@@ -1,6 +1,6 @@
 <template>
     <div class='pageWrap'>
-        <a class='icon_icon_close_big' href='javascript:;'></a>
+        <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a>
         <header class='header'>
             <h1 class='pageTitle'>登录</h1>
             <languageDiv />
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import languageDiv from '@m/components/languageDiv'
+import languageDiv from '@m/modules/languageDiv'
 export default {
     components: {
         languageDiv,
@@ -70,6 +70,7 @@ export default {
     left: rem(30px);
     top: rem(30px);
     font-size: rem(34px);
+    color: var(--color);
 }
 .loginForm{
     padding-top: rem(40px);

@@ -18,11 +18,11 @@ module.exports = {
             alias: {
                 '@public': resolve('public'),
                 '@': resolve('src'),
-                '@m': resolve('src/pages/mobile'),
+                '@m': resolve('src/themes/mobile'),
             }
         }
     },
     pages: {
-        index: 'src/pages/mobile/main.js'
+        index: 'src/themes/mobile/main.js'
     }
 }

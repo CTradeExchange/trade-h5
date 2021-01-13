@@ -1,12 +1,11 @@
 <template>
-    <router-view class='pageRouter' />
+    <router-view />
 </template>
 
 <script>
 export default {
     data () {
         return {
-            aa: 111
         }
     },
     created () {
@@ -16,7 +15,7 @@ export default {
 </script>>
 
 <style lang="scss">
-@import '~@/fonts/iconfont.css';
-@import '~@/sass/global.scss';
+@import '~@m/style.scss';
+@import '~@m/font/iconfont.css';
 @import '~@/sass/mixin.scss';
 </style>

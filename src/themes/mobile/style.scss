@@ -1,4 +1,18 @@
 @import '~@/sass/mixin.scss';
+:root{
+    --color: #333;
+    --bdColor: #bdbdbd;
+    --mutedColor: #989898;
+    --placeholder: #c4c4c4;
+    --bgColor: #F8F8F8;
+    --white: #fff;
+    --riseColor: #E3525C;
+    --fallColor: #007aff;
+    --sellColor: #E3525C;
+    --buyColor: #007aff;
+    --primary: #477fd3;
+    --red: #E3525C;
+}
 
 * {
     margin: 0;
@@ -27,6 +41,18 @@ a{
 }
 .link{
     color: var(--primary);
+}
+.riseColor{
+    color: var(--riseColor);
+}
+.fallColor{
+    color: var(--fallColor);
+}
+.buyColor{
+    color: var(--buyColor);
+}
+.sellColor{
+    color: var(--sellColor);
 }
 [class*='icon_'] {
     font-family: iconfont;
