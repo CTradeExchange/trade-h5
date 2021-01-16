@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "19451818",
+      "name": "成功",
+      "font_class": "chenggong",
+      "unicode": "e64a",
+      "unicode_decimal": 58954
+    },
+    {
+      "icon_id": "19451771",
+      "name": "排队",
+      "font_class": "paidui",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "19407771",
+      "name": "日历",
+      "font_class": "rili",
+      "unicode": "e64f",
+      "unicode_decimal": 58959
+    },
+    {
       "icon_id": "19368025",
       "name": "减",
       "font_class": "jian",
@@ -53,20 +74,6 @@
       "font_class": "xindingdan",
       "unicode": "e64b",
       "unicode_decimal": 58955
-    },
-    {
-      "icon_id": "19368032",
-      "name": "成功",
-      "font_class": "chenggong",
-      "unicode": "e64c",
-      "unicode_decimal": 58956
-    },
-    {
-      "icon_id": "19368033",
-      "name": "排队",
-      "font_class": "paidui",
-      "unicode": "e64d",
-      "unicode_decimal": 58957
     },
     {
       "icon_id": "19368034",
@@ -228,34 +235,6 @@
       "font_class": "jiaoyi",
       "unicode": "e643",
       "unicode_decimal": 58947
-    },
-    {
-      "icon_id": "512360",
-      "name": "添加",
-      "font_class": "tianjia",
-      "unicode": "e613",
-      "unicode_decimal": 58899
-    },
-    {
-      "icon_id": "5388975",
-      "name": "编辑",
-      "font_class": "bianji",
-      "unicode": "e64a",
-      "unicode_decimal": 58954
-    },
-    {
-      "icon_id": "18337896",
-      "name": "添加",
-      "font_class": "jia",
-      "unicode": "e688",
-      "unicode_decimal": 59016
-    },
-    {
-      "icon_id": "1752883",
-      "name": "菜单",
-      "font_class": "caidan",
-      "unicode": "e600",
-      "unicode_decimal": 58880
     }
   ]
 }

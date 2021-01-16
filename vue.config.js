@@ -22,6 +22,22 @@ module.exports = {
             }
         }
     },
+    chainWebpack: config => {
+        // 移除 prefetch 插件
+        config.plugins.delete('preload-index').delete('prefetch-index')
+        if (process.env.NODE_ENV === 'production') {
+            config.optimization.minimizer('js').use(TerserPlugin, [
+                {
+                    terserOptions: {
+                        compress: {
+                            pure_funcs: ['console.table', 'console.log'] // 配置发布时，不被打包的函数
+                            // drop_console: true
+                        }
+                    }
+                }
+            ])
+        }
+    },
     pages: {
         index: 'src/themes/mobile/main.js'
     }

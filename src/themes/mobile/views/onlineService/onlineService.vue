@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>onlineService页面</h2>
+        <h2 align='center'>在线客服页面</h2>
     </div>
 </template>
 
@@ -11,5 +11,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/sass/mixin.scss';
 
 </style>

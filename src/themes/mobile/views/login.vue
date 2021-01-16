@@ -1,5 +1,6 @@
 <template>
     <div class='pageWrap'>
+        <top back :menu='false' />
         <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a>
         <header class='header'>
             <h1 class='pageTitle'>登录</h1>
@@ -17,33 +18,39 @@
                 <a v-show='pwd.length' class='van-icon van-icon-clear' href='javascript:;' @click="pwd=''"></a>
                 <a :class='[pwdVisible?"icon_icon_pressed":"icon_icon_default"]' href='javascript:;' @click='pwdVisible=!pwdVisible'></a>
             </div>
+            <div class='field'>
+                <van-checkbox v-model='savePwd' shape='square'>保存密码</van-checkbox>
+            </div>
             <van-button block class='loginBtn' type='primary'>登录</van-button>
         </form>
-        <div class='tools'>
+        <!-- <div class='tools'>
             <a class='link' href='javascript:;'>我要注册</a>
             <i class='line'>|</i>
             <a class='link' href='javascript:;'>忘记密码</a>
-        </div>
-        <footer class='footer'>
+        </div> -->
+        <!-- <footer class='footer'>
             <a class='link' href='javascript:;'>
                 <i class='icon_icon_service'></i>
                 在线客服
             </a>
-        </footer>
+        </footer> -->
     </div>
 </template>
 
 <script>
 import languageDiv from '@m/modules/languageDiv'
+import top from '@m/layout/top'
 export default {
     components: {
         languageDiv,
+        top,
     },
     data () {
         return {
             pwdVisible: false,
             account: '',
             pwd: '',
+            savePwd: true,
         }
     },
 }
@@ -53,8 +60,9 @@ export default {
 @import '@/sass/mixin.scss';
 .pageWrap{
     position: relative;
-    padding: rem(90px) rem(30px) 0;
+    height: 100%;
     .header{
+        margin: rem(40px) rem(30px);
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -73,7 +81,7 @@ export default {
     color: var(--color);
 }
 .loginForm{
-    padding-top: rem(40px);
+    margin: rem(40px) rem(30px);
     .field{
         position: relative;
         display: flex;
@@ -117,10 +125,13 @@ export default {
         }
     }
     .loginBtn{
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
         margin-top: rem(90px);
         height: rem(80px);
         line-height: rem(80px);
-        border-radius: rem(40px);
         background: var(--primary);
         border-color: var(--primary);
         font-size: rem(34px);

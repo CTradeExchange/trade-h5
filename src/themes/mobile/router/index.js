@@ -55,6 +55,14 @@ const routes = [
                     title: '在线客服'
                 }
             },
+            {
+                path: 'accountManager',
+                name: 'AccountManager',
+                component: () => import('../views/accountManager/accountManager.vue'),
+                meta: {
+                    title: '账户'
+                }
+            },
         ]
     },
     {
@@ -68,7 +76,58 @@ const routes = [
     {
         path: '/login',
         name: 'Login',
-        component: () => import('../views/login.vue')
+        component: () => import('../views/login.vue'),
+        meta: {
+            title: '登录到一个账户'
+        }
+    },
+    {
+        path: '/modifyPwd',
+        name: 'ModifyPwd',
+        component: () => import('../views/modifyPwd/modifyPwd.vue'),
+        meta: {
+            title: '更改密码'
+        }
+    },
+    {
+        path: '/addAccount',
+        name: 'AddAccount',
+        component: () => import('../views/accountManager/addAccount.vue'),
+        meta: {
+            title: '新账户'
+        }
+    },
+    {
+        path: '/contract',
+        name: 'Contract',
+        component: () => import('../views/contract/contract.vue'),
+        meta: {
+            title: '合约属性'
+        }
+    },
+    {
+        path: '/order',
+        name: 'Order',
+        component: () => import(/* webpackChunkName: "order" */ '../views/order/order.vue'),
+        meta: {
+            title: '下单'
+        }
+    },
+    {
+        path: '/order/pending',
+        name: 'OrderPending',
+        component: () => import(/* webpackChunkName: "order" */ '../views/order/pending.vue'),
+        meta: {
+            title: '新订单'
+        }
+    },
+    {
+        path: '/order/success',
+        name: 'OrderSuccess',
+        component: () => import(/* webpackChunkName: "order" */ '../views/order/success.vue'),
+        meta: {
+            title: '成功'
+        }
     }
 ]
 

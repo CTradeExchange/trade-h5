@@ -1,24 +1,29 @@
 <template>
     <div class='top'>
-        <a v-if='menuIcon' class='icon_caidan' href='javascript:;' @click="$emit('showLeftMenu')"></a>
-        <div class='title'>
-            <h2 v-if='title'>{{ title }}</h2>
+        <a v-if='menu' class='icon_caidan1' href='javascript:;' @click="$emit('showLeftMenu')"></a>
+        <a v-if='back' class='icon_fanhui' href='javascript:;' @click='$router.back()'></a>
+        <div v-if='titleText' class='title'>
+            <h2 v-if='titleText'>{{ titleText }}</h2>
             <p v-if='subTitle' class='subTitle'>{{ subTitle }}</p>
         </div>
-        <div class='rightActions'>
-            <a class='icon icon_jia' href='javascript:;'></a>
-            <a class='icon icon_bianji' href='javascript:;'></a>
-            <a class='icon icon_tianjia' href='javascript:;'></a>
-        </div>
+        <topRight />
     </div>
 </template>
 
 <script>
+import topRight from './topRight'
 export default {
+    components: {
+        topRight,
+    },
     props: {
-        menuIcon: {
+        menu: {
             type: Boolean,
             default: true
+        },
+        back: {
+            type: Boolean,
+            default: false
         },
         title: {
             type: String,
@@ -27,6 +32,11 @@ export default {
         subTitle: {
             type: String,
             default: ''
+        },
+    },
+    computed: {
+        titleText () {
+            return this.title || this.$route.meta?.title
         },
     },
 }
@@ -50,6 +60,7 @@ export default {
         position: relative;
         padding-left: rem(60px);
         margin-left: rem(20px);
+        line-height: 1.4;
         flex: 1;
         &::before{
             content: '';
@@ -71,12 +82,6 @@ export default {
     }
     a{
         color: var(--white);
-    }
-    .icon{
-        font-size: 1.4em;
-        &:not(:first-of-type){
-            margin-left: .2em;
-        }
     }
 }
 </style>

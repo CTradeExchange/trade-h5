@@ -14,7 +14,7 @@
                 <figcaption>
                     <p><strong>Cats2.0 H5 Demo</strong></p>
                     <p>84769176 - MetaQuotes-Demo</p>
-                    <a class='accountManager' href='javascript:;'>管理账户</a>
+                    <a class='accountManager' href='javascript:;' @click="visible=false;$router.push('/accountManager')">管理账户</a>
                 </figcaption>
             </figure>
             <ul class='menuList'>
@@ -34,7 +34,7 @@
 export default {
     data () {
         return {
-            visible: true
+            visible: false
         }
     },
 }

@@ -1,6 +1,6 @@
-import { Button, Tabbar, TabbarItem, popup } from 'vant'
+import { Button, Tabbar, TabbarItem, popup, Dialog, Cell, CellGroup, Stepper, Checkbox, CheckboxGroup } from 'vant'
 
-const components = [Button, Tabbar, TabbarItem, popup]
+const components = [Button, Tabbar, TabbarItem, popup, Dialog, Cell, CellGroup, Stepper, Checkbox, CheckboxGroup]
 const install = (app, options) => {
     console.log(app, options, components)
     components.forEach(component => {

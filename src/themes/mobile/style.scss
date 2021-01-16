@@ -1,7 +1,7 @@
 @import '~@/sass/mixin.scss';
 :root{
     --color: #333;
-    --bdColor: #bdbdbd;
+    --bdColor: #ddd;
     --mutedColor: #989898;
     --placeholder: #c4c4c4;
     --bgColor: #F8F8F8;
@@ -10,7 +10,8 @@
     --fallColor: #007aff;
     --sellColor: #E3525C;
     --buyColor: #007aff;
-    --primary: #477fd3;
+    --primary: #007aff;
+    --success: #20ce00;
     --red: #E3525C;
 }
 
@@ -136,55 +137,6 @@ i {
     position: relative;
 }
 
-// 路由切换动画效果
-.routerView-fade-enter-active {
-    transition: all 0.4s;
-}
-
-.routerView-fade-leave-active {
-    // transition: all 0.3s;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.5s;
-}
-
-.fade-enter,
-.fade-leave-to
-
-/* .fade-leave-active below version 2.1.8 */
- {
-    opacity: 0;
-}
-
-.routerView-fade-enter,
-.routerView-fade-leave-to
-
-/* .slide-fade-leave-active for below version 2.1.8 */
- {
-    // transform: translateX(10px);
-    opacity: 0.3;
-}
-
-.slideLeft-fade-enter-active {
-    transition: all 0.3s ease-out;
-}
-
-.slideLeft-fade-leave-active {
-    transition: all 0.3s;
-}
-
-.slideLeft-fade-enter,
-.slideLeft-fade-leave-to
-
-/* .slide-fade-leave-active for below version 2.1.8 */
- {
-    transform: translateX(100%);
-    opacity: 0.3;
-}
-
-
 @font-face {
     font-weight: normal;
     font-family: 'vant-icon';
@@ -193,64 +145,6 @@ i {
     src: url('~@/fonts/vant-icon-db1de1.woff2') format('woff2'), url('~@/fonts/vant-icon-db1de1.woff') format('woff'), url('~@/fonts/vant-icon-db1de1.ttf') format('truetype');
 }
 
-@keyframes redPacketsRain {
-    to {
-        top: 100%;
-    }
-}
-
-@keyframes AnimFadeOut {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-@keyframes bg-red {
-    0% {
-        background: #fff;
-    }
-    30% {
-        background: linear-gradient(to right, #fff, #fcf6f7);
-    }
-    80% {
-        background: linear-gradient(to right, #fff, #faf3f3);
-    }
-    100% {
-        background:#fff;
-    }
-}
-@keyframes bg-green {
-    0% {
-        background: #fff;
-    }
-    30% {
-        background: linear-gradient(to right, #fff, #f0faf8);
-    }
-    80% {
-        background: linear-gradient(to right, #fff, #eaf8f6);
-    }
-    100% {
-        background:#fff;
-    }
-}
-.riseColorBgAni,.fallColorBgAni {
-    animation-duration: 1s;
-    animation-timing-function: ease-out;
-    animation-iteration-count: infinite;
-    transition-property: background;
-    animation-iteration-count:1;
-    animation-direction:normal;
-}
-.riseColorBgAni {
-    animation-name: bg-green;
-    
-}
-.fallColorBgAni {
-    animation-name: bg-red;
-}
 .z-index-9999 {
     position: relative;
     z-index: 99999;
@@ -273,7 +167,7 @@ i {
     transform-origin: 0 0;
     pointer-events: none;
     box-sizing: border-box;
-    border: 0 solid #ddd;
+    border: 0 solid #bbb;
 }
 
 .of-1px-top::after {
@@ -298,17 +192,4 @@ i {
 
 .of-1px-all::after {
     border-width: 1px;
-}
-
-.van-button--disabled {
-    opacity: 1 !important;
-    background: #a3bfe9 !important;
-}
-
-.van-dialog__confirm .van-button__text {
-    color: #477fd3 !important;
-}
-
-.van-dialog__message.van-dialog__message--has-title {
-    color: #8f8f8f;
 }

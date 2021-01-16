@@ -1,0 +1,23 @@
+import { createStore } from 'vuex'
+
+const rootElement = getComputedStyle(document.documentElement)
+const style = {
+    primary: rootElement.getPropertyValue('--primary'),
+    red: rootElement.getPropertyValue('--red'),
+}
+
+export default createStore({
+    state: {
+        style,
+        quoteMode: 1, // 1简单模式 2高级模式
+    },
+    mutations: {
+        Update_quoteMode (state, data = 1) {
+            state.quoteMode = data
+        }
+    },
+    actions: {
+    },
+    modules: {
+    }
+})
