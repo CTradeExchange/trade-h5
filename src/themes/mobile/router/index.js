@@ -20,7 +20,7 @@ const routes = [
                 name: 'Chart',
                 component: () => import('../views/chart/chart.vue'),
                 meta: {
-                    title: '图表'
+                    title: '图表页面，对接接口后处理'
                 }
             },
             {

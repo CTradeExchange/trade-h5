@@ -5,7 +5,7 @@
             <component :is='Component' class='pageWrap' />
         </keep-alive>
     </router-view>
-    <footerMenu class='footerMenu' />
+    <footerMenu id='footerMenu' class='footerMenu' />
     <leftMenu ref='leftMenu' />
 </template>
 

@@ -2,8 +2,9 @@
     <div class='pending'>
         <top />
         <p class='iconMain'><i class='icon_chenggong'></i></p>
-        <p class='title'>下单成功</p>
+        <p class='title'>订单打开</p>
         <p class='desc'>
+            #695329333 <br />
             buy 1.00 EURUSD at 1.21350 <br />
             sl:0.0000 tp: 0.00000
         </p>

@@ -176,17 +176,15 @@ export default {
 .priceStepper{
     width: 100%;
     display: flex;
-    :deep{
-        .van-stepper__input{
-            flex: 1;
-        }
-        .van-stepper__minus,.van-stepper__plus{
-            background: none;
-            color: var(--primary);
-        }
-        .van-stepper__input{
-            background: none;
-        }
+    :deep(.van-stepper__input){
+        flex: 1;
+    }
+    :deep(.van-stepper__minus,.van-stepper__plus){
+        background: none;
+        color: var(--primary);
+    }
+    :deep(.van-stepper__input){
+        background: none;
     }
 }
 .chart{

@@ -6,8 +6,8 @@
         <section class='popContainer'>
             <p class='title'>UERUSD</p>
             <div class='menulist'>
-                <a class='item of-1px-bottom ' href='javascript:;' @click="show=false;$router.push('/chart')">打开图表</a>
                 <a class='item of-1px-bottom ' href='javascript:;' @click="$router.push('/order')">新交易</a>
+                <a class='item of-1px-bottom ' href='javascript:;' @click="show=false;$router.push('/chart')">打开图表</a>
                 <a class='item of-1px-bottom ' href='javascript:;' @click="$router.push('/contract')">交易品种属性</a>
                 <a v-if='quoteMode===2' class='item of-1px-bottom ' href='javascript:;' @click='switchQuoteMode'>简单查看模式</a>
                 <a v-else class='item of-1px-bottom ' href='javascript:;' @click='switchQuoteMode'>高级查看模式</a>

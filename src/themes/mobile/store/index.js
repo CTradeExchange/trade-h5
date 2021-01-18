@@ -9,7 +9,7 @@ const style = {
 export default createStore({
     state: {
         style,
-        quoteMode: 1, // 1简单模式 2高级模式
+        quoteMode: 2, // 1简单模式 2高级模式
     },
     mutations: {
         Update_quoteMode (state, data = 1) {

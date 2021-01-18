@@ -4,7 +4,7 @@
         <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a>
         <header class='header'>
             <h1 class='pageTitle'>登录</h1>
-            <languageDiv />
+            <!-- <languageDiv /> -->
         </header>
         <form class='loginForm'>
             <div class='field of-1px of-1px-bottom'>
@@ -21,7 +21,7 @@
             <div class='field'>
                 <van-checkbox v-model='savePwd' shape='square'>保存密码</van-checkbox>
             </div>
-            <van-button block class='loginBtn' type='primary'>登录</van-button>
+            <van-button block class='loginBtn' type='primary' @click="$router.replace('/')">登录</van-button>
         </form>
         <!-- <div class='tools'>
             <a class='link' href='javascript:;'>我要注册</a>
@@ -38,11 +38,11 @@
 </template>
 
 <script>
-import languageDiv from '@m/modules/languageDiv'
+// import languageDiv from '@m/modules/languageDiv'
 import top from '@m/layout/top'
 export default {
     components: {
-        languageDiv,
+        // languageDiv,
         top,
     },
     data () {
