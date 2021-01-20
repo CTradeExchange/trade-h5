@@ -1,35 +1,40 @@
 <template>
     <div class='pageWrap'>
-        <top back :menu='false' />
+        <Top back :menu='false' />
         <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a>
         <header class='header'>
-            <h1 class='pageTitle'>登录</h1>
-            <!-- <languageDiv /> -->
+            <h1 class='pageTitle'>{{ loginType==='password'? '账号密码登录':'验证码快捷登录' }}</h1>
+            <LanguageDiv />
         </header>
-        <van-tabs
-            v-model:active='loginType'
-            background='#F2F2F2'
-            class='loginTypeWrapper'
-            :color='$store.state.style.primary'
-            title-active-color='#fff'
-            title-inactive-color='#333'
-            type='card'
-        >
-            <van-tab name='password' title='账号登录' />
-            <van-tab name='checkCode' title='验证码登录' />
-        </van-tabs>
+        <div class='loginAccount'>
+            <a class='item' :class="{ 'active':loginAccount==='mobile' }" href='javascript:;' @click="loginAccount='mobile'">手机号</a>
+            <span class='line'></span>
+            <a class='item' :class="{ 'active':loginAccount==='email' }" href='javascript:;' @click="loginAccount='email'">邮箱</a>
+        </div>
         <form class='loginForm'>
-            <div class='field of-1px of-1px-bottom'>
+            <div v-if="loginAccount==='mobile'" class='field'>
+                <MobileInput v-model='account' v-model:zone='zone' clear placeholder='请输入手机号' />
+            </div>
+            <div v-else class='field'>
+                <InputComp v-model='email' clear label='邮箱' />
+            </div>
+            <div v-if="loginType==='password'" class='field'>
+                <InputComp v-model='pwd' v-model:zone='zone' clear label='密码' pwd />
+            </div>
+            <div v-else class='field'>
+                <CheckCode v-model='checkCode' clear label='验证码' />
+            </div>
+            <!-- <div class='field of-1px of-1px-bottom'>
                 <input id='account' v-model.trim='account' class='input' required type='text' />
                 <label for='account'>请输入登录账号</label>
                 <a v-show='account.length' class='van-icon van-icon-clear' href='javascript:;' @click="account=''"></a>
-            </div>
-            <div class='field of-1px of-1px-bottom'>
+            </div> -->
+            <!-- <div class='field of-1px of-1px-bottom'>
                 <input id='pwd' v-model.trim='pwd' class='input' required :type='pwdVisible ? "text" : "password"' />
                 <label for='pwd'>密码</label>
                 <a v-show='pwd.length' class='van-icon van-icon-clear' href='javascript:;' @click="pwd=''"></a>
                 <a :class='[pwdVisible?"icon_icon_pressed":"icon_icon_default"]' href='javascript:;' @click='pwdVisible=!pwdVisible'></a>
-            </div>
+            </div> -->
             <div class='field toolWrap'>
                 <van-checkbox v-model='savePwd' shape='square'>保存密码</van-checkbox>
                 <div class='tools'>
@@ -39,33 +44,49 @@
                 </div>
             </div>
             <van-button block class='loginBtn' type='primary' @click="$router.replace('/')">登录</van-button>
+            <van-button block class='loginBtn light' @click='changeLoginType'>{{ loginType==='password'? '验证码快捷登录':'账号密码登录' }}</van-button>
         </form>
-        <!-- <footer class='footer'>
+        <footer class='footer'>
             <a class='link' href='javascript:;'>
                 <i class='icon_icon_service'></i>
                 在线客服
             </a>
-        </footer> -->
+        </footer>
     </div>
 </template>
 
 <script>
-// import languageDiv from '@m/modules/languageDiv'
-import top from '@m/layout/top'
+import LanguageDiv from '@m/modules/languageDiv'
+import MobileInput from '@m/components/form/mobileInput'
+import InputComp from '@m/components/form/input'
+import CheckCode from '@m/components/form/checkCode'
+import Top from '@m/layout/top'
 export default {
     components: {
-        // languageDiv,
-        top,
+        LanguageDiv,
+        InputComp,
+        MobileInput,
+        CheckCode,
+        Top,
     },
     data () {
         return {
             pwdVisible: false,
+            zone: 86,
             account: '',
             pwd: '',
+            checkCode: '',
             savePwd: true,
             loginType: 'password',
+            loginAccount: 'email',
         }
     },
+    methods: {
+        changeLoginType () {
+            const loginType = this.loginType
+            this.loginType = loginType === 'password' ? 'checkCode' : 'password'
+        }
+    }
 }
 </script>
 
@@ -84,7 +105,25 @@ export default {
         font-size: rem(50px);
         font-weight: normal;
     }
-
+}
+.loginAccount{
+    margin: rem(0px) rem(30px);
+    display: flex;
+    align-items: center;
+    .line{
+        display: inline-block;
+        margin: 0 1em;
+        width: 1px;
+        height: .9em;
+        vertical-align: middle;
+        background: var(--bdColor);
+    }
+    .item{
+        color: inherit;
+        &.active{
+            color: var(--primary);
+        }
+    }
 }
 .icon_icon_close_big{
     position: absolute;
@@ -92,22 +131,6 @@ export default {
     top: rem(30px);
     font-size: rem(34px);
     color: var(--color);
-}
-.loginTypeWrapper{
-    margin: rem(74px) auto rem(50px);
-    width: rem(580px);
-    :deep(.van-tabs__nav,.van-tabs__wrap){
-        height: rem(60px);
-        line-height: rem(60px);
-        border: 0;
-        border-radius: rem(60px);
-        overflow: hidden;
-    }
-    :deep(.van-tab){
-        height: rem(60px);
-        line-height: rem(60px);
-        font-size: rem(28px);
-    }
 }
 .loginForm{
     margin: rem(40px) rem(30px);
@@ -157,16 +180,19 @@ export default {
         }
     }
     .loginBtn{
-        position: absolute;
-        left: 0;
-        bottom: 0;
         width: 100%;
         margin-top: rem(90px);
         height: rem(80px);
         line-height: rem(80px);
         background: var(--primary);
         border-color: var(--primary);
-        font-size: rem(34px);
+        font-size: rem(30px);
+        border-radius: rem(40px);
+        &.light{
+            margin-top: rem(40px);
+            background: none;
+            color: var(--primary);
+        }
     }
 }
 .tools{

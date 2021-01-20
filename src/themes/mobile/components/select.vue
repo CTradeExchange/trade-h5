@@ -1,7 +1,7 @@
 <template>
     <div class='selectWrap'>
-        <p v-if='label' class='label'>{{ label }}</p>
         <span class='selectval' @click='show=true'>{{ selected && selected[text] }}</span>
+        <span class='icon_arrow-down'></span>
     </div>
     <van-action-sheet v-if='actions && actions.length' v-model:show='show' :actions='actions' @select='onSelect' />
 </template>
@@ -57,40 +57,29 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .selectWrap{
+    position: relative;
     width: 100%;
     display: inline-block;
-}
-.label{
-    font-size: rem(26px);
-    margin-bottom: rem(10px);
-    text-indent: rem(15px);
+    .icon_arrow-down{
+        position: absolute;
+        right: rem(10px);
+        top: rem(25px);
+    }
 }
 .selectval{
     position: relative;
     display: block;
     height: rem(75px);
     line-height: rem(75px);
-    padding: 0 rem(60px) 0 rem(15px);
+    padding: 0 rem(50px) 0 rem(15px);
     font-size: rem(26px);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    border-radius: rem(10px);
-    border: 1px solid var(--bdColor);
-    &:not(:disabled){
-        @include active();
-    }
-    &::after{
-        content: '';
-        position: absolute;
-        right: rem(20px);
-        top: rem(25px);
-        width: 0;
-        height: 0;
-        border-radius: 6px;
-        border: 6px solid var(--bdColor);
-        border-color: var(--bdColor) transparent transparent transparent;
-        border-width: 8px 8px 0 8px;
-    }
+    // border-radius: rem(10px);
+    // border: 1px solid var(--bdColor);
+    // &:not(:disabled){
+    //     @include active();
+    // }
 }
 </style>

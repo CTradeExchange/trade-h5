@@ -1,68 +1,54 @@
 <template>
     <div class='register'>
-        <top back :menu='false' />
+        <Top back :menu='false' />
         <a class='loginBtn' href='javascript:;' @click="$router.replace('/login')">已有账号</a>
         <div class='banner'>
             <img alt='' src='https://www.blazaintl.com/platformimages/mainpage_banner11a.png' srcset='' />
         </div>
         <form class='form'>
-            <div class='cell accountCell'>
-                <div class='field'>
-                    <VueSelect v-model='accountType' :actions='accountTypeList' label='账户类型' value='name' />
-                </div>
-                <div class='field'>
-                    <VueSelect v-model='currency' :actions='currencyList' label='账户币种' value='name' />
-                </div>
+            <div class='cell of-1px-bottom'>
+                <VueSelect v-model='currency' :actions='currencyList' value='name' />
             </div>
-            <!-- <div class='cell'>
-                <van-tabs
-                    v-model:active='openType'
-                    class='openTypeWrapper'
-                    :color='$store.state.style.primary'
-                    title-active-color='#fff'
-                    title-inactive-color='#333'
-                    type='card'
-                >
-                    <van-tab name='mobile' title='手机号' />
-                    <van-tab name='email' title='邮箱' />
-                </van-tabs>
-            </div> -->
-            <div class='cell openType'>
+            <!-- <div class='cell openType'>
                 <div :class="{ 'openTypeAcitve':openType==='mobile' }"><a href='javascript:;' @click="openType='mobile'">手机号</a></div>
                 <div :class="{ 'openTypeAcitve':openType==='email' }"><a href='javascript:;' @click="openType='email'">邮箱</a></div>
-            </div>
+            </div> -->
             <div v-if="openType==='mobile'" class='cell'>
-                <mobileInput v-model='mobile' v-model:zone='zone' placeholder='手机号' />
+                <MobileInput v-model='mobile' v-model:zone='zone' placeholder='手机号' />
             </div>
             <div v-else class='cell'>
-                <div>
-                    <input class='input' placeholder='邮箱' type='text' />
-                </div>
+                <InputComp v-model='email' clear label='邮箱' />
             </div>
             <div class='cell'>
-                <checkCode v-model='checkCode' />
+                <CheckCode v-model='checkCode' clear label='验证码' />
             </div>
             <div class='cell'>
                 <van-checkbox v-model='protocol' shape='square'>开户注意事项</van-checkbox>
             </div>
+            <div class='cell'>
+                <van-button block class='registerBtn' :color='$store.state.style.primary' type='primary' @click="$router.push('/register/success')">提交</van-button>
+            </div>
         </form>
-        <div class='footerBtn'>
-            <van-button block :color='$store.state.style.primary' type='primary' @click="$router.push('/register/success')">提交</van-button>
+        <div class='switchType'>
+            <a v-if="openType==='email'" href='javascript:;' @click="openType='mobile'">手机号注册</a>
+            <a v-else href='javascript:;' @click="openType='email'">邮箱注册</a>
         </div>
     </div>
 </template>
 
 <script>
-import top from '@m/layout/top'
+import Top from '@m/layout/top'
 import VueSelect from '@m/components/select'
-import checkCode from '@m/components/form/checkCode'
-import mobileInput from '@m/components/form/mobileInput'
+import CheckCode from '@m/components/form/checkCode'
+import InputComp from '@m/components/form/input'
+import MobileInput from '@m/components/form/mobileInput'
 import { mapState } from 'vuex'
 export default {
     components: {
-        top,
-        mobileInput,
-        checkCode,
+        Top,
+        MobileInput,
+        InputComp,
+        CheckCode,
         VueSelect,
     },
     data () {
@@ -76,9 +62,9 @@ export default {
             accountTypeList: [
                 { name: 'CFD账户' }
             ],
-            currency: '选项一',
+            currency: '美元账户',
             currencyList: [
-                { name: '选项一' },
+                { name: '美元账户' },
                 { name: '选项二' },
                 { name: '选项三' },
             ],
@@ -116,11 +102,7 @@ export default {
 .cell{
     display: flex;
     justify-content: space-between;
-    margin: rem(30px) rem(30px);
-    &.accountCell .field{
-        width: rem(336px);
-        flex: none;
-    }
+    margin: rem(40px) rem(30px);
     div{
         flex: 1;
     }
@@ -162,10 +144,15 @@ export default {
     border: 1px solid var(--bdColor);
     border-radius: rem(10px);
 }
-.footerBtn{
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
+.registerBtn{
+    margin-top: rem(80px);
+    border-radius: rem(50px);
+}
+.switchType{
+    text-align: center;
+    margin-top: rem(30px);
+    a{
+        color: var(--primary);
+    }
 }
 </style>

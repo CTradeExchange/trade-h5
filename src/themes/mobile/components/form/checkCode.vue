@@ -1,21 +1,28 @@
 <template>
-    <div class='checkCodeBar'>
+    <div class='checkCodeBar of-1px-bottom'>
         <div class='checkCodeInput'>
-            <input class='input' type='text' v-bind='$attrs' :value='modelValue' @input='onInput' />
+            <input
+                :id='id'
+                class='input'
+                required
+                type='text'
+                v-bind='$attrs'
+                :value='modelValue'
+                @input='onInput'
+            />
+            <label v-if='label' class='label' :for='id'>{{ label }}</label>
         </div>
-        <div class='checkCodeBtn'>
+        <a v-if='clear' v-show='modelValue.length' class='van-icon van-icon-clear' href='javascript:;' @click='onClear'></a>
+        <button ref='getCodeBtn' class='getCodeBtn' :disabled='disabled' @click='getCode'>获取验证码</button>
+        <!-- <div class='checkCodeBtn'>
             <van-button block :color='$store.state.style.primary' type='primary' @click="$emit('getCode')">获取验证码</van-button>
-        </div>
+        </div> -->
     </div>
 </template>
 
 <script>
-import VueSelect from '@m/components/select'
-import { mapState } from 'vuex'
+import { randomId } from '@/utils/util'
 export default {
-    components: {
-        VueSelect,
-    },
     props: {
         modelValue: {
             type: [Number, String],
@@ -25,23 +32,28 @@ export default {
             type: [Number, String],
             default: ''
         },
+        clear: {
+            type: Boolean,
+            default: false
+        },
+        label: {
+            type: [String, Number],
+            default: ''
+        },
     },
     data () {
         return {
             value: '',
-            zoneVal: this.zone,
-        }
-    },
-    computed: {
-        ...mapState(['zoneList'])
-    },
-    watch: {
-        zone (newval) {
-            if (newval !== this.zoneVal) this.zoneVal = newval
+            id: this.$attrs.id || randomId(),
+            disabled: false,
         }
     },
     emits: ['update:modelValue', 'update:zone', 'input'],
     methods: {
+        onClear () {
+            this.$emit('update:modelValue', '')
+            this.$emit('input', '')
+        },
         onInput ($event) {
             this.$emit('update:modelValue', $event.target.value)
             this.$emit('input', $event.target.value)
@@ -49,6 +61,25 @@ export default {
         zoneOnSelect (item) {
             console.log(item)
             this.$emit('update:zone', item.value)
+        },
+        getCode () {
+            this.getCodeBtnCountDown()
+        },
+        getCodeBtnCountDown () {
+            const getCodeBtn = this.$refs.getCodeBtn
+            const originText = getCodeBtn.textContent
+            let len = 60
+            this.disabled = true
+            const t = setInterval(() => {
+                if (len === 0) {
+                    clearInterval(t)
+                    getCodeBtn.innerText = originText
+                    this.disabled = false
+                    return
+                }
+                len--
+                getCodeBtn.innerText = `${len}s`
+            }, 1000)
         }
     }
 }
@@ -59,17 +90,18 @@ export default {
 .checkCodeBar{
     width: 100%;
     display: flex;
-    &>div{
+    align-items: center;
+    .checkCodeInput{
+        position: relative;
         flex: 1;
     }
-    .checkCodeBtn{
-        flex: none;
-        width: rem(240px);
+    .getCodeBtn{
         margin-left: rem(20px);
-        button{
-            padding: 0;
-            height: rem(75px);
-            border-radius: rem(10px);
+        font-size: rem(26px);
+        color: var(--primary);
+        background: none;
+        &:disabled{
+            color: var(--bdColor);
         }
     }
 }
@@ -77,7 +109,27 @@ export default {
     padding: 0 5px;
     width: 100%;
     height: rem(75px);
-    border-radius: rem(10px);
-    border: 1px solid var(--bdColor);
+    &:focus ~ .label,
+    &:valid ~ .label{
+        transform-origin: bottom left;
+        transform: scale(.8) translateY(-90%);
+    }
+}
+.label{
+    position: absolute;
+    left: 5px;
+    top: 0;
+    height: rem(75px);
+    line-height: rem(75px);
+    color: var(--placeholder);
+    font-size: rem(30px);
+    transition: all cubic-bezier(.4,0,.2,1) .15s;
+    &.active{
+        transform: scale(.8) translateY(-90%);
+    }
+}
+.van-icon-clear{
+    color: var(--bdColor);
+    font-size: rem(36px);
 }
 </style>

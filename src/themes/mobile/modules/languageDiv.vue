@@ -17,8 +17,8 @@ export default {
     height: rem(50px);
     line-height: rem(50px);
     color: var(--mutedColor);
-    border: 1px solid var(--mutedColor);
-    border-radius: rem(15px);
+    border: 1px solid var(--bdColor);
+    border-radius: rem(10px);
     box-sizing: content-box;
     .lang-icon{
         width:23px;
