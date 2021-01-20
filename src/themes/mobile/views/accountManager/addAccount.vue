@@ -1,6 +1,5 @@
 <template>
     <section class='addAccount'>
-        <top />
         <ul class='actionList of-1px-bottom'>
             <li class='item of-1px-bottom'>
                 <p class='title'>打开模拟账户</p>
@@ -13,7 +12,7 @@
         </ul>
         <tip class='muted'>
             若要打开一个真实账户，请
-            <a class='link' href='javascript:;'>立即注册</a>
+            <a class='link' href='javascript:;' @click="$router.push('/register')">立即注册</a>
         </tip>
     </section>
 </template>

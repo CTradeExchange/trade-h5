@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "12260713",
+      "name": "icon8_pressed",
+      "font_class": "icon_pressed",
+      "unicode": "e650",
+      "unicode_decimal": 58960
+    },
+    {
+      "icon_id": "12260714",
+      "name": "icon8_default",
+      "font_class": "icon_default",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "19467284",
+      "name": "市场关闭",
+      "font_class": "shichangguanbi",
+      "unicode": "e64d",
+      "unicode_decimal": 58957
+    },
+    {
       "icon_id": "19451818",
       "name": "成功",
       "font_class": "chenggong",

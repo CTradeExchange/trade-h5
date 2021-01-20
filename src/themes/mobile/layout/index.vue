@@ -2,7 +2,7 @@
     <layoutTop ref='root' class='layoutTop' :title='$route.meta.title' @showLeftMenu='$refs.leftMenu.visible=true' />
     <router-view v-slot='{ Component }'>
         <keep-alive>
-            <component :is='Component' class='pageWrap' />
+            <component :is='Component' class='pageWrap' :class="{ 'noFoot':$route.meta.footerMenu===false }" />
         </keep-alive>
     </router-view>
     <footerMenu id='footerMenu' class='footerMenu' />
@@ -24,7 +24,6 @@ export default {
             leftMenuVisible: true
         }
     },
-
 }
 </script>
 
@@ -38,5 +37,10 @@ export default {
     flex: 1;
     padding-bottom: rem(100px);
     overflow-y: auto;
+    &.noFoot{
+        padding-bottom: 0;
+        background: var(--white);
+        z-index: 2;
+    }
 }
 </style>

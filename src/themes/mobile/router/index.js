@@ -63,6 +63,15 @@ const routes = [
                     title: '账户'
                 }
             },
+            {
+                path: '/addAccount',
+                name: 'AddAccount',
+                component: () => import('../views/accountManager/addAccount.vue'),
+                meta: {
+                    title: '新账户',
+                    footerMenu: false
+                }
+            },
         ]
     },
     {
@@ -82,6 +91,22 @@ const routes = [
         }
     },
     {
+        path: '/register',
+        name: 'Register',
+        component: () => import('../views/register/register.vue'),
+        meta: {
+            title: '注册开户'
+        }
+    },
+    {
+        path: '/register/success',
+        name: 'RegisterSuccess',
+        component: () => import('../views/register/registerSuccess.vue'),
+        meta: {
+            title: '注册开户'
+        }
+    },
+    {
         path: '/modifyPwd',
         name: 'ModifyPwd',
         component: () => import('../views/modifyPwd/modifyPwd.vue'),
@@ -90,11 +115,11 @@ const routes = [
         }
     },
     {
-        path: '/addAccount',
-        name: 'AddAccount',
-        component: () => import('../views/accountManager/addAccount.vue'),
+        path: '/forgot',
+        name: 'Forgot',
+        component: () => import('../views/forgot/forgot.vue'),
         meta: {
-            title: '新账户'
+            title: '找回密码'
         }
     },
     {

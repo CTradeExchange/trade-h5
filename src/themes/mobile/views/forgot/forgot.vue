@@ -3,8 +3,7 @@
         <top back :menu='false' />
         <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a>
         <header class='header'>
-            <h1 class='pageTitle'>登录</h1>
-            <!-- <languageDiv /> -->
+            <h1 class='pageTitle'>找回密码</h1>
         </header>
         <van-tabs
             v-model:active='loginType'
@@ -15,55 +14,41 @@
             title-inactive-color='#333'
             type='card'
         >
-            <van-tab name='password' title='账号登录' />
-            <van-tab name='checkCode' title='验证码登录' />
+            <van-tab name='mobile' title='手机号' />
+            <van-tab name='email' title='邮箱' />
         </van-tabs>
         <form class='loginForm'>
-            <div class='field of-1px of-1px-bottom'>
-                <input id='account' v-model.trim='account' class='input' required type='text' />
-                <label for='account'>请输入登录账号</label>
-                <a v-show='account.length' class='van-icon van-icon-clear' href='javascript:;' @click="account=''"></a>
+            <div class='field'>
+                <mobileInput v-model='mobile' v-model:zone='zone' placeholder='手机号' />
             </div>
-            <div class='field of-1px of-1px-bottom'>
-                <input id='pwd' v-model.trim='pwd' class='input' required :type='pwdVisible ? "text" : "password"' />
-                <label for='pwd'>密码</label>
-                <a v-show='pwd.length' class='van-icon van-icon-clear' href='javascript:;' @click="pwd=''"></a>
-                <a :class='[pwdVisible?"icon_icon_pressed":"icon_icon_default"]' href='javascript:;' @click='pwdVisible=!pwdVisible'></a>
+            <div class='field'>
+                <checkCode v-model='checkCode' />
             </div>
-            <div class='field toolWrap'>
-                <van-checkbox v-model='savePwd' shape='square'>保存密码</van-checkbox>
-                <div class='tools'>
-                    <router-link class='link' to='/register'>我要注册</router-link>
-                    <i class='line'>|</i>
-                    <router-link class='link' to='/forgot'>忘记密码</router-link>
-                </div>
-            </div>
-            <van-button block class='loginBtn' type='primary' @click="$router.replace('/')">登录</van-button>
+            <van-button block class='loginBtn' type='primary' @click="$router.replace('/')">下一步</van-button>
         </form>
-        <!-- <footer class='footer'>
-            <a class='link' href='javascript:;'>
-                <i class='icon_icon_service'></i>
-                在线客服
-            </a>
-        </footer> -->
     </div>
 </template>
 
 <script>
-// import languageDiv from '@m/modules/languageDiv'
 import top from '@m/layout/top'
+import mobileInput from '@m/components/form/mobileInput'
+import checkCode from '@m/components/form/checkCode'
 export default {
     components: {
-        // languageDiv,
+        mobileInput,
+        checkCode,
         top,
     },
     data () {
         return {
             pwdVisible: false,
+            zone: 86,
+            mobile: '',
+            checkCode: '',
             account: '',
             pwd: '',
             savePwd: true,
-            loginType: 'password',
+            loginType: 'mobile',
         }
     },
 }
