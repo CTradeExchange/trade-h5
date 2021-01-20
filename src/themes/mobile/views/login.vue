@@ -24,17 +24,6 @@
             <div v-else class='field'>
                 <CheckCode v-model='checkCode' clear label='验证码' />
             </div>
-            <!-- <div class='field of-1px of-1px-bottom'>
-                <input id='account' v-model.trim='account' class='input' required type='text' />
-                <label for='account'>请输入登录账号</label>
-                <a v-show='account.length' class='van-icon van-icon-clear' href='javascript:;' @click="account=''"></a>
-            </div> -->
-            <!-- <div class='field of-1px of-1px-bottom'>
-                <input id='pwd' v-model.trim='pwd' class='input' required :type='pwdVisible ? "text" : "password"' />
-                <label for='pwd'>密码</label>
-                <a v-show='pwd.length' class='van-icon van-icon-clear' href='javascript:;' @click="pwd=''"></a>
-                <a :class='[pwdVisible?"icon_icon_pressed":"icon_icon_default"]' href='javascript:;' @click='pwdVisible=!pwdVisible'></a>
-            </div> -->
             <div class='field toolWrap'>
                 <van-checkbox v-model='savePwd' shape='square'>保存密码</van-checkbox>
                 <div class='tools'>
@@ -78,7 +67,7 @@ export default {
             checkCode: '',
             savePwd: true,
             loginType: 'password',
-            loginAccount: 'email',
+            loginAccount: 'mobile',
         }
     },
     methods: {
@@ -133,13 +122,13 @@ export default {
     color: var(--color);
 }
 .loginForm{
-    margin: rem(40px) rem(30px);
+    margin: rem(50px) rem(30px);
     .field{
         position: relative;
         display: flex;
         align-items: center;
         &:not(:first-of-type){
-            margin-top: rem(50px);
+            margin-top: rem(45px);
         }
         &.toolWrap{
             justify-content: space-between;
