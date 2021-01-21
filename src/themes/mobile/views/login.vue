@@ -35,6 +35,11 @@
             <van-button block class='loginBtn' type='primary' @click="$router.replace('/')">登录</van-button>
             <van-button block class='loginBtn light' @click='changeLoginType'>{{ loginType==='password'? '验证码快捷登录':'账号密码登录' }}</van-button>
         </form>
+        <div class='otherLogin'>
+            <LoginByGoogle />
+            <span class='empty'></span>
+            <LoginByFacebook />
+        </div>
         <footer class='footer'>
             <a class='link' href='javascript:;'>
                 <i class='icon_icon_service'></i>
@@ -49,12 +54,16 @@ import LanguageDiv from '@m/modules/languageDiv'
 import MobileInput from '@m/components/form/mobileInput'
 import InputComp from '@m/components/form/input'
 import CheckCode from '@m/components/form/checkCode'
+import LoginByGoogle from '@m/components/loginByGoogle/loginByGoogle'
+import LoginByFacebook from '@m/components/loginByFacebook/loginByFacebook'
 import Top from '@m/layout/top'
 export default {
     components: {
         LanguageDiv,
         InputComp,
         MobileInput,
+        LoginByGoogle,
+        LoginByFacebook,
         CheckCode,
         Top,
     },
@@ -191,6 +200,16 @@ export default {
     .line{
         color: var(--mutedColor);
         margin: 0 1em;
+    }
+}
+.otherLogin{
+    text-align: center;
+    margin-top: rem(30px);
+    .empty{
+        display: inline-block;
+        vertical-align: middle;
+        width: rem(50px);
+        height: rem(30px);
     }
 }
 .footer{
