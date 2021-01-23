@@ -29,17 +29,16 @@
     "editor.fastScrollSensitivity": 12,
     "telemetry.enableCrashReporter": false,
     "liveServer.settings.donotShowInfoMsg": true,
-
-
     // eslint
     "eslint.options": {
         "configFile": ".eslintrc.js"
-      },
-      "eslint.nodePath": "./",
+    },
+    "eslint.nodePath": "./",
     "vetur.validation.template": true,
     "editor.formatOnSave": false,
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
+        "source.fixAll.eslint": true,
+        "source.fixAll.stylelint": true,
     },
     "eslint.probe": [
         "javascript",
@@ -65,5 +64,4 @@
     "[typescript]": {
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     }
-
 }

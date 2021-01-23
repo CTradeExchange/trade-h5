@@ -7,6 +7,9 @@ module.exports = {
         'plugin:vue/vue3-essential',
         '@vue/standard'
     ],
+    plugins:[
+        // "only-warn"
+    ],
     parserOptions: {
         parser: 'babel-eslint'
     },
