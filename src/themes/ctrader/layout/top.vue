@@ -1,6 +1,6 @@
 <template>
     <div class='top'>
-        <a v-if='menu' class='icon_caidan1' href='javascript:;' @click="$emit('showLeftMenu')"></a>
+        <a v-if='menu' class='icon_caidan' href='javascript:;' @click="$emit('showLeftMenu')"></a>
         <a v-if='back' class='van-badge__wrapper van-icon van-icon-arrow-left' href='javascript:;' @click='$router.back()'></a>
         <div class='center'>
             <slot></slot>
@@ -35,26 +35,26 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.top{
+.top {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     height: rem(90px);
     padding: 0 rem(30px);
     color: var(--white);
     background: var(--primary);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    .icon_caidan{
+    .icon_caidan {
         color: var(--white);
         font-size: 1.2em;
     }
-    .van-icon-arrow-left{
+    .van-icon-arrow-left {
         font-size: rem(44px);
     }
-    a{
+    a {
         color: var(--white);
     }
-    .center{
+    .center {
         flex: 1;
     }
 }
