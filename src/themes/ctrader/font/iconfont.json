@@ -1,0 +1,58 @@
+{
+  "id": "2343116",
+  "name": "themes_cTrader",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon_",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "17726964",
+      "name": "caidan",
+      "font_class": "caidan",
+      "unicode": "e64d",
+      "unicode_decimal": 58957
+    },
+    {
+      "icon_id": "13717149",
+      "name": "长箭头",
+      "font_class": "jtup",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "14456066",
+      "name": "长箭头",
+      "font_class": "down-jiantou-right",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "7560684",
+      "name": "back",
+      "font_class": "arrow-down",
+      "unicode": "e873",
+      "unicode_decimal": 59507
+    },
+    {
+      "icon_id": "12260713",
+      "name": "icon8_pressed",
+      "font_class": "icon_pressed",
+      "unicode": "e650",
+      "unicode_decimal": 58960
+    },
+    {
+      "icon_id": "12260714",
+      "name": "icon8_default",
+      "font_class": "icon_default",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "7440494",
+      "name": "清单",
+      "font_class": "qingdan",
+      "unicode": "e6bb",
+      "unicode_decimal": 59067
+    }
+  ]
+}

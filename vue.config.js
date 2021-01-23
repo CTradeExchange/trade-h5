@@ -19,6 +19,7 @@ module.exports = {
                 '@public': resolve('public'),
                 '@': resolve('src'),
                 '@m': resolve('src/themes/mobile'),
+                '@ct': resolve('src/themes/ctrader'),
             }
         }
     },
@@ -27,6 +28,7 @@ module.exports = {
         config.plugins.delete('preload-index').delete('prefetch-index')
     },
     pages: {
-        index: 'src/themes/mobile/main.js'
+        // index: 'src/themes/mobile/main.js'
+        index: 'src/themes/ctrader/main.js'
     }
 }
