@@ -11,10 +11,16 @@
                 0.01手数
             </span>
             <div class='ft price riseColor'>
-                <i class='iconClose icon_cha'></i>
                 <span class='alignmiddle'>-34.66</span>
             </div>
         </listItem>
+        <div class='profitLoss'>
+            <span>实际盈亏</span>
+            <span class='riseColor'>0.04</span>
+        </div>
+        <p class='tips'>
+            History may be truncated, full history is available on the desktop.
+        </p>
     </div>
 </template>
 
@@ -31,7 +37,7 @@ export default {
                 { name: '仓位' },
                 { name: '净盈亏' },
             ],
-            list: [...new Array(30)]
+            list: [...new Array(5)]
         }
     },
 }
@@ -53,15 +59,20 @@ export default {
     flex: 1;
 }
 .ft {
-    width: 25%;
+    width: 22%;
+    text-align: left;
 }
 .iconArrow {
     font-size: 1.2em;
 }
-.iconClose {
-    float: right;
-    color: var(--color);
-    font-size: rem(36px);
-    vertical-align: middle;
+.tips {
+    margin: 0 rem(22px);
+    color: var(--mutedColor);
+    font-size: rem(24px);
+}
+.profitLoss {
+    display: flex;
+    justify-content: space-between;
+    margin: rem(20px) rem(22px);
 }
 </style>

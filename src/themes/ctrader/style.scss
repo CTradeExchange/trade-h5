@@ -1,139 +1,124 @@
 @import '~@/sass/mixin.scss';
-:root{
+:root {
     --color: #333;
-    --bdColor: #ddd;
+    --bdColor: #DDD;
     --mutedColor: #989898;
-    --placeholder: #c4c4c4;
-    --bgColor: #f5f5f5;
-    --bgerColor: #dcdcdc;
-    --white: #fff;
-    --riseColor: #2ca463;
-    --fallColor: #f05824;
-    --sellColor: #f06c3e;
+    --placeholder: #C4C4C4;
+    --bgColor: #F5F5F5;
+    --bgerColor: #DCDCDC;
+    --white: #FFF;
+    --riseColor: #2CA463;
+    --fallColor: #F05824;
+    --sellColor: #F06C3E;
     --buyColor: #009344;
-    --primary: #1b5180;
-    --success: #0f9348;
+    --primary: #1B5180;
+    --success: #0F9348;
     --red: #E3525C;
 }
-
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
     border: 0;
-    box-sizing: border-box;
 }
-
 html,
 body,
 #app {
     height: 100%;
     color: var(--color);
 }
-
 body {
     font-size: 16px;
-    /*no*/
-    font-family: 'PingFang SC', '-apple-system', 'Heiti SC', 'Helvetica', 'Helvetica Neue', 'Droid Sans Fallback', 'Droid Sans';
-    webkit-text-size-adjust: none;
-    -webkit-user-select: none;
     font-size: rem(26px);
+    /* no */
+    font-family: 'PingFang SC', '-apple-system', 'Heiti SC', 'Helvetica', 'Helvetica Neue', 'Droid Sans Fallback', 'Droid Sans';
+    -webkit-user-select: none;
+    webkit-text-size-adjust: none;
 }
-a{
-    text-decoration:none;
+a {
+    text-decoration: none;
 }
-.link{
+.link {
     color: var(--primary);
 }
-.riseColor{
+.riseColor {
     color: var(--riseColor);
 }
-.fallColor{
+.fallColor {
     color: var(--fallColor);
 }
-.buyColor{
+.buyColor {
     color: var(--buyColor);
 }
-.sellColor{
+.sellColor {
     color: var(--sellColor);
 }
 [class*='icon_'] {
     font-family: iconfont;
 }
-
-[class*='of-1px']:after {
-    content: '';
+[class*='of-1px']::after {
     position: absolute;
     top: 0;
     left: 0;
+    box-sizing: border-box;
     width: 200%;
     height: 200%;
+    border: 0 solid #E2E9F1;
     transform: scale(0.5);
     transform-origin: 0 0;
+    content: '';
     pointer-events: none;
-    box-sizing: border-box;
-    border: 0 solid #e2e9f1;
 }
-
 .of-1px-all {
     &::after {
         border-width: 1px;
     }
 }
-
 .m-field {
+    background-color: #FFF;
     // padding: .38667rem .42667rem;
     border: none;
-    background-color: #fff;
 }
-
 ::-webkit-input-placeholder {
-    color: rgba($color: #000000, $alpha: 0.3);
+    color: rgba($color: #000, $alpha: 0.3);
 }
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
-
 input[type='number'] {
     -moz-appearance: textfield;
 }
-
 i {
     font-style: normal;
 }
-
 .pageRouter {
-    font-size: rem(26px);
     min-height: 100%;
     color: $text;
+    font-size: rem(26px);
     line-height: 1.4;
 }
-
 .protocolContent a {
     color: $primary !important;
 }
-
 .muted {
     color: var(--mutedColor);
 }
-
 .red {
     color: var(--red);
 }
-
 .alignRgiht {
     text-align: right;
 }
-
 .alignmiddle {
     vertical-align: middle;
 }
-
 .mtop10 {
     margin-top: 10px;
 }
-
+.mtop20 {
+    margin-top: 20px;
+}
 .relative {
     position: relative;
 }
@@ -145,7 +130,6 @@ i {
     font-display: auto;
     src: url('~@/fonts/vant-icon-db1de1.woff2') format('woff2'), url('~@/fonts/vant-icon-db1de1.woff') format('woff'), url('~@/fonts/vant-icon-db1de1.ttf') format('truetype');
 }
-
 .z-index-9999 {
     position: relative;
     z-index: 99999;
@@ -154,42 +138,35 @@ i {
 [class*='of-1px'] {
     position: relative;
 }
-
 [class*='of-1px']::after {
-    content: '';
     position: absolute;
     top: 0;
     left: 0;
+    box-sizing: border-box;
     width: 200%;
     height: 200%;
+    border: 0 solid #DDD;
     transform: scale(0.5);
     transform-origin: 0 0;
+    content: '';
     pointer-events: none;
-    box-sizing: border-box;
-    border: 0 solid #ddd;
 }
-
 .of-1px-top::after {
     border-top-width: 1px;
 }
-
 .of-1px-left::after {
     border-left-width: 1px;
 }
-
 .of-1px-right::after {
     border-right-width: 1px;
 }
-
 .of-1px-bottom::after {
-    transform: scale(0.5) translateY(-1px);
     border-bottom-width: 1px;
+    transform: scale(0.5) translateY(-1px);
 }
-
 .of-1px-top-bottom::after {
     border-width: 1px 0;
 }
-
 .of-1px-all::after {
     border-width: 1px;
 }

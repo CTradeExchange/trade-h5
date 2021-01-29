@@ -1,7 +1,7 @@
 <template>
     <div class='top'>
-        <a v-if='menu' class='icon_caidan' href='javascript:;' @click="$emit('showLeftMenu')"></a>
-        <a v-if='back' class='van-badge__wrapper van-icon van-icon-arrow-left' href='javascript:;' @click='$router.back()'></a>
+        <a v-if='menu' class='icon_caidan1' href='javascript:;' @click="$emit('showLeftMenu')"></a>
+        <a v-if='back' class='icon_fanhui' href='javascript:;' @click='$router.back()'></a>
         <div class='center'>
             <slot></slot>
         </div>
@@ -40,15 +40,15 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: rem(90px);
+    height: 45px;
     padding: 0 rem(30px);
     color: var(--white);
     background: var(--primary);
-    .icon_caidan {
+    .icon_caidan1 {
         color: var(--white);
         font-size: 1.2em;
     }
-    .van-icon-arrow-left {
+    .icon_fanhui {
         font-size: rem(44px);
     }
     a {

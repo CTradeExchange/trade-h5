@@ -27,6 +27,7 @@ export default {
     color: var(--muted);
     font-size: rem(26px);
     text-align: center;
+    background: var(--white);
     .col {
         position: relative;
         flex: 1;

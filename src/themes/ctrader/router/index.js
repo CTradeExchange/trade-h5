@@ -12,7 +12,17 @@ const routes = [
                 name: 'Home',
                 component: () => import(/* webpackChunkName: "home" */ '../views/home.vue'),
                 meta: {
-                    title: '关注列表'
+                    title: '关注列表',
+                    full: false
+                }
+            },
+            {
+                path: '/order',
+                name: 'Order',
+                component: () => import(/* webpackChunkName: "home" */ '../views/order/order.vue'),
+                meta: {
+                    title: '创建订单',
+                    full: true
                 }
             },
         ]

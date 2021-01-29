@@ -7,11 +7,11 @@
                 <i class='positions'>5</i>
             </p>
             <div class='orderBtnRow'>
-                <a class='btn riseColor' href='javascript:;'>
+                <a class='btn riseColor' href='javascript:;' @click="$router.push({ name:'Order' })">
                     <p class='label'>卖出</p>
                     <p class='price'>1.21789</p>
                 </a>
-                <a class='btn fallColor' href='javascript:;'>
+                <a class='btn fallColor' href='javascript:;' @click="$router.push({ name:'Order' })">
                     <p class='label'>买入</p>
                     <p class='price'>1.21789</p>
                 </a>
@@ -22,49 +22,7 @@
             <Peity :data='pieData' :options="{ 'fill': 'url(#LinearGradient)', 'innerRadius': 10, 'radius': 40 }" :type="'line'" />
         </div>
     </div>
-    <div style='position: absolute; top: -2000px'>
-        <svg>
-            <defs>
-                <linearGradient
-                    id='redLinearGradient'
-                    x1='0'
-                    x2='0'
-                    y1='0'
-                    y2='1'
-                >
-                    <stop offset='0' stop-color='#e9b1bf' />
-                    <stop offset='1' stop-color='#ffffff' />
-                </linearGradient>
-            </defs>
-        </svg>
-        <svg>
-            <defs>
-                <linearGradient
-                    id='greenLinearGradient'
-                    x1='0'
-                    x2='0'
-                    y1='0'
-                    y2='1'
-                >
-                    <stop offset='0' stop-color='#afd4cb' />
-                    <stop offset='1' stop-color='#ffffff' />
-                </linearGradient>
-            </defs>
-        </svg>
-        <svg>
-            <defs>
-                <linearGradient
-                    id='blueLinearGradient'
-                    x1='0'
-                    x2='0'
-                    y1='0'
-                    y2='1'
-                >
-                    <stop offset='0' stop-color='#b0cbf6' />
-                    <stop offset='1' stop-color='#f3f6fc' />
-                </linearGradient>
-            </defs>
-        </svg>
+    <div class='svgColor'>
         <svg>
             <defs>
                 <linearGradient id='LinearGradient' x1='0' x2='0' y1='0' y2='1'>
@@ -102,48 +60,48 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/sass/mixin.scss";
+@import '~@/sass/mixin.scss';
 .productItem {
+    @include active();
     position: relative;
     display: flex;
     padding: rem(20px) rem(40px);
     overflow: hidden;
-    @include active();
     .hd {
-        font-size: rem(22px);
-        color: var(--mutedColor);
-        line-height: 1.3;
         flex: 1;
+        color: var(--mutedColor);
+        font-size: rem(22px);
+        line-height: 1.3;
     }
     .productName {
-        font-size: rem(36px);
-        font-weight: normal;
         color: var(--color);
+        font-weight: normal;
+        font-size: rem(36px);
     }
     .col {
-        text-align: right;
-        font-size: rem(24px);
-        margin-left: rem(46px);
         flex: 1;
+        margin-left: rem(46px);
+        font-size: rem(24px);
+        text-align: right;
         &:first-of-type {
             margin-left: 0;
         }
     }
     .van-icon-success {
-        vertical-align: -2px;
         color: var(--success);
+        vertical-align: -2px;
     }
     .positions {
         display: inline-block;
-        font-size: rem(22px);
-        line-height: 1;
-        vertical-align: text-top;
         margin-top: rem(2px);
         margin-left: rem(5px);
         padding: 2px 5px;
         color: var(--placeholder);
-        border-radius: rem(5px);
+        font-size: rem(22px);
+        line-height: 1;
+        vertical-align: text-top;
         border: 1px solid var(--placeholder);
+        border-radius: rem(5px);
     }
     .priceUp {
         padding: rem(10px) 0;
@@ -158,8 +116,8 @@ export default {
     display: flex;
     margin-top: rem(20px);
     .btn {
-        padding: 2px 0;
         width: rem(165px);
+        padding: 2px 0;
         text-align: center;
         border-radius: 4px;
         &:first-of-type {
@@ -179,5 +137,9 @@ export default {
             font-size: rem(30px);
         }
     }
+}
+.svgColor {
+    position: absolute;
+    top: -2000px;
 }
 </style>

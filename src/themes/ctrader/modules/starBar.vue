@@ -2,10 +2,10 @@
     <div class='starBar'>
         <vueSelect v-model='productListType' :actions='productListTypes' close='取消' value='val' />
         <a class='icon' href='javascript:;'>
-            <van-icon name='add' />
+            <i class='icon_tianjia'></i>
         </a>
         <a class='icon' href='javascript:;'>
-            <van-icon name='setting' />
+            <i class='icon_bianji'></i>
         </a>
     </div>
 </template>
@@ -31,14 +31,15 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.starBar{
+.starBar {
     display: flex;
     align-items: center;
     padding: rem(10px) rem(40px) rem(10px) rem(20px);
-    .icon{
-        font-size: rem(44px);
-        color: var(--mutedColor);
+    background: var(--white);
+    .icon {
         margin-left: rem(40px);
+        color: var(--mutedColor);
+        font-size: rem(44px);
     }
 }
 </style>

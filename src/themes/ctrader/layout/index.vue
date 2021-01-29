@@ -1,6 +1,7 @@
 <template>
-    <div class='container'>
+    <div class='container' :style="{ background:$route.name==='Home'?'var(--bgColor)':'none' }">
         <layoutTop
+            v-if='!$route.meta.full'
             ref='root'
             :back='false'
             class='layoutTop'
@@ -16,7 +17,7 @@
             </keep-alive>
         </router-view>
     </div>
-    <footerMenu id='footerMenu' class='footerMenu' />
+    <footerMenu v-if='!$route.meta.full' id='footerMenu' class='footerMenu' />
     <leftMenu ref='leftMenu' />
 </template>
 
@@ -42,11 +43,11 @@ export default {
 
 <style lang="scss">
 @import '@/sass/mixin.scss';
-#app{
+#app {
     display: flex;
     flex-flow: column;
 }
-.container{
+.container {
     flex: 1;
     overflow-y: auto;
 }
