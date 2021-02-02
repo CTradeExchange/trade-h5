@@ -54,7 +54,7 @@
         </div>
 
         <!-- 过期 -->
-        <div class='expireRow'>
+        <div v-if='type>1' class='expireRow'>
             <van-checkbox v-model='expireEnabled' :checked-color='$store.state.style.primary' shape='square'>过期</van-checkbox>
             <template v-if='expireEnabled'>
                 <p class='muted mtop20'>选择日期</p>
@@ -94,7 +94,7 @@
                 </div>
             </div>
             <div class='col'>
-                <van-checkbox v-model='lossEnable' :checked-color='$store.state.style.primary' shape='square'>止盈</van-checkbox>
+                <van-checkbox v-model='lossEnable' :checked-color='$store.state.style.primary' shape='square'>止赢</van-checkbox>
                 <div v-if='lossEnable'>
                     <p class='mtop10 muted'>点数</p>
                     <Steper v-model='lossDot' class='of-1px-bottom' />
@@ -150,8 +150,8 @@ export default {
                 { name: 'GBPUSD', val: 2 },
                 { name: 'USDJPY', val: 3 },
             ],
-            profitEnable: true,
-            lossEnable: true,
+            profitEnable: false,
+            lossEnable: false,
             launchTrade: 1,
             launchTradeOpts: [
                 { name: '交易', val: 1 },
@@ -307,7 +307,7 @@ export default {
     .expireButton {
         width: 100%;
         height: 44px;
-        margin-top: rem(20px);
+        margin-top: rem(10px);
         font-size: rem(26px);
         text-align: center;
         background: none;

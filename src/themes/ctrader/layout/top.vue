@@ -56,6 +56,7 @@ export default {
     }
     .center {
         flex: 1;
+        padding: 0 rem(10px);
     }
 }
 </style>
