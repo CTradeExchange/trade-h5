@@ -19,9 +19,24 @@ const routes = [
             {
                 path: '/order',
                 name: 'Order',
-                component: () => import(/* webpackChunkName: "home" */ '../views/order/order.vue'),
+                component: () => import(/* webpackChunkName: "order" */ '../views/order/order.vue'),
                 meta: {
                     title: '创建订单',
+                    full: true
+                }
+            },
+        ]
+    },
+    {
+        path: '/productDetail',
+        component: Layout,
+        children: [
+            {
+                path: ':id',
+                name: 'ProductDetail',
+                component: () => import(/* webpackChunkName: "productDetail" */ '../views/productDetail/productDetail.vue'),
+                meta: {
+                    title: '产品详情',
                     full: true
                 }
             },
@@ -33,6 +48,14 @@ const routes = [
         component: () => import(/* webpackChunkName: "search" */ '../views/search.vue'),
         meta: {
             title: '搜索'
+        }
+    },
+    {
+        path: '/setting',
+        name: 'Setting',
+        component: () => import(/* webpackChunkName: "setting" */ '../views/setting.vue'),
+        meta: {
+            title: '设置'
         }
     },
     {

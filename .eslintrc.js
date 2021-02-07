@@ -150,7 +150,6 @@ module.exports = {
         'vue/require-default-prop': 'error', // props 必须定义默认值
         'vue/no-template-shadow': 'error', // 禁止多个v-for嵌套中出现的同名变量
         'vue/valid-v-bind-sync': 'error', // sync是否有效
-        'vue/valid-v-slot': 'error', // v-slot是否有效
         'comma-dangle': 'off',
         'dot-notation': 'off',
         'prefer-promise-reject-errors': 'off',

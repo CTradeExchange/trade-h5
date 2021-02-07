@@ -35,7 +35,7 @@ export default {
 
                 //	BEWARE: no trailing slash is expected in feed URL
                 datafeed: new UDFCompatibleDatafeed('https://demo-feed-data.tradingview.com'),
-                library_path: 'charting_library/',
+                library_path: '/charting_library/',
                 locale: 'zh',
 
                 // disabled_features: ['use_localstorage_for_settings'],

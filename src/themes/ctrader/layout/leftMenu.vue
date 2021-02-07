@@ -6,32 +6,42 @@
     >
         <div class='mainWrap'>
             <!-- <div class="flagWrap"> </div> -->
-            <span class='flag'>Demo</span>
-            <figure class='userFigure of-1px-bottom'>
+            <figure class='userFigure'>
                 <span class='face'>
                     <img alt='' src='@ct/images/face.png' />
                 </span>
                 <figcaption>
-                    <p><strong>Cats2.0 H5 Demo</strong></p>
-                    <p>84769176 - MetaQuotes-Demo</p>
-                    <a class='accountManager' href='javascript:;' @click="visible=false;$router.push('/accountManager')">管理账户</a>
+                    <p class='platform'>Cats2.0 H5 Demo</p>
+                    <p class='loginName'>qia75786@eveav.com</p>
+                    <p class='accountName'>qia75786</p>
+                    <a class='accountSetting' href='javascript:;'>
+                        <i class='icon_zhanghushezhi'></i>
+                    </a>
                 </figcaption>
+                <div class='accountRow'>
+                    <a class='addAccountBtn' href='javascript:;'>
+                        <i class='icon_jia'></i>
+                    </a>
+                    <topAccount />
+                </div>
             </figure>
             <ul class='menuList'>
-                <li class='item' @click="visible=false;$router.push('/quote')"> <i class='icon icon_hangqing'></i> <strong>行情</strong> </li>
-                <li class='item' @click="visible=false;$router.push('/chart')"> <i class='icon icon_tubiao'></i> <strong>图表</strong> </li>
-                <li class='item' @click="visible=false;$router.push('/trade')"> <i class='icon icon_jiaoyi'></i> <strong>交易</strong> </li>
-                <li class='item' @click="visible=false;$router.push('/history')"> <i class='icon icon_lishi'></i> <strong>历史</strong> </li>
-                <li class='item' @click="visible=false;$router.push('/news')"> <i class='icon icon_xinwen'></i> <strong>新闻</strong> </li>
-                <li class='item' @click="visible=false;$router.push('/onlineService')"> <i class='icon icon_xinxi'></i> <strong>信息</strong> </li>
+                <li class='item' @click="visible=false;$router.push('/quote')"> <i class='icon icon_cunkuan'></i> <strong>存款</strong> </li>
+                <li class='item' @click="visible=false;$router.push('/chart')"> <i class='icon icon_qukuan'></i> <strong>取款</strong> </li>
+                <li class='item' @click="visible=false;$router.push('/history')"> <i class='icon icon_xindingdan'></i> <strong>新订单</strong> </li>
                 <li class='item'> <i class='icon icon_shezhi'></i> <strong>设置</strong> </li>
+                <li class='item'> <i class='icon icon_tuichu'></i> <strong>退出</strong> </li>
             </ul>
         </div>
     </van-popup>
 </template>
 
 <script>
+import topAccount from './topAccount'
 export default {
+    components: {
+        topAccount,
+    },
     data () {
         return {
             visible: false
@@ -42,66 +52,84 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.mainWrap{
+.mainWrap {
     position: relative;
-    width: 70vw;
+    width: 80vw;
     overflow: hidden;
 }
-.flag{
-    position: absolute;
-    display: block;
-    right: 0;
-    top: 0;
-    color: #fff;
-    background: #4dc90f;
-    width: rem(180px);
-    height: rem(44px);
-    line-height: rem(44px);
-    text-align: center;
-    font-size: rem(24px);
-    text-shadow:#267200 1px 0 0,#267200 0 1px 0,#267200 -1px 0 0,#267200 0 -1px 0;
-    font-weight: bold;
-    transform: rotate(45deg) translate(rem(44px), rem(-20px));
-}
-
-.userFigure{
-    padding: rem(30px);
-    display: flex;
+.userFigure {
+    position: relative;
+    padding: rem(30px) 0;
+    color: var(--white);
     font-size: rem(24px);
     line-height: 1.5;
-    .face{
+    background: var(--primary);
+    .face {
+        position: absolute;
+        top: rem(30px);
+        left: rem(30px);
         width: rem(100px);
         height: rem(100px);
-        img{
+        img {
             width: rem(60px);
             height: rem(60px);
         }
     }
-    strong{
-        font-size: rem(28px);
+    figcaption {
+        margin-left: rem(130px);
     }
-    .accountManager{
-        color: var(--primary);
+    .platform {
+        font-size: rem(40px);
+        opacity: 0.6;
+    }
+    .loginName {
+        margin-top: rem(20px);
+        opacity: 0.6;
+    }
+    .accountName {
+        font-size: rem(32px);
+    }
+    .accountManager {
         display: block;
         margin-top: rem(20px);
+        color: var(--white);
+    }
+    .accountSetting {
+        position: absolute;
+        top: rem(120px);
+        right: rem(30px);
+        padding: 5px;
+        color: var(--white);
+        font-size: rem(50px);
+        line-height: 1;
+        background: rgba(0, 0, 0, 0.18);
+        border-radius: 50%;
+    }
+    .accountRow {
+        margin: rem(20px) rem(20px) 0;
+    }
+    .addAccountBtn {
+        float: right;
+        color: var(--white);
+        font-size: rem(45px);
     }
 }
-.menuList{
+.menuList {
     padding: rem(10px) 0;
     font-size: rem(26px);
-    .item{
+    .item {
+        @include active();
         padding: rem(19px) rem(30px);
-        strong{
+        strong {
             vertical-align: middle;
         }
-        @include active()
     }
-    .icon{
+    .icon {
         display: inline-block;
-        margin-right: .8em;
-        font-size: rem(52px);
-        vertical-align: middle;
+        margin-right: 0.8em;
         color: var(--mutedColor);
+        font-size: rem(50px);
+        vertical-align: middle;
     }
 }
 </style>

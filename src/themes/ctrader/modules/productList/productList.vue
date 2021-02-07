@@ -1,6 +1,6 @@
 <template>
     <div class='productListWrap'>
-        <productItem v-for='item in list' :key='item' @open='show=true' />
+        <productItem v-for='item in list' :key='item' @open='toDetail' />
     </div>
 </template>
 
@@ -16,6 +16,9 @@ export default {
         }
     },
     methods: {
+        toDetail () {
+            this.$router.push({ name: 'ProductDetail', params: { id: 1 } })
+        }
     }
 }
 </script>

@@ -7,11 +7,11 @@
                 <i class='positions'>5</i>
             </p>
             <div class='orderBtnRow'>
-                <a class='btn riseColor' href='javascript:;' @click="$router.push({ name:'Order' })">
+                <a class='btn riseColor' href='javascript:;' @click.stop="$router.push({ name:'Order' })">
                     <p class='label'>卖出</p>
                     <p class='price'>1.21789</p>
                 </a>
-                <a class='btn fallColor' href='javascript:;' @click="$router.push({ name:'Order' })">
+                <a class='btn fallColor' href='javascript:;' @click.stop="$router.push({ name:'Order' })">
                     <p class='label'>买入</p>
                     <p class='price'>1.21789</p>
                 </a>

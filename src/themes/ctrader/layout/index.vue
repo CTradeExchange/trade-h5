@@ -1,5 +1,5 @@
 <template>
-    <div class='container' :style="{ background:$route.name==='Home'?'var(--bgColor)':'none' }">
+    <div class='pageContainer' :style="{ background:$route.name==='Home'?'var(--bgColor)':'none' }">
         <layoutTop
             v-if='!$route.meta.full'
             ref='root'
@@ -12,9 +12,9 @@
             <topAccount />
         </layoutTop>
         <router-view v-slot='{ Component }'>
-            <keep-alive>
-                <component :is='Component' class='pageWrap' />
-            </keep-alive>
+            <!-- <keep-alive> -->
+            <component :is='Component' />
+            <!-- </keep-alive> -->
         </router-view>
     </div>
     <footerMenu v-if='!$route.meta.full' id='footerMenu' class='footerMenu' />
@@ -47,7 +47,7 @@ export default {
     display: flex;
     flex-flow: column;
 }
-.container {
+.pageContainer {
     flex: 1;
     overflow-y: auto;
 }
