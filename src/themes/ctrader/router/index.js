@@ -47,7 +47,7 @@ const routes = [
         name: 'Search',
         component: () => import(/* webpackChunkName: "search" */ '../views/search.vue'),
         meta: {
-            title: '搜索'
+            title: 'Find & Add Symbols'
         }
     },
     {

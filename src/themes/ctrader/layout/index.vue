@@ -6,7 +6,6 @@
             :back='false'
             class='layoutTop'
             menu
-            :title='$route.meta.title'
             @showLeftMenu='$refs.leftMenu.visible=true'
         >
             <topAccount />
