@@ -9,10 +9,10 @@
                     <span class='title'>Metals</span>
                 </div>
                 <div class='subList'>
-                    <div v-for='item in 15' :key='item' class='subItem'>
-                        <i class='icon icon_shoucang'></i>
-                        <p class='name'>XAGEUR</p>
-                        <p class='desc'>Silver vs Euro</p>
+                    <div v-for='item in list' :key='item' class='subItem' @click='onClick(item)'>
+                        <i class='icon' :class="[item.collected?'icon_yishoucang':'icon_shoucang']" @click.stop='item.collected=!item.collected'></i>
+                        <p class='name'>{{ item.name }}</p>
+                        <p class='desc'>{{ item.desc }}</p>
                     </div>
                 </div>
             </li>
@@ -31,9 +31,25 @@ export default {
     },
     data () {
         return {
-            keywords: ''
+            keywords: '',
+            collected: false,
+            list: new Array(10).fill('').map(el =>
+                (
+                    {
+                        collected: false,
+                        name: 'XAGEUR',
+                        desc: 'Silver vs Euro',
+                    }
+                )
+            )
         }
     },
+    methods: {
+        onClick (item) {
+            console.log(item)
+            this.$router.push({ name: 'ProductDetail', params: { id: '1' } })
+        }
+    }
 }
 </script>
 
@@ -53,6 +69,9 @@ export default {
     }
     :deep(.van-search__content) {
         background: var(--white);
+    }
+    .icon_yishoucang {
+        color: var(--primary);
     }
 }
 .productList {

@@ -1,7 +1,7 @@
 <template>
     <div class='starBar'>
         <vueSelect v-model='productListType' :actions='productListTypes' close='取消' value='val' />
-        <a class='icon' href='javascript:;'>
+        <a class='icon' href='javascript:;' @click="$router.push('/search')">
             <i class='icon_tianjia'></i>
         </a>
         <a class='icon' href='javascript:;'>

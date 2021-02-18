@@ -26,12 +26,12 @@
                 </div>
             </figure>
             <ul class='menuList'>
-                <li class='item' @click="visible=false;$router.push('/quote')"> <i class='icon icon_cunkuan'></i> <strong>存款</strong> </li>
-                <li class='item' @click="visible=false;$router.push('/chart')"> <i class='icon icon_qukuan'></i> <strong>取款</strong> </li>
-                <li class='item' @click="visible=false;$router.push('/history')"> <i class='icon icon_xindingdan'></i> <strong>新订单</strong> </li>
+                <li class='item'> <i class='icon icon_cunkuan'></i> <strong>存款</strong> </li>
+                <li class='item'> <i class='icon icon_qukuan'></i> <strong>取款</strong> </li>
+                <li class='item' @click="visible=false;$router.push('/order')"> <i class='icon icon_xindingdan'></i> <strong>新订单</strong> </li>
                 <li class='item' @click="visible=false;$router.push('/search')"> <i class='icon icon_sousuo'></i> <strong>Find & Add Symbols</strong> </li>
                 <li class='item' @click="visible=false;$router.push('/setting')"> <i class='icon icon_shezhi'></i> <strong>设置</strong> </li>
-                <li class='item'> <i class='icon icon_tuichu'></i> <strong>退出</strong> </li>
+                <li class='item' @click="visible=false;$router.push('/login')"> <i class='icon icon_tuichu'></i> <strong>退出</strong> </li>
             </ul>
         </div>
     </van-popup>

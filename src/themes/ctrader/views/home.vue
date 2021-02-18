@@ -19,7 +19,7 @@
             <van-tab title='历史'><HistoryList /></van-tab>
             <van-tab title='交易'><TradeList /></van-tab>
         </van-tabs>
-        <a class='fastOrder' href='javascript:;'>
+        <a class='fastOrder' href='javascript:;' @click="$router.push('/order')">
             <i class='icon_xindingdan'></i>
         </a>
     </div>
