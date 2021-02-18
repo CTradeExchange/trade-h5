@@ -1,10 +1,29 @@
 const path = require('path')
+// const dayjs = require('dayjs')
+const FileManagerPlugin = require('filemanager-webpack-plugin')
 function resolve (dir) {
     return path.join(__dirname, dir)
 }
+
+const plugins = []
+
+if (process.env.NODE_ENV === 'production') {
+    plugins.push(
+        new FileManagerPlugin({
+            events: {
+                onEnd: {
+                    // archive: [{ source: resolve('dist'), destination: resolve(`zip/dist_${dayjs().format('MMDDHHmm')}.zip`) }]
+                    archive: [{ source: resolve('dist'), destination: resolve('zip/dist.zip') }]
+                }
+            }
+        })
+    )
+}
+
 module.exports = {
     lintOnSave: false,
     configureWebpack: {
+        plugins,
         optimization: {
             splitChunks: {
                 cacheGroups: {
