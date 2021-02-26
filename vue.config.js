@@ -35,11 +35,29 @@ module.exports = {
         // it can be accessed in index.html to inject the correct title.
         resolve: {
             alias: {
+                'vue$': 'vue/dist/vue.esm-bundler.js',
                 '@public': resolve('public'),
                 '@': resolve('src'),
-                '@m': resolve('src/themes/mobile'),
+                '@api': resolve('src/api'),
+                '@m': resolve('src/themes/mt4'),
                 '@ct': resolve('src/themes/ctrader'),
             }
+        }
+    },
+    devServer:{
+        port:8090,
+        open: false,
+        overlay: {
+            warnings: false,
+            errors: true
+        },
+        proxy: {
+            '/wp-json/wp': {
+                target: 'http://uatwpadmin.ixmiddle.site'
+            },
+            '/cats-manage-api': {
+                target: 'http://uatwph5.ixmiddle.site'
+            },
         }
     },
     chainWebpack: config => {
@@ -47,7 +65,7 @@ module.exports = {
         config.plugins.delete('preload-index').delete('prefetch-index')
     },
     pages: {
-        // index: 'src/themes/mobile/main.js'
-        index: 'src/themes/ctrader/main.js'
+        index: 'src/themes/mt4/main.js'
+        // index: 'src/themes/ctrader/main.js'
     }
 }

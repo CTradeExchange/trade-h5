@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import {pageConfig} from '@api/base'
 export default {
     data () {
         return {
@@ -11,9 +12,12 @@ export default {
     created () {
         window.vm = this
         console.log(this)
+        pageConfig('Nav').then(res=>{
+            console.log(res)
+        })
     },
 }
-</script>>
+</script>
 
 <style lang="scss">
 @import '~@m/style.scss';
