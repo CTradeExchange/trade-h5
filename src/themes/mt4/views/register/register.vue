@@ -14,7 +14,7 @@
                 <div :class="{ 'openTypeAcitve':openType==='email' }"><a href='javascript:;' @click="openType='email'">邮箱</a></div>
             </div> -->
             <div v-if="openType==='mobile'" class='cell'>
-                <MobileInput v-model='mobile' v-model:zone='zone' placeholder='手机号' />
+                <MobileInput v-model.trim='mobile' v-model:zone='zone' placeholder='手机号' />
             </div>
             <div v-else class='cell'>
                 <InputComp v-model='email' clear label='邮箱' />
@@ -26,7 +26,7 @@
                 <van-checkbox v-model='protocol' shape='square'>开户注意事项</van-checkbox>
             </div>
             <div class='cell'>
-                <van-button block class='registerBtn' :color='$store.state.style.primary' type='primary' @click="$router.push('/register/success')">提交</van-button>
+                <van-button block class='registerBtn' :color='$store.state.style.primary' type='primary' @click="registerHandler">提交</van-button>
             </div>
         </form>
         <div class='switchType'>
@@ -42,6 +42,8 @@ import VueSelect from '@m/components/select'
 import CheckCode from '@m/components/form/checkCode'
 import InputComp from '@m/components/form/input'
 import MobileInput from '@m/components/form/mobileInput'
+import {getDevice} from '@/utils/util'
+import { register } from '@/api/user'
 import { mapState } from 'vuex'
 export default {
     components: {
@@ -74,6 +76,24 @@ export default {
     computed: {
         ...mapState(['zoneList'])
     },
+    methods: {
+        // 提交注册接口
+        registerHandler(){
+            console.log(this.mobile)
+            register({
+                type: this.openType==='mobile'?1:2,
+                loginName: this.mobile,
+                path: '123',
+                registerSource: getDevice(),
+                verifyCode: '222',
+                currency: 'USD',
+                playType: 1,
+            }).then(res=>{
+                console.log(res)
+            })
+            // this.$router.push('/register/success');
+        }
+    }
 }
 </script>
 

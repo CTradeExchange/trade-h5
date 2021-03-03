@@ -1,4 +1,6 @@
 import { createStore } from 'vuex'
+import Base from '@/store/modules/base'
+import User from '@/store/modules/user'
 
 const rootElement = getComputedStyle(document.documentElement)
 const style = {
@@ -7,6 +9,10 @@ const style = {
 }
 
 export default createStore({
+    modules:{
+        _base:Base,
+        _user:User,
+    },
     state: {
         style,
         quoteMode: 2, // 1简单模式 2高级模式
@@ -18,7 +24,5 @@ export default createStore({
         }
     },
     actions: {
-    },
-    modules: {
     }
 })
