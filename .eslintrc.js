@@ -4,11 +4,8 @@ module.exports = {
         node: true
     },
     extends: [
-        'plugin:vue/vue3-essential',
+        'plugin:vue/essential',
         '@vue/standard'
-    ],
-    plugins:[
-        "only-warn"
     ],
     parserOptions: {
         parser: 'babel-eslint'
@@ -128,7 +125,7 @@ module.exports = {
         'vue/object-curly-spacing': ['error', 'always'], // template属性内的花括号间距,例slot-scope='{k}' => "{ k }"
         'vue/no-reserved-component-names': 'error', // 禁止组件名称使用保留字
         'vue/match-component-file-name': ['error', {
-        // "extensions": ["vue"],
+            // "extensions": ["vue"],
             shouldMatchCase: false // 是否匹配大小写(若匹配，可能和强制大驼峰有冲突，建议false)
         }], // 组件名称和文件名称是否相同
         'vue/v-slot-style': ['error', {
@@ -140,16 +137,18 @@ module.exports = {
         'vue/v-on-style': ['error', 'shorthand'], // @on事件样式
         'vue/v-bind-style': ['error', 'shorthand'], // v-bind样式
 
-        // 'vue/singleline-html-element-content-newline': ['error', {
-        //     ignoreWhenNoAttributes: true,
-        //     ignoreWhenEmpty: true,
-        //     ignores: ['pre', 'textarea']
-        // }], // 单行元素基于属性和内容是否换行
+        'vue/singleline-html-element-content-newline': ['error', {
+            ignoreWhenNoAttributes: true,
+            ignoreWhenEmpty: true,
+            ignores: ['pre', 'textarea']
+        }], // 单行元素基于属性和内容是否换行
         'vue/prop-name-casing': ['error', 'camelCase'], // props的key名驼峰式
         'vue/require-prop-types': 'error', // props 必须定义类型
         'vue/require-default-prop': 'error', // props 必须定义默认值
         'vue/no-template-shadow': 'error', // 禁止多个v-for嵌套中出现的同名变量
         'vue/valid-v-bind-sync': 'error', // sync是否有效
+        'vue/valid-v-slot': 'error', // v-slot是否有效
+        'vue/no-v-model-argument': 'off', // v-slot是否有效
         'comma-dangle': 'off',
         'dot-notation': 'off',
         'prefer-promise-reject-errors': 'off',

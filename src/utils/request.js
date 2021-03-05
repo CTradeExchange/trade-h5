@@ -1,7 +1,6 @@
 import axios from 'axios'
 import CheckAPI from './checkAPI'
 import { guid } from '@/utils/util'
-
 const baseURL = 'http://10.186.20.102:10000/cats-gateway'
 
 // create an axios instance
@@ -11,15 +10,15 @@ const service = axios.create({
 })
 const headers = service.defaults.headers
 headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
-headers.companyId = 1
 headers.version = '0.0.1'
 // request interceptor
 service.interceptors.request.use(
     config => {
-        let language="zh-CN"
         const headers = config.headers
+        const companyId = sessionStorage.getItem('companyId')
+        config.toastErr = config.toastErr ?? true
         headers.trace = guid()
-        config.responseType = config.responseType || ''
+        headers.companyId = companyId
         if (config.method === 'get') {
             config.params = Object.assign({}, config.params || {})
         } else if (config.method === 'post') {
@@ -37,9 +36,11 @@ service.interceptors.request.use(
 // response interceptor
 service.interceptors.response.use(
     response => {
-        const res = response.data
-
-        const result = new CheckAPI(res)
+        const { data, config } = response
+        const result = new CheckAPI(data)
+        if (!result.check() && config.toastErr) {
+            result.toast()
+        }
         return result
     },
     error => {

@@ -1,5 +1,5 @@
-import axios from 'axios';
-import {CheckAPI_wp} from './checkAPI'
+import axios from 'axios'
+import { CheckAPI_wp } from './checkAPI'
 
 // create an axios instance
 const service = axios.create({

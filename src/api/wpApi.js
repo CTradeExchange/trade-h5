@@ -1,6 +1,10 @@
 import { unzip } from '@/utils/util';
 import request_wp from '@/utils/request_wp'
 
+/* 获取wp公司配置信息*/
+export const wpCompanyConfig = ()=> pageConfig('SysSetting');
+export const wpNav = ()=> pageConfig('Nav');
+
 /* 获取页面配置信息*/
 export function pageConfig(id) {
     const NODE_ENV = process.env.NODE_ENV;
@@ -25,15 +29,39 @@ export function pageConfig(id) {
             case 'Mine':
                 data = unzip(window['wp_Mine'])
                 break;
+            case 'SysSetting':      // 获取wp公司配置信息
+                data = window['wp_SysSetting']
+                break;
             default:
                 break;
         }
         if(data) return Promise.resolve(JSON.parse(data));
     }
-    return request_wp(`/${id}.json?timestamp=${Date.now()}`).then(({content}) => {
+    return request_wp(`/${id}.json?timestamp=${Date.now()}`).then(res => {
         const reg=/^(\{|\[)/;
-        content = reg.test(content) ? content:unzip(content);
+        let content = res?._content ?? res;
+        content = reg.test(content) || typeof(content)==='object' ? content:unzip(content);
         const data = typeof(content)==='string' ? JSON.parse(content) : content ;
         return data;
+    })
+}
+/* 获取行情板块配置信息*/
+export function productCategoryConfig(data) {
+    // return axios.get('/config/product_category.json', {
+    //     params: {
+    //         timestamp: Date.now(),
+    //     },
+    // }).then(res => {
+    //     return res.data;
+    // })
+    return request_wp(`/wp-json/wp/v2/zoneSymbolList`, {
+        params: {
+            timestamp: Date.now(),
+        },
+    }).then(res => {
+        if (res.success && res?.data?.code === '0000') {
+            return res?.data?.content?.product_category
+        }
+        return [];
     })
 }

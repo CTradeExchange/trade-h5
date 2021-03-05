@@ -1,19 +1,21 @@
 <template>
     <div class='register'>
         <Top back :menu='false' />
-        <a class='loginBtn' href='javascript:;' @click="$router.replace('/login')">已有账号</a>
+        <a class='loginBtn' href='javascript:;' @click="$router.replace('/login')">
+            已有账号
+        </a>
         <div class='banner'>
             <img alt='' src='https://www.blazaintl.com/platformimages/mainpage_banner11a.png' srcset='' />
         </div>
         <form class='form'>
             <div class='cell of-1px-bottom'>
-                <VueSelect v-model='currency' :actions='currencyList' value='name' />
+                <VueSelect v-model='currency' :actions='currencyList' value='value' />
             </div>
             <!-- <div class='cell openType'>
                 <div :class="{ 'openTypeAcitve':openType==='mobile' }"><a href='javascript:;' @click="openType='mobile'">手机号</a></div>
                 <div :class="{ 'openTypeAcitve':openType==='email' }"><a href='javascript:;' @click="openType='email'">邮箱</a></div>
             </div> -->
-            <div v-if="openType==='mobile'" class='cell'>
+            <div v-if="openType === 'mobile'" class='cell'>
                 <MobileInput v-model.trim='mobile' v-model:zone='zone' placeholder='手机号' />
             </div>
             <div v-else class='cell'>
@@ -23,75 +25,112 @@
                 <CheckCode v-model='checkCode' clear label='验证码' />
             </div>
             <div class='cell'>
-                <van-checkbox v-model='protocol' shape='square'>开户注意事项</van-checkbox>
+                <van-checkbox v-model='protocol' shape='square'>
+                    开户注意事项
+                </van-checkbox>
             </div>
             <div class='cell'>
-                <van-button block class='registerBtn' :color='$store.state.style.primary' type='primary' @click="registerHandler">提交</van-button>
+                <van-button
+                    block
+                    class='registerBtn'
+                    :color='$store.state.style.primary'
+                    :disabled='loading'
+                    type='primary'
+                    @click='registerHandler'
+                >
+                    提交
+                </van-button>
             </div>
         </form>
         <div class='switchType'>
-            <a v-if="openType==='email'" href='javascript:;' @click="openType='mobile'">手机号注册</a>
-            <a v-else href='javascript:;' @click="openType='email'">邮箱注册</a>
+            <a v-if="openType === 'email'" href='javascript:;' @click="openType = 'mobile'">
+                手机号注册
+            </a>
+            <a v-else href='javascript:;' @click="openType = 'email'">
+                邮箱注册
+            </a>
         </div>
+        <Loading :show='loading' />
     </div>
 </template>
 
 <script>
 import Top from '@m/layout/top'
 import VueSelect from '@m/components/select'
+import Loading from '@m/components/loading'
 import CheckCode from '@m/components/form/checkCode'
 import InputComp from '@m/components/form/input'
 import MobileInput from '@m/components/form/mobileInput'
-import {getDevice} from '@/utils/util'
+import { getDevice, mobileReg } from '@/utils/util'
 import { register } from '@/api/user'
-import { mapState } from 'vuex'
+import { mapState, useStore } from 'vuex'
+import { reactive, toRefs, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { Toast } from 'vant'
 export default {
     components: {
         Top,
         MobileInput,
         InputComp,
         CheckCode,
-        VueSelect,
+        Loading,
+        VueSelect
     },
-    data () {
-        return {
+    setup () {
+        const store = useStore()
+        const router = useRouter()
+        const state = reactive({
             options: [{ country: 'Canada', code: 'CA' }],
             zone: 86,
+            loading: false,
             checkCode: '',
             mobile: '',
             openType: 'mobile',
             accountType: 'CFD账户',
-            accountTypeList: [
-                { name: 'CFD账户' }
-            ],
-            currency: '美元账户',
+            accountTypeList: [{ name: 'CFD账户' }],
+            currency: 'USD',
             currencyList: [
-                { name: '美元账户' },
-                { name: '选项二' },
-                { name: '选项三' },
+                { name: '美元账户', value: 'USD' },
+                { name: '人民币', value: 'CNY' }
             ],
             protocol: true
-        }
-    },
-    computed: {
-        ...mapState(['zoneList'])
-    },
-    methods: {
-        // 提交注册接口
-        registerHandler(){
-            console.log(this.mobile)
+        })
+        const registerSubmit = () => {
+            state.loading = true
             register({
-                type: this.openType==='mobile'?1:2,
-                loginName: this.mobile,
+                type: state.openType === 'mobile' ? 1 : 2,
+                loginName: state.mobile,
                 path: '123',
                 registerSource: getDevice(),
-                verifyCode: '222',
+                verifyCode: state.checkCode,
                 currency: 'USD',
-                playType: 1,
-            }).then(res=>{
+                mobilePhonePrefix: state.zone,
+                playType: 1
+            }).then(res => {
                 console.log(res)
+                if (res.check()) {
+                    // 注册成功
+                    sessionStorage.setItem('RegisterSuccess', JSON.stringify(res))
+                    router.replace({ name: 'RegisterSuccess' })
+                }
+            }).finally(() => {
+                state.loading = false
             })
-            // this.$router.push('/register/success');
+        }
+        // 提交注册
+        const registerHandler = () => {
+            if (!state.mobile) {
+                return Toast('请输入手机号')
+            } else if (!mobileReg.test(state.mobile)) {
+                return Toast('请输入正确的手机号')
+            } else if (!state.checkCode) {
+                return Toast('请输入验证码')
+            }
+            registerSubmit()
+        }
+        return {
+            ...toRefs(state),
+            registerHandler
         }
     }
 }
@@ -99,11 +138,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.register{
+.register {
     position: relative;
     height: 100%;
 }
-.loginBtn{
+.loginBtn {
     position: absolute;
     right: rem(30px);
     top: 0;
@@ -111,50 +150,50 @@ export default {
     line-height: rem(90px);
     color: var(--white);
 }
-.banner{
+.banner {
     padding: 0 rem(30px);
     margin-top: rem(20px);
-    img{
+    img {
         display: block;
         width: 100%;
     }
 }
-.cell{
+.cell {
     display: flex;
     justify-content: space-between;
     margin: rem(40px) rem(30px);
-    div{
+    div {
         flex: 1;
     }
-    .zone{
+    .zone {
         width: rem(200px);
         flex: none;
         margin-right: rem(20px);
     }
-    &.openType{
+    &.openType {
         justify-content: center;
-        &>div{
+        & > div {
             flex: none;
             margin: 0 1em;
         }
-        a{
+        a {
             color: var(--color);
         }
     }
-    .openTypeAcitve{
-        a{
+    .openTypeAcitve {
+        a {
             color: var(--primary);
         }
     }
 }
-.openTypeWrapper{
-    :deep(.van-tabs__nav--card){
+.openTypeWrapper {
+    :deep(.van-tabs__nav--card) {
         margin: 0;
         border-radius: rem(10px);
         overflow: hidden;
     }
 }
-.input{
+.input {
     display: block;
     width: 100%;
     height: rem(75px);
@@ -164,14 +203,14 @@ export default {
     border: 1px solid var(--bdColor);
     border-radius: rem(10px);
 }
-.registerBtn{
+.registerBtn {
     margin-top: rem(80px);
     border-radius: rem(50px);
 }
-.switchType{
+.switchType {
     text-align: center;
     margin-top: rem(30px);
-    a{
+    a {
         color: var(--primary);
     }
 }

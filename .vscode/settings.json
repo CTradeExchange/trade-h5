@@ -38,28 +38,17 @@
     "editor.formatOnSave": false,
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true,
-        "source.fixAll.stylelint": true,
+        "source.fixAll.stylelint": true
     },
-    "eslint.probe": [
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact",
-        "html",
-        "vue",
-    ],
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        "vue",
-    ],
+    "eslint.probe": ["javascript", "javascriptreact", "typescript", "typescriptreact", "html", "vue"],
+    "eslint.validate": ["javascript", "javascriptreact", "vue"],
     "eslint.run": "onSave",
     "eslint.format.enable": true,
     "[vue]": {
-        "editor.defaultFormatter": "octref.vetur",
+        "editor.defaultFormatter": "svipas.prettier-plus"
     },
     "[javascript]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+        "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "[typescript]": {
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"

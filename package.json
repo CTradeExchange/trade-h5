@@ -11,6 +11,7 @@
     "eslint": "eslint 'src/**/*.{js,vue}' --fix"
   },
   "dependencies": {
+    "async-validator": "^3.5.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "dayjs": "^1.10.4",
