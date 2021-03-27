@@ -5,15 +5,21 @@
         </div>
         <div class='container'>
             <h2>恭喜！您的账号已经开立成功</h2>
-            <p>客户编号：<span class='accountNo'>89000056</span></p>
+            <p>
+                客户编号：<span class='accountNo'>
+                    {{ accountNo }}
+                </span>
+            </p>
         </div>
     </section>
-    <p class='tips'>首次登录请使用注册填写的【手机/邮箱+验证码】登录</p>
+    <p class='tips'>
+        首次登录请使用注册填写的【手机/邮箱+验证码】登录
+    </p>
     <div class='btnBox'>
-        <button class='btn' @click="$router.push('/quote')">
+        <button class='btn' @click='toExperience'>
             立即体验
         </button>
-        <button class='highBtn'>
+        <button class='highBtn' @click='toExperience'>
             去存款
             <p class='smallRow'>
                 <span>现在存款最高<i>赠1000USD</i></span>
@@ -23,59 +29,93 @@
 </template>
 
 <script>
+import { reactive, toRefs } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import { getDevice } from '@/utils/util'
 export default {
-
+    setup () {
+        const RegisterData = JSON.parse(sessionStorage.getItem('RegisterData')) ?? {}
+        const RegisterParams = JSON.parse(sessionStorage.getItem('RegisterParams')) ?? {}
+        const store = useStore()
+        const router = useRouter()
+        const onceState = reactive({
+            accountNo: RegisterData.data
+        })
+        const toExperience = () => {
+            return router.replace({ name: 'Login' })
+            const params = {
+                type: RegisterParams.openType === 'mobile' ? 2 : 1,
+                loginName: RegisterParams.loginName,
+                phoneArea: RegisterParams.phoneArea,
+                device: getDevice(),
+                verifyCode: '',
+                loginPwd: '',
+            }
+            store.dispatch('_user/login', params).then(res => {
+                if (res.check()) {
+                    router.replace('/')
+                }
+            })
+        }
+        return {
+            ...onceState,
+            toExperience,
+        }
+    }
 }
 </script>
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.registerSuccess{
+.registerSuccess {
     display: flex;
     padding: rem(80px) rem(40px)  rem(40px);
-    .icon{
+    .icon {
         width: rem(200px);
-        font-size: rem(120px);
         color: var(--success);
+        font-size: rem(120px);
         text-align: center;
     }
-    h2{
-        font-size: rem(32px);
-        font-weight: normal;
+    h2 {
         margin: rem(15px) 0 rem(20px);
+        font-weight: normal;
+        font-size: rem(32px);
     }
-    .accountNo{
+    .accountNo {
         color: var(--success);
     }
 }
-.tips{
+.tips {
     margin-top: rem(20px);
-    font-size: rem(26px);
     color: var(--mutedColor);
+    font-size: rem(26px);
     text-align: center;
 }
-.btnBox{
-    margin: rem(60px) rem(80px);
+.btnBox {
     display: flex;
+    margin: rem(60px) rem(80px);
     text-align: center;
-    .btn,.highBtn{
+    .btn,
+    .highBtn {
+        @include active()
+    ;
         flex: 1;
         height: rem(100px);
-        background: #f3f8fe;
-        color: var(--primary);
         margin-right: rem(20px);
-        border-radius: rem(10px);
+        color: var(--primary);
         line-height: 1.5;
-        @include active()
+        background: #F3F8FE;
+        border-radius: rem(10px);
     }
-    .highBtn{
-        background: var(--primary);
+    .highBtn {
         color: var(--white);
+        background: var(--primary);
     }
-    .smallRow{
+    .smallRow {
         font-size: rem(20px);
-        i{
-            color: #fffc00;
+        i {
+            color: #FFFC00;
         }
     }
 }

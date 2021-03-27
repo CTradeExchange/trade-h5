@@ -16,7 +16,7 @@
                 <div :class="{ 'openTypeAcitve':openType==='email' }"><a href='javascript:;' @click="openType='email'">邮箱</a></div>
             </div> -->
             <div v-if="openType === 'mobile'" class='cell'>
-                <MobileInput v-model.trim='mobile' v-model:zone='zone' placeholder='手机号' />
+                <MobileInput v-model.trim='mobile' v-model:zone='zone' placeholder='手机号' @blur='onMobileBlur' />
             </div>
             <div v-else class='cell'>
                 <InputComp v-model='email' clear label='邮箱' />
@@ -55,18 +55,20 @@
 </template>
 
 <script>
+import Schema from 'async-validator'
 import Top from '@m/layout/top'
 import VueSelect from '@m/components/select'
 import Loading from '@m/components/loading'
 import CheckCode from '@m/components/form/checkCode'
 import InputComp from '@m/components/form/input'
 import MobileInput from '@m/components/form/mobileInput'
-import { getDevice, mobileReg } from '@/utils/util'
-import { register } from '@/api/user'
-import { mapState, useStore } from 'vuex'
+import { getDevice, getQueryVariable } from '@/utils/util'
+import { register, openAccount } from '@/api/user'
+import { useStore } from 'vuex'
 import { reactive, toRefs, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Toast } from 'vant'
+import Rule, { checkCustomerExistRule } from './rule'
 export default {
     components: {
         Top,
@@ -77,6 +79,7 @@ export default {
         VueSelect
     },
     setup () {
+        let delayer = null
         const store = useStore()
         const router = useRouter()
         const state = reactive({
@@ -85,7 +88,7 @@ export default {
             loading: false,
             checkCode: '',
             mobile: '',
-            openType: 'mobile',
+            openType: 'mobile', // mobile 手机号开户， email 邮箱开户
             accountType: 'CFD账户',
             accountTypeList: [{ name: 'CFD账户' }],
             currency: 'USD',
@@ -95,42 +98,73 @@ export default {
             ],
             protocol: true
         })
-        const registerSubmit = () => {
+        // 手机号输入框离开焦点
+        const onMobileBlur = () => {
+            const validator = new Schema(checkCustomerExistRule)
+            const params = {
+                type: state.openType === 'email' ? 1 : 2, // 1邮箱，2手机号码，3客户账号
+                loginName: state.openType === 'email' ? state.email : state.mobile,
+                phoneArea: state.openType === 'mobile' ? String(state.zone) : '',
+            }
+            delayer = setTimeout(() => {
+                validator.validate(params, { first: true }, (errors, fields) => {
+                    if (errors) {
+                        Toast(errors[0].message)
+                    }
+                })
+            }, 100)
+        }
+        const registerSubmit = (params) => {
             state.loading = true
-            register({
-                type: state.openType === 'mobile' ? 1 : 2,
-                loginName: state.mobile,
-                path: '123',
-                registerSource: getDevice(),
-                verifyCode: state.checkCode,
-                currency: 'USD',
-                mobilePhonePrefix: state.zone,
-                playType: 1
+            register(params).finally(() => {
+                state.loading = false
             }).then(res => {
-                console.log(res)
+                // state.loading = false
                 if (res.check()) {
                     // 注册成功
-                    sessionStorage.setItem('RegisterSuccess', JSON.stringify(res))
+                    sessionStorage.setItem('RegisterParams', JSON.stringify({ ...params, openType: state.openType }))
+                    sessionStorage.setItem('RegisterData', JSON.stringify(res))
                     router.replace({ name: 'RegisterSuccess' })
+
+                    // 注册成功后开立账户
+                    openAccount({
+                        tradeType: 1,
+                        currency: state.currency,
+                    })
+                } else {
+                    res.toast()
                 }
-            }).finally(() => {
-                state.loading = false
             })
         }
         // 提交注册
         const registerHandler = () => {
-            if (!state.mobile) {
-                return Toast('请输入手机号')
-            } else if (!mobileReg.test(state.mobile)) {
-                return Toast('请输入正确的手机号')
-            } else if (!state.checkCode) {
-                return Toast('请输入验证码')
+            clearTimeout(delayer)
+            const params = {
+                type: state.openType === 'email' ? 1 : 2,
+                loginName: state.openType === 'email' ? state.email : state.mobile,
+                phoneArea: state.openType === 'mobile' ? String(state.zone) : '',
+                registerSource: getDevice(),
+                verifyCode: state.checkCode,
+                currency: state.currency,
+                tradeType: 1,
+                utmSource: getQueryVariable('utm_source'),
+                utmMedium: getQueryVariable('utm_medium'),
+                utmCampaign: getQueryVariable('utm_campaign'),
+                utmContent: getQueryVariable('utm_content'),
+                utmTerm: getQueryVariable('utm_term'),
             }
-            registerSubmit()
+            const validator = new Schema(Rule)
+            validator.validate(params, { first: true }, (errors, fields) => {
+                if (errors) {
+                    return Toast(errors[0].message)
+                }
+                registerSubmit(params)
+            })
         }
         return {
             ...toRefs(state),
-            registerHandler
+            registerHandler,
+            onMobileBlur,
         }
     }
 }
@@ -144,15 +178,15 @@ export default {
 }
 .loginBtn {
     position: absolute;
-    right: rem(30px);
     top: 0;
+    right: rem(30px);
     height: rem(90px);
-    line-height: rem(90px);
     color: var(--white);
+    line-height: rem(90px);
 }
 .banner {
-    padding: 0 rem(30px);
     margin-top: rem(20px);
+    padding: 0 rem(30px);
     img {
         display: block;
         width: 100%;
@@ -166,13 +200,13 @@ export default {
         flex: 1;
     }
     .zone {
-        width: rem(200px);
         flex: none;
+        width: rem(200px);
         margin-right: rem(20px);
     }
     &.openType {
         justify-content: center;
-        & > div {
+        &>div {
             flex: none;
             margin: 0 1em;
         }
@@ -189,17 +223,17 @@ export default {
 .openTypeWrapper {
     :deep(.van-tabs__nav--card) {
         margin: 0;
-        border-radius: rem(10px);
         overflow: hidden;
+        border-radius: rem(10px);
     }
 }
 .input {
     display: block;
     width: 100%;
     height: rem(75px);
-    line-height: 1;
-    font-size: rem(30px);
     padding: 0 5px;
+    font-size: rem(30px);
+    line-height: 1;
     border: 1px solid var(--bdColor);
     border-radius: rem(10px);
 }
@@ -208,8 +242,8 @@ export default {
     border-radius: rem(50px);
 }
 .switchType {
-    text-align: center;
     margin-top: rem(30px);
+    text-align: center;
     a {
         color: var(--primary);
     }

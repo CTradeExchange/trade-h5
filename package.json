@@ -16,6 +16,7 @@
     "core-js": "^3.6.5",
     "dayjs": "^1.10.4",
     "pako": "^2.0.3",
+    "reconnectingwebsocket": "^1.0.0",
     "vant": "^3.0.2",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",

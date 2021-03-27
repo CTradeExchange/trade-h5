@@ -7,25 +7,25 @@ export default {
         {
             message: '请输入手机号',
             validator: (rule, value, callback, source, options) => {
-                return source.type === 1 ? !!value : true
+                return source.type === 2 ? !!value : true
             },
         },
         {
             message: '请输入正确的手机号',
             validator: (rule, value, callback, source, options) => {
-                return source.type === 1 ? mobileReg.test(value) : true
+                return source.type === 2 ? mobileReg.test(value) : true
             },
         },
         {
             message: '请输入邮箱',
             validator: (rule, value, callback, source, options) => {
-                return source.type === 2 ? !!value : true
+                return source.type === 1 ? !!value : true
             },
         },
         {
             message: '请输入正确的邮箱',
             validator: (rule, value, callback, source, options) => {
-                return source.type === 2 ? emailReg.test(value) : true
+                return source.type === 1 ? emailReg.test(value) : true
             },
         },
     ],

@@ -9,9 +9,14 @@ export default class CheckAPI {
         return this.code === '0'
     }
 
+    // 检查接口是否异常
+    invalid () {
+        return this.code !== '0'
+    }
+
     // 获取错误信息
     errorMsg () {
-        const msg = this.msg || this.errMsg || this.message
+        const msg = this.msg
         return msg
     }
 

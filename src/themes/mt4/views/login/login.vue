@@ -78,7 +78,7 @@ import LoginByFacebook from '@m/components/loginByFacebook/loginByFacebook'
 import Top from '@m/layout/top'
 import { getDevice } from '@/utils/util'
 import { reactive, toRefs } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
 import Rule from './rule'
@@ -94,12 +94,13 @@ export default {
     },
     setup () {
         const router = useRouter()
+        const route = useRoute()
         const store = useStore()
         const state = reactive({
             pwdVisible: false,
             zone: 86,
             email: '',
-            mobile: '',
+            mobile: '13200001111',
             pwd: '',
             checkCode: '',
             savePwd: true,
@@ -112,8 +113,9 @@ export default {
         }
         const loginHandle = () => {
             const loginParams = {
-                type: state.loginAccount === 'mobile' ? 1 : 2,
+                type: state.loginAccount === 'mobile' ? 2 : 1,
                 loginName: state.loginAccount === 'mobile' ? state.mobile : state.email,
+                phoneArea: state.loginAccount === 'mobile' ? String(state.zone) : undefined,
                 device: getDevice(),
                 verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
                 loginPwd: state.loginType === 'password' ? state.pwd : undefined,
@@ -128,11 +130,14 @@ export default {
                 loginSubmit(loginParams)
             })
         }
-
+        // 发送登录接
         const loginSubmit = (params) => {
             store.dispatch('_user/login', params).then(res => {
                 // console.log(res)
-                // router.replace('/')
+                if (res.check()) {
+                    const toURL = route.query.back ? decodeURIComponent(route.query.back) : '/'
+                    router.replace(toURL)
+                }
             })
         }
         return {

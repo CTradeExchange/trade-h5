@@ -1,5 +1,6 @@
 <template>
     <div id='homeContent'>
+        <Top />
         <div id='inflow2App' ref='inflow2App'>
             <!-- <demo :orgid="orgid" lang="zh-cn"></demo> -->
         </div>
@@ -7,11 +8,15 @@
 </template>
 
 <script>
+import Top from '@m/layout/top'
 import loadScript from '@/utils/loadScript'
 import loadCSS from '@/utils/loadCSS'
 let loaded = false
 export default {
     name: 'News',
+    components: {
+        Top,
+    },
     mounted () {
         this.init()
     },

@@ -3,16 +3,15 @@
         <div class='mainWrap'>
             <div class='hd'>
                 <p class='productName'>
-                    EURCAD,
+                    {{ data.symbolName }},
                     <span class='volumn'>
-                        {{ data.direction===1?'buy':'sell' }}
-                        {{ positionNUm }}
+                        {{ data.direction===1?'buy':'sell' }} 1.00
                     </span>
                 </p>
                 <p>
-                    <span>{{ data.openPrice }}</span>
+                    <span>{{ executePrice }}</span>
                     <span> →</span>
-                    <span>{{ product.buy_price }}</span>
+                    <span>{{ executePrice }}</span>
                 </p>
             </div>
             <div class='col'>
@@ -80,25 +79,19 @@
 </template>
 
 <script>
-import { computed, reactive, toRefs } from 'vue'
-import { useStore } from 'vuex'
-import { priceFormat } from '@/utils/util'
+import { reactive, toRefs } from 'vue'
 export default {
     props: ['data'],
     setup ({ data }) {
-        const store = useStore()
         const onceState = {
-            executePrice: priceFormat(data.executePrice, data.openSymbolDigits),
-            positionNUm: Number(data.openNum) - Number(data.closeFee)
+            executePrice: data.executePrice
         }
         const state = reactive({
             detailVisible: false
         })
-        const product = computed(() => store.state._quote.productMap[data.symbolId])
         return {
             ...toRefs(state),
-            ...onceState,
-            product,
+            ...onceState
         }
     },
 }

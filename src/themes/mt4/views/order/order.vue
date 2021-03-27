@@ -1,41 +1,47 @@
 <template>
-    <div class='orderWrap'>
+    <div v-if='product' class='orderWrap'>
         <top
             back
             :menu='false'
             sub-title='Eur vs US Dollar'
-            title='UERUSD'
+            :title='product.name'
         />
         <!-- 订单类型 -->
         <div class='cell openType'>
-            <p class='title' @click='dropdownWrap=!dropdownWrap'>即时执行</p>
+            <p class='title' @click='dropdownWrap=!dropdownWrap'>
+                即时执行
+            </p>
             <div v-show='dropdownWrap' class='dropdownWrap' @click='dropdownWrap=false'>
-                <a class='item of-1px-bottom' href='javascript:;'>即时执行</a>
-                <a class='item of-1px-bottom' href='javascript:;'>买入限价</a>
-                <a class='item of-1px-bottom' href='javascript:;'>卖出限价</a>
-                <a class='item of-1px-bottom' href='javascript:;'>买入止损</a>
-                <a class='item of-1px-bottom' href='javascript:;'>卖出止损</a>
+                <a class='item of-1px-bottom' href='javascript:;'>
+                    即时执行
+                </a>
+                <a class='item of-1px-bottom' href='javascript:;'>
+                    买入限价
+                </a>
+                <a class='item of-1px-bottom' href='javascript:;'>
+                    卖出限价
+                </a>
+                <a class='item of-1px-bottom' href='javascript:;'>
+                    买入止损
+                </a>
+                <a class='item of-1px-bottom' href='javascript:;'>
+                    卖出止损
+                </a>
             </div>
         </div>
 
         <!-- 订单手数 -->
-        <div class='cell volumn'>
-            <a class='item' href='javascript:;'>-0.1</a>
-            <a class='item' href='javascript:;'>-0.01</a>
-            <span class='item'>
-                <input v-model='volumn' class='volumnInput' type='text' />
-            </span>
-            <a class='item' href='javascript:;'>+0.01</a>
-            <a class='item' href='javascript:;'>+0.1</a>
+        <div class='cell'>
+            <OrderVolumn v-model='volumn' />
         </div>
 
         <!-- 买卖价格 -->
         <div class='cell priceCell'>
             <div class='col fallColor'>
-                <Price />
+                <Price :data='product.sell_price' :mode='1' />
             </div>
             <div class='col riseColor'>
-                <Price />
+                <Price :data='product.buy_price' :mode='1' />
             </div>
         </div>
 
@@ -50,30 +56,52 @@
         </div>
 
         <!-- 图表 -->
-        <div class='chart'> 这里是图表 </div>
+        <div class='chart'>
+            这里是图表
+        </div>
 
         <!-- 底部下单按钮 -->
         <div class='footerBtn'>
             <div class='col'>
-                <button class='btn sellColor' @click="$router.push('/order/pending')">SELL</button>
+                <button class='btn sellColor' @click="orderClick('sell')">
+                    SELL
+                </button>
             </div>
             <div class='col'>
-                <button class='btn buyColor' @click="$router.push('/order/pending')">BUY</button>
+                <button class='btn buyColor' @click="$router.push('/order/pending')">
+                    BUY
+                </button>
             </div>
         </div>
     </div>
+    <van-popup v-model:show='pendingVisible' :close-on-click-overlay='false' :style='{ width:"100%",height: "100%" }'>
+        <Pending @onHide='pendingVisible=false' />
+    </van-popup>
 </template>
 
 <script>
 import top from '@m/layout/top'
 import Price from '@m/components/price'
+import { computed, reactive, toRefs } from 'vue'
+import { useStore } from 'vuex'
+import { socket } from '@/plugins/socket/socket'
+import { addMarketOrder } from '@/api/trade'
+import { useRoute, useRouter } from 'vue-router'
+import OrderVolumn from './components/orderVolumn'
+import Pending from './pending'
 export default {
     components: {
+        Pending,
+        OrderVolumn,
         Price,
         top,
     },
-    data () {
-        return {
+    setup () {
+        const store = useStore()
+        const route = useRoute()
+        const router = useRouter()
+        const state = reactive({
+            pendingVisible: false,
             dropdownWrap: false,
             volumn: 0.01,
             value: 3,
@@ -83,6 +111,33 @@ export default {
                 { text: '新款商品', value: 1 },
                 { text: '活动商品', value: 2 },
             ],
+        })
+        // 当前产品
+        const product = computed(() => store.getters.productActived)
+        if (!product.value) router.replace('/')
+        // 点击下单按钮
+        const orderClick = (direction) => {
+            const requestPrice = direction === 'sell' ? product.value.sell_price : product.value.buy_price
+            const params = {
+                bizType: 1, // 业务类型。0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
+                direction: direction === 'sell' ? 2 : 1, // 订单买卖方向。1-买；2-卖；
+                symbolId: product.value.symbol_id,
+                requestTime: Date.now(),
+                requestNum: state.volumn,
+                requestPrice: Number(requestPrice),
+            }
+            addMarketOrder(params).then(res => {
+                if (res.invalid()) return false
+                router.push('/order/pending')
+            })
+        }
+        const { symbolId } = route.query
+        socket.send_subscribe([symbolId])
+        store.commit('Update_productActivedID', symbolId)
+        return {
+            ...toRefs(state),
+            product,
+            orderClick,
         }
     },
 
@@ -90,138 +145,120 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/sass/mixin.scss";
+@import '~@/sass/mixin.scss';
 .orderWrap {
     position: relative;
     height: 100%;
     padding-bottom: rem(100px);
     .cell {
-        margin-left: rem(30px);
         margin-right: rem(30px);
+        margin-left: rem(30px);
     }
 }
 .openType {
+    @include ftbd();
     margin-top: rem(20px);
     padding: 1px;
     text-align: center;
-    @include ftbd();
-    .title{
+    .title {
         padding: rem(15px) 0 rem(5px);
         font-size: rem(28px);
     }
-    .dropdownWrap{
+    .dropdownWrap {
         position: absolute;
         top: 100%;
         left: 0;
+        z-index: 1;
         width: 100%;
         background: var(--bgColor);
-        box-shadow: 1px 1px rem(15px) rgba(0,0,0,.3);
-        .item{
+        box-shadow: 1px 1px rem(15px) rgba(0, 0, 0, 0.3);
+        .item {
             display: block;
-            line-height: rem(80px);
             color: inherit;
             font-size: rem(28px);
+            line-height: rem(80px);
         }
     }
 }
-.volumn{
-    margin-top: rem(40px);
-    padding: 1px;
-    line-height: rem(44px);
-    text-align: center;
-    display: flex;
-    position: relative;
-    padding-bottom: rem(10px);
-    @include ftbd();
-    .item{
-        flex: 1;
-        font-size: rem(26px);
-        @include active();
-    }
-    .volumnInput{
-        width: 100%;
-        text-align: center;
-    }
-}
-.priceCell{
-    margin-top: rem(30px);
+.priceCell {
     display: flex;
     justify-content: center;
-    .col{
-        &:first-of-type{
+    margin-top: rem(30px);
+    .col {
+        &:first-of-type {
             margin-right: rem(40px);
         }
     }
 }
-.priceSet{
-    margin-top: rem(40px);
+.priceSet {
     display: flex;
-    .col{
-        flex: 1;
+    margin-top: rem(40px);
+    .col {
         @include ftbd();
-
-        &:first-of-type{
+        flex: 1;
+        &:first-of-type {
             margin-right: rem(40px);
-            &::before{
+            &::before {
                 border-color: var(--sellColor);
             }
         }
-        &:last-of-type{
-            &::before{
+        &:last-of-type {
+            &::before {
                 border-color: var(--buyColor);
             }
         }
     }
 }
-.priceStepper{
-    width: 100%;
+.priceStepper {
     display: flex;
-    :deep(.van-stepper__input){
+    width: 100%;
+    :deep(.van-stepper__input) {
         flex: 1;
     }
-    :deep(.van-stepper__minus,.van-stepper__plus){
-        background: none;
+    :deep(.van-stepper__minus,.van-stepper__plus) {
         color: var(--primary);
+        background: none;
     }
-    :deep(.van-stepper__input){
+    :deep(.van-stepper__input) {
         background: none;
     }
 }
-.chart{
-    margin-top: rem(40px);
-    background: var(--bdColor);
+.chart {
     height: rem(500px);
-    line-height: rem(500px);
-    text-align: center;
+    margin-top: rem(40px);
     color: var(--color);
     font-size: rem(30px);
+    line-height: rem(500px);
+    text-align: center;
+    background: var(--bdColor);
 }
-.footerBtn{
+.footerBtn {
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 100%;
     display: flex;
-    &::before{
-        content: '';
+    width: 100%;
+    &::before {
         position: absolute;
-        left: 50%;
         top: 20%;
         bottom: 20%;
+        left: 50%;
         width: 1px;
-        background: rgba(0,0,0,.15);
+        background: rgba(0, 0, 0, 0.15);
+        content: '';
     }
-    .col{
+    .col {
         flex: 1;
     }
-    .btn{
+    .btn {
+        @include active()
+    ;
+        width: 100%;
         height: rem(100px);
+        font-weight: bold;
+        font-size: rem(28px);
         line-height: 1;
         text-align: center;
-        width: 100%;
-        font-size: rem(28px);
-        font-weight: bold;
-        @include active()
     }
 }
 </style>

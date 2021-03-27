@@ -1,20 +1,28 @@
 <template>
     <div class='top'>
-        <a v-if='menu' class='icon_caidan1' href='javascript:;' @click="$emit('showLeftMenu')"></a>
+        <a v-if='menu' class='icon_caidan1' href='javascript:;' @click='$refs.leftMenu.visible=true'></a>
         <a v-if='back' class='icon_fanhui' href='javascript:;' @click='$router.back()'></a>
         <div v-if='titleText' class='title'>
-            <h2 v-if='titleText'>{{ titleText }}</h2>
-            <p v-if='subTitle' class='subTitle'>{{ subTitle }}</p>
+            <h2 v-if='titleText'>
+                {{ titleText }}
+            </h2>
+            <p v-if='subTitle' class='subTitle'>
+                {{ subTitle }}
+            </p>
         </div>
-        <topRight />
+        <slot name='right'></slot>
+        <!-- <topRight /> -->
     </div>
+    <leftMenu ref='leftMenu' />
 </template>
 
 <script>
 import topRight from './topRight'
+import leftMenu from './leftMenu'
 export default {
     components: {
         topRight,
+        leftMenu,
     },
     props: {
         menu: {
@@ -44,43 +52,43 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.top{
+.top {
     position: relative;
+    display: flex;
+    align-items: center;
     height: rem(90px);
     padding: 0 rem(30px);
     color: var(--white);
     background: var(--primary);
-    display: flex;
-    align-items: center;
-    .icon_caidan{
+    .icon_caidan {
         color: var(--white);
         font-size: 1.2em;
     }
-    .title{
+    .title {
         position: relative;
-        padding-left: rem(60px);
-        margin-left: rem(20px);
-        line-height: 1.4;
         flex: 1;
-        &::before{
-            content: '';
+        margin-left: rem(20px);
+        padding-left: rem(60px);
+        line-height: 1.4;
+        &::before {
             position: absolute;
-            left: 0;
             top: 50%;
+            left: 0;
+            width: rem(50px);
+            height: rem(50px);
             margin-top: rem(-25px);
             background: url('~@m/images/logo.png') no-repeat;
             background-size: auto 100%;
-            width: rem(50px);
-            height: rem(50px);
+            content: '';
         }
-        h2{
+        h2 {
             font-size: rem(32px);
         }
-        .subTitle{
+        .subTitle {
             font-size: rem(24px);
         }
     }
-    a{
+    a {
         color: var(--white);
     }
 }

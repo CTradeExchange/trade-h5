@@ -1,7 +1,11 @@
 import axios from 'axios'
 import CheckAPI from './checkAPI'
-import { guid } from '@/utils/util'
-const baseURL = 'http://10.186.20.102:10000/cats-gateway'
+import { login } from '@/api/user'
+import { guid, getLoginParams } from '@/utils/util'
+import { apiDomain } from '@/config'
+
+// const baseURL = 'http://18.162.240.170:10000/cats-gateway'
+const baseURL = `${apiDomain}/cats-gateway`
 
 // create an axios instance
 const service = axios.create({
@@ -16,8 +20,10 @@ service.interceptors.request.use(
     config => {
         const headers = config.headers
         const companyId = sessionStorage.getItem('companyId')
+        const token = sessionStorage.getItem('token')
         config.toastErr = config.toastErr ?? true
         headers.trace = guid()
+        if (token) headers.token = token
         headers.companyId = companyId
         if (config.method === 'get') {
             config.params = Object.assign({}, config.params || {})
@@ -37,6 +43,15 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     response => {
         const { data, config } = response
+        // token失效重新登录
+        if (data.code === 'GATEWAY_CODE_005') {
+            const loginParams = getLoginParams()
+            return login(loginParams).then(res => {
+                sessionStorage.setItem('token', res.data.token)
+                config.headers.token = res.data.token
+                return service(config)
+            })
+        }
         const result = new CheckAPI(data)
         if (!result.check() && config.toastErr) {
             result.toast()

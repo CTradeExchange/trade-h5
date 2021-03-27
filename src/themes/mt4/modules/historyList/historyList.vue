@@ -1,11 +1,11 @@
 <template>
-    <div ref='positionWrap'>
-        <div v-if='positionList.length===0 && $store.state._trade.positionLoading' class='loading'>
+    <div>
+        <div v-if='orderList.length===0 && $store.state._trade.historyLoading' class='loading'>
             <van-loading type='spinner' />
         </div>
-        <van-empty v-else-if='positionList.length===0' description='无历史记录' />
+        <van-empty v-else-if='orderList.length===0' description='无历史记录' />
         <template v-else>
-            <positionItem v-for='item in positionList' :key='item' :data='item' />
+            <positionItem v-for='item in orderList' :key='item' :data='item' />
         </template>
     </div>
 </template>
@@ -13,16 +13,16 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import positionItem from './positionItem'
+import positionItem from './historyItem'
 export default {
     components: {
         positionItem,
     },
     setup () {
         const store = useStore()
-        const positionList = computed(() => store.state._trade.positionList)
+        const orderList = computed(() => store.state._trade.historyList)
         return {
-            positionList
+            orderList,
         }
     },
 }
@@ -34,5 +34,4 @@ export default {
     padding-top: 30%;
     text-align: center;
 }
-
 </style>

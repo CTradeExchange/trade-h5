@@ -50,3 +50,27 @@ export function getDevice () {
     }
     return openFrom
 }
+
+// 获取连接参数
+export function getQueryVariable (variable, search = location.search) {
+    if (!search) {
+        return undefined
+    }
+    var query = search.substring(1)
+    var vars = query.split('&')
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=')
+        if (pair[0] == variable) { return decodeURIComponent(pair[1]) }
+    }
+    return undefined
+}
+
+// 获取登录参数
+export function getLoginParams () {
+    return JSON.parse(localStorage.getItem('loginParams'))
+}
+// 格式化价格
+export function priceFormat (price, digits) {
+    const _price = price / Math.pow(10, digits)
+    return _price.toFixed(digits)
+}

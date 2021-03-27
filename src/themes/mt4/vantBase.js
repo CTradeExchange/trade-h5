@@ -1,6 +1,6 @@
-import { Button, Tabbar, TabbarItem, popup, Dialog, Cell, CellGroup, Stepper, Checkbox, CheckboxGroup, Tab, Tabs, ActionSheet, Swipe, SwipeItem, Icon, Loading } from 'vant'
+import { Button, Tabbar, TabbarItem, popup, Dialog, Cell, CellGroup, Stepper, Checkbox, CheckboxGroup, Tab, Tabs, ActionSheet, Swipe, SwipeItem, Icon, Loading, Calendar, Empty } from 'vant'
 
-const components = [Button, Tabbar, TabbarItem, popup, Dialog, Cell, CellGroup, Stepper, Checkbox, CheckboxGroup, Tab, Tabs, ActionSheet, Swipe, SwipeItem, Icon, Loading]
+const components = [Button, Tabbar, TabbarItem, popup, Dialog, Cell, CellGroup, Stepper, Checkbox, CheckboxGroup, Tab, Tabs, ActionSheet, Swipe, SwipeItem, Icon, Loading, Calendar, Empty]
 const install = (app, options) => {
     components.forEach(component => {
         app.use(component)
@@ -11,7 +11,7 @@ export default {
 }
 
 window['IX_postMessage'] = (win => {
-    function IX_postMessage() {
+    function IX_postMessage () {
         this.domain = ''
         this.key = ''
         this.inIframe = !(window.self === window.top)

@@ -1,23 +1,18 @@
 <template>
-    <layoutTop ref='root' class='layoutTop' :title='$route.meta.title' @showLeftMenu='$refs.leftMenu.visible=true' />
-    <router-view v-slot='{ Component }'>
+    <router-view />
+    <!-- <router-view v-slot='{ Component }'>
         <keep-alive>
             <component :is='Component' class='pageWrap' :class="{ 'noFoot':$route.meta.footerMenu===false }" />
         </keep-alive>
-    </router-view>
+    </router-view> -->
     <footerMenu id='footerMenu' class='footerMenu' />
-    <leftMenu ref='leftMenu' />
 </template>
 
 <script>
 import footerMenu from './footerMenu'
-import leftMenu from './leftMenu'
-import layoutTop from './top'
 export default {
     components: {
         footerMenu,
-        layoutTop,
-        leftMenu,
     },
     data () {
         return {
@@ -29,18 +24,18 @@ export default {
 
 <style lang="scss">
 @import '@/sass/mixin.scss';
-#app{
+#app {
     display: flex;
     flex-flow: column;
 }
-.pageWrap{
+.pageWrap {
     flex: 1;
     padding-bottom: rem(100px);
     overflow-y: auto;
-    &.noFoot{
+    &.noFoot {
+        z-index: 2;
         padding-bottom: 0;
         background: var(--white);
-        z-index: 2;
     }
 }
 </style>

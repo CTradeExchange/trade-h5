@@ -1,10 +1,16 @@
 <template>
-    <span v-show='mode===1' class='price'>1.55225</span>
-    <span v-show='mode===2' class='price'>
-        <span class='normal'>1.55</span>
-        <span class='big'>22</span>
-        <sup>5</sup>
+    <span v-show='mode===1 || mode===2' class='price'>
+        {{ data }}
     </span>
+    <!-- <span v-show='mode===2' class='price'>
+        <span class='normal'>
+            1.55
+        </span>
+        <span class='big'>
+            22
+        </span>
+        <sup>5</sup>
+    </span> -->
 </template>
 
 <script>
@@ -25,16 +31,16 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-.price{
-    font-size: rem(30px);
+.price {
     font-weight: bold;
-    .normal{
+    font-size: rem(30px);
+    .normal {
         vertical-align: text-bottom;
     }
-    .big{
+    .big {
         font-size: rem(46px);
     }
-    sup{
+    sup {
         font-size: inherit;
     }
 }
