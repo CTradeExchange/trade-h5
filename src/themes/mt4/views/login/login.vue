@@ -1,22 +1,12 @@
 <template>
     <div class='pageWrap'>
-        <Top back :menu='false' />
-        <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a>
+        <Top back :menu='false' :right-action='rightAction' @rightClick='changeLoginType' />
         <header class='header'>
             <h1 class='pageTitle'>
-                {{ loginType==='password'? '账号密码登录':'验证码快捷登录' }}
+                {{ loginType==='password'? '账号密码登录':'验证码登录' }}
             </h1>
-            <LanguageDiv />
+            <!-- <LanguageDiv /> -->
         </header>
-        <div class='loginAccount'>
-            <a class='item' :class="{ 'active':loginAccount==='mobile' }" href='javascript:;' @click="loginAccount='mobile'">
-                手机号
-            </a>
-            <span class='line'></span>
-            <a class='item' :class="{ 'active':loginAccount==='email' }" href='javascript:;' @click="loginAccount='email'">
-                邮箱
-            </a>
-        </div>
         <form class='loginForm'>
             <div v-if="loginAccount==='mobile'" class='field'>
                 <MobileInput v-model='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
@@ -30,28 +20,25 @@
             <div v-else class='field'>
                 <CheckCode v-model='checkCode' clear label='验证码' />
             </div>
-            <div class='field toolWrap'>
-                <van-checkbox v-model='savePwd' shape='square'>
-                    保存密码
-                </van-checkbox>
-                <div class='tools'>
-                    <router-link class='link' to='/register'>
-                        我要注册
-                    </router-link>
-                    <i class='line'>
-                        |
-                    </i>
-                    <router-link class='link' to='/forgot'>
-                        忘记密码
-                    </router-link>
-                </div>
-            </div>
             <van-button block class='loginBtn' type='primary' @click='loginHandle'>
                 登录
             </van-button>
-            <van-button block class='loginBtn light' @click='changeLoginType'>
-                {{ loginType==='password'? '验证码快捷登录':'账号密码登录' }}
-            </van-button>
+            <div class='toolBtns'>
+                <a class='btn' href='javascript:;' @click="$router.push({ name:'Register' })">
+                    注册新账户
+                </a>
+                <Vline />
+                <a class='btn' href='javascript:;' @click="$router.push({ name:'Forgot' })">
+                    忘记密码
+                </a>
+                <Vline />
+                <a v-if="loginAccount==='mobile'" class='btn' href='javascript:;' @click="loginAccount='email'">
+                    邮箱验证码登录
+                </a>
+                <a v-else class='btn' href='javascript:;' @click="loginAccount='mobile'">
+                    手机验证码登录
+                </a>
+            </div>
         </form>
         <!-- <div class='otherLogin'>
             <LoginByGoogle />
@@ -72,12 +59,14 @@ import Schema from 'async-validator'
 import LanguageDiv from '@m/modules/languageDiv'
 import MobileInput from '@m/components/form/mobileInput'
 import InputComp from '@m/components/form/input'
+import Vline from '@/components/vline'
 import CheckCode from '@m/components/form/checkCode'
 import LoginByGoogle from '@m/components/loginByGoogle/loginByGoogle'
 import LoginByFacebook from '@m/components/loginByFacebook/loginByFacebook'
-import Top from '@m/layout/top'
+import Top from '@/components/top'
 import { getDevice } from '@/utils/util'
-import { reactive, toRefs } from 'vue'
+import { getListByParentCode } from '@/api/base'
+import { computed, reactive, toRefs } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
@@ -85,6 +74,7 @@ import Rule from './rule'
 export default {
     components: {
         LanguageDiv,
+        Vline,
         InputComp,
         MobileInput,
         LoginByGoogle,
@@ -103,9 +93,13 @@ export default {
             mobile: '13200001111',
             pwd: '',
             checkCode: '',
-            savePwd: true,
             loginType: 'checkCode',
             loginAccount: 'mobile',
+        })
+        const rightAction = computed(() => {
+            return {
+                title: state.loginType === 'password' ? '验证码登录' : '账号密码登录'
+            }
         })
         const changeLoginType = () => {
             const loginType = state.loginType
@@ -140,10 +134,20 @@ export default {
                 }
             })
         }
+        const topRightClick = () => {
+            console.log('rightClick')
+        }
+
+        // 获取国家验区号
+        getListByParentCode({ parentCode: 'phone_code' }).then(res => {
+
+        })
         return {
             ...toRefs(state),
             changeLoginType,
+            rightAction,
             loginHandle,
+            topRightClick,
         }
     }
 }
@@ -163,25 +167,6 @@ export default {
     .pageTitle {
         font-weight: normal;
         font-size: rem(50px);
-    }
-}
-.loginAccount {
-    display: flex;
-    align-items: center;
-    margin: 0 rem(30px);
-    .line {
-        display: inline-block;
-        width: 1px;
-        height: 0.9em;
-        margin: 0 1em;
-        vertical-align: middle;
-        background: var(--bdColor);
-    }
-    .item {
-        color: inherit;
-        &.active {
-            color: var(--primary);
-        }
     }
 }
 .icon_icon_close_big {
@@ -241,13 +226,14 @@ export default {
     }
     .loginBtn {
         width: 100%;
-        height: rem(80px);
+        height: rem(100px);
         margin-top: rem(90px);
+        color: var(--color);
         font-size: rem(30px);
         line-height: rem(80px);
-        background: var(--primary);
-        border-color: var(--primary);
-        border-radius: rem(40px);
+        background: var(--bgColor);
+        border-color: var(--bdColor);
+        border-radius: rem(4px);
         &.light {
             margin-top: rem(40px);
             color: var(--primary);
@@ -283,6 +269,14 @@ export default {
     .icon_icon_service {
         font-size: 1.2em;
         vertical-align: middle;
+    }
+}
+.toolBtns {
+    margin-top: rem(30px);
+    text-align: center;
+    .btn {
+        @include active();
+        color: var(--color);
     }
 }
 

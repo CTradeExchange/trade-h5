@@ -74,3 +74,23 @@ export function priceFormat (price, digits) {
     const _price = price / Math.pow(10, digits)
     return _price.toFixed(digits)
 }
+
+/* 延迟处理 */
+let awaitCount = 0
+export function delayAwait (fn, reset = true) {
+    if (reset) awaitCount = 0
+    return new Promise((resolve, reject) => {
+        console.log(`>> Await count:: ${awaitCount * 200}ms`)
+        const flag = fn()
+        if (flag) {
+            return resolve(flag)
+        } else {
+            return awaitCount < 100 ? reject() : resolve()
+        }
+    }).catch(() => {
+        return new Promise(resolve => {
+            awaitCount++
+            setTimeout(resolve, 200)
+        }).then(() => delayAwait(fn, false))
+    })
+}

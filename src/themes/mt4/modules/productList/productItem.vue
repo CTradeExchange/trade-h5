@@ -2,7 +2,7 @@
     <div class='productItem of-1px-bottom position' :class="[quoteMode===1?'mode1':'mode2']" @click="$emit('open')">
         <div class='hd'>
             <p class='productName'>
-                {{ product.name }}
+                {{ product.symbolName }}
             </p>
             <p class='time'>
                 {{ tickTime }}

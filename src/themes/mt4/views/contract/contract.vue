@@ -2,8 +2,8 @@
     <top
         back
         :menu='false'
-        sub-title='Euro vs US Dollar'
-        title='UERUSD'
+        :sub-title='product.symbolCode'
+        :title='product.symbolName'
     />
     <div>
         <van-cell size='large' title='点差' value='浮动' />
@@ -21,10 +21,30 @@
 
 <script>
 import top from '@m/layout/top'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 export default {
     components: {
         top,
     },
+    setup () {
+        const store = useStore()
+        const route = useRoute()
+        const symbolId = route.query.symbolId
+        const product = computed(() => store.state._quote.productMap[symbolId])
+        if (product.value) {
+
+        }
+        store.dispatch('_quote/querySymbolInfo', {
+            symbolId: Number(symbolId),
+            tradeType: store.state._base.tradeType,
+            customerGroupId: store.state._base.wpCompanyInfo.customerGroupId,
+        })
+        return {
+            product
+        }
+    }
 }
 </script>
 

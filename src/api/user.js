@@ -3,6 +3,7 @@ import { getDevice } from '@/utils/util'
 
 /* 登录 */
 export function login (data) {
+    console.log('login')
     return request({
         url: '/login/customer.CustomerWebApiService.login',
         method: 'post',

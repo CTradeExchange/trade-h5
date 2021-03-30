@@ -14,7 +14,7 @@
                 <a class='item of-1px-bottom ' href='javascript:;' @click="show=false;$router.push('/chart')">
                     打开图表
                 </a>
-                <a class='item of-1px-bottom ' href='javascript:;' @click="$router.push('/contract')">
+                <a class='item of-1px-bottom ' href='javascript:;' @click='toContract'>
                     交易品种属性
                 </a>
                 <a v-if='quoteMode===2' class='item of-1px-bottom ' href='javascript:;' @click='switchQuoteMode'>
@@ -64,6 +64,10 @@ export default {
         const toOrder = () => {
             router.push({ name: 'Order', query: { symbolId } })
         }
+        // 去合约属性
+        const toContract = () => {
+            router.push({ name: 'Contract', query: { symbolId } })
+        }
         return {
             ...toRefs(state),
             quoteMode,
@@ -71,6 +75,7 @@ export default {
             switchQuoteMode,
             toOrder,
             openProduct,
+            toContract,
         }
     },
 }

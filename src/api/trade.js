@@ -17,7 +17,6 @@ export function querySymbolInfo (data) {
         url: '/global/rtc.RtcSymbolQueryService.querySymbolInfo',
         method: 'post',
         headers: {
-            group: 'tradeApi',
             version: '0.0.1',
         },
         data

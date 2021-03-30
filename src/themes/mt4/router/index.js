@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Layout from '@m/layout/index'
-import { getLoginParams } from '@/utils/util'
+import { getLoginParams, delayAwait } from '@/utils/util'
+import store from '../store'
 
 const routes = [
     {
@@ -11,7 +12,7 @@ const routes = [
             {
                 path: 'quote',
                 name: 'Quote',
-                component: () => import(/* webpackChunkName: "quote" */ '../views/home/home.vue'),
+                component: () => import(/* webpackChunkName: "quote" */ '../views/quote/quote.vue'),
                 meta: {
                     title: '行情',
                 }
@@ -159,6 +160,10 @@ router.beforeEach((to, from, next) => {
     } else if (!loginParams && roles.length && roles.includes('User')) {
         // 仅登录用户访问，游客访问时跳转到登录页面
         next({ name: 'Login', query: { back: encodeURIComponent(to.fullPath) } })
+    } else if (loginParams && store.state._user.loginLoading) {
+        delayAwait(() => {
+            return !store.state._user.loginLoading
+        }).then(next)
     } else {
         next()
     }

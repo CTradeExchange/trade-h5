@@ -32,9 +32,7 @@ export default {
                     commit('_base/UPDATE_tradeType', data.tradeType, { root: true }) // 登录后存储用户的玩法类型
                     // dispatch('findCustomerInfo')  // findCustomerInfod 的数据目前和登录的数据一样，不需要再次调用
                 }
-                setTimeout(() => {
-                    commit('Update_loginLoading', false)
-                }, 10000)
+                commit('Update_loginLoading', false)
                 return res
             })
         },

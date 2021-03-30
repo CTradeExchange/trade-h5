@@ -28,6 +28,7 @@ export default {
         store.dispatch('_quote/querySymbolBaseInfoList', {
             symbolIds: subscribList.join(),
             tradeType: store.state._base.tradeType,
+            customerGroupId: store.state._base.wpCompanyInfo.customerGroupId,
         }, { root: true })
         return {}
     }

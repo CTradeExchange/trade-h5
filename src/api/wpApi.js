@@ -7,6 +7,7 @@ export const wpCompanyConfig = () => {
     return Promise.resolve({
         companyId: 3,
         trade_type: 1,
+        customerGroupId: 7,
         symbol_ids: [2, 3, 4]
     })
 }

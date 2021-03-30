@@ -14,7 +14,7 @@ const service = axios.create({
 })
 const headers = service.defaults.headers
 headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
-headers.version = '0.0.1'
+
 // request interceptor
 service.interceptors.request.use(
     config => {
