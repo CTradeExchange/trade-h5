@@ -11,7 +11,7 @@
             <van-tab title='手机找回'>
                 <form class='loginForm'>
                     <div class='field'>
-                        <mobileInput v-model='mobile' v-model:zone='zone' placeholder='请输入手机号' @input='inputMobile' />
+                        <MobileInput v-model='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
                     </div>
                     <div class='field'>
                         <checkCode v-model='checkCode' placeholder='请输入验证码' :tips='tips' />
@@ -40,27 +40,31 @@ import top from '@/components/top'
 import {
     reactive, toRefs
 } from 'vue'
-import mobileInput from '@m/components/form/mobileInput'
+import MobileInput from '@m/components/form/mobileInput'
 import checkCode from '@m/components/form/checkCode'
 import { Toast } from 'vant'
 import { useRouter } from 'vue-router'
 import uInput from '@/themes/mt4/components/form/input.vue'
+import Schema from 'async-validator'
+import Rule from './rule'
+import { useStore } from 'vuex'
 
 export default {
     components: {
         top,
-        mobileInput,
+        MobileInput,
         checkCode,
         uInput
     },
     setup (props) {
+        const store = useStore()
         const router = useRouter()
         const state = reactive({
             mobile: '',
             checkCode: '',
             email: '',
             emailCode: '',
-            zone: 86,
+            zone: '+86',
             curTab: 0,
             tips: {
                 flag: true,
@@ -68,78 +72,34 @@ export default {
             }
         })
 
-        // 手机正则校验
-        const mobileReg = /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[189]))\d{8}$/
-
-        // 邮箱正则校验
-        const emailReg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-
         const handleTabChange = (name, title) => {
             state.curTab = name
         }
 
-        const inputMobile = (val) => {
-            console.log(val)
-            if (Number(state.curTab) === 0) {
-                if (!state.mobile) {
-                    state.tips = {
-                        flag: false,
-                        msg: '请输入手机号'
-                    }
-                }
-                if (!mobileReg.test(state.mobile)) {
-                    state.tips = {
-                        flag: false,
-                        msg: '手机号输入错误，请重新输入'
-                    }
-                }
-            } else {
-                if (!state.email) {
-                    state.tips = {
-                        flag: false,
-                        msg: '请输入邮箱'
-                    }
-                }
-                if (!emailReg.test(state.email)) {
-                    state.tips = {
-                        flag: false,
-                        msg: '邮箱格式输入错误，请重新输入'
-                    }
-                }
-            }
-        }
-
         const next = () => {
-            console.log(state)
-            if (Number(state.curTab) === 0) {
-                if (!state.mobile) {
-                    return Toast('请输入手机号')
-                }
-                if (!mobileReg.test(state.mobile)) {
-                    return Toast('手机号输入错误，请重新输入')
-                }
-                if (!state.checkCode) {
-                    return Toast('请输入验证码')
-                }
-            } else {
-                if (!state.email) {
-                    return Toast('请输入邮箱')
-                }
-                if (!emailReg.test(state.email)) {
-                    return Toast('邮箱格式输入错误，请重新输入')
-                }
-                if (!state.emailCode) {
-                    return Toast('请输入验证码')
-                }
+            const params = {
+                mobile: state.mobile,
+                email: state.email,
+                checkCode: state.checkCode,
+                emailCode: state.emailCode,
+                type: state.curTab
             }
-
-            router.push('/resetPwd')
+            const validator = new Schema(Rule)
+            validator.validate(params, (errors, fields) => {
+                console.log(errors, fields)
+                debugger
+                if (errors) {
+                    return Toast(errors[0].message)
+                }
+                router.push('/resetPwd')
+            })
         }
+        // 获取国家验区号
+        store.dispatch('getListByParentCode')
         return {
             ...toRefs(state),
             next,
-            handleTabChange,
-            inputMobile
+            handleTabChange
         }
     }
 }

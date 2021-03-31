@@ -11,11 +11,11 @@
         <van-cell-group>
             <div class='form-item'>
                 <Field v-model='newPwd' label='' placeholder='请输入新密码' :type='newPwdVis ? "text" : "password"' />
-                <span class='icon' :class="newPwdVis ? 'icon_icon_pressed': 'icon_icon_default'" @click='changeState("newPwdVis")'></span>
+                <span class='icon' :class="newPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("newPwdVis")'></span>
             </div>
             <div class='form-item'>
                 <Field v-model='confirmPwd' label='' placeholder='请再次输入新密码' :type='confirmVis ? "text" : "password"' />
-                <span class='icon' :class="confirmVis ? 'icon_icon_pressed': 'icon_icon_default'" @click='changeState("confirmVis")'></span>
+                <span class='icon' :class="confirmVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("confirmVis")'></span>
             </div>
         </van-cell-group>
         <van-button class='confirmBtn' @click='handleConfirm'>
@@ -29,6 +29,7 @@ import top from '@/components/top'
 import { reactive, toRefs } from 'vue'
 import { Field, Toast } from 'vant'
 import { useRouter } from 'vue-router'
+import { findPwd } from '@/api/user'
 
 export default {
     components: {
@@ -58,7 +59,19 @@ export default {
             if (state.newPwd !== state.confirmPwd) {
                 return Toast('新密码和确认密码不同，请检查后重新输入')
             }
-            router.push('/resetSuccess')
+
+            return findPwd({
+                type: 1,
+                loginName: '',
+                companyId: '',
+                verifyCode: '',
+                newPwd: ''
+
+            }).then((res) => {
+                if (res.check()) {
+                    router.push('/resetSuccess')
+                }
+            })
         }
 
         return {
@@ -100,13 +113,12 @@ export default {
         position: relative;
         .icon {
             position: absolute;
-            top: rem(10px);
+            top: rem(25px);
             right: rem(50px);
             z-index: 99;
-            font-size: rem(30px);
             cursor: pointer;
             &::before {
-                font-size: rem(60px);
+                font-size: rem(30px);
             }
         }
     }
