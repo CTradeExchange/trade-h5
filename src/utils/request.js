@@ -49,7 +49,7 @@ service.interceptors.response.use(
             return login(loginParams).then(res => {
                 sessionStorage.setItem('token', res.data.token)
                 config.headers.token = res.data.token
-                return service(config)
+                return service({ ...config, data: JSON.parse(config.data) })
             })
         }
         const result = new CheckAPI(data)

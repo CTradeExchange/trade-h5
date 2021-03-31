@@ -64,6 +64,7 @@ import InputComp from '@m/components/form/input'
 import MobileInput from '@m/components/form/mobileInput'
 import { getDevice, getQueryVariable } from '@/utils/util'
 import { register, openAccount } from '@/api/user'
+import { getListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
 import { reactive, toRefs, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -84,7 +85,7 @@ export default {
         const router = useRouter()
         const state = reactive({
             options: [{ country: 'Canada', code: 'CA' }],
-            zone: 86,
+            zone: '+86',
             loading: false,
             checkCode: '',
             mobile: '',
@@ -98,6 +99,7 @@ export default {
             ],
             protocol: true
         })
+        store.dispatch('getListByParentCode')
         // 手机号输入框离开焦点
         const onMobileBlur = () => {
             const validator = new Schema(checkCustomerExistRule)

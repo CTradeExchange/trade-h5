@@ -8,12 +8,12 @@
                 {{ tickTime }}
             </p>
             <p class='p'>
-                点差：19
+                点差：{{ product.spread_text }}
             </p>
         </div>
         <div class='col'>
             <p class='fallColor'>
-                <Price :data='product.sell_price' :mode='quoteMode' />
+                <Price :digit='product.price_digits' :mode='quoteMode' :point-ratio='product.pointRatio' :price='product.sell_price' />
             </p>
             <p v-show='product.low_price' class='muted limitPrice'>
                 最低：{{ product.low_price }}
@@ -21,7 +21,7 @@
         </div>
         <div class='col'>
             <p class='riseColor'>
-                <Price :data='product.buy_price' :mode='quoteMode' />
+                <Price :digit='product.price_digits' :mode='quoteMode' :point-ratio='product.pointRatio' :price='product.buy_price' />
             </p>
             <p v-show='product.high_price' class='muted limitPrice'>
                 最高：{{ product.high_price }}

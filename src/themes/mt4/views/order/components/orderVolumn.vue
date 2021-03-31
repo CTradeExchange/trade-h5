@@ -1,9 +1,9 @@
 <template>
     <div class='volumn'>
-        <a class='item' href='javascript:;' @click='minusVolumn(-0.1)'>
+        <a class='item' href='javascript:;' @click='minusVolumn(0.1)'>
             -0.1
         </a>
-        <a class='item' href='javascript:;' @click='minusVolumn(-0.01)'>
+        <a class='item' href='javascript:;' @click='minusVolumn(0.01)'>
             -0.01
         </a>
         <span class='item'>

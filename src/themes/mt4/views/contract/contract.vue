@@ -24,6 +24,7 @@ import top from '@m/layout/top'
 import { useStore } from 'vuex'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { socket } from '@/plugins/socket/socket'
 export default {
     components: {
         top,
@@ -33,14 +34,8 @@ export default {
         const route = useRoute()
         const symbolId = route.query.symbolId
         const product = computed(() => store.state._quote.productMap[symbolId])
-        if (product.value) {
-
-        }
-        store.dispatch('_quote/querySymbolInfo', {
-            symbolId: Number(symbolId),
-            tradeType: store.state._base.tradeType,
-            customerGroupId: store.state._base.wpCompanyInfo.customerGroupId,
-        })
+        store.dispatch('_quote/querySymbolInfo', symbolId)
+        socket.send_subscribe([symbolId])
         return {
             product
         }

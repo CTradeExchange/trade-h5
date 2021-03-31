@@ -8,7 +8,7 @@ export const wpCompanyConfig = () => {
         companyId: 3,
         trade_type: 1,
         customerGroupId: 7,
-        symbol_ids: [2, 3, 4]
+        symbol_ids: [2, 3, 4, 5, 6, 7, 8]
     })
 }
 export const wpNav = () => pageConfig('Nav')

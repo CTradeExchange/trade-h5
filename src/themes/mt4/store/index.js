@@ -3,6 +3,7 @@ import Base from '@/store/modules/base'
 import User from '@/store/modules/user'
 import Quote from '@/store/modules/quote'
 import Trade from '@/store/modules/trade'
+import { getListByParentCode } from '@/api/base'
 
 const rootElement = getComputedStyle(document.documentElement)
 const style = {
@@ -21,7 +22,7 @@ export default createStore({
         style,
         quoteMode: 2, // 1简单模式 2高级模式
         productActivedID: null, // 当前操作的产品ID
-        zoneList: [{ name: '中国(86)', value: 86 }, ...new Array(100).fill({ name: 'other(88)', value: 88 })],
+        zoneList: [],
     },
     getters: {
         productActived (state) {
@@ -35,7 +36,22 @@ export default createStore({
         Update_productActivedID (state, id) {
             state.productActivedID = id
         },
+        Update_zoneList (state, list) {
+            state.zoneList = list
+        },
     },
     actions: {
+        // 获取国家验区号
+        getListByParentCode ({ dispatch, commit, state }) {
+            return getListByParentCode({ parentCode: 'phone_code' }).then(res => {
+                if (res.check()) {
+                    res.data.forEach(el => {
+                        el.name += ' ' + el.code
+                    })
+                    commit('Update_zoneList', res.data)
+                }
+                return res
+            })
+        },
     }
 })

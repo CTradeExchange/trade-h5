@@ -3,11 +3,13 @@ import { getDevice } from '@/utils/util'
 
 /* 登录 */
 export function login (data) {
-    console.log('login')
     return request({
         url: '/login/customer.CustomerWebApiService.login',
         method: 'post',
         // toastErr: false,
+        headers: {
+            version: '0.0.1',
+        },
         data: {
             device: getDevice(),
             ...data,
@@ -20,6 +22,9 @@ export function register (data) {
     return request({
         url: '/global/customer.CustomerWebApiService.register',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data: {
             registerSource: getDevice(),
             ...data,
@@ -31,6 +36,9 @@ export function openAccount (data) {
     return request({
         url: '/global/customer.CustomerWebApiService.openAccount',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data
     })
 }
@@ -39,6 +47,9 @@ export function checkCustomerExist (data) {
     return request({
         url: '/global/customer.CustomerWebApiService.checkCustomerExist',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data: {
             ...data,
         }
@@ -49,6 +60,9 @@ export function findCustomerInfo (data) {
     return request({
         url: '/global/customer.CustomerWebApiService.findCustomerInfo',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data
     })
 }
