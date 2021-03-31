@@ -66,3 +66,15 @@ export function findCustomerInfo (data) {
         data
     })
 }
+
+/* 找回密码 */
+export function findPwd (data) {
+    return request({
+        url: '/global/customer.CustomerWebApiService.forgetLoginPwd',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}

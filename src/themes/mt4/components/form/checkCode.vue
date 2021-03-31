@@ -102,7 +102,7 @@ export default {
     }
     .getCodeBtn {
         margin-left: rem(20px);
-        color: var(--primary);
+        color: var(--assist2Color);
         font-size: rem(26px);
         background: none;
         &:disabled {

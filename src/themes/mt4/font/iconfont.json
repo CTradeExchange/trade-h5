@@ -6,6 +6,118 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "20683921",
+      "name": "close",
+      "font_class": "close",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "20683922",
+      "name": "arrow-up",
+      "font_class": "arrow-up",
+      "unicode": "e653",
+      "unicode_decimal": 58963
+    },
+    {
+      "icon_id": "20683923",
+      "name": "arrow-down",
+      "font_class": "arrow-down1",
+      "unicode": "e654",
+      "unicode_decimal": 58964
+    },
+    {
+      "icon_id": "20683924",
+      "name": "back",
+      "font_class": "back",
+      "unicode": "e655",
+      "unicode_decimal": 58965
+    },
+    {
+      "icon_id": "20683925",
+      "name": "add",
+      "font_class": "add1",
+      "unicode": "e656",
+      "unicode_decimal": 58966
+    },
+    {
+      "icon_id": "20683926",
+      "name": "wait",
+      "font_class": "wait",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
+      "icon_id": "20683927",
+      "name": "success",
+      "font_class": "success",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    },
+    {
+      "icon_id": "20683928",
+      "name": "fail",
+      "font_class": "fail",
+      "unicode": "e659",
+      "unicode_decimal": 58969
+    },
+    {
+      "icon_id": "20683929",
+      "name": "eye",
+      "font_class": "eye",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
+      "icon_id": "20683930",
+      "name": "password",
+      "font_class": "password",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "20683931",
+      "name": "arrow-right",
+      "font_class": "arrow-right",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
+      "icon_id": "20683932",
+      "name": "choose",
+      "font_class": "choose",
+      "unicode": "e65d",
+      "unicode_decimal": 58973
+    },
+    {
+      "icon_id": "20683933",
+      "name": "eye-off",
+      "font_class": "eye-off",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
+    },
+    {
+      "icon_id": "20683934",
+      "name": "upload",
+      "font_class": "upload",
+      "unicode": "e65f",
+      "unicode_decimal": 58975
+    },
+    {
+      "icon_id": "18883619",
+      "name": "facebook",
+      "font_class": "facebook",
+      "unicode": "e94b",
+      "unicode_decimal": 59723
+    },
+    {
+      "icon_id": "11983544",
+      "name": "google",
+      "font_class": "google",
+      "unicode": "ea0c",
+      "unicode_decimal": 59916
+    },
+    {
       "icon_id": "7560684",
       "name": "back",
       "font_class": "arrow-down",
