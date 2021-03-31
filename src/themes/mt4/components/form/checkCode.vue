@@ -10,10 +10,14 @@
                 :value='modelValue'
                 @input='onInput'
             />
-            <label v-if='label' class='label' :for='id'>{{ label }}</label>
+            <label v-if='label' class='label' :for='id'>
+                {{ label }}
+            </label>
         </div>
         <a v-if='clear' v-show='modelValue.length' class='van-icon van-icon-clear' href='javascript:;' @click='onClear'></a>
-        <button ref='getCodeBtn' class='getCodeBtn' :disabled='disabled' @click='getCode'>获取验证码</button>
+        <button ref='getCodeBtn' class='getCodeBtn' :disabled='disabled' @click='getCode'>
+            获取验证码
+        </button>
         <!-- <div class='checkCodeBtn'>
             <van-button block :color='$store.state.style.primary' type='primary' @click="$emit('getCode')">获取验证码</van-button>
         </div> -->
@@ -63,7 +67,8 @@ export default {
             this.$emit('update:zone', item.value)
         },
         getCode () {
-            this.getCodeBtnCountDown()
+            this.$emit('verifyCodeSend', this.getCodeBtnCountDown)
+            // this.getCodeBtnCountDown()
         },
         getCodeBtnCountDown () {
             const getCodeBtn = this.$refs.getCodeBtn
@@ -87,48 +92,48 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.checkCodeBar{
-    width: 100%;
+.checkCodeBar {
     display: flex;
     align-items: center;
-    .checkCodeInput{
+    width: 100%;
+    .checkCodeInput {
         position: relative;
         flex: 1;
     }
-    .getCodeBtn{
+    .getCodeBtn {
         margin-left: rem(20px);
-        font-size: rem(26px);
         color: var(--primary);
+        font-size: rem(26px);
         background: none;
-        &:disabled{
+        &:disabled {
             color: var(--bdColor);
         }
     }
 }
-.input{
-    padding: 0 5px;
+.input {
     width: 100%;
     height: rem(75px);
-    &:focus ~ .label,
-    &:valid ~ .label{
+    padding: 0 5px;
+    &:focus~.label,
+    &:valid~.label {
+        transform: scale(0.8) translateY(-90%);
         transform-origin: bottom left;
-        transform: scale(.8) translateY(-90%);
     }
 }
-.label{
+.label {
     position: absolute;
-    left: 5px;
     top: 0;
+    left: 5px;
     height: rem(75px);
-    line-height: rem(75px);
     color: var(--placeholder);
     font-size: rem(30px);
-    transition: all cubic-bezier(.4,0,.2,1) .15s;
-    &.active{
-        transform: scale(.8) translateY(-90%);
+    line-height: rem(75px);
+    transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.15s;
+    &.active {
+        transform: scale(0.8) translateY(-90%);
     }
 }
-.van-icon-clear{
+.van-icon-clear {
     color: var(--bdColor);
     font-size: rem(36px);
 }

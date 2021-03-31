@@ -65,6 +65,7 @@ import LoginByGoogle from '@m/components/loginByGoogle/loginByGoogle'
 import LoginByFacebook from '@m/components/loginByFacebook/loginByFacebook'
 import Top from '@/components/top'
 import { getDevice } from '@/utils/util'
+import { verifyCodeSend } from '@/api/base'
 import { computed, reactive, toRefs } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
@@ -137,6 +138,22 @@ export default {
             console.log('rightClick')
         }
 
+        // 发送验证码
+        const verifyCodeSend = (callback) => {
+            const params = {
+                type: state.loginAccount === 'mobile' ? 2 : 1,
+                loginName: state.loginAccount === 'mobile' ? state.mobile : state.email,
+                phoneArea: state.loginAccount === 'mobile' ? String(state.zone) : undefined,
+                device: getDevice(),
+                verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
+                loginPwd: state.loginType === 'password' ? state.pwd : undefined,
+            }
+            verifyCodeSend(params).then(res => {
+                if (res.check()) {
+                    callback && callback()
+                }
+            })
+        }
         // 获取国家验区号
         store.dispatch('getListByParentCode')
         return {

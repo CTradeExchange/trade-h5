@@ -9,3 +9,27 @@ export function getListByParentCode (data) {
         data
     })
 }
+
+/* 发送验证码 */
+export function verifyCodeSend (data) {
+    return request({
+        url: '/global/message.VerificationApiService.verifyCodeSend',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
+/* 验证验证码 */
+export function verifyCodeCheck (data) {
+    return request({
+        url: '/global/message.VerificationApiService.verifyCodeCheck',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}

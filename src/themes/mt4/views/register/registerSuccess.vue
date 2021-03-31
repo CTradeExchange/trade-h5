@@ -40,7 +40,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const onceState = reactive({
-            accountNo: RegisterData.data
+            accountNo: RegisterData.data?.customerNo
         })
         const toExperience = () => {
             return router.replace({ name: 'Login' })
