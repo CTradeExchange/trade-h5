@@ -119,6 +119,38 @@ const routes = [
         }
     },
     {
+        path: '/resetPwd',
+        name: 'resetPwd',
+        component: () => import(/* webpackChunkName: "resetPwd" */ '../views/forgot/resetPwd.vue'),
+        meta: {
+            title: '重置密码'
+        }
+    },
+    {
+        path: '/resetSuccess',
+        name: 'resetSuccess',
+        component: () => import(/* webpackChunkName: "resetSuccess" */ '../views/forgot/resetSuccess.vue'),
+        meta: {
+            title: '重置成功'
+        }
+    },
+    {
+        path: '/resetFail',
+        name: 'resetFail',
+        component: () => import(/* webpackChunkName: "resetFail" */ '../views/forgot/resetFail.vue'),
+        meta: {
+            title: '重置失败'
+        }
+    },
+    {
+        path: '/forgot2',
+        name: 'Forgot2',
+        component: () => import(/* webpackChunkName: "forgot2" */ '../views/forgot/forgot2.vue'),
+        meta: {
+            title: '找回密码'
+        }
+    },
+    {
         path: '/contract',
         name: 'Contract',
         component: () => import(/* webpackChunkName: "contract" */ '../views/contract/contract.vue'),
