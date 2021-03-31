@@ -67,7 +67,8 @@ export default {
             this.$emit('update:zone', item.value)
         },
         getCode () {
-            this.getCodeBtnCountDown()
+            this.$emit('verifyCodeSend', this.getCodeBtnCountDown)
+            // this.getCodeBtnCountDown()
         },
         getCodeBtnCountDown () {
             const getCodeBtn = this.$refs.getCodeBtn

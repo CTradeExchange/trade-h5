@@ -1,12 +1,12 @@
-import ReconnectingWebSocket from 'reconnectingwebsocket'
-import { apiDomain } from '@/config'
+import { quoteService, msgService } from '@/config'
+import CreateSocket from './createSocket'
 import SocketEvent from './socketEvent'
 
 export const socket = new SocketEvent()
 export default {
     install: (app, { $store } = {}) => {
-        const protocol = location.protocol === 'http:' ? 'ws:' : 'wss:'
-        const ws = new ReconnectingWebSocket(`${protocol + apiDomain}/ws/`)
+        const ws = CreateSocket(quoteService)
+        const msgWS = CreateSocket(msgService)
 
         socket.init(ws, $store)
         app.config.globalProperties.$socket = socket
@@ -24,6 +24,9 @@ export default {
 
         ws.addEventListener('open', function () {
             if (socket.subscribedList.length) socket.send_subscribe(socket.subscribedList)
+        })
+        msgWS.addEventListener('open', function () {
+            msgWS.send(JSON.stringify({ 'head': { 'msgType': 'ping', 'sendTime': 1617092609603, 'lang': 'zh-CN', 'token': '' }, 'device': '1', 'trace': '123' }))
         })
     }
 }

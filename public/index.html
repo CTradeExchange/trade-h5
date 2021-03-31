@@ -8,9 +8,9 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
     <meta name="google-signin-client_id" content="507643510387-ff4on5fmgb2h06tmd5vou0trprtnk0b9.apps.googleusercontent.com">
     <style>
-        html {
-            font-size: 10vw;
-        }
+    html {
+        font-size: 10vw;
+    }
     </style>
   </head>
   <body>
@@ -64,6 +64,20 @@
         /* ##wp_Mine start## */
         window['wp_Mine'] = '';
         /* ##wp_Mine end## */
+
+        /* ##接口域名 ## */
+        window['apiService'] = '//uatcatsapi.cats-trade.com';
+
+        /* ##行情websocket地址 start## */
+        window['quoteService'] = '//uatcatsapi.cats-trade.com/ws/';
+
+        /* ##消息websocket地址 start## */
+        window['msgService'] = '//uatcatsapi.cats-trade.com/msg';
+
+        /* ##交易websocket地址 start## */
+        window['tradeService'] = '//uatcatsapi.cats-trade.com/cats-gateway/ws/';
+
+        
     </script>
   </body>
 </html>
