@@ -25,11 +25,7 @@ export default {
         const subscribList = productList.value.map(({ symbolId }) => symbolId)
         socket.send_subscribe(subscribList)
 
-        store.dispatch('_quote/querySymbolBaseInfoList', {
-            symbolIds: subscribList.join(),
-            tradeType: store.state._base.tradeType,
-            customerGroupId: store.state._base.wpCompanyInfo.customerGroupId,
-        }, { root: true })
+        store.dispatch('_quote/querySymbolBaseInfoList', subscribList)
         return {}
     }
 }

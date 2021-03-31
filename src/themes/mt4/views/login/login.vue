@@ -65,7 +65,6 @@ import LoginByGoogle from '@m/components/loginByGoogle/loginByGoogle'
 import LoginByFacebook from '@m/components/loginByFacebook/loginByFacebook'
 import Top from '@/components/top'
 import { getDevice } from '@/utils/util'
-import { getListByParentCode } from '@/api/base'
 import { computed, reactive, toRefs } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
@@ -88,7 +87,7 @@ export default {
         const store = useStore()
         const state = reactive({
             pwdVisible: false,
-            zone: 86,
+            zone: '+86',
             email: '',
             mobile: '13200001111',
             pwd: '',
@@ -139,9 +138,7 @@ export default {
         }
 
         // 获取国家验区号
-        getListByParentCode({ parentCode: 'phone_code' }).then(res => {
-
-        })
+        store.dispatch('getListByParentCode')
         return {
             ...toRefs(state),
             changeLoginType,

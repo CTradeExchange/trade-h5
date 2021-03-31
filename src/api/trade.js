@@ -29,6 +29,7 @@ export function addMarketOrder (data) {
         url: '/global/tradeapi.OrderApiService.addMarketOrder',
         method: 'post',
         headers: {
+            version: '0.0.1',
             group: 'tradeApi'
         },
         data

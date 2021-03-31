@@ -1,4 +1,19 @@
 import { querySymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
+import { plus } from '@/utils/calculation'
+
+// 处理显示的点差  点差=（买价-卖价）/pip
+function spreadText (product) {
+    const pip = Math.pow(0.1, product.price_digits) * product.pointRatio
+    const spread = (product.buy_price - product.sell_price) / pip
+    const spDigit = String(product.pointRatio).length - 1 // 点差小数位
+    if (spread) product.spread_text = spread.toFixed(spDigit)
+}
+
+// 报价计算点差
+function price_spread (product, data) {
+    if (product.askSpread && data.buy_price) product.buy_price = plus(product.askSpread, data.buy_price)
+    if (product.bidSpread && data.sell_price) product.sell_price = plus(product.bidSpread, data.sell_price)
+}
 
 export default {
     namespaced: true,
@@ -16,32 +31,45 @@ export default {
                 productMap[item.symbolId] = item
             })
         },
-        // 更新某个产品信息
+        // 更新某个产品信息、报价快照
         Update_product (state, data = {}) {
             const productMap = state.productMap
-            const prodocut = productMap[data.symbol_id]
-            if (!prodocut) return false
-            Object.assign(prodocut, data)
+            const symbolId = data.symbol_id || data.symbolId
+            const product = productMap[symbolId]
+            if (!product) return false
+            const askSpread = product.askSpread
+            Object.assign(product, data)
+
+            // 该产品先拿到快照价格，后拿到点差，需要重新计算价格点差
+            if (!askSpread && data.askSpread && data.pointRatio) {
+                spreadText(product)
+                price_spread(product, { ...data, ...product })
+            }
         },
         // 更新某个产品报价
         Update_productTick (state, data = {}) {
             const productMap = state.productMap
-            const prodocut = productMap[data.symbolId]
-            if (!prodocut) return false
-            if (data.price - prodocut.high_price > 0) data.high_price = data.price
-            if (data.price - prodocut.low_price < 0) data.low_price = data.price
-            Object.assign(prodocut, data)
+            const product = productMap[data.symbolId]
+            if (!product) return false
+            if (data.price - product.high_price > 0) data.high_price = data.price
+            if (data.price - product.low_price < 0) data.low_price = data.price
+            Object.assign(product, data)
+            spreadText(product)
+            price_spread(product, data)
         },
     },
     actions: {
         // 产品基础信息列表
-        querySymbolBaseInfoList ({ dispatch, commit, state }, params = {}) {
+        querySymbolBaseInfoList ({ dispatch, commit, state, rootState }, symbolIds = []) {
             const productMap = state.productMap
-            const symbolIds = params.symbolIds.split(',')
-                .filter(el => !productMap[el].symbolName)
-                .join()
-            if (symbolIds.length === 0) return Promise.resolve({ code: '0', data: [] })
-            return querySymbolBaseInfoList({ ...params, symbolIds }).then((res) => {
+            const newSymbolIds = symbolIds.filter(el => !productMap[el].symbolName)
+            const params = {
+                symbolIds: newSymbolIds.join(),
+                tradeType: rootState._base.tradeType,
+                customerGroupId: rootState._base.wpCompanyInfo.customerGroupId,
+            }
+            if (newSymbolIds.length === 0) return Promise.resolve({ code: '0', data: [] })
+            return querySymbolBaseInfoList(params).then((res) => {
                 if (res.check()) {
                     res.data.forEach(el => {
                         el.symbol_id = el.symbolId
@@ -52,9 +80,17 @@ export default {
             })
         },
         // 产品详细信息
-        querySymbolInfo ({ dispatch, commit, state }, params = {}) {
+        querySymbolInfo ({ dispatch, commit, state, rootState }, symbolId) {
+            const productMap = state.productMap
+            if (productMap[symbolId].contractSize) return Promise.resolve({ code: '0', data: {} })
+            const params = {
+                symbolId: Number(symbolId),
+                tradeType: rootState._base.tradeType,
+                customerGroupId: rootState._base.wpCompanyInfo.customerGroupId,
+            }
             return querySymbolInfo(params).then((res) => {
                 if (res.check()) {
+                    commit('Update_product', res.data)
                 }
                 return res
             })

@@ -63,12 +63,12 @@
         <!-- 底部下单按钮 -->
         <div class='footerBtn'>
             <div class='col'>
-                <button class='btn sellColor' @click="orderClick('sell')">
+                <button class='btn sellColor' :disabled='loading' @click="orderClick('sell')">
                     SELL
                 </button>
             </div>
             <div class='col'>
-                <button class='btn buyColor' @click="$router.push('/order/pending')">
+                <button class='btn buyColor' :disabled='loading' @click="orderClick('buy')">
                     BUY
                 </button>
             </div>
@@ -101,6 +101,7 @@ export default {
         const route = useRoute()
         const router = useRouter()
         const state = reactive({
+            loading: false,
             pendingVisible: false,
             dropdownWrap: false,
             volumn: 0.01,
@@ -112,6 +113,7 @@ export default {
                 { text: '活动商品', value: 2 },
             ],
         })
+
         // 当前产品
         const product = computed(() => store.getters.productActived)
         if (!product.value) router.replace('/')
@@ -121,18 +123,23 @@ export default {
             const params = {
                 bizType: 1, // 业务类型。0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
                 direction: direction === 'sell' ? 2 : 1, // 订单买卖方向。1-买；2-卖；
-                symbolId: product.value.symbol_id,
+                symbolId: Number(product.value.symbol_id),
                 requestTime: Date.now(),
-                requestNum: state.volumn,
+                requestNum: Number(state.volumn),
                 requestPrice: Number(requestPrice),
             }
+            state.loading = true
             addMarketOrder(params).then(res => {
+                state.loading = false
                 if (res.invalid()) return false
-                router.push('/order/pending')
+                state.pendingVisible = true
+            }).catch(err => {
+                state.loading = false
             })
         }
         const { symbolId } = route.query
         socket.send_subscribe([symbolId])
+        store.dispatch('_quote/querySymbolInfo', symbolId)
         store.commit('Update_productActivedID', symbolId)
         return {
             ...toRefs(state),

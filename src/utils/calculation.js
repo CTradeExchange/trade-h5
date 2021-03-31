@@ -29,7 +29,8 @@ export function plus (num1, num2) {
     const r1 = getDecimalNum(num1)
     const r2 = getDecimalNum(num2)
     const m = Math.pow(10, Math.max(r1, r2))
-    return +(Math.round(num1 * m + num2 * m) / m)
+    const n = r1 >= r2 ? r1 : r2
+    return (Math.round(num1 * m + num2 * m) / m).toFixed(n)
 }
 
 /* 减法 */
@@ -38,7 +39,7 @@ export function minus (num1, num2) {
     const r2 = getDecimalNum(num2)
     const m = Math.pow(10, Math.max(r1, r2))
     const n = r1 >= r2 ? r1 : r2
-    return +(Math.round(num1 * m - num2 * m) / m).toFixed(n)
+    return (Math.round(num1 * m - num2 * m) / m).toFixed(n)
 }
 
 /* 除法 */

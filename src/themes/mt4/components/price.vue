@@ -1,7 +1,5 @@
 <template>
-    <span v-show='mode===1 || mode===2' class='price'>
-        {{ data }}
-    </span>
+    <span class='priceBar' v-html='priceHTML'></span>
     <!-- <span v-show='mode===2' class='price'>
         <span class='normal'>
             1.55
@@ -14,9 +12,10 @@
 </template>
 
 <script>
+import { computed } from 'vue'
 export default {
     props: {
-        data: {
+        price: {
             type: [Number, String],
             default: ''
         },
@@ -24,14 +23,33 @@ export default {
             type: Number,
             default: 2
         },
-
+        pointRatio: Number,
+        digit: Number,
     },
+    setup (props) {
+        const priceHTML = computed(() => {
+            if (props.mode === 1) {
+                return props.price
+            }
+            let lastBigIndex = String(props.pointRatio).length - 1 // 后一个被放大的数字的下标
+            lastBigIndex *= -1 // 倒数的下标
+            let firstBigIndex = lastBigIndex - 2 // 前一个被放大的数字的下标，倒数的下标
+            const price = Number(props.price).toFixed(props.digit)
+            const digitDotIndex = String(props.price).includes('.') ? String(props.price).split('').reverse().join('').indexOf('.') * -1 : -9999999 // 小数点的下标，倒数的下标
+            if (lastBigIndex < digitDotIndex) lastBigIndex--
+            if (firstBigIndex < digitDotIndex) firstBigIndex--
+            return `<span class='normal'>${price.slice(0, firstBigIndex)}</span><span class='big'>${price.slice(firstBigIndex, lastBigIndex)}</span><sup >${price.slice(lastBigIndex)}</sup>`
+        })
+        return {
+            priceHTML
+        }
+    }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~@/sass/mixin.scss';
-.price {
+.priceBar {
     font-weight: bold;
     font-size: rem(30px);
     .normal {
