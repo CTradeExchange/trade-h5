@@ -28,7 +28,7 @@ export default {
     },
     setup (props) {
         const priceHTML = computed(() => {
-            if (props.mode === 1) {
+            if (props.mode === 1 || !props.price) {
                 return props.price
             }
             let lastBigIndex = String(props.pointRatio).length - 1 // 后一个被放大的数字的下标

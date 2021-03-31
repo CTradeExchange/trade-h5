@@ -41,6 +41,7 @@ export function queryPositionPage (data) {
         url: '/global/tradeapi.PositionApiService.queryPositionPage',
         method: 'post',
         headers: {
+            version: '0.0.1',
             group: 'tradeApi'
         },
         data

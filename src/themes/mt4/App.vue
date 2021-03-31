@@ -12,7 +12,9 @@ export default {
         store.dispatch('_base/getNav')
         window.store = store
         const loginParams = getLoginParams()
-        if (loginParams) store.dispatch('_user/login', loginParams)
+        if (loginParams) {
+            store.dispatch('_user/login', loginParams)
+        }
     },
     created () {
         console.log('app.vue this', this)

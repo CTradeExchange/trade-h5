@@ -1,5 +1,5 @@
 import { login, findCustomerInfo } from '@/api/user'
-
+import { setToken } from '@/utils/util'
 export default {
     namespaced: true,
     state: {
@@ -27,7 +27,7 @@ export default {
                 if (res.check()) {
                     const data = res.data
                     localStorage.setItem('loginParams', JSON.stringify(params))
-                    sessionStorage.setItem('token', data.token)
+                    setToken(data.token)
                     commit('Update_loginData', data)
                     commit('_base/UPDATE_tradeType', data.tradeType, { root: true }) // 登录后存储用户的玩法类型
                     // dispatch('findCustomerInfo')  // findCustomerInfod 的数据目前和登录的数据一样，不需要再次调用

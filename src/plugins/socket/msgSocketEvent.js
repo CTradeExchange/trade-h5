@@ -1,5 +1,4 @@
-import { tickFormat } from './socketUtil'
-import { guid } from '@/utils/util'
+import { guid, getDevice, getToken } from '@/utils/util'
 
 // websocket消息事件
 class SocketEvent {
@@ -20,19 +19,26 @@ class SocketEvent {
     }
 
     // ws发送数据格式
-    getParam (cmd_id, data) {
+    getParam (msgType, data = {}) {
+        const token = getToken()
         const param = {
-            cmd_id,
-            data,
-            seq_id: this.seq_id, // 发送端的索引编号，类型：uint32
-            ext: guid(), // track 跟踪号，类型：string，谁请求，谁生成，回包的ext也不变，每次请求就要变化，最大长度64
+            head: {
+                msgType,
+                token,
+                sendTime: Date.now(),
+                lang: 'zh-CN',
+            },
+            device: getDevice(),
+            seqId: this.seq_id,
+            trace: guid(),
         }
+
         return param
     }
 
     // 发送消息
     send (cmd_id, data, timeOut) {
-        if (this.ws.readyState !== 1) return console.warn('websocket连接未准备好  readyState：', this.ws.readyState)
+        if (this.ws.readyState !== 1) return console.warn('消息websocket连接未准备好  readyState：', this.ws.readyState)
         this.seq_id++
         const param = this.getParam(cmd_id, data)
         this.ws.send(JSON.stringify(param))
@@ -66,18 +72,13 @@ class SocketEvent {
         })
     }
 
-    // 订阅产品报价
-    send_subscribe (productIds = []) {
-        productIds = productIds.map(el => Number(el))
-        this.subscribedList = productIds
-        const trade_type = this.$store.state._base.tradeType
-        const list = productIds.map(el => {
-            return {
-                symbol_id: el, // 产品ID ，类型：uint64
-                trade_type, // 交易类型，类型：uint32，1：cfd，2：me
-            }
-        })
-        this.send(14000, { symbol_list: list })
+    // 心跳机制
+    initPing () {
+        if (this.ws.readyState !== 1) return console.warn('消息websocket连接未准备好  readyState：', this.ws.readyState)
+        const param = this.getParam('ping')
+        setInterval(() => {
+            this.ws.send(JSON.stringify(param))
+        }, 30000)
     }
 
     // 收取到消息
@@ -91,35 +92,6 @@ class SocketEvent {
         if (typeof (this[cmdID]) === 'function') {
             this[cmdID](data)
         }
-    }
-
-    // 处理报价快照
-    ['cmd_id_14001'] (data) {
-        const list = data.data?.tick_list ?? []
-        const $store = this.$store
-        list.forEach(item => {
-            tickFormat(item) // 格式化快照价格
-            $store.commit('_quote/Update_product', item)
-            // $store.commit('_quote/Update_productTick', item)
-        })
-    }
-
-    // 实时报价
-    tick (p) {
-        // p(1123,1,1232312,34545435345,6.23,6.23,6.24);(1124,2,1232314,34545435345,7.23,7.23,7.24)
-        // 产品ID，报价序号，报价时间戳，当前价，第一档bid卖价，第一档ask买价
-        const priceStr = p.split(';')[0].match(/\((.+)\)/)
-        const $store = this.$store
-        const price = priceStr[1] ?? ''
-        const priceArr = price.split(',')
-        $store.commit('_quote/Update_productTick', {
-            symbolId: priceArr[0] * 1,
-            trade_type: priceArr[1],
-            tick_time: priceArr[3] * 1,
-            price: priceArr[4],
-            sell_price: priceArr[5],
-            buy_price: priceArr[6],
-        })
     }
 }
 
