@@ -8,7 +8,15 @@ export const wpCompanyConfig = () => {
         companyId: 3,
         trade_type: 1,
         customerGroupId: 7,
-        symbol_ids: [2, 3, 4, 5, 6, 7, 8]
+        symbol_ids: [2, 3, 4, 5, 6, 7, 8],
+        currencyList:[
+            { name: '美元账户', value: 'USD' },
+            { name: '人民币', value: 'CNY' }
+        ],
+        tradeTypeList:[
+            { name: 'CFD账户', value: '1' },
+            { name: 'CFD账户222', value: '2' },
+        ],
     })
 }
 export const wpNav = () => pageConfig('Nav')

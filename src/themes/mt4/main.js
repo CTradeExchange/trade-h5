@@ -4,7 +4,9 @@ import router from './router'
 import store from './store'
 import VantBase from './vantBase'
 import Socket from '@/plugins/socket/socket'
+import Colors,{setRootVariable} from './colorVariables'
 
+setRootVariable(Colors)
 const app = createApp(App)
 
 app.use(VantBase).use(store).use(router).use(Socket, { $store: store })

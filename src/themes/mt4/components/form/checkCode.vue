@@ -1,5 +1,5 @@
 <template>
-    <div class='checkCodeBar of-1px-bottom'>
+    <div class='checkCodeBar van-hairline--bottom'>
         <div class='checkCodeInput'>
             <input
                 :id='id'
@@ -8,11 +8,12 @@
                 type='text'
                 v-bind='$attrs'
                 :value='modelValue'
+                :placeholder="label"
                 @input='onInput'
             />
-            <label v-if='label' class='label' :for='id'>
+            <!-- <label v-if='label' class='label' :for='id'>
                 {{ label }}
-            </label>
+            </label> -->
         </div>
         <a v-if='clear' v-show='modelValue.length' class='van-icon van-icon-clear' href='javascript:;' @click='onClear'></a>
         <button ref='getCodeBtn' class='getCodeBtn' :disabled='disabled' type='button' @click='getCode'>
@@ -114,11 +115,11 @@ export default {
     width: 100%;
     height: rem(75px);
     padding: 0 5px;
-    &:focus~.label,
-    &:valid~.label {
-        transform: scale(0.8) translateY(-90%);
-        transform-origin: bottom left;
-    }
+    // &:focus~.label,
+    // &:valid~.label {
+    //     transform: scale(0.8) translateY(-90%);
+    //     transform-origin: bottom left;
+    // }
 }
 .label {
     position: absolute;

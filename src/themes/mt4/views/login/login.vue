@@ -1,6 +1,6 @@
 <template>
     <div class='pageWrap'>
-        <Top back :menu='false' :right-action='rightAction' @rightClick='changeLoginType' />
+        <Top :right-action='rightAction' @rightClick='changeLoginType' />
         <header class='header'>
             <h1 class='pageTitle'>
                 {{ loginType==='password'? '账号密码登录':'验证码登录' }}

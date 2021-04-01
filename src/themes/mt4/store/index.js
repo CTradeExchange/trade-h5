@@ -4,11 +4,10 @@ import User from '@/store/modules/user'
 import Quote from '@/store/modules/quote'
 import Trade from '@/store/modules/trade'
 import { getListByParentCode } from '@/api/base'
+import Colors from '@m/colorVariables'
 
-const rootElement = getComputedStyle(document.documentElement)
 const style = {
-    primary: rootElement.getPropertyValue('--primary'),
-    red: rootElement.getPropertyValue('--red'),
+    ...Colors
 }
 
 export default createStore({
@@ -46,9 +45,9 @@ export default createStore({
         getListByParentCode ({ dispatch, commit, state }) {
             return getListByParentCode({ parentCode: 'phone_code' }).then(res => {
                 if (res.check()) {
-                    res.data.forEach(el => {
-                        el.name += ' ' + el.code
-                    })
+                    // res.data.forEach(el => {
+                    //     el.name += ' ' + el.code
+                    // })
                     commit('Update_zoneList', res.data)
                 }
                 return res
