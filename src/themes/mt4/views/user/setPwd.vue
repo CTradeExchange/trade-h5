@@ -1,8 +1,6 @@
 <template>
     <div class='pageWrap'>
         <top back :menu='false' />
-        {{ formData }}
-        {{ geolocation }}
         <header class='header'>
             <h1 class='pageTitle'>
                 设置登录密码
@@ -30,7 +28,6 @@ import top from '@/components/top2'
 import { reactive, toRefs } from 'vue'
 import { Field, Toast } from 'vant'
 import { useRouter } from 'vue-router'
-import { modifyPwd, findPwd } from '@/api/user'
 import md5 from 'js-md5'
 
 export default {
@@ -46,7 +43,7 @@ export default {
             newPwdVis: false,
             confirmVis: false
         })
-        
+
         function changeState (type) {
             state[type] = !state[type]
         }
@@ -64,7 +61,6 @@ export default {
             if (state.newPwd !== state.confirmPwd) {
                 return Toast('新密码和确认密码不同，请检查后重新输入')
             }
-
         }
 
         return {
