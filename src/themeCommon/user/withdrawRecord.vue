@@ -1,10 +1,11 @@
 <template>
     <div class='page-wrap'>
-        <van-nav-bar
+        <!-- <van-nav-bar
             left-arrow
             title='取款记录'
             @click-left='back'
-        />
+        /> -->
+        <topNav />
         <div class='record-list'>
             <van-collapse v-model='activeNames' accordion @change='handleFold'>
                 <van-collapse-item name='1'>
@@ -186,9 +187,11 @@
 import Top from '@/components/top'
 import { reactive, toRefs, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import topNav from '@/components/topNav'
 export default {
     components: {
-        Top
+        Top,
+        topNav
     },
     setup (props) {
         const router = useRouter()
@@ -231,7 +234,7 @@ export default {
     }
     .record-list {
         .van-collapse-item {
-            margin-top: rem(20px);
+            border-top: solid rem(20px) var(--btnColor);
         }
         .amount {
             color: var(--color);
