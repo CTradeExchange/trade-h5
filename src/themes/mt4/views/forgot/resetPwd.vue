@@ -2,6 +2,8 @@
     <div class='pageWrap'>
         <top back :menu='false' />
         <!-- <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a> -->
+        {{ formData }}
+        {{ geolocation }}
         <header class='header'>
             <h1 class='pageTitle'>
                 重置密码
@@ -25,11 +27,12 @@
 </template>
 
 <script>
-import top from '@/components/top'
-import { reactive, toRefs } from 'vue'
+import top from '@/components/top2'
+import { reactive, toRefs, inject } from 'vue'
 import { Field, Toast } from 'vant'
 import { useRouter } from 'vue-router'
-import { findPwd } from '@/api/user'
+import { modifyPwd, findPwd } from '@/api/user'
+import md5 from 'js-md5'
 
 export default {
     components: {
@@ -45,6 +48,9 @@ export default {
             confirmVis: false
         })
 
+        const formData = inject('formData')
+        const geolocation = inject('geolocation')
+        debugger
         function changeState (type) {
             state[type] = !state[type]
         }
@@ -56,18 +62,27 @@ export default {
             if (!state.confirmPwd) {
                 return Toast('请输入确认密码')
             }
+            if (state.newPwd.length < 6 || state.newPwd.length > 16) {
+                return Toast('密码为6-16位数字或字母的组合')
+            }
             if (state.newPwd !== state.confirmPwd) {
                 return Toast('新密码和确认密码不同，请检查后重新输入')
             }
 
-            return findPwd({
-                type: 1,
+            // type	Integer	必填	注册登录方式：1邮箱，2手机号码，3客户账号
+            // loginName	String	必填	账号：邮箱/手机号码
+            // companyId	Long	必填	公司
+            // verifyCode	String	必填	验证码
+            // newPwd	String	必填	新密码
+
+            findPwd({
+                type: '',
                 loginName: '',
                 companyId: '',
                 verifyCode: '',
-                newPwd: ''
-
+                newPwd: md5(state.confirmPwd)
             }).then((res) => {
+                debugger
                 if (res.check()) {
                     router.push('/resetSuccess')
                 }
@@ -77,7 +92,9 @@ export default {
         return {
             ...toRefs(state),
             changeState,
-            handleConfirm
+            handleConfirm,
+            formData,
+            geolocation
         }
     }
 }

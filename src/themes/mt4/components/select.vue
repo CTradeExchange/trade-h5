@@ -1,6 +1,8 @@
 <template>
     <div class='selectWrap'>
-        <span class='selectval' @click='show=true'>{{ selected && selected[text] }}</span>
+        <span class='selectval' @click='show=true'>
+            {{ selected && selected[text] }}
+        </span>
         <span class='icon_arrow-down'></span>
     </div>
     <van-action-sheet v-if='actions && actions.length' v-model:show='show' :actions='actions' @select='onSelect' />
@@ -56,25 +58,25 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.selectWrap{
+.selectWrap {
     position: relative;
-    width: 100%;
     display: inline-block;
-    .icon_arrow-down{
+    width: 100%;
+    .icon_arrow-down {
         position: absolute;
-        right: rem(10px);
         top: rem(25px);
+        right: rem(10px);
     }
 }
-.selectval{
+.selectval {
     position: relative;
     display: block;
     height: rem(75px);
-    line-height: rem(75px);
     padding: 0 rem(50px) 0 rem(15px);
-    font-size: rem(26px);
-    white-space: nowrap;
     overflow: hidden;
+    font-size: rem(26px);
+    line-height: rem(75px);
+    white-space: nowrap;
     text-overflow: ellipsis;
     // border-radius: rem(10px);
     // border: 1px solid var(--bdColor);

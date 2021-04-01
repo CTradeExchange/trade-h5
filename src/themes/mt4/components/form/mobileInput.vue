@@ -73,6 +73,7 @@ export default {
             this.$emit('input', $event.target.value)
         },
         zoneOnSelect (item) {
+            this.zoneVal = item.code
             this.$emit('update:zone', item.value)
             this.$emit('zoneSelect', item.value)
         }

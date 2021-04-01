@@ -14,14 +14,14 @@
                         <MobileInput v-model='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
                     </div>
                     <div class='field'>
-                        <checkCode v-model='checkCode' placeholder='请输入验证码' :tips='tips' />
+                        <checkCode v-model='checkCode' placeholder='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
                     </div>
                 </form>
             </van-tab>
             <van-tab title='邮箱找回'>
                 <form class='loginForm'>
                     <div class='field'>
-                        <u-input v-model='email' placeholder='请输入邮箱' />
+                        <u-input v-model='email' clear placeholder='请输入邮箱' />
                     </div>
                     <div class='field'>
                         <checkCode v-model='emailCode' :label='请输入验证码' placeholder='请输入验证码' />
@@ -36,9 +36,9 @@
 </template>
 
 <script>
-import top from '@/components/top'
+import top from '@/components/top2'
 import {
-    reactive, toRefs
+    reactive, toRefs, provide
 } from 'vue'
 import MobileInput from '@m/components/form/mobileInput'
 import checkCode from '@m/components/form/checkCode'
@@ -48,6 +48,7 @@ import uInput from '@/themes/mt4/components/form/input.vue'
 import Schema from 'async-validator'
 import Rule from './rule'
 import { useStore } from 'vuex'
+import { verifyCodeSend, verifyCodeCheck } from '@/api/base'
 
 export default {
     components: {
@@ -60,7 +61,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const state = reactive({
-            mobile: '',
+            mobile: '18680878788',
             checkCode: '',
             email: '',
             emailCode: '',
@@ -69,11 +70,52 @@ export default {
             tips: {
                 flag: true,
                 msg: ''
-            }
+            },
+            sendToken: ''
+        })
+
+        provide('formData', {
+            type: 1,
+            loginName: 'adfaf',
+            companyId: 1,
+            verifyCode: '',
+            newPwd: ''
+        })
+
+        provide('geolocation', {
+            longitude: 90,
+            latitude: 135
         })
 
         const handleTabChange = (name, title) => {
             state.curTab = name
+        }
+
+        // 发送验证码
+        const handleVerifyCodeSend = (callback) => {
+            const params = {
+                companyId: 1,
+                bizType: 'SMS_PASSWORD_VERIFICATION_CODE',
+                toUser: state.zone + ' ' + state.mobile,
+                trace: '8545154888555'
+            }
+            console.log(params)
+            verifyCodeSend(params).then(res => {
+                if (res.check()) {
+                    if (res.code === '0') {
+                        state.sendToken = res.data.token
+                        Toast('验证码发送成功，请注意查收!')
+                    }
+                }
+            })
+        }
+
+        const handleVerifyCodeCheck = () => {
+            verifyCodeCheck().then(res => {
+                if (res) {
+                    next()
+                }
+            })
         }
 
         const next = () => {
@@ -87,11 +129,22 @@ export default {
             const validator = new Schema(Rule)
             validator.validate(params, (errors, fields) => {
                 console.log(errors, fields)
-                debugger
                 if (errors) {
                     return Toast(errors[0].message)
                 }
-                router.push('/resetPwd')
+                verifyCodeCheck({
+                    companyId: 1,
+                    bizType: 'SMS_PASSWORD_VERIFICATION_CODE',
+                    toUser: state.zone + ' ' + state.mobile,
+                    sendToken: state.sendToken,
+                    code: state.checkCode
+                }).then(res => {
+                    if (res.ok) {
+                        router.push('/resetPwd')
+                    } else {
+                        Toast(res.msg)
+                    }
+                })
             })
         }
         // 获取国家验区号
@@ -99,7 +152,9 @@ export default {
         return {
             ...toRefs(state),
             next,
-            handleTabChange
+            handleTabChange,
+            handleVerifyCodeSend,
+            handleVerifyCodeCheck
         }
     }
 }

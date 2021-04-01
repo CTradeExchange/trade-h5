@@ -28,7 +28,6 @@ export default {
         {
             message: '请输入正确的邮箱',
             validator: (rule, value, callback, source, options) => {
-                debugger
                 return source.type === 1 ? emailReg.test(value) : true
             },
         },

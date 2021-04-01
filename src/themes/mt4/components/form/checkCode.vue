@@ -4,7 +4,6 @@
             <input
                 :id='id'
                 class='input'
-                required
                 type='text'
                 v-bind='$attrs'
                 :value='modelValue'
@@ -52,7 +51,7 @@ export default {
             disabled: false,
         }
     },
-    emits: ['update:modelValue', 'update:zone', 'input'],
+    emits: ['update:modelValue', 'update:zone', 'input', 'verifyCodeSend'],
     methods: {
         onClear () {
             this.$emit('update:modelValue', '')
@@ -67,8 +66,8 @@ export default {
             this.$emit('update:zone', item.value)
         },
         getCode () {
-            this.$emit('verifyCodeSend', this.getCodeBtnCountDown)
-            // this.getCodeBtnCountDown()
+            this.$emit('verifyCodeSend', '')
+            this.getCodeBtnCountDown()
         },
         getCodeBtnCountDown () {
             const getCodeBtn = this.$refs.getCodeBtn

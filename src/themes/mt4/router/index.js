@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Layout from '@m/layout/index'
 import { getLoginParams, delayAwait } from '@/utils/util'
 import store from '../store'
+import themeRouter from '@/themeCommon/router'
 
 const routes = [
     {
@@ -74,6 +75,8 @@ const routes = [
                     footerMenu: false
                 }
             },
+            ...themeRouter
+
         ]
     },
     {
