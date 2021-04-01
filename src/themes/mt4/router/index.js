@@ -75,6 +75,15 @@ const routes = [
                     footerMenu: false
                 }
             },
+            {
+                path: '/setPwd',
+                name: 'setPwd',
+                component: () => import(/* webpackChunkName: "setPwd" */ '../views/user/setPwd.vue'),
+                meta: {
+                    title: '设置密码',
+                    footerMenu: false
+                }
+            },
             ...themeRouter
 
         ]
