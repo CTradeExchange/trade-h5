@@ -7,12 +7,12 @@
             </p>
             <div class='field-wrap'>
                 <input v-model='amount' placeholder='请输入取款金额' type='number' />
-                <van-button class='get-btn' plain round size='small'>
+                <van-button class='get-btn' plain round size='small' @click='getAll'>
                     全部取出
                 </van-button>
             </div>
             <div class='notice'>
-                <span>最大可取 5005.55 美元</span>
+                <span>最大可取 {{ maxAmount }} 美元</span>
                 <span>手续费 0.10美元</span>
             </div>
             <div class='bank-wrap'>
@@ -32,6 +32,9 @@
             </div>
         </div>
     </div>
+    <van-button block class='next-btn' type='primary' @click='next'>
+        <span>下一步</span>
+    </van-button>
     <van-action-sheet v-model:show='show' round='false' title='选择收款银行卡'>
         <div class='bank-list'>
             <div v-for='(item, index) in bankList' :key='index' class='bank' @click='chooseBank(item)'>
@@ -41,7 +44,7 @@
                 </span>
                 <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
             </div>
-            <div class='add-bank'>
+            <div class='add-bank' @click='toAddBank'>
                 <van-icon class='icon-plus' name='plus' size='13' />
                 <span> 新增银行卡</span>
                 <van-icon class='icon-arrow' name='arrow' size='13' />
@@ -68,6 +71,7 @@ export default {
         const state = reactive({
             amount: 0,
             show: false,
+            maxAmount: 5005.55,
             checkedBank: {
                 icon: require('../../assets/logo.png'),
                 bankName: '招商银行',
@@ -99,6 +103,7 @@ export default {
             state.show = true
         }
 
+        // 选择银行卡
         const chooseBank = (item) => {
             state.checkedBank = item
             state.bankList.map(item => { item.checked = false })
@@ -107,14 +112,26 @@ export default {
         }
 
         const toWithdrawList = () => {
-            router.push('/withdrawRecord')
+            router.push({ path: '/withdrawRecord' })
         }
+
+        const toAddBank = () => {
+            router.push('/addBank')
+        }
+
+        // 全部取出
+        const getAll = () => {
+            state.amount = state.maxAmount
+        }
+
         return {
             rightAction,
             toWithdrawList,
             ...toRefs(state),
             openSheet,
-            chooseBank
+            chooseBank,
+            getAll,
+            toAddBank
         }
     }
 
@@ -178,6 +195,16 @@ export default {
                 line-height: rem(60px);
             }
         }
+    }
+}
+.next-btn {
+    position: fixed;
+    bottom: 0;
+    background: var(--bdColor);
+    border-color: var(--bdColor);
+    span {
+        color: var(--color);
+        font-size: rem(34px);
     }
 }
 .bank {

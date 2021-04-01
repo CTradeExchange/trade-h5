@@ -12,9 +12,18 @@ const routes = [
     {
         path: '/withdrawRecord',
         name: 'WithdrawRecord',
-        component: () => import(/* webpackChunkName: "withdraw" */ '../user/withdrawRecord.vue'),
+        component: () => import(/* webpackChunkName: "withdrawRecord" */ '../user/withdrawRecord.vue'),
         meta: {
             title: '取款记录',
+            footerMenu: false
+        }
+    },
+    {
+        path: '/addBank',
+        name: 'AddBank',
+        component: () => import(/* webpackChunkName: "addBank" */ '../user/addBank.vue'),
+        meta: {
+            title: '添加银行卡',
             footerMenu: false
         }
     }

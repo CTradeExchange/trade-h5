@@ -29,7 +29,7 @@
                 </form>
             </van-tab>
         </van-tabs>
-        <van-button block class='loginBtn' type='primary' @click='next'>
+        <van-button block class='next-btn' type='primary' @click='next'>
             <span>下一步</span>
         </van-button>
     </div>
@@ -61,7 +61,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const state = reactive({
-            mobile: '18680878788',
+            mobile: '',
             checkCode: '',
             email: '',
             emailCode: '',
@@ -227,7 +227,7 @@ export default {
         }
     }
 }
-.loginBtn {
+.next-btn {
     position: fixed;
     bottom: 0;
     background: var(--bdColor);
@@ -241,6 +241,7 @@ export default {
 </style>
 
 <style>
+
 .pageWrap .van-tabs__line {
     background-color: #333;
 }
