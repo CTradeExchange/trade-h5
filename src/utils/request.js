@@ -1,7 +1,7 @@
 import axios from 'axios'
 import CheckAPI from './checkAPI'
 import { login } from '@/api/user'
-import { guid, getLoginParams } from '@/utils/util'
+import { guid, getLoginParams, getToken, setToken } from '@/utils/util'
 import { apiDomain } from '@/config'
 
 // const baseURL = 'http://18.162.240.170:10000/cats-gateway'
@@ -20,7 +20,7 @@ service.interceptors.request.use(
     config => {
         const headers = config.headers
         const companyId = sessionStorage.getItem('companyId')
-        const token = sessionStorage.getItem('token')
+        const token = getToken()
         config.toastErr = config.toastErr ?? true
         headers.trace = guid()
         if (token) headers.token = token
@@ -47,7 +47,7 @@ service.interceptors.response.use(
         if (data.code === 'GATEWAY_CODE_005') {
             const loginParams = getLoginParams()
             return login(loginParams).then(res => {
-                sessionStorage.setItem('token', res.data.token)
+                setToken(res.data.token)
                 config.headers.token = res.data.token
                 return service({ ...config, data: JSON.parse(config.data) })
             })

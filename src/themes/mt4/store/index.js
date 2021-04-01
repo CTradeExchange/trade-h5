@@ -34,6 +34,7 @@ export default createStore({
             state.quoteMode = data
         },
         Update_productActivedID (state, id) {
+            sessionStorage.setItem('productActived', JSON.stringify(state._quote.productMap[id]))
             state.productActivedID = id
         },
         Update_zoneList (state, list) {

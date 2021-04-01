@@ -89,8 +89,11 @@ export default {
                 customerGroupId: rootState._base.wpCompanyInfo.customerGroupId,
             }
             return querySymbolInfo(params).then((res) => {
-                if (res.check()) {
+                if (res.check() && res.res) {
                     commit('Update_product', res.data)
+                    if (rootState.productActivedID == symbolId) {
+                        sessionStorage.setItem('productActived', JSON.stringify(productMap[symbolId]))
+                    }
                 }
                 return res
             })

@@ -14,7 +14,7 @@
             </label>
         </div>
         <a v-if='clear' v-show='modelValue.length' class='van-icon van-icon-clear' href='javascript:;' @click='onClear'></a>
-        <button ref='getCodeBtn' class='getCodeBtn' :disabled='disabled' @click='getCode'>
+        <button ref='getCodeBtn' class='getCodeBtn' :disabled='disabled' type='button' @click='getCode'>
             获取验证码
         </button>
         <!-- <div class='checkCodeBtn'>
@@ -66,8 +66,8 @@ export default {
             this.$emit('update:zone', item.value)
         },
         getCode () {
-            this.$emit('verifyCodeSend', '')
-            this.getCodeBtnCountDown()
+            this.$emit('verifyCodeSend', this.getCodeBtnCountDown.bind(this))
+            // this.getCodeBtnCountDown()
         },
         getCodeBtnCountDown () {
             const getCodeBtn = this.$refs.getCodeBtn

@@ -18,7 +18,7 @@
                 <InputComp v-model='pwd' v-model:zone='zone' clear label='密码' pwd />
             </div>
             <div v-else class='field'>
-                <CheckCode v-model='checkCode' clear label='验证码' />
+                <CheckCode v-model='checkCode' clear label='验证码' @verifyCodeSend='verifyCodeSendHandler' />
             </div>
             <van-button block class='loginBtn' type='primary' @click='loginHandle'>
                 登录
@@ -96,6 +96,7 @@ export default {
             loginType: 'checkCode',
             loginAccount: 'mobile',
         })
+        let token = ''
         const rightAction = computed(() => {
             return {
                 title: state.loginType === 'password' ? '验证码登录' : '账号密码登录'
@@ -113,6 +114,7 @@ export default {
                 device: getDevice(),
                 verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
                 loginPwd: state.loginType === 'password' ? state.pwd : undefined,
+                token: state.loginType === 'checkCode' ? token : undefined,
             }
             const validator = new Schema(Rule)
             validator.validate(loginParams, { ...state, first: true }, (errors, fields) => {
@@ -139,18 +141,27 @@ export default {
         }
 
         // 发送验证码
-        const verifyCodeSend = (callback) => {
-            const params = {
+        const verifyCodeSendHandler = (callback) => {
+            const verifyParams = {
                 type: state.loginAccount === 'mobile' ? 2 : 1,
                 loginName: state.loginAccount === 'mobile' ? state.mobile : state.email,
                 phoneArea: state.loginAccount === 'mobile' ? String(state.zone) : undefined,
-                device: getDevice(),
-                verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
-                loginPwd: state.loginType === 'password' ? state.pwd : undefined,
             }
-            verifyCodeSend(params).then(res => {
-                if (res.check()) {
-                    callback && callback()
+            const validator = new Schema(Rule)
+            validator.validate(verifyParams).then(res => {
+                const params = {
+                    bizType: state.loginAccount === 'mobile' ? 'SMS_LOGIN_VERIFICATION_CODE' : 'EMAIL_LOGIN_VERIFICATION_CODE',
+                    toUser: state.loginAccount === 'mobile' ? String(state.zone * 1) + ' ' + state.mobile : state.email,
+                }
+                verifyCodeSend(params).then(res => {
+                    if (res.check()) {
+                        token = res.data.token
+                        callback && callback()
+                    }
+                })
+            }).catch(({ errors, fields }) => {
+                if (errors) {
+                    Toast(errors[0].message)
                 }
             })
         }
@@ -162,6 +173,7 @@ export default {
             rightAction,
             loginHandle,
             topRightClick,
+            verifyCodeSendHandler,
         }
     }
 }

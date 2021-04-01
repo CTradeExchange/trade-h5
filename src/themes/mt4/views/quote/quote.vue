@@ -8,9 +8,10 @@
 <script>
 import Top from '@m/layout/top'
 import productListComp from '@m/modules/productList/productList.vue'
-import { socket } from '@/plugins/socket/socket'
+import { QuoteSocket } from '@/plugins/socket/socket'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { getLoginParams } from '@/utils/util'
 
 export default {
     components: {
@@ -23,9 +24,12 @@ export default {
 
         // 订阅产品
         const subscribList = productList.value.map(({ symbolId }) => symbolId)
-        socket.send_subscribe(subscribList)
+        QuoteSocket.send_subscribe(subscribList)
 
         store.dispatch('_quote/querySymbolBaseInfoList', subscribList)
+
+        const loginParams = getLoginParams()
+        if (loginParams) store.dispatch('_trade/queryPositionPage')
         return {}
     }
 }

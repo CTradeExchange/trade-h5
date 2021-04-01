@@ -4,7 +4,7 @@ export default {
     namespaced: true,
     state: {
         positionLoading: '', // 持仓列表加载
-        positionList: '', // 持仓列表
+        positionList: [], // 持仓列表
         historyLoading: false, // 历史记录加载
         historyList: '', // 订单列表
     },

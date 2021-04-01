@@ -22,7 +22,7 @@
                 <InputComp v-model='email' clear label='邮箱' />
             </div>
             <div class='cell'>
-                <CheckCode v-model='checkCode' clear label='验证码' />
+                <CheckCode v-model='checkCode' clear label='验证码' @verifyCodeSend='verifyCodeSendHandler' />
             </div>
             <div class='cell'>
                 <van-checkbox v-model='protocol' shape='square'>
@@ -64,7 +64,7 @@ import InputComp from '@m/components/form/input'
 import MobileInput from '@m/components/form/mobileInput'
 import { getDevice, getQueryVariable } from '@/utils/util'
 import { register, openAccount } from '@/api/user'
-import { getListByParentCode } from '@/api/base'
+import { verifyCodeSend } from '@/api/base'
 import { useStore } from 'vuex'
 import { reactive, toRefs, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -99,6 +99,7 @@ export default {
             ],
             protocol: true
         })
+        let token = ''
         store.dispatch('getListByParentCode')
         // 手机号输入框离开焦点
         const onMobileBlur = () => {
@@ -127,12 +128,6 @@ export default {
                     sessionStorage.setItem('RegisterParams', JSON.stringify({ ...params, openType: state.openType }))
                     sessionStorage.setItem('RegisterData', JSON.stringify(res))
                     router.replace({ name: 'RegisterSuccess' })
-
-                    // 注册成功后开立账户
-                    openAccount({
-                        tradeType: 1,
-                        currency: state.currency,
-                    })
                 } else {
                     res.toast()
                 }
@@ -149,6 +144,7 @@ export default {
                 verifyCode: state.checkCode,
                 currency: state.currency,
                 tradeType: 1,
+                token,
                 utmSource: getQueryVariable('utm_source'),
                 utmMedium: getQueryVariable('utm_medium'),
                 utmCampaign: getQueryVariable('utm_campaign'),
@@ -163,10 +159,36 @@ export default {
                 registerSubmit(params)
             })
         }
+        // 发送验证码
+        const verifyCodeSendHandler = (callback) => {
+            const verifyParams = {
+                type: state.openType === 'mobile' ? 2 : 1,
+                loginName: state.openType === 'mobile' ? state.mobile : state.email,
+                phoneArea: state.openType === 'mobile' ? String(state.zone) : undefined,
+            }
+            const validator = new Schema(checkCustomerExistRule)
+            validator.validate(verifyParams).then(res => {
+                const params = {
+                    bizType: state.openType === 'mobile' ? 'SMS_REGISTER_VERIFICATION_CODE' : 'EMAIL_REGISTER_VERIFICATION_CODE',
+                    toUser: state.openType === 'mobile' ? String(state.zone * 1) + ' ' + state.mobile : state.email,
+                }
+                verifyCodeSend(params).then(res => {
+                    if (res.check()) {
+                        token = res.data.token
+                        callback && callback()
+                    }
+                })
+            }).catch(({ errors, fields }) => {
+                if (errors) {
+                    Toast(errors[0].message)
+                }
+            })
+        }
         return {
             ...toRefs(state),
             registerHandler,
             onMobileBlur,
+            verifyCodeSendHandler,
         }
     }
 }

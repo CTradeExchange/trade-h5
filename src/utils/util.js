@@ -69,6 +69,14 @@ export function getQueryVariable (variable, search = location.search) {
 export function getLoginParams () {
     return JSON.parse(localStorage.getItem('loginParams'))
 }
+// 设置登录token
+export function setToken (token) {
+    return sessionStorage.setItem('token', token)
+}
+// 获取登录token
+export function getToken () {
+    return sessionStorage.getItem('token')
+}
 // 格式化价格
 export function priceFormat (price, digits) {
     const _price = price / Math.pow(10, digits)
@@ -94,3 +102,5 @@ export function delayAwait (fn, reset = true) {
         }).then(() => delayAwait(fn, false))
     })
 }
+/* 获取字符长度 */
+export const getLen = (str = '') => str.replace(/\p{Unified_Ideograph}/ug, '01').length

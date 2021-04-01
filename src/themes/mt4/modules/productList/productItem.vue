@@ -1,7 +1,7 @@
 <template>
-    <div class='productItem of-1px-bottom position' :class="[quoteMode===1?'mode1':'mode2']" @click="$emit('open')">
+    <div class='productItem of-1px-bottom' :class='className' @click="$emit('open')">
         <div class='hd'>
-            <p class='productName'>
+            <p class='productName' :class='{ longName }'>
                 {{ product.symbolName }}
             </p>
             <p class='time'>
@@ -35,6 +35,7 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import Price from '@m/components/price'
 import dayjs from 'dayjs'
+import { getLen } from '@/utils/util'
 export default {
     components: {
         Price,
@@ -45,18 +46,28 @@ export default {
             default: {}
         },
     },
-    setup (props, context) {
+    setup ({ product }, context) {
         const store = useStore()
-        const quoteMode = computed(() => {
-            return store.state.quoteMode
-        })
+        const positionList = computed(() => store.state._trade.positionList)
+        const quoteMode = computed(() => store.state.quoteMode)
+        const longName = computed(() => getLen(product?.symbolName) > 15)
         const tickTime = computed(() => {
-            const tick_time = props.product.tick_time ?? ''
+            const tick_time = product.tick_time ?? ''
             return tick_time ? dayjs(Number(tick_time)).format('HH:mm:ss') : ''
         })
+        const inPosition = computed(() => positionList.value.find(el => el.symbolId === parseInt(product.symbolId)))
+        const className = computed(() => ({
+            mode1: quoteMode.value === 1,
+            mode2: quoteMode.value === 2,
+            position1: inPosition?.value?.direction === 1,
+            position2: inPosition?.value?.direction === 2,
+        }))
         return {
             tickTime,
             quoteMode,
+            inPosition,
+            longName,
+            className,
         }
     }
 }
@@ -70,13 +81,24 @@ export default {
     display: flex;
     padding: rem(20px) rem(40px);
     overflow: hidden;
-    &.position::before {
+    &.position1::before {
         position: absolute;
         top: 0;
         left: 0;
         width: rem(40px);
         height: rem(40px);
-        background: var(--riseColor);
+        background: var(--buyColor);
+        transform: translate(-50%, -50%) rotate(45deg);
+        transform-origin: center;
+        content: '';
+    }
+    &.position2::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: rem(40px);
+        height: rem(40px);
+        background: var(--sellColor);
         transform: translate(-50%, -50%) rotate(45deg);
         transform-origin: center;
         content: '';
@@ -99,16 +121,24 @@ export default {
         line-height: 1.3;
     }
     .productName {
+        max-width: rem(280px);
+        overflow: hidden;
         color: var(--color);
         font-weight: normal;
         font-size: rem(36px);
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        &.longName {
+            font-size: 12px;
+        }
     }
     .col {
-        margin-left: rem(46px);
+        width: rem(200px);
+        margin-left: rem(10px);
         font-size: rem(24px);
         text-align: right;
-        &:first-of-type {
-            margin-left: 0;
+        &:last-of-type {
+            margin-left: rem(30px);
         }
     }
 }

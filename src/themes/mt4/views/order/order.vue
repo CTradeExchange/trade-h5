@@ -84,7 +84,7 @@ import top from '@m/layout/top'
 import Price from '@m/components/price'
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import { socket } from '@/plugins/socket/socket'
+import { QuoteSocket } from '@/plugins/socket/socket'
 import { addMarketOrder } from '@/api/trade'
 import { useRoute, useRouter } from 'vue-router'
 import OrderVolumn from './components/orderVolumn'
@@ -138,7 +138,7 @@ export default {
             })
         }
         const { symbolId } = route.query
-        socket.send_subscribe([symbolId])
+        QuoteSocket.send_subscribe([symbolId])
         store.dispatch('_quote/querySymbolInfo', symbolId)
         store.commit('Update_productActivedID', symbolId)
         return {
