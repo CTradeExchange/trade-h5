@@ -1,6 +1,8 @@
 <template>
     <div class='selectWrap'>
-        <span class='selectval' @click='show=true'>{{ selected && selected[text] }}</span>
+        <span class='selectval' @click='show=true'>
+            {{ selected && selected[text] }}
+        </span>
         <span class='icon_arrow-down'></span>
     </div>
     <van-action-sheet v-if='actions && actions.length' v-model:show='show' :actions='actions' @select='onSelect' />

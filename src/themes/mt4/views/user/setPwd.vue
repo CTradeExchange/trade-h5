@@ -1,21 +1,19 @@
 <template>
     <div class='pageWrap'>
         <top back :menu='false' />
-        <!-- <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a> -->
-
         <header class='header'>
             <h1 class='pageTitle'>
-                重置密码
+                设置登录密码
             </h1>
             <h6>密码为6-16位数字或字母的组合</h6>
         </header>
         <van-cell-group>
             <div class='form-item'>
-                <Field v-model='newPwd' label='' placeholder='请输入新密码' :type='newPwdVis ? "text" : "password"' />
+                <Field v-model='newPwd' label='' placeholder='请输入登录密码' :type='newPwdVis ? "text" : "password"' />
                 <span class='icon' :class="newPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("newPwdVis")'></span>
             </div>
             <div class='form-item'>
-                <Field v-model='confirmPwd' label='' placeholder='请再次输入新密码' :type='confirmVis ? "text" : "password"' />
+                <Field v-model='confirmPwd' label='' placeholder='请再次输入登录密码' :type='confirmVis ? "text" : "password"' />
                 <span class='icon' :class="confirmVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("confirmVis")'></span>
             </div>
         </van-cell-group>
@@ -29,8 +27,7 @@
 import top from '@/components/top2'
 import { reactive, toRefs } from 'vue'
 import { Field, Toast } from 'vant'
-import { useRouter, useRoute } from 'vue-router'
-import { findPwd } from '@/api/user'
+import { useRouter } from 'vue-router'
 import md5 from 'js-md5'
 
 export default {
@@ -40,7 +37,6 @@ export default {
     },
     setup (props) {
         const router = useRouter()
-        const route = useRoute()
         const state = reactive({
             newPwd: '',
             confirmPwd: '',
@@ -54,10 +50,10 @@ export default {
 
         function handleConfirm () {
             if (!state.newPwd) {
-                return Toast('请输入新密码')
+                return Toast('请输入登录密码')
             }
             if (!state.confirmPwd) {
-                return Toast('请输入确认密码')
+                return Toast('请输入登录确认密码')
             }
             if (state.newPwd.length < 6 || state.newPwd.length > 16) {
                 return Toast('密码为6-16位数字或字母的组合')
@@ -65,28 +61,6 @@ export default {
             if (state.newPwd !== state.confirmPwd) {
                 return Toast('新密码和确认密码不同，请检查后重新输入')
             }
-
-            // type	Integer	必填	注册登录方式：1邮箱，2手机号码，3客户账号
-            // loginName	String	必填	账号：邮箱/手机号码
-            // companyId	Long	必填	公司
-            // verifyCode	String	必填	验证码
-            // newPwd	String	必填	新密码
-            debugger
-            const params = {
-                type: route.query['type'],
-                loginName: route.query['loginName'],
-                verifyCode: route.query['verifyCode'],
-                newPwd: md5(state.confirmPwd)
-            }
-
-            debugger
-
-            findPwd(params).then((res) => {
-                if (res.check()) {
-                    return router.push('/resetSuccess')
-                }
-                Toast(res.msg)
-            })
         }
 
         return {

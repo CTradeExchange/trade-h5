@@ -78,3 +78,16 @@ export function findPwd (data) {
         data
     })
 }
+
+/* 修改密码 */
+
+export function modifyPwd (data) {
+    return request({
+        url: '/global/customer.CustomerWebApiService.updateLoginPwd',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}

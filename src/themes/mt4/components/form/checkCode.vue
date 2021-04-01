@@ -4,7 +4,6 @@
             <input
                 :id='id'
                 class='input'
-                required
                 type='text'
                 v-bind='$attrs'
                 :value='modelValue'

@@ -28,7 +28,6 @@ export default {
         {
             message: '请输入正确的邮箱',
             validator: (rule, value, callback, source, options) => {
-                debugger
                 return source.type === 1 ? emailReg.test(value) : true
             },
         },
@@ -36,13 +35,13 @@ export default {
     checkCode: {
         message: '请输入验证码',
         validator: (rule, value, callback, source, options) => {
-            return source.type === 0 ? !!value : true
+            return source.type && source.type === 0 ? !!value : true
         },
     },
     emailCode: {
         message: '请输入验证码',
         validator: (rule, value, callback, source, options) => {
-            return source.type === 1 ? !!value : true
+            return source.type && source.type === 1 ? !!value : true
         },
     }
 }
