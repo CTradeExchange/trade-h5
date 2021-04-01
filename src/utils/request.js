@@ -3,6 +3,7 @@ import CheckAPI from './checkAPI'
 import { login } from '@/api/user'
 import { guid, getLoginParams, getToken, setToken } from '@/utils/util'
 import { apiDomain } from '@/config'
+import { Toast } from 'vant'
 
 // const baseURL = 'http://18.162.240.170:10000/cats-gateway'
 const baseURL = `${apiDomain}/cats-gateway`
@@ -18,6 +19,11 @@ headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 // request interceptor
 service.interceptors.request.use(
     config => {
+        Toast.loading({
+            message: '请求中...',
+            forbidClick: true,
+            loadingType: 'spinner',
+        })
         const headers = config.headers
         const companyId = sessionStorage.getItem('companyId')
         const token = getToken()
@@ -34,6 +40,7 @@ service.interceptors.request.use(
         return config
     },
     error => {
+        Toast.clear()
         console.log(error) // for debug
         return Promise.reject(error)
     }
@@ -42,6 +49,7 @@ service.interceptors.request.use(
 // response interceptor
 service.interceptors.response.use(
     response => {
+        Toast.clear()
         const { data, config } = response
         // token失效重新登录
         if (data.code === 'GATEWAY_CODE_005') {
@@ -59,6 +67,7 @@ service.interceptors.response.use(
         return result
     },
     error => {
+        Toast.clear()
         return Promise.reject(error)
     }
 )

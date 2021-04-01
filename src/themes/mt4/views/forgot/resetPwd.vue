@@ -2,8 +2,7 @@
     <div class='pageWrap'>
         <top back :menu='false' />
         <!-- <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a> -->
-        {{ formData }}
-        {{ geolocation }}
+
         <header class='header'>
             <h1 class='pageTitle'>
                 重置密码
@@ -28,10 +27,10 @@
 
 <script>
 import top from '@/components/top2'
-import { reactive, toRefs, inject } from 'vue'
+import { reactive, toRefs } from 'vue'
 import { Field, Toast } from 'vant'
-import { useRouter } from 'vue-router'
-import { modifyPwd, findPwd } from '@/api/user'
+import { useRouter, useRoute } from 'vue-router'
+import { findPwd } from '@/api/user'
 import md5 from 'js-md5'
 
 export default {
@@ -41,6 +40,7 @@ export default {
     },
     setup (props) {
         const router = useRouter()
+        const route = useRoute()
         const state = reactive({
             newPwd: '',
             confirmPwd: '',
@@ -48,9 +48,6 @@ export default {
             confirmVis: false
         })
 
-        const formData = inject('formData')
-        const geolocation = inject('geolocation')
-        
         function changeState (type) {
             state[type] = !state[type]
         }
@@ -74,26 +71,28 @@ export default {
             // companyId	Long	必填	公司
             // verifyCode	String	必填	验证码
             // newPwd	String	必填	新密码
-
-            findPwd({
-                type: '',
-                loginName: '',
-                companyId: '',
-                verifyCode: '',
+            debugger
+            const params = {
+                type: route.query['type'],
+                loginName: route.query['loginName'],
+                verifyCode: route.query['verifyCode'],
                 newPwd: md5(state.confirmPwd)
-            }).then((res) => {
+            }
+
+            debugger
+
+            findPwd(params).then((res) => {
                 if (res.check()) {
-                    router.push('/resetSuccess')
+                    return router.push('/resetSuccess')
                 }
+                Toast(res.msg)
             })
         }
 
         return {
             ...toRefs(state),
             changeState,
-            handleConfirm,
-            formData,
-            geolocation
+            handleConfirm
         }
     }
 }

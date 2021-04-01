@@ -38,7 +38,7 @@
 <script>
 import top from '@/components/top2'
 import {
-    reactive, toRefs, provide
+    reactive, toRefs
 } from 'vue'
 import MobileInput from '@m/components/form/mobileInput'
 import checkCode from '@m/components/form/checkCode'
@@ -74,19 +74,6 @@ export default {
             sendToken: ''
         })
 
-        provide('formData', {
-            type: 1,
-            loginName: 'adfaf',
-            companyId: 1,
-            verifyCode: '',
-            newPwd: ''
-        })
-
-        provide('geolocation', {
-            longitude: 90,
-            latitude: 135
-        })
-
         const handleTabChange = (name, title) => {
             state.curTab = name
         }
@@ -94,27 +81,30 @@ export default {
         // 发送验证码
         const handleVerifyCodeSend = (callback) => {
             const params = {
-                companyId: 1,
                 bizType: 'SMS_PASSWORD_VERIFICATION_CODE',
-                toUser: state.zone + ' ' + state.mobile,
-                trace: '8545154888555'
+                toUser: state.zone + ' ' + state.mobile
             }
-            console.log(params)
-            verifyCodeSend(params).then(res => {
-                if (res.check()) {
-                    if (res.code === '0') {
-                        state.sendToken = res.data.token
-                        Toast('验证码发送成功，请注意查收!')
-                    }
-                }
-            })
-        }
 
-        const handleVerifyCodeCheck = () => {
-            verifyCodeCheck().then(res => {
-                if (res) {
-                    next()
+            const validator = new Schema(Rule)
+            validator.validate({
+                type: state.curTab,
+                mobile: state.mobile,
+                email: state.email,
+            }, (errors, fields) => {
+                console.log(errors, fields)
+                if (errors) {
+                    return Toast(errors[0].message)
                 }
+                console.log(params)
+                verifyCodeSend(params).then(res => {
+                    if (res.check()) {
+                        if (res.code === '0') {
+                            state.sendToken = res.data.token
+                            Toast('验证码发送成功，请注意查收!')
+                            callback && callback()
+                        }
+                    }
+                })
             })
         }
 
@@ -133,14 +123,20 @@ export default {
                     return Toast(errors[0].message)
                 }
                 verifyCodeCheck({
-                    companyId: 1,
                     bizType: 'SMS_PASSWORD_VERIFICATION_CODE',
                     toUser: state.zone + ' ' + state.mobile,
                     sendToken: state.sendToken,
                     code: state.checkCode
                 }).then(res => {
                     if (res.ok) {
-                        router.push('/resetPwd')
+                        router.push({
+                            path: '/resetPwd',
+                            query: {
+                                type: state.curTab === 0 ? 2 : 1,
+                                loginName: state.curTab === 0 ? state.mobile : state.email,
+                                verifyCode: state.curTab === 0 ? state.checkCode : state.emailCode,
+                            }
+                        })
                     } else {
                         Toast(res.msg)
                     }
@@ -153,8 +149,7 @@ export default {
             ...toRefs(state),
             next,
             handleTabChange,
-            handleVerifyCodeSend,
-            handleVerifyCodeCheck
+            handleVerifyCodeSend
         }
     }
 }
