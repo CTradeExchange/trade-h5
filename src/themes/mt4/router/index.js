@@ -75,16 +75,7 @@ const routes = [
                     footerMenu: false
                 }
             },
-            {
-                path: '/setPwd',
-                name: 'setPwd',
-                component: () => import(/* webpackChunkName: "setPwd" */ '../views/user/setPwd.vue'),
-                meta: {
-                    title: '设置密码',
-                    footerMenu: false
-                }
-            },
-            ...themeRouter
+            
 
         ]
     },
@@ -132,7 +123,7 @@ const routes = [
     },
     {
         path: '/resetPwd',
-        name: 'resetPwd',
+        name: 'ResetPwd',
         component: () => import(/* webpackChunkName: "resetPwd" */ '../views/forgot/resetPwd.vue'),
         meta: {
             title: '重置密码'
@@ -140,7 +131,7 @@ const routes = [
     },
     {
         path: '/resetSuccess',
-        name: 'resetSuccess',
+        name: 'ResetSuccess',
         component: () => import(/* webpackChunkName: "resetSuccess" */ '../views/forgot/resetSuccess.vue'),
         meta: {
             title: '重置成功'
@@ -148,7 +139,7 @@ const routes = [
     },
     {
         path: '/resetFail',
-        name: 'resetFail',
+        name: 'ResetFail',
         component: () => import(/* webpackChunkName: "resetFail" */ '../views/forgot/resetFail.vue'),
         meta: {
             title: '重置失败'
@@ -187,7 +178,17 @@ const routes = [
             title: '成功',
             roles: ['User'],
         }
-    }
+    },
+    {
+        path: '/setPwd',
+        name: 'SetPwd',
+        component: () => import(/* webpackChunkName: "setPwd" */ '../views/user/setPwd.vue'),
+        meta: {
+            title: '设置密码',
+            footerMenu: false
+        }
+    },
+    ...themeRouter
 ]
 
 const router = createRouter({
