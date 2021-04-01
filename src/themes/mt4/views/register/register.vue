@@ -1,55 +1,51 @@
 <template>
     <div class='register'>
-        <Top :right-action='{title:"已有账号"}' @rightClick='$router.replace({name:"Login"})' />
-        <p class="pageTitle">真实开户</p>
-        <div class='banner'>
-            <img alt='' src='https://testcms.ixmiddle.com/docs/registerBanner.png' srcset='' />
+        <Top :right-action='{title:"已有账号"}' @rightClick='$router.replace({name:"Login"})' class="topBar"/>
+        <div class="container">
+            <p class="pageTitle">真实开户</p>
+            <div class='banner'>
+                <img alt='' src='https://testcms.ixmiddle.com/docs/registerBanner.png' srcset='' />
+            </div>
+            <van-tabs v-model:active="openType" class="openTypeTab"
+                :color='style.color'
+                line-width="20px"
+                line-height="2px"
+                :title-inactive-color="style.mutedColor"
+                :title-active-color="style.color">
+                <van-tab title="手机号" name="mobile"></van-tab>
+                <van-tab title="邮箱" name="email"></van-tab>
+            </van-tabs>
+            <form class='form'>
+                <CurrencyAction v-model="currency" class="cellRow"/>
+                <TradeTypeAction v-model="tradeType" class="cellRow" />
+                <!-- <van-cell title="账户币种" is-link arrow-direction="down" value="USD" /> -->
+                <div v-if="openType === 'mobile'" class='cell'>
+                    <MobileInput v-model.trim='mobile' v-model:zone='zone' placeholder='手机号' @blur='onMobileBlur' />
+                </div>
+                <div v-else class='cell'>
+                    <InputComp v-model='email' clear label='邮箱' />
+                </div>
+                <div class='cell'>
+                    <CheckCode v-model='checkCode' clear label='验证码' @verifyCodeSend='verifyCodeSendHandler' />
+                </div>
+                <div class='cell'>
+                    <van-checkbox v-model='protocol' shape='square'>
+                        继续开户表示您已确认已满18周岁且已细读并同意《客户隐私保护政策、投资风险披露及免责声明》
+                    </van-checkbox>
+                </div>
+            </form>
         </div>
-        <van-tabs v-model:active="openType" class="openTypeTab" color='#333' line-width="20px" line-height="2px" title-inactive-color="#989898" title-active-color="#333">
-            <van-tab title="手机号" name="mobile"></van-tab>
-            <van-tab title="邮箱" name="email"></van-tab>
-        </van-tabs>
-        <form class='form'>
-            <CurrencyAction v-model="currency" class="cellRow"/>
-            <TradeTypeAction v-model="tradeType" class="cellRow" />
-            <!-- <van-cell title="账户币种" is-link arrow-direction="down" value="USD" /> -->
-            <div v-if="openType === 'mobile'" class='cell'>
-                <MobileInput v-model.trim='mobile' v-model:zone='zone' placeholder='手机号' @blur='onMobileBlur' />
-            </div>
-            <div v-else class='cell'>
-                <InputComp v-model='email' clear label='邮箱' />
-            </div>
-            <div class='cell'>
-                <CheckCode v-model='checkCode' clear label='验证码' @verifyCodeSend='verifyCodeSendHandler' />
-            </div>
-            <div class='cell'>
-                <van-checkbox v-model='protocol' shape='square'>
-                    开户注意事项
-                </van-checkbox>
-            </div>
-            <div class='cell'>
-                <van-button
+        <div class="footerBtn">
+            <van-button
                     block
                     class='registerBtn'
-                    :color='$store.state.style.primary'
                     :disabled='loading'
-                    type='primary'
                     @click='registerHandler'
                 >
                     提交
                 </van-button>
-            </div>
-        </form>
-        <div class='switchType'>
-            <a v-if="openType === 'email'" href='javascript:;' @click="openType = 'mobile'">
-                手机号注册
-            </a>
-            <a v-else href='javascript:;' @click="openType = 'email'">
-                邮箱注册
-            </a>
         </div>
         <Loading :show='loading' />
-
     </div>
 </template>
 
@@ -67,7 +63,7 @@ import { getDevice, getQueryVariable } from '@/utils/util'
 import { register, openAccount } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
 import { useStore } from 'vuex'
-import { reactive, toRefs, ref } from 'vue'
+import { reactive, toRefs, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { Toast } from 'vant'
 import Rule, { checkCustomerExistRule } from './rule'
@@ -102,6 +98,7 @@ export default {
         })
         let token = ''
         store.dispatch('getListByParentCode')
+        const style = computed(()=>store.state.style);
         // 手机号输入框离开焦点
         const onMobileBlur = () => {
             const validator = new Schema(checkCustomerExistRule)
@@ -190,6 +187,7 @@ export default {
             registerHandler,
             onMobileBlur,
             verifyCodeSendHandler,
+            style,
         }
     }
 }
@@ -199,7 +197,23 @@ export default {
 @import '@/sass/mixin.scss';
 .register {
     position: relative;
+    display: flex;
+    flex-flow: column;
     height: 100%;
+    .topBar {
+        height: rem(100px);
+        // position: fixed;
+        // top: 0;
+        // left: 0;
+        // width: 100%;
+        // background: var(--white);
+    }
+    .container {
+        flex: 1;
+    }
+    .footerBtn {
+        height: rem(100px);
+    }
 }
 .pageTitle {
     padding: 0 rem(30px);
@@ -255,14 +269,9 @@ export default {
     border-radius: rem(10px);
 }
 .registerBtn {
-    margin-top: rem(80px);
-    border-radius: rem(50px);
-}
-.switchType {
-    margin-top: rem(30px);
-    text-align: center;
-    a {
-        color: var(--primary);
-    }
+    height: rem(100px);
+    color: var(--btnText);
+    background: var(--btnColor);
+    border-width: 1px 0 0;
 }
 </style>
