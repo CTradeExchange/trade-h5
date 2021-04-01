@@ -1,4 +1,4 @@
-import { queryPositionPage, queryOrderPage } from '@/api/trade'
+import { queryPositionPage, queryHistoryCloseOrderList } from '@/api/trade'
 
 export default {
     namespaced: true,
@@ -6,7 +6,7 @@ export default {
         positionLoading: '', // 持仓列表加载
         positionList: [], // 持仓列表
         historyLoading: false, // 历史记录加载
-        historyList: '', // 订单列表
+        historyList: '', // 平仓历史记录列表
     },
     mutations: {
         Update_positionLoading (state, data) {
@@ -25,6 +25,8 @@ export default {
     actions: {
         // 查询持仓列表
         queryPositionPage ({ dispatch, commit, state, rootState }, params = {}) {
+            const accountListLen = rootState._user.customerInfo?.accountList?.length
+            if(!accountListLen) return Promise.resolve({code:'0',data:[]}) //没有交易账户直接返回空持仓
             commit('Update_positionLoading', true)
             return queryPositionPage(params).then((res) => {
                 commit('Update_positionLoading', false)
@@ -34,10 +36,12 @@ export default {
                 return res
             })
         },
-        // 查看订单列表
-        queryOrderPage ({ dispatch, commit, state, rootState }, params = {}) {
+        // 平仓历史记录列表
+        queryHistoryCloseOrderList ({ dispatch, commit, state, rootState }, params = {}) {
+            const accountListLen = rootState._user.customerInfo?.accountList?.length
+            if(!accountListLen) return Promise.resolve({code:'0',data:[]}) //没有交易账户直接返回空数据
             commit('Update_historyLoading', true)
-            return queryOrderPage(params).then((res) => {
+            return queryHistoryCloseOrderList(params).then((res) => {
                 commit('Update_historyLoading', false)
                 if (res.check()) {
                     commit('Update_historyList', res.data)

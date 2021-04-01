@@ -32,7 +32,7 @@
 import { reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { getDevice } from '@/utils/util'
+import { getDevice,setToken } from '@/utils/util'
 export default {
     setup () {
         const RegisterData = JSON.parse(sessionStorage.getItem('RegisterData')) ?? {}
@@ -43,20 +43,9 @@ export default {
             accountNo: RegisterData.data?.customerNo
         })
         const toExperience = () => {
-            return router.replace({ name: 'Login' })
-            const params = {
-                type: RegisterParams.openType === 'mobile' ? 2 : 1,
-                loginName: RegisterParams.loginName,
-                phoneArea: RegisterParams.phoneArea,
-                device: getDevice(),
-                verifyCode: '',
-                loginPwd: '',
-            }
-            store.dispatch('_user/login', params).then(res => {
-                if (res.check()) {
-                    router.replace('/')
-                }
-            })
+            const token = RegisterData.data?.token
+            if(token) setToken(token)
+            return router.replace({ name: 'Quote' })
         }
         return {
             ...onceState,

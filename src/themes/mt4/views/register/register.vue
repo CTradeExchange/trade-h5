@@ -26,7 +26,7 @@
                     <InputComp v-model='email' clear label='邮箱' />
                 </div>
                 <div class='cell'>
-                    <CheckCode v-model='checkCode' clear label='验证码' @verifyCodeSend='verifyCodeSendHandler' />
+                    <CheckCode v-model='checkCode' clear label='验证码' @verifyCodeSend='verifyCodeSendHandler' :loading="verifyCodeLoading" />
                 </div>
                 <div class='cell'>
                     <van-checkbox v-model='protocol' shape='square'>
@@ -86,6 +86,7 @@ export default {
             options: [{ country: 'Canada', code: 'CA' }],
             zone: '+86',
             loading: false,
+            verifyCodeLoading: false,
             checkCode: '',
             mobile: '',
             openType: 'mobile', // mobile 手机号开户， email 邮箱开户
@@ -165,18 +166,21 @@ export default {
                 phoneArea: state.openType === 'mobile' ? String(state.zone) : undefined,
             }
             const validator = new Schema(checkCustomerExistRule)
-            validator.validate(verifyParams).then(res => {
+            state.verifyCodeLoading = true;
+            validator.validate(verifyParams,{ first: true }).then(res => {
                 const params = {
                     bizType: state.openType === 'mobile' ? 'SMS_REGISTER_VERIFICATION_CODE' : 'EMAIL_REGISTER_VERIFICATION_CODE',
                     toUser: state.openType === 'mobile' ? String(state.zone * 1) + ' ' + state.mobile : state.email,
                 }
                 verifyCodeSend(params).then(res => {
+                    state.verifyCodeLoading = false;
                     if (res.check()) {
                         token = res.data.token
                         callback && callback()
                     }
                 })
             }).catch(({ errors, fields }) => {
+                state.verifyCodeLoading = false;
                 if (errors) {
                     Toast(errors[0].message)
                 }
@@ -202,14 +206,10 @@ export default {
     height: 100%;
     .topBar {
         height: rem(100px);
-        // position: fixed;
-        // top: 0;
-        // left: 0;
-        // width: 100%;
-        // background: var(--white);
     }
     .container {
         flex: 1;
+        overflow: auto;
     }
     .footerBtn {
         height: rem(100px);

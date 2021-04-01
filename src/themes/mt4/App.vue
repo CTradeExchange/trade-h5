@@ -4,7 +4,7 @@
 
 <script>
 import { useStore } from 'vuex'
-import { getLoginParams } from '@/utils/util'
+import { getLoginParams, getToken } from '@/utils/util'
 
 export default {
     setup () {
@@ -12,9 +12,9 @@ export default {
         store.dispatch('_base/getNav')
         window.store = store
         const loginParams = getLoginParams()
-        if (loginParams) {
-            store.dispatch('_user/login', loginParams)
-        }
+        const token = getToken()
+        if (loginParams) store.dispatch('_user/login', loginParams)
+        else if(token) store.dispatch('_user/findCustomerInfo')
     },
     created () {
         console.log('app.vue this', this)

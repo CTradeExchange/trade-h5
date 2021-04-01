@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div v-if='orderList.length===0 && $store.state._trade.historyLoading' class='loading'>
+        <div v-if='orderList && orderList.length===0 && $store.state._trade.historyLoading' class='loading'>
             <van-loading type='spinner' />
         </div>
-        <van-empty v-else-if='orderList.length===0' description='无历史记录' />
-        <template v-else>
+        <van-empty v-else-if='orderList && orderList.length===0' description='无历史记录' />
+        <template v-else-if="orderList">
             <positionItem v-for='item in orderList' :key='item' :data='item' />
         </template>
     </div>
@@ -20,7 +20,7 @@ export default {
     },
     setup () {
         const store = useStore()
-        const orderList = computed(() => store.state._trade.historyList)
+        const orderList = computed(() => store.state._trade.historyList?.list)
         return {
             orderList,
         }

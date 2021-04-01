@@ -29,6 +29,7 @@ export default {
 
         quoteWS.addEventListener('open', function () {
             if (QuoteSocket.subscribedList.length) QuoteSocket.send_subscribe(QuoteSocket.subscribedList)
+            QuoteSocket.initPing() // 心跳
         })
 
         msgWS.addEventListener('open', function () {
@@ -36,7 +37,15 @@ export default {
         })
 
         tradeWS.addEventListener('open', function () {
-            tradeWS.send(JSON.stringify({ 'head': { 'msgType': 'ping', 'sendTime': Date.now(), 'lang': 'zh-CN', 'token': '' }, 'device': '1', 'trace': '123', 'seqId': 1 }))
+            tradeWS.send(JSON.stringify({
+                "header": {
+                    "trace": "trace",
+                    "token": "token",
+                    "bizType": "ping",
+                    "sendTime": Date.now(),
+                    "lang": "zh-CN"
+                }
+            }))
         })
     }
 }

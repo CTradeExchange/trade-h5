@@ -52,8 +52,8 @@ service.interceptors.response.use(
         Toast.clear()
         const { data, config } = response
         // token失效重新登录
-        if (data.code === 'GATEWAY_CODE_005') {
-            const loginParams = getLoginParams()
+        const loginParams = getLoginParams()
+        if (data.code === 'GATEWAY_CODE_005' && loginParams) {
             return login(loginParams).then(res => {
                 setToken(res.data.token)
                 config.headers.token = res.data.token

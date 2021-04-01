@@ -16,7 +16,8 @@
         </div>
         <a v-if='clear' v-show='modelValue.length' class='van-icon van-icon-clear' href='javascript:;' @click='onClear'></a>
         <button ref='getCodeBtn' class='getCodeBtn' :disabled='disabled' type='button' @click='getCode'>
-            获取验证码
+            <van-loading size="20px" v-if="loading" />
+            <span v-else>获取验证码</span>
         </button>
         <!-- <div class='checkCodeBtn'>
             <van-button block :color='$store.state.style.primary' type='primary' @click="$emit('getCode')">获取验证码</van-button>
@@ -43,6 +44,10 @@ export default {
         label: {
             type: [String, Number],
             default: ''
+        },
+        loading: {
+            type: Boolean,
+            default: false
         },
     },
     data () {

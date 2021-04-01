@@ -7,6 +7,7 @@ export default {
         info: '', // http接口登录的信息
         zone: '86', // 区号
         loginData: '', // login返回的信息
+        customerInfo: '', // 用户信息
     },
     mutations: {
         Update_loginLoading (state, data) {
@@ -17,6 +18,9 @@ export default {
         },
         Update_loginData (state, data) {
             state.loginData = data
+        },
+        Update_customerInfo (state, data) {
+            state.customerInfo = data
         },
     },
     actions: {
@@ -29,6 +33,7 @@ export default {
                     localStorage.setItem('loginParams', JSON.stringify(params))
                     setToken(data.token)
                     commit('Update_loginData', data)
+                    commit('Update_customerInfo', data)
                     commit('_base/UPDATE_tradeType', data.tradeType, { root: true }) // 登录后存储用户的玩法类型
                     // dispatch('findCustomerInfo')  // findCustomerInfod 的数据目前和登录的数据一样，不需要再次调用
                 }
@@ -40,6 +45,7 @@ export default {
         findCustomerInfo ({ dispatch, commit, state }, params = {}) {
             return findCustomerInfo().then((res) => {
                 if (res.check()) {
+                    commit('Update_loginData', res.data)
                 }
                 return res
             })

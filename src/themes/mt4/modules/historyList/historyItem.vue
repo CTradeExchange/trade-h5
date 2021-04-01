@@ -1,28 +1,30 @@
 <template>
-    <div class='positionItem of-1px-bottom' @click='detailVisible=!detailVisible'>
+    <div class='positionItem van-hairline--bottom' @click='detailVisible=!detailVisible'>
         <div class='mainWrap'>
             <div class='hd'>
                 <p class='productName'>
                     {{ data.symbolName }},
                     <span class='volumn'>
-                        {{ data.direction===1?'buy':'sell' }} 1.00
+                        {{ data.direction===1?'buy':'sell' }}
+                        {{data.closeNum}}
                     </span>
                 </p>
-                <p>
-                    <span>{{ executePrice }}</span>
-                    <span> →</span>
-                    <span>{{ executePrice }}</span>
+                <p class="volums">
+                    <span>{{ data.openPrice }}</span>
+                    <span> → </span>
+                    <span>{{ data.closePrice }}</span>
                 </p>
             </div>
             <div class='col'>
-                <p class='price riseColor'>
-                    -34.66
+                <p class="date">{{closeTime}}</p>
+                <p class='price' :class="{riseColor:data.profit>=0,fallColor:data.profit<0}">
+                    {{data.profit}}
                 </p>
             </div>
         </div>
         <div v-if='detailVisible' class='detail muted'>
             <p class='date '>
-                2021.01.12 09:03
+                ID: {{data.orderId}}
             </p>
             <ul class='list'>
                 <li class='flexWrap'>
@@ -30,7 +32,7 @@
                         S/L
                     </span>
                     <span class='value'>
-                        --
+                        {{data.stopLoss || '--'}}
                     </span>
                 </li>
                 <li class='flexWrap'>
@@ -46,31 +48,23 @@
                         T/P
                     </span>
                     <span class='value'>
-                        --
+                        {{data.takeProfit || '--'}}
                     </span>
                 </li>
-                <li class='flexWrap'>
+                <!-- <li class='flexWrap'>
                     <span class='title'>
                         税金
                     </span>
                     <span class='value'>
                         --
                     </span>
-                </li>
-                <li class='flexWrap'>
-                    <span class='title'>
-                        ID
-                    </span>
-                    <span class='value'>
-                        692666666
-                    </span>
-                </li>
+                </li> -->
                 <li class='flexWrap'>
                     <span class='title'>
                         手续费
                     </span>
                     <span class='value'>
-                        --
+                        {{data.commission||'--'}}
                     </span>
                 </li>
             </ul>
@@ -80,11 +74,12 @@
 
 <script>
 import { reactive, toRefs } from 'vue'
+import dayjs from 'dayjs'
 export default {
     props: ['data'],
     setup ({ data }) {
         const onceState = {
-            executePrice: data.executePrice
+            closeTime: dayjs(data.closeTime).format('YYYY.MM.DD HH:mm:ss')
         }
         const state = reactive({
             detailVisible: false
@@ -107,20 +102,27 @@ export default {
         display: flex;
         align-items: center;
         overflow: hidden;
+        .date {
+            line-height: rem(40px);
+        }
     }
     .hd {
         flex: 1;
         color: var(--mutedColor);
-        font-size: rem(22px);
+        font-size: rem(24px);
         line-height: 1.3;
     }
     .productName {
         color: var(--color);
         font-weight: bold;
         font-size: rem(30px);
+        line-height: rem(40px);
         .volumn {
             font-weight: normal;
         }
+    }
+    .volums {
+        padding-top: 3px;
     }
     .col {
         margin-left: rem(46px);
@@ -131,7 +133,6 @@ export default {
         }
     }
     .price {
-        margin-bottom: rem(6px);
         font-weight: bold;
         font-size: rem(30px);
         .normal {
@@ -147,7 +148,7 @@ export default {
 }
 .detail {
     margin-top: rem(10px);
-    font-size: rem(22px);
+    font-size: rem(24px);
     .date {
         font-weight: normal;
     }
@@ -160,6 +161,7 @@ export default {
     .flexWrap {
         display: flex;
         justify-content: space-between;
+        padding: 3px 0;
     }
 }
 </style>

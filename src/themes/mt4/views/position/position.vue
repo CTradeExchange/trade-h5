@@ -3,7 +3,7 @@
         <Top>
             <template #right>
                 <a class='icon icon_paixu' href='javascript:;' @click='sortActionsVisible=true'></a>
-                <a class='icon icon_xindingdan' href='javascript:;'></a>
+                <a class='icon icon_xindingdan' href='javascript:;' @click="newOrder"></a>
             </template>
         </Top>
         <CapitalList :data='capitalListData' />
@@ -23,6 +23,8 @@ import CapitalList from '@m/components/capitalList'
 import PositionList from '@m/modules/positionList/positionList'
 import { reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
+import { QuoteSocket } from '@/plugins/socket/socket'
+import { useRouter } from 'vue-router'
 export default {
     components: {
         CapitalList,
@@ -31,6 +33,7 @@ export default {
     },
     setup () {
         const store = useStore()
+        const router = useRouter()
         const sortActionsSelected = 'van-badge__wrapper van-icon van-icon-down'
         const sortActions = [
             { name: '订单', feild: 'order', className: sortActionsSelected },
@@ -56,11 +59,21 @@ export default {
             sortActionValue = item.feild
             state.sortActionsVisible = false
         }
+        // 查询持仓列表
+        store.dispatch('_trade/queryPositionPage', { sort: sortActionValue }).then(res=>{
+            if(res.check()){
+                const subscribList = res.data.map(el=> el.symbolId);
+                QuoteSocket.send_subscribe(subscribList)
+            }
+        })
 
-        store.dispatch('_trade/queryPositionPage', { sort: sortActionValue })
+        const newOrder = () => {
+            router.push({ name: 'Order', query: { symbolId: store.state.productActivedID } })
+        }
         return {
             ...toRefs(state),
             actionSheetOnSelect,
+            newOrder,
         }
     },
 }

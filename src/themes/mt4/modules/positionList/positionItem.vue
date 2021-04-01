@@ -3,15 +3,15 @@
         <div class='mainWrap'>
             <div class='hd'>
                 <p class='productName'>
-                    EURCAD,
+                    {{data.symbolName}},
                     <span class='volumn'>
                         {{ data.direction===1?'buy':'sell' }}
-                        {{ positionNUm }}
+                        {{ data.openNum }}
                     </span>
                 </p>
                 <p>
-                    <span>{{ data.openPrice }}</span>
-                    <span> →</span>
+                    <span>{{ openPrice }}</span>
+                    <span> → </span>
                     <span>{{ product.buy_price }}</span>
                 </p>
             </div>
@@ -22,40 +22,13 @@
             </div>
         </div>
         <div v-if='detailVisible' class='detail muted'>
-            <p class='date '>
-                2021.01.12 09:03
-            </p>
             <ul class='list'>
                 <li class='flexWrap'>
                     <span class='title'>
                         S/L
                     </span>
                     <span class='value'>
-                        --
-                    </span>
-                </li>
-                <li class='flexWrap'>
-                    <span class='title'>
-                        库存费
-                    </span>
-                    <span class='value'>
-                        --
-                    </span>
-                </li>
-                <li class='flexWrap'>
-                    <span class='title'>
-                        T/P
-                    </span>
-                    <span class='value'>
-                        --
-                    </span>
-                </li>
-                <li class='flexWrap'>
-                    <span class='title'>
-                        税金
-                    </span>
-                    <span class='value'>
-                        --
+                        {{data.stopLoss||'--'}}
                     </span>
                 </li>
                 <li class='flexWrap'>
@@ -63,15 +36,23 @@
                         ID
                     </span>
                     <span class='value'>
-                        692666666
+                        {{data.positionId}}
                     </span>
                 </li>
                 <li class='flexWrap'>
                     <span class='title'>
-                        手续费
+                        T/P
                     </span>
                     <span class='value'>
-                        --
+                        {{data.takeProfit||'--'}}
+                    </span>
+                </li>
+                <li class='flexWrap'>
+                    <span class='title'>
+
+                    </span>
+                    <span class='value'>
+                        {{openTime}}
                     </span>
                 </li>
             </ul>
@@ -83,13 +64,15 @@
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { priceFormat } from '@/utils/util'
+import dayjs from 'dayjs'
 export default {
     props: ['data'],
     setup ({ data }) {
         const store = useStore()
         const onceState = {
             executePrice: priceFormat(data.executePrice, data.openSymbolDigits),
-            positionNUm: Number(data.openNum) - Number(data.closeFee)
+            openPrice: priceFormat(data.openPrice, data.openSymbolDigits),
+            openTime: dayjs(data.openTime).format('YYYY.MM.DD HH:mm:ss'),
         }
         const state = reactive({
             detailVisible: false
@@ -154,7 +137,7 @@ export default {
 }
 .detail {
     margin-top: rem(10px);
-    font-size: rem(22px);
+    font-size: rem(24px);
     .date {
         font-weight: normal;
     }
@@ -167,6 +150,7 @@ export default {
     .flexWrap {
         display: flex;
         justify-content: space-between;
+        padding: 3px 0;
     }
 }
 </style>

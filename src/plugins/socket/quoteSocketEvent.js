@@ -121,6 +121,15 @@ class SocketEvent {
             buy_price: priceArr[6],
         })
     }
+
+    // 心跳机制
+    initPing () {
+        if (this.ws.readyState !== 1) return console.warn('消息websocket连接未准备好  readyState：', this.ws.readyState)
+        const param = this.getParam(14008, {})
+        setInterval(() => {
+            this.ws.send(JSON.stringify(param))
+        }, 10000)
+    }
 }
 
 export default SocketEvent

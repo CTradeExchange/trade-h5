@@ -58,3 +58,15 @@ export function queryOrderPage (data) {
         data
     })
 }
+/* 平仓历史记录列表 */
+export function queryHistoryCloseOrderList (data) {
+    return request({
+        url: '/global/tradeapi.OrderApiService.queryHistoryCloseOrderList',
+        method: 'post',
+        headers: {
+            group: 'tradeApi',
+            version: '0.0.1',
+        },
+        data
+    })
+}
