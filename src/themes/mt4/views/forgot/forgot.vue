@@ -11,20 +11,20 @@
             <van-tab title='手机找回'>
                 <form class='loginForm'>
                     <div class='field'>
-                        <MobileInput v-model='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
+                        <MobileInput v-model='mobile' v-model:zone='zone' clear label='请输入手机号' />
                     </div>
                     <div class='field'>
-                        <checkCode v-model='checkCode' placeholder='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
+                        <checkCode v-model='checkCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
                     </div>
                 </form>
             </van-tab>
             <van-tab title='邮箱找回'>
                 <form class='loginForm'>
                     <div class='field'>
-                        <u-input v-model='email' clear placeholder='请输入邮箱' />
+                        <u-input v-model='email' clear label='请输入邮箱' />
                     </div>
                     <div class='field'>
-                        <checkCode v-model='emailCode' :label='请输入验证码' placeholder='请输入验证码' />
+                        <checkCode v-model='emailCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
                     </div>
                 </form>
             </van-tab>
@@ -81,7 +81,7 @@ export default {
         // 发送验证码
         const handleVerifyCodeSend = (callback) => {
             const params = {
-                bizType: 'SMS_PASSWORD_VERIFICATION_CODE',
+                bizType: state.curTab === 0 ? 'SMS_PASSWORD_VERIFICATION_CODE' : 'EMAIL_PASSWORD_VERIFICATION_CODE',
                 toUser: state.zone + ' ' + state.mobile
             }
 
@@ -114,7 +114,8 @@ export default {
                 email: state.email,
                 checkCode: state.checkCode,
                 emailCode: state.emailCode,
-                type: state.curTab
+                type: state.curTab,
+                needCheckCode: true
             }
             const validator = new Schema(Rule)
             validator.validate(params, (errors, fields) => {
@@ -123,10 +124,10 @@ export default {
                     return Toast(errors[0].message)
                 }
                 verifyCodeCheck({
-                    bizType: 'SMS_PASSWORD_VERIFICATION_CODE',
-                    toUser: state.zone + ' ' + state.mobile,
+                    bizType: state.curTab === 0 ? 'SMS_PASSWORD_VERIFICATION_CODE' : 'EMAIL_PASSWORD_VERIFICATION_CODE',
+                    toUser: state.curTab === 0 ? state.zone + ' ' + state.mobile : state.email,
                     sendToken: state.sendToken,
-                    code: state.checkCode
+                    code: state.curTab === 0 ? state.checkCode : state.emailCode
                 }).then(res => {
                     if (res.ok) {
                         router.push({

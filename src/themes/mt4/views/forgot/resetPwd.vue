@@ -71,15 +71,13 @@ export default {
             // companyId	Long	必填	公司
             // verifyCode	String	必填	验证码
             // newPwd	String	必填	新密码
-            debugger
+
             const params = {
                 type: route.query['type'],
                 loginName: route.query['loginName'],
                 verifyCode: route.query['verifyCode'],
                 newPwd: md5(state.confirmPwd)
             }
-
-            debugger
 
             findPwd(params).then((res) => {
                 if (res.check()) {

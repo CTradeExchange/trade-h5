@@ -1,6 +1,7 @@
 <template>
     <van-nav-bar
         left-arrow
+        nav-bar-icon-color="red"
         :title='navTitle'
         @click-left='back'
     />
@@ -21,3 +22,10 @@ export default {
     }
 }
 </script>
+
+
+<style lang="scss">
+.van-nav-bar .van-icon {
+    color: var(--color);
+}
+</style>

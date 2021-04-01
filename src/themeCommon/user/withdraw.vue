@@ -32,8 +32,8 @@
             </div>
         </div>
     </div>
-    <van-button block class='next-btn' type='primary' @click='next'>
-        <span>下一步</span>
+    <van-button block class='confirm-btn' type='primary' @click='next'>
+        <span>确定</span>
     </van-button>
     <van-action-sheet v-model:show='show' round='false' title='选择收款银行卡'>
         <div class='bank-list'>
@@ -197,8 +197,8 @@ export default {
         }
     }
 }
-.next-btn {
-    position: fixed;
+.confirm-btn {
+    position: absolute;
     bottom: 0;
     background: var(--bdColor);
     border-color: var(--bdColor);

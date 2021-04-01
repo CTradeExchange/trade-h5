@@ -1,8 +1,8 @@
 import { mobileReg, emailReg } from '@/utils/util'
 export default {
-    type: {
-        required: true,
-    },
+    // type: {
+    //     required: true,
+    // },
     mobile: [
         {
             message: '请输入手机号',
@@ -35,13 +35,13 @@ export default {
     checkCode: {
         message: '请输入验证码',
         validator: (rule, value, callback, source, options) => {
-            return source.type && source.type === 0 ? !!value : true
+            return source.needCheckCode && source.type === 0 ? !!value : true
         },
     },
     emailCode: {
         message: '请输入验证码',
         validator: (rule, value, callback, source, options) => {
-            return source.type && source.type === 1 ? !!value : true
+            return source.needCheckCode && source.type === 1 ? !!value : true
         },
     }
 }
