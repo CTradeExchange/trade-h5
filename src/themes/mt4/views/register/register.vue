@@ -1,20 +1,18 @@
 <template>
     <div class='register'>
-        <Top back :menu='false' />
-        <a class='loginBtn' href='javascript:;' @click="$router.replace('/login')">
-            已有账号
-        </a>
+        <Top :right-action='{title:"已有账号"}' @rightClick='$router.replace({name:"Login"})' />
+        <p class="pageTitle">真实开户</p>
         <div class='banner'>
-            <img alt='' src='https://www.blazaintl.com/platformimages/mainpage_banner11a.png' srcset='' />
+            <img alt='' src='https://testcms.ixmiddle.com/docs/registerBanner.png' srcset='' />
         </div>
+        <van-tabs v-model:active="openType" class="openTypeTab" color='#333' line-width="20px" line-height="2px" title-inactive-color="#989898" title-active-color="#333">
+            <van-tab title="手机号" name="mobile"></van-tab>
+            <van-tab title="邮箱" name="email"></van-tab>
+        </van-tabs>
         <form class='form'>
-            <div class='cell of-1px-bottom'>
-                <VueSelect v-model='currency' :actions='currencyList' value='value' />
-            </div>
-            <!-- <div class='cell openType'>
-                <div :class="{ 'openTypeAcitve':openType==='mobile' }"><a href='javascript:;' @click="openType='mobile'">手机号</a></div>
-                <div :class="{ 'openTypeAcitve':openType==='email' }"><a href='javascript:;' @click="openType='email'">邮箱</a></div>
-            </div> -->
+            <CurrencyAction v-model="currency" class="cellRow"/>
+            <TradeTypeAction v-model="tradeType" class="cellRow" />
+            <!-- <van-cell title="账户币种" is-link arrow-direction="down" value="USD" /> -->
             <div v-if="openType === 'mobile'" class='cell'>
                 <MobileInput v-model.trim='mobile' v-model:zone='zone' placeholder='手机号' @blur='onMobileBlur' />
             </div>
@@ -51,17 +49,20 @@
             </a>
         </div>
         <Loading :show='loading' />
+
     </div>
 </template>
 
 <script>
 import Schema from 'async-validator'
-import Top from '@m/layout/top'
+import Top from '@/components/top'
 import VueSelect from '@m/components/select'
 import Loading from '@m/components/loading'
 import CheckCode from '@m/components/form/checkCode'
 import InputComp from '@m/components/form/input'
 import MobileInput from '@m/components/form/mobileInput'
+import CurrencyAction from './components/currencyAction'
+import TradeTypeAction from './components/tradeTypeAction'
 import { getDevice, getQueryVariable } from '@/utils/util'
 import { register, openAccount } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
@@ -77,7 +78,9 @@ export default {
         InputComp,
         CheckCode,
         Loading,
-        VueSelect
+        CurrencyAction,
+        TradeTypeAction,
+        VueSelect,
     },
     setup () {
         let delayer = null
@@ -93,10 +96,8 @@ export default {
             accountType: 'CFD账户',
             accountTypeList: [{ name: 'CFD账户' }],
             currency: 'USD',
-            currencyList: [
-                { name: '美元账户', value: 'USD' },
-                { name: '人民币', value: 'CNY' }
-            ],
+            tradeType: 1,
+            email: '',
             protocol: true
         })
         let token = ''
@@ -143,7 +144,7 @@ export default {
                 registerSource: getDevice(),
                 verifyCode: state.checkCode,
                 currency: state.currency,
-                tradeType: 1,
+                tradeType: state.tradeType,
                 token,
                 utmSource: getQueryVariable('utm_source'),
                 utmMedium: getQueryVariable('utm_medium'),
@@ -200,26 +201,25 @@ export default {
     position: relative;
     height: 100%;
 }
-.loginBtn {
-    position: absolute;
-    top: 0;
-    right: rem(30px);
-    height: rem(90px);
-    color: var(--white);
-    line-height: rem(90px);
+.pageTitle {
+    padding: 0 rem(30px);
+    font-size: rem(46px);
 }
 .banner {
-    margin-top: rem(20px);
+    margin-top: rem(60px);
     padding: 0 rem(30px);
     img {
         display: block;
         width: 100%;
     }
 }
+.form {
+    margin-top: rem(30px);
+}
 .cell {
     display: flex;
     justify-content: space-between;
-    margin: rem(40px) rem(30px);
+    margin: rem(20px) rem(30px);
     div {
         flex: 1;
     }
@@ -228,21 +228,14 @@ export default {
         width: rem(200px);
         margin-right: rem(20px);
     }
-    &.openType {
-        justify-content: center;
-        &>div {
-            flex: none;
-            margin: 0 1em;
-        }
-        a {
-            color: var(--color);
-        }
-    }
-    .openTypeAcitve {
-        a {
-            color: var(--primary);
-        }
-    }
+}
+.openTypeTab {
+    width: 40%;
+    margin: rem(60px) auto 0;
+}
+:deep(.cellRow) {
+    padding-top: rem(24px);
+    padding-bottom: rem(24px);
 }
 .openTypeWrapper {
     :deep(.van-tabs__nav--card) {

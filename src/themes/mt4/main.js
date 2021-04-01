@@ -4,8 +4,10 @@ import router from './router'
 import store from './store'
 import VantBase from './vantBase'
 import Socket from '@/plugins/socket/socket'
-import { Collapse, CollapseItem, Toast, NavBar } from 'vant'
+import Colors,{setRootVariable} from './colorVariables'
+import { Collapse, CollapseItem, Toast } from 'vant'
 
+setRootVariable(Colors)
 const app = createApp(App)
 app.use(Collapse)
 app.use(CollapseItem)

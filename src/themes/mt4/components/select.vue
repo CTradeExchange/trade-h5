@@ -47,7 +47,6 @@ export default {
     },
     methods: {
         onSelect (item, index) {
-            // console.log(item, index)
             this.$emit('select', item, index)
             this.$emit('update:modelValue', item[this.value])
             this.show = false

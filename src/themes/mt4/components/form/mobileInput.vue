@@ -1,7 +1,7 @@
 <template>
-    <div class='mobileBar of-1px-bottom'>
+    <div class='mobileBar van-hairline--bottom'>
         <div class='zone'>
-            <VueSelect v-model='zoneVal' :actions='zoneList' text='name' value='code' @select='zoneOnSelect' />
+            <VueSelect v-model='zoneVal' :actions='zoneList' text='code' value='code' @select='zoneOnSelect' />
         </div>
         <div class='inputWrapper'>
             <input
@@ -73,9 +73,8 @@ export default {
             this.$emit('input', $event.target.value)
         },
         zoneOnSelect (item) {
-            this.zoneVal = item.code
-            this.$emit('update:zone', item.value)
-            this.$emit('zoneSelect', item.value)
+            this.$emit('update:zone', item.code)
+            this.$emit('zoneSelect', item.code)
         }
     }
 }
@@ -125,5 +124,22 @@ export default {
 .van-icon-clear {
     color: var(--bdColor);
     font-size: rem(36px);
+}
+:deep(.selectWrap) {
+    min-width: rem(150px);
+    margin-right: rem(20px);
+    .icon_arrow-down {
+        right: rem(25px);
+    }
+    &::after {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        width: 1px;
+        height: rem(50px);
+        margin-top: rem(-25px);
+        background: var(--bdColor);
+        content: '';
+    }
 }
 </style>

@@ -27,7 +27,6 @@ export default {
         backHandler: Function,
     },
     setup (props, { emit, attrs }) {
-        console.log(attrs)
         const router = useRouter()
         // 点击返回
         const back = () => {

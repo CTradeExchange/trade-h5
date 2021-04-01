@@ -1,11 +1,21 @@
 @import '~@/sass/mixin.scss';
 :root {
     --color: #333;
-    --bdColor: #E5E5E5;
     --mutedColor: #989898;
-    --placeholder: #C4C4C4;
-    --bgColor: #F6F6F6;
+    --placeholder: #C2C2C2;
+    --tabColor: #333;
+    --tabLine: #333;
+    --bdColor: #E5E5E5;
+    --btnColor: #F6F6F6;
+    --btnLine: #E5E5E5;
+    --btnText: #333;
+    --btnText2: #989898;
+    --btnSelected: #FF7418;
+    --btnInterval: #E5E5E5;
+    --iconColor: #333;
+    --iconColor2: #333;
     --white: #FFF;
+    --bgColor: #FFF;
     --riseColor: #E3525C;
     --fallColor: #007AFF;
     --sellColor: #E3525C;
@@ -57,24 +67,6 @@ a {
 }
 [class*='icon_'] {
     font-family: iconfont;
-}
-[class*='of-1px']::after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    box-sizing: border-box;
-    width: 200%;
-    height: 200%;
-    border: 0 solid #E2E9F1;
-    transform: scale(0.5);
-    transform-origin: 0 0;
-    content: '';
-    pointer-events: none;
-}
-.of-1px-all {
-    &::after {
-        border-width: 1px;
-    }
 }
 .m-field {
     background-color: #FFF;
