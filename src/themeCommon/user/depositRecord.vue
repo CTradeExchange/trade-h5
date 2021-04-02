@@ -15,7 +15,7 @@
                     <template #right-icon>
                         <div>
                             <span class='state'>
-                                审核中
+                                待支付
                             </span>
                             <van-icon :name='activeNames == 1 ? "arrow-up" : "arrow-down"' />
                         </div>
@@ -42,7 +42,7 @@
                                 状态
                             </span>
                             <span class='right-val state'>
-                                审核中
+                                待支付
                             </span>
                         </div>
 
@@ -100,7 +100,7 @@
                     <template #right-icon>
                         <div>
                             <span class='state'>
-                                审核中
+                                已完成
                             </span>
                             <van-icon :name='activeNames == 2 ? "arrow-up" : "arrow-down"' />
                         </div>
@@ -108,7 +108,7 @@
                     <div class='withdraw-desc'>
                         <div class='w-item'>
                             <span class='left-label'>
-                                取款金额
+                                存款金额
                             </span>
                             <span class='right-val'>
                                 1000
@@ -127,7 +127,7 @@
                                 状态
                             </span>
                             <span class='right-val state'>
-                                审核中
+                                已完成
                             </span>
                         </div>
 
@@ -141,7 +141,7 @@
                         </div>
                         <div class='w-item'>
                             <span class='left-label'>
-                                入账金额
+                                实际入账
                             </span>
                             <span class='right-val'>
                                 1000
@@ -158,6 +158,14 @@
                         <div class='w-item'>
                             <span class='left-label'>
                                 提交时间
+                            </span>
+                            <span class='right-val'>
+                                2020.04.23 06:14:01
+                            </span>
+                        </div>
+                        <div class='w-item'>
+                            <span class='left-label'>
+                                入账时间
                             </span>
                             <span class='right-val'>
                                 2020.04.23 06:14:01

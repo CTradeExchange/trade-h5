@@ -9,7 +9,7 @@
         </p>
     </div>
     <div class='footer-bottom'>
-        <van-button class='confirmBtn' @click='toLogin'>
+        <van-button class='confirmBtn' @click='$router.push("/forgot")'>
             再试试
         </van-button>
         <span class='line'></span>

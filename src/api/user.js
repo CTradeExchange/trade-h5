@@ -103,3 +103,27 @@ export function handleWithdraw (data) {
         data
     })
 }
+
+/* 查询取款限制配置 */
+export function queryWithdrawConfig (data) {
+    return request({
+        url: '/global/fund.WithdrawAppDubboService.queryWithdrawLimitConfig',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
+/* 获取客户取款货币对汇率 */
+export function queryWithdrawRate (data) {
+    return request({
+        url: '/global/fund.WithdrawAppDubboService.getWithdrawExchangeRate',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}

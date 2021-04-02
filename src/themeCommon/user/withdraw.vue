@@ -32,6 +32,7 @@
             </div>
         </div>
     </div>
+
     <van-button block class='confirm-btn' type='primary' @click='confirm'>
         <span>确定</span>
     </van-button>
@@ -55,20 +56,30 @@
 
 <script>
 import Top from '@/components/top'
-import { reactive, ref, computed, toRefs } from 'vue'
+import {
+    reactive, ref, computed, toRefs, onMounted,
+    onBeforeMount,
+    onBeforeUpdate,
+    onUpdated,
+} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Toast } from 'vant'
-import { handleWithdraw } from '@/api/user'
+import { useStore } from 'vuex'
+import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate } from '@/api/user'
 export default {
     components: {
         Top
     },
     setup (props) {
+        const store = useStore()
         const router = useRouter()
         // const route = useRoute()
         const rightAction = {
             title: '取款记录'
         }
+
+        // 获取账户信息
+        const customInfo = computed(() => store.state._user.customerInfo)
 
         const state = reactive({
             amount: 0,
@@ -138,6 +149,50 @@ export default {
             })
         }
 
+        console.log('1-开始创建组件-----setup()')
+
+        onBeforeMount(() => {
+            getWithdrawConfig()
+            console.log('2-组件挂载到页面之前执行-----onBeforeMount()')
+        })
+
+        onMounted(() => {
+            console.log('3-组件挂载到页面之后执行-----onMounted()')
+        })
+
+        onBeforeUpdate(() => {
+            console.log('4-组件更新之前-----onBeforeUpdate()')
+        })
+
+        onUpdated(() => {
+            console.log('5-组件更新之后-----onUpdated()')
+        })
+
+        // 获取取款限制配置
+        const getWithdrawConfig = () => {
+            // companyId 公司ID
+            // customerNo 客户编号
+            // accountId 账户ID
+            // customerGroupId 客户组ID
+            // accountCurrency 账户货币编码
+
+            const params = {
+                customerNo: customInfo.value.customerNo,
+                accountId: customInfo.value.accountId,
+                customerGroupId: customInfo.value.customerGroupId,
+                accountCurrency: customInfo.value.currency
+            }
+            debugger
+            queryWithdrawConfig(params).then(res => {
+                console.log(res)
+                if (res.check()) {
+
+                } else {
+                    Toast(res.msg)
+                }
+            })
+        }
+
         return {
             rightAction,
             toWithdrawList,
@@ -146,7 +201,9 @@ export default {
             chooseBank,
             getAll,
             toAddBank,
-            confirm
+            confirm,
+            getWithdrawConfig,
+            customInfo
         }
     }
 

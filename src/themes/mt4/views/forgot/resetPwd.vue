@@ -66,11 +66,11 @@ export default {
                 return Toast('新密码和确认密码不同，请检查后重新输入')
             }
 
-            // type	Integer	必填	注册登录方式：1邮箱，2手机号码，3客户账号
-            // loginName	String	必填	账号：邮箱/手机号码
-            // companyId	Long	必填	公司
-            // verifyCode	String	必填	验证码
-            // newPwd	String	必填	新密码
+            // type	Integer	 1邮箱，2手机号码，3客户账号
+            // loginName 账号：邮箱/手机号码
+            // companyId	公司
+            // verifyCode 验证码
+            // newPwd	新密码.
 
             const params = {
                 type: route.query['type'],
@@ -81,7 +81,9 @@ export default {
 
             findPwd(params).then((res) => {
                 if (res.check()) {
-                    return router.push('/resetSuccess')
+                    router.push('/resetSuccess')
+                } else {
+                    router.push('/resetFail')
                 }
                 Toast(res.msg)
             })

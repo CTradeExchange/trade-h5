@@ -26,6 +26,24 @@ const routes = [
             title: '添加银行卡',
             footerMenu: false
         }
+    },
+    {
+        path: '/desposit',
+        name: 'Desposit',
+        component: () => import(/* webpackChunkName: "addBank" */ '../user/desposit.vue'),
+        meta: {
+            title: '存款',
+            footerMenu: false
+        }
+    },
+    {
+        path: '/despositRecord',
+        name: 'DespositRecord',
+        component: () => import(/* webpackChunkName: "addBank" */ '../user/depositRecord.vue'),
+        meta: {
+            title: '存款记录',
+            footerMenu: false
+        }
     }
 ]
 // const router = createRouter({
