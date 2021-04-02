@@ -7,28 +7,40 @@
                 找回密码
             </h1>
         </header>
-        <van-tabs v-model:active='active' type='line' @click='handleTabChange'>
-            <van-tab title='手机找回'>
-                <form class='loginForm'>
-                    <div class='field'>
-                        <MobileInput v-model='mobile' v-model:zone='zone' clear label='请输入手机号' />
-                    </div>
-                    <div class='field'>
-                        <checkCode v-model='checkCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
-                    </div>
-                </form>
-            </van-tab>
-            <van-tab title='邮箱找回'>
-                <form class='loginForm'>
-                    <div class='field'>
-                        <u-input v-model='email' clear label='请输入邮箱' />
-                    </div>
-                    <div class='field'>
-                        <checkCode v-model='emailCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
-                    </div>
-                </form>
-            </van-tab>
-        </van-tabs>
+        <div class='tabs-wrap'>
+            <van-tabs
+                v-model:active='active'
+                :color='style.color'
+                line-height='2px'
+                line-width='20px'
+                :title-active-color='style.color'
+                :title-inactive-color='style.mutedColor'
+                type='line'
+                @click='handleTabChange'
+            >
+                <van-tab title='手机找回' />
+                <van-tab title='邮箱找回' />
+            </van-tabs>
+        </div>
+        <div class='tabs-content'>
+            <form v-show='curTab === 0' class='loginForm'>
+                <div class='field'>
+                    <MobileInput v-model='mobile' v-model:zone='zone' clear label='请输入手机号' />
+                </div>
+                <div class='field'>
+                    <checkCode v-model='checkCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
+                </div>
+            </form>
+
+            <form v-show='curTab === 1' class='loginForm'>
+                <div class='field'>
+                    <u-input v-model='email' clear label='请输入邮箱' />
+                </div>
+                <div class='field'>
+                    <checkCode v-model='emailCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
+                </div>
+            </form>
+        </div>
         <van-button block class='next-btn' type='primary' @click='next'>
             <span>下一步</span>
         </van-button>
@@ -38,7 +50,7 @@
 <script>
 import top from '@/components/top2'
 import {
-    reactive, toRefs
+    reactive, toRefs, computed
 } from 'vue'
 import MobileInput from '@m/components/form/mobileInput'
 import checkCode from '@m/components/form/checkCode'
@@ -58,6 +70,7 @@ export default {
         uInput
     },
     setup (props) {
+        const style = computed(() => store.state.style)
         const store = useStore()
         const router = useRouter()
         const state = reactive({
@@ -150,7 +163,8 @@ export default {
             ...toRefs(state),
             next,
             handleTabChange,
-            handleVerifyCodeSend
+            handleVerifyCodeSend,
+            style
         }
     }
 }
@@ -171,6 +185,10 @@ export default {
         font-weight: normal;
         font-size: rem(50px);
     }
+    .tabs-wrap {
+        width: 40%;
+        margin: rem(60px) auto 0;
+    }
 }
 .icon_icon_close_big {
     position: absolute;
@@ -186,7 +204,7 @@ export default {
         display: flex;
         align-items: center;
         &:not(:first-of-type) {
-            margin-top: rem(50px);
+            margin-top: rem(30px);
         }
         &.toolWrap {
             justify-content: space-between;

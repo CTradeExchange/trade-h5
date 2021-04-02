@@ -13,14 +13,15 @@
                     right-icon='arrow-down'
                     @click='bankShow = true'
                 />
-                <van-field
+                <!-- <van-field
                     v-model='currency'
                     label='银行卡币种'
                     placeholder='请输入银行卡币种'
                     readonly
                     right-icon='arrow-down'
                     @click='currencyShow=true'
-                />
+                /> -->
+                <CurrencyAction v-model='currency' v-model:show='currencyShow' class='cellRow' />
                 <van-field
                     v-model='area'
                     label='开户地址'
@@ -47,6 +48,7 @@
         close-on-click-action
         @select='onSelectCurrency'
     />
+
     <van-action-sheet
         v-model:show='bankShow'
         :actions='banksActions'
@@ -64,10 +66,12 @@ import { areaList } from '@/utils/area'
 import Rule from './addbank_rule'
 import Schema from 'async-validator'
 import { Toast } from 'vant'
+import CurrencyAction from '../../themes/mt4/views/register/components/currencyAction'
 
 export default {
     components: {
-        topNav
+        topNav,
+        CurrencyAction
     },
     setup (props, { emit, attrs }) {
         const router = useRouter()
@@ -76,7 +80,7 @@ export default {
             userName: '',
             bankNo: '',
             bankName: '',
-            currency: '',
+            currency: 'USD',
             area: '',
             bankArea: '',
             areaShow: false,

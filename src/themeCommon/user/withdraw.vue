@@ -32,7 +32,7 @@
             </div>
         </div>
     </div>
-    <van-button block class='confirm-btn' type='primary' @click='next'>
+    <van-button block class='confirm-btn' type='primary' @click='confirm'>
         <span>确定</span>
     </van-button>
     <van-action-sheet v-model:show='show' round='false' title='选择收款银行卡'>
@@ -57,6 +57,8 @@
 import Top from '@/components/top'
 import { reactive, ref, computed, toRefs } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { Toast } from 'vant'
+import { handleWithdraw } from '@/api/user'
 export default {
     components: {
         Top
@@ -124,6 +126,18 @@ export default {
             state.amount = state.maxAmount
         }
 
+        const confirm = () => {
+            if (state.amount <= 0) {
+                return Toast('请输入正确的金额')
+            }
+            handleWithdraw({
+                aaa: 111
+            }).then(res => {
+                Toast(res)
+                console.log('res', res)
+            })
+        }
+
         return {
             rightAction,
             toWithdrawList,
@@ -131,7 +145,8 @@ export default {
             openSheet,
             chooseBank,
             getAll,
-            toAddBank
+            toAddBank,
+            confirm
         }
     }
 

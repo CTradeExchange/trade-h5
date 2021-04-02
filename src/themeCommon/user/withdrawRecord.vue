@@ -240,6 +240,10 @@ export default {
         }
         .state {
             color: var(--primary);
+            vertical-align: middle;
+        }
+        .van-icon {
+            vertical-align: middle;
         }
     }
 }

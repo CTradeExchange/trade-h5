@@ -91,3 +91,15 @@ export function modifyPwd (data) {
         data
     })
 }
+
+/* 创建取款提案 */
+export function handleWithdraw (data) {
+    return request({
+        url: '/global/fund.WithdrawAppDubboService.createWithdrawProposal',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
