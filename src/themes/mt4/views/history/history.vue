@@ -40,10 +40,10 @@ export default {
         const sortActionsUp = 'van-badge__wrapper van-icon van-icon-down up'
         const sortActionsDown = 'van-badge__wrapper van-icon van-icon-down '
         const sortActions = [
-            { name: '收盘时间', feild: 'execute_time', className: sortActionsDown },
-            { name: '开盘时间', feild: 'time' },
-            { name: '交易品种', feild: 'symbol' },
-            { name: '订单', feild: 'order' },
+            { name: '收盘时间', feild: 'closeTime', className: sortActionsDown },
+            { name: '开盘时间', feild: 'openTime' },
+            { name: '交易品种', feild: 'symbolId' },
+            { name: '订单', feild: 'orderId' },
             { name: '利润', feild: 'pnl' },
         ]
 

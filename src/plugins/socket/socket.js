@@ -16,6 +16,7 @@ export default {
         app.config.globalProperties.$QuoteSocket = QuoteSocket
         app.config.globalProperties.$MsgSocket = MsgSocket
 
+        quoteWS.open();
         quoteWS.addEventListener('message', evt => {
             if (typeof evt.data === 'string' && evt.data.startsWith('p(')) return QuoteSocket.tick(evt.data)
             if (typeof evt.data === 'object' || evt.data.indexOf('{') !== 0) return

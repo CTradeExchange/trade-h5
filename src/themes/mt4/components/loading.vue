@@ -4,7 +4,7 @@
         class='loadingPop'
         :close-on-click-overlay='false'
         lock-scroll
-        :overlay-style="{ background: 'none' }"
+        :overlay-style="{ opacity:.4 }"
         teleport='body'
     >
         <van-loading color='#fff' size='28px' />
@@ -38,9 +38,9 @@ export default {
 
 <style lang="scss" >
 @import '@/sass/mixin.scss';
-.loadingPop{
+.loadingPop {
     padding: rem(20px);
-    border-radius: rem(15px);
     background: #444;
+    border-radius: rem(15px);
 }
 </style>

@@ -52,6 +52,31 @@
             </a>
         </footer>
     </div>
+    <van-popup v-model:show='kycPop' :style="{'border-radius':'8px'}" :close-on-click-overlay="false">
+        <section class='kycPopContainer'>
+            <div class="kycTimeLine">
+                <timeline>
+                    <timelineItem>
+                        <template #icon><span class="icon_upload primary" ></span></template>
+                        <p>2021.03.26 16:23:26提交成功</p>
+                    </timelineItem>
+                    <timelineItem>
+                        <template #icon><span class="icon_wait primary" ></span></template>
+                        <p>您的资料正在审核中，请耐心等待</p>
+                    </timelineItem>
+                    <timelineItem>
+                        <template #icon><span class="icon_fail red" ></span></template>
+                        <p>您的资料审核失败</p>
+                        <p>原因：姓名和身份证号不匹配</p>
+                    </timelineItem>
+                </timeline>
+            </div>
+            <div class="btnBox">
+                <!-- <button class="btn">重新提交</button> -->
+                <button class="btn" @click="kycPop=false">关闭</button>
+            </div>
+        </section>
+    </van-popup>
 </template>
 
 <script>
@@ -71,8 +96,12 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
 import Rule from './rule'
+import {timeline,timelineItem} from '@m/components/timeline'
+
 export default {
     components: {
+        timeline,
+        timelineItem,
         LanguageDiv,
         Vline,
         InputComp,
@@ -88,6 +117,7 @@ export default {
         const store = useStore()
         const state = reactive({
             pwdVisible: false,
+            kycPop: true,
             zone: '+86',
             email: '',
             mobile: '13200001111',
@@ -305,5 +335,37 @@ export default {
         color: var(--color);
     }
 }
-
+.kycPopContainer {
+    width: 80vw;
+    background: var(--white);
+    border-radius: 8px;
+    .kycTimeLine {
+        padding: rem(60px);
+    }
+    .btnBox {
+        position: relative;
+        display: flex;
+        color: var(--btnText);
+        font-size: rem(34px);
+        text-align: center;
+        background: var(--btnColor);
+        border-top: 1px solid var(--btnLine);
+        &::after {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1px;
+            height: rem(50px);
+            background: var(--btnInterval);
+            transform: translateY(-50%);
+            content: '';
+        }
+        .btn {
+            @include active();
+            flex: 1;
+            height: rem(100px);
+            line-height: 1;
+        }
+    }
+}
 </style>

@@ -63,12 +63,12 @@
         <!-- 底部下单按钮 -->
         <div class='footerBtn'>
             <div class='col'>
-                <button class='btn sellColor' :disabled='loading' @click="orderClick('sell')">
+                <button class='btn sellColor' :disabled='loading' @click="openOrder('sell')">
                     SELL
                 </button>
             </div>
             <div class='col'>
-                <button class='btn buyColor' :disabled='loading' @click="orderClick('buy')">
+                <button class='btn buyColor' :disabled='loading' @click="openOrder('buy')">
                     BUY
                 </button>
             </div>
@@ -118,7 +118,7 @@ export default {
         const product = computed(() => store.getters.productActived)
         if (!product.value) router.replace('/')
         // 点击下单按钮
-        const orderClick = (direction) => {
+        const openOrder = (direction) => {
             const requestPrice = direction === 'sell' ? product.value.sell_price : product.value.buy_price
             const params = {
                 bizType: 1, // 业务类型。0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
@@ -144,7 +144,7 @@ export default {
         return {
             ...toRefs(state),
             product,
-            orderClick,
+            openOrder,
         }
     },
 

@@ -17,6 +17,7 @@ export default {
         else if(token) store.dispatch('_user/findCustomerInfo')
     },
     created () {
+        window.vm = this
         console.log('app.vue this', this)
     }
 }

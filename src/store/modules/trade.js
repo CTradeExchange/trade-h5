@@ -1,4 +1,5 @@
 import { queryPositionPage, queryHistoryCloseOrderList } from '@/api/trade'
+import CheckAPI from '@/utils/checkAPI';
 
 export default {
     namespaced: true,
@@ -26,7 +27,7 @@ export default {
         // 查询持仓列表
         queryPositionPage ({ dispatch, commit, state, rootState }, params = {}) {
             const accountListLen = rootState._user.customerInfo?.accountList?.length
-            if(!accountListLen) return Promise.resolve({code:'0',data:[]}) //没有交易账户直接返回空持仓
+            if(!accountListLen) return Promise.resolve(new CheckAPI({code:'0',data:[]})) //没有交易账户直接返回空持仓
             commit('Update_positionLoading', true)
             return queryPositionPage(params).then((res) => {
                 commit('Update_positionLoading', false)
@@ -39,7 +40,7 @@ export default {
         // 平仓历史记录列表
         queryHistoryCloseOrderList ({ dispatch, commit, state, rootState }, params = {}) {
             const accountListLen = rootState._user.customerInfo?.accountList?.length
-            if(!accountListLen) return Promise.resolve({code:'0',data:[]}) //没有交易账户直接返回空数据
+            if(!accountListLen) return Promise.resolve(new CheckAPI({code:'0',data:[]})) //没有交易账户直接返回空数据
             commit('Update_historyLoading', true)
             return queryHistoryCloseOrderList(params).then((res) => {
                 commit('Update_historyLoading', false)

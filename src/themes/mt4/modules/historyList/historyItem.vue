@@ -6,7 +6,7 @@
                     {{ data.symbolName }},
                     <span class='volumn'>
                         {{ data.direction===1?'buy':'sell' }}
-                        {{data.closeNum}}
+                        {{data.closeVolume}}
                     </span>
                 </p>
                 <p class="volums">
@@ -37,10 +37,10 @@
                 </li>
                 <li class='flexWrap'>
                     <span class='title'>
-                        库存费
+                        手续费
                     </span>
                     <span class='value'>
-                        --
+                        {{data.commission||'--'}}
                     </span>
                 </li>
                 <li class='flexWrap'>
@@ -59,14 +59,6 @@
                         --
                     </span>
                 </li> -->
-                <li class='flexWrap'>
-                    <span class='title'>
-                        手续费
-                    </span>
-                    <span class='value'>
-                        {{data.commission||'--'}}
-                    </span>
-                </li>
             </ul>
         </div>
     </div>

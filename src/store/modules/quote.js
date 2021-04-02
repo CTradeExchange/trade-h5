@@ -1,5 +1,6 @@
 import { querySymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
 import { plus } from '@/utils/calculation'
+import CheckAPI from '@/utils/checkAPI';
 
 // 处理显示的点差  点差=（买价-卖价）/pip
 function spreadText (product) {
@@ -68,7 +69,7 @@ export default {
                 tradeType: rootState._base.tradeType,
                 customerGroupId: rootState._base.wpCompanyInfo.customerGroupId,
             }
-            if (newSymbolIds.length === 0) return Promise.resolve({ code: '0', data: [] })
+            if (newSymbolIds.length === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
             return querySymbolBaseInfoList(params).then((res) => {
                 if (res.check()) {
                     res.data.forEach(el => {
@@ -82,7 +83,7 @@ export default {
         // 产品详细信息
         querySymbolInfo ({ dispatch, commit, state, rootState }, symbolId) {
             const productMap = state.productMap
-            if (productMap[symbolId].contractSize) return Promise.resolve({ code: '0', data: {} })
+            if (productMap[symbolId].contractSize) return Promise.resolve(new CheckAPI({ code: '0', data: {} }))
             const params = {
                 symbolId: Number(symbolId),
                 tradeType: rootState._base.tradeType,

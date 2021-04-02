@@ -1,12 +1,12 @@
 <template>
-    <div class='positionItem of-1px-bottom' @click='detailVisible=!detailVisible'>
+    <div class='positionItem van-hairline--bottom' @click='detailVisible=!detailVisible'>
         <div class='mainWrap'>
             <div class='hd'>
                 <p class='productName'>
                     {{data.symbolName}},
                     <span class='volumn'>
                         {{ data.direction===1?'buy':'sell' }}
-                        {{ data.openNum }}
+                        {{ positionVolume }}
                     </span>
                 </p>
                 <p>
@@ -65,6 +65,7 @@ import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { priceFormat } from '@/utils/util'
 import dayjs from 'dayjs'
+import { minus } from '@/utils/calculation'
 export default {
     props: ['data'],
     setup ({ data }) {
@@ -78,10 +79,12 @@ export default {
             detailVisible: false
         })
         const product = computed(() => store.state._quote.productMap[data.symbolId])
+        const positionVolume = computed(() => minus(data.openNum, data.closeNum))
         return {
             ...toRefs(state),
             ...onceState,
             product,
+            positionVolume,
         }
     },
 }
@@ -90,6 +93,7 @@ export default {
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
 .positionItem {
+    @include active();
     position: relative;
     padding: rem(20px) rem(40px);
     .mainWrap {

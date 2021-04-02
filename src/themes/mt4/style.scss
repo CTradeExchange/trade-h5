@@ -95,6 +95,9 @@ i {
 .protocolContent a {
     color: $primary !important;
 }
+.primary {
+    color: var(--primary);
+}
 .muted {
     color: var(--mutedColor);
 }
