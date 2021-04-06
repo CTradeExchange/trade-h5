@@ -31,7 +31,8 @@ export default {
         },
         backHandler: Function,
         leftIcon: {
-            type: String
+            type: String,
+            default: 'cross'
         },
         showCenter: {
             type: Boolean,
