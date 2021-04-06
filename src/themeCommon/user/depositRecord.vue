@@ -1,6 +1,13 @@
 <template>
     <div class='page-wrap'>
-        <topNav />
+        <Top
+            back
+            left-icon='arrow-left'
+            :menu='false'
+            :right-action='rightAction'
+            :show-center='true'
+            @rightClick='toWithdrawList'
+        />
         <div class='record-list'>
             <van-collapse v-model='activeNames' accordion @change='handleFold'>
                 <van-collapse-item name='1'>
@@ -189,10 +196,10 @@
 <script>
 import { reactive, toRefs, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import topNav from '@/components/topNav'
+import Top from '@/components/top'
 export default {
     components: {
-        topNav
+        Top
     },
     setup (props) {
         const router = useRouter()

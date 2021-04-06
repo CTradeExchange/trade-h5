@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import top from '@/components/top2'
+import top from '@/components/top'
 import { reactive, toRefs } from 'vue'
 import { Field, Toast } from 'vant'
 import { useRouter } from 'vue-router'

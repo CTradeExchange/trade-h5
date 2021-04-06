@@ -1,6 +1,6 @@
 <template>
     <div class='page-wrap'>
-        <topNav />
+        <top />
         <div class='filed-wrap'>
             <van-cell-group>
                 <van-field v-model='userName' label='持卡人姓名' placeholder='请输入持卡人姓名' />
@@ -60,7 +60,7 @@
 
 <script>
 import { useRouter } from 'vue-router'
-import topNav from '@/components/topNav'
+import top from '@/components/top'
 import { reactive, toRefs } from 'vue'
 import { areaList } from '@/utils/area'
 import Rule from './addbank_rule'
@@ -70,7 +70,7 @@ import CurrencyAction from '../../themes/mt4/views/register/components/currencyA
 
 export default {
     components: {
-        topNav,
+        top,
         CurrencyAction
     },
     setup (props, { emit, attrs }) {

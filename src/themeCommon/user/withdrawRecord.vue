@@ -184,11 +184,9 @@
 <script>
 import { reactive, toRefs, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import topNav from '@/components/topNav'
 import Top from '@/components/top'
 export default {
     components: {
-        topNav,
         Top
     },
     setup (props) {
