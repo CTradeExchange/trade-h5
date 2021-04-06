@@ -1,6 +1,12 @@
 <template>
     <div class='pageWrap'>
-        <top back :menu='false' />
+        <Top back left-icon='arrow-left' :menu='false' :right-action='false' :show-center='false'>
+            <template #right>
+            </template>
+            <template #center>
+            </template>
+        </Top>
+
         <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a>
         <header class='header'>
             <h1 class='pageTitle'>
@@ -48,7 +54,7 @@
 </template>
 
 <script>
-import top from '@/components/top2'
+import Top from '@/components/top'
 import {
     reactive, toRefs, computed
 } from 'vue'
@@ -64,7 +70,7 @@ import { verifyCodeSend, verifyCodeCheck } from '@/api/base'
 
 export default {
     components: {
-        top,
+        Top,
         MobileInput,
         checkCode,
         uInput

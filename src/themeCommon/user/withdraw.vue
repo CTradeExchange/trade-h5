@@ -1,6 +1,13 @@
 <template>
     <div class='pageWrap'>
-        <Top back :menu='false' :right-action='rightAction' @rightClick='toWithdrawList' />
+        <Top
+            back
+            left-icon='arrow-left'
+            :menu='false'
+            :right-action='rightAction'
+            :show-center='true'
+            @rightClick='toWithdrawList'
+        />
         <div class='wrap'>
             <p class='header-text'>
                 取款金额
@@ -182,7 +189,7 @@ export default {
                 customerGroupId: customInfo.value.customerGroupId,
                 accountCurrency: customInfo.value.currency
             }
-            debugger
+
             queryWithdrawConfig(params).then(res => {
                 console.log(res)
                 if (res.check()) {

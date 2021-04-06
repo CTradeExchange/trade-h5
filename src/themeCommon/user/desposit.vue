@@ -55,7 +55,6 @@ export default {
         const currIndex = ref(0)
 
         const checkAmount = (index) => {
-            debugger
             currIndex.value = index
         }
         return {
@@ -106,6 +105,7 @@ export default {
                 margin-bottom: rem(30px);
                 text-align: center;
                 border: rem(2px) solid var(--bdColor);
+                border-radius: rem(10px);
                 .t1 {
                     color: var(--color);
                     font-size: rem(28px);
