@@ -68,6 +68,7 @@ export default {
     height: rem(100px);
     .back {
         position: absolute;
+        top: rem(26px);
         left: rem(10px);
         color: var(--color);
         font-size: rem(46px);
