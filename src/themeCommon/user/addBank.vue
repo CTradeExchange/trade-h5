@@ -1,6 +1,6 @@
 <template>
     <div class='page-wrap'>
-        <top />
+        <top left-icon='arrow-left' :menu='false' :right-action='false' show-center='true' />
         <div class='filed-wrap'>
             <van-cell-group>
                 <van-field v-model='userName' label='持卡人姓名' placeholder='请输入持卡人姓名' />

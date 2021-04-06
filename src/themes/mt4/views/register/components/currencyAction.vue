@@ -1,5 +1,21 @@
 <template>
-    <van-cell title="账户币种" is-link arrow-direction="down" :value="modelValue" @click="actionSheetVisible=true" v-bind="$attrs"/>
+    <van-field
+        v-model='modelValue'
+        label='账户币种'
+        placeholder='账户币种'
+        readonly
+        right-icon='arrow-down'
+        type='text'
+        @click='actionSheetVisible=true'
+    />
+    <!-- <van-cell
+        arrow-direction='down'
+        is-link
+        title='账户币种'
+        :value='modelValue'
+        v-bind='$attrs'
+        @click='actionSheetVisible=true'
+    /> -->
     <van-action-sheet v-model:show='actionSheetVisible' :actions='actionsList' @select='actionOnSelect' />
 </template>
 
@@ -10,14 +26,14 @@ export default {
     props: {
         modelValue: String
     },
-    emits:['update:modelValue'],
-    setup (props,{emit}) {
+    emits: ['update:modelValue'],
+    setup (props, { emit }) {
         const store = useStore()
         const state = reactive({
-            actionSheetVisible:false
+            actionSheetVisible: false
         })
-        const actionsList = computed(()=> store.state._base.wpCompanyInfo.currencyList)
-        const actionOnSelect = (item)=>{
+        const actionsList = computed(() => store.state._base.wpCompanyInfo.currencyList)
+        const actionOnSelect = (item) => {
             emit('update:modelValue', item.value)
             state.actionSheetVisible = false
         }

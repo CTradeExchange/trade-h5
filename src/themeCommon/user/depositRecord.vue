@@ -4,10 +4,13 @@
             back
             left-icon='arrow-left'
             :menu='false'
-            :right-action='rightAction'
+            :right-action='false'
             :show-center='true'
             @rightClick='toWithdrawList'
-        />
+        >
+            <template #right>
+            </template>
+        </Top>
         <div class='record-list'>
             <van-collapse v-model='activeNames' accordion @change='handleFold'>
                 <van-collapse-item name='1'>

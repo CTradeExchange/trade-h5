@@ -1,6 +1,6 @@
 <template>
     <div class='page-wrap'>
-        <Top back left-icon='arrow-left' :menu='false' :right-action='false' :show-center='true'>
+        <Top back left-icon='arrow-left' :menu='false' :right-action='false' show-center='true'>
             <template #right>
             </template>
         </Top>
