@@ -6,7 +6,8 @@ import VantBase from './vantBase'
 import Socket from '@/plugins/socket/socket'
 import longpress from '@/directives/longpress';
 import Colors,{setRootVariable} from './colorVariables'
-
+import { setRouter } from '@/utils/request'
+setRouter(router)
 
 setRootVariable(Colors)
 const app = createApp(App)

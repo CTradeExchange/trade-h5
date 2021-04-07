@@ -12,8 +12,8 @@ function spreadText (product) {
 
 // 报价计算点差
 function price_spread (product, data) {
-    if (product.askSpread && data.buy_price) product.buy_price = plus(product.askSpread, data.buy_price)
-    if (product.bidSpread && data.sell_price) product.sell_price = plus(product.bidSpread, data.sell_price)
+    if (product.askSpread && data.buy_price) product.buy_price = plus(data.buy_price, product.askSpread)
+    if (product.bidSpread && data.sell_price) product.sell_price = plus(data.sell_price, product.bidSpread)
 }
 
 export default {
@@ -21,6 +21,7 @@ export default {
     state: {
         productList: [], // 产品列表
         productMap: {}, // 产品列表
+        productActivedID: null, // 当前操作的产品ID
     },
     mutations: {
         // 更新产品列表
@@ -58,6 +59,10 @@ export default {
             spreadText(product)
             price_spread(product, data)
         },
+        Update_productActivedID (state, id) {
+            sessionStorage.setItem('productActived', JSON.stringify(state.productMap[id]))
+            state.productActivedID = id
+        },
     },
     actions: {
         // 产品基础信息列表
@@ -88,11 +93,12 @@ export default {
                 symbolId: Number(symbolId),
                 tradeType: rootState._base.tradeType,
                 customerGroupId: rootState._base.wpCompanyInfo.customerGroupId,
+                accountId: rootState._user.customerInfo?.accountId,
             }
             return querySymbolInfo(params).then((res) => {
-                if (res.check() && res.res) {
+                if (res.check() && res.data) {
                     commit('Update_product', res.data)
-                    if (rootState.productActivedID == symbolId) {
+                    if (rootState._quote.productActivedID == symbolId) {
                         sessionStorage.setItem('productActived', JSON.stringify(productMap[symbolId]))
                     }
                 }

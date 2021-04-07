@@ -20,21 +20,16 @@ export default createStore({
     state: {
         style,
         quoteMode: 2, // 1简单模式 2高级模式
-        productActivedID: null, // 当前操作的产品ID
         zoneList: [],
     },
     getters: {
-        productActived (state) {
-            return state._quote.productMap[state.productActivedID]
+        productActived (state, getters, rootState) {
+            return state._quote.productMap[rootState._quote.productActivedID]
         }
     },
     mutations: {
         Update_quoteMode (state, data = 1) {
             state.quoteMode = data
-        },
-        Update_productActivedID (state, id) {
-            sessionStorage.setItem('productActived', JSON.stringify(state._quote.productMap[id]))
-            state.productActivedID = id
         },
         Update_zoneList (state, list) {
             state.zoneList = list

@@ -69,6 +69,11 @@ export function getQueryVariable (variable, search = location.search) {
 export function getLoginParams () {
     return JSON.parse(localStorage.getItem('loginParams'))
 }
+// 删除登录参数
+export function removeLoginParams () {
+    localStorage.removeItem('loginParams')
+    sessionStorage.removeItem('token')
+}
 // 设置登录token
 export function setToken (token) {
     return sessionStorage.setItem('token', token)
@@ -76,6 +81,12 @@ export function setToken (token) {
 // 获取登录token
 export function getToken () {
     return sessionStorage.getItem('token')
+}
+export function localSet (key,val) {
+    return localStorage.setItem(key,val)
+}
+export function localGet (key) {
+    return localStorage.getItem(key)
 }
 // 格式化价格
 export function priceFormat (price, digits) {

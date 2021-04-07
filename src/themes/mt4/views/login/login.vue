@@ -45,15 +45,17 @@
             <span class='empty'></span>
             <LoginByFacebook />
         </div> -->
-        <footer class='footer'>
+        <!-- <footer class='footer'>
             <a class='link' href='javascript:;'>
                 <i class='icon_icon_service'></i>
                 在线客服
             </a>
-        </footer>
+        </footer> -->
     </div>
+
+    <!-- 用户KYC资料验证 -->
     <van-popup v-model:show='kycPop' :style="{'border-radius':'8px'}" :close-on-click-overlay="false">
-        <section class='kycPopContainer'>
+        <section class='popContainer'>
             <div class="kycTimeLine">
                 <timeline>
                     <timelineItem>
@@ -77,6 +79,21 @@
             </div>
         </section>
     </van-popup>
+
+    <!-- 设置登录密码 -->
+    <van-popup v-model:show='loginPwdPop' :style="{'border-radius':'8px'}" :close-on-click-overlay="false">
+        <section class='popContainer'>
+            <a href="javascript:;" class="noTip" @click="noTip">不再提醒</a>
+            <div class="containerBox">
+                <p class="iconPwd"><span class="icon_password"></span></p>
+                <p class="tipContent" >您的登录密码还未设置，设置后便可通过密码进行登录，是否现在去设置？</p>
+            </div>
+            <div class="btnBox">
+                <button class="btn" @click="loginPwdSet">去设置</button>
+                <button class="btn muted" @click="loginPwdSetNext">下次</button>
+            </div>
+        </section>
+    </van-popup>
 </template>
 
 <script>
@@ -89,7 +106,7 @@ import CheckCode from '@m/components/form/checkCode'
 import LoginByGoogle from '@m/components/loginByGoogle/loginByGoogle'
 import LoginByFacebook from '@m/components/loginByFacebook/loginByFacebook'
 import Top from '@/components/top'
-import { getDevice } from '@/utils/util'
+import { getDevice, localGet, localSet } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
 import { computed, reactive, toRefs } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -117,7 +134,8 @@ export default {
         const store = useStore()
         const state = reactive({
             pwdVisible: false,
-            kycPop: true,
+            kycPop: false,
+            loginPwdPop: false,
             zone: '+86',
             email: '',
             mobile: '13200001111',
@@ -144,7 +162,7 @@ export default {
                 device: getDevice(),
                 verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
                 loginPwd: state.loginType === 'password' ? state.pwd : undefined,
-                token: state.loginType === 'checkCode' ? token : undefined,
+                sendToken: state.loginType === 'checkCode' ? token : undefined,
             }
             const validator = new Schema(Rule)
             validator.validate(loginParams, { ...state, first: true }, (errors, fields) => {
@@ -156,13 +174,22 @@ export default {
                 loginSubmit(loginParams)
             })
         }
+
+        // 登录成功跳转
+        const loginToPath = ()=>{
+            const toURL = route.query.back ? decodeURIComponent(route.query.back) : '/'
+            router.replace(toURL)
+        }
+
         // 发送登录接
         const loginSubmit = (params) => {
             store.dispatch('_user/login', params).then(res => {
                 // console.log(res)
-                if (res.check()) {
-                    const toURL = route.query.back ? decodeURIComponent(route.query.back) : '/'
-                    router.replace(toURL)
+                if (res.invalid()) return false;
+                if(parseInt(res.data.loginPassStatus)===1 && !localGet('loginPwdIgnore')){
+                    state.loginPwdPop = true;
+                }else{
+                    loginToPath()
                 }
             })
         }
@@ -181,11 +208,12 @@ export default {
             validator.validate(verifyParams).then(res => {
                 const params = {
                     bizType: state.loginAccount === 'mobile' ? 'SMS_LOGIN_VERIFICATION_CODE' : 'EMAIL_LOGIN_VERIFICATION_CODE',
-                    toUser: state.loginAccount === 'mobile' ? String(state.zone * 1) + ' ' + state.mobile : state.email,
+                    toUser: state.loginAccount === 'mobile' ? String(state.zone) + ' ' + state.mobile : state.email,
                 }
                 verifyCodeSend(params).then(res => {
                     if (res.check()) {
                         token = res.data.token
+                        if(res.data.code) state.checkCode = res.data.code;
                         callback && callback()
                     }
                 })
@@ -195,6 +223,24 @@ export default {
                 }
             })
         }
+
+        // 设置登录密码
+        const loginPwdSet =  ()=>{
+            state.loginPwdPop = false;
+            router.push({name:"SetPwd"});
+        }
+        // 下次设置登录密码
+        const loginPwdSetNext =  ()=>{
+            state.loginPwdPop = false;
+            loginToPath();
+        }
+        // 设置登录密码不再提醒
+        const noTip =  ()=>{
+            localSet('loginPwdIgnore',true);
+            state.loginPwdPop = false;
+            loginToPath();
+        }
+
         // 获取国家验区号
         store.dispatch('getListByParentCode')
         return {
@@ -204,6 +250,9 @@ export default {
             loginHandle,
             topRightClick,
             verifyCodeSendHandler,
+            loginPwdSetNext,
+            loginPwdSet,
+            noTip,
         }
     }
 }
@@ -335,12 +384,35 @@ export default {
         color: var(--color);
     }
 }
-.kycPopContainer {
+.popContainer {
+    position: relative;
     width: 80vw;
     background: var(--white);
     border-radius: 8px;
     .kycTimeLine {
         padding: rem(60px);
+    }
+    .containerBox {
+        padding: rem(80px) rem(60px);
+    }
+    .tipContent {
+        font-size: rem(28px);
+        line-height: 1.5;
+        text-align: center;
+    }
+    .iconPwd {
+        padding-bottom: rem(35px);
+        text-align: center;
+    }
+    .icon_password {
+        color: var(--primary);
+        font-size: rem(60px);
+    }
+    .noTip {
+        position: absolute;
+        top: rem(20px);
+        right: rem(20px);
+        color: var(--mutedColor);
     }
     .btnBox {
         position: relative;
@@ -365,6 +437,7 @@ export default {
             flex: 1;
             height: rem(100px);
             line-height: 1;
+            background: none;
         }
     }
 }

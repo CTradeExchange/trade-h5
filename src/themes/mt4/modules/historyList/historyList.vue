@@ -5,7 +5,15 @@
         </div>
         <van-empty v-else-if='orderList && orderList.length===0' description='无历史记录' />
         <template v-else-if="orderList">
-            <positionItem v-for='item in orderList' :key='item' :data='item' />
+            <van-list
+                v-model:loading="loading"
+                :finished="finished"
+                finished-text="没有更多了"
+                @load="onLoad"
+                >
+                    <positionItem v-for='item in orderList' :key='item' :data='item' />
+                </van-list>
+            <!-- <positionItem v-for='item in orderList' :key='item' :data='item' /> -->
         </template>
     </div>
 </template>
@@ -15,14 +23,24 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import positionItem from './historyItem'
 export default {
+    props: {
+        loading:Boolean,
+        finished:Boolean,
+    },
     components: {
         positionItem,
     },
-    setup () {
+    setup (props,{emit}) {
         const store = useStore()
-        const orderList = computed(() => store.state._trade.historyList?.list)
+        const orderList = computed(() => store.state._trade.historyList)
+
+        const onLoad = ()=>{
+            emit('onLoad')
+        }
+
         return {
             orderList,
+            onLoad,
         }
     },
 }

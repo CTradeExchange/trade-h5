@@ -1,20 +1,20 @@
 <template>
-    <div>
-        <Top>
-            <template #right>
-                <a class='icon icon_paixu' href='javascript:;' @click='sortActionsVisible=true'></a>
-                <a class='icon icon_xindingdan' href='javascript:;' @click="newOrder"></a>
-            </template>
-        </Top>
+    <Top>
+        <template #right>
+            <a class='icon icon_paixu' href='javascript:;' @click='sortActionsVisible=true'></a>
+            <a class='icon icon_xindingdan' href='javascript:;' @click="newOrder"></a>
+        </template>
+    </Top>
+    <div class="container">
         <CapitalList :data='capitalListData' />
         <div class='titleBar'>
             价位
         </div>
-        <PositionList />
-
-        <!-- 排序 actionsheet -->
-        <van-action-sheet v-model:show='sortActionsVisible' :actions='sortActions' cancel-text='取消' @select='actionSheetOnSelect' />
+        <PositionList  @refresh="refresh"/>
     </div>
+
+    <!-- 排序 actionsheet -->
+    <van-action-sheet v-model:show='sortActionsVisible' :actions='sortActions' cancel-text='取消' @select='actionSheetOnSelect' />
 </template>
 
 <script>
@@ -60,20 +60,29 @@ export default {
             state.sortActionsVisible = false
         }
         // 查询持仓列表
-        store.dispatch('_trade/queryPositionPage', { sort: sortActionValue }).then(res=>{
-            if(res.check()){
-                const subscribList = res.data.map(el=> el.symbolId);
-                QuoteSocket.send_subscribe(subscribList)
-            }
-        })
+        const queryList = ()=>{
+            store.dispatch('_trade/queryPositionPage', { sort: sortActionValue }).then(res=>{
+                if(res.check()){
+                    const subscribList = res.data.map(el=> el.symbolId);
+                    QuoteSocket.send_subscribe(subscribList)
+                }
+            })
+        }
+        queryList()
+
 
         const newOrder = () => {
-            router.push({ name: 'Order', query: { symbolId: store.state.productActivedID } })
+            router.push({ name: 'Order', query: { symbolId: store.state._quote.productActivedID } })
+        }
+        // 刷新持仓列表
+        const refresh = ()=>{
+            queryList()
         }
         return {
             ...toRefs(state),
             actionSheetOnSelect,
             newOrder,
+            refresh,
         }
     },
 }
@@ -81,6 +90,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
+.container {
+    flex: 1;
+    margin-bottom: rem(100px);
+    overflow-y: auto;
+}
 .titleBar {
     height: rem(60px);
     padding: 0 rem(40px);
