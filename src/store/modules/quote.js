@@ -12,8 +12,8 @@ function spreadText (product) {
 
 // 报价计算点差
 function price_spread (product, data) {
-    if (product.askSpread && data.buy_price) product.buy_price = plus(data.buy_price, product.askSpread)
-    if (product.bidSpread && data.sell_price) product.sell_price = plus(data.sell_price, product.bidSpread)
+    if (product.askSpread && data.buy_price) product.buy_price = plus(data.buy_price, product.askSpread).toFixed(product.symbolDigits)
+    if (product.bidSpread && data.sell_price) product.sell_price = plus(data.sell_price, product.bidSpread).toFixed(product.symbolDigits)
 }
 
 export default {
@@ -39,6 +39,7 @@ export default {
             const symbolId = data.symbol_id || data.symbolId
             const product = productMap[symbolId]
             if (!product) return false
+            // if(product.price && data.price) return false; // 已经拿到产品快照，不在重复处理
             const askSpread = product.askSpread
             Object.assign(product, data)
 
@@ -51,7 +52,8 @@ export default {
         // 更新某个产品报价
         Update_productTick (state, data = {}) {
             const productMap = state.productMap
-            const product = productMap[data.symbolId]
+            const symbolId = data.symbol_id || data.symbolId
+            const product = productMap[symbolId]
             if (!product) return false
             if (data.price - product.high_price > 0) data.high_price = data.price
             if (data.price - product.low_price < 0) data.low_price = data.price

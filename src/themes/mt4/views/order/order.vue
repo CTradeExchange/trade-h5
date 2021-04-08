@@ -39,15 +39,14 @@
                 <Price :price="product.buy_price" :mode="2" :point-ratio="product.pointRatio" :digit="product.price_digits" />
             </div>
         </div>
-        {{ marketProfitLossRang }}
+        {{ profitLossRang }}
         <!-- 价格设置 -->
         <div class="cell priceSet">
             <div class="col">
-                {{ stopLoss }}
                 <PriceStepper v-model="stopLoss" :product="product"></PriceStepper>
             </div>
             <div class="col">
-                <van-stepper v-model="takeProfit" class="priceStepper" :decimal-length="3" :step="product.volumeStep" :min="0" />
+                <PriceStepper v-model="takeProfit" :product="product"></PriceStepper>
             </div>
         </div>
 
@@ -59,12 +58,12 @@
         <!-- 底部下单按钮 -->
         <div class="footerBtn">
             <div class="col">
-                <button class="btn sellColor" :disabled="loading" @click="openOrder('sell')">
+                <button class="btn sellColor" :disabled="loading || sellDisabled" @click="openOrder('sell')">
                     SELL
                 </button>
             </div>
             <div class="col">
-                <button class="btn buyColor" :disabled="loading" @click="openOrder('buy')">
+                <button class="btn buyColor" :disabled="loading || buyDisabled" @click="openOrder('buy')">
                     BUY
                 </button>
             </div>
@@ -120,7 +119,37 @@ export default {
         // 当前产品
         const product = computed(() => store.getters.productActived)
         const positionList = computed(() => store.state._trade.positionList)
-        const marketProfitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
+        const profitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
+
+        // 是否符合买入的止盈止损范围
+        const buyDisabled = computed(() => {
+            const buyProfitRange = profitLossRang.value.buyProfitRange
+            const buyStopLossRange = profitLossRang.value.buyStopLossRange
+            const stopLoss = Number(state.stopLoss);
+            const takeProfit = Number(state.takeProfit);
+            if(stopLoss>0 && (stopLoss < buyStopLossRange[0] || stopLoss > buyStopLossRange[1])){
+                return true
+            }else if(takeProfit>0 && (takeProfit < buyProfitRange[0] || takeProfit > buyProfitRange[1])){
+                return true
+            }else{
+                return false
+            }
+        })
+        // 是否符合卖出的止盈止损范围
+        const sellDisabled = computed(() => {
+            const sellProfitRange = profitLossRang.value.sellProfitRange
+            const sellStopLossRange = profitLossRang.value.sellStopLossRange
+            const stopLoss = Number(state.stopLoss);
+            const takeProfit = Number(state.takeProfit);
+            if(stopLoss>0 && (stopLoss < sellStopLossRange[0] || stopLoss > sellStopLossRange[1])){
+                return true
+            }else if(takeProfit>0 && (takeProfit < sellProfitRange[0] || takeProfit > sellProfitRange[1])){
+                return true
+            }else{
+                return false
+            }
+        })
+
         watch(
             () => product.value.minVolume,
             newval => (state.volumn = newval)
@@ -180,7 +209,9 @@ export default {
             ...toRefs(state),
             product,
             openOrder,
-            marketProfitLossRang
+            profitLossRang,
+            buyDisabled,
+            sellDisabled,
         }
     }
 }
@@ -286,6 +317,9 @@ export default {
         font-size: rem(28px);
         line-height: 1;
         text-align: center;
+        &:disabled {
+            opacity: 0.4;
+        }
     }
 }
 </style>

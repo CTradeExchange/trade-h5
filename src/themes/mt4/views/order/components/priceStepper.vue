@@ -1,39 +1,52 @@
 <template>
-    <van-stepper v-model='value' class='priceStepper' :decimal-length='product.symbolDigits' :step='step' :min="0" @change="onChange" />
+    <van-stepper v-model='value' class='priceStepper' :decimal-length='product.symbolDigits' :step='step' :min="-999" @minus="onMinus" @plus="onPlus" @change="onChange" @focus="onFocus" />
 </template>
 
 <script>
-import { reactive, toRefs, watch } from 'vue'
-import { minus } from '@/utils/calculation'
+import { computed, reactive, toRefs, watch } from 'vue'
+import { minus, plus } from '@/utils/calculation'
 export default {
     props: ['modelValue','product'],
     emits:['update:modelValue'],
     setup (props,{emit}) {
-        let prevVvalue = props.modelValue
+        let prevValue = props.modelValue
         const state = reactive({
             value: props.modelValue,
-            step: Math.pow(0.1, props.product.symbolDigits),
         })
+        const step = computed(()=>Math.pow(0.1, props.product.symbolDigits))
+        let type;
         watch(
             ()=>props.modelValue,
             newVal=>{
                 if(newVal!==state.value) state.value = newVal
             }
         )
-        const onChange = (...ars)=>{
-            let newVal = state.value;
-            if(Number(prevVvalue)===0){
-                newVal = minus(props.product.sell_price, props.product.volumeStep)
-                console.log(newVal)
-                state.value = newVal
+
+        const onFocus = ()=>{
+            type = ''
+        }
+        const onMinus = ()=>{
+            type = 'minus'
+        }
+        const onPlus = ()=>{
+            type = 'plus'
+        }
+        const onChange = (newVal)=>{
+            newVal = Number(newVal)
+            if(Number(prevValue)===0 && newVal!==0 && type){
+                newVal = type === 'minus' ? minus(props.product.sell_price, step.value) : plus(props.product.sell_price, step.value)
             }
             emit('update:modelValue', newVal)
-            prevVvalue = newVal
+            prevValue = newVal
         }
 
         return {
             ...toRefs(state),
+            step,
+            onMinus,
+            onPlus,
             onChange,
+            onFocus,
         }
     }
 }
@@ -47,7 +60,11 @@ export default {
     :deep(.van-stepper__input) {
         flex: 1;
     }
-    :deep(.van-stepper__minus,.van-stepper__plus) {
+    :deep(.van-stepper__minus) {
+        color: var(--primary);
+        background: none;
+    }
+    :deep(.van-stepper__plus) {
         color: var(--primary);
         background: none;
     }
