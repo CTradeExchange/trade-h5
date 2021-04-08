@@ -52,7 +52,7 @@
 
         <!-- 图表 -->
         <div class="chart">
-            这里是图表
+            <lightweightChart :product="product" />
         </div>
 
         <!-- 底部下单按钮 -->
@@ -82,6 +82,7 @@ import { useStore } from 'vuex'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { addMarketOrder } from '@/api/trade'
 import { useRoute, useRouter } from 'vue-router'
+import lightweightChart from './components/lightweightChart'
 import OrderVolumn from './components/orderVolumn'
 import PriceStepper from './components/priceStepper'
 import Pending from './pending'
@@ -90,6 +91,7 @@ export default {
     components: {
         Pending,
         OrderVolumn,
+        lightweightChart,
         PriceStepper,
         Price,
         top
@@ -125,13 +127,13 @@ export default {
         const buyDisabled = computed(() => {
             const buyProfitRange = profitLossRang.value.buyProfitRange
             const buyStopLossRange = profitLossRang.value.buyStopLossRange
-            const stopLoss = Number(state.stopLoss);
-            const takeProfit = Number(state.takeProfit);
-            if(stopLoss>0 && (stopLoss < buyStopLossRange[0] || stopLoss > buyStopLossRange[1])){
+            const stopLoss = Number(state.stopLoss)
+            const takeProfit = Number(state.takeProfit)
+            if (stopLoss > 0 && (stopLoss < buyStopLossRange[0] || stopLoss > buyStopLossRange[1])) {
                 return true
-            }else if(takeProfit>0 && (takeProfit < buyProfitRange[0] || takeProfit > buyProfitRange[1])){
+            } else if (takeProfit > 0 && (takeProfit < buyProfitRange[0] || takeProfit > buyProfitRange[1])) {
                 return true
-            }else{
+            } else {
                 return false
             }
         })
@@ -139,13 +141,13 @@ export default {
         const sellDisabled = computed(() => {
             const sellProfitRange = profitLossRang.value.sellProfitRange
             const sellStopLossRange = profitLossRang.value.sellStopLossRange
-            const stopLoss = Number(state.stopLoss);
-            const takeProfit = Number(state.takeProfit);
-            if(stopLoss>0 && (stopLoss < sellStopLossRange[0] || stopLoss > sellStopLossRange[1])){
+            const stopLoss = Number(state.stopLoss)
+            const takeProfit = Number(state.takeProfit)
+            if (stopLoss > 0 && (stopLoss < sellStopLossRange[0] || stopLoss > sellStopLossRange[1])) {
                 return true
-            }else if(takeProfit>0 && (takeProfit < sellProfitRange[0] || takeProfit > sellProfitRange[1])){
+            } else if (takeProfit > 0 && (takeProfit < sellProfitRange[0] || takeProfit > sellProfitRange[1])) {
                 return true
-            }else{
+            } else {
                 return false
             }
         })
@@ -211,7 +213,7 @@ export default {
             openOrder,
             profitLossRang,
             buyDisabled,
-            sellDisabled,
+            sellDisabled
         }
     }
 }

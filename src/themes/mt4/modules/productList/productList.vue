@@ -1,6 +1,8 @@
 <template>
     <div>
-        <productItem v-for='item in productList' :key='item' :product='item' @open='openProduct(item)' />
+        <template v-for='item in productList' :key='item'>
+            <productItem v-if="item.symbolName" :product='item' @open='openProduct(item)' />
+        </template>
     </div>
     <van-popup v-model:show='show'>
         <section class='popContainer'>

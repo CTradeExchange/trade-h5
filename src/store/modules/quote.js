@@ -71,10 +71,12 @@ export default {
         querySymbolBaseInfoList ({ dispatch, commit, state, rootState }, symbolIds = []) {
             const productMap = state.productMap
             const newSymbolIds = symbolIds.filter(el => !productMap[el].symbolName)
+            const guestCustomerGroupId = rootState._base.wpCompanyInfo.customerGroupId
             const params = {
                 symbolIds: newSymbolIds.join(),
                 tradeType: rootState._base.tradeType,
-                customerGroupId: rootState._base.wpCompanyInfo.customerGroupId,
+                customerGroupId: rootState._user.customerInfo?.customerGroupId ?? guestCustomerGroupId,
+                accountId: rootState._user.customerInfo?.accountId,
             }
             if (newSymbolIds.length === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
             return querySymbolBaseInfoList(params).then((res) => {
@@ -95,7 +97,7 @@ export default {
                 symbolId: Number(symbolId),
                 tradeType: rootState._base.tradeType,
                 customerGroupId: rootState._base.wpCompanyInfo.customerGroupId,
-                accountId: rootState._user.customerInfo?.accountId,
+                // accountId: rootState._user.customerInfo?.accountId,
             }
             return querySymbolInfo(params).then((res) => {
                 if (res.check() && res.data) {
