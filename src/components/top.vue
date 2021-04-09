@@ -66,10 +66,11 @@ export default {
     align-items: center;
     justify-content: space-between;
     height: rem(100px);
+    background-color: #FFF;
     .back {
         position: absolute;
         top: rem(26px);
-        left: rem(10px);
+        left: rem(13px);
         color: var(--color);
         font-size: rem(46px);
     }

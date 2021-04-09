@@ -1,6 +1,7 @@
 <template>
     <van-field
         v-model='modelValue'
+        :input-align='inputAlign'
         label='账户币种'
         placeholder='账户币种'
         readonly
@@ -24,7 +25,11 @@ import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 export default {
     props: {
-        modelValue: String
+        modelValue: String,
+        inputAlign: {
+            true: String,
+            default: 'right'
+        }
     },
     emits: ['update:modelValue'],
     setup (props, { emit }) {
