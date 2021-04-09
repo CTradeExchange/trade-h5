@@ -1,14 +1,15 @@
 <template>
-    <div>
-        <Top>
+        <Top >
             <template #right>
                 <a class="icon icon_paixu" href="javascript:;" @click="sortActionsVisible = true"></a>
                 <a class="icon icon_rili" href="javascript:;" @click="timeActionsVisible = true"></a>
             </template>
         </Top>
-        <CapitalList class="of-1px-bottom" :data="capitalListData" />
-        <Balance />
-        <HistoryList />
+        <div class="container">
+            <CapitalList class="of-1px-bottom" :data="capitalListData" />
+            <Balance />
+            <HistoryList :loading="loading" :finished="finished" @onLoad="onLoad" />
+        </div>
 
         <!-- 排序 actionsheet -->
         <van-action-sheet v-model:show="sortActionsVisible" :actions="sortActions" cancel-text="取消" @select="actionSheetOnSelect" />
@@ -16,7 +17,6 @@
         <van-action-sheet v-model:show="timeActionsVisible" :actions="timeActions" cancel-text="取消" class="timeActions" @select="timeActionSheetOnSelect" />
         <!-- 日历 -->
         <van-calendar v-model:show="calendarVisible" :max-date="maxDate" :min-date="minDate" type="range" @confirm="calendarOnConfirm" />
-    </div>
 </template>
 
 <script>
@@ -66,9 +66,10 @@ export default {
             maxDate: new Date(),
             timeActionsVisible: false,
             sortActionsVisible: false,
+            loading: false,
+            finished: false,
             sortActions,
-            timeActions,
-            recordList: []
+            timeActions
         })
         // 选择排序方式
         const actionSheetOnSelect = item => {
@@ -85,6 +86,7 @@ export default {
                 sortFieldName = item.feild
             }
             state.sortActionsVisible = false
+            current=1;
             queryRecordList()
         }
         // 选择日期查询方式
@@ -92,6 +94,7 @@ export default {
             if (item.startTime) {
                 startTime = item.startTime
                 endTime = item.endTime
+                current=1;
                 queryRecordList()
             } else {
                 state.calendarVisible = true
@@ -102,12 +105,14 @@ export default {
         const calendarOnConfirm = ([start, end]) => {
             startTime = dayjs(start).startOf('day').valueOf()
             endTime = dayjs(end).endOf('day').valueOf()
+            current=1;
             queryRecordList()
             state.calendarVisible = false
         }
 
         // 查询平仓历史记录列表
         const queryRecordList = ()=>{
+            state.loading = true;
             store.dispatch('_trade/queryHistoryCloseOrderList', {
                 current,
                 size:20,
@@ -115,16 +120,31 @@ export default {
                 sortFieldName: sortFieldName,
                 executeStartTime: startTime,
                 executeEndTime: endTime
+            }).then(res=>{
+                if(res.check() && res.data){
+                    const data = res.data
+                    state.loading = false;
+                    state.finished = data.totalPage===data.current;
+                }
+            }).catch(()=>{
+                state.loading = false;
             })
         }
         queryRecordList();
+
+        // 加载更多
+        const onLoad = ()=>{
+            current++;
+            queryRecordList();
+        }
 
         return {
             ...toRefs(state),
             capitalListData,
             actionSheetOnSelect,
             timeActionSheetOnSelect,
-            calendarOnConfirm
+            calendarOnConfirm,
+            onLoad,
         }
     }
 }
@@ -132,6 +152,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
+.container {
+    flex: 1;
+    margin-bottom: rem(100px);
+    overflow-y: auto;
+}
 .icon {
     color: var(--white);
     font-size: 1.4em;

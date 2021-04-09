@@ -57,7 +57,7 @@
     >
         <van-search
             v-model='value'
-            background='#f00'
+            background='#fff'
             placeholder='请输入银行名称关键词'
             show-action
             @cancel='onCancel'

@@ -28,7 +28,7 @@ export default {
                     commit('UPDATE_wpCompanyInfo', data)
                     const productList = data.symbol_ids.map(el => ({ symbolId: el }))
                     commit('_quote/Update_productList', productList, { root: true })
-                    commit('Update_productActivedID', data.symbol_ids[0], { root: true })
+                    commit('_quote/Update_productActivedID', data.symbol_ids[0], { root: true })
 
                     commit('UPDATE_tradeType', data.trade_type) // 先存储公司默认的玩法类型
                 }

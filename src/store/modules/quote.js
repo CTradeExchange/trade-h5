@@ -12,8 +12,8 @@ function spreadText (product) {
 
 // 报价计算点差
 function price_spread (product, data) {
-    if (product.askSpread && data.buy_price) product.buy_price = plus(product.askSpread, data.buy_price)
-    if (product.bidSpread && data.sell_price) product.sell_price = plus(product.bidSpread, data.sell_price)
+    if (product.askSpread && data.buy_price) product.buy_price = plus(data.buy_price, product.askSpread).toFixed(product.symbolDigits)
+    if (product.bidSpread && data.sell_price) product.sell_price = plus(data.sell_price, product.bidSpread).toFixed(product.symbolDigits)
 }
 
 export default {
@@ -21,6 +21,7 @@ export default {
     state: {
         productList: [], // 产品列表
         productMap: {}, // 产品列表
+        productActivedID: null, // 当前操作的产品ID
     },
     mutations: {
         // 更新产品列表
@@ -38,6 +39,7 @@ export default {
             const symbolId = data.symbol_id || data.symbolId
             const product = productMap[symbolId]
             if (!product) return false
+            // if(product.price && data.price) return false; // 已经拿到产品快照，不在重复处理
             const askSpread = product.askSpread
             Object.assign(product, data)
 
@@ -50,7 +52,8 @@ export default {
         // 更新某个产品报价
         Update_productTick (state, data = {}) {
             const productMap = state.productMap
-            const product = productMap[data.symbolId]
+            const symbolId = data.symbol_id || data.symbolId
+            const product = productMap[symbolId]
             if (!product) return false
             if (data.price - product.high_price > 0) data.high_price = data.price
             if (data.price - product.low_price < 0) data.low_price = data.price
@@ -58,16 +61,22 @@ export default {
             spreadText(product)
             price_spread(product, data)
         },
+        Update_productActivedID (state, id) {
+            sessionStorage.setItem('productActived', JSON.stringify(state.productMap[id]))
+            state.productActivedID = id
+        },
     },
     actions: {
         // 产品基础信息列表
         querySymbolBaseInfoList ({ dispatch, commit, state, rootState }, symbolIds = []) {
             const productMap = state.productMap
             const newSymbolIds = symbolIds.filter(el => !productMap[el].symbolName)
+            const guestCustomerGroupId = rootState._base.wpCompanyInfo.customerGroupId
             const params = {
                 symbolIds: newSymbolIds.join(),
                 tradeType: rootState._base.tradeType,
-                customerGroupId: rootState._base.wpCompanyInfo.customerGroupId,
+                customerGroupId: rootState._user.customerInfo?.customerGroupId ?? guestCustomerGroupId,
+                accountId: rootState._user.customerInfo?.accountId,
             }
             if (newSymbolIds.length === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
             return querySymbolBaseInfoList(params).then((res) => {
@@ -88,11 +97,12 @@ export default {
                 symbolId: Number(symbolId),
                 tradeType: rootState._base.tradeType,
                 customerGroupId: rootState._base.wpCompanyInfo.customerGroupId,
+                // accountId: rootState._user.customerInfo?.accountId,
             }
             return querySymbolInfo(params).then((res) => {
-                if (res.check() && res.res) {
+                if (res.check() && res.data) {
                     commit('Update_product', res.data)
-                    if (rootState.productActivedID == symbolId) {
+                    if (rootState._quote.productActivedID == symbolId) {
                         sessionStorage.setItem('productActived', JSON.stringify(productMap[symbolId]))
                     }
                 }

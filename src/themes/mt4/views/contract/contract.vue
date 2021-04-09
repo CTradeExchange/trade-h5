@@ -5,17 +5,27 @@
         :sub-title='product.symbolCode'
         :title='product.symbolName'
     />
-    <div>
+    <div class="container">
         <van-cell size='large' title='点差' value='浮动' />
-        <van-cell size='large' title='小数位' value='5' />
+        <van-cell size='large' title='小数位' :value='product.symbolDigits' />
         <van-cell size='large' title='止损水平' value='8' />
-        <van-cell size='large' title='合约数量' value='10000' />
-        <van-cell size='large' title='利润计算模式' value='Forex' />
-        <van-cell size='large' title='利润计算模式' value='Forex' />
-        <van-cell size='large' title='利润计算模式' value='Forex' />
-        <van-cell size='large' title='利润计算模式' value='Forex' />
-        <van-cell size='large' title='利润计算模式' value='Forex' />
-        <van-cell size='large' title='利润计算模式' value='Forex' />
+        <van-cell size='large' title='合约数量' :value='product.contractSize' />
+        <van-cell size='large' title='利润计算公式' value='CFD' />
+        <van-cell size='large' title='预付款计算公式' value='CFD' />
+        <van-cell size='large' title='预付款对冲' value='50%' />
+        <van-cell size='large' title='直到取消挂单' value='否' />
+        <van-cell size='large' title='库存费类型' value='百分比模式' />
+        <van-cell size='large' title='买入库存费' value='Forex' />
+        <van-cell size='large' title='卖出库存费' value='Forex' />
+        <van-cell size='large' title='卖出库存费' value='Forex' />
+        <van-cell size='large' title='卖出库存费' value='Forex' />
+        <van-cell size='large' title='卖出库存费' value='Forex' />
+        <van-cell size='large' title='卖出库存费' value='Forex' />
+        <van-cell size='large' title='卖出库存费' value='Forex' />
+        <van-cell size='large' title='卖出库存费' value='Forex' />
+        <van-cell size='large' title='卖出库存费' value='Forex' />
+        <van-cell size='large' title='卖出库存费' value='Forex' />
+        <van-cell size='large' title='卖出库存费' value='Forex' />
     </div>
 </template>
 
@@ -44,5 +54,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.container {
+    flex: 1;
+    overflow-y: auto;
+}
 </style>

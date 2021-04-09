@@ -1,5 +1,5 @@
 const path = require('path')
-// const dayjs = require('dayjs')
+const dayjs = require('dayjs')
 const FileManagerPlugin = require('filemanager-webpack-plugin')
 function resolve (dir) {
     return path.join(__dirname, dir)
@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'production') {
             events: {
                 onEnd: {
                     // archive: [{ source: resolve('dist'), destination: resolve(`zip/dist_${dayjs().format('MMDDHHmm')}.zip`) }]
-                    archive: [{ source: resolve('dist'), destination: resolve('zip/dist.zip') }]
+                    archive: [{ source: resolve('dist'), destination: resolve(`zip/dist${dayjs().format('YYYYMMDDHHmm')}.zip`) }]
                 }
             }
         })
@@ -44,8 +44,8 @@ module.exports = {
             }
         }
     },
-    devServer:{
-        port:8090,
+    devServer: {
+        port: 8090,
         open: false,
         overlay: {
             warnings: false,

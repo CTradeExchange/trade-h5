@@ -1,11 +1,13 @@
 <template>
     <div>
-        <productItem v-for='item in productList' :key='item' :product='item' @open='openProduct(item)' />
+        <template v-for='item in productList' :key='item'>
+            <productItem v-if="item.symbolName" :product='item' @open='openProduct(item)' />
+        </template>
     </div>
     <van-popup v-model:show='show'>
         <section class='popContainer'>
             <p class='title'>
-                UERUSD
+                {{cur.symbolName}}
             </p>
             <div class='menulist'>
                 <a class='item of-1px-bottom ' href='javascript:;' @click='toOrder'>
@@ -43,6 +45,7 @@ export default {
         const state = reactive({
             list: [...new Array(10)],
             show: false,
+            cur: {},
         })
         let symbolId = null
         // 行情列表模式 1高级模式 2简单模式
@@ -56,8 +59,9 @@ export default {
         }
         // 点击某个产品
         const openProduct = (item) => {
-            store.commit('Update_productActivedID', item.symbol_id)
+            store.commit('_quote/Update_productActivedID', item.symbol_id)
             symbolId = item.symbol_id
+            state.cur = item
             state.show = true
         }
         // 去交易

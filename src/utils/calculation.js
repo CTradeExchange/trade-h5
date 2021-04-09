@@ -25,32 +25,32 @@ export function getDecimalNum (num) {
 }
 
 /* 加法 */
-export function plus (num1, num2) {
+export function plus (num1=0, num2=0) {
     const r1 = getDecimalNum(num1)
     const r2 = getDecimalNum(num2)
     const m = Math.pow(10, Math.max(r1, r2))
     const n = r1 >= r2 ? r1 : r2
-    return (Math.round(num1 * m + num2 * m) / m).toFixed(n)
+    return (Math.round(num1 * m + num2 * m) / m).toFixed(n)*1
 }
 
 /* 减法 */
-export function minus (num1, num2) {
+export function minus (num1=0, num2=0) {
     const r1 = getDecimalNum(num1)
     const r2 = getDecimalNum(num2)
     const m = Math.pow(10, Math.max(r1, r2))
     const n = r1 >= r2 ? r1 : r2
-    return (Math.round(num1 * m - num2 * m) / m).toFixed(n)
+    return (Math.round(num1 * m - num2 * m) / m).toFixed(n)*1
 }
 
 /* 除法 */
-export function divide (num1, num2) {
+export function divide (num1=0, num2=1) {
     const r1 = getDecimalNum(num1)
     const r2 = getDecimalNum(num2)
     const m = Math.pow(10, Math.max(r1, r2))
-    return (num1 * m).toFixed(0) / (num2 * m).toFixed(0)
+    return (num1 * m).toFixed(0) / (num2 * m).toFixed(m)
 }
 /* 乘法 */
-export function mul (a, b) {
+export function mul (a=0, b=0) {
     let c = 0 // a的小数部分长度
     let d = 0 // b的小数部分长度
     try {

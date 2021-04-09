@@ -1,8 +1,10 @@
 import axios from 'axios'
 import CheckAPI from './checkAPI'
 import { login } from '@/api/user'
-import { guid, getLoginParams, getToken, setToken } from '@/utils/util'
+import { guid, getLoginParams, getToken, setToken,removeLoginParams } from '@/utils/util'
 import { apiDomain } from '@/config'
+let router = null;
+export const setRouter = r=> (router=r)
 
 // const baseURL = 'http://18.162.240.170:10000/cats-gateway'
 const baseURL = `${apiDomain}/cats-gateway`
@@ -45,12 +47,14 @@ service.interceptors.response.use(
         const { data, config } = response
         // token失效重新登录
         const loginParams = getLoginParams()
-        if (data.code === 'GATEWAY_CODE_005' && loginParams) {
-            return login(loginParams).then(res => {
-                setToken(res.data.token)
-                config.headers.token = res.data.token
-                return service({ ...config, data: JSON.parse(config.data) })
-            })
+        if (data.code === 'GATEWAY_CODE_005' && router) {
+            removeLoginParams();
+            router.push({ name: 'Login', query: { back: encodeURIComponent(location.pathname+location.search) } })
+            // return login(loginParams).then(res => {
+            //     setToken(res.data.token)
+            //     config.headers.token = res.data.token
+            //     return service({ ...config, data: JSON.parse(config.data) })
+            // })
         }
         const result = new CheckAPI(data)
         if (!result.check() && config.toastErr) {

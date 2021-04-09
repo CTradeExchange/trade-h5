@@ -99,8 +99,8 @@ class SocketEvent {
         const $store = this.$store
         list.forEach(item => {
             tickFormat(item) // 格式化快照价格
-            $store.commit('_quote/Update_product', item)
-            // $store.commit('_quote/Update_productTick', item)
+            // $store.commit('_quote/Update_product', item) // 不需要处理产品属性
+            $store.commit('_quote/Update_productTick', item)
         })
     }
 
