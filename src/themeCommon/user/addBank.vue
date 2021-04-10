@@ -39,7 +39,7 @@
     </div>
 
     <van-action-sheet v-model:show='areaShow'>
-        <van-area :area-list='areaList' title='开户地址' @cancel='show=false' @confirm='handleAreaConfirm' />
+        <van-area :area-list='areaList' columns-num='2' title='开户地址' @cancel='show=false' @confirm='handleAreaConfirm' />
     </van-action-sheet>
     <van-action-sheet
         v-model:show='currencyShow'
@@ -63,7 +63,7 @@
             @cancel='onCancel'
             @search='onSearch'
         />
-        <div v-for='(item, index) in banksActions' :key='index' class='bank-item'>
+        <div v-for='(item, index) in banksActions' :key='index' class='bank-item' @click='onSelectBank(item)'>
             {{ item.name }}
         </div>
     </van-action-sheet>
@@ -128,26 +128,39 @@ export default {
 
         // 提交处理
         const handleConfirm = () => {
+            // bankAccountName	账户持有人姓名
+            // bankCardNumber	银行卡号
+            // bankCurrency	银行币种
+            // bankName	银行名称
+            // bankAddress	银行开户地址
+            // bankBranch	银行支行
+            // country	国家
+            // province	省
+            // city	市
             const params = {
-                userName: state.userName,
-                bankNo: state.bankNo,
+                bankAccountName: state.userName,
+                bankCardNumber: state.bankNo,
                 bankName: state.bankName,
-                currency: state.currency,
-                area: state.area,
-                bankArea: state.bankArea,
+                bankCurrency: state.currency,
+                bankAddress: state.bankArea,
+                country: '中国',
+                province: state.area[0],
+                city: state.area[1]
             }
             const validator = new Schema(Rule)
             validator.validate(params, (errors, fields) => {
                 if (errors) {
                     return Toast(errors[0].message)
                 }
-                // handleAddBank(params)
+                handleAddBank(params)
             })
         }
 
         const handleAddBank = (params) => {
             addBank(params).then(res => {
-
+                if (res.check()) {
+                    Toast(res.msg)
+                }
             })
         }
 

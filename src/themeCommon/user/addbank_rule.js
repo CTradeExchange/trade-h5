@@ -1,5 +1,6 @@
+import { bankNoReg } from '@/utils/util'
 export default {
-    userName: [
+    bankAccountName: [
         {
             message: ['请输入持卡人姓名'],
             validator: (rule, value, callback, source, options) => {
@@ -7,12 +8,19 @@ export default {
             },
         }
     ],
-    bankNo: [
+    bankCardNumber: [
         {
             message: ['请输入银行卡号'],
             validator: (rule, value, callback, source, options) => {
                 return !!value
             },
+        },
+        {
+            message: ['请输入正确的银行卡号'],
+            validator: (rule, value, callback, source, options) => {
+                return bankNoReg.test(value)
+            }
+
         }
     ],
     bankName: [
@@ -23,7 +31,7 @@ export default {
             },
         }
     ],
-    currency: [
+    bankCurrency: [
         {
             message: ['请选择银行卡币种'],
             validator: (rule, value, callback, source, options) => {
@@ -31,7 +39,7 @@ export default {
             },
         }
     ],
-    area: [
+    province: [
         {
             message: ['请选择开户地址'],
             validator: (rule, value, callback, source, options) => {
@@ -39,7 +47,7 @@ export default {
             },
         }
     ],
-    bankArea: [
+    bankAddress: [
         {
             message: ['请输入开户行地址'],
             validator: (rule, value, callback, source, options) => {

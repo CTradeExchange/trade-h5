@@ -26,12 +26,18 @@
                 <p class='bw-t'>
                     收款银行卡
                 </p>
-                <div class='bank' @click='openSheet'>
+                <div v-if='bankList.length > 0' class='bank' @click='openSheet'>
                     <img alt='' :src='checkedBank.icon' srcset='' />
                     <span class='bank-no'>
-                        {{ checkedBank.bankName }} {{ checkedBank.bankNo }}
+                        {{ checkedBank.bankName }} {{ checkedBank.bankCardNumber }}
                     </span>
                     <van-icon name='arrow-down' />
+                </div>
+                <div v-else class='bank no-data'>
+                    <span>暂无银行卡</span>
+                    <van-button plain round size='mini' type='success' @click='toAddBank'>
+                        去添加
+                    </van-button>
                 </div>
                 <p class='bw-t2'>
                     预计到账 {{ amount }}美元
@@ -48,7 +54,7 @@
             <div v-for='(item, index) in bankList' :key='index' class='bank' @click='chooseBank(item)'>
                 <img alt='' :src='item.icon' srcset='' />
                 <span class='bank-no'>
-                    {{ item.bankName }} {{ item.bankNo }}
+                    {{ item.bankName }} {{ item.bankCardNumber }}
                 </span>
                 <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
             </div>
@@ -91,31 +97,31 @@ export default {
             show: false,
             maxAmount: 5005.55,
             checkedBank: {
-                icon: require('../../assets/logo.png'),
-                bankName: '招商银行',
-                bankNo: '6388 **** **** 1222'
+                // icon: require('../../assets/logo.png'),
+                // bankName: '招商银行',
+                // bankNo: '6388 **** **** 1222'
             },
             withdrawRate: '',
             withdrawConfig: '',
             bankList: [
-                {
-                    icon: require('../../assets/logo.png'),
-                    bankName: '招商银行',
-                    bankNo: '6388 **** **** 1222',
-                    checked: false
-                },
-                {
-                    icon: require('../../assets/logo.png'),
-                    bankName: '建设银行',
-                    bankNo: '6225 **** **** 4443',
-                    checked: false
-                },
-                {
-                    icon: require('../../assets/logo.png'),
-                    bankName: '工商银行',
-                    bankNo: '6225 **** **** 1543',
-                    checked: false
-                }
+                // {
+                //     icon: require('../../assets/logo.png'),
+                //     bankName: '招商银行',
+                //     bankNo: '6388 **** **** 1222',
+                //     checked: false
+                // },
+                // {
+                //     icon: require('../../assets/logo.png'),
+                //     bankName: '建设银行',
+                //     bankNo: '6225 **** **** 4443',
+                //     checked: false
+                // },
+                // {
+                //     icon: require('../../assets/logo.png'),
+                //     bankName: '工商银行',
+                //     bankNo: '6225 **** **** 1543',
+                //     checked: false
+                // }
             ]
         })
 
@@ -145,13 +151,27 @@ export default {
         }
 
         const confirm = () => {
-            if (!state.withdrawConfig.enableWithdraw) {
-                return Toast('该用户不可取款')
-            }
+            // if (!state.withdrawConfig.enableWithdraw) {
+            //     return Toast('该用户暂不可取款')
+            // }
 
             if (state.amount <= 0) {
+                state.amount = 0
                 return Toast('请输入正确的金额')
             }
+
+            if (parseFloat(state.amount) < parseFloat(state.withdrawConfig.withdrawAmountConfig.singleLowAmount)) {
+                return Toast(`取款金额不能小于${state.withdrawConfig.withdrawAmountConfig.singleLowAmount}`)
+            }
+
+            if (parseFloat(state.amount) > parseFloat(state.withdrawConfig.withdrawAmountConfig.singleHighAmount)) {
+                return Toast(`取款金额不能大于${state.withdrawConfig.withdrawAmountConfig.singleHighAmount}`)
+            }
+
+            if (parseFloat(state.amount) > parseFloat(state.withdrawConfig.withdrawAmount)) {
+                return Toast('余额不足')
+            }
+
             // companyId	Long	必填	公司ID
             // customerNo	String	必填	客户编号
             // accountId	Long	必填	账户ID
@@ -171,22 +191,21 @@ export default {
                 accountId: customInfo.value.accountId,
                 customerGroupId: customInfo.value.customerGroupId,
                 accountCurrency: customInfo.value.currency,
-                withdrawCurrency: '',
+                withdrawCurrency: state.withdrawConfig.withdrawCurrency,
                 amount: state.amount,
-                rate: '',
-                withdrawRateSerialNo: '',
-                bankAccountName: '',
-                bankName: '',
-                bankCardNo: '',
-                country: ''
-
+                rate: state.withdrawConfig.exchangeRate,
+                withdrawRateSerialNo: state.withdrawConfig.withdrawRateSerialNo,
+                bankAccountName: state.checkedBank.bankAccountName,
+                bankName: state.checkedBank.bankName,
+                bankCardNo: state.checkedBank.bankCardNumber,
+                country: 'IOS_3166_156'
             }
 
-            handleWithdraw({
-                aaa: 111
-            }).then(res => {
-                Toast(res)
-                console.log('res', res)
+            handleWithdraw(params).then(res => {
+                if (res.check()) {
+                    Toast(res.msg)
+                    console.log('res', res)
+                }
             })
         }
 
@@ -239,6 +258,7 @@ export default {
                 if (res.check()) {
                     if (res.data && res.data.length > 0) {
                         state.bankList = res.data
+                        state.checkedBank = res.data[0]
                     } else {
                         Dialog.confirm({
                             title: '提示',
@@ -362,6 +382,18 @@ export default {
     .van-icon {
         margin-right: rem(20px);
     }
+    &.no-data {
+        justify-content: center;
+        line-height: rem(90px);
+        span {
+            margin-right: rem(20px);
+            vertical-align: middle;
+        }
+        .van-button {
+            padding: 0 rem(20px);
+            vertical-align: middle;
+        }
+    }
 }
 .bank-list .bank {
     border-color: var(--bdColor);
@@ -384,4 +416,5 @@ export default {
         margin-right: rem(30px);
     }
 }
+
 </style>

@@ -75,7 +75,6 @@ const routes = [
                     footerMenu: false
                 }
             },
-            
 
         ]
     },
@@ -143,14 +142,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "resetFail" */ '../views/forgot/resetFail.vue'),
         meta: {
             title: '重置失败'
-        }
-    },
-    {
-        path: '/forgot2',
-        name: 'Forgot2',
-        component: () => import(/* webpackChunkName: "forgot2" */ '../views/forgot/forgot2.vue'),
-        meta: {
-            title: '找回密码'
         }
     },
     {

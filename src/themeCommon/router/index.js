@@ -44,10 +44,89 @@ const routes = [
             title: '存款记录',
             footerMenu: false
         }
-    }
+    },
+    {
+        path: '/msg',
+        name: 'Msg',
+        component: () => import(/* webpackChunkName: "msg" */ '../user/msg.vue'),
+        meta: {
+            title: '消息中心',
+            footerMenu: false
+        }
+    },
+    {
+        path: '/fundDetail',
+        name: 'FundDetail',
+        component: () => import(/* webpackChunkName: "fundDetail" */ '../user/fundDetail.vue'),
+        meta: {
+            title: '资金明细',
+            footerMenu: false
+        }
+    },
+    {
+        path: '/fund',
+        name: 'Fund',
+        component: () => import(/* webpackChunkName: "fundDetail" */ '../user/fund.vue'),
+        meta: {
+            title: '账户资金',
+            footerMenu: false
+        }
+    },
+    {
+        path: '/personal',
+        name: 'Personal',
+        component: () => import(/* webpackChunkName: "personal" */ '../user/personal.vue'),
+        meta: {
+            title: '个人信息',
+            footerMenu: false
+        }
+    },
+    {
+        path: '/authentication',
+        name: 'Authentication',
+        component: () => import(/* webpackChunkName: "authentication" */ '../user/authentication.vue'),
+        meta: {
+            title: '身份验证',
+            footerMenu: false
+        }
+    },
+    {
+        path: '/authL1',
+        name: 'AuthL1',
+        component: () => import(/* webpackChunkName: "authentication" */ '../user/authL1.vue'),
+        meta: {
+            title: '身份验证(LV1认证)',
+            footerMenu: false
+        }
+    },
+    {
+        path: '/authL1Input',
+        name: 'AuthL1Input',
+        component: () => import(/* webpackChunkName: "authL1Input" */ '../user/authL1Input.vue'),
+        meta: {
+            title: '身份验证(LV1认证)',
+            footerMenu: false
+        }
+    },
+    {
+        path: '/authL2',
+        name: 'AuthL2',
+        component: () => import(/* webpackChunkName: "authL2" */ '../user/authL2.vue'),
+        meta: {
+            title: '身份验证(LV2认证)',
+            footerMenu: false
+        }
+    },
+    {
+        path: '/authL3',
+        name: 'AuthL3',
+        component: () => import(/* webpackChunkName: "authL3" */ '../user/authL3.vue'),
+        meta: {
+            title: '身份验证(LV3认证)',
+            footerMenu: false
+        }
+    },
+
 ]
-// const router = createRouter({
-//     history: createWebHistory(process.env.BASE_URL),
-//     routes
-// })
+
 export default routes

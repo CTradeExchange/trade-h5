@@ -35,13 +35,17 @@
                 <p class='bw-t'>
                     请选择支付方式
                 </p>
+
                 <div class='pay-item'>
-                    <div class='pay-type' @click='openSheet'>
+                    <div v-if='PayTypes.length > 0' class='pay-type' @click='openSheet'>
                         <img alt='' :src='checkedType.icon' srcset='' />
                         <span class='pay-name'>
                             {{ checkedType.paymentCode }}
                         </span>
                         <van-icon name='arrow-down' />
+                    </div>
+                    <div v-else class='pay-type no-data'>
+                        暂无可用的支付通道
                     </div>
                     <p class='notice'>
                         <span class='left-val'>
@@ -195,8 +199,10 @@ export default {
             }
             queryPayType(params).then(res => {
                 if (res.check()) {
-                    state.PayTypes = res.data
-                    state.checkedType = state.PayTypes[0]
+                    if (res.data && res.data.length > 0) {
+                        state.PayTypes = res.data
+                        state.checkedType = state.PayTypes[0]
+                    }
                 } else {
                     Toast(res.msg)
                 }
@@ -404,6 +410,7 @@ export default {
 .pay-type {
     display: flex;
     align-items: center;
+    justify-content: center;
     border: rem(2px) solid #E5E5E5;
     border-radius: rem(4px);
     .pay-name {
@@ -416,6 +423,9 @@ export default {
     }
     .van-icon {
         margin-right: rem(20px);
+    }
+    &.no-data {
+        line-height: rem(80px);
     }
 }
 .pay-list .pay-type {

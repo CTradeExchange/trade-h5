@@ -186,3 +186,27 @@ export function addBank (data) {
         data
     })
 }
+
+/* 取款提案列表 */
+export function queryWithdrawPageList (data) {
+    return request({
+        url: '/global/fund.CustomerProposalQueryService.queryWithdrawPageList',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
+/* 存款提案列表 */
+export function queryDepositPageList (data) {
+    return request({
+        url: '/global/fund.CustomerProposalQueryService.queryDepositPageList',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}

@@ -2,6 +2,7 @@ import pako from 'pako'
 
 export const mobileReg = /^(13|14|15|16|17|18|19)\d{9}$/
 export const emailReg = new RegExp('^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$')
+export const bankNoReg = /^([1-9]{1})(\d{11}|\d{15}|\d{16}|\d{17}|\d{18})$/
 
 export const randomId = () => {
     const r = Math.random() + Math.random() + Math.random()
@@ -82,8 +83,8 @@ export function setToken (token) {
 export function getToken () {
     return sessionStorage.getItem('token')
 }
-export function localSet (key,val) {
-    return localStorage.setItem(key,val)
+export function localSet (key, val) {
+    return localStorage.setItem(key, val)
 }
 export function localGet (key) {
     return localStorage.getItem(key)
