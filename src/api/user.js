@@ -80,10 +80,21 @@ export function findPwd (data) {
 }
 
 /* 修改密码 */
-
 export function modifyPwd (data) {
     return request({
         url: '/global/customer.CustomerWebApiService.updateLoginPwd',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
+/* 创建存款提案 */
+export function handleDesposit (data) {
+    return request({
+        url: '/global/fund.DepositAppDubboService.createDepositProposal',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -104,7 +115,7 @@ export function handleWithdraw (data) {
     })
 }
 
-/* 查询取款限制配置 */
+/* 获取取款限制配置 */
 export function queryWithdrawConfig (data) {
     return request({
         url: '/global/fund.WithdrawAppDubboService.queryWithdrawLimitConfig',
@@ -120,6 +131,54 @@ export function queryWithdrawConfig (data) {
 export function queryWithdrawRate (data) {
     return request({
         url: '/global/fund.WithdrawAppDubboService.getWithdrawExchangeRate',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
+/* 获取支付通道 */
+export function queryPayType (data) {
+    return request({
+        url: '/global/fund.DepositAppDubboService.getPayChannels',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
+/* 获取客户存款货币对汇率 */
+export function queryDepositExchangeRate (data) {
+    return request({
+        url: '/global/fund.DepositAppDubboService.getDepositExchangeRate',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
+/* 查询客户出金银行卡列表 */
+export function queryBankList (data) {
+    return request({
+        url: '/global/customer.WithdrawBankWebApiService.bankList',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
+/* 新增出金银行卡 */
+export function addBank (data) {
+    return request({
+        url: '/global/customer.WithdrawBankWebApiService.add',
         method: 'post',
         headers: {
             version: '0.0.1',

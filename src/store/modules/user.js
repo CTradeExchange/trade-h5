@@ -1,5 +1,6 @@
-import { login, findCustomerInfo } from '@/api/user'
+import { login, findCustomerInfo, queryWithdrawConfig } from '@/api/user'
 import { localSet, setToken } from '@/utils/util'
+
 export default {
     namespaced: true,
     state: {
@@ -8,6 +9,7 @@ export default {
         zone: '86', // 区号
         loginData: '', // login返回的信息
         customerInfo: '', // 用户信息
+        withdrawConfig: '' // 用户取款配置
     },
     mutations: {
         Update_loginLoading (state, data) {
@@ -21,7 +23,7 @@ export default {
         },
         Update_customerInfo (state, data) {
             state.customerInfo = data
-        },
+        }
     },
     actions: {
         // 登录
@@ -49,6 +51,6 @@ export default {
                 }
                 return res
             })
-        },
+        }
     }
 }

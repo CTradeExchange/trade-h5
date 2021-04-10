@@ -21,7 +21,7 @@
                     right-icon='arrow-down'
                     @click='currencyShow=true'
                 /> -->
-                <CurrencyAction v-model='currency' v-model:show='currencyShow' class='cellRow' />
+                <CurrencyAction v-model='currency' v-model:show='currencyShow' class='cellRow' input-align='left' />
                 <van-field
                     v-model='area'
                     label='开户地址'
@@ -51,21 +51,34 @@
 
     <van-action-sheet
         v-model:show='bankShow'
-        :actions='banksActions'
         cancel-text='取消'
         close-on-click-action
         @select='onSelectBank'
-    />
+    >
+        <van-search
+            v-model='value'
+            background='#fff'
+            placeholder='请输入银行名称关键词'
+            show-action
+            @cancel='onCancel'
+            @search='onSearch'
+        />
+        <div v-for='(item, index) in banksActions' :key='index' class='bank-item'>
+            {{ item.name }}
+        </div>
+    </van-action-sheet>
 </template>
 
 <script>
 import { useRouter } from 'vue-router'
 import top from '@/components/top'
-import { reactive, toRefs } from 'vue'
+import { onBeforeMount, reactive, toRefs } from 'vue'
 import { areaList } from '@/utils/area'
 import Rule from './addbank_rule'
+import { useStore } from 'vuex'
 import Schema from 'async-validator'
 import { Toast } from 'vant'
+import { addBank } from '@/api/user'
 import CurrencyAction from '../../themes/mt4/views/register/components/currencyAction'
 
 export default {
@@ -75,7 +88,7 @@ export default {
     },
     setup (props, { emit, attrs }) {
         const router = useRouter()
-
+        const store = useStore()
         const state = reactive({
             userName: '',
             bankNo: '',
@@ -128,8 +141,21 @@ export default {
                 if (errors) {
                     return Toast(errors[0].message)
                 }
+                // handleAddBank(params)
             })
         }
+
+        const handleAddBank = (params) => {
+            addBank(params).then(res => {
+
+            })
+        }
+
+        store.dispatch('getBankDictList')
+
+        onBeforeMount(() => {
+            console.log(555)
+        })
 
         return {
             areaList,
@@ -154,5 +180,10 @@ export default {
         color: var(--color);
         font-size: rem(34px);
     }
+}
+.bank-item {
+    font-size: rem(30px);
+    line-height: rem(80px);
+    text-align: center;
 }
 </style>

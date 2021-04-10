@@ -19,7 +19,7 @@
                 </van-button>
             </div>
             <div class='notice'>
-                <span>最大可取 {{ maxAmount }} 美元</span>
+                <span>最大可取 {{ withdrawConfig.withdrawAmount }} 美元</span>
                 <span>手续费 0.10美元</span>
             </div>
             <div class='bank-wrap'>
@@ -34,7 +34,7 @@
                     <van-icon name='arrow-down' />
                 </div>
                 <p class='bw-t2'>
-                    预计到账 54美元
+                    预计到账 {{ amount }}美元
                 </p>
             </div>
         </div>
@@ -65,14 +65,12 @@
 import Top from '@/components/top'
 import {
     reactive, ref, computed, toRefs, onMounted,
-    onBeforeMount,
-    onBeforeUpdate,
-    onUpdated,
+    onBeforeMount
 } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Toast } from 'vant'
+import { Toast, Dialog } from 'vant'
 import { useStore } from 'vuex'
-import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate } from '@/api/user'
+import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate, queryBankList } from '@/api/user'
 export default {
     components: {
         Top
@@ -97,6 +95,8 @@ export default {
                 bankName: '招商银行',
                 bankNo: '6388 **** **** 1222'
             },
+            withdrawRate: '',
+            withdrawConfig: '',
             bankList: [
                 {
                     icon: require('../../assets/logo.png'),
@@ -141,13 +141,47 @@ export default {
 
         // 全部取出
         const getAll = () => {
-            state.amount = state.maxAmount
+            state.amount = state.withdrawConfig.withdrawAmount
         }
 
         const confirm = () => {
+            if (!state.withdrawConfig.enableWithdraw) {
+                return Toast('该用户不可取款')
+            }
+
             if (state.amount <= 0) {
                 return Toast('请输入正确的金额')
             }
+            // companyId	Long	必填	公司ID
+            // customerNo	String	必填	客户编号
+            // accountId	Long	必填	账户ID
+            // customerGroupId	Long	必填	客户组ID
+            // accountCurrency	String	必填	账户货币编码
+            // withdrawCurrency	String	必填	收款货币
+            // amount	BigDecimal	必填	提案金额
+            // rate	BigDecimal	必填	发送给平台CATS2使用的取款汇率
+            // withdrawRateSerialNo	String	必填	取款费率流水号
+            // bankAccountName	String	必填	银行卡持有者姓名
+            // bankName	String	必填	银行卡银行名称
+            // bankCardNo	String	必填	银行卡号
+            // country	String	必填	国家
+
+            const params = {
+                customerNo: customInfo.value.customerNo,
+                accountId: customInfo.value.accountId,
+                customerGroupId: customInfo.value.customerGroupId,
+                accountCurrency: customInfo.value.currency,
+                withdrawCurrency: '',
+                amount: state.amount,
+                rate: '',
+                withdrawRateSerialNo: '',
+                bankAccountName: '',
+                bankName: '',
+                bankCardNo: '',
+                country: ''
+
+            }
+
             handleWithdraw({
                 aaa: 111
             }).then(res => {
@@ -158,22 +192,21 @@ export default {
 
         console.log('1-开始创建组件-----setup()')
 
-        onBeforeMount(() => {
-            getWithdrawConfig()
-            console.log('2-组件挂载到页面之前执行-----onBeforeMount()')
-        })
-
-        onMounted(() => {
-            console.log('3-组件挂载到页面之后执行-----onMounted()')
-        })
-
-        onBeforeUpdate(() => {
-            console.log('4-组件更新之前-----onBeforeUpdate()')
-        })
-
-        onUpdated(() => {
-            console.log('5-组件更新之后-----onUpdated()')
-        })
+        const getWithdrawRate = () => {
+            const params = {
+                customerNo: customInfo.value.customerNo,
+                accountId: customInfo.value.accountId,
+                accountCurrency: customInfo.value.currency,
+                withdrawCurrency: 'CNY', // 暂时只支持CNY
+            }
+            queryWithdrawRate(params).then(res => {
+                if (res.check()) {
+                    state.withdrawRate = res.data
+                } else {
+                    Toast(res.msg)
+                }
+            })
+        }
 
         // 获取取款限制配置
         const getWithdrawConfig = () => {
@@ -191,14 +224,42 @@ export default {
             }
 
             queryWithdrawConfig(params).then(res => {
-                console.log(res)
                 if (res.check()) {
-
+                    state.withdrawConfig = res.data
                 } else {
                     Toast(res.msg)
                 }
             })
         }
+
+        const getBankList = () => {
+            console.log('banklist')
+            queryBankList().then(res => {
+                console.log(res)
+                if (res.check()) {
+                    if (res.data && res.data.length > 0) {
+                        state.bankList = res.data
+                    } else {
+                        Dialog.confirm({
+                            title: '提示',
+                            message: '暂无银行卡，是否去添加?',
+                        }).then(() => {
+                            router.push('/addBank')
+                        }).catch(() => {
+                        })
+                    }
+                }
+            })
+        }
+
+        onBeforeMount(() => {
+            // 获取取款配置
+            getWithdrawConfig()
+            // 获取取款汇率
+            getWithdrawRate()
+            // 获取银行卡列表
+            getBankList()
+        })
 
         return {
             rightAction,
@@ -209,7 +270,6 @@ export default {
             getAll,
             toAddBank,
             confirm,
-            getWithdrawConfig,
             customInfo
         }
     }
