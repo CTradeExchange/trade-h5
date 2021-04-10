@@ -1,26 +1,14 @@
 <template>
+    <top back :menu="false" :sub-title="product.symbolCode" :title="product.symbolName" />
     <div v-if="product" class="orderWrap">
-        <top back :menu="false" :sub-title="product.symbolCode" :title="product.symbolName" />
         <!-- 订单类型 -->
         <div class="cell openType">
             <p class="title" @click="dropdownWrap = !dropdownWrap">
-                即时执行
+                {{ openOrderSelected.name }}
             </p>
             <div v-show="dropdownWrap" class="dropdownWrap" @click="dropdownWrap = false">
-                <a class="item of-1px-bottom" href="javascript:;">
-                    即时执行
-                </a>
-                <a class="item of-1px-bottom" href="javascript:;">
-                    买入限价
-                </a>
-                <a class="item of-1px-bottom" href="javascript:;">
-                    卖出限价
-                </a>
-                <a class="item of-1px-bottom" href="javascript:;">
-                    买入止损
-                </a>
-                <a class="item of-1px-bottom" href="javascript:;">
-                    卖出止损
+                <a class="item of-1px-bottom" href="javascript:;" v-for="item in openOrderList" :key="item.val" @click="selectOpenOrder(item)">
+                    {{ item.name }}
                 </a>
             </div>
         </div>
@@ -40,6 +28,13 @@
             </div>
         </div>
         {{ profitLossRang }}
+        <!-- 挂单 -->
+        <div class="cell priceSet" v-if="openOrderSelected.val > 1">
+            <div class="col">
+                <PriceStepper v-model="pendingPrice" :product="product"></PriceStepper>
+            </div>
+        </div>
+
         <!-- 价格设置 -->
         <div class="cell priceSet">
             <div class="col">
@@ -52,21 +47,27 @@
 
         <!-- 图表 -->
         <div class="chart">
-            <lightweightChart :product="product" />
+            <lightweightChart :product="product" ref="chart" v-if="product.symbolDigits" />
         </div>
+    </div>
 
-        <!-- 底部下单按钮 -->
-        <div class="footerBtn">
-            <div class="col">
-                <button class="btn sellColor" :disabled="loading || sellDisabled" @click="openOrder('sell')">
-                    SELL
-                </button>
-            </div>
-            <div class="col">
-                <button class="btn buyColor" :disabled="loading || buyDisabled" @click="openOrder('buy')">
-                    BUY
-                </button>
-            </div>
+    <!-- 底部下单按钮 -->
+    <div class="footerBtn line" v-if="openOrderSelected.val === 1">
+        <div class="col">
+            <button class="btn sellColor" :disabled="loading || sellDisabled" @click="openOrder('sell')">
+                SELL
+            </button>
+        </div>
+        <div class="col">
+            <button class="btn buyColor" :disabled="loading || buyDisabled" @click="openOrder('buy')">
+                BUY
+            </button>
+        </div>
+    </div>
+    <div class="footerBtn" v-else>
+        <div class="col">
+            <button class="btn buyColor" v-if="[2, 4].includes(openOrderSelected.val)" :disabled="loading || buyDisabled" @click="openOrder()">下单</button>
+            <button class="btn sellColor" v-else-if="[3, 5].includes(openOrderSelected.val)" :disabled="loading || sellDisabled" @click="openOrder()">下单</button>
         </div>
     </div>
     <van-popup v-model:show="pendingVisible" :close-on-click-overlay="false" :style="{ width: '100%', height: '100%' }">
@@ -77,7 +78,7 @@
 <script>
 import top from '@m/layout/top'
 import Price from '@m/components/price'
-import { computed, reactive, toRefs, watch } from 'vue'
+import { computed, onUnmounted, reactive, ref, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { addMarketOrder } from '@/api/trade'
@@ -100,38 +101,59 @@ export default {
         const store = useStore()
         const route = useRoute()
         const router = useRouter()
+        const chart = ref(null)
         const { symbolId, positionId } = route.query
         const state = reactive({
             loading: false,
             disabled: positionId,
             pendingVisible: false,
             dropdownWrap: false,
+            openOrderSelected: {}, // 1即时执行 2买入限价 3卖出限价 4买入止损 5卖出止损
+            openOrderList: [
+                { name: '即时执行', val: 1 },
+                { name: '买入限价', val: 2 },
+                { name: '卖出限价', val: 3 },
+                { name: '买入止损', val: 4 },
+                { name: '卖出止损', val: 5 }
+            ],
             volumn: 0.01,
             value: 3,
+            pendingPrice: 0, // 挂单价
             stopLoss: 0, // 止损单价
-            takeProfit: 0, // 止盈单价
-            value2: '',
-            option1: [
-                { text: '全部商品', value: 0 },
-                { text: '新款商品', value: 1 },
-                { text: '活动商品', value: 2 }
-            ]
+            takeProfit: 0 // 止盈单价
         })
+        watch(
+            () => state.pendingPrice,
+            newval => store.commit('_trade/Update_pendingPrice', newval),
+            { immediate: true }
+        )
+        onUnmounted(() => store.commit('_trade/Update_pendingPrice', 0))
+
+        state.openOrderSelected = state.openOrderList[0]
 
         // 当前产品
         const product = computed(() => store.getters.productActived)
         const positionList = computed(() => store.state._trade.positionList)
         const profitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
+        const pendingPriceRang = computed(() => store.getters['_trade/pendingPriceRang'])
 
         // 是否符合买入的止盈止损范围
         const buyDisabled = computed(() => {
-            const buyProfitRange = profitLossRang.value.buyProfitRange
-            const buyStopLossRange = profitLossRang.value.buyStopLossRange
+            const [buyProfitMin, buyProfitMax] = profitLossRang.value.buyProfitRange
+            const [buyStopLossMin, buyStopLossMax] = profitLossRang.value.buyStopLossRange
+            const [buyLimitMin, buyLimitMax] = pendingPriceRang.value.buyLimitRange
+            const [buyStopMin, buyStopMax] = pendingPriceRang.value.buyStopRange
+            const openOrderVal = state.openOrderSelected.val
+            const pendingPrice = Number(state.pendingPrice)
             const stopLoss = Number(state.stopLoss)
             const takeProfit = Number(state.takeProfit)
-            if (stopLoss > 0 && (stopLoss < buyStopLossRange[0] || stopLoss > buyStopLossRange[1])) {
+            if (stopLoss > 0 && (stopLoss < buyStopLossMin || stopLoss > buyStopLossMax)) {
                 return true
-            } else if (takeProfit > 0 && (takeProfit < buyProfitRange[0] || takeProfit > buyProfitRange[1])) {
+            } else if (takeProfit > 0 && (takeProfit < buyProfitMin || takeProfit > buyProfitMax)) {
+                return true
+            } else if (openOrderVal === 2 && (pendingPrice < buyLimitMin || pendingPrice > buyLimitMax)) {
+                return true
+            } else if (openOrderVal === 4 && (pendingPrice < buyStopMin || pendingPrice > buyStopMax)) {
                 return true
             } else {
                 return false
@@ -139,13 +161,21 @@ export default {
         })
         // 是否符合卖出的止盈止损范围
         const sellDisabled = computed(() => {
-            const sellProfitRange = profitLossRang.value.sellProfitRange
-            const sellStopLossRange = profitLossRang.value.sellStopLossRange
+            const [sellProfitMin, sellProfitMax] = profitLossRang.value.sellProfitRange
+            const [sellStopLossMin, sellStopLossMax] = profitLossRang.value.sellStopLossRange
+            const [sellLimitMin, sellLimitMax] = pendingPriceRang.value.sellLimitRange
+            const [sellStopMin, sellStopMax] = pendingPriceRang.value.sellStopRange
+            const openOrderVal = state.openOrderSelected.val
+            const pendingPrice = Number(state.pendingPrice)
             const stopLoss = Number(state.stopLoss)
             const takeProfit = Number(state.takeProfit)
-            if (stopLoss > 0 && (stopLoss < sellStopLossRange[0] || stopLoss > sellStopLossRange[1])) {
+            if (stopLoss > 0 && (stopLoss < sellProfitMin || stopLoss > sellProfitMax)) {
                 return true
-            } else if (takeProfit > 0 && (takeProfit < sellProfitRange[0] || takeProfit > sellProfitRange[1])) {
+            } else if (takeProfit > 0 && (takeProfit < sellStopLossMin || takeProfit > sellStopLossMax)) {
+                return true
+            } else if (openOrderVal === 3 && (pendingPrice < sellLimitMin || pendingPrice > sellLimitMax)) {
+                return true
+            } else if (openOrderVal === 5 && (pendingPrice < sellStopMin || pendingPrice > sellStopMax)) {
                 return true
             } else {
                 return false
@@ -155,6 +185,20 @@ export default {
         watch(
             () => product.value.minVolume,
             newval => (state.volumn = newval)
+        )
+        // 止损价格变更
+        watch(
+            () => state.stopLoss,
+            newval => {
+                chart.value && chart.value.stopLossLineUpdate({ price: newval })
+            }
+        )
+        // 止赢价格变更
+        watch(
+            () => state.takeProfit,
+            newval => {
+                chart.value && chart.value.takeProfitLineUpdate({ price: newval })
+            }
         )
         if (!product.value) router.replace('/')
         // 点击下单按钮
@@ -206,14 +250,21 @@ export default {
                     state.volumn = minus(curPosition.openVolume, curPosition.closeVolume)
                 })
         }
+        // 选择订单类型
+        const selectOpenOrder = (item)=>{
+            state.openOrderSelected = item
+            if(item.val===1) store.commit('_trade/Update_pendingPrice', 0)
+        }
 
         return {
             ...toRefs(state),
             product,
+            chart,
             openOrder,
             profitLossRang,
             buyDisabled,
-            sellDisabled
+            sellDisabled,
+            selectOpenOrder,
         }
     }
 }
@@ -223,8 +274,9 @@ export default {
 @import '~@/sass/mixin.scss';
 .orderWrap {
     position: relative;
-    height: 100%;
-    padding-bottom: rem(100px);
+    flex: 1;
+    margin-bottom: rem(10px);
+    overflow-y: auto;
     .cell {
         margin-right: rem(30px);
         margin-left: rem(30px);
@@ -236,8 +288,20 @@ export default {
     padding: 1px;
     text-align: center;
     .title {
+        position: relative;
         padding: rem(15px) 0 rem(5px);
+        overflow: hidden;
         font-size: rem(28px);
+        &::after {
+            position: absolute;
+            right: -6px;
+            bottom: -6px;
+            width: 13px;
+            height: 13px;
+            background: var(--placeholder);
+            transform: rotate(45deg);
+            content: '';
+        }
     }
     .dropdownWrap {
         position: absolute;
@@ -271,8 +335,9 @@ export default {
     .col {
         @include ftbd();
         flex: 1;
+        margin-left: rem(40px);
         &:first-of-type {
-            margin-right: rem(40px);
+            margin-left: 0;
             &::before {
                 border-color: var(--sellColor);
             }
@@ -294,12 +359,14 @@ export default {
     background: var(--bdColor);
 }
 .footerBtn {
-    position: absolute;
-    bottom: 0;
-    left: 0;
+    // position: absolute;
+    // bottom: 0;
+    // left: 0;
+    position: relative;
     display: flex;
     width: 100%;
-    &::before {
+    height: rem(100px);
+    &.line::before {
         position: absolute;
         top: 20%;
         bottom: 20%;

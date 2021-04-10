@@ -10,128 +10,132 @@
 
 @mixin clfix() {
     zoom: 1;
-    &:after {
-        content: '.';
+    &::after {
         display: block;
-        height: 0;
         clear: both;
-        visibility: hidden;
-        line-height: 0;
+        height: 0;
         font-size: 0;
+        line-height: 0;
+        visibility: hidden;
+        content: '.';
     }
 }
 
 @mixin ellipsis() {
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
-
 @mixin text_wrap {
-    word-wrap:break-word;
-    word-break:break-all;
-  }
-  
-  @mixin ellipsisLn($line) {
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+@mixin ellipsisLn($line) {
+    @include text_wrap;
+    display: -webkit-box;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: $line;
-    @include text_wrap;
-  }
-  
-  @mixin single-line-clamp() {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      @include text_wrap;
-  }
+}
 
+@mixin single-line-clamp() {
+    @include text_wrap;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 
 @mixin opacity($n) {
-    filter: alpha(opacity=#{$n * 100});
     -moz-opacity: $n;
     opacity: $n;
+    filter: alpha(opacity=#{$n * 100});
 }
 
 @mixin active() {
     &:active {
-        box-shadow: 0px 0px 999px rgba(0, 0, 0, 0.05) inset;
+        box-shadow: 0 0 999px rgba(0, 0, 0, 0.05) inset;
     }
 }
 
 @mixin scroll() {
+    scrollbar-color: #DFDFDF white;
+    scrollbar-width: thin;
     &::-webkit-scrollbar {
         width: 3px;
         height: 3px;
     }
-
     &::-webkit-scrollbar-track {
-        box-shadow: 0px 0px 3px #dfdfdf inset;
+        background: #EEE;
         border-radius: 10px;
-        background: #eee;
+        box-shadow: 0 0 3px #DFDFDF inset;
     }
-
     &::-webkit-scrollbar-thumb {
+        background: #999;
         border: 1px #808080 solid;
         border-radius: 10px;
-        background: #999;
     }
-
     &::-webkit-scrollbar-thumb:hover {
-        background: #7d7d7d;
+        background: #7D7D7D;
     }
-    scrollbar-color: #dfdfdf white;
-    scrollbar-width: thin;
 }
 
 @mixin borderline($color: #ebedf0) {
     position: absolute;
-    z-index: 1;
-    box-sizing: border-box;
-    content: '';
-    pointer-events: none;
     right: 0;
     left: 0;
+    z-index: 1;
+    box-sizing: border-box;
     border-bottom: 1px solid $color;
     transform: scaleY(0.5);
+    content: '';
+    pointer-events: none;
 }
+
 @mixin triangle($direction, $width, $height, $color) {
     @if not index('up' 'up-right' 'right' 'down-right' 'down' 'down-left' 'left' 'up-left', $direction) {
-        @error "Direction must be `up`, `up-right`, `right`, `down-right`, " +
-           "`down`, `down-left`, `left` or `up-left`.";
-    } @else if not _is-color($color) {
-        @error "`#{$color}` is not a valid color for the `$color` argument in " +
-           "the `triangle` mixin.";
-    } @else {
+        @error 'Direction must be `up`, `up-right`, `right`, `down-right`, ' +
+            '`down`, `down-left`, `left` or `up-left`.';
+    }
+    @else if not _is-color($color) {
+        @error '`#{$color}` is not a valid color for the `$color` argument in ' +
+            'the `triangle` mixin.';
+    }
+    @else {
         border-style: solid;
         height: 0;
         width: 0;
-
         @if $direction == 'up' {
             border-color: transparent transparent $color;
             border-width: 0 ($width / 2) $height;
-        } @else if $direction == 'up-right' {
+        }
+        @else if $direction == 'up-right' {
             border-color: transparent $color transparent transparent;
             border-width: 0 $width $width 0;
-        } @else if $direction == 'right' {
+        }
+        @else if $direction == 'right' {
             border-color: transparent transparent transparent $color;
             border-width: ($height / 2) 0 ($height / 2) $width;
-        } @else if $direction == 'down-right' {
+        }
+        @else if $direction == 'down-right' {
             border-color: transparent transparent $color;
             border-width: 0 0 $width $width;
-        } @else if $direction == 'down' {
+        }
+        @else if $direction == 'down' {
             border-color: $color transparent transparent;
             border-width: $height ($width / 2) 0;
-        } @else if $direction == 'down-left' {
+        }
+        @else if $direction == 'down-left' {
             border-color: transparent transparent transparent $color;
             border-width: $width 0 0 $width;
-        } @else if $direction == 'left' {
+        }
+        @else if $direction == 'left' {
             border-color: transparent $color transparent transparent;
             border-width: ($height / 2) $width ($height / 2) 0;
-        } @else if $direction == 'up-left' {
+        }
+        @else if $direction == 'up-left' {
             border-color: $color transparent transparent;
             border-width: $width $width 0 0;
         }
@@ -141,8 +145,8 @@
 // funds
 @mixin bg-image($url, $width, $height) {
     background-image: url($url + '@2x.png');
-    background-size: $width, $height;
     background-repeat: no-repeat;
+    background-size: $width, $height;
     @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3) {
         background-image: url($url + '@3x.png');
     }
@@ -152,15 +156,15 @@
 @mixin ftbd() {
     position: relative;
     padding-bottom: rem(14px);
-    &::before{
+    &::before {
         position: absolute;
-        content: '';
         bottom: 0;
         left: 0;
+        box-sizing: border-box;
         width: 100%;
         height: rem(14px);
-        border:1px solid var(--bdColor);
+        border: 1px solid var(--bdColor);
         border-top: 0;
+        content: '';
     }
 }
-

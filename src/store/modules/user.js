@@ -1,5 +1,6 @@
 import { login, findCustomerInfo, queryWithdrawConfig } from '@/api/user'
-import { setToken } from '@/utils/util'
+import { localSet, setToken } from '@/utils/util'
+
 export default {
     namespaced: true,
     state: {
@@ -31,7 +32,7 @@ export default {
             return login(params).then((res) => {
                 if (res.check()) {
                     const data = res.data
-                    localStorage.setItem('loginParams', JSON.stringify(params))
+                    if(params.loginPwd) localSet('loginParams', JSON.stringify(params))
                     setToken(data.token)
                     commit('Update_loginData', data)
                     commit('Update_customerInfo', data)

@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Layout from '@m/layout/index'
-import { getLoginParams, delayAwait } from '@/utils/util'
+import { getLoginParams, delayAwait, getToken } from '@/utils/util'
 import store from '../store'
 import themeRouter from '@/themeCommon/router'
 
@@ -74,8 +74,7 @@ const routes = [
                     title: '新账户',
                     footerMenu: false
                 }
-            },
-
+            }
         ]
     },
     {
@@ -188,15 +187,15 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const loginParams = getLoginParams()
+    const token = getToken()
     const roles = to.meta?.roles ?? []
-    if (loginParams && roles.length && roles.includes('Guest')) {
+    if (token && roles.length && roles.includes('Guest')) {
         // 仅游客访问，登录用户访问时跳转到行情页面
         next({ name: 'Quote' })
-    } else if (!loginParams && roles.length && roles.includes('User')) {
+    } else if (!token && roles.length && roles.includes('User')) {
         // 仅登录用户访问，游客访问时跳转到登录页面
         next({ name: 'Login', query: { back: encodeURIComponent(to.fullPath) } })
-    } else if (loginParams && store.state._user.loginLoading) {
+    } else if (token && store.state._user.loginLoading) {
         delayAwait(() => {
             return !store.state._user.loginLoading
         }).then(next)
