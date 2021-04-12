@@ -47,7 +47,7 @@ export default {
         findCustomerInfo ({ dispatch, commit, state }, params = {}) {
             return findCustomerInfo().then((res) => {
                 if (res.check()) {
-                    commit('Update_loginData', res.data)
+                    commit('Update_customerInfo', data)
                 }
                 return res
             })
