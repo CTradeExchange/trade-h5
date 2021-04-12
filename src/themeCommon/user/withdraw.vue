@@ -185,16 +185,16 @@ export default {
             // bankName	String	必填	银行卡银行名称
             // bankCardNo	String	必填	银行卡号
             // country	String	必填	国家
-
+            debugger
             const params = {
                 customerNo: customInfo.value.customerNo,
                 accountId: customInfo.value.accountId,
                 customerGroupId: customInfo.value.customerGroupId,
-                accountCurrency: customInfo.value.currency,
-                withdrawCurrency: state.withdrawConfig.withdrawCurrency,
+                accountCurrency: customInfo.value.ext1,
+                withdrawCurrency: state.withdrawRate.withdrawCurrency,
                 amount: state.amount,
-                rate: state.withdrawConfig.exchangeRate,
-                withdrawRateSerialNo: state.withdrawConfig.withdrawRateSerialNo,
+                rate: state.withdrawRate.exchangeRate,
+                withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
                 bankAccountName: state.checkedBank.bankAccountName,
                 bankName: state.checkedBank.bankName,
                 bankCardNo: state.checkedBank.bankCardNumber,
@@ -205,11 +205,12 @@ export default {
                 if (res.check()) {
                     Toast(res.msg)
                     console.log('res', res)
+                    state.amount = ''
                 }
             })
         }
 
-        console.log('1-开始创建组件-----setup()')
+        console.log('1-开始创建组件-----setup()', customInfo.value)
 
         const getWithdrawRate = () => {
             const params = {

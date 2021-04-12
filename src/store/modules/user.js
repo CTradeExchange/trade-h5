@@ -32,7 +32,7 @@ export default {
             return login(params).then((res) => {
                 if (res.check()) {
                     const data = res.data
-                    if(params.loginPwd) localSet('loginParams', JSON.stringify(params))
+                    if (params.loginPwd) localSet('loginParams', JSON.stringify(params))
                     setToken(data.token)
                     commit('Update_loginData', data)
                     commit('Update_customerInfo', data)
@@ -47,7 +47,7 @@ export default {
         findCustomerInfo ({ dispatch, commit, state }, params = {}) {
             return findCustomerInfo().then((res) => {
                 if (res.check()) {
-                    commit('Update_customerInfo', data)
+                    commit('Update_customerInfo', res.data)
                 }
                 return res
             })
