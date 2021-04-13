@@ -16,7 +16,7 @@
       ]
     })
  */
-export function createArcs (args) {
+export function createTorus (args) {
     var html = '<svg id="ringSvg" class="ring-svg" width="' + args.width + '" height="' + args.width + '" >'
     var cx = args.width / 2; var cy = args.height / 2
     var r = args.r
