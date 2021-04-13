@@ -133,6 +133,15 @@ const routes = [
             footerMenu: false
         }
     },
+    {
+        path: '/bankList',
+        name: 'BankList',
+        component: () => import(/* webpackChunkName: "bankList" */ '../user/bankList.vue'),
+        meta: {
+            title: '银行卡列表',
+            footerMenu: false
+        }
+    },
 
 ]
 

@@ -75,6 +75,7 @@ import {
 } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Toast, Dialog } from 'vant'
+import { isEmpty } from '@/utils/util'
 import { useStore } from 'vuex'
 import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate, queryBankList } from '@/api/user'
 export default {
@@ -160,6 +161,10 @@ export default {
                 return Toast('请输入正确的金额')
             }
 
+            if (isEmpty(state.checkedBank)) {
+                return Toast('请选择取款银行卡')
+            }
+
             if (parseFloat(state.amount) < parseFloat(state.withdrawConfig.withdrawAmountConfig.singleLowAmount)) {
                 return Toast(`取款金额不能小于${state.withdrawConfig.withdrawAmountConfig.singleLowAmount}`)
             }
@@ -214,8 +219,6 @@ export default {
             })
         }
 
-        console.log('1-开始创建组件-----setup()', customInfo.value)
-
         const getWithdrawRate = () => {
             const params = {
                 customerNo: customInfo.value.customerNo,
@@ -258,8 +261,13 @@ export default {
 
         const getBankList = () => {
             console.log('banklist')
+            const toast = Toast.loading({
+                message: '加载中...',
+                forbidClick: true,
+            })
             queryBankList().then(res => {
                 console.log(res)
+                toast.clear()
                 if (res.check()) {
                     if (res.data && res.data.length > 0) {
                         state.bankList = res.data

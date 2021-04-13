@@ -68,6 +68,9 @@
                 </div>
             </div>
         </div>
+        <van-button class='desposit-btn' type='primary' @click='toDesposit'>
+            <span>存款</span>
+        </van-button>
     </div>
 </template>
 
@@ -75,11 +78,17 @@
 import Top from '@m/layout/top'
 import { toRefs, reactive, ref, onMounted } from 'vue'
 import { createTorus } from '@/plugins/createTorus'
+import { useRouter, useRoute } from 'vue-router'
 export default {
     components: {
         Top
     },
     setup (props) {
+        const router = useRouter()
+        function toDesposit () {
+            router.push('/desposit')
+        }
+
         onMounted(() => {
             createTorus({
                 id: 'annulus',
@@ -95,6 +104,10 @@ export default {
                 ]
             })
         })
+
+        return {
+            toDesposit
+        }
     }
 }
 </script>
@@ -191,6 +204,17 @@ export default {
                     }
                 }
             }
+        }
+    }
+    .desposit-btn {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: var(--bdColor);
+        border-color: var(--bdColor);
+        span {
+            color: var(--btnSelected);
+            font-size: rem(34px);
         }
     }
 }

@@ -22,7 +22,7 @@
                                     {{ item.amount }} USD
                                 </p>
                                 <p class='time'>
-                                    {{ formatTime(item.creatTime) }}
+                                    {{ formatTime(item.createTime) }}
                                 </p>
                             </template>
                             <template #right-icon>
@@ -88,7 +88,7 @@
                                         提交时间
                                     </span>
                                     <span class='right-val'>
-                                        {{ formatTime(item.creatTime) }}
+                                        {{ formatTime(item.createTime) }}
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -96,7 +96,7 @@
                                         备注
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.remark }}
+                                        {{ item.remark || '--' }}
                                     </span>
                                 </div>
                             </div>

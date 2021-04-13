@@ -59,8 +59,15 @@
                             {{ item.name }}
                         </van-button>
                         <!-- <van-cell title='选择日期区间' :value='date'  /> -->
-                        <van-field v-model='date' label='时间区间' placeholder='请选择时间区间' @click='showCalendar = true' />
-                        <van-calendar v-model:show='showCalendar' type='range' @confirm='onConfirm' />
+                        <van-field v-model='date' :default-date='defaultDate' label='时间区间' placeholder='请选择时间区间' @click='showCalendar = true' />
+                        <van-calendar
+                            v-model='dateRange'
+                            v-model:show='showCalendar'
+                            allow-same-day='true'
+                            :min-date='minDate'
+                            type='range'
+                            @confirm='onConfirm'
+                        />
                     </div>
                     <div class='btns'>
                         <van-button plain size='small' type='primary' @click='dateReset'>
@@ -98,7 +105,9 @@
 
 <script>
 import Top from '@m/layout/top'
-import { toRefs, reactive, ref } from 'vue'
+import { toRefs, reactive, ref, computed, onBeforeMount } from 'vue'
+import { queryCapitalFlowList } from '@/api/user'
+import dayjs from 'dayjs'
 export default {
     components: {
         Top
@@ -109,46 +118,42 @@ export default {
         const proBtns = [
             {
                 name: '全部项目',
-                value: 99
+                value: '99'
             },
             {
-                name: '存款',
+                name: '存取款',
                 value: 1
             },
             {
-                name: '取款',
+                name: '手续费',
                 value: 2
             },
             {
-                name: '手续费',
+                name: '隔夜利息',
                 value: 3
             },
             {
-                name: '隔夜利息',
+                name: '盈亏',
                 value: 4
             },
             {
-                name: '盈亏',
+                name: '系统清零',
                 value: 5
             },
             {
-                name: '系统清零',
+                name: '额度调整',
                 value: 6
             },
             {
-                name: '额度调整',
-                value: 7
-            },
-            {
                 name: '冻结',
-                value: 8
+                value: 7
             }
 
         ]
         const directionBtns = [
             {
                 name: '全部流向',
-                value: 99
+                value: '99'
             },
             {
                 name: '入账',
@@ -183,13 +188,25 @@ export default {
             }
         ]
         const state = reactive({
-            proCurr: 99,
-            directionCur: 99,
-            dateCur: 99,
+            proCurr: 99, // 业务类型
+            directionCur: 99, // 流向
+            dateCur: '', // 时间
             proTitle: '全部项目',
-            date: '',
-            showCalendar: false
+            date: '', // 日期
+            minDate: new Date('2018-01-01'),
+            showCalendar: false,
+            dateRange: [],
+            defaultDate: [],
+            pagigation: {
+                size: 10,
+                current: 1,
+            }
         })
+
+        // const minDate = computed(function () {
+        //     debugger
+        //     return dayjs()
+        // })
 
         const onProbtn = (item) => {
             state.proCurr = item.value
@@ -208,6 +225,14 @@ export default {
 
         const confirm = () => {
             proDownItem.value.toggle()
+            queryFundDetail()
+        }
+
+        const onConfirm = (values) => {
+            state.dateCur = 99
+            const [start, end] = values
+            state.showCalendar = false
+            state.date = `${formatDate(start)} - ${formatDate(end)}`
         }
 
         const dateConfirm = () => {
@@ -220,15 +245,50 @@ export default {
         }
 
         const formatDate = (date) => `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
-        const onConfirm = (values) => {
-            const [start, end] = values
-            state.showCalendar = false
-            state.date = `${formatDate(start)} - ${formatDate(end)}`
-        }
 
         const onDate = (item) => {
+            if (item.value === 1) {
+                state.date = dayjs(new Date()).format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
+            } else if (item.value === 2) {
+                state.date = dayjs().subtract(7, 'day').format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
+                state.dateRange = [dayjs().subtract(7, 'day').format('YYYY/MM/DD'), dayjs(new Date()).format('YYYY/MM/DD')]
+            } else if (item.value === 3) {
+                state.date = dayjs().subtract(1, 'month').format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
+            } else if (item.value === 4) {
+                state.date = dayjs().subtract(3, 'month').format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
+            } else if (item.value === 99) {
+                state.date = ''
+            }
+
             state.dateCur = item.value
         }
+
+        const queryFundDetail = () => {
+            // size		每页条数
+            // current	当前页
+            // businessType		业务类型。1-存取款；2-手续费；3-过夜利息；4-盈亏；5-系统清零；6-额度调整；7-冻结；
+            // status		状态。1-初始化；2-处理成功；3-处理失败；
+            // startTime	开始时间。13位时间戳；
+            // endTime	开始时间。13位时间戳；
+            // operate流向。1.增加，2.减少；
+
+            const params = {
+                size: state.pagigation.size,
+                current: state.pagigation.current,
+                status: 0,
+                startTime: 0,
+                endTime: 0,
+                operate: 0,
+                businessType: 0
+            }
+            queryCapitalFlowList(params).then(res => {
+
+            })
+        }
+
+        onBeforeMount(() => {
+            queryFundDetail()
+        })
 
         return {
             proBtns,
@@ -245,6 +305,7 @@ export default {
             onConfirm,
             dateReset,
             dateDownItem,
+            queryFundDetail,
             ...toRefs(state)
         }
     }
@@ -259,7 +320,8 @@ export default {
     overflow: auto;
     .oper-area {
         .condition {
-            margin-bottom: rem(40px);
+            margin-top: rem(20px);
+            margin-bottom: rem(30px);
             padding: 0 rem(30px);
             .title {
                 line-height: rem(60px);
@@ -267,7 +329,7 @@ export default {
             .van-button {
                 margin-right: rem(20px);
                 margin-bottom: rem(20px);
-                padding: 0 rem(15px);
+                padding: 0 rem(13px);
                 &.active {
                     border-color: dodgerblue;
                 }

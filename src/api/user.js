@@ -210,3 +210,17 @@ export function queryDepositPageList (data) {
         data
     })
 }
+
+/* 资金明细查询 */
+
+export function queryCapitalFlowList (data) {
+    return request({
+        url: '/global/tradeapi.OrderApiService.queryCapitalFlowList',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            group: 'tradeApi'
+        },
+        data
+    })
+}
