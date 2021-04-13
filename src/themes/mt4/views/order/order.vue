@@ -71,7 +71,7 @@
         </div>
     </div>
     <van-popup v-model:show="pendingVisible" :close-on-click-overlay="false" :style="{ width: '100%', height: '100%' }">
-        <Pending @onHide="pendingVisible = false" />
+        <Pending @onHide="pendingVisible = false" :data="orderParams" :product="product" />
     </van-popup>
 </template>
 
@@ -120,7 +120,8 @@ export default {
             value: 3,
             pendingPrice: 0, // 挂单价
             stopLoss: 0, // 止损单价
-            takeProfit: 0 // 止盈单价
+            takeProfit: 0, // 止盈单价
+            orderParams:{}, // 订单入参
         })
         watch(
             () => state.pendingPrice,
@@ -151,9 +152,9 @@ export default {
                 return true
             } else if (takeProfit > 0 && (takeProfit < buyProfitMin || takeProfit > buyProfitMax)) {
                 return true
-            } else if (openOrderVal === 2 && (pendingPrice < buyLimitMin || pendingPrice > buyLimitMax)) {
+            } else if (openOrderVal === 2 && (!buyLimitMax || pendingPrice < buyLimitMin || pendingPrice > buyLimitMax)) {
                 return true
-            } else if (openOrderVal === 4 && (pendingPrice < buyStopMin || pendingPrice > buyStopMax)) {
+            } else if (openOrderVal === 4 && (!buyStopMax || pendingPrice < buyStopMin || pendingPrice > buyStopMax)) {
                 return true
             } else {
                 return false
@@ -173,9 +174,9 @@ export default {
                 return true
             } else if (takeProfit > 0 && (takeProfit < sellStopLossMin || takeProfit > sellStopLossMax)) {
                 return true
-            } else if (openOrderVal === 3 && (pendingPrice < sellLimitMin || pendingPrice > sellLimitMax)) {
+            } else if (openOrderVal === 3 && (!sellLimitMax || pendingPrice < sellLimitMin || pendingPrice > sellLimitMax)) {
                 return true
-            } else if (openOrderVal === 5 && (pendingPrice < sellStopMin || pendingPrice > sellStopMax)) {
+            } else if (openOrderVal === 5 && (!sellStopMax || pendingPrice < sellStopMin || pendingPrice > sellStopMax)) {
                 return true
             } else {
                 return false
@@ -202,23 +203,48 @@ export default {
         )
         if (!product.value) router.replace('/')
         // 点击下单按钮
-        const openOrder = direction => {
-            const requestPrice = direction === 'sell' ? product.value.sell_price : product.value.buy_price
+        const openOrder = direct => {
+            let requestPrice = direct === 'sell' ? product.value.sell_price : product.value.buy_price
+            let direction = direct === 'sell' ? 2 : 1;
+            let bizType = 1;
+            switch(state.openOrderSelected.val){
+                case 2:
+                case 3:
+                    bizType = 10;
+                    requestPrice = state.pendingPrice;
+                    break;
+                case 4:
+                case 5:
+                    bizType = 11;
+                    requestPrice = state.pendingPrice;
+                    break;
+                default:
+                    bizType = 1;
+                    break;
+            }
+            if([2,4].includes(state.openOrderSelected.val)){
+                direction = 1;
+            }else if([3,5].includes(state.openOrderSelected.val)){
+                direction = 2;
+            }
+            const p = Math.pow(10, product.value.symbolDigits)
             const params = {
-                bizType: 1, // 业务类型。0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
-                direction: direction === 'sell' ? 2 : 1, // 订单买卖方向。1-买；2-卖；
+                bizType, // 业务类型。0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
+                direction, // 订单买卖方向。1-买；2-卖；
                 symbolId: Number(product.value.symbol_id),
                 requestTime: Date.now(),
                 requestNum: state.volumn * product.value.contractSize,
-                requestPrice: Number(requestPrice),
-                stopLoss: Number(state.stopLoss) || undefined,
-                takeProfit: Number(state.takeProfit) || undefined
+                requestPrice: requestPrice * p,
+                stopLoss: Number(state.stopLoss) ? state.stopLoss * p : undefined,
+                takeProfit: Number(state.takeProfit) ? state.takeProfit * p : undefined
             }
             state.loading = true
+            console.log(params)
             addMarketOrder(params)
                 .then(res => {
                     state.loading = false
                     if (res.invalid()) return false
+                    state.orderParams = params;
                     state.pendingVisible = true
                 })
                 .catch(err => {

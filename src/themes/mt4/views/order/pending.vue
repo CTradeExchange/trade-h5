@@ -7,8 +7,11 @@
             订单正在进行排队处理...
         </p>
         <p class='desc'>
-            buy 1.00 EURUSD at 1.21350 <br />
-            sl:0.0000 tp: 0.00000
+            {{data.direction===1?'buy':'sell'}}
+            {{orderVolume +' '+ product.symbolName }} at
+            {{requestPrice}} <br />
+            sl: {{sl}}
+            tp: {{tp}}
         </p>
         <div class='footerBtn of-1px-top'>
             <button class='btn' @click='$emit("onHide")'>
@@ -19,9 +22,31 @@
 </template>
 
 <script>
+import { computed } from 'vue'
+import { getDecimalNum } from '@/utils/calculation';
 export default {
-    // emits: ['onHide'],
-
+    props: ['data','product'],
+    setup(props){
+        const orderVolume = computed(()=>{
+            const volumeDigit = getDecimalNum(props.product.minVolume)
+            return (props.data.requestNum/props.product.contractSize).toFixed(volumeDigit);
+        });
+        const requestPrice = computed(()=> (props.data.requestPrice/Math.pow(10, props.product.symbolDigits)).toFixed(props.product.symbolDigits));
+        const sl = computed(()=> {
+            if(!props.data.stopLoss) return Number(0).toFixed(props.product.symbolDigits)
+            return (props.data.stopLoss/Math.pow(10, props.product.symbolDigits)).toFixed(props.product.symbolDigits)
+        });
+        const tp = computed(()=> {
+            if(!props.data.takeProfit) return Number(0).toFixed(props.product.symbolDigits)
+            return (props.data.takeProfit/Math.pow(10, props.product.symbolDigits)).toFixed(props.product.symbolDigits)
+        });
+        return {
+            orderVolume,
+            requestPrice,
+            sl,
+            tp,
+        }
+    }
 }
 </script>
 

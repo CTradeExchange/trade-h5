@@ -70,3 +70,15 @@ export function queryHistoryCloseOrderList (data) {
         data
     })
 }
+/* 查看预埋单列表 */
+export function queryPBOOrderPage (data) {
+    return request({
+        url: '/global/tradeapi.OrderApiService.queryPBOOrderPage',
+        method: 'post',
+        headers: {
+            group: 'tradeApi',
+            version: '0.0.1',
+        },
+        data
+    })
+}

@@ -1,4 +1,4 @@
-import { queryPositionPage, queryHistoryCloseOrderList } from '@/api/trade'
+import { queryPositionPage, queryHistoryCloseOrderList, queryPBOOrderPage } from '@/api/trade'
 import CheckAPI from '@/utils/checkAPI';
 
 const EmptyProfitLossRang = {
@@ -22,6 +22,7 @@ export default {
         positionList: [], // 持仓列表
         historyLoading: false, // 历史记录加载
         historyList: [], // 平仓历史记录列表
+        pendingList: [], // 预埋单列表
     },
     getters: {
         // 当前操作的产品
@@ -123,6 +124,9 @@ export default {
         Update_historyList(state, data) {
             state.historyList = data
         },
+        Update_pendingList(state, data) {
+            state.pendingList = data
+        },
     },
     actions: {
         // 查询持仓列表
@@ -130,6 +134,7 @@ export default {
             const accountListLen = rootState._user.customerInfo?.accountList?.length
             if (!accountListLen) return Promise.resolve(new CheckAPI({ code: '0', data: [] })) //没有交易账户直接返回空持仓
             commit('Update_positionLoading', true)
+            dispatch('queryPBOOrderPage');
             return queryPositionPage(params).then((res) => {
                 commit('Update_positionLoading', false)
                 if (res.check()) {
@@ -148,6 +153,17 @@ export default {
                 if (res.check()) {
                     const newList = params.current === 1 ? res.data.list : state.historyList.concat(res.data.list)
                     commit('Update_historyList', newList)
+                }
+                return res
+            })
+        },
+        // 预埋单列表
+        queryPBOOrderPage({ dispatch, commit, state, rootState }, params = {}) {
+            const accountListLen = rootState._user.customerInfo?.accountList?.length
+            if (!accountListLen) return Promise.resolve(new CheckAPI({ code: '0', data: [] })) //没有交易账户直接返回空数据
+            return queryPBOOrderPage(params).then((res) => {
+                if (res.check()) {
+                    commit('Update_pendingList', res.data)
                 }
                 return res
             })

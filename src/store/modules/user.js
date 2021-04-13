@@ -45,10 +45,12 @@ export default {
         },
         // 查询客户信息
         findCustomerInfo ({ dispatch, commit, state }, params = {}) {
+            commit('Update_loginLoading', true)
             return findCustomerInfo().then((res) => {
                 if (res.check()) {
                     commit('Update_customerInfo', res.data)
                 }
+                commit('Update_loginLoading', false)
                 return res
             })
         }

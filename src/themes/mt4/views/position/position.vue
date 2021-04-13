@@ -7,10 +7,13 @@
     </Top>
     <div class="container">
         <CapitalList :data='capitalListData' />
-        <div class='titleBar'>
-            价位
-        </div>
+        <div class='titleBar'> 价位 </div>
         <PositionList  @refresh="refresh"/>
+        <template v-if="pendingList.length">
+            <div class='titleBar'> 订单 </div>
+            <PendingList  @refresh="refresh"/>
+        </template>
+
     </div>
 
     <!-- 排序 actionsheet -->
@@ -21,7 +24,8 @@
 import Top from '@m/layout/top'
 import CapitalList from '@m/components/capitalList'
 import PositionList from '@m/modules/positionList/positionList'
-import { reactive, toRefs } from 'vue'
+import PendingList from '@m/modules/pendingList/pendingList'
+import { reactive, toRefs, computed } from 'vue'
 import { useStore } from 'vuex'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useRouter } from 'vue-router'
@@ -29,11 +33,13 @@ export default {
     components: {
         CapitalList,
         PositionList,
+        PendingList,
         Top,
     },
     setup () {
         const store = useStore()
         const router = useRouter()
+        const pendingList = computed(() => store.state._trade.pendingList)
         const sortActionsSelected = 'van-badge__wrapper van-icon van-icon-down'
         const sortActions = [
             { name: '订单', feild: 'order', className: sortActionsSelected },
@@ -80,6 +86,7 @@ export default {
         }
         return {
             ...toRefs(state),
+            pendingList,
             actionSheetOnSelect,
             newOrder,
             refresh,
