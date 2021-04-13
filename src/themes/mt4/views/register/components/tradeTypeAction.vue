@@ -17,9 +17,9 @@ export default {
             actionSheetVisible:false
         })
         const actionsList = computed(()=> store.state._base.wpCompanyInfo.tradeTypeList)
-        const currentAction = computed(()=> actionsList.value.find(el=>el.value==props.modelValue))
+        const currentAction = computed(()=> actionsList.value.find(el=>el.id==props.modelValue))
         const actionOnSelect = (item)=>{
-            emit('update:modelValue', item.value)
+            emit('update:modelValue', item.id)
             state.actionSheetVisible = false
         }
 

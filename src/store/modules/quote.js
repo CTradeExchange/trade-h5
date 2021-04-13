@@ -74,7 +74,7 @@ export default {
             const guestCustomerGroupId = rootState._base.wpCompanyInfo.customerGroupId
             const params = {
                 symbolIds: newSymbolIds.join(),
-                tradeType: rootState._base.tradeType,
+                tradeType: parseInt(rootState._base.tradeType),
                 customerGroupId: rootState._user.customerInfo?.customerGroupId ?? guestCustomerGroupId,
                 accountId: rootState._user.customerInfo?.accountId,
             }

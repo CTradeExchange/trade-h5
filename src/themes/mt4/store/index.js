@@ -57,9 +57,6 @@ export default createStore({
         getBankDictList ({ dispatch, commit, state }) {
             return getBankDict({ parentCode: 'bank_code' }).then(res => {
                 if (res.check()) {
-                    // res.data.forEach(el => {
-                    //     el.name += ' ' + el.code
-                    // })
                     commit('Update_bankList', res.data)
                 }
                 return res

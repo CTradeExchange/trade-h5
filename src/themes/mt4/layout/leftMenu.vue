@@ -24,6 +24,8 @@
                 <li class='item' @click="visible=false;$router.push('/history')"> <i class='icon icon_lishi'></i> <strong>历史</strong> </li>
                 <li class='item' @click="visible=false;$router.push('/news')"> <i class='icon icon_xinwen'></i> <strong>新闻</strong> </li>
                 <li class='item' @click="visible=false;$router.push('/onlineService')"> <i class='icon icon_xinxi'></i> <strong>信息</strong> </li>
+                <li class='item' @click="visible=false;$router.push('/desposit')"> <i class='icon icon_xinxi'></i> <strong>存款</strong> </li>
+                <li class='item' @click="visible=false;$router.push('/withdraw')"> <i class='icon icon_xinxi'></i> <strong>取款</strong> </li>
                 <li class='item'> <i class='icon icon_shezhi'></i> <strong>设置</strong> </li>
             </ul>
         </div>
@@ -42,66 +44,66 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.mainWrap{
+.mainWrap {
     position: relative;
     width: 70vw;
     overflow: hidden;
 }
-.flag{
+.flag {
     position: absolute;
-    display: block;
-    right: 0;
     top: 0;
-    color: #fff;
-    background: #4dc90f;
+    right: 0;
+    display: block;
     width: rem(180px);
     height: rem(44px);
+    color: #FFF;
+    font-weight: bold;
+    font-size: rem(24px);
     line-height: rem(44px);
     text-align: center;
-    font-size: rem(24px);
-    text-shadow:#267200 1px 0 0,#267200 0 1px 0,#267200 -1px 0 0,#267200 0 -1px 0;
-    font-weight: bold;
+    text-shadow: #267200 1px 0 0, #267200 0 1px 0, #267200 -1px 0 0, #267200 0 -1px 0;
+    background: #4DC90F;
     transform: rotate(45deg) translate(rem(44px), rem(-20px));
 }
-
-.userFigure{
-    padding: rem(30px);
+.userFigure {
     display: flex;
+    padding: rem(30px);
     font-size: rem(24px);
     line-height: 1.5;
-    .face{
+    .face {
         width: rem(100px);
         height: rem(100px);
-        img{
+        img {
             width: rem(60px);
             height: rem(60px);
         }
     }
-    strong{
+    strong {
         font-size: rem(28px);
     }
-    .accountManager{
-        color: var(--primary);
+    .accountManager {
         display: block;
         margin-top: rem(20px);
+        color: var(--primary);
     }
 }
-.menuList{
+.menuList {
     padding: rem(10px) 0;
     font-size: rem(26px);
-    .item{
+    .item {
+        @include active()
+    ;
         padding: rem(19px) rem(30px);
-        strong{
+        strong {
             vertical-align: middle;
         }
-        @include active()
     }
-    .icon{
+    .icon {
         display: inline-block;
-        margin-right: .8em;
+        margin-right: 0.8em;
+        color: var(--mutedColor);
         font-size: rem(52px);
         vertical-align: middle;
-        color: var(--mutedColor);
     }
 }
 </style>

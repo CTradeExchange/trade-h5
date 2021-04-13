@@ -39,7 +39,7 @@ export default {
         })
         const actionsList = computed(() => store.state._base.wpCompanyInfo.currencyList)
         const actionOnSelect = (item) => {
-            emit('update:modelValue', item.value)
+            emit('update:modelValue', item.code)
             state.actionSheetVisible = false
         }
 
