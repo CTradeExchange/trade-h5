@@ -143,7 +143,7 @@ export default {
                 verifyCode: state.checkCode,
                 currency: state.currency,
                 tradeType: state.tradeType,
-                token,
+                sendToken:token,
                 utmSource: getQueryVariable('utm_source'),
                 utmMedium: getQueryVariable('utm_medium'),
                 utmCampaign: getQueryVariable('utm_campaign'),
@@ -170,7 +170,7 @@ export default {
             validator.validate(verifyParams,{ first: true }).then(res => {
                 const params = {
                     bizType: state.openType === 'mobile' ? 'SMS_REGISTER_VERIFICATION_CODE' : 'EMAIL_REGISTER_VERIFICATION_CODE',
-                    toUser: state.openType === 'mobile' ? String(state.zone * 1) + ' ' + state.mobile : state.email,
+                    toUser: state.openType === 'mobile' ? String(state.zone) + ' ' + state.mobile : state.email,
                 }
                 verifyCodeSend(params).then(res => {
                     state.verifyCodeLoading = false;
