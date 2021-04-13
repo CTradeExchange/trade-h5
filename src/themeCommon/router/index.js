@@ -6,7 +6,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "withdraw" */ '../user/withdraw.vue'),
         meta: {
             title: '取款',
-            footerMenu: false
+            footerMenu: false,
+            roles: ['User'],
         }
     },
     {
@@ -15,7 +16,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "withdrawRecord" */ '../user/withdrawRecord.vue'),
         meta: {
             title: '取款记录',
-            footerMenu: false
+            footerMenu: false,
+            roles: ['User'],
         }
     },
     {
@@ -24,7 +26,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "addBank" */ '../user/addBank.vue'),
         meta: {
             title: '添加银行卡',
-            footerMenu: false
+            footerMenu: false,
+            roles: ['User'],
         }
     },
     {
@@ -33,7 +36,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "addBank" */ '../user/desposit.vue'),
         meta: {
             title: '存款',
-            footerMenu: false
+            footerMenu: false,
+            roles: ['User'],
         }
     },
     {
@@ -42,7 +46,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "addBank" */ '../user/depositRecord.vue'),
         meta: {
             title: '存款记录',
-            footerMenu: false
+            footerMenu: false,
+            roles: ['User'],
         }
     },
     {
@@ -51,7 +56,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "msg" */ '../user/msg.vue'),
         meta: {
             title: '消息中心',
-            footerMenu: false
+            footerMenu: false,
+            roles: ['User'],
         }
     },
     {
@@ -60,7 +66,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "fundDetail" */ '../user/fundDetail.vue'),
         meta: {
             title: '资金明细',
-            footerMenu: false
+            footerMenu: false,
+            roles: ['User'],
         }
     },
     {
@@ -69,7 +76,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "fundDetail" */ '../user/fund.vue'),
         meta: {
             title: '账户资金',
-            footerMenu: false
+            footerMenu: false,
         }
     },
     {

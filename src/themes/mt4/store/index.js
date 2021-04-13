@@ -48,7 +48,7 @@ export default createStore({
                     // res.data.forEach(el => {
                     //     el.name += ' ' + el.code
                     // })
-                    commit('Update_bankList', res.data)
+                    commit('Update_zoneList', res.data)
                 }
                 return res
             })
@@ -60,7 +60,7 @@ export default createStore({
                     // res.data.forEach(el => {
                     //     el.name += ' ' + el.code
                     // })
-                    commit('Update_zoneList', res.data)
+                    commit('Update_bankList', res.data)
                 }
                 return res
             })

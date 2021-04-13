@@ -27,9 +27,9 @@
                     收款银行卡
                 </p>
                 <div v-if='bankList.length > 0' class='bank' @click='openSheet'>
-                    <img alt='' :src='checkedBank.icon' srcset='' />
+                    <i class='bank-icons-sm' :class="'bk-'+ checkedBank.bankCode"></i>
                     <span class='bank-no'>
-                        {{ checkedBank.bankName }} {{ checkedBank.bankCardNumber }}
+                        {{ checkedBank.bankName }} {{ hideMiddle(checkedBank.bankCardNumber) }}
                     </span>
                     <van-icon name='arrow-down' />
                 </div>
@@ -52,9 +52,9 @@
     <van-action-sheet v-model:show='show' round='false' title='选择收款银行卡'>
         <div class='bank-list'>
             <div v-for='(item, index) in bankList' :key='index' class='bank' @click='chooseBank(item)'>
-                <img alt='' :src='item.icon' srcset='' />
+                <i class='bank-icons-sm' :class="'bk-'+ item.bankCode"></i>
                 <span class='bank-no'>
-                    {{ item.bankName }} {{ item.bankCardNumber }}
+                    {{ item.bankName }} {{ hideMiddle(item.bankCardNumber) }}
                 </span>
                 <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
             </div>
@@ -171,6 +171,10 @@ export default {
             if (parseFloat(state.amount) > parseFloat(state.withdrawConfig.withdrawAmount)) {
                 return Toast('余额不足')
             }
+            const toast = Toast.loading({
+                message: '加载中...',
+                forbidClick: true,
+            })
 
             // companyId	Long	必填	公司ID
             // customerNo	String	必填	客户编号
@@ -185,12 +189,11 @@ export default {
             // bankName	String	必填	银行卡银行名称
             // bankCardNo	String	必填	银行卡号
             // country	String	必填	国家
-            debugger
             const params = {
                 customerNo: customInfo.value.customerNo,
                 accountId: customInfo.value.accountId,
                 customerGroupId: customInfo.value.customerGroupId,
-                accountCurrency: customInfo.value.ext1,
+                accountCurrency: customInfo.value.currency,
                 withdrawCurrency: state.withdrawRate.withdrawCurrency,
                 amount: state.amount,
                 rate: state.withdrawRate.exchangeRate,
@@ -202,6 +205,7 @@ export default {
             }
 
             handleWithdraw(params).then(res => {
+                toast.clear()
                 if (res.check()) {
                     Toast(res.msg)
                     console.log('res', res)
@@ -273,6 +277,11 @@ export default {
             })
         }
 
+        // 处理银行卡号显示
+        const hideMiddle = (value) => {
+            return `${value.substring(0, 4)} ${'*'.repeat(value.length - 8).replace(/(.{4})/g, '$1 ')}${value.length % 4 ? ' ' : ''}${value.slice(-4)}`
+        }
+
         onBeforeMount(() => {
             // 获取取款配置
             getWithdrawConfig()
@@ -291,7 +300,8 @@ export default {
             getAll,
             toAddBank,
             confirm,
-            customInfo
+            customInfo,
+            hideMiddle
         }
     }
 
@@ -375,10 +385,8 @@ export default {
     .bank-no {
         flex: 1;
     }
-    img {
-        width: rem(55px);
-        height: rem(55px);
-        margin: rem(20px) rem(30px);
+    .bank-icons-sm {
+        margin: rem(30px);
     }
     .van-icon {
         margin-right: rem(20px);

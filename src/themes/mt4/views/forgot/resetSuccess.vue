@@ -1,7 +1,6 @@
 <template>
     <div class='wrap'>
         <i class='icon_success'></i>
-        <van-image fit='contain' src='../../images/googleLogo.jpg' />
         <p class='t1'>
             恭喜！新密码重设成功
         </p>

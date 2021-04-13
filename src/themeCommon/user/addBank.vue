@@ -49,7 +49,33 @@
         @select='onSelectCurrency'
     />
 
-    <van-action-sheet
+    <van-popup v-model:show='bankShow' position='right' :style="{ height: '100%' }">
+        <div class='bank-list'>
+            <div v-for='item in bankDict' :key='item.code' class='bank-item' @click='onSelectBank(item)'>
+                <i class='bank-icons-sm' :class="'bk-'+ item.code"></i>
+                {{ item.name }}
+            </div>
+        </div>
+    </van-popup>
+
+    <van-dialog
+        v-model:show='addSuccessShow'
+        class-name='add-success'
+        confirm-button-text='查看'
+        show-cancel-button='false'
+        @cancel='cancel'
+        @confirm='toPersonal'
+    >
+        <i class='icon_success'></i>
+        <p class='title'>
+            提交成功
+        </p>
+        <p class='content'>
+            预计2-3个工作日完成审核（节假期顺延），如需要其它帮助，请联系客服。
+        </p>
+    </van-dialog>
+
+    <!-- <van-action-sheet
         v-model:show='bankShow'
         cancel-text='取消'
         close-on-click-action
@@ -66,29 +92,32 @@
         <div v-for='(item, index) in banksActions' :key='index' class='bank-item' @click='onSelectBank(item)'>
             {{ item.name }}
         </div>
-    </van-action-sheet>
+    </van-action-sheet> -->
 </template>
 
 <script>
 import { useRouter } from 'vue-router'
 import top from '@/components/top'
-import { onBeforeMount, reactive, toRefs } from 'vue'
+import { onBeforeMount, reactive, toRefs, computed } from 'vue'
 import { areaList } from '@/utils/area'
 import Rule from './addbank_rule'
 import { useStore } from 'vuex'
 import Schema from 'async-validator'
-import { Toast } from 'vant'
+import { Toast, Dialog } from 'vant'
 import { addBank } from '@/api/user'
-import CurrencyAction from '../../themes/mt4/views/register/components/currencyAction'
+import CurrencyAction from '@/components/currencyAction'
 
 export default {
     components: {
         top,
-        CurrencyAction
+        CurrencyAction,
+        Dialog
     },
     setup (props, { emit, attrs }) {
         const router = useRouter()
         const store = useStore()
+        const bankDict = computed(() => store.state.bankDict)
+
         const state = reactive({
             userName: '',
             bankNo: '',
@@ -98,13 +127,9 @@ export default {
             bankArea: '',
             areaShow: false,
             bankShow: false,
-            banksActions: [
-                { name: '招商银行' },
-                { name: '建设银行' },
-                { name: '农业银行' },
-
-            ],
+            checkedBankCode: '',
             currencyShow: false,
+            addSuccessShow: false,
             currencyActions: [{ name: '人民币' }, { name: '美元' }
             ]
         })
@@ -119,6 +144,7 @@ export default {
         const onSelectBank = (item) => {
             state.bankShow = false
             state.bankName = item.name
+            state.checkedBankCode = item.code
         }
 
         const onSelectCurrency = (item) => {
@@ -137,6 +163,7 @@ export default {
             // country	国家
             // province	省
             // city	市
+
             const params = {
                 bankAccountName: state.userName,
                 bankCardNumber: state.bankNo,
@@ -144,10 +171,13 @@ export default {
                 bankCurrency: state.currency,
                 bankAddress: state.bankArea,
                 country: '中国',
-                province: state.area[0],
-                city: state.area[1]
+                province: state.area.split(',')[0],
+                city: state.area.split(',')[1],
+                bankCode: state.checkedBankCode
             }
+
             const validator = new Schema(Rule)
+
             validator.validate(params, (errors, fields) => {
                 if (errors) {
                     return Toast(errors[0].message)
@@ -157,11 +187,29 @@ export default {
         }
 
         const handleAddBank = (params) => {
+            const toast = Toast.loading({
+                message: '加载中...',
+                forbidClick: true,
+            })
             addBank(params).then(res => {
+                toast.clear()
                 if (res.check()) {
-                    Toast(res.msg)
+                    state.addSuccessShow = true
                 }
             })
+        }
+
+        const toPersonal = () => {
+            router.push('/personal')
+        }
+
+        const cancel = () => {
+            state.userName = ''
+            state.bankNo = ''
+            state.currency = ''
+            state.bankName = ''
+            state.bankArea = ''
+            state.area = ''
         }
 
         store.dispatch('getBankDictList')
@@ -176,7 +224,10 @@ export default {
             onSelectCurrency,
             handleAreaConfirm,
             ...toRefs(state),
-            handleConfirm
+            handleConfirm,
+            toPersonal,
+            bankDict,
+            cancel
         }
     }
 }
@@ -194,9 +245,55 @@ export default {
         font-size: rem(34px);
     }
 }
-.bank-item {
-    font-size: rem(30px);
-    line-height: rem(80px);
+.bank-list {
+    min-width: rem(400px);
+    //min-width: 2.66667rem;
+    padding: rem(30px) rem(50px) 0 rem(50px);
+    overflow-y: auto;
+    .bank-item {
+        position: relative;
+        padding: rem(15px) 0 rem(15px) 0;
+        font-size: rem(30px);
+        line-height: rem(80px);
+        line-height: rem(60px);
+        text-align: left;
+        &::after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 200%;
+            height: 200%;
+            border-bottom: 1px solid #E3E3E3;
+            -webkit-transform: scale(0.5);
+            transform: scale(0.5);
+            -webkit-transform-origin: 0 0;
+            transform-origin: 0 0;
+            content: '';
+            pointer-events: none;
+        }
+    }
+}
+
+</style>
+
+<style lang="scss">
+@import '@/sass/mixin.scss';
+.add-success {
+    padding: rem(30px);
     text-align: center;
+    .icon_success {
+        color: var(--success);
+        font-size: rem(96px);
+    }
+    .title {
+        line-height: rem(80px);
+    }
+    .content {
+        margin: rem(20px) 0;
+        color: var(--mutedColor);
+        font-size: rem(28px);
+    }
 }
 </style>

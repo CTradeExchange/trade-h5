@@ -17,14 +17,14 @@ export default {
         const loginParams = getLoginParams()
         const token = getToken()
         if (loginParams) {
-            store.dispatch('_user/login', loginParams).then(res=>{
-                if(res.invalid()){
+            store.dispatch('_user/login', loginParams).then(res => {
+                if (res.invalid()) {
                     console.log(111)
                     removeLoginParams()
-                    router.push({name:'Login',query:{back: encodeURIComponent(route.path)}})
+                    router.push({ name: 'Login', query: { back: encodeURIComponent(route.path) } })
                 }
             })
-        } else if(token){
+        } else if (token) {
             store.dispatch('_user/findCustomerInfo')
         }
     },
