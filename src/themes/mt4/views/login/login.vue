@@ -54,43 +54,61 @@
     </div>
 
     <!-- 用户KYC资料验证 -->
-    <van-popup v-model:show='kycPop' :style="{'border-radius':'8px'}" :close-on-click-overlay="false">
+    <van-popup v-model:show='kycPop' :close-on-click-overlay='false' :style="{ 'border-radius':'8px' }">
         <section class='popContainer'>
-            <div class="kycTimeLine">
+            <div class='kycTimeLine'>
                 <timeline>
                     <timelineItem>
-                        <template #icon><span class="icon_upload primary" ></span></template>
+                        <template #icon>
+                            <span class='icon_upload primary'></span>
+                        </template>
                         <p>2021.03.26 16:23:26提交成功</p>
                     </timelineItem>
                     <timelineItem>
-                        <template #icon><span class="icon_wait primary" ></span></template>
+                        <template #icon>
+                            <span class='icon_wait primary'></span>
+                        </template>
                         <p>您的资料正在审核中，请耐心等待</p>
                     </timelineItem>
                     <timelineItem>
-                        <template #icon><span class="icon_fail red" ></span></template>
+                        <template #icon>
+                            <span class='icon_fail red'></span>
+                        </template>
                         <p>您的资料审核失败</p>
                         <p>原因：姓名和身份证号不匹配</p>
                     </timelineItem>
                 </timeline>
             </div>
-            <div class="btnBox">
+            <div class='btnBox'>
                 <!-- <button class="btn">重新提交</button> -->
-                <button class="btn" @click="kycPop=false">关闭</button>
+                <button class='btn' @click='kycPop=false'>
+                    关闭
+                </button>
             </div>
         </section>
     </van-popup>
 
     <!-- 设置登录密码 -->
-    <van-popup v-model:show='loginPwdPop' :style="{'border-radius':'8px'}" :close-on-click-overlay="false">
+    <van-popup v-model:show='loginPwdPop' :close-on-click-overlay='false' :style="{ 'border-radius':'8px' }">
         <section class='popContainer'>
-            <a href="javascript:;" class="noTip" @click="noTip">不再提醒</a>
-            <div class="containerBox">
-                <p class="iconPwd"><span class="icon_password"></span></p>
-                <p class="tipContent" >您的登录密码还未设置，设置后便可通过密码进行登录，是否现在去设置？</p>
+            <a class='noTip' href='javascript:;' @click='noTip'>
+                不再提醒
+            </a>
+            <div class='containerBox'>
+                <p class='iconPwd'>
+                    <span class='icon_password'></span>
+                </p>
+                <p class='tipContent'>
+                    您的登录密码还未设置，设置后便可通过密码进行登录，是否现在去设置？
+                </p>
             </div>
-            <div class="btnBox">
-                <button class="btn" @click="loginPwdSet">去设置</button>
-                <button class="btn muted" @click="loginPwdSetNext">下次</button>
+            <div class='btnBox'>
+                <button class='btn' @click='loginPwdSet'>
+                    去设置
+                </button>
+                <button class='btn muted' @click='loginPwdSetNext'>
+                    下次
+                </button>
             </div>
         </section>
     </van-popup>
@@ -113,7 +131,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
 import Rule from './rule'
-import {timeline,timelineItem} from '@m/components/timeline'
+import { timeline, timelineItem } from '@m/components/timeline'
 
 export default {
     components: {
@@ -176,7 +194,7 @@ export default {
         }
 
         // 登录成功跳转
-        const loginToPath = ()=>{
+        const loginToPath = () => {
             const toURL = route.query.back ? decodeURIComponent(route.query.back) : '/'
             router.replace(toURL)
         }
@@ -185,10 +203,10 @@ export default {
         const loginSubmit = (params) => {
             store.dispatch('_user/login', params).then(res => {
                 // console.log(res)
-                if (res.invalid()) return false;
-                if(parseInt(res.data.loginPassStatus)===1 && !localGet('loginPwdIgnore')){
-                    state.loginPwdPop = true;
-                }else{
+                if (res.invalid()) return false
+                if (parseInt(res.data.loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
+                    state.loginPwdPop = true
+                } else {
                     loginToPath()
                 }
             })
@@ -213,7 +231,7 @@ export default {
                 verifyCodeSend(params).then(res => {
                     if (res.check()) {
                         token = res.data.token
-                        if(res.data.code) state.checkCode = res.data.code;
+                        if (res.data.code) state.checkCode = res.data.code
                         callback && callback()
                     }
                 })
@@ -225,20 +243,20 @@ export default {
         }
 
         // 设置登录密码
-        const loginPwdSet =  ()=>{
-            state.loginPwdPop = false;
-            router.push({name:"SetPwd"});
+        const loginPwdSet = () => {
+            state.loginPwdPop = false
+            router.push({ name: 'SetPwd' })
         }
         // 下次设置登录密码
-        const loginPwdSetNext =  ()=>{
-            state.loginPwdPop = false;
-            loginToPath();
+        const loginPwdSetNext = () => {
+            state.loginPwdPop = false
+            loginToPath()
         }
         // 设置登录密码不再提醒
-        const noTip =  ()=>{
-            localSet('loginPwdIgnore',true);
-            state.loginPwdPop = false;
-            loginToPath();
+        const noTip = () => {
+            localSet('loginPwdIgnore', true)
+            state.loginPwdPop = false
+            loginToPath()
         }
 
         // 获取国家验区号

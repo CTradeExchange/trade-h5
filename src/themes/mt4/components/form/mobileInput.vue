@@ -55,7 +55,19 @@ export default {
         }
     },
     computed: {
-        ...mapState(['zoneList'])
+        // ...mapState(['zoneList'])
+        zoneList () {
+            const zoneList = this.$store.state.zoneList
+            const tempArr = []
+            zoneList.forEach(item => {
+                const code = item.code.split('/').length > 1 ? item.code.split('/')[1] : item.code
+                tempArr.push({
+                    name: item.name + ' ' + code,
+                    code
+                })
+            })
+            return tempArr
+        }
     },
     watch: {
         zone (newval) {
