@@ -2,7 +2,7 @@
     <top back :menu="false" :sub-title="product.symbolCode" :title="product.symbolName" />
     <div v-if="product" class="orderWrap">
         <!-- 订单类型 -->
-        <div class="cell openType">
+        <div class="cell openType" v-if="!$route.query.positionId">
             <p class="title" @click="dropdownWrap = !dropdownWrap">
                 {{ openOrderSelected.name }}
             </p>
@@ -73,6 +73,7 @@
     <van-popup v-model:show="pendingVisible" :close-on-click-overlay="false" :style="{ width: '100%', height: '100%' }">
         <Pending @onHide="pendingVisible = false" :data="orderParams" :product="product" />
     </van-popup>
+    <Loading :show='loading' />
 </template>
 
 <script>
@@ -185,7 +186,10 @@ export default {
 
         watch(
             () => product.value.minVolume,
-            newval => (state.volumn = newval)
+            newval => (state.volumn = Math.max(newval,product.value.volumeStep)),
+            {
+                immediate: true
+            }
         )
         // 止损价格变更
         watch(
@@ -239,7 +243,6 @@ export default {
                 takeProfit: Number(state.takeProfit) ? state.takeProfit * p : undefined
             }
             state.loading = true
-            console.log(params)
             addMarketOrder(params)
                 .then(res => {
                     state.loading = false
@@ -385,20 +388,18 @@ export default {
     background: var(--bdColor);
 }
 .footerBtn {
-    // position: absolute;
-    // bottom: 0;
-    // left: 0;
     position: relative;
     display: flex;
     width: 100%;
     height: rem(100px);
+    border-top: 1px solid var(--btnLine);
     &.line::before {
         position: absolute;
         top: 20%;
         bottom: 20%;
         left: 50%;
         width: 1px;
-        background: rgba(0, 0, 0, 0.15);
+        background: var(--btnLine);
         content: '';
     }
     .col {
@@ -412,6 +413,7 @@ export default {
         font-size: rem(28px);
         line-height: 1;
         text-align: center;
+        background: var(--btnColor);
         &:disabled {
             opacity: 0.4;
         }

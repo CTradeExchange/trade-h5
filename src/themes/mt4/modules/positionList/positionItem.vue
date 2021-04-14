@@ -17,7 +17,7 @@
             </div>
             <div class='col'>
                 <p class='price riseColor'>
-                    -34.66
+                    -88.66
                 </p>
             </div>
         </div>

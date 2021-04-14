@@ -13,7 +13,6 @@
             <div class='titleBar'> 订单 </div>
             <PendingList  @refresh="refresh"/>
         </template>
-
     </div>
 
     <!-- 排序 actionsheet -->

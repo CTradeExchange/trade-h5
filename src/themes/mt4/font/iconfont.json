@@ -6,6 +6,76 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "20974825",
+      "name": "存款",
+      "font_class": "cunkuan",
+      "unicode": "e665",
+      "unicode_decimal": 58981
+    },
+    {
+      "icon_id": "20974826",
+      "name": "个人信息",
+      "font_class": "gerenxinxi",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "20974827",
+      "name": "取款",
+      "font_class": "qukuan",
+      "unicode": "e667",
+      "unicode_decimal": 58983
+    },
+    {
+      "icon_id": "20974828",
+      "name": "资金明细",
+      "font_class": "zijinmingxi",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    },
+    {
+      "icon_id": "20974829",
+      "name": "界面",
+      "font_class": "jiemian",
+      "unicode": "e669",
+      "unicode_decimal": 58985
+    },
+    {
+      "icon_id": "20905074",
+      "name": "全部已读",
+      "font_class": "quanbuyidu",
+      "unicode": "e660",
+      "unicode_decimal": 58976
+    },
+    {
+      "icon_id": "20905075",
+      "name": "图表线",
+      "font_class": "tubiaoxian",
+      "unicode": "e661",
+      "unicode_decimal": 58977
+    },
+    {
+      "icon_id": "20905076",
+      "name": "相机",
+      "font_class": "xiangji",
+      "unicode": "e662",
+      "unicode_decimal": 58978
+    },
+    {
+      "icon_id": "20905077",
+      "name": "柱形图",
+      "font_class": "zhuxingtu",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "20905078",
+      "name": "阴阳烛",
+      "font_class": "yinyangzhu",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    },
+    {
       "icon_id": "20683921",
       "name": "close",
       "font_class": "close",
