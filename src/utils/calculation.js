@@ -46,8 +46,9 @@ export function minus (num1=0, num2=0) {
 export function divide (num1=0, num2=1) {
     const r1 = getDecimalNum(num1)
     const r2 = getDecimalNum(num2)
-    const m = Math.pow(10, Math.max(r1, r2))
-    return (num1 * m).toFixed(0) / (num2 * m).toFixed(m)
+    const maxDigit = Math.max(r1, r2)
+    const m = Math.pow(10, maxDigit)
+    return (num1 * m).toFixed(0) / (num2 * m).toFixed(maxDigit)*1
 }
 /* 乘法 */
 export function mul (a=0, b=0) {

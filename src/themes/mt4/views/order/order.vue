@@ -52,28 +52,12 @@
     </div>
 
     <!-- 底部下单按钮 -->
-    <div class="footerBtn line" v-if="openOrderSelected.val === 1">
-        <div class="col">
-            <button class="btn sellColor" :disabled="loading || sellDisabled" @click="openOrder('sell')">
-                SELL
-            </button>
-        </div>
-        <div class="col">
-            <button class="btn buyColor" :disabled="loading || buyDisabled" @click="openOrder('buy')">
-                BUY
-            </button>
-        </div>
-    </div>
-    <div class="footerBtn" v-else>
-        <div class="col">
-            <button class="btn buyColor" v-if="[2, 4].includes(openOrderSelected.val)" :disabled="loading || buyDisabled" @click="openOrder()">下单</button>
-            <button class="btn sellColor" v-else-if="[3, 5].includes(openOrderSelected.val)" :disabled="loading || sellDisabled" @click="openOrder()">下单</button>
-        </div>
-    </div>
+    <FooterBtn :loading="loading" :openOrderSelected="openOrderSelected" :pendingPrice="pendingPrice" :stopLoss="stopLoss" :takeProfit="takeProfit" @openOrder="openOrder" />
+
     <van-popup v-model:show="pendingVisible" :close-on-click-overlay="false" :style="{ width: '100%', height: '100%' }">
         <Pending @onHide="pendingVisible = false" :data="orderParams" :product="product" />
     </van-popup>
-    <Loading :show='loading' />
+    <Loading :show="loading" />
 </template>
 
 <script>
@@ -87,8 +71,10 @@ import { useRoute, useRouter } from 'vue-router'
 import lightweightChart from './components/lightweightChart'
 import OrderVolumn from './components/orderVolumn'
 import PriceStepper from './components/priceStepper'
+import FooterBtn from './components/footerBtn'
 import Pending from './pending'
-import { minus } from '@/utils/calculation'
+import { minus, divide, getDecimalNum } from '@/utils/calculation'
+import { Toast } from 'vant'
 export default {
     components: {
         Pending,
@@ -96,6 +82,7 @@ export default {
         lightweightChart,
         PriceStepper,
         Price,
+        FooterBtn,
         top
     },
     setup() {
@@ -122,7 +109,7 @@ export default {
             pendingPrice: 0, // 挂单价
             stopLoss: 0, // 止损单价
             takeProfit: 0, // 止盈单价
-            orderParams:{}, // 订单入参
+            orderParams: {} // 订单入参
         })
         watch(
             () => state.pendingPrice,
@@ -137,59 +124,12 @@ export default {
         const product = computed(() => store.getters.productActived)
         const positionList = computed(() => store.state._trade.positionList)
         const profitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
-        const pendingPriceRang = computed(() => store.getters['_trade/pendingPriceRang'])
 
-        // 是否符合买入的止盈止损范围
-        const buyDisabled = computed(() => {
-            const [buyProfitMin, buyProfitMax] = profitLossRang.value.buyProfitRange
-            const [buyStopLossMin, buyStopLossMax] = profitLossRang.value.buyStopLossRange
-            const [buyLimitMin, buyLimitMax] = pendingPriceRang.value.buyLimitRange
-            const [buyStopMin, buyStopMax] = pendingPriceRang.value.buyStopRange
-            const openOrderVal = state.openOrderSelected.val
-            const pendingPrice = Number(state.pendingPrice)
-            const stopLoss = Number(state.stopLoss)
-            const takeProfit = Number(state.takeProfit)
-            if (stopLoss > 0 && (stopLoss < buyStopLossMin || stopLoss > buyStopLossMax)) {
-                return true
-            } else if (takeProfit > 0 && (takeProfit < buyProfitMin || takeProfit > buyProfitMax)) {
-                return true
-            } else if (openOrderVal === 2 && (!buyLimitMax || pendingPrice < buyLimitMin || pendingPrice > buyLimitMax)) {
-                return true
-            } else if (openOrderVal === 4 && (!buyStopMax || pendingPrice < buyStopMin || pendingPrice > buyStopMax)) {
-                return true
-            } else {
-                return false
-            }
-        })
-        // 是否符合卖出的止盈止损范围
-        const sellDisabled = computed(() => {
-            const [sellProfitMin, sellProfitMax] = profitLossRang.value.sellProfitRange
-            const [sellStopLossMin, sellStopLossMax] = profitLossRang.value.sellStopLossRange
-            const [sellLimitMin, sellLimitMax] = pendingPriceRang.value.sellLimitRange
-            const [sellStopMin, sellStopMax] = pendingPriceRang.value.sellStopRange
-            const openOrderVal = state.openOrderSelected.val
-            const pendingPrice = Number(state.pendingPrice)
-            const stopLoss = Number(state.stopLoss)
-            const takeProfit = Number(state.takeProfit)
-            if (stopLoss > 0 && (stopLoss < sellProfitMin || stopLoss > sellProfitMax)) {
-                return true
-            } else if (takeProfit > 0 && (takeProfit < sellStopLossMin || takeProfit > sellStopLossMax)) {
-                return true
-            } else if (openOrderVal === 3 && (!sellLimitMax || pendingPrice < sellLimitMin || pendingPrice > sellLimitMax)) {
-                return true
-            } else if (openOrderVal === 5 && (!sellStopMax || pendingPrice < sellStopMin || pendingPrice > sellStopMax)) {
-                return true
-            } else {
-                return false
-            }
-        })
-
+        // 设置默认手数
         watch(
             () => product.value.minVolume,
-            newval => (state.volumn = Math.max(newval,product.value.volumeStep)),
-            {
-                immediate: true
-            }
+            newval => (state.volumn = Math.max(newval, product.value.volumeStep)),
+            { immediate: true }
         )
         // 止损价格变更
         watch(
@@ -206,30 +146,41 @@ export default {
             }
         )
         if (!product.value) router.replace('/')
+
+        // 检查下单参数是否有效
+        const paramsInvalid = ()=>{
+            let result = false;
+            const m = divide(state.volumn, product.value.minVolume)
+            result = getDecimalNum(m) > 0 // 手数不是最小手数的整数倍
+            if(result) Toast('手数不是最小手数的整数倍')
+            return result;
+        }
+
         // 点击下单按钮
         const openOrder = direct => {
+            if(paramsInvalid()) return false;
             let requestPrice = direct === 'sell' ? product.value.sell_price : product.value.buy_price
-            let direction = direct === 'sell' ? 2 : 1;
-            let bizType = 1;
-            switch(state.openOrderSelected.val){
+            let direction = direct === 'sell' ? 2 : 1
+            let bizType = 1
+            switch (state.openOrderSelected.val) {
                 case 2:
                 case 3:
-                    bizType = 10;
-                    requestPrice = state.pendingPrice;
-                    break;
+                    bizType = 10
+                    requestPrice = state.pendingPrice
+                    break
                 case 4:
                 case 5:
-                    bizType = 11;
-                    requestPrice = state.pendingPrice;
-                    break;
+                    bizType = 11
+                    requestPrice = state.pendingPrice
+                    break
                 default:
-                    bizType = 1;
-                    break;
+                    bizType = 1
+                    break
             }
-            if([2,4].includes(state.openOrderSelected.val)){
-                direction = 1;
-            }else if([3,5].includes(state.openOrderSelected.val)){
-                direction = 2;
+            if ([2, 4].includes(state.openOrderSelected.val)) {
+                direction = 1
+            } else if ([3, 5].includes(state.openOrderSelected.val)) {
+                direction = 2
             }
             const p = Math.pow(10, product.value.symbolDigits)
             const params = {
@@ -247,7 +198,7 @@ export default {
                 .then(res => {
                     state.loading = false
                     if (res.invalid()) return false
-                    state.orderParams = params;
+                    state.orderParams = params
                     state.pendingVisible = true
                 })
                 .catch(err => {
@@ -280,9 +231,9 @@ export default {
                 })
         }
         // 选择订单类型
-        const selectOpenOrder = (item)=>{
+        const selectOpenOrder = item => {
             state.openOrderSelected = item
-            if(item.val===1) store.commit('_trade/Update_pendingPrice', 0)
+            if (item.val === 1) store.commit('_trade/Update_pendingPrice', 0)
         }
 
         return {
@@ -291,9 +242,7 @@ export default {
             chart,
             openOrder,
             profitLossRang,
-            buyDisabled,
-            sellDisabled,
-            selectOpenOrder,
+            selectOpenOrder
         }
     }
 }
@@ -386,37 +335,5 @@ export default {
     line-height: rem(500px);
     text-align: center;
     background: var(--bdColor);
-}
-.footerBtn {
-    position: relative;
-    display: flex;
-    width: 100%;
-    height: rem(100px);
-    border-top: 1px solid var(--btnLine);
-    &.line::before {
-        position: absolute;
-        top: 20%;
-        bottom: 20%;
-        left: 50%;
-        width: 1px;
-        background: var(--btnLine);
-        content: '';
-    }
-    .col {
-        flex: 1;
-    }
-    .btn {
-        @include active();
-        width: 100%;
-        height: rem(100px);
-        font-weight: bold;
-        font-size: rem(28px);
-        line-height: 1;
-        text-align: center;
-        background: var(--btnColor);
-        &:disabled {
-            opacity: 0.4;
-        }
-    }
 }
 </style>
