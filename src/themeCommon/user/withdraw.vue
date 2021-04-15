@@ -20,7 +20,7 @@
             </div>
             <div class='notice'>
                 <span>最大可取 {{ withdrawConfig.withdrawAmount }} 美元</span>
-                <span>手续费 0.10美元</span>
+                <span>手续费 {{ fee }} 美元</span>
             </div>
             <div class='bank-wrap'>
                 <p class='bw-t'>
@@ -71,13 +71,14 @@
 import Top from '@/components/top'
 import {
     reactive, ref, computed, toRefs, onMounted,
-    onBeforeMount
+    onBeforeMount,
+    watch
 } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Toast, Dialog } from 'vant'
-import { isEmpty } from '@/utils/util'
+import { isEmpty, debounce } from '@/utils/util'
 import { useStore } from 'vuex'
-import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate, queryBankList } from '@/api/user'
+import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate, queryBankList, computeWithdrawFee } from '@/api/user'
 export default {
     components: {
         Top
@@ -94,7 +95,8 @@ export default {
         const customInfo = computed(() => store.state._user.customerInfo)
 
         const state = reactive({
-            amount: 0,
+            amount: '',
+            fee: 0,
             show: false,
             maxAmount: 5005.55,
             checkedBank: {
@@ -104,27 +106,33 @@ export default {
             },
             withdrawRate: '',
             withdrawConfig: '',
-            bankList: [
-                // {
-                //     icon: require('../../assets/logo.png'),
-                //     bankName: '招商银行',
-                //     bankNo: '6388 **** **** 1222',
-                //     checked: false
-                // },
-                // {
-                //     icon: require('../../assets/logo.png'),
-                //     bankName: '建设银行',
-                //     bankNo: '6225 **** **** 4443',
-                //     checked: false
-                // },
-                // {
-                //     icon: require('../../assets/logo.png'),
-                //     bankName: '工商银行',
-                //     bankNo: '6225 **** **** 1543',
-                //     checked: false
-                // }
-            ]
+            bankList: []
         })
+
+        // 监听金额变化，动态计算取款手续费
+
+        watch(
+            () => state.amount,
+            (nVal, oVal) => {
+                console.log(nVal, oVal)
+                const lowAmount = state.withdrawConfig.withdrawAmountConfig.singleLowAmount
+                const highAmount = state.withdrawConfig.withdrawAmountConfig.singleHighAmount
+                if (parseFloat(nVal) > parseFloat(highAmount)) {
+                    state.fee = ''
+                    return Toast(`取款金额不能大于${state.withdrawConfig.withdrawAmountConfig.singleHighAmount}`)
+                }
+                if (parseFloat(nVal) >= parseFloat(lowAmount) && parseFloat(nVal) <= parseFloat(highAmount)) {
+                    getWithdrawFee(nVal)
+                }
+
+                // debouceFn(nVal).then(res => {
+                //     debugger
+                // })
+                // debouceFn()
+
+                // debounce(getWithdrawFee(nVal), 2000)
+            }
+        )
 
         const openSheet = () => {
             state.show = true
@@ -149,6 +157,12 @@ export default {
         // 全部取出
         const getAll = () => {
             state.amount = state.withdrawConfig.withdrawAmount
+        }
+
+        const debouceFn = () => {
+            debounce(function () {
+                console.log(999)
+            }, 2000)
         }
 
         const confirm = () => {
@@ -181,32 +195,19 @@ export default {
                 forbidClick: true,
             })
 
-            // companyId	Long	必填	公司ID
-            // customerNo	String	必填	客户编号
-            // accountId	Long	必填	账户ID
-            // customerGroupId	Long	必填	客户组ID
-            // accountCurrency	String	必填	账户货币编码
-            // withdrawCurrency	String	必填	收款货币
-            // amount	BigDecimal	必填	提案金额
-            // rate	BigDecimal	必填	发送给平台CATS2使用的取款汇率
-            // withdrawRateSerialNo	String	必填	取款费率流水号
-            // bankAccountName	String	必填	银行卡持有者姓名
-            // bankName	String	必填	银行卡银行名称
-            // bankCardNo	String	必填	银行卡号
-            // country	String	必填	国家
             const params = {
-                customerNo: customInfo.value.customerNo,
-                accountId: customInfo.value.accountId,
-                customerGroupId: customInfo.value.customerGroupId,
-                accountCurrency: customInfo.value.currency,
-                withdrawCurrency: state.withdrawRate.withdrawCurrency,
-                amount: state.amount,
-                rate: state.withdrawRate.exchangeRate,
-                withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
-                bankAccountName: state.checkedBank.bankAccountName,
-                bankName: state.checkedBank.bankName,
-                bankCardNo: state.checkedBank.bankCardNumber,
-                country: 'IOS_3166_156'
+                customerNo: customInfo.value.customerNo, // 客户编号
+                accountId: customInfo.value.accountId, // 账户ID
+                customerGroupId: customInfo.value.customerGroupId, // 客户组ID
+                accountCurrency: customInfo.value.currency, // 账户货币编码
+                withdrawCurrency: state.withdrawRate.withdrawCurrency, // 收款货币
+                amount: state.amount, // 提案金额
+                rate: state.withdrawRate.exchangeRate, // 发送给平台CATS2使用的取款汇率
+                withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo, // 取款费率流水号
+                bankAccountName: state.checkedBank.bankAccountName, // 银行卡持有者姓名
+                bankName: state.checkedBank.bankName, // 银行卡银行名称
+                bankCardNo: state.checkedBank.bankCardNumber, // 银行卡号
+                country: 'IOS_3166_156' // country
             }
 
             handleWithdraw(params).then(res => {
@@ -219,6 +220,7 @@ export default {
             })
         }
 
+        // 获取取款汇率
         const getWithdrawRate = () => {
             const params = {
                 customerNo: customInfo.value.customerNo,
@@ -237,17 +239,11 @@ export default {
 
         // 获取取款限制配置
         const getWithdrawConfig = () => {
-            // companyId 公司ID
-            // customerNo 客户编号
-            // accountId 账户ID
-            // customerGroupId 客户组ID
-            // accountCurrency 账户货币编码
-
             const params = {
                 customerNo: customInfo.value.customerNo,
                 accountId: customInfo.value.accountId,
                 customerGroupId: customInfo.value.customerGroupId,
-                accountCurrency: customInfo.value.currency
+                accountCurrency: customInfo.value.currency // 账户货币编码
             }
 
             queryWithdrawConfig(params).then(res => {
@@ -290,6 +286,22 @@ export default {
             return `${value.substring(0, 4)} ${'*'.repeat(value.length - 8).replace(/(.{4})/g, '$1 ')}${value.length % 4 ? ' ' : ''}${value.slice(-4)}`
         }
 
+        const getWithdrawFee = (amount) => {
+            const params = {
+                customerNo: customInfo.value.customerNo, // 客户编号
+                accountId: customInfo.value.accountId, // 账户ID
+                customerGroupId: customInfo.value.customerGroupId, // 客户组ID
+                accountCurrency: customInfo.value.currency, // 账户货币编码
+                amount: parseFloat(amount)
+            }
+            state.fee = '计算中...'
+            computeWithdrawFee(params).then(res => {
+                if (res.check()) {
+                    state.fee = res.data
+                }
+            })
+        }
+
         onBeforeMount(() => {
             // 获取取款配置
             getWithdrawConfig()
@@ -309,7 +321,8 @@ export default {
             toAddBank,
             confirm,
             customInfo,
-            hideMiddle
+            hideMiddle,
+            getWithdrawFee
         }
     }
 

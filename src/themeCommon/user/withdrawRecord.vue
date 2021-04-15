@@ -147,6 +147,7 @@ export default {
 
         const onRefresh = () => {
             state.current = 1
+            state.finished = false
             state.list = []
             getWithdrawList()
         }

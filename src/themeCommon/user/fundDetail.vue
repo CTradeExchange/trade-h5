@@ -9,14 +9,14 @@
                             项目
                         </p>
                         <van-button
-                            v-for='item in proBtns'
-                            :key='item.value'
-                            :class='{ active: proCurr === item.value }'
+                            v-for='(item,val) in proBtns'
+                            :key='val'
+                            :class='{ active: Number(proCurr) === Number(val) }'
                             plain
                             size='small'
-                            @click='onProbtn(item)'
+                            @click='onProbtn(item,val)'
                         >
-                            {{ item.name }}
+                            {{ item }}
                         </van-button>
                     </div>
                     <div class='condition'>
@@ -81,21 +81,21 @@
             </van-dropdown-menu>
         </div>
         <div class='list'>
-            <div v-for='i in 15' :key='i' class='fund-item'>
+            <div v-for='(item,index) in list' :key='index' class='fund-item'>
                 <div class='f-left'>
                     <p class='title'>
-                        存款
+                        {{ proBtns[item.businessType] }}
                     </p>
                     <p class='date'>
-                        2021.01.02 14:20:35
+                        {{ formatTime(item.createTime) }}
                     </p>
                 </div>
                 <div class='f-right'>
                     <p class='amount'>
-                        +1000.00 USD
+                        {{ item.amountIn }} USD
                     </p>
                     <p class='balance'>
-                        余额 3000.00 USD
+                        余额 {{ item.amountAfter }} USD
                     </p>
                 </div>
             </div>
@@ -115,45 +115,22 @@ export default {
     setup (props) {
         const proDownItem = ref(null)
         const dateDownItem = ref(null)
-        const proBtns = [
-            {
-                name: '全部项目',
-                value: '99'
-            },
-            {
-                name: '存取款',
-                value: 1
-            },
-            {
-                name: '手续费',
-                value: 2
-            },
-            {
-                name: '隔夜利息',
-                value: 3
-            },
-            {
-                name: '盈亏',
-                value: 4
-            },
-            {
-                name: '系统清零',
-                value: 5
-            },
-            {
-                name: '额度调整',
-                value: 6
-            },
-            {
-                name: '冻结',
-                value: 7
-            }
+        const proBtns = {
+            0: '全部项目',
+            1: '存款',
+            8: '取款',
+            2: '手续费',
+            3: '隔夜利息',
+            4: '盈亏',
+            5: '系统清零',
+            6: '额度调整',
+            7: '冻结'
+        }
 
-        ]
         const directionBtns = [
             {
                 name: '全部流向',
-                value: '99'
+                value: 0
             },
             {
                 name: '入账',
@@ -188,8 +165,8 @@ export default {
             }
         ]
         const state = reactive({
-            proCurr: 99, // 业务类型
-            directionCur: 99, // 流向
+            proCurr: 0, // 业务类型
+            directionCur: 0, // 流向
             dateCur: '', // 时间
             proTitle: '全部项目',
             date: '', // 日期
@@ -197,20 +174,16 @@ export default {
             showCalendar: false,
             dateRange: [],
             defaultDate: [],
+            list: [],
             pagigation: {
                 size: 10,
                 current: 1,
             }
         })
 
-        // const minDate = computed(function () {
-        //     debugger
-        //     return dayjs()
-        // })
-
-        const onProbtn = (item) => {
-            state.proCurr = item.value
-            state.proTitle = item.name
+        const onProbtn = (item, val) => {
+            state.proCurr = val
+            state.proTitle = item
         }
 
         const onDirectbtn = (item) => {
@@ -218,8 +191,8 @@ export default {
         }
 
         const reset = () => {
-            state.proCurr = 99
-            state.directionCur = 99
+            state.proCurr = 0
+            state.directionCur = 0
             state.proTitle = '全部项目'
         }
 
@@ -279,11 +252,17 @@ export default {
                 startTime: 0,
                 endTime: 0,
                 operate: 0,
-                businessType: 0
+                businessType: state.proCurr
             }
             queryCapitalFlowList(params).then(res => {
-
+                if (res.check()) {
+                    state.list = res.data.records
+                }
             })
+        }
+
+        const formatTime = (val) => {
+            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
 
         onBeforeMount(() => {
@@ -306,6 +285,7 @@ export default {
             dateReset,
             dateDownItem,
             queryFundDetail,
+            formatTime,
             ...toRefs(state)
         }
     }
