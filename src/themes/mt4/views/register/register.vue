@@ -1,23 +1,28 @@
 <template>
     <div class='register'>
-        <Top :right-action='{title:"已有账号"}' @rightClick='$router.replace({name:"Login"})' class="topBar"/>
-        <div class="container">
-            <p class="pageTitle">真实开户</p>
+        <Top class='topBar' :right-action='{ title:"已有账号" }' @rightClick='$router.replace({ name:"Login" })' />
+        <div class='container'>
+            <p class='pageTitle'>
+                真实开户
+            </p>
             <div class='banner'>
                 <img alt='' src='https://testcms.ixmiddle.com/docs/registerBanner.png' srcset='' />
             </div>
-            <van-tabs v-model:active="openType" class="openTypeTab"
+            <van-tabs
+                v-model:active='openType'
+                class='openTypeTab'
                 :color='style.color'
-                line-width="20px"
-                line-height="2px"
-                :title-inactive-color="style.mutedColor"
-                :title-active-color="style.color">
-                <van-tab title="手机号" name="mobile"></van-tab>
-                <van-tab title="邮箱" name="email"></van-tab>
+                line-height='2px'
+                line-width='20px'
+                :title-active-color='style.color'
+                :title-inactive-color='style.mutedColor'
+            >
+                <van-tab name='mobile' title='手机号' />
+                <van-tab name='email' title='邮箱' />
             </van-tabs>
             <form class='form'>
-                <CurrencyAction v-model="currency" class="cellRow"/>
-                <TradeTypeAction v-model="tradeType" class="cellRow" />
+                <CurrencyAction v-model='currency' class='cellRow' />
+                <TradeTypeAction v-model='tradeType' class='cellRow' />
                 <!-- <van-cell title="账户币种" is-link arrow-direction="down" value="USD" /> -->
                 <div v-if="openType === 'mobile'" class='cell'>
                     <MobileInput v-model.trim='mobile' v-model:zone='zone' placeholder='手机号' @blur='onMobileBlur' />
@@ -26,7 +31,7 @@
                     <InputComp v-model='email' clear label='邮箱' />
                 </div>
                 <div class='cell'>
-                    <CheckCode v-model='checkCode' clear label='验证码' @verifyCodeSend='verifyCodeSendHandler' :loading="verifyCodeLoading" />
+                    <CheckCode v-model='checkCode' clear label='验证码' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
                 </div>
                 <div class='cell'>
                     <van-checkbox v-model='protocol' shape='square'>
@@ -35,15 +40,15 @@
                 </div>
             </form>
         </div>
-        <div class="footerBtn">
+        <div class='footerBtn'>
             <van-button
-                    block
-                    class='registerBtn'
-                    :disabled='loading'
-                    @click='registerHandler'
-                >
-                    提交
-                </van-button>
+                block
+                class='registerBtn'
+                :disabled='loading'
+                @click='registerHandler'
+            >
+                提交
+            </van-button>
         </div>
         <Loading :show='loading' />
     </div>
@@ -99,7 +104,7 @@ export default {
         })
         let token = ''
         store.dispatch('getListByParentCode')
-        const style = computed(()=>store.state.style);
+        const style = computed(() => store.state.style)
         // 手机号输入框离开焦点
         const onMobileBlur = () => {
             const validator = new Schema(checkCustomerExistRule)
@@ -143,7 +148,7 @@ export default {
                 verifyCode: state.checkCode,
                 currency: state.currency,
                 tradeType: state.tradeType,
-                sendToken:token,
+                sendToken: token,
                 utmSource: getQueryVariable('utm_source'),
                 utmMedium: getQueryVariable('utm_medium'),
                 utmCampaign: getQueryVariable('utm_campaign'),
@@ -166,21 +171,21 @@ export default {
                 phoneArea: state.openType === 'mobile' ? String(state.zone) : undefined,
             }
             const validator = new Schema(checkCustomerExistRule)
-            state.verifyCodeLoading = true;
-            validator.validate(verifyParams,{ first: true }).then(res => {
+            state.verifyCodeLoading = true
+            validator.validate(verifyParams, { first: true }).then(res => {
                 const params = {
                     bizType: state.openType === 'mobile' ? 'SMS_REGISTER_VERIFICATION_CODE' : 'EMAIL_REGISTER_VERIFICATION_CODE',
                     toUser: state.openType === 'mobile' ? String(state.zone) + ' ' + state.mobile : state.email,
                 }
                 verifyCodeSend(params).then(res => {
-                    state.verifyCodeLoading = false;
+                    state.verifyCodeLoading = false
                     if (res.check()) {
                         token = res.data.token
                         callback && callback()
                     }
                 })
             }).catch(({ errors, fields }) => {
-                state.verifyCodeLoading = false;
+                state.verifyCodeLoading = false
                 if (errors) {
                     Toast(errors[0].message)
                 }
@@ -216,6 +221,7 @@ export default {
     }
 }
 .pageTitle {
+    margin-bottom: rem(10px);
     padding: 0 rem(30px);
     font-size: rem(46px);
 }

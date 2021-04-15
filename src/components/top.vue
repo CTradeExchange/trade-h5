@@ -12,7 +12,9 @@
         </slot>
         <slot name='right'>
             <a v-if='rightAction' class='rightClick' href='javascript:;' @click='rightClick'>
-                {{ rightAction.title }}
+                <span class='right-text'>
+                    {{ rightAction.title }}
+                </span>
                 <van-icon name='arrow' />
             </a>
         </slot>
@@ -81,15 +83,18 @@ export default {
         padding: 0 0 0 rem(26px);
         color: var(--color);
         font-size: rem(24px);
-        line-height: rem(59px);
+        line-height: rem(55px);
         border: 1px solid var(--bdColor);
         border-radius: rem(30px);
     }
     .van-icon-arrow {
-        margin-right: rem(3px);
-        margin-left: rem(3px);
-        font-size: rem(30px);
-        vertical-align: -3px;
+        margin-right: rem(10px);
+        margin-left: rem(5px);
+        font-weight: bold;
+        vertical-align: middle;
+    }
+    .right-text {
+        vertical-align: middle;
     }
     .title {
         width: 60%;

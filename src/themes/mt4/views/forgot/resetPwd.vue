@@ -8,7 +8,7 @@
 
         <header class='header'>
             <h1 class='pageTitle'>
-                重置密码
+                设置登录密码
             </h1>
             <h6>密码为6-16位数字或字母的组合</h6>
         </header>
@@ -113,6 +113,7 @@ export default {
         margin: rem(40px) rem(30px);
     }
     .pageTitle {
+        margin-bottom: rem(10px);
         font-weight: normal;
         font-size: rem(50px);
     }

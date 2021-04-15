@@ -48,7 +48,7 @@
                 <li class='item'>
                     <i class='icon icon_kefu'></i> <strong>客服</strong>
                 </li>
-                <li class='item'>
+                <li class='item' @click="visible=false;$router.push('/setting')">
                     <i class='icon icon_shezhi'></i> <strong>设置</strong>
                 </li>
             </ul>

@@ -237,9 +237,21 @@ export function computeWithdrawFee (data) {
 }
 
 /* 设置登录密码 */
-export function setPwd (data) {
+export function setLoginPwd (data) {
     return request({
         url: '/global/customer.CustomerWebApiService.bindLoginPwd',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 修改登录密码 */
+export function modifyLoginPwd (data) {
+    return request({
+        url: '/global/customer.CustomerWebApiService.updateLoginPwd',
         method: 'post',
         headers: {
             version: '0.0.1'

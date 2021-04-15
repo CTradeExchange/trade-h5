@@ -188,6 +188,7 @@ export default {
         margin: rem(40px) rem(30px);
     }
     .pageTitle {
+        margin-bottom: rem(10px);
         font-weight: normal;
         font-size: rem(50px);
     }
@@ -253,7 +254,7 @@ export default {
     }
 }
 .next-btn {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     background: var(--bdColor);
     border-color: var(--bdColor);

@@ -29,7 +29,7 @@ import { reactive, toRefs } from 'vue'
 import { Field, Toast } from 'vant'
 import { useRouter } from 'vue-router'
 import md5 from 'js-md5'
-import { setPwd } from '@/api/user'
+import { setLoginPwd } from '@/api/user'
 
 export default {
     components: {
@@ -67,7 +67,7 @@ export default {
                 forbidClick: true,
             })
 
-            setPwd({
+            setLoginPwd({
                 pwd: md5(state.confirmPwd)
             }).then(res => {
                 toast.clear()
@@ -99,6 +99,7 @@ export default {
         margin: rem(40px) rem(30px);
     }
     .pageTitle {
+        margin-bottom: rem(10px);
         font-weight: normal;
         font-size: rem(50px);
     }

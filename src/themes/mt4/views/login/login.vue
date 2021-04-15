@@ -246,7 +246,7 @@ export default {
         // 设置登录密码
         const loginPwdSet = () => {
             state.loginPwdPop = false
-            router.push({ name: 'SetPwd' })
+            router.push({ name: 'SetLoginPwd' })
         }
         // 下次设置登录密码
         const loginPwdSetNext = () => {
@@ -289,6 +289,7 @@ export default {
         margin: rem(40px) rem(30px);
     }
     .pageTitle {
+        margin-bottom: rem(10px);
         font-weight: normal;
         font-size: rem(50px);
     }

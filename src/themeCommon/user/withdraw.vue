@@ -341,6 +341,7 @@ export default {
         margin: rem(40px) rem(30px);
     }
     .pageTitle {
+        margin-bottom: rem(10px);
         font-weight: normal;
         font-size: rem(50px);
     }
