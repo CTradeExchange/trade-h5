@@ -142,6 +142,15 @@ const routes = [
             footerMenu: false
         }
     },
+    {
+        path: '/setting',
+        name: 'Setting',
+        component: () => import(/* webpackChunkName: "bankList" */ '../user/setting.vue'),
+        meta: {
+            title: '设置',
+            footerMenu: false
+        }
+    },
 
 ]
 

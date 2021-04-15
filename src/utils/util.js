@@ -169,3 +169,22 @@ export function isEmpty (obj) {
         return false
     }
 }
+
+/**
+ * @desc 函数防抖(用于异步Promise)
+ * @param func 函数
+ * @param wait 延迟执行毫秒数
+ */
+export function debounce (fn, delay = 500) {
+    // timer 是在闭包中的
+    let timer = null
+    return function () {
+        if (timer) {
+            clearTimeout(timer)
+        }
+        timer = setTimeout(() => {
+            fn.apply(this, arguments)
+            timer = null
+        }, delay)
+    }
+}

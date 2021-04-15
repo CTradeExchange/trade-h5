@@ -212,7 +212,6 @@ export function queryDepositPageList (data) {
 }
 
 /* 资金明细查询 */
-
 export function queryCapitalFlowList (data) {
     return request({
         url: '/global/tradeapi.OrderApiService.queryCapitalFlowList',
@@ -220,6 +219,42 @@ export function queryCapitalFlowList (data) {
         headers: {
             version: '0.0.1',
             group: 'tradeApi'
+        },
+        data
+    })
+}
+
+/* 获取取款手续费 */
+export function computeWithdrawFee (data) {
+    return request({
+        url: '/global/fund.WithdrawAppDubboService.computeWithdrawFee',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 设置登录密码 */
+export function setPwd (data) {
+    return request({
+        url: '/global/customer.CustomerWebApiService.bindLoginPwd',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 获取指定公司下平台信息列表 */
+export function queryPlatFormMessageLogList (data) {
+    return request({
+        url: '/global/message.PlatFormMessageLogApiService.queryPlatFormMessageLogByPage',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
         },
         data
     })

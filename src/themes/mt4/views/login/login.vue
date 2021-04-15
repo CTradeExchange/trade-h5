@@ -131,6 +131,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
 import Rule from './rule'
+import md5 from 'js-md5'
 import { timeline, timelineItem } from '@m/components/timeline'
 
 export default {
@@ -179,7 +180,7 @@ export default {
                 phoneArea: state.loginAccount === 'mobile' ? String(state.zone) : undefined,
                 device: getDevice(),
                 verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
-                loginPwd: state.loginType === 'password' ? state.pwd : undefined,
+                loginPwd: state.loginType === 'password' ? md5(state.pwd) : undefined,
                 sendToken: state.loginType === 'checkCode' ? token : undefined,
             }
             const validator = new Schema(Rule)
