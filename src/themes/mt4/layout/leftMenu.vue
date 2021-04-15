@@ -25,23 +25,13 @@
                 </figcaption>
             </figure>
             <ul class='menuList'>
-                <li class='item' @click="visible=false;$router.push('/quote')">
-                    <i class='icon icon_hangqing'></i> <strong>行情</strong>
-                </li>
-                <li class='item' @click="visible=false;$router.push('/chart')">
-                    <i class='icon icon_tubiao'></i> <strong>图表</strong>
-                </li>
-                <li class='item' @click="visible=false;$router.push('/trade')">
-                    <i class='icon icon_jiaoyi'></i> <strong>交易</strong>
-                </li>
-                <li class='item' @click="visible=false;$router.push('/history')">
-                    <i class='icon icon_lishi'></i> <strong>历史</strong>
-                </li>
-                <li class='item' @click="visible=false;$router.push('/news')">
-                    <i class='icon icon_xinwen'></i> <strong>新闻</strong>
-                </li>
-                <li class='item' @click="visible=false;$router.push('/msg')">
-                    <i class='icon icon_xinxi'></i> <strong>消息中心</strong>
+                <!-- <li class='item' @click="visible=false;$router.push('/quote')"> <i class='icon icon_hangqing'></i> <strong>行情</strong> </li>
+                <li class='item' @click="visible=false;$router.push('/chart')"> <i class='icon icon_tubiao'></i> <strong>图表</strong> </li>
+                <li class='item' @click="visible=false;$router.push('/trade')"> <i class='icon icon_jiaoyi'></i> <strong>交易</strong> </li>
+                <li class='item' @click="visible=false;$router.push('/history')"> <i class='icon icon_lishi'></i> <strong>历史</strong> </li>
+                <li class='item' @click="visible=false;$router.push('/news')"> <i class='icon icon_xinwen'></i> <strong>新闻</strong> </li> -->
+                <li class='item' @click="visible=false;$router.push('/onlineService')">
+                    <i class='icon icon_xinxi'></i> <strong>信息</strong>
                 </li>
                 <li class='item' @click="visible=false;$router.push('/desposit')">
                     <i class='icon icon_cunkuan'></i> <strong>存款</strong>
@@ -56,7 +46,7 @@
                     <i class='icon icon_tubiaoxian'></i> <strong>图表</strong>
                 </li>
                 <li class='item'>
-                    <i class='icon icon_xinxi'></i> <strong>客服</strong>
+                    <i class='icon icon_kefu'></i> <strong>客服</strong>
                 </li>
                 <li class='item'>
                     <i class='icon icon_shezhi'></i> <strong>设置</strong>

@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "20987273",
+      "name": "客服",
+      "font_class": "kefu",
+      "unicode": "e66a",
+      "unicode_decimal": 58986
+    },
+    {
       "icon_id": "20974825",
       "name": "存款",
       "font_class": "cunkuan",
