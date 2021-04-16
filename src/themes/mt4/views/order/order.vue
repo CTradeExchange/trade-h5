@@ -1,63 +1,70 @@
 <template>
-    <top back :menu="false" :sub-title="product.symbolCode" :title="product.symbolName" />
-    <div v-if="product" class="orderWrap">
+    <top back :menu='false' :sub-title='product.symbolCode' :title='product.symbolName' />
+    <div v-if='product' class='orderWrap'>
         <!-- 订单类型 -->
-        <div class="cell openType" v-if="!$route.query.positionId">
-            <p class="title" @click="dropdownWrap = !dropdownWrap">
+        <div v-if='!$route.query.positionId' class='cell openType'>
+            <p class='title' @click='dropdownWrap = !dropdownWrap'>
                 {{ openOrderSelected.name }}
             </p>
-            <div v-show="dropdownWrap" class="dropdownWrap" @click="dropdownWrap = false">
-                <a class="item of-1px-bottom" href="javascript:;" v-for="item in openOrderList" :key="item.val" @click="selectOpenOrder(item)">
+            <div v-show='dropdownWrap' class='dropdownWrap' @click='dropdownWrap = false'>
+                <a v-for='item in openOrderList' :key='item.val' class='item of-1px-bottom' href='javascript:;' @click='selectOpenOrder(item)'>
                     {{ item.name }}
                 </a>
             </div>
         </div>
 
         <!-- 订单手数 -->
-        <div class="cell">
-            <OrderVolumn v-model="volumn" :product="product" :disabled="disabled" />
+        <div class='cell'>
+            <OrderVolumn v-model='volumn' :disabled='disabled' :product='product' />
         </div>
 
         <!-- 买卖价格 -->
-        <div class="cell priceCell">
-            <div class="col fallColor">
-                <Price :price="product.sell_price" :mode="2" :point-ratio="product.pointRatio" :digit="product.price_digits" />
+        <div class='cell priceCell'>
+            <div class='col fallColor'>
+                <Price :digit='product.price_digits' :mode='2' :point-ratio='product.pointRatio' :price='product.sell_price' />
             </div>
-            <div class="col riseColor">
-                <Price :price="product.buy_price" :mode="2" :point-ratio="product.pointRatio" :digit="product.price_digits" />
+            <div class='col riseColor'>
+                <Price :digit='product.price_digits' :mode='2' :point-ratio='product.pointRatio' :price='product.buy_price' />
             </div>
         </div>
-        {{ profitLossRang }}
+        <!-- {{ profitLossRang }} -->
         <!-- 挂单 -->
-        <div class="cell priceSet" v-if="openOrderSelected.val > 1">
-            <div class="col">
-                <PriceStepper v-model="pendingPrice" :product="product"></PriceStepper>
+        <div v-if='openOrderSelected.val > 1' class='cell priceSet'>
+            <div class='col'>
+                <PriceStepper v-model='pendingPrice' :product='product' />
             </div>
         </div>
 
         <!-- 价格设置 -->
-        <div class="cell priceSet">
-            <div class="col">
-                <PriceStepper v-model="stopLoss" :product="product"></PriceStepper>
+        <div class='cell priceSet'>
+            <div class='col'>
+                <PriceStepper v-model='stopLoss' :product='product' />
             </div>
-            <div class="col">
-                <PriceStepper v-model="takeProfit" :product="product"></PriceStepper>
+            <div class='col'>
+                <PriceStepper v-model='takeProfit' :product='product' />
             </div>
         </div>
 
         <!-- 图表 -->
-        <div class="chart">
-            <lightweightChart :product="product" ref="chart" v-if="product.symbolDigits" />
+        <div class='chart'>
+            <lightweightChart v-if='product.symbolDigits' ref='chart' :product='product' />
         </div>
     </div>
 
     <!-- 底部下单按钮 -->
-    <FooterBtn :loading="loading" :openOrderSelected="openOrderSelected" :pendingPrice="pendingPrice" :stopLoss="stopLoss" :takeProfit="takeProfit" @openOrder="openOrder" />
+    <FooterBtn
+        :loading='loading'
+        :open-order-selected='openOrderSelected'
+        :pending-price='pendingPrice'
+        :stop-loss='stopLoss'
+        :take-profit='takeProfit'
+        @openOrder='openOrder'
+    />
 
-    <van-popup v-model:show="pendingVisible" :close-on-click-overlay="false" :style="{ width: '100%', height: '100%' }">
-        <Pending @onHide="pendingVisible = false" :data="orderParams" :product="product" />
+    <van-popup v-model:show='pendingVisible' :close-on-click-overlay='false' :style="{ width: '100%', height: '100%' }">
+        <Pending :data='orderParams' :product='product' @onHide='pendingVisible = false' />
     </van-popup>
-    <Loading :show="loading" />
+    <Loading :show='loading' />
 </template>
 
 <script>
@@ -85,7 +92,7 @@ export default {
         FooterBtn,
         top
     },
-    setup() {
+    setup () {
         const store = useStore()
         const route = useRoute()
         const router = useRouter()
@@ -148,17 +155,17 @@ export default {
         if (!product.value) router.replace('/')
 
         // 检查下单参数是否有效
-        const paramsInvalid = ()=>{
-            let result = false;
+        const paramsInvalid = () => {
+            let result = false
             const m = divide(state.volumn, product.value.minVolume)
             result = getDecimalNum(m) > 0 // 手数不是最小手数的整数倍
-            if(result) Toast('手数不是最小手数的整数倍')
-            return result;
+            if (result) Toast('手数不是最小手数的整数倍')
+            return result
         }
 
         // 点击下单按钮
         const openOrder = direct => {
-            if(paramsInvalid()) return false;
+            if (paramsInvalid()) return false
             let requestPrice = direct === 'sell' ? product.value.sell_price : product.value.buy_price
             let direction = direct === 'sell' ? 2 : 1
             let bizType = 1
@@ -211,7 +218,7 @@ export default {
         store.commit('_quote/Update_productActivedID', symbolId)
 
         initPositionInfo()
-        function initPositionInfo() {
+        function initPositionInfo () {
             if (!positionId) return false
             Promise.resolve()
                 .then(() => {

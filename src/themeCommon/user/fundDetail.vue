@@ -43,7 +43,7 @@
                         </van-button>
                     </div>
                 </van-dropdown-item>
-                <van-dropdown-item ref='dateDownItem' title='全部日期'>
+                <van-dropdown-item ref='dateDownItem' :title='dateTitle'>
                     <div class='condition'>
                         <p class='title'>
                             时间
@@ -81,24 +81,36 @@
             </van-dropdown-menu>
         </div>
         <div class='list'>
-            <div v-for='(item,index) in list' :key='index' class='fund-item'>
-                <div class='f-left'>
-                    <p class='title'>
-                        {{ proBtns[item.businessType] }}
-                    </p>
-                    <p class='date'>
-                        {{ formatTime(item.createTime) }}
-                    </p>
-                </div>
-                <div class='f-right'>
-                    <p class='amount'>
-                        {{ item.amountIn }} USD
-                    </p>
-                    <p class='balance'>
-                        余额 {{ item.amountAfter }} USD
-                    </p>
-                </div>
-            </div>
+            <van-pull-refresh v-model='loading' @refresh='onRefresh'>
+                <van-list
+                    v-model:loading='loading'
+                    :finished='finished'
+                    :finished-text='finishedText'
+                    @load='onLoad'
+                >
+                    <div v-if='list.length === 0'>
+                        <van-empty description='暂无数据' image='search' />
+                    </div>
+                    <div v-for='(item,index) in list' :key='index' class='fund-item'>
+                        <div class='f-left'>
+                            <p class='title'>
+                                {{ proBtns[item.businessType] }}
+                            </p>
+                            <p class='date'>
+                                {{ formatTime(item.createTime) }}
+                            </p>
+                        </div>
+                        <div class='f-right'>
+                            <p class='amount'>
+                                {{ item.amountIn }} USD
+                            </p>
+                            <p class='balance'>
+                                余额 {{ item.amountAfter }} USD
+                            </p>
+                        </div>
+                    </div>
+                </van-list>
+            </van-pull-refresh>
         </div>
     </div>
 </template>
@@ -108,6 +120,8 @@ import Top from '@m/layout/top'
 import { toRefs, reactive, ref, computed, onBeforeMount } from 'vue'
 import { queryCapitalFlowList } from '@/api/user'
 import dayjs from 'dayjs'
+import { Toast } from 'vant'
+import { isEmpty } from '@/utils/util'
 export default {
     components: {
         Top
@@ -145,7 +159,7 @@ export default {
         const dateBtns = [
             {
                 name: '全部日期',
-                value: 99
+                value: 0
             },
             {
                 name: '今天',
@@ -167,19 +181,31 @@ export default {
         const state = reactive({
             proCurr: 0, // 业务类型
             directionCur: 0, // 流向
-            dateCur: '', // 时间
+            dateCur: 0, // 时间
             proTitle: '全部项目',
+            dateTitle: '全部日期',
             date: '', // 日期
             minDate: new Date('2018-01-01'),
             showCalendar: false,
             dateRange: [],
             defaultDate: [],
             list: [],
+            finished: false,
+            loading: false,
+            loadingMore: false,
+            finishedText: '没有更多了',
             pagigation: {
                 size: 10,
                 current: 1,
             }
         })
+
+        const onRefresh = () => {
+            state.pagigation.current = 1
+            state.finished = false
+            state.list = []
+            queryFundDetail()
+        }
 
         const onProbtn = (item, val) => {
             state.proCurr = val
@@ -190,36 +216,8 @@ export default {
             state.directionCur = item.value
         }
 
-        const reset = () => {
-            state.proCurr = 0
-            state.directionCur = 0
-            state.proTitle = '全部项目'
-        }
-
-        const confirm = () => {
-            proDownItem.value.toggle()
-            queryFundDetail()
-        }
-
-        const onConfirm = (values) => {
-            state.dateCur = 99
-            const [start, end] = values
-            state.showCalendar = false
-            state.date = `${formatDate(start)} - ${formatDate(end)}`
-        }
-
-        const dateConfirm = () => {
-            dateDownItem.value.toggle()
-        }
-
-        const dateReset = () => {
-            state.date = ''
-            state.dateCur = 99
-        }
-
-        const formatDate = (date) => `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
-
         const onDate = (item) => {
+            state.dateTitle = item.name
             if (item.value === 1) {
                 state.date = dayjs(new Date()).format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
             } else if (item.value === 2) {
@@ -229,34 +227,87 @@ export default {
                 state.date = dayjs().subtract(1, 'month').format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
             } else if (item.value === 4) {
                 state.date = dayjs().subtract(3, 'month').format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
-            } else if (item.value === 99) {
+            } else if (item.value === 0) {
                 state.date = ''
             }
 
             state.dateCur = item.value
         }
 
-        const queryFundDetail = () => {
-            // size		每页条数
-            // current	当前页
-            // businessType		业务类型。1-存取款；2-手续费；3-过夜利息；4-盈亏；5-系统清零；6-额度调整；7-冻结；
-            // status		状态。1-初始化；2-处理成功；3-处理失败；
-            // startTime	开始时间。13位时间戳；
-            // endTime	开始时间。13位时间戳；
-            // operate流向。1.增加，2.减少；
+        const reset = () => {
+            state.proCurr = 0
+            state.directionCur = 0
+            state.proTitle = '全部项目'
+        }
 
+        const confirm = () => {
+            proDownItem.value.toggle()
+            state.list = []
+            queryFundDetail()
+        }
+
+        const onConfirm = (values) => {
+            state.dateCur = 99
+            const [start, end] = values
+            state.showCalendar = false
+            state.date = `${formatDate(start)} - ${formatDate(end)}`
+            state.dateTitle = state.date
+        }
+
+        const dateConfirm = () => {
+            if (!isEmpty(state.date)) {
+                state.startTime = new Date(state.date.split('-')[0]).getTime()
+                state.endTime = new Date(dayjs(state.date.split('-')[1])).getTime()
+            } else {
+                state.startTime = 0
+                state.endTime = 0
+            }
+            dateDownItem.value.toggle()
+            state.list = []
+            queryFundDetail()
+        }
+
+        const dateReset = () => {
+            state.date = ''
+            state.dateCur = 99
+        }
+
+        const formatDate = (date) => `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
+
+        // 底部加载更多
+        const onLoad = () => {
+            state.current++
+            // queryFundDetail()
+        }
+
+        const queryFundDetail = () => {
+            const toast = Toast.loading({
+                message: '加载中...',
+                forbidClick: true,
+            })
             const params = {
                 size: state.pagigation.size,
                 current: state.pagigation.current,
-                status: 0,
-                startTime: 0,
-                endTime: 0,
-                operate: 0,
-                businessType: state.proCurr
+                status: 0, // 状态。1-初始化；2-处理成功；3-处理失败；
+                startTime: state.startTime,
+                endTime: state.endTime,
+                operate: state.directionCur, // 1.增加，2.减少；
+                businessType: state.proCurr // 业务类型
             }
             queryCapitalFlowList(params).then(res => {
+                toast.clear()
+                state.loading = false
                 if (res.check()) {
-                    state.list = res.data.records
+                    state.list = state.list.concat(res.data.records)
+
+                    // 数据全部加载完成
+                    if (res.data.current * res.data.size >= res.data.total) {
+                        state.finished = true
+                    }
+
+                    if (isEmpty(res.data.records)) {
+                        state.finishedText = ''
+                    }
                 }
             })
         }
@@ -279,7 +330,9 @@ export default {
             reset,
             proDownItem,
             onDate,
+            onLoad,
             confirm,
+            onRefresh,
             dateCur: 99,
             onConfirm,
             dateReset,
@@ -328,6 +381,11 @@ export default {
         }
     }
     .list {
+        height: calc(100% - 50px);
+        .van-pull-refresh {
+            height: 100%;
+            overflow: scroll;
+        }
         .fund-item {
             display: flex;
             align-items: center;

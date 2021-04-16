@@ -271,3 +271,15 @@ export function queryPlatFormMessageLogList (data) {
         data
     })
 }
+
+/* 切换交易账户信息 */
+export function switchAccount (data) {
+    return request({
+        url: '/global/switch.trade.account',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

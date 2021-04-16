@@ -12,9 +12,9 @@
         <van-tabbar-item name='History' to='/history'>
             <i class='icon icon_lishi'></i>
         </van-tabbar-item>
-        <van-tabbar-item name='News' to='/news'>
+        <!-- <van-tabbar-item name='News' to='/news'>
             <i class='icon icon_xinwen'></i>
-        </van-tabbar-item>
+        </van-tabbar-item> -->
         <!-- <van-tabbar-item name='OnlineService' to='/onlineService'>
             <i class='icon icon_xinxi'></i>
         </van-tabbar-item> -->

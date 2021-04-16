@@ -170,6 +170,16 @@ const routes = [
             roles: ['User']
         }
     },
+    {
+        path: '/page',
+        name: 'Page',
+        component: () => import(/* webpackChunkName: "page" */ '../user/page.vue'),
+        meta: {
+            title: '界面',
+            footerMenu: false,
+            roles: ['User']
+        }
+    },
 
 ]
 

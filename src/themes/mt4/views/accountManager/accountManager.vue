@@ -1,104 +1,178 @@
 <template>
     <div class='accountManager'>
         <section class='accountBlock'>
-            <span class='flag'>Demo</span>
+            <span class='flag'>
+                Demo
+            </span>
             <figure class='userFigure'>
                 <img alt='' class='face' src='@m/images/face.png' />
                 <figcaption>
                     <p><strong>Cats2.0 H5 Demo</strong></p>
-                    <p class='muted'>84769176 - MetaQuotes-Demo</p>
-                    <p class='muted'>Access Point EU 0, 1:100</p>
-                    <p class='amount'>100 000.00 USD</p>
+                    <p class='muted'>
+                        {{ customInfo.customerNo }} - MetaQuotes-Demo
+                    </p>
+                    <p class='muted'>
+                        Access Point EU 0, 1:100
+                    </p>
+                    <p class='amount'>
+                        {{ mainAccount.balance }} USD
+                    </p>
                 </figcaption>
             </figure>
             <i class='icon_tishi' @click='show=true'></i>
         </section>
+        <div v-for='(item, index) in accountList' :key='index' class='account-item' @click='handleSwitchAccount(item)'>
+            <p>余额： {{ item.balance }}</p>
+            <p>可取金额：{{ item.withdrawAmount }}</p>
+            <p>锁定金额： {{ item.lockAmount }}</p>
+        </div>
     </div>
     <van-dialog v-model:show='show' title='属性'>
         <div class='tishiDialog'>
             <p><strong>84769176 - Cats2.0 H5 Demo</strong></p>
-            <p class='muted'>MetaQuotes Software Corp</p>
-            <p class='muted'>1:100, USD 100 000.00</p>
-            <p class='muted'>access point: Access Point EU 0</p>
+            <p class='muted'>
+                MetaQuotes Software Corp
+            </p>
+            <p class='muted'>
+                1:100, USD 100 000.00
+            </p>
+            <p class='muted'>
+                access point: Access Point EU 0
+            </p>
         </div>
     </van-dialog>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { useStore } from 'vuex'
+import { Toast } from 'vant'
+
+import { switchAccount } from '@/api/user'
+import { reactive, toRefs, ref, onBeforeMount, computed, onMounted } from 'vue'
 export default {
     setup () {
+        const store = useStore()
         const show = ref(false)
-        return { show }
+        // 获取账户信息
+        const customInfo = computed(() => store.state._user.customerInfo)
+
+        const state = reactive({
+            mainAccount: {},
+            accountList: []
+        })
+
+        const handleSwitchAccount = (item) => {
+            const toast = Toast.loading({
+                message: '加载中...',
+                forbidClick: true,
+            })
+            const params = {
+                accountId: item.accountId,
+                tradeType: item.tradeType,
+                currency: item.currency,
+                digits: item.digits
+            }
+
+            switchAccount(params).then(res => {
+                toast.clear()
+                if (res.check()) {
+
+                }
+            })
+        }
+
+        onBeforeMount(() => {
+            const list = customInfo.value.accountList
+            list.forEach(item => {
+                if (item.accountId === customInfo.value.accountId) {
+                    state.mainAccount = item
+                } else {
+                    state.accountList.push(item)
+                }
+            })
+        })
+
+        return {
+            customInfo,
+            show,
+            handleSwitchAccount,
+            ...toRefs(state)
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.accountManager{
+.accountManager {
     position: relative;
     padding-top: rem(10px);
-    &::before{
+    &::before {
         position: absolute;
-        content: '';
         top: 0;
         left: 0;
         width: 100%;
         height: rem(200px);
         background: var(--primary);
+        content: '';
     }
-    .accountBlock{
+    .accountBlock {
         position: relative;
         z-index: 1;
-        overflow: hidden;
         margin: 0 rem(20px) rem(40px);
         padding: rem(40px);
-        border-radius: rem(10px);
+        overflow: hidden;
         background: var(--white);
-        box-shadow: 1px 1px 5px rgba(0,0,0,.2);
+        border-radius: rem(10px);
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    }
+    .account-item {
+        margin: rem(30px);
+        padding: rem(30px);
+        border: solid 1px var(--bdColor);
+        border-radius: rem(15px);
     }
 }
-.flag{
+.flag {
     position: absolute;
-    display: block;
-    right: 0;
     top: 0;
-    color: #fff;
-    background: #4dc90f;
+    right: 0;
+    display: block;
     width: rem(180px);
     height: rem(44px);
+    color: #FFF;
+    font-weight: bold;
+    font-size: rem(24px);
     line-height: rem(44px);
     text-align: center;
-    font-size: rem(24px);
-    text-shadow:#267200 1px 0 0,#267200 0 1px 0,#267200 -1px 0 0,#267200 0 -1px 0;
-    font-weight: bold;
+    text-shadow: #267200 1px 0 0, #267200 0 1px 0, #267200 -1px 0 0, #267200 0 -1px 0;
+    background: #4DC90F;
     transform: rotate(45deg) translate(rem(44px), rem(-20px));
 }
-.icon_tishi{
+.icon_tishi {
     position: absolute;
-    bottom: rem(45px);
     right: rem(30px);
+    bottom: rem(45px);
     font-size: rem(42px);
 }
-.tishiDialog{
+.tishiDialog {
     padding: rem(20px) 0;
     line-height: 1.5;
     text-align: center;
 }
-.userFigure{
-    .face{
+.userFigure {
+    .face {
         display: block;
-        margin: 0 auto;
         width: rem(80px);
         height: rem(80px);
+        margin: 0 auto;
     }
-    figcaption{
+    figcaption {
         padding-top: rem(30px);
-        text-align: center;
         line-height: 1.5;
+        text-align: center;
     }
-    .amount{
+    .amount {
         margin-top: rem(20px);
         color: var(--olor);
         font-size: rem(40px);

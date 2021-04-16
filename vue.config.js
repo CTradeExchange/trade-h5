@@ -21,6 +21,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
+    indexPath: 'index_template.html', // 就是这条
     lintOnSave: false,
     configureWebpack: {
         plugins,

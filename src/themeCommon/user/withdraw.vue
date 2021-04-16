@@ -76,7 +76,7 @@ import {
 } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Toast, Dialog } from 'vant'
-import { isEmpty, debounce } from '@/utils/util'
+import { isEmpty, debounce, debounce2 } from '@/utils/util'
 import { useStore } from 'vuex'
 import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate, queryBankList, computeWithdrawFee } from '@/api/user'
 export default {
@@ -114,16 +114,18 @@ export default {
         watch(
             () => state.amount,
             (nVal, oVal) => {
-                console.log(nVal, oVal)
-                const lowAmount = state.withdrawConfig.withdrawAmountConfig.singleLowAmount
-                const highAmount = state.withdrawConfig.withdrawAmountConfig.singleHighAmount
-                if (parseFloat(nVal) > parseFloat(highAmount)) {
-                    state.fee = ''
-                    return Toast(`取款金额不能大于${state.withdrawConfig.withdrawAmountConfig.singleHighAmount}`)
-                }
-                if (parseFloat(nVal) >= parseFloat(lowAmount) && parseFloat(nVal) <= parseFloat(highAmount)) {
-                    getWithdrawFee(nVal)
-                }
+                // console.log(nVal, oVal)
+                // const lowAmount = state.withdrawConfig.withdrawAmountConfig.singleLowAmount
+                // const highAmount = state.withdrawConfig.withdrawAmountConfig.singleHighAmount
+                // if (parseFloat(nVal) > parseFloat(highAmount)) {
+                //     state.fee = ''
+                //     return Toast(`取款金额不能大于${state.withdrawConfig.withdrawAmountConfig.singleHighAmount}`)
+                // }
+                // if (parseFloat(nVal) >= parseFloat(lowAmount) && parseFloat(nVal) <= parseFloat(highAmount)) {
+                //     getWithdrawFee(nVal)
+                // }
+                // debouceFn(nVal)
+                debounce3(getWithdrawFee(nVal), 2000, true)
 
                 // debouceFn(nVal).then(res => {
                 //     debugger
@@ -159,10 +161,34 @@ export default {
             state.amount = state.withdrawConfig.withdrawAmount
         }
 
-        const debouceFn = () => {
-            debounce(function () {
-                console.log(999)
-            }, 2000)
+        const debouceFn = (nVal) => {
+            debounce2(() => {
+                console.log(9999)
+            }, 2000, true)
+        }
+
+        const debounce3 = (func, wait, immediate) => {
+            var timeout, result
+
+            return function () {
+                var context = this
+                var args = arguments
+
+                if (timeout) clearTimeout(timeout)
+                if (immediate) {
+                    // 如果已经执行过，不再执行
+                    var callNow = !timeout
+                    timeout = setTimeout(function () {
+                        timeout = null
+                    }, wait)
+                    if (callNow) result = func.apply(context, args)
+                } else {
+                    timeout = setTimeout(function () {
+                        func.apply(context, args)
+                    }, wait)
+                }
+                return result
+            }
         }
 
         const confirm = () => {
@@ -322,7 +348,8 @@ export default {
             confirm,
             customInfo,
             hideMiddle,
-            getWithdrawFee
+            getWithdrawFee,
+            debounce3
         }
     }
 

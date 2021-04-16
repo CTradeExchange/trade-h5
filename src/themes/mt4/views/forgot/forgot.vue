@@ -31,7 +31,7 @@
         <div class='tabs-content'>
             <form v-show='curTab === 0' class='loginForm'>
                 <div class='field'>
-                    <MobileInput v-model='mobile' v-model:zone='zone' clear label='请输入手机号' />
+                    <MobileInput v-model='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
                 </div>
                 <div class='field'>
                     <checkCode v-model='checkCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />

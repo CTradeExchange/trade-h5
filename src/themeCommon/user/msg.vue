@@ -1,5 +1,18 @@
 <template>
-    <Top back='true' :menu='false' title='' />
+    <Top back='true' :menu='false' :right-action='rightAction' title='' :title-vis='false'>
+        <template #left>
+            <div>
+                <van-dropdown-menu active-color='#007AFF'>
+                    <van-dropdown-item v-model='type' :options='options' @change='changeType' />
+                </van-dropdown-menu>
+            </div>
+        </template>
+        <template #right>
+            <div class='right-ico'>
+                <i class='icon icon_quanbuyidu'></i>
+            </div>
+        </template>
+    </Top>
     <div class='msg-list'>
         <div v-if='list.length === 0'>
             <van-empty description='暂无数据' image='search' />
@@ -44,10 +57,24 @@ export default {
             list: [],
             loading: false,
             finished: false,
-            current: 1
+            current: 1,
+            type: 0,
+            rightAction: { title: 444 },
+            options: [
+                { text: '全部消息', value: 0 },
+                { text: '账户消息', value: 1 },
+                { text: '资金消息', value: 2 },
+                { text: '交易消息', value: 3 },
+            ]
         })
+
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+
+        const changeType = (val) => {
+            console.log(val)
+        }
+
         const getMsgList = () => {
             const toast = Toast.loading({
                 message: '加载中...',
@@ -95,6 +122,7 @@ export default {
             formatTime,
             onRefresh,
             onLoad,
+            changeType,
             ...toRefs(state)
         }
     }
@@ -103,6 +131,12 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
+.right-ico {
+    position: absolute;
+    right: rem(30px);
+    color: var(--white);
+    font-size: rem(48px);
+}
 .msg-list {
     flex: 1;
     overflow-y: auto;
@@ -127,6 +161,19 @@ export default {
             font-size: rem(20px);
             line-height: rem(60px);
         }
+    }
+}
+</style>
+
+<style lang="scss">
+@import '@/sass/mixin.scss';
+.van-dropdown-menu__bar {
+    background-color: transparent !important;
+    .van-dropdown-menu__title {
+        color: var(--white);
+    }
+    .van-ellipsis {
+        color: var(--white);
     }
 }
 </style>
