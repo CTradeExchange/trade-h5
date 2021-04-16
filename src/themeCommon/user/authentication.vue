@@ -5,6 +5,7 @@
             完成认证，可获得对应权限
         </p>
         <div class='auth-list'>
+            {{ list }}
             <div class='auth-item'>
                 <img alt='' class='auth-img' src='../../themes/mt4/images/lv1.png' srcset='' />
                 <div class='content'>
@@ -61,13 +62,31 @@
 <script>
 import Top from '@m/layout/top'
 import { useRouter } from 'vue-router'
-import { toRefs, reactive, ref } from 'vue'
+import { findAllBizKycList } from '@/api/user'
+import { toRefs, reactive, ref, onBeforeMount } from 'vue'
 export default {
     components: {
         Top
     },
     setup (props) {
         const router = useRouter()
+        const state = reactive({
+            list: []
+        })
+        const getAuthCondition = () => {
+            findAllBizKycList().then(res => {
+                if (res.check()) {
+                    state.list = res.data
+                }
+            })
+        }
+        onBeforeMount(() => {
+            getAuthCondition()
+        })
+
+        return {
+            ...toRefs(state)
+        }
     }
 }
 </script>

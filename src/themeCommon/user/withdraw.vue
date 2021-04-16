@@ -70,9 +70,14 @@
 <script>
 import Top from '@/components/top'
 import {
-    reactive, ref, computed, toRefs, onMounted,
+    reactive,
+    ref,
+    computed,
+    toRefs,
+    onMounted,
     onBeforeMount,
-    watch
+    watch,
+    watchEffect
 } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Toast, Dialog } from 'vant'
@@ -106,35 +111,37 @@ export default {
             },
             withdrawRate: '',
             withdrawConfig: '',
-            bankList: []
+            bankList: [],
+            fun: null
         })
 
-        // 监听金额变化，动态计算取款手续费
-
-        watch(
-            () => state.amount,
-            (nVal, oVal) => {
-                // console.log(nVal, oVal)
-                // const lowAmount = state.withdrawConfig.withdrawAmountConfig.singleLowAmount
-                // const highAmount = state.withdrawConfig.withdrawAmountConfig.singleHighAmount
-                // if (parseFloat(nVal) > parseFloat(highAmount)) {
-                //     state.fee = ''
-                //     return Toast(`取款金额不能大于${state.withdrawConfig.withdrawAmountConfig.singleHighAmount}`)
-                // }
-                // if (parseFloat(nVal) >= parseFloat(lowAmount) && parseFloat(nVal) <= parseFloat(highAmount)) {
-                //     getWithdrawFee(nVal)
-                // }
-                // debouceFn(nVal)
-                debounce3(getWithdrawFee(nVal), 2000, true)
-
-                // debouceFn(nVal).then(res => {
-                //     debugger
-                // })
-                // debouceFn()
-
-                // debounce(getWithdrawFee(nVal), 2000)
+        const getWithdrawFee = (amount) => {
+            const params = {
+                customerNo: customInfo.value.customerNo, // 客户编号
+                accountId: customInfo.value.accountId, // 账户ID
+                customerGroupId: customInfo.value.customerGroupId, // 客户组ID
+                accountCurrency: customInfo.value.currency, // 账户货币编码
+                amount: parseFloat(state.amount)
             }
-        )
+            state.fee = '计算中...'
+            computeWithdrawFee(params).then(res => {
+                if (res.check()) {
+                    state.fee = res.data
+                }
+            })
+        }
+
+        const debounceFn = () => {
+            return setTimeout(getWithdrawFee, 1000)
+        }
+
+        watchEffect((onInvalidate) => {
+            const timer = debounceFn()// 再重新生成定时器
+            console.log('change', state.amount)
+            onInvalidate(() => { // watchEffect里面先执行这个函数，即是清除掉之前的定时器
+                clearTimeout(timer)
+            })
+        })
 
         const openSheet = () => {
             state.show = true
@@ -161,40 +168,20 @@ export default {
             state.amount = state.withdrawConfig.withdrawAmount
         }
 
-        const debouceFn = (nVal) => {
-            debounce2(() => {
-                console.log(9999)
-            }, 2000, true)
-        }
-
-        const debounce3 = (func, wait, immediate) => {
-            var timeout, result
-
+        function debounce3 (fn, wait) {
+            debugger
+            let timeoutID = null
             return function () {
-                var context = this
-                var args = arguments
-
-                if (timeout) clearTimeout(timeout)
-                if (immediate) {
-                    // 如果已经执行过，不再执行
-                    var callNow = !timeout
-                    timeout = setTimeout(function () {
-                        timeout = null
-                    }, wait)
-                    if (callNow) result = func.apply(context, args)
-                } else {
-                    timeout = setTimeout(function () {
-                        func.apply(context, args)
-                    }, wait)
-                }
-                return result
+                debugger
+                if (timeoutID != null) clearTimeout(timeoutID)
+                timeoutID = setTimeout(fn, wait)
             }
         }
 
         const confirm = () => {
-            // if (!state.withdrawConfig.enableWithdraw) {
-            //     return Toast('该用户暂不可取款')
-            // }
+            if (!state.withdrawConfig.enableWithdraw) {
+                return Toast('该用户暂不可取款')
+            }
 
             if (state.amount <= 0) {
                 state.amount = 0
@@ -310,22 +297,6 @@ export default {
         // 处理银行卡号显示
         const hideMiddle = (value) => {
             return `${value.substring(0, 4)} ${'*'.repeat(value.length - 8).replace(/(.{4})/g, '$1 ')}${value.length % 4 ? ' ' : ''}${value.slice(-4)}`
-        }
-
-        const getWithdrawFee = (amount) => {
-            const params = {
-                customerNo: customInfo.value.customerNo, // 客户编号
-                accountId: customInfo.value.accountId, // 账户ID
-                customerGroupId: customInfo.value.customerGroupId, // 客户组ID
-                accountCurrency: customInfo.value.currency, // 账户货币编码
-                amount: parseFloat(amount)
-            }
-            state.fee = '计算中...'
-            computeWithdrawFee(params).then(res => {
-                if (res.check()) {
-                    state.fee = res.data
-                }
-            })
         }
 
         onBeforeMount(() => {

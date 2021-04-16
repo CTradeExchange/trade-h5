@@ -232,7 +232,7 @@ export default {
                 verifyCodeSend(params).then(res => {
                     if (res.check()) {
                         token = res.data.token
-                        if (res.data.code) state.checkCode = res.data.code
+                        // if (res.data.code) state.checkCode = res.data.code
                         callback && callback()
                     }
                 })

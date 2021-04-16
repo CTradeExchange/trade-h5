@@ -283,3 +283,15 @@ export function switchAccount (data) {
         data
     })
 }
+
+/* 指定客户的身份认证信息 */
+export function findAllBizKycList (data) {
+    return request({
+        url: '/global/customer.KycWebApiService.findAllBizKycList',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
