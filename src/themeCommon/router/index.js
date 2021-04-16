@@ -101,11 +101,11 @@ const routes = [
         }
     },
     {
-        path: '/authL1',
-        name: 'AuthL1',
-        component: () => import(/* webpackChunkName: "authentication" */ '../user/authL1.vue'),
+        path: '/authConditon',
+        name: 'AuthConditon',
+        component: () => import(/* webpackChunkName: "authentication" */ '../user/authConditon.vue'),
         meta: {
-            title: '身份验证(LV1认证)',
+            title: '身份验证',
             footerMenu: false,
             roles: ['User']
         }

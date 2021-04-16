@@ -295,3 +295,15 @@ export function findAllBizKycList (data) {
         data
     })
 }
+
+/* 判断指定KYC等级是否要KYC认证 */
+export function findAllLevelKyc (data) {
+    return request({
+        url: '/global/customer.KycWebApiService.findAllLevelKyc',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

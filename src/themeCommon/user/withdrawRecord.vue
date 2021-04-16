@@ -3,6 +3,7 @@
         <template #right>
         </template>
     </Top>
+    <!-- <Loading :show='loading' /> -->
     <div class='page-wrap'>
         <div class='record-list'>
             <van-pull-refresh v-model='loading' @refresh='onRefresh'>
@@ -161,13 +162,8 @@ export default {
                 size: state.size,
                 current: state.current,
             }
-            const toast = Toast.loading({
-                message: '加载中...',
-                forbidClick: true,
-            })
+
             queryWithdrawPageList(params).then(res => {
-                console.log(res)
-                toast.clear()
                 state.loading = false
                 if (res.check()) {
                     const resdata = res.data

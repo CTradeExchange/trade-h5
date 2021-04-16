@@ -1,5 +1,6 @@
 <template>
     <Top back='true' :menu='false' title='' />
+    <Loading :show='loading' />
     <div class='page-wrap'>
         <van-field
             v-model='area'
@@ -15,8 +16,9 @@
                 需要准备的验证资料
             </p>
             <ul>
-                <li>姓名</li>
-                <li>身份证号</li>
+                <li v-for='(item,index) in list' :key='index'>
+                    {{ item.elementName }}
+                </li>
             </ul>
         </div>
         <van-button class='confirm-btn' @click='beginAuth'>
@@ -29,8 +31,10 @@
 <script>
 import Top from '@m/layout/top'
 import { useRouter } from 'vue-router'
-import { toRefs, reactive, ref } from 'vue'
+import { toRefs, reactive, ref, onBeforeMount } from 'vue'
 import { Toast } from 'vant'
+import { findAllLevelKyc } from '@/api/user'
+
 export default {
     components: {
         Top
@@ -39,13 +43,33 @@ export default {
         const router = useRouter()
         const state = reactive({
             areaShow: false,
-            area: ''
+            area: '',
+            loading: false,
+            list: []
         })
         const actions = [
             { name: '中国' },
             { name: '美国' },
             { name: '澳大利亚' },
         ]
+
+        const getConditon = () => {
+            state.loading = true
+            // findAllLevelKyc({
+            //     // levelCode: 'level_1'
+            // }).then(res => {
+            //     debugger
+            //     state.loading = false
+            // })
+            findAllLevelKyc({
+                levelCode: 'level_1'
+            }).then(res => {
+                state.loading = false
+                state.list = res.data[0].elementList
+            }).catch(err => {
+                state.loading = false
+            })
+        }
 
         const onSelect = (item) => {
             state.area = item.name
@@ -58,11 +82,14 @@ export default {
             }
             router.push('/authL1Input')
         }
-
+        onBeforeMount(() => {
+            getConditon()
+        })
         return {
             ...toRefs(state),
             actions,
             onSelect,
+            getConditon,
             beginAuth
         }
     }

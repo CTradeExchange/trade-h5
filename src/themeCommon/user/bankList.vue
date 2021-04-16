@@ -1,6 +1,7 @@
 <template>
     <Top back='true' :menu='false' title='' />
     <div class='page-wrap'>
+        <Loading :show='loading' />
         <div class='list'>
             <div v-for='(item,index) in bankList' :key='index' class='bank-item' :class="'BG_'+ item.bankCode">
                 <div class='bi-head'>
@@ -43,22 +44,22 @@ export default {
     setup (props) {
         const router = useRouter()
         const state = reactive({
-            bankList: []
+            bankList: [],
+            loading: false
         })
         const getBankList = () => {
             console.log('banklist')
-            const toast = Toast.loading({
-                message: '加载中...',
-                forbidClick: true,
-            })
+            state.loading = true
             queryBankList().then(res => {
                 console.log(res)
-                toast.clear()
+                state.loading = false
                 if (res.check()) {
                     if (res.data && res.data.length > 0) {
                         state.bankList = res.data
                     }
                 }
+            }).catch(err => {
+                state.loading = false
             })
         }
 

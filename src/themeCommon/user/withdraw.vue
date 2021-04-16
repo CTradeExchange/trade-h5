@@ -8,6 +8,7 @@
             :show-center='true'
             @rightClick='toWithdrawList'
         />
+        <Loading :show='loading' />
         <div class='wrap'>
             <p class='header-text'>
                 取款金额
@@ -102,6 +103,7 @@ export default {
         const state = reactive({
             amount: '',
             fee: 0,
+            loading: false,
             show: false,
             maxAmount: 5005.55,
             checkedBank: {
@@ -168,16 +170,6 @@ export default {
             state.amount = state.withdrawConfig.withdrawAmount
         }
 
-        function debounce3 (fn, wait) {
-            debugger
-            let timeoutID = null
-            return function () {
-                debugger
-                if (timeoutID != null) clearTimeout(timeoutID)
-                timeoutID = setTimeout(fn, wait)
-            }
-        }
-
         const confirm = () => {
             if (!state.withdrawConfig.enableWithdraw) {
                 return Toast('该用户暂不可取款')
@@ -203,10 +195,7 @@ export default {
             if (parseFloat(state.amount) > parseFloat(state.withdrawConfig.withdrawAmount)) {
                 return Toast('余额不足')
             }
-            const toast = Toast.loading({
-                message: '加载中...',
-                forbidClick: true,
-            })
+            state.loading = true
 
             const params = {
                 customerNo: customInfo.value.customerNo, // 客户编号
@@ -224,12 +213,14 @@ export default {
             }
 
             handleWithdraw(params).then(res => {
-                toast.clear()
+                state.loading = false
                 if (res.check()) {
                     Toast(res.msg)
                     console.log('res', res)
                     state.amount = ''
                 }
+            }).catch(err => {
+                state.loading = false
             })
         }
 
@@ -269,14 +260,10 @@ export default {
         }
 
         const getBankList = () => {
-            console.log('banklist')
-            const toast = Toast.loading({
-                message: '加载中...',
-                forbidClick: true,
-            })
+            state.loading = true
             queryBankList().then(res => {
                 console.log(res)
-                toast.clear()
+                state.loading = false
                 if (res.check()) {
                     if (res.data && res.data.length > 0) {
                         state.bankList = res.data
@@ -291,6 +278,8 @@ export default {
                         })
                     }
                 }
+            }).catch(err => {
+                state.loading = false
             })
         }
 
@@ -319,8 +308,8 @@ export default {
             confirm,
             customInfo,
             hideMiddle,
-            getWithdrawFee,
-            debounce3
+            getWithdrawFee
+
         }
     }
 

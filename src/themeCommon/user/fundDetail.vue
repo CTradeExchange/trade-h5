@@ -281,10 +281,6 @@ export default {
         }
 
         const queryFundDetail = () => {
-            const toast = Toast.loading({
-                message: '加载中...',
-                forbidClick: true,
-            })
             const params = {
                 size: state.pagigation.size,
                 current: state.pagigation.current,
@@ -295,7 +291,6 @@ export default {
                 businessType: state.proCurr // 业务类型
             }
             queryCapitalFlowList(params).then(res => {
-                toast.clear()
                 state.loading = false
                 if (res.check()) {
                     state.list = state.list.concat(res.data.records)
