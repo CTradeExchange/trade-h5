@@ -61,8 +61,8 @@
     "*.js": "eslint --fix",
     "*.vue": [
       "eslint --fix",
-      "stylelint --fix"
+      "npm run stylelint"
     ],
-    "*.{css,scss}": "stylelint --fix"
+    "*.{css,scss}": "npm run stylelint"
   }
 }
