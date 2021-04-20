@@ -112,6 +112,7 @@ export default {
                 type: state.openType === 'email' ? 1 : 2, // 1邮箱，2手机号码，3客户账号
                 loginName: state.openType === 'email' ? state.email : state.mobile,
                 phoneArea: state.openType === 'mobile' ? String(state.zone) : '',
+                protocol: state.protocol
             }
             delayer = setTimeout(() => {
                 validator.validate(params, { first: true }, (errors, fields) => {
@@ -140,6 +141,9 @@ export default {
         // 提交注册
         const registerHandler = () => {
             clearTimeout(delayer)
+            if (!token) {
+                return Toast('请输入正确的验证码')
+            }
             const params = {
                 type: state.openType === 'email' ? 1 : 2,
                 loginName: state.openType === 'email' ? state.email : state.mobile,
@@ -154,6 +158,7 @@ export default {
                 utmCampaign: getQueryVariable('utm_campaign'),
                 utmContent: getQueryVariable('utm_content'),
                 utmTerm: getQueryVariable('utm_term'),
+                protocol: state.protocol
             }
             const validator = new Schema(Rule)
             validator.validate(params, { first: true }, (errors, fields) => {
@@ -169,6 +174,7 @@ export default {
                 type: state.openType === 'mobile' ? 2 : 1,
                 loginName: state.openType === 'mobile' ? state.mobile : state.email,
                 phoneArea: state.openType === 'mobile' ? String(state.zone) : undefined,
+                protocol: state.protocol
             }
             const validator = new Schema(checkCustomerExistRule)
             state.verifyCodeLoading = true

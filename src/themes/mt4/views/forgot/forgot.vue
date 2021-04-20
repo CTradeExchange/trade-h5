@@ -152,6 +152,8 @@ export default {
                         router.push({
                             path: '/resetPwd',
                             query: {
+                                verifyCodeToken: res.data.token,
+                                sendToken: state.sendToken,
                                 type: state.curTab === 0 ? 2 : 1,
                                 loginName: state.curTab === 0 ? state.mobile : state.email,
                                 verifyCode: state.curTab === 0 ? state.checkCode : state.emailCode,

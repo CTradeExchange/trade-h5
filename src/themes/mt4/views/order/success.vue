@@ -1,15 +1,21 @@
 <template>
     <div class='pending'>
         <top />
-        <p class='iconMain'><i class='icon_chenggong'></i></p>
-        <p class='title'>订单打开</p>
+        <p class='iconMain'>
+            <i class='icon_chenggong'></i>
+        </p>
+        <p class='title'>
+            订单打开
+        </p>
         <p class='desc'>
             #695329333 <br />
             buy 1.00 EURUSD at 1.21350 <br />
             sl:0.0000 tp: 0.00000
         </p>
         <div class='footerBtn of-1px-top'>
-            <button class='btn' @click='$router.replace("/trade")'>隐藏</button>
+            <button class='btn' @click='$router.replace("/quote")'>
+                隐藏
+            </button>
         </div>
     </div>
 </template>
@@ -24,47 +30,47 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/sass/mixin.scss";
-.pending{
+@import '~@/sass/mixin.scss';
+.pending {
     position: relative;
     height: 100%;
 }
-.iconMain{
+.iconMain {
     padding-top: rem(50px);
 }
-.icon_chenggong{
+.icon_chenggong {
     display: block;
-    margin: 0 auto;
     width: rem(200px);
-    font-size: rem(200px);
+    margin: 0 auto;
     color: var(--success);
-    opacity: .8;
+    font-size: rem(200px);
+    opacity: 0.8;
 }
-.title{
+.title {
+    padding-top: rem(30px);
     font-size: rem(50px);
     text-align: center;
-    padding-top: rem(30px);
 }
-.desc{
+.desc {
     padding-top: rem(30px);
-    font-size: rem(30px);
-    text-align: center;
     color: var(--mutedColor);
+    font-size: rem(30px);
     line-height: 1.5;
+    text-align: center;
 }
-.footerBtn{
+.footerBtn {
     position: absolute;
-    left: 0;
     bottom: 0;
+    left: 0;
     width: 100%;
-    .btn{
-        height: rem(100px);
+    .btn {
+        @include active();
         width: 100%;
-        text-align: center;
-        background: var(--bgColor);
+        height: rem(100px);
         color: var(--color);
         font-size: rem(28px);
-        @include active();
+        text-align: center;
+        background: var(--bgColor);
     }
 }
 </style>

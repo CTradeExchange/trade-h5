@@ -32,11 +32,18 @@
                     忘记密码
                 </a>
                 <Vline />
-                <a v-if="loginAccount==='mobile'" class='btn' href='javascript:;' @click="loginAccount='email'">
+                <a v-if="loginAccount==='mobile' && loginType === 'checkCode'" class='btn' href='javascript:;' @click="loginAccount='email'">
                     邮箱验证码登录
                 </a>
-                <a v-else class='btn' href='javascript:;' @click="loginAccount='mobile'">
+                <a v-if="loginAccount==='email' && loginType === 'checkCode'" class='btn' href='javascript:;' @click="loginAccount='mobile'">
                     手机验证码登录
+                </a>
+
+                <a v-if="loginAccount==='email' && loginType === 'password'" class='btn' href='javascript:;' @click="loginAccount='mobile'">
+                    手机密码登录
+                </a>
+                <a v-if="loginAccount==='mobile' && loginType === 'password'" class='btn' href='javascript:;' @click="loginAccount='email'">
+                    邮箱密码登录
                 </a>
             </div>
         </form>

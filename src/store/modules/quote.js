@@ -73,7 +73,7 @@ export default {
             try {
                 const productMap = state.productMap
                 const newSymbolIds = symbolIds.filter(el => !productMap[el].symbolName)
-
+                debugger
                 const wp_SelfSymbolIndex = JSON.parse(unzip(window['wp_SelfSymbolIndex']))
 
                 const guestCustomerGroupId = rootState._base.wpCompanyInfo.customerGroupId

@@ -18,10 +18,12 @@
 
 <script>
 import { useRouter } from 'vue-router'
+import { removeLoginParams } from '@/utils/util'
 export default {
     setup (props) {
         const router = useRouter()
         const toLogin = () => {
+            removeLoginParams()
             router.push('/login')
         }
 

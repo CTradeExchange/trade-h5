@@ -64,6 +64,10 @@
     <van-popup v-model:show='pendingVisible' :close-on-click-overlay='false' :style="{ width: '100%', height: '100%' }">
         <Pending :data='orderParams' :product='product' @onHide='pendingVisible = false' />
     </van-popup>
+    <van-popup v-model:show='successVisible' :close-on-click-overlay='false' :style="{ width: '100%', height: '100%' }">
+        <Success @onHide='successVisible = false' />
+    </van-popup>
+
     <Loading :show='loading' />
 </template>
 
@@ -72,7 +76,7 @@ import top from '@m/layout/top'
 import Price from '@m/components/price'
 import { computed, onUnmounted, reactive, ref, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
-import { QuoteSocket } from '@/plugins/socket/socket'
+import { QuoteSocket, MsgSocket } from '@/plugins/socket/socket'
 import { addMarketOrder } from '@/api/trade'
 import { useRoute, useRouter } from 'vue-router'
 import lightweightChart from './components/lightweightChart'
@@ -80,6 +84,7 @@ import OrderVolumn from './components/orderVolumn'
 import PriceStepper from './components/priceStepper'
 import FooterBtn from './components/footerBtn'
 import Pending from './pending'
+import Success from './success'
 import { minus, divide, getDecimalNum } from '@/utils/calculation'
 import { Toast } from 'vant'
 export default {
@@ -90,7 +95,8 @@ export default {
         PriceStepper,
         Price,
         FooterBtn,
-        top
+        top,
+        Success
     },
     setup () {
         const store = useStore()
@@ -102,6 +108,7 @@ export default {
             loading: false,
             disabled: positionId,
             pendingVisible: false,
+            successVisible: false,
             dropdownWrap: false,
             openOrderSelected: {}, // 1即时执行 2买入限价 3卖出限价 4买入止损 5卖出止损
             openOrderList: [

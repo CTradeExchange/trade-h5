@@ -28,7 +28,11 @@ export const checkCustomerExistRule = {
         {
             message: '请输入正确的手机号',
             validator: (rule, value, callback, source, options) => {
-                return source.type === 2 ? mobileReg.test(value) : true
+                if (source.phoneArea === '+86') {
+                    return source.type === 2 ? mobileReg.test(value) : true
+                } else {
+                    return source.type === 2 ? value.length <= 15 : true
+                }
             },
         },
         {
@@ -52,6 +56,12 @@ export const checkCustomerExistRule = {
             return source.type === 2 ? !!value : true
         },
     },
+    protocol: {
+        message: '请阅读并同意客户隐私保护政策、投资风险披露及免责声明',
+        validator: (rule, value, callback, source, options) => {
+            return !!source.protocol
+        },
+    }
 }
 
 // 开户参数效验

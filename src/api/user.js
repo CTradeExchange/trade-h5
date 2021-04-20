@@ -20,7 +20,7 @@ export function login (data) {
 /* 登出 */
 export function logout (data) {
     return request({
-        url: '/global/cats-gateway/logout',
+        url: '/logout',
         method: 'post',
         headers: {
             version: '0.0.1',

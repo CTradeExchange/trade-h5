@@ -50,7 +50,7 @@
                     </div>
                     <p class='notice'>
                         <span class='left-val'>
-                            存款时间 : {{ checkedType.startTime }} - {{ checkedType.endTime }}
+                            存款时间 : {{ computeTime(checkedType.startTime ) }} - {{ computeTime(checkedType.endTime) }}
                         </span>
                         <span class='right-val'>
                             金额限制 : {{ checkedType.singleLowAmount }} - {{ checkedType.singleHighAmount }} {{ checkedType.accountCurrency }}
@@ -100,6 +100,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { queryPayType, queryDepositExchangeRate, handleDesposit } from '@/api/user'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
+import { isEmpty } from '@/utils/util'
+import dayjs from 'dayjs'
 export default {
     components: {
         Top
@@ -297,6 +299,15 @@ export default {
             })
         }
 
+        const computeTime = (val) => {
+            if (!isEmpty(val)) {
+                // 0 点时的时间戳
+                const time = (dayjs(new Date(new Date(new Date().toLocaleDateString()).getTime()))).valueOf()
+
+                return dayjs(time + val * 60 * 1000).format('HH:mm')
+            }
+        }
+
         onBeforeMount(() => {
             getPayTypes()
             getDepositExchangeRate()
@@ -313,7 +324,8 @@ export default {
             choosePayType,
             openOtherMoney,
             getDepositExchangeRate,
-            next
+            next,
+            computeTime
         }
     }
 }

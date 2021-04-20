@@ -8,7 +8,7 @@
 <script>
 import Top from '@m/layout/top'
 import productListComp from '@m/modules/productList/productList.vue'
-import { QuoteSocket } from '@/plugins/socket/socket'
+import { QuoteSocket, MsgSocket } from '@/plugins/socket/socket'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { getLoginParams } from '@/utils/util'
@@ -19,10 +19,14 @@ export default {
         Top,
     },
     setup () {
+        // 登录之后重新初始化msg socket,否则token取不到
+        MsgSocket.initPing()
+
         const store = useStore()
         const productList = computed(() => store.state._quote.productList)
 
         // 订阅产品
+        debugger
         const subscribList = productList.value.map(({ symbolId }) => symbolId)
         QuoteSocket.send_subscribe(subscribList)
 

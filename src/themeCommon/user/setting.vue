@@ -20,6 +20,8 @@ import { toRefs, reactive, ref } from 'vue'
 import { logout } from '@/api/user'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
+import { removeLoginParams } from '@/utils/util'
+
 export default {
     components: {
         Top
@@ -37,6 +39,7 @@ export default {
             }).then(() => {
                 logout().then(res => {
                     if (res.check()) {
+                        removeLoginParams()
                         router.push('/login')
                     }
                 }).catch(err => {
