@@ -16,14 +16,21 @@
                         认证通过后方可进行 [{{ item.businessNameList.toString() }}]
                     </p>
                 </div>
-                <van-button plain round size='small' @click="$router.push('/authConditon')">
-                    <template #default>
-                        <span class='btn-text'>
-                            {{ item.statusName }}
-                        </span>
-                        <van-icon name='arrow' />
-                    </template>
-                </van-button>
+                <div v-if='item.preLevelObj && Number(item.preLevelObj.status) === 0'>
+                    <span class='notice'>
+                        请先完成{{ item.preLevelObj.levelName }}认证
+                    </span>
+                </div>
+                <div v-else>
+                    <van-button plain round size='small' @click="$router.push({ path: '/authConditon',query: { levelCode: item.levelCode } })">
+                        <template #default>
+                            <span class='btn-text'>
+                                {{ item.statusName }}
+                            </span>
+                            <van-icon name='arrow' />
+                        </template>
+                    </van-button>
+                </div>
             </div>
 
             <!-- <div class='auth-item'>
@@ -64,6 +71,7 @@ import Top from '@m/layout/top'
 import { useRouter } from 'vue-router'
 import { findAllBizKycList } from '@/api/user'
 import { toRefs, reactive, ref, onBeforeMount } from 'vue'
+import { getArrayObj } from '@/utils/util'
 export default {
     components: {
         Top
@@ -80,6 +88,12 @@ export default {
             findAllBizKycList().then(res => {
                 state.loading = false
                 if (res.check()) {
+                    res.data.forEach(item => {
+                        if (item.preLevelName) {
+                            const temp = getArrayObj(res.data, 'levelName', item.preLevelName)
+                            item.preLevelObj = temp
+                        }
+                    })
                     state.list = res.data
                 }
             }).catch(err => {

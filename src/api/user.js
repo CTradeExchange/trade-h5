@@ -17,6 +17,18 @@ export function login (data) {
     })
 }
 
+/* 登出 */
+export function logout (data) {
+    return request({
+        url: '/global/cats-gateway/logout',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
 /* 注册 */
 export function register (data) {
     return request({
@@ -300,6 +312,18 @@ export function findAllBizKycList (data) {
 export function findAllLevelKyc (data) {
     return request({
         url: '/global/customer.KycWebApiService.findAllLevelKyc',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* KYC证申请 */
+export function kycLevelApply (data) {
+    return request({
+        url: '/global/customer.KycWebApiService.kycLevelApply',
         method: 'post',
         headers: {
             version: '0.0.1'

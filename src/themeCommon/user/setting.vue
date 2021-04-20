@@ -8,7 +8,7 @@
             </template>
         </van-cell>
         <van-cell is-link title='修改登录密码' to='/setLoginPwd' />
-        <van-button class='logout-btn' type='primary'>
+        <van-button class='logout-btn' type='primary' @click='handleLogout'>
             <span>退出账号</span>
         </van-button>
     </div>
@@ -17,6 +17,9 @@
 <script>
 import Top from '@m/layout/top'
 import { toRefs, reactive, ref } from 'vue'
+import { logout } from '@/api/user'
+import { useRouter } from 'vue-router'
+import { Dialog } from 'vant'
 export default {
     components: {
         Top
@@ -25,7 +28,27 @@ export default {
         const state = reactive({
             checked: false
         })
+        const router = useRouter()
+
+        const handleLogout = () => {
+            Dialog.confirm({
+                title: '提示',
+                message: '确定退出登录吗',
+            }).then(() => {
+                logout().then(res => {
+                    if (res.check()) {
+                        router.push('/login')
+                    }
+                }).catch(err => {
+
+                })
+            })
+                .catch(() => {
+                    // on cancel
+                })
+        }
         return {
+            handleLogout,
             ...toRefs(state)
         }
     }

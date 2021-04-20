@@ -2,38 +2,61 @@
     <Top back='true' :menu='false' title='' />
     <Loading :show='loading' />
     <div class='page-wrap'>
-        <van-field
-            v-model='area'
-            input-align='right'
-            label='国家'
-            placeholder='请选择国家'
-            readonly
-            right-icon='arrow-down'
-            @click='areaShow = true'
-        />
-        <div class='notice'>
-            <p class='title'>
-                需要准备的验证资料
-            </p>
-            <ul>
-                <li v-for='(item,index) in list' :key='index'>
-                    {{ item.elementName }}
-                </li>
-            </ul>
+        <div v-if='conditionVis' class='auth-condition'>
+            <van-field
+                v-model='area'
+                input-align='right'
+                label='国家'
+                placeholder='请选择国家'
+                readonly
+                right-icon='arrow-down'
+                @click='areaShow = true'
+            />
+            <div class='notice'>
+                <p class='title'>
+                    需要准备的验证资料
+                </p>
+                <ul>
+                    <li v-for='(item,index) in elementList' :key='index'>
+                        {{ item.elementName }}
+                    </li>
+                </ul>
+            </div>
+            <van-button class='confirm-btn' @click='beginAuth'>
+                开始验证
+            </van-button>
         </div>
-        <van-button class='confirm-btn' @click='beginAuth'>
-            开始验证
-        </van-button>
+        <div v-else>
+            <div class='conditon-wrap'>
+                {{ elementList }}
+                <div v-for='(item,index) in elementList' :key='index' class='c-item'>
+                    <van-cell-group>
+                        <van-field
+                            v-if="item.showType === 'input'"
+                            v-model='conditionModel[item.elementCode]'
+                            clearable
+                            :label='item.elementName'
+                            :placeholder='"请输入"+item.elementName'
+                            :type='item.elementCode === "phone" ? "number" : "text"'
+                        />
+                    </van-cell-group>
+                </div>
+                <van-button class='confirm-btn' @click='onConfirm'>
+                    提交
+                </van-button>
+            </div>
+        </div>
     </div>
-    <van-action-sheet v-model:show='areaShow' :actions='actions' @select='onSelect' />
+    <van-action-sheet v-model:show='areaShow' :actions='countryActions' @select='onSelect' />
 </template>
 
 <script>
 import Top from '@m/layout/top'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { toRefs, reactive, ref, onBeforeMount } from 'vue'
-import { Toast } from 'vant'
-import { findAllLevelKyc } from '@/api/user'
+import { Toast, Dialog } from 'vant'
+import { findAllLevelKyc, kycLevelApply } from '@/api/user'
+import { getArrayObj, isEmpty } from '@/utils/util'
 
 export default {
     components: {
@@ -41,56 +64,106 @@ export default {
     },
     setup (props) {
         const router = useRouter()
+        const route = useRoute()
+        const levelCode = route.query.levelCode
         const state = reactive({
             areaShow: false,
             area: '',
             loading: false,
-            list: []
+            list: [],
+            elementList: [],
+            countryActions: [],
+            conditionVis: true,
+            conditionModel: {}
         })
-        const actions = [
-            { name: '中国' },
-            { name: '美国' },
-            { name: '澳大利亚' },
-        ]
+
+        const status = {
+            0: '认证',
+            1: '审核中',
+            2: '审核通过',
+            3: '审核拒绝'
+        }
 
         const getConditon = () => {
             state.loading = true
-            // findAllLevelKyc({
-            //     // levelCode: 'level_1'
-            // }).then(res => {
-            //     debugger
-            //     state.loading = false
-            // })
+
             findAllLevelKyc({
-                levelCode: 'level_1'
+                levelCode: levelCode
             }).then(res => {
                 state.loading = false
-                state.list = res.data[0].elementList
+                if (res.data.length > 0) {
+                    res.data.forEach(item => {
+                        state.countryActions.push({
+                            name: item.pathCode
+                        })
+                    })
+                }
+                state.list = res.data
             }).catch(err => {
                 state.loading = false
             })
         }
 
         const onSelect = (item) => {
-            state.area = item.name
-            state.areaShow = false
+            try {
+                state.area = item.name
+                state.elementList = getArrayObj(state.list, 'pathCode', item.name).elementList
+                state.areaShow = false
+            } catch (error) {
+                console.log(error)
+            }
         }
 
         const beginAuth = () => {
             if (!state.area) {
                 return Toast('请先选择国家')
             }
-            router.push('/authL1Input')
+            state.conditionVis = false
         }
+
+        const onConfirm = () => {
+            const elementList = []
+            if (!isEmpty(state.conditionModel)) {
+                for (const key in state.conditionModel) {
+                    if (state.conditionModel.hasOwnProperty(key)) {
+                        elementList.push({
+                            elementCode: key,
+                            elementValue: state.conditionModel[key]
+                        })
+                    }
+                }
+            }
+
+            const params = {
+                pathCode: state.area,
+                levelCode: levelCode,
+                elementList: elementList
+            }
+
+            kycLevelApply(params).then(res => {
+                if (res.check()) {
+                    Dialog.alert({
+                        title: '提示',
+                        message: levelCode + '认证成功',
+                    }).then(() => {
+                        router.go(-1)
+                    })
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+        }
+
         onBeforeMount(() => {
             getConditon()
         })
         return {
             ...toRefs(state),
-            actions,
             onSelect,
+            onConfirm,
             getConditon,
-            beginAuth
+            beginAuth,
+            status
         }
     }
 }
@@ -117,6 +190,14 @@ export default {
                 list-style-type: disc;
             }
         }
+    }
+    .confirm-btn {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        color: var(--color);
+        font-size: rem(34px);
+        background: var(--btnColor);
     }
     .confirm-btn {
         position: absolute;

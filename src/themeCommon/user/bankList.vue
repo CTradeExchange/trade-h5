@@ -3,6 +3,9 @@
     <div class='page-wrap'>
         <Loading :show='loading' />
         <div class='list'>
+            <p v-if='bankList.length === 0' class='no-data'>
+                暂无银行卡
+            </p>
             <div v-for='(item,index) in bankList' :key='index' class='bank-item' :class="'BG_'+ item.bankCode">
                 <div class='bi-head'>
                     <div class='icon-bank' :class="'BK_'+ item.bankCode">
@@ -292,6 +295,10 @@ export default {
                 color: var(--color);
                 font-size: rem(28px);
             }
+        }
+        .no-data {
+            line-height: rem(100px);
+            text-align: center;
         }
     }
 }

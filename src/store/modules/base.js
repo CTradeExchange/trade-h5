@@ -1,4 +1,5 @@
-import { pageConfig, wpCompanyConfig, wpNav,wpSelfSymbolIndex } from '@/api/wpApi'
+import { pageConfig, wpCompanyConfig, wpNav, wpSelfSymbolIndex } from '@/api/wpApi'
+import { unzip } from '@/utils/util'
 
 export default {
     namespaced: true,
@@ -31,7 +32,8 @@ export default {
                 }
                 // 自选产品
                 const selfSymbolData = await wpSelfSymbolIndex()
-                if(selfSymbolData){
+
+                if (selfSymbolData) {
                     const productList = selfSymbolData.symbol_ids.map(el => ({ symbolId: el }))
                     commit('_quote/Update_productList', productList, { root: true })
                     commit('_quote/Update_productActivedID', selfSymbolData.symbol_ids[0], { root: true })

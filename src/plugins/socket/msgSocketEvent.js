@@ -42,6 +42,7 @@ class SocketEvent {
         this.seq_id++
         const param = this.getParam(cmd_id, data)
         this.ws.send(JSON.stringify(param))
+
         if (!this.timer) {
             this.timer = window.setInterval(() => {
                 const nowTime = new Date().getTime()
@@ -78,11 +79,13 @@ class SocketEvent {
         const param = this.getParam('ping')
         setInterval(() => {
             this.ws.send(JSON.stringify(param))
+            console.log('心跳', param)
         }, 30000)
     }
 
     // 收取到消息
     onMessage (data) {
+        console.log('收到消息', data)
         this.requests.forEach((item, key) => {
             if (data.seq_id === key) {
                 item.resolve(data)

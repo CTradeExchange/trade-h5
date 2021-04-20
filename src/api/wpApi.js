@@ -8,11 +8,11 @@ export const wpCompanyConfig = () => {
         companyId: 3,
         trade_type: 1,
         customerGroupId: 7,
-        currencyList:[
+        currencyList: [
             { name: '美元账户', value: 'USD' },
             { name: '人民币', value: 'CNY' }
         ],
-        tradeTypeList:[
+        tradeTypeList: [
             { name: 'CFD账户', id: '1' },
             { name: 'CFD账户222', id: '2' },
         ],
@@ -21,8 +21,9 @@ export const wpCompanyConfig = () => {
 // 获取自选产品
 export const wpSelfSymbolIndex = () => {
     // return pageConfig('SelfSymbolIndex')
+
     return Promise.resolve({
-        symbol_ids: [1,2, 3, 4, 5, 6, 7,8],
+        symbol_ids: [1, 2, 3, 4, 5, 6, 7, 8],
     })
 }
 export const wpNav = () => pageConfig('Nav')

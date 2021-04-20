@@ -169,3 +169,16 @@ export function isEmpty (obj) {
         return false
     }
 }
+
+/* 获取数组里面指定key = value的对象 */
+export function getArrayObj (arr, key, value) {
+    let temp = {}
+    if (Array.isArray(arr)) {
+        arr.forEach(item => {
+            if (String(item[key]) === String(value)) {
+                temp = item
+            }
+        })
+    }
+    return temp
+}

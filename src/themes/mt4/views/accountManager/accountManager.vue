@@ -7,7 +7,7 @@
             <figure class='userFigure'>
                 <img alt='' class='face' src='@m/images/face.png' />
                 <figcaption>
-                    <p><strong>Cats2.0 H5 Demo</strong></p>
+                    <!-- <p><strong>Cats2.0 H5 Demo</strong></p>
                     <p class='muted'>
                         {{ customInfo.customerNo }} - MetaQuotes-Demo
                     </p>
@@ -16,11 +16,17 @@
                     </p>
                     <p class='amount'>
                         {{ mainAccount.balance }} USD
+                    </p> -->
+                    <p class='account-info'>
+                        {{ customInfo.customerNo }} - {{ mainAccount.trade.name }}
                     </p>
                 </figcaption>
             </figure>
-            <i class='icon_tishi' @click='show=true'></i>
+            <!-- <i class='icon_tishi' @click='show=true'></i> -->
         </section>
+        <p class='link'>
+            连接到
+        </p>
         <div v-for='(item, index) in accountList' :key='index' class='account-item' @click='handleSwitchAccount(item)'>
             <p>余额： {{ item.balance }}</p>
             <p>可取金额：{{ item.withdrawAmount }}</p>
@@ -49,12 +55,14 @@ import { Toast } from 'vant'
 
 import { switchAccount } from '@/api/user'
 import { reactive, toRefs, ref, onBeforeMount, computed, onMounted } from 'vue'
+import { getArrayObj } from '@/utils/util'
 export default {
     setup () {
         const store = useStore()
         const show = ref(false)
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+        const tradeTypeList = computed(() => store.state._base.wpCompanyInfo.tradeTypeList)
 
         const state = reactive({
             mainAccount: {},
@@ -84,6 +92,7 @@ export default {
         onBeforeMount(() => {
             const list = customInfo.value.accountList
             list.forEach(item => {
+                item.trade = getArrayObj(tradeTypeList.value, 'id', item.tradeType)
                 if (item.accountId === customInfo.value.accountId) {
                     state.mainAccount = item
                 } else {
@@ -94,6 +103,7 @@ export default {
 
         return {
             customInfo,
+            tradeTypeList,
             show,
             handleSwitchAccount,
             ...toRefs(state)
@@ -131,6 +141,9 @@ export default {
         padding: rem(30px);
         border: solid 1px var(--bdColor);
         border-radius: rem(15px);
+    }
+    .link {
+        padding-left: rem(30px);
     }
 }
 .flag {
