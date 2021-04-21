@@ -4,11 +4,15 @@ import router from './router'
 import store from './store'
 import VantBase from './vantBase'
 import Socket from '@/plugins/socket/socket'
-import longpress from '@/directives/longpress';
+import longpress from '@/directives/longpress'
 import Loading from '@m/components/loading'
 import Colors, { setRootVariable } from './colorVariables'
 import { setRouter } from '@/utils/request'
 import { getLoginParams, getToken, removeLoginParams } from '@/utils/util'
+
+// 调试工具
+import VConsole from 'vconsole'
+const Vconsole = new VConsole()
 
 setRouter(router)
 setRootVariable(Colors)

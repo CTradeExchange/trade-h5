@@ -252,22 +252,6 @@ export default {
                 return Toast(`存款金额不能大于${state.checkedType.singleHighAmount}`)
             }
 
-            // companyId	Long	必填	公司ID
-            // customerNo	String	必填	客户编号
-            // accountId	Long	必填	账户ID
-            // customerGroupId	Long	必填	客户组id
-            // depositRateSerialNo	String	必填	存款费率流水号
-            // paymentCurrency	String	必填	存款货币编码
-            // accountCurrency	String	必填	账户货币编码
-            // exchangeRate	BigDecimal	选填	汇率
-            // paymentChannelCode	String	必填	支付通道编码
-            // paymentChannelType	String	必填	支付通道类型
-            // paymentChannelClientType	String	必填	支付通道客户端类型pc、mobile
-            // depositAmount	BigDecimal	必填	账户存款金额,币种类型和账户币种一致
-            // country	String	必填	国家(客户账号开户所属国家)
-            // channelCode	String	必填	广告来源(客户账号开户渠道编码)
-            // depositFrom	String	必填	存款来源,取值H5、H5_Android、H5_IOS、PCUI_Windows、PCUI_Mac、APP_Android、APP_IOS
-
             const params = {
                 customerNo: customInfo.value.customerNo,
                 accountId: customInfo.value.accountId,
@@ -289,7 +273,8 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     if (res.data.browserOpenUrl) {
-                        window.open(res.data.browserOpenUrl)
+                        window.location.href = res.data.browserOpenUrl
+                        // window.open(res.data.browserOpenUrl)
                     }
                 } else {
                     Toast(res.msg)

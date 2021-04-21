@@ -66,23 +66,36 @@
             </div>
         </div>
     </van-action-sheet>
+    <van-dialog
+        v-model:show='withdrawSuccess'
+        class-name='add-success'
+        confirm-button-text='返回首页'
+        show-cancel-button='false'
+        @cancel='onCancel'
+        @confirm='onConfirm'
+    >
+        <i class='icon_success'></i>
+        <p class='title'>
+            提交成功
+        </p>
+        <p class='content'>
+            提交成功，等待客服审核
+        </p>
+    </van-dialog>
 </template>
 
 <script>
 import Top from '@/components/top'
 import {
     reactive,
-    ref,
     computed,
     toRefs,
-    onMounted,
     onBeforeMount,
-    watch,
     watchEffect
 } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { Toast, Dialog } from 'vant'
-import { isEmpty, debounce, debounce2 } from '@/utils/util'
+import { isEmpty } from '@/utils/util'
 import { useStore } from 'vuex'
 import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate, queryBankList, computeWithdrawFee } from '@/api/user'
 export default {
@@ -114,7 +127,8 @@ export default {
             withdrawRate: '',
             withdrawConfig: '',
             bankList: [],
-            fun: null
+            fun: null,
+            withdrawSuccess: false
         })
 
         const getWithdrawFee = (amount) => {
@@ -129,12 +143,16 @@ export default {
             computeWithdrawFee(params).then(res => {
                 if (res.check()) {
                     state.fee = res.data
+                } else {
+                    state.fee = ''
                 }
             })
         }
 
         const debounceFn = () => {
-            return setTimeout(getWithdrawFee, 1000)
+            if (!isEmpty(state.amount)) {
+                return setTimeout(getWithdrawFee, 1000)
+            }
         }
 
         watchEffect((onInvalidate) => {
@@ -171,9 +189,9 @@ export default {
         }
 
         const confirm = () => {
-            if (!state.withdrawConfig.enableWithdraw) {
-                return Toast('该用户暂不可取款')
-            }
+            // if (!state.withdrawConfig.enableWithdraw) {
+            //     return Toast('该用户暂不可取款')
+            // }
 
             if (state.amount <= 0) {
                 state.amount = 0
@@ -215,9 +233,9 @@ export default {
             handleWithdraw(params).then(res => {
                 state.loading = false
                 if (res.check()) {
-                    Toast(res.msg)
                     console.log('res', res)
                     state.amount = ''
+                    state.withdrawSuccess = true
                 }
             }).catch(err => {
                 state.loading = false
@@ -288,6 +306,13 @@ export default {
             return `${value.substring(0, 4)} ${'*'.repeat(value.length - 8).replace(/(.{4})/g, '$1 ')}${value.length % 4 ? ' ' : ''}${value.slice(-4)}`
         }
 
+        const onCancel = () => {
+            // state.withdrawSuccess = false
+        }
+        const onConfirm = () => {
+            router.push('/quote')
+        }
+
         onBeforeMount(() => {
             // 获取取款配置
             getWithdrawConfig()
@@ -308,8 +333,9 @@ export default {
             confirm,
             customInfo,
             hideMiddle,
-            getWithdrawFee
-
+            getWithdrawFee,
+            onCancel,
+            onConfirm
         }
     }
 
@@ -435,4 +461,24 @@ export default {
     }
 }
 
+</style>
+
+<style lang="scss">
+@import '@/sass/mixin.scss';
+.add-success {
+    padding: rem(30px) rem(30px) 0 rem(30px);
+    text-align: center;
+    .icon_success {
+        color: var(--success);
+        font-size: rem(96px);
+    }
+    .title {
+        line-height: rem(80px);
+    }
+    .content {
+        margin: rem(20px) 0;
+        color: var(--mutedColor);
+        font-size: rem(28px);
+    }
+}
 </style>

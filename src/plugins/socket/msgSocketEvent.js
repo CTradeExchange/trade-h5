@@ -79,7 +79,6 @@ class SocketEvent {
         const param = this.getParam('ping')
         setInterval(() => {
             this.ws.send(JSON.stringify(param))
-            console.log('心跳', param)
         }, 30000)
     }
 

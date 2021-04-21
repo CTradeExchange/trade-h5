@@ -8,7 +8,7 @@
             </template>
         </van-cell>
         <van-cell is-link title='修改登录密码' to='/setLoginPwd' />
-        <van-button class='logout-btn' type='primary' @click='handleLogout'>
+        <van-button class='logout-btn' loading='loading' type='primary' @click='handleLogout'>
             <span>退出账号</span>
         </van-button>
     </div>
@@ -28,7 +28,8 @@ export default {
     },
     setup (props) {
         const state = reactive({
-            checked: false
+            checked: false,
+            loading: false
         })
         const router = useRouter()
 
@@ -37,13 +38,15 @@ export default {
                 title: '提示',
                 message: '确定退出登录吗',
             }).then(() => {
+                state.loading = true
                 logout().then(res => {
+                    state.loading = false
                     if (res.check()) {
                         removeLoginParams()
                         router.push('/login')
                     }
                 }).catch(err => {
-
+                    state.loading = true
                 })
             })
                 .catch(() => {

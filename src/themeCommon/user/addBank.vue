@@ -281,7 +281,7 @@ export default {
 <style lang="scss">
 @import '@/sass/mixin.scss';
 .add-success {
-    padding: rem(30px);
+    padding: rem(30px) rem(30px) 0 rem(30px);
     text-align: center;
     .icon_success {
         color: var(--success);

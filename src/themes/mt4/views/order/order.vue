@@ -299,7 +299,7 @@ export default {
         position: absolute;
         top: 100%;
         left: 0;
-        z-index: 1;
+        z-index: 3;
         width: 100%;
         background: var(--bgColor);
         box-shadow: 1px 1px rem(15px) rgba(0, 0, 0, 0.3);
