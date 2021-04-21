@@ -42,3 +42,12 @@ export function getBankDict (data) {
         data
     })
 }
+
+/* 上传 */
+export function upload (data) {
+    return request({
+        url: '/upload',
+        method: 'post',
+        data
+    })
+}
