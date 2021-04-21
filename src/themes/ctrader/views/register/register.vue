@@ -79,79 +79,79 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.register{
+.register {
     position: relative;
     height: 100%;
 }
-.loginBtn{
+.loginBtn {
     position: absolute;
-    right: rem(30px);
     top: 0;
+    right: rem(30px);
     height: rem(90px);
-    line-height: rem(90px);
     color: var(--white);
+    line-height: rem(90px);
 }
-.banner{
-    padding: 0 rem(30px);
+.banner {
     margin-top: rem(20px);
-    img{
+    padding: 0 rem(30px);
+    img {
         display: block;
         width: 100%;
     }
 }
-.cell{
+.cell {
     display: flex;
     justify-content: space-between;
     margin: rem(40px) rem(30px);
-    div{
+    div {
         flex: 1;
     }
-    .zone{
-        width: rem(200px);
+    .zone {
         flex: none;
+        width: rem(200px);
         margin-right: rem(20px);
     }
-    &.openType{
+    &.openType {
         justify-content: center;
-        &>div{
+        &>div {
             flex: none;
             margin: 0 1em;
         }
-        a{
+        a {
             color: var(--color);
         }
     }
-    .openTypeAcitve{
-        a{
+    .openTypeAcitve {
+        a {
             color: var(--primary);
         }
     }
 }
-.openTypeWrapper{
-    :deep(.van-tabs__nav--card){
+.openTypeWrapper {
+    :deep(.van-tabs__nav--card) {
         margin: 0;
-        border-radius: rem(10px);
         overflow: hidden;
+        border-radius: rem(10px);
     }
 }
-.input{
+.input {
     display: block;
     width: 100%;
     height: rem(75px);
-    line-height: 1;
-    font-size: rem(30px);
     padding: 0 5px;
+    font-size: rem(30px);
+    line-height: 1;
     border: 1px solid var(--bdColor);
     border-radius: rem(10px);
 }
-.registerBtn{
+.registerBtn {
     margin-top: rem(80px);
     border-radius: rem(50px);
 }
-.switchType{
-    text-align: center;
+.switchType {
     margin-top: rem(30px);
-    a{
+    text-align: center;
+    a {
         color: var(--primary);
     }
 }

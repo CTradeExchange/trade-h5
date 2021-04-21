@@ -76,43 +76,44 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.inputWrapper{
+.inputWrapper {
     position: relative;
-    width: 100%;
     display: flex;
     align-items: center;
-    padding-right: .8em;
+    width: 100%;
+    padding-right: 0.8em;
 }
-.label{
+.label {
     position: absolute;
-    left: 5px;
     top: 0;
+    left: 5px;
     height: rem(75px);
-    line-height: rem(75px);
     color: var(--placeholder);
     font-size: rem(30px);
-    transition: all cubic-bezier(.4,0,.2,1) .15s;
-    &.active{
-        transform: scale(.8) translateY(-90%);
+    line-height: rem(75px);
+    transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.15s;
+    &.active {
+        transform: scale(0.8) translateY(-90%);
     }
 }
-.input{
+.input {
     flex: 1;
-    padding: 0 5px;
     width: 100%;
     height: rem(75px);
-    &:focus ~ .label,
-    &:valid ~ .label{
+    padding: 0 5px;
+    &:focus~.label,
+    &:valid~.label {
+        transform: scale(0.8) translateY(-90%);
         transform-origin: bottom left;
-        transform: scale(.8) translateY(-90%);
     }
 }
-.van-icon-clear{
+.van-icon-clear {
     color: var(--bdColor);
     font-size: rem(36px);
 }
-.icon_icon_default, .icon_icon_pressed{
-    margin-left: .8em;
+.icon_icon_default,
+.icon_icon_pressed {
+    margin-left: 0.8em;
     color: var(--bdColor);
     font-size: rem(36px);
 }

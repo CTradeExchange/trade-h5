@@ -30,19 +30,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/sass/mixin.scss";
-.actionList{
+@import '~@/sass/mixin.scss';
+.actionList {
     padding-left: rem(40px);
     line-height: 1.5;
-    .item{
-        padding: rem(30px) rem(30px) rem(30px) 0;
+    .item {
         @include active();
+        padding: rem(30px) rem(30px) rem(30px) 0;
     }
-    .title{
-        font-size: rem(30px);
+    .title {
         font-weight: bold;
+        font-size: rem(30px);
     }
-    .desc{
+    .desc {
         color: var(--mutedColor);
         font-size: rem(26px);
     }

@@ -46,42 +46,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/sass/mixin.scss";
+@import '@/sass/mixin.scss';
 .icon {
     color: var(--white);
     font-size: 1.4em;
     &:not(:first-of-type) {
-        margin-left: .6em;
+        margin-left: 0.6em;
     }
-    &.icon_gengduo{
+    &.icon_gengduo {
         font-size: 1.2em;
-        opacity: .7;
+        opacity: 0.7;
     }
 }
-.morePopup{
+.morePopup {
     position: fixed;
-    z-index: 9;
-    left: 0;
     top: 0;
+    left: 0;
+    z-index: 9;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,.3);
+    background: rgba(0, 0, 0, 0.3);
 }
-.morePopupContainer{
+.morePopupContainer {
     position: absolute;
-    right: rem(10px);
     top: rem(90px);
+    right: rem(10px);
     background: var(--bgColor);
-    .link{
+    .link {
+        @include active()
+    ;
         display: block;
         padding: 0 rem(30px);
-        line-height: rem(88px);
         color: var(--color);
         font-size: rem(28px);
-        @include active()
+        line-height: rem(88px);
     }
 }
-.morePopupContainer{
+.morePopupContainer {
     color: var(--color);
 }
 </style>

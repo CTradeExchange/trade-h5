@@ -28,31 +28,32 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-.capitalList{
+.capitalList {
     padding: rem(20px) rem(30px);
     font-size: rem(24px);
-    .item{
+    .item {
         position: relative;
         display: flex;
         justify-content: space-between;
         height: rem(50px);
         line-height: rem(50px);
-        &::before{
+        &::before {
             position: absolute;
-            content: '';
-            width: 100%;
             top: 48%;
             left: 0;
+            width: 100%;
             height: 1px;
             border-bottom: 1px dashed var(--placeholder);
+            content: '';
         }
-        .title,.value{
+        .title,
+        .value {
             position: relative;
             z-index: 1;
-            background: #fff;
             padding: 0 rem(10px);
+            background: #FFF;
         }
-        .value{
+        .value {
             color: var(--primary);
             font-weight: bold;
         }

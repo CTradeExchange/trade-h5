@@ -44,21 +44,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/sass/mixin.scss";
+@import '@/sass/mixin.scss';
 .loginByFacebook {
     position: relative;
     display: inline-block;
     width: rem(220px);
     height: rem(60px);
-    line-height: rem(60px);
     padding-left: rem(60px);
     color: var(--white);
+    line-height: rem(60px);
     background: var(--primary);
     border-radius: rem(5px);
     .icon {
         position: absolute;
-        left: 1px;
         top: 1px;
+        left: 1px;
         width: rem(56px);
         height: rem(56px);
         background: url(../../images/facebook.svg) no-repeat center;

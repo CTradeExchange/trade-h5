@@ -30,52 +30,54 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.registerSuccess{
+.registerSuccess {
     display: flex;
     padding: rem(80px) rem(40px)  rem(40px);
-    .icon{
+    .icon {
         width: rem(200px);
-        font-size: rem(120px);
         color: var(--success);
+        font-size: rem(120px);
         text-align: center;
     }
-    h2{
-        font-size: rem(32px);
-        font-weight: normal;
+    h2 {
         margin: rem(15px) 0 rem(20px);
+        font-weight: normal;
+        font-size: rem(32px);
     }
-    .accountNo{
+    .accountNo {
         color: var(--success);
     }
 }
-.tips{
+.tips {
     margin-top: rem(20px);
-    font-size: rem(26px);
     color: var(--mutedColor);
+    font-size: rem(26px);
     text-align: center;
 }
-.btnBox{
-    margin: rem(60px) rem(80px);
+.btnBox {
     display: flex;
+    margin: rem(60px) rem(80px);
     text-align: center;
-    .btn,.highBtn{
+    .btn,
+    .highBtn {
+        @include active()
+    ;
         flex: 1;
         height: rem(100px);
-        background: #f3f8fe;
-        color: var(--primary);
         margin-right: rem(20px);
-        border-radius: rem(10px);
+        color: var(--primary);
         line-height: 1.5;
-        @include active()
+        background: #F3F8FE;
+        border-radius: rem(10px);
     }
-    .highBtn{
-        background: var(--primary);
+    .highBtn {
         color: var(--white);
+        background: var(--primary);
     }
-    .smallRow{
+    .smallRow {
         font-size: rem(20px);
-        i{
-            color: #fffc00;
+        i {
+            color: #FFFC00;
         }
     }
 }

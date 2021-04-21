@@ -29,18 +29,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/sass/mixin.scss";
-.tips{
+@import '~@/sass/mixin.scss';
+.tips {
     position: relative;
     margin-top: rem(20px);
     padding-left: rem(70px);
     font-size: rem(26px);
-    .icon{
+    .icon {
         position: absolute;
-        left: rem(30px);
         top: rem(2px);
-        vertical-align: -2px;
+        left: rem(30px);
         font-size: rem(30px);
+        vertical-align: -2px;
     }
 }
 </style>

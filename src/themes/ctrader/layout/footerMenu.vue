@@ -53,31 +53,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/sass/mixin.scss";
-.my-swipe{
+@import '@/sass/mixin.scss';
+.my-swipe {
     .van-swipe-item {
-        font-size: rem(24px);
+        display: flex;
+        width: 100%;
         height: rem(120px);
+        padding-top: rem(20px);
+        font-size: rem(24px);
+        line-height: 1.5;
         text-align: center;
         background-color: var(--bgColor);
-        padding-top: rem(20px);
-        width: 100%;
-        line-height: 1.5;
-        display: flex;
-        .col{
+        .col {
             flex: 1;
         }
     }
-    :deep(.van-swipe__indicators){
-        bottom:5px;
+    :deep(.van-swipe__indicators) {
+        bottom: 5px;
     }
-    :deep(.van-swipe__indicator){
-        background-color: var(--mutedColor) !important;
+    :deep(.van-swipe__indicator) {
         width: 4px;
         height: 4px;
+        background-color: var(--mutedColor) !important;
     }
 }
-
 .val {
     font-size: rem(22px);
 }

@@ -25,16 +25,16 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-.price{
-    font-size: rem(30px);
+.price {
     font-weight: bold;
-    .normal{
+    font-size: rem(30px);
+    .normal {
         vertical-align: text-bottom;
     }
-    .big{
+    .big {
         font-size: rem(46px);
     }
-    sup{
+    sup {
         font-size: inherit;
     }
 }
