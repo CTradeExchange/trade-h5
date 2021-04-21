@@ -26,7 +26,7 @@ export default {
         const productList = computed(() => store.state._quote.productList)
 
         // 订阅产品
-        debugger
+
         const subscribList = productList.value.map(({ symbolId }) => symbolId)
         QuoteSocket.send_subscribe(subscribList)
 

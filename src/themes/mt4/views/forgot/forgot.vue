@@ -101,7 +101,7 @@ export default {
         const handleVerifyCodeSend = (callback) => {
             const params = {
                 bizType: state.curTab === 0 ? 'SMS_PASSWORD_VERIFICATION_CODE' : 'EMAIL_PASSWORD_VERIFICATION_CODE',
-                toUser: state.zone + ' ' + state.mobile
+                toUser: state.curTab === 0 ? state.zone + ' ' + state.mobile : state.email,
             }
 
             const validator = new Schema(Rule)

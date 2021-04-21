@@ -20,6 +20,7 @@
     "pako": "^2.0.3",
     "reconnectingwebsocket": "^1.0.0",
     "vant": "^3.0.2",
+    "vconsole": "^3.4.1",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
