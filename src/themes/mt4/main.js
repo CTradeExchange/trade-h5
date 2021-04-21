@@ -11,8 +11,8 @@ import { setRouter } from '@/utils/request'
 import { getLoginParams, getToken, removeLoginParams } from '@/utils/util'
 
 // 调试工具
-import VConsole from 'vconsole'
-const Vconsole = new VConsole()
+// import VConsole from 'vconsole'
+// const Vconsole = new VConsole()
 
 setRouter(router)
 setRootVariable(Colors)

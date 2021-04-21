@@ -198,7 +198,7 @@
 
 <script>
 import { reactive, toRefs, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, onBeforeRouteUpdate } from 'vue-router'
 import Top from '@/components/top'
 export default {
     components: {
@@ -206,6 +206,10 @@ export default {
     },
     setup (props) {
         const router = useRouter()
+        onBeforeRouteUpdate(async (to, from) => {
+        //仅当 id 更改时才获取用户，例如仅 query 或 hash 值已更改
+           console.log(555)
+        })
         const activeNames = ref(['1'])
         const handleFold = (e) => {
             console.log(e)

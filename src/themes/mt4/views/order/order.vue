@@ -20,11 +20,11 @@
 
         <!-- 买卖价格 -->
         <div class='cell priceCell'>
-            <div class='col fallColor'>
-                <Price :digit='product.price_digits' :mode='2' :point-ratio='product.pointRatio' :price='product.sell_price' />
-            </div>
             <div class='col riseColor'>
                 <Price :digit='product.price_digits' :mode='2' :point-ratio='product.pointRatio' :price='product.buy_price' />
+            </div>
+            <div class='col fallColor'>
+                <Price :digit='product.price_digits' :mode='2' :point-ratio='product.pointRatio' :price='product.sell_price' />
             </div>
         </div>
         <!-- {{ profitLossRang }} -->
@@ -65,7 +65,7 @@
         <Pending :data='orderParams' :product='product' @onHide='pendingVisible = false' />
     </van-popup>
     <van-popup v-model:show='successVisible' :close-on-click-overlay='false' :style="{ width: '100%', height: '100%' }">
-        <Success @onHide='successVisible = false' />
+        <Success :data='resData' @onHide='successVisible = false' />
     </van-popup>
 
     <Loading :show='loading' />
@@ -123,7 +123,8 @@ export default {
             pendingPrice: 0, // 挂单价
             stopLoss: 0, // 止损单价
             takeProfit: 0, // 止盈单价
-            orderParams: {} // 订单入参
+            orderParams: {}, // 订单入参
+            resData: {}
         })
         watch(
             () => state.pendingPrice,
@@ -213,7 +214,9 @@ export default {
                     state.loading = false
                     if (res.invalid()) return false
                     state.orderParams = params
-                    state.pendingVisible = true
+                    // state.pendingVisible = true
+                    state.successVisible = true
+                    state.resData = res.data
                 })
                 .catch(err => {
                     state.loading = false

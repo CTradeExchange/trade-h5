@@ -46,7 +46,7 @@
                     <i class='icon icon_jiemian'></i> <strong>账户资金</strong>
                 </li>
 
-                <li class='item' @click="visible=false;$router.push('/desposit')">
+                <li class='item' @click="visible=false;$router.push({path:'/desposit'})">
                     <i class='icon icon_cunkuan'></i> <strong>存款</strong>
                 </li>
                 <li class='item' @click="visible=false;$router.push('/withdraw')">

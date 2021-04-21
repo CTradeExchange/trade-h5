@@ -39,7 +39,7 @@ export default {
 
         store.dispatch('_quote/querySymbolInfo', symbolId)
         const product = computed(() => store.state._quote.productMap[symbolId])
-        debugger
+
         QuoteSocket.send_subscribe([symbolId])
         return {
             product

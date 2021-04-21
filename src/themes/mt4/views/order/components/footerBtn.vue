@@ -1,25 +1,31 @@
 <template>
-    <div class="footerBtn" v-if="$route.query.positionId">
-        <div class="col">
-            <button class="btn" :disabled="loading" @click="modifyOrder">修改</button>
+    <div v-if='$route.query.positionId' class='footerBtn'>
+        <div class='col'>
+            <button class='btn' :disabled='loading' @click='modifyOrder'>
+                修改
+            </button>
         </div>
     </div>
-    <div class="footerBtn line" v-else-if="openOrderSelected.val === 1">
-        <div class="col">
-            <button class="btn sellColor" :disabled="loading || sellDisabled" @click="openOrder('sell')">
+    <div v-else-if='openOrderSelected.val === 1' class='footerBtn line'>
+        <div class='col'>
+            <button class='btn sellColor' :disabled='loading || sellDisabled' @click="openOrder('sell')">
                 SELL
             </button>
         </div>
-        <div class="col">
-            <button class="btn buyColor" :disabled="loading || buyDisabled" @click="openOrder('buy')">
+        <div class='col'>
+            <button class='btn buyColor' :disabled='loading || buyDisabled' @click="openOrder('buy')">
                 BUY
             </button>
         </div>
     </div>
-    <div class="footerBtn" v-else>
-        <div class="col">
-            <button class="btn buyColor" v-if="[2, 4].includes(openOrderSelected.val)" :disabled="loading || buyDisabled" @click="openOrder()">下单</button>
-            <button class="btn sellColor" v-else-if="[3, 5].includes(openOrderSelected.val)" :disabled="loading || sellDisabled" @click="openOrder()">下单</button>
+    <div v-else class='footerBtn'>
+        <div class='col'>
+            <button v-if='[2, 4].includes(openOrderSelected.val)' class='btn buyColor' :disabled='loading || buyDisabled' @click='openOrder()'>
+                下单
+            </button>
+            <button v-else-if='[3, 5].includes(openOrderSelected.val)' class='btn sellColor' :disabled='loading || sellDisabled' @click='openOrder()'>
+                下单
+            </button>
         </div>
     </div>
 </template>
@@ -28,15 +34,15 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 export default {
-    props: ['loading', 'openOrderSelected','pendingPrice','stopLoss','takeProfit'],
+    props: ['loading', 'openOrderSelected', 'pendingPrice', 'stopLoss', 'takeProfit'],
     emits: ['openOrder'],
-    setup(props, { emit }) {
+    setup (props, { emit }) {
         const store = useStore()
         const profitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
         const pendingPriceRang = computed(() => store.getters['_trade/pendingPriceRang'])
         // 是否符合买入的止盈止损范围
         const buyDisabled = computed(() => {
-            let {stopLoss,takeProfit,pendingPrice,openOrderSelected} = props
+            let { stopLoss, takeProfit, pendingPrice, openOrderSelected } = props
             const [buyProfitMin, buyProfitMax] = profitLossRang.value.buyProfitRange
             const [buyStopLossMin, buyStopLossMax] = profitLossRang.value.buyStopLossRange
             const [buyLimitMin, buyLimitMax] = pendingPriceRang.value.buyLimitRange
@@ -45,6 +51,8 @@ export default {
             pendingPrice = Number(pendingPrice)
             stopLoss = Number(stopLoss)
             takeProfit = Number(takeProfit)
+            console.log('买入止盈最小，最大', buyProfitMin, buyProfitMax)
+            console.log('买入止损最小，最大', buyStopLossMin, buyStopLossMax)
             if (stopLoss > 0 && (stopLoss < buyStopLossMin || stopLoss > buyStopLossMax)) {
                 return true
             } else if (takeProfit > 0 && (takeProfit < buyProfitMin || takeProfit > buyProfitMax)) {
@@ -59,18 +67,22 @@ export default {
         })
         // 是否符合卖出的止盈止损范围
         const sellDisabled = computed(() => {
-            let {stopLoss,takeProfit,pendingPrice,openOrderSelected} = props
+            let { stopLoss, takeProfit, pendingPrice, openOrderSelected } = props
+
             const [sellProfitMin, sellProfitMax] = profitLossRang.value.sellProfitRange
             const [sellStopLossMin, sellStopLossMax] = profitLossRang.value.sellStopLossRange
             const [sellLimitMin, sellLimitMax] = pendingPriceRang.value.sellLimitRange
             const [sellStopMin, sellStopMax] = pendingPriceRang.value.sellStopRange
             const openOrderVal = openOrderSelected.val
+            console.log('卖出止盈最小，最大', sellProfitMin, sellProfitMax)
+            console.log('卖出止损最小，最大', sellStopLossMin, sellStopLossMax)
             pendingPrice = Number(pendingPrice)
             stopLoss = Number(stopLoss)
             takeProfit = Number(takeProfit)
-            if (stopLoss > 0 && (stopLoss < sellProfitMin || stopLoss > sellProfitMax)) {
+
+            if (stopLoss > 0 && (stopLoss < sellStopLossMin || stopLoss > sellStopLossMax)) {
                 return true
-            } else if (takeProfit > 0 && (takeProfit < sellStopLossMin || takeProfit > sellStopLossMax)) {
+            } else if (takeProfit > 0 && (takeProfit < sellProfitMin || takeProfit > sellProfitMax)) {
                 return true
             } else if (openOrderVal === 3 && (!sellLimitMax || pendingPrice < sellLimitMin || pendingPrice > sellLimitMax)) {
                 return true

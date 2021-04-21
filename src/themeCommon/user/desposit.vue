@@ -5,7 +5,7 @@
             left-icon='arrow-left'
             :menu='false'
             :right-action='rightAction'
-            show-center='true'
+            :show-center='true'
             @rightClick='toDespositList'
         />
         <Loading :show='loading' />
@@ -80,7 +80,7 @@
         <span>下一步</span>
     </van-button>
 
-    <van-action-sheet v-model:show='typeShow' round='false' title='选择支付方式'>
+    <van-action-sheet v-model:show='typeShow' :round='false' title='选择支付方式'>
         <div class='pay-list'>
             <div v-for='(item,index) in PayTypes' :key='index' class='pay-type' @click='choosePayType(item)'>
                 <img alt='' :src='require("../../assets/payment_icon/" + checkedType.paymentType + ".png")' srcset='' />
@@ -91,12 +91,29 @@
             </div>
         </div>
     </van-action-sheet>
+
+    <van-dialog
+        v-model:show='despositVis'
+        cancel-button-text='未完成充值'
+        class-name='desposit-dialog'
+        confirm-button-text='已完成充值'
+        show-cancel-button='false'
+        @cancel='onCancel'
+        @confirm='onConfirm'
+    >
+        <van-icon
+            name='info-o'
+        />
+        <p class='title'>
+            是否已完成充值
+        </p>
+    </van-dialog>
 </template>
 
 <script>
 import Top from '@/components/top'
-import { onBeforeMount, reactive, ref, computed, toRefs } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { onBeforeMount, reactive, ref, computed, watch, toRefs } from 'vue'
+import { useRoute, useRouter, onBeforeRouteUpdate, onBeforeRouteEnter, onBeforeRouteLeave } from 'vue-router'
 import { queryPayType, queryDepositExchangeRate, handleDesposit } from '@/api/user'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
@@ -110,6 +127,7 @@ export default {
         const route = useRoute()
         const router = useRouter()
         const store = useStore()
+
         const rightAction = {
             title: '取款记录'
         }
@@ -164,8 +182,14 @@ export default {
             rateConfig: '',
             presentAmount: 0,
             loading: false,
+            despositVis: false
 
         })
+
+        // 判断sessionStorage 里面有没有保存proposalNo，有则弹窗提醒
+        if (sessionStorage.getItem('proposalNo')) {
+            state.despositVis = true
+        }
 
         const checkAmount = (index, item) => {
             state.otherAmountVis = false
@@ -273,6 +297,8 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     if (res.data.browserOpenUrl) {
+                        console.log(res.data)
+                        sessionStorage.setItem('proposalNo', res.data.proposalNo)
                         window.location.href = res.data.browserOpenUrl
                         // window.open(res.data.browserOpenUrl)
                     }
@@ -293,6 +319,16 @@ export default {
             }
         }
 
+        const onConfirm = () => {
+            sessionStorage.removeItem('proposalNo')
+            router.replace('/position')
+        }
+
+        const onCancel = () => {
+            sessionStorage.removeItem('proposalNo')
+            state.despositVis = false
+        }
+
         onBeforeMount(() => {
             getPayTypes()
             getDepositExchangeRate()
@@ -310,7 +346,9 @@ export default {
             openOtherMoney,
             getDepositExchangeRate,
             next,
-            computeTime
+            computeTime,
+            onCancel,
+            onConfirm
         }
     }
 }
@@ -458,6 +496,25 @@ export default {
     span {
         color: var(--color);
         font-size: rem(34px);
+    }
+}
+</style>
+
+<style lang="scss">
+@import '@/sass/mixin.scss';
+.desposit-dialog {
+    padding: rem(30px) rem(30px) 0 rem(30px);
+    text-align: center;
+    .van-icon-info-o {
+        font-size: rem(60px);
+    }
+    .title {
+        line-height: rem(80px);
+    }
+    .content {
+        margin: rem(20px) 0;
+        color: var(--mutedColor);
+        font-size: rem(28px);
     }
 }
 </style>

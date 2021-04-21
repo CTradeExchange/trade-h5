@@ -1,20 +1,26 @@
 <template>
     <div class='pending'>
         <top />
-        <p class='iconMain'>
-            <i class='icon_chenggong'></i>
-        </p>
-        <p class='title'>
-            订单打开
-        </p>
-        <p class='desc'>
-            #695329333 <br />
-            buy 1.00 EURUSD at 1.21350 <br />
-            sl:0.0000 tp: 0.00000
-        </p>
+        <div class='pending-wrap'>
+            <p>
+                #{{ data.orderId }}
+                <span class='direction'>
+                    {{ data.direction === 1 ? 'BUY' : 'SELL' }}
+                    {{ data.tradeVolume }}
+                </span>
+            </p>
+            <p>
+                at <span class='price'>
+                    {{ data.executePrice }}
+                </span>
+            </p>
+            <p>
+                成功
+            </p>
+        </div>
         <div class='footerBtn of-1px-top'>
             <button class='btn' @click='$router.replace("/quote")'>
-                隐藏
+                完成
             </button>
         </div>
     </div>
@@ -26,6 +32,7 @@ export default {
     components: {
         top,
     },
+    props: ['data']
 }
 </script>
 
@@ -34,6 +41,22 @@ export default {
 .pending {
     position: relative;
     height: 100%;
+    .pending-wrap {
+        padding-top: rem(50px);
+        color: #4B4B52;
+        font-weight: bold;
+        font-size: rem(48px);
+        text-align: center;
+        p {
+            margin-bottom: rem(10px);
+        }
+        .direction {
+            color: #007AFF;
+        }
+        .price {
+            color: var(--color);
+        }
+    }
 }
 .iconMain {
     padding-top: rem(50px);
