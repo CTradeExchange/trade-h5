@@ -52,5 +52,10 @@
     },
     "[typescript]": {
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    }
+    },
+    "vue-format.pug-beautify": {
+
+        "fill_tab": false
+    },
+    "editor.minimap.enabled": false
 }
