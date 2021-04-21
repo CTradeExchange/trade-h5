@@ -1,4 +1,5 @@
 **/fonts/**/*
 **/font/**/*
 src/components/tradingview/datafeeds/**/*
-# /src
+src/
+public/charting_library/
