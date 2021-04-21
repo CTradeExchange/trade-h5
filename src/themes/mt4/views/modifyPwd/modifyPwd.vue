@@ -67,8 +67,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/sass/mixin.scss";
-.modifyPwd{
+@import '@/sass/mixin.scss';
+.modifyPwd {
     position: relative;
     height: 100%;
 }
@@ -81,42 +81,42 @@ export default {
             margin-top: rem(20px);
         }
         &::before {
-            content: "";
             position: absolute;
-            left: 1px;
-            right: 1px;
             top: 0;
+            right: 1px;
             bottom: 0;
+            left: 1px;
             border: 1px solid var(--bdColor);
+            content: '';
             clip: rect(rem(58px) auto auto auto);
         }
         input {
             display: block;
             width: 100%;
-            padding: 0 rem(20px);
             height: rem(70px);
+            padding: 0 rem(20px);
             line-height: 1;
             background-color: var(--white);
         }
     }
 }
-.tips{
+.tips {
     position: relative;
-    line-height: 1.4;
-    font-size: rem(24px);
     padding: rem(10px) 0 0 rem(90px);
     color: var(--mutedColor);
-    .icon_tishi{
-        font-size: rem(40px);
+    font-size: rem(24px);
+    line-height: 1.4;
+    .icon_tishi {
         position: absolute;
-        left: rem(30px);
         top: rem(10px);
+        left: rem(30px);
+        font-size: rem(40px);
     }
 }
-.footerBtn{
+.footerBtn {
     position: absolute;
-    left: 0;
     bottom: 0;
+    left: 0;
     width: 100%;
 }
 </style>

@@ -90,135 +90,136 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.pageWrap{
+.pageWrap {
     position: relative;
     height: 100%;
-    .header{
-        margin: rem(40px) rem(30px);
+    .header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
+        margin: rem(40px) rem(30px);
     }
-    .pageTitle{
-        font-size: rem(50px);
+    .pageTitle {
         font-weight: normal;
+        font-size: rem(50px);
     }
 }
-.loginAccount{
-    margin: rem(0px) rem(30px);
+.loginAccount {
     display: flex;
     align-items: center;
-    .line{
+    margin: rem(0) rem(30px);
+    .line {
         display: inline-block;
-        margin: 0 1em;
         width: 1px;
-        height: .9em;
+        height: 0.9em;
+        margin: 0 1em;
         vertical-align: middle;
         background: var(--bdColor);
     }
-    .item{
+    .item {
         color: inherit;
-        &.active{
+        &.active {
             color: var(--primary);
         }
     }
 }
-.icon_icon_close_big{
+.icon_icon_close_big {
     position: absolute;
-    left: rem(30px);
     top: rem(30px);
-    font-size: rem(34px);
+    left: rem(30px);
     color: var(--color);
+    font-size: rem(34px);
 }
-.loginForm{
+.loginForm {
     margin: rem(50px) rem(30px);
-    .field{
+    .field {
         position: relative;
         display: flex;
         align-items: center;
-        &:not(:first-of-type){
+        &:not(:first-of-type) {
             margin-top: rem(45px);
         }
-        &.toolWrap{
+        &.toolWrap {
             justify-content: space-between;
         }
-        label{
+        label {
             position: absolute;
-            left: 0;
             top: 0;
+            left: 0;
             height: rem(75px);
-            line-height: rem(75px);
             color: var(--placeholder);
             font-size: rem(30px);
-            transition: all cubic-bezier(.4,0,.2,1) .15s;
-            &.active{
-                transform: scale(.8) translateY(-90%);
+            line-height: rem(75px);
+            transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.15s;
+            &.active {
+                transform: scale(0.8) translateY(-90%);
             }
         }
-        .input{
+        .input {
             display: block;
             flex: 1;
             height: rem(75px);
-            line-height: 1;
             font-size: rem(30px);
-            &:focus ~ label,
-            &:valid ~ label{
+            line-height: 1;
+            &:focus~label,
+            &:valid~label {
+                transform: scale(0.8) translateY(-90%);
                 transform-origin: bottom left;
-                transform: scale(.8) translateY(-90%);
             }
         }
-        .van-icon-clear{
+        .van-icon-clear {
             color: var(--bdColor);
             font-size: rem(36px);
         }
-        .icon_icon_default, .icon_icon_pressed{
+        .icon_icon_default,
+        .icon_icon_pressed {
             margin-left: rem(10px);
             color: var(--bdColor);
             font-size: rem(36px);
         }
     }
-    .loginBtn{
+    .loginBtn {
         width: 100%;
-        margin-top: rem(90px);
         height: rem(80px);
+        margin-top: rem(90px);
+        font-size: rem(30px);
         line-height: rem(80px);
         background: var(--primary);
         border-color: var(--primary);
-        font-size: rem(30px);
         border-radius: rem(40px);
-        &.light{
+        &.light {
             margin-top: rem(40px);
-            background: none;
             color: var(--primary);
+            background: none;
         }
     }
 }
-.tools{
+.tools {
+    font-size: rem(26px);
     // margin-top: rem(50px);
     text-align: center;
-    font-size: rem(26px);
-    .line{
-        color: var(--mutedColor);
+    .line {
         margin: 0 1em;
+        color: var(--mutedColor);
     }
 }
-.otherLogin{
-    text-align: center;
+.otherLogin {
     margin-top: rem(30px);
-    .empty{
+    text-align: center;
+    .empty {
         display: inline-block;
-        vertical-align: middle;
         width: rem(50px);
         height: rem(30px);
+        vertical-align: middle;
     }
 }
-.footer{
+.footer {
     position: absolute;
     bottom: 20px;
     left: 0;
     width: 100%;
     text-align: center;
-    .icon_icon_service{
+    .icon_icon_service {
         font-size: 1.2em;
         vertical-align: middle;
     }

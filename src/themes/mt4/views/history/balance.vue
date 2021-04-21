@@ -16,39 +16,39 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/sass/mixin.scss";
+@import '~@/sass/mixin.scss';
 .mainWrap {
     position: relative;
-    padding: rem(20px) rem(40px);
     display: flex;
+    padding: rem(20px) rem(40px);
     overflow: hidden;
 }
 .hd {
-    font-size: rem(22px);
-    color: var(--mutedColor);
-    line-height: 1.3;
     flex: 1;
+    color: var(--mutedColor);
+    font-size: rem(22px);
+    line-height: 1.3;
 }
 .productName {
-    font-size: rem(30px);
-    font-weight: bold;
     color: var(--color);
+    font-weight: bold;
+    font-size: rem(30px);
     .volumn {
         font-weight: normal;
     }
 }
 .col {
-    text-align: right;
-    font-size: rem(24px);
     margin-left: rem(46px);
+    font-size: rem(24px);
+    text-align: right;
     &:first-of-type {
         margin-left: 0;
     }
 }
 .price {
-    font-size: rem(30px);
-    font-weight: bold;
     margin-bottom: rem(6px);
+    font-weight: bold;
+    font-size: rem(30px);
     .normal {
         vertical-align: text-bottom;
     }
