@@ -3,16 +3,17 @@
         <template #right>
         </template>
     </Top>
+    <!-- <Loading :show='loading' /> -->
     <div class='page-wrap'>
-        <div v-if='list.length === 0'>
-            <van-empty description='暂无数据' image='search' />
-        </div>
-        <div v-else class='record-list'>
+        <div class='record-list'>
             <van-pull-refresh v-model='loading' @refresh='onRefresh'>
+                <div v-if='list.length === 0'>
+                    <van-empty description='暂无数据' image='search' />
+                </div>
                 <van-list
                     v-model:loading='loading'
                     :finished='finished'
-                    finished-text='没有更多了'
+                    :finished-text='finishedText'
                     @load='onLoad'
                 >
                     <van-collapse v-for='(item, index) in list' :key='index' v-model='activeIndex' accordion @change='handleFold(index)'>
@@ -115,6 +116,7 @@ import Top from '@/components/top'
 import { useStore } from 'vuex'
 import { queryWithdrawPageList } from '@/api/user'
 import dayjs from 'dayjs'
+import { isEmpty } from '@/utils/util'
 import { Toast } from 'vant'
 export default {
     components: {
@@ -139,6 +141,7 @@ export default {
             size: 5,
             current: 1,
             list: [],
+            finishedText: '没有更多了',
             finished: false,
         })
         const handleFold = (val) => {
@@ -147,6 +150,7 @@ export default {
 
         const onRefresh = () => {
             state.current = 1
+            state.finished = false
             state.list = []
             getWithdrawList()
         }
@@ -158,13 +162,8 @@ export default {
                 size: state.size,
                 current: state.current,
             }
-            const toast = Toast.loading({
-                message: '加载中...',
-                forbidClick: true,
-            })
+
             queryWithdrawPageList(params).then(res => {
-                console.log(res)
-                toast.clear()
                 state.loading = false
                 if (res.check()) {
                     const resdata = res.data
@@ -174,6 +173,10 @@ export default {
                         // 数据全部加载完成
                         if (resdata.current * resdata.size >= resdata.total) {
                             state.finished = true
+                        }
+
+                        if (isEmpty(res.data.records)) {
+                            state.finishedText = ''
                         }
                     }
                 }
@@ -189,10 +192,6 @@ export default {
             state.current++
             getWithdrawList()
         }
-
-        onBeforeMount(() => {
-
-        })
 
         onMounted(() => {
             getWithdrawList()

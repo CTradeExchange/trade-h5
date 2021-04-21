@@ -31,7 +31,7 @@
         <div class='tabs-content'>
             <form v-show='curTab === 0' class='loginForm'>
                 <div class='field'>
-                    <MobileInput v-model='mobile' v-model:zone='zone' clear label='请输入手机号' />
+                    <MobileInput v-model='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
                 </div>
                 <div class='field'>
                     <checkCode v-model='checkCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
@@ -152,6 +152,8 @@ export default {
                         router.push({
                             path: '/resetPwd',
                             query: {
+                                verifyCodeToken: res.data.token,
+                                sendToken: state.sendToken,
                                 type: state.curTab === 0 ? 2 : 1,
                                 loginName: state.curTab === 0 ? state.mobile : state.email,
                                 verifyCode: state.curTab === 0 ? state.checkCode : state.emailCode,
@@ -188,6 +190,7 @@ export default {
         margin: rem(40px) rem(30px);
     }
     .pageTitle {
+        margin-bottom: rem(10px);
         font-weight: normal;
         font-size: rem(50px);
     }
@@ -253,7 +256,7 @@ export default {
     }
 }
 .next-btn {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     background: var(--bdColor);
     border-color: var(--bdColor);

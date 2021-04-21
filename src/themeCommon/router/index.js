@@ -67,7 +67,7 @@ const routes = [
         meta: {
             title: '资金明细',
             footerMenu: false,
-            roles: ['User'],
+            roles: ['User']
         }
     },
     {
@@ -77,6 +77,7 @@ const routes = [
         meta: {
             title: '账户资金',
             footerMenu: false,
+            roles: ['User']
         }
     },
     {
@@ -85,7 +86,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "personal" */ '../user/personal.vue'),
         meta: {
             title: '个人信息',
-            footerMenu: false
+            footerMenu: false,
+            roles: ['User']
         }
     },
     {
@@ -94,16 +96,18 @@ const routes = [
         component: () => import(/* webpackChunkName: "authentication" */ '../user/authentication.vue'),
         meta: {
             title: '身份验证',
-            footerMenu: false
+            footerMenu: false,
+            roles: ['User']
         }
     },
     {
-        path: '/authL1',
-        name: 'AuthL1',
-        component: () => import(/* webpackChunkName: "authentication" */ '../user/authL1.vue'),
+        path: '/authConditon',
+        name: 'AuthConditon',
+        component: () => import(/* webpackChunkName: "authentication" */ '../user/authConditon.vue'),
         meta: {
-            title: '身份验证(LV1认证)',
-            footerMenu: false
+            title: '身份验证',
+            footerMenu: false,
+            roles: ['User']
         }
     },
     {
@@ -112,7 +116,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "authL1Input" */ '../user/authL1Input.vue'),
         meta: {
             title: '身份验证(LV1认证)',
-            footerMenu: false
+            footerMenu: false,
+            roles: ['User']
         }
     },
     {
@@ -121,7 +126,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "authL2" */ '../user/authL2.vue'),
         meta: {
             title: '身份验证(LV2认证)',
-            footerMenu: false
+            footerMenu: false,
+            roles: ['User']
         }
     },
     {
@@ -130,7 +136,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "authL3" */ '../user/authL3.vue'),
         meta: {
             title: '身份验证(LV3认证)',
-            footerMenu: false
+            footerMenu: false,
+            roles: ['User']
         }
     },
     {
@@ -139,7 +146,38 @@ const routes = [
         component: () => import(/* webpackChunkName: "bankList" */ '../user/bankList.vue'),
         meta: {
             title: '银行卡列表',
-            footerMenu: false
+            footerMenu: false,
+            roles: ['User']
+        }
+    },
+    {
+        path: '/setting',
+        name: 'Setting',
+        component: () => import(/* webpackChunkName: "bankList" */ '../user/setting.vue'),
+        meta: {
+            title: '设置',
+            footerMenu: false,
+            roles: ['User']
+        }
+    },
+    {
+        path: '/setLoginPwd',
+        name: 'SetLoginPwd',
+        component: () => import(/* webpackChunkName: "setLoginPwd" */ '../user/setLoginPwd.vue'),
+        meta: {
+            title: '设置登录密码',
+            footerMenu: false,
+            roles: ['User']
+        }
+    },
+    {
+        path: '/page',
+        name: 'Page',
+        component: () => import(/* webpackChunkName: "page" */ '../user/page.vue'),
+        meta: {
+            title: '界面',
+            footerMenu: false,
+            roles: ['User']
         }
     },
 

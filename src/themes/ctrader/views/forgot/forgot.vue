@@ -3,7 +3,9 @@
         <top back :menu='false' />
         <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a>
         <header class='header'>
-            <h1 class='pageTitle'>找回密码</h1>
+            <h1 class='pageTitle'>
+                找回密码
+            </h1>
         </header>
         <van-tabs
             v-model:active='loginType'
@@ -24,7 +26,9 @@
             <div class='field'>
                 <checkCode v-model='checkCode' />
             </div>
-            <van-button block class='loginBtn' type='primary' @click="$router.replace('/')">下一步</van-button>
+            <van-button block class='loginBtn' type='primary' @click="$router.replace('/')">
+                下一步
+            </van-button>
         </form>
     </div>
 </template>
@@ -56,120 +60,121 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.pageWrap{
+.pageWrap {
     position: relative;
     height: 100%;
-    .header{
-        margin: rem(40px) rem(30px);
+    .header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
+        margin: rem(40px) rem(30px);
     }
-    .pageTitle{
-        font-size: rem(50px);
+    .pageTitle {
+        margin-bottom: rem(10px);
         font-weight: normal;
+        font-size: rem(50px);
     }
-
 }
-.icon_icon_close_big{
+.icon_icon_close_big {
     position: absolute;
-    left: rem(30px);
     top: rem(30px);
-    font-size: rem(34px);
+    left: rem(30px);
     color: var(--color);
+    font-size: rem(34px);
 }
-.loginTypeWrapper{
-    margin: rem(74px) auto rem(50px);
+.loginTypeWrapper {
     width: rem(580px);
-    :deep(.van-tabs__nav,.van-tabs__wrap){
+    margin: rem(74px) auto rem(50px);
+    :deep(.van-tabs__nav,.van-tabs__wrap) {
         height: rem(60px);
+        overflow: hidden;
         line-height: rem(60px);
         border: 0;
         border-radius: rem(60px);
-        overflow: hidden;
     }
-    :deep(.van-tab){
+    :deep(.van-tab) {
         height: rem(60px);
-        line-height: rem(60px);
         font-size: rem(28px);
+        line-height: rem(60px);
     }
 }
-.loginForm{
+.loginForm {
     margin: rem(40px) rem(30px);
-    .field{
+    .field {
         position: relative;
         display: flex;
         align-items: center;
-        &:not(:first-of-type){
+        &:not(:first-of-type) {
             margin-top: rem(50px);
         }
-        &.toolWrap{
+        &.toolWrap {
             justify-content: space-between;
         }
-        label{
+        label {
             position: absolute;
-            left: 0;
             top: 0;
+            left: 0;
             height: rem(75px);
-            line-height: rem(75px);
             color: var(--placeholder);
             font-size: rem(30px);
-            transition: all cubic-bezier(.4,0,.2,1) .15s;
-            &.active{
-                transform: scale(.8) translateY(-90%);
+            line-height: rem(75px);
+            transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.15s;
+            &.active {
+                transform: scale(0.8) translateY(-90%);
             }
         }
-        .input{
+        .input {
             display: block;
             flex: 1;
             height: rem(75px);
-            line-height: 1;
             font-size: rem(30px);
-            &:focus ~ label,
-            &:valid ~ label{
+            line-height: 1;
+            &:focus~label,
+            &:valid~label {
+                transform: scale(0.8) translateY(-90%);
                 transform-origin: bottom left;
-                transform: scale(.8) translateY(-90%);
             }
         }
-        .van-icon-clear{
+        .van-icon-clear {
             color: var(--bdColor);
             font-size: rem(36px);
         }
-        .icon_icon_default, .icon_icon_pressed{
+        .icon_icon_default,
+        .icon_icon_pressed {
             margin-left: rem(10px);
             color: var(--bdColor);
             font-size: rem(36px);
         }
     }
-    .loginBtn{
+    .loginBtn {
         position: absolute;
-        left: 0;
         bottom: 0;
+        left: 0;
         width: 100%;
-        margin-top: rem(90px);
         height: rem(80px);
+        margin-top: rem(90px);
+        font-size: rem(34px);
         line-height: rem(80px);
         background: var(--primary);
         border-color: var(--primary);
-        font-size: rem(34px);
     }
 }
-.tools{
+.tools {
+    font-size: rem(26px);
     // margin-top: rem(50px);
     text-align: center;
-    font-size: rem(26px);
-    .line{
-        color: var(--mutedColor);
+    .line {
         margin: 0 1em;
+        color: var(--mutedColor);
     }
 }
-.footer{
+.footer {
     position: absolute;
     bottom: 20px;
     left: 0;
     width: 100%;
     text-align: center;
-    .icon_icon_service{
+    .icon_icon_service {
         font-size: 1.2em;
         vertical-align: middle;
     }

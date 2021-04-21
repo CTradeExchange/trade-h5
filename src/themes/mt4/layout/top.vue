@@ -1,8 +1,10 @@
 <template>
     <div class='top'>
-        <a v-if='menu' class='icon_caidan1' href='javascript:;' @click='$refs.leftMenu.visible=true'></a>
+        <a v-if='menu' class='icon_caidan1' href='javascript:;' @click='$refs.leftMenu.visible=true'>
+        </a>
         <a v-if='back' class='icon_fanhui' href='javascript:;' @click='$router.back()'></a>
-        <div v-if='titleText' class='title'>
+
+        <div v-if='titleText && titleVis' class='title'>
             <h2 v-if='titleText'>
                 {{ titleText }}
             </h2>
@@ -10,9 +12,11 @@
                 {{ subTitle }}
             </p>
         </div>
+        <slot name='left'></slot>
         <slot name='right'></slot>
         <!-- <topRight /> -->
     </div>
+
     <leftMenu ref='leftMenu' />
 </template>
 
@@ -37,6 +41,10 @@ export default {
             type: String,
             default: ''
         },
+        titleVis: {
+            type: Boolean,
+            default: true
+        },
         subTitle: {
             type: String,
             default: ''
@@ -46,7 +54,7 @@ export default {
         titleText () {
             return this.title || this.$route.meta?.title
         },
-    },
+    }
 }
 </script>
 
@@ -56,6 +64,7 @@ export default {
     position: relative;
     display: flex;
     align-items: center;
+    //justify-content: space-between;
     height: rem(90px);
     padding: 0 rem(30px);
     color: var(--white);

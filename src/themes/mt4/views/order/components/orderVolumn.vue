@@ -1,19 +1,19 @@
 <template>
     <div class='volumn'>
-        <a class='item' :class="{disabled}" href='javascript:;' v-show="product.minVolume" @click='minusVolumn(product.minVolume*10)'>
-            -{{product.minVolume*10}}
+        <a class='item' :class="{disabled}" href='javascript:;' v-show="product.volumeStep" @click='minusVolumn(product.volumeStep*10)'>
+            -{{product.volumeStep*10}}
         </a>
-        <a class='item' :class="{disabled}" href='javascript:;' v-show="product.minVolume" @click='minusVolumn(product.minVolume)'>
-            -{{product.minVolume}}
+        <a class='item' :class="{disabled}" href='javascript:;' v-show="product.volumeStep" @click='minusVolumn(product.volumeStep)'>
+            -{{product.volumeStep}}
         </a>
         <span class='item' :class="{disabled}">
             <input v-model.trim='volumn' class='volumnInput' :disabled="disabled" :class="{disabled}" type='text' @input='onInput' />
         </span>
-        <a class='item' :class="{disabled}" href='javascript:;' v-show="product.minVolume" @click='plusVolumn(product.minVolume)'>
-            +{{product.minVolume}}
+        <a class='item' :class="{disabled}" href='javascript:;' v-show="product.volumeStep" @click='plusVolumn(product.volumeStep)'>
+            +{{product.volumeStep}}
         </a>
-        <a class='item' :class="{disabled}" href='javascript:;' v-show="product.minVolume" @click='plusVolumn(product.minVolume*10)'>
-            +{{product.minVolume*10}}
+        <a class='item' :class="{disabled}" href='javascript:;' v-show="product.volumeStep" @click='plusVolumn(product.volumeStep*10)'>
+            +{{product.volumeStep*10}}
         </a>
     </div>
 </template>

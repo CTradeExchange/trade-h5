@@ -16,8 +16,8 @@ export default {
         app.config.globalProperties.$QuoteSocket = QuoteSocket
         app.config.globalProperties.$MsgSocket = MsgSocket
 
-        quoteWS.open();
-        msgWS.open();
+        quoteWS.open()
+        msgWS.open()
 
         quoteWS.addEventListener('message', evt => {
             if (typeof evt.data === 'string' && evt.data.startsWith('p(')) return QuoteSocket.tick(evt.data)
@@ -39,14 +39,18 @@ export default {
             MsgSocket.initPing() // 心跳
         })
 
+        msgWS.addEventListener('close', function (err) {
+            console.log('close', err)
+        })
+
         tradeWS.addEventListener('open', function () {
             tradeWS.send(JSON.stringify({
-                "header": {
-                    "trace": "trace",
-                    "token": "token",
-                    "bizType": "ping",
-                    "sendTime": Date.now(),
-                    "lang": "zh-CN"
+                'header': {
+                    'trace': 'trace',
+                    'token': 'token',
+                    'bizType': 'ping',
+                    'sendTime': Date.now(),
+                    'lang': 'zh-CN'
                 }
             }))
         })

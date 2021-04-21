@@ -17,6 +17,18 @@ export function login (data) {
     })
 }
 
+/* 登出 */
+export function logout (data) {
+    return request({
+        url: '/logout',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
 /* 注册 */
 export function register (data) {
     return request({
@@ -212,7 +224,6 @@ export function queryDepositPageList (data) {
 }
 
 /* 资金明细查询 */
-
 export function queryCapitalFlowList (data) {
     return request({
         url: '/global/tradeapi.OrderApiService.queryCapitalFlowList',
@@ -220,6 +231,102 @@ export function queryCapitalFlowList (data) {
         headers: {
             version: '0.0.1',
             group: 'tradeApi'
+        },
+        data
+    })
+}
+
+/* 获取取款手续费 */
+export function computeWithdrawFee (data) {
+    return request({
+        url: '/global/fund.WithdrawAppDubboService.computeWithdrawFee',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 设置登录密码 */
+export function setLoginPwd (data) {
+    return request({
+        url: '/global/customer.CustomerWebApiService.bindLoginPwd',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 修改登录密码 */
+export function modifyLoginPwd (data) {
+    return request({
+        url: '/global/customer.CustomerWebApiService.updateLoginPwd',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 获取指定公司下平台信息列表 */
+export function queryPlatFormMessageLogList (data) {
+    return request({
+        url: '/global/message.PlatFormMessageLogApiService.queryPlatFormMessageLogByPage',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 切换交易账户信息 */
+export function switchAccount (data) {
+    return request({
+        url: '/global/switch.trade.account',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 指定客户的身份认证信息 */
+export function findAllBizKycList (data) {
+    return request({
+        url: '/global/customer.KycWebApiService.findAllBizKycList',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 判断指定KYC等级是否要KYC认证 */
+export function findAllLevelKyc (data) {
+    return request({
+        url: '/global/customer.KycWebApiService.findAllLevelKyc',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* KYC证申请 */
+export function kycLevelApply (data) {
+    return request({
+        url: '/global/customer.KycWebApiService.kycLevelApply',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
         },
         data
     })

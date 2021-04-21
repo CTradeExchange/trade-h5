@@ -23,7 +23,6 @@
                 </a>
                 <a class='item van-hairline--bottom' href='javascript:;' @click='modifyOrder'>
                     修改订单
-
                 </a>
                 <a class='item van-hairline--bottom' href='javascript:;' @click='toChart'>
                     图表
@@ -40,11 +39,9 @@ import { useStore } from 'vuex'
 import positionItem from './positionItem'
 import { useRouter } from 'vue-router'
 import { addMarketOrder } from '@/api/trade'
-import Loading from '@m/components/loading'
 export default {
     components: {
         positionItem,
-        Loading,
     },
     emits:['refresh'],
     setup (props,{emit}) {

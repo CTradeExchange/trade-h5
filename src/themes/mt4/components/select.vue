@@ -1,6 +1,6 @@
 <template>
-    <div class='selectWrap'>
-        <span class='selectval' @click='show=true'>
+    <div class='selectWrap' @click='show=true'>
+        <span class='selectval'>
             {{ selected && selected[text] }}
         </span>
         <span class='icon_arrow-down'></span>

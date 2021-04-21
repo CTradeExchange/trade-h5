@@ -7,11 +7,11 @@
             订单正在进行排队处理...
         </p>
         <p class='desc'>
-            {{data.direction===1?'buy':'sell'}}
-            {{orderVolume +' '+ product.symbolName }} at
-            {{requestPrice}} <br />
-            sl: {{sl}}
-            tp: {{tp}}
+            {{ data.direction===1?'buy':'sell' }}
+            {{ orderVolume +' '+ product.symbolName }} at
+            {{ requestPrice }} <br />
+            sl: {{ sl }}
+            tp: {{ tp }}
         </p>
         <div class='footerBtn of-1px-top'>
             <button class='btn' @click='$emit("onHide")'>
@@ -23,23 +23,23 @@
 
 <script>
 import { computed } from 'vue'
-import { getDecimalNum } from '@/utils/calculation';
+import { getDecimalNum } from '@/utils/calculation'
 export default {
-    props: ['data','product'],
-    setup(props){
-        const orderVolume = computed(()=>{
+    props: ['data', 'product'],
+    setup (props) {
+        const orderVolume = computed(() => {
             const volumeDigit = getDecimalNum(props.product.minVolume)
-            return (props.data.requestNum/props.product.contractSize).toFixed(volumeDigit);
-        });
-        const requestPrice = computed(()=> (props.data.requestPrice/Math.pow(10, props.product.symbolDigits)).toFixed(props.product.symbolDigits));
-        const sl = computed(()=> {
-            if(!props.data.stopLoss) return Number(0).toFixed(props.product.symbolDigits)
-            return (props.data.stopLoss/Math.pow(10, props.product.symbolDigits)).toFixed(props.product.symbolDigits)
-        });
-        const tp = computed(()=> {
-            if(!props.data.takeProfit) return Number(0).toFixed(props.product.symbolDigits)
-            return (props.data.takeProfit/Math.pow(10, props.product.symbolDigits)).toFixed(props.product.symbolDigits)
-        });
+            return (props.data.requestNum / props.product.contractSize).toFixed(volumeDigit)
+        })
+        const requestPrice = computed(() => (props.data.requestPrice / Math.pow(10, props.product.symbolDigits)).toFixed(props.product.symbolDigits))
+        const sl = computed(() => {
+            if (!props.data.stopLoss) return Number(0).toFixed(props.product.symbolDigits)
+            return (props.data.stopLoss / Math.pow(10, props.product.symbolDigits)).toFixed(props.product.symbolDigits)
+        })
+        const tp = computed(() => {
+            if (!props.data.takeProfit) return Number(0).toFixed(props.product.symbolDigits)
+            return (props.data.takeProfit / Math.pow(10, props.product.symbolDigits)).toFixed(props.product.symbolDigits)
+        })
         return {
             orderVolume,
             requestPrice,

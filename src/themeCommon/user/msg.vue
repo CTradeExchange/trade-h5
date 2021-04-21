@@ -1,31 +1,142 @@
 <template>
-    <Top back='true' :menu='false' title='' />
+    <Top back='true' :menu='false' :right-action='rightAction' title='' :title-vis='false'>
+        <template #left>
+            <div>
+                <van-dropdown-menu active-color='#007AFF'>
+                    <van-dropdown-item v-model='type' :options='options' @change='changeType' />
+                </van-dropdown-menu>
+            </div>
+        </template>
+        <template #right>
+            <div class='right-ico'>
+                <i class='icon icon_quanbuyidu'></i>
+            </div>
+        </template>
+    </Top>
     <div class='msg-list'>
-        <div v-for='(item,index) in 10' :key='index' class='msg-item'>
-            <p class='msg-title'>
-                充值入账通知
-            </p>
-            <p class='msg-content'>
-                您的USD账户68000089于2021.01.29 15:53:40充值100.00US D，实际入账金额为100.00US
-            </p>
-            <p class='msg-time'>
-                2021.01.29  15:53:41
-            </p>
+        <div v-if='list.length === 0'>
+            <van-empty description='暂无数据' image='search' />
         </div>
+        <van-pull-refresh v-else v-model='loading' @refresh='onRefresh'>
+            <van-list
+                v-model:loading='loading'
+                :finished='finished'
+                finished-text='没有更多了'
+                @load='onLoad'
+            >
+                <div v-for='(item,index) in list' :key='index' class='msg-item'>
+                    <p class='msg-title'>
+                        {{ item.title === 'null'? '': item.title }}
+                    </p>
+                    <p class='msg-content'>
+                        {{ item.content }}
+                    </p>
+                    <p class='msg-time'>
+                        {{ formatTime(item.createTime) }}
+                    </p>
+                </div>
+            </van-list>
+        </van-pull-refresh>
     </div>
 </template>
 
 <script>
 import Top from '@m/layout/top'
+import { onBeforeMount, computed, reactive, toRefs } from 'vue'
+import { queryPlatFormMessageLogList } from '@/api/user'
+import { useStore } from 'vuex'
+import dayjs from 'dayjs'
+import { Toast } from 'vant'
 export default {
     components: {
         Top
+    },
+    setup (props) {
+        const store = useStore()
+        const state = reactive({
+            list: [],
+            loading: false,
+            finished: false,
+            current: 1,
+            type: 0,
+            rightAction: { title: 444 },
+            options: [
+                { text: '全部消息', value: 0 },
+                { text: '账户消息', value: 1 },
+                { text: '资金消息', value: 2 },
+                { text: '交易消息', value: 3 },
+            ]
+        })
+
+        // 获取账户信息
+        const customInfo = computed(() => store.state._user.customerInfo)
+
+        const changeType = (val) => {
+            console.log(val)
+        }
+
+        const getMsgList = () => {
+            const toast = Toast.loading({
+                message: '加载中...',
+                forbidClick: true,
+            })
+            queryPlatFormMessageLogList({
+                current: state.current
+            }).then(res => {
+                toast.clear()
+                if (res.check()) {
+                    if (res.data.records && res.data.records.length > 0) {
+                        state.list = state.list.concat(res.data.records)
+                    }
+                    // 数据全部加载完成
+                    if (res.data.size * res.data.current >= res.data.total) {
+                        state.finished = true
+                    }
+                }
+            })
+        }
+        onBeforeMount(() => {
+            getMsgList()
+        })
+
+        // 上拉刷新
+        const onRefresh = () => {
+            state.current = 1
+            state.finished = false
+            state.list = []
+            getMsgList()
+        }
+        // 底部加载更多
+        const onLoad = () => {
+            state.current++
+            getMsgList()
+        }
+
+        const formatTime = (val) => {
+            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+        }
+
+        return {
+            getMsgList,
+            customInfo,
+            formatTime,
+            onRefresh,
+            onLoad,
+            changeType,
+            ...toRefs(state)
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
+.right-ico {
+    position: absolute;
+    right: rem(30px);
+    color: var(--white);
+    font-size: rem(48px);
+}
 .msg-list {
     flex: 1;
     overflow-y: auto;
@@ -50,6 +161,19 @@ export default {
             font-size: rem(20px);
             line-height: rem(60px);
         }
+    }
+}
+</style>
+
+<style lang="scss">
+@import '@/sass/mixin.scss';
+.van-dropdown-menu__bar {
+    background-color: transparent !important;
+    .van-dropdown-menu__title {
+        color: var(--white);
+    }
+    .van-ellipsis {
+        color: var(--white);
     }
 }
 </style>

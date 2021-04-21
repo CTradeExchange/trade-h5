@@ -32,11 +32,18 @@
                     忘记密码
                 </a>
                 <Vline />
-                <a v-if="loginAccount==='mobile'" class='btn' href='javascript:;' @click="loginAccount='email'">
+                <a v-if="loginAccount==='mobile' && loginType === 'checkCode'" class='btn' href='javascript:;' @click="loginAccount='email'">
                     邮箱验证码登录
                 </a>
-                <a v-else class='btn' href='javascript:;' @click="loginAccount='mobile'">
+                <a v-if="loginAccount==='email' && loginType === 'checkCode'" class='btn' href='javascript:;' @click="loginAccount='mobile'">
                     手机验证码登录
+                </a>
+
+                <a v-if="loginAccount==='email' && loginType === 'password'" class='btn' href='javascript:;' @click="loginAccount='mobile'">
+                    手机密码登录
+                </a>
+                <a v-if="loginAccount==='mobile' && loginType === 'password'" class='btn' href='javascript:;' @click="loginAccount='email'">
+                    邮箱密码登录
                 </a>
             </div>
         </form>
@@ -131,6 +138,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
 import Rule from './rule'
+import md5 from 'js-md5'
 import { timeline, timelineItem } from '@m/components/timeline'
 
 export default {
@@ -179,7 +187,7 @@ export default {
                 phoneArea: state.loginAccount === 'mobile' ? String(state.zone) : undefined,
                 device: getDevice(),
                 verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
-                loginPwd: state.loginType === 'password' ? state.pwd : undefined,
+                loginPwd: state.loginType === 'password' ? md5(state.pwd) : undefined,
                 sendToken: state.loginType === 'checkCode' ? token : undefined,
             }
             const validator = new Schema(Rule)
@@ -231,7 +239,7 @@ export default {
                 verifyCodeSend(params).then(res => {
                     if (res.check()) {
                         token = res.data.token
-                        if (res.data.code) state.checkCode = res.data.code
+                        // if (res.data.code) state.checkCode = res.data.code
                         callback && callback()
                     }
                 })
@@ -245,7 +253,7 @@ export default {
         // 设置登录密码
         const loginPwdSet = () => {
             state.loginPwdPop = false
-            router.push({ name: 'SetPwd' })
+            router.push({ name: 'SetLoginPwd' })
         }
         // 下次设置登录密码
         const loginPwdSetNext = () => {
@@ -288,6 +296,7 @@ export default {
         margin: rem(40px) rem(30px);
     }
     .pageTitle {
+        margin-bottom: rem(10px);
         font-weight: normal;
         font-size: rem(50px);
     }

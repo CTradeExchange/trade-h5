@@ -1,31 +1,39 @@
 <template>
     <Top back='true' :menu='false' title='' />
     <div class='page-wrap'>
+        <Loading :show='loading' />
         <p class='title'>
             完成认证，可获得对应权限
         </p>
         <div class='auth-list'>
-            <div class='auth-item'>
-                <img alt='' class='auth-img' src='../../themes/mt4/images/lv1.png' srcset='' />
+            <div v-for='(item,index) in list' :key='index' class='auth-item'>
+                <img alt='' class='auth-img' :src="require('../../themes/mt4/images/'+ item.levelCode +'.png')" />
                 <div class='content'>
                     <p class='t1'>
-                        基础认证
+                        {{ item.levelName }}
                     </p>
                     <p class='t2'>
-                        认证通过后方可进行 [注册]
+                        认证通过后方可进行 [{{ item.businessNameList.toString() }}]
                     </p>
                 </div>
-                <van-button plain round size='small' @click="$router.push('/authL1')">
-                    <template #default>
-                        <span class='btn-text'>
-                            去认证
-                        </span>
-                        <van-icon name='arrow' />
-                    </template>
-                </van-button>
+                <div v-if='item.preLevelObj && Number(item.preLevelObj.status) === 0'>
+                    <span class='notice'>
+                        请先完成{{ item.preLevelObj.levelName }}认证
+                    </span>
+                </div>
+                <div v-else>
+                    <van-button plain round size='small' @click="$router.push({ path: '/authConditon',query: { levelCode: item.levelCode } })">
+                        <template #default>
+                            <span class='btn-text'>
+                                {{ item.statusName }}
+                            </span>
+                            <van-icon name='arrow' />
+                        </template>
+                    </van-button>
+                </div>
             </div>
 
-            <div class='auth-item'>
+            <!-- <div class='auth-item'>
                 <img alt='' class='auth-img' src='../../themes/mt4/images/lv2.png' srcset='' />
                 <div class='content'>
                     <p class='t1'>
@@ -53,7 +61,7 @@
                 <span class='notice'>
                     请先完成LV2认证
                 </span>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -61,13 +69,44 @@
 <script>
 import Top from '@m/layout/top'
 import { useRouter } from 'vue-router'
-import { toRefs, reactive, ref } from 'vue'
+import { findAllBizKycList } from '@/api/user'
+import { toRefs, reactive, ref, onBeforeMount } from 'vue'
+import { getArrayObj } from '@/utils/util'
 export default {
     components: {
         Top
     },
     setup (props) {
         const router = useRouter()
+        const state = reactive({
+            list: [],
+            loading: false,
+        })
+
+        const getAuthCondition = () => {
+            state.loading = true
+            findAllBizKycList().then(res => {
+                state.loading = false
+                if (res.check()) {
+                    res.data.forEach(item => {
+                        if (item.preLevelName) {
+                            const temp = getArrayObj(res.data, 'levelName', item.preLevelName)
+                            item.preLevelObj = temp
+                        }
+                    })
+                    state.list = res.data
+                }
+            }).catch(err => {
+                state.loading = false
+            })
+        }
+        onBeforeMount(() => {
+            getAuthCondition()
+        })
+
+        return {
+            ...toRefs(state)
+        }
     }
 }
 </script>

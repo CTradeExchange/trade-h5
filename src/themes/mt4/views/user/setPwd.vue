@@ -1,6 +1,6 @@
 <template>
     <div class='pageWrap'>
-        <top back :menu='false' />
+        <top back left-icon='arrow-left' :menu='false' :right-action='false' />
         <header class='header'>
             <h1 class='pageTitle'>
                 设置登录密码
@@ -29,6 +29,7 @@ import { reactive, toRefs } from 'vue'
 import { Field, Toast } from 'vant'
 import { useRouter } from 'vue-router'
 import md5 from 'js-md5'
+import { setLoginPwd } from '@/api/user'
 
 export default {
     components: {
@@ -61,6 +62,20 @@ export default {
             if (state.newPwd !== state.confirmPwd) {
                 return Toast('新密码和确认密码不同，请检查后重新输入')
             }
+            const toast = Toast.loading({
+                message: '加载中...',
+                forbidClick: true,
+            })
+
+            setLoginPwd({
+                pwd: md5(state.confirmPwd)
+            }).then(res => {
+                toast.clear()
+                if (res.check()) {
+                    Toast('设置成功')
+                    router.push('/')
+                }
+            })
         }
 
         return {
@@ -84,6 +99,7 @@ export default {
         margin: rem(40px) rem(30px);
     }
     .pageTitle {
+        margin-bottom: rem(10px);
         font-weight: normal;
         font-size: rem(50px);
     }

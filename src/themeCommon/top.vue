@@ -59,11 +59,12 @@ export default {
         font-size: rem(46px);
     }
     .rightClick {
+        display: flex;
+        align-items: center;
         height: rem(60px);
         padding: 0 rem(21px) 0 rem(30px);
         color: var(--color);
         font-size: rem(24px);
-        line-height: rem(59px);
         border: 1px solid var(--bdColor);
         border-radius: rem(30px);
     }

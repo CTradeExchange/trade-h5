@@ -8,7 +8,7 @@
 
         <header class='header'>
             <h1 class='pageTitle'>
-                重置密码
+                设置登录密码
             </h1>
             <h6>密码为6-16位数字或字母的组合</h6>
         </header>
@@ -69,17 +69,13 @@ export default {
                 return Toast('新密码和确认密码不同，请检查后重新输入')
             }
 
-            // type	Integer	 1邮箱，2手机号码，3客户账号
-            // loginName 账号：邮箱/手机号码
-            // companyId	公司
-            // verifyCode 验证码
-            // newPwd	新密码.
-
             const params = {
-                type: route.query['type'],
+                type: route.query['type'], // 1邮箱，2手机号码，3客户账号
                 loginName: route.query['loginName'],
                 verifyCode: route.query['verifyCode'],
-                newPwd: md5(state.confirmPwd)
+                newPwd: md5(state.confirmPwd),
+                sendToken: route.query['sendToken'],
+                verifyCodeToken: route.query['verifyCodeToken']
             }
 
             findPwd(params).then((res) => {
@@ -113,6 +109,7 @@ export default {
         margin: rem(40px) rem(30px);
     }
     .pageTitle {
+        margin-bottom: rem(10px);
         font-weight: normal;
         font-size: rem(50px);
     }

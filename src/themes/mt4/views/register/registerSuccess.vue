@@ -19,7 +19,7 @@
         <button class='btn' @click='toExperience'>
             立即体验
         </button>
-        <button class='highBtn' @click='toExperience'>
+        <button class='highBtn' @click='toDesposit'>
             去存款
             <p class='smallRow'>
                 <span>现在存款最高<i>赠1000USD</i></span>
@@ -32,7 +32,7 @@
 import { reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { getDevice,setToken } from '@/utils/util'
+import { getDevice, setToken } from '@/utils/util'
 export default {
     setup () {
         const RegisterData = JSON.parse(sessionStorage.getItem('RegisterData')) ?? {}
@@ -44,12 +44,20 @@ export default {
         })
         const toExperience = () => {
             const token = RegisterData.data?.token
-            if(token) setToken(token)
+            if (token) setToken(token)
+            // 注册成功重新获取客户信息
+            store.dispatch('_user/findCustomerInfo')
             return router.replace({ name: 'Quote' })
+        }
+        const toDesposit = () => {
+            const token = RegisterData.data?.token
+            if (token) setToken(token)
+            return router.replace({ name: 'Desposit' })
         }
         return {
             ...onceState,
             toExperience,
+            toDesposit
         }
     }
 }

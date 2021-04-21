@@ -128,6 +128,7 @@ class SocketEvent {
         const param = this.getParam(14008, {})
         setInterval(() => {
             this.ws.send(JSON.stringify(param))
+            console.log('quote heart', param)
         }, 10000)
     }
 }

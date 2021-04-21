@@ -8,6 +8,7 @@
             :show-center='true'
             @rightClick='toWithdrawList'
         />
+        <Loading :show='loading' />
         <div class='wrap'>
             <p class='header-text'>
                 取款金额
@@ -20,7 +21,7 @@
             </div>
             <div class='notice'>
                 <span>最大可取 {{ withdrawConfig.withdrawAmount }} 美元</span>
-                <span>手续费 0.10美元</span>
+                <span>手续费 {{ fee }} 美元</span>
             </div>
             <div class='bank-wrap'>
                 <p class='bw-t'>
@@ -70,14 +71,20 @@
 <script>
 import Top from '@/components/top'
 import {
-    reactive, ref, computed, toRefs, onMounted,
-    onBeforeMount
+    reactive,
+    ref,
+    computed,
+    toRefs,
+    onMounted,
+    onBeforeMount,
+    watch,
+    watchEffect
 } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Toast, Dialog } from 'vant'
-import { isEmpty } from '@/utils/util'
+import { isEmpty, debounce, debounce2 } from '@/utils/util'
 import { useStore } from 'vuex'
-import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate, queryBankList } from '@/api/user'
+import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate, queryBankList, computeWithdrawFee } from '@/api/user'
 export default {
     components: {
         Top
@@ -94,7 +101,9 @@ export default {
         const customInfo = computed(() => store.state._user.customerInfo)
 
         const state = reactive({
-            amount: 0,
+            amount: '',
+            fee: 0,
+            loading: false,
             show: false,
             maxAmount: 5005.55,
             checkedBank: {
@@ -104,26 +113,36 @@ export default {
             },
             withdrawRate: '',
             withdrawConfig: '',
-            bankList: [
-                // {
-                //     icon: require('../../assets/logo.png'),
-                //     bankName: '招商银行',
-                //     bankNo: '6388 **** **** 1222',
-                //     checked: false
-                // },
-                // {
-                //     icon: require('../../assets/logo.png'),
-                //     bankName: '建设银行',
-                //     bankNo: '6225 **** **** 4443',
-                //     checked: false
-                // },
-                // {
-                //     icon: require('../../assets/logo.png'),
-                //     bankName: '工商银行',
-                //     bankNo: '6225 **** **** 1543',
-                //     checked: false
-                // }
-            ]
+            bankList: [],
+            fun: null
+        })
+
+        const getWithdrawFee = (amount) => {
+            const params = {
+                customerNo: customInfo.value.customerNo, // 客户编号
+                accountId: customInfo.value.accountId, // 账户ID
+                customerGroupId: customInfo.value.customerGroupId, // 客户组ID
+                accountCurrency: customInfo.value.currency, // 账户货币编码
+                amount: parseFloat(state.amount)
+            }
+            state.fee = '计算中...'
+            computeWithdrawFee(params).then(res => {
+                if (res.check()) {
+                    state.fee = res.data
+                }
+            })
+        }
+
+        const debounceFn = () => {
+            return setTimeout(getWithdrawFee, 1000)
+        }
+
+        watchEffect((onInvalidate) => {
+            const timer = debounceFn()// 再重新生成定时器
+            console.log('change', state.amount)
+            onInvalidate(() => { // watchEffect里面先执行这个函数，即是清除掉之前的定时器
+                clearTimeout(timer)
+            })
         })
 
         const openSheet = () => {
@@ -152,9 +171,9 @@ export default {
         }
 
         const confirm = () => {
-            // if (!state.withdrawConfig.enableWithdraw) {
-            //     return Toast('该用户暂不可取款')
-            // }
+            if (!state.withdrawConfig.enableWithdraw) {
+                return Toast('该用户暂不可取款')
+            }
 
             if (state.amount <= 0) {
                 state.amount = 0
@@ -176,49 +195,36 @@ export default {
             if (parseFloat(state.amount) > parseFloat(state.withdrawConfig.withdrawAmount)) {
                 return Toast('余额不足')
             }
-            const toast = Toast.loading({
-                message: '加载中...',
-                forbidClick: true,
-            })
+            state.loading = true
 
-            // companyId	Long	必填	公司ID
-            // customerNo	String	必填	客户编号
-            // accountId	Long	必填	账户ID
-            // customerGroupId	Long	必填	客户组ID
-            // accountCurrency	String	必填	账户货币编码
-            // withdrawCurrency	String	必填	收款货币
-            // amount	BigDecimal	必填	提案金额
-            // rate	BigDecimal	必填	发送给平台CATS2使用的取款汇率
-            // withdrawRateSerialNo	String	必填	取款费率流水号
-            // bankAccountName	String	必填	银行卡持有者姓名
-            // bankName	String	必填	银行卡银行名称
-            // bankCardNo	String	必填	银行卡号
-            // country	String	必填	国家
             const params = {
-                customerNo: customInfo.value.customerNo,
-                accountId: customInfo.value.accountId,
-                customerGroupId: customInfo.value.customerGroupId,
-                accountCurrency: customInfo.value.currency,
-                withdrawCurrency: state.withdrawRate.withdrawCurrency,
-                amount: state.amount,
-                rate: state.withdrawRate.exchangeRate,
-                withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
-                bankAccountName: state.checkedBank.bankAccountName,
-                bankName: state.checkedBank.bankName,
-                bankCardNo: state.checkedBank.bankCardNumber,
-                country: 'IOS_3166_156'
+                customerNo: customInfo.value.customerNo, // 客户编号
+                accountId: customInfo.value.accountId, // 账户ID
+                customerGroupId: customInfo.value.customerGroupId, // 客户组ID
+                accountCurrency: customInfo.value.currency, // 账户货币编码
+                withdrawCurrency: state.withdrawRate.withdrawCurrency, // 收款货币
+                amount: state.amount, // 提案金额
+                rate: state.withdrawRate.exchangeRate, // 发送给平台CATS2使用的取款汇率
+                withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo, // 取款费率流水号
+                bankAccountName: state.checkedBank.bankAccountName, // 银行卡持有者姓名
+                bankName: state.checkedBank.bankName, // 银行卡银行名称
+                bankCardNo: state.checkedBank.bankCardNumber, // 银行卡号
+                country: 'IOS_3166_156' // country
             }
 
             handleWithdraw(params).then(res => {
-                toast.clear()
+                state.loading = false
                 if (res.check()) {
                     Toast(res.msg)
                     console.log('res', res)
                     state.amount = ''
                 }
+            }).catch(err => {
+                state.loading = false
             })
         }
 
+        // 获取取款汇率
         const getWithdrawRate = () => {
             const params = {
                 customerNo: customInfo.value.customerNo,
@@ -237,17 +243,11 @@ export default {
 
         // 获取取款限制配置
         const getWithdrawConfig = () => {
-            // companyId 公司ID
-            // customerNo 客户编号
-            // accountId 账户ID
-            // customerGroupId 客户组ID
-            // accountCurrency 账户货币编码
-
             const params = {
                 customerNo: customInfo.value.customerNo,
                 accountId: customInfo.value.accountId,
                 customerGroupId: customInfo.value.customerGroupId,
-                accountCurrency: customInfo.value.currency
+                accountCurrency: customInfo.value.currency // 账户货币编码
             }
 
             queryWithdrawConfig(params).then(res => {
@@ -260,14 +260,10 @@ export default {
         }
 
         const getBankList = () => {
-            console.log('banklist')
-            const toast = Toast.loading({
-                message: '加载中...',
-                forbidClick: true,
-            })
+            state.loading = true
             queryBankList().then(res => {
                 console.log(res)
-                toast.clear()
+                state.loading = false
                 if (res.check()) {
                     if (res.data && res.data.length > 0) {
                         state.bankList = res.data
@@ -282,6 +278,8 @@ export default {
                         })
                     }
                 }
+            }).catch(err => {
+                state.loading = false
             })
         }
 
@@ -309,7 +307,9 @@ export default {
             toAddBank,
             confirm,
             customInfo,
-            hideMiddle
+            hideMiddle,
+            getWithdrawFee
+
         }
     }
 
@@ -328,6 +328,7 @@ export default {
         margin: rem(40px) rem(30px);
     }
     .pageTitle {
+        margin-bottom: rem(10px);
         font-weight: normal;
         font-size: rem(50px);
     }
