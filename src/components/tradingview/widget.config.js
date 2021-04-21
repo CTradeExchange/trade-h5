@@ -1,13 +1,12 @@
 export function WidgetConfig () {
     return {
         // debug: true, // uncomment this line to see Library errors and warnings in the console
+        // datafeed: new UDFCompatibleDatafeed('https://demo-feed-data.tradingview.com'),
         // fullscreen: true,
-        symbol: 'BTC/USDT',
         container_id: 'tv_chart_container',
-
         //	BEWARE: no trailing slash is expected in feed URL
         library_path: '/charting_library/',
-        custom_css_url: 'customCssUrl.css?v=1.0.1',
+        // custom_css_url: 'customCssUrl.css?v=1.0.1',
         locale: 'zh',
 
         disabled_features: [
@@ -75,9 +74,9 @@ export function WidgetConfig () {
             // 阻止滚动到第一个历史 K 线的左侧
             'fix_left_edge'
         ],
-        charts_storage_url: 'http://saveload.tradingview.com',
+        // charts_storage_url: 'http://saveload.tradingview.com',
         charts_storage_api_version: '1.1',
-        client_id: 'tradingview.com',
+        // client_id: 'tradingview.com',
         user_id: 'public_user_id',
         // debug: true,
         theme: 'Light', // "Light" | "Dark"

@@ -23,27 +23,21 @@ export default {
     },
     methods: {
         init () {
-            if (!this.height) return
+            const symbolId = 2
+            if (!this.height || !symbolId) return
+
             this.widget = window.tvWidget = new window.TradingView.widget({
                 ...WidgetConfig(),
-                // debug: true, // uncomment this line to see Library errors and warnings in the console
+                datafeed: new UDFCompatibleDatafeed('', {
+                    isControl: true
+                }),
+                container_id: 'tv_chart_container',
                 height: this.height,
                 width: this.width,
-                symbol: 'AAPL',
-                interval: '1D',
-                container_id: 'tv_chart_container',
-
-                //	BEWARE: no trailing slash is expected in feed URL
-                datafeed: new UDFCompatibleDatafeed('https://demo-feed-data.tradingview.com'),
+                symbol: symbolId,
+                interval: '1',
                 library_path: '/charting_library/',
                 locale: 'zh',
-
-                // disabled_features: ['use_localstorage_for_settings'],
-                // enabled_features: ['study_templates'],
-                charts_storage_url: 'https://saveload.tradingview.com',
-                charts_storage_api_version: '1.1',
-                client_id: 'tradingview.com',
-                user_id: 'public_user_id'
             })
         }
     }
