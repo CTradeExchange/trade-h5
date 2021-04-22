@@ -189,9 +189,9 @@ export default {
         }
 
         const confirm = () => {
-            // if (!state.withdrawConfig.enableWithdraw) {
-            //     return Toast('该用户暂不可取款')
-            // }
+            if (!state.withdrawConfig.enableWithdraw) {
+                return Toast('该用户暂不可取款')
+            }
 
             if (state.amount <= 0) {
                 state.amount = 0

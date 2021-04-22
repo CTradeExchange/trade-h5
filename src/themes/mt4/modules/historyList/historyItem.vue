@@ -6,25 +6,27 @@
                     {{ data.symbolName }},
                     <span class='volumn'>
                         {{ data.direction===1?'buy':'sell' }}
-                        {{data.closeVolume}}
+                        {{ data.closeVolume }}
                     </span>
                 </p>
-                <p class="volums">
+                <p class='volums'>
                     <span>{{ data.openPrice }}</span>
                     <span> → </span>
                     <span>{{ data.closePrice }}</span>
                 </p>
             </div>
             <div class='col'>
-                <p class="date">{{closeTime}}</p>
-                <p class='price' :class="{riseColor:data.profit>=0,fallColor:data.profit<0}">
-                    {{data.profit}}
+                <p class='date'>
+                    {{ closeTime }}
+                </p>
+                <p class='price' :class='{ riseColor:data.profit>=0,fallColor:data.profit<0 }'>
+                    {{ data.profit }}
                 </p>
             </div>
         </div>
         <div v-if='detailVisible' class='detail muted'>
             <p class='date '>
-                ID: {{data.orderId}}
+                ID: {{ data.orderId }}
             </p>
             <ul class='list'>
                 <li class='flexWrap'>
@@ -32,7 +34,7 @@
                         S/L
                     </span>
                     <span class='value'>
-                        {{data.stopLoss || '--'}}
+                        {{ data.stopLoss || '--' }}
                     </span>
                 </li>
                 <li class='flexWrap'>
@@ -40,7 +42,7 @@
                         手续费
                     </span>
                     <span class='value'>
-                        {{data.commission||'--'}}
+                        {{ data.commission||'--' }}
                     </span>
                 </li>
                 <li class='flexWrap'>
@@ -48,7 +50,7 @@
                         T/P
                     </span>
                     <span class='value'>
-                        {{data.takeProfit || '--'}}
+                        {{ data.takeProfit || '--' }}
                     </span>
                 </li>
                 <!-- <li class='flexWrap'>

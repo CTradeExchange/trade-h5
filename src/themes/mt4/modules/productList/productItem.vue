@@ -48,6 +48,9 @@ export default {
     },
     setup ({ product }, context) {
         const store = useStore()
+        // 第一次进来产品页面缺少持仓标识
+        store.dispatch('_trade/queryPositionPage')
+
         const positionList = computed(() => store.state._trade.positionList)
         const quoteMode = computed(() => store.state.quoteMode)
         const longName = computed(() => getLen(product?.symbolName) > 15)
@@ -55,6 +58,7 @@ export default {
             const tick_time = product.tick_time ?? ''
             return tick_time ? dayjs(Number(tick_time)).format('HH:mm:ss') : ''
         })
+        console.log('positionList', positionList)
         const inPosition = computed(() => positionList.value.find(el => el.symbolId === parseInt(product.symbolId)))
 
         const className = computed(() => ({

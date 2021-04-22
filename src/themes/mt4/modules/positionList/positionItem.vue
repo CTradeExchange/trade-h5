@@ -5,8 +5,9 @@
                 <p class='productName'>
                     {{ data.symbolName }},
                     <span class='volumn'>
-                        {{ data.direction===1?'buy':'sell' }}
-                        {{ positionVolume }}
+                        {{ data.direction===1?'buy':'sell' }}&nbsp;
+                        <!-- {{ positionVolume }} -->
+                        {{ data.openVolume }}
                     </span>
                 </p>
                 <p>
@@ -146,7 +147,7 @@ export default {
     }
     .list {
         display: grid;
-        grid-column-gap: rem(30px);
+        grid-column-gap: rem(90px);
         grid-template-columns: repeat(2, 1fr);
         margin-top: rem(10px);
     }

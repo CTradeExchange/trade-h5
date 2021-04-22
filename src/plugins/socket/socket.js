@@ -43,6 +43,10 @@ export default {
             console.log('close', err)
         })
 
+        msgWS.addEventListener('message', evt => {
+
+        })
+
         tradeWS.addEventListener('open', function () {
             tradeWS.send(JSON.stringify({
                 'header': {

@@ -4,15 +4,15 @@
             <van-loading type='spinner' />
         </div>
         <van-empty v-else-if='orderList && orderList.length===0' description='无历史记录' />
-        <template v-else-if="orderList">
+        <template v-else-if='orderList'>
             <van-list
-                v-model:loading="loading"
-                :finished="finished"
-                finished-text="没有更多了"
-                @load="onLoad"
-                >
-                    <positionItem v-for='item in orderList' :key='item' :data='item' />
-                </van-list>
+                v-model:loading='loading'
+                :finished='finished'
+                finished-text='没有更多了'
+                @load='onLoad'
+            >
+                <positionItem v-for='item in orderList' :key='item' :data='item' />
+            </van-list>
             <!-- <positionItem v-for='item in orderList' :key='item' :data='item' /> -->
         </template>
     </div>
@@ -23,18 +23,18 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import positionItem from './historyItem'
 export default {
-    props: {
-        loading:Boolean,
-        finished:Boolean,
-    },
     components: {
         positionItem,
     },
-    setup (props,{emit}) {
+    props: {
+        loading: Boolean,
+        finished: Boolean,
+    },
+    setup (props, { emit }) {
         const store = useStore()
         const orderList = computed(() => store.state._trade.historyList)
 
-        const onLoad = ()=>{
+        const onLoad = () => {
             emit('onLoad')
         }
 

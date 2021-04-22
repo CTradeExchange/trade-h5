@@ -169,6 +169,15 @@ const routes = [
             roles: ['User'],
         }
     },
+    {
+        path: '/closePosition',
+        name: 'ClosePosition',
+        component: () => import(/* webpackChunkName: "order" */ '../views/order/closePosition.vue'),
+        meta: {
+            title: '平仓',
+            roles: ['User'],
+        }
+    },
     ...themeRouter
 ]
 

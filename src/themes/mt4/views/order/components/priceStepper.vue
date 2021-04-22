@@ -3,6 +3,7 @@
         v-model='value'
         class='priceStepper'
         :decimal-length='product.symbolDigits'
+        :disabled='disabled'
         :min='-999'
         :step='step'
         @change='onChange'
@@ -16,7 +17,18 @@
 import { computed, reactive, toRefs, watch } from 'vue'
 import { minus, plus } from '@/utils/calculation'
 export default {
-    props: ['modelValue', 'product'],
+    props: {
+        modelValue: {
+
+        },
+        product: {
+
+        },
+        disabled: {
+            type: Boolean,
+            default: false
+        }
+    },
     emits: ['update:modelValue'],
     setup (props, { emit }) {
         let prevValue = props.modelValue

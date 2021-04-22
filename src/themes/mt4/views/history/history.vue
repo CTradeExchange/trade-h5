@@ -1,22 +1,22 @@
 <template>
-        <Top >
-            <template #right>
-                <a class="icon icon_paixu" href="javascript:;" @click="sortActionsVisible = true"></a>
-                <a class="icon icon_rili" href="javascript:;" @click="timeActionsVisible = true"></a>
-            </template>
-        </Top>
-        <div class="container">
-            <CapitalList class="of-1px-bottom" :data="capitalListData" />
-            <Balance />
-            <HistoryList :loading="loading" :finished="finished" @onLoad="onLoad" />
-        </div>
+    <Top>
+        <template #right>
+            <a class='icon icon_paixu' href='javascript:;' @click='sortActionsVisible = true'></a>
+            <a class='icon icon_rili' href='javascript:;' @click='timeActionsVisible = true'></a>
+        </template>
+    </Top>
+    <div class='container'>
+        <CapitalList class='of-1px-bottom' :data='capitalListData' />
+        <Balance />
+        <HistoryList :finished='finished' :loading='loading' @onLoad='onLoad' />
+    </div>
 
-        <!-- 排序 actionsheet -->
-        <van-action-sheet v-model:show="sortActionsVisible" :actions="sortActions" cancel-text="取消" @select="actionSheetOnSelect" />
-        <!-- 查询时间 actionsheet -->
-        <van-action-sheet v-model:show="timeActionsVisible" :actions="timeActions" cancel-text="取消" class="timeActions" @select="timeActionSheetOnSelect" />
-        <!-- 日历 -->
-        <van-calendar v-model:show="calendarVisible" :max-date="maxDate" :min-date="minDate" type="range" @confirm="calendarOnConfirm" />
+    <!-- 排序 actionsheet -->
+    <van-action-sheet v-model:show='sortActionsVisible' :actions='sortActions' cancel-text='取消' @select='actionSheetOnSelect' />
+    <!-- 查询时间 actionsheet -->
+    <van-action-sheet v-model:show='timeActionsVisible' :actions='timeActions' cancel-text='取消' class='timeActions' @select='timeActionSheetOnSelect' />
+    <!-- 日历 -->
+    <van-calendar v-model:show='calendarVisible' :max-date='maxDate' :min-date='minDate' type='range' @confirm='calendarOnConfirm' />
 </template>
 
 <script>
@@ -35,7 +35,7 @@ export default {
         HistoryList,
         Top
     },
-    setup() {
+    setup () {
         const store = useStore()
         const sortActionsUp = 'van-badge__wrapper van-icon van-icon-down up'
         const sortActionsDown = 'van-badge__wrapper van-icon van-icon-down '
@@ -49,9 +49,9 @@ export default {
 
         let sortFieldName = sortActions[0].feild
         let current = 1
-        let sortType = 'desc'   // desc 降序；asc 升序
-        let startTime = undefined
-        let endTime = undefined
+        let sortType = 'desc' // desc 降序；asc 升序
+        let startTime
+        let endTime
         const orderList = computed(() => store.state._trade.historyList)
         const capitalListData = computed(() => {
             return [
@@ -73,20 +73,19 @@ export default {
         })
         // 选择排序方式
         const actionSheetOnSelect = item => {
-            if(item.className && sortType==='desc'){
+            if (item.className && sortType === 'desc') {
                 sortType = 'asc'
                 item.className = sortActionsUp
-            }else if(item.className && sortType==='asc'){
+            } else if (item.className && sortType === 'asc') {
                 sortType = 'desc'
                 item.className = sortActionsDown
-
-            }else{
+            } else {
                 sortActions.forEach(el => (el.className = ''))
                 item.className = sortActionsDown
                 sortFieldName = item.feild
             }
             state.sortActionsVisible = false
-            current=1;
+            current = 1
             queryRecordList()
         }
         // 选择日期查询方式
@@ -94,7 +93,7 @@ export default {
             if (item.startTime) {
                 startTime = item.startTime
                 endTime = item.endTime
-                current=1;
+                current = 1
                 queryRecordList()
             } else {
                 state.calendarVisible = true
@@ -105,37 +104,37 @@ export default {
         const calendarOnConfirm = ([start, end]) => {
             startTime = dayjs(start).startOf('day').valueOf()
             endTime = dayjs(end).endOf('day').valueOf()
-            current=1;
+            current = 1
             queryRecordList()
             state.calendarVisible = false
         }
 
         // 查询平仓历史记录列表
-        const queryRecordList = ()=>{
-            state.loading = true;
+        const queryRecordList = () => {
+            state.loading = true
             store.dispatch('_trade/queryHistoryCloseOrderList', {
                 current,
-                size:20,
-                sortType:sortType,
+                size: 20,
+                sortType: sortType,
                 sortFieldName: sortFieldName,
                 executeStartTime: startTime,
                 executeEndTime: endTime
-            }).then(res=>{
-                if(res.check() && res.data){
+            }).then(res => {
+                if (res.check() && res.data) {
                     const data = res.data
-                    state.loading = false;
-                    state.finished = data.totalPage===data.current;
+                    state.loading = false
+                    state.finished = data.totalPage === data.current
                 }
-            }).catch(()=>{
-                state.loading = false;
+            }).catch(() => {
+                state.loading = false
             })
         }
-        queryRecordList();
+        queryRecordList()
 
         // 加载更多
-        const onLoad = ()=>{
-            current++;
-            queryRecordList();
+        const onLoad = () => {
+            current++
+            queryRecordList()
         }
 
         return {

@@ -3,7 +3,7 @@
         <div class='mainWrap'>
             <div class='hd'>
                 <p class='productName'>
-                    {{data.symbolName}},
+                    {{ data.symbolName }},
                     <span class='volumn'>
                         {{ data.direction===1?'buy':'sell' }}
                         {{ positionVolume }}
@@ -28,7 +28,7 @@
                         S/L
                     </span>
                     <span class='value'>
-                        {{data.stopLoss||'--'}}
+                        {{ data.stopLoss||'--' }}
                     </span>
                 </li>
                 <li class='flexWrap'>
@@ -36,7 +36,7 @@
                         ID
                     </span>
                     <span class='value'>
-                        {{data.positionId}}
+                        {{ data.positionId }}
                     </span>
                 </li>
                 <li class='flexWrap'>
@@ -44,15 +44,14 @@
                         T/P
                     </span>
                     <span class='value'>
-                        {{data.takeProfit||'--'}}
+                        {{ data.takeProfit||'--' }}
                     </span>
                 </li>
                 <li class='flexWrap'>
                     <span class='title'>
-
                     </span>
                     <span class='value'>
-                        {{openTime}}
+                        {{ openTime }}
                     </span>
                 </li>
             </ul>

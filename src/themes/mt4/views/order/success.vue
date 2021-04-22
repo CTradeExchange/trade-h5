@@ -5,12 +5,12 @@
             <p>
                 #{{ data.orderId }}
                 <span class='direction'>
-                    {{ data.direction === 1 ? 'BUY' : 'SELL' }}
+                    {{ data.direction === 1 ? 'buy' : 'sell' }}
                     {{ data.tradeVolume }}
                 </span>
             </p>
             <p>
-                at <span class='price'>
+                {{ data.symbolName }} at <span class='price'>
                     {{ data.executePrice }}
                 </span>
             </p>
@@ -42,19 +42,20 @@ export default {
     position: relative;
     height: 100%;
     .pending-wrap {
-        padding-top: rem(50px);
+        padding-top: rem(100px);
         color: #4B4B52;
         font-weight: bold;
         font-size: rem(48px);
+        letter-spacing: -1px;
         text-align: center;
         p {
-            margin-bottom: rem(10px);
+            margin-bottom: rem(20px);
         }
         .direction {
             color: #007AFF;
         }
         .price {
-            color: var(--color);
+            color: #000;
         }
     }
 }

@@ -51,6 +51,7 @@ export default {
             pendingPrice = Number(pendingPrice)
             stopLoss = Number(stopLoss)
             takeProfit = Number(takeProfit)
+
             console.log('买入止盈最小，最大', buyProfitMin, buyProfitMax)
             console.log('买入止损最小，最大', buyStopLossMin, buyStopLossMax)
             if (stopLoss > 0 && (stopLoss < buyStopLossMin || stopLoss > buyStopLossMax)) {

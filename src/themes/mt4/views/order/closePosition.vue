@@ -1,21 +1,12 @@
 <template>
     <top back :menu='false' :sub-title='product.symbolCode' :title='product.symbolName' />
     <div v-if='product' class='orderWrap'>
-        <!-- 订单类型 -->
-        <div v-if='!$route.query.positionId' class='cell openType'>
-            <p class='title' @click='dropdownWrap = !dropdownWrap'>
-                {{ openOrderSelected.name }}
-            </p>
-            <div v-show='dropdownWrap' class='dropdownWrap' @click='dropdownWrap = false'>
-                <a v-for='item in openOrderList' :key='item.val' class='item of-1px-bottom' href='javascript:;' @click='selectOpenOrder(item)'>
-                    {{ item.name }}
-                </a>
-            </div>
-        </div>
-
+        <p class='header-info'>
+            平仓：#{{ positionId }} {{ Number(direction) === 1 ? 'buy' : 'sell' }} {{ openVolume }}
+        </p>
         <!-- 订单手数 -->
         <div class='cell'>
-            <OrderVolumn v-model='volumn' :disabled='disabled' :product='product' />
+            <OrderVolumn v-model='volumn' :disabled='false' :product='product' />
         </div>
 
         <!-- 买卖价格 -->
@@ -38,10 +29,10 @@
         <!-- 价格设置 -->
         <div class='cell priceSet'>
             <div class='col'>
-                <PriceStepper v-model='stopLoss' :product='product' />
+                <PriceStepper v-model='stopLoss' :disabled='true' :product='product' />
             </div>
             <div class='col'>
-                <PriceStepper v-model='takeProfit' :product='product' />
+                <PriceStepper v-model='takeProfit' :disabled='true' :product='product' />
             </div>
         </div>
 
@@ -52,14 +43,9 @@
     </div>
 
     <!-- 底部下单按钮 -->
-    <FooterBtn
-        :loading='loading'
-        :open-order-selected='openOrderSelected'
-        :pending-price='pendingPrice'
-        :stop-loss='stopLoss'
-        :take-profit='takeProfit'
-        @openOrder='openOrder'
-    />
+    <van-button block class='confirm-btn' @click='handleConfirm'>
+        <span>平仓</span>
+    </van-button>
 
     <van-popup v-model:show='pendingVisible' :close-on-click-overlay='false' :style="{ width: '100%', height: '100%' }">
         <Pending :data='orderParams' :product='product' @onHide='pendingVisible = false' />
@@ -82,7 +68,6 @@ import { useRoute, useRouter } from 'vue-router'
 import lightweightChart from './components/lightweightChart'
 import OrderVolumn from './components/orderVolumn'
 import PriceStepper from './components/priceStepper'
-import FooterBtn from './components/footerBtn'
 import Pending from './pending'
 import Success from './success'
 import { minus, divide, getDecimalNum } from '@/utils/calculation'
@@ -94,16 +79,15 @@ export default {
         lightweightChart,
         PriceStepper,
         Price,
-        FooterBtn,
         top,
         Success
     },
-    setup () {
+    setup (props, { emit }) {
         const store = useStore()
         const route = useRoute()
         const router = useRouter()
         const chart = ref(null)
-        const { symbolId, positionId } = route.query
+        const { symbolId, positionId, direction, openVolume, openNum, stopLossDecimal, takeProfitDecimal } = route.query
         const state = reactive({
             loading: false,
             disabled: positionId,
@@ -111,13 +95,6 @@ export default {
             successVisible: false,
             dropdownWrap: false,
             openOrderSelected: {}, // 1即时执行 2买入限价 3卖出限价 4买入止损 5卖出止损
-            openOrderList: [
-                { name: '即时执行', val: 1 },
-                { name: '买入限价', val: 2 },
-                { name: '卖出限价', val: 3 },
-                { name: '买入止损', val: 4 },
-                { name: '卖出止损', val: 5 }
-            ],
             volumn: 0.01,
             value: 3,
             pendingPrice: 0, // 挂单价
@@ -132,8 +109,6 @@ export default {
             { immediate: true }
         )
         onUnmounted(() => store.commit('_trade/Update_pendingPrice', 0))
-
-        state.openOrderSelected = state.openOrderList[0]
 
         // 当前产品
         const product = computed(() => store.getters.productActived)
@@ -162,70 +137,6 @@ export default {
         )
         if (!product.value) router.replace('/')
 
-        // 检查下单参数是否有效
-        const paramsInvalid = () => {
-            let result = false
-            const m = divide(state.volumn, product.value.minVolume)
-            result = getDecimalNum(m) > 0 // 手数不是最小手数的整数倍
-            if (result) Toast('手数不是最小手数的整数倍')
-            return result
-        }
-
-        // 点击下单按钮
-        const openOrder = direct => {
-            if (paramsInvalid()) return false
-            let requestPrice = direct === 'sell' ? product.value.sell_price : product.value.buy_price
-            let direction = direct === 'sell' ? 2 : 1
-            let bizType = 1
-            switch (state.openOrderSelected.val) {
-                case 2:
-                case 3:
-                    bizType = 10
-                    requestPrice = state.pendingPrice
-                    break
-                case 4:
-                case 5:
-                    bizType = 11
-                    requestPrice = state.pendingPrice
-                    break
-                default:
-                    bizType = 1
-                    break
-            }
-            if ([2, 4].includes(state.openOrderSelected.val)) {
-                direction = 1
-            } else if ([3, 5].includes(state.openOrderSelected.val)) {
-                direction = 2
-            }
-            const p = Math.pow(10, product.value.symbolDigits)
-            const params = {
-                bizType, // 业务类型。0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
-                direction, // 订单买卖方向。1-买；2-卖；
-                symbolId: Number(product.value.symbol_id),
-                requestTime: Date.now(),
-                requestNum: state.volumn * product.value.contractSize,
-                requestPrice: requestPrice * p,
-                stopLoss: Number(state.stopLoss) ? state.stopLoss * p : undefined,
-                takeProfit: Number(state.takeProfit) ? state.takeProfit * p : undefined
-            }
-            state.loading = true
-            addMarketOrder(params)
-                .then(res => {
-                    state.loading = false
-                    if (res.invalid()) return false
-                    state.orderParams = params
-                    // state.pendingVisible = true
-                    state.successVisible = true
-                    state.resData = res.data
-                    setTimeout(() => {
-                        state.successVisible = false
-                    }, 2000)
-                })
-                .catch(err => {
-                    state.loading = false
-                })
-        }
-
         QuoteSocket.send_subscribe([symbolId]) // 订阅产品报价
         store.dispatch('_quote/querySymbolInfo', symbolId) // 获取产品详情
         store.commit('_quote/Update_productActivedID', symbolId)
@@ -250,19 +161,45 @@ export default {
                     state.volumn = minus(curPosition.openVolume, curPosition.closeVolume)
                 })
         }
-        // 选择订单类型
-        const selectOpenOrder = item => {
-            state.openOrderSelected = item
-            if (item.val === 1) store.commit('_trade/Update_pendingPrice', 0)
+
+        const handleConfirm = () => {
+            const requestPrice = direction === 1 ? product.value.sell_price : product.value.buy_price
+            const params = {
+                bizType: 2, // 业务类型。0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
+                direction: Number(direction) === 1 ? 2 : 1, // 订单买卖方向。1-买；2-卖；
+                symbolId: symbolId,
+                positionId: Number(positionId),
+                requestTime: Date.now(),
+                requestNum: Number(openNum),
+                requestPrice: Number(requestPrice),
+            }
+            state.loading = true
+            addMarketOrder(params).then(res => {
+                state.loading = false
+                if (res.invalid()) return false
+                emit('refresh')
+                state.resData = res.data
+                state.successVisible = true
+                setTimeout(() => {
+                    state.successVisible = false
+                }, 2000)
+            }).catch(err => {
+                state.loading = false
+            })
         }
 
         return {
             ...toRefs(state),
             product,
             chart,
-            openOrder,
             profitLossRang,
-            selectOpenOrder
+            positionId,
+            direction,
+            openVolume,
+            openNum,
+            stopLossDecimal,
+            takeProfitDecimal,
+            handleConfirm
         }
     }
 }
@@ -275,9 +212,26 @@ export default {
     flex: 1;
     margin-bottom: rem(10px);
     overflow-y: auto;
+    .header-info {
+        font-weight: bold;
+        font-size: rem(30px);
+        line-height: rem(80px);
+        text-align: center;
+        border-bottom: solid 1px var(--bdColor);
+    }
     .cell {
         margin-right: rem(30px);
         margin-left: rem(30px);
+    }
+}
+.confirm-btn {
+    position: absolute;
+    bottom: 0;
+    background: var(--btnColor);
+    border-color: var(--bdColor);
+    span {
+        color: var(--color);
+        font-size: rem(34px);
     }
 }
 .openType {

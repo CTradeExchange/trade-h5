@@ -139,10 +139,19 @@ export default {
 
         // 上传图片
         const afterRead = (file) => {
-            debugger
             // console.log(file)// 由打印的可以看到，图片    信息就在files[0]里面
-            // const formData = new FormData()// 通过formdata上传
-            // formData.append('file', file)
+            const formData = new FormData()// 通过formdata上传
+            formData.append('file', file)
+            debugger
+            upload({
+                object: file
+            }).then(res => {
+                if (res.check()) {
+
+                }
+            }).catch(err => {
+                console.log(err)
+            })
             // this.$http.post('图片上传接口', formData, {
             //     method: 'post',
             //     headers: { 'Content-Type': 'multipart/form-data' }

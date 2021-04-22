@@ -1,24 +1,25 @@
 <template>
-    <div ref='positionWrap' >
+    <div ref='positionWrap'>
         <div v-if='orderList.length===0 && $store.state._trade.positionLoading' class='loading'>
             <van-loading type='spinner' />
         </div>
         <van-empty v-else-if='orderList.length===0' description='无历史记录' />
         <template v-else>
-            <pendingItem v-for='item in orderList' :key='item' :data='item' v-longpress:closePosition="item" />
+            877887
+            <pendingItem v-for='item in orderList' :key='item' v-longpress:closePosition='item' :data='item' />
         </template>
     </div>
     <van-popup v-model:show='show'>
         <section class='popContainer'>
             <p class='title'>
-                {{cur.symbolName}},
-                {{cur.direction===1?'buy':'sell'}}
+                {{ cur.symbolName }},
+                {{ cur.direction===1?'buy':'sell' }}
             </p>
             <div class='menulist'>
                 <a class='item van-hairline--bottom' href='javascript:;' @click='modifyOrder'>
                     修改订单
                 </a>
-                <a class='item van-hairline--bottom' href='javascript:;' @click="delOrder">
+                <a class='item van-hairline--bottom' href='javascript:;' @click='delOrder'>
                     删除订单
                 </a>
                 <a class='item van-hairline--bottom' href='javascript:;' @click='toChart'>
@@ -42,8 +43,8 @@ export default {
         pendingItem,
         Loading,
     },
-    emits:['refresh'],
-    setup (props,{emit}) {
+    emits: ['refresh'],
+    setup (props, { emit }) {
         const store = useStore()
         const router = useRouter()
         const state = reactive({
@@ -54,14 +55,14 @@ export default {
         const product = computed(() => store.getters.productActived)
         const orderList = computed(() => store.state._trade.pendingList)
         // 长按持仓
-        const closePosition=(item)=>{
+        const closePosition = (item) => {
             store.commit('_quote/Update_productActivedID', item.symbolId)
-            state.cur = item;
+            state.cur = item
             state.show = true
         }
         // 去图表
-        const toChart = ()=>{
-            router.push({name:'Chart',query:{ symbolId: state.cur.symbolId}});
+        const toChart = () => {
+            router.push({ name: 'Chart', query: { symbolId: state.cur.symbolId } })
         }
         // 平仓
         const openOrder = () => {
@@ -89,14 +90,14 @@ export default {
         }
 
         // 删除订单
-        const delOrder = ()=>{
+        const delOrder = () => {
             state.show = false
-            router.push({name:'Order',query:{ symbolId: state.cur.symbolId}});
+            router.push({ name: 'Order', query: { symbolId: state.cur.symbolId } })
         }
         // 修改订单
-        const modifyOrder = ()=>{
+        const modifyOrder = () => {
             state.show = false
-            router.push({name:'Order',query:{ symbolId: state.cur.symbolId,positionId: state.cur.positionId}});
+            router.push({ name: 'Order', query: { symbolId: state.cur.symbolId, positionId: state.cur.positionId } })
         }
         return {
             ...toRefs(state),

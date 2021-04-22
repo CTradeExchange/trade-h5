@@ -363,7 +363,7 @@ export default {
         color: var(--color);
         font-size: rem(30px);
         line-height: rem(80px);
-        background: var(--bgColor);
+        background: var(--btnColor);
         border-color: var(--bdColor);
         border-radius: rem(4px);
         &.light {

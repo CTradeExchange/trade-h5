@@ -21,7 +21,7 @@
                     资金成分
                 </span>
                 <span class='t2'>
-                    (单位：USD)
+                    (单位：{{ mainAccount.currency }})
                 </span>
             </p>
             <div id='annulus' class='annulus'></div>
@@ -31,7 +31,7 @@
                         盈亏
                     </p>
                     <p class='val profit'>
-                        +421.12
+                        {{ computePrice(mainAccount.profit, mainAccount.digits) }}
                     </p>
                 </div>
                 <div class='item'>
@@ -39,7 +39,7 @@
                         余额
                     </p>
                     <p class='val balance'>
-                        452154.21
+                        {{ computePrice(mainAccount.balance,mainAccount.digits) }}
                     </p>
                 </div>
                 <div class='item'>
@@ -47,7 +47,7 @@
                         可取
                     </p>
                     <p class='val'>
-                        48000.00
+                        {{ computePrice(mainAccount.withdrawAmount,mainAccount.digits) }}
                     </p>
                 </div>
                 <div class='item'>
@@ -55,7 +55,7 @@
                         可用保证金
                     </p>
                     <p class='val'>
-                        48000.00
+                        --
                     </p>
                 </div>
                 <div class='item'>
@@ -63,7 +63,7 @@
                         占用保证金
                     </p>
                     <p class='val'>
-                        2000.00
+                        {{ computePrice(mainAccount.margin, mainAccount.digits) }}
                     </p>
                 </div>
             </div>
@@ -76,8 +76,10 @@
 
 <script>
 import Top from '@m/layout/top'
-import { toRefs, reactive, ref, onMounted } from 'vue'
+import { toRefs, reactive, ref, onMounted, computed } from 'vue'
 import { createTorus } from '@/plugins/createTorus'
+import { useStore } from 'vuex'
+import { getArrayObj, priceFormat } from '@/utils/util'
 import { useRouter, useRoute } from 'vue-router'
 export default {
     components: {
@@ -85,11 +87,23 @@ export default {
     },
     setup (props) {
         const router = useRouter()
+        const store = useStore()
+        // 获取账户信息
+        const customInfo = computed(() => store.state._user.customerInfo)
+        const state = reactive({
+            mainAccount: {}
+        })
+
         function toDesposit () {
             router.push('/desposit')
         }
 
+        const computePrice = (price, digits) => {
+            return priceFormat(price, digits)
+        }
+
         onMounted(() => {
+            state.mainAccount = getArrayObj(customInfo.value.accountList, 'accountId', customInfo.value.accountId)
             createTorus({
                 id: 'annulus',
                 width: 220,
@@ -97,7 +111,7 @@ export default {
                 r: 80,
                 arcWidth: 15,
                 label: '净值',
-                text: '48888.55',
+                text: computePrice(state.mainAccount.equity, state.mainAccount.digits),
                 data: [
                     { color: '#3894FF', percent: 0.85, text: '第1项' },
                     { color: '#51C31C', percent: 0.15, text: '第2项' },
@@ -106,7 +120,9 @@ export default {
         })
 
         return {
-            toDesposit
+            toDesposit,
+            computePrice,
+            ...toRefs(state)
         }
     }
 }
