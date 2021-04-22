@@ -39,11 +39,13 @@
                             :type='item.elementCode === "phone" ? "number" : "text"'
                         />
                     </van-cell-group>
-                    <div>
-                        <img alt='' class='upload-img' :src='require("../../assets/auth/" + item.elementCode + ".png")' srcset='' />
-                        <p class='upload-text'>
-                            {{ item.elementName }}
-                        </p>
+                    <div v-if="item.showType === 'image'">
+                        <van-uploader :after-read='afterRead'>
+                            <img alt='' class='upload-img' :src='require("../../assets/auth/" + item.elementCode + ".png")' srcset='' />
+                            <p class='upload-text'>
+                                {{ item.elementName }}
+                            </p>
+                        </van-uploader>
                     </div>
                 </div>
                 <van-button class='confirm-btn' @click='onConfirm'>
@@ -62,6 +64,7 @@ import { toRefs, reactive, ref, onBeforeMount } from 'vue'
 import { Toast, Dialog } from 'vant'
 import { findAllLevelKyc, kycLevelApply } from '@/api/user'
 import { getArrayObj, isEmpty } from '@/utils/util'
+import { upload } from '@/api/base'
 
 export default {
     components: {
@@ -71,6 +74,14 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const levelCode = route.query.levelCode
+
+        const fileList = ref([
+            {
+                url: '',
+                status: 'uploading',
+                message: '上传中...',
+            }
+        ])
         const state = reactive({
             areaShow: false,
             area: '',
@@ -126,6 +137,30 @@ export default {
             state.conditionVis = false
         }
 
+        // 上传图片
+        const afterRead = (file) => {
+            debugger
+            // console.log(file)// 由打印的可以看到，图片    信息就在files[0]里面
+            // const formData = new FormData()// 通过formdata上传
+            // formData.append('file', file)
+            // this.$http.post('图片上传接口', formData, {
+            //     method: 'post',
+            //     headers: { 'Content-Type': 'multipart/form-data' }
+            // }).then(function (res) {
+            //     console.log(res.data)//
+            // }).catch(function (error) {
+            //     console.log(error)
+            // })
+
+            // file.status = 'uploading'
+            // file.message = '上传中...'
+
+            // setTimeout(() => {
+            //     file.status = 'failed'
+            //     file.message = '上传失败'
+            // }, 1000)
+        }
+
         const onConfirm = () => {
             const elementList = []
             if (!isEmpty(state.conditionModel)) {
@@ -168,7 +203,9 @@ export default {
             onConfirm,
             getConditon,
             beginAuth,
-            status
+            status,
+            afterRead,
+            fileList
         }
     }
 }

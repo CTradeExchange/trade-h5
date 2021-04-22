@@ -50,18 +50,18 @@ export default {
             const buy_price = state.pendingPrice ? state.pendingPrice : Number(product.buy_price)
             const sell_price = state.pendingPrice ? state.pendingPrice : Number(product.sell_price)
 
-            buyProfitMax = (sell_price + pip * product.priceMaxLimit).toFixed(digits) // 买入价+pip*限价最大距离
-            buyProfitMin = (sell_price + pip * product.priceMinLimit).toFixed(digits) // 买入价+pip*限价最小距离
+            buyProfitMax = (buy_price + pip * product.priceMaxLimit).toFixed(digits) // 买入价+pip*限价最大距离
+            buyProfitMin = (buy_price + pip * product.priceMinLimit).toFixed(digits) // 买入价+pip*限价最小距离
 
-            sellProfitMax = (buy_price - pip * product.priceMinLimit).toFixed(digits) // 卖出价-pip*限价最小距离
-            sellProfitMin = (buy_price - pip * product.priceMaxLimit).toFixed(digits) // 卖出价-pip*限价最大距离
+            sellProfitMax = (sell_price - pip * product.priceMinLimit).toFixed(digits) // 卖出价-pip*限价最小距离
+            sellProfitMin = (sell_price - pip * product.priceMaxLimit).toFixed(digits) // 卖出价-pip*限价最大距离
 
-            buyStopLossMax = (sell_price - pip * product.stopLossMinPoint).toFixed(digits) // 买入价-pip*止损最小距离
-            buyStopLossMin = (sell_price - pip * product.stopLossMaxPoint).toFixed(digits) // 买入价-pip*止损最大距离
+            buyStopLossMax = (buy_price - pip * product.stopLossMinPoint).toFixed(digits) // 买入价-pip*止损最小距离
+            buyStopLossMin = (buy_price - pip * product.stopLossMaxPoint).toFixed(digits) // 买入价-pip*止损最大距离
 
-            sellStopLossMax = (buy_price + pip * product.stopLossMaxPoint).toFixed(digits) // 卖出价+pip*止损最大距离
+            sellStopLossMax = (sell_price + pip * product.stopLossMaxPoint).toFixed(digits) // 卖出价+pip*止损最大距离
 
-            sellStopLossMin = (buy_price - pip * product.stopLossMinPoint).toFixed(digits) // 卖出价+pip*止损最小距离
+            sellStopLossMin = (sell_price - pip * product.stopLossMinPoint).toFixed(digits) // 卖出价+pip*止损最小距离
 
             return {
                 buyProfitRange: [buyProfitMin, buyProfitMax], // 买入止盈范围

@@ -20,11 +20,11 @@
 
         <!-- 买卖价格 -->
         <div class='cell priceCell'>
-            <div class='col riseColor'>
-                <Price :digit='product.price_digits' :mode='2' :point-ratio='product.pointRatio' :price='product.buy_price' />
-            </div>
             <div class='col fallColor'>
                 <Price :digit='product.price_digits' :mode='2' :point-ratio='product.pointRatio' :price='product.sell_price' />
+            </div>
+            <div class='col riseColor'>
+                <Price :digit='product.price_digits' :mode='2' :point-ratio='product.pointRatio' :price='product.buy_price' />
             </div>
         </div>
         <!-- {{ profitLossRang }} -->

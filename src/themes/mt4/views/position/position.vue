@@ -2,16 +2,20 @@
     <Top>
         <template #right>
             <a class='icon icon_paixu' href='javascript:;' @click='sortActionsVisible=true'></a>
-            <a class='icon icon_xindingdan' href='javascript:;' @click="newOrder"></a>
+            <a class='icon icon_xindingdan' href='javascript:;' @click='newOrder'></a>
         </template>
     </Top>
-    <div class="container">
+    <div class='container'>
         <CapitalList :data='capitalListData' />
-        <div class='titleBar'> 价位 </div>
-        <PositionList  @refresh="refresh"/>
-        <template v-if="pendingList.length">
-            <div class='titleBar'> 订单 </div>
-            <PendingList  @refresh="refresh"/>
+        <div class='titleBar'>
+            价位
+        </div>
+        <PositionList @refresh='refresh' />
+        <template v-if='pendingList.length'>
+            <div class='titleBar'>
+                订单
+            </div>
+            <PendingList @refresh='refresh' />
         </template>
     </div>
 
@@ -65,22 +69,21 @@ export default {
             state.sortActionsVisible = false
         }
         // 查询持仓列表
-        const queryList = ()=>{
-            store.dispatch('_trade/queryPositionPage', { sort: sortActionValue }).then(res=>{
-                if(res.check()){
-                    const subscribList = res.data.map(el=> el.symbolId);
+        const queryList = () => {
+            store.dispatch('_trade/queryPositionPage', { sort: sortActionValue }).then(res => {
+                if (res.check()) {
+                    const subscribList = res.data.map(el => el.symbolId)
                     QuoteSocket.send_subscribe(subscribList)
                 }
             })
         }
         queryList()
 
-
         const newOrder = () => {
             router.push({ name: 'Order', query: { symbolId: store.state._quote.productActivedID } })
         }
         // 刷新持仓列表
-        const refresh = ()=>{
+        const refresh = () => {
             queryList()
         }
         return {

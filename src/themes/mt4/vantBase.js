@@ -1,6 +1,6 @@
-import { Button, Tabbar, TabbarItem, popup, Dialog, Cell, CellGroup, Stepper, Checkbox, CheckboxGroup, Tab, Tabs, ActionSheet, Swipe, SwipeItem, Icon, Loading, Calendar, Empty, Collapse, CollapseItem, Toast, NavBar, Field, Area, List, Search, PullRefresh, DropdownMenu, DropdownItem, Progress, Switch, Radio, RadioGroup } from 'vant'
+import { Button, Tabbar, TabbarItem, popup, Dialog, Cell, CellGroup, Stepper, Checkbox, CheckboxGroup, Tab, Tabs, ActionSheet, Swipe, SwipeItem, Icon, Loading, Calendar, Empty, Collapse, CollapseItem, Toast, NavBar, Field, Area, List, Search, PullRefresh, DropdownMenu, DropdownItem, Progress, Switch, Radio, RadioGroup, Uploader } from 'vant'
 
-const components = [Button, Tabbar, TabbarItem, popup, Dialog, Cell, CellGroup, Stepper, Checkbox, CheckboxGroup, Tab, Tabs, ActionSheet, Swipe, SwipeItem, Icon, Loading, Calendar, Empty, Collapse, CollapseItem, Toast, NavBar, Field, Area, List, Search, PullRefresh, DropdownMenu, DropdownItem, Progress, Switch, Radio, RadioGroup]
+const components = [Button, Tabbar, TabbarItem, popup, Dialog, Cell, CellGroup, Stepper, Checkbox, CheckboxGroup, Tab, Tabs, ActionSheet, Swipe, SwipeItem, Icon, Loading, Calendar, Empty, Collapse, CollapseItem, Toast, NavBar, Field, Area, List, Search, PullRefresh, DropdownMenu, DropdownItem, Progress, Switch, Radio, RadioGroup, Uploader]
 const install = (app, options) => {
     components.forEach(component => {
         app.use(component)
