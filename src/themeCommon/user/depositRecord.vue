@@ -1,224 +1,212 @@
 <template>
+    <Top back left-icon='arrow-left' :menu='false' :right-action='false' show-center='true'>
+        <template #right>
+        </template>
+    </Top>
+    <!-- <Loading :show='loading' /> -->
     <div class='page-wrap'>
-        <Top
-            back
-            left-icon='arrow-left'
-            :menu='false'
-            :right-action='false'
-            :show-center='true'
-            @rightClick='toWithdrawList'
-        >
-            <template #right>
-            </template>
-        </Top>
         <div class='record-list'>
-            <van-collapse v-model='activeNames' accordion @change='handleFold'>
-                <van-collapse-item name='1'>
-                    <template #title>
-                        <p class='amount'>
-                            10000.00 USD
-                        </p>
-                        <p class='time'>
-                            2020.04.03 16:12:40
-                        </p>
-                    </template>
-                    <template #right-icon>
-                        <div>
-                            <span class='state'>
-                                待支付
-                            </span>
-                            <van-icon :name='activeNames == 1 ? "arrow-up" : "arrow-down"' />
-                        </div>
-                    </template>
-                    <div class='withdraw-desc'>
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                取款金额
-                            </span>
-                            <span class='right-val'>
-                                1000
-                            </span>
-                        </div>
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                币种
-                            </span>
-                            <span class='right-val'>
-                                USD
-                            </span>
-                        </div>
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                状态
-                            </span>
-                            <span class='right-val state'>
-                                待支付
-                            </span>
-                        </div>
+            <van-pull-refresh v-model='loading' @refresh='onRefresh'>
+                <div v-if='list.length === 0'>
+                    <van-empty description='暂无数据' image='search' />
+                </div>
+                <van-list
+                    v-model:loading='loading'
+                    :finished='finished'
+                    :finished-text='finishedText'
+                    @load='onLoad'
+                >
+                    <van-collapse v-for='(item, index) in list' :key='index' v-model='activeIndex' accordion @change='handleFold(index)'>
+                        <van-collapse-item :name='index+1'>
+                            <template #title>
+                                <p class='amount'>
+                                    {{ item.amount }} USD
+                                </p>
+                                <p class='time'>
+                                    {{ formatTime(item.createTime) }}
+                                </p>
+                            </template>
+                            <template #right-icon>
+                                <div>
+                                    <span class='state'>
+                                        {{ states[item.checkStatus] }}
+                                    </span>
+                                    <van-icon :name='activeIndex === index+1 ? "arrow-up" : "arrow-down"' />
+                                </div>
+                            </template>
+                            <div class='withdraw-desc'>
+                                <div class='w-item'>
+                                    <span class='left-label'>
+                                        取款金额
+                                    </span>
+                                    <span class='right-val'>
+                                        {{ item.amount }}
+                                    </span>
+                                </div>
+                                <div class='w-item'>
+                                    <span class='left-label'>
+                                        币种
+                                    </span>
+                                    <span class='right-val'>
+                                        {{ item.withdrawCurrency }}
+                                    </span>
+                                </div>
+                                <div class='w-item'>
+                                    <span class='left-label'>
+                                        状态
+                                    </span>
+                                    <span class='right-val state'>
+                                        {{ states[item.checkStatus] }}
+                                    </span>
+                                </div>
 
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                手续费
-                            </span>
-                            <span class='right-val'>
-                                0.00
-                            </span>
-                        </div>
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                入账金额
-                            </span>
-                            <span class='right-val'>
-                                1000
-                            </span>
-                        </div>
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                提案编号
-                            </span>
-                            <span class='right-val'>
-                                M45482723665
-                            </span>
-                        </div>
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                提交时间
-                            </span>
-                            <span class='right-val'>
-                                2020.04.23 06:14:01
-                            </span>
-                        </div>
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                备注
-                            </span>
-                            <span class='right-val'>
-                                --
-                            </span>
-                        </div>
-                    </div>
-                </van-collapse-item>
-                <van-collapse-item name='2'>
-                    <template #title>
-                        <p class='amount'>
-                            10000.00 USD
-                        </p>
-                        <p class='time'>
-                            2020.04.03 16:12:40
-                        </p>
-                    </template>
-                    <template #right-icon>
-                        <div>
-                            <span class='state'>
-                                已完成
-                            </span>
-                            <van-icon :name='activeNames == 2 ? "arrow-up" : "arrow-down"' />
-                        </div>
-                    </template>
-                    <div class='withdraw-desc'>
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                存款金额
-                            </span>
-                            <span class='right-val'>
-                                1000
-                            </span>
-                        </div>
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                币种
-                            </span>
-                            <span class='right-val'>
-                                USD
-                            </span>
-                        </div>
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                状态
-                            </span>
-                            <span class='right-val state'>
-                                已完成
-                            </span>
-                        </div>
-
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                手续费
-                            </span>
-                            <span class='right-val'>
-                                0.00
-                            </span>
-                        </div>
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                实际入账
-                            </span>
-                            <span class='right-val'>
-                                1000
-                            </span>
-                        </div>
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                提案编号
-                            </span>
-                            <span class='right-val'>
-                                M45482723665
-                            </span>
-                        </div>
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                提交时间
-                            </span>
-                            <span class='right-val'>
-                                2020.04.23 06:14:01
-                            </span>
-                        </div>
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                入账时间
-                            </span>
-                            <span class='right-val'>
-                                2020.04.23 06:14:01
-                            </span>
-                        </div>
-                        <div class='w-item'>
-                            <span class='left-label'>
-                                备注
-                            </span>
-                            <span class='right-val'>
-                                --
-                            </span>
-                        </div>
-                    </div>
-                </van-collapse-item>
-            </van-collapse>
+                                <div class='w-item'>
+                                    <span class='left-label'>
+                                        手续费
+                                    </span>
+                                    <span class='right-val'>
+                                        {{ item.withdrawFee }}
+                                    </span>
+                                </div>
+                                <div class='w-item'>
+                                    <span class='left-label'>
+                                        入账金额
+                                    </span>
+                                    <span class='right-val'>
+                                        {{ item.amount - item.withdrawFee }}
+                                    </span>
+                                </div>
+                                <div class='w-item'>
+                                    <span class='left-label'>
+                                        提案编号
+                                    </span>
+                                    <span class='right-val'>
+                                        {{ item.proposalNo }}
+                                    </span>
+                                </div>
+                                <div class='w-item'>
+                                    <span class='left-label'>
+                                        提交时间
+                                    </span>
+                                    <span class='right-val'>
+                                        {{ formatTime(item.createTime) }}
+                                    </span>
+                                </div>
+                                <div class='w-item'>
+                                    <span class='left-label'>
+                                        备注
+                                    </span>
+                                    <span class='right-val'>
+                                        {{ item.remark || '--' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </van-collapse-item>
+                    </van-collapse>
+                </van-list>
+            </van-pull-refresh>
         </div>
     </div>
 </template>
 
 <script>
-import { reactive, toRefs, ref } from 'vue'
-import { useRouter, onBeforeRouteUpdate } from 'vue-router'
+import { reactive, toRefs, ref, onBeforeMount, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import Top from '@/components/top'
+import { useStore } from 'vuex'
+import { queryDepositPageList } from '@/api/user'
+import dayjs from 'dayjs'
+import { isEmpty } from '@/utils/util'
+import { Toast } from 'vant'
 export default {
     components: {
-        Top
+        Top,
+        Toast
     },
     setup (props) {
         const router = useRouter()
-        onBeforeRouteUpdate(async (to, from) => {
-        //仅当 id 更改时才获取用户，例如仅 query 或 hash 值已更改
-           console.log(555)
+        const store = useStore()
+        // 获取账户信息
+        const customInfo = computed(() => store.state._user.customerInfo)
+
+        // 审核状态
+        const states = {
+            0: '等待人工审批',
+            1: '审批失败',
+            2: '审批成功'
+        }
+        const activeIndex = ref(['0'])
+        const state = reactive({
+            loading: false,
+            size: 5,
+            current: 1,
+            list: [],
+            finishedText: '没有更多了',
+            finished: false,
         })
-        const activeNames = ref(['1'])
-        const handleFold = (e) => {
-            console.log(e)
+        const handleFold = (val) => {
+            activeIndex.value = val
         }
-        const back = () => {
-            if (props.backHandler) emit('back')
-            else router.back()
+
+        const onRefresh = () => {
+            state.current = 1
+            state.finished = false
+            state.list = []
+            getWithdrawList()
         }
-        return { activeNames, handleFold, back }
+
+        const getWithdrawList = () => {
+            const params = {
+                customerNo: customInfo.value.customerNo,
+                accountId: customInfo.value.accountId,
+                size: state.size,
+                current: state.current,
+            }
+
+            queryDepositPageList(params).then(res => {
+                state.loading = false
+                if (res.check()) {
+                    const resdata = res.data
+                    if (resdata.records && resdata.records.length > 0) {
+                        state.loading = false
+                        state.list = state.list.concat(resdata.records)
+                        // 数据全部加载完成
+                        if (resdata.current * resdata.size >= resdata.total) {
+                            state.finished = true
+                        }
+
+                        if (isEmpty(res.data.records)) {
+                            state.finishedText = ''
+                        }
+                    }
+                }
+            })
+        }
+
+        const formatTime = (val) => {
+            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+        }
+
+        // 底部加载更多
+        const onLoad = () => {
+            state.current++
+            getWithdrawList()
+        }
+
+        onMounted(() => {
+            getWithdrawList()
+        })
+
+        return {
+            activeIndex,
+            handleFold,
+            customInfo,
+            onRefresh,
+            formatTime,
+            states,
+            onLoad,
+            ...toRefs(state)
+        }
     }
 }
 </script>
@@ -226,6 +214,9 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .page-wrap {
+    flex: 1;
+    height: 100%;
+    overflow: auto;
     background-color: var(--bgColor);
     .withdraw-desc {
         .w-item {
@@ -269,5 +260,8 @@ export default {
             vertical-align: middle;
         }
     }
+}
+.van-pull-refresh {
+    height: 100%;
 }
 </style>

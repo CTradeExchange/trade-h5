@@ -2,36 +2,40 @@
     <Top back='true' :menu='false' title='' />
     <div class='page-wrap'>
         <Loading :show='loading' />
-        <p class='title'>
-            完成认证，可获得对应权限
-        </p>
-        <div class='auth-list'>
-            <div v-for='(item,index) in list' :key='index' class='auth-item'>
-                <img alt='' class='auth-img' :src="require('../../themes/mt4/images/'+ item.levelCode +'.png')" />
-                <div class='content'>
-                    <p class='t1'>
-                        {{ item.levelName }}
-                    </p>
-                    <p class='t2'>
-                        认证通过后方可进行 [{{ item.businessNameList.toString() }}]
-                    </p>
+        <div v-if='list.length === 0'>
+            <van-empty description='暂无需验证' image='search' />
+        </div>
+        <div v-else>
+            <p class='title'>
+                完成认证，可获得对应权限
+            </p>
+            <div class='auth-list'>
+                <div v-for='(item,index) in list' :key='index' class='auth-item'>
+                    <img alt='' class='auth-img' :src="require('../../themes/mt4/images/'+ item.levelCode +'.png')" />
+                    <div class='content'>
+                        <p class='t1'>
+                            {{ item.levelName }}
+                        </p>
+                        <p class='t2'>
+                            认证通过后方可进行 [{{ item.businessNameList.toString() }}]
+                        </p>
+                    </div>
+                    <div v-if='item.preLevelObj && Number(item.preLevelObj.status) === 0'>
+                        <span class='notice'>
+                            请先完成{{ item.preLevelObj.levelName }}认证
+                        </span>
+                    </div>
+                    <div v-else>
+                        <van-button plain round size='small' @click="$router.push({ path: '/authConditon',query: { levelCode: item.levelCode } })">
+                            <template #default>
+                                <span class='btn-text'>
+                                    {{ item.statusName }}
+                                </span>
+                                <van-icon name='arrow' />
+                            </template>
+                        </van-button>
+                    </div>
                 </div>
-                <div v-if='item.preLevelObj && Number(item.preLevelObj.status) === 0'>
-                    <span class='notice'>
-                        请先完成{{ item.preLevelObj.levelName }}认证
-                    </span>
-                </div>
-                <div v-else>
-                    <van-button plain round size='small' @click="$router.push({ path: '/authConditon',query: { levelCode: item.levelCode } })">
-                        <template #default>
-                            <span class='btn-text'>
-                                {{ item.statusName }}
-                            </span>
-                            <van-icon name='arrow' />
-                        </template>
-                    </van-button>
-                </div>
-            </div>
 
             <!-- <div class='auth-item'>
                 <img alt='' class='auth-img' src='../../themes/mt4/images/lv2.png' srcset='' />
@@ -62,6 +66,7 @@
                     请先完成LV2认证
                 </span>
             </div> -->
+            </div>
         </div>
     </div>
 </template>

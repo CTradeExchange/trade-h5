@@ -28,9 +28,8 @@
         </div>
         <div v-else>
             <div class='conditon-wrap'>
-                {{ elementList }}
                 <div v-for='(item,index) in elementList' :key='index' class='c-item'>
-                    <van-cell-group>
+                    <van-cell-group v-if="item.showType === 'input'">
                         <van-field
                             v-if="item.showType === 'input'"
                             v-model='conditionModel[item.elementCode]'
@@ -40,6 +39,12 @@
                             :type='item.elementCode === "phone" ? "number" : "text"'
                         />
                     </van-cell-group>
+                    <div>
+                        <img alt='' class='upload-img' :src='require("../../assets/auth/" + item.elementCode + ".png")' srcset='' />
+                        <p class='upload-text'>
+                            {{ item.elementName }}
+                        </p>
+                    </div>
                 </div>
                 <van-button class='confirm-btn' @click='onConfirm'>
                     提交
@@ -188,6 +193,20 @@ export default {
             li {
                 margin-top: rem(20px);
                 list-style-type: disc;
+            }
+        }
+    }
+    .conditon-wrap {
+        padding-bottom: rem(50px);
+        .c-item {
+            margin-bottom: rem(50px);
+            text-align: center;
+            .upload-img {
+                width: rem(400px);
+                height: rem(260px);
+            }
+            .upload-text {
+                margin-top: rem(20px);
             }
         }
     }
