@@ -140,11 +140,17 @@ export default {
         // 上传图片
         const afterRead = (file) => {
             // console.log(file)// 由打印的可以看到，图片    信息就在files[0]里面
-            const formData = new FormData()// 通过formdata上传
-            formData.append('file', file)
+
+            const ff = dataURLtoBlob(file.content)
+            const formDate = new FormData()
+            formDate.append('userPicture', file, '1.jpg')
+
             debugger
             upload({
-                object: file
+                object: formDate,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             }).then(res => {
                 if (res.check()) {
 
@@ -168,6 +174,20 @@ export default {
             //     file.status = 'failed'
             //     file.message = '上传失败'
             // }, 1000)
+        }
+
+        function dataURLtoBlob (dataurl) {
+            var arr = dataurl.split(',')
+            var mime = arr[0].match(/:(.*?);/)[1]
+            var bstr = atob(arr[1])
+            var n = bstr.length
+            var u8arr = new Uint8Array(n)
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n)
+            }
+            return new Blob([u8arr], {
+                type: mime
+            })
         }
 
         const onConfirm = () => {
@@ -214,7 +234,8 @@ export default {
             beginAuth,
             status,
             afterRead,
-            fileList
+            fileList,
+            dataURLtoBlob
         }
     }
 }

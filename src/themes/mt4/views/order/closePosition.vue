@@ -182,7 +182,8 @@ export default {
                 state.successVisible = true
                 setTimeout(() => {
                     state.successVisible = false
-                }, 2000)
+                    router.push({ name: 'History' })
+                }, 3000)
             }).catch(err => {
                 state.loading = false
             })

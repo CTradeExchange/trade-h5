@@ -17,8 +17,10 @@
                 </p>
             </div>
             <div class='col'>
-                <p class='price riseColor'>
-                    -88.66
+                <!-- :class="{ data.profitLoss > 0 : 'riseColor': 'fallColor'}" -->
+                <p class='price riseColor' :class="data.profitLoss || data.profit > 0 ? 'riseColor': 'fallColor'">
+                    {{ data.profitLoss }}
+                    <!-- {{ computePrice(data.profitLoss,data.openAccountDigits) || computePrice(data.profit,data.openAccountDigits) }} -->
                 </p>
             </div>
         </div>
@@ -63,7 +65,7 @@
 <script>
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import { priceFormat } from '@/utils/util'
+import { priceFormat, isEmpty } from '@/utils/util'
 import dayjs from 'dayjs'
 import { minus } from '@/utils/calculation'
 export default {
@@ -78,6 +80,11 @@ export default {
         const state = reactive({
             detailVisible: false
         })
+        const computePrice = (price, digits) => {
+            if (!isEmpty(price)) {
+                return priceFormat(price, digits)
+            }
+        }
         const product = computed(() => store.state._quote.productMap[data.symbolId])
         const positionVolume = computed(() => minus(data.openNum, data.closeNum))
         return {
@@ -85,6 +92,7 @@ export default {
             ...onceState,
             product,
             positionVolume,
+            computePrice
         }
     },
 }

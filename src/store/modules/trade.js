@@ -50,11 +50,11 @@ export default {
             const buy_price = state.pendingPrice ? state.pendingPrice : Number(product.buy_price)
             const sell_price = state.pendingPrice ? state.pendingPrice : Number(product.sell_price)
 
-            buyProfitMax = (buy_price + pip * product.priceMaxLimit).toFixed(digits) // 买入价+pip*限价最大距离
-            buyProfitMin = (buy_price + pip * product.priceMinLimit).toFixed(digits) // 买入价+pip*限价最小距离
+            buyProfitMax = (buy_price + pip * product.stopLossMaxPoint).toFixed(digits) // 买入价+pip*限价最大距离
+            buyProfitMin = (buy_price + pip * product.stopLossMinPoint).toFixed(digits) // 买入价+pip*限价最小距离
 
-            sellProfitMax = (sell_price - pip * product.priceMinLimit).toFixed(digits) // 卖出价-pip*限价最小距离
-            sellProfitMin = (sell_price - pip * product.priceMaxLimit).toFixed(digits) // 卖出价-pip*限价最大距离
+            sellProfitMax = (sell_price - pip * product.stopLossMinPoint).toFixed(digits) // 卖出价-pip*限价最小距离
+            sellProfitMin = (sell_price - pip * product.stopLossMaxPoint).toFixed(digits) // 卖出价-pip*限价最大距离
 
             buyStopLossMax = (buy_price - pip * product.stopLossMinPoint).toFixed(digits) // 买入价-pip*止损最小距离
             buyStopLossMin = (buy_price - pip * product.stopLossMaxPoint).toFixed(digits) // 买入价-pip*止损最大距离
@@ -94,11 +94,11 @@ export default {
             sellLimitMax = (sell_price + pip * product.priceMaxLimit).toFixed(digits) // 卖出价+pip*限价最大距离
             sellLimitMin = (sell_price + pip * product.priceMinLimit).toFixed(digits) // 卖出价+pip*限价最小距离
 
-            buyStopMax = (buy_price + pip * product.stopLossMaxPoint).toFixed(digits) // 买入价+pip*止损最大距离
-            buyStopMin = (buy_price + pip * product.stopLossMinPoint).toFixed(digits) // 买入价+pip*止损最小距离
+            buyStopMax = (buy_price + pip * product.priceMaxLimit).toFixed(digits) // 买入价+pip*止损最大距离
+            buyStopMin = (buy_price + pip * product.priceMinLimit).toFixed(digits) // 买入价+pip*止损最小距离
 
-            sellStopMax = (sell_price - pip * product.stopLossMinPoint).toFixed(digits) // 卖出价-pip*止损最小距离
-            sellStopMin = (sell_price - pip * product.stopLossMaxPoint).toFixed(digits) // 卖出价-pip*止损最大距离
+            sellStopMax = (sell_price - pip * product.priceMinLimit).toFixed(digits) // 卖出价-pip*止损最小距离
+            sellStopMin = (sell_price - pip * product.priceMaxLimit).toFixed(digits) // 卖出价-pip*止损最大距离
 
             return {
                 buyLimitRange: [buyLimitMin, buyLimitMax], // 限价买入范围
@@ -127,6 +127,9 @@ export default {
         Update_pendingList (state, data) {
             state.pendingList = data
         },
+        Update_positionItem (state, data) {
+            state.positionList.push(data)
+        }
     },
     actions: {
         // 查询持仓列表

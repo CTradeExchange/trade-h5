@@ -44,7 +44,29 @@ export default {
         })
 
         msgWS.addEventListener('message', evt => {
-
+            console.log('msg', JSON.parse(evt.data))
+            // const msg = {
+            //     'trace': 'cfbb670b-7bcb-4d2e-9dd7-f8b4551b2475-1619091447093',
+            //     'msgCode': 'floatProfitLoss',
+            //     'content': {
+            //         'companyId': 3,
+            //         'profitLoss': -42126072,
+            //         'positionProfitLossMessages': [
+            //             {
+            //                 'positionId': 2021042100123,
+            //                 'profitLoss': -42125426,
+            //                 'digit': 2
+            //             }
+            //         ],
+            //         'account': 12,
+            //         'digit': 2
+            //     }
+            // }
+            const data = JSON.parse(evt.data)
+            if (data.msgCode === 'floatProfitLoss') {
+                debugger
+                MsgSocket.onMessage(data)
+            }
         })
 
         tradeWS.addEventListener('open', function () {

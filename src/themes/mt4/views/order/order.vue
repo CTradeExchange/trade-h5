@@ -208,6 +208,7 @@ export default {
                 stopLoss: Number(state.stopLoss) ? state.stopLoss * p : undefined,
                 takeProfit: Number(state.takeProfit) ? state.takeProfit * p : undefined
             }
+
             state.loading = true
             addMarketOrder(params)
                 .then(res => {
@@ -219,6 +220,7 @@ export default {
                     state.resData = res.data
                     setTimeout(() => {
                         state.successVisible = false
+                        router.push({ name: 'Position' })
                     }, 2000)
                 })
                 .catch(err => {

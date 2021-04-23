@@ -1,4 +1,4 @@
-import { guid, getDevice, getToken } from '@/utils/util'
+import { guid, getDevice, getToken, priceFormat } from '@/utils/util'
 
 // websocket消息事件
 class SocketEvent {
@@ -85,15 +85,24 @@ class SocketEvent {
     // 收取到消息
     onMessage (data) {
         console.log('收到消息', data)
-        this.requests.forEach((item, key) => {
-            if (data.seq_id === key) {
-                item.resolve(data)
-            }
-        })
-        const cmdID = `cmd_id_${data.cmd_id}`
-        if (typeof (this[cmdID]) === 'function') {
-            this[cmdID](data)
+        const content = data.content
+        const positionList = this.$store.state._trade.positionList
+        if (content.positionProfitLossMessages.length > 0 && positionList.length > 0) {
+            positionList.forEach(p => {
+                content.positionProfitLossMessages.forEach(item => {
+                    // obj = getArrayObj(positionList, 'positionId', item.positionId)
+                    console.log('更新价格', item.profitLoss)
+
+                    if (Number(item.positionId) === Number(p.positionId)) {
+                        p.profitLoss = priceFormat(item.profitLoss, item.digit)
+                    }
+                })
+            })
+
+            this.$store.commit('_trade/Update_positionList', positionList)
         }
+
+        // console.log('positionList', positionList)
     }
 }
 

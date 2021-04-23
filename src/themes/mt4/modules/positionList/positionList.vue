@@ -79,28 +79,6 @@ export default {
                         takeProfitDecimal: state.cur.takeProfitDecimal
                     }
                 })
-            return
-            state.show = false
-            const direction = state.cur.direction
-            const requestPrice = direction === 1 ? product.value.sell_price : product.value.buy_price
-            const params = {
-                bizType: 2, // 业务类型。0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
-                direction: direction === 1 ? 2 : 1, // 订单买卖方向。1-买；2-卖；
-                symbolId: state.cur.symbolId,
-                positionId: state.cur.positionId,
-                requestTime: Date.now(),
-                requestNum: Number(state.cur.openNum),
-                requestPrice: Number(requestPrice),
-            }
-            state.loading = true
-            addMarketOrder(params).then(res => {
-                state.loading = false
-                if (res.invalid()) return false
-                emit('refresh')
-                state.pendingVisible = true
-            }).catch(err => {
-                state.loading = false
-            })
         }
 
         // 新订单

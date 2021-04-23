@@ -40,6 +40,7 @@ export default {
         const store = useStore()
         const profitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
         const pendingPriceRang = computed(() => store.getters['_trade/pendingPriceRang'])
+
         // 是否符合买入的止盈止损范围
         const buyDisabled = computed(() => {
             let { stopLoss, takeProfit, pendingPrice, openOrderSelected } = props
@@ -52,8 +53,9 @@ export default {
             stopLoss = Number(stopLoss)
             takeProfit = Number(takeProfit)
 
-            console.log('买入止盈最小，最大', buyProfitMin, buyProfitMax)
-            console.log('买入止损最小，最大', buyStopLossMin, buyStopLossMax)
+            // console.log('限价买入范围', buyLimitMin, buyLimitMax)
+            // console.log('停损买入范围', buyStopMin, buyStopMax)
+
             if (stopLoss > 0 && (stopLoss < buyStopLossMin || stopLoss > buyStopLossMax)) {
                 return true
             } else if (takeProfit > 0 && (takeProfit < buyProfitMin || takeProfit > buyProfitMax)) {
@@ -75,11 +77,12 @@ export default {
             const [sellLimitMin, sellLimitMax] = pendingPriceRang.value.sellLimitRange
             const [sellStopMin, sellStopMax] = pendingPriceRang.value.sellStopRange
             const openOrderVal = openOrderSelected.val
-            console.log('卖出止盈最小，最大', sellProfitMin, sellProfitMax)
-            console.log('卖出止损最小，最大', sellStopLossMin, sellStopLossMax)
             pendingPrice = Number(pendingPrice)
             stopLoss = Number(stopLoss)
             takeProfit = Number(takeProfit)
+
+            // console.log('限价卖出范围', sellLimitMin, sellLimitMax)
+            // console.log('停损卖出范围', sellStopMin, sellStopMax)
 
             if (stopLoss > 0 && (stopLoss < sellStopLossMin || stopLoss > sellStopLossMax)) {
                 return true
