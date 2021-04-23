@@ -1,13 +1,14 @@
 <template>
     <Top back='true' :menu='false' title='' />
     <div class='page-wrap'>
+        {{ accountInfo }}***
         <div class='header'>
             <div class='header-info'>
                 <p class='t1'>
                     保证金水平
                 </p>
                 <p class='t2'>
-                    850%
+                    {{ accountInfo.value.marginRadio ? accountInfo.value.marginRadio : '--' }}
                 </p>
             </div>
             <div class='progress'>
@@ -31,7 +32,7 @@
                         盈亏
                     </p>
                     <p class='val profit'>
-                        {{ computePrice(mainAccount.profit, mainAccount.digits) }}
+                        {{ computePrice(accountInfo.value.profitLoss, accountInfo.value.digits) }}
                     </p>
                 </div>
                 <div class='item'>
@@ -39,7 +40,7 @@
                         余额
                     </p>
                     <p class='val balance'>
-                        {{ computePrice(mainAccount.balance,mainAccount.digits) }}
+                        {{ computePrice(accountInfo.value.balance, accountInfo.value.digits) }}
                     </p>
                 </div>
                 <div class='item'>
@@ -55,7 +56,7 @@
                         可用保证金
                     </p>
                     <p class='val'>
-                        --
+                        {{ computePrice(accountInfo.value.availableMargin, accountInfo.value.digits) }}
                     </p>
                 </div>
                 <div class='item'>
@@ -63,7 +64,7 @@
                         占用保证金
                     </p>
                     <p class='val'>
-                        {{ computePrice(mainAccount.margin, mainAccount.digits) }}
+                        {{ computePrice(accountInfo.value.mainAccount.occupyMargin, accountInfo.value.value.digits) }}
                     </p>
                 </div>
             </div>
@@ -90,8 +91,10 @@ export default {
         const store = useStore()
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+
         const state = reactive({
-            mainAccount: {}
+            mainAccount: {},
+            accountInfo: {}
         })
 
         function toDesposit () {
@@ -103,6 +106,7 @@ export default {
         }
 
         onMounted(() => {
+            state.accountInfo = computed(() => store.state._user.userAccount)
             state.mainAccount = getArrayObj(customInfo.value.accountList, 'accountId', customInfo.value.accountId)
             createTorus({
                 id: 'annulus',
@@ -111,7 +115,7 @@ export default {
                 r: 80,
                 arcWidth: 15,
                 label: '净值',
-                text: computePrice(state.mainAccount.equity, state.mainAccount.digits),
+                text: computePrice(state.accountInfo.value.netWorth, state.accountInfo.value.digits),
                 data: [
                     { color: '#3894FF', percent: 0.85, text: '第1项' },
                     { color: '#51C31C', percent: 0.15, text: '第2项' },

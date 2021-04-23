@@ -1,8 +1,12 @@
 <template>
     <ul class='capitalList'>
         <li v-for='item in data' :key='item[valKey]' class='item'>
-            <span class='title'>{{ item[titleKey] }}</span>
-            <span class='value'>{{ item[valKey] }}</span>
+            <span class='title'>
+                {{ item[titleKey] }}
+            </span>
+            <span class='value'>
+                {{ item[valKey] }}
+            </span>
         </li>
     </ul>
 </template>

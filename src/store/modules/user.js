@@ -9,7 +9,8 @@ export default {
         zone: '86', // 区号
         loginData: '', // login返回的信息
         customerInfo: '', // 用户信息
-        withdrawConfig: '' // 用户取款配置
+        withdrawConfig: '', // 用户取款配置
+        userAccount: ''
     },
     mutations: {
         Update_loginLoading (state, data) {
@@ -23,6 +24,9 @@ export default {
         },
         Update_customerInfo (state, data) {
             state.customerInfo = data
+        },
+        Update_userAccount (state, data) {
+            state.userAccount = data
         }
     },
     actions: {

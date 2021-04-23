@@ -86,6 +86,7 @@ class SocketEvent {
     onMessage (data) {
         console.log('收到消息', data)
         const content = data.content
+        this.$store.commit('_user/Update_userAccount', content)
         const positionList = this.$store.state._trade.positionList
         if (content.positionProfitLossMessages.length > 0 && positionList.length > 0) {
             positionList.forEach(p => {

@@ -10,8 +10,12 @@
                 </span>
             </p>
             <p>
-                {{ data.symbolName }} at <span class='price'>
+                {{ data.symbolName }} at
+                <span v-if='Number(data.bizType) === 1' class='price'>
                     {{ data.executePrice }}
+                </span>
+                <span v-else class='price'>
+                    {{ data.requestPrice }}
                 </span>
             </p>
             <p>
@@ -31,11 +35,21 @@
 
 <script>
 import top from '@m/layout/top'
+import { priceFormat } from '@/utils/util'
 export default {
     components: {
         top,
     },
-    props: ['data']
+    props: ['data'],
+    setup (props) {
+        const formatPrice = () => {
+            priceFormat()
+        }
+
+        return {
+            formatPrice
+        }
+    }
 }
 </script>
 

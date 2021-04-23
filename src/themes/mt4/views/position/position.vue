@@ -32,6 +32,7 @@ import { reactive, toRefs, computed } from 'vue'
 import { useStore } from 'vuex'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useRouter } from 'vue-router'
+import { priceFormat } from '@/utils/util'
 export default {
     components: {
         CapitalList,
@@ -51,13 +52,15 @@ export default {
             { name: '利润', feild: 'yz', },
         ]
         let sortActionValue = sortActions[0].feild
+
+        const accountInfo = computed(() => store.state._user.userAccount)
         const state = reactive({
             capitalListData: [
-                { title: '结余：', value: '1000000.00' },
-                { title: '净值：', value: '1000000.00' },
-                { title: '可用预付款：', value: '1000000.00' },
-                { title: '预付款比率(%)：', value: '1000000.00' },
-                { title: '预付款：', value: '1000000.00' },
+                { title: '结余：', value: accountInfo.value.balance ? priceFormat(accountInfo.value.balance, accountInfo.value.digit) : '--' },
+                { title: '净值：', value: accountInfo.value.netWorth ? priceFormat(accountInfo.value.netWorth, accountInfo.value.digit) : '--' },
+                { title: '可用预付款：', value: accountInfo.value.availableMargin ? priceFormat(accountInfo.value.availableMargin, accountInfo.value.digit) : '--' },
+                { title: '预付款比率(%)：', value: accountInfo.value.marginRadio ? priceFormat(accountInfo.value.marginRadio, accountInfo.value.digit) + '%' : '--' },
+                { title: '预付款：', value: accountInfo.value.occupyMargin ? priceFormat(accountInfo.value.occupyMargin, accountInfo.value.digit) : '--' },
             ],
             sortActionsVisible: false,
             sortActions
@@ -92,6 +95,7 @@ export default {
             actionSheetOnSelect,
             newOrder,
             refresh,
+            accountInfo
         }
     },
 }
