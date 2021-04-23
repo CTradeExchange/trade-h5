@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Layout from '@m/layout/index'
-import { getLoginParams, delayAwait, getToken } from '@/utils/util'
+import { delayAwait, getToken } from '@/utils/util'
 import store from '../store'
 import themeRouter from '@/themeCommon/router'
 
@@ -23,7 +23,7 @@ const routes = [
                 name: 'Chart',
                 component: () => import(/* webpackChunkName: "chart" */ '../views/chart/chart.vue'),
                 meta: {
-                    title: '图表页面，对接接口后处理'
+                    title: '图表'
                 }
             },
             {

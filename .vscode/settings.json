@@ -57,5 +57,5 @@
 
         "fill_tab": false
     },
-    "editor.minimap.enabled": false
+    "editor.minimap.enabled": true
 }
