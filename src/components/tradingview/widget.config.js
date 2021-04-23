@@ -3,8 +3,9 @@ export function WidgetConfig () {
         // debug: true, // uncomment this line to see Library errors and warnings in the console
         // datafeed: new UDFCompatibleDatafeed('https://demo-feed-data.tradingview.com'),
         // fullscreen: true,
+        autosize: true,
         container_id: 'tv_chart_container',
-        //	BEWARE: no trailing slash is expected in feed URL
+        // BEWARE: no trailing slash is expected in feed URL
         library_path: '/charting_library/',
         // custom_css_url: 'customCssUrl.css?v=1.0.1',
         locale: 'zh',
@@ -93,10 +94,10 @@ export function WidgetConfig () {
             // 'paneProperties.legendProperties.showStudyArguments': false,
             // 'paneProperties.legendProperties.showStudyTitles': false,
             // 'paneProperties.legendProperties.showStudyValues': false,
-            'paneProperties.legendProperties.showSeriesTitle': false, // 隐藏K线标题
-            'paneProperties.legendProperties.showSeriesOHLC': false, // 显示高开低收
+            'paneProperties.legendProperties.showSeriesTitle': true, // 隐藏K线标题
+            'paneProperties.legendProperties.showSeriesOHLC': true, // 显示高开低收
             'paneProperties.legendProperties.showLegend': true,
-            'paneProperties.legendProperties.showBarChange': false,
+            'paneProperties.legendProperties.showBarChange': true,
             // 'paneProperties.legendProperties.showOnlyPriceSource': false,
 
             // 'scalesProperties.backgroundColor': '#ffffff',
@@ -127,8 +128,8 @@ export function WidgetConfig () {
 
             // 'mainSeriesProperties.showCountdown': false,
             // 'mainSeriesProperties.visible': true,
-            'mainSeriesProperties.showPriceLine': false, // 现价线
-            'scalesProperties.showSeriesLastValue': false, // 现价标签
+            'mainSeriesProperties.showPriceLine': true, // 现价线
+            'scalesProperties.showSeriesLastValue': true, // 现价标签
             // 'mainSeriesProperties.priceLineWidth': 1,
             'mainSeriesProperties.priceLineColor': 'rgb(71, 127, 211)',
             // 'mainSeriesProperties.showPrevClosePriceLine': false,
@@ -143,7 +144,6 @@ export function WidgetConfig () {
             'mainSeriesProperties.priceAxisProperties.percentageDisabled': false,
             'mainSeriesProperties.priceAxisProperties.log': false,
             'mainSeriesProperties.priceAxisProperties.logDisabled': false,
-
             // 'mainSeriesProperties.candleStyle.upColor': style.riseColor,
             // 'mainSeriesProperties.candleStyle.downColor': style.fallColor,
             // 'mainSeriesProperties.candleStyle.borderUpColor': style.riseColor,

@@ -306,7 +306,7 @@ function querySymbolInfo (code_id) {
         description: 'product.simplified', // 商品说明。这个商品说明将被打印在图表的标题栏中。
         type: 'stock', // 仪表的可选类型 stock, index, forex, futures, bitcoin,  expression,  spread, cfd 或其他字符串
         supported_resolutions: Object.keys(resolutionToKlineType),
-        pricescale: 100, // 价格精度
+        pricescale: 10000000, // 价格精度
         has_weekly_and_monthly: true // 允许周期：周/月
     }
 }
