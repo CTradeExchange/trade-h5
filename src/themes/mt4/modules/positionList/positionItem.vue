@@ -18,7 +18,7 @@
             </div>
             <div class='col'>
                 <!-- :class="{ data.profitLoss > 0 : 'riseColor': 'fallColor'}" -->
-                <p class='price riseColor' :class="data.profitLoss || data.profit > 0 ? 'riseColor': 'fallColor'">
+                <p class='price riseColor' :class="data.profitLoss > 0 ? 'riseColor': 'fallColor'">
                     {{ data.profitLoss }}
                     <!-- {{ computePrice(data.profitLoss,data.openAccountDigits) || computePrice(data.profit,data.openAccountDigits) }} -->
                 </p>
@@ -155,7 +155,7 @@ export default {
     }
     .list {
         display: grid;
-        grid-column-gap: rem(90px);
+        grid-column-gap: rem(160px);
         grid-template-columns: repeat(2, 1fr);
         margin-top: rem(10px);
     }

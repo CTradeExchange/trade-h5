@@ -64,7 +64,6 @@ export default {
             // }
             const data = JSON.parse(evt.data)
             if (data.msgCode === 'floatProfitLoss') {
-                debugger
                 MsgSocket.onMessage(data)
             }
         })

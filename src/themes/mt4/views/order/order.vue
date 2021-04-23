@@ -198,6 +198,7 @@ export default {
                 direction = 2
             }
             const p = Math.pow(10, product.value.symbolDigits)
+            console.log('****', state.volumn, product.value.contractSize)
             const params = {
                 bizType, // 业务类型。0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
                 direction, // 订单买卖方向。1-买；2-卖；
@@ -221,7 +222,7 @@ export default {
                     setTimeout(() => {
                         state.successVisible = false
                         router.push({ name: 'Position' })
-                    }, 2000)
+                    }, 5000)
                 })
                 .catch(err => {
                     state.loading = false

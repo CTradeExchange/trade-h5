@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-    <meta name="google-signin-client_id" content="507643510387-ff4on5fmgb2h06tmd5vou0trprtnk0b9.apps.googleusercontent.com">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
 
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible"
+          content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0">
+    <link rel="icon"
+          href="<%= BASE_URL %>favicon.ico">
+    <title>
+        <%= htmlWebpackPlugin.options.title
+            %>
+    </title>
+    <meta name="google-signin-client_id"
+          content="507643510387-ff4on5fmgb2h06tmd5vou0trprtnk0b9.apps.googleusercontent.com">
     <style>
     html {
         font-size: 10vw;
     }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+        <strong>We're sorry but <%= htmlWebpackPlugin.options.title
+                %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
-    <script src="<%= BASE_URL %>charting_library/charting_library.js?t=2"></script>
+    <script src="<%= BASE_URL %>charting_library/charting_library.min.js?t=2"></script>
     <!-- built files will be auto injected -->
     <script>
         window['isPRD'] = true
@@ -52,7 +60,8 @@
         /* ##wp_Home end## */
 
         /* ##wp_SelfSymbolIndex start## */
-        window['wp_SelfSymbolIndex'] = 'H4sIAAAAAAAAA32RwQ7CIAyGn4ajiZsu8+pc4tWod8MGIpFRwmri3l6mg5FsMyFN6df2h5ZkBckLkqaSOUM2e2dbru6XrqlA3dZ9MD04i1TMJATMKNKBf9vRuoaXxmtn+BDO+vAxFJTBO9+SyE97Pyt/V/420nYlxaiJZ0rq5wEaE14VmnhyglaiBD3NqGj9FNY9kE1Zi53i8VcaaoXUK4QZqYFZKR64SCtAhGYRK36fqTWUManFvKyHC7oeLwl7PlHOw9yRh9m4Ifi4scBeNZJoOkm83lFiE7xxudt4tbs/dS4n9ycrP2lccZWjAgAA';
+        window['wp_SelfSymbolIndex'] = 'H4sIAAAAAAAAA32SwQ7CIAyGn4ajiU7JvKpLvBr1bthAJDJKWE3c28t0IGabydL869f2Z2WEbkm+JVmmuA9kufGxEfp6ausS9GXeJbOdj8jkSEHEnCHr+Xscqyp4GDy3VvRp2qX3saGI6nhZJDrrNC0+r+JplWsLhsmQwLQy9x3UNp4qDgnkAI1CBWZYUbLqLp0/IB+yBlst0k+pmZPKzBBGrHrmlLzhJC0BEepJrMV1pNcyzpWR47YBTvgGPGUc+MA5j3tHEXfjlxDy1gF/VEiS7SzS6/1aLNNrzNOaH7L+0/1W319jFRXtJ+ThocUL1R0PkscCAAA=';
+        /* ##wp_SelfSymbolIndex end## */
 
         /* ##wp_SelfSymbolIndex end## */
 
@@ -80,7 +89,8 @@
         /* ##交易websocket地址 start## */
         window['tradeService'] = '//uatcatsapi.cats-trade.com/cats-gateway/ws';
 
-        
+
     </script>
-  </body>
+</body>
+
 </html>

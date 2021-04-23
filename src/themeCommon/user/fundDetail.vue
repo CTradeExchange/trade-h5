@@ -81,7 +81,7 @@
             </van-dropdown-menu>
         </div>
         <div class='list'>
-            <van-pull-refresh v-model='loading' @refresh='onRefresh'>
+            <van-pull-refresh v-model='loadingRefresh' @refresh='onRefresh'>
                 <van-list
                     v-model:loading='loading'
                     :finished='finished'
@@ -192,6 +192,7 @@ export default {
             list: [],
             finished: false,
             loading: false,
+            loadingRefresh: false,
             loadingMore: false,
             finishedText: '没有更多了',
             pagigation: {
@@ -203,6 +204,7 @@ export default {
         const onRefresh = () => {
             state.pagigation.current = 1
             state.finished = false
+            state.loading = false
             state.list = []
             queryFundDetail()
         }
@@ -276,8 +278,8 @@ export default {
 
         // 底部加载更多
         const onLoad = () => {
-            state.current++
-            // queryFundDetail()
+            state.pagigation.current++
+            queryFundDetail()
         }
 
         const queryFundDetail = () => {
@@ -292,6 +294,7 @@ export default {
             }
             queryCapitalFlowList(params).then(res => {
                 state.loading = false
+                state.loadingRefresh = false
                 if (res.check()) {
                     state.list = state.list.concat(res.data.records)
 
@@ -304,6 +307,8 @@ export default {
                         state.finishedText = ''
                     }
                 }
+            }).catch(err => {
+                state.loading = false
             })
         }
 

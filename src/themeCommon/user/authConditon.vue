@@ -40,7 +40,7 @@
                         />
                     </van-cell-group>
                     <div v-if="item.showType === 'image'">
-                        <van-uploader :after-read='afterRead'>
+                        <van-uploader :after-read='afterRead' result-type='file'>
                             <img alt='' class='upload-img' :src='require("../../assets/auth/" + item.elementCode + ".png")' srcset='' />
                             <p class='upload-text'>
                                 {{ item.elementName }}
@@ -145,7 +145,6 @@ export default {
             const formDate = new FormData()
             formDate.append('userPicture', file, '1.jpg')
 
-            debugger
             upload({
                 object: formDate,
                 headers: {

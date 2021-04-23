@@ -1,7 +1,6 @@
 import { querySymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
 import { plus } from '@/utils/calculation'
 import CheckAPI from '@/utils/checkAPI'
-import { unzip } from '@/utils/util'
 
 // 处理显示的点差  点差=（买价-卖价）/pip
 function spreadText (product) {
@@ -70,33 +69,25 @@ export default {
     actions: {
         // 产品基础信息列表
         querySymbolBaseInfoList ({ dispatch, commit, state, rootState }, symbolIds = []) {
-            try {
-                const productMap = state.productMap
-                const newSymbolIds = symbolIds.filter(el => !productMap[el].symbolName)
-
-                const wp_SelfSymbolIndex = JSON.parse(unzip(window['wp_SelfSymbolIndex']))
-
-                const guestCustomerGroupId = rootState._base.wpCompanyInfo.customerGroupId
-                const prolistIds = wp_SelfSymbolIndex[0].data.product[rootState._user.customerInfo?.customerGroupId ?? guestCustomerGroupId]
-                const params = {
-                    symbolIds: prolistIds.join(),
-                    tradeType: parseInt(rootState._base.tradeType),
-                    customerGroupId: rootState._user.customerInfo?.customerGroupId ?? guestCustomerGroupId,
-                    accountId: rootState._user.customerInfo?.accountId,
-                }
-                if (newSymbolIds.length === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
-                return querySymbolBaseInfoList(params).then((res) => {
-                    if (res.check()) {
-                        res.data.forEach(el => {
-                            el.symbol_id = el.symbolId
-                            commit('Update_product', el)
-                        })
-                    }
-                    return res
-                })
-            } catch (error) {
-                console.log(error)
+            const productMap = state.productMap
+            const newSymbolIds = symbolIds.filter(el => !productMap[el].symbolName)
+            const guestCustomerGroupId = rootState._base.wpCompanyInfo.customerGroupId
+            const params = {
+                symbolIds: newSymbolIds.join(),
+                tradeType: parseInt(rootState._base.tradeType),
+                customerGroupId: rootState._user.customerInfo?.customerGroupId ?? guestCustomerGroupId,
+                accountId: rootState._user.customerInfo?.accountId,
             }
+            if (newSymbolIds.length === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
+            return querySymbolBaseInfoList(params).then((res) => {
+                if (res.check()) {
+                    res.data.forEach(el => {
+                        el.symbol_id = el.symbolId
+                        commit('Update_product', el)
+                    })
+                }
+                return res
+            })
         },
         // 产品详细信息
         querySymbolInfo ({ dispatch, commit, state, rootState }, symbolId) {

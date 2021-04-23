@@ -15,6 +15,9 @@
                 </span>
             </p>
             <p>
+                s/l: {{ data.stopLoss || '--' }}&nbsp;&nbsp;&nbsp;t/p: {{ data.takeProfit || '--' }}
+            </p>
+            <p>
                 成功
             </p>
         </div>

@@ -28,6 +28,7 @@ export default {
         // 订阅产品
 
         const subscribList = productList.value.map(({ symbolId }) => symbolId)
+
         QuoteSocket.send_subscribe(subscribList)
 
         store.dispatch('_quote/querySymbolBaseInfoList', subscribList)

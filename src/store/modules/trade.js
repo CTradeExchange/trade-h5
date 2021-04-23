@@ -54,13 +54,14 @@ export default {
             buyProfitMin = (buy_price + pip * product.stopLossMinPoint).toFixed(digits) // 买入价+pip*限价最小距离
 
             sellProfitMax = (sell_price - pip * product.stopLossMinPoint).toFixed(digits) // 卖出价-pip*限价最小距离
+
             sellProfitMin = (sell_price - pip * product.stopLossMaxPoint).toFixed(digits) // 卖出价-pip*限价最大距离
 
-            buyStopLossMax = (buy_price - pip * product.stopLossMinPoint).toFixed(digits) // 买入价-pip*止损最小距离
-            buyStopLossMin = (buy_price - pip * product.stopLossMaxPoint).toFixed(digits) // 买入价-pip*止损最大距离
+            buyStopLossMax = (buy_price - pip * product.stopLossMinPoint).toFixed(digits) // 买入价-pip*限价最小距离
+            buyStopLossMin = (buy_price - pip * product.stopLossMaxPoint).toFixed(digits) // 买入价-pip*限价最大距离
 
-            sellStopLossMax = (sell_price + pip * product.stopLossMaxPoint).toFixed(digits) // 卖出价+pip*止损最大距离
-            sellStopLossMin = (sell_price + pip * product.stopLossMinPoint).toFixed(digits) // 卖出价+pip*止损最小距离
+            sellStopLossMax = (sell_price + pip * product.stopLossMaxPoint).toFixed(digits) // 卖出价+pip*限价最大距离
+            sellStopLossMin = (sell_price + pip * product.stopLossMinPoint).toFixed(digits) // 卖出价+pip*限价最小距离
 
             return {
                 buyProfitRange: [buyProfitMin, buyProfitMax], // 买入止盈范围
