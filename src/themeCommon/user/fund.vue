@@ -1,18 +1,17 @@
 <template>
-    <Top back='true' :menu='false' title='' />
+    <Top :back='true' :menu='false' title='' />
     <div class='page-wrap'>
-        {{ accountInfo }}***
         <div class='header'>
             <div class='header-info'>
                 <p class='t1'>
                     保证金水平
                 </p>
                 <p class='t2'>
-                    {{ accountInfo.value.marginRadio ? accountInfo.value.marginRadio : '--' }}
+                    {{ accountInfo ? accountInfo.marginRadio+'%' : '--' }}
                 </p>
             </div>
             <div class='progress'>
-                <div class='p-val'></div>
+                <div class='p-val' :style="'width:' + perfent + '%'"></div>
             </div>
         </div>
 
@@ -31,8 +30,8 @@
                     <p class='label'>
                         盈亏
                     </p>
-                    <p class='val profit'>
-                        {{ computePrice(accountInfo.value.profitLoss, accountInfo.value.digits) }}
+                    <p class='val profit' :class="computePrice(accountInfo.profitLoss, accountInfo.digit) > 0 ? 'riseColor' : 'fallColor'">
+                        {{ accountInfo ? computePrice(accountInfo.profitLoss, accountInfo.digit) : '--' }}
                     </p>
                 </div>
                 <div class='item'>
@@ -40,7 +39,7 @@
                         余额
                     </p>
                     <p class='val balance'>
-                        {{ computePrice(accountInfo.value.balance, accountInfo.value.digits) }}
+                        {{ accountInfo ? computePrice(accountInfo.balance, accountInfo.digit) : '--' }}
                     </p>
                 </div>
                 <div class='item'>
@@ -56,7 +55,7 @@
                         可用保证金
                     </p>
                     <p class='val'>
-                        {{ computePrice(accountInfo.value.availableMargin, accountInfo.value.digits) }}
+                        {{ accountInfo ? computePrice(accountInfo.availableMargin, accountInfo.digit) : '--' }}
                     </p>
                 </div>
                 <div class='item'>
@@ -64,7 +63,7 @@
                         占用保证金
                     </p>
                     <p class='val'>
-                        {{ computePrice(accountInfo.value.mainAccount.occupyMargin, accountInfo.value.value.digits) }}
+                        {{ accountInfo ? computePrice(accountInfo.occupyMargin, accountInfo.digit) : '--' }}
                     </p>
                 </div>
             </div>
@@ -80,7 +79,7 @@ import Top from '@m/layout/top'
 import { toRefs, reactive, ref, onMounted, computed } from 'vue'
 import { createTorus } from '@/plugins/createTorus'
 import { useStore } from 'vuex'
-import { getArrayObj, priceFormat } from '@/utils/util'
+import { getArrayObj, priceFormat, isEmpty } from '@/utils/util'
 import { useRouter, useRoute } from 'vue-router'
 export default {
     components: {
@@ -91,7 +90,9 @@ export default {
         const store = useStore()
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
-
+        const perfent = computed(() => {
+            return state.accountInfo.marginRadio >= 100 ? 100 : state.accountInfo.marginRadio
+        })
         const state = reactive({
             mainAccount: {},
             accountInfo: {}
@@ -101,8 +102,8 @@ export default {
             router.push('/desposit')
         }
 
-        const computePrice = (price, digits) => {
-            return priceFormat(price, digits)
+        const computePrice = (price, digit) => {
+            return priceFormat(price, digit)
         }
 
         onMounted(() => {
@@ -115,7 +116,7 @@ export default {
                 r: 80,
                 arcWidth: 15,
                 label: '净值',
-                text: computePrice(state.accountInfo.value.netWorth, state.accountInfo.value.digits),
+                text: state.accountInfo ? computePrice(state.accountInfo.netWorth, state.accountInfo.digit) : '--',
                 data: [
                     { color: '#3894FF', percent: 0.85, text: '第1项' },
                     { color: '#51C31C', percent: 0.15, text: '第2项' },
@@ -125,6 +126,7 @@ export default {
 
         return {
             toDesposit,
+            perfent,
             computePrice,
             ...toRefs(state)
         }
@@ -162,7 +164,6 @@ export default {
             border-radius: rem(20px);
             .p-val {
                 position: absolute;
-                width: 85%;
                 height: rem(10px);
                 background-color: #52C41A;
                 border-radius: rem(20px);
@@ -214,7 +215,7 @@ export default {
                     font-weight: bold;
                     font-size: rem(34px);
                     &.profit {
-                        color: var(--success);
+                        //color: var(--success);
                     }
                     &.loss {
                         color: var(--fallColor);

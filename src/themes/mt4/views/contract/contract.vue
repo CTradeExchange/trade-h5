@@ -18,10 +18,28 @@
         <van-cell size='large' title='库存费类型' value='百分比' />
         <van-cell size='large' title='买入库存费' :value='product.buyInterest' />
         <van-cell size='large' title='卖出库存费' :value='product.sellInterest' />
-        <van-cell size='large' title='预付款' value='Forex' />
+        <van-cell size='large' title='预付款'>
+            <div class='margin-info'>
+                <span class='left-label header'>
+                    手数范围
+                </span>
+                <span class='right-val header'>
+                    保证金要求
+                </span>
+            </div>
+            <div v-for='(item, index) in usedMarginSet' :key='index' class='margin-info'>
+                <span class='left-label'>
+                    {{ item.rangeLeft / product.contractSize }} &gt; 手数 &le; {{ item.rangeRight / product.contractSize }}
+                </span>
+                <span class='right-val'>
+                    {{ item.percent * 100 }}%
+                </span>
+            </div>
+        </van-cell>
         <van-cell size='large' title='交易时间'>
-            {{ product.tradeTimeList }}
-            <div class='item-item'></div>
+            <div v-for='(item,index) in weekList' :key='index' class='item-item'>
+                {{ weekdayMap[item.dayOfWeek] }}: {{ formatDayTime(item.startTime, item.endTime) }}
+            </div>
         </van-cell>
     </div>
 </template>
@@ -31,6 +49,8 @@ import top from '@m/layout/top'
 import { useStore } from 'vuex'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { isEmpty, objArraySort } from '@/utils/util'
+import dayjs from 'dayjs'
 import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
     components: {
@@ -39,23 +59,82 @@ export default {
     setup () {
         const store = useStore()
         const route = useRoute()
+
+        const weekdayMap = {
+            1: '周一',
+            2: '周二',
+            3: '周三',
+            4: '周四',
+            5: '周五',
+            6: '周六',
+            7: '周日'
+        }
+
         const symbolId = route.query.symbolId
-        const message = ref('dfsa大大阿达顶顶顶打发打发打发发发多发发顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶')
         store.dispatch('_quote/querySymbolInfo', symbolId)
         const product = computed(() => store.state._quote.productMap[symbolId])
+        console.log('product', product)
+        const usedMarginSet = computed(() => {
+            if (!isEmpty(product.value.usedMarginSet)) {
+                return objArraySort(product.value.usedMarginSet, 'rangeLeft')
+            }
+        })
+
+        const weekList = computed(() => {
+            if (!isEmpty(product.value.tradeTimeList)) {
+                return objArraySort(product.value.tradeTimeList, 'dayOfWeek')
+            }
+        })
+
+        const formatDayTime = (startTime, endTime) => {
+            if (!isEmpty(startTime) && !isEmpty(endTime)) {
+                // 0 点时的时间戳
+                const time = (dayjs(new Date(new Date(new Date().toLocaleDateString()).getTime()))).valueOf()
+
+                if (endTime === Number(1440)) {
+                    return dayjs(time + startTime * 60 * 1000).format('HH:mm') + '-' + '24:00'
+                } else {
+                    return dayjs(time + startTime * 60 * 1000).format('HH:mm') + '-' + dayjs(time + endTime * 60 * 1000).format('HH:mm')
+                }
+            }
+        }
 
         QuoteSocket.send_subscribe([symbolId])
         return {
             product,
-            message
+            weekdayMap,
+            formatDayTime,
+            weekList,
+            usedMarginSet
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
+@import '@/sass/mixin.scss';
 .container {
     flex: 1;
     overflow-y: auto;
+    .margin-info {
+        text-align: left;
+        .left-label {
+            display: inline-block;
+            width: rem(190px);
+            margin-right: rem(10px);
+            text-align: right;
+            &.header {
+                text-align: center;
+            }
+        }
+        .right-val {
+            display: inline-block;
+            width: rem(140px);
+            text-align: center;
+            &.header {
+                text-align: center;
+            }
+        }
+    }
 }
 </style>

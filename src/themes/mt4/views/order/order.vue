@@ -219,6 +219,7 @@ export default {
                     // state.pendingVisible = true
                     state.successVisible = true
                     state.resData = res.data
+                    state.resData.tradeVolume = state.volumn
                     setTimeout(() => {
                         state.successVisible = false
                         router.push({ name: 'Position' })

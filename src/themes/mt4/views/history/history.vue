@@ -6,8 +6,8 @@
         </template>
     </Top>
     <div class='container'>
-        <CapitalList class='of-1px-bottom' :data='capitalListData' />
-        <Balance />
+        <!-- <CapitalList class='of-1px-bottom' :data='capitalListData' /> -->
+        <!-- <Balance /> -->
         <HistoryList :finished='finished' :loading='loading' @onLoad='onLoad' />
     </div>
 

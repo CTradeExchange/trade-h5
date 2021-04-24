@@ -28,7 +28,7 @@ import Top from '@m/layout/top'
 import CapitalList from '@m/components/capitalList'
 import PositionList from '@m/modules/positionList/positionList'
 import PendingList from '@m/modules/pendingList/pendingList'
-import { reactive, toRefs, computed } from 'vue'
+import { reactive, toRefs, computed, onMounted, onUpdated } from 'vue'
 import { useStore } from 'vuex'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useRouter } from 'vue-router'
@@ -46,22 +46,25 @@ export default {
         const pendingList = computed(() => store.state._trade.pendingList)
         const sortActionsSelected = 'van-badge__wrapper van-icon van-icon-down'
         const sortActions = [
-            { name: '订单', feild: 'order', className: sortActionsSelected },
-            { name: '时间', feild: 'time', },
-            { name: '交易品种', feild: 'symbol', },
-            { name: '利润', feild: 'yz', },
+            { name: '订单', feild: 'orderId', className: sortActionsSelected },
+            { name: '时间', feild: 'openTime', },
+            { name: '产品', feild: 'symbolId', },
+            // { name: '利润', feild: 'yz', },
         ]
         let sortActionValue = sortActions[0].feild
 
         const accountInfo = computed(() => store.state._user.userAccount)
-        const state = reactive({
-            capitalListData: [
+        const capitalListData = computed(() => {
+            return [
                 { title: '结余：', value: accountInfo.value.balance ? priceFormat(accountInfo.value.balance, accountInfo.value.digit) : '--' },
                 { title: '净值：', value: accountInfo.value.netWorth ? priceFormat(accountInfo.value.netWorth, accountInfo.value.digit) : '--' },
                 { title: '可用预付款：', value: accountInfo.value.availableMargin ? priceFormat(accountInfo.value.availableMargin, accountInfo.value.digit) : '--' },
                 { title: '预付款比率(%)：', value: accountInfo.value.marginRadio ? priceFormat(accountInfo.value.marginRadio, accountInfo.value.digit) + '%' : '--' },
                 { title: '预付款：', value: accountInfo.value.occupyMargin ? priceFormat(accountInfo.value.occupyMargin, accountInfo.value.digit) : '--' },
-            ],
+            ]
+        })
+
+        const state = reactive({
             sortActionsVisible: false,
             sortActions
         })
@@ -70,17 +73,18 @@ export default {
             item.className = sortActionsSelected
             sortActionValue = item.feild
             state.sortActionsVisible = false
+            queryList()
         }
         // 查询持仓列表
         const queryList = () => {
-            store.dispatch('_trade/queryPositionPage', { sort: sortActionValue }).then(res => {
+            store.dispatch('_trade/queryPositionPage', { 'sortFieldName': sortActionValue, 'sortType': 'desc' }).then(res => {
                 if (res.check()) {
                     const subscribList = res.data.map(el => el.symbolId)
                     QuoteSocket.send_subscribe(subscribList)
                 }
             })
         }
-        queryList()
+        // queryList()
 
         const newOrder = () => {
             router.push({ name: 'Order', query: { symbolId: store.state._quote.productActivedID } })
@@ -89,13 +93,15 @@ export default {
         const refresh = () => {
             queryList()
         }
+
         return {
             ...toRefs(state),
             pendingList,
             actionSheetOnSelect,
             newOrder,
             refresh,
-            accountInfo
+            accountInfo,
+            capitalListData
         }
     },
 }

@@ -58,7 +58,7 @@ export default {
             const tick_time = product.tick_time ?? ''
             return tick_time ? dayjs(Number(tick_time)).format('HH:mm:ss') : ''
         })
-        console.log('positionList', positionList)
+
         const inPosition = computed(() => positionList.value.find(el => el.symbolId === parseInt(product.symbolId)))
 
         const className = computed(() => ({

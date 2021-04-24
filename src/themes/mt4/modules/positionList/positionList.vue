@@ -54,6 +54,8 @@ export default {
         })
         const product = computed(() => store.getters.productActived)
         const positionList = computed(() => store.state._trade.positionList)
+
+        console.log('storePositionlist', positionList)
         // 长按持仓
         const closePosition = (item) => {
             store.commit('_quote/Update_productActivedID', item.symbolId)

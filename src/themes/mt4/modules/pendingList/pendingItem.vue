@@ -12,7 +12,7 @@
                 <p>
                     <span>{{ openPrice }}</span>
                     <span> → </span>
-                    <span>{{ product.buy_price }}</span>
+                    <span>{{ product.sell_price }}</span>
                 </p>
             </div>
             <div class='col'>
@@ -71,14 +71,16 @@ export default {
         const store = useStore()
         const onceState = {
             executePrice: priceFormat(data.executePrice, data.openSymbolDigits),
-            openPrice: priceFormat(data.openPrice, data.openSymbolDigits),
+            openPrice: priceFormat(data.requestPrice, data.digits),
             openTime: dayjs(data.openTime).format('YYYY.MM.DD HH:mm:ss'),
         }
         const state = reactive({
             detailVisible: false
         })
         const product = computed(() => store.state._quote.productMap[data.symbolId])
-        const positionVolume = computed(() => minus(data.openNum, data.closeNum))
+        console.log('***', product)
+
+        const positionVolume = computed(() => data.requestNum / data.contractSize)
         return {
             ...toRefs(state),
             ...onceState,

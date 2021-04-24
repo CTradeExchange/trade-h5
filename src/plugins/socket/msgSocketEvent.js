@@ -1,5 +1,5 @@
 import { guid, getDevice, getToken, priceFormat } from '@/utils/util'
-
+import { QuoteSocket } from '@/plugins/socket/socket'
 // websocket消息事件
 class SocketEvent {
     constructor () {
@@ -76,8 +76,10 @@ class SocketEvent {
     // 心跳机制
     initPing () {
         if (this.ws.readyState !== 1) return console.warn('消息websocket连接未准备好  readyState：', this.ws.readyState)
-        const param = this.getParam('ping')
+        let param = this.getParam('ping')
+        this.ws.send(JSON.stringify(param))
         setInterval(() => {
+            param = this.getParam('ping')
             this.ws.send(JSON.stringify(param))
         }, 30000)
     }
@@ -87,21 +89,27 @@ class SocketEvent {
         console.log('收到消息', data)
         const content = data.content
         this.$store.commit('_user/Update_userAccount', content)
-        const positionList = this.$store.state._trade.positionList
-        if (content.positionProfitLossMessages.length > 0 && positionList.length > 0) {
-            positionList.forEach(p => {
-                content.positionProfitLossMessages.forEach(item => {
-                    // obj = getArrayObj(positionList, 'positionId', item.positionId)
-                    console.log('更新价格', item.profitLoss)
 
-                    if (Number(item.positionId) === Number(p.positionId)) {
-                        p.profitLoss = priceFormat(item.profitLoss, item.digit)
-                    }
-                })
-            })
+        this.$store.dispatch('_trade/queryPositionPage').then(res => {
+            if (res.check()) {
+                const subscribList = res.data.map(el => el.symbolId)
+                QuoteSocket.send_subscribe(subscribList)
 
-            this.$store.commit('_trade/Update_positionList', positionList)
-        }
+                const positionList = res.data
+                console.log(content.positionProfitLossMessages.length, positionList.length)
+                if (content.positionProfitLossMessages.length > 0 && positionList.length > 0) {
+                    positionList.forEach(p => {
+                        content.positionProfitLossMessages.forEach(item => {
+                            // console.log('更新价格', item.profitLoss)
+                            if (Number(item.positionId) === Number(p.positionId)) {
+                                p.profitLoss = priceFormat(item.profitLoss, item.digit)
+                            }
+                        })
+                    })
+                    this.$store.commit('_trade/Update_positionList', positionList)
+                }
+            }
+        })
 
         // console.log('positionList', positionList)
     }

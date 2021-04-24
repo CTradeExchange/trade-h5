@@ -3,19 +3,22 @@
         <top />
         <div class='pending-wrap'>
             <p>
-                #{{ data.orderId }}
-                <span class='direction'>
+                <span v-if='data.orderId'>
+                    #{{ data.orderId }}&nbsp;
+                </span>
+                <span :class="data.direction === 1 ? 'riseColor' : 'fallColor'">
                     {{ data.direction === 1 ? 'buy' : 'sell' }}
+
                     {{ data.tradeVolume }}
                 </span>
             </p>
             <p>
                 {{ data.symbolName }} at
-                <span v-if='Number(data.bizType) === 1' class='price'>
-                    {{ data.executePrice }}
+                <span v-if='Number(data.bizType) === 10 || Number(data.bizType) === 11' class='price'>
+                    {{ formatPrice(data.requestPrice, data.digits ) }}
                 </span>
                 <span v-else class='price'>
-                    {{ data.requestPrice }}
+                    {{ formatPrice(data.executePrice, data.digits) }}
                 </span>
             </p>
             <p>
@@ -42,8 +45,8 @@ export default {
     },
     props: ['data'],
     setup (props) {
-        const formatPrice = () => {
-            priceFormat()
+        const formatPrice = (price, digits) => {
+            return priceFormat(price, digits)
         }
 
         return {

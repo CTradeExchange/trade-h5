@@ -97,7 +97,7 @@
         cancel-button-text='未完成充值'
         class-name='desposit-dialog'
         confirm-button-text='已完成充值'
-        show-cancel-button='false'
+        :show-cancel-button='false'
         @cancel='onCancel'
         @confirm='onConfirm'
     >

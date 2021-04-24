@@ -18,7 +18,7 @@
             </div>
             <div class='col'>
                 <!-- :class="{ data.profitLoss > 0 : 'riseColor': 'fallColor'}" -->
-                <p class='price riseColor' :class="data.profitLoss > 0 ? 'riseColor': 'fallColor'">
+                <p class='price' :class="parseFloat(data.profitLoss) > 0 ? 'riseColor': 'fallColor'">
                     {{ data.profitLoss }}
                     <!-- {{ computePrice(data.profitLoss,data.openAccountDigits) || computePrice(data.profit,data.openAccountDigits) }} -->
                 </p>
@@ -31,7 +31,7 @@
                         S/L
                     </span>
                     <span class='value'>
-                        {{ data.stopLoss||'--' }}
+                        {{ computePrice(data.stopLoss, data.closeSymbolDigits) ||'--' }}
                     </span>
                 </li>
                 <li class='flexWrap'>
@@ -47,7 +47,7 @@
                         T/P
                     </span>
                     <span class='value'>
-                        {{ data.takeProfit||'--' }}
+                        {{ computePrice(data.takeProfit, data.closeSymbolDigits)||'--' }}
                     </span>
                 </li>
                 <li class='flexWrap'>

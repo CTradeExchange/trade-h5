@@ -28,9 +28,11 @@
             连接到
         </p>
         <div v-for='(item, index) in accountList' :key='index' class='account-item' @click='handleSwitchAccount(item)'>
-            <p>余额： {{ item.balance }}</p>
+            <img alt='' class='face' src='@m/images/face.png' />
+            {{ customInfo.customerNo }} - {{ mainAccount.trade.name }}
+            <!-- <p>余额： {{ item.balance }}</p>
             <p>可取金额：{{ item.withdrawAmount }}</p>
-            <p>锁定金额： {{ item.lockAmount }}</p>
+            <p>锁定金额： {{ item.lockAmount }}</p> -->
         </div>
     </div>
     <van-dialog v-model:show='show' title='属性'>
@@ -141,6 +143,13 @@ export default {
         padding: rem(30px);
         border: solid 1px var(--bdColor);
         border-radius: rem(15px);
+        .face {
+            width: rem(80px);
+            height: rem(80px);
+            margin: 0 auto;
+            margin-right: rem(10px);
+            vertical-align: middle;
+        }
     }
     .link {
         padding-left: rem(30px);

@@ -5,7 +5,6 @@
         </div>
         <van-empty v-else-if='orderList.length===0' description='无历史记录' />
         <template v-else>
-            877887
             <pendingItem v-for='item in orderList' :key='item' v-longpress:closePosition='item' :data='item' />
         </template>
     </div>

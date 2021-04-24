@@ -182,3 +182,9 @@ export function getArrayObj (arr, key, value) {
     }
     return temp
 }
+
+/* 对象排序 */
+export function objArraySort (objArr, key) {
+    const result = objArr.slice(0)
+    return result.sort((a, b) => a[key] - b[key])
+}
