@@ -5,7 +5,7 @@
                 <p class='productName'>
                     {{ data.symbolName }},
                     <span class='volumn'>
-                        {{ data.direction===1?'buy':'sell' }}&nbsp;
+                        {{ Number(data.direction) === 1 ?'buy':'sell' }}&nbsp;
                         <!-- {{ positionVolume }} -->
                         {{ data.openVolume }}
                     </span>
@@ -13,7 +13,7 @@
                 <p>
                     <span>{{ openPrice }}</span>
                     <span> → </span>
-                    <span>{{ product.buy_price }}</span>
+                    <span>{{ Number(data.direction) === 1 ? product.sell_price : product.buy_price }}</span>
                 </p>
             </div>
             <div class='col'>
@@ -86,6 +86,7 @@ export default {
             }
         }
         const product = computed(() => store.state._quote.productMap[data.symbolId])
+        console.log('**', product)
         const positionVolume = computed(() => minus(data.openNum, data.closeNum))
         return {
             ...toRefs(state),

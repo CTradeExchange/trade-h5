@@ -30,6 +30,7 @@
                     </p>
                     <p class='msg-content'>
                         {{ item.content }}
+                        {{ computeTime(item.content) }}
                     </p>
                     <p class='msg-time'>
                         {{ formatTime(item.createTime) }}
@@ -95,6 +96,11 @@ export default {
                 }
             })
         }
+
+        const computeTime = (content) => {
+            var reg = /\<time>/ig
+        }
+
         onBeforeMount(() => {
             getMsgList()
         })
@@ -123,6 +129,7 @@ export default {
             onRefresh,
             onLoad,
             changeType,
+            computeTime,
             ...toRefs(state)
         }
     }

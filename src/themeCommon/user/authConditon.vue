@@ -141,16 +141,14 @@ export default {
         const afterRead = (file) => {
             // console.log(file)// 由打印的可以看到，图片    信息就在files[0]里面
 
-            const ff = dataURLtoBlob(file.content)
-            const formDate = new FormData()
-            formDate.append('userPicture', file, '1.jpg')
+            /// const ff = dataURLtoBlob(file.content)
+            const formData = new FormData()
+            formData.append('object', file)
 
-            upload({
-                object: formDate,
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).then(res => {
+            upload(
+                formData
+
+            ).then(res => {
                 if (res.check()) {
 
                 }

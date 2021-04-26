@@ -5,14 +5,14 @@
                 <p class='productName'>
                     {{ data.symbolName }},
                     <span class='volumn'>
-                        {{ data.direction===1?'buy':'sell' }}
+                        {{ Number(data.direction) === 1 ? 'buy' : 'sell' }}
                         {{ positionVolume }}
                     </span>
                 </p>
                 <p>
                     <span>{{ openPrice }}</span>
                     <span> → </span>
-                    <span>{{ product.sell_price }}</span>
+                    <span>{{ Number(data.direction) === 1 ? product.buy_price : product.sell_price }}</span>
                 </p>
             </div>
             <div class='col'>

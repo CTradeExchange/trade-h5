@@ -27,11 +27,15 @@ service.interceptors.request.use(
         headers.trace = guid()
         if (token) headers.token = token
         headers.companyId = companyId
+
         if (config.method === 'get') {
             config.params = Object.assign({}, config.params || {})
         } else if (config.method === 'post') {
             const postData = config.data
-            config.data = Object.assign({}, postData)
+
+            if (!config.isUpload) {
+                config.data = Object.assign({}, postData)
+            }
         }
         return config
     },
