@@ -23,6 +23,7 @@ export default {
         historyLoading: false, // 历史记录加载
         historyList: [], // 平仓历史记录列表
         pendingList: [], // 预埋单列表
+        positionProfitLossList: [] // 持仓盈亏列表
     },
     getters: {
         // 当前操作的产品
@@ -130,6 +131,9 @@ export default {
         },
         Update_positionItem (state, data) {
             state.positionList.push(data)
+        },
+        Update_positionProfitLossList (state, data) {
+            state.positionProfitLossList = data
         }
     },
     actions: {

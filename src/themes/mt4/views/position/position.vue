@@ -5,6 +5,8 @@
             <a class='icon icon_xindingdan' href='javascript:;' @click='newOrder'></a>
         </template>
     </Top>
+    <!-- {{ positionList }} -->
+
     <div class='container'>
         <CapitalList :data='capitalListData' />
         <div class='titleBar'>
@@ -28,7 +30,7 @@ import Top from '@m/layout/top'
 import CapitalList from '@m/components/capitalList'
 import PositionList from '@m/modules/positionList/positionList'
 import PendingList from '@m/modules/pendingList/pendingList'
-import { reactive, toRefs, computed, onMounted, onUpdated } from 'vue'
+import { reactive, toRefs, computed, onMounted, watch, onUpdated } from 'vue'
 import { useStore } from 'vuex'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useRouter } from 'vue-router'
@@ -64,6 +66,24 @@ export default {
             ]
         })
 
+        // 取变动价格列表
+        const positionProfitLossList = computed(() => store.state._trade.positionProfitLossList)
+
+        const positionList = computed(() => store.state._trade.positionList)
+
+        watch([positionList, positionProfitLossList], ([pNew, pflNew], [pOld, pflOld]) => {
+            if (pNew.length > 0 && pflNew.length > 0) {
+                pNew.forEach(p => {
+                    pflNew.forEach(item => {
+                        // console.log('更新价格', item.profitLoss)
+                        if (Number(item.positionId) === Number(p.positionId)) {
+                            p.profitLoss = priceFormat(item.profitLoss, item.digit)
+                        }
+                    })
+                })
+            }
+        })
+
         const state = reactive({
             sortActionsVisible: false,
             sortActions
@@ -79,12 +99,13 @@ export default {
         const queryList = () => {
             store.dispatch('_trade/queryPositionPage', { 'sortFieldName': sortActionValue, 'sortType': 'desc' }).then(res => {
                 if (res.check()) {
-                    const subscribList = res.data.map(el => el.symbolId)
+                    const positionList = res.data
+                    const subscribList = positionList.map(el => el.symbolId)
                     QuoteSocket.send_subscribe(subscribList)
                 }
             })
         }
-        // queryList()
+        queryList()
 
         const newOrder = () => {
             router.push({ name: 'Order', query: { symbolId: store.state._quote.productActivedID } })
@@ -101,7 +122,9 @@ export default {
             newOrder,
             refresh,
             accountInfo,
-            capitalListData
+            capitalListData,
+            positionProfitLossList,
+            positionList
         }
     },
 }

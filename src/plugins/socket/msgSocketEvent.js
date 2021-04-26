@@ -89,29 +89,9 @@ class SocketEvent {
         console.log('收到消息', data)
         const content = data.content
         this.$store.commit('_user/Update_userAccount', content)
-
-        this.$store.dispatch('_trade/queryPositionPage').then(res => {
-            if (res.check()) {
-                const subscribList = res.data.map(el => el.symbolId)
-                QuoteSocket.send_subscribe(subscribList)
-
-                const positionList = res.data
-                console.log(content.positionProfitLossMessages.length, positionList.length)
-                if (content.positionProfitLossMessages.length > 0 && positionList.length > 0) {
-                    positionList.forEach(p => {
-                        content.positionProfitLossMessages.forEach(item => {
-                            // console.log('更新价格', item.profitLoss)
-                            if (Number(item.positionId) === Number(p.positionId)) {
-                                p.profitLoss = priceFormat(item.profitLoss, item.digit)
-                            }
-                        })
-                    })
-                    this.$store.commit('_trade/Update_positionList', positionList)
-                }
-            }
-        })
-
-        // console.log('positionList', positionList)
+        if (content.positionProfitLossMessages.length > 0) {
+            this.$store.commit('_trade/Update_positionProfitLossList', content.positionProfitLossMessages)
+        }
     }
 }
 
