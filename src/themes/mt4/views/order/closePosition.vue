@@ -101,7 +101,8 @@ export default {
             stopLoss: 0, // 止损单价
             takeProfit: 0, // 止盈单价
             orderParams: {}, // 订单入参
-            resData: {}
+            resData: {},
+            timeId: ''
         })
         watch(
             () => state.pendingPrice,
@@ -180,13 +181,18 @@ export default {
                 emit('refresh')
                 state.resData = res.data
                 state.successVisible = true
-                setTimeout(() => {
+                state.timeId = setTimeout(() => {
                     state.successVisible = false
                     router.push({ name: 'History' })
                 }, 5000)
             }).catch(err => {
                 state.loading = false
             })
+        }
+
+        const onHide = () => {
+            state.successVisible = false
+            clearTimeout(state.timeId)
         }
 
         return {
@@ -200,7 +206,8 @@ export default {
             openNum,
             stopLossDecimal,
             takeProfitDecimal,
-            handleConfirm
+            handleConfirm,
+            onHide
         }
     }
 }

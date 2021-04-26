@@ -278,7 +278,7 @@ export function queryPlatFormMessageLogList (data) {
         url: '/global/message.PlatFormMessageLogApiService.queryPlatFormMessageLogByPage',
         method: 'post',
         headers: {
-            version: '0.0.1'
+            version: '0.0.1',
         },
         data
     })

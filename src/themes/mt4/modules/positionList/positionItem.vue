@@ -5,7 +5,10 @@
                 <p class='productName'>
                     {{ data.symbolName }},
                     <span class='volumn'>
-                        {{ Number(data.direction) === 1 ?'buy':'sell' }}&nbsp;
+                        <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
+                            {{ Number(data.direction) === 1 ?'buy':'sell' }}&nbsp;
+                        </span>
+
                         <!-- {{ positionVolume }} -->
                         {{ data.openVolume }}
                     </span>
@@ -17,7 +20,6 @@
                 </p>
             </div>
             <div class='col'>
-                <!-- :class="{ data.profitLoss > 0 : 'riseColor': 'fallColor'}" -->
                 <p class='price' :class="parseFloat(data.profitLoss) > 0 ? 'riseColor': 'fallColor'">
                     {{ data.profitLoss }}
                     <!-- {{ computePrice(data.profitLoss,data.openAccountDigits) || computePrice(data.profit,data.openAccountDigits) }} -->
@@ -86,7 +88,7 @@ export default {
             }
         }
         const product = computed(() => store.state._quote.productMap[data.symbolId])
-        console.log('**', product)
+
         const positionVolume = computed(() => minus(data.openNum, data.closeNum))
         return {
             ...toRefs(state),

@@ -5,7 +5,6 @@
             <a class='icon icon_xindingdan' href='javascript:;' @click='newOrder'></a>
         </template>
     </Top>
-    <!-- {{ positionList }} -->
 
     <div class='container'>
         <CapitalList :data='capitalListData' />
@@ -100,6 +99,10 @@ export default {
             store.dispatch('_trade/queryPositionPage', { 'sortFieldName': sortActionValue, 'sortType': 'desc' }).then(res => {
                 if (res.check()) {
                     const positionList = res.data
+                    if (positionList.length === 0) {
+                        // 如果没有持仓，也要更新store
+                        store.commit('_trade/Update_positionList', res.data)
+                    }
                     const subscribList = positionList.map(el => el.symbolId)
                     QuoteSocket.send_subscribe(subscribList)
                 }

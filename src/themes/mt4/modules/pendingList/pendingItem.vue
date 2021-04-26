@@ -17,7 +17,6 @@
             </div>
             <div class='col'>
                 <p class='price riseColor'>
-                    -88.66
                 </p>
             </div>
         </div>
@@ -78,7 +77,6 @@ export default {
             detailVisible: false
         })
         const product = computed(() => store.state._quote.productMap[data.symbolId])
-        console.log('***', product)
 
         const positionVolume = computed(() => data.requestNum / data.contractSize)
         return {

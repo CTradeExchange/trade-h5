@@ -29,8 +29,8 @@
                         {{ item.title === 'null'? '': item.title }}
                     </p>
                     <p class='msg-content'>
-                        {{ item.content }}
-                        {{ computeTime(item.content) }}
+                        {{ computeHtml(item.content) }}
+                        {{ computeHtmlTime(item.content) }}
                     </p>
                     <p class='msg-time'>
                         {{ formatTime(item.createTime) }}
@@ -59,13 +59,13 @@ export default {
             loading: false,
             finished: false,
             current: 1,
-            type: 0,
+            type: '',
             rightAction: { title: 444 },
             options: [
-                { text: '全部消息', value: 0 },
-                { text: '账户消息', value: 1 },
-                { text: '资金消息', value: 2 },
-                { text: '交易消息', value: 3 },
+                { text: '全部消息', value: '' },
+                { text: '账户消息', value: 'USER_MESSAGE' },
+                { text: '资金消息', value: 'CASH_MESSAGE' },
+                { text: '交易消息', value: 'TRADE_MESSAGE' },
             ]
         })
 
@@ -74,6 +74,10 @@ export default {
 
         const changeType = (val) => {
             console.log(val)
+            state.type = val
+            state.current = 1
+            state.list = []
+            getMsgList()
         }
 
         const getMsgList = () => {
@@ -82,7 +86,8 @@ export default {
                 forbidClick: true,
             })
             queryPlatFormMessageLogList({
-                current: state.current
+                current: state.current,
+                parentType: state.type,
             }).then(res => {
                 toast.clear()
                 if (res.check()) {
@@ -97,8 +102,20 @@ export default {
             })
         }
 
-        const computeTime = (content) => {
-            var reg = /\<time>/ig
+        const computeHtmlTime = (content) => {
+            try {
+                const reg = /<?time[^>]*>[^<]*<\/time>/gi
+                const tag = content.match(reg)
+                const time = tag.toString().replace(/<\/?time>/g, '')
+                return dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        const computeHtml = (content) => {
+            const reg = /<?time[^>]*>[^<]*<\/time>。/gi
+            return content.replace(reg, '')
         }
 
         onBeforeMount(() => {
@@ -129,7 +146,8 @@ export default {
             onRefresh,
             onLoad,
             changeType,
-            computeTime,
+            computeHtmlTime,
+            computeHtml,
             ...toRefs(state)
         }
     }

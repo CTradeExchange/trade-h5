@@ -1,5 +1,5 @@
 <template>
-    <Top back='true' :menu='false' title='' />
+    <Top :back='true' :menu='false' title='' />
     <div class='page-wrap'>
         <van-cell title='启用新闻'>
             <!-- 使用 right-icon 插槽来自定义右侧图标 -->
@@ -16,17 +16,18 @@
 
 <script>
 import Top from '@m/layout/top'
-import { toRefs, reactive, ref } from 'vue'
+import { toRefs, reactive, ref, getCurrentInstance } from 'vue'
 import { logout } from '@/api/user'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { removeLoginParams } from '@/utils/util'
-
+import { MsgSocket } from '@/plugins/socket/socket'
 export default {
     components: {
         Top
     },
     setup (props) {
+        const { ctx } = getCurrentInstance()
         const state = reactive({
             checked: false,
             loading: false
@@ -39,6 +40,7 @@ export default {
                 message: '确定退出登录吗',
             }).then(() => {
                 state.loading = true
+                ctx.$MsgSocket.ws.close()
                 logout().then(res => {
                     state.loading = false
                     if (res.check()) {

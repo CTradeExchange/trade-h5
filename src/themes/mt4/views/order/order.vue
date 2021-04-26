@@ -65,7 +65,7 @@
         <Pending :data='orderParams' :product='product' @onHide='pendingVisible = false' />
     </van-popup>
     <van-popup v-model:show='successVisible' :close-on-click-overlay='false' :style="{ width: '100%', height: '100%' }">
-        <Success :data='resData' @onHide='successVisible = false' />
+        <Success :data='resData' @onHide='onHide' />
     </van-popup>
 
     <Loading :show='loading' />
@@ -124,7 +124,8 @@ export default {
             stopLoss: 0, // 止损单价
             takeProfit: 0, // 止盈单价
             orderParams: {}, // 订单入参
-            resData: {}
+            resData: {},
+            timeId: ''
         })
         watch(
             () => state.pendingPrice,
@@ -198,7 +199,6 @@ export default {
                 direction = 2
             }
             const p = Math.pow(10, product.value.symbolDigits)
-            console.log('****', state.volumn, product.value.contractSize)
             const params = {
                 bizType, // 业务类型。0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
                 direction, // 订单买卖方向。1-买；2-卖；
@@ -220,7 +220,7 @@ export default {
                     state.successVisible = true
                     state.resData = res.data
                     state.resData.tradeVolume = state.volumn
-                    setTimeout(() => {
+                    state.timeId = setTimeout(() => {
                         state.successVisible = false
                         router.push({ name: 'Position' })
                     }, 5000)
@@ -228,6 +228,11 @@ export default {
                 .catch(err => {
                     state.loading = false
                 })
+        }
+
+        const onHide = () => {
+            state.successVisible = false
+            clearTimeout(state.timeId)
         }
 
         QuoteSocket.send_subscribe([symbolId]) // 订阅产品报价
@@ -266,7 +271,8 @@ export default {
             chart,
             openOrder,
             profitLossRang,
-            selectOpenOrder
+            selectOpenOrder,
+            onHide
         }
     }
 }

@@ -93,6 +93,15 @@ class SocketEvent {
             this.$store.commit('_trade/Update_positionProfitLossList', content.positionProfitLossMessages)
         }
     }
+
+    // 关闭
+    close () {
+        this.ws.close()
+    }
+
+    open () {
+        this.ws.open()
+    }
 }
 
 export default SocketEvent

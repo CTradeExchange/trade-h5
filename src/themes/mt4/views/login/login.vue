@@ -133,14 +133,16 @@ import LoginByFacebook from '@m/components/loginByFacebook/loginByFacebook'
 import Top from '@/components/top'
 import { getDevice, localGet, localSet } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
-import { computed, reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs, getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
 import Rule from './rule'
 import md5 from 'js-md5'
 import { timeline, timelineItem } from '@m/components/timeline'
-
+import { MsgSocket } from '@/plugins/socket/socket'
+import CreateSocket from '@/plugins/socket/createSocket'
+import { msgService } from '@/config'
 export default {
     components: {
         timeline,
@@ -158,6 +160,7 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const store = useStore()
+        const { ctx } = getCurrentInstance()
         const state = reactive({
             pwdVisible: false,
             kycPop: false,
@@ -212,6 +215,15 @@ export default {
             store.dispatch('_user/login', params).then(res => {
                 // console.log(res)
                 if (res.invalid()) return false
+
+                ctx.$MsgSocket.initPing()
+                // ctx.$MsgSocket.ws.open()
+                // 登录成功重新连接websocket
+                store.commit('_user/Update_userAccount', '')
+                // const msgWS = CreateSocket(msgService)
+                // MsgSocket.init(msgWS, store)
+                // msgWS.open()
+
                 if (parseInt(res.data.loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
                     state.loginPwdPop = true
                 } else {
