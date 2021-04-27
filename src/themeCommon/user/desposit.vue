@@ -129,7 +129,7 @@ export default {
         const store = useStore()
 
         const rightAction = {
-            title: '取款记录'
+            title: '存款记录'
         }
         const amountList = [
             {

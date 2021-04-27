@@ -10,7 +10,6 @@
         <!-- <Balance /> -->
         <HistoryList :finished='finished' :loading='loading' @onLoad='onLoad' />
     </div>
-
     <!-- 排序 actionsheet -->
     <van-action-sheet v-model:show='sortActionsVisible' :actions='sortActions' cancel-text='取消' @select='actionSheetOnSelect' />
     <!-- 查询时间 actionsheet -->
@@ -90,6 +89,7 @@ export default {
         }
         // 选择日期查询方式
         const timeActionSheetOnSelect = item => {
+            state.finished = false
             if (item.startTime) {
                 startTime = item.startTime
                 endTime = item.endTime
@@ -112,14 +112,21 @@ export default {
         // 查询平仓历史记录列表
         const queryRecordList = () => {
             state.loading = true
-            store.dispatch('_trade/queryHistoryCloseOrderList', {
+            const params = {
                 current,
                 size: 20,
                 sortType: sortType,
-                sortFieldName: sortFieldName,
-                executeStartTime: startTime,
-                executeEndTime: endTime
-            }).then(res => {
+                sortFieldName: sortFieldName
+            }
+            if (sortFieldName === 'closeTime') {
+                params.closeStartTime = startTime
+                params.closeEndTime = endTime
+            } else if (sortFieldName === 'openTime') {
+                params.openStartTime = startTime
+                params.openEndTime = endTime
+            }
+
+            store.dispatch('_trade/queryHistoryCloseOrderList', params).then(res => {
                 if (res.check() && res.data) {
                     const data = res.data
                     state.loading = false

@@ -244,7 +244,7 @@ export default {
                 stopLoss: Number(state.stopLoss) ? mul(state.stopLoss, p) : 0,
                 takeProfit: Number(state.takeProfit) ? mul(state.takeProfit, p) : 0
             }
-            debugger
+
             state.loading = true
             updateOrder(params).then(res => {
                 state.loading = false

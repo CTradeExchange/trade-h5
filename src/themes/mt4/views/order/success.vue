@@ -6,8 +6,8 @@
                 <span v-if='data.orderId'>
                     #{{ data.orderId }}&nbsp;
                 </span>
-                <span :class="data.direction === 1 ? 'riseColor' : 'fallColor'">
-                    {{ data.direction === 1 ? 'buy' : 'sell' }}
+                <span :class="data.openDirection === 1 ? 'riseColor' : 'fallColor'">
+                    {{ data.openDirection === 1 ? 'buy' : 'sell' }}
 
                     {{ data.tradeVolume }}
                 </span>

@@ -40,7 +40,7 @@
                         />
                     </van-cell-group>
                     <div v-if="item.showType === 'image'">
-                        <van-uploader :after-read='afterRead' result-type='file'>
+                        <van-uploader :after-read='afterRead' :name='item.elementCode' result-type='file'>
                             <img alt='' class='upload-img' :src='require("../../assets/auth/" + item.elementCode + ".png")' srcset='' />
                             <p class='upload-text'>
                                 {{ item.elementName }}
@@ -65,7 +65,6 @@ import { Toast, Dialog } from 'vant'
 import { findAllLevelKyc, kycLevelApply } from '@/api/user'
 import { getArrayObj, isEmpty } from '@/utils/util'
 import { upload } from '@/api/base'
-import axios from 'axios'
 
 export default {
     components: {
@@ -76,13 +75,6 @@ export default {
         const route = useRoute()
         const levelCode = route.query.levelCode
 
-        const fileList = ref([
-            {
-                url: '',
-                status: 'uploading',
-                message: '上传中...',
-            }
-        ])
         const state = reactive({
             areaShow: false,
             area: '',
@@ -139,66 +131,22 @@ export default {
         }
 
         // 上传图片
-        const afterRead = (file) => {
-            // console.log(file)// 由打印的可以看到，图片    信息就在files[0]里面
-
-            /// const ff = dataURLtoBlob(file.content)
+        const afterRead = (file, detail) => {
+            state.loading = true
             const formData = new FormData()
-            formData.append('object', file)
+            formData.append('object', file.file)
 
-            axios({
-                method: 'post',
-                url: '/upload', // 接口地址
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-                data: {
-                    object: formData
+            upload(
+                formData
+            ).then(res => {
+                state.loading = false
+                if (res.check()) {
+                    state.conditionModel[detail.name] = res.data
+                    Toast('上传成功')
                 }
-            }).then(response => {
-                console.log(response, 'success') // 成功的返回
-            }).catch(error => console.log(error, 'error'))
-
-            // upload(
-            //     formData
-
-            // ).then(res => {
-            //     if (res.check()) {
-
-            //     }
-            // }).catch(err => {
-            //     console.log(err)
-            // })
-
-            // this.$http.post('图片上传接口', formData, {
-            //     method: 'post',
-            //     headers: { 'Content-Type': 'multipart/form-data' }
-            // }).then(function (res) {
-            //     console.log(res.data)//
-            // }).catch(function (error) {
-            //     console.log(error)
-            // })
-
-            // file.status = 'uploading'
-            // file.message = '上传中...'
-
-            // setTimeout(() => {
-            //     file.status = 'failed'
-            //     file.message = '上传失败'
-            // }, 1000)
-        }
-
-        function dataURLtoBlob (dataurl) {
-            var arr = dataurl.split(',')
-            var mime = arr[0].match(/:(.*?);/)[1]
-            var bstr = atob(arr[1])
-            var n = bstr.length
-            var u8arr = new Uint8Array(n)
-            while (n--) {
-                u8arr[n] = bstr.charCodeAt(n)
-            }
-            return new Blob([u8arr], {
-                type: mime
+            }).catch(err => {
+                state.loading = false
+                console.log(err)
             })
         }
 
@@ -245,9 +193,8 @@ export default {
             getConditon,
             beginAuth,
             status,
-            afterRead,
-            fileList,
-            dataURLtoBlob
+            afterRead
+
         }
     }
 }

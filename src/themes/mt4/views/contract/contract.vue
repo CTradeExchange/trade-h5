@@ -29,7 +29,7 @@
             </div>
             <div v-for='(item, index) in usedMarginSet' :key='index' class='margin-info'>
                 <span class='left-label'>
-                    {{ item.rangeLeft / product.contractSize }} &gt; 手数 &le; {{ item.rangeRight / product.contractSize }}
+                    {{ item.rangeLeft / product.contractSize }} &lt; 手数 &le; {{ item.rangeRight / product.contractSize }}
                 </span>
                 <span class='right-val'>
                     {{ item.percent * 100 }}%

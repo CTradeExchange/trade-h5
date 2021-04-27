@@ -15,9 +15,9 @@
                 {{ cur.direction===1?'buy':'sell' }}
             </p>
             <div class='menulist'>
-                <a class='item van-hairline--bottom' href='javascript:;' @click='modifyOrder'>
+                <!-- <a class='item van-hairline--bottom' href='javascript:;' @click='modifyOrder'>
                     修改订单
-                </a>
+                </a> -->
                 <a class='item van-hairline--bottom' href='javascript:;' @click='delOrder'>
                     删除订单
                 </a>
@@ -35,8 +35,9 @@ import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import pendingItem from './pendingItem'
 import { useRouter } from 'vue-router'
-import { addMarketOrder } from '@/api/trade'
+import { addMarketOrder, closePboOrder } from '@/api/trade'
 import Loading from '@m/components/loading'
+import { Toast } from 'vant'
 export default {
     components: {
         pendingItem,
@@ -91,7 +92,21 @@ export default {
         // 删除订单
         const delOrder = () => {
             state.show = false
-            router.push({ name: 'Order', query: { symbolId: state.cur.symbolId } })
+            // bizType 0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
+            const params = {
+                pboId: state.cur.id,
+                bizType: state.cur.bizType
+            }
+            closePboOrder(params).then(res => {
+                if (res.check()) {
+                    Toast('删除成功')
+                    store.dispatch('_trade/queryPBOOrderPage')
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+
+            // router.push({ name: 'Order', query: { symbolId: state.cur.symbolId } })
         }
         // 修改订单
         const modifyOrder = () => {

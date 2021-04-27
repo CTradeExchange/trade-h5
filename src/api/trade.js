@@ -95,3 +95,16 @@ export function updateOrder (data) {
         data
     })
 }
+
+/* 取消预埋单 */
+export function closePboOrder (data) {
+    return request({
+        url: '/global/tradeapi.OrderApiService.closePboOrder',
+        method: 'post',
+        headers: {
+            group: 'tradeApi',
+            version: '0.0.1',
+        },
+        data
+    })
+}
