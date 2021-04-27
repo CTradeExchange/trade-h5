@@ -7,12 +7,12 @@ let isdebug = true
 let lastBar = null // 记录最新k线时间
 let tickListener = null
 let symbolParams = null
-let kline = null
+let hasHistoryKline = null
 let oldPrice = null
 
 store.subscribe((mutation, state) => {
     try {
-        if(kline && typeof tickListener !== 'function' || mutation.type !== '_quote/Update_productTick'){
+        if(hasHistoryKline && typeof tickListener !== 'function' || mutation.type !== '_quote/Update_productTick'){
             return
         }
         if(
@@ -37,6 +37,7 @@ store.subscribe((mutation, state) => {
 
 // 历史k线
 export function getKline(params, firstDataRequest){
+    hasHistoryKline = null
     return new Promise((resolve) => {
             const fn = () => {
                 if(QuoteSocket.ws.readyState ===1 ){
@@ -80,7 +81,7 @@ export function getKline(params, firstDataRequest){
                         lastBar = bars[bars.length-1] || null
                     }
 
-                    kline = bars
+                    hasHistoryKline = bars
                     return {
                         bars,
                         meta:{
@@ -171,7 +172,7 @@ function debugKline(res,requestParams){
         }
         return value
     }, ' '))
-    console.log('response:', res, ' ')
+    console.log('response:', res.data?.kline_list, ' ')
     console.groupEnd()
 }
 

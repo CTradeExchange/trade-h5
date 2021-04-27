@@ -31,13 +31,13 @@
                                 >
                                     <template #reference>
                                         <van-button class='btn' type='primary'>
-                                            <van-icon name='chart-trending-o' size='25' />
+                                            <van-icon name='clock-o' size='25' />
                                         </van-button>
                                     </template>
                                 </van-popover>
                             </div>
                             <div class='btn' @click='gotoOrder'>
-                                <van-icon name='arrow' size='25' />
+                                <i class='icon icon_jiaoyi'></i>
                             </div>
                         </div>
                     </template>
@@ -122,7 +122,7 @@ export default {
                 name: 'Order',
                 query: {
                     ...route.query,
-                    symbolId: localStorage.getItem('symbolIdForChart')
+                    symbolId: localStorage.getItem('symbolIdForChart') || this.initialValue.value
                 },
             })
         }
@@ -177,8 +177,9 @@ export default {
         .van-button {
             padding: 0;
         }
-        .van-icon {
+        i {
             align-self: center;
+            font-size: 20px;
         }
     }
 }
