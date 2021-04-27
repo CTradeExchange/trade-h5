@@ -1,5 +1,5 @@
 <template>
-    <Top back='true' :menu='false' title='' />
+    <Top :back='true' :menu='false' title='' />
     <div class='page-wrap'>
         <van-cell-group>
             <van-cell is-link title='身份验证' to='/authentication' />

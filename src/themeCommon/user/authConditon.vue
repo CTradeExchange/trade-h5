@@ -1,5 +1,5 @@
 <template>
-    <Top back='true' :menu='false' title='' />
+    <Top :back='true' :menu='false' title='' />
     <Loading :show='loading' />
     <div class='page-wrap'>
         <div v-if='conditionVis' class='auth-condition'>
@@ -29,19 +29,19 @@
         <div v-else>
             <div class='conditon-wrap'>
                 <div v-for='(item,index) in elementList' :key='index' class='c-item'>
-                    <van-cell-group v-if="item.showType === 'input'">
-                        <van-field
-                            v-if="item.showType === 'input'"
-                            v-model='conditionModel[item.elementCode]'
-                            clearable
-                            :label='item.elementName'
-                            :placeholder='"请输入"+item.elementName'
-                            :type='item.elementCode === "phone" ? "number" : "text"'
-                        />
-                    </van-cell-group>
+                    <!-- <van-cell-group v-if="item.showType === 'input'"> -->
+                    <van-field
+                        v-if="item.showType === 'input'"
+                        v-model='conditionModel[item.elementCode]'
+                        clearable
+                        :label='item.elementName'
+                        :placeholder='"请输入"+item.elementName'
+                        :type='item.elementCode === "phone" ? "number" : "text"'
+                    />
+                    <!-- </van-cell-group> -->
                     <div v-if="item.showType === 'image'">
                         <van-uploader :after-read='afterRead' :name='item.elementCode' result-type='file'>
-                            <img alt='' class='upload-img' :src='require("../../assets/auth/" + item.elementCode + ".png")' srcset='' />
+                            <img :id='item.elementCode' alt='' class='upload-img' :src='require("../../assets/auth/" + item.elementCode + ".png")' srcset='' />
                             <p class='upload-text'>
                                 {{ item.elementName }}
                             </p>
@@ -141,6 +141,8 @@ export default {
             ).then(res => {
                 state.loading = false
                 if (res.check()) {
+                    debugger
+                    document.getElementById(detail.name).src = res.data
                     state.conditionModel[detail.name] = res.data
                     Toast('上传成功')
                 }
@@ -163,6 +165,10 @@ export default {
                 }
             }
 
+            if (elementList.length < state.elementList.length) {
+                return Toast('请完成所有认证项')
+            }
+
             const params = {
                 pathCode: state.area,
                 levelCode: levelCode,
@@ -173,7 +179,7 @@ export default {
                 if (res.check()) {
                     Dialog.alert({
                         title: '提示',
-                        message: levelCode + '认证成功',
+                        message: levelCode + '认证提交成功，等待客服审核',
                     }).then(() => {
                         router.go(-1)
                     })
@@ -225,14 +231,18 @@ export default {
     .conditon-wrap {
         padding-bottom: rem(50px);
         .c-item {
-            margin-bottom: rem(50px);
             text-align: center;
+            border-bottom: solid 1px var(--bdColor);
             .upload-img {
                 width: rem(400px);
                 height: rem(260px);
             }
             .upload-text {
                 margin-top: rem(20px);
+            }
+            .van-uploader {
+                margin-top: rem(50px);
+                margin-bottom: rem(50px);
             }
         }
     }

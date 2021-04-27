@@ -70,7 +70,7 @@ import OrderVolumn from './components/orderVolumn'
 import PriceStepper from './components/priceStepper'
 import Pending from './pending'
 import Success from './success'
-import { minus, divide, getDecimalNum } from '@/utils/calculation'
+import { minus, divide, getDecimalNum, mul } from '@/utils/calculation'
 import { Toast } from 'vant'
 export default {
     components: {
@@ -98,8 +98,8 @@ export default {
             volumn: 0.01,
             value: 3,
             pendingPrice: 0, // 挂单价
-            stopLoss: 0, // 止损单价
-            takeProfit: 0, // 止盈单价
+            stopLoss: stopLossDecimal || 0, // 止损单价
+            takeProfit: takeProfitDecimal || 0, // 止盈单价
             orderParams: {}, // 订单入参
             resData: {},
             timeId: ''
@@ -165,6 +165,7 @@ export default {
 
         const handleConfirm = () => {
             const requestPrice = direction === 1 ? product.value.sell_price : product.value.buy_price
+            const p = Math.pow(10, product.value.symbolDigits)
             const params = {
                 bizType: 2, // 业务类型。0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
                 direction: Number(direction) === 1 ? 2 : 1, // 订单买卖方向。1-买；2-卖；
@@ -173,6 +174,8 @@ export default {
                 requestTime: Date.now(),
                 requestNum: Number(openNum),
                 requestPrice: Number(requestPrice),
+                stopLoss: Number(state.stopLoss) ? mul(state.stopLoss, p) : undefined,
+                takeProfit: Number(state.takeProfit) ? mul(state.takeProfit, p) : undefined
             }
             state.loading = true
             addMarketOrder(params).then(res => {

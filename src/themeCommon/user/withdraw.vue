@@ -50,7 +50,7 @@
     <van-button block class='confirm-btn' type='primary' @click='confirm'>
         <span>确定</span>
     </van-button>
-    <van-action-sheet v-model:show='show' round='false' title='选择收款银行卡'>
+    <van-action-sheet v-model:show='show' :round='false' title='选择收款银行卡'>
         <div class='bank-list'>
             <div v-for='(item, index) in bankList' :key='index' class='bank' @click='chooseBank(item)'>
                 <i class='bank-icons-sm' :class="'bk-'+ item.bankCode"></i>

@@ -1,5 +1,5 @@
 <template>
-    <Top back='true' :menu='false' title='' />
+    <Top :back='true' :menu='false' title='' />
     <div class='page-wrap'>
         <Loading :show='loading' />
         <div v-if='list.length === 0'>
@@ -20,13 +20,13 @@
                             认证通过后方可进行 [{{ item.businessNameList.toString() }}]
                         </p>
                     </div>
-                    <div v-if='item.preLevelObj && Number(item.preLevelObj.status) === 0'>
+                    <div v-if='item.preLevelObj && item.preLevelObj.status !== 2'>
                         <span class='notice'>
                             请先完成{{ item.preLevelObj.levelName }}认证
                         </span>
                     </div>
                     <div v-else>
-                        <van-button plain round size='small' @click="$router.push({ path: '/authConditon',query: { levelCode: item.levelCode } })">
+                        <van-button plain round size='small' @click='handleNext(item)'>
                             <template #default>
                                 <span class='btn-text'>
                                     {{ item.statusName }}
@@ -36,36 +36,6 @@
                         </van-button>
                     </div>
                 </div>
-
-            <!-- <div class='auth-item'>
-                <img alt='' class='auth-img' src='../../themes/mt4/images/lv2.png' srcset='' />
-                <div class='content'>
-                    <p class='t1'>
-                        中级认证
-                    </p>
-                    <p class='t2'>
-                        认证通过后方可进行 [存款]
-                    </p>
-                </div>
-                <span class='notice'>
-                    请先完成LV1认证
-                </span>
-            </div>
-
-            <div class='auth-item'>
-                <img alt='' class='auth-img' src='../../themes/mt4/images/lv3.png' srcset='' />
-                <div class='content'>
-                    <p class='t1'>
-                        高级认证
-                    </p>
-                    <p class='t2'>
-                        认证通过后方可进行 [取款]
-                    </p>
-                </div>
-                <span class='notice'>
-                    请先完成LV2认证
-                </span>
-            </div> -->
             </div>
         </div>
     </div>
@@ -105,11 +75,19 @@ export default {
                 state.loading = false
             })
         }
+
+        const handleNext = (item) => {
+            if (Number(item.status) === 0 || Number(item.status) === 3) {
+                router.push({ path: '/authConditon', query: { levelCode: item.levelCode } })
+            }
+        }
+
         onBeforeMount(() => {
             getAuthCondition()
         })
 
         return {
+            handleNext,
             ...toRefs(state)
         }
     }

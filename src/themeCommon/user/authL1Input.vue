@@ -1,5 +1,5 @@
 <template>
-    <Top back='true' :menu='false' title='' />
+    <Top :back='true' :menu='false' title='' />
     <div class='page-wrap'>
         <van-field v-model='userName' label='姓名' placeholder='请输入您的姓名' type='text' />
         <van-field v-model='userId' label='身份证' placeholder='请输入您的身份证号' type='text' />

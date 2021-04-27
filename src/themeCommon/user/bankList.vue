@@ -1,5 +1,5 @@
 <template>
-    <Top back='true' :menu='false' title='' />
+    <Top :back='true' :menu='false' title='' />
     <div class='page-wrap'>
         <Loading :show='loading' />
         <div class='list'>

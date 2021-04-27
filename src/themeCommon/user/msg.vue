@@ -1,5 +1,5 @@
 <template>
-    <Top back='true' :menu='false' :right-action='rightAction' title='' :title-vis='false'>
+    <Top :back='true' :menu='false' :right-action='rightAction' title='' :title-vis='false'>
         <template #left>
             <div>
                 <van-dropdown-menu active-color='#007AFF'>
