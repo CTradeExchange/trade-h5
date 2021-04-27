@@ -22,7 +22,7 @@
                 </span>
             </p>
             <p>
-                s/l: {{ data.stopLoss || '--' }}&nbsp;&nbsp;&nbsp;t/p: {{ data.takeProfit || '--' }}
+                s/l: {{ data.stopLoss ? formatPrice(data.stopLoss, data.digits) : '--' }}&nbsp;&nbsp;&nbsp;t/p: {{ data.takeProfit ? formatPrice(data.takeProfit, data.digits) : '--' }}
             </p>
             <p>
                 成功

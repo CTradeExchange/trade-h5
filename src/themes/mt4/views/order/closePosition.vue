@@ -60,7 +60,7 @@
 <script>
 import top from '@m/layout/top'
 import Price from '@m/components/price'
-import { computed, onUnmounted, reactive, ref, toRefs, watch } from 'vue'
+import { computed, onUnmounted, reactive, ref, toRefs, watch, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 import { QuoteSocket, MsgSocket } from '@/plugins/socket/socket'
 import { addMarketOrder } from '@/api/trade'
@@ -194,6 +194,11 @@ export default {
             state.successVisible = false
             clearTimeout(state.timeId)
         }
+
+        // 组件销毁之前清除定时器
+        onBeforeUnmount(() => {
+            clearTimeout(state.timeId)
+        })
 
         return {
             ...toRefs(state),

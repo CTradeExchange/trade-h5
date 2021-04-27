@@ -65,6 +65,7 @@ import { Toast, Dialog } from 'vant'
 import { findAllLevelKyc, kycLevelApply } from '@/api/user'
 import { getArrayObj, isEmpty } from '@/utils/util'
 import { upload } from '@/api/base'
+import axios from 'axios'
 
 export default {
     components: {
@@ -145,16 +146,30 @@ export default {
             const formData = new FormData()
             formData.append('object', file)
 
-            upload(
-                formData
-
-            ).then(res => {
-                if (res.check()) {
-
+            axios({
+                method: 'post',
+                url: '/upload', // 接口地址
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                data: {
+                    object: formData
                 }
-            }).catch(err => {
-                console.log(err)
-            })
+            }).then(response => {
+                console.log(response, 'success') // 成功的返回
+            }).catch(error => console.log(error, 'error'))
+
+            // upload(
+            //     formData
+
+            // ).then(res => {
+            //     if (res.check()) {
+
+            //     }
+            // }).catch(err => {
+            //     console.log(err)
+            // })
+
             // this.$http.post('图片上传接口', formData, {
             //     method: 'post',
             //     headers: { 'Content-Type': 'multipart/form-data' }

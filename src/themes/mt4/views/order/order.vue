@@ -59,6 +59,7 @@
         :stop-loss='stopLoss'
         :take-profit='takeProfit'
         @openOrder='openOrder'
+        @updateOrder='handleUpdateOrder'
     />
 
     <van-popup v-model:show='pendingVisible' :close-on-click-overlay='false' :style="{ width: '100%', height: '100%' }">
@@ -74,10 +75,10 @@
 <script>
 import top from '@m/layout/top'
 import Price from '@m/components/price'
-import { computed, onUnmounted, reactive, ref, toRefs, watch } from 'vue'
+import { computed, onUnmounted, reactive, ref, toRefs, watch, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 import { QuoteSocket, MsgSocket } from '@/plugins/socket/socket'
-import { addMarketOrder } from '@/api/trade'
+import { addMarketOrder, updateOrder } from '@/api/trade'
 import { useRoute, useRouter } from 'vue-router'
 import lightweightChart from './components/lightweightChart'
 import OrderVolumn from './components/orderVolumn'
@@ -85,7 +86,7 @@ import PriceStepper from './components/priceStepper'
 import FooterBtn from './components/footerBtn'
 import Pending from './pending'
 import Success from './success'
-import { minus, divide, getDecimalNum } from '@/utils/calculation'
+import { minus, divide, getDecimalNum, mul } from '@/utils/calculation'
 import { Toast } from 'vant'
 export default {
     components: {
@@ -103,7 +104,7 @@ export default {
         const route = useRoute()
         const router = useRouter()
         const chart = ref(null)
-        const { symbolId, positionId } = route.query
+        const { symbolId, positionId, orderId, takeProfit, stopLoss } = route.query
         const state = reactive({
             loading: false,
             disabled: positionId,
@@ -121,8 +122,8 @@ export default {
             volumn: 0.01,
             value: 3,
             pendingPrice: 0, // 挂单价
-            stopLoss: 0, // 止损单价
-            takeProfit: 0, // 止盈单价
+            stopLoss: stopLoss || 0, // 止损单价
+            takeProfit: takeProfit || 0, // 止盈单价
             orderParams: {}, // 订单入参
             resData: {},
             timeId: ''
@@ -138,13 +139,14 @@ export default {
 
         // 当前产品
         const product = computed(() => store.getters.productActived)
+
         const positionList = computed(() => store.state._trade.positionList)
         const profitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
 
         // 设置默认手数
         watch(
             () => product.value.minVolume,
-            newval => (state.volumn = Math.max(newval, product.value.volumeStep)),
+            newval => (state.volumn = newval),
             { immediate: true }
         )
         // 止损价格变更
@@ -205,9 +207,9 @@ export default {
                 symbolId: Number(product.value.symbol_id),
                 requestTime: Date.now(),
                 requestNum: state.volumn * product.value.contractSize,
-                requestPrice: requestPrice * p,
-                stopLoss: Number(state.stopLoss) ? state.stopLoss * p : undefined,
-                takeProfit: Number(state.takeProfit) ? state.takeProfit * p : undefined
+                requestPrice: mul(requestPrice, p),
+                stopLoss: Number(state.stopLoss) ? mul(state.stopLoss, p) : undefined,
+                takeProfit: Number(state.takeProfit) ? mul(state.takeProfit, p) : undefined
             }
 
             state.loading = true
@@ -228,6 +230,32 @@ export default {
                 .catch(err => {
                     state.loading = false
                 })
+        }
+
+        // 点击修改订单
+        const handleUpdateOrder = () => {
+            if (takeProfit === state.takeProfit || stopLoss === state.stopLoss) {
+                return Toast('数据未修改')
+            }
+            const p = Math.pow(10, product.value.symbolDigits)
+            const params = {
+                orderId: orderId,
+                positionId: positionId,
+                stopLoss: Number(state.stopLoss) ? mul(state.stopLoss, p) : 0,
+                takeProfit: Number(state.takeProfit) ? mul(state.takeProfit, p) : 0
+            }
+            debugger
+            state.loading = true
+            updateOrder(params).then(res => {
+                state.loading = false
+                if (res.check()) {
+                    Toast('修改成功')
+                    router.push({ name: 'Position' })
+                }
+            }).catch(err => {
+                state.loading = false
+                console.log(err)
+            })
         }
 
         const onHide = () => {
@@ -265,14 +293,21 @@ export default {
             if (item.val === 1) store.commit('_trade/Update_pendingPrice', 0)
         }
 
+        // 组件销毁之前清除定时器
+        onBeforeUnmount(() => {
+            clearTimeout(state.timeId)
+        })
+
         return {
             ...toRefs(state),
             product,
             chart,
             openOrder,
+            handleUpdateOrder,
             profitLossRang,
             selectOpenOrder,
-            onHide
+            onHide,
+
         }
     }
 }

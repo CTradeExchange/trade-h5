@@ -20,7 +20,7 @@ export default {
     },
     setup () {
         // 登录之后重新初始化msg socket,否则token取不到
-        MsgSocket.initPing()
+        // MsgSocket.initPing()
 
         const store = useStore()
         const productList = computed(() => store.state._quote.productList)

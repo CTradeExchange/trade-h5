@@ -27,7 +27,8 @@ export default {
         Top
     },
     setup (props) {
-        const { ctx } = getCurrentInstance()
+        const instance = getCurrentInstance()
+
         const state = reactive({
             checked: false,
             loading: false
@@ -40,7 +41,8 @@ export default {
                 message: '确定退出登录吗',
             }).then(() => {
                 state.loading = true
-                ctx.$MsgSocket.ws.close()
+                // 退出登录 断开ws
+                instance.appContext.config.globalProperties.$MsgSocket.ws.close()
                 logout().then(res => {
                     state.loading = false
                     if (res.check()) {

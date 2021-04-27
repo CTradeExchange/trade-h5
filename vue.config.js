@@ -59,6 +59,9 @@ module.exports = {
             '/cats-manage-api': {
                 target: 'http://uatwpview.cats-trade.com'
             },
+            '/upload': {
+                target: 'http://uatcatsapi.cats-trade.com/upload'
+            },
         }
     },
     chainWebpack: config => {

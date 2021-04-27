@@ -91,7 +91,7 @@ export default {
         // 修改订单
         const modifyOrder = () => {
             state.show = false
-            router.push({ name: 'Order', query: { symbolId: state.cur.symbolId, positionId: state.cur.positionId } })
+            router.push({ name: 'Order', query: { symbolId: state.cur.symbolId, positionId: state.cur.positionId, orderId: state.cur.orderId, takeProfit: state.cur.takeProfitDecimal, stopLoss: state.cur.stopLossDecimal } })
         }
         return {
             ...toRefs(state),
