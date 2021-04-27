@@ -13,7 +13,7 @@ var UDFCompatibleDatafeed = /** @class */ (function (_super) {
      * @return {*}
      */
     function UDFCompatibleDatafeed(datafeedURL, otherConfig, updateFrequency) {
-        if (updateFrequency === void 0) { updateFrequency = 10 * 1000; }
+        if (updateFrequency === void 0) { updateFrequency = 0.5 * 1000; }
         var _this = this;
         var requester = new Requester();
         var quotesProvider = new QuotesProvider(datafeedURL, requester);

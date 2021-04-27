@@ -1,38 +1,44 @@
 <template>
     <div ref='chartWrap' class='chartWrap'>
-        <tv ref='tv'>
-            <template #default='{ setSymbol,resolutionList, setResolution, filterProductList }'>
+        <tv v-if='initialValue' ref='tv' a='1' :initial-value='initialValue' @symbolChanged='symbolChanged'>
+            <template #default='{ setSymbol,resolutionList, setResolution }'>
                 <Top>
                     <template #right>
-                        <div class='resolution-wrap'>
-                            <van-popover
-                                v-model:show='showProductPopover'
-                                :actions='filterProductList'
-                                class='tv-product-popover'
-                                @select='e => setSymbol(e.value)'
-                            >
-                                <template #reference>
-                                    <van-button type='primary'>
-                                        产品
-                                    </van-button>
-                                </template>
-                            </van-popover>
-                        </div>
+                        <div class='btn-wrap'>
+                            <div class='btn'>
+                                <van-popover
+                                    v-model:show='showProductPopover'
+                                    :actions='filterProductList'
+                                    class='tv-product-popover'
+                                    overlay
+                                    @select='setSymbol'
+                                >
+                                    <template #reference>
+                                        <van-button class='btn' type='primary'>
+                                            <van-icon name='points' size='25' />
+                                        </van-button>
+                                    </template>
+                                </van-popover>
+                            </div>
 
-                        <div class='resolution-wrap'>
-                            <van-popover
-                                v-model:show='showResolutionPopover'
-                                :actions='resolutionList'
-                                class='tv-resolution-popover'
-                                theme='dark'
-                                @select='e => setResolution(e.value)'
-                            >
-                                <template #reference>
-                                    <van-button type='primary'>
-                                        周期
-                                    </van-button>
-                                </template>
-                            </van-popover>
+                            <div class='btn'>
+                                <van-popover
+                                    v-model:show='showResolutionPopover'
+                                    :actions='resolutionList'
+                                    class='tv-resolution-popover'
+                                    overlay
+                                    @select='e => setResolution(e.value)'
+                                >
+                                    <template #reference>
+                                        <van-button class='btn' type='primary'>
+                                            <van-icon name='chart-trending-o' size='25' />
+                                        </van-button>
+                                    </template>
+                                </van-popover>
+                            </div>
+                            <div class='btn' @click='gotoOrder'>
+                                <van-icon name='arrow' size='25' />
+                            </div>
                         </div>
                     </template>
                 </Top>
@@ -45,6 +51,11 @@
 import Top from '@m/layout/top'
 import tv from '@/components/tradingview/tv'
 import { Popover } from 'vant'
+import { computed, watch } from 'vue'
+import { useStore } from 'vuex'
+import { QuoteSocket } from '@/plugins/socket/socket'
+import { useRouter, useRoute } from 'vue-router'
+
 export default {
     components: {
         tv,
@@ -65,10 +76,68 @@ export default {
         // this.width = chartWrap.clientWidth
         console.log('chart mounted')
     },
-    methods: {
-        propSetSymbol (id) {
-            console.log(this.$refs.tv)
+    setup () {
+        const router = useRouter()
+        const route = useRoute()
+        const store = useStore()
+        const productList = computed(() => store.state._quote.productList)
+        // 订阅产品
+        const subscribList = productList.value.map(({ symbolId }) => symbolId)
+        store.dispatch('_quote/querySymbolBaseInfoList', subscribList)
+        QuoteSocket.send_subscribe(subscribList)
+
+        const filterProductList = computed(
+            () => productList.value
+                .slice(0, 10)
+                .filter(e => e.symbolName)
+                .map(e => ({
+                    text: e.symbolName,
+                    value: e.symbolId,
+                    description: e.symbolName,
+                    price_digits: e.price_digits,
+                    pricescale: Math.pow(10, e.price_digits)
+                }))
+        )
+
+        const initialValue = computed(() => {
+            if (!filterProductList.value.length) {
+                return null
+            }
+            const symbolId = localStorage.getItem('symbolIdForChart')
+            if (symbolId) {
+                const target = filterProductList.value.find(e => e.value + '' === symbolId)
+                if (target) {
+                    return target
+                }
+            }
+            return filterProductList.value[0]
+        })
+
+        watch(initialValue, (val) => {
+            val && localStorage.setItem('symbolIdForChart', val.value)
+        })
+
+        const gotoOrder = () => {
+            router.push({
+                name: 'Order',
+                query: {
+                    ...route.query,
+                    symbolId: localStorage.getItem('symbolIdForChart')
+                },
+            })
         }
+
+        return {
+            filterProductList,
+            initialValue,
+            gotoOrder
+        }
+    },
+    methods: {
+        symbolChanged (id) {
+            localStorage.setItem('symbolIdForChart', id)
+        },
+
     }
 }
 </script>
@@ -92,4 +161,26 @@ export default {
         width: auto;
     }
 }
+.btn-wrap {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    .btn {
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        justify-content: center;
+        padding: 0 10px;
+        background: var(--primary);
+        border: 0;
+        .van-button {
+            padding: 0;
+        }
+        .van-icon {
+            align-self: center;
+        }
+    }
+}
+
 </style>

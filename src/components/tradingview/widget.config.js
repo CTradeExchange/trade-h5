@@ -35,8 +35,6 @@ export function WidgetConfig () {
             // 'edit_buttons_in_legend',
             // 在表单左上角元素信息中隐藏“设置”按钮
             'symbol_info',
-            // logo
-            'adaptive_logo',
             // “撤销”、“重做”按钮
             'header_undo_redo',
             // 成交量是否显示
@@ -67,7 +65,9 @@ export function WidgetConfig () {
             // 禁用右边价格坐标弹窗
             'scales_context_menu',
             // 禁用图表上下滑动，上下滑动是直接滑动页面
-            'vert_touch_drag_scroll'
+            'vert_touch_drag_scroll',
+            // 显示有关可能的鼠标/快捷键/ UI操作的弹出提示
+            'popup_hints'
         ],
         enabled_features: [
             // 指标栏目

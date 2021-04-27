@@ -1,6 +1,39 @@
+import dayjs from 'dayjs'
+
 import { QuoteSocket } from '@/plugins/socket/socket'
+import store from '@m/store/index'
+
 let isdebug = true
 let lastBar = null // 记录最新k线时间
+let tickListener = null
+let symbolParams = null
+let kline = null
+let oldPrice = null
+
+store.subscribe((mutation, state) => {
+    try {
+        if(kline && typeof tickListener !== 'function' || mutation.type !== '_quote/Update_productTick'){
+            return
+        }
+        if(
+            !symbolParams
+            || symbolParams.symbolId + '' !== mutation.payload.symbolId + ''
+            ){
+            return
+        }
+
+        const { tick_time, price } = mutation.payload
+        if(oldPrice === price){
+            return
+        }
+        oldPrice = price
+        const tick = normalizeTick(price, symbolParams.resolution, tick_time)
+        tickListener(tick)
+        isdebug && debugTick(tick, symbolParams)
+    } catch (error) {
+        console.error(error)
+    }
+})
 
 // 历史k线
 export function getKline(params, firstDataRequest){
@@ -47,6 +80,7 @@ export function getKline(params, firstDataRequest){
                         lastBar = bars[bars.length-1] || null
                     }
 
+                    kline = bars
                     return {
                         bars,
                         meta:{
@@ -60,83 +94,55 @@ export function getKline(params, firstDataRequest){
         })
 }
 
-// 实时报价
-export function getTick(params){
-    return new Promise((resolve) => {
-        const fn = () => {
-            if(QuoteSocket.ws.readyState ===1 ){
-                resolve()
-            } else {
-                setTimeout(fn, 1000)
-            }
-        }
-        fn()
-    })
-    .then(() => {
-        const { symbolId, resolution } = params
-        const requestParams = {
-            symbol_list: [
-                {
-                    symbolId,
-                    trade_type: 1
-                }
-            ],
-        }
-        return QuoteSocket.send(14000, requestParams)
-            .then(res => {
-                isdebug && debugTick(res,requestParams)
 
-                const checkResult = validateRes(res)
-                if(checkResult){
-                    return checkResult
-                }
-                const {data: { tick_list }} = res
-                const bars = normalizeTick(tick_list, resolution)
-                console.log(bars)
-
-
-                return {
-                    bars,
-                    meta:{
-                        noData: !bars.length
-                    }
-                }
-            })
-            .catch(error => {
-                console.error(error)
-            })
-    })
+export function setTickRequest(params, tickEvent){
+    symbolParams = params
+    tickListener = tickEvent
 }
 
-function normalizeTick(tickList, resolution){
-    if(!tickList){
+
+function normalizeTick(price, resolution, tickTime){
+    if(!price || !lastBar){
         return []
     }
-    if(!Array.isArray(tickList)){
-        tickList = [tickList]
+
+    let bar = {}
+
+    if(lastBar.time >= tickTime || isSameTime(resolution, lastBar.time, tickTime)){
+        bar = {
+            time: lastBar.time,
+            open: lastBar.open,
+            high: Math.max(lastBar.high, price),
+            low: Math.min(lastBar.low, price),
+            close: parseFloat(price),
+        }
+    } else {
+        bar = {
+            ...lastBar,
+            close: price,
+            time: tickTime
+        }
     }
 
-    console.log(resolution)
-    return tickList.map(e => {
-        // const pow = Math.pow(10, e.price_digits)
-        const pow = 1
-        const bar = {
-            time: parseFloat(e.tick_time),
-            close: parseFloat(e.close_price) / pow,
-            open:  parseFloat(e.open_price) / pow,
-            high:  parseFloat(e.high_price) / pow,
-            low:  parseFloat(e.low_price) / pow,
-        }
-        if(lastBar){
-            if(lastBar.time >= bar.time){
-                bar.time = lastBar.time
-            } else {
+    lastBar = bar
+    return bar
+}
 
-            }
-        }
+function isSameTime(resolution, lastBarTime, tickTime){
+    // console.log('isSameTime: ', resolution, lastBarTime, tickTime)
+    let oldTime = dayjs(lastBarTime)
+    let newTime = dayjs(tickTime)
 
-        return bar
-    })
+    if(/^[0-9]+$/.test(resolution)){
+        // 小于日k
+        const oldMinutes = oldTime.hour() * 60 + oldTime.minute()
+        const newMinutes = newTime.hour() * 60 + newTime.minute()
+        // console.log(oldMinutes, newMinutes)
+        return newMinutes - oldMinutes<resolution
+    } else {
+        return oldTime === newTime
+    }
+
 }
 
 function validateRes(res){
@@ -169,9 +175,8 @@ function debugKline(res,requestParams){
     console.groupEnd()
 }
 
-function debugTick(res,requestParams){
-    console.groupCollapsed(`%c请求实时报价:⬇`,  `color:${res.ret === 200 ? 'green': 'red'}`)
-    console.log('request:', JSON.stringify(requestParams, null, ' '))
-    console.log('response:', res, ' ')
+function debugTick(tick, requestParams){
+    console.group('%c实时报价:⬇', 'color:green')
+    console.log(JSON.stringify(tick))
     console.groupEnd()
 }

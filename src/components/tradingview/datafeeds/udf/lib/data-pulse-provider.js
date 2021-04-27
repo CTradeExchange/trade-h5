@@ -4,7 +4,7 @@ var DataPulseProvider = /** @class */ (function () {
         this._subscribers = {};
         this._requestsPending = 0;
         this._historyProvider = historyProvider;
-        setInterval(this._updateData.bind(this), updateFrequency);
+        // setInterval(this._updateData.bind(this), updateFrequency);
     }
     DataPulseProvider.prototype.subscribeBars = function (symbolInfo, resolution, newDataCallback, listenerGuid) {
         if (this._subscribers.hasOwnProperty(listenerGuid)) {
@@ -77,11 +77,11 @@ var DataPulseProvider = /** @class */ (function () {
         // Pulse updating may miss some trades data (ie, if pulse period = 10 secods and new bar is started 5 seconds later after the last update, the
         // old bar's last 5 seconds trades will be lost). Thus, at fist we should broadcast old bar updates when it's ready.
         if (isNewBar) {
-            if (bars.length < 2) {
-                throw new Error('Not enough bars in history for proper pulse update. Need at least 2.');
-            }
-            var previousBar = bars[bars.length - 2];
-            subscriptionRecord.listener(previousBar);
+            // if (bars.length < 2) {
+            //     throw new Error('Not enough bars in history for proper pulse update. Need at least 2.');
+            // }
+            // var previousBar = bars[bars.length - 2];
+            // subscriptionRecord.listener(previousBar);
         }
         subscriptionRecord.lastBarTime = lastBar.time;
         subscriptionRecord.listener(lastBar);

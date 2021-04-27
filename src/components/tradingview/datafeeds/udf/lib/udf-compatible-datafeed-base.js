@@ -175,7 +175,10 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
         if(this.otherConfig.isControl){
             // 这里需要异步返回结果
             setTimeout(() => {
-                onResultReady(querySymbolInfo(symbolName))
+                onResultReady({
+                    ...querySymbolInfo(symbolName),
+                    ...(this.otherConfig.symbolInfo || {})
+                })
             }, 0)
         } else {
             if (!this._configuration.supports_group_request) {
@@ -208,13 +211,14 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
         }
     };
     UDFCompatibleDatafeedBase.prototype.getBars = function (symbolInfo, resolution, rangeStartDate, rangeEndDate, onResult, onError, firstDataRequest) {
-        this._historyProvider.getBars(symbolInfo, resolution, rangeStartDate, rangeEndDate, firstDataRequest)
+        this._historyProvider.getBars(symbolInfo, resolution, rangeStartDate, rangeEndDate, firstDataRequest, this.onTick)
             .then(function (result) {
             onResult(result.bars, result.meta);
         })
             .catch(onError);
     };
     UDFCompatibleDatafeedBase.prototype.subscribeBars = function (symbolInfo, resolution, onTick, listenerGuid, onResetCacheNeededCallback) {
+        this.setOnTick(onTick)
         this._dataPulseProvider.subscribeBars(symbolInfo, resolution, onTick, listenerGuid);
     };
     UDFCompatibleDatafeedBase.prototype.unsubscribeBars = function (listenerGuid) {
@@ -247,6 +251,17 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
         }
         logMessage("UdfCompatibleDatafeed: Initialized with " + JSON.stringify(configurationData));
     };
+
+    // 用于提供给用户修改产品属性
+    UDFCompatibleDatafeedBase.prototype.setSymbolInfo = function(info){
+        this.otherConfig.symbolInfo = Object.assign({}, info)
+    }
+
+    // 存储实时报价的监听方法
+    UDFCompatibleDatafeedBase.prototype.setOnTick = function(listener){
+        this.onTick = listener
+    }
+
     return UDFCompatibleDatafeedBase;
 }());
 export { UDFCompatibleDatafeedBase };
@@ -289,7 +304,7 @@ function otherDefaultConfiguration() {
 /* 商品信息结构 */
 function querySymbolInfo (code_id) {
     if(!code_id){
-        throw new Error('产品symbolId不存在')
+        console.error('产品symbolId不存在')
     }
     return {
         name: code_id,
@@ -303,10 +318,10 @@ function querySymbolInfo (code_id) {
         session: '24x7', // 交易时段
         has_intraday: true, // 布尔值显示商品是否具有日内（分钟）历史数据
         has_no_volume: false, // 布尔表示商品是否拥有成交量数据
-        description: 'product.simplified', // 商品说明。这个商品说明将被打印在图表的标题栏中。
+        description: '', // 商品说明。这个商品说明将被打印在图表的标题栏中。
         type: 'stock', // 仪表的可选类型 stock, index, forex, futures, bitcoin,  expression,  spread, cfd 或其他字符串
         supported_resolutions: Object.keys(resolutionToKlineType),
-        pricescale: 10000000, // 价格精度
+        pricescale: 10000, // 价格精度
         has_weekly_and_monthly: true // 允许周期：周/月
     }
 }
