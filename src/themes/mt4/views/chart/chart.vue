@@ -37,7 +37,7 @@
                                 </van-popover>
                             </div>
                             <div class='btn' @click='gotoOrder'>
-                                <i class='icon icon_jiaoyi'></i>
+                                <i class='icon icon_xindingdan'></i>
                             </div>
                         </div>
                     </template>
@@ -179,7 +179,7 @@ export default {
         }
         i {
             align-self: center;
-            font-size: 20px;
+            font-size: 22px;
         }
     }
 }
