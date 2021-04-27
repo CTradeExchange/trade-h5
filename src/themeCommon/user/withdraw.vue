@@ -6,7 +6,7 @@
             :menu='false'
             :right-action='rightAction'
             :show-center='true'
-            @rightClick='toWithdrawList'
+            @rightClick='$router.push({ path: "/withdrawRecord" })'
         />
         <Loading :show='loading' />
         <div class='wrap'>
@@ -71,8 +71,7 @@
         class-name='add-success'
         confirm-button-text='返回首页'
         show-cancel-button='false'
-        @cancel='onCancel'
-        @confirm='onConfirm'
+        @confirm='$router.push("/quote")'
     >
         <i class='icon_success'></i>
         <p class='title'>
@@ -97,7 +96,7 @@ import { useRouter } from 'vue-router'
 import { Toast, Dialog } from 'vant'
 import { isEmpty } from '@/utils/util'
 import { useStore } from 'vuex'
-import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate, queryBankList, computeWithdrawFee } from '@/api/user'
+import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate, queryBankList, computeWithdrawFee, checkKycApply } from '@/api/user'
 export default {
     components: {
         Top
@@ -155,6 +154,7 @@ export default {
             }
         }
 
+        /* 防抖 */
         watchEffect((onInvalidate) => {
             const timer = debounceFn()// 再重新生成定时器
             console.log('change', state.amount)
@@ -173,10 +173,6 @@ export default {
             state.bankList.map(item => { item.checked = false })
             item.checked = true
             state.show = false
-        }
-
-        const toWithdrawList = () => {
-            router.push({ path: '/withdrawRecord' })
         }
 
         const toAddBank = () => {
@@ -306,14 +302,19 @@ export default {
             return `${value.substring(0, 4)} ${'*'.repeat(value.length - 8).replace(/(.{4})/g, '$1 ')}${value.length % 4 ? ' ' : ''}${value.slice(-4)}`
         }
 
-        const onCancel = () => {
-            // state.withdrawSuccess = false
-        }
-        const onConfirm = () => {
-            router.push('/quote')
+        const checkKyc = () => {
+            checkKycApply({
+                businessCode: 'withdraw'
+            }).then(res => {
+
+            }).catch(err => {
+                console.log(err)
+            })
         }
 
         onBeforeMount(() => {
+            // 检测kyc是否通过
+            checkKyc()
             // 获取取款配置
             getWithdrawConfig()
             // 获取取款汇率
@@ -324,7 +325,6 @@ export default {
 
         return {
             rightAction,
-            toWithdrawList,
             ...toRefs(state),
             openSheet,
             chooseBank,
@@ -333,9 +333,7 @@ export default {
             confirm,
             customInfo,
             hideMiddle,
-            getWithdrawFee,
-            onCancel,
-            onConfirm
+            getWithdrawFee
         }
     }
 

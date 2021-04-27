@@ -141,7 +141,6 @@ export default {
             ).then(res => {
                 state.loading = false
                 if (res.check()) {
-                    debugger
                     document.getElementById(detail.name).src = res.data
                     state.conditionModel[detail.name] = res.data
                     Toast('上传成功')

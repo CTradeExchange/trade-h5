@@ -1,4 +1,6 @@
 import { pageConfig, wpCompanyConfig, wpNav, wpSelfSymbolIndex } from '@/api/wpApi'
+import { guid, isEmpty, unzip } from '@/utils/util'
+import User from './user'
 
 export default {
     namespaced: true,
@@ -30,8 +32,16 @@ export default {
                     commit('UPDATE_tradeType', data.tradeTypeList[0]['id']) // 先存储公司默认的玩法类型
                 }
                 // 自选产品
-                const selfSymbolData = await wpSelfSymbolIndex()
-                if (selfSymbolData) {
+                // const selfSymbolData = await wpSelfSymbolIndex()
+                const guestCustomerGroupId = JSON.parse(window['wp_SysSetting']).customerGroupId
+                const wp_SelfSymbolIndex = JSON.parse(unzip(window['wp_SelfSymbolIndex']))
+                const customerInfo = User.state.customerInfo
+                const products = wp_SelfSymbolIndex[0].data.product[!isEmpty(customerInfo) ? customerInfo.customerGroupId : guestCustomerGroupId]
+                // const customerInfo = this.$store.state._user.customerInfo
+                debugger
+                if (!isEmpty(products)) {
+                    // commit('_quote/Update_productList', products, { root: true })
+                    const selfSymbolData = { symbol_ids: products }
                     const productList = selfSymbolData.symbol_ids.map(el => ({ symbolId: el }))
                     commit('_quote/Update_productList', productList, { root: true })
                     commit('_quote/Update_productActivedID', selfSymbolData.symbol_ids[0], { root: true })

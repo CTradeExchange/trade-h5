@@ -22,10 +22,12 @@ export default {
         productList: [], // 产品列表
         productMap: {}, // 产品列表
         productActivedID: null, // 当前操作的产品ID
+
     },
     mutations: {
         // 更新产品列表
         Update_productList (state, data = []) {
+            debugger
             state.productList = data
             const productMap = state.productMap
             data.forEach(item => {

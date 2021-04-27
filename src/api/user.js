@@ -331,3 +331,15 @@ export function kycLevelApply (data) {
         data
     })
 }
+
+/* 指定业务场景是否KYC通过 */
+export function checkKycApply (data) {
+    return request({
+        url: '/global/customer.KycWebApiService.checkKycApply',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

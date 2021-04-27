@@ -20,6 +20,10 @@ export const wpCompanyConfig = () => {
 }
 // 获取自选产品
 export const wpSelfSymbolIndex = () => {
+    // pageConfig('SelfSymbolIndex').then(res => {
+
+    // })
+
     // return pageConfig('SelfSymbolIndex')
 
     return Promise.resolve({
