@@ -7,7 +7,7 @@ export function WidgetConfig () {
         container_id: 'tv_chart_container',
         // BEWARE: no trailing slash is expected in feed URL
         library_path: '/charting_library/',
-        // custom_css_url: 'customCssUrl.css?v=1.0.1',
+        custom_css_url: 'customCssUrl.css?v=1.0.1',
         locale: 'zh',
 
         disabled_features: [
