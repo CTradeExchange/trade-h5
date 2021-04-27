@@ -33,7 +33,7 @@
                         S/L
                     </span>
                     <span class='value'>
-                        {{ computePrice(data.stopLoss, data.closeSymbolDigits) ||'--' }}
+                        {{ data.stopLoss ? computePrice(data.stopLoss, data.closeSymbolDigits) : '--' }}
                     </span>
                 </li>
                 <li class='flexWrap'>
@@ -49,7 +49,7 @@
                         T/P
                     </span>
                     <span class='value'>
-                        {{ computePrice(data.takeProfit, data.closeSymbolDigits)||'--' }}
+                        {{ data.takeProfit ? computePrice(data.takeProfit, data.closeSymbolDigits) : '--' }}
                     </span>
                 </li>
                 <li class='flexWrap'>

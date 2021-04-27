@@ -1,19 +1,26 @@
 <template>
     <div class='volumn'>
-        <a class='item' :class="{disabled}" href='javascript:;' v-show="product.volumeStep" @click='minusVolumn(product.volumeStep*10)'>
-            -{{product.volumeStep*10}}
+        <a v-show='product.volumeStep' class='item' :class='{ disabled }' href='javascript:;' @click='minusVolumn(product.volumeStep*10)'>
+            -{{ product.volumeStep*10 }}
         </a>
-        <a class='item' :class="{disabled}" href='javascript:;' v-show="product.volumeStep" @click='minusVolumn(product.volumeStep)'>
-            -{{product.volumeStep}}
+        <a v-show='product.volumeStep' class='item' :class='{ disabled }' href='javascript:;' @click='minusVolumn(product.volumeStep)'>
+            -{{ product.volumeStep }}
         </a>
-        <span class='item' :class="{disabled}">
-            <input v-model.trim='volumn' class='volumnInput' :disabled="disabled" :class="{disabled}" type='text' @input='onInput' />
+        <span class='item' :class='{ disabled }'>
+            <input
+                v-model.trim='volumn'
+                class='volumnInput'
+                :class='{ disabled }'
+                :disabled='disabled'
+                type='text'
+                @input='onInput'
+            />
         </span>
-        <a class='item' :class="{disabled}" href='javascript:;' v-show="product.volumeStep" @click='plusVolumn(product.volumeStep)'>
-            +{{product.volumeStep}}
+        <a v-show='product.volumeStep' class='item' :class='{ disabled }' href='javascript:;' @click='plusVolumn(product.volumeStep)'>
+            +{{ product.volumeStep }}
         </a>
-        <a class='item' :class="{disabled}" href='javascript:;' v-show="product.volumeStep" @click='plusVolumn(product.volumeStep*10)'>
-            +{{product.volumeStep*10}}
+        <a v-show='product.volumeStep' class='item' :class='{ disabled }' href='javascript:;' @click='plusVolumn(product.volumeStep*10)'>
+            +{{ product.volumeStep*10 }}
         </a>
     </div>
 </template>
@@ -37,13 +44,13 @@ export default {
         }
         // 快速加减
         const plusVolumn = (num) => {
-            if(props.disabled) return false;
+            if (props.disabled) return false
             state.volumn = plus(state.volumn, num)
             emit('update:modelValue', state.volumn)
         }
         // 快速减
         const minusVolumn = (num) => {
-            if(props.disabled) return false;
+            if (props.disabled) return false
             state.volumn = minus(state.volumn, num)
             emit('update:modelValue', state.volumn)
         }

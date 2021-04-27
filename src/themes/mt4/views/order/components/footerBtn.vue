@@ -1,7 +1,7 @@
 <template>
     <div v-if='$route.query.positionId' class='footerBtn'>
         <div class='col'>
-            <button class='btn' :disabled='loading' @click='modifyOrder'>
+            <button class='btn' :disabled='loading' @click='updateOrder()'>
                 修改
             </button>
         </div>
@@ -35,7 +35,7 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 export default {
     props: ['loading', 'openOrderSelected', 'pendingPrice', 'stopLoss', 'takeProfit'],
-    emits: ['openOrder'],
+    emits: ['openOrder', 'updateOrder'],
     setup (props, { emit }) {
         const store = useStore()
         const profitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
@@ -101,14 +101,15 @@ export default {
         const openOrder = param => {
             emit('openOrder', param)
         }
-        const modifyOrder = () => {
-            console.log('modifyOrder')
+        const updateOrder = () => {
+            console.log('updateOrder')
+            emit('updateOrder')
         }
         return {
             buyDisabled,
             sellDisabled,
             openOrder,
-            modifyOrder
+            updateOrder
         }
     }
 }

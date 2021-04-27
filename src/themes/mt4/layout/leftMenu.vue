@@ -29,29 +29,29 @@
                 <li class='item' @click="visible=false;$router.push('/chart')"> <i class='icon icon_tubiao'></i> <strong>图表</strong> </li>
                 <li class='item' @click="visible=false;$router.push('/trade')"> <i class='icon icon_jiaoyi'></i> <strong>交易</strong> </li>
                 <li class='item' @click="visible=false;$router.push('/history')"> <i class='icon icon_lishi'></i> <strong>历史</strong> </li> -->
-                <li class='item' @click="visible=false;$router.push('/news')">
-                    <i class='icon icon_xinwen'></i> <strong>新闻</strong>
-                </li>
-                <li class='item' @click="visible=false;$router.push('/fundDetail')">
-                    <i class='icon icon_zijinmingxi'></i> <strong>资金明细</strong>
-                </li>
-                <li class='item' @click="visible=false;$router.push('/msg')">
-                    <i class='icon icon_xinxi'></i> <strong>消息中心</strong>
-                </li>
-
-                <li class='item' @click="visible=false;$router.push('/personal')">
-                    <i class='icon icon_gerenxinxi '></i> <strong>个人信息</strong>
-                </li>
-                <li class='item' @click="visible=false;$router.push('/fund')">
-                    <i class='icon icon_jiemian'></i> <strong>账户资金</strong>
-                </li>
-
-                <li class='item' @click="visible=false;$router.push({path:'/desposit'})">
+                <li class='item' @click="visible=false;$router.push({ path:'/desposit' })">
                     <i class='icon icon_cunkuan'></i> <strong>存款</strong>
                 </li>
                 <li class='item' @click="visible=false;$router.push('/withdraw')">
                     <i class='icon icon_qukuan'></i> <strong>取款</strong>
                 </li>
+                <li class='item' @click="visible=false;$router.push('/fund')">
+                    <i class='icon icon_jiemian'></i> <strong>账户资金</strong>
+                </li>
+                <li class='item' @click="visible=false;$router.push('/fundDetail')">
+                    <i class='icon icon_zijinmingxi'></i> <strong>资金明细</strong>
+                </li>
+                <li class='item' @click="visible=false;$router.push('/personal')">
+                    <i class='icon icon_gerenxinxi '></i> <strong>个人信息</strong>
+                </li>
+                <li class='item' @click="visible=false;$router.push('/news')">
+                    <i class='icon icon_xinwen'></i> <strong>新闻</strong>
+                </li>
+
+                <li class='item' @click="visible=false;$router.push('/msg')">
+                    <i class='icon icon_xinxi'></i> <strong>消息中心</strong>
+                </li>
+
                 <li class='item' @click="visible=false;$router.push('/page')">
                     <i class='icon icon_jiemian'></i> <strong>界面</strong>
                 </li>

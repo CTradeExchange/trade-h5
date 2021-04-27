@@ -5,7 +5,9 @@
                 <p class='productName'>
                     {{ data.symbolName }},
                     <span class='volumn'>
-                        {{ Number(data.direction) === 1 ? 'buy' : 'sell' }}
+                        <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
+                            {{ Number(data.direction) === 1 ? 'buy' : 'sell' }}
+                        </span>
                         {{ positionVolume }}
                     </span>
                 </p>
@@ -27,7 +29,7 @@
                         S/L
                     </span>
                     <span class='value'>
-                        {{ data.stopLoss||'--' }}
+                        {{ data.stopLoss ? computePrice(data.stopLoss, data.digits) : '--' }}
                     </span>
                 </li>
                 <li class='flexWrap'>
@@ -43,7 +45,7 @@
                         T/P
                     </span>
                     <span class='value'>
-                        {{ data.takeProfit||'--' }}
+                        {{ data.takeProfit ? computePrice(data.takeProfit, data.digits) : '--' }}
                     </span>
                 </li>
                 <li class='flexWrap'>
@@ -61,7 +63,7 @@
 <script>
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import { priceFormat } from '@/utils/util'
+import { priceFormat, isEmpty } from '@/utils/util'
 import dayjs from 'dayjs'
 import { minus } from '@/utils/calculation'
 export default {
@@ -79,11 +81,19 @@ export default {
         const product = computed(() => store.state._quote.productMap[data.symbolId])
 
         const positionVolume = computed(() => data.requestNum / data.contractSize)
+
+        const computePrice = (price, digits) => {
+            if (!isEmpty(price)) {
+                return priceFormat(price, digits)
+            }
+        }
+
         return {
             ...toRefs(state),
             ...onceState,
             product,
             positionVolume,
+            computePrice
         }
     },
 }

@@ -82,3 +82,16 @@ export function queryPBOOrderPage (data) {
         data
     })
 }
+
+/* 修改订单 */
+export function updateOrder (data) {
+    return request({
+        url: '/global/tradeapi.OrderApiService.updateOrder',
+        method: 'post',
+        headers: {
+            group: 'tradeApi',
+            version: '0.0.1',
+        },
+        data
+    })
+}

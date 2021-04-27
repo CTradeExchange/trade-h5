@@ -5,7 +5,9 @@
                 <p class='productName'>
                     {{ data.symbolName }},
                     <span class='volumn'>
-                        {{ data.direction===1?'buy':'sell' }}
+                        <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
+                            {{ data.direction===1?'buy':'sell' }}
+                        </span>
                         {{ data.closeVolume }}
                     </span>
                 </p>

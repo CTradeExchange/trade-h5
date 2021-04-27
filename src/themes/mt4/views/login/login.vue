@@ -160,7 +160,7 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const store = useStore()
-        const { ctx } = getCurrentInstance()
+        const instance = getCurrentInstance()
         const state = reactive({
             pwdVisible: false,
             kycPop: false,
@@ -215,15 +215,10 @@ export default {
             store.dispatch('_user/login', params).then(res => {
                 // console.log(res)
                 if (res.invalid()) return false
-
-                ctx.$MsgSocket.initPing()
-                // ctx.$MsgSocket.ws.open()
                 // 登录成功重新连接websocket
-                store.commit('_user/Update_userAccount', '')
-                // const msgWS = CreateSocket(msgService)
-                // MsgSocket.init(msgWS, store)
-                // msgWS.open()
 
+                instance.appContext.config.globalProperties.$MsgSocket.ws.open()
+                store.commit('_user/Update_userAccount', '')
                 if (parseInt(res.data.loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
                     state.loginPwdPop = true
                 } else {

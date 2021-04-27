@@ -123,7 +123,9 @@ export default {
                 if (res.check() && res.data) {
                     const data = res.data
                     state.loading = false
-                    state.finished = data.totalPage === data.current
+                    if (res.data.list.length === 0) {
+                        state.finished = true
+                    }
                 }
             }).catch(() => {
                 state.loading = false

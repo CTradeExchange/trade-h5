@@ -5,7 +5,6 @@
             <a class='icon icon_xindingdan' href='javascript:;' @click='newOrder'></a>
         </template>
     </Top>
-
     <div class='container'>
         <CapitalList :data='capitalListData' />
         <div class='titleBar'>
@@ -60,7 +59,7 @@ export default {
                 { title: '结余：', value: accountInfo.value.balance ? priceFormat(accountInfo.value.balance, accountInfo.value.digit) : '--' },
                 { title: '净值：', value: accountInfo.value.netWorth ? priceFormat(accountInfo.value.netWorth, accountInfo.value.digit) : '--' },
                 { title: '可用预付款：', value: accountInfo.value.availableMargin ? priceFormat(accountInfo.value.availableMargin, accountInfo.value.digit) : '--' },
-                { title: '预付款比率(%)：', value: accountInfo.value.marginRadio ? priceFormat(accountInfo.value.marginRadio, accountInfo.value.digit) + '%' : '--' },
+                { title: '预付款比率(%)：', value: accountInfo.value.marginRadio ? accountInfo.value.marginRadio + '%' : '--' },
                 { title: '预付款：', value: accountInfo.value.occupyMargin ? priceFormat(accountInfo.value.occupyMargin, accountInfo.value.digit) : '--' },
             ]
         })
