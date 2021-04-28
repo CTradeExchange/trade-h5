@@ -46,6 +46,7 @@ export default {
                 logout().then(res => {
                     state.loading = false
                     if (res.check()) {
+                        sessionStorage.removeItem('customerGroupId')
                         removeLoginParams()
                         router.push('/login')
                     }
