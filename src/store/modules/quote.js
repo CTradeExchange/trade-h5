@@ -22,12 +22,10 @@ export default {
         productList: [], // 产品列表
         productMap: {}, // 产品列表
         productActivedID: null, // 当前操作的产品ID
-
     },
     mutations: {
         // 更新产品列表
         Update_productList (state, data = []) {
-            debugger
             state.productList = data
             const productMap = state.productMap
             data.forEach(item => {
@@ -72,6 +70,7 @@ export default {
         // 产品基础信息列表
         querySymbolBaseInfoList ({ dispatch, commit, state, rootState }, symbolIds = []) {
             const productMap = state.productMap
+
             const newSymbolIds = symbolIds.filter(el => !productMap[el].symbolName)
             const guestCustomerGroupId = rootState._base.wpCompanyInfo.customerGroupId
             const params = {
@@ -94,6 +93,7 @@ export default {
         // 产品详细信息
         querySymbolInfo ({ dispatch, commit, state, rootState }, symbolId) {
             const productMap = state.productMap
+
             if (productMap[symbolId].contractSize) return Promise.resolve(new CheckAPI({ code: '0', data: {} }))
             const params = {
                 symbolId: Number(symbolId),

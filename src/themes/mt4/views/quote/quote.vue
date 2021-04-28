@@ -26,11 +26,11 @@ export default {
         const productList = computed(() => store.state._quote.productList)
 
         // 订阅产品
-        console.log('productList*****', productList)
-        debugger
+
         const subscribList = productList.value.map(({ symbolId }) => symbolId)
 
         QuoteSocket.send_subscribe(subscribList)
+
         store.dispatch('_quote/querySymbolBaseInfoList', subscribList)
 
         const loginParams = getLoginParams()
