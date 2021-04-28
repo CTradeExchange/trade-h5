@@ -1,4 +1,4 @@
-import { login, findCustomerInfo, queryWithdrawConfig } from '@/api/user'
+import { login, findCustomerInfo } from '@/api/user'
 import { localSet, setToken } from '@/utils/util'
 
 export default {
@@ -40,6 +40,7 @@ export default {
                     setToken(data.token)
                     commit('Update_loginData', data)
                     commit('Update_customerInfo', data)
+                    commit('_quote/Update_productListByLogin', data.customerGroupId, { root: true })
                     commit('_base/UPDATE_tradeType', data.tradeType, { root: true }) // 登录后存储用户的玩法类型
                     // dispatch('findCustomerInfo')  // findCustomerInfod 的数据目前和登录的数据一样，不需要再次调用
                 }

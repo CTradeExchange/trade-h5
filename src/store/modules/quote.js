@@ -65,6 +65,14 @@ export default {
             sessionStorage.setItem('productActived', JSON.stringify(state.productMap[id]))
             state.productActivedID = id
         },
+        Update_productListByLogin (state, customerGroupId) {
+            try {
+                const productGroup = JSON.parse(window.sessionStorage.getItem('productGroup'))
+                state.productList = state.productList.filter(e => productGroup[customerGroupId].includes(e.symbolId + ''))
+            } catch (error) {
+                console.error(error)
+            }
+        }
     },
     actions: {
         // 产品基础信息列表
@@ -106,7 +114,7 @@ export default {
             return querySymbolInfo(params).then((res) => {
                 if (res.check() && res.data) {
                     commit('Update_product', res.data)
-                    if (rootState._quote.productActivedID == symbolId) {
+                    if (rootState._quote.productActivedID === symbolId) {
                         sessionStorage.setItem('productActived', JSON.stringify(productMap[symbolId]))
                     }
                 }
