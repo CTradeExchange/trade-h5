@@ -34,15 +34,6 @@ export default {
                 // 自选产品
                 const selfSymbolData = await wpSelfSymbolIndex()
 
-                // const guestCustomerGroupId = sessionStorage.getItem('guestCustomerGroupId')
-                // const wp_SelfSymbolIndex = JSON.parse(unzip(window['wp_SelfSymbolIndex']))
-                // const products = wp_SelfSymbolIndex[0].data.product
-                // // const customerInfo = this.$store.state._user.customerInfo
-
-                // console.log('user', User.state.customerInfo)
-                // debugger
-
-                // const products = selfSymbolData[0].data.product
                 const wp_SelfSymbolIndex = JSON.parse(unzip(window['wp_SelfSymbolIndex']))
 
                 sessionStorage.setItem('guestCustomerGroupId', data.customerGroupId)

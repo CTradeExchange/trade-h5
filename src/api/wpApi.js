@@ -1,4 +1,4 @@
-import { unzip } from '@/utils/util'
+import { unzip, isEmpty } from '@/utils/util'
 import request_wp from '@/utils/request_wp'
 
 /* 获取wp公司配置信息 */
@@ -21,6 +21,12 @@ export const wpCompanyConfig = () => {
 // 获取自选产品
 export const wpSelfSymbolIndex = () => {
     return pageConfig('SelfSymbolIndex').then(res => {
+        if (isEmpty(res[0].data.product)) {
+            return {
+                symbol_ids: []
+            }
+        }
+
         let symbol_ids = Object.values(res[0].data.product).reduce((prev, cur) => prev.concat(cur))
         symbol_ids = [...new Set(symbol_ids)].sort((a, b) => a - b)
         return {

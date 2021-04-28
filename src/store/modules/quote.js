@@ -1,6 +1,7 @@
 import { querySymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
 import { plus } from '@/utils/calculation'
 import CheckAPI from '@/utils/checkAPI'
+import { isEmpty } from '@/utils/util'
 
 // 处理显示的点差  点差=（买价-卖价）/pip
 function spreadText (product) {
@@ -28,7 +29,11 @@ export default {
             const productGroup = JSON.parse(sessionStorage.getItem('productGroup'))
             const guestCustomerGroupId = sessionStorage.getItem('customerGroupId') || sessionStorage.getItem('guestCustomerGroupId')
             const list = productGroup[guestCustomerGroupId]
-            return state.productList.filter(e => list.includes(String(e.symbolId)))
+            if (!isEmpty(list)) {
+                return state.productList.filter(e => list.includes(String(e.symbolId)))
+            } else {
+                return []
+            }
         }
     },
     mutations: {

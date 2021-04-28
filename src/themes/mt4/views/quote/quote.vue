@@ -27,8 +27,11 @@ export default {
         // 订阅产品
 
         const subscribList = productList.value.map(({ symbolId }) => symbolId)
-        QuoteSocket.send_subscribe(subscribList)
-        store.dispatch('_quote/querySymbolBaseInfoList', subscribList)
+
+        if (subscribList.length > 0) {
+            QuoteSocket.send_subscribe(subscribList)
+            store.dispatch('_quote/querySymbolBaseInfoList', subscribList)
+        }
 
         const loginParams = getLoginParams()
         if (loginParams) store.dispatch('_trade/queryPositionPage')
