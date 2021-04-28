@@ -41,7 +41,12 @@ export default {
 
                 // console.log('user', User.state.customerInfo)
                 // debugger
+
                 // const products = selfSymbolData[0].data.product
+                const wp_SelfSymbolIndex = JSON.parse(unzip(window['wp_SelfSymbolIndex']))
+
+                sessionStorage.setItem('guestCustomerGroupId', data.customerGroupId)
+                sessionStorage.setItem('productGroup', JSON.stringify(wp_SelfSymbolIndex[0].data.product))
                 if (selfSymbolData) {
                     const productList = selfSymbolData.symbol_ids.map(el => ({ symbolId: el }))
 

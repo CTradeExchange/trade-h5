@@ -72,7 +72,7 @@ class SocketEvent {
         const customerInfo = this.$store.state._user.customerInfo
 
         const guestCustomerGroupId = JSON.parse(window['wp_SysSetting']).customerGroupId
-        sessionStorage.setItem('guestCustomerGroupId', guestCustomerGroupId)
+
         productIds = wp_SelfSymbolIndex[0].data.product[customerInfo.customerGroupId ?? guestCustomerGroupId]
 
         // productIds = productIds.map(el => Number(el))
