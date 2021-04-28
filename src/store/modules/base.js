@@ -1,4 +1,6 @@
 import { pageConfig, wpCompanyConfig, wpNav, wpSelfSymbolIndex } from '@/api/wpApi'
+import { isEmpty, unzip } from '@/utils/util'
+import User from './user'
 
 export default {
     namespaced: true,
@@ -32,9 +34,17 @@ export default {
                 // 自选产品
                 const selfSymbolData = await wpSelfSymbolIndex()
 
+                // const guestCustomerGroupId = sessionStorage.getItem('guestCustomerGroupId')
+                // const wp_SelfSymbolIndex = JSON.parse(unzip(window['wp_SelfSymbolIndex']))
+                // const products = wp_SelfSymbolIndex[0].data.product
+                // // const customerInfo = this.$store.state._user.customerInfo
+
+                // console.log('user', User.state.customerInfo)
+                // debugger
                 // const products = selfSymbolData[0].data.product
                 if (selfSymbolData) {
                     const productList = selfSymbolData.symbol_ids.map(el => ({ symbolId: el }))
+
                     commit('_quote/Update_productList', productList, { root: true })
                     commit('_quote/Update_productActivedID', selfSymbolData.symbol_ids[0], { root: true })
                 }

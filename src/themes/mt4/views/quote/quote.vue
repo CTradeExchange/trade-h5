@@ -24,13 +24,14 @@ export default {
 
         const store = useStore()
         const productList = computed(() => store.state._quote.productList)
-
+        const customInfo = computed(() => store.state._user.customerInfo)
         // 订阅产品
 
-        const subscribList = productList.value.map(({ symbolId }) => symbolId)
+        const productGroup = JSON.parse(sessionStorage.getItem('productGroup'))
+        const subscribList = productGroup[customInfo.value.customerGroupId || sessionStorage.getItem('guestCustomerGroupId')]
+        console.log('productGroup', productGroup)
 
         QuoteSocket.send_subscribe(subscribList)
-
         store.dispatch('_quote/querySymbolBaseInfoList', subscribList)
 
         const loginParams = getLoginParams()

@@ -1,13 +1,13 @@
 <template>
     <div>
         <template v-for='item in productList' :key='item'>
-            <productItem v-if="item.symbolName" :product='item' @open='openProduct(item)' />
+            <productItem v-if='item.symbolName' :product='item' @open='openProduct(item)' />
         </template>
     </div>
     <van-popup v-model:show='show'>
         <section class='popContainer'>
             <p class='title'>
-                {{cur.symbolName}}
+                {{ cur.symbolName }}
             </p>
             <div class='menulist'>
                 <a class='item of-1px-bottom ' href='javascript:;' @click='toOrder'>

@@ -24,7 +24,9 @@ export const wpSelfSymbolIndex = () => {
 
     // })
 
-    // return pageConfig('SelfSymbolIndex')
+    pageConfig('SelfSymbolIndex').then(res => {
+        sessionStorage.setItem('productGroup', JSON.stringify(res[0].data.product))
+    })
 
     return Promise.resolve({
         symbol_ids: [1, 2, 3, 4, 5, 6, 7, 8],

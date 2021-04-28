@@ -79,7 +79,9 @@ export default {
                 customerGroupId: rootState._user.customerInfo?.customerGroupId ?? guestCustomerGroupId,
                 accountId: rootState._user.customerInfo?.accountId,
             }
+
             if (newSymbolIds.length === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
+
             return querySymbolBaseInfoList(params).then((res) => {
                 if (res.check()) {
                     res.data.forEach(el => {
