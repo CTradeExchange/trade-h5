@@ -8,7 +8,7 @@
 <script>
 import Top from '@m/layout/top'
 import productListComp from '@m/modules/productList/productList.vue'
-import { QuoteSocket, MsgSocket } from '@/plugins/socket/socket'
+import { QuoteSocket } from '@/plugins/socket/socket'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { getLoginParams } from '@/utils/util'
@@ -23,14 +23,13 @@ export default {
         // MsgSocket.initPing()
 
         const store = useStore()
-        const productList = computed(() => store.state._quote.productList)
-        const customInfo = computed(() => store.state._user.customerInfo)
+        // const productList = computed(() => store.state._quote.productList)
+        // const customInfo = computed(() => store.state._user.customerInfo)
+        const productList = computed(() => store.getters['_quote/productListByUser'])
         // 订阅产品
 
-        const productGroup = JSON.parse(sessionStorage.getItem('productGroup'))
-        const subscribList = productGroup[customInfo.value.customerGroupId || sessionStorage.getItem('guestCustomerGroupId')]
-        console.log('productGroup', productGroup)
-
+        // const productGroup = JSON.parse(sessionStorage.getItem('productGroup'))
+        const subscribList = productList.value.map(({ symbolId }) => symbolId)
         QuoteSocket.send_subscribe(subscribList)
         store.dispatch('_quote/querySymbolBaseInfoList', subscribList)
 

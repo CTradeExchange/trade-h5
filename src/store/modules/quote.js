@@ -23,6 +23,14 @@ export default {
         productMap: {}, // 产品列表
         productActivedID: null, // 当前操作的产品ID
     },
+    getters: {
+        productListByUser (state) {
+            const productGroup = JSON.parse(sessionStorage.getItem('productGroup'))
+            const guestCustomerGroupId = sessionStorage.getItem('customerGroupId') || sessionStorage.getItem('guestCustomerGroupId')
+            const list = productGroup[guestCustomerGroupId]
+            return state.productList.filter(e => list.includes(String(e.symbolId)))
+        }
+    },
     mutations: {
         // 更新产品列表
         Update_productList (state, data = []) {
@@ -64,14 +72,6 @@ export default {
         Update_productActivedID (state, id) {
             sessionStorage.setItem('productActived', JSON.stringify(state.productMap[id]))
             state.productActivedID = id
-        },
-        Update_productListByLogin (state, customerGroupId) {
-            try {
-                const productGroup = JSON.parse(window.sessionStorage.getItem('productGroup'))
-                state.productList = state.productList.filter(e => productGroup[customerGroupId].includes(e.symbolId + ''))
-            } catch (error) {
-                console.error(error)
-            }
         }
     },
     actions: {

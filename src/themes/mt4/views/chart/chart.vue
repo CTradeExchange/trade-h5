@@ -80,7 +80,9 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const store = useStore()
-        const productList = computed(() => store.state._quote.productList)
+        // const productList = computed(() => store.state._quote.productList)
+        const productList = computed(() => store.getters['_quote/productListByUser'])
+
         // 订阅产品
         const subscribList = productList.value.map(({ symbolId }) => symbolId)
         store.dispatch('_quote/querySymbolBaseInfoList', subscribList)

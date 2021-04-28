@@ -40,7 +40,7 @@ export default {
                     setToken(data.token)
                     commit('Update_loginData', data)
                     commit('Update_customerInfo', data)
-                    commit('_quote/Update_productListByLogin', data.customerGroupId, { root: true })
+                    sessionStorage.setItem('customerGroupId', data.customerGroupId)
                     commit('_base/UPDATE_tradeType', data.tradeType, { root: true }) // 登录后存储用户的玩法类型
                     // dispatch('findCustomerInfo')  // findCustomerInfod 的数据目前和登录的数据一样，不需要再次调用
                 }
@@ -54,6 +54,7 @@ export default {
             return findCustomerInfo().then((res) => {
                 if (res.check()) {
                     commit('Update_customerInfo', res.data)
+                    sessionStorage.setItem('customerGroupId', res.data.customerGroupId)
                 }
                 commit('Update_loginLoading', false)
                 return res

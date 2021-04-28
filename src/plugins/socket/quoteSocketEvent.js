@@ -1,5 +1,5 @@
 import { tickFormat } from './socketUtil'
-import { guid, unzip } from '@/utils/util'
+import { guid } from '@/utils/util'
 
 // websocket消息事件
 class SocketEvent {
@@ -68,12 +68,12 @@ class SocketEvent {
 
     // 订阅产品报价
     send_subscribe (productIds = []) {
-        const wp_SelfSymbolIndex = JSON.parse(unzip(window['wp_SelfSymbolIndex']))
-        const customerInfo = this.$store.state._user.customerInfo
+        // const wp_SelfSymbolIndex = JSON.parse(unzip(window['wp_SelfSymbolIndex']))
+        // const customerInfo = this.$store.state._user.customerInfo
 
-        const guestCustomerGroupId = JSON.parse(window['wp_SysSetting']).customerGroupId
+        // const guestCustomerGroupId = JSON.parse(window['wp_SysSetting']).customerGroupId
 
-        productIds = wp_SelfSymbolIndex[0].data.product[customerInfo.customerGroupId ?? guestCustomerGroupId]
+        // productIds = wp_SelfSymbolIndex[0].data.product[customerInfo.customerGroupId ?? guestCustomerGroupId]
 
         // productIds = productIds.map(el => Number(el))
         this.subscribedList = productIds
