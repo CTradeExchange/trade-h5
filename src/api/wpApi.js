@@ -20,17 +20,21 @@ export const wpCompanyConfig = () => {
 }
 // 获取自选产品
 export const wpSelfSymbolIndex = () => {
-    // pageConfig('SelfSymbolIndex').then(res => {
-
-    // })
+    return pageConfig('SelfSymbolIndex').then(res => {
+        let symbol_ids = Object.values(res[0].data.product).reduce((prev, cur) => prev.concat(cur))
+        symbol_ids = [...new Set(symbol_ids)].sort((a, b) => a - b)
+        return {
+            symbol_ids
+        }
+    })
 
     // pageConfig('SelfSymbolIndex').then(res => {
     //     sessionStorage.setItem('productGroup', JSON.stringify(res[0].data.product))
     // })
 
-    return Promise.resolve({
-        symbol_ids: [1, 2, 3, 4, 5, 6, 7, 8],
-    })
+    // return Promise.resolve({
+    //     symbol_ids: [1, 2, 3, 4, 5, 6, 7, 8],
+    // })
 }
 export const wpNav = () => pageConfig('Nav')
 
