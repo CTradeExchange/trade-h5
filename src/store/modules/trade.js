@@ -140,10 +140,12 @@ export default {
         // 查询持仓列表
         queryPositionPage ({ dispatch, commit, state, rootState }, params = {}) {
             const accountListLen = rootState._user.customerInfo?.accountList?.length
-
-            if (!accountListLen) return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空持仓
-            commit('Update_positionLoading', true)
             dispatch('queryPBOOrderPage')
+            if (!accountListLen) {
+                commit('Update_positionList', [])
+                return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空持仓
+            }
+            commit('Update_positionLoading', true)
             return queryPositionPage(params).then((res) => {
                 commit('Update_positionLoading', false)
                 if (res.check()) {
@@ -155,7 +157,10 @@ export default {
         // 平仓历史记录列表
         queryHistoryCloseOrderList ({ dispatch, commit, state, rootState }, params = {}) {
             const accountListLen = rootState._user.customerInfo?.accountList?.length
-            if (!accountListLen) return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空数据
+            if (!accountListLen) {
+                commit('Update_historyList', [])
+                return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空数据
+            }
             commit('Update_historyLoading', true)
             return queryHistoryCloseOrderList(params).then((res) => {
                 commit('Update_historyLoading', false)
@@ -169,7 +174,10 @@ export default {
         // 预埋单列表
         queryPBOOrderPage ({ dispatch, commit, state, rootState }, params = {}) {
             const accountListLen = rootState._user.customerInfo?.accountList?.length
-            if (!accountListLen) return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空数据
+            if (!accountListLen) {
+                commit('Update_pendingList', [])
+                return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空数据
+            }
             return queryPBOOrderPage(params).then((res) => {
                 if (res.check()) {
                     commit('Update_pendingList', res.data)

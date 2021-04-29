@@ -61,17 +61,17 @@
 
             <div class='pay-info'>
                 <div class='pi-item'>
-                    预计支付 {{ amount }} {{ checkedType.accountCurrency }}
+                    预计支付 {{ amount || '--' }} {{ checkedType.accountCurrency }}
                 </div>
                 <div class='pi-item'>
-                    预计到账 {{ amount + presentAmount }} {{ checkedType.accountCurrency }}
+                    预计到账  {{ checkType ? parseFloat(amount) + parseFloat(presentAmount) - parseFloat(checkedType.fee) : '--' }} {{ checkedType.accountCurrency }}
                 </div>
                 <div class='line'></div>
                 <div class='pi-item'>
-                    赠送金额 {{ presentAmount }} {{ checkedType.accountCurrency }}
+                    赠送金额 {{ presentAmount || '--' }} {{ checkedType.accountCurrency }}
                 </div>
                 <div class='pi-item'>
-                    手续费 {{ checkedType.fee }} {{ checkedType.accountCurrency }}
+                    手续费 {{ checkedType.fee || '--' }} {{ checkedType.accountCurrency }}
                 </div>
             </div>
         </div>
@@ -180,7 +180,7 @@ export default {
             PayTypes: [],
             checkedType: '',
             rateConfig: '',
-            presentAmount: 0,
+            presentAmount: 5,
             loading: false,
             despositVis: false
 
@@ -216,6 +216,7 @@ export default {
             state.otherAmountVis = !state.otherAmountVis
             state.amount = ''
             state.currIndex = 99
+            state.presentAmount = ''
         }
 
         // 获取支付通道

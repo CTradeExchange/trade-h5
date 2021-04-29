@@ -29,12 +29,13 @@
 </template>
 
 <script>
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs, getCurrentInstance } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { getDevice, setToken } from '@/utils/util'
 export default {
     setup () {
+        const instance = getCurrentInstance()
         const RegisterData = JSON.parse(sessionStorage.getItem('RegisterData')) ?? {}
         const RegisterParams = JSON.parse(sessionStorage.getItem('RegisterParams')) ?? {}
         const store = useStore()
@@ -42,18 +43,22 @@ export default {
         const onceState = reactive({
             accountNo: RegisterData.data?.customerNo
         })
+        const token = RegisterData.data?.token
+        if (token) setToken(token)
         const toExperience = () => {
-            const token = RegisterData.data?.token
-            if (token) setToken(token)
-            // 注册成功重新获取客户信息
-            store.dispatch('_user/findCustomerInfo')
             return router.replace({ name: 'Quote' })
         }
         const toDesposit = () => {
-            const token = RegisterData.data?.token
-            if (token) setToken(token)
             return router.replace({ name: 'Desposit' })
         }
+        // 注册成功重新获取客户信息
+        store.dispatch('_user/findCustomerInfo')
+        // 重新登录清除账户信息
+        store.commit('_user/Update_userAccount', '')
+        // 重新开启ws
+        instance.appContext.config.globalProperties.$MsgSocket.ws.open()
+        instance.appContext.config.globalProperties.$QuoteSocket.ws.open()
+
         return {
             ...onceState,
             toExperience,
