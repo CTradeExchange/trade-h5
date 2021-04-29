@@ -97,6 +97,7 @@ class SocketEvent {
     // 处理异地登录踢出
     handleLogout (data) {
         Dialog.alert({
+            theme: 'round-button',
             message: '您的账号在异地登录，请重新登录',
         }).then(() => {
             this.$store.dispatch('_user/logout')

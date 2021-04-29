@@ -303,24 +303,35 @@ export default {
         }
 
         const checkKyc = () => {
+            state.loading = true
             checkKycApply({
                 businessCode: 'withdraw'
             }).then(res => {
-
+                state.loading = false
+                if (Number(res.data) !== 2) {
+                    return Dialog.alert({
+                        theme: 'round-button',
+                        confirmButtonText: Number(res.data) === 1 ? '去查看' : '去认证',
+                        message: Number(res.data) === 2 ? 'KYC审核中，请耐心等待' : '当前操作需要KYC认证',
+                    }).then(() => {
+                        router.replace({ name: 'Authentication' })
+                    })
+                }
+                // 获取取款配置
+                getWithdrawConfig()
+                // 获取取款汇率
+                getWithdrawRate()
+                // 获取银行卡列表
+                getBankList()
             }).catch(err => {
+                state.loading = false
                 console.log(err)
             })
         }
 
         onBeforeMount(() => {
-            // 检测kyc是否通过
+            // 检测取款是否需要kyc
             checkKyc()
-            // 获取取款配置
-            getWithdrawConfig()
-            // 获取取款汇率
-            getWithdrawRate()
-            // 获取银行卡列表
-            getBankList()
         })
 
         return {

@@ -48,8 +48,6 @@ export default {
     },
     setup ({ product }, context) {
         const store = useStore()
-        // 第一次进来产品页面缺少持仓标识
-        store.dispatch('_trade/queryPositionPage')
 
         const positionList = computed(() => store.state._trade.positionList)
         const quoteMode = computed(() => store.state.quoteMode)

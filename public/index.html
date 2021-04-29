@@ -45,8 +45,6 @@
         window['wp_apiPath'] = '/cats-manage-api/json-view';
         /* ##wp_apiPath end## */
 
-        window['companyId'] = '';
-
         /* ##wp_SysSetting start## */
         window['wp_SysSetting'] = '{"usdcnyCodeid":573043,"usdhkdCodeid":573044,"googleAnalytics":"","language":"zh-CN","loginTime":86400,"onlineService":"https://cs.se6868w.com:8188/?company_id=14&utm_source=1&utm_medium=1&utm_campaign=1&utm_term=1&utm_content=1&chat_type=1&lang=zh-CN","webApiUri":"","imsApiUri":"https://imsapi.mircoinfolab.com:1315","apiService":"http://uatcatsapi.cats-trade.com","quoteService":"ws://uatcatsapi.cats-trade.com/ws/","msgService":"ws://uatcatsapi.cats-trade.com/msg","tradeService":"ws://uatcatsapi.cats-trade.com/cats-gateway/ws","marginLevel":{"marginLess":100,"marginWarn":500},"companyId":3,"tradeTypeList":[{"name":"CFD","id":"1"}],"customerGroupId":8,"currencyList":[{"id":1,"code":"USD","name":"美元"},{"id":2,"code":"CNY","name":"人民币"},{"id":3,"code":"GBP","name":"英镑"},{"id":4,"code":"AUD","name":"澳元"},{"id":5,"code":"JPY","name":"日元"},{"id":6,"code":"CHF","name":"瑞郎"},{"id":7,"code":"EUR","name":"欧元"},{"id":8,"code":"CAD","name":"加元"},{"id":9,"code":"HKD","name":"港币"},{"id":10,"code":"NZD","name":"纽元"}]}';
         /* ##wp_SysSetting end## */
@@ -65,10 +63,6 @@
         window['wp_SelfSymbolIndex'] = 'H4sIAAAAAAAAA3WRwYrDIBCGn8bjwiZdyV7bBnpdtr0XE62VGkfMBJq3r9nGWSEJyPA7nzO/jowfWHVgZWlkDGy3j7FX9nYeuwbs9XNKlscYUeiVA4SlQDHzv3aibWFweBm9mtN8Sp+ooCb1ey0yXU6a1++tenoTxlpg1iQxa9zjCJ2nW1GTRH6gN2jALU80on3oEC8ol6zH0ar8KZ0I2rgPhBWrmQWj77hJG0CEbhNbdVup9UJK4/S6bYIbvglvGSe+cK5o7qhoNnEIKe8DyKFFlk2nyL/332JH6osUz7/2O68rZlKlxesXJY0jGJkCAAA=';
         /* ##wp_SelfSymbolIndex end## */
 
-        /* ##wp_SelfSymbolIndex end## */
-
-
-        /* ##wp_SelfSymbolIndex end## */
 
         /* ##wp_TradeIndex start## */
         window['wp_TradeIndex'] = '';
@@ -82,17 +76,29 @@
         window['wp_Mine'] = '';
         /* ##wp_Mine end## */
 
-        /* ##接口域名 ## */
+        /* ##wp_companyId start## */
+        window['companyId'] = '';
+        /* ##wp_companyId end## */
+
+        /* ##接口域名*/
+        /* ##wp_apiService start## */
         window['apiService'] = '//uatcatsapi.cats-trade.com';
+        /* ##wp_apiService end## */
 
-        /* ##行情websocket地址 start## */
-        window['quoteService'] = '//uatcatsapi.cats-trade.com/ws/';
+        /* ##行情websocket地址## */
+        /* ##wp_quoteService start## */
+        window['quoteService'] = '//uatcatsapi.cats-trade.com/ws/'
+        /* ##wp_quoteService end## */
 
-        /* ##消息websocket地址 start## */
-        window['msgService'] = '//uatcatsapi.cats-trade.com/msg';
+        /* ##消息websocket地址## */
+        /* ##wp_msgService start## */
+        window['msgService'] = '//uatcatsapi.cats-trade.com/msg'
+        /* ##wp_msgService end## */
 
         /* ##交易websocket地址 start## */
-        window['tradeService'] = '//uatcatsapi.cats-trade.com/cats-gateway/ws';
+        /* ##wp_tradeService start## */
+        window['tradeService'] = '//uatcatsapi.cats-trade.com/cats-gateway/ws'
+        /* ##wp_tradeService end## */
 
 
     </script>

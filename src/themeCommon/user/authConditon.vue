@@ -178,6 +178,7 @@ export default {
                 if (res.check()) {
                     Dialog.alert({
                         title: '提示',
+                        theme: 'round-button',
                         message: levelCode + '认证提交成功，等待客服审核',
                     }).then(() => {
                         router.go(-1)

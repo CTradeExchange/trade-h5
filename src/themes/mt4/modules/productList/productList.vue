@@ -47,6 +47,9 @@ export default {
             show: false,
             cur: {},
         })
+        // 第一次进来产品页面缺少持仓标识
+        store.dispatch('_trade/queryPositionPage')
+
         let symbolId = null
         // 行情列表模式 1高级模式 2简单模式
         const quoteMode = computed(() => store.state.quoteMode)

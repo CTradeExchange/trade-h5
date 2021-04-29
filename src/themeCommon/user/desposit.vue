@@ -114,9 +114,9 @@
 import Top from '@/components/top'
 import { onBeforeMount, reactive, ref, computed, watch, toRefs } from 'vue'
 import { useRoute, useRouter, onBeforeRouteUpdate, onBeforeRouteEnter, onBeforeRouteLeave } from 'vue-router'
-import { queryPayType, queryDepositExchangeRate, handleDesposit } from '@/api/user'
+import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply } from '@/api/user'
 import { useStore } from 'vuex'
-import { Toast } from 'vant'
+import { Toast, Dialog } from 'vant'
 import { isEmpty } from '@/utils/util'
 import dayjs from 'dayjs'
 export default {
@@ -329,9 +329,32 @@ export default {
             state.despositVis = false
         }
 
+        const checkKyc = () => {
+            state.loading = true
+            checkKycApply({
+                businessCode: 'cashin'
+            }).then(res => {
+                state.loading = false
+                if (Number(res.data) !== 2) {
+                    return Dialog.alert({
+                        theme: 'round-button',
+                        confirmButtonText: Number(res.data) === 1 ? '去查看' : '去认证',
+                        message: Number(res.data) === 2 ? 'KYC审核中，请耐心等待' : '当前操作需要KYC认证',
+                    }).then(() => {
+                        router.replace({ name: 'Authentication' })
+                    })
+                }
+                getPayTypes()
+                getDepositExchangeRate()
+            }).catch(err => {
+                state.loading = false
+                console.log(err)
+            })
+        }
+
         onBeforeMount(() => {
-            getPayTypes()
-            getDepositExchangeRate()
+            // 检测存款是否需要kyc
+            checkKyc()
         })
 
         return {

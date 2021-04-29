@@ -218,6 +218,7 @@ export default {
                 // 登录成功重新连接websocket
 
                 instance.appContext.config.globalProperties.$MsgSocket.ws.open()
+                instance.appContext.config.globalProperties.$QuoteSocket.ws.open()
                 store.commit('_user/Update_userAccount', '')
                 if (parseInt(res.data.loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
                     state.loginPwdPop = true

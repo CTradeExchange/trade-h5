@@ -34,7 +34,10 @@ export default {
         }
 
         const loginParams = getLoginParams()
-        if (loginParams) store.dispatch('_trade/queryPositionPage')
+
+        if (loginParams) {
+            store.dispatch('_trade/queryPositionPage')
+        }
         return {}
     }
 }
