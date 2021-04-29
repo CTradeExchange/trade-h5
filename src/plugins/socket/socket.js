@@ -3,6 +3,8 @@ import CreateSocket from './createSocket'
 import QuoteSocketEvent from './quoteSocketEvent'
 import MsgSocketEvent from './msgSocketEvent'
 
+import store from '@/store'
+
 export const QuoteSocket = new QuoteSocketEvent() // 行情websocket
 export const MsgSocket = new MsgSocketEvent() // 消息websocket
 export default {
@@ -46,7 +48,9 @@ export default {
         msgWS.addEventListener('message', evt => {
             const data = JSON.parse(evt.data)
             if (data.msgCode === 'floatProfitLoss') {
-                MsgSocket.onMessage(data)
+                MsgSocket.handleProfitLoss(data)
+            } else if (data.msgCode === 'disconnect') {
+                MsgSocket.handleLogout(data)
             }
         })
 

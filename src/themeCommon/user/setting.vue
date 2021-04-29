@@ -21,14 +21,14 @@ import { logout } from '@/api/user'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { removeLoginParams } from '@/utils/util'
-import { MsgSocket } from '@/plugins/socket/socket'
+import { useStore } from 'vuex'
 export default {
     components: {
         Top
     },
     setup (props) {
         const instance = getCurrentInstance()
-
+        const store = useStore()
         const state = reactive({
             checked: false,
             loading: false
@@ -43,16 +43,7 @@ export default {
                 state.loading = true
                 // 退出登录 断开ws
                 instance.appContext.config.globalProperties.$MsgSocket.ws.close()
-                logout().then(res => {
-                    state.loading = false
-                    if (res.check()) {
-                        sessionStorage.removeItem('customerGroupId')
-                        removeLoginParams()
-                        router.push('/login')
-                    }
-                }).catch(err => {
-                    state.loading = true
-                })
+                store.dispatch('_user/logout')
             })
                 .catch(() => {
                     // on cancel

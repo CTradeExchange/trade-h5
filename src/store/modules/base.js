@@ -1,6 +1,5 @@
 import { pageConfig, wpCompanyConfig, wpNav, wpSelfSymbolIndex } from '@/api/wpApi'
 import { isEmpty, unzip } from '@/utils/util'
-import User from './user'
 
 export default {
     namespaced: true,

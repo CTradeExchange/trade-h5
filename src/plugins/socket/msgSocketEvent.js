@@ -1,5 +1,5 @@
-import { guid, getDevice, getToken, priceFormat } from '@/utils/util'
-import { QuoteSocket } from '@/plugins/socket/socket'
+import { guid, getDevice, getToken } from '@/utils/util'
+import { Dialog } from 'vant'
 // websocket消息事件
 class SocketEvent {
     constructor () {
@@ -84,14 +84,24 @@ class SocketEvent {
         }, 30000)
     }
 
-    // 收取到消息
-    onMessage (data) {
+    // 处理盈亏浮动数据和账户数据
+    handleProfitLoss (data) {
         console.log('收到消息', data)
         const content = data.content
         this.$store.commit('_user/Update_userAccount', content)
         if (content.positionProfitLossMessages.length > 0) {
             this.$store.commit('_trade/Update_positionProfitLossList', content.positionProfitLossMessages)
         }
+    }
+
+    // 处理异地登录踢出
+    handleLogout (data) {
+        Dialog.alert({
+            message: '您的账号在异地登录，请重新登录',
+        }).then(() => {
+            this.$store.dispatch('_user/logout')
+        })
+        this.close()
     }
 
     // 关闭

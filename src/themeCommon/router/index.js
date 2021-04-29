@@ -38,8 +38,7 @@ const routes = [
             title: '存款',
             footerMenu: false,
             roles: ['User'],
-        },
-        beforeEnter: [addParams],
+        }
     },
     {
         path: '/despositRecord',
@@ -183,15 +182,5 @@ const routes = [
     },
 
 ]
-
-function addParams (to, from) {
-    // if (Object.keys(to.query).length) { return { path: to.path, query: {}, hash: to.hash } }
-    console.log('nnn', to)
-    if (from.fullPath === '/') {
-        to.params = { aa: 3 }
-    }
-
-    // return { path: to.path, query: {}, hash: to.hash }
-}
 
 export default routes

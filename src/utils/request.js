@@ -59,6 +59,7 @@ service.interceptors.response.use(
             //     return service({ ...config, data: JSON.parse(config.data) })
             // })
         }
+
         const result = new CheckAPI(data)
         if (!result.check() && config.toastErr) {
             result.toast()

@@ -1,5 +1,6 @@
-import { login, findCustomerInfo } from '@/api/user'
-import { localSet, setToken } from '@/utils/util'
+import { login, findCustomerInfo, logout } from '@/api/user'
+import { localSet, setToken, removeLoginParams } from '@/utils/util'
+import router from '@m/router'
 
 export default {
     namespaced: true,
@@ -58,6 +59,17 @@ export default {
                 }
                 commit('Update_loginLoading', false)
                 return res
+            })
+        },
+        logout ({ dispatch, commit, state, rootState }, params = {}) {
+            return logout().then(res => {
+                if (res.check()) {
+                    sessionStorage.removeItem('customerGroupId')
+                    removeLoginParams()
+                    router.push('/login')
+                }
+                return res
+            }).catch(err => {
             })
         }
     }
