@@ -20,6 +20,7 @@ class SocketEvent {
 
     // ws发送数据格式
     getParam (msgType, data = {}) {
+        this.seq_id++
         const token = getToken()
         const param = {
             head: {
@@ -39,7 +40,6 @@ class SocketEvent {
     // 发送消息
     send (cmd_id, data, timeOut) {
         if (this.ws.readyState !== 1) return console.warn('消息websocket连接未准备好  readyState：', this.ws.readyState)
-        this.seq_id++
         const param = this.getParam(cmd_id, data)
         this.ws.send(JSON.stringify(param))
 
@@ -78,7 +78,8 @@ class SocketEvent {
         if (this.ws.readyState !== 1) return console.warn('消息websocket连接未准备好  readyState：', this.ws.readyState)
         let param = this.getParam('ping')
         this.ws.send(JSON.stringify(param))
-        setInterval(() => {
+        if (this.ping) clearInterval(this.ping)
+        this.ping = setInterval(() => {
             param = this.getParam('ping')
             this.ws.send(JSON.stringify(param))
         }, 30000)

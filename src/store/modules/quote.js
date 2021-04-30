@@ -8,7 +8,7 @@ function spreadText (product) {
     const pip = Math.pow(0.1, product.price_digits) * product.pointRatio
     const spread = (product.buy_price - product.sell_price) / pip
     const spDigit = String(product.pointRatio).length - 1 // 点差小数位
-    if (spread) product.spread_text = spread.toFixed(spDigit)
+    product.spread_text = spread.toFixed(spDigit)
 }
 
 // 报价计算点差
