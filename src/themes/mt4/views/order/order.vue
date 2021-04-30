@@ -234,7 +234,7 @@ export default {
 
         // 点击修改订单
         const handleUpdateOrder = () => {
-            if (takeProfit === state.takeProfit || stopLoss === state.stopLoss) {
+            if (takeProfit === state.takeProfit && stopLoss === state.stopLoss) {
                 return Toast('数据未修改')
             }
             const p = Math.pow(10, product.value.symbolDigits)

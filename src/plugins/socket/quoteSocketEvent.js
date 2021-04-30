@@ -21,6 +21,7 @@ class SocketEvent {
 
     // ws发送数据格式
     getParam (cmd_id, data) {
+        this.seq_id++
         const param = {
             cmd_id,
             data,
@@ -33,7 +34,6 @@ class SocketEvent {
     // 发送消息
     send (cmd_id, data, timeOut) {
         if (this.ws.readyState !== 1) return console.warn('行情websocket连接未准备好  readyState：', this.ws.readyState)
-        this.seq_id++
         const param = this.getParam(cmd_id, data)
         this.ws.send(JSON.stringify(param))
         if (!this.timer) {
@@ -128,8 +128,9 @@ class SocketEvent {
     // 心跳机制
     initPing () {
         if (this.ws.readyState !== 1) return console.warn('消息websocket连接未准备好  readyState：', this.ws.readyState)
-        const param = this.getParam(14008, {})
-        setInterval(() => {
+        if (this.ping) clearInterval(this.ping)
+        this.ping = setInterval(() => {
+            const param = this.getParam(14008, {})
             this.ws.send(JSON.stringify(param))
         }, 10000)
     }
