@@ -94,6 +94,7 @@ export default {
                     if (res.data.records && res.data.records.length > 0) {
                         state.list = state.list.concat(res.data.records)
                     }
+
                     // 数据全部加载完成
                     if (res.data.size * res.data.current >= res.data.total) {
                         state.finished = true
@@ -164,7 +165,8 @@ export default {
 }
 .msg-list {
     flex: 1;
-    overflow-y: auto;
+    height: 100%;
+    overflow: auto;
     .msg-item {
         padding: rem(30px);
         border-top: solid rem(20px) var(--btnColor);

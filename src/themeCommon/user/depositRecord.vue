@@ -14,6 +14,7 @@
                     v-model:loading='loading'
                     :finished='finished'
                     :finished-text='finishedText'
+                    :immediate-check='false'
                     @load='onLoad'
                 >
                     <van-collapse v-for='(item, index) in list' :key='index' v-model='activeIndex' accordion @change='handleFold(index)'>
@@ -37,10 +38,10 @@
                             <div class='withdraw-desc'>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        取款金额
+                                        存款金额
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.amount }}
+                                        {{ item.intendAmount }}
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -48,7 +49,7 @@
                                         币种
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.withdrawCurrency }}
+                                        {{ item.depositCurrency }}
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -65,15 +66,15 @@
                                         手续费
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.withdrawFee }}
+                                        {{ item.depositFee || '--' }}
                                     </span>
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        入账金额
+                                        实际入账
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.amount - item.withdrawFee }}
+                                        {{ item.finalAmount || '--' }}
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -90,6 +91,14 @@
                                     </span>
                                     <span class='right-val'>
                                         {{ formatTime(item.createTime) }}
+                                    </span>
+                                </div>
+                                <div class='w-item'>
+                                    <span class='left-label'>
+                                        入帐时间
+                                    </span>
+                                    <span class='right-val'>
+                                        --
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -131,14 +140,14 @@ export default {
 
         // 审核状态
         const states = {
-            0: '等待人工审批',
-            1: '审批失败',
-            2: '审批成功'
+            1: '待审批',
+            2: '审批失败',
+            3: '审批成功'
         }
         const activeIndex = ref(['0'])
         const state = reactive({
             loading: false,
-            size: 5,
+            size: 20,
             current: 1,
             list: [],
             finishedText: '没有更多了',

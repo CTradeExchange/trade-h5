@@ -3,7 +3,7 @@
         <Top>
             <template #right>
                 <!-- @click="$router.push({ name: 'Withdraw' })" -->
-                <van-icon name='plus' />
+                <van-icon class='icon-add' name='plus' />
             </template>
         </Top>
         <productListComp />
@@ -24,9 +24,6 @@ export default {
         Top,
     },
     setup () {
-        // 登录之后重新初始化msg socket,否则token取不到
-        // MsgSocket.initPing()
-
         const store = useStore()
         const productList = computed(() => store.getters['_quote/productListByUser'])
         // 订阅产品

@@ -14,9 +14,17 @@
                     v-model:loading='loading'
                     :finished='finished'
                     :finished-text='finishedText'
+                    :immediate-check='false'
                     @load='onLoad'
                 >
-                    <van-collapse v-for='(item, index) in list' :key='index' v-model='activeIndex' accordion @change='handleFold(index)'>
+                    <van-collapse
+                        v-for='(item, index) in list'
+                        :key='index'
+                        v-model='activeIndex'
+                        accordion
+                        class='aaa'
+                        @change='handleFold(index)'
+                    >
                         <van-collapse-item :name='index+1'>
                             <template #title>
                                 <p class='amount'>
@@ -131,14 +139,20 @@ export default {
 
         // 审核状态
         const states = {
-            0: '等待人工审批',
-            1: '审批失败',
-            2: '审批成功'
+            1: '待审批',
+            2: '审批失败',
+            3: '审批成功'
+        }
+
+        const transferStatus = {
+            1: '待转账',
+            2: '转账失败',
+            3: '转账成功'
         }
         const activeIndex = ref(['0'])
         const state = reactive({
             loading: false,
-            size: 5,
+            size: 20,
             current: 1,
             list: [],
             finishedText: '没有更多了',
@@ -189,8 +203,8 @@ export default {
 
         // 底部加载更多
         const onLoad = () => {
-            state.current++
             getWithdrawList()
+            state.current++
         }
 
         onMounted(() => {
