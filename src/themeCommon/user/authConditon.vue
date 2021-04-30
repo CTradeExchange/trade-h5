@@ -103,7 +103,8 @@ export default {
                 if (res.data.length > 0) {
                     res.data.forEach(item => {
                         state.countryActions.push({
-                            name: item.pathCode
+                            name: item.pathName,
+                            code: item.pathCode
                         })
                     })
                 }
@@ -116,7 +117,7 @@ export default {
         const onSelect = (item) => {
             try {
                 state.area = item.name
-                state.elementList = getArrayObj(state.list, 'pathCode', item.name).elementList
+                state.elementList = getArrayObj(state.list, 'pathCode', item.code).elementList
                 state.areaShow = false
             } catch (error) {
                 console.log(error)

@@ -108,3 +108,15 @@ export function closePboOrder (data) {
         data
     })
 }
+
+/* 根据客户组搜索产品 */
+export function getSymbolList (data) {
+    return request({
+        url: '/global/config.OpenSymbolDubboService.getSymbolList',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}

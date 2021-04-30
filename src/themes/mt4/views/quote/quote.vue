@@ -1,6 +1,11 @@
 <template>
     <main class='productMain'>
-        <Top />
+        <Top>
+            <template #right>
+                <!-- @click="$router.push({ name: 'Withdraw' })" -->
+                <van-icon name='plus' />
+            </template>
+        </Top>
         <productListComp />
     </main>
 </template>
