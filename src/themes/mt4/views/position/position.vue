@@ -32,7 +32,7 @@ import { reactive, toRefs, computed, onMounted, watch, onUpdated } from 'vue'
 import { useStore } from 'vuex'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useRouter } from 'vue-router'
-import { priceFormat } from '@/utils/util'
+import { priceFormat, isEmpty } from '@/utils/util'
 export default {
     components: {
         CapitalList,
@@ -56,11 +56,11 @@ export default {
         const accountInfo = computed(() => store.state._user.userAccount)
         const capitalListData = computed(() => {
             return [
-                { title: '结余：', value: accountInfo.value.balance ? priceFormat(accountInfo.value.balance, accountInfo.value.digit) : '--' },
-                { title: '净值：', value: accountInfo.value.netWorth ? priceFormat(accountInfo.value.netWorth, accountInfo.value.digit) : '--' },
-                { title: '可用预付款：', value: accountInfo.value.availableMargin ? priceFormat(accountInfo.value.availableMargin, accountInfo.value.digit) : '--' },
-                { title: '预付款比率(%)：', value: accountInfo.value.marginRadio ? accountInfo.value.marginRadio + '%' : '--' },
-                { title: '预付款：', value: accountInfo.value.occupyMargin ? priceFormat(accountInfo.value.occupyMargin, accountInfo.value.digit) : '--' },
+                { title: '结余：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.balance, accountInfo.value.digit) : '--' },
+                { title: '净值：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.netWorth, accountInfo.value.digit) : '--' },
+                { title: '可用预付款：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.availableMargin, accountInfo.value.digit) : '--' },
+                { title: '预付款比率(%)：', value: !isEmpty(accountInfo.value.marginRadio) ? accountInfo.value.marginRadio + '%' : '--' },
+                { title: '预付款：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.occupyMargin, accountInfo.value.digit) : '--' },
             ]
         })
 

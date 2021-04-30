@@ -1,5 +1,6 @@
 import { guid, getDevice, getToken } from '@/utils/util'
 import { Dialog } from 'vant'
+import { QuoteSocket } from '@/plugins/socket/socket'
 // websocket消息事件
 class SocketEvent {
     constructor () {
@@ -96,13 +97,17 @@ class SocketEvent {
 
     // 处理异地登录踢出
     handleLogout (data) {
+        const that = this
         Dialog.alert({
+            title: '提示',
             theme: 'round-button',
             message: '您的账号在异地登录，请重新登录',
         }).then(() => {
-            this.$store.dispatch('_user/logout')
+            // 踢出登录断开ws
+            QuoteSocket.ws.close()
+            that.ws.close()
+            that.$store.dispatch('_user/logout')
         })
-        this.close()
     }
 }
 

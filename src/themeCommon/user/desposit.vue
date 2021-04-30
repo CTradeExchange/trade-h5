@@ -18,9 +18,9 @@
                     <p class='t1'>
                         {{ item.amount }} {{ checkedType.accountCurrency }}
                     </p>
-                    <p class='t2'>
+                    <!-- <p class='t2'>
                         赠送${{ item.present }}
-                    </p>
+                    </p> -->
                 </div>
                 <div class='amount-item' :class='{ active: currIndex === 99 }' @click='openOtherMoney'>
                     其它金额
@@ -41,7 +41,7 @@
                     <div v-if='PayTypes.length > 0' class='pay-type' @click='openSheet'>
                         <img alt='' :src='require("../../assets/payment_icon/" + checkedType.paymentType + ".png")' srcset='' />
                         <span class='pay-name'>
-                            {{ checkedType.paymentAlias || checkedType.paymentType }}
+                            {{ checkedType.paymentTypeAlias || checkedType.paymentType }}
                         </span>
                         <van-icon name='arrow-down' />
                     </div>
@@ -61,21 +61,22 @@
 
             <div class='pay-info'>
                 <div class='pi-item'>
-                    预计支付 {{ amount || '--' }} {{ checkedType.accountCurrency }}
+                    预计支付 {{ computeExpectedpay || '--' }} {{ checkedType.paymentCurrency }}
                 </div>
                 <div class='pi-item'>
-                    预计到账  {{ checkType ? parseFloat(amount) + parseFloat(presentAmount) - parseFloat(checkedType.fee) : '--' }} {{ checkedType.accountCurrency }}
+                    预计到账  {{ amount ? parseFloat(amount) - parseFloat(checkedType.fee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
                 </div>
                 <div class='line'></div>
-                <div class='pi-item'>
+                <!-- <div class='pi-item'>
                     赠送金额 {{ presentAmount || '--' }} {{ checkedType.accountCurrency }}
-                </div>
+                </div> -->
                 <div class='pi-item'>
                     手续费 {{ checkedType.fee || '--' }} {{ checkedType.accountCurrency }}
                 </div>
             </div>
         </div>
     </div>
+
     <van-button block class='next-btn' type='primary' @click='next'>
         <span>下一步</span>
     </van-button>
@@ -83,9 +84,9 @@
     <van-action-sheet v-model:show='typeShow' :round='false' title='选择支付方式'>
         <div class='pay-list'>
             <div v-for='(item,index) in PayTypes' :key='index' class='pay-type' @click='choosePayType(item)'>
-                <img alt='' :src='require("../../assets/payment_icon/" + checkedType.paymentType + ".png")' srcset='' />
+                <img alt='' :src='require("../../assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
                 <span class='pay-name'>
-                    {{ item.paymentType }}
+                    {{ item.paymentTypeAlias || item.paymentType }}
                 </span>
                 <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
             </div>
@@ -97,7 +98,7 @@
         cancel-button-text='未完成充值'
         class-name='desposit-dialog'
         confirm-button-text='已完成充值'
-        :show-cancel-button='false'
+        :show-cancel-button='true'
         @cancel='onCancel'
         @confirm='onConfirm'
     >
@@ -112,13 +113,14 @@
 
 <script>
 import Top from '@/components/top'
-import { onBeforeMount, reactive, ref, computed, watch, toRefs } from 'vue'
-import { useRoute, useRouter, onBeforeRouteUpdate, onBeforeRouteEnter, onBeforeRouteLeave } from 'vue-router'
+import { onBeforeMount, reactive, computed, toRefs } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply } from '@/api/user'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
 import { isEmpty } from '@/utils/util'
 import dayjs from 'dayjs'
+import { mul } from '@/utils/calculation'
 export default {
     components: {
         Top
@@ -154,23 +156,22 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
 
-        const payTypeList = [
-            {
-                icon: require('../../assets/logo.png'),
-                payName: 'CoinBridge',
-                checked: false
-            },
-            {
-                icon: require('../../assets/logo.png'),
-                payName: 'CoinBridge',
-                checked: false
-            },
-            {
-                icon: require('../../assets/logo.png'),
-                payName: 'CoinBridge',
-                checked: false
+        // 计算存款手续费
+        const computeFee = computed(() => {
+            // feeType  1：固定金额手续费 2：百分比手续费
+            if (Number(state.checkedType.feeType === 1)) {
+                return state.checkedType.fee
+            } else if (Number(state.checkedType.feeType === 2)) {
+                return mul(state.amount * (state.checkedType.fee / 100))
             }
-        ]
+            return state.presentAmount * 50
+        })
+
+        // 计算预计支付金额
+        const computeExpectedpay = computed(() => {
+            // 计算方式：存款金额 * 汇率
+            return mul(state.amount, state.rateConfig.exchangeRate)
+        })
 
         const state = reactive({
             otherAmountVis: false,
@@ -207,9 +208,10 @@ export default {
 
         const choosePayType = (item) => {
             state.checkedType = item
-            payTypeList.map(item => { item.checked = false })
+            state.PayTypes.map(item => { item.checked = false })
             item.checked = true
             state.typeShow = false
+            getDepositExchangeRate()
         }
 
         const openOtherMoney = () => {
@@ -225,7 +227,6 @@ export default {
                 customerNo: customInfo.value.customerNo,
                 customerGroupId: customInfo.value.customerGroupId,
                 clientType: 'mobile',
-                paymentCurrency: 'CNY', // 暂时只支持CNY
                 accountCurrency: customInfo.value.currency,
             }
             state.loading = true
@@ -235,6 +236,7 @@ export default {
                     if (res.data && res.data.length > 0) {
                         state.PayTypes = res.data
                         state.checkedType = state.PayTypes[0]
+                        getDepositExchangeRate()
                     }
                 } else {
                     state.loading = false
@@ -251,7 +253,7 @@ export default {
                 customerNo: customInfo.value.customerNo,
                 accountId: customInfo.value.accountId,
                 accountCurrency: customInfo.value.currency,
-                paymentCurrency: 'CNY', // 暂时只支持CNY
+                paymentCurrency: state.checkedType.paymentCurrency,
             }
             state.loading = true
             queryDepositExchangeRate(param).then(res => {
@@ -266,6 +268,7 @@ export default {
             })
         }
 
+        // 创建存款提案
         const next = () => {
             if (!state.amount) {
                 return Toast('请输入存款金额')
@@ -282,7 +285,7 @@ export default {
                 accountId: customInfo.value.accountId,
                 customerGroupId: customInfo.value.customerGroupId,
                 depositRateSerialNo: state.rateConfig.depositRateSerialNo,
-                paymentCurrency: state.rateConfig.paymentCurrency,
+                paymentCurrency: state.checkedType.paymentCurrency,
                 accountCurrency: state.rateConfig.accountCurrency,
                 exchangeRate: state.rateConfig.exchangeRate,
                 paymentChannelCode: state.checkedType.paymentCode,
@@ -311,12 +314,16 @@ export default {
             })
         }
 
+        // 计算存款时间
         const computeTime = (val) => {
             if (!isEmpty(val)) {
                 // 0 点时的时间戳
                 const time = (dayjs(new Date(new Date(new Date().toLocaleDateString()).getTime()))).valueOf()
-
-                return dayjs(time + val * 60 * 1000).format('HH:mm')
+                if (val === 1440) {
+                    return '24:00'
+                } else {
+                    return dayjs(time + val * 60 * 1000).format('HH:mm')
+                }
             }
         }
 
@@ -339,6 +346,7 @@ export default {
                 if (Number(res.data) !== 2) {
                     return Dialog.alert({
                         theme: 'round-button',
+                        title: '提示',
                         confirmButtonText: Number(res.data) === 1 ? '去查看' : '去认证',
                         message: Number(res.data) === 2 ? 'KYC审核中，请耐心等待' : '当前操作需要KYC认证',
                     }).then(() => {
@@ -346,7 +354,6 @@ export default {
                     })
                 }
                 getPayTypes()
-                getDepositExchangeRate()
             }).catch(err => {
                 state.loading = false
                 console.log(err)
@@ -365,14 +372,15 @@ export default {
             toDespositList,
             openSheet,
             ...toRefs(state),
-            payTypeList,
             choosePayType,
             openOtherMoney,
             getDepositExchangeRate,
             next,
             computeTime,
             onCancel,
-            onConfirm
+            onConfirm,
+            computeFee,
+            computeExpectedpay
         }
     }
 }

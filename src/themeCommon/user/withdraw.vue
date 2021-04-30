@@ -310,6 +310,7 @@ export default {
                 state.loading = false
                 if (Number(res.data) !== 2) {
                     return Dialog.alert({
+                        title: '提示',
                         theme: 'round-button',
                         confirmButtonText: Number(res.data) === 1 ? '去查看' : '去认证',
                         message: Number(res.data) === 2 ? 'KYC审核中，请耐心等待' : '当前操作需要KYC认证',
