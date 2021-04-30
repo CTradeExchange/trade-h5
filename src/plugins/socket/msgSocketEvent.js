@@ -104,15 +104,6 @@ class SocketEvent {
         })
         this.close()
     }
-
-    // 关闭
-    close () {
-        this.ws.close()
-    }
-
-    open () {
-        this.ws.open()
-    }
 }
 
 export default SocketEvent
