@@ -64,7 +64,7 @@
                     预计支付 {{ computeExpectedpay || '--' }} {{ checkedType.paymentCurrency }}
                 </div>
                 <div class='pi-item'>
-                    预计到账  {{ amount ? parseFloat(amount) - parseFloat(checkedType.fee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
+                    预计到账  {{ checkedType ? parseFloat(amount) - parseFloat(checkedType.fee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
                 </div>
                 <div class='line'></div>
                 <!-- <div class='pi-item'>
@@ -319,7 +319,7 @@ export default {
             if (!isEmpty(val)) {
                 // 0 点时的时间戳
                 const time = (dayjs(new Date(new Date(new Date().toLocaleDateString()).getTime()))).valueOf()
-                if (val === 1440) {
+                if (Number(val) === 1440) {
                     return '24:00'
                 } else {
                     return dayjs(time + val * 60 * 1000).format('HH:mm')

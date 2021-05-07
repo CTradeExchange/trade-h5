@@ -178,6 +178,22 @@ const routes = [
             roles: ['User'],
         }
     },
+    {
+        path: '/search',
+        name: 'Search',
+        component: () => import(/* webpackChunkName: "order" */ '../views/quote/search.vue'),
+        meta: {
+            title: '添加交易品种'
+        }
+    },
+    {
+        path: '/regKyc',
+        name: 'RegKyc',
+        component: () => import(/* webpackChunkName: "order" */ '../views/register/regKyc.vue'),
+        meta: {
+            title: '身份认证'
+        }
+    },
     ...themeRouter
 ]
 

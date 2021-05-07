@@ -1,7 +1,7 @@
 <template>
-    <Top :back='true' :menu='false' title='' />
     <Loading :show='loading' />
     <div class='page-wrap'>
+        <slot name='notice'></slot>
         <div v-if='conditionVis' class='auth-condition'>
             <van-field
                 v-model='area'
@@ -177,13 +177,8 @@ export default {
 
             kycLevelApply(params).then(res => {
                 if (res.check()) {
-                    Dialog.alert({
-                        title: '提示',
-                        theme: 'round-button',
-                        message: levelCode + '认证提交成功，等待客服审核',
-                    }).then(() => {
-                        router.go(-1)
-                    })
+                    sessionStorage.removeItem('kycList')
+                    router.replace({ name: 'KycCommitted' })
                 }
             }).catch(err => {
                 console.log(err)
@@ -191,7 +186,19 @@ export default {
         }
 
         onBeforeMount(() => {
-            getConditon()
+            // 注册进来的kyc
+            const kycList = sessionStorage.getItem('kycList')
+            if (!isEmpty(kycList)) {
+                state.list = JSON.parse(kycList)
+                state.list.forEach(item => {
+                    state.countryActions.push({
+                        name: item.pathName,
+                        code: item.pathCode
+                    })
+                })
+            } else {
+                getConditon()
+            }
         })
         return {
             ...toRefs(state),

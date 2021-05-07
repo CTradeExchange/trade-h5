@@ -343,3 +343,27 @@ export function checkKycApply (data) {
         data
     })
 }
+
+/* 绑定手机号码 */
+export function bindPhone (data) {
+    return request({
+        url: '/global/customer.CustomerWebApiService.bindPhone',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 绑定邮箱 */
+export function bindEmail (data) {
+    return request({
+        url: '/global/customer.CustomerWebApiService.bindEmail',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

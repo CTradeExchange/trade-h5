@@ -64,14 +64,15 @@ import InputComp from '@m/components/form/input'
 import MobileInput from '@m/components/form/mobileInput'
 import CurrencyAction from './components/currencyAction'
 import TradeTypeAction from './components/tradeTypeAction'
-import { getDevice, getQueryVariable } from '@/utils/util'
-import { register, openAccount } from '@/api/user'
+import { getDevice, getQueryVariable, setToken } from '@/utils/util'
+import { register, openAccount, checkKycApply } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
 import { useStore } from 'vuex'
-import { reactive, toRefs, ref, computed } from 'vue'
+import { reactive, toRefs, ref, computed, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
-import { Toast } from 'vant'
+import { Toast, Dialog } from 'vant'
 import Rule, { checkCustomerExistRule } from './rule'
+
 export default {
     components: {
         Top,
@@ -84,6 +85,7 @@ export default {
         VueSelect,
     },
     setup () {
+        const instance = getCurrentInstance()
         let delayer = null
         const store = useStore()
         const router = useRouter()
@@ -132,12 +134,33 @@ export default {
                     // 注册成功
                     sessionStorage.setItem('RegisterParams', JSON.stringify({ ...params, openType: state.openType }))
                     sessionStorage.setItem('RegisterData', JSON.stringify(res))
-                    router.replace({ name: 'RegisterSuccess' })
+
+                    // 注册成功重新获取客户信息
+                    store.dispatch('_user/findCustomerInfo')
+                    // 重新登录清除账户信息
+                    store.commit('_user/Update_userAccount', '')
+                    // 重新开启ws
+                    instance.appContext.config.globalProperties.$MsgSocket.ws.open()
+                    instance.appContext.config.globalProperties.$QuoteSocket.ws.open()
+
+                    if (res.data.token) setToken(res.data.token)
+                    if (res.data.list.length > 0) {
+                        // 需要KYC认证
+                        sessionStorage.setItem('kycList', JSON.stringify(res.data.list))
+                        router.replace(
+                            {
+                                name: 'RegKyc',
+                                query: { levelCode: res.data.list[0].levelCode }
+                            })
+                    } else {
+                        router.replace({ name: 'RegisterSuccess' })
+                    }
                 } else {
                     res.toast()
                 }
             })
         }
+
         // 提交注册
         const registerHandler = () => {
             clearTimeout(delayer)

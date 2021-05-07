@@ -29,13 +29,12 @@
 </template>
 
 <script>
-import { reactive, toRefs, getCurrentInstance } from 'vue'
+import { reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { getDevice, setToken } from '@/utils/util'
 export default {
     setup () {
-        const instance = getCurrentInstance()
         const RegisterData = JSON.parse(sessionStorage.getItem('RegisterData')) ?? {}
         const RegisterParams = JSON.parse(sessionStorage.getItem('RegisterParams')) ?? {}
         const store = useStore()
@@ -51,13 +50,6 @@ export default {
         const toDesposit = () => {
             return router.replace({ name: 'Desposit' })
         }
-        // 注册成功重新获取客户信息
-        store.dispatch('_user/findCustomerInfo')
-        // 重新登录清除账户信息
-        store.commit('_user/Update_userAccount', '')
-        // 重新开启ws
-        instance.appContext.config.globalProperties.$MsgSocket.ws.open()
-        instance.appContext.config.globalProperties.$QuoteSocket.ws.open()
 
         return {
             ...onceState,

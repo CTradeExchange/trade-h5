@@ -101,41 +101,11 @@ const routes = [
         }
     },
     {
-        path: '/authConditon',
-        name: 'AuthConditon',
-        component: () => import(/* webpackChunkName: "authentication" */ '../user/authConditon.vue'),
+        path: '/authForm',
+        name: 'AuthForm',
+        component: () => import(/* webpackChunkName: "authentication" */ '../user/authForm.vue'),
         meta: {
             title: '身份验证',
-            footerMenu: false,
-            roles: ['User']
-        }
-    },
-    {
-        path: '/authL1Input',
-        name: 'AuthL1Input',
-        component: () => import(/* webpackChunkName: "authL1Input" */ '../user/authL1Input.vue'),
-        meta: {
-            title: '身份验证(LV1认证)',
-            footerMenu: false,
-            roles: ['User']
-        }
-    },
-    {
-        path: '/authL2',
-        name: 'AuthL2',
-        component: () => import(/* webpackChunkName: "authL2" */ '../user/authL2.vue'),
-        meta: {
-            title: '身份验证(LV2认证)',
-            footerMenu: false,
-            roles: ['User']
-        }
-    },
-    {
-        path: '/authL3',
-        name: 'AuthL3',
-        component: () => import(/* webpackChunkName: "authL3" */ '../user/authL3.vue'),
-        meta: {
-            title: '身份验证(LV3认证)',
             footerMenu: false,
             roles: ['User']
         }
@@ -178,6 +148,33 @@ const routes = [
             title: '界面',
             footerMenu: false,
             roles: ['User']
+        }
+    },
+    {
+        path: '/bindMobile',
+        name: 'BindMobile',
+        component: () => import(/* webpackChunkName: "page" */ '../user/bindMobile.vue'),
+        meta: {
+            title: '绑定手机',
+            footerMenu: false,
+        }
+    },
+    {
+        path: '/bindEmail',
+        name: 'BindEmail',
+        component: () => import(/* webpackChunkName: "page" */ '../user/bindEmail.vue'),
+        meta: {
+            title: '绑定邮箱',
+            footerMenu: false,
+        }
+    },
+    {
+        path: '/kycCommitted',
+        name: 'KycCommitted',
+        component: () => import(/* webpackChunkName: "page" */ '../user/kycCommitted.vue'),
+        meta: {
+            title: '绑定邮箱',
+            footerMenu: false,
         }
     },
 

@@ -140,9 +140,7 @@ import { Toast } from 'vant'
 import Rule from './rule'
 import md5 from 'js-md5'
 import { timeline, timelineItem } from '@m/components/timeline'
-import { MsgSocket } from '@/plugins/socket/socket'
-import CreateSocket from '@/plugins/socket/createSocket'
-import { msgService } from '@/config'
+
 export default {
     components: {
         timeline,

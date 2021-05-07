@@ -78,7 +78,7 @@ export default {
 
         const handleNext = (item) => {
             if (Number(item.status) === 0 || Number(item.status) === 3) {
-                router.push({ path: '/authConditon', query: { levelCode: item.levelCode } })
+                router.push({ path: '/authForm', query: { levelCode: item.levelCode } })
             }
         }
 

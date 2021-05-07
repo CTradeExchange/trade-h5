@@ -1,0 +1,45 @@
+<template>
+    <Top
+        back
+        left-icon='arrow-left'
+        :menu='false'
+    >
+        <template #right>
+            <span @click="$router.push({ path: '/login' })">
+                账号登录
+            </span>
+        </template>
+    </Top>
+
+    <auth-condition :level-code='levelCode'>
+        <template #notice>
+            <p class='notice'>
+                您已成功注册，因监管需要，请如实填写并提供以下资料
+            </p>
+        </template>
+    </auth-condition>
+</template>
+
+<script>
+import Top from '@m/layout/top'
+import authCondition from '@/themeCommon/components/authConditon'
+export default {
+    components: {
+        authCondition,
+        Top
+    },
+    setup (props) {
+        return {
+
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+@import '@/sass/mixin.scss';
+.notice {
+    margin-bottom: rem(20px);
+    padding-left: rem(30px);
+}
+</style>

@@ -2,8 +2,7 @@
     <main class='productMain'>
         <Top>
             <template #right>
-                <!-- @click="$router.push({ name: 'Withdraw' })" -->
-                <van-icon class='icon-add' name='plus' />
+                <van-icon class='icon-add' name='plus' @click="$router.push({ name: 'Search' })" />
             </template>
         </Top>
         <productListComp />
@@ -46,5 +45,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+@import '@/sass/mixin.scss';
+.icon-add {
+    font-size: rem(40px);
+}
 </style>
