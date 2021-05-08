@@ -8,8 +8,8 @@
             </template>
         </van-cell>
         <van-cell is-link title='修改登录密码' to='/setLoginPwd' />
-        <van-cell is-link title='绑定手机' to='/bindMobile' />
-        <van-cell is-link title='绑定邮箱' to='/bindEmail' />
+        <van-cell v-if='!customInfo.phone' is-link title='绑定手机' to='/bindMobile' />
+        <van-cell v-if='!customInfo.email' is-link title='绑定邮箱' to='/bindEmail' />
         <van-button class='logout-btn' :loading='loading' type='primary' @click='handleLogout'>
             <span>退出账号</span>
         </van-button>
@@ -18,7 +18,7 @@
 
 <script>
 import Top from '@m/layout/top'
-import { toRefs, reactive, ref, getCurrentInstance } from 'vue'
+import { toRefs, reactive, computed, ref, getCurrentInstance } from 'vue'
 import { logout } from '@/api/user'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
@@ -30,6 +30,8 @@ export default {
     },
     setup (props) {
         const instance = getCurrentInstance()
+        // 获取账户信息
+        const customInfo = computed(() => store.state._user.customerInfo)
         const store = useStore()
         const state = reactive({
             checked: false,
@@ -53,6 +55,7 @@ export default {
                 })
         }
         return {
+            customInfo,
             handleLogout,
             ...toRefs(state)
         }

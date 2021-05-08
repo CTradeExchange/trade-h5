@@ -138,7 +138,7 @@ export default {
             4: '盈亏',
             5: '系统清零',
             6: '额度调整',
-            7: '冻结'
+            // 7: '冻结'
         }
 
         const directionBtns = [

@@ -33,7 +33,7 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { verifyCodeSend } from '@/api/base'
 import { bindPhone } from '@/api/user'
-
+import { useStore } from 'vuex'
 export default {
     components: {
         Top,
@@ -98,6 +98,7 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     Toast('绑定手机成功')
+                    store.dispatch('_user/findCustomerInfo')
                     setTimeout(() => {
                         router.push('/setting')
                     }, 1500)

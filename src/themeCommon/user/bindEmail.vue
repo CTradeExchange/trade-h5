@@ -32,6 +32,7 @@ import { isEmpty, emailReg } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
 import { bindEmail } from '@/api/user'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 export default {
     components: {
         Top,
@@ -39,6 +40,7 @@ export default {
         CheckCode
     },
     setup (props) {
+        const store = useStore()
         const router = useRouter()
         const state = reactive({
             email: '',
@@ -66,8 +68,9 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     Toast('绑定邮箱成功')
+                    store.dispatch('_user/findCustomerInfo')
                     setTimeout(() => {
-                        router.push('/setting')
+                        router.replace('/setting')
                     }, 1500)
                 }
             }).catch(err => {
