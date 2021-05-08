@@ -58,17 +58,18 @@
 </template>
 
 <script>
-import Top from '@m/layout/top'
 import { useRouter, useRoute } from 'vue-router'
 import { toRefs, reactive, ref, onBeforeMount } from 'vue'
 import { Toast, Dialog } from 'vant'
-import { findAllLevelKyc, kycLevelApply } from '@/api/user'
+import { findAllLevelKyc, kycLevelApply, kycApply } from '@/api/user'
 import { getArrayObj, isEmpty } from '@/utils/util'
 import { upload } from '@/api/base'
 
 export default {
-    components: {
-        Top
+    props: {
+        businessCode: {
+            type: String
+        }
     },
     setup (props) {
         const router = useRouter()
@@ -78,6 +79,7 @@ export default {
         const state = reactive({
             areaShow: false,
             area: '',
+            pathCode: '',
             loading: false,
             list: [],
             elementList: [],
@@ -117,6 +119,7 @@ export default {
         const onSelect = (item) => {
             try {
                 state.area = item.name
+                state.pathCode = item.code
                 state.elementList = getArrayObj(state.list, 'pathCode', item.code).elementList
                 state.areaShow = false
             } catch (error) {
@@ -169,20 +172,37 @@ export default {
                 return Toast('请完成所有认证项')
             }
 
-            const params = {
-                pathCode: state.area,
-                levelCode: levelCode,
-                elementList: elementList
-            }
-
-            kycLevelApply(params).then(res => {
-                if (res.check()) {
-                    sessionStorage.removeItem('kycList')
-                    router.replace({ name: 'KycCommitted' })
+            let params
+            /* 具体业务的kyc认证 */
+            if (!isEmpty(props.businessCode)) {
+                params = {
+                    pathCode: state.pathCode,
+                    businessCode: props.businessCode,
+                    elementList: elementList,
+                    levelCode
                 }
-            }).catch(err => {
-                console.log(err)
-            })
+                kycApply(params).then(res => {
+                    if (res.check()) {
+                        router.replace({ name: 'KycCommitted' })
+                        sessionStorage.removeItem('kycList')
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+            } else {
+                params = {
+                    pathCode: state.pathCode,
+                    levelCode,
+                    elementList: elementList
+                }
+                kycLevelApply(params).then(res => {
+                    if (res.check()) {
+                        router.replace({ name: 'KycCommitted' })
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+            }
         }
 
         onBeforeMount(() => {

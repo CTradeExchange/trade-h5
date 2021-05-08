@@ -11,7 +11,7 @@
         </template>
     </Top>
 
-    <auth-condition :level-code='levelCode'>
+    <auth-condition business-code='open_account'>
         <template #notice>
             <p class='notice'>
                 您已成功注册，因监管需要，请如实填写并提供以下资料

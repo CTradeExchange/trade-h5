@@ -286,7 +286,7 @@ export default {
             const params = {
                 size: state.pagigation.size,
                 current: state.pagigation.current,
-                status: 0, // 状态。1-初始化；2-处理成功；3-处理失败；
+                status: 2, // 状态。1-初始化；2-处理成功；3-处理失败；
                 startTime: state.startTime,
                 endTime: state.endTime,
                 operate: state.directionCur, // 1.增加，2.减少；

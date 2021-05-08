@@ -344,6 +344,18 @@ export function checkKycApply (data) {
     })
 }
 
+/* KYC业务场景认证申请 */
+export function kycApply (data) {
+    return request({
+        url: '/global/customer.KycWebApiService.kycApply',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
 /* 绑定手机号码 */
 export function bindPhone (data) {
     return request({

@@ -282,14 +282,6 @@ export default {
                     if (res.data && res.data.length > 0) {
                         state.bankList = res.data
                         state.checkedBank = res.data[0]
-                    } else {
-                        Dialog.confirm({
-                            title: '提示',
-                            message: '暂无银行卡，是否去添加?',
-                        }).then(() => {
-                            router.push('/addBank')
-                        }).catch(() => {
-                        })
                     }
                 }
             }).catch(err => {
@@ -315,7 +307,7 @@ export default {
                         confirmButtonText: Number(res.data) === 1 ? '去查看' : '去认证',
                         message: Number(res.data) === 2 ? 'KYC审核中，请耐心等待' : '当前操作需要KYC认证',
                     }).then(() => {
-                        router.replace({ name: 'Authentication' })
+                        router.replace({ name: 'Authentication', query: { businessCode: 'withdraw' } })
                     })
                 }
                 // 获取取款配置
@@ -333,6 +325,8 @@ export default {
         onBeforeMount(() => {
             // 检测取款是否需要kyc
             checkKyc()
+
+            getWithdrawConfig()
         })
 
         return {

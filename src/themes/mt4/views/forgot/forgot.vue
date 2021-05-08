@@ -67,7 +67,8 @@ import Schema from 'async-validator'
 import Rule from './rule'
 import { useStore } from 'vuex'
 import { verifyCodeSend, verifyCodeCheck } from '@/api/base'
-
+import { checkCustomerExist } from '@/api/user'
+import { isEmpty } from '@/utils/util'
 export default {
     components: {
         Top,
@@ -90,7 +91,8 @@ export default {
                 flag: true,
                 msg: ''
             },
-            sendToken: ''
+            sendToken: '',
+            active: 0
         })
 
         const handleTabChange = (name, title) => {
@@ -109,20 +111,40 @@ export default {
                 type: state.curTab,
                 mobile: state.mobile,
                 email: state.email,
+                zone: state.zone
             }, (errors, fields) => {
-                console.log(errors, fields)
+                console.log('errors:', errors, fields)
                 if (errors) {
                     return Toast(errors[0].message)
                 }
                 console.log(params)
-                verifyCodeSend(params).then(res => {
+
+                // 验证手机号邮箱是否存在
+                const source = {
+                    type: state.curTab === 0 ? 2 : 1,
+                    loginName: state.curTab === 0 ? state.mobile : state.email,
+                    phoneArea: state.curTab === 0 ? state.zone : ''
+                }
+
+                checkCustomerExist(source).then(res => {
                     if (res.check()) {
-                        if (res.code === '0') {
-                            state.sendToken = res.data.token
-                            Toast('验证码发送成功，请注意查收!')
-                            callback && callback()
+                        if (res.data === 2) {
+                            const msg = state.curTab === 0 ? '手机号不存在' : '邮箱不存在'
+                            return Toast(msg)
+                        } else {
+                            verifyCodeSend(params).then(res => {
+                                if (res.check()) {
+                                    if (res.code === '0') {
+                                        state.sendToken = res.data.token
+                                        Toast('验证码发送成功，请注意查收!')
+                                        callback && callback()
+                                    }
+                                }
+                            })
                         }
                     }
+                }).catch(err => {
+                    console.log(err)
                 })
             })
         }

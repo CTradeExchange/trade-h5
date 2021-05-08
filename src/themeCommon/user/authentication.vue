@@ -43,7 +43,7 @@
 
 <script>
 import Top from '@m/layout/top'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { findAllBizKycList } from '@/api/user'
 import { toRefs, reactive, ref, onBeforeMount } from 'vue'
 import { getArrayObj } from '@/utils/util'
@@ -53,6 +53,7 @@ export default {
     },
     setup (props) {
         const router = useRouter()
+        const route = useRoute()
         const state = reactive({
             list: [],
             loading: false,
@@ -78,7 +79,7 @@ export default {
 
         const handleNext = (item) => {
             if (Number(item.status) === 0 || Number(item.status) === 3) {
-                router.push({ path: '/authForm', query: { levelCode: item.levelCode } })
+                router.push({ path: '/authForm', query: { levelCode: item.levelCode, businessCode: route.query.businessCode } })
             }
         }
 

@@ -350,7 +350,7 @@ export default {
                         confirmButtonText: Number(res.data) === 1 ? '去查看' : '去认证',
                         message: Number(res.data) === 2 ? 'KYC审核中，请耐心等待' : '当前操作需要KYC认证',
                     }).then(() => {
-                        router.replace({ name: 'Authentication' })
+                        router.replace({ name: 'Authentication', query: { businessCode: 'cashin' } })
                     })
                 }
                 getPayTypes()
