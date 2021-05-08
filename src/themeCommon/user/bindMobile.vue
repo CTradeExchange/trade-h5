@@ -33,7 +33,6 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { verifyCodeSend } from '@/api/base'
 import { bindPhone } from '@/api/user'
-import { useStore } from 'vuex'
 export default {
     components: {
         Top,
