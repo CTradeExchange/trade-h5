@@ -21,26 +21,9 @@ export const wpCompanyConfig = () => {
 // 获取自选产品
 export const wpSelfSymbolIndex = () => {
     return pageConfig('SelfSymbolIndex').then(res => {
-        if (isEmpty(res[0].data.product)) {
-            return {
-                symbol_ids: []
-            }
-        }
-
-        let symbol_ids = Object.values(res[0].data.product).reduce((prev, cur) => prev.concat(cur))
-        symbol_ids = [...new Set(symbol_ids)].sort((a, b) => a - b)
-        return {
-            symbol_ids
-        }
+        const data = res.find(el => el.tag === 'selfSymbol')
+        return data ? data.data : null
     })
-
-    // pageConfig('SelfSymbolIndex').then(res => {
-    //     sessionStorage.setItem('productGroup', JSON.stringify(res[0].data.product))
-    // })
-
-    // return Promise.resolve({
-    //     symbol_ids: [1, 2, 3, 4, 5, 6, 7, 8],
-    // })
 }
 export const wpNav = () => pageConfig('Nav')
 

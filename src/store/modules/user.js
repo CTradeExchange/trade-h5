@@ -32,7 +32,7 @@ export default {
     },
     actions: {
         // 登录
-        login ({ dispatch, commit, state, rootState }, params = {}) {
+        login ({ dispatch, commit, rootState }, params = {}) {
             commit('Update_loginLoading', true)
             return login(params).then((res) => {
                 if (res.check()) {
@@ -41,21 +41,38 @@ export default {
                     setToken(data.token)
                     commit('Update_loginData', data)
                     commit('Update_customerInfo', data)
-                    sessionStorage.setItem('customerGroupId', data.customerGroupId)
                     commit('_base/UPDATE_tradeType', data.tradeType, { root: true }) // 登录后存储用户的玩法类型
                     // dispatch('findCustomerInfo')  // findCustomerInfod 的数据目前和登录的数据一样，不需要再次调用
+
+                    // 设置当前用户组的产品
+                    const selfSymbolData = rootState._base.selfSymbol
+                    const customerGroupId = data.customerGroupId || rootState._base.wpCompanyInfo?.customerGroupId
+                    const products = selfSymbolData.product[customerGroupId]
+                    const productList = products.map(el => ({ symbolId: el }))
+                    commit('_quote/Update_productList', productList, { root: true })
+                    commit('_quote/Update_productActivedID', products[0], { root: true })
                 }
                 commit('Update_loginLoading', false)
                 return res
             })
         },
         // 查询客户信息
-        findCustomerInfo ({ dispatch, commit, state }, params = {}) {
+        findCustomerInfo ({ dispatch, commit, rootState }, params = {}) {
             commit('Update_loginLoading', true)
             return findCustomerInfo().then((res) => {
                 if (res.check()) {
+                    const data = res.data
                     commit('Update_customerInfo', res.data)
-                    sessionStorage.setItem('customerGroupId', res.data.customerGroupId)
+
+                    // 设置当前用户组的产品
+                    const selfSymbolData = rootState._base.selfSymbol
+                    if (selfSymbolData) {
+                        const customerGroupId = data.customerGroupId || rootState._base.wpCompanyInfo?.customerGroupId
+                        const products = selfSymbolData.product[customerGroupId]
+                        const productList = products.map(el => ({ symbolId: el }))
+                        commit('_quote/Update_productList', productList, { root: true })
+                        commit('_quote/Update_productActivedID', products[0], { root: true })
+                    }
                 }
                 commit('Update_loginLoading', false)
                 return res
@@ -64,7 +81,6 @@ export default {
         logout ({ dispatch, commit, state, rootState }, params = {}) {
             return logout().then(res => {
                 if (res.check()) {
-                    sessionStorage.removeItem('customerGroupId')
                     removeLoginParams()
                     router.push('/login')
                 }

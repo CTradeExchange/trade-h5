@@ -54,7 +54,7 @@ export default {
         // 行情列表模式 1高级模式 2简单模式
         const quoteMode = computed(() => store.state.quoteMode)
         // 产品列表
-        const productList = computed(() => store.getters['_quote/productListByUser'])
+        const productList = computed(() => store.state._quote.productList)
         // 切换行情列表模式
         const switchQuoteMode = () => {
             store.commit('Update_quoteMode', quoteMode.value === 1 ? 2 : 1)

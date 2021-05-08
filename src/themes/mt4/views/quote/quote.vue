@@ -24,7 +24,7 @@ export default {
     },
     setup () {
         const store = useStore()
-        const productList = computed(() => store.getters['_quote/productListByUser'])
+        const productList = computed(() => store.state._quote.productList)
         // 订阅产品
 
         const subscribList = productList.value.map(({ symbolId }) => symbolId)

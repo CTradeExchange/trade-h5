@@ -23,11 +23,11 @@ export default {
     methods: {
         init () {
             const jsCode = [
-                'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/js/prod/vue.js',
-                'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/js/prod/vant.min.js',
-                'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/js/prod/wequickNewsList.umd.min.js'
+                'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2md/vue.js',
+                'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2md/vant.min.js',
+                'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2md/prodcn/wequickNewsList.umd.min.js'
             ]
-            const cssCode = 'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/js/prod/wequickNewsList.css'
+            const cssCode = 'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2md/prodcn/wequickNewsList.css'
             if (loaded) {
                 setTimeout(() => {
                     this.initInflow()

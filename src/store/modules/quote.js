@@ -24,25 +24,14 @@ export default {
         productMap: {}, // 产品列表
         productActivedID: null, // 当前操作的产品ID
     },
-    getters: {
-        productListByUser (state) {
-            const productGroup = JSON.parse(sessionStorage.getItem('productGroup'))
-            const guestCustomerGroupId = sessionStorage.getItem('customerGroupId') || sessionStorage.getItem('guestCustomerGroupId')
-            const list = productGroup[guestCustomerGroupId]
-            if (!isEmpty(list)) {
-                return state.productList.filter(e => list.includes(String(e.symbolId)))
-            } else {
-                return []
-            }
-        }
-    },
     mutations: {
         // 更新产品列表
         Update_productList (state, data = []) {
+            console.log('Update_productList', data)
             state.productList = data
             const productMap = state.productMap
             data.forEach(item => {
-                if (!item || productMap[item.symbolId]) return false
+                if (!item) return false
                 productMap[item.symbolId] = item
             })
         },
