@@ -20,7 +20,7 @@
             <div v-else class='field'>
                 <CheckCode v-model='checkCode' clear label='验证码' @verifyCodeSend='verifyCodeSendHandler' />
             </div>
-            <van-button block class='loginBtn' type='primary' @click='loginHandle'>
+            <van-button block class='loginBtn' :disabled='loading' type='primary' @click='loginHandle'>
                 登录
             </van-button>
             <div class='toolBtns'>
@@ -119,6 +119,8 @@
             </div>
         </section>
     </van-popup>
+
+    <Loading :show='loading' />
 </template>
 
 <script>
@@ -160,6 +162,7 @@ export default {
         const store = useStore()
         const instance = getCurrentInstance()
         const state = reactive({
+            loading: false,
             pwdVisible: false,
             kycPop: false,
             loginPwdPop: false,
@@ -192,9 +195,11 @@ export default {
                 sendToken: state.loginType === 'checkCode' ? token : undefined,
             }
             const validator = new Schema(Rule)
+            state.loading = true
             validator.validate(loginParams, { ...state, first: true }, (errors, fields) => {
                 // console.log(errors, fields)
                 if (errors) {
+                    state.loading = false
                     Toast(errors[0].message)
                     return
                 }
@@ -211,6 +216,7 @@ export default {
         // 发送登录接
         const loginSubmit = (params) => {
             store.dispatch('_user/login', params).then(res => {
+                state.loading = false
                 // console.log(res)
                 if (res.invalid()) return false
                 // 登录成功重新连接websocket

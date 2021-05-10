@@ -3,19 +3,7 @@
 </template>
 
 <script>
-import { getLoginParams, getToken, removeLoginParams } from '@/utils/util'
-import { useStore } from 'vuex'
-
 export default {
-    setup () {
-        const store = useStore()
-        store.dispatch('_base/getNav')
-        window.store = store
-    },
-    created () {
-        window.vm = this
-        console.log('app.vue this', this)
-    }
 }
 </script>
 
