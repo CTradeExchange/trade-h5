@@ -59,6 +59,18 @@ export default {
             if (!product) return false
             if (data.price - product.high_price > 0) data.high_price = data.price
             if (data.price - product.low_price < 0) data.low_price = data.price
+            if (!product.buy_price_pre) {
+                product.buy_price_pre = data.buy_price * 1
+                product.sell_price_pre = data.sell_price * 1
+                product.cur_price_pre = data.cur_price * 1
+                product.cur_color = product.buy_color = product.sell_color = 'grayColor'
+            }
+            product.cur_color = data.cur_price * 1 === product.cur_price_pre ? product.cur_color : data.cur_price < product.cur_price_pre ? 'fallColor' : 'riseColor'
+            product.buy_color = data.buy_price * 1 === product.buy_price_pre ? product.buy_color : data.buy_price < product.buy_price_pre ? 'fallColor' : 'riseColor'
+            product.sell_color = data.sell_price * 1 === product.sell_price_pre ? product.sell_color : data.sell_price < product.sell_price_pre ? 'fallColor' : 'riseColor'
+            product.cur_price_pre = product.cur_price * 1
+            product.buy_price_pre = product.buy_price * 1
+            product.sell_price_pre = product.sell_price * 1
             Object.assign(product, data)
             spreadText(product)
             price_spread(product, data)
@@ -99,10 +111,11 @@ export default {
             const productMap = state.productMap
 
             if (productMap[symbolId].contractSize) return Promise.resolve(new CheckAPI({ code: '0', data: {} }))
+            const guestCustomerGroupId = rootState._base.wpCompanyInfo.customerGroupId
             const params = {
                 symbolId: Number(symbolId),
                 tradeType: rootState._base.tradeType,
-                customerGroupId: rootState._base.wpCompanyInfo.customerGroupId,
+                customerGroupId: rootState._user.customerInfo?.customerGroupId ?? guestCustomerGroupId,
                 // accountId: rootState._user.customerInfo?.accountId,
             }
             return querySymbolInfo(params).then((res) => {
