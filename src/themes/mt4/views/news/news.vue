@@ -1,6 +1,6 @@
 <template>
-    <div id='homeContent'>
-        <Top />
+    <Top />
+    <div id='homeContent' class='container'>
         <div id='inflow2App' ref='inflow2App'>
             <!-- <demo :orgid="orgid" lang="zh-cn"></demo> -->
         </div>
@@ -59,5 +59,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+@import '~@/sass/mixin.scss';
+.container {
+    flex: 1;
+    margin-bottom: rem(100px);
+    overflow-y: auto;
+}
 </style>
