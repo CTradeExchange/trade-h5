@@ -111,10 +111,11 @@ export default {
             const productMap = state.productMap
 
             if (productMap[symbolId].contractSize) return Promise.resolve(new CheckAPI({ code: '0', data: {} }))
+            const guestCustomerGroupId = rootState._base.wpCompanyInfo.customerGroupId
             const params = {
                 symbolId: Number(symbolId),
                 tradeType: rootState._base.tradeType,
-                customerGroupId: rootState._base.wpCompanyInfo.customerGroupId,
+                customerGroupId: rootState._user.customerInfo?.customerGroupId ?? guestCustomerGroupId,
                 // accountId: rootState._user.customerInfo?.accountId,
             }
             return querySymbolInfo(params).then((res) => {
