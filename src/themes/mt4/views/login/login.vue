@@ -136,7 +136,7 @@ import { verifyCodeSend } from '@/api/base'
 import { computed, reactive, toRefs, getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { Toast } from 'vant'
+import { Toast, Dialog } from 'vant'
 import Rule from './rule'
 import md5 from 'js-md5'
 import { timeline, timelineItem } from '@m/components/timeline'
@@ -165,7 +165,7 @@ export default {
             loginPwdPop: false,
             zone: '+86',
             email: '',
-            mobile: '13200001111',
+            mobile: '15896587426',
             pwd: '',
             checkCode: '',
             loginType: 'checkCode',
@@ -218,6 +218,42 @@ export default {
                 instance.appContext.config.globalProperties.$QuoteSocket.ws.open()
                 // 重新登录清除账户信息
                 store.commit('_user/Update_userAccount', '')
+
+                // 登录KYC,0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
+                let msg, confirmButtonText
+                if (Number(res.data.kycAuditStatus === 0)) {
+                    msg = '当前操作需要KYC认证'
+                    confirmButtonText = '去认证'
+                } else if (Number(res.data.kycAuditStatus === 1)) {
+                    msg = '您的资料正在审核中，等耐心等待'
+                    confirmButtonText = '关闭'
+                } else if (Number(res.data.kycAuditStatus === 3)) {
+                    msg = '您的资料审核失败'
+                    confirmButtonText = '重新提交'
+                } else if (Number(res.data.kycAuditStatus === 2)) {
+                    msg = '您的资料已经审核通过，现在就开启您的财富之旅吧！'
+                    confirmButtonText = '好的'
+                }
+                if (Number(res.data.kycAuditStatus !== 2)) {
+                    Dialog.alert({
+                        title: '提示',
+                        confirmButtonText: res.data.kycAuditStatus === 1 ? '去查看' : '去认证',
+                        message: msg,
+                        theme: 'round-button',
+                    }).then(() => {
+                        router.push('/authentication')
+                    })
+                } else {
+                    Dialog.alert({
+                        title: '提示',
+                        confirmButtonText: confirmButtonText,
+                        message: msg,
+                        theme: 'round-button',
+                    }).then(() => {
+                        router.push('/quote')
+                    })
+                }
+
                 if (parseInt(res.data.loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
                     state.loginPwdPop = true
                 } else {
