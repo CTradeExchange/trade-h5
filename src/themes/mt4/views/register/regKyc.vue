@@ -3,13 +3,7 @@
         back
         left-icon='arrow-left'
         :menu='false'
-    >
-        <template #right>
-            <span @click="$router.push({ path: '/login' })">
-                账号登录
-            </span>
-        </template>
-    </Top>
+    />
 
     <auth-condition business-code='open_account'>
         <template #notice>
@@ -22,13 +16,31 @@
 
 <script>
 import Top from '@m/layout/top'
+import {
+    onBeforeRouteLeave
+} from 'vue-router'
+import {
+    getCurrentInstance,
+} from 'vue'
 import authCondition from '@/themeCommon/components/authConditon'
+import { useStore } from 'vuex'
 export default {
     components: {
         authCondition,
         Top
     },
     setup (props) {
+        const instance = getCurrentInstance()
+        const store = useStore()
+        onBeforeRouteLeave((to, from) => {
+            debugger
+            if (to.fullPath === '/login') {
+                // 退出登录 断开ws
+                instance.appContext.config.globalProperties.$MsgSocket.ws.close()
+                instance.appContext.config.globalProperties.$QuoteSocket.ws.close()
+                store.dispatch('_user/logout')
+            }
+        })
         return {
 
         }

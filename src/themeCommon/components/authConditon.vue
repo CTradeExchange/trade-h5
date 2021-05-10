@@ -174,6 +174,7 @@ export default {
 
             let params
             /* 具体业务的kyc认证 */
+
             if (!isEmpty(props.businessCode)) {
                 params = {
                     pathCode: state.pathCode,

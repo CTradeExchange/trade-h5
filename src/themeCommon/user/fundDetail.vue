@@ -86,6 +86,7 @@
                     v-model:loading='loading'
                     :finished='finished'
                     :finished-text='finishedText'
+                    :immediate-check='false'
                     @load='onLoad'
                 >
                     <div v-if='list.length === 0'>
@@ -196,7 +197,7 @@ export default {
             loadingMore: false,
             finishedText: '没有更多了',
             pagigation: {
-                size: 10,
+                size: 20,
                 current: 1,
             }
         })
@@ -244,7 +245,9 @@ export default {
 
         const confirm = () => {
             proDownItem.value.toggle()
+            state.pagigation.current = 1
             state.list = []
+            state.finished = false
             queryFundDetail()
         }
 
@@ -265,6 +268,8 @@ export default {
                 state.endTime = 0
             }
             dateDownItem.value.toggle()
+            state.pagigation.current = 1
+            state.finished = false
             state.list = []
             queryFundDetail()
         }
@@ -413,6 +418,7 @@ export default {
                     font-weight: bold;
                     font-size: rem(28px);
                     font-family: DIN 1451 Mittelschrift;
+                    text-align: right;
                 }
                 .balance {
                     color: var(--mutedColor);

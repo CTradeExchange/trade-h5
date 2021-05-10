@@ -47,7 +47,7 @@
         </div>
     </div>
 
-    <van-button block class='confirm-btn' type='primary' @click='confirm'>
+    <van-button block class='confirm-btn' :disabled='btnDisabled' type='primary' @click='confirm'>
         <span>确定</span>
     </van-button>
     <van-action-sheet v-model:show='show' :round='false' title='选择收款银行卡'>
@@ -66,13 +66,7 @@
             </div>
         </div>
     </van-action-sheet>
-    <van-dialog
-        v-model:show='withdrawSuccess'
-        class-name='add-success'
-        confirm-button-text='返回首页'
-        show-cancel-button='false'
-        @confirm='$router.push("/quote")'
-    >
+    <van-dialog v-model:show='withdrawSuccess' class-name='add-success' confirm-button-text='返回首页' show-cancel-button='false' @confirm='$router.push("/quote")'>
         <i class='icon_success'></i>
         <p class='title'>
             提交成功
@@ -92,11 +86,27 @@ import {
     onBeforeMount,
     watchEffect
 } from 'vue'
-import { useRouter } from 'vue-router'
-import { Toast, Dialog } from 'vant'
-import { isEmpty } from '@/utils/util'
-import { useStore } from 'vuex'
-import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate, queryBankList, computeWithdrawFee, checkKycApply } from '@/api/user'
+import {
+    useRouter
+} from 'vue-router'
+import {
+    Toast,
+    Dialog
+} from 'vant'
+import {
+    isEmpty
+} from '@/utils/util'
+import {
+    useStore
+} from 'vuex'
+import {
+    handleWithdraw,
+    queryWithdrawConfig,
+    queryWithdrawRate,
+    queryBankList,
+    computeWithdrawFee,
+    checkKycApply
+} from '@/api/user'
 export default {
     components: {
         Top
@@ -127,7 +137,8 @@ export default {
             withdrawConfig: '',
             bankList: [],
             fun: null,
-            withdrawSuccess: false
+            withdrawSuccess: false,
+            btnDisabled: false
         })
 
         const getWithdrawFee = (amount) => {
@@ -138,11 +149,14 @@ export default {
                 accountCurrency: customInfo.value.currency, // 账户货币编码
                 amount: parseFloat(state.amount)
             }
+            state.btnDisabled = true
             state.fee = '计算中...'
             computeWithdrawFee(params).then(res => {
                 if (res.check()) {
+                    state.btnDisabled = false
                     state.fee = res.data
                 } else {
+                    state.btnDisabled = true
                     state.fee = ''
                 }
             })
@@ -156,7 +170,7 @@ export default {
 
         /* 防抖 */
         watchEffect((onInvalidate) => {
-            const timer = debounceFn()// 再重新生成定时器
+            const timer = debounceFn() // 再重新生成定时器
             console.log('change', state.amount)
             onInvalidate(() => { // watchEffect里面先执行这个函数，即是清除掉之前的定时器
                 clearTimeout(timer)
@@ -170,7 +184,9 @@ export default {
         // 选择银行卡
         const chooseBank = (item) => {
             state.checkedBank = item
-            state.bankList.map(item => { item.checked = false })
+            state.bankList.map(item => {
+                item.checked = false
+            })
             item.checked = true
             state.show = false
         }
@@ -185,10 +201,6 @@ export default {
         }
 
         const confirm = () => {
-            if (!state.withdrawConfig.enableWithdraw) {
-                return Toast('该用户暂不可取款')
-            }
-
             if (state.amount <= 0) {
                 state.amount = 0
                 return Toast('请输入正确的金额')
@@ -250,6 +262,7 @@ export default {
                 if (res.check()) {
                     state.withdrawRate = res.data
                 } else {
+                    state.btnDisabled = true
                     Toast(res.msg)
                 }
             })
@@ -267,6 +280,10 @@ export default {
             queryWithdrawConfig(params).then(res => {
                 if (res.check()) {
                     state.withdrawConfig = res.data
+                    if (!state.withdrawConfig.enableWithdraw) {
+                        state.btnDisabled = true
+                        return Toast('该用户暂不可取款')
+                    }
                 } else {
                     Toast(res.msg)
                 }
@@ -307,7 +324,12 @@ export default {
                         confirmButtonText: Number(res.data) === 1 ? '去查看' : '去认证',
                         message: Number(res.data) === 2 ? 'KYC审核中，请耐心等待' : '当前操作需要KYC认证',
                     }).then(() => {
-                        router.replace({ name: 'Authentication', query: { businessCode: 'withdraw' } })
+                        router.replace({
+                            name: 'Authentication',
+                            query: {
+                                businessCode: 'withdraw'
+                            }
+                        })
                     })
                 }
                 // 获取取款配置
@@ -324,7 +346,7 @@ export default {
 
         onBeforeMount(() => {
             // 检测取款是否需要kyc
-            checkKyc()
+            // checkKyc()
 
             getWithdrawConfig()
         })
@@ -377,9 +399,7 @@ export default {
             input {
                 flex: 1;
             }
-            .get-btn{
-
-            }
+            .get-btn {}
         }
         .notice {
             display: flex;
@@ -464,7 +484,6 @@ export default {
         margin-right: rem(30px);
     }
 }
-
 </style>
 
 <style lang="scss">

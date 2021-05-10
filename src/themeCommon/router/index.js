@@ -1,4 +1,5 @@
-// import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, beforeEnter } from 'vue-router'
+import store from '../../store'
 const routes = [
     {
         path: '/withdraw',
@@ -98,6 +99,9 @@ const routes = [
             title: '身份验证',
             footerMenu: false,
             roles: ['User']
+        },
+        beforeEnter: (to, from, next) => {
+            next()
         }
     },
     {

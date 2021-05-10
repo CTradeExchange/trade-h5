@@ -10,10 +10,10 @@
         </p>
 
         <div class='btns'>
-            <van-button hairline plain type='success' @click='$router.replace({ name: "Quote" })'>
+            <!-- <van-button hairline plain type='success' @click='$router.replace({ name: "Quote" })'>
                 先行体验
-            </van-button>
-            <van-button hairline plain type='default' @click='$router.replace({ name: "Authentication" })'>
+            </van-button> -->
+            <van-button hairline plain type='default' @click='$router.push({ name: "Authentication" })'>
                 查看进度
             </van-button>
         </div>

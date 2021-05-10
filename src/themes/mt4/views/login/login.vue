@@ -5,7 +5,7 @@
             <h1 class='pageTitle'>
                 {{ loginType==='password'? '账号密码登录':'验证码登录' }}
             </h1>
-            <!-- <LanguageDiv /> -->
+        <!-- <LanguageDiv /> -->
         </header>
         <form class='loginForm'>
             <div v-if="loginAccount==='mobile'" class='field'>
@@ -47,12 +47,12 @@
                 </a>
             </div>
         </form>
-        <!-- <div class='otherLogin'>
+    <!-- <div class='otherLogin'>
             <LoginByGoogle />
             <span class='empty'></span>
             <LoginByFacebook />
         </div> -->
-        <!-- <footer class='footer'>
+    <!-- <footer class='footer'>
             <a class='link' href='javascript:;'>
                 <i class='icon_icon_service'></i>
                 在线客服
@@ -133,15 +133,37 @@ import CheckCode from '@m/components/form/checkCode'
 import LoginByGoogle from '@m/components/loginByGoogle/loginByGoogle'
 import LoginByFacebook from '@m/components/loginByFacebook/loginByFacebook'
 import Top from '@/components/top'
-import { getDevice, localGet, localSet } from '@/utils/util'
-import { verifyCodeSend } from '@/api/base'
-import { computed, reactive, toRefs, getCurrentInstance } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useStore } from 'vuex'
-import { Toast, Dialog } from 'vant'
+import {
+    getDevice,
+    localGet,
+    localSet
+} from '@/utils/util'
+import {
+    verifyCodeSend
+} from '@/api/base'
+import {
+    computed,
+    reactive,
+    toRefs,
+    getCurrentInstance
+} from 'vue'
+import {
+    useRoute,
+    useRouter
+} from 'vue-router'
+import {
+    useStore
+} from 'vuex'
+import {
+    Toast,
+    Dialog
+} from 'vant'
 import Rule from './rule'
 import md5 from 'js-md5'
-import { timeline, timelineItem } from '@m/components/timeline'
+import {
+    timeline,
+    timelineItem
+} from '@m/components/timeline'
 
 export default {
     components: {
@@ -168,7 +190,7 @@ export default {
             loginPwdPop: false,
             zone: '+86',
             email: '',
-            mobile: '15896587426',
+            mobile: '',
             pwd: '',
             checkCode: '',
             loginType: 'checkCode',
@@ -196,7 +218,10 @@ export default {
             }
             const validator = new Schema(Rule)
             state.loading = true
-            validator.validate(loginParams, { ...state, first: true }, (errors, fields) => {
+            validator.validate(loginParams, {
+                ...state,
+                first: true
+            }, (errors, fields) => {
                 // console.log(errors, fields)
                 if (errors) {
                     state.loading = false
@@ -228,7 +253,7 @@ export default {
                 // 登录KYC,0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
                 let msg, confirmButtonText
                 if (Number(res.data.kycAuditStatus === 0)) {
-                    msg = '当前操作需要KYC认证'
+                    msg = '您还未进行KYC认证，点击去认证'
                     confirmButtonText = '去认证'
                 } else if (Number(res.data.kycAuditStatus === 1)) {
                     msg = '您的资料正在审核中，等耐心等待'
@@ -243,7 +268,7 @@ export default {
                 if (Number(res.data.kycAuditStatus !== 2)) {
                     Dialog.alert({
                         title: '提示',
-                        confirmButtonText: res.data.kycAuditStatus === 1 ? '去查看' : '去认证',
+                        confirmButtonText: confirmButtonText,
                         message: msg,
                         theme: 'round-button',
                     }).then(() => {
@@ -256,14 +281,13 @@ export default {
                         message: msg,
                         theme: 'round-button',
                     }).then(() => {
-                        router.push('/quote')
+                        if (parseInt(res.data.loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
+                            state.loginPwdPop = true
+                        } else {
+                            loginToPath()
+                        }
+                        // router.push('/quote')
                     })
-                }
-
-                if (parseInt(res.data.loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
-                    state.loginPwdPop = true
-                } else {
-                    loginToPath()
                 }
             })
         }
@@ -291,7 +315,10 @@ export default {
                         callback && callback()
                     }
                 })
-            }).catch(({ errors, fields }) => {
+            }).catch(({
+                errors,
+                fields
+            }) => {
                 if (errors) {
                     Toast(errors[0].message)
                 }
@@ -301,7 +328,9 @@ export default {
         // 设置登录密码
         const loginPwdSet = () => {
             state.loginPwdPop = false
-            router.push({ name: 'SetLoginPwd' })
+            router.push({
+                name: 'SetLoginPwd'
+            })
         }
         // 下次设置登录密码
         const loginPwdSetNext = () => {

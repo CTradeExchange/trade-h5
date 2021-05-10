@@ -43,15 +43,32 @@
 
 <script>
 import Top from '@m/layout/top'
-import { useRouter, useRoute } from 'vue-router'
-import { findAllBizKycList } from '@/api/user'
-import { toRefs, reactive, ref, onBeforeMount } from 'vue'
-import { getArrayObj } from '@/utils/util'
+import {
+    useRouter,
+    useRoute,
+    onBeforeRouteLeave
+} from 'vue-router'
+import {
+    findAllBizKycList
+} from '@/api/user'
+import { useStore } from 'vuex'
+import {
+    toRefs,
+    reactive,
+    ref,
+    getCurrentInstance,
+    onBeforeMount
+} from 'vue'
+import {
+    getArrayObj
+} from '@/utils/util'
 export default {
     components: {
         Top
     },
     setup (props) {
+        const instance = getCurrentInstance()
+        const store = useStore()
         const router = useRouter()
         const route = useRoute()
         const state = reactive({
@@ -79,9 +96,25 @@ export default {
 
         const handleNext = (item) => {
             if (Number(item.status) === 0 || Number(item.status) === 3) {
-                router.push({ path: '/authForm', query: { levelCode: item.levelCode, businessCode: route.query.businessCode } })
+                router.push({
+                    path: '/authForm',
+                    query: {
+                        levelCode: item.levelCode,
+                        businessCode: route.query.businessCode
+                    }
+                })
             }
         }
+
+        onBeforeRouteLeave((to, from) => {
+            debugger
+            if (to.fullPath === '/login' || to.fullPath === '/kycCommitted') {
+                // 退出登录 断开ws
+                instance.appContext.config.globalProperties.$MsgSocket.ws.close()
+                instance.appContext.config.globalProperties.$QuoteSocket.ws.close()
+                store.dispatch('_user/logout')
+            }
+        })
 
         onBeforeMount(() => {
             getAuthCondition()
