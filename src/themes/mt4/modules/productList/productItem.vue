@@ -12,7 +12,7 @@
             </p>
         </div>
         <div class='col'>
-            <p class='fallColor'>
+            <p :class='[product.sell_color]'>
                 <Price :digit='product.price_digits' :mode='quoteMode' :point-ratio='product.pointRatio' :price='product.sell_price' />
             </p>
             <p v-show='product.low_price' class='muted limitPrice'>
@@ -20,7 +20,7 @@
             </p>
         </div>
         <div class='col'>
-            <p class='riseColor'>
+            <p :class='[product.buy_color]'>
                 <Price :digit='product.price_digits' :mode='quoteMode' :point-ratio='product.pointRatio' :price='product.buy_price' />
             </p>
             <p v-show='product.high_price' class='muted limitPrice'>

@@ -20,10 +20,10 @@
 
         <!-- 买卖价格 -->
         <div class='cell priceCell'>
-            <div class='col fallColor'>
+            <div class='col' :class='[product.sell_color]'>
                 <Price :digit='product.price_digits' :mode='2' :point-ratio='product.pointRatio' :price='product.sell_price' />
             </div>
-            <div class='col riseColor'>
+            <div class='col' :class='[product.buy_color]'>
                 <Price :digit='product.price_digits' :mode='2' :point-ratio='product.pointRatio' :price='product.buy_price' />
             </div>
         </div>
@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <!-- 价格设置 -->
+        <!-- 止盈止损价格设置 -->
         <div class='cell priceSet'>
             <div class='col'>
                 <PriceStepper v-model='stopLoss' :product='product' />

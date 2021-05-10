@@ -119,7 +119,7 @@ class SocketEvent {
             symbolId: priceArr[0] * 1,
             trade_type: priceArr[1],
             tick_time: priceArr[3] * 1,
-            price: priceArr[4],
+            cur_price: priceArr[4],
             sell_price: priceArr[5],
             buy_price: priceArr[6],
         })
