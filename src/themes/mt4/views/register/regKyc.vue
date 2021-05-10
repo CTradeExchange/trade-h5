@@ -33,7 +33,6 @@ export default {
         const instance = getCurrentInstance()
         const store = useStore()
         onBeforeRouteLeave((to, from) => {
-            debugger
             if (to.fullPath === '/login') {
                 // 退出登录 断开ws
                 instance.appContext.config.globalProperties.$MsgSocket.ws.close()

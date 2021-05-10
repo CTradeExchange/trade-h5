@@ -107,7 +107,6 @@ export default {
         }
 
         onBeforeRouteLeave((to, from) => {
-            debugger
             if (to.fullPath === '/login' || to.fullPath === '/kycCommitted') {
                 // 退出登录 断开ws
                 instance.appContext.config.globalProperties.$MsgSocket.ws.close()
