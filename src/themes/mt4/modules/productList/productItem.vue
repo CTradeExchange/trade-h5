@@ -57,13 +57,25 @@ export default {
             return tick_time ? dayjs(Number(tick_time)).format('HH:mm:ss') : ''
         })
 
-        const inPosition = computed(() => positionList.value.find(el => el.symbolId === parseInt(product.symbolId)))
+        // 找出当前产品持仓手数
+        const inPosition = computed(() => {
+            const result = {
+                buyVolumes: 0,
+                sellVolumes: 0,
+            }
+            positionList.value.forEach(el => {
+                if (el.symbolId === parseInt(product.symbolId)) {
+                    result[el.direction === 1 ? 'buyVolumes' : 'sellVolumes'] += 1
+                }
+            })
+            return result
+        })
 
         const className = computed(() => ({
             mode1: quoteMode.value === 1,
             mode2: quoteMode.value === 2,
-            position1: inPosition?.value?.direction === 1,
-            position2: inPosition?.value?.direction === 2,
+            position_buy: inPosition.value.buyVolumes && inPosition.value.buyVolumes >= inPosition.value.sellVolumes,
+            position_sell: inPosition.value.sellVolumes && inPosition.value.buyVolumes < inPosition.value.sellVolumes,
         }))
         return {
             tickTime,
@@ -84,7 +96,7 @@ export default {
     display: flex;
     padding: rem(20px) rem(40px);
     overflow: hidden;
-    &.position1::before {
+    &.position_buy::before {
         position: absolute;
         top: 0;
         left: 0;
@@ -95,7 +107,7 @@ export default {
         transform-origin: center;
         content: '';
     }
-    &.position2::before {
+    &.position_sell::before {
         position: absolute;
         top: 0;
         left: 0;
