@@ -102,7 +102,7 @@
                         </div>
                         <div class='f-right'>
                             <p class='amount'>
-                                {{ item.amountIn }} USD
+                                {{ item.amount }} USD
                             </p>
                             <p class='balance'>
                                 余额 {{ item.amountAfter }} USD
