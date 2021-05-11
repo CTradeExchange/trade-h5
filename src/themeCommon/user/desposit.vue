@@ -18,7 +18,7 @@
                     <p class='t1'>
                         {{ item.amount }} {{ checkedType.accountCurrency }}
                     </p>
-                    <!-- <p class='t2'>
+                <!-- <p class='t2'>
                         赠送${{ item.present }}
                     </p> -->
                 </div>
@@ -50,7 +50,7 @@
                     </div>
                     <p class='notice'>
                         <span class='left-val'>
-                            存款时间 : {{ computeTime(checkedType.startTime ) }} - {{ computeTime(checkedType.endTime) }}
+                            存款时间 :{{ checkedType.openTime }}
                         </span>
                         <span class='right-val'>
                             金额限制 : {{ checkedType.singleLowAmount }} - {{ checkedType.singleHighAmount }} {{ checkedType.accountCurrency }}
@@ -64,20 +64,20 @@
                     预计支付 {{ computeExpectedpay || '--' }} {{ checkedType.paymentCurrency }}
                 </div>
                 <div class='pi-item'>
-                    预计到账  {{ checkedType ? parseFloat(amount) - parseFloat(checkedType.fee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
+                    预计到账 {{ checkedType ? parseFloat(amount) - parseFloat(checkedType.fee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
                 </div>
                 <div class='line'></div>
                 <!-- <div class='pi-item'>
                     赠送金额 {{ presentAmount || '--' }} {{ checkedType.accountCurrency }}
                 </div> -->
                 <div class='pi-item'>
-                    手续费 {{ checkedType.fee || '--' }} {{ checkedType.accountCurrency }}
+                    手续费 {{ computeFee || '--' }} {{ checkedType.accountCurrency }}
                 </div>
             </div>
         </div>
     </div>
 
-    <van-button block class='next-btn' type='primary' @click='next'>
+    <van-button block class='next-btn' :disabled='btnDisabled' type='primary' @click='next'>
         <span>下一步</span>
     </van-button>
 
@@ -102,9 +102,7 @@
         @cancel='onCancel'
         @confirm='onConfirm'
     >
-        <van-icon
-            name='info-o'
-        />
+        <van-icon name='info-o' />
         <p class='title'>
             是否已完成充值
         </p>
@@ -113,14 +111,36 @@
 
 <script>
 import Top from '@/components/top'
-import { onBeforeMount, reactive, computed, toRefs } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply } from '@/api/user'
-import { useStore } from 'vuex'
-import { Toast, Dialog } from 'vant'
-import { isEmpty } from '@/utils/util'
+import {
+    onBeforeMount,
+    reactive,
+    computed,
+    toRefs
+} from 'vue'
+import {
+    useRoute,
+    useRouter
+} from 'vue-router'
+import {
+    queryPayType,
+    queryDepositExchangeRate,
+    handleDesposit,
+    checkKycApply
+} from '@/api/user'
+import {
+    useStore
+} from 'vuex'
+import {
+    Toast,
+    Dialog
+} from 'vant'
+import {
+    isEmpty
+} from '@/utils/util'
 import dayjs from 'dayjs'
-import { mul } from '@/utils/calculation'
+import {
+    mul
+} from '@/utils/calculation'
 export default {
     components: {
         Top
@@ -162,9 +182,8 @@ export default {
             if (Number(state.checkedType.feeType === 1)) {
                 return state.checkedType.fee
             } else if (Number(state.checkedType.feeType === 2)) {
-                return mul(state.amount * (state.checkedType.fee / 100))
+                return mul(state.amount, (state.checkedType.fee / 100))
             }
-            return state.presentAmount * 50
         })
 
         // 计算预计支付金额
@@ -183,7 +202,8 @@ export default {
             rateConfig: '',
             presentAmount: 5,
             loading: false,
-            despositVis: false
+            despositVis: false,
+            btnDisabled: false
 
         })
 
@@ -200,7 +220,9 @@ export default {
         }
 
         const toDespositList = () => {
-            router.push({ path: '/despositRecord' })
+            router.push({
+                path: '/despositRecord'
+            })
         }
         const openSheet = () => {
             state.typeShow = true
@@ -208,7 +230,9 @@ export default {
 
         const choosePayType = (item) => {
             state.checkedType = item
-            state.PayTypes.map(item => { item.checked = false })
+            state.PayTypes.map(item => {
+                item.checked = false
+            })
             item.checked = true
             state.typeShow = false
             getDepositExchangeRate()
@@ -236,6 +260,7 @@ export default {
                     if (res.data && res.data.length > 0) {
                         state.PayTypes = res.data
                         state.checkedType = state.PayTypes[0]
+                        state.checkedType.checked = true
                         getDepositExchangeRate()
                     }
                 } else {
@@ -350,7 +375,12 @@ export default {
                         confirmButtonText: Number(res.data) === 1 ? '去查看' : '去认证',
                         message: Number(res.data) === 2 ? 'KYC审核中，请耐心等待' : '当前操作需要KYC认证',
                     }).then(() => {
-                        router.replace({ name: 'Authentication', query: { businessCode: 'cashin' } })
+                        router.replace({
+                            name: 'Authentication',
+                            query: {
+                                businessCode: 'cashin'
+                            }
+                        })
                     })
                 }
                 getPayTypes()
@@ -361,8 +391,24 @@ export default {
         }
 
         onBeforeMount(() => {
-            // 检测存款是否需要kyc
-            checkKyc()
+            // 检测客户组配置是否可存款
+            if (Number(customInfo.value.deposit) === 0) {
+                state.btnDisabled = true
+                return Dialog.confirm({
+                    title: '提示',
+                    theme: 'round-button',
+                    message: '账户暂不能存款，如有疑问请联系在线客服',
+                    confirmButtonText: '联系客服',
+                    cancelButtonText: '关闭'
+                }).then(() => {
+                    // on confirm
+                }).catch(() => {
+                    // on cancel
+                })
+            } else {
+                // 检测存款是否需要kyc
+                checkKyc()
+            }
         })
 
         return {
