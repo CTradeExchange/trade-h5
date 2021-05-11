@@ -48,14 +48,21 @@
                     <div v-else class='pay-type no-data'>
                         暂无可用的支付通道
                     </div>
-                    <p class='notice'>
-                        <span class='left-val'>
-                            存款时间 :{{ checkedType.openTime }}
-                        </span>
+                    <div class='notice'>
+                        <div class='left-val'>
+                            <span class='label'>
+                                存款时间 :
+                            </span>
+                            <div class='left-time'>
+                                <p v-for='(item,index) in resultTimeList' :key='index'>
+                                    {{ item }}
+                                </p>
+                            </div>
+                        </div>
                         <span class='right-val'>
                             金额限制 : {{ checkedType.singleLowAmount }} - {{ checkedType.singleHighAmount }} {{ checkedType.accountCurrency }}
                         </span>
-                    </p>
+                    </div>
                 </div>
             </div>
 
@@ -95,16 +102,17 @@
 
     <van-dialog
         v-model:show='despositVis'
-        cancel-button-text='未完成充值'
+        cancel-button-text='否，关闭'
         class-name='desposit-dialog'
-        confirm-button-text='已完成充值'
+        confirm-button-text='是的，已支付'
         :show-cancel-button='true'
+        theme='round-button'
         @cancel='onCancel'
         @confirm='onConfirm'
     >
-        <van-icon name='info-o' />
+        <h4>支付确认</h4>
         <p class='title'>
-            是否已完成充值
+            您是否已完成该笔充值支付?
         </p>
     </van-dialog>
 </template>
@@ -138,9 +146,12 @@ import {
     isEmpty
 } from '@/utils/util'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import {
     mul
 } from '@/utils/calculation'
+
+dayjs.extend(utc)
 export default {
     components: {
         Top
@@ -203,7 +214,8 @@ export default {
             presentAmount: 5,
             loading: false,
             despositVis: false,
-            btnDisabled: false
+            btnDisabled: false,
+            resultTimeList: []
 
         })
 
@@ -235,6 +247,7 @@ export default {
             })
             item.checked = true
             state.typeShow = false
+            handleShowTime()
             getDepositExchangeRate()
         }
 
@@ -261,6 +274,8 @@ export default {
                         state.PayTypes = res.data
                         state.checkedType = state.PayTypes[0]
                         state.checkedType.checked = true
+                        // 处理时区时间
+                        handleShowTime()
                         getDepositExchangeRate()
                     }
                 } else {
@@ -293,6 +308,36 @@ export default {
             })
         }
 
+        const handleShowTime = () => {
+            state.resultTimeList = []
+            const todayStr = dayjs().format('YYYY-MM-DD')
+            const openTime = state.checkedType.openTime
+            let openTimeList
+            if (!isEmpty(openTime)) {
+                openTimeList = openTime.split(',')
+                openTimeList.forEach(item => {
+                    const [start, end] = item.split('-')
+                    const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
+                    const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
+                    debugger
+                    if (endLocal.isAfter(todayStr, 'day')) {
+                        state.resultTimeList.push(startLocal.format('HH:mm') + '-23:59')
+                        state.resultTimeList.push('00:00-' + endLocal.format('HH:mm'))
+                    } else {
+                        state.resultTimeList.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                    }
+                    const nowDate = dayjs()
+                    debugger
+                })
+            }
+        }
+
+        const timeList = computed(() => {
+            if (!isEmpty(state.checkedType)) {
+                return state.checkedType.openTime.split(',')
+            }
+        })
+
         // 创建存款提案
         const next = () => {
             if (!state.amount) {
@@ -319,7 +364,8 @@ export default {
                 depositAmount: state.amount,
                 country: 'IOS_3166_156',
                 channelCode: '1',
-                depositFrom: 'H5'
+                depositFrom: 'H5',
+                callbackUrl: window.location.host + '/despositCb'
             }
             state.loading = true
             handleDesposit(params).then(res => {
@@ -329,7 +375,6 @@ export default {
                         console.log(res.data)
                         sessionStorage.setItem('proposalNo', res.data.proposalNo)
                         window.location.href = res.data.browserOpenUrl
-                        // window.open(res.data.browserOpenUrl)
                     }
                 } else {
                     Toast(res.msg)
@@ -426,6 +471,8 @@ export default {
             onCancel,
             onConfirm,
             computeFee,
+            timeList,
+            handleShowTime,
             computeExpectedpay
         }
     }
@@ -467,7 +514,7 @@ export default {
                 width: 47%;
                 min-width: 47%;
                 max-width: 47%;
-                height: 50px;
+                height: rem(80px);
                 margin-bottom: rem(30px);
                 text-align: center;
                 border: rem(2px) solid var(--bdColor);
@@ -511,7 +558,18 @@ export default {
                 justify-content: space-between;
                 line-height: rem(72px);
                 .left-val {
+                    display: flex;
+                    //align-items: center;
                     color: var(--mutedColor);
+                    .label{
+
+                    }
+                    .left-time {
+                        padding: rem(16px) 0;
+                        p {
+                            line-height: rem(40px);
+                        }
+                    }
                 }
                 .right-val {
                     color: var(--mutedColor);

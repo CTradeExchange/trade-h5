@@ -20,7 +20,7 @@
                 </van-button>
             </div>
             <div class='notice'>
-                <span>最大可取 {{ withdrawConfig.withdrawAmount }} {{ accountCurrency }}</span>
+                <span>最大可取 {{ withdrawAmount }} {{ accountCurrency }}</span>
                 <span>手续费 {{ fee }} {{ accountCurrency }}</span>
             </div>
             <div class='bank-wrap'>
@@ -77,12 +77,12 @@
     </van-dialog>
     <van-dialog v-model:show='timeShow' theme='round-button' title='提示'>
         <div class='time-wrap'>
-            <p>当前时间不可取款 </p><br />
+            <h4>当前时间不可取款 </h4><br />
             <div class='flex'>
                 <p>取款时间：</p>
                 <div class='time-text'>
                     <p v-for='(item,index) in timeList' :key='index'>
-                        {{ item.weekDay }}：{{ item.openTime }}
+                        {{ item.weekDay }}：{{ item.openTimeLocal.toString() }}
                     </p><br />
                 </div>
             </div>
@@ -107,14 +107,13 @@ import {
     Dialog
 } from 'vant'
 import {
-    isEmpty
+    isEmpty,
+    priceFormat
 } from '@/utils/util'
 import {
     useStore
 } from 'vuex'
-import {
-    mul
-} from '@/utils/calculation'
+import { mul } from '@/utils/calculation'
 import {
     handleWithdraw,
     queryWithdrawConfig,
@@ -125,9 +124,8 @@ import {
 } from '@/api/user'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
-import timezone from 'dayjs/plugin/timezone'
-dayjs.extend(utc) // use plugin
-dayjs.extend(timezone) // use plugin
+
+dayjs.extend(utc)
 export default {
     components: {
         Top
@@ -160,16 +158,22 @@ export default {
         })
 
         const timeList = computed(() => {
-            const timeConfigList = state.withdrawConfig.withdrawTimeConfigList
+            const timeConfigList = state.withdrawTimeConfigMap
             const tempList = []
 
-            if (!isEmpty(timeConfigList) && timeConfigList.length > 0) {
-                timeConfigList.forEach(item => {
-                    tempList.push({
-                        weekDay: weekdayMap[item.weekDay],
-                        openTime: item.openTime
-                    })
-                })
+            if (!isEmpty(timeConfigList)) {
+                for (const key in timeConfigList) {
+                    if (Object.hasOwnProperty.call(timeConfigList, key)) {
+                        const item = timeConfigList[key]
+                        if (!isEmpty(item.openTimeLocal)) {
+                            tempList.push({
+                                weekDay: weekdayMap[item.weekDay],
+                                openTimeLocal: item.openTimeLocal
+                            })
+                        }
+                    }
+                }
+
                 return tempList
             }
         })
@@ -178,6 +182,10 @@ export default {
         const computePre = computed(() => {
             return mul((state.amount - state.fee), state.withdrawRate.exchangeRate)
         })
+
+        // 计算可取金额
+        const withdrawAmount = computed(() =>
+            priceFormat(state.withdrawConfig.withdrawAmount, state.withdrawConfig.digit))
 
         const state = reactive({
             amount: '',
@@ -197,7 +205,8 @@ export default {
             withdrawSuccess: false,
             btnDisabled: false,
             withdrawCurrency: '',
-            timeShow: false
+            timeShow: false,
+            withdrawTimeConfigMap: {} // 处理后的时区
         })
 
         const getWithdrawFee = (amount) => {
@@ -231,6 +240,42 @@ export default {
                     state.fee = 0
                 }
             })
+        }
+
+        const transferUtc = () => {
+            const todayStr = dayjs().format('YYYY-MM-DD')
+            state.withdrawConfig.withdrawTimeConfigList.forEach(el => {
+                el.openTimeLocal = []
+                state.withdrawTimeConfigMap[el.weekDay] = el
+            })
+            for (const key in state.withdrawTimeConfigMap) {
+                if (Object.hasOwnProperty.call(state.withdrawTimeConfigMap, key)) {
+                    const el = state.withdrawTimeConfigMap[key]
+                    const [start, end] = el.openTime.split('-')
+                    const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
+                    const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
+
+                    // 第二天
+                    const weekDay = key < 7 ? Number(key) + 1 : 1
+                    let elNext = state.withdrawTimeConfigMap[weekDay]
+                    if (!elNext) {
+                        elNext = {
+                            openTimeLocal: [],
+                            weekDay
+                        }
+                        state.withdrawTimeConfigMap[weekDay] = elNext
+                    }
+                    if (startLocal.isAfter(todayStr, 'day')) {
+                        elNext.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                    } else if (endLocal.isAfter(todayStr, 'day')) {
+                        elNext.openTimeLocal.push('00:00-' + endLocal.format('HH:mm'))
+                        el.openTimeLocal.push(startLocal.format('HH:mm') + '-23:59')
+                    } else if (el.openTime !== '00:00-00:00') {
+                        el.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                    }
+                }
+            }
+            console.log(state.withdrawTimeConfigMap)
         }
 
         const debounceFn = () => {
@@ -399,6 +444,7 @@ export default {
                     }
                     // 检测取款是否需要kyc
                     checkKyc()
+                    transferUtc()
                 } else {
                     Toast(res.msg)
                 }
@@ -475,7 +521,8 @@ export default {
             getWithdrawFee,
             accountCurrency,
             timeList,
-            computePre
+            computePre,
+            withdrawAmount
         }
     }
 
