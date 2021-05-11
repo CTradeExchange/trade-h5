@@ -45,8 +45,8 @@ export default {
                 message: '确定退出登录吗',
             }).then(() => {
                 state.loading = true
-                // 退出登录 断开ws
-                instance.appContext.config.globalProperties.$MsgSocket.ws.close()
+                // 退出登录
+                instance.appContext.config.globalProperties.$MsgSocket.logout()
                 store.dispatch('_user/logout')
             })
                 .catch(() => {

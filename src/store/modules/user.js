@@ -11,7 +11,7 @@ export default {
         loginData: '', // login返回的信息
         customerInfo: '', // 用户信息
         withdrawConfig: '', // 用户取款配置
-        userAccount: ''
+        userAccount: '', // msg服务推送过来的交易账号信息
     },
     mutations: {
         Update_loginLoading (state, data) {
@@ -89,8 +89,9 @@ export default {
             })
         },
         // 切换账号
-        switchAccount (params) {
+        switchAccount ({ dispatch, commit, rootState }, params = {}) {
             return switchAccount(params).then(res => {
+                // 目前只有一个玩法，暂时不处理切换账号
                 return res
             })
         },

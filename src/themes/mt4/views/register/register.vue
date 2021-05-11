@@ -140,7 +140,6 @@ export default {
                     // 重新登录清除账户信息
                     store.commit('_user/Update_userAccount', '')
                     // 重新开启ws
-                    instance.appContext.config.globalProperties.$MsgSocket.ws.open()
 
                     if (res.data.token) setToken(res.data.token)
                     if (res.data.list.length > 0) {
@@ -157,8 +156,6 @@ export default {
                         // 重新登录清除账户信息
                         store.commit('_user/Update_userAccount', '')
                         // 重新开启ws
-                        instance.appContext.config.globalProperties.$MsgSocket.ws.open()
-                        instance.appContext.config.globalProperties.$QuoteSocket.ws.open()
                         router.replace({ name: 'RegisterSuccess' })
                     }
                 } else {

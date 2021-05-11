@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import VantBase from './vantBase'
-import Socket from '@/plugins/socket/socket'
+import Socket, { MsgSocket } from '@/plugins/socket/socket'
 import longpress from '@/directives/longpress'
 import Loading from '@m/components/loading'
 import Colors, { setRootVariable } from './colorVariables'
@@ -32,9 +32,18 @@ if (loginParams) {
             removeLoginParams()
             router.push({ name: 'Login', query: { back: encodeURIComponent(route.path) } })
         }
+        // 登录消息websocket
+        MsgSocket.subscribedListAdd(function () {
+            MsgSocket.login()
+        })
     })
 } else if (token) {
-    store.dispatch('_user/findCustomerInfo')
+    store.dispatch('_user/findCustomerInfo').then(() => {
+        // 登录消息websocket
+        MsgSocket.subscribedListAdd(function () {
+            MsgSocket.login()
+        })
+    })
 }
 
 // 获取到公司配置后初始化vue实例

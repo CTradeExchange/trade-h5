@@ -33,12 +33,13 @@ export default {
         })
 
         quoteWS.addEventListener('open', function () {
-            if (QuoteSocket.subscribedList.length) QuoteSocket.send_subscribe(QuoteSocket.subscribedList)
             QuoteSocket.initPing() // 心跳
+            QuoteSocket.onOpen() // 连接成功
         })
 
         msgWS.addEventListener('open', function () {
             MsgSocket.initPing() // 心跳
+            MsgSocket.onOpen() // 连接成功
         })
 
         msgWS.addEventListener('close', function (err) {
@@ -46,12 +47,11 @@ export default {
         })
 
         msgWS.addEventListener('message', evt => {
-            const data = JSON.parse(evt.data)
-            if (data.msgCode === 'floatProfitLoss') {
-                MsgSocket.handleProfitLoss(data)
-            } else if (data.msgCode === 'disconnect') {
-                MsgSocket.handleLogout(data)
-            }
+            if (typeof evt.data === 'object' || evt.data.indexOf('{') !== 0) return
+            try {
+                const data = JSON.parse(evt.data)
+                MsgSocket.onMessage(data)
+            } catch (error) {}
         })
 
         tradeWS.addEventListener('open', function () {

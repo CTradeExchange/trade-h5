@@ -83,6 +83,11 @@ class SocketEvent {
         this.send(14000, { symbol_list: list })
     }
 
+    // websocket连接成功
+    onOpen () {
+        if (this.subscribedList.length) this.send_subscribe(this.subscribedList)
+    }
+
     // 收取到消息
     onMessage (data) {
         this.requests.forEach((item, key) => {

@@ -244,8 +244,7 @@ export default {
                 state.loading = false
                 // console.log(res)
                 if (res.invalid()) return false
-                // 登录成功重新连接websocket
-                instance.appContext.config.globalProperties.$MsgSocket.ws.open()
+
                 // 重新登录清除账户信息
                 store.commit('_user/Update_userAccount', '')
 
@@ -293,9 +292,8 @@ export default {
                         message: msg,
                         theme: 'round-button',
                     }).then(() => {
-                        // 登录成功重新连接websocket
-                        instance.appContext.config.globalProperties.$MsgSocket.ws.open()
-                        instance.appContext.config.globalProperties.$QuoteSocket.ws.open()
+                        // 登录websocket
+                        instance.appContext.config.globalProperties.$MsgSocket.login()
                         // 重新登录清除账户信息
                         store.commit('_user/Update_userAccount', '')
                         if (parseInt(res.data.loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
