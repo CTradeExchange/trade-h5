@@ -34,9 +34,7 @@ export default {
         const store = useStore()
         onBeforeRouteLeave((to, from) => {
             if (to.fullPath === '/login') {
-                // 退出登录 断开ws
-                instance.appContext.config.globalProperties.$MsgSocket.ws.close()
-                instance.appContext.config.globalProperties.$QuoteSocket.ws.close()
+                // 退出登录
                 store.dispatch('_user/logout')
             }
         })
