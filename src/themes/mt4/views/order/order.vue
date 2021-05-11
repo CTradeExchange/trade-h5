@@ -27,8 +27,9 @@
                 <Price :digit='product.price_digits' :mode='2' :point-ratio='product.pointRatio' :price='product.buy_price' />
             </div>
         </div>
-        <!-- {{ profitLossRang }} -->
         <!-- 挂单 -->
+        <p>挂单价格范围</p>
+        <p>{{ pendingPriceRang }}</p>
         <div v-if='openOrderSelected.val > 1' class='cell priceSet'>
             <div class='col'>
                 <PriceStepper v-model='pendingPrice' :product='product' />
@@ -36,6 +37,8 @@
         </div>
 
         <!-- 止盈止损价格设置 -->
+        <p>止盈止损价格范围</p>
+        {{ profitLossRang }}
         <div class='cell priceSet'>
             <div class='col'>
                 <PriceStepper v-model='stopLoss' :product='product' />
@@ -142,6 +145,7 @@ export default {
 
         const positionList = computed(() => store.state._trade.positionList)
         const profitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
+        const pendingPriceRang = computed(() => store.getters['_trade/pendingPriceRang'])
 
         // 设置默认手数
         watch(
@@ -305,6 +309,7 @@ export default {
             openOrder,
             handleUpdateOrder,
             profitLossRang,
+            pendingPriceRang,
             selectOpenOrder,
             onHide,
 

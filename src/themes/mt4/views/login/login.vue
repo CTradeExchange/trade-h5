@@ -246,7 +246,6 @@ export default {
                 if (res.invalid()) return false
                 // 登录成功重新连接websocket
                 instance.appContext.config.globalProperties.$MsgSocket.ws.open()
-                instance.appContext.config.globalProperties.$QuoteSocket.ws.open()
                 // 重新登录清除账户信息
                 store.commit('_user/Update_userAccount', '')
 

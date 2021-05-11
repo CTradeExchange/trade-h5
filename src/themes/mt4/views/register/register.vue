@@ -141,7 +141,6 @@ export default {
                     store.commit('_user/Update_userAccount', '')
                     // 重新开启ws
                     instance.appContext.config.globalProperties.$MsgSocket.ws.open()
-                    instance.appContext.config.globalProperties.$QuoteSocket.ws.open()
 
                     if (res.data.token) setToken(res.data.token)
                     if (res.data.list.length > 0) {

@@ -36,7 +36,6 @@ export default {
             if (to.fullPath === '/login') {
                 // 退出登录 断开ws
                 instance.appContext.config.globalProperties.$MsgSocket.ws.close()
-                instance.appContext.config.globalProperties.$QuoteSocket.ws.close()
                 store.dispatch('_user/logout')
             }
         })
