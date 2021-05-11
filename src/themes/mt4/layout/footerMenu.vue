@@ -22,14 +22,24 @@
 </template>
 
 <script>
+import { reactive, toRefs, watch } from 'vue'
+import { useRoute } from 'vue-router'
 export default {
-    data () {
+    setup () {
+        const route = useRoute()
+        const state = reactive({
+            active: '/quote'
+        })
+        watch(
+            route,
+            (newval) => {
+                state.active = newval.name
+            },
+            { immediate: true }
+        )
         return {
-            active: ''
+            ...toRefs(state)
         }
-    },
-    created () {
-        this.active = this.$route.name
     }
 }
 </script>

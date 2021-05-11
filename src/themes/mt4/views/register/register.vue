@@ -135,6 +135,13 @@ export default {
                     sessionStorage.setItem('RegisterParams', JSON.stringify({ ...params, openType: state.openType }))
                     sessionStorage.setItem('RegisterData', JSON.stringify(res))
 
+                    // 注册成功重新获取客户信息
+                    store.dispatch('_user/findCustomerInfo')
+                    // 重新登录清除账户信息
+                    store.commit('_user/Update_userAccount', '')
+                    // 重新开启ws
+                    instance.appContext.config.globalProperties.$MsgSocket.ws.open()
+
                     if (res.data.token) setToken(res.data.token)
                     if (res.data.list.length > 0) {
                         // 需要KYC认证

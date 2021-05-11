@@ -244,6 +244,10 @@ export default {
                 state.loading = false
                 // console.log(res)
                 if (res.invalid()) return false
+                // 登录成功重新连接websocket
+                instance.appContext.config.globalProperties.$MsgSocket.ws.open()
+                // 重新登录清除账户信息
+                store.commit('_user/Update_userAccount', '')
 
                 // 登录KYC,0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
                 let msg, confirmButtonText
