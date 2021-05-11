@@ -8,7 +8,7 @@
 
     <div class='container'>
         <van-cell size='large' title='点差' value='浮动' />
-        <van-cell size='large' title='小数位' :value='product.symbolDigits' />
+        <van-cell size='large' title='小数位' :value='product.price_digits' />
         <van-cell size='large' title='止损水平' :value='product.stopLossMinPoint +"-"+ product.stopLossMaxPoint' />
         <van-cell size='large' title='合约数量' :value='product.contractSize' />
         <van-cell size='large' title='利润计算公式' value='Forex' />

@@ -2,7 +2,7 @@
     <van-stepper
         v-model='value'
         class='priceStepper'
-        :decimal-length='product.symbolDigits'
+        :decimal-length='product.price_digits'
         :disabled='disabled'
         :min='-999'
         :step='step'
@@ -35,7 +35,7 @@ export default {
         const state = reactive({
             value: props.modelValue,
         })
-        const step = computed(() => Math.pow(0.1, props.product.symbolDigits))
+        const step = computed(() => Math.pow(0.1, props.product.price_digits))
         let type
         watch(
             () => props.modelValue,

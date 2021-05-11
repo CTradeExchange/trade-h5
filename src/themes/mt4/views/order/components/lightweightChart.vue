@@ -1,5 +1,5 @@
 <template>
-    <div id="lightweightChart" ref="chartEl"></div>
+    <div id='lightweightChart' ref='chartEl'></div>
 </template>
 
 <script>
@@ -8,13 +8,13 @@ import { ref, onMounted, watch, computed } from 'vue'
 import { useStore } from 'vuex'
 export default {
     props: ['product'],
-    setup({ product }) {
+    setup ({ product }) {
         const chartEl = ref(null)
         const store = useStore()
-        const style = computed(()=>store.state.style);
+        const style = computed(() => store.state.style)
         const buyPriceArrs = []
         const sellPriceArrs = []
-        let stopLossLine,takeProfitLine;
+        let stopLossLine, takeProfitLine
         const initChart = () => {
             const el = chartEl.value
             const chart = createChart(chartEl.value, {
@@ -39,30 +39,30 @@ export default {
             // 买价线
             const buyLineSeries = chart.addLineSeries({
                 lineWidth: 1,
-                color:style.value.buyColor,
-                priceScale:{
+                color: style.value.buyColor,
+                priceScale: {
                     autoScale: false,
 
                 },
                 priceFormat: {
                     type: 'price',
-                    precision: product.symbolDigits,
-                    minMove: Math.pow(0.1, product.symbolDigits).toFixed(product.symbolDigits) * 1,
+                    precision: product.price_digits,
+                    minMove: Math.pow(0.1, product.price_digits).toFixed(product.price_digits) * 1,
                 }
             })
             // 卖价线
             const sellLineSeries = chart.addLineSeries({
                 lineWidth: 1,
-                color:style.value.sellColor,
+                color: style.value.sellColor,
                 priceFormat: {
                     type: 'price',
-                    precision: product.symbolDigits,
-                    minMove: Math.pow(0.1, product.symbolDigits).toFixed(product.symbolDigits) * 1,
+                    precision: product.price_digits,
+                    minMove: Math.pow(0.1, product.price_digits).toFixed(product.price_digits) * 1,
                 }
             })
 
             // 创建价格线
-            const createPriceLine = ({price, title,color})=>{
+            const createPriceLine = ({ price, title, color }) => {
                 return buyLineSeries.createPriceLine({
                     price,
                     title,
@@ -73,18 +73,18 @@ export default {
             }
             // 止损线
             stopLossLine = createPriceLine({
-                price:-999,
-                title:'SL',
-                color:style.value.fallColor
-            });
+                price: -999,
+                title: 'SL',
+                color: style.value.fallColor
+            })
             // 止盈线
             takeProfitLine = createPriceLine({
-                price:-999,
-                title:'TP',
-                color:style.value.riseColor
-            });
+                price: -999,
+                title: 'TP',
+                color: style.value.riseColor
+            })
 
-            const setNewPrice = ()=>{
+            const setNewPrice = () => {
                 const curBuyPrice = { time: parseInt(product.tick_time / 1000), value: Number(product.buy_price) }
                 const curSellPrice = { time: parseInt(product.tick_time / 1000), value: Number(product.sell_price) }
                 buyPriceArrs.push(curBuyPrice)
@@ -108,13 +108,12 @@ export default {
             )
         }
 
-
         // 更新止损线
-        const stopLossLineUpdate = opts=>{
+        const stopLossLineUpdate = opts => {
             stopLossLine.applyOptions(opts)
         }
         // 更新止盈线
-        const takeProfitLineUpdate = opts=>{
+        const takeProfitLineUpdate = opts => {
             takeProfitLine.applyOptions(opts)
         }
         onMounted(() => {

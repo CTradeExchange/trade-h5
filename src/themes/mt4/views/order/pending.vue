@@ -31,14 +31,14 @@ export default {
             const volumeDigit = getDecimalNum(props.product.minVolume)
             return (props.data.requestNum / props.product.contractSize).toFixed(volumeDigit)
         })
-        const requestPrice = computed(() => (props.data.requestPrice / Math.pow(10, props.product.symbolDigits)).toFixed(props.product.symbolDigits))
+        const requestPrice = computed(() => (props.data.requestPrice / Math.pow(10, props.product.price_digits)).toFixed(props.product.price_digits))
         const sl = computed(() => {
-            if (!props.data.stopLoss) return Number(0).toFixed(props.product.symbolDigits)
-            return (props.data.stopLoss / Math.pow(10, props.product.symbolDigits)).toFixed(props.product.symbolDigits)
+            if (!props.data.stopLoss) return Number(0).toFixed(props.product.price_digits)
+            return (props.data.stopLoss / Math.pow(10, props.product.price_digits)).toFixed(props.product.price_digits)
         })
         const tp = computed(() => {
-            if (!props.data.takeProfit) return Number(0).toFixed(props.product.symbolDigits)
-            return (props.data.takeProfit / Math.pow(10, props.product.symbolDigits)).toFixed(props.product.symbolDigits)
+            if (!props.data.takeProfit) return Number(0).toFixed(props.product.price_digits)
+            return (props.data.takeProfit / Math.pow(10, props.product.price_digits)).toFixed(props.product.price_digits)
         })
         return {
             orderVolume,

@@ -1,4 +1,4 @@
-import { login, findCustomerInfo, logout } from '@/api/user'
+import { login, findCustomerInfo, logout, switchAccount } from '@/api/user'
 import { localSet, setToken, removeLoginParams } from '@/utils/util'
 import router from '@m/router'
 
@@ -87,6 +87,12 @@ export default {
                 return res
             }).catch(err => {
             })
-        }
+        },
+        // 切换账号
+        switchAccount (params) {
+            return switchAccount(params).then(res => {
+                return res
+            })
+        },
     }
 }
