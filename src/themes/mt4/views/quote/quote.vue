@@ -18,6 +18,7 @@ import { useStore } from 'vuex'
 import { getLoginParams } from '@/utils/util'
 
 export default {
+    name: 'Quote',
     components: {
         productListComp,
         Top,

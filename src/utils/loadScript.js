@@ -26,7 +26,8 @@ function loadScript (url) {
         )
     })
     scriptElement.type = 'text/javascript'
-    scriptElement.async = true
+    scriptElement.async = false
+    scriptElement.defer = true
     scriptElement.src = url
     return promise
 }

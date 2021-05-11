@@ -13,7 +13,7 @@ const routes = [
             {
                 path: 'quote',
                 name: 'Quote',
-                component: () => import(/* webpackChunkName: "quote" */ '../views/quote/quote.vue'),
+                component: () => import(/* webpackChunkName: "Quote" */ '../views/quote/quote.vue'),
                 meta: {
                     title: '行情',
                 }
@@ -43,14 +43,6 @@ const routes = [
                 }
             },
             {
-                path: 'news',
-                name: 'News',
-                component: () => import(/* webpackChunkName: "news" */ '../views/news/news.vue'),
-                meta: {
-                    title: '新闻'
-                }
-            },
-            {
                 path: 'onlineService',
                 name: 'OnlineService',
                 component: () => import(/* webpackChunkName: "onlineService" */ '../views/onlineService/onlineService.vue'),
@@ -76,6 +68,15 @@ const routes = [
                 }
             }
         ]
+    },
+    {
+        path: '/news',
+        name: 'News',
+        component: () => import(/* webpackChunkName: "news" */ '../views/news/news.vue'),
+        meta: {
+            title: '新闻',
+            keepAlive: true,
+        }
     },
     {
         path: '/login',
@@ -172,7 +173,7 @@ const routes = [
     {
         path: '/closePosition',
         name: 'ClosePosition',
-        component: () => import(/* webpackChunkName: "order" */ '../views/order/closePosition.vue'),
+        component: () => import(/* webpackChunkName: "closePosition" */ '../views/order/closePosition.vue'),
         meta: {
             title: '平仓',
             roles: ['User'],
@@ -181,7 +182,7 @@ const routes = [
     {
         path: '/search',
         name: 'Search',
-        component: () => import(/* webpackChunkName: "order" */ '../views/quote/search.vue'),
+        component: () => import(/* webpackChunkName: "search" */ '../views/quote/search.vue'),
         meta: {
             title: '添加交易品种'
         }
@@ -189,9 +190,17 @@ const routes = [
     {
         path: '/regKyc',
         name: 'RegKyc',
-        component: () => import(/* webpackChunkName: "order" */ '../views/register/regKyc.vue'),
+        component: () => import(/* webpackChunkName: "regKyc" */ '../views/register/regKyc.vue'),
         meta: {
             title: '身份认证'
+        }
+    },
+    {
+        path: '/otherpage/:type',
+        name: 'Otherpage',
+        component: () => import(/* webpackChunkName: "otherpage" */ '../views/otherpage/otherpage.vue'),
+        meta: {
+            title: ''
         }
     },
     ...themeRouter
