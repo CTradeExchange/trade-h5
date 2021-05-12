@@ -21,7 +21,7 @@ import { toRefs, reactive, computed, ref, getCurrentInstance, watch, onBeforeMou
 import { logout } from '@/api/user'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
-import { isEmpty, removeLoginParams } from '@/utils/util'
+import { isEmpty, removeLoginParams, localSet, localGet } from '@/utils/util'
 import { useStore } from 'vuex'
 export default {
     components: {
@@ -39,13 +39,13 @@ export default {
         })
 
         onBeforeMount(() => {
-            if (!isEmpty(localStorage.getItem('openNews'))) {
-                state.checked = JSON.parse(localStorage.getItem('openNews'))
+            if (!isEmpty(localGet('openNews'))) {
+                state.checked = JSON.parse(localGet('openNews'))
             }
         })
 
         const changeNewsState = (state) => {
-            localStorage.setItem('openNews', state)
+            localSet('openNews', state)
         }
 
         const handleLogout = () => {
