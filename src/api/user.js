@@ -391,3 +391,27 @@ export function queryDepositProposal (data) {
         data
     })
 }
+
+/* 更换手机 */
+export function changePhone (data) {
+    return request({
+        url: '/global/customer.CustomerWebApiService.changePhone',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 更换邮箱 */
+export function changeEmail (data) {
+    return request({
+        url: '/global/customer.CustomerWebApiService.changeEmail',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

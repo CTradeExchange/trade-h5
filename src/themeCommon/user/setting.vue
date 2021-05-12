@@ -2,9 +2,8 @@
     <Top :back='true' :menu='false' title='' />
     <div class='page-wrap'>
         <van-cell title='启用新闻'>
-            <!-- 使用 right-icon 插槽来自定义右侧图标 -->
             <template #right-icon>
-                <van-switch v-model='checked' active-color='#54C41C' size='24px' />
+                <van-switch v-model='checked' active-color='#54C41C' size='24px' @change='changeNewsState' />
             </template>
         </van-cell>
         <van-cell is-link title='修改登录密码' to='/setLoginPwd' />
@@ -18,11 +17,11 @@
 
 <script>
 import Top from '@m/layout/top'
-import { toRefs, reactive, computed, ref, getCurrentInstance } from 'vue'
+import { toRefs, reactive, computed, ref, getCurrentInstance, watch, onBeforeMount } from 'vue'
 import { logout } from '@/api/user'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
-import { removeLoginParams } from '@/utils/util'
+import { isEmpty, removeLoginParams } from '@/utils/util'
 import { useStore } from 'vuex'
 export default {
     components: {
@@ -33,11 +32,21 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         const store = useStore()
+        const router = useRouter()
         const state = reactive({
             checked: false,
             loading: false
         })
-        const router = useRouter()
+
+        onBeforeMount(() => {
+            if (!isEmpty(localStorage.getItem('openNews'))) {
+                state.checked = JSON.parse(localStorage.getItem('openNews'))
+            }
+        })
+
+        const changeNewsState = (state) => {
+            localStorage.setItem('openNews', state)
+        }
 
         const handleLogout = () => {
             Dialog.confirm({
@@ -48,14 +57,14 @@ export default {
                 // 退出登录
                 instance.appContext.config.globalProperties.$MsgSocket.logout()
                 store.dispatch('_user/logout')
+            }).catch(() => {
+                // on cancel
             })
-                .catch(() => {
-                    // on cancel
-                })
         }
         return {
             customInfo,
             handleLogout,
+            changeNewsState,
             ...toRefs(state)
         }
     }

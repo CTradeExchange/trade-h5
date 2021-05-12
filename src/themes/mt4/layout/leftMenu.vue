@@ -25,6 +25,7 @@
                 </figcaption>
             </figure>
             <ul class='menuList'>
+                {{ visible }}***
                 <!-- <li class='item' @click="visible=false;$router.push('/quote')"> <i class='icon icon_hangqing'></i> <strong>行情</strong> </li>
                 <li class='item' @click="visible=false;$router.push('/chart')"> <i class='icon icon_tubiao'></i> <strong>图表</strong> </li>
                 <li class='item' @click="visible=false;$router.push('/trade')"> <i class='icon icon_jiaoyi'></i> <strong>交易</strong> </li>
@@ -44,7 +45,7 @@
                 <li class='item' @click="visible=false;$router.push('/personal')">
                     <i class='icon icon_gerenxinxi '></i> <strong>个人信息</strong>
                 </li>
-                <li class='item' @click="visible=false;$router.push('/news')">
+                <li v-if='openNews' class='item' @click='toNews'>
                     <i class='icon icon_xinwen'></i> <strong>新闻</strong>
                 </li>
 
@@ -72,16 +73,33 @@
 <script>
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 export default {
     setup () {
+        const router = useRouter()
         const store = useStore()
         const state = reactive({
             visible: false,
         })
+
         const customerNo = computed(() => store.state._user.customerInfo?.customerNo)
+        const openNews = computed(() => {
+            debugger
+            if (localStorage.getItem('openNews')) return JSON.parse(localStorage.getItem('openNews'))
+        })
+
+        const toNews = () => {
+            state.visible = false
+            router.replace('/news')
+            // debugger
+        }
+
         return {
             ...toRefs(state),
             customerNo,
+            openNews,
+            toNews
+
         }
     },
 }

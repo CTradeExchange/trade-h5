@@ -1,5 +1,5 @@
 <template>
-    <Top />
+    <Top ref='top' />
     <div id='homeContent' ref='homeContent' class='container'>
         <div id='inflow2App' ref='inflow2App'>
             <!-- <demo :orgid="orgid" lang="zh-cn"></demo> -->
@@ -22,6 +22,8 @@ export default {
         footerMenu,
     },
     activated () {
+        debugger
+        console.log(this.$refs.top.$refs.leftMenu.visible)
         const homeContent = this.$refs.homeContent
         homeContent.scrollTop = scrollTop
     },

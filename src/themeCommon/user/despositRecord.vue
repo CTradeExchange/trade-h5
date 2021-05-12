@@ -21,7 +21,7 @@
                         <van-collapse-item :name='index+1'>
                             <template #title>
                                 <p class='amount'>
-                                    {{ item.intendAmount }} USD
+                                    {{ item.intendAmount }} {{ item.depositCurrency }}
                                 </p>
                                 <p class='time'>
                                     {{ formatTime(item.createTime) }}

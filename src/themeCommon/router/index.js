@@ -44,7 +44,7 @@ const routes = [
     {
         path: '/despositRecord',
         name: 'DespositRecord',
-        component: () => import(/* webpackChunkName: "addBank" */ '../user/depositRecord.vue'),
+        component: () => import(/* webpackChunkName: "addBank" */ '../user/despositRecord.vue'),
         meta: {
             title: '存款记录',
             footerMenu: false,

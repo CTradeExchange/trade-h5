@@ -60,7 +60,7 @@
                             </div>
                         </div>
                         <span class='right-val'>
-                            金额限制 : {{ checkedType.singleLowAmount }} - {{ checkedType.singleHighAmount }} {{ checkedType.accountCurrency }}
+                            金额限制 : {{ checkedType.singleLowAmount }}-{{ checkedType.singleHighAmount }} {{ checkedType.accountCurrency }}
                         </span>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                     预计支付 {{ computeExpectedpay || '--' }} {{ checkedType.paymentCurrency }}
                 </div>
                 <div class='pi-item'>
-                    预计到账 {{ checkedType ? parseFloat(amount) - parseFloat(checkedType.fee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
+                    预计到账 {{ amount && checkedType ? parseFloat(amount) - parseFloat(checkedType.fee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
                 </div>
                 <div class='line'></div>
                 <!-- <div class='pi-item'>
@@ -399,8 +399,8 @@ export default {
                 paymentChannelType: state.checkedType.paymentType,
                 paymentChannelClientType: 'mobile',
                 depositAmount: state.amount,
-                country: 'IOS_3166_156',
-                channelCode: '1',
+                country: customInfo.value.country,
+                channelCode: customInfo.value.utmSource,
                 depositFrom: 'H5',
                 callbackUrl: window.location.host + '/despositCb'
             }
