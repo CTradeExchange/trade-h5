@@ -392,6 +392,18 @@ export function queryDepositProposal (data) {
     })
 }
 
+/* 客户自选产品列表 */
+export function queryCustomerOptionalList (data) {
+    return request({
+        url: '/global/customer.CustomerOptionalWebApiService.list',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
 /* 更换手机 */
 export function changePhone (data) {
     return request({

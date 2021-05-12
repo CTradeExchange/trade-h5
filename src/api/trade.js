@@ -109,13 +109,26 @@ export function closePboOrder (data) {
     })
 }
 
+/* 添加自选 */
+export function addCustomerOptional (data) {
+    return request({
+        url: '/global/customer.CustomerOptionalWebApiService.add',
+        method: 'post',
+        headers: {
+            // group: 'tradeApi',
+            // version: '0.0.1',
+        },
+        data
+    })
+}
+
 /* 根据客户组搜索产品 */
 export function getSymbolList (data) {
     return request({
         url: '/global/config.OpenSymbolDubboService.getSymbolList',
         method: 'post',
         headers: {
-            version: '0.0.1',
+            // version: '0.0.1',
         },
         data
     })
