@@ -46,8 +46,8 @@ export default {
 
             // 该产品先拿到快照价格，后拿到点差，需要重新计算价格点差
             if (!askSpread && data.askSpread && data.pointRatio) {
-                spreadText(product)
                 price_spread(product, { ...data, ...product })
+                spreadText(product)
             }
         },
         // 更新某个产品报价
@@ -71,8 +71,8 @@ export default {
             product.buy_price_pre = product.buy_price * 1
             product.sell_price_pre = product.sell_price * 1
             Object.assign(product, data)
-            spreadText(product)
             price_spread(product, data)
+            spreadText(product)
         },
         Update_productActivedID (state, id) {
             sessionStorage.setItem('productActived', JSON.stringify(state.productMap[id]))
@@ -96,7 +96,6 @@ export default {
             if (newSymbolIds.length === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
 
             return querySymbolBaseInfoList(params).then((res) => {
-                console.log('querySymbolBaseInfoList')
                 if (res.check()) {
                     res.data.forEach(el => {
                         el.symbol_id = el.symbolId
