@@ -1,7 +1,7 @@
-import { login, findCustomerInfo, logout, switchAccount } from '@/api/user'
+import { login, findCustomerInfo, logout, switchAccount, queryCustomerOptionalList } from '@/api/user'
 import { localSet, setToken, removeLoginParams } from '@/utils/util'
 import router from '@m/router'
-import { Toast, Dialog } from 'vant'
+import { Dialog } from 'vant'
 
 export default {
     namespaced: true,
@@ -13,7 +13,8 @@ export default {
         customerInfo: '', // 用户信息
         withdrawConfig: '', // 用户取款配置
         userAccount: '', // msg服务推送过来的交易账号信息
-        kycState: '' // kyc认证
+        kycState: '', // kyc认证
+        selfSymbolList: [], // 自选产品列表
     },
     mutations: {
         Update_loginLoading (state, data) {
@@ -33,7 +34,10 @@ export default {
         },
         Update_kycState (state, data) {
             state.kycState = data
-        }
+        },
+        Update_selfSymbolList (state, data) {
+            state.selfSymbolList = data
+        },
     },
     actions: {
         // 登录
@@ -129,6 +133,13 @@ export default {
         switchAccount ({ dispatch, commit, rootState }, params = {}) {
             return switchAccount(params).then(res => {
                 // 目前只有一个玩法，暂时不处理切换账号
+                return res
+            })
+        },
+        // 客户自选产品列表
+        queryCustomerOptionalList ({ dispatch, commit, rootState }, params = {}) {
+            return queryCustomerOptionalList(params).then(res => {
+                commit('Update_selfSymbolList', res.data)
                 return res
             })
         },
