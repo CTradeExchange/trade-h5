@@ -142,7 +142,6 @@ export default {
         })
 
         onBeforeUnmount(() => {
-            debugger
             sessionStorage.removeItem('proposalNo')
         })
 

@@ -319,7 +319,7 @@ export default {
                     const [start, end] = item.split('-')
                     const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
                     const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
-                    debugger
+
                     if (endLocal.isAfter(todayStr, 'day')) {
                         state.resultTimeList.push(startLocal.format('HH:mm') + '-23:59')
                         state.resultTimeList.push('00:00-' + endLocal.format('HH:mm'))
@@ -327,7 +327,6 @@ export default {
                         state.resultTimeList.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
                     }
                     const nowDate = dayjs()
-                    debugger
                 })
             }
         }

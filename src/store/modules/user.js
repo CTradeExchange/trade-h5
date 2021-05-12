@@ -1,6 +1,7 @@
 import { login, findCustomerInfo, logout, switchAccount } from '@/api/user'
 import { localSet, setToken, removeLoginParams } from '@/utils/util'
 import router from '@m/router'
+import { Toast, Dialog } from 'vant'
 
 export default {
     namespaced: true,
@@ -12,6 +13,7 @@ export default {
         customerInfo: '', // 用户信息
         withdrawConfig: '', // 用户取款配置
         userAccount: '', // msg服务推送过来的交易账号信息
+        kycState: '' // kyc认证
     },
     mutations: {
         Update_loginLoading (state, data) {
@@ -28,6 +30,9 @@ export default {
         },
         Update_userAccount (state, data) {
             state.userAccount = data
+        },
+        Update_kycState (state, data) {
+            state.kycState = data
         }
     },
     actions: {
@@ -39,6 +44,7 @@ export default {
                     const data = res.data
                     if (params.loginPwd) localSet('loginParams', JSON.stringify(params))
                     setToken(data.token)
+                    commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_loginData', data)
                     commit('Update_customerInfo', data)
                     commit('_base/UPDATE_tradeType', data.tradeType, { root: true }) // 登录后存储用户的玩法类型
@@ -61,7 +67,46 @@ export default {
             commit('Update_loginLoading', true)
             return findCustomerInfo().then((res) => {
                 if (res.check()) {
+                    // 登录KYC,0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
+                    let msg, confirmButtonText
+
+                    if (Number(res.data.kycAuditStatus === 0)) {
+                        msg = '您还未进行KYC认证，点击去认证'
+                        confirmButtonText = '去认证'
+                        Dialog.alert({
+                            title: '提示',
+                            confirmButtonText: confirmButtonText,
+                            message: msg,
+                            theme: 'round-button',
+                        }).then(() => {
+                            router.push('/authentication')
+                        })
+                    } else if (Number(res.data.kycAuditStatus === 1)) {
+                        msg = '您的资料正在审核中，等耐心等待'
+                        confirmButtonText = '关闭'
+                        return Dialog.alert({
+                            title: '提示',
+                            confirmButtonText: confirmButtonText,
+                            message: msg,
+                            theme: 'round-button',
+                        }).then(() => {
+                            dispatch('_user/logout')
+                        })
+                    } else if (Number(res.data.kycAuditStatus === 3)) {
+                        msg = '您的资料审核失败'
+                        confirmButtonText = '重新提交'
+                        return Dialog.alert({
+                            title: '提示',
+                            confirmButtonText: confirmButtonText,
+                            message: msg,
+                            theme: 'round-button',
+                        }).then(() => {
+                            router.push('/authentication')
+                        })
+                    }
+
                     const data = res.data
+                    commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_customerInfo', res.data)
 
                     // 设置当前用户组的产品

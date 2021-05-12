@@ -56,6 +56,7 @@ import {
     toRefs,
     reactive,
     ref,
+    computed,
     getCurrentInstance,
     onBeforeMount
 } from 'vue'
@@ -75,6 +76,8 @@ export default {
             list: [],
             loading: false,
         })
+
+        const kycState = computed(() => store.state._user.kycState)
 
         const getAuthCondition = () => {
             state.loading = true
@@ -107,10 +110,13 @@ export default {
         }
 
         onBeforeRouteLeave((to, from) => {
-            if (to.fullPath === '/login' || to.fullPath === '/kycCommitted') {
-                // 退出登录 断开ws
+            if ((Number(kycState.value) === 0 || Number(kycState.value) === 3) && to.path !== '/authForm') {
                 store.dispatch('_user/logout')
             }
+            // if (to.fullPath === '/login' || to.fullPath === '/kycCommitted') {
+            //     // 退出登录 断开ws
+
+            // }
         })
 
         onBeforeMount(() => {
@@ -118,6 +124,7 @@ export default {
         })
 
         return {
+            kycState,
             handleNext,
             ...toRefs(state)
         }
