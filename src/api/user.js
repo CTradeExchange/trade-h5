@@ -32,7 +32,7 @@ export function logout (data) {
 /* 注册 */
 export function register (data) {
     return request({
-        url: '/global/customer.app.CustomerWebApiService.register',
+        url: '/register/customer.app.CustomerWebApiService.register',
         method: 'post',
         headers: {
             version: '0.0.1',
