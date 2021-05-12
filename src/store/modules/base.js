@@ -27,10 +27,9 @@ export default {
     },
     actions: {
         // 获取公司配置信息
-        getCompanyInfo ({ dispatch, commit, state, rootState }) {
+        getCompanyInfo ({ dispatch, commit, state, rootGetters }) {
             return wpCompanyConfig().then(async data => {
                 if (data) {
-                    // data.customerGroupId = 1
                     commit('UPDATE_wpCompanyInfo', data)
                     commit('UPDATE_tradeType', data.tradeTypeList[0]['id']) // 先存储公司默认的玩法类型
                 }
@@ -38,8 +37,7 @@ export default {
                 const selfSymbolData = await wpSelfSymbolIndex()
 
                 if (selfSymbolData) {
-                    const customerGroupId = rootState._user.customerInfo?.customerGroupId || data.customerGroupId
-                    const products = selfSymbolData.product[customerGroupId]
+                    const products = selfSymbolData.product[rootGetters.customerGroupId]
                     const productList = products.map(el => ({ symbolId: el }))
 
                     commit('UPDATE_selfSymbol', selfSymbolData)

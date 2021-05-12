@@ -81,15 +81,14 @@ export default {
     },
     actions: {
         // 产品基础信息列表
-        querySymbolBaseInfoList ({ dispatch, commit, state, rootState }, symbolIds = []) {
+        querySymbolBaseInfoList ({ dispatch, commit, state, rootState, rootGetters }, symbolIds = []) {
             const productMap = state.productMap
 
             const newSymbolIds = symbolIds.filter(el => !productMap[el].symbolName)
-            const guestCustomerGroupId = rootState._base.wpCompanyInfo.customerGroupId
             const params = {
                 symbolIds: newSymbolIds.join(),
                 tradeType: parseInt(rootState._base.tradeType),
-                customerGroupId: rootState._user.customerInfo?.customerGroupId ?? guestCustomerGroupId,
+                customerGroupId: rootGetters.customerGroupId,
                 accountId: rootState._user.customerInfo?.accountId,
             }
 
@@ -106,15 +105,14 @@ export default {
             })
         },
         // 产品详细信息
-        querySymbolInfo ({ dispatch, commit, state, rootState }, symbolId) {
+        querySymbolInfo ({ dispatch, commit, state, rootState, rootGetters }, symbolId) {
             const productMap = state.productMap
 
             if (productMap[symbolId].contractSize) return Promise.resolve(new CheckAPI({ code: '0', data: {} }))
-            const guestCustomerGroupId = rootState._base.wpCompanyInfo.customerGroupId
             const params = {
                 symbolId: Number(symbolId),
                 tradeType: rootState._base.tradeType,
-                customerGroupId: rootState._user.customerInfo?.customerGroupId ?? guestCustomerGroupId,
+                customerGroupId: rootGetters.customerGroupId,
                 // accountId: rootState._user.customerInfo?.accountId,
             }
             return querySymbolInfo(params).then((res) => {
