@@ -43,7 +43,7 @@ export default {
         }
         const onSearch = (val) => {
             state.value = val
-            debugger
+
             // const registerData = sessionStorage.getItem('RegisterData')
             if (!isEmpty(customInfo)) {
                 // const { companyId, customerGroupId } = JSON.parse(registerData).data
