@@ -130,7 +130,6 @@ class SocketEvent {
 
     // 处理盈亏浮动数据和账户数据
     floatProfitLoss (data) {
-        console.log('收到消息', data)
         const content = data.content
         this.$store.commit('_user/Update_userAccount', content)
         if (content.positionProfitLossMessages.length > 0) {

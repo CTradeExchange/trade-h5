@@ -2,7 +2,7 @@
     <top back :menu='false' :sub-title='product.symbolCode' :title='product.symbolName' />
     <div v-if='product' class='orderWrap'>
         <!-- 订单类型 -->
-        <div v-if='!$route.query.positionId' class='cell openType'>
+        <div v-if='!$route.query.positionId && !$route.query.pendingId' class='cell openType'>
             <p class='title' @click='dropdownWrap = !dropdownWrap'>
                 {{ openOrderSelected.name }}
             </p>
@@ -30,9 +30,9 @@
         <!-- 挂单 -->
         <p>挂单价格范围</p>
         <p>{{ pendingPriceRang }}</p>
-        <div v-if='openOrderSelected.val > 1' class='cell priceSet'>
+        <div v-if='openOrderSelected.val > 1 || $route.query.pendingId' class='cell priceSet'>
             <div class='col'>
-                <PriceStepper v-model='pendingPrice' :product='product' />
+                <PriceStepper v-model='pendingPrice' :disabled='disabled' :product='product' />
             </div>
         </div>
 
@@ -48,6 +48,13 @@
             </div>
         </div>
 
+        <!-- 挂单有效期 -->
+        <SelectComp v-if='openOrderSelected.val > 1' v-model='expireType' :disabled='disabled' :options='expireTypeOptions'>
+            <p class='expireTypeTitle'>
+                期限： {{ expireTypeItem.label }}
+            </p>
+        </SelectComp>
+
         <!-- 图表 -->
         <div class='chart'>
             <lightweightChart v-if='product.price_digits' ref='chart' :product='product' />
@@ -56,6 +63,7 @@
 
     <!-- 底部下单按钮 -->
     <FooterBtn
+        :is-modify-status='$route.query.pendingId'
         :loading='loading'
         :open-order-selected='openOrderSelected'
         :pending-price='pendingPrice'
@@ -63,6 +71,7 @@
         :take-profit='takeProfit'
         @openOrder='openOrder'
         @updateOrder='handleUpdateOrder'
+        @updatePending='handleUpdatePending'
     />
 
     <van-popup v-model:show='pendingVisible' :close-on-click-overlay='false' :style="{ width: '100%', height: '100%' }">
@@ -80,16 +89,17 @@ import top from '@m/layout/top'
 import Price from '@m/components/price'
 import { computed, onUnmounted, reactive, ref, toRefs, watch, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
-import { QuoteSocket, MsgSocket } from '@/plugins/socket/socket'
-import { addMarketOrder, updateOrder } from '@/api/trade'
+import { QuoteSocket } from '@/plugins/socket/socket'
+import { addMarketOrder, updateOrder, updatePboOrder } from '@/api/trade'
 import { useRoute, useRouter } from 'vue-router'
 import lightweightChart from './components/lightweightChart'
 import OrderVolumn from './components/orderVolumn'
 import PriceStepper from './components/priceStepper'
 import FooterBtn from './components/footerBtn'
+import SelectComp from './components/select'
 import Pending from './pending'
 import Success from './success'
-import { minus, divide, getDecimalNum, mul } from '@/utils/calculation'
+import { minus, divide, getDecimalNum, mul, toFixed } from '@/utils/calculation'
 import { Toast } from 'vant'
 export default {
     components: {
@@ -100,6 +110,7 @@ export default {
         Price,
         FooterBtn,
         top,
+        SelectComp,
         Success
     },
     setup () {
@@ -107,10 +118,10 @@ export default {
         const route = useRoute()
         const router = useRouter()
         const chart = ref(null)
-        const { symbolId, positionId, orderId, takeProfit, stopLoss } = route.query
+        const { symbolId, positionId, pendingId, orderId, takeProfit, stopLoss } = route.query
         const state = reactive({
             loading: false,
-            disabled: positionId,
+            disabled: !!positionId || !!pendingId,
             pendingVisible: false,
             successVisible: false,
             dropdownWrap: false,
@@ -123,11 +134,20 @@ export default {
                 { name: '卖出止损', val: 5 }
             ],
             volumn: 0.01,
-            value: 3,
             pendingPrice: 0, // 挂单价
             stopLoss: stopLoss || 0, // 止损单价
             takeProfit: takeProfit || 0, // 止盈单价
             orderParams: {}, // 订单入参
+            expireType: 1, // 挂单有效期过期类型 1.当日有效 2.当周有效
+            expireTypeOptions: [
+                {
+                    id: 1,
+                    label: '当日有效',
+                }, {
+                    id: 2,
+                    label: '当周有效',
+                }
+            ],
             resData: {},
             timeId: ''
         })
@@ -143,9 +163,11 @@ export default {
         // 当前产品
         const product = computed(() => store.getters.productActived)
 
-        const positionList = computed(() => store.state._trade.positionList)
+        const positionList = computed(() => store.state._trade.positionList) // 持仓列表
+        const pendingList = computed(() => store.state._trade.pendingList) // 挂单列表
         const profitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
         const pendingPriceRang = computed(() => store.getters['_trade/pendingPriceRang'])
+        const expireTypeItem = computed(() => state.expireTypeOptions.find(el => el.id === state.expireType))
 
         // 设置默认手数
         watch(
@@ -212,6 +234,7 @@ export default {
                 requestTime: Date.now(),
                 requestNum: state.volumn * product.value.contractSize,
                 requestPrice: mul(requestPrice, p),
+                expireType: state.expireType,
                 stopLoss: Number(state.stopLoss) ? mul(state.stopLoss, p) : undefined,
                 takeProfit: Number(state.takeProfit) ? mul(state.takeProfit, p) : undefined
             }
@@ -262,6 +285,32 @@ export default {
             })
         }
 
+        // 修改挂单
+        const handleUpdatePending = () => {
+            const p = Math.pow(10, product.value.price_digits)
+            const params = {
+                pboId: pendingId,
+                stopLoss: Number(state.stopLoss) ? mul(state.stopLoss, p) : undefined,
+                takeProfit: Number(state.takeProfit) ? mul(state.takeProfit, p) : undefined
+            }
+            state.loading = true
+            updatePboOrder(params).then(res => {
+                state.loading = false
+                if (res.invalid()) return false
+                state.orderParams = params
+                // state.pendingVisible = true
+                state.successVisible = true
+                state.resData = res.data
+                state.resData.tradeVolume = state.volumn
+                state.timeId = setTimeout(() => {
+                    state.successVisible = false
+                    router.push({ name: 'Position' })
+                }, 5000)
+            }).catch(err => {
+                state.loading = false
+            })
+        }
+
         const onHide = () => {
             state.successVisible = false
             clearTimeout(state.timeId)
@@ -271,9 +320,8 @@ export default {
         store.dispatch('_quote/querySymbolInfo', symbolId) // 获取产品详情
         store.commit('_quote/Update_productActivedID', symbolId)
 
-        initPositionInfo()
+        // 查询某持仓详情
         function initPositionInfo () {
-            if (!positionId) return false
             Promise.resolve()
                 .then(() => {
                     if (positionList.value.length === 0) {
@@ -291,6 +339,38 @@ export default {
                     state.volumn = minus(curPosition.openVolume, curPosition.closeVolume)
                 })
         }
+
+        // 查询某挂单详情
+        function initPendingInfo () {
+            Promise.resolve()
+                .then(() => {
+                    if (pendingList.value.length === 0) {
+                        return store.dispatch('_trade/queryPBOOrderPage').then(res => {
+                            return res.data
+                        })
+                    } else {
+                        return Promise.resolve(pendingList.value)
+                    }
+                })
+                .then(list => {
+                    if (!list) return false
+                    const curPending = list.find(el => el.id === pendingId)
+                    if (!curPending) return
+                    state.volumn = curPending.requestNum / curPending.contractSize
+                    const digits = curPending.digits
+                    state.pendingPrice = toFixed(curPending.requestPrice * Math.pow(0.1, digits), digits)
+                    state.stopLoss = toFixed(curPending.stopLoss * Math.pow(0.1, digits), digits)
+                    state.takeProfit = toFixed(curPending.takeProfit * Math.pow(0.1, digits), digits)
+                    state.openOrderSelected = state.openOrderList[curPending.direction === 1 ? 1 : 2]
+                })
+        }
+
+        if (positionId) {
+            initPositionInfo()
+        } else if (pendingId) {
+            initPendingInfo()
+        }
+
         // 选择订单类型
         const selectOpenOrder = item => {
             state.openOrderSelected = item
@@ -311,6 +391,8 @@ export default {
             profitLossRang,
             pendingPriceRang,
             selectOpenOrder,
+            expireTypeItem,
+            handleUpdatePending,
             onHide,
 
         }
@@ -405,5 +487,21 @@ export default {
     line-height: rem(500px);
     text-align: center;
     background: var(--bdColor);
+}
+.expireTypeTitle {
+    position: relative;
+    padding: rem(15px) rem(35px) rem(5px);
+    overflow: hidden;
+    font-size: rem(28px);
+    &::after {
+        position: absolute;
+        right: -6px;
+        bottom: -6px;
+        width: 13px;
+        height: 13px;
+        background: var(--placeholder);
+        transform: rotate(45deg);
+        content: '';
+    }
 }
 </style>

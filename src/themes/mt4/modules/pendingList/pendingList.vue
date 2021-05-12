@@ -15,9 +15,9 @@
                 {{ cur.direction===1?'buy':'sell' }}
             </p>
             <div class='menulist'>
-                <!-- <a class='item van-hairline--bottom' href='javascript:;' @click='modifyOrder'>
+                <a class='item van-hairline--bottom' href='javascript:;' @click='modifyOrder'>
                     修改订单
-                </a> -->
+                </a>
                 <a class='item van-hairline--bottom' href='javascript:;' @click='delOrder'>
                     删除订单
                 </a>
@@ -111,7 +111,7 @@ export default {
         // 修改订单
         const modifyOrder = () => {
             state.show = false
-            router.push({ name: 'Order', query: { symbolId: state.cur.symbolId, positionId: state.cur.positionId } })
+            router.push({ name: 'Order', query: { symbolId: state.cur.symbolId, pendingId: state.cur.id } })
         }
         return {
             ...toRefs(state),

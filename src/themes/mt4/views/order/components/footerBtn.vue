@@ -6,6 +6,16 @@
             </button>
         </div>
     </div>
+    <div v-else-if='$route.query.pendingId' class='footerBtn'>
+        <div class='col'>
+            <button v-if='[2, 4].includes(openOrderSelected.val)' class='btn' :disabled='loading || buyDisabled' @click='updatePending'>
+                修改
+            </button>
+            <button v-else-if='[3, 5].includes(openOrderSelected.val)' class='btn' :disabled='loading || sellDisabled' @click='updatePending'>
+                修改
+            </button>
+        </div>
+    </div>
     <div v-else-if='openOrderSelected.val === 1' class='footerBtn line'>
         <div class='col'>
             <button class='btn sellColor' :disabled='loading || sellDisabled' @click="openOrder('sell')">
@@ -34,8 +44,18 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 export default {
-    props: ['loading', 'openOrderSelected', 'pendingPrice', 'stopLoss', 'takeProfit'],
-    emits: ['openOrder', 'updateOrder'],
+    props: {
+        loading: Boolean,
+        openOrderSelected: Object,
+        pendingPrice: [String, Number],
+        stopLoss: [String, Number],
+        takeProfit: [String, Number],
+        isModifyStatus: {
+            type: Boolean,
+            default: false
+        }
+    },
+    emits: ['openOrder', 'updateOrder', 'updatePending'],
     setup (props, { emit }) {
         const store = useStore()
         const profitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
@@ -55,7 +75,6 @@ export default {
 
             // console.log('限价买入范围', buyLimitMin, buyLimitMax)
             // console.log('停损买入范围', buyStopMin, buyStopMax)
-
             if (stopLoss > 0 && (stopLoss < buyStopLossMin || stopLoss > buyStopLossMax)) {
                 return true
             } else if (takeProfit > 0 && (takeProfit < buyProfitMin || takeProfit > buyProfitMax)) {
@@ -70,7 +89,7 @@ export default {
         })
         // 是否符合卖出的止盈止损范围
         const sellDisabled = computed(() => {
-            let { stopLoss, takeProfit, pendingPrice, openOrderSelected } = props
+            let { stopLoss, takeProfit, pendingPrice, openOrderSelected, isModifyStatus } = props
 
             const [sellProfitMin, sellProfitMax] = profitLossRang.value.sellProfitRange
             const [sellStopLossMin, sellStopLossMax] = profitLossRang.value.sellStopLossRange
@@ -88,9 +107,9 @@ export default {
                 return true
             } else if (takeProfit > 0 && (takeProfit < sellProfitMin || takeProfit > sellProfitMax)) {
                 return true
-            } else if (openOrderVal === 3 && (!sellLimitMax || pendingPrice < sellLimitMin || pendingPrice > sellLimitMax)) {
+            } else if (openOrderVal === 3 && !isModifyStatus && (!sellLimitMax || pendingPrice < sellLimitMin || pendingPrice > sellLimitMax)) {
                 return true
-            } else if (openOrderVal === 5 && (!sellStopMax || pendingPrice < sellStopMin || pendingPrice > sellStopMax)) {
+            } else if (openOrderVal === 5 && !isModifyStatus && (!sellStopMax || pendingPrice < sellStopMin || pendingPrice > sellStopMax)) {
                 return true
             } else {
                 return false
@@ -102,13 +121,16 @@ export default {
             emit('openOrder', param)
         }
         const updateOrder = () => {
-            console.log('updateOrder')
             emit('updateOrder')
+        }
+        const updatePending = () => {
+            emit('updatePending')
         }
         return {
             buyDisabled,
             sellDisabled,
             openOrder,
+            updatePending,
             updateOrder
         }
     }
