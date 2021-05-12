@@ -22,8 +22,6 @@ export default {
         footerMenu,
     },
     activated () {
-        debugger
-        console.log(this.$refs.top.$refs.leftMenu.visible)
         const homeContent = this.$refs.homeContent
         homeContent.scrollTop = scrollTop
     },

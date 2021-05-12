@@ -1,7 +1,6 @@
 import { querySymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
 import { plus } from '@/utils/calculation'
 import CheckAPI from '@/utils/checkAPI'
-import { isEmpty } from '@/utils/util'
 
 // 处理显示的点差  点差=（买价-卖价）/pip
 function spreadText (product) {
@@ -97,6 +96,7 @@ export default {
             if (newSymbolIds.length === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
 
             return querySymbolBaseInfoList(params).then((res) => {
+                console.log('querySymbolBaseInfoList')
                 if (res.check()) {
                     res.data.forEach(el => {
                         el.symbol_id = el.symbolId

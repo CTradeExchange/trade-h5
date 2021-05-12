@@ -3,6 +3,7 @@
         v-model:show='visible'
         position='left'
         :style="{ height: '100%' }"
+        teleport='#app'
     >
         <div class='mainWrap'>
             <!-- <div class="flagWrap"> </div> -->
@@ -25,7 +26,6 @@
                 </figcaption>
             </figure>
             <ul class='menuList'>
-                {{ visible }}***
                 <!-- <li class='item' @click="visible=false;$router.push('/quote')"> <i class='icon icon_hangqing'></i> <strong>行情</strong> </li>
                 <li class='item' @click="visible=false;$router.push('/chart')"> <i class='icon icon_tubiao'></i> <strong>图表</strong> </li>
                 <li class='item' @click="visible=false;$router.push('/trade')"> <i class='icon icon_jiaoyi'></i> <strong>交易</strong> </li>
@@ -84,14 +84,12 @@ export default {
 
         const customerNo = computed(() => store.state._user.customerInfo?.customerNo)
         const openNews = computed(() => {
-            debugger
             if (localStorage.getItem('openNews')) return JSON.parse(localStorage.getItem('openNews'))
         })
 
         const toNews = () => {
             state.visible = false
             router.replace('/news')
-            // debugger
         }
 
         return {
