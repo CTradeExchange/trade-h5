@@ -4,7 +4,7 @@ import { getDevice } from '@/utils/util'
 /* 登录 */
 export function login (data) {
     return request({
-        url: '/login/customer.CustomerWebApiService.login',
+        url: '/login/customer.app.CustomerWebApiService.login',
         method: 'post',
         // toastErr: false,
         headers: {
@@ -32,7 +32,7 @@ export function logout (data) {
 /* 注册 */
 export function register (data) {
     return request({
-        url: '/global/customer.CustomerWebApiService.register',
+        url: '/global/customer.app.CustomerWebApiService.register',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -46,7 +46,7 @@ export function register (data) {
 /* 开交易账户 */
 export function openAccount (data) {
     return request({
-        url: '/global/customer.CustomerWebApiService.openAccount',
+        url: '/global/customer.app.CustomerWebApiService.openAccount',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -57,7 +57,7 @@ export function openAccount (data) {
 /* 检测客户信息是否存在 */
 export function checkCustomerExist (data) {
     return request({
-        url: '/global/customer.CustomerWebApiService.checkCustomerExist',
+        url: '/global/customer.app.CustomerWebApiService.checkCustomerExist',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -70,7 +70,7 @@ export function checkCustomerExist (data) {
 /* 查询客户信息 */
 export function findCustomerInfo (data) {
     return request({
-        url: '/global/customer.CustomerWebApiService.findCustomerInfo',
+        url: '/global/customer.app.CustomerWebApiService.findCustomerInfo',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -82,7 +82,7 @@ export function findCustomerInfo (data) {
 /* 找回密码 */
 export function findPwd (data) {
     return request({
-        url: '/global/customer.CustomerWebApiService.forgetLoginPwd',
+        url: '/global/customer.app.CustomerWebApiService.forgetLoginPwd',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -94,7 +94,7 @@ export function findPwd (data) {
 /* 修改密码 */
 export function modifyPwd (data) {
     return request({
-        url: '/global/customer.CustomerWebApiService.updateLoginPwd',
+        url: '/global/customer.app.CustomerWebApiService.updateLoginPwd',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -178,7 +178,7 @@ export function queryDepositExchangeRate (data) {
 /* 查询客户出金银行卡列表 */
 export function queryBankList (data) {
     return request({
-        url: '/global/customer.WithdrawBankWebApiService.bankList',
+        url: '/global/customer.app.WithdrawBankWebApiService.bankList',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -190,7 +190,7 @@ export function queryBankList (data) {
 /* 新增出金银行卡 */
 export function addBank (data) {
     return request({
-        url: '/global/customer.WithdrawBankWebApiService.add',
+        url: '/global/customer.app.WithdrawBankWebApiService.add',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -226,7 +226,7 @@ export function queryDepositPageList (data) {
 /* 资金明细查询 */
 export function queryCapitalFlowList (data) {
     return request({
-        url: '/global/tradeapi.OrderApiService.queryCapitalFlowList',
+        url: '/global/tradeapi.app.OrderApiService.queryCapitalFlowList',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -251,7 +251,7 @@ export function computeWithdrawFee (data) {
 /* 设置登录密码 */
 export function setLoginPwd (data) {
     return request({
-        url: '/global/customer.CustomerWebApiService.bindLoginPwd',
+        url: '/global/customer.app.CustomerWebApiService.bindLoginPwd',
         method: 'post',
         headers: {
             version: '0.0.1'
@@ -263,7 +263,7 @@ export function setLoginPwd (data) {
 /* 修改登录密码 */
 export function modifyLoginPwd (data) {
     return request({
-        url: '/global/customer.CustomerWebApiService.updateLoginPwd',
+        url: '/global/customer.app.CustomerWebApiService.updateLoginPwd',
         method: 'post',
         headers: {
             version: '0.0.1'
@@ -275,7 +275,7 @@ export function modifyLoginPwd (data) {
 /* 获取指定公司下平台信息列表 */
 export function queryPlatFormMessageLogList (data) {
     return request({
-        url: '/global/message.PlatFormMessageLogApiService.queryPlatFormMessageLogByPage',
+        url: '/global/message.app.PlatFormMessageLogApiService.queryPlatFormMessageLogByPage',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -299,7 +299,7 @@ export function switchAccount (data) {
 /* 指定客户的身份认证信息 */
 export function findAllBizKycList (data) {
     return request({
-        url: '/global/customer.KycWebApiService.findAllBizKycList',
+        url: '/global/customer.app.KycWebApiService.findAllBizKycList',
         method: 'post',
         headers: {
             version: '0.0.1'
@@ -311,7 +311,7 @@ export function findAllBizKycList (data) {
 /* 判断指定KYC等级是否要KYC认证 */
 export function findAllLevelKyc (data) {
     return request({
-        url: '/global/customer.KycWebApiService.findAllLevelKyc',
+        url: '/global/customer.app.KycWebApiService.findAllLevelKyc',
         method: 'post',
         headers: {
             version: '0.0.1'
@@ -323,7 +323,7 @@ export function findAllLevelKyc (data) {
 /* KYC证申请 */
 export function kycLevelApply (data) {
     return request({
-        url: '/global/customer.KycWebApiService.kycLevelApply',
+        url: '/global/customer.app.KycWebApiService.kycLevelApply',
         method: 'post',
         headers: {
             version: '0.0.1'
@@ -335,7 +335,7 @@ export function kycLevelApply (data) {
 /* 指定业务场景是否KYC通过 */
 export function checkKycApply (data) {
     return request({
-        url: '/global/customer.KycWebApiService.checkKycApply',
+        url: '/global/customer.app.KycWebApiService.checkKycApply',
         method: 'post',
         headers: {
             version: '0.0.1'
@@ -347,7 +347,7 @@ export function checkKycApply (data) {
 /* KYC业务场景认证申请 */
 export function kycApply (data) {
     return request({
-        url: '/global/customer.KycWebApiService.kycApply',
+        url: '/global/customer.app.KycWebApiService.kycApply',
         method: 'post',
         headers: {
             version: '0.0.1'
@@ -359,7 +359,7 @@ export function kycApply (data) {
 /* 绑定手机号码 */
 export function bindPhone (data) {
     return request({
-        url: '/global/customer.CustomerWebApiService.bindPhone',
+        url: '/global/customer.app.CustomerWebApiService.bindPhone',
         method: 'post',
         headers: {
             version: '0.0.1'
@@ -371,7 +371,7 @@ export function bindPhone (data) {
 /* 绑定邮箱 */
 export function bindEmail (data) {
     return request({
-        url: '/global/customer.CustomerWebApiService.bindEmail',
+        url: '/global/customer.app.CustomerWebApiService.bindEmail',
         method: 'post',
         headers: {
             version: '0.0.1'
@@ -395,7 +395,7 @@ export function queryDepositProposal (data) {
 /* 客户自选产品列表 */
 export function queryCustomerOptionalList (data) {
     return request({
-        url: '/global/customer.CustomerOptionalWebApiService.list',
+        url: '/global/customer.app.CustomerOptionalWebApiService.list',
         method: 'post',
         headers: {
             version: '0.0.1'
@@ -407,7 +407,7 @@ export function queryCustomerOptionalList (data) {
 /* 更换手机 */
 export function changePhone (data) {
     return request({
-        url: '/global/customer.CustomerWebApiService.changePhone',
+        url: '/global/customer.app.CustomerWebApiService.changePhone',
         method: 'post',
         headers: {
             version: '0.0.1'
@@ -419,7 +419,7 @@ export function changePhone (data) {
 /* 更换邮箱 */
 export function changeEmail (data) {
     return request({
-        url: '/global/customer.CustomerWebApiService.changeEmail',
+        url: '/global/customer.app.CustomerWebApiService.changeEmail',
         method: 'post',
         headers: {
             version: '0.0.1'
