@@ -13,8 +13,8 @@ function spreadText (product) {
 
 // 报价计算点差
 function price_spread (product, data) {
-    if (product.askSpread && data.buy_price) product.buy_price = plus(data.buy_price, product.askSpread).toFixed(product.symbolDigits)
-    if (product.bidSpread && data.sell_price) product.sell_price = plus(data.sell_price, product.bidSpread).toFixed(product.symbolDigits)
+    if (product.askSpread && data.buy_price) product.buy_price = plus(data.buy_price, product.askSpread).toFixed(product.price_digits)
+    if (product.bidSpread && data.sell_price) product.sell_price = plus(data.sell_price, product.bidSpread).toFixed(product.price_digits)
 }
 
 export default {

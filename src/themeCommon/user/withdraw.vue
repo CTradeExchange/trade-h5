@@ -20,8 +20,8 @@
                 </van-button>
             </div>
             <div class='notice'>
-                <span>最大可取 {{ withdrawConfig.withdrawAmount }} 美元</span>
-                <span>手续费 {{ fee }} 美元</span>
+                <span>最大可取 {{ withdrawAmount || '--' }} {{ accountCurrency }}</span>
+                <span>手续费 {{ fee }} {{ accountCurrency }}</span>
             </div>
             <div class='bank-wrap'>
                 <p class='bw-t'>
@@ -41,7 +41,7 @@
                     </van-button>
                 </div>
                 <p class='bw-t2'>
-                    预计到账 {{ amount }}美元
+                    预计到账 {{ computePre }} {{ checkedBank.bankCurrency }}
                 </p>
             </div>
         </div>
@@ -75,6 +75,19 @@
             提交成功，等待客服审核
         </p>
     </van-dialog>
+    <van-dialog v-model:show='timeShow' theme='round-button' title='提示'>
+        <div class='time-wrap'>
+            <h4>当前时间不可取款 </h4><br />
+            <div class='flex'>
+                <p>取款时间：</p>
+                <div class='time-text'>
+                    <p v-for='(item,index) in timeList' :key='index'>
+                        {{ item.weekDay }}：{{ item.openTimeLocal.toString() }}
+                    </p><br />
+                </div>
+            </div>
+        </div>
+    </van-dialog>
 </template>
 
 <script>
@@ -94,11 +107,13 @@ import {
     Dialog
 } from 'vant'
 import {
-    isEmpty
+    isEmpty,
+    priceFormat
 } from '@/utils/util'
 import {
     useStore
 } from 'vuex'
+import { mul } from '@/utils/calculation'
 import {
     handleWithdraw,
     queryWithdrawConfig,
@@ -107,6 +122,10 @@ import {
     computeWithdrawFee,
     checkKycApply
 } from '@/api/user'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(utc)
 export default {
     components: {
         Top
@@ -119,8 +138,57 @@ export default {
             title: '取款记录'
         }
 
+        const weekdayMap = {
+            1: '周一',
+            2: '周二',
+            3: '周三',
+            4: '周四',
+            5: '周五',
+            6: '周六',
+            7: '周日',
+
+        }
+
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+        const accountCurrency = computed(() => {
+            if (state.withdrawConfig) {
+                return state.withdrawConfig.withdrawAmountConfig.accountCurrency
+            }
+        })
+
+        const timeList = computed(() => {
+            const timeConfigList = state.withdrawTimeConfigMap
+            const tempList = []
+
+            if (!isEmpty(timeConfigList)) {
+                for (const key in timeConfigList) {
+                    if (Object.hasOwnProperty.call(timeConfigList, key)) {
+                        const item = timeConfigList[key]
+                        if (!isEmpty(item.openTimeLocal)) {
+                            tempList.push({
+                                weekDay: weekdayMap[item.weekDay],
+                                openTimeLocal: item.openTimeLocal
+                            })
+                        }
+                    }
+                }
+
+                return tempList
+            }
+        })
+
+        // 计算取款手续费
+        const computePre = computed(() => {
+            return mul((state.amount - state.fee), state.withdrawRate.exchangeRate)
+        })
+
+        // 计算可取金额
+        const withdrawAmount = computed(() => {
+            if (!isEmpty(state.withdrawConfig)) {
+                return priceFormat(state.withdrawConfig.withdrawAmount, state.withdrawConfig.digit)
+            }
+        })
 
         const state = reactive({
             amount: '',
@@ -128,20 +196,31 @@ export default {
             loading: false,
             show: false,
             maxAmount: 5005.55,
-            checkedBank: {
-                // icon: require('../../assets/logo.png'),
-                // bankName: '招商银行',
-                // bankNo: '6388 **** **** 1222'
-            },
+            checkedBank: {},
             withdrawRate: '',
             withdrawConfig: '',
             bankList: [],
             fun: null,
             withdrawSuccess: false,
-            btnDisabled: false
+            btnDisabled: false,
+            withdrawCurrency: '',
+            timeShow: false,
+            withdrawTimeConfigMap: {} // 处理后的时区
         })
 
         const getWithdrawFee = (amount) => {
+            if (parseFloat(state.amount) < parseFloat(state.withdrawConfig.withdrawAmountConfig.singleLowAmount)) {
+                state.btnDisabled = true
+                state.fee = 0
+                return Toast(`取款金额不能小于${state.withdrawConfig.withdrawAmountConfig.singleLowAmount}`)
+            }
+
+            if (parseFloat(state.amount) > parseFloat(state.withdrawConfig.withdrawAmountConfig.singleHighAmount)) {
+                state.btnDisabled = true
+                state.fee = 0
+                return Toast(`取款金额不能大于${state.withdrawConfig.withdrawAmountConfig.singleHighAmount}`)
+            }
+
             const params = {
                 customerNo: customInfo.value.customerNo, // 客户编号
                 accountId: customInfo.value.accountId, // 账户ID
@@ -150,21 +229,57 @@ export default {
                 amount: parseFloat(state.amount)
             }
             state.btnDisabled = true
-            state.fee = '计算中...'
+            // state.fee = '计算中...'
             computeWithdrawFee(params).then(res => {
                 if (res.check()) {
                     state.btnDisabled = false
                     state.fee = res.data
                 } else {
                     state.btnDisabled = true
-                    state.fee = ''
+                    state.fee = 0
                 }
             })
         }
 
+        const transferUtc = () => {
+            const todayStr = dayjs().format('YYYY-MM-DD')
+            state.withdrawConfig.withdrawTimeConfigList.forEach(el => {
+                el.openTimeLocal = []
+                state.withdrawTimeConfigMap[el.weekDay] = el
+            })
+            for (const key in state.withdrawTimeConfigMap) {
+                if (Object.hasOwnProperty.call(state.withdrawTimeConfigMap, key)) {
+                    const el = state.withdrawTimeConfigMap[key]
+                    const [start, end] = el.openTime.split('-')
+                    const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
+                    const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
+
+                    // 第二天
+                    const weekDay = key < 7 ? Number(key) + 1 : 1
+                    let elNext = state.withdrawTimeConfigMap[weekDay]
+                    if (!elNext) {
+                        elNext = {
+                            openTimeLocal: [],
+                            weekDay
+                        }
+                        state.withdrawTimeConfigMap[weekDay] = elNext
+                    }
+                    if (startLocal.isAfter(todayStr, 'day')) {
+                        elNext.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                    } else if (endLocal.isAfter(todayStr, 'day')) {
+                        elNext.openTimeLocal.push('00:00-' + endLocal.format('HH:mm'))
+                        el.openTimeLocal.push(startLocal.format('HH:mm') + '-23:59')
+                    } else if (el.openTime !== '00:00-00:00') {
+                        el.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                    }
+                }
+            }
+            console.log(state.withdrawTimeConfigMap)
+        }
+
         const debounceFn = () => {
-            if (!isEmpty(state.amount)) {
-                return setTimeout(getWithdrawFee, 1000)
+            if (parseFloat(state.amount) > 0) {
+                return setTimeout(getWithdrawFee, 300)
             }
         }
 
@@ -183,6 +298,9 @@ export default {
 
         // 选择银行卡
         const chooseBank = (item) => {
+            // 获取取款汇率
+            getWithdrawRate()
+            state.withdrawCurrency = item.bankCurrency
             state.checkedBank = item
             state.bankList.map(item => {
                 item.checked = false
@@ -242,7 +360,7 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     console.log('res', res)
-                    state.amount = ''
+                    state.amount = 0
                     state.withdrawSuccess = true
                 }
             }).catch(err => {
@@ -256,7 +374,7 @@ export default {
                 customerNo: customInfo.value.customerNo,
                 accountId: customInfo.value.accountId,
                 accountCurrency: customInfo.value.currency,
-                withdrawCurrency: 'CNY', // 暂时只支持CNY
+                withdrawCurrency: state.withdrawCurrency, // 暂时只支持CNY
             }
             queryWithdrawRate(params).then(res => {
                 if (res.check()) {
@@ -280,10 +398,52 @@ export default {
             queryWithdrawConfig(params).then(res => {
                 if (res.check()) {
                     state.withdrawConfig = res.data
-                    if (!state.withdrawConfig.enableWithdraw) {
+
+                    if (!res.data.accountActiveEnable) {
                         state.btnDisabled = true
-                        return Toast('该用户暂不可取款')
+                        return Dialog.confirm({
+                            title: '提示',
+                            message: '账户激活后才可取款',
+                            confirmButtonText: '去激活'
+                        }).then(() => {
+                            // on confirm
+                            router.push('/desposit')
+                        }).catch(() => {
+                            // on cancel
+                        })
                     }
+
+                    if (!res.data.amountEnable) {
+                        state.btnDisabled = true
+                        return Toast('可取资金不足')
+                    }
+
+                    if (!res.data.hourIn24Enable) {
+                        state.btnDisabled = true
+                        return Toast('24小时内取款次数不超过' + state.withdrawConfig.withdrawBaseConfig.maxCount + '次')
+                    }
+                    if (!res.data.customerGroupEnable) {
+                        state.btnDisabled = true
+                        return Dialog.confirm({
+                            title: '提示',
+                            theme: 'round-button',
+                            message: '账户暂不能取款，如有疑问请联系在线客服',
+                            confirmButtonText: '联系客服',
+                            cancelButtonText: '关闭'
+                        }).then(() => {
+                            // on confirm
+                        }).catch(() => {
+                            // on cancel
+                        })
+                    }
+
+                    if (!res.data.timeEnable) {
+                        state.btnDisabled = true
+                        state.timeShow = true
+                    }
+                    // 检测取款是否需要kyc
+                    checkKyc()
+                    transferUtc()
                 } else {
                     Toast(res.msg)
                 }
@@ -299,6 +459,9 @@ export default {
                     if (res.data && res.data.length > 0) {
                         state.bankList = res.data
                         state.checkedBank = res.data[0]
+                        state.checkedBank.checked = true
+                        state.withdrawCurrency = state.checkedBank.bankCurrency
+                        getWithdrawRate()
                     }
                 }
             }).catch(err => {
@@ -332,12 +495,6 @@ export default {
                         })
                     })
                 }
-                // 获取取款配置
-                getWithdrawConfig()
-                // 获取取款汇率
-                getWithdrawRate()
-                // 获取银行卡列表
-                getBankList()
             }).catch(err => {
                 state.loading = false
                 console.log(err)
@@ -345,9 +502,8 @@ export default {
         }
 
         onBeforeMount(() => {
-            // 检测取款是否需要kyc
-            // checkKyc()
-
+            // 获取银行卡列表
+            getBankList()
             getWithdrawConfig()
         })
 
@@ -361,7 +517,11 @@ export default {
             confirm,
             customInfo,
             hideMiddle,
-            getWithdrawFee
+            getWithdrawFee,
+            accountCurrency,
+            timeList,
+            computePre,
+            withdrawAmount
         }
     }
 
@@ -502,6 +662,16 @@ export default {
         margin: rem(20px) 0;
         color: var(--mutedColor);
         font-size: rem(28px);
+    }
+}
+.time-wrap {
+    padding: 0 rem(30px);
+    font-size: rem(28px);
+    .flex {
+        display: flex;
+        .time-text {
+            flex: 1;
+        }
     }
 }
 </style>

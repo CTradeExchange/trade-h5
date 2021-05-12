@@ -379,3 +379,15 @@ export function bindEmail (data) {
         data
     })
 }
+
+/* 查询存款提案 */
+export function queryDepositProposal (data) {
+    return request({
+        url: '/global/fund.DepositAppDubboService.queryDepositProposal',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

@@ -16,12 +16,8 @@
 
 <script>
 import Top from '@m/layout/top'
-import {
-    onBeforeRouteLeave
-} from 'vue-router'
-import {
-    getCurrentInstance,
-} from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
+// import { getCurrentInstance, } from 'vue'
 import authCondition from '@/themeCommon/components/authConditon'
 import { useStore } from 'vuex'
 export default {
@@ -30,13 +26,11 @@ export default {
         Top
     },
     setup (props) {
-        const instance = getCurrentInstance()
+        // const instance = getCurrentInstance()
         const store = useStore()
         onBeforeRouteLeave((to, from) => {
             if (to.fullPath === '/login') {
                 // 退出登录 断开ws
-                instance.appContext.config.globalProperties.$MsgSocket.ws.close()
-                instance.appContext.config.globalProperties.$QuoteSocket.ws.close()
                 store.dispatch('_user/logout')
             }
         })

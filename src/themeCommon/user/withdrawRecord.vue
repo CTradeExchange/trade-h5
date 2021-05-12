@@ -3,7 +3,7 @@
         <template #right>
         </template>
     </Top>
-    <!-- <Loading :show='loading' /> -->
+    <Loading :show='loadingPage' />
     <div class='page-wrap'>
         <div class='record-list'>
             <van-pull-refresh v-model='loading' @refresh='onRefresh'>
@@ -28,7 +28,7 @@
                         <van-collapse-item :name='index+1'>
                             <template #title>
                                 <p class='amount'>
-                                    {{ item.amount }} USD
+                                    {{ item.amount }} {{ item.accountCurrency }}
                                 </p>
                                 <p class='time'>
                                     {{ formatTime(item.createTime) }}
@@ -64,7 +64,7 @@
                                         状态
                                     </span>
                                     <span class='right-val state'>
-                                        {{ states[item.checkStatus] }}
+                                        {{ transferStatus[item.transferStatus] }}
                                     </span>
                                 </div>
 
@@ -81,7 +81,7 @@
                                         入账金额
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.amount - item.withdrawFee }}
+                                        {{ item.finalAmount }}{{ item.withdrawCurrency }}
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -139,9 +139,9 @@ export default {
 
         // 审核状态
         const states = {
-            1: '待审批',
-            2: '审批失败',
-            3: '审批成功'
+            1: '审核中',
+            2: '已取消',
+            3: '成功'
         }
 
         const transferStatus = {
@@ -157,6 +157,7 @@ export default {
             list: [],
             finishedText: '没有更多了',
             finished: false,
+            loadingPage: false
         })
         const handleFold = (val) => {
             activeIndex.value = val
@@ -176,9 +177,10 @@ export default {
                 size: state.size,
                 current: state.current,
             }
-
+            state.loadingPage = true
             queryWithdrawPageList(params).then(res => {
                 state.loading = false
+                state.loadingPage = false
                 if (res.check()) {
                     const resdata = res.data
                     if (resdata.records && resdata.records.length > 0) {
@@ -194,6 +196,8 @@ export default {
                         }
                     }
                 }
+            }).catch(err => {
+                state.loadingPage = false
             })
         }
 
@@ -219,6 +223,7 @@ export default {
             formatTime,
             states,
             onLoad,
+            transferStatus,
             ...toRefs(state)
         }
     }

@@ -18,7 +18,7 @@
                     <p class='t1'>
                         {{ item.amount }} {{ checkedType.accountCurrency }}
                     </p>
-                    <!-- <p class='t2'>
+                <!-- <p class='t2'>
                         赠送${{ item.present }}
                     </p> -->
                 </div>
@@ -48,14 +48,21 @@
                     <div v-else class='pay-type no-data'>
                         暂无可用的支付通道
                     </div>
-                    <p class='notice'>
-                        <span class='left-val'>
-                            存款时间 : {{ computeTime(checkedType.startTime ) }} - {{ computeTime(checkedType.endTime) }}
-                        </span>
+                    <div class='notice'>
+                        <div class='left-val'>
+                            <span class='label'>
+                                存款时间 :
+                            </span>
+                            <div class='left-time'>
+                                <p v-for='(item,index) in resultTimeMap[checkedType.id]' :key='index'>
+                                    {{ item }}
+                                </p>
+                            </div>
+                        </div>
                         <span class='right-val'>
                             金额限制 : {{ checkedType.singleLowAmount }} - {{ checkedType.singleHighAmount }} {{ checkedType.accountCurrency }}
                         </span>
-                    </p>
+                    </div>
                 </div>
             </div>
 
@@ -64,26 +71,33 @@
                     预计支付 {{ computeExpectedpay || '--' }} {{ checkedType.paymentCurrency }}
                 </div>
                 <div class='pi-item'>
-                    预计到账  {{ checkedType ? parseFloat(amount) - parseFloat(checkedType.fee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
+                    预计到账 {{ checkedType ? parseFloat(amount) - parseFloat(checkedType.fee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
                 </div>
                 <div class='line'></div>
                 <!-- <div class='pi-item'>
                     赠送金额 {{ presentAmount || '--' }} {{ checkedType.accountCurrency }}
                 </div> -->
                 <div class='pi-item'>
-                    手续费 {{ checkedType.fee || '--' }} {{ checkedType.accountCurrency }}
+                    手续费 {{ computeFee || '--' }} {{ checkedType.accountCurrency }}
                 </div>
             </div>
         </div>
     </div>
 
-    <van-button block class='next-btn' type='primary' @click='next'>
+    <van-button block class='next-btn' :disabled='btnDisabled' type='primary' @click='next'>
         <span>下一步</span>
     </van-button>
 
     <van-action-sheet v-model:show='typeShow' :round='false' title='选择支付方式'>
         <div class='pay-list'>
-            <div v-for='(item,index) in PayTypes' :key='index' class='pay-type' @click='choosePayType(item)'>
+            <div v-for='(item,index) in payTypesSortEnable' :key='index' class='pay-type' @click='choosePayType(item)'>
+                <img alt='' :src='require("../../assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
+                <span class='pay-name'>
+                    {{ item.paymentTypeAlias || item.paymentType }}
+                </span>
+                <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
+            </div>
+            <div v-for='(item,index) in payTypesSortDisable' :key='index' class='pay-type' @click='choosePayType(item)'>
                 <img alt='' :src='require("../../assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
                 <span class='pay-name'>
                     {{ item.paymentTypeAlias || item.paymentType }}
@@ -95,32 +109,58 @@
 
     <van-dialog
         v-model:show='despositVis'
-        cancel-button-text='未完成充值'
+        cancel-button-text='否，关闭'
         class-name='desposit-dialog'
-        confirm-button-text='已完成充值'
+        confirm-button-text='是的，已支付'
         :show-cancel-button='true'
+        theme='round-button'
         @cancel='onCancel'
         @confirm='onConfirm'
     >
-        <van-icon
-            name='info-o'
-        />
+        <h4>支付确认</h4>
         <p class='title'>
-            是否已完成充值
+            您是否已完成该笔充值支付?
         </p>
     </van-dialog>
 </template>
 
 <script>
 import Top from '@/components/top'
-import { onBeforeMount, reactive, computed, toRefs } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply } from '@/api/user'
-import { useStore } from 'vuex'
-import { Toast, Dialog } from 'vant'
-import { isEmpty } from '@/utils/util'
+import {
+    onBeforeMount,
+    reactive,
+    computed,
+    toRefs
+} from 'vue'
+import {
+    useRoute,
+    useRouter
+} from 'vue-router'
+import {
+    queryPayType,
+    queryDepositExchangeRate,
+    handleDesposit,
+    checkKycApply
+} from '@/api/user'
+import {
+    useStore
+} from 'vuex'
+import {
+    Toast,
+    Dialog
+} from 'vant'
+import {
+    isEmpty
+} from '@/utils/util'
 import dayjs from 'dayjs'
-import { mul } from '@/utils/calculation'
+import utc from 'dayjs/plugin/utc'
+import isBetween from 'dayjs/plugin/isBetween'
+import {
+    mul
+} from '@/utils/calculation'
+dayjs.extend(isBetween)
+
+dayjs.extend(utc)
 export default {
     components: {
         Top
@@ -162,15 +202,29 @@ export default {
             if (Number(state.checkedType.feeType === 1)) {
                 return state.checkedType.fee
             } else if (Number(state.checkedType.feeType === 2)) {
-                return mul(state.amount * (state.checkedType.fee / 100))
+                return mul(state.amount, (state.checkedType.fee / 100))
             }
-            return state.presentAmount * 50
         })
 
         // 计算预计支付金额
         const computeExpectedpay = computed(() => {
             // 计算方式：存款金额 * 汇率
             return mul(state.amount, state.rateConfig.exchangeRate)
+        })
+
+        // 处理支付通道排序
+        const payTypesSortEnable = computed(() => {
+            if (state.PayTypes.length > 0) {
+                const temp = state.PayTypes.filter(item => item.timeRangeFlag)
+
+                return temp
+            }
+        })
+
+        const payTypesSortDisable = computed(() => {
+            if (state.PayTypes.length > 0) {
+                return state.PayTypes.filter(item => !item.timeRangeFlag)
+            }
         })
 
         const state = reactive({
@@ -183,7 +237,9 @@ export default {
             rateConfig: '',
             presentAmount: 5,
             loading: false,
-            despositVis: false
+            despositVis: false,
+            btnDisabled: false,
+            resultTimeMap: {}
 
         })
 
@@ -200,7 +256,9 @@ export default {
         }
 
         const toDespositList = () => {
-            router.push({ path: '/despositRecord' })
+            router.push({
+                path: '/despositRecord'
+            })
         }
         const openSheet = () => {
             state.typeShow = true
@@ -208,7 +266,12 @@ export default {
 
         const choosePayType = (item) => {
             state.checkedType = item
-            state.PayTypes.map(item => { item.checked = false })
+            payTypesSortEnable.value && payTypesSortEnable.value.map(item => {
+                item.checked = false
+            })
+            payTypesSortDisable.value && payTypesSortDisable.value.map(item => {
+                item.checked = false
+            })
             item.checked = true
             state.typeShow = false
             getDepositExchangeRate()
@@ -235,11 +298,13 @@ export default {
                     state.loading = false
                     if (res.data && res.data.length > 0) {
                         state.PayTypes = res.data
-                        state.checkedType = state.PayTypes[0]
+                        // 处理时区时间
+                        handleShowTime()
                         getDepositExchangeRate()
                     }
                 } else {
                     state.loading = false
+                    state.btnDisabled = true
                     Toast(res.msg)
                 }
             }).catch(err => {
@@ -268,6 +333,48 @@ export default {
             })
         }
 
+        const handleShowTime = () => {
+            if (state.PayTypes.length > 0) {
+                const todayStr = dayjs().format('YYYY-MM-DD')
+
+                state.PayTypes.forEach(payItem => {
+                    const openTime = payItem.openTime
+                    let openTimeList
+                    if (!isEmpty(openTime)) {
+                        openTimeList = openTime.split(',')
+                        openTimeList.forEach(item => {
+                            state.resultTimeMap[payItem.id] = []
+                            const [start, end] = item.split('-')
+                            const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
+                            const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
+
+                            if (endLocal.isAfter(todayStr, 'day')) {
+                                state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-23:59')
+                                state.resultTimeMap[payItem.id].push('00:00-' + endLocal.format('HH:mm'))
+                            } else {
+                                state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                            }
+
+                            const nowDate = dayjs()
+
+                            // 判断当前时间是否在设置的存款时间内
+                            if (nowDate.isBetween(startLocal, endLocal)) {
+                                payItem.timeRangeFlag = true
+                                state.checkedType = payItem
+                                state.checkedType.checked = true
+                            }
+                        })
+                    }
+                })
+            }
+        }
+
+        const timeList = computed(() => {
+            if (!isEmpty(state.checkedType)) {
+                return state.checkedType.openTime.split(',')
+            }
+        })
+
         // 创建存款提案
         const next = () => {
             if (!state.amount) {
@@ -294,7 +401,8 @@ export default {
                 depositAmount: state.amount,
                 country: 'IOS_3166_156',
                 channelCode: '1',
-                depositFrom: 'H5'
+                depositFrom: 'H5',
+                callbackUrl: window.location.host + '/despositCb'
             }
             state.loading = true
             handleDesposit(params).then(res => {
@@ -304,7 +412,6 @@ export default {
                         console.log(res.data)
                         sessionStorage.setItem('proposalNo', res.data.proposalNo)
                         window.location.href = res.data.browserOpenUrl
-                        // window.open(res.data.browserOpenUrl)
                     }
                 } else {
                     Toast(res.msg)
@@ -350,7 +457,12 @@ export default {
                         confirmButtonText: Number(res.data) === 1 ? '去查看' : '去认证',
                         message: Number(res.data) === 2 ? 'KYC审核中，请耐心等待' : '当前操作需要KYC认证',
                     }).then(() => {
-                        router.replace({ name: 'Authentication', query: { businessCode: 'cashin' } })
+                        router.replace({
+                            name: 'Authentication',
+                            query: {
+                                businessCode: 'cashin'
+                            }
+                        })
                     })
                 }
                 getPayTypes()
@@ -361,8 +473,24 @@ export default {
         }
 
         onBeforeMount(() => {
-            // 检测存款是否需要kyc
-            checkKyc()
+            // 检测客户组配置是否可存款
+            if (Number(customInfo.value.deposit) === 0) {
+                state.btnDisabled = true
+                return Dialog.confirm({
+                    title: '提示',
+                    theme: 'round-button',
+                    message: '账户暂不能存款，如有疑问请联系在线客服',
+                    confirmButtonText: '联系客服',
+                    cancelButtonText: '关闭'
+                }).then(() => {
+                    // on confirm
+                }).catch(() => {
+                    // on cancel
+                })
+            } else {
+                // 检测存款是否需要kyc
+                checkKyc()
+            }
         })
 
         return {
@@ -380,7 +508,11 @@ export default {
             onCancel,
             onConfirm,
             computeFee,
-            computeExpectedpay
+            timeList,
+            handleShowTime,
+            computeExpectedpay,
+            payTypesSortEnable,
+            payTypesSortDisable
         }
     }
 }
@@ -421,7 +553,7 @@ export default {
                 width: 47%;
                 min-width: 47%;
                 max-width: 47%;
-                height: 50px;
+                height: rem(80px);
                 margin-bottom: rem(30px);
                 text-align: center;
                 border: rem(2px) solid var(--bdColor);
@@ -465,7 +597,18 @@ export default {
                 justify-content: space-between;
                 line-height: rem(72px);
                 .left-val {
+                    display: flex;
+                    //align-items: center;
                     color: var(--mutedColor);
+                    .label{
+
+                    }
+                    .left-time {
+                        padding: rem(16px) 0;
+                        p {
+                            line-height: rem(40px);
+                        }
+                    }
                 }
                 .right-val {
                     color: var(--mutedColor);

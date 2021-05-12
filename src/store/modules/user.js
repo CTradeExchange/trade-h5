@@ -1,6 +1,7 @@
-import { login, findCustomerInfo, logout } from '@/api/user'
+import { login, findCustomerInfo, logout, switchAccount } from '@/api/user'
 import { localSet, setToken, removeLoginParams } from '@/utils/util'
 import router from '@m/router'
+import { Toast, Dialog } from 'vant'
 
 export default {
     namespaced: true,
@@ -11,7 +12,8 @@ export default {
         loginData: '', // login返回的信息
         customerInfo: '', // 用户信息
         withdrawConfig: '', // 用户取款配置
-        userAccount: ''
+        userAccount: '', // msg服务推送过来的交易账号信息
+        kycState: '' // kyc认证
     },
     mutations: {
         Update_loginLoading (state, data) {
@@ -28,6 +30,9 @@ export default {
         },
         Update_userAccount (state, data) {
             state.userAccount = data
+        },
+        Update_kycState (state, data) {
+            state.kycState = data
         }
     },
     actions: {
@@ -39,6 +44,7 @@ export default {
                     const data = res.data
                     if (params.loginPwd) localSet('loginParams', JSON.stringify(params))
                     setToken(data.token)
+                    commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_loginData', data)
                     commit('Update_customerInfo', data)
                     commit('_base/UPDATE_tradeType', data.tradeType, { root: true }) // 登录后存储用户的玩法类型
@@ -62,6 +68,7 @@ export default {
             return findCustomerInfo().then((res) => {
                 if (res.check()) {
                     const data = res.data
+                    commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_customerInfo', res.data)
 
                     // 设置当前用户组的产品
@@ -75,6 +82,36 @@ export default {
                     }
                 }
                 commit('Update_loginLoading', false)
+
+                // 登录KYC,0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
+                if (Number(res.data.kycAuditStatus === 0)) {
+                    Dialog.alert({
+                        title: '提示',
+                        confirmButtonText: '去认证',
+                        message: '您还未进行KYC认证，点击去认证',
+                        theme: 'round-button',
+                    }).then(() => {
+                        router.push('/authentication')
+                    })
+                } else if (Number(res.data.kycAuditStatus === 1)) {
+                    return Dialog.alert({
+                        title: '提示',
+                        confirmButtonText: '关闭',
+                        message: '您的资料正在审核中，等耐心等待',
+                        theme: 'round-button',
+                    }).then(() => {
+                        dispatch('_user/logout')
+                    })
+                } else if (Number(res.data.kycAuditStatus === 3)) {
+                    return Dialog.alert({
+                        title: '提示',
+                        confirmButtonText: '重新提交',
+                        message: '您的资料审核失败',
+                        theme: 'round-button',
+                    }).then(() => {
+                        router.push('/authentication')
+                    })
+                }
                 return res
             })
         },
@@ -87,6 +124,13 @@ export default {
                 return res
             }).catch(err => {
             })
-        }
+        },
+        // 切换账号
+        switchAccount ({ dispatch, commit, rootState }, params = {}) {
+            return switchAccount(params).then(res => {
+                // 目前只有一个玩法，暂时不处理切换账号
+                return res
+            })
+        },
     }
 }

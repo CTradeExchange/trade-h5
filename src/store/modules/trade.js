@@ -36,7 +36,7 @@ export default {
         marketProfitLossRang (state, getters, rootState) {
             const product = getters.product
             if (!product) return EmptyProfitLossRang
-            const digits = product.symbolDigits
+            const digits = product.price_digits
             const point = Math.pow(0.1, digits)
             const pip = point * product.pointRatio
             let buyProfitMax, // 买入止盈范围最大值
@@ -75,7 +75,7 @@ export default {
         pendingPriceRang (state, getters, rootState) {
             const product = getters.product
             if (!product || state.pendingPrice === 0) return EmptyPendingPriceRang
-            const digits = product.symbolDigits
+            const digits = product.price_digits
             const point = Math.pow(0.1, digits)
             const pip = point * product.pointRatio
             let buyLimitMax, // 限价买入范围最大值

@@ -39,9 +39,9 @@ class SocketEvent {
     }
 
     // 发送消息
-    send (cmd_id, data, timeOut) {
+    send (msgType, data, timeOut) {
         if (this.ws.readyState !== 1) return console.warn('消息websocket连接未准备好  readyState：', this.ws.readyState)
-        const param = this.getParam(cmd_id, data)
+        const param = this.getParam(msgType, data)
         this.ws.send(JSON.stringify(param))
 
         if (!this.timer) {
@@ -52,7 +52,7 @@ class SocketEvent {
                     if (nowTime - item.sendTime > item.timeOut) {
                         item.reject({
                             errorType: 'TimeOut',
-                            remark: `timeOut: seq_id-${item.request.seq_id}, cmd_id-${item.request.cmd_id}`
+                            remark: `timeOut: seq_id-${item.request.seq_id}, msgType-${item.request.msgType}`
                         })
                         this.requests.delete(key)
                     }
@@ -74,11 +74,53 @@ class SocketEvent {
         })
     }
 
+    // 收取到消息
+    onMessage (data) {
+        this.requests.forEach((item, key) => {
+            if (data.seq_id === key) {
+                item.resolve(data)
+            }
+        })
+        const msgCode = data.msgCode
+        if (typeof (this[msgCode]) === 'function') {
+            this[msgCode](data)
+        }
+    }
+
+    // 登录
+    login () {
+        return this.send('login')
+    }
+
+    // 登出
+    logout () {
+        return this.send('logout')
+    }
+
+    // 新增订阅动作，如果websocket已经建立好，则直接请求，否则先缓存在subscribedList中
+    subscribedListAdd (fn) {
+        if (this.ws.readyState === 1) {
+            fn && fn()
+        } else {
+            this.subscribedList.push(fn)
+        }
+    }
+
+    // websocket连接成功
+    onOpen () {
+        const executeFn = () => {
+            const fn = this.subscribedList.shift()
+            fn && fn()
+            if (this.subscribedList.length) executeFn()
+        }
+        executeFn()
+    }
+
     // 心跳机制
     initPing () {
         if (this.ws.readyState !== 1) return console.warn('消息websocket连接未准备好  readyState：', this.ws.readyState)
         let param = this.getParam('ping')
-        this.ws.send(JSON.stringify(param))
+        // this.ws.send(JSON.stringify(param))
         if (this.ping) clearInterval(this.ping)
         this.ping = setInterval(() => {
             param = this.getParam('ping')
@@ -87,7 +129,7 @@ class SocketEvent {
     }
 
     // 处理盈亏浮动数据和账户数据
-    handleProfitLoss (data) {
+    floatProfitLoss (data) {
         console.log('收到消息', data)
         const content = data.content
         this.$store.commit('_user/Update_userAccount', content)
@@ -97,7 +139,7 @@ class SocketEvent {
     }
 
     // 处理异地登录踢出
-    handleLogout (data) {
+    disconnect (data) {
         const that = this
         Dialog.alert({
             title: '提示',

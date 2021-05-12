@@ -181,6 +181,15 @@ const routes = [
             footerMenu: false,
         }
     },
+    {
+        path: '/despositCb',
+        name: 'DespositCb',
+        component: () => import(/* webpackChunkName: "page" */ '../user/despositCb.vue'),
+        meta: {
+            title: '充值结果',
+            footerMenu: false,
+        }
+    },
 
 ]
 

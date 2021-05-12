@@ -55,8 +55,7 @@
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
 
-import { switchAccount } from '@/api/user'
-import { reactive, toRefs, ref, onBeforeMount, computed, onMounted } from 'vue'
+import { reactive, toRefs, ref, onBeforeMount, computed } from 'vue'
 import { getArrayObj } from '@/utils/util'
 export default {
     setup () {
@@ -82,12 +81,9 @@ export default {
                 currency: item.currency,
                 digits: item.digits
             }
-
-            switchAccount(params).then(res => {
+            store.dispatch('_user/switchAccount', params).then(res => {
                 toast.clear()
-                if (res.check()) {
-
-                }
+                Toast('目前只有一个玩法，暂时不处理切换账号')
             })
         }
 

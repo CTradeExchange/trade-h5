@@ -27,8 +27,9 @@
                 <Price :digit='product.price_digits' :mode='2' :point-ratio='product.pointRatio' :price='product.buy_price' />
             </div>
         </div>
-        <!-- {{ profitLossRang }} -->
         <!-- 挂单 -->
+        <p>挂单价格范围</p>
+        <p>{{ pendingPriceRang }}</p>
         <div v-if='openOrderSelected.val > 1' class='cell priceSet'>
             <div class='col'>
                 <PriceStepper v-model='pendingPrice' :product='product' />
@@ -36,6 +37,8 @@
         </div>
 
         <!-- 止盈止损价格设置 -->
+        <p>止盈止损价格范围</p>
+        {{ profitLossRang }}
         <div class='cell priceSet'>
             <div class='col'>
                 <PriceStepper v-model='stopLoss' :product='product' />
@@ -47,7 +50,7 @@
 
         <!-- 图表 -->
         <div class='chart'>
-            <lightweightChart v-if='product.symbolDigits' ref='chart' :product='product' />
+            <lightweightChart v-if='product.price_digits' ref='chart' :product='product' />
         </div>
     </div>
 
@@ -142,6 +145,7 @@ export default {
 
         const positionList = computed(() => store.state._trade.positionList)
         const profitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
+        const pendingPriceRang = computed(() => store.getters['_trade/pendingPriceRang'])
 
         // 设置默认手数
         watch(
@@ -200,7 +204,7 @@ export default {
             } else if ([3, 5].includes(state.openOrderSelected.val)) {
                 direction = 2
             }
-            const p = Math.pow(10, product.value.symbolDigits)
+            const p = Math.pow(10, product.value.price_digits)
             const params = {
                 bizType, // 业务类型。0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
                 direction, // 订单买卖方向。1-买；2-卖；
@@ -237,7 +241,7 @@ export default {
             if (takeProfit === state.takeProfit && stopLoss === state.stopLoss) {
                 return Toast('数据未修改')
             }
-            const p = Math.pow(10, product.value.symbolDigits)
+            const p = Math.pow(10, product.value.price_digits)
             const params = {
                 orderId: orderId,
                 positionId: positionId,
@@ -305,6 +309,7 @@ export default {
             openOrder,
             handleUpdateOrder,
             profitLossRang,
+            pendingPriceRang,
             selectOpenOrder,
             onHide,
 

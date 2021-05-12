@@ -19,12 +19,14 @@
 <script>
 import { useRouter } from 'vue-router'
 import { removeLoginParams } from '@/utils/util'
+import { useStore } from 'vuex'
 export default {
     setup (props) {
+        const store = useStore()
         const router = useRouter()
         const toLogin = () => {
             removeLoginParams()
-            router.push('/login')
+            store.dispatch('_user/logout')
         }
 
         return {

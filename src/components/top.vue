@@ -6,7 +6,10 @@
             </a>
         </slot>
         <slot name='center'>
-            <div v-if='showCenter' class='title'>
+            <div v-if='title' class='title'>
+                {{ title }}
+            </div>
+            <div v-else-if='showCenter' class='title'>
                 {{ $route.meta.title }}
             </div>
         </slot>
@@ -26,7 +29,7 @@ import { useRouter, useRoute } from 'vue-router'
 export default {
     props: {
         rightAction: {
-            type: Object,
+            type: [Object, Boolean],
             default: function () {
                 return { title: '' }
             }
@@ -35,6 +38,10 @@ export default {
         leftIcon: {
             type: String,
             default: 'cross'
+        },
+        title: {
+            type: String,
+            default: ''
         },
         showCenter: {
             type: Boolean,

@@ -59,7 +59,7 @@
 
 <script>
 import { useRouter, useRoute } from 'vue-router'
-import { toRefs, reactive, ref, onBeforeMount } from 'vue'
+import { toRefs, reactive, ref, onBeforeMount, onBeforeUnmount } from 'vue'
 import { Toast, Dialog } from 'vant'
 import { findAllLevelKyc, kycLevelApply, kycApply } from '@/api/user'
 import { getArrayObj, isEmpty } from '@/utils/util'
@@ -111,6 +111,13 @@ export default {
                     })
                 }
                 state.list = res.data
+                // 只有一个路径的时候默认选中
+                if (Number(res.data.length === 1)) {
+                    state.area = res.data[0].pathName
+                    state.pathCode = res.data[0].pathCode
+                    state.elementList = getArrayObj(state.list, 'pathCode', state.pathCode).elementList
+                    state.areaShow = false
+                }
             }).catch(err => {
                 state.loading = false
             })
@@ -208,6 +215,7 @@ export default {
 
         onBeforeMount(() => {
             // 注册进来的kyc
+
             const kycList = sessionStorage.getItem('kycList')
             if (!isEmpty(kycList)) {
                 state.list = JSON.parse(kycList)
@@ -221,6 +229,10 @@ export default {
                 getConditon()
             }
         })
+        onBeforeUnmount(() => {
+            sessionStorage.removeItem('kycList')
+        })
+
         return {
             ...toRefs(state),
             onSelect,

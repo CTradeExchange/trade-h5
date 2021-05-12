@@ -244,49 +244,55 @@ export default {
                 state.loading = false
                 // console.log(res)
                 if (res.invalid()) return false
-                // 登录成功重新连接websocket
-                instance.appContext.config.globalProperties.$MsgSocket.ws.open()
-                instance.appContext.config.globalProperties.$QuoteSocket.ws.open()
+
                 // 重新登录清除账户信息
                 store.commit('_user/Update_userAccount', '')
 
                 // 登录KYC,0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
-                let msg, confirmButtonText
+
                 if (Number(res.data.kycAuditStatus === 0)) {
-                    msg = '您还未进行KYC认证，点击去认证'
-                    confirmButtonText = '去认证'
-                } else if (Number(res.data.kycAuditStatus === 1)) {
-                    msg = '您的资料正在审核中，等耐心等待'
-                    confirmButtonText = '关闭'
-                } else if (Number(res.data.kycAuditStatus === 3)) {
-                    msg = '您的资料审核失败'
-                    confirmButtonText = '重新提交'
-                } else if (Number(res.data.kycAuditStatus === 2)) {
-                    msg = '您的资料已经审核通过，现在就开启您的财富之旅吧！'
-                    confirmButtonText = '好的'
-                }
-                if (Number(res.data.kycAuditStatus !== 2)) {
                     Dialog.alert({
                         title: '提示',
-                        confirmButtonText: confirmButtonText,
-                        message: msg,
+                        confirmButtonText: '去认证',
+                        message: '您还未进行KYC认证，点击去认证',
                         theme: 'round-button',
                     }).then(() => {
                         router.push('/authentication')
                     })
-                } else {
-                    Dialog.alert({
+                } else if (Number(res.data.kycAuditStatus === 1)) {
+                    return Dialog.alert({
                         title: '提示',
-                        confirmButtonText: confirmButtonText,
-                        message: msg,
+                        confirmButtonText: '关闭',
+                        message: '您的资料正在审核中，等耐心等待',
                         theme: 'round-button',
                     }).then(() => {
+                        store.dispatch('_user/logout')
+                    })
+                } else if (Number(res.data.kycAuditStatus === 3)) {
+                    return Dialog.alert({
+                        title: '提示',
+                        confirmButtonText: '重新提交',
+                        message: '您的资料审核失败',
+                        theme: 'round-button',
+                    }).then(() => {
+                        router.push('/authentication')
+                    })
+                } else if (Number(res.data.kycAuditStatus === 2)) {
+                    Dialog.alert({
+                        title: '提示',
+                        confirmButtonText: '好的',
+                        message: '您的资料已经审核通过，现在就开启您的财富之旅吧！',
+                        theme: 'round-button',
+                    }).then(() => {
+                        // 登录websocket
+                        instance.appContext.config.globalProperties.$MsgSocket.login()
+                        // 重新登录清除账户信息
+                        store.commit('_user/Update_userAccount', '')
                         if (parseInt(res.data.loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
                             state.loginPwdPop = true
                         } else {
                             loginToPath()
                         }
-                        // router.push('/quote')
                     })
                 }
             })
