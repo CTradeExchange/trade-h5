@@ -3,7 +3,7 @@
         <template #right>
         </template>
     </Top>
-    <!-- <Loading :show='loading' /> -->
+    <Loading :show='pageLoading' />
     <div class='page-wrap'>
         <div class='record-list'>
             <van-pull-refresh v-model='loading' @refresh='onRefresh'>
@@ -21,7 +21,7 @@
                         <van-collapse-item :name='index+1'>
                             <template #title>
                                 <p class='amount'>
-                                    {{ item.amount }} USD
+                                    {{ item.intendAmount }} USD
                                 </p>
                                 <p class='time'>
                                     {{ formatTime(item.createTime) }}
@@ -152,6 +152,7 @@ export default {
             list: [],
             finishedText: '没有更多了',
             finished: false,
+            pageLoading: false
         })
         const handleFold = (val) => {
             activeIndex.value = val
@@ -171,9 +172,10 @@ export default {
                 size: state.size,
                 current: state.current,
             }
-
+            state.pageLoading = true
             queryDepositPageList(params).then(res => {
                 state.loading = false
+                state.pageLoading = false
                 if (res.check()) {
                     const resdata = res.data
                     if (resdata.records && resdata.records.length > 0) {
@@ -189,6 +191,8 @@ export default {
                         }
                     }
                 }
+            }).catch(err => {
+                state.pageLoading = false
             })
         }
 

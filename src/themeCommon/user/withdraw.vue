@@ -20,7 +20,7 @@
                 </van-button>
             </div>
             <div class='notice'>
-                <span>最大可取 {{ withdrawAmount }} {{ accountCurrency }}</span>
+                <span>最大可取 {{ withdrawAmount || '--' }} {{ accountCurrency }}</span>
                 <span>手续费 {{ fee }} {{ accountCurrency }}</span>
             </div>
             <div class='bank-wrap'>
@@ -184,8 +184,11 @@ export default {
         })
 
         // 计算可取金额
-        const withdrawAmount = computed(() =>
-            priceFormat(state.withdrawConfig.withdrawAmount, state.withdrawConfig.digit))
+        const withdrawAmount = computed(() => {
+            if (!isEmpty(state.withdrawConfig)) {
+                return priceFormat(state.withdrawConfig.withdrawAmount, state.withdrawConfig.digit)
+            }
+        })
 
         const state = reactive({
             amount: '',
@@ -193,11 +196,7 @@ export default {
             loading: false,
             show: false,
             maxAmount: 5005.55,
-            checkedBank: {
-                // icon: require('../../assets/logo.png'),
-                // bankName: '招商银行',
-                // bankNo: '6388 **** **** 1222'
-            },
+            checkedBank: {},
             withdrawRate: '',
             withdrawConfig: '',
             bankList: [],

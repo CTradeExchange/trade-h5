@@ -54,7 +54,7 @@
                                 存款时间 :
                             </span>
                             <div class='left-time'>
-                                <p v-for='(item,index) in resultTimeList' :key='index'>
+                                <p v-for='(item,index) in resultTimeMap[checkedType.id]' :key='index'>
                                     {{ item }}
                                 </p>
                             </div>
@@ -90,7 +90,14 @@
 
     <van-action-sheet v-model:show='typeShow' :round='false' title='选择支付方式'>
         <div class='pay-list'>
-            <div v-for='(item,index) in PayTypes' :key='index' class='pay-type' @click='choosePayType(item)'>
+            <div v-for='(item,index) in payTypesSortEnable' :key='index' class='pay-type' @click='choosePayType(item)'>
+                <img alt='' :src='require("../../assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
+                <span class='pay-name'>
+                    {{ item.paymentTypeAlias || item.paymentType }}
+                </span>
+                <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
+            </div>
+            <div v-for='(item,index) in payTypesSortDisable' :key='index' class='pay-type' @click='choosePayType(item)'>
                 <img alt='' :src='require("../../assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
                 <span class='pay-name'>
                     {{ item.paymentTypeAlias || item.paymentType }}
@@ -147,9 +154,11 @@ import {
 } from '@/utils/util'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import isBetween from 'dayjs/plugin/isBetween'
 import {
     mul
 } from '@/utils/calculation'
+dayjs.extend(isBetween)
 
 dayjs.extend(utc)
 export default {
@@ -203,6 +212,21 @@ export default {
             return mul(state.amount, state.rateConfig.exchangeRate)
         })
 
+        // 处理支付通道排序
+        const payTypesSortEnable = computed(() => {
+            if (state.PayTypes.length > 0) {
+                const temp = state.PayTypes.filter(item => item.timeRangeFlag)
+
+                return temp
+            }
+        })
+
+        const payTypesSortDisable = computed(() => {
+            if (state.PayTypes.length > 0) {
+                return state.PayTypes.filter(item => !item.timeRangeFlag)
+            }
+        })
+
         const state = reactive({
             otherAmountVis: false,
             currIndex: 0,
@@ -215,7 +239,7 @@ export default {
             loading: false,
             despositVis: false,
             btnDisabled: false,
-            resultTimeList: []
+            resultTimeMap: {}
 
         })
 
@@ -242,12 +266,14 @@ export default {
 
         const choosePayType = (item) => {
             state.checkedType = item
-            state.PayTypes.map(item => {
+            payTypesSortEnable.value && payTypesSortEnable.value.map(item => {
+                item.checked = false
+            })
+            payTypesSortDisable.value && payTypesSortDisable.value.map(item => {
                 item.checked = false
             })
             item.checked = true
             state.typeShow = false
-            handleShowTime()
             getDepositExchangeRate()
         }
 
@@ -272,14 +298,13 @@ export default {
                     state.loading = false
                     if (res.data && res.data.length > 0) {
                         state.PayTypes = res.data
-                        state.checkedType = state.PayTypes[0]
-                        state.checkedType.checked = true
                         // 处理时区时间
                         handleShowTime()
                         getDepositExchangeRate()
                     }
                 } else {
                     state.loading = false
+                    state.btnDisabled = true
                     Toast(res.msg)
                 }
             }).catch(err => {
@@ -309,24 +334,37 @@ export default {
         }
 
         const handleShowTime = () => {
-            state.resultTimeList = []
-            const todayStr = dayjs().format('YYYY-MM-DD')
-            const openTime = state.checkedType.openTime
-            let openTimeList
-            if (!isEmpty(openTime)) {
-                openTimeList = openTime.split(',')
-                openTimeList.forEach(item => {
-                    const [start, end] = item.split('-')
-                    const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
-                    const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
+            if (state.PayTypes.length > 0) {
+                const todayStr = dayjs().format('YYYY-MM-DD')
 
-                    if (endLocal.isAfter(todayStr, 'day')) {
-                        state.resultTimeList.push(startLocal.format('HH:mm') + '-23:59')
-                        state.resultTimeList.push('00:00-' + endLocal.format('HH:mm'))
-                    } else {
-                        state.resultTimeList.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                state.PayTypes.forEach(payItem => {
+                    const openTime = payItem.openTime
+                    let openTimeList
+                    if (!isEmpty(openTime)) {
+                        openTimeList = openTime.split(',')
+                        openTimeList.forEach(item => {
+                            state.resultTimeMap[payItem.id] = []
+                            const [start, end] = item.split('-')
+                            const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
+                            const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
+
+                            if (endLocal.isAfter(todayStr, 'day')) {
+                                state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-23:59')
+                                state.resultTimeMap[payItem.id].push('00:00-' + endLocal.format('HH:mm'))
+                            } else {
+                                state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                            }
+
+                            const nowDate = dayjs()
+
+                            // 判断当前时间是否在设置的存款时间内
+                            if (nowDate.isBetween(startLocal, endLocal)) {
+                                payItem.timeRangeFlag = true
+                                state.checkedType = payItem
+                                state.checkedType.checked = true
+                            }
+                        })
                     }
-                    const nowDate = dayjs()
                 })
             }
         }
@@ -472,7 +510,9 @@ export default {
             computeFee,
             timeList,
             handleShowTime,
-            computeExpectedpay
+            computeExpectedpay,
+            payTypesSortEnable,
+            payTypesSortDisable
         }
     }
 }
