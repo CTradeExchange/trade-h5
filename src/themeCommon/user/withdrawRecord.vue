@@ -137,7 +137,7 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
 
-        // 审核状态
+        // 审核状态 取款状态：审核中、已取消、成功
         const states = {
             1: '审核中',
             2: '已取消',

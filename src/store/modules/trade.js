@@ -111,6 +111,12 @@ export default {
         }
     },
     mutations: {
+        Empty_data (state, data) { // 清空信息
+            state.positionList = []
+            state.historyList = []
+            state.pendingList = []
+            state.positionProfitLossList = []
+        },
         Update_pendingPrice (state, data) {
             state.pendingPrice = data
         },

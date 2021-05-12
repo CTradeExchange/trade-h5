@@ -17,8 +17,7 @@
 
 <script>
 import Top from '@m/layout/top'
-import { toRefs, reactive, computed, ref, getCurrentInstance, watch, onBeforeMount } from 'vue'
-import { logout } from '@/api/user'
+import { toRefs, reactive, computed, getCurrentInstance, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { isEmpty, removeLoginParams, localSet, localGet } from '@/utils/util'
@@ -56,7 +55,11 @@ export default {
                 state.loading = true
                 // 退出登录
                 instance.appContext.config.globalProperties.$MsgSocket.logout()
-                store.dispatch('_user/logout')
+                return store.dispatch('_user/logout')
+            }).then(() => {
+                return router.push('/login')
+            }).then(() => {
+                location.reload()
             }).catch(() => {
                 // on cancel
             })

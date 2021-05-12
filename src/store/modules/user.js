@@ -17,6 +17,13 @@ export default {
         selfSymbolList: [], // 自选产品列表
     },
     mutations: {
+        Empty_data (state, data) { // 清空用户信息
+            state.info = ''
+            state.loginData = ''
+            state.customerInfo = ''
+            state.userAccount = ''
+            state.kycState = ''
+        },
         Update_loginLoading (state, data) {
             state.loginLoading = data
         },
@@ -123,7 +130,8 @@ export default {
             return logout().then(res => {
                 if (res.check()) {
                     removeLoginParams()
-                    router.push('/login')
+                    commit('Empty_data')
+                    commit('_trade/Empty_data', null, { root: true })
                 }
                 return res
             }).catch(err => {

@@ -138,12 +138,20 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
 
-        // 审核状态
-        const states = {
+        // 提案状态,待审批:1、审批成功:2、审批失败:3
+        const checkStatus = {
             1: '待审批',
-            2: '审批失败',
-            3: '审批成功'
+            2: '审批成功',
+            3: '审批失败'
         }
+
+        // 存款状态,待存款:1、存款成功:2、存款失败:3
+        const depositStatus = {
+            1: '待支付',
+            2: '存款成功',
+            3: '存款失败'
+        }
+
         const activeIndex = ref(['0'])
         const state = reactive({
             loading: false,

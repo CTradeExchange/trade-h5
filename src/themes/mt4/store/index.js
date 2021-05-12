@@ -26,6 +26,9 @@ export default createStore({
     getters: {
         productActived (state, getters, rootState) {
             return state._quote.productMap[rootState._quote.productActivedID]
+        },
+        customerGroupId (state) { // 用户组ID
+            return state._user.customerInfo?.customerGroupId ?? state._base.wpCompanyInfo?.customerGroupId
         }
     },
     mutations: {
