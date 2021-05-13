@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class='pageWrap'>
         <template v-for='item in productList'>
             <productItem v-if='item.symbolName' :key='item' :product='item' @open='openProduct(item)' />
         </template>

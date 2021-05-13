@@ -30,7 +30,8 @@
                             <template #right-icon>
                                 <div>
                                     <span class='state'>
-                                        {{ states[item.checkStatus] }}
+                                        {{ handleState(item.checkStatus, item.depositStatus) }}
+                                        <!-- {{ checkStatus[item.checkStatus] }} -->
                                     </span>
                                     <van-icon :name='activeIndex === index+1 ? "arrow-up" : "arrow-down"' />
                                 </div>
@@ -57,7 +58,8 @@
                                         状态
                                     </span>
                                     <span class='right-val state'>
-                                        {{ states[item.checkStatus] }}
+                                        {{ handleState(item.checkStatus, item.depositStatus) }}
+                                        <!-- {{ Number(item.depositStatus) ===2 ? '存款成功' : '待支付' }} -->
                                     </span>
                                 </div>
 
@@ -142,7 +144,7 @@ export default {
         const checkStatus = {
             1: '待审批',
             2: '审批成功',
-            3: '审批失败'
+            3: '已取消'
         }
 
         // 存款状态,待存款:1、存款成功:2、存款失败:3
@@ -150,6 +152,17 @@ export default {
             1: '待支付',
             2: '存款成功',
             3: '存款失败'
+        }
+
+        const handleState = (checkStatus, depositStatus) => {
+            // 存款成功 待支付 已取消
+            if (Number(depositStatus) === 2) {
+                return '存款成功'
+            } else if (Number(checkStatus) === 3) {
+                return '已取消'
+            } else {
+                return '待支付'
+            }
         }
 
         const activeIndex = ref(['0'])
@@ -224,8 +237,8 @@ export default {
             customInfo,
             onRefresh,
             formatTime,
-            states,
             onLoad,
+            handleState,
             ...toRefs(state)
         }
     }

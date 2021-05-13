@@ -361,7 +361,7 @@ export default {
                             if (nowDate.isBetween(startLocal, endLocal)) {
                                 payItem.timeRangeFlag = true
                                 state.checkedType = payItem
-                                state.checkedType.checked = true
+                                // state.checkedType.checked = true
                             }
                         })
                     }

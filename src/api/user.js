@@ -106,7 +106,7 @@ export function modifyPwd (data) {
 /* 创建存款提案 */
 export function handleDesposit (data) {
     return request({
-        url: '/global/fund.DepositAppDubboService.createDepositProposal',
+        url: '/global/fund.app.DepositAppDubboService.createDepositProposal',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -118,7 +118,7 @@ export function handleDesposit (data) {
 /* 创建取款提案 */
 export function handleWithdraw (data) {
     return request({
-        url: '/global/fund.WithdrawAppDubboService.createWithdrawProposal',
+        url: '/global/fund.app.WithdrawAppDubboService.createWithdrawProposal',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -130,7 +130,7 @@ export function handleWithdraw (data) {
 /* 获取取款限制配置 */
 export function queryWithdrawConfig (data) {
     return request({
-        url: '/global/fund.WithdrawAppDubboService.queryWithdrawLimitConfig',
+        url: '/global/fund.app.WithdrawAppDubboService.queryWithdrawLimitConfig',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -142,7 +142,7 @@ export function queryWithdrawConfig (data) {
 /* 获取客户取款货币对汇率 */
 export function queryWithdrawRate (data) {
     return request({
-        url: '/global/fund.WithdrawAppDubboService.getWithdrawExchangeRate',
+        url: '/global/fund.app.WithdrawAppDubboService.getWithdrawExchangeRate',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -154,7 +154,7 @@ export function queryWithdrawRate (data) {
 /* 获取支付通道 */
 export function queryPayType (data) {
     return request({
-        url: '/global/fund.DepositAppDubboService.getPayChannels',
+        url: '/global/fund.app.DepositAppDubboService.getPayChannels',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -166,7 +166,7 @@ export function queryPayType (data) {
 /* 获取客户存款货币对汇率 */
 export function queryDepositExchangeRate (data) {
     return request({
-        url: '/global/fund.DepositAppDubboService.getDepositExchangeRate',
+        url: '/global/fund.app.DepositAppDubboService.getDepositExchangeRate',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -202,7 +202,7 @@ export function addBank (data) {
 /* 取款提案列表 */
 export function queryWithdrawPageList (data) {
     return request({
-        url: '/global/fund.CustomerProposalQueryService.queryWithdrawPageList',
+        url: '/global/fund.app.CustomerProposalQueryService.queryWithdrawPageList',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -214,7 +214,7 @@ export function queryWithdrawPageList (data) {
 /* 存款提案列表 */
 export function queryDepositPageList (data) {
     return request({
-        url: '/global/fund.CustomerProposalQueryService.queryDepositPageList',
+        url: '/global/fund.app.CustomerProposalQueryService.queryDepositPageList',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -239,7 +239,7 @@ export function queryCapitalFlowList (data) {
 /* 获取取款手续费 */
 export function computeWithdrawFee (data) {
     return request({
-        url: '/global/fund.WithdrawAppDubboService.computeWithdrawFee',
+        url: '/global/fund.app.WithdrawAppDubboService.computeWithdrawFee',
         method: 'post',
         headers: {
             version: '0.0.1'
@@ -383,7 +383,7 @@ export function bindEmail (data) {
 /* 查询存款提案 */
 export function queryDepositProposal (data) {
     return request({
-        url: '/global/fund.DepositAppDubboService.queryDepositProposal',
+        url: '/global/fund.app.DepositAppDubboService.queryDepositProposal',
         method: 'post',
         headers: {
             version: '0.0.1'
