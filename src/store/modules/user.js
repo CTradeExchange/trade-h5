@@ -64,10 +64,12 @@ export default {
                     // 设置当前用户组的产品
                     const selfSymbolData = rootState._base.selfSymbol
                     const customerGroupId = data.customerGroupId || rootState._base.wpCompanyInfo?.customerGroupId
-                    const products = selfSymbolData.product[customerGroupId]
-                    const productList = products.map(el => ({ symbolId: el }))
-                    commit('_quote/Update_productList', productList, { root: true })
-                    commit('_quote/Update_productActivedID', products[0], { root: true })
+                    const products = selfSymbolData && selfSymbolData.product[customerGroupId]
+                    if (products) {
+                        const productList = products.map(el => ({ symbolId: el }))
+                        commit('_quote/Update_productList', productList, { root: true })
+                        commit('_quote/Update_productActivedID', products[0], { root: true })
+                    }
                 }
                 commit('Update_loginLoading', false)
                 return res
@@ -87,9 +89,11 @@ export default {
                     if (selfSymbolData) {
                         const customerGroupId = data.customerGroupId || rootState._base.wpCompanyInfo?.customerGroupId
                         const products = selfSymbolData.product[customerGroupId]
-                        const productList = products.map(el => ({ symbolId: el }))
-                        commit('_quote/Update_productList', productList, { root: true })
-                        commit('_quote/Update_productActivedID', products[0], { root: true })
+                        if (products) {
+                            const productList = products.map(el => ({ symbolId: el }))
+                            commit('_quote/Update_productList', productList, { root: true })
+                            commit('_quote/Update_productActivedID', products[0], { root: true })
+                        }
                     }
                 }
                 commit('Update_loginLoading', false)
