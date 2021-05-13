@@ -348,12 +348,13 @@ export default {
                             const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
                             const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
 
-                            if (endLocal.isAfter(todayStr, 'day')) {
-                                state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-23:59')
-                                state.resultTimeMap[payItem.id].push('00:00-' + endLocal.format('HH:mm'))
-                            } else {
-                                state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
-                            }
+                            state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                            // if (endLocal.isAfter(todayStr, 'day')) {
+                            //     state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-23:59')
+                            //     state.resultTimeMap[payItem.id].push('00:00-' + endLocal.format('HH:mm'))
+                            // } else {
+                            //     state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                            // }
 
                             const nowDate = dayjs()
 
@@ -402,7 +403,7 @@ export default {
                 country: customInfo.value.country,
                 channelCode: customInfo.value.utmSource,
                 depositFrom: 'H5',
-                callbackUrl: window.location.host + '/despositCb'
+                callbackUrl: window.location.protocol + '//' + window.location.host + '/despositCb'
             }
             state.loading = true
             handleDesposit(params).then(res => {
