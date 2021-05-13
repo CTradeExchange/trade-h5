@@ -34,15 +34,6 @@ export function verifyCodeCheck (data) {
     })
 }
 
-/* 获取银行卡列表 */
-export function getBankDict (data) {
-    return request({
-        url: '/global/config.app.OpenDictDubboService.getListByParentCode',
-        method: 'post',
-        data
-    })
-}
-
 /* 上传 */
 export function upload (data) {
     return request({

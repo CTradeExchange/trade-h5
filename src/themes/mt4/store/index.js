@@ -3,7 +3,7 @@ import Base from '@/store/modules/base'
 import User from '@/store/modules/user'
 import Quote from '@/store/modules/quote'
 import Trade from '@/store/modules/trade'
-import { getListByParentCode, getBankDict } from '@/api/base'
+import { getListByParentCode } from '@/api/base'
 import Colors from '@m/colorVariables'
 
 const style = {
@@ -58,7 +58,7 @@ export default createStore({
         },
 
         getBankDictList ({ dispatch, commit, state }) {
-            return getBankDict({ parentCode: 'bank_code' }).then(res => {
+            return getListByParentCode({ parentCode: 'bank_code' }).then(res => {
                 if (res.check()) {
                     commit('Update_bankList', res.data)
                 }

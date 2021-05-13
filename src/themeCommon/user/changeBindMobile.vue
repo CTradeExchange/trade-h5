@@ -1,5 +1,5 @@
 <template>
-    <bindMobileComponent type='bind' />
+    <bindMobileComponent type='change' />
 </template>
 
 <script>

@@ -9,6 +9,8 @@
         <van-cell is-link title='修改登录密码' to='/setLoginPwd' />
         <van-cell v-if='!customInfo.phone' is-link title='绑定手机' to='/bindMobile' />
         <van-cell v-if='!customInfo.email' is-link title='绑定邮箱' to='/bindEmail' />
+        <van-cell v-if='customInfo.email' is-link title='更换邮箱' to='/changeBindEmail' />
+        <van-cell v-if='customInfo.phone' is-link title='更换手机' to='/changeBindMobile' />
         <van-button class='logout-btn' :loading='loading' type='primary' @click='handleLogout'>
             <span>退出账号</span>
         </van-button>

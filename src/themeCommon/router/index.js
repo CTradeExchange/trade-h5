@@ -177,7 +177,7 @@ const routes = [
         name: 'KycCommitted',
         component: () => import(/* webpackChunkName: "page" */ '../user/kycCommitted.vue'),
         meta: {
-            title: '绑定邮箱',
+            title: '提交KYC',
             footerMenu: false,
         }
     },
@@ -187,6 +187,24 @@ const routes = [
         component: () => import(/* webpackChunkName: "page" */ '../user/despositCb.vue'),
         meta: {
             title: '充值结果',
+            footerMenu: false,
+        }
+    },
+    {
+        path: '/changeBindEmail',
+        name: 'ChangeEmail',
+        component: () => import(/* webpackChunkName: "page" */ '../user/changeBindEmail.vue'),
+        meta: {
+            title: '更换邮箱',
+            footerMenu: false,
+        }
+    },
+    {
+        path: '/changeBindMobile',
+        name: 'ChangeMobile',
+        component: () => import(/* webpackChunkName: "page" */ '../user/changeBindMobile.vue'),
+        meta: {
+            title: '更换手机',
             footerMenu: false,
         }
     },

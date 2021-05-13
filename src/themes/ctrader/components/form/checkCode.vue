@@ -10,10 +10,14 @@
                 :value='modelValue'
                 @input='onInput'
             />
-            <label v-if='label' class='label' :for='id'>{{ label }}</label>
+            <label v-if='label' class='label' :for='id'>
+                {{ label }}
+            </label>
         </div>
         <a v-if='clear' v-show='modelValue.length' class='van-icon van-icon-clear' href='javascript:;' @click='onClear'></a>
-        <button ref='getCodeBtn' class='getCodeBtn' :disabled='disabled' @click='getCode'>获取验证码</button>
+        <button ref='getCodeBtn' class='getCodeBtn' :disabled='disabled' @click='getCode'>
+            获取验证码
+        </button>
         <!-- <div class='checkCodeBtn'>
             <van-button block :color='$store.state.style.primary' type='primary' @click="$emit('getCode')">获取验证码</van-button>
         </div> -->

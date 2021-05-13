@@ -18,7 +18,7 @@
                     <p class='t1'>
                         {{ item.amount }} {{ checkedType.accountCurrency }}
                     </p>
-                <!-- <p class='t2'>
+                    <!-- <p class='t2'>
                         赠送${{ item.present }}
                     </p> -->
                 </div>
@@ -370,12 +370,6 @@ export default {
             }
         }
 
-        const timeList = computed(() => {
-            if (!isEmpty(state.checkedType)) {
-                return state.checkedType.openTime.split(',')
-            }
-        })
-
         // 创建存款提案
         const next = () => {
             if (!state.amount) {
@@ -509,7 +503,6 @@ export default {
             onCancel,
             onConfirm,
             computeFee,
-            timeList,
             handleShowTime,
             computeExpectedpay,
             payTypesSortEnable,

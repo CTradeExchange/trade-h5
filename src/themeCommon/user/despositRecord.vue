@@ -97,10 +97,10 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        入帐时间
+                                        更新时间
                                     </span>
                                     <span class='right-val'>
-                                        --
+                                        {{ formatTime(item.updateTime) || '--' }}
                                     </span>
                                 </div>
                                 <div class='w-item'>

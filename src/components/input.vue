@@ -6,8 +6,8 @@
             v-model='val'
             class='input'
             v-bind='$attrs'
+            :placeholder='label'
             required
-            :placeholder="label"
             :type='pwdVisible ? "text" : "password"'
             @input='onInput'
         />
@@ -17,9 +17,9 @@
             v-model='val'
             class='input'
             v-bind='$attrs'
+            :placeholder='label'
             required
             type='text'
-            :placeholder="label"
             @input='onInput'
         />
         <!-- <label v-if='label' class='label' :for='id'>{{ label }}</label> -->
@@ -103,6 +103,7 @@ export default {
     width: 100%;
     height: rem(75px);
     padding: 0 5px;
+    font-size: rem(26px);
     &:focus~.label,
     &:valid~.label {
         transform: scale(0.8) translateY(-90%);
