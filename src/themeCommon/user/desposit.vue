@@ -37,7 +37,7 @@
                     请选择支付方式
                 </p>
 
-                <div class='pay-item'>
+                <div v-if='checkedType' class='pay-item'>
                     <div v-if='PayTypes.length > 0' class='pay-type' @click='openSheet'>
                         <img alt='' :src='require("../../assets/payment_icon/" + checkedType.paymentType + ".png")' srcset='' />
                         <span class='pay-name'>
@@ -68,7 +68,7 @@
 
             <div class='pay-info'>
                 <div class='pi-item'>
-                    预计支付 {{ computeExpectedpay || '--' }} {{ checkedType.paymentCurrency }}
+                    预计支付 {{ computeExpectedpay || '--' }} {{ checkedType.paymentCurrency || checkedType.accountCurrency }}
                 </div>
                 <div class='pi-item'>
                     预计到账 {{ amount && checkedType ? parseFloat(amount) - parseFloat(checkedType.fee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
@@ -221,6 +221,7 @@ export default {
             }
         })
 
+        // 不在当前时间的支付通道
         const payTypesSortDisable = computed(() => {
             if (state.PayTypes.length > 0) {
                 return state.PayTypes.filter(item => !item.timeRangeFlag)
@@ -367,6 +368,10 @@ export default {
                         })
                     }
                 })
+
+                if (isEmpty(state.checkedType)) {
+                    state.checkedType = state.PayTypes[0]
+                }
             }
         }
 

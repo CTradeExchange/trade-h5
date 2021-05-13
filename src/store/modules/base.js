@@ -38,11 +38,13 @@ export default {
 
                 if (selfSymbolData) {
                     const products = selfSymbolData.product[rootGetters.customerGroupId]
-                    const productList = products.map(el => ({ symbolId: el }))
+                    if (products) {
+                        const productList = products && products.map(el => ({ symbolId: el }))
 
-                    commit('UPDATE_selfSymbol', selfSymbolData)
-                    commit('_quote/Update_productList', productList, { root: true })
-                    commit('_quote/Update_productActivedID', products[0], { root: true })
+                        commit('UPDATE_selfSymbol', selfSymbolData)
+                        commit('_quote/Update_productList', productList, { root: true })
+                        commit('_quote/Update_productActivedID', products[0], { root: true })
+                    }
                 }
                 return data
             })
