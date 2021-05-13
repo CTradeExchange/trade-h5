@@ -154,12 +154,12 @@ export default {
 
         const handleState = (checkStatus, transferStatus) => {
             // 存款成功 待支付 已取消
-            if (Number(transferStatus) === 1) {
-                return '审核中'
+            if (Number(checkStatus) === 3) {
+                return '已取消'
             } else if (Number(transferStatus) === 2) {
                 return '成功'
             } else {
-                return '已取消'
+                return '审核中'
             }
         }
 
