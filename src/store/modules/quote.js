@@ -1,7 +1,6 @@
 import { querySymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
 import { plus } from '@/utils/calculation'
 import CheckAPI from '@/utils/checkAPI'
-import { isEmpty } from '@/utils/util'
 
 // 处理显示的点差  点差=（买价-卖价）/pip
 function spreadText (product) {
@@ -47,8 +46,8 @@ export default {
 
             // 该产品先拿到快照价格，后拿到点差，需要重新计算价格点差
             if (!askSpread && data.askSpread && data.pointRatio) {
-                spreadText(product)
                 price_spread(product, { ...data, ...product })
+                spreadText(product)
             }
         },
         // 更新某个产品报价
@@ -72,8 +71,8 @@ export default {
             product.buy_price_pre = product.buy_price * 1
             product.sell_price_pre = product.sell_price * 1
             Object.assign(product, data)
-            spreadText(product)
             price_spread(product, data)
+            spreadText(product)
         },
         Update_productActivedID (state, id) {
             sessionStorage.setItem('productActived', JSON.stringify(state.productMap[id]))
@@ -82,15 +81,14 @@ export default {
     },
     actions: {
         // 产品基础信息列表
-        querySymbolBaseInfoList ({ dispatch, commit, state, rootState }, symbolIds = []) {
+        querySymbolBaseInfoList ({ dispatch, commit, state, rootState, rootGetters }, symbolIds = []) {
             const productMap = state.productMap
 
             const newSymbolIds = symbolIds.filter(el => !productMap[el].symbolName)
-            const guestCustomerGroupId = rootState._base.wpCompanyInfo.customerGroupId
             const params = {
                 symbolIds: newSymbolIds.join(),
                 tradeType: parseInt(rootState._base.tradeType),
-                customerGroupId: rootState._user.customerInfo?.customerGroupId ?? guestCustomerGroupId,
+                customerGroupId: rootGetters.customerGroupId,
                 accountId: rootState._user.customerInfo?.accountId,
             }
 
@@ -107,15 +105,14 @@ export default {
             })
         },
         // 产品详细信息
-        querySymbolInfo ({ dispatch, commit, state, rootState }, symbolId) {
+        querySymbolInfo ({ dispatch, commit, state, rootState, rootGetters }, symbolId) {
             const productMap = state.productMap
 
             if (productMap[symbolId].contractSize) return Promise.resolve(new CheckAPI({ code: '0', data: {} }))
-            const guestCustomerGroupId = rootState._base.wpCompanyInfo.customerGroupId
             const params = {
                 symbolId: Number(symbolId),
                 tradeType: rootState._base.tradeType,
-                customerGroupId: rootState._user.customerInfo?.customerGroupId ?? guestCustomerGroupId,
+                customerGroupId: rootGetters.customerGroupId,
                 // accountId: rootState._user.customerInfo?.accountId,
             }
             return querySymbolInfo(params).then((res) => {

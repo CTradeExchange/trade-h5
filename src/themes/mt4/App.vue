@@ -10,6 +10,10 @@
 
 <script>
 export default {
+    created () {
+        window.vm = this
+        window.store = this.$store
+    }
 }
 </script>
 

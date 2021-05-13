@@ -3,7 +3,7 @@ import request from '@/utils/request'
 /* 产品基础信息列表 */
 export function querySymbolBaseInfoList (data) {
     return request({
-        url: '/global/rtc.RtcSymbolQueryService.querySymbolBaseInfoList',
+        url: '/global/rtc.app.RtcSymbolQueryService.querySymbolBaseInfoList',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -14,7 +14,7 @@ export function querySymbolBaseInfoList (data) {
 /* 产品信息 */
 export function querySymbolInfo (data) {
     return request({
-        url: '/global/rtc.RtcSymbolQueryService.querySymbolInfo',
+        url: '/global/rtc.app.RtcSymbolQueryService.querySymbolInfo',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -26,7 +26,7 @@ export function querySymbolInfo (data) {
 /* 下单 */
 export function addMarketOrder (data) {
     return request({
-        url: '/global/tradeapi.OrderApiService.addMarketOrder',
+        url: '/global/tradeapi.app.OrderApiService.addMarketOrder',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -38,7 +38,7 @@ export function addMarketOrder (data) {
 /* 查看持仓列表 */
 export function queryPositionPage (data) {
     return request({
-        url: '/global/tradeapi.PositionApiService.queryPositionPage',
+        url: '/global/tradeapi.app.PositionApiService.queryPositionPage',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -50,7 +50,7 @@ export function queryPositionPage (data) {
 /* 查看订单列表 */
 export function queryOrderPage (data) {
     return request({
-        url: '/global/tradeapi.OrderApiService.queryOrderPage',
+        url: '/global/tradeapi.app.OrderApiService.queryOrderPage',
         method: 'post',
         headers: {
             group: 'tradeApi'
@@ -61,7 +61,7 @@ export function queryOrderPage (data) {
 /* 平仓历史记录列表 */
 export function queryHistoryCloseOrderList (data) {
     return request({
-        url: '/global/tradeapi.OrderApiService.queryHistoryCloseOrderList',
+        url: '/global/tradeapi.app.OrderApiService.queryHistoryCloseOrderList',
         method: 'post',
         headers: {
             group: 'tradeApi',
@@ -73,7 +73,7 @@ export function queryHistoryCloseOrderList (data) {
 /* 查看预埋单列表 */
 export function queryPBOOrderPage (data) {
     return request({
-        url: '/global/tradeapi.OrderApiService.queryPBOOrderPage',
+        url: '/global/tradeapi.app.OrderApiService.queryPBOOrderPage',
         method: 'post',
         headers: {
             group: 'tradeApi',
@@ -86,7 +86,7 @@ export function queryPBOOrderPage (data) {
 /* 修改订单 */
 export function updateOrder (data) {
     return request({
-        url: '/global/tradeapi.OrderApiService.updateOrder',
+        url: '/global/tradeapi.app.OrderApiService.updateOrder',
         method: 'post',
         headers: {
             group: 'tradeApi',
@@ -99,7 +99,7 @@ export function updateOrder (data) {
 /* 取消预埋单 */
 export function closePboOrder (data) {
     return request({
-        url: '/global/tradeapi.OrderApiService.closePboOrder',
+        url: '/global/tradeapi.app.OrderApiService.closePboOrder',
         method: 'post',
         headers: {
             group: 'tradeApi',
@@ -112,7 +112,7 @@ export function closePboOrder (data) {
 /* 添加自选 */
 export function addCustomerOptional (data) {
     return request({
-        url: '/global/customer.CustomerOptionalWebApiService.add',
+        url: '/global/customer.app.CustomerOptionalWebApiService.add',
         method: 'post',
         headers: {
             // group: 'tradeApi',
@@ -125,10 +125,22 @@ export function addCustomerOptional (data) {
 /* 根据客户组搜索产品 */
 export function getSymbolList (data) {
     return request({
-        url: '/global/config.OpenSymbolDubboService.getSymbolList',
+        url: '/global/config.app.OpenSymbolDubboService.getSymbolList',
         method: 'post',
         headers: {
             // version: '0.0.1',
+        },
+        data
+    })
+}
+/* 修改预埋单 */
+export function updatePboOrder (data) {
+    return request({
+        url: '/global/tradeapi.app.OrderApiService.updatePboOrder',
+        method: 'post',
+        headers: {
+            group: 'tradeApi',
+            version: '0.0.1',
         },
         data
     })

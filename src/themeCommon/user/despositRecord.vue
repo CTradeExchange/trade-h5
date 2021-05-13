@@ -21,7 +21,7 @@
                         <van-collapse-item :name='index+1'>
                             <template #title>
                                 <p class='amount'>
-                                    {{ item.intendAmount }} USD
+                                    {{ item.intendAmount }} {{ item.depositCurrency }}
                                 </p>
                                 <p class='time'>
                                     {{ formatTime(item.createTime) }}
@@ -30,7 +30,8 @@
                             <template #right-icon>
                                 <div>
                                     <span class='state'>
-                                        {{ states[item.checkStatus] }}
+                                        {{ handleState(item.checkStatus, item.depositStatus) }}
+                                        <!-- {{ checkStatus[item.checkStatus] }} -->
                                     </span>
                                     <van-icon :name='activeIndex === index+1 ? "arrow-up" : "arrow-down"' />
                                 </div>
@@ -57,7 +58,8 @@
                                         状态
                                     </span>
                                     <span class='right-val state'>
-                                        {{ states[item.checkStatus] }}
+                                        {{ handleState(item.checkStatus, item.depositStatus) }}
+                                        <!-- {{ Number(item.depositStatus) ===2 ? '存款成功' : '待支付' }} -->
                                     </span>
                                 </div>
 
@@ -138,12 +140,31 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
 
-        // 审核状态
-        const states = {
+        // 提案状态,待审批:1、审批成功:2、审批失败:3
+        const checkStatus = {
             1: '待审批',
-            2: '审批失败',
-            3: '审批成功'
+            2: '审批成功',
+            3: '已取消'
         }
+
+        // 存款状态,待存款:1、存款成功:2、存款失败:3
+        const depositStatus = {
+            1: '待支付',
+            2: '存款成功',
+            3: '存款失败'
+        }
+
+        const handleState = (checkStatus, depositStatus) => {
+            // 存款成功 待支付 已取消
+            if (Number(depositStatus) === 2) {
+                return '存款成功'
+            } else if (Number(checkStatus) === 3) {
+                return '已取消'
+            } else {
+                return '待支付'
+            }
+        }
+
         const activeIndex = ref(['0'])
         const state = reactive({
             loading: false,
@@ -216,8 +237,8 @@ export default {
             customInfo,
             onRefresh,
             formatTime,
-            states,
             onLoad,
+            handleState,
             ...toRefs(state)
         }
     }

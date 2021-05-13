@@ -60,7 +60,7 @@
                             </div>
                         </div>
                         <span class='right-val'>
-                            金额限制 : {{ checkedType.singleLowAmount }} - {{ checkedType.singleHighAmount }} {{ checkedType.accountCurrency }}
+                            金额限制 : {{ checkedType.singleLowAmount }}-{{ checkedType.singleHighAmount }} {{ checkedType.accountCurrency }}
                         </span>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                     预计支付 {{ computeExpectedpay || '--' }} {{ checkedType.paymentCurrency }}
                 </div>
                 <div class='pi-item'>
-                    预计到账 {{ checkedType ? parseFloat(amount) - parseFloat(checkedType.fee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
+                    预计到账 {{ amount && checkedType ? parseFloat(amount) - parseFloat(checkedType.fee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
                 </div>
                 <div class='line'></div>
                 <!-- <div class='pi-item'>
@@ -348,12 +348,13 @@ export default {
                             const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
                             const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
 
-                            if (endLocal.isAfter(todayStr, 'day')) {
-                                state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-23:59')
-                                state.resultTimeMap[payItem.id].push('00:00-' + endLocal.format('HH:mm'))
-                            } else {
-                                state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
-                            }
+                            state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                            // if (endLocal.isAfter(todayStr, 'day')) {
+                            //     state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-23:59')
+                            //     state.resultTimeMap[payItem.id].push('00:00-' + endLocal.format('HH:mm'))
+                            // } else {
+                            //     state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                            // }
 
                             const nowDate = dayjs()
 
@@ -361,7 +362,7 @@ export default {
                             if (nowDate.isBetween(startLocal, endLocal)) {
                                 payItem.timeRangeFlag = true
                                 state.checkedType = payItem
-                                state.checkedType.checked = true
+                                // state.checkedType.checked = true
                             }
                         })
                     }
@@ -399,10 +400,10 @@ export default {
                 paymentChannelType: state.checkedType.paymentType,
                 paymentChannelClientType: 'mobile',
                 depositAmount: state.amount,
-                country: 'IOS_3166_156',
-                channelCode: '1',
+                country: customInfo.value.country,
+                channelCode: customInfo.value.utmSource,
                 depositFrom: 'H5',
-                callbackUrl: window.location.host + '/despositCb'
+                callbackUrl: window.location.protocol + '//' + window.location.host + '/despositCb'
             }
             state.loading = true
             handleDesposit(params).then(res => {

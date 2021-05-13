@@ -48,8 +48,8 @@ export default {
                 sellStopLossMax, // 卖出止损范围最大值
                 sellStopLossMin // 卖出止损范围最小值
 
-            const buy_price = state.pendingPrice ? state.pendingPrice : Number(product.buy_price)
-            const sell_price = state.pendingPrice ? state.pendingPrice : Number(product.sell_price)
+            const buy_price = state.pendingPrice ? Number(state.pendingPrice) : Number(product.buy_price)
+            const sell_price = state.pendingPrice ? Number(state.pendingPrice) : Number(product.sell_price)
 
             buyProfitMax = (buy_price + pip * product.stopLossMaxPoint).toFixed(digits) // 买入价+pip*限价最大距离
             buyProfitMin = (buy_price + pip * product.stopLossMinPoint).toFixed(digits) // 买入价+pip*限价最小距离
@@ -111,6 +111,12 @@ export default {
         }
     },
     mutations: {
+        Empty_data (state, data) { // 清空信息
+            state.positionList = []
+            state.historyList = []
+            state.pendingList = []
+            state.positionProfitLossList = []
+        },
         Update_pendingPrice (state, data) {
             state.pendingPrice = data
         },

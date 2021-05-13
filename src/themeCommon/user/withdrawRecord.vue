@@ -37,7 +37,8 @@
                             <template #right-icon>
                                 <div>
                                     <span class='state'>
-                                        {{ states[item.checkStatus] }}
+                                        {{ handleState(item.checkStatus,item.transferStatus) }}
+                                        <!-- {{ states[item.checkStatus] }} -->
                                     </span>
                                     <van-icon :name='activeIndex === index+1 ? "arrow-up" : "arrow-down"' />
                                 </div>
@@ -64,7 +65,8 @@
                                         状态
                                     </span>
                                     <span class='right-val state'>
-                                        {{ transferStatus[item.transferStatus] }}
+                                        {{ handleState(item.checkStatus,item.transferStatus) }}
+                                        <!-- {{ transferStatus[item.transferStatus] }} -->
                                     </span>
                                 </div>
 
@@ -137,7 +139,7 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
 
-        // 审核状态
+        // 审核状态 取款状态：审核中、已取消、成功
         const states = {
             1: '审核中',
             2: '已取消',
@@ -149,6 +151,18 @@ export default {
             2: '转账失败',
             3: '转账成功'
         }
+
+        const handleState = (checkStatus, transferStatus) => {
+            // 存款成功 待支付 已取消
+            if (Number(checkStatus) === 1) {
+                return '审核中'
+            } else if (Number(transferStatus) === 2) {
+                return '成功'
+            } else {
+                return '已取消'
+            }
+        }
+
         const activeIndex = ref(['0'])
         const state = reactive({
             loading: false,
@@ -223,6 +237,7 @@ export default {
             formatTime,
             states,
             onLoad,
+            handleState,
             transferStatus,
             ...toRefs(state)
         }

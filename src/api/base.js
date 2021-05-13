@@ -4,7 +4,7 @@ import request from '@/utils/request'
 /* 获取国家区号列表 */
 export function getListByParentCode (data) {
     return request({
-        url: '/global/config.OpenDictDubboService.getListByParentCode',
+        url: '/global/config.app.AppDictDubboService.getListByParentCode',
         method: 'post',
         data
     })
@@ -13,7 +13,7 @@ export function getListByParentCode (data) {
 /* 发送验证码 */
 export function verifyCodeSend (data) {
     return request({
-        url: '/global/message.VerificationApiService.verifyCodeSend',
+        url: '/global/message.app.VerificationApiService.verifyCodeSend',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -25,7 +25,7 @@ export function verifyCodeSend (data) {
 /* 验证验证码 */
 export function verifyCodeCheck (data) {
     return request({
-        url: '/global/message.VerificationApiService.verifyCodeCheck',
+        url: '/global/message.app.VerificationApiService.verifyCodeCheck',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -37,7 +37,7 @@ export function verifyCodeCheck (data) {
 /* 获取银行卡列表 */
 export function getBankDict (data) {
     return request({
-        url: '/global/config.OpenDictDubboService.getListByParentCode',
+        url: '/global/config.app.OpenDictDubboService.getListByParentCode',
         method: 'post',
         data
     })

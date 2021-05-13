@@ -113,10 +113,6 @@ export default {
             if ((Number(kycState.value) === 0 || Number(kycState.value) === 3) && to.path !== '/authForm') {
                 store.dispatch('_user/logout')
             }
-            // if (to.fullPath === '/login' || to.fullPath === '/kycCommitted') {
-            //     // 退出登录 断开ws
-
-            // }
         })
 
         onBeforeMount(() => {

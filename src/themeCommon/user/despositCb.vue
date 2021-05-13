@@ -8,7 +8,7 @@
         />
         <Loading :show='loading' />
         <div v-if='despositObj' class='wrap'>
-            <i class='icon' :class='statusMap[despositObj.paymentStatus].className ||"icon_tishi"'></i>
+            <i class='icon' :class='statusMap[despositObj.paymentStatus].className || "icon_tishi"'></i>
 
             <h2 class='text'>
                 {{ statusMap[despositObj.paymentStatus].stateText }}
@@ -86,16 +86,20 @@ import {
     useStore
 } from 'vuex'
 import dayjs from 'dayjs'
+import { Dialog } from 'vant'
 import { isEmpty } from '@/utils/util'
+import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
 export default {
     components: {
         Top
     },
     setup (props) {
         const store = useStore()
+        const router = useRouter()
+        const route = useRoute()
         const state = reactive({
             loading: false,
-            despositObj: {}
+            despositObj: ''
         })
         const customInfo = computed(() => store.state._user.customerInfo)
 
@@ -115,11 +119,11 @@ export default {
             }
         }
         const getDespostProposal = () => {
-            const proposalNo = sessionStorage.getItem('proposalNo')
-            if (!isEmpty(proposalNo)) {
+            const orderId = route.query.orderId
+            if (!isEmpty(orderId)) {
                 const params = {
                     customerNo: customInfo.value.customerNo,
-                    proposalNo: sessionStorage.getItem('proposalNo')
+                    proposalNo: orderId
                 }
                 state.loading = true
                 queryDepositProposal(params).then(res => {
@@ -131,11 +135,28 @@ export default {
                     state.loading = false
                     console.log(err)
                 })
+            } else {
+                Dialog.confirm({
+                    title: '提示',
+                    confirmButtonText: '返回首页',
+                    cancelButtonText: '联系客服',
+                    message: '未查询到订单信息，如有疑问请联系客服',
+                    theme: 'round-button',
+                }).then(() => {
+                    router.push('/quote')
+                }).catch(() => {
+                    // on cancel
+                })
             }
         }
+
         const formatTime = (val) => {
             return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
+
+        onBeforeRouteLeave((to, from) => {
+            router.push('/desposit')
+        })
 
         onBeforeMount(() => {
             getDespostProposal()

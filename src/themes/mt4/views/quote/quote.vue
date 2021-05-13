@@ -1,12 +1,10 @@
 <template>
-    <main class='productMain'>
-        <Top>
-            <template #right>
-                <van-icon class='icon-add' name='plus' @click="$router.push({ name: 'Search' })" />
-            </template>
-        </Top>
-        <productListComp />
-    </main>
+    <Top>
+        <template #right>
+            <van-icon class='icon-add' name='plus' @click="$router.push({ name: 'Search' })" />
+        </template>
+    </Top>
+    <productListComp />
 </template>
 
 <script>

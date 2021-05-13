@@ -1,5 +1,5 @@
 <template>
-    <Top />
+    <Top ref='top' />
     <div id='homeContent' ref='homeContent' class='container'>
         <div id='inflow2App' ref='inflow2App'>
             <!-- <demo :orgid="orgid" lang="zh-cn"></demo> -->
@@ -13,6 +13,7 @@ import Top from '@m/layout/top'
 import footerMenu from '@m/layout/footerMenu'
 import loadScript from '@/utils/loadScript'
 import loadCSS from '@/utils/loadCSS'
+import { isEmpty, removeLoginParams, localSet, localGet } from '@/utils/util'
 let loaded = false
 let scrollTop = 0
 export default {
@@ -23,7 +24,14 @@ export default {
     },
     activated () {
         const homeContent = this.$refs.homeContent
+        const _this = this
         homeContent.scrollTop = scrollTop
+        // 未启用新闻跳转首页
+        if (!isEmpty(localGet('openNews'))) {
+            if (!JSON.parse(localGet('openNews'))) {
+                _this.$router.push('/')
+            }
+        }
     },
     mounted () {
         const _this = this

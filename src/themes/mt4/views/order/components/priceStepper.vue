@@ -2,6 +2,7 @@
     <van-stepper
         v-model='value'
         class='priceStepper'
+        :class="{ 'disabled':disabled }"
         :decimal-length='product.price_digits'
         :disabled='disabled'
         :min='-999'
@@ -79,6 +80,14 @@ export default {
 .priceStepper {
     display: flex;
     width: 100%;
+    &.disabled {
+        :deep(.van-stepper__minus) {
+            color: var(--placeholder);
+        }
+        :deep(.van-stepper__plus) {
+            color: var(--placeholder);
+        }
+    }
     :deep(.van-stepper__input) {
         flex: 1;
     }

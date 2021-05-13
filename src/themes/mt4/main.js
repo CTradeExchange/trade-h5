@@ -8,7 +8,7 @@ import longpress from '@/directives/longpress'
 import Loading from '@m/components/loading'
 import Colors, { setRootVariable } from './colorVariables'
 import { setRouter } from '@/utils/request'
-import { getLoginParams, getToken, removeLoginParams } from '@/utils/util'
+import { getLoginParams, getToken, isEmpty, removeLoginParams } from '@/utils/util'
 
 // 调试工具
 // import VConsole from 'vconsole'
@@ -44,6 +44,11 @@ if (loginParams) {
             MsgSocket.login()
         })
     })
+}
+
+// 启用新闻设置默认值
+if (isEmpty(localStorage.getItem('openNews'))) {
+    localStorage.setItem('openNews', true)
 }
 
 // 获取到公司配置后初始化vue实例
