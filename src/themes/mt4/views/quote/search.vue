@@ -64,7 +64,7 @@ export default {
             }
             // console.log('onSearch---', state.value)
         }
-        // store.dispatch('getBankDictList')
+        store.dispatch('_user/queryCustomerOptionalList')
         return {
             ...toRefs(state),
             onSearch,

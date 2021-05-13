@@ -395,7 +395,7 @@ export function queryDepositProposal (data) {
 /* 客户自选产品列表 */
 export function queryCustomerOptionalList (data) {
     return request({
-        url: '/global/customer.CustomerOptionalWebApiService.list',
+        url: '/global/customer.CustomerOptionalWebApiService.optionalList',
         method: 'post',
         headers: {
             version: '0.0.1'
