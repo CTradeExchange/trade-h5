@@ -62,9 +62,9 @@ const routes = [
         }
     },
     {
-        path: '/fundDetail',
-        name: 'FundDetail',
-        component: () => import(/* webpackChunkName: "fundDetail" */ '../user/fundDetail.vue'),
+        path: '/fundLog',
+        name: 'FundLog',
+        component: () => import(/* webpackChunkName: "fundDetail" */ '../user/fundLog.vue'),
         meta: {
             title: '资金明细',
             footerMenu: false,

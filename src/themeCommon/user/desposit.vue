@@ -87,7 +87,6 @@
     <van-button block class='next-btn' :disabled='btnDisabled' type='primary' @click='next'>
         <span>下一步</span>
     </van-button>
-
     <van-action-sheet v-model:show='typeShow' :round='false' title='选择支付方式'>
         <div class='pay-list'>
             <div v-for='(item,index) in payTypesSortEnable' :key='index' class='pay-type' @click='choosePayType(item)'>

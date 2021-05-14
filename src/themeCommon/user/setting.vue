@@ -51,6 +51,7 @@ export default {
 
         const handleLogout = () => {
             Dialog.confirm({
+                theme: 'round-button',
                 title: '提示',
                 message: '确定退出登录吗',
             }).then(() => {

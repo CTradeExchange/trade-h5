@@ -58,6 +58,7 @@
                         {{ accountInfo ? computePrice(accountInfo.availableMargin, accountInfo.digit) : '--' }}
                     </p>
                 </div>
+                {{}}
                 <div class='item'>
                     <p class='label'>
                         占用保证金
@@ -76,11 +77,12 @@
 
 <script>
 import Top from '@m/layout/top'
-import { toRefs, reactive, ref, onMounted, computed } from 'vue'
+import { toRefs, reactive, ref, onMounted, computed, onUpdated } from 'vue'
 import { createTorus } from '@/plugins/createTorus'
 import { useStore } from 'vuex'
 import { getArrayObj, priceFormat, isEmpty } from '@/utils/util'
 import { useRouter, useRoute } from 'vue-router'
+import { divide } from '@/utils/calculation'
 export default {
     components: {
         Top
@@ -98,7 +100,7 @@ export default {
             accountInfo: {}
         })
 
-        function toDesposit () {
+        const toDesposit = () => {
             router.push('/desposit')
         }
 
@@ -106,28 +108,44 @@ export default {
             return priceFormat(price, digit)
         }
 
+        const netWorth = computed(() => {
+            if (!isEmpty(state.accountInfo)) {
+                return priceFormat(state.accountInfo.netWorth, state.accountInfo.digit)
+            }
+        })
+
+        onUpdated(() => {
+            if (state.accountInfo) {
+                const earnest = computePrice(state.accountInfo.occupyMargin, state.accountInfo.digit)
+
+                const netWorthPercent = divide(netWorth.value, parseFloat(netWorth.value + earnest))
+                const earnestPercent = divide(earnest, parseFloat(netWorth.value + earnest))
+                createTorus({
+                    id: 'annulus',
+                    width: 220,
+                    height: 220,
+                    r: 80,
+                    arcWidth: 15,
+                    label: '净值',
+                    text: state.accountInfo ? netWorth.value : '--',
+                    data: [
+                        { color: '#3894FF', percent: netWorthPercent, text: '第1项' },
+                        { color: '#51C31C', percent: earnestPercent, text: '第2项' },
+                    ]
+                })
+            }
+        })
+
         onMounted(() => {
             state.accountInfo = computed(() => store.state._user.userAccount)
             state.mainAccount = getArrayObj(customInfo.value.accountList, 'accountId', customInfo.value.accountId)
-            createTorus({
-                id: 'annulus',
-                width: 220,
-                height: 220,
-                r: 80,
-                arcWidth: 15,
-                label: '净值',
-                text: state.accountInfo ? computePrice(state.accountInfo.netWorth, state.accountInfo.digit) : '--',
-                data: [
-                    { color: '#3894FF', percent: 0.85, text: '第1项' },
-                    { color: '#51C31C', percent: 0.15, text: '第2项' },
-                ]
-            })
         })
 
         return {
             toDesposit,
             perfent,
             computePrice,
+            netWorth,
             ...toRefs(state)
         }
     }

@@ -1,6 +1,8 @@
 const path = require('path')
 const dayjs = require('dayjs')
 const FileManagerPlugin = require('filemanager-webpack-plugin')
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
+const productionGzipExtensions = ['js', 'css']
 function resolve (dir) {
     return path.join(__dirname, dir)
 }
@@ -18,11 +20,21 @@ if (process.env.NODE_ENV === 'production') {
             }
         })
     )
+    plugins.push(
+        // 配置compression-webpack-plugin压缩
+        new CompressionWebpackPlugin({
+            algorithm: 'gzip',
+            test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
+            threshold: 10240,
+            minRatio: 0.8
+        }),
+    )
 }
 
 module.exports = {
     indexPath: 'index_template.html', // 就是这条
     lintOnSave: false,
+    productionSourceMap: process.env.NODE_ENV === 'dev',
     configureWebpack: {
         plugins,
         optimization: {

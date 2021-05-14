@@ -1,5 +1,6 @@
 <template>
     <Top :back='true' :menu='false' title='' />
+    <Loading :show='loadingPage' />
     <div class='page-wrap'>
         <div class='oper-area'>
             <van-dropdown-menu>
@@ -103,10 +104,10 @@
                         </div>
                         <div class='f-right'>
                             <p class='amount'>
-                                {{ item.amount }} USD
+                                {{ computePrice(item.amount,item.digits) }} USD
                             </p>
                             <p class='balance'>
-                                余额 {{ item.amountAfter }} USD
+                                余额 {{ computePrice(item.amountAfter, item.digits) }} USD
                             </p>
                         </div>
                     </div>
@@ -122,7 +123,7 @@ import { toRefs, reactive, ref, computed, onBeforeMount } from 'vue'
 import { queryCapitalFlowList } from '@/api/user'
 import dayjs from 'dayjs'
 import { Toast } from 'vant'
-import { isEmpty } from '@/utils/util'
+import { isEmpty, priceFormat } from '@/utils/util'
 export default {
     components: {
         Top
@@ -195,6 +196,7 @@ export default {
             loading: false,
             loadingRefresh: false,
             loadingMore: false,
+            loadingPage: false,
             finishedText: '没有更多了',
             pagigation: {
                 size: 20,
@@ -297,7 +299,9 @@ export default {
                 operate: state.directionCur, // 1.增加，2.减少；
                 businessType: state.proCurr // 业务类型
             }
+            state.loadingPage = true
             queryCapitalFlowList(params).then(res => {
+                state.loadingPage = false
                 state.loading = false
                 state.loadingRefresh = false
                 if (res.check()) {
@@ -313,8 +317,13 @@ export default {
                     }
                 }
             }).catch(err => {
+                state.loadingPage = false
                 state.loading = false
             })
+        }
+
+        const computePrice = (amount, digest) => {
+            return priceFormat(amount, digest)
         }
 
         const formatTime = (val) => {
@@ -344,6 +353,7 @@ export default {
             dateDownItem,
             queryFundDetail,
             formatTime,
+            computePrice,
             ...toRefs(state)
         }
     }
