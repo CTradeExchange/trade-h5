@@ -344,7 +344,8 @@ export default {
                     if (!isEmpty(openTime)) {
                         openTimeList = openTime.split(',')
                         openTimeList.forEach(item => {
-                            state.resultTimeMap[payItem.id] = []
+                            state.resultTimeMap[payItem.id] = [].concat(state.resultTimeMap[payItem.id])
+
                             const [start, end] = item.split('-')
                             const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
                             const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
