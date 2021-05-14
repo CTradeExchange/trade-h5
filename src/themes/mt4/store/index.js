@@ -29,7 +29,16 @@ export default createStore({
         },
         customerGroupId (state) { // 用户组ID
             return state._user.customerInfo?.customerGroupId ?? state._base.wpCompanyInfo?.customerGroupId
-        }
+        },
+        userSelfSymbolList (state, getters) { // 用户自选列表
+            if (state._user.customerInfo) {
+                return state._user.selfSymbolList
+            } else {
+                const wpSelfSymbol = state._base.wpSelfSymbol
+                const customerGroupId = getters.customerGroupId
+                return wpSelfSymbol[customerGroupId] ?? []
+            }
+        },
     },
     mutations: {
         Update_quoteMode (state, data = 1) {
@@ -41,7 +50,6 @@ export default createStore({
         Update_bankList (state, list) {
             state.bankDict = list
         },
-
     },
     actions: {
         // 获取国家验区号
