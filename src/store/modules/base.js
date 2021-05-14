@@ -5,7 +5,7 @@ export default {
     namespaced: true,
     state: {
         wpCompanyInfo: null, //   wordpress公司配置信息
-        selfSymbol: null, //   wordpress自选产品配置
+        wpSelfSymbol: null, //   wordpress自选产品配置
         wpNav: null, //   wordpress公司配置信息
         tradeType: localStorage.getItem('tradeType'), //   先存储公司默认的玩法类型，用户登录后存储用户的玩法类型
     },
@@ -18,7 +18,7 @@ export default {
             state.wpNav = data
         },
         UPDATE_selfSymbol (state, data) {
-            state.selfSymbol = data
+            state.wpSelfSymbol = data
         },
         UPDATE_tradeType (state, type) {
             localStorage.setItem('tradeType', String(type))

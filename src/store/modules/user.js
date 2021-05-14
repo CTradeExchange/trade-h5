@@ -60,9 +60,10 @@ export default {
                     commit('Update_customerInfo', data)
                     commit('_base/UPDATE_tradeType', data.tradeType, { root: true }) // 登录后存储用户的玩法类型
                     // dispatch('findCustomerInfo')  // findCustomerInfod 的数据目前和登录的数据一样，不需要再次调用
+                    dispatch('queryCustomerOptionalList') // 拉取自选列表
 
                     // 设置当前用户组的产品
-                    const selfSymbolData = rootState._base.selfSymbol
+                    const selfSymbolData = rootState._base.wpSelfSymbol
                     const customerGroupId = data.customerGroupId || rootState._base.wpCompanyInfo?.customerGroupId
                     const products = selfSymbolData && selfSymbolData.product[customerGroupId]
                     if (products) {
@@ -83,9 +84,10 @@ export default {
                     const data = res.data
                     commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_customerInfo', res.data)
+                    dispatch('queryCustomerOptionalList') // 拉取自选列表
 
                     // 设置当前用户组的产品
-                    const selfSymbolData = rootState._base.selfSymbol
+                    const selfSymbolData = rootState._base.wpSelfSymbol
                     if (selfSymbolData) {
                         const customerGroupId = data.customerGroupId || rootState._base.wpCompanyInfo?.customerGroupId
                         const products = selfSymbolData.product[customerGroupId]

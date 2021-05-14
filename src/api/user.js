@@ -404,6 +404,19 @@ export function queryCustomerOptionalList (data) {
     })
 }
 
+/* 添加自选 */
+export function addCustomerOptional (data) {
+    return request({
+        url: '/global/customer.app.CustomerOptionalWebApiService.add',
+        method: 'post',
+        headers: {
+            // group: 'tradeApi',
+            // version: '0.0.1',
+        },
+        data
+    })
+}
+
 /* 更换手机 */
 export function changePhone (data) {
     return request({
