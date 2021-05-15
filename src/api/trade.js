@@ -116,7 +116,19 @@ export function addCustomerOptional (data) {
         method: 'post',
         headers: {
             // group: 'tradeApi',
-            // version: '0.0.1',
+            version: '0.0.1',
+        },
+        data
+    })
+}
+/* 添加自选 */
+export function removeCustomerOptional (data) {
+    return request({
+        url: '/global/customer.app.CustomerOptionalWebApiService.delete',
+        method: 'post',
+        headers: {
+            // group: 'tradeApi',
+            version: '0.0.1',
         },
         data
     })
@@ -125,7 +137,7 @@ export function addCustomerOptional (data) {
 /* 根据客户组搜索产品 */
 export function getSymbolList (data) {
     return request({
-        url: '/global/config.app.OpenSymbolDubboService.getSymbolList',
+        url: '/global/config.app.AppSymbolDubboService.getSymbolList',
         method: 'post',
         headers: {
             // version: '0.0.1',

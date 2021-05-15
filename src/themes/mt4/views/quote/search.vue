@@ -4,7 +4,7 @@
     <div class='search-result'>
         <van-cell v-for='(item,index) in searchDataList' :key='index' class='center-align-items' icon='location-o' :title='item.name'>
             <template #icon>
-                <van-icon class='icon' name='add-o' @click='addOptional(item)' />
+                <van-icon class='icon' name='add-o' @click='removeOptional(item)' />
             </template>
         </van-cell>
     </div>
@@ -12,7 +12,7 @@
 
 <script>
 import Top from '@m/layout/top'
-import { getSymbolList, addCustomerOptional } from '@/api/trade'
+import { getSymbolList, addCustomerOptional, removeCustomerOptional } from '@/api/trade'
 import { isEmpty } from '@/utils/util'
 import { toRefs, reactive, computed, onBeforeMount } from 'vue'
 import {
@@ -39,7 +39,14 @@ export default {
             // })
         })
         const addOptional = (record) => {
-            addCustomerOptional([{}])
+            addCustomerOptional({ symbolList: [{ symbolCode: record.code, symbolName: record.name, symbolId: record.id }] }).then(res => {
+
+            })
+        }
+        const removeOptional = ({ id }) => {
+            removeCustomerOptional({ symbolId: id }).then(res => {
+
+            })
         }
         const onSearch = (val) => {
             state.value = val
@@ -68,7 +75,8 @@ export default {
         return {
             ...toRefs(state),
             onSearch,
-            addOptional
+            addOptional,
+            removeOptional,
         }
     }
 }
