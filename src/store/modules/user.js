@@ -16,6 +16,22 @@ export default {
         kycState: '', // kyc认证
         selfSymbolList: [], // 自选产品列表
     },
+    getters: {
+        userAccountType (state) {
+            let _type = ''
+            const customerInfo = state.customerInfo
+            if (customerInfo.type === 2) {
+                _type = 'G' // 游客
+            } else if (customerInfo.type === 1) {
+                _type = 'D' // 模拟，
+            } else if (customerInfo.type === 0 && customerInfo.activateStatus === 1) {
+                _type = 'R_1' // 真实未入金
+            } else if (customerInfo.type === 0 && customerInfo.activateStatus === 2) {
+                _type = 'R_2' // 真实已入金
+            }
+            return _type
+        }
+    },
     mutations: {
         Empty_data (state, data) { // 清空用户信息
             state.info = ''

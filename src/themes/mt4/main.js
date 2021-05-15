@@ -30,7 +30,7 @@ if (loginParams) {
     store.dispatch('_user/login', loginParams).then(res => {
         if (res.invalid()) {
             removeLoginParams()
-            router.push({ name: 'Login', query: { back: encodeURIComponent(route.path) } })
+            router.push({ name: 'Login', query: { back: encodeURIComponent(location.pathname) } })
         }
         // 登录消息websocket
         MsgSocket.subscribedListAdd(function () {

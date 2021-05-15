@@ -24,8 +24,8 @@ export default createStore({
         bankDict: []
     },
     getters: {
-        productActived (state, getters, rootState) {
-            return state._quote.productMap[rootState._quote.productActivedID]
+        productActived (state) {
+            return state._quote.productMap[state._quote.productActivedID]
         },
         customerGroupId (state) { // 用户组ID
             return state._user.customerInfo?.customerGroupId ?? state._base.wpCompanyInfo?.customerGroupId
