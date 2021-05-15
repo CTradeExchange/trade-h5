@@ -1,5 +1,5 @@
 <template>
-    <Top :back='true' :menu='false' title='' />
+    <Top :back='true' :menu='false' title='' @backEvent='back' />
     <div class='page-wrap'>
         <Loading :show='loading' />
         <div v-if='list.length === 0'>
@@ -67,7 +67,7 @@ export default {
     components: {
         Top
     },
-    setup (props) {
+    setup (props, { emit, attrs }) {
         const instance = getCurrentInstance()
         const store = useStore()
         const router = useRouter()
@@ -109,6 +109,10 @@ export default {
             }
         }
 
+        const back = () => {
+            router.replace('/personal')
+        }
+
         onBeforeRouteLeave((to, from) => {
             if ((Number(kycState.value) === 0 || Number(kycState.value) === 3) && to.path !== '/authForm') {
                 store.dispatch('_user/logout')
@@ -122,6 +126,7 @@ export default {
         return {
             kycState,
             handleNext,
+            back,
             ...toRefs(state)
         }
     }

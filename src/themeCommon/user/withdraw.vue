@@ -78,7 +78,7 @@
     <van-dialog v-model:show='timeShow' theme='round-button' title='提示'>
         <div class='time-wrap'>
             <h4>当前时间不可取款 </h4><br />
-            <div class='flex'>
+            <div v-if='timeList.length > 0' class='flex'>
                 <p>取款时间：</p>
                 <div class='time-text'>
                     <p v-for='(item,index) in timeList' :key='index'>
@@ -425,36 +425,6 @@ export default {
                         checkKyc()
                     }
 
-                    if (!res.data.accountActiveEnable) {
-                        state.btnDisabled = true
-                        return Dialog.confirm({
-                            theme: 'round-button',
-                            title: '提示',
-                            message: '账户激活后才可取款',
-                            confirmButtonText: '去激活'
-                        }).then(() => {
-                            // on confirm
-                            router.push('/desposit')
-                        }).catch(() => {
-                            // on cancel
-                        })
-                    }
-
-                    if (!res.data.amountEnable) {
-                        state.btnDisabled = true
-                        return Toast('可取资金不足')
-                    }
-
-                    if (!res.data.hourIn24Enable) {
-                        state.btnDisabled = true
-                        return Toast('24小时内取款次数不超过' + state.withdrawConfig.withdrawBaseConfig.maxCount + '次')
-                    }
-
-                    if (!res.data.timeEnable) {
-                        state.btnDisabled = true
-                        state.timeShow = true
-                    }
-
                     // 时区转换
                     transferUtc()
                 } else {
@@ -507,6 +477,37 @@ export default {
                             }
                         })
                     })
+                } else {
+                    if (!state.withdrawConfig.accountActiveEnable) {
+                        state.btnDisabled = true
+                        return Dialog.confirm({
+                            theme: 'round-button',
+                            title: '提示',
+                            message: '账户激活后才可取款',
+                            confirmButtonText: '去激活'
+                        }).then(() => {
+                            // on confirm
+                            router.push('/desposit')
+                        }).catch(() => {
+                            // on cancel
+                        })
+                    }
+
+                    if (!state.withdrawConfig.timeEnable) {
+                        state.btnDisabled = true
+                        state.timeShow = true
+                        return
+                    }
+
+                    if (!state.withdrawConfig.amountEnable) {
+                        state.btnDisabled = true
+                        return Toast('可取资金不足')
+                    }
+
+                    if (!state.withdrawConfig.hourIn24Enable) {
+                        state.btnDisabled = true
+                        return Toast('24小时内取款次数不超过' + state.withdrawConfig.withdrawBaseConfig.maxCount + '次')
+                    }
                 }
             }).catch(err => {
                 state.loading = false
