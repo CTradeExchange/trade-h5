@@ -250,27 +250,35 @@ export default {
             for (const key in state.withdrawTimeConfigMap) {
                 if (Object.hasOwnProperty.call(state.withdrawTimeConfigMap, key)) {
                     const el = state.withdrawTimeConfigMap[key]
-                    const [start, end] = el.openTime.split('-')
-                    const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
-                    const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
+                    if (!isEmpty(el.openTime)) {
+                        const timeRange = el.openTime.split(',')
+                        if (timeRange.length > 0) {
+                            timeRange.forEach(timeRangeItem => {
+                                const [start, end] = timeRangeItem.split('-')
+                                const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
+                                const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
 
-                    // 第二天
-                    const weekDay = key < 7 ? Number(key) + 1 : 1
-                    let elNext = state.withdrawTimeConfigMap[weekDay]
-                    if (!elNext) {
-                        elNext = {
-                            openTimeLocal: [],
-                            weekDay
+                                // 第二天
+                                const weekDay = key < 7 ? Number(key) + 1 : 1
+                                let elNext = state.withdrawTimeConfigMap[weekDay]
+
+                                if (!elNext) {
+                                    elNext = {
+                                        openTimeLocal: [],
+                                        weekDay
+                                    }
+                                    state.withdrawTimeConfigMap[weekDay] = elNext
+                                }
+                                if (startLocal.isAfter(todayStr, 'day')) {
+                                    elNext.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                                } else if (endLocal.isAfter(todayStr, 'day')) {
+                                    elNext.openTimeLocal.push('00:00-' + endLocal.format('HH:mm'))
+                                    el.openTimeLocal.push(startLocal.format('HH:mm') + '-23:59')
+                                } else if (el.openTime !== '00:00-00:00' || el.openTime !== '') {
+                                    el.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                                }
+                            })
                         }
-                        state.withdrawTimeConfigMap[weekDay] = elNext
-                    }
-                    if (startLocal.isAfter(todayStr, 'day')) {
-                        elNext.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
-                    } else if (endLocal.isAfter(todayStr, 'day')) {
-                        elNext.openTimeLocal.push('00:00-' + endLocal.format('HH:mm'))
-                        el.openTimeLocal.push(startLocal.format('HH:mm') + '-23:59')
-                    } else if (el.openTime !== '00:00-00:00') {
-                        el.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
                     }
                 }
             }
@@ -399,9 +407,28 @@ export default {
                 if (res.check()) {
                     state.withdrawConfig = res.data
 
+                    if (!res.data.customerGroupEnable) {
+                        state.btnDisabled = true
+                        return Dialog.confirm({
+                            title: '提示',
+                            theme: 'round-button',
+                            message: '账户暂不能取款，如有疑问请联系在线客服',
+                            confirmButtonText: '联系客服',
+                            cancelButtonText: '关闭'
+                        }).then(() => {
+                            // on confirm
+                        }).catch(() => {
+                            // on cancel
+                        })
+                    } else {
+                        // 检测取款是否需要kyc
+                        checkKyc()
+                    }
+
                     if (!res.data.accountActiveEnable) {
                         state.btnDisabled = true
                         return Dialog.confirm({
+                            theme: 'round-button',
                             title: '提示',
                             message: '账户激活后才可取款',
                             confirmButtonText: '去激活'
@@ -422,27 +449,13 @@ export default {
                         state.btnDisabled = true
                         return Toast('24小时内取款次数不超过' + state.withdrawConfig.withdrawBaseConfig.maxCount + '次')
                     }
-                    if (!res.data.customerGroupEnable) {
-                        state.btnDisabled = true
-                        return Dialog.confirm({
-                            title: '提示',
-                            theme: 'round-button',
-                            message: '账户暂不能取款，如有疑问请联系在线客服',
-                            confirmButtonText: '联系客服',
-                            cancelButtonText: '关闭'
-                        }).then(() => {
-                            // on confirm
-                        }).catch(() => {
-                            // on cancel
-                        })
-                    }
 
                     if (!res.data.timeEnable) {
                         state.btnDisabled = true
                         state.timeShow = true
                     }
-                    // 检测取款是否需要kyc
-                    checkKyc()
+
+                    // 时区转换
                     transferUtc()
                 } else {
                     Toast(res.msg)
