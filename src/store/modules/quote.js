@@ -80,10 +80,23 @@ export default {
         }
     },
     actions: {
+        // 整理当前账户组的所有产品列表，自选产品+产品板块的产品
+        // 此方法只有在账户变化后调用
+        setProductAllList ({ dispatch, commit, state, rootState, rootGetters }) {
+            const customerGroupId = rootGetters.customerGroupId
+            const selfSymbolProduct = rootState._base.wpSelfSymbol.find(el => el.tag === 'selfSymbol')?.data?.product || {}
+            const selfSymbolList = selfSymbolProduct[customerGroupId] || []
+            const productList = [...selfSymbolList]
+            rootGetters.userProductCategory.forEach(el => {
+                productList.push(...el.code_ids)
+            })
+            const productAllList = [...new Set(productList)].map(el => ({ symbolId: parseInt(el) }))
+            commit('Update_productList', productAllList)
+            commit('Update_productActivedID', selfSymbolList[0])
+        },
         // 产品基础信息列表
         querySymbolBaseInfoList ({ dispatch, commit, state, rootState, rootGetters }, symbolIds = []) {
             const productMap = state.productMap
-
             const newSymbolIds = symbolIds.filter(el => !productMap[el].symbolName)
             const params = {
                 symbolIds: newSymbolIds.join(),

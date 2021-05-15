@@ -26,34 +26,32 @@ app.component('Loading', Loading)
 // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
 const loginParams = getLoginParams()
 const token = getToken()
-if (loginParams) {
-    store.dispatch('_user/login', loginParams).then(res => {
-        if (res.invalid()) {
-            removeLoginParams()
-            router.push({ name: 'Login', query: { back: encodeURIComponent(location.pathname) } })
-        }
-        // 登录消息websocket
-        MsgSocket.subscribedListAdd(function () {
-            MsgSocket.login()
-        })
-    })
-} else if (token) {
-    store.dispatch('_user/findCustomerInfo').then(() => {
-        // 登录消息websocket
-        MsgSocket.subscribedListAdd(function () {
-            MsgSocket.login()
-        })
-    })
-}
 
 // 启用新闻设置默认值
 if (isEmpty(localStorage.getItem('openNews'))) {
     localStorage.setItem('openNews', true)
 }
 
-store.dispatch('_base/getProductCategory') // 拉取板块信息
+if (loginParams || token) store.commit('_user/Update_loginLoading', true)
 
 // 获取到公司配置后初始化vue实例
-store.dispatch('_base/getCompanyInfo').then(() => {
+store.dispatch('_base/initBaseConfig').then(() => {
+    // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
+    if (loginParams || token) {
+        Promise.resolve().then(() => {
+            if (loginParams) return store.dispatch('_user/login', loginParams)
+            else return store.dispatch('_user/findCustomerInfo')
+        }).then(res => {
+            if (res.invalid()) {
+                removeLoginParams()
+                return false
+            }
+            // 登录消息websocket
+            MsgSocket.subscribedListAdd(function () {
+                MsgSocket.login()
+            })
+        })
+    }
+
     app.mount('#app')
 })
