@@ -12,7 +12,8 @@
 
 <script>
 import Top from '@m/layout/top'
-import { getSymbolList, addCustomerOptional, removeCustomerOptional } from '@/api/trade'
+import { getSymbolList, removeCustomerOptional } from '@/api/trade'
+import { addCustomerOptional } from '@/api/user'
 import { isEmpty } from '@/utils/util'
 import { toRefs, reactive, computed, onBeforeMount } from 'vue'
 import {

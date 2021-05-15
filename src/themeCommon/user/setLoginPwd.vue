@@ -114,6 +114,7 @@ export default {
                     } else {
                         if (res.check()) {
                             Dialog.alert({
+                                theme: 'round-button',
                                 title: '提示',
                                 message: '密码修改成功',
                                 confirmButtonText: '去登录'

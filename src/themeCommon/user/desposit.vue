@@ -18,7 +18,7 @@
                     <p class='t1'>
                         {{ item.amount }} {{ checkedType.accountCurrency }}
                     </p>
-                <!-- <p class='t2'>
+                    <!-- <p class='t2'>
                         赠送${{ item.present }}
                     </p> -->
                 </div>
@@ -37,7 +37,7 @@
                     请选择支付方式
                 </p>
 
-                <div class='pay-item'>
+                <div v-if='checkedType' class='pay-item'>
                     <div v-if='PayTypes.length > 0' class='pay-type' @click='openSheet'>
                         <img alt='' :src='require("../../assets/payment_icon/" + checkedType.paymentType + ".png")' srcset='' />
                         <span class='pay-name'>
@@ -68,7 +68,7 @@
 
             <div class='pay-info'>
                 <div class='pi-item'>
-                    预计支付 {{ computeExpectedpay || '--' }} {{ checkedType.paymentCurrency }}
+                    预计支付 {{ computeExpectedpay || '--' }} {{ checkedType.paymentCurrency || checkedType.accountCurrency }}
                 </div>
                 <div class='pi-item'>
                     预计到账 {{ amount && checkedType ? parseFloat(amount) - parseFloat(checkedType.fee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
@@ -87,7 +87,6 @@
     <van-button block class='next-btn' :disabled='btnDisabled' type='primary' @click='next'>
         <span>下一步</span>
     </van-button>
-
     <van-action-sheet v-model:show='typeShow' :round='false' title='选择支付方式'>
         <div class='pay-list'>
             <div v-for='(item,index) in payTypesSortEnable' :key='index' class='pay-type' @click='choosePayType(item)'>
@@ -221,6 +220,7 @@ export default {
             }
         })
 
+        // 不在当前时间的支付通道
         const payTypesSortDisable = computed(() => {
             if (state.PayTypes.length > 0) {
                 return state.PayTypes.filter(item => !item.timeRangeFlag)
@@ -343,7 +343,8 @@ export default {
                     if (!isEmpty(openTime)) {
                         openTimeList = openTime.split(',')
                         openTimeList.forEach(item => {
-                            state.resultTimeMap[payItem.id] = []
+                            state.resultTimeMap[payItem.id] = [].concat(state.resultTimeMap[payItem.id])
+
                             const [start, end] = item.split('-')
                             const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
                             const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
@@ -367,14 +368,12 @@ export default {
                         })
                     }
                 })
+
+                if (isEmpty(state.checkedType)) {
+                    state.checkedType = state.PayTypes[0]
+                }
             }
         }
-
-        const timeList = computed(() => {
-            if (!isEmpty(state.checkedType)) {
-                return state.checkedType.openTime.split(',')
-            }
-        })
 
         // 创建存款提案
         const next = () => {
@@ -509,7 +508,6 @@ export default {
             onCancel,
             onConfirm,
             computeFee,
-            timeList,
             handleShowTime,
             computeExpectedpay,
             payTypesSortEnable,

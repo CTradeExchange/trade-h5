@@ -39,7 +39,7 @@
                 <li class='item' @click="visible=false;$router.push('/fund')">
                     <i class='icon icon_jiemian'></i> <strong>账户资金</strong>
                 </li>
-                <li class='item' @click="visible=false;$router.push('/fundDetail')">
+                <li class='item' @click="visible=false;$router.push('/fundLog')">
                     <i class='icon icon_zijinmingxi'></i> <strong>资金明细</strong>
                 </li>
                 <li class='item' @click="visible=false;$router.push('/personal')">

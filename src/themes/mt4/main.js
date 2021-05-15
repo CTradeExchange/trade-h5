@@ -30,7 +30,7 @@ if (loginParams) {
     store.dispatch('_user/login', loginParams).then(res => {
         if (res.invalid()) {
             removeLoginParams()
-            router.push({ name: 'Login', query: { back: encodeURIComponent(route.path) } })
+            router.push({ name: 'Login', query: { back: encodeURIComponent(location.pathname) } })
         }
         // 登录消息websocket
         MsgSocket.subscribedListAdd(function () {
@@ -50,6 +50,8 @@ if (loginParams) {
 if (isEmpty(localStorage.getItem('openNews'))) {
     localStorage.setItem('openNews', true)
 }
+
+store.dispatch('_base/getProductCategory') // 拉取板块信息
 
 // 获取到公司配置后初始化vue实例
 store.dispatch('_base/getCompanyInfo').then(() => {

@@ -1,5 +1,5 @@
 <template>
-    <bindEmailComponent type='bind' />
+    <bindEmailComponent type='change' />
 </template>
 
 <script>

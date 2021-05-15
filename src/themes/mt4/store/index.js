@@ -3,7 +3,7 @@ import Base from '@/store/modules/base'
 import User from '@/store/modules/user'
 import Quote from '@/store/modules/quote'
 import Trade from '@/store/modules/trade'
-import { getListByParentCode, getBankDict } from '@/api/base'
+import { getListByParentCode } from '@/api/base'
 import Colors from '@m/colorVariables'
 
 const style = {
@@ -24,12 +24,38 @@ export default createStore({
         bankDict: []
     },
     getters: {
-        productActived (state, getters, rootState) {
-            return state._quote.productMap[rootState._quote.productActivedID]
+        productActived (state) {
+            return state._quote.productMap[state._quote.productActivedID]
         },
         customerGroupId (state) { // 用户组ID
             return state._user.customerInfo?.customerGroupId ?? state._base.wpCompanyInfo?.customerGroupId
-        }
+        },
+        // 用户自选列表
+        userSelfSymbolList (state, getters) {
+            if (state._user.customerInfo) {
+                return state._user.selfSymbolList
+            } else {
+                const wpSelfSymbol = state._base.wpSelfSymbol
+                const customerGroupId = getters.customerGroupId
+                return wpSelfSymbol[customerGroupId] ?? []
+            }
+        },
+        // 用户产品板块
+        userProductCategory (state, getters) {
+            let _result = []
+            const customerGroupId = getters.customerGroupId
+            const wpProductCategory = state._base.wpProductCategory
+            const quoteListConfig = wpProductCategory.find(el => el.tag === 'quoteList')
+            if (!quoteListConfig) return _result
+            const categories = quoteListConfig.data.items || []
+            _result = categories.map(el => {
+                const newItem = {
+                    code_ids: el.code_ids_all[customerGroupId] ?? []
+                }
+                return Object.assign(newItem, el)
+            })
+            return _result
+        },
     },
     mutations: {
         Update_quoteMode (state, data = 1) {
@@ -41,7 +67,6 @@ export default createStore({
         Update_bankList (state, list) {
             state.bankDict = list
         },
-
     },
     actions: {
         // 获取国家验区号
@@ -58,7 +83,7 @@ export default createStore({
         },
 
         getBankDictList ({ dispatch, commit, state }) {
-            return getBankDict({ parentCode: 'bank_code' }).then(res => {
+            return getListByParentCode({ parentCode: 'bank_code' }).then(res => {
                 if (res.check()) {
                     commit('Update_bankList', res.data)
                 }

@@ -251,7 +251,7 @@ export default {
                 // 登录KYC,0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
 
                 if (Number(res.data.kycAuditStatus === 0)) {
-                    Dialog.alert({
+                    return Dialog.alert({
                         title: '提示',
                         confirmButtonText: '去认证',
                         message: '您还未进行KYC认证，点击去认证',
