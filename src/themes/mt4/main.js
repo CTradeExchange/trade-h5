@@ -51,6 +51,8 @@ if (isEmpty(localStorage.getItem('openNews'))) {
     localStorage.setItem('openNews', true)
 }
 
+store.dispatch('_base/getProductCategory') // 拉取板块信息
+
 // 获取到公司配置后初始化vue实例
 store.dispatch('_base/getCompanyInfo').then(() => {
     app.mount('#app')

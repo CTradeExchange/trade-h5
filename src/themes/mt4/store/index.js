@@ -30,7 +30,8 @@ export default createStore({
         customerGroupId (state) { // 用户组ID
             return state._user.customerInfo?.customerGroupId ?? state._base.wpCompanyInfo?.customerGroupId
         },
-        userSelfSymbolList (state, getters) { // 用户自选列表
+        // 用户自选列表
+        userSelfSymbolList (state, getters) {
             if (state._user.customerInfo) {
                 return state._user.selfSymbolList
             } else {
@@ -38,6 +39,22 @@ export default createStore({
                 const customerGroupId = getters.customerGroupId
                 return wpSelfSymbol[customerGroupId] ?? []
             }
+        },
+        // 用户产品板块
+        userProductCategory (state, getters) {
+            let _result = []
+            const customerGroupId = getters.customerGroupId
+            const wpProductCategory = state._base.wpProductCategory
+            const quoteListConfig = wpProductCategory.find(el => el.tag === 'quoteList')
+            if (!quoteListConfig) return _result
+            const categories = quoteListConfig.data.items || []
+            _result = categories.map(el => {
+                const newItem = {
+                    code_ids: el.code_ids_all[customerGroupId] ?? []
+                }
+                return Object.assign(newItem, el)
+            })
+            return _result
         },
     },
     mutations: {

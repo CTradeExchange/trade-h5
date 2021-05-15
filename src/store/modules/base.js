@@ -1,11 +1,11 @@
 import { pageConfig, wpCompanyConfig, wpNav, wpSelfSymbolIndex } from '@/api/wpApi'
-import { isEmpty, unzip } from '@/utils/util'
 
 export default {
     namespaced: true,
     state: {
         wpCompanyInfo: null, //   wordpress公司配置信息
         wpSelfSymbol: null, //   wordpress自选产品配置
+        wpProductCategory: [], // wordpress配置的产品板块
         wpNav: null, //   wordpress公司配置信息
         tradeType: localStorage.getItem('tradeType'), //   先存储公司默认的玩法类型，用户登录后存储用户的玩法类型
     },
@@ -23,6 +23,9 @@ export default {
         UPDATE_tradeType (state, type) {
             localStorage.setItem('tradeType', String(type))
             state.tradeType = type
+        },
+        Update_wpProductCategory (state, data = []) {
+            state.wpProductCategory = data
         },
     },
     actions: {
@@ -54,6 +57,16 @@ export default {
             return wpNav().then(data => {
                 if (data) {
                     commit('UPDATE_wpNav', data)
+                }
+                return data
+            })
+        },
+        // 获取产品板块
+        getProductCategory ({ dispatch, commit, state }) {
+            return pageConfig('TradeIndex').then(data => {
+                console.log(data)
+                if (data) {
+                    commit('Update_wpProductCategory', data)
                 }
                 return data
             })
