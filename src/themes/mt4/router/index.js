@@ -182,9 +182,25 @@ const routes = [
     {
         path: '/search',
         name: 'Search',
-        component: () => import(/* webpackChunkName: "search" */ '../views/quote/search.vue'),
+        component: () => import(/* webpackChunkName: "search" */ '../views/search/search.vue'),
         meta: {
             title: '添加交易品种'
+        }
+    },
+    {
+        path: '/market',
+        name: 'Market',
+        component: () => import(/* webpackChunkName: "search" */ '../views/search/market.vue'),
+        meta: {
+            title: ''
+        }
+    },
+    {
+        path: '/optional',
+        name: 'Optional',
+        component: () => import(/* webpackChunkName: "search" */ '../views/search/optional.vue'),
+        meta: {
+            title: ''
         }
     },
     {
