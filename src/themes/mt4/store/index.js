@@ -39,8 +39,9 @@ export default createStore({
                 const selfSymbolData = wpSelfSymbol.find(el => el.tag === 'selfSymbol')?.data?.product || {}
                 const customerGroupId = getters.customerGroupId
                 const selfSymbolIds = selfSymbolData[customerGroupId] ?? []
+                const productMap = state._quote.productMap
                 return selfSymbolIds.map(el => {
-                    return { symbolId: parseInt(el) }
+                    return productMap[el]
                 })
             }
         },

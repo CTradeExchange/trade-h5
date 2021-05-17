@@ -51,6 +51,8 @@ store.dispatch('_base/initBaseConfig').then(() => {
                 MsgSocket.login()
             })
         })
+    } else {
+        store.dispatch('_quote/querySymbolBaseInfoList', null)
     }
 
     app.mount('#app')
