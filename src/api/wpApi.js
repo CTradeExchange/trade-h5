@@ -19,12 +19,7 @@ export const wpCompanyConfig = () => {
     })
 }
 // 获取自选产品
-export const wpSelfSymbolIndex = () => {
-    return pageConfig('SelfSymbolIndex').then(res => {
-        const data = res.find(el => el.tag === 'selfSymbol')
-        return data ? data.data : null
-    })
-}
+export const wpSelfSymbolIndex = () => pageConfig('SelfSymbolIndex')
 export const wpNav = () => pageConfig('Nav')
 
 /* 获取页面配置信息 */

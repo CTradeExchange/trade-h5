@@ -30,7 +30,7 @@ npm run build
 
 ## store里面常用数据
 - `store.state._user.customerInfo` // 当前登录的用户信息
-- `store.getters['_user/userAccountType']` // 账户类型，G游客, D模拟, R_1真实未入金, R_2真实已入金
+- `store.getters['_user/userAccountType']` // 账户类型，G游客, D模拟, R_1真实未入金, R_2真实已入金, R_3真实已激活
 - `store.getters.customerGroupId` // 当前客户组(包括游客账户组)
 - `store.getters.productActived` // 当前操作的产品信息
 - `store.getters.userSelfSymbolList` // 当前用户的自选产品列表

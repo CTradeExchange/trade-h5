@@ -6,12 +6,12 @@
                 <p class='t1'>
                     保证金水平
                 </p>
-                <p class='t2'>
+                <p class='t2' :class='computMargin'>
                     {{ accountInfo ? accountInfo.marginRadio+'%' : '--' }}
                 </p>
             </div>
             <div class='progress'>
-                <div class='p-val' :style="'width:' + perfent + '%'"></div>
+                <div class='p-val' :class='computMargin' :style="'width:' + perfent + '%'"></div>
             </div>
         </div>
 
@@ -47,7 +47,7 @@
                         可取
                     </p>
                     <p class='val'>
-                        {{ computePrice(mainAccount.withdrawAmount,mainAccount.digits) }}
+                        {{ mainAccount ? computePrice(mainAccount.withdrawAmount,mainAccount.digits) : '--' }}
                     </p>
                 </div>
                 <div class='item'>
@@ -77,7 +77,7 @@
 
 <script>
 import Top from '@m/layout/top'
-import { toRefs, reactive, ref, onMounted, computed, onUpdated } from 'vue'
+import { toRefs, reactive, ref, onMounted, computed, onUpdated, onBeforeMount } from 'vue'
 import { createTorus } from '@/plugins/createTorus'
 import { useStore } from 'vuex'
 import { getArrayObj, priceFormat, isEmpty } from '@/utils/util'
@@ -95,6 +95,24 @@ export default {
         const perfent = computed(() => {
             return state.accountInfo.marginRadio >= 100 ? 100 : state.accountInfo.marginRadio
         })
+
+        // 计算保证金水平区间
+        const computMargin = computed(() => {
+            // 强平水平	预警水平
+            if (!isEmpty(customInfo.value) && !isEmpty(state.accountInfo)) {
+                const [forceLevel, earlyWarningLevel] = [parseFloat(customInfo.value.forceLevel), parseFloat(customInfo.value.earlyWarningLevel)]
+                const marginRadio = divide(state.accountInfo.marginRadio, 100)
+
+                if (marginRadio > earlyWarningLevel) {
+                    return 'success'
+                } else if (marginRadio <= earlyWarningLevel && marginRadio > forceLevel) {
+                    return 'warning'
+                } else if (marginRadio <= forceLevel) {
+                    return 'fail'
+                }
+            }
+        })
+
         const state = reactive({
             mainAccount: {},
             accountInfo: {}
@@ -136,6 +154,10 @@ export default {
             }
         })
 
+        onBeforeMount(() => {
+            store.dispatch('_user/findCustomerInfo')
+        })
+
         onMounted(() => {
             state.accountInfo = computed(() => store.state._user.userAccount)
             state.mainAccount = getArrayObj(customInfo.value.accountList, 'accountId', customInfo.value.accountId)
@@ -146,6 +168,7 @@ export default {
             perfent,
             computePrice,
             netWorth,
+            computMargin,
             ...toRefs(state)
         }
     }
@@ -171,6 +194,15 @@ export default {
             .t2 {
                 color: #52C41A;
                 font-size: rem(50px);
+                &.success {
+                    color: #51C417;
+                }
+                &.fail {
+                    color: #E55160;
+                }
+                &.warning {
+                    color: #FF731A;
+                }
             }
         }
         .progress {
@@ -185,6 +217,15 @@ export default {
                 height: rem(10px);
                 background-color: #52C41A;
                 border-radius: rem(20px);
+                &.success {
+                    background-color: #51C417;
+                }
+                &.fail {
+                    background-color: #E55160;
+                }
+                &.warning {
+                    background-color: #FF731A;
+                }
             }
         }
     }

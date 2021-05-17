@@ -125,32 +125,12 @@
 
 <script>
 import Top from '@/components/top'
-import {
-    onBeforeMount,
-    reactive,
-    computed,
-    toRefs
-} from 'vue'
-import {
-    useRoute,
-    useRouter
-} from 'vue-router'
-import {
-    queryPayType,
-    queryDepositExchangeRate,
-    handleDesposit,
-    checkKycApply
-} from '@/api/user'
-import {
-    useStore
-} from 'vuex'
-import {
-    Toast,
-    Dialog
-} from 'vant'
-import {
-    isEmpty
-} from '@/utils/util'
+import { onBeforeMount, reactive, computed, toRefs, onBeforeUnmount } from 'vue'
+import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
+import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply } from '@/api/user'
+import { useStore } from 'vuex'
+import { Toast, Dialog } from 'vant'
+import { isEmpty } from '@/utils/util'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import isBetween from 'dayjs/plugin/isBetween'
@@ -214,7 +194,7 @@ export default {
         // 处理支付通道排序
         const payTypesSortEnable = computed(() => {
             if (state.PayTypes.length > 0) {
-                const temp = state.PayTypes.filter(item => item.timeRangeFlag)
+                const temp = state.PayTypes.filter(item => item.timeRangeFlag && item.openTime)
 
                 return temp
             }
@@ -223,7 +203,7 @@ export default {
         // 不在当前时间的支付通道
         const payTypesSortDisable = computed(() => {
             if (state.PayTypes.length > 0) {
-                return state.PayTypes.filter(item => !item.timeRangeFlag)
+                return state.PayTypes.filter(item => !item.timeRangeFlag && item.openTime)
             }
         })
 
@@ -246,6 +226,16 @@ export default {
         // 判断sessionStorage 里面有没有保存proposalNo，有则弹窗提醒
         if (sessionStorage.getItem('proposalNo')) {
             state.despositVis = true
+        }
+
+        const onConfirm = () => {
+            sessionStorage.removeItem('proposalNo')
+            router.replace('/position')
+        }
+
+        const onCancel = () => {
+            sessionStorage.removeItem('proposalNo')
+            state.despositVis = false
         }
 
         const checkAmount = (index, item) => {
@@ -434,38 +424,30 @@ export default {
             }
         }
 
-        const onConfirm = () => {
-            sessionStorage.removeItem('proposalNo')
-            router.replace('/position')
-        }
-
-        const onCancel = () => {
-            sessionStorage.removeItem('proposalNo')
-            state.despositVis = false
-        }
-
         const checkKyc = () => {
             state.loading = true
             checkKycApply({
                 businessCode: 'cashin'
             }).then(res => {
-                state.loading = false
-                if (Number(res.data) !== 2) {
-                    return Dialog.alert({
-                        theme: 'round-button',
-                        title: '提示',
-                        confirmButtonText: Number(res.data) === 1 ? '去查看' : '去认证',
-                        message: Number(res.data) === 2 ? 'KYC审核中，请耐心等待' : '当前操作需要KYC认证',
-                    }).then(() => {
-                        router.replace({
-                            name: 'Authentication',
-                            query: {
-                                businessCode: 'cashin'
-                            }
+                if (res.check()) {
+                    state.loading = false
+                    if (Number(res.data) !== 2) {
+                        return Dialog.alert({
+                            theme: 'round-button',
+                            title: '提示',
+                            confirmButtonText: Number(res.data) === 1 ? '去查看' : '去认证',
+                            message: Number(res.data) === 2 ? 'KYC审核中，请耐心等待' : '当前操作需要KYC认证',
+                        }).then(() => {
+                            router.replace({
+                                name: 'Authentication',
+                                query: {
+                                    businessCode: 'cashin'
+                                }
+                            })
                         })
-                    })
+                    }
+                    getPayTypes()
                 }
-                getPayTypes()
             }).catch(err => {
                 state.loading = false
                 console.log(err)
@@ -491,6 +473,10 @@ export default {
                 // 检测存款是否需要kyc
                 checkKyc()
             }
+        })
+
+        onBeforeUnmount(() => {
+            sessionStorage.removeItem('proposalNo')
         })
 
         return {

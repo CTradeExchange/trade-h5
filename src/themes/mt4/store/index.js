@@ -32,12 +32,16 @@ export default createStore({
         },
         // 用户自选列表
         userSelfSymbolList (state, getters) {
-            if (state._user.customerInfo) {
+            if (state._user.customerInfo?.optional === 1) {
                 return state._user.selfSymbolList
             } else {
                 const wpSelfSymbol = state._base.wpSelfSymbol
+                const selfSymbolData = wpSelfSymbol.find(el => el.tag === 'selfSymbol')?.data?.product || {}
                 const customerGroupId = getters.customerGroupId
-                return wpSelfSymbol[customerGroupId] ?? []
+                const selfSymbolIds = selfSymbolData[customerGroupId] ?? []
+                return selfSymbolIds.map(el => {
+                    return { symbolId: parseInt(el) }
+                })
             }
         },
         // 用户产品板块

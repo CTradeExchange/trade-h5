@@ -181,7 +181,6 @@ export default {
 
             let params
             /* 具体业务的kyc认证 */
-
             if (!isEmpty(props.businessCode)) {
                 params = {
                     pathCode: state.pathCode,
@@ -189,12 +188,15 @@ export default {
                     elementList: elementList,
                     levelCode
                 }
+                state.loading = true
                 kycApply(params).then(res => {
+                    state.loading = false
                     if (res.check()) {
                         router.replace({ name: 'KycCommitted' })
                         sessionStorage.removeItem('kycList')
                     }
                 }).catch(err => {
+                    state.loading = false
                     console.log(err)
                 })
             } else {
@@ -203,11 +205,14 @@ export default {
                     levelCode,
                     elementList: elementList
                 }
+                state.loading = true
                 kycLevelApply(params).then(res => {
+                    state.loading = false
                     if (res.check()) {
                         router.replace({ name: 'KycCommitted' })
                     }
                 }).catch(err => {
+                    state.loading = false
                     console.log(err)
                 })
             }

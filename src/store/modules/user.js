@@ -1,4 +1,4 @@
-import { login, findCustomerInfo, logout, switchAccount, queryCustomerOptionalList } from '@/api/user'
+import { login, findCustomerInfo, logout, switchAccount, queryCustomerOptionalList, addCustomerOptional } from '@/api/user'
 import { localSet, setToken, removeLoginParams } from '@/utils/util'
 import router from '@m/router'
 import { Dialog } from 'vant'
@@ -24,10 +24,12 @@ export default {
                 _type = 'G' // 游客
             } else if (customerInfo.type === 1) {
                 _type = 'D' // 模拟，
-            } else if (customerInfo.type === 0 && customerInfo.activateStatus === 1) {
-                _type = 'R_1' // 真实未入金
             } else if (customerInfo.type === 0 && customerInfo.activateStatus === 2) {
+                _type = 'R_3' // 真实已激活
+            } else if (customerInfo.type === 0 && customerInfo.firstDepositTime) {
                 _type = 'R_2' // 真实已入金
+            } else if (customerInfo.type === 0 && !customerInfo.firstDepositTime) {
+                _type = 'R_1' // 真实未入金
             }
             return _type
         }
@@ -76,17 +78,8 @@ export default {
                     commit('Update_customerInfo', data)
                     commit('_base/UPDATE_tradeType', data.tradeType, { root: true }) // 登录后存储用户的玩法类型
                     // dispatch('findCustomerInfo')  // findCustomerInfod 的数据目前和登录的数据一样，不需要再次调用
-                    dispatch('queryCustomerOptionalList') // 拉取自选列表
-
-                    // 设置当前用户组的产品
-                    const selfSymbolData = rootState._base.wpSelfSymbol
-                    const customerGroupId = data.customerGroupId || rootState._base.wpCompanyInfo?.customerGroupId
-                    const products = selfSymbolData && selfSymbolData.product[customerGroupId]
-                    if (products) {
-                        const productList = products.map(el => ({ symbolId: el }))
-                        commit('_quote/Update_productList', productList, { root: true })
-                        commit('_quote/Update_productActivedID', products[0], { root: true })
-                    }
+                    dispatch(data.optional === 1 ? 'queryCustomerOptionalList' : 'addCustomerOptionalDefault') // 拉取自选列表
+                    dispatch('_quote/setProductAllList', null, { root: true })
                 }
                 commit('Update_loginLoading', false)
                 return res
@@ -100,19 +93,10 @@ export default {
                     const data = res.data
                     commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_customerInfo', res.data)
-                    dispatch('queryCustomerOptionalList') // 拉取自选列表
-
-                    // 设置当前用户组的产品
-                    const selfSymbolData = rootState._base.wpSelfSymbol
-                    if (selfSymbolData) {
-                        const customerGroupId = data.customerGroupId || rootState._base.wpCompanyInfo?.customerGroupId
-                        const products = selfSymbolData.product[customerGroupId]
-                        if (products) {
-                            const productList = products.map(el => ({ symbolId: el }))
-                            commit('_quote/Update_productList', productList, { root: true })
-                            commit('_quote/Update_productActivedID', products[0], { root: true })
-                        }
-                    }
+                    dispatch(data.optional === 1 ? 'queryCustomerOptionalList' : 'addCustomerOptionalDefault') // 拉取自选列表
+                    dispatch('_quote/setProductAllList', null, { root: true }).then(productList => {
+                        dispatch('_quote/querySymbolBaseInfoList', productList, { root: true })
+                    })
                 }
                 commit('Update_loginLoading', false)
 
@@ -167,11 +151,28 @@ export default {
             })
         },
         // 客户自选产品列表
-        queryCustomerOptionalList ({ dispatch, commit, rootState }, params = {}) {
+        queryCustomerOptionalList ({ dispatch, commit }, params = {}) {
             return queryCustomerOptionalList(params).then(res => {
                 commit('Update_selfSymbolList', res.data)
                 return res
             })
+        },
+        // 添加自选产品
+        addCustomerOptionals ({ dispatch, commit, state, rootState }, params = []) {
+            if (!params.length) return Promise.resolve()
+            return addCustomerOptional({ symbolList: params }).then(res => {
+                dispatch('queryCustomerOptionalList') // 拉取自选列表
+                return res
+            })
+        },
+        // 如果和没有添加过自选产品，自动添加默认自选产品
+        addCustomerOptionalDefault ({ dispatch, commit, state, rootState }) {
+            if (state.customerInfo.optional === 1) return Promise.resolve()
+            const customerGroupId = state.customerInfo.customerGroupId
+            const wpSelfSymbol = rootState._base.wpSelfSymbol.product || {}
+            let defaultOptions = wpSelfSymbol[customerGroupId] ?? []
+            defaultOptions = defaultOptions.map(el => ({ symbolId: parseInt(el) }))
+            return dispatch('addCustomerOptionals', defaultOptions)
         },
     }
 }

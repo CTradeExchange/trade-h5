@@ -13,7 +13,6 @@ import productListComp from '@m/modules/productList/productList.vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import { getLoginParams } from '@/utils/util'
 
 export default {
     name: 'Quote',
@@ -23,19 +22,17 @@ export default {
     },
     setup () {
         const store = useStore()
-        const productList = computed(() => store.state._quote.productList)
+        const customerInfo = computed(() => store.state._user.customerInfo)
+        const productList = computed(() => store.getters.userSelfSymbolList)
         // 订阅产品
 
         const subscribList = productList.value.map(({ symbolId }) => symbolId)
 
         if (subscribList.length > 0) {
             QuoteSocket.send_subscribe(subscribList)
-            store.dispatch('_quote/querySymbolBaseInfoList', subscribList)
         }
 
-        const loginParams = getLoginParams()
-
-        if (loginParams) {
+        if (customerInfo.value) {
             store.dispatch('_trade/queryPositionPage')
         }
         return {}

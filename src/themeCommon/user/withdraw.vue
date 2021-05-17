@@ -78,7 +78,7 @@
     <van-dialog v-model:show='timeShow' theme='round-button' title='提示'>
         <div class='time-wrap'>
             <h4>当前时间不可取款 </h4><br />
-            <div class='flex'>
+            <div v-if='timeList.length > 0' class='flex'>
                 <p>取款时间：</p>
                 <div class='time-text'>
                     <p v-for='(item,index) in timeList' :key='index'>
@@ -250,27 +250,35 @@ export default {
             for (const key in state.withdrawTimeConfigMap) {
                 if (Object.hasOwnProperty.call(state.withdrawTimeConfigMap, key)) {
                     const el = state.withdrawTimeConfigMap[key]
-                    const [start, end] = el.openTime.split('-')
-                    const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
-                    const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
+                    if (!isEmpty(el.openTime)) {
+                        const timeRange = el.openTime.split(',')
+                        if (timeRange.length > 0) {
+                            timeRange.forEach(timeRangeItem => {
+                                const [start, end] = timeRangeItem.split('-')
+                                const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
+                                const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
 
-                    // 第二天
-                    const weekDay = key < 7 ? Number(key) + 1 : 1
-                    let elNext = state.withdrawTimeConfigMap[weekDay]
-                    if (!elNext) {
-                        elNext = {
-                            openTimeLocal: [],
-                            weekDay
+                                // 第二天
+                                const weekDay = key < 7 ? Number(key) + 1 : 1
+                                let elNext = state.withdrawTimeConfigMap[weekDay]
+
+                                if (!elNext) {
+                                    elNext = {
+                                        openTimeLocal: [],
+                                        weekDay
+                                    }
+                                    state.withdrawTimeConfigMap[weekDay] = elNext
+                                }
+                                if (startLocal.isAfter(todayStr, 'day')) {
+                                    elNext.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                                } else if (endLocal.isAfter(todayStr, 'day')) {
+                                    elNext.openTimeLocal.push('00:00-' + endLocal.format('HH:mm'))
+                                    el.openTimeLocal.push(startLocal.format('HH:mm') + '-23:59')
+                                } else if (el.openTime !== '00:00-00:00' || el.openTime !== '') {
+                                    el.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                                }
+                            })
                         }
-                        state.withdrawTimeConfigMap[weekDay] = elNext
-                    }
-                    if (startLocal.isAfter(todayStr, 'day')) {
-                        elNext.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
-                    } else if (endLocal.isAfter(todayStr, 'day')) {
-                        elNext.openTimeLocal.push('00:00-' + endLocal.format('HH:mm'))
-                        el.openTimeLocal.push(startLocal.format('HH:mm') + '-23:59')
-                    } else if (el.openTime !== '00:00-00:00') {
-                        el.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
                     }
                 }
             }
@@ -399,29 +407,6 @@ export default {
                 if (res.check()) {
                     state.withdrawConfig = res.data
 
-                    if (!res.data.accountActiveEnable) {
-                        state.btnDisabled = true
-                        return Dialog.confirm({
-                            title: '提示',
-                            message: '账户激活后才可取款',
-                            confirmButtonText: '去激活'
-                        }).then(() => {
-                            // on confirm
-                            router.push('/desposit')
-                        }).catch(() => {
-                            // on cancel
-                        })
-                    }
-
-                    if (!res.data.amountEnable) {
-                        state.btnDisabled = true
-                        return Toast('可取资金不足')
-                    }
-
-                    if (!res.data.hourIn24Enable) {
-                        state.btnDisabled = true
-                        return Toast('24小时内取款次数不超过' + state.withdrawConfig.withdrawBaseConfig.maxCount + '次')
-                    }
                     if (!res.data.customerGroupEnable) {
                         state.btnDisabled = true
                         return Dialog.confirm({
@@ -435,14 +420,12 @@ export default {
                         }).catch(() => {
                             // on cancel
                         })
+                    } else {
+                        // 检测取款是否需要kyc
+                        checkKyc()
                     }
 
-                    if (!res.data.timeEnable) {
-                        state.btnDisabled = true
-                        state.timeShow = true
-                    }
-                    // 检测取款是否需要kyc
-                    checkKyc()
+                    // 时区转换
                     transferUtc()
                 } else {
                     Toast(res.msg)
@@ -494,6 +477,37 @@ export default {
                             }
                         })
                     })
+                } else {
+                    if (!state.withdrawConfig.accountActiveEnable) {
+                        state.btnDisabled = true
+                        return Dialog.confirm({
+                            theme: 'round-button',
+                            title: '提示',
+                            message: '账户激活后才可取款',
+                            confirmButtonText: '去激活'
+                        }).then(() => {
+                            // on confirm
+                            router.push('/desposit')
+                        }).catch(() => {
+                            // on cancel
+                        })
+                    }
+
+                    if (!state.withdrawConfig.timeEnable) {
+                        state.btnDisabled = true
+                        state.timeShow = true
+                        return
+                    }
+
+                    if (!state.withdrawConfig.amountEnable) {
+                        state.btnDisabled = true
+                        return Toast('可取资金不足')
+                    }
+
+                    if (!state.withdrawConfig.hourIn24Enable) {
+                        state.btnDisabled = true
+                        return Toast('24小时内取款次数不超过' + state.withdrawConfig.withdrawBaseConfig.maxCount + '次')
+                    }
                 }
             }).catch(err => {
                 state.loading = false

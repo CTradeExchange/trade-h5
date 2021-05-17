@@ -29,45 +29,46 @@ export default {
         },
     },
     actions: {
+        // 初始化基础配置信息，如公司配置、底部导航配置、自选产品配置、产品板块配置
+        initBaseConfig ({ dispatch }) {
+            const baseList = [
+                dispatch('getCompanyInfo'),
+                dispatch('getNav'),
+                dispatch('getWpSelfSymbols'),
+                dispatch('getProductCategory')
+            ]
+            return Promise.all(baseList).then(res => {
+                return dispatch('_quote/setProductAllList', null, { root: true })
+            })
+        },
         // 获取公司配置信息
-        getCompanyInfo ({ dispatch, commit, state, rootGetters }) {
+        getCompanyInfo ({ commit }) {
             return wpCompanyConfig().then(async data => {
                 if (data) {
                     commit('UPDATE_wpCompanyInfo', data)
                     commit('UPDATE_tradeType', data.tradeTypeList[0]['id']) // 先存储公司默认的玩法类型
                 }
-                // 自选产品
-                const selfSymbolData = await wpSelfSymbolIndex()
-
-                if (selfSymbolData) {
-                    const products = selfSymbolData.product[rootGetters.customerGroupId]
-                    if (products) {
-                        const productList = products && products.map(el => ({ symbolId: el }))
-
-                        commit('UPDATE_selfSymbol', selfSymbolData)
-                        commit('_quote/Update_productList', productList, { root: true })
-                        commit('_quote/Update_productActivedID', products[0], { root: true })
-                    }
-                }
                 return data
             })
         },
         // 获取底部导航配置
-        getNav ({ dispatch, commit, state }) {
+        getNav ({ commit }) {
             return wpNav().then(data => {
-                if (data) {
-                    commit('UPDATE_wpNav', data)
-                }
+                if (data) commit('UPDATE_wpNav', data)
+                return data
+            })
+        },
+        // 获取自选产品配置
+        getWpSelfSymbols ({ commit }) {
+            return wpSelfSymbolIndex().then(data => {
+                if (data) commit('UPDATE_selfSymbol', data)
                 return data
             })
         },
         // 获取产品板块
-        getProductCategory ({ dispatch, commit, state }) {
+        getProductCategory ({ commit }) {
             return pageConfig('TradeIndex').then(data => {
-                console.log(data)
-                if (data) {
-                    commit('Update_wpProductCategory', data)
-                }
+                if (data) commit('Update_wpProductCategory', data)
                 return data
             })
         },

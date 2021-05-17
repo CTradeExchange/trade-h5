@@ -19,6 +19,39 @@
     html {
         font-size: 10vw;
     }
+    #app:empty::after,
+    .loadIcon::after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 30px;
+        height: 30px;
+        margin: -30px 0 0 -15px;
+        background: url(/images/loading.svg) center no-repeat;
+        background-size: 100%;
+        opacity: 0.7;
+        -webkit-animation: loading 1s linear infinite;
+        animation: loading 1s linear infinite;
+        content: '';
+    }
+
+    @-webkit-keyframes loading {
+        0% {
+            transform: translateZ(0) rotate(0deg);
+        }
+        100% {
+            transform: translateZ(0) rotate(360deg);
+        }
+    }
+
+    @keyframes loading {
+        0% {
+            transform: translateZ(0) rotate(0deg);
+        }
+        100% {
+            transform: translateZ(0) rotate(360deg);
+        }
+    }
     </style>
 </head>
 

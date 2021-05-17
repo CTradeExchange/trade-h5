@@ -2,7 +2,7 @@
     <div class='top'>
         <a v-if='menu' class='icon_caidan1' href='javascript:;' @click='$refs.leftMenu.visible=true'>
         </a>
-        <a v-if='back' class='icon_fanhui' href='javascript:;' @click='$router.back()'></a>
+        <a v-if='back' class='icon_fanhui' href='javascript:;' @click='backEvent'></a>
 
         <div v-if='titleText && titleVis' class='title'>
             <h2 v-if='titleText'>
@@ -23,6 +23,8 @@
 <script>
 import topRight from './topRight'
 import leftMenu from './leftMenu'
+import { computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 export default {
     components: {
         topRight,
@@ -50,10 +52,17 @@ export default {
             default: ''
         },
     },
-    computed: {
-        titleText () {
-            return this.title || this.$route.meta?.title
-        },
+    setup (props, { emit, attrs }) {
+        const router = useRouter()
+        const route = useRoute()
+        const titleText = computed(() => props.title || route.meta?.title)
+        const backEvent = () => {
+            attrs.onBackEvent ? emit('backEvent') : router.back()
+        }
+        return {
+            titleText,
+            backEvent
+        }
     }
 }
 </script>

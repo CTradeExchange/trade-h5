@@ -38,7 +38,6 @@ import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import positionItem from './positionItem'
 import { useRouter } from 'vue-router'
-import { addMarketOrder } from '@/api/trade'
 export default {
     components: {
         positionItem,
@@ -52,7 +51,6 @@ export default {
             loading: false,
             cur: {},
         })
-        const product = computed(() => store.getters.productActived)
         const positionList = computed(() => store.state._trade.positionList)
 
         console.log('storePositionlist', positionList)

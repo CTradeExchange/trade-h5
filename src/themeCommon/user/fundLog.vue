@@ -104,10 +104,10 @@
                         </div>
                         <div class='f-right'>
                             <p class='amount'>
-                                {{ computePrice(item.amount,item.digits) }} USD
+                                {{ computePrice(item.amount,item.digits) }} {{ customInfo.currency }}
                             </p>
                             <p class='balance'>
-                                余额 {{ computePrice(item.amountAfter, item.digits) }} USD
+                                余额 {{ computePrice(item.amountAfter, item.digits) }} {{ customInfo.currency }}
                             </p>
                         </div>
                     </div>
@@ -131,6 +131,7 @@ export default {
     setup (props) {
         const proDownItem = ref(null)
         const dateDownItem = ref(null)
+        const customInfo = computed(() => store.state._user.customerInfo)
         const proBtns = {
             0: '全部项目',
             1: '存款',
@@ -180,6 +181,7 @@ export default {
                 value: 4
             }
         ]
+
         const state = reactive({
             proCurr: 0, // 业务类型
             directionCur: 0, // 流向
@@ -354,6 +356,7 @@ export default {
             queryFundDetail,
             formatTime,
             computePrice,
+            customInfo,
             ...toRefs(state)
         }
     }
