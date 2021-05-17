@@ -17,9 +17,6 @@ class SocketEvent {
     init (ws, $store) {
         this.ws = ws
         this.$store = $store
-        setTimeout(() => {
-            this.notice({ a: 1, b: 2 })
-        }, 1000)
     }
 
     // ws发送数据格式
