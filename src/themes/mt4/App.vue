@@ -13,6 +13,9 @@ export default {
     created () {
         window.vm = this
         window.store = this.$store
+        document.body.addEventListener('notice', res => {
+            console.log(res)
+        }, false)
     }
 }
 </script>
