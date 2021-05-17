@@ -172,12 +172,9 @@ export default {
             })
         },
         // 如果和没有添加过自选产品，自动添加默认自选产品
-        addCustomerOptionalDefault ({ dispatch, commit, state, rootState, rootGetters }) {
+        addCustomerOptionalDefault ({ state, rootGetters }) {
             if (state.customerInfo.optional === 1) return Promise.resolve()
-            const customerGroupId = state.customerInfo.customerGroupId
-            const wpSelfSymbol = rootState._base.wpSelfSymbol.product || {}
-            let defaultOptions = wpSelfSymbol[customerGroupId] ?? []
-            defaultOptions = [...rootGetters.userSelfSymbolList]
+            const defaultOptions = rootGetters.userSelfSymbolList.map(el => parseInt(el.symbolId))
             return addCustomerOptional({ symbolList: defaultOptions })
         },
     }
