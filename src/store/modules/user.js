@@ -94,7 +94,9 @@ export default {
                     commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_customerInfo', res.data)
                     dispatch(data.optional === 1 ? 'queryCustomerOptionalList' : 'addCustomerOptionalDefault') // 拉取自选列表
-                    dispatch('_quote/setProductAllList', null, { root: true })
+                    dispatch('_quote/setProductAllList', null, { root: true }).then(productList => {
+                        dispatch('_quote/querySymbolBaseInfoList', productList, { root: true })
+                    })
                 }
                 commit('Update_loginLoading', false)
 

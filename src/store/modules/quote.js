@@ -93,6 +93,7 @@ export default {
             const productAllList = [...new Set(productList)].map(el => ({ symbolId: parseInt(el) }))
             commit('Update_productList', productAllList)
             commit('Update_productActivedID', selfSymbolList[0])
+            return [...new Set(productList)]
         },
         // 产品基础信息列表
         querySymbolBaseInfoList ({ dispatch, commit, state, rootState, rootGetters }, symbolIds = []) {

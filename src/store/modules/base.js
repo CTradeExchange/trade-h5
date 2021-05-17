@@ -30,7 +30,7 @@ export default {
     },
     actions: {
         // 初始化基础配置信息，如公司配置、底部导航配置、自选产品配置、产品板块配置
-        initBaseConfig ({ dispatch, commit, state, rootGetters }) {
+        initBaseConfig ({ dispatch }) {
             const baseList = [
                 dispatch('getCompanyInfo'),
                 dispatch('getNav'),
@@ -42,7 +42,7 @@ export default {
             })
         },
         // 获取公司配置信息
-        getCompanyInfo ({ dispatch, commit, state, rootGetters }) {
+        getCompanyInfo ({ commit }) {
             return wpCompanyConfig().then(async data => {
                 if (data) {
                     commit('UPDATE_wpCompanyInfo', data)
@@ -52,7 +52,7 @@ export default {
             })
         },
         // 获取底部导航配置
-        getNav ({ dispatch, commit, state }) {
+        getNav ({ commit }) {
             return wpNav().then(data => {
                 if (data) commit('UPDATE_wpNav', data)
                 return data
