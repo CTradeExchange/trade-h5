@@ -1,7 +1,7 @@
 <template>
     <div class='pageWrap'>
-        <template v-for='item in productList'>
-            <productItem v-if='item.symbolName' :key='item' :product='item' @open='openProduct(item)' />
+        <template v-for='item in productList' :key='item'>
+            <productItem v-if='productMap[item.symbolId] && productMap[item.symbolId].symbolName' :product='productMap[item.symbolId]' @open='openProduct(item)' />
         </template>
     </div>
     <van-popup v-model:show='show'>
@@ -50,9 +50,10 @@ export default {
 
         let symbolId = null
         // 行情列表模式 1高级模式 2简单模式
+        const productMap = computed(() => store.state._quote.productMap)
         const quoteMode = computed(() => store.state.quoteMode)
         // 产品列表
-        const productList = computed(() => store.state._quote.productList)
+        const productList = computed(() => store.getters.userSelfSymbolList)
         // 切换行情列表模式
         const switchQuoteMode = () => {
             store.commit('Update_quoteMode', quoteMode.value === 1 ? 2 : 1)
@@ -76,6 +77,7 @@ export default {
         return {
             ...toRefs(state),
             quoteMode,
+            productMap,
             productList,
             switchQuoteMode,
             toOrder,

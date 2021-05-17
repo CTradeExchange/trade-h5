@@ -59,8 +59,10 @@
                 <li class='item' @click="visible=false;$router.push('/chart')">
                     <i class='icon icon_tubiaoxian'></i> <strong>图表</strong>
                 </li>
-                <li class='item'>
-                    <i class='icon icon_kefu'></i> <strong>客服</strong>
+                <li v-if='$store.state._base.wpCompanyInfo?.onlineService' class='item'>
+                    <a :href='$store.state._base.wpCompanyInfo?.onlineService' rel='noopener noreferrer' target='_blank'>
+                        <i class='icon icon_kefu'></i> <strong>客服</strong>
+                    </a>
                 </li>
                 <li class='item' @click="visible=false;$router.push('/setting')">
                     <i class='icon icon_shezhi'></i> <strong>设置</strong>

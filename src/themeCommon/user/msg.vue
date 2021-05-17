@@ -48,6 +48,7 @@ import { queryPlatFormMessageLogList } from '@/api/user'
 import { useStore } from 'vuex'
 import dayjs from 'dayjs'
 import { Toast } from 'vant'
+import { isEmpty } from '@/utils/util'
 export default {
     components: {
         Top
@@ -107,8 +108,10 @@ export default {
             try {
                 const reg = /<?time[^>]*>[^<]*<\/time>/gi
                 const tag = content.match(reg)
-                const time = tag.toString().replace(/<\/?time>/g, '')
-                return dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
+                if (!isEmpty(tag)) {
+                    const time = tag.toString().replace(/<\/?time>/g, '')
+                    return dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
+                }
             } catch (error) {
                 console.log(error)
             }

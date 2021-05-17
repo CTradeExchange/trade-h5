@@ -78,8 +78,12 @@ export default {
                     commit('Update_customerInfo', data)
                     commit('_base/UPDATE_tradeType', data.tradeType, { root: true }) // 登录后存储用户的玩法类型
                     // dispatch('findCustomerInfo')  // findCustomerInfod 的数据目前和登录的数据一样，不需要再次调用
-                    dispatch(data.optional === 1 ? 'queryCustomerOptionalList' : 'addCustomerOptionalDefault') // 拉取自选列表
-                    dispatch('_quote/setProductAllList', null, { root: true })
+                    if (data.optional === 1) dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
+                    dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {
+                        return dispatch('_quote/querySymbolBaseInfoList', productAllList, { root: true })
+                    }).then(() => {
+                        if (data.optional === 0) dispatch('addCustomerOptionalDefault') // 如果没有添加过自选，拿到产品精简信息后添加自选，因为添加自选需要拿到 symbolId, symbolCode, symbolName
+                    })
                 }
                 commit('Update_loginLoading', false)
                 return res
@@ -93,42 +97,44 @@ export default {
                     const data = res.data
                     commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_customerInfo', res.data)
-                    dispatch(data.optional === 1 ? 'queryCustomerOptionalList' : 'addCustomerOptionalDefault') // 拉取自选列表
-                    dispatch('_quote/setProductAllList', null, { root: true }).then(productList => {
-                        dispatch('_quote/querySymbolBaseInfoList', productList, { root: true })
+                    if (data.optional === 1) dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
+                    dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {
+                        return dispatch('_quote/querySymbolBaseInfoList', productAllList, { root: true })
+                    }).then(() => {
+                        if (data.optional === 0) dispatch('addCustomerOptionalDefault') // 如果没有添加过自选，拿到产品精简信息后添加自选，因为添加自选需要拿到 symbolId, symbolCode, symbolName
                     })
+                    // 登录KYC,0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
+                    if (Number(res.data.kycAuditStatus === 0)) {
+                        return Dialog.alert({
+                            title: '提示',
+                            confirmButtonText: '去认证',
+                            message: '您还未进行KYC认证，点击去认证',
+                            theme: 'round-button',
+                        }).then(() => {
+                            router.push('/authentication')
+                        })
+                    } else if (Number(res.data.kycAuditStatus === 1)) {
+                        return Dialog.alert({
+                            title: '提示',
+                            confirmButtonText: '关闭',
+                            message: '您的资料正在审核中，等耐心等待',
+                            theme: 'round-button',
+                        }).then(() => {
+                            dispatch('logout')
+                        })
+                    } else if (Number(res.data.kycAuditStatus === 3)) {
+                        return Dialog.alert({
+                            title: '提示',
+                            confirmButtonText: '重新提交',
+                            message: '您的资料审核失败',
+                            theme: 'round-button',
+                        }).then(() => {
+                            router.push('/authentication')
+                        })
+                    }
                 }
                 commit('Update_loginLoading', false)
 
-                // 登录KYC,0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
-                if (Number(res.data.kycAuditStatus === 0)) {
-                    return Dialog.alert({
-                        title: '提示',
-                        confirmButtonText: '去认证',
-                        message: '您还未进行KYC认证，点击去认证',
-                        theme: 'round-button',
-                    }).then(() => {
-                        router.push('/authentication')
-                    })
-                } else if (Number(res.data.kycAuditStatus === 1)) {
-                    return Dialog.alert({
-                        title: '提示',
-                        confirmButtonText: '关闭',
-                        message: '您的资料正在审核中，等耐心等待',
-                        theme: 'round-button',
-                    }).then(() => {
-                        dispatch('_user/logout')
-                    })
-                } else if (Number(res.data.kycAuditStatus === 3)) {
-                    return Dialog.alert({
-                        title: '提示',
-                        confirmButtonText: '重新提交',
-                        message: '您的资料审核失败',
-                        theme: 'round-button',
-                    }).then(() => {
-                        router.push('/authentication')
-                    })
-                }
                 return res
             })
         },
@@ -166,13 +172,10 @@ export default {
             })
         },
         // 如果和没有添加过自选产品，自动添加默认自选产品
-        addCustomerOptionalDefault ({ dispatch, commit, state, rootState }) {
+        addCustomerOptionalDefault ({ state, rootGetters }) {
             if (state.customerInfo.optional === 1) return Promise.resolve()
-            const customerGroupId = state.customerInfo.customerGroupId
-            const wpSelfSymbol = rootState._base.wpSelfSymbol.product || {}
-            let defaultOptions = wpSelfSymbol[customerGroupId] ?? []
-            defaultOptions = defaultOptions.map(el => ({ symbolId: parseInt(el) }))
-            return dispatch('addCustomerOptionals', defaultOptions)
+            const defaultOptions = rootGetters.userSelfSymbolList.map(el => parseInt(el.symbolId))
+            return addCustomerOptional({ symbolList: defaultOptions })
         },
     }
 }

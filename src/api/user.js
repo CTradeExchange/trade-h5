@@ -411,7 +411,7 @@ export function addCustomerOptional (data) {
         method: 'post',
         headers: {
             // group: 'tradeApi',
-            // version: '0.0.1',
+            version: '0.0.1',
         },
         data
     })

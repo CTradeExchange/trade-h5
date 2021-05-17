@@ -128,9 +128,30 @@ class SocketEvent {
         }, 30000)
     }
 
-    // 处理盈亏浮动数据和账户数据
-    floatProfitLoss (data) {
-        const content = data.content
+    // 处理持仓盈亏浮动数据和账户数据
+    positionsTick (str) {
+        // f(profitLoss,occupyMargin,availableMargin,marginRadio,netWorth,balance);(positionId,profitLoss);(positionId,profitLoss);(positionId,profitLoss)
+        const dataArr = str.split(';')
+        const accountData = dataArr[0].match(/\((.+)\)/)[1].split(',')
+        const positionsProfitLoss = dataArr.slice(1).map(el => {
+            const elData = el.replace(/\(|\)/g, '').split(',').map(parseFloat)
+            return {
+                positionId: elData[0],
+                profitLoss: elData[1],
+            }
+        })
+        this.floatProfitLoss({
+            availableMargin: Number(accountData[2]),
+            balance: Number(accountData[5]),
+            marginRadio: accountData[3],
+            netWorth: Number(accountData[4]),
+            occupyMargin: Number(accountData[1]),
+            profitLoss: Number(accountData[0]),
+            positionProfitLossMessages: positionsProfitLoss,
+        })
+    }
+
+    floatProfitLoss (content) {
         this.$store.commit('_user/Update_userAccount', content)
         if (content.positionProfitLossMessages.length > 0) {
             this.$store.commit('_trade/Update_positionProfitLossList', content.positionProfitLossMessages)
@@ -150,6 +171,14 @@ class SocketEvent {
             that.ws.close()
             that.$store.dispatch('_user/logout')
         })
+    }
+
+    // 消息通知
+    notice (data) {
+        const event = new CustomEvent('notice', {
+            detail: data
+        })
+        document.body.dispatchEvent(event)
     }
 }
 
