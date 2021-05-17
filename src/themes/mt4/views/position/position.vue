@@ -44,6 +44,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const pendingList = computed(() => store.state._trade.pendingList)
+        const customerInfo = computed(() => store.state._user.customerInfo)
         const sortActionsSelected = 'van-badge__wrapper van-icon van-icon-down'
         const sortActions = [
             { name: '订单', feild: 'orderId', className: sortActionsSelected },
@@ -56,11 +57,11 @@ export default {
         const accountInfo = computed(() => store.state._user.userAccount)
         const capitalListData = computed(() => {
             return [
-                { title: '结余：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.balance, accountInfo.value.digit) : '--' },
-                { title: '净值：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.netWorth, accountInfo.value.digit) : '--' },
-                { title: '可用预付款：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.availableMargin, accountInfo.value.digit) : '--' },
+                { title: '结余：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.balance, customerInfo.value.digits) : '--' },
+                { title: '净值：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.netWorth, customerInfo.value.digits) : '--' },
+                { title: '可用预付款：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.availableMargin, customerInfo.value.digits) : '--' },
                 { title: '预付款比率(%)：', value: !isEmpty(accountInfo.value.marginRadio) ? accountInfo.value.marginRadio + '%' : '--' },
-                { title: '预付款：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.occupyMargin, accountInfo.value.digit) : '--' },
+                { title: '预付款：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.occupyMargin, customerInfo.value.digits) : '--' },
             ]
         })
 
@@ -75,7 +76,7 @@ export default {
                     pflNew.forEach(item => {
                         // console.log('更新价格', item.profitLoss)
                         if (Number(item.positionId) === Number(p.positionId)) {
-                            p.profitLoss = priceFormat(item.profitLoss, item.digit)
+                            p.profitLoss = priceFormat(item.profitLoss, customerInfo.value.digits)
                         }
                     })
                 })

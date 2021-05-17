@@ -47,6 +47,7 @@ export default {
         })
 
         msgWS.addEventListener('message', evt => {
+            if (typeof evt.data === 'string' && evt.data.startsWith('f(')) return MsgSocket.positionsTick(evt.data)
             if (typeof evt.data === 'object' || evt.data.indexOf('{') !== 0) return
             try {
                 const data = JSON.parse(evt.data)
