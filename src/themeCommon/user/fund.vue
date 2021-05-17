@@ -31,7 +31,7 @@
                         盈亏
                     </p>
                     <p class='val profit' :class="computePrice(accountInfo.profitLoss, accountInfo.digit) > 0 ? 'riseColor' : 'fallColor'">
-                        {{ accountInfo ? computePrice(accountInfo.profitLoss, accountInfo.digit) : '--' }}
+                        {{ accountInfo.digit ? computePrice(accountInfo.profitLoss, accountInfo.digit) : '--' }}
                     </p>
                 </div>
                 <div class='item'>
@@ -39,7 +39,7 @@
                         余额
                     </p>
                     <p class='val balance'>
-                        {{ accountInfo ? computePrice(accountInfo.balance, accountInfo.digit) : '--' }}
+                        {{ accountInfo.digit ? computePrice(accountInfo.balance, accountInfo.digit) : '--' }}
                     </p>
                 </div>
                 <div class='item'>
@@ -47,7 +47,7 @@
                         可取
                     </p>
                     <p class='val'>
-                        {{ mainAccount ? computePrice(mainAccount.withdrawAmount,mainAccount.digits) : '--' }}
+                        {{ mainAccount.digits ? computePrice(mainAccount.withdrawAmount,mainAccount.digits) : '--' }}
                     </p>
                 </div>
                 <div class='item'>
@@ -55,7 +55,7 @@
                         可用保证金
                     </p>
                     <p class='val'>
-                        {{ accountInfo ? computePrice(accountInfo.availableMargin, accountInfo.digit) : '--' }}
+                        {{ accountInfo.digits ? computePrice(accountInfo.availableMargin, accountInfo.digit) : '--' }}
                     </p>
                 </div>
                 {{}}
@@ -64,7 +64,7 @@
                         占用保证金
                     </p>
                     <p class='val'>
-                        {{ accountInfo ? computePrice(accountInfo.occupyMargin, accountInfo.digit) : '--' }}
+                        {{ accountInfo.digits ? computePrice(accountInfo.occupyMargin, accountInfo.digit) : '--' }}
                     </p>
                 </div>
             </div>
@@ -127,7 +127,7 @@ export default {
         }
 
         const netWorth = computed(() => {
-            if (!isEmpty(state.accountInfo)) {
+            if (!isEmpty(state.accountInfo) && !isEmpty(state.accountInfo.digit)) {
                 return priceFormat(state.accountInfo.netWorth, state.accountInfo.digit)
             }
         })
@@ -145,7 +145,7 @@ export default {
                     r: 80,
                     arcWidth: 15,
                     label: '净值',
-                    text: state.accountInfo ? netWorth.value : '--',
+                    text: netWorth.value || '--',
                     data: [
                         { color: '#3894FF', percent: netWorthPercent, text: '第1项' },
                         { color: '#51C31C', percent: earnestPercent, text: '第2项' },
