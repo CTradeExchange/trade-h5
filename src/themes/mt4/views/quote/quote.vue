@@ -3,6 +3,9 @@
         <template #right>
             <van-icon class='icon-add' name='plus' @click="$router.push({ name: 'Search' })" />
         </template>
+        <template #left>
+            <van-icon class='icon-add' name='edit' @click="$router.push({ name: 'Optional' })" />
+        </template>
     </Top>
     <productListComp />
 </template>

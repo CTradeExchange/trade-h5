@@ -2,7 +2,7 @@
     <Top :back='true' :menu='false' title='' />
     <van-search v-model='value' placeholder='请输入搜索关键词' @cancel='onCancel' @search='onSearch' @update:model-value='onUpdatedSearchValue' />
     <div v-show='categoryShow' class='category-list'>
-        <van-cell v-for='(v,i) in productCategoryList' :key='i' is-link :title='v.title' @click='showPopup(v.id)' />
+        <van-cell v-for='(v,i) in productCategoryList' :key='i' is-link :title='v.title' :to="{ path: '/market', query: { code: v.id } }" />
     </div>
     <div class='search-result'>
         <van-cell v-for='(item,index) in searchDataList' :key='index' class='center-align-items' icon='location-o' :title='item.name'>
@@ -29,7 +29,7 @@ import { getSymbolList, addCustomerOptional } from '@/api/trade'
 // import { addCustomerOptional } from '@/api/user'
 import { isEmpty } from '@/utils/util'
 import { find, forOwn, differenceBy } from 'lodash'
-import { toRefs, reactive, computed, onBeforeMount, ref, watch } from 'vue'
+import { toRefs, reactive, computed, ref, watch } from 'vue'
 import {
     useStore
 } from 'vuex'
@@ -118,7 +118,7 @@ export default {
                 }
                 getSymbolList(params).then(res => {
                     const { data, code } = res
-                    debugger
+                    // debugger
                     if (code === '0' && Array.isArray(data)) {
                         state.searchDataList = differenceBy(data, selfSymbolList.value.map(el => ({
                             id: el.symbolId,
