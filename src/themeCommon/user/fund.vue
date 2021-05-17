@@ -147,8 +147,8 @@ export default {
                     label: '净值',
                     text: netWorth.value || '--',
                     data: [
-                        { color: '#3894FF', percent: netWorthPercent, text: '第1项' },
-                        { color: '#51C31C', percent: earnestPercent, text: '第2项' },
+                        { color: '#3894FF', percent: netWorthPercent || 0, text: '第1项' },
+                        { color: '#51C31C', percent: earnestPercent || 0, text: '第2项' },
                     ]
                 })
             }
