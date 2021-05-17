@@ -11,16 +11,6 @@
             </template>
         </van-cell>
     </div>
-
-    <van-popup v-model:show='show' closeable position='right' :style="{ height: '100%',width:'100%' }">
-        <div class='category-product-list'>
-            <van-cell v-for='(val,idx) in categoryProductList' :key='idx' is-link :title='val.symbolName' :to="{ path: '/contract', query: { symbolId: val.symbolId } }">
-                <template #icon>
-                    <van-icon class='icon' name='add-o' @click.stop='addOptional(val)' />
-                </template>
-            </van-cell>
-        </div>
-    </van-popup>
 </template>
 
 <script>
@@ -28,7 +18,7 @@ import Top from '@m/layout/top'
 import { getSymbolList, addCustomerOptional } from '@/api/trade'
 // import { addCustomerOptional } from '@/api/user'
 import { isEmpty } from '@/utils/util'
-import { find, forOwn, differenceBy } from 'lodash'
+import { differenceBy } from 'lodash'
 import { toRefs, reactive, computed, ref, watch } from 'vue'
 import {
     useStore
@@ -37,7 +27,7 @@ export default {
     components: {
         Top,
     },
-    setup (props) {
+    setup () {
         const state = reactive({
             value: '',
             // show: ref(false),
@@ -45,7 +35,6 @@ export default {
             requesNeedParams: {},
             searchDataList: [],
             productCategoryList: [],
-            categoryProductList: [],
             selfSymbolList: [],
             quoteProductMap: {}
         })
@@ -55,30 +44,8 @@ export default {
         state.productCategoryList = store.getters.userProductCategory
         state.quoteProductMap = store.state._quote.productMap
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)
-        // onBeforeMount(() => {
-        //     // const params = {}
-        //     // getSymbolList(params).then(res => {
-
-        //     // }).catch(err => {
-
-        //     // })
-        // })
 
         const show = ref(false)
-        const showPopup = (id) => {
-            const currentCategory = find(state.productCategoryList, ['id', id])
-            if (currentCategory?.code_ids) {
-                const productList = []
-                forOwn(currentCategory.code_ids, (value, key) => {
-                    if (state.quoteProductMap[value]) {
-                        productList.push(state.quoteProductMap[value])
-                    }
-                })
-                // debugger
-                state.categoryProductList = differenceBy(productList, selfSymbolList.value, 'symbolId')
-            }
-            show.value = true
-        }
         const onUpdatedSearchValue = (value) => {
             state.categoryShow = !value
         }
@@ -94,23 +61,22 @@ export default {
             })
         }
         const addSearchOptional = (record) => {
-            addCustomerOptional({ symbolList: [{ symbolCode: record.code, symbolName: record.name, symbolId: record.id }] }).then(res => {
+            addCustomerOptional({ symbolList: [record.id] }).then(res => {
                 if (res.code === '0') {
-                    state.categoryProductList = differenceBy(state.categoryProductList, [{ symbolId: record.symbolId }], 'symbolId')
                     store.dispatch('_user/queryCustomerOptionalList')
                 }
             })
         }
         watch(selfSymbolList, (val) => {
-            state.categoryProductList = differenceBy(state.categoryProductList, val, 'symbolId')
-            // val && localStorage.setItem('symbolIdForChart', val.value)
+            state.searchDataList = differenceBy(state.searchDataList, val.map(el => ({
+                id: el.symbolId,
+                code: el.symbolCode,
+                name: el.symbolName
+            })), 'symbolId')
         })
         const onSearch = (val) => {
             state.value = val
-
-            // const registerData = sessionStorage.getItem('RegisterData')
             if (!isEmpty(customInfo)) {
-                // const { companyId, customerGroupId } = JSON.parse(registerData).data
                 const params = {
                     companyId: customInfo.value.companyId,
                     customerGroupId: customInfo.value.customerGroupId,
@@ -118,7 +84,6 @@ export default {
                 }
                 getSymbolList(params).then(res => {
                     const { data, code } = res
-                    // debugger
                     if (code === '0' && Array.isArray(data)) {
                         state.searchDataList = differenceBy(data, selfSymbolList.value.map(el => ({
                             id: el.symbolId,
@@ -126,12 +91,10 @@ export default {
                             name: el.symbolName
                         })), 'id')
                     }
-                    // [{"sourceId":"USDJPY_Group","priftCurrency":"USD","name":"现货黄金","id":1,"class":"com.cats.config.api.vo.open.OpenSymbolVo","baseCurrency":"USD","status":1}]
                 }).catch(err => {
 
                 })
             }
-            // console.log('onSearch---', state.value)
         }
 
         /**
@@ -144,7 +107,6 @@ export default {
             onCancel,
             addOptional,
             addSearchOptional,
-            showPopup,
             show,
             selfSymbolList,
             onUpdatedSearchValue,

@@ -4,14 +4,19 @@
         </a>
         <a v-if='back' class='icon_fanhui' href='javascript:;' @click='backEvent'></a>
 
-        <div v-if='titleText && titleVis' class='title'>
-            <h2 v-if='titleText'>
-                {{ titleText }}
-            </h2>
-            <p v-if='subTitle' class='subTitle'>
-                {{ subTitle }}
-            </p>
+        <div class='title'>
+            <slot name='center'>
+                <template v-if='titleText && titleVis'>
+                    <h2 v-if='titleText'>
+                        {{ titleText }}
+                    </h2>
+                    <p v-if='subTitle' class='subTitle'>
+                        {{ subTitle }}
+                    </p>
+                </template>
+            </slot>
         </div>
+
         <slot name='left'></slot>
         <slot name='right'></slot>
         <!-- <topRight /> -->
