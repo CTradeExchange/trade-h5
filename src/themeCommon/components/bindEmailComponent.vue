@@ -33,7 +33,6 @@ import { verifyCodeSend } from '@/api/base'
 import { bindEmail, changeEmail, checkCustomerExist } from '@/api/user'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import FindCustomerInfo from '@m/composables/findCustomerInfo'
 export default {
     components: {
         Top,
@@ -78,7 +77,7 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         Toast('绑定邮箱成功')
-                        FindCustomerInfo()
+                        store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
                             router.replace('/setting')
                         }, 1500)
@@ -91,7 +90,7 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         Toast('更换邮箱成功')
-                        FindCustomerInfo()
+                        store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
                             router.replace('/setting')
                         }, 1500)

@@ -3,13 +3,14 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import VantBase from './vantBase'
+import { Dialog } from 'vant'
 import Socket, { MsgSocket } from '@/plugins/socket/socket'
+import FindCustomerInfo from '@m/plugins/findCustomerInfo'
 import longpress from '@/directives/longpress'
 import Loading from '@m/components/loading'
 import Colors, { setRootVariable } from './colorVariables'
 import { setRouter } from '@/utils/request'
-import { getLoginParams, getToken, isEmpty, removeLoginParams } from '@/utils/util'
-import FindCustomerInfo, { setStore } from '@m/composables/findCustomerInfo'
+import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC } from '@/utils/util'
 
 // 调试工具
 // import VConsole from 'vconsole'
@@ -17,11 +18,11 @@ import FindCustomerInfo, { setStore } from '@m/composables/findCustomerInfo'
 
 setRouter(router)
 setRootVariable(Colors)
-setStore(store, router)
 
 const app = createApp(App)
 app.use(longpress)
-app.use(VantBase).use(store).use(router).use(Socket, { $store: store })
+app.use(VantBase).use(store).use(router)
+app.use(Socket, { $store: store }).use(FindCustomerInfo, { $store: store, $router: router })
 app.component('Loading', Loading)
 
 // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
@@ -41,9 +42,11 @@ store.dispatch('_base/initBaseConfig').then(() => {
     if (loginParams || token) {
         Promise.resolve().then(() => {
             if (loginParams) return store.dispatch('_user/login', loginParams)
-            else return FindCustomerInfo()
+            else return store.dispatch('_user/findCustomerInfo')
         }).then(res => {
-            if (res.invalid && res.invalid()) {
+            if (typeof (res.check) === 'function' && res.check()) {
+                checkUserKYC({ res, Dialog, router, store })
+            } else if (res.invalid && res.invalid()) {
                 removeLoginParams()
                 return false
             }

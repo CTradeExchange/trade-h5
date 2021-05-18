@@ -33,7 +33,6 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { verifyCodeSend } from '@/api/base'
 import { bindPhone, changePhone, checkCustomerExist } from '@/api/user'
-import FindCustomerInfo from '@m/composables/findCustomerInfo'
 export default {
     components: {
         Top,
@@ -131,7 +130,7 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         Toast('绑定手机成功')
-                        FindCustomerInfo()
+                        store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
                             router.push('/setting')
                         }, 1500)
@@ -144,7 +143,7 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         Toast('更换手机成功')
-                        FindCustomerInfo()
+                        store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
                             router.replace('/setting')
                         }, 1500)
