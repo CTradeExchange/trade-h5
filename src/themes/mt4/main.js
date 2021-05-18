@@ -9,6 +9,7 @@ import Loading from '@m/components/loading'
 import Colors, { setRootVariable } from './colorVariables'
 import { setRouter } from '@/utils/request'
 import { getLoginParams, getToken, isEmpty, removeLoginParams } from '@/utils/util'
+import FindCustomerInfo from '@m/compositionApi/findCustomerInfo'
 
 // 调试工具
 // import VConsole from 'vconsole'
@@ -20,7 +21,6 @@ setRootVariable(Colors)
 const app = createApp(App)
 app.use(longpress)
 app.use(VantBase).use(store).use(router).use(Socket, { $store: store })
-
 app.component('Loading', Loading)
 
 // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
@@ -40,9 +40,9 @@ store.dispatch('_base/initBaseConfig').then(() => {
     if (loginParams || token) {
         Promise.resolve().then(() => {
             if (loginParams) return store.dispatch('_user/login', loginParams)
-            else return store.dispatch('_user/findCustomerInfo')
+            else return FindCustomerInfo()
         }).then(res => {
-            if (res.invalid()) {
+            if (res.invalid && res.invalid()) {
                 removeLoginParams()
                 return false
             }

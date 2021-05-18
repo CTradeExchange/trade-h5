@@ -83,6 +83,7 @@ import { useStore } from 'vuex'
 import { getArrayObj, priceFormat, isEmpty } from '@/utils/util'
 import { useRouter, useRoute } from 'vue-router'
 import { divide } from '@/utils/calculation'
+import FindCustomerInfo from '@m/compositionApi/findCustomerInfo'
 export default {
     components: {
         Top
@@ -155,7 +156,7 @@ export default {
         })
 
         onBeforeMount(() => {
-            store.dispatch('_user/findCustomerInfo')
+            FindCustomerInfo()
         })
 
         onMounted(() => {
