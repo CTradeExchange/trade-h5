@@ -130,6 +130,15 @@ i {
         top: 100%;
     }
 }
+
+@keyframes AnimFadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
 .z-index-9999 {
     position: relative;
     z-index: 99999;
