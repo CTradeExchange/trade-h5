@@ -74,10 +74,10 @@
         @updatePending='handleUpdatePending'
     />
 
-    <van-popup v-model:show='pendingVisible' :close-on-click-overlay='false' :style="{ width: '100%', height: '100%',zIndex: 2000 }">
+    <van-popup v-model:show='pendingVisible' :close-on-click-overlay='false' :overlay='false' :style="{ width: '100%', height: '100%',zIndex: 100 }">
         <Pending :data='orderParams' :product='product' @onHide='pendingVisible = false' />
     </van-popup>
-    <van-popup v-model:show='successVisible' :close-on-click-overlay='false' :style="{ width: '100%', height: '100%',zIndex: 2000 }">
+    <van-popup v-model:show='successVisible' :close-on-click-overlay='false' :overlay='false' :style="{ width: '100%', height: '100%',zIndex: 100 }">
         <Success :data='resData' @onHide='onHide' />
     </van-popup>
 

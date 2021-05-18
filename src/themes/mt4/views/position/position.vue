@@ -56,7 +56,6 @@ export default {
 
         const accountInfo = computed(() => store.state._user.userAccount)
         const capitalListData = computed(() => {
-            debugger
             return [
                 { title: '结余：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.balance, customerInfo.value.digits) : '--' },
                 { title: '净值：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.netWorth, customerInfo.value.digits) : '--' },

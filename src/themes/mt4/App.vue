@@ -13,7 +13,8 @@
         close-on-popstate
         :overlay='false'
         position='top'
-        :style='{ zIndex: 2009,overflow: "hidden" }'
+        :style='{ zIndex: 9999,overflow: "hidden" }'
+        teleport='#app'
     >
         <div class='notice' @click="show=false;$router.push('/msg')">
             <div class='top'>

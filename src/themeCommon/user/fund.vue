@@ -30,8 +30,8 @@
                     <p class='label'>
                         盈亏
                     </p>
-                    <p class='val profit' :class="computePrice(accountInfo.profitLoss, accountInfo.digit) > 0 ? 'riseColor' : 'fallColor'">
-                        {{ accountInfo.digit ? computePrice(accountInfo.profitLoss, accountInfo.digit) : '--' }}
+                    <p class='val profit' :class="computePrice(accountInfo.profitLoss) > 0 ? 'riseColor' : 'fallColor'">
+                        {{ computePrice(accountInfo.profitLoss) }}
                     </p>
                 </div>
                 <div class='item'>
@@ -39,7 +39,7 @@
                         余额
                     </p>
                     <p class='val balance'>
-                        {{ accountInfo.digit ? computePrice(accountInfo.balance, accountInfo.digit) : '--' }}
+                        {{ computePrice(accountInfo.balance) }}
                     </p>
                 </div>
                 <div class='item'>
@@ -47,7 +47,7 @@
                         可取
                     </p>
                     <p class='val'>
-                        {{ mainAccount.digits ? computePrice(mainAccount.withdrawAmount,mainAccount.digits) : '--' }}
+                        {{ computePrice(mainAccount.withdrawAmount) }}
                     </p>
                 </div>
                 <div class='item'>
@@ -55,7 +55,7 @@
                         可用保证金
                     </p>
                     <p class='val'>
-                        {{ accountInfo.digits ? computePrice(accountInfo.availableMargin, accountInfo.digit) : '--' }}
+                        {{ computePrice(accountInfo.availableMargin) }}
                     </p>
                 </div>
                 {{}}
@@ -64,7 +64,7 @@
                         占用保证金
                     </p>
                     <p class='val'>
-                        {{ accountInfo.digits ? computePrice(accountInfo.occupyMargin, accountInfo.digit) : '--' }}
+                        {{ computePrice(accountInfo.occupyMargin) }}
                     </p>
                 </div>
             </div>
@@ -91,15 +91,18 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         const perfent = computed(() => {
-            return state.accountInfo.marginRadio >= 100 ? 100 : state.accountInfo.marginRadio
+            return accountInfo.value.marginRadio >= 100 ? 100 : accountInfo.value.marginRadio
         })
+
+        const accountInfo = computed(() => store.state._user.userAccount)
+        const mainAccount = getArrayObj(customInfo.value.accountList, 'accountId', customInfo.value.accountId)
 
         // 计算保证金水平区间
         const computMargin = computed(() => {
             // 强平水平	预警水平
-            if (!isEmpty(customInfo.value) && !isEmpty(state.accountInfo)) {
+            if (!isEmpty(customInfo.value) && !isEmpty(accountInfo.value)) {
                 const [forceLevel, earlyWarningLevel] = [parseFloat(customInfo.value.forceLevel), parseFloat(customInfo.value.earlyWarningLevel)]
-                const marginRadio = divide(state.accountInfo.marginRadio, 100)
+                const marginRadio = divide(accountInfo.value.marginRadio, 100)
 
                 if (marginRadio > earlyWarningLevel) {
                     return 'success'
@@ -111,28 +114,26 @@ export default {
             }
         })
 
-        const state = reactive({
-            mainAccount: {},
-            accountInfo: {}
-        })
-
         const toDesposit = () => {
             router.push('/desposit')
         }
 
-        const computePrice = (price, digit) => {
-            return priceFormat(price, digit)
+        const computePrice = (price) => {
+            if (price === '') {
+                return '--'
+            }
+            return price > 0 ? priceFormat(price, customInfo.value.digits) : 0
         }
 
         const netWorth = computed(() => {
-            if (!isEmpty(state.accountInfo) && !isEmpty(state.accountInfo.digit)) {
-                return priceFormat(state.accountInfo.netWorth, state.accountInfo.digit)
+            if (!isEmpty(accountInfo.value) && !isEmpty(customInfo.value.digits)) {
+                return priceFormat(accountInfo.value.netWorth, customInfo.value.digits)
             }
         })
 
         onUpdated(() => {
-            if (state.accountInfo) {
-                const earnest = computePrice(state.accountInfo.occupyMargin, state.accountInfo.digit)
+            if (accountInfo.value) {
+                const earnest = computePrice(accountInfo.value.occupyMargin, customInfo.value.digit)
 
                 const netWorthPercent = divide(netWorth.value, parseFloat(netWorth.value + earnest))
                 const earnestPercent = divide(earnest, parseFloat(netWorth.value + earnest))
@@ -157,8 +158,7 @@ export default {
         })
 
         onMounted(() => {
-            state.accountInfo = computed(() => store.state._user.userAccount)
-            state.mainAccount = getArrayObj(customInfo.value.accountList, 'accountId', customInfo.value.accountId)
+
         })
 
         return {
@@ -167,7 +167,8 @@ export default {
             computePrice,
             netWorth,
             computMargin,
-            ...toRefs(state)
+            accountInfo,
+            mainAccount
         }
     }
 }
