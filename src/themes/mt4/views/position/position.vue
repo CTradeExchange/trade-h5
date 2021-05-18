@@ -56,13 +56,15 @@ export default {
 
         const accountInfo = computed(() => store.state._user.userAccount)
         const capitalListData = computed(() => {
-            return [
-                { title: '结余：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.balance, customerInfo.value.digits) : '--' },
-                { title: '净值：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.netWorth, customerInfo.value.digits) : '--' },
-                { title: '可用预付款：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.availableMargin, customerInfo.value.digits) : '--' },
-                { title: '预付款比率(%)：', value: !isEmpty(accountInfo.value.marginRadio) ? accountInfo.value.marginRadio + '%' : '--' },
-                { title: '预付款：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.occupyMargin, customerInfo.value.digits) : '--' },
-            ]
+            if (!isEmpty(accountInfo.value)) {
+                return [
+                    { title: '结余：', value: priceFormat(accountInfo.value.balance, customerInfo.value.digits) || '--' },
+                    { title: '净值：', value: priceFormat(accountInfo.value.netWorth, customerInfo.value.digits) || '--' },
+                    { title: '可用预付款：', value: priceFormat(accountInfo.value.availableMargin, customerInfo.value.digits) || '--' },
+                    { title: '预付款比率(%)：', value: accountInfo.value.marginRadio + '%' || '--' },
+                    { title: '预付款：', value: priceFormat(accountInfo.value.occupyMargin, customerInfo.value.digits) || '--' },
+                ]
+            }
         })
 
         // 取变动价格列表
