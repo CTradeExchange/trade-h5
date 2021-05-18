@@ -141,17 +141,19 @@ class SocketEvent {
             }
         })
         this.floatProfitLoss({
-            availableMargin: Number(accountData[2]),
-            balance: Number(accountData[5]),
-            marginRadio: accountData[3],
-            netWorth: Number(accountData[4]),
-            occupyMargin: Number(accountData[1]),
-            profitLoss: Number(accountData[0]),
-            positionProfitLossMessages: positionsProfitLoss,
+            content: {
+                availableMargin: Number(accountData[2]),
+                balance: Number(accountData[5]),
+                marginRadio: accountData[3],
+                netWorth: Number(accountData[4]),
+                occupyMargin: Number(accountData[1]),
+                profitLoss: Number(accountData[0]),
+                positionProfitLossMessages: positionsProfitLoss,
+            }
         })
     }
 
-    floatProfitLoss (content) {
+    floatProfitLoss ({ content }) {
         this.$store.commit('_user/Update_userAccount', content)
         if (content.positionProfitLossMessages.length > 0) {
             this.$store.commit('_trade/Update_positionProfitLossList', content.positionProfitLossMessages)
