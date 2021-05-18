@@ -259,7 +259,7 @@ export default {
         .infos {
             justify-content: space-between;
             margin-top: rem(20px);
-            padding: 0 rem(70px);
+            padding: 0 rem(30px);
             overflow: hidden;
             .item {
                 float: left;
