@@ -28,12 +28,8 @@ export const checkCustomerExistRule = {
         {
             message: '请输入正确的手机号',
             validator: (rule, value, callback, source, options) => {
-                if (source.phoneArea === '+86') {
-                    return source.type === 2 ? mobileReg.test(value) : true
-                } else {
-                    return source.type === 2 ? value.length <= 15 : true
-                }
-            },
+                return source.type === 2 ? source.mobileReg.test(value) : true
+            }
         },
         {
             asyncValidator: (rule, value, callback, source, options) => {

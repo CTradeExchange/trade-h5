@@ -24,7 +24,7 @@
 
 <script>
 import Top from '@m/layout/top'
-import CheckCode from '@m/components/form/checkCode'
+import CheckCode from '@/components/form/checkCode'
 import uInput from '@/components/input.vue'
 import { Toast, Dialog } from 'vant'
 import { reactive, toRefs } from 'vue'

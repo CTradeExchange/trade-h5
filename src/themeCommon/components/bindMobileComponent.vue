@@ -24,10 +24,10 @@
 
 <script>
 import Top from '@m/layout/top'
-import MobileInput from '@m/components/form/mobileInput'
-import CheckCode from '@m/components/form/checkCode'
-import { toRefs, reactive } from 'vue'
-import { isEmpty, mobileReg, emailReg } from '@/utils/util'
+import MobileInput from '@/components/form/mobileInput'
+import CheckCode from '@/components/form/checkCode'
+import { toRefs, reactive, computed } from 'vue'
+import { isEmpty, getArrayObj } from '@/utils/util'
 import { Toast, Dialog } from 'vant'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -58,13 +58,17 @@ export default {
         })
         store.dispatch('getListByParentCode')
 
+        const zoneList = computed(() => store.state.zoneList)
+        // 手机正则表达式
+        const mobileReg = computed(() => getArrayObj(zoneList.value, 'code', state.zone).extend || '')
+
         // 发送验证码
         const handleVerifyCodeSend = (callback) => {
             if (isEmpty(state.mobile)) {
                 return Toast('请输入手机号')
             }
 
-            if (state.zone === '+86' && !mobileReg.test(state.mobile)) {
+            if (!RegExp(mobileReg.value).test(state.mobile)) {
                 return Toast('请输入正确的手机号')
             }
             const params = {
@@ -75,7 +79,7 @@ export default {
             const existParams = {
                 type: 2,
                 loginName: state.mobile,
-                phoneArea: state.phoneArea
+                phoneArea: state.zone
             }
             checkCustomerExist(existParams).then(res => {
                 if (res.check()) {
@@ -112,7 +116,7 @@ export default {
             if (isEmpty(state.mobile)) {
                 return Toast('请输入手机号')
             }
-            if (state.zone === '+86' && !mobileReg.test(state.mobile)) {
+            if (!RegExp(mobileReg.value).test(state.mobile)) {
                 return Toast('请输入正确的手机号')
             }
             if (isEmpty(state.checkCode)) {

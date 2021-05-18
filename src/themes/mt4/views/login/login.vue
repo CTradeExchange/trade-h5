@@ -126,44 +126,22 @@
 <script>
 import Schema from 'async-validator'
 import LanguageDiv from '@m/modules/languageDiv'
-import MobileInput from '@m/components/form/mobileInput'
-import InputComp from '@m/components/form/input'
+import MobileInput from '@/components/form/mobileInput'
+import InputComp from '@/components/form/input'
 import Vline from '@/components/vline'
-import CheckCode from '@m/components/form/checkCode'
+import CheckCode from '@/components/form/checkCode'
 import LoginByGoogle from '@m/components/loginByGoogle/loginByGoogle'
 import LoginByFacebook from '@m/components/loginByFacebook/loginByFacebook'
 import Top from '@/components/top'
-import {
-    getDevice,
-    localGet,
-    localSet
-} from '@/utils/util'
-import {
-    verifyCodeSend
-} from '@/api/base'
-import {
-    computed,
-    reactive,
-    toRefs,
-    getCurrentInstance
-} from 'vue'
-import {
-    useRoute,
-    useRouter
-} from 'vue-router'
-import {
-    useStore
-} from 'vuex'
-import {
-    Toast,
-    Dialog
-} from 'vant'
+import { getDevice, localGet, localSet, getArrayObj } from '@/utils/util'
+import { verifyCodeSend } from '@/api/base'
+import { computed, reactive, toRefs, getCurrentInstance } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { Toast, Dialog } from 'vant'
 import Rule from './rule'
 import md5 from 'js-md5'
-import {
-    timeline,
-    timelineItem
-} from '@m/components/timeline'
+import { timeline, timelineItem } from '@m/components/timeline'
 
 export default {
     components: {
@@ -202,6 +180,10 @@ export default {
                 title: state.loginType === 'password' ? '验证码登录' : '账号密码登录'
             }
         })
+        const zoneList = computed(() => store.state.zoneList)
+        // 手机正则表达式
+        const mobileReg = computed(() => getArrayObj(zoneList.value, 'code', state.zone).extend || '')
+
         const changeLoginType = () => {
             const loginType = state.loginType
             state.loginType = loginType === 'password' ? 'checkCode' : 'password'
@@ -215,21 +197,28 @@ export default {
                 verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
                 loginPwd: state.loginType === 'password' ? md5(state.pwd) : undefined,
                 sendToken: state.loginType === 'checkCode' ? token : undefined,
+
             }
+
             const validator = new Schema(Rule)
             state.loading = true
-            validator.validate(loginParams, {
-                ...state,
-                first: true
-            }, (errors, fields) => {
-                // console.log(errors, fields)
-                if (errors) {
-                    state.loading = false
-                    Toast(errors[0].message)
-                    return
-                }
-                loginSubmit(loginParams)
-            })
+
+            validator.validate(
+                {
+                    ...loginParams,
+                    mobileReg: new RegExp(mobileReg.value)
+                }, {
+                    ...state,
+                    first: true
+                }, (errors, fields) => {
+                    // console.log(errors, fields)
+                    if (errors) {
+                        state.loading = false
+                        Toast(errors[0].message)
+                        return
+                    }
+                    loginSubmit(loginParams)
+                })
         }
 
         // 登录成功跳转
@@ -309,7 +298,10 @@ export default {
                 phoneArea: state.loginAccount === 'mobile' ? String(state.zone) : undefined,
             }
             const validator = new Schema(Rule)
-            validator.validate(verifyParams).then(res => {
+            validator.validate({
+                ...verifyParams,
+                mobileReg: new RegExp(mobileReg.value)
+            }).then(res => {
                 const params = {
                     bizType: state.loginAccount === 'mobile' ? 'SMS_LOGIN_VERIFICATION_CODE' : 'EMAIL_LOGIN_VERIFICATION_CODE',
                     toUser: state.loginAccount === 'mobile' ? String(state.zone) + ' ' + state.mobile : state.email,

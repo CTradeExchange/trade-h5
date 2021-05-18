@@ -13,12 +13,8 @@ export default {
         {
             message: '请输入正确的手机号',
             validator: (rule, value, callback, source, options) => {
-                if (source.zone === '+86') {
-                    return source.type === 0 ? mobileReg.test(value) : true
-                } else {
-                    return true
-                }
-            },
+                return source.type === 0 ? source.mobileReg.test(value) : true
+            }
         },
 
     ],

@@ -58,8 +58,8 @@ import Top from '@/components/top'
 import {
     reactive, toRefs, computed
 } from 'vue'
-import MobileInput from '@m/components/form/mobileInput'
-import checkCode from '@m/components/form/checkCode'
+import MobileInput from '@/components/form/mobileInput'
+import checkCode from '@/components/form/checkCode'
 import { Toast } from 'vant'
 import { useRouter } from 'vue-router'
 import uInput from '@/components/input.vue'
@@ -68,7 +68,7 @@ import Rule from './rule'
 import { useStore } from 'vuex'
 import { verifyCodeSend, verifyCodeCheck } from '@/api/base'
 import { checkCustomerExist } from '@/api/user'
-import { isEmpty } from '@/utils/util'
+import { isEmpty, getArrayObj } from '@/utils/util'
 export default {
     components: {
         Top,
@@ -95,6 +95,10 @@ export default {
             active: 0
         })
 
+        const zoneList = computed(() => store.state.zoneList)
+        // 手机正则表达式
+        const mobileReg = computed(() => getArrayObj(zoneList.value, 'code', state.zone).extend || '')
+
         const handleTabChange = (name, title) => {
             state.curTab = name
         }
@@ -111,7 +115,8 @@ export default {
                 type: state.curTab,
                 mobile: state.mobile,
                 email: state.email,
-                zone: state.zone
+                zone: state.zone,
+                mobileReg: new RegExp(mobileReg.value)
             }, (errors, fields) => {
                 console.log('errors:', errors, fields)
                 if (errors) {
@@ -156,7 +161,8 @@ export default {
                 checkCode: state.checkCode,
                 emailCode: state.emailCode,
                 type: state.curTab,
-                needCheckCode: true
+                needCheckCode: true,
+                mobileReg: new RegExp(mobileReg.value)
             }
             const validator = new Schema(Rule)
             validator.validate(params, (errors, fields) => {

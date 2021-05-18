@@ -59,12 +59,12 @@ import Schema from 'async-validator'
 import Top from '@/components/top'
 import VueSelect from '@m/components/select'
 import Loading from '@m/components/loading'
-import CheckCode from '@m/components/form/checkCode'
-import InputComp from '@m/components/form/input'
-import MobileInput from '@m/components/form/mobileInput'
+import CheckCode from '@/components/form/checkCode'
+import InputComp from '@/components/form/input'
+import MobileInput from '@/components/form/mobileInput'
 import CurrencyAction from './components/currencyAction'
 import TradeTypeAction from './components/tradeTypeAction'
-import { getDevice, getQueryVariable, setToken } from '@/utils/util'
+import { getDevice, getQueryVariable, setToken, getArrayObj } from '@/utils/util'
 import { register, openAccount, checkKycApply } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
 import { useStore } from 'vuex'
@@ -108,6 +108,10 @@ export default {
         let token = ''
         store.dispatch('getListByParentCode')
         const style = computed(() => store.state.style)
+        const zoneList = computed(() => store.state.zoneList)
+        // 手机正则表达式
+        const mobileReg = computed(() => getArrayObj(zoneList.value, 'code', state.zone).extend || '')
+
         // 手机号输入框离开焦点
         const onMobileBlur = () => {
             const validator = new Schema(checkCustomerExistRule)
@@ -183,12 +187,14 @@ export default {
                 protocol: state.protocol
             }
             const validator = new Schema(Rule)
-            validator.validate(params, { first: true }, (errors, fields) => {
-                if (errors) {
-                    return Toast(errors[0].message)
-                }
-                registerSubmit(params)
-            })
+            validator.validate(
+                { ...params, mobileReg: new RegExp(mobileReg.value) },
+                { first: true }, (errors, fields) => {
+                    if (errors) {
+                        return Toast(errors[0].message)
+                    }
+                    registerSubmit(params)
+                })
         }
         // 发送验证码
         const verifyCodeSendHandler = (callback) => {
@@ -196,7 +202,9 @@ export default {
                 type: state.openType === 'mobile' ? 2 : 1,
                 loginName: state.openType === 'mobile' ? state.mobile : state.email,
                 phoneArea: state.openType === 'mobile' ? String(state.zone) : undefined,
-                protocol: state.protocol
+                protocol: state.protocol,
+                mobileReg: new RegExp(mobileReg.value)
+
             }
             const validator = new Schema(checkCustomerExistRule)
             state.verifyCodeLoading = true
