@@ -3,9 +3,9 @@
         <a v-if='menu' class='icon_caidan1' href='javascript:;' @click='$refs.leftMenu.visible=true'>
         </a>
         <a v-if='back' class='icon_fanhui' href='javascript:;' @click='backEvent'></a>
-
-        <div class='title'>
-            <slot name='center'>
+        <span v-if='iconLogo' class='iconLogo'></span>
+        <slot name='center'>
+            <div class='title'>
                 <template v-if='titleText && titleVis'>
                     <h2 v-if='titleText'>
                         {{ titleText }}
@@ -14,10 +14,9 @@
                         {{ subTitle }}
                     </p>
                 </template>
-            </slot>
-        </div>
+            </div>
+        </slot>
 
-        <slot name='left'></slot>
         <slot name='right'></slot>
         <!-- <topRight /> -->
     </div>
@@ -56,6 +55,10 @@ export default {
             type: String,
             default: ''
         },
+        iconLogo: {
+            type: Boolean,
+            default: true
+        },
     },
     setup (props, { emit, attrs }) {
         const router = useRouter()
@@ -87,23 +90,19 @@ export default {
         color: var(--white);
         font-size: 1.2em;
     }
+    .iconLogo {
+        display: inline-block;
+        width: rem(50px);
+        height: rem(50px);
+        margin-left: rem(20px);
+        background: url('~@m/images/logo.png') no-repeat;
+        background-size: auto 100%;
+    }
     .title {
         position: relative;
         flex: 1;
         margin-left: rem(20px);
-        padding-left: rem(60px);
         line-height: 1.4;
-        &::before {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: rem(50px);
-            height: rem(50px);
-            margin-top: rem(-25px);
-            background: url('~@m/images/logo.png') no-repeat;
-            background-size: auto 100%;
-            content: '';
-        }
         h2 {
             font-size: rem(32px);
         }

@@ -1,5 +1,5 @@
 <template>
-    <Top :back='true' :menu='false' title='' @backEvent='back' />
+    <LayoutTop :back='true' :menu='false' title='' @backEvent='back' />
     <div class='page-wrap'>
         <Loading :show='loading' />
         <div v-if='list.length === 0'>
@@ -42,33 +42,14 @@
 </template>
 
 <script>
-import Top from '@m/layout/top'
-import {
-    useRouter,
-    useRoute,
-    onBeforeRouteLeave
-} from 'vue-router'
-import {
-    findAllBizKycList
-} from '@/api/user'
+
+import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
+import { findAllBizKycList } from '@/api/user'
 import { useStore } from 'vuex'
-import {
-    toRefs,
-    reactive,
-    ref,
-    computed,
-    getCurrentInstance,
-    onBeforeMount
-} from 'vue'
-import {
-    getArrayObj
-} from '@/utils/util'
+import { toRefs, reactive, computed, onBeforeMount } from 'vue'
+import { getArrayObj } from '@/utils/util'
 export default {
-    components: {
-        Top
-    },
     setup (props, { emit, attrs }) {
-        const instance = getCurrentInstance()
         const store = useStore()
         const router = useRouter()
         const route = useRoute()

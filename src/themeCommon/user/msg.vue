@@ -1,6 +1,6 @@
 <template>
-    <Top :back='true' :menu='false' :right-action='rightAction' title='' :title-vis='false'>
-        <template #left>
+    <LayoutTop :back='true' :menu='false' title='' :title-vis='false'>
+        <template #center>
             <div>
                 <van-dropdown-menu active-color='#007AFF'>
                     <van-dropdown-item v-model='type' :options='options' @change='changeType' />
@@ -12,7 +12,7 @@
                 <i class='icon icon_quanbuyidu'></i>
             </div>
         </template>
-    </Top>
+    </LayoutTop>
     <div class='msg-list'>
         <div v-if='list.length === 0'>
             <van-empty description='暂无数据' image='search' />
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import Top from '@m/layout/top'
+
 import { onBeforeMount, computed, reactive, toRefs } from 'vue'
 import { queryPlatFormMessageLogList } from '@/api/user'
 import { useStore } from 'vuex'
@@ -50,9 +50,6 @@ import dayjs from 'dayjs'
 import { Toast } from 'vant'
 import { isEmpty } from '@/utils/util'
 export default {
-    components: {
-        Top
-    },
     setup (props) {
         const store = useStore()
         const state = reactive({

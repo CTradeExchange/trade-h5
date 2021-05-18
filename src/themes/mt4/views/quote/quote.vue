@@ -1,10 +1,8 @@
 <template>
     <Top>
         <template #right>
-            <van-icon class='icon-add' name='plus' @click="$router.push({ name: 'Search' })" />
-        </template>
-        <template #left>
-            <van-icon class='icon-add' name='edit' @click="$router.push({ name: 'Optional' })" />
+            <van-icon class='icon-edit' name='edit' @click="$router.push({ name: 'Optional' })" />
+            <van-icon class='icon-plus' name='plus' @click="$router.push({ name: 'Search' })" />
         </template>
     </Top>
     <productListComp />
@@ -45,7 +43,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.icon-add {
+.icon-edit,
+.icon-plus {
     font-size: rem(40px);
+}
+.icon-plus {
+    margin-left: rem(20px);
 }
 </style>

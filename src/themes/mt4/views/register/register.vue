@@ -72,7 +72,6 @@ import { reactive, toRefs, ref, computed, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
 import { Toast, Dialog } from 'vant'
 import Rule, { checkCustomerExistRule } from './rule'
-import FindCustomerInfo from '@m/composables/findCustomerInfo'
 
 export default {
     components: {
@@ -141,7 +140,7 @@ export default {
                     sessionStorage.setItem('RegisterData', JSON.stringify(res))
 
                     // 注册成功重新获取客户信息
-                    FindCustomerInfo()
+                    store.dispatch('_user/findCustomerInfo')
                     // 重新登录清除账户信息
                     store.commit('_user/Update_userAccount', '')
                     // 重新开启ws

@@ -1,5 +1,5 @@
 <template>
-    <Top :back='true' :menu='false' title='' @backEvent='back' />
+    <LayoutTop :back='true' :menu='false' title='' @backEvent='back' />
     <div class='page-wrap'>
         <van-cell-group>
             <van-cell is-link title='身份验证' to='/authentication' />
@@ -9,13 +9,8 @@
 </template>
 
 <script>
-import { useRouter, useRoute } from 'vue-router'
-import Top from '@m/layout/top'
-import { toRefs, reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 export default {
-    components: {
-        Top
-    },
     setup (props) {
         const router = useRouter()
         const back = () => {
