@@ -9,7 +9,7 @@ import Loading from '@m/components/loading'
 import Colors, { setRootVariable } from './colorVariables'
 import { setRouter } from '@/utils/request'
 import { getLoginParams, getToken, isEmpty, removeLoginParams } from '@/utils/util'
-import FindCustomerInfo from '@m/compositionApi/findCustomerInfo'
+import FindCustomerInfo, { setStore } from '@m/composables/findCustomerInfo'
 
 // 调试工具
 // import VConsole from 'vconsole'
@@ -17,6 +17,7 @@ import FindCustomerInfo from '@m/compositionApi/findCustomerInfo'
 
 setRouter(router)
 setRootVariable(Colors)
+setStore(store, router)
 
 const app = createApp(App)
 app.use(longpress)

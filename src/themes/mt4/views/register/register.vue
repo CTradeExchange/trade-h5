@@ -72,7 +72,7 @@ import { reactive, toRefs, ref, computed, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
 import { Toast, Dialog } from 'vant'
 import Rule, { checkCustomerExistRule } from './rule'
-import FindCustomerInfo from '@m/compositionApi/findCustomerInfo'
+import FindCustomerInfo from '@m/composables/findCustomerInfo'
 
 export default {
     components: {

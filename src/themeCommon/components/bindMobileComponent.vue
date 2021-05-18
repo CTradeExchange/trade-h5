@@ -33,7 +33,7 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { verifyCodeSend } from '@/api/base'
 import { bindPhone, changePhone, checkCustomerExist } from '@/api/user'
-import FindCustomerInfo from '@m/compositionApi/findCustomerInfo'
+import FindCustomerInfo from '@m/composables/findCustomerInfo'
 export default {
     components: {
         Top,
