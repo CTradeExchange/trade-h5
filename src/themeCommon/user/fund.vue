@@ -1,5 +1,5 @@
 <template>
-    <Top :back='true' :menu='false' title='' />
+    <LayoutTop :back='true' :menu='false' title='' />
     <div class='page-wrap'>
         <div class='header'>
             <div class='header-info'>
@@ -76,18 +76,14 @@
 </template>
 
 <script>
-import Top from '@m/layout/top'
-import { toRefs, reactive, ref, onMounted, computed, onUpdated, onBeforeMount, getCurrentInstance } from 'vue'
+import { toRefs, reactive, onMounted, computed, onUpdated, onBeforeMount, getCurrentInstance } from 'vue'
 import { createTorus } from '@/plugins/createTorus'
 import { useStore } from 'vuex'
 import { getArrayObj, priceFormat, isEmpty } from '@/utils/util'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { divide } from '@/utils/calculation'
 
 export default {
-    components: {
-        Top
-    },
     setup (props) {
         const router = useRouter()
         const store = useStore()

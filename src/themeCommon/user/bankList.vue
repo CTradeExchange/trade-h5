@@ -1,5 +1,5 @@
 <template>
-    <Top :back='true' :menu='false' title='' />
+    <LayoutTop :back='true' :menu='false' title='' />
     <div class='page-wrap'>
         <Loading :show='loading' />
         <div class='list'>
@@ -34,16 +34,11 @@
 </template>
 
 <script>
-import Top from '@m/layout/top'
-import { toRefs, reactive, ref, onBeforeMount } from 'vue'
+import { toRefs, reactive, onBeforeMount } from 'vue'
 import { queryBankList } from '@/api/user'
-import { isEmpty } from '@/utils/util'
-import { useRoute, useRouter } from 'vue-router'
-import { Toast, Dialog } from 'vant'
+import { useRouter } from 'vue-router'
+
 export default {
-    components: {
-        Top
-    },
     setup (props) {
         const router = useRouter()
         const state = reactive({

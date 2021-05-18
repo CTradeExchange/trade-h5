@@ -1,6 +1,6 @@
 <template>
     <div class='pageWrap'>
-        <Top :back='true' :menu='false' />
+        <LayoutTop :back='true' :menu='false' />
         <Loading :show='loading' />
         <form class='form'>
             <div class='field'>
@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import Top from '@m/layout/top'
 import CheckCode from '@m/components/form/checkCode'
 import uInput from '@/components/input.vue'
 import { Toast, Dialog } from 'vant'
@@ -35,7 +34,6 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 export default {
     components: {
-        Top,
         uInput,
         CheckCode
     },

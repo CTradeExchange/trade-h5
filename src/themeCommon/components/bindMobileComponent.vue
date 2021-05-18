@@ -1,6 +1,6 @@
 <template>
     <div class='pageWrap'>
-        <Top :back='true' :menu='false' />
+        <LayoutTop :back='true' :menu='false' />
         <Loading :show='loading' />
         <form class='form'>
             <div class='field'>
@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import Top from '@m/layout/top'
 import MobileInput from '@m/components/form/mobileInput'
 import CheckCode from '@m/components/form/checkCode'
 import { toRefs, reactive } from 'vue'
@@ -35,7 +34,6 @@ import { verifyCodeSend } from '@/api/base'
 import { bindPhone, changePhone, checkCustomerExist } from '@/api/user'
 export default {
     components: {
-        Top,
         MobileInput,
         CheckCode
     },

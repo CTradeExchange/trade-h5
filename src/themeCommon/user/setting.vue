@@ -1,5 +1,5 @@
 <template>
-    <Top :back='true' :menu='false' title='' />
+    <LayoutTop :back='true' :menu='false' title='' />
     <div class='page-wrap'>
         <van-cell title='启用新闻'>
             <template #right-icon>
@@ -18,16 +18,12 @@
 </template>
 
 <script>
-import Top from '@m/layout/top'
 import { toRefs, reactive, computed, getCurrentInstance, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { isEmpty, removeLoginParams, localSet, localGet } from '@/utils/util'
 import { useStore } from 'vuex'
 export default {
-    components: {
-        Top
-    },
     setup (props) {
         const instance = getCurrentInstance()
         // 获取账户信息

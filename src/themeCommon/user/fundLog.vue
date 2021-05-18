@@ -1,5 +1,5 @@
 <template>
-    <Top :back='true' :menu='false' title='' />
+    <LayoutTop :back='true' :menu='false' title='' />
     <Loading :show='loadingPage' />
     <div class='page-wrap'>
         <div class='oper-area'>
@@ -118,16 +118,11 @@
 </template>
 
 <script>
-import Top from '@m/layout/top'
 import { toRefs, reactive, ref, computed, onBeforeMount } from 'vue'
 import { queryCapitalFlowList } from '@/api/user'
 import dayjs from 'dayjs'
-import { Toast } from 'vant'
 import { isEmpty, priceFormat } from '@/utils/util'
 export default {
-    components: {
-        Top
-    },
     setup (props) {
         const proDownItem = ref(null)
         const dateDownItem = ref(null)

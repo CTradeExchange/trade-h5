@@ -8,6 +8,7 @@ import Socket, { MsgSocket } from '@/plugins/socket/socket'
 import FindCustomerInfo from '@m/plugins/findCustomerInfo'
 import longpress from '@/directives/longpress'
 import Loading from '@m/components/loading'
+import LayoutTop from '@m/layout/top'
 import Colors, { setRootVariable } from './colorVariables'
 import { setRouter } from '@/utils/request'
 import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC } from '@/utils/util'
@@ -24,6 +25,7 @@ app.use(longpress)
 app.use(VantBase).use(store).use(router)
 app.use(Socket, { $store: store }).use(FindCustomerInfo, { $store: store, $router: router })
 app.component('Loading', Loading)
+app.component('LayoutTop', LayoutTop)
 
 // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
 const loginParams = getLoginParams()
