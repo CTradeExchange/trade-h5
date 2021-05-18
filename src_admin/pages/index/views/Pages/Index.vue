@@ -1,6 +1,5 @@
 <template>
     <div class='m-pageList'>
-        <ImgComp />
         <el-collapse :value="['1']">
             <el-collapse-item class='search' name='1' title='页面列表'>
                 <el-form ref='form' inline label-position='left' label-width='60px' :model='searchForm'>
@@ -132,13 +131,8 @@ import { deepClone } from '@utils/deepClone'
 import { h5PageList } from './h5PageList'
 import { useRouter } from 'vue-router'
 import { onMounted, reactive, ref, toRefs, getCurrentInstance } from 'vue'
-// import ImgComp from '@m/modules/swipe/swipe'
-const ImgComp = require('@m/modules/swipe/swipe').default
 export default {
     name: 'Pages',
-    components: {
-        ImgComp
-    },
     setup (props) {
         const router = useRouter()
         const addFormModal = ref(null)
