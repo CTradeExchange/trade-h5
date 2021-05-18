@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",
+    "dev_admin": "vue-cli-service serve --mode admin",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
@@ -11,19 +12,29 @@
     "eslint": "eslint 'src/**/*.{js,vue}' --fix"
   },
   "dependencies": {
+    "animejs": "^3.2.1",
     "async-validator": "^3.5.1",
     "axios": "^0.21.1",
+    "codemirror": "^5.61.0",
     "core-js": "^3.6.5",
     "dayjs": "^1.10.4",
+    "element-plus": "^1.0.2-beta.44",
+    "html2canvas": "^1.0.0-rc.7",
     "js-md5": "^0.7.3",
+    "jsonlint": "^1.6.3",
     "lightweight-charts": "^3.3.0",
+    "mousetrap": "^1.6.5",
     "pako": "^2.0.3",
     "reconnectingwebsocket": "^1.0.0",
+    "script-loader": "^0.7.2",
     "vant": "^3.0.2",
     "vconsole": "^3.4.1",
     "vue": "^3.0.11",
+    "vue-particles": "^1.0.9",
     "vue-router": "^4.0.6",
-    "vuex": "^4.0.0-0"
+    "vuedraggable": "^4.0.1",
+    "vuex": "^4.0.0-0",
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
