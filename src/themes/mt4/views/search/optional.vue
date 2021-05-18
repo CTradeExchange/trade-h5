@@ -1,11 +1,19 @@
 <template>
     <div class='optional-top'>
-        <Top :back='false' :menu='false' title=''>
+        <Top :back='true' :menu='false' title=''>
             <template #right>
-                <van-icon v-if='isEidt && checked.length>0' class='icon-add' name='delete-o' @click='removeOptional' />
+                <van-icon class='icon-edit' name='edit' @click='toggleEdit' />
+                <van-icon v-if='isEidt && checked.length>0' class='icon-delete' name='delete-o' @click='removeOptional' />
             </template>
-            <template #left>
-                <van-icon class='icon-add' name='edit' @click='toggleEdit' />
+            <template #center>
+                <div class='van-button-group'>
+                    <van-button class='van-action-bar-button van-action-bar-button--first' :class='quoteMode===1 ? "van-button--primary" : "van-button--default"' plain size='small' @click='switchQuoteMode(1)'>
+                        简单
+                    </van-button>
+                    <van-button class='van-action-bar-button van-action-bar-button--last' :class='quoteMode===2 ? "van-button--primary" : "van-button--default"' plain size='small' @click='switchQuoteMode(2)'>
+                        高级的
+                    </van-button>
+                </div>
             </template>
         </Top>
     </div>
@@ -69,7 +77,14 @@ export default {
 
         const store = useStore()
         store.dispatch('_user/queryCustomerOptionalList')
-
+        const quoteMode = computed(() => store.state.quoteMode)
+        // 切换行情列表模式
+        const switchQuoteMode = (mode) => {
+            if ((mode === 1 && quoteMode.value === 1) || (mode === 2 && quoteMode.value === 2)) {
+                return
+            }
+            store.commit('Update_quoteMode', mode)
+        }
         const selfSymbolList = computed(() => {
             return store.state._user.selfSymbolList
         })
@@ -100,6 +115,8 @@ export default {
             isEidt,
             checked,
             checkboxRefs,
+            switchQuoteMode,
+            quoteMode
             // addOptional
         }
     }
@@ -113,10 +130,24 @@ export default {
         justify-content: space-between;
     }
 }
-.icon-add {
+.icon-edit,
+.icon-delete {
     font-size: rem(40px);
+}
+.icon-delete {
+    margin-left: rem(20px);
 }
 .cats-checkbox {
     margin-right: rem(16px);
+}
+.van-button-group {
+    display: flex;
+    justify-content: center;
+    :deep(.van-action-bar-button) {
+        flex: none;
+        width: rem(148px);
+        height: rem(48px);
+        font-size: rem(24px);
+    }
 }
 </style>
