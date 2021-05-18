@@ -61,7 +61,7 @@ export default {
                     { title: '结余：', value: priceFormat(accountInfo.value.balance, customerInfo.value.digits) || '--' },
                     { title: '净值：', value: priceFormat(accountInfo.value.netWorth, customerInfo.value.digits) || '--' },
                     { title: '可用预付款：', value: priceFormat(accountInfo.value.availableMargin, customerInfo.value.digits) || '--' },
-                    { title: '预付款比率(%)：', value: accountInfo.value.marginRadio + '%' || '--' },
+                    { title: '预付款比率(%)：', value: accountInfo.value.marginRadio ? accountInfo.value.marginRadio + '%' : '--' },
                     { title: '预付款：', value: priceFormat(accountInfo.value.occupyMargin, customerInfo.value.digits) || '--' },
                 ]
             }
