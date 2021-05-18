@@ -1,6 +1,6 @@
 <template>
     <Top :back='true' :menu='false' :right-action='rightAction' title='' :title-vis='false'>
-        <template #left>
+        <template #center>
             <div>
                 <van-dropdown-menu active-color='#007AFF'>
                     <van-dropdown-item v-model='type' :options='options' @change='changeType' />
