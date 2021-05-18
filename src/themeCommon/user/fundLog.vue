@@ -4,7 +4,7 @@
     <div class='page-wrap'>
         <div class='oper-area'>
             <van-dropdown-menu>
-                <van-dropdown-item ref='proDownItem' :title='proTitle'>
+                <van-dropdown-item ref='proDownItem' :title='proTitle || "全部项目"'>
                     <div class='condition'>
                         <p class='title'>
                             项目
@@ -44,7 +44,7 @@
                         </van-button>
                     </div>
                 </van-dropdown-item>
-                <van-dropdown-item ref='dateDownItem' :title='dateTitle'>
+                <van-dropdown-item ref='dateDownItem' :title='dateTitle || "全部日期"'>
                     <div class='condition'>
                         <p class='title'>
                             时间

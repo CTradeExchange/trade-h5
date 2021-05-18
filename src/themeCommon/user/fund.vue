@@ -77,12 +77,13 @@
 
 <script>
 import Top from '@m/layout/top'
-import { toRefs, reactive, ref, onMounted, computed, onUpdated, onBeforeMount } from 'vue'
+import { toRefs, reactive, ref, onMounted, computed, onUpdated, onBeforeMount, getCurrentInstance } from 'vue'
 import { createTorus } from '@/plugins/createTorus'
 import { useStore } from 'vuex'
 import { getArrayObj, priceFormat, isEmpty } from '@/utils/util'
 import { useRouter, useRoute } from 'vue-router'
 import { divide } from '@/utils/calculation'
+
 export default {
     components: {
         Top
@@ -90,6 +91,7 @@ export default {
     setup (props) {
         const router = useRouter()
         const store = useStore()
+        const internalInstance = getCurrentInstance()
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         const perfent = computed(() => {
@@ -147,15 +149,15 @@ export default {
                     label: '净值',
                     text: netWorth.value || '--',
                     data: [
-                        { color: '#3894FF', percent: netWorthPercent, text: '第1项' },
-                        { color: '#51C31C', percent: earnestPercent, text: '第2项' },
+                        { color: '#3894FF', percent: netWorthPercent || 0, text: '第1项' },
+                        { color: '#51C31C', percent: earnestPercent || 0, text: '第2项' },
                     ]
                 })
             }
         })
 
         onBeforeMount(() => {
-            store.dispatch('_user/findCustomerInfo')
+            internalInstance.appContext.config.globalProperties.$findCustomerInfo()
         })
 
         onMounted(() => {
@@ -258,7 +260,7 @@ export default {
         .infos {
             justify-content: space-between;
             margin-top: rem(20px);
-            padding: 0 rem(70px);
+            padding: 0 rem(30px);
             overflow: hidden;
             .item {
                 float: left;

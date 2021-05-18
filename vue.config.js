@@ -1,11 +1,14 @@
 const path = require('path')
 const dayjs = require('dayjs')
 const FileManagerPlugin = require('filemanager-webpack-plugin')
+const plugins = []
+const pages = {}
 function resolve (dir) {
     return path.join(__dirname, dir)
 }
 
-const plugins = []
+const NODE_ENV = process.env.NODE_ENV
+const isAdminMode = process.env.VUE_APP_isAdmin === 'true' // WordPress后台插件的开发模式
 
 if (process.env.NODE_ENV === 'production') {
     plugins.push(
@@ -18,6 +21,28 @@ if (process.env.NODE_ENV === 'production') {
             }
         })
     )
+}
+
+if (isAdminMode) {
+    // WordPress后台插件的开发模式
+    Object.assign(pages, {
+        index: {
+            entry: 'src_admin/pages/index/main.js',
+            template: 'public/admin.html',
+            filename: NODE_ENV === 'development' ? 'index.html' : 'admin.html',
+        },
+        // preview: {
+        //     entry: 'src_admin/pages/preview/main.js',
+        //     template: 'public/preview.html',
+        //     filename: 'preview.html',
+        // }
+    })
+} else {
+    // H5开发模式
+    Object.assign(pages, {
+        index: 'src/themes/mt4/main.js'
+        // index: 'src/themes/ctrader/main.js'
+    })
 }
 
 module.exports = {
@@ -42,11 +67,14 @@ module.exports = {
                 '@api': resolve('src/api'),
                 '@m': resolve('src/themes/mt4'),
                 '@ct': resolve('src/themes/ctrader'),
+                '@admin': resolve('src_admin'),
+                '@utils': resolve('src_admin/utils'),
+                '@index': resolve('src_admin/pages/index'),
             }
         }
     },
     devServer: {
-        port: 8090,
+        port: isAdminMode ? 8080 : 8090,
         open: false,
         overlay: {
             warnings: false,
@@ -68,8 +96,5 @@ module.exports = {
         // 移除 prefetch 插件
         config.plugins.delete('preload-index').delete('prefetch-index')
     },
-    pages: {
-        index: 'src/themes/mt4/main.js'
-        // index: 'src/themes/ctrader/main.js'
-    }
+    pages
 }

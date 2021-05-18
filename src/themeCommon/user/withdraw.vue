@@ -6,6 +6,7 @@
             :menu='false'
             :right-action='rightAction'
             :show-center='true'
+            title='提币|取款'
             @rightClick='$router.push({ path: "/withdrawRecord" })'
         />
         <Loading :show='loading' />
@@ -20,7 +21,7 @@
                 </van-button>
             </div>
             <div class='notice'>
-                <span>最大可取 {{ withdrawAmount || '--' }} {{ accountCurrency }}</span>
+                <span>可提金额 {{ withdrawAmount || '--' }} {{ accountCurrency }}</span>
                 <span>手续费 {{ fee }} {{ accountCurrency }}</span>
             </div>
             <div class='bank-wrap'>

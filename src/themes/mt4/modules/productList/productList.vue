@@ -61,8 +61,8 @@ export default {
         }
         // 点击某个产品
         const openProduct = (item) => {
-            store.commit('_quote/Update_productActivedID', item.symbol_id)
-            symbolId = item.symbol_id
+            symbolId = item.symbolId
+            store.commit('_quote/Update_productActivedID', symbolId)
             state.cur = item
             state.show = true
         }
