@@ -26,6 +26,7 @@ npm run build
 - 引入任何dependencies需要在前端群咨询其他同事意见，尤其是大体积插件；
 - `/src/themes`子级是各主题的私有业务代码，`/src/themes`兄弟目录都是公共资源，公共资源不允许引入私有业务代码；
 - 颜色换肤使用css变量实现，所以页面内所有元素都不能写死颜色值，须使用css颜色变量赋值；(如 color: var(--bdColor))
+- 获取用户信息统一使用 `FindCustomerInfo()`方法，导入文件：`import FindCustomerInfo from '@m/compositionApi/findCustomerInfo'`
 
 
 ## store里面常用数据
