@@ -83,7 +83,7 @@ import { useStore } from 'vuex'
 import { getArrayObj, priceFormat, isEmpty } from '@/utils/util'
 import { useRouter, useRoute } from 'vue-router'
 import { divide } from '@/utils/calculation'
-import FindCustomerInfo from '@m/compositionApi/findCustomerInfo'
+import FindCustomerInfo from '@m/composables/findCustomerInfo'
 export default {
     components: {
         Top

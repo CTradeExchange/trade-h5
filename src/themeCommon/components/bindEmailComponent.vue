@@ -33,7 +33,7 @@ import { verifyCodeSend } from '@/api/base'
 import { bindEmail, changeEmail, checkCustomerExist } from '@/api/user'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import FindCustomerInfo from '@m/compositionApi/findCustomerInfo'
+import FindCustomerInfo from '@m/composables/findCustomerInfo'
 export default {
     components: {
         Top,

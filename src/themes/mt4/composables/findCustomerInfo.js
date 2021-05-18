@@ -1,10 +1,13 @@
-import { useStore } from 'vuex'
 import { Dialog } from 'vant'
-import { useRouter } from 'vue-router'
+let router = null
+let store = null
+
+export function setStore (storeObj, routerObj) {
+    router = routerObj
+    store = storeObj
+}
 
 export default function () {
-    const router = useRouter()
-    const store = useStore()
     return store.dispatch('_user/findCustomerInfo').then(res => {
         if (res.check()) {
             // 登录KYC,0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
