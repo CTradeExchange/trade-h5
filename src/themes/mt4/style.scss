@@ -124,6 +124,12 @@ i {
     font-display: auto;
     src: url('~@/fonts/vant-icon-db1de1.woff2') format('woff2'), url('~@/fonts/vant-icon-db1de1.woff') format('woff'), url('~@/fonts/vant-icon-db1de1.ttf') format('truetype');
 }
+
+@keyframes redPacketsRain {
+    to {
+        top: 100%;
+    }
+}
 .z-index-9999 {
     position: relative;
     z-index: 99999;
