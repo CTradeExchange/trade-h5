@@ -3,8 +3,8 @@ import request from '@/utils/request'
 /* 产品基础信息列表 */
 export function querySymbolBaseInfoList (data) {
     return request({
-        url: '/global/customer.app.CustomerOptionalWebApiService.querySymbolBaseInfoList',
-        // url: '/global/rtc.app.RtcSymbolQueryService.querySymbolBaseInfoList',
+        // url: '/global/customer.app.CustomerOptionalWebApiService.querySymbolBaseInfoList',
+        url: '/global/rtc.app.RtcSymbolQueryService.querySymbolBaseInfoList',
         method: 'post',
         headers: {
             version: '0.0.1',
