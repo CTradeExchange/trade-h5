@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { reactive, toRefs, watch } from 'vue'
+import { reactive, toRefs, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 export default {
     setup () {
@@ -30,7 +30,7 @@ export default {
         const state = reactive({
             active: '/quote'
         })
-        watch(
+        watchEffect(
             route,
             (newval) => {
                 state.active = newval.name
