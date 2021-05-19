@@ -28,15 +28,9 @@ export default {
     setup () {
         const route = useRoute()
         const state = reactive({
-            active: '/quote'
+            active: route.name
         })
-        watchEffect(
-            route,
-            (newval) => {
-                state.active = newval.name
-            },
-            { immediate: true }
-        )
+        watchEffect(() => (state.active = route.name))
         return {
             ...toRefs(state)
         }
