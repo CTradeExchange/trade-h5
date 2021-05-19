@@ -6,7 +6,7 @@
             :menu='false'
             :right-action='rightAction'
             :show-center='true'
-            title='提币|取款'
+            title='取款'
             @rightClick='$router.push({ path: "/withdrawRecord" })'
         />
         <Loading :show='loading' />
