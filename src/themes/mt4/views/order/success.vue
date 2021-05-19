@@ -29,7 +29,7 @@
             </p>
         </div>
         <div class='footerBtn of-1px-top'>
-            <button class='btn' @click='$router.replace("/quote")'>
+            <button class='btn' @click='$router.back()'>
                 完成
             </button>
         </div>
