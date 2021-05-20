@@ -88,12 +88,12 @@ i {
 }
 .pageRouter {
     min-height: 100%;
-    color: $text;
+    color: var(--btnText);
     font-size: rem(26px);
     line-height: 1.4;
 }
 .protocolContent a {
-    color: $primary !important;
+    color: var(--primary) !important;
 }
 .primary {
     color: var(--primary);
@@ -122,7 +122,7 @@ i {
     font-family: 'vant-icon';
     font-style: normal;
     font-display: auto;
-    src: url('~@/fonts/vant-icon-db1de1.woff2') format('woff2'), url('~@/fonts/vant-icon-db1de1.woff') format('woff'), url('~@/fonts/vant-icon-db1de1.ttf') format('truetype');
+    src: url('~@m/font/vant-icon-db1de1.woff2') format('woff2'), url('~@m/font/vant-icon-db1de1.woff') format('woff'), url('~@m/font/vant-icon-db1de1.ttf') format('truetype');
 }
 
 @keyframes redPacketsRain {

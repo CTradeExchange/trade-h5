@@ -39,6 +39,7 @@ export default {
         marketProfitLossRang (state, getters, rootState) {
             const product = getters.product
             if (!product) return EmptyProfitLossRang
+            const curPosition = state.positionMap[state.modifyPositionId] // 当前修改的持仓
             const digits = product.price_digits
             const point = Math.pow(0.1, digits)
             const pip = point * product.pointRatio
@@ -51,8 +52,12 @@ export default {
                 sellStopLossMax, // 卖出止损范围最大值
                 sellStopLossMin // 卖出止损范围最小值
 
-            const buy_price = state.pendingPrice ? Number(state.pendingPrice) : Number(product.buy_price)
-            const sell_price = state.pendingPrice ? Number(state.pendingPrice) : Number(product.sell_price)
+            let buy_price = state.pendingPrice ? Number(state.pendingPrice) : Number(product.buy_price)
+            let sell_price = state.pendingPrice ? Number(state.pendingPrice) : Number(product.sell_price)
+            if (curPosition) {
+                // 如果当前是修改持仓，公式里面的价格则是：买方向取卖价、卖方向取买价
+                buy_price = sell_price = curPosition.direction === 1 ? Number(product.sell_price) : Number(product.buy_price)
+            }
 
             buyProfitMax = (buy_price + pip * product.stopLossMaxPoint).toFixed(digits) // 买入价+pip*限价最大距离
             buyProfitMin = (buy_price + pip * product.stopLossMinPoint).toFixed(digits) // 买入价+pip*限价最小距离

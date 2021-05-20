@@ -2,7 +2,6 @@
  * 可以使用 rem(设计稿里面的原始尺寸大小px)； rem(100px);
  * 也可以用设计稿里面的原始尺寸大小px / 100 (单位直接写rem)； 100px = 1rem; 例如20px = 0.2rem;
 */
-@import './variables.scss';
 
 @function rem($px) {
     @return $px / 75px * 1rem;

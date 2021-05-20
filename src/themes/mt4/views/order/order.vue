@@ -166,19 +166,12 @@ export default {
 
         // 当前产品
         const product = computed(() => store.getters.productActived)
-
         const positionList = computed(() => store.state._trade.positionList) // 持仓列表
         const pendingList = computed(() => store.state._trade.pendingList) // 挂单列表
         const profitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
         const pendingPriceRang = computed(() => store.getters['_trade/pendingPriceRang'])
         const expireTypeItem = computed(() => state.expireTypeOptions.find(el => el.id === state.expireType))
 
-        // 设置默认手数
-        watch(
-            () => product.value.minVolume,
-            newval => (state.volumn = newval),
-            { immediate: true }
-        )
         // 止损价格变更
         watch(
             () => state.stopLoss,
@@ -321,7 +314,6 @@ export default {
         }
 
         QuoteSocket.send_subscribe([symbolId]) // 订阅产品报价
-        store.dispatch('_quote/querySymbolInfo', symbolId) // 获取产品详情
         store.commit('_quote/Update_productActivedID', symbolId)
 
         // 查询某持仓详情
@@ -340,7 +332,7 @@ export default {
                     if (!list) return false
                     const curPosition = list.find(el => el.positionId === Number(positionId))
                     if (!curPosition) return
-                    state.volumn = minus(curPosition.openVolume, curPosition.closeVolume)
+                    state.volumn = minus(curPosition.openVolume, curPosition.closeVolume || 0)
                 })
         }
 
@@ -369,12 +361,6 @@ export default {
                 })
         }
 
-        if (positionId) {
-            initPositionInfo()
-        } else if (pendingId) {
-            initPendingInfo()
-        }
-
         // 选择订单类型
         const selectOpenOrder = item => {
             state.openOrderSelected = item
@@ -385,6 +371,27 @@ export default {
         onBeforeUnmount(() => {
             clearTimeout(state.timeId)
         })
+
+        // 初始化设置
+        const init = () => {
+            // 设置默认手数
+            if (product.value.minVolume) {
+                state.volumn = product.value.minVolume
+            } else {
+                // 获取产品详情
+                store.dispatch('_quote/querySymbolInfo', symbolId).then(res => {
+                    if (res.invalid() || positionId || pendingId) return false
+                    state.volumn = res.data.minVolume // 设置默认手数
+                })
+            }
+
+            if (positionId) {
+                initPositionInfo()
+            } else if (pendingId) {
+                initPendingInfo()
+            }
+        }
+        init()
 
         return {
             ...toRefs(state),

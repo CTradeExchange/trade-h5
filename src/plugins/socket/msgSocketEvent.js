@@ -169,7 +169,6 @@ class SocketEvent {
             message: '您的账号在异地登录，请重新登录',
         }).then(() => {
             // 踢出登录断开ws
-            QuoteSocket.ws.close()
             that.ws.close()
             that.$store.dispatch('_user/logout')
         })
@@ -181,6 +180,12 @@ class SocketEvent {
             detail: data
         })
         document.body.dispatchEvent(event)
+    }
+
+    // 踢出消息
+    UserForceLogoutRet () {
+        const detail = {}
+        document.body.dispatchEvent(new CustomEvent('UserForceLogoutRet', { detail }))
     }
 }
 

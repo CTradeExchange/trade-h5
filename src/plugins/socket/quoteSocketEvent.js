@@ -77,9 +77,6 @@ class SocketEvent {
                 trade_type, // 交易类型，类型：uint32，1：cfd，2：me
             }
         })
-
-        sessionStorage.setItem(productIds, list)
-
         this.send(14000, { symbol_list: list })
     }
 

@@ -11,23 +11,32 @@
 
 <script>
 import Notice from '@m/components/notice'
+import { useStore } from 'vuex'
+import { onMounted } from 'vue'
 export default {
     components: {
         Notice
     },
-    data () {
-        return {
-            show: false,
-            noticeContent: ''
+    setup () {
+        const store = useStore()
+        window.store = store
+
+        // 用户被踢出消息
+        const kickOut = () => {
+            store.dispatch('_user/logout')
         }
+
+        // 监听ws全局事件
+        document.body.addEventListener('UserForceLogoutRet', kickOut, false)
+        onMounted(() => {
+            document.body.removeEventListener('UserForceLogoutRet', kickOut)
+        })
+
+        return {}
     },
     created () {
         window.vm = this
-        window.store = this.$store
     },
-    methods: {
-
-    }
 }
 </script>
 
