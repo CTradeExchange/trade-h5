@@ -17,12 +17,15 @@ const EmptyPendingPriceRang = {
 export default {
     namespaced: true,
     state: {
+        modifyPositionId: 0, // 修改持仓ID
         pendingPrice: 0, // 挂单价格
         positionLoading: '', // 持仓列表加载
         positionList: [], // 持仓列表
+        positionMap: [], // 持仓列表map
         historyLoading: false, // 历史记录加载
         historyList: [], // 平仓历史记录列表
         pendingList: [], // 预埋单列表
+        pendingMap: [], // 预埋单列表
         positionProfitLossList: [] // 持仓盈亏列表
     },
     getters: {
@@ -32,7 +35,7 @@ export default {
             const product = rootState._quote.productMap[productID]
             return product
         },
-        // 市价止盈止损范围
+        // 市价、持仓止盈止损范围
         marketProfitLossRang (state, getters, rootState) {
             const product = getters.product
             if (!product) return EmptyProfitLossRang
@@ -113,9 +116,14 @@ export default {
     mutations: {
         Empty_data (state, data) { // 清空信息
             state.positionList = []
+            state.positionMap = {}
             state.historyList = []
             state.pendingList = []
+            state.pendingMap = {}
             state.positionProfitLossList = []
+        },
+        Update_modifyPositionId (state, data) {
+            state.modifyPositionId = data
         },
         Update_pendingPrice (state, data) {
             state.pendingPrice = data
@@ -125,6 +133,12 @@ export default {
         },
         Update_positionList (state, data) {
             state.positionList = data
+            const positionMap = state.positionMap
+            data.forEach(item => {
+                if (!item || !item.positionId) return false
+                if (!positionMap[item.positionId]) positionMap[item.positionId] = {}
+                Object.assign(positionMap[item.positionId], item)
+            })
         },
         Update_historyLoading (state, data) {
             state.historyLoading = data
@@ -134,13 +148,21 @@ export default {
         },
         Update_pendingList (state, data) {
             state.pendingList = data
+            const pendingMap = state.pendingMap
+            data.forEach(item => {
+                if (!item || !item.id) return false
+                if (!pendingMap[item.id]) pendingMap[item.id] = {}
+                Object.assign(pendingMap[item.id], item)
+            })
         },
-        Update_positionItem (state, data) {
-            state.positionList.push(data)
+        Update_positionProfitLossList (state, dataList = []) {
+            state.positionProfitLossList = dataList
+            const positionMap = state.positionMap
+            dataList.forEach(({ positionId, profitLoss }) => {
+                if (positionMap[positionId]) positionMap[positionId].profitLoss = profitLoss
+                else positionMap[positionId] = { profitLoss }
+            })
         },
-        Update_positionProfitLossList (state, data) {
-            state.positionProfitLossList = data
-        }
     },
     actions: {
         // 查询持仓列表

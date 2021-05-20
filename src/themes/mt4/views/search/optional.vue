@@ -89,10 +89,10 @@ export default {
             return store.state._user.selfSymbolList
         })
         optionalSymbolList.value = [].concat(selfSymbolList)
-        watch(selfSymbolList, (val) => {
+        watch(selfSymbolList.value.length, (val) => {
             console.log('vvvvvv')
-            optionalSymbolList.value = val
-            const subscribList = val.map(({ symbolId }) => symbolId)
+            optionalSymbolList.value = selfSymbolList.value
+            const subscribList = selfSymbolList.value.map(({ symbolId }) => symbolId)
             if (subscribList.length > 0) {
                 QuoteSocket.send_subscribe(subscribList)
             }

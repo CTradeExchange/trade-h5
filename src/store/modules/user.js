@@ -10,7 +10,7 @@ export default {
         loginData: '', // login返回的信息
         customerInfo: '', // 用户信息
         withdrawConfig: '', // 用户取款配置
-        userAccount: '', // msg服务推送过来的交易账号信息
+        accountAssets: {}, // msg服务推送过来的交易账户资产
         kycState: '', // kyc认证
         selfSymbolList: [], // 自选产品列表
     },
@@ -37,7 +37,7 @@ export default {
             state.info = ''
             state.loginData = ''
             state.customerInfo = ''
-            state.userAccount = ''
+            state.accountAssets = {}
             state.kycState = ''
         },
         Update_loginLoading (state, data) {
@@ -52,8 +52,8 @@ export default {
         Update_customerInfo (state, data) {
             state.customerInfo = data
         },
-        Update_userAccount (state, data) {
-            state.userAccount = data
+        Update_accountAssets (state, data) {
+            state.accountAssets = data
         },
         Update_kycState (state, data) {
             state.kycState = data

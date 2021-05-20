@@ -49,8 +49,8 @@ export default {
             // debugger
             state.categoryProductList = differenceBy(productList, selfSymbolList.value, 'symbolId')
         }
-        watch(selfSymbolList, (val) => {
-            state.categoryProductList = differenceBy(state.categoryProductList, val, 'symbolId')
+        watch(selfSymbolList.value.length, () => {
+            state.categoryProductList = differenceBy(state.categoryProductList, selfSymbolList.value, 'symbolId')
             // val && localStorage.setItem('symbolIdForChart', val.value)
         })
         const addOptional = (record) => {

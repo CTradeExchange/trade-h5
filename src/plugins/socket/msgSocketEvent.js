@@ -154,7 +154,7 @@ class SocketEvent {
     }
 
     floatProfitLoss ({ content }) {
-        this.$store.commit('_user/Update_userAccount', content)
+        this.$store.commit('_user/Update_accountAssets', content)
         if (content.positionProfitLossMessages.length > 0) {
             this.$store.commit('_trade/Update_positionProfitLossList', content.positionProfitLossMessages)
         }

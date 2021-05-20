@@ -235,7 +235,7 @@ export default {
                 if (res.invalid()) return false
 
                 // 重新登录清除账户信息
-                store.commit('_user/Update_userAccount', '')
+                store.commit('_user/Update_accountAssets', {})
 
                 // 登录KYC,0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
 
@@ -276,7 +276,7 @@ export default {
                         // 登录websocket
                         instance.appContext.config.globalProperties.$MsgSocket.login()
                         // 重新登录清除账户信息
-                        store.commit('_user/Update_userAccount', '')
+                        store.commit('_user/Update_accountAssets', {})
                         if (parseInt(res.data.loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
                             state.loginPwdPop = true
                         } else {

@@ -94,7 +94,7 @@ export default {
             return accountInfo.value.marginRadio >= 100 ? 100 : accountInfo.value.marginRadio
         })
 
-        const accountInfo = computed(() => store.state._user.userAccount)
+        const accountInfo = computed(() => store.state._user.accountAssets)
         const mainAccount = getArrayObj(customInfo.value.accountList, 'accountId', customInfo.value.accountId)
 
         // 计算保证金水平区间

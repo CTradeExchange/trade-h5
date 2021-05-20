@@ -4,6 +4,7 @@ import CheckAPI from '@/utils/checkAPI'
 
 // 处理显示的点差  点差=（买价-卖价）/pip
 function spreadText (product) {
+    if (!product.pointRatio) return
     const pip = Math.pow(0.1, product.price_digits) * product.pointRatio
     const spread = (product.buy_price - product.sell_price) / pip
     const spDigit = String(product.pointRatio).length - 1 // 点差小数位

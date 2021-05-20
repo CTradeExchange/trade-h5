@@ -67,8 +67,8 @@ export default {
                 }
             })
         }
-        watch(selfSymbolList, (val) => {
-            state.searchDataList = differenceBy(state.searchDataList, val.map(el => ({
+        watch(selfSymbolList.value.length, () => {
+            state.searchDataList = differenceBy(state.searchDataList, selfSymbolList.value.map(el => ({
                 id: el.symbolId,
                 code: el.symbolCode,
                 name: el.symbolName

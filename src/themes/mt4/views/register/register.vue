@@ -142,7 +142,7 @@ export default {
                     // 注册成功重新获取客户信息
                     store.dispatch('_user/findCustomerInfo')
                     // 重新登录清除账户信息
-                    store.commit('_user/Update_userAccount', '')
+                    store.commit('_user/Update_accountAssets', {})
                     // 重新开启ws
 
                     if (res.data.token) setToken(res.data.token)

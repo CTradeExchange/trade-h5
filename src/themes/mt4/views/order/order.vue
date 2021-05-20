@@ -151,12 +151,16 @@ export default {
             resData: {},
             timeId: ''
         })
+        if (positionId) store.commit('_trade/Update_modifyPositionId', positionId)
         watch(
             () => state.pendingPrice,
             newval => store.commit('_trade/Update_pendingPrice', newval),
             { immediate: true }
         )
-        onUnmounted(() => store.commit('_trade/Update_pendingPrice', 0))
+        onUnmounted(() => {
+            store.commit('_trade/Update_pendingPrice', 0)
+            store.commit('_trade/Update_modifyPositionId', 0)
+        })
 
         state.openOrderSelected = state.openOrderList[0]
 
