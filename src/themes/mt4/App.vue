@@ -13,17 +13,23 @@
 import Notice from '@m/components/notice'
 import { useStore } from 'vuex'
 import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 export default {
     components: {
         Notice
     },
     setup () {
         const store = useStore()
+        const router = useRouter()
         window.store = store
 
         // 用户被踢出消息
         const kickOut = () => {
-            store.dispatch('_user/logout')
+            store.dispatch('_user/logout').then(() => {
+                return router.push('/login')
+            }).then(() => {
+                location.reload()
+            })
         }
 
         // 监听ws全局事件
