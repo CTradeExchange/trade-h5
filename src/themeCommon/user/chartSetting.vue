@@ -2,17 +2,6 @@
     <LayoutTop :back='true' :menu='false' title='' />
     <div class='page-wrap'>
         <van-cell-group class='group'>
-            <van-cell title='柱形图' @click='changeType(0)'>
-                <template #icon>
-                    <van-icon
-                        class='icon icon_zhuxingtu
-'
-                    />
-                </template>
-                <template v-if='chartSet.chartType === 0' #right-icon>
-                    <van-icon color='#58C225' name='success' />
-                </template>
-            </van-cell>
             <van-cell title='阴阳烛' @click='changeType(1)'>
                 <template #icon>
                     <van-icon class='icon icon_yinyangzhu' />
@@ -21,6 +10,17 @@
                     <van-icon color='#58C225' name='success' />
                 </template>
             </van-cell>
+            <van-cell title='柱形图' @click='changeType(0)'>
+                <template #icon>
+                    <van-icon
+                        class='icon icon_zhuxingtu'
+                    />
+                </template>
+                <template v-if='chartSet.chartType === 0' #right-icon>
+                    <van-icon color='#58C225' name='success' />
+                </template>
+            </van-cell>
+
             <van-cell title='图表线' @click='changeType(2)'>
                 <template #icon>
                     <van-icon class='icon icon_tubiaoxian' />
