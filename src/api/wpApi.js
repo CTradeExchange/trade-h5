@@ -62,23 +62,3 @@ export function pageConfig (id) {
         return data
     })
 }
-/* 获取行情板块配置信息 */
-export function productCategoryConfig (data) {
-    // return axios.get('/config/product_category.json', {
-    //     params: {
-    //         timestamp: Date.now(),
-    //     },
-    // }).then(res => {
-    //     return res.data;
-    // })
-    return request_wp('/wp-json/wp/v2/zoneSymbolList', {
-        params: {
-            timestamp: Date.now(),
-        },
-    }).then(res => {
-        if (res.success && res?.data?.code === '0000') {
-            return res?.data?.content?.product_category
-        }
-        return []
-    })
-}

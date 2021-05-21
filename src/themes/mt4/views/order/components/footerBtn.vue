@@ -1,5 +1,12 @@
 <template>
-    <div v-if='$route.query.positionId' class='footerBtn'>
+    <div v-if='$route.query.isClosePosition' class='footerBtn'>
+        <div class='col'>
+            <button class='btn' :disabled='loading' @click='closeOrder()'>
+                平仓
+            </button>
+        </div>
+    </div>
+    <div v-else-if='$route.query.positionId' class='footerBtn'>
         <div class='col'>
             <button class='btn' :disabled='loading' @click='updateOrder()'>
                 修改
@@ -126,12 +133,16 @@ export default {
         const updatePending = () => {
             emit('updatePending')
         }
+        const closeOrder = () => {
+            emit('closeOrder')
+        }
         return {
             buyDisabled,
             sellDisabled,
             openOrder,
             updatePending,
-            updateOrder
+            updateOrder,
+            closeOrder,
         }
     }
 }

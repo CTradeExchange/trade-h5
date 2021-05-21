@@ -141,8 +141,9 @@ export default {
             const positionMap = state.positionMap
             data.forEach(item => {
                 if (!item || !item.positionId) return false
-                if (!positionMap[item.positionId]) positionMap[item.positionId] = {}
-                Object.assign(positionMap[item.positionId], item)
+                const curPosition = positionMap[item.positionId]
+                if (curPosition) Object.assign(item, { profitLoss: curPosition.profitLoss }) // 如果map数据中已经有此持仓信息，将之合并到item
+                positionMap[item.positionId] = item
             })
         },
         Update_historyLoading (state, data) {

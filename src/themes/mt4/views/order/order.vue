@@ -2,7 +2,7 @@
     <top back :menu='false' :sub-title='product.symbolCode' :title='product.symbolName' />
     <div v-if='product' class='orderWrap'>
         <!-- 订单类型 -->
-        <div v-if='!$route.query.positionId && !$route.query.pendingId' class='cell openType'>
+        <div v-if='!positionId && !pendingId' class='cell openType'>
             <p class='title' @click='dropdownWrap = !dropdownWrap'>
                 {{ openOrderSelected.name }}
             </p>
@@ -12,10 +12,19 @@
                 </a>
             </div>
         </div>
+        <p v-if='positionId' class='header-info'>
+            <span v-if='isClosePosition'>
+                平仓：
+            </span>
+            <span v-if='isModifyPosition'>
+                修改订单：
+            </span>
+            #{{ positionId }} {{ Number(curPosition.direction) === 1 ? 'buy' : 'sell' }} {{ curPosition.openVolume-curPosition.closeVolume }}
+        </p>
 
         <!-- 订单手数 -->
         <div class='cell'>
-            <OrderVolumn v-model='volumn' :disabled='disabled' :product='product' />
+            <OrderVolumn v-model='volumn' :disabled='!!isModifyPosition || !!isModifyPending' :max='volumnMax' :min='volumnMin' :product='product' />
         </div>
 
         <!-- 买卖价格 -->
@@ -30,7 +39,7 @@
         <!-- 挂单 -->
         <p>挂单价格范围</p>
         <p>{{ pendingPriceRang }}</p>
-        <div v-if='openOrderSelected.val > 1 || $route.query.pendingId' class='cell priceSet'>
+        <div v-if='openOrderSelected.val > 1 || pendingId' class='cell priceSet'>
             <div class='col'>
                 <PriceStepper v-model='pendingPrice' :disabled='disabled' :product='product' />
             </div>
@@ -41,10 +50,10 @@
         {{ profitLossRang }}
         <div class='cell priceSet'>
             <div class='col'>
-                <PriceStepper v-model='stopLoss' :product='product' />
+                <PriceStepper v-model='stopLoss' :disabled='!!isClosePosition' :product='product' />
             </div>
             <div class='col'>
-                <PriceStepper v-model='takeProfit' :product='product' />
+                <PriceStepper v-model='takeProfit' :disabled='!!isClosePosition' :product='product' />
             </div>
         </div>
 
@@ -60,7 +69,33 @@
             <lightweightChart v-if='product.price_digits' ref='chart' :product='product' />
         </div>
     </div>
-
+    <!-- 协助测试代码 start -->
+    <div class='faceBtns'>
+        <template v-if='openOrderSelected.val === 1'>
+            <button class='fbtn' @click="openOrder('buy')">
+                买方向测试
+            </button>
+            <button class='fbtn' @click="openOrder('sell')">
+                卖方向测试
+            </button>
+        </template>
+        <template v-else-if='isModifyPosition'>
+            <button class='fbtn' :disabled='loading' @click='handleUpdateOrder()'>
+                修改
+            </button>
+        </template>
+        <template v-else-if='isModifyPending'>
+            <button class='fbtn' :disabled='loading' @click='handleUpdatePending()'>
+                修改
+            </button>
+        </template>
+        <template v-else>
+            <button class='fbtn ' @click='openOrder()'>
+                下单
+            </button>
+        </template>
+    </div>
+    <!-- 协助测试代码 end -->
     <!-- 底部下单按钮 -->
     <FooterBtn
         :is-modify-status='$route.query.pendingId'
@@ -69,6 +104,7 @@
         :pending-price='pendingPrice'
         :stop-loss='stopLoss'
         :take-profit='takeProfit'
+        @closeOrder='handleCloseOrder'
         @openOrder='openOrder'
         @updateOrder='handleUpdateOrder'
         @updatePending='handleUpdatePending'
@@ -118,7 +154,7 @@ export default {
         const route = useRoute()
         const router = useRouter()
         const chart = ref(null)
-        const { symbolId, positionId, pendingId, orderId, takeProfit, stopLoss } = route.query
+        const { symbolId, positionId, pendingId, orderId, takeProfit, stopLoss, isClosePosition, isModifyPosition, isModifyPending } = route.query
         const state = reactive({
             loading: false,
             disabled: !!positionId || !!pendingId,
@@ -171,6 +207,15 @@ export default {
         const profitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
         const pendingPriceRang = computed(() => store.getters['_trade/pendingPriceRang'])
         const expireTypeItem = computed(() => state.expireTypeOptions.find(el => el.id === state.expireType))
+        const curPosition = computed(() => store.state._trade.positionMap[positionId] || {}) // 当前持仓
+        const volumnMin = computed(() => product.value.minVolume)
+        const volumnMax = computed(() => {
+            if (positionId) {
+                return minus(curPosition.value.openVolume, curPosition.value.closeVolume || 0)
+            } else {
+                return product.value.maxVolume
+            }
+        })
 
         // 止损价格变更
         watch(
@@ -197,7 +242,7 @@ export default {
             return result
         }
 
-        // 点击下单按钮
+        // 点击下单、平仓按钮
         const openOrder = direct => {
             if (paramsInvalid()) return false
             let requestPrice = direct === 'sell' ? product.value.sell_price : product.value.buy_price
@@ -218,6 +263,7 @@ export default {
                     bizType = 1
                     break
             }
+            if (isClosePosition) bizType = 2
             if ([2, 4].includes(state.openOrderSelected.val)) {
                 direction = 1
             } else if ([3, 5].includes(state.openOrderSelected.val)) {
@@ -227,6 +273,7 @@ export default {
             const params = {
                 bizType, // 业务类型。0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
                 direction, // 订单买卖方向。1-买；2-卖；
+                positionId,
                 symbolId: Number(product.value.symbol_id),
                 requestTime: Date.now(),
                 requestNum: state.volumn * product.value.contractSize,
@@ -366,6 +413,10 @@ export default {
             state.openOrderSelected = item
             if (item.val === 1) store.commit('_trade/Update_pendingPrice', 0)
         }
+        // 平仓
+        const handleCloseOrder = item => {
+            openOrder()
+        }
 
         // 组件销毁之前清除定时器
         onBeforeUnmount(() => {
@@ -395,7 +446,15 @@ export default {
 
         return {
             ...toRefs(state),
+            positionId,
+            pendingId,
+            orderId,
+            isClosePosition,
+            isModifyPosition,
+            isModifyPending,
             product,
+            volumnMin,
+            volumnMax,
             chart,
             openOrder,
             handleUpdateOrder,
@@ -404,8 +463,9 @@ export default {
             selectOpenOrder,
             expireTypeItem,
             handleUpdatePending,
+            handleCloseOrder,
             onHide,
-
+            curPosition,
         }
     }
 }
@@ -418,9 +478,24 @@ export default {
     flex: 1;
     margin-bottom: rem(10px);
     overflow-y: auto;
+    .header-info {
+        font-weight: bold;
+        font-size: rem(30px);
+        line-height: rem(80px);
+        text-align: center;
+        border-bottom: solid 1px var(--bdColor);
+    }
     .cell {
         margin-right: rem(30px);
         margin-left: rem(30px);
+    }
+}
+.faceBtns {
+    display: flex;
+    .fbtn {
+        flex: 1;
+        height: 40px;
+        line-height: 40px;
     }
 }
 .openType {

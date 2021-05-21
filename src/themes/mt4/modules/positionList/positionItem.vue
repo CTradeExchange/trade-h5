@@ -9,8 +9,7 @@
                             {{ Number(data.direction) === 1 ?'buy':'sell' }}&nbsp;
                         </span>
 
-                        <!-- {{ positionVolume }} -->
-                        {{ data.openVolume }}
+                        {{ positionVolume }}
                     </span>
                 </p>
                 <p>
@@ -89,7 +88,7 @@ export default {
         }
         const product = computed(() => store.state._quote.productMap[data.symbolId])
 
-        const positionVolume = computed(() => minus(data.openNum, data.closeNum))
+        const positionVolume = computed(() => minus(data.openVolume, data.closeVolume || 0))
         return {
             ...toRefs(state),
             ...onceState,

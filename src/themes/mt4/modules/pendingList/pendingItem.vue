@@ -7,18 +7,19 @@
                     <span class='volumn'>
                         <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
                             {{ Number(data.direction) === 1 ? 'buy' : 'sell' }}
+                            {{ bizTypeMap[data.bizType] }}
                         </span>
-                        {{ positionVolume }}
                     </span>
                 </p>
                 <p>
-                    <span>{{ openPrice }}</span>
-                    <span> → </span>
-                    <span>{{ Number(data.direction) === 1 ? product.buy_price : product.sell_price }}</span>
+                    <span>{{ positionVolume }}</span>
+                    <span> at </span>
+                    <span>{{ pendingPrice }}</span>
                 </p>
             </div>
             <div class='col'>
-                <p class='price riseColor'>
+                <p class='price muted'>
+                    <span>{{ Number(data.direction) === 1 ? product.buy_price : product.sell_price }}</span>
                 </p>
             </div>
         </div>
@@ -34,10 +35,10 @@
                 </li>
                 <li class='flexWrap'>
                     <span class='title'>
-                        ID
+                        期限
                     </span>
                     <span class='value'>
-                        {{ data.positionId }}
+                        {{ data.expireType===1 ? '当日有效' : '当周有效' }}
                     </span>
                 </li>
                 <li class='flexWrap'>
@@ -65,15 +66,18 @@ import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { priceFormat, isEmpty } from '@/utils/util'
 import dayjs from 'dayjs'
-import { minus } from '@/utils/calculation'
 export default {
     props: ['data'],
     setup ({ data }) {
         const store = useStore()
         const onceState = {
             executePrice: priceFormat(data.executePrice, data.openSymbolDigits),
-            openPrice: priceFormat(data.requestPrice, data.digits),
+            pendingPrice: priceFormat(data.requestPrice, data.digits),
             openTime: dayjs(data.openTime).format('YYYY.MM.DD HH:mm:ss'),
+            bizTypeMap: {
+                '10': 'limit',
+                '11': 'stop'
+            }
         }
         const state = reactive({
             detailVisible: false

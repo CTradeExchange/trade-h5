@@ -67,7 +67,7 @@ export default {
         const openOrder = () => {
             router.push(
                 {
-                    name: 'ClosePosition',
+                    name: 'Order',
                     query: {
                         symbolId: state.cur.symbolId,
                         positionId: state.cur.positionId,
@@ -75,7 +75,8 @@ export default {
                         openVolume: state.cur.openVolume,
                         openNum: state.cur.openNum,
                         stopLossDecimal: state.cur.stopLossDecimal,
-                        takeProfitDecimal: state.cur.takeProfitDecimal
+                        takeProfitDecimal: state.cur.takeProfitDecimal,
+                        isClosePosition: true
                     }
                 })
         }
@@ -88,7 +89,7 @@ export default {
         // 修改订单
         const modifyOrder = () => {
             state.show = false
-            router.push({ name: 'Order', query: { symbolId: state.cur.symbolId, positionId: state.cur.positionId, orderId: state.cur.orderId, takeProfit: state.cur.takeProfitDecimal, stopLoss: state.cur.stopLossDecimal } })
+            router.push({ name: 'Order', query: { symbolId: state.cur.symbolId, positionId: state.cur.positionId, orderId: state.cur.orderId, takeProfit: state.cur.takeProfitDecimal, stopLoss: state.cur.stopLossDecimal, isModifyPosition: true } })
         }
         return {
             ...toRefs(state),
