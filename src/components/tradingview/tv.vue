@@ -1,7 +1,6 @@
 <template>
     <div class='tv'>
         <slot :resolutionList='resolutionList' :setResolution='setResolution' :setSymbol='setSymbol'></slot>
-        {{ product.buy_price }}-{{ product.sell_price }}
         <div id='tv_chart_container' ref='container'></div>
     </div>
 </template>
