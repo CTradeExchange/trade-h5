@@ -56,7 +56,7 @@
                 <li class='item' @click="visible=false;$router.push('/page')">
                     <i class='icon icon_jiemian'></i> <strong>界面</strong>
                 </li>
-                <li class='item' @click="visible=false;$router.push('/chart')">
+                <li class='item' @click="visible=false;$router.push('/chartSetting')">
                     <i class='icon icon_tubiaoxian'></i> <strong>图表</strong>
                 </li>
                 <li v-if='$store.state._base.wpCompanyInfo?.onlineService' class='item'>

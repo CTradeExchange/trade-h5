@@ -208,6 +208,15 @@ const routes = [
             footerMenu: false,
         }
     },
+    {
+        path: '/chartSetting',
+        name: 'ChartSetting',
+        component: () => import(/* webpackChunkName: "page" */ '../user/chartSetting.vue'),
+        meta: {
+            title: '图表设置',
+            footerMenu: false,
+        }
+    },
 
 ]
 
