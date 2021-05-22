@@ -138,14 +138,15 @@ export default {
                     // 注册成功
                     sessionStorage.setItem('RegisterParams', JSON.stringify({ ...params, openType: state.openType }))
                     sessionStorage.setItem('RegisterData', JSON.stringify(res))
+                    if (res.data.token) setToken(res.data.token)
 
                     // 注册成功重新获取客户信息
                     store.dispatch('_user/findCustomerInfo')
                     // 重新登录清除账户信息
                     store.commit('_user/Update_accountAssets', {})
-                    // 重新开启ws
+                    // 登录websocket
+                    instance.appContext.config.globalProperties.$MsgSocket.login()
 
-                    if (res.data.token) setToken(res.data.token)
                     if (res.data.list.length > 0) {
                         // 需要KYC认证
                         sessionStorage.setItem('kycList', JSON.stringify(res.data.list))

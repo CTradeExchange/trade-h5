@@ -157,7 +157,7 @@ export default {
     }
     .list {
         display: grid;
-        grid-column-gap: rem(160px);
+        grid-column-gap: rem(140px);
         grid-template-columns: repeat(2, 1fr);
         margin-top: rem(10px);
     }
