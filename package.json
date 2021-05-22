@@ -7,6 +7,7 @@
     "dev_admin": "vue-cli-service serve --mode admin",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build_admin": "vue-cli-service build --mode admin",
     "lint": "vue-cli-service lint",
     "stylelint": "stylelint 'src/**/*.(css|scss|vue)' --fix",
     "eslint": "eslint 'src/**/*.{js,vue}' --fix"
