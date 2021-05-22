@@ -19,7 +19,9 @@
             </div>
             <div class='col'>
                 <p class='price muted'>
-                    <span>{{ Number(data.direction) === 1 ? product.buy_price : product.sell_price }}</span>
+                    <span v-if='product'>
+                        {{ Number(data.direction) === 1 ? product.buy_price : product.sell_price }}
+                    </span>
                 </p>
             </div>
         </div>
@@ -73,7 +75,7 @@ export default {
         const onceState = {
             executePrice: priceFormat(data.executePrice, data.openSymbolDigits),
             pendingPrice: priceFormat(data.requestPrice, data.digits),
-            openTime: dayjs(data.openTime).format('YYYY.MM.DD HH:mm:ss'),
+            openTime: dayjs(data.orderTime).format('YYYY.MM.DD HH:mm:ss'),
             bizTypeMap: {
                 '10': 'limit',
                 '11': 'stop'

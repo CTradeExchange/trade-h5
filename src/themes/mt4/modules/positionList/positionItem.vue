@@ -15,7 +15,9 @@
                 <p>
                     <span>{{ openPrice }}</span>
                     <span> → </span>
-                    <span>{{ Number(data.direction) === 1 ? product.sell_price : product.buy_price }}</span>
+                    <span v-if='product'>
+                        {{ Number(data.direction) === 1 ? product.sell_price : product.buy_price }}
+                    </span>
                 </p>
             </div>
             <div class='col'>
