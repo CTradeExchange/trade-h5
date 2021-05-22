@@ -55,7 +55,7 @@ export default {
             loading: false
         })
         store.dispatch('getListByParentCode')
-
+        const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
         const zoneList = computed(() => store.state.zoneList)
         // 手机正则表达式
         const mobileReg = computed(() => getArrayObj(zoneList.value, 'code', state.zone).extend || '')
@@ -89,7 +89,7 @@ export default {
                             confirmButtonText: '联系客服',
                             cancelButtonText: '关闭'
                         }).then(() => {
-                            // on confirm
+                            if (onlineServices.value) location.href = onlineServices.value
                         }).catch(() => {
                             // on cancel
                         })
@@ -160,6 +160,7 @@ export default {
         return {
             handleVerifyCodeSend,
             handleConfirm,
+            onlineServices,
             ...toRefs(state)
         }
     }

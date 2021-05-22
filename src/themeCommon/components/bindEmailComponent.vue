@@ -27,7 +27,7 @@ import Top from '@m/layout/top'
 import CheckCode from '@/components/form/checkCode'
 import uInput from '@/components/input.vue'
 import { Toast, Dialog } from 'vant'
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs, computed } from 'vue'
 import { isEmpty, emailReg } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
 import { bindEmail, changeEmail, checkCustomerExist } from '@/api/user'
@@ -53,6 +53,8 @@ export default {
             checkCode: '',
             loading: false
         })
+
+        const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
 
         const handleConfirm = () => {
             if (isEmpty(state.email)) {
@@ -128,7 +130,7 @@ export default {
                             confirmButtonText: '联系客服',
                             cancelButtonText: '关闭'
                         }).then(() => {
-                            // on confirm
+                            if (onlineServices.value) { location.href = onlineServices.value }
                         }).catch(() => {
                             // on cancel
                         })
@@ -152,6 +154,7 @@ export default {
 
         return {
             handleConfirm,
+            onlineServices,
             handleVerifyCodeSend,
             ...toRefs(state)
         }

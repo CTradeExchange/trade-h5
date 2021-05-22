@@ -157,6 +157,7 @@ export default {
                 return state.withdrawConfig.withdrawAmountConfig.accountCurrency
             }
         })
+        const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
 
         const timeList = computed(() => {
             const timeConfigList = state.withdrawTimeConfigMap
@@ -417,7 +418,7 @@ export default {
                             confirmButtonText: '联系客服',
                             cancelButtonText: '关闭'
                         }).then(() => {
-                            // on confirm
+                            if (onlineServices.value) { location.href = onlineServices.value }
                         }).catch(() => {
                             // on cancel
                         })
@@ -536,6 +537,7 @@ export default {
             accountCurrency,
             timeList,
             computePre,
+            onlineServices,
             withdrawAmount
         }
     }

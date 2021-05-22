@@ -103,6 +103,8 @@ export default {
         })
         const customInfo = computed(() => store.state._user.customerInfo)
 
+        const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
+
         const statusMap = {
             1: {
                 stateText: '待支付',
@@ -145,7 +147,7 @@ export default {
                 }).then(() => {
                     router.push('/quote')
                 }).catch(() => {
-                    // on cancel
+                    if (onlineServices.value) { location.href = onlineServices.value }
                 })
             }
         }
@@ -169,6 +171,7 @@ export default {
         return {
             formatTime,
             statusMap,
+            onlineServices,
             ...toRefs(state)
         }
     }

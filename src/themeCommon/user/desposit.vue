@@ -174,6 +174,7 @@ export default {
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+        const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
 
         // 计算存款手续费
         const computeFee = computed(() => {
@@ -465,7 +466,7 @@ export default {
                     confirmButtonText: '联系客服',
                     cancelButtonText: '关闭'
                 }).then(() => {
-                    // on confirm
+                    if (onlineServices.value) { location.href = onlineServices.value }
                 }).catch(() => {
                     // on cancel
                 })
@@ -497,7 +498,8 @@ export default {
             handleShowTime,
             computeExpectedpay,
             payTypesSortEnable,
-            payTypesSortDisable
+            payTypesSortDisable,
+            onlineServices
         }
     }
 }
