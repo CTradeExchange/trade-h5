@@ -6,11 +6,22 @@
                 <span v-if='data.orderId'>
                     #{{ data.orderId }}&nbsp;
                 </span>
-                <span :class="data.openDirection === 1 ? 'riseColor' : 'fallColor'">
-                    {{ data.openDirection === 1 ? 'buy' : 'sell' }}
+                <template v-if='data.bizType===2'>
+                    <!-- 平仓 -->
+                    <span :class="data.openDirection === 1 ? 'fallColor' : 'riseColor'">
+                        {{ data.openDirection === 1 ? 'sell' : 'buy' }}
 
-                    {{ data.tradeVolume }}
-                </span>
+                        {{ data.tradeVolume }}
+                    </span>
+                </template>
+                <template v-else>
+                    <!-- 开仓、挂单 -->
+                    <span :class="data.direction === 1 ? 'riseColor' : 'fallColor'">
+                        {{ data.direction === 1 ? 'buy' : 'sell' }}
+
+                        {{ data.tradeVolume }}
+                    </span>
+                </template>
             </p>
             <p>
                 {{ data.symbolName }} at
