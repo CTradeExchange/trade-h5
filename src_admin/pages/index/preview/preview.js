@@ -30,8 +30,6 @@ function render (container) {
     })
 
     // 获取到公司配置后初始化vue实例
-    store.dispatch('_base/getCompanyInfo').then(() => {
-        app.mount(container)
-    })
+    app.mount(container)
 }
 export default render

@@ -29,7 +29,7 @@ if (isAdminMode) {
         index: {
             entry: 'src_admin/pages/index/main.js',
             template: 'public/admin.html',
-            filename: NODE_ENV === 'development' ? 'index.html' : 'admin.html',
+            filename: 'index.html',
         },
         // preview: {
         //     entry: 'src_admin/pages/preview/main.js',

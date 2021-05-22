@@ -131,7 +131,19 @@ import { deepClone } from '@utils/deepClone'
 import { h5PageList } from './h5PageList'
 import { useRouter } from 'vue-router'
 import { onMounted, reactive, ref, toRefs, getCurrentInstance } from 'vue'
+import { getQuery } from '@admin/utils'
 export default {
+    beforeRouteEnter (to, from, next) {
+        const urlParams = getQuery()
+        console.log(to, from, urlParams)
+        if (urlParams.page == 'cats_sett_manage') {
+            next({ name: 'Setting' })
+        } else if (urlParams.page == 'cats_init_manage') {
+            next({ name: 'Install' })
+        } else {
+            next()
+        }
+    },
     name: 'Pages',
     setup (props) {
         const router = useRouter()
