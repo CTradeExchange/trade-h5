@@ -26,6 +26,12 @@ export default {
         productActivedID: null, // 当前操作的产品ID
     },
     mutations: {
+        // 清空产品数据
+        Empty_data (state) {
+            state.productList = []
+            state.productMap = {}
+            state.productActivedID = null
+        },
         // 更新产品列表
         Update_productList (state, data = []) {
             state.productList = data

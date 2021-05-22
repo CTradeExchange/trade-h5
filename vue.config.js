@@ -85,7 +85,7 @@ module.exports = {
                 target: 'http://uatwpadmin.ixmiddle.site'
             },
             '/cats-manage-api': {
-                target: 'http://uatwpview.cats-trade.com'
+                target: 'http://prewph5.cats-trade.com' // uat http://uatwpview.cats-trade.com  // pre http://prewph5.cats-trade.com/
             },
             '/upload': {
                 target: 'http://uatcatsapi.cats-trade.com/upload'

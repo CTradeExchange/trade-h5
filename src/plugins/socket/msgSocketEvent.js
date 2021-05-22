@@ -1,6 +1,5 @@
 import { guid, getDevice, getToken } from '@/utils/util'
 import { Dialog } from 'vant'
-import { QuoteSocket } from '@/plugins/socket/socket'
 // websocket消息事件
 class SocketEvent {
     constructor () {
@@ -11,6 +10,7 @@ class SocketEvent {
         this.$store = null
         this.requests = new Map()
         this.subscribedList = []
+        this.connectNum = 0 // websocket链接连接次数
     }
 
     // 初始化
@@ -108,6 +108,9 @@ class SocketEvent {
 
     // websocket连接成功
     onOpen () {
+        const token = getToken()
+        this.connectNum++
+        if (this.connectNum > 1 && token) this.login() // 重连后自动登录
         const executeFn = () => {
             const fn = this.subscribedList.shift()
             fn && fn()

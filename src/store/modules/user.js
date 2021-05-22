@@ -71,6 +71,11 @@ export default {
                     const data = res.data
                     if (params.loginPwd) localSet('loginParams', JSON.stringify(params))
                     setToken(data.token)
+                    // 清空之前的账户数据和产品数据
+                    commit('Empty_data')
+                    commit('_trade/Empty_data', null, { root: true })
+                    commit('_quote/Empty_data', null, { root: true })
+
                     commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_loginData', data)
                     commit('Update_customerInfo', data)
@@ -112,6 +117,7 @@ export default {
                     removeLoginParams()
                     commit('Empty_data')
                     commit('_trade/Empty_data', null, { root: true })
+                    commit('_quote/Empty_data', null, { root: true })
                 }
                 return res
             }).catch(err => {
@@ -133,7 +139,7 @@ export default {
         },
         // 添加自选产品
         addCustomerOptionals ({ dispatch, commit, state, rootState }, params = []) {
-            if (!params.length) return Promise.resolve()
+            if (!params || !params.length) return Promise.resolve()
             return addCustomerOptional({ symbolList: params }).then(res => {
                 dispatch('queryCustomerOptionalList') // 拉取自选列表
                 return res
@@ -143,7 +149,7 @@ export default {
         addCustomerOptionalDefault ({ state, rootGetters }) {
             if (state.customerInfo.optional === 1) return Promise.resolve()
             const defaultOptions = rootGetters.userSelfSymbolList.map(el => parseInt(el.symbolId))
-            return addCustomerOptional({ symbolList: defaultOptions })
+            return defaultOptions.length > 0 ? addCustomerOptional({ symbolList: defaultOptions }) : Promise.resolve()
         },
     }
 }
