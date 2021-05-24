@@ -25,3 +25,5 @@ pnpm-debug.log*
 /zip
 /package-lock.json
 /dist.zip
+/cats-upload-all.zip
+/cats-upload-all/dist

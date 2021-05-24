@@ -1,26 +1,34 @@
 const path = require('path')
 const dayjs = require('dayjs')
 const FileManagerPlugin = require('filemanager-webpack-plugin')
-const plugins = []
+var plugins
 const pages = {}
 function resolve (dir) {
     return path.join(__dirname, dir)
 }
 
 const NODE_ENV = process.env.NODE_ENV
+
 const isAdminMode = process.env.VUE_APP_isAdmin === 'true' // WordPress后台插件的开发模式
 
 if (process.env.NODE_ENV === 'production') {
-    plugins.push(
+    plugins = [
         new FileManagerPlugin({
             events: {
                 onEnd: {
-                    // archive: [{ source: resolve('dist'), destination: resolve(`zip/dist_${dayjs().format('MMDDHHmm')}.zip`) }]
-                    archive: [{ source: resolve('dist'), destination: resolve(`zip/dist${dayjs().format('YYYYMMDDHHmm')}.zip`) }]
+                    copy: [{
+                        source: './dist',
+                        destination: './cats-upload-all/dist'
+                    }],
+                    archive: [
+                        { source: resolve('dist'), destination: resolve(`zip/dist${dayjs().format('YYYYMMDDHHmm')}.zip`) },
+                        { source: resolve('cats-upload-all'), destination: 'cats-upload-all.zip', format: 'zip', }
+                    ],
+
                 }
             }
         })
-    )
+    ]
 }
 
 if (isAdminMode) {
