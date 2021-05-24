@@ -10,7 +10,7 @@ export default {
     props: {
         data: {
             type: Object,
-            default: {}
+            default: () => ({})
         },
     },
     mounted () {
@@ -34,7 +34,7 @@ export default {
 
 <style lang="scss" scoped>
 .redpacket {
-    padding: 10px;
     min-height: 10px;
+    padding: 10px;
 }
 </style>

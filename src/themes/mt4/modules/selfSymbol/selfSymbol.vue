@@ -1,7 +1,7 @@
 <template>
     <div>
-        <p v-if="h5Preview" align="center">
-            <img src="./selfSymbol.png" alt=""  />
+        <p v-if='h5Preview' align='center'>
+            <img alt='' src='./selfSymbol.png' />
         </p>
         <div v-else>
             <!-- <optional :data="{ list: optinalList }" /> -->
@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import { mapState,mapGetters } from 'vuex'
 // import Optional from '@m/views/selfSymbol/optional/optional'
 export default {
     // components: {
@@ -44,7 +43,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-img{
+img {
     width: 100%;
 }
 </style>
