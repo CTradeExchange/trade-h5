@@ -7,7 +7,7 @@
             :style="{ margin: '0 ' + data.gutter + 'px' }"
         >
             <a class='link' href='javascript:;' @click="$emit('openurl',item)">
-                <img v-if='item.src' :src='item.src'  />
+                <img v-if='item.src' :src='item.src' />
                 <p v-if='item.label' class='label'>
                     {{ item.label }}
                 </p>
@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import ImgComp from '../img/img.vue'
+// import ImgComp from '../img/img.vue'
 export default {
     components: {
-        ImgComp,
+        // ImgComp,
     },
     props: {
         data: {
@@ -65,8 +65,8 @@ export default {
         flex: 1;
         margin: 0;
         color: inherit;
-        text-align: center;
         line-height: 20px;
+        text-align: center;
     }
 }
 </style>

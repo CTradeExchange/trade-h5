@@ -65,23 +65,7 @@ export default {
             ]
         })
 
-        // 取变动价格列表
-        // const positionProfitLossList = computed(() => store.state._trade.positionProfitLossList)
-
         const positionList = computed(() => store.state._trade.positionList)
-
-        // watch([positionList, positionProfitLossList], ([pNew, pflNew], [pOld, pflOld]) => {
-        //     if (pNew.length > 0 && pflNew.length > 0) {
-        //         pNew.forEach(p => {
-        //             pflNew.forEach(item => {
-        //                 // console.log('更新价格', item.profitLoss)
-        //                 if (Number(item.positionId) === Number(p.positionId)) {
-        //                     p.profitLoss = priceFormat(item.profitLoss, customerInfo.value.digits)
-        //                 }
-        //             })
-        //         })
-        //     }
-        // })
 
         const state = reactive({
             sortActionsVisible: false,
@@ -122,7 +106,6 @@ export default {
             refresh,
             accountInfo,
             capitalListData,
-            // positionProfitLossList,
             positionList
         }
     },

@@ -248,6 +248,7 @@ export default {
             let requestPrice = direct === 'sell' ? product.value.sell_price : product.value.buy_price
             let direction = direct === 'sell' ? 2 : 1
             let bizType = 1
+            if (curPosition?.value?.direction) direction = curPosition.value.direction
             switch (state.openOrderSelected.val) {
                 case 2:
                 case 3:
@@ -293,6 +294,7 @@ export default {
                     state.successVisible = true
                     state.resData = res.data
                     state.resData.tradeVolume = state.volumn
+                    state.resData.bizType = bizType
                     state.timeId = setTimeout(() => {
                         state.successVisible = false
                         router.push({ name: 'Position' })

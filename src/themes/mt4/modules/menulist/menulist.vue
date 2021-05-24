@@ -47,11 +47,11 @@ export default {
     props: {
         data: {
             type: Object,
-            default: {
+            default: () => ({
                 href: '',
                 src: '',
                 target: '',
-            }
+            })
         },
     },
     data () {
@@ -81,18 +81,19 @@ export default {
        scoped>
 .title {
     padding: 10px 20px;
-    line-height: 1;
     font-size: 14px;
+    line-height: 1;
 }
 .icon {
     margin-top: 3px;
     margin-right: 5px;
 }
-.cellGroup,.cellItem{
+.cellGroup,
+.cellItem {
     background: none;
 }
 ::v-deep {
-    .van-tag--none{
+    .van-tag--none {
         color: #969799;
     }
     .van-cell__label:empty {
