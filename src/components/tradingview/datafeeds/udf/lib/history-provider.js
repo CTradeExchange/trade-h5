@@ -1,12 +1,12 @@
 import { resolutionToKlineType } from './constant'
-import { getKline, setTickRequest }from './getData'
+import { getKline, setTickRequest, setTicklistener }from './getData'
 
 class HistoryProvider {
      constructor(datafeedUrl, requester) {
         this._datafeedUrl = datafeedUrl;
         this._requester = requester;
     }
-    getBars (symbolInfo, resolution, rangeStartDate, rangeEndDate, firstDataRequest, tickListener) {
+    getBars (symbolInfo, resolution, rangeStartDate, rangeEndDate, firstDataRequest) {
         // console.log('firstDataRequest: ', firstDataRequest)
         const params = {
             symbolId: symbolInfo.ticker,
@@ -16,14 +16,15 @@ class HistoryProvider {
             resolution
         }
 
-        if(tickListener){
-            setTickRequest(params, tickListener)
-        }
+        setTickRequest(params)
 
         if(typeof firstDataRequest === 'boolean'){
             // 历史k线
             return getKline(params, firstDataRequest)
         }
+    }
+    setListenerForTick(onTick){
+        setTicklistener(onTick)
     }
 }
 

@@ -12,13 +12,9 @@ let oldPrice = null
 
 store.subscribe((mutation, state) => {
     try {
-        if(hasHistoryKline && typeof tickListener !== 'function' || mutation.type !== '_quote/Update_productTick'){
-            return
-        }
-        if(
-            !symbolParams
-            || symbolParams.symbolId + '' !== mutation.payload.symbolId + ''
-            ){
+        const canExecuted = (hasHistoryKline && typeof tickListener === 'function' && mutation.type === '_quote/Update_productTick' && symbolParams && String(symbolParams.symbolId)  === String(mutation.payload.symbolId))
+
+        if(!canExecuted){
             return
         }
 
@@ -95,9 +91,12 @@ export function getKline(params, firstDataRequest){
         })
 }
 
-
-export function setTickRequest(params, tickEvent){
+// 请求参数
+export function setTickRequest(params){
     symbolParams = params
+}
+// tick回调函数
+export function setTicklistener(tickEvent){
     tickListener = tickEvent
 }
 

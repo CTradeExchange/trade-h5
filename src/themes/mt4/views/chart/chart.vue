@@ -96,7 +96,7 @@ export default {
                     text: e.symbolName,
                     value: e.symbolId,
                     description: e.symbolName,
-                    priceDigits: e.price_digits
+                    digits: e.symbolDigits
                 }))
         )
 

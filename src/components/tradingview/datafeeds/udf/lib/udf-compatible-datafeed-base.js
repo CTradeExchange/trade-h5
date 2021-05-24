@@ -176,8 +176,7 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
             // 这里需要异步返回结果
             setTimeout(() => {
                 onResultReady({
-                    ...querySymbolInfo(symbolName),
-                    ...(this.otherConfig.symbolInfo || {})
+                    ...querySymbolInfo(symbolName, this.otherConfig.symbolInfo),
                 })
             }, 0)
         } else {
@@ -211,17 +210,18 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
         }
     };
     UDFCompatibleDatafeedBase.prototype.getBars = function (symbolInfo, resolution, rangeStartDate, rangeEndDate, onResult, onError, firstDataRequest) {
-        this._historyProvider.getBars(symbolInfo, resolution, rangeStartDate, rangeEndDate, firstDataRequest, this.onTick)
+        this._historyProvider.getBars(symbolInfo, resolution, rangeStartDate, rangeEndDate, firstDataRequest)
             .then(function (result) {
             onResult(result.bars, result.meta);
         })
             .catch(onError);
     };
     UDFCompatibleDatafeedBase.prototype.subscribeBars = function (symbolInfo, resolution, onTick, listenerGuid, onResetCacheNeededCallback) {
-        this.setOnTick(onTick)
+        this._historyProvider.setListenerForTick(onTick)
         this._dataPulseProvider.subscribeBars(symbolInfo, resolution, onTick, listenerGuid);
     };
     UDFCompatibleDatafeedBase.prototype.unsubscribeBars = function (listenerGuid) {
+        this._historyProvider.setListenerForTick()
         this._dataPulseProvider.unsubscribeBars(listenerGuid);
     };
     UDFCompatibleDatafeedBase.prototype._requestConfiguration = function () {
@@ -255,11 +255,6 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
     // 用于提供给用户修改产品属性
     UDFCompatibleDatafeedBase.prototype.setSymbolInfo = function(info){
         this.otherConfig.symbolInfo = Object.assign({}, info)
-    }
-
-    // 存储实时报价的监听方法
-    UDFCompatibleDatafeedBase.prototype.setOnTick = function(listener){
-        this.onTick = listener
     }
 
     return UDFCompatibleDatafeedBase;
@@ -302,11 +297,11 @@ function otherDefaultConfiguration() {
 }
 
 /* 商品信息结构 */
-function querySymbolInfo (code_id) {
+function querySymbolInfo (code_id, symbolInfo) {
     if(!code_id){
         console.error('产品symbolId不存在')
     }
-    return {
+    const result = {
         name: code_id,
         ticker: code_id, // 商品代码
         // 'exchange-traded': product.short_name,   不需要这两个字段
@@ -321,7 +316,19 @@ function querySymbolInfo (code_id) {
         description: '', // 商品说明。这个商品说明将被打印在图表的标题栏中。
         type: 'stock', // 仪表的可选类型 stock, index, forex, futures, bitcoin,  expression,  spread, cfd 或其他字符串
         supported_resolutions: Object.keys(resolutionToKlineType),
-        pricescale: 10000, // 价格精度
-        has_weekly_and_monthly: true // 允许周期：周/月
+        pricescale: 100000000000000000, // 价格精度
+        has_weekly_and_monthly: true, // 允许周期：周/月
+        ...normalizeInfo(symbolInfo)
     }
+
+    return result
+}
+
+
+function normalizeInfo(info){
+    const result = {
+        pricescale:  Math.pow(10, info.digits),
+        description: info.description
+    }
+    return result
 }

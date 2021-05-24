@@ -67,12 +67,13 @@ export default {
                 return
             }
 
+            const symbolInfo = {
+                ...this.initialValue
+            }
+
             this.datafeed = new UDFCompatibleDatafeed('', {
                 isControl: true,
-                symbolInfo: {
-                    ...this.initialValue,
-                    pricescale: Math.pow(10, this.initialValue.price_digits)
-                }
+                symbolInfo
             })
 
             // eslint-disable-next-line new-cap
@@ -90,7 +91,7 @@ export default {
 
             this.widget.onChartReady(() => {
                 this.linesMap[this.initialValue.value] = {}
-                this.createStudies()
+                this.createStudies(symbolInfo)
                 // 根据用户设置的类型显示图表
                 this.setChartType()
                 console.log(`%c初始产品: ${JSON.stringify(this.initialValue)}datafeed:${JSON.stringify(this.datafeed)}`, 'color:green')
@@ -133,13 +134,15 @@ export default {
             })
         },
         // 批量创建指标
-        createStudies () {
+        createStudies (info) {
             this.studies.forEach(e => {
-                this.widget.activeChart().createStudy(...e)
+                this.widget.activeChart().createStudy(...e, {
+                    precision: info.price_digits
+                })
             })
         },
         updateLineData (val) {
-            console.log('更新价格线')
+            // console.log('更新价格线')
 
             if (!isEmpty(this.buyPriceLinEntity)) {
                 this.buyPriceLinEntity.setPrice(val.buy_price)
