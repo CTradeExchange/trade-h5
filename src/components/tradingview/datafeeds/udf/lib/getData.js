@@ -22,12 +22,12 @@ store.subscribe((mutation, state) => {
             return
         }
 
-        const { tick_time, price } = mutation.payload
-        if(oldPrice === price){
+        const { tick_time, cur_price } = mutation.payload
+        if(oldPrice === cur_price){
             return
         }
-        oldPrice = price
-        const tick = normalizeTick(price, symbolParams.resolution, tick_time)
+        oldPrice = cur_price
+        const tick = normalizeTick(cur_price, symbolParams.resolution, tick_time)
         tickListener(tick)
         isdebug && debugTick(tick, symbolParams)
     } catch (error) {

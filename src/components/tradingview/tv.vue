@@ -9,7 +9,7 @@
 import { UDFCompatibleDatafeed } from './datafeeds/udf/lib/udf-compatible-datafeed'
 import { WidgetConfig } from './widget.config'
 import { resolutionToKlineType, resolutionToText } from '@/components/tradingview/datafeeds/udf/lib/constant.js'
-import { localSet, localGet, isEmpty } from '@/utils/util'
+import { localGet, isEmpty } from '@/utils/util'
 export default {
     props: {
         initialValue: {
@@ -70,7 +70,8 @@ export default {
             this.datafeed = new UDFCompatibleDatafeed('', {
                 isControl: true,
                 symbolInfo: {
-                    ...this.initialValue
+                    ...this.initialValue,
+                    pricescale: Math.pow(10, this.initialValue.price_digits)
                 }
             })
 
