@@ -10,7 +10,7 @@ function resolve (dir) {
 const NODE_ENV = process.env.NODE_ENV
 
 const isAdminMode = process.env.VUE_APP_isAdmin === 'true' // WordPress后台插件的开发模式
-
+console.log(NODE_ENV, process.env.VUE_APP_isAdmin)
 if (process.env.NODE_ENV === 'production') {
     plugins = [
         new FileManagerPlugin({
@@ -37,7 +37,7 @@ if (isAdminMode) {
         index: {
             entry: 'src_admin/pages/index/main.js',
             template: 'public/admin.html',
-            filename: NODE_ENV === 'development' ? 'index.html' : 'admin.html',
+            filename: 'index.html',
         },
         // preview: {
         //     entry: 'src_admin/pages/preview/main.js',
@@ -54,6 +54,7 @@ if (isAdminMode) {
 }
 
 const config = {
+    productionSourceMap: false,
     publicPath: process.env.NODE_ENV === 'production' && isAdminMode ? '/wp-content/plugins/cats-manage/wp-admin-static/' : '/', // static/
     indexPath: isAdminMode ? 'index.html' : 'index_template.html', // 就是这条
     lintOnSave: false,

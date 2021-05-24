@@ -1,6 +1,6 @@
 <template>
     <div ref='chartWrap' class='chartWrap'>
-        <tv v-if='initialValue' ref='tv' a='1' :initial-value='initialValue' @symbolChanged='symbolChanged'>
+        <tv v-if='initialValue' ref='tv' :initial-value='initialValue' @symbolChanged='symbolChanged'>
             <template #default='{ setSymbol,resolutionList, setResolution }'>
                 <Top>
                     <template #right>
@@ -96,8 +96,7 @@ export default {
                     text: e.symbolName,
                     value: e.symbolId,
                     description: e.symbolName,
-                    price_digits: e.price_digits,
-                    pricescale: Math.pow(10, e.price_digits)
+                    priceDigits: e.price_digits
                 }))
         )
 

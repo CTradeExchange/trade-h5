@@ -99,6 +99,9 @@ export function WidgetConfig () {
             'paneProperties.legendProperties.showLegend': true,
             'paneProperties.legendProperties.showBarChange': true,
             // 'paneProperties.legendProperties.showOnlyPriceSource': false,
+            // 边际（百分比）。 用于自动缩放。
+            'paneProperties.topMargin': 22,
+            'paneProperties.bottomMargin': 5,
 
             // 'scalesProperties.backgroundColor': '#ffffff',
             // 'scalesProperties.fontSize': 11,

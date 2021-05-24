@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",
-    "dev_admin": "vue-cli-service serve --mode admin",
+    "dev_admin": "vue-cli-service serve --mode adminDev",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build_admin": "vue-cli-service build --mode admin",
