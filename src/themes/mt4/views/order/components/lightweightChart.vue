@@ -42,7 +42,6 @@ export default {
                 color: style.value.buyColor,
                 priceScale: {
                     autoScale: false,
-
                 },
                 priceFormat: {
                     type: 'price',
@@ -93,15 +92,15 @@ export default {
                 sellLineSeries.setData([...sellPriceArrs])
             }
 
-            console.log(buyLineSeries)
+            // console.log(buyLineSeries)
             if (product.tick_time) {
                 setNewPrice()
             }
             watch(
-                () => product.price,
+                () => [product.sell_price, product.buy_price],
                 newval => {
                     setNewPrice()
-                    // console.log(product.tick_time * 1, product.buy_price * 1)
+                    // console.log(product.tick_time * 1, product.buy_price, product.sell_price)
                     // buyLineSeries.update({ time: parseInt(product.tick_time / 1000), value: Number(product.buy_price) })
                     // sellLineSeries.update({ time: parseInt(product.tick_time / 1000), value: Number(product.sell_price) })
                 }
