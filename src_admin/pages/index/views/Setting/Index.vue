@@ -245,7 +245,6 @@
                                 <el-input
                                     v-model='form.onlineService'
                                     placeholder='请输入'
-                                    :row='5'
                                     type='textarea'
                                 />
                             </el-form-item>
@@ -514,7 +513,7 @@ export default {
     }
     .tab {
         height: calc(100vh - 100px);
-          padding-bottom: 100px;
+        padding-bottom: 100px;
         overflow: auto;
     }
     .tree {
@@ -523,23 +522,23 @@ export default {
             margin-bottom: 10px;
         }
     }
-    .play-settings{
+    .play-settings {
         display: flex;
         flex-direction: row;
+        flex-wrap: nowrap;
         justify-content: space-between;
         width: 100%;
-        flex-wrap: nowrap;
-        .p-left{
+        .p-left {
             flex: 1;
         }
-        .p-right{
-            flex: 0 0 60px;
+        .p-right {
             display: flex;
+            flex: 0 0 60px;
             flex-direction: row;
-            .el-button{
+            .el-button {
                 width: 100%;
-                background: #F5F7FA;
                 color: #909399;
+                background: #F5F7FA;
                 border: 1px solid #DCDFE6;
                 border-left: none;
             }
