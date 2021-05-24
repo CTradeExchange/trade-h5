@@ -60,28 +60,12 @@ export default {
                 { title: '结余：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.balance, customerInfo.value.digits) : '--' },
                 { title: '净值：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.netWorth, customerInfo.value.digits) : '--' },
                 { title: '可用预付款：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.availableMargin, customerInfo.value.digits) : '--' },
-                { title: '预付款比率(%)：', value: accountInfo.value.marginRadio ? accountInfo.value.marginRadio + '%' : '--' },
+                { title: '预付款比率(%)：', value: accountInfo.value.marginRadio ? accountInfo.value.marginRadio : '--' },
                 { title: '预付款：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.occupyMargin, customerInfo.value.digits) : '--' },
             ]
         })
 
-        // 取变动价格列表
-        // const positionProfitLossList = computed(() => store.state._trade.positionProfitLossList)
-
         const positionList = computed(() => store.state._trade.positionList)
-
-        // watch([positionList, positionProfitLossList], ([pNew, pflNew], [pOld, pflOld]) => {
-        //     if (pNew.length > 0 && pflNew.length > 0) {
-        //         pNew.forEach(p => {
-        //             pflNew.forEach(item => {
-        //                 // console.log('更新价格', item.profitLoss)
-        //                 if (Number(item.positionId) === Number(p.positionId)) {
-        //                     p.profitLoss = priceFormat(item.profitLoss, customerInfo.value.digits)
-        //                 }
-        //             })
-        //         })
-        //     }
-        // })
 
         const state = reactive({
             sortActionsVisible: false,
@@ -122,7 +106,6 @@ export default {
             refresh,
             accountInfo,
             capitalListData,
-            // positionProfitLossList,
             positionList
         }
     },

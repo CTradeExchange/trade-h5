@@ -9,10 +9,11 @@
                 <template v-if='data.bizType===2'>
                     <!-- 平仓 -->
                     <span :class="data.openDirection === 1 ? 'fallColor' : 'riseColor'">
-                        {{ data.openDirection === 1 ? 'sell' : 'buy' }}
+                        <!-- {{ data.openDirection === 1 ? 'sell' : 'buy' }} -->
 
                         {{ data.tradeVolume }}
                     </span>
+                    平仓
                 </template>
                 <template v-else>
                     <!-- 开仓、挂单 -->
