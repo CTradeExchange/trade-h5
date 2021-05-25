@@ -112,7 +112,7 @@ export default {
                     this.$emit('symbolChanged', this.symbolId)
                 })
             // 修改现有指标价格价格精度
-            this.setPrecisionForStudies(info.price_digits)
+            this.setPrecisionForStudies(info.digits)
             this.setChartType()
         },
         // 切换周期
@@ -137,7 +137,7 @@ export default {
         createStudies (info) {
             this.studies.forEach(e => {
                 this.widget.activeChart().createStudy(...e, {
-                    precision: info.price_digits
+                    precision: info.digits
                 })
             })
         },
