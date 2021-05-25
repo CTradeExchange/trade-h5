@@ -25,7 +25,7 @@
     "jsonlint": "^1.6.3",
     "lightweight-charts": "^3.3.0",
     "mousetrap": "^1.6.5",
-    "pako": "^2.0.3",
+    "pako": "^1.0.11",
     "reconnectingwebsocket": "^1.0.0",
     "script-loader": "^0.7.2",
     "vant": "^3.0.2",

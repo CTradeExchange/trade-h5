@@ -118,7 +118,7 @@ export default {
                 }
                 getSymbolList(params).then(res => {
                     const { data, code } = res
-                    debugger
+
                     if (code === '0' && Array.isArray(data)) {
                         state.searchDataList = differenceBy(data, selfSymbolList.value.map(el => ({
                             id: el.symbolId,

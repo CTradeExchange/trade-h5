@@ -13,7 +13,7 @@
             再试试
         </van-button>
         <span class='line'></span>
-        <van-button class='confirmBtn' @click='toLogin'>
+        <van-button class='confirmBtn' @click='toService'>
             在线客服
         </van-button>
     </div>
@@ -21,15 +21,19 @@
 
 <script>
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 export default {
     setup (props) {
         const router = useRouter()
-        const toLogin = () => {
-            router.push('/login')
+        const store = useStore()
+        const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
+        const toService = () => {
+            if (onlineServices.value) { location.href = onlineServices.value }
         }
 
         return {
-            toLogin
+            toService,
+            onlineServices
         }
     }
 }

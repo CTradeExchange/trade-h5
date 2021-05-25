@@ -9,7 +9,7 @@
         </header>
         <form class='loginForm'>
             <div v-if="loginAccount==='mobile'" class='field'>
-                <MobileInput v-model='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
+                <areaInput v-model.trim='loginName' v-model:zone='zone' clear placeholder='请输入手机号或邮箱' />
             </div>
             <div v-else class='field'>
                 <InputComp v-model='email' clear label='邮箱' />
@@ -30,20 +30,6 @@
                 <Vline />
                 <a class='btn' href='javascript:;' @click="$router.push({ name:'Forgot' })">
                     忘记密码
-                </a>
-                <Vline />
-                <a v-if="loginAccount==='mobile' && loginType === 'checkCode'" class='btn' href='javascript:;' @click="loginAccount='email'">
-                    邮箱验证码登录
-                </a>
-                <a v-if="loginAccount==='email' && loginType === 'checkCode'" class='btn' href='javascript:;' @click="loginAccount='mobile'">
-                    手机验证码登录
-                </a>
-
-                <a v-if="loginAccount==='email' && loginType === 'password'" class='btn' href='javascript:;' @click="loginAccount='mobile'">
-                    手机密码登录
-                </a>
-                <a v-if="loginAccount==='mobile' && loginType === 'password'" class='btn' href='javascript:;' @click="loginAccount='email'">
-                    邮箱密码登录
                 </a>
             </div>
         </form>
@@ -126,7 +112,7 @@
 <script>
 import Schema from 'async-validator'
 import LanguageDiv from '@m/modules/languageDiv'
-import MobileInput from '@/components/form/mobileInput'
+import areaInput from '@/components/form/areaInput'
 import InputComp from '@/components/form/input'
 import Vline from '@/components/vline'
 import CheckCode from '@/components/form/checkCode'
@@ -150,7 +136,7 @@ export default {
         LanguageDiv,
         Vline,
         InputComp,
-        MobileInput,
+        areaInput,
         LoginByGoogle,
         LoginByFacebook,
         CheckCode,
@@ -167,8 +153,7 @@ export default {
             kycPop: false,
             loginPwdPop: false,
             zone: '+86',
-            email: '',
-            mobile: '',
+            loginName: '',
             pwd: '',
             checkCode: '',
             loginType: 'checkCode',
@@ -182,7 +167,9 @@ export default {
         })
         const zoneList = computed(() => store.state.zoneList)
         // 手机正则表达式
-        const mobileReg = computed(() => getArrayObj(zoneList.value, 'code', state.zone).extend || '')
+        const mobileReg = computed(() => {
+            return getArrayObj(zoneList.value, 'code', state.zone).extend || ''
+        })
 
         const changeLoginType = () => {
             const loginType = state.loginType
@@ -190,14 +177,19 @@ export default {
         }
         const loginHandle = () => {
             const loginParams = {
-                type: state.loginAccount === 'mobile' ? 2 : 1,
-                loginName: state.loginAccount === 'mobile' ? state.mobile : state.email,
-                phoneArea: state.loginAccount === 'mobile' ? String(state.zone) : undefined,
+                type: state.loginName.includes('@') ? 1 : 2,
+                loginName: state.loginName,
                 device: getDevice(),
                 verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
                 loginPwd: state.loginType === 'password' ? md5(state.pwd) : undefined,
                 sendToken: state.loginType === 'checkCode' ? token : undefined,
 
+            }
+
+            if (state.loginName.includes('@')) {
+                loginParams.emailArea = String(state.zone)
+            } else {
+                loginParams.phoneArea = String(state.zone)
             }
 
             const validator = new Schema(Rule)
@@ -293,18 +285,24 @@ export default {
         // 发送验证码
         const verifyCodeSendHandler = (callback) => {
             const verifyParams = {
-                type: state.loginAccount === 'mobile' ? 2 : 1,
-                loginName: state.loginAccount === 'mobile' ? state.mobile : state.email,
-                phoneArea: state.loginAccount === 'mobile' ? String(state.zone) : undefined,
+                type: state.loginName.includes('@') ? 1 : 2,
+                loginName: state.loginName
             }
+
+            if (state.loginName.includes('@')) {
+                verifyParams.emailArea = String(state.zone)
+            } else {
+                verifyParams.phoneArea = String(state.zone)
+            }
+
             const validator = new Schema(Rule)
             validator.validate({
                 ...verifyParams,
                 mobileReg: new RegExp(mobileReg.value)
             }).then(res => {
                 const params = {
-                    bizType: state.loginAccount === 'mobile' ? 'SMS_LOGIN_VERIFICATION_CODE' : 'EMAIL_LOGIN_VERIFICATION_CODE',
-                    toUser: state.loginAccount === 'mobile' ? String(state.zone) + ' ' + state.mobile : state.email,
+                    bizType: state.loginName.includes('@') ? 'EMAIL_LOGIN_VERIFICATION_CODE' : 'SMS_LOGIN_VERIFICATION_CODE',
+                    toUser: state.loginName.includes('@') ? state.loginName : String(state.zone) + ' ' + state.loginName,
                 }
                 verifyCodeSend(params).then(res => {
                     if (res.check()) {

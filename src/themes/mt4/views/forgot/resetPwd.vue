@@ -23,7 +23,7 @@
             </div>
         </van-cell-group>
         <van-button class='confirmBtn' @click='handleConfirm'>
-            确定
+            <span> 确定</span>
         </van-button>
     </div>
 </template>

@@ -25,10 +25,11 @@
                 <TradeTypeAction v-model='tradeType' class='cellRow' />
                 <!-- <van-cell title="账户币种" is-link arrow-direction="down" value="USD" /> -->
                 <div v-if="openType === 'mobile'" class='cell'>
-                    <MobileInput v-model.trim='mobile' v-model:zone='zone' placeholder='手机号' @blur='onMobileBlur' />
+                    <areaInput v-model.trim='mobile' v-model:zone='zone' placeholder='手机号' @blur='onMobileBlur' />
                 </div>
                 <div v-else class='cell'>
-                    <InputComp v-model='email' clear label='邮箱' />
+                    <!-- <InputComp v-model='email' clear label='邮箱' /> -->
+                    <areaInput v-model.trim='email' v-model:zone='zone' placeholder='邮箱' />
                 </div>
                 <div class='cell'>
                     <CheckCode v-model='checkCode' clear label='验证码' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
@@ -61,7 +62,7 @@ import VueSelect from '@m/components/select'
 import Loading from '@m/components/loading'
 import CheckCode from '@/components/form/checkCode'
 import InputComp from '@/components/form/input'
-import MobileInput from '@/components/form/mobileInput'
+import areaInput from '@/components/form/areaInput'
 import CurrencyAction from './components/currencyAction'
 import TradeTypeAction from './components/tradeTypeAction'
 import { getDevice, getQueryVariable, setToken, getArrayObj } from '@/utils/util'
@@ -76,7 +77,7 @@ import Rule, { checkCustomerExistRule } from './rule'
 export default {
     components: {
         Top,
-        MobileInput,
+        areaInput,
         InputComp,
         CheckCode,
         Loading,
@@ -173,7 +174,6 @@ export default {
             const params = {
                 type: state.openType === 'email' ? 1 : 2,
                 loginName: state.openType === 'email' ? state.email : state.mobile,
-                phoneArea: state.openType === 'mobile' ? String(state.zone) : '',
                 registerSource: getDevice(),
                 verifyCode: state.checkCode,
                 currency: state.currency,
@@ -186,6 +186,13 @@ export default {
                 utmTerm: getQueryVariable('utm_term'),
                 protocol: state.protocol
             }
+
+            if (state.openType === 'mobile') {
+                params.phoneArea = String(state.zone)
+            } else {
+                params.emailArea = String(state.zone)
+            }
+
             const validator = new Schema(Rule)
             validator.validate(
                 { ...params, mobileReg: new RegExp(mobileReg.value) },
@@ -201,11 +208,17 @@ export default {
             const verifyParams = {
                 type: state.openType === 'mobile' ? 2 : 1,
                 loginName: state.openType === 'mobile' ? state.mobile : state.email,
-                phoneArea: state.openType === 'mobile' ? String(state.zone) : undefined,
                 protocol: state.protocol,
                 mobileReg: new RegExp(mobileReg.value)
 
             }
+
+            if (state.openType === 'mobile') {
+                verifyParams.phoneArea = String(state.zone)
+            } else {
+                verifyParams.emailArea = String(state.zone)
+            }
+
             const validator = new Schema(checkCustomerExistRule)
             state.verifyCodeLoading = true
             validator.validate(verifyParams, { first: true }).then(res => {

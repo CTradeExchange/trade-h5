@@ -31,7 +31,7 @@
         <div class='tabs-content'>
             <form v-show='curTab === 0' class='loginForm'>
                 <div class='field'>
-                    <MobileInput v-model='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
+                    <areaInput v-model='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
                 </div>
                 <div class='field'>
                     <checkCode v-model='checkCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
@@ -40,7 +40,7 @@
 
             <form v-show='curTab === 1' class='loginForm'>
                 <div class='field'>
-                    <u-input v-model='email' clear label='请输入邮箱' />
+                    <areaInput v-model='email' v-model:zone='zone' clear placeholder='请输入邮箱' />
                 </div>
                 <div class='field'>
                     <checkCode v-model='emailCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
@@ -58,7 +58,7 @@ import Top from '@/components/top'
 import {
     reactive, toRefs, computed
 } from 'vue'
-import MobileInput from '@/components/form/mobileInput'
+import areaInput from '@/components/form/areaInput'
 import checkCode from '@/components/form/checkCode'
 import { Toast } from 'vant'
 import { useRouter } from 'vue-router'
@@ -72,7 +72,7 @@ import { isEmpty, getArrayObj } from '@/utils/util'
 export default {
     components: {
         Top,
-        MobileInput,
+        areaInput,
         checkCode,
         uInput
     },
@@ -128,7 +128,13 @@ export default {
                 const source = {
                     type: state.curTab === 0 ? 2 : 1,
                     loginName: state.curTab === 0 ? state.mobile : state.email,
-                    phoneArea: state.curTab === 0 ? state.zone : ''
+                    phoneArea: state.zone
+                }
+
+                if (state.curTab === 0) {
+                    source.phoneArea = state.zone
+                } else {
+                    source.emailArea = state.zone
                 }
 
                 checkCustomerExist(source).then(res => {
