@@ -92,7 +92,7 @@ const config = {
         },
         proxy: {
             '/wp-json/wp': {
-                target: 'http://uatwpadmin.ixmiddle.site'
+                target: 'http://prewpadmin.cats-trade.com' // http://prewpadmin.cats-trade.com/
             },
             '/cats-manage-api': {
                 target: 'http://prewph5.cats-trade.com' // uat http://uatwpview.cats-trade.com  // pre http://prewph5.cats-trade.com/
