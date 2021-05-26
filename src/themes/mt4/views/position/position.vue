@@ -43,6 +43,7 @@ export default {
     setup () {
         const store = useStore()
         const router = useRouter()
+        const positionList = computed(() => store.state._trade.positionList)
         const pendingList = computed(() => store.state._trade.pendingList)
         const customerInfo = computed(() => store.state._user.customerInfo)
         const sortActionsSelected = 'van-badge__wrapper van-icon van-icon-down'
@@ -65,8 +66,6 @@ export default {
             ]
         })
 
-        const positionList = computed(() => store.state._trade.positionList)
-
         const state = reactive({
             sortActionsVisible: false,
             sortActions
@@ -82,13 +81,21 @@ export default {
         const queryList = () => {
             store.dispatch('_trade/queryPositionPage', { 'sortFieldName': sortActionValue, 'sortType': 'desc' }).then(res => {
                 if (res.check()) {
-                    const positionList = res.data
-                    const subscribList = positionList.map(el => el.symbolId)
+                    const subscribList = positionList.value.concat(pendingList.value).map(el => el.symbolId)
+                    QuoteSocket.send_subscribe(subscribList)
+                }
+            })
+        }
+        const queryPendingList = () => {
+            store.dispatch('_trade/queryPBOOrderPage', { 'sortFieldName': sortActionValue, 'sortType': 'desc' }).then(res => {
+                if (res.check()) {
+                    const subscribList = positionList.value.concat(pendingList.value).map(el => el.symbolId)
                     QuoteSocket.send_subscribe(subscribList)
                 }
             })
         }
         queryList()
+        queryPendingList()
 
         const newOrder = () => {
             router.push({ name: 'Order', query: { symbolId: store.state._quote.productActivedID } })

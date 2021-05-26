@@ -277,7 +277,7 @@ export default {
                 positionId,
                 symbolId: Number(product.value.symbol_id),
                 requestTime: Date.now(),
-                requestNum: state.volumn * product.value.contractSize,
+                requestNum: parseInt((state.volumn * product.value.contractSize).toFixed(0)),
                 requestPrice: mul(requestPrice, p),
                 expireType: state.expireType,
                 stopLoss: Number(state.stopLoss) ? mul(state.stopLoss, p) : undefined,

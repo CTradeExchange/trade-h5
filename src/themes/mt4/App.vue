@@ -14,6 +14,7 @@ import Notice from '@m/components/notice'
 import { useStore } from 'vuex'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { Dialog } from 'vant'
 export default {
     components: {
         Notice
@@ -23,19 +24,37 @@ export default {
         const router = useRouter()
         window.store = store
 
-        // 用户被踢出消息
-        const kickOut = () => {
-            store.dispatch('_user/logout').then(() => {
+        // 跳转到登录页面刷新
+        const handlerLogout = () => {
+            return store.dispatch('_user/logout').then(() => {
                 return router.push('/login')
             }).then(() => {
                 location.reload()
             })
         }
 
+        // 用户被踢出消息
+        const kickOut = () => {
+            return handlerLogout()
+        }
+
+        // 用户异地登录
+        const disconnect = () => {
+            Dialog.alert({
+                title: '提示',
+                theme: 'round-button',
+                message: '您的账号在异地登录，请重新登录',
+            }).then(() => {
+                handlerLogout()
+            })
+        }
+
         // 监听ws全局事件
-        document.body.addEventListener('UserForceLogoutRet', kickOut, false)
+        document.body.addEventListener('GotMsg_UserForceLogoutRet', kickOut, false)
+        document.body.addEventListener('GotMsg_disconnect', disconnect, false)
         onMounted(() => {
-            document.body.removeEventListener('UserForceLogoutRet', kickOut)
+            document.body.removeEventListener('GotMsg_UserForceLogoutRet', kickOut)
+            document.body.removeEventListener('GotMsg_disconnect', kickOut)
         })
 
         return {}

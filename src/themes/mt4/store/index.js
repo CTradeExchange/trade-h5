@@ -42,7 +42,7 @@ export default createStore({
                 const productMap = state._quote.productMap
                 return selfSymbolIds.map(el => {
                     return productMap[el]
-                })
+                }).filter(el => el)
             }
         },
         // 用户产品板块
