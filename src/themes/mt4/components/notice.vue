@@ -33,7 +33,7 @@ export default {
             noticeContent: ''
         })
 
-        document.body.addEventListener('notice', res => {
+        document.body.addEventListener('GotMsg_notice', res => {
             state.show = true
             state.noticeContent = res.detail.content
             setTimeout(() => {

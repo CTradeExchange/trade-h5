@@ -1,5 +1,5 @@
 import { guid, getDevice, getToken } from '@/utils/util'
-import { Dialog } from 'vant'
+
 // websocket消息事件
 class SocketEvent {
     constructor () {
@@ -8,15 +8,17 @@ class SocketEvent {
         this.timeOut = 60 * 1000
         this.timer = null
         this.$store = null
+        this.$router = null
         this.requests = new Map()
         this.subscribedList = []
         this.connectNum = 0 // websocket链接连接次数
     }
 
     // 初始化
-    init (ws, $store) {
+    init (ws, $store, $router) {
         this.ws = ws
         this.$store = $store
+        this.$router = $router
     }
 
     // ws发送数据格式
@@ -97,6 +99,15 @@ class SocketEvent {
         return this.send('logout')
     }
 
+    // 跳转到登录页面刷新
+    handlerLogout () {
+        return this.$store.dispatch('_user/logout').then(() => {
+            return this.$router.push('/login')
+        }).then(() => {
+            location.reload()
+        })
+    }
+
     // 新增订阅动作，如果websocket已经建立好，则直接请求，否则先缓存在subscribedList中
     subscribedListAdd (fn) {
         if (this.ws.readyState === 1) {
@@ -165,30 +176,42 @@ class SocketEvent {
 
     // 处理异地登录踢出
     disconnect (data) {
-        const that = this
-        Dialog.alert({
-            title: '提示',
-            theme: 'round-button',
-            message: '您的账号在异地登录，请重新登录',
-        }).then(() => {
-            // 踢出登录断开ws
-            that.ws.close()
-            that.$store.dispatch('_user/logout')
-        })
+        document.body.dispatchEvent(new Event('GotMsg_disconnect'))
     }
 
     // 消息通知
     notice (data) {
-        const event = new CustomEvent('notice', {
-            detail: data
-        })
-        document.body.dispatchEvent(event)
+        // 刷新字段：updateType
+        // NO_MOVEMENT(0 ,"无动作"),
+        // POSITION(1 ,"刷新仓位"),
+        // ORDER(2 ,"刷新挂单"),
+        // AMOUNT(3 ,"刷新资金"),
+        // LOGOUT(4 ,"踢出"),
+        // POSITION_AND_ORDER(5, "同时刷新挂单、仓位"),
+        if (data.updateType === 1) {
+            this.$store.dispatch('_trade/queryPositionPage')
+        } else if (data.updateType === 2) {
+            this.$store.dispatch('_trade/queryPBOOrderPage')
+        } else if (data.updateType === 4) {
+            this.handlerLogout()
+        } else if (data.updateType === 5) {
+            this.$store.dispatch('_trade/queryPositionPage')
+            this.$store.dispatch('_trade/queryPBOOrderPage')
+        }
+
+        // 展示字段：show
+        // NO_MOVEMENT(0 ,"无动作"),
+        // POPUP(1 ,"弹窗"), // 显示顶部消息
+        if (data.show === 1) {
+            const event = new CustomEvent('GotMsg_notice', { detail: data })
+            document.body.dispatchEvent(event)
+        }
     }
 
     // 踢出消息
     UserForceLogoutRet () {
         const detail = {}
-        document.body.dispatchEvent(new CustomEvent('UserForceLogoutRet', { detail }))
+        document.body.dispatchEvent(new CustomEvent('GotMsg_UserForceLogoutRet', { detail }))
     }
 }
 
