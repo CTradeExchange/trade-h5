@@ -145,12 +145,12 @@ class SocketEvent {
         })
         this.floatProfitLoss({
             content: {
-                availableMargin: Number(accountData[2]),
-                balance: Number(accountData[5]),
+                availableMargin: accountData[2],
+                balance: accountData[5],
                 marginRadio: accountData[3],
-                netWorth: Number(accountData[4]),
-                occupyMargin: Number(accountData[1]),
-                profitLoss: Number(accountData[0]),
+                netWorth: accountData[4],
+                occupyMargin: accountData[1],
+                profitLoss: accountData[0],
                 positionProfitLossMessages: positionsProfitLoss,
             }
         })

@@ -7,7 +7,7 @@
                     保证金水平
                 </p>
                 <p class='t2' :class='computMargin'>
-                    {{ accountInfo ? accountInfo.marginRadio+'%' : '--' }}
+                    {{ accountInfo.marginRadio ?accountInfo.marginRadio+'%' : '--' }}
                 </p>
             </div>
             <div class='progress'>
@@ -24,7 +24,9 @@
                     (单位：{{ mainAccount.currency }})
                 </span>
             </p>
-            <div id='annulus' class='annulus'></div>
+            <div id='annulus' class='annulus'>
+                加载中...
+            </div>
             <div class='infos'>
                 <div class='item'>
                     <p class='label'>
@@ -122,18 +124,18 @@ export default {
             if (price === '') {
                 return '--'
             }
-            return price > 0 ? priceFormat(price, customInfo.value.digits) : 0
+            return price > 0 ? price : 0
         }
 
         const netWorth = computed(() => {
             if (!isEmpty(accountInfo.value) && !isEmpty(customInfo.value.digits)) {
-                return priceFormat(accountInfo.value.netWorth, customInfo.value.digits)
+                return accountInfo.value.netWorth
             }
         })
 
         onUpdated(() => {
             if (accountInfo.value) {
-                const earnest = computePrice(accountInfo.value.occupyMargin, customInfo.value.digit)
+                const earnest = accountInfo.value.occupyMargin
 
                 const netWorthPercent = divide(netWorth.value, parseFloat(netWorth.value + earnest))
                 const earnestPercent = divide(earnest, parseFloat(netWorth.value + earnest))
@@ -246,6 +248,8 @@ export default {
             }
         }
         .annulus {
+            height: rem(440px);
+            line-height: rem(440px);
             text-align: center;
         }
         .ring-svg {
