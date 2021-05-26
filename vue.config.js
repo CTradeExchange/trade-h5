@@ -1,7 +1,7 @@
 const path = require('path')
 const dayjs = require('dayjs')
 const FileManagerPlugin = require('filemanager-webpack-plugin')
-var plugins
+var plugins = []
 const pages = {}
 function resolve (dir) {
     return path.join(__dirname, dir)
@@ -12,27 +12,29 @@ const NODE_ENV = process.env.NODE_ENV
 const isAdminMode = process.env.VUE_APP_isAdmin === 'true' // WordPress后台插件的开发模式
 console.log(NODE_ENV, process.env.VUE_APP_isAdmin)
 if (process.env.NODE_ENV === 'production') {
-    plugins = [
+    const pathStr = isAdminMode ? 'cats-upload-admin' : 'cats-upload-all'
+    const pathName = isAdminMode ? 'admin' : 'dist'
+    plugins.push(
         new FileManagerPlugin({
             events: {
                 onEnd: {
                     delete: [
-                        './cats-upload-all/dist',
-                        './cats-upload-all.zip'
+                        `./build_folder/${pathStr}/dist`,
+                        `./build_folder/${pathStr}.zip`
                     ],
                     copy: [{
-                        source: './dist',
-                        destination: './cats-upload-all/dist'
+                        source: `./${pathName}`,
+                        destination: `./build_folder/${pathStr}/${pathName}`
                     }],
                     archive: [
-                        { source: resolve('dist'), destination: resolve(`zip/dist${dayjs().format('YYYYMMDDHHmm')}.zip`) },
-                        { source: resolve('cats-upload-all'), destination: 'cats-upload-all.zip', format: 'zip', }
+                        { source: resolve(`${pathName}`), destination: resolve(`zip/${pathName}${dayjs().format('YYYYMMDDHHmm')}.zip`) },
+                        { source: resolve(`./build_folder/${pathStr}`), destination: `./build_folder/${pathStr}.zip`, format: 'zip' }
                     ],
 
                 }
             }
         })
-    ]
+    )
 }
 
 if (isAdminMode) {
@@ -62,6 +64,7 @@ const config = {
     publicPath: process.env.NODE_ENV === 'production' && isAdminMode ? '/wp-content/plugins/cats-manage/wp-admin-static/' : '/', // static/
     indexPath: isAdminMode ? 'index.html' : 'index_template.html', // 就是这条
     lintOnSave: false,
+    outputDir: isAdminMode ? 'admin' : 'dist',
     configureWebpack: {
         plugins,
         optimization: {

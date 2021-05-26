@@ -27,3 +27,4 @@ pnpm-debug.log*
 /dist.zip
 /cats-upload-all.zip
 /cats-upload-all/dist
+/admin
