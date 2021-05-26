@@ -23,7 +23,7 @@ setRootVariable(Colors)
 const app = createApp(App)
 app.use(longpress)
 app.use(VantBase).use(store).use(router)
-app.use(Socket, { $store: store }).use(FindCustomerInfo, { $store: store, $router: router })
+app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router })
 app.component('Loading', Loading)
 app.component('LayoutTop', LayoutTop)
 
