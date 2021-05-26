@@ -74,8 +74,8 @@ export default {
                         direction: state.cur.direction,
                         openVolume: state.cur.openVolume,
                         openNum: state.cur.openNum,
-                        stopLossDecimal: state.cur.stopLossDecimal,
-                        takeProfitDecimal: state.cur.takeProfitDecimal,
+                        stopLoss: state.cur.stopLossDecimal,
+                        takeProfit: state.cur.takeProfitDecimal,
                         isClosePosition: true
                     }
                 })
