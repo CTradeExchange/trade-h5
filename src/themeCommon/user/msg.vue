@@ -13,6 +13,7 @@
             </div>
         </template>
     </LayoutTop>
+    <Loading :show='pageLoading' />
     <div class='msg-list'>
         <div v-if='list.length === 0'>
             <van-empty description='暂无数据' image='search' />
@@ -55,6 +56,7 @@ export default {
             list: [],
             loading: false,
             finished: false,
+            pageLoading: false,
             current: 1,
             type: '',
             rightAction: { title: 444 },
@@ -73,20 +75,19 @@ export default {
             console.log(val)
             state.type = val
             state.current = 1
+            state.finished = false
             state.list = []
             getMsgList()
         }
 
         const getMsgList = () => {
-            const toast = Toast.loading({
-                message: '加载中...',
-                forbidClick: true,
-            })
+            state.pageLoading = true
             queryPlatFormMessageLogList({
                 current: state.current,
                 parentType: state.type,
             }).then(res => {
-                toast.clear()
+                state.loading = false
+                state.pageLoading = false
                 if (res.check()) {
                     if (res.data.records && res.data.records.length > 0) {
                         state.list = state.list.concat(res.data.records)
@@ -97,6 +98,8 @@ export default {
                         state.finished = true
                     }
                 }
+            }).catch(err => {
+                state.pageLoading = false
             })
         }
 
