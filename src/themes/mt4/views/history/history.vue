@@ -130,7 +130,7 @@ export default {
                 if (res.check() && res.data) {
                     const data = res.data
                     state.loading = false
-                    if (res.data.list.length === 0 || res.data.current >= res.data.totalPage) {
+                    if (data.list.length === 0 || data.current >= data.totalPage) {
                         state.finished = true
                     }
                 }
