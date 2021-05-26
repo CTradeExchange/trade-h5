@@ -19,7 +19,7 @@
             <span v-if='isModifyPosition'>
                 修改订单：
             </span>
-            #{{ positionId }} {{ Number(curPosition.direction) === 1 ? 'buy' : 'sell' }} {{ curPosition.openVolume-curPosition.closeVolume }}
+            #{{ positionId }} {{ Number(curPosition.direction) === 1 ? 'buy' : 'sell' }} {{ minus(curPosition.openVolume, curPosition.closeVolume||0) }}
         </p>
 
         <!-- 订单手数 -->
@@ -451,6 +451,7 @@ export default {
             positionId,
             pendingId,
             orderId,
+            minus,
             isClosePosition,
             isModifyPosition,
             isModifyPending,
