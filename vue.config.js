@@ -23,7 +23,7 @@ if (process.env.NODE_ENV === 'production') {
                         `./build_folder/${pathStr}.zip`
                     ],
                     copy: [{
-                        source: `./${pathName}`,
+                        source: `./build_folder/${pathName}`,
                         destination: `./build_folder/${pathStr}/${pathName}`
                     }],
                     archive: [
@@ -64,7 +64,7 @@ const config = {
     publicPath: process.env.NODE_ENV === 'production' && isAdminMode ? '/wp-content/plugins/cats-manage/wp-admin-static/' : '/', // static/
     indexPath: isAdminMode ? 'index.html' : 'index_template.html', // 就是这条
     lintOnSave: false,
-    outputDir: isAdminMode ? 'admin' : 'dist',
+    outputDir: isAdminMode ? './build_folder/admin' : './build_folder/dist',
     configureWebpack: {
         plugins,
         optimization: {
