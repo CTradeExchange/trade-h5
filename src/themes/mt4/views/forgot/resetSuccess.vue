@@ -26,8 +26,11 @@ export default {
         const router = useRouter()
         const toLogin = () => {
             removeLoginParams()
-            store.dispatch('_user/logout')
-            router.push('/login')
+            store.dispatch('_user/logout').then(() => {
+                return router.push('/login')
+            }).then(() => {
+                location.reload()
+            })
         }
 
         return {

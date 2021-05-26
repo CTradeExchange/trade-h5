@@ -16,6 +16,10 @@ if (process.env.NODE_ENV === 'production') {
         new FileManagerPlugin({
             events: {
                 onEnd: {
+                    delete: [
+                        './cats-upload-all/dist',
+                        './cats-upload-all.zip'
+                    ],
                     copy: [{
                         source: './dist',
                         destination: './cats-upload-all/dist'
@@ -54,7 +58,7 @@ if (isAdminMode) {
 }
 
 const config = {
-    productionSourceMap: false,
+    productionSourceMap: true,
     publicPath: process.env.NODE_ENV === 'production' && isAdminMode ? '/wp-content/plugins/cats-manage/wp-admin-static/' : '/', // static/
     indexPath: isAdminMode ? 'index.html' : 'index_template.html', // 就是这条
     lintOnSave: false,
