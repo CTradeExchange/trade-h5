@@ -49,7 +49,7 @@
                         可取
                     </p>
                     <p class='val'>
-                        {{ computePrice(mainAccount.withdrawAmount) }}
+                        {{ computePrice(mainAccount.withdrawAmount,customInfo.digits ) }}
                     </p>
                 </div>
                 <div class='item'>
@@ -120,9 +120,12 @@ export default {
             router.push('/desposit')
         }
 
-        const computePrice = (price) => {
+        const computePrice = (price, digits) => {
             if (price === '') {
                 return '--'
+            }
+            if (!isEmpty(digits)) {
+                return priceFormat(price, digits)
             }
             return price > 0 ? price : 0
         }
@@ -170,7 +173,8 @@ export default {
             netWorth,
             computMargin,
             accountInfo,
-            mainAccount
+            mainAccount,
+            customInfo
         }
     }
 }
