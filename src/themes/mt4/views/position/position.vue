@@ -7,10 +7,14 @@
     </Top>
     <div class='container'>
         <CapitalList :data='capitalListData' />
-        <div class='titleBar'>
+        <div v-if='positionList.length===0 && $store.state._trade.positionLoading' class='loading'>
+            <van-loading type='spinner' />
+        </div>
+        <van-empty v-else-if='positionList.length===0 && pendingList.length===0' description='无历史记录' />
+        <div v-if='positionList.length' class='titleBar'>
             价位
         </div>
-        <PositionList @refresh='refresh' />
+        <PositionList v-if='positionList.length' @refresh='refresh' />
         <template v-if='pendingList.length'>
             <div class='titleBar'>
                 订单

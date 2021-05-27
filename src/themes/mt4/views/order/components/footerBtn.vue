@@ -1,46 +1,46 @@
 <template>
     <div v-if='$route.query.isClosePosition' class='footerBtn'>
         <div class='col'>
-            <button class='btn' :disabled='loading' @click='closeOrder()'>
+            <button class='btn' :disabled='disabled' @click='closeOrder()'>
                 平仓
             </button>
         </div>
     </div>
     <div v-else-if='$route.query.positionId' class='footerBtn'>
         <div class='col'>
-            <button class='btn' :disabled='loading' @click='updateOrder()'>
+            <button class='btn' :disabled='disabled' @click='updateOrder()'>
                 修改
             </button>
         </div>
     </div>
     <div v-else-if='$route.query.pendingId' class='footerBtn'>
         <div class='col'>
-            <button v-if='[2, 4].includes(openOrderSelected.val)' class='btn' :disabled='loading || buyDisabled' @click='updatePending'>
+            <button v-if='[2, 4].includes(openOrderSelected.val)' class='btn' :disabled='disabled || buyDisabled' @click='updatePending'>
                 修改
             </button>
-            <button v-else-if='[3, 5].includes(openOrderSelected.val)' class='btn' :disabled='loading || sellDisabled' @click='updatePending'>
+            <button v-else-if='[3, 5].includes(openOrderSelected.val)' class='btn' :disabled='disabled || sellDisabled' @click='updatePending'>
                 修改
             </button>
         </div>
     </div>
     <div v-else-if='openOrderSelected.val === 1' class='footerBtn line'>
         <div class='col'>
-            <button class='btn sellColor' :disabled='loading || sellDisabled' @click="openOrder('sell')">
+            <button class='btn sellColor' :disabled='disabled || sellDisabled' @click="openOrder('sell')">
                 SELL
             </button>
         </div>
         <div class='col'>
-            <button class='btn buyColor' :disabled='loading || buyDisabled' @click="openOrder('buy')">
+            <button class='btn buyColor' :disabled='disabled || buyDisabled' @click="openOrder('buy')">
                 BUY
             </button>
         </div>
     </div>
     <div v-else class='footerBtn'>
         <div class='col'>
-            <button v-if='[2, 4].includes(openOrderSelected.val)' class='btn buyColor' :disabled='loading || buyDisabled' @click='openOrder()'>
+            <button v-if='[2, 4].includes(openOrderSelected.val)' class='btn buyColor' :disabled='disabled || buyDisabled' @click='openOrder()'>
                 下单
             </button>
-            <button v-else-if='[3, 5].includes(openOrderSelected.val)' class='btn sellColor' :disabled='loading || sellDisabled' @click='openOrder()'>
+            <button v-else-if='[3, 5].includes(openOrderSelected.val)' class='btn sellColor' :disabled='disabled || sellDisabled' @click='openOrder()'>
                 下单
             </button>
         </div>
@@ -52,7 +52,7 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 export default {
     props: {
-        loading: Boolean,
+        disabled: Boolean,
         openOrderSelected: Object,
         pendingPrice: [String, Number],
         stopLoss: [String, Number],

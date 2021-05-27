@@ -98,8 +98,8 @@
     <!-- 协助测试代码 end -->
     <!-- 底部下单按钮 -->
     <FooterBtn
+        :disabled='footerBtnDisabled'
         :is-modify-status='!!$route.query.pendingId'
-        :loading='loading'
         :open-order-selected='openOrderSelected'
         :pending-price='pendingPrice'
         :stop-loss='stopLoss'
@@ -218,12 +218,13 @@ export default {
                 return product.value.maxVolume
             }
         })
+        const footerBtnDisabled = computed(() => state.loading || state.volumn === '')
 
         // 止损价格变更
         watch(
             () => state.stopLoss,
             newval => {
-                // chart.value && newval && chart.value.stopLossLineUpdate({ price: newval * 1 })
+                chart.value && newval && chart.value.stopLossLineUpdate({ price: newval * 1 })
             }
         )
         // 止赢价格变更
@@ -454,6 +455,7 @@ export default {
             pendingId,
             orderId,
             minus,
+            footerBtnDisabled,
             isClosePosition,
             isModifyPosition,
             isModifyPending,
