@@ -121,9 +121,11 @@
 import { toRefs, reactive, ref, computed, onBeforeMount } from 'vue'
 import { queryCapitalFlowList } from '@/api/user'
 import dayjs from 'dayjs'
+import { useStore } from 'vuex'
 import { isEmpty, priceFormat } from '@/utils/util'
 export default {
     setup (props) {
+        const store = useStore()
         const proDownItem = ref(null)
         const dateDownItem = ref(null)
         const customInfo = computed(() => store.state._user.customerInfo)
@@ -221,7 +223,7 @@ export default {
         const onDate = (item) => {
             state.dateTitle = item.name
             if (item.value === 1) {
-                state.date = dayjs(new Date()).format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
+                state.date = dayjs(new Date()).format('YYYY/MM/DD 00:00:00') + '-' + dayjs(new Date()).format('YYYY/MM/DD 23:59:59')
             } else if (item.value === 2) {
                 state.date = dayjs().subtract(7, 'day').format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
                 state.dateRange = [dayjs().subtract(7, 'day').format('YYYY/MM/DD'), dayjs(new Date()).format('YYYY/MM/DD')]
@@ -253,6 +255,7 @@ export default {
         const onConfirm = (values) => {
             state.dateCur = 99
             const [start, end] = values
+            state.pagigation.current = 1
             state.showCalendar = false
             state.date = `${formatDate(start)} - ${formatDate(end)}`
             state.dateTitle = state.date
@@ -287,6 +290,7 @@ export default {
         }
 
         const queryFundDetail = () => {
+            debugger
             const params = {
                 size: state.pagigation.size,
                 current: state.pagigation.current,
@@ -302,14 +306,15 @@ export default {
                 state.loading = false
                 state.loadingRefresh = false
                 if (res.check()) {
-                    state.list = state.list.concat(res.data.records)
+                    debugger
+                    if (res.data.records.length > 0) { state.list = state.list.concat(res.data.records) }
 
                     // 数据全部加载完成
                     if (res.data.current * res.data.size >= res.data.total) {
                         state.finished = true
                     }
 
-                    if (isEmpty(res.data.records)) {
+                    if (isEmpty(res.data.total)) {
                         state.finishedText = ''
                     }
                 }
