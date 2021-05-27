@@ -1,17 +1,4 @@
 <template>
-    <!-- <van-stepper
-        v-model='value'
-        class='priceStepper'
-        :class="{ 'disabled':disabled }"
-        :decimal-length='product.price_digits'
-        :disabled='disabled'
-        :min='-999'
-        :step='step'
-        @change='onChange'
-        @focus='onFocus'
-        @minus='onMinus'
-        @plus='onPlus'
-    /> -->
     <Stepper
         class='priceStepper'
         :digits='product.price_digits'
@@ -77,6 +64,7 @@ export default {
             emit('update:modelValue', newVal)
             prevValue = newVal
         }
+
         const onFirstPlus = () => {
             const newVal = plus(props.product.sell_price, step.value).toFixed(props.product.price_digits)
             state.value = newVal
