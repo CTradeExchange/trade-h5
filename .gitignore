@@ -34,3 +34,5 @@ pnpm-debug.log*
 /build_folder/cats-upload-admin/admin
 /build_folder/admin
 /build_folder/dist
+/build_folder/cats-upload-all/cats-upload-all/dist
+/build_folder/cats-upload-admin/cats-upload-admin/admin

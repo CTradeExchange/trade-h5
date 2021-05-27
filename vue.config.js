@@ -19,16 +19,24 @@ if (process.env.NODE_ENV === 'production') {
             events: {
                 onEnd: {
                     delete: [
-                        `./build_folder/${pathStr}/dist`,
+                        `./build_folder/${pathStr}/${pathStr}/dist`,
                         `./build_folder/${pathStr}.zip`
                     ],
                     copy: [{
                         source: `./build_folder/${pathName}`,
-                        destination: `./build_folder/${pathStr}/${pathName}`
+                        destination: `./build_folder/${pathStr}/${pathStr}/${pathName}`
                     }],
                     archive: [
                         { source: resolve(`${pathName}`), destination: resolve(`zip/${pathName}${dayjs().format('YYYYMMDDHHmm')}.zip`) },
-                        { source: resolve(`./build_folder/${pathStr}`), destination: `./build_folder/${pathStr}.zip`, format: 'zip' }
+                        {
+                            source: resolve(`./build_folder/${pathStr}`),
+                            destination: `./build_folder/${pathStr}.zip`,
+                            options: {
+                                gzipOptions: {
+                                    level: 1
+                                }
+                            }
+                        }
                     ],
 
                 }
