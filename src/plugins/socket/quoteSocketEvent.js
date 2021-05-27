@@ -129,11 +129,12 @@ class SocketEvent {
 
     // 心跳机制
     initPing () {
-        if (this.ws.readyState !== 1) return console.warn('消息websocket连接未准备好  readyState：', this.ws.readyState)
+        const ws = this.ws
+        if (ws.readyState !== 1) return console.warn('消息websocket连接未准备好  readyState：', ws.readyState)
         if (this.ping) clearInterval(this.ping)
         this.ping = setInterval(() => {
             const param = this.getParam(14008, {})
-            this.ws.send(JSON.stringify(param))
+            if (ws.readyState === 1) ws.send(JSON.stringify(param))
         }, 10000)
     }
 }
