@@ -290,7 +290,6 @@ export default {
         }
 
         const queryFundDetail = () => {
-            debugger
             const params = {
                 size: state.pagigation.size,
                 current: state.pagigation.current,
@@ -306,7 +305,6 @@ export default {
                 state.loading = false
                 state.loadingRefresh = false
                 if (res.check()) {
-                    debugger
                     if (res.data.records.length > 0) { state.list = state.list.concat(res.data.records) }
 
                     // 数据全部加载完成
