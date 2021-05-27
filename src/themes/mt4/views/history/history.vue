@@ -15,7 +15,14 @@
     <!-- 查询时间 actionsheet -->
     <van-action-sheet v-model:show='timeActionsVisible' :actions='timeActions' cancel-text='取消' class='timeActions' @select='timeActionSheetOnSelect' />
     <!-- 日历 -->
-    <van-calendar v-model:show='calendarVisible' :max-date='maxDate' :min-date='minDate' type='range' @confirm='calendarOnConfirm' />
+    <van-calendar
+        v-model:show='calendarVisible'
+        :allow-same-day='true'
+        :max-date='maxDate'
+        :min-date='minDate'
+        type='range'
+        @confirm='calendarOnConfirm'
+    />
 </template>
 
 <script>
@@ -83,6 +90,7 @@ export default {
                 item.className = sortActionsDown
                 sortFieldName = item.feild
             }
+            state.finished = false
             state.sortActionsVisible = false
             current = 1
             queryRecordList()
@@ -105,6 +113,7 @@ export default {
             startTime = dayjs(start).startOf('day').valueOf()
             endTime = dayjs(end).endOf('day').valueOf()
             current = 1
+            state.finished = false
             queryRecordList()
             state.calendarVisible = false
         }
@@ -121,7 +130,7 @@ export default {
             if (sortFieldName === 'closeTime') {
                 params.closeStartTime = startTime
                 params.closeEndTime = endTime
-            } else if (sortFieldName === 'openTime') {
+            } else {
                 params.openStartTime = startTime
                 params.openEndTime = endTime
             }

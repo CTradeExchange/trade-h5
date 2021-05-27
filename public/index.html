@@ -65,7 +65,7 @@
     <!-- built files will be auto injected -->
     <script>
         var date = new Date();
-        var strDate = date.toLocaleString().replace(/[年月]/g,'-').replace(/[日上下午:/]/g,'');
+        var strDate = date.toLocaleString().replace(/[年月]/g,'').replace(/[日上下午:/]/g,'');
         window['version'] =   'V-'+ strDate
         window['isPRD'] = true
 
