@@ -70,7 +70,7 @@ export default {
 
         // 是否符合买入的止盈止损范围
         const buyDisabled = computed(() => {
-            let { stopLoss, takeProfit, pendingPrice, openOrderSelected } = props
+            let { stopLoss, takeProfit, pendingPrice, openOrderSelected, isModifyStatus } = props
             const [buyProfitMin, buyProfitMax] = profitLossRang.value.buyProfitRange
             const [buyStopLossMin, buyStopLossMax] = profitLossRang.value.buyStopLossRange
             const [buyLimitMin, buyLimitMax] = pendingPriceRang.value.buyLimitRange
@@ -86,9 +86,9 @@ export default {
                 return true
             } else if (takeProfit > 0 && (takeProfit < buyProfitMin || takeProfit > buyProfitMax)) {
                 return true
-            } else if (openOrderVal === 2 && (!buyLimitMax || pendingPrice < buyLimitMin || pendingPrice > buyLimitMax)) {
+            } else if (openOrderVal === 2 && !isModifyStatus && (!buyLimitMax || pendingPrice < buyLimitMin || pendingPrice > buyLimitMax)) {
                 return true
-            } else if (openOrderVal === 4 && (!buyStopMax || pendingPrice < buyStopMin || pendingPrice > buyStopMax)) {
+            } else if (openOrderVal === 4 && !isModifyStatus && (!buyStopMax || pendingPrice < buyStopMin || pendingPrice > buyStopMax)) {
                 return true
             } else {
                 return false
