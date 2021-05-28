@@ -440,3 +440,15 @@ export function changeEmail (data) {
         data
     })
 }
+
+/* 检测客户信息是否存在,不需要区号信息 */
+export function checkUserStatus (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.checkStatus',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
