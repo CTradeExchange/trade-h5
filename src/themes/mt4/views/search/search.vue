@@ -61,19 +61,18 @@ export default {
             })
         }
         const addSearchOptional = (record) => {
-            addCustomerOptional({ symbolList: [record.id] }).then(res => {
-                if (res.code === '0') {
-                    store.dispatch('_user/queryCustomerOptionalList')
-                }
-            })
+            store.dispatch('_user/addCustomerOptionals', [record.id])
         }
-        watch(selfSymbolList.value.length, () => {
-            state.searchDataList = differenceBy(state.searchDataList, selfSymbolList.value.map(el => ({
-                id: el.symbolId,
-                code: el.symbolCode,
-                name: el.symbolName
-            })), 'symbolId')
-        })
+        watch(
+            () => selfSymbolList.value.length,
+            () => {
+                state.searchDataList = differenceBy(state.searchDataList, selfSymbolList.value.map(el => ({
+                    id: el.symbolId,
+                    code: el.symbolCode,
+                    name: el.symbolName
+                })), 'symbolId')
+            }
+        )
         const onSearch = (val) => {
             state.value = val
             if (!isEmpty(customInfo)) {

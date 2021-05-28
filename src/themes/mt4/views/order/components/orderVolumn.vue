@@ -8,11 +8,11 @@
         </a>
         <span class='item' :class='{ disabled }'>
             <input
-                v-model.trim='volumn'
                 class='volumnInput'
                 :class='{ disabled }'
                 :disabled='disabled'
                 type='text'
+                :value='modelValue'
                 @blur='onBlur'
                 @input='onInput'
             />
@@ -36,42 +36,48 @@ export default {
         const state = reactive({
             volumn: props.modelValue
         })
-        watchEffect(() => (state.volumn = props.modelValue))
-        const disabledSub = computed(() => (props.disabled || Number(state.volumn) <= props.min))
-        const disabledAdd = computed(() => (props.disabled || Number(state.volumn) >= props.max))
-        const onInput = ($event) => {
+        // watchEffect(() => (state.volumn = props.modelValue))
+        const disabledSub = computed(() => (props.disabled || Number(props.modelValue) <= props.min))
+        const disabledAdd = computed(() => (props.disabled || Number(props.modelValue) >= props.max))
+        const onInput = (e) => {
+            let newval = e.target.value
             const volumeDigit = getDecimalNum(props.product.minVolume)
-            const inputVal = $event.target.value.trim().replace(/[a-zA-Z]/g, '')
-            if (inputVal !== $event.target.value) {
-                $event.target.value = inputVal
-                state.volumn = inputVal
+            const reg = new RegExp('^\\d*(\\.?\\d{0,' + volumeDigit + '})', 'g')
+            if (getDecimalNum(newval) > volumeDigit) {
+                newval = (newval.match(reg)[0]) || ''
+                if (volumeDigit === 0 && newval.endsWith('.')) newval = newval.replace(/\./g, '') // 浏览器不允许给number输入框输入'1.'字符串
+                e.target.value = newval
             }
-            let newval = Number(inputVal)
-            const inputDigit = getDecimalNum(inputVal)
-            if (newval === 0) return false
-            if (newval > props.max) {
-                newval = props.max
-                $event.target.value = newval
-                state.volumn = newval
-            } else if (newval < props.min) {
-                newval = props.min
-                $event.target.value = newval
-                state.volumn = newval
-            }
-            if (inputDigit > volumeDigit) {
-                newval = toFixed(newval, volumeDigit)
-                $event.target.value = newval
-                state.volumn = newval
-            }
+            // const inputVal = $event.target.value.trim().replace(/[a-zA-Z]/g, '')
+            // if (inputVal !== $event.target.value) {
+            //     $event.target.value = inputVal
+            //     state.volumn = inputVal
+            // }
+            // let newval = Number(inputVal)
+            // const inputDigit = getDecimalNum(inputVal)
+            // // if (newval === 0) return false
+            // if (newval > props.max) {
+            //     newval = props.max
+            //     $event.target.value = newval
+            //     state.volumn = newval
+            // } else if (newval < props.min) {
+            //     newval = props.min
+            //     $event.target.value = newval
+            //     state.volumn = newval
+            // }
+            // if (inputDigit > volumeDigit) {
+            //     newval = toFixed(newval, volumeDigit)
+            //     $event.target.value = newval
+            //     state.volumn = newval
+            // }
             emit('update:modelValue', newval)
         }
-        const onBlur = ($event) => {
-            const newval = Number($event.target.value)
-            if (newval === 0) {
-                $event.target.value = props.min
-                state.volumn = props.min
-                emit('update:modelValue', props.min)
-            }
+        const onBlur = e => {
+            let value = e.target.value
+            const volumeDigit = getDecimalNum(props.product.minVolume)
+            if (value === props.modelValue) return false
+            value = value ? toFixed(value, volumeDigit) : value
+            this.$emit('update:modelValue', value)
         }
 
         // 快速加减

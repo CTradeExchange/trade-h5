@@ -75,7 +75,6 @@ export default {
         minus () {
             const curval = (this.value == '' || this.value == 'NaN') && this.max && this.max !== Infinity ? this.max : this.value
             if (this.disabledMinus) return false
-            console.log(this.disabledMinus)
             const newval = minus(curval, this.step)
             this.$emit('update:modelValue', toFixed(newval, this.digits))
             this.$emit('change', toFixed(newval, this.digits))
@@ -98,7 +97,6 @@ export default {
             let value = e.target.value
             if (value === this.value) return false
             value = value ? toFixed(value, this.digits) : value
-            console.log(value)
             this.$emit('change', value)
         },
         plus () {
