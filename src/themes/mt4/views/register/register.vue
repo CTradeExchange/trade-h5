@@ -32,7 +32,7 @@
                     <areaInput v-model.trim='email' v-model:zone='zone' placeholder='邮箱' />
                 </div>
                 <div class='cell'>
-                    <CheckCode v-model='checkCode' clear label='验证码' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
+                    <CheckCode v-model.trim='checkCode' clear label='验证码' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
                 </div>
                 <div class='cell'>
                     <van-checkbox v-model='protocol' shape='square'>
