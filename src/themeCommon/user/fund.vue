@@ -121,7 +121,6 @@ export default {
         }
 
         const computePrice = (price, digits) => {
-            debugger
             if (price === '') {
                 return '--'
             }

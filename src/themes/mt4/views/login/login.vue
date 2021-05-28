@@ -229,52 +229,54 @@ export default {
                 // 重新登录清除账户信息
                 store.commit('_user/Update_accountAssets', {})
 
-                // 登录KYC,0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
-
-                if (Number(res.data.kycAuditStatus === 0)) {
-                    return Dialog.alert({
-                        title: '提示',
-                        confirmButtonText: '去认证',
-                        message: '您还未进行KYC认证，点击去认证',
-                        theme: 'round-button',
-                    }).then(() => {
-                        router.push('/authentication')
-                    })
-                } else if (Number(res.data.kycAuditStatus === 1)) {
-                    return Dialog.alert({
-                        title: '提示',
-                        confirmButtonText: '关闭',
-                        message: '您的资料正在审核中，等耐心等待',
-                        theme: 'round-button',
-                    }).then(() => {
-                        store.dispatch('_user/logout')
-                    })
-                } else if (Number(res.data.kycAuditStatus === 3)) {
-                    return Dialog.alert({
-                        title: '提示',
-                        confirmButtonText: '重新提交',
-                        message: '您的资料审核失败',
-                        theme: 'round-button',
-                    }).then(() => {
-                        router.push('/authentication')
-                    })
-                } else if (Number(res.data.kycAuditStatus === 2)) {
-                    Dialog.alert({
-                        title: '提示',
-                        confirmButtonText: '好的',
-                        message: '您的资料已经审核通过，现在就开启您的财富之旅吧！',
-                        theme: 'round-button',
-                    }).then(() => {
-                        // 登录websocket
-                        instance.appContext.config.globalProperties.$MsgSocket.login()
-                        // 重新登录清除账户信息
-                        store.commit('_user/Update_accountAssets', {})
-                        if (parseInt(res.data.loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
-                            state.loginPwdPop = true
-                        } else {
-                            loginToPath()
-                        }
-                    })
+                // 登录KYC,kycAuditStatus:0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
+                // companyKycStatus 公司KYC开户状态，1开启 2未开启
+                if (Number(res.data.companyKycStatus) === 1) {
+                    if (Number(res.data.kycAuditStatus === 0)) {
+                        return Dialog.alert({
+                            title: '提示',
+                            confirmButtonText: '去认证',
+                            message: '您还未进行KYC认证，点击去认证',
+                            theme: 'round-button',
+                        }).then(() => {
+                            router.push('/authentication')
+                        })
+                    } else if (Number(res.data.kycAuditStatus === 1)) {
+                        return Dialog.alert({
+                            title: '提示',
+                            confirmButtonText: '关闭',
+                            message: '您的资料正在审核中，等耐心等待',
+                            theme: 'round-button',
+                        }).then(() => {
+                            store.dispatch('_user/logout')
+                        })
+                    } else if (Number(res.data.kycAuditStatus === 3)) {
+                        return Dialog.alert({
+                            title: '提示',
+                            confirmButtonText: '重新提交',
+                            message: '您的资料审核失败',
+                            theme: 'round-button',
+                        }).then(() => {
+                            router.push('/authentication')
+                        })
+                    } else if (Number(res.data.kycAuditStatus === 2)) {
+                        Dialog.alert({
+                            title: '提示',
+                            confirmButtonText: '好的',
+                            message: '您的资料已经审核通过，现在就开启您的财富之旅吧！',
+                            theme: 'round-button',
+                        }).then(() => {
+                            // 登录websocket
+                            instance.appContext.config.globalProperties.$MsgSocket.login()
+                            // 重新登录清除账户信息
+                            store.commit('_user/Update_accountAssets', {})
+                            if (parseInt(res.data.loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
+                                state.loginPwdPop = true
+                            } else {
+                                loginToPath()
+                            }
+                        })
+                    }
                 }
             })
         }
