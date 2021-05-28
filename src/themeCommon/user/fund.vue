@@ -121,13 +121,14 @@ export default {
         }
 
         const computePrice = (price, digits) => {
+            debugger
             if (price === '') {
                 return '--'
             }
             if (!isEmpty(digits)) {
                 return priceFormat(price, digits)
             }
-            return price > 0 ? price : 0
+            return price
         }
 
         const netWorth = computed(() => {
