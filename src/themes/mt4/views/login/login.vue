@@ -12,13 +12,13 @@
                 <areaInput v-model.trim='loginName' v-model:zone='zone' clear placeholder='请输入手机号或邮箱' />
             </div>
             <div v-else class='field'>
-                <InputComp v-model='email' clear label='邮箱' />
+                <InputComp v-model.trim='email' clear label='邮箱' />
             </div>
             <div v-if="loginType==='password'" class='field'>
                 <InputComp v-model='pwd' v-model:zone='zone' clear label='密码' pwd />
             </div>
             <div v-else class='field'>
-                <CheckCode v-model='checkCode' clear label='验证码' @verifyCodeSend='verifyCodeSendHandler' />
+                <CheckCode v-model.trim='checkCode' clear label='验证码' @verifyCodeSend='verifyCodeSendHandler' />
             </div>
             <van-button block class='loginBtn' :disabled='loading' type='primary' @click='loginHandle'>
                 登录

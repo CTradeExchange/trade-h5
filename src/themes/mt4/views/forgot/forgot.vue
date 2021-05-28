@@ -31,19 +31,19 @@
         <div class='tabs-content'>
             <form v-show='curTab === 0' class='loginForm'>
                 <div class='field'>
-                    <areaInput v-model='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
+                    <areaInput v-model.trim='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
                 </div>
                 <div class='field'>
-                    <checkCode v-model='checkCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
+                    <checkCode v-model.trim='checkCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
                 </div>
             </form>
 
             <form v-show='curTab === 1' class='loginForm'>
                 <div class='field'>
-                    <areaInput v-model='email' v-model:zone='zone' clear placeholder='请输入邮箱' />
+                    <areaInput v-model.trim='email' v-model:zone='zone' clear placeholder='请输入邮箱' />
                 </div>
                 <div class='field'>
-                    <checkCode v-model='emailCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
+                    <checkCode v-model.trim='emailCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
                 </div>
             </form>
         </div>
@@ -55,9 +55,7 @@
 
 <script>
 import Top from '@/components/top'
-import {
-    reactive, toRefs, computed
-} from 'vue'
+import { reactive, toRefs, computed } from 'vue'
 import areaInput from '@/components/form/areaInput'
 import checkCode from '@/components/form/checkCode'
 import { Toast } from 'vant'
