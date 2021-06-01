@@ -7,7 +7,7 @@
                     保证金水平
                 </p>
                 <p class='t2' :class='computMargin'>
-                    {{ accountInfo ? accountInfo.marginRadio+'%' : '--' }}
+                    {{ accountInfo.marginRadio ?accountInfo.marginRadio+'%' : '--' }}
                 </p>
             </div>
             <div class='progress'>
@@ -24,7 +24,9 @@
                     (单位：{{ mainAccount.currency }})
                 </span>
             </p>
-            <div id='annulus' class='annulus'></div>
+            <div id='annulus' class='annulus'>
+                加载中...
+            </div>
             <div class='infos'>
                 <div class='item'>
                     <p class='label'>
@@ -47,7 +49,7 @@
                         可取
                     </p>
                     <p class='val'>
-                        {{ computePrice(mainAccount.withdrawAmount) }}
+                        {{ computePrice(mainAccount.withdrawAmount,customInfo.digits ) }}
                     </p>
                 </div>
                 <div class='item'>
@@ -118,22 +120,25 @@ export default {
             router.push('/desposit')
         }
 
-        const computePrice = (price) => {
+        const computePrice = (price, digits) => {
             if (price === '') {
                 return '--'
             }
-            return price > 0 ? priceFormat(price, customInfo.value.digits) : 0
+            if (!isEmpty(digits)) {
+                return priceFormat(price, digits)
+            }
+            return price
         }
 
         const netWorth = computed(() => {
             if (!isEmpty(accountInfo.value) && !isEmpty(customInfo.value.digits)) {
-                return priceFormat(accountInfo.value.netWorth, customInfo.value.digits)
+                return accountInfo.value.netWorth
             }
         })
 
         onUpdated(() => {
             if (accountInfo.value) {
-                const earnest = computePrice(accountInfo.value.occupyMargin, customInfo.value.digit)
+                const earnest = accountInfo.value.occupyMargin
 
                 const netWorthPercent = divide(netWorth.value, parseFloat(netWorth.value + earnest))
                 const earnestPercent = divide(earnest, parseFloat(netWorth.value + earnest))
@@ -168,7 +173,8 @@ export default {
             netWorth,
             computMargin,
             accountInfo,
-            mainAccount
+            mainAccount,
+            customInfo
         }
     }
 }
@@ -246,6 +252,8 @@ export default {
             }
         }
         .annulus {
+            height: rem(440px);
+            line-height: rem(440px);
             text-align: center;
         }
         .ring-svg {

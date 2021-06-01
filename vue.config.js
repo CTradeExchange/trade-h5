@@ -1,22 +1,44 @@
 const path = require('path')
 const dayjs = require('dayjs')
 const FileManagerPlugin = require('filemanager-webpack-plugin')
-const plugins = []
+var plugins = []
 const pages = {}
 function resolve (dir) {
     return path.join(__dirname, dir)
 }
 
 const NODE_ENV = process.env.NODE_ENV
+
 const isAdminMode = process.env.VUE_APP_isAdmin === 'true' // WordPress后台插件的开发模式
 console.log(NODE_ENV, process.env.VUE_APP_isAdmin)
 if (process.env.NODE_ENV === 'production') {
+    const pathStr = isAdminMode ? 'cats-upload-admin' : 'cats-upload-all'
+    const pathName = isAdminMode ? 'admin' : 'dist'
     plugins.push(
         new FileManagerPlugin({
             events: {
                 onEnd: {
-                    // archive: [{ source: resolve('dist'), destination: resolve(`zip/dist_${dayjs().format('MMDDHHmm')}.zip`) }]
-                    archive: [{ source: resolve('dist'), destination: resolve(`zip/dist${dayjs().format('YYYYMMDDHHmm')}.zip`) }]
+                    delete: [
+                        `./build_folder/${pathStr}/${pathStr}/dist`,
+                        `./build_folder/${pathStr}.zip`
+                    ],
+                    copy: [{
+                        source: `./build_folder/${pathName}`,
+                        destination: `./build_folder/${pathStr}/${pathStr}/${pathName}`
+                    }],
+                    archive: [
+                        { source: resolve(`${pathName}`), destination: resolve(`zip/${pathName}${dayjs().format('YYYYMMDDHHmm')}.zip`) },
+                        {
+                            source: resolve(`./build_folder/${pathStr}`),
+                            destination: `./build_folder/${pathStr}.zip`,
+                            options: {
+                                gzipOptions: {
+                                    level: 1
+                                }
+                            }
+                        }
+                    ],
+
                 }
             }
         })
@@ -46,10 +68,11 @@ if (isAdminMode) {
 }
 
 const config = {
-    productionSourceMap: false,
+    productionSourceMap: true,
     publicPath: process.env.NODE_ENV === 'production' && isAdminMode ? '/wp-content/plugins/cats-manage/wp-admin-static/' : '/', // static/
     indexPath: isAdminMode ? 'index.html' : 'index_template.html', // 就是这条
     lintOnSave: false,
+    outputDir: isAdminMode ? './build_folder/admin' : './build_folder/dist',
     configureWebpack: {
         plugins,
         optimization: {
@@ -84,7 +107,7 @@ const config = {
         },
         proxy: {
             '/wp-json/wp': {
-                target: 'http://uatwpadmin.ixmiddle.site'
+                target: 'http://prewpadmin.cats-trade.com' // http://prewpadmin.cats-trade.com/
             },
             '/cats-manage-api': {
                 target: 'http://prewph5.cats-trade.com' // uat http://uatwpview.cats-trade.com  // pre http://prewph5.cats-trade.com/

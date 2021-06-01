@@ -21,7 +21,7 @@
         </van-tabs>
         <form class='loginForm'>
             <div class='field'>
-                <mobileInput v-model='mobile' v-model:zone='zone' placeholder='手机号' />
+                <areaInput v-model='mobile' v-model:zone='zone' placeholder='手机号' />
             </div>
             <div class='field'>
                 <checkCode v-model='checkCode' />
@@ -35,11 +35,11 @@
 
 <script>
 import top from '@ct/layout/top'
-import mobileInput from '@ct/components/form/mobileInput'
+import areaInput from '@ct/components/form/areaInput'
 import checkCode from '@ct/components/form/checkCode'
 export default {
     components: {
-        mobileInput,
+        areaInput,
         checkCode,
         top,
     },

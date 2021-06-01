@@ -30,7 +30,7 @@
                     right-icon='arrow-down'
                     @click='areaShow = true'
                 />
-                <van-field v-model='bankArea' label='开户行地址' placeholder='请输入开户行地址' />
+                <van-field v-model='bankArea' label='支行地址' placeholder='请输入支行地址（选填）' />
             </van-cell-group>
         </div>
         <van-button block class='confirm-btn' type='primary' @click='handleConfirm'>

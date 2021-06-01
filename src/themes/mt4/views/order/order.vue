@@ -19,7 +19,7 @@
             <span v-if='isModifyPosition'>
                 修改订单：
             </span>
-            #{{ positionId }} {{ Number(curPosition.direction) === 1 ? 'buy' : 'sell' }} {{ curPosition.openVolume-curPosition.closeVolume }}
+            #{{ positionId }} {{ Number(curPosition.direction) === 1 ? 'buy' : 'sell' }} {{ minus(curPosition.openVolume, curPosition.closeVolume||0) }}
         </p>
 
         <!-- 订单手数 -->
@@ -41,7 +41,7 @@
         <p>{{ pendingPriceRang }}</p>
         <div v-if='openOrderSelected.val > 1 || pendingId' class='cell priceSet'>
             <div class='col'>
-                <PriceStepper v-model='pendingPrice' :disabled='disabled' :product='product' />
+                <PriceStepper v-model='pendingPrice' class='pendingPrice' :disabled='disabled' :product='product' />
             </div>
         </div>
 
@@ -50,10 +50,10 @@
         {{ profitLossRang }}
         <div class='cell priceSet'>
             <div class='col'>
-                <PriceStepper v-model='stopLoss' :disabled='!!isClosePosition' :product='product' />
+                <TakeProfit v-model='stopLoss' :disabled='!!isClosePosition' :product='product' />
             </div>
             <div class='col'>
-                <PriceStepper v-model='takeProfit' :disabled='!!isClosePosition' :product='product' />
+                <TakeProfit v-model='takeProfit' :disabled='!!isClosePosition' :product='product' />
             </div>
         </div>
 
@@ -98,8 +98,8 @@
     <!-- 协助测试代码 end -->
     <!-- 底部下单按钮 -->
     <FooterBtn
-        :is-modify-status='$route.query.pendingId'
-        :loading='loading'
+        :disabled='footerBtnDisabled'
+        :is-modify-status='!!$route.query.pendingId'
         :open-order-selected='openOrderSelected'
         :pending-price='pendingPrice'
         :stop-loss='stopLoss'
@@ -131,6 +131,7 @@ import { useRoute, useRouter } from 'vue-router'
 import lightweightChart from './components/lightweightChart'
 import OrderVolumn from './components/orderVolumn'
 import PriceStepper from './components/priceStepper'
+import TakeProfit from './components/takeProfitSet'
 import FooterBtn from './components/footerBtn'
 import SelectComp from './components/select'
 import Pending from './pending'
@@ -143,6 +144,7 @@ export default {
         OrderVolumn,
         lightweightChart,
         PriceStepper,
+        TakeProfit,
         Price,
         FooterBtn,
         top,
@@ -170,9 +172,9 @@ export default {
                 { name: '卖出止损', val: 5 }
             ],
             volumn: 0.01,
-            pendingPrice: 0, // 挂单价
-            stopLoss: stopLoss || 0, // 止损单价
-            takeProfit: takeProfit || 0, // 止盈单价
+            pendingPrice: '', // 挂单价
+            stopLoss: stopLoss || '', // 止损单价
+            takeProfit: takeProfit || '', // 止盈单价
             orderParams: {}, // 订单入参
             expireType: 1, // 挂单有效期过期类型 1.当日有效 2.当周有效
             expireTypeOptions: [
@@ -216,12 +218,13 @@ export default {
                 return product.value.maxVolume
             }
         })
+        const footerBtnDisabled = computed(() => state.loading || state.volumn === '')
 
         // 止损价格变更
         watch(
             () => state.stopLoss,
             newval => {
-                chart.value && chart.value.stopLossLineUpdate({ price: newval })
+                chart.value && newval && chart.value.stopLossLineUpdate({ price: newval * 1 })
             }
         )
         // 止赢价格变更
@@ -248,6 +251,7 @@ export default {
             let requestPrice = direct === 'sell' ? product.value.sell_price : product.value.buy_price
             let direction = direct === 'sell' ? 2 : 1
             let bizType = 1
+            if (curPosition?.value?.direction) direction = curPosition.value.direction
             switch (state.openOrderSelected.val) {
                 case 2:
                 case 3:
@@ -276,7 +280,7 @@ export default {
                 positionId,
                 symbolId: Number(product.value.symbol_id),
                 requestTime: Date.now(),
-                requestNum: state.volumn * product.value.contractSize,
+                requestNum: parseInt((state.volumn * product.value.contractSize).toFixed(0)),
                 requestPrice: mul(requestPrice, p),
                 expireType: state.expireType,
                 stopLoss: Number(state.stopLoss) ? mul(state.stopLoss, p) : undefined,
@@ -293,6 +297,7 @@ export default {
                     state.successVisible = true
                     state.resData = res.data
                     state.resData.tradeVolume = state.volumn
+                    state.resData.bizType = bizType
                     state.timeId = setTimeout(() => {
                         state.successVisible = false
                         router.push({ name: 'Position' })
@@ -334,8 +339,8 @@ export default {
             const p = Math.pow(10, product.value.price_digits)
             const params = {
                 pboId: pendingId,
-                stopLoss: Number(state.stopLoss) ? mul(state.stopLoss, p) : undefined,
-                takeProfit: Number(state.takeProfit) ? mul(state.takeProfit, p) : undefined
+                stopLoss: Number(state.stopLoss),
+                takeProfit: Number(state.takeProfit)
             }
             state.loading = true
             updatePboOrder(params).then(res => {
@@ -402,8 +407,8 @@ export default {
                     state.volumn = curPending.requestNum / curPending.contractSize
                     const digits = curPending.digits
                     state.pendingPrice = toFixed(curPending.requestPrice * Math.pow(0.1, digits), digits)
-                    state.stopLoss = toFixed(curPending.stopLoss * Math.pow(0.1, digits), digits)
-                    state.takeProfit = toFixed(curPending.takeProfit * Math.pow(0.1, digits), digits)
+                    if (curPending.stopLoss) state.stopLoss = toFixed(curPending.stopLoss * Math.pow(0.1, digits), digits)
+                    if (curPending.takeProfit) state.takeProfit = toFixed(curPending.takeProfit * Math.pow(0.1, digits), digits)
                     state.openOrderSelected = state.openOrderList[curPending.direction === 1 ? 1 : 2]
                 })
         }
@@ -449,6 +454,8 @@ export default {
             positionId,
             pendingId,
             orderId,
+            minus,
+            footerBtnDisabled,
             isClosePosition,
             isModifyPosition,
             isModifyPending,
@@ -563,6 +570,11 @@ export default {
                 border-color: var(--buyColor);
             }
         }
+    }
+}
+.pendingPrice {
+    :deep(.inputEl) {
+        flex: 1;
     }
 }
 .chart {

@@ -39,7 +39,7 @@
                         <van-button plain size='small' type='primary' @click='reset'>
                             重置
                         </van-button>
-                        <van-button size='small' type='primary' @click='confirm'>
+                        <van-button size='small' type='primary' @click='handleProConfirm'>
                             完成
                         </van-button>
                     </div>
@@ -64,7 +64,7 @@
                         <van-calendar
                             v-model='dateRange'
                             v-model:show='showCalendar'
-                            allow-same-day='true'
+                            :allow-same-day='true'
                             :min-date='minDate'
                             type='range'
                             @confirm='onConfirm'
@@ -82,7 +82,7 @@
             </van-dropdown-menu>
         </div>
         <div class='list'>
-            <van-pull-refresh v-model='loadingRefresh' @refresh='onRefresh'>
+            <van-pull-refresh v-model='loading' @refresh='onRefresh'>
                 <van-list
                     v-model:loading='loading'
                     :finished='finished'
@@ -121,9 +121,11 @@
 import { toRefs, reactive, ref, computed, onBeforeMount } from 'vue'
 import { queryCapitalFlowList } from '@/api/user'
 import dayjs from 'dayjs'
+import { useStore } from 'vuex'
 import { isEmpty, priceFormat } from '@/utils/util'
 export default {
     setup (props) {
+        const store = useStore()
         const proDownItem = ref(null)
         const dateDownItem = ref(null)
         const customInfo = computed(() => store.state._user.customerInfo)
@@ -191,7 +193,6 @@ export default {
             list: [],
             finished: false,
             loading: false,
-            loadingRefresh: false,
             loadingMore: false,
             loadingPage: false,
             finishedText: '没有更多了',
@@ -221,7 +222,7 @@ export default {
         const onDate = (item) => {
             state.dateTitle = item.name
             if (item.value === 1) {
-                state.date = dayjs(new Date()).format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
+                state.date = dayjs(new Date()).format('YYYY/MM/DD 00:00:00') + '-' + dayjs(new Date()).format('YYYY/MM/DD 23:59:59')
             } else if (item.value === 2) {
                 state.date = dayjs().subtract(7, 'day').format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
                 state.dateRange = [dayjs().subtract(7, 'day').format('YYYY/MM/DD'), dayjs(new Date()).format('YYYY/MM/DD')]
@@ -242,11 +243,12 @@ export default {
             state.proTitle = '全部项目'
         }
 
-        const confirm = () => {
+        const handleProConfirm = () => {
             proDownItem.value.toggle()
             state.pagigation.current = 1
             state.list = []
             state.finished = false
+            state.loadingMore = true
             queryFundDetail()
         }
 
@@ -269,6 +271,7 @@ export default {
             dateDownItem.value.toggle()
             state.pagigation.current = 1
             state.finished = false
+            state.loadingMore = true
             state.list = []
             queryFundDetail()
         }
@@ -282,8 +285,10 @@ export default {
 
         // 底部加载更多
         const onLoad = () => {
-            state.pagigation.current++
-            queryFundDetail()
+            if (!state.loadingMore) {
+                state.pagigation.current++
+                queryFundDetail()
+            }
         }
 
         const queryFundDetail = () => {
@@ -300,20 +305,24 @@ export default {
             queryCapitalFlowList(params).then(res => {
                 state.loadingPage = false
                 state.loading = false
-                state.loadingRefresh = false
+                state.loadingMore = false
                 if (res.check()) {
-                    state.list = state.list.concat(res.data.records)
-
-                    // 数据全部加载完成
-                    if (res.data.current * res.data.size >= res.data.total) {
-                        state.finished = true
+                    if (res.data.records.length > 0) {
+                        state.list = [...state.list, ...res.data.records]
                     }
 
-                    if (isEmpty(res.data.records)) {
+                    // 数据全部加载完成
+                    if (state.list.length >= res.data.total) {
+                        state.finished = true
+                        state.finishedText = '没有更多了'
+                    }
+
+                    if (res.data.total === 0) {
                         state.finishedText = ''
                     }
                 }
             }).catch(err => {
+                state.loadingMore = false
                 state.loadingPage = false
                 state.loading = false
             })
@@ -342,7 +351,7 @@ export default {
             proDownItem,
             onDate,
             onLoad,
-            confirm,
+            handleProConfirm,
             onRefresh,
             dateCur: 99,
             onConfirm,

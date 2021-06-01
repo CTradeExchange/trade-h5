@@ -3,18 +3,16 @@ import CreateSocket from './createSocket'
 import QuoteSocketEvent from './quoteSocketEvent'
 import MsgSocketEvent from './msgSocketEvent'
 
-import store from '@/store'
-
 export const QuoteSocket = new QuoteSocketEvent() // 行情websocket
 export const MsgSocket = new MsgSocketEvent() // 消息websocket
 export default {
-    install: (app, { $store } = {}) => {
+    install: (app, { $store, $router } = {}) => {
         const quoteWS = CreateSocket(quoteService)
         const msgWS = CreateSocket(msgService)
         const tradeWS = CreateSocket(tradeService)
 
-        QuoteSocket.init(quoteWS, $store)
-        MsgSocket.init(msgWS, $store)
+        QuoteSocket.init(quoteWS, $store, $router)
+        MsgSocket.init(msgWS, $store, $router)
         app.config.globalProperties.$QuoteSocket = QuoteSocket
         app.config.globalProperties.$MsgSocket = MsgSocket
 

@@ -1,7 +1,9 @@
 <template>
     <div class='register'>
         <Top back :menu='false' />
-        <a class='loginBtn' href='javascript:;' @click="$router.replace('/login')">已有账号</a>
+        <a class='loginBtn' href='javascript:;' @click="$router.replace('/login')">
+            已有账号
+        </a>
         <div class='banner'>
             <img alt='' src='https://www.blazaintl.com/platformimages/mainpage_banner11a.png' srcset='' />
         </div>
@@ -14,7 +16,7 @@
                 <div :class="{ 'openTypeAcitve':openType==='email' }"><a href='javascript:;' @click="openType='email'">邮箱</a></div>
             </div> -->
             <div v-if="openType==='mobile'" class='cell'>
-                <MobileInput v-model='mobile' v-model:zone='zone' placeholder='手机号' />
+                <areaInput v-model='mobile' v-model:zone='zone' placeholder='手机号' />
             </div>
             <div v-else class='cell'>
                 <InputComp v-model='email' clear label='邮箱' />
@@ -23,15 +25,23 @@
                 <CheckCode v-model='checkCode' clear label='验证码' />
             </div>
             <div class='cell'>
-                <van-checkbox v-model='protocol' shape='square'>开户注意事项</van-checkbox>
+                <van-checkbox v-model='protocol' shape='square'>
+                    开户注意事项
+                </van-checkbox>
             </div>
             <div class='cell'>
-                <van-button block class='registerBtn' :color='$store.state.style.primary' type='primary' @click="$router.push('/register/success')">提交</van-button>
+                <van-button block class='registerBtn' :color='$store.state.style.primary' type='primary' @click="$router.push('/register/success')">
+                    提交
+                </van-button>
             </div>
         </form>
         <div class='switchType'>
-            <a v-if="openType==='email'" href='javascript:;' @click="openType='mobile'">手机号注册</a>
-            <a v-else href='javascript:;' @click="openType='email'">邮箱注册</a>
+            <a v-if="openType==='email'" href='javascript:;' @click="openType='mobile'">
+                手机号注册
+            </a>
+            <a v-else href='javascript:;' @click="openType='email'">
+                邮箱注册
+            </a>
         </div>
     </div>
 </template>
@@ -41,12 +51,12 @@ import Top from '@ct/layout/top'
 import VueSelect from '@ct/components/select'
 import CheckCode from '@ct/components/form/checkCode'
 import InputComp from '@ct/components/form/input'
-import MobileInput from '@ct/components/form/mobileInput'
+import areaInput from '@ct/components/form/areaInput'
 import { mapState } from 'vuex'
 export default {
     components: {
         Top,
-        MobileInput,
+        areaInput,
         InputComp,
         CheckCode,
         VueSelect,

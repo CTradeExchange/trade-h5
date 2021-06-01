@@ -1,4 +1,4 @@
-import { mobileReg, emailReg } from '@/utils/util'
+import { emailReg } from '@/utils/util'
 import { checkCustomerExist } from '@/api/user'
 
 // 判断用户是否存在的接口参数效验
@@ -47,9 +47,15 @@ export const checkCustomerExistRule = {
         },
     ],
     phoneArea: {
-        message: '请输入手机区号',
+        message: '请输入区号',
         validator: (rule, value, callback, source, options) => {
             return source.type === 2 ? !!value : true
+        },
+    },
+    emailArea: {
+        message: '请输入区号',
+        validator: (rule, value, callback, source, options) => {
+            return source.type === 1 ? !!value : true
         },
     },
     protocol: {

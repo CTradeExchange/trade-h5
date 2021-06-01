@@ -13,6 +13,7 @@
             </div>
         </template>
     </LayoutTop>
+    <Loading :show='pageLoading' />
     <div class='msg-list'>
         <div v-if='list.length === 0'>
             <van-empty description='暂无数据' image='search' />
@@ -29,7 +30,6 @@
                         {{ item.title === 'null'? '': item.title }}
                     </p>
                     <p class='msg-content'>
-                        {{ computeHtml(item.content) }}
                         {{ computeHtmlTime(item.content) }}
                     </p>
                     <p class='msg-time'>
@@ -56,6 +56,7 @@ export default {
             list: [],
             loading: false,
             finished: false,
+            pageLoading: false,
             current: 1,
             type: '',
             rightAction: { title: 444 },
@@ -74,20 +75,19 @@ export default {
             console.log(val)
             state.type = val
             state.current = 1
+            state.finished = false
             state.list = []
             getMsgList()
         }
 
         const getMsgList = () => {
-            const toast = Toast.loading({
-                message: '加载中...',
-                forbidClick: true,
-            })
+            state.pageLoading = true
             queryPlatFormMessageLogList({
                 current: state.current,
                 parentType: state.type,
             }).then(res => {
-                toast.clear()
+                state.loading = false
+                state.pageLoading = false
                 if (res.check()) {
                     if (res.data.records && res.data.records.length > 0) {
                         state.list = state.list.concat(res.data.records)
@@ -98,6 +98,8 @@ export default {
                         state.finished = true
                     }
                 }
+            }).catch(err => {
+                state.pageLoading = false
             })
         }
 
@@ -105,18 +107,22 @@ export default {
             try {
                 const reg = /<?time[^>]*>[^<]*<\/time>/gi
                 const tag = content.match(reg)
-                if (!isEmpty(tag)) {
-                    const time = tag.toString().replace(/<\/?time>/g, '')
-                    return dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
+                let returnVal
+                if (!isEmpty(tag) && tag.length > 0) {
+                    tag.forEach(item => {
+                        returnVal = content.replace(reg, function (matchStr) {
+                            const time = matchStr.toString().replace(/<\/?time>/g, '')
+                            const timeStr = dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
+                            return timeStr
+                        })
+                    })
+                    return returnVal
+                } else {
+                    return content
                 }
             } catch (error) {
                 console.log(error)
             }
-        }
-
-        const computeHtml = (content) => {
-            const reg = /<?time[^>]*>[^<]*<\/time>。/gi
-            return content.replace(reg, '')
         }
 
         onBeforeMount(() => {
@@ -148,7 +154,6 @@ export default {
             onLoad,
             changeType,
             computeHtmlTime,
-            computeHtml,
             ...toRefs(state)
         }
     }

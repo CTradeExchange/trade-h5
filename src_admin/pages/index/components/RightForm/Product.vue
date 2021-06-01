@@ -3,9 +3,9 @@
         <el-form-item :label='config.label'>
             <div @click='showDialog'>
                 <el-input
+                    :model-value='showNum'
                     placeholder='请选择'
                     readonly
-                    :value='showNum'
                 />
             </div>
         </el-form-item>
@@ -306,10 +306,10 @@ export default {
 <style lang="scss">
 .m-product {
     .input {
-        padding: 20px;
-        padding-bottom: 0;
         height: 60px;
         margin-top: 20px;
+        padding: 20px;
+        padding-bottom: 0;
     }
     .bottoms {
         padding: 20px;
@@ -317,8 +317,8 @@ export default {
 }
 .product-scrollbar {
     height: calc(100vh - 60px);
-    overflow: hidden;
     padding: 0;
+    overflow: hidden;
     .tree {
         min-height: 400px;
     }

@@ -12,7 +12,7 @@
 import Top from '@m/layout/top'
 import productListComp from '@m/modules/productList/productList.vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
@@ -27,11 +27,10 @@ export default {
         const productList = computed(() => store.getters.userSelfSymbolList)
         // 订阅产品
 
-        const subscribList = productList.value.map(({ symbolId }) => symbolId)
-
-        if (subscribList.length > 0) {
-            QuoteSocket.send_subscribe(subscribList)
-        }
+        watchEffect(() => {
+            const subscribList = productList.value.map(({ symbolId }) => symbolId)
+            if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
+        })
 
         if (customerInfo.value) {
             store.dispatch('_trade/queryPositionPage')

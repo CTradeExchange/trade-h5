@@ -89,19 +89,22 @@ export default {
             return store.state._user.selfSymbolList
         })
         optionalSymbolList.value = [].concat(selfSymbolList)
-        watch(selfSymbolList.value.length, (val) => {
-            console.log('vvvvvv')
-            optionalSymbolList.value = selfSymbolList.value
-            const subscribList = selfSymbolList.value.map(({ symbolId }) => symbolId)
-            if (subscribList.length > 0) {
-                QuoteSocket.send_subscribe(subscribList)
+        watch(
+            () => selfSymbolList.value.length,
+            () => {
+                optionalSymbolList.value = selfSymbolList.value
+                const subscribList = selfSymbolList.value.map(({ symbolId }) => symbolId)
+                if (subscribList.length > 0) {
+                    QuoteSocket.send_subscribe(subscribList)
+                }
             }
-        })
+        )
         const removeOptional = (record) => {
             removeCustomerOptional({ symbolList: checked.value }).then(res => {
-                if (res.code === '0') {
+                if (res.check()) {
                     // state.searchDataList = differenceBy(state.searchDataList, [{ id: record.id }], 'id')
                     store.dispatch('_user/queryCustomerOptionalList')
+                    checked.value = []
                 }
             })
         }

@@ -4,10 +4,7 @@
         <Loading :show='loading' />
         <form class='form'>
             <div class='field'>
-                <!-- <label class='label'>
-                    请输入手机号
-                </label> -->
-                <u-input v-model='email' clear label='请输入邮箱' />
+                <areaInput v-model='email' v-model:zone='zone' clear placeholder='请输入邮箱' />
             </div>
             <div class='field'>
                 <!-- <label class='label'>
@@ -25,7 +22,7 @@
 <script>
 import Top from '@m/layout/top'
 import CheckCode from '@/components/form/checkCode'
-import uInput from '@/components/input.vue'
+import areaInput from '@/components/form/areaInput.vue'
 import { Toast, Dialog } from 'vant'
 import { reactive, toRefs, computed } from 'vue'
 import { isEmpty, emailReg } from '@/utils/util'
@@ -35,7 +32,7 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 export default {
     components: {
-        uInput,
+        areaInput,
         CheckCode
     },
     props: {
@@ -51,10 +48,13 @@ export default {
             email: '',
             sendToken: '',
             checkCode: '',
-            loading: false
+            loading: false,
+            zone: '+86',
         })
 
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
+
+        store.dispatch('getListByParentCode')
 
         const handleConfirm = () => {
             if (isEmpty(state.email)) {
@@ -69,7 +69,8 @@ export default {
             const params = {
                 email: state.email,
                 verifyCode: state.checkCode,
-                sendToken: state.sendToken
+                sendToken: state.sendToken,
+                emailArea: state.zone
             }
             state.loading = true
 
@@ -116,7 +117,8 @@ export default {
             }
             const existParams = {
                 type: 1,
-                loginName: state.email
+                loginName: state.email,
+                emailArea: state.zone
             }
             state.loading = true
             checkCustomerExist(existParams).then(res => {

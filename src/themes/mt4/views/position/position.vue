@@ -7,10 +7,14 @@
     </Top>
     <div class='container'>
         <CapitalList :data='capitalListData' />
-        <div class='titleBar'>
+        <div v-if='positionList.length===0 && $store.state._trade.positionLoading' class='loading'>
+            <van-loading type='spinner' />
+        </div>
+        <van-empty v-else-if='positionList.length===0 && pendingList.length===0' description='无历史记录' />
+        <div v-if='positionList.length' class='titleBar'>
             价位
         </div>
-        <PositionList @refresh='refresh' />
+        <PositionList v-if='positionList.length' @refresh='refresh' />
         <template v-if='pendingList.length'>
             <div class='titleBar'>
                 订单
@@ -43,6 +47,7 @@ export default {
     setup () {
         const store = useStore()
         const router = useRouter()
+        const positionList = computed(() => store.state._trade.positionList)
         const pendingList = computed(() => store.state._trade.pendingList)
         const customerInfo = computed(() => store.state._user.customerInfo)
         const sortActionsSelected = 'van-badge__wrapper van-icon van-icon-down'
@@ -57,31 +62,13 @@ export default {
         const accountInfo = computed(() => store.state._user.accountAssets)
         const capitalListData = computed(() => {
             return [
-                { title: '结余：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.balance, customerInfo.value.digits) : '--' },
-                { title: '净值：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.netWorth, customerInfo.value.digits) : '--' },
-                { title: '可用预付款：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.availableMargin, customerInfo.value.digits) : '--' },
-                { title: '预付款比率(%)：', value: accountInfo.value.marginRadio ? accountInfo.value.marginRadio + '%' : '--' },
-                { title: '预付款：', value: !isEmpty(accountInfo.value) ? priceFormat(accountInfo.value.occupyMargin, customerInfo.value.digits) : '--' },
+                { title: '结余：', value: !isEmpty(accountInfo.value) ? accountInfo.value.balance : '--' },
+                { title: '净值：', value: !isEmpty(accountInfo.value) ? accountInfo.value.netWorth : '--' },
+                { title: '可用预付款：', value: !isEmpty(accountInfo.value) ? accountInfo.value.availableMargin : '--' },
+                { title: '预付款：', value: !isEmpty(accountInfo.value) ? accountInfo.value.occupyMargin : '--' },
+                { title: '预付款比率(%)：', value: !isEmpty(accountInfo.value) ? accountInfo.value.marginRadio : '--' },
             ]
         })
-
-        // 取变动价格列表
-        // const positionProfitLossList = computed(() => store.state._trade.positionProfitLossList)
-
-        const positionList = computed(() => store.state._trade.positionList)
-
-        // watch([positionList, positionProfitLossList], ([pNew, pflNew], [pOld, pflOld]) => {
-        //     if (pNew.length > 0 && pflNew.length > 0) {
-        //         pNew.forEach(p => {
-        //             pflNew.forEach(item => {
-        //                 // console.log('更新价格', item.profitLoss)
-        //                 if (Number(item.positionId) === Number(p.positionId)) {
-        //                     p.profitLoss = priceFormat(item.profitLoss, customerInfo.value.digits)
-        //                 }
-        //             })
-        //         })
-        //     }
-        // })
 
         const state = reactive({
             sortActionsVisible: false,
@@ -98,13 +85,21 @@ export default {
         const queryList = () => {
             store.dispatch('_trade/queryPositionPage', { 'sortFieldName': sortActionValue, 'sortType': 'desc' }).then(res => {
                 if (res.check()) {
-                    const positionList = res.data
-                    const subscribList = positionList.map(el => el.symbolId)
+                    const subscribList = positionList.value.concat(pendingList.value).map(el => el.symbolId)
+                    QuoteSocket.send_subscribe(subscribList)
+                }
+            })
+        }
+        const queryPendingList = () => {
+            store.dispatch('_trade/queryPBOOrderPage', { 'sortFieldName': sortActionValue, 'sortType': 'desc' }).then(res => {
+                if (res.check()) {
+                    const subscribList = positionList.value.concat(pendingList.value).map(el => el.symbolId)
                     QuoteSocket.send_subscribe(subscribList)
                 }
             })
         }
         queryList()
+        queryPendingList()
 
         const newOrder = () => {
             router.push({ name: 'Order', query: { symbolId: store.state._quote.productActivedID } })
@@ -122,7 +117,6 @@ export default {
             refresh,
             accountInfo,
             capitalListData,
-            // positionProfitLossList,
             positionList
         }
     },

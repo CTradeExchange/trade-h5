@@ -114,6 +114,8 @@ export default {
             const chartConfig = JSON.parse(localGet('chartConfig'))
             if (!isEmpty(chartConfig)) {
                 state.chartSet = deepClone(chartConfig)
+            } else {
+                localSet('chartConfig', JSON.stringify({ chartType: 1 }))
             }
         })
 

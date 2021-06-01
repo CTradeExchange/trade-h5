@@ -2,7 +2,7 @@
     <div>
         <form class='loginForm'>
             <div v-if="loginAccount==='mobile'" class='field'>
-                <MobileInput v-model='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
+                <areaInput v-model='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
             </div>
             <div v-else class='field'>
                 <InputComp v-model='email' clear label='邮箱' />

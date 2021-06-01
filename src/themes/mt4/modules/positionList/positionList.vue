@@ -1,12 +1,6 @@
 <template>
     <div ref='positionWrap'>
-        <div v-if='positionList.length===0 && $store.state._trade.positionLoading' class='loading'>
-            <van-loading type='spinner' />
-        </div>
-        <van-empty v-else-if='positionList.length===0' description='无历史记录' />
-        <template v-else>
-            <positionItem v-for='item in positionList' :key='item' v-longpress:closePosition='item' :data='item' />
-        </template>
+        <positionItem v-for='item in positionList' :key='item' v-longpress:closePosition='item' :data='item' />
     </div>
     <van-popup v-model:show='show'>
         <section class='popContainer'>
@@ -74,8 +68,8 @@ export default {
                         direction: state.cur.direction,
                         openVolume: state.cur.openVolume,
                         openNum: state.cur.openNum,
-                        stopLossDecimal: state.cur.stopLossDecimal,
-                        takeProfitDecimal: state.cur.takeProfitDecimal,
+                        stopLoss: state.cur.stopLossDecimal,
+                        takeProfit: state.cur.takeProfitDecimal,
                         isClosePosition: true
                     }
                 })

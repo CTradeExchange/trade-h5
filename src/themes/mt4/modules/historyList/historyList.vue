@@ -9,6 +9,7 @@
                 v-model:loading='loading'
                 :finished='finished'
                 finished-text='没有更多了'
+                :immediate-check='false'
                 @load='onLoad'
             >
                 <positionItem v-for='item in orderList' :key='item' :data='item' />

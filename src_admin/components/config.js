@@ -13,7 +13,7 @@ import text from '@m/modules/text/config.js'
 import redpacket from '@m/modules/redpacket/config.js'
 // import template from '@m/modules/template/config.js'
 // import mineTop from '@m/modules/mineTop/config.js'
-// import quoteList from '@m/modules/quoteList/config.js'
+import quoteList from '@m/modules/quoteList/config.js'
 // import nav from '@m/modules/nav/config.js'
 // import registerForm from '@m/modules/registerForm/config.js'
 export const mobileComponentsConfig = async () => {
@@ -30,7 +30,7 @@ export const mobileComponentsConfig = async () => {
         // nav,
         text,
         // tinymce,
-        // quoteList,
+        quoteList,
         redpacket,
         // template,
         // mineTop,

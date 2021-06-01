@@ -191,32 +191,35 @@ export function objArraySort (objArr, key) {
 /* 检测用户KYC状态 */
 export function checkUserKYC ({ res, Dialog, router, store }) {
     // 登录KYC,0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
-    if (Number(res.data.kycAuditStatus === 0)) {
-        Dialog.alert({
-            title: '提示',
-            confirmButtonText: '去认证',
-            message: '您还未进行KYC认证，点击去认证',
-            theme: 'round-button',
-        }).then(() => {
-            router.push('/authentication')
-        })
-    } else if (Number(res.data.kycAuditStatus === 1)) {
-        Dialog.alert({
-            title: '提示',
-            confirmButtonText: '关闭',
-            message: '您的资料正在审核中，等耐心等待',
-            theme: 'round-button',
-        }).then(() => {
-            store.dispatch('_user/logout')
-        })
-    } else if (Number(res.data.kycAuditStatus === 3)) {
-        Dialog.alert({
-            title: '提示',
-            confirmButtonText: '重新提交',
-            message: '您的资料审核失败',
-            theme: 'round-button',
-        }).then(() => {
-            router.push('/authentication')
-        })
+    // companyKycStatus 公司KYC开户状态，1开启 2未开启
+    if (Number(res.data.companyKycStatus) === 1) {
+        if (Number(res.data.kycAuditStatus === 0)) {
+            Dialog.alert({
+                title: '提示',
+                confirmButtonText: '去认证',
+                message: '您还未进行KYC认证，点击去认证',
+                theme: 'round-button',
+            }).then(() => {
+                router.push('/authentication')
+            })
+        } else if (Number(res.data.kycAuditStatus === 1)) {
+            Dialog.alert({
+                title: '提示',
+                confirmButtonText: '关闭',
+                message: '您的资料正在审核中，等耐心等待',
+                theme: 'round-button',
+            }).then(() => {
+                store.dispatch('_user/logout')
+            })
+        } else if (Number(res.data.kycAuditStatus === 3)) {
+            Dialog.alert({
+                title: '提示',
+                confirmButtonText: '重新提交',
+                message: '您的资料审核失败',
+                theme: 'round-button',
+            }).then(() => {
+                router.push('/authentication')
+            })
+        }
     }
 }

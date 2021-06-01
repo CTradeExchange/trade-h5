@@ -16,7 +16,6 @@
                 <van-icon name='cross' @click.stop='show = false' />
             </div>
             <div class='content'>
-                {{ computeHtml(noticeContent.text) }}
                 {{ computeHtmlTime(noticeContent.text) }}
             </div>
         </div>
@@ -34,7 +33,7 @@ export default {
             noticeContent: ''
         })
 
-        document.body.addEventListener('notice', res => {
+        document.body.addEventListener('GotMsg_notice', res => {
             state.show = true
             state.noticeContent = res.detail.content
             setTimeout(() => {
@@ -46,23 +45,26 @@ export default {
             try {
                 const reg = /<?time[^>]*>[^<]*<\/time>/gi
                 const tag = content.match(reg)
-                if (!isEmpty(tag)) {
-                    const time = tag.toString().replace(/<\/?time>/g, '')
-                    return dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
+                let returnVal
+                if (!isEmpty(tag) && tag.length > 0) {
+                    tag.forEach(item => {
+                        returnVal = content.replace(reg, function (matchStr) {
+                            const time = matchStr.toString().replace(/<\/?time>/g, '')
+                            const timeStr = dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
+                            return timeStr
+                        })
+                    })
+                    return returnVal
+                } else {
+                    return content
                 }
             } catch (error) {
                 console.log(error)
             }
         }
 
-        const computeHtml = (content) => {
-            const reg = /<?time[^>]*>[^<]*<\/time>。/gi
-            return content.replace(reg, '')
-        }
-
         return {
             computeHtmlTime,
-            computeHtml,
             ...toRefs(state)
         }
     }

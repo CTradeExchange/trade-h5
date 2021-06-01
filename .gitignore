@@ -25,3 +25,14 @@ pnpm-debug.log*
 /zip
 /package-lock.json
 /dist.zip
+/cats-upload-all.zip
+/cats-upload-all/dist
+/admin
+/build_folder/cats-upload-all/dist
+/build_folder/cats-upload-admin.zip
+/build_folder/cats-upload-all.zip
+/build_folder/cats-upload-admin/admin
+/build_folder/admin
+/build_folder/dist
+/build_folder/cats-upload-all/cats-upload-all/dist
+/build_folder/cats-upload-admin/cats-upload-admin/admin

@@ -51,6 +51,7 @@ export function zip (str) {
     const binaryString = pako.gzip(encodeURIComponent(str), { to: 'string' })
     return btoa(binaryString)
 }
+window.zip = zip
 export function unzip (str) {
     let strData = atob(str)
     const charData = strData.split('').map((t) => (t.charCodeAt(0)))
@@ -59,6 +60,7 @@ export function unzip (str) {
     strData = handleCodePoints(new Uint16Array(data))
     return decodeURIComponent(strData)
 }
+window.unzip = unzip
 export function handleCodePoints (array) {
     const CHUNK_SIZE = 0x8000 // arbitrary number here, not too small, not too big
     let index = 0

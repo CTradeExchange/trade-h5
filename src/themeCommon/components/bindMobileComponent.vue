@@ -7,7 +7,7 @@
                 <!-- <label class='label'>
                     请输入手机号
                 </label> -->
-                <MobileInput v-model='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
+                <areaInput v-model='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
             </div>
             <div class='field'>
                 <!-- <label class='label'>
@@ -24,7 +24,7 @@
 
 <script>
 import Top from '@m/layout/top'
-import MobileInput from '@/components/form/mobileInput'
+import areaInput from '@/components/form/areaInput'
 import CheckCode from '@/components/form/checkCode'
 import { toRefs, reactive, computed } from 'vue'
 import { isEmpty, getArrayObj } from '@/utils/util'
@@ -35,7 +35,7 @@ import { verifyCodeSend } from '@/api/base'
 import { bindPhone, changePhone, checkCustomerExist } from '@/api/user'
 export default {
     components: {
-        MobileInput,
+        areaInput,
         CheckCode
     },
     props: {
