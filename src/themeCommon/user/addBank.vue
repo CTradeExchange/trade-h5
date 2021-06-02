@@ -64,7 +64,7 @@
         confirm-button-text='查看'
         show-cancel-button='false'
         @cancel='cancel'
-        @confirm='toPersonal'
+        @confirm='toBankList'
     >
         <i class='icon_success'></i>
         <p class='title'>
@@ -117,6 +117,7 @@ export default {
         const router = useRouter()
         const store = useStore()
         const bankDict = computed(() => store.state.bankDict)
+        const customInfo = computed(() => store.state._user.customerInfo)
 
         const state = reactive({
             userName: '',
@@ -170,7 +171,7 @@ export default {
                 bankName: state.bankName,
                 bankCurrency: state.currency,
                 bankAddress: state.bankArea,
-                country: '中国',
+                country: customInfo.value.country,
                 province: state.area.split(',')[0],
                 city: state.area.split(',')[1],
                 bankCode: state.checkedBankCode
@@ -199,8 +200,8 @@ export default {
             })
         }
 
-        const toPersonal = () => {
-            router.push('/personal')
+        const toBankList = () => {
+            router.push('/bankList')
         }
 
         const cancel = () => {
@@ -225,7 +226,7 @@ export default {
             handleAreaConfirm,
             ...toRefs(state),
             handleConfirm,
-            toPersonal,
+            toBankList,
             bankDict,
             cancel
         }

@@ -31,20 +31,20 @@ export const checkCustomerExistRule = {
                 return source.type === 2 ? source.mobileReg.test(value) : true
             }
         },
-        {
-            asyncValidator: (rule, value, callback, source, options) => {
-                checkCustomerExist(source).then(res => {
-                    if (res.check()) {
-                        const msg = source.type === 2 ? '手机号已存在' : '邮箱已存在'
-                        callback(res.data === 1 ? msg : undefined)
-                    } else {
-                        callback(res.errorMsg())
-                    }
-                }).catch(err => {
-                    callback(err)
-                })
-            },
-        },
+        // {
+        //     asyncValidator: (rule, value, callback, source, options) => {
+        //         checkCustomerExist(source).then(res => {
+        //             if (res.check()) {
+        //                 const msg = source.type === 2 ? '手机号已存在' : '邮箱已存在'
+        //                 callback(res.data === 1 ? msg : undefined)
+        //             } else {
+        //                 callback(res.errorMsg())
+        //             }
+        //         }).catch(err => {
+        //             callback(err)
+        //         })
+        //     },
+        // },
     ],
     phoneArea: {
         message: '请输入区号',
@@ -53,7 +53,7 @@ export const checkCustomerExistRule = {
         },
     },
     emailArea: {
-        message: '请输入区号',
+        message: '请选择地区',
         validator: (rule, value, callback, source, options) => {
             return source.type === 1 ? !!value : true
         },

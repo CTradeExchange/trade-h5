@@ -5,7 +5,7 @@
             </template>
         </Top>
         <!-- <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a> -->
-
+        <Loading :show='loading' />
         <header class='header'>
             <h1 class='pageTitle'>
                 设置登录密码
@@ -48,7 +48,8 @@ export default {
             newPwd: '',
             confirmPwd: '',
             newPwdVis: false,
-            confirmVis: false
+            confirmVis: false,
+            loading: false
         })
 
         function changeState (type) {
@@ -77,14 +78,18 @@ export default {
                 sendToken: route.query['sendToken'],
                 verifyCodeToken: route.query['verifyCodeToken']
             }
-
+            state.loading = true
             findPwd(params).then((res) => {
+                state.loading = true
                 if (res.check()) {
                     router.push('/resetSuccess')
                 } else {
                     router.push('/resetFail')
                 }
                 Toast(res.msg)
+            }).catch(err => {
+                state.loading = false
+                router.push('/resetFail')
             })
         }
 

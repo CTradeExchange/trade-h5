@@ -3,7 +3,7 @@ import Base from '@/store/modules/base'
 import User from '@/store/modules/user'
 import Quote from '@/store/modules/quote'
 import Trade from '@/store/modules/trade'
-import { getListByParentCode } from '@/api/base'
+import { getListByParentCode, getCountryListByParentCode } from '@/api/base'
 import Colors from '@m/colorVariables'
 
 const style = {
@@ -21,7 +21,8 @@ export default createStore({
         style,
         quoteMode: 2, // 1简单模式 2高级模式
         zoneList: [],
-        bankDict: []
+        bankDict: [],
+        countryList: []
     },
     getters: {
         productActived (state) {
@@ -72,6 +73,9 @@ export default createStore({
         Update_bankList (state, list) {
             state.bankDict = list
         },
+        Update_countryList (state, list) {
+            state.countryList = list
+        }
     },
     actions: {
         // 获取国家验区号
@@ -86,7 +90,6 @@ export default createStore({
                 return res
             })
         },
-
         getBankDictList ({ dispatch, commit, state }) {
             return getListByParentCode({ parentCode: 'bank_code' }).then(res => {
                 if (res.check()) {
@@ -94,6 +97,14 @@ export default createStore({
                 }
                 return res
             })
-        }
+        },
+        getCountryListByParentCode ({ dispatch, commit, state }) {
+            return getCountryListByParentCode({ parentCode: '-1' }).then(res => {
+                if (res.check()) {
+                    commit('Update_countryList', res.data)
+                }
+                return res
+            })
+        },
     }
 })

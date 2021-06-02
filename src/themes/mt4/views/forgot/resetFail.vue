@@ -22,6 +22,7 @@
 <script>
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import { computed } from 'vue'
 export default {
     setup (props) {
         const router = useRouter()

@@ -9,13 +9,14 @@
         </header>
         <form class='loginForm'>
             <div v-if="loginAccount==='mobile'" class='field'>
-                <areaInput v-model.trim='loginName' v-model:zone='zone' clear placeholder='请输入手机号或邮箱' />
+                <!-- <areaInput v-model.trim='loginName' v-model:zone='zone' clear placeholder='请输入手机号或邮箱' /> -->
+                <InputComp v-model.trim='loginName' clear label='请输入手机号或邮箱' />
             </div>
             <div v-else class='field'>
                 <InputComp v-model.trim='email' clear label='邮箱' />
             </div>
             <div v-if="loginType==='password'" class='field'>
-                <InputComp v-model='pwd' v-model:zone='zone' clear label='密码' pwd />
+                <InputComp v-model='pwd' clear label='密码' pwd />
             </div>
             <div v-else class='field'>
                 <CheckCode v-model.trim='checkCode' clear label='验证码' @verifyCodeSend='verifyCodeSendHandler' />
@@ -105,7 +106,6 @@
             </div>
         </section>
     </van-popup>
-
     <Loading :show='loading' />
 </template>
 
@@ -128,6 +128,7 @@ import { Toast, Dialog } from 'vant'
 import Rule from './rule'
 import md5 from 'js-md5'
 import { timeline, timelineItem } from '@m/components/timeline'
+import { checkUserStatus } from '@/api/user'
 
 export default {
     components: {
@@ -152,7 +153,6 @@ export default {
             pwdVisible: false,
             kycPop: false,
             loginPwdPop: false,
-            zone: '+86',
             loginName: '',
             pwd: '',
             checkCode: '',
@@ -165,11 +165,7 @@ export default {
                 title: state.loginType === 'password' ? '验证码登录' : '账号密码登录'
             }
         })
-        const zoneList = computed(() => store.state.zoneList)
-        // 手机正则表达式
-        const mobileReg = computed(() => {
-            return getArrayObj(zoneList.value, 'code', state.zone).extend || ''
-        })
+        const countryList = computed(() => store.state.countryList)
 
         const changeLoginType = () => {
             const loginType = state.loginType
@@ -186,19 +182,18 @@ export default {
 
             }
 
-            if (state.loginName.includes('@')) {
-                loginParams.emailArea = String(state.zone)
-            } else {
-                loginParams.phoneArea = String(state.zone)
-            }
+            // if (state.loginName.includes('@')) {
+            //     loginParams.emailArea = String(state.zone)
+            // } else {
+            //     loginParams.phoneArea = String(state.zone)
+            // }
 
             const validator = new Schema(Rule)
             state.loading = true
 
             validator.validate(
                 {
-                    ...loginParams,
-                    mobileReg: new RegExp(mobileReg.value)
+                    ...loginParams
                 }, {
                     ...state,
                     first: true
@@ -231,51 +226,54 @@ export default {
 
                 // 登录KYC,kycAuditStatus:0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
                 // companyKycStatus 公司KYC开户状态，1开启 2未开启
-
-                if (Number(res.data.kycAuditStatus === 0)) {
-                    return Dialog.alert({
-                        title: '提示',
-                        confirmButtonText: '去认证',
-                        message: '您还未进行KYC认证，点击去认证',
-                        theme: 'round-button',
-                    }).then(() => {
-                        router.push('/authentication')
-                    })
-                } else if (Number(res.data.kycAuditStatus === 1)) {
-                    return Dialog.alert({
-                        title: '提示',
-                        confirmButtonText: '关闭',
-                        message: '您的资料正在审核中，等耐心等待',
-                        theme: 'round-button',
-                    }).then(() => {
-                        store.dispatch('_user/logout')
-                    })
-                } else if (Number(res.data.kycAuditStatus === 3)) {
-                    return Dialog.alert({
-                        title: '提示',
-                        confirmButtonText: '重新提交',
-                        message: '您的资料审核失败',
-                        theme: 'round-button',
-                    }).then(() => {
-                        router.push('/authentication')
-                    })
-                } else if (Number(res.data.kycAuditStatus === 2)) {
-                    Dialog.alert({
-                        title: '提示',
-                        confirmButtonText: '好的',
-                        message: '您的资料已经审核通过，现在就开启您的财富之旅吧！',
-                        theme: 'round-button',
-                    }).then(() => {
-                        // 登录websocket
-                        instance.appContext.config.globalProperties.$MsgSocket.login()
-                        // 重新登录清除账户信息
-                        store.commit('_user/Update_accountAssets', {})
-                        if (parseInt(res.data.loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
-                            state.loginPwdPop = true
-                        } else {
-                            loginToPath()
-                        }
-                    })
+                if (Number(res.data.companyKycStatus) === 1) {
+                    if (Number(res.data.kycAuditStatus === 0)) {
+                        return Dialog.alert({
+                            title: '提示',
+                            confirmButtonText: '去认证',
+                            message: '您还未进行KYC认证，点击去认证',
+                            theme: 'round-button',
+                        }).then(() => {
+                            router.push('/authentication')
+                        })
+                    } else if (Number(res.data.kycAuditStatus === 1)) {
+                        return Dialog.alert({
+                            title: '提示',
+                            confirmButtonText: '关闭',
+                            message: '您的资料正在审核中，等耐心等待',
+                            theme: 'round-button',
+                        }).then(() => {
+                            store.dispatch('_user/logout')
+                        })
+                    } else if (Number(res.data.kycAuditStatus === 3)) {
+                        return Dialog.alert({
+                            title: '提示',
+                            confirmButtonText: '重新提交',
+                            message: '您的资料审核失败',
+                            theme: 'round-button',
+                        }).then(() => {
+                            router.push('/authentication')
+                        })
+                    } else if (Number(res.data.kycAuditStatus === 2)) {
+                        Dialog.alert({
+                            title: '提示',
+                            confirmButtonText: '好的',
+                            message: '您的资料已经审核通过，现在就开启您的财富之旅吧！',
+                            theme: 'round-button',
+                        }).then(() => {
+                            // 登录websocket
+                            instance.appContext.config.globalProperties.$MsgSocket.login()
+                            // 重新登录清除账户信息
+                            store.commit('_user/Update_accountAssets', {})
+                            if (parseInt(res.data.loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
+                                state.loginPwdPop = true
+                            } else {
+                                loginToPath()
+                            }
+                        })
+                    }
+                } else if (Number(res.data.companyKycStatus) === 2) {
+                    loginToPath()
                 }
             })
         }
@@ -290,26 +288,29 @@ export default {
                 loginName: state.loginName
             }
 
-            if (state.loginName.includes('@')) {
-                verifyParams.emailArea = String(state.zone)
-            } else {
-                verifyParams.phoneArea = String(state.zone)
-            }
-
             const validator = new Schema(Rule)
             validator.validate({
-                ...verifyParams,
-                mobileReg: new RegExp(mobileReg.value)
+                ...verifyParams
             }).then(res => {
-                const params = {
-                    bizType: state.loginName.includes('@') ? 'EMAIL_LOGIN_VERIFICATION_CODE' : 'SMS_LOGIN_VERIFICATION_CODE',
-                    toUser: state.loginName.includes('@') ? state.loginName : String(state.zone) + ' ' + state.loginName,
-                }
-                verifyCodeSend(params).then(res => {
+                // 检测客户是否存在,同时获取区号
+                checkUserStatus(verifyParams).then(res => {
                     if (res.check()) {
-                        token = res.data.token
-                        // if (res.data.code) state.checkCode = res.data.code
-                        callback && callback()
+                        if (Number(res.data.status) === 2) {
+                            return Toast(verifyParams.type === 1 ? '邮箱不存在' : '手机不存在')
+                        } else {
+                            state.zone = res.data.phoneArea
+                            const params = {
+                                bizType: state.loginName.includes('@') ? 'EMAIL_LOGIN_VERIFICATION_CODE' : 'SMS_LOGIN_VERIFICATION_CODE',
+                                toUser: state.loginName.includes('@') ? state.loginName : String(state.zone) + ' ' + state.loginName,
+                            }
+                            verifyCodeSend(params).then(res => {
+                                if (res.check()) {
+                                    token = res.data.token
+                                    // if (res.data.code) state.checkCode = res.data.code
+                                    callback && callback()
+                                }
+                            })
+                        }
                     }
                 })
             }).catch(({
@@ -341,13 +342,15 @@ export default {
             loginToPath()
         }
 
-        // 获取国家验区号
-        store.dispatch('getListByParentCode')
+        // 获取国家区号
+        store.dispatch('getCountryListByParentCode')
+
         return {
             ...toRefs(state),
             changeLoginType,
             rightAction,
             loginHandle,
+            countryList,
             topRightClick,
             verifyCodeSendHandler,
             loginPwdSetNext,

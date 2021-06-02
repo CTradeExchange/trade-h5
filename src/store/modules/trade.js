@@ -175,6 +175,7 @@ export default {
         queryPositionPage ({ dispatch, commit, state, rootState }, params = {}) {
             const accountListLen = rootState._user.customerInfo?.accountList?.length
             dispatch('queryPBOOrderPage')
+
             if (!accountListLen) {
                 commit('Update_positionList', [])
                 return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空持仓

@@ -25,11 +25,24 @@
                 <TradeTypeAction v-model='tradeType' class='cellRow' />
                 <!-- <van-cell title="账户币种" is-link arrow-direction="down" value="USD" /> -->
                 <div v-if="openType === 'mobile'" class='cell'>
-                    <areaInput v-model.trim='mobile' v-model:zone='zone' placeholder='手机号' @blur='onMobileBlur' />
+                    <areaInput
+                        v-model.trim='mobile'
+                        v-model:zone='zone'
+                        clear
+                        placeholder='手机号'
+                        type='mobile'
+                        @zoneSelect='zoneSelect'
+                    />
                 </div>
                 <div v-else class='cell'>
-                    <!-- <InputComp v-model='email' clear label='邮箱' /> -->
-                    <areaInput v-model.trim='email' v-model:zone='zone' placeholder='邮箱' />
+                    <areaInput
+                        v-model.trim='email'
+                        v-model:zone='zone'
+                        clear
+                        placeholder='邮箱'
+                        type='email'
+                        @zoneSelect='zoneSelect'
+                    />
                 </div>
                 <div class='cell'>
                     <CheckCode v-model.trim='checkCode' clear label='验证码' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
@@ -66,7 +79,7 @@ import areaInput from '@/components/form/areaInput'
 import CurrencyAction from './components/currencyAction'
 import TradeTypeAction from './components/tradeTypeAction'
 import { getDevice, getQueryVariable, setToken, getArrayObj } from '@/utils/util'
-import { register, openAccount, checkKycApply } from '@/api/user'
+import { register, openAccount, checkKycApply, checkUserStatus } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
 import { useStore } from 'vuex'
 import { reactive, toRefs, ref, computed, getCurrentInstance } from 'vue'
@@ -78,21 +91,21 @@ export default {
     components: {
         Top,
         areaInput,
-        InputComp,
         CheckCode,
         Loading,
         CurrencyAction,
         TradeTypeAction,
-        VueSelect,
     },
     setup () {
         const instance = getCurrentInstance()
-        let delayer = null
+        const delayer = null
         const store = useStore()
         const router = useRouter()
         const state = reactive({
             options: [{ country: 'Canada', code: 'CA' }],
-            zone: '+86',
+            zone: '中国大陆 (86)',
+            countryZone: '86',
+            countryCode: 'ISO_3166_156',
             loading: false,
             verifyCodeLoading: false,
             checkCode: '',
@@ -106,29 +119,14 @@ export default {
             protocol: true
         })
         let token = ''
-        store.dispatch('getListByParentCode')
+        // 获取国家区号
+        store.dispatch('getCountryListByParentCode')
+        const countryList = computed(() => store.state.countryList)
         const style = computed(() => store.state.style)
-        const zoneList = computed(() => store.state.zoneList)
         // 手机正则表达式
-        const mobileReg = computed(() => getArrayObj(zoneList.value, 'code', state.zone).extend || '')
+        const mobileReg = computed(() => getArrayObj(countryList.value, 'countryCode', state.countryZone).extend || ''
+        )
 
-        // 手机号输入框离开焦点
-        const onMobileBlur = () => {
-            const validator = new Schema(checkCustomerExistRule)
-            const params = {
-                type: state.openType === 'email' ? 1 : 2, // 1邮箱，2手机号码，3客户账号
-                loginName: state.openType === 'email' ? state.email : state.mobile,
-                phoneArea: state.openType === 'mobile' ? String(state.zone) : '',
-                protocol: state.protocol
-            }
-            delayer = setTimeout(() => {
-                validator.validate(params, { first: true }, (errors, fields) => {
-                    if (errors) {
-                        Toast(errors[0].message)
-                    }
-                })
-            }, 100)
-        }
         const registerSubmit = (params) => {
             state.loading = true
             register(params).finally(() => {
@@ -184,13 +182,14 @@ export default {
                 utmCampaign: getQueryVariable('utm_campaign'),
                 utmContent: getQueryVariable('utm_content'),
                 utmTerm: getQueryVariable('utm_term'),
-                protocol: state.protocol
+                protocol: state.protocol,
+                country: state.countryCode
             }
 
             if (state.openType === 'mobile') {
-                params.phoneArea = String(state.zone)
+                params.phoneArea = '+' + String(state.countryZone)
             } else {
-                params.emailArea = String(state.zone)
+                params.emailArea = String(state.countryZone)
             }
 
             const validator = new Schema(Rule)
@@ -222,15 +221,26 @@ export default {
             const validator = new Schema(checkCustomerExistRule)
             state.verifyCodeLoading = true
             validator.validate(verifyParams, { first: true }).then(res => {
-                const params = {
-                    bizType: state.openType === 'mobile' ? 'SMS_REGISTER_VERIFICATION_CODE' : 'EMAIL_REGISTER_VERIFICATION_CODE',
-                    toUser: state.openType === 'mobile' ? String(state.zone) + ' ' + state.mobile : state.email,
-                }
-                verifyCodeSend(params).then(res => {
-                    state.verifyCodeLoading = false
+                // 检测客户是否存在,同时获取区号
+                checkUserStatus(verifyParams).then(res => {
                     if (res.check()) {
-                        token = res.data.token
-                        callback && callback()
+                        if (Number(res.data.status) === 1) {
+                            state.verifyCodeLoading = false
+                            return Toast(verifyParams.type === 1 ? '邮箱已存在' : '手机已存在')
+                        } else {
+                            // state.zone = res.data.phoneArea
+                            const params = {
+                                bizType: state.openType === 'mobile' ? 'SMS_REGISTER_VERIFICATION_CODE' : 'EMAIL_REGISTER_VERIFICATION_CODE',
+                                toUser: state.openType === 'mobile' ? '+' + state.countryZone + ' ' + state.mobile : state.email,
+                            }
+                            verifyCodeSend(params).then(res => {
+                                state.verifyCodeLoading = false
+                                if (res.check()) {
+                                    token = res.data.token
+                                    callback && callback()
+                                }
+                            })
+                        }
                     }
                 })
             }).catch(({ errors, fields }) => {
@@ -240,12 +250,19 @@ export default {
                 }
             })
         }
+
+        const zoneSelect = (data) => {
+            state.countryZone = data.code
+            state.countryCode = data.countryCode
+        }
+
         return {
             ...toRefs(state),
             registerHandler,
-            onMobileBlur,
             verifyCodeSendHandler,
             style,
+            countryList,
+            zoneSelect
         }
     }
 }

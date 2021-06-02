@@ -44,3 +44,12 @@ export function upload (data) {
         isUpload: true
     })
 }
+
+/* 获取国家字典列表 */
+export function getCountryListByParentCode (data) {
+    return request({
+        url: '/global/config.app.AppDictDubboService.getCountryListByParentCode',
+        method: 'post',
+        data
+    })
+}

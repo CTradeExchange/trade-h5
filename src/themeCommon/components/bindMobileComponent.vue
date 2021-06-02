@@ -4,10 +4,7 @@
         <Loading :show='loading' />
         <form class='form'>
             <div class='field'>
-                <!-- <label class='label'>
-                    请输入手机号
-                </label> -->
-                <areaInput v-model='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
+                <areaInput v-model='mobile' v-model:zone='zoneText' clear :disabled='true' placeholder='请输入手机号' />
             </div>
             <div class='field'>
                 <!-- <label class='label'>
@@ -23,7 +20,7 @@
 </template>
 
 <script>
-import Top from '@m/layout/top'
+
 import areaInput from '@/components/form/areaInput'
 import CheckCode from '@/components/form/checkCode'
 import { toRefs, reactive, computed } from 'vue'
@@ -32,7 +29,7 @@ import { Toast, Dialog } from 'vant'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { verifyCodeSend } from '@/api/base'
-import { bindPhone, changePhone, checkCustomerExist } from '@/api/user'
+import { bindPhone, changePhone, checkUserStatus } from '@/api/user'
 export default {
     components: {
         areaInput,
@@ -48,17 +45,25 @@ export default {
         const store = useStore()
         const router = useRouter()
         const state = reactive({
-            zone: '+86',
+            zone: '',
             sendToken: '',
             mobile: '',
             checkCode: '',
             loading: false
         })
-        store.dispatch('getListByParentCode')
+
+        store.dispatch('getCountryListByParentCode')
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
-        const zoneList = computed(() => store.state.zoneList)
+
+        const countryList = computed(() => store.state.countryList)
+        const customInfo = computed(() => store.state._user.customerInfo)
+        const zoneText = computed(() => {
+            const countryObj = getArrayObj(countryList.value, 'code', customInfo.value.country)
+            state.zone = countryObj.countryCode
+            return countryObj.name + ' (' + countryObj.countryCode + ')'
+        })
         // 手机正则表达式
-        const mobileReg = computed(() => getArrayObj(zoneList.value, 'code', state.zone).extend || '')
+        const mobileReg = computed(() => getArrayObj(countryList.value, 'code', customInfo.value.country).extend || '')
 
         // 发送验证码
         const handleVerifyCodeSend = (callback) => {
@@ -69,19 +74,20 @@ export default {
             if (!RegExp(mobileReg.value).test(state.mobile)) {
                 return Toast('请输入正确的手机号')
             }
+
             const params = {
                 bizType: 'SMS_COMMON_VERIFICATION_CODE',
-                toUser: state.zone + ' ' + state.mobile
+                toUser: '+' + state.zone + ' ' + state.mobile
             }
 
             const existParams = {
                 type: 2,
                 loginName: state.mobile,
-                phoneArea: state.zone
+                phoneArea: '+' + state.zone
             }
-            checkCustomerExist(existParams).then(res => {
+            checkUserStatus(existParams).then(res => {
                 if (res.check()) {
-                    if (res.data === 1) {
+                    if (Number(res.data.status) === 1) {
                         return Dialog.confirm({
                             theme: 'round-button',
                             title: '提示',
@@ -123,9 +129,9 @@ export default {
             state.loading = true
             const params = {
                 phone: state.mobile,
-                phoneArea: state.zone,
                 verifyCode: state.checkCode,
-                sendToken: state.sendToken
+                sendToken: state.sendToken,
+                phoneArea: '+' + state.zone
             }
 
             if (props.type === 'bind') {
@@ -161,6 +167,7 @@ export default {
             handleVerifyCodeSend,
             handleConfirm,
             onlineServices,
+            zoneText,
             ...toRefs(state)
         }
     }

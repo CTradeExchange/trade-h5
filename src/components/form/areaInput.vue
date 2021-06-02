@@ -1,7 +1,7 @@
 <template>
     <div class='mobileBar van-hairline--bottom'>
-        <div class='zone'>
-            <VueSelect v-model='zoneVal' :actions='zoneList' text='code' value='code' @select='zoneOnSelect' />
+        <div class='zone' :class='{ disabled: disabled }'>
+            <VueSelect v-model='zoneVal' :actions='countryList' :text="type === 'mobile' ? 'name': 'countryName'" value='name' @select='zoneOnSelect' />
         </div>
         <div class='inputWrapper'>
             <input
@@ -23,7 +23,6 @@
 
 <script>
 import VueSelect from '@m/components/select'
-import { mapState } from 'vuex'
 import { randomId } from '@/utils/util'
 export default {
     components: {
@@ -45,6 +44,14 @@ export default {
         label: {
             type: [String, Number],
             default: ''
+        },
+        type: {
+            type: String,
+            default: 'mobile'
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     data () {
@@ -55,15 +62,15 @@ export default {
         }
     },
     computed: {
-        // ...mapState(['zoneList'])
-        zoneList () {
-            const zoneList = this.$store.state.zoneList
+        countryList () {
+            const countryList = this.$store.state.countryList
             const tempArr = []
-            zoneList.forEach(item => {
-                const code = item.code.split('/').length > 1 ? item.code.split('/')[1] : item.code
+            countryList.forEach(item => {
                 tempArr.push({
-                    name: item.name + ' ' + code,
-                    code
+                    name: item.name + ' (' + item.countryCode + ')',
+                    code: item.countryCode,
+                    countryCode: item.code,
+                    countryName: item.name
                 })
             })
             return tempArr
@@ -85,8 +92,10 @@ export default {
             this.$emit('input', $event.target.value)
         },
         zoneOnSelect (item) {
-            this.$emit('update:zone', item.code)
-            this.$emit('zoneSelect', item.code)
+            if (!this.disabled) {
+                this.$emit('update:zone', item.name)
+                this.$emit('zoneSelect', item)
+            }
         }
     }
 }
@@ -105,6 +114,10 @@ export default {
         flex: none;
         // width: rem(220px);
         margin-right: rem(20px);
+        &.disabled {
+            color: #C5C5C5;
+            pointer-events: none;
+        }
     }
 }
 .inputWrapper {

@@ -6,7 +6,7 @@
             <template #center>
             </template>
         </Top>
-
+        <Loading :show='loading' />
         <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a>
         <header class='header'>
             <h1 class='pageTitle'>
@@ -31,7 +31,7 @@
         <div class='tabs-content'>
             <form v-show='curTab === 0' class='loginForm'>
                 <div class='field'>
-                    <areaInput v-model.trim='mobile' v-model:zone='zone' clear placeholder='请输入手机号' />
+                    <InputComp v-model.trim='mobile' clear label='请输入手机号' />
                 </div>
                 <div class='field'>
                     <checkCode v-model.trim='checkCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
@@ -40,7 +40,7 @@
 
             <form v-show='curTab === 1' class='loginForm'>
                 <div class='field'>
-                    <areaInput v-model.trim='email' v-model:zone='zone' clear placeholder='请输入邮箱' />
+                    <InputComp v-model.trim='email' clear label='请输入邮箱' />
                 </div>
                 <div class='field'>
                     <checkCode v-model.trim='emailCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
@@ -55,6 +55,7 @@
 
 <script>
 import Top from '@/components/top'
+import InputComp from '@/components/form/input'
 import { reactive, toRefs, computed } from 'vue'
 import areaInput from '@/components/form/areaInput'
 import checkCode from '@/components/form/checkCode'
@@ -65,12 +66,12 @@ import Schema from 'async-validator'
 import Rule from './rule'
 import { useStore } from 'vuex'
 import { verifyCodeSend, verifyCodeCheck } from '@/api/base'
-import { checkCustomerExist } from '@/api/user'
+import { checkUserStatus } from '@/api/user'
 import { isEmpty, getArrayObj } from '@/utils/util'
 export default {
     components: {
         Top,
-        areaInput,
+        InputComp,
         checkCode,
         uInput
     },
@@ -83,19 +84,17 @@ export default {
             checkCode: '',
             email: '',
             emailCode: '',
-            zone: '+86',
+            zone: '中国大陆 (86)',
+            countryZone: '86',
             curTab: 0,
             tips: {
                 flag: true,
                 msg: ''
             },
             sendToken: '',
-            active: 0
+            active: 0,
+            loading: false
         })
-
-        const zoneList = computed(() => store.state.zoneList)
-        // 手机正则表达式
-        const mobileReg = computed(() => getArrayObj(zoneList.value, 'code', state.zone).extend || '')
 
         const handleTabChange = (name, title) => {
             state.curTab = name
@@ -103,45 +102,37 @@ export default {
 
         // 发送验证码
         const handleVerifyCodeSend = (callback) => {
-            const params = {
-                bizType: state.curTab === 0 ? 'SMS_PASSWORD_VERIFICATION_CODE' : 'EMAIL_PASSWORD_VERIFICATION_CODE',
-                toUser: state.curTab === 0 ? state.zone + ' ' + state.mobile : state.email,
-            }
-
+            state.loading = true
             const validator = new Schema(Rule)
             validator.validate({
                 type: state.curTab,
                 mobile: state.mobile,
                 email: state.email,
-                zone: state.zone,
-                mobileReg: new RegExp(mobileReg.value)
+                zone: state.zone
             }, (errors, fields) => {
                 console.log('errors:', errors, fields)
                 if (errors) {
                     return Toast(errors[0].message)
                 }
-                console.log(params)
 
                 // 验证手机号邮箱是否存在
                 const source = {
                     type: state.curTab === 0 ? 2 : 1,
-                    loginName: state.curTab === 0 ? state.mobile : state.email,
-                    phoneArea: state.zone
+                    loginName: state.curTab === 0 ? state.mobile : state.email
                 }
 
-                if (state.curTab === 0) {
-                    source.phoneArea = state.zone
-                } else {
-                    source.emailArea = state.zone
-                }
-
-                checkCustomerExist(source).then(res => {
+                checkUserStatus(source).then(res => {
+                    state.loading = false
                     if (res.check()) {
-                        if (res.data === 2) {
+                        if (Number(res.data.status) === 2) {
                             const msg = state.curTab === 0 ? '手机号不存在' : '邮箱不存在'
                             return Toast(msg)
                         } else {
-                            verifyCodeSend(params).then(res => {
+                            state.countryZone = res.data.phoneArea
+                            verifyCodeSend({
+                                bizType: state.curTab === 0 ? 'SMS_PASSWORD_VERIFICATION_CODE' : 'EMAIL_PASSWORD_VERIFICATION_CODE',
+                                toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
+                            }).then(res => {
                                 if (res.check()) {
                                     if (res.code === '0') {
                                         state.sendToken = res.data.token
@@ -153,6 +144,7 @@ export default {
                         }
                     }
                 }).catch(err => {
+                    state.loading = false
                     console.log(err)
                 })
             })
@@ -165,21 +157,23 @@ export default {
                 checkCode: state.checkCode,
                 emailCode: state.emailCode,
                 type: state.curTab,
-                needCheckCode: true,
-                mobileReg: new RegExp(mobileReg.value)
+                needCheckCode: true
             }
             const validator = new Schema(Rule)
+
             validator.validate(params, (errors, fields) => {
                 console.log(errors, fields)
                 if (errors) {
                     return Toast(errors[0].message)
                 }
+                state.loading = true
                 verifyCodeCheck({
                     bizType: state.curTab === 0 ? 'SMS_PASSWORD_VERIFICATION_CODE' : 'EMAIL_PASSWORD_VERIFICATION_CODE',
-                    toUser: state.curTab === 0 ? state.zone + ' ' + state.mobile : state.email,
+                    toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
                     sendToken: state.sendToken,
                     code: state.curTab === 0 ? state.checkCode : state.emailCode
                 }).then(res => {
+                    state.loading = false
                     if (res.ok) {
                         router.push({
                             path: '/resetPwd',
@@ -194,17 +188,23 @@ export default {
                     } else {
                         Toast(res.msg)
                     }
+                }).catch((err) => {
+                    state.loading = false
                 })
             })
         }
-        // 获取国家验区号
-        store.dispatch('getListByParentCode')
+
+        const zoneSelect = (data) => {
+            state.countryZone = data.code
+            state.countryCode = data.countryCode
+        }
         return {
             ...toRefs(state),
             next,
             handleTabChange,
             handleVerifyCodeSend,
-            style
+            style,
+            zoneSelect
         }
     }
 }

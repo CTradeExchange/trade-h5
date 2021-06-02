@@ -4,7 +4,14 @@
         <Loading :show='loading' />
         <form class='form'>
             <div class='field'>
-                <areaInput v-model='email' v-model:zone='zone' clear placeholder='请输入邮箱' />
+                <areaInput
+                    v-model='email'
+                    v-model:zone='zoneText'
+                    clear
+                    :disabled='true'
+                    placeholder='请输入邮箱'
+                    type='email'
+                />
             </div>
             <div class='field'>
                 <!-- <label class='label'>
@@ -25,7 +32,7 @@ import CheckCode from '@/components/form/checkCode'
 import areaInput from '@/components/form/areaInput.vue'
 import { Toast, Dialog } from 'vant'
 import { reactive, toRefs, computed } from 'vue'
-import { isEmpty, emailReg } from '@/utils/util'
+import { isEmpty, emailReg, getArrayObj } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
 import { bindEmail, changeEmail, checkCustomerExist } from '@/api/user'
 import { useRouter } from 'vue-router'
@@ -51,8 +58,15 @@ export default {
             loading: false,
             zone: '+86',
         })
-
+        store.dispatch('getCountryListByParentCode')
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
+        const countryList = computed(() => store.state.countryList)
+        const customInfo = computed(() => store.state._user.customerInfo)
+        const zoneText = computed(() => {
+            const countryObj = getArrayObj(countryList.value, 'code', customInfo.value.country)
+            state.zone = countryObj.countryCode
+            return countryObj.name + ' (' + countryObj.countryCode + ')'
+        })
 
         store.dispatch('getListByParentCode')
 
@@ -158,6 +172,7 @@ export default {
             handleConfirm,
             onlineServices,
             handleVerifyCodeSend,
+            zoneText,
             ...toRefs(state)
         }
     }

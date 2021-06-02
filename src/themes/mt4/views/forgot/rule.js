@@ -1,4 +1,4 @@
-import { mobileReg, emailReg } from '@/utils/util'
+import { emailReg } from '@/utils/util'
 export default {
     // type: {
     //     required: true,
@@ -9,13 +9,7 @@ export default {
             validator: (rule, value, callback, source, options) => {
                 return source.type === 0 ? !!value : true
             },
-        },
-        {
-            message: '请输入正确的手机号',
-            validator: (rule, value, callback, source, options) => {
-                return source.type === 0 ? source.mobileReg.test(value) : true
-            }
-        },
+        }
 
     ],
     email: [

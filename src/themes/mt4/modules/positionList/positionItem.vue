@@ -90,7 +90,9 @@ export default {
         }
         const product = computed(() => store.state._quote.productMap[data.symbolId])
 
-        const positionVolume = computed(() => minus(data.openVolume, data.closeVolume || 0))
+        const positionVolume = computed(() => {
+            return minus(data.openVolume, data.closeVolume || 0)
+        })
         return {
             ...toRefs(state),
             ...onceState,
