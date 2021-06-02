@@ -94,6 +94,7 @@ export default {
             } else {
                 sortActions.forEach(el => (el.className = ''))
                 item.className = sortActionsDown
+                sortType = 'desc'
                 sortFieldName = item.feild
             }
             state.sortActionsVisible = false
@@ -166,7 +167,7 @@ export default {
             actionSheetOnSelect,
             timeActionSheetOnSelect,
             calendarOnConfirm,
-            onLoad,
+            onLoad
         }
     }
 }
@@ -211,7 +212,7 @@ export default {
 }
 .sort-action-wrap{
     .action-item{
-        line-height: rem(22px);
+        line-height: rem(40px);
         padding: rem(32px) rem(36px);
         font-size: 16px;
         display: flex;
@@ -225,7 +226,7 @@ export default {
             vertical-align: middle;
             &::before{
                 color: #409DFF;
-                font-size: rem(30px);
+                font-size: rem(28px);
             }
         }
     }
