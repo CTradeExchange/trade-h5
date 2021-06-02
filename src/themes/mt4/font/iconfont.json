@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "21997846",
+      "name": "买卖",
+      "font_class": "maimai",
+      "unicode": "e674",
+      "unicode_decimal": 58996
+    },
+    {
       "icon_id": "21996981",
       "name": "排序箭头向下",
       "font_class": "paixujiantouxiangxia",

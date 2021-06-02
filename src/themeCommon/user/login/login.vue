@@ -22,7 +22,7 @@
                 <CheckCode v-model.trim='checkCode' clear label='验证码' @verifyCodeSend='verifyCodeSendHandler' />
             </div>
             <van-button block class='loginBtn' :disabled='loading' type='primary' @click='loginHandle'>
-                登录
+                {{ $t('login.loginBtn') }}
             </van-button>
             <div class='toolBtns'>
                 <a class='btn' href='javascript:;' @click="$router.push({ name:'Register' })">
