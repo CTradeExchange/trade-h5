@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import VueSelect from '@m/components/select'
+import VueSelect from '@/components/select'
 import { randomId } from '@/utils/util'
 export default {
     components: {

@@ -5,7 +5,7 @@ import VantBase from '@m/vantBase'
 import MyAsset from '@index/components/placeholder/placeholder.vue'
 
 import longpress from '@/directives/longpress'
-import Loading from '@m/components/loading'
+import Loading from '@/components/loading'
 import Colors, { setRootVariable } from '@m/colorVariables'
 import { setRouter } from '@/utils/request'
 

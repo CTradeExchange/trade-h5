@@ -72,8 +72,8 @@ import LanguageDiv from '@ct/modules/languageDiv'
 import areaInput from '@ct/components/form/areaInput'
 import InputComp from '@ct/components/form/input'
 import CheckCode from '@ct/components/form/checkCode'
-import LoginByGoogle from '@ct/components/loginByGoogle/loginByGoogle'
-import LoginByFacebook from '@ct/components/loginByFacebook/loginByFacebook'
+import LoginByGoogle from '@/components/loginByGoogle/loginByGoogle'
+import LoginByFacebook from '@/components/loginByFacebook/loginByFacebook'
 import Top from '@ct/layout/top'
 export default {
     components: {

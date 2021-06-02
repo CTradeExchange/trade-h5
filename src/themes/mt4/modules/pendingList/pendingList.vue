@@ -36,7 +36,7 @@ import { useStore } from 'vuex'
 import pendingItem from './pendingItem'
 import { useRouter } from 'vue-router'
 import { addMarketOrder, closePboOrder } from '@/api/trade'
-import Loading from '@m/components/loading'
+import Loading from '@/components/loading'
 import { Toast } from 'vant'
 export default {
     components: {

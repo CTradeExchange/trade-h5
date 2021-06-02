@@ -71,8 +71,8 @@
 <script>
 import Schema from 'async-validator'
 import Top from '@/components/top'
-import VueSelect from '@m/components/select'
-import Loading from '@m/components/loading'
+import VueSelect from '@/components/select'
+import Loading from '@/components/loading'
 import CheckCode from '@/components/form/checkCode'
 import InputComp from '@/components/form/input'
 import areaInput from '@/components/form/areaInput'
