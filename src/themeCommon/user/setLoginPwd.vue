@@ -69,6 +69,7 @@ export default {
         }
 
         function handleConfirm () {
+            const pwdReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/
             if (!state.oldPwd && !isFirstSet.value) {
                 return Toast('请输入原密码')
             }
@@ -78,9 +79,10 @@ export default {
             if (!state.confirmPwd) {
                 return Toast('请输入确认密码')
             }
-            if (state.newPwd.length < 6 || state.newPwd.length > 16 || (state.oldPwd.length < 6 && !isFirstSet)) {
+            if (!pwdReg.test(state.newPwd)) {
                 return Toast('密码为6-16位数字或字母的组合')
             }
+
             if (state.newPwd !== state.confirmPwd) {
                 return Toast('新密码和确认密码不同，请检查后重新输入')
             }
@@ -97,7 +99,8 @@ export default {
                     toast.clear()
                     if (res.check()) {
                         Toast('设置成功')
-                        router.push('/')
+                        store.dispatch('_user/findCustomerInfo')
+                        router.back()
                     }
                 })
             } else {
@@ -113,6 +116,7 @@ export default {
                         }
                     } else {
                         if (res.check()) {
+                            store.dispatch('_user/findCustomerInfo')
                             Dialog.alert({
                                 theme: 'round-button',
                                 title: '提示',
@@ -120,7 +124,7 @@ export default {
                                 confirmButtonText: '去登录'
                             }).then(() => {
                                 // 注销登录
-                                router.push('/login')
+                                store.dispatch('_user/logout')
                             })
                         }
                     }
