@@ -53,8 +53,7 @@ export default {
         const route = useRoute()
         // 点击返回
         const back = () => {
-            if (props.backHandler) emit('back')
-            else router.back()
+            attrs.onBack ? emit('back') : router.back()
         }
         // 点击右侧按钮
         const rightClick = () => {

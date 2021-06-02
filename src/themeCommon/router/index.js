@@ -2,6 +2,44 @@ import { createRouter, createWebHistory, beforeEnter } from 'vue-router'
 import store from '../../store'
 const routes = [
     {
+
+        path: '/login',
+        name: 'Login',
+        component: () => import(/* webpackChunkName: "login" */ '../user/login/login.vue'),
+        meta: {
+            title: '登录到一个账户',
+            roles: ['Guest'], // Guest 仅游客访问 User 仅登录用户访问
+        }
+
+    },
+    {
+
+        path: '/register',
+        name: 'Register',
+        component: () => import(/* webpackChunkName: "login" */ '../user/register/register.vue'),
+        meta: {
+            title: '注册开户',
+            roles: ['Guest'],
+        }
+
+    },
+    {
+        path: '/register/success',
+        name: 'RegisterSuccess',
+        component: () => import(/* webpackChunkName: "register" */ '../user/register/registerSuccess.vue'),
+        meta: {
+            title: '开户成功'
+        }
+    },
+    {
+        path: '/regKyc',
+        name: 'RegKyc',
+        component: () => import(/* webpackChunkName: "regKyc" */ '../user/register/regKyc.vue'),
+        meta: {
+            title: '身份认证'
+        }
+    },
+    {
         path: '/withdraw',
         name: 'Withdraw',
         component: () => import(/* webpackChunkName: "withdraw" */ '../user/withdraw.vue'),

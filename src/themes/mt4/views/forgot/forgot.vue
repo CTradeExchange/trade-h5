@@ -1,11 +1,13 @@
 <template>
     <div class='pageWrap'>
-        <Top back left-icon='arrow-left' :menu='false' :right-action='false' :show-center='false'>
-            <template #right>
-            </template>
-            <template #center>
-            </template>
-        </Top>
+        <Top
+            back
+            left-icon='arrow-left'
+            :menu='false'
+            :right-action='false'
+            :show-center='false'
+            @back='back'
+        />
         <Loading :show='loading' />
         <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a>
         <header class='header'>
@@ -198,13 +200,18 @@ export default {
             state.countryZone = data.code
             state.countryCode = data.countryCode
         }
+        const back = () => {
+            router.replace('/login')
+        }
+
         return {
             ...toRefs(state),
             next,
             handleTabChange,
             handleVerifyCodeSend,
             style,
-            zoneSelect
+            zoneSelect,
+            back
         }
     }
 }

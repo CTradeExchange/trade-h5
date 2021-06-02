@@ -6,7 +6,7 @@
                 <van-switch v-model='checked' active-color='#54C41C' size='24px' @change='changeNewsState' />
             </template>
         </van-cell>
-        <van-cell is-link title='修改登录密码' to='/setLoginPwd' />
+        <van-cell is-link :title="Number(customInfo.loginPassStatus) === 1 ? '设置登录密码': '修改登录密码'" to='/setLoginPwd' />
         <van-cell v-if='!customInfo.phone' is-link title='绑定手机' to='/bindMobile' />
         <van-cell v-if='!customInfo.email' is-link title='绑定邮箱' to='/bindEmail' />
         <van-cell v-if='customInfo.email' is-link title='更换邮箱' to='/changeBindEmail' />
@@ -28,6 +28,7 @@ export default {
         const instance = getCurrentInstance()
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+
         const store = useStore()
         const router = useRouter()
         const state = reactive({

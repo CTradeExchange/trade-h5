@@ -78,32 +78,7 @@ const routes = [
             keepAlive: true,
         }
     },
-    {
-        path: '/login',
-        name: 'Login',
-        component: () => import(/* webpackChunkName: "login" */ '../views/login/login.vue'),
-        meta: {
-            title: '登录到一个账户',
-            roles: ['Guest'], // Guest 仅游客访问 User 仅登录用户访问
-        }
-    },
-    {
-        path: '/register',
-        name: 'Register',
-        component: () => import(/* webpackChunkName: "register" */ '../views/register/register.vue'),
-        meta: {
-            title: '注册开户',
-            roles: ['Guest'],
-        }
-    },
-    {
-        path: '/register/success',
-        name: 'RegisterSuccess',
-        component: () => import(/* webpackChunkName: "register" */ '../views/register/registerSuccess.vue'),
-        meta: {
-            title: '注册开户'
-        }
-    },
+
     {
         path: '/modifyPwd',
         name: 'ModifyPwd',
@@ -203,14 +178,7 @@ const routes = [
             title: ''
         }
     },
-    {
-        path: '/regKyc',
-        name: 'RegKyc',
-        component: () => import(/* webpackChunkName: "regKyc" */ '../views/register/regKyc.vue'),
-        meta: {
-            title: '身份认证'
-        }
-    },
+
     {
         path: '/otherpage/:type',
         name: 'Otherpage',
