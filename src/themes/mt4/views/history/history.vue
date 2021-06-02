@@ -6,12 +6,18 @@
         </template>
     </Top>
     <div class='container'>
+        <Loading :show='loading' />
         <!-- <CapitalList class='of-1px-bottom' :data='capitalListData' /> -->
         <!-- <Balance /> -->
         <HistoryList :finished='finished' :loading='loading' @onLoad='onLoad' />
     </div>
     <!-- 排序 actionsheet -->
-    <van-action-sheet v-model:show='sortActionsVisible' :actions='sortActions' cancel-text='取消' @select='actionSheetOnSelect' />
+    <van-action-sheet v-model:show='sortActionsVisible' cancel-text='取消' class='sort-action-wrap'>
+        <div v-for='(item,index) in sortActions' :key='index' class='action-item' @click='actionSheetOnSelect(item)'>
+            <span> {{ item.name }} </span>
+            <i class='icon arrow' :class='item.className'></i>
+        </div>
+    </van-action-sheet>
     <!-- 查询时间 actionsheet -->
     <van-action-sheet v-model:show='timeActionsVisible' :actions='timeActions' cancel-text='取消' class='timeActions' @select='timeActionSheetOnSelect' />
     <!-- 日历 -->
@@ -43,8 +49,8 @@ export default {
     },
     setup () {
         const store = useStore()
-        const sortActionsUp = 'van-badge__wrapper van-icon van-icon-down up'
-        const sortActionsDown = 'van-badge__wrapper van-icon van-icon-down '
+        const sortActionsUp = 'van-badge__wrapper icon icon_paixujiantouxiangshang arrow'
+        const sortActionsDown = 'van-badge__wrapper van-icon icon_paixujiantouxiangxia arrow'
         const sortActions = [
             { name: '收盘时间', feild: 'closeTime', className: sortActionsDown },
             { name: '开盘时间', feild: 'openTime' },
@@ -90,7 +96,6 @@ export default {
                 item.className = sortActionsDown
                 sortFieldName = item.feild
             }
-            state.finished = false
             state.sortActionsVisible = false
             current = 1
             queryRecordList()
@@ -169,6 +174,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
+
 .container {
     flex: 1;
     margin-bottom: rem(100px);
@@ -201,6 +207,27 @@ export default {
         margin-top: 0;
         margin-left: 10px;
         vertical-align: middle;
+    }
+}
+.sort-action-wrap{
+    .action-item{
+        line-height: rem(22px);
+        padding: rem(32px) rem(36px);
+        font-size: 16px;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: solid 1px var(--bdColor);
+        align-items: center;
+        span{
+            vertical-align: middle;
+        }
+        .arrow{
+            vertical-align: middle;
+            &::before{
+                color: #409DFF;
+                font-size: rem(30px);
+            }
+        }
     }
 }
 </style>

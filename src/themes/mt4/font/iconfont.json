@@ -6,6 +6,69 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "21996981",
+      "name": "排序箭头向下",
+      "font_class": "paixujiantouxiangxia",
+      "unicode": "e672",
+      "unicode_decimal": 58994
+    },
+    {
+      "icon_id": "21996982",
+      "name": "排序箭头向上",
+      "font_class": "paixujiantouxiangshang",
+      "unicode": "e673",
+      "unicode_decimal": 58995
+    },
+    {
+      "icon_id": "21045741",
+      "name": "射单产品映射",
+      "font_class": "shedanchanpinyingshe",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
+      "icon_id": "21045742",
+      "name": "首页",
+      "font_class": "shouye",
+      "unicode": "e66c",
+      "unicode_decimal": 58988
+    },
+    {
+      "icon_id": "21045743",
+      "name": "白标管理",
+      "font_class": "baibiaoguanli",
+      "unicode": "e66d",
+      "unicode_decimal": 58989
+    },
+    {
+      "icon_id": "21045744",
+      "name": "基础设置",
+      "font_class": "jichushezhi",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
+      "icon_id": "21045745",
+      "name": "玩法管理",
+      "font_class": "wanfaguanli",
+      "unicode": "e66f",
+      "unicode_decimal": 58991
+    },
+    {
+      "icon_id": "21045746",
+      "name": "主标消息管理",
+      "font_class": "zhubiaoxiaoxiguanli",
+      "unicode": "e670",
+      "unicode_decimal": 58992
+    },
+    {
+      "icon_id": "21045747",
+      "name": "系统管理",
+      "font_class": "xitongguanli",
+      "unicode": "e671",
+      "unicode_decimal": 58993
+    },
+    {
       "icon_id": "20987273",
       "name": "客服",
       "font_class": "kefu",
