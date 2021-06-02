@@ -80,46 +80,6 @@ const routes = [
     },
 
     {
-        path: '/modifyPwd',
-        name: 'ModifyPwd',
-        component: () => import(/* webpackChunkName: "modifyPwd" */ '../views/modifyPwd/modifyPwd.vue'),
-        meta: {
-            title: '更改密码'
-        }
-    },
-    {
-        path: '/forgot',
-        name: 'Forgot',
-        component: () => import(/* webpackChunkName: "forgot" */ '../views/forgot/forgot.vue'),
-        meta: {
-            title: '找回密码'
-        }
-    },
-    {
-        path: '/resetPwd',
-        name: 'ResetPwd',
-        component: () => import(/* webpackChunkName: "resetPwd" */ '../views/forgot/resetPwd.vue'),
-        meta: {
-            title: '重置密码'
-        }
-    },
-    {
-        path: '/resetSuccess',
-        name: 'ResetSuccess',
-        component: () => import(/* webpackChunkName: "resetSuccess" */ '../views/forgot/resetSuccess.vue'),
-        meta: {
-            title: '重置成功'
-        }
-    },
-    {
-        path: '/resetFail',
-        name: 'ResetFail',
-        component: () => import(/* webpackChunkName: "resetFail" */ '../views/forgot/resetFail.vue'),
-        meta: {
-            title: '重置失败'
-        }
-    },
-    {
         path: '/contract',
         name: 'Contract',
         component: () => import(/* webpackChunkName: "contract" */ '../views/contract/contract.vue'),

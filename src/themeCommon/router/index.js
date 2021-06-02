@@ -32,6 +32,38 @@ const routes = [
         }
     },
     {
+        path: '/forgot',
+        name: 'Forgot',
+        component: () => import(/* webpackChunkName: "forgot" */ '../user/forgot/forgot.vue'),
+        meta: {
+            title: '找回密码'
+        }
+    },
+    {
+        path: '/resetPwd',
+        name: 'ResetPwd',
+        component: () => import(/* webpackChunkName: "resetPwd" */ '../user/forgot/resetPwd.vue'),
+        meta: {
+            title: '重置密码'
+        }
+    },
+    {
+        path: '/resetSuccess',
+        name: 'ResetSuccess',
+        component: () => import(/* webpackChunkName: "resetSuccess" */ '../user/forgot/resetSuccess.vue'),
+        meta: {
+            title: '重置成功'
+        }
+    },
+    {
+        path: '/resetFail',
+        name: 'ResetFail',
+        component: () => import(/* webpackChunkName: "resetFail" */ '../user/forgot/resetFail.vue'),
+        meta: {
+            title: '重置失败'
+        }
+    },
+    {
         path: '/regKyc',
         name: 'RegKyc',
         component: () => import(/* webpackChunkName: "regKyc" */ '../user/register/regKyc.vue'),
