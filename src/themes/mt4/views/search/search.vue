@@ -69,7 +69,7 @@ export default {
                     id: el.symbolId,
                     code: el.symbolCode,
                     name: el.symbolName
-                })), 'symbolId')
+                })), 'id')
             }
         )
         const onSearch = (val) => {
