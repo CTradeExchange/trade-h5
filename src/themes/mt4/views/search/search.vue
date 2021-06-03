@@ -36,13 +36,12 @@ export default {
             searchDataList: [],
             productCategoryList: [],
             selfSymbolList: [],
-            quoteProductMap: {}
         })
 
         const store = useStore()
         const customInfo = computed(() => store.state._user.customerInfo)
+        const productMap = computed(() => store.state._quote.productMap)
         state.productCategoryList = store.getters.userProductCategory
-        state.quoteProductMap = store.state._quote.productMap
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)
 
         const show = ref(false)
@@ -84,7 +83,7 @@ export default {
                 getSymbolList(params).then(res => {
                     const { data, code } = res
                     if (code === '0' && Array.isArray(data)) {
-                        state.searchDataList = differenceBy(data, selfSymbolList.value.map(el => ({
+                        state.searchDataList = differenceBy(data.filter(el => productMap.value[el.id]), selfSymbolList.value.map(el => ({
                             id: el.symbolId,
                             code: el.symbolCode,
                             name: el.symbolName

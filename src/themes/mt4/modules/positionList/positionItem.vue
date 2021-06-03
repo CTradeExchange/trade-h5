@@ -1,5 +1,5 @@
 <template>
-    <div class='positionItem van-hairline--bottom' @click='detailVisible=!detailVisible'>
+    <div class='positionItem van-hairline--bottom' @click='toggleDetail'>
         <div class='mainWrap'>
             <div class='hd'>
                 <p class='productName'>
@@ -93,10 +93,15 @@ export default {
         const positionVolume = computed(() => {
             return minus(data.openVolume, data.closeVolume || 0)
         })
+        const toggleDetail = () => {
+            state.detailVisible = !state.detailVisible
+            store.commit('_quote/Update_productActivedID', data.symbolId)
+        }
         return {
             ...toRefs(state),
             ...onceState,
             product,
+            toggleDetail,
             positionVolume,
             computePrice
         }

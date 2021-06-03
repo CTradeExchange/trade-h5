@@ -92,6 +92,7 @@ export default {
         // 整理当前账户组的所有产品列表，自选产品+产品板块的产品
         // 此方法只有在账户变化后调用
         setProductAllList ({ dispatch, commit, state, rootState, rootGetters }) {
+            commit('Empty_data')
             const customerGroupId = rootGetters.customerGroupId
             const selfSymbolProduct = rootState._base.wpSelfSymbol.find(el => el.tag === 'selfSymbol')?.data?.product || {}
             const selfSymbolList = selfSymbolProduct[customerGroupId] || []
