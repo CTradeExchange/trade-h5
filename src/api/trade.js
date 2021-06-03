@@ -3,8 +3,8 @@ import request from '@/utils/request'
 /* 产品基础信息列表 */
 export function querySymbolBaseInfoList (data) {
     return request({
-        // url: '/global/customer.app.CustomerOptionalWebApiService.querySymbolBaseInfoList',
-        url: '/global/rtc.app.RtcSymbolQueryService.querySymbolBaseInfoList',
+        // url: '/global/rtc.app.RtcSymbolQueryService.querySymbolBaseInfoList',
+        url: '/global/customer.app.CustomerOptionalWebApiService.querySymbolBaseInfoList',
         method: 'post',
         headers: {
             version: '0.0.1',
@@ -15,11 +15,12 @@ export function querySymbolBaseInfoList (data) {
 /* 产品信息 */
 export function querySymbolInfo (data) {
     return request({
-        url: '/global/rtc.app.RtcSymbolQueryService.querySymbolInfo',
+        url: '/global/config.app.AppSymbolDubboService.getSymbolDetail',
+        // url: '/global/rtc.app.RtcSymbolQueryService.querySymbolInfo',
         method: 'post',
-        headers: {
-            version: '0.0.1',
-        },
+        // headers: {
+        //     version: '0.0.1',
+        // },
         data
     })
 }

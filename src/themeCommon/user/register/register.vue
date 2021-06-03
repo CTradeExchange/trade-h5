@@ -1,6 +1,7 @@
 <template>
     <div class='register'>
         <Top class='topBar' :right-action='{ title:"已有账号" }' @rightClick='$router.replace({ name:"Login" })' />
+        <!-- <PageComp v-if='pageui' :data='pageui' /> -->
         <div class='container'>
             <p class='pageTitle'>
                 真实开户
@@ -86,6 +87,7 @@ import { reactive, toRefs, ref, computed, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
 import { Toast, Dialog } from 'vant'
 import Rule, { checkCustomerExistRule } from './rule'
+import { pageConfig } from '@/api/wpApi'
 
 export default {
     components: {
@@ -116,9 +118,15 @@ export default {
             currency: 'USD',
             tradeType: 1,
             email: '',
+            pageui: '',
             protocol: true
         })
         let token = ''
+
+        pageConfig('Register').then(res => {
+            state.pageui = res
+            console.log('Register', res)
+        })
         // 获取国家区号
         store.dispatch('getCountryListByParentCode')
         const countryList = computed(() => store.state.countryList)

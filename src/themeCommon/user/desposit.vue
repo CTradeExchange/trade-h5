@@ -132,14 +132,8 @@ import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
 import { isEmpty } from '@/utils/util'
 import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
-import isBetween from 'dayjs/plugin/isBetween'
-import {
-    mul
-} from '@/utils/calculation'
-dayjs.extend(isBetween)
+import { mul } from '@/utils/calculation'
 
-dayjs.extend(utc)
 export default {
     components: {
         Top

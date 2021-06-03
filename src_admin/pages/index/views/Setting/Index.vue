@@ -201,7 +201,7 @@
                                 :config="{ label: '语言包地址' }"
                                 @formChange='updateBackground'
                             />
-                            <el-form-item label='登录保持时间'>
+                            <!-- <el-form-item label='登录保持时间'>
                                 <el-input
                                     v-model='form.loginTime'
                                     placeholder='请输入'
@@ -210,6 +210,19 @@
                                         秒
                                     </template>
                                 </el-input>
+                            </el-form-item> -->
+                            <el-form-item label='时区'>
+                                <el-select
+                                    v-model='form.utcOffset'
+                                    placeholder='请输入'
+                                >
+                                    <el-option
+                                        v-for='(item) in utcOffsetList'
+                                        :key='item'
+                                        :label='item < 0 ? item : "+"+item'
+                                        :value='item'
+                                    />
+                                </el-select>
                             </el-form-item>
                             <el-form-item label='web API地址'>
                                 <el-input
@@ -334,6 +347,7 @@ export default {
                 quoteService: '',
                 msgService: '',
                 tradeService: '',
+                utcOffset: '',
                 currencyList: ''
             },
             publishLoading: false,
@@ -345,6 +359,7 @@ export default {
             submitLoading: false,
             getLoading: false,
             pageData: {},
+            utcOffsetList: [-12, 13],
             tradeTypeListLoading: false
         }
     },
@@ -361,12 +376,15 @@ export default {
         // }
     },
     created () {
-        this.getPageConfig()
-    },
-    created () {
+        this.createTimezoneList()
         this.getPageConfig()
     },
     methods: {
+        createTimezoneList () {
+            const [min, max] = this.utcOffsetList
+            this.utcOffsetList = new Array(max - min).fill(0).map((el, i) => min + i)
+            this.form.utcOffset = 0 - (new Date().getTimezoneOffset() / 60)
+        },
         getPageConfig () {
             this.getLoading = true
             getPageConfig('SysSetting')

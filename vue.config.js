@@ -8,7 +8,17 @@ function resolve (dir) {
 }
 
 const NODE_ENV = process.env.NODE_ENV
-
+const alias = {
+    'vue$': 'vue/dist/vue.esm-bundler.js',
+    '@public': resolve('public'),
+    '@': resolve('src'),
+    '@api': resolve('src/api'),
+    '@m': resolve('src/themes/mt4'),
+    '@ct': resolve('src/themes/ctrader'),
+    '@admin': resolve('src_admin'),
+    '@utils': resolve('src_admin/utils'),
+    '@index': resolve('src_admin/pages/index'),
+}
 const isAdminMode = process.env.VUE_APP_isAdmin === 'true' // WordPress后台插件的开发模式
 console.log(NODE_ENV, process.env.VUE_APP_isAdmin)
 if (process.env.NODE_ENV === 'production') {
@@ -60,6 +70,9 @@ if (isAdminMode) {
         // }
     })
 } else {
+    Object.assign(alias, {
+        'dayjs': resolve('src/utils/dayjs.js')
+    })
     // H5开发模式
     Object.assign(pages, {
         index: 'src/themes/mt4/main.js'
@@ -85,17 +98,7 @@ const config = {
         // provide the app's title in webpack's name field, so that
         // it can be accessed in index.html to inject the correct title.
         resolve: {
-            alias: {
-                'vue$': 'vue/dist/vue.esm-bundler.js',
-                '@public': resolve('public'),
-                '@': resolve('src'),
-                '@api': resolve('src/api'),
-                '@m': resolve('src/themes/mt4'),
-                '@ct': resolve('src/themes/ctrader'),
-                '@admin': resolve('src_admin'),
-                '@utils': resolve('src_admin/utils'),
-                '@index': resolve('src_admin/pages/index'),
-            }
+            alias
         }
     },
     devServer: {
