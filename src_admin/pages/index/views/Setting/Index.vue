@@ -219,7 +219,7 @@
                                     <el-option
                                         v-for='(item) in utcOffsetList'
                                         :key='item'
-                                        :label='item < 0 ? item : "+"+item'
+                                        :label='"GMT"+(item < 0 ? item : "+"+item)'
                                         :value='item'
                                     />
                                 </el-select>
