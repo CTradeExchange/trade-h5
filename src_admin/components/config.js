@@ -15,7 +15,7 @@ import redpacket from '@m/modules/redpacket/config.js'
 // import mineTop from '@m/modules/mineTop/config.js'
 import quoteList from '@m/modules/quoteList/config.js'
 // import nav from '@m/modules/nav/config.js'
-// import registerForm from '@m/modules/registerForm/config.js'
+import registerForm from '@m/modules/registerForm/config.js'
 export const mobileComponentsConfig = async () => {
     return [
         img,
@@ -34,7 +34,7 @@ export const mobileComponentsConfig = async () => {
         redpacket,
         // template,
         // mineTop,
-        // await registerForm()
+        await registerForm()
     ]
 }
 export const pcComponentsConfig = []

@@ -12,7 +12,7 @@
                     </span>
                 </p>
                 <p>
-                    <span>{{ positionVolume }}</span>
+                    <span>{{ data.requestNum }}</span>
                     <span> at </span>
                     <span>{{ pendingPrice }}</span>
                 </p>

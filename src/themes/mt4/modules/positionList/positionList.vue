@@ -100,10 +100,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-.loading {
-    padding-top: 30%;
-    text-align: center;
-}
 .popContainer {
     width: 80vw;
     background: var(--white);

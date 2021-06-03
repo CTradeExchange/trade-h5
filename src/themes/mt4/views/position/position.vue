@@ -125,6 +125,10 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
+.loading {
+    padding-top: 30%;
+    text-align: center;
+}
 .container {
     flex: 1;
     margin-bottom: rem(100px);

@@ -9,6 +9,7 @@ import Socket, { MsgSocket } from '@/plugins/socket/socket'
 import FindCustomerInfo from '@m/plugins/findCustomerInfo'
 import longpress from '@/directives/longpress'
 import Loading from '@/components/loading'
+import PageComp from '@m/components/PageComp.vue'
 import LayoutTop from '@m/layout/top'
 import Colors, { setRootVariable } from './colorVariables'
 import { setRouter } from '@/utils/request'
@@ -27,6 +28,7 @@ app.use(VantBase).use(I18n).use(store).use(router)
 app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router })
 app.component('Loading', Loading)
 app.component('LayoutTop', LayoutTop)
+app.component('PageComp', PageComp)
 
 // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
 const loginParams = getLoginParams()
