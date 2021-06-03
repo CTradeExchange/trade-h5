@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import I18n from './i18n/i18n.js'
 import VantBase from './vantBase'
 import { Dialog } from 'vant'
 import Socket, { MsgSocket } from '@/plugins/socket/socket'
@@ -22,7 +23,7 @@ setRootVariable(Colors)
 
 const app = createApp(App)
 app.use(longpress)
-app.use(VantBase).use(store).use(router)
+app.use(VantBase).use(I18n).use(store).use(router)
 app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router })
 app.component('Loading', Loading)
 app.component('LayoutTop', LayoutTop)
