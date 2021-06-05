@@ -11,19 +11,19 @@
             </p>
             <div class='menulist'>
                 <a class='item of-1px-bottom ' href='javascript:;' @click='toOrder'>
-                    新交易
+                    {{ $t('trade.newTrade') }}
                 </a>
                 <a class='item of-1px-bottom ' href='javascript:;' @click="show=false;$router.push('/chart')">
-                    打开图表
+                    {{ $t('trade.openChart') }}
                 </a>
                 <a class='item of-1px-bottom ' href='javascript:;' @click='toContract'>
-                    交易品种属性
+                    {{ $t('trade.contract') }}
                 </a>
                 <a v-if='quoteMode===2' class='item of-1px-bottom ' href='javascript:;' @click='switchQuoteMode'>
-                    简单查看模式
+                    {{ $t('trade.simpleMode') }}
                 </a>
                 <a v-else class='item of-1px-bottom ' href='javascript:;' @click='switchQuoteMode'>
-                    高级查看模式
+                    {{ $t('trade.highMode') }}
                 </a>
             </div>
         </section>

@@ -6,7 +6,7 @@ const pages = {}
 function resolve (dir) {
     return path.join(__dirname, dir)
 }
-
+process.env.VUE_APP_build = dayjs().format('YYYY-MM-DD HH:mm')
 const NODE_ENV = process.env.NODE_ENV
 const alias = {
     'vue$': 'vue/dist/vue.esm-bundler.js',

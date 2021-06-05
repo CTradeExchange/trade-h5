@@ -1,6 +1,6 @@
 <template>
     <div class='textWrapper' :style='styleObject'>
-        {{ content || "这里是模块默认内容" }}
+        {{ content || $t('modules.defaultContent') }}
         <slot></slot>
     </div>
 </template>
@@ -10,10 +10,12 @@ export default {
     props: {
         data: {
             type: Object,
-            default: {
-                content: '',
-                color: '',
-                fontSize: '',
+            default: () => {
+                return {
+                    content: '',
+                    color: '',
+                    fontSize: '',
+                }
             }
         },
     },

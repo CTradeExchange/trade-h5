@@ -37,10 +37,10 @@
                 </li>
                 <li class='flexWrap'>
                     <span class='title'>
-                        期限
+                        {{ $t('trade.expire') }}
                     </span>
                     <span class='value'>
-                        {{ data.expireType===1 ? '当日有效' : '当周有效' }}
+                        {{ $t(data.expireType===1 ? 'trade.expire1':'trade.expire2') }}
                     </span>
                 </li>
                 <li class='flexWrap'>

@@ -1,16 +1,19 @@
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
     border: 0;
-    box-sizing: border-box;
 }
-html{
+html {
     font-size: 37.5px;
 }
-body{
+body {
     font-size: 12px;
 }
-body,html,#app,.m-layout {
+body,
+html,
+#app,
+.g-layout {
     width: 100%;
     height: 100%;
 }

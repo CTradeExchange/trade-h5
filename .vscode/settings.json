@@ -57,5 +57,12 @@
 
         "fill_tab": false
     },
-    "editor.minimap.enabled": true
+    "editor.minimap.enabled": true,
+    "i18n-ally.localesPaths": ["src/themes/mt4/i18n"],
+    "i18n-ally.keystyle": "nested",
+    "i18n-ally.namespace": true,
+    "i18n-ally.enabledParsers": ["json", "js"],
+    "i18n-ally.sortKeys": true,
+    "i18n-ally.sourceLanguage": "zh-CN",
+    "i18n-ally.displayLanguage": "zh-CN"
 }

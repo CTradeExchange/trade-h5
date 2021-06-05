@@ -1,5 +1,5 @@
 <template>
-    <div class='layout' :style='data.styleObj'>
+    <div class='m-layout' :style='data.styleObj'>
         <div
             v-for='(item, i) in dataList'
             :key='i'
@@ -49,15 +49,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.label {
-    padding: 5px 0;
-    text-align: center;
-}
-.link {
-    color: inherit;
-}
-.layout {
+<style lang="scss" >
+.m-layout {
     display: flex;
     min-height: 10px;
     line-height: 1.4;
@@ -67,6 +60,16 @@ export default {
         color: inherit;
         line-height: 20px;
         text-align: center;
+    }
+    .label {
+        padding: 5px 0;
+        text-align: center;
+    }
+    .link {
+        color: inherit;
+    }
+    img {
+        width: 100%;
     }
 }
 </style>

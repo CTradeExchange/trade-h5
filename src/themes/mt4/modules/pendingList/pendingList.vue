@@ -3,7 +3,7 @@
         <div v-if='orderList.length===0 && $store.state._trade.positionLoading' class='loading'>
             <van-loading type='spinner' />
         </div>
-        <van-empty v-else-if='orderList.length===0' description='无历史记录' />
+        <van-empty v-else-if='orderList.length===0' :description='$t("emptyHistory")' />
         <template v-else>
             <pendingItem v-for='item in orderList' :key='item' v-longpress:closePosition='item' :data='item' />
         </template>
@@ -16,13 +16,13 @@
             </p>
             <div class='menulist'>
                 <a class='item van-hairline--bottom' href='javascript:;' @click='modifyOrder'>
-                    修改订单
+                    {{ $t('trade.modifyOrder') }}
                 </a>
                 <a class='item van-hairline--bottom' href='javascript:;' @click='delOrder'>
-                    删除订单
+                    {{ $t('trade.delOrder') }}
                 </a>
                 <a class='item van-hairline--bottom' href='javascript:;' @click='toChart'>
-                    图表
+                    {{ $t('trade.chart') }}
                 </a>
             </div>
         </section>

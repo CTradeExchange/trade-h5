@@ -3,12 +3,12 @@
         <div v-if='orderList && orderList.length===0 && $store.state._trade.historyLoading' class='loading'>
             <van-loading type='spinner' />
         </div>
-        <van-empty v-else-if='orderList && orderList.length===0' description='无历史记录' />
+        <van-empty v-else-if='orderList && orderList.length===0' :description='$t("emptyHistory")' />
         <template v-else-if='orderList'>
             <van-list
                 v-model:loading='loading'
                 :finished='finished'
-                finished-text='没有更多了'
+                :finished-text='$t("historyList.noMore")'
                 :immediate-check='false'
                 @load='onLoad'
             >

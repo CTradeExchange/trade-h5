@@ -5,8 +5,8 @@
                 <p class='productName'>
                     {{ data.symbolName }},
                     <span class='volumn'>
-                        <span :class="Number(data.openDirection) === 1 ? 'riseColor' : 'fallColor'">
-                            {{ data.openDirection===1?'buy':'sell' }}
+                        <span :class="Number(data.closeDirection) === 1 ? 'riseColor' : 'fallColor'">
+                            {{ data.closeDirection===1?'buy':'sell' }}
                         </span>
                         {{ data.closeVolume }}
                     </span>
@@ -22,7 +22,7 @@
                     {{ closeTime }}
                 </p>
                 <p class='price' :class='{ riseColor:data.profit>=0,fallColor:data.profit<0 }'>
-                    {{ data.profit }}
+                    {{ data.profit<0 ? data.profit : "+"+data.profit }}
                 </p>
             </div>
         </div>
@@ -41,7 +41,7 @@
                 </li>
                 <li class='flexWrap'>
                     <span class='title'>
-                        手续费
+                        {{ $t('fee') }}
                     </span>
                     <span class='value'>
                         {{ data.commission||'--' }}

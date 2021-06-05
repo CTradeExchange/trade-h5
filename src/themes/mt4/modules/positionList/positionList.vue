@@ -10,16 +10,16 @@
             </p>
             <div class='menulist'>
                 <a class='item van-hairline--bottom' href='javascript:;' @click='openOrder'>
-                    平仓
+                    {{ $t('trade.closeOrder') }}
                 </a>
                 <a class='item van-hairline--bottom' href='javascript:;' @click='newOrder'>
-                    新订单
+                    {{ $t('trade.newOrder') }}
                 </a>
                 <a class='item van-hairline--bottom' href='javascript:;' @click='modifyOrder'>
-                    修改订单
+                    {{ $t('trade.modifyOrder') }}
                 </a>
                 <a class='item van-hairline--bottom' href='javascript:;' @click='toChart'>
-                    图表
+                    {{ $t('trade.chart') }}
                 </a>
             </div>
         </section>

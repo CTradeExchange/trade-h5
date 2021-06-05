@@ -2,14 +2,15 @@
     <div class='m-file'>
         <el-form-item :label='config.label'>
             <el-input placeholder='请输入' :value='activeData' @input='input'>
-                <el-button
-                    slot='append'
-                    icon='el-icon-upload'
-                    type='primary'
-                    @click='uploadFile'
-                >
-                    上传文件
-                </el-button>
+                <template #append>
+                    <el-button
+                        icon='el-icon-upload'
+                        type='primary'
+                        @click='uploadFile'
+                    >
+                        上传文件
+                    </el-button>
+                </template>
             </el-input>
         </el-form-item>
     </div>
@@ -53,6 +54,8 @@ export default {
                     const imgUrl = _div.querySelector('img').src
                     this.$emit('formChange', imgUrl)
                 }
+            } else {
+                console.log('执行WordPress window.tb_show方法显示上传图片功能')
             }
         },
         input (val) {

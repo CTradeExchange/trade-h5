@@ -24,9 +24,7 @@
             </figure>
             <!-- <i class='icon_tishi' @click='show=true'></i> -->
         </section>
-        <p class='link'>
-            连接到
-        </p>
+        <p class='link'></p>
         <div v-for='(item, index) in accountList' :key='index' class='account-item' @click='handleSwitchAccount(item)'>
             <img alt='' class='face' src='@m/images/face.png' />
             {{ customInfo.customerNo }} - {{ mainAccount.trade.name }}
@@ -35,7 +33,7 @@
             <p>锁定金额： {{ item.lockAmount }}</p> -->
         </div>
     </div>
-    <van-dialog v-model:show='show' title='属性'>
+    <van-dialog v-model:show='show' :title='$t("attrs")'>
         <div class='tishiDialog'>
             <p><strong>84769176 - Cats2.0 H5 Demo</strong></p>
             <p class='muted'>

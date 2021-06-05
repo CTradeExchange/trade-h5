@@ -15,7 +15,7 @@ const routes = [
                 name: 'Quote',
                 component: () => import(/* webpackChunkName: "Quote" */ '../views/quote/quote.vue'),
                 meta: {
-                    title: '行情',
+                    title: 'route.quote',
                 }
             },
             {
@@ -23,7 +23,7 @@ const routes = [
                 name: 'Chart',
                 component: () => import(/* webpackChunkName: "chart" */ '../views/chart/chart.vue'),
                 meta: {
-                    title: '图表'
+                    title: 'route.chart'
                 }
             },
             {
@@ -31,7 +31,7 @@ const routes = [
                 name: 'Position',
                 component: () => import(/* webpackChunkName: "position" */ '../views/position/position.vue'),
                 meta: {
-                    title: '交易'
+                    title: 'route.trade'
                 }
             },
             {
@@ -39,7 +39,7 @@ const routes = [
                 name: 'History',
                 component: () => import(/* webpackChunkName: "history" */ '../views/history/history.vue'),
                 meta: {
-                    title: '历史'
+                    title: 'route.history'
                 }
             },
             {
@@ -47,7 +47,7 @@ const routes = [
                 name: 'OnlineService',
                 component: () => import(/* webpackChunkName: "onlineService" */ '../views/onlineService/onlineService.vue'),
                 meta: {
-                    title: '在线客服'
+                    title: 'route.onlineService'
                 }
             },
             {
@@ -55,7 +55,7 @@ const routes = [
                 name: 'AccountManager',
                 component: () => import(/* webpackChunkName: "accountManager" */ '../views/accountManager/accountManager.vue'),
                 meta: {
-                    title: '账户'
+                    title: 'route.account'
                 }
             },
             {
@@ -63,7 +63,7 @@ const routes = [
                 name: 'AddAccount',
                 component: () => import(/* webpackChunkName: "addAccount" */ '../views/accountManager/addAccount.vue'),
                 meta: {
-                    title: '新账户',
+                    title: 'route.newAccount',
                     footerMenu: false
                 }
             }
@@ -74,7 +74,7 @@ const routes = [
         name: 'News',
         component: () => import(/* webpackChunkName: "news" */ '../views/news/news.vue'),
         meta: {
-            title: '新闻',
+            title: 'route.news',
             keepAlive: true,
         }
     },
@@ -84,7 +84,7 @@ const routes = [
         name: 'Contract',
         component: () => import(/* webpackChunkName: "contract" */ '../views/contract/contract.vue'),
         meta: {
-            title: '合约属性'
+            title: 'route.contract'
         }
     },
     {
@@ -92,7 +92,7 @@ const routes = [
         name: 'Order',
         component: () => import(/* webpackChunkName: "order" */ '../views/order/order.vue'),
         meta: {
-            title: '下单',
+            title: 'route.order',
             roles: ['User'],
         }
     },
@@ -101,7 +101,7 @@ const routes = [
         name: 'OrderSuccess',
         component: () => import(/* webpackChunkName: "order" */ '../views/order/success.vue'),
         meta: {
-            title: '成功',
+            title: 'route.orderSuccess',
             roles: ['User'],
         }
     },
@@ -110,7 +110,7 @@ const routes = [
         name: 'ClosePosition',
         component: () => import(/* webpackChunkName: "closePosition" */ '../views/order/closePosition.vue'),
         meta: {
-            title: '平仓',
+            title: 'route.orderClose',
             roles: ['User'],
         }
     },
@@ -119,7 +119,7 @@ const routes = [
         name: 'Search',
         component: () => import(/* webpackChunkName: "search" */ '../views/search/search.vue'),
         meta: {
-            title: '添加交易品种'
+            title: 'route.search'
         }
     },
     {

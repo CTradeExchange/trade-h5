@@ -29,6 +29,11 @@ npm run build
 - 获取用户信息统一使用 `FindCustomerInfo()`方法，导入文件：`import FindCustomerInfo from '@m/compositionApi/findCustomerInfo'`
 - 除了密码之外所有的呼输入框需做`trim`处理
 
+## 关于时区
+
+cats2 H5里面由于时区功能对`dayjs`做了一些封装；   
+直接`import dayjs, from 'dayjs'` 是封装后的`dayjs`，包含了时区处理   
+`import { _dayjs } from 'dayjs'` 导入的`_dayjs`是`源dayjs`，如果有特殊需求可以使用`_dayjs`
 
 ## store里面常用数据
 - `store.state._user.customerInfo` // 当前登录的用户信息
