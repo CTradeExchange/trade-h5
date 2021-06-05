@@ -1,5 +1,5 @@
-import { resolutionToKlineType } from './constant'
-import { getKline, setTickRequest, setTicklistener }from './getData'
+import { resolutionToKlineType } from '../../userConfig/config.js'
+import { getKline, setTickRequest, setTicklistener }from '../../userConfig/getData'
 
 class HistoryProvider {
      constructor(datafeedUrl, requester) {
@@ -9,7 +9,7 @@ class HistoryProvider {
     getBars (symbolInfo, resolution, rangeStartDate, rangeEndDate, firstDataRequest) {
         // console.log('firstDataRequest: ', firstDataRequest)
         const params = {
-            symbolId: symbolInfo.ticker,
+            symbolId: symbolInfo.symbolId,
             klineType: resolutionToKlineType[resolution],
             startTime: rangeStartDate,
             endTime: rangeEndDate,

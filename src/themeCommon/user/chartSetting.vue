@@ -1,5 +1,10 @@
 <template>
-    <LayoutTop :back='true' :menu='false' title='' />
+    <van-nav-bar
+        left-arrow
+        left-text='返回'
+        title='图表'
+        @click-left='$attrs.onBackEvent'
+    />
     <div class='page-wrap'>
         <van-cell-group class='group'>
             <van-cell title='阴阳烛' @click='changeType(1)'>
@@ -20,7 +25,6 @@
                     <van-icon color='#58C225' name='success' />
                 </template>
             </van-cell>
-
             <van-cell title='图表线' @click='changeType(2)'>
                 <template #icon>
                     <van-icon class='icon icon_tubiaoxian' />
@@ -39,20 +43,20 @@
             </van-cell> -->
             <van-cell title='买价线'>
                 <template #right-icon>
-                    <van-switch v-model='chartSet.buyPriceLine' active-color='#53C41C' size='22px' @change='handleChartSet("buyPriceLine")' />
+                    <van-switch v-model='chartSet.showBuyPrice' active-color='#53C41C' size='22px' @change='handleChartSet("showBuyPrice")' />
                 </template>
             </van-cell>
             <van-cell title='卖价线'>
                 <template #right-icon>
-                    <van-switch v-model='chartSet.sellPriceLine' active-color='#53C41C' size='22px' @change='handleChartSet("sellPriceLine")' />
+                    <van-switch v-model='chartSet.showSellPrice' active-color='#53C41C' size='22px' @change='handleChartSet("showSellPrice")' />
                 </template>
             </van-cell>
             <!-- <van-cell title='周期分隔符'>
                 <template #right-icon>
                     <van-switch v-model='chartSet.periodSeparator' active-color='#53C41C' size='22px' @change='handleChartSet("periodSeparator")' />
                 </template>
-            </van-cell>
-            <van-cell title='交易级别'>
+            </van-cell>-->
+            <van-cell title='交易级别(暂未开放)'>
                 <template #right-icon>
                     <van-switch v-model='chartSet.tradeLevel' active-color='#53C41C' size='22px' @change='handleChartSet("tradeLevel")' />
                 </template>
@@ -60,29 +64,34 @@
             <p class='notice'>
                 启用交易水平查看挂单价格以及图表上止损和获利的值
             </p>
-            <van-cell title='高开低收'>
+            <van-cell title='开高低收'>
                 <template #right-icon>
-                    <van-switch v-model='chartSet.openHighCloseLow' active-color='#53C41C' size='22px' @change='handleChartSet("openHighCloseLow")' />
+                    <van-switch v-model='chartSet.showSeriesOHLC' active-color='#53C41C' size='22px' @change='handleChartSet("showSeriesOHLC")' />
                 </template>
-            </van-cell> -->
+            </van-cell>
+            <van-cell title='涨跌幅'>
+                <template #right-icon>
+                    <van-switch v-model='chartSet.showBarChange' active-color='#53C41C' size='22px' @change='handleChartSet("showBarChange")' />
+                </template>
+            </van-cell>
         </van-cell-group>
     </div>
 </template>
 
 <script>
-import { toRefs, reactive, onMounted, onBeforeMount } from 'vue'
+import { toRefs, reactive, onBeforeMount } from 'vue'
 import { localSet, localGet, isEmpty } from '@/utils/util'
-import { deepClone } from '@utils/deepClone'
 export default {
     setup (props) {
         const state = reactive({
             chartSet: {
                 volumeSwitch: false,
-                buyPriceLine: false,
+                showBuyPrice: false,
                 periodSeparator: false,
                 tradeLevel: false,
-                openHighCloseLow: false,
-                sellPriceLine: false,
+                showSeriesOHLC: false,
+                showBarChange: false,
+                showSellPrice: false,
                 chartType: 1
             }
 
@@ -113,7 +122,7 @@ export default {
         onBeforeMount(() => {
             const chartConfig = JSON.parse(localGet('chartConfig'))
             if (!isEmpty(chartConfig)) {
-                state.chartSet = deepClone(chartConfig)
+                state.chartSet = chartConfig
             } else {
                 localSet('chartConfig', JSON.stringify({ chartType: 1 }))
             }
@@ -132,16 +141,17 @@ export default {
 @import '@/sass/mixin.scss';
 .page-wrap {
     .group {
-        border-top: solid rem(30px) #F6F6F6;
+        border-top: solid 10px #F6F6F6;
     }
     .notice {
-        padding: rem(30px);
+        padding: 10px;
+        font-size: 12px;
         background-color: var(--btnColor);
     }
     .icon {
-        margin-right: rem(20px);
+        margin-right: 10px;
         color: var(--color);
-        font-size: rem(46px);
+        font-size: 20px;
         vertical-align: middle;
     }
 }

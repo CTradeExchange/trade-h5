@@ -8,7 +8,7 @@
 <script>
 import { UDFCompatibleDatafeed } from './datafeeds/udf/lib/udf-compatible-datafeed'
 import { WidgetConfig } from './widget.config'
-import { resolutionToKlineType, resolutionToText } from '@/components/tradingview/datafeeds/udf/lib/constant.js'
+import { resolutionToKlineType, resolutionToText } from '@/components/tradingview/datafeeds/userConfig/config.js'
 
 export default {
     props: {

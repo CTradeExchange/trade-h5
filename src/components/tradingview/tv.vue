@@ -1,182 +1,125 @@
 <template>
     <div class='tv'>
-        <slot :resolutionList='resolutionList' :setResolution='setResolution' :setSymbol='setSymbol'></slot>
-        <div id='tv_chart_container' ref='container'></div>
+        <!-- slot头部渲染 -->
+        <slot
+            v-if='chart'
+            name='top'
+            :resolutionList='resolutionList'
+            :setResolution='chart.setResolution'
+            :setSymbol='setSymbol'
+        ></slot>
+        <!-- 图表承载节点 -->
+        <div id='tv-chart-container' :class='{ landscape: isLandscape }'></div>
+
+        <!-- slot横屏菜单渲染 -->
+        <slot
+            v-if='chart'
+            :chart='chart'
+            name='sideMenu'
+        ></slot>
     </div>
 </template>
 
 <script>
-import { UDFCompatibleDatafeed } from './datafeeds/udf/lib/udf-compatible-datafeed'
-import { WidgetConfig } from './widget.config'
-import { resolutionToKlineType, resolutionToText } from '@/components/tradingview/datafeeds/udf/lib/constant.js'
-import { localGet, isEmpty } from '@/utils/util'
+import { computed, onMounted, onUnmounted, ref, watch, unref } from 'vue'
+import { useStore } from 'vuex'
+import { Popup } from 'vant'
+import { resolutionToKlineType, resolutionToText } from './datafeeds/userConfig/config.js'
+import { createChart } from './chart'
+
 export default {
+    components: {
+        [Popup.name]: Popup,
+    },
     props: {
+        // 产品初始值
         initialValue: {
             type: Object,
             default: null
+        },
+        options: {
+            type: Object,
+            default: () => ({})
         }
     },
-    data () {
-        return {
-            containerHeight: 0,
-            studies: [
-                ['MACD', false, false, [14, 30, 'close', 9]],
-                ['Moving Average Exponential', false, false, [26]]
-            ],
-            symbolId: '',
-            linesMap: {}, // 存放是否已绘制买卖价线
-            buyPriceLinEntity: {},
-            sellPriceLinEntity: {}
-        }
-    },
-    computed: {
-        product () {
-            return this.$store.state._quote.productMap[this.symbolId || this.initialValue.value]
-        }
-    },
-    watch: {
-        product: {
-            handler (newVal, oldVal) {
-                this.updateLineData(newVal)
-            },
-            deep: true
+    setup (props, context) {
+        const store = useStore()
+        const symbolId = ref(props.initialValue.symbolId)
+        const product = computed(() => store.state._quote.productMap[symbolId.value])
+        // 是否横屏
+        const isLandscape = ref([90, -90].includes(window.orientation))
 
-        }
-    },
-    mounted () {
-        console.log('tv mounted')
-        this.containerHeight = this.$refs.container.offsetHeight
-        console.log(this.containerHeight)
-        this.init()
-    },
-
-    setup () {
+        /** 图表相关-start */
         // 周期列表
         const resolutionList = Object.keys(resolutionToKlineType).map(value => ({
             text: resolutionToText[value],
             value
         }))
-        return {
-            resolutionList
+
+        // 图表实例
+        const chart = ref(null)
+        onMounted(() => {
+            const { options } = props
+            chart.value = createChart({
+                // 容器id
+                containerId: '#tv-chart-container',
+                // 产品初始值
+                initial: {
+                    ...props.initialValue,
+                    buyPrice: product.value.buy_price,
+                    sellPrice: product.value.sell_price,
+                },
+                // 图表属性
+                property: {
+                    showBuyPrice: options.showBuyPrice, // 买价线
+                    showSellPrice: options.showSellPrice, // 卖价线
+                    showSeriesOHLC: options.showSeriesOHLC, // 高开低收
+                    showBarChange: options.showBarChange, // 涨跌幅
+                    chartType: options.chartType, // 图表类型
+                    showPriceBox: options.chartType // 价格框
+                },
+                // 指标
+                indicators: options.indicators || []
+            }, () => {
+                // 监听是否横屏
+                unref(chart).subscribe('isLandscape', (bool) => {
+                    isLandscape.value = bool
+                    context.emit('changeOrientation', bool)
+                })
+
+                // 监听指标从图表内直接移除
+                unref(chart).nativeSubscribe('study_event', (name, event) => {
+                    if (event === 'remove' && name) {
+                        context.emit('indicatorRemoved', name)
+                    }
+                })
+
+                // 实时更新买卖价线
+                watch(() => [product.value.buy_price, product.value.sell_price], (newValues) => {
+                    const [buyPrice, sellPrice] = newValues
+                    unref(chart).updateLineData({ buyPrice, sellPrice })
+                })
+            })
+        })
+        onUnmounted(() => {
+            unref(chart).destroyed()
+        })
+
+        // 切换产品后增加自定义逻辑
+        const setSymbol = (info) => {
+            unref(chart).setSymbol(info)
+                .then(id => {
+                    symbolId.value = id
+                    context.emit('symbolChanged', id)
+                })
         }
-    },
-    methods: {
-        init () {
-            if (!this.containerHeight || !this.initialValue) {
-                return
-            }
+        /** 图表相关-end */
 
-            const symbolInfo = {
-                ...this.initialValue
-            }
-
-            this.datafeed = new UDFCompatibleDatafeed('', {
-                isControl: true,
-                symbolInfo
-            })
-
-            // eslint-disable-next-line new-cap
-            this.widget = window.tvWidget = new window.TradingView.widget({
-                ...WidgetConfig(),
-                datafeed: this.datafeed,
-                container_id: 'tv_chart_container',
-                symbol: this.initialValue.value,
-                interval: '1',
-                // debug: true,
-                library_path: '/charting_library/',
-                locale: 'zh'
-
-            })
-
-            this.widget.onChartReady(() => {
-                this.linesMap[this.initialValue.value] = {}
-                this.createStudies(symbolInfo)
-                // 根据用户设置的类型显示图表
-                this.setChartType()
-                console.log(`%c初始产品: ${JSON.stringify(this.initialValue)}datafeed:${JSON.stringify(this.datafeed)}`, 'color:green')
-            })
-        },
-
-        // 切换产品
-        setSymbol (info) {
-            this.symbolId = info.value
-
-            if (isEmpty(this.linesMap[this.symbolId])) this.linesMap[this.symbolId] = {}
-            // 修改产品属性
-            this.datafeed.setSymbolInfo(info)
-            // 修改图表产品
-            this.widget.activeChart()
-                .setSymbol(this.symbolId + '', () => {
-                    console.log(`%c切换产品: ${JSON.stringify(info)}`, 'color:green')
-                    this.$emit('symbolChanged', this.symbolId)
-                })
-            // 修改现有指标价格价格精度
-            this.setPrecisionForStudies(info.digits)
-            this.setChartType()
-        },
-        // 切换周期
-        setResolution (val) {
-            console.log('setResolution:', val)
-            this.widget.activeChart()
-                .setResolution(val, () => {
-                    console.log(`%c切换周期: ${val}`, 'color:green')
-                })
-        },
-        // 修改现有指标价格精度
-        setPrecisionForStudies (precision) {
-            const chart = this.widget.activeChart()
-            chart.getAllStudies().forEach(e => {
-                chart.getStudyById(e.id)
-                    .applyOverrides({
-                        precision
-                    })
-            })
-        },
-        // 批量创建指标
-        createStudies (info) {
-            this.studies.forEach(e => {
-                this.widget.activeChart().createStudy(...e, {
-                    precision: info.digits
-                })
-            })
-        },
-        updateLineData (val) {
-            // console.log('更新价格线')
-
-            if (!isEmpty(this.buyPriceLinEntity)) {
-                this.buyPriceLinEntity.setPrice(val.buy_price)
-            }
-            if (!isEmpty(this.sellPriceLinEntity)) {
-                this.sellPriceLinEntity.setPrice(val.sell_price)
-            }
-        },
-        setChartType () {
-            const chartConfig = JSON.parse(localGet('chartConfig'))
-            const symbolId = this.product.symbolId
-            if (!isEmpty(chartConfig)) {
-                // 0:Bar 1:Candle 2:Line 3:Area ,8:Heikin-Ashi ,9: Hollow Candle 10: Baseline 12 10Hi-Lo
-                this.widget.activeChart().setChartType(chartConfig.chartType)
-                if (chartConfig.buyPriceLine && !this.linesMap[symbolId].buyPriceLine) {
-                    this.buyPriceLinEntity = this.widget.activeChart().createOrderLine()
-                        .setPrice(this.product.buy_price)
-                        .setText('')
-                        .setLineStyle(0)
-                        .setLineColor('#e3525c')
-                        .setQuantity(false)
-                    this.linesMap[symbolId].buyPriceLine = true
-                }
-
-                if (chartConfig.sellPriceLine && !this.linesMap[symbolId].sellPriceLine) {
-                    this.sellPriceLinEntity = this.widget.activeChart().createOrderLine()
-                        .setPrice(this.product.sell_price)
-                        .setText('')
-                        .setLineStyle(0)
-                        .setLineColor('#10b873')
-                        .setQuantity(false)
-                    this.linesMap[symbolId].sellPriceLine = true
-                }
-            }
+        return {
+            resolutionList,
+            chart,
+            setSymbol,
+            isLandscape,
         }
     }
 }
@@ -188,8 +131,26 @@ export default {
     flex-direction: column;
     width: 100%;
     height: 100%;
-    #tv_chart_container {
+    #tv-chart-container {
         flex: 1;
+        &.landscape {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 99;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #FFF;
+            transform: rotate(90deg);
+        }
+    }
+    @media screen and (orientation: landscape) {
+        #tv-chart-container {
+            top: 0 !important;
+            left: 0 !important;
+            transform: none !important;
+        }
     }
 }
 </style>

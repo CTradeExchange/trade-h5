@@ -3,7 +3,7 @@ import { HistoryProvider, } from './history-provider';
 import { DataPulseProvider } from './data-pulse-provider';
 import { QuotesPulseProvider } from './quotes-pulse-provider';
 import { SymbolsStorage } from './symbols-storage';
-import { resolutionToKlineType } from './constant'
+import { resolutionToKlineType } from '../../userConfig/config.js'
 
 function extractField(data, field, arrayIndex) {
     var value = data[field];
@@ -302,8 +302,8 @@ function querySymbolInfo (code_id, symbolInfo) {
         console.error('产品symbolId不存在')
     }
     const result = {
-        name: code_id,
-        ticker: code_id, // 商品代码
+        // name: 'asfd',
+        // ticker: '888', // 商品代码
         // 'exchange-traded': product.short_name,   不需要这两个字段
         // 'exchange-listed': product.short_name,   不需要这两个字段
         timezone: 'Etc/UTC', // 交易所时区
@@ -327,8 +327,10 @@ function querySymbolInfo (code_id, symbolInfo) {
 
 function normalizeInfo(info){
     const result = {
+        name: info.description,
+        description: info.description,
+        symbolId: info.symbolId,
         pricescale:  Math.pow(10, info.digits),
-        description: info.description
     }
     return result
 }
