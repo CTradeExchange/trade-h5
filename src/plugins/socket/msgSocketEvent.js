@@ -149,10 +149,10 @@ class SocketEvent {
         const dataArr = str.split(';')
         const accountData = dataArr[0].match(/\((.+)\)/)[1].split(',')
         const positionsProfitLoss = dataArr.slice(1).map(el => {
-            const elData = el.replace(/\(|\)/g, '').split(',').map(parseFloat)
+            const elData = el.replace(/\(|\)/g, '').split(',')
             return {
                 positionId: elData[0],
-                profitLoss: elData[1],
+                profitLoss: elData[1] < 0 ? elData[1] : '+' + elData[1],
             }
         })
         this.floatProfitLoss({

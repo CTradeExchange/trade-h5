@@ -214,6 +214,8 @@ export default {
                 // console.log(res)
                 if (res.invalid()) return false
 
+                // 登录websocket
+                instance.appContext.config.globalProperties.$MsgSocket.login()
                 // 重新登录清除账户信息
                 store.commit('_user/Update_accountAssets', {})
 
@@ -254,10 +256,6 @@ export default {
                             message: '您的资料已经审核通过，现在就开启您的财富之旅吧！',
                             theme: 'round-button',
                         }).then(() => {
-                            // 登录websocket
-                            instance.appContext.config.globalProperties.$MsgSocket.login()
-                            // 重新登录清除账户信息
-                            store.commit('_user/Update_accountAssets', {})
                             noticeSetPwd(res.data.loginPassStatus)
                         })
                     }

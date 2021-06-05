@@ -13,7 +13,7 @@
         <van-cell size='large' title='点差' value='浮动' />
         <van-cell size='large' title='单笔交易手数' :value='product.minVolume+"-"+product.maxVolume' />
         <van-cell size='large' title='手数步长' :value='product.volumeStep' />
-        <van-cell size='large' title='小数位' :value='product.price_digits' />
+        <!-- <van-cell size='large' title='小数位' :value='product.price_digits' /> -->
         <van-cell size='large' title='最小/最大挂单距离' :value='product.priceMinLimit+"/"+product.priceMaxLimit+"点"' />
         <van-cell size='large' title='预付款'>
             <div class='margin-info'>
@@ -33,9 +33,9 @@
                 </span>
             </div>
         </van-cell>
-        <van-cell size='large' title='手续费类型' :value='product.stopLossMinPoint +"-"+ product.stopLossMaxPoint' />
-        <van-cell size='large' title='手续费' :value='product.stopLossMinPoint +"-"+ product.stopLossMaxPoint' />
-        <van-cell size='large' title='库存费(买/卖)' :value='product.stopLossMinPoint +"-"+ product.stopLossMaxPoint' />
+        <van-cell size='large' title='手续费类型' :value='product.feeFormula===1? "百分比":"金额"' />
+        <van-cell size='large' title='手续费' :value='product.fee' />
+        <van-cell size='large' title='库存费(买/卖)' :value='product.buyInterest +"%/"+ product.sellInterest+"%(年利率)"' />
         <van-cell size='large' title='所在时区' :value="'UTC+' + (0 - new Date().getTimezoneOffset() / 60)" />
         <!-- <van-cell size='large' title='止损水平' :value='product.stopLossMinPoint +"-"+ product.stopLossMaxPoint' /> -->
         <!-- <van-cell size='large' title='利润计算公式' value='Forex' /> -->
@@ -45,11 +45,17 @@
         <!-- <van-cell size='large' title='库存费类型' value='百分比' /> -->
         <!-- <van-cell size='large' title='买入库存费' :value='product.buyInterest' /> -->
         <!-- <van-cell size='large' title='卖出库存费' :value='product.sellInterest' /> -->
-        <van-cell size='large' title='交易时间'>
-            <div v-for='(item,index) in weekList' :key='index' class='item-item'>
+        <van-cell v-if='product.quoteTimeList && product.quoteTimeList.length' size='large' title='行情时间'>
+            <div v-for='(item,index) in quoteTimeList' :key='index' class='item-item'>
                 {{ weekdayMap[item.dayOfWeek] }}: {{ formatDayTime(item.startTime, item.endTime) }}
             </div>
         </van-cell>
+        <van-cell size='large' title='交易时间'>
+            <div v-for='(item,index) in tradeTimeList' :key='index' class='item-item'>
+                {{ weekdayMap[item.dayOfWeek] }}: {{ formatDayTime(item.startTime, item.endTime) }}
+            </div>
+        </van-cell>
+        <van-cell v-if='product.eodTime' size='large' title='结算时间' :value='eodTime' />
     </div>
 </template>
 
@@ -88,32 +94,45 @@ export default {
                 return objArraySort(product.value.usedMarginSet, 'rangeLeft')
             }
         })
-
-        const weekList = computed(() => {
+        // 交易时间
+        const tradeTimeList = computed(() => {
             if (!isEmpty(product.value.tradeTimeList)) {
                 return objArraySort(product.value.tradeTimeList, 'dayOfWeek')
+            }
+        })
+        // 行情时间
+        const quoteTimeList = computed(() => {
+            if (!isEmpty(product.value.quoteTimeList)) {
+                return objArraySort(product.value.quoteTimeList, 'dayOfWeek')
             }
         })
 
         const formatDayTime = (startTime, endTime) => {
             if (!isEmpty(startTime) && !isEmpty(endTime)) {
-                // 0 点时的时间戳
-                const time = (dayjs(new Date(new Date(new Date().toLocaleDateString()).getTime()))).valueOf()
-
+                const startTimeStr = dayjs().startOf('day').add(startTime, 'minute').format('HH:mm')
+                const endTimeStr = dayjs().startOf('day').add(endTime, 'minute').format('HH:mm')
                 if (endTime === Number(1440)) {
-                    return dayjs(time + startTime * 60 * 1000).format('HH:mm') + '-' + '24:00'
+                    return startTimeStr + '-' + '24:00'
                 } else {
-                    return dayjs(time + startTime * 60 * 1000).format('HH:mm') + '-' + dayjs(time + endTime * 60 * 1000).format('HH:mm')
+                    return startTimeStr + '-' + endTimeStr
                 }
             }
         }
+        // 结算时间
+        const eodTime = computed(() => {
+            if (!isEmpty(product.value.eodTime)) {
+                return dayjs().startOf('day').add(product.value.eodTime, 'minute').format('HH:mm')
+            }
+        })
 
         QuoteSocket.send_subscribe([symbolId])
         return {
             product,
             weekdayMap,
             formatDayTime,
-            weekList,
+            tradeTimeList,
+            quoteTimeList,
+            eodTime,
             usedMarginSet
         }
     }
