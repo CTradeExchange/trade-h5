@@ -37,6 +37,7 @@ import { useStore } from 'vuex'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useRouter } from 'vue-router'
 import { priceFormat, isEmpty } from '@/utils/util'
+import { mul } from '@/utils/calculation'
 export default {
     components: {
         CapitalList,
@@ -66,7 +67,7 @@ export default {
                 { title: '净值：', value: !isEmpty(accountInfo.value) ? accountInfo.value.netWorth : '--' },
                 { title: '可用预付款：', value: !isEmpty(accountInfo.value) ? accountInfo.value.availableMargin : '--' },
                 { title: '预付款：', value: !isEmpty(accountInfo.value) ? accountInfo.value.occupyMargin : '--' },
-                { title: '预付款比率(%)：', value: !isEmpty(accountInfo.value) ? accountInfo.value.marginRadio : '--' },
+                { title: '预付款比率(%)：', value: !isEmpty(accountInfo.value) ? mul(accountInfo.value.marginRadio, 100) + '%' : '--' },
             ]
         })
 
