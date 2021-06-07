@@ -224,10 +224,7 @@ class Chart {
     // 添加买卖价节点（左上角）
     _addPriceBox () {
         const contentWindow = this.elm.querySelector('iframe').contentWindow
-        this.priceBox = appendPriceBoxToIframe(contentWindow, this.initial.sellPrice, this.initial.buyPrice)
-        if (!this.property.showPriceBox) {
-            this.priceBox.hide()
-        }
+        this.priceBox = appendPriceBoxToIframe(contentWindow, this.initial.sellPrice, this.initial.buyPrice, this.property.showPriceBox)
     }
 
     togglePriceBox (bool) {
@@ -362,6 +359,19 @@ class Chart {
         return fn
     }
 
+    // 覆盖图表属性
+    _applyOverrides (config) {
+        const options = {}
+        if (typeof config.showSeriesOHLC === 'boolean') {
+            options['paneProperties.legendProperties.showSeriesOHLC'] = config.showSeriesOHLC
+        }
+
+        if (typeof config.showSeriesOHLC === 'boolean') {
+            options['paneProperties.legendProperties.showBarChange'] = config.showBarChange
+        }
+        this.widget.applyOverrides(options)
+    }
+
     /** ---------------------------- 分割线 ------------------------------------------------------------------------------------------- */
     /** ---------------------------- 以下是公开方法 ------------------------------------------------------------------------------------ */
     // 切换产品
@@ -480,15 +490,16 @@ class Chart {
 
     // 覆盖图表配置
     updateProperty (config) {
-        const options = {
-            'paneProperties.legendProperties.showSeriesOHLC': !!config.showSeriesOHLC,
-            'paneProperties.legendProperties.showBarChange': !!config.showBarChange
-        }
-        this.widget.applyOverrides(options)
+        this._applyOverrides(config)
         this.setChartType(config.chartType)
         this._setLine(config)
 
         Object.assign(this.property, config)
+    }
+
+    // 实时tick
+    setTick (price, time) {
+        this.datafeed._historyProvider.onTick(price, time)
     }
 }
 
@@ -516,10 +527,11 @@ function getIconHtml ({ fillColor }, type) {
     return `<svg t="1621511137390" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9915" data-spm-anchor-id="a313x.7781069.0.i9"><path d="M967.111111 1024h-342.869333a56.888889 56.888889 0 0 1-56.888889-56.888889v-0.455111a56.888889 56.888889 0 0 1 56.888889-56.888889h197.916444l-236.088889-236.088889a61.952 61.952 0 0 1 87.608889-87.608889l236.088889 236.088889v-197.916444a56.888889 56.888889 0 0 1 56.888889-56.888889H967.111111a56.888889 56.888889 0 0 1 56.888889 56.888889V967.111111a56.888889 56.888889 0 0 1-56.888889 56.888889zM398.222222 113.777778H201.045333l235.178667 235.178666a61.724444 61.724444 0 1 1-87.267556 87.267556L113.777778 201.045333V398.222222a56.888889 56.888889 0 0 1-113.777778 0V56.888889a56.888889 56.888889 0 0 1 56.888889-56.888889h341.333333a56.888889 56.888889 0 0 1 0 113.777778z" fill="${fillColor}" p-id="9916"></path></svg>`
 }
 
-function appendPriceBoxToIframe (iframeWindow, sellPrice, buyPrice) {
+function appendPriceBoxToIframe (iframeWindow, sellPrice, buyPrice, isShow) {
     const elm = iframeWindow.document.querySelector('.noWrap-ODIQgNap')
     const div = document.createElement('div')
     div.classList.add('price-box')
+    !isShow && div.classList.add('hide')
     div.innerHTML = `<div class='block sell'>
                         <span class='num'>
                             ${sellPrice}

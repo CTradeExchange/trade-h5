@@ -1,39 +1,40 @@
 import dayjs from 'dayjs'
-
 import { QuoteSocket } from '@/plugins/socket/socket'
-import store from '@m/store/index'
 
 let isdebug = true
-let lastBar = null // 记录最新k线时间
-let tickListener = null
-let symbolParams = null
-let hasHistoryKline = null
-let oldPrice = null
 
-store.subscribe((mutation, state) => {
-    try {
-        const canExecuted = (hasHistoryKline && typeof tickListener === 'function' && mutation.type === '_quote/Update_productTick' && symbolParams && String(symbolParams.symbolId)  === String(mutation.payload.symbolId))
-
-        if(!canExecuted){
-            return
-        }
-
-        const { tick_time, cur_price } = mutation.payload
-        if(oldPrice === cur_price){
-            return
-        }
-        oldPrice = cur_price
-        const tick = normalizeTick(cur_price, symbolParams.resolution, tick_time)
-        tickListener(tick)
-        isdebug && debugTick(tick, symbolParams)
-    } catch (error) {
-        console.error(error)
+export class RequestKData {
+    constructor(){
+        // 记录最新k线时间
+        this._lastBar = null
+        // 存储历史数据
+        this._historyKline = null
     }
-})
+    getKline(params, firstDataRequest){
+        this._historyKline = null
+        return getKline(params, firstDataRequest)
+            .then(res => {
+                res._lastBar && (this._lastBar = res._lastBar)
+                this._historyKline = res.data.bars
+                return res.data
+            })
+    }
+    normalizeTick(price, tickTime, resolution){
+        if(!this._historyKline) {
+            return
+        }
+        if(!price || !this._lastBar){
+            return
+        }
+        this._lastBar = normalizeTick(price, tickTime, resolution, this._lastBar)
+        isdebug && debugTick(this._lastBar)
+        return this._lastBar
+    }
+}
+
 
 // 历史k线
-export function getKline(params, firstDataRequest){
-    hasHistoryKline = null
+function getKline(params, firstDataRequest){
     return new Promise((resolve) => {
             const fn = () => {
                 if(QuoteSocket.ws.readyState ===1 ){
@@ -73,15 +74,18 @@ export function getKline(params, firstDataRequest){
                     }))
 
                     // 记录最新k线时间
-                    if(firstDataRequest || !lastBar || lastBar.time < (bars[bars.length-1] || {}).time){
-                        lastBar = bars[bars.length-1] || null
+                    let _lastBar = null
+                    if(firstDataRequest || !_lastBar || _lastBar.time < (bars[bars.length-1] || {}).time){
+                        _lastBar = bars[bars.length-1] || null
                     }
 
-                    hasHistoryKline = bars
                     return {
-                        bars,
-                        meta:{
-                            noData: !bars.length
+                        _lastBar,
+                        data:{
+                            bars,
+                            meta:{
+                                noData: !bars.length
+                            },
                         }
                     }
                 })
@@ -91,47 +95,38 @@ export function getKline(params, firstDataRequest){
         })
 }
 
-// 请求参数
-export function setTickRequest(params){
-    symbolParams = params
-}
-// tick回调函数
-export function setTicklistener(tickEvent){
-    tickListener = tickEvent
-}
-
-
-function normalizeTick(price, resolution, tickTime){
-    if(!price || !lastBar){
-        return []
-    }
-
+function normalizeTick(price, tickTime, resolution, _lastBar){
     let bar = {}
 
-    if(lastBar.time >= tickTime || isSameTime(resolution, lastBar.time, tickTime)){
+    if(isSameTime(resolution, _lastBar.time, tickTime)){
         bar = {
-            time: lastBar.time,
-            open: lastBar.open,
-            high: Math.max(lastBar.high, price),
-            low: Math.min(lastBar.low, price),
-            close: parseFloat(price),
+            time: _lastBar.time,
+            open: _lastBar.open,
+            high: Math.max(_lastBar.high, price),
+            low: Math.min(_lastBar.low, price),
+            close: price,
         }
     } else {
         bar = {
-            ...lastBar,
+            time: tickTime,
+            open: _lastBar.close,
+            high: Math.max(_lastBar.close, price),
+            low: Math.min(_lastBar.close, price),
             close: price,
-            time: tickTime
         }
     }
 
-    lastBar = bar
     return bar
 }
 
 function isSameTime(resolution, lastBarTime, tickTime){
+    lastBarTime = lastBarTime * 1
+    tickTime = tickTime * 1
+
+    if(lastBarTime > tickTime) return true
     // console.log('isSameTime: ', resolution, lastBarTime, tickTime)
     let oldTime = dayjs(lastBarTime)
-    let newTime = dayjs(tickTime)
+    let newTime = dayjs(tickTime )
 
     if(/^[0-9]+$/.test(resolution)){
         // 小于日k
@@ -175,7 +170,7 @@ function debugKline(res,requestParams){
     console.groupEnd()
 }
 
-function debugTick(tick, requestParams){
+function debugTick(tick){
     console.group('%c实时报价:⬇', 'color:green')
     console.log(JSON.stringify(tick))
     console.groupEnd()

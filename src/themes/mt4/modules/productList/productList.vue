@@ -13,7 +13,7 @@
                 <a class='item of-1px-bottom ' href='javascript:;' @click='toOrder'>
                     {{ $t('trade.newTrade') }}
                 </a>
-                <a class='item of-1px-bottom ' href='javascript:;' @click="show=false;$router.push('/chart')">
+                <a class='item of-1px-bottom ' href='javascript:;' @click='toChart()'>
                     {{ $t('trade.openChart') }}
                 </a>
                 <a class='item of-1px-bottom ' href='javascript:;' @click='toContract'>
@@ -35,6 +35,8 @@ import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import productItem from './productItem'
 import { useRouter } from 'vue-router'
+import { localSet } from '@/utils/util'
+
 export default {
     components: {
         productItem,
@@ -74,6 +76,13 @@ export default {
         const toContract = () => {
             router.push({ name: 'Contract', query: { symbolId } })
         }
+
+        // 去图表
+        const toChart = () => {
+            state.show = false
+            localSet('symbolIdForChart', symbolId)
+            router.push('/chart')
+        }
         return {
             ...toRefs(state),
             quoteMode,
@@ -83,6 +92,7 @@ export default {
             toOrder,
             openProduct,
             toContract,
+            toChart
         }
     },
 }

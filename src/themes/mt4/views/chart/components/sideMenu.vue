@@ -73,7 +73,7 @@ export default {
             if (!bool) {
                 chartConfig.value = JSON.parse(localGet('chartConfig')) || {}
                 // 更新指标
-                chart.updateIndicator(chartConfig.indicators)
+                chart.updateIndicator(unref(chartConfig).indicators)
             }
         })
         // 显示设置弹出层

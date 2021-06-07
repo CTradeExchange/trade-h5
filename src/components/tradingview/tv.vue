@@ -5,7 +5,6 @@
             v-if='chart'
             name='top'
             :resolutionList='resolutionList'
-            :setResolution='chart.setResolution'
             :setSymbol='setSymbol'
         ></slot>
         <!-- 图表承载节点 -->
@@ -76,7 +75,7 @@ export default {
                     showSeriesOHLC: options.showSeriesOHLC, // 高开低收
                     showBarChange: options.showBarChange, // 涨跌幅
                     chartType: options.chartType, // 图表类型
-                    showPriceBox: options.chartType // 价格框
+                    showPriceBox: options.showPriceBox // 价格框
                 },
                 // 指标
                 indicators: options.indicators || []
@@ -98,6 +97,15 @@ export default {
                 watch(() => [product.value.buy_price, product.value.sell_price], (newValues) => {
                     const [buyPrice, sellPrice] = newValues
                     unref(chart).updateLineData({ buyPrice, sellPrice })
+                })
+
+                // 实时更新tick
+                store.subscribe((mutation) => {
+                    const { type, payload: { tick_time, cur_price } } = mutation
+                    if (!(type === '_quote/Update_productTick' && String(unref(chart).symbolId) === String(mutation.payload.symbolId))) {
+                        return
+                    }
+                    unref(chart).setTick(cur_price, tick_time)
                 })
             })
         })

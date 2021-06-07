@@ -9,7 +9,7 @@
             @indicatorRemoved='indicatorRemoved'
             @symbolChanged='symbolChanged'
         >
-            <template v-if='!isLandscape' #top='{ setSymbol,resolutionList, setResolution }'>
+            <template v-if='!isLandscape' #top='{ setSymbol,resolutionList }'>
                 <Top>
                     <template #right>
                         <div class='btn-wrap'>
@@ -239,6 +239,10 @@ export default {
             localSet('chartConfig', JSON.stringify(unref(chartConfig)))
         }
 
+        const setResolution = value => {
+            unref(chartRef).chart.setResolution(value)
+        }
+
         return {
             computedProductList,
             initialValue,
@@ -257,7 +261,8 @@ export default {
             showResolutionPopover,
             onBack,
             showIndicator,
-            chartRef
+            chartRef,
+            setResolution
         }
     }
 }
