@@ -2,6 +2,7 @@ import { quoteService, msgService, tradeService } from '@/config'
 import CreateSocket from './createSocket'
 import QuoteSocketEvent from './quoteSocketEvent'
 import MsgSocketEvent from './msgSocketEvent'
+import { ungzip } from './socketUtil'
 
 export const QuoteSocket = new QuoteSocketEvent() // 行情websocket
 export const MsgSocket = new MsgSocketEvent() // 消息websocket
@@ -21,10 +22,17 @@ export default {
 
         quoteWS.addEventListener('message', evt => {
             if (typeof evt.data === 'string' && evt.data.startsWith('p(')) return QuoteSocket.tick(evt.data)
-            if (typeof evt.data === 'object' || evt.data.indexOf('{') !== 0) return
+            else if (typeof evt.data === 'string' && evt.data.indexOf('{') !== 0) return
+
             try {
-                const data = JSON.parse(evt.data)
-                QuoteSocket.onMessage(data)
+                if (typeof evt.data === 'object') {
+                    ungzip(evt.data).then(res => {
+                        QuoteSocket.onMessage(res)
+                    })
+                } else {
+                    const data = JSON.parse(evt.data)
+                    QuoteSocket.onMessage(data)
+                }
             } catch (error) {
 
             }
