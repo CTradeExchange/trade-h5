@@ -29,6 +29,7 @@ import topRight from './topRight'
 import leftMenu from './leftMenu'
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 export default {
     components: {
         topRight,
@@ -63,7 +64,9 @@ export default {
     setup (props, { emit, attrs }) {
         const router = useRouter()
         const route = useRoute()
-        const titleText = computed(() => props.title || route.meta?.title)
+        const { t } = useI18n({ useScope: 'global' })
+        const routeTitle = route.meta?.title ? t(route.meta?.title) : ''
+        const titleText = computed(() => props.title || routeTitle)
         const backEvent = () => {
             attrs.onBackEvent ? emit('backEvent') : router.back()
         }

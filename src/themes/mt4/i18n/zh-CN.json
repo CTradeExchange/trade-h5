@@ -1,5 +1,10 @@
 {
+  "advanced": "高级的",
   "attrs": "属性",
+  "balance": "结余",
+  "cancel": "取消",
+  "colon": "：",
+  "complete": "完成",
   "contract": {
     "advance": "预付款",
     "amount": "金额",
@@ -23,16 +28,27 @@
     "volumes": "手数",
     "zone": "所在时区"
   },
+  "deposit": "入金",
   "emptyHistory": "无历史记录",
   "fee": "手续费",
+  "history": {
+    "closeTime": "收盘时间",
+    "daytime": "时间",
+    "lirun": "利润",
+    "openTime": "开盘时间",
+    "order": "订单",
+    "product": "产品",
+    "tradeProducts": "交易品种"
+  },
   "historyList": {
     "noMore": "没有更多了"
   },
-  "login": {
-    "loginBtn": "登录11"
-  },
+  "infos": "详情",
   "modules": {
     "defaultContent": "这里是模块默认内容"
+  },
+  "position": {
+    "price": "价位"
   },
   "route": {
     "account": "账户",
@@ -49,7 +65,14 @@
     "search": "添加交易品种",
     "trade": "交易"
   },
+  "search": {
+    "keywords": "请输入搜索关键词"
+  },
+  "simple": "简单",
+  "success": "成功",
   "trade": {
+    "advance": "预付款",
+    "advanceRatio": "预付款比率",
     "chart": "图表",
     "closeOrder": "平仓",
     "contract": "交易品种属性",
@@ -57,16 +80,27 @@
     "expire": "期限",
     "expire1": "当日有效",
     "expire2": "当周有效",
+    "hide": "隐藏",
     "highMode": "高级查看模式",
     "highest": "最高：",
+    "invalidVolume1": "手数不是最小手数的整数倍",
+    "jingzhi": "净值",
     "lowest": "最低：",
+    "modify": "修改",
     "modifyOrder": "修改订单",
+    "modifySuccess": "修改成功",
     "newOrder": "新订单",
     "newTrade": "新交易",
     "openChart": "打开图表",
+    "pending": "订单正在进行排队处理...",
+    "pendingRange": "挂单价格范围",
+    "profitLossRange": "止盈止损价格范围",
     "simpleMode": "简单查看模式",
     "spread": "点差：",
-    "timeLimit": "当日有效"
+    "submitOrder": "下单",
+    "timeLimit": "当日有效",
+    "unModify": "数据未修改",
+    "usableAdvance": "可用预付款"
   },
   "weekdayMap": {
     "1": "周一",

@@ -2,24 +2,24 @@
     <div v-if='$route.query.isClosePosition' class='footerBtn'>
         <div class='col'>
             <button class='btn' :disabled='disabled' @click='closeOrder()'>
-                平仓
+                {{ $t('trade.closeOrder') }}
             </button>
         </div>
     </div>
     <div v-else-if='$route.query.positionId' class='footerBtn'>
         <div class='col'>
             <button class='btn' :disabled='disabled' @click='updateOrder()'>
-                修改
+                {{ $t('trade.modify') }}
             </button>
         </div>
     </div>
     <div v-else-if='$route.query.pendingId' class='footerBtn'>
         <div class='col'>
             <button v-if='[2, 4].includes(openOrderSelected.val)' class='btn' :disabled='disabled || buyDisabled' @click='updatePending'>
-                修改
+                {{ $t('trade.modify') }}
             </button>
             <button v-else-if='[3, 5].includes(openOrderSelected.val)' class='btn' :disabled='disabled || sellDisabled' @click='updatePending'>
-                修改
+                {{ $t('trade.modify') }}
             </button>
         </div>
     </div>
@@ -38,10 +38,10 @@
     <div v-else class='footerBtn'>
         <div class='col'>
             <button v-if='[2, 4].includes(openOrderSelected.val)' class='btn buyColor' :disabled='disabled || buyDisabled' @click='openOrder()'>
-                下单
+                {{ $t('trade.submitOrder') }}
             </button>
             <button v-else-if='[3, 5].includes(openOrderSelected.val)' class='btn sellColor' :disabled='disabled || sellDisabled' @click='openOrder()'>
-                下单
+                {{ $t('trade.submitOrder') }}
             </button>
         </div>
     </div>

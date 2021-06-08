@@ -8,10 +8,10 @@
             <template #center>
                 <div class='van-button-group'>
                     <van-button class='van-action-bar-button van-action-bar-button--first' :class='quoteMode===1 ? "van-button--primary" : "van-button--default"' plain size='small' @click='switchQuoteMode(1)'>
-                        简单
+                        {{ $t('simple') }}
                     </van-button>
                     <van-button class='van-action-bar-button van-action-bar-button--last' :class='quoteMode===2 ? "van-button--primary" : "van-button--default"' plain size='small' @click='switchQuoteMode(2)'>
-                        高级的
+                        {{ $t('advanced') }}
                     </van-button>
                 </div>
             </template>

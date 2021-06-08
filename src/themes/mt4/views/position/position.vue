@@ -10,21 +10,21 @@
         <div v-if='positionList.length===0 && $store.state._trade.positionLoading' class='loading'>
             <van-loading type='spinner' />
         </div>
-        <van-empty v-else-if='positionList.length===0 && pendingList.length===0' description='无历史记录' />
+        <van-empty v-else-if='positionList.length===0 && pendingList.length===0' :description="$t('emptyHistory')" />
         <div v-if='positionList.length' class='titleBar'>
-            价位
+            {{ $t('position.price') }}
         </div>
         <PositionList v-if='positionList.length' @refresh='refresh' />
         <template v-if='pendingList.length'>
             <div class='titleBar'>
-                订单
+                {{ $t('history.order') }}
             </div>
             <PendingList @refresh='refresh' />
         </template>
     </div>
 
     <!-- 排序 actionsheet -->
-    <van-action-sheet v-model:show='sortActionsVisible' :actions='sortActions' cancel-text='取消' @select='actionSheetOnSelect' />
+    <van-action-sheet v-model:show='sortActionsVisible' :actions='sortActions' :cancel-text="$t('cancel')" @select='actionSheetOnSelect' />
 </template>
 
 <script>
@@ -38,6 +38,7 @@ import { QuoteSocket } from '@/plugins/socket/socket'
 import { useRouter } from 'vue-router'
 import { priceFormat, isEmpty } from '@/utils/util'
 import { mul } from '@/utils/calculation'
+import { useI18n } from 'vue-i18n'
 export default {
     components: {
         CapitalList,
@@ -48,14 +49,15 @@ export default {
     setup () {
         const store = useStore()
         const router = useRouter()
+        const { t } = useI18n({ useScope: 'global' })
         const positionList = computed(() => store.state._trade.positionList)
         const pendingList = computed(() => store.state._trade.pendingList)
         const customerInfo = computed(() => store.state._user.customerInfo)
         const sortActionsSelected = 'van-badge__wrapper van-icon van-icon-down'
         const sortActions = [
-            { name: '订单', feild: 'orderId', className: sortActionsSelected },
-            { name: '时间', feild: 'openTime', },
-            { name: '产品', feild: 'symbolId', },
+            { name: t('history.order'), feild: 'orderId', className: sortActionsSelected },
+            { name: t('history.daytime'), feild: 'openTime', },
+            { name: t('history.product'), feild: 'symbolId', },
             // { name: '利润', feild: 'yz', },
         ]
         let sortActionValue = sortActions[0].feild
@@ -63,11 +65,11 @@ export default {
         const accountInfo = computed(() => store.state._user.accountAssets)
         const capitalListData = computed(() => {
             return [
-                { title: '结余：', value: !isEmpty(accountInfo.value) ? accountInfo.value.balance : '--' },
-                { title: '净值：', value: !isEmpty(accountInfo.value) ? accountInfo.value.netWorth : '--' },
-                { title: '可用预付款：', value: !isEmpty(accountInfo.value) ? accountInfo.value.availableMargin : '--' },
-                { title: '预付款：', value: !isEmpty(accountInfo.value) ? accountInfo.value.occupyMargin : '--' },
-                { title: '预付款比率(%)：', value: !isEmpty(accountInfo.value) ? mul(accountInfo.value.marginRadio, 100) + '%' : '--' },
+                { title: t('history.lirun') + t('colon'), value: !isEmpty(accountInfo.value) ? accountInfo.value.balance : '--' },
+                { title: t('trade.jingzhi') + t('colon'), value: !isEmpty(accountInfo.value) ? accountInfo.value.netWorth : '--' },
+                { title: t('trade.usableAdvance') + t('colon'), value: !isEmpty(accountInfo.value) ? accountInfo.value.availableMargin : '--' },
+                { title: t('trade.advance') + t('colon'), value: !isEmpty(accountInfo.value) ? accountInfo.value.occupyMargin : '--' },
+                { title: t('trade.advanceRatio') + '(%)' + t('colon'), value: !isEmpty(accountInfo.value) ? mul(accountInfo.value.marginRadio, 100) + '%' : '--' },
             ]
         })
 

@@ -14,6 +14,7 @@ import footerMenu from '@m/layout/footerMenu'
 import loadScript from '@/utils/loadScript'
 import loadCSS from '@/utils/loadCSS'
 import { isEmpty, removeLoginParams, localSet, localGet } from '@/utils/util'
+import { useI18n } from 'vue-i18n'
 let loaded = false
 let scrollTop = 0
 export default {
@@ -35,6 +36,7 @@ export default {
     },
     mounted () {
         const _this = this
+        const { t } = useI18n({ useScope: 'global' })
         window['IX_postMessage'] = (win => {
             function IX_postMessage () {
                 this.domain = ''
@@ -48,7 +50,7 @@ export default {
                     params: { type: 'page' },
                     query: {
                         url: encodeURIComponent(data.query.url),
-                        pageTitle: '详情'
+                        pageTitle: t('infos')
                     }
                 })
             }

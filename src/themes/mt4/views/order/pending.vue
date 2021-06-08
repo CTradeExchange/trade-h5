@@ -4,7 +4,7 @@
             <i class='icon_paidui'></i>
         </p>
         <p class='title'>
-            订单正在进行排队处理...
+            {{ $t('trade.pending') }}
         </p>
         <p class='desc'>
             {{ data.direction===1?'buy':'sell' }}
@@ -15,7 +15,7 @@
         </p>
         <div class='footerBtn of-1px-top'>
             <button class='btn' @click='$emit("onHide")'>
-                隐藏
+                {{ $t('trade.hide') }}
             </button>
         </div>
     </div>

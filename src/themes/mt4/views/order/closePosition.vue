@@ -2,7 +2,7 @@
     <top back :menu='false' :sub-title='product.symbolCode' :title='product.symbolName' />
     <div v-if='product' class='orderWrap'>
         <p class='header-info'>
-            平仓：#{{ positionId }} {{ Number(direction) === 1 ? 'buy' : 'sell' }} {{ openVolume }}
+            {{ $t('trade.closeOrder')+t('colon') }}#{{ positionId }} {{ Number(direction) === 1 ? 'buy' : 'sell' }} {{ openVolume }}
         </p>
         <!-- 订单手数 -->
         <div class='cell'>
@@ -44,7 +44,7 @@
 
     <!-- 底部下单按钮 -->
     <van-button block class='confirm-btn' @click='handleConfirm'>
-        <span>平仓</span>
+        <span>{{ $t('trade.closeOrder') }}</span>
     </van-button>
 
     <van-popup v-model:show='pendingVisible' :close-on-click-overlay='false' :overlay='false' :style="{ width: '100%', height: '100%',zIndex: 2000 }">

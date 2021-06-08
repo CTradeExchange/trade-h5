@@ -12,14 +12,14 @@
         <HistoryList :finished='finished' :loading='loading' @onLoad='onLoad' />
     </div>
     <!-- 排序 actionsheet -->
-    <van-action-sheet v-model:show='sortActionsVisible' cancel-text='取消' class='sort-action-wrap'>
+    <van-action-sheet v-model:show='sortActionsVisible' :cancel-text="$t('cancel')" class='sort-action-wrap'>
         <div v-for='(item,index) in sortActions' :key='index' class='action-item' @click='actionSheetOnSelect(item)'>
             <span> {{ item.name }} </span>
             <i class='icon arrow' :class='item.className'></i>
         </div>
     </van-action-sheet>
     <!-- 查询时间 actionsheet -->
-    <van-action-sheet v-model:show='timeActionsVisible' :actions='timeActions' cancel-text='取消' class='timeActions' @select='timeActionSheetOnSelect' />
+    <van-action-sheet v-model:show='timeActionsVisible' :actions='timeActions' :cancel-text="$t('cancel')" class='timeActions' @select='timeActionSheetOnSelect' />
     <!-- 日历 -->
     <van-calendar
         v-model:show='calendarVisible'
@@ -40,6 +40,7 @@ import Balance from './balance'
 import HistoryList from '@m/modules/historyList/historyList'
 import dayjs from 'dayjs'
 import { timeActions } from './historyUtil'
+import { useI18n } from 'vue-i18n'
 export default {
     components: {
         Balance,
@@ -49,14 +50,15 @@ export default {
     },
     setup () {
         const store = useStore()
+        const { t } = useI18n({ useScope: 'global' })
         const sortActionsUp = 'van-badge__wrapper icon icon_paixujiantouxiangshang arrow'
         const sortActionsDown = 'van-badge__wrapper van-icon icon_paixujiantouxiangxia arrow'
         const sortActions = [
-            { name: '收盘时间', feild: 'closeTime', className: sortActionsDown },
-            { name: '开盘时间', feild: 'openTime' },
-            { name: '交易品种', feild: 'symbolId' },
-            { name: '订单', feild: 'orderId' },
-            { name: '利润', feild: 'pnl' },
+            { name: t('history.closeTime'), feild: 'closeTime', className: sortActionsDown },
+            { name: t('history.openTime'), feild: 'openTime' },
+            { name: t('history.tradeProducts'), feild: 'symbolId' },
+            { name: t('history.order'), feild: 'orderId' },
+            { name: t('history.lirun'), feild: 'pnl' },
         ]
 
         let sortFieldName = sortActions[0].feild
@@ -67,9 +69,9 @@ export default {
         const orderList = computed(() => store.state._trade.historyList)
         const capitalListData = computed(() => {
             return [
-                { title: '利润：', value: orderList?.value?.totalPnl },
-                { title: '入金：', value: '1000000.00' },
-                { title: '结余：', value: '1000000.00' }
+                { title: t('history.lirun') + t('colon'), value: orderList?.value?.totalPnl },
+                { title: t('deposit') + t('colon'), value: '1000000.00' },
+                { title: t('balance') + t('colon'), value: '1000000.00' }
             ]
         })
         const state = reactive({
@@ -175,7 +177,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-
 .container {
     flex: 1;
     margin-bottom: rem(100px);
@@ -210,21 +211,21 @@ export default {
         vertical-align: middle;
     }
 }
-.sort-action-wrap{
-    .action-item{
-        line-height: rem(40px);
+.sort-action-wrap {
+    .action-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         padding: rem(32px) rem(36px);
         font-size: 16px;
-        display: flex;
-        justify-content: space-between;
+        line-height: rem(40px);
         border-bottom: solid 1px var(--bdColor);
-        align-items: center;
-        span{
+        span {
             vertical-align: middle;
         }
-        .arrow{
+        .arrow {
             vertical-align: middle;
-            &::before{
+            &::before {
                 color: #409DFF;
                 font-size: rem(28px);
             }

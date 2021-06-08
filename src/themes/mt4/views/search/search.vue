@@ -1,6 +1,6 @@
 <template>
     <Top :back='true' :menu='false' title='' />
-    <van-search v-model='value' placeholder='请输入搜索关键词' @cancel='onCancel' @search='onSearch' @update:model-value='onUpdatedSearchValue' />
+    <van-search v-model='value' :placeholder="$t('search.keywords')" @cancel='onCancel' @search='onSearch' @update:model-value='onUpdatedSearchValue' />
     <div v-show='categoryShow' class='category-list'>
         <van-cell v-for='(v,i) in productCategoryList' :key='i' is-link :title='v.title' :to="{ path: '/market', query: { code: v.id } }" />
     </div>

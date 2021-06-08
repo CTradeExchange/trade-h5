@@ -14,10 +14,10 @@
         </div>
         <p v-if='positionId' class='header-info'>
             <span v-if='isClosePosition'>
-                平仓：
+                {{ $t('trade.closeOrder')+t('colon') }}
             </span>
             <span v-if='isModifyPosition'>
-                修改订单：
+                {{ $t('trade.modifyOrder') + $t('colon') }}
             </span>
             #{{ positionId }} {{ Number(curPosition.direction) === 1 ? 'buy' : 'sell' }} {{ minus(curPosition.openVolume, curPosition.closeVolume||0) }}
         </p>
@@ -37,7 +37,7 @@
             </div>
         </div>
         <!-- 挂单 -->
-        <p>挂单价格范围</p>
+        <p>{{ $t('trade.pendingRange') }}</p>
         <p>{{ pendingPriceRang }}</p>
         <div v-if='openOrderSelected.val > 1 || pendingId' class='cell priceSet'>
             <div class='col'>
@@ -46,7 +46,7 @@
         </div>
 
         <!-- 止盈止损价格设置 -->
-        <p>止盈止损价格范围</p>
+        <p>{{ $t('trade.profitLossRange') }}</p>
         {{ profitLossRang }}
         <div class='cell priceSet'>
             <div class='col'>
@@ -60,7 +60,7 @@
         <!-- 挂单有效期 -->
         <SelectComp v-if='openOrderSelected.val > 1' v-model='expireType' :disabled='disabled' :options='expireTypeOptions'>
             <p class='expireTypeTitle'>
-                期限： {{ expireTypeItem.label }}
+                {{ $t('trade.expire') + $t('colon') + expireTypeItem.label }}
             </p>
         </SelectComp>
 
@@ -138,6 +138,7 @@ import Pending from './pending'
 import Success from './success'
 import { minus, divide, getDecimalNum, mul, toFixed } from '@/utils/calculation'
 import { Toast } from 'vant'
+import { useI18n } from 'vue-i18n'
 export default {
     components: {
         Pending,
@@ -155,6 +156,7 @@ export default {
         const store = useStore()
         const route = useRoute()
         const router = useRouter()
+        const { t } = useI18n({ useScope: 'global' })
         const chart = ref(null)
         const { symbolId, positionId, pendingId, orderId, takeProfit, stopLoss, isClosePosition, isModifyPosition, isModifyPending } = route.query
         const state = reactive({
@@ -180,10 +182,10 @@ export default {
             expireTypeOptions: [
                 {
                     id: 1,
-                    label: '当日有效',
+                    label: t('trade.expire1'),
                 }, {
                     id: 2,
-                    label: '当周有效',
+                    label: t('trade.expire2'),
                 }
             ],
             resData: {},
@@ -241,7 +243,7 @@ export default {
             let result = false
             const m = divide(state.volumn, product.value.minVolume)
             result = getDecimalNum(m) > 0 // 手数不是最小手数的整数倍
-            if (result) Toast('手数不是最小手数的整数倍')
+            if (result) Toast(t('trade.invalidVolume1'))
             return result
         }
 
@@ -311,7 +313,7 @@ export default {
         // 点击修改订单
         const handleUpdateOrder = () => {
             if (takeProfit === state.takeProfit && stopLoss === state.stopLoss) {
-                return Toast('数据未修改')
+                return Toast(t('trade.unModify'))
             }
             const p = Math.pow(10, product.value.price_digits)
             const params = {
@@ -325,7 +327,7 @@ export default {
             updateOrder(params).then(res => {
                 state.loading = false
                 if (res.check()) {
-                    Toast('修改成功')
+                    Toast(t('trade.modifySuccess'))
                     router.push({ name: 'Position' })
                 }
             }).catch(err => {

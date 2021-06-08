@@ -13,7 +13,7 @@
 
                         {{ data.tradeVolume }}
                     </span>
-                    平仓
+                    {{ $t('trade.closeOrder') }}
                 </template>
                 <template v-else>
                     <!-- 开仓、挂单 -->
@@ -37,12 +37,12 @@
                 s/l: {{ data.stopLoss ? formatPrice(data.stopLoss, data.digits) : '--' }}&nbsp;&nbsp;&nbsp;t/p: {{ data.takeProfit ? formatPrice(data.takeProfit, data.digits) : '--' }}
             </p>
             <p>
-                成功
+                {{ $t('success') }}
             </p>
         </div>
         <div class='footerBtn of-1px-top'>
             <button class='btn' @click='$router.back()'>
-                完成
+                {{ $t('complete') }}
             </button>
         </div>
     </div>
