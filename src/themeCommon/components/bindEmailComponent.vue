@@ -9,7 +9,7 @@
                     v-model:zone='zoneText'
                     clear
                     :disabled='true'
-                    placeholder='请输入邮箱'
+                    :placeholder='$t("common.inputEmail")'
                     type='email'
                 />
             </div>
@@ -17,10 +17,10 @@
                 <!-- <label class='label'>
                     验证码
                 </label> -->
-                <CheckCode v-model='checkCode' clear label='验证码' @verifyCodeSend='handleVerifyCodeSend' />
+                <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
             </div>
             <van-button block class='confirm-btn' type='primary' @click='handleConfirm'>
-                <span>确定</span>
+                <span>{{ $t('common.sure') }}</span>
             </van-button>
         </form>
     </div>
@@ -37,6 +37,7 @@ import { verifyCodeSend } from '@/api/base'
 import { bindEmail, changeEmail, checkCustomerExist } from '@/api/user'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 export default {
     components: {
         areaInput,
@@ -51,6 +52,7 @@ export default {
     setup (props) {
         const store = useStore()
         const router = useRouter()
+        const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             email: '',
             sendToken: '',
@@ -72,13 +74,13 @@ export default {
 
         const handleConfirm = () => {
             if (isEmpty(state.email)) {
-                return Toast('请输入邮箱')
+                return Toast(t('common.inputEmail'))
             }
             if (!emailReg.test(state.email)) {
-                return Toast('请输入正确的邮箱')
+                return Toast(t('common.inputRealEmail'))
             }
             if (isEmpty(state.checkCode)) {
-                return Toast('请输入验证码')
+                return Toast(t('common.inputVerifyCode'))
             }
             const params = {
                 email: state.email,
@@ -92,7 +94,7 @@ export default {
                 bindEmail(params).then(res => {
                     state.loading = false
                     if (res.check()) {
-                        Toast('绑定邮箱成功')
+                        Toast(t('common.emailBindSuccess'))
                         store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
                             router.replace('/setting')
@@ -105,7 +107,7 @@ export default {
                 changeEmail(params).then(res => {
                     state.loading = false
                     if (res.check()) {
-                        Toast('更换邮箱成功')
+                        Toast(t('common.replaceEmailSuccess'))
                         store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
                             router.replace('/setting')
@@ -120,10 +122,10 @@ export default {
         // 发送验证码
         const handleVerifyCodeSend = (callback) => {
             if (isEmpty(state.email)) {
-                return Toast('请输入邮箱')
+                return Toast(t('common.inputEmail'))
             }
             if (!emailReg.test(state.email)) {
-                return Toast('请输入正确的邮箱')
+                return Toast(t('common.inputRealEmail'))
             }
             const params = {
                 bizType: 'EMAIL_COMMON_VERIFICATION_CODE',
@@ -141,10 +143,10 @@ export default {
                     if (res.data === 1) {
                         return Dialog.confirm({
                             theme: 'round-button',
-                            title: '提示',
-                            message: '该邮箱已被其他账号绑定，如有疑问请联系在线客服',
-                            confirmButtonText: '联系客服',
-                            cancelButtonText: '关闭'
+                            title: t('common.tip'),
+                            message: t('common.emailBinded'),
+                            confirmButtonText: t('common.serivce'),
+                            cancelButtonText: t('common.close')
                         }).then(() => {
                             if (onlineServices.value) { location.href = onlineServices.value }
                         }).catch(() => {
@@ -155,7 +157,7 @@ export default {
                             if (res.check()) {
                                 if (res.code === '0') {
                                     state.sendToken = res.data.token
-                                    Toast('验证码发送成功，请注意查收!')
+                                    Toast(t('common.verifySended'))
                                     callback && callback()
                                 }
                             }

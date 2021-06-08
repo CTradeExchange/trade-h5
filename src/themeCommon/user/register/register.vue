@@ -1,10 +1,10 @@
 <template>
     <div class='register'>
-        <Top class='topBar' :right-action='{ title:"已有账号" }' @rightClick='$router.replace({ name:"Login" })' />
+        <Top class='topBar' :right-action='{ title:$t("register.hasAccount") }' @rightClick='$router.replace({ name:"Login" })' />
         <!-- <PageComp v-if='pageui' :data='pageui' /> -->
         <div class='container'>
             <p class='pageTitle'>
-                真实开户
+                {{ $t('register.openAccount') }}
             </p>
             <div class='banner'>
                 <img alt='' src='https://testcms.ixmiddle.com/docs/registerBanner.png' srcset='' />
@@ -18,8 +18,8 @@
                 :title-active-color='style.color'
                 :title-inactive-color='style.mutedColor'
             >
-                <van-tab name='mobile' title='手机号' />
-                <van-tab name='email' title='邮箱' />
+                <van-tab name='mobile' :title='$t("register.phoneNo")' />
+                <van-tab name='email' :title='$t("register.email")' />
             </van-tabs>
             <form class='form'>
                 <CurrencyAction v-model='currency' class='cellRow' />
@@ -30,7 +30,7 @@
                         v-model.trim='mobile'
                         v-model:zone='zone'
                         clear
-                        placeholder='手机号'
+                        :placeholder='$t("register.phoneNo")'
                         type='mobile'
                         @zoneSelect='zoneSelect'
                     />
@@ -40,17 +40,17 @@
                         v-model.trim='email'
                         v-model:zone='zone'
                         clear
-                        placeholder='邮箱'
+                        :placeholder='$t("register.email")'
                         type='email'
                         @zoneSelect='zoneSelect'
                     />
                 </div>
                 <div class='cell'>
-                    <CheckCode v-model.trim='checkCode' clear label='验证码' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
+                    <CheckCode v-model.trim='checkCode' clear :label='$t("login.verifyCode")' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
                 </div>
                 <div class='cell'>
                     <van-checkbox v-model='protocol' shape='square'>
-                        继续开户表示您已确认已满18周岁且已细读并同意《客户隐私保护政策、投资风险披露及免责声明》
+                        {{ $t('register.protocol') }}
                     </van-checkbox>
                 </div>
             </form>
@@ -62,7 +62,7 @@
                 :disabled='loading'
                 @click='registerHandler'
             >
-                提交
+                {{ $t('common.submit') }}
             </van-button>
         </div>
         <Loading :show='loading' />
@@ -86,8 +86,9 @@ import { useStore } from 'vuex'
 import { reactive, toRefs, ref, computed, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
 import { Toast, Dialog } from 'vant'
-import Rule, { checkCustomerExistRule } from './rule'
+import RuleFn, { checkCustomerExistRule } from './rule'
 import { pageConfig } from '@/api/wpApi'
+import { useI18n } from 'vue-i18n'
 
 export default {
     components: {
@@ -103,9 +104,10 @@ export default {
         const delayer = null
         const store = useStore()
         const router = useRouter()
+        const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             options: [{ country: 'Canada', code: 'CA' }],
-            zone: '中国大陆 (86)',
+            zone: '',
             countryZone: '86',
             countryCode: 'ISO_3166_156',
             loading: false,
@@ -113,8 +115,6 @@ export default {
             checkCode: '',
             mobile: '',
             openType: 'mobile', // mobile 手机号开户， email 邮箱开户
-            accountType: 'CFD账户',
-            accountTypeList: [{ name: 'CFD账户' }],
             currency: 'USD',
             tradeType: 1,
             email: '',
@@ -175,7 +175,7 @@ export default {
         const registerHandler = () => {
             clearTimeout(delayer)
             if (!token) {
-                return Toast('请输入正确的验证码')
+                return Toast(t('common.inputRealVerifyCode'))
             }
             const params = {
                 type: state.openType === 'email' ? 1 : 2,
@@ -200,7 +200,7 @@ export default {
                 params.emailArea = String(state.countryZone)
             }
 
-            const validator = new Schema(Rule)
+            const validator = new Schema(RuleFn(t))
             validator.validate(
                 { ...params, mobileReg: new RegExp(mobileReg.value) },
                 { first: true }, (errors, fields) => {
@@ -226,7 +226,7 @@ export default {
                 verifyParams.emailArea = String(state.zone)
             }
 
-            const validator = new Schema(checkCustomerExistRule)
+            const validator = new Schema(checkCustomerExistRule(t))
             state.verifyCodeLoading = true
             validator.validate(verifyParams, { first: true }).then(res => {
                 // 检测客户是否存在,同时获取区号
@@ -234,7 +234,8 @@ export default {
                     if (res.check()) {
                         if (Number(res.data.status) === 1) {
                             state.verifyCodeLoading = false
-                            return Toast(verifyParams.type === 1 ? '邮箱已存在' : '手机已存在')
+                            const msg = t(verifyParams.type === 1 ? 'common.existEmail' : 'common.existPhone')
+                            return Toast(msg)
                         } else {
                             // state.zone = res.data.phoneArea
                             const params = {

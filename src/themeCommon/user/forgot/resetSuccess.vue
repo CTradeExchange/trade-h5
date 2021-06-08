@@ -2,17 +2,17 @@
     <div class='wrap'>
         <i class='icon_success'></i>
         <p class='t1'>
-            恭喜！新密码重设成功
+            {{ $t('forgot.newPwdSuccess') }}
         </p>
         <p class='t2'>
-            请使用新密码进行登录
+            {{ $t('forgot.newPwdLogin') }}
         </p>
         <p class='t3'>
-            出于账户安全考虑，最近24小时将不能取款
+            {{ $t('forgot.tip1') }}
         </p>
     </div>
     <van-button class='confirmBtn' @click='toLogin'>
-        去登录
+        {{ $t('forgot.goLogin') }}
     </van-button>
 </template>
 

@@ -8,22 +8,22 @@
         <Loading :show='loading' />
         <header class='header'>
             <h1 class='pageTitle'>
-                设置登录密码
+                {{ $t('forgot.setPwd') }}
             </h1>
-            <h6>密码为6-16位数字或字母的组合</h6>
+            <h6>{{ $t('forgot.pwdRule') }}</h6>
         </header>
         <van-cell-group>
             <div class='form-item'>
-                <Field v-model='newPwd' label='' placeholder='请输入新密码' :type='newPwdVis ? "text" : "password"' />
+                <Field v-model='newPwd' label='' :placeholder='$t("forgot.inputNewPwd")' :type='newPwdVis ? "text" : "password"' />
                 <span class='icon' :class="newPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("newPwdVis")'></span>
             </div>
             <div class='form-item'>
-                <Field v-model='confirmPwd' label='' placeholder='请再次输入新密码' :type='confirmVis ? "text" : "password"' />
+                <Field v-model='confirmPwd' label='' :placeholder='$t("forgot.newPwdAgain")' :type='confirmVis ? "text" : "password"' />
                 <span class='icon' :class="confirmVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("confirmVis")'></span>
             </div>
         </van-cell-group>
         <van-button class='confirmBtn' @click='handleConfirm'>
-            <span> 确定</span>
+            <span>{{ $t('common.sure') }}</span>
         </van-button>
     </div>
 </template>
@@ -35,6 +35,7 @@ import { Field, Toast } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
 import { findPwd } from '@/api/user'
 import md5 from 'js-md5'
+import { useI18n } from 'vue-i18n'
 
 export default {
     components: {
@@ -44,6 +45,7 @@ export default {
     setup (props) {
         const router = useRouter()
         const route = useRoute()
+        const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             newPwd: '',
             confirmPwd: '',
@@ -58,16 +60,16 @@ export default {
 
         function handleConfirm () {
             if (!state.newPwd) {
-                return Toast('请输入新密码')
+                return Toast(t('forgot.inputNewPwd'))
             }
             if (!state.confirmPwd) {
-                return Toast('请输入确认密码')
+                return Toast(t('forgot.inputSurePwd'))
             }
             if (state.newPwd.length < 6 || state.newPwd.length > 16) {
-                return Toast('密码为6-16位数字或字母的组合')
+                return Toast(t('forgot.pwdRule'))
             }
             if (state.newPwd !== state.confirmPwd) {
-                return Toast('新密码和确认密码不同，请检查后重新输入')
+                return Toast(t('forgot.pwdDiff'))
             }
 
             const params = {

@@ -3,34 +3,34 @@
         <Top :right-action='rightAction' @rightClick='changeLoginType' />
         <header class='header'>
             <h1 class='pageTitle'>
-                {{ loginType==='password'? '账号密码登录':'验证码登录' }}
+                {{ $t(loginType==='password'?'login.loginByPwd':'login.loginByCode') }}
             </h1>
         <!-- <LanguageDiv /> -->
         </header>
         <form class='loginForm'>
             <div v-if="loginAccount==='mobile'" class='field'>
                 <!-- <areaInput v-model.trim='loginName' v-model:zone='zone' clear placeholder='请输入手机号或邮箱' /> -->
-                <InputComp v-model.trim='loginName' clear label='请输入手机号或邮箱' />
+                <InputComp v-model.trim='loginName' clear :label="$t('login.loginNamePlaceholder')" />
             </div>
             <div v-else class='field'>
-                <InputComp v-model.trim='email' clear label='邮箱' />
+                <InputComp v-model.trim='email' clear :label="$t('login.email')" />
             </div>
             <div v-if="loginType==='password'" class='field'>
-                <InputComp v-model='pwd' clear label='密码' pwd />
+                <InputComp v-model='pwd' clear :label="$t('login.pwd')" pwd />
             </div>
             <div v-else class='field'>
-                <CheckCode v-model.trim='checkCode' clear label='验证码' @verifyCodeSend='verifyCodeSendHandler' />
+                <CheckCode v-model.trim='checkCode' clear :label="$t('login.verifyCode')" @verifyCodeSend='verifyCodeSendHandler' />
             </div>
             <van-button block class='loginBtn' :disabled='loading' type='primary' @click='loginHandle'>
                 {{ $t('login.loginBtn') }}
             </van-button>
             <div class='toolBtns'>
                 <a class='btn' href='javascript:;' @click="$router.push({ name:'Register' })">
-                    注册新账户
+                    {{ $t('login.register') }}
                 </a>
                 <Vline />
                 <a class='btn' href='javascript:;' @click="$router.push({ name:'Forgot' })">
-                    忘记密码
+                    {{ $t('login.forgot') }}
                 </a>
             </div>
         </form>
@@ -47,61 +47,26 @@
         </footer> -->
     </div>
 
-    <!-- 用户KYC资料验证 -->
-    <van-popup v-model:show='kycPop' :close-on-click-overlay='false' :style="{ 'border-radius':'8px' }">
-        <section class='popContainer'>
-            <div class='kycTimeLine'>
-                <timeline>
-                    <timelineItem>
-                        <template #icon>
-                            <span class='icon_upload primary'></span>
-                        </template>
-                        <p>2021.03.26 16:23:26提交成功</p>
-                    </timelineItem>
-                    <timelineItem>
-                        <template #icon>
-                            <span class='icon_wait primary'></span>
-                        </template>
-                        <p>您的资料正在审核中，请耐心等待</p>
-                    </timelineItem>
-                    <timelineItem>
-                        <template #icon>
-                            <span class='icon_fail red'></span>
-                        </template>
-                        <p>您的资料审核失败</p>
-                        <p>原因：姓名和身份证号不匹配</p>
-                    </timelineItem>
-                </timeline>
-            </div>
-            <div class='btnBox'>
-                <!-- <button class="btn">重新提交</button> -->
-                <button class='btn' @click='kycPop=false'>
-                    关闭
-                </button>
-            </div>
-        </section>
-    </van-popup>
-
     <!-- 设置登录密码 -->
     <van-popup v-model:show='loginPwdPop' :close-on-click-overlay='false' :style="{ 'border-radius':'8px' }">
         <section class='popContainer'>
             <a class='noTip' href='javascript:;' @click='noTip'>
-                不再提醒
+                {{ $t('login.neverTip') }}
             </a>
             <div class='containerBox'>
                 <p class='iconPwd'>
                     <span class='icon_password'></span>
                 </p>
                 <p class='tipContent'>
-                    您的登录密码还未设置，设置后便可通过密码进行登录，是否现在去设置？
+                    {{ $t('login.pwdTips') }}
                 </p>
             </div>
             <div class='btnBox'>
                 <button class='btn' @click='loginPwdSet'>
-                    去设置
+                    {{ $t('login.goSet') }}
                 </button>
                 <button class='btn muted' @click='loginPwdSetNext'>
-                    下次
+                    {{ $t('login.nextTime') }}
                 </button>
             </div>
         </section>
@@ -125,10 +90,11 @@ import { computed, reactive, toRefs, getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
-import Rule from './rule'
+import RuleFn from './rule'
 import md5 from 'js-md5'
 import { timeline, timelineItem } from '@/components/timeline'
 import { checkUserStatus } from '@/api/user'
+import { useI18n } from 'vue-i18n'
 
 export default {
     components: {
@@ -147,11 +113,11 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const store = useStore()
+        const { t } = useI18n({ useScope: 'global' })
         const instance = getCurrentInstance()
         const state = reactive({
             loading: false,
             pwdVisible: false,
-            kycPop: false,
             loginPwdPop: false,
             loginName: '',
             pwd: '',
@@ -162,7 +128,7 @@ export default {
         let token = ''
         const rightAction = computed(() => {
             return {
-                title: state.loginType === 'password' ? '验证码登录' : '账号密码登录'
+                title: t(state.loginType === 'password' ? 'login.loginByCode' : 'login.loginByPwd')
             }
         })
 
@@ -181,7 +147,7 @@ export default {
 
             }
 
-            const validator = new Schema(Rule)
+            const validator = new Schema(RuleFn(t))
             state.loading = true
 
             validator.validate(
@@ -224,36 +190,36 @@ export default {
                 if (Number(res.data.companyKycStatus) === 1) {
                     if (Number(res.data.kycAuditStatus === 0)) {
                         return Dialog.alert({
-                            title: '提示',
-                            confirmButtonText: '去认证',
-                            message: '您还未进行KYC认证，点击去认证',
+                            title: t('common.tip'),
+                            confirmButtonText: t('login.goAuthenticate'),
+                            message: t('login.goAuthenticateMsg'),
                             theme: 'round-button',
                         }).then(() => {
                             router.push('/authentication')
                         })
                     } else if (Number(res.data.kycAuditStatus === 1)) {
                         return Dialog.alert({
-                            title: '提示',
-                            confirmButtonText: '关闭',
-                            message: '您的资料正在审核中，等耐心等待',
+                            title: t('common.tip'),
+                            confirmButtonText: t('common.close'),
+                            message: t('common.inReview'),
                             theme: 'round-button',
                         }).then(() => {
                             store.dispatch('_user/logout')
                         })
                     } else if (Number(res.data.kycAuditStatus === 3)) {
                         return Dialog.alert({
-                            title: '提示',
-                            confirmButtonText: '重新提交',
-                            message: '您的资料审核失败',
+                            title: t('common.tip'),
+                            confirmButtonText: t('common.reSubmit'),
+                            message: t('common.reviewFailed'),
                             theme: 'round-button',
                         }).then(() => {
                             router.push('/authentication')
                         })
                     } else if (Number(res.data.kycAuditStatus === 2)) {
                         Dialog.alert({
-                            title: '提示',
-                            confirmButtonText: '好的',
-                            message: '您的资料已经审核通过，现在就开启您的财富之旅吧！',
+                            title: t('common.tip'),
+                            confirmButtonText: t('common.ok'),
+                            message: t('common.reviewSuccess'),
                             theme: 'round-button',
                         }).then(() => {
                             noticeSetPwd(res.data.loginPassStatus)
@@ -284,7 +250,7 @@ export default {
                 loginName: state.loginName
             }
 
-            const validator = new Schema(Rule)
+            const validator = new Schema(RuleFn(t))
             validator.validate({
                 ...verifyParams
             }).then(res => {
@@ -292,7 +258,8 @@ export default {
                 checkUserStatus(verifyParams).then(res => {
                     if (res.check()) {
                         if (Number(res.data.status) === 2) {
-                            return Toast(verifyParams.type === 1 ? '邮箱不存在' : '手机不存在')
+                            const msg = t(verifyParams.type === 1 ? 'common.noEmail' : 'common.noPhone')
+                            return Toast(msg)
                         } else {
                             state.zone = res.data.phoneArea
                             const params = {

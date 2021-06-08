@@ -12,7 +12,7 @@
         <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a>
         <header class='header'>
             <h1 class='pageTitle'>
-                找回密码
+                {{ $t('forgot.forgot') }}
             </h1>
         </header>
         <div class='tabs-wrap'>
@@ -26,31 +26,31 @@
                 type='line'
                 @click='handleTabChange'
             >
-                <van-tab title='手机找回' />
-                <van-tab title='邮箱找回' />
+                <van-tab :title='$t("forgot.retrievedByPhone")' />
+                <van-tab :title='$t("forgot.retrievedByEmail")' />
             </van-tabs>
         </div>
         <div class='tabs-content'>
             <form v-show='curTab === 0' class='loginForm'>
                 <div class='field'>
-                    <InputComp v-model.trim='mobile' clear label='请输入手机号' />
+                    <InputComp v-model.trim='mobile' clear :label='$t("common.inputPhone")' />
                 </div>
                 <div class='field'>
-                    <checkCode v-model.trim='checkCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
+                    <checkCode v-model.trim='checkCode' :label='$t("common.inputVerifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
                 </div>
             </form>
 
             <form v-show='curTab === 1' class='loginForm'>
                 <div class='field'>
-                    <InputComp v-model.trim='email' clear label='请输入邮箱' />
+                    <InputComp v-model.trim='email' clear :label='$t("common.inputEmail")' />
                 </div>
                 <div class='field'>
-                    <checkCode v-model.trim='emailCode' label='请输入验证码' @verifyCodeSend='handleVerifyCodeSend' />
+                    <checkCode v-model.trim='emailCode' :label='$t("common.inputVerifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
                 </div>
             </form>
         </div>
         <van-button block class='next-btn' type='primary' @click='next'>
-            <span>下一步</span>
+            <span>{{ $t('common.nextStep') }}</span>
         </van-button>
     </div>
 </template>
@@ -65,11 +65,12 @@ import { Toast } from 'vant'
 import { useRouter } from 'vue-router'
 import uInput from '@/components/input.vue'
 import Schema from 'async-validator'
-import Rule from './rule'
+import RuleFn from './rule'
 import { useStore } from 'vuex'
 import { verifyCodeSend, verifyCodeCheck } from '@/api/base'
 import { checkUserStatus } from '@/api/user'
 import { isEmpty, getArrayObj } from '@/utils/util'
+import { useI18n } from 'vue-i18n'
 export default {
     components: {
         Top,
@@ -81,12 +82,13 @@ export default {
         const style = computed(() => store.state.style)
         const store = useStore()
         const router = useRouter()
+        const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             mobile: '',
             checkCode: '',
             email: '',
             emailCode: '',
-            zone: '中国大陆 (86)',
+            zone: '',
             countryZone: '86',
             curTab: 0,
             tips: {
@@ -105,7 +107,7 @@ export default {
         // 发送验证码
         const handleVerifyCodeSend = (callback) => {
             state.loading = true
-            const validator = new Schema(Rule)
+            const validator = new Schema(RuleFn(t))
             validator.validate({
                 type: state.curTab,
                 mobile: state.mobile,
@@ -127,7 +129,7 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         if (Number(res.data.status) === 2) {
-                            const msg = state.curTab === 0 ? '手机号不存在' : '邮箱不存在'
+                            const msg = t(state.curTab === 0 ? 'common.unExistPhone' : 'common.unExistEmail')
                             return Toast(msg)
                         } else {
                             state.countryZone = res.data.phoneArea
@@ -138,7 +140,7 @@ export default {
                                 if (res.check()) {
                                     if (res.code === '0') {
                                         state.sendToken = res.data.token
-                                        Toast('验证码发送成功，请注意查收!')
+                                        Toast(t('common.verifySended'))
                                         callback && callback()
                                     }
                                 }
@@ -161,7 +163,7 @@ export default {
                 type: state.curTab,
                 needCheckCode: true
             }
-            const validator = new Schema(Rule)
+            const validator = new Schema(RuleFn(t))
 
             validator.validate(params, (errors, fields) => {
                 console.log(errors, fields)

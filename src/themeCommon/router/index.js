@@ -7,7 +7,7 @@ const routes = [
         name: 'Login',
         component: () => import(/* webpackChunkName: "login" */ '../user/login/login.vue'),
         meta: {
-            title: '登录到一个账户',
+            title: 'cRoute.login',
             roles: ['Guest'], // Guest 仅游客访问 User 仅登录用户访问
         }
 
@@ -18,7 +18,7 @@ const routes = [
         name: 'Register',
         component: () => import(/* webpackChunkName: "login" */ '../user/register/register.vue'),
         meta: {
-            title: '注册开户',
+            title: 'cRoute.register',
             roles: ['Guest'],
         }
 
@@ -28,7 +28,7 @@ const routes = [
         name: 'RegisterSuccess',
         component: () => import(/* webpackChunkName: "register" */ '../user/register/registerSuccess.vue'),
         meta: {
-            title: '开户成功'
+            title: 'cRoute.registerSuccess'
         }
     },
     {
@@ -36,7 +36,7 @@ const routes = [
         name: 'Forgot',
         component: () => import(/* webpackChunkName: "forgot" */ '../user/forgot/forgot.vue'),
         meta: {
-            title: '找回密码'
+            title: 'cRoute.forgot'
         }
     },
     {
@@ -44,7 +44,7 @@ const routes = [
         name: 'ResetPwd',
         component: () => import(/* webpackChunkName: "resetPwd" */ '../user/forgot/resetPwd.vue'),
         meta: {
-            title: '重置密码'
+            title: 'cRoute.resetPwd'
         }
     },
     {
@@ -52,7 +52,7 @@ const routes = [
         name: 'ResetSuccess',
         component: () => import(/* webpackChunkName: "resetSuccess" */ '../user/forgot/resetSuccess.vue'),
         meta: {
-            title: '重置成功'
+            title: 'cRoute.resetPwdSuccess'
         }
     },
     {
@@ -60,7 +60,7 @@ const routes = [
         name: 'ResetFail',
         component: () => import(/* webpackChunkName: "resetFail" */ '../user/forgot/resetFail.vue'),
         meta: {
-            title: '重置失败'
+            title: 'cRoute.resetPwdFaid'
         }
     },
     {
@@ -68,7 +68,7 @@ const routes = [
         name: 'RegKyc',
         component: () => import(/* webpackChunkName: "regKyc" */ '../user/register/regKyc.vue'),
         meta: {
-            title: '身份认证'
+            title: 'cRoute.regKyc'
         }
     },
     {
@@ -76,7 +76,7 @@ const routes = [
         name: 'Withdraw',
         component: () => import(/* webpackChunkName: "withdraw" */ '../user/withdraw.vue'),
         meta: {
-            title: '取款',
+            title: 'cRoute.withdraw',
             footerMenu: false,
             roles: ['User'],
         }
@@ -86,7 +86,7 @@ const routes = [
         name: 'WithdrawRecord',
         component: () => import(/* webpackChunkName: "withdrawRecord" */ '../user/withdrawRecord.vue'),
         meta: {
-            title: '取款记录',
+            title: 'cRoute.withdrawRecord',
             footerMenu: false,
             roles: ['User'],
         }
@@ -96,7 +96,7 @@ const routes = [
         name: 'AddBank',
         component: () => import(/* webpackChunkName: "addBank" */ '../user/addBank.vue'),
         meta: {
-            title: '添加银行卡',
+            title: 'cRoute.addBank',
             footerMenu: false,
             roles: ['User'],
         }
@@ -106,7 +106,7 @@ const routes = [
         name: 'Desposit',
         component: () => import(/* webpackChunkName: "addBank" */ '../user/desposit.vue'),
         meta: {
-            title: '存款',
+            title: 'cRoute.deposit',
             footerMenu: false,
             roles: ['User'],
         }
@@ -116,7 +116,7 @@ const routes = [
         name: 'DespositRecord',
         component: () => import(/* webpackChunkName: "addBank" */ '../user/despositRecord.vue'),
         meta: {
-            title: '存款记录',
+            title: 'cRoute.depositRecord',
             footerMenu: false,
             roles: ['User'],
         }
@@ -126,7 +126,7 @@ const routes = [
         name: 'Msg',
         component: () => import(/* webpackChunkName: "msg" */ '../user/msg.vue'),
         meta: {
-            title: '消息中心',
+            title: 'cRoute.msg',
             footerMenu: false,
             roles: ['User'],
         }
@@ -136,7 +136,7 @@ const routes = [
         name: 'FundLog',
         component: () => import(/* webpackChunkName: "fundDetail" */ '../user/fundLog.vue'),
         meta: {
-            title: '资金明细',
+            title: 'cRoute.fundLog',
             footerMenu: false,
             roles: ['User']
         }
@@ -146,7 +146,7 @@ const routes = [
         name: 'Fund',
         component: () => import(/* webpackChunkName: "fundDetail" */ '../user/fund.vue'),
         meta: {
-            title: '账户资金',
+            title: 'cRoute.fund',
             footerMenu: false,
             roles: ['User']
         }
@@ -156,7 +156,7 @@ const routes = [
         name: 'Personal',
         component: () => import(/* webpackChunkName: "personal" */ '../user/personal.vue'),
         meta: {
-            title: '个人信息',
+            title: 'cRoute.personal',
             footerMenu: false,
             roles: ['User']
         }
@@ -166,7 +166,7 @@ const routes = [
         name: 'Authentication',
         component: () => import(/* webpackChunkName: "authentication" */ '../user/authentication.vue'),
         meta: {
-            title: '身份验证',
+            title: 'cRoute.authentication',
             footerMenu: false,
             roles: ['User']
         },
@@ -179,7 +179,7 @@ const routes = [
         name: 'AuthForm',
         component: () => import(/* webpackChunkName: "authentication" */ '../user/authForm.vue'),
         meta: {
-            title: '身份验证',
+            title: 'cRoute.authForm',
             footerMenu: false,
             roles: ['User']
         }
@@ -189,7 +189,7 @@ const routes = [
         name: 'BankList',
         component: () => import(/* webpackChunkName: "bankList" */ '../user/bankList.vue'),
         meta: {
-            title: '银行卡列表',
+            title: 'cRoute.bankList',
             footerMenu: false,
             roles: ['User']
         }
@@ -199,7 +199,7 @@ const routes = [
         name: 'Setting',
         component: () => import(/* webpackChunkName: "bankList" */ '../user/setting.vue'),
         meta: {
-            title: '设置',
+            title: 'cRoute.setting',
             footerMenu: false,
             roles: ['User']
         }
@@ -209,7 +209,7 @@ const routes = [
         name: 'SetLoginPwd',
         component: () => import(/* webpackChunkName: "setLoginPwd" */ '../user/setLoginPwd.vue'),
         meta: {
-            title: '设置登录密码',
+            title: 'cRoute.setLoginPwd',
             footerMenu: false,
             roles: ['User']
         }
@@ -219,7 +219,7 @@ const routes = [
         name: 'Page',
         component: () => import(/* webpackChunkName: "page" */ '../user/page.vue'),
         meta: {
-            title: '界面',
+            title: 'cRoute.page',
             footerMenu: false,
             roles: ['User']
         }
@@ -229,7 +229,7 @@ const routes = [
         name: 'BindMobile',
         component: () => import(/* webpackChunkName: "page" */ '../user/bindMobile.vue'),
         meta: {
-            title: '绑定手机',
+            title: 'cRoute.bindMobile',
             footerMenu: false,
         }
     },
@@ -238,7 +238,7 @@ const routes = [
         name: 'BindEmail',
         component: () => import(/* webpackChunkName: "page" */ '../user/bindEmail.vue'),
         meta: {
-            title: '绑定邮箱',
+            title: 'cRoute.bindEmail',
             footerMenu: false,
         }
     },
@@ -247,7 +247,7 @@ const routes = [
         name: 'KycCommitted',
         component: () => import(/* webpackChunkName: "page" */ '../user/kycCommitted.vue'),
         meta: {
-            title: '提交KYC',
+            title: 'cRoute.kycCommitted',
             footerMenu: false,
         }
     },
@@ -256,7 +256,7 @@ const routes = [
         name: 'DespositCb',
         component: () => import(/* webpackChunkName: "page" */ '../user/despositCb.vue'),
         meta: {
-            title: '充值结果',
+            title: 'cRoute.despositCb',
             footerMenu: false,
         }
     },
@@ -265,7 +265,7 @@ const routes = [
         name: 'ChangeEmail',
         component: () => import(/* webpackChunkName: "page" */ '../user/changeBindEmail.vue'),
         meta: {
-            title: '更换邮箱',
+            title: 'cRoute.changeBindEmail',
             footerMenu: false,
         }
     },
@@ -274,7 +274,7 @@ const routes = [
         name: 'ChangeMobile',
         component: () => import(/* webpackChunkName: "page" */ '../user/changeBindMobile.vue'),
         meta: {
-            title: '更换手机',
+            title: 'cRoute.changeBindMobile',
             footerMenu: false,
         }
     },
@@ -283,7 +283,7 @@ const routes = [
         name: 'ChartSetting',
         component: () => import(/* webpackChunkName: "page" */ '../user/chartSetting.vue'),
         meta: {
-            title: '图表设置',
+            title: 'cRoute.chartSetting',
             footerMenu: false,
         }
     },

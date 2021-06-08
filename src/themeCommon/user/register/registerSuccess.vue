@@ -4,26 +4,23 @@
             <i class='icon_chenggong'></i>
         </div>
         <div class='container'>
-            <h2>恭喜！您的账号已经开立成功</h2>
+            <h2>{{ $t('register.openSuccess') }}</h2>
             <p>
-                客户编号：<span class='accountNo'>
+                {{ $t('common.customerNo') + $t('common.colon') }}<span class='accountNo'>
                     {{ accountNo }}
                 </span>
             </p>
         </div>
     </section>
     <p class='tips'>
-        首次登录请使用注册填写的【手机/邮箱+验证码】登录
+        {{ $t('register.tips1') }}
     </p>
     <div class='btnBox'>
         <button class='btn' @click='toExperience'>
-            立即体验
+            {{ $t('register.experienceNow') }}
         </button>
         <button class='highBtn' @click='toDesposit'>
-            去存款
-            <p class='smallRow'>
-                <span>现在存款最高<i>赠1000USD</i></span>
-            </p>
+            {{ $t('register.goDeposit') }}
         </button>
     </div>
 </template>

@@ -2,19 +2,19 @@
     <div class='wrap'>
         <i class='icon_fail'></i>
         <p class='t1'>
-            糟糕！您的新密码设置失败
+            {{ $t('forgot.setPwdFailed') }}
         </p>
         <p class='t2'>
-            请稍后再试，或联系在线客服
+            {{ $t('forgot.tryLater') }}
         </p>
     </div>
     <div class='footer-bottom'>
         <van-button class='confirmBtn' @click='$router.push("/forgot")'>
-            再试试
+            {{ $t('common.tryAgain') }}
         </van-button>
         <span class='line'></span>
         <van-button class='confirmBtn' @click='toService'>
-            在线客服
+            {{ $t('common.serivce') }}
         </van-button>
     </div>
 </template>

@@ -6,15 +6,15 @@
             <van-field
                 v-model='area'
                 input-align='right'
-                label='国家'
-                placeholder='请选择国家'
+                :label='$t("auth.country")'
+                :placeholder='$t("auth.countrySelect")'
                 readonly
                 right-icon='arrow-down'
                 @click='areaShow = true'
             />
             <div class='notice'>
                 <p class='title'>
-                    需要准备的验证资料
+                    {{ $t('auth.info') }}
                 </p>
                 <ul>
                     <li v-for='(item,index) in elementList' :key='index'>
@@ -23,7 +23,7 @@
                 </ul>
             </div>
             <van-button class='confirm-btn' @click='beginAuth'>
-                开始验证
+                {{ $t('auth.startValid') }}
             </van-button>
         </div>
         <div v-else>
@@ -35,7 +35,7 @@
                         v-model='conditionModel[item.elementCode]'
                         clearable
                         :label='item.elementName'
-                        :placeholder='"请输入"+item.elementName'
+                        :placeholder='$t("common.input")+item.elementName'
                         :type='item.elementCode === "phone" ? "number" : "text"'
                     />
                     <!-- </van-cell-group> -->
@@ -49,7 +49,7 @@
                     </div>
                 </div>
                 <van-button class='confirm-btn' @click='onConfirm'>
-                    提交
+                    {{ $t('common.submit') }}
                 </van-button>
             </div>
         </div>
@@ -64,6 +64,7 @@ import { Toast, Dialog } from 'vant'
 import { findAllLevelKyc, kycLevelApply, kycApply } from '@/api/user'
 import { getArrayObj, isEmpty } from '@/utils/util'
 import { upload } from '@/api/base'
+import { useI18n } from 'vue-i18n'
 
 export default {
     props: {
@@ -74,6 +75,7 @@ export default {
     setup (props) {
         const router = useRouter()
         const route = useRoute()
+        const { t } = useI18n({ useScope: 'global' })
         const levelCode = route.query.levelCode
 
         const state = reactive({
@@ -87,13 +89,6 @@ export default {
             conditionVis: true,
             conditionModel: {}
         })
-
-        const status = {
-            0: '认证',
-            1: '审核中',
-            2: '审核通过',
-            3: '审核拒绝'
-        }
 
         const getConditon = () => {
             state.loading = true
@@ -136,7 +131,7 @@ export default {
 
         const beginAuth = () => {
             if (!state.area) {
-                return Toast('请先选择国家')
+                return Toast(t('auth.countrySelect'))
             }
             state.conditionVis = false
         }
@@ -154,7 +149,7 @@ export default {
                 if (res.check()) {
                     document.getElementById(detail.name).src = res.data
                     state.conditionModel[detail.name] = res.data
-                    Toast('上传成功')
+                    Toast(t('auth.uploadSuccess'))
                 }
             }).catch(err => {
                 state.loading = false
@@ -176,7 +171,7 @@ export default {
             }
 
             if (elementList.length < state.elementList.length) {
-                return Toast('请完成所有认证项')
+                return Toast(t('auth.allAuthPlease'))
             }
 
             let params
@@ -244,7 +239,6 @@ export default {
             onConfirm,
             getConditon,
             beginAuth,
-            status,
             afterRead
 
         }

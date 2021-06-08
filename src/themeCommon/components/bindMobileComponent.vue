@@ -4,16 +4,16 @@
         <Loading :show='loading' />
         <form class='form'>
             <div class='field'>
-                <areaInput v-model='mobile' v-model:zone='zoneText' clear :disabled='true' placeholder='请输入手机号' />
+                <areaInput v-model='mobile' v-model:zone='zoneText' clear :disabled='true' :placeholder='$t("common.inputPhone")' />
             </div>
             <div class='field'>
                 <!-- <label class='label'>
                     验证码
                 </label> -->
-                <CheckCode v-model='checkCode' clear label='验证码' @verifyCodeSend='handleVerifyCodeSend' />
+                <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
             </div>
             <van-button block class='confirm-btn' type='primary' @click='handleConfirm'>
-                <span>确定</span>
+                <span>{{ $t('common.sure') }}</span>
             </van-button>
         </form>
     </div>
@@ -30,6 +30,7 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { verifyCodeSend } from '@/api/base'
 import { bindPhone, changePhone, checkUserStatus } from '@/api/user'
+import { useI18n } from 'vue-i18n'
 export default {
     components: {
         areaInput,
@@ -44,6 +45,7 @@ export default {
     setup (props) {
         const store = useStore()
         const router = useRouter()
+        const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             zone: '',
             sendToken: '',
@@ -68,11 +70,11 @@ export default {
         // 发送验证码
         const handleVerifyCodeSend = (callback) => {
             if (isEmpty(state.mobile)) {
-                return Toast('请输入手机号')
+                return Toast(t('common.inputPhone'))
             }
 
             if (!RegExp(mobileReg.value).test(state.mobile)) {
-                return Toast('请输入正确的手机号')
+                return Toast(t('common.inputRealPhone'))
             }
 
             const params = {
@@ -90,10 +92,10 @@ export default {
                     if (Number(res.data.status) === 1) {
                         return Dialog.confirm({
                             theme: 'round-button',
-                            title: '提示',
-                            message: '该手机号已被其他账号绑定，如有疑问请联系在线客服',
-                            confirmButtonText: '联系客服',
-                            cancelButtonText: '关闭'
+                            title: t('common.tip'),
+                            message: t('common.phoneBinded'),
+                            confirmButtonText: t('common.serivce'),
+                            cancelButtonText: t('common.close')
                         }).then(() => {
                             if (onlineServices.value) location.href = onlineServices.value
                         }).catch(() => {
@@ -104,7 +106,7 @@ export default {
                             if (res.check()) {
                                 if (Number(res.code) === 0) {
                                     state.sendToken = res.data.token
-                                    Toast('验证码发送成功，请注意查收!')
+                                    Toast(t('common.verifySended'))
                                     callback && callback()
                                 }
                             }
@@ -118,13 +120,13 @@ export default {
 
         const handleConfirm = () => {
             if (isEmpty(state.mobile)) {
-                return Toast('请输入手机号')
+                return Toast(t('common.inputPhone'))
             }
             if (!RegExp(mobileReg.value).test(state.mobile)) {
-                return Toast('请输入正确的手机号')
+                return Toast(t('common.inputRealPhone'))
             }
             if (isEmpty(state.checkCode)) {
-                return Toast('请输入验证码')
+                return Toast(t('common.inputVerifyCode'))
             }
             state.loading = true
             const params = {
@@ -138,7 +140,7 @@ export default {
                 bindPhone(params).then(res => {
                     state.loading = false
                     if (res.check()) {
-                        Toast('绑定手机成功')
+                        Toast(t('common.phoneBindSuccess'))
                         store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
                             router.push('/setting')
@@ -151,7 +153,7 @@ export default {
                 changePhone(params).then(res => {
                     state.loading = false
                     if (res.check()) {
-                        Toast('更换手机成功')
+                        Toast(t('common.replacePhoneSuccess'))
                         store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
                             router.replace('/setting')
