@@ -36,14 +36,22 @@
         <van-cell size='large' :title="$t('fee')" :value='fee' />
         <van-cell size='large' :title="$t('contract.interest')" :value='interest' />
         <van-cell size='large' :title="$t('contract.zone')" :value="'UTC+' + (0 - new Date().getTimezoneOffset() / 60)" />
-        <van-cell v-if='product.quoteTimeList && product.quoteTimeList.length' size='large' :title="$t('contract.quoteTime')">
+        <van-cell v-if='product.quoteTimeList && product.quoteTimeList.length' class='timeListCell' size='large' :title="$t('contract.quoteTime')">
             <div v-for='(item,index) in quoteTimeList' :key='index' class='item-item'>
-                {{ $t('weekdayMap.'+ item.dayOfWeek) }}: {{ formatDayTime(item.startTime, item.endTime) }}
+                {{ $t('weekdayMap.'+ item[0].dayOfWeek) }}:
+                <template>
+                    <span v-for='el in item' :key='el.timeStr' class='timeItem'>
+                        {{ el.timeStr }}
+                    </span>
+                </template>
             </div>
         </van-cell>
-        <van-cell size='large' :title="$t('contract.tradeTime')">
+        <van-cell v-if='product.tradeTimeList && product.tradeTimeList.length' class='timeListCell' size='large' :title="$t('contract.tradeTime')">
             <div v-for='(item,index) in tradeTimeList' :key='index' class='item-item'>
-                {{ $t('weekdayMap.'+ item.dayOfWeek) }}: {{ formatDayTime(item.startTime, item.endTime) }}
+                {{ $t('weekdayMap.'+ item[0].dayOfWeek) }}:
+                <span v-for='el in item' :key='el.timeStr' class='timeItem'>
+                    {{ el.timeStr }}
+                </span>
             </div>
         </van-cell>
         <van-cell v-if='product.eodTime' size='large' :title="$t('contract.eodTime')" :value='eodTime' />
@@ -60,6 +68,7 @@ import dayjs, { _dayjs } from 'dayjs'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useI18n } from 'vue-i18n'
 import { mul } from '@/utils/calculation'
+import { sortTimeList, timeListFormat } from './contractUtil'
 export default {
     components: {
         top,
@@ -81,28 +90,19 @@ export default {
         // 交易时间
         const tradeTimeList = computed(() => {
             if (!isEmpty(product.value.tradeTimeList)) {
-                return objArraySort(product.value.tradeTimeList, 'dayOfWeek')
+                const newTimeList = sortTimeList(product.value.tradeTimeList, utcOffset)
+                timeListFormat(newTimeList)
+                return newTimeList
             }
         })
         // 行情时间
         const quoteTimeList = computed(() => {
             if (!isEmpty(product.value.quoteTimeList)) {
-                return objArraySort(product.value.quoteTimeList, 'dayOfWeek')
+                const newTimeList = sortTimeList(product.value.quoteTimeList, utcOffset)
+                timeListFormat(newTimeList)
+                return newTimeList
             }
         })
-
-        const formatDayTime = (startTime, endTime) => {
-            if (!isEmpty(startTime) && !isEmpty(endTime)) {
-                const utcStartDay = dayjs().utc().startOf('day')
-                const startTimeStr = utcStartDay.add(startTime, 'minute').format('HH:mm')
-                const endTimeStr = utcStartDay.add(endTime, 'minute').format('HH:mm')
-                if (endTime === Number(1440)) {
-                    return startTimeStr + '-' + '24:00'
-                } else {
-                    return startTimeStr + '-' + endTimeStr
-                }
-            }
-        }
         // 结算时间
         const eodTime = computed(() => {
             if (!isEmpty(product.value.eodTime)) {
@@ -114,6 +114,7 @@ export default {
         const interest = computed(() => {
             return mul(product.value.buyInterest, 100) + '%/' + mul(product.value.sellInterest, 100) + '%(' + t('contract.interestRate') + ')'
         })
+        // 手续费
         const fee = computed(() => {
             return mul(product.value.fee, 100) + '%'
         })
@@ -121,7 +122,6 @@ export default {
         QuoteSocket.send_subscribe([symbolId])
         return {
             product,
-            formatDayTime,
             tradeTimeList,
             quoteTimeList,
             eodTime,
@@ -157,6 +157,18 @@ export default {
                 text-align: center;
             }
         }
+    }
+    .timeItem {
+        &:not(:last-of-type) {
+            padding-right: 5px;
+            &::after {
+                content: ',';
+            }
+        }
+    }
+    .timeListCell :deep(.van-cell__value) {
+        flex: none;
+        width: 70%;
     }
 }
 </style>
