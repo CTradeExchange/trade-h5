@@ -82,7 +82,13 @@
     "tryAgain": "再试试",
     "inputRealVerifyCode": "请输入正确的验证码",
     "colon": "：",
-    "customerNo": "客户编号"
+    "customerNo": "客户编号",
+    "cancel": "取消",
+    "look": "查看",
+    "submitSuccess": "提交成功",
+    "RMB": "人民币",
+    "dollar": "美元",
+    "loading": "加载中..."
   },
   "auth": {
     "info": "需要准备的验证资料",
@@ -125,5 +131,22 @@
     "protocolTip": "请阅读并同意客户隐私保护政策、投资风险披露及免责声明",
     "area": "请选择地区",
     "inputZone": "请输入区号"
+  },
+  "bank": {
+    "inputBankPersonName": "请输入持卡人姓名",
+    "inputBankNo": "请输入银行卡号",
+    "inputRealBankNo": "请输入正确的银行卡号",
+    "inputBankName": "请选择银行名称",
+    "inputBankCurrency": "请选择银行卡币种",
+    "inputOpenProvince": "请选择开户地址",
+    "inputOpenAddress": "请输入开户行地址",
+    "bankNo": "银行卡号",
+    "bankPersonName": "持卡人姓名",
+    "bankName": "银行名称",
+    "openAddress": "开户地址",
+    "inputOpenAddressText": "请输入开户地址",
+    "branchAddress": "支行地址",
+    "inputBranchAddress": "请输入支行地址（选填）",
+    "submitSuccessTips": "预计2-3个工作日完成审核（节假期顺延），如需要其它帮助，请联系客服。"
   }
 }

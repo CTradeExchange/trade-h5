@@ -3,12 +3,12 @@
         <top left-icon='arrow-left' :menu='false' :right-action='false' show-center='true' />
         <div class='filed-wrap'>
             <van-cell-group>
-                <van-field v-model='userName' label='持卡人姓名' placeholder='请输入持卡人姓名' />
-                <van-field v-model='bankNo' label='银行卡号' placeholder='请输入银行卡号' type='number' />
+                <van-field v-model='userName' :label='$t("bank.bankPersonName")' :placeholder='$t("bank.inputBankPersonName")' />
+                <van-field v-model='bankNo' :label='$t("bank.bankNo")' :placeholder='$t("bank.inputBankNo")' type='number' />
                 <van-field
                     v-model='bankName'
-                    label='银行名称'
-                    placeholder='请输入银行名称'
+                    :label='$t("bank.bankName")'
+                    :placeholder='$t("bank.inputBankName")'
                     readonly
                     right-icon='arrow-down'
                     @click='bankShow = true'
@@ -24,27 +24,27 @@
                 <CurrencyAction v-model='currency' v-model:show='currencyShow' class='cellRow' input-align='left' />
                 <van-field
                     v-model='area'
-                    label='开户地址'
-                    placeholder='请输入开户地址'
+                    :label='$t("bank.openAddress")'
+                    :placeholder='$t("bank.inputOpenAddressText")'
                     readonly
                     right-icon='arrow-down'
                     @click='areaShow = true'
                 />
-                <van-field v-model='bankArea' label='支行地址' placeholder='请输入支行地址（选填）' />
+                <van-field v-model='bankArea' :label='$t("bank.branchAddress")' :placeholder='$t("bank.inputBranchAddress")' />
             </van-cell-group>
         </div>
         <van-button block class='confirm-btn' type='primary' @click='handleConfirm'>
-            <span>确定</span>
+            <span>{{ $t('common.sure') }}</span>
         </van-button>
     </div>
 
     <van-action-sheet v-model:show='areaShow'>
-        <van-area :area-list='areaList' columns-num='2' title='开户地址' @cancel='show=false' @confirm='handleAreaConfirm' />
+        <van-area :area-list='areaList' columns-num='2' :title='$t("bank.openAddress")' @cancel='show=false' @confirm='handleAreaConfirm' />
     </van-action-sheet>
     <van-action-sheet
         v-model:show='currencyShow'
         :actions='currencyActions'
-        cancel-text='取消'
+        :cancel-text='$t("common.cancel")'
         close-on-click-action
         @select='onSelectCurrency'
     />
@@ -61,17 +61,17 @@
     <van-dialog
         v-model:show='addSuccessShow'
         class-name='add-success'
-        confirm-button-text='查看'
+        :confirm-button-text='$t("common.look")'
         show-cancel-button='false'
         @cancel='cancel'
         @confirm='toBankList'
     >
         <i class='icon_success'></i>
         <p class='title'>
-            提交成功
+            {{ $t('common.submitSuccess') }}
         </p>
         <p class='content'>
-            预计2-3个工作日完成审核（节假期顺延），如需要其它帮助，请联系客服。
+            {{ $t('bank.submitSuccessTips') }}
         </p>
     </van-dialog>
 
@@ -100,12 +100,13 @@ import { useRouter } from 'vue-router'
 import top from '@/components/top'
 import { onBeforeMount, reactive, toRefs, computed } from 'vue'
 import { areaList } from '@/utils/area'
-import Rule from './addbank_rule'
+import RuleFn from './addbank_rule'
 import { useStore } from 'vuex'
 import Schema from 'async-validator'
 import { Toast, Dialog } from 'vant'
 import { addBank } from '@/api/user'
 import CurrencyAction from '@/components/currencyAction'
+import { useI18n } from 'vue-i18n'
 
 export default {
     components: {
@@ -116,6 +117,7 @@ export default {
     setup (props, { emit, attrs }) {
         const router = useRouter()
         const store = useStore()
+        const { t } = useI18n({ useScope: 'global' })
         const bankDict = computed(() => store.state.bankDict)
         const customInfo = computed(() => store.state._user.customerInfo)
 
@@ -131,7 +133,7 @@ export default {
             checkedBankCode: '',
             currencyShow: false,
             addSuccessShow: false,
-            currencyActions: [{ name: '人民币' }, { name: '美元' }
+            currencyActions: [{ name: t('common.RMB') }, { name: t('common.dollar') }
             ]
         })
 
@@ -177,7 +179,7 @@ export default {
                 bankCode: state.checkedBankCode
             }
 
-            const validator = new Schema(Rule)
+            const validator = new Schema(RuleFn(t))
 
             validator.validate(params, (errors, fields) => {
                 if (errors) {
@@ -189,7 +191,7 @@ export default {
 
         const handleAddBank = (params) => {
             const toast = Toast.loading({
-                message: '加载中...',
+                message: t('common.loading'),
                 forbidClick: true,
             })
             addBank(params).then(res => {

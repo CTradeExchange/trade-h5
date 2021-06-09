@@ -92,12 +92,10 @@ export default {
 .cellItem {
     background: none;
 }
-::v-deep {
-    .van-tag--none {
-        color: #969799;
-    }
-    .van-cell__label:empty {
-        display: none;
-    }
+:deep(.van-tag--none) {
+    color: #969799;
+}
+:deep(.van-cell__label:empty) {
+    display: none;
 }
 </style>
