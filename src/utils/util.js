@@ -209,7 +209,11 @@ export function checkUserKYC ({ res, Dialog, router, store }) {
                 message: '您的资料正在审核中，等耐心等待',
                 theme: 'round-button',
             }).then(() => {
-                store.dispatch('_user/logout')
+                store.dispatch('_user/logout').then(() => {
+                    return router.push('/login')
+                }).then(() => {
+                    location.reload()
+                })
             })
         } else if (Number(res.data.kycAuditStatus === 3)) {
             Dialog.alert({

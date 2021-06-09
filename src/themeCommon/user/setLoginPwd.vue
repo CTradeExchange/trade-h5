@@ -108,6 +108,7 @@ export default {
                     oldPwd: md5(state.oldPwd),
                     newPwd: md5(state.confirmPwd)
                 }).then((res) => {
+                    toast.clear()
                     if (isFirstSet.value) {
                         if (res.check()) {
                             router.push('/resetSuccess')
@@ -116,7 +117,6 @@ export default {
                         }
                     } else {
                         if (res.check()) {
-                            store.dispatch('_user/findCustomerInfo')
                             Dialog.alert({
                                 theme: 'round-button',
                                 title: '提示',
@@ -124,7 +124,11 @@ export default {
                                 confirmButtonText: '去登录'
                             }).then(() => {
                                 // 注销登录
-                                store.dispatch('_user/logout')
+                                store.dispatch('_user/logout').then(() => {
+                                    return router.push('/login')
+                                }).then(() => {
+                                    location.reload()
+                                })
                             })
                         }
                     }

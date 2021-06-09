@@ -96,7 +96,11 @@ export default {
 
         onBeforeRouteLeave((to, from) => {
             if ((Number(kycState.value) === 0 || Number(kycState.value) === 3) && to.path !== '/authForm') {
-                store.dispatch('_user/logout')
+                store.dispatch('_user/logout').then(() => {
+                    return router.push('/login')
+                }).then(() => {
+                    location.reload()
+                })
             }
         })
 

@@ -204,7 +204,11 @@ export default {
                             message: t('common.inReview'),
                             theme: 'round-button',
                         }).then(() => {
-                            store.dispatch('_user/logout')
+                            store.dispatch('_user/logout').then(() => {
+                                return router.push('/login')
+                            }).then(() => {
+                                location.reload()
+                            })
                         })
                     } else if (Number(res.data.kycAuditStatus === 3)) {
                         return Dialog.alert({
