@@ -35,7 +35,7 @@
         <van-cell size='large' :title="$t('contract.feeType')" :value='$t(parseFloat(product.feeFormula)===1?"contract.ratio":"contract.amount")' />
         <van-cell size='large' :title="$t('fee')" :value='fee' />
         <van-cell size='large' :title="$t('contract.interest')" :value='interest' />
-        <van-cell size='large' :title="$t('contract.zone')" :value="'UTC+' + (0 - new Date().getTimezoneOffset() / 60)" />
+        <van-cell size='large' :title="$t('contract.zone')" :value="'GTM +' + (0 - new Date().getTimezoneOffset() / 60)" />
         <van-cell v-if='product.quoteTimeList && product.quoteTimeList.length' class='timeListCell' size='large' :title="$t('contract.quoteTime')">
             <div v-for='(item,index) in quoteTimeList' :key='index' class='item-item'>
                 {{ $t('weekdayMap.'+ item[0].dayOfWeek) }}:
