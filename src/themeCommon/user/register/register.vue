@@ -125,10 +125,14 @@ export default {
 
         pageConfig('Register').then(res => {
             state.pageui = res
-            console.log('Register', res)
         })
         // 获取国家区号
-        store.dispatch('getCountryListByParentCode')
+        store.dispatch('getCountryListByParentCode').then(res => {
+            if (res.check() && res.data.length) {
+                const firstItem = res.data[0]
+                state.zone = firstItem.name + ` (${firstItem.countryCode})`
+            }
+        })
         const countryList = computed(() => store.state.countryList)
         const style = computed(() => store.state.style)
         // 手机正则表达式
