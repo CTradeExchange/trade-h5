@@ -17,7 +17,6 @@
 <script>
 import Top from '@m/layout/top'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
-// import { getCurrentInstance, } from 'vue'
 import authCondition from '@/themeCommon/components/authConditon'
 import { useStore } from 'vuex'
 export default {
@@ -26,7 +25,6 @@ export default {
         Top
     },
     setup (props) {
-        // const instance = getCurrentInstance()
         const store = useStore()
         const router = useRouter()
         onBeforeRouteLeave((to, from) => {

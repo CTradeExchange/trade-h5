@@ -2,68 +2,60 @@
     <Loading :show='loading' />
     <div class='page-wrap'>
         <slot name='notice'></slot>
-        <div v-if='conditionVis' class='auth-condition'>
-            <van-field
-                v-model='area'
-                input-align='right'
-                :label='$t("auth.country")'
-                :placeholder='$t("auth.countrySelect")'
-                readonly
-                right-icon='arrow-down'
-                @click='areaShow = true'
-            />
-            <div class='notice'>
-                <p class='title'>
-                    {{ $t('auth.info') }}
-                </p>
-                <ul>
-                    <li v-for='(item,index) in elementList' :key='index'>
-                        {{ item.elementName }}
-                    </li>
-                </ul>
+        <div class='conditon-wrap'>
+            <div v-for='(item,index) in elementList' :key='index' class='c-item'>
+                <van-field
+                    v-if="item.showType === 'input'"
+                    v-model='conditionModel[item.elementCode]'
+                    clearable
+                    :label='item.elementName'
+                    :placeholder='$t("common.input")+item.elementName'
+                    :type='item.elementCode === "phone" ? "number" : "text"'
+                />
+
+                <div v-if="item.showType === 'image'">
+                    <van-uploader :after-read='afterRead' :name='item.elementCode' result-type='file'>
+                        <img :id='item.elementCode' alt='' class='upload-img' :src='require("../../assets/auth/" + item.elementCode + ".png")' srcset='' />
+                        <p class='upload-text'>
+                            {{ item.elementName }}
+                        </p>
+                    </van-uploader>
+                </div>
+                <div v-if="item.showType === 'inputGroup'">
+                    <van-field
+                        v-model='typeValue'
+                        clickable
+                        :label='$t("register.certificateType")'
+                        :placeholder='$t("register.chooseCertificateType")'
+                        readonly
+                        @click='showPicker = true'
+                    />
+                    <van-field v-model='conditionModel[typeCode]' :label='$t("register.certificateNo")' :placeholder="$t('register.pleaseEnter')+ typeValue" />
+                </div>
             </div>
-            <van-button class='confirm-btn' @click='beginAuth'>
-                {{ $t('auth.startValid') }}
+            <van-button class='confirm-btn' @click='onConfirm'>
+                {{ $t('common.submit') }}
             </van-button>
         </div>
-        <div v-else>
-            <div class='conditon-wrap'>
-                <div v-for='(item,index) in elementList' :key='index' class='c-item'>
-                    <!-- <van-cell-group v-if="item.showType === 'input'"> -->
-                    <van-field
-                        v-if="item.showType === 'input'"
-                        v-model='conditionModel[item.elementCode]'
-                        clearable
-                        :label='item.elementName'
-                        :placeholder='$t("common.input")+item.elementName'
-                        :type='item.elementCode === "phone" ? "number" : "text"'
-                    />
-                    <!-- </van-cell-group> -->
-                    <div v-if="item.showType === 'image'">
-                        <van-uploader :after-read='afterRead' :name='item.elementCode' result-type='file'>
-                            <img :id='item.elementCode' alt='' class='upload-img' :src='require("../../assets/auth/" + item.elementCode + ".png")' srcset='' />
-                            <p class='upload-text'>
-                                {{ item.elementName }}
-                            </p>
-                        </van-uploader>
-                    </div>
-                </div>
-                <van-button class='confirm-btn' @click='onConfirm'>
-                    {{ $t('common.submit') }}
-                </van-button>
-            </div>
-        </div>
     </div>
-    <van-action-sheet v-model:show='areaShow' :actions='countryActions' @select='onSelect' />
+
+    <van-popup v-model:show='showPicker' position='bottom' round>
+        <van-picker
+            :columns='columns'
+            :columns-field-names='columnsFields'
+            @cancel='showPicker = false'
+            @confirm='handleConfirm'
+        />
+    </van-popup>
 </template>
 
 <script>
 import { useRouter, useRoute } from 'vue-router'
-import { toRefs, reactive, ref, onBeforeMount, onBeforeUnmount } from 'vue'
-import { Toast, Dialog } from 'vant'
+import { toRefs, reactive, onBeforeMount, onBeforeUnmount } from 'vue'
+import { Toast } from 'vant'
 import { findAllLevelKyc, kycLevelApply, kycApply } from '@/api/user'
 import { getArrayObj, isEmpty } from '@/utils/util'
-import { upload } from '@/api/base'
+import { upload, getListByParentCode } from '@/api/base'
 import { useI18n } from 'vue-i18n'
 
 export default {
@@ -79,16 +71,22 @@ export default {
         const levelCode = route.query.levelCode
 
         const state = reactive({
-            areaShow: false,
             area: '',
             pathCode: '',
             loading: false,
             list: [],
             elementList: [],
-            countryActions: [],
             conditionVis: true,
-            conditionModel: {}
+            conditionModel: {},
+            typeValue: '',
+            showPicker: false,
+            value1: '',
+            columns: [],
+            typeCode: '',
+            extendsMap: {} // 字段和正则对应
+
         })
+        const columnsFields = { text: 'name' }
 
         const getConditon = () => {
             state.loading = true
@@ -97,43 +95,53 @@ export default {
                 levelCode: levelCode
             }).then(res => {
                 state.loading = false
-                if (res.data.length > 0) {
-                    res.data.forEach(item => {
-                        state.countryActions.push({
-                            name: item.pathName,
-                            code: item.pathCode
-                        })
-                    })
-                }
+
                 state.list = res.data
                 // 只有一个路径的时候默认选中
                 if (Number(res.data.length === 1)) {
                     state.area = res.data[0].pathName
                     state.pathCode = res.data[0].pathCode
                     state.elementList = getArrayObj(state.list, 'pathCode', state.pathCode).elementList
+
                     state.areaShow = false
+                    getInputGroupList()
                 }
             }).catch(err => {
                 state.loading = false
             })
         }
 
-        const onSelect = (item) => {
-            try {
-                state.area = item.name
-                state.pathCode = item.code
-                state.elementList = getArrayObj(state.list, 'pathCode', item.code).elementList
-                state.areaShow = false
-            } catch (error) {
-                console.log(error)
+        // 有inputGroup证件类型的时候 请求类型列表
+        const getInputGroupList = () => {
+            const typeObj = getArrayObj(state.elementList, 'showType', 'inputGroup')
+            if (!isEmpty(typeObj)) {
+                getInputGroupData()
             }
+
+            state.elementList.forEach(item => {
+                state.extendsMap[item.elementCode] = {
+                    name: item.elementName,
+                    extend: item.extend
+                }
+            })
         }
 
-        const beginAuth = () => {
-            if (!state.area) {
-                return Toast(t('auth.countrySelect'))
-            }
-            state.conditionVis = false
+        const getInputGroupData = () => {
+            getListByParentCode({ parentCode: 'id_card_type' }).then(res => {
+                if (res.check() && res.data.length > 0) {
+                    state.columns = res.data
+                    if (res.data.length > 0) {
+                        res.data.forEach(item => {
+                            state.extendsMap[item.code] = {
+                                name: item.name,
+                                extend: item.extend
+                            }
+                        })
+                    }
+                }
+            }).catch(res => {
+
+            })
         }
 
         // 上传图片
@@ -158,11 +166,18 @@ export default {
         }
 
         const onConfirm = () => {
-            const elementList = []
+            const tempElementList = []
             if (!isEmpty(state.conditionModel)) {
                 for (const key in state.conditionModel) {
                     if (state.conditionModel.hasOwnProperty(key)) {
-                        elementList.push({
+                        if (!isEmpty(state.extendsMap[key].extend)) {
+                            const valueReg = new RegExp(state.extendsMap[key].extend)
+                            if (!valueReg.test(state.conditionModel[key])) {
+                                return Toast(`${state.extendsMap[key].name}` + t('register.incorrectlyFormed'))
+                            }
+                        }
+
+                        tempElementList.push({
                             elementCode: key,
                             elementValue: state.conditionModel[key]
                         })
@@ -170,7 +185,7 @@ export default {
                 }
             }
 
-            if (elementList.length < state.elementList.length) {
+            if (tempElementList.length < state.elementList.length) {
                 return Toast(t('auth.allAuthPlease'))
             }
 
@@ -178,9 +193,8 @@ export default {
             /* 具体业务的kyc认证 */
             if (!isEmpty(props.businessCode)) {
                 params = {
-                    pathCode: state.pathCode,
                     businessCode: props.businessCode,
-                    elementList: elementList,
+                    elementList: tempElementList,
                     levelCode
                 }
                 state.loading = true
@@ -196,9 +210,8 @@ export default {
                 })
             } else {
                 params = {
-                    pathCode: state.pathCode,
                     levelCode,
-                    elementList: elementList
+                    elementList: tempElementList
                 }
                 state.loading = true
                 kycLevelApply(params).then(res => {
@@ -213,34 +226,34 @@ export default {
             }
         }
 
+        const handleConfirm = (value) => {
+            state.typeValue = value.name
+            state.typeCode = value.code
+            state.showPicker = false
+        }
+
         onBeforeMount(() => {
             // 注册进来的kyc
-
             const kycList = sessionStorage.getItem('kycList')
             if (!isEmpty(kycList)) {
-                state.list = JSON.parse(kycList)
-                state.list.forEach(item => {
-                    state.countryActions.push({
-                        name: item.pathName,
-                        code: item.pathCode
-                    })
-                })
+                state.elementList = JSON.parse(kycList)[0].elementList
+                getInputGroupList()
             } else {
                 getConditon()
             }
         })
+
         onBeforeUnmount(() => {
             sessionStorage.removeItem('kycList')
         })
 
         return {
             ...toRefs(state),
-            onSelect,
             onConfirm,
             getConditon,
-            beginAuth,
-            afterRead
-
+            afterRead,
+            handleConfirm,
+            columnsFields
         }
     }
 }
@@ -283,6 +296,9 @@ export default {
             .van-uploader {
                 margin-top: rem(50px);
                 margin-bottom: rem(50px);
+            }
+            &:last-of-type {
+                //border-bottom: none;
             }
         }
     }
