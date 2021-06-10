@@ -18,6 +18,7 @@
     "fund": "账户资金",
     "personal": "个人信息",
     "authentication": "身份验证",
+    "authForm": "身份验证",
     "bankList": "银行卡列表",
     "setting": "设置",
     "setLoginPwd": "设置登录密码",

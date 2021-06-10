@@ -13,7 +13,7 @@
                     </span>
                 </p>
                 <p>
-                    <span>{{ openPrice }}</span>
+                    <span>{{ data.openPrice }}</span>
                     <span> → </span>
                     <span v-if='product'>
                         {{ Number(data.direction) === 1 ? product.sell_price : product.buy_price }}
@@ -34,7 +34,7 @@
                         S/L
                     </span>
                     <span class='value'>
-                        {{ data.stopLoss ? computePrice(data.stopLoss, data.closeSymbolDigits) : '--' }}
+                        {{ parseFloat(data.stopLossDecimal) ? data.stopLossDecimal : '--' }}
                     </span>
                 </li>
                 <li class='flexWrap'>
@@ -50,7 +50,7 @@
                         T/P
                     </span>
                     <span class='value'>
-                        {{ data.takeProfit ? computePrice(data.takeProfit, data.closeSymbolDigits) : '--' }}
+                        {{ parseFloat(data.takeProfitDecimal) ? data.takeProfitDecimal : '--' }}
                     </span>
                 </li>
                 <li class='flexWrap'>
@@ -77,7 +77,6 @@ export default {
         const store = useStore()
         const onceState = {
             executePrice: priceFormat(data.executePrice, data.openSymbolDigits),
-            openPrice: priceFormat(data.openPrice, data.openSymbolDigits),
             openTime: dayjs(data.openTime).format('YYYY.MM.DD HH:mm:ss'),
         }
         const state = reactive({

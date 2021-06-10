@@ -1,65 +1,33 @@
+import BigNumber from 'bignumber.js'
+
 /** 四舍五入转化为指定小数位数，不足补0
  * @num num表示需要四舍五入的小数
  * @pNum s表示需要保留几位小数
  */
 export function toFixed (num, s = 2) {
-    const times = Math.pow(10, s)
-    let des = 0
-    if (num > 0) {
-        des = num * times + 0.5
-    } else {
-        des = num * times - 0.5
-    }
-    des = parseInt(des, 10) / times
-    return Number(des).toFixed(s)
+    return BigNumber(num).toFixed(s)
 }
 
 /* 获取数字小数位长度 */
 export function getDecimalNum (num) {
-    try {
-        const arr = num.toString().split('.')
-        return arr.length > 1 ? arr[1].length : 0
-    } catch (e) {
-        return 0
-    }
+    return BigNumber(num).dp()
 }
 
 /* 加法 */
-export function plus (num1=0, num2=0) {
-    const r1 = getDecimalNum(num1)
-    const r2 = getDecimalNum(num2)
-    const m = Math.pow(10, Math.max(r1, r2))
-    const n = r1 >= r2 ? r1 : r2
-    return (Math.round(num1 * m + num2 * m) / m).toFixed(n)*1
+export function plus (num1 = 0, num2 = 0) {
+    return BigNumber(num1).plus(num2)
 }
 
 /* 减法 */
-export function minus (num1=0, num2=0) {
-    const r1 = getDecimalNum(num1)
-    const r2 = getDecimalNum(num2)
-    const m = Math.pow(10, Math.max(r1, r2))
-    const n = r1 >= r2 ? r1 : r2
-    return (Math.round(num1 * m - num2 * m) / m).toFixed(n)*1
+export function minus (num1 = 0, num2 = 0) {
+    return BigNumber(num1).minus(num2)
 }
 
 /* 除法 */
-export function divide (num1=0, num2=1) {
-    const r1 = getDecimalNum(num1)
-    const r2 = getDecimalNum(num2)
-    const maxDigit = Math.max(r1, r2)
-    const m = Math.pow(10, maxDigit)
-    return (num1 * m).toFixed(0) / (num2 * m).toFixed(maxDigit)*1
+export function divide (num1 = 0, num2 = 1) {
+    return BigNumber(num1).div(num2)
 }
 /* 乘法 */
-export function mul (a=0, b=0) {
-    let c = 0 // a的小数部分长度
-    let d = 0 // b的小数部分长度
-    try {
-        c = a.toString().split('.')[1].length
-    } catch (f) { }
-    try {
-        d = b.toString().split('.')[1].length
-    } catch (f) { }
-
-    return (Number(a.toString().replace('.', '')) * Number(b.toString().replace('.', ''))) / Math.pow(10, (c + d))
+export function mul (num1 = 0, num2 = 0) {
+    return BigNumber(num1).multipliedBy(num2)
 }
