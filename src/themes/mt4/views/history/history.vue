@@ -70,7 +70,7 @@ export default {
         const capitalListData = computed(() => {
             return [
                 { title: t('history.lirun') + t('colon'), value: orderList?.value?.totalPnl },
-                { title: t('deposit') + t('colon'), value: '1000000.00' },
+                { title: t('depositText') + t('colon'), value: '1000000.00' },
                 { title: t('balance') + t('colon'), value: '1000000.00' }
             ]
         })

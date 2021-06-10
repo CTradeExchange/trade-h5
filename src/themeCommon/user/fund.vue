@@ -4,7 +4,7 @@
         <div class='header'>
             <div class='header-info'>
                 <p class='t1'>
-                    保证金水平
+                    {{ $t('fund.marginLevel') }}
                 </p>
                 <p class='t2' :class='computMargin'>
                     {{ accountInfo.marginRadio ?accountInfo.marginRadio+'%' : '--' }}
@@ -18,19 +18,19 @@
         <div class='annulus-wrap'>
             <p class='a-title'>
                 <span class='t1'>
-                    资金成分
+                    {{ $t('fund.capitialComponents') }}
                 </span>
                 <span class='t2'>
-                    (单位：{{ mainAccount.currency }})
+                    ({{ $t('common.unit') + $t('common.colon') + mainAccount.currency }})
                 </span>
             </p>
             <div id='annulus' class='annulus'>
-                加载中...
+                {{ $t('common.loading') }}
             </div>
             <div class='infos'>
                 <div class='item'>
                     <p class='label'>
-                        盈亏
+                        {{ $t('common.yk') }}
                     </p>
                     <p class='val profit' :class="computePrice(accountInfo.profitLoss) > 0 ? 'riseColor' : 'fallColor'">
                         {{ computePrice(accountInfo.profitLoss) }}
@@ -38,7 +38,7 @@
                 </div>
                 <div class='item'>
                     <p class='label'>
-                        余额
+                        {{ $t('common.balance') }}
                     </p>
                     <p class='val balance'>
                         {{ computePrice(accountInfo.balance) }}
@@ -46,7 +46,7 @@
                 </div>
                 <div class='item'>
                     <p class='label'>
-                        可取
+                        {{ $t('fund.acceptAmount') }}
                     </p>
                     <p class='val'>
                         {{ computePrice(mainAccount.withdrawAmount,customInfo.digits ) }}
@@ -54,16 +54,15 @@
                 </div>
                 <div class='item'>
                     <p class='label'>
-                        可用保证金
+                        {{ $t('fund.maginable') }}
                     </p>
                     <p class='val'>
                         {{ computePrice(accountInfo.availableMargin) }}
                     </p>
                 </div>
-                {{}}
                 <div class='item'>
                     <p class='label'>
-                        占用保证金
+                        {{ $t('fund.accupyMargin') }}
                     </p>
                     <p class='val'>
                         {{ computePrice(accountInfo.occupyMargin) }}
@@ -72,7 +71,7 @@
             </div>
         </div>
         <van-button class='desposit-btn' type='primary' @click='toDesposit'>
-            <span>存款</span>
+            <span>{{ $t('common.deposit') }}</span>
         </van-button>
     </div>
 </template>
@@ -84,11 +83,13 @@ import { useStore } from 'vuex'
 import { getArrayObj, priceFormat, isEmpty } from '@/utils/util'
 import { useRouter } from 'vue-router'
 import { divide } from '@/utils/calculation'
+import { useI18n } from 'vue-i18n'
 
 export default {
     setup (props) {
         const router = useRouter()
         const store = useStore()
+        const { t } = useI18n({ useScope: 'global' })
         const internalInstance = getCurrentInstance()
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
@@ -148,11 +149,11 @@ export default {
                     height: 220,
                     r: 80,
                     arcWidth: 15,
-                    label: '净值',
+                    label: t('common.jz'),
                     text: netWorth.value || '--',
                     data: [
-                        { color: '#3894FF', percent: netWorthPercent || 0, text: '第1项' },
-                        { color: '#51C31C', percent: earnestPercent || 0, text: '第2项' },
+                        { color: '#3894FF', percent: netWorthPercent || 0, text: t('common.nthItem', 1) },
+                        { color: '#51C31C', percent: earnestPercent || 0, text: t('common.nthItem', 2) },
                     ]
                 })
             }

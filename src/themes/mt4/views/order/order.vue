@@ -14,7 +14,7 @@
         </div>
         <p v-if='positionId' class='header-info'>
             <span v-if='isClosePosition'>
-                {{ $t('trade.closeOrder')+t('colon') }}
+                {{ $t('trade.closeOrder')+$t('colon') }}
             </span>
             <span v-if='isModifyPosition'>
                 {{ $t('trade.modifyOrder') + $t('colon') }}

@@ -4,7 +4,7 @@
         <Loading :show='loading' />
         <div class='list'>
             <p v-if='bankList.length === 0' class='no-data'>
-                暂无银行卡
+                {{ $t('bank.noBanks') }}
             </p>
             <div v-for='(item,index) in bankList' :key='index' class='bank-item' :class="'BG_'+ item.bankCode">
                 <div class='bi-head'>
@@ -25,7 +25,7 @@
             <div class='add-wrap' @click='toAdd'>
                 <van-icon name='plus' />
                 <span class='btn-text'>
-                    新增银行卡
+                    {{ $t('bank.addBank') }}
                 </span>
                 <van-icon name='arrow' />
             </div>

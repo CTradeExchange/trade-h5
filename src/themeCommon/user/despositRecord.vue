@@ -8,7 +8,7 @@
         <div class='record-list'>
             <van-pull-refresh v-model='loading' @refresh='onRefresh'>
                 <div v-if='list.length === 0'>
-                    <van-empty description='暂无数据' image='search' />
+                    <van-empty :description='$t("common.noData")' image='search' />
                 </div>
                 <van-list
                     v-model:loading='loading'
@@ -39,7 +39,7 @@
                             <div class='withdraw-desc'>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        存款金额
+                                        {{ $t('deposit.amount') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.intendAmount }}
@@ -47,7 +47,7 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        币种
+                                        {{ $t('common.currency') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.depositCurrency }}
@@ -55,7 +55,7 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        状态
+                                        {{ $t('common.status') }}
                                     </span>
                                     <span class='right-val state'>
                                         {{ handleState(item.checkStatus, item.depositStatus) }}
@@ -65,7 +65,7 @@
 
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        手续费
+                                        {{ $t('common.fee') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.depositFee || '--' }}
@@ -73,7 +73,7 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        实际入账
+                                        {{ $t('common.enterAccount') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.finalAmount || '--' }}
@@ -81,7 +81,7 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        提案编号
+                                        {{ $t('deposit.proposalNo') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.proposalNo }}
@@ -89,7 +89,7 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        提交时间
+                                        {{ $t('deposit.submitTime') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ formatTime(item.createTime) }}
@@ -97,7 +97,7 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        更新时间
+                                        {{ $t('common.updateTime') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ formatTime(item.updateTime) || '--' }}
@@ -105,7 +105,7 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        备注
+                                        {{ $t('common.remark') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.remark || '--' }}
@@ -129,6 +129,7 @@ import { queryDepositPageList } from '@/api/user'
 import dayjs from 'dayjs'
 import { isEmpty } from '@/utils/util'
 import { Toast } from 'vant'
+import { useI18n } from 'vue-i18n'
 export default {
     components: {
         Top,
@@ -137,31 +138,32 @@ export default {
     setup (props) {
         const router = useRouter()
         const store = useStore()
+        const { t } = useI18n({ useScope: 'global' })
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
 
         // 提案状态,待审批:1、审批成功:2、审批失败:3
-        const checkStatus = {
-            1: '待审批',
-            2: '审批成功',
-            3: '已取消'
-        }
+        // const checkStatus = {
+        //     1: '待审批',
+        //     2: '审批成功',
+        //     3: '已取消'
+        // }
 
         // 存款状态,待存款:1、存款成功:2、存款失败:3
-        const depositStatus = {
-            1: '待支付',
-            2: '存款成功',
-            3: '存款失败'
-        }
+        // const depositStatus = {
+        //     1: '待支付',
+        //     2: '存款成功',
+        //     3: '存款失败'
+        // }
 
         const handleState = (checkStatus, depositStatus) => {
             // 存款成功 待支付 已取消
             if (Number(depositStatus) === 2) {
-                return '存款成功'
+                return t('deposit.depositSuccess')
             } else if (Number(checkStatus) === 3) {
-                return '已取消'
+                return t('common.canceled')
             } else {
-                return '待支付'
+                return t('deposit.tobePay')
             }
         }
 
@@ -171,7 +173,7 @@ export default {
             size: 20,
             current: 1,
             list: [],
-            finishedText: '没有更多了',
+            finishedText: t('common.noMore'),
             finished: false,
             pageLoading: false
         })

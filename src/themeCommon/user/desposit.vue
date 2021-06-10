@@ -11,7 +11,7 @@
         <Loading :show='loading' />
         <div class='wrap'>
             <p class='header-text'>
-                请选择充值金额
+                {{ $t('deposit.selectAmount') }}
             </p>
             <div class='amount-list'>
                 <div v-for='(item,index) in amountList' :key='index' class='amount-item' :class='{ active: currIndex === index }' @click='checkAmount(index,item)'>
@@ -23,18 +23,18 @@
                     </p> -->
                 </div>
                 <div class='amount-item' :class='{ active: currIndex === 99 }' @click='openOtherMoney'>
-                    其它金额
+                    {{ $t('deposit.otherAmount') }}
                 </div>
             </div>
             <div v-show='otherAmountVis' class='other-money'>
-                <input v-model='amount' class='input-amount' placeholder='请输入金额' type='number' />
+                <input v-model='amount' class='input-amount' :placeholder='$t("deposit.inputAmount")' type='number' />
                 <span class='label-amount'>
                     {{ checkedType.accountCurrency }}
                 </span>
             </div>
             <div class='pay-wrap'>
                 <p class='bw-t'>
-                    请选择支付方式
+                    {{ $t('deposit.selectPayMethods') }}
                 </p>
 
                 <div v-if='checkedType' class='pay-item'>
@@ -46,12 +46,12 @@
                         <van-icon name='arrow-down' />
                     </div>
                     <div v-else class='pay-type no-data'>
-                        暂无可用的支付通道
+                        {{ $t('deposit.noPayPassway') }}
                     </div>
                     <div class='notice'>
                         <div class='left-val'>
                             <span class='label'>
-                                存款时间 :
+                                {{ $t('deposit.depositTime') + $t('common.colon') }}
                             </span>
                             <div class='left-time'>
                                 <p v-for='(item,index) in resultTimeMap[checkedType.id]' :key='index'>
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                         <span class='right-val'>
-                            金额限制 : {{ checkedType.singleLowAmount }}-{{ checkedType.singleHighAmount }} {{ checkedType.accountCurrency }}
+                            {{ $t('deposit.amountLimit') + $t('common.colon') }}  {{ checkedType.singleLowAmount }}-{{ checkedType.singleHighAmount }} {{ checkedType.accountCurrency }}
                         </span>
                     </div>
                 </div>
@@ -68,26 +68,26 @@
 
             <div class='pay-info'>
                 <div class='pi-item'>
-                    预计支付 {{ computeExpectedpay || '--' }} {{ checkedType.paymentCurrency || checkedType.accountCurrency }}
+                    {{ $t('deposit.expectPay') }} {{ computeExpectedpay || '--' }} {{ checkedType.paymentCurrency || checkedType.accountCurrency }}
                 </div>
                 <div class='pi-item'>
-                    预计到账 {{ amount && checkedType ? parseFloat(amount) - parseFloat(checkedType.fee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
+                    {{ $t('deposit.expectInBank') }} {{ amount && checkedType ? parseFloat(amount) - parseFloat(checkedType.fee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
                 </div>
                 <div class='line'></div>
                 <!-- <div class='pi-item'>
                     赠送金额 {{ presentAmount || '--' }} {{ checkedType.accountCurrency }}
                 </div> -->
                 <div class='pi-item'>
-                    手续费 {{ computeFee || '--' }} {{ checkedType.accountCurrency }}
+                    {{ $t('common.fee') }} {{ computeFee || '--' }} {{ checkedType.accountCurrency }}
                 </div>
             </div>
         </div>
     </div>
 
     <van-button block class='next-btn' :disabled='btnDisabled' type='primary' @click='next'>
-        <span>下一步</span>
+        <span>{{ $t('common.nextStep') }}</span>
     </van-button>
-    <van-action-sheet v-model:show='typeShow' :round='false' title='选择支付方式'>
+    <van-action-sheet v-model:show='typeShow' :round='false' :title='$t("deposit.selectPayMethods")'>
         <div class='pay-list'>
             <div v-for='(item,index) in payTypesSortEnable' :key='index' class='pay-type' @click='choosePayType(item)'>
                 <img alt='' :src='require("../../assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
@@ -108,17 +108,17 @@
 
     <van-dialog
         v-model:show='despositVis'
-        cancel-button-text='否，关闭'
+        :cancel-button-text='$t("deposit.denyText")'
         class-name='desposit-dialog'
-        confirm-button-text='是的，已支付'
+        :confirm-button-text='$t("deposit.agreeText")'
         :show-cancel-button='true'
         theme='round-button'
         @cancel='onCancel'
         @confirm='onConfirm'
     >
-        <h4>支付确认</h4>
+        <h4>{{ $t('deposit.payConfirm') }}</h4>
         <p class='title'>
-            您是否已完成该笔充值支付?
+            {{ $t('deposit.payConfirmTips') }}
         </p>
     </van-dialog>
 </template>
@@ -133,6 +133,7 @@ import { Toast, Dialog } from 'vant'
 import { isEmpty } from '@/utils/util'
 import dayjs from 'dayjs'
 import { mul } from '@/utils/calculation'
+import { useI18n } from 'vue-i18n'
 
 export default {
     components: {
@@ -142,9 +143,10 @@ export default {
         const route = useRoute()
         const router = useRouter()
         const store = useStore()
+        const { t } = useI18n({ useScope: 'global' })
 
         const rightAction = {
-            title: '存款记录'
+            title: t('deposit.depositRecord')
         }
         const amountList = [
             {
@@ -363,13 +365,13 @@ export default {
         // 创建存款提案
         const next = () => {
             if (!state.amount) {
-                return Toast('请输入存款金额')
+                return Toast(t('deposit.selectAmount'))
             }
             if (Number(state.amount) < Number(state.checkedType.singleLowAmount)) {
-                return Toast(`存款金额不能小于${state.checkedType.singleLowAmount}`)
+                return Toast(t('deposit.amountMinTips') + `${state.checkedType.singleLowAmount}`)
             }
             if (Number(state.amount > Number(state.checkedType.singleHighAmount))) {
-                return Toast(`存款金额不能大于${state.checkedType.singleHighAmount}`)
+                return Toast(t('deposit.amountMaxTips') + `${state.checkedType.singleHighAmount}`)
             }
 
             const params = {
@@ -429,9 +431,9 @@ export default {
                     if (Number(res.data) !== 2) {
                         return Dialog.alert({
                             theme: 'round-button',
-                            title: '提示',
-                            confirmButtonText: Number(res.data) === 1 ? '去查看' : '去认证',
-                            message: Number(res.data) === 2 ? 'KYC审核中，请耐心等待' : '当前操作需要KYC认证',
+                            title: t('common.tip'),
+                            confirmButtonText: Number(res.data) === 1 ? t('common.goLook') : t('login.goAuthenticate'),
+                            message: Number(res.data) === 2 ? t('deposit.KYCReviewing') : t('deposit.needKYC'),
                         }).then(() => {
                             router.replace({
                                 name: 'Authentication',
@@ -454,11 +456,11 @@ export default {
             if (Number(customInfo.value.deposit) === 0) {
                 state.btnDisabled = true
                 return Dialog.confirm({
-                    title: '提示',
+                    title: t('common.tip'),
                     theme: 'round-button',
-                    message: '账户暂不能存款，如有疑问请联系在线客服',
-                    confirmButtonText: '联系客服',
-                    cancelButtonText: '关闭'
+                    message: t('deposit.serviceTips1'),
+                    confirmButtonText: t('common.serivce'),
+                    cancelButtonText: t('common.close')
                 }).then(() => {
                     if (onlineServices.value) { location.href = onlineServices.value }
                 }).catch(() => {

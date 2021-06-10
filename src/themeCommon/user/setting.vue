@@ -1,18 +1,18 @@
 <template>
     <LayoutTop :back='true' :menu='false' title='' />
     <div class='page-wrap'>
-        <van-cell title='启用新闻'>
+        <van-cell :title='$t("setting.enableNews")'>
             <template #right-icon>
                 <van-switch v-model='checked' active-color='#54C41C' size='24px' @change='changeNewsState' />
             </template>
         </van-cell>
-        <van-cell is-link :title="Number(customInfo.loginPassStatus) === 1 ? '设置登录密码': '修改登录密码'" to='/setLoginPwd' />
-        <van-cell v-if='!customInfo.phone' is-link title='绑定手机' to='/bindMobile' />
-        <van-cell v-if='!customInfo.email' is-link title='绑定邮箱' to='/bindEmail' />
-        <van-cell v-if='customInfo.email' is-link title='更换邮箱' to='/changeBindEmail' />
-        <van-cell v-if='customInfo.phone' is-link title='更换手机' to='/changeBindMobile' />
+        <van-cell is-link :title='$t(Number(customInfo.loginPassStatus) === 1 ?"forgot.setPwd" : "login.modifyLoginPwd")' to='/setLoginPwd' />
+        <van-cell v-if='!customInfo.phone' is-link :title='$t("setting.bindPhone")' to='/bindMobile' />
+        <van-cell v-if='!customInfo.email' is-link :title='$t("setting.bindEmail")' to='/bindEmail' />
+        <van-cell v-if='customInfo.email' is-link :title='$t("setting.replaceEmail")' to='/changeBindEmail' />
+        <van-cell v-if='customInfo.phone' is-link :title='$t("setting.replacePhone")' to='/changeBindMobile' />
         <van-button class='logout-btn' :loading='loading' type='primary' @click='handleLogout'>
-            <span>退出账号</span>
+            <span>{{ $t("setting.logout") }}</span>
         </van-button>
     </div>
 </template>
@@ -23,9 +23,11 @@ import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { isEmpty, removeLoginParams, localSet, localGet } from '@/utils/util'
 import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 export default {
     setup (props) {
         const instance = getCurrentInstance()
+        const { t } = useI18n({ useScope: 'global' })
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
 
@@ -49,8 +51,8 @@ export default {
         const handleLogout = () => {
             Dialog.confirm({
                 theme: 'round-button',
-                title: '提示',
-                message: '确定退出登录吗',
+                title: t('common.tip'),
+                message: t('setting.logoutConfirm'),
             }).then(() => {
                 state.loading = true
                 // 退出登录

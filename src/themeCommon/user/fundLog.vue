@@ -4,10 +4,10 @@
     <div class='page-wrap'>
         <div class='oper-area'>
             <van-dropdown-menu>
-                <van-dropdown-item ref='proDownItem' :title='proTitle || "全部项目"'>
+                <van-dropdown-item ref='proDownItem' :title='proTitle || $t("fund.allItem")'>
                     <div class='condition'>
                         <p class='title'>
-                            项目
+                            {{ $t('common.item') }}
                         </p>
                         <van-button
                             v-for='(item,val) in proBtns'
@@ -22,7 +22,7 @@
                     </div>
                     <div class='condition'>
                         <p class='title'>
-                            流向
+                            {{ $t('fund.flow') }}
                         </p>
                         <van-button
                             v-for='item in directionBtns'
@@ -37,17 +37,17 @@
                     </div>
                     <div class='btns'>
                         <van-button plain size='small' type='primary' @click='reset'>
-                            重置
+                            {{ $t('fund.reset') }}
                         </van-button>
                         <van-button size='small' type='primary' @click='handleProConfirm'>
-                            完成
+                            {{ $t('common.complete') }}
                         </van-button>
                     </div>
                 </van-dropdown-item>
-                <van-dropdown-item ref='dateDownItem' :title='dateTitle || "全部日期"'>
+                <van-dropdown-item ref='dateDownItem' :title='dateTitle || $t("fund.allDayTime")'>
                     <div class='condition'>
                         <p class='title'>
-                            时间
+                            {{ $t('common.time') }}
                         </p>
                         <van-button
                             v-for='item in dateBtns'
@@ -60,7 +60,7 @@
                             {{ item.name }}
                         </van-button>
                         <!-- <van-cell title='选择日期区间' :value='date'  /> -->
-                        <van-field v-model='date' :default-date='defaultDate' label='时间区间' placeholder='请选择时间区间' @click='showCalendar = true' />
+                        <van-field v-model='date' :default-date='defaultDate' :label='$t("fund.timeZone")' :placeholder='$t("fund.selectTimeZone")' @click='showCalendar = true' />
                         <van-calendar
                             v-model='dateRange'
                             v-model:show='showCalendar'
@@ -72,10 +72,10 @@
                     </div>
                     <div class='btns'>
                         <van-button plain size='small' type='primary' @click='dateReset'>
-                            重置
+                            {{ $t('fund.reset') }}
                         </van-button>
                         <van-button size='small' type='primary' @click='dateConfirm'>
-                            完成
+                            {{ $t('common.complete') }}
                         </van-button>
                     </div>
                 </van-dropdown-item>
@@ -91,7 +91,7 @@
                     @load='onLoad'
                 >
                     <div v-if='list.length === 0'>
-                        <van-empty description='暂无数据' image='search' />
+                        <van-empty :description='$t("common.noData")' image='search' />
                     </div>
                     <div v-for='(item,index) in list' :key='index' class='fund-item'>
                         <div class='f-left'>
@@ -107,7 +107,7 @@
                                 {{ computePrice(item.amount,item.digits) }} {{ customInfo.currency }}
                             </p>
                             <p class='balance'>
-                                余额 {{ computePrice(item.amountAfter, item.digits) }} {{ customInfo.currency }}
+                                {{ $t('common.balance') + computePrice(item.amountAfter, item.digits) }} {{ customInfo.currency }}
                             </p>
                         </div>
                     </div>
@@ -123,68 +123,25 @@ import { queryCapitalFlowList } from '@/api/user'
 import dayjs from 'dayjs'
 import { useStore } from 'vuex'
 import { isEmpty, priceFormat } from '@/utils/util'
+import { useI18n } from 'vue-i18n'
 export default {
     setup (props) {
         const store = useStore()
         const proDownItem = ref(null)
         const dateDownItem = ref(null)
+        const { t, tm } = useI18n({ useScope: 'global' })
         const customInfo = computed(() => store.state._user.customerInfo)
-        const proBtns = {
-            0: '全部项目',
-            1: '存款',
-            8: '取款',
-            2: '手续费',
-            3: '隔夜利息',
-            4: '盈亏',
-            5: '系统清零',
-            6: '额度调整',
-            // 7: '冻结'
-        }
+        const proBtns = tm('fund.proBtns')
 
-        const directionBtns = [
-            {
-                name: '全部流向',
-                value: 0
-            },
-            {
-                name: '入账',
-                value: 1
-            },
-            {
-                name: '出帐',
-                value: 2
-            }
-
-        ]
-        const dateBtns = [
-            {
-                name: '全部日期',
-                value: 0
-            },
-            {
-                name: '今天',
-                value: 1
-            },
-            {
-                name: '最近一周',
-                value: 2
-            },
-            {
-                name: '最近一月',
-                value: 3
-            },
-            {
-                name: '最近三月',
-                value: 4
-            }
-        ]
+        const directionBtns = tm('fund.directionBtns')
+        const dateBtns = tm('fund.dateBtns')
 
         const state = reactive({
             proCurr: 0, // 业务类型
             directionCur: 0, // 流向
             dateCur: 0, // 时间
-            proTitle: '全部项目',
-            dateTitle: '全部日期',
+            proTitle: t('fund.allItem'),
+            dateTitle: t('fund.allDayTime'),
             date: '', // 日期
             minDate: new Date('2018-01-01'),
             showCalendar: false,
@@ -195,7 +152,7 @@ export default {
             loading: false,
             loadingMore: false,
             loadingPage: false,
-            finishedText: '没有更多了',
+            finishedText: t('common.noMore'),
             pagigation: {
                 size: 20,
                 current: 1,
@@ -240,7 +197,7 @@ export default {
         const reset = () => {
             state.proCurr = 0
             state.directionCur = 0
-            state.proTitle = '全部项目'
+            state.proTitle = t('fund.allItem')
         }
 
         const handleProConfirm = () => {
@@ -314,7 +271,7 @@ export default {
                     // 数据全部加载完成
                     if (state.list.length >= res.data.total) {
                         state.finished = true
-                        state.finishedText = '没有更多了'
+                        state.finishedText = t('common.noMore')
                     }
 
                     if (res.data.total === 0) {

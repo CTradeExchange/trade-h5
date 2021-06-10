@@ -6,26 +6,26 @@
         </Top>
         <header class='header'>
             <h1 class='pageTitle'>
-                {{ isFirstSet ? '设置' : '修改' }}登录密码
+                {{ $t(isFirstSet ? "common.settings" : 'common.modify') + $t("login.loginPwd") }}
             </h1>
-            <h6>密码为6-16位数字或字母的组合</h6>
+            <h6>{{ $t('forgot.pwdRule') }}</h6>
         </header>
         <van-cell-group>
             <div v-if='!isFirstSet' class='form-item'>
-                <van-field v-model='oldPwd' label='' placeholder='请输入原密码' :type='oldPwdVis ? "text" : "password"' />
+                <van-field v-model='oldPwd' label='' :placeholder='$t("login.originPwd")' :type='oldPwdVis ? "text" : "password"' />
                 <span class='icon' :class="oldPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("oldPwdVis")'></span>
             </div>
             <div class='form-item'>
-                <van-field v-model='newPwd' label='' placeholder='请输入新密码' :type='newPwdVis ? "text" : "password"' />
+                <van-field v-model='newPwd' label='' :placeholder='$t("forgot.inputNewPwd")' :type='newPwdVis ? "text" : "password"' />
                 <span class='icon' :class="newPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("newPwdVis")'></span>
             </div>
             <div class='form-item'>
-                <van-field v-model='confirmPwd' label='' placeholder='请再次输入新密码' :type='confirmVis ? "text" : "password"' />
+                <van-field v-model='confirmPwd' label='' :placeholder='$t("forgot.newPwdAgain")' :type='confirmVis ? "text" : "password"' />
                 <span class='icon' :class="confirmVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("confirmVis")'></span>
             </div>
         </van-cell-group>
         <van-button class='confirmBtn' @click='handleConfirm'>
-            确定
+            {{ $t('common.sure') }}
         </van-button>
     </div>
 </template>
@@ -38,6 +38,7 @@ import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { setLoginPwd, modifyLoginPwd } from '@/api/user'
 import md5 from 'js-md5'
+import { useI18n } from 'vue-i18n'
 
 export default {
     components: {
@@ -49,6 +50,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const route = useRoute()
+        const { t } = useI18n({ useScope: 'global' })
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
@@ -71,24 +73,24 @@ export default {
         function handleConfirm () {
             const pwdReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/
             if (!state.oldPwd && !isFirstSet.value) {
-                return Toast('请输入原密码')
+                return Toast(t('login.originPwd'))
             }
             if (!state.newPwd) {
-                return Toast('请输入新密码')
+                return Toast(t('forgot.inputNewPwd'))
             }
             if (!state.confirmPwd) {
-                return Toast('请输入确认密码')
+                return Toast(t('forgot.inputSurePwd'))
             }
             if (!pwdReg.test(state.newPwd)) {
-                return Toast('密码为6-16位数字或字母的组合')
+                return Toast(t('forgot.pwdRule'))
             }
 
             if (state.newPwd !== state.confirmPwd) {
-                return Toast('新密码和确认密码不同，请检查后重新输入')
+                return Toast(t('forgot.pwdDiff'))
             }
 
             const toast = Toast.loading({
-                message: '加载中...',
+                message: t('common.loading'),
                 forbidClick: true,
             })
 
@@ -98,7 +100,7 @@ export default {
                 }).then(res => {
                     toast.clear()
                     if (res.check()) {
-                        Toast('设置成功')
+                        Toast(t('common.setSuccess'))
                         store.dispatch('_user/findCustomerInfo')
                         router.back()
                     }
@@ -119,9 +121,9 @@ export default {
                         if (res.check()) {
                             Dialog.alert({
                                 theme: 'round-button',
-                                title: '提示',
-                                message: '密码修改成功',
-                                confirmButtonText: '去登录'
+                                title: t('common.tip'),
+                                message: t('login.pwdSuccess'),
+                                confirmButtonText: t('forgot.goLogin')
                             }).then(() => {
                                 // 注销登录
                                 store.dispatch('_user/logout').then(() => {

@@ -2,13 +2,13 @@
     <div class='setting-wrap'>
         <van-nav-bar
             left-arrow
-            left-text='返回'
-            title='图表'
+            :left-text='$t("common.back")'
+            :title='$t("common.chart")'
             @click-left='$attrs.onBackEvent'
         />
         <div class='page-wrap'>
             <van-cell-group class='group'>
-                <van-cell title='阴阳烛' @click='changeType(1)'>
+                <van-cell :title='$t("chart.candleStick")' @click='changeType(1)'>
                     <template #icon>
                         <van-icon class='icon icon_yinyangzhu' />
                     </template>
@@ -16,7 +16,7 @@
                         <van-icon color='#58C225' name='success' />
                     </template>
                 </van-cell>
-                <van-cell title='柱形图' @click='changeType(0)'>
+                <van-cell :title='$t("chart.barLine")' @click='changeType(0)'>
                     <template #icon>
                         <van-icon
                             class='icon icon_zhuxingtu'
@@ -26,7 +26,7 @@
                         <van-icon color='#58C225' name='success' />
                     </template>
                 </van-cell>
-                <van-cell title='图表线' @click='changeType(2)'>
+                <van-cell :title='$t("chart.chartLine")' @click='changeType(2)'>
                     <template #icon>
                         <van-icon class='icon icon_tubiaoxian' />
                     </template>
@@ -42,12 +42,12 @@
                     <van-switch v-model='chartSet.volumeSwitch' active-color='#53C41C' size='22px' @change='handleChartSet("volumeSwitch")' />
                 </template>
             </van-cell> -->
-                <van-cell title='买价线'>
+                <van-cell :title='$t("chart.buyLine")'>
                     <template #right-icon>
                         <van-switch v-model='chartSet.showBuyPrice' active-color='#53C41C' size='22px' @change='handleChartSet("showBuyPrice")' />
                     </template>
                 </van-cell>
-                <van-cell title='卖价线'>
+                <van-cell :title='$t("chart.sellLine")'>
                     <template #right-icon>
                         <van-switch v-model='chartSet.showSellPrice' active-color='#53C41C' size='22px' @change='handleChartSet("showSellPrice")' />
                     </template>
@@ -57,20 +57,20 @@
                     <van-switch v-model='chartSet.periodSeparator' active-color='#53C41C' size='22px' @change='handleChartSet("periodSeparator")' />
                 </template>
             </van-cell>-->
-                <van-cell title='交易级别(暂未开放)'>
+                <van-cell :title='$t("chart.tradeLevel")'>
                     <template #right-icon>
                         <van-switch v-model='chartSet.tradeLevel' active-color='#53C41C' size='22px' @change='handleChartSet("tradeLevel")' />
                     </template>
                 </van-cell>
                 <p class='notice'>
-                    启用交易水平查看挂单价格以及图表上止损和获利的值
+                    {{ $t('chart.noticeTips') }}
                 </p>
-                <van-cell title='开高低收'>
+                <van-cell :title='$t("chart.OHLC")'>
                     <template #right-icon>
                         <van-switch v-model='chartSet.showSeriesOHLC' active-color='#53C41C' size='22px' @change='handleChartSet("showSeriesOHLC")' />
                     </template>
                 </van-cell>
-                <van-cell title='涨跌幅'>
+                <van-cell :title='$t("chart.upAndDown")'>
                     <template #right-icon>
                         <van-switch v-model='chartSet.showBarChange' active-color='#53C41C' size='22px' @change='handleChartSet("showBarChange")' />
                     </template>

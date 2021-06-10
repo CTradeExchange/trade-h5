@@ -2,19 +2,19 @@
     <div class='pageWrap'>
         <i class='icon_success'></i>
         <p class='t1'>
-            资料已成功提交，感谢您的配合，我们将尽快完成审核！
+            {{ $t('auth.tips1') }}
         </p>
 
         <p class='t2'>
-            资料审核通过前您可以通过注册时填写的【手机号/邮箱+验证码】登录系统查看审核进度
+            {{ $t('auth.tips2') }}
         </p>
 
         <div class='btns'>
             <van-button hairline type='success' @click='$router.replace({ name: "Quote" })'>
-                返回首页
+                {{ $t('common.backHome') }}
             </van-button>
             <van-button hairline type='default' @click='$router.replace({ name: "Authentication" })'>
-                查看进度
+                {{ $t('common.lookProcess') }}
             </van-button>
         </div>
     </div>

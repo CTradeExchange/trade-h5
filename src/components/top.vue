@@ -10,7 +10,7 @@
                 {{ title }}
             </div>
             <div v-else-if='showCenter' class='title'>
-                {{ $route.meta.title }}
+                {{ $t($route.meta.title) }}
             </div>
         </slot>
         <slot name='right'>

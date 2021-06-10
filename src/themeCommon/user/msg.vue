@@ -16,13 +16,13 @@
     <Loading :show='pageLoading' />
     <div class='msg-list'>
         <div v-if='list.length === 0'>
-            <van-empty description='暂无数据' image='search' />
+            <van-empty :description='$t("common.noData")' image='search' />
         </div>
         <van-pull-refresh v-else v-model='loading' @refresh='onRefresh'>
             <van-list
                 v-model:loading='loading'
                 :finished='finished'
-                finished-text='没有更多了'
+                :finished-text='$t("common.noMore")'
                 @load='onLoad'
             >
                 <div v-for='(item,index) in list' :key='index' class='msg-item'>
@@ -49,9 +49,11 @@ import { useStore } from 'vuex'
 import dayjs from 'dayjs'
 import { Toast } from 'vant'
 import { isEmpty } from '@/utils/util'
+import { useI18n } from 'vue-i18n'
 export default {
     setup (props) {
         const store = useStore()
+        const { t, tm } = useI18n({ useScope: 'global' })
         const state = reactive({
             list: [],
             loading: false,
@@ -60,12 +62,7 @@ export default {
             current: 1,
             type: '',
             rightAction: { title: 444 },
-            options: [
-                { text: '全部消息', value: '' },
-                { text: '账户消息', value: 'USER_MESSAGE' },
-                { text: '资金消息', value: 'CASH_MESSAGE' },
-                { text: '交易消息', value: 'TRADE_MESSAGE' },
-            ]
+            options: tm('msg.typesOptions')
         })
 
         // 获取账户信息

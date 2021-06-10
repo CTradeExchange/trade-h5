@@ -45,7 +45,11 @@
     "goSet": "去设置",
     "pwdTips": "您的登录密码还未设置，设置后便可通过密码进行登录，是否现在去设置？",
     "goAuthenticate": "去认证",
-    "goAuthenticateMsg": "您还未进行KYC认证，点击去认证"
+    "goAuthenticateMsg": "您还未进行KYC认证，点击去认证",
+    "loginPwd": "登录密码",
+    "originPwd": "请输入原密码",
+    "pwdSuccess": "密码修改成功",
+    "modifyLoginPwd": "修改登录密码"
   },
   "common": {
     "tip": "提示",
@@ -88,7 +92,33 @@
     "submitSuccess": "提交成功",
     "RMB": "人民币",
     "dollar": "美元",
-    "loading": "加载中..."
+    "loading": "加载中...",
+    "back": "返回",
+    "chart": "图表",
+    "fee": "手续费",
+    "goLook": "去查看",
+    "status": "状态",
+    "remark": "备注",
+    "time": "时间",
+    "backHome": "返回首页",
+    "noData": "暂无数据",
+    "currency": "币种",
+    "enterAccount": "实际入账",
+    "updateTime": "更新时间",
+    "canceled": "已取消",
+    "noMore": "没有更多了",
+    "unit": "单位",
+    "yk": "盈亏",
+    "balance": "余额",
+    "deposit": "存款",
+    "jz": "净值",
+    "nthItem": "第{0}项",
+    "item": "项目",
+    "complete": "完成",
+    "lookProcess": "查看进度",
+    "settings": "设置",
+    "modify": "修改",
+    "setSuccess": "设置成功"
   },
   "auth": {
     "info": "需要准备的验证资料",
@@ -96,7 +126,14 @@
     "country": "国家",
     "countrySelect": "请选择国家",
     "uploadSuccess": "上传成功",
-    "allAuthPlease": "请完成所有认证项"
+    "allAuthPlease": "请完成所有认证项",
+    "authComplete": "完成认证，可获得对应权限",
+    "authPass": "认证通过后方可进行",
+    "executeAuth": "请先完成{0}认证",
+    "noRequired": "暂无需验证",
+    "tips1": "资料已成功提交，感谢您的配合，我们将尽快完成审核！",
+    "tips2": "资料审核通过前您可以通过注册时填写的【手机号/邮箱+验证码】登录系统查看审核进度",
+    "personValid": "身份验证"
   },
   "forgot": {
     "forgot": "找回密码",
@@ -147,6 +184,139 @@
     "inputOpenAddressText": "请输入开户地址",
     "branchAddress": "支行地址",
     "inputBranchAddress": "请输入支行地址（选填）",
-    "submitSuccessTips": "预计2-3个工作日完成审核（节假期顺延），如需要其它帮助，请联系客服。"
+    "submitSuccessTips": "预计2-3个工作日完成审核（节假期顺延），如需要其它帮助，请联系客服。",
+    "noBanks": "暂无银行卡",
+    "addBank": "新增银行卡",
+    "bankList": "银行卡列表"
+  },
+  "chart": {
+    "candleStick": "阴阳烛",
+    "barLine": "柱形图",
+    "chartLine": "图表线",
+    "buyLine": "买价线",
+    "sellLine": "卖价线",
+    "tradeLevel": "交易级别(暂未开放)",
+    "noticeTips": "启用交易水平查看挂单价格以及图表上止损和获利的值",
+    "OHLC": "开高低收",
+    "upAndDown": "涨跌幅"
+  },
+  "deposit": {
+    "selectAmount": "请选择充值金额",
+    "otherAmount": "其它金额",
+    "selectPayMethods": "请选择支付方式",
+    "noPayPassway": "暂无可用的支付通道",
+    "depositTime": "存款时间",
+    "amountLimit": "金额限制",
+    "expectPay": "预计支付",
+    "expectInBank": "预计到账",
+    "payConfirm": "支付确认",
+    "payConfirmTips": "您是否已完成该笔充值支付?",
+    "denyText": "否，关闭",
+    "agreeText": "是的，已支付",
+    "depositRecord": "存款记录",
+    "amountMinTips": "存款金额不能小于",
+    "amountMaxTips": "存款金额不能大于",
+    "KYCReviewing": "KYC审核中，请耐心等待",
+    "needKYC": "当前操作需要KYC认证",
+    "serviceTips1": "账户暂不能存款，如有疑问请联系在线客服",
+    "proposalNo": "提案号",
+    "proposalAmount": "提案金额",
+    "lastAmount": "最终入账金额",
+    "tobePay": "待支付",
+    "paySuccess": "支付成功",
+    "payFail": "支付失败",
+    "serviceTips2": "未查询到订单信息，如有疑问请联系客服",
+    "amount": "存款金额",
+    "submitTime": "提交时间",
+    "depositSuccess": "存款成功",
+    "inputAmount": "请输入金额"
+  },
+  "fund": {
+    "marginLevel": "保证金水平",
+    "capitialComponents": "资金成分",
+    "acceptAmount": "可取",
+    "maginable": "可用保证金",
+    "accupyMargin": "占用保证金",
+    "allItem": "全部项目",
+    "flow": "流向",
+    "reset": "重置",
+    "allDayTime": "全部日期",
+    "timeZone": "时间区间",
+    "selectTimeZone": "请选择时间区间",
+    "proBtns": {
+      "0": "全部项目",
+      "1": "存款",
+      "2": "手续费",
+      "3": "隔夜利息",
+      "4": "盈亏",
+      "5": "系统清零",
+      "6": "额度调整",
+      "8": "取款"
+    },
+    "directionBtns": [
+      {
+        "name": "全部流向",
+        "value": 0
+      },
+      {
+        "name": "入账",
+        "value": 1
+      },
+      {
+        "name": "出帐",
+        "value": 2
+      }
+    ],
+    "dateBtns": [
+      {
+        "name": "全部日期",
+        "value": 0
+      },
+      {
+        "name": "今天",
+        "value": 1
+      },
+      {
+        "name": "最近一周",
+        "value": 2
+      },
+      {
+        "name": "最近一月",
+        "value": 3
+      },
+      {
+        "name": "最近三月",
+        "value": 4
+      }
+    ]
+  },
+  "msg": {
+    "typesOptions": [
+      {
+        "text": "全部消息",
+        "value": ""
+      },
+      {
+        "text": "账户消息",
+        "value": "USER_MESSAGE"
+      },
+      {
+        "text": "资金消息",
+        "value": "CASH_MESSAGE"
+      },
+      {
+        "text": "交易消息",
+        "value": "TRADE_MESSAGE"
+      }
+    ]
+  },
+  "setting": {
+    "enableNews": "启用新闻",
+    "bindPhone": "绑定手机",
+    "bindEmail": "绑定邮箱",
+    "replaceEmail": "更换邮箱",
+    "replacePhone": "更换手机",
+    "logout": "退出账号",
+    "logoutConfirm": "确定退出登录吗"
   }
 }

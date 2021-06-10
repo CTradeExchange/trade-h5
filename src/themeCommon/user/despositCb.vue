@@ -16,7 +16,7 @@
             <div class='detail'>
                 <div class='d-item'>
                     <span class='label'>
-                        提案号
+                        {{ $t('deposit.proposalNo') }}
                     </span>
                     <span class='val'>
                         {{ despositObj.proposalNo }}
@@ -24,7 +24,7 @@
                 </div>
                 <div class='d-item'>
                     <span class='label'>
-                        提案金额
+                        {{ $t('deposit.proposalAmount') }}
                     </span>
                     <span class='val'>
                         {{ despositObj.intendAmount }}{{ despositObj.depositCurrency }}
@@ -32,7 +32,7 @@
                 </div>
                 <div class='d-item'>
                     <span class='label'>
-                        最终入账金额
+                        {{ $t('deposit.lastAmount') }}
                     </span>
                     <span class='val'>
                         {{ despositObj.finalAmount || '--' }}{{ despositObj.depositCurrency }}
@@ -40,7 +40,7 @@
                 </div>
                 <div class='d-item'>
                     <span class='label'>
-                        手续费
+                        {{ $t('common.fee') }}
                     </span>
                     <span class='val'>
                         {{ despositObj.depositFee || '--' }}{{ despositObj.depositCurrency }}
@@ -48,7 +48,7 @@
                 </div>
                 <div class='d-item'>
                     <span class='label'>
-                        状态
+                        {{ $t('common.status') }}
                     </span>
                     <span class='val'>
                         {{ statusMap[despositObj.paymentStatus].stateText }}
@@ -56,7 +56,7 @@
                 </div>
                 <div class='d-item'>
                     <span class='label'>
-                        备注
+                        {{ $t('common.remark') }}
                     </span>
                     <span class='val'>
                         {{ despositObj.remark || '--' }}
@@ -65,7 +65,7 @@
 
                 <div class='d-item'>
                     <span class='label'>
-                        时间
+                        {{ $t('common.time') }}
                     </span>
                     <span class='val'>
                         {{ formatTime(despositObj.createTime) || '--' }}
@@ -89,6 +89,7 @@ import dayjs from 'dayjs'
 import { Dialog } from 'vant'
 import { isEmpty } from '@/utils/util'
 import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 export default {
     components: {
         Top
@@ -97,6 +98,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const route = useRoute()
+        const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             loading: false,
             despositObj: ''
@@ -107,16 +109,16 @@ export default {
 
         const statusMap = {
             1: {
-                stateText: '待支付',
+                stateText: t('deposit.tobePay'),
                 className: 'icon_tishi'
             },
 
             2: {
-                stateText: '支付成功',
+                stateText: t('deposit.paySuccess'),
                 className: 'icon_success'
             },
             3: {
-                stateText: '支付失败',
+                stateText: t('deposit.payFail'),
                 className: 'icon_fail'
             }
         }
@@ -139,10 +141,10 @@ export default {
                 })
             } else {
                 Dialog.confirm({
-                    title: '提示',
-                    confirmButtonText: '返回首页',
-                    cancelButtonText: '联系客服',
-                    message: '未查询到订单信息，如有疑问请联系客服',
+                    title: t('common.tip'),
+                    confirmButtonText: t('common.backHome'),
+                    cancelButtonText: t('common.serivce'),
+                    message: t('deposit.serviceTips2'),
                     theme: 'round-button',
                 }).then(() => {
                     router.push('/quote')

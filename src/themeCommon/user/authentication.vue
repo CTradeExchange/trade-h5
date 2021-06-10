@@ -3,11 +3,11 @@
     <div class='page-wrap'>
         <Loading :show='loading' />
         <div v-if='list.length === 0'>
-            <van-empty description='暂无需验证' image='search' />
+            <van-empty :description='$t("auth.noRequired")' image='search' />
         </div>
         <div v-else>
             <p class='title'>
-                完成认证，可获得对应权限
+                {{ $t('auth.authComplete') }}
             </p>
             <div class='auth-list'>
                 <div v-for='(item,index) in list' :key='index' class='auth-item'>
@@ -17,12 +17,12 @@
                             {{ item.levelName }}
                         </p>
                         <p class='t2'>
-                            认证通过后方可进行 [{{ item.businessNameList.toString() }}]
+                            {{ $t('auth.authPass') }} [{{ item.businessNameList.toString() }}]
                         </p>
                     </div>
                     <div v-if='item.preLevelObj && item.preLevelObj.status !== 2'>
                         <span class='notice'>
-                            请先完成{{ item.preLevelObj.levelName }}认证
+                            {{ $t('auth.executeAuth', [item.preLevelObj.levelName]) }}
                         </span>
                     </div>
                     <div v-else>

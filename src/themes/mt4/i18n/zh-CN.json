@@ -28,7 +28,7 @@
     "volumes": "手数",
     "zone": "所在时区"
   },
-  "deposit": "入金",
+  "depositText": "入金",
   "emptyHistory": "无历史记录",
   "fee": "手续费",
   "history": {
