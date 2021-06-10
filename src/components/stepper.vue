@@ -58,7 +58,7 @@ export default {
     },
     computed: {
         placeholderText () {
-            return this.placeholder || '未设置'
+            return this.placeholder || this.$t('common.noSet')
         },
         disabledPlus () {
             return this.disabled || !!(this.value && Number(this.value) >= this.max)

@@ -189,24 +189,24 @@ export function objArraySort (objArr, key) {
     return result.sort((a, b) => a[key] - b[key])
 }
 /* 检测用户KYC状态 */
-export function checkUserKYC ({ res, Dialog, router, store }) {
+export function checkUserKYC ({ res, Dialog, router, store, t }) {
     // 登录KYC,0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
     // companyKycStatus 公司KYC开户状态，1开启 2未开启
     if (Number(res.data.companyKycStatus) === 1) {
         if (Number(res.data.kycAuditStatus === 0)) {
             Dialog.alert({
-                title: '提示',
-                confirmButtonText: '去认证',
-                message: '您还未进行KYC认证，点击去认证',
+                title: t('common.tip'),
+                confirmButtonText: t('login.goAuthenticate'),
+                message: t('login.goAuthenticateMsg'),
                 theme: 'round-button',
             }).then(() => {
                 router.push('/authentication')
             })
         } else if (Number(res.data.kycAuditStatus === 1)) {
             Dialog.alert({
-                title: '提示',
-                confirmButtonText: '关闭',
-                message: '您的资料正在审核中，等耐心等待',
+                title: t('common.tip'),
+                confirmButtonText: t('common.close'),
+                message: t('common.inReview'),
                 theme: 'round-button',
             }).then(() => {
                 store.dispatch('_user/logout').then(() => {
@@ -217,9 +217,9 @@ export function checkUserKYC ({ res, Dialog, router, store }) {
             })
         } else if (Number(res.data.kycAuditStatus === 3)) {
             Dialog.alert({
-                title: '提示',
-                confirmButtonText: '重新提交',
-                message: '您的资料审核失败',
+                title: t('common.tip'),
+                confirmButtonText: t('common.reSubmit'),
+                message: t('common.reviewFailed'),
                 theme: 'round-button',
             }).then(() => {
                 router.push('/authentication')

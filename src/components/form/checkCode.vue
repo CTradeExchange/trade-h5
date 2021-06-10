@@ -18,7 +18,7 @@
         <button ref='getCodeBtn' class='getCodeBtn' :disabled='disabled' type='button' @click='getCode'>
             <van-loading v-if='loading' size='20px' />
             <span v-else>
-                获取验证码
+                {{ $t('login.getVerifyCode') }}
             </span>
         </button>
         <!-- <div class='checkCodeBtn'>

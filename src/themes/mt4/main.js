@@ -25,7 +25,7 @@ setRootVariable(Colors)
 const app = createApp(App)
 app.use(longpress)
 app.use(VantBase).use(I18n).use(store).use(router)
-app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router })
+app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })
 app.component('Loading', Loading)
 app.component('LayoutTop', LayoutTop)
 app.component('PageComp', PageComp)
@@ -50,7 +50,7 @@ store.dispatch('_base/initBaseConfig').then(() => {
             else return store.dispatch('_user/findCustomerInfo')
         }).then(res => {
             if (typeof (res.check) === 'function' && res.check()) {
-                checkUserKYC({ res, Dialog, router, store })
+                checkUserKYC({ res, Dialog, router, store, t: I18n.global.t })
             } else if (res.invalid && res.invalid()) {
                 removeLoginParams()
                 return false

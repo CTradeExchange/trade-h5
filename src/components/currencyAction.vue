@@ -2,8 +2,8 @@
     <van-field
         v-model='modelValue'
         :input-align='inputAlign'
-        label='账户币种'
-        placeholder='账户币种'
+        :label='$t("register.accountCurrency")'
+        :placeholder='$t("register.accountCurrency")'
         readonly
         right-icon='arrow-down'
         type='text'

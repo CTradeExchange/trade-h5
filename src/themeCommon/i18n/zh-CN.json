@@ -49,7 +49,8 @@
     "loginPwd": "登录密码",
     "originPwd": "请输入原密码",
     "pwdSuccess": "密码修改成功",
-    "modifyLoginPwd": "修改登录密码"
+    "modifyLoginPwd": "修改登录密码",
+    "getVerifyCode": "获取验证码"
   },
   "common": {
     "tip": "提示",
@@ -118,7 +119,8 @@
     "lookProcess": "查看进度",
     "settings": "设置",
     "modify": "修改",
-    "setSuccess": "设置成功"
+    "setSuccess": "设置成功",
+    "noSet": "未设置"
   },
   "auth": {
     "info": "需要准备的验证资料",
