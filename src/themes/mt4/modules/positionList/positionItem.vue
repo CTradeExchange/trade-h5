@@ -90,7 +90,7 @@ export default {
         const product = computed(() => store.state._quote.productMap[data.symbolId])
 
         const positionVolume = computed(() => {
-            return minus(data.openVolume, data.closeVolume || 0)
+            return minus(data.openVolume, data.closeVolume)
         })
         const toggleDetail = () => {
             state.detailVisible = !state.detailVisible

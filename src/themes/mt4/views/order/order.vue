@@ -406,7 +406,7 @@ export default {
                     if (!list) return false
                     const curPending = list.find(el => el.id === pendingId)
                     if (!curPending) return
-                    state.volumn = curPending.requestNum / curPending.contractSize
+                    state.volumn = curPending.requestNum
                     const digits = curPending.digits
                     state.pendingPrice = toFixed(curPending.requestPrice * Math.pow(0.1, digits), digits)
                     if (curPending.stopLoss) state.stopLoss = toFixed(curPending.stopLoss * Math.pow(0.1, digits), digits)

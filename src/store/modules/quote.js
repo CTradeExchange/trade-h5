@@ -1,20 +1,21 @@
 import { querySymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
 import { plus } from '@/utils/calculation'
 import CheckAPI from '@/utils/checkAPI'
+import BigNumber from 'bignumber.js'
 
 // 处理显示的点差  点差=（买价-卖价）/pip
 function spreadText (product) {
     if (!product.pointRatio) return
-    const pip = Math.pow(0.1, product.price_digits) * product.pointRatio
-    const spread = (product.buy_price - product.sell_price) / pip
+    const pip = BigNumber(0.1).pow(product.price_digits).times(product.pointRatio).toNumber()
+    const spread = BigNumber(product.buy_price).minus(product.sell_price).div(pip).toNumber()
     const spDigit = String(product.pointRatio).length - 1 // 点差小数位
     product.spread_text = spread.toFixed(spDigit)
 }
 
 // 报价计算点差
 function price_spread (product, data) {
-    if (product.askSpread && data.buy_price) product.buy_price = plus(data.buy_price, product.askSpread).toFixed(product.price_digits)
-    if (product.bidSpread && data.sell_price) product.sell_price = plus(data.sell_price, product.bidSpread).toFixed(product.price_digits)
+    if (product.askSpread && data.buy_price) product.buy_price = BigNumber(data.buy_price).plus(product.askSpread).toFixed(product.price_digits)
+    if (product.bidSpread && data.sell_price) product.sell_price = BigNumber(data.sell_price).plus(product.bidSpread).toFixed(product.price_digits)
     spreadText(product)
 }
 
