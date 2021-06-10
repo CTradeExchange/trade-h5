@@ -55,6 +55,7 @@
             </div>
         </van-cell>
         <van-cell v-if='product.eodTime' size='large' :title="$t('contract.eodTime')" :value='eodTime' />
+        <van-cell v-if='expireTime' size='large' :title='$t("contract.expireTime")' :value='expireTime' />
     </div>
 </template>
 
@@ -118,6 +119,11 @@ export default {
         const fee = computed(() => {
             return mul(product.value.fee, 100) + '%'
         })
+        // 手续费
+        const expireTime = computed(() => {
+            if (product.value.endTime === 9999999999999) return null
+            return dayjs(product.value.endTime).format('YYYY-MM-DD HH:mm:ss')
+        })
 
         QuoteSocket.send_subscribe([symbolId])
         return {
@@ -127,6 +133,7 @@ export default {
             eodTime,
             interest,
             fee,
+            expireTime,
             usedMarginSet
         }
     }

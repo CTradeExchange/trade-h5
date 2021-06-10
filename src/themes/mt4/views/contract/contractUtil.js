@@ -6,31 +6,32 @@ export const sortTimeList = (timeList, utcOffset) => {
     // 时间+时区跨天的添加到下一天
     timeList.forEach(el => {
         const { dayOfWeek, endTime, startTime } = el
-        const curResult = result[dayOfWeek - 1]
+        const curDay = result[dayOfWeek - 1]
+        const nextDay = result[dayOfWeek === 7 ? 0 : dayOfWeek]
         if (startTime + utcOffset > 1440) { // 开始时间+时区后跨天
             const item = Object.assign({}, el, {
-                dayOfWeek: dayOfWeek + 1,
+                dayOfWeek: dayOfWeek === 7 ? 0 : dayOfWeek + 1,
                 startTime: (startTime + utcOffset - 1440).toFixed(0)
             })
-            result[dayOfWeek].unshift(item)
+            nextDay.unshift(item)
         } else if (endTime + utcOffset > 1440) { // 结束时间+时区后跨天
             const item = Object.assign({}, el, {
-                dayOfWeek: dayOfWeek + 1,
+                dayOfWeek: dayOfWeek === 7 ? 1 : dayOfWeek + 1,
                 startTime: 0,
                 endTime: (endTime + utcOffset - 1440).toFixed(0)
             })
-            result[dayOfWeek].unshift(item)
-            const curDay = Object.assign({}, el, {
+            nextDay.unshift(item)
+            const curDayData = Object.assign({}, el, {
                 startTime: startTime + utcOffset,
                 endTime: 1440,
             })
-            curResult.push(curDay)
+            curDay.push(curDayData)
         } else {
-            const curDay = Object.assign({}, el, {
+            const curDayData = Object.assign({}, el, {
                 startTime: startTime + utcOffset,
                 endTime: endTime + utcOffset,
             })
-            curResult.push(curDay)
+            curDay.push(curDayData)
         }
     })
     return result
