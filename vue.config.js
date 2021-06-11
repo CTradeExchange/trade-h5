@@ -110,13 +110,13 @@ const config = {
         },
         proxy: {
             '/wp-json/wp': {
-                target: 'http://uatwpadmin.cats-trade.com' // http://prewpadmin.cats-trade.com/
+                target: 'http://prewpadmin.cats-trade.com' // http://prewpadmin.cats-trade.com/
             },
             '/cats-manage-api': {
-                target: 'http://uatwpview.cats-trade.com' // uat http://uatwpview.cats-trade.com  // pre http://prewph5.cats-trade.com/
+                target: 'http://prewph5.cats-trade.com' // uat http://uatwpview.cats-trade.com  // pre http://prewph5.cats-trade.com/
             },
             '/upload': {
-                target: 'http://uatcatsapi.cats-trade.com/upload'
+                target: 'http://precatsapi.cats-trade.com/upload'
             },
         }
     },

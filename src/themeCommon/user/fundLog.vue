@@ -163,6 +163,7 @@ export default {
             state.pagigation.current = 1
             state.finished = false
             state.loading = false
+            state.loadingMore = true
             state.list = []
             queryFundDetail()
         }
@@ -235,7 +236,8 @@ export default {
 
         const dateReset = () => {
             state.date = ''
-            state.dateCur = 99
+            state.dateCur = 0
+            state.dateTitle = t('fund.allDayTime')
         }
 
         const formatDate = (date) => `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
