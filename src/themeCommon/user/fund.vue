@@ -49,7 +49,7 @@
                         {{ $t('fund.acceptAmount') }}
                     </p>
                     <p class='val'>
-                        {{ computePrice(mainAccount.withdrawAmount,customInfo.digits ) }}
+                        {{ computePrice(mainAccount.withdrawAmount ) }}
                     </p>
                 </div>
                 <div class='item'>
@@ -121,14 +121,8 @@ export default {
             router.push('/desposit')
         }
 
-        const computePrice = (price, digits) => {
-            if (price === '') {
-                return '--'
-            }
-            if (!isEmpty(digits)) {
-                return priceFormat(price, digits)
-            }
-            return price
+        const computePrice = (price,) => {
+            return price === '' ? '--' : price
         }
 
         const netWorth = computed(() => {
