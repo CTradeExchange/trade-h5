@@ -104,10 +104,10 @@
                         </div>
                         <div class='f-right'>
                             <p class='amount'>
-                                {{ computePrice(item.amount,item.digits) }} {{ customInfo.currency }}
+                                {{ item.amount }} {{ customInfo.currency }}
                             </p>
                             <p class='balance'>
-                                {{ $t('common.balance') + computePrice(item.amountAfter, item.digits) }} {{ customInfo.currency }}
+                                {{ $t('common.balance') + item.amountAfter }} {{ customInfo.currency }}
                             </p>
                         </div>
                     </div>
@@ -287,10 +287,6 @@ export default {
             })
         }
 
-        const computePrice = (amount, digest) => {
-            return priceFormat(amount, digest)
-        }
-
         const formatTime = (val) => {
             return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
@@ -318,7 +314,6 @@ export default {
             dateDownItem,
             queryFundDetail,
             formatTime,
-            computePrice,
             customInfo,
             ...toRefs(state)
         }
