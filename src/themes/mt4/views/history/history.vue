@@ -100,6 +100,7 @@ export default {
                 sortFieldName = item.feild
             }
             state.sortActionsVisible = false
+            state.finished = false
             current = 1
             queryRecordList()
         }
