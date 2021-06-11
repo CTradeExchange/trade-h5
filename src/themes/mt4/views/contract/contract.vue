@@ -25,17 +25,25 @@
             </div>
             <div v-for='(item, index) in usedMarginSet' :key='index' class='margin-info'>
                 <span class='left-label'>
-                    {{ item.rangeLeft / product.contractSize }} &lt; {{ $t('contract.volumes') }} &le; {{ item.rangeRight / product.contractSize }}
+                    {{ item.rangeLeftVolume }} &lt; {{ $t('contract.volumes') }} &le; {{ item.rangeRightVolume }}
                 </span>
                 <span class='right-val'>
                     {{ item.percent * 100 }}%
+                </span>
+            </div>
+            <div class='margin-info'>
+                <span class='left-label'>
+                    {{ $t('contract.volumes') }} &gt; {{ usedMarginSet[usedMarginSet.length-1].rangeRightVolume }}
+                </span>
+                <span class='right-val'>
+                    {{ usedMarginSet[usedMarginSet.length-1].percent * 100 }}%
                 </span>
             </div>
         </van-cell>
         <van-cell size='large' :title="$t('contract.feeType')" :value='$t(parseFloat(product.feeFormula)===1?"contract.ratio":"contract.amount")' />
         <van-cell size='large' :title="$t('fee')" :value='fee' />
         <van-cell size='large' :title="$t('contract.interest')" :value='interest' />
-        <van-cell size='large' :title="$t('contract.zone')" :value="'GTM +' + (0 - new Date().getTimezoneOffset() / 60)" />
+        <van-cell size='large' :title="$t('contract.zone')" :value="'GMT +' + (0 - new Date().getTimezoneOffset() / 60)" />
         <van-cell v-if='product.quoteTimeList && product.quoteTimeList.length' class='timeListCell' size='large' :title="$t('contract.quoteTime')">
             <div v-for='(item,index) in quoteTimeList' :key='index' class='item-item'>
                 {{ $t('weekdayMap.'+ item[0].dayOfWeek) }}:
@@ -63,29 +71,36 @@
 import top from '@m/layout/top'
 import { useStore } from 'vuex'
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { isEmpty, objArraySort } from '@/utils/util'
 import dayjs, { _dayjs } from 'dayjs'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useI18n } from 'vue-i18n'
 import { mul } from '@/utils/calculation'
 import { sortTimeList, timeListFormat } from './contractUtil'
+import BigNumber from 'bignumber.js'
 export default {
     components: {
         top,
     },
     setup () {
         const store = useStore()
+        const router = useRouter()
         const route = useRoute()
         const { t } = useI18n({ useScope: 'global' })
         const utcOffset = parseFloat(sessionStorage.getItem('utcOffset')) || dayjs().utcOffset()
         const symbolId = route.query.symbolId
-        store.dispatch('_quote/querySymbolInfo', symbolId)
         const product = computed(() => store.state._quote.productMap[symbolId])
-        console.log('product', product)
+        if (product.value) store.dispatch('_quote/querySymbolInfo', symbolId)
+        else router.replace('/')
         const usedMarginSet = computed(() => {
             if (!isEmpty(product.value.usedMarginSet)) {
-                return objArraySort(product.value.usedMarginSet, 'rangeLeft')
+                const contractSize = product.value.contractSize
+                return objArraySort(product.value.usedMarginSet, 'rangeLeft').map(el => {
+                    el.rangeLeftVolume = BigNumber(el.rangeLeft).div(contractSize).toNumber()
+                    el.rangeRightVolume = BigNumber(el.rangeRight).div(contractSize).toNumber()
+                    return el
+                })
             }
         })
         // 交易时间
@@ -117,7 +132,7 @@ export default {
         })
         // 手续费
         const fee = computed(() => {
-            return mul(product.value.fee, 100) + '%'
+            return parseFloat(product.value.feeFormula) === 1 ? mul(product.value.fee, 100) + '%' : product.value.feeRate
         })
         // 手续费
         const expireTime = computed(() => {
