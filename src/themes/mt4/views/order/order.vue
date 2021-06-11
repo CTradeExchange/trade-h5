@@ -139,6 +139,7 @@ import Success from './success'
 import { minus, divide, getDecimalNum, mul, toFixed } from '@/utils/calculation'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
+import BigNumber from 'bignumber.js'
 export default {
     components: {
         Pending,
@@ -315,7 +316,7 @@ export default {
             if (takeProfit === state.takeProfit && stopLoss === state.stopLoss) {
                 return Toast(t('trade.unModify'))
             }
-            const p = Math.pow(10, product.value.price_digits)
+            const p = BigNumber(10).pow(product.value.price_digits).toNumber()
             const params = {
                 orderId: orderId,
                 positionId: positionId,
@@ -338,11 +339,11 @@ export default {
 
         // 修改挂单
         const handleUpdatePending = () => {
-            const p = Math.pow(10, product.value.price_digits)
+            const p = BigNumber(10).pow(product.value.price_digits).toNumber()
             const params = {
                 pboId: pendingId,
-                stopLoss: Number(state.stopLoss),
-                takeProfit: Number(state.takeProfit)
+                stopLoss: Number(state.stopLoss) ? mul(state.stopLoss, p) : 0,
+                takeProfit: Number(state.takeProfit) ? mul(state.takeProfit, p) : 0
             }
             state.loading = true
             updatePboOrder(params).then(res => {

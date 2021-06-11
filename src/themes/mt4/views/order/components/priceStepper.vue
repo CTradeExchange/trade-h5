@@ -28,6 +28,7 @@
 import { computed, reactive, toRefs, watch } from 'vue'
 import { minus, plus } from '@/utils/calculation'
 import Stepper from '@/components/stepper'
+import BigNumber from 'bignumber.js'
 export default {
     components: {
         Stepper
@@ -78,12 +79,12 @@ export default {
             prevValue = newVal
         }
         const onFirstPlus = () => {
-            const newVal = plus(props.product.sell_price, step.value).toFixed(props.product.price_digits)
+            const newVal = BigNumber(props.product.sell_price).plus(step.value).toFixed(props.product.price_digits)
             state.value = newVal
             emit('update:modelValue', newVal)
         }
         const onFirstMinus = () => {
-            const newVal = minus(props.product.sell_price, step.value).toFixed(props.product.price_digits)
+            const newVal = BigNumber(props.product.sell_price).minus(step.value).toFixed(props.product.price_digits)
             state.value = newVal
             emit('update:modelValue', newVal)
         }
