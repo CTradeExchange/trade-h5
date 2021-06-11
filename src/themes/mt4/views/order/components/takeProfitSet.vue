@@ -4,7 +4,7 @@
         :digits='product.price_digits'
         :disabled='disabled'
         :step='step'
-        :value='value'
+        :value='val'
         @change='onChange'
         @firstMinus='onFirstMinus'
         @firstPlus='onFirstPlus'
@@ -13,8 +13,8 @@
 
 <script>
 import { computed, reactive, toRefs, watch } from 'vue'
-import { minus, plus } from '@/utils/calculation'
 import Stepper from '@/components/stepper'
+import BigNumber from 'bignumber.js'
 export default {
     components: {
         Stepper
@@ -35,14 +35,14 @@ export default {
     setup (props, { emit }) {
         let prevValue = props.modelValue
         const state = reactive({
-            value: props.modelValue,
+            val: props.modelValue,
         })
         const step = computed(() => Math.pow(0.1, props.product.price_digits).toFixed(props.product.price_digits) * 1)
         let type
         watch(
             () => props.modelValue,
             newVal => {
-                if (newVal !== state.value) state.value = newVal
+                if (newVal !== state.val) state.val = newVal
             }
         )
 
@@ -60,19 +60,19 @@ export default {
             // if (Number(prevValue) === 0 && newVal !== 0 && type) {
             //     newVal = type === 'minus' ? minus(props.product.sell_price, step.value) : plus(props.product.sell_price, step.value)
             // }
-            state.value = newVal
+            state.val = newVal
             emit('update:modelValue', newVal)
             prevValue = newVal
         }
 
         const onFirstPlus = () => {
-            const newVal = plus(props.product.sell_price, step.value).toFixed(props.product.price_digits)
-            state.value = newVal
+            const newVal = BigNumber(props.product.sell_price).plus(step.value).toFixed(props.product.price_digits)
+            state.val = newVal
             emit('update:modelValue', newVal)
         }
         const onFirstMinus = () => {
-            const newVal = minus(props.product.sell_price, step.value).toFixed(props.product.price_digits)
-            state.value = newVal
+            const newVal = BigNumber(props.product.sell_price).minus(step.value).toFixed(props.product.price_digits)
+            state.val = newVal
             emit('update:modelValue', newVal)
         }
 

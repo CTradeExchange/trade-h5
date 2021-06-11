@@ -49,11 +49,11 @@ export default {
             const product = productMap[symbolId]
             if (!product) return false
             // if(product.price && data.price) return false; // 已经拿到产品快照，不在重复处理
-            const askSpread = product.askSpread
+            const askSpread = product.hasOwnProperty('askSpread')
             Object.assign(product, { spread_text: '--' }, data)
 
             // 该产品先拿到快照价格，后拿到点差，需要重新计算价格点差
-            if (!askSpread && data.askSpread && data.pointRatio) {
+            if (!askSpread && data.hasOwnProperty('askSpread') && data.pointRatio) {
                 price_spread(product, { ...data, ...product })
             }
         },

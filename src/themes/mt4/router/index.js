@@ -84,7 +84,8 @@ const routes = [
         name: 'Contract',
         component: () => import(/* webpackChunkName: "contract" */ '../views/contract/contract.vue'),
         meta: {
-            title: 'route.contract'
+            title: 'route.contract',
+            roles: ['User'],
         }
     },
     {
