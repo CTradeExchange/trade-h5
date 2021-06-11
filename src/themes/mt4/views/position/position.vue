@@ -69,7 +69,7 @@ export default {
                 { title: t('trade.jingzhi') + t('colon'), value: !isEmpty(accountInfo.value) ? accountInfo.value.netWorth : '--' },
                 { title: t('trade.usableAdvance') + t('colon'), value: !isEmpty(accountInfo.value) ? accountInfo.value.availableMargin : '--' },
                 { title: t('trade.advance') + t('colon'), value: !isEmpty(accountInfo.value) ? accountInfo.value.occupyMargin : '--' },
-                { title: t('trade.advanceRatio') + '(%)' + t('colon'), value: isNaN(accountInfo.value.marginRadio) ? '--' : mul(accountInfo.value.marginRadio, 100) + '%' },
+                { title: t('trade.advanceRatio') + '(%)' + t('colon'), value: isNaN(accountInfo.value.marginRadio) ? '--' : accountInfo.value.marginRadio + '%' },
             ]
         })
 
