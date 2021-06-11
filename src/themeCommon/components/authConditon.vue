@@ -226,10 +226,21 @@ export default {
             }
         }
 
+        const deleterepeatData = () => {
+            const tempDelData = state.columns.filter((item) => item.code !== state.typeCode)
+            if (tempDelData.length > 0) {
+                tempDelData.forEach(item => {
+                    delete state.conditionModel[item.code]
+                })
+            }
+        }
+
         const handleConfirm = (value) => {
             state.typeValue = value.name
             state.typeCode = value.code
             state.showPicker = false
+            // 类型为证件类型的时候处理重复数据
+            deleterepeatData()
         }
 
         onBeforeMount(() => {
