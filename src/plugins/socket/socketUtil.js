@@ -13,6 +13,7 @@ export function tickFormat (data) {
     data.sell_price = priceFormat(tick_deep.price_bid, digits)
     data.buy_price = priceFormat(tick_deep.price_ask, digits)
     data.yesterday_close_price = priceFormat(data.yesterday_close_price, digits)
+    return data
 }
 
 export function ungzip (blod) {
@@ -41,4 +42,20 @@ export function ungzip (blod) {
         reader.readAsBinaryString(blod)
         reader.onerror = () => reject()
     })
+}
+
+// 实时行情tick字符串转Object对象
+export function tickToObj (p) {
+    const priceStr = p.split(';')[0].match(/\((.+)\)/)
+    const price = priceStr[1] ?? ''
+    const priceArr = price.split(',')
+    const curPriceData = {
+        symbolId: priceArr[0] * 1,
+        trade_type: priceArr[1],
+        tick_time: priceArr[3] * 1,
+        cur_price: priceArr[4],
+        sell_price: priceArr[5],
+        buy_price: priceArr[6],
+    }
+    return curPriceData
 }

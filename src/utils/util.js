@@ -227,3 +227,27 @@ export function checkUserKYC ({ res, Dialog, router, store, t }) {
         }
     }
 }
+
+/**
+ * @desc 函数防抖
+ * @param func 函数
+ * @param wait 延迟执行毫秒数
+ * @param immediate true 表立即执行，false 表非立即执行
+ */
+export function debounce (func, wait = 200, immediate = false) {
+    let timer
+    return function (...rest) {
+        if (timer) clearTimeout(timer)
+        if (immediate) {
+            const callNow = !timer
+            timer = setTimeout(() => {
+                timer = null
+            }, wait)
+            if (callNow) func.apply(this, rest)
+        } else {
+            timer = setTimeout(() => {
+                func.apply(this, rest)
+            }, wait)
+        }
+    }
+}

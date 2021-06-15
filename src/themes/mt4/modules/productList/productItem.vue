@@ -1,5 +1,5 @@
 <template>
-    <div class='productItem of-1px-bottom' :class='className' @click="$emit('open')">
+    <div class='productItem of-1px-bottom' :class='className' :data-symbolId='product.symbolId' @click="$emit('open')">
         <div class='hd'>
             <p class='productName' :class='{ longName }'>
                 {{ product.symbolName }}

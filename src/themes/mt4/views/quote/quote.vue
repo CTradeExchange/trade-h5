@@ -11,7 +11,6 @@
 <script>
 import Top from '@m/layout/top'
 import productListComp from '@m/modules/productList/productList.vue'
-import { QuoteSocket } from '@/plugins/socket/socket'
 import { computed, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 
@@ -26,11 +25,6 @@ export default {
         const customerInfo = computed(() => store.state._user.customerInfo)
         const productList = computed(() => store.getters.userSelfSymbolList)
         // 订阅产品
-
-        watchEffect(() => {
-            const subscribList = productList.value.map(({ symbolId }) => symbolId)
-            if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
-        })
 
         if (customerInfo.value) {
             store.dispatch('_trade/queryPositionPage')

@@ -1,4 +1,4 @@
-import { tickFormat } from './socketUtil'
+import { tickFormat, tickToObj } from './socketUtil'
 import { guid } from '@/utils/util'
 
 // websocket消息事件
@@ -11,6 +11,9 @@ class SocketEvent {
         this.$store = null
         this.requests = new Map()
         this.subscribedList = []
+        this.preSetTime = 1 // 上一次保存价格的时间
+        this.newPrice = []
+        this.newPriceTimer = null
     }
 
     // 初始化
@@ -102,29 +105,34 @@ class SocketEvent {
     ['cmd_id_14001'] (data) {
         const list = data.data?.tick_list ?? []
         const $store = this.$store
-        list.forEach(item => {
-            tickFormat(item) // 格式化快照价格
-            // $store.commit('_quote/Update_product', item) // 不需要处理产品属性
-            $store.commit('_quote/Update_productTick', item)
-        })
+        const newData = list.map(el => tickFormat(el))
+        $store.commit('_quote/Update_productTick', newData)
     }
 
     // 实时报价
     tick (p) {
         // p(1123,1,1232312,34545435345,6.23,6.23,6.24);(1124,2,1232314,34545435345,7.23,7.23,7.24)
         // 产品ID，报价序号，报价时间戳，当前价，第一档bid卖价，第一档ask买价
-        const priceStr = p.split(';')[0].match(/\((.+)\)/)
+        if (this.newPriceTimer) clearTimeout(this.newPriceTimer)
         const $store = this.$store
-        const price = priceStr[1] ?? ''
-        const priceArr = price.split(',')
-        $store.commit('_quote/Update_productTick', {
-            symbolId: priceArr[0] * 1,
-            trade_type: priceArr[1],
-            tick_time: priceArr[3] * 1,
-            cur_price: priceArr[4],
-            sell_price: priceArr[5],
-            buy_price: priceArr[6],
-        })
+        const curPriceData = tickToObj(p)
+        const now = new Date().getTime()
+        if (this.preSetTime + 125 <= now) {
+            this.preSetTime = now
+            this.newPrice.push(curPriceData)
+            $store.commit('_quote/Update_productTick', this.newPrice)
+            this.newPrice = []
+        } else {
+            this.newPrice.push(curPriceData)
+        }
+
+        // 500毫秒后更新最后一组报价数据
+        this.newPriceTimer = setTimeout(() => {
+            if (this.newPrice.length > 0) {
+                $store.commit('_quote/Update_productTick', this.newPrice)
+                this.newPrice = []
+            }
+        }, 500)
     }
 
     // 心跳机制

@@ -14,6 +14,9 @@ import LayoutTop from '@m/layout/top'
 import Colors, { setRootVariable } from './colorVariables'
 import { setRouter } from '@/utils/request'
 import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC } from '@/utils/util'
+import BigNumber from 'bignumber.js'
+
+BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 
 // 调试工具
 // import VConsole from 'vconsole'

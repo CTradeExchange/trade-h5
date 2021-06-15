@@ -58,31 +58,33 @@ export default {
             }
         },
         // 更新某个产品报价
-        Update_productTick (state, data = {}) {
+        Update_productTick (state, dataArr = []) {
             const productMap = state.productMap
-            const symbolId = data.symbolId || data.symbol_id
-            const product = productMap[symbolId]
-            if (!product) return false
-            if (data.cur_price - product.high_price > 0) data.high_price = data.cur_price
-            if (data.cur_price - product.low_price < 0) data.low_price = data.cur_price
-            if (!product.buy_price_pre) { // 缓存上一口价的裸行情
+            dataArr.forEach(data => {
+                const symbolId = data.symbolId || data.symbol_id
+                const product = productMap[symbolId]
+                if (!product) return false
+                if (data.cur_price - product.high_price > 0) data.high_price = data.cur_price
+                if (data.cur_price - product.low_price < 0) data.low_price = data.cur_price
+                if (!product.buy_price_pre) { // 缓存上一口价的裸行情
+                    product.buy_price_pre = data.buy_price * 1
+                    product.sell_price_pre = data.sell_price * 1
+                    product.cur_price_pre = data.cur_price * 1
+                    product.cur_color = product.buy_color = product.sell_color = 'grayColor'
+                }
+                // 计算涨跌
+                // if (symbolId === 3) console.log(product.buy_price_pre)
+                // if (symbolId === 3) console.log('cur_price:', data.cur_price, product.cur_price_pre, '| buy_price:', data.buy_price, product.buy_price_pre, '| sell_price:', data.sell_price, product.sell_price_pre)
+                product.cur_color = data.cur_price * 1 === product.cur_price_pre ? product.cur_color : data.cur_price < product.cur_price_pre ? 'fallColor' : 'riseColor'
+                product.buy_color = data.buy_price * 1 === product.buy_price_pre ? product.buy_color : data.buy_price < product.buy_price_pre ? 'fallColor' : 'riseColor'
+                product.sell_color = data.sell_price * 1 === product.sell_price_pre ? product.sell_color : data.sell_price < product.sell_price_pre ? 'fallColor' : 'riseColor'
+                // 更新上一口价的裸行情
+                product.cur_price_pre = data.cur_price * 1
                 product.buy_price_pre = data.buy_price * 1
                 product.sell_price_pre = data.sell_price * 1
-                product.cur_price_pre = data.cur_price * 1
-                product.cur_color = product.buy_color = product.sell_color = 'grayColor'
-            }
-            // 计算涨跌
-            // if (symbolId === 3) console.log(product.buy_price_pre)
-            // if (symbolId === 3) console.log('cur_price:', data.cur_price, product.cur_price_pre, '| buy_price:', data.buy_price, product.buy_price_pre, '| sell_price:', data.sell_price, product.sell_price_pre)
-            product.cur_color = data.cur_price * 1 === product.cur_price_pre ? product.cur_color : data.cur_price < product.cur_price_pre ? 'fallColor' : 'riseColor'
-            product.buy_color = data.buy_price * 1 === product.buy_price_pre ? product.buy_color : data.buy_price < product.buy_price_pre ? 'fallColor' : 'riseColor'
-            product.sell_color = data.sell_price * 1 === product.sell_price_pre ? product.sell_color : data.sell_price < product.sell_price_pre ? 'fallColor' : 'riseColor'
-            // 更新上一口价的裸行情
-            product.cur_price_pre = data.cur_price * 1
-            product.buy_price_pre = data.buy_price * 1
-            product.sell_price_pre = data.sell_price * 1
-            Object.assign(product, data)
-            price_spread(product, data)
+                Object.assign(product, data)
+                price_spread(product, data)
+            })
         },
         Update_productActivedID (state, id) {
             sessionStorage.setItem('productActived', JSON.stringify(state.productMap[id]))
