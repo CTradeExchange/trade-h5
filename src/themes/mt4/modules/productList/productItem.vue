@@ -66,7 +66,7 @@ export default {
             }
             positionList.value.forEach(el => {
                 if (el.symbolId === parseInt(product.symbolId)) {
-                    result[el.direction === 1 ? 'buyVolumes' : 'sellVolumes'] += minus(el.openVolume, el.closeVolume)
+                    result[el.direction === 1 ? 'buyVolumes' : 'sellVolumes'] += parseFloat(minus(el.openVolume, el.closeVolume))
                 }
             })
             return result

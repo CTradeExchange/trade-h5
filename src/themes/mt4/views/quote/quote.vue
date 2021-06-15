@@ -23,8 +23,6 @@ export default {
     setup () {
         const store = useStore()
         const customerInfo = computed(() => store.state._user.customerInfo)
-        const productList = computed(() => store.getters.userSelfSymbolList)
-        // 订阅产品
 
         if (customerInfo.value) {
             store.dispatch('_trade/queryPositionPage')
