@@ -1,5 +1,5 @@
 import { createI18n } from 'vue-i18n'
-import zhCN_common from '../../../themeCommon/i18n/zh-CN.json'
+import zhCN_common from '../../../themeCommon/i18n/common_zh-CN.json'
 import zhCN from './zh-CN.json'
 
 const i18n = createI18n({
