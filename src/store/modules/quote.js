@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 
 // 处理显示的点差  点差=（买价-卖价）/pip
 function spreadText (product) {
-    if (!product.pointRatio) return
+    if (!product.pointRatio || !product.buy_price) return
     const pip = BigNumber(0.1).pow(product.price_digits).times(product.pointRatio).toNumber()
     const spread = BigNumber(product.buy_price).minus(product.sell_price).div(pip).toNumber()
     const spDigit = String(product.pointRatio).length - 1 // 点差小数位

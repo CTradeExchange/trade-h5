@@ -1,5 +1,5 @@
 <template>
-    <span class='priceBar' v-html='priceHTML'></span>
+    <span class='priceBar' :class="['digit'+digit]" v-html='priceHTML'></span>
     <!-- <span v-show='mode===2' class='price'>
         <span class='normal'>
             1.55
@@ -67,6 +67,15 @@ export default {
     }
     sup {
         font-size: inherit;
+    }
+    &.digit13,
+    &.digit14,
+    &.digit15,
+    &.digit16 {
+        font-size: rem(26px);
+        .big {
+            font-size: rem(40px);
+        }
     }
 }
 </style>
