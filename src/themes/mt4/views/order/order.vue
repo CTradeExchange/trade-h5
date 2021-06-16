@@ -19,7 +19,11 @@
             <span v-if='isModifyPosition'>
                 {{ $t('trade.modifyOrder') + $t('colon') }}
             </span>
-            #{{ positionId }} {{ Number(curPosition.direction) === 1 ? 'buy' : 'sell' }} {{ minus(curPosition.openVolume, curPosition.closeVolume||0) }}
+            #{{ positionId }} {{ Number(curOrder.direction) === 1 ? 'buy' : 'sell' }} {{ minus(curOrder.openVolume, curOrder.closeVolume) }}
+        </p>
+        <p v-else-if='isModifyPending' class='header-info'>
+            {{ $t('trade.modifyOrder') + $t('colon') }}
+            {{ Number(curOrder.direction) === 1 ? 'buy' : 'sell' }} {{ curOrder.requestNum }}
         </p>
 
         <!-- 订单手数 -->
@@ -212,11 +216,18 @@ export default {
         const profitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
         const pendingPriceRang = computed(() => store.getters['_trade/pendingPriceRang'])
         const expireTypeItem = computed(() => state.expireTypeOptions.find(el => el.id === state.expireType))
-        const curPosition = computed(() => store.state._trade.positionMap[positionId] || {}) // 当前持仓
+        // const curPosition = computed(() => store.state._trade.positionMap[positionId] || {}) // 当前持仓
+        const curOrder = computed(() => { // 当前持仓订单或者挂单订单
+            if (positionId) {
+                return store.state._trade.positionMap[positionId]
+            } else if (pendingId) {
+                return store.state._trade.pendingMap[pendingId]
+            }
+        })
         const volumnMin = computed(() => product.value.minVolume)
         const volumnMax = computed(() => {
             if (positionId) {
-                return minus(curPosition.value.openVolume, curPosition.value.closeVolume || 0)
+                return minus(curOrder.value.openVolume, curOrder.value.closeVolume || 0)
             } else {
                 return product.value.maxVolume
             }
@@ -254,7 +265,7 @@ export default {
             let requestPrice = direct === 'sell' ? product.value.sell_price : product.value.buy_price
             let direction = direct === 'sell' ? 2 : 1
             let bizType = 1
-            if (curPosition?.value?.direction) direction = curPosition.value.direction
+            if (isClosePosition) direction = curOrder.value.direction
             switch (state.openOrderSelected.val) {
                 case 2:
                 case 3:
@@ -475,7 +486,7 @@ export default {
             handleUpdatePending,
             handleCloseOrder,
             onHide,
-            curPosition,
+            curOrder,
         }
     }
 }

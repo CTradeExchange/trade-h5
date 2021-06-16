@@ -59,3 +59,28 @@ export function tickToObj (p) {
     }
     return curPriceData
 }
+
+// 账户持仓浮动盈亏tick字符串转Object对象
+export function positionsTickToObj (str) {
+    const dataArr = str.split(';')
+    const accountData = dataArr[0].match(/\((.+)\)/)[1].split(',')
+    const positionsProfitLoss = dataArr.slice(1).map(el => {
+        const elData = el.replace(/\(|\)/g, '').split(',')
+        return {
+            positionId: elData[0],
+            profitLoss: elData[1] < 0 ? elData[1] : '+' + elData[1],
+        }
+    })
+    const result = {
+        content: {
+            availableMargin: accountData[2],
+            balance: accountData[5],
+            marginRadio: accountData[3],
+            netWorth: accountData[4],
+            occupyMargin: accountData[1],
+            profitLoss: accountData[0],
+            positionProfitLossMessages: positionsProfitLoss,
+        }
+    }
+    return result
+}
