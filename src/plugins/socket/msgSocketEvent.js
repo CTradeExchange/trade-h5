@@ -151,7 +151,6 @@ class SocketEvent {
     positionsTick (str) {
         // f(profitLoss,occupyMargin,availableMargin,marginRadio,netWorth,balance);(positionId,profitLoss);(positionId,profitLoss);(positionId,profitLoss)
         if (this.newPriceTimer) clearTimeout(this.newPriceTimer)
-        const $store = this.$store
         const curPriceData = positionsTickToObj(str)
         const now = new Date().getTime()
         if (this.preSetTime + 125 <= now) { // 控制计算频率

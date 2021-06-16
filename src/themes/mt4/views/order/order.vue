@@ -227,7 +227,7 @@ export default {
         const volumnMin = computed(() => product.value.minVolume)
         const volumnMax = computed(() => {
             if (positionId) {
-                return minus(curOrder.value.openVolume, curOrder.value.closeVolume || 0)
+                return minus(curOrder.value.openVolume, curOrder.value.closeVolume || 0) * 1
             } else {
                 return product.value.maxVolume
             }
@@ -398,7 +398,7 @@ export default {
                     if (!list) return false
                     const curPosition = list.find(el => el.positionId === Number(positionId))
                     if (!curPosition) return
-                    state.volumn = minus(curPosition.openVolume, curPosition.closeVolume || 0)
+                    state.volumn = minus(curPosition.openVolume, curPosition.closeVolume || 0) * 1
                 })
         }
 
