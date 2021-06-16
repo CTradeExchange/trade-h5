@@ -14,20 +14,26 @@ export function getDecimalNum (num) {
 }
 
 /* 加法 */
-export function plus (num1 = 0, num2 = 0) {
-    return BigNumber(Number(num1)).plus(Number(num2)).toString()
+export function plus (num1, num2) {
+    return BigNumber(num1).plus(num2).toString()
 }
 
 /* 减法 */
-export function minus (num1 = 0, num2 = 0) {
-    return BigNumber(Number(num1)).minus(Number(num2)).toString()
+export function minus (num1, num2) {
+    num1 = num1 || 0
+    num2 = num2 || 0
+    return BigNumber(num1).minus(num2).toString()
 }
 
 /* 除法 */
-export function divide (num1 = 0, num2 = 1) {
-    return BigNumber(Number(num1)).div(Number(num2)).toString()
+export function divide (num1, num2) {
+    num1 = num1 || 0
+    num2 = num2 || 1
+    return BigNumber(num1).div(num2).toString()
 }
 /* 乘法 */
-export function mul (num1 = 0, num2 = 0) {
-    return BigNumber(Number(num1)).multipliedBy(Number(num2)).toString()
+export function mul (num1, num2) {
+    num1 = num1 || 0
+    num2 = num2 || 0
+    return BigNumber(num1).multipliedBy(num2).toString()
 }
