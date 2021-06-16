@@ -92,6 +92,36 @@ const routes = [
         }
     },
     {
+        path: '/coinRecord',
+        name: 'CoinRecord',
+        component: () => import(/* webpackChunkName: "coinRecord" */ '../user/coinRecord.vue'),
+        meta: {
+            title: 'cRoute.coinRecord',
+            footerMenu: false,
+            roles: ['User'],
+        }
+    },
+    {
+        path: '/walletAddress',
+        name: 'WalletAddress',
+        component: () => import(/* webpackChunkName: "walletAddress" */ '../user/walletAddress.vue'),
+        meta: {
+            title: 'cRoute.walletAddress',
+            footerMenu: false,
+            roles: ['User'],
+        }
+    },
+    {
+        path: '/walletAdd',
+        name: 'WalletAdd',
+        component: () => import(/* webpackChunkName: "walletAdd" */ '../user/walletAdd.vue'),
+        meta: {
+            title: 'cRoute.walletAdd',
+            footerMenu: false,
+            roles: ['User'],
+        }
+    },
+    {
         path: '/addBank',
         name: 'AddBank',
         component: () => import(/* webpackChunkName: "addBank" */ '../user/addBank.vue'),

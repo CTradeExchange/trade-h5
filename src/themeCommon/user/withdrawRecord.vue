@@ -8,7 +8,7 @@
         <div class='record-list'>
             <van-pull-refresh v-model='loading' @refresh='onRefresh'>
                 <div v-if='list.length === 0'>
-                    <van-empty description='暂无数据' image='search' />
+                    <van-empty :description="$t('withdrawRecord.noneHint')" image='search' />
                 </div>
                 <van-list
                     v-model:loading='loading'
@@ -35,7 +35,7 @@
                                 </p>
                             </template>
                             <template #right-icon>
-                                <div>
+                                <div class='right-lump'>
                                     <span class='state'>
                                         {{ handleState(item.checkStatus,item.transferStatus) }}
                                         <!-- {{ states[item.checkStatus] }} -->
@@ -46,7 +46,7 @@
                             <div class='withdraw-desc'>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        取款金额
+                                        {{ $t('withdrawRecord.moneyName') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.amount }}
@@ -54,7 +54,7 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        币种
+                                        {{ $t('withdrawRecord.coinName') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.withdrawCurrency }}
@@ -62,7 +62,7 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        状态
+                                        {{ $t('withdrawRecord.statusName') }}
                                     </span>
                                     <span class='right-val state'>
                                         {{ handleState(item.checkStatus,item.transferStatus) }}
@@ -72,7 +72,7 @@
 
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        手续费
+                                        {{ $t('withdrawRecord.serviceName') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.withdrawFee }}
@@ -80,7 +80,7 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        入账金额
+                                        {{ $t('withdrawRecord.predictName') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.finalAmount }}{{ item.withdrawCurrency }}
@@ -88,7 +88,7 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        提案编号
+                                        {{ $t('withdrawRecord.noName') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.proposalNo }}
@@ -96,7 +96,7 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        提交时间
+                                        {{ $t('withdrawRecord.timeName') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ formatTime(item.createTime) }}
@@ -104,7 +104,7 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        备注
+                                        {{ $t('withdrawRecord.remarkName') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.remark || '--' }}
@@ -128,12 +128,15 @@ import { queryWithdrawPageList } from '@/api/user'
 import dayjs from 'dayjs'
 import { isEmpty } from '@/utils/util'
 import { Toast } from 'vant'
+// i18n
+import { useI18n } from 'vue-i18n'
 export default {
     components: {
         Top,
         Toast
     },
     setup (props) {
+        const { t } = useI18n({ useScope: 'global' })
         const router = useRouter()
         const store = useStore()
         // 获取账户信息
@@ -141,25 +144,25 @@ export default {
 
         // 审核状态 取款状态：审核中、已取消、成功
         const states = {
-            1: '审核中',
-            2: '已取消',
-            3: '成功'
+            1: t('withdrawRecord.auditStatus.1'),
+            2: t('withdrawRecord.auditStatus.2'),
+            3: t('withdrawRecord.auditStatus.3')
         }
 
         const transferStatus = {
-            1: '待转账',
-            2: '转账失败',
-            3: '转账成功'
+            1: t('withdrawRecord.transferStatus.1'),
+            2: t('withdrawRecord.transferStatus.2'),
+            3: t('withdrawRecord.transferStatus.3')
         }
 
         const handleState = (checkStatus, transferStatus) => {
             // 存款成功 待支付 已取消
             if (Number(checkStatus) === 3) {
-                return '已取消'
+                return t('withdrawRecord.auditStatus.2')
             } else if (Number(transferStatus) === 2) {
-                return '成功'
+                return t('withdrawRecord.auditStatus.3')
             } else {
-                return '审核中'
+                return t('withdrawRecord.auditStatus.1')
             }
         }
 
@@ -169,7 +172,7 @@ export default {
             size: 20,
             current: 1,
             list: [],
-            finishedText: '没有更多了',
+            finishedText: t('withdrawRecord.noMore'),
             finished: false,
             loadingPage: false
         })
@@ -186,8 +189,10 @@ export default {
 
         const getWithdrawList = () => {
             const params = {
+                companyId: customInfo.value.companyId,
                 customerNo: customInfo.value.customerNo,
                 accountId: customInfo.value.accountId,
+                withdrawType: 1,
                 size: state.size,
                 current: state.current,
             }
@@ -286,9 +291,14 @@ export default {
             color: var(--mutedColor);
             font-size: rem(20px);
         }
-        .state {
-            color: var(--primary);
-            vertical-align: middle;
+        .right-lump {
+            display: flex;
+            align-items: center;
+            .state {
+                margin-right: rem(10px);
+                color: var(--primary);
+                vertical-align: middle;
+            }
         }
         .van-icon {
             vertical-align: middle;

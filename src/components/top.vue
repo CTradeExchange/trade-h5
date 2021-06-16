@@ -10,11 +10,11 @@
                 {{ title }}
             </div>
             <div v-else-if='showCenter' class='title'>
-                {{ $t($route.meta.title) }}
-            </div>
+                {{ $t($route.meta.title) }}            </div>
         </slot>
+        <slot name='tabs'></slot>
         <slot name='right'>
-            <a v-if='rightAction' class='rightClick' href='javascript:;' @click='rightClick'>
+            <a v-if='rightAction.title' class='rightClick' href='javascript:;' @click='rightClick'>
                 <span class='right-text'>
                     {{ rightAction.title }}
                 </span>
@@ -71,6 +71,7 @@ export default {
 @import '@/sass/mixin.scss';
 .top {
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: space-between;
     height: rem(100px);

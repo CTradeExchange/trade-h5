@@ -452,3 +452,75 @@ export function checkUserStatus (data) {
         data
     })
 }
+
+/* 获取客户提现方式 */
+export function getWithdrawMethodList (data) {
+    return request({
+        url: '/global/fund.app.WithdrawAppDubboService.getWithdrawMethodList',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 获取客户提币币种和链名称 */
+export function getWithdrawCurrencyList (data) {
+    return request({
+        url: '/global/fund.app.WithdrawAppDubboService.getWithdrawCurrencyList',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 获取钱包列表 */
+export function getWalletAddressList (data) {
+    return request({
+        url: '/global/customer.app.CustomerWalletWebApiService.walletList',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 添加钱包 */
+export function addWalletAddress (data) {
+    return request({
+        url: '/global/customer.app.CustomerWalletWebApiService.add',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 删除钱包 */
+export function deleteWalletAddress (data) {
+    return request({
+        url: '/global/customer.app.CustomerWalletWebApiService.delete',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 设置默认钱包 */
+export function setDefaultWallet (data) {
+    return request({
+        url: '/global/customer.app.CustomerWalletWebApiService.updateWallet',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
