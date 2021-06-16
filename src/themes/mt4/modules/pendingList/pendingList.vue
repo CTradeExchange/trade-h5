@@ -111,7 +111,7 @@ export default {
         // 修改订单
         const modifyOrder = () => {
             state.show = false
-            router.push({ name: 'Order', query: { symbolId: state.cur.symbolId, pendingId: state.cur.id } })
+            router.push({ name: 'Order', query: { symbolId: state.cur.symbolId, pendingId: state.cur.id, isModifyPending: true } })
         }
         return {
             ...toRefs(state),

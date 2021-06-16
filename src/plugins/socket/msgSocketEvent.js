@@ -1,4 +1,5 @@
 import { guid, getDevice, getToken } from '@/utils/util'
+import { positionsTickToObj } from './socketUtil'
 
 // websocket消息事件
 class SocketEvent {
@@ -12,6 +13,9 @@ class SocketEvent {
         this.requests = new Map()
         this.subscribedList = []
         this.connectNum = 0 // websocket链接连接次数
+        this.preSetTime = 1 // 上一次保存价格的时间
+        this.newPrice = []
+        this.newPriceTimer = null
     }
 
     // 初始化
@@ -146,33 +150,36 @@ class SocketEvent {
     // 处理持仓盈亏浮动数据和账户数据
     positionsTick (str) {
         // f(profitLoss,occupyMargin,availableMargin,marginRadio,netWorth,balance);(positionId,profitLoss);(positionId,profitLoss);(positionId,profitLoss)
-        const dataArr = str.split(';')
-        const accountData = dataArr[0].match(/\((.+)\)/)[1].split(',')
-        const positionsProfitLoss = dataArr.slice(1).map(el => {
-            const elData = el.replace(/\(|\)/g, '').split(',')
-            return {
-                positionId: elData[0],
-                profitLoss: elData[1] < 0 ? elData[1] : '+' + elData[1],
+        if (this.newPriceTimer) clearTimeout(this.newPriceTimer)
+        const $store = this.$store
+        const curPriceData = positionsTickToObj(str)
+        const now = new Date().getTime()
+        if (this.preSetTime + 125 <= now) { // 控制计算频率
+            this.preSetTime = now
+            this.newPrice.push(curPriceData)
+            this.floatProfitLoss(this.newPrice)
+            this.newPrice = []
+        } else {
+            this.newPrice.push(curPriceData)
+        }
+
+        // 500毫秒后更新最后一组报价数据
+        this.newPriceTimer = setTimeout(() => {
+            if (this.newPrice.length > 0) {
+                this.floatProfitLoss(this.newPrice)
+                this.newPrice = []
             }
-        })
-        this.floatProfitLoss({
-            content: {
-                availableMargin: accountData[2],
-                balance: accountData[5],
-                marginRadio: accountData[3],
-                netWorth: accountData[4],
-                occupyMargin: accountData[1],
-                profitLoss: accountData[0],
-                positionProfitLossMessages: positionsProfitLoss,
-            }
-        })
+        }, 500)
     }
 
-    floatProfitLoss ({ content }) {
-        this.$store.commit('_user/Update_accountAssets', content)
-        if (content.positionProfitLossMessages.length > 0) {
-            this.$store.commit('_trade/Update_positionProfitLossList', content.positionProfitLossMessages)
-        }
+    floatProfitLoss (dataArr) {
+        const $store = this.$store
+        dataArr.forEach(({ content }) => {
+            $store.commit('_user/Update_accountAssets', content)
+            if (content.positionProfitLossMessages.length > 0) {
+                $store.commit('_trade/Update_positionProfitLossList', content.positionProfitLossMessages)
+            }
+        })
     }
 
     // 处理异地登录踢出
