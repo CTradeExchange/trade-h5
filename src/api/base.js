@@ -53,3 +53,14 @@ export function getCountryListByParentCode (data) {
         data
     })
 }
+/* 设置语言信息 */
+export function changeLang (lang) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.changeLang',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data: { lang }
+    })
+}

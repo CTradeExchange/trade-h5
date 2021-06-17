@@ -11,9 +11,13 @@
         <van-cell v-if='!customInfo.email' is-link :title='$t("setting.bindEmail")' to='/bindEmail' />
         <van-cell v-if='customInfo.email' is-link :title='$t("setting.replaceEmail")' to='/changeBindEmail' />
         <van-cell v-if='customInfo.phone' is-link :title='$t("setting.replacePhone")' to='/changeBindMobile' />
+        <van-cell is-link :title='$t("setting.setLang")' :value='langText' @click='langVisible=true' />
         <van-button class='logout-btn' :loading='loading' type='primary' @click='handleLogout'>
             <span>{{ $t("setting.logout") }}</span>
         </van-button>
+
+        <van-action-sheet v-model:show='langVisible' :actions='langActions' @select='langSelect' />
+        <Loading :show='loading' />
     </div>
 </template>
 
@@ -24,6 +28,7 @@ import { Dialog } from 'vant'
 import { isEmpty, removeLoginParams, localSet, localGet } from '@/utils/util'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
+import { changeLang } from '@/api/base'
 export default {
     setup (props) {
         const instance = getCurrentInstance()
@@ -35,7 +40,14 @@ export default {
         const router = useRouter()
         const state = reactive({
             checked: false,
-            loading: false
+            loading: false,
+            langVisible: false,
+            lang: localGet('lang') || store.state._base.wpCompanyInfo.language,
+            langActions: store.state.supportLanguages
+        })
+        const langText = computed(() => {
+            const curLang = state.langActions.find(el => el.val === state.lang)
+            return curLang ? curLang.name : ''
         })
 
         onBeforeMount(() => {
@@ -66,10 +78,26 @@ export default {
                 // on cancel
             })
         }
+
+        // 选择语言
+        const langSelect = (action) => {
+            state.loading = true
+            changeLang(action.val).then(res => {
+                state.loading = false
+                if (res.check()) {
+                    state.langVisible = false
+                    state.lang = action.val
+                    localSet('lang', action.val)
+                }
+            }).catch(err => (state.loading = false))
+        }
+
         return {
             customInfo,
             handleLogout,
             changeNewsState,
+            langText,
+            langSelect,
             ...toRefs(state)
         }
     }

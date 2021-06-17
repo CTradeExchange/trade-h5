@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import I18n from './i18n/i18n.js'
+import I18n, { setI18nLanguage, loadLocaleMessages } from './i18n/i18n.js'
 import VantBase from './vantBase'
 import { Dialog } from 'vant'
 import Socket, { MsgSocket } from '@/plugins/socket/socket'
@@ -13,7 +13,7 @@ import PageComp from '@m/components/PageComp.vue'
 import LayoutTop from '@m/layout/top'
 import Colors, { setRootVariable } from './colorVariables'
 import { setRouter } from '@/utils/request'
-import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC } from '@/utils/util'
+import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet } from '@/utils/util'
 import BigNumber from 'bignumber.js'
 
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
@@ -46,6 +46,11 @@ if (loginParams || token) store.commit('_user/Update_loginLoading', true)
 
 // 获取到公司配置后初始化vue实例
 store.dispatch('_base/initBaseConfig').then(() => {
+    // 设置语言
+    const defaultLocal = localGet('lang')
+    setI18nLanguage(I18n, defaultLocal)
+    loadLocaleMessages(I18n, defaultLocal)
+
     // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
     if (loginParams || token) {
         Promise.resolve().then(() => {

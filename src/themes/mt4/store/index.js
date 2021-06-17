@@ -9,6 +9,10 @@ import Colors from '@m/colorVariables'
 const style = {
     ...Colors
 }
+const supportLanguages = [
+    { val: 'zh-CN', name: '中文' },
+    { val: 'en-US', name: 'English' },
+]
 
 export default createStore({
     modules: {
@@ -22,6 +26,7 @@ export default createStore({
         quoteMode: 2, // 1简单模式 2高级模式
         zoneList: [],
         bankDict: [],
+        supportLanguages: supportLanguages,
         countryList: []
     },
     getters: {

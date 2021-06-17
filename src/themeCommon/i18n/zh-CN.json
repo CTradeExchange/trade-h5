@@ -1,5 +1,5 @@
 {
-"cRoute": {
+  "cRoute": {
     "login": "登录",
     "register": "注册开户",
     "registerSuccess": "开户成功",
@@ -33,7 +33,7 @@
     "changeBindEmail": "更换邮箱",
     "changeBindMobile": "更换手机",
     "chartSetting": "图表设置"
-    },
+  },
   "login": {
     "loginBtn": "登录",
     "register": "注册新账户",
@@ -179,7 +179,6 @@
     "chooseCertificateType": "选择证件类型",
     "incorrectlyFormed": "格式不正确",
     "pleaseEnter": "请输入"
-
   },
   "chart": {
     "candleStick": "阴阳烛",
@@ -309,7 +308,8 @@
     "replaceEmail": "更换邮箱",
     "replacePhone": "更换手机",
     "logout": "退出账号",
-    "logoutConfirm": "确定退出登录吗"
+    "logoutConfirm": "确定退出登录吗",
+    "setLang": "设置语言"
   },
   "withdraw": {
     "wayMsg": "暂无取款功能",
@@ -330,7 +330,7 @@
     "kycMsg_1": "KYC审核中，请耐心等待",
     "kycMsg_2": "当前操作需要KYC认证",
     "activateMsg": "账户激活后才可取款",
-    "activateBtn": "去激活", 
+    "activateBtn": "去激活",
     "bindBtn": "去绑定",
     "bindPhoneHint": "暂未绑定手机号码，请前往绑定",
     "backHome": "返回首页",
@@ -370,14 +370,14 @@
     "remarkName": "备注",
     "noMore": "没有更多了",
     "auditStatus": {
-        "1": "审核中",
-        "2": "已取消",
-        "3": "成功"
+      "1": "审核中",
+      "2": "已取消",
+      "3": "成功"
     },
     "transferStatus": {
-        "1": "待转账",
-        "2": "转账失败",
-        "3": "转账成功"
+      "1": "待转账",
+      "2": "转账失败",
+      "3": "转账成功"
     }
   },
   "withdrawCoin": {
@@ -402,24 +402,24 @@
     "hint_4": "提币数量不能小于",
     "hint_5": "提币数量不能大于"
   },
-	"coinRecord": {
-		"auditStatus": {
-		    "1": "审核中",
-		    "2": "已完成",
-		    "3": "已失败"
-		},
-		"time": "时间",
-		"service": "手续费",
-		"take": "提币",
-		"takeCount": "提币数量",
-		"coin": "币种",
-		"chain": "链名称",
-		"status": "状态",
-		"arriveCount": "到账数量",
-		"takeNo": "提案编号",
-		"submitTime": "提交时间",
-		"remark": "备注"
-	},
+  "coinRecord": {
+    "auditStatus": {
+      "1": "审核中",
+      "2": "已完成",
+      "3": "已失败"
+    },
+    "time": "时间",
+    "service": "手续费",
+    "take": "提币",
+    "takeCount": "提币数量",
+    "coin": "币种",
+    "chain": "链名称",
+    "status": "状态",
+    "arriveCount": "到账数量",
+    "takeNo": "提案编号",
+    "submitTime": "提交时间",
+    "remark": "备注"
+  },
   "walletAdd": {
     "coinName": "提币币种",
     "coinPlaceholder": "请选择提币币种",
@@ -454,7 +454,7 @@
     "inputOpenAddressText": "请输入开户地址",
     "branchAddress": "支行地址",
     "inputBranchAddress": "请输入支行地址（选填）",
-    "submitSuccessTips": "预计2-3个工作日完成审核（节假期顺延），如需要其它帮助，请联系客服。"  ,
+    "submitSuccessTips": "预计2-3个工作日完成审核（节假期顺延），如需要其它帮助，请联系客服。",
     "noBanks": "暂无银行卡",
     "addBank": "新增银行卡",
     "bankList": "银行卡列表"
