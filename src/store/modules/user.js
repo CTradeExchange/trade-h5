@@ -70,6 +70,7 @@ export default {
                 if (res.check()) {
                     const data = res.data
                     if (params.loginPwd) localSet('loginParams', JSON.stringify(params))
+                    window.sessionStorage.setItem('customerNo', data.customerNo)
                     setToken(data.token)
                     // 清空之前的账户数据和产品数据
                     commit('Empty_data')

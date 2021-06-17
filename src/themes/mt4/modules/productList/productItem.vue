@@ -153,9 +153,6 @@ export default {
         margin-left: rem(10px);
         font-size: rem(24px);
         text-align: right;
-        &:last-of-type {
-            margin-left: rem(30px);
-        }
     }
 }
 </style>

@@ -261,6 +261,12 @@
                                     type='textarea'
                                 />
                             </el-form-item>
+                            <el-form-item label='借款还款'>
+                                <el-input
+                                    v-model='form.borrowReturn'
+                                    placeholder='请输入'
+                                />
+                            </el-form-item>
                         </el-col>
                     </el-row>
                 </el-tab-pane>

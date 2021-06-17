@@ -49,6 +49,9 @@
                     <i class='icon icon_xinwen'></i> <strong>{{ $t('route.news') }}</strong>
                 </li>
 
+                <li v-if='borrowReturn' class='item' @click='toBorrow'>
+                    <i class='icon icon_xinwen'></i> <strong>{{ $t('c.borrowReturn') }}</strong>
+                </li>
                 <li class='item' @click="visible=false;$router.push('/msg')">
                     <i class='icon icon_xinxi'></i> <strong>{{ $t('cRoute.msg') }}</strong>
                 </li>
@@ -76,15 +79,18 @@
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 export default {
     setup () {
         const router = useRouter()
         const store = useStore()
+        const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             visible: false,
         })
 
         const customerNo = computed(() => store.state._user.customerInfo?.customerNo)
+        const borrowReturn = computed(() => store.state._base.wpCompanyInfo.borrowReturn)
         const openNews = computed(() => {
             if (localStorage.getItem('openNews')) return JSON.parse(localStorage.getItem('openNews'))
         })
@@ -94,10 +100,26 @@ export default {
             router.replace('/news')
         }
 
+        // 借还
+        const toBorrow = () => {
+            state.visible = false
+            if (!customerNo.value) return router.push({ name: 'Login' })
+            router.push({
+                name: 'Otherpage',
+                params: { type: 'page' },
+                query: {
+                    url: encodeURIComponent(borrowReturn.value),
+                    pageTitle: t('c.borrowReturn')
+                }
+            })
+        }
+
         return {
             ...toRefs(state),
+            borrowReturn,
             customerNo,
             openNews,
+            toBorrow,
             toNews
 
         }
