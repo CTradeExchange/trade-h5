@@ -27,7 +27,7 @@
         </p>
 
         <!-- 订单手数 -->
-        <div class='cell'>
+        <div class='cell '>
             <OrderVolumn v-model='volumn' :disabled='!!isModifyPosition || !!isModifyPending' :max='volumnMax' :min='volumnMin' :product='product' />
         </div>
 
@@ -40,26 +40,37 @@
                 <Price :digit='product.price_digits' :mode='2' :point-ratio='product.pointRatio' :price='product.buy_price' />
             </div>
         </div>
+
         <!-- 挂单 -->
         <p>{{ $t('trade.pendingRange') }}</p>
         <p>{{ pendingPriceRang }}</p>
-        <div v-if='openOrderSelected.val > 1 || pendingId' class='cell priceSet'>
-            <div class='col'>
-                <PriceStepper v-model='pendingPrice' class='pendingPrice' :disabled='disabled' :product='product' />
-            </div>
-        </div>
-
-        <!-- 止盈止损价格设置 -->
         <p>{{ $t('trade.profitLossRange') }}</p>
         {{ profitLossRang }}
-        <div class='cell priceSet'>
-            <div class='col'>
-                <TakeProfit v-model='stopLoss' :disabled='!!isClosePosition' :product='product' />
-            </div>
-            <div class='col'>
-                <TakeProfit v-model='takeProfit' :disabled='!!isClosePosition' :product='product' />
-            </div>
-        </div>
+        <van-cell v-if='openOrderSelected.val > 1 || pendingId' class='priceRow'>
+            <template #title>
+                <span class='vancellTitle'>
+                    价格
+                </span>
+            </template>
+            <PriceStepper v-model='pendingPrice' class='pendingPrice' :disabled='disabled' :product='product' />
+        </van-cell>
+        <!-- 止盈止损价格设置 -->
+        <van-cell class='priceRow'>
+            <template #title>
+                <span class='vancellTitle'>
+                    止损
+                </span>
+            </template>
+            <TakeProfit v-model='stopLoss' :disabled='!!isClosePosition' :product='product' />
+        </van-cell>
+        <van-cell class='priceRow'>
+            <template #title>
+                <span class='vancellTitle'>
+                    止盈
+                </span>
+            </template>
+            <TakeProfit v-model='takeProfit' :disabled='!!isClosePosition' :product='product' />
+        </van-cell>
 
         <!-- 挂单有效期 -->
         <SelectComp v-if='openOrderSelected.val > 1' v-model='expireType' :disabled='disabled' :options='expireTypeOptions'>
@@ -560,31 +571,27 @@ export default {
     display: flex;
     justify-content: center;
     margin-top: rem(30px);
+    margin-bottom: 10px;
+    background: var(--bgColor);
     .col {
         &:first-of-type {
             margin-right: rem(40px);
         }
     }
 }
-.priceSet {
-    display: flex;
-    margin-top: rem(40px);
-    .col {
-        @include ftbd();
-        flex: 1;
-        margin-left: rem(40px);
-        &:first-of-type {
-            margin-left: 0;
-            &::before {
-                border-color: var(--sellColor);
-            }
-        }
-        &:last-of-type {
-            &::before {
-                border-color: var(--buyColor);
-            }
-        }
+.priceRow {
+    padding-bottom: 5px;
+    :deep(.van-cell__value) {
+        flex: none;
+        width: 60%;
     }
+    :deep(.inputEl) {
+        flex: 1;
+    }
+}
+.vancellTitle {
+    display: inline-block;
+    line-height: rem(80px);
 }
 .pendingPrice {
     :deep(.inputEl) {
