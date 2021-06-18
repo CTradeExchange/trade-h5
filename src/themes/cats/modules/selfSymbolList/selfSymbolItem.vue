@@ -1,5 +1,5 @@
 <template>
-    <div v-if='product.symbolId' class='productItem'>
+    <div v-if='product' class='productItem'>
         <div class='cell'>
             <div class='th' @click='toDetail(product)'>
                 <span

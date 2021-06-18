@@ -1,44 +1,101 @@
 <template>
-    <Top>
-        <template #right>
-            <van-icon class='icon-edit' name='edit' @click="$router.push({ name: 'Optional' })" />
-            <van-icon class='icon-plus' name='plus' @click="$router.push({ name: 'Search' })" />
-        </template>
-    </Top>
-    <productListComp />
+    <div class='quoteWrap'>
+        <div class='tradeNav'>
+            <TopTab
+                ref='tabList'
+                v-model='activeTab'
+                class='tradeSortNav'
+                :dot='true'
+                line-height='0'
+                line-width='0'
+                :list='categoryList'
+                title-active-color='#333'
+                title-inactive-color='#333'
+                @change='tabChange'
+                @tabClick='tabClick'
+            />
+        </div>
+
+        <productListComp v-if='productList.length' :product-list='productList' />
+    </div>
 </template>
 
 <script>
-import Top from '@c/layout/top'
+import TopTab from './topTab'
 import productListComp from '@c/modules/productList/productList.vue'
-import { computed, watchEffect } from 'vue'
+import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
     name: 'Quote',
     components: {
         productListComp,
-        Top,
+        TopTab,
     },
     setup () {
         const store = useStore()
         const customerInfo = computed(() => store.state._user.customerInfo)
+        const customerGroupId = computed(() => store.getters.customerGroupId)
+        const productMap = computed(() => store.state._quote.productMap)
+        // 板块分类列表
+        const categoryList = computed(() => {
+            const wpProductCategory = store.state._base.wpProductCategory || []
+            const quoteList = wpProductCategory.find(el => el.tag === 'quoteList')
+            if (!quoteList) return []
+            const resultList = quoteList.data.items.map(el => {
+                return {
+                    id: el.id,
+                    title: el.title,
+                    list: el.code_ids_all[customerGroupId.value]
+                }
+            })
+            return resultList
+        })
+        // 当前板块下的产品列表
+        const productList = computed(() => {
+            const list = categoryList.value[state.activeTab].list
+            const products = []
+            const productMapVal = productMap.value
+            list.forEach(el => {
+                if (productMapVal[el]) products.push(productMapVal[el])
+            })
+            return products
+        })
 
+        const state = reactive({
+            activeTab: 0,
+        })
         if (customerInfo.value) {
             store.dispatch('_trade/queryPositionPage')
         }
-        return {}
+        const tabChange = (i) => {}
+        const tabClick = (i) => {}
+        return {
+            ...toRefs(state),
+            categoryList,
+            productList,
+            tabChange,
+            tabClick,
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.icon-edit,
-.icon-plus {
-    font-size: rem(40px);
+.quoteWrap {
+    flex: 1;
+    width: 100%;
+    margin-top: rem(100px);
+    margin-bottom: rem(100px);
+    overflow: auto;
 }
-.icon-plus {
-    margin-left: rem(20px);
+.tradeNav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-bottom: rem(10px);
+    background-color: #FFF;
 }
 </style>

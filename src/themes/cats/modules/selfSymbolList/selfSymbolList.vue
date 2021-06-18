@@ -42,7 +42,7 @@ export default {
             const sortField = state.displayType === 1 ? 'upDownAmount_pip' : 'upDownAmount'
             if (state.sortType === 2) list = list.slice(0).sort((a, b) => parseFloat(b[sortField]) - parseFloat(a[sortField]))
             if (state.sortType === 3) list = list.slice(0).sort((a, b) => parseFloat(a[sortField]) - parseFloat(b[sortField]))
-            list.filter(el => productMap.value[el.symbolId] && productMap.value[el.symbolId].symbolName)
+            list = list.filter(el => productMap.value[el.symbolId] && productMap.value[el.symbolId].symbolName)
             return list
         })
 
@@ -77,6 +77,10 @@ export default {
             { immediate: true }
         )
 
+        const openProduct = (data) => {
+            router.push({ name: 'Order', query: { symbolId: data.symbolId } })
+        }
+
         onMounted(() => {
             productListEl.value.addEventListener('scroll', calcProductsDebounce, false)
         })
@@ -87,6 +91,7 @@ export default {
             calcSubscribeProducts,
             productMap,
             productList,
+            openProduct,
         }
     },
 }
