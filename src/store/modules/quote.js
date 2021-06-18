@@ -1,4 +1,5 @@
 import { querySymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
+import { minus, toFixed } from '@/utils/calculation'
 import CheckAPI from '@/utils/checkAPI'
 import BigNumber from 'bignumber.js'
 
@@ -16,6 +17,17 @@ function price_spread (product, data) {
     if (product.askSpread && data.buy_price) product.buy_price = BigNumber(data.buy_price).plus(product.askSpread).toFixed(product.price_digits)
     if (product.bidSpread && data.sell_price) product.sell_price = BigNumber(data.sell_price).plus(product.bidSpread).toFixed(product.price_digits)
     spreadText(product)
+}
+/** 价格转点数  点数=价差/（Point*大点比率）
+ * 点差小数位显示规则：
+    根据大点比率进行显示，大点比率的值一般为1（10的0次方）、10（10的1次方）、100（10的2次方）、1000（10的3次方）
+    则点差的小数位分别对应为0位、1位、2位、3位
+    例如：EURUSD卖价：1.19323 ，买价：1.19341，大点比率为10，则点差=（1.19341-1.19323）/10*0.00001=1.8
+ */
+function priceToPip (price, product) {
+    const spDigit = String(product.pointRatio).length - 1 // 点差小数位
+    const pip = BigNumber(0.1).pow(product.price_digits).times(product.pointRatio) // 1pip=point*大点比率
+    return BigNumber(price).div(pip).toFixed(spDigit)
 }
 
 export default {
@@ -69,12 +81,19 @@ export default {
                     product.buy_price_pre = data.buy_price
                     product.sell_price_pre = data.sell_price
                     product.cur_price_pre = data.cur_price
+                    product.yesterday_close_price = data.yesterday_close_price
                     product.cur_color = product.buy_color = product.sell_color = 'grayColor'
                 }
                 // 计算涨跌
                 product.cur_color = BigNumber(data.cur_price).eq(product.cur_price_pre) ? product.cur_color : BigNumber(data.cur_price).lt(product.cur_price_pre) ? 'fallColor' : 'riseColor'
                 product.buy_color = BigNumber(data.buy_price).eq(product.buy_price_pre) ? product.buy_color : BigNumber(data.buy_price).lt(product.buy_price_pre) ? 'fallColor' : 'riseColor'
                 product.sell_color = BigNumber(data.sell_price).eq(product.sell_price_pre) ? product.sell_color : BigNumber(data.sell_price).lt(product.sell_price_pre) ? 'fallColor' : 'riseColor'
+
+                product.upDownAmount = BigNumber(data.cur_price).minus(product.yesterday_close_price).toFixed(product.price_digits) // 涨跌额
+                product.upDownAmount_pip = priceToPip(product.upDownAmount, product) // 涨跌额(点)
+                product.upDownWidth = BigNumber(product.upDownAmount).div(product.yesterday_close_price).times(100).toFixed(2) + '%' // 涨跌幅
+                product.upDownColor = product.upDownAmount >= 0 ? 'riseColor' : 'fallColor'
+
                 // 更新上一口价的裸行情
                 product.cur_price_pre = data.cur_price
                 product.buy_price_pre = data.buy_price

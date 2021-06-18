@@ -14,6 +14,7 @@ const alias = {
     '@': resolve('src'),
     '@api': resolve('src/api'),
     '@m': resolve('src/themes/mt4'),
+    '@c': resolve('src/themes/cats'),
     '@ct': resolve('src/themes/ctrader'),
     '@admin': resolve('src_admin'),
     '@utils': resolve('src_admin/utils'),
@@ -75,7 +76,8 @@ if (isAdminMode) {
     })
     // H5开发模式
     Object.assign(pages, {
-        index: 'src/themes/mt4/main.js'
+        index: 'src/themes/cats/main.js'
+        // index: 'src/themes/mt4/main.js'
         // index: 'src/themes/ctrader/main.js'
     })
 }

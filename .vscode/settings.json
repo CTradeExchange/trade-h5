@@ -58,7 +58,11 @@
         "fill_tab": false
     },
     "editor.minimap.enabled": true,
-    "i18n-ally.localesPaths": ["src/themes/mt4/i18n", "src/themeCommon/i18n"], //
+    "i18n-ally.localesPaths": [
+        "public/lang",
+        "src/themes/cats/i18n",
+        "src/themeCommon/i18n"
+    ], //
         
     "i18n-ally.refactor.templates": [ "$t(\"{key}\")" ],
     // "i18n-ally.pathMatcher": "{locale}/{namespaces}.{ext}",
