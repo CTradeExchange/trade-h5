@@ -23,24 +23,24 @@
             </button>
         </div>
     </div>
-    <div v-else-if='openOrderSelected.val === 1' class='footerBtn line'>
+    <div v-else-if='openOrderSelected.val === 1' class='footerBtn'>
         <div class='col'>
-            <button class='btn sellColor' :disabled='disabled || sellDisabled' @click="openOrder('sell')">
+            <button class='btn sell' :disabled='disabled || sellDisabled' @click="openOrder('sell')">
                 SELL
             </button>
         </div>
         <div class='col'>
-            <button class='btn buyColor' :disabled='disabled || buyDisabled' @click="openOrder('buy')">
+            <button class='btn buy' :disabled='disabled || buyDisabled' @click="openOrder('buy')">
                 BUY
             </button>
         </div>
     </div>
     <div v-else class='footerBtn'>
         <div class='col'>
-            <button v-if='[2, 4].includes(openOrderSelected.val)' class='btn buyColor' :disabled='disabled || buyDisabled' @click='openOrder()'>
+            <button v-if='[2, 4].includes(openOrderSelected.val)' class='btn buy' :disabled='disabled || buyDisabled' @click='openOrder()'>
                 {{ $t('trade.submitOrder') }}
             </button>
-            <button v-else-if='[3, 5].includes(openOrderSelected.val)' class='btn sellColor' :disabled='disabled || sellDisabled' @click='openOrder()'>
+            <button v-else-if='[3, 5].includes(openOrderSelected.val)' class='btn sell' :disabled='disabled || sellDisabled' @click='openOrder()'>
                 {{ $t('trade.submitOrder') }}
             </button>
         </div>
@@ -177,8 +177,17 @@ export default {
         line-height: 1;
         text-align: center;
         background: var(--btnColor);
+        &.sell {
+            color: var(--white);
+            background: var(--sellColor);
+        }
+        &.buy {
+            color: var(--white);
+            background: var(--buyColor);
+        }
         &:disabled {
-            opacity: 0.4;
+            background: var(--color);
+            opacity: 0.2;
         }
     }
 }

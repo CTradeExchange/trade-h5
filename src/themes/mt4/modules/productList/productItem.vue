@@ -52,7 +52,7 @@ export default {
 
         const positionList = computed(() => store.state._trade.positionList)
         const quoteMode = computed(() => store.state.quoteMode)
-        const longName = computed(() => getLen(product?.symbolName) > 15)
+        const longName = computed(() => getLen(product?.symbolName) > 10)
         const tickTime = computed(() => {
             const tick_time = product.tick_time ?? ''
             return tick_time ? dayjs(Number(tick_time)).format('HH:mm:ss') : ''
@@ -95,14 +95,14 @@ export default {
     @include active();
     position: relative;
     display: flex;
-    padding: rem(20px) rem(40px);
+    padding: rem(20px);
     overflow: hidden;
     &.position_buy::before {
         position: absolute;
         top: 0;
         left: 0;
-        width: rem(40px);
-        height: rem(40px);
+        width: rem(30px);
+        height: rem(30px);
         background: var(--buyColor);
         transform: translate(-50%, -50%) rotate(45deg);
         transform-origin: center;
@@ -112,8 +112,8 @@ export default {
         position: absolute;
         top: 0;
         left: 0;
-        width: rem(40px);
-        height: rem(40px);
+        width: rem(30px);
+        height: rem(30px);
         background: var(--sellColor);
         transform: translate(-50%, -50%) rotate(45deg);
         transform-origin: center;
@@ -137,11 +137,11 @@ export default {
         line-height: 1.3;
     }
     .productName {
-        max-width: rem(280px);
+        width: rem(160px);
         overflow: hidden;
         color: var(--color);
         font-weight: normal;
-        font-size: rem(36px);
+        font-size: rem(30px);
         white-space: nowrap;
         text-overflow: ellipsis;
         &.longName {
@@ -149,13 +149,10 @@ export default {
         }
     }
     .col {
-        width: rem(200px);
+        width: rem(280px);
         margin-left: rem(10px);
         font-size: rem(24px);
         text-align: right;
-        &:last-of-type {
-            margin-left: rem(30px);
-        }
     }
 }
 </style>

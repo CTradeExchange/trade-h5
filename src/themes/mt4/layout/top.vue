@@ -18,21 +18,18 @@
         </slot>
 
         <slot name='right'></slot>
-        <!-- <topRight /> -->
     </div>
 
     <leftMenu ref='leftMenu' />
 </template>
 
 <script>
-import topRight from './topRight'
 import leftMenu from './leftMenu'
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 export default {
     components: {
-        topRight,
         leftMenu,
     },
     props: {

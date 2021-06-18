@@ -106,15 +106,15 @@ const routes = [
             roles: ['User'],
         }
     },
-    {
-        path: '/closePosition',
-        name: 'ClosePosition',
-        component: () => import(/* webpackChunkName: "closePosition" */ '../views/order/closePosition.vue'),
-        meta: {
-            title: 'route.orderClose',
-            roles: ['User'],
-        }
-    },
+    // {
+    //     path: '/closePosition',
+    //     name: 'ClosePosition',
+    //     component: () => import(/* webpackChunkName: "closePosition" */ '../views/order/closePosition.vue'),
+    //     meta: {
+    //         title: 'route.orderClose',
+    //         roles: ['User'],
+    //     }
+    // },
     {
         path: '/search',
         name: 'Search',

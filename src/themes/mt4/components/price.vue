@@ -1,5 +1,5 @@
 <template>
-    <span class='priceBar' v-html='priceHTML'></span>
+    <span class='priceBar' :class="['digit'+digit]" v-html='priceHTML'></span>
     <!-- <span v-show='mode===2' class='price'>
         <span class='normal'>
             1.55
@@ -13,6 +13,7 @@
 
 <script>
 import { computed } from 'vue'
+import BigNumber from 'bignumber.js'
 export default {
     props: {
         price: {
@@ -39,12 +40,12 @@ export default {
             // if (lastBigIndex < digitDotIndex) lastBigIndex--
             // if (firstBigIndex < digitDotIndex) firstBigIndex--
             // return `<span class='normal'>${price.slice(0, firstBigIndex)}</span><span class='big'>${price.slice(firstBigIndex, lastBigIndex)}</span><sup >${price.slice(lastBigIndex)}</sup>`
-            const price = Number(props.price).toFixed(props.digit)
+            const price = BigNumber(props.price).toFixed(props.digit)
             let bigEnd = price.length - String(props.pointRatio).length
             if (price.charAt(bigEnd) === '.') bigEnd--
             let bigStart = bigEnd - 1
             if (price.charAt(bigStart) === '.') bigStart--
-            return `<span class='normal'>${price.slice(0, bigStart)}</span><span class='big'>${price.slice(bigStart, bigEnd+1)}</span><sup >${price.slice(bigEnd+1)}</sup>`
+            return `<span class='normal'>${price.slice(0, bigStart)}</span><span class='big'>${price.slice(bigStart, bigEnd + 1)}</span><sup >${price.slice(bigEnd + 1)}</sup>`
         })
         return {
             priceHTML
@@ -66,6 +67,15 @@ export default {
     }
     sup {
         font-size: inherit;
+    }
+    &.digit13,
+    &.digit14,
+    &.digit15,
+    &.digit16 {
+        font-size: rem(26px);
+        .big {
+            font-size: rem(40px);
+        }
     }
 }
 </style>

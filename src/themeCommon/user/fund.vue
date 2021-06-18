@@ -105,7 +105,7 @@ export default {
             // 强平水平	预警水平
             if (!isEmpty(customInfo.value) && !isEmpty(accountInfo.value)) {
                 const [forceLevel, earlyWarningLevel] = [parseFloat(customInfo.value.forceLevel), parseFloat(customInfo.value.earlyWarningLevel)]
-                const marginRadio = divide(accountInfo.value.marginRadio, 100)
+                const marginRadio = divide(accountInfo.value.marginRadio, 100) * 1
 
                 if (marginRadio > earlyWarningLevel) {
                     return 'success'

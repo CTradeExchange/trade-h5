@@ -5,6 +5,12 @@
   "cancel": "取消",
   "colon": "：",
   "complete": "完成",
+  "c": {
+    "managAccount": "管理账户",
+    "loginAccont": "登录账户",
+    "onlineService": "客服",
+    "borrowReturn": "借款/还款"
+  },
   "contract": {
     "advance": "预付款",
     "amount": "金额",

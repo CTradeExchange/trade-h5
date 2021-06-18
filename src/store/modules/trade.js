@@ -1,5 +1,6 @@
 import { queryPositionPage, queryHistoryCloseOrderList, queryPBOOrderPage } from '@/api/trade'
 import CheckAPI from '@/utils/checkAPI'
+import BigNumber from 'bignumber.js'
 
 const EmptyProfitLossRang = {
     buyProfitRange: [], // 买入止盈范围
@@ -43,34 +44,25 @@ export default {
             const digits = product.price_digits
             const point = Math.pow(0.1, digits)
             const pip = point * product.pointRatio
-            let buyProfitMax, // 买入止盈范围最大值
-                buyProfitMin, // 买入止盈范围最小值
-                sellProfitMax, // 卖出止盈范围最大值
-                sellProfitMin, // 卖出止盈范围最小值
-                buyStopLossMax, // 买入止损范围最大值
-                buyStopLossMin, // 买入止损范围最小值
-                sellStopLossMax, // 卖出止损范围最大值
-                sellStopLossMin // 卖出止损范围最小值
 
-            let buy_price = state.pendingPrice ? Number(state.pendingPrice) : Number(product.buy_price)
-            let sell_price = state.pendingPrice ? Number(state.pendingPrice) : Number(product.sell_price)
+            let buy_price = state.pendingPrice ? state.pendingPrice : product.buy_price
+            let sell_price = state.pendingPrice ? state.pendingPrice : product.sell_price
             if (curPosition) {
                 // 如果当前是修改持仓，公式里面的价格则是：买方向取卖价、卖方向取买价
-                buy_price = sell_price = curPosition.direction === 1 ? Number(product.sell_price) : Number(product.buy_price)
+                buy_price = sell_price = curPosition.direction === 1 ? product.sell_price : product.buy_price
             }
 
-            buyProfitMax = (buy_price + pip * product.stopLossMaxPoint).toFixed(digits) // 买入价+pip*限价最大距离
-            buyProfitMin = (buy_price + pip * product.stopLossMinPoint).toFixed(digits) // 买入价+pip*限价最小距离
+            const buyProfitMax = BigNumber(buy_price).plus(pip * product.stopLossMaxPoint).toFixed(digits) // 买入止盈范围最大值 买入价+pip*限价最大距离
+            const buyProfitMin = BigNumber(buy_price).plus(pip * product.stopLossMinPoint).toFixed(digits) // 买入止盈范围最小值 买入价+pip*限价最小距离
 
-            sellProfitMax = (sell_price - pip * product.stopLossMinPoint).toFixed(digits) // 卖出价-pip*限价最小距离
+            const sellProfitMax = BigNumber(sell_price).minus(pip * product.stopLossMinPoint).toFixed(digits) // 卖出止盈范围最大值 卖出价-pip*限价最小距离
+            const sellProfitMin = BigNumber(sell_price).minus(pip * product.stopLossMaxPoint).toFixed(digits) // 卖出止盈范围最小值 卖出价-pip*限价最大距离
 
-            sellProfitMin = (sell_price - pip * product.stopLossMaxPoint).toFixed(digits) // 卖出价-pip*限价最大距离
+            const buyStopLossMax = BigNumber(buy_price).minus(pip * product.stopLossMinPoint).toFixed(digits) // 买入止损范围最大值 买入价-pip*限价最小距离
+            const buyStopLossMin = BigNumber(buy_price).minus(pip * product.stopLossMaxPoint).toFixed(digits) // 买入止损范围最小值 买入价-pip*限价最大距离
 
-            buyStopLossMax = (buy_price - pip * product.stopLossMinPoint).toFixed(digits) // 买入价-pip*限价最小距离
-            buyStopLossMin = (buy_price - pip * product.stopLossMaxPoint).toFixed(digits) // 买入价-pip*限价最大距离
-
-            sellStopLossMax = (sell_price + pip * product.stopLossMaxPoint).toFixed(digits) // 卖出价+pip*限价最大距离
-            sellStopLossMin = (sell_price + pip * product.stopLossMinPoint).toFixed(digits) // 卖出价+pip*限价最小距离
+            const sellStopLossMax = BigNumber(sell_price).plus(pip * product.stopLossMaxPoint).toFixed(digits) // 卖出止损范围最大值 卖出价+pip*限价最大距离
+            const sellStopLossMin = BigNumber(sell_price).plus(pip * product.stopLossMinPoint).toFixed(digits) // 卖出止损范围最小值 卖出价+pip*限价最小距离
 
             return {
                 buyProfitRange: [buyProfitMin, buyProfitMax], // 买入止盈范围
@@ -86,29 +78,21 @@ export default {
             const digits = product.price_digits
             const point = Math.pow(0.1, digits)
             const pip = point * product.pointRatio
-            let buyLimitMax, // 限价买入范围最大值
-                buyLimitMin, // 限价买入范围最小值
-                sellLimitMax, // 限价卖出范围最大值
-                sellLimitMin, // 限价卖出范围最小值
-                buyStopMax, // 停损买入范围最大值
-                buyStopMin, // 停损买入范围最小值
-                sellStopMax, // 停损卖出范围最大值
-                sellStopMin // 停损卖出范围最小值
 
-            const buy_price = Number(product.buy_price)
-            const sell_price = Number(product.sell_price)
+            const buy_price = product.buy_price
+            const sell_price = product.sell_price
 
-            buyLimitMax = (buy_price - pip * product.priceMinLimit).toFixed(digits) // 买入价-pip*限价最小距离
-            buyLimitMin = (buy_price - pip * product.priceMaxLimit).toFixed(digits) // 买入价-pip*限价最大距离
+            const buyLimitMax = BigNumber(buy_price).minus(pip * product.priceMinLimit).toFixed(digits) // 限价买入范围最大值 买入价-pip*限价最小距离
+            const buyLimitMin = BigNumber(buy_price).minus(pip * product.priceMaxLimit).toFixed(digits) // 限价买入范围最小值 买入价-pip*限价最大距离
 
-            sellLimitMax = (sell_price + pip * product.priceMaxLimit).toFixed(digits) // 卖出价+pip*限价最大距离
-            sellLimitMin = (sell_price + pip * product.priceMinLimit).toFixed(digits) // 卖出价+pip*限价最小距离
+            const sellLimitMax = BigNumber(sell_price).plus(pip * product.priceMaxLimit).toFixed(digits) // 限价卖出范围最大值 卖出价+pip*限价最大距离
+            const sellLimitMin = BigNumber(sell_price).plus(pip * product.priceMinLimit).toFixed(digits) // 限价卖出范围最小值 卖出价+pip*限价最小距离
 
-            buyStopMax = (buy_price + pip * product.priceMaxLimit).toFixed(digits) // 买入价+pip*止损最大距离
-            buyStopMin = (buy_price + pip * product.priceMinLimit).toFixed(digits) // 买入价+pip*止损最小距离
+            const buyStopMax = BigNumber(buy_price).plus(pip * product.priceMaxLimit).toFixed(digits) // 停损买入范围最大值 买入价+pip*止损最大距离
+            const buyStopMin = BigNumber(buy_price).plus(pip * product.priceMinLimit).toFixed(digits) // 停损买入范围最小值 买入价+pip*止损最小距离
 
-            sellStopMax = (sell_price - pip * product.priceMinLimit).toFixed(digits) // 卖出价-pip*止损最小距离
-            sellStopMin = (sell_price - pip * product.priceMaxLimit).toFixed(digits) // 卖出价-pip*止损最大距离
+            const sellStopMax = BigNumber(sell_price).minus(pip * product.priceMinLimit).toFixed(digits) // 停损卖出范围最大值 卖出价-pip*止损最小距离
+            const sellStopMin = BigNumber(sell_price).minus(pip * product.priceMaxLimit).toFixed(digits) // 停损卖出范围最小值 卖出价-pip*止损最大距离
 
             return {
                 buyLimitRange: [buyLimitMin, buyLimitMax], // 限价买入范围
