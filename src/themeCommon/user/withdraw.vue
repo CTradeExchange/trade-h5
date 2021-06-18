@@ -35,7 +35,7 @@
 
 <script>
 // vue
-import { ref, reactive, computed, onMounted, toRefs } from 'vue'
+import { reactive, computed, onMounted, toRefs } from 'vue'
 // router
 import { useRouter } from 'vue-router'
 // vuex
@@ -69,39 +69,33 @@ export default {
 
         const state = reactive({
             // 加载状态
-            loading: false
-        })
-        // 导航栏选项卡
-        const tabs = [
-            { title: t('withdraw.coinTitle'), key: 'coin' },
-            { title: t('withdraw.moneyTitle'), key: 'money' }
-        ]
-        // 当前导航栏选项卡
-        const currentTab = ref('')
-        // 导航栏右侧标题
-        const rightAction = reactive({
-            title: t('withdraw.coinRecordText'),
-            path: '/coinRecord'
+            loading: false,
+            // 导航栏选项卡
+            tabs: [],
+            // 当前导航栏选项卡
+            currentTab: '',
+            // 导航栏右侧标题
+            rightAction: {}
         })
 
         // 切换导航栏选项卡
         const switchTabs = (key) => {
-            if (key === currentTab.value) return
-            currentTab.value = key
+            if (key === state.currentTab) return
+            state.currentTab = key
             switch (key) {
                 case 'coin':
-                    rightAction.title = t('withdraw.coinRecordText')
-                    rightAction.path = '/coinRecord'
+                    state.rightAction.title = t('withdraw.coinRecordText')
+                    state.rightAction.path = '/coinRecord'
                     break
                 case 'money':
-                    rightAction.title = t('withdraw.moneyRecordText')
-                    rightAction.path = '/withdrawRecord'
+                    state.rightAction.title = t('withdraw.moneyRecordText')
+                    state.rightAction.path = '/withdrawRecord'
                     break
             }
         }
         // 导航栏右侧标题点击跳转
         const rightClick = () => {
-            router.push(rightAction.path)
+            router.push(state.rightAction.path)
         }
 
         // 获取客户提现方式
@@ -114,18 +108,7 @@ export default {
             }).then(res => {
                 state.loading = false
                 const { data } = res
-                if (data) {
-                    // 设置默认显示提款方式
-                    const wayArr = data.map(elem => elem.withdrawMethod)
-                    const isWithdrawCoin = wayArr.some(name => name === 'digit_wallet')
-                    const isWithdrawMoney = wayArr.some(name => name === 'bank')
-                    if (isWithdrawCoin) {
-                        currentTab.value = 'coin'
-                    }
-                    if (!isWithdrawCoin && isWithdrawMoney) {
-                        currentTab.value = 'money'
-                    }
-                } else {
+                if (!data || data.length === 0) {
                     return Dialog.alert({
                         title: t('withdraw.hint'),
                         theme: 'round-button',
@@ -134,6 +117,28 @@ export default {
                     }).then(() => {
                         router.go(-1)
                     })
+                } else {
+                    // 设置默认显示提款方式
+                    const wayArr = data.map(elem => elem.withdrawMethod)
+                    const isWithdrawCoin = wayArr.some(name => name === 'digit_wallet')
+                    const isWithdrawMoney = wayArr.some(name => name === 'bank')
+                    // 显示提币功能
+                    if (isWithdrawCoin) {
+                        state.tabs.push({ title: t('withdraw.coinTitle'), key: 'coin' })
+                        state.rightAction.title = t('withdraw.coinRecordText')
+                        state.rightAction.path = '/coinRecord'
+                        state.currentTab = 'coin'
+                    }
+                    // 显示提现功能
+                    if (isWithdrawMoney) {
+                        state.tabs.push({ title: t('withdraw.moneyTitle'), key: 'money' })
+                    }
+                    // 当前显示为提现
+                    if (!isWithdrawCoin && isWithdrawMoney) {
+                        state.rightAction.title = t('withdraw.moneyRecordText')
+                        state.rightAction.path = '/withdrawRecord'
+                        state.currentTab = 'money'
+                    }
                 }
             })
         }
@@ -145,10 +150,7 @@ export default {
 
         return {
             ...toRefs(state),
-            tabs,
-            currentTab,
             switchTabs,
-            rightAction,
             rightClick,
             getWithdrawWay
         }
