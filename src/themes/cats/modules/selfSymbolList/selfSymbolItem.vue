@@ -78,6 +78,7 @@
  */
 
 import { getLen } from '@/utils/util'
+import { useRouter } from 'vue-router'
 
 export default {
     name: 'ProductItem',
@@ -87,7 +88,10 @@ export default {
         }
     },
     setup () {
-        const toOrder = () => {}
+        const router = useRouter()
+        const toOrder = (data, direction) => {
+            router.push({ name: 'Order', query: { symbolId: data.symbolId, direction } })
+        }
         const toDetail = () => {}
         return {
             getLen,

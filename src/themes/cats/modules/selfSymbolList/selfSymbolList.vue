@@ -3,7 +3,7 @@
         <TabBar v-model:dType='displayType' v-model:sType='sortType' />
         <ul ref='productListEl' class='selfSymbolListUl'>
             <li v-for='item in productList' :key='item' class='van-hairline--bottom'>
-                <productItem :display-type='displayType' :product='productMap[item.symbolId]' @open='openProduct(item)' />
+                <productItem :display-type='displayType' :product='productMap[item.symbolId]' />
             </li>
         </ul>
     </div>
@@ -77,10 +77,6 @@ export default {
             { immediate: true }
         )
 
-        const openProduct = (data) => {
-            router.push({ name: 'Order', query: { symbolId: data.symbolId } })
-        }
-
         onMounted(() => {
             productListEl.value.addEventListener('scroll', calcProductsDebounce, false)
         })
@@ -91,7 +87,6 @@ export default {
             calcSubscribeProducts,
             productMap,
             productList,
-            openProduct,
         }
     },
 }

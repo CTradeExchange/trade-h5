@@ -59,6 +59,13 @@
     }
 }
 
+@mixin single-line-clamp() {
+    @include text_wrap;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 @mixin scroll() {
     scrollbar-color: #DFDFDF white;
     scrollbar-width: thin;

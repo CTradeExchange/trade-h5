@@ -114,6 +114,10 @@ i {
 .primary {
     color: var(--primary);
 }
+.mainColorBg {
+    color: var(--white) !important;
+    background-color: var(--primary) !important;
+}
 .muted {
     color: var(--mutedColor);
 }

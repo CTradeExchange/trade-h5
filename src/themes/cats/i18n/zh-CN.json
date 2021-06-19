@@ -102,7 +102,6 @@
     "newOrder": "新订单",
     "newTrade": "新交易",
     "openChart": "打开图表",
-    "pending": "订单正在进行排队处理...",
     "pendingRange": "挂单价格范围",
     "profitLossRange": "止盈止损价格范围",
     "simpleMode": "简单查看模式",
@@ -113,6 +112,10 @@
     "usableAdvance": "可用预付款",
     "sell": "卖出",
     "buy": "买入",
+    "orderType": "类型",
+    "marketPrice": "市价",
+    "pending": "挂单",
+    "orderVolume": "数量(手)",
     "dot": "点"
   },
   "weekdayMap": {
