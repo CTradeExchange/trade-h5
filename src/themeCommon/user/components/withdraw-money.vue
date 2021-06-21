@@ -14,7 +14,7 @@
             </div>
             <div class='notice'>
                 <span>{{ $t('withdrawMoney.canName') }} {{ withdrawAmount || '--' }} {{ accountCurrency }}</span>
-                <span>{{ $t('withdrawMoney.serviceName') }} {{ toFixed(fee) }} {{ accountCurrency }}</span>
+                <span>{{ $t('withdrawMoney.serviceName') }} {{ fee }} {{ accountCurrency }}</span>
             </div>
             <div class='bank-wrap'>
                 <p class='bw-t'>
@@ -34,7 +34,7 @@
                     </van-button>
                 </div>
                 <p class='bw-t2'>
-                    {{ $t('withdrawMoney.predictName') }} {{ toFixed(computePre) }} {{ checkedBank.bankCurrency }}
+                    {{ $t('withdrawMoney.predictName') }} {{ computePre }} {{ checkedBank.bankCurrency }}
                 </p>
             </div>
         </div>
@@ -104,7 +104,7 @@ import {
 import {
     useStore
 } from 'vuex'
-import { toFixed, mul } from '@/utils/calculation'
+import { mul } from '@/utils/calculation'
 import {
     handleWithdraw,
     queryWithdrawConfig,
@@ -170,7 +170,7 @@ export default {
         // 计算可取金额
         const withdrawAmount = computed(() => {
             if (!isEmpty(state.withdrawConfig)) {
-                return toFixed(state.withdrawConfig.withdrawAmount, 2)
+                return state.withdrawConfig.withdrawAmount
             } else {
                 return 0
             }
@@ -178,10 +178,9 @@ export default {
 
         const state = reactive({
             amount: '',
-            fee: 0,
+            fee: '0.00',
             loading: false,
             show: false,
-            maxAmount: 5005.55,
             checkedBank: {},
             withdrawRate: '',
             withdrawConfig: '',
@@ -197,13 +196,13 @@ export default {
         const getWithdrawFee = (amount) => {
             if (parseFloat(state.amount) < parseFloat(state.withdrawConfig.withdrawAmountConfig.singleLowAmount)) {
                 state.btnDisabled = true
-                state.fee = 0
+                state.fee = '0.00'
                 return Toast(`${t('withdrawMoney.hint_3')}${state.withdrawConfig.withdrawAmountConfig.singleLowAmount}`)
             }
 
             if (parseFloat(state.amount) > parseFloat(state.withdrawConfig.withdrawAmountConfig.singleHighAmount)) {
                 state.btnDisabled = true
-                state.fee = 0
+                state.fee = '0.00'
                 return Toast(`${t('withdrawMoney.hint_4')}${state.withdrawConfig.withdrawAmountConfig.singleHighAmount}`)
             }
 
@@ -226,7 +225,7 @@ export default {
                     state.fee = res.data
                 } else {
                     state.btnDisabled = true
-                    state.fee = 0
+                    state.fee = '0.00'
                 }
             })
         }
@@ -526,8 +525,7 @@ export default {
             timeList,
             computePre,
             onlineServices,
-            withdrawAmount,
-            toFixed
+            withdrawAmount
         }
     }
 

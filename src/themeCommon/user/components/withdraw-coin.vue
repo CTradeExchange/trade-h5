@@ -193,7 +193,7 @@ import {
 } from '@api/user'
 // 工具方法
 import { isEmpty } from '@/utils/util'
-import { toFixed, minus, mul, divide } from '@/utils/calculation'
+import { minus, mul, divide } from '@/utils/calculation'
 // 插件
 import dayjs from 'dayjs'
 // import utc from 'dayjs/plugin/utc'
@@ -434,7 +434,7 @@ export default {
                 if (res.check()) {
                     const { data } = res
                     state.withdrawRate = data
-                    state.coinTotal = toFixed(mul(state.withdrawConfig.withdrawAmount, data.exchangeRate))
+                    state.coinTotal = mul(state.withdrawConfig.withdrawAmount, data.exchangeRate)
                 }
             })
         }
@@ -457,14 +457,14 @@ export default {
             computeWithdrawFee(item).then(res => {
                 if (res.check()) {
                     const { data } = res
-                    state.serviceCount = toFixed(data, 2)
-                    state.arriveCount = toFixed(minus(state.coinCount, state.serviceCount), 2)
-                    state.minusCount = toFixed(divide(state.coinCount, state.withdrawRate.exchangeRate), 2)
+                    state.serviceCount = data
+                    state.arriveCount = minus(state.coinCount, state.serviceCount)
+                    state.minusCount = divide(state.coinCount, state.withdrawRate.exchangeRate)
                     state.btnDisabled = false
                 } else {
-                    state.serviceCount = toFixed(0)
-                    state.arriveCount = toFixed(0)
-                    state.minusCount = toFixed(0)
+                    state.serviceCount = '0.00'
+                    state.arriveCount = '0.00'
+                    state.minusCount = '0.00'
                     state.btnDisabled = true
                 }
             })
