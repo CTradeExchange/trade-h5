@@ -2,8 +2,9 @@
     <LayoutTop :back='true' :menu='false' title='' @backEvent='back' />
     <div class='page-wrap'>
         <van-cell-group>
-            <van-cell is-link :title='$t("auth.personValid")' to='/authentication' />
-            <van-cell is-link :title='$t("bank.bankList")' to='/bankList' />
+            <van-cell is-link :title='$t("cRoute.authentication")' to='/authentication' />
+            <van-cell is-link :title='$t("cRoute.bankList")' to='/bankList' />
+            <van-cell is-link :title='$t("cRoute.walletAddress")' to='/walletAddress' />
         </van-cell-group>
     </div>
 </template>

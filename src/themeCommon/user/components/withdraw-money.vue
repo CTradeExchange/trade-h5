@@ -198,13 +198,13 @@ export default {
             if (parseFloat(state.amount) < parseFloat(state.withdrawConfig.withdrawAmountConfig.singleLowAmount)) {
                 state.btnDisabled = true
                 state.fee = 0
-                return Toast(`取款金额不能小于${state.withdrawConfig.withdrawAmountConfig.singleLowAmount}`)
+                return Toast(`${t('withdrawMoney.hint_3')}${state.withdrawConfig.withdrawAmountConfig.singleLowAmount}`)
             }
 
             if (parseFloat(state.amount) > parseFloat(state.withdrawConfig.withdrawAmountConfig.singleHighAmount)) {
                 state.btnDisabled = true
                 state.fee = 0
-                return Toast(`取款金额不能大于${state.withdrawConfig.withdrawAmountConfig.singleHighAmount}`)
+                return Toast(`${t('withdrawMoney.hint_4')}${state.withdrawConfig.withdrawAmountConfig.singleHighAmount}`)
             }
 
             const params = {

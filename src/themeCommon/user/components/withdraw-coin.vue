@@ -609,6 +609,9 @@ export default {
         // 点击确定
         const onConfirm = () => {
             const { withdrawAmountConfig } = state.withdrawConfig
+            const rate = state.withdrawRate.exchangeRate
+            const singleLowAmount = minus(withdrawAmountConfig.singleLowAmount, rate)
+            const singleHighAmount = minus(withdrawAmountConfig.singleHighAmount, rate)
             if (!state.coinKind) {
                 return Toast({ message: t('withdrawCoin.coinPlaceholder') })
             }
@@ -618,11 +621,11 @@ export default {
             if (!state.coinCount) {
                 return Toast({ message: t('withdrawCoin.coinCountPlaceholder') })
             }
-            if (state.coinCount < withdrawAmountConfig.singleLowAmount) {
-                return Toast({ message: `${t('withdrawCoin.hint_4')}${withdrawAmountConfig.singleLowAmount}` })
+            if (state.coinCount < singleLowAmount) {
+                return Toast({ message: `${t('withdrawCoin.hint_4')}${singleLowAmount}` })
             }
-            if (state.coinCount > withdrawAmountConfig.singleHighAmount) {
-                return Toast({ message: `${t('withdrawCoin.hint_5')}${withdrawAmountConfig.singleHighAmount}` })
+            if (state.coinCount > singleHighAmount) {
+                return Toast({ message: `${t('withdrawCoin.hint_5')}${singleHighAmount}` })
             }
             if (!state.currentWallet) {
                 return Toast({ message: t('withdrawCoin.walletSelect') })
@@ -639,6 +642,8 @@ export default {
                 amount: parseFloat(state.coinCount),
                 rate: state.withdrawRate.exchangeRate,
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
+                bankName: '数字钱包',
+                bankCardNo: state.walletId,
                 withdrawType: 2,
                 withdrawCurrency: state.coinKind,
                 blockchainName: state.chainName
