@@ -207,13 +207,14 @@ export default {
             }
 
             const params = {
+                accountId: customInfo.value.accountId,
+                accountCurrency: customInfo.value.currency,
+                amount: parseFloat(state.amount),
                 companyId: customInfo.value.companyId,
                 customerNo: customInfo.value.customerNo,
-                accountId: customInfo.value.accountId,
                 customerGroupId: customInfo.value.customerGroupId,
-                accountCurrency: customInfo.value.currency,
+                country: customInfo.value.country,
                 withdrawCurrency: customInfo.value.currency,
-                amount: parseFloat(state.amount),
                 withdrawType: 1,
                 withdrawMethod: 'bank'
             }

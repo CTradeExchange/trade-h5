@@ -192,7 +192,7 @@ import {
     computeWithdrawFee
 } from '@api/user'
 // 工具方法
-import { isEmpty } from '@/utils/util'
+import { isEmpty, debounce } from '@/utils/util'
 import { minus, mul, divide } from '@/utils/calculation'
 // 插件
 import dayjs from 'dayjs'
@@ -211,6 +211,8 @@ export default {
             withdrawConfig: null,
             // 取款汇率配置
             withdrawRate: null,
+            // 取款汇率
+            rate: 0,
             // 提币链名称数据列表
             allList: [],
             // 提币币种选项列表
@@ -434,7 +436,8 @@ export default {
                 if (res.check()) {
                     const { data } = res
                     state.withdrawRate = data
-                    state.coinTotal = mul(state.withdrawConfig.withdrawAmount, data.exchangeRate)
+                    state.rate = data.exchangeRate
+                    state.coinTotal = mul(state.withdrawConfig.withdrawAmount, state.rate)
                 }
             })
         }
@@ -459,13 +462,11 @@ export default {
                     const { data } = res
                     state.serviceCount = data
                     state.arriveCount = minus(state.coinCount, state.serviceCount)
-                    state.minusCount = divide(state.coinCount, state.withdrawRate.exchangeRate)
-                    state.btnDisabled = false
+                    state.minusCount = divide(state.coinCount, state.rate)
                 } else {
                     state.serviceCount = '0.00'
                     state.arriveCount = '0.00'
                     state.minusCount = '0.00'
-                    state.btnDisabled = true
                 }
             })
         }
@@ -609,9 +610,8 @@ export default {
         // 点击确定
         const onConfirm = () => {
             const { withdrawAmountConfig } = state.withdrawConfig
-            const rate = state.withdrawRate.exchangeRate
-            const singleLowAmount = minus(withdrawAmountConfig.singleLowAmount, rate)
-            const singleHighAmount = minus(withdrawAmountConfig.singleHighAmount, rate)
+            const singleLowAmount = mul(withdrawAmountConfig.singleLowAmount, state.rate)
+            const singleHighAmount = mul(withdrawAmountConfig.singleHighAmount, state.rate)
             if (!state.coinKind) {
                 return Toast({ message: t('withdrawCoin.coinPlaceholder') })
             }
@@ -640,7 +640,7 @@ export default {
             const item = {
                 ...params,
                 amount: parseFloat(state.coinCount),
-                rate: state.withdrawRate.exchangeRate,
+                rate: state.rate,
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
                 bankName: '数字钱包',
                 bankCardNo: state.walletId,
