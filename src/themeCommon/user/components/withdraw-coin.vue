@@ -187,13 +187,13 @@ import {
     queryWithdrawConfig,
     checkKycApply,
     getWalletAddressList,
-    queryWithdrawRate,
     handleWithdraw,
+    queryWithdrawRate,
+    queryWithdrawLimitInfo,
     computeWithdrawFee
 } from '@api/user'
 // 工具方法
 import { isEmpty, debounce } from '@/utils/util'
-import { minus, mul, divide } from '@/utils/calculation'
 // 插件
 import dayjs from 'dayjs'
 // import utc from 'dayjs/plugin/utc'
@@ -211,8 +211,10 @@ export default {
             withdrawConfig: null,
             // 取款汇率配置
             withdrawRate: null,
-            // 取款汇率
-            rate: 0,
+            // 最高可提币数量
+            singleHighAmount: 0,
+            // 最低可提币数量
+            singleLowAmount: 0,
             // 提币链名称数据列表
             allList: [],
             // 提币币种选项列表
@@ -254,6 +256,15 @@ export default {
             // 是否禁用提交按钮
             btnDisabled: true
         })
+
+        // 数据初始化
+        const init = () => {
+            state.coinTotal = ''
+            state.coinCount = ''
+            state.serviceCount = '0.00'
+            state.arriveCount = '0.00'
+            state.minusCount = '0.00'
+        }
 
         // 账户信息
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
@@ -423,54 +434,6 @@ export default {
             })
         }
 
-        // 获取取款汇率
-        const getWithdrawRate = () => {
-            const params = {
-                companyId: customInfo.companyId,
-                customerNo: customInfo.customerNo,
-                accountId: customInfo.accountId,
-                accountCurrency: customInfo.currency,
-                withdrawCurrency: state.coinKind
-            }
-            queryWithdrawRate(params).then(res => {
-                if (res.check()) {
-                    const { data } = res
-                    state.withdrawRate = data
-                    state.rate = data.exchangeRate
-                    state.coinTotal = mul(state.withdrawConfig.withdrawAmount, state.rate)
-                }
-            })
-        }
-
-        // 获取取款手续费
-        const getWithdrawFee = () => {
-            if (!parseFloat(state.coinCount)) return
-            if (Number(state.coinCount) > Number(state.coinTotal)) {
-                return Toast({
-                    message: t('withdrawCoin.hint_1')
-                })
-            }
-            const item = {
-                ...params,
-                amount: parseFloat(state.coinCount),
-                withdrawType: 2,
-                withdrawCurrency: state.coinKind,
-                blockchainName: state.chainName
-            }
-            computeWithdrawFee(item).then(res => {
-                if (res.check()) {
-                    const { data } = res
-                    state.serviceCount = data
-                    state.arriveCount = minus(state.coinCount, state.serviceCount)
-                    state.minusCount = divide(state.coinCount, state.rate)
-                } else {
-                    state.serviceCount = '0.00'
-                    state.arriveCount = '0.00'
-                    state.minusCount = '0.00'
-                }
-            })
-        }
-
         // 获取客户提币币种和链名称
         const queryWithdrawCurrencyList = () => {
             getWithdrawCurrencyList({
@@ -514,11 +477,13 @@ export default {
             state.coinKind = item.name
             state.chainName = ''
             state.coinKindVisible = false
+            // 初据初始化
+            init()
             // 根据提币币种获取筛选链名称
             filterChainName()
             // 获取钱包地址列表
             getWalletAddress()
-            // 获取取款汇率
+            // 获取配置信息
             getWithdrawRate()
         }
 
@@ -533,23 +498,77 @@ export default {
             state.chainNameVisible = false
             // 获取钱包地址列表
             getWalletAddress()
-            // 获取取款手续费
-            getWithdrawFee()
         }
+
+        // 获取取款汇率
+        const getWithdrawRate = () => {
+            queryWithdrawRate({
+                companyId: customInfo.companyId,
+                customerNo: customInfo.customerNo,
+                accountId: customInfo.accountId,
+                accountCurrency: customInfo.currency,
+                withdrawCurrency: state.coinKind,
+                withdrawType: 2
+            }).then(res => {
+                if (res.check()) {
+                    state.withdrawRate = res.data
+                    // 获取取款、提币额度限制配置
+                    getWithdrawLimitInfo()
+                }
+            })
+        }
+
+        // 获取取款、提币额度限制配置
+        const getWithdrawLimitInfo = () => {
+            queryWithdrawLimitInfo({
+                ...params,
+                withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
+                withdrawCurrency: state.coinKind
+            }).then(res => {
+                if (res.check()) {
+                    const { data } = res
+                    state.coinTotal = data.withdrawAmount
+                    state.singleHighAmount = data.singleHighAmount
+                    state.singleLowAmount = data.singleLowAmount
+                }
+            })
+        }
+
+        // 获取取款手续费
+        const getWithdrawFee = debounce(() => {
+            const item = {
+                ...params,
+                amount: state.coinCount,
+                withdrawType: 2,
+                withdrawCurrency: state.coinKind,
+                blockchainName: state.chainName,
+                withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo
+            }
+            computeWithdrawFee(item).then(res => {
+                if (res.check()) {
+                    const { data } = res
+                    state.serviceCount = data.coinFee
+                    state.arriveCount = data.coinFinalAmount
+                    state.minusCount = data.amount
+                }
+            })
+        }, 500)
 
         // 改变计算金额
         const changeAmount = () => {
+            const coinTotal = parseFloat(state.coinTotal)
+            const coinCount = parseFloat(state.coinCount)
             if (!state.coinKind) {
-                return Toast({
-                    message: t('withdrawCoin.coinPlaceholder')
-                })
+                return Toast(t('withdrawCoin.coinPlaceholder'))
             }
             if (!state.chainName) {
-                return Toast({
-                    message: t('withdrawCoin.chainPlaceholder')
-                })
+                return Toast(t('withdrawCoin.chainPlaceholder'))
             }
-            if (!state.coinTotal) return
+            if (!coinTotal) return
+            if (!coinCount) return
+            if (coinCount > coinTotal) {
+                return Toast(t('withdrawCoin.hint_1'))
+            }
             // 获取取款手续费
             getWithdrawFee()
         }
@@ -557,8 +576,6 @@ export default {
         // 点击全部取出
         const onAllTake = () => {
             state.coinCount = state.coinTotal
-            // 获取取款手续费
-            getWithdrawFee()
         }
 
         // 获取钱包地址列表
@@ -609,9 +626,7 @@ export default {
 
         // 点击确定
         const onConfirm = () => {
-            const { withdrawAmountConfig } = state.withdrawConfig
-            const singleLowAmount = mul(withdrawAmountConfig.singleLowAmount, state.rate)
-            const singleHighAmount = mul(withdrawAmountConfig.singleHighAmount, state.rate)
+            const coinCount = parseFloat(state.coinCount)
             if (!state.coinKind) {
                 return Toast({ message: t('withdrawCoin.coinPlaceholder') })
             }
@@ -621,11 +636,11 @@ export default {
             if (!state.coinCount) {
                 return Toast({ message: t('withdrawCoin.coinCountPlaceholder') })
             }
-            if (state.coinCount < singleLowAmount) {
-                return Toast({ message: `${t('withdrawCoin.hint_4')}${singleLowAmount}` })
+            if (coinCount < state.singleLowAmount) {
+                return Toast({ message: `${t('withdrawCoin.hint_4')}${state.singleLowAmount}` })
             }
-            if (state.coinCount > singleHighAmount) {
-                return Toast({ message: `${t('withdrawCoin.hint_5')}${singleHighAmount}` })
+            if (coinCount > state.singleHighAmount) {
+                return Toast({ message: `${t('withdrawCoin.hint_5')}${state.singleHighAmount}` })
             }
             if (!state.currentWallet) {
                 return Toast({ message: t('withdrawCoin.walletSelect') })
@@ -639,11 +654,13 @@ export default {
             state.loading = true
             const item = {
                 ...params,
-                amount: parseFloat(state.coinCount),
-                rate: state.rate,
+                amount: state.coinCount,
+                withdrawCoinAmount: state.coinCount,
+                rate: state.withdrawRate.exchangeRate,
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
+                bankAccountName: '',
                 bankName: '数字钱包',
-                bankCardNo: state.walletId,
+                bankCardNo: state.walletId.toString(),
                 withdrawType: 2,
                 withdrawCurrency: state.coinKind,
                 blockchainName: state.chainName
@@ -810,7 +827,7 @@ export default {
         padding: 0 rem(30px);
         border: 1px solid var(--bdColor);
         border-radius: rem(4px);
-        &::v-deep .van-icon-plus {
+        :deep(.van-icon-plus) {
             margin-right: rem(26px);
             font-weight: bold;
         }
@@ -853,7 +870,7 @@ export default {
                 font-size: rem(24px);
             }
         }
-        &::v-deep .van-icon-arrow-down {
+        :deep(.van-icon-arrow-down) {
             margin-right: rem(-2px);
             font-weight: bold;
         }
@@ -902,7 +919,7 @@ export default {
         align-items: center;
         height: rem(116px);
         padding: 0 rem(30px);
-        &::v-deep .van-icon-plus {
+        :deep(.van-icon-plus) {
             margin-right: rem(26px);
             font-weight: bold;
         }

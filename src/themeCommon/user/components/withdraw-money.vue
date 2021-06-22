@@ -13,8 +13,8 @@
                 </button>
             </div>
             <div class='notice'>
-                <span>{{ $t('withdrawMoney.canName') }} {{ withdrawAmount || '--' }} {{ accountCurrency }}</span>
-                <span>{{ $t('withdrawMoney.serviceName') }} {{ fee }} {{ accountCurrency }}</span>
+                <span>{{ $t('withdrawMoney.canName') }} {{ withdrawAmount }} {{ customInfo.currency }}</span>
+                <span>{{ $t('withdrawMoney.serviceName') }} {{ fee }} {{ customInfo.currency }}</span>
             </div>
             <div class='bank-wrap'>
                 <p class='bw-t'>
@@ -104,7 +104,6 @@ import {
 import {
     useStore
 } from 'vuex'
-import { mul } from '@/utils/calculation'
 import {
     handleWithdraw,
     queryWithdrawConfig,
@@ -137,9 +136,6 @@ export default {
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
-        const accountCurrency = computed(() => {
-            return state.withdrawConfig ? state.withdrawConfig.withdrawAmountConfig.accountCurrency : ''
-        })
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
 
         const timeList = computed(() => {
@@ -162,23 +158,13 @@ export default {
             return tempList
         })
 
-        // 计算取款手续费
-        const computePre = computed(() => {
-            return mul((state.amount - state.fee), state.withdrawRate.exchangeRate)
-        })
-
-        // 计算可取金额
-        const withdrawAmount = computed(() => {
-            if (!isEmpty(state.withdrawConfig)) {
-                return state.withdrawConfig.withdrawAmount
-            } else {
-                return 0
-            }
-        })
-
         const state = reactive({
-            amount: '',
-            fee: '0.00',
+            withdrawAmount: '0.00', // 可提金额
+            amount: '', // 提现金额
+            fee: '0.00', // 手续费
+            computePre: '0.00', // 预计到账
+            singleHighAmount: 0, // 最高可提金额
+            singleLowAmount: 0, // 最低可提金额
             loading: false,
             show: false,
             checkedBank: {},
@@ -193,40 +179,33 @@ export default {
             withdrawTimeConfigMap: {} // 处理后的时区
         })
 
-        const getWithdrawFee = (amount) => {
-            if (parseFloat(state.amount) < parseFloat(state.withdrawConfig.withdrawAmountConfig.singleLowAmount)) {
-                state.btnDisabled = true
-                state.fee = '0.00'
-                return Toast(`${t('withdrawMoney.hint_3')}${state.withdrawConfig.withdrawAmountConfig.singleLowAmount}`)
+        const getWithdrawFee = () => {
+            const amount = parseFloat(state.amount)
+            if (amount < state.singleLowAmount) {
+                return Toast(`${t('withdrawMoney.hint_3')}${state.singleLowAmount}`)
             }
-
-            if (parseFloat(state.amount) > parseFloat(state.withdrawConfig.withdrawAmountConfig.singleHighAmount)) {
-                state.btnDisabled = true
-                state.fee = '0.00'
-                return Toast(`${t('withdrawMoney.hint_4')}${state.withdrawConfig.withdrawAmountConfig.singleHighAmount}`)
+            if (amount > state.singleHighAmount) {
+                return Toast(`${t('withdrawMoney.hint_4')}${state.singleHighAmount}`)
             }
 
             const params = {
                 accountId: customInfo.value.accountId,
                 accountCurrency: customInfo.value.currency,
-                amount: parseFloat(state.amount),
+                amount: state.amount,
                 companyId: customInfo.value.companyId,
                 customerNo: customInfo.value.customerNo,
                 customerGroupId: customInfo.value.customerGroupId,
                 country: customInfo.value.country,
                 withdrawCurrency: customInfo.value.currency,
                 withdrawType: 1,
-                withdrawMethod: 'bank'
+                withdrawMethod: 'bank',
+                withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo
             }
-            state.btnDisabled = true
-            // state.fee = '计算中...'
             computeWithdrawFee(params).then(res => {
                 if (res.check()) {
-                    state.btnDisabled = false
-                    state.fee = res.data
-                } else {
-                    state.btnDisabled = true
-                    state.fee = '0.00'
+                    const { data } = res
+                    state.fee = data.withdrawFee
+                    state.computePre = data.finalAmount
                 }
             })
         }
@@ -315,49 +294,46 @@ export default {
         }
 
         const confirm = () => {
-            if (state.amount <= 0) {
-                state.amount = 0
+            const amount = parseFloat(state.amount)
+            const withdrawAmount = parseFloat(state.withdrawAmount)
+            if (!amount) {
                 return Toast(t('withdrawMoney.hint_1'))
             }
-
             if (isEmpty(state.checkedBank)) {
                 return Toast(t('withdrawMoney.hint_2'))
             }
-
-            if (parseFloat(state.amount) < parseFloat(state.withdrawConfig.withdrawAmountConfig.singleLowAmount)) {
-                return Toast(`${t('withdrawMoney.hint_3')}${state.withdrawConfig.withdrawAmountConfig.singleLowAmount}`)
+            if (amount < parseFloat(state.singleLowAmount)) {
+                return Toast(`${t('withdrawMoney.hint_3')}${state.singleLowAmount}`)
             }
-
-            if (parseFloat(state.amount) > parseFloat(state.withdrawConfig.withdrawAmountConfig.singleHighAmount)) {
-                return Toast(`${t('withdrawMoney.hint_4')}${state.withdrawConfig.withdrawAmountConfig.singleHighAmount}`)
+            if (amount > parseFloat(state.singleHighAmount)) {
+                return Toast(`${t('withdrawMoney.hint_4')}${state.singleHighAmount}`)
             }
-
-            if (parseFloat(state.amount) > parseFloat(state.withdrawConfig.withdrawAmount)) {
+            if (amount > withdrawAmount) {
                 return Toast(t('withdrawMoney.hint_5'))
             }
-            state.loading = true
 
             const params = {
-                customerNo: customInfo.value.customerNo, // 客户编号
-                accountId: customInfo.value.accountId, // 账户ID
-                customerGroupId: customInfo.value.customerGroupId, // 客户组ID
-                accountCurrency: customInfo.value.currency, // 账户货币编码
+                customerNo: customInfo.value.customerNo,
+                accountId: customInfo.value.accountId,
+                customerGroupId: customInfo.value.customerGroupId,
+                accountCurrency: customInfo.value.currency,
                 country: customInfo.value.country,
-                withdrawCurrency: state.withdrawRate.withdrawCurrency, // 收款货币
-                amount: state.amount, // 提案金额
-                rate: state.withdrawRate.exchangeRate, // 发送给平台CATS2使用的取款汇率
-                withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo, // 取款费率流水号
-                bankAccountName: state.checkedBank.bankAccountName, // 银行卡持有者姓名
-                bankName: state.checkedBank.bankName, // 银行卡银行名称
-                bankCardNo: state.checkedBank.bankCardNumber, // 银行卡号
-                withdrawType: 1, // 取款类型
-                withdrawMethod: 'bank' // 取款方式
+                withdrawCurrency: state.withdrawRate.withdrawCurrency,
+                amount: state.amount,
+                rate: state.withdrawRate.exchangeRate,
+                withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
+                bankAccountName: state.checkedBank.bankAccountName,
+                bankName: state.checkedBank.bankName,
+                bankCardNo: state.checkedBank.bankCardNumber,
+                withdrawType: 1,
+                withdrawMethod: 'bank'
             }
 
+            state.loading = true
             handleWithdraw(params).then(res => {
                 state.loading = false
                 if (res.check()) {
-                    state.amount = 0
+                    state.amount = ''
                     state.withdrawSuccess = true
                 }
             }).catch(err => {
@@ -372,7 +348,8 @@ export default {
                 customerNo: customInfo.value.customerNo,
                 accountId: customInfo.value.accountId,
                 accountCurrency: customInfo.value.currency,
-                withdrawCurrency: state.withdrawCurrency, // 暂时只支持CNY
+                withdrawCurrency: state.withdrawCurrency,
+                withdrawType: 1
             }
             queryWithdrawRate(params).then(res => {
                 if (res.check()) {
@@ -398,7 +375,11 @@ export default {
 
             queryWithdrawConfig(params).then(res => {
                 if (res.check()) {
-                    state.withdrawConfig = res.data
+                    const { data } = res
+                    state.withdrawConfig = data
+                    state.withdrawAmount = data.withdrawAmount
+                    state.singleHighAmount = data.withdrawAmountConfig.singleHighAmount
+                    state.singleLowAmount = data.withdrawAmountConfig.singleLowAmount
 
                     if (!res.data.customerGroupEnable) {
                         state.btnDisabled = true
@@ -410,8 +391,6 @@ export default {
                             cancelButtonText: t('withdraw.close')
                         }).then(() => {
                             if (onlineServices.value) { location.href = onlineServices.value }
-                        }).catch(() => {
-                            // on cancel
                         })
                     } else {
                         // 检测取款是否需要kyc
@@ -522,11 +501,8 @@ export default {
             customInfo,
             hideMiddle,
             getWithdrawFee,
-            accountCurrency,
             timeList,
-            computePre,
-            onlineServices,
-            withdrawAmount
+            onlineServices
         }
     }
 
