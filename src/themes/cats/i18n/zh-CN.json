@@ -10,6 +10,8 @@
     "managAccount": "管理账户",
     "loginAccont": "登录账户",
     "onlineService": "客服",
+    "noSetup": "未设置",
+    "look": "查看",
     "borrowReturn": "借款/还款"
   },
   "contract": {
@@ -81,6 +83,7 @@
   },
   "simple": "简单",
   "success": "成功",
+  "submit": "提交",
   "trade": {
     "advance": "预付款",
     "advanceRatio": "预付款比率",
@@ -113,9 +116,7 @@
     "usableAdvance": "可用预付款",
     "sell": "卖出",
     "buy": "买入",
-    "orderType": "类型",
     "marketPrice": "市价",
-    "pending": "挂单",
     "closedOrder": "已平仓",
     "orderVolume": "数量(手)",
     "dot": "点",
@@ -183,8 +184,6 @@
     "priceLabel": "价格",
     "pendingPrice": "挂单价",
     "pendingTime": "挂单时间",
-    "buy": "买入",
-    "sell": "卖出",
     "buyPrice": "买入价",
     "sellPrice": "卖出价",
     "volumeUnit": "手",
@@ -283,8 +282,6 @@
     "watch": "盯盘",
     "accountOverview": "账户总览",
     "fee": "手续费",
-    "marketPrice": "市价",
-    "orderVolume": "数量(手)",
     "hold": "持有",
     "volumes": "数量",
     "pendingPriceWarn": "挂单价格距离太近，请重新输入",
@@ -334,7 +331,8 @@
     "leverage":"杠杆",
     "multiples":"倍",
     "experibBalance": "体验账户余额",
-    "nosSet": "未设置"
+    "nosSet": "未设置",
+    "inputPendingPrice": "请输入挂单价格"
   },
   "weekdayMap": {
     "1": "周一",

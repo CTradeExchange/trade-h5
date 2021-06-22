@@ -1,9 +1,9 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2618280 */
-  src: url('iconfont.woff2?t=1623986118106') format('woff2'),
-       url('iconfont.woff?t=1623986118106') format('woff'),
-       url('iconfont.ttf?t=1623986118106') format('truetype'),
-       url('iconfont.svg?t=1623986118106#iconfont') format('svg');
+  src: url('iconfont.woff2?t=1624259959822') format('woff2'),
+       url('iconfont.woff?t=1624259959822') format('woff'),
+       url('iconfont.ttf?t=1624259959822') format('truetype'),
+       url('iconfont.svg?t=1624259959822#iconfont') format('svg');
 }
 
 .iconfont {
@@ -12,6 +12,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon_password:before {
+  content: "\e6bc";
 }
 
 .icon_shunxu-you-xuanzhong-:before {
@@ -120,6 +124,10 @@
 
 .icon_icon_success:before {
   content: "\e609";
+}
+
+.icon_icon_close_small:before {
+  content: "\e60a";
 }
 
 .icon_icon_back:before {

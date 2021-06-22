@@ -33,14 +33,6 @@ export default {
             type: [Number, String],
             default: 1
         },
-        min: {
-            type: [Number, String],
-            default: 0
-        },
-        max: {
-            type: [Number, String],
-            default: Infinity
-        },
         placeholder: {
             type: [Number, String],
             default: ''
@@ -48,22 +40,19 @@ export default {
         disabled: {
             default: false,
             type: Boolean
-        }
-    },
-    data () {
-        return {
-            data: 'value'
-        }
+        },
+        disabledMinus: {
+            default: false,
+            type: Boolean
+        },
+        disabledPlus: {
+            default: false,
+            type: Boolean
+        },
     },
     computed: {
         placeholderText () {
             return this.placeholder || this.$t('common.noSet')
-        },
-        disabledPlus () {
-            return this.disabled || !!(this.modelValue && Number(this.modelValue) >= this.max)
-        },
-        disabledMinus () {
-            return this.disabled || !!(this.modelValue && Number(this.modelValue) <= this.min)
         },
     },
     mounted () {
@@ -72,12 +61,13 @@ export default {
     emits: ['update:modelValue', 'change', 'firstMinus', 'firstPlus'],
     methods: {
         minus () {
-            const curval = (this.modelValue == '' || this.modelValue == 'NaN') && this.max && this.max !== Infinity ? this.max : this.modelValue
             if (this.disabledMinus) return false
-            const newval = minus(curval, this.step)
-            this.$emit('update:modelValue', toFixed(newval, this.digits))
-            this.$emit('change', toFixed(newval, this.digits))
-            if (this.modelValue == '') this.$emit('firstMinus')
+            const val = isNaN(this.modelValue) ? 0 : this.modelValue
+            let newval = minus(val, this.step)
+            newval = toFixed(newval, this.digits)
+            this.$emit('update:modelValue', newval)
+            this.$emit('change', newval)
+            if (this.modelValue === '') this.$emit('firstMinus')
         },
         input (e) {
             let newval = e.target.value
@@ -99,12 +89,13 @@ export default {
             this.$emit('change', value)
         },
         plus () {
-            const curval = this.modelValue == '' || this.modelValue == 'NaN' && this.min ? this.min : this.modelValue
             if (this.disabledPlus) return
-            const newval = plus(curval, this.step)
-            this.$emit('update:modelValue', toFixed(newval, this.digits))
-            this.$emit('change', toFixed(newval, this.digits))
-            if (this.modelValue == '') this.$emit('firstPlus')
+            const val = isNaN(this.modelValue) ? 0 : this.modelValue
+            let newval = plus(val, this.step)
+            newval = toFixed(newval, this.digits)
+            this.$emit('update:modelValue', newval)
+            this.$emit('change', newval)
+            if (this.modelValue === '') this.$emit('firstPlus')
         },
         longPressStep (type) {
             const timer = Date.now() - this.longPressTimerStart > 3000 ? 50 : 200
