@@ -169,7 +169,7 @@ export default {
         // 查询持仓列表
         queryPositionPage ({ dispatch, commit, state, rootState }, params = {}) {
             const accountListLen = rootState._user.customerInfo?.accountList?.length
-            dispatch('queryPBOOrderPage')
+            // dispatch('queryPBOOrderPage')
 
             if (!accountListLen) {
                 commit('Update_positionList', [])

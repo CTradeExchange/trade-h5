@@ -13,8 +13,9 @@
                 </div>
             </template>
         </LayoutTop>
+
         <div class='m-subtab'>
-            <van-tabs color='rgb(71, 127, 211)' title-inactive-color='#333' type='card'>
+            <van-tabs v-model:active='active' color='rgb(71, 127, 211)' title-inactive-color='#333' type='card' @click='triggerTab'>
                 <van-tab :title='$t("trade.position")'>
                     <div class='m-ccgd'>
                         <div class='m-orderBy'>
@@ -25,51 +26,75 @@
                                 :class='{ active: item.active }'
                                 size='small'
                                 type='default'
-                                @click='actionSheetOnSelect(item)'
+                                @click='handleSortPosition(item)'
                             >
                                 <span> {{ item.name }} </span>
                                 <i class='icon arrow' :class='item.className'></i>
                             </van-button>
-                            <!-- <van-button size='small' type='default' @click='handleSort(1)'>
-                                {{ $t('history.daytime') }} <i class='iconfont icon_paixuxiaojiantou_xiangxia'></i>
-                            </van-button>
-                            <van-button size='small' type='default' @click='handleSort(2)'>
-                                {{ $t('trade.profit') }}
-                            </van-button> -->
                         </div>
-                        <div v-if='positionList.length===0 && $store.state._trade.positionLoading' class='loading'>
-                            <van-loading type='spinner' />
-                        </div>
+
                         <PositionList />
                     </div>
                 </van-tab>
                 <van-tab :title='$t("trade.pending")'>
-                    挂单
+                    <PendingList />
                 </van-tab>
                 <van-tab :title='$t("trade.closedOrder")'>
-                    平仓
+                    <div class='groupBtn'>
+                        <van-button
+                            :class="{ 'active': activeType===1,'mainColorBg': activeType ===1 }"
+                            size='small'
+                            @click='queryHistoryList(1)'
+                        >
+                            {{ $t('trade.filterToday') }}
+                        </van-button>
+                        <van-button
+                            :class="{ 'active': activeType===2,'mainColorBg': activeType ===2 }"
+                            size='small'
+                            @click='queryHistoryList(2)'
+                        >
+                            {{ $t('trade.filterweek') }}
+                        </van-button>
+                        <van-button
+                            :class="{ 'active': activeType===3,'mainColorBg': activeType ===3 }"
+                            size='small'
+                            @click='queryHistoryList(3)'
+                        >
+                            {{ $t('trade.filterMonth') }}
+                        </van-button>
+                    </div>
+                    <HistoryList :finished='finished' :loading='loading' @onLoad='onLoad' />
                 </van-tab>
             </van-tabs>
         </div>
     </div>
-
+    <Loading v-if='pageLoading' :show='pageLoading' :text='44455' />
     <Fund v-if='fundVis' :show='fundVis' @update:show='updateShow' />
 </template>
 
 <script>
-import { reactive, toRefs, onUpdated, computed } from 'vue'
+import { reactive, toRefs, onUpdated, computed, watchEffect } from 'vue'
 import { useStore } from 'vuex'
+import { QuoteSocket } from '@/plugins/socket/socket'
 import { useI18n } from 'vue-i18n'
+import { useRouter, useRoute } from 'vue-router'
 import Fund from '@c/components/fund'
 import PositionList from '@c/modules/positionList/positionList'
+import PendingList from '@c/modules/pendingList/pendingList'
+import HistoryList from '@c/modules/historyList/historyList'
+import dayjs from 'dayjs'
 export default {
     components: {
         Fund,
-        PositionList
+        PositionList,
+        PendingList,
+        HistoryList
     },
     setup (props) {
+        let current = 1
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
+        const route = useRoute()
 
         let sortFieldName = 'openTime'
         let sortType = 'desc'
@@ -79,6 +104,10 @@ export default {
 
         const state = reactive({
             fundVis: false,
+            pageLoading: false,
+            active: 0,
+            loading: false,
+            finished: false,
             sortActions: [
                 { name: t('history.daytime'), feild: 'openTime', active: false, className: sortActionsDown },
                 { name: t('trade.profit'), active: false, feild: 'pnl' },
@@ -88,18 +117,14 @@ export default {
         const pendingList = computed(() => store.state._trade.pendingList)
         const customerInfo = computed(() => store.state._user.customerInfo)
 
-        const sortActions = [
-            { name: t('history.daytime'), feild: 'openTime', className: sortActionsDown },
-            { name: t('trade.profit'), feild: 'pnl' },
-        ]
-
-        if (customerInfo.value) {
-            store.dispatch('_trade/queryPositionPage')
-        }
+        // 切换指定tab页
+        state.active = Number(route.query.tab)
 
         // 选择排序方式
-        const actionSheetOnSelect = item => {
+        const handleSortPosition = item => {
+            state.sortActions.forEach(el => (el.active = false))
             item.active = true
+
             if (item.className && sortType === 'desc') {
                 sortType = 'asc'
                 item.className = sortActionsUp
@@ -112,18 +137,99 @@ export default {
                 sortType = 'desc'
                 sortFieldName = item.feild
             }
+            queryPositionList()
+        }
+
+        // 查询持仓列表
+        const queryPositionList = () => {
+            state.pageLoading = true
+            store.dispatch('_trade/queryPositionPage', { 'sortFieldName': sortFieldName, 'sortType': sortType }).then(res => {
+                state.pageLoading = false
+                if (res.check()) {
+                    const subscribList = positionList.value.concat(pendingList.value).map(el => el.symbolId)
+                    QuoteSocket.send_subscribe(subscribList)
+                }
+            }).catch(() => {
+                state.pageLoading = false
+            })
+        }
+
+        // 查询挂单列表
+        const queryPendingList = () => {
+            state.pageLoading = true
+            store.dispatch('_trade/queryPBOOrderPage').then(res => {
+                state.pageLoading = false
+            }).catch(err => {
+                state.pageLoading = false
+            })
+        }
+
+        // 查询已平仓列表
+        const queryHistoryList = (dateType) => {
+            state.loading = true
+            let closeEndTime
+            const closeStartTime = dayjs().startOf('day').valueOf()
+            if (Number(dateType) === 1) {
+                closeEndTime = dayjs().endOf('day').valueOf()
+            } else if (Number(dateType) === 2) {
+                closeEndTime = dayjs().subtract(7, 'day').startOf('day').valueOf()
+            } else if (Number(dateType) === 3) {
+                closeEndTime = dayjs().subtract(1, 'month').startOf('day').valueOf()
+            }
+
+            state.pageLoading = true
+            store.dispatch('_trade/queryHistoryCloseOrderList', {
+                sortFieldName: 'closeTime',
+                sortType: 'desc',
+                closeStartTime,
+                closeEndTime,
+                current,
+                size: 20
+            }).then(res => {
+                state.pageLoading = false
+                state.loading = false
+                if (res.data.list.length === 0 || res.data.current >= res.data.totalPage) {
+                    state.finished = true
+                }
+            }).catch(err => {
+                state.pageLoading = false
+            })
+        }
+
+        // 平仓记录加载更多
+        const onLoad = () => {
+            current++
+            queryHistoryList()
+        }
+
+        watchEffect(() => {
+            if (Number(state.active) === 0) {
+                queryPositionList()
+            } else if (Number(state.active) === 1) {
+                queryPendingList()
+            } else if (state.active === 2) {
+                queryHistoryList(1)
+            }
+        })
+
+        const triggerTab = (val) => {
+            state.active = Number(val)
         }
 
         const updateShow = (val) => {
             state.fundVis = val
         }
+
         return {
             ...toRefs(state),
             updateShow,
             positionList,
             pendingList,
             customerInfo,
-            actionSheetOnSelect
+            handleSortPosition,
+            triggerTab,
+            queryHistoryList,
+            onLoad
         }
     }
 }
@@ -136,6 +242,7 @@ export default {
     height: 100%;
     margin-top: rem(90px);
     margin-bottom: rem(100px);
+    padding: 0 rem(20px);
     overflow: auto;
     background: var(--bgColor2);
     .assetIcon {
@@ -169,7 +276,6 @@ export default {
         }
     }
     .m-ccgd {
-        padding: 0 rem(20px);
         background-color: var(--bgColor2);
         .m-orderBy {
             margin-top: rem(20px);
@@ -178,6 +284,9 @@ export default {
                 min-width: rem(110px);
                 color: #000;
                 //padding: 0 rem(30px);
+                &.active {
+                    color: #477FD3;
+                }
             }
             i {
                 font-size: rem(22px);
@@ -191,6 +300,10 @@ export default {
             padding-top: rem(60px);
             text-align: center;
         }
+    }
+    .groupBtn {
+        padding-top: rem(30px);
+        padding-bottom: rem(30px);
     }
 }
 

@@ -76,7 +76,11 @@
     "orderSuccess": "成功",
     "quote": "行情",
     "search": "添加交易品种",
-    "trade": "交易"
+    "trade": "交易",
+    "positionDetail": "持仓明细",
+    "pendingDetail": "挂单明细",
+    "historyDetail": "已平仓明细"
+    
   },
   "search": {
     "keywords": "请输入搜索关键词"
@@ -154,7 +158,6 @@
     "confirmClose": "确认平仓",
     "closeNetProfit": "平仓净盈亏",
     "positionProfit": "盈亏",
-    "positionNetProfit": "净盈亏",
     "swap": "隔夜利息",
     "swap_2": "利息",
     "unit": "单位",
@@ -332,7 +335,9 @@
     "multiples":"倍",
     "experibBalance": "体验账户余额",
     "nosSet": "未设置",
-    "inputPendingPrice": "请输入挂单价格"
+    "inputPendingPrice": "请输入挂单价格",
+    "openTime": "开仓时间",
+    "orderSn": "订单编号"
   },
   "weekdayMap": {
     "1": "周一",

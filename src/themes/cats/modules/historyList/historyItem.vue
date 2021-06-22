@@ -1,163 +1,239 @@
 <template>
-    <div class='positionItem van-hairline--bottom' @click='detailVisible=!detailVisible'>
-        <div class='mainWrap'>
-            <div class='hd'>
-                <p class='productName'>
-                    {{ data.symbolName }},
-                    <span class='volumn'>
-                        <span :class="Number(data.closeDirection) === 1 ? 'riseColor' : 'fallColor'">
-                            {{ data.closeDirection===1?'buy':'sell' }}
-                        </span>
-                        {{ data.closeVolume }}
+    <div class='product-item' @click='toPositionDetail(data)'>
+        <!-- {{ data.direction }} -->
+        <div class='item'>
+            <div class='cell'>
+                <div class='th'>
+                    <div class='name'>
+                        {{ data.symbolName }}
+                    </div>
+                    <div class='lot'>
+                        {{ data.symbolName }}
+                    </div><p>
+                        <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
+                            {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
+                        </span>{{ positionVolume }} {{ $t('trade.volumeUnit') }}
+                    </p>
+                </div>
+                <div>
+                    <span class='currency'>
+                        {{ $t('trade.netProfit') }} ({{ customerInfo.currency }})
                     </span>
-                </p>
-                <p class='volums'>
-                    <span>{{ data.openPrice }}</span>
-                    <span> → </span>
-                    <span>{{ data.closePrice }}</span>
-                </p>
+                    <div class='ft amount' :class="parseFloat(data.profit) > 0 ? 'riseColor': 'fallColor'">
+                        {{ parseFloat(data.profit) > 0 ? '+': '-' }}{{ data.profit }}
+                    </div>
+                </div>
             </div>
-            <div class='col'>
-                <p class='date'>
-                    {{ closeTime }}
-                </p>
-                <p class='price' :class='{ riseColor:data.profit>=0,fallColor:data.profit<0 }'>
-                    {{ data.profit<0 ? data.profit : "+"+data.profit }}
-                </p>
+            <div class='cell'>
+                <div class='price'>
+                    <div>
+                        <div class='price_item'>
+                            <span class='title'>
+                                {{ $t('trade.positionPrice') }}
+                            </span><span>
+                                {{ data.openPrice }}
+                            </span>
+                        </div><div class='price_item'>
+                            <span class='title'>
+                                {{ $t('trade.swap_2') }}
+                            </span>
+                            <span class='grayColor'>
+                                {{ data.interest }}
+                            </span>
+                        </div>
+                    </div><div>
+                        <div class='price_item'>
+                            <span class='title'>
+                                {{ $t('trade.closedPrice') }}
+                            </span><span class=''>
+                                {{ data.closePrice }}
+                            </span>
+                        </div><div class='price_item'>
+                            <span class='title'>
+                                {{ $t('trade.fee') }}
+                            </span><span class=''>
+                                {{ data.commission||'--' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class='ft'>
+                    {{ formatTime(data.closeTime) }}
+                </div>
             </div>
-        </div>
-        <div v-if='detailVisible' class='detail muted'>
-            <p class='date '>
-                ID: {{ data.orderId }}
-            </p>
-            <ul class='list'>
-                <li class='flexWrap'>
-                    <span class='title'>
-                        S/L
-                    </span>
-                    <span class='value'>
-                        {{ data.stopLoss || '--' }}
-                    </span>
-                </li>
-                <li class='flexWrap'>
-                    <span class='title'>
-                        {{ $t('fee') }}
-                    </span>
-                    <span class='value'>
-                        {{ data.commission||'--' }}
-                    </span>
-                </li>
-                <li class='flexWrap'>
-                    <span class='title'>
-                        T/P
-                    </span>
-                    <span class='value'>
-                        {{ data.takeProfit || '--' }}
-                    </span>
-                </li>
-                <!-- <li class='flexWrap'>
-                    <span class='title'>
-                        税金
-                    </span>
-                    <span class='value'>
-                        --
-                    </span>
-                </li> -->
-            </ul>
         </div>
     </div>
+
+    <DialogClosePosition v-if='cpVis' :data='data' :show='cpVis' @update:show='updateShow' />
 </template>
 
 <script>
-import { reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { minus } from '@/utils/calculation'
+import DialogClosePosition from '@c/components/dialogClosePosition'
 import dayjs from 'dayjs'
 export default {
+    components: {
+        DialogClosePosition
+    },
     props: ['data'],
     setup ({ data }) {
-        const onceState = {
-            closeTime: dayjs(data.closeTime).format('YYYY.MM.DD HH:mm:ss')
-        }
+        const store = useStore()
+        const router = useRouter()
         const state = reactive({
-            detailVisible: false
+            show: false,
+            loading: false,
+            cur: {},
+            cpVis: false
         })
+        const customerInfo = computed(() => store.state._user.customerInfo)
+        const positionList = computed(() => store.state._trade.positionList)
+        const product = computed(() => store.state._quote.productMap[data.symbolId])
+        const positionVolume = computed(() => minus(data.openVolume, data.closeVolume))
+
+        const toPositionDetail = (item) => {
+            store.commit('_quote/Update_productActivedID', item.symbolId)
+            router.push({ path: '/historyDetail', query: { symbolId: item.symbolId, positionId: item.positionId } })
+        }
+
+        // 格式化时间
+        const formatTime = (val) => {
+            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+        }
+        const updateShow = (val) => {
+            state.cpVis = val
+        }
+
         return {
             ...toRefs(state),
-            ...onceState
+            positionList,
+            customerInfo,
+            product,
+            positionVolume,
+            toPositionDetail,
+            updateShow,
+            formatTime
         }
-    },
+    }
 }
 </script>
 
-<style lang="scss" scoped>
-@import '~@/sass/mixin.scss';
-.positionItem {
-    position: relative;
-    padding: rem(20px) rem(40px);
-    .mainWrap {
+<style lang='scss' scoped>
+@import '@/sass/mixin.scss';
+.product-item {
+    .item {
         position: relative;
-        display: flex;
-        align-items: center;
+        margin-bottom: rem(20px);
+        padding: rem(20px) rem(30px) 0;
         overflow: hidden;
-        .date {
-            line-height: rem(40px);
+        background: #FFF;
+        border-radius: rem(10px);
+        .cell {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: rem(20px);
+            color: #999;
+            font-size: rem(20px);
+            line-height: 1.45;
+            .th {
+                flex: 1;
+            }
+            &:last-child {
+                align-items: flex-end;
+            }
+            .bd {
+                position: relative;
+                top: rem(4px);
+                display: inline-block;
+                margin-right: rem(20px);
+                text-align: center;
+            }
+            .price {
+                flex: 1;
+                .price_item {
+                    display: inline-block;
+                    width: rem(220px);
+                    span {
+                        padding: 0 rem(4px);
+                    }
+                    .title {
+                        margin-right: rem(4px);
+                        padding: 0;
+                    }
+                }
+            }
+            .ft {
+                text-align: right;
+                vertical-align: middle;
+                .van-button {
+                    vertical-align: middle;
+                    background: rgb(243, 248, 255);
+                    border-color: rgb(243, 248, 255);
+                }
+            }
+            .amount {
+                padding-top: rem(6px);
+                padding-right: rem(6px);
+                font-weight: 600;
+                font-size: rem(34px);
+            }
+            .currency {
+                position: relative;
+                top: rem(6px);
+            }
+            .warn {
+                color: #333;
+                background-color: #FFA700;
+            }
+            .name {
+                display: inline-block;
+                max-width: rem(360px);
+                color: #333;
+                font-size: rem(28px);
+                line-height: rem(38px);
+                vertical-align: bottom;
+            }
+            .lot {
+                display: inline-block;
+                margin-left: 0.5em;
+                vertical-align: bottom;
+            }
+            .time {
+                color: #999;
+                font-size: rem(20px);
+            }
         }
-    }
-    .hd {
-        flex: 1;
-        color: var(--mutedColor);
-        font-size: rem(24px);
-        line-height: 1.3;
-    }
-    .productName {
-        color: var(--color);
-        font-weight: bold;
-        font-size: rem(30px);
-        line-height: rem(40px);
-        .volumn {
-            font-weight: normal;
+        .icon_icon_chart {
+            display: inline-block;
+            width: rem(52px);
+            height: rem(46px);
+            font-size: rem(30px);
+            font-style: normal;
+            line-height: rem(46px);
+            text-align: center;
+            border-radius: rem(6px);
+            &.hidden {
+                color: #477FD3;
+                background-color: #F3F8FF;
+            }
         }
-    }
-    .volums {
-        padding-top: 3px;
-    }
-    .col {
-        margin-left: rem(46px);
-        font-size: rem(24px);
-        text-align: right;
-        &:first-of-type {
-            margin-left: 0;
+        .van-button {
+            border-radius: rem(6px);
+            &__text {
+                color: #477FD3;
+            }
+            &--mini {
+                min-width: rem(124px);
+                height: rem(48px);
+                padding: 0 rem(10px);
+                font-size: rem(24px);
+                line-height: rem(48px);
+            }
         }
-    }
-    .price {
-        font-weight: bold;
-        font-size: rem(30px);
-        .normal {
-            vertical-align: text-bottom;
-        }
-        .big {
-            font-size: rem(46px);
-        }
-        sup {
-            font-size: inherit;
-        }
-    }
-}
-.detail {
-    margin-top: rem(10px);
-    font-size: rem(24px);
-    .date {
-        font-weight: normal;
-    }
-    .list {
-        display: grid;
-        grid-column-gap: rem(30px);
-        grid-template-columns: repeat(2, 1fr);
-        margin-top: rem(10px);
-    }
-    .flexWrap {
-        display: flex;
-        justify-content: space-between;
-        padding: 3px 0;
     }
 }
 </style>

@@ -34,7 +34,7 @@ export default {
         })
         const store = useStore()
         store.dispatch('_user/queryCustomerOptionalList')
-        // debugger
+
         state.productCategoryList = store.getters.userProductCategory
         state.quoteProductMap = store.state._quote.productMap
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)
@@ -46,7 +46,7 @@ export default {
                     productList.push(state.quoteProductMap[value])
                 }
             })
-            // debugger
+
             state.categoryProductList = differenceBy(productList, selfSymbolList.value, 'symbolId')
         }
         watch(selfSymbolList.value.length, () => {

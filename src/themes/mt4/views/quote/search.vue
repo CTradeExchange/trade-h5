@@ -74,7 +74,7 @@ export default {
                         productList.push(state.quoteProductMap[value])
                     }
                 })
-                // debugger
+
                 state.categoryProductList = differenceBy(productList, selfSymbolList.value, 'symbolId')
             }
             show.value = true

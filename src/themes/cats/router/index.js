@@ -63,7 +63,23 @@ const routes = [
                 name: 'PositionDetail',
                 component: () => import(/* webpackChunkName: "position" */ '../views/position/positionDetail.vue'),
                 meta: {
-                    title: 'route.trade'
+                    title: 'route.positionDetail'
+                }
+            },
+            {
+                path: 'pendingDetail',
+                name: 'PendingDetail',
+                component: () => import(/* webpackChunkName: "position" */ '../views/position/pendingDetail.vue'),
+                meta: {
+                    title: 'route.pendingDetail'
+                }
+            },
+            {
+                path: 'historyDetail',
+                name: 'HistoryDetail',
+                component: () => import(/* webpackChunkName: "position" */ '../views/position/historyDetail.vue'),
+                meta: {
+                    title: 'route.historyDetail'
                 }
             },
             {
@@ -71,7 +87,7 @@ const routes = [
                 name: 'History',
                 component: () => import(/* webpackChunkName: "history" */ '../views/history/history.vue'),
                 meta: {
-                    title: 'route.history'
+                    title: 'route.historyDetail'
                 }
             },
             {

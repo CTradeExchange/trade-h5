@@ -1,82 +1,88 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop :back='true' :menu='false' title='持仓明细' />
+        <LayoutTop :back='true' :menu='false' />
         <div class='main'>
             <div class='m-orderInfo'>
                 <div class='layout layout-1'>
                     <div class='item item-1'>
                         <div class='left'>
                             <div class='name'>
-                                BTC/USDT_100倍
+                                {{ positionData.symbolName }}
                             </div>
                             <div class='code'>
-                                BTCUSDT x100
+                                {{ positionData.symbolName }}
                             </div>
                         </div>
                     </div>
                     <div class='item item-2'>
+                        <!-- <div class='col'>
+                            <div class='sub'>
+                                {{ $t('trade.netProfit') }} (USD)
+                            </div><div class='name riseColor'>
+                            </div>
+                        </div> -->
                         <div class='col'>
                             <div class='sub'>
-                                净盈亏(USD)
-                            </div><div class='name riseColor'>
-                                +12.00
+                                {{ $t('trade.profit') }}({{ customerInfo.currency }})
+                            </div>
+                            <div class='name' :class="parseFloat(positionData.profit) > 0 ? 'riseColor': 'fallColor'">
+                                {{ positionData.profitLoss }}
                             </div>
                         </div><div class='col'>
                             <div class='sub'>
-                                盈亏(USD)
-                            </div><div class='name riseColor'>
-                                +17.91
+                                {{ $t('trade.swap_2') }}({{ customerInfo.currency }})
+                            </div>
+                            <div class='name'>
+                                {{ positionData.interest || '--' }}
                             </div>
                         </div><div class='col'>
                             <div class='sub'>
-                                利息(USD)
-                            </div><div class='name'>
-                                -5.91
+                                {{ $t('trade.fee') }}({{ customerInfo.currency }})
                             </div>
-                        </div><div class='col'>
-                            <div class='sub'>
-                                手续费(USD)
-                            </div><div class='name'>
-                                0.00
+                            <div class='name'>
+                                {{ positionData.openFee }}
                             </div>
                         </div>
                     </div>
                 </div><div class='layout layout-1'>
                     <div class='item item-2 van-hairline--bottom'>
                         <div class='col'>
-                            <div class='sub fallColor'>
-                                卖出
+                            <div class='sub' :class="Number(positionData.direction) === 1 ? 'riseColor' : 'fallColor'">
+                                {{ Number(positionData.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
                             </div><div class='name'>
-                                0.01手
+                                {{ positionData.openVolume }} {{ $t('trade.volumeUnit') }}
                             </div>
-                        </div><div class='col'>
+                        </div>
+                        <div class='col'>
                             <div class='sub'>
-                                开仓价
-                            </div><div class='name'>
-                                37308.8
+                                {{ $t('trade.positionPrice') }}
                             </div>
-                        </div><div class='col'>
+                            <div class='name'>
+                                {{ positionData.openPrice }}
+                            </div>
+                        </div>
+                        <div class='col'>
                             <div class='sub'>
-                                当前价
+                                {{ $t('trade.currentPrice') }}
                             </div><div class='name riseColor'>
-                                35518.2
+                                {{ Number(positionData.direction) === 1 ? product.sell_price : product.buy_price }}
                             </div>
                         </div>
                     </div><div class='item item-2 van-hairline--bottom'>
                         <div class='col'>
                             <div class='sub'>
-                                止损价
+                                {{ $t('trade.stopLossPrice') }}
                             </div><div class='name'>
                                 <span class='number'>
-                                    未设置
+                                    {{ parseFloat(positionData.stopLossDecimal) ? positionData.stopLossDecimal : $t('trade.nosSet') }}
                                 </span>
                             </div>
                         </div><div class='col'>
                             <div class='sub'>
-                                止盈价
+                                {{ $t('trade.stopProfitPrice') }}
                             </div><div class='name'>
                                 <span class='number'>
-                                    未设置
+                                    {{ parseFloat(positionData.takeProfitDecimal) ? positionData.takeProfitDecimal : $t('trade.nosSet') }}
                                 </span>
                             </div>
                         </div>
@@ -85,18 +91,18 @@
                     <div class='item van-hairline--bottom'>
                         <div class='left'>
                             <div class='title'>
-                                开仓时间
+                                {{ $t('trade.openTime') }}
                             </div>
                         </div><div class='right'>
-                            2021/06/03 10:56:21
+                            {{ formatTime(positionData.openTime) }}
                         </div>
                     </div><div class='item'>
                         <div class='left'>
                             <div class='title'>
-                                持仓号
+                                {{ $t('trade.positionId') }}
                             </div>
                         </div><div class='right'>
-                            ID : 6393504
+                            ID : {{ positionId }}
                         </div>
                     </div>
                 </div>
@@ -104,14 +110,14 @@
         </div>
         <div class='submitBox'>
             <van-button plain size='normal' type='default' @click='showSetProfit = true'>
-                止盈止损
+                {{ $t('trade.tackStopSetup') }}
             </van-button>
             <van-button size='normal' type='primary'>
-                平仓
+                {{ $t('trade.closeOrder') }}
             </van-button>
         </div>
     </div>
-    <!-- :product='activeOrder' -->
+    <!-- :positionData='activeOrder' -->
     <DialogSLTP
         :direction='1'
         :is-position='true'
@@ -123,14 +129,31 @@
 
 <script>
 import DialogSLTP from '@c/components/dialogSLTP'
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { isEmpty } from '@/utils/util'
+import { useStore } from 'vuex'
+import dayjs from 'dayjs'
+import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
     components: { DialogSLTP },
 
     setup (props) {
+        const store = useStore()
+        const route = useRoute()
         const state = reactive({
             showSetProfit: false
         })
+
+        const orderId = route.query.orderId
+        const positionId = route.query.positionId
+        const symbolId = route.query.symbolId
+        const customerInfo = computed(() => store.state._user.customerInfo)
+        // 持仓产品
+        const positionData = computed(() => store.state._trade.positionMap[positionId])
+        const product = computed(() => store.state._quote.productMap[symbolId])
+
+        QuoteSocket.send_subscribe([symbolId])
 
         const setProfitSuccess = () => {
 
@@ -138,10 +161,20 @@ export default {
         const updateShow = (val) => {
             state.showSetProfit = val
         }
+
+        const formatTime = (val) => {
+            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+        }
         return {
             ...toRefs(state),
             setProfitSuccess,
-            updateShow
+            updateShow,
+            product,
+            positionData,
+            orderId,
+            formatTime,
+            customerInfo,
+            positionId
         }
     }
 }
@@ -195,6 +228,9 @@ export default {
                         }
                         &.fallColor {
                             color: var(--success);
+                        }
+                        .number {
+                            color: var(--btnText2);
                         }
                     }
                     &:last-child {

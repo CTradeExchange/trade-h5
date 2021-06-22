@@ -1,5 +1,5 @@
 <template>
-    <div class='position-item' @click='toPositionDetail(data)'>
+    <div class='product-item' @click='toPositionDetail(data)'>
         <!-- {{ data.direction }} -->
         <div class='item'>
             <div class='cell'>
@@ -100,8 +100,9 @@ export default {
         const product = computed(() => store.state._quote.productMap[data.symbolId])
         const positionVolume = computed(() => minus(data.openVolume, data.closeVolume))
 
-        const toPositionDetail = () => {
-            router.push('/positionDetail')
+        const toPositionDetail = (item) => {
+            store.commit('_quote/Update_productActivedID', item.symbolId)
+            router.push({ path: '/positionDetail', query: { symbolId: item.symbolId, positionId: item.positionId } })
         }
         const updateShow = (val) => {
             state.cpVis = val
@@ -122,7 +123,7 @@ export default {
 
 <style lang='scss' scoped>
 @import '@/sass/mixin.scss';
-.position-item {
+.product-item {
     .item {
         position: relative;
         margin-bottom: rem(20px);

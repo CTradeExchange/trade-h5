@@ -1,9 +1,6 @@
 <template>
     <div>
-        <div v-if='orderList && orderList.length===0 && $store.state._trade.historyLoading' class='loading'>
-            <van-loading type='spinner' />
-        </div>
-        <van-empty v-else-if='orderList && orderList.length===0' :description='$t("emptyHistory")' />
+        <van-empty v-if='orderList && orderList.length===0' :description='$t("trade.closedEmpty")' />
         <template v-else-if='orderList'>
             <van-list
                 v-model:loading='loading'
@@ -12,7 +9,7 @@
                 :immediate-check='false'
                 @load='onLoad'
             >
-                <positionItem v-for='item in orderList' :key='item' :data='item' />
+                <HistoryItem v-for='item in orderList' :key='item' :data='item' />
             </van-list>
             <!-- <positionItem v-for='item in orderList' :key='item' :data='item' /> -->
         </template>
@@ -22,10 +19,10 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import positionItem from './historyItem'
+import HistoryItem from './historyItem'
 export default {
     components: {
-        positionItem,
+        HistoryItem,
     },
     props: {
         loading: Boolean,
