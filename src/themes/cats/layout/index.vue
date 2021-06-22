@@ -1,10 +1,10 @@
 <template>
-    <router-view />
-    <!-- <router-view v-slot='{ Component }'>
+    <!-- <router-view /> -->
+    <router-view v-slot='{ Component }'>
         <keep-alive>
-            <component :is='Component' class='pageWrap' :class="{ 'noFoot':$route.meta.footerMenu===false }" />
+            <component :is='Component' :class="{ 'noFoot':$route.meta.footerMenu===false }" />
         </keep-alive>
-    </router-view> -->
+    </router-view>
     <footerMenu id='footerMenu' class='footerMenu' />
 </template>
 
