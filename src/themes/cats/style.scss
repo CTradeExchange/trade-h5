@@ -21,7 +21,7 @@
     --sellColor: #E3525C;
     --buyColor: #007AFF;
     --primary: #007AFF;
-    --success: #20CE00;
+    --success: #10B873;
     --red: #E3525C;
     --assistColor: #989898;
     --assist2Color: #484848;
@@ -77,6 +77,9 @@ a {
 .sellColor {
     color: var(--sellColor);
 }
+.successColor {
+    color: var(--success);
+}
 [class*='icon_'] {
     font-family: iconfont;
 }
@@ -112,8 +115,9 @@ i {
     color: var(--primary) !important;
 }
 .primary {
-    color: var(--primary);
+    color: var(--primary) !important;
 }
+.primaryBg,
 .mainColorBg {
     color: var(--white) !important;
     background-color: var(--primary) !important;

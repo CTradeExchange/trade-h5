@@ -72,7 +72,11 @@ export default {
             const m = divide(this.modelValue, this.product.minVolume)
             return getDecimalNum(m) > 0
         }
-
+    },
+    watch: {
+        modelValue (newval) {
+            this.num = newval
+        }
     },
     created () {
         this.num = this.modelValue
@@ -82,7 +86,7 @@ export default {
             this.$emit('update:modelValue', val)
         },
         addStep (val) {
-            let newval = plus(this.modelValue * 1, val * 1)
+            let newval = plus(this.modelValue, val) * 1
             const volumes_min = this.product.minVolume
             const volumes_max = this.product.maxVolume
             newval = Math.max(newval, volumes_min)
@@ -103,8 +107,12 @@ export default {
     }
 }
 .stepper {
+    background: var(--btnColor);
     &.warn {
         color: var(--red);
+    }
+    :deep(.input) {
+        width: rem(240px);
     }
 }
 .volumeSteps {
@@ -123,7 +131,7 @@ export default {
         color: #333;
         line-height: rem(40px);
         text-align: center;
-        background: #F9F9F9;
+        background: var(--btnColor);
         border-radius: rem(6px);
     }
 }

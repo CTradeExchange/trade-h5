@@ -9,6 +9,8 @@
     "managAccount": "管理账户",
     "loginAccont": "登录账户",
     "onlineService": "客服",
+    "noSetup": "未设置",
+    "look": "查看",
     "borrowReturn": "借款/还款"
   },
   "contract": {
@@ -80,6 +82,7 @@
   },
   "simple": "简单",
   "success": "成功",
+  "submit": "提交",
   "trade": {
     "advance": "预付款",
     "advanceRatio": "预付款比率",
@@ -115,8 +118,27 @@
     "orderType": "类型",
     "marketPrice": "市价",
     "pending": "挂单",
+    "pendingPrice": "挂单价",
     "orderVolume": "数量(手)",
-    "dot": "点"
+    "tackStopSetup": "止盈止损",
+    "stopProfitPrice": "止盈价",
+    "stopLossPrice": "止损价",
+    "takeProfit": "止盈",
+    "takeLoss": "止损",
+    "expireTime": "有效期",
+    "expireType1": "当日",
+    "expireType2": "当周",
+    "openPendingSuccess": "挂单成功",
+    "positionPrice": "开仓价",
+    "volumes": "数量",
+    "volumeUnit": "手",
+    "buyAgain": "继续下单",
+    "lookPendings": "查看挂单",
+    "lookPositions": "查看持仓",
+    "priceIntroduce": "价格说明",
+    "priceIntroContent": "设置挂单价格后，仅当市场价格触达该价格时，挂单将以市价成交。",
+    "dot": "点",
+    "inputPendingPrice": "请输入挂单价格"
   },
   "weekdayMap": {
     "1": "周一",

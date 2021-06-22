@@ -19,7 +19,8 @@ const colors = {
     'fallColor': '#10b873',
     'sellColor': '#E3525C',
     'buyColor': '#007AFF',
-    'primary': '#1989fa',
+    'primary': '#477fd3',
+    'success': '#10B873',
 }
 
 // 设置root变量
