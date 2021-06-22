@@ -10,7 +10,8 @@
                 {{ title }}
             </div>
             <div v-else-if='showCenter' class='title'>
-                {{ $t($route.meta.title) }}            </div>
+                {{ $t($route.meta.title) }}
+            </div>
         </slot>
         <slot name='tabs'></slot>
         <slot name='right'>
@@ -25,7 +26,7 @@
 </template>
 
 <script>
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 export default {
     props: {
         rightAction: {
@@ -50,7 +51,6 @@ export default {
     },
     setup (props, { emit, attrs }) {
         const router = useRouter()
-        const route = useRoute()
         // 点击返回
         const back = () => {
             attrs.onBack ? emit('back') : router.back()

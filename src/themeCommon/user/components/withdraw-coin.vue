@@ -192,8 +192,8 @@ import {
     computeWithdrawFee
 } from '@api/user'
 // 工具方法
-import { isEmpty } from '@/utils/util'
-import { toFixed, minus, mul, divide } from '@/utils/calculation'
+import { isEmpty, debounce } from '@/utils/util'
+import { minus, mul, divide } from '@/utils/calculation'
 // 插件
 import dayjs from 'dayjs'
 // import utc from 'dayjs/plugin/utc'
@@ -211,6 +211,8 @@ export default {
             withdrawConfig: null,
             // 取款汇率配置
             withdrawRate: null,
+            // 取款汇率
+            rate: 0,
             // 提币链名称数据列表
             allList: [],
             // 提币币种选项列表
@@ -434,7 +436,8 @@ export default {
                 if (res.check()) {
                     const { data } = res
                     state.withdrawRate = data
-                    state.coinTotal = toFixed(mul(state.withdrawConfig.withdrawAmount, data.exchangeRate))
+                    state.rate = data.exchangeRate
+                    state.coinTotal = mul(state.withdrawConfig.withdrawAmount, state.rate)
                 }
             })
         }
@@ -457,15 +460,13 @@ export default {
             computeWithdrawFee(item).then(res => {
                 if (res.check()) {
                     const { data } = res
-                    state.serviceCount = toFixed(data, 2)
-                    state.arriveCount = toFixed(minus(state.coinCount, state.serviceCount), 2)
-                    state.minusCount = toFixed(divide(state.coinCount, state.withdrawRate.exchangeRate), 2)
-                    state.btnDisabled = false
+                    state.serviceCount = data
+                    state.arriveCount = minus(state.coinCount, state.serviceCount)
+                    state.minusCount = divide(state.coinCount, state.rate)
                 } else {
-                    state.serviceCount = toFixed(0)
-                    state.arriveCount = toFixed(0)
-                    state.minusCount = toFixed(0)
-                    state.btnDisabled = true
+                    state.serviceCount = '0.00'
+                    state.arriveCount = '0.00'
+                    state.minusCount = '0.00'
                 }
             })
         }
@@ -609,6 +610,8 @@ export default {
         // 点击确定
         const onConfirm = () => {
             const { withdrawAmountConfig } = state.withdrawConfig
+            const singleLowAmount = mul(withdrawAmountConfig.singleLowAmount, state.rate)
+            const singleHighAmount = mul(withdrawAmountConfig.singleHighAmount, state.rate)
             if (!state.coinKind) {
                 return Toast({ message: t('withdrawCoin.coinPlaceholder') })
             }
@@ -618,11 +621,11 @@ export default {
             if (!state.coinCount) {
                 return Toast({ message: t('withdrawCoin.coinCountPlaceholder') })
             }
-            if (state.coinCount < withdrawAmountConfig.singleLowAmount) {
-                return Toast({ message: `${t('withdrawCoin.hint_4')}${withdrawAmountConfig.singleLowAmount}` })
+            if (state.coinCount < singleLowAmount) {
+                return Toast({ message: `${t('withdrawCoin.hint_4')}${singleLowAmount}` })
             }
-            if (state.coinCount > withdrawAmountConfig.singleHighAmount) {
-                return Toast({ message: `${t('withdrawCoin.hint_5')}${withdrawAmountConfig.singleHighAmount}` })
+            if (state.coinCount > singleHighAmount) {
+                return Toast({ message: `${t('withdrawCoin.hint_5')}${singleHighAmount}` })
             }
             if (!state.currentWallet) {
                 return Toast({ message: t('withdrawCoin.walletSelect') })
@@ -637,8 +640,10 @@ export default {
             const item = {
                 ...params,
                 amount: parseFloat(state.coinCount),
-                rate: state.withdrawRate.exchangeRate,
+                rate: state.rate,
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
+                bankName: '数字钱包',
+                bankCardNo: state.walletId,
                 withdrawType: 2,
                 withdrawCurrency: state.coinKind,
                 blockchainName: state.chainName
