@@ -16,6 +16,7 @@ const routes = [
                 component: () => import(/* webpackChunkName: "Quote" */ '../views/home/home.vue'),
                 meta: {
                     title: 'route.home',
+                    keepAlive: true,
                 }
             },
             {
@@ -32,6 +33,7 @@ const routes = [
                 component: () => import(/* webpackChunkName: "Quote" */ '../views/quote/quote.vue'),
                 meta: {
                     title: 'route.quote',
+                    keepAlive: true,
                 }
             },
             {
@@ -117,16 +119,6 @@ const routes = [
             }
         ]
     },
-    {
-        path: '/news',
-        name: 'News',
-        component: () => import(/* webpackChunkName: "news" */ '../views/news/news.vue'),
-        meta: {
-            title: 'route.news',
-            keepAlive: true,
-        }
-    },
-
     {
         path: '/contract',
         name: 'Contract',

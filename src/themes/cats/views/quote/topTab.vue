@@ -95,7 +95,7 @@ export default {
 @import '~@/sass/mixin.scss';
 :deep(.van-tab) {
     flex: none;
-    padding: 0;
+    padding: 0 !important;
     text-align: left;
 }
 .dot {

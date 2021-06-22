@@ -175,7 +175,7 @@
     "positionEmpty": "暂无持仓，去交易吧",
     "pendingEmpty": "暂无挂单，去交易吧",
     "closedEmpty": "暂无平仓记录",
-    "openPositionSuccess": "开仓成功",
+    "openPositionSuccess": "下单成功",
     "closedSuccess": "平仓成功",
     "closedNum": "平仓数量",
     "closedNumHands": "平仓数量(手)",

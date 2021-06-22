@@ -1,38 +1,20 @@
 <template>
-    <Top ref='top' />
-    <div id='homeContent' ref='homeContent' class='container'>
-        <div id='inflow2App' ref='inflow2App'>
-            <!-- <demo :orgid="orgid" lang="zh-cn"></demo> -->
-        </div>
+    <div class='container'>
+        <div id='inflow2App' ref='inflow2App'></div>
     </div>
-    <footerMenu id='footerMenu' class='footerMenu' />
 </template>
 
 <script>
-import Top from '@c/layout/top'
-import footerMenu from '@c/layout/footerMenu'
 import loadScript from '@/utils/loadScript'
 import loadCSS from '@/utils/loadCSS'
-import { isEmpty, removeLoginParams, localSet, localGet } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 let loaded = false
 let scrollTop = 0
 export default {
     name: 'News',
-    components: {
-        Top,
-        footerMenu,
-    },
     activated () {
-        const homeContent = this.$refs.homeContent
-        const _this = this
+        const homeContent = document.querySelector('#homeContent')
         homeContent.scrollTop = scrollTop
-        // 未启用新闻跳转首页
-        if (!isEmpty(localGet('openNews'))) {
-            if (!JSON.parse(localGet('openNews'))) {
-                _this.$router.push('/')
-            }
-        }
     },
     mounted () {
         const _this = this
@@ -45,14 +27,7 @@ export default {
                 this.callback = {}
             }
             IX_postMessage.prototype.toMiddlePage = function (data) {
-                _this.$router.push({
-                    name: 'Otherpage',
-                    params: { type: 'page' },
-                    query: {
-                        url: encodeURIComponent(data.query.url),
-                        pageTitle: t('infos')
-                    }
-                })
+                _this.openUrl(data.query.url, t('infos'))
             }
             return new IX_postMessage()
         })(window)
@@ -60,7 +35,7 @@ export default {
         this.writeTop()
     },
     unmounted () {
-        const homeContent = this.$refs.homeContent
+        const homeContent = document.querySelector('#homeContent')
         homeContent.removeEventListener('scroll', this.scrollFn, false)
     },
     methods: {
@@ -68,9 +43,9 @@ export default {
             const jsCode = [
                 'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2md/vue.js',
                 'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2md/vant.min.js',
-                'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2md/prodcn/wequickNewsList.umd.min.js'
+                'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2/proden/wequickNewsList.umd.min.js'
             ]
-            const cssCode = 'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2md/prodcn/wequickNewsList.css'
+            const cssCode = 'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2/proden/wequickNewsList.css'
             if (loaded) {
                 setTimeout(() => {
                     this.initInflow()
@@ -90,7 +65,7 @@ export default {
         },
         // 初始化信息流组件
         initInflow () {
-            this.$refs.inflow2App.innerHTML = '<demo :orgid="3" lang="zh"></demo>'
+            this.$refs.inflow2App.innerHTML = '<demo :orgid="1" lang="en"></demo>'
             new window.Vue({
                 components: {
                     demo: window.wequickNewsList
@@ -99,7 +74,7 @@ export default {
         },
         // 记录信息流的滚动条，保留上次滑动的位置
         writeTop () {
-            const homeContent = this.$refs.homeContent
+            const homeContent = document.querySelector('#homeContent')
             this.scrollFn = evt => {
                 scrollTop = evt.target.scrollTop
             }
@@ -111,9 +86,5 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-.container {
-    flex: 1;
-    margin-bottom: rem(100px);
-    overflow-y: auto;
-}
+
 </style>

@@ -1,11 +1,8 @@
 <template>
     <div class='profitLossSetBar'>
-        <p v-if='stopLossWarn' class='floatTip'>
-            止损价格不在范围{{ stopLossRange }}
-        </p>
-        <p v-else-if='stopProfitWarn' class='floatTip'>
-            止盈价格不在范围{{ profitRange }}
-        </p>
+        <FloatTip v-if='stopLossWarn || stopProfitWarn'>
+            {{ stopLossWarn || stopProfitWarn }}
+        </FloatTip>
         <van-cell center class='cellWrapper' :title="$t('trade.tackStopSetup')">
             <template #right-icon>
                 <van-switch
@@ -54,10 +51,14 @@
 <script>
 import { computed, reactive, ref, toRefs, watchEffect } from 'vue'
 import ProfitLossBar from '@c/modules/profitLossBar/profitLossBar'
+import FloatTip from './floatTip'
+import { profitLossPriceCompare } from './checkProfitLoss'
 import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 export default {
     components: {
         ProfitLossBar,
+        FloatTip,
     },
     props: ['product', 'stopLoss', 'stopProfit', 'direction'],
     emits: ['update:stopLoss', 'update:stopProfit'],
@@ -65,16 +66,24 @@ export default {
         const store = useStore()
         const stopLossRef = ref(null)
         const stopProfitRef = ref(null)
+        const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             enabled: false,
             stopLossPrice: '',
             stopProfitPrice: '',
         })
+        const dire = props.direction === 'buy' ? 1 : 2
         const profitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
         const stopLossRange = computed(() => props.direction === 'buy' ? profitLossRang.value.buyStopLossRange : profitLossRang.value.sellStopLossRange)
         const profitRange = computed(() => props.direction === 'buy' ? profitLossRang.value.buyProfitRange : profitLossRang.value.sellProfitRange)
-        const stopLossWarn = computed(() => stopLossRef.value?.warn)
-        const stopProfitWarn = computed(() => stopProfitRef.value?.warn)
+        const stopLossWarn = computed(() => {
+            const warn = stopLossRef.value?.warn
+            return warn && profitLossPriceCompare('stopLoss', dire, state.stopLossPrice, profitLossRang.value, t)
+        })
+        const stopProfitWarn = computed(() => {
+            const warn = stopProfitRef.value?.warn
+            return warn && profitLossPriceCompare('profit', dire, state.stopProfitPrice, profitLossRang.value, t)
+        })
 
         watchEffect(() => {
             if (props.stopLoss !== state.stopLossPrice) {

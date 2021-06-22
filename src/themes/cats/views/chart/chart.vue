@@ -9,58 +9,9 @@
             @indicatorRemoved='indicatorRemoved'
             @symbolChanged='symbolChanged'
         >
-            <template v-if='!isLandscape' #top='{ setSymbol,resolutionList }'>
-                <Top>
-                    <template #right>
-                        <div class='btn-wrap'>
-                            <div class='btn'>
-                                <van-popover
-                                    v-model:show='showProductPopover'
-                                    :actions='computedProductList'
-                                    class='tv-product-popover'
-                                    overlay
-                                    theme='dark'
-                                    @select='setSymbol'
-                                >
-                                    <template #reference>
-                                        <van-button class='btn' type='primary'>
-                                            <van-icon name='points' size='25' />
-                                        </van-button>
-                                    </template>
-                                </van-popover>
-                            </div>
+            <!-- <template v-if='!isLandscape' #top='{ setSymbol,resolutionList }'>
 
-                            <div class='btn'>
-                                <van-popover
-                                    v-model:show='showResolutionPopover'
-                                    :actions='resolutionList'
-                                    class='tv-resolution-popover'
-                                    overlay
-                                    theme='dark'
-                                    @select='e => setResolution(e.value)'
-                                >
-                                    <template #reference>
-                                        <van-button class='btn' type='primary'>
-                                            <van-icon name='clock-o' size='25' />
-                                        </van-button>
-                                    </template>
-                                </van-popover>
-                            </div>
-                            <div class='btn'>
-                                <van-button class='btn' type='primary' @click='() => showIndicator = true'>
-                                    <i class='icon icon_f'></i>
-                                </van-button>
-                            </div>
-                            <div class='btn' @click='onShowSetting'>
-                                <i class='icon icon_shezhi'></i>
-                            </div>
-                            <div class='btn' @click='gotoOrder'>
-                                <i class='icon icon_xindingdan'></i>
-                            </div>
-                        </div>
-                    </template>
-                </Top>
-            </template>
+            </template> -->
             <template v-if='isLandscape' #sideMenu>
                 <!-- 横屏菜单 -->
                 <SideMenu
@@ -86,7 +37,6 @@
 </template>
 
 <script>
-import Top from '@c/layout/top'
 import tv from '@/components/tradingview/tv'
 import { Popover } from 'vant'
 import { computed, watch, ref, unref } from 'vue'
@@ -101,7 +51,6 @@ import Indicator from './components/indicator'
 export default {
     components: {
         tv,
-        Top,
         [Popover.name]: Popover,
         ChartSetting,
         SideMenu,
@@ -114,11 +63,21 @@ export default {
         const productList = computed(() => store.state._quote.productList)
 
         // 图表配置
-        const chartConfig = ref({})
+        const chartConfig = ref({
+            property: {
+                showBuyPrice: true, // 买价线
+                showSellPrice: true, // 卖价线
+                showSeriesOHLC: true, // 高开低收
+                showBarChange: true, // 涨跌幅
+                chartType: '1', // 图表类型
+                showSeriesTitle: false // K线标题
+            }
+        })
         // 图表组件引用
         const chartRef = ref(null)
         // 是否横屏
-        const isLandscape = ref([90, -90].includes(window.orientation))
+        // const isLandscape = ref([90, -90].includes(window.orientation))
+        const isLandscape = ref(false)
 
         // 横屏菜单ref
         const sideMenuRef = ref(null)
@@ -135,7 +94,7 @@ export default {
 
         watch(showIndicator, (bool) => {
             if (!bool) {
-                chartConfig.value = JSON.parse(localGet('chartConfig')) || {}
+                Object.assign(chartConfig.value, JSON.parse(localGet('chartConfig')) || {})
                 // 更新指标
                 unref(chartRef).chart.updateIndicator(unref(chartConfig).indicators)
             }
@@ -154,9 +113,9 @@ export default {
 
         watch(showSetting, (bool) => {
             if (!bool) {
-                chartConfig.value = JSON.parse(localGet('chartConfig')) || {}
+                Object.assign(chartConfig.value, JSON.parse(localGet('chartConfig')) || {})
                 // 更新图表
-                unref(chartRef).chart.setChartType(unref(chartConfig).chartType)
+                unref(chartRef).chart.setChartType(unref(chartConfig).property.chartType)
                 unref(chartRef).chart.updateProperty(unref(chartConfig))
             }
         })
@@ -210,15 +169,15 @@ export default {
         }
 
         try {
-            chartConfig.value = JSON.parse(localGet('chartConfig')) || {}
+            Object.assign(chartConfig.value, JSON.parse(localGet('chartConfig')) || {})
         } catch (error) {
             console.error('图表缓存出错，进行清空')
             localSet('chartConfig', '{}')
         }
         // 价格栏显隐
         const togglePriceBox = () => {
-            unref(chartConfig).showPriceBox = !chartConfig.value.showPriceBox
-            unref(chartRef).chart.togglePriceBox(unref(chartConfig).showPriceBox)
+            unref(chartConfig).property.showPriceBox = !unref(chartConfig).property.showPriceBox
+            unref(chartRef).chart.togglePriceBox(unref(chartConfig).property.showPriceBox)
             localSet('chartConfig', JSON.stringify(unref(chartConfig)))
         }
         // 产品id变化
@@ -234,7 +193,7 @@ export default {
 
         // 移除指标特殊情况：图表内直接移除指标
         const indicatorRemoved = name => {
-            chartConfig.value = JSON.parse(localGet('chartConfig')) || {}
+            Object.assign(chartConfig.value, JSON.parse(localGet('chartConfig')) || {})
             unref(chartConfig).indicators = unref(chartConfig).indicators.filter(e => e.name !== name)
             localSet('chartConfig', JSON.stringify(unref(chartConfig)))
         }

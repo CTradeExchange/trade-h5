@@ -50,7 +50,9 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
         this._quotesPulseProvider.unsubscribeQuotes(listenerGuid);
     };
     UDFCompatibleDatafeedBase.prototype.calculateHistoryDepth = function (resolution, resolutionBack, intervalBack) {
-        return undefined;
+        // 覆盖所需的历史深度
+        // return undefined;
+        return {resolutionBack: resolution, intervalBack: 20}
     };
     UDFCompatibleDatafeedBase.prototype.getMarks = function (symbolInfo, from, to, onDataCallback, resolution) {
         if (!this._configuration.supports_marks) {
@@ -217,11 +219,11 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
             .catch(onError);
     };
     UDFCompatibleDatafeedBase.prototype.subscribeBars = function (symbolInfo, resolution, onTick, listenerGuid, onResetCacheNeededCallback) {
-        this._historyProvider._onTick = onTick
+        this._historyProvider.setTick(onTick)
         this._dataPulseProvider.subscribeBars(symbolInfo, resolution, onTick, listenerGuid);
     };
     UDFCompatibleDatafeedBase.prototype.unsubscribeBars = function (listenerGuid) {
-        this._historyProvider._onTick = null
+        this._historyProvider.setTick(null)
         this._dataPulseProvider.unsubscribeBars(listenerGuid);
     };
     UDFCompatibleDatafeedBase.prototype._requestConfiguration = function () {

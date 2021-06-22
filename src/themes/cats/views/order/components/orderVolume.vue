@@ -23,7 +23,7 @@
         <ul class='volumeSteps'>
             <li v-for='(step,i) in volumeSteps' :key='i'>
                 <a class='item' href='javascript:;' @click='addStep(step)'>
-                    {{ step < 0 ? step:'+'+step }}
+                    {{ lt(step, 0) ? step:'+'+step }}
                 </a>
             </li>
         </ul>
@@ -32,7 +32,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getDecimalNum, plus, divide, toFixed } from '@/utils/calculation'
+import { getDecimalNum, plus, divide, mul, lt } from '@/utils/calculation'
 import StepperComp from '@/components/stepper'
 
 export default {
@@ -61,10 +61,10 @@ export default {
         volumeSteps () {
             const volumeStep = this.product.volumeStep
             return [
-                volumeStep * -10,
-                volumeStep * -1,
-                volumeStep * 1,
-                volumeStep * 10
+                mul(volumeStep, -10),
+                mul(volumeStep, -1),
+                mul(volumeStep, 1),
+                mul(volumeStep, 10)
             ]
         },
         // 手数不是最小手数的整数倍
@@ -92,7 +92,8 @@ export default {
             newval = Math.max(newval, volumes_min)
             newval = Math.min(newval, volumes_max)
             this.$emit('update:modelValue', newval)
-        }
+        },
+        lt,
     },
 }
 </script>
