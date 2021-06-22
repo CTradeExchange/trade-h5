@@ -69,16 +69,11 @@ export default {
                     sellPrice: product.value.sell_price,
                 },
                 // 图表属性
-                property: {
-                    showBuyPrice: options.showBuyPrice, // 买价线
-                    showSellPrice: options.showSellPrice, // 卖价线
-                    showSeriesOHLC: options.showSeriesOHLC, // 高开低收
-                    showBarChange: options.showBarChange, // 涨跌幅
-                    chartType: options.chartType, // 图表类型
-                    showPriceBox: options.showPriceBox // 价格框
-                },
+                property: options.property,
                 // 指标
-                indicators: options.indicators || []
+                indicators: options.indicators,
+                // 扩展
+                extension: options.extension
             }, () => {
                 // 监听是否横屏
                 unref(chart).subscribe('isLandscape', (bool) => {
@@ -101,8 +96,10 @@ export default {
 
                 // 实时更新tick
                 store.subscribe((mutation) => {
-                    const { type, payload: { tick_time, cur_price } } = mutation
-                    if (!(type === '_quote/Update_productTick' && String(unref(chart).symbolId) === String(mutation.payload.symbolId))) {
+                    const { type, payload } = mutation
+                    const { tick_time, cur_price, symbolId } = payload[0] || {}
+
+                    if (!(type === '_quote/Update_productTick' && String(unref(chart).symbolId) === String(symbolId))) {
                         return
                     }
                     unref(chart).setTick(cur_price, tick_time)

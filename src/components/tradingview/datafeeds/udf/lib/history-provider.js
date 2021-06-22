@@ -6,6 +6,7 @@ class HistoryProvider {
         this._datafeedUrl = datafeedUrl;
         this._requester = requester;
         this._requestKData = new RequestKData()
+        this._onTick = null
     }
     // 获取历史k线
     getBars (symbolInfo, resolution, rangeStartDate, rangeEndDate, firstDataRequest) {
@@ -22,13 +23,15 @@ class HistoryProvider {
         }
     }
     // 实时更新k线
-    onTick(price, time){
+    async onTick(price, time){
         if(!this._onTick) return
-        const tick = this._requestKData.normalizeTick(price, time, this.symbolParams.resolution)
-        this._onTick(tick)
+        const ticks = await this._requestKData.normalizeTick(price, time, this.symbolParams.resolution)
+        ticks.forEach(t => this._onTick(t))
     }
     // 用于存储udf获取的tick函数
-    __onTick(){}
+    setTick(cb){
+        this._onTick = cb
+    }
 }
 
 export { HistoryProvider };
