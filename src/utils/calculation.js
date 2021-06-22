@@ -15,6 +15,8 @@ export function getDecimalNum (num) {
 
 /* 加法 */
 export function plus (num1, num2) {
+    num1 = num1 || 0
+    num2 = num2 || 0
     return BigNumber(num1).plus(num2).toString()
 }
 
@@ -31,9 +33,48 @@ export function divide (num1, num2) {
     num2 = num2 || 1
     return BigNumber(num1).div(num2).toString()
 }
+/* 除法 */
+export function div (num1, num2) {
+    num1 = num1 || 0
+    num2 = num2 || 1
+    return BigNumber(num1).div(num2).toString()
+}
 /* 乘法 */
 export function mul (num1, num2) {
     num1 = num1 || 0
     num2 = num2 || 0
     return BigNumber(num1).multipliedBy(num2).toString()
+}
+/* 幂 */
+export function pow (num1, num2) {
+    num1 = num1 || 0
+    num2 = num2 || 0
+    return BigNumber(num1).pow(num2).toString()
+}
+/* 大于 */
+export function gt (num1, num2) {
+    return BigNumber(num1).gt(num2)
+}
+/* 大于等于 */
+export function gte (num1, num2) {
+    return BigNumber(num1).gte(num2)
+}
+/* 小于 */
+export function lt (num1, num2) {
+    return BigNumber(num1).lt(num2)
+}
+/* 小于等于 */
+export function lte (num1, num2) {
+    return BigNumber(num1).lte(num2)
+}
+/* 等于 */
+export function eq (num1, num2) {
+    return BigNumber(num1).eq(num2)
+}
+/* 移位比 shiftedBy(num1, num2)
+ * num1 要处理的数字
+ * num2 移位为小数点，即10的幂，如果n为负则向左移位，如果n为正则向右移位。
+ */
+export function shiftedBy (num1, num2) {
+    return BigNumber(num1).shiftedBy(num2).toFixed(Math.abs(num2))
 }

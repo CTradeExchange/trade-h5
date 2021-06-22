@@ -57,7 +57,7 @@ export default {
     color: #333;
     line-height: rem(70px);
     text-align: center;
-    background: #F2F2F2;
+    background: var(--btnColor);
     border-radius: rem(6px);
     &.mainColorBg {
         color: #FFF;

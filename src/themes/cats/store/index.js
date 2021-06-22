@@ -23,6 +23,7 @@ export default createStore({
     },
     state: {
         style,
+        disabledSuccAnimtion: false,
         quoteMode: 2, // 1简单模式 2高级模式
         zoneList: [],
         bankDict: [],
@@ -80,6 +81,9 @@ export default createStore({
         },
         Update_countryList (state, list) {
             state.countryList = list
+        },
+        Update_disabledSuccAnimtion (state, data) {
+            state.disabledSuccAnimtion = data
         }
     },
     actions: {

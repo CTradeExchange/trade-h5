@@ -46,7 +46,7 @@ export default {
         height: rem(70px);
         padding: rem(10px) rem(20px);
         line-height: rem(50px);
-        background: #F2F2F2;
+        background: var(--btnColor);
         border-radius: rem(6px);
         &.sell {
             margin-right: 5px;

@@ -1,5 +1,9 @@
 <template>
-    <top left-icon='arrow-left' :right-action='false' :title='title' />
+    <top left-icon='arrow-left' :right-action='false' :title='title'>
+        <template #right>
+            <van-loading v-if='loading' class='loadingIcon' :color='$style.primary' size='20px' />
+        </template>
+    </top>
     <my-iframe
         ref='contentIframe'
         :class="{ 'hasheader': !$route.query.hidehead }"
@@ -76,5 +80,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+@import '~@/sass/mixin.scss';
+.loadingIcon {
+    margin-right: rem(20px);
+}
 </style>

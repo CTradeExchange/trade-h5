@@ -1,168 +1,221 @@
 <template>
-    <Top>
-        <template #right>
-            <a class='icon icon_paixu' href='javascript:;' @click='sortActionsVisible=true'></a>
-            <a class='icon icon_xindingdan' href='javascript:;' @click='newOrder'></a>
-        </template>
-    </Top>
-    <div class='container'>
-        <CapitalList :data='capitalListData' />
-        <div v-if='positionList.length===0 && $store.state._trade.positionLoading' class='loading'>
-            <van-loading type='spinner' />
+    <div class='page-wrap'>
+        <LayoutTop :menu='false' :title='$t("route.trade")'>
+            <template #left>
+                <span></span>
+            </template>
+            <template #right>
+                <div class='assetIcon adequate' @click='fundVis=true'>
+                    <i class='icon_icon_assets'></i>
+                    <div class='other'>
+                        <span> {{ $t('trade.asset') }} </span>
+                    </div>
+                </div>
+            </template>
+        </LayoutTop>
+        <div class='m-subtab'>
+            <van-tabs color='rgb(71, 127, 211)' title-inactive-color='#333' type='card'>
+                <van-tab :title='$t("trade.position")'>
+                    <div class='m-ccgd'>
+                        <div class='m-orderBy'>
+                            <van-button
+                                v-for='(item,index) in sortActions'
+                                :key='index'
+                                class='action-item'
+                                :class='{ active: item.active }'
+                                size='small'
+                                type='default'
+                                @click='actionSheetOnSelect(item)'
+                            >
+                                <span> {{ item.name }} </span>
+                                <i class='icon arrow' :class='item.className'></i>
+                            </van-button>
+                            <!-- <van-button size='small' type='default' @click='handleSort(1)'>
+                                {{ $t('history.daytime') }} <i class='iconfont icon_paixuxiaojiantou_xiangxia'></i>
+                            </van-button>
+                            <van-button size='small' type='default' @click='handleSort(2)'>
+                                {{ $t('trade.profit') }}
+                            </van-button> -->
+                        </div>
+                        <div v-if='positionList.length===0 && $store.state._trade.positionLoading' class='loading'>
+                            <van-loading type='spinner' />
+                        </div>
+                        <PositionList />
+                    </div>
+                </van-tab>
+                <van-tab :title='$t("trade.pending")'>
+                    挂单
+                </van-tab>
+                <van-tab :title='$t("trade.closedOrder")'>
+                    平仓
+                </van-tab>
+            </van-tabs>
         </div>
-        <van-empty v-else-if='positionList.length===0 && pendingList.length===0' :description="$t('emptyHistory')" />
-        <div v-if='positionList.length' class='titleBar'>
-            {{ $t('position.price') }}
-        </div>
-        <PositionList v-if='positionList.length' @refresh='refresh' />
-        <template v-if='pendingList.length'>
-            <div class='titleBar'>
-                {{ $t('history.order') }}
-            </div>
-            <PendingList @refresh='refresh' />
-        </template>
     </div>
 
-    <!-- 排序 actionsheet -->
-    <van-action-sheet v-model:show='sortActionsVisible' :actions='sortActions' :cancel-text="$t('cancel')" @select='actionSheetOnSelect' />
+    <Fund v-if='fundVis' :show='fundVis' @update:show='updateShow' />
 </template>
 
 <script>
-import Top from '@c/layout/top'
-import CapitalList from '@c/components/capitalList'
-import PositionList from '@c/modules/positionList/positionList'
-import PendingList from '@c/modules/pendingList/pendingList'
-import { reactive, toRefs, computed, onMounted, watch, onUpdated } from 'vue'
+import { reactive, toRefs, onUpdated, computed } from 'vue'
 import { useStore } from 'vuex'
-import { QuoteSocket } from '@/plugins/socket/socket'
-import { useRouter } from 'vue-router'
-import { priceFormat, isEmpty } from '@/utils/util'
-import { mul } from '@/utils/calculation'
 import { useI18n } from 'vue-i18n'
+import Fund from '@c/components/fund'
+import PositionList from '@c/modules/positionList/positionList'
 export default {
     components: {
-        CapitalList,
-        PositionList,
-        PendingList,
-        Top,
+        Fund,
+        PositionList
     },
-    setup () {
-        const store = useStore()
-        const router = useRouter()
+    setup (props) {
         const { t } = useI18n({ useScope: 'global' })
+        const store = useStore()
+
+        let sortFieldName = 'openTime'
+        let sortType = 'desc'
+
+        const sortActionsUp = 'iconfont icon_paixuxiaojiantou_xiangshang'
+        const sortActionsDown = 'iconfont icon_paixuxiaojiantou_xiangxia'
+
+        const state = reactive({
+            fundVis: false,
+            sortActions: [
+                { name: t('history.daytime'), feild: 'openTime', active: false, className: sortActionsDown },
+                { name: t('trade.profit'), active: false, feild: 'pnl' },
+            ]
+        })
         const positionList = computed(() => store.state._trade.positionList)
         const pendingList = computed(() => store.state._trade.pendingList)
         const customerInfo = computed(() => store.state._user.customerInfo)
-        const sortActionsSelected = 'van-badge__wrapper van-icon van-icon-down'
+
         const sortActions = [
-            { name: t('history.order'), feild: 'orderId', className: sortActionsSelected },
-            { name: t('history.daytime'), feild: 'openTime', },
-            { name: t('history.product'), feild: 'symbolId', },
-            // { name: '利润', feild: 'yz', },
+            { name: t('history.daytime'), feild: 'openTime', className: sortActionsDown },
+            { name: t('trade.profit'), feild: 'pnl' },
         ]
-        let sortActionValue = sortActions[0].feild
 
-        const accountInfo = computed(() => store.state._user.accountAssets)
-        const capitalListData = computed(() => {
-            return [
-                { title: t('history.lirun') + t('colon'), value: !isEmpty(accountInfo.value) ? accountInfo.value.balance : '--' },
-                { title: t('trade.jingzhi') + t('colon'), value: !isEmpty(accountInfo.value) ? accountInfo.value.netWorth : '--' },
-                { title: t('trade.usableAdvance') + t('colon'), value: !isEmpty(accountInfo.value) ? accountInfo.value.availableMargin : '--' },
-                { title: t('trade.advance') + t('colon'), value: !isEmpty(accountInfo.value) ? accountInfo.value.occupyMargin : '--' },
-                { title: t('trade.advanceRatio') + '(%)' + t('colon'), value: isNaN(accountInfo.value.marginRadio) ? '--' : accountInfo.value.marginRadio + '%' },
-            ]
-        })
+        if (customerInfo.value) {
+            store.dispatch('_trade/queryPositionPage')
+        }
 
-        const state = reactive({
-            sortActionsVisible: false,
-            sortActions
-        })
+        // 选择排序方式
         const actionSheetOnSelect = item => {
-            sortActions.forEach(el => (el.className = ''))
-            item.className = sortActionsSelected
-            sortActionValue = item.feild
-            state.sortActionsVisible = false
-            queryList()
-        }
-        // 查询持仓列表
-        const queryList = () => {
-            store.dispatch('_trade/queryPositionPage', { 'sortFieldName': sortActionValue, 'sortType': 'desc' }).then(res => {
-                if (res.check()) {
-                    const subscribList = positionList.value.concat(pendingList.value).map(el => el.symbolId)
-                    QuoteSocket.send_subscribe(subscribList)
-                }
-            })
-        }
-        const queryPendingList = () => {
-            store.dispatch('_trade/queryPBOOrderPage', { 'sortFieldName': sortActionValue, 'sortType': 'desc' }).then(res => {
-                if (res.check()) {
-                    const subscribList = positionList.value.concat(pendingList.value).map(el => el.symbolId)
-                    QuoteSocket.send_subscribe(subscribList)
-                }
-            })
-        }
-        queryList()
-        queryPendingList()
-
-        const newOrder = () => {
-            router.push({ name: 'Order', query: { symbolId: store.state._quote.productActivedID } })
-        }
-        // 刷新持仓列表
-        const refresh = () => {
-            queryList()
+            item.active = true
+            if (item.className && sortType === 'desc') {
+                sortType = 'asc'
+                item.className = sortActionsUp
+            } else if (item.className && sortType === 'asc') {
+                sortType = 'desc'
+                item.className = sortActionsDown
+            } else {
+                state.sortActions.forEach(el => (el.className = ''))
+                item.className = sortActionsDown
+                sortType = 'desc'
+                sortFieldName = item.feild
+            }
         }
 
+        const updateShow = (val) => {
+            state.fundVis = val
+        }
         return {
             ...toRefs(state),
+            updateShow,
+            positionList,
             pendingList,
-            actionSheetOnSelect,
-            newOrder,
-            refresh,
-            accountInfo,
-            capitalListData,
-            positionList
+            customerInfo,
+            actionSheetOnSelect
         }
-    },
+    }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '~@/sass/mixin.scss';
-.loading {
-    padding-top: 30%;
-    text-align: center;
-}
-.container {
-    flex: 1;
+@import '@/sass/mixin.scss';
+.page-wrap {
+    width: 100%;
+    height: 100%;
+    margin-top: rem(90px);
     margin-bottom: rem(100px);
-    overflow-y: auto;
-}
-.titleBar {
-    height: rem(60px);
-    padding: 0 rem(40px);
-    font-size: rem(28px);
-    line-height: rem(60px);
-    background: var(--bgColor);
-    border: 1px solid rgba($color: #000, $alpha: 0.1);
-    border-width: 1px 0;
-    box-shadow: 0 1px 0 rgba($color: #FFF, $alpha: 1) inset;
-}
-.icon {
-    color: var(--white);
-    font-size: 1.4em;
-    &:not(:first-of-type) {
-        margin-left: 0.6em;
+    overflow: auto;
+    background: var(--bgColor2);
+    .assetIcon {
+        right: 0;
+        bottom: 0;
+        height: 100%;
+        line-height: rem(90px);
+        .other {
+            position: relative;
+            top: rem(-5px);
+            display: inline-block;
+            margin-left: rem(10px);
+            font-size: rem(28px);
+            line-height: rem(50px);
+            i {
+                margin-left: rem(10px);
+                font-size: rem(24px);
+            }
+        }
+        &.adequate {
+            color: #11B873;
+        }
+        &.less {
+            color: #F39800;
+        }
+        &.stopout {
+            color: #E3525C;
+        }
+        i {
+            font-size: rem(45px);
+        }
+    }
+    .m-ccgd {
+        padding: 0 rem(20px);
+        background-color: var(--bgColor2);
+        .m-orderBy {
+            margin-top: rem(20px);
+            margin-bottom: rem(20px);
+            .van-button {
+                min-width: rem(110px);
+                color: #000;
+                //padding: 0 rem(30px);
+            }
+            i {
+                font-size: rem(22px);
+            }
+        }
+        .link {
+            display: inline-block;
+            width: 100%;
+        }
+        .m-loading {
+            padding-top: rem(60px);
+            text-align: center;
+        }
     }
 }
-:deep(.van-icon-down) {
-    &::before {
-        content: '';
-    }
-    &::after {
-        display: inline-block;
-        margin-left: 5px;
-        vertical-align: -2px;
-        content: '\F04B';
+
+</style>
+
+<style lang="scss">
+@import '@/sass/mixin.scss';
+.m-subtab {
+    margin: 0 auto;
+    padding-top: rem(20px);
+    background-color: var(--bgColor2);
+    .van-tabs__nav {
+        margin: 0 rem(150px);
+        border: none;
+        border-radius: 0.8rem;
+        .van-tab {
+            border: none;
+            &:last-child {
+                border-radius: 0 0.8rem 0.8rem 0;
+            }
+            &:first-child {
+                border-radius: 0.8rem 0 0 0.8rem;
+            }
+        }
     }
 }
+
 </style>

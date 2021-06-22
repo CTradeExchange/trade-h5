@@ -1,5 +1,6 @@
 import { queryPositionPage, queryHistoryCloseOrderList, queryPBOOrderPage } from '@/api/trade'
 import CheckAPI from '@/utils/checkAPI'
+import { minus, toFixed, plus } from '@/utils/calculation'
 import BigNumber from 'bignumber.js'
 
 const EmptyProfitLossRang = {
@@ -19,14 +20,15 @@ export default {
     namespaced: true,
     state: {
         modifyPositionId: 0, // 修改持仓ID
+        pendingEnable: false, // 启用挂单
         pendingPrice: 0, // 挂单价格
         positionLoading: '', // 持仓列表加载
         positionList: [], // 持仓列表
-        positionMap: [], // 持仓列表map
+        positionMap: {}, // 持仓列表map
         historyLoading: false, // 历史记录加载
         historyList: [], // 平仓历史记录列表
         pendingList: [], // 预埋单列表
-        pendingMap: [], // 预埋单列表
+        pendingMap: {}, // 预埋单列表
         positionProfitLossList: [] // 持仓盈亏列表
     },
     getters: {
@@ -74,7 +76,7 @@ export default {
         // 挂单价格范围
         pendingPriceRang (state, getters, rootState) {
             const product = getters.product
-            if (!product || state.pendingPrice === 0) return EmptyPendingPriceRang
+            if (!product || !state.pendingEnable) return EmptyPendingPriceRang
             const digits = product.price_digits
             const point = Math.pow(0.1, digits)
             const pip = point * product.pointRatio
@@ -94,11 +96,17 @@ export default {
             const sellStopMax = BigNumber(sell_price).minus(pip * product.priceMinLimit).toFixed(digits) // 停损卖出范围最大值 卖出价-pip*止损最小距离
             const sellStopMin = BigNumber(sell_price).minus(pip * product.priceMaxLimit).toFixed(digits) // 停损卖出范围最小值 卖出价-pip*止损最大距离
 
+            const priceMinLimit = product.priceMinLimit + 10
+            const priceMinLimitPrice = toFixed(priceMinLimit * pip, digits)
+            const defaultBuyPrice = minus(buy_price, priceMinLimitPrice) // 买入方向挂单价格默认值
+            const defaultSellPrice = plus(sell_price, priceMinLimitPrice) // 卖出方向挂单价格默认值
             return {
                 buyLimitRange: [buyLimitMin, buyLimitMax], // 限价买入范围
                 sellLimitRange: [sellLimitMin, sellLimitMax], // 限价卖出范围
                 buyStopRange: [buyStopMin, buyStopMax], // 停损买入范围
                 sellStopRange: [sellStopMin, sellStopMax], // 停损卖出范围
+                defaultBuyPrice, // 买入方向挂单价格默认值
+                defaultSellPrice, // 卖出方向挂单价格默认值
             }
         }
     },
@@ -113,6 +121,9 @@ export default {
         },
         Update_modifyPositionId (state, data) {
             state.modifyPositionId = data
+        },
+        Update_pendingEnable (state, data) {
+            state.pendingEnable = data
         },
         Update_pendingPrice (state, data) {
             state.pendingPrice = data

@@ -16,6 +16,7 @@ const routes = [
                 component: () => import(/* webpackChunkName: "Quote" */ '../views/home/home.vue'),
                 meta: {
                     title: 'route.home',
+                    keepAlive: true,
                 }
             },
             {
@@ -32,6 +33,7 @@ const routes = [
                 component: () => import(/* webpackChunkName: "Quote" */ '../views/quote/quote.vue'),
                 meta: {
                     title: 'route.quote',
+                    keepAlive: true,
                 }
             },
             {
@@ -54,6 +56,14 @@ const routes = [
                 path: 'position',
                 name: 'Position',
                 component: () => import(/* webpackChunkName: "position" */ '../views/position/position.vue'),
+                meta: {
+                    title: 'route.trade'
+                }
+            },
+            {
+                path: 'positionDetail',
+                name: 'PositionDetail',
+                component: () => import(/* webpackChunkName: "position" */ '../views/position/positionDetail.vue'),
                 meta: {
                     title: 'route.trade'
                 }

@@ -14,12 +14,13 @@ const colors = {
     'iconColor': '#333',
     'iconColor2': '#333',
     'white': '#fff',
-    'bgColor': '#fff',
+    'bgColor': '#f6f6f6',
     'riseColor': '#e3525c',
     'fallColor': '#10b873',
     'sellColor': '#E3525C',
     'buyColor': '#007AFF',
-    'primary': '#1989fa',
+    'primary': '#477fd3',
+    'success': '#10B873',
 }
 
 // 设置root变量

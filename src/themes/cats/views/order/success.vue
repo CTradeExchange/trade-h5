@@ -1,68 +1,162 @@
 <template>
-    <div class='pending'>
-        <top />
-        <div class='pending-wrap'>
-            <p>
-                <span v-if='data.orderId'>
-                    #{{ data.orderId }}&nbsp;
-                </span>
-                <template v-if='data.bizType===2'>
-                    <!-- 平仓 -->
-                    <span :class="data.openDirection === 1 ? 'fallColor' : 'riseColor'">
-                        <!-- {{ data.openDirection === 1 ? 'sell' : 'buy' }} -->
+    <div class='orderSuccess'>
+        <a class='back' href='javascript:;' @click='$router.back()'>
+            <i class='icon_icon_close_small'></i>
+        </a>
+        <span class='successIcon'>
+            <SuccessAnimation :disabled-succ-animtion='$store.state.disabledSuccAnimtion' />
+        </span>
+        <p class='title successColor' :class="{ 'animate':!$store.state.disabledSuccAnimtion }">
+            {{ $t('trade.openPendingSuccess') }}
+        </p>
 
-                        {{ data.tradeVolume }}
+        <div class='orderInfo'>
+            <div class='product'>
+                <p class='productTitle'>
+                    {{ product.symbolName }}
+                </p>
+                <p class='productCode'>
+                    {{ product.symbolCode }}
+                </p>
+            </div>
+            <template v-if='orderInfo && orderInfo.bizType===1'>
+                <van-cell class='dataBar' :title="$t('trade.positionPrice')" :value='shiftedBy(orderInfo.executePrice,orderInfo.digits*-1)' />
+                <van-cell class='dataBar' :title="$t('trade.volumes')">
+                    <template #default>
+                        <span
+                            :class="[orderInfo.openDirection===1?'riseColor':'fallColor']"
+                        >
+                            {{ orderInfo.openDirection===1?$t('trade.buy'):$t('trade.sell') }}
+                        </span>
+                        {{ orderInfo.tradeVolume+$t('trade.volumeUnit') }}
+                    </template>
+                </van-cell>
+                <van-cell v-if='orderInfo.fee' class='dataBar' :title="$t('fee')">
+                    <template>
+                        <span
+                            :class="[orderInfo.fee?'':'muted']"
+                        >
+                            {{ orderInfo.fee + accountCurrency }}
+                        </span>
+                    </template>
+                </van-cell>
+                <van-cell class='dataBar' :title="$t('trade.takeLoss')">
+                    <span
+                        v-if='orderInfo.stopLoss'
+                        :class="[orderInfo.stopLoss?'':'muted']"
+                    >
+                        {{ shiftedBy(orderInfo.stopLoss, orderInfo.digits*-1) }}
                     </span>
-                    {{ $t('trade.closeOrder') }}
-                </template>
-                <template v-else>
-                    <!-- 开仓、挂单 -->
-                    <span :class="data.direction === 1 ? 'riseColor' : 'fallColor'">
-                        {{ data.direction === 1 ? 'buy' : 'sell' }}
+                    <span v-else class='muted'>
+                        {{ $t('c.noSetup') }}
+                    </span>
+                </van-cell>
+                <van-cell class='dataBar' :title="$t('trade.takeProfit')">
+                    <span
+                        v-if='orderInfo.takeProfit'
+                        :class="[orderInfo.takeProfit?'':'muted']"
+                    >
+                        {{ shiftedBy(orderInfo.takeProfit, orderInfo.digits*-1) }}
+                    </span>
+                    <span v-else class='muted'>
+                        {{ $t('c.noSetup') }}
+                    </span>
+                </van-cell>
+            </template>
+            <template v-else-if='orderInfo'>
+                <van-cell class='dataBar' :title="$t('trade.pendingPrice')" :value='shiftedBy(orderInfo.requestPrice,orderInfo.digits*-1)' />
+                <van-cell class='dataBar' :title="$t('trade.volumes')">
+                    <template #default>
+                        <span
+                            :class="[orderInfo.direction===1?'riseColor':'fallColor']"
+                        >
+                            {{ orderInfo.direction===1?$t('trade.buy'):$t('trade.sell') }}
+                        </span>
+                        {{ orderInfo.requestNum+$t('trade.volumeUnit') }}
+                    </template>
+                </van-cell>
+                <van-cell
+                    class='dataBar'
+                    :title="$t('trade.expireTime')"
+                    :value="orderInfo.expireType===1?$t('trade.expireType1'):$t('trade.expireType2')"
+                />
+                <van-cell class='dataBar' :title="$t('trade.takeLoss')">
+                    <span
+                        v-if='orderInfo.stopLoss'
+                        :class="[orderInfo.stopLoss?'':'muted']"
+                    >
+                        {{ shiftedBy(orderInfo.stopLoss, orderInfo.digits*-1) }}
+                    </span>
+                    <span v-else class='muted'>
+                        {{ $t('c.noSetup') }}
+                    </span>
+                </van-cell>
+                <van-cell class='dataBar' :title="$t('trade.takeProfit')">
+                    <span
+                        v-if='orderInfo.takeProfit'
+                        :class="[orderInfo.takeProfit?'':'muted']"
+                    >
+                        {{ shiftedBy(orderInfo.takeProfit, orderInfo.digits*-1) }}
+                    </span>
+                    <span v-else class='muted'>
+                        {{ $t('c.noSetup') }}
+                    </span>
+                </van-cell>
+            </template>
 
-                        {{ data.tradeVolume }}
-                    </span>
-                </template>
-            </p>
-            <p>
-                {{ data.symbolName }} at
-                <span v-if='Number(data.bizType) === 10 || Number(data.bizType) === 11' class='price'>
-                    {{ formatPrice(data.requestPrice, data.digits ) }}
-                </span>
-                <span v-else class='price'>
-                    {{ formatPrice(data.executePrice, data.digits) }}
-                </span>
-            </p>
-            <p>
-                s/l: {{ data.stopLoss ? formatPrice(data.stopLoss, data.digits) : '--' }}&nbsp;&nbsp;&nbsp;t/p: {{ data.takeProfit ? formatPrice(data.takeProfit, data.digits) : '--' }}
-            </p>
-            <p>
-                {{ $t('success') }}
-            </p>
-        </div>
-        <div class='footerBtn of-1px-top'>
-            <button class='btn' @click='$router.back()'>
-                {{ $t('complete') }}
-            </button>
+            <van-row class='btnGroup' gutter='10'>
+                <van-col span='12'>
+                    <button
+                        class='primary toDetail'
+                        @click='toDetail'
+                    >
+                        {{ $t(orderInfo.bizType==1?'trade.lookPositions':'trade.lookPendings') }}
+                    </button>
+                </van-col>
+                <van-col span='12'>
+                    <button
+                        class='primaryBg goonOrder'
+                        @click='$router.back()'
+                    >
+                        {{ $t('trade.buyAgain') }}
+                    </button>
+                </van-col>
+            </van-row>
         </div>
     </div>
 </template>
 
 <script>
-import top from '@c/layout/top'
-import { priceFormat } from '@/utils/util'
+import SuccessAnimation from '@c/components/successAnimation'
+import { computed, reactive, toRefs } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { shiftedBy } from '@/utils/calculation'
 export default {
     components: {
-        top,
+        SuccessAnimation,
     },
-    props: ['data'],
-    setup (props) {
-        const formatPrice = (price, digits) => {
-            return priceFormat(price, digits)
-        }
+    setup () {
+        const route = useRoute()
+        const router = useRouter()
+        const store = useStore()
+        const product = computed(() => store.getters.productActived)
+        const { orderId } = route.query
+        const state = reactive({
+            orderInfo: JSON.parse(sessionStorage.getItem('order_' + orderId))
+        })
+        if (!state.orderInfo) return router.push('/')
 
+        // 查看详情
+        const toDetail = () => {
+            router.push(state.orderInfo.bizType === 1 ? '/position' : '/position?tab=1')
+        }
         return {
-            formatPrice
+            ...toRefs(state),
+            product,
+            orderId,
+            shiftedBy,
+            toDetail,
         }
     }
 }
@@ -70,63 +164,121 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-.pending {
+@import '~@/sass/animations.scss';
+.orderSuccess {
     position: relative;
     height: 100%;
-    .pending-wrap {
-        padding-top: rem(100px);
-        color: #4B4B52;
-        font-weight: bold;
-        font-size: rem(48px);
-        letter-spacing: -1px;
-        text-align: center;
-        p {
-            margin-bottom: rem(20px);
-        }
-        .direction {
-            color: #007AFF;
-        }
-        .price {
-            color: #000;
+    overflow: auto;
+    background: var(--btnColor);
+    .back {
+        position: absolute;
+        top: rem(40px);
+        right: rem(40px);
+        color: inherit;
+        font-size: rem(40px);
+        font-style: normal;
+        &:active {
+            box-shadow: 0 0 999px rgba(0, 0, 0, 0.05) inset;
+            opacity: 0.7;
         }
     }
-}
-.iconMain {
-    padding-top: rem(50px);
-}
-.icon_chenggong {
-    display: block;
-    width: rem(200px);
-    margin: 0 auto;
-    color: var(--success);
-    font-size: rem(200px);
-    opacity: 0.8;
-}
-.title {
-    padding-top: rem(30px);
-    font-size: rem(50px);
-    text-align: center;
-}
-.desc {
-    padding-top: rem(30px);
-    color: var(--mutedColor);
-    font-size: rem(30px);
-    line-height: 1.5;
-    text-align: center;
-}
-.footerBtn {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    .btn {
-        @include active();
-        width: 100%;
-        height: rem(100px);
-        color: var(--color);
-        font-size: rem(28px);
+    .successIcon {
+        position: relative;
+        display: block;
+        width: rem(90px);
+        height: rem(90px);
+        margin: rem(120px) auto 0;
+        color: #FFF;
+        font-size: rem(70px);
+        line-height: rem(110px);
         text-align: center;
-        background: var(--bgColor);
+        border-radius: 100%;
+    }
+    .title {
+        padding-top: rem(20px);
+        padding-bottom: rem(20px);
+        font-size: rem(34px);
+        line-height: 1;
+        text-align: center;
+        &.animate {
+            opacity: 0;
+            animation: fadeInUp 0.3s linear 0.9s forwards;
+        }
+    }
+    .adTopBox {
+        width: rem(580px);
+        margin: rem(50px) auto 0;
+    }
+    .fullScreenLink {
+        width: rem(580px);
+        margin: rem(30px) auto rem(90px);
+        text-align: center;
+    }
+    .adBottomBox {
+        width: rem(580px);
+        margin: 0 auto rem(90px);
+    }
+    .orderInfo {
+        box-sizing: border-box;
+        width: rem(580px);
+        margin: 0 auto;
+        margin-top: rem(40px);
+        padding: rem(66px) rem(40px);
+        line-height: 1.6;
+        background: #FFF;
+        border-radius: rem(10px);
+        box-shadow: 0 0 18px 0 rgba(243, 243, 243, 1);
+    }
+    .product {
+        padding-bottom: rem(40px);
+        .productTitle {
+            @include single-line-clamp();
+            font-size: rem(34px);
+            text-align: center;
+        }
+        .productCode {
+            color: var(--mutedColor);
+            font-size: rem(20px);
+            text-align: center;
+        }
+    }
+    .dataBar {
+        :deep(.van-cell__title) {
+            color: var(--mutedColor);
+        }
+        :deep(.van-cell__value) {
+            color: #333;
+        }
+    }
+    .dataBar {
+        padding: 6px 0;
+        white-space: nowrap;
+        &::after {
+            opacity: 0;
+        }
+    }
+    .goonOrder,
+    .toDetail {
+        display: block;
+        width: 100%;
+        height: rem(80px);
+        color: #FFF;
+        font-size: rem(26px);
+        line-height: 1;
+        text-align: center;
+        border-radius: rem(6px);
+        cursor: pointer;
+    }
+    .toDetail {
+        background-color: #F4F7FC;
+    }
+    .btnGroup {
+        margin-top: rem(45px);
+    }
+    .hasAdded {
+        margin-top: rem(40px);
+        color: var(--mutedColor);
+        text-align: center;
     }
 }
 </style>
