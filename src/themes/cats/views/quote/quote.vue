@@ -15,7 +15,17 @@
                 @tabClick='tabClick'
             />
         </div>
-
+        <div class='titleBar van-hairline--bottom'>
+            <span class='item'>
+                {{ $t('trade.nameCode') }}
+            </span>
+            <span class='item'>
+                {{ $t('trade.sellPrice') }}
+            </span>
+            <span class='item'>
+                {{ $t('trade.buyPrice') }}
+            </span>
+        </div>
         <productListComp v-if='productList.length' :product-list='productList' />
     </div>
 </template>
@@ -97,5 +107,26 @@ export default {
     width: 100%;
     padding-bottom: rem(10px);
     background-color: #FFF;
+}
+.titleBar {
+    display: flex;
+    height: rem(60px);
+    padding: 0 rem(30px);
+    color: var(--mutedColor);
+    font-size: rem(20px);
+    line-height: rem(60px);
+    background-color: var(--white);
+    .item {
+        width: rem(210px);
+        text-align: right;
+        &:first-child {
+            flex: 1;
+            text-align: left;
+        }
+        &:nth-child(2) {
+            width: rem(210px);
+            text-align: left;
+        }
+    }
 }
 </style>

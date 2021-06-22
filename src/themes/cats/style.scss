@@ -171,6 +171,51 @@ i {
         opacity: 0;
     }
 }
+
+@keyframes bg-red {
+    0% {
+        background: #FFF;
+    }
+    30% {
+        background: linear-gradient(to right, #FFF, #FCF6F7);
+    }
+    80% {
+        background: linear-gradient(to right, #FFF, #FAF3F3);
+    }
+    100% {
+        background: #FFF;
+    }
+}
+
+@keyframes bg-green {
+    0% {
+        background: #FFF;
+    }
+    30% {
+        background: linear-gradient(to right, #FFF, #F0FAF8);
+    }
+    80% {
+        background: linear-gradient(to right, #FFF, #EAF8F6);
+    }
+    100% {
+        background: #FFF;
+    }
+}
+.riseColorBgAni,
+.fallColorBgAni {
+    transition-property: background;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-iteration-count: infinite;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+}
+.riseColorBgAni {
+    animation-name: bg-green;
+}
+.fallColorBgAni {
+    animation-name: bg-red;
+}
 .z-index-9999 {
     position: relative;
     z-index: 99999;
