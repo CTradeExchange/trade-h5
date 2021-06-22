@@ -25,7 +25,14 @@
             <!-- 订单类型 -->
             <CellType v-model='orderType' :btn-list='orderTypeList' class='cellMarginTop' :title="$t('trade.orderType')" @selected='changeOrderType' />
             <!-- 挂单设置 -->
-            <PendingBar v-if='orderType===2' v-model='pendingPrice' class='cellMarginTop' :direction='direction' :product='product' />
+            <PendingBar
+                v-if='orderType===2'
+                ref='pendingRef'
+                v-model='pendingPrice'
+                class='cellMarginTop'
+                :direction='direction'
+                :product='product'
+            />
             <!-- 手数 -->
             <OrderVolume v-if='product' v-model='volume' class='cellMarginTop' :product='product' />
             <!-- 止盈止损 -->

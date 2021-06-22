@@ -1,5 +1,8 @@
 <template>
     <div class='wrapper'>
+        <FloatTip v-if='warn'>
+            {{ warn }}
+        </FloatTip>
         {{ pendingRang }}
         <van-row align='center' class='pendingOrderSet' justify='space-between'>
             <van-col>
@@ -32,6 +35,7 @@
 <script>
 import { lt, gt, pow } from '@/utils/calculation'
 import StepperComp from '@c/components/stepper'
+import FloatTip from './floatTip'
 import { Dialog } from 'vant'
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
@@ -39,6 +43,7 @@ import { useI18n } from 'vue-i18n'
 export default {
     components: {
         StepperComp,
+        FloatTip,
     },
     props: ['modelValue', 'product', 'direction'],
     emits: ['update:modelValue'],
@@ -64,13 +69,14 @@ export default {
             if (!modelValue) {
                 return false
             } else if (lt(modelValue, pendingRange.stopRangeMin) && gt(modelValue, pendingRange.limitRangeMax)) {
-                return true
+                return t('trade.pendingPriceWarn')
             } else if (gt(modelValue, pendingRange.stopRangeMax) || lt(modelValue, pendingRange.limitRangeMin)) {
-                return true
+                return t('trade.pendingPriceWarn2')
             } else {
                 return false
             }
         })
+
         const step = computed(() => pow(0.1, props.product.price_digits))
         const state = reactive({
             num: props.modelValue
