@@ -1,7 +1,7 @@
 <template>
     <div class='volumn'>
         <a v-show='product.volumeStep' class='item' :class='{ disabled:disabledSub }' href='javascript:;' @click='minusVolumn(product.volumeStep*10)'>
-            -{{ product.volumeStep*10 }}
+            -{{ mul(product.volumeStep,10) }}
         </a>
         <a v-show='product.volumeStep' class='item' :class='{ disabled:disabledSub }' href='javascript:;' @click='minusVolumn(product.volumeStep)'>
             -{{ product.volumeStep }}
@@ -21,14 +21,14 @@
             +{{ product.volumeStep }}
         </a>
         <a v-show='product.volumeStep' class='item' :class='{ disabled:disabledAdd }' href='javascript:;' @click='plusVolumn(product.volumeStep*10)'>
-            +{{ product.volumeStep*10 }}
+            +{{ mul(product.volumeStep,10) }}
         </a>
     </div>
 </template>
 
 <script>
 import { computed, reactive, toRefs, watchEffect } from 'vue'
-import { minus, plus, toFixed, getDecimalNum } from '@/utils/calculation'
+import { minus, plus, mul, toFixed, getDecimalNum } from '@/utils/calculation'
 export default {
     props: ['modelValue', 'product', 'disabled', 'min', 'max'],
     emits: ['update:modelValue'],
@@ -99,6 +99,7 @@ export default {
             ...toRefs(state),
             onInput,
             onBlur,
+            mul,
             plusVolumn,
             minusVolumn,
             disabledSub,

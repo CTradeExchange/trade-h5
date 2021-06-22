@@ -14,7 +14,7 @@
 <script>
 import top from '@/components/top'
 import myIframe from '@m/components/iframe'
-import { onMounted, onUnmounted, reactive, ref, toRefs } from 'vue'
+import { onBeforeUnmount, onMounted, reactive, ref, toRefs } from 'vue'
 import { useRoute } from 'vue-router'
 export default {
     components: {
@@ -59,7 +59,7 @@ export default {
             }, 8000)
         })
         window.addEventListener('message', fnPostMessage, false)
-        onUnmounted(() => {
+        onBeforeUnmount(() => {
             window.removeEventListener('message', fnPostMessage)
         })
         const pageOnLoad = () => {

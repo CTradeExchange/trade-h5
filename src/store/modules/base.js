@@ -1,4 +1,5 @@
 import { pageConfig, wpCompanyConfig, wpNav, wpSelfSymbolIndex } from '@/api/wpApi'
+import { localSet, localGet } from '@/utils/util'
 
 export default {
     namespaced: true,
@@ -46,6 +47,7 @@ export default {
             return wpCompanyConfig().then(async data => {
                 if (data) {
                     sessionStorage.setItem('utcOffset', parseFloat(data.utcOffset) * 60)
+                    if (!localGet('lang')) localSet('lang', data.language)
                     commit('UPDATE_wpCompanyInfo', data)
                     commit('UPDATE_tradeType', data.tradeTypeList[0]['id']) // 先存储公司默认的玩法类型
                 }

@@ -61,7 +61,7 @@ export default {
         const customInfo = computed(() => store.state._user.customerInfo)
         const zoneText = computed(() => {
             const countryObj = getArrayObj(countryList.value, 'code', customInfo.value.country)
-            state.zone = countryObj.countryCode
+            if (countryObj) state.zone = countryObj.countryCode
             return countryObj.name + ' (' + countryObj.countryCode + ')'
         })
         // 手机正则表达式

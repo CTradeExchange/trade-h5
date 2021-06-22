@@ -30,7 +30,7 @@ export default {
 }
 .pageWrap {
     flex: 1;
-    margin-bottom: rem(100px);
+    padding-bottom: rem(100px);
     overflow-y: auto;
     &.noFoot {
         z-index: 2;
