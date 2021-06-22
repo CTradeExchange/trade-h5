@@ -10,14 +10,14 @@ export function genBaseConfig () {
         locale: 'zh',
         charts_storage_api_version: '1.1',
         user_id: 'public_user_id',
-        theme: 'Dark', // "Light" | "Dark"
+        theme: 'Light', // "Light" | "Dark"
         timezone: 'Asia/Shanghai',
         custom_indicators_getter: customIndicatorsGetter,
         overrides: {
-            'paneProperties.legendProperties.showSeriesTitle': true, // 隐藏K线标题
+            'paneProperties.legendProperties.showSeriesTitle': false, // 隐藏K线标题
             'paneProperties.legendProperties.showSeriesOHLC': false, // 显示高开低收
-            'paneProperties.legendProperties.showLegend': true,
             'paneProperties.legendProperties.showBarChange': false, // 涨跌幅
+            'paneProperties.legendProperties.showLegend': true,
             // 边际（百分比）。 用于自动缩放。
             'paneProperties.topMargin': 22,
             'paneProperties.bottomMargin': 5,

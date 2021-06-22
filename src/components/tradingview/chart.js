@@ -17,8 +17,29 @@ export function createChart (...args) {
     }
  */
 
+/**
+    图表属性-默认值
+    property = {
+        showBuyPrice: false, // 买价线
+        showSellPrice: false, // 卖价线
+        showSeriesOHLC: false, // 高开低收
+        showBarChange: false, // 涨跌幅
+        chartType: '' // 图表类型
+        showPriceBox: false, // 价格框
+        showSeriesTitle: false // K线标题
+    }
+ */
+
+/**
+    扩展字段-默认值
+    extension = {
+        theme: 'Light' // 主题
+        fullScreen: false // 全屏功能（右上角缩放按钮、横屏监听等）
+    }
+ */
+
 class Chart {
-    constructor ({ containerId, initial, property, indicators = [] }, chartReadyCallback = () => {}) {
+    constructor ({ containerId, initial, property = {}, indicators = [], extension = {} }, chartReadyCallback = () => {}) {
         // 产品初始值
         this.initial = {
             description: initial.description, // 图表左上角名称显示
@@ -27,8 +48,12 @@ class Chart {
             buyPrice: initial.buyPrice || 0, // 买价
             sellPrice: initial.sellPrice || 0, // 卖价
         }
+        // 产品id
+        this.symbolId = initial.symbolId
         // 图表属性
-        this.property = property || {}
+        this.property = property
+        // 扩展
+        this.extension = extension
         // 容器id
         this.containerId = containerId
         // 容器节点
@@ -75,16 +100,12 @@ class Chart {
             return
         }
 
-        this.symbolId = initial.symbolId
+        console.group('%c当前产品:⬇', 'color:green')
+        console.log(JSON.stringify(initial))
+        console.groupEnd()
 
         // 获取横竖屏配置项
-        let options = null
-        if (this._firstInit && this._orientation === 'portrait' && [90, -90].includes(window.orientation)) {
-            // 横屏，但是默认值是竖屏时
-            options = landscapeOptions()
-        } else {
-            options = this._orientation === 'portrait' ? portraitOptions() : landscapeOptions()
-        }
+        const options = { ...this._options }
 
         if (!this._firstInit) {
             // 还原上一次用户操作（例如绘图）
@@ -102,10 +123,8 @@ class Chart {
         })
 
         this.widget.onChartReady(() => {
-            console.log(`%c初始产品: ${JSON.stringify(initial)}`, 'color:green')
             this.updateIndicator(this.indicators)
             this.updateProperty(this.property)
-            this._addFullScreenBtn()
             this._addPriceBox()
             this._bindEvent()
             if (this._firstInit && this._orientation === 'portrait' && [90, -90].includes(window.orientation)) {
@@ -118,6 +137,26 @@ class Chart {
         })
     }
 
+    get _options () {
+        let options = null
+        if (this.fullScreen && this._firstInit && this._orientation === 'portrait' && [90, -90].includes(window.orientation)) {
+            // 横屏，但是默认值是竖屏时
+            options = landscapeOptions()
+        } else {
+            options = this._orientation === 'portrait' ? portraitOptions() : landscapeOptions()
+        }
+
+        ['theme'].forEach(key => {
+            if (this.extension[key]) {
+                options[key] = this.extension[key]
+            }
+        })
+
+        this._setProperty(this.property, options.overrides)
+
+        return options
+    }
+
     _bindEvent () {
         this._bindResize()
         this._bindClick()
@@ -125,6 +164,9 @@ class Chart {
 
     // 监听窗口变化
     _bindResize () {
+        if (!this.extension.fullScreen) return
+
+        this._addFullScreenBtn()
         const handleResize = debounce(() => {
             // 火狐的orientation延迟超过200ms以上
             if (window.orientation === 0 && this._orientation !== 'portrait') {
@@ -361,14 +403,7 @@ class Chart {
 
     // 覆盖图表属性
     _applyOverrides (config) {
-        const options = {}
-        if (typeof config.showSeriesOHLC === 'boolean') {
-            options['paneProperties.legendProperties.showSeriesOHLC'] = config.showSeriesOHLC
-        }
-
-        if (typeof config.showSeriesOHLC === 'boolean') {
-            options['paneProperties.legendProperties.showBarChange'] = config.showBarChange
-        }
+        const options = this._setProperty(config, {})
         this.widget.applyOverrides(options)
     }
 
@@ -486,6 +521,15 @@ class Chart {
             const fn = this._destroyedFns.shift()
             fn()
         }
+    }
+
+    _setProperty (property, overrides) {
+        Object.keys(property || {}).forEach(key => {
+            if (['showSeriesTitle', 'showSeriesOHLC', 'showBarChange'].includes(key)) {
+                overrides[`paneProperties.legendProperties.${key}`] = property[key]
+            }
+        })
+        return overrides
     }
 
     // 覆盖图表配置
