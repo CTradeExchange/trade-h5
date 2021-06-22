@@ -59,6 +59,14 @@ const routes = [
                 }
             },
             {
+                path: 'positionDetail',
+                name: 'PositionDetail',
+                component: () => import(/* webpackChunkName: "position" */ '../views/position/positionDetail.vue'),
+                meta: {
+                    title: 'route.trade'
+                }
+            },
+            {
                 path: 'history',
                 name: 'History',
                 component: () => import(/* webpackChunkName: "history" */ '../views/history/history.vue'),

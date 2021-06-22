@@ -25,6 +25,7 @@
     --red: #E3525C;
     --assistColor: #989898;
     --assist2Color: #484848;
+    --bgColor2: #F8F8F8;
 }
 * {
     box-sizing: border-box;
@@ -44,6 +45,7 @@ body {
     /* no */
     // font-family: 'PingFang SC', '-apple-system', 'Heiti SC', 'Helvetica', 'Helvetica Neue', 'Droid Sans Fallback', 'Droid Sans';
     font-family: 'Trebuchet MS', 'roboto', 'ubuntu', 'sans-serif';
+    //background-color: var(--bgColor2);
     -webkit-user-select: none;
     webkit-text-size-adjust: none;
 }
@@ -374,4 +376,48 @@ i {
 }
 .van-loading {
     text-align: center;
+}
+.m-dialog {
+    display: flex;
+    flex-direction: column;
+    background-color: #FFF;
+    &.transparent {
+        background-color: transparent;
+    }
+    .dialog-header {
+        position: relative;
+        padding: rem(43px) 0 rem(45px) 0;
+        color: #333;
+        font-size: rem(34px);
+        .title {
+            text-align: center;
+        }
+        .right {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            height: 100%;
+            padding: rem(45px) rem(30px);
+            i {
+                font-size: rem(40px);
+            }
+        }
+    }
+    .dialog-body {
+        flex: 1;
+        overflow-y: auto;
+    }
+    .dialog-footer {
+        display: flex;
+        .van-button {
+            flex: 1;
+            height: rem(90px);
+            font-size: rem(34px);
+            border: none;
+            border-radius: 0;
+        }
+        .van-button--plain {
+            color: #477FD3;
+        }
+    }
 }
