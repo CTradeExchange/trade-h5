@@ -7,7 +7,7 @@
             <SuccessAnimation :disabled-succ-animtion='$store.state.disabledSuccAnimtion' />
         </span>
         <p class='title successColor' :class="{ 'animate':!$store.state.disabledSuccAnimtion }">
-            {{ $t('trade.openPendingSuccess') }}
+            {{ $t(orderInfo.bizType===1?'trade.openPositionSuccess':'trade.openPendingSuccess') }}
         </p>
 
         <div class='orderInfo'>
@@ -20,15 +20,15 @@
                 </p>
             </div>
             <template v-if='orderInfo && orderInfo.bizType===1'>
-                <van-cell class='dataBar' :title="$t('trade.positionPrice')" :value='shiftedBy(orderInfo.executePrice,orderInfo.digits*-1)' />
+                <van-cell class='dataBar' :title="$t('trade.positionPrice')" :value='shiftedBy(orderInfo.requestPrice,orderInfo.digits*-1)' />
                 <van-cell class='dataBar' :title="$t('trade.volumes')">
                     <template #default>
                         <span
-                            :class="[orderInfo.openDirection===1?'riseColor':'fallColor']"
+                            :class="[orderInfo.direction===1?'riseColor':'fallColor']"
                         >
-                            {{ orderInfo.openDirection===1?$t('trade.buy'):$t('trade.sell') }}
+                            {{ orderInfo.direction===1?$t('trade.buy'):$t('trade.sell') }}
                         </span>
-                        {{ orderInfo.tradeVolume+$t('trade.volumeUnit') }}
+                        {{ orderInfo.requestNum+$t('trade.volumeUnit') }}
                     </template>
                 </van-cell>
                 <van-cell v-if='orderInfo.fee' class='dataBar' :title="$t('fee')">
