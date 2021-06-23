@@ -39,6 +39,10 @@ export default {
         options: {
             type: Object,
             default: () => ({})
+        },
+        positionList: {
+            type: Array,
+            default: () => []
         }
     },
     setup (props, context) {
@@ -103,6 +107,17 @@ export default {
                         return
                     }
                     unref(chart).setTick(cur_price, tick_time)
+                })
+
+                // 实时更新Tick
+                watch(() => props.positionList, (val) => {
+                    val = val.filter(e => e.symbolId === symbolId.value)
+                    if (val.length) {
+                        unref(chart).createPositionLine(val)
+                    }
+                }, {
+                    immediate: true,
+                    deep: true
                 })
             })
         })
