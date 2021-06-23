@@ -1,9 +1,9 @@
 <template>
     <div>
-        <van-empty v-if='orderList && orderList.length===0' :description='$t("trade.closedEmpty")' />
+        <van-empty v-if='!loadStatus && orderList && orderList.length===0' :description='$t("trade.closedEmpty")' />
         <template v-else-if='orderList'>
             <van-list
-                v-model:loading='loading'
+                v-model:loading='loadStatus'
                 :finished='finished'
                 :finished-text='$t("historyList.noMore")'
                 :immediate-check='false'
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, reactive, toRefs, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import HistoryItem from './historyItem'
 export default {
@@ -31,12 +31,18 @@ export default {
     setup (props, { emit }) {
         const store = useStore()
         const orderList = computed(() => store.state._trade.historyList)
-
+        const state = reactive({
+            loadStatus: props.loading
+        })
         const onLoad = () => {
             emit('onLoad')
         }
+        watchEffect(() => {
+            state.loadStatus = props.loading
+        })
 
         return {
+            ...toRefs(state),
             orderList,
             onLoad,
         }

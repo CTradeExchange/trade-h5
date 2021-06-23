@@ -60,7 +60,6 @@
                     <van-button
                         color='#477fd3'
                         hairline
-                        plain
                         size='mini'
                         type='default'
                         @click.stop='cpVis=true'
@@ -217,22 +216,19 @@ export default {
             text-align: center;
             border-radius: rem(6px);
             &.hidden {
-                color: #477FD3;
-                background-color: #F3F8FF;
+                color: var(--primary);
+                background-color: var(--lightenPrimary);
             }
         }
         .van-button {
+            width: rem(124px);
+            height: rem(48px);
+            color: var(--primary) !important;
+            font-size: rem(24px);
+            line-height: rem(48px);
+            background: var(--lightenPrimary) !important;
+            border-color: var(--lightenPrimary) !important;
             border-radius: rem(6px);
-            &__text {
-                color: #477FD3;
-            }
-            &--mini {
-                min-width: rem(124px);
-                height: rem(48px);
-                padding: 0 rem(10px);
-                font-size: rem(24px);
-                line-height: rem(48px);
-            }
         }
     }
 }

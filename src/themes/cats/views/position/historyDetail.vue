@@ -2,45 +2,39 @@
     <div class='page-wrap'>
         <LayoutTop :back='true' :menu='false' />
         <div class='main'>
-            <div class='m-orderInfo'>
+            <div v-if='orderInfo' class='m-orderInfo'>
                 <div class='layout layout-1'>
-                    <div class='item item-1'>
+                    <div v-if='product' class='item item-1'>
                         <div class='left'>
                             <div class='name'>
-                                欧元美元
+                                {{ product.symbolName }}
                             </div>
                             <div class='code'>
-                                欧元美元
+                                {{ product.symbolCode }}
                             </div>
                         </div>
                     </div>
                     <div class='item item-2'>
-                        <!-- <div class='col'>
-                            <div class='sub'>
-                                {{ $t('trade.netProfit') }} (USD)
-                            </div><div class='name riseColor'>
-                            </div>
-                        </div> -->
                         <div class='col'>
                             <div class='sub'>
                                 {{ $t('trade.profit') }}({{ customerInfo.currency }})
                             </div>
                             <div class='name'>
-                                --
+                                {{ orderInfo.profit }}
                             </div>
                         </div><div class='col'>
                             <div class='sub'>
                                 {{ $t('trade.swap_2') }}({{ customerInfo.currency }})
                             </div>
                             <div class='name'>
-                                --
+                                {{ orderInfo.interest || '--' }}
                             </div>
                         </div><div class='col'>
                             <div class='sub'>
                                 {{ $t('trade.fee') }}({{ customerInfo.currency }})
                             </div>
                             <div class='name'>
-                                --
+                                {{ orderInfo.commission || '--' }}
                             </div>
                         </div>
                     </div>
@@ -48,9 +42,10 @@
                     <div class='item item-2 van-hairline--bottom'>
                         <div class='col'>
                             <div class='sub'>
-                                {{ $t('trade.buy') }}
-                            </div><div class='name'>
-                                0.01 {{ $t('trade.volumeUnit') }}
+                                {{ $t(orderInfo.openDirection===1 ? 'trade.buy':'trade.sell') }}
+                            </div>
+                            <div class='name'>
+                                {{ orderInfo.openVolume }} {{ $t('trade.volumeUnit') }}
                             </div>
                         </div>
                         <div class='col'>
@@ -58,31 +53,34 @@
                                 {{ $t('trade.positionPrice') }}
                             </div>
                             <div class='name'>
-                                --
+                                {{ orderInfo.openPrice }}
                             </div>
                         </div>
                         <div class='col'>
                             <div class='sub'>
-                                {{ $t('trade.currentPrice') }}
-                            </div><div class='name riseColor'>
-                                --
+                                {{ $t('trade.closedPrice') }}
+                            </div>
+                            <div class='name'>
+                                {{ orderInfo.closePrice }}
                             </div>
                         </div>
                     </div><div class='item item-2 van-hairline--bottom'>
                         <div class='col'>
                             <div class='sub'>
                                 {{ $t('trade.stopLossPrice') }}
-                            </div><div class='name'>
+                            </div>
+                            <div class='name'>
                                 <span class='number'>
-                                    --
+                                    {{ orderInfo.stopLoss || '--' }}
                                 </span>
                             </div>
-                        </div><div class='col'>
+                        </div>
+                        <div class='col'>
                             <div class='sub'>
                                 {{ $t('trade.stopProfitPrice') }}
                             </div><div class='name'>
                                 <span class='number'>
-                                    --
+                                    {{ orderInfo.takeProfit || '--' }}
                                 </span>
                             </div>
                         </div>
@@ -94,7 +92,7 @@
                                 {{ $t('trade.openTime') }}
                             </div>
                         </div><div class='right'>
-                            --
+                            {{ formatTime(orderInfo.openTime) }}
                         </div>
                     </div><div class='item'>
                         <div class='left'>
@@ -110,25 +108,24 @@
         </div>
     </div>
     <!-- :positionData='activeOrder' -->
-    <DialogSLTP
+    <!-- <DialogSLTP
         :direction='1'
         :is-position='true'
         :show='showSetProfit'
         @submit='setProfitSuccess'
         @update:show='updateShow'
-    />
+    /> -->
 </template>
 
 <script>
-import DialogSLTP from '@c/components/dialogSLTP'
+// import DialogSLTP from '@c/components/dialogSLTP'
 import { reactive, toRefs, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { isEmpty } from '@/utils/util'
 import { useStore } from 'vuex'
-import dayjs from 'dayjs'
 import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
-    components: { DialogSLTP },
+    // components: { DialogSLTP },
 
     setup (props) {
         const store = useStore()
@@ -141,9 +138,9 @@ export default {
         const positionId = route.query.positionId
         const symbolId = route.query.symbolId
         const customerInfo = computed(() => store.state._user.customerInfo)
-        // 持仓产品
-        const positionData = computed(() => store.state._trade.positionMap[positionId])
-        const product = computed(() => store.state._quote.productMap[symbolId])
+        const historyList = computed(() => store.state._trade.historyList)
+        const orderInfo = computed(() => historyList.value && historyList.value.find(el => el.positionId === parseFloat(positionId)))
+        const product = computed(() => store.state._quote.productMap[orderInfo.value?.symbolId])
 
         QuoteSocket.send_subscribe([symbolId])
 
@@ -153,19 +150,14 @@ export default {
         const updateShow = (val) => {
             state.showSetProfit = val
         }
-
-        const formatTime = (val) => {
-            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
-        }
         return {
             ...toRefs(state),
             setProfitSuccess,
             updateShow,
             product,
-            positionData,
             orderId,
-            formatTime,
             customerInfo,
+            orderInfo,
             positionId
         }
     }
@@ -196,18 +188,16 @@ export default {
                 }
             }
         }
-        ::v-deep {
-            .van-button {
-                border-radius: rem(6px);
-                &__text {
-                    color: #477FD3;
-                }
-                &--mini {
-                    width: rem(124px);
-                    height: rem(48px);
-                    font-size: rem(24px);
-                    line-height: rem(48px);
-                }
+        :deep(.van-button) {
+            border-radius: rem(6px);
+            .van-button__text {
+                color: #477FD3;
+            }
+            .van-button--mini {
+                width: rem(124px);
+                height: rem(48px);
+                font-size: rem(24px);
+                line-height: rem(48px);
             }
         }
         .layout-1 {

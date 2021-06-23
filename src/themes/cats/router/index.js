@@ -76,48 +76,48 @@ const routes = [
                     title: 'route.pendingDetail'
                 }
             },
-            {
-                path: 'historyDetail',
-                name: 'HistoryDetail',
-                component: () => import(/* webpackChunkName: "position" */ '../views/position/historyDetail.vue'),
-                meta: {
-                    title: 'route.historyDetail'
-                }
-            },
-            {
-                path: 'history',
-                name: 'History',
-                component: () => import(/* webpackChunkName: "history" */ '../views/history/history.vue'),
-                meta: {
-                    title: 'route.historyDetail'
-                }
-            },
-            {
-                path: 'onlineService',
-                name: 'OnlineService',
-                component: () => import(/* webpackChunkName: "onlineService" */ '../views/onlineService/onlineService.vue'),
-                meta: {
-                    title: 'route.onlineService'
-                }
-            },
-            {
-                path: 'accountManager',
-                name: 'AccountManager',
-                component: () => import(/* webpackChunkName: "accountManager" */ '../views/accountManager/accountManager.vue'),
-                meta: {
-                    title: 'route.account'
-                }
-            },
-            {
-                path: '/addAccount',
-                name: 'AddAccount',
-                component: () => import(/* webpackChunkName: "addAccount" */ '../views/accountManager/addAccount.vue'),
-                meta: {
-                    title: 'route.newAccount',
-                    footerMenu: false
-                }
-            }
+            // {
+            //     path: 'history',
+            //     name: 'History',
+            //     component: () => import(/* webpackChunkName: "history" */ '../views/history/history.vue'),
+            //     meta: {
+            //         title: 'route.historyDetail'
+            //     }
+            // },
+            // {
+            //     path: 'onlineService',
+            //     name: 'OnlineService',
+            //     component: () => import(/* webpackChunkName: "onlineService" */ '../views/onlineService/onlineService.vue'),
+            //     meta: {
+            //         title: 'route.onlineService'
+            //     }
+            // },
+            // {
+            //     path: 'accountManager',
+            //     name: 'AccountManager',
+            //     component: () => import(/* webpackChunkName: "accountManager" */ '../views/accountManager/accountManager.vue'),
+            //     meta: {
+            //         title: 'route.account'
+            //     }
+            // },
+            // {
+            //     path: '/addAccount',
+            //     name: 'AddAccount',
+            //     component: () => import(/* webpackChunkName: "addAccount" */ '../views/accountManager/addAccount.vue'),
+            //     meta: {
+            //         title: 'route.newAccount',
+            //         footerMenu: false
+            //     }
+            // }
         ]
+    },
+    {
+        path: '/historyDetail',
+        name: 'HistoryDetail',
+        component: () => import(/* webpackChunkName: "position" */ '../views/position/historyDetail.vue'),
+        meta: {
+            title: 'route.historyDetail'
+        }
     },
     {
         path: '/contract',
