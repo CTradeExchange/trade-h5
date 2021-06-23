@@ -20,6 +20,7 @@ const colors = {
     'sellColor': '#E3525C',
     'buyColor': '#007AFF',
     'primary': '#477fd3',
+    'lightenPrimary': '#f3f8ff',
     'success': '#10B873',
 }
 

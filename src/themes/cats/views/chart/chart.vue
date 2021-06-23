@@ -5,6 +5,7 @@
             ref='chartRef'
             :initial-value='initialValue'
             :options='chartConfig'
+            :position-list='positionList'
             @changeOrientation='changeOrientation'
             @indicatorRemoved='indicatorRemoved'
             @symbolChanged='symbolChanged'
@@ -61,7 +62,11 @@ export default {
         const route = useRoute()
         const store = useStore()
         const productList = computed(() => store.state._quote.productList)
-
+        const positionList = computed(() => store.state._trade.positionList)
+        const customerInfo = computed(() => store.state._user.customerInfo)
+        if (customerInfo.value) {
+            store.dispatch('_trade/queryPositionPage')
+        }
         // 图表配置
         const chartConfig = ref({
             property: {
@@ -221,7 +226,8 @@ export default {
             onBack,
             showIndicator,
             chartRef,
-            setResolution
+            setResolution,
+            positionList
         }
     }
 }

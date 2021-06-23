@@ -2,7 +2,7 @@
     <!-- <router-view /> -->
     <router-view v-slot='{ Component }'>
         <keep-alive>
-            <component :is='Component' :class="{ 'noFoot':$route.meta.footerMenu===false }" />
+            <component :is='Component' />
         </keep-alive>
     </router-view>
     <footerMenu id='footerMenu' class='footerMenu' />

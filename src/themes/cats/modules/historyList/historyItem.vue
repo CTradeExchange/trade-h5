@@ -8,16 +8,16 @@
                         {{ data.symbolName }}
                     </div>
                     <div class='lot'>
-                        {{ data.symbolName }}
+                        {{ product.symbolCode }}
                     </div><p>
                         <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
                             {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
                         </span>{{ positionVolume }} {{ $t('trade.volumeUnit') }}
                     </p>
                 </div>
-                <div>
+                <div class='ft'>
                     <span class='currency'>
-                        {{ $t('trade.netProfit') }} ({{ customerInfo.currency }})
+                        {{ $t('trade.profit') }} ({{ customerInfo.currency }})
                     </span>
                     <div class='ft amount' :class="parseFloat(data.profit) > 0 ? 'riseColor': 'fallColor'">
                         {{ parseFloat(data.profit) > 0 ? '+': '-' }}{{ data.profit }}
@@ -73,7 +73,6 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { minus } from '@/utils/calculation'
 import DialogClosePosition from '@c/components/dialogClosePosition'
-import dayjs from 'dayjs'
 export default {
     components: {
         DialogClosePosition
@@ -98,10 +97,6 @@ export default {
             router.push({ path: '/historyDetail', query: { symbolId: item.symbolId, positionId: item.positionId } })
         }
 
-        // 格式化时间
-        const formatTime = (val) => {
-            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
-        }
         const updateShow = (val) => {
             state.cpVis = val
         }
@@ -113,8 +108,7 @@ export default {
             product,
             positionVolume,
             toPositionDetail,
-            updateShow,
-            formatTime
+            updateShow
         }
     }
 }

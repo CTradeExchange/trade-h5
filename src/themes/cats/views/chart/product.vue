@@ -1,0 +1,1046 @@
+<template>
+    <div class='page-wrap'>
+        <LayoutTop :back='true' :menu='false' title='现货黄金'>
+            <template #center>
+                {{ $t('trade.update') }}: {{ nowTime }}
+            </template>
+        </LayoutTop>
+        <section class='container'>
+            <div class='productInfo'>
+                <div class='hd'>
+                    <div class='hd-left'>
+                        <p class='cur_price fallColor '>
+                            25.904
+                        </p><!---->
+                    </div><div class='others'>
+                        <span class='fallColor'>
+                            -0.049  (-4.9点)
+                        </span><div class='others-bottom'>
+                            <span class='upDownAmount fallColor'>
+                                -0.19%
+                            </span><!---->
+                        </div>
+                    </div><!---->
+                </div><div class='bd'>
+                    <div class='item'>
+                        <p class='priceBottom'>
+                            <span>
+                                今开
+                            </span><span>
+                                25.948
+                            </span>
+                        </p><p>
+                            <span>
+                                昨收
+                            </span><span>
+                                25.953
+                            </span>
+                        </p>
+                    </div><div class='item'>
+                        <p class='priceBottom'>
+                            最高 <span>
+                                26.042
+                            </span>
+                        </p><p>
+                            最低 <span>
+                                25.768
+                            </span>
+                        </p>
+                    </div><div class='item'>
+                        <p class='priceBottom'>
+                            振幅 <span>
+                                27.4点
+                            </span>
+                        </p><p>
+                            <span class='point-value' @click='showTips'>
+                                点值 <i class='van-icon van-icon-question-o'>
+                                    <!---->
+                                </i>
+                            </span><span>
+                                50.00 USD
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class='placeholder'></div>
+        <div class='tv-head'>
+            <div class='tabs-wrap'>
+                <van-tabs
+                    v-model:active='activeTab'
+                    :before-change='onBeforeChange'
+                    class='tabs'
+                    color='#007AFF'
+                    line-height='2'
+                    line-width='20'
+                    title-active-color='#007AFF'
+                >
+                    <van-tab v-for='(item,i) in candleKTypeList.slice(0,6)' :key='i' :name='item.ktype' :title='item.title' />
+                    <van-tab name='moreKTypes'>
+                        <template #title class='other-time-tab'>
+                            {{ moreKType.title }}
+                        </template>
+                    </van-tab>
+                </van-tabs>
+
+                <div class='more-time' :class='{ opened: moreTimeIsOpened }'>
+                    <div v-show='moreTimeIsOpened' class='options van-hairline--surround'>
+                        <div
+                            v-for='(item,i) in candleKTypeList.slice(6)'
+                            :key='i'
+                            class='option'
+                            :class='{ active: moreKType.title === item.title }'
+                            @click='onClickMoreTime(item)'
+                        >
+                            {{ item.title }}
+                        </div>
+                    </div>
+                    <div
+                        v-show='moreTimeIsOpened'
+                        class='mask'
+                        @click.stop='moreTimeIsOpened = false'
+                        @touchmove.stop='moreTimeIsOpened = false'
+                    ></div>
+                </div>
+
+                <div class='flex-right'>
+                    <van-dropdown-menu class='kIcon-wrap'>
+                        <van-dropdown-item ref='klineTypeDropdown' v-model='klineType' :title="$t('indicator')">
+                            <template #title>
+                                <KIcon class='kIcon' :value='klineTypeIndex' />
+                            </template>
+                            <van-cell
+                                v-for='(item, i) in klineTypeList'
+                                :key='item.name'
+                                :class="{ 'mainColor':klineType === item.value }"
+                                is-link
+                                @click='setKlineType(item)'
+                            >
+                                <template #title>
+                                    <span class='custom-title'>
+                                        <KIcon class='kIcon' :value='i+1' />
+                                        {{ item['title_zh'] }}
+                                    </span>
+                                </template>
+                                <template #right-icon>
+                                    <van-icon v-if='klineType===item.value' class='klineTypeRightIcon' name='success' />
+                                </template>
+                            </van-cell>
+                        </van-dropdown-item>
+                    </van-dropdown-menu>
+                    <!-- <van-loading v-if='loading' class='loadingIcon' color='#1989fa' size='18px' /> -->
+                    <div class='setting' @click='settingStatus = !settingStatus'>
+                        <van-icon class='icon' name='setting-o' />
+
+                        <div v-show='settingStatus' class='content van-hairline--surround' @click.stop>
+                            <van-checkbox-group ref='checkboxGroup' v-model='settingList'>
+                                <van-checkbox
+                                    v-for='item in lineList'
+                                    :key='item.value'
+                                    v-model='linesData[item.value].status'
+                                    class='item'
+                                    icon-size='16px'
+                                    :name='item.value'
+                                >
+                                    {{ item.title }}
+                                </van-checkbox>
+                            </van-checkbox-group>
+                        </div>
+                        <div
+                            v-show='settingStatus'
+                            class='mask'
+                            @click.stop='settingStatus = false'
+                            @touchmove.stop='settingStatus = false'
+                        >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-show='true' ref='mainStudyArea' class='study-area'>
+            <div class='main-study'>
+                <div class='content'>
+                    <div
+                        v-for='(item, i) in mainStudyList'
+                        :key='i'
+                        class='item'
+                        :class='{ active: mainStudy === item.name, disabled: !TVHasInit }'
+                    >
+                        <span
+                            class='inner-label'
+                            @click='onClickStudy("main", item.name)'
+                            @touchend='onClickStudy("main", item.name)'
+                        >
+                            {{ item.label }}
+                        </span>
+                    </div>
+                    <span class='item more' @click='showStudyDialog = true'>
+                        <span class='inner-label'>
+                            {{ $t('chart.more') }}
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class='chart-wrap'>
+            <Chart />
+        </div>
+
+        <div class='footerBtnBox'>
+            <div class='trade-btn-wrap'>
+                <div class='sell fallColorBg'>
+                    <p>
+                        卖出
+                    </p>
+                    <p class='price riseColorArrow'>
+                        25.965
+                    </p>
+                </div>
+                <div class='buy riseColorBg'>
+                    <p>
+                        买入
+                    </p><p class='price riseColorArrow'>
+                        25.965
+                    </p>
+                </div><span class='spread_text'>
+                    0.0
+                </span>
+            </div><!---->
+        </div>
+    </div>
+
+    <StudyList
+        :prop-main-study='mainStudy'
+        :prop-sub-study='subStudy'
+        :show='showStudyDialog'
+        @createStudy='createStudy'
+        @removeStudy='removeStudy'
+        @update:show='updateShow'
+    />
+</template>
+
+<script>
+import Chart from './chart'
+import StudyList from './components/studyList.vue'
+import { useI18n } from 'vue-i18n'
+import { computed, reactive, toRefs, onBeforeUnmount, ref } from 'vue'
+import KIcon from './icons/kIcon.vue'
+import { MAINSTUDIES, SUBSTUDIES } from './constant'
+import dayjs from 'dayjs'
+import { Dialog } from 'vant'
+export default {
+    components: { KIcon, Chart, StudyList },
+    setup (props) {
+        const { t } = useI18n({ useScope: 'global' })
+        const klineTypeDropdown = ref(null)
+        const candleKTypeList = [
+            {
+                title: t('chart.timeSharing'),
+                value: '1min',
+                ktype: 'timeSharing',
+            },
+            {
+                title: t('chart.1min'),
+                value: '1min',
+                ktype: '1',
+            }, {
+                title: t('chart.15min'),
+                value: '15min',
+                ktype: '15',
+            }, {
+                title: t('chart.30min'),
+                value: '30min',
+                ktype: '30',
+            }, {
+                title: t('chart.1hour'),
+                value: '1hour',
+                ktype: '60',
+            }, {
+                title: t('chart.day'),
+                value: 'day',
+                ktype: '1D',
+            }, {
+                title: t('chart.week'),
+                value: 'week',
+                ktype: '1W',
+            }, {
+                title: t('chart.5min'),
+                value: '5min',
+                ktype: '5',
+            }, {
+                title: t('chart.2hour'),
+                value: '2hour',
+                ktype: '120',
+            }, {
+                title: t('chart.4hour'),
+                value: '4hour',
+                ktype: '240',
+            }, {
+                title: t('chart.month'),
+                value: 'month',
+                ktype: '1M',
+            }
+        ]
+
+        const klineTypeList = [{
+            name: 'kIcon1',
+            title_zh: '美国线',
+            title_en: 'Bars',
+            value: 0,
+        }, {
+            name: 'kIcon2',
+            title_zh: 'K线图',
+            title_en: 'Candles',
+            value: 1,
+        }, {
+            name: 'kIcon3',
+            title_zh: '空心K线图',
+            title_en: 'Hollow Candles',
+            value: 9,
+        }, {
+            name: 'kIcon4',
+            title_zh: '平均K线图',
+            title_en: 'Heikin Ashi',
+            value: 8,
+        }, {
+            name: 'kIcon5',
+            title_zh: '线形图',
+            title_en: 'Line',
+            value: 2,
+        }, {
+            name: 'kIcon6',
+            title_zh: '面积图',
+            title_en: 'Area',
+            value: 3,
+        }, {
+            name: 'kIcon7',
+            title_zh: '基准线',
+            title_en: 'Baseline',
+            value: 10,
+        }]
+
+        const state = reactive({
+            activeTab: 0,
+            moreKType: {
+                title: t('chart.more'),
+                ktype: null
+            },
+            moreTimeIsOpened: false,
+            settingStatus: false,
+            mainStudyList: MAINSTUDIES.slice(0, 5), // 主图
+            sideStudyList: SUBSTUDIES.slice(0, 5), // 副图
+            mainStudy: '',
+            subStudy: '',
+            showStudyDialog: false,
+            lineList: [
+                {
+                    title: t('chart.lastValueLine'),
+                    value: 'lastValue'
+                },
+                {
+                    title: t('chart.positionLine'),
+                    value: 'position',
+                },
+                {
+                    title: t('chart.buyLine'),
+                    value: 'buy',
+                },
+                {
+                    title: t('chart.sellLine'),
+                    value: 'sell',
+                },
+                // {
+                //     title: '买卖五档',
+                //     value: 'stalls',
+                // },
+                // {
+                //     title: '成交数据',
+                //     value: 'deal',
+                // }
+            ],
+            linesData: {
+                lastValue: {
+                    status: true
+                },
+                position: {
+                    status: true
+                },
+                buy: {
+                    status: false
+                },
+                sell: {
+                    status: false
+                },
+                // stalls: {
+                //     status: true
+                // },
+                // deal: {
+                //     status: true
+                // }
+            },
+            nowTime: dayjs().format('HH:mm:ss'),
+            timeId: '',
+            settingList: [],
+            klineType: 0,
+        })
+
+        state.timeId = setInterval(() => {
+            state.nowTime = dayjs().format('HH:mm:ss')
+        }, 1000)
+
+        const tabChange = (name, title) => {
+
+        }
+
+        const onClickStudy = (type, name) => {
+
+        }
+        const onBeforeChange = (name, title) => {
+            if (name === 'moreKTypes') {
+                state.moreTimeIsOpened = !state.moreTimeIsOpened
+            }
+            return true
+        }
+        // 增加单个指标
+        const createStudy = (type, name) => {
+
+        }
+
+        // 删除指标
+        const removeStudy = (type) => {
+
+        }
+
+        const updateShow = (val) => {
+            state.showStudyDialog = val
+        }
+
+        const showTips = () => {
+            Dialog.alert({
+
+                title: t('trade.descTitle'),
+                message: t('trade.nonStocksAndnonBullPointDesc'),
+                confirmButtonColor: '#477fd3'
+            }).then(() => {
+                // on close
+            })
+        }
+
+        // 更多周期
+        const onClickMoreTime = ({ title, ktype }) => {
+            state.activeTab = 'moreKTypes'
+            initOtherTime(title, ktype)
+            state.moreTimeIsOpened = false
+        }
+
+        const initOtherTime = (title = this.$t('chart.more'), ktype = null) => {
+            state.moreKType = { title, ktype }
+        }
+
+        const setKlineType = (item) => {
+            klineTypeDropdown.toggle()
+            state.klineType = item.value
+            state.klineTypeDropdown.toggle()
+        }
+
+        onBeforeUnmount(() => {
+            state.timeId = null
+        })
+
+        return {
+            ...toRefs(state),
+            candleKTypeList,
+            klineTypeList,
+            onBeforeChange,
+            tabChange,
+            onClickStudy,
+            createStudy,
+            removeStudy,
+            showTips,
+            updateShow,
+            onClickMoreTime,
+            setKlineType
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+@import '@/sass/mixin.scss';
+.page-wrap {
+    width: 100%;
+    height: 100%;
+    margin-top: rem(90px);
+    margin-bottom: rem(100px);
+    overflow: auto;
+    background: var(--bgColor2);
+    .productInfo {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: rem(10px) rem(20px) rem(10px) rem(20px);
+        background: #FFF;
+        transform: translateZ(1px);
+        // margin-bottom: rem(10px);
+        .hd {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            min-width: rem(265px);
+            font-size: rem(24px);
+            line-height: 1;
+            .others {
+                flex: 1;
+                margin-left: rem(10px);
+                > span {
+                    display: block;
+                    margin: rem(5px) 0;
+                }
+                .others-bottom {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-start;
+                }
+            }
+            .expire-date {
+                display: flex;
+                flex: 1;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                align-self: flex-end;
+                justify-content: flex-end;
+                color: #646566;
+                font-size: rem(24px);
+                white-space: nowrap;
+                .value {
+                    min-width: rem(153px);
+                    text-align: right;
+                }
+            }
+            .account-info {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: rem(14px) rem(17px) rem(10px);
+                color: #FF8400;
+                font-weight: 500;
+                font-size: rem(21px);
+                border: 2px solid #FF8400;
+                border-radius: rem(10px);
+                .text {
+                    display: block;
+                    margin-bottom: rem(5px);
+                    font-size: rem(22px);
+                    line-height: rem(24px);
+                }
+                .balance {
+                    font-weight: 400;
+                    font-size: rem(30px);
+                    line-height: rem(32px);
+                }
+            }
+            .hd-left {
+                &.flex-auto {
+                    flex: 1;
+                }
+                .hd-left-others {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: nowrap;
+                    .others-bottom {
+                        margin-left: rem(20px);
+                    }
+                }
+            }
+        }
+        .bd {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            width: 100%;
+            padding-top: rem(20px);
+            color: #646566;
+            font-size: rem(24px);
+            .item {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                margin-left: rem(50px);
+                &:first-child {
+                    margin-left: 0;
+                }
+                &:first-child {
+                    margin-right: rem(5px);
+                }
+                > p {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: nowrap;
+                    justify-content: space-between;
+                    white-space: nowrap;
+                    &.priceBottom {
+                        margin-bottom: rem(10px);
+                    }
+                }
+            }
+            .point-value {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                align-items: center;
+                justify-content: flex-start;
+                .van-icon {
+                    padding: 0 rem(5px);
+                }
+            }
+        }
+        .priceTime {
+            position: absolute;
+            top: rem(35px);
+            right: rem(20px);
+            color: #777;
+        }
+        .cur_price {
+            font-size: rem(60px);
+            // padding-bottom: rem(13px);
+        }
+        .upDownAmount {
+            // padding-left: rem(20px);
+        }
+        .icon_icon_prompt {
+            @include active();
+            font-size: rem(40px);
+            vertical-align: middle;
+        }
+    }
+    .placeholder {
+        height: rem(10px);
+    }
+    .tv-head {
+        box-sizing: border-box;
+        // 若高度调整，需同时处理vant-tab组件内的高度和行高等
+        width: 100%;
+        height: rem(60px);
+    }
+    .tabs-wrap {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        height: 100%;
+        .van-popup {
+            @include scroll();
+        }
+        .tabs {
+            flex: 1;
+            :deep(.van-tab) {
+                flex: 1;
+                flex-basis: auto !important;
+                padding: 0;
+                font-size: rem(24px);
+                line-height: rem(60px);
+                white-space: nowrap;
+                .van-tab__text {
+                    white-space: nowrap;
+                }
+            }
+            :deep(.van-tabs__wrap) {
+                height: rem(60px);
+                .van-tabs__nav--line {
+                    padding-bottom: 0;
+                }
+                .van-tabs__line {
+                    bottom: 0;
+                }
+            }
+        }
+        .other-time-tab {
+            min-width: rem(61px);
+            white-space: nowrap;
+            text-align: center;
+        }
+        .more-time {
+            position: relative;
+            height: 100%;
+            padding: 0 4px 0 0;
+            color: #646566;
+            font-size: rem(24px);
+            line-height: rem(60px);
+            background: #FFF;
+            &::after {
+                position: absolute;
+                top: 50%;
+                right: 1px;
+                margin-top: -5px;
+                border: 3px solid;
+                border-color: transparent transparent #DCDEE0 #DCDEE0;
+                -webkit-transform: rotate(-45deg);
+                transform: rotate(-45deg);
+                opacity: 0.8;
+                content: '';
+            }
+            &.opened {
+                &::after {
+                    margin-top: -1px;
+                    border-color: transparent transparent currentColor currentColor;
+                    transform: rotate(135deg);
+                }
+            }
+            .options {
+                position: absolute;
+                top: rem(71px);
+                left: rem(-100px);
+                z-index: 10;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin-top: rem(1px);
+                background: #FFF;
+                box-shadow: 0 0 2px 0 #EBEDF0;
+                .option {
+                    padding: rem(20px) rem(50px) rem(10px);
+                    line-height: rem(30px);
+                    white-space: nowrap;
+                    &.active {
+                        color: var(--primary);
+                    }
+                }
+            }
+            .mask {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 9;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+            }
+        }
+        .loadingIcon {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            width: rem(80px);
+            text-align: center;
+            background: #FFF;
+        }
+        .flex-right {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+        }
+        .study-wrap,
+        .kIcon-wrap {
+            height: auto;
+            :deep(.van-dropdown-menu__title) {
+                color: #646566;
+                font-size: rem(24px);
+            }
+            :deep(.van-dropdown-menu__bar) {
+                width: 100%;
+                height: 100%;
+                box-shadow: none;
+            }
+            .mainColor {
+                color: var(--primary);
+            }
+        }
+        .chartPositinLine {
+            font-size: rem(40px);
+        }
+        .study-wrap {
+            width: rem(120px);
+            :deep(.van-dropdown-menu__bar) {
+                .van-dropdown-menu__bar {
+                    box-sizing: border-box;
+                    width: 100%;
+                    height: 100%;
+                    padding-right: 13px;
+                }
+            }
+        }
+        .kIcon-wrap {
+            width: rem(80px);
+            padding-right: 0;
+            :deep(.van-dropdown-menu__title::after) {
+                display: none;
+            }
+        }
+        .kIcon {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .klineTypeRightIcon {
+            padding-top: rem(10px);
+            font-size: rem(36px);
+        }
+        .setting {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: rem(80px);
+            background: #FFF;
+            .icon {
+                font-size: rem(32px);
+            }
+            .content {
+                position: absolute;
+                top: rem(72px);
+                right: 0;
+                z-index: 10;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                align-items: flex-start;
+                justify-content: center;
+                background: #FFF;
+                box-shadow: 0 0 2px 0 #EBEDF0;
+                .item {
+                    padding: rem(20px) rem(50px) rem(10px);
+                    line-height: rem(30px);
+                    white-space: nowrap;
+                    &.active {
+                        :deep(&.van-checkbox__icon--disabled) {
+                            .van-icon {
+                                background-color: #EBEDF0;
+                                border-color: #C8C9CC;
+                            }
+                        }
+                        .van-icon {
+                            background-color: red;
+                            border-color: red;
+                        }
+                        .van-checkbox__label {
+                            color: red;
+                            &.van-checkbox__label--disabled {
+                                color: #C8C9CC;
+                            }
+                        }
+                    }
+                }
+            }
+            .mask {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 9;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+            }
+        }
+    }
+    .study-area {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        height: rem(60px);
+        line-height: rem(60px);
+        background: #FFF;
+        .main-study,
+        .side-study {
+            display: flex;
+            flex: 1;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: flex-end;
+            justify-content: flex-start;
+            height: 100%;
+            overflow-x: auto;
+            .content {
+                display: flex;
+                flex: 1;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                justify-content: space-around;
+                white-space: nowrap;
+                .item {
+                    display: flex;
+                    flex: 1;
+                    flex-direction: row;
+                    align-items: flex-end;
+                    justify-content: center;
+                    padding: 0 rem(10px);
+                    color: #646566;
+                    font-size: rem(24px);
+                    text-align: center;
+                    &.active {
+                        color: var(--riseColor);
+                    }
+                    &.disabled {
+                        color: var(--assistColor);
+                    }
+                    .inner-label {
+                        flex: 1;
+                        height: rem(50px);
+                        line-height: rem(45px);
+                    }
+                }
+            }
+        }
+        .split {
+            display: block;
+            flex: 0 0 1px;
+            height: rem(30px);
+            margin: 0 rem(20px);
+            background: #F8F8F8;
+        }
+        .more {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: center;
+            margin: 0 rem(10px);
+            .inner-label {
+                flex: 1;
+                height: rem(50px);
+                line-height: rem(45px);
+            }
+        }
+    }
+
+    // 底部按钮
+    .footerBtnBox {
+        position: absolute;
+        bottom: rem(20px);
+        left: 0;
+        z-index: 2;
+        display: flex;
+        width: 100%;
+        height: rem(100px);
+        text-align: center;
+        background: #FFF;
+        .watch {
+            @include active();
+            width: rem(110px);
+            padding-top: rem(20px);
+            line-height: 1;
+            background-color: #FFF;
+            .icon {
+                font-size: rem(40px);
+            }
+            .text {
+                padding-top: rem(8px);
+                font-size: rem(20px);
+            }
+        }
+        .trade-btn-wrap {
+            position: relative;
+            display: flex;
+            flex: 1;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            padding: 0 rem(20px);
+            white-space: nowrap;
+            .buy {
+                margin-left: rem(20px);
+            }
+        }
+        .sell,
+        .buy {
+            @include active();
+            position: relative;
+            flex: 1;
+            padding-top: rem(18px);
+            color: #FFF;
+            font-size: rem(24px);
+            line-height: 1;
+            background-color: #858C9A;
+            border-radius: 3px;
+            &.fallColorBg {
+                background-color: var(--sellColor);
+            }
+            &.riseColorBg {
+                background-color: var(--success);
+            }
+        }
+        .sell::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1px;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.15);
+            content: '';
+        }
+        // .sell {
+        //     .price {
+        //         padding-right: rem(50px);
+        //     }
+        // }
+        // .buy {
+        //     .text {
+        //         padding-left: rem(50px);
+        //     }
+        // }
+        .text {
+            font-size: rem(28px);
+            vertical-align: middle;
+        }
+        .price {
+            padding-top: rem(12px);
+            font-size: rem(32px);
+            vertical-align: middle;
+            &.fallColorArrow::after {
+                font-weight: normal;
+                font-size: rem(17px);
+                font-family: 'iconfont' !important;
+                vertical-align: middle;
+                content: '\e674';
+            }
+            &.riseColorArrow::after {
+                font-weight: normal;
+                font-size: rem(17px);
+                font-family: 'iconfont' !important;
+                vertical-align: middle;
+                content: '\e675';
+            }
+        }
+        .spread_text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            height: rem(44px);
+            padding: 0 rem(14px);
+            color: #666;
+            font-size: rem(28px);
+            line-height: rem(46px);
+            background: #FFF;
+            border-radius: 3px;
+            transform: translate(-50%, -50%);
+        }
+        .scrollToPosition {
+            display: flex;
+            flex: 0 0 rem(140px);
+            flex-direction: row;
+            align-content: center;
+            justify-content: center;
+            margin-right: rem(20px);
+            color: #333;
+            font-weight: 500;
+            font-size: rem(28px);
+            line-height: rem(100px);
+            background: #EEE;
+            border-radius: 3px;
+        }
+    }
+    .chart-wrap {
+        height: rem(660px);
+    }
+}
+
+</style>

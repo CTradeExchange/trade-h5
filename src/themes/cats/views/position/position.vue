@@ -18,7 +18,7 @@
             <van-tabs v-model:active='active' color='rgb(71, 127, 211)' title-inactive-color='#333' type='card' @click='triggerTab'>
                 <van-tab :title='$t("trade.position")'>
                     <div class='m-ccgd'>
-                        <div class='m-orderBy'>
+                        <div v-if='positionList.length' class='m-orderBy'>
                             <van-button
                                 v-for='(item,index) in sortActions'
                                 :key='index'
@@ -33,7 +33,8 @@
                             </van-button>
                         </div>
 
-                        <PositionList />
+                        <van-empty v-if='!pageLoading && positionList.length===0' :description='$t("c.noData")' />
+                        <PositionList v-if='positionList.length' />
                     </div>
                 </van-tab>
                 <van-tab :title='$t("trade.pending")'>
@@ -68,7 +69,7 @@
             </van-tabs>
         </div>
     </div>
-    <Loading v-if='pageLoading' :show='pageLoading' :text='44455' />
+    <Loading v-if='pageLoading' :show='pageLoading' />
     <Fund v-if='fundVis' :show='fundVis' @update:show='updateShow' />
 </template>
 
@@ -106,6 +107,7 @@ export default {
             fundVis: false,
             pageLoading: false,
             active: 0,
+            activeType: 1,
             loading: false,
             finished: false,
             sortActions: [
@@ -118,7 +120,7 @@ export default {
         const customerInfo = computed(() => store.state._user.customerInfo)
 
         // 切换指定tab页
-        state.active = Number(route.query.tab)
+        if (route.query.tab) state.active = Number(route.query.tab)
 
         // 选择排序方式
         const handleSortPosition = item => {
@@ -167,6 +169,7 @@ export default {
         // 查询已平仓列表
         const queryHistoryList = (dateType) => {
             state.loading = true
+            state.activeType = dateType
             let closeEndTime
             const closeStartTime = dayjs().startOf('day').valueOf()
             if (Number(dateType) === 1) {
@@ -313,7 +316,7 @@ export default {
 @import '@/sass/mixin.scss';
 .m-subtab {
     margin: 0 auto;
-    padding-top: rem(20px);
+    padding-top: rem(40px);
     background-color: var(--bgColor2);
     .van-tabs__nav {
         margin: 0 rem(150px);

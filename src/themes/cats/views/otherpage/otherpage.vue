@@ -45,7 +45,7 @@ export default {
             if (type === 'getAppToken') {
                 const _data = {
                     authorization: window.sessionStorage.getItem('token'),
-                    appKey: '',
+                    appKey: window.sessionStorage.getItem('companyId'),
                     userId: window.sessionStorage.getItem('customerNo'),
                 }
                 launchMessage({

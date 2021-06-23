@@ -76,16 +76,16 @@ const routes = [
                 meta: {
                     title: 'route.pendingDetail'
                 }
-            },
-            {
-                path: 'historyDetail',
-                name: 'HistoryDetail',
-                component: () => import(/* webpackChunkName: "position" */ '../views/position/historyDetail.vue'),
-                meta: {
-                    title: 'route.historyDetail'
-                }
             }
         ]
+    },
+    {
+        path: '/historyDetail',
+        name: 'HistoryDetail',
+        component: () => import(/* webpackChunkName: "position" */ '../views/position/historyDetail.vue'),
+        meta: {
+            title: 'route.historyDetail'
+        }
     },
     {
         path: '/contract',
