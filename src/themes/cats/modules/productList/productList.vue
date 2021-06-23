@@ -60,7 +60,8 @@ export default {
         )
 
         const openProduct = (data) => {
-            router.push({ name: 'Order', query: { symbolId: data.symbolId, direction: 'buy' } })
+            // router.push({ name: 'Order', query: { symbolId: data.symbolId, direction: 'buy' } })
+            router.push('/product?symbolId=' + data.symbolId)
         }
 
         onMounted(() => {

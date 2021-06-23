@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class='ft actionBox'>
-                <div class='btn-wrap'>
+                <div class='btns-wrap'>
                     <button
                         class='btn'
                         :class="product.sell_color==='grayColor'?'grayColorBg':'fallColorBg'"
@@ -87,12 +87,14 @@ export default {
         return {
         }
     },
-    setup () {
+    setup (props) {
         const router = useRouter()
         const toOrder = (data, direction) => {
             router.push({ name: 'Order', query: { symbolId: data.symbolId, direction } })
         }
-        const toDetail = () => {}
+        const toDetail = (data) => {
+            router.push('/product?symbolId=' + props.product.symbolId)
+        }
         return {
             getLen,
             toOrder,
@@ -202,7 +204,7 @@ export default {
     }
 }
 .actionBox {
-    .btn-wrap {
+    .btns-wrap {
         position: relative;
         display: flex;
         flex-direction: row;
