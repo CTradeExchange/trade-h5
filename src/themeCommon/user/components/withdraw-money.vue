@@ -7,14 +7,14 @@
                 {{ $t('withdrawMoney.moneyName') }}
             </p>
             <div class='field-wrap'>
-                <input v-model='amount' :placeholder="$t('withdrawMoney.moneyPlaceholder')" type='number' />
+                <input v-model='amount' :placeholder="$t('withdrawMoney.moneyPlaceholder')" type='number' @change='changeAmount' @input='changeAmount' />
                 <button class='get-btn' plain round size='small' @click='getAll'>
                     {{ $t('withdrawMoney.allBtn') }}
                 </button>
             </div>
             <div class='notice'>
                 <span>{{ $t('withdrawMoney.canName') }} {{ withdrawAmount }} {{ customInfo.currency }}</span>
-                <span>{{ $t('withdrawMoney.serviceName') }} {{ fee }} {{ customInfo.currency }}</span>
+                <span>{{ $t('withdrawMoney.serviceName') }} {{ fee || '--' }} {{ customInfo.currency }}</span>
             </div>
             <div class='bank-wrap'>
                 <p class='bw-t'>
@@ -34,7 +34,7 @@
                     </van-button>
                 </div>
                 <p class='bw-t2'>
-                    {{ $t('withdrawMoney.predictName') }} {{ computePre }} {{ checkedBank.bankCurrency }}
+                    {{ $t('withdrawMoney.predictName') }} {{ computePre || '--' }} {{ checkedBank.bankCurrency }}
                 </p>
             </div>
         </div>
@@ -88,8 +88,7 @@ import {
     reactive,
     computed,
     toRefs,
-    onBeforeMount,
-    watchEffect
+    onBeforeMount
 } from 'vue'
 import {
     useRouter
@@ -99,7 +98,8 @@ import {
     Dialog
 } from 'vant'
 import {
-    isEmpty
+    isEmpty,
+    debounce
 } from '@/utils/util'
 import {
     useStore
@@ -161,14 +161,14 @@ export default {
         const state = reactive({
             withdrawAmount: '0.00', // 可提金额
             amount: '', // 提现金额
-            fee: '0.00', // 手续费
-            computePre: '0.00', // 预计到账
+            fee: '', // 手续费
+            computePre: '', // 预计到账
             singleHighAmount: 0, // 最高可提金额
             singleLowAmount: 0, // 最低可提金额
             loading: false,
             show: false,
             checkedBank: {},
-            withdrawRate: '',
+            withdrawRate: null,
             withdrawConfig: '',
             bankList: [],
             fun: null,
@@ -179,8 +179,20 @@ export default {
             withdrawTimeConfigMap: {} // 处理后的时区
         })
 
-        const getWithdrawFee = () => {
+        // 初始化数据
+        const init = () => {
+            state.amount = ''
+            state.fee = ''
+            state.computePre = ''
+        }
+
+        // 获取取款手续费
+        const getWithdrawFee = debounce(() => {
             const amount = parseFloat(state.amount)
+            if (state.amount === '') return
+            if (!amount) {
+                return Toast(t('withdrawMoney.hint_1'))
+            }
             if (amount < state.singleLowAmount) {
                 return Toast(`${t('withdrawMoney.hint_3')}${state.singleLowAmount}`)
             }
@@ -196,7 +208,7 @@ export default {
                 customerNo: customInfo.value.customerNo,
                 customerGroupId: customInfo.value.customerGroupId,
                 country: customInfo.value.country,
-                withdrawCurrency: customInfo.value.currency,
+                withdrawCurrency: state.withdrawCurrency,
                 withdrawType: 1,
                 withdrawMethod: 'bank',
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo
@@ -205,10 +217,10 @@ export default {
                 if (res.check()) {
                     const { data } = res
                     state.fee = data.withdrawFee
-                    state.computePre = data.finalAmount
+                    state.computePre = data.coinFinalAmount
                 }
             })
-        }
+        }, 1000)
 
         const transferUtc = () => {
             const todayStr = dayjs().format('YYYY-MM-DD')
@@ -253,28 +265,12 @@ export default {
             }
         }
 
-        const debounceFn = () => {
-            if (parseFloat(state.amount) > 0) {
-                return setTimeout(getWithdrawFee, 300)
-            }
-        }
-
-        /* 防抖 */
-        watchEffect((onInvalidate) => {
-            const timer = debounceFn() // 再重新生成定时器
-            onInvalidate(() => { // watchEffect里面先执行这个函数，即是清除掉之前的定时器
-                clearTimeout(timer)
-            })
-        })
-
         const openSheet = () => {
             state.show = true
         }
 
         // 选择银行卡
         const chooseBank = (item) => {
-            // 获取取款汇率
-            getWithdrawRate()
             state.withdrawCurrency = item.bankCurrency
             state.checkedBank = item
             state.bankList.map(item => {
@@ -282,6 +278,11 @@ export default {
             })
             item.checked = true
             state.show = false
+
+            // 数据初始化
+            init()
+            // 获取取款汇率
+            getWithdrawRate()
         }
 
         const toAddBank = () => {
@@ -291,6 +292,12 @@ export default {
         // 全部取出
         const getAll = () => {
             state.amount = state.withdrawConfig.withdrawAmount
+        }
+
+        // 改变取款金额
+        const changeAmount = () => {
+            // 获取取款手续费
+            getWithdrawFee()
         }
 
         const confirm = () => {
@@ -354,9 +361,6 @@ export default {
             queryWithdrawRate(params).then(res => {
                 if (res.check()) {
                     state.withdrawRate = res.data
-                } else {
-                    state.btnDisabled = true
-                    Toast(res.msg)
                 }
             })
         }
@@ -415,6 +419,7 @@ export default {
                         state.checkedBank = res.data[0]
                         state.checkedBank.checked = true
                         state.withdrawCurrency = state.checkedBank.bankCurrency
+                        // 获取取款汇率
                         getWithdrawRate()
                     }
                 }
@@ -488,6 +493,7 @@ export default {
         onBeforeMount(() => {
             // 获取银行卡列表
             getBankList()
+            // 获取取款限制配置
             getWithdrawConfig()
         })
 
@@ -497,6 +503,7 @@ export default {
             chooseBank,
             getAll,
             toAddBank,
+            changeAmount,
             confirm,
             customInfo,
             hideMiddle,

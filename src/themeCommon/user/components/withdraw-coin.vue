@@ -536,6 +536,25 @@ export default {
 
         // 获取取款手续费
         const getWithdrawFee = debounce(() => {
+            const coinTotal = parseFloat(state.coinTotal)
+            const coinCount = parseFloat(state.coinCount)
+            if (!state.coinKind) {
+                return Toast(t('withdrawCoin.coinPlaceholder'))
+            }
+            if (!state.chainName) {
+                return Toast(t('withdrawCoin.chainPlaceholder'))
+            }
+            if (state.coinCount === '') return
+            if (coinCount < state.singleLowAmount) {
+                return Toast({ message: `${t('withdrawCoin.hint_4')}${state.singleLowAmount}` })
+            }
+            if (coinCount > state.singleHighAmount) {
+                return Toast({ message: `${t('withdrawCoin.hint_5')}${state.singleHighAmount}` })
+            }
+            if (coinCount > coinTotal) {
+                return Toast(t('withdrawCoin.hint_1'))
+            }
+
             const item = {
                 ...params,
                 amount: state.coinCount,
@@ -552,23 +571,10 @@ export default {
                     state.minusCount = data.amount
                 }
             })
-        }, 500)
+        }, 1000)
 
-        // 改变计算金额
+        // 改变提币数量
         const changeAmount = () => {
-            const coinTotal = parseFloat(state.coinTotal)
-            const coinCount = parseFloat(state.coinCount)
-            if (!state.coinKind) {
-                return Toast(t('withdrawCoin.coinPlaceholder'))
-            }
-            if (!state.chainName) {
-                return Toast(t('withdrawCoin.chainPlaceholder'))
-            }
-            if (!coinTotal) return
-            if (!coinCount) return
-            if (coinCount > coinTotal) {
-                return Toast(t('withdrawCoin.hint_1'))
-            }
             // 获取取款手续费
             getWithdrawFee()
         }
