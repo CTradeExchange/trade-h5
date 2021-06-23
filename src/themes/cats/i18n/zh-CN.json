@@ -6,6 +6,7 @@
   "colon": "：",
   "complete": "完成",
   "save": "保存",
+  "confirm": "确定",
   "c": {
     "managAccount": "管理账户",
     "loginAccont": "登录账户",
@@ -355,6 +356,35 @@
     "sortIncrease": "按涨幅排序",
     "sortDecline": "按跌幅排序",
     "my": "我的自选"
-  }
+  },
+  "chart": {
+    "high": "高",
+    "open": "开",
+    "low": "低",
+    "close": "收",
+    "timeSharing": "分时",
+    "mins": "分钟",
+    "1min": "1分",
+    "5min": "5分",
+    "15min": "15分",
+    "30min": "30分",
+    "1hour": "1小时",
+    "2hour": "2小时",
+    "4hour": "4小时",
+    "day": "日K",
+    "week": "周K",
+    "month": "月K",
+    "chartEmpty": "图表数据为空",
+    "studyLimitTips": "同时选择的指标数量不应超过{num}个",
+    "diffPrice": "涨跌价",
+    "quoteChange": "涨跌幅",
+    "more": "更多",
+    "positionLine": "持仓线",
+    "buyLine": "买价线",
+    "sellLine": "卖价线",
+    "lastValueLine": "现价线",
+    "mainStudy": "主图指标",
+    "subStudy": "副图指标"
+}
 
 }

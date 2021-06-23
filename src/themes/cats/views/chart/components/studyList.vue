@@ -1,69 +1,191 @@
 <template>
-    <div class='list-wrap'>
-        <van-nav-bar
-            left-arrow
-            title='添加指标'
-            @click-left='onClickLeft'
-        />
-        <van-cell-group class='content'>
-            <van-cell v-for='item in list' :key='item.label' :title='item.label' @click='onAdd(item)' />
-        </van-cell-group>
-    </div>
+    <van-popup
+        v-model:show='showList'
+        :close-on-click-overlay='false'
+        closeable
+        :get-container='getContainer'
+        round
+        :style="{ width: '90%' }"
+        @click-close-icon='onClose'
+        @closed='closed'
+    >
+        <div class='content'>
+            <span class='type'>
+                {{ $t('chart.mainStudy') }}
+            </span>
+            <!-- :style="{ 'font-size': (1/item.label.length/6) + 24/75+'rem' }" -->
+            <div class='list'>
+                <span
+                    v-for='(item, i) in MAINSTUDIES'
+                    :key='i'
+                    class='item of-1px'
+                    :class="{ 'active': mainStudy === item.name }"
+                    :style="[{ 'font-size': item.label.length >=6 ? '0.28rem': '' } ]"
+                    @touchend='onClick("main", item.name)'
+                >
+                    {{ item.label }}
+                </span>
+            </div>
+
+            <span class='type'>
+                {{ $t('chart.subStudy') }}
+            </span>
+            <div class='list'>
+                <span
+                    v-for='(item, i) in SUBSTUDIES'
+                    :key='i'
+                    class='item of-1px'
+                    :class="{ 'active': subStudy === item.name }"
+                    :style="[{ 'font-size': item.label.length >6 ? '0.28rem': '' } ]"
+                    @touchend='onClick("sub", item.name)'
+                >
+                    {{ item.label }}
+                </span>
+                <span v-for='item in (5 - SUBSTUDIES.length %5)' :key='"other" + item' class='item of-1px' style='opacity: 0;'></span>
+            </div>
+
+            <div class='submit' @click='onSubmit'>
+                {{ $t('confirm') }}
+            </div>
+        </div>
+    </van-popup>
 </template>
 
 <script>
-import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config.js'
-import { computed } from 'vue'
-
+import { MAINSTUDIES, SUBSTUDIES } from '../constant'
 export default {
     props: {
-        type: {
+        show: {
+            type: Boolean,
+            default: false
+        },
+        propMainStudy: {
+            type: String,
+            default: ''
+        },
+        propSubStudy: {
             type: String,
             default: ''
         }
     },
-    setup (props, context) {
-        // 头部返回
-        const onClickLeft = () => {
-            context.emit('back')
-        }
-        // 添加指标
-        const onAdd = value => {
-            context.emit('addStudy', {
-                type: props.type,
-                value
-            })
-            onClickLeft()
-        }
-
-        const list = computed(() => {
-            const obj = {
-                'main': MAINSTUDIES,
-                'sub': SUBSTUDIES,
-            }
-            return obj[props.type]
-        })
-
+    data () {
         return {
-            onClickLeft,
-            onAdd,
-            list
+            MAINSTUDIES,
+            SUBSTUDIES,
+            list: [],
+            mainStudy: '',
+            subStudy: '',
+            showList: false
+        }
+    },
+    watch: {
+        show (val) {
+            this.showList = val
+        },
+        propMainStudy: {
+            immediate: true,
+            handler (val) {
+                const study = this.MAINSTUDIES.find(e => e.name === val)
+                this.mainStudy = study ? val : null
+            }
+        },
+        propSubStudy: {
+            immediate: true,
+            handler (val) {
+                const study = this.SUBSTUDIES.find(e => e.name === val)
+                this.subStudy = study ? val : null
+            }
+        }
+    },
+    methods: {
+        onSubmit () {
+            if (this.mainStudy !== this.propMainStudy) {
+                this.$emit('removeStudy', 'main')
+                this.$emit('createStudy', 'main', this.mainStudy)
+            }
+
+            if (this.subStudy !== this.propSubStudy) {
+                this.$emit('removeStudy', 'sub')
+                this.$emit('createStudy', 'sub', this.subStudy)
+            }
+
+            this.onClose()
+        },
+        onClose () {
+            this.$emit('update:show', false)
+        },
+        closed () {
+            this.mainStudy = this.propMainStudy
+            this.subStudy = this.propSubStudy
+            this.$emit('update:show', false)
+        },
+        onClick (type, name) {
+            switch (type) {
+                case 'main': {
+                    this.mainStudy = this.mainStudy === name ? '' : name
+                    break
+                }
+                case 'sub': {
+                    this.subStudy = this.subStudy === name ? '' : name
+                    break
+                }
+            }
+        },
+        getContainer () {
+            return document.body
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '~@/sass/mixin.scss';
-.list-wrap {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
+@import '@/sass/mixin.scss';
+.van-popup {
+    width: 90%;
+    max-width: rem(736px);
     .content {
-        flex: 1;
-        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: rem(50px) 0 0;
+        .type {
+            margin: rem(10px) 0;
+            padding: 0 rem(30px);
+            font-size: rem(28px);
+        }
+        .list {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: rem(20px);
+            padding: 0 rem(25px);
+            .item {
+                flex: 0 0 rem(112px);
+                box-sizing: border-box;
+                margin: rem(10px) rem(5px);
+                font-weight: normal;
+                font-size: rem(24px);
+                line-height: rem(40px);
+                text-align: center;
+                border: 1px solid #D7D7D7;
+                &.active {
+                    color: #FFF;
+                    background: var(--buyColor);
+                    border-color: var(--buyColor);
+                }
+            }
+        }
+        .submit {
+            box-sizing: border-box;
+            width: 100%;
+            height: rem(70px);
+            margin-top: rem(30px);
+            color: #FFF;
+            line-height: rem(70px);
+            text-align: center;
+            background: var(--buyColor);
+        }
     }
 }
-
 </style>

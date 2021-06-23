@@ -231,6 +231,7 @@ export default {
 @import '~@/sass/mixin.scss';
 .chartWrap {
     flex: 1;
+    height: 100%;
     margin-bottom: rem(100px);
     &.landscape {
         position: relative;

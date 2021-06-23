@@ -52,6 +52,7 @@ const routes = [
                     title: 'route.chart'
                 }
             },
+
             {
                 path: 'position',
                 name: 'Position',
@@ -83,39 +84,6 @@ const routes = [
                 meta: {
                     title: 'route.historyDetail'
                 }
-            },
-            {
-                path: 'history',
-                name: 'History',
-                component: () => import(/* webpackChunkName: "history" */ '../views/history/history.vue'),
-                meta: {
-                    title: 'route.historyDetail'
-                }
-            },
-            {
-                path: 'onlineService',
-                name: 'OnlineService',
-                component: () => import(/* webpackChunkName: "onlineService" */ '../views/onlineService/onlineService.vue'),
-                meta: {
-                    title: 'route.onlineService'
-                }
-            },
-            {
-                path: 'accountManager',
-                name: 'AccountManager',
-                component: () => import(/* webpackChunkName: "accountManager" */ '../views/accountManager/accountManager.vue'),
-                meta: {
-                    title: 'route.account'
-                }
-            },
-            {
-                path: '/addAccount',
-                name: 'AddAccount',
-                component: () => import(/* webpackChunkName: "addAccount" */ '../views/accountManager/addAccount.vue'),
-                meta: {
-                    title: 'route.newAccount',
-                    footerMenu: false
-                }
             }
         ]
     },
@@ -134,6 +102,15 @@ const routes = [
         component: () => import(/* webpackChunkName: "order" */ '../views/order/order.vue'),
         meta: {
             title: 'route.order',
+            roles: ['User'],
+        }
+    },
+    {
+        path: '/product',
+        name: 'Product',
+        component: () => import(/* webpackChunkName: "chart" */ '../views/chart/product.vue'),
+        meta: {
+            title: 'route.chart',
             roles: ['User'],
         }
     },
