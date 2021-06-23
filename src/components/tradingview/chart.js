@@ -76,6 +76,8 @@ class Chart {
         this._orientation = 'portrait'
         // 价格线实例
         this._linesMap = {}
+        // 持仓线实例
+        this._positionLines = []
         // 事件订阅,通过实例方法subscribe订阅
         this._listener = {
             isLandscape: [], // 是否横屏
@@ -544,6 +546,33 @@ class Chart {
     // 实时tick
     setTick (price, time) {
         this.datafeed._historyProvider.onTick(price, time)
+    }
+
+    // 批量创建持仓线
+    createPositionLine (positions) {
+        while (this._positionLines.length) {
+            this._positionLines.pop().remove()
+        }
+        this._positionLines = positions.map(el => {
+            const currency = 'USD'
+            let text = el.direction === 1 ? '买' : '卖'
+            text += ` ${el.volume}` + '手'
+            const profitLoss = el.profitLoss * 1
+            const n = profitLoss >= 0 ? '+' : ''
+            const color = profitLoss < 0 ? 'green' : 'red'
+            const entity = this.widget.activeChart().createOrderLine()
+                .setPrice(el.openPrice)
+                .setText(text)
+                .setExtendLeft(false)
+                .setLineStyle(0)
+                .setQuantity(n + profitLoss.toFixed(2) + ' ' + currency)
+                .setQuantityBackgroundColor(color)
+                .setBodyBorderColor(color)
+                .setLineColor(color)
+                .setQuantityBorderColor(color)
+                .setLineLength(55)
+            return entity
+        })
     }
 }
 
