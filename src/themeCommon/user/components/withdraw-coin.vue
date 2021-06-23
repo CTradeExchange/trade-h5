@@ -666,7 +666,7 @@ export default {
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
                 bankAccountName: '',
                 bankName: '数字钱包',
-                bankCardNo: state.walletId.toString(),
+                bankCardNo: state.currentWallet.address,
                 withdrawType: 2,
                 withdrawCurrency: state.coinKind,
                 blockchainName: state.chainName

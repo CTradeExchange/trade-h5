@@ -189,6 +189,7 @@ export default {
         // 获取取款手续费
         const getWithdrawFee = debounce(() => {
             const amount = parseFloat(state.amount)
+            if (!state.withdrawRate) return
             if (state.amount === '') return
             if (!amount) {
                 return Toast(t('withdrawMoney.hint_1'))
