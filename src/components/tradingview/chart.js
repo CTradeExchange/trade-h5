@@ -566,18 +566,14 @@ class Chart {
             return
         }
         this._positionLines = positions.map(el => {
-            const currency = 'USD'
-            let text = el.direction === 1 ? '买' : '卖'
-            text += ` ${el.volume}` + '手'
-            const profitLoss = el.profitLoss * 1
-            const n = profitLoss >= 0 ? '+' : ''
-            const color = profitLoss < 0 ? 'green' : 'red'
+            const { text, quantity, price, color } = el
+
             const entity = this.widget.activeChart().createOrderLine()
-                .setPrice(el.openPrice)
+                .setPrice(price)
                 .setText(text)
                 .setExtendLeft(false)
                 .setLineStyle(0)
-                .setQuantity(n + profitLoss.toFixed(2) + ' ' + currency)
+                .setQuantity(quantity)
                 .setQuantityBackgroundColor(color)
                 .setBodyBorderColor(color)
                 .setLineColor(color)
