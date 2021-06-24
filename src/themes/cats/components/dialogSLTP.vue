@@ -134,10 +134,8 @@ export default {
     }
     .dialog-body {
         overflow-y: visible;
-        ::v-deep {
-            .layout-1 {
-                padding-bottom: rem(30px);
-            }
+        :deep(.layout-1) {
+            padding-bottom: rem(30px);
         }
         .mtop {
             padding: 0 rem(40px);

@@ -409,7 +409,7 @@ export default {
                 color: #477FD3;
                 font-size: rem(43px);
             }
-            ::v-deep {
+            :deep() {
                 .van-cell {
                     padding: rem(20px) rem(30px);
                     &::after {
