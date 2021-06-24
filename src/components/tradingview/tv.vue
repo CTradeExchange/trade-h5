@@ -82,7 +82,7 @@ export default {
                 // 监听是否横屏
                 unref(chart).subscribe('isLandscape', (bool) => {
                     isLandscape.value = bool
-                    context.emit('changeOrientation', bool)
+                    context.emit('orientationChanged', bool)
                 })
 
                 // 监听指标从图表内直接移除
@@ -113,7 +113,7 @@ export default {
                 watch(() => props.positionList, (val) => {
                     val = val.filter(e => e.symbolId === symbolId.value)
                     if (val.length) {
-                        unref(chart).createPositionLine(val)
+                        unref(chart).updatePosition(val)
                     }
                 }, {
                     immediate: true,
@@ -125,7 +125,11 @@ export default {
             unref(chart).destroyed()
         })
 
-        // 切换产品后增加自定义逻辑
+        // 设置图表类型
+        const setChartType = (...args) => {
+            unref(chart).setChartType(...args)
+        }
+        // 切换产品, 执行symbolChanged回调
         const setSymbol = (info) => {
             unref(chart).setSymbol(info)
                 .then(id => {
@@ -133,13 +137,35 @@ export default {
                     context.emit('symbolChanged', id)
                 })
         }
+        // 设置周期
+        const setResolution = (...args) => {
+            unref(chart).setResolution(...args)
+        }
+        // 设置指标
+        const updateIndicator = (...args) => {
+            unref(chart).updateIndicator(...args)
+        }
+        // 更新买卖价线（若左上角/买卖价框设置显示，则同步更新）
+        const updateLineData = (...args) => {
+            unref(chart).updateLineData(...args)
+        }
+        // 设置持仓线
+        const updatePosition = (...args) => {
+            unref(chart).updatePosition(...args)
+        }
+
         /** 图表相关-end */
 
         return {
             resolutionList,
+            isLandscape,
             chart,
             setSymbol,
-            isLandscape,
+            setResolution,
+            updateIndicator,
+            updatePosition,
+            setChartType,
+            updateLineData
         }
     }
 }

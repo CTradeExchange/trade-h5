@@ -409,6 +409,15 @@ class Chart {
         this.widget.applyOverrides(options)
     }
 
+    _setProperty (property, overrides) {
+        Object.keys(property || {}).forEach(key => {
+            if (['showSeriesTitle', 'showSeriesOHLC', 'showBarChange'].includes(key)) {
+                overrides[`paneProperties.legendProperties.${key}`] = property[key]
+            }
+        })
+        return overrides
+    }
+
     /** ---------------------------- 分割线 ------------------------------------------------------------------------------------------- */
     /** ---------------------------- 以下是公开方法 ------------------------------------------------------------------------------------ */
     // 切换产品
@@ -525,15 +534,6 @@ class Chart {
         }
     }
 
-    _setProperty (property, overrides) {
-        Object.keys(property || {}).forEach(key => {
-            if (['showSeriesTitle', 'showSeriesOHLC', 'showBarChange'].includes(key)) {
-                overrides[`paneProperties.legendProperties.${key}`] = property[key]
-            }
-        })
-        return overrides
-    }
-
     // 覆盖图表配置
     updateProperty (config) {
         this._applyOverrides(config)
@@ -549,7 +549,7 @@ class Chart {
     }
 
     // 批量创建持仓线
-    createPositionLine (positions) {
+    updatePosition (positions) {
         while (this._positionLines.length) {
             this._positionLines.pop().remove()
         }

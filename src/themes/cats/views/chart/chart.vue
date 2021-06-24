@@ -6,8 +6,8 @@
             :initial-value='initialValue'
             :options='chartConfig'
             :position-list='positionList'
-            @changeOrientation='changeOrientation'
             @indicatorRemoved='indicatorRemoved'
+            @orientationChanged='orientationChanged'
             @symbolChanged='symbolChanged'
         >
             <!-- <template v-if='!isLandscape' #top='{ setSymbol,resolutionList }'>
@@ -191,9 +191,9 @@ export default {
         }
 
         // 监听是否横屏
-        const changeOrientation = (bool) => {
+        const orientationChanged = (bool) => {
             isLandscape.value = bool
-            console.log('changeOrientation: ', bool)
+            console.log('orientationChanged: ', bool)
         }
 
         // 移除指标特殊情况：图表内直接移除指标
@@ -217,7 +217,7 @@ export default {
             chartConfig,
             symbolChanged,
             isLandscape,
-            changeOrientation,
+            orientationChanged,
             sideMenuRef,
             togglePriceBox,
             indicatorRemoved,
