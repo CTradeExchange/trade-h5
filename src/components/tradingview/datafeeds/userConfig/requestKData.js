@@ -36,18 +36,27 @@ export class RequestKData {
                     if (res.data.bars.length) {
                         // 记录最新bar
                         this._latestBar = { ...res.data.bars[res.data.bars.length - 1] }
-                    } else {
+                        // 记录最左侧bar
                         this._leftBar = { ...res.data.bars[0] }
                     }
                 }
                 return res
             })
             .then(res => {
+                console.log('exit_earlier_kline: ', res.rawData.exit_earlier_kline)
                 if (!res.data.bars.length) {
+                    let nextTime = this._leftBar ? this._leftBar.time : undefined
+                    if(!res.rawData.exit_earlier_kline){
+                        nextTime = undefined
+                        console.log(`%c${_params.kline_timestamp_start}-${_params.kline_timestamp_end}区间无数据，并且没有更早历史数据，不再进行请求`, 'color:red')
+                    } else {
+                        console.log(`%c${_params.kline_timestamp_start}-${_params.kline_timestamp_end}区间无数据，准备请求${nextTime}左侧的时间区间的历史数据`, 'color:red')
+                    }
+
                     Object.assign(res.data, {
                         meta: {
                             noData: true,
-                            nextTime: this._leftBar.time
+                            nextTime
                         }
                     })
                 }
@@ -137,6 +146,7 @@ function requestKline(params) {
                     }))
 
                     return {
+                        rawData: res.data,
                         data: {
                             bars
                         }
