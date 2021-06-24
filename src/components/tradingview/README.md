@@ -80,14 +80,14 @@
             const setChartType => () =>{
                 unref(chartRef).setChartType(6)
             }
-            // 覆盖图表配置
+            // 仅覆盖图表属性字段：property
             const updateProperty = (options) => {
                 unref(chartRef).updateProperty(options)
             }
             // 更新持仓
-            const updateProperty = (positions=[]) => {
+            const updatePosition = (positions=[]) => {
                 // positions = [{ text, quantity, price, color }, ...]
-                unref(chartRef).updateProperty(positions)
+                unref(chartRef).updatePosition(positions)
             }
 
             return {
@@ -120,15 +120,15 @@
 
 ## 方法
 
-| 方法名            | 说明                     | 参数                             | 备注                                     |
-| ----------------- | ------------------------ | -------------------------------- | ---------------------------------------- |
-| `updateProperty`  | 覆盖图表配置（增量更新） | Function(props: object)          | 参数和 options 结构完全一样              |
-| `setChartType`    | 设置图表类型             | Function(props: number)          | --                                       |
-| `setResolution`   | 设置图表周期             | Function(props: sring)           | --                                       |
-| `setSymbol`       | 切换产品                 | Function(props: number \| sring) | --                                       |
-| `updateIndicator` | 更新指标（全量更新）     | Function(props: array \| object) | [{ name: '', params: [] }, ...]          |
-| `updateLineData`  | 更新买卖价线（全量更新） | Function(props: object)          | { buyPrice, sellPrice }                  |
-| `updatePosition`  | 更新持仓 （全量更新）    | Function(props: array)           | [ { text, quantity, price, color }, ...] |
+| 方法名            | 说明                                     | 参数                             | 备注                                     |
+| ----------------- | ---------------------------------------- | -------------------------------- | ---------------------------------------- |
+| `updateProperty`  | 仅覆盖图表属性字段：property（增量更新） | Function(props: object)          | 参数和 options.property 结构完全一样     |
+| `setChartType`    | 设置图表类型                             | Function(props: number)          | --                                       |
+| `setResolution`   | 设置图表周期                             | Function(props: sring)           | --                                       |
+| `setSymbol`       | 切换产品                                 | Function(props: number \| sring) | --                                       |
+| `updateIndicator` | 更新指标（全量更新）                     | Function(props: array \| object) | [{ name: '', params: [] }, ...]          |
+| `updateLineData`  | 更新买卖价线（全量更新）                 | Function(props: object)          | { buyPrice, sellPrice }                  |
+| `updatePosition`  | 更新持仓 （全量更新）                    | Function(props: array)           | [ { text, quantity, price, color }, ...] |
 
 ## 参数说明
 
