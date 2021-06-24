@@ -153,6 +153,10 @@ export default {
         const updatePosition = (...args) => {
             unref(chart).updatePosition(...args)
         }
+        // 覆盖图表配置
+        const updateProperty = (...args) => {
+            unref(chart).updateProperty(...args)
+        }
 
         /** 图表相关-end */
 
@@ -165,7 +169,8 @@ export default {
             updateIndicator,
             updatePosition,
             setChartType,
-            updateLineData
+            updateLineData,
+            updateProperty
         }
     }
 }
