@@ -3,7 +3,7 @@
         v-model:show='showDialog'
         class='m-dialog m-dialogZyzs'
         get-container='body'
-        :position="isPC?'center':'bottom'"
+        position='bottom'
         @closed='close'
         @open='open'
     >
@@ -91,10 +91,12 @@ export default {
         const close = () => {
             context.emit('update:show', false)
         }
+        const open = () => {}
 
         return {
             ...toRefs(state),
-            close
+            close,
+            open,
         }
     }
 }

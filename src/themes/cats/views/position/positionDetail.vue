@@ -1,16 +1,16 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop :back='true' :menu='false' />
+        <LayoutTop />
         <div class='main'>
             <div class='m-orderInfo'>
                 <div class='layout layout-1'>
-                    <div class='item item-1'>
+                    <div v-if='product' class='item item-1'>
                         <div class='left'>
                             <div class='name'>
-                                {{ positionData.symbolName }}
+                                {{ product.symbolName }}
                             </div>
                             <div class='code'>
-                                {{ positionData.symbolName }}
+                                {{ product.symbolName }}
                             </div>
                         </div>
                     </div>
@@ -26,7 +26,7 @@
                                 {{ $t('trade.profit') }}({{ customerInfo.currency }})
                             </div>
                             <div class='name' :class="parseFloat(positionData.profit) > 0 ? 'riseColor': 'fallColor'">
-                                {{ positionData.profitLoss }}
+                                {{ positionData.profit }}
                             </div>
                         </div><div class='col'>
                             <div class='sub'>
@@ -40,7 +40,7 @@
                                 {{ $t('trade.fee') }}({{ customerInfo.currency }})
                             </div>
                             <div class='name'>
-                                {{ positionData.openFee }}
+                                {{ positionData.openFee || '--' }}
                             </div>
                         </div>
                     </div>
@@ -129,9 +129,8 @@
 
 <script>
 import DialogSLTP from '@c/components/dialogSLTP'
-import { reactive, toRefs, computed } from 'vue'
+import { reactive, toRefs, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { isEmpty } from '@/utils/util'
 import { useStore } from 'vuex'
 import dayjs from 'dayjs'
 import { QuoteSocket } from '@/plugins/socket/socket'
@@ -149,11 +148,15 @@ export default {
         const positionId = route.query.positionId
         const symbolId = route.query.symbolId
         const customerInfo = computed(() => store.state._user.customerInfo)
-        // 持仓产品
         const positionData = computed(() => store.state._trade.positionMap[positionId])
-        const product = computed(() => store.state._quote.productMap[symbolId])
 
-        QuoteSocket.send_subscribe([symbolId])
+        const product = computed(() => store.state._quote.productMap[symbolId])
+        onMounted(() => {
+            QuoteSocket.send_subscribe([symbolId])
+            if (positionId && !positionData.value?.positionId) {
+                store.dispatch('_trade/queryPositionPage')
+            }
+        })
 
         const setProfitSuccess = () => {
 

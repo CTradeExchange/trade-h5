@@ -9,10 +9,7 @@
             </slot>
         </div>
         <div class='main'>
-            <p> {{ title?title:$t($route.meta.title) }}</p>
-            <div class='center'>
-                <slot name='center'></slot>
-            </div>
+            <slot>{{ title?title:$t($route.meta.title) }}</slot>
         </div>
         <div class='right'>
             <slot name='right'>
