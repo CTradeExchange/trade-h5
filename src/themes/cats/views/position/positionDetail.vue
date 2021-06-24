@@ -204,19 +204,17 @@ export default {
                 }
             }
         }
-        ::v-deep {
-            .van-button {
-                border-radius: rem(6px);
-                &__text {
-                    color: #477FD3;
-                }
-                &--mini {
-                    width: rem(124px);
-                    height: rem(48px);
-                    font-size: rem(24px);
-                    line-height: rem(48px);
-                }
-            }
+        :deep(.van-button) {
+            border-radius: rem(6px);
+        }
+        :deep(.van-button__text) {
+            color: var(--primary);
+        }
+        :deep(.van-button__text) {
+            width: rem(124px);
+            height: rem(48px);
+            font-size: rem(24px);
+            line-height: rem(48px);
         }
         .layout-1 {
             .item-2 {
