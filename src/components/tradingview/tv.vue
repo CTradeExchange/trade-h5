@@ -149,7 +149,7 @@ export default {
         const updateLineData = (...args) => {
             unref(chart).updateLineData(...args)
         }
-        // 设置持仓线
+        // 更新持仓线
         const updatePosition = (...args) => {
             unref(chart).updatePosition(...args)
         }

@@ -33,6 +33,8 @@
                 // 图表属性
                 property: {
                     chartType: '1', // 图表类型
+                    showLastPrice: true, // 现价线
+                    showPositionPrice: true, // 持仓线
                     showBuyPrice: false, // 买价线
                     showSellPrice: false, // 卖价线
                     showSeriesOHLC: false, // 高开低收
@@ -112,10 +114,10 @@
 
 ## 方法
 
-| 方法名            | 说明                     | 参数                             | 备注 |
-| ----------------- | ------------------------ | -------------------------------- | ------ |
-| `updateProperty`  | 覆盖图表配置 （全量更新）    | Function(props: object)           | 参数和options结构完全一样 |
-| `setChartType`    | 设置图表类型             | Function(props: number)          |        |
+| 方法名            | 说明                     | 参数                             | 备注                        |
+| ----------------- | ------------------------ | -------------------------------- | --------------------------- |
+| `updateProperty`  | 覆盖图表配置             | Function(props: object)          | 参数和 options 结构完全一样 |
+| `setChartType`    | 设置图表类型             | Function(props: number)          |                             |
 | `setResolution`   | 设置图表周期             | Function(props: sring)           |
 | `setSymbol`       | 切换产品                 | Function(props: number \| sring) |
 | `updateIndicator` | 更新指标（全量更新）     | Function(props: array \| object) |
@@ -127,9 +129,9 @@
 | 数据类型     | 说明       | 数据结构                                                                                                                                                      |
 | ------------ | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | initialValue | 产品属性   | {<br> &emsp;description: '欧元美元',<br>&emsp;symbolId: 1,<br>&emsp;digits: '4',<br>&emsp;buyPrice: '1.23',<br>&emsp;sellPrice: '1.35'<br>}                   |
-| options      | 图表配置   | {<br>&emsp;property: {}, <br>&emsp;indicators: [],<br>&emsp;extension: {}<br>}                                                                                                              |
+| options      | 图表配置   | {<br>&emsp;property: {}, <br>&emsp;indicators: [],<br>&emsp;extension: {}<br>}                                                                                |
 | chartType    | 图表类型   | 0:Bar <br>1:Candle <br>2:Line <br>3:Area <br>4:Renko <br>5:Kagi <br>6:PnF <br>7:Line Break <br>8:Heikin-Ashi <br>9:Hollow Candle <br>10:Baseline <br>12:Hi-Lo |
 | resolution   | 图表周期   | '1' \| '5' \| '15' \| '30' \| '60' \| '240' \| '1D' \| '1W' \| '1M' \| '10'                                                                                   |
-| indicator    | 指标       | [ {name, params}, ... ]                                                                                                                                              |
+| indicator    | 指标       | [ {name, params}, ... ]                                                                                                                                       |
 | positionList | 持仓数据   | 接口返回的数据结构（未做处理）                                                                                                                                |
 | lineData     | 买卖价数据 | { <br> &emsp;buyPrice: number, <br> &emsp;sellPrice: number<br>}                                                                                              |

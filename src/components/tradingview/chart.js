@@ -20,11 +20,13 @@ export function createChart (...args) {
 /**
     图表属性-默认值
     property = {
+        chartType: '1', // 图表类型
+        showLastPrice: true, // 现价线
         showBuyPrice: false, // 买价线
         showSellPrice: false, // 卖价线
+        showPositionPrice: false, // 持仓线
         showSeriesOHLC: false, // 高开低收
         showBarChange: false, // 涨跌幅
-        chartType: '' // 图表类型
         showPriceBox: false, // 价格框
         showSeriesTitle: false // K线标题
     }
@@ -154,7 +156,8 @@ class Chart {
             }
         })
 
-        this._setProperty(this.property, options.overrides)
+        // 覆盖图表属性
+        Object.assign(options.overrides, this._setProperty(this.property, {}))
 
         return options
     }
@@ -413,6 +416,9 @@ class Chart {
         Object.keys(property || {}).forEach(key => {
             if (['showSeriesTitle', 'showSeriesOHLC', 'showBarChange'].includes(key)) {
                 overrides[`paneProperties.legendProperties.${key}`] = property[key]
+            } else if (key === 'showLastPrice') {
+                overrides['mainSeriesProperties.showPriceLine'] = property[key]
+                overrides['scalesProperties.showSeriesLastValue'] = property[key]
             }
         })
         return overrides
@@ -536,11 +542,14 @@ class Chart {
 
     // 覆盖图表配置
     updateProperty (config) {
-        this._applyOverrides(config)
-        this.setChartType(config.chartType)
-        this._setLine(config)
-
         Object.assign(this.property, config)
+
+        this._applyOverrides(config)
+        config.property && this.setChartType(config.property.chartType)
+        this._setLine(config)
+        if (typeof config.showPositionPrice === 'boolean') {
+            !config.showPositionPrice && this.updatePosition()
+        }
     }
 
     // 实时tick
@@ -549,9 +558,12 @@ class Chart {
     }
 
     // 批量创建持仓线
-    updatePosition (positions) {
+    updatePosition (positions = []) {
         while (this._positionLines.length) {
             this._positionLines.pop().remove()
+        }
+        if (!this.property.showPositionPrice) {
+            return
         }
         this._positionLines = positions.map(el => {
             const currency = 'USD'
