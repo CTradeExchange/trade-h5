@@ -362,12 +362,16 @@ class Chart {
 
         if (typeof config.showBuyPrice === 'boolean') {
             if (config.showBuyPrice) {
-                target.buyPriceLine = target.buyPriceLine || this.widget.activeChart().createOrderLine()
-                    .setPrice(this.buyPrice)
-                    .setText('')
-                    .setLineStyle(0)
-                    .setLineColor('#e3525c')
-                    .setQuantity(false)
+                if (target.buyPriceLine) {
+                    target.buyPriceLine.setPrice(this.buyPrice)
+                } else {
+                    target.buyPriceLine = this.widget.activeChart().createOrderLine()
+                        .setPrice(this.buyPrice)
+                        .setText('')
+                        .setLineStyle(0)
+                        .setLineColor('#e3525c')
+                        .setQuantity(false)
+                }
             } else if (target.buyPriceLine) {
                 target.buyPriceLine.remove()
                 target.buyPriceLine = null
@@ -375,12 +379,16 @@ class Chart {
         }
         if (typeof config.showSellPrice === 'boolean') {
             if (config.showSellPrice) {
-                target.sellPriceLine = target.sellPriceLine || this.widget.activeChart().createOrderLine()
-                    .setPrice(this.sellPrice)
-                    .setText('')
-                    .setLineStyle(0)
-                    .setLineColor('#10b873')
-                    .setQuantity(false)
+                if (target.sellPriceLine) {
+                    target.sellPriceLine.setPrice(this.sellPrice)
+                } else {
+                    target.sellPriceLine = this.widget.activeChart().createOrderLine()
+                        .setPrice(this.sellPrice)
+                        .setText('')
+                        .setLineStyle(0)
+                        .setLineColor('#10b873')
+                        .setQuantity(false)
+                }
             } else if (target.sellPriceLine) {
                 target.sellPriceLine.remove()
                 target.sellPriceLine = null
