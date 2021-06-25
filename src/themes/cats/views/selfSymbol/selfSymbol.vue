@@ -1,19 +1,18 @@
 <template>
     <div class='selfSymbol'>
-        <Top>
+        <layoutTop>
             <div></div>
             <template #left>
                 <span class='title'>
                     {{ $t('selfSymbol.my') }}
                 </span>
             </template>
-        </Top>
+        </layoutTop>
         <SelfSymbolList />
     </div>
 </template>
 
 <script>
-import Top from '@c/layout/top'
 import SelfSymbolList from '@c/modules/selfSymbolList/selfSymbolList.vue'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
@@ -22,7 +21,6 @@ export default {
     name: 'Quote',
     components: {
         SelfSymbolList,
-        Top,
     },
     setup () {
         const store = useStore()

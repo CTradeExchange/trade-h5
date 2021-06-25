@@ -20,16 +20,11 @@
 </template>
 
 <script>
-import { computed, onMounted, onUnmounted, ref, watch, unref } from 'vue'
-import { useStore } from 'vuex'
-import { Popup } from 'vant'
+import { onMounted, onUnmounted, ref, unref } from 'vue'
 import { resolutionToKlineType, resolutionToText } from './datafeeds/userConfig/config.js'
 import { createChart } from './chart'
 
 export default {
-    components: {
-        [Popup.name]: Popup,
-    },
     props: {
         // 产品初始值
         initialValue: {
@@ -39,16 +34,9 @@ export default {
         options: {
             type: Object,
             default: () => ({})
-        },
-        positionList: {
-            type: Array,
-            default: () => []
         }
     },
     setup (props, context) {
-        const store = useStore()
-        const symbolId = ref(props.initialValue.symbolId)
-        const product = computed(() => store.state._quote.productMap[symbolId.value])
         // 是否横屏
         const isLandscape = ref([90, -90].includes(window.orientation))
 
@@ -68,9 +56,7 @@ export default {
                 containerId: '#tv-chart-container',
                 // 产品初始值
                 initial: {
-                    ...props.initialValue,
-                    buyPrice: product.value.buy_price,
-                    sellPrice: product.value.sell_price,
+                    ...props.initialValue
                 },
                 // 图表属性
                 property: options.property,
@@ -91,34 +77,6 @@ export default {
                         context.emit('indicatorRemoved', name)
                     }
                 })
-
-                // 实时更新买卖价线
-                watch(() => [product.value.buy_price, product.value.sell_price], (newValues) => {
-                    const [buyPrice, sellPrice] = newValues
-                    unref(chart).updateLineData({ buyPrice, sellPrice })
-                })
-
-                // 实时更新tick
-                store.subscribe((mutation) => {
-                    const { type, payload } = mutation
-                    const { tick_time, cur_price, symbolId } = payload[0] || {}
-
-                    if (!(type === '_quote/Update_productTick' && String(unref(chart).symbolId) === String(symbolId))) {
-                        return
-                    }
-                    unref(chart).setTick(cur_price, tick_time)
-                })
-
-                // 实时更新Tick
-                watch(() => props.positionList, (val) => {
-                    val = val.filter(e => e.symbolId === symbolId.value)
-                    if (val.length) {
-                        unref(chart).updatePosition(val)
-                    }
-                }, {
-                    immediate: true,
-                    deep: true
-                })
             })
         })
         onUnmounted(() => {
@@ -133,7 +91,6 @@ export default {
         const setSymbol = (info) => {
             unref(chart).setSymbol(info)
                 .then(id => {
-                    symbolId.value = id
                     context.emit('symbolChanged', id)
                 })
         }
@@ -157,6 +114,10 @@ export default {
         const updateProperty = (...args) => {
             unref(chart).updateProperty(...args)
         }
+        // 实时更新tick
+        const setTick = (price, time) => {
+            unref(chart).setTick(price, time)
+        }
 
         /** 图表相关-end */
 
@@ -170,7 +131,8 @@ export default {
             updatePosition,
             setChartType,
             updateLineData,
-            updateProperty
+            updateProperty,
+            setTick
         }
     }
 }

@@ -1,5 +1,12 @@
 <template>
-    <van-popup v-model:show='showFund' class='popup-myAsset' position='top' :style="{ height: '70%' }" :transition-appear='true'>
+    <van-popup
+        v-model:show='showFund'
+        class='popup-myAsset'
+        position='top'
+        :style="{ height: '70%' }"
+        :transition-appear='true'
+        @close='hide'
+    >
         <div class='layout-1'>
             <div class='title'>
                 {{ $t('route.mine') }}
@@ -74,6 +81,7 @@ import { divide } from '@/utils/calculation'
 export default {
     name: 'Fund',
     props: ['show'],
+    emits: ['update:show'],
     setup (props, context) {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()

@@ -1,11 +1,24 @@
 <template>
     <div class='selfSymbolList'>
         <TabBar v-model:dType='displayType' v-model:sType='sortType' />
-        <ul ref='productListEl' class='selfSymbolListUl'>
-            <li v-for='item in productList' :key='item' class='van-hairline--bottom'>
-                <productItem :display-type='displayType' :product='productMap[item.symbolId]' />
-            </li>
-        </ul>
+        <div class='selfSymbolListWrap'>
+            <div class='titleBarCell van-hairline--bottom'>
+                <span class='item'>
+                    {{ $t('trade.nameCode') }}
+                </span>
+                <span class='item'>
+                    {{ $t('trade.sellPrice') }}
+                </span>
+                <span class='item'>
+                    {{ $t('trade.buyPrice') }}
+                </span>
+            </div>
+            <ul ref='productListEl' class='selfSymbolListUl'>
+                <li v-for='item in productList' :key='item' class='van-hairline--bottom'>
+                    <productItem :display-type='displayType' :product='productMap[item.symbolId]' />
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
@@ -99,12 +112,29 @@ export default {
     flex-direction: column;
     width: 100%;
 }
-.selfSymbolListUl {
+.selfSymbolListWrap {
     flex: 1;
-    padding-top: rem(20px);
     overflow: auto;
-    li {
-        padding: rem(20px) 0;
+}
+.titleBarCell {
+    display: flex;
+    height: rem(60px);
+    padding: 0 rem(30px);
+    color: var(--mutedColor);
+    font-size: rem(20px);
+    line-height: rem(60px);
+    background-color: var(--white);
+    .item {
+        width: rem(210px);
+        text-align: right;
+        &:first-child {
+            flex: 1;
+            text-align: left;
+        }
+        &:nth-child(2) {
+            width: rem(210px);
+            text-align: left;
+        }
     }
 }
 </style>

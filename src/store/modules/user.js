@@ -18,7 +18,7 @@ export default {
         userAccountType (state) {
             let _type = ''
             const customerInfo = state.customerInfo
-            if (customerInfo.type === 2) {
+            if (!customerInfo) {
                 _type = 'G' // 游客
             } else if (customerInfo.type === 1) {
                 _type = 'D' // 模拟，

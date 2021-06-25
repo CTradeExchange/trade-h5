@@ -12,6 +12,7 @@
             <slot>
                 {{ title?title:$t($route.meta.title) }}
             </slot>
+
         </div>
         <div class='right'>
             <slot name='right'>
