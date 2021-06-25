@@ -25,8 +25,6 @@
                 description: '欧元美元',// 图表左上角名称显示
                 symbolId: 1,  //产品id
                 digits: '4', //小数点
-                buyPrice: '1.23', //买价
-                sellPrice: '1.35', //卖价
             }
             // 图表其他配置
             const options = {
@@ -80,7 +78,7 @@
             const setChartType => () =>{
                 unref(chartRef).setChartType(6)
             }
-            // 仅覆盖图表属性字段：property
+            // 仅覆盖图表属性字段：options.property
             const updateProperty = (options) => {
                 unref(chartRef).updateProperty(options)
             }
@@ -88,6 +86,10 @@
             const updatePosition = (positions=[]) => {
                 // positions = [{ text, quantity, price, color }, ...]
                 unref(chartRef).updatePosition(positions)
+            }
+            // 实时更新tick
+            const setTick = (price, time) => {
+                unref(chartRef).setTick(price, time)
             }
 
             return {
@@ -108,7 +110,6 @@
 | ------------------------------------------- | -------- | ------ |
 | <font color='red'> \* </font>`initialValue` | 产品属性 | object |
 | `options`                                   | 图表配置 | object |
-| `positionList`                              | 持仓数据 | array  |
 
 ## 回调函数
 
@@ -129,15 +130,16 @@
 | `updateIndicator` | 更新指标（全量更新）                     | Function(props: array \| object) | [{ name: '', params: [] }, ...]          |
 | `updateLineData`  | 更新买卖价线（全量更新）                 | Function(props: object)          | { buyPrice, sellPrice }                  |
 | `updatePosition`  | 更新持仓 （全量更新）                    | Function(props: array)           | [ { text, quantity, price, color }, ...] |
+| `setTick`         | 实时更新 tick                            | Function(price, time)            | --                                       |
 
 ## 参数说明
 
 | 数据类型     | 说明       | 数据结构                                                                                                                                                      |
 | ------------ | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| initialValue | 产品属性   | {<br> &emsp;description: '欧元美元',<br>&emsp;symbolId: 1,<br>&emsp;digits: '4',<br>&emsp;buyPrice: '1.23',<br>&emsp;sellPrice: '1.35'<br>}                   |
+| initialValue | 产品属性   | {<br> &emsp;description: '欧元美元',<br>&emsp;symbolId: 1,<br>&emsp;digits: '4'<br>}                   |
 | options      | 图表配置   | {<br>&emsp;property: {}, <br>&emsp;indicators: [],<br>&emsp;extension: {}<br>}                                                                                |
 | chartType    | 图表类型   | 0:Bar <br>1:Candle <br>2:Line <br>3:Area <br>4:Renko <br>5:Kagi <br>6:PnF <br>7:Line Break <br>8:Heikin-Ashi <br>9:Hollow Candle <br>10:Baseline <br>12:Hi-Lo |
 | resolution   | 图表周期   | '1' \| '5' \| '15' \| '30' \| '60' \| '240' \| '1D' \| '1W' \| '1M' \| '10'                                                                                   |
 | indicator    | 指标       | [ {name, params}, ... ]                                                                                                                                       |
-| positionList | 持仓数据   | 接口返回的数据结构（未做处理）                                                                                                                                |
+| positionList | 持仓数据   | [{text, quantity, price, color}, ...]                                                                                                                         |
 | lineData     | 买卖价数据 | { <br> &emsp;buyPrice: number, <br> &emsp;sellPrice: number<br>}                                                                                              |

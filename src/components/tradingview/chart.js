@@ -12,8 +12,6 @@ export function createChart (...args) {
         description: '欧元美元' || '123',// 图表左上角名称显示
         symbolId: 1,  //产品id
         digits: '4', //小数点
-        buyPrice: '1.23', //买价
-        sellPrice: '1.35', //卖价
     }
  */
 
@@ -47,9 +45,9 @@ class Chart {
             description: initial.description, // 图表左上角名称显示
             symbolId: initial.symbolId, // 产品id
             digits: initial.digits, // 小数点
-            buyPrice: initial.buyPrice || 0, // 买价
-            sellPrice: initial.sellPrice || 0, // 卖价
         }
+        this.buyPrice = '' // 买价
+        this.sellPrice = '' // 卖价
         // 产品id
         this.symbolId = initial.symbolId
         // 图表属性
@@ -271,7 +269,7 @@ class Chart {
     // 添加买卖价节点（左上角）
     _addPriceBox () {
         const contentWindow = this.elm.querySelector('iframe').contentWindow
-        this.priceBox = appendPriceBoxToIframe(contentWindow, this.initial.sellPrice, this.initial.buyPrice, this.property.showPriceBox)
+        this.priceBox = appendPriceBoxToIframe(contentWindow, this.sellPrice, this.buyPrice, this.property.showPriceBox)
     }
 
     togglePriceBox (bool) {
@@ -283,7 +281,7 @@ class Chart {
     }
 
     _addFullScreenBtn () {
-        const len = this.initial.sellPrice ? this.initial.sellPrice.length : 10
+        const len = this.sellPrice ? this.sellPrice.length : 10
         appendBtnToIframe({
             el: this.elm.querySelector('iframe'),
             type: 'landscape',
@@ -365,7 +363,7 @@ class Chart {
         if (typeof config.showBuyPrice === 'boolean') {
             if (config.showBuyPrice) {
                 target.buyPriceLine = target.buyPriceLine || this.widget.activeChart().createOrderLine()
-                    .setPrice(this.initial.buyPrice)
+                    .setPrice(this.buyPrice)
                     .setText('')
                     .setLineStyle(0)
                     .setLineColor('#e3525c')
@@ -378,7 +376,7 @@ class Chart {
         if (typeof config.showSellPrice === 'boolean') {
             if (config.showSellPrice) {
                 target.sellPriceLine = target.sellPriceLine || this.widget.activeChart().createOrderLine()
-                    .setPrice(this.initial.sellPrice)
+                    .setPrice(this.sellPrice)
                     .setText('')
                     .setLineStyle(0)
                     .setLineColor('#10b873')
@@ -463,10 +461,10 @@ class Chart {
 
     // 更新买/卖价格线
     updateLineData = ({ buyPrice, sellPrice }) => {
-        const { _linesMap, symbolId } = this
-        const target = _linesMap[symbolId] || {}
-        target.buyPriceLine && target.buyPriceLine.setPrice(buyPrice)
-        target.sellPriceLine && target.sellPriceLine.setPrice(sellPrice)
+        this.buyPrice = buyPrice
+        this.sellPrice = sellPrice
+
+        this._setLine(this.property)
         if (this.priceBox) {
             this.priceBox.setSellPrice(sellPrice)
             this.priceBox.setBuyPrice(buyPrice)
@@ -542,6 +540,7 @@ class Chart {
 
     // 覆盖图表配置
     updateProperty (config) {
+        // 提前合并属性
         Object.assign(this.property, config)
 
         this._applyOverrides(config)
