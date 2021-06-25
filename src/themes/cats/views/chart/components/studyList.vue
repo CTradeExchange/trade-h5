@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { MAINSTUDIES, SUBSTUDIES } from '../constant'
+import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 export default {
     props: {
         show: {

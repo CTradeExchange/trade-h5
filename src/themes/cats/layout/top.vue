@@ -9,10 +9,9 @@
             </slot>
         </div>
         <div class='main'>
-            <p> {{ title?title:$t($route.meta.title) }}</p>
-            <div class='center'>
-                <slot name='center'></slot>
-            </div>
+            <slot>
+                {{ title?title:$t($route.meta.title) }}
+            </slot>
         </div>
         <div class='right'>
             <slot name='right'>
@@ -108,11 +107,6 @@ export default {
         max-width: 60%;
         margin: 0 auto;
         text-align: center;
-        .center {
-            padding-top: rem(5px);
-            font-size: rem(20px);
-            line-height: rem(24px);
-        }
     }
     a {
         color: inherit;

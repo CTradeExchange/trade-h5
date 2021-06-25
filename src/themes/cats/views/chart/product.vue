@@ -1,8 +1,28 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop :back='true' :menu='false' title='现货黄金'>
-            <template #center>
-                {{ $t('trade.update') }}: {{ nowTime }}
+        <LayoutTop :back='true' :menu='false'>
+            <p>{{ product.symbolName }}</p>
+            <p class='infomation'>
+                {{ product.symbolName }} {{ $t('trade.update') }}: {{ nowTime }}
+            </p>
+
+            <template #right>
+                <div class='right-wrap'>
+                    <div class='collectIcon' @click='toggleSelf'>
+                        <i
+                            ref='collect'
+                            class='icon_zixuan1'
+                            :class="{ 'icon_zixuan2':isSelfSymbol }"
+                        ></i>
+                    </div>
+                    <div class='ft'>
+                        <span
+                            @click='toContractInfo'
+                        >
+                            <i class='icon_guanyu'></i>
+                        </span>
+                    </div>
+                </div>
             </template>
         </LayoutTop>
         <section class='container'>
@@ -10,14 +30,14 @@
                 <div class='hd'>
                     <div class='hd-left'>
                         <p class='cur_price fallColor '>
-                            25.904
+                            {{ product.cur_price }}
                         </p><!---->
                     </div><div class='others'>
                         <span class='fallColor'>
-                            -0.049  (-4.9点)
+                            {{ product.upDownAmount }}({{ product.upDownAmount_pip }} {{ $t('trade.dot') }})
                         </span><div class='others-bottom'>
                             <span class='upDownAmount fallColor'>
-                                -0.19%
+                                {{ product.upDownWidth }}
                             </span><!---->
                         </div>
                     </div><!---->
@@ -25,39 +45,30 @@
                     <div class='item'>
                         <p class='priceBottom'>
                             <span>
-                                今开
-                            </span><span>
-                                25.948
+                                {{ $t('trade.todayOpen') }}
+                            </span>
+                            <span>
+                                {{ product.open_price }}
                             </span>
                         </p><p>
                             <span>
-                                昨收
-                            </span><span>
-                                25.953
+                                {{ $t('trade.yesterdayClosed') }}
+                            </span>
+                            <span>
+                                {{ product.yesterday_close_price }}
                             </span>
                         </p>
                     </div><div class='item'>
                         <p class='priceBottom'>
-                            最高 <span>
-                                26.042
-                            </span>
-                        </p><p>
-                            最低 <span>
-                                25.768
+                            {{ $t('trade.high') }}
+                            <span>
+                                {{ product.high_price }}
                             </span>
                         </p>
-                    </div><div class='item'>
-                        <p class='priceBottom'>
-                            振幅 <span>
-                                27.4点
-                            </span>
-                        </p><p>
-                            <span class='point-value' @click='showTips'>
-                                点值 <i class='van-icon van-icon-question-o'>
-                                    <!---->
-                                </i>
-                            </span><span>
-                                50.00 USD
+                        <p>
+                            {{ $t('trade.low') }}
+                            <span>
+                                {{ product.low_price }}
                             </span>
                         </p>
                     </div>
@@ -76,7 +87,12 @@
                     line-width='20'
                     title-active-color='#007AFF'
                 >
-                    <van-tab v-for='(item,i) in candleKTypeList.slice(0,6)' :key='i' :name='item.ktype' :title='item.title' />
+                    <van-tab
+                        v-for='(item,i) in candleKTypeList.slice(0,6)'
+                        :key='i'
+                        :name='item.ktype'
+                        :title='item.title'
+                    />
                     <van-tab name='moreKTypes'>
                         <template #title class='other-time-tab'>
                             {{ moreKType.title }}
@@ -115,7 +131,7 @@
                                 :key='item.name'
                                 :class="{ 'mainColor':klineType === item.value }"
                                 is-link
-                                @click='setKlineType(item)'
+                                @click='setChartType(item)'
                             >
                                 <template #title>
                                     <span class='custom-title'>
@@ -133,12 +149,12 @@
                     <div class='setting' @click='settingStatus = !settingStatus'>
                         <van-icon class='icon' name='setting-o' />
 
-                        <div v-show='settingStatus' class='content van-hairline--surround' @click.stop>
-                            <van-checkbox-group ref='checkboxGroup' v-model='settingList'>
+                        <div v-show='settingStatus' class='content van-hairline--surround' @click.stop=''>
+                            <van-checkbox-group ref='checkboxGroup' v-model='settingList' @change='handleLineChange'>
                                 <van-checkbox
                                     v-for='item in lineList'
                                     :key='item.value'
-                                    v-model='linesData[item.value].status'
+
                                     class='item'
                                     icon-size='16px'
                                     :name='item.value'
@@ -159,19 +175,18 @@
             </div>
         </div>
 
-        <div v-show='true' ref='mainStudyArea' class='study-area'>
+        <div v-show='studyVis' ref='mainStudyArea' class='study-area'>
             <div class='main-study'>
                 <div class='content'>
                     <div
                         v-for='(item, i) in mainStudyList'
                         :key='i'
                         class='item'
-                        :class='{ active: mainStudy === item.name, disabled: !TVHasInit }'
+                        :class='{ active: mainStudy === item.name }'
                     >
                         <span
                             class='inner-label'
                             @click='onClickStudy("main", item.name)'
-                            @touchend='onClickStudy("main", item.name)'
                         >
                             {{ item.label }}
                         </span>
@@ -185,29 +200,79 @@
             </div>
         </div>
         <div class='chart-wrap'>
-            <Chart />
+            <!-- <Chart /> -->
+            <tv
+                v-if='initialValue'
+                ref='chartRef'
+                :initial-value='initialValue'
+                :positionList="positionList"
+                :options='chartConfig'
+                @indicatorRemoved='indicatorRemoved'
+                @orientationChanged='orientationChanged'
+                @symbolChanged='symbolChanged'
+            />
         </div>
+        <div v-show='studyVis' ref='mainStudyArea' class='study-area'>
+            <div class='main-study'>
+                <div class='content'>
+                    <div
+                        v-for='(item, i) in sideStudyList'
+                        :key='i'
+                        class='item'
+                        :class='{ active: subStudy === item.name }'
+                    >
+                        <span
+                            class='inner-label'
+                            @click='onClickStudy("sub", item.name)'
+                        >
+                            {{ item.label }}
+                        </span>
+                    </div>
+                    <span class='item more' @click='showStudyDialog = true'>
+                        <span class='inner-label'>
+                            {{ $t('chart.more') }}
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- <StallsAndDeal
+            :cur-price='product.cur_price'
+            :deal-str='dealStr'
+            :digit='product.digit'
+            market-id='1'
+            product-id='1'
+            :stalls-str='stallsStr'
+            :status="{ stalls: 1, deal: '' }"
+        >
+            <template #myPositions>
+                <slot name='myPositions'></slot>
+            </template>
+        </StallsAndDeal> -->
 
         <div class='footerBtnBox'>
             <div class='trade-btn-wrap'>
                 <div class='sell fallColorBg'>
                     <p>
-                        卖出
+                        {{ $t('trade.sell') }}
                     </p>
-                    <p class='price riseColorArrow'>
-                        25.965
+                    <p class='price ' :class="product.sell_color+'Arrow'">
+                        {{ product.sell_price }}
                     </p>
                 </div>
                 <div class='buy riseColorBg'>
                     <p>
-                        买入
-                    </p><p class='price riseColorArrow'>
-                        25.965
+                        {{ $t('trade.buy') }}
                     </p>
-                </div><span class='spread_text'>
-                    0.0
+                    <p class='price' :class="product.buy_color+'Arrow'">
+                        {{ product.buy_price }}
+                    </p>
+                </div>
+                <span class='spread_text'>
+                    {{ product.spread_text }}
                 </span>
-            </div><!---->
+            </div>
         </div>
     </div>
 
@@ -223,24 +288,34 @@
 
 <script>
 import Chart from './chart'
+import { useRouter, useRoute } from 'vue-router'
 import StudyList from './components/studyList.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, reactive, toRefs, onBeforeUnmount, ref } from 'vue'
+import { computed, reactive, toRefs, onBeforeUnmount, ref, onMounted, unref, watchEffect } from 'vue'
 import KIcon from './icons/kIcon.vue'
-import { MAINSTUDIES, SUBSTUDIES } from './constant'
+import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import dayjs from 'dayjs'
+import { useStore } from 'vuex'
 import { Dialog } from 'vant'
+import { isEmpty, localSet, localGet } from '@/utils/util'
+import tv from '@/components/tradingview/tv'
+import { QuoteSocket } from '@/plugins/socket/socket'
+import StallsAndDeal from './components/StallsAndDeal'
 export default {
-    components: { KIcon, Chart, StudyList },
+    components: { KIcon, Chart, StudyList, tv, StallsAndDeal },
     setup (props) {
+        const route = useRoute()
+        const router = useRouter()
+        const symbolId = route.query.symbolId
         const { t } = useI18n({ useScope: 'global' })
         const klineTypeDropdown = ref(null)
+        const store = useStore()
         const candleKTypeList = [
-            {
-                title: t('chart.timeSharing'),
-                value: '1min',
-                ktype: 'timeSharing',
-            },
+            // {
+            //     title: t('chart.timeSharing'),
+            //     value: '1min',
+            //     ktype: 'timeSharing',
+            // },
             {
                 title: t('chart.1min'),
                 value: '1min',
@@ -286,37 +361,37 @@ export default {
 
         const klineTypeList = [{
             name: 'kIcon1',
-            title_zh: '美国线',
+            title_zh: t('chart.bars'),
             title_en: 'Bars',
             value: 0,
         }, {
             name: 'kIcon2',
-            title_zh: 'K线图',
+            title_zh: t('chart.candles'),
             title_en: 'Candles',
             value: 1,
         }, {
             name: 'kIcon3',
-            title_zh: '空心K线图',
+            title_zh: t('chart.hollowCandles'),
             title_en: 'Hollow Candles',
             value: 9,
         }, {
             name: 'kIcon4',
-            title_zh: '平均K线图',
+            title_zh: t('chart.heikinAshi'),
             title_en: 'Heikin Ashi',
             value: 8,
         }, {
             name: 'kIcon5',
-            title_zh: '线形图',
+            title_zh: t('chart.line'),
             title_en: 'Line',
             value: 2,
         }, {
             name: 'kIcon6',
-            title_zh: '面积图',
+            title_zh: t('chart.area'),
             title_en: 'Area',
             value: 3,
         }, {
             name: 'kIcon7',
-            title_zh: '基准线',
+            title_zh: t('chart.baseLine'),
             title_en: 'Baseline',
             value: 10,
         }]
@@ -331,86 +406,274 @@ export default {
             settingStatus: false,
             mainStudyList: MAINSTUDIES.slice(0, 5), // 主图
             sideStudyList: SUBSTUDIES.slice(0, 5), // 副图
-            mainStudy: '',
-            subStudy: '',
+            studyVis: true,
+            mainStudy: 'Moving Average mock',
+            subStudy: 'Custom MACD',
             showStudyDialog: false,
             lineList: [
                 {
                     title: t('chart.lastValueLine'),
-                    value: 'lastValue'
+                    value: 'showLastPrice'
                 },
                 {
                     title: t('chart.positionLine'),
-                    value: 'position',
+                    value: 'showPositionPrice',
                 },
                 {
                     title: t('chart.buyLine'),
-                    value: 'buy',
+                    value: 'showBuyPrice',
                 },
                 {
                     title: t('chart.sellLine'),
-                    value: 'sell',
+                    value: 'showSellPrice',
                 },
-                // {
-                //     title: '买卖五档',
-                //     value: 'stalls',
-                // },
-                // {
-                //     title: '成交数据',
-                //     value: 'deal',
-                // }
+                {
+                    title: t('trade.buySellFive'),
+                    value: 'stalls',
+                },
+                {
+                    title: t('trade.dealData'),
+                    value: 'deal',
+                }
             ],
             linesData: {
-                lastValue: {
+                showLastPrice: {
                     status: true
                 },
-                position: {
-                    status: true
-                },
-                buy: {
+                showPositionPrice: {
                     status: false
                 },
-                sell: {
+                showBuyPrice: {
                     status: false
                 },
-                // stalls: {
-                //     status: true
-                // },
-                // deal: {
-                //     status: true
-                // }
+                showSellPrice: {
+                    status: false
+                },
+                stalls: {
+                    status: false
+                },
+                deal: {
+                    status: false
+                }
             },
             nowTime: dayjs().format('HH:mm:ss'),
             timeId: '',
             settingList: [],
-            klineType: 0,
+            klineType: 0
+
         })
+
+        // 图表配置
+        const chartConfig = ref({
+            property: {
+                showLastPrice: true, // 现价线
+                showPositionPrice: true, // 持仓线
+                showBuyPrice: false, // 买价线
+                showSellPrice: false, // 卖价线
+                showSeriesOHLC: true, // 高开低收
+                showBarChange: true, // 涨跌幅
+                chartType: '1', // 图表类型
+                showSeriesTitle: false // K线标题
+            },
+            indicators: [
+                {
+                    name: 'Bollinger Bands',
+                    params: [true, false, [26, 2]]
+                },
+                {
+                    name: 'Custom MACD',
+                    params: [false, false, [12, 26, 'close', 9]]
+                }
+
+            ]
+        })
+
+        // 图表组件引用
+        const chartRef = ref(null)
+
+        const klineTypeIndex = computed(() => {
+            const curIndex = klineTypeList.findIndex(el => el.value === state.klineType)
+            return curIndex + 1
+        })
+        const product = computed(() => store.state._quote.productMap[symbolId])
+        const productList = computed(() => store.state._quote.productList)
+        const positionList = computed(() => store.state._trade.positionList)
+        const selfSymbolList = computed(() => store.state._user.selfSymbolList)
+
+        // 订阅产品
+        // const subscribList = productList.value.map(({ symbolId }) => symbolId)
+        // store.dispatch('_quote/querySymbolBaseInfoList', subscribList)
+        // QuoteSocket.send_subscribe(subscribList)
+
+        // 图表初始值
+        const initialValue = computed(() => {
+            
+            if (symbolId) {
+                return {
+                    text: product.value.symbolName, // 用于vant组件显示
+                    description: product.value.symbolCode, // 显示在图表左上角
+                    symbolId: product.value.symbolId, // 产品id
+                    digits: product.value.symbolDigits, // 小数点
+                    buyPrice: product.value.buy_price,
+                    sellPrice: product.value.sell_price
+                }
+            }
+        })
+
+        const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value.find(el => el.symbolId === parseInt(symbolId))))
 
         state.timeId = setInterval(() => {
             state.nowTime = dayjs().format('HH:mm:ss')
         }, 1000)
 
-        const tabChange = (name, title) => {
-
-        }
-
+        // 选择指标
         const onClickStudy = (type, name) => {
+            const obj = {
+                main: 'mainStudy',
+                sub: 'subStudy'
+            }
+            const oldStudyName = state[obj[type]]
 
+            if (oldStudyName === name) {
+                removeStudy(type)
+            } else {
+                removeStudy(type)
+                createStudy(type, name)
+            }
         }
+
+        // 设置图表周期
         const onBeforeChange = (name, title) => {
             if (name === 'moreKTypes') {
                 state.moreTimeIsOpened = !state.moreTimeIsOpened
             }
+            console.log(name)
+            if (name === 'timeSharing') {
+                state.studyVis = false
+            } else {
+                state.studyVis = true
+            }
+
+            unref(chartRef).chart.setResolution(name)
+
+            localSetChartConfig('resolution', name)
+
             return true
         }
-        // 增加单个指标
-        const createStudy = (type, name) => {
 
+        // 设置图表类型
+        const setChartType = (item) => {
+            state.klineType = item.value
+
+            unref(chartRef).chart.setChartType(Number(item.value))
+            localSetChartConfig('chartType', item.value)
+            klineTypeDropdown.value.toggle()
+        }
+
+        // 设置图表线
+        const handleLineChange = (val, v) => {
+            const property = {}
+            if (val.indexOf('showBuyPrice') > -1) {
+                property.showBuyPrice = true
+            } else {
+                property.showBuyPrice = false
+            }
+
+            if (val.indexOf('showPositionPrice') > -1) {
+                property.showPositionPrice = true
+                //setPositionLine()
+            } else {
+                property.showPositionPrice = false
+            }
+
+            if (val.indexOf('showSellPrice') > -1) {
+                property.showSellPrice = true
+            } else {
+                property.showSellPrice = false
+            }
+
+            if (val.indexOf('showLastPrice') > -1) {
+                property.showLastPrice = true
+
+                
+            } else {
+                property.showLastPrice = false
+            }
+
+            chartRef.value && unref(chartRef).chart.updateProperty(property)
+        }
+
+        const setPositionLine = () => {
+            
+            const positionProducts = positionList.value.find(item=>item.symbolId === Number(symbolId))
+            if(isEmpty(positionProducts)) return
+            const property = [
+                { 
+                    text: Number(positionProducts.direction) === 1 ? t('trade.buy'): t('trade.sell') + positionProducts.volume + t('trade.volumeUnit'), 
+                    quantity: positionProducts.openNum, 
+                    price: positionProducts.openPrice, 
+                    color: positionProducts.profitLoss < 0 ? 'green' : 'red'
+                }
+            ]
+            //chartRef.value && unref(chartRef).chart.updatePosition(property)
+        }
+
+        // 增加指标
+        const createStudy = (type, name) => {
+            const target = JSON.parse(JSON.stringify([...MAINSTUDIES, ...SUBSTUDIES].find(item => item.name === name) || null))
+            switch (type) {
+                case 'main': {
+                    state.mainStudy = target.name
+                    localSetChartConfig('mainStudy', JSON.stringify({
+                        name: target.name,
+                        params: target.params
+                    }))
+                    break
+                }
+                case 'sub': {
+                    state.subStudy = target.name
+                    localSetChartConfig('subStudy', JSON.stringify({
+                        name: target.name,
+                        params: target.params
+                    }))
+                    break
+                }
+            }
+
+            const property = [
+                JSON.parse(JSON.parse(localGet('chartConfig')).mainStudy),
+                JSON.parse(JSON.parse(localGet('chartConfig')).subStudy)
+            ]
+
+            chartRef.value && unref(chartRef).chart.updateIndicator(property)
+        }
+
+        // 缓存图表设置
+        const localSetChartConfig = (key, value) => {
+            const chartConfig = JSON.parse(localGet('chartConfig'))
+            if (!isEmpty(chartConfig)) {
+                chartConfig[key] = value
+                localSet('chartConfig', JSON.stringify(chartConfig))
+            } else {
+                localSet('chartConfig', JSON.stringify({
+                    [key]: value
+                }))
+            }
         }
 
         // 删除指标
         const removeStudy = (type) => {
+            switch (type) {
+                case 'main': {
+                    state.mainStudy = ''
+                    break
+                }
+                case 'sub': {
+                    state.subStudy = ''
 
+                    break
+                }
+            }
         }
 
         const updateShow = (val) => {
@@ -419,13 +682,10 @@ export default {
 
         const showTips = () => {
             Dialog.alert({
-
                 title: t('trade.descTitle'),
                 message: t('trade.nonStocksAndnonBullPointDesc'),
                 confirmButtonColor: '#477fd3'
-            }).then(() => {
-                // on close
-            })
+            }).then(() => {})
         }
 
         // 更多周期
@@ -439,11 +699,67 @@ export default {
             state.moreKType = { title, ktype }
         }
 
-        const setKlineType = (item) => {
-            klineTypeDropdown.toggle()
-            state.klineType = item.value
-            state.klineTypeDropdown.toggle()
+        const toggleSelf = () => {
         }
+
+        const toContractInfo = () => {
+            router.push({ path: '/contract', query: { symbolId: symbolId } })
+        }
+
+        const orientationChanged = () => {
+
+        }
+
+        // 指标移除回调
+        const indicatorRemoved = name => {}
+
+        watchEffect(() => {
+            if (state.settingList.length > 0) {
+                if (state.settingList.indexOf('showBuyPrice') > -1) {
+                    localSetChartConfig('showBuyPrice', true)
+                } else {
+                    localSetChartConfig('showBuyPrice', false)
+                }
+
+                if (state.settingList.indexOf('showPositionPrice') > -1) {
+                    localSetChartConfig('showPositionPrice', true)
+                } else {
+                    localSetChartConfig('showPositionPrice', false)
+                }
+
+                if (state.settingList.indexOf('showSellPrice') > -1) {
+                    localSetChartConfig('showSellPrice', true)
+                } else {
+                    localSetChartConfig('showSellPrice', false)
+                }
+
+                if (state.settingList.indexOf('showLastPrice') > -1) {
+                    localSetChartConfig('showLastPrice', true)
+                } else {
+                    localSetChartConfig('showLastPrice', false)
+                }
+                // if (state.settingList.length > 0) { localSetChartConfig('lineSet', state.settingList) }
+            }
+        })
+
+        onMounted(() => {
+            // 设置图表设置缓存
+            const chartConfig = JSON.parse(localGet('chartConfig'))
+            if (isEmpty(chartConfig)) {
+                localSetChartConfig('showLastPrice', true)
+                localSetChartConfig('mainStudy', JSON.stringify({
+                    name: 'Bollinger Bands',
+                    params: [true, false, [26, 2]]
+                }))
+                localSetChartConfig('subStudy', JSON.stringify({
+                    name: 'Custom MACD',
+                    params: [false, false, [12, 26, 'close', 9]]
+                }))
+            } else {
+
+                // state.settingList = chartConfig.lineSet
+            }
+        })
 
         onBeforeUnmount(() => {
             state.timeId = null
@@ -454,14 +770,26 @@ export default {
             candleKTypeList,
             klineTypeList,
             onBeforeChange,
-            tabChange,
             onClickStudy,
             createStudy,
             removeStudy,
             showTips,
             updateShow,
             onClickMoreTime,
-            setKlineType
+            setChartType,
+            klineTypeDropdown,
+            klineTypeIndex,
+            toggleSelf,
+            toContractInfo,
+            isSelfSymbol,
+            product,
+            initialValue,
+            chartConfig,
+            indicatorRemoved,
+            chartRef,
+            handleLineChange,
+            orientationChanged,
+            positionList
         }
     }
 }
@@ -469,6 +797,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
+@import '~@/sass/animations.scss';
 .page-wrap {
     width: 100%;
     height: 100%;
@@ -476,6 +805,61 @@ export default {
     margin-bottom: rem(100px);
     overflow: auto;
     background: var(--bgColor2);
+    .infomation {
+        padding-top: rem(5px);
+        font-size: rem(20px);
+        line-height: rem(24px);
+    }
+    .right-wrap {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        .ft {
+            margin-left: rem(30px);
+            a {
+                display: inline-block;
+            }
+            .icon_guanyu {
+                color: rgb(153, 153, 153);
+            }
+        }
+        .collectIcon {
+            width: rem(40px);
+            height: 100%;
+            color: #777;
+            vertical-align: top;
+            .icon_zixuan1 {
+                font-weight: normal !important;
+                vertical-align: top;
+            }
+            .icon_zixuan2 {
+                position: absolute;
+                top: 0;
+                color: #FC822F;
+                vertical-align: top;
+                &.heartBeat {
+                    animation: heartBeat 1.3s ease-in-out forwards;
+                }
+            }
+            .loading {
+                position: relative;
+                &::before {
+                    position: absolute;
+                    animation: loading 0.6s linear infinite;
+                }
+            }
+            .zoomIn {
+                position: relative;
+                &::before {
+                    position: absolute;
+                    animation: zoomIn 0.6s linear forwards;
+                }
+            }
+        }
+    }
     .productInfo {
         position: relative;
         display: flex;
@@ -879,7 +1263,7 @@ export default {
                     font-size: rem(24px);
                     text-align: center;
                     &.active {
-                        color: var(--riseColor);
+                        color: var(--primary);
                     }
                     &.disabled {
                         color: var(--assistColor);
@@ -977,16 +1361,6 @@ export default {
             background-color: rgba(0, 0, 0, 0.15);
             content: '';
         }
-        // .sell {
-        //     .price {
-        //         padding-right: rem(50px);
-        //     }
-        // }
-        // .buy {
-        //     .text {
-        //         padding-left: rem(50px);
-        //     }
-        // }
         .text {
             font-size: rem(28px);
             vertical-align: middle;
@@ -996,6 +1370,8 @@ export default {
             font-size: rem(32px);
             vertical-align: middle;
             &.fallColorArrow::after {
+                position: relative;
+                left: rem(5px);
                 font-weight: normal;
                 font-size: rem(17px);
                 font-family: 'iconfont' !important;
@@ -1003,6 +1379,8 @@ export default {
                 content: '\e674';
             }
             &.riseColorArrow::after {
+                position: relative;
+                left: rem(5px);
                 font-weight: normal;
                 font-size: rem(17px);
                 font-family: 'iconfont' !important;
