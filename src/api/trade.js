@@ -123,7 +123,7 @@ export function addCustomerOptional (data) {
         data
     })
 }
-/* 添加自选 */
+/* 删除自选 */
 export function removeCustomerOptional (data) {
     return request({
         url: '/global/customer.app.CustomerOptionalWebApiService.delete',

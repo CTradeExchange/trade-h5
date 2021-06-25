@@ -111,7 +111,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "chart" */ '../views/chart/product.vue'),
         meta: {
             title: 'route.chart',
-            roles: ['User'],
         }
     },
     {
