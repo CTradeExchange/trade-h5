@@ -12,6 +12,7 @@
       @symbolChanged="symbolChanged"
       @indicatorRemoved="indicatorRemoved"
       @orientationChanged="orientationChanged"
+      @onChartReady="onChartReady" //确保图表创建完成，方可调用图表方法
     />
 </template>
 <script>
@@ -63,6 +64,8 @@
             const indicatorRemoved= (name) =>{}
             // 横屏状态变更后回调
             const orientationChanged= (bool) =>{}
+            // 图表实例创建完成后回调
+            const onChartReady= () =>{}
 
             // 图表方法调用示例
             // 切换产品
@@ -97,7 +100,8 @@
                 options,
                 symbolChanged,
                 indicatorRemoved,
-                orientationChanged
+                orientationChanged,
+                onChartReady
             }
         }
     }
@@ -115,6 +119,7 @@
 
 | 事件名称             | 说明               | 回调函数            |
 | -------------------- | ------------------ | ------------------- |
+| <font color='red'> \* </font>`onChartReady`       | 图表创建完成后触发 | --                  |
 | `symbolChanged`      | 切换产品后触发     | 切换后的产品 id     |
 | `indicatorRemoved`   | 指标移除后触发     | 被移除的指标名称    |
 | `orientationChanged` | 设备方向变化后触发 | 是否横屏（bool 值） |
@@ -136,7 +141,7 @@
 
 | 数据类型     | 说明       | 数据结构                                                                                                                                                      |
 | ------------ | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| initialValue | 产品属性   | {<br> &emsp;description: '欧元美元',<br>&emsp;symbolId: 1,<br>&emsp;digits: '4'<br>}                   |
+| initialValue | 产品属性   | {<br> &emsp;description: '欧元美元',<br>&emsp;symbolId: 1,<br>&emsp;digits: '4'<br>}                                                                          |
 | options      | 图表配置   | {<br>&emsp;property: {}, <br>&emsp;indicators: [],<br>&emsp;extension: {}<br>}                                                                                |
 | chartType    | 图表类型   | 0:Bar <br>1:Candle <br>2:Line <br>3:Area <br>4:Renko <br>5:Kagi <br>6:PnF <br>7:Line Break <br>8:Heikin-Ashi <br>9:Hollow Candle <br>10:Baseline <br>12:Hi-Lo |
 | resolution   | 图表周期   | '1' \| '5' \| '15' \| '30' \| '60' \| '240' \| '1D' \| '1W' \| '1M' \| '10'                                                                                   |

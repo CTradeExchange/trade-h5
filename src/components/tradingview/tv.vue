@@ -77,6 +77,8 @@ export default {
                         context.emit('indicatorRemoved', name)
                     }
                 })
+                // 图表实例创建完成后回调
+                context.emit('onChartReady')
             })
         })
         onUnmounted(() => {
