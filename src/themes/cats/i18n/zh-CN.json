@@ -339,7 +339,9 @@
     "nosSet": "未设置",
     "inputPendingPrice": "请输入挂单价格",
     "openTime": "开仓时间",
-    "orderSn": "订单编号"
+    "orderSn": "订单编号",
+    "buySellFive": "买卖五档",
+    "dealData": "成交数据"
   },
   "weekdayMap": {
     "1": "周一",
@@ -385,13 +387,20 @@
     "sellLine": "卖价线",
     "lastValueLine": "现价线",
     "mainStudy": "主图指标",
-    "subStudy": "副图指标"
-  },
-  "kycAuditStatus":{
-    "0":"未认证",
-    "1":"待审核",
-    "2":"审核通过",
-    "3":"审核不通过"
-  }
+    "subStudy": "副图指标",
+    "bars":"美国线",
+    "candles":"K线图",
+    "hollowCandles":"空心K线图",
+    "heikinAshi":"平均K线图",
+    "line":"线形图",
+    "area":"面积图",
+    "baseLine": "基准线"
+    },
+    "kycAuditStatus":{
+        "0":"未认证",
+        "1":"待审核",
+        "2":"审核通过",
+        "3":"审核不通过"
+    }
 
 }
