@@ -3,115 +3,143 @@
         ref='tabs'
         v-model='tabActive'
         class='tabs'
-        :color='style.mainColor'
+        color='#477fd3'
         line-height='2'
         line-width='20'
         :style='{
             "min-width": tabMinWidth + "px"
         }'
-        :title-active-color='style.mainColor'
+        title-active-color='#477fd3'
         @change='onChangeTab'
     >
-        <van-tab v-if='status.stalls' name='stalls' title='五档'>
+        <van-tab name='stalls' title='五档'>
             <div class='stalls-wrap'>
-                <!-- 卖五档 -->
                 <div class='sell-wrap'>
-                    <template v-if='sellList.length'>
-                        <div v-for='(item, i) in sellList' :key='i' class='item quantity'>
-                            <span class='label'>
-                                卖{{ i + 1 }}
-                            </span>
-                            <span class='price' :style='{ color: style.fallColor }'>
-                                {{ item[1] }}
-                            </span>
-                            <span class='quantity'>
-                                <!-- {{ item[3].toFixed([0,1,2,9].includes(marketId) ? 0 : 2) }} -->
-                                {{ item[3].toFixed(3) }}
-                            </span>
-                            <span class='histogram' :style='{ width: item.width.sell, background: style.fallColor }'></span>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <div v-for='item in 5' :key='item' class='item'>
-                            <span class='label'>
-                                - -
-                            </span>
-                            <span class='price'>
-                                - -
-                            </span>
-                            <span class='quantity'>
-                                - -
-                            </span>
-                        </div>
-                    </template>
-                </div>
-                <!-- 成交量比 -->
-                <div class='scale-wrap'>
-                    <template v-if='volumeRatioForSell>=0'>
-                        <span
-                            class='left'
-                            :style='{
-                                flex: "0 0 " + volumeRatioForSell + "%",
-                                background: "linear-gradient(-60deg, transparent 0.06667rem, " + style.fallColor + " 0)"
-                            }'
+                    <div class='item quantity'>
+                        <span class='label'>
+                            卖1
+                        </span><span class='price' style='color: rgb(227, 82, 92);'>
+                            31739.0
+                        </span><span class='quantity'>
+                            0.064
+                        </span><span
+                            class='histogram'
+                            style='width: 7.4188%;
+background: rgb(227, 82, 92);'
                         ></span>
-                        <span
-                            class='right'
-                            :style='{
-                                background: "linear-gradient(127deg, transparent 0.06667rem, " + style.riseColor + " 0)"
-                            }'
+                    </div><div class='item quantity'>
+                        <span class='label'>
+                            卖2
+                        </span><span class='price' style='color: rgb(227, 82, 92);'>
+                            31739.3
+                        </span><span class='quantity'>
+                            0.186
+                        </span><span
+                            class='histogram'
+                            style='width: 22.0171%;
+background: rgb(227, 82, 92);'
                         ></span>
-                    </template>
-                    <template v-else>
-                        <span
-                            class='left'
-                            :style='{
-                                flex: "0 0 50%",
-                                background: "linear-gradient(-60deg, transparent 0.06667rem, " + style.fallColor + " 0)"
-                            }'
+                    </div><div class='item quantity'>
+                        <span class='label'>
+                            卖3
+                        </span><span class='price' style='color: rgb(227, 82, 92);'>
+                            31739.9
+                        </span><span class='quantity'>
+                            0.470
+                        </span><span
+                            class='histogram'
+                            style='width: 56%;
+background: rgb(227, 82, 92);'
                         ></span>
-                        <span
-                            class='right'
-                            :style='{
-                                background: "linear-gradient(127deg, transparent 0.06667rem, " + style.riseColor + " 0)"
-                            }'
+                    </div><div class='item quantity'>
+                        <span class='label'>
+                            卖4
+                        </span><span class='price' style='color: rgb(227, 82, 92);'>
+                            31740.7
+                        </span><span class='quantity'>
+                            0.287
+                        </span><span
+                            class='histogram'
+                            style='width: 34.1026%;
+background: rgb(227, 82, 92);'
                         ></span>
-                    </template>
-                </div>
-                <!-- 买五档 -->
-                <div class='buy-wrap'>
-                    <template v-if='buyList.length'>
-                        <div v-for='(item, i) in buyList' :key='i' class='item quantity'>
-                            <span class='label'>
-                                买{{ i + 1 }}
-                            </span>
-                            <span class='price' :style='{ color: style.riseColor }'>
-                                {{ item[0] }}
-                            </span>
-                            <span class='quantity'>
-                                <!-- {{ item[2].toFixed([0,1,2,9].includes(marketId) ? 0 : 2) }} -->
-                                {{ item[2].toFixed(3) }}
-                            </span>
-                            <span class='histogram' :style='{ width: item.width.buy, background: style.riseColor }'></span>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <div v-for='item in 5' :key='item' class='item'>
-                            <span class='label'>
-                                - -
-                            </span>
-                            <span class='price'>
-                                - -
-                            </span>
-                            <span class='quantity'>
-                                - -
-                            </span>
-                        </div>
-                    </template>
+                    </div><div class='item quantity'>
+                        <span class='label'>
+                            卖5
+                        </span><span class='price' style='color: rgb(227, 82, 92);'>
+                            31740.9
+                        </span><span class='quantity'>
+                            0.401
+                        </span><span
+                            class='histogram'
+                            style='width: 47.7436%;
+background: rgb(227, 82, 92);'
+                        ></span>
+                    </div>
+                </div><div class='scale-wrap'>
+                    <span
+                        class='left'
+                    ></span><span class='right'></span>
+                </div><div class='buy-wrap'>
+                    <div class='item quantity'>
+                        <span class='label'>
+                            买1
+                        </span><span class='price'>
+                            31589.0
+                        </span><span class='quantity'>
+                            0.023
+                        </span><span
+                            class='histogram'
+                        ></span>
+                    </div><div class='item quantity'>
+                        <span class='label'>
+                            买2
+                        </span><span class='price'>
+                            31588.9
+                        </span><span class='quantity'>
+                            0.051
+                        </span><span
+                            class='histogram'
+                        ></span>
+                    </div><div class='item quantity'>
+                        <span class='label'>
+                            买3
+                        </span><span class='price' style='color: rgb(16, 184, 115);'>
+                            31588.1
+                        </span><span class='quantity'>
+                            0.003
+                        </span><span
+                            class='histogram'
+                        ></span>
+                    </div><div class='item quantity'>
+                        <span class='label'>
+                            买4
+                        </span><span class='price' style='color: rgb(16, 184, 115);'>
+                            31587.8
+                        </span><span class='quantity'>
+                            0.002
+                        </span><span
+                            class='histogram'
+                            style='width: 0%;
+background: rgb(16, 184, 115);'
+                        ></span>
+                    </div><div class='item quantity'>
+                        <span class='label'>
+                            买5
+                        </span><span class='price' style='color: rgb(16, 184, 115);'>
+                            31587.6
+                        </span><span class='quantity'>
+                            0.230
+                        </span><span
+                            class='histogram'
+                            style='width: 27.2821%;
+background: rgb(16, 184, 115);'
+                        ></span>
+                    </div>
                 </div>
             </div>
         </van-tab>
-        <van-tab v-if='status.deal' name='deal' title='成交'>
+        <van-tab name='deal' title='成交'>
             <!-- 成交记录 -->
             <div class='deal-wrap'>
                 <div class='list-wrap'>
@@ -119,125 +147,118 @@
                         <span class='label'>
                             时间
                         </span>
-                        <!-- 用于占宽 -->
-                        <span v-if='dealData.length' class='val forWide'>
-                            {{ dealData[0][1] | filterTime('HH:mm:ss') }}
+                        <span class='val forWide'>
+                            09:47:05
                         </span>
-                        <div ref='timeColVals' class='vals'>
-                            <span v-for='(item, i) in dealData' :key='i' class='val' :class='item.colorCls'>
-                                {{ item[1] | filterTime('HH:mm:ss') }}
+                        <div class='vals'>
+                            <span class='val'>
+                                09:47:01
+                            </span>
+                            <span class='val'>
+                                09:47:01
+                            </span>
+                            <span class='val fallColor'>
+                                09:47:01
+                            </span>
+                            <span class='val'>
+                                09:46:58
+                            </span>
+                            <span class='val riseColor'>
+                                09:46:58
+                            </span>
+                            <span class='val'>
+                                09:46:58
+                            </span>
+                            <span class='val'>
+                                09:46:58
+                            </span>
+                            <span class='val riseColor'>
+                                09:46:58
+                            </span>
+                            <span class='val riseColor'>
+                                09:46:58
                             </span>
                         </div>
                     </div>
-
                     <div class='col price-col'>
                         <span class='label'>
                             成交价
+                        </span><span class='val forWide'>
+                            31596.3
                         </span>
-                        <!-- 用于占宽 -->
-                        <span v-if='dealData.length' class='val forWide'>
-                            {{ dealData[0][2] }}
-                        </span>
-                        <!-- 用于占宽 -->
                         <div class='vals'>
-                            <span v-for='(item, i) in dealData' :key='i' class='val' :class='item.colorCls'>
-                                {{ item[2] }}
+                            <span class='val'>
+                                31596.3
+                            </span>
+                            <span class='val fallColor'>
+                                31596.3
+                            </span>
+                            <span class='val fallColor'>
+                                31596.7
+                            </span>
+                            <span class='val'>
+                                31598.7
+                            </span>
+                            <span class='val'>
+                                31598.7
+                            </span>
+                            <span class='val riseColor'>
+                                31598.7
+                            </span>
+                            <span class='val fallColor'>
+                                31597.1
+                            </span>
+                            <span class='val'>
+                                31598.4
+                            </span>
+                            <span class='val'>
+                                31598.4
                             </span>
                         </div>
-                    </div>
-
-                    <div class='col volume-col'>
+                    </div><div class='col volume-col'>
                         <span class='label'>
                             成交量
+                        </span><span class='val forWide'>
+                            6.245
                         </span>
-                        <!-- 用于占宽 -->
-                        <span v-if='dealData.length' class='val forWide'>
-                            {{ dealData[0][3] }}
-                        </span>
-                        <!-- 用于占宽 -->
                         <div class='vals'>
-                            <span v-for='(item, i) in dealData' :key='i' class='val' :class='item.colorCls'>
-                                {{ item[3] }}
-                                <!-- {{ item[4] === 1 ? 'B' : 'S' }} -->
+                            <span class='val'>
+                                6.245
+                            </span>
+                            <span class='val fallColor'>
+                                3.417
+                            </span>
+                            <span class='val fallColor'>
+                                2.082
+                            </span>
+                            <span class='val'>
+                                1.715
+                            </span>
+                            <span class='val'>
+                                1.962
+                            </span>
+                            <span class='val riseColor'>
+                                4.418
+                            </span>
+                            <span class='val fallColor'>
+                                2.082
+                            </span>
+                            <span class='val'>
+                                1.715
+                            </span>
+                            <span class='val'>
+                                1.962
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
         </van-tab>
-        <van-tab name='myPosition' title='我的持仓'>
-            <slot name='myPositions'></slot>
-        </van-tab>
     </van-tabs>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import dayjs from 'dayjs'
 
-export default {
-    filters: {
-        filterTime (val, format) {
-            return dayjs(val).format(format)
-        }
-    },
-    props: {
-        status: {
-            type: Object,
-            default: () => ({})
-        },
-        sellList: {
-            type: Array,
-            default: () => []
-        },
-        buyList: {
-            type: Object,
-            default: () => []
-        },
-        volumeRatioForSell: {
-            type: Number,
-            default: 0
-        },
-        sums: {
-            type: Object,
-            default: () => ({})
-        },
-        dealData: {
-            type: Array,
-            default: () => []
-        },
-    },
-    data () {
-        return {
-            tabMinWidth: 0
-        }
-    },
-    computed: {
-        ...mapGetters(['style']),
-    },
-    watch: {
-        sellList: {
-            immediate: true,
-            handler () {
-                this.$refs['tabs'] && this.$refs['tabs'].resize()
-            }
-        }
-    },
-    methods: {
-        getWidth (quantity, type) {
-            const maxNum = Math.max(...this.sellList.map(e => e[type === 'sell' ? 2 : 3]))
-            const minNum = Math.min(...this.sellList.map(e => e[type === 'sell' ? 2 : 3]))
-            const diff = maxNum - minNum
-            const result = (maxNum - quantity) / diff * 100
-            return result + '%'
-        },
-        onChangeTab () {
-            const tabW = this.$refs['tabs'].$el.offsetWidth
-            console.log(tabW, typeof tabW)
-            tabW > this.tabMinWidth && (this.tabMinWidth = tabW)
-        }
-    }
-}
 </script>
 
 <style lang="scss" scoped>
@@ -246,11 +267,9 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100%;
-    ::v-deep {
-        .van-tab {
-            font-size: rem(24px);
-            line-height: rem(50px);
-        }
+    :deep(.van-tab) {
+        font-size: rem(24px);
+        line-height: rem(50px);
         .van-tabs__wrap {
             height: rem(50px);
         }
@@ -278,7 +297,7 @@ export default {
         flex-direction: column;
         // justify-content: space-around;
         justify-content: flex-start;
-        color: red;
+        color: var(--mutedColor);
         font-size: rem(22px);
         .item {
             // flex: 1;
@@ -355,7 +374,7 @@ export default {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    color: red;
+    color: var(--mutedColor);
     font-size: rem(22px);
     line-height: rem(24px);
     .list-wrap {
@@ -411,7 +430,6 @@ export default {
         }
         .volume-col {
             flex: 1;
-            align-items: flex-end;
             align-items: flex-end;
             margin-left: rem(6px);
             text-align: right;

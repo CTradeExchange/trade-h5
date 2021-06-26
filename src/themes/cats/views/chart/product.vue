@@ -235,19 +235,7 @@
             </div>
         </div>
 
-        <!-- <StallsAndDeal
-            :cur-price='product.cur_price'
-            :deal-str='dealStr'
-            :digit='product.digit'
-            market-id='1'
-            product-id='1'
-            :stalls-str='stallsStr'
-            :status="{ stalls: 1, deal: '' }"
-        >
-            <template #myPositions>
-                <slot name='myPositions'></slot>
-            </template>
-        </StallsAndDeal> -->
+        <StallsAndDeal />
 
         <div class='footerBtnBox'>
             <div class='trade-btn-wrap'>
@@ -644,7 +632,6 @@ export default {
                 }
                 case 'sub': {
                     state.subStudy = ''
-
                     break
                 }
             }
@@ -683,7 +670,9 @@ export default {
         }
 
         // 指标移除回调
-        const indicatorRemoved = name => {}
+        const indicatorRemoved = name => {
+            console.log(name)
+        }
 
         // 图表创建完成回调
         const onChartReady = () => {
