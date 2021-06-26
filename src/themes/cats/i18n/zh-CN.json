@@ -122,6 +122,8 @@
     "usableAdvance": "可用预付款",
     "sell": "卖出",
     "buy": "买入",
+    "sellShort": "卖",
+    "buyShort": "买",
     "marketPrice": "市价",
     "closedOrder": "已平仓",
     "orderVolume": "数量(手)",

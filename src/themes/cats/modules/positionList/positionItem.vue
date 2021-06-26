@@ -1,5 +1,5 @@
 <template>
-    <div class='product-item' @click='toPositionDetail(data)'>
+    <div class='product-item' @click.stop='toPositionDetail(data)'>
         <!-- {{ data.direction }} -->
         <div class='item'>
             <div class='cell'>
@@ -38,7 +38,8 @@
                                 {{ Number(data.direction) === 1 ? product.sell_price : product.buy_price }}
                             </span>
                         </div>
-                    </div><div>
+                    </div>
+                    <div>
                         <div class='price_item'>
                             <span class='title'>
                                 {{ $t('trade.stopProfitPrice') }}
@@ -53,8 +54,9 @@
                             </span>
                         </div>
                     </div>
-                </div><div class='ft'>
-                    <div class='bd'>
+                </div>
+                <div class='ft'>
+                    <div class='bd' @click.stop='toProduct(data.symbolId)'>
                         <i class='icon_icon_chart hidden'></i>
                     </div>
                     <van-button
@@ -107,6 +109,10 @@ export default {
             state.cpVis = val
         }
 
+        const toProduct = (symbolId) => {
+            router.push({ path: '/product', query: { symbolId } })
+        }
+
         return {
             ...toRefs(state),
             positionList,
@@ -114,7 +120,8 @@ export default {
             product,
             positionVolume,
             toPositionDetail,
-            updateShow
+            updateShow,
+            toProduct
         }
     }
 }

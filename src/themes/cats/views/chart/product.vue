@@ -235,7 +235,10 @@
             </div>
         </div>
 
-        <StallsAndDeal />
+        <StallsAndDeal
+            :status='[settingList.indexOf("stalls") > -1, settingList.indexOf("deal") > -1, ]'
+            :symbol-id='symbolId'
+        />
 
         <div class='footerBtnBox'>
             <div class='trade-btn-wrap'>
@@ -287,7 +290,7 @@ import tv from '@/components/tradingview/tv'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import StallsAndDeal from './components/StallsAndDeal'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
-let updateCurrentPriceLine
+
 export default {
     components: { KIcon, StudyList, tv, StallsAndDeal },
     setup (props) {
@@ -610,19 +613,6 @@ export default {
             state.onChartReadyFlag && unref(chartRef).updateIndicator(property)
         }
 
-        // 缓存图表设置
-        const localSetChartConfig = (key, value) => {
-            const chartConfig = JSON.parse(localGet('chartConfig'))
-            if (!isEmpty(chartConfig)) {
-                chartConfig[key] = value
-                localSet('chartConfig', JSON.stringify(chartConfig))
-            } else {
-                localSet('chartConfig', JSON.stringify({
-                    [key]: value
-                }))
-            }
-        }
-
         // 删除指标
         const removeStudy = (type) => {
             switch (type) {
@@ -634,6 +624,19 @@ export default {
                     state.subStudy = ''
                     break
                 }
+            }
+        }
+
+        // 缓存图表设置
+        const localSetChartConfig = (key, value) => {
+            const chartConfig = JSON.parse(localGet('chartConfig'))
+            if (!isEmpty(chartConfig)) {
+                chartConfig[key] = value
+                localSet('chartConfig', JSON.stringify(chartConfig))
+            } else {
+                localSet('chartConfig', JSON.stringify({
+                    [key]: value
+                }))
             }
         }
 
@@ -670,7 +673,7 @@ export default {
         }
 
         // 指标移除回调
-        const indicatorRemoved = name => {
+        const indicatorRemoved = (name, val) => {
             console.log(name)
         }
 
@@ -680,22 +683,20 @@ export default {
         }
 
         // 实时更新买卖价线
-        watch(() => [product.value.buy_price, product.value.sell_price], (newValues) => {
-            const [buyPrice, sellPrice] = newValues
-
-            state.onChartReadyFlag && unref(chartRef).updateLineData({ buyPrice, sellPrice })
-        })
-
-        // 实时更新Tick
-        watch(() => positionList.value, (val) => {
-            val = val.filter(e => e.symbolId === symbolId.value)
-            if (val.length) {
-                state.onChartReadyFlag && unref(chartRef).updatePosition(val)
+        watch(() => [product.value.buy_price, product.value.sell_price, product.value.cur_price, product.value.tick_time], (newValues) => {
+            if (state.settingList.indexOf('showLastPrice') > -1) {
+                state.onChartReadyFlag && unref(chartRef).setTick(product.value.cur_price, product.value.tick_time)
             }
-        }, {
-            immediate: true,
-            deep: true
-        })
+
+            if (state.settingList.indexOf('showBuyPrice') > -1 || state.settingList.indexOf('showSellPrice') > -1) {
+                state.onChartReadyFlag && unref(chartRef).updateLineData({
+                    buyPrice: product.value.buy_price,
+                    sellPrice: product.value.sell_price
+                })
+            }
+        }
+
+        )
 
         watchEffect(() => {
             if (state.settingList && state.settingList.length > 0) {
@@ -719,22 +720,10 @@ export default {
 
                 if (state.settingList.indexOf('showLastPrice') > -1) {
                     localSetChartConfig('showLastPrice', true)
-                    // 实时更新现价线
-                    updateCurrentPriceLine =
-                        store.subscribe((mutation) => {
-                            const { type, payload } = mutation
-                            const { tick_time, cur_price, symbolId } = payload[0] || {}
-
-                            if (!(type === '_quote/Update_productTick' && String(state.symbolId) === String(symbolId))) {
-                                return
-                            }
-
-                            state.onChartReadyFlag && unref(chartRef).setTick(cur_price, tick_time)
-                        })
                 } else {
                     localSetChartConfig('showLastPrice', false)
-                    updateCurrentPriceLine && updateCurrentPriceLine()
                 }
+
                 localSetChartConfig('lineSetList', state.settingList)
             }
         })
@@ -744,7 +733,7 @@ export default {
             const locChartConfig = JSON.parse(localGet('chartConfig'))
 
             if (isEmpty(locChartConfig)) {
-                localSetChartConfig('showLastPrice', true)
+                localSetChartConfig('showLastPrice', false)
                 localSetChartConfig('mainStudy', JSON.stringify({
                     name: 'Bollinger Bands',
                     params: [true, false, [26, 2]]
