@@ -31,11 +31,8 @@
                 </div>
                 <p class='may'>
                     <span>{{ $t('withdrawCoin.can') }} </span>
-                    <strong>
-                        {{ coinTotal }} {{ coinKind }}
-                        <b v-if='chainName'>
-                            -{{ chainName }}
-                        </b>
+                    <strong v-if='showCanMoney'>
+                        {{ coinTotal }} {{ coinKind }}-{{ chainName }}
                     </strong>
                 </p>
             </div>
@@ -104,7 +101,7 @@
             </div>
         </div>
     </div>
-    <van-button class='footer-btn' :disabled='btnDisabled' @click='onConfirm'>
+    <van-button class='footer-btn' @click='onConfirm'>
         <span>{{ $t('withdraw.confirm') }}</span>
     </van-button>
 
@@ -207,6 +204,8 @@ export default {
         const state = reactive({
             // 加载状态
             loading: true,
+            // 是否显示可提金额
+            showCanMoney: false,
             // 取款限制配置
             withdrawConfig: null,
             // 取款汇率配置
@@ -252,13 +251,12 @@ export default {
             // 当前选择的钱包
             currentWallet: null,
             // 当前选择钱包地址id
-            walletId: 0,
-            // 是否禁用提交按钮
-            btnDisabled: true
+            walletId: 0
         })
 
         // 数据初始化
         const init = () => {
+            state.showCanMoney = false
             state.coinTotal = ''
             state.coinCount = ''
             state.serviceCount = '0.00'
@@ -429,8 +427,6 @@ export default {
                         return Toast(t('withdrawCoin.hint_2') + withdrawConfig.withdrawBaseConfig.maxCount + t('withdrawCoin.unit'))
                     }
                 }
-
-                state.btnDisabled = false
             })
         }
 
@@ -446,13 +442,19 @@ export default {
                 if (res.check()) {
                     const { data } = res
                     const coinKindList = []
-                    data.map(elem => {
-                        if (!coinKindList.some(v => v.name === elem.withdrawCurrency)) {
-                            coinKindList.push({ name: elem.withdrawCurrency })
-                        }
-                    })
-                    state.allList = data
-                    state.coinKindList = coinKindList
+                    if (data.length > 0) {
+                        data.map(elem => {
+                            if (!coinKindList.some(v => v.name === elem.withdrawCurrency)) {
+                                coinKindList.push({ name: elem.withdrawCurrency })
+                            }
+                        })
+                        state.allList = data
+                        state.coinKind = coinKindList[0].name
+                        state.coinKindList = coinKindList
+
+                        // 根据提币币种获取筛选链名称
+                        filterChainName()
+                    }
                 }
             })
         }
@@ -464,7 +466,13 @@ export default {
             arr.map(elem => {
                 chainNameList.push({ name: elem.blockchainName })
             })
+            state.chainName = chainNameList[0].name
             state.chainNameList = chainNameList
+
+            // 获取钱包地址列表
+            getWalletAddress()
+            // 获取配置信息
+            getWithdrawRate()
         }
 
         // 提币币种弹窗
@@ -481,10 +489,6 @@ export default {
             init()
             // 根据提币币种获取筛选链名称
             filterChainName()
-            // 获取钱包地址列表
-            getWalletAddress()
-            // 获取配置信息
-            getWithdrawRate()
         }
 
         // 链名称弹窗
@@ -523,13 +527,15 @@ export default {
             queryWithdrawLimitInfo({
                 ...params,
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
-                withdrawCurrency: state.coinKind
+                withdrawCurrency: state.coinKind,
+                blockchainName: state.chainName
             }).then(res => {
                 if (res.check()) {
                     const { data } = res
                     state.coinTotal = data.withdrawAmount
                     state.singleHighAmount = data.singleHighAmount
                     state.singleLowAmount = data.singleLowAmount
+                    state.showCanMoney = true
                 }
             })
         }
@@ -608,12 +614,6 @@ export default {
 
         // 跳转到新增钱包地址页面
         const goWalletAdd = () => {
-            if (!state.coinKind) {
-                return Toast({ message: t('withdrawCoin.coinPlaceholder') })
-            }
-            if (!state.chainName) {
-                return Toast({ message: t('withdrawCoin.chainPlaceholder') })
-            }
             state.walletSelectVisible = false
             router.push('/walletAdd')
         }

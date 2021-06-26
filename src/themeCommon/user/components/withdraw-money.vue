@@ -14,7 +14,7 @@
             </div>
             <div class='notice'>
                 <span>{{ $t('withdrawMoney.canName') }} {{ withdrawAmount }} {{ customInfo.currency }}</span>
-                <span>{{ $t('withdrawMoney.serviceName') }} {{ fee || '--' }} {{ customInfo.currency }}</span>
+                <span>{{ $t('withdrawMoney.serviceName') }} {{ fee }} {{ customInfo.currency }}</span>
             </div>
             <div class='bank-wrap'>
                 <p class='bw-t'>
@@ -34,13 +34,13 @@
                     </van-button>
                 </div>
                 <p class='bw-t2'>
-                    {{ $t('withdrawMoney.predictName') }} {{ computePre || '--' }} {{ checkedBank.bankCurrency }}
+                    {{ $t('withdrawMoney.predictName') }} {{ computePre }} {{ checkedBank.bankCurrency }}
                 </p>
             </div>
         </div>
     </div>
 
-    <van-button block class='confirm-btn' :disabled='btnDisabled' type='primary' @click='confirm'>
+    <van-button block class='confirm-btn' type='primary' @click='confirm'>
         <span>{{ $t('withdraw.confirm') }}</span>
     </van-button>
     <van-action-sheet v-model:show='show' :round='false' :title="$t('withdrawMoney.bankPopupTitle')">
@@ -161,8 +161,8 @@ export default {
         const state = reactive({
             withdrawAmount: '0.00', // 可提金额
             amount: '', // 提现金额
-            fee: '', // 手续费
-            computePre: '', // 预计到账
+            fee: '--', // 手续费
+            computePre: '--', // 预计到账
             singleHighAmount: 0, // 最高可提金额
             singleLowAmount: 0, // 最低可提金额
             loading: false,
@@ -173,7 +173,6 @@ export default {
             bankList: [],
             fun: null,
             withdrawSuccess: false,
-            btnDisabled: false,
             withdrawCurrency: '',
             timeShow: false,
             withdrawTimeConfigMap: {} // 处理后的时区
@@ -182,8 +181,8 @@ export default {
         // 初始化数据
         const init = () => {
             state.amount = ''
-            state.fee = ''
-            state.computePre = ''
+            state.fee = '--'
+            state.computePre = '--'
         }
 
         // 获取取款手续费
@@ -387,7 +386,6 @@ export default {
                     state.singleLowAmount = data.withdrawAmountConfig.singleLowAmount
 
                     if (!res.data.customerGroupEnable) {
-                        state.btnDisabled = true
                         return Dialog.confirm({
                             title: t('withdraw.hint'),
                             theme: 'round-button',
@@ -456,7 +454,6 @@ export default {
                     })
                 } else {
                     if (!state.withdrawConfig.accountActiveEnable) {
-                        state.btnDisabled = true
                         return Dialog.confirm({
                             theme: 'round-button',
                             title: t('withdraw.hint'),
@@ -471,18 +468,15 @@ export default {
                     }
 
                     if (!state.withdrawConfig.timeEnable) {
-                        state.btnDisabled = true
                         state.timeShow = true
                         return
                     }
 
                     if (!state.withdrawConfig.amountEnable) {
-                        state.btnDisabled = true
                         return Toast(t('withdrawMoney.hint_6'))
                     }
 
                     if (!state.withdrawConfig.hourIn24Enable) {
-                        state.btnDisabled = true
                         return Toast(t('withdrawMoney.hint_7') + state.withdrawConfig.withdrawBaseConfig.maxCount + t('withdrawMoney.unit'))
                     }
                 }

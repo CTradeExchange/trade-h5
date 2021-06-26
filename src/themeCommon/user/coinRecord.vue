@@ -22,11 +22,11 @@
                     <div class='item-header' @click='onItem(index)'>
                         <div class='inner'>
                             <p class='vital'>
-                                <span class='name'>
-                                    {{ item.finalAmount }} {{ item.withdrawCurrency }}-{{ item.blockchainName }}
-                                </span>
                                 <span :class="[item.withdrawCoinStatus === 1 ? 'state-1' : 'state-2']">
                                     {{ states[item.withdrawCoinStatus] }}
+                                </span>
+                                <span class='name'>
+                                    {{ item.finalAmount }} {{ item.withdrawCurrency }}-{{ item.blockchainName }}
                                 </span>
                             </p>
                             <p class='row'>
@@ -36,8 +36,8 @@
                             </p>
                             <p class='row'>
                                 <span>{{ formatTime(item.createTime) }}</span>
-                                <span>{{ item.withdrawFee }} {{ item.withdrawCurrency }}-{{ item.blockchainName }}</span>
-                                <span>{{ item.amount }} {{ item.withdrawCurrency }}-{{ item.blockchainName }}</span>
+                                <span>{{ item.withdrawFee }} {{ item.withdrawCurrency }}</span>
+                                <span>{{ item.amount }} {{ item.withdrawCurrency }}</span>
                             </p>
                         </div>
                         <div class='arrow'>
