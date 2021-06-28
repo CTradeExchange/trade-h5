@@ -1,7 +1,7 @@
 <template>
     <div class='page-wrap'>
         <LayoutTop />
-        <div class='main'>
+        <div v-if='positionData' class='main'>
             <div class='m-orderInfo'>
                 <div class='layout layout-1'>
                     <div v-if='product' class='item item-1'>
@@ -44,7 +44,8 @@
                             </div>
                         </div>
                     </div>
-                </div><div class='layout layout-1'>
+                </div>
+                <div class='layout layout-1'>
                     <div class='item item-2 van-hairline--bottom'>
                         <div class='col'>
                             <div class='sub' :class="Number(positionData.direction) === 1 ? 'riseColor' : 'fallColor'">
@@ -64,30 +65,36 @@
                         <div class='col'>
                             <div class='sub'>
                                 {{ $t('trade.currentPrice') }}
-                            </div><div class='name riseColor'>
+                            </div>
+                            <div class='name' :class='[product.cur_color]'>
                                 {{ Number(positionData.direction) === 1 ? product.sell_price : product.buy_price }}
                             </div>
                         </div>
-                    </div><div class='item item-2 van-hairline--bottom'>
+                    </div>
+                    <div class='item item-2 van-hairline--bottom'>
                         <div class='col'>
                             <div class='sub'>
                                 {{ $t('trade.stopLossPrice') }}
-                            </div><div class='name'>
+                            </div>
+                            <div class='name'>
                                 <span class='number'>
                                     {{ parseFloat(positionData.stopLossDecimal) ? positionData.stopLossDecimal : $t('trade.nosSet') }}
                                 </span>
                             </div>
-                        </div><div class='col'>
+                        </div>
+                        <div class='col'>
                             <div class='sub'>
                                 {{ $t('trade.stopProfitPrice') }}
-                            </div><div class='name'>
+                            </div>
+                            <div class='name'>
                                 <span class='number'>
                                     {{ parseFloat(positionData.takeProfitDecimal) ? positionData.takeProfitDecimal : $t('trade.nosSet') }}
                                 </span>
                             </div>
                         </div>
                     </div>
-                </div><div class='layout layout-3'>
+                </div>
+                <div class='layout layout-3'>
                     <div class='item van-hairline--bottom'>
                         <div class='left'>
                             <div class='title'>
@@ -112,70 +119,82 @@
             <van-button plain size='normal' type='default' @click='showSetProfit = true'>
                 {{ $t('trade.tackStopSetup') }}
             </van-button>
-            <van-button size='normal' type='primary'>
+            <van-button size='normal' type='primary' @click='closeHandler'>
                 {{ $t('trade.closeOrder') }}
             </van-button>
         </div>
     </div>
     <!-- :positionData='activeOrder' -->
     <DialogSLTP
-        :direction='1'
-        :is-position='true'
+        :data='positionData'
+        :product='product'
         :show='showSetProfit'
         @submit='setProfitSuccess'
-        @update:show='updateShow'
+        @update:show='updateSLTPVisible'
     />
+    <DialogClosePosition v-model:show='closeVisible' :data='positionData' :product='product' />
 </template>
 
 <script>
 import DialogSLTP from '@c/components/dialogSLTP'
+import DialogClosePosition from '@c/components/dialogClosePosition'
 import { reactive, toRefs, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import dayjs from 'dayjs'
 import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
-    components: { DialogSLTP },
-
+    components: {
+        DialogSLTP,
+        DialogClosePosition,
+    },
     setup (props) {
         const store = useStore()
         const route = useRoute()
         const state = reactive({
-            showSetProfit: false
+            showSetProfit: false,
+            closeVisible: false,
         })
 
-        const orderId = route.query.orderId
-        const positionId = route.query.positionId
-        const symbolId = route.query.symbolId
+        const { orderId, positionId, symbolId } = route.query
+        store.commit('_quote/Update_productActivedID', symbolId)
         const customerInfo = computed(() => store.state._user.customerInfo)
         const positionData = computed(() => store.state._trade.positionMap[positionId])
-
         const product = computed(() => store.state._quote.productMap[symbolId])
-        onMounted(() => {
+
+        // 初始化设置
+        const init = () => {
+            if (!product.value.minVolume) {
+                // 获取产品详情
+                store.dispatch('_quote/querySymbolInfo', symbolId)
+            }
+            // 订阅报价
             QuoteSocket.send_subscribe([symbolId])
             if (positionId && !positionData.value?.positionId) {
                 store.dispatch('_trade/queryPositionPage')
             }
+        }
+        onMounted(() => {
+            init()
         })
 
         const setProfitSuccess = () => {
 
         }
-        const updateShow = (val) => {
+        const updateSLTPVisible = (val) => {
             state.showSetProfit = val
         }
-
-        const formatTime = (val) => {
-            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+        // 平仓
+        const closeHandler = () => {
+            state.closeVisible = true
         }
         return {
             ...toRefs(state),
             setProfitSuccess,
-            updateShow,
+            updateSLTPVisible,
+            closeHandler,
             product,
             positionData,
             orderId,
-            formatTime,
             customerInfo,
             positionId
         }

@@ -1,7 +1,7 @@
 <template>
     <div id='homeContent' ref='homeContent' class='home'>
         <Banner :list='BannerConfig.list' />
-        <Products ref='productsRef' />
+        <!-- <Products ref='productsRef' /> -->
         <Fastlink />
         <img src='https://www.se6868w.com/upload/2021/06-22/09-14-0309361852188263.png' style='width: 100%;' />
         <BanderBanner class='BanderBanner' :list='BannerConfig.list' />
@@ -32,7 +32,7 @@ export default {
     setup () {
         const productsRef = ref(null)
         const calcSubscribeProducts = () => {
-            let list = productsRef.value?.products
+            let list = productsRef.value?.products || []
             list = list.map(el => el.symbolId)
             return list
         }

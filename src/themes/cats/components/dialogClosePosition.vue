@@ -1,5 +1,14 @@
 <template>
-    <van-popup v-model:show='showCP' class='m-dialog m-dialogPc' position='bottom' transition-appear='false'>
+    <van-popup
+        v-model:show='showCP'
+        class='m-dialogPC'
+        position='bottom'
+        :transition-appear='true'
+        @closed='closed'
+    >
+        <div v-if='!!closeVolumeWarn' class='floatTip'>
+            {{ closeVolumeWarn }}
+        </div>
         <div class='dialog-header'>
             <div class='title'>
                 <p class='productName'>
@@ -8,239 +17,329 @@
                     {{ data.symbolName }}
                 </p>
             </div>
-            <div class='right' @click='close'>
+            <div class='right' @click='closeHandler'>
                 <i class='icon_icon_close_big'></i>
             </div>
-        </div><div class='dialog-body'>
+        </div>
+        <div class='dialog-body'>
             <div class='inputNumber'>
                 <div class='left'>
                     <div class='name'>
                         {{ $t('trade.hold') }}
-                    </div><div class='val'>
+                    </div>
+                    <div class='val'>
                         <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
                             {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
-                        </span> {{ positionVolume }} {{ $t('trade.volumeUnit') }}
+                        </span>
+                        {{ positionVolume }} {{ $t('trade.volumeUnit') }}
                     </div>
-                </div><div class='right'>
+                </div>
+                <div class='right'>
                     <div>
                         <div class='name'>
                             {{ $t('trade.positionPrice') }}
-                        </div><div>
+                        </div>
+                        <div>
                             {{ data.openPrice }}
                         </div>
-                    </div><div class='line'>
+                    </div>
+                    <!-- <div class='line'>
                         <div class='lineInfo van-hairline--bottom'>
                             4269.7  点
                         </div>
-                    </div><div>
+                    </div> -->
+                    <div>
                         <div class='name'>
                             {{ $t('trade.currentPrice') }}
-                        </div><div class='riseColor'>
+                        </div>
+                        <div class='riseColor'>
                             {{ Number(data.direction) === 1 ? product.sell_price : product.buy_price }}
                         </div>
                     </div>
                 </div>
-            </div><div class='inputNumber'>
+            </div>
+            <div class='inputNumber'>
                 <div class='title'>
                     <div>
                         {{ $t('trade.closedNumHands') }}
                     </div>
                 </div>
-                <stepper
+                <Stepper
+                    v-model='closeVolume'
                     class='stepper'
-                    :controlbtn='true'
-                    max='100'
-                    min='0'
                     :placeholder="$t('trade.positionNum')"
                     :step='1'
-                    value='2'
                     @change='change'
                 />
             </div>
             <div class='pcBtns'>
-                <van-tab
-                    v-for='item in btns'
-                    :key='item.value'
-                    :disabled='item.disabled'
-                    :name='item.value'
+                <a
+                    v-for='(item,i) in fastBtns'
+                    :key='i'
+                    class='item'
+                    :class='{ active:item.activeIndex===fastBtnIndex }'
+                    href='javascript:;'
+                    @click='fastVolumeHandler(item)'
                 >
-                    <van-button slot='title' round>
-                        <template #title>
-                            {{ item.title }}
-                        </template>
-                    </van-button>
-                </van-tab>
+                    {{ item.title }}
+                </a>
             </div>
             <div class='info'>
                 <div class='row'>
                     <div class='name'>
-                        平仓盈亏
-                    </div><div class='val'>
-                        +42.70 USDT≈  +42.70 USD
+                        {{ $t('trade.closeProfit') }}
                     </div>
-                </div><div class='row'>
+                    <div class='val'>
+                        {{ data.profit>0 ? '+'+data.profit : data.profit }} {{ customerInfo.currency }}
+                    </div>
+                </div>
+                <!-- <div class='row'>
                     <div class='name'>
-                        隔夜利息
-                    </div><div class='val'>
-                        -6.63 USD
+                        {{ $t('trade.swap') }}
                     </div>
-                </div><div class='row'>
+                    <div class='val'>
+                        -- {{ customerInfo.currency }}
+                    </div>
+                </div> -->
+                <div v-if='data.closeFreeDigits' class='row'>
                     <div class='name'>
                         手续费
-                    </div><div class='val'>
-                        0.00 USD
                     </div>
-                </div><div class='row'>
-                    <div class='name'>
-                        平仓净盈亏
-                    </div><div class='val'>
-                        <span class='riseColor'>
-                            {{ data.profitLoss }}
-                        </span>
-                        {{ customerInfo.currency }}
+                    <div class='val'>
+                        {{ data.closeFreeDigits + customerInfo.currency }}
                     </div>
                 </div>
             </div>
-        </div><div class='dialog-footer'>
+        </div>
+        <div class='dialog-footer'>
             <van-button
-
-                color='#477FD3'
+                block
+                class='pcHandler'
                 :loading='loading'
-                @click='submit'
+                @click='submitCloseHandler'
             >
                 {{ $t('trade.confirmClose') }}
             </van-button>
         </div>
     </van-popup>
+    <Loading :show='loading' />
 </template>
 
 <script>
-import { reactive, toRefs, watch, computed, watchEffect, onUnmounted } from 'vue'
-import { minus } from '@/utils/calculation'
+import { reactive, toRefs, computed, watchEffect, onMounted } from 'vue'
+import { div, eq, getDecimalNum, gt, lt, minus, mul } from '@/utils/calculation'
 import { useStore } from 'vuex'
+import Stepper from '@/components/stepper'
+import BigNumber from 'bignumber.js'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { addMarketOrder } from '@/api/trade'
+import { Toast } from 'vant'
 export default {
-    props: ['cpVis', 'data'],
+    components: {
+        Stepper,
+    },
+    props: ['show', 'product', 'data'],
+    emits: ['update:show'],
     setup (props, context) {
         const store = useStore()
+        const router = useRouter()
+        const { t } = useI18n({ useScope: 'global' })
         const fastBtns = [
-            { title: '全部', value: 1 },
-            { title: '1/2', value: 0.5 },
-            { title: '1/3', value: 1 / 3 },
-            { title: '1/4', value: 0.25 }
+            { title: t('trade.allPosition'), activeIndex: 1, divValue: 1 },
+            { title: '1/2', activeIndex: 2, divValue: 2 },
+            { title: '1/3', activeIndex: 3, divValue: 3 },
+            { title: '1/4', activeIndex: 4, divValue: 4 }
         ]
         const state = reactive({
-            showCP: true
+            showCP: true,
+            loading: false,
+            fastBtnIndex: 1,
+            closeVolume: '',
         })
         const customerInfo = computed(() => store.state._user.customerInfo)
-        const positionVolume = computed(() => minus(props.data.openVolume, props.data.closeVolume))
-        const product = computed(() => store.state._quote.productMap[props.data.symbolId])
-        const close = () => {
+        const positionVolume = computed(() => minus(props.data?.openVolume, props.data?.closeVolume))
+        const positionVolumeMin = computed(() => props.product.minVolume)
+        const closeVolumeWarn = computed(() => { // 检测平仓手数是否合法
+            const minVolume = props.product.minVolume
+            const closeVolume = state.closeVolume
+            const mod = BigNumber(closeVolume).mod(minVolume).toNumber()
+            if (eq(closeVolume, positionVolume.value)) {
+                return false
+            } else if (lt(closeVolume, minVolume) || gt(closeVolume, positionVolume.value)) {
+                return t('trade.volumesOutScope', { min: minVolume, max: positionVolume.value, volumeUnit: t('trade.volumeUnit') })
+            } else if (mod > 0) {
+                return t('trade.volumesOutScopeTip', { volume: minVolume })
+            } else {
+                return false
+            }
+        })
+        const closeHandler = () => {
+            state.showCP = false
+        }
+
+        const change = () => {}
+
+        // 平仓接口参数
+        const submitCloseParam = () => {
+            if (!state.closeVolume) {
+                Toast('请输入平仓数量')
+                return false
+            }
+            if (closeVolumeWarn.value) return false
+            const requestPrice = props.data.direction === 1 ? props.product.sell_price : props.product.buy_price
+            const direction = props.data.direction === 1 ? 2 : 1
+            const p = Math.pow(10, props.product.price_digits)
+            const params = {
+                bizType: 2, // 业务类型。0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
+                direction, // 订单买卖方向。1-买；2-卖；
+                positionId: props.data.positionId,
+                symbolId: props.product.symbolId,
+                requestTime: Date.now(),
+                requestNum: state.closeVolume,
+                requestPrice: mul(requestPrice, p),
+                expireType: props.data.expireType,
+                stopLoss: props.data.stopLoss,
+                takeProfit: props.data.takeProfit
+            }
+            return params
+        }
+        // 平仓
+        const submitCloseHandler = () => {
+            const params = submitCloseParam()
+            if (!params) return false
+            state.loading = true
+            addMarketOrder(params)
+                .then(res => {
+                    state.loading = false
+                    if (res.invalid()) return false
+                    const data = res.data
+                    const localData = Object.assign({}, params, data)
+                    const orderId = data.orderId || data.id
+                    sessionStorage.setItem('order_' + orderId, JSON.stringify(localData))
+                    router.push({ name: 'ClosePositionSuccess', query: { orderId } })
+                })
+                .catch(err => {
+                    state.loading = false
+                })
+        }
+        const closed = () => { // 关闭弹出层且动画结束后触发
             context.emit('update:show', false)
         }
 
-        const change = () => {
-
+        // 快速设置平仓手数
+        const fastVolumeHandler = (item) => {
+            const volumeStep = props.product.volumeStep
+            const newVolume = BigNumber(positionVolume.value).div(item.divValue).toString()
+            const mod = BigNumber(newVolume).mod(volumeStep).toString()
+            if (eq(mod, 0)) {
+                state.closeVolume = newVolume
+            }
         }
 
-        watchEffect(() => (state.showCP = props.show))
+        watchEffect(() => {
+            state.showCP = props.show
+            if (props.show) {
+                state.closeVolume = positionVolume.value
+            }
+        })
+        watchEffect(() => { // 根据输入的手数高亮快速平仓手数
+            fastBtns.forEach(el => {
+                const elVolume = div(positionVolume.value, el.divValue)
+                if (eq(elVolume, state.closeVolume)) {
+                    state.fastBtnIndex = el.activeIndex
+                }
+            })
+        })
 
         return {
             ...toRefs(state),
-            close,
-            product,
+            fastBtns,
+            closeHandler,
+            closed,
             positionVolume,
+            positionVolumeMin,
+            closeVolumeWarn,
+            fastVolumeHandler,
             change,
+            submitCloseHandler,
             customerInfo
         }
     }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-.m-dialogPc {
-    z-index: 1000;
-    height: rem(740px);
-    &.pc {
-        width: 400px;
-        height: 600px;
-        border-radius: 6px;
-        .dialog-footer {
-            position: absolute;
-            right: 20px;
-            bottom: 20px;
-            left: 20px;
-            .van-button {
-                border-radius: 2px;
-            }
-        }
-        .dialog-header {
-            .title {
-                padding: 0 60px;
-                .productName {
-                    @include single-line-clamp();
-                }
-            }
-        }
+.floatTip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: rem(50px);
+    color: var(--red);
+    line-height: rem(50px);
+    text-align: center;
+    background: #FFF0E2;
+    transform: translateY(-100%);
+}
+.stepper {
+    background: var(--btnColor);
+    &.warn {
+        color: var(--red);
     }
-    .errorFixedTip {
-        top: 57px !important;
-        width: 100%;
-        height: rem(50px);
-        color: #E3525C;
-        font-size: rem(24px);
-        line-height: rem(50px);
-        text-align: center;
-        background: rgba(255, 240, 226, 1);
+}
+.dialog-header {
+    padding: rem(30px) 0;
+    text-align: center;
+    .title {
+        font-size: rem(32px);
     }
     .lot {
         color: #999;
         font-size: rem(20px);
         text-align: center;
     }
-    .dialog-body {
-        .pcBtns {
-            padding-bottom: rem(30px);
-            text-align: right;
-            .van-tabs__wrap {
-                height: rem(60px);
-            }
-            .van-tabs__nav--card {
-                height: rem(60px);
-                margin: 0 rem(30px);
-            }
-            .van-tabs__nav {
-                justify-content: flex-end;
-                border: none;
-            }
-            .van-tab {
-                flex: none;
-                width: rem(120px);
-                height: rem(50px);
-                margin-left: rem(30px);
-                padding: 0;
-                border-right: none;
-            }
-            .van-button {
-                width: rem(120px);
-                height: rem(50px);
-                padding: 0;
-                color: #333;
-                line-height: rem(50px);
-                text-align: center;
-                background-color: #F9F9F9;
-                border-color: #F9F9F9;
-                border-radius: rem(6px);
-            }
-            .van-tab--active {
-                background-color: #FFF;
-                .van-button {
-                    color: #FFF;
-                    background-color: #477FD3;
-                    border-color: #477FD3;
-                }
-            }
+    .right {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: rem(25px);
+        font-size: rem(38px);
+    }
+}
+.pcBtns {
+    margin: 0 rem(40px) rem(40px) rem(35px);
+    text-align: right;
+    .item {
+        display: inline-block;
+        width: rem(120px);
+        height: rem(45px);
+        margin-left: rem(30px);
+        color: var(--color);
+        line-height: rem(45px);
+        text-align: center;
+        background: var(--btnColor);
+        border-radius: 4px;
+        &.active {
+            color: var(--white);
+            background: var(--primary);
         }
+    }
+}
+.dialog-footer {
+    width: 100%;
+    .pcHandler {
+        color: var(--white);
+        background: var(--primary);
+    }
+}
+.m-dialogPC {
+    z-index: 1000;
+    height: rem(740px);
+    overflow: visible;
+    .dialog-body {
+        flex: 1;
         .inputNumber {
             position: relative;
             display: flex;
@@ -250,11 +349,6 @@ export default {
             .title {
                 color: #333;
                 font-size: rem(28px);
-            }
-            .stepper {
-                &.warn {
-                    color: var(--red);
-                }
             }
             .tipNumber {
                 color: #666;
@@ -285,6 +379,7 @@ export default {
             .right {
                 display: flex;
                 flex: 1;
+                justify-content: space-between;
                 .line {
                     position: relative;
                     flex: 1;
@@ -321,5 +416,16 @@ export default {
             text-align: center;
         }
     }
+}
+</style>
+
+<style lang='scss'>
+@import '~@/sass/mixin.scss';
+.m-dialogPC {
+    z-index: 1000;
+    display: flex;
+    flex-flow: column;
+    height: rem(640px);
+    overflow: visible;
 }
 </style>

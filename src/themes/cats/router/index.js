@@ -60,24 +60,32 @@ const routes = [
                 meta: {
                     title: 'route.trade'
                 }
-            },
-            {
-                path: 'positionDetail',
-                name: 'PositionDetail',
-                component: () => import(/* webpackChunkName: "position" */ '../views/position/positionDetail.vue'),
-                meta: {
-                    title: 'route.positionDetail'
-                }
-            },
-            {
-                path: 'pendingDetail',
-                name: 'PendingDetail',
-                component: () => import(/* webpackChunkName: "position" */ '../views/position/pendingDetail.vue'),
-                meta: {
-                    title: 'route.pendingDetail'
-                }
             }
         ]
+    },
+    {
+        path: '/closePositionSuccess',
+        name: 'ClosePositionSuccess',
+        component: () => import(/* webpackChunkName: "position" */ '../views/position/closePositionSuccess.vue'),
+        meta: {
+            title: ''
+        }
+    },
+    {
+        path: '/positionDetail',
+        name: 'PositionDetail',
+        component: () => import(/* webpackChunkName: "position" */ '../views/position/positionDetail.vue'),
+        meta: {
+            title: 'route.positionDetail'
+        }
+    },
+    {
+        path: '/pendingDetail',
+        name: 'PendingDetail',
+        component: () => import(/* webpackChunkName: "position" */ '../views/position/pendingDetail.vue'),
+        meta: {
+            title: 'route.pendingDetail'
+        }
     },
     {
         path: '/historyDetail',
