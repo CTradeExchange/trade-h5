@@ -553,7 +553,7 @@ class Chart {
 
         this._applyOverrides(config)
         config.property && this.setChartType(config.property.chartType)
-        this._setLine(config)
+        // this._setLine(config)
         if (typeof config.showPositionPrice === 'boolean') {
             !config.showPositionPrice && this.updatePosition()
         }
