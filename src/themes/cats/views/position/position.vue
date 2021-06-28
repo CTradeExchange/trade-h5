@@ -24,7 +24,7 @@
                                 :key='index'
                                 class='action-item'
                                 :class='{ active: item.active }'
-                                size='small'
+                                size='mini'
                                 type='default'
                                 @click='handleSortPosition(item)'
                             >
@@ -281,12 +281,12 @@ export default {
     .m-ccgd {
         background-color: var(--bgColor2);
         .m-orderBy {
-            margin-top: rem(20px);
+            margin-top: rem(40px);
             margin-bottom: rem(20px);
             .van-button {
                 min-width: rem(110px);
                 color: #000;
-                //padding: 0 rem(30px);
+                border-color: var(--white);
                 &.active {
                     color: #477FD3;
                 }
@@ -307,6 +307,9 @@ export default {
     .groupBtn {
         padding-top: rem(30px);
         padding-bottom: rem(30px);
+        .van-button {
+            height: rem(48px);
+        }
     }
 }
 

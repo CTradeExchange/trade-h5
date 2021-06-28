@@ -25,36 +25,43 @@
                             </div>
                         </div>
                     </div>
+
                     <div class='subTitle'>
                         {{ $t('fund.capitialComponents') }}
                         <span>({{ $t('common.unit') + mainAccount.currency }})</span>
                     </div>
-                    <div id='annulus' class='annulus'>
-                        {{ $t('common.loading') }}
+                    <div v-if='accountInfo' class='subTitle'>
+                        <p>{{ $t('common.jz') }}</p>
+                        {{ netWorth }}
                     </div>
-                    <div class='percent-info'>
-                        <div class='item'>
-                            <div class='title'>
-                                {{ $t('common.yk') }}
-                            </div>
-                            <div class='val riseColor'>
-                                {{ computePrice(accountInfo.profitLoss) }}
-                            </div>
+                    <div class='annulusWrapper'>
+                        <div id='annulus' class='annulus'>
+                            {{ $t('common.loading') }}
                         </div>
-                        <div class='item'>
-                            <div class='title'>
-                                {{ $t('fund.maginable') }}
+                        <div v-if='accountInfo' class='percent-info'>
+                            <div class='item'>
+                                <span class='title'>
+                                    {{ $t('common.yk') }}
+                                </span>
+                                <span class='val riseColor'>
+                                    {{ computePrice(accountInfo.profitLoss) }}
+                                </span>
                             </div>
-                            <div class='val val2'>
-                                {{ computePrice(accountInfo.availableMargin) }}
+                            <div class='item'>
+                                <span class='title'>
+                                    {{ $t('fund.maginable') }}
+                                </span>
+                                <span class='val val2'>
+                                    {{ computePrice(accountInfo.availableMargin) }}
+                                </span>
                             </div>
-                        </div>
-                        <div class='item'>
-                            <div class='title'>
-                                {{ $t('fund.accupyMargin') }}
-                            </div>
-                            <div class='val val3'>
-                                {{ computePrice(accountInfo.occupyMargin) }}
+                            <div class='item'>
+                                <span class='title'>
+                                    {{ $t('fund.accupyMargin') }}
+                                </span>
+                                <span class='val val3'>
+                                    {{ computePrice(accountInfo.occupyMargin) }}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -111,18 +118,17 @@ export default {
         onMounted(() => {
             if (accountInfo.value) {
                 const earnest = accountInfo.value.occupyMargin
-
                 const netWorthPercent = divide(netWorth.value, parseFloat(netWorth.value + earnest))
                 const earnestPercent = divide(earnest, parseFloat(netWorth.value + earnest))
 
                 createTorus({
                     id: 'annulus',
-                    width: 210,
-                    height: 210,
-                    r: 80,
+                    width: 120,
+                    height: 120,
+                    r: 45,
                     arcWidth: 15,
-                    label: t('common.jz'),
-                    text: netWorth.value || '--',
+                    label: '',
+                    text: '',
                     data: [
                         {
                             color: '#477FD3',
@@ -142,6 +148,7 @@ export default {
         return {
             ...toRefs(state),
             hide,
+            netWorth,
             accountInfo,
             mainAccount,
             computePrice
@@ -180,8 +187,13 @@ export default {
                 font-size: rem(20px);
             }
         }
-        .annulus {
-            text-align: center;
+        .annulusWrapper {
+            position: relative;
+            .annulus {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
         }
         .percent {
             position: relative;
@@ -232,44 +244,11 @@ export default {
                     }
                 }
             }
-            &.less {
-                .progress-base {
-                    .progress-color {
-                        background-color: #F39800;
-                    }
-                    .number {
-                        color: #F39800;
-                    }
-                    .tip-2 {
-                        .txt {
-                            color: #F39800;
-                        }
-                    }
-                }
-            }
-            &.stopout {
-                .progress-base {
-                    .progress-color {
-                        background-color: #E3525C;
-                    }
-                    .number {
-                        color: #E3525C;
-                    }
-                    .tip-2 {
-                        .txt {
-                            color: #E3525C;
-                        }
-                    }
-                }
-            }
         }
         .percent-info {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             margin-top: rem(20px);
-            padding: 0 rem(40px);
-            text-align: center;
+            line-height: rem(70px);
+            text-align: right;
             .title {
                 padding-bottom: rem(10px);
                 color: #333;

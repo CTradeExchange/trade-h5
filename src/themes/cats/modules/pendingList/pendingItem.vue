@@ -8,7 +8,7 @@
                         {{ data.symbolName }}
                     </div>
                     <div class='lot'>
-                        {{ data.symbolName }}
+                        {{ data.symbolCode }}
                     </div>
                 </div>
             </div>
@@ -19,7 +19,7 @@
                             <span class='title' :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
                                 {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
                             </span><span>
-                                {{ positionVolume }} {{ $t('trade.volumeUnit') }}
+                                {{ data.requestNum }} {{ $t('trade.volumeUnit') }}
                             </span>
                         </div>
                         <div class='price_item'>
@@ -27,7 +27,7 @@
                                 {{ $t('trade.pendingPrice') }}
                             </span>
                             <span class='grayColor'>
-                                {{ Number(data.direction) === 1 ? product.buy_price : product.sell_price }}
+                                {{ shiftedBy(data.requestPrice, -1*product.price_digits) }}
                             </span>
                         </div>
                     </div><div>
@@ -47,13 +47,12 @@
                         </div>
                     </div>
                 </div><div class='ft'>
-                    <div class='bd'>
+                    <div class='bd' @click.stop='toProduct(data.symbolId)'>
                         <i class='icon_icon_chart hidden'></i>
                     </div>
                     <van-button
                         color='#477fd3'
                         hairline
-                        plain
                         size='mini'
                         type='default'
                         @click.stop='handleClose'
@@ -73,7 +72,7 @@ import { Toast } from 'vant'
 import { computed, reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { minus } from '@/utils/calculation'
+import { minus, shiftedBy } from '@/utils/calculation'
 import DialogClosePosition from '@c/components/dialogClosePosition'
 import { closePboOrder } from '@/api/trade'
 export default {
@@ -81,7 +80,8 @@ export default {
         DialogClosePosition
     },
     props: ['data'],
-    setup ({ data }) {
+    emits: ['showClose'],
+    setup ({ data }, { emit }) {
         const store = useStore()
         const router = useRouter()
         const state = reactive({
@@ -102,36 +102,27 @@ export default {
 
         // 取消订单
         const handleClose = () => {
-            state.show = false
-            // bizType 0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
-            const params = {
-                pboId: state.cur.id,
-                bizType: state.cur.bizType
-            }
-            closePboOrder(params).then(res => {
-                if (res.check()) {
-                    Toast('删除成功')
-                    store.dispatch('_trade/queryPBOOrderPage')
-                }
-            }).catch(err => {
-                console.log(err)
-            })
-
-            // router.push({ name: 'Order', query: { symbolId: state.cur.symbolId } })
+            emit('showClose', data)
         }
 
         const updateShow = (val) => {
             state.cpVis = val
         }
 
+        const toProduct = (symbolId) => {
+            router.push({ path: '/product', query: { symbolId } })
+        }
+
         return {
             ...toRefs(state),
             positionList,
             customerInfo,
+            shiftedBy,
             product,
             positionVolume,
             toPositionDetail,
             updateShow,
+            toProduct,
             handleClose
         }
     }
@@ -239,17 +230,14 @@ export default {
             }
         }
         .van-button {
+            width: rem(124px);
+            height: rem(48px);
+            color: var(--primary) !important;
+            font-size: rem(24px);
+            line-height: rem(48px);
+            background: var(--lightenPrimary) !important;
+            border-color: var(--lightenPrimary) !important;
             border-radius: rem(6px);
-            &__text {
-                color: #477FD3;
-            }
-            &--mini {
-                min-width: rem(124px);
-                height: rem(48px);
-                padding: 0 rem(10px);
-                font-size: rem(24px);
-                line-height: rem(48px);
-            }
         }
     }
 }

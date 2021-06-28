@@ -161,7 +161,7 @@ export default {
         const positionVolume = computed(() => minus(props.data?.openVolume, props.data?.closeVolume))
         const positionVolumeMin = computed(() => props.product.minVolume)
         const closeVolumeWarn = computed(() => { // 检测平仓手数是否合法
-            const minVolume = props.product.minVolume
+            const minVolume = props.product?.minVolume ?? 0
             const closeVolume = state.closeVolume
             const mod = BigNumber(closeVolume).mod(minVolume).toNumber()
             if (eq(closeVolume, positionVolume.value)) {

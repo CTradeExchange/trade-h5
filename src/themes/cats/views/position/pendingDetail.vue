@@ -1,40 +1,40 @@
 <template>
     <div class='page-wrap'>
         <LayoutTop :back='true' :menu='false' />
-        <div class='main'>
+        <div v-if='orderInfo' class='main'>
             <div class='m-orderInfo'>
                 <div class='layout layout-1'>
                     <div class='item item-1'>
                         <div class='left'>
                             <div class='name'>
-                                {{ pendingData.symbolName }}
+                                {{ orderInfo.symbolName }}
                             </div>
                             <div class='code'>
-                                {{ pendingData.symbolName }}
+                                {{ orderInfo.symbolCode }}
                             </div>
                         </div>
                     </div>
                     <div class='item item-2'>
                         <div class='col'>
-                            <div class='sub'>
-                                {{ $t('trade.sell') }}
+                            <div class='sub' :class="Number(orderInfo.direction) === 1 ? 'riseColor' : 'fallColor'">
+                                {{ Number(orderInfo.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
                             </div>
-                            <div class='name' :class="parseFloat(pendingData.profit) > 0 ? 'riseColor': 'fallColor'">
-                                --
+                            <div class='name'>
+                                {{ orderInfo.requestNum }} {{ $t('trade.volumeUnit') }}
                             </div>
                         </div><div class='col'>
                             <div class='sub'>
                                 {{ $t('trade.pendingPrice') }}
                             </div>
                             <div class='name'>
-                                --
+                                {{ pendingPrice }}
                             </div>
                         </div><div class='col'>
-                            <div class='sub'>
+                            <div class='sub' :class='[product.cur_color]'>
                                 {{ $t('trade.currentPrice') }}
                             </div>
                             <div class='name'>
-                                --
+                                {{ Number(orderInfo.direction) === 1 ? product.sell_price : product.buy_price }}
                             </div>
                         </div>
                     </div>
@@ -46,7 +46,7 @@
                             </div>
                             <div class='name'>
                                 <span class='number'>
-                                    --
+                                    {{ orderInfo.stopLoss ? shiftedBy(orderInfo.stopLoss, -1*product.price_digits):'--' }}
                                 </span>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                             </div>
                             <div class='name'>
                                 <span class='number'>
-                                    --
+                                    {{ orderInfo.takeProfit ? shiftedBy(orderInfo.takeProfit, -1*product.price_digits) :'--' }}
                                 </span>
                             </div>
                         </div>
@@ -70,6 +70,7 @@
                             </div>
                         </div>
                         <div class='right'>
+                            {{ $t( orderInfo.expireType===1?'trade.expireType1' :'trade.expireType2') }}
                         </div>
                     </div>
                     <div class='item van-hairline--bottom'>
@@ -79,6 +80,7 @@
                             </div>
                         </div>
                         <div class='right'>
+                            {{ formatTime(orderInfo.orderTime) }}
                         </div>
                     </div>
                     <div class='item'>
@@ -95,60 +97,98 @@
             </div>
         </div>
         <div class='submitBox'>
-            <van-button plain size='normal' type='primary' @click='showSetProfit = true'>
+            <van-button plain size='normal' type='primary' @click='showCancelOrderTip = true'>
                 {{ $t('trade.cancelPending') }}
             </van-button>
         </div>
+        <DialogBottomTip
+            v-model:show='showCancelOrderTip'
+            :tips="$t('trade.cancelPendingConfirm')"
+            :title="$t('trade.cancelPending')"
+            @submit='cancelOrderHandler'
+        />
+        <Loading :show='loading' />
     </div>
 </template>
 
 <script>
-import { reactive, toRefs, computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { isEmpty } from '@/utils/util'
+import { reactive, toRefs, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import dayjs from 'dayjs'
+import { shiftedBy } from '@/utils/calculation'
+import { closePboOrder } from '@/api/trade'
 import { QuoteSocket } from '@/plugins/socket/socket'
+import DialogBottomTip from '@c/components/dialogBottomTip'
+import { Toast } from 'vant'
+import { useI18n } from 'vue-i18n'
 export default {
-
+    components: {
+        DialogBottomTip,
+    },
     setup (props) {
         const store = useStore()
         const route = useRoute()
+        const router = useRouter()
+        const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
-
+            showCancelOrderTip: false,
+            loading: false,
         })
 
-        const orderId = route.query.orderId
-        const id = route.query.id
-        const symbolId = route.query.symbolId
-        const customerInfo = computed(() => store.state._user.customerInfo)
-        // 持仓产品
-
-        const pendingData = computed(() => store.state._trade.pendingMap[id])
-
+        const { id, symbolId } = route.query
         const product = computed(() => store.state._quote.productMap[symbolId])
+        const customerInfo = computed(() => store.state._user.customerInfo)
+        const orderInfo = computed(() => store.state._trade.pendingMap[id])
+        const pendingPrice = computed(() => shiftedBy(orderInfo.value?.requestPrice, -1 * product.value?.price_digits))
 
         QuoteSocket.send_subscribe([symbolId])
 
-        const setProfitSuccess = () => {
+        // 初始化设置
+        const init = () => {
+            if (!product.value?.minVolume) {
+                // 获取产品详情
+                store.dispatch('_quote/querySymbolInfo', symbolId)
+            }
+            // 订阅报价
+            QuoteSocket.send_subscribe([symbolId])
+            if (id && !orderInfo.value?.id) {
+                store.dispatch('_trade/queryPBOOrderPage')
+            }
+        }
 
+        // 取消挂单
+        const cancelOrderHandler = () => {
+            state.showCancelOrderTip = false
+            // bizType 0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
+            const params = {
+                pboId: orderInfo.value.id,
+                bizType: orderInfo.value.bizType
+            }
+            state.loading = true
+            closePboOrder(params).then(res => {
+                state.loading = false
+                if (res.check()) {
+                    router.back()
+                    Toast(t('trade.cancelSuccess'))
+                    store.dispatch('_trade/queryPBOOrderPage')
+                }
+            }).catch(err => {
+                state.loading = false
+                console.log(err)
+            })
         }
-        const updateShow = (val) => {
-            state.showSetProfit = val
-        }
+        onMounted(() => {
+            init()
+        })
 
-        const formatTime = (val) => {
-            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
-        }
         return {
             ...toRefs(state),
-            setProfitSuccess,
-            updateShow,
             product,
-            pendingData,
-            orderId,
-            formatTime,
+            orderInfo,
+            pendingPrice,
             customerInfo,
+            shiftedBy,
+            cancelOrderHandler,
             id
         }
     }

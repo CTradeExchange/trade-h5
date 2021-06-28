@@ -8,7 +8,7 @@
                         {{ data.symbolName }}
                     </div>
                     <div class='lot'>
-                        {{ data.symbolName }}
+                        {{ data.symbolCode }}
                     </div><p>
                         <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
                             {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
@@ -64,7 +64,7 @@
                         hairline
                         size='mini'
                         type='default'
-                        @click.stop='cpVis=true'
+                        @click.stop='$emit("showClose",data)'
                     >
                         {{ $t('trade.closed') }}
                     </van-button>
@@ -73,7 +73,7 @@
         </div>
     </div>
 
-    <DialogClosePosition v-if='cpVis' :data='data' :show='cpVis' @update:show='updateShow' />
+    <!-- <DialogClosePosition v-if='cpVis' :data='data' :show='cpVis' @update:show='updateShow' /> -->
 </template>
 
 <script>
@@ -81,12 +81,10 @@ import { computed, reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { minus } from '@/utils/calculation'
-import DialogClosePosition from '@c/components/dialogClosePosition'
+// import DialogClosePosition from '@c/components/dialogClosePosition'
 export default {
-    components: {
-        DialogClosePosition
-    },
     props: ['data'],
+    emits: ['showClose'],
     setup ({ data }) {
         const store = useStore()
         const router = useRouter()
