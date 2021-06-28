@@ -108,7 +108,6 @@ export default {
         const updateShow = (val) => {
             state.cpVis = val
         }
-
         const toProduct = (symbolId) => {
             router.push({ path: '/product', query: { symbolId } })
         }
@@ -123,7 +122,7 @@ export default {
             toPositionDetail,
             updateShow,
             toProduct,
-            handleClose
+            handleClose,
         }
     }
 }

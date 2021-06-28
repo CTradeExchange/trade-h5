@@ -1,19 +1,14 @@
 <template>
-    <div class='stallsAndDeal'>
+    <div v-if='showTabs' class='stallsAndDeal'>
         <van-tabs
             ref='tabs'
-            v-model='tabActive'
             class='tabs'
             color='#477fd3'
             line-height='2'
             line-width='20'
-            :style='{
-                "min-width": tabMinWidth + "px"
-            }'
             title-active-color='#477fd3'
-            @change='onChangeTab'
         >
-            <van-tab name='stalls' title='五档'>
+            <van-tab v-if='statusList.indexOf("stalls") > -1' name='stalls' :title='$t("trade.sellFive")'>
                 <div v-for='(item,index) in product.tickResult' :key='index' class='stalls-wrap'>
                     <div class='sell-wrap'>
                         <div class='item quantity'>
@@ -56,115 +51,48 @@
                     </div>
                 </div>
             </van-tab>
-            <van-tab name='deal' title='成交'>
+            <van-tab v-if='statusList.indexOf("deal") > -1' name='deal' :title='$t("trade.deal")'>
                 <!-- 成交记录 -->
                 <div class='deal-wrap'>
                     <div class='list-wrap'>
                         <div class='col time-col'>
                             <span class='label'>
-                                时间
+                                {{ $t('trade.sortTime') }}
                             </span>
-                            <span class='val forWide'>
-                                09:47:05
+                            <span v-if='dealData.length' class='val forWide'>
+                                {{ formatTime(dealData[0][1]) }}
                             </span>
                             <div class='vals'>
                                 <span class='val'>
-                                    09:47:01
-                                </span>
-                                <span class='val'>
-                                    09:47:01
-                                </span>
-                                <span class='val fallColor'>
-                                    09:47:01
-                                </span>
-                                <span class='val'>
-                                    09:46:58
-                                </span>
-                                <span class='val riseColor'>
-                                    09:46:58
-                                </span>
-                                <span class='val'>
-                                    09:46:58
-                                </span>
-                                <span class='val'>
-                                    09:46:58
-                                </span>
-                                <span class='val riseColor'>
-                                    09:46:58
-                                </span>
-                                <span class='val riseColor'>
-                                    09:46:58
+                                    <span v-for='(item, i) in dealData' :key='i' class='val' :class='item.colorCls'>
+                                        {{ formatTime(item[1]) }}
+                                    </span>
                                 </span>
                             </div>
                         </div>
                         <div class='col price-col'>
                             <span class='label'>
-                                成交价
-                            </span><span class='val forWide'>
-                                31596.3
+                                {{ $t('trade.dealPrice') }}
+                            </span>
+                            <span v-if='dealData.length' class='val forWide'>
+                                {{ dealData[0][2] }}
                             </span>
                             <div class='vals'>
-                                <span class='val'>
-                                    31596.3
-                                </span>
-                                <span class='val fallColor'>
-                                    31596.3
-                                </span>
-                                <span class='val fallColor'>
-                                    31596.7
-                                </span>
-                                <span class='val'>
-                                    31598.7
-                                </span>
-                                <span class='val'>
-                                    31598.7
-                                </span>
-                                <span class='val riseColor'>
-                                    31598.7
-                                </span>
-                                <span class='val fallColor'>
-                                    31597.1
-                                </span>
-                                <span class='val'>
-                                    31598.4
-                                </span>
-                                <span class='val'>
-                                    31598.4
+                                <span v-for='(item, i) in dealData' :key='i' class='val' :class='item.colorCls'>
+                                    {{ item[2] }}
                                 </span>
                             </div>
                         </div><div class='col volume-col'>
                             <span class='label'>
-                                成交量
-                            </span><span class='val forWide'>
-                                6.245
+                                {{ $t('trade.dealVolume') }}
+                            </span>
+                            <span v-if='dealData.length' class='val forWide'>
+                                {{ dealData[0][3] }}
                             </span>
                             <div class='vals'>
-                                <span class='val'>
-                                    6.245
-                                </span>
-                                <span class='val fallColor'>
-                                    3.417
-                                </span>
-                                <span class='val fallColor'>
-                                    2.082
-                                </span>
-                                <span class='val'>
-                                    1.715
-                                </span>
-                                <span class='val'>
-                                    1.962
-                                </span>
-                                <span class='val riseColor'>
-                                    4.418
-                                </span>
-                                <span class='val fallColor'>
-                                    2.082
-                                </span>
-                                <span class='val'>
-                                    1.715
-                                </span>
-                                <span class='val'>
-                                    1.962
+                                <span v-for='(item, i) in dealData' :key='i' class='val' :class='item.colorCls'>
+                                    {{ item[3] }}
+                                <!-- {{ item[4] === 1 ? 'B' : 'S' }} -->
                                 </span>
                             </div>
                         </div>
@@ -179,40 +107,162 @@
 
 import { computed, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
+import dayjs from 'dayjs'
 export default {
-    components: {
-
-    },
-    props: ['symbolId', 'status'],
+    props: ['symbolId', 'settingList', 'curPrice'],
     setup (props) {
         const store = useStore()
         const state = reactive({
-            tabActive: 1,
             dealData: [],
             tempDealData: [],
+            statusList: props.settingList,
+            isDealDelaying: false,
+            timer: 0,
+            diffVal: 0
         })
         const product = computed(() => store.state._quote.productMap[props.symbolId])
-
+        const showTabs = computed(() => {
+            if (props.settingList.indexOf('stalls') === -1 && props.settingList.indexOf('deal') === -1) {
+                return false
+            }
+            return true
+        })
         watch(() => [product.value.tickResult], (newValues) => {
             let totalAskVolume = 0; let totalBidVolume = 0
+            const tempArr = []
             if (product.value.tickResult.length > 0) {
                 product.value.tickResult.forEach(item => {
+                    tempArr.push(item.volume_ask)
+                    tempArr.push(item.volume_bid)
+
                     totalAskVolume += parseFloat(item.volume_ask)
                     totalBidVolume += parseFloat(item.volume_bid)
                 })
                 product.value.askTotal = totalAskVolume
                 product.value.bidTotal = totalBidVolume
             }
+            state.diffVal = Math.max.apply(null, tempArr) - Math.min.apply(null, tempArr)
         })
 
         watch(
-            () => props.status,
+            () => props.settingList,
             (val) => {
-                console.log(props.status)
+                console.log(props.settingList)
+                if (props.settingList.indexOf('stalls') === -1 && props.settingList.indexOf('deal') === -1) {
+                    state.showTabs = false
+                } else {
+                    state.showTabs = true
+                }
+                state.statusList = props.settingList
+                // state.activeObj = props.status
             })
+
+        watch(() => props.curPrice, (newVal, oldVal) => {
+            const newList = []
+            const len = genRandomLen()
+            while (newList.length < len) {
+                const time = Date.now()
+                const volume = genRandomVolume()
+                newList.unshift([793065, time, newVal, volume, 2, 1])
+            }
+            if (newList.length && newVal && oldVal) {
+                if (newVal * 1 !== oldVal * 1) {
+                    if (newVal * 1 > oldVal * 1) {
+                        newList[newList.length - 1].colorCls = 'riseColor'
+                    } else {
+                        newList[newList.length - 1].colorCls = 'fallColor'
+                    }
+                }
+            }
+
+            state.tempDealData.unshift(...newList)
+        })
+
+        watch(() => state.tempDealData, (val, old) => {
+            if (!val.length) {
+                state.isDealDelaying = false
+            }
+
+            if (val.length && !state.isDealDelaying) {
+                state.isDealDelaying = true
+                delayMounted()
+                // console.log(val.length, 'delayMounted')
+            }
+        }, {
+            deep: true,
+            immediate: true,
+        })
+
+        const delayMounted = (time = 100) => {
+            requestAnimationFrame(() => {
+                if (!state.tempDealData.length) {
+                    return
+                }
+                // if (this.tempDealData.length > 100) {
+                //     this.tempDealData.splice(0, this.tempDealData.length - 60)
+                // }
+                state.tempDealData.splice(20)
+                if (state.dealData.length > 20) {
+                    state.dealData.pop()
+                }
+                state.dealData.unshift(state.tempDealData.splice(state.tempDealData.length - 1, 1)[0])
+
+                state.timer = setTimeout(() => {
+                    delayMounted(100 / state.tempDealData.length)
+                }, time)
+            })
+        }
+
+        // 生成随机长度，大于0
+        const genRandomLen = () => {
+            // 笔数=【1，5】随机
+            const random = Math.random()
+            let range = []
+            if (random < 0.7) {
+                // 3条概率
+                range = [0, 3]
+            } else {
+                // 5条概率
+                range = [3, 2]
+            }
+
+            let len = range[0] + Math.random() * range[1]
+            while (!len) {
+                len = range[0] + Math.random() * range[1]
+            }
+
+            return len
+        }
+
+        // 生成随机成交量，大于0
+        const genRandomVolume = () => {
+            const random = Math.random()
+            let range = []
+            if (random < 0.7) {
+                range = [0, 3]
+            } else {
+                range = [3, 10]
+            }
+            // BTC产品 数量=【0，30】随机，保留3位小数
+            // ETH产品 数量=【0，100】随机，保留3位小数
+            let volume = range[0] + Math.random() * range[1]
+            while (!volume) {
+                volume = range[0] + Math.random() * range[1]
+            }
+            volume = volume.toFixed(3)
+
+            return volume
+        }
+
+        // 格式化时间
+        const formatTime = (val) => {
+            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+        }
 
         return {
             product,
+            formatTime,
+            showTabs,
             ...toRefs(state)
         }
     }
@@ -233,9 +283,11 @@ export default {
         display: flex;
         flex-direction: column;
         height: 100%;
-        :deep(.van-tab) {
-            font-size: rem(24px);
-            line-height: rem(50px);
+        :deep() {
+            .van-tab {
+                font-size: rem(24px);
+                line-height: rem(50px);
+            }
             .van-tabs__wrap {
                 height: rem(50px);
             }
@@ -255,7 +307,6 @@ export default {
         display: flex;
         flex-direction: row;
         width: 100%;
-        height: 100%;
         .sell-wrap,
         .buy-wrap {
             display: flex;

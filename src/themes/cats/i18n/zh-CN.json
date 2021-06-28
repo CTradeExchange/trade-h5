@@ -363,7 +363,11 @@
     "dealData": "成交数据",
     "addOptionalOk": "已添加自选",
     "removeOptionalOk": "已取消自选",
-    "cancelSuccess": "取消成功"
+    "cancelSuccess": "取消成功",
+    "sellFive": "五档",
+    "deal": "成交",
+    "dealPrice": "成交价",
+    "dealVolume": "成交量"
   },
   "weekdayMap": {
     "1": "周一",
