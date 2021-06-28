@@ -2,18 +2,14 @@
     <div class='stallsAndDeal'>
         <van-tabs
             ref='tabs'
-            v-model='tabActive'
+            v-model:active='tabActive'
             class='tabs'
             color='#477fd3'
             line-height='2'
             line-width='20'
-            :style='{
-                "min-width": tabMinWidth + "px"
-            }'
             title-active-color='#477fd3'
-            @change='onChangeTab'
         >
-            <van-tab name='stalls' title='五档'>
+            <van-tab v-if='activeObj[0]' name='stalls' title='五档'>
                 <div v-for='(item,index) in product.tickResult' :key='index' class='stalls-wrap'>
                     <div class='sell-wrap'>
                         <div class='item quantity'>
@@ -56,7 +52,7 @@
                     </div>
                 </div>
             </van-tab>
-            <van-tab name='deal' title='成交'>
+            <van-tab v-if='activeObj[1]' name='deal' title='成交'>
                 <!-- 成交记录 -->
                 <div class='deal-wrap'>
                     <div class='list-wrap'>
@@ -189,9 +185,10 @@ export default {
         const state = reactive({
             tabActive: 1,
             dealData: [],
-            tempDealData: [],
+            tempDealData: []
         })
         const product = computed(() => store.state._quote.productMap[props.symbolId])
+        const activeObj = computed(() => props.status)
 
         watch(() => [product.value.tickResult], (newValues) => {
             let totalAskVolume = 0; let totalBidVolume = 0
@@ -205,14 +202,16 @@ export default {
             }
         })
 
-        watch(
-            () => props.status,
-            (val) => {
-                console.log(props.status)
-            })
+        // watch(
+        //     () => props.status,
+        //     (val) => {
+        //         console.log(props.status)
+        //         state.activeObj = props.status
+        //     })
 
         return {
             product,
+            activeObj,
             ...toRefs(state)
         }
     }
@@ -233,9 +232,11 @@ export default {
         display: flex;
         flex-direction: column;
         height: 100%;
-        :deep(.van-tab) {
-            font-size: rem(24px);
-            line-height: rem(50px);
+        :deep() {
+            .van-tab {
+                font-size: rem(24px);
+                line-height: rem(50px);
+            }
             .van-tabs__wrap {
                 height: rem(50px);
             }
