@@ -63,8 +63,6 @@
             </div>
         </div>
     </div>
-
-    <DialogClosePosition v-if='cpVis' :data='data' :show='cpVis' @update:show='updateShow' />
 </template>
 
 <script>
@@ -73,12 +71,7 @@ import { computed, reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { minus, shiftedBy } from '@/utils/calculation'
-import DialogClosePosition from '@c/components/dialogClosePosition'
-import { closePboOrder } from '@/api/trade'
 export default {
-    components: {
-        DialogClosePosition
-    },
     props: ['data'],
     emits: ['showClose'],
     setup ({ data }, { emit }) {
@@ -87,8 +80,6 @@ export default {
         const state = reactive({
             show: false,
             loading: false,
-            cur: {},
-            cpVis: false
         })
         const customerInfo = computed(() => store.state._user.customerInfo)
         const positionList = computed(() => store.state._trade.positionList)
@@ -105,9 +96,6 @@ export default {
             emit('showClose', data)
         }
 
-        const updateShow = (val) => {
-            state.cpVis = val
-        }
         const toProduct = (symbolId) => {
             router.push({ path: '/product', query: { symbolId } })
         }
@@ -120,7 +108,6 @@ export default {
             product,
             positionVolume,
             toPositionDetail,
-            updateShow,
             toProduct,
             handleClose,
         }
