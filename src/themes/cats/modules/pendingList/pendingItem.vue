@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 </div><div class='ft'>
-                    <div class='bd'>
+                    <div class='bd' @click.stop='toProduct(data.symbolId)'>
                         <i class='icon_icon_chart hidden'></i>
                     </div>
                     <van-button
@@ -123,6 +123,9 @@ export default {
         const updateShow = (val) => {
             state.cpVis = val
         }
+        const toProduct = (symbolId) => {
+            router.push({ path: '/product', query: { symbolId } })
+        }
 
         return {
             ...toRefs(state),
@@ -132,7 +135,8 @@ export default {
             positionVolume,
             toPositionDetail,
             updateShow,
-            handleClose
+            handleClose,
+            toProduct
         }
     }
 }

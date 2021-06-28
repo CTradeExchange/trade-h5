@@ -25,6 +25,7 @@
                 </div>
             </template>
         </LayoutTop>
+        <Loading :show='loading' />
         <section class='container'>
             <div class='productInfo'>
                 <div class='hd'>
@@ -145,7 +146,6 @@
                             </van-cell>
                         </van-dropdown-item>
                     </van-dropdown-menu>
-                    <!-- <van-loading v-if='loading' class='loadingIcon' color='#1989fa' size='18px' /> -->
                     <div class='setting' @click='settingStatus = !settingStatus'>
                         <van-icon class='icon' name='setting-o' />
 
@@ -234,9 +234,9 @@
                 </div>
             </div>
         </div>
-
         <StallsAndDeal
-            :status='[settingList.indexOf("stalls") > -1, settingList.indexOf("deal") > -1, ]'
+            :cur-price='product.cur_price'
+            :setting-list='settingList'
             :symbol-id='symbolId'
         />
 
@@ -279,7 +279,7 @@
 import { useRouter, useRoute } from 'vue-router'
 import StudyList from './components/studyList.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, reactive, toRefs, onBeforeUnmount, ref, onMounted, unref, watchEffect, watch, onUpdated } from 'vue'
+import { computed, reactive, toRefs, onBeforeUnmount, ref, onMounted, unref, watchEffect, watch, onUpdated, nextTick } from 'vue'
 import KIcon from './icons/kIcon.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import dayjs from 'dayjs'
@@ -290,15 +290,17 @@ import tv from '@/components/tradingview/tv'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import StallsAndDeal from './components/StallsAndDeal'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
+import Loading from '@/components/loading.vue'
 
 export default {
-    components: { KIcon, StudyList, tv, StallsAndDeal },
+    components: { KIcon, StudyList, tv, StallsAndDeal, Loading },
     setup (props) {
         const route = useRoute()
         const router = useRouter()
         const symbolId = route.query.symbolId
         const { t } = useI18n({ useScope: 'global' })
         const klineTypeDropdown = ref(null)
+        const collect = ref(null)
         const store = useStore()
         const candleKTypeList = [
             // {
@@ -452,7 +454,8 @@ export default {
             klineType: 0,
             initConfig: {},
             symbolId: symbolId,
-            onChartReadyFlag: false
+            onChartReadyFlag: false,
+            loading: false
 
         })
 
@@ -475,7 +478,7 @@ export default {
 
         // 图表初始值
         const initialValue = computed(() => {
-            if (symbolId) {
+            if (product.value.symbolName) {
                 return {
                     text: product.value.symbolName, // 用于vant组件显示
                     description: product.value.symbolCode, // 显示在图表左上角
@@ -562,9 +565,9 @@ export default {
             } else {
                 property.showLastPrice = false
             }
-
             state.onChartReadyFlag && unref(chartRef).updateProperty(property)
-            setPositionLine()
+
+            // setPositionLine()
         }
 
         const setPositionLine = (property) => {
@@ -688,44 +691,43 @@ export default {
                 state.onChartReadyFlag && unref(chartRef).setTick(product.value.cur_price, product.value.tick_time)
             }
 
-            if (state.settingList.indexOf('showBuyPrice') > -1 || state.settingList.indexOf('showSellPrice') > -1) {
-                state.onChartReadyFlag && unref(chartRef).updateLineData({
-                    buyPrice: product.value.buy_price,
-                    sellPrice: product.value.sell_price
-                })
+            // if (state.settingList.indexOf('showBuyPrice') > -1 || state.settingList.indexOf('showSellPrice') > -1) {
+            state.onChartReadyFlag && unref(chartRef).updateLineData({
+                buyPrice: product.value.buy_price,
+                sellPrice: product.value.sell_price
+            })
+            // }
+        })
+
+        watch(() => [state.settingList], (newValues) => {
+            // console.log('newValues', newValues)
+            // if (state.settingList && state.settingList.length > 0) {
+            if (state.settingList.indexOf('showBuyPrice') > -1) {
+                localSetChartConfig('showBuyPrice', true)
+            } else {
+                localSetChartConfig('showBuyPrice', false)
             }
-        }
 
-        )
-
-        watchEffect(() => {
-            if (state.settingList && state.settingList.length > 0) {
-                if (state.settingList.indexOf('showBuyPrice') > -1) {
-                    localSetChartConfig('showBuyPrice', true)
-                } else {
-                    localSetChartConfig('showBuyPrice', false)
-                }
-
-                if (state.settingList.indexOf('showPositionPrice') > -1) {
-                    localSetChartConfig('showPositionPrice', true)
-                } else {
-                    localSetChartConfig('showPositionPrice', false)
-                }
-
-                if (state.settingList.indexOf('showSellPrice') > -1) {
-                    localSetChartConfig('showSellPrice', true)
-                } else {
-                    localSetChartConfig('showSellPrice', false)
-                }
-
-                if (state.settingList.indexOf('showLastPrice') > -1) {
-                    localSetChartConfig('showLastPrice', true)
-                } else {
-                    localSetChartConfig('showLastPrice', false)
-                }
-
-                localSetChartConfig('lineSetList', state.settingList)
+            if (state.settingList.indexOf('showPositionPrice') > -1) {
+                localSetChartConfig('showPositionPrice', true)
+            } else {
+                localSetChartConfig('showPositionPrice', false)
             }
+
+            if (state.settingList.indexOf('showSellPrice') > -1) {
+                localSetChartConfig('showSellPrice', true)
+            } else {
+                localSetChartConfig('showSellPrice', false)
+            }
+
+            if (state.settingList.indexOf('showLastPrice') > -1) {
+                localSetChartConfig('showLastPrice', true)
+            } else {
+                localSetChartConfig('showLastPrice', false)
+            }
+
+            localSetChartConfig('lineSetList', state.settingList)
+            // }
         })
 
         const initChartData = () => {
@@ -772,7 +774,7 @@ export default {
             } else {
                 state.mainStudy = JSON.parse(locChartConfig.mainStudy).name
                 state.subStudy = JSON.parse(locChartConfig.subStudy).name
-                state.activeTab = candleKTypeList.find(item => Number(item.ktype) === Number(locChartConfig.resolution)).ktype
+                state.activeTab = candleKTypeList.find(item => String(item.ktype) === String(locChartConfig.resolution)).ktype
 
                 state.klineType = locChartConfig.chartType
                 state.settingList = locChartConfig.lineSetList
@@ -800,19 +802,29 @@ export default {
 
         // 添加自选
         const addOptional = () => {
+            state.loading = true
             if (isSelfSymbol.value) {
                 removeCustomerOptional({ symbolList: [symbolId] }).then(res => {
                     if (res.code === '0') {
+                        state.loading = false
                         store.dispatch('_user/queryCustomerOptionalList')
                         Toast(t('trade.removeOptionalOk'))
+                        collect.value.classList.remove('icon_zixuan2')
                     }
+                }).catch(err => {
+                    state.loading = false
                 })
             } else {
                 addCustomerOptional({ symbolList: [symbolId] }).then(res => {
                     if (res.code === '0') {
+                        state.loading = false
                         store.dispatch('_user/queryCustomerOptionalList')
+                        collect.value.classList.add('icon_zixuan2')
+
                         Toast(t('trade.addOptionalOk'))
                     }
+                }).catch(err => {
+                    state.loading = false
                 })
             }
         }
@@ -861,7 +873,8 @@ export default {
             positionList,
             onChartReady,
             addOptional,
-            toOrder
+            toOrder,
+            collect
         }
     }
 }
