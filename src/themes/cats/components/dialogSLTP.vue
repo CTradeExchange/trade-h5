@@ -4,99 +4,163 @@
         class='m-dialog m-dialogZyzs'
         get-container='body'
         position='bottom'
-        @closed='close'
+        @closed='closed'
         @open='open'
     >
-        <template v-if='showDialog'>
-            <div class='dialog-header'>
-                <div class='title'>
-                    <p class='productName'>
-                        现货白银
-                    </p>
-                </div>
-                <div class='right' @click='close'>
-                    <i class='icon_icon_close_big'></i>
-                </div>
+        <div v-if='!!warn' class='floatTip'>
+            {{ warn }}
+        </div>
+        <div class='dialog-header'>
+            <div class='title'>
+                <p class='productName'>
+                    {{ data.symbolName }}
+                </p><p class='lot'>
+                    {{ data.symbolName }}
+                </p>
             </div>
-            <div class='dialog-body'>
-                <div class='inputNumber'>
-                    <div class='left'>
+            <div class='right' @click='closeHandler'>
+                <i class='icon_icon_close_big'></i>
+            </div>
+        </div>
+        <div class='dialog-body'>
+            <div class='inputNumber'>
+                <div class='left'>
+                    <div class='name'>
+                        {{ $t('trade.hold') }}
+                    </div>
+                    <div class='val'>
+                        <span :class="parseFloat(data.direction) === 1 ? 'riseColor' : 'fallColor'">
+                            {{ parseFloat(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
+                        </span>
+                        {{ positionVolume }} {{ $t('trade.volumeUnit') }}
+                    </div>
+                </div>
+                <div class='right'>
+                    <div>
                         <div class='name'>
-                            {{ $t('trade.hold') }}
+                            {{ $t('trade.positionPrice') }}
                         </div>
-                        <div class='val'>
-                            <span
-                                class='riseColor'
-                            >
-                                卖出
-                            </span>
-                            0.1 {{ $t('trade.volumeUnit') }}
-                        </div>
+                        <div>{{ data.openPrice }}</div>
                     </div>
-                    <div class='right'>
-                        <div>
-                            <div class='name'>
-                                {{ $t('trade.positionPrice') }}
-                            </div>
-                            <div>51.55488</div>
+                    <!-- <div class='line'>
+                        <div class='lineInfo van-hairline--bottom'>
+                            7545
                         </div>
-                        <div class='line'>
-                            <div class='lineInfo van-hairline--bottom'>
-                                7545
-                            </div>
+                    </div> -->
+                    <div>
+                        <div class='name'>
+                            {{ $t('trade.currentPrice') }}
                         </div>
-                        <div>
-                            <div class='name'>
-                                {{ $t('trade.currentPrice') }}
-                            </div>
-                            <div class='sell_color'>
-                                21.555
-                            </div>
+                        <div :class='[parseFloat(data.direction)===1 ? product.sell_color:product.buy_color]'>
+                            {{ parseFloat(data.direction)===1 ? product.sell_price:product.buy_price }}
                         </div>
                     </div>
                 </div>
-                <!-- <profit-loss
-                        ref='profitLoss'
-                        v-model='setData'
-                        class='mtop'
-                        :digits='product.groupSymbol.digits'
-                        :direction="direction === 1 ? 'buy' : 'sell'"
-                        from='zyzs'
-                        :open-price='orderinfo.open_price'
-                        :position-close-price="isPosition ? positionClosePrice : ''"
-                        :product='orderinfo'
-                        :volume='orderinfo.volume'
-                    /> -->
             </div>
-            <div class='dialog-footer'>
-                <van-button color='#477FD3' @click='submit'>
-                    {{ $t('save') }}
-                </van-button>
-            </div>
-        </template>
+            <ModifyProfitLoss
+                ref='modifyProfitLossRef'
+                v-model:stopLoss='stopLossPrice'
+                v-model:stopProfit='stopProfitPrice'
+                class='modifyProfitLoss'
+                :direction='data.direction'
+                :order-data='data'
+                :product='product'
+            />
+        </div>
+        <div class='dialog-footer'>
+            <van-button color='#477FD3' :loading='loading' @click='submitHandler'>
+                {{ $t('save') }}
+            </van-button>
+        </div>
     </van-popup>
 </template>
 
 <script>
-import { reactive, toRefs, watch, watchEffect, onUnmounted } from 'vue'
+import { reactive, toRefs, watchEffect, computed, ref } from 'vue'
+import ModifyProfitLoss from '@c/components/modifyProfitLoss'
+import { updateOrder, updatePboOrder } from '@/api/trade'
+import { equalTo, mul, pow, minus } from '@/utils/calculation'
+import { useI18n } from 'vue-i18n'
+import { Toast } from 'vant'
+import { useStore } from 'vuex'
 export default {
-    props: ['show'],
+    components: {
+        ModifyProfitLoss,
+    },
+    props: ['show', 'product', 'data'],
+    emits: ['update:show'],
     setup (props, context) {
+        const modifyProfitLossRef = ref(null)
+        const store = useStore()
+        const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
-            showDialog: false
+            loading: false,
+            showDialog: false,
+            stopLossPrice: '',
+            stopProfitPrice: '',
         })
-
-        watchEffect(() => (state.showDialog = props.show))
-
-        const close = () => {
+        const warn = computed(() => modifyProfitLossRef.value?.stopLossWarn || modifyProfitLossRef.value?.stopProfitWarn)
+        const positionVolume = computed(() => minus(props.data?.openVolume, props.data?.closeVolume))
+        watchEffect(() => {
+            state.showDialog = props.show
+            if (props.data?.positionId) store.commit('_trade/Update_modifyPositionId', props.data.positionId)
+        })
+        watchEffect(() => {
+            if (props.data?.stopLoss) state.stopLossPrice = props.data.stopLossDecimal
+            if (props.data?.stopLoss) state.stopProfitPrice = props.data.takeProfitDecimal
+        })
+        const closed = () => { // 关闭弹出层且动画结束后触发
+            state.stopLossPrice = ''
+            state.stopProfitPrice = ''
             context.emit('update:show', false)
         }
+        const closeHandler = () => {
+            state.showDialog = false
+        }
         const open = () => {}
+        // 获取修改止盈止损参数
+        const submitParams = () => {
+            const data = props.data
+            if (equalTo(data.takeProfit, state.stopLossPrice) && equalTo(data.stopLoss, state.stopProfitPrice)) {
+                Toast(t('trade.unModify'))
+                return false
+            }
+            const p = pow(10, props.product.price_digits)
+            const params = {
+                orderId: data.orderId,
+                positionId: data.positionId,
+                stopLoss: !state.stopLossPrice ? 0 : mul(state.stopLossPrice, p),
+                takeProfit: !state.stopProfitPrice ? 0 : mul(state.stopProfitPrice, p),
+            }
+            return params
+        }
+        // 提交修改止盈止损
+        const submitHandler = () => {
+            const params = submitParams()
+            if (!params) return false
+            state.loading = true
+            updateOrder(params).then(res => {
+                state.loading = false
+                if (res.check()) {
+                    store.dispatch('_trade/queryPositionPage')
+                    Toast(t('trade.modifySuccess'))
+                    closed()
+                }
+            }).catch((err) => {
+                state.loading = false
+                console.log(err)
+            })
+        }
 
         return {
             ...toRefs(state),
-            close,
+            modifyProfitLossRef,
+            positionVolume,
+            warn,
+            closed,
             open,
+            closeHandler,
+            submitHandler,
         }
     }
 }
@@ -104,37 +168,48 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.m-dialogZyzs {
-    height: rem(630px);
-    overflow-y: visible;
-    &.pc {
-        width: 400px;
-        height: 600px;
-        border-radius: 6px;
-        .dialog-footer {
-            position: absolute;
-            right: 20px;
-            bottom: 20px;
-            left: 20px;
-            .van-button {
-                border-radius: 2px;
-            }
-        }
-        .dialog-header {
-            .title {
-                padding: 0 60px;
-                .productName {
-
-                }
-            }
-        }
+.floatTip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: rem(50px);
+    color: var(--red);
+    line-height: rem(50px);
+    text-align: center;
+    background: #FFF0E2;
+    transform: translateY(-100%);
+}
+.dialog-header {
+    padding: rem(30px) 0;
+    text-align: center;
+    .title {
+        font-size: rem(32px);
     }
     .lot {
         color: #999;
         font-size: rem(20px);
         text-align: center;
     }
+    .right {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: rem(25px);
+        font-size: rem(38px);
+    }
+}
+.modifyProfitLoss {
+    margin: 0 rem(40px) rem(30px) rem(35px);
+}
+.m-dialogZyzs {
+    .lot {
+        color: #999;
+        font-size: rem(20px);
+        text-align: center;
+    }
     .dialog-body {
+        padding-bottom: rem(20px);
         overflow-y: visible;
         :deep(.layout-1) {
             padding-bottom: rem(30px);
@@ -158,11 +233,12 @@ export default {
                 font-size: rem(20px);
             }
             .left {
-                width: rem(200px);
+                width: rem(300px);
             }
             .right {
                 display: flex;
                 flex: 1;
+                justify-content: space-between;
                 .line {
                     position: relative;
                     flex: 1;
@@ -177,5 +253,12 @@ export default {
             }
         }
     }
+}
+</style>
+
+<style lang="scss">
+.m-dialogZyzs {
+    height: rem(630px);
+    overflow-y: visible;
 }
 </style>

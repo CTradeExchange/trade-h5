@@ -119,6 +119,7 @@ export default {
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
         QuoteSocket.send_subscribe([symbolId]) // 订阅产品报价
         store.commit('_quote/Update_productActivedID', symbolId)
+        store.commit('_trade/Update_modifyPositionId', 0)
         const product = computed(() => store.getters.productActived)
         // 切换订单类型
         const changeOrderType = (val) => {

@@ -49,6 +49,48 @@ export function tickToObj (p) {
     const priceStr = p.split(';')[0].match(/\((.+)\)/)
     const price = priceStr[1] ?? ''
     const priceArr = price.split(',')
+
+    const priceTickArr = p.split(';')
+    // priceTickArr.shift()
+    const tickResult = []
+
+    if (priceTickArr.length > 2) {
+        priceTickArr.forEach((item, index) => {
+            if (item) {
+                const tickObj = {}
+                if (Number(index) === 0) {
+                    item = item.replace('(', '').replace(')', '')
+                    tickObj.price_bid = priceArr[5]
+                    tickObj.price_ask = priceArr[6]
+                    tickObj.volume_bid = priceArr[7]
+                    tickObj.volume_ask = priceArr[8]
+                    tickResult.push(tickObj)
+                } else {
+                    item = item.replace('(', '').replace(')', '')
+                    tickObj.price_bid = item.split(',')[0]
+                    tickObj.price_ask = item.split(',')[1]
+                    tickObj.volume_bid = item.split(',')[2]
+                    tickObj.volume_ask = item.split(',')[3]
+                    tickResult.push(tickObj)
+                }
+            }
+        })
+    } else {
+        priceTickArr.forEach(item => {
+            if (item) {
+                const tickObj = {}
+                tickObj.price_bid = priceArr[5]
+                tickObj.price_ask = priceArr[6]
+                tickObj.volume_bid = priceArr[7]
+                tickObj.volume_ask = priceArr[8]
+                tickResult.push(tickObj)
+            }
+        })
+    }
+    // const priceTickStr = JSON.stringify(p.split(';')).shift().match(/\((.+)\)/)
+    // const prictTick = p[1] ?? ''
+    // const prictTickArr = prictTick.split(',')
+
     const curPriceData = {
         symbolId: priceArr[0] * 1,
         trade_type: priceArr[1],
@@ -56,6 +98,7 @@ export function tickToObj (p) {
         cur_price: priceArr[4],
         sell_price: priceArr[5],
         buy_price: priceArr[6],
+        tickResult
     }
     return curPriceData
 }

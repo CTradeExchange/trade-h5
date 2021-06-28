@@ -144,9 +144,7 @@ export default {
 
         QuoteSocket.send_subscribe([symbolId])
 
-        const setProfitSuccess = () => {
-
-        }
+        const setProfitSuccess = () => {}
         const updateShow = (val) => {
             state.showSetProfit = val
         }

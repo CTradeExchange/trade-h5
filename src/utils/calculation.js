@@ -78,3 +78,13 @@ export function eq (num1, num2) {
 export function shiftedBy (num1, num2) {
     return BigNumber(num1).shiftedBy(num2).toFixed(Math.abs(num2))
 }
+/* 比较两个数字值是否相等，包含null, undefined,0,'',false类型 */
+export function equalTo (a, b) {
+    const aBool = !!a
+    const bBool = !!b
+    if (aBool === false && aBool === bBool) {
+        return true
+    } else {
+        return BigNumber(a).eq(b)
+    }
+}

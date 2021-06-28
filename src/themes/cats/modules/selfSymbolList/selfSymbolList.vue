@@ -15,7 +15,7 @@
             </div>
             <ul ref='productListEl' class='selfSymbolListUl'>
                 <li v-for='item in productList' :key='item' class='van-hairline--bottom'>
-                    <productItem :display-type='displayType' :product='productMap[item.symbolId]' />
+                    <productItem :display-type='displayType' :product='productMap[item.symbolId]' @open='openProduct(item)' />
                 </li>
             </ul>
         </div>
@@ -79,6 +79,9 @@ export default {
             const subscribList = calcSubscribeProducts()
             if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
         })
+        const openProduct = (data) => {
+            router.push('/product?symbolId=' + data.symbolId)
+        }
 
         watch(
             () => productList.value.length,
@@ -97,6 +100,7 @@ export default {
         return {
             ...toRefs(state),
             productListEl,
+            openProduct,
             calcSubscribeProducts,
             productMap,
             productList,

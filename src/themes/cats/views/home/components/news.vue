@@ -14,7 +14,7 @@ export default {
     name: 'News',
     activated () {
         const homeContent = document.querySelector('#homeContent')
-        homeContent.scrollTop = scrollTop
+        if (homeContent) homeContent.scrollTop = scrollTop
     },
     mounted () {
         const _this = this
@@ -78,7 +78,7 @@ export default {
             this.scrollFn = evt => {
                 scrollTop = evt.target.scrollTop
             }
-            homeContent.addEventListener('scroll', this.scrollFn, false)
+            if (homeContent) homeContent.addEventListener('scroll', this.scrollFn, false)
         }
     }
 }

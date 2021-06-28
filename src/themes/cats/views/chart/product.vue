@@ -8,7 +8,7 @@
 
             <template #right>
                 <div class='right-wrap'>
-                    <div class='collectIcon' @click='toggleSelf'>
+                    <div class='collectIcon' @click='addOptional'>
                         <i
                             ref='collect'
                             class='icon_zixuan1'
@@ -88,8 +88,8 @@
                     title-active-color='#007AFF'
                 >
                     <van-tab
-                        v-for='(item,i) in candleKTypeList.slice(0,6)'
-                        :key='i'
+                        v-for='(item) in candleKTypeList.slice(0,6)'
+                        :key='item.ktype'
                         :name='item.ktype'
                         :title='item.title'
                     />
@@ -200,16 +200,14 @@
             </div>
         </div>
         <div class='chart-wrap'>
-            <!-- <Chart /> -->
             <tv
                 v-if='initialValue'
                 ref='chartRef'
                 :initial-value='initialValue'
-                :positionList="positionList"
-                :options='chartConfig'
+                :options='initConfig'
                 @indicatorRemoved='indicatorRemoved'
+                @onChartReady='onChartReady'
                 @orientationChanged='orientationChanged'
-                @symbolChanged='symbolChanged'
             />
         </div>
         <div v-show='studyVis' ref='mainStudyArea' class='study-area'>
@@ -237,23 +235,14 @@
             </div>
         </div>
 
-        <!-- <StallsAndDeal
-            :cur-price='product.cur_price'
-            :deal-str='dealStr'
-            :digit='product.digit'
-            market-id='1'
-            product-id='1'
-            :stalls-str='stallsStr'
-            :status="{ stalls: 1, deal: '' }"
-        >
-            <template #myPositions>
-                <slot name='myPositions'></slot>
-            </template>
-        </StallsAndDeal> -->
+        <StallsAndDeal
+            :status='[settingList.indexOf("stalls") > -1, settingList.indexOf("deal") > -1, ]'
+            :symbol-id='symbolId'
+        />
 
         <div class='footerBtnBox'>
             <div class='trade-btn-wrap'>
-                <div class='sell fallColorBg'>
+                <div class='sell fallColorBg' @click="toOrder('sell')">
                     <p>
                         {{ $t('trade.sell') }}
                     </p>
@@ -261,7 +250,7 @@
                         {{ product.sell_price }}
                     </p>
                 </div>
-                <div class='buy riseColorBg'>
+                <div class='buy riseColorBg' @click="toOrder('buy')">
                     <p>
                         {{ $t('trade.buy') }}
                     </p>
@@ -287,22 +276,23 @@
 </template>
 
 <script>
-import Chart from './chart'
 import { useRouter, useRoute } from 'vue-router'
 import StudyList from './components/studyList.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, reactive, toRefs, onBeforeUnmount, ref, onMounted, unref, watchEffect } from 'vue'
+import { computed, reactive, toRefs, onBeforeUnmount, ref, onMounted, unref, watchEffect, watch, onUpdated } from 'vue'
 import KIcon from './icons/kIcon.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import dayjs from 'dayjs'
 import { useStore } from 'vuex'
-import { Dialog } from 'vant'
+import { Dialog, Toast } from 'vant'
 import { isEmpty, localSet, localGet } from '@/utils/util'
 import tv from '@/components/tradingview/tv'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import StallsAndDeal from './components/StallsAndDeal'
+import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
+
 export default {
-    components: { KIcon, Chart, StudyList, tv, StallsAndDeal },
+    components: { KIcon, StudyList, tv, StallsAndDeal },
     setup (props) {
         const route = useRoute()
         const router = useRouter()
@@ -459,33 +449,11 @@ export default {
             nowTime: dayjs().format('HH:mm:ss'),
             timeId: '',
             settingList: [],
-            klineType: 0
+            klineType: 0,
+            initConfig: {},
+            symbolId: symbolId,
+            onChartReadyFlag: false
 
-        })
-
-        // 图表配置
-        const chartConfig = ref({
-            property: {
-                showLastPrice: true, // 现价线
-                showPositionPrice: true, // 持仓线
-                showBuyPrice: false, // 买价线
-                showSellPrice: false, // 卖价线
-                showSeriesOHLC: true, // 高开低收
-                showBarChange: true, // 涨跌幅
-                chartType: '1', // 图表类型
-                showSeriesTitle: false // K线标题
-            },
-            indicators: [
-                {
-                    name: 'Bollinger Bands',
-                    params: [true, false, [26, 2]]
-                },
-                {
-                    name: 'Custom MACD',
-                    params: [false, false, [12, 26, 'close', 9]]
-                }
-
-            ]
         })
 
         // 图表组件引用
@@ -501,21 +469,18 @@ export default {
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)
 
         // 订阅产品
-        // const subscribList = productList.value.map(({ symbolId }) => symbolId)
-        // store.dispatch('_quote/querySymbolBaseInfoList', subscribList)
-        // QuoteSocket.send_subscribe(subscribList)
+        const subscribList = productList.value.map(({ symbolId }) => symbolId)
+        store.dispatch('_quote/querySymbolBaseInfoList', subscribList)
+        QuoteSocket.send_subscribe(subscribList)
 
         // 图表初始值
         const initialValue = computed(() => {
-            
             if (symbolId) {
                 return {
                     text: product.value.symbolName, // 用于vant组件显示
                     description: product.value.symbolCode, // 显示在图表左上角
                     symbolId: product.value.symbolId, // 产品id
                     digits: product.value.symbolDigits, // 小数点
-                    buyPrice: product.value.buy_price,
-                    sellPrice: product.value.sell_price
                 }
             }
         })
@@ -546,6 +511,7 @@ export default {
         const onBeforeChange = (name, title) => {
             if (name === 'moreKTypes') {
                 state.moreTimeIsOpened = !state.moreTimeIsOpened
+                return
             }
             console.log(name)
             if (name === 'timeSharing') {
@@ -554,7 +520,7 @@ export default {
                 state.studyVis = true
             }
 
-            unref(chartRef).chart.setResolution(name)
+            state.onChartReadyFlag && unref(chartRef).setResolution(name)
 
             localSetChartConfig('resolution', name)
 
@@ -565,7 +531,7 @@ export default {
         const setChartType = (item) => {
             state.klineType = item.value
 
-            unref(chartRef).chart.setChartType(Number(item.value))
+            state.onChartReadyFlag && unref(chartRef).setChartType(Number(item.value))
             localSetChartConfig('chartType', item.value)
             klineTypeDropdown.value.toggle()
         }
@@ -581,7 +547,6 @@ export default {
 
             if (val.indexOf('showPositionPrice') > -1) {
                 property.showPositionPrice = true
-                //setPositionLine()
             } else {
                 property.showPositionPrice = false
             }
@@ -594,28 +559,28 @@ export default {
 
             if (val.indexOf('showLastPrice') > -1) {
                 property.showLastPrice = true
-
-                
             } else {
                 property.showLastPrice = false
             }
 
-            chartRef.value && unref(chartRef).chart.updateProperty(property)
+            state.onChartReadyFlag && unref(chartRef).updateProperty(property)
+            setPositionLine()
         }
 
-        const setPositionLine = () => {
-            
-            const positionProducts = positionList.value.find(item=>item.symbolId === Number(symbolId))
-            if(isEmpty(positionProducts)) return
-            const property = [
-                { 
-                    text: Number(positionProducts.direction) === 1 ? t('trade.buy'): t('trade.sell') + positionProducts.volume + t('trade.volumeUnit'), 
-                    quantity: positionProducts.openNum, 
-                    price: positionProducts.openPrice, 
-                    color: positionProducts.profitLoss < 0 ? 'green' : 'red'
-                }
-            ]
-            //chartRef.value && unref(chartRef).chart.updatePosition(property)
+        const setPositionLine = (property) => {
+            const positionProducts = positionList.value.filter(item => item.symbolId === Number(symbolId))
+            if (positionProducts.length > 0) {
+                const temp = []
+                positionProducts.forEach(item => {
+                    temp.push({
+                        text: (Number(item.direction) === 1 ? t('trade.buy') : t('trade.sell')) + item.volume + t('trade.volumeUnit'),
+                        quantity: item.openNum,
+                        price: item.openPrice,
+                        color: item.profit < 0 ? 'green' : 'red'
+                    })
+                })
+                state.onChartReadyFlag && unref(chartRef).updatePosition(temp)
+            }
         }
 
         // 增加指标
@@ -645,7 +610,21 @@ export default {
                 JSON.parse(JSON.parse(localGet('chartConfig')).subStudy)
             ]
 
-            chartRef.value && unref(chartRef).chart.updateIndicator(property)
+            state.onChartReadyFlag && unref(chartRef).updateIndicator(property)
+        }
+
+        // 删除指标
+        const removeStudy = (type) => {
+            switch (type) {
+                case 'main': {
+                    state.mainStudy = ''
+                    break
+                }
+                case 'sub': {
+                    state.subStudy = ''
+                    break
+                }
+            }
         }
 
         // 缓存图表设置
@@ -658,21 +637,6 @@ export default {
                 localSet('chartConfig', JSON.stringify({
                     [key]: value
                 }))
-            }
-        }
-
-        // 删除指标
-        const removeStudy = (type) => {
-            switch (type) {
-                case 'main': {
-                    state.mainStudy = ''
-                    break
-                }
-                case 'sub': {
-                    state.subStudy = ''
-
-                    break
-                }
             }
         }
 
@@ -696,10 +660,8 @@ export default {
         }
 
         const initOtherTime = (title = this.$t('chart.more'), ktype = null) => {
+            localSetChartConfig('resolution', ktype)
             state.moreKType = { title, ktype }
-        }
-
-        const toggleSelf = () => {
         }
 
         const toContractInfo = () => {
@@ -711,10 +673,33 @@ export default {
         }
 
         // 指标移除回调
-        const indicatorRemoved = name => {}
+        const indicatorRemoved = (name, val) => {
+            console.log(name)
+        }
+
+        // 图表创建完成回调
+        const onChartReady = () => {
+            state.onChartReadyFlag = true
+        }
+
+        // 实时更新买卖价线
+        watch(() => [product.value.buy_price, product.value.sell_price, product.value.cur_price, product.value.tick_time], (newValues) => {
+            if (state.settingList.indexOf('showLastPrice') > -1) {
+                state.onChartReadyFlag && unref(chartRef).setTick(product.value.cur_price, product.value.tick_time)
+            }
+
+            if (state.settingList.indexOf('showBuyPrice') > -1 || state.settingList.indexOf('showSellPrice') > -1) {
+                state.onChartReadyFlag && unref(chartRef).updateLineData({
+                    buyPrice: product.value.buy_price,
+                    sellPrice: product.value.sell_price
+                })
+            }
+        }
+
+        )
 
         watchEffect(() => {
-            if (state.settingList.length > 0) {
+            if (state.settingList && state.settingList.length > 0) {
                 if (state.settingList.indexOf('showBuyPrice') > -1) {
                     localSetChartConfig('showBuyPrice', true)
                 } else {
@@ -738,15 +723,17 @@ export default {
                 } else {
                     localSetChartConfig('showLastPrice', false)
                 }
-                // if (state.settingList.length > 0) { localSetChartConfig('lineSet', state.settingList) }
+
+                localSetChartConfig('lineSetList', state.settingList)
             }
         })
 
-        onMounted(() => {
+        const initChartData = () => {
             // 设置图表设置缓存
-            const chartConfig = JSON.parse(localGet('chartConfig'))
-            if (isEmpty(chartConfig)) {
-                localSetChartConfig('showLastPrice', true)
+            const locChartConfig = JSON.parse(localGet('chartConfig'))
+
+            if (isEmpty(locChartConfig)) {
+                localSetChartConfig('showLastPrice', false)
                 localSetChartConfig('mainStudy', JSON.stringify({
                     name: 'Bollinger Bands',
                     params: [true, false, [26, 2]]
@@ -755,10 +742,94 @@ export default {
                     name: 'Custom MACD',
                     params: [false, false, [12, 26, 'close', 9]]
                 }))
-            } else {
+                localSetChartConfig('resolution', 1)
+                localSetChartConfig('chartType', 0)
 
-                // state.settingList = chartConfig.lineSet
+                // 图表配置
+                state.initConfig = ref({
+                    property: {
+                        showLastPrice: true, // 现价线
+                        showPositionPrice: true, // 持仓线
+                        showBuyPrice: false, // 买价线
+                        showSellPrice: false, // 卖价线
+                        showSeriesOHLC: true, // 高开低收
+                        showBarChange: true, // 涨跌幅
+                        chartType: '1', // 图表类型
+                        showSeriesTitle: false // K线标题
+                    },
+                    indicators: [
+                        {
+                            name: 'Bollinger Bands',
+                            params: [true, false, [26, 2]]
+                        },
+                        {
+                            name: 'Custom MACD',
+                            params: [false, false, [12, 26, 'close', 9]]
+                        }
+
+                    ]
+                })
+            } else {
+                state.mainStudy = JSON.parse(locChartConfig.mainStudy).name
+                state.subStudy = JSON.parse(locChartConfig.subStudy).name
+                state.activeTab = candleKTypeList.find(item => Number(item.ktype) === Number(locChartConfig.resolution)).ktype
+
+                state.klineType = locChartConfig.chartType
+                state.settingList = locChartConfig.lineSetList
+
+                state.initConfig = ref({
+                    property: {
+                        showLastPrice: locChartConfig.showLastPrice, // 现价线
+                        showPositionPrice: locChartConfig.showPositionPrice, // 持仓线
+                        showBuyPrice: locChartConfig.showBuyPrice, // 买价线
+                        showSellPrice: locChartConfig.showSellPrice, // 卖价线
+                        showSeriesOHLC: true, // 高开低收
+                        showBarChange: true, // 涨跌幅
+                        chartType: locChartConfig.chartType, // 图表类型
+                        showSeriesTitle: false // K线标题
+                    },
+                    indicators: [
+                        JSON.parse(locChartConfig.mainStudy),
+                        JSON.parse(locChartConfig.subStudy)
+
+                    ]
+                })
+            // state.settingList = chartConfig.lineSet
             }
+        }
+
+        // 添加自选
+        const addOptional = () => {
+            if (isSelfSymbol.value) {
+                removeCustomerOptional({ symbolList: [symbolId] }).then(res => {
+                    if (res.code === '0') {
+                        store.dispatch('_user/queryCustomerOptionalList')
+                        Toast(t('trade.removeOptionalOk'))
+                    }
+                })
+            } else {
+                addCustomerOptional({ symbolList: [symbolId] }).then(res => {
+                    if (res.code === '0') {
+                        store.dispatch('_user/queryCustomerOptionalList')
+                        Toast(t('trade.addOptionalOk'))
+                    }
+                })
+            }
+        }
+
+        const toOrder = (direction) => {
+            router.push({
+                path: '/order',
+                query: {
+                    symbolId, direction
+                }
+            })
+        }
+
+        initChartData()
+
+        onUpdated(() => {
+            setPositionLine()
         })
 
         onBeforeUnmount(() => {
@@ -779,17 +850,18 @@ export default {
             setChartType,
             klineTypeDropdown,
             klineTypeIndex,
-            toggleSelf,
             toContractInfo,
             isSelfSymbol,
             product,
             initialValue,
-            chartConfig,
             indicatorRemoved,
             chartRef,
             handleLineChange,
             orientationChanged,
-            positionList
+            positionList,
+            onChartReady,
+            addOptional,
+            toOrder
         }
     }
 }
@@ -833,16 +905,12 @@ export default {
             vertical-align: top;
             .icon_zixuan1 {
                 font-weight: normal !important;
-                vertical-align: top;
             }
             .icon_zixuan2 {
                 position: absolute;
                 top: 0;
                 color: #FC822F;
-                vertical-align: top;
-                &.heartBeat {
-                    animation: heartBeat 1.3s ease-in-out forwards;
-                }
+                animation: heartBeat 1.3s ease-in-out forwards;
             }
             .loading {
                 position: relative;
@@ -1275,13 +1343,6 @@ export default {
                     }
                 }
             }
-        }
-        .split {
-            display: block;
-            flex: 0 0 1px;
-            height: rem(30px);
-            margin: 0 rem(20px);
-            background: #F8F8F8;
         }
         .more {
             display: flex;
