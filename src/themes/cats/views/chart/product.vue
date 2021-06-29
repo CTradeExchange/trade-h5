@@ -566,6 +566,7 @@ export default {
                 property.showLastPrice = false
             }
             state.onChartReadyFlag && unref(chartRef).updateProperty(property)
+            console.log('更新属性', property)
 
             // setPositionLine()
         }

@@ -23,7 +23,7 @@
                             </span>
                             <span
                                 class='histogram sell-histogram'
-                                :style='"width:"+(item.volume_bid / product.bidTotal)*100 + "%"'
+                                :style='"width:"+ item.width.sell *100 + "%"'
                             ></span>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                             <span
                                 class='histogram buy-histogram'
 
-                                :style='"width:"+(item.volume_ask / product.askTotal)*100 + "%"'
+                                :style='"width:"+ item.width.buy * 100 + "%"'
                             ></span>
                         </div>
                     </div>
@@ -118,7 +118,6 @@ export default {
             statusList: props.settingList,
             isDealDelaying: false,
             timer: 0,
-            diffVal: 0
         })
         const product = computed(() => store.state._quote.productMap[props.symbolId])
         const showTabs = computed(() => {
@@ -128,20 +127,24 @@ export default {
             return true
         })
         watch(() => [product.value.tickResult], (newValues) => {
-            let totalAskVolume = 0; let totalBidVolume = 0
+            const result = product.value.tickResult
             const tempArr = []
-            if (product.value.tickResult.length > 0) {
-                product.value.tickResult.forEach(item => {
+            if (result.length > 0) {
+                result.forEach(item => {
                     tempArr.push(item.volume_ask)
                     tempArr.push(item.volume_bid)
-
-                    totalAskVolume += parseFloat(item.volume_ask)
-                    totalBidVolume += parseFloat(item.volume_bid)
                 })
-                product.value.askTotal = totalAskVolume
-                product.value.bidTotal = totalBidVolume
             }
-            state.diffVal = Math.max.apply(null, tempArr) - Math.min.apply(null, tempArr)
+            const maxValue = Math.max(...tempArr)
+            const minValue = Math.min(...tempArr)
+            const diff = maxValue - minValue
+            // 计算深度
+            result.forEach(item => {
+                item.width = {
+                    buy: diff === 0 ? 0 : (item.volume_ask - minValue) / diff,
+                    sell: diff === 0 ? 0 : (item.volume_bid - minValue) / diff,
+                }
+            })
         })
 
         watch(
