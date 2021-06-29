@@ -1,69 +1,68 @@
 <template>
-    <top
-        back
-        :menu='false'
-        :sub-title='product.symbolCode'
-        :title='product.symbolName'
-    />
-
-    <div class='container'>
-        <van-cell size='large' :title='$t("contract.symbolCode")' :value='product.symbolCode' />
-        <van-cell size='large' :title='$t("contract.contractSize")' :value='product.contractSize' />
-        <van-cell size='large' :title="$t('contract.profitCurrency')" :value='product.profitCurrency' />
-        <van-cell size='large' :title="$t('contract.spread')" :value="$t('contract.float')" />
-        <van-cell size='large' :title="$t('contract.singleNumbers')" :value='product.minVolume+"-"+product.maxVolume' />
-        <van-cell size='large' :title="$t('contract.steper')" :value='product.volumeStep' />
-        <van-cell size='large' :title="$t('contract.limitDistance')" :value='product.priceMinLimit+"/"+product.priceMaxLimit+"点"' />
-        <van-cell size='large' :title="$t('contract.advance')">
-            <div class='margin-info'>
-                <span class='left-label header'>
-                    {{ $t('contract.volumeRange') }}
-                </span>
-                <span class='right-val header'>
-                    {{ $t('contract.margins') }}
-                </span>
-            </div>
-            <div v-for='(item, index) in usedMarginSet' :key='index' class='margin-info'>
-                <span class='left-label'>
-                    {{ item.rangeLeftVolume }} &lt; {{ $t('contract.volumes') }} &le; {{ item.rangeRightVolume }}
-                </span>
-                <span class='right-val'>
-                    {{ item.percent * 100 }}%
-                </span>
-            </div>
-            <div class='margin-info'>
-                <span class='left-label'>
-                    {{ $t('contract.volumes') }} &gt; {{ usedMarginSet[usedMarginSet.length-1].rangeRightVolume }}
-                </span>
-                <span class='right-val'>
-                    {{ usedMarginSet[usedMarginSet.length-1].percent * 100 }}%
-                </span>
-            </div>
-        </van-cell>
-        <van-cell size='large' :title="$t('contract.feeType')" :value='$t(parseFloat(product.feeFormula)===1?"contract.ratio":"contract.amount")' />
-        <van-cell size='large' :title="$t('fee')" :value='fee' />
-        <van-cell size='large' :title="$t('contract.interest')" :value='interest' />
-        <van-cell size='large' :title="$t('contract.zone')" :value="'GMT +' + (0 - new Date().getTimezoneOffset() / 60)" />
-        <van-cell v-if='product.quoteTimeList && product.quoteTimeList.length' class='timeListCell' size='large' :title="$t('contract.quoteTime')">
-            <div v-for='(item,index) in quoteTimeList' :key='index' class='item-item'>
-                {{ $t('weekdayMap.'+ item[0].dayOfWeek) }}:
-                <template>
+    <div class='contractWrapper'>
+        <top
+            :sub-title='product.symbolCode'
+            :title='product.symbolName'
+        />
+        <div class='container'>
+            <van-cell size='large' :title='$t("contract.symbolCode")' :value='product.symbolCode' />
+            <van-cell size='large' :title='$t("contract.contractSize")' :value='product.contractSize' />
+            <van-cell size='large' :title="$t('contract.profitCurrency')" :value='product.profitCurrency' />
+            <van-cell size='large' :title="$t('contract.spread')" :value="$t('contract.float')" />
+            <van-cell size='large' :title="$t('contract.singleNumbers')" :value='product.minVolume+"-"+product.maxVolume' />
+            <van-cell size='large' :title="$t('contract.steper')" :value='product.volumeStep' />
+            <van-cell size='large' :title="$t('contract.limitDistance')" :value='product.priceMinLimit+"/"+product.priceMaxLimit+"点"' />
+            <van-cell v-if='usedMarginSet && usedMarginSet.length' size='large' :title="$t('contract.advance')">
+                <div class='margin-info'>
+                    <span class='left-label header'>
+                        {{ $t('contract.volumeRange') }}
+                    </span>
+                    <span class='right-val header'>
+                        {{ $t('contract.margins') }}
+                    </span>
+                </div>
+                <div v-for='(item, index) in usedMarginSet' :key='index' class='margin-info'>
+                    <span class='left-label'>
+                        {{ item.rangeLeftVolume }} &lt; {{ $t('contract.volumes') }} &le; {{ item.rangeRightVolume }}
+                    </span>
+                    <span class='right-val'>
+                        {{ item.percent * 100 }}%
+                    </span>
+                </div>
+                <div class='margin-info'>
+                    <span class='left-label'>
+                        {{ $t('contract.volumes') }} &gt; {{ usedMarginSet[usedMarginSet.length-1].rangeRightVolume }}
+                    </span>
+                    <span class='right-val'>
+                        {{ usedMarginSet[usedMarginSet.length-1].percent * 100 }}%
+                    </span>
+                </div>
+            </van-cell>
+            <van-cell size='large' :title="$t('contract.feeType')" :value='$t(parseFloat(product.feeFormula)===1?"contract.ratio":"contract.amount")' />
+            <van-cell size='large' :title="$t('fee')" :value='fee' />
+            <van-cell size='large' :title="$t('contract.interest')" :value='interest' />
+            <van-cell size='large' :title="$t('contract.zone')" :value="'GMT +' + (0 - new Date().getTimezoneOffset() / 60)" />
+            <van-cell v-if='product.quoteTimeList && product.quoteTimeList.length' class='timeListCell' size='large' :title="$t('contract.quoteTime')">
+                <div v-for='(item,index) in quoteTimeList' :key='index' class='item-item'>
+                    {{ $t('weekdayMap.'+ item[0].dayOfWeek) }}:
+                    <template>
+                        <span v-for='el in item' :key='el.timeStr' class='timeItem'>
+                            {{ el.timeStr }}
+                        </span>
+                    </template>
+                </div>
+            </van-cell>
+            <van-cell v-if='product.tradeTimeList && product.tradeTimeList.length' class='timeListCell' size='large' :title="$t('contract.tradeTime')">
+                <div v-for='(item,index) in tradeTimeList' :key='index' class='item-item'>
+                    {{ $t('weekdayMap.'+ item[0].dayOfWeek) }}:
                     <span v-for='el in item' :key='el.timeStr' class='timeItem'>
                         {{ el.timeStr }}
                     </span>
-                </template>
-            </div>
-        </van-cell>
-        <van-cell v-if='product.tradeTimeList && product.tradeTimeList.length' class='timeListCell' size='large' :title="$t('contract.tradeTime')">
-            <div v-for='(item,index) in tradeTimeList' :key='index' class='item-item'>
-                {{ $t('weekdayMap.'+ item[0].dayOfWeek) }}:
-                <span v-for='el in item' :key='el.timeStr' class='timeItem'>
-                    {{ el.timeStr }}
-                </span>
-            </div>
-        </van-cell>
-        <van-cell v-if='product.eodTime' size='large' :title="$t('contract.eodTime')" :value='eodTime' />
-        <van-cell v-if='expireTime' size='large' :title='$t("contract.expireTime")' :value='expireTime' />
+                </div>
+            </van-cell>
+            <van-cell v-if='product.eodTime' size='large' :title="$t('contract.eodTime')" :value='eodTime' />
+            <van-cell v-if='expireTime' size='large' :title='$t("contract.expireTime")' :value='expireTime' />
+        </div>
     </div>
 </template>
 

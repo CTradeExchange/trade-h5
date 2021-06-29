@@ -15,12 +15,12 @@ export default {
     activated () {
         const homeContent = document.querySelector('#homeContent')
         if (homeContent) homeContent.scrollTop = scrollTop
-        const wequickNewsListCss = [...document.querySelectorAll('link')].find(el => el.href.includes('wequickNewsList.css'))
-        if (wequickNewsListCss) wequickNewsListCss.disabled = false
+        // const wequickNewsListCss = [...document.querySelectorAll('link')].find(el => el.href.includes('wequickNewsList.css'))
+        // if (wequickNewsListCss) wequickNewsListCss.disabled = false
     },
     deactivated () {
-        const wequickNewsListCss = [...document.querySelectorAll('link')].find(el => el.href.includes('wequickNewsList.css'))
-        if (wequickNewsListCss) wequickNewsListCss.disabled = true
+        // const wequickNewsListCss = [...document.querySelectorAll('link')].find(el => el.href.includes('wequickNewsList.css'))
+        // if (wequickNewsListCss) wequickNewsListCss.disabled = true
     },
     mounted () {
         const _this = this
@@ -49,9 +49,11 @@ export default {
             const jsCode = [
                 'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2md/vue.js',
                 'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2md/vant.min.js',
-                'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2/proden/wequickNewsList.umd.min.js'
+                'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2md/prodcn/wequickNewsList.umd.min.js'
+                // 'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2/proden/wequickNewsList.umd.min.js'
             ]
-            const cssCode = 'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2/proden/wequickNewsList.css'
+            const cssCode = 'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2md/prodcn/wequickNewsList.css'
+            // const cssCode = 'https://zixuninfo.oss-cn-hangzhou.aliyuncs.com/v2/proden/wequickNewsList.css'
             if (loaded) {
                 setTimeout(() => {
                     this.initInflow()
