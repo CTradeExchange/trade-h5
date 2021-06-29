@@ -543,7 +543,6 @@ export default {
 
         // 设置图表线
         const handleLineChange = (val, v) => {
-            debugger
             const property = {}
             if (val.indexOf('showBuyPrice') > -1) {
                 property.showBuyPrice = true
@@ -573,7 +572,6 @@ export default {
         }
 
         const setPositionLine = (property) => {
-            debugger
             const positionProducts = positionList.value.filter(item => item.symbolId === Number(symbolId))
             if (positionProducts.length > 0) {
                 const temp = []

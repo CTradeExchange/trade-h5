@@ -41,10 +41,10 @@
                 </van-row>
             </div>
             <div class='accountBtns'>
-                <button class='btn' @click="$router.push('/login')">
+                <button class='btn' @click="$router.push('/withdraw')">
                     出金
                 </button>
-                <button class='btn' @click="$router.push('/register')">
+                <button class='btn' @click="$router.push('/desposit')">
                     入金
                 </button>
             </div>

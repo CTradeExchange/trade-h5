@@ -23,7 +23,7 @@
                             </span>
                             <span
                                 class='histogram sell-histogram'
-                                :style='"width:"+ item.width.sell *100 + "%"'
+                                :style='"width:"+ item?.width?.sell *100 + "%"'
                             ></span>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                             <span
                                 class='histogram buy-histogram'
 
-                                :style='"width:"+ item.width.buy * 100 + "%"'
+                                :style='"width:"+ item?.width?.buy * 100 + "%"'
                             ></span>
                         </div>
                     </div>
