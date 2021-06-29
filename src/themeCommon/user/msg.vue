@@ -175,6 +175,7 @@ export default {
     flex: 1;
     height: 100%;
     overflow: auto;
+    background-color: var(--white);
     .msg-item {
         padding: rem(30px);
         border-top: solid rem(20px) var(--btnColor);

@@ -185,8 +185,10 @@ export default {
 @import '@/sass/mixin.scss';
 .pageWrap {
     position: relative;
+    padding-top: rem(100px);
+    background-color: var(--white);
     .form {
-        margin-top: rem(30px);
+        //margin-top: rem(30px);
         .field {
             padding: 0 rem(30px);
             .label {

@@ -572,7 +572,7 @@ export default {
             console.log('更新属性', property)
         }
 
-        const setPositionLine = (property) => {
+        const setPositionLine = () => {
             const positionProducts = positionList.value.filter(item => item.symbolId === Number(symbolId))
             if (positionProducts.length > 0) {
                 const temp = []
@@ -850,7 +850,7 @@ export default {
         initChartData()
 
         onUpdated(() => {
-            // setPositionLine()
+            setPositionLine()
         })
 
         onBeforeUnmount(() => {
