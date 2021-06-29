@@ -329,6 +329,7 @@ export default {
 .pageWrap {
     position: relative;
     height: 100%;
+    background: var(--white);
     .header {
         display: flex;
         align-items: center;

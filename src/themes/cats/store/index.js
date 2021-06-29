@@ -5,6 +5,7 @@ import Quote from '@/store/modules/quote'
 import Trade from '@/store/modules/trade'
 import { getListByParentCode, getCountryListByParentCode } from '@/api/base'
 import Colors from '@c/colorVariables'
+import { localGet, localSet } from '@/utils/util'
 
 const style = {
     ...Colors
@@ -24,7 +25,7 @@ export default createStore({
     state: {
         style,
         disabledSuccAnimtion: false,
-        invertColor: 'night', // 黑夜模式
+        invertColor: localGet('invertColor') || 'light', // 黑夜模式
         zoneList: [],
         bankDict: [],
         supportLanguages: supportLanguages,
@@ -84,6 +85,7 @@ export default createStore({
         },
         Update_invertColor (state, data) {
             state.invertColor = data
+            localSet('invertColor', data)
         },
         Update_disabledSuccAnimtion (state, data) {
             state.disabledSuccAnimtion = data

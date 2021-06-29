@@ -47,6 +47,7 @@ export default {
                     authorization: window.sessionStorage.getItem('token'),
                     appKey: window.sessionStorage.getItem('companyId'),
                     userId: window.sessionStorage.getItem('customerNo'),
+                    cats2: true,
                 }
                 launchMessage({
                     type: 'appToken',

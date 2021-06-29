@@ -99,6 +99,7 @@ export default {
     margin-top: rem(100px);
     margin-bottom: rem(100px);
     overflow: auto;
+    background: var(--white);
 }
 .tradeNav {
     position: absolute;

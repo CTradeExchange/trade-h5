@@ -15,6 +15,12 @@ export default {
     activated () {
         const homeContent = document.querySelector('#homeContent')
         if (homeContent) homeContent.scrollTop = scrollTop
+        const wequickNewsListCss = [...document.querySelectorAll('link')].find(el => el.href.includes('wequickNewsList.css'))
+        if (wequickNewsListCss) wequickNewsListCss.disabled = false
+    },
+    deactivated () {
+        const wequickNewsListCss = [...document.querySelectorAll('link')].find(el => el.href.includes('wequickNewsList.css'))
+        if (wequickNewsListCss) wequickNewsListCss.disabled = true
     },
     mounted () {
         const _this = this
