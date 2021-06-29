@@ -214,7 +214,7 @@ export default {
                         return Dialog.alert({
                             title: t('common.tip'),
                             confirmButtonText: t('common.reSubmit'),
-                            message: t('common.reviewFailed'),
+                            message: t('common.reviewFailed') + '\n' + '失败原因：' + res.data.kycAuditRemark,
                             theme: 'round-button',
                         }).then(() => {
                             router.push('/authentication')
@@ -264,6 +264,8 @@ export default {
                         if (Number(res.data.status) === 2) {
                             const msg = t(verifyParams.type === 1 ? 'common.noEmail' : 'common.noPhone')
                             return Toast(msg)
+                        } else if (Number(res.data.status === -1)) {
+                            return Toast(t('c.userDisable'))
                         } else {
                             state.zone = res.data.phoneArea
                             const params = {
