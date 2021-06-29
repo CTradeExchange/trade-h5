@@ -43,6 +43,7 @@ export default {
     margin-top: rem(90px);
     margin-bottom: rem(100px);
     overflow: auto;
+    background: var(--white);
 }
 .title {
     color: rgba(51, 51, 51, 1);
