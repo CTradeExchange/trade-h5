@@ -101,6 +101,8 @@ export default {
                         }).catch(() => {
                             // on cancel
                         })
+                    } else if (Number(res.data.status === -1)) {
+                        return Toast(t('c.userDisable'))
                     } else {
                         verifyCodeSend(params).then(res => {
                             if (res.check()) {

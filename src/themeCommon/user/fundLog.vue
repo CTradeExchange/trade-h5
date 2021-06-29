@@ -342,6 +342,7 @@ export default {
 .page-wrap {
     flex: 1;
     overflow: auto;
+    background: var(--white);
     .oper-area {
         .condition {
             margin-top: rem(20px);

@@ -30,14 +30,14 @@
             <div class='productInfo'>
                 <div class='hd'>
                     <div class='hd-left'>
-                        <p class='cur_price fallColor '>
+                        <p class='cur_price' :class='product.cur_color'>
                             {{ product.cur_price }}
                         </p><!---->
                     </div><div class='others'>
-                        <span class='fallColor'>
+                        <span :class='product.cur_color'>
                             {{ product.upDownAmount }}({{ product.upDownAmount_pip }} {{ $t('trade.dot') }})
                         </span><div class='others-bottom'>
-                            <span class='upDownAmount fallColor'>
+                            <span class='upDownAmount' :class='product.cur_color'>
                                 {{ product.upDownWidth }}
                             </span><!---->
                         </div>
@@ -123,7 +123,7 @@
 
                 <div class='flex-right'>
                     <van-dropdown-menu class='kIcon-wrap'>
-                        <van-dropdown-item ref='klineTypeDropdown' v-model='klineType' :title="$t('indicator')">
+                        <van-dropdown-item ref='klineTypeDropdown' v-model='klineType'>
                             <template #title>
                                 <KIcon class='kIcon' :value='klineTypeIndex' />
                             </template>
@@ -568,6 +568,7 @@ export default {
                 property.showLastPrice = false
             }
             state.onChartReadyFlag && unref(chartRef).updateProperty(property)
+            setPositionLine()
             console.log('更新属性', property)
         }
 
@@ -678,7 +679,13 @@ export default {
 
         // 指标移除回调
         const indicatorRemoved = (name, val) => {
-            console.log(name)
+            console.log(name, state.subStudy)
+            if (name === state.subStudy) {
+                removeStudy('sub')
+            }
+            if (name === state.mainStudy) {
+                removeStudy('main')
+            }
         }
 
         // 图表创建完成回调
@@ -843,7 +850,7 @@ export default {
         initChartData()
 
         onUpdated(() => {
-            setPositionLine()
+            // setPositionLine()
         })
 
         onBeforeUnmount(() => {

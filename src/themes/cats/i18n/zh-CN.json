@@ -31,7 +31,9 @@
     "noSetup": "未设置",
     "noData": "暂无数据",
     "look": "查看",
-    "borrowReturn": "借款/还款"
+    "borrowReturn": "借款/还款",
+    "userDisable": "账户已被禁用，请联系管理员"
+
   },
   "contract": {
     "advance": "预付款",

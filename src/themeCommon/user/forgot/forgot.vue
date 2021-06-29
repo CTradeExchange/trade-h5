@@ -131,6 +131,8 @@ export default {
                         if (Number(res.data.status) === 2) {
                             const msg = t(state.curTab === 0 ? 'common.unExistPhone' : 'common.unExistEmail')
                             return Toast(msg)
+                        } else if (Number(res.data.status === -1)) {
+                            return Toast(t('c.userDisable'))
                         } else {
                             state.countryZone = res.data.phoneArea
                             verifyCodeSend({

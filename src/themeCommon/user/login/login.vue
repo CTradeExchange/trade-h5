@@ -214,7 +214,7 @@ export default {
                         return Dialog.alert({
                             title: t('common.tip'),
                             confirmButtonText: t('common.reSubmit'),
-                            message: t('common.reviewFailed') + '\n' + '失败原因：' + res.data.kycAuditRemark,
+                            message: t('common.reviewFailed') + '\n' + t('common.reviewReson') + res.data.kycAuditRemark,
                             theme: 'round-button',
                         }).then(() => {
                             router.push('/authentication')

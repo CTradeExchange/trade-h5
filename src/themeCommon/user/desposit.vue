@@ -1,13 +1,13 @@
 <template>
+    <Top
+        back
+        left-icon='arrow-left'
+        :menu='false'
+        :right-action='rightAction'
+        :show-center='true'
+        @rightClick='toDespositList'
+    />
     <div class='pageWrap'>
-        <Top
-            back
-            left-icon='arrow-left'
-            :menu='false'
-            :right-action='rightAction'
-            :show-center='true'
-            @rightClick='toDespositList'
-        />
         <Loading :show='loading' />
         <div class='wrap'>
             <p class='header-text'>
@@ -48,6 +48,14 @@
                     <div v-else class='pay-type no-data'>
                         {{ $t('deposit.noPayPassway') }}
                     </div>
+                    <div class='currency-wrap'>
+                        <van-radio-group v-model='currencyChecked' @change='changePayCurrency'>
+                            <van-radio v-for='(item,index) in paymentTypes' :key='index' class='currency-radio' icon-size='20px' :name='item'>
+                                {{ item }}
+                            </van-radio>
+                        </van-radio-group>
+                    </div>
+
                     <div class='notice'>
                         <div class='left-val'>
                             <span class='label'>
@@ -68,17 +76,17 @@
 
             <div class='pay-info'>
                 <div class='pi-item'>
-                    {{ $t('deposit.expectPay') }} {{ computeExpectedpay || '--' }} {{ checkedType.paymentCurrency || checkedType.accountCurrency }}
+                    {{ $t('deposit.expectPay') }} {{ computeExpectedpay || '--' }} {{ currencyChecked }}
                 </div>
                 <div class='pi-item'>
-                    {{ $t('deposit.expectInBank') }} {{ amount && checkedType ? parseFloat(amount) - parseFloat(checkedType.fee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
+                    {{ $t('deposit.expectInBank') }} {{ amount && checkedType ? parseFloat(amount) - parseFloat(computeFee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
                 </div>
                 <div class='line'></div>
                 <!-- <div class='pi-item'>
                     赠送金额 {{ presentAmount || '--' }} {{ checkedType.accountCurrency }}
                 </div> -->
                 <div class='pi-item'>
-                    {{ $t('common.fee') }} {{ computeFee || '--' }} {{ checkedType.accountCurrency }}
+                    {{ $t('common.fee') }} {{ computeFee }} {{ checkedType.accountCurrency }}
                 </div>
             </div>
         </div>
@@ -128,6 +136,7 @@ import Top from '@/components/top'
 import { onBeforeMount, reactive, computed, toRefs, onBeforeUnmount } from 'vue'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply } from '@/api/user'
+import { getListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
 import { isEmpty } from '@/utils/util'
@@ -168,18 +177,38 @@ export default {
             }
         ]
 
+        const state = reactive({
+            currencyChecked: '',
+            otherAmountVis: false,
+            currIndex: 0,
+            amount: 50,
+            typeShow: false,
+            PayTypes: [],
+            checkedType: '',
+            rateConfig: '',
+            presentAmount: 5,
+            loading: false,
+            despositVis: false,
+            btnDisabled: false,
+            resultTimeMap: {},
+            paymentTypes: []
+        })
+
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
 
         // 计算存款手续费
         const computeFee = computed(() => {
-            // feeType  1：固定金额手续费 2：百分比手续费
-            if (Number(state.checkedType.feeType === 1)) {
-                return state.checkedType.fee
-            } else if (Number(state.checkedType.feeType === 2)) {
-                return mul(state.amount, (state.checkedType.fee / 100))
+            if (state.amount >= state.checkedType.singleLowAmount && state.amount <= state.checkedType.singleHighAmount) {
+                // feeType  1：固定金额手续费 2：百分比手续费
+                if (Number(state.checkedType.feeType === 1)) {
+                    return state.checkedType.fee
+                } else if (Number(state.checkedType.feeType === 2)) {
+                    return mul(state.amount, (state.checkedType.fee))
+                }
             }
+            return 0
         })
 
         // 计算预计支付金额
@@ -202,22 +231,6 @@ export default {
             if (state.PayTypes.length > 0) {
                 return state.PayTypes.filter(item => !item.timeRangeFlag && item.openTime)
             }
-        })
-
-        const state = reactive({
-            otherAmountVis: false,
-            currIndex: 0,
-            amount: 50,
-            typeShow: false,
-            PayTypes: [],
-            checkedType: '',
-            rateConfig: '',
-            presentAmount: 5,
-            loading: false,
-            despositVis: false,
-            btnDisabled: false,
-            resultTimeMap: {}
-
         })
 
         // 判断sessionStorage 里面有没有保存proposalNo，有则弹窗提醒
@@ -251,8 +264,16 @@ export default {
             state.typeShow = true
         }
 
+        const changePayCurrency = (val) => {
+            console.log('type', val)
+            state.currencyChecked = val
+            getDepositExchangeRate()
+        }
+
+        // 切换支付方式
         const choosePayType = (item) => {
             state.checkedType = item
+            setPaymentList(state.checkedType)
             payTypesSortEnable.value && payTypesSortEnable.value.map(item => {
                 item.checked = false
             })
@@ -261,7 +282,6 @@ export default {
             })
             item.checked = true
             state.typeShow = false
-            getDepositExchangeRate()
         }
 
         const openOtherMoney = () => {
@@ -300,24 +320,26 @@ export default {
         }
 
         // 获取存款货币对汇率
-        const getDepositExchangeRate = () => {
-            const param = {
-                customerNo: customInfo.value.customerNo,
-                accountId: customInfo.value.accountId,
-                accountCurrency: customInfo.value.currency,
-                paymentCurrency: state.checkedType.paymentCurrency,
-            }
-            state.loading = true
-            queryDepositExchangeRate(param).then(res => {
-                state.loading = false
-                if (res.check()) {
-                    state.rateConfig = res.data
-                } else {
-                    Toast(res.msg)
+        const getDepositExchangeRate = async () => {
+            if (state.currencyChecked) {
+                const param = {
+                    customerNo: customInfo.value.customerNo,
+                    accountId: customInfo.value.accountId,
+                    accountCurrency: customInfo.value.currency,
+                    paymentCurrency: state.currencyChecked.split('-').length > 1 ? state.currencyChecked.split('-')[0] : state.currencyChecked
                 }
-            }).catch(err => {
-                state.loading = false
-            })
+                state.loading = true
+                queryDepositExchangeRate(param).then(res => {
+                    state.loading = false
+                    if (res.check()) {
+                        state.rateConfig = res.data
+                    } else {
+                        Toast(res.msg)
+                    }
+                }).catch(err => {
+                    state.loading = false
+                })
+            }
         }
 
         const handleShowTime = () => {
@@ -337,19 +359,15 @@ export default {
                             const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
 
                             state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
-                            // if (endLocal.isAfter(todayStr, 'day')) {
-                            //     state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-23:59')
-                            //     state.resultTimeMap[payItem.id].push('00:00-' + endLocal.format('HH:mm'))
-                            // } else {
-                            //     state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
-                            // }
 
                             const nowDate = dayjs()
 
                             // 判断当前时间是否在设置的存款时间内
+
                             if (nowDate.isBetween(startLocal, endLocal)) {
                                 payItem.timeRangeFlag = true
                                 state.checkedType = payItem
+
                                 // state.checkedType.checked = true
                             }
                         })
@@ -359,7 +377,19 @@ export default {
                 if (isEmpty(state.checkedType)) {
                     state.checkedType = state.PayTypes[0]
                 }
+                setPaymentList(state.checkedType)
             }
+        }
+
+        const setPaymentList = async (payItem) => {
+            if (payItem.paymentCurrency === 'USDT') {
+                await getChainList()
+            } else {
+                state.paymentTypes = state.checkedType.paymentCurrency.split(',')
+            }
+
+            state.currencyChecked = state.paymentTypes[0]
+            await getDepositExchangeRate()
         }
 
         // 创建存款提案
@@ -389,8 +419,10 @@ export default {
                 country: customInfo.value.country,
                 channelCode: customInfo.value.utmSource,
                 depositFrom: 'H5',
-                callbackUrl: window.location.protocol + '//' + window.location.host + '/despositCb'
+                callbackUrl: window.location.protocol + '//' + window.location.host + '/despositCb',
+                blockchainName: state.currencyChecked.split('-').length > 1 ? state.currencyChecked.split('-')[1] : ''
             }
+
             state.loading = true
             handleDesposit(params).then(res => {
                 state.loading = false
@@ -451,6 +483,21 @@ export default {
             })
         }
 
+        const getChainList = async () => {
+            state.paymentTypes = []
+            await getListByParentCode({ parentCode: 'USDT' }).then(res => {
+                if (res.check()) {
+                    if (res.data.length > 0) {
+                        res.data.forEach(item => {
+                            console.log('aaaa', state.paymentTypes)
+                            state.paymentTypes.push(item.parentCode + '-' + item.code)
+                        })
+                        // state.currencyChecked = state.paymentTypes[0]
+                    }
+                }
+            })
+        }
+
         onBeforeMount(() => {
             // 检测客户组配置是否可存款
             if (Number(customInfo.value.deposit) === 0) {
@@ -477,12 +524,12 @@ export default {
         })
 
         return {
+            ...toRefs(state),
             rightAction,
             amountList,
             checkAmount,
             toDespositList,
             openSheet,
-            ...toRefs(state),
             choosePayType,
             openOtherMoney,
             getDepositExchangeRate,
@@ -495,7 +542,8 @@ export default {
             computeExpectedpay,
             payTypesSortEnable,
             payTypesSortDisable,
-            onlineServices
+            onlineServices,
+            changePayCurrency
         }
     }
 }
@@ -504,7 +552,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .pageWrap {
-    background-color: #F6F6F6;
+    background-color: var(--white);
     .header {
         display: flex;
         align-items: center;
@@ -512,7 +560,7 @@ export default {
         margin: rem(40px) rem(30px);
     }
     .wrap {
-        background-color: var(--bgColor);
+        //background-color: var(--bgColor);
         .header-text {
             padding: rem(46px) rem(30px) rem(40px) rem(30px);
             color: var(--color);
@@ -639,6 +687,14 @@ export default {
     }
     &.no-data {
         line-height: rem(80px);
+    }
+}
+.currency-wrap {
+    padding: rem(30px) 0 0 rem(30px);
+    border: solid 1px #DDD;
+    border-top: none;
+    .currency-radio {
+        margin-bottom: rem(20px);
     }
 }
 .pay-list .pay-type {
