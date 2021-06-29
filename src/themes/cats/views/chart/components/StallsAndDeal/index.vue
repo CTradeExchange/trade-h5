@@ -141,8 +141,8 @@ export default {
             // 计算深度
             result.forEach(item => {
                 item.width = {
-                    buy: diff === 0 ? 0 : (item.volume_ask - minValue) / diff,
-                    sell: diff === 0 ? 0 : (item.volume_bid - minValue) / diff,
+                    buy: diff === 0 ? 0 : (parseFloat(item.volume_ask) - parseFloat(minValue)) / diff,
+                    sell: diff === 0 ? 0 : (parseFloat(item.volume_bid) - parseFloat(minValue)) / diff,
                 }
             })
         })
