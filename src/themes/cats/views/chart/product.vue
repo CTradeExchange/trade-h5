@@ -475,6 +475,8 @@ export default {
         const subscribList = productList.value.map(({ symbolId }) => symbolId)
         store.dispatch('_quote/querySymbolBaseInfoList', subscribList)
         QuoteSocket.send_subscribe(subscribList)
+        // 查询持仓列表，获取持仓线数据
+        store.dispatch('_trade/queryPositionPage')
 
         // 图表初始值
         const initialValue = computed(() => {
@@ -566,8 +568,7 @@ export default {
                 property.showLastPrice = false
             }
             state.onChartReadyFlag && unref(chartRef).updateProperty(property)
-
-            // setPositionLine()
+            console.log('更新属性', property)
         }
 
         const setPositionLine = (property) => {
@@ -710,6 +711,7 @@ export default {
 
             if (state.settingList.indexOf('showPositionPrice') > -1) {
                 localSetChartConfig('showPositionPrice', true)
+                setPositionLine()
             } else {
                 localSetChartConfig('showPositionPrice', false)
             }
@@ -745,7 +747,7 @@ export default {
                     params: [false, false, [12, 26, 'close', 9]]
                 }))
                 localSetChartConfig('resolution', 1)
-                localSetChartConfig('chartType', 0)
+                localSetChartConfig('lineSetList', [])
 
                 // 图表配置
                 state.initConfig = ref({
