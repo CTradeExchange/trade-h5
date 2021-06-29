@@ -321,13 +321,5 @@ export default {
         font-size: rem(34px);
         background: var(--btnColor);
     }
-    .confirm-btn {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        color: var(--color);
-        font-size: rem(34px);
-        background: var(--btnColor);
-    }
 }
 </style>

@@ -25,7 +25,7 @@
             </div>
         </van-cell-group>
         <van-button class='confirmBtn' @click='handleConfirm'>
-            {{ $t('common.sure') }}
+            <span>{{ $t('common.sure') }}</span>
         </van-button>
     </div>
 </template>
