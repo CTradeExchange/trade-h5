@@ -45,11 +45,11 @@ if (isEmpty(localStorage.getItem('openNews'))) {
 if (loginParams || token) store.commit('_user/Update_loginLoading', true)
 
 // 获取到公司配置后初始化vue实例
-store.dispatch('_base/initBaseConfig').then(() => {
+store.dispatch('_base/initBaseConfig').then(async () => {
     // 设置语言
     const defaultLocal = localGet('lang')
     setI18nLanguage(I18n, defaultLocal)
-    loadLocaleMessages(I18n, defaultLocal)
+    await loadLocaleMessages(I18n, defaultLocal)
 
     // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
     if (loginParams || token) {

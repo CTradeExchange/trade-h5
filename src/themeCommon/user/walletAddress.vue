@@ -6,7 +6,7 @@
         <Top
             back
             left-icon='arrow-left'
-            showCenter
+            show-center
         />
         <div class='container'>
             <div v-if='addressList.length > 0' class='address-list'>
@@ -26,7 +26,7 @@
                     </div>
                     <div class='below'>
                         <span class='delete' @click='deleteWallet(item.id)'>
-                            {{$t('walletAddress.deleteBtn')}}
+                            {{ $t('walletAddress.deleteBtn') }}
                         </span>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
         <!-- 底部按钮 -->
         <button class='footer-btn' @click="$router.push({ path: '/walletAdd' })">
             <van-icon color='#333' name='plus' />
-            <span>{{$t('walletAddress.addBtn')}}</span>
+            <span>{{ $t('walletAddress.addBtn') }}</span>
         </button>
     </div>
 </template>
@@ -91,11 +91,11 @@ export default {
                 currency: '',
                 chainName: ''
             }).then(res => {
-                 state.loading = false
+                state.loading = false
                 if (res.check()) {
                     const { data } = res
                     state.addressList = data
-                } 
+                }
             })
         }
 
@@ -162,7 +162,7 @@ export default {
             align-items: center;
             justify-content: flex-end;
             height: rem(68px);
-            &::v-deep .van-radio__label {
+            :deep(.van-radio__label) {
                 margin-top: rem(4px);
                 margin-left: rem(10px);
                 color: var(--mutedColor);
@@ -183,7 +183,7 @@ export default {
     height: rem(104px);
     background-color: var(--btnColor);
     border-top: 1px solid var(--bdColor);
-    ::v-deep .van-icon-plus {
+    :deep(.van-icon-plus) {
         font-weight: bold;
     }
     span {

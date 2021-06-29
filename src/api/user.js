@@ -127,6 +127,18 @@ export function handleWithdraw (data) {
     })
 }
 
+/* 获取取款、提币额度限制配置 */
+export function queryWithdrawLimitInfo (data) {
+    return request({
+        url: '/global/fund.app.WithdrawAppDubboService.getWithdrawAmountLimitInfo',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
 /* 获取取款限制配置 */
 export function queryWithdrawConfig (data) {
     return request({

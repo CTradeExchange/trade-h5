@@ -98,12 +98,12 @@
 <script>
 import { useRouter } from 'vue-router'
 import top from '@/components/top'
-import { onBeforeMount, reactive, toRefs, computed } from 'vue'
+import { reactive, toRefs, computed } from 'vue'
 import { areaList } from '@/utils/area'
 import RuleFn from './addbank_rule'
 import { useStore } from 'vuex'
 import Schema from 'async-validator'
-import { Toast, Dialog } from 'vant'
+import { Toast } from 'vant'
 import { addBank } from '@/api/user'
 import CurrencyAction from '@/components/currencyAction'
 import { useI18n } from 'vue-i18n'
@@ -111,8 +111,7 @@ import { useI18n } from 'vue-i18n'
 export default {
     components: {
         top,
-        CurrencyAction,
-        Dialog
+        CurrencyAction
     },
     setup (props, { emit, attrs }) {
         const router = useRouter()
@@ -138,7 +137,6 @@ export default {
         })
 
         const handleAreaConfirm = (area) => {
-            console.log(area)
             if (area) {
                 state.area = area.map(item => item.name)
                 state.areaShow = false
@@ -157,25 +155,27 @@ export default {
 
         // 提交处理
         const handleConfirm = () => {
-            // bankAccountName	账户持有人姓名
-            // bankCardNumber	银行卡号
-            // bankCurrency	银行币种
-            // bankName	银行名称
-            // bankAddress	银行开户地址
-            // bankBranch	银行支行
-            // country	国家
-            // province	省
-            // city	市
-
+            // bankAccountName账户持有人姓名
+            // bankCardNumber银行卡号
+            // bankCurrency银行币种
+            // bankName银行名称
+            // bankAddress银行开户地址
+            // bankBranch银行支行
+            // country国家
+            // province省
+            // city市
+            const province = state.area.split(',')[0]
+            const city = state.area.split(',')[1]
             const params = {
                 bankAccountName: state.userName,
                 bankCardNumber: state.bankNo,
                 bankName: state.bankName,
                 bankCurrency: state.currency,
-                bankAddress: state.bankArea,
+                bankAddress: province + city,
+                bankBranch: state.bankArea,
                 country: customInfo.value.country,
-                province: state.area.split(',')[0],
-                city: state.area.split(',')[1],
+                province: province,
+                city: city,
                 bankCode: state.checkedBankCode
             }
 
@@ -216,10 +216,6 @@ export default {
         }
 
         store.dispatch('getBankDictList')
-
-        onBeforeMount(() => {
-            console.log(555)
-        })
 
         return {
             areaList,

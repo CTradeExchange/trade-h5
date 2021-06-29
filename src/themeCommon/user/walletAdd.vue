@@ -218,6 +218,7 @@ export default {
             if (state.code !== verifyInfo.code) {
                 return Toast({ message: t('walletAdd.confirmCodePlaceholder') })
             }
+
             // 发起api请示
             addWalletAddress({
                 currency: state.coinKind,
@@ -229,11 +230,15 @@ export default {
                 phoneArea: customInfo.phoneArea,
                 sendToken: verifyInfo.token
             }).then(res => {
-                Toast.success(t('withdraw.successHint'))
-                init()
-                setTimeout(() => {
-                    router.go(-1)
-                }, 1500)
+                if (res.check()) {
+                    Toast.success(t('withdraw.successHint'))
+                    init()
+                    setTimeout(() => {
+                        router.go(-1)
+                    }, 1500)
+                } else {
+                    Toast(res.msg)
+                }
             })
         }
 

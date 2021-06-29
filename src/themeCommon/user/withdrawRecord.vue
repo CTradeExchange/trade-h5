@@ -120,24 +120,21 @@
 </template>
 
 <script>
-import { reactive, toRefs, ref, onBeforeMount, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { reactive, toRefs, ref, computed, onMounted } from 'vue'
 import Top from '@/components/top'
 import { useStore } from 'vuex'
 import { queryWithdrawPageList } from '@/api/user'
 import dayjs from 'dayjs'
 import { isEmpty } from '@/utils/util'
-import { Toast } from 'vant'
+
 // i18n
 import { useI18n } from 'vue-i18n'
 export default {
     components: {
-        Top,
-        Toast
+        Top
     },
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
-        const router = useRouter()
         const store = useStore()
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)

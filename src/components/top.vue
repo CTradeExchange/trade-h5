@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 export default {
     props: {
         rightAction: {
@@ -51,7 +51,6 @@ export default {
     },
     setup (props, { emit, attrs }) {
         const router = useRouter()
-        const route = useRoute()
         // 点击返回
         const back = () => {
             attrs.onBack ? emit('back') : router.back()

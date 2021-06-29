@@ -22,11 +22,11 @@
                     <div class='item-header' @click='onItem(index)'>
                         <div class='inner'>
                             <p class='vital'>
-                                <span class='name'>
-                                    {{ toFixed(item.finalAmount) }} {{ item.withdrawCurrency }}-{{ item.blockchainName }}
-                                </span>
                                 <span :class="[item.withdrawCoinStatus === 1 ? 'state-1' : 'state-2']">
                                     {{ states[item.withdrawCoinStatus] }}
+                                </span>
+                                <span class='name'>
+                                    {{ item.finalAmount }} {{ item.withdrawCurrency }}-{{ item.blockchainName }}
                                 </span>
                             </p>
                             <p class='row'>
@@ -36,8 +36,8 @@
                             </p>
                             <p class='row'>
                                 <span>{{ formatTime(item.createTime) }}</span>
-                                <span>{{ toFixed(item.withdrawFee) }} {{ item.withdrawCurrency }}-{{ item.blockchainName }}</span>
-                                <span>{{ toFixed(item.amount) }} {{ item.withdrawCurrency }}-{{ item.blockchainName }}</span>
+                                <span>{{ item.withdrawFee }} {{ item.withdrawCurrency }}</span>
+                                <span>{{ item.amount }} {{ item.withdrawCurrency }}</span>
                             </p>
                         </div>
                         <div class='arrow'>
@@ -50,7 +50,7 @@
                                 {{ $t('coinRecord.takeCount') }}
                             </span>
                             <span class='value'>
-                                {{ toFixed(item.amount) }}
+                                {{ item.amount }}
                             </span>
                         </div>
                         <div class='row'>
@@ -82,7 +82,7 @@
                                 {{ $t('coinRecord.service') }}
                             </span>
                             <span class='value'>
-                                {{ toFixed(item.withdrawFee) }}
+                                {{ item.withdrawFee }}
                             </span>
                         </div>
                         <div class='row'>
@@ -90,7 +90,7 @@
                                 {{ $t('coinRecord.arriveCount') }}
                             </span>
                             <span class='value'>
-                                {{ toFixed(item.finalAmount) }}
+                                {{ item.finalAmount }}
                             </span>
                         </div>
                         <div class='row'>
@@ -140,8 +140,6 @@ import Top from '@/components/top'
 import { queryWithdrawPageList } from '@/api/user'
 // plugin
 import dayjs from 'dayjs'
-// util
-import { toFixed } from '@/utils/calculation'
 // i18n
 import { useI18n } from 'vue-i18n'
 
@@ -223,8 +221,7 @@ export default {
             onItem,
             getWithdrawList,
             states,
-            formatTime,
-            toFixed
+            formatTime
         }
     }
 }
@@ -236,7 +233,7 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background-color: #F6F6F6;
+    background-color: #F9F9F9;
 }
 .container {
     display: flex;
