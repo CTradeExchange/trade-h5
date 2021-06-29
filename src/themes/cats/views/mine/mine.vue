@@ -13,7 +13,8 @@ export default {
         Person,
         Menulist,
     },
-    setup () {       return {}
+    setup () {
+        return {}
     }
 }
 </script>

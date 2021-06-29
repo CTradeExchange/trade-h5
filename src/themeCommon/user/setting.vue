@@ -12,11 +12,14 @@
         <van-cell v-if='customInfo.email' is-link :title='$t("setting.replaceEmail")' to='/changeBindEmail' />
         <van-cell v-if='customInfo.phone' is-link :title='$t("setting.replacePhone")' to='/changeBindMobile' />
         <van-cell is-link :title='$t("setting.setLang")' :value='langText' @click='langVisible=true' />
+        <van-cell is-link :title='$t("setting.color")' :value='colorText' @click='colorVisible=true' />
+
         <van-button class='logout-btn' :loading='loading' type='primary' @click='handleLogout'>
             <span>{{ $t("setting.logout") }}</span>
         </van-button>
 
         <van-action-sheet v-model:show='langVisible' :actions='langActions' @select='langSelect' />
+        <van-action-sheet v-model:show='colorVisible' :actions='colorsActions' @select='colorSelect' />
         <Loading :show='loading' />
     </div>
 </template>
@@ -35,6 +38,10 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+        const colorsActions = [
+            { val: 'night', name: '黑夜' },
+            { val: 'light', name: '白天' },
+        ]
 
         const store = useStore()
         const router = useRouter()
@@ -42,12 +49,17 @@ export default {
             checked: false,
             loading: false,
             langVisible: false,
+            colorVisible: false,
             lang: localGet('lang') || store.state._base.wpCompanyInfo.language,
             langActions: store.state.supportLanguages
         })
         const langText = computed(() => {
             const curLang = state.langActions.find(el => el.val === state.lang)
             return curLang ? curLang.name : ''
+        })
+        const colorText = computed(() => {
+            const cur = colorsActions.find(el => el.val === store.state.invertColor)
+            return cur ? cur.name : ''
         })
 
         onBeforeMount(() => {
@@ -92,12 +104,28 @@ export default {
             }).catch(err => (state.loading = false))
         }
 
+        // 选择颜色
+        const colorSelect = (action) => {
+            const classList = document.documentElement.classList
+            if (action.val === 'light') {
+                classList.remove('night')
+            } else if (action.val === 'night') {
+                classList.remove('light')
+            }
+            if (!classList.contains(action.val)) classList.add(action.val)
+            store.commit('Update_invertColor', action.val)
+            state.colorVisible = false
+        }
+
         return {
+            colorsActions,
             customInfo,
             handleLogout,
             changeNewsState,
             langText,
             langSelect,
+            colorSelect,
+            colorText,
             ...toRefs(state)
         }
     }

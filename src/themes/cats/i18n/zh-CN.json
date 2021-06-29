@@ -18,8 +18,8 @@
     "complete": "完成",
     "loading": "数据加载中...",
     "vanPullRefresh": {
-        "pulling": "下拉刷新",
-        "loosing": "释放刷新"
+      "pulling": "下拉刷新",
+      "loosing": "释放刷新"
     },
     "be": "是",
     "deny": "否"
@@ -99,7 +99,6 @@
     "positionDetail": "持仓明细",
     "pendingDetail": "挂单明细",
     "historyDetail": "已平仓明细"
-    
   },
   "search": {
     "keywords": "请输入搜索关键词"
@@ -155,9 +154,9 @@
     "guest": "游客账户",
     "toReal": "切换到真实账户",
     "toExperience": "切换到体验账户",
-    "experience":"体验账户",
+    "experience": "体验账户",
     "operating": "操作",
-    "openReal": "开通真实账户",        
+    "openReal": "开通真实账户",
     "demo": "模拟账户",
     "experi": "体验账户",
     "openDemo": "开通模拟账户",
@@ -348,12 +347,12 @@
     "volumeExplain3": "1手点值，表示持有1手合约时，报价波动1点可获得的盈亏金额。例：买入1手EURUSD，从1.12930涨至1.12940（波动1点），可获10美元收益。合约点值 = 1手点值 x 手数。",
     "lossLabel": "亏损",
     "profitLabel": "盈利",
-    "direction":"方向",
-    "positionNumber":"持仓数量",
-    "pendingNumber":"挂单数量",
-    "pendingNo":"订单号",
-    "leverage":"杠杆",
-    "multiples":"倍",
+    "direction": "方向",
+    "positionNumber": "持仓数量",
+    "pendingNumber": "挂单数量",
+    "pendingNo": "订单号",
+    "leverage": "杠杆",
+    "multiples": "倍",
     "experibBalance": "体验账户余额",
     "nosSet": "未设置",
     "inputPendingPrice": "请输入挂单价格",
@@ -414,19 +413,18 @@
     "lastValueLine": "现价线",
     "mainStudy": "主图指标",
     "subStudy": "副图指标",
-    "bars":"美国线",
-    "candles":"K线图",
-    "hollowCandles":"空心K线图",
-    "heikinAshi":"平均K线图",
-    "line":"线形图",
-    "area":"面积图",
+    "bars": "美国线",
+    "candles": "K线图",
+    "hollowCandles": "空心K线图",
+    "heikinAshi": "平均K线图",
+    "line": "线形图",
+    "area": "面积图",
     "baseLine": "基准线"
-    },
-    "kycAuditStatus":{
-        "0":"未认证",
-        "1":"待审核",
-        "2":"审核通过",
-        "3":"审核不通过"
-    }
-
+  },
+  "kycAuditStatus": {
+    "0": "未认证",
+    "1": "待审核",
+    "2": "审核通过",
+    "3": "审核不通过"
+  }
 }

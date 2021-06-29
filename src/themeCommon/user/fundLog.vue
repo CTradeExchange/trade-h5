@@ -1,5 +1,11 @@
 <template>
-    <LayoutTop :back='true' :menu='false' title='' />
+    <Top>
+        <template #center>
+            <p class='topTitle'>
+                {{ $t($route.meta.title) }}
+            </p>
+        </template>
+    </Top>
     <Loading :show='loadingPage' />
     <div class='page-wrap'>
         <div class='oper-area'>
@@ -121,10 +127,14 @@
 import { toRefs, reactive, ref, computed, onBeforeMount } from 'vue'
 import { queryCapitalFlowList } from '@/api/user'
 import dayjs from 'dayjs'
+import Top from '@/components/top'
 import { useStore } from 'vuex'
 import { isEmpty, priceFormat } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 export default {
+    components: {
+        Top,
+    },
     setup (props) {
         const store = useStore()
         const proDownItem = ref(null)
@@ -324,6 +334,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
+.topTitle {
+    flex: 1;
+    font-size: rem(32px);
+    text-align: center;
+}
 .page-wrap {
     flex: 1;
     overflow: auto;

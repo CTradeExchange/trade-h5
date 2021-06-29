@@ -1,7 +1,7 @@
 <template>
-    <LayoutTop :back='true' :menu='false' title='' :title-vis='false'>
+    <Top class='msgTopBar'>
         <template #center>
-            <div>
+            <div class='msgTopCenter'>
                 <van-dropdown-menu active-color='#007AFF'>
                     <van-dropdown-item v-model='type' :options='options' @change='changeType' />
                 </van-dropdown-menu>
@@ -12,7 +12,7 @@
                 <i class='icon icon_quanbuyidu'></i>
             </div>
         </template>
-    </LayoutTop>
+    </Top>
     <Loading :show='pageLoading' />
     <div class='msg-list'>
         <div v-if='list.length === 0'>
@@ -47,10 +47,13 @@ import { onBeforeMount, computed, reactive, toRefs } from 'vue'
 import { queryPlatFormMessageLogList } from '@/api/user'
 import { useStore } from 'vuex'
 import dayjs from 'dayjs'
-import { Toast } from 'vant'
+import Top from '@/components/top'
 import { isEmpty } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 export default {
+    components: {
+        Top,
+    },
     setup (props) {
         const store = useStore()
         const { t, tm } = useI18n({ useScope: 'global' })
@@ -165,6 +168,9 @@ export default {
     color: var(--white);
     font-size: rem(48px);
 }
+.msgTopCenter {
+    flex: 1;
+}
 .msg-list {
     flex: 1;
     height: 100%;
@@ -194,15 +200,10 @@ export default {
 }
 </style>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.van-dropdown-menu__bar {
-    background-color: transparent !important;
-    .van-dropdown-menu__title {
-        color: var(--white);
-    }
-    .van-ellipsis {
-        color: var(--white);
-    }
+.msgTopBar {
+    position: relative !important;
 }
+
 </style>

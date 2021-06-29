@@ -36,7 +36,7 @@ export default {
     display: flex;
     width: 100%;
     padding: 10px rem(20px);
-    line-height: 1.6;
+    line-height: 1.5;
     text-align: center;
     .item {
         flex: 1;
@@ -45,8 +45,9 @@ export default {
         font-size: rem(24px);
     }
     .price {
-        padding: rem(5px) 0;
+        padding: rem(10px) 0 rem(3px);
         font-size: rem(38px);
+        line-height: 1.2;
     }
     .change {
         font-size: rem(24px);

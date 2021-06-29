@@ -38,7 +38,7 @@ export default {
         backHandler: Function,
         leftIcon: {
             type: String,
-            default: 'cross'
+            default: 'arrow-left'
         },
         title: {
             type: String,
@@ -80,6 +80,7 @@ export default {
         position: absolute;
         top: rem(26px);
         left: rem(13px);
+        z-index: 1;
         color: var(--color);
         font-size: rem(46px);
     }

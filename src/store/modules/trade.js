@@ -16,6 +16,9 @@ const EmptyPendingPriceRang = {
     sellStopRange: [], // 卖出止损范围
 }
 
+let positionsConfig = {} // 持仓列表排序
+let pendingsConfig = {} // 挂单列表排序
+
 export default {
     namespaced: true,
     state: {
@@ -167,7 +170,8 @@ export default {
     },
     actions: {
         // 查询持仓列表
-        queryPositionPage ({ dispatch, commit, state, rootState }, params = {}) {
+        queryPositionPage ({ dispatch, commit, state, rootState }, params) {
+            if (params) positionsConfig = params
             const accountListLen = rootState._user.customerInfo?.accountList?.length
             // dispatch('queryPBOOrderPage')
 
@@ -176,7 +180,7 @@ export default {
                 return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空持仓
             }
             commit('Update_positionLoading', true)
-            return queryPositionPage(params).then((res) => {
+            return queryPositionPage(positionsConfig).then((res) => {
                 commit('Update_positionLoading', false)
                 if (res.check()) {
                     commit('Update_positionList', res.data)
@@ -202,13 +206,14 @@ export default {
             })
         },
         // 预埋单列表
-        queryPBOOrderPage ({ dispatch, commit, state, rootState }, params = {}) {
+        queryPBOOrderPage ({ dispatch, commit, state, rootState }, params) {
+            if (params) pendingsConfig = params
             const accountListLen = rootState._user.customerInfo?.accountList?.length
             if (!accountListLen) {
                 commit('Update_pendingList', [])
                 return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空数据
             }
-            return queryPBOOrderPage(params).then((res) => {
+            return queryPBOOrderPage(pendingsConfig).then((res) => {
                 if (res.check()) {
                     commit('Update_pendingList', res.data)
                 }

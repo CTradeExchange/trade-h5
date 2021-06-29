@@ -309,7 +309,8 @@
         "replacePhone": "更换手机",
         "logout": "退出账号",
         "logoutConfirm": "确定退出登录吗",
-        "setLang": "设置语言"
+        "setLang": "设置语言",
+        "color": "皮肤颜色"
     },
     "withdraw": {
         "wayMsg": "暂无取款功能",

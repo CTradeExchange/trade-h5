@@ -12,7 +12,7 @@
 <script>
 import Notice from '@c/components/notice'
 import { useStore } from 'vuex'
-import { onMounted } from 'vue'
+import { onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 export default {
@@ -49,6 +49,8 @@ export default {
             })
         }
 
+        document.documentElement.classList.add(store.state.invertColor)
+
         // 监听ws全局事件
         document.body.addEventListener('GotMsg_UserForceLogoutRet', kickOut, false)
         document.body.addEventListener('GotMsg_disconnect', disconnect, false)
@@ -69,4 +71,20 @@ export default {
 @import '~@c/style.scss';
 @import '~@c/font/iconfont.css';
 @import '~@/sass/mixin.scss';
+.night {
+    filter: invert(0.85);
+    .riseColor,
+    .riseColorBg,
+    .fallColor,
+    .fallColorBg,
+    .grayColorBg,
+    .buyColor,
+    .sellColor,
+    .successColor,
+    .invert,
+    iframe,
+    img {
+        filter: invert(0.85);
+    }
+}
 </style>

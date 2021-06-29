@@ -4,10 +4,10 @@
             <img class='faceImg' src='../../../images/face.png' />
             <div class='guestBts'>
                 <button class='btn' @click="$router.push('/login')">
-                    登录
+                    {{ $t('cRoute.login') }}
                 </button>
                 <button class='btn' @click="$router.push('/register')">
-                    注册
+                    {{ $t('cRoute.register') }}
                 </button>
             </div>
         </div>
@@ -19,7 +19,7 @@
                         {{ customerInfo.customerNo }}
                         <van-icon class='arrowIcon' name='arrow' />
                     </p>
-                    <span class='status' :class="['status'+customerInfo.kycAuditStatus]">
+                    <span class='status invert' :class="['status'+customerInfo.kycAuditStatus]">
                         {{ $tm('kycAuditStatus')[customerInfo.kycAuditStatus] }}
                     </span>
                 </div>
@@ -27,25 +27,25 @@
             <div class='capital'>
                 <van-row align='center' justify='space-between' @click='updateShow(true)'>
                     <van-col class='accountView'>
-                        账户总览({{ customerInfo.currency }})
+                        {{ $t('trade.accountOverview') }}({{ customerInfo.currency }})
                     </van-col>
                     <van-col><van-icon class='arrowIcon' name='arrow' /></van-col>
                 </van-row>
                 <van-row class='mtop10' justify='space-between'>
-                    <van-col>账户余额</van-col>
-                    <van-col> 可用保证金 </van-col>
+                    <van-col>{{ $t('trade.balance') }}</van-col>
+                    <van-col> {{ $t('trade.freeMargin') }} </van-col>
                 </van-row>
                 <van-row class='amountNum' :class="{ 'mini':miniAmountText }" justify='space-between'>
                     <van-col>{{ assets.balance }}</van-col>
                     <van-col>{{ assets.availableMargin }}</van-col>
                 </van-row>
             </div>
-            <div class='accountBtns'>
-                <button class='btn' @click="$router.push('/login')">
-                    出金
+            <div class='accountBtns invert'>
+                <button class='btn' @click="$router.push('/withdraw')">
+                    {{ $t('trade.drawings') }}
                 </button>
-                <button class='btn' @click="$router.push('/register')">
-                    入金
+                <button class='btn' @click="$router.push('/desposit')">
+                    {{ $t('depositText') }}
                 </button>
             </div>
         </div>

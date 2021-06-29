@@ -24,7 +24,7 @@ export default createStore({
     state: {
         style,
         disabledSuccAnimtion: false,
-        quoteMode: 2, // 1简单模式 2高级模式
+        invertColor: 'night', // 黑夜模式
         zoneList: [],
         bankDict: [],
         supportLanguages: supportLanguages,
@@ -81,6 +81,9 @@ export default createStore({
         },
         Update_countryList (state, list) {
             state.countryList = list
+        },
+        Update_invertColor (state, data) {
+            state.invertColor = data
         },
         Update_disabledSuccAnimtion (state, data) {
             state.disabledSuccAnimtion = data
