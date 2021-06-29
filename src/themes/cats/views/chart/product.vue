@@ -747,7 +747,7 @@ export default {
                     params: [false, false, [12, 26, 'close', 9]]
                 }))
                 localSetChartConfig('resolution', 1)
-                localSetChartConfig('chartType', 0)
+                localSetChartConfig('lineSetList', [])
 
                 // 图表配置
                 state.initConfig = ref({
