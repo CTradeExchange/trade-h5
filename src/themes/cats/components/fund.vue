@@ -21,7 +21,7 @@
                         <div class='progress-base'>
                             <div class='progress-color' style='width: 100%;'></div>
                             <div class='number'>
-                                {{ accountInfo.marginRadio ?accountInfo.marginRadio+'%' : '--' }}
+                                {{ accountInfo.marginRadio }}
                             </div>
                         </div>
                     </div>
@@ -117,8 +117,8 @@ export default {
 
         onMounted(() => {
             if (accountInfo.value) {
-                const earnest = accountInfo.value.occupyMargin
-                const netWorthPercent = divide(netWorth.value, parseFloat(netWorth.value + earnest))
+                const earnest = parseFloat(accountInfo.value.occupyMargin)
+                const netWorthPercent = divide(parseFloat(netWorth.value), parseFloat(netWorth.value) + earnest)
                 const earnestPercent = divide(earnest, parseFloat(netWorth.value + earnest))
 
                 createTorus({
@@ -250,12 +250,14 @@ export default {
             line-height: rem(70px);
             text-align: right;
             .title {
-                padding-bottom: rem(10px);
+                padding-right: rem(5px);
                 color: #333;
                 font-size: rem(24px);
+                vertical-align: middle;
             }
             .val {
                 font-size: rem(34px);
+                vertical-align: middle;
             }
             .val2 {
                 color: #477FD3;
