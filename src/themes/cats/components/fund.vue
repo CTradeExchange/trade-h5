@@ -21,7 +21,7 @@
                         <div class='progress-base'>
                             <div class='progress-color' style='width: 100%;'></div>
                             <div class='number'>
-                                {{ accountInfo.marginRadio }}
+                                {{ accountInfo.marginRadio }}%
                             </div>
                         </div>
                     </div>

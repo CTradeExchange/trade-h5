@@ -29,16 +29,16 @@ if (process.env.NODE_ENV === 'production') {
         new FileManagerPlugin({
             events: {
                 onEnd: {
-                    delete: [
-                        `./build_folder/${pathStr}/${pathStr}/dist`,
-                        `./build_folder/${pathStr}.zip`
-                    ],
+                    // delete: [
+                    //     `./build_folder/${pathStr}/${pathStr}/dist`,
+                    //     `./build_folder/${pathStr}.zip`
+                    // ],
                     copy: [{
-                        source: `./build_folder/${pathName}`,
-                        destination: `./build_folder/${pathStr}/${pathStr}/${pathName}`
+                        source: resolve(`/build_folder/${pathName}`),
+                        destination: resolve(`/build_folder/${pathStr}/${pathStr}/${pathName}`)
                     }],
                     archive: [
-                        { source: resolve(`${pathName}`), destination: resolve(`zip/${pathName}${dayjs().format('YYYYMMDDHHmm')}.zip`) },
+                        // { source: resolve(`${pathName}`), destination: resolve(`zip/${pathName}${dayjs().format('YYYYMMDDHHmm')}.zip`) },
                         {
                             source: resolve(`./build_folder/${pathStr}`),
                             destination: `./build_folder/${pathStr}.zip`,
@@ -76,7 +76,11 @@ if (isAdminMode) {
     })
     // H5开发模式
     Object.assign(pages, {
-        index: 'src/themes/cats/main.js'
+        index: {
+            entry: 'src/themes/cats/main.js',
+            template: 'public/index.html',
+            filename: process.env.NODE_ENV === 'production' ? 'index_template.html' : 'index.html',
+        }
         // index: 'src/themes/mt4/main.js'
         // index: 'src/themes/ctrader/main.js'
     })
@@ -85,7 +89,7 @@ if (isAdminMode) {
 const config = {
     productionSourceMap: true,
     publicPath: process.env.NODE_ENV === 'production' && isAdminMode ? '/wp-content/plugins/cats-manage/wp-admin-static/' : '/', // static/
-    indexPath: isAdminMode ? 'index.html' : 'index_template.html', // 就是这条
+    // indexPath: isAdminMode ? 'index.html' : 'index_template.html', // 就是这条
     lintOnSave: false,
     outputDir: isAdminMode ? './build_folder/admin' : './build_folder/dist',
     configureWebpack: {

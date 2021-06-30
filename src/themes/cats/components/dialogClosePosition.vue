@@ -90,7 +90,7 @@
                         {{ $t('trade.closeProfit') }}
                     </div>
                     <div class='val'>
-                        {{ data.profit>0 ? '+'+data.profit : data.profit }} {{ customerInfo.currency }}
+                        {{ data.profitLoss>0 ? '+'+data.profitLoss : data.profitLoss }} {{ customerInfo.currency }}
                     </div>
                 </div>
                 <!-- <div class='row'>
@@ -103,7 +103,7 @@
                 </div> -->
                 <div v-if='data.closeFreeDigits' class='row'>
                     <div class='name'>
-                        手续费
+                        {{ $t('trade.fee') }}
                     </div>
                     <div class='val'>
                         {{ data.closeFreeDigits + customerInfo.currency }}

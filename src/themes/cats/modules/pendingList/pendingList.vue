@@ -15,13 +15,14 @@
 </template>
 
 <script>
-import { computed, reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs, nextTick, watch } from 'vue'
 import { useStore } from 'vuex'
 import pendingItem from './pendingItem'
 import { closePboOrder } from '@/api/trade'
 import DialogBottomTip from '@c/components/dialogBottomTip'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
+import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
     components: {
         pendingItem,
@@ -38,6 +39,18 @@ export default {
         let cur = null
 
         const orderList = computed(() => store.state._trade.pendingList)
+
+        watch(
+            () => orderList.value?.length,
+            async (newval) => {
+                await nextTick()
+                if (!newval) return false
+                const subscribList = orderList.value.map(el => el.symbolId)
+                if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
+            },
+            { immediate: true }
+        )
+
         const showClose = (data) => {
             store.commit('_quote/Update_productActivedID', data.symbolId)
             cur = data

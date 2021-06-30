@@ -34,7 +34,7 @@
                         </div><div class='price_item'>
                             <span class='title'>
                                 {{ $t('trade.currentPrice') }}
-                            </span><span class='grayColor'>
+                            </span><span :class='[Number(data.direction) === 1 ? product.sell_color : product.buy_color]'>
                                 {{ Number(data.direction) === 1 ? product.sell_price : product.buy_price }}
                             </span>
                         </div>

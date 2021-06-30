@@ -76,6 +76,7 @@ export function eq (num1, num2) {
  * num2 移位为小数点，即10的幂，如果n为负则向左移位，如果n为正则向右移位。
  */
 export function shiftedBy (num1, num2) {
+    if (!num1 || !num2) return num1
     return BigNumber(num1).shiftedBy(num2).toFixed(Math.abs(num2))
 }
 /* 比较两个数字值是否相等，包含null, undefined,0,'',false类型 */

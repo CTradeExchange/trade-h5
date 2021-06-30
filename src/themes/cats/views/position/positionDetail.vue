@@ -25,8 +25,8 @@
                             <div class='sub'>
                                 {{ $t('trade.profit') }}({{ customerInfo.currency }})
                             </div>
-                            <div class='name' :class="parseFloat(positionData.profit) > 0 ? 'riseColor': 'fallColor'">
-                                {{ positionData.profit }}
+                            <div class='name' :class="parseFloat(positionData.profitLoss) > 0 ? 'riseColor': 'fallColor'">
+                                {{ positionData.profitLoss }}
                             </div>
                         </div><div class='col'>
                             <div class='sub'>
