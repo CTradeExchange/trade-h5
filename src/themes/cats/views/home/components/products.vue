@@ -1,5 +1,5 @@
 <template>
-    <ul class='products'>
+    <ul v-if='products.length' class='products'>
         <li v-for='product in products' :key='product.symbolId' class='item'>
             <div class='name'>
                 {{ product.symbolName }}
@@ -21,7 +21,7 @@ export default {
     setup () {
         const store = useStore()
         const productMap = computed(() => store.state._quote.productMap)
-        const products = [23, 24, 32].map(el => productMap.value[el])
+        const products = [23, 24, 32].map(el => productMap.value[el]).filter(el => el)
         return {
             productMap,
             products

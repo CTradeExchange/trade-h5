@@ -5,7 +5,7 @@
                 <span></span>
             </template>
             <template #right>
-                <div class='assetIcon adequate' @click='fundVis=true'>
+                <div v-if='$store.state._user.customerInfo' class='assetIcon adequate' @click='fundVis=true'>
                     <i class='icon_icon_assets'></i>
                     <div class='other'>
                         <span> {{ $t('trade.asset') }} </span>
@@ -170,14 +170,14 @@ export default {
         const queryHistoryList = (dateType) => {
             state.loading = true
             state.activeType = dateType
-            let closeEndTime
-            const closeStartTime = dayjs().startOf('day').valueOf()
+            const closeEndTime = dayjs().endOf('day').valueOf()
+            let closeStartTime = dayjs().startOf('day').valueOf()
             if (Number(dateType) === 1) {
-                closeEndTime = dayjs().endOf('day').valueOf()
+                closeStartTime = dayjs().startOf('day').valueOf()
             } else if (Number(dateType) === 2) {
-                closeEndTime = dayjs().subtract(7, 'day').startOf('day').valueOf()
+                closeStartTime = dayjs().subtract(7, 'day').startOf('day').valueOf()
             } else if (Number(dateType) === 3) {
-                closeEndTime = dayjs().subtract(1, 'month').startOf('day').valueOf()
+                closeStartTime = dayjs().subtract(1, 'month').startOf('day').valueOf()
             }
 
             state.pageLoading = true

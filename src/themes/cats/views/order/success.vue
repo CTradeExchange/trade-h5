@@ -32,13 +32,11 @@
                     </template>
                 </van-cell>
                 <van-cell v-if='orderInfo.fee' class='dataBar' :title="$t('fee')">
-                    <template>
-                        <span
-                            :class="[orderInfo.fee?'':'muted']"
-                        >
-                            {{ orderInfo.fee + accountCurrency }}
-                        </span>
-                    </template>
+                    <span
+                        :class="[orderInfo.fee?'':'muted']"
+                    >
+                        {{ orderInfo.fee + accountCurrency }}
+                    </span>
                 </van-cell>
                 <van-cell class='dataBar' :title="$t('trade.takeLoss')">
                     <span

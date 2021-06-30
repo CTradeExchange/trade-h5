@@ -63,11 +63,11 @@ export default {
         })
         // 当前板块下的产品列表
         const productList = computed(() => {
-            const list = categoryList.value[state.activeTab].list
+            const list = categoryList.value[state.activeTab].list || []
             const products = []
             const productMapVal = productMap.value
             list.forEach(el => {
-                if (productMapVal[el]) products.push(productMapVal[el])
+                if (productMapVal[el]?.symbolName) products.push(productMapVal[el])
             })
             return products
         })
@@ -106,7 +106,7 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
-    padding-bottom: rem(10px);
+    padding-bottom: rem(15px);
     background-color: #FFF;
 }
 .titleBar {
