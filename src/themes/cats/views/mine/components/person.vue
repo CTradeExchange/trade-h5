@@ -24,8 +24,8 @@
                     </span>
                 </div>
             </div>
-            <div class='capital'>
-                <van-row justify='space-between' @click='updateShow(true)'>
+            <div class='capital' @click='updateShow(true)'>
+                <van-row justify='space-between'>
                     <van-col class='accountView'>
                         {{ $t('trade.accountOverview') }}({{ customerInfo.currency }})
                     </van-col>

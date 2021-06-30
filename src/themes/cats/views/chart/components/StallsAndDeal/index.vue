@@ -54,7 +54,8 @@
             <van-tab v-if='statusList.indexOf("deal") > -1' name='deal' :title='$t("trade.deal")'>
                 <!-- 成交记录 -->
                 <div class='deal-wrap'>
-                    <div class='list-wrap'>
+                    <van-empty v-if='dealData.length === 0' />
+                    <div v-else class='list-wrap'>
                         <div class='col time-col'>
                             <span class='label'>
                                 {{ $t('trade.sortTime') }}
