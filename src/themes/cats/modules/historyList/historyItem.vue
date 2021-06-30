@@ -12,7 +12,7 @@
                     </div><p>
                         <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
                             {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
-                        </span>{{ positionVolume }} {{ $t('trade.volumeUnit') }}
+                        </span>{{ data.closeVolume }} {{ $t('trade.volumeUnit') }}
                     </p>
                 </div>
                 <div class='ft'>
@@ -20,41 +20,38 @@
                         {{ $t('trade.profit') }} ({{ customerInfo.currency }})
                     </span>
                     <div class='ft amount' :class="parseFloat(data.profit) > 0 ? 'riseColor': 'fallColor'">
-                        {{ parseFloat(data.profit) > 0 ? '+': '-' }}{{ data.profit }}
+                        {{ parseFloat(data.profit) > 0 ? '+': '' }}{{ data.profit }}
                     </div>
                 </div>
             </div>
             <div class='cell'>
                 <div class='price'>
-                    <div>
-                        <div class='price_item'>
-                            <span class='title'>
-                                {{ $t('trade.positionPrice') }}
-                            </span><span>
-                                {{ data.openPrice }}
-                            </span>
-                        </div><div class='price_item'>
-                            <span class='title'>
-                                {{ $t('trade.swap_2') }}
-                            </span>
-                            <span class='grayColor'>
-                                {{ data.interest }}
-                            </span>
-                        </div>
-                    </div><div>
-                        <div class='price_item'>
-                            <span class='title'>
-                                {{ $t('trade.closedPrice') }}
-                            </span><span class=''>
-                                {{ data.closePrice }}
-                            </span>
-                        </div><div class='price_item'>
-                            <span class='title'>
-                                {{ $t('trade.fee') }}
-                            </span><span class=''>
-                                {{ data.commission||'--' }}
-                            </span>
-                        </div>
+                    <div class='price_item'>
+                        <span class='title'>
+                            {{ $t('trade.positionPrice') }}
+                        </span><span>
+                            {{ data.openPrice }}
+                        </span>
+                    </div><div class='price_item'>
+                        <span class='title'>
+                            {{ $t('trade.swap_2') }}
+                        </span>
+                        <span class='grayColor'>
+                            {{ data.interest }}
+                        </span>
+                    </div>
+                    <div class='price_item'>
+                        <span class='title'>
+                            {{ $t('trade.closedPrice') }}
+                        </span><span class=''>
+                            {{ data.closePrice }}
+                        </span>
+                    </div><div class='price_item'>
+                        <span class='title'>
+                            {{ $t('trade.fee') }}
+                        </span><span class=''>
+                            {{ data.commission||'--' }}
+                        </span>
                     </div>
                 </div>
                 <div class='ft'>
@@ -90,7 +87,6 @@ export default {
         const customerInfo = computed(() => store.state._user.customerInfo)
         const positionList = computed(() => store.state._trade.positionList)
         const product = computed(() => store.state._quote.productMap[data.symbolId])
-        const positionVolume = computed(() => minus(data.openVolume, data.closeVolume))
 
         const toPositionDetail = (item) => {
             store.commit('_quote/Update_productActivedID', item.symbolId)
@@ -106,7 +102,6 @@ export default {
             positionList,
             customerInfo,
             product,
-            positionVolume,
             toPositionDetail,
             updateShow
         }
@@ -147,10 +142,11 @@ export default {
                 text-align: center;
             }
             .price {
+                display: flex;
                 flex: 1;
+                flex-wrap: wrap;
                 .price_item {
-                    display: inline-block;
-                    width: rem(220px);
+                    width: 50%;
                     span {
                         padding: 0 rem(4px);
                     }

@@ -35,14 +35,16 @@
                             <div class='name'>
                                 {{ positionData.interest || '--' }}
                             </div>
-                        </div><div class='col'>
+                        </div>
+                        <!-- abcc版本不需要显示手续费 -->
+                        <!-- <div class='col'>
                             <div class='sub'>
                                 {{ $t('trade.fee') }}({{ customerInfo.currency }})
                             </div>
                             <div class='name'>
                                 {{ positionData.openFee || '--' }}
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class='layout layout-1'>

@@ -42,23 +42,27 @@
             <van-cell size='large' :title="$t('fee')" :value='fee' />
             <van-cell size='large' :title="$t('contract.interest')" :value='interest' />
             <van-cell size='large' :title="$t('contract.zone')" :value="'GMT +' + (0 - new Date().getTimezoneOffset() / 60)" />
-            <van-cell v-if='product.quoteTimeList && product.quoteTimeList.length' class='timeListCell' size='large' :title="$t('contract.quoteTime')">
-                <div v-for='(item,index) in quoteTimeList' :key='index' class='item-item'>
-                    {{ $t('weekdayMap.'+ item[0].dayOfWeek) }}:
-                    <template>
+            <van-cell v-if='quoteTimeList && quoteTimeList.length' class='timeListCell' size='large' :title="$t('contract.quoteTime')">
+                <template v-for='(item,index) in quoteTimeList' :key='index'>
+                    <div v-if='item.length' class='item-item'>
+                        {{ $t('weekdayMap.'+ item[0].dayOfWeek) }}:
+                        <template>
+                            <span v-for='el in item' :key='el.timeStr' class='timeItem'>
+                                {{ el.timeStr }}
+                            </span>
+                        </template>
+                    </div>
+                </template>
+            </van-cell>
+            <van-cell v-if='tradeTimeList && tradeTimeList.length' class='timeListCell' size='large' :title="$t('contract.tradeTime')">
+                <template v-for='(item,index) in tradeTimeList' :key='index'>
+                    <div v-if='item.length' class='item-item'>
+                        {{ $t('weekdayMap.'+ item[0].dayOfWeek) }}:
                         <span v-for='el in item' :key='el.timeStr' class='timeItem'>
                             {{ el.timeStr }}
                         </span>
-                    </template>
-                </div>
-            </van-cell>
-            <van-cell v-if='product.tradeTimeList && product.tradeTimeList.length' class='timeListCell' size='large' :title="$t('contract.tradeTime')">
-                <div v-for='(item,index) in tradeTimeList' :key='index' class='item-item'>
-                    {{ $t('weekdayMap.'+ item[0].dayOfWeek) }}:
-                    <span v-for='el in item' :key='el.timeStr' class='timeItem'>
-                        {{ el.timeStr }}
-                    </span>
-                </div>
+                    </div>
+                </template>
             </van-cell>
             <van-cell v-if='product.eodTime' size='large' :title="$t('contract.eodTime')" :value='eodTime' />
             <van-cell v-if='expireTime' size='large' :title='$t("contract.expireTime")' :value='expireTime' />
@@ -109,6 +113,7 @@ export default {
                 timeListFormat(newTimeList)
                 return newTimeList
             }
+            return []
         })
         // 行情时间
         const quoteTimeList = computed(() => {
@@ -117,12 +122,14 @@ export default {
                 timeListFormat(newTimeList)
                 return newTimeList
             }
+            return []
         })
         // 结算时间
         const eodTime = computed(() => {
             if (!isEmpty(product.value.eodTime)) {
                 return dayjs().utc().startOf('day').utcOffset(utcOffset).add(product.value.eodTime, 'minute').format('HH:mm')
             }
+            return ''
         })
 
         // 年利率
@@ -131,7 +138,7 @@ export default {
         })
         // 手续费
         const fee = computed(() => {
-            return parseFloat(product.value.feeFormula) === 1 ? mul(product.value.fee, 100) + '%' : product.value.feeRate
+            return parseFloat(product.value.feeFormula) === 1 ? mul(product.value.feeRate, 100) + '%' : product.value.fee
         })
         // 手续费
         const expireTime = computed(() => {

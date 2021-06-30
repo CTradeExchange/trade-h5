@@ -1,6 +1,6 @@
 <template>
     <ul v-if='products.length' class='products'>
-        <li v-for='product in products' :key='product.symbolId' class='item'>
+        <li v-for='product in products' :key='product.symbolId' class='item' @click='handlerItem(product)'>
             <div class='name'>
                 {{ product.symbolName }}
             </div>
@@ -17,13 +17,20 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 export default {
     setup () {
         const store = useStore()
+        const router = useRouter()
         const productMap = computed(() => store.state._quote.productMap)
         const products = [23, 24, 32].map(el => productMap.value[el]).filter(el => el)
+        // 点击进入产品详情页面
+        const handlerItem = item => {
+            router.push({ name: 'Product', query: { symbolId: item.symbolId } })
+        }
         return {
             productMap,
+            handlerItem,
             products
         }
     }
