@@ -466,17 +466,24 @@ export default {
             const curIndex = klineTypeList.findIndex(el => el.value === state.klineType)
             return curIndex + 1
         })
-        const product = computed(() => store.state._quote.productMap[symbolId])
+        const product = computed(() => {
+            const product = store.state._quote.productMap[symbolId]
+            if (product.cur_price) {
+                // 有产品数据就渲染图表
+                renderChart(product, state.initConfig.property)
+            }
+            return product
+        })
         const productList = computed(() => store.state._quote.productList)
         const positionList = computed(() => store.state._trade.positionList)
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)
 
+        // 查询持仓列表，获取持仓线数据
+        store.dispatch('_trade/queryPositionPage')
         // 订阅产品
         const subscribList = productList.value.map(({ symbolId }) => symbolId)
         store.dispatch('_quote/querySymbolBaseInfoList', subscribList)
         QuoteSocket.send_subscribe(subscribList)
-        // 查询持仓列表，获取持仓线数据
-        store.dispatch('_trade/queryPositionPage')
 
         // 图表初始值
         const initialValue = computed(() => {
@@ -518,7 +525,6 @@ export default {
                 state.moreTimeIsOpened = !state.moreTimeIsOpened
                 return
             }
-            console.log(name)
             if (name === 'timeSharing') {
                 state.studyVis = false
             } else {
@@ -543,7 +549,7 @@ export default {
 
         // 设置图表线
         const handleLineChange = (val, v) => {
-            const property = {}
+            var property = {}
             if (val.indexOf('showBuyPrice') > -1) {
                 property.showBuyPrice = true
             } else {
@@ -567,9 +573,17 @@ export default {
             } else {
                 property.showLastPrice = false
             }
+            renderChart(product.value, property)
+        }
+
+        // 重新渲染图表
+        const renderChart = (product, property) => {
             state.onChartReadyFlag && unref(chartRef).updateProperty(property)
+            state.onChartReadyFlag && unref(chartRef).updateLineData({
+                buyPrice: product.buy_price,
+                sellPrice: product.sell_price
+            })
             setPositionLine()
-            console.log('更新属性', property)
         }
 
         const setPositionLine = () => {
@@ -584,6 +598,7 @@ export default {
                         color: item.profit < 0 ? 'green' : 'red'
                     })
                 })
+
                 state.onChartReadyFlag && unref(chartRef).updatePosition(temp)
             }
         }
@@ -661,6 +676,8 @@ export default {
         const onClickMoreTime = ({ title, ktype }) => {
             state.activeTab = 'moreKTypes'
             initOtherTime(title, ktype)
+            state.onChartReadyFlag && unref(chartRef).setResolution(ktype)
+            localSetChartConfig('resolution', ktype)
             state.moreTimeIsOpened = false
         }
 
@@ -679,7 +696,6 @@ export default {
 
         // 指标移除回调
         const indicatorRemoved = (name, val) => {
-            console.log(name, state.subStudy)
             if (name === state.subStudy) {
                 removeStudy('sub')
             }
@@ -708,8 +724,6 @@ export default {
         })
 
         watch(() => [state.settingList], (newValues) => {
-            // console.log('newValues', newValues)
-            // if (state.settingList && state.settingList.length > 0) {
             if (state.settingList.indexOf('showBuyPrice') > -1) {
                 localSetChartConfig('showBuyPrice', true)
             } else {
@@ -718,7 +732,6 @@ export default {
 
             if (state.settingList.indexOf('showPositionPrice') > -1) {
                 localSetChartConfig('showPositionPrice', true)
-                setPositionLine()
             } else {
                 localSetChartConfig('showPositionPrice', false)
             }
@@ -736,7 +749,6 @@ export default {
             }
 
             localSetChartConfig('lineSetList', state.settingList)
-            // }
         })
 
         const initChartData = () => {
@@ -755,12 +767,15 @@ export default {
                 }))
                 localSetChartConfig('resolution', 1)
                 localSetChartConfig('lineSetList', [])
+                localSetChartConfig('chartType', 1)
+                // 默认选中现价线
+                state.settingList = ['showLastPrice']
 
                 // 图表配置
                 state.initConfig = ref({
                     property: {
                         showLastPrice: true, // 现价线
-                        showPositionPrice: true, // 持仓线
+                        showPositionPrice: false, // 持仓线
                         showBuyPrice: false, // 买价线
                         showSellPrice: false, // 卖价线
                         showSeriesOHLC: true, // 高开低收
@@ -805,8 +820,10 @@ export default {
 
                     ]
                 })
+
             // state.settingList = chartConfig.lineSet
             }
+            // renderChart(state.initConfig.property)
         }
 
         // 添加自选
@@ -847,11 +864,8 @@ export default {
             })
         }
 
+        // 初始化图表配置
         initChartData()
-
-        onUpdated(() => {
-            setPositionLine()
-        })
 
         onBeforeUnmount(() => {
             state.timeId = null
@@ -1500,7 +1514,7 @@ export default {
         }
     }
     .chart-wrap {
-        height: rem(660px);
+        height: rem(720px);
     }
 }
 

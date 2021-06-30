@@ -48,7 +48,7 @@
                     <div v-else class='pay-type no-data'>
                         {{ $t('deposit.noPayPassway') }}
                     </div>
-                    <div class='currency-wrap'>
+                    <div v-if='paymentTypes.length > 0' class='currency-wrap'>
                         <van-radio-group v-model='currencyChecked' @change='changePayCurrency'>
                             <van-radio v-for='(item,index) in paymentTypes' :key='index' class='currency-radio' icon-size='20px' :name='item'>
                                 {{ item }}
@@ -382,10 +382,14 @@ export default {
         }
 
         const setPaymentList = async (payItem) => {
+            state.paymentTypes = []
             if (payItem.paymentCurrency === 'USDT') {
                 await getChainList()
             } else {
-                state.paymentTypes = state.checkedType.paymentCurrency.split(',')
+                const splitCurrency = state.checkedType.paymentCurrency.split(',')
+                if (splitCurrency.length > 1) {
+                    state.paymentTypes = splitCurrency
+                }
             }
 
             state.currencyChecked = state.paymentTypes[0]
@@ -453,6 +457,7 @@ export default {
             }
         }
 
+        // 检查是否需要KYC认证
         const checkKyc = () => {
             state.loading = true
             checkKycApply({
@@ -483,6 +488,7 @@ export default {
             })
         }
 
+        // 重置币种为虚拟币的时候 获取链列表
         const getChainList = async () => {
             state.paymentTypes = []
             await getListByParentCode({ parentCode: 'USDT' }).then(res => {
