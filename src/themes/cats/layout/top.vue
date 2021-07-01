@@ -75,7 +75,7 @@ export default {
     align-items: center;
     width: 100%;
     height: rem(90px);
-    color: #333;
+    color: var(--color);
     font-size: rem(34px);
     background: var(--white);
     &.mainColorBg {

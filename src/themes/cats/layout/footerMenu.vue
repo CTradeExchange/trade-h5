@@ -1,5 +1,5 @@
 <template>
-    <van-tabbar v-model='active' :active-color='$style.primary'>
+    <van-tabbar v-model='active' :active-color='$style.primary' class='footerMenu'>
         <van-tabbar-item v-for='item in menuList' :key='item.href' :name='item.href' @click='menuHandler(item)'>
             <template #icon>
                 <i class='icon' :class='item.icon'></i>
@@ -66,6 +66,12 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
+.footerMenu {
+    background: var(--white);
+    .van-tabbar-item--active {
+        background: var(--white);
+    }
+}
 :deep(.van-tabbar-item) {
     color: #CACACA;
 }

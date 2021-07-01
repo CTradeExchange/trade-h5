@@ -183,7 +183,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const token = getToken()
     const roles = to.meta?.roles ?? []
-    if (token && roles.length && roles.includes('Guest')) {
+    const customerInfo = store.state._user.customerInfo
+    const unKYCPages = ['Authentication', 'RegisterSuccess', 'RegKyc', 'AddBank', 'Personal', 'AuthForm', 'BankList', 'Setting', 'KycCommitted']
+    if (customerInfo && customerInfo?.kycAuditStatus !== 2 && unKYCPages.indexOf(to.name) === -1) {
+        // 未审核通过的用户直接跳转到KYC页面
+        next({ name: 'Authentication' })
+    } else if (token && roles.length && roles.includes('Guest')) {
         // 仅游客访问，登录用户访问时跳转到行情页面
         next({ name: 'Quote' })
     } else if (!token && roles.length && roles.includes('User')) {

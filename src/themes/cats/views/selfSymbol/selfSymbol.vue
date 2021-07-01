@@ -46,7 +46,7 @@ export default {
     background: var(--white);
 }
 .title {
-    color: rgba(51, 51, 51, 1);
+    color: var(--color);
     font-weight: 700;
     font-size: rem(40px);
 }
