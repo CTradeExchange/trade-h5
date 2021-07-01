@@ -12,7 +12,6 @@
             <slot>
                 {{ title?title:$t($route.meta.title) }}
             </slot>
-
         </div>
         <div class='right'>
             <slot name='right'>
@@ -78,9 +77,9 @@ export default {
     height: rem(90px);
     color: #333;
     font-size: rem(34px);
-    background: #FFF;
+    background: var(--white);
     &.mainColorBg {
-        color: #FFF;
+        color: var(--white);
     }
     &.nobg {
         background: none;
@@ -107,6 +106,7 @@ export default {
     .main {
         max-width: 60%;
         margin: 0 auto;
+        color: var(--color);
         text-align: center;
     }
     a {

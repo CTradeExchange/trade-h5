@@ -368,7 +368,9 @@
     "sellFive": "五档",
     "deal": "成交",
     "dealPrice": "成交价",
-    "dealVolume": "成交量"
+    "dealVolume": "成交量",
+    "noDealData": "暂无成交记录",
+    "noStallsData": "暂无五档报价"
   },
   "weekdayMap": {
     "1": "周一",

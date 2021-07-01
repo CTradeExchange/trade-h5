@@ -793,7 +793,11 @@ export default {
                             params: [false, false, [12, 26, 'close', 9]]
                         }
 
-                    ]
+                    ],
+                    extension: {
+                        theme: 'Dark', // 主题 "Light" | "Dark"
+                        fullScreen: false // 全屏功能（右上角缩放按钮、横屏监听等）
+                    }
                 })
             } else {
                 state.mainStudy = JSON.parse(locChartConfig.mainStudy).name
@@ -818,7 +822,11 @@ export default {
                         JSON.parse(locChartConfig.mainStudy),
                         JSON.parse(locChartConfig.subStudy)
 
-                    ]
+                    ],
+                    extension: {
+                        theme: 'Dark', // 主题 "Light" | "Dark"
+                        fullScreen: false // 全屏功能（右上角缩放按钮、横屏监听等）
+                    }
                 })
 
             // state.settingList = chartConfig.lineSet

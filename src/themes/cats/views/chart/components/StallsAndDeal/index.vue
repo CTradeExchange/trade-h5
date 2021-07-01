@@ -9,6 +9,9 @@
             title-active-color='#477fd3'
         >
             <van-tab v-if='statusList.indexOf("stalls") > -1' name='stalls' :title='$t("trade.sellFive")'>
+                <!-- <van-empty v-if='product.tickResult.length === 0'>
+                    {{ $t('trade.noStallsData') }}
+                </van-empty> -->
                 <div v-for='(item,index) in product.tickResult' :key='index' class='stalls-wrap'>
                     <div class='sell-wrap'>
                         <div class='item quantity'>
@@ -54,7 +57,9 @@
             <van-tab v-if='statusList.indexOf("deal") > -1' name='deal' :title='$t("trade.deal")'>
                 <!-- 成交记录 -->
                 <div class='deal-wrap'>
-                    <van-empty v-if='dealData.length === 0' />
+                    <van-empty v-if='dealData.length === 0'>
+                        {{ $t('trade.noDealData') }}
+                    </van-empty>
                     <div v-else class='list-wrap'>
                         <div class='col time-col'>
                             <span class='label'>

@@ -133,7 +133,7 @@ export default {
         margin-bottom: rem(20px);
         padding: rem(20px) rem(30px) 0;
         overflow: hidden;
-        background: #FFF;
+        background: var(--white);
         border-radius: rem(10px);
         .cell {
             display: flex;

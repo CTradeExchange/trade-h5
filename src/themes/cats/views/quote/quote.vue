@@ -107,7 +107,7 @@ export default {
     left: 0;
     width: 100%;
     padding-bottom: rem(15px);
-    background-color: #FFF;
+    background-color: var(--white);
 }
 .titleBar {
     display: flex;
