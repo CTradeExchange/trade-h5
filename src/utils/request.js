@@ -51,7 +51,7 @@ service.interceptors.response.use(
         const { data, config } = response
         // token失效重新登录
         const loginParams = getLoginParams()
-        if (data.code === 'GATEWAY_CODE_005' && router) {
+        if (['GATEWAY_CODE_001', 'GATEWAY_CODE_005'].includes(data.code) && router) {
             removeLoginParams()
             router.push({ name: 'Login', query: { back: encodeURIComponent(location.pathname + location.search) } })
             // return login(loginParams).then(res => {

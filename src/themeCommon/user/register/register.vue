@@ -288,6 +288,7 @@ export default {
     display: flex;
     flex-flow: column;
     height: 100%;
+    background: var(--white);
     .topBar {
         height: rem(100px);
     }

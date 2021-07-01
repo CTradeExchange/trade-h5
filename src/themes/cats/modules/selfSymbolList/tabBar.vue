@@ -80,7 +80,7 @@ export default {
     padding: 0 rem(30px);
     color: var(--mutedColor);
     line-height: rem(76px);
-    background: #F9F9F9;
+    background: var(--bgColor);
     .van-dropdown-menu {
         height: auto;
         background: none;
