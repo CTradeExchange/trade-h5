@@ -122,7 +122,7 @@ export default {
     width: 100%;
     height: rem(75px);
     padding: 0 5px;
-    color: var(--white);
+    //color: var(--white);
     // &:focus~.label,
     // &:valid~.label {
     //     transform: scale(0.8) translateY(-90%);

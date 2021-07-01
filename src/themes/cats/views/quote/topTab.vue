@@ -151,7 +151,5 @@ export default {
         opacity: 1;
     }
 }
-</style>
 
-<style lang="scss">
 </style>
