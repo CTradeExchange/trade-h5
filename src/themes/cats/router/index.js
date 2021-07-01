@@ -184,7 +184,7 @@ router.beforeEach((to, from, next) => {
     const token = getToken()
     const roles = to.meta?.roles ?? []
     const customerInfo = store.state._user.customerInfo
-    const unKYCPages = ['Authentication', 'RegisterSuccess', 'RegKyc', 'AddBank', 'Personal', 'AuthForm', 'BankList', 'Setting', 'KycCommitted']
+    const unKYCPages = ['Authentication', 'Home', 'RegisterSuccess', 'RegKyc', 'AddBank', 'Personal', 'AuthForm', 'BankList', 'Setting', 'KycCommitted']
     if (customerInfo && customerInfo?.kycAuditStatus !== 2 && unKYCPages.indexOf(to.name) === -1) {
         // 未审核通过的用户直接跳转到KYC页面
         next({ name: 'Authentication' })

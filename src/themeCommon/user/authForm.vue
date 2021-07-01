@@ -1,6 +1,8 @@
 <template>
-    <LayoutTop back :menu='false' />
-    <auth-condition :business-code='businessCode' />
+    <div class='authConditionWrapper'>
+        <LayoutTop back :menu='false' />
+        <auth-condition :business-code='businessCode' />
+    </div>
 </template>
 
 <script>
@@ -24,8 +26,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.notice {
-    margin-bottom: rem(20px);
-    padding-left: rem(30px);
+.authConditionWrapper {
+    padding-top: rem(100px);
 }
 </style>

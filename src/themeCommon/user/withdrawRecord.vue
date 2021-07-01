@@ -154,7 +154,7 @@ export default {
 
         const handleState = (checkStatus, transferStatus) => {
             // 存款成功 待支付 已取消
-            if (Number(checkStatus) === 3) {
+            if (Number(checkStatus) === 3 || Number(transferStatus) === 3) {
                 return t('withdrawRecord.auditStatus.2')
             } else if (Number(transferStatus) === 2) {
                 return t('withdrawRecord.auditStatus.3')

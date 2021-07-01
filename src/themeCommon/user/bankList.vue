@@ -87,7 +87,9 @@ export default {
 @import '@/sass/mixin.scss';
 .page-wrap {
     flex: 1;
+    padding-top: rem(100px);
     overflow: auto;
+    background: var(--white);
     .list {
         padding: rem(30px);
         .bank-item {

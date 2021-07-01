@@ -52,8 +52,8 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const pendingRang = computed(() => {
             const range = store.getters['_trade/pendingPriceRang']
-            const limitRange = props.direction === 'buy' ? range.buyLimitRange : range.sellLimitRange
-            const stopRange = props.direction === 'buy' ? range.buyStopRange : range.sellStopRange
+            const limitRange = props.direction === 'buy' ? range.buyLimitRange : range.sellStopRange
+            const stopRange = props.direction === 'buy' ? range.buyStopRange : range.sellLimitRange
             return {
                 stopRangeMax: stopRange[1],
                 stopRangeMin: stopRange[0],

@@ -264,6 +264,7 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    background: var(--white);
 }
 .container {
     display: flex;
