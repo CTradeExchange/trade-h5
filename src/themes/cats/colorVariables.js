@@ -1,5 +1,5 @@
 const colors = {
-    'color': '#f8f8f8',
+    'color': '#333',
     'mutedColor': '#989898',
     'placeholder': '#c2c2c2',
     'tabColor': '#333',
@@ -13,7 +13,7 @@ const colors = {
     'btnInterval': '#e5e5e5',
     'iconColor': '#333',
     'iconColor2': '#333',
-    'white': '#000',
+    'white': '#fff',
     'bgColor': '#f6f6f6',
     'riseColor': '#e3525c',
     'fallColor': '#10b873',

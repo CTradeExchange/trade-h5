@@ -73,7 +73,7 @@ export default {
         const deleteWallet = (id) => {
             Dialog.confirm({
                 title: t('withdraw.hint'),
-                message: t('withdraw.addHint'),
+                message: t('walletAddress.addHint'),
             }).then(() => {
                 // 发起api请示
                 deleteWalletAddress({

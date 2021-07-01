@@ -177,6 +177,7 @@ export default {
             display: block;
             flex: 1;
             height: rem(75px);
+            color: var(--color);
             font-size: rem(30px);
             line-height: 1;
             &:focus~label,

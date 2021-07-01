@@ -979,7 +979,7 @@ export default {
         align-items: flex-start;
         justify-content: flex-start;
         padding: rem(10px) rem(20px) rem(10px) rem(20px);
-        background: #FFF;
+        background: var(--white);
         transform: translateZ(1px);
         // margin-bottom: rem(10px);
         .hd {
@@ -1152,6 +1152,7 @@ export default {
                 height: rem(60px);
                 .van-tabs__nav--line {
                     padding-bottom: 0;
+                    background-color: var(--white);
                 }
                 .van-tabs__line {
                     bottom: 0;
@@ -1170,7 +1171,7 @@ export default {
             color: #646566;
             font-size: rem(24px);
             line-height: rem(60px);
-            background: #FFF;
+            background-color: var(--white);
             &::after {
                 position: absolute;
                 top: 50%;
@@ -1286,7 +1287,7 @@ export default {
             align-items: center;
             justify-content: center;
             width: rem(80px);
-            background: #FFF;
+            background: var(--white);
             .icon {
                 font-size: rem(32px);
             }
@@ -1346,7 +1347,7 @@ export default {
         width: 100%;
         height: rem(60px);
         line-height: rem(60px);
-        background: #FFF;
+        //background: #FFF;
         .main-study,
         .side-study {
             display: flex;
@@ -1412,7 +1413,7 @@ export default {
         width: 100%;
         height: rem(100px);
         text-align: center;
-        background: #FFF;
+        background: var(--white);
         .watch {
             @include active();
             width: rem(110px);
