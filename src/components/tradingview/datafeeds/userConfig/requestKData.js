@@ -136,13 +136,13 @@ function requestKline(params) {
                     }
 
                     const { kline_list, price_digits } = res.data
-                    const pow = Math.pow(10, price_digits)
+                    // const pow = Math.pow(10, price_digits)
                     const bars = kline_list.map(e => ({
                         time: parseFloat(e.timestamp * 1000),
-                        close: parseFloat(e.close_price) / pow,
-                        open: parseFloat(e.open_price) / pow,
-                        high: parseFloat(e.high_price) / pow,
-                        low: parseFloat(e.low_price) / pow,
+                        close: parseFloat(e.close_price),
+                        open: parseFloat(e.open_price),
+                        high: parseFloat(e.high_price),
+                        low: parseFloat(e.low_price),
                     }))
 
                     return {
