@@ -407,6 +407,7 @@ export default {
             if (Number(state.amount > Number(state.checkedType.singleHighAmount))) {
                 return Toast(t('deposit.amountMaxTips') + `${state.checkedType.singleHighAmount}`)
             }
+            debugger
 
             const params = {
                 customerNo: customInfo.value.customerNo,
@@ -424,7 +425,7 @@ export default {
                 channelCode: customInfo.value.utmSource,
                 depositFrom: 'H5',
                 callbackUrl: window.location.protocol + '//' + window.location.host + '/despositCb',
-                blockchainName: state.currencyChecked.split('-').length > 1 ? state.currencyChecked.split('-')[1] : ''
+                blockchainName: (state.currencyChecked && state.currencyChecked.split('-').length > 1) ? state.currencyChecked.split('-')[1] : ''
             }
 
             state.loading = true
@@ -659,7 +660,7 @@ export default {
         align-content: flex-start;
         margin-top: rem(20px);
         padding: 0 rem(30px);
-        background-color: #FFF;
+        background-color: var(--white);
         border-top: solid rem(20px) var(--btnColor);
         .pi-item {
             flex: 0 0 50%;

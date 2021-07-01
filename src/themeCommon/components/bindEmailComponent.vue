@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import Top from '@m/layout/top'
+import Top from '@/components/top'
 import CheckCode from '@/components/form/checkCode'
 import areaInput from '@/components/form/areaInput.vue'
 import { Toast, Dialog } from 'vant'

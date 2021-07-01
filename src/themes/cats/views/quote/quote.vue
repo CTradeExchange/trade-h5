@@ -108,6 +108,9 @@ export default {
     width: 100%;
     padding-bottom: rem(15px);
     background-color: var(--white);
+    .van-tab {
+        background: yellow !important;
+    }
 }
 .titleBar {
     display: flex;

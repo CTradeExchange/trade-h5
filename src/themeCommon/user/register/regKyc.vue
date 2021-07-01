@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Top from '@m/layout/top'
+import Top from '@/components/top'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import authCondition from '@/themeCommon/components/authConditon'
 import { useStore } from 'vuex'

@@ -1301,7 +1301,7 @@ export default {
                 align-items: center;
                 align-items: flex-start;
                 justify-content: center;
-                background: #FFF;
+                background: var(--white);
                 box-shadow: 0 0 2px 0 #EBEDF0;
                 .item {
                     padding: rem(20px) rem(50px) rem(10px);
