@@ -63,7 +63,7 @@ export default {
         })
         // 当前板块下的产品列表
         const productList = computed(() => {
-            const list = categoryList.value[state.activeTab].list || []
+            const list = categoryList.value[state.activeTab]?.list || []
             const products = []
             const productMapVal = productMap.value
             list.forEach(el => {

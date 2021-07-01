@@ -11,7 +11,7 @@
         <div class='notice' @click="show=false;$router.push('/msg')">
             <div class='top'>
                 <p class='title'>
-                    {{ noticeContent.title || '标题' }}
+                    {{ noticeContent.title || $t('c.biaoTi') }}
                 </p>
                 <van-icon name='cross' @click.stop='show = false' />
             </div>
@@ -25,22 +25,28 @@
 <script>
 import dayjs from 'dayjs'
 import { isEmpty } from '@/utils/util'
-import { reactive, toRefs } from 'vue'
+import { onUnmounted, reactive, toRefs } from 'vue'
 export default {
     setup (props) {
         const state = reactive({
             show: false,
             noticeContent: ''
         })
-
-        document.body.addEventListener('GotMsg_notice', res => {
+        let noticeCloseTimer
+        const gotMsg = res => {
+            console.log(res)
             state.show = true
             state.noticeContent = res.detail.content
-            setTimeout(() => {
+            if (noticeCloseTimer) clearTimeout(noticeCloseTimer)
+            noticeCloseTimer = setTimeout(() => {
                 state.show = false
             }, 5000)
-        }, false)
+        }
 
+        document.body.addEventListener('GotMsg_notice', gotMsg, false)
+        onUnmounted(() => {
+            document.body.removeEventListener('GotMsg_notice', gotMsg)
+        })
         const computeHtmlTime = (content) => {
             try {
                 const reg = /<?time[^>]*>[^<]*<\/time>/gi

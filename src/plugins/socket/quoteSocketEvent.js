@@ -70,7 +70,7 @@ class SocketEvent {
     }
 
     // 订阅产品报价
-    send_subscribe (productIds = []) {
+    send_subscribe (productIds = [], quote_type = 1, depth_level = 1) {
         this.subscribedList = productIds
         const trade_type = this.$store.state._base.tradeType
 
@@ -78,6 +78,11 @@ class SocketEvent {
             return {
                 symbol_id: el, // 产品ID ，类型：uint64
                 trade_type, // 交易类型，类型：uint32，1：cfd，2：me
+                // quote_type, // 报价类型，类型：uint32，0：所有，1：实时报价，2：实时成交报价，没有该字段，后台默认按0处理
+                // depth_level, // 深度层级，类型：uint32，该字段有效范围1到10之间，
+                // 在quote_type为0，1，或者没有quote_type字段时，需要赋值，
+                // 如果没有depth_level字段时，后台只会提供一层的报价
+                // 请求的层级大于实际报价层级，则后台按实际报价有多少层给多少层
             }
         })
         this.send(14000, { symbol_list: list })
