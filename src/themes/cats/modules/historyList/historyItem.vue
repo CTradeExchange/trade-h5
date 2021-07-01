@@ -1,6 +1,5 @@
 <template>
     <div class='product-item' @click='toPositionDetail(data)'>
-        <!-- {{ data.direction }} -->
         <div class='item'>
             <div class='cell'>
                 <div class='th'>
@@ -10,8 +9,8 @@
                     <div class='lot'>
                         {{ product.symbolCode }}
                     </div><p>
-                        <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
-                            {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
+                        <span :class="Number(data.closeDirection) === 1 ? 'riseColor' : 'fallColor'">
+                            {{ Number(data.closeDirection) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
                         </span>{{ data.closeVolume }} {{ $t('trade.volumeUnit') }}
                     </p>
                 </div>

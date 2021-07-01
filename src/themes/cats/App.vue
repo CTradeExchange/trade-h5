@@ -15,6 +15,7 @@ import { useStore } from 'vuex'
 import { onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
+import { useI18n } from 'vue-i18n'
 export default {
     components: {
         Notice
@@ -22,6 +23,7 @@ export default {
     setup () {
         const store = useStore()
         const router = useRouter()
+        const { t } = useI18n({ useScope: 'global' })
         window.store = store
 
         // 跳转到登录页面刷新
@@ -43,7 +45,7 @@ export default {
             Dialog.alert({
                 title: '提示',
                 theme: 'round-button',
-                message: '您的账号在异地登录，请重新登录',
+                message: t('c.otherPlaceLogin'),
             }).then(() => {
                 handlerLogout()
             })
