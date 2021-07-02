@@ -53,7 +53,7 @@
                             <div class='sub' :class="Number(positionData.direction) === 1 ? 'riseColor' : 'fallColor'">
                                 {{ Number(positionData.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
                             </div><div class='name'>
-                                {{ positionData.openVolume }} {{ $t('trade.volumeUnit') }}
+                                {{ positionVolume }} {{ $t('trade.volumeUnit') }}
                             </div>
                         </div>
                         <div class='col'>
@@ -144,6 +144,7 @@ import { reactive, toRefs, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { QuoteSocket } from '@/plugins/socket/socket'
+import { minus } from '@/utils/calculation'
 export default {
     components: {
         DialogSLTP,
@@ -162,7 +163,7 @@ export default {
         const customerInfo = computed(() => store.state._user.customerInfo)
         const positionData = computed(() => store.state._trade.positionMap[positionId])
         const product = computed(() => store.state._quote.productMap[symbolId])
-
+        const positionVolume = computed(() => minus(positionData.value?.openVolume, positionData.value?.closeVolume))
         // 初始化设置
         const init = () => {
             if (!product.value.minVolume) {
@@ -193,6 +194,7 @@ export default {
             ...toRefs(state),
             setProfitSuccess,
             updateSLTPVisible,
+            positionVolume,
             closeHandler,
             product,
             positionData,

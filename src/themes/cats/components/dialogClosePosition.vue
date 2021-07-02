@@ -67,8 +67,9 @@
                 <Stepper
                     v-model='closeVolume'
                     class='stepper'
+                    :digits='volumeDigit'
                     :placeholder="$t('trade.positionNum')"
-                    :step='1'
+                    :step='product.volumeStep'
                     @change='change'
                 />
             </div>
@@ -129,7 +130,7 @@
 import { reactive, toRefs, computed, watchEffect, onMounted } from 'vue'
 import { div, eq, getDecimalNum, gt, lt, minus, mul } from '@/utils/calculation'
 import { useStore } from 'vuex'
-import Stepper from '@/components/stepper'
+import Stepper from '@c/components/stepper'
 import BigNumber from 'bignumber.js'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -158,6 +159,7 @@ export default {
             closeVolume: '',
         })
         const customerInfo = computed(() => store.state._user.customerInfo)
+        const volumeDigit = computed(() => getDecimalNum(props.product.minVolume))
         const positionVolume = computed(() => minus(props.data?.openVolume, props.data?.closeVolume))
         const positionVolumeMin = computed(() => props.product.minVolume)
         const closeVolumeWarn = computed(() => { // 检测平仓手数是否合法
@@ -257,6 +259,7 @@ export default {
             fastBtns,
             closeHandler,
             closed,
+            volumeDigit,
             positionVolume,
             positionVolumeMin,
             closeVolumeWarn,
