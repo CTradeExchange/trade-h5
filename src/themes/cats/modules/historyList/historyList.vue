@@ -3,7 +3,9 @@
         <van-empty v-if='!loadStatus && orderList && orderList.length===0' :description='$t("trade.closedEmpty")' />
         <template v-else-if='orderList'>
             <van-list
+                v-model:error='isError'
                 v-model:loading='loadStatus'
+                :error-text='errorTip'
                 :finished='finished'
                 :finished-text='$t("historyList.noMore")'
                 :immediate-check='false'
@@ -27,18 +29,23 @@ export default {
     props: {
         loading: Boolean,
         finished: Boolean,
+        error: String,
     },
     setup (props, { emit }) {
         const store = useStore()
         const orderList = computed(() => store.state._trade.historyList)
         const state = reactive({
-            loadStatus: props.loading
+            loadStatus: props.loading,
+            isError: !!props.error,
+            errorTip: props.error,
         })
         const onLoad = () => {
             emit('onLoad')
         }
         watchEffect(() => {
             state.loadStatus = props.loading
+            state.isError = !!props.error
+            state.errorTip = props.error
         })
 
         return {

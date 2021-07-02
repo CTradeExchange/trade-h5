@@ -45,26 +45,26 @@
                         <van-button
                             :class="{ 'active': activeType===1,'mainColorBg': activeType ===1 }"
                             size='small'
-                            @click='queryHistoryList(1)'
+                            @click='setQueryHistoryCycle(1)'
                         >
                             {{ $t('trade.filterToday') }}
                         </van-button>
                         <van-button
                             :class="{ 'active': activeType===2,'mainColorBg': activeType ===2 }"
                             size='small'
-                            @click='queryHistoryList(2)'
+                            @click='setQueryHistoryCycle(2)'
                         >
                             {{ $t('trade.filterweek') }}
                         </van-button>
                         <van-button
                             :class="{ 'active': activeType===3,'mainColorBg': activeType ===3 }"
                             size='small'
-                            @click='queryHistoryList(3)'
+                            @click='setQueryHistoryCycle(3)'
                         >
                             {{ $t('trade.filterMonth') }}
                         </van-button>
                     </div>
-                    <HistoryList :finished='finished' :loading='loading' @onLoad='onLoad' />
+                    <HistoryList :error='loadError' :finished='finished' :loading='loading' @onLoad='onLoad' />
                 </van-tab>
             </van-tabs>
         </div>
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { reactive, toRefs, onUpdated, computed, watchEffect } from 'vue'
+import { reactive, toRefs, onUpdated, computed, watch } from 'vue'
 import { useStore } from 'vuex'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useI18n } from 'vue-i18n'
@@ -110,6 +110,9 @@ export default {
             activeType: 1,
             loading: false,
             finished: false,
+            loadError: '',
+            historyStartTime: dayjs().startOf('day').valueOf(),
+            historyEndTime: dayjs().endOf('day').valueOf(),
             sortActions: [
                 { name: t('history.daytime'), feild: 'openTime', active: false, className: sortActionsDown },
                 { name: t('trade.profit'), active: false, feild: 'pnl' },
@@ -166,26 +169,31 @@ export default {
             })
         }
 
-        // 查询已平仓列表
-        const queryHistoryList = (dateType) => {
-            state.loading = true
+        // 设置查询已平仓列表时间范围
+        const setQueryHistoryCycle = (dateType) => {
+            console.log(1111)
             state.activeType = dateType
-            const closeEndTime = dayjs().endOf('day').valueOf()
-            let closeStartTime = dayjs().startOf('day').valueOf()
             if (Number(dateType) === 1) {
-                closeStartTime = dayjs().startOf('day').valueOf()
+                state.historyStartTime = dayjs().startOf('day').valueOf()
             } else if (Number(dateType) === 2) {
-                closeStartTime = dayjs().subtract(7, 'day').startOf('day').valueOf()
+                state.historyStartTime = dayjs().subtract(7, 'day').startOf('day').valueOf()
             } else if (Number(dateType) === 3) {
-                closeStartTime = dayjs().subtract(1, 'month').startOf('day').valueOf()
+                state.historyStartTime = dayjs().subtract(1, 'month').startOf('day').valueOf()
             }
-
+            current = 1
+            state.finished = false
+            queryHistoryList()
+        }
+        // 查询已平仓列表
+        const queryHistoryList = () => {
+            state.loading = true
             state.pageLoading = true
+            state.loadError = ''
             store.dispatch('_trade/queryHistoryCloseOrderList', {
                 sortFieldName: 'closeTime',
                 sortType: 'desc',
-                closeStartTime,
-                closeEndTime,
+                closeStartTime: state.historyStartTime,
+                closeEndTime: state.historyEndTime,
                 current,
                 size: 20
             }).then(res => {
@@ -195,6 +203,8 @@ export default {
                     state.finished = true
                 }
             }).catch(err => {
+                state.loadError = t('c.loadError')
+                state.loading = false
                 state.pageLoading = false
             })
         }
@@ -205,15 +215,21 @@ export default {
             queryHistoryList()
         }
 
-        watchEffect(() => {
-            if (Number(state.active) === 0) {
-                queryPositionList()
-            } else if (Number(state.active) === 1) {
-                queryPendingList()
-            } else if (state.active === 2) {
-                queryHistoryList(1)
-            }
-        })
+        watch(
+            () => state.active,
+            newval => {
+                if (Number(newval) === 0) {
+                    queryPositionList()
+                } else if (Number(newval) === 1) {
+                    queryPendingList()
+                } else if (newval === 2) {
+                    current = 1
+                    state.finished = false
+                    setQueryHistoryCycle(1)
+                }
+            },
+            { immediate: true }
+        )
 
         const triggerTab = (val) => {
             state.active = Number(val)
@@ -229,6 +245,7 @@ export default {
             positionList,
             pendingList,
             customerInfo,
+            setQueryHistoryCycle,
             handleSortPosition,
             triggerTab,
             queryHistoryList,
