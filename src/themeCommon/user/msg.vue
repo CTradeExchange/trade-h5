@@ -20,7 +20,9 @@
         </div>
         <van-pull-refresh v-else v-model='loading' @refresh='onRefresh'>
             <van-list
+                v-model:error='isError'
                 v-model:loading='loading'
+                :error-text='errorTip'
                 :finished='finished'
                 :finished-text='$t("common.noMore")'
                 @load='onLoad'
@@ -43,7 +45,7 @@
 
 <script>
 
-import { onBeforeMount, computed, reactive, toRefs } from 'vue'
+import { onBeforeMount, computed, reactive, toRefs, onUnmounted } from 'vue'
 import { queryPlatFormMessageLogList } from '@/api/user'
 import { useStore } from 'vuex'
 import dayjs from 'dayjs'
@@ -64,9 +66,11 @@ export default {
             pageLoading: false,
             current: 1,
             type: '',
+            errorTip: '',
             rightAction: { title: 444 },
             options: tm('msg.typesOptions')
         })
+        const isError = computed(() => !!state.isError)
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
@@ -82,6 +86,7 @@ export default {
 
         const getMsgList = () => {
             state.pageLoading = true
+            state.errorTip = ''
             queryPlatFormMessageLogList({
                 current: state.current,
                 parentType: state.type,
@@ -99,6 +104,7 @@ export default {
                     }
                 }
             }).catch(err => {
+                state.errorTip = t('c.loadError')
                 state.pageLoading = false
             })
         }
@@ -125,8 +131,16 @@ export default {
             }
         }
 
+        // 获取到顶部消息通知，同时刷新消息列表
+        const gotMsg = () => {
+            onRefresh()
+        }
+        document.body.addEventListener('GotMsg_notice', gotMsg, false)
         onBeforeMount(() => {
             getMsgList()
+        })
+        onUnmounted(() => {
+            document.body.removeEventListener('GotMsg_notice', gotMsg)
         })
 
         // 上拉刷新
@@ -148,6 +162,7 @@ export default {
 
         return {
             getMsgList,
+            isError,
             customInfo,
             formatTime,
             onRefresh,

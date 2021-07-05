@@ -1,15 +1,12 @@
 <template>
     <div class='pageWrap'>
         <Top
-            back
-            left-icon='arrow-left'
             :menu='false'
             :right-action='false'
             :show-center='false'
             @back='back'
         />
         <Loading :show='loading' />
-        <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a>
         <header class='header'>
             <h1 class='pageTitle'>
                 {{ $t('forgot.forgot') }}
@@ -226,6 +223,7 @@ export default {
 .pageWrap {
     position: relative;
     height: 100%;
+    background: var(--white);
     .header {
         display: flex;
         align-items: center;

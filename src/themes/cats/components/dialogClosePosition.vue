@@ -231,9 +231,9 @@ export default {
 
         // 快速设置平仓手数
         const fastVolumeHandler = (item) => {
-            const volumeStep = props.product.volumeStep
+            const minVolume = props.product.minVolume
             const newVolume = BigNumber(positionVolume.value).div(item.divValue).toString()
-            const mod = BigNumber(newVolume).mod(volumeStep).toString()
+            const mod = BigNumber(newVolume).mod(minVolume).toString()
             if (eq(mod, 0)) {
                 state.closeVolume = newVolume
             }

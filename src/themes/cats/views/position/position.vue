@@ -171,7 +171,6 @@ export default {
 
         // 设置查询已平仓列表时间范围
         const setQueryHistoryCycle = (dateType) => {
-            console.log(1111)
             state.activeType = dateType
             if (Number(dateType) === 1) {
                 state.historyStartTime = dayjs().startOf('day').valueOf()
