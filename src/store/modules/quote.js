@@ -25,9 +25,13 @@ function price_spread (product, data) {
     例如：EURUSD卖价：1.19323 ，买价：1.19341，大点比率为10，则点差=（1.19341-1.19323）/10*0.00001=1.8
  */
 function priceToPip (price, product) {
-    const spDigit = String(product.pointRatio).length - 1 // 点差小数位
-    const pip = BigNumber(0.1).pow(product.price_digits).times(product.pointRatio) // 1pip=point*大点比率
-    return BigNumber(price).div(pip).toFixed(spDigit)
+    if (product && product.hasOwnProperty('pointRatio')) {
+        const spDigit = String(product.pointRatio).length - 1 // 点差小数位
+        const pip = BigNumber(0.1).pow(product.price_digits).times(product.pointRatio) // 1pip=point*大点比率
+        return BigNumber(price).div(pip).toFixed(spDigit)
+    } else {
+        return ''
+    }
 }
 
 export default {
@@ -61,7 +65,8 @@ export default {
             if (!product) return false
             // if(product.price && data.price) return false; // 已经拿到产品快照，不在重复处理
             const askSpread = product.hasOwnProperty('askSpread')
-            Object.assign(product, { spread_text: '--' }, data)
+            data.spread_text = product.spread_text || '--'
+            Object.assign(product, data)
 
             // 该产品先拿到快照价格，后拿到点差，需要重新计算价格点差
             if (!askSpread && data.hasOwnProperty('askSpread') && data.pointRatio) {
@@ -82,6 +87,7 @@ export default {
                     product.sell_price_pre = data.sell_price
                     product.cur_price_pre = data.cur_price
                     product.yesterday_close_price = data.yesterday_close_price
+                    product.price_digits = data.price_digits
                     product.cur_color = product.buy_color = product.sell_color = 'grayColor'
                 }
                 // 计算涨跌
