@@ -332,7 +332,7 @@ export default {
     height: 100vh;
     overflow-y: auto;
     .search {
-        ::v-deep .el-collapse-item__wrap {
+        :deep(.el-collapse-item__wrap) {
             padding: 0 20px;
         }
     }

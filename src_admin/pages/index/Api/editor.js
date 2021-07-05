@@ -139,3 +139,12 @@ export function getCompanyInfo (data) {
         method: 'get'
     })
 }
+
+// 获取国家区号列表
+export function queryCountryList (data) {
+    return request({
+        url: '/wp-json/wp/v2/queryCountryList',
+        data: data,
+        method: 'get'
+    })
+}

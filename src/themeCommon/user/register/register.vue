@@ -129,8 +129,13 @@ export default {
         // 获取国家区号
         store.dispatch('getCountryListByParentCode').then(res => {
             if (res.check() && res.data.length) {
-                const firstItem = res.data[0]
-                state.zone = firstItem.name + ` (${firstItem.countryCode})`
+                const defaultZone = store.state._base.wpCompanyInfo?.defaultZone
+                if (defaultZone) {
+                    state.zone = defaultZone
+                } else {
+                    const firstItem = res.data[0]
+                    state.zone = firstItem.name + ` (${firstItem.countryCode})`
+                }
             }
         })
         const countryList = computed(() => store.state.countryList)

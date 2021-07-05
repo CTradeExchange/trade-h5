@@ -224,6 +224,19 @@
                                     />
                                 </el-select>
                             </el-form-item>
+                            <el-form-item label='默认注册区号'>
+                                <el-select
+                                    v-model='form.defaultZone'
+                                    placeholder='请输入'
+                                >
+                                    <el-option
+                                        v-for='(item) in zoneList'
+                                        :key='item.id'
+                                        :label='item.name+" ("+item.country_code+")"'
+                                        :value='item.name+" ("+item.country_code+")"'
+                                    />
+                                </el-select>
+                            </el-form-item>
                             <el-form-item label='web API地址'>
                                 <el-input
                                     v-model='form.webApiUri'
@@ -303,13 +316,25 @@
                         </el-col>
                     </el-row>
                 </el-tab-pane>
+                <el-tab-pane class='tab' label='APP管理'>
+                    <el-row class='row'>
+                        <el-col :span='12' :xs='24'>
+                            <el-form-item label='APP最新版本'>
+                                <el-input
+                                    v-model='form.appVersion'
+                                    placeholder='请输入'
+                                />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-tab-pane>
             </el-tabs>
         </el-form>
     </div>
 </template>
 
 <script>
-import { getPageConfig, modifyPageConfig, pushPage, getCompanyInfo } from '@index/Api/editor'
+import { getPageConfig, modifyPageConfig, pushPage, getCompanyInfo, queryCountryList } from '@index/Api/editor'
 import File from '@index/components/RightForm/File'
 import city from './data/city.json'
 import province from './data/province.json'
@@ -354,8 +379,11 @@ export default {
                 msgService: '',
                 tradeService: '',
                 utcOffset: '',
-                currencyList: ''
+                currencyList: '',
+                defaultZone: '',
+                appVersion: '1.0.0',
             },
+            zoneList: [],
             publishLoading: false,
             treeData: treeData,
             defaultPropsTree: {
@@ -384,12 +412,22 @@ export default {
     created () {
         this.createTimezoneList()
         this.getPageConfig()
+        this.queryCountryList()
     },
     methods: {
         createTimezoneList () {
             const [min, max] = this.utcOffsetList
             this.utcOffsetList = new Array(max - min).fill(0).map((el, i) => min + i)
             this.form.utcOffset = 0 - (new Date().getTimezoneOffset() / 60)
+        },
+        // 获取国家区号列表
+        queryCountryList () {
+            queryCountryList().then(res => {
+                if (res.success && res.data?.length) {
+                    const list = res.data
+                    this.zoneList = list
+                }
+            })
         },
         getPageConfig () {
             this.getLoading = true
