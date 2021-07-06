@@ -15,7 +15,7 @@
             </div>
             <ul ref='productListEl' class='selfSymbolListUl'>
                 <li v-for='item in productList' :key='item' class='van-hairline--bottom'>
-                    <productItem :display-type='displayType' :product='productMap[item.symbolId]' @open='openProduct(item)' />
+                    <productItem :display-type='displayType' :product='item' @open='openProduct(item)' />
                 </li>
             </ul>
         </div>
@@ -51,7 +51,8 @@ export default {
         const productMap = computed(() => store.state._quote.productMap)
         // 产品列表
         const productList = computed(() => {
-            let list = store.getters.userSelfSymbolList
+            let list = store.getters.userSelfSymbolList || []
+            list = list.map(el => productMap.value[el.symbolId])
             const sortField = state.displayType === 1 ? 'upDownAmount_pip' : 'upDownAmount'
             if (state.sortType === 2) list = list.slice(0).sort((a, b) => parseFloat(b[sortField]) - parseFloat(a[sortField]))
             if (state.sortType === 3) list = list.slice(0).sort((a, b) => parseFloat(a[sortField]) - parseFloat(b[sortField]))

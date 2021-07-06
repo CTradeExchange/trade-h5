@@ -267,7 +267,7 @@ export default {
     background-color: #FFF;
     .right-scrollbar {
         height: calc(100vh - 57px);
-        ::v-deep .el-form {
+        :deep(.el-form) {
             .el-range-editor {
                 width: 100%;
             }

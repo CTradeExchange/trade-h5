@@ -518,7 +518,7 @@ export default {
         font-size: 18px;
         text-align: right;
         a {
-            color: #409eff;
+            color: #409EFF;
         }
     }
     .particles {
@@ -534,22 +534,22 @@ export default {
     margin-top: 5vh;
     margin-left: -400px;
     .title {
-        font-size: 28px;
-        color: #666;
         margin-bottom: 20px;
+        color: #666;
+        font-size: 28px;
     }
 }
 .showInfo {
     position: relative;
     display: inline-block;
-    margin-left: -400px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 12px 0px;
-    border-radius: 5px;
     width: 600px;
     height: 500px;
-    text-align: left;
-    font-size: 16px;
+    margin-left: -400px;
     color: #666;
+    font-size: 16px;
+    text-align: left;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 2px 12px 0;
     .bg {
         position: absolute;
         top: 0;
@@ -566,32 +566,30 @@ export default {
             position: relative;
             top: 3px;
             margin-right: 10px;
-            font-size: 22px;
             color: #999;
+            font-size: 22px;
         }
         .el-icon-circle-close {
-            color: #f56c6c;
+            color: #F56C6C;
         }
         .el-icon-loading {
-            color: #409eff;
+            color: #409EFF;
         }
         .el-icon-success {
-            color: #67c23a;
+            color: #67C23A;
         }
     }
     .infoScroll {
         height: 100%;
-        ::v-deep {
-            .el-scrollbar__wrap {
-                overflow-x: hidden;
-                padding: 20px;
-            }
+        :deep(.el-scrollbar__wrap) {
+            padding: 20px;
+            overflow-x: hidden;
         }
     }
 }
 .progeress {
+    margin-top: 4vh;
     padding: 0 20px;
     text-align: center;
-    margin-top: 4vh;
 }
 </style>

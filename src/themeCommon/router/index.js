@@ -230,8 +230,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "bankList" */ '../user/setting.vue'),
         meta: {
             title: 'cRoute.setting',
-            footerMenu: false,
-            roles: ['User']
+            footerMenu: false
         }
     },
     {

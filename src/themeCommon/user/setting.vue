@@ -6,11 +6,11 @@
                 <van-switch v-model='checked' active-color='#54C41C' size='24px' @change='changeNewsState' />
             </template>
         </van-cell>
-        <van-cell is-link :title='$t(Number(customInfo.loginPassStatus) === 1 ?"forgot.setPwd" : "login.modifyLoginPwd")' to='/setLoginPwd' />
-        <van-cell v-if='!customInfo.phone' is-link :title='$t("setting.bindPhone")' to='/bindMobile' />
-        <van-cell v-if='!customInfo.email' is-link :title='$t("setting.bindEmail")' to='/bindEmail' />
-        <van-cell v-if='customInfo.email' is-link :title='$t("setting.replaceEmail")' to='/changeBindEmail' />
-        <van-cell v-if='customInfo.phone' is-link :title='$t("setting.replacePhone")' to='/changeBindMobile' />
+        <van-cell v-if='customInfo' is-link :title='$t(Number(customInfo.loginPassStatus) === 1 ?"forgot.setPwd" : "login.modifyLoginPwd")' to='/setLoginPwd' />
+        <van-cell v-if='customInfo && !customInfo.phone' is-link :title='$t("setting.bindPhone")' to='/bindMobile' />
+        <van-cell v-if='customInfo && !customInfo.email' is-link :title='$t("setting.bindEmail")' to='/bindEmail' />
+        <van-cell v-if='customInfo && customInfo.email' is-link :title='$t("setting.replaceEmail")' to='/changeBindEmail' />
+        <van-cell v-if='customInfo && customInfo.phone' is-link :title='$t("setting.replacePhone")' to='/changeBindMobile' />
         <van-cell is-link :title='$t("setting.setLang")' :value='langText' @click='langVisible=true' />
         <van-cell is-link :title='$t("setting.color")' :value='colorText' @click='colorVisible=true' />
 

@@ -34,7 +34,8 @@
     "borrowReturn": "借款/还款",
     "userDisable": "账户已被禁用，请联系管理员",
     "biaoTi": "标题",
-    "otherPlaceLogin": "您的账号在异地登录，请重新登录"
+    "otherPlaceLogin": "您的账号在异地登录，请重新登录",
+    "loadError": "加载失败，请稍后重试"
   },
   "contract": {
     "advance": "预付款",
