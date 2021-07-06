@@ -7,7 +7,7 @@
         <Top
             back
             left-icon='arrow-left'
-            title='提币记录'
+            :title='$t("cRoute.coinRecord")'
         />
         <div class='container'>
             <van-list
@@ -22,17 +22,17 @@
                     <div class='item-header' @click='onItem(index)'>
                         <div class='inner'>
                             <p class='vital'>
-                                <span :class="[item.withdrawCoinStatus === 1 ? 'state-1' : 'state-2']">
-                                    {{ states[item.withdrawCoinStatus] }}
-                                </span>
                                 <span class='name'>
                                     {{ item.finalAmount }} {{ item.withdrawCurrency }}-{{ item.blockchainName }}
+                                </span>
+                                <span :class="[item.withdrawCoinStatus === 1 ? 'state-1' : 'state-2']">
+                                    {{ handleState(item.checkStatus,item.transferStatus) }}
                                 </span>
                             </p>
                             <p class='row'>
                                 <span>{{ $t('coinRecord.time') }}</span>
                                 <span>{{ $t('coinRecord.service') }}</span>
-                                <span>提币</span>
+                                <span>{{ $t('coinRecord.take') }}</span>
                             </p>
                             <p class='row'>
                                 <span>{{ formatTime(item.createTime) }}</span>
@@ -74,7 +74,7 @@
                                 {{ $t('coinRecord.status') }}
                             </span>
                             <span :class="['value', item.withdrawCoinStatus === 1 ? 'state-1' : 'state-2']">
-                                {{ states[item.withdrawCoinStatus] }}
+                                {{ handleState(item.checkStatus,item.transferStatus) }}
                             </span>
                         </div>
                         <div class='row'>
@@ -122,8 +122,7 @@
             </van-list>
             <van-empty
                 v-else
-                description='暂无提币记录'
-                image='https://img01.yzcdn.cn/vant/empty-image-default.png'
+                :description='$t("coinRecord.noData")'
             />
         </div>
     </div>
@@ -166,9 +165,25 @@ export default {
         })
         // 审核状态 取款状态：审核中、已成功、已失败
         const states = {
-            1: t('coinRecord.auditStatus.1'),
-            2: t('coinRecord.auditStatus.2'),
-            3: t('coinRecord.auditStatus.3')
+            1: t('withdrawRecord.auditStatus.1'),
+            2: t('withdrawRecord.auditStatus.2'),
+            3: t('withdrawRecord.auditStatus.3')
+        }
+
+        const transferStatus = {
+            1: t('withdrawRecord.transferStatus.1'),
+            2: t('withdrawRecord.transferStatus.2'),
+            3: t('withdrawRecord.transferStatus.3')
+        }
+        const handleState = (checkStatus, transferStatus) => {
+            // 存款成功 待支付 已取消
+            if (Number(checkStatus) === 3 || Number(transferStatus) === 3) {
+                return t('withdrawRecord.auditStatus.2')
+            } else if (Number(transferStatus) === 2) {
+                return t('withdrawRecord.auditStatus.3')
+            } else {
+                return t('withdrawRecord.auditStatus.1')
+            }
         }
 
         // 获取账户信息
@@ -219,6 +234,7 @@ export default {
         return {
             ...toRefs(state),
             onItem,
+            handleState,
             getWithdrawList,
             states,
             formatTime
@@ -283,10 +299,10 @@ export default {
                     color: var(--color);
                 }
                 .state-1 {
-                    color: #3894FF;
+                    color: var(--primary);
                 }
                 .state-2 {
-                    color: var(--color);
+                    color: var(--primary);
                 }
             }
             .row {
@@ -325,10 +341,10 @@ export default {
             .value {
                 color: var(--color);
                 &.state-1 {
-                    color: #3894FF;
+                    color: var(--primary);
                 }
                 &.state-2 {
-                    color: var(--color);
+                    color: var(--primary);
                 }
             }
         }

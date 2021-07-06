@@ -1,6 +1,6 @@
 <template>
     <div class='page-wrap'>
-        <top left-icon='arrow-left' :menu='false' :right-action='false' show-center='true' />
+        <top left-icon='arrow-left' :menu='false' :right-action='false' :show-center='true' />
         <div class='filed-wrap'>
             <van-cell-group>
                 <van-field v-model='userName' :label='$t("bank.bankPersonName")' :placeholder='$t("bank.inputBankPersonName")' />
