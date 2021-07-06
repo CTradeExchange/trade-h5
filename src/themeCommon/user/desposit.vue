@@ -48,7 +48,7 @@
                     <div v-else class='pay-type no-data'>
                         {{ $t('deposit.noPayPassway') }}
                     </div>
-                    <div v-if='paymentTypes.length > 0' class='currency-wrap'>
+                    <div v-if='paymentTypes.length > 1' class='currency-wrap'>
                         <van-radio-group v-model='currencyChecked' @change='changePayCurrency'>
                             <van-radio v-for='(item,index) in paymentTypes' :key='index' class='currency-radio' icon-size='20px' :name='item'>
                                 {{ item }}
@@ -221,7 +221,11 @@ export default {
         const payTypesSortEnable = computed(() => {
             if (state.PayTypes.length > 0) {
                 const temp = state.PayTypes.filter(item => item.timeRangeFlag && item.openTime)
-
+                temp.forEach(item => {
+                    if (state.checkedType.paymentCode === item.paymentCode) {
+                        item.checked = true
+                    }
+                })
                 return temp
             }
         })
@@ -229,7 +233,13 @@ export default {
         // 不在当前时间的支付通道
         const payTypesSortDisable = computed(() => {
             if (state.PayTypes.length > 0) {
-                return state.PayTypes.filter(item => !item.timeRangeFlag && item.openTime)
+                const temp = state.PayTypes.filter(item => !item.timeRangeFlag && item.openTime)
+                temp.forEach(item => {
+                    if (state.checkedType.paymentCode === item.paymentCode) {
+                        item.checked = true
+                    }
+                })
+                return temp
             }
         })
 
@@ -307,7 +317,6 @@ export default {
                         state.PayTypes = res.data
                         // 处理时区时间
                         handleShowTime()
-                        getDepositExchangeRate()
                     }
                 } else {
                     state.loading = false
@@ -363,12 +372,9 @@ export default {
                             const nowDate = dayjs()
 
                             // 判断当前时间是否在设置的存款时间内
-
                             if (nowDate.isBetween(startLocal, endLocal)) {
                                 payItem.timeRangeFlag = true
                                 state.checkedType = payItem
-
-                                // state.checkedType.checked = true
                             }
                         })
                     }
@@ -376,6 +382,7 @@ export default {
 
                 if (isEmpty(state.checkedType)) {
                     state.checkedType = state.PayTypes[0]
+                    state.PayTypes[0].checked = true
                 }
                 setPaymentList(state.checkedType)
             }
@@ -387,7 +394,7 @@ export default {
                 await getChainList()
             } else {
                 const splitCurrency = state.checkedType.paymentCurrency.split(',')
-                if (splitCurrency.length > 1) {
+                if (splitCurrency.length >= 1) {
                     state.paymentTypes = splitCurrency
                 }
             }
@@ -407,7 +414,6 @@ export default {
             if (Number(state.amount > Number(state.checkedType.singleHighAmount))) {
                 return Toast(t('deposit.amountMaxTips') + `${state.checkedType.singleHighAmount}`)
             }
-            debugger
 
             const params = {
                 customerNo: customInfo.value.customerNo,

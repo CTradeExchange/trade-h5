@@ -3,7 +3,7 @@
         <LayoutTop :back='true' :menu='false'>
             <p>{{ product.symbolName }}</p>
             <p class='infomation'>
-                {{ product.symbolName }} {{ $t('trade.update') }}: {{ nowTime }}
+                {{ product.symbolName }} {{ $t('trade.update') }}:{{ formatTime(product.tick_time) }}
             </p>
 
             <template #right>
@@ -448,8 +448,6 @@ export default {
                     status: false
                 }
             },
-            nowTime: dayjs().format('HH:mm:ss'),
-            timeId: '',
             settingList: [],
             klineType: 0,
             initConfig: {},
@@ -498,10 +496,6 @@ export default {
         })
 
         const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value.find(el => el.symbolId === parseInt(symbolId))))
-
-        state.timeId = setInterval(() => {
-            state.nowTime = dayjs().format('HH:mm:ss')
-        }, 1000)
 
         // 选择指标
         const onClickStudy = (type, name) => {
@@ -795,7 +789,7 @@ export default {
 
                     ],
                     extension: {
-                        theme: 'Dark', // 主题 "Light" | "Dark"
+                        theme: 'Light', // 主题 "Light" | "Dark"
                         fullScreen: false // 全屏功能（右上角缩放按钮、横屏监听等）
                     }
                 })
@@ -824,7 +818,7 @@ export default {
 
                     ],
                     extension: {
-                        theme: 'Dark', // 主题 "Light" | "Dark"
+                        theme: 'Light', // 主题 "Light" | "Dark"
                         fullScreen: false // 全屏功能（右上角缩放按钮、横屏监听等）
                     }
                 })
@@ -872,12 +866,13 @@ export default {
             })
         }
 
+        // 格式化时间
+        const formatTime = (val) => {
+            if (val) { return dayjs(Number(val)).format('YYYY-MM-DD HH:mm:ss') }
+        }
+
         // 初始化图表配置
         initChartData()
-
-        onBeforeUnmount(() => {
-            state.timeId = null
-        })
 
         return {
             ...toRefs(state),
@@ -905,7 +900,8 @@ export default {
             onChartReady,
             addOptional,
             toOrder,
-            collect
+            collect,
+            formatTime
         }
     }
 }
