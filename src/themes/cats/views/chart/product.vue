@@ -3,7 +3,7 @@
         <LayoutTop :back='true' :menu='false'>
             <p>{{ product.symbolName }}</p>
             <p class='infomation'>
-                {{ product.symbolName }} {{ $t('trade.update') }}:{{ formatTime(product.tick_time) }}
+                {{ product.symbolCode }} {{ $t('trade.update') }}:{{ formatTime(product.tick_time) }}
             </p>
 
             <template #right>
@@ -868,7 +868,7 @@ export default {
 
         // 格式化时间
         const formatTime = (val) => {
-            if (val) { return dayjs(Number(val)).format('YYYY-MM-DD HH:mm:ss') }
+            if (val) { return dayjs(Number(val)).format('HH:mm:ss') }
         }
 
         // 初始化图表配置
