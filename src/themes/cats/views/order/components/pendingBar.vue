@@ -37,7 +37,7 @@ import { lt, gt, pow } from '@/utils/calculation'
 import StepperComp from '@c/components/stepper'
 import FloatTip from './floatTip'
 import { Dialog } from 'vant'
-import { computed, reactive, toRefs } from 'vue'
+import { computed, onMounted, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 export default {
@@ -91,6 +91,9 @@ export default {
         const firstChange = () => {
             emit('update:modelValue', pendingRang.value[props.direction === 'buy' ? 'defaultBuyPrice' : 'defaultSellPrice'])
         }
+        onMounted(() => {
+            firstChange()
+        })
         return {
             ...toRefs(state),
             step,
