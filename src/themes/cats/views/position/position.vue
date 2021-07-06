@@ -69,7 +69,7 @@
             </van-tabs>
         </div>
     </div>
-    <Loading v-if='pageLoading' :show='pageLoading' />
+    <!-- <Loading v-if='pageLoading' :show='pageLoading' /> -->
     <Fund v-if='fundVis' :show='fundVis' @update:show='updateShow' />
 </template>
 
@@ -114,7 +114,7 @@ export default {
             historyStartTime: dayjs().startOf('day').valueOf(),
             historyEndTime: dayjs().endOf('day').valueOf(),
             sortActions: [
-                { name: t('history.daytime'), feild: 'openTime', active: false, className: sortActionsDown },
+                { name: t('history.daytime'), feild: 'openTime', active: true, className: sortActionsDown },
                 { name: t('trade.profit'), active: false, feild: 'pnl' },
             ]
         })
