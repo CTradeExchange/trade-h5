@@ -345,23 +345,46 @@ export default {
     overflow: auto;
     background: var(--bgColor);
     .oper-area {
+        :deep(.van-dropdown-menu__bar) {
+            background-color: var(--contentColor);
+            .van-ellipsis {
+
+            }
+            .van-dropdown-menu__title {
+                color: var(--color);
+                &.van-dropdown-menu__title--active {
+                    color: var(--riseColor);
+                }
+            }
+        }
+        :deep(.van-popup) {
+            background-color: var(--contentColor);
+        }
         .condition {
             margin-top: rem(20px);
             margin-bottom: rem(30px);
             padding: 0 rem(30px);
             .title {
+                color: var(--color);
                 line-height: rem(60px);
             }
             .van-button {
                 margin-right: rem(20px);
                 margin-bottom: rem(20px);
                 padding: 0 rem(13px);
+                color: var(--color);
+                background: var(--contentColor);
                 &.active {
-                    border-color: dodgerblue;
+                    color: var(--primary);
+                    border-color: var(--primary);
                 }
             }
             .van-cell {
                 padding: 0;
+                background: var(--contentColor);
+                :deep(.van-cell__title) {
+                    color: var(--color);
+                }
             }
         }
         .btns {
@@ -383,10 +406,11 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin: rem(30px);
-            padding-bottom: rem(30px);
+            //margin: rem(30px);
+            padding: rem(30px);
             line-height: rem(50px);
-            border-bottom: solid 1px var(--bdColor);
+            background: var(--contentColor);
+            border-bottom: solid 1px var(--lineColor);
             .f-left {
                 .title {
                     color: var(--color);
@@ -395,7 +419,7 @@ export default {
                     font-family: PingFang SC;
                 }
                 .date {
-                    color: var(--mutedColor);
+                    color: var(--normalColor);
                     font-weight: 400;
                     font-family: DIN 1451 Mittelschrift;
                 }
@@ -409,7 +433,7 @@ export default {
                     text-align: right;
                 }
                 .balance {
-                    color: var(--mutedColor);
+                    color: var(--normalColor);
                     font-weight: 500;
                     font-family: PingFang SC;
                 }

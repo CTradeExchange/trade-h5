@@ -751,7 +751,7 @@ export default {
 }
 .pay-warpper {
     background-color: var(--bgColor);
-    :deep(.van-action-sheet__header) {
+    .van-action-sheet__header {
         color: var(--color);
     }
 }

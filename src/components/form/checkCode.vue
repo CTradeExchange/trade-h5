@@ -80,7 +80,6 @@ export default {
             // this.getCodeBtnCountDown()
         },
         getCodeBtnCountDown () {
-            debugger
             const getCodeBtn = this.$refs.getCodeBtn
             const originText = getCodeBtn.textContent
             let len = 10

@@ -19,7 +19,7 @@
                                 {{ $t('trade.sellShort') }}{{ index+1 }}
                             </span>
                             <span class='price riseColor '>
-                                {{ item.price_bid }}
+                                {{ parseFloat(item.price_bid).toFixed(product.price_digits) }}
                             </span>
                             <span class='quantity'>
                                 {{ item.volume_bid }}
@@ -40,7 +40,7 @@
                                 {{ $t('trade.buyShort') }}{{ index+1 }}
                             </span>
                             <span class='price fallColor'>
-                                {{ item.price_ask }}
+                                {{ parseFloat(item.price_ask).toFixed(product.price_digits) }}
                             </span>
                             <span class='quantity'>
                                 {{ item.volume_ask }}

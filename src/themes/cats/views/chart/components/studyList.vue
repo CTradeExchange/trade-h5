@@ -148,6 +148,7 @@ export default {
         flex-direction: column;
         width: 100%;
         padding: rem(50px) 0 0;
+        background-color: var(--bgColor);
         .type {
             margin: rem(10px) 0;
             padding: 0 rem(30px);
@@ -164,6 +165,7 @@ export default {
                 flex: 0 0 rem(112px);
                 box-sizing: border-box;
                 margin: rem(10px) rem(5px);
+                color: var(--color);
                 font-weight: normal;
                 font-size: rem(24px);
                 line-height: rem(40px);
@@ -171,8 +173,8 @@ export default {
                 border: 1px solid #D7D7D7;
                 &.active {
                     color: #FFF;
-                    background: var(--buyColor);
-                    border-color: var(--buyColor);
+                    background: var(--primary);
+                    border-color: var(--primary);
                 }
             }
         }
@@ -184,7 +186,7 @@ export default {
             color: #FFF;
             line-height: rem(70px);
             text-align: center;
-            background: var(--buyColor);
+            background: var(--primary);
         }
     }
 }

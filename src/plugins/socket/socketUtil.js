@@ -93,9 +93,6 @@ export function tickToObj (p) {
             }
         })
     }
-    // const priceTickStr = JSON.stringify(p.split(';')).shift().match(/\((.+)\)/)
-    // const prictTick = p[1] ?? ''
-    // const prictTickArr = prictTick.split(',')
 
     const curPriceData = {
         symbolId: priceArr[0] * 1,

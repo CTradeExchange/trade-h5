@@ -56,20 +56,14 @@ const colors = {
 }
 
 // 设置root变量
-export function setRootVariable (colors) {
-    const invertColor = localGet('invertColor')
+export function setRootVariable (themeColor) {
+    const invertColor = themeColor || localGet('invertColor')
     const colorsArr = Object.assign(colors[invertColor], colors.common)
     const style = document.documentElement.style
     for (const key in colorsArr) {
         if (Object.hasOwnProperty.call(colorsArr, key)) {
             const el = colorsArr[key]
             style.setProperty(`--${key}`, el)
-            // for (const colorType in el) {
-            //     if (Object.hasOwnProperty.call(el, colorType)) {
-            //         const elColor = el[colorType]
-            //         style.setProperty(`--${colorType}`, elColor)
-            //     }
-            // }
         }
     }
     sessionStorage.setItem('themeColors', JSON.stringify(colors))

@@ -14,7 +14,7 @@ import PageComp from '@c/components/PageComp.vue'
 import LayoutTop from '@c/layout/top'
 import Colors, { setRootVariable } from './colorVariables'
 import { setRouter } from '@/utils/request'
-import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet } from '@/utils/util'
+import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet } from '@/utils/util'
 import BigNumber from 'bignumber.js'
 
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
@@ -22,9 +22,6 @@ BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 // 调试工具
 // import VConsole from 'vconsole'
 // const Vconsole = new VConsole()
-
-setRouter(router)
-setRootVariable(Colors)
 
 const app = createApp(App)
 app.use(longpress)
@@ -39,10 +36,17 @@ app.mixin(MixinGlobal)
 const loginParams = getLoginParams()
 const token = getToken()
 
+// 设置默认主题色
+if (isEmpty(localGet('invertColor'))) {
+    localSet('invertColor', 'light')
+}
 // 启用新闻设置默认值
 if (isEmpty(localStorage.getItem('openNews'))) {
     localStorage.setItem('openNews', true)
 }
+
+setRouter(router)
+setRootVariable()
 
 if (loginParams || token) store.commit('_user/Update_loginLoading', true)
 

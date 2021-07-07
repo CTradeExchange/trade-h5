@@ -31,7 +31,7 @@
                 <div class='hd'>
                     <div class='hd-left'>
                         <p class='cur_price' :class='product.cur_color'>
-                            {{ product.cur_price }}
+                            {{ parseFloat(product.cur_price).toFixed(product.price_digits) }}
                         </p><!---->
                     </div><div class='others'>
                         <span :class='product.cur_color'>
@@ -1199,10 +1199,11 @@ export default {
                 align-items: center;
                 justify-content: center;
                 margin-top: rem(1px);
-                background: #FFF;
+                background: var(--contentColor);
                 box-shadow: 0 0 2px 0 #EBEDF0;
                 .option {
                     padding: rem(20px) rem(50px) rem(10px);
+                    color: var(--normalColor);
                     line-height: rem(30px);
                     white-space: nowrap;
                     &.active {
@@ -1245,6 +1246,14 @@ export default {
                 width: 100%;
                 height: 100%;
                 box-shadow: none;
+            }
+            :deep(.van-popup) {
+                .van-cell {
+                    background-color: var(--contentColor);
+                    .van-cell__title {
+                        color: var(--color);
+                    }
+                }
             }
             .mainColor {
                 color: var(--primary);
@@ -1303,8 +1312,8 @@ export default {
                 align-items: center;
                 align-items: flex-start;
                 justify-content: center;
-                background: var(--white);
-                box-shadow: 0 0 2px 0 #EBEDF0;
+                background: var(--contentColor);
+                box-shadow: 0 0 2px 0 var(--contentColor);
                 .item {
                     padding: rem(20px) rem(50px) rem(10px);
                     line-height: rem(30px);
@@ -1326,6 +1335,9 @@ export default {
                                 color: #C8C9CC;
                             }
                         }
+                    }
+                    :deep(.van-checkbox__label) {
+                        color: var(--color);
                     }
                 }
             }

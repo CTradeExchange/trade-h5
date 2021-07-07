@@ -32,6 +32,7 @@ import { isEmpty, removeLoginParams, localSet, localGet } from '@/utils/util'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { changeLang } from '@/api/base'
+import Colors, { setRootVariable } from '@m/colorVariables'
 export default {
     setup (props) {
         const instance = getCurrentInstance()
@@ -107,7 +108,8 @@ export default {
         // 选择颜色
         const colorSelect = (action) => {
             // 设置全局变量
-            setRootVariable()
+            const invertColor = localGet('invertColor')
+            setRootVariable(invertColor)
             store.commit('Update_invertColor', action.val)
             state.colorVisible = false
 
@@ -125,18 +127,18 @@ export default {
             }
         }
 
-        const setRootVariable = () => {
-            const colors = JSON.parse(sessionStorage.getItem('themeColors'))
-            const invertColor = localGet('invertColor')
-            const colorsArr = Object.assign(colors[invertColor], colors.common)
-            const style = document.documentElement.style
-            for (const key in colorsArr) {
-                if (Object.hasOwnProperty.call(colorsArr, key)) {
-                    const el = colorsArr[key]
-                    style.setProperty(`--${key}`, el)
-                }
-            }
-        }
+        // const setRootVariable = () => {
+        //     const colors = JSON.parse(sessionStorage.getItem('themeColors'))
+        //     const invertColor = localGet('invertColor')
+        //     const colorsArr = Object.assign(colors[invertColor], colors.common)
+        //     const style = document.documentElement.style
+        //     for (const key in colorsArr) {
+        //         if (Object.hasOwnProperty.call(colorsArr, key)) {
+        //             const el = colorsArr[key]
+        //             style.setProperty(`--${key}`, el)
+        //         }
+        //     }
+        // }
 
         return {
             colorsActions,

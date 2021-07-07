@@ -148,6 +148,7 @@ export default {
     height: 100%;
     #tv-chart-container {
         flex: 1;
+        background: var(--contentColor);
         &.landscape {
             position: fixed;
             top: 0;
