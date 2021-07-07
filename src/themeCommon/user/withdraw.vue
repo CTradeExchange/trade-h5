@@ -3,6 +3,7 @@
         <!-- 加载中组件 -->
         <Loading :show='loading' />
         <!-- 头部导航 -->
+
         <Top
             back
             left-icon='arrow-left'
@@ -37,7 +38,7 @@
 // vue
 import { reactive, computed, onMounted, toRefs } from 'vue'
 // router
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 // vuex
 import { useStore } from 'vuex'
 // components
@@ -60,12 +61,15 @@ export default {
     setup () {
         // router
         const router = useRouter()
+        const route = useRoute()
         // vuex
         const store = useStore()
         // i18n
         const { t } = useI18n({ useScope: 'global' })
         // 账户信息
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
+
+        const { tab } = route.query
 
         const state = reactive({
             // 加载状态
@@ -81,6 +85,7 @@ export default {
         // 切换导航栏选项卡
         const switchTabs = (key) => {
             if (key === state.currentTab) return
+            if (route.query.tab !== key) router.replace({ name: route.name, query: { tab: key } })
             state.currentTab = key
             switch (key) {
                 case 'coin':
@@ -93,6 +98,7 @@ export default {
                     break
             }
         }
+
         // 导航栏右侧标题点击跳转
         const rightClick = () => {
             router.push(state.rightAction.path)
@@ -138,6 +144,9 @@ export default {
                         state.rightAction.title = t('withdraw.moneyRecordText')
                         state.rightAction.path = '/withdrawRecord'
                         state.currentTab = 'money'
+                    }
+                    if (isWithdrawCoin && isWithdrawMoney && route.query.tab) {
+                        switchTabs(tab)
                     }
                 }
             })
