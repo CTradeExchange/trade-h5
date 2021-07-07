@@ -1,5 +1,5 @@
 import { querySymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
-import { minus, toFixed } from '@/utils/calculation'
+import { toFixed } from '@/utils/calculation'
 import CheckAPI from '@/utils/checkAPI'
 import BigNumber from 'bignumber.js'
 
@@ -80,6 +80,8 @@ export default {
                 const symbolId = data.symbolId || data.symbol_id
                 const product = productMap[symbolId]
                 if (!product) return false
+                const digits = data.price_digits || product.price_digits
+                data.cur_price = toFixed(data.cur_price, digits) // 中间价补0操作，买卖价在计算完点差后自动补0
                 if (BigNumber(data.cur_price).gt(product.high_price)) data.high_price = data.cur_price
                 if (BigNumber(data.cur_price).lt(product.low_price)) data.low_price = data.cur_price
                 if (!product.buy_price_pre) { // 缓存上一口价的裸行情
