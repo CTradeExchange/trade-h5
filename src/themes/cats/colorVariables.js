@@ -57,7 +57,7 @@ const colors = {
 
 // 设置root变量
 export function setRootVariable (colors) {
-    const invertColor = localGet('invertColor')
+    const invertColor = localGet('invertColor') || 'light'
     const colorsArr = Object.assign(colors[invertColor], colors.common)
     const style = document.documentElement.style
     for (const key in colorsArr) {
