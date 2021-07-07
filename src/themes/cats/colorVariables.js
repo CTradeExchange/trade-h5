@@ -1,5 +1,36 @@
+import { localGet } from '@/utils/util'
+
 const colors = {
-    'color': '#333',
+    common: {
+        primary: '#477fd3',
+        riseColor: '#ef5353',
+        fallColor: '#26a69a',
+        focusColor: '#f2a11b'
+    },
+    night: {
+        primaryAssistColor: '#2c2e3b',
+        color: '#ffffff',
+        normalColor: '#9294a3',
+        minorColor: '#9294a3',
+        placeholdColor: '#515366',
+        contentColor: '#20212a',
+        bgColor: '#191a22',
+        assistColor: '#2c2e3b',
+        lineColor: '#2c2e3b'
+    },
+    light: {
+        primaryAssistColor: '#f4f7fc',
+        color: '#333333',
+        normalColor: '#656667',
+        minorColor: '#999999',
+        placeholdColor: '#c2c2c2',
+        contentColor: '#ffffff',
+        bgColor: '#f8f8f8',
+        assistColor: '#f8f8f8',
+        lineColor: '#eeeeee'
+    },
+
+    /* 'color': '#333',
     'mutedColor': '#989898',
     'placeholder': '#c2c2c2',
     'tabColor': '#333',
@@ -21,17 +52,26 @@ const colors = {
     'buyColor': '#007AFF',
     'primary': '#477fd3',
     'lightenPrimary': '#f3f8ff',
-    'success': '#10B873',
+    'success': '#10B873', */
 }
 
 // 设置root变量
 export function setRootVariable (colors) {
+    const invertColor = localGet('invertColor')
+    const colorsArr = Object.assign(colors[invertColor], colors.common)
     const style = document.documentElement.style
-    for (const key in colors) {
-        if (Object.hasOwnProperty.call(colors, key)) {
-            const el = colors[key]
+    for (const key in colorsArr) {
+        if (Object.hasOwnProperty.call(colorsArr, key)) {
+            const el = colorsArr[key]
             style.setProperty(`--${key}`, el)
+            // for (const colorType in el) {
+            //     if (Object.hasOwnProperty.call(el, colorType)) {
+            //         const elColor = el[colorType]
+            //         style.setProperty(`--${colorType}`, elColor)
+            //     }
+            // }
         }
     }
+    sessionStorage.setItem('themeColors', JSON.stringify(colors))
 }
 export default colors

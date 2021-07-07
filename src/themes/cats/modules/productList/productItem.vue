@@ -104,6 +104,7 @@ export default {
     position: relative;
     padding: rem(20px) 0;
     overflow: hidden;
+    background-color: var(--contentColor);
     .cell {
         display: flex;
         align-items: center;
@@ -150,6 +151,7 @@ export default {
     }
     .symbolCode {
         margin-top: 5px;
+        color: var(--minorColor);
     }
     .sell_price,
     .buy_price {

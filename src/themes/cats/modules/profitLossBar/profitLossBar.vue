@@ -76,6 +76,7 @@ export default {
 .profitLossBar {
     align-items: center;
     padding-top: rem(30px);
+    color: var(--minorColor);
     line-height: 1.5;
 }
 .stepper {
@@ -85,6 +86,10 @@ export default {
     }
     :deep(.input) {
         width: rem(240px);
+        background-color: var(--primaryAssistColor);
+        &::-webkit-input-placeholder {
+            color: var(--placeholdColor);
+        }
     }
 }
 

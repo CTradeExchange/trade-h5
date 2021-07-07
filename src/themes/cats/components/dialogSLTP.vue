@@ -40,7 +40,9 @@
                         <div class='name'>
                             {{ $t('trade.positionPrice') }}
                         </div>
-                        <div>{{ data.openPrice }}</div>
+                        <div class='open-price'>
+                            {{ data.openPrice }}
+                        </div>
                     </div>
                     <!-- <div class='line'>
                         <div class='lineInfo van-hairline--bottom'>
@@ -185,6 +187,9 @@ export default {
     text-align: center;
     .title {
         font-size: rem(32px);
+        .productName {
+            color: var(--color);
+        }
     }
     .lot {
         color: #999;
@@ -196,6 +201,7 @@ export default {
         top: 0;
         right: 0;
         padding: rem(25px);
+        color: var(--normalColor);
         font-size: rem(38px);
     }
 }
@@ -225,8 +231,11 @@ export default {
             margin: 0 rem(40px) rem(20px) rem(35px);
             .name {
                 padding-bottom: rem(20px);
-                color: #999;
+                color: var(--minorColor);
                 font-size: rem(20px);
+            }
+            .open-price {
+                color: var(--color);
             }
             .left,
             .right {
@@ -257,8 +266,10 @@ export default {
 </style>
 
 <style lang="scss">
+@import '@/sass/mixin.scss';
 .m-dialogZyzs {
     height: rem(630px);
     overflow-y: visible;
+    background-color: var(--bgColor);
 }
 </style>

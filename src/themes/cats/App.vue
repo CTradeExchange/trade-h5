@@ -87,21 +87,5 @@ export default {
 @import '~@c/style.scss';
 @import '~@c/font/iconfont.css';
 @import '~@/sass/mixin.scss';
-.night {
-    filter: invert(0.9);
-    .riseColor,
-    .riseColorBg,
-    .fallColor,
-    .fallColorBg,
-    .grayColorBg,
-    .buyColor,
-    .sellColor,
-    .successColor,
-    .van-button,
-    .invert,
-    iframe,
-    img {
-        filter: invert(0.9);
-    }
-}
+
 </style>

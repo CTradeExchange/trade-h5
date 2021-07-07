@@ -75,7 +75,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     height: rem(100px);
-    background-color: var(--white);
+    background: var(--contentColor);
     .back {
         position: absolute;
         top: rem(26px);
@@ -109,6 +109,7 @@ export default {
         width: 60%;
         max-width: 60%;
         margin: 0 auto;
+        color: var(--color);
         font-size: rem(34px);
         line-height: rem(59px);
         text-align: center;

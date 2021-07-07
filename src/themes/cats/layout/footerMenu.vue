@@ -67,13 +67,14 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .footerMenu {
-    background: var(--white);
+    background: var(--contentColor);
     .van-tabbar-item--active {
-        background: var(--white);
+        //background: var(--color);
+        background: var(--contentColor);
     }
 }
 :deep(.van-tabbar-item) {
-    color: #CACACA;
+    //color: #CACACA;
 }
 :deep(.van-tabbar-item__icon) {
     font-size: rem(46px);

@@ -83,15 +83,23 @@ export default {
         content: '';
     }
 }
-:deep() {
-    .van-cell__title {
-        margin-left: rem(28px);
-        color: #333;
-        font-size: rem(28px);
+.van-cell {
+    color: var(--color);
+    background-color: var(--contentColor) !important;
+    &::after {
+        border-bottom: solid 1px var(--lineColor);
     }
-    .van-cell__value {
-        color: #999;
-        font-size: rem(24px);
+    :deep() {
+        .van-cell__title {
+            margin-left: rem(28px);
+            color: var(--color);
+            font-size: rem(28px);
+        }
+        .van-cell__value {
+            color: #999;
+            font-size: rem(24px);
+        }
     }
 }
+
 </style>

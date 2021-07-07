@@ -95,7 +95,7 @@
     <van-button block class='next-btn' :disabled='btnDisabled' type='primary' @click='next'>
         <span>{{ $t('common.nextStep') }}</span>
     </van-button>
-    <van-action-sheet v-model:show='typeShow' :round='false' :title='$t("deposit.selectPayMethods")'>
+    <van-action-sheet v-model:show='typeShow' class='pay-warpper' :round='false' :title='$t("deposit.selectPayMethods")'>
         <div class='pay-list'>
             <div v-for='(item,index) in payTypesSortEnable' :key='index' class='pay-type' @click='choosePayType(item)'>
                 <img alt='' :src='require("../../assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
@@ -565,7 +565,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .pageWrap {
-    background-color: var(--white);
+    background-color: var(--bgColor);
     .header {
         display: flex;
         align-items: center;
@@ -599,8 +599,9 @@ export default {
                 max-width: 47%;
                 height: rem(80px);
                 margin-bottom: rem(30px);
+                color: var(--color);
                 text-align: center;
-                border: rem(2px) solid var(--bdColor);
+                border: rem(2px) solid var(--placeholdColor);
                 border-radius: rem(10px);
                 .t1 {
                     color: var(--color);
@@ -611,7 +612,7 @@ export default {
                     font-size: rem(20px);
                 }
                 &.active {
-                    border: rem(2px) solid var(--btnSelected);
+                    border: rem(2px) solid var(--focusColor);
                 }
             }
         }
@@ -643,7 +644,7 @@ export default {
                 .left-val {
                     display: flex;
                     //align-items: center;
-                    color: var(--mutedColor);
+                    color: var(--normalColor);
                     .label{
 
                     }
@@ -655,7 +656,7 @@ export default {
                     }
                 }
                 .right-val {
-                    color: var(--mutedColor);
+                    color: var(--normalColor);
                 }
             }
         }
@@ -666,11 +667,11 @@ export default {
         align-content: flex-start;
         margin-top: rem(20px);
         padding: 0 rem(30px);
-        background-color: var(--white);
-        border-top: solid rem(20px) var(--btnColor);
+        background-color: var(--bgColor);
+        border-top: solid rem(20px) var(--lineColor);
         .pi-item {
             flex: 0 0 50%;
-            color: var(--mutedColor);
+            color: var(--normalColor);
             font-size: rem(24px);
             line-height: rem(96px);
         }
@@ -689,6 +690,7 @@ export default {
     border-radius: rem(4px);
     .pay-name {
         flex: 1;
+        color: var(--color);
     }
     img {
         width: rem(55px);
@@ -708,23 +710,27 @@ export default {
     border-top: none;
     .currency-radio {
         margin-bottom: rem(20px);
+        :deep(.van-radio__label) {
+            color: var(--color);
+        }
     }
 }
 .pay-list .pay-type {
-    border-color: var(--bdColor);
+    border-color: var(--lineColor);
     border-style: solid;
     border-width: 0 0 1px;
 }
 .next-btn {
     position: fixed;
     bottom: 0;
-    background: var(--bdColor);
-    border-color: var(--bdColor);
+    background: var(--contentColor);
+    border-color: var(--contentColor);
     span {
         color: var(--color);
         font-size: rem(34px);
     }
 }
+
 </style>
 
 <style lang="scss">
@@ -742,6 +748,12 @@ export default {
         margin: rem(20px) 0;
         color: var(--mutedColor);
         font-size: rem(28px);
+    }
+}
+.pay-warpper {
+    background-color: var(--bgColor);
+    :deep(.van-action-sheet__header) {
+        color: var(--color);
     }
 }
 </style>

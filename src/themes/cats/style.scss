@@ -1,6 +1,6 @@
 @import '~@/sass/mixin.scss';
 :root {
-    --color: #333;
+    /*  --color: #333;
     --mutedColor: #989898;
     --placeholder: #C2C2C2;
     --tabColor: #333;
@@ -26,7 +26,7 @@
     --red: #E3525C;
     --assistColor: #989898;
     --assist2Color: #484848;
-    --bgColor2: #F8F8F8;
+    --bgColor2: #F8F8F8; */
 }
 * {
     box-sizing: border-box;
@@ -38,7 +38,7 @@ html,
 body,
 #app {
     height: 100%;
-    color: var(--color);
+    color: var(--bgColor);
 }
 body {
     font-size: 16px;
@@ -46,7 +46,6 @@ body {
     /* no */
     // font-family: 'PingFang SC', '-apple-system', 'Heiti SC', 'Helvetica', 'Helvetica Neue', 'Droid Sans Fallback', 'Droid Sans';
     font-family: 'Trebuchet MS', 'roboto', 'ubuntu', 'sans-serif';
-    background-color: var(--bgColor2);
     //background-color: var(--bgColor2);
     -webkit-user-select: none;
     webkit-text-size-adjust: none;
@@ -61,19 +60,22 @@ a {
     color: var(--riseColor);
 }
 .riseColorBg {
-    color: var(--white);
+    color: var(--color);
     background-color: var(--riseColor);
 }
 .fallColor {
     color: var(--fallColor);
 }
 .fallColorBg {
-    color: var(--white);
+    color: var(--color);
     background-color: var(--fallColor);
 }
 .grayColorBg {
-    color: var(--white);
-    background-color: var(--btnText2);
+    color: var(--color);
+    background-color: var(--minorColor);
+}
+.grayColor {
+    color: var(--minorColor);
 }
 .buyColor {
     color: var(--buyColor);
@@ -123,7 +125,7 @@ i {
 }
 .primaryBg,
 .mainColorBg {
-    color: var(--white) !important;
+    color: var(--color) !important;
     background-color: var(--primary) !important;
 }
 .muted {
@@ -179,10 +181,10 @@ i {
         background: #FFF;
     }
     30% {
-        background: linear-gradient(to right, #FFF, #FCF6F7);
+        background: linear-gradient(to right, var(--contentColor), #FCF6F7);
     }
     80% {
-        background: linear-gradient(to right, #FFF, #FAF3F3);
+        background: linear-gradient(to right, var(--contentColor), #FAF3F3);
     }
     100% {
         background: #FFF;
@@ -194,10 +196,10 @@ i {
         background: #FFF;
     }
     30% {
-        background: linear-gradient(to right, #FFF, #F0FAF8);
+        background: linear-gradient(to right, var(--contentColor), #F0FAF8);
     }
     80% {
-        background: linear-gradient(to right, #FFF, #EAF8F6);
+        background: linear-gradient(to right, var(--contentColor), #EAF8F6);
     }
     100% {
         background: #FFF;
@@ -233,7 +235,7 @@ i {
     box-sizing: border-box;
     width: 200%;
     height: 200%;
-    border: 0 solid #DDD;
+    border: 0 solid var(--lineColor);
     transform: scale(0.5);
     transform-origin: 0 0;
     content: '';
@@ -428,6 +430,30 @@ i {
 .van-loading {
     text-align: center;
 }
+/* .van-cell {
+    background-color: var(--assistColor) !important;
+}
+.van-dropdown-menu__bar {
+    background-color: var(--white) !important;
+}
+.van-tab {
+    background-color: var(--white) !important;
+    .title {
+        color: var(--btnColor);
+    }
+}
+.van-tabs__nav--complete {
+    background-color: var(--white) !important;
+    .title {
+        color: var(--lightenPrimary);
+    }
+}
+.van-checkbox__label {
+    color: var(--lightenPrimary) !important;
+}
+.van-dropdown-item__option {
+    color: var(--lightenPrimary);
+} */
 .m-dialog {
     display: flex;
     flex-direction: column;

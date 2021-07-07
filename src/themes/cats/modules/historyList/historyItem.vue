@@ -116,7 +116,7 @@ export default {
         margin-bottom: rem(20px);
         padding: rem(20px) rem(30px) 0;
         overflow: hidden;
-        background: var(--white);
+        background: var(--contentColor);
         border-radius: rem(10px);
         .cell {
             display: flex;
@@ -175,13 +175,13 @@ export default {
                 top: rem(6px);
             }
             .warn {
-                color: #333;
+                color: var(--color);
                 background-color: #FFA700;
             }
             .name {
                 display: inline-block;
                 max-width: rem(360px);
-                color: #333;
+                color: var(--color);
                 font-size: rem(28px);
                 line-height: rem(38px);
                 vertical-align: bottom;

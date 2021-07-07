@@ -7,8 +7,6 @@
         :color='color'
         :ellipsis='false'
         line-width='30'
-        :title-active-color='titleActiveColor'
-        :title-inactive-color='titleInactiveColor'
         :type='type'
         @change='updataActive'
     >
@@ -93,10 +91,14 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-:deep(.van-tab) {
-    flex: none;
-    padding: 0 !important;
-    text-align: left;
+:deep(.van-tabs__nav) {
+    background: var(--bgColor) !important;
+    .van-tab {
+        flex: none;
+        padding: 0 !important;
+        text-align: left;
+        background: var(--bgColor);
+    }
 }
 .dot {
     display: block;
@@ -104,16 +106,18 @@ export default {
     height: rem(10px);
     margin: 0 auto;
     margin-top: rem(-10px);
-    background: var(--primary);
+    background: var(--bgColor);
     border-radius: 50%;
     transform: scale(0);
     opacity: 0;
 }
 .van-tab--active {
     .text {
+        color: var(--color);
         animation: zoomText 0.26s ease normal forwards;
     }
     .dot {
+        color: var(--color);
         animation: zoomDot 0.26s ease normal forwards;
     }
 }

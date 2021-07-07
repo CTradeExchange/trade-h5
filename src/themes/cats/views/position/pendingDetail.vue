@@ -97,7 +97,7 @@
             </div>
         </div>
         <div class='submitBox'>
-            <van-button plain size='normal' type='primary' @click='showCancelOrderTip = true'>
+            <van-button plain size='normal' type='default' @click='showCancelOrderTip = true'>
                 {{ $t('trade.cancelPending') }}
             </van-button>
         </div>
@@ -202,12 +202,12 @@ export default {
     height: 100%;
     padding-top: 1.2rem;
     font-size: 0.37333rem;
-    background: var(--bgColor2);
+    background: var(--bgColor);
     .m-orderInfo {
         padding: rem(20px) rem(20px) rem(7px) rem(20px);
         .layout {
             margin-bottom: rem(20px);
-            background-color: #FFF;
+            background-color: var(--contentColor);
             border-radius: 10px;
             .item {
                 display: flex;
@@ -240,10 +240,10 @@ export default {
                             color: var(--fallColor);
                         }
                         &.fallColor {
-                            color: var(--success);
+                            color: var(--riseColor);
                         }
                         .number {
-                            color: var(--btnText2);
+                            color: var(--minorColor);
                         }
                     }
                     &:last-child {
@@ -252,19 +252,20 @@ export default {
                 }
             }
             .name {
-                color: #333;
+                color: var(--color);
                 font-size: rem(28px);
             }
             .code {
-                color: #999;
+                color: var(--minorColor);
                 font-size: rem(20px);
             }
             .sub {
+                color: var(--minorColor);
                 &.riseColor {
                     color: var(--fallColor);
                 }
                 &.fallColor {
-                    color: var(--success);
+                    color: var(--riseColor);
                 }
             }
             .active {
@@ -287,6 +288,7 @@ export default {
                 }
             }
             .right {
+                color: var(--color);
                 text-align: right;
             }
         }
@@ -304,6 +306,10 @@ export default {
             font-size: rem(30px);
             border: none;
             border-radius: 0;
+            &.van-button--default {
+                color: var(--primary);
+                background: var(--contentColor);
+            }
         }
     }
 }

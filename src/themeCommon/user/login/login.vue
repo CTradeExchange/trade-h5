@@ -331,7 +331,7 @@ export default {
 .pageWrap {
     position: relative;
     height: 100%;
-    background: var(--white);
+    background: var(--bgColor);
     .header {
         display: flex;
         align-items: center;
@@ -406,8 +406,8 @@ export default {
         color: var(--color);
         font-size: rem(30px);
         line-height: rem(80px);
-        background: var(--btnColor);
-        border-color: var(--bdColor);
+        background: var(--lineColor);
+        border-color: var(--lineColor);
         border-radius: rem(4px);
         &.light {
             margin-top: rem(40px);

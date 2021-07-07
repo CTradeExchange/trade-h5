@@ -336,13 +336,14 @@ export default {
 @import '@/sass/mixin.scss';
 .topTitle {
     flex: 1;
+    color: var(--color);
     font-size: rem(32px);
     text-align: center;
 }
 .page-wrap {
     flex: 1;
     overflow: auto;
-    background: var(--white);
+    background: var(--bgColor);
     .oper-area {
         .condition {
             margin-top: rem(20px);

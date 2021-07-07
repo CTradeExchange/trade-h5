@@ -111,7 +111,7 @@ export default {
 }
 .personInfo {
     padding: rem(40px);
-    background: var(--white);
+    color: var(--color);
 }
 .personNo {
     position: relative;
@@ -151,8 +151,8 @@ export default {
     margin-top: rem(30px);
     padding: rem(20px) rem(30px);
     line-height: 1.4;
-    background: var(--bgColor);
-    border-radius: 3px;
+    background: var(--contentColor);
+    border-radius: rem(10px);
     .accountView {
         font-size: rem(34px);
     }
@@ -172,7 +172,7 @@ export default {
     .btn {
         width: 47%;
         height: rem(80px);
-        color: var(--white);
+        color: #FFF;
         font-size: rem(34px);
         line-height: 1;
         background: var(--primary);

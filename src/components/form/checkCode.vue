@@ -29,6 +29,7 @@
 
 <script>
 import { randomId } from '@/utils/util'
+import { useI18n } from 'vue-i18n'
 export default {
     props: {
         modelValue: {
@@ -74,18 +75,20 @@ export default {
             this.$emit('update:zone', item.value)
         },
         getCode () {
+            this.disabled = true
             this.$emit('verifyCodeSend', this.getCodeBtnCountDown.bind(this))
             // this.getCodeBtnCountDown()
         },
         getCodeBtnCountDown () {
+            debugger
             const getCodeBtn = this.$refs.getCodeBtn
             const originText = getCodeBtn.textContent
-            let len = 60
-            this.disabled = true
+            let len = 10
+
             const t = setInterval(() => {
                 if (len === 0) {
                     clearInterval(t)
-                    getCodeBtn.innerText = originText
+                    getCodeBtn.innerText = this.$t('register.reGet')
                     this.disabled = false
                     return
                 }
@@ -110,7 +113,7 @@ export default {
     }
     .getCodeBtn {
         margin-left: rem(20px);
-        color: var(--assist2Color);
+        color: var(--color);
         font-size: rem(26px);
         background: none;
         &:disabled {

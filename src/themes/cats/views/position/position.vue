@@ -15,7 +15,7 @@
         </LayoutTop>
 
         <div class='m-subtab'>
-            <van-tabs v-model:active='active' color='rgb(71, 127, 211)' title-inactive-color='#333' type='card' @click='triggerTab'>
+            <van-tabs v-model:active='active' type='card' @click='triggerTab'>
                 <van-tab :title='$t("trade.position")'>
                     <div class='m-ccgd'>
                         <div v-if='positionList.length' class='m-orderBy'>
@@ -260,10 +260,9 @@ export default {
     width: 100%;
     height: 100%;
     margin-top: rem(90px);
-    margin-bottom: rem(100px);
     padding: 0 rem(20px);
     overflow: auto;
-    background: var(--bgColor2);
+    background: var(--bgColor);
     .assetIcon {
         right: 0;
         bottom: 0;
@@ -301,8 +300,9 @@ export default {
             margin-bottom: rem(20px);
             .van-button {
                 min-width: rem(110px);
-                color: #000;
-                border-color: var(--white);
+                color: var(--minorColor);
+                background-color: var(--contentColor);
+                border-color: var(--contentColor);
                 &.active {
                     color: #477FD3;
                 }
@@ -325,6 +325,9 @@ export default {
         padding-bottom: rem(30px);
         .van-button {
             height: rem(48px);
+            color: var(--color);
+            background-color: var(--primaryAssistColor);
+            border-color: var(--lineColor);
         }
     }
 }
@@ -336,18 +339,24 @@ export default {
 .m-subtab {
     margin: 0 auto;
     padding-top: rem(40px);
-    background-color: var(--bgColor2);
+    background-color: var(--bgColor);
     .van-tabs__nav {
         margin: 0 rem(150px);
+        background: var(--contentColor);
         border: none;
         border-radius: 0.8rem;
         .van-tab {
+            color: var(--color);
             border: none;
             &:last-child {
                 border-radius: 0 0.8rem 0.8rem 0;
             }
             &:first-child {
                 border-radius: 0.8rem 0 0 0.8rem;
+            }
+            &.van-tab--active {
+                color: #FFF !important;
+                background: var(--primary);
             }
         }
     }

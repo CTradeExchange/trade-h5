@@ -165,8 +165,8 @@ export default {
         padding: rem(100px) 0;
     }
     .layout-1 {
-        color: #333;
-        background-color: #FFF;
+        color: var(--color);
+        background-color: var(--contentColor);
         .warp {
             @include scroll();
             max-height: 70vh;
@@ -251,7 +251,7 @@ export default {
             text-align: right;
             .title {
                 padding-right: rem(5px);
-                color: #333;
+                color: var(--mutedColor);
                 font-size: rem(24px);
                 vertical-align: middle;
             }

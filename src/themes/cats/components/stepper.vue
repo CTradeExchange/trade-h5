@@ -142,6 +142,7 @@ export default {
     input {
         width: rem(80px);
         height: rem(80px);
+        color: var(--color);
         line-height: 1;
         text-align: center;
         vertical-align: middle;
@@ -149,7 +150,7 @@ export default {
     }
     .input {
         width: rem(180px);
-        color: inherit;
+        color: var(--color);
         font-size: rem(28px);
     }
     button {

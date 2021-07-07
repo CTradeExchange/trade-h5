@@ -106,15 +106,36 @@ export default {
 
         // 选择颜色
         const colorSelect = (action) => {
-            const classList = document.documentElement.classList
-            if (action.val === 'light') {
-                classList.remove('night')
-            } else if (action.val === 'night') {
-                classList.remove('light')
-            }
-            if (!classList.contains(action.val)) classList.add(action.val)
+            // 设置全局变量
+            setRootVariable()
             store.commit('Update_invertColor', action.val)
             state.colorVisible = false
+
+            let themeColors = sessionStorage.getItem('themeColors')
+            if (!isEmpty(themeColors)) {
+                themeColors = JSON.parse(themeColors)
+
+                document.body.style.setProperty('--color', themeColors[action.val].color)
+                document.body.style.setProperty('--contentColor', themeColors[action.val].contentColor)
+                document.body.style.setProperty('--primaryAssistColor', themeColors[action.val].primaryAssistColor)
+                document.body.style.setProperty('--bgColor', themeColors[action.val].bgColor)
+                document.body.style.setProperty('--normalColor', themeColors[action.val].normalColor)
+                document.body.style.setProperty('--assistColor', themeColors[action.val].assistColor)
+                document.body.style.setProperty('--lineColor', themeColors[action.val].lineColor)
+            }
+        }
+
+        const setRootVariable = () => {
+            const colors = JSON.parse(sessionStorage.getItem('themeColors'))
+            const invertColor = localGet('invertColor')
+            const colorsArr = Object.assign(colors[invertColor], colors.common)
+            const style = document.documentElement.style
+            for (const key in colorsArr) {
+                if (Object.hasOwnProperty.call(colorsArr, key)) {
+                    const el = colorsArr[key]
+                    style.setProperty(`--${key}`, el)
+                }
+            }
         }
 
         return {
@@ -136,16 +157,29 @@ export default {
 @import '@/sass/mixin.scss';
 .page-wrap {
     flex: 1;
+    padding-top: rem(100px);
     overflow: auto;
+    color: var(--color);
+    background: var(--bgColor);
     .logout-btn {
         position: absolute;
         bottom: 0;
         width: 100%;
-        background: var(--bdColor);
-        border-color: var(--bdColor);
+        background: var(--lineColor);
+        border-color: var(--lineColor);
         span {
             color: var(--color);
             font-size: rem(34px);
+        }
+    }
+    .van-cell {
+        color: var(--color);
+        background-color: var(--contentColor) !important;
+        .van-cell__title {
+            color: var(--color);
+        }
+        &::after {
+            border-bottom: solid 1px var(--lineColor);
         }
     }
 }

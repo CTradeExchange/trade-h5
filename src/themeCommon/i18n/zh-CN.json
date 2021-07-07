@@ -179,7 +179,8 @@
         "certificateNo": "证件号码",
         "chooseCertificateType": "选择证件类型",
         "incorrectlyFormed": "格式不正确",
-        "pleaseEnter": "请输入"
+        "pleaseEnter": "请输入",
+        "reGet" :"重新获取"
     },
     "chart": {
         "candleStick": "阴阳烛",
@@ -456,7 +457,7 @@
         "inputOpenAddressText": "请输入开户地址",
         "branchAddress": "支行地址",
         "inputBranchAddress": "请输入支行地址（选填）",
-        "submitSuccessTips": "预计2-3个工作日完成审核（节假期顺延），如需要其它帮助，请联系客服。",
+        "submitSuccessTips": "您的资料已提交成功",
         "noBanks": "暂无银行卡",
         "addBank": "新增银行卡",
         "bankList": "银行卡列表"

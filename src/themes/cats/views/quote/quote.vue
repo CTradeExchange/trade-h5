@@ -9,8 +9,6 @@
                 line-height='0'
                 line-width='0'
                 :list='categoryList'
-                title-active-color='#333'
-                title-inactive-color='#333'
                 @change='tabChange'
                 @tabClick='tabClick'
             />
@@ -96,18 +94,19 @@ export default {
 .quoteWrap {
     flex: 1;
     width: 100%;
-    margin-top: rem(100px);
-    margin-bottom: rem(100px);
+    margin-top: rem(80px);
+    padding-bottom: rem(100px);
     overflow: auto;
-    background: var(--white);
+    background: var(--bgColor);
 }
 .tradeNav {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    padding-bottom: rem(15px);
-    background-color: var(--white);
+    //padding-bottom: rem(10px);
+    background-color: var(--contentColor);
+    //border-bottom: solid 4px var(--lineColor);
     .van-tab {
         background: yellow !important;
     }
@@ -116,10 +115,10 @@ export default {
     display: flex;
     height: rem(60px);
     padding: 0 rem(30px);
-    color: var(--mutedColor);
+    color: var(--minorColor);
     font-size: rem(20px);
     line-height: rem(60px);
-    background-color: var(--white);
+    background-color: var(--contentColor);
     .item {
         width: rem(210px);
         text-align: right;

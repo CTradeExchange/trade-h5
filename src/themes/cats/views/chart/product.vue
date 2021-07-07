@@ -748,7 +748,7 @@ export default {
         const initChartData = () => {
             // 设置图表设置缓存
             const locChartConfig = JSON.parse(localGet('chartConfig'))
-
+            const invertColor = localGet('invertColor')
             if (isEmpty(locChartConfig)) {
                 localSetChartConfig('showLastPrice', false)
                 localSetChartConfig('mainStudy', JSON.stringify({
@@ -789,7 +789,7 @@ export default {
 
                     ],
                     extension: {
-                        theme: 'Light', // 主题 "Light" | "Dark"
+                        theme: invertColor === 'light' ? 'Light' : 'Dark', // 主题 "Light" | "Dark"
                         fullScreen: false // 全屏功能（右上角缩放按钮、横屏监听等）
                     }
                 })
@@ -818,7 +818,7 @@ export default {
 
                     ],
                     extension: {
-                        theme: 'Light', // 主题 "Light" | "Dark"
+                        theme: invertColor === 'light' ? 'Light' : 'Dark', // 主题 "Light" | "Dark"
                         fullScreen: false // 全屏功能（右上角缩放按钮、横屏监听等）
                     }
                 })
@@ -975,7 +975,7 @@ export default {
         align-items: flex-start;
         justify-content: flex-start;
         padding: rem(10px) rem(20px) rem(10px) rem(20px);
-        background: var(--white);
+        background: var(--contentColor);
         transform: translateZ(1px);
         // margin-bottom: rem(10px);
         .hd {
@@ -1116,12 +1116,14 @@ export default {
     }
     .placeholder {
         height: rem(10px);
+        background: var(--lineColor);
     }
     .tv-head {
         box-sizing: border-box;
         // 若高度调整，需同时处理vant-tab组件内的高度和行高等
         width: 100%;
         height: rem(60px);
+        background-color: var(--contentColor);
     }
     .tabs-wrap {
         display: flex;
@@ -1265,8 +1267,11 @@ export default {
         .kIcon-wrap {
             width: rem(80px);
             padding-right: 0;
-            :deep(.van-dropdown-menu__title::after) {
-                display: none;
+            :deep(.van-dropdown-menu__item) {
+                background-color: var(--contentColor);
+                .van-dropdown-menu__title::after {
+                    display: none;
+                }
             }
         }
         .kIcon {
@@ -1283,8 +1288,9 @@ export default {
             align-items: center;
             justify-content: center;
             width: rem(80px);
-            background: var(--white);
+            background: var(--contentColor);
             .icon {
+                color: var(--normalColor);
                 font-size: rem(32px);
             }
             .content {
@@ -1343,7 +1349,7 @@ export default {
         width: 100%;
         height: rem(60px);
         line-height: rem(60px);
-        //background: #FFF;
+        background: var(--contentColor);
         .main-study,
         .side-study {
             display: flex;
@@ -1448,10 +1454,10 @@ export default {
             background-color: #858C9A;
             border-radius: 3px;
             &.fallColorBg {
-                background-color: var(--sellColor);
+                background-color: var(--riseColor);
             }
             &.riseColorBg {
-                background-color: var(--success);
+                background-color: var(--fallColor);
             }
         }
         .sell::after {

@@ -61,14 +61,14 @@
     <van-dialog
         v-model:show='addSuccessShow'
         class-name='add-success'
-        :confirm-button-text='$t("common.look")'
-        show-cancel-button='false'
+        :confirm-button-text='$t("common.sure")'
+        :show-cancel-button='showCancel'
         @cancel='cancel'
         @confirm='toBankList'
     >
         <i class='icon_success'></i>
         <p class='title'>
-            {{ $t('common.submitSuccess') }}
+            {{ $t('common.tip') }}
         </p>
         <p class='content'>
             {{ $t('bank.submitSuccessTips') }}
@@ -131,7 +131,8 @@ export default {
             bankShow: false,
             checkedBankCode: '',
             currencyShow: false,
-            addSuccessShow: false,
+            addSuccessShow: true,
+            showCancel: false,
             currencyActions: [{ name: t('common.RMB') }, { name: t('common.dollar') }
             ]
         })

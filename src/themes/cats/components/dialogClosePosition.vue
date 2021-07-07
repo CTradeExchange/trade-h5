@@ -39,7 +39,7 @@
                         <div class='name'>
                             {{ $t('trade.positionPrice') }}
                         </div>
-                        <div>
+                        <div class='open-price'>
                             {{ data.openPrice }}
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                         {{ $t('trade.closeProfit') }}
                     </div>
                     <div class='val'>
-                        {{ data.profitLoss>0 ? '+'+data.profitLoss : data.profitLoss }} {{ customerInfo.currency }}
+                        {{ data.profitLoss>0 ? data.profitLoss : data.profitLoss }} {{ customerInfo.currency }}
                     </div>
                 </div>
                 <!-- <div class='row'>
@@ -295,6 +295,9 @@ export default {
 .dialog-header {
     padding: rem(30px) 0;
     text-align: center;
+    .productName {
+        color: var(--color);
+    }
     .title {
         font-size: rem(32px);
     }
@@ -308,6 +311,7 @@ export default {
         top: 0;
         right: 0;
         padding: rem(25px);
+        color: var(--normalColor);
         font-size: rem(38px);
     }
 }
@@ -325,7 +329,7 @@ export default {
         background: var(--btnColor);
         border-radius: 4px;
         &.active {
-            color: var(--white);
+            color: var(--color);
             background: var(--primary);
         }
     }
@@ -333,8 +337,9 @@ export default {
 .dialog-footer {
     width: 100%;
     .pcHandler {
-        color: var(--white);
+        color: var(--color);
         background: var(--primary);
+        border: none;
     }
 }
 .m-dialogPC {
@@ -350,7 +355,7 @@ export default {
             justify-content: space-between;
             margin: 0 rem(40px) rem(40px) rem(35px);
             .title {
-                color: #333;
+                color: var(--minorColor);
                 font-size: rem(28px);
             }
             .tipNumber {
@@ -371,6 +376,9 @@ export default {
                 padding-bottom: rem(20px);
                 color: #999;
                 font-size: rem(20px);
+            }
+            .open-price {
+                color: var(--color);
             }
             .left,
             .right {
@@ -430,5 +438,6 @@ export default {
     flex-flow: column;
     height: rem(640px);
     overflow: visible;
+    background-color: var(--bgColor);
 }
 </style>

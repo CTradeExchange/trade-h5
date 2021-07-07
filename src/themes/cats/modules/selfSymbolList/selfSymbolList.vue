@@ -125,10 +125,10 @@ export default {
     display: flex;
     height: rem(60px);
     padding: 0 rem(30px);
-    color: var(--mutedColor);
+    color: var(--normalColor);
     font-size: rem(20px);
     line-height: rem(60px);
-    background-color: var(--white);
+    background-color: var(--contentColor);
     .item {
         width: rem(210px);
         text-align: right;

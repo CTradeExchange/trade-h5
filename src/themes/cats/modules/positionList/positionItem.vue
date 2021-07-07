@@ -133,7 +133,7 @@ export default {
         margin-bottom: rem(20px);
         padding: rem(20px) rem(30px) 0;
         overflow: hidden;
-        background: var(--white);
+        background: var(--contentColor);
         border-radius: rem(10px);
         .cell {
             display: flex;
@@ -196,7 +196,7 @@ export default {
             .name {
                 display: inline-block;
                 max-width: rem(360px);
-                color: #333;
+                color: var(--color);
                 font-size: rem(28px);
                 line-height: rem(38px);
                 vertical-align: bottom;
@@ -221,18 +221,18 @@ export default {
             text-align: center;
             border-radius: rem(6px);
             &.hidden {
-                color: var(--primary);
-                background-color: var(--lightenPrimary);
+                color: var(--color);
+                background-color: var(--primaryAssistColor);
             }
         }
         .van-button {
             width: rem(124px);
             height: rem(48px);
-            color: var(--primary) !important;
+            color: var(--color) !important;
             font-size: rem(24px);
             line-height: rem(48px);
-            background: var(--lightenPrimary) !important;
-            border-color: var(--lightenPrimary) !important;
+            background: var(--primaryAssistColor) !important;
+            border-color: var(--primaryAssistColor) !important;
             border-radius: rem(6px);
         }
     }

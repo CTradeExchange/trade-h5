@@ -166,37 +166,47 @@ export default {
 .container {
     flex: 1;
     overflow-y: auto;
-    .margin-info {
-        text-align: left;
-        .left-label {
-            display: inline-block;
-            width: rem(190px);
-            margin-right: rem(10px);
-            text-align: right;
-            &.header {
+    background-color: var(--bgColor);
+    :deep(.van-cell) {
+        background-color: var(--bgColor);
+        .van-cell__title {
+            color: var(--normalColor);
+        }
+        .van-cell__value {
+            color: var(--color);
+        }
+        .margin-info {
+            text-align: left;
+            .left-label {
+                display: inline-block;
+                width: rem(190px);
+                margin-right: rem(10px);
+                text-align: right;
+                &.header {
+                    text-align: center;
+                }
+            }
+            .right-val {
+                display: inline-block;
+                width: rem(140px);
                 text-align: center;
+                &.header {
+                    text-align: center;
+                }
             }
         }
-        .right-val {
-            display: inline-block;
-            width: rem(140px);
-            text-align: center;
-            &.header {
-                text-align: center;
+        .timeItem {
+            &:not(:last-of-type) {
+                padding-right: 5px;
+                &::after {
+                    content: ',';
+                }
             }
         }
-    }
-    .timeItem {
-        &:not(:last-of-type) {
-            padding-right: 5px;
-            &::after {
-                content: ',';
-            }
+        .timeListCell :deep(.van-cell__value) {
+            flex: none;
+            width: 70%;
         }
-    }
-    .timeListCell :deep(.van-cell__value) {
-        flex: none;
-        width: 70%;
     }
 }
 </style>

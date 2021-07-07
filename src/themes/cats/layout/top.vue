@@ -77,9 +77,9 @@ export default {
     height: rem(90px);
     color: var(--color);
     font-size: rem(34px);
-    background: var(--white);
+    background: var(--contentColor);
     &.mainColorBg {
-        color: var(--white);
+        color: var(--contentColor);
     }
     &.nobg {
         background: none;
@@ -119,6 +119,7 @@ export default {
     .backIcon {
         margin-left: rem(-10px);
         padding: rem(10px);
+        color: var(--color);
     }
 }
 </style>

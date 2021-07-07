@@ -283,11 +283,11 @@ export default {
 .stallsAndDeal {
     min-width: rem(200px);
     height: rem(890px);
-    margin-top: rem(10px);
+    //margin-top: rem(10px);
     margin-bottom: rem(30px);
-    background: var(--white);
-    border-top: 1px solid #ECEDF2;
-    border-right: 1px solid #ECEDF2;
+    background: var(--contentColor);
+    border-top: 1px solid var(--lineColor);
+    //border-right: 1px solid #ECEDF2;
     .tabs {
         display: flex;
         flex-direction: column;
@@ -296,7 +296,7 @@ export default {
             .van-tab {
                 font-size: rem(24px);
                 line-height: rem(50px);
-                background: var(--white);
+                background-color: var(--contentColor);
             }
             .van-tabs__wrap {
                 height: rem(50px);
@@ -353,6 +353,7 @@ export default {
                     text-align: left;
                 }
                 .quantity {
+                    color: var(--normalColor);
                     // flex: 1;
                     text-align: right;
                 }
@@ -445,6 +446,7 @@ export default {
                     .val {
                         display: block;
                         margin: rem(15px) 0;
+                        color: var(--contentColor);
                     }
                 }
                 .forWide {
