@@ -347,12 +347,12 @@ export default {
 
         // 请求参数
         const params = {
-            companyId: customInfo.companyId,
-            customerNo: customInfo.customerNo,
-            accountId: customInfo.accountId,
-            customerGroupId: customInfo.customerGroupId,
-            accountCurrency: customInfo.currency,
-            country: customInfo.country,
+            // companyId: customInfo.companyId,
+            // customerNo: customInfo.customerNo,
+            // accountId: customInfo.accountId,
+            // customerGroupId: customInfo.customerGroupId,
+            // accountCurrency: customInfo.currency,
+            // country: customInfo.country,
             withdrawMethod: 'digit_wallet'
         }
 
@@ -507,10 +507,10 @@ export default {
         // 获取取款汇率
         const getWithdrawRate = () => {
             queryWithdrawRate({
-                companyId: customInfo.companyId,
-                customerNo: customInfo.customerNo,
-                accountId: customInfo.accountId,
-                accountCurrency: customInfo.currency,
+                // companyId: customInfo.companyId,
+                // customerNo: customInfo.customerNo,
+                // accountId: customInfo.accountId,
+                // accountCurrency: customInfo.currency,
                 withdrawCurrency: state.coinKind,
                 withdrawType: 2
             }).then(res => {

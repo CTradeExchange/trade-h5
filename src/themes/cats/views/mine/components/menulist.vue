@@ -20,6 +20,12 @@ export default {
         const router = useRouter()
         const userAccountType = computed(() => store.getters['_user/userAccountType'])
         const menuData = [
+            // {
+            //     icon: 'https://img.yienecom.com/upload/%E8%B5%84%E9%87%91%E6%98%8E%E7%BB%86.jpg',
+            //     title: '清理缓存去首页',
+            //     href: '/home?nocache',
+            //     role: ['D', 'R_3', 'R_2', 'R_1'],
+            // },
             {
                 icon: 'https://img.yienecom.com/upload/%E8%B5%84%E9%87%91%E6%98%8E%E7%BB%86.jpg',
                 title: '资金明细',

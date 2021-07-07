@@ -421,7 +421,8 @@
         "arriveCount": "到账数量",
         "takeNo": "提案编号",
         "submitTime": "提交时间",
-        "remark": "备注"
+        "remark": "备注",
+        "noData": "暂无提币记录"
     },
     "walletAdd": {
         "coinName": "提币币种",

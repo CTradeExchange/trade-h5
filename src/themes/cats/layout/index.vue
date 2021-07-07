@@ -1,24 +1,41 @@
 <template>
     <!-- <router-view /> -->
-    <router-view v-slot='{ Component }'>
-        <keep-alive>
-            <component :is='Component' />
-        </keep-alive>
-    </router-view>
+    <Suspense>
+        <template #default>
+            <router-view v-slot='{ Component, route }'>
+                <keep-alive :include='cacheViews'>
+                    <component
+                        :is='Component'
+                        :key='
+                            route.meta.usePathKey ? route.path : undefined
+                        '
+                    />
+                </keep-alive>
+            </router-view>
+        </template>
+        <template #fallback>
+            Loading...
+        </template>
+    </Suspense>
     <footerMenu id='footerMenu' class='footerMenu' />
 </template>
 
 <script>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 import footerMenu from './footerMenu'
 export default {
     components: {
         footerMenu,
     },
-    data () {
+    setup () {
+        const store = useStore()
+        const cacheViews = computed(() => store.state.cacheViews)
+
         return {
-            leftMenuVisible: true
+            cacheViews
         }
-    },
+    }
 }
 </script>
 

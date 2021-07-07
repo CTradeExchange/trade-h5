@@ -29,7 +29,8 @@ export default createStore({
         zoneList: [],
         bankDict: [],
         supportLanguages: supportLanguages,
-        countryList: []
+        countryList: [],
+        cacheViews: [],
     },
     getters: {
         productActived (state) {
@@ -86,6 +87,18 @@ export default createStore({
         Update_invertColor (state, data) {
             state.invertColor = data
             localSet('invertColor', data)
+        },
+        add_cacheViews (state, routeName) {
+            if (!routeName) return false
+            if (state.cacheViews.includes(routeName)) return false
+            state.cacheViews.push(routeName)
+        },
+        del_cacheViews (state, routeName) {
+            if (!routeName) return false
+            const _index = state.cacheViews.findIndex(el => el === routeName)
+            if (_index > -1) {
+                state.cacheViews.splice(_index, 1)
+            }
         },
         Update_disabledSuccAnimtion (state, data) {
             state.disabledSuccAnimtion = data

@@ -201,13 +201,13 @@ export default {
             }
 
             const params = {
-                accountId: customInfo.value.accountId,
-                accountCurrency: customInfo.value.currency,
+                // accountId: customInfo.value.accountId,
+                // accountCurrency: customInfo.value.currency,
                 amount: state.amount,
-                companyId: customInfo.value.companyId,
-                customerNo: customInfo.value.customerNo,
-                customerGroupId: customInfo.value.customerGroupId,
-                country: customInfo.value.country,
+                // companyId: customInfo.value.companyId,
+                // customerNo: customInfo.value.customerNo,
+                // customerGroupId: customInfo.value.customerGroupId,
+                // country: customInfo.value.country,
                 withdrawCurrency: state.withdrawCurrency,
                 withdrawType: 1,
                 withdrawMethod: 'bank',
@@ -217,7 +217,7 @@ export default {
                 if (res.check()) {
                     const { data } = res
                     state.fee = data.withdrawFee
-                    state.computePre = data.coinFinalAmount
+                    state.computePre = data.finalAmount
                 }
             })
         }, 1000)
@@ -320,11 +320,7 @@ export default {
             }
 
             const params = {
-                customerNo: customInfo.value.customerNo,
-                accountId: customInfo.value.accountId,
-                customerGroupId: customInfo.value.customerGroupId,
-                accountCurrency: customInfo.value.currency,
-                country: customInfo.value.country,
+                // accountCurrency: customInfo.value.currency,
                 withdrawCurrency: state.withdrawRate.withdrawCurrency,
                 amount: state.amount,
                 rate: state.withdrawRate.exchangeRate,
@@ -351,10 +347,10 @@ export default {
         // 获取取款汇率
         const getWithdrawRate = () => {
             const params = {
-                companyId: customInfo.value.companyId,
-                customerNo: customInfo.value.customerNo,
-                accountId: customInfo.value.accountId,
-                accountCurrency: customInfo.value.currency,
+                // companyId: customInfo.value.companyId,
+                // customerNo: customInfo.value.customerNo,
+                // accountId: customInfo.value.accountId,
+                // accountCurrency: customInfo.value.currency,
                 withdrawCurrency: state.withdrawCurrency,
                 withdrawType: 1
             }
@@ -368,12 +364,12 @@ export default {
         // 获取取款限制配置
         const getWithdrawConfig = () => {
             const params = {
-                companyId: customInfo.value.companyId,
-                customerNo: customInfo.value.customerNo,
-                accountId: customInfo.value.accountId,
-                customerGroupId: customInfo.value.customerGroupId,
-                accountCurrency: customInfo.value.currency,
-                country: customInfo.value.country,
+                // companyId: customInfo.value.companyId,
+                // customerNo: customInfo.value.customerNo,
+                // accountId: customInfo.value.accountId,
+                // customerGroupId: customInfo.value.customerGroupId,
+                // accountCurrency: customInfo.value.currency,
+                // country: customInfo.value.country,
                 withdrawMethod: 'bank'
             }
 

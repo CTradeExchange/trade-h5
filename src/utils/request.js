@@ -53,7 +53,9 @@ service.interceptors.response.use(
         const loginParams = getLoginParams()
         if (['GATEWAY_CODE_001', 'GATEWAY_CODE_005'].includes(data.code) && router) {
             removeLoginParams()
-            router.push({ name: 'Login', query: { back: encodeURIComponent(location.pathname + location.search) } })
+            router.push({ name: 'Login', query: { back: encodeURIComponent(location.pathname + location.search) } }).then(() => {
+                location.reload()
+            })
             // return login(loginParams).then(res => {
             //     setToken(res.data.token)
             //     config.headers.token = res.data.token

@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { reactive, toRefs, onUpdated, computed, watch } from 'vue'
+import { reactive, toRefs, computed, watch } from 'vue'
 import { useStore } from 'vuex'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useI18n } from 'vue-i18n'
@@ -96,6 +96,7 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const route = useRoute()
+        const router = useRouter()
 
         let sortFieldName = 'openTime'
         let sortType = 'desc'
@@ -231,7 +232,8 @@ export default {
         )
 
         const triggerTab = (val) => {
-            state.active = Number(val)
+            // state.active = Number(val)
+            router.replace({ name: 'Position', query: { tab: val } })
         }
 
         const updateShow = (val) => {

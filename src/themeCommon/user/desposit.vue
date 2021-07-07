@@ -134,7 +134,7 @@
 <script>
 import Top from '@/components/top'
 import { onBeforeMount, reactive, computed, toRefs, onBeforeUnmount } from 'vue'
-import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply } from '@/api/user'
 import { getListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
@@ -149,7 +149,6 @@ export default {
         Top
     },
     setup (props) {
-        const route = useRoute()
         const router = useRouter()
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
