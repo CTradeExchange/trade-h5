@@ -42,7 +42,7 @@ export default {
     },
     unmounted () {
         const homeContent = document.querySelector('#homeContent')
-        homeContent.removeEventListener('scroll', this.scrollFn, false)
+        if (homeContent) homeContent.removeEventListener('scroll', this.scrollFn, false)
     },
     methods: {
         init () {

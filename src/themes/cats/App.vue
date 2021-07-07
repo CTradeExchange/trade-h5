@@ -1,18 +1,32 @@
 <template>
-    <router-view v-slot='{ Component, route }'>
+    <!-- <router-view v-slot='{ Component, route }'>
         <keep-alive>
             <component :is='Component' v-if='route.meta.keepAlive' :key='route.fullPath' />
         </keep-alive>
         <component :is='Component' v-if='!route.meta.keepAlive' :key='route.fullPath' />
-    </router-view>
-    <Notice />
+    </router-view> -->
+    <Suspense>
+        <template #default>
+            <router-view v-slot='{ Component, route }'>
+                <!-- <transition mode='out-in' :name="route.meta.transition || 'fade'"> -->
+                <keep-alive :include='cacheViews'>
+                    <component :is='Component' :key='route.meta.usePathKey ? route.path : undefined' />
+                </keep-alive>
+                <!-- </transition> -->
+            </router-view>
+        </template>
+        <template #fallback>
+            Loading...
+        </template>
+    </Suspense>
+    <!-- <Notice /> -->
     <!-- <router-view />  -->
 </template>
 
 <script>
 import Notice from '@c/components/notice'
 import { useStore } from 'vuex'
-import { onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
@@ -25,16 +39,20 @@ export default {
         const store = useStore()
         const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
+        const cacheViews = computed(() => store.state.cacheViews)
         const tipTextCountDown = ref(t('confirm') + '(3s)')
         window.store = store
 
         // 跳转到登录页面刷新
         const handlerLogout = () => {
-            return store.dispatch('_user/logout').then(() => {
-                return router.push('/login')
-            }).then(() => {
-                location.reload()
-            })
+            return store
+                .dispatch('_user/logout')
+                .then(() => {
+                    return router.push('/login')
+                })
+                .then(() => {
+                    location.reload()
+                })
         }
 
         // 用户被踢出消息
@@ -59,7 +77,7 @@ export default {
                 title: t('tip'),
                 theme: 'round-button',
                 message: t('c.otherPlaceLogin'),
-                confirmButtonText: tipTextCountDown,
+                confirmButtonText: tipTextCountDown
             }).then(() => {
                 handlerLogout()
             })
@@ -75,11 +93,13 @@ export default {
             document.body.removeEventListener('GotMsg_disconnect', kickOut)
         })
 
-        return {}
+        return {
+            cacheViews
+        }
     },
     created () {
         window.vm = this
-    },
+    }
 }
 </script>
 

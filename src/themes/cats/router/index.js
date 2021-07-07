@@ -182,6 +182,12 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const token = getToken()
+    const keepAlive = to.meta?.keepAlive ?? false
+    const query = to.query
+    const nocache = query.hasOwnProperty('nocache') && !query.nocache ? true : query.nocache
+    if (keepAlive && nocache) {
+        store.commit('del_cacheViews', to.name)
+    }
     const roles = to.meta?.roles ?? []
     const customerInfo = store.state._user.customerInfo
     const unKYCPages = ['Authentication', 'Home', 'RegisterSuccess', 'RegKyc', 'AddBank', 'Personal', 'AuthForm', 'BankList', 'Setting', 'KycCommitted']
@@ -202,5 +208,10 @@ router.beforeEach((to, from, next) => {
         next()
     }
 })
-
+router.afterEach((to, from) => {
+    const keepAlive = to.meta?.keepAlive ?? false
+    if (keepAlive) {
+        store.commit('add_cacheViews', to.name)
+    }
+})
 export default router

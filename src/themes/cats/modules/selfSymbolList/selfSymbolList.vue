@@ -27,7 +27,7 @@ import { computed, nextTick, reactive, ref, toRefs, watch, onMounted } from 'vue
 import { useStore } from 'vuex'
 import productItem from './selfSymbolItem'
 import { useRouter } from 'vue-router'
-import { debounce, localSet } from '@/utils/util'
+import { debounce } from '@/utils/util'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import TabBar from './tabBar'
 
@@ -52,7 +52,7 @@ export default {
         // 产品列表
         const productList = computed(() => {
             let list = store.getters.userSelfSymbolList || []
-            list = list.map(el => productMap.value[el.symbolId])
+            list = list.map(el => productMap.value[el.symbolId]).filter(el => el?.symbolId)
             const sortField = state.displayType === 1 ? 'upDownAmount_pip' : 'upDownAmount'
             if (state.sortType === 2) list = list.slice(0).sort((a, b) => parseFloat(b[sortField]) - parseFloat(a[sortField]))
             if (state.sortType === 3) list = list.slice(0).sort((a, b) => parseFloat(a[sortField]) - parseFloat(b[sortField]))

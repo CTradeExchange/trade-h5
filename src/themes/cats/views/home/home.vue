@@ -22,6 +22,7 @@ import { ref } from '@vue/reactivity'
 import { onMounted } from '@vue/runtime-core'
 
 export default {
+    name: 'Home',
     components: {
         Banner,
         Fastlink,
