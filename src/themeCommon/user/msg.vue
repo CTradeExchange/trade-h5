@@ -190,9 +190,11 @@ export default {
     flex: 1;
     height: 100%;
     overflow: auto;
-    background-color: var(--white);
+    background-color: var(--bgColor);
     .msg-item {
-        padding: rem(30px);
+        margin: rem(15px);
+        padding: rem(20px);
+        background-color: var(--contentColor);
         border-top: solid rem(20px) var(--btnColor);
         .msg-title {
             color: var(--color);
@@ -214,12 +216,22 @@ export default {
         }
     }
 }
-</style>
-
-<style lang="scss" scoped>
-@import '@/sass/mixin.scss';
 .msgTopBar {
     position: relative !important;
+    background-color: var(--contentColor);
+    :deep(.van-dropdown-menu__bar) {
+        background-color: var(--contentColor);
+        .van-dropdown-menu__title {
+            color: var(--color);
+        }
+    }
+    :deep(.van-dropdown-item__content) {
+        .van-cell {
+            background-color: var(--contentColor);
+            .van-cell__title {
+                color: var(--color);
+            }
+        }
+    }
 }
-
 </style>

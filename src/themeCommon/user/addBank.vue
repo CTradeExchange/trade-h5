@@ -131,7 +131,7 @@ export default {
             bankShow: false,
             checkedBankCode: '',
             currencyShow: false,
-            addSuccessShow: true,
+            addSuccessShow: false,
             showCancel: false,
             currencyActions: [{ name: t('common.RMB') }, { name: t('common.dollar') }
             ]
