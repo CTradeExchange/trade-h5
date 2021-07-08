@@ -137,6 +137,7 @@ export default {
         width: rem(690px);
         margin: 0 auto rem(30px);
         padding: 0 rem(32px);
+        background-color: var(--contentColor);
         border: 1px solid var(--lineColor);
         border-radius: rem(4px);
         .above {

@@ -101,7 +101,7 @@ export default {
         .btn {
             width: 45%;
             height: rem(80px);
-            color: var(--contentColor);
+            color: #FFF;
             font-size: rem(34px);
             line-height: 1;
             background: var(--primary);

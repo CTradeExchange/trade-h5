@@ -337,17 +337,5 @@ export default {
         letter-spacing: 1px;
     }
 }
-:deep(.action-sheet-chain) {
-    .van-action-sheet__item {
-        color: var(--color);
-        background-color: var(--contentColor);
-    }
-}
-:deep(.action-sheet-coin) {
-    .van-action-sheet__item {
-        color: var(--color);
-        background-color: var(--contentColor);
-    }
-}
 
 </style>

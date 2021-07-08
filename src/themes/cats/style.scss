@@ -274,6 +274,42 @@ i {
 .van-button--default {
     border: 1px solid var(--lineColor);
 }
+.van-dialog {
+    background-color: var(--bgColor);
+    .van-dialog__header {
+        color: var(--normalColor);
+    }
+    .van-dialog__message {
+        color: var(--color);
+    }
+    .van-button {
+        background-color: var(--bgColor);
+        &.van-dialog__cancel {
+            .van-button__text {
+                color: var(--color);
+            }
+        }
+    }
+}
+.van-cell {
+    background-color: var(--contentColor) !important;
+    .van-cell__title {
+        color: var(--normalColor);
+    }
+    .van-cell__value {
+        color: var(--color);
+    }
+    .van-field__control {
+        color: var(--color);
+    }
+}
+.van-action-sheet__item {
+    color: var(--color);
+    background-color: var(--contentColor) !important;
+}
+.van-checkbox__label {
+    color: var(--minorColor) !important;
+}
 .bank-icons-sm.bk-ABOCCNBJXXX,
 .bk-ABC {
     background-position: rem(-5px) rem(-5px);

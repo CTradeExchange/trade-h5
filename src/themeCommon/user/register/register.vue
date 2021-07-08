@@ -337,6 +337,9 @@ export default {
 .openTypeTab {
     width: 40%;
     margin: rem(60px) auto 0;
+    :deep(.van-tabs__nav--line) {
+        background: var(--contentColor);
+    }
 }
 :deep(.cellRow) {
     padding-top: rem(24px);

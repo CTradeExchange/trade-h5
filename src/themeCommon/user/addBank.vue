@@ -324,6 +324,9 @@ export default {
         .van-picker-column__item {
             color: var(--color);
         }
+        .van-picker__toolbar {
+            color: var(--color);
+        }
         .van-picker__mask {
             background-image: none;
         }

@@ -116,6 +116,11 @@ export default {
     display: flex;
     flex-direction: column;
     width: 100%;
+    .selfSymbolListUl {
+        li {
+            background-color: var(--contentColor);
+        }
+    }
 }
 .selfSymbolListWrap {
     flex: 1;

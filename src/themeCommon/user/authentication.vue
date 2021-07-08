@@ -2,7 +2,7 @@
     <LayoutTop :back='true' :menu='false' title='' @backEvent='back' />
     <div class='page-wrap'>
         <Loading :show='loading' />
-        <div v-if='list.length === 0'>
+        <div v-if='list.length === 0' class='empty-data'>
             <van-empty :description='$t("auth.noRequired")' image='search' />
         </div>
         <div v-else>
@@ -126,6 +126,9 @@ export default {
     flex: 1;
     overflow: auto;
     background: var(--bgColor);
+    .empty-data {
+        padding-top: rem(200px);
+    }
     .title {
         color: var(--minorColor);
         line-height: rem(80px);
