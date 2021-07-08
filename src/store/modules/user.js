@@ -1,4 +1,5 @@
 import { login, findCustomerInfo, logout, switchAccount, queryCustomerOptionalList, addCustomerOptional } from '@/api/user'
+import { removeCustomerOptional } from '@/api/trade'
 import { localSet, setToken, removeLoginParams } from '@/utils/util'
 
 export default {
@@ -142,6 +143,14 @@ export default {
         addCustomerOptionals ({ dispatch, commit, state, rootState }, params = []) {
             if (!params || !params.length) return Promise.resolve()
             return addCustomerOptional({ symbolList: params }).then(res => {
+                dispatch('queryCustomerOptionalList') // 拉取自选列表
+                return res
+            })
+        },
+        // 删除自选产品
+        removeCustomerOptionals ({ dispatch, commit, state, rootState }, params = []) {
+            if (!params || !params.length) return Promise.resolve()
+            return removeCustomerOptional({ symbolList: params }).then(res => {
                 dispatch('queryCustomerOptionalList') // 拉取自选列表
                 return res
             })

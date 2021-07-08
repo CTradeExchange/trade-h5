@@ -105,7 +105,14 @@
     "historyDetail": "已平仓明细"
   },
   "search": {
-    "keywords": "请输入搜索关键词"
+    "keywords": "请输入搜索关键词",
+    "placeholder": "请输入搜索关键词",
+    "norecord": "暂无搜索记录",
+    "nodata": "未搜索到结果",
+    "network": "网络异常，请检查网络或重试",
+    "interface": "搜索失败，请重新尝试",
+    "shelf": "该产品已下架",
+    "lastest": "最近搜索"
   },
   "simple": "简单",
   "success": "成功",
