@@ -4,6 +4,7 @@
             <TopTab
                 ref='tabList'
                 v-model='activeTab'
+                :background='$style.contentColor'
                 class='tradeSortNav'
                 :dot='true'
                 line-height='0'

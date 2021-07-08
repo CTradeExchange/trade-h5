@@ -148,23 +148,6 @@ const routes = [
         }
     },
     {
-        path: '/market',
-        name: 'Market',
-        component: () => import(/* webpackChunkName: "search" */ '../views/search/market.vue'),
-        meta: {
-            title: ''
-        }
-    },
-    {
-        path: '/optional',
-        name: 'Optional',
-        component: () => import(/* webpackChunkName: "search" */ '../views/search/optional.vue'),
-        meta: {
-            title: ''
-        }
-    },
-
-    {
         path: '/otherpage/:type',
         name: 'Otherpage',
         component: () => import(/* webpackChunkName: "otherpage" */ '../views/otherpage/otherpage.vue'),

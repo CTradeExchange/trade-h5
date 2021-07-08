@@ -7,6 +7,11 @@
                     {{ $t('selfSymbol.my') }}
                 </span>
             </template>
+            <template #right>
+                <router-link class='searchIcon' tag='div' :to="{ name:'Search' }">
+                    <i class='icon_sousuo1'></i>
+                </router-link>
+            </template>
         </layoutTop>
         <SelfSymbolList />
     </div>
@@ -44,6 +49,9 @@ export default {
     margin-bottom: rem(100px);
     overflow: auto;
     background: var(--bgColor);
+    .searchIcon {
+        color: var(--color);
+    }
 }
 .title {
     color: var(--color);

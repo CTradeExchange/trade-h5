@@ -7,11 +7,8 @@ import { getListByParentCode, getCountryListByParentCode } from '@/api/base'
 import Colors from '@c/colorVariables'
 import { localGet, localSet } from '@/utils/util'
 
-const invertColor = localGet('invertColor')
-console.log(invertColor)
-const colorsArr = Object.assign({}, Colors[invertColor], Colors.common)
 const style = {
-    ...colorsArr
+    ...Colors
 }
 const supportLanguages = [
     { val: 'zh-CN', name: '中文' },

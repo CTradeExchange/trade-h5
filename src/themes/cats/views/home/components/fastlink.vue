@@ -9,7 +9,7 @@
                     href='javascript:void(0)'
                     @click='openUrl(item.href, item.title)'
                 >
-                    <img alt='' :src='item.img' />
+                    <img alt='' class='img' :src='item.img' />
                     <div>{{ item.title }}</div>
                 </a>
             </div>
@@ -22,22 +22,22 @@ export default {
     setup () {
         const list = [
             {
-                img: 'https://img.yienecom.com/upload/%E9%A6%96%E9%A1%B5-%E4%BA%A4%E6%98%93%E5%AD%A6%E9%99%A242x42-2.png',
+                img: 'http://prewpadmin.cats-trade.com/wp-content/uploads/2021/07/4%E6%B6%88%E6%81%AF%E4%B8%AD%E5%BF%83.png',
                 href: 'https://m.zhixuan6868.com/lp295A_v3.html?app=ix_app_orig&menu-button=lp295A',
                 title: '行情推荐',
             },
             {
-                img: 'https://img.yienecom.com/upload/%E9%A6%96%E9%A1%B5-%E5%B8%B8%E8%A7%81%E9%97%AE%E7%AD%9442x42-3.png',
+                img: 'http://prewpadmin.cats-trade.com/wp-content/uploads/2021/07/1%E8%A1%8C%E6%83%85%E5%9B%BE%E8%A1%A8.png',
                 href: 'https://m.zhixuan6868.com/helpcenter.html?h5=y',
                 title: '常见问答',
             },
             {
-                img: 'https://img-pc.bbyou.net/images/%E9%A6%96%E9%A1%B5-%E8%B4%A2%E7%BB%8F%E6%97%A5%E5%8E%8642x42-1.png',
+                img: 'http://prewpadmin.cats-trade.com/wp-content/uploads/2021/07/3%E8%B5%84%E9%87%91%E6%98%8E%E7%BB%86.png',
                 href: 'https://www.zhixuan6868.com/03-App-lp/H5TradeInfo.html?app=ix_app_orig&inIframe=y',
                 title: '关于智选',
             },
             {
-                img: 'https://img.yienecom.com/upload/%E6%88%91%E7%9A%84-%E5%9C%A8%E7%BA%BF%E5%AE%A2%E6%9C%8D_42X42.png',
+                img: 'http://prewpadmin.cats-trade.com/wp-content/uploads/2021/07/2%E4%BA%A4%E6%98%93.png',
                 href: 'https://cs.zhixuan6868.com:8188/?company_id=14&chat_type=1&uagent=1000&lang=zh-cn&lastPageDesc=h5%E5%85%AC%E7%89%88&account_no=&reffer=',
                 title: '联系客服',
             },
@@ -64,6 +64,7 @@ export default {
         font-size: rem(25px);
         text-align: center;
         img {
+            width: rem(86px);
             padding-bottom: 5px;
         }
     }

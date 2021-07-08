@@ -3,7 +3,6 @@
         <Banner :list='BannerConfig.list' />
         <Products ref='productsRef' />
         <Fastlink />
-        <img src='https://www.se6868w.com/upload/2021/06-22/09-14-0309361852188263.png' style='width: 100%;' />
         <BanderBanner class='BanderBanner' :list='BannerConfig.list' />
         <News class='newBar' />
     </div>
@@ -57,6 +56,7 @@ export default {
     height: 100%;
     margin-bottom: rem(100px);
     overflow: auto;
+    background: var(--contentColor);
 }
 .noticeBar,
 .newBar {
