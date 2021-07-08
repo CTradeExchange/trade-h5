@@ -49,6 +49,9 @@ export default {
     margin-bottom: rem(100px);
     overflow: auto;
     background: var(--bgColor);
+    .searchIcon {
+        color: var(--color);
+    }
 }
 .title {
     color: var(--color);

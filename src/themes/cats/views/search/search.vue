@@ -2,6 +2,7 @@
     <div class='searchWrapper'>
         <van-search
             v-model='keywords'
+            :background='$style.contentColor'
             :placeholder="$t('search.placeholder')"
             show-action
             @search='onSearch'
@@ -81,8 +82,13 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .searchWrapper {
-    // background: var(--bgColor);
+    height: 100%;
+    background: var(--contentColor);
+    .searchBody {
+        background: var(--contentColor);
+    }
     .searchRecord {
+        background: var(--contentColor);
         .label {
             padding: rem(20px) rem(30px);
             color: var(--minorColor);

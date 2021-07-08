@@ -92,12 +92,10 @@ export default {
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
 :deep(.van-tabs__nav) {
-    background: var(--bgColor) !important;
     .van-tab {
         flex: none;
         padding: 0 !important;
         text-align: left;
-        background: var(--bgColor);
     }
 }
 .dot {
