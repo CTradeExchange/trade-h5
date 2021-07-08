@@ -38,7 +38,7 @@
         </van-button>
     </div>
 
-    <van-action-sheet v-model:show='areaShow'>
+    <van-action-sheet v-model:show='areaShow' class='action-sheet-area'>
         <van-area :area-list='areaList' columns-num='2' :title='$t("bank.openAddress")' @cancel='show=false' @confirm='handleAreaConfirm' />
     </van-action-sheet>
     <van-action-sheet
@@ -49,7 +49,7 @@
         @select='onSelectCurrency'
     />
 
-    <van-popup v-model:show='bankShow' position='right' :style="{ height: '100%' }">
+    <van-popup v-model:show='bankShow' class='popup-bank' position='right' :style="{ height: '100%' }">
         <div class='bank-list'>
             <div v-for='item in bankDict' :key='item.code' class='bank-item' @click='onSelectBank(item)'>
                 <i class='bank-icons-sm' :class="'bk-'+ item.code"></i>
@@ -235,43 +235,36 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.confirm-btn {
-    position: absolute;
-    bottom: 0;
-    background: var(--bdColor);
-    border-color: var(--bdColor);
-    span {
-        color: var(--color);
-        font-size: rem(34px);
+.page-wrap {
+    flex: 1;
+    background-color: var(--bgColor);
+    .filed-wrap {
+        :deep(.van-cell-group) {
+            .van-cell {
+                background-color: var(--contentColor);
+                .van-cell__title {
+                    color: var(--color);
+                }
+                .van-field__control {
+                    color: var(--color);
+                }
+                &::after {
+                    border-bottom: 1px solid var(--lineColor);
+                }
+            }
+            &::after {
+                border-color: var(--lineColor);
+            }
+        }
     }
-}
-.bank-list {
-    min-width: rem(400px);
-    //min-width: 2.66667rem;
-    padding: rem(30px) rem(50px) 0 rem(50px);
-    overflow-y: auto;
-    .bank-item {
-        position: relative;
-        padding: rem(15px) 0 rem(15px) 0;
-        font-size: rem(30px);
-        line-height: rem(80px);
-        line-height: rem(60px);
-        text-align: left;
-        &::after {
-            position: absolute;
-            top: 0;
-            left: 0;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            width: 200%;
-            height: 200%;
-            border-bottom: 1px solid #E3E3E3;
-            -webkit-transform: scale(0.5);
-            transform: scale(0.5);
-            -webkit-transform-origin: 0 0;
-            transform-origin: 0 0;
-            content: '';
-            pointer-events: none;
+    .confirm-btn {
+        position: absolute;
+        bottom: 0;
+        background: var(--contentColor);
+        border-color: var(--lineColor);
+        span {
+            color: var(--color);
+            font-size: rem(34px);
         }
     }
 }
@@ -280,20 +273,72 @@ export default {
 
 <style lang="scss">
 @import '@/sass/mixin.scss';
+.popup-bank {
+    background-color: var(--bgColor);
+    .bank-list {
+        min-width: rem(400px);
+        //min-width: 2.66667rem;
+        padding: rem(30px) rem(50px) 0 rem(50px);
+        overflow-y: auto;
+        background-color: var(--contentColor);
+        .bank-item {
+            position: relative;
+            padding: rem(15px) 0 rem(15px) 0;
+            color: var(--color);
+            font-size: rem(30px);
+            line-height: rem(80px);
+            line-height: rem(60px);
+            text-align: left;
+            &::after {
+                position: absolute;
+                top: 0;
+                left: 0;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+                width: 200%;
+                height: 200%;
+                border-bottom: 1px solid #E3E3E3;
+                -webkit-transform: scale(0.5);
+                transform: scale(0.5);
+                -webkit-transform-origin: 0 0;
+                transform-origin: 0 0;
+                content: '';
+                pointer-events: none;
+            }
+        }
+    }
+}
+.action-sheet-area {
+    .van-picker {
+        background-color: var(--bgColor);
+        .van-picker-column__item {
+            color: var(--color);
+        }
+        .van-picker__mask {
+            background-image: none;
+        }
+    }
+}
 .add-success {
     padding: rem(30px) rem(30px) 0 rem(30px);
     text-align: center;
+    background-color: var(--contentColor);
     .icon_success {
         color: var(--success);
         font-size: rem(96px);
     }
     .title {
+        color: var(--color);
         line-height: rem(80px);
     }
     .content {
         margin: rem(20px) 0;
-        color: var(--mutedColor);
+        color: var(--color);
         font-size: rem(28px);
+    }
+    .van-dialog__confirm {
+        color: var(--color);
+        background-color: var(--contentColor);
     }
 }
 </style>

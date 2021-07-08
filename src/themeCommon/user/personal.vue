@@ -26,4 +26,23 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
+.page-wrap {
+    height: 100%;
+    padding-top: rem(100px);
+    background-color: var(--bgColor);
+    :deep(.van-cell-group) {
+        .van-cell {
+            background-color: var(--contentColor);
+            .van-cell__title {
+                color: var(--color);
+            }
+            &::after {
+                border-bottom: 1px solid var(--lineColor);
+            }
+        }
+        &::after {
+            border-color: var(--lineColor);
+        }
+    }
+}
 </style>

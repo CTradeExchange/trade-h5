@@ -89,7 +89,7 @@ export default {
     flex: 1;
     padding-top: rem(100px);
     overflow: auto;
-    background: var(--white);
+    background: var(--bgColor);
     .list {
         padding: rem(30px);
         .bank-item {
@@ -282,10 +282,11 @@ export default {
             display: flex;
             align-items: center;
             padding: rem(34px);
-            border: solid 1px var(--bdColor);
+            border: solid 1px var(--primaryAssistColor);
             cursor: pointer;
             .van-icon-plus {
                 margin-right: rem(10px);
+                color: var(--minorColor);
             }
             .btn-text {
                 flex: 1;

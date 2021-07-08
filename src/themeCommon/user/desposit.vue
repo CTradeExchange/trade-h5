@@ -213,7 +213,8 @@ export default {
         // 计算预计支付金额
         const computeExpectedpay = computed(() => {
             // 计算方式：存款金额 * 汇率
-            return mul(state.amount, state.rateConfig.exchangeRate)
+
+            return state.rateConfig.exchangeRate ? mul(state.amount, state.rateConfig.exchangeRate) : '--'
         })
 
         // 处理支付通道排序
@@ -388,6 +389,12 @@ export default {
         }
 
         const setPaymentList = async (payItem) => {
+            if (payItem.channelConvertRate) {
+                state.rateConfig = {}
+                state.currencyChecked = ''
+                return
+            }
+
             state.paymentTypes = []
             if (payItem.paymentCurrency === 'USDT') {
                 await getChainList()
@@ -572,7 +579,7 @@ export default {
         margin: rem(40px) rem(30px);
     }
     .wrap {
-        //background-color: var(--bgColor);
+        background-color: var(--contentColor);
         .header-text {
             padding: rem(46px) rem(30px) rem(40px) rem(30px);
             color: var(--color);
@@ -666,7 +673,7 @@ export default {
         align-content: flex-start;
         margin-top: rem(20px);
         padding: 0 rem(30px);
-        background-color: var(--bgColor);
+        background-color: var(--contentColor);
         border-top: solid rem(20px) var(--lineColor);
         .pi-item {
             flex: 0 0 50%;
