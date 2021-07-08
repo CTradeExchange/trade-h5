@@ -607,7 +607,7 @@ export default {
                     font-size: rem(28px);
                 }
                 .t2 {
-                    color: var(--btnSelected);
+                    color: var(--focusColor);
                     font-size: rem(20px);
                 }
                 &.active {
@@ -619,7 +619,7 @@ export default {
             display: flex;
             margin-top: rem(32px);
             padding: 0 rem(30px) rem(35px) rem(30px);
-            border-bottom: solid 1px var(--bdColor);
+            border-bottom: solid 1px var(--lineColor);
             .input-amount {
                 flex: 1;
             }
@@ -630,7 +630,7 @@ export default {
         }
         .pay-wrap {
             padding: 0 rem(30px);
-            border-top: solid rem(20px) var(--btnColor);
+            border-top: solid rem(20px) var(--bgColor);
             .bw-t {
                 color: var(--color);
                 font-size: rem(28px);
@@ -677,7 +677,7 @@ export default {
         .line {
             width: 100%;
             height: 1px;
-            background-color: var(--btnLine);
+            background-color: var(--lineColor);
         }
     }
 }
@@ -745,7 +745,7 @@ export default {
     }
     .content {
         margin: rem(20px) 0;
-        color: var(--mutedColor);
+        color: var(--minorColor);
         font-size: rem(28px);
     }
 }

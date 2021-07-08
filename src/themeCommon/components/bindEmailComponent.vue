@@ -186,20 +186,20 @@ export default {
 .pageWrap {
     position: relative;
     padding-top: rem(100px);
-    background-color: var(--white);
+    background-color: var(--contentColor);
     .form {
         //margin-top: rem(30px);
         .field {
             padding: 0 rem(30px);
             .label {
-                color: var(--assistColor);
+                color: var(--minorColor);
             }
         }
         .confirm-btn {
             position: absolute;
             bottom: 0;
-            background: var(--bdColor);
-            border-color: var(--bdColor);
+            background: var(--lineColor);
+            border-color: var(--lineColor);
             span {
                 color: var(--color);
                 font-size: rem(34px);

@@ -130,12 +130,12 @@ export default {
         width: rem(690px);
         margin: 0 auto rem(30px);
         padding: 0 rem(32px);
-        border: 1px solid var(--bdColor);
+        border: 1px solid var(--lineColor);
         border-radius: rem(4px);
         .above {
             height: rem(122px);
             padding-top: rem(20px);
-            border-bottom: 1px solid var(--bdColor);
+            border-bottom: 1px solid var(--lineColor);
             .info {
                 display: flex;
                 align-items: center;
@@ -165,11 +165,11 @@ export default {
             :deep(.van-radio__label) {
                 margin-top: rem(4px);
                 margin-left: rem(10px);
-                color: var(--mutedColor);
+                color: var(--minorColor);
                 font-size: rem(24px);
             }
             .delete {
-                color: var(--mutedColor);
+                color: var(--minorColor);
                 font-size: rem(24px);
             }
         }
@@ -181,8 +181,8 @@ export default {
     align-items: center;
     justify-content: center;
     height: rem(104px);
-    background-color: var(--btnColor);
-    border-top: 1px solid var(--bdColor);
+    background-color: var(--bgColor);
+    border-top: 1px solid var(--lineColor);
     :deep(.van-icon-plus) {
         font-weight: bold;
     }

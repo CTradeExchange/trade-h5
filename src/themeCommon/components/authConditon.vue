@@ -280,7 +280,7 @@ export default {
         margin-top: rem(58px);
         padding-left: rem(30px);
         .title {
-            color: var(--mutedColor);
+            color: var(--minorColor);
             font-size: rem(28px);
             line-height: rem(36px);
         }
@@ -296,7 +296,7 @@ export default {
         padding-bottom: rem(50px);
         .c-item {
             text-align: center;
-            border-bottom: solid 1px var(--bdColor);
+            border-bottom: solid 1px var(--lineColor);
             .upload-img {
                 width: rem(400px);
                 height: rem(260px);
@@ -319,7 +319,7 @@ export default {
         width: 100%;
         color: var(--color);
         font-size: rem(34px);
-        background: var(--btnColor);
+        background: var(--bgColor);
     }
 }
 </style>

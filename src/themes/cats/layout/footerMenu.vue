@@ -72,9 +72,9 @@ export default {
         color: var(--primary);
         background: var(--contentColor);
     }
-}
-:deep(.van-tabbar-item) {
-    color: var(--placeholdColor);
+    .van-tabbar-item {
+        color: var(--placeholdColor);
+    }
 }
 :deep(.van-tabbar-item__icon) {
     font-size: rem(46px);

@@ -306,7 +306,7 @@ export default {
                 box-sizing: border-box;
                 padding-top: rem(10px);
                 padding-bottom: rem(20px);
-                background: var(--white);
+                background: var(--contentColor);
                 .van-tab__pane {
                     height: 100%;
                 }
@@ -436,7 +436,7 @@ export default {
                     z-index: 1;
                     width: 100%;
                     padding: rem(5px) 0;
-                    background: var(--white);
+                    background: var(--contentColor);
                 }
                 .vals {
                     position: absolute;

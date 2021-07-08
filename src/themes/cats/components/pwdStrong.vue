@@ -46,7 +46,7 @@ export default {
     }
     .item {
         height: 2px;
-        background: var(--bdColor);
+        background: var(--lineColor);
     }
 }
 </style>

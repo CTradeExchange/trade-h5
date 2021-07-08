@@ -124,18 +124,18 @@ export default {
     flex: 1;
     padding: 0 rem(30px);
     overflow: auto;
-    background: var(--white);
+    background: var(--contentColor);
     .title {
-        color: var(--mutedColor);
+        color: var(--minorColor);
         line-height: rem(80px);
-        border-bottom: solid 1px var(--btnLine);
+        border-bottom: solid 1px var(--lineColor);
     }
     .auth-list {
         .auth-item {
             display: flex;
             align-items: center;
             padding: rem(45px) 0;
-            border-bottom: solid 1px var(--btnLine);
+            border-bottom: solid 1px var(--lineColor);
             .auth-img {
                 width: rem(60px);
                 height: rem(100px);
@@ -167,7 +167,7 @@ export default {
                 }
             }
             .notice {
-                color: var(--mutedColor);
+                color: var(--minorColor);
                 font-size: rem(24px);
             }
         }

@@ -155,14 +155,14 @@ export default {
     display: flex;
     width: 100%;
     height: rem(100px);
-    border-top: 1px solid var(--btnLine);
+    border-top: 1px solid var(--lineColor);
     &.line::before {
         position: absolute;
         top: 20%;
         bottom: 20%;
         left: 50%;
         width: 1px;
-        background: var(--btnLine);
+        background: var(--lineColor);
         content: '';
     }
     .col {
@@ -178,12 +178,12 @@ export default {
         text-align: center;
         background: var(--bgColor);
         &.sell {
-            color: var(--white);
-            background: var(--sellColor);
+            color: var(--contentColor);
+            background: var(--fallColor);
         }
         &.buy {
-            color: var(--white);
-            background: var(--buyColor);
+            color: var(--contentColor);
+            background: var(--riseColor);
         }
         &:disabled {
             background: var(--color);

@@ -389,13 +389,13 @@ export default {
             }
         }
         .van-icon-clear {
-            color: var(--bdColor);
+            color: var(--lineColor);
             font-size: rem(36px);
         }
         .icon_icon_default,
         .icon_icon_pressed {
             margin-left: rem(10px);
-            color: var(--bdColor);
+            color: var(--lineColor);
             font-size: rem(36px);
         }
     }
@@ -422,7 +422,7 @@ export default {
     text-align: center;
     .line {
         margin: 0 1em;
-        color: var(--mutedColor);
+        color: var(--minorColor);
     }
 }
 .otherLogin {
@@ -457,7 +457,7 @@ export default {
 .popContainer {
     position: relative;
     width: 80vw;
-    background: var(--white);
+    background: var(--contentColor);
     border-radius: 8px;
     .kycTimeLine {
         padding: rem(60px);
@@ -482,23 +482,23 @@ export default {
         position: absolute;
         top: rem(20px);
         right: rem(20px);
-        color: var(--mutedColor);
+        color: var(--minorColor);
     }
     .btnBox {
         position: relative;
         display: flex;
-        color: var(--btnText);
+        color: var(--color);
         font-size: rem(34px);
         text-align: center;
-        background: var(--btnColor);
-        border-top: 1px solid var(--btnLine);
+        background: var(--bgColor);
+        border-top: 1px solid var(--lineColor);
         &::after {
             position: absolute;
             top: 50%;
             left: 50%;
             width: 1px;
             height: rem(50px);
-            background: var(--btnInterval);
+            background: var(--lineColor);
             transform: translateY(-50%);
             content: '';
         }

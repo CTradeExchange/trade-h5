@@ -226,7 +226,7 @@ export default {
     margin-top: rem(90px);
     overflow-y: auto;
     color: var(--color);
-    background: var(--white);
+    background: var(--contentColor);
     .main {
         @include scroll();
         flex: 1;

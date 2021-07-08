@@ -238,8 +238,8 @@ export default {
 .confirm-btn {
     position: absolute;
     bottom: 0;
-    background: var(--bdColor);
-    border-color: var(--bdColor);
+    background: var(--lineColor);
+    border-color: var(--lineColor);
     span {
         color: var(--color);
         font-size: rem(34px);
@@ -292,7 +292,7 @@ export default {
     }
     .content {
         margin: rem(20px) 0;
-        color: var(--mutedColor);
+        color: var(--minorColor);
         font-size: rem(28px);
     }
 }

@@ -223,7 +223,7 @@ export default {
 .pageWrap {
     position: relative;
     height: 100%;
-    background: var(--white);
+    background: var(--contentColor);
     .header {
         display: flex;
         align-items: center;
@@ -285,13 +285,13 @@ export default {
             }
         }
         .van-icon-clear {
-            color: var(--bdColor);
+            color: var(--lineColor);
             font-size: rem(36px);
         }
         .icon_icon_default,
         .icon_icon_pressed {
             margin-left: rem(10px);
-            color: var(--bdColor);
+            color: var(--lineColor);
             font-size: rem(36px);
         }
     }
@@ -299,8 +299,8 @@ export default {
 .next-btn {
     position: absolute;
     bottom: 0;
-    background: var(--bdColor);
-    border-color: var(--bdColor);
+    background: var(--lineColor);
+    border-color: var(--lineColor);
     span {
         color: var(--color);
         font-size: rem(34px);

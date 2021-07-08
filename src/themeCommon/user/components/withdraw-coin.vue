@@ -723,7 +723,7 @@ export default {
         padding: 0 rem(30px);
         color: var(--color);
         font-size: rem(28px);
-        border-bottom: 1px solid var(--bdColor);
+        border-bottom: 1px solid var(--lineColor);
         .option {
             display: inline-flex;
             flex: 1;
@@ -753,7 +753,7 @@ export default {
             justify-content: space-between;
             height: rem(100px);
             color: var(--color);
-            border-bottom: 1px solid var(--bdColor);
+            border-bottom: 1px solid var(--lineColor);
             input {
                 width: rem(500px);
                 height: 100%;
@@ -770,7 +770,7 @@ export default {
                 height: rem(60px);
                 font-size: rem(24px);
                 background-color: var(--bgColor);
-                border: 1px solid var(--bdColor);
+                border: 1px solid var(--lineColor);
                 border-radius: rem(30px);
             }
         }
@@ -787,13 +787,13 @@ export default {
             strong {
                 display: inline-flex;
                 align-items: center;
-                color: var(--btnSelected);
+                color: var(--focusColor);
             }
         }
     }
     .case {
         padding: rem(15px) rem(30px);
-        color: var(--mutedColor);
+        color: var(--minorColor);
         font-size: rem(24px);
         .row {
             display: flex;
@@ -821,7 +821,7 @@ export default {
     }
     .hint {
         margin-top: rem(14px);
-        color: var(--btnSelected);
+        color: var(--focusColor);
         font-size: rem(20px);
     }
     // 无钱包地址
@@ -831,7 +831,7 @@ export default {
         height: rem(120px);
         margin-top: rem(28px);
         padding: 0 rem(30px);
-        border: 1px solid var(--bdColor);
+        border: 1px solid var(--lineColor);
         border-radius: rem(4px);
         :deep(.van-icon-plus) {
             margin-right: rem(26px);
@@ -850,7 +850,7 @@ export default {
         height: rem(120px);
         margin-top: rem(28px);
         padding: 0 rem(30px);
-        border: 1px solid var(--bdColor);
+        border: 1px solid var(--lineColor);
         border-radius: rem(4px);
         .info {
             flex: 1;
@@ -890,9 +890,9 @@ export default {
             align-items: center;
             justify-content: space-between;
             height: rem(116px);
-            border-bottom: 1px solid var(--bdColor);
+            border-bottom: 1px solid var(--lineColor);
             &:nth-of-type(1) {
-                border-top: 1px solid var(--bdColor);
+                border-top: 1px solid var(--lineColor);
             }
             .info {
                 flex: 1;
@@ -941,8 +941,8 @@ export default {
     align-items: center;
     justify-content: center;
     height: rem(104px);
-    background-color: var(--btnColor);
-    border-top: 1px solid var(--bdColor);
+    background-color: var(--bgColor);
+    border-top: 1px solid var(--lineColor);
     span {
         margin-left: rem(15px);
         color: var(--color);
@@ -963,7 +963,7 @@ export default {
     }
     .content {
         margin: rem(20px) 0;
-        color: var(--mutedColor);
+        color: var(--minorColor);
         font-size: rem(28px);
     }
 }

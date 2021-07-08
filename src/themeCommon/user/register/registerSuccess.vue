@@ -79,7 +79,7 @@ export default {
 }
 .tips {
     margin-top: rem(20px);
-    color: var(--mutedColor);
+    color: var(--minorColor);
     font-size: rem(26px);
     text-align: center;
 }
@@ -100,7 +100,7 @@ export default {
         border-radius: rem(10px);
     }
     .highBtn {
-        color: var(--white);
+        color: var(--contentColor);
         background: var(--primary);
     }
     .smallRow {

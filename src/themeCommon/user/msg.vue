@@ -180,7 +180,7 @@ export default {
 .right-ico {
     position: absolute;
     right: rem(30px);
-    color: var(--white);
+    color: var(--contentColor);
     font-size: rem(48px);
 }
 .msgTopCenter {
@@ -195,7 +195,7 @@ export default {
         margin: rem(15px);
         padding: rem(20px);
         background-color: var(--contentColor);
-        border-top: solid rem(20px) var(--btnColor);
+        border-top: solid rem(20px) var(--bgColor);
         .msg-title {
             color: var(--color);
             font-weight: bold;
@@ -209,7 +209,7 @@ export default {
             line-height: rem(40px);
         }
         .msg-time {
-            color: var(--mutedColor);
+            color: var(--minorColor);
             font-weight: 400;
             font-size: rem(20px);
             line-height: rem(60px);

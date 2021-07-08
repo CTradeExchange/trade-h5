@@ -18,7 +18,7 @@ export default {
     padding: 0 rem(16px);
     color: var(--minorColor);
     line-height: rem(50px);
-    border: 1px solid var(--bdColor);
+    border: 1px solid var(--lineColor);
     border-radius: rem(10px);
     .lang-icon {
         position: relative;

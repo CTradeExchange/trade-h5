@@ -264,7 +264,7 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background: var(--white);
+    background: var(--contentColor);
 }
 .container {
     display: flex;
@@ -284,7 +284,7 @@ export default {
         padding: 0 rem(30px);
         color: var(--color);
         font-size: rem(28px);
-        border-bottom: 1px solid var(--bdColor);
+        border-bottom: 1px solid var(--lineColor);
         .option {
             display: inline-flex;
             flex: 1;
@@ -309,14 +309,14 @@ export default {
         height: rem(100px);
         color: var(--color);
         font-size: rem(28px);
-        border-bottom: 1px solid var(--bdColor);
+        border-bottom: 1px solid var(--lineColor);
         input {
             flex: 1;
             height: 100%;
             margin-right: rem(20px);
         }
         .time {
-            color: var(--mutedColor);
+            color: var(--minorColor);
         }
     }
 }
@@ -325,8 +325,8 @@ export default {
     align-items: center;
     justify-content: center;
     height: rem(104px);
-    background-color: var(--btnColor);
-    border-top: 1px solid var(--bdColor);
+    background-color: var(--bgColor);
+    border-top: 1px solid var(--lineColor);
     span {
         color: var(--color);
         font-weight: bold;

@@ -24,8 +24,12 @@
     <!-- 账户管理页面更多按钮弹窗 -->
     <div v-show='moreVisible' class='morePopup' @click='moreVisible=false'>
         <div class='morePopupContainer'>
-            <router-link class='link of-1px-bottom' to='/modifyPwd'>更改密码</router-link>
-            <a class='link' href='javascript:;'>删除账户</a>
+            <router-link class='link of-1px-bottom' to='/modifyPwd'>
+                更改密码
+            </router-link>
+            <a class='link' href='javascript:;'>
+                删除账户
+            </a>
         </div>
     </div>
 </template>
@@ -48,7 +52,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .icon {
-    color: var(--white);
+    color: var(--contentColor);
     font-size: 1.4em;
     &:not(:first-of-type) {
         margin-left: 0.6em;

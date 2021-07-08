@@ -195,7 +195,7 @@ export default {
             color: var(--fallColor);
         }
         &.icon_tishi {
-            color: var(--assistColor);
+            color: var(--minorColor);
         }
     }
     .text{
@@ -210,9 +210,9 @@ export default {
             justify-content: space-between;
             margin-bottom: rem(20px);
             padding: 0 rem(20px) rem(20px);
-            border-bottom: solid 1px var(--bdColor);
+            border-bottom: solid 1px var(--lineColor);
             .label {
-                color: var(--mutedColor);
+                color: var(--minorColor);
             }
             .val {
                 color: var(--color);

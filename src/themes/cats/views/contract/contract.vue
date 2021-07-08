@@ -168,7 +168,7 @@ export default {
     overflow-y: auto;
     background-color: var(--bgColor);
     :deep(.van-cell) {
-        background-color: var(--bgColor);
+        background-color: var(--contentColor);
         .van-cell__title {
             color: var(--normalColor);
         }

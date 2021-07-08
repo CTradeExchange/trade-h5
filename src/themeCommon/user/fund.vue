@@ -180,7 +180,7 @@ export default {
 .page-wrap {
     flex: 1;
     overflow: auto;
-    background-color: var(--btnColor);
+    background-color: var(--bgColor);
     .header {
         padding: rem(30px);
         background-color: #FFF;
@@ -210,7 +210,7 @@ export default {
             width: 100%;
             height: rem(10px);
             margin-top: rem(20px);
-            background: var(--btnColor);
+            background: var(--bgColor);
             border-radius: rem(20px);
             .p-val {
                 position: absolute;
@@ -292,10 +292,10 @@ export default {
         position: absolute;
         bottom: 0;
         width: 100%;
-        background: var(--bdColor);
-        border-color: var(--bdColor);
+        background: var(--lineColor);
+        border-color: var(--lineColor);
         span {
-            color: var(--btnSelected);
+            color: var(--focusColor);
             font-size: rem(34px);
         }
     }
