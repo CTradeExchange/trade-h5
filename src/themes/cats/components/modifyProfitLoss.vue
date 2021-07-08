@@ -95,7 +95,7 @@ export default {
 
 }
 .priceRange {
-    color: var(--mutedColor);
+    color: var(--minorColor);
     font-size: rem(22px);
 }
 </style>

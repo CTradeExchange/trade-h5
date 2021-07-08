@@ -111,7 +111,7 @@ export default {
         justify-content: space-between;
         width: 100%;
         padding: 0 rem(30px);
-        color: var(--mutedColor);
+        color: var(--minorColor);
         font-size: rem(24px);
         line-height: 1.45;
         .th {
@@ -133,7 +133,7 @@ export default {
     }
     .hd {
         flex: 1;
-        color: var(--mutedColor);
+        color: var(--minorColor);
         font-size: rem(22px);
         line-height: 1.3;
     }

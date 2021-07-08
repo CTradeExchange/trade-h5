@@ -7,8 +7,11 @@ import { getListByParentCode, getCountryListByParentCode } from '@/api/base'
 import Colors from '@c/colorVariables'
 import { localGet, localSet } from '@/utils/util'
 
+const invertColor = localGet('invertColor')
+console.log(invertColor)
+const colorsArr = Object.assign({}, Colors[invertColor], Colors.common)
 const style = {
-    ...Colors
+    ...colorsArr
 }
 const supportLanguages = [
     { val: 'zh-CN', name: '中文' },
@@ -72,6 +75,9 @@ export default createStore({
         },
     },
     mutations: {
+        Update_style (state, data) {
+            state.style = data
+        },
         Update_quoteMode (state, data = 1) {
             state.quoteMode = data
         },

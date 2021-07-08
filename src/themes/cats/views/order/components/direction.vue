@@ -45,8 +45,9 @@ export default {
         box-sizing: border-box;
         height: rem(70px);
         padding: rem(10px) rem(20px);
+        color: var(--color);
         line-height: rem(50px);
-        background: var(--btnColor);
+        background: var(--bgColor);
         border-radius: rem(6px);
         &.sell {
             margin-right: 5px;
@@ -57,7 +58,7 @@ export default {
             padding-left: rem(45px);
         }
         &.mainColorBg {
-            color: #FFF;
+            color: var(--contentColor);
         }
     }
     .price {

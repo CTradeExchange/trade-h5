@@ -131,7 +131,7 @@ export default {
         background: none;
     }
     &.warn {
-        color: var(--red);
+        color: var(--warn);
     }
 }
 </style>

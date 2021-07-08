@@ -20,7 +20,7 @@ export default {
     left: 0;
     width: 100%;
     height: rem(50px);
-    color: var(--red);
+    color: var(--warn);
     line-height: rem(50px);
     text-align: center;
     background: #FFF0E2;

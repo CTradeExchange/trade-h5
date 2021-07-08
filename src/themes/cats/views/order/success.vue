@@ -167,7 +167,7 @@ export default {
     position: relative;
     height: 100%;
     overflow: auto;
-    background: var(--btnColor);
+    background: var(--bgColor);
     .back {
         position: absolute;
         top: rem(40px);
@@ -235,14 +235,14 @@ export default {
             text-align: center;
         }
         .productCode {
-            color: var(--mutedColor);
+            color: var(--minorColor);
             font-size: rem(20px);
             text-align: center;
         }
     }
     .dataBar {
         :deep(.van-cell__title) {
-            color: var(--mutedColor);
+            color: var(--minorColor);
         }
         :deep(.van-cell__value) {
             color: #333;
@@ -275,7 +275,7 @@ export default {
     }
     .hasAdded {
         margin-top: rem(40px);
-        color: var(--mutedColor);
+        color: var(--minorColor);
         text-align: center;
     }
 }

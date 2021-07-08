@@ -251,7 +251,7 @@ export default {
             text-align: right;
             .title {
                 padding-right: rem(5px);
-                color: var(--mutedColor);
+                color: var(--minorColor);
                 font-size: rem(24px);
                 vertical-align: middle;
             }

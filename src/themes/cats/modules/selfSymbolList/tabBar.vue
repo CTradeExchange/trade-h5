@@ -78,7 +78,7 @@ export default {
     justify-content: space-between;
     height: rem(76px);
     padding: 0 rem(30px);
-    color: var(--mutedColor);
+    color: var(--minorColor);
     line-height: rem(76px);
     background: var(--bgColor);
     .van-dropdown-menu {

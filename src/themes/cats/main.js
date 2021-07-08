@@ -46,7 +46,7 @@ if (isEmpty(localStorage.getItem('openNews'))) {
 }
 
 setRouter(router)
-setRootVariable()
+setRootVariable(localGet('invertColor'))
 
 if (loginParams || token) store.commit('_user/Update_loginLoading', true)
 

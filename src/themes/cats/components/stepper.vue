@@ -158,7 +158,7 @@ export default {
         font-weight: 400;
         font-size: rem(28px);
         &:disabled {
-            color: var(--mutedColor);
+            color: var(--minorColor);
         }
     }
     .van-stepper__minus::before,

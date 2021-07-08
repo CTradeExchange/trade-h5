@@ -80,9 +80,9 @@ export default {
     line-height: 1.5;
 }
 .stepper {
-    background: var(--btnColor);
+    background: var(--bgColor);
     &.warn {
-        color: var(--red);
+        color: var(--warn);
     }
     :deep(.input) {
         width: rem(240px);

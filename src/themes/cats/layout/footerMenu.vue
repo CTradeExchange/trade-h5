@@ -69,12 +69,12 @@ export default {
 .footerMenu {
     background: var(--contentColor);
     .van-tabbar-item--active {
-        //background: var(--color);
+        color: var(--primary);
         background: var(--contentColor);
     }
 }
 :deep(.van-tabbar-item) {
-    //color: #CACACA;
+    color: var(--placeholdColor);
 }
 :deep(.van-tabbar-item__icon) {
     font-size: rem(46px);

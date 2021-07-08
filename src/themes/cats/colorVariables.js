@@ -1,10 +1,13 @@
 import { localGet } from '@/utils/util'
+import store from './store'
 
 const colors = {
     common: {
         primary: '#477fd3',
         riseColor: '#ef5353',
         fallColor: '#26a69a',
+        warn: '#ef5353',
+        success: '#26a69a',
         focusColor: '#f2a11b'
     },
     night: {
@@ -59,6 +62,7 @@ const colors = {
 export function setRootVariable (themeColor) {
     const invertColor = themeColor || localGet('invertColor')
     const colorsArr = Object.assign(colors[invertColor], colors.common)
+    store.commit('Update_style', colorsArr)
     const style = document.documentElement.style
     for (const key in colorsArr) {
         if (Object.hasOwnProperty.call(colorsArr, key)) {

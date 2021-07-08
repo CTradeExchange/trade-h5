@@ -124,19 +124,19 @@ export default {
     .title {
         line-height: 1;
         .icon {
-            color: var(--mutedColor);
+            color: var(--minorColor);
             vertical-align: -3px;
         }
     }
     .pendingRang {
-        color: var(--mutedColor);
+        color: var(--minorColor);
         font-size: rem(20px);
     }
 }
 .stepper {
-    background: var(--btnColor);
+    background: var(--bgColor);
     &.warn {
-        color: var(--red);
+        color: var(--warn);
     }
     :deep(.input) {
         width: rem(240px);

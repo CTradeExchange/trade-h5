@@ -16,7 +16,7 @@ export default {
     box-sizing: content-box;
     height: rem(50px);
     padding: 0 rem(16px);
-    color: var(--mutedColor);
+    color: var(--minorColor);
     line-height: rem(50px);
     border: 1px solid var(--bdColor);
     border-radius: rem(10px);

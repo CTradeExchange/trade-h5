@@ -108,9 +108,9 @@ export default {
     }
 }
 .stepper {
-    background: var(--btnColor);
+    background: var(--bgColor);
     &.warn {
-        color: var(--red);
+        color: var(--warn);
     }
     :deep(.input) {
         width: rem(240px);
@@ -132,7 +132,7 @@ export default {
         color: #333;
         line-height: rem(40px);
         text-align: center;
-        background: var(--btnColor);
+        background: var(--bgColor);
         border-radius: rem(6px);
     }
 }

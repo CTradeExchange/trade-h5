@@ -30,13 +30,13 @@ export default {
     width: 100%;
     margin-top: rem(10px);
     &.level0 .item:first-of-type {
-        background: var(--red);
+        background: var(--warn);
     }
     &.level1 .item:first-of-type {
-        background: var(--red);
+        background: var(--warn);
     }
     &.level2 .item:not(:nth-of-type(n+3)) {
-        background: var(--red);
+        background: var(--warn);
     }
     &.level3 .item:not(:nth-of-type(n+4)) {
         background: #FFD060;

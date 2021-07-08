@@ -209,7 +209,7 @@ export default {
     line-height: 1;
     .short_name {
         margin-top: rem(8px);
-        color: var(--mutedColor);
+        color: var(--minorColor);
         font-size: rem(20px);
     }
     .productName {
@@ -225,6 +225,7 @@ export default {
     flex: 1;
     margin-top: rem(90px);
     overflow-y: auto;
+    color: var(--color);
     background: var(--white);
     .main {
         @include scroll();

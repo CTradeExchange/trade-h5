@@ -176,7 +176,7 @@ export default {
         font-size: rem(28px);
         line-height: 1;
         text-align: center;
-        background: var(--btnColor);
+        background: var(--bgColor);
         &.sell {
             color: var(--white);
             background: var(--sellColor);

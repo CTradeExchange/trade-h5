@@ -1,7 +1,7 @@
 @import '~@/sass/mixin.scss';
 :root {
     /*  --color: #333;
-    --mutedColor: #989898;
+    --minorColor: #989898;
     --placeholder: #C2C2C2;
     --tabColor: #333;
     --tabLine: #333;
@@ -125,14 +125,14 @@ i {
 }
 .primaryBg,
 .mainColorBg {
-    color: var(--color) !important;
+    color: var(--contentColor) !important;
     background-color: var(--primary) !important;
 }
 .muted {
-    color: var(--mutedColor);
+    color: var(--minorColor);
 }
 .red {
-    color: var(--red);
+    color: var(--warn);
 }
 .alignRgiht {
     text-align: right;

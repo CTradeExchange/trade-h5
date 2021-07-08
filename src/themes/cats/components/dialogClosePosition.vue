@@ -280,16 +280,16 @@ export default {
     left: 0;
     width: 100%;
     height: rem(50px);
-    color: var(--red);
+    color: var(--warn);
     line-height: rem(50px);
     text-align: center;
     background: #FFF0E2;
     transform: translateY(-100%);
 }
 .stepper {
-    background: var(--btnColor);
+    background: var(--bgColor);
     &.warn {
-        color: var(--red);
+        color: var(--warn);
     }
 }
 .dialog-header {
@@ -326,7 +326,7 @@ export default {
         color: var(--color);
         line-height: rem(45px);
         text-align: center;
-        background: var(--btnColor);
+        background: var(--bgColor);
         border-radius: 4px;
         &.active {
             color: var(--color);
@@ -362,14 +362,14 @@ export default {
                 color: #666;
                 font-size: rem(24px);
                 &.warn {
-                    color: var(--red);
+                    color: var(--warn);
                 }
             }
             .tipWords {
                 position: absolute;
                 bottom: rem(-30px);
                 left: rem(330px);
-                color: var(--red);
+                color: var(--warn);
                 font-size: rem(24px);
             }
             .name {

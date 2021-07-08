@@ -130,7 +130,7 @@ export default {
         font-size: rem(32px);
     }
     .arrowIcon {
-        color: var(--mutedColor);
+        color: var(--minorColor);
         vertical-align: middle;
     }
     .status {
@@ -140,7 +140,7 @@ export default {
         color: var(--white);
         font-size: rem(22px);
         line-height: 1;
-        background: var(--red);
+        background: var(--warn);
         border-radius: 3px;
         &.status2 {
             background: var(--success);
