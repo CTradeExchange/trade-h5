@@ -2,11 +2,11 @@ export default {
     type: 'banner',
     list: [
         {
-            img: 'https://www.se6868w.com/03-App-h5/June/0622.jpg',
+            img: 'http://prewpadmin.cats-trade.com/wp-content/uploads/2021/07/minibanner1.png',
             href: 'https://m.se6868w.com/lp364C.html?null&title=矿工争霸赛',
         },
         {
-            img: 'https://www.zhixuan6868.com/H5-junexinkebanner750X290.jpg',
+            img: 'http://prewpadmin.cats-trade.com/wp-content/uploads/2021/07/minibanner2.png',
             href: 'https://m.zhixuan6868.com/lp366C.html?topbanner=xinke&null&title=限时开户双重赠 喜迎端午赚不停',
         },
     ]
