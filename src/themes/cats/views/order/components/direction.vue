@@ -47,7 +47,7 @@ export default {
         padding: rem(10px) rem(20px);
         color: var(--color);
         line-height: rem(50px);
-        background: var(--bgColor);
+        background: var(--primaryAssistColor);
         border-radius: rem(6px);
         &.sell {
             margin-right: 5px;
@@ -58,7 +58,7 @@ export default {
             padding-left: rem(45px);
         }
         &.mainColorBg {
-            color: var(--contentColor);
+            color: #FFF;
         }
     }
     .price {
@@ -75,10 +75,11 @@ export default {
         min-width: rem(20px);
         height: rem(40px);
         padding: 0 rem(10px);
+        color: var(--color);
         font-size: rem(20px);
         line-height: rem(36px);
         text-align: center;
-        background: #F2F2F2;
+        background: var(--primaryAssistColor);
         border: 2px solid rgba(255, 255, 255, 0.5);
         border-radius: rem(6px);
         transform: translate3d(-50%, -50%, 1px) scale(1);

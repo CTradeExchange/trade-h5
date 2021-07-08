@@ -39,6 +39,7 @@ body,
 #app {
     height: 100%;
     color: var(--color);
+    background-color: var(--bgColor);
 }
 body {
     font-size: 16px;
@@ -127,7 +128,7 @@ i {
 }
 .primaryBg,
 .mainColorBg {
-    color: var(--contentColor) !important;
+    color: #FFF;
     background-color: var(--primary) !important;
 }
 .muted {
@@ -275,7 +276,7 @@ i {
     border: 1px solid var(--lineColor);
 }
 .van-dialog {
-    background-color: var(--bgColor);
+    background-color: var(--contentColor);
     .van-dialog__header {
         color: var(--normalColor);
     }
@@ -283,12 +284,15 @@ i {
         color: var(--color);
     }
     .van-button {
-        background-color: var(--bgColor);
+        background-color: var(--contentColor);
         &.van-dialog__cancel {
             .van-button__text {
                 color: var(--color);
             }
         }
+    }
+    .van-dialog__footer {
+        background-color: var(--contentColor);
     }
 }
 .van-cell {

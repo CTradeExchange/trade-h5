@@ -55,9 +55,10 @@ export default {
     min-width: rem(160px);
     height: rem(70px);
     margin-bottom: rem(10px);
+    color: var(color);
     line-height: rem(70px);
     text-align: center;
-    background: var(--bgColor);
+    background: var(--primaryAssistColor);
     border-radius: rem(6px);
     &.mainColorBg {
         color: #FFF;

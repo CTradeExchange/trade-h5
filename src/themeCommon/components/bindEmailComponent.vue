@@ -186,11 +186,11 @@ export default {
 .pageWrap {
     position: relative;
     padding-top: rem(100px);
-    background-color: var(--contentColor);
     .form {
         //margin-top: rem(30px);
         .field {
             padding: 0 rem(30px);
+            background: var(--contentColor);
             .label {
                 color: var(--minorColor);
             }

@@ -108,7 +108,7 @@ export default {
     }
 }
 .stepper {
-    background: var(--bgColor);
+    background: var(--primaryAssistColor);
     &.warn {
         color: var(--warn);
     }
@@ -129,10 +129,10 @@ export default {
         display: inline-block;
         width: rem(120px);
         height: rem(40px);
-        color: #333;
+        color: var(--color);
         line-height: rem(40px);
         text-align: center;
-        background: var(--bgColor);
+        background: var(--primaryAssistColor);
         border-radius: rem(6px);
     }
 }

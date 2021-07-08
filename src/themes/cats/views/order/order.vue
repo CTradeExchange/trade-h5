@@ -226,13 +226,14 @@ export default {
     margin-top: rem(90px);
     overflow-y: auto;
     color: var(--color);
-    background: var(--contentColor);
+    background: var(--bgColor);
     .main {
         @include scroll();
         flex: 1;
         margin-bottom: rem(90px);
         padding: 0 20px;
         overflow: auto;
+        background: var(--contentColor);
     }
 }
 .cellMarginTop {
