@@ -52,7 +52,7 @@ export default {
     &.noFoot {
         z-index: 2;
         padding-bottom: 0;
-        background: var(--white);
+        background: var(--contentColor);
     }
 }
 </style>

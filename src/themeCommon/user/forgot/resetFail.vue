@@ -46,7 +46,7 @@ export default {
     padding-top: rem(240px);
     text-align: center;
     .icon_fail {
-        color: var(--red);
+        color: var(--warn);
         font-size: rem(96px);
     }
     .t1 {
@@ -61,7 +61,7 @@ export default {
     }
     .t3 {
         margin-top: rem(30px);
-        color: var(--assistColor);
+        color: var(--minorColor);
         font-size: rem(24px);
     }
 }
@@ -71,7 +71,7 @@ export default {
     display: flex;
     align-items: center;
     width: 100%;
-    background: var(--bdColor);
+    background: var(--lineColor);
     .line {
         width: rem(2px);
         height: rem(47px);
@@ -79,8 +79,8 @@ export default {
     }
     .confirmBtn {
         flex: 1;
-        background: var(--bdColor);
-        border-color: var(--bdColor);
+        background: var(--lineColor);
+        border-color: var(--lineColor);
         span {
             color: var(--color);
             font-size: rem(34px);

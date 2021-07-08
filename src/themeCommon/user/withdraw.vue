@@ -173,7 +173,7 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background: var(--white);
+    background: var(--contentColor);
 }
 .wrap {
     display: flex;
@@ -193,7 +193,7 @@ export default {
         align-items: center;
         height: 100%;
         margin: 0 rem(40px);
-        color: var(--mutedColor);
+        color: var(--minorColor);
         transition: all 0.1s;
     }
     .tabs-item-active {

@@ -293,7 +293,7 @@ export default {
     display: flex;
     flex-flow: column;
     height: 100%;
-    background: var(--white);
+    background: var(--contentColor);
     .topBar {
         height: rem(100px);
     }
@@ -356,13 +356,13 @@ export default {
     padding: 0 5px;
     font-size: rem(30px);
     line-height: 1;
-    border: 1px solid var(--bdColor);
+    border: 1px solid var(--lineColor);
     border-radius: rem(10px);
 }
 .registerBtn {
     height: rem(100px);
-    color: var(--btnText);
-    background: var(--btnColor);
+    color: var(--color);
+    background: var(--bgColor);
     border-width: 1px 0 0;
 }
 </style>

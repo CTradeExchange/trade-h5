@@ -87,7 +87,7 @@ export default {
 @import '@/sass/mixin.scss';
 .mineGuest {
     padding: rem(40px) 0 rem(30px);
-    background: var(--white);
+    background: var(--contentColor);
     .faceImg {
         display: block;
         width: rem(110px);
@@ -101,7 +101,7 @@ export default {
         .btn {
             width: 45%;
             height: rem(80px);
-            color: var(--white);
+            color: var(--contentColor);
             font-size: rem(34px);
             line-height: 1;
             background: var(--primary);
@@ -137,7 +137,7 @@ export default {
         display: inline-block;
         margin-top: 3px;
         padding: 3px 4px;
-        color: var(--white);
+        color: var(--contentColor);
         font-size: rem(22px);
         line-height: 1;
         background: var(--warn);

@@ -296,7 +296,7 @@ export default {
         }
     }
     .m-ccgd {
-        background-color: var(--bgColor2);
+        background-color: var(--bgColor);
         .m-orderBy {
             margin-top: rem(40px);
             margin-bottom: rem(20px);
@@ -339,7 +339,7 @@ export default {
 <style lang="scss">
 @import '@/sass/mixin.scss';
 .m-subtab {
-    margin: 0 auto;
+    margin: 0 auto rem(120px);
     padding-top: rem(40px);
     background-color: var(--bgColor);
     .van-tabs__nav {

@@ -82,7 +82,7 @@ export default {
         getCodeBtnCountDown () {
             const getCodeBtn = this.$refs.getCodeBtn
             const originText = getCodeBtn.textContent
-            let len = 10
+            let len = 60
 
             const t = setInterval(() => {
                 if (len === 0) {
@@ -105,6 +105,7 @@ export default {
     display: flex;
     align-items: center;
     width: 100%;
+    border-bottom: solid 1px var(lineColor);
     .checkCodeInput {
         position: relative;
         flex: 1;

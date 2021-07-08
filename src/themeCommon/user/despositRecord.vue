@@ -271,13 +271,13 @@ export default {
                 }
             }
             .left-label {
-                color: var(--mutedColor);
+                color: var(--minorColor);
             }
         }
     }
     .record-list {
         .van-collapse-item {
-            border-top: solid rem(20px) var(--btnColor);
+            border-top: solid rem(20px) var(--bgColor);
         }
         .amount {
             color: var(--color);
@@ -285,7 +285,7 @@ export default {
             font-size: rem(28px);
         }
         .time {
-            color: var(--mutedColor);
+            color: var(--minorColor);
             font-size: rem(20px);
         }
         .state {

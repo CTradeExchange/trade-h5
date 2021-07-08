@@ -260,11 +260,21 @@ export default {
     .confirm-btn {
         position: absolute;
         bottom: 0;
-        background: var(--contentColor);
+        background: var(--lineColor);
         border-color: var(--lineColor);
         span {
             color: var(--color);
             font-size: rem(34px);
+        }
+        .confirm-btn {
+            position: absolute;
+            bottom: 0;
+            background: var(--contentColor);
+            border-color: var(--lineColor);
+            span {
+                color: var(--color);
+                font-size: rem(34px);
+            }
         }
     }
 }

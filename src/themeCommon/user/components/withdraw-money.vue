@@ -536,7 +536,7 @@ export default {
         .field-wrap {
             display: flex;
             padding-bottom: rem(18px);
-            border-bottom: solid 1px var(--bdColor);
+            border-bottom: solid 1px var(--lineColor);
             input {
                 flex: 1;
             }
@@ -548,7 +548,7 @@ export default {
                 height: rem(60px);
                 font-size: rem(24px);
                 background-color: var(--bgColor);
-                border: 1px solid var(--bdColor);
+                border: 1px solid var(--lineColor);
                 border-radius: rem(30px);
             }
         }
@@ -558,7 +558,7 @@ export default {
             margin-bottom: rem(40px);
             span {
                 flex: 1;
-                color: var(--assistColor);
+                color: var(--minorColor);
                 font-size: rem(24px);
             }
         }
@@ -570,7 +570,7 @@ export default {
                 line-height: rem(72px);
             }
             .bw-t2 {
-                color: var(--assistColor);
+                color: var(--minorColor);
                 font-size: rem(24px);
                 line-height: rem(60px);
             }
@@ -581,8 +581,8 @@ export default {
     position: absolute;
     bottom: 0;
     height: rem(104px);
-    background: var(--bdColor);
-    border-color: var(--bdColor);
+    background: var(--lineColor);
+    border-color: var(--lineColor);
     span {
         color: var(--color);
         font-weight: bold;
@@ -617,7 +617,7 @@ export default {
     }
 }
 .bank-list .bank {
-    border-color: var(--bdColor);
+    border-color: var(--lineColor);
     border-style: solid;
     border-width: 0 0 1px;
 }
@@ -653,7 +653,7 @@ export default {
     }
     .content {
         margin: rem(20px) 0;
-        color: var(--mutedColor);
+        color: var(--minorColor);
         font-size: rem(28px);
     }
 }

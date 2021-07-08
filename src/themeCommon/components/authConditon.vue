@@ -274,13 +274,15 @@ export default {
 @import '@/sass/mixin.scss';
 .page-wrap {
     flex: 1;
+    height: 100%;
     padding-top: rem(30px);
     overflow: auto;
+    background-color: var(--bgColor);
     .notice {
         margin-top: rem(58px);
         padding-left: rem(30px);
         .title {
-            color: var(--mutedColor);
+            color: var(--minorColor);
             font-size: rem(28px);
             line-height: rem(36px);
         }
@@ -296,7 +298,20 @@ export default {
         padding-bottom: rem(50px);
         .c-item {
             text-align: center;
-            border-bottom: solid 1px var(--bdColor);
+            background: var(--contentColor);
+            border-bottom: solid 1px var(--lineColor);
+            :deep(.van-cell) {
+                background-color: var(--contentColor);
+                .van-cell__title {
+                    color: var(--normalColor);
+                }
+                .van-cell__value {
+                    color: var(--color);
+                }
+                .van-field__control {
+                    color: var(--color);
+                }
+            }
             .upload-img {
                 width: rem(400px);
                 height: rem(260px);
@@ -319,7 +334,7 @@ export default {
         width: 100%;
         color: var(--color);
         font-size: rem(34px);
-        background: var(--btnColor);
+        background: var(--contentColor);
     }
 }
 </style>

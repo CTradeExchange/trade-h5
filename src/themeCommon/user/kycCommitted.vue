@@ -34,7 +34,7 @@ export default {
 .pageWrap {
     padding: rem(200px) rem(30px) rem(30px);
     text-align: center;
-    background: var(--white);
+    background: var(--contentColor);
     .icon_success {
         color: var(--success);
         font-size: rem(96px);

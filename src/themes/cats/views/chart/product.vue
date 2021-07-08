@@ -916,7 +916,7 @@ export default {
     margin-top: rem(90px);
     margin-bottom: rem(100px);
     overflow: auto;
-    background: var(--bgColor2);
+    background: var(--bgColor);
     .infomation {
         padding-top: rem(5px);
         font-size: rem(20px);
@@ -1150,7 +1150,7 @@ export default {
                 height: rem(60px);
                 .van-tabs__nav--line {
                     padding-bottom: 0;
-                    background-color: var(--white);
+                    background-color: var(--contentColor);
                 }
                 .van-tabs__line {
                     bottom: 0;
@@ -1169,7 +1169,7 @@ export default {
             color: #646566;
             font-size: rem(24px);
             line-height: rem(60px);
-            background-color: var(--white);
+            background-color: var(--contentColor);
             &::after {
                 position: absolute;
                 top: 50%;
@@ -1393,7 +1393,7 @@ export default {
                         color: var(--primary);
                     }
                     &.disabled {
-                        color: var(--assistColor);
+                        color: var(--minorColor);
                     }
                     .inner-label {
                         flex: 1;
@@ -1427,7 +1427,7 @@ export default {
         width: 100%;
         height: rem(100px);
         text-align: center;
-        background: var(--white);
+        background: var(--contentColor);
         .watch {
             @include active();
             width: rem(110px);

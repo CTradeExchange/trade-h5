@@ -173,7 +173,7 @@ export default {
                 height: 100%;
                 padding-left: 12px;
                 .van-icon-clear {
-                    color: var(--btnSelected);
+                    color: var(--focusColor);
                     font-size: 20px;
                 }
             }
@@ -185,7 +185,7 @@ export default {
             display: block;
             margin: 5px 0 20px;
             padding-left: 16px;
-            color: var(--btnText);
+            color: var(--color);
             font-size: 12px;
         }
     }

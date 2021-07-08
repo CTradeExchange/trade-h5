@@ -122,7 +122,7 @@ export default {
                 document.body.style.setProperty('--primaryAssistColor', themeColors[action.val].primaryAssistColor)
                 document.body.style.setProperty('--bgColor', themeColors[action.val].bgColor)
                 document.body.style.setProperty('--normalColor', themeColors[action.val].normalColor)
-                document.body.style.setProperty('--assistColor', themeColors[action.val].assistColor)
+                document.body.style.setProperty('--minorColor', themeColors[action.val].assistColor)
                 document.body.style.setProperty('--lineColor', themeColors[action.val].lineColor)
             }
         }

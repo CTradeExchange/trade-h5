@@ -282,7 +282,8 @@ export default {
             display: flex;
             align-items: center;
             padding: rem(34px);
-            border: solid 1px var(--primaryAssistColor);
+            background-color: var(--contentColor);
+            border: solid 1px var(--lineColor);
             cursor: pointer;
             .van-icon-plus {
                 margin-right: rem(10px);

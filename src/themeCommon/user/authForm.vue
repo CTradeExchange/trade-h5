@@ -27,6 +27,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .authConditionWrapper {
-    padding-top: rem(100px);
+    height: 100%;
+    padding-top: rem(50px);
 }
 </style>

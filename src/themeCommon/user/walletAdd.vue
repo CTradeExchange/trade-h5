@@ -48,9 +48,9 @@
         </button>
 
         <!-- 提币币种弹窗 -->
-        <van-action-sheet v-model:show='coinKindVisible' :actions='coinKindList' @select='selectCoinKind' />
+        <van-action-sheet v-model:show='coinKindVisible' :actions='coinKindList' class='action-sheet-coin' @select='selectCoinKind' />
         <!-- 链名称弹窗 -->
-        <van-action-sheet v-model:show='chainNameVisible' :actions='chainNameList' @select='selectChainName' />
+        <van-action-sheet v-model:show='chainNameVisible' :actions='chainNameList' class='action-sheet-chain' @select='selectChainName' />
     </div>
 </template>
 
@@ -264,19 +264,21 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background: var(--white);
+    background: var(--bgColor);
 }
 .container {
     display: flex;
     flex: 1;
     flex-direction: column;
     overflow-y: auto;
+    background: var(--contentColor);
     .empty {
         height: rem(20px);
-        background-color: #F9F9F9;
+        background-color: var(--contentColor);
     }
 }
 .module-form {
+    background-color: var(--contentColor);
     .select {
         display: flex;
         align-items: center;
@@ -284,7 +286,7 @@ export default {
         padding: 0 rem(30px);
         color: var(--color);
         font-size: rem(28px);
-        border-bottom: 1px solid var(--bdColor);
+        border-bottom: 1px solid var(--lineColor);
         .option {
             display: inline-flex;
             flex: 1;
@@ -309,14 +311,15 @@ export default {
         height: rem(100px);
         color: var(--color);
         font-size: rem(28px);
-        border-bottom: 1px solid var(--bdColor);
+        background-color: var(--contentColor);
+        border-bottom: 1px solid var(--lineColor);
         input {
             flex: 1;
             height: 100%;
             margin-right: rem(20px);
         }
         .time {
-            color: var(--mutedColor);
+            color: var(--minorColor);
         }
     }
 }
@@ -325,8 +328,8 @@ export default {
     align-items: center;
     justify-content: center;
     height: rem(104px);
-    background-color: var(--btnColor);
-    border-top: 1px solid var(--bdColor);
+    background-color: var(--contentColor);
+    border-top: 1px solid var(--lineColor);
     span {
         color: var(--color);
         font-weight: bold;
@@ -334,4 +337,17 @@ export default {
         letter-spacing: 1px;
     }
 }
+:deep(.action-sheet-chain) {
+    .van-action-sheet__item {
+        color: var(--color);
+        background-color: var(--contentColor);
+    }
+}
+:deep(.action-sheet-coin) {
+    .van-action-sheet__item {
+        color: var(--color);
+        background-color: var(--contentColor);
+    }
+}
+
 </style>

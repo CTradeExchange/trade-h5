@@ -60,7 +60,6 @@
                         <i class='icon_icon_chart hidden'></i>
                     </div>
                     <van-button
-                        color='#477fd3'
                         hairline
                         size='mini'
                         type='default'
@@ -175,9 +174,10 @@ export default {
                 text-align: right;
                 vertical-align: middle;
                 .van-button {
+                    color: var(--primary);
                     vertical-align: middle;
-                    background: rgb(243, 248, 255);
-                    border-color: rgb(243, 248, 255);
+                    background: var(--primaryAssistColor);
+                    border-color: var(--primaryAssistColor);
                 }
             }
             .amount {
@@ -221,14 +221,14 @@ export default {
             text-align: center;
             border-radius: rem(6px);
             &.hidden {
-                color: var(--color);
+                color: var(--primary);
                 background-color: var(--primaryAssistColor);
             }
         }
         .van-button {
             width: rem(124px);
             height: rem(48px);
-            color: var(--color) !important;
+            color: var(--primary) !important;
             font-size: rem(24px);
             line-height: rem(48px);
             background: var(--primaryAssistColor) !important;

@@ -38,7 +38,7 @@ html,
 body,
 #app {
     height: 100%;
-    color: var(--bgColor);
+    color: var(--color);
 }
 body {
     font-size: 16px;
@@ -78,10 +78,10 @@ a {
     color: var(--minorColor);
 }
 .buyColor {
-    color: var(--buyColor);
+    color: var(--riseColor);
 }
 .sellColor {
-    color: var(--sellColor);
+    color: var(--fallColor);
 }
 .successColor {
     color: var(--success);
@@ -90,12 +90,12 @@ a {
     font-family: iconfont;
 }
 .m-field {
-    background-color: #FFF;
+    background-color: var(--contentColor);
     // padding: .38667rem .42667rem;
     border: none;
 }
 ::-webkit-input-placeholder {
-    color: rgba($color: #000, $alpha: 0.3);
+    color: var(--placeholdColor);
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -106,7 +106,9 @@ input[type='number'] {
 }
 input,
 textarea {
+    color: var(--color);
     font-family: 'PingFang SC', '-apple-system', 'Heiti SC', 'Helvetica', 'Helvetica Neue', 'Droid Sans Fallback', 'Droid Sans';
+    background: none;
 }
 i {
     font-style: normal;
@@ -268,6 +270,9 @@ i {
     background: url('~@/assets/bank-icons-sm.png') no-repeat top center;
     background-position: rem(-5px) rem(-5px);
     background-size: rem(54px) auto;
+}
+.van-button--default {
+    border: 1px solid var(--lineColor);
 }
 .bank-icons-sm.bk-ABOCCNBJXXX,
 .bk-ABC {

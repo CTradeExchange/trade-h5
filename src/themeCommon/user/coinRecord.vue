@@ -261,7 +261,7 @@ export default {
     .item {
         margin-top: rem(20px);
         padding: 0 rem(30px);
-        background-color: var(--white);
+        background-color: var(--contentColor);
         .arrow {
             transition: all 0.2s;
         }
@@ -270,7 +270,7 @@ export default {
         .item-content {
             height: auto;
             padding: rem(20px) 0;
-            border-top: 1px solid var(--bdColor);
+            border-top: 1px solid var(--lineColor);
         }
         .arrow {
             transform: rotate(180deg);
@@ -310,7 +310,7 @@ export default {
                 align-items: center;
                 justify-content: space-between;
                 margin-bottom: rem(5px);
-                color: var(--mutedColor);
+                color: var(--minorColor);
                 font-size: rem(20px);
                 span {
                     &:nth-of-type(1) {
@@ -336,7 +336,7 @@ export default {
             margin-bottom: rem(20px);
             font-size: rem(24px);
             .name {
-                color: var(--mutedColor);
+                color: var(--minorColor);
             }
             .value {
                 color: var(--color);

@@ -156,7 +156,7 @@ export default {
     .notice {
         padding: 10px;
         font-size: 12px;
-        background-color: var(--btnColor);
+        background-color: var(--bgColor);
     }
     .icon {
         margin-right: 10px;

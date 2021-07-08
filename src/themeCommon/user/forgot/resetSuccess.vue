@@ -61,7 +61,7 @@ export default {
     }
     .t3 {
         margin-top: rem(30px);
-        color: var(--assistColor);
+        color: var(--minorColor);
         font-size: rem(24px);
     }
 }
@@ -69,8 +69,8 @@ export default {
     position: absolute;
     bottom: 0;
     width: 100%;
-    background: var(--bdColor);
-    border-color: var(--bdColor);
+    background: var(--lineColor);
+    border-color: var(--lineColor);
     span {
         color: var(--color);
         font-size: rem(34px);
