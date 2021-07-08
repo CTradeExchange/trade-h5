@@ -512,7 +512,7 @@ export default {
 .pageWrap {
     .empty {
         height: rem(20px);
-        background-color: #F9F9F9;
+        background-color: var(--lineColor);
     }
     .header {
         display: flex;
@@ -592,7 +592,7 @@ export default {
 .bank {
     display: flex;
     align-items: center;
-    border: rem(2px) solid #E5E5E5;
+    border: rem(2px) solid var(--normalColor);
     border-radius: rem(4px);
     .bank-no {
         flex: 1;

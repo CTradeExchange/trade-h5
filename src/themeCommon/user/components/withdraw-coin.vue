@@ -160,9 +160,9 @@
             </div>
         </van-radio-group>
         <div class='add-handle' @click='goWalletAdd'>
-            <van-icon color='#333' name='plus' />
+            <van-icon :color='style.color' name='plus' />
             <span>{{ $t('withdrawCoin.walletAdd') }}</span>
-            <van-icon color='#333' name='arrow' />
+            <van-icon :color='style.color' name='arrow' />
         </div>
     </van-action-sheet>
 </template>
@@ -201,6 +201,7 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const router = useRouter()
+        const style = computed(() => store.state.style)
         const state = reactive({
             // 加载状态
             loading: true,
@@ -699,7 +700,8 @@ export default {
             goWalletAdd,
             openWalletSelect,
             selectWallet,
-            onConfirm
+            onConfirm,
+            style
         }
     }
 }
@@ -712,7 +714,7 @@ export default {
     overflow-y: auto;
     .empty {
         height: rem(20px);
-        background-color: #F9F9F9;
+        background-color: var(--lineColor);
     }
 }
 .module-form {

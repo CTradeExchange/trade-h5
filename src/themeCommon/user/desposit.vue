@@ -222,7 +222,7 @@ export default {
             if (state.PayTypes.length > 0) {
                 const temp = state.PayTypes.filter(item => item.timeRangeFlag && item.openTime)
                 temp.forEach(item => {
-                    if (state.checkedType.paymentCode === item.paymentCode) {
+                    if (state.checkedType.paymentTypeAlias === item.paymentTypeAlias) {
                         item.checked = true
                     }
                 })
@@ -235,7 +235,7 @@ export default {
             if (state.PayTypes.length > 0) {
                 const temp = state.PayTypes.filter(item => !item.timeRangeFlag && item.openTime)
                 temp.forEach(item => {
-                    if (state.checkedType.paymentCode === item.paymentCode) {
+                    if (state.checkedType.paymentTypeAlias === item.paymentTypeAlias) {
                         item.checked = true
                     }
                 })
