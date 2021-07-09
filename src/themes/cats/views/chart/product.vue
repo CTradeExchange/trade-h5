@@ -914,7 +914,7 @@ export default {
     width: 100%;
     height: 100%;
     margin-top: rem(90px);
-    margin-bottom: rem(100px);
+    margin-bottom: rem(120px);
     overflow: auto;
     background: var(--bgColor);
     .infomation {
@@ -1177,7 +1177,7 @@ export default {
                 right: 1px;
                 margin-top: -5px;
                 border: 3px solid;
-                border-color: transparent transparent #DCDEE0 #DCDEE0;
+                border-color: transparent transparent var(--normalColor) var(--normalColor);
                 -webkit-transform: rotate(-45deg);
                 transform: rotate(-45deg);
                 opacity: 0.8;
@@ -1186,7 +1186,7 @@ export default {
             &.opened {
                 &::after {
                     margin-top: -1px;
-                    border-color: transparent transparent currentColor currentColor;
+                    // border-color: transparent transparent currentColor currentColor;
                     transform: rotate(135deg);
                 }
             }

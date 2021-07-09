@@ -562,4 +562,7 @@ body {
             color: var(--color);
         }
     }
+    [class*=van-hairline]::after {
+        border-color: var(--lineColor);
+    }
 }
