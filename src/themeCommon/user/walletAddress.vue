@@ -34,7 +34,7 @@
             <van-empty
                 v-else
                 :description="$t('walletAddress.none')"
-                image='https://img01.yzcdn.cn/vant/empty-image-default.png'
+                image='/images/empty.png'
             />
         </div>
         <!-- 底部按钮 -->
@@ -154,9 +154,9 @@ export default {
                 }
                 .tag {
                     padding: rem(9px) rem(7px);
-                    color: #3894FF;
+                    color: var(--primary);
                     font-size: rem(20px);
-                    background-color: #EEF6FE;
+                    background-color: var(--primaryAssistColor);
                     border-radius: rem(4px);
                 }
             }

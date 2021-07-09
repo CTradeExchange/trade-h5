@@ -8,7 +8,7 @@
         <div class='record-list'>
             <van-pull-refresh v-model='loading' @refresh='onRefresh'>
                 <div v-if='list.length === 0'>
-                    <van-empty :description='$t("common.noData")' image='search' />
+                    <van-empty :description='$t("common.noData")' image='/images/empty.png' />
                 </div>
                 <van-list
                     v-model:loading='loading'

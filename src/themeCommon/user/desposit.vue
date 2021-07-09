@@ -692,7 +692,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: rem(2px) solid #E5E5E5;
+    border: rem(2px) solid var(--lineColor);
     border-radius: rem(4px);
     .pay-name {
         flex: 1;
@@ -712,7 +712,7 @@ export default {
 }
 .currency-wrap {
     padding: rem(30px) 0 0 rem(30px);
-    border: solid 1px #DDD;
+    border: solid 1px var(--lineColor);
     border-top: none;
     .currency-radio {
         margin-bottom: rem(20px);

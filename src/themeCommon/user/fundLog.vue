@@ -97,7 +97,7 @@
                     @load='onLoad'
                 >
                     <div v-if='list.length === 0'>
-                        <van-empty :description='$t("common.noData")' image='search' />
+                        <van-empty :description='$t("common.noData")' image='/images/empty.png' />
                     </div>
                     <div v-for='(item,index) in list' :key='index' class='fund-item'>
                         <div class='f-left'>

@@ -1,6 +1,6 @@
 <template>
     <div class='pending-wrap'>
-        <van-empty v-if='orderList.length===0' :description='$t("trade.pendingEmpty")' />
+        <van-empty v-if='orderList.length===0' :description='$t("trade.pendingEmpty")' image='/images/empty.png' />
         <template v-else>
             <pendingItem v-for='item in orderList' :key='item' :data='item' @showClose='showClose' />
         </template>

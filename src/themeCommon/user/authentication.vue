@@ -3,7 +3,7 @@
     <div class='page-wrap'>
         <Loading :show='loading' />
         <div v-if='list.length === 0' class='empty-data'>
-            <van-empty :description='$t("auth.noRequired")' image='search' />
+            <van-empty :description='$t("auth.noRequired")' image='/images/empty.png' />
         </div>
         <div v-else>
             <p class='title'>

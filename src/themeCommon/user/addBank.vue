@@ -288,7 +288,7 @@ export default {
                 box-sizing: border-box;
                 width: 200%;
                 height: 200%;
-                border-bottom: 1px solid #E3E3E3;
+                border-bottom: 1px solid var(--lineColor);
                 -webkit-transform: scale(0.5);
                 transform: scale(0.5);
                 -webkit-transform-origin: 0 0;

@@ -16,7 +16,7 @@
     <Loading :show='pageLoading' />
     <div class='msg-list'>
         <div v-if='list.length === 0'>
-            <van-empty :description='$t("common.noData")' image='search' />
+            <van-empty :description='$t("common.noData")' image='/images/empty.png' />
         </div>
         <van-pull-refresh v-else v-model='loading' @refresh='onRefresh'>
             <van-list

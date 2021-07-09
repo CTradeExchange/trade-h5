@@ -41,7 +41,7 @@
                             </p>
                         </div>
                         <div class='arrow'>
-                            <van-icon color='#333' name='arrow-down' />
+                            <van-icon :color='$style.color' name='arrow-down' />
                         </div>
                     </div>
                     <div class='item-content'>
@@ -123,6 +123,7 @@
             <van-empty
                 v-else
                 :description='$t("coinRecord.noData")'
+                image='/images/empty.png'
             />
         </div>
     </div>
@@ -249,7 +250,6 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background-color: #F9F9F9;
 }
 .container {
     display: flex;

@@ -19,7 +19,7 @@
             Loading...
         </template>
     </Suspense>
-    <!-- <Notice /> -->
+    <Notice />
     <!-- <router-view />  -->
 </template>
 

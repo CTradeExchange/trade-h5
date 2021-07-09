@@ -1,6 +1,6 @@
 <template>
     <div>
-        <van-empty v-if='!loadStatus && orderList && orderList.length===0' :description='$t("trade.closedEmpty")' />
+        <van-empty v-if='!loadStatus && orderList && orderList.length===0' :description='$t("trade.closedEmpty")' image='/images/empty.png' />
         <template v-else-if='orderList'>
             <van-list
                 v-model:error='isError'

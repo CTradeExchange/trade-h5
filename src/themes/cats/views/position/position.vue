@@ -33,7 +33,7 @@
                             </van-button>
                         </div>
 
-                        <van-empty v-if='!pageLoading && positionList.length===0' :description='$t("c.noData")' />
+                        <van-empty v-if='!pageLoading && positionList.length===0' :description='$t("c.noData")' image='/images/empty.png' />
                         <PositionList v-if='positionList.length' />
                     </div>
                 </van-tab>
