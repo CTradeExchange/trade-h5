@@ -117,7 +117,7 @@ export default {
         font-size: rem(26px);
         background: none;
         &:disabled {
-            color: var(--bdColor);
+            color: var(--minorColor);
         }
     }
 }
@@ -146,7 +146,7 @@ export default {
     }
 }
 .van-icon-clear {
-    color: var(--bdColor);
+    color: var(--minorColor);
     font-size: rem(36px);
 }
 </style>

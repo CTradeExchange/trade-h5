@@ -111,13 +111,13 @@ export default {
     }
 }
 .van-icon-clear {
-    color: var(--bdColor);
+    color: var(--minorColor);
     font-size: rem(36px);
 }
 .icon_icon_default,
 .icon_icon_pressed {
     margin-left: 0.8em;
-    color: var(--bdColor);
+    color: var(--minorColor);
     font-size: rem(36px);
 }
 </style>

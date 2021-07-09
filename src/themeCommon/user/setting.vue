@@ -14,7 +14,7 @@
         <van-cell is-link :title='$t("setting.setLang")' :value='langText' @click='langVisible=true' />
         <van-cell is-link :title='$t("setting.color")' :value='colorText' @click='colorVisible=true' />
 
-        <van-button class='logout-btn' :loading='loading' type='primary' @click='handleLogout'>
+        <van-button v-if='customInfo' class='logout-btn' :loading='loading' type='primary' @click='handleLogout'>
             <span>{{ $t("setting.logout") }}</span>
         </van-button>
 

@@ -147,7 +147,7 @@ export default {
     }
 }
 .van-icon-clear {
-    color: var(--bdColor);
+    color: var(--minorColor);
     font-size: rem(36px);
 }
 :deep(.selectWrap) {
@@ -163,7 +163,7 @@ export default {
         width: 1px;
         height: rem(50px);
         margin-top: rem(-25px);
-        background: var(--bdColor);
+        background: var(--minorColor);
         content: '';
     }
 }
