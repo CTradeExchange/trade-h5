@@ -16,6 +16,5 @@ export default {
 .vline {
     padding: 0 0.5em;
     color: var(--placeholder);
-    vertical-align: middle;
 }
 </style>

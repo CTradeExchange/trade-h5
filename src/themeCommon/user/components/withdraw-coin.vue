@@ -772,7 +772,7 @@ export default {
                 width: rem(168px);
                 height: rem(60px);
                 font-size: rem(24px);
-                background-color: var(--bgColor);
+                background-color: var(--primaryAssistColor);
                 border: 1px solid var(--lineColor);
                 border-radius: rem(30px);
             }

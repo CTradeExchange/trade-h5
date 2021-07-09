@@ -103,7 +103,6 @@ export default {
 
         // 发送验证码
         const handleVerifyCodeSend = (callback) => {
-            state.loading = true
             const validator = new Schema(RuleFn(t))
             validator.validate({
                 type: state.curTab,
@@ -121,7 +120,7 @@ export default {
                     type: state.curTab === 0 ? 2 : 1,
                     loginName: state.curTab === 0 ? state.mobile : state.email
                 }
-
+                state.loading = true
                 checkUserStatus(source).then(res => {
                     state.loading = false
                     if (res.check()) {

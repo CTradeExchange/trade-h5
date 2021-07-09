@@ -15,7 +15,7 @@
                 :color='style.color'
                 line-height='2px'
                 line-width='20px'
-                :title-active-color='style.color'
+                title-active-color='red'
                 :title-inactive-color='style.mutedColor'
             >
                 <van-tab name='mobile' :title='$t("register.phoneNo")' />
@@ -365,7 +365,7 @@ export default {
 .registerBtn {
     height: rem(100px);
     color: var(--color);
-    background: var(--bgColor);
+    background: var(--primaryAssistColor);
     border-width: 1px 0 0;
 }
 </style>

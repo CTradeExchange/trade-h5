@@ -71,7 +71,7 @@ export default {
     position: relative;
     display: block;
     height: rem(75px);
-    padding: 0 rem(50px) 0 rem(15px);
+    padding: 0 rem(50px) 0 rem(5px);
     overflow: hidden;
     font-size: rem(26px);
     line-height: rem(75px);

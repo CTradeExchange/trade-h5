@@ -331,7 +331,7 @@ export default {
 .pageWrap {
     position: relative;
     height: 100%;
-    background: var(--bgColor);
+    background: var(--contentColor);
     .header {
         display: flex;
         align-items: center;
@@ -452,6 +452,7 @@ export default {
     .btn {
         @include active();
         color: var(--color);
+        vertical-align: middle;
     }
 }
 .popContainer {
