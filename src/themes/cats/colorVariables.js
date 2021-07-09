@@ -58,10 +58,20 @@ const colors = {
     'success': '#10B873', */
 }
 
+// 更新body类
+function updateBodyClass (themeColor) {
+    const classList = document.body.classList
+    if (!themeColor || classList.contains(themeColor)) return false
+    classList.remove('light')
+    classList.remove('night')
+    classList.add(themeColor)
+}
+
 // 设置root变量
 export function setRootVariable (themeColor) {
     const invertColor = themeColor || localGet('invertColor')
     const colorsArr = Object.assign(colors[invertColor], colors.common)
+    updateBodyClass(invertColor)
     store.commit('Update_style', colorsArr)
     const style = document.body.style
     for (const key in colorsArr) {
@@ -72,4 +82,5 @@ export function setRootVariable (themeColor) {
     }
     sessionStorage.setItem('themeColors', JSON.stringify(colors))
 }
+
 export default colors

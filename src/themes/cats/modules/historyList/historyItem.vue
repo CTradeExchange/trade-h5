@@ -89,7 +89,7 @@ export default {
 
         const toPositionDetail = (item) => {
             store.commit('_quote/Update_productActivedID', item.symbolId)
-            router.push({ path: '/historyDetail', query: { symbolId: item.symbolId, positionId: item.positionId } })
+            router.push({ path: '/historyDetail', query: { symbolId: item.symbolId, orderId: item.orderId } })
         }
 
         const updateShow = (val) => {

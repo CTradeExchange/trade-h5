@@ -100,7 +100,7 @@
                                 {{ $t('trade.positionId') }}
                             </div>
                         </div><div class='right'>
-                            ID : {{ positionId }}
+                            ID : {{ orderInfo.positionId }}
                         </div>
                     </div>
                 </div>
@@ -139,7 +139,7 @@ export default {
         const symbolId = route.query.symbolId
         const customerInfo = computed(() => store.state._user.customerInfo)
         const historyList = computed(() => store.state._trade.historyList)
-        const orderInfo = computed(() => historyList.value && historyList.value.find(el => el.positionId === parseFloat(positionId)))
+        const orderInfo = computed(() => historyList.value && historyList.value.find(el => el.orderId === parseFloat(orderId)))
         const product = computed(() => store.state._quote.productMap[orderInfo.value?.symbolId])
 
         QuoteSocket.send_subscribe([symbolId])

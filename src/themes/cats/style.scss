@@ -208,20 +208,22 @@ i {
         background: #FFF;
     }
 }
-.riseColorBgAni,
-.fallColorBgAni {
-    transition-property: background;
-    animation-duration: 1s;
-    animation-timing-function: ease-out;
-    animation-iteration-count: infinite;
-    animation-iteration-count: 1;
-    animation-direction: normal;
-}
-.riseColorBgAni {
-    animation-name: bg-green;
-}
-.fallColorBgAni {
-    animation-name: bg-red;
+body.light {
+    .riseColorBgAni,
+    .fallColorBgAni {
+        transition-property: background;
+        animation-duration: 1s;
+        animation-timing-function: ease-out;
+        animation-iteration-count: infinite;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+    }
+    .riseColorBgAni {
+        animation-name: bg-green;
+    }
+    .fallColorBgAni {
+        animation-name: bg-red;
+    }
 }
 .z-index-9999 {
     position: relative;
