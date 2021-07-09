@@ -552,4 +552,7 @@ body {
     .van-search__content {
         background-color: var(--bgColor) !important;
     }
+    [class*=van-hairline]::after {
+        border-color: var(--lineColor);
+    }
 }
