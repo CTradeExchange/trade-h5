@@ -283,11 +283,9 @@ export default {
 .stallsAndDeal {
     min-width: rem(200px);
     height: rem(890px);
-    //margin-top: rem(10px);
+    margin-top: rem(10px);
     margin-bottom: rem(30px);
     background: var(--contentColor);
-    border-top: 1px solid var(--lineColor);
-    //border-right: 1px solid #ECEDF2;
     .tabs {
         display: flex;
         flex-direction: column;

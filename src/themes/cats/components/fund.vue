@@ -3,7 +3,7 @@
         v-model:show='showFund'
         class='popup-myAsset'
         position='top'
-        :style="{ height: '70%' }"
+        :style="{ height: '60%' }"
         :transition-appear='true'
         @close='hide'
     >
@@ -166,7 +166,6 @@ export default {
     }
     .layout-1 {
         color: var(--color);
-        background-color: var(--contentColor);
         .warp {
             @include scroll();
             max-height: 70vh;
@@ -237,10 +236,10 @@ export default {
             &.adequate {
                 .progress-base {
                     .progress-color {
-                        background-color: #10B873;
+                        background-color: var(--success);
                     }
                     .number {
-                        color: #10B873;
+                        color: var(--success);
                     }
                 }
             }

@@ -230,8 +230,8 @@ export default {
     .main {
         @include scroll();
         flex: 1;
-        margin-bottom: rem(90px);
-        padding: 0 20px;
+        //margin-bottom: rem(90px);
+        padding: 0 rem(40px) rem(100px) rem(40px);
         overflow: auto;
         background: var(--contentColor);
     }

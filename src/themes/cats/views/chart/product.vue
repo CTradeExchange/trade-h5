@@ -83,10 +83,10 @@
                     v-model:active='activeTab'
                     :before-change='onBeforeChange'
                     class='tabs'
-                    color='#007AFF'
+                    :color='$style.primary'
                     line-height='2'
                     line-width='20'
-                    title-active-color='#007AFF'
+                    title-active-color='$style.primary'
                 >
                     <van-tab
                         v-for='(item) in candleKTypeList.slice(0,6)'
@@ -183,6 +183,7 @@
                         :key='i'
                         class='item'
                         :class='{ active: mainStudy === item.name }'
+                        :color='$style.primary'
                     >
                         <span
                             class='inner-label'
@@ -459,7 +460,6 @@ export default {
 
         // 图表组件引用
         const chartRef = ref(null)
-
         const klineTypeIndex = computed(() => {
             const curIndex = klineTypeList.findIndex(el => el.value === state.klineType)
             return curIndex + 1
@@ -901,7 +901,8 @@ export default {
             addOptional,
             toOrder,
             collect,
-            formatTime
+            formatTime,
+
         }
     }
 }
@@ -919,6 +920,7 @@ export default {
     background: var(--bgColor);
     .infomation {
         padding-top: rem(5px);
+        color: var(--minorColor);
         font-size: rem(20px);
         line-height: rem(24px);
     }
@@ -1142,16 +1144,11 @@ export default {
                 font-size: rem(24px);
                 line-height: rem(60px);
                 white-space: nowrap;
-                .van-tab__text {
-                    color: var(--normalColor);
-                    white-space: nowrap;
-                }
             }
             :deep(.van-tabs__wrap) {
                 height: rem(60px);
                 .van-tabs__nav--line {
                     padding-bottom: 0;
-                    background-color: var(--contentColor);
                 }
                 .van-tabs__line {
                     bottom: 0;
@@ -1247,14 +1244,6 @@ export default {
                 width: 100%;
                 height: 100%;
                 box-shadow: none;
-            }
-            :deep(.van-popup) {
-                .van-cell {
-                    background-color: var(--contentColor);
-                    .van-cell__title {
-                        color: var(--color);
-                    }
-                }
             }
             .mainColor {
                 color: var(--primary);
@@ -1393,6 +1382,9 @@ export default {
                     text-align: center;
                     &.active {
                         color: var(--primary);
+                        .inner-label {
+                            color: var(--primary);
+                        }
                     }
                     &.disabled {
                         color: var(--minorColor);
@@ -1517,10 +1509,10 @@ export default {
             left: 50%;
             height: rem(44px);
             padding: 0 rem(14px);
-            color: #666;
+            color: #FFF;
             font-size: rem(28px);
             line-height: rem(46px);
-            background: #FFF;
+            background: var(--contentColor);
             border-radius: 3px;
             transform: translate(-50%, -50%);
         }

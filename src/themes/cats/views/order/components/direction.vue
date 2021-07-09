@@ -80,7 +80,7 @@ export default {
         line-height: rem(36px);
         text-align: center;
         background: var(--primaryAssistColor);
-        border: 2px solid rgba(255, 255, 255, 0.5);
+        border: 2px solid var(--contentColor);
         border-radius: rem(6px);
         transform: translate3d(-50%, -50%, 1px) scale(1);
     }

@@ -2,7 +2,7 @@
     <Top class='msgTopBar'>
         <template #center>
             <div class='msgTopCenter'>
-                <van-dropdown-menu active-color='#007AFF'>
+                <van-dropdown-menu :active-color='$style.primary'>
                     <van-dropdown-item v-model='type' :options='options' @change='changeType' />
                 </van-dropdown-menu>
             </div>

@@ -138,6 +138,7 @@ export default {
 @import '~@/sass/mixin.scss';
 .stepper {
     font-size: 0;
+    border-radius: rem(10px);
     button,
     input {
         width: rem(80px);

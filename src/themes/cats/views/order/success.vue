@@ -225,7 +225,6 @@ export default {
         line-height: 1.6;
         background: var(--contentColor);
         border-radius: rem(10px);
-        box-shadow: 0 0 18px 0 var(--normalColor);
     }
     .product {
         padding-bottom: rem(40px);

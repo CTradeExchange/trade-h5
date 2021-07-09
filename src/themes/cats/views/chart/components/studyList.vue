@@ -170,7 +170,7 @@ export default {
                 font-size: rem(24px);
                 line-height: rem(40px);
                 text-align: center;
-                border: 1px solid #D7D7D7;
+                border: 1px solid var(--lineColor);
                 &.active {
                     color: #FFF;
                     background: var(--primary);

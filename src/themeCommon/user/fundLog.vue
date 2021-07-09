@@ -42,7 +42,7 @@
                         </van-button>
                     </div>
                     <div class='btns'>
-                        <van-button plain size='small' type='primary' @click='reset'>
+                        <van-button class='reset-btn' plain size='small' type='primary' @click='reset'>
                             {{ $t('fund.reset') }}
                         </van-button>
                         <van-button size='small' type='primary' @click='handleProConfirm'>
@@ -77,7 +77,7 @@
                         />
                     </div>
                     <div class='btns'>
-                        <van-button plain size='small' type='primary' @click='dateReset'>
+                        <van-button class='reset-btn' plain size='small' type='primary' @click='dateReset'>
                             {{ $t('fund.reset') }}
                         </van-button>
                         <van-button size='small' type='primary' @click='dateConfirm'>
@@ -353,7 +353,7 @@ export default {
             .van-dropdown-menu__title {
                 color: var(--color);
                 &.van-dropdown-menu__title--active {
-                    color: var(--riseColor);
+                    color: var(--primary);
                 }
             }
         }
@@ -379,20 +379,21 @@ export default {
                     border-color: var(--primary);
                 }
             }
-            .van-cell {
-                padding: 0;
-                background: var(--contentColor);
-                :deep(.van-cell__title) {
-                    color: var(--color);
-                }
-            }
         }
         .btns {
             display: flex;
             justify-content: space-around;
             margin: rem(20px) 0;
             .van-button {
+                flex: 1;
+                margin: 0 rem(20px);
                 padding: 0 rem(30px);
+                background-color: var(--primary);
+                &.reset-btn {
+                    color: var(--color);
+                    background-color: var(--primaryAssistColor);
+                    border: none;
+                }
             }
         }
     }

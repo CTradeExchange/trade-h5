@@ -2,7 +2,7 @@
     <van-tabs
         v-model:active='active'
         :aaa='background'
-        :background='background'
+
         :border='border'
         class='tabs'
         :color='color'
@@ -92,11 +92,14 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-:deep(.van-tabs__nav) {
-    .van-tab {
-        flex: none;
-        padding: 0 !important;
-        text-align: left;
+:deep(.van-tabs__wrap) {
+    height: auto;
+    .van-tabs__nav {
+        .van-tab {
+            flex: none;
+            padding: 0 !important;
+            text-align: left;
+        }
     }
 }
 .dot {
@@ -117,6 +120,7 @@ export default {
     }
     .dot {
         color: var(--color);
+        background-color: var(--primary);
         animation: zoomDot 0.26s ease normal forwards;
     }
 }

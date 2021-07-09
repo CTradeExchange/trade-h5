@@ -75,7 +75,6 @@ export default {
 
         const handleLogout = () => {
             Dialog.confirm({
-                theme: 'round-button',
                 title: t('common.tip'),
                 message: t('setting.logoutConfirm'),
             }).then(() => {
@@ -174,16 +173,6 @@ export default {
         span {
             color: var(--color);
             font-size: rem(34px);
-        }
-    }
-    .van-cell {
-        color: var(--color);
-        background-color: var(--contentColor) !important;
-        .van-cell__title {
-            color: var(--color);
-        }
-        &::after {
-            border-bottom: solid 1px var(--lineColor);
         }
     }
 }

@@ -238,25 +238,6 @@ export default {
 .page-wrap {
     flex: 1;
     background-color: var(--bgColor);
-    .filed-wrap {
-        :deep(.van-cell-group) {
-            .van-cell {
-                background-color: var(--contentColor);
-                .van-cell__title {
-                    color: var(--color);
-                }
-                .van-field__control {
-                    color: var(--color);
-                }
-                &::after {
-                    border-bottom: 1px solid var(--lineColor);
-                }
-            }
-            &::after {
-                border-color: var(--lineColor);
-            }
-        }
-    }
     .confirm-btn {
         position: absolute;
         bottom: 0;

@@ -272,29 +272,6 @@ i {
     background-position: rem(-5px) rem(-5px);
     background-size: rem(54px) auto;
 }
-.van-button--default {
-    border: 1px solid var(--lineColor);
-}
-.van-dialog {
-    background-color: var(--contentColor);
-    .van-dialog__header {
-        color: var(--normalColor);
-    }
-    .van-dialog__message {
-        color: var(--color);
-    }
-    .van-button {
-        background-color: var(--contentColor);
-        &.van-dialog__cancel {
-            .van-button__text {
-                color: var(--color);
-            }
-        }
-    }
-    .van-dialog__footer {
-        background-color: var(--contentColor);
-    }
-}
 .bank-icons-sm.bk-ABOCCNBJXXX,
 .bk-ABC {
     background-position: rem(-5px) rem(-5px);
@@ -456,30 +433,6 @@ i {
 .van-loading {
     text-align: center;
 }
-/* .van-cell {
-    background-color: var(--assistColor) !important;
-}
-.van-dropdown-menu__bar {
-    background-color: var(--white) !important;
-}
-.van-tab {
-    background-color: var(--white) !important;
-    .title {
-        color: var(--btnColor);
-    }
-}
-.van-tabs__nav--complete {
-    background-color: var(--white) !important;
-    .title {
-        color: var(--lightenPrimary);
-    }
-}
-.van-checkbox__label {
-    color: var(--lightenPrimary) !important;
-}
-.van-dropdown-item__option {
-    color: var(--lightenPrimary);
-} */
 .m-dialog {
     display: flex;
     flex-direction: column;
@@ -490,7 +443,7 @@ i {
     .dialog-header {
         position: relative;
         padding: rem(43px) 0 rem(45px) 0;
-        color: #333;
+        color: var(--color);
         font-size: rem(34px);
         .title {
             text-align: center;
@@ -509,6 +462,9 @@ i {
     .dialog-body {
         flex: 1;
         overflow-y: auto;
+        .words {
+            color: var(--color);
+        }
     }
     .dialog-footer {
         display: flex;
@@ -531,10 +487,10 @@ body {
         color: var(--color);
     }
     .van-search__content {
-        background-color: var(--bgColor) !important;
+        background-color: var(--bgColor);
     }
     .van-cell {
-        background-color: var(--contentColor) !important;
+        background-color: var(--contentColor);
         .van-cell__title {
             color: var(--normalColor);
         }
@@ -550,10 +506,10 @@ body {
     }
     .van-action-sheet__item {
         color: var(--color);
-        background-color: var(--contentColor) !important;
+        background-color: var(--contentColor);
     }
     .van-checkbox__label {
-        color: var(--minorColor) !important;
+        color: var(--minorColor);
     }
     .van-action-sheet {
         background: var(--contentColor);
@@ -562,7 +518,68 @@ body {
             color: var(--color);
         }
     }
+    .van-tabs__nav {
+        background: var(--contentColor);
+    }
     [class*=van-hairline]::after {
         border-color: var(--lineColor);
+    }
+    .van-dropdown-menu__bar {
+        background-color: var(--white);
+    }
+    .van-tab {
+        background-color: var(--white);
+        .van-tab__text {
+            color: var(--normalColor);
+        }
+        &.van-tab--active {
+            .van-tab__text {
+                color: var(--primary);
+            }
+        }
+        .title {
+            color: var(--btnColor);
+        }
+    }
+    .van-tabs__nav--complete {
+        background-color: var(--white);
+        .title {
+            color: var(--lightenPrimary);
+        }
+    }
+    .van-dropdown-item__option {
+        color: var(--lightenPrimary);
+    }
+    .van-popup {
+        background: var(--contentColor);
+    }
+    .van-button--default {
+        border: 1px solid var(--lineColor);
+    }
+    .van-dialog {
+        background-color: var(--contentColor);
+        .van-dialog__header {
+            color: var(--normalColor);
+        }
+        .van-dialog__message {
+            color: var(--color);
+        }
+        .van-button {
+            background-color: var(--contentColor);
+            &.van-dialog__confirm {
+                .van-button__text {
+                    color: var(--primary);
+                }
+            }
+            .van-button__text {
+                color: var(--normalColor);
+            }
+        }
+        .van-dialog__footer {
+            background-color: var(--contentColor);
+        }
+    }
+    ::-webkit-input-placeholder {
+        color: var(--placeholdColor);
     }
 }

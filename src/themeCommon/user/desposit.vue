@@ -674,7 +674,7 @@ export default {
         margin-top: rem(20px);
         padding: 0 rem(30px);
         background-color: var(--contentColor);
-        border-top: solid rem(20px) var(--lineColor);
+        border-top: solid rem(20px) var(--bgColor);
         .pi-item {
             flex: 0 0 50%;
             color: var(--normalColor);

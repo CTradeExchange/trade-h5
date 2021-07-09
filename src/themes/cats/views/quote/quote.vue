@@ -4,7 +4,6 @@
             <TopTab
                 ref='tabList'
                 v-model='activeTab'
-                :aa='$style.contentColor'
                 :background='$style.contentColor'
                 class='tradeSortNav'
                 :dot='true'
@@ -96,7 +95,7 @@ export default {
 .quoteWrap {
     flex: 1;
     width: 100%;
-    margin-top: rem(80px);
+    margin-top: rem(90px);
     padding-bottom: rem(100px);
     overflow: auto;
     background: var(--bgColor);

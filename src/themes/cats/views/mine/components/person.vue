@@ -12,7 +12,7 @@
             </div>
         </div>
         <div v-else class='personInfo'>
-            <div class='personNo'>
+            <div class='personNo' @click="$router.push('/personal')">
                 <img class='faceImg' src='../../../images/face.png' />
                 <div v-if='customerInfo' class='customerNo'>
                     <p>

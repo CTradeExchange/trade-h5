@@ -92,7 +92,8 @@ export default {
                 border-radius: 2px;
                 &:first-child {
                     margin-left: 20px;
-                    background: #F4F7FC;
+                    color: var(--color);
+                    background: var(--contentColor);
                 }
                 &:last-child {
                     margin-right: 20px;
@@ -104,9 +105,23 @@ export default {
         padding-bottom: rem(60px);
         overflow-y: auto;
         .words {
-            color: #333;
             font-size: rem(28px);
             text-align: center;
+        }
+    }
+    .dialog-footer {
+        padding-bottom: 20px;
+        .van-button {
+            margin: 0 10px;
+            border-radius: 2px;
+            &:first-child {
+                margin-left: 20px;
+                color: var(--color);
+                background: var(--primaryAssistColor);
+            }
+            &:last-child {
+                margin-right: 20px;
+            }
         }
     }
 }

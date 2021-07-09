@@ -287,7 +287,8 @@ export default {
     transform: translateY(-100%);
 }
 .stepper {
-    background: var(--bgColor);
+    background: var(--primaryAssistColor);
+    border-radius: rem(10px);
     &.warn {
         color: var(--warn);
     }
@@ -326,10 +327,10 @@ export default {
         color: var(--color);
         line-height: rem(45px);
         text-align: center;
-        background: var(--bgColor);
+        background: var(--primaryAssistColor);
         border-radius: 4px;
         &.active {
-            color: var(--color);
+            color: #FFF;
             background: var(--primary);
         }
     }
@@ -337,7 +338,7 @@ export default {
 .dialog-footer {
     width: 100%;
     .pcHandler {
-        color: var(--color);
+        color: #FFF;
         background: var(--primary);
         border: none;
     }

@@ -3,13 +3,14 @@
         <Banner :list='BannerConfig.list' />
         <Products ref='productsRef' />
         <Fastlink />
-        <BanderBanner class='BanderBanner' :list='BannerConfig.list' />
+        <BanderBanner class='BanderBanner' :list='BannerMiniConfig.list' />
         <News class='newBar' />
     </div>
 </template>
 
 <script>
 import BannerConfig from './configs/banner'
+import BannerMiniConfig from './configs/banner_mini'
 import NoticeConfig from './configs/notice'
 import Banner from '@c/modules/banner/banner'
 import Fastlink from './components/fastlink'
@@ -45,6 +46,7 @@ export default {
             productsRef,
             BannerConfig,
             NoticeConfig,
+            BannerMiniConfig
         }
     }
 }

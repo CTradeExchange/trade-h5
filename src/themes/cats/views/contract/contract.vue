@@ -5,14 +5,14 @@
             :title='product.symbolName'
         />
         <div class='container'>
-            <van-cell size='large' :title='$t("contract.symbolCode")' :value='product.symbolCode' />
-            <van-cell size='large' :title='$t("contract.contractSize")' :value='product.contractSize' />
-            <van-cell size='large' :title="$t('contract.profitCurrency')" :value='product.profitCurrency' />
-            <van-cell size='large' :title="$t('contract.spread')" :value="$t('contract.float')" />
-            <van-cell size='large' :title="$t('contract.singleNumbers')" :value='product.minVolume+"-"+product.maxVolume' />
-            <van-cell size='large' :title="$t('contract.steper')" :value='product.volumeStep' />
-            <van-cell size='large' :title="$t('contract.limitDistance')" :value='product.priceMinLimit+"/"+product.priceMaxLimit+"点"' />
-            <van-cell v-if='usedMarginSet && usedMarginSet.length' size='large' :title="$t('contract.advance')">
+            <van-cell :title='$t("contract.symbolCode")' :value='product.symbolCode' />
+            <van-cell :title='$t("contract.contractSize")' :value='product.contractSize' />
+            <van-cell :title="$t('contract.profitCurrency')" :value='product.profitCurrency' />
+            <van-cell :title="$t('contract.spread')" :value="$t('contract.float')" />
+            <van-cell :title="$t('contract.singleNumbers')" :value='product.minVolume+"-"+product.maxVolume' />
+            <van-cell :title="$t('contract.steper')" :value='product.volumeStep' />
+            <van-cell :title="$t('contract.limitDistance')" :value='product.priceMinLimit+"/"+product.priceMaxLimit+"点"' />
+            <van-cell v-if='usedMarginSet && usedMarginSet.length' :title="$t('contract.advance')">
                 <div class='margin-info'>
                     <span class='left-label header'>
                         {{ $t('contract.volumeRange') }}
@@ -38,11 +38,11 @@
                     </span>
                 </div>
             </van-cell>
-            <van-cell size='large' :title="$t('contract.feeType')" :value='$t(parseFloat(product.feeFormula)===1?"contract.ratio":"contract.amount")' />
-            <van-cell size='large' :title="$t('fee')" :value='fee' />
-            <van-cell size='large' :title="$t('contract.interest')" :value='interest' />
-            <van-cell size='large' :title="$t('contract.zone')" :value="'GMT +' + (0 - new Date().getTimezoneOffset() / 60)" />
-            <van-cell v-if='quoteTimeList && quoteTimeList.length' class='timeListCell' size='large' :title="$t('contract.quoteTime')">
+            <van-cell :title="$t('contract.feeType')" :value='$t(parseFloat(product.feeFormula)===1?"contract.ratio":"contract.amount")' />
+            <van-cell :title="$t('fee')" :value='fee' />
+            <van-cell :title="$t('contract.interest')" :value='interest' />
+            <van-cell :title="$t('contract.zone')" :value="'GMT +' + (0 - new Date().getTimezoneOffset() / 60)" />
+            <van-cell v-if='quoteTimeList && quoteTimeList.length' class='timeListCell' :title="$t('contract.quoteTime')">
                 <template v-for='(item,index) in quoteTimeList' :key='index'>
                     <div v-if='item.length' class='item-item'>
                         {{ $t('weekdayMap.'+ item[0].dayOfWeek) }}:
@@ -54,7 +54,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell v-if='tradeTimeList && tradeTimeList.length' class='timeListCell' size='large' :title="$t('contract.tradeTime')">
+            <van-cell v-if='tradeTimeList && tradeTimeList.length' class='timeListCell' :title="$t('contract.tradeTime')">
                 <template v-for='(item,index) in tradeTimeList' :key='index'>
                     <div v-if='item.length' class='item-item'>
                         {{ $t('weekdayMap.'+ item[0].dayOfWeek) }}:
@@ -64,8 +64,8 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell v-if='product.eodTime' size='large' :title="$t('contract.eodTime')" :value='eodTime' />
-            <van-cell v-if='expireTime' size='large' :title='$t("contract.expireTime")' :value='expireTime' />
+            <van-cell v-if='product.eodTime' :title="$t('contract.eodTime')" :value='eodTime' />
+            <van-cell v-if='expireTime' :title='$t("contract.expireTime")' :value='expireTime' />
         </div>
     </div>
 </template>
@@ -165,16 +165,10 @@ export default {
 @import '@/sass/mixin.scss';
 .container {
     flex: 1;
+    padding-top: rem(100px);
     overflow-y: auto;
     background-color: var(--bgColor);
     :deep(.van-cell) {
-        background-color: var(--contentColor);
-        .van-cell__title {
-            color: var(--normalColor);
-        }
-        .van-cell__value {
-            color: var(--color);
-        }
         .margin-info {
             text-align: left;
             .left-label {

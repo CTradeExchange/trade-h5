@@ -109,6 +109,7 @@ export default {
 }
 .stepper {
     background: var(--primaryAssistColor);
+    border-radius: rem(10px);
     &.warn {
         color: var(--warn);
     }

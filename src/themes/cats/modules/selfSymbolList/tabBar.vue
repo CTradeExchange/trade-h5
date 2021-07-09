@@ -123,20 +123,20 @@ export default {
             content: '';
         }
         &.default::after {
-            background: url('../../images/moren_default.png') #FFF center center no-repeat;
+            background: url('../../images/moren_default.png') transparent center center no-repeat;
             background-size: rem(20px) auto;
         }
         &.up {
             color: rgb(71, 127, 211);
             &::after {
-                background: url('../../images/moren_up.png') #FFF center center no-repeat;
+                background: url('../../images/moren_up.png') transparent center center no-repeat;
                 background-size: rem(20px) auto;
             }
         }
         &.down {
             color: rgb(71, 127, 211);
             &::after {
-                background: url('../../images/moren_down.png') #FFF center center no-repeat;
+                background: url('../../images/moren_down.png') transparent center center no-repeat;
                 background-size: rem(20px) auto;
             }
         }

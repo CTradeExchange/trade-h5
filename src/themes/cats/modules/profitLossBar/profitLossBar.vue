@@ -80,7 +80,8 @@ export default {
     line-height: 1.5;
 }
 .stepper {
-    background: var(--bgColor);
+    background: var(--primaryAssistColor);
+    border-radius: rem(10px);
     &.warn {
         color: var(--warn);
     }

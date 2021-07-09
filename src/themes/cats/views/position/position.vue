@@ -283,7 +283,7 @@ export default {
             }
         }
         &.adequate {
-            color: #11B873;
+            color: var(--success);
         }
         &.less {
             color: #F39800;
@@ -327,9 +327,14 @@ export default {
         padding-bottom: rem(30px);
         .van-button {
             height: rem(48px);
-            color: var(--color);
-            background-color: var(--primaryAssistColor);
-            border-color: var(--lineColor);
+            margin-right: rem(10px);
+            color: var(--minorColor);
+            background-color: var(--contentColor);
+            border: none;
+            border-radius: rem(8px);
+            &.active {
+                color: #FFF;
+            }
         }
     }
 }
@@ -359,6 +364,9 @@ export default {
             &.van-tab--active {
                 color: #FFF !important;
                 background: var(--primary);
+                .van-tab__text {
+                    color: #FFF;
+                }
             }
         }
     }
