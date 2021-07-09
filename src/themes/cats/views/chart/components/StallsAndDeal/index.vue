@@ -446,7 +446,6 @@ export default {
                     .val {
                         display: block;
                         margin: rem(15px) 0;
-                        color: var(--contentColor);
                     }
                 }
                 .forWide {

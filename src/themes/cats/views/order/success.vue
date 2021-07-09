@@ -223,9 +223,9 @@ export default {
         margin-top: rem(40px);
         padding: rem(66px) rem(40px);
         line-height: 1.6;
-        background: #FFF;
+        background: var(--contentColor);
         border-radius: rem(10px);
-        box-shadow: 0 0 18px 0 rgba(243, 243, 243, 1);
+        box-shadow: 0 0 18px 0 var(--normalColor);
     }
     .product {
         padding-bottom: rem(40px);
@@ -245,7 +245,7 @@ export default {
             color: var(--minorColor);
         }
         :deep(.van-cell__value) {
-            color: #333;
+            color: var(--color);
         }
     }
     .dataBar {
@@ -268,7 +268,8 @@ export default {
         cursor: pointer;
     }
     .toDetail {
-        background-color: #F4F7FC;
+        color: var(--color);
+        background-color: var(--primaryAssistColor);
     }
     .btnGroup {
         margin-top: rem(45px);

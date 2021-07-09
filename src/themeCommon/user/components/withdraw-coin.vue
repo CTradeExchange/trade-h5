@@ -96,7 +96,7 @@
             </div>
             <!-- 无钱包地址 -->
             <div v-else class='wallet-not' @click='goWalletAdd'>
-                <van-icon color='#333' name='plus' />
+                <van-icon :color='style.color' name='plus' />
                 <span>{{ $t('withdrawCoin.walletAdd') }}</span>
             </div>
         </div>
@@ -714,10 +714,11 @@ export default {
     overflow-y: auto;
     .empty {
         height: rem(20px);
-        background-color: var(--lineColor);
+        background-color: var(--bgColor);
     }
 }
 .module-form {
+    background-color: var(--contentColor);
     .select {
         display: flex;
         align-items: center;
@@ -817,6 +818,7 @@ export default {
 }
 .module-wallet {
     padding: rem(30px);
+    background-color: var(--contentColor);
     .title {
         color: var(--color);
         font-size: rem(28px);
@@ -833,7 +835,7 @@ export default {
         height: rem(120px);
         margin-top: rem(28px);
         padding: 0 rem(30px);
-        border: 1px solid var(--lineColor);
+        border: 1px solid var(--placeholdColor);
         border-radius: rem(4px);
         :deep(.van-icon-plus) {
             margin-right: rem(26px);
@@ -943,7 +945,7 @@ export default {
     align-items: center;
     justify-content: center;
     height: rem(104px);
-    background-color: var(--bgColor);
+    background-color: var(--contentColor);
     border-top: 1px solid var(--lineColor);
     span {
         margin-left: rem(15px);

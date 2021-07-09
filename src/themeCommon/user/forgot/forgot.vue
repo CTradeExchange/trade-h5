@@ -238,6 +238,9 @@ export default {
     .tabs-wrap {
         width: 40%;
         margin: rem(60px) auto 0;
+        :deep(.van-tabs__nav--line) {
+            background: var(--contentColor);
+        }
     }
 }
 .icon_icon_close_big {

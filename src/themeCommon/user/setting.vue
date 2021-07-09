@@ -113,18 +113,20 @@ export default {
             store.commit('Update_invertColor', action.val)
             state.colorVisible = false
 
-            // let themeColors = sessionStorage.getItem('themeColors')
-            // if (!isEmpty(themeColors)) {
-            //     themeColors = JSON.parse(themeColors)
+            let themeColors = sessionStorage.getItem('themeColors')
+            if (!isEmpty(themeColors)) {
+                themeColors = JSON.parse(themeColors)
 
-            //     document.body.style.setProperty('--color', themeColors[action.val].color)
-            //     document.body.style.setProperty('--contentColor', themeColors[action.val].contentColor)
-            //     document.body.style.setProperty('--primaryAssistColor', themeColors[action.val].primaryAssistColor)
-            //     document.body.style.setProperty('--bgColor', themeColors[action.val].bgColor)
-            //     document.body.style.setProperty('--normalColor', themeColors[action.val].normalColor)
-            //     document.body.style.setProperty('--minorColor', themeColors[action.val].assistColor)
-            //     document.body.style.setProperty('--lineColor', themeColors[action.val].lineColor)
-            // }
+                document.body.style.setProperty('--color', themeColors[action.val].color)
+                document.body.style.setProperty('--contentColor', themeColors[action.val].contentColor)
+                document.body.style.setProperty('--primaryAssistColor', themeColors[action.val].primaryAssistColor)
+                document.body.style.setProperty('--bgColor', themeColors[action.val].bgColor)
+                document.body.style.setProperty('--normalColor', themeColors[action.val].normalColor)
+                document.body.style.setProperty('--minorColor', themeColors[action.val].minorColor)
+                document.body.style.setProperty('--lineColor', themeColors[action.val].lineColor)
+                document.body.style.setProperty('--assistColor', themeColors[action.val].assistColor)
+                document.body.style.setProperty('--placeholdColor', themeColors[action.val].placeholdColor)
+            }
         }
 
         // const setRootVariable = () => {

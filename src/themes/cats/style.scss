@@ -295,25 +295,6 @@ i {
         background-color: var(--contentColor);
     }
 }
-.van-cell {
-    background-color: var(--contentColor) !important;
-    .van-cell__title {
-        color: var(--normalColor);
-    }
-    .van-cell__value {
-        color: var(--color);
-    }
-    .van-field__control {
-        color: var(--color);
-    }
-}
-.van-action-sheet__item {
-    color: var(--color);
-    background-color: var(--contentColor) !important;
-}
-.van-checkbox__label {
-    color: var(--minorColor) !important;
-}
 .bank-icons-sm.bk-ABOCCNBJXXX,
 .bk-ABC {
     background-position: rem(-5px) rem(-5px);
@@ -551,5 +532,34 @@ body {
     }
     .van-search__content {
         background-color: var(--bgColor) !important;
+    }
+    .van-cell {
+        background-color: var(--contentColor) !important;
+        .van-cell__title {
+            color: var(--normalColor);
+        }
+        .van-cell__value {
+            color: var(--color);
+        }
+        .van-field__control {
+            color: var(--color);
+        }
+        &::after {
+            border-bottom: 1px solid var(--lineColor);
+        }
+    }
+    .van-action-sheet__item {
+        color: var(--color);
+        background-color: var(--contentColor) !important;
+    }
+    .van-checkbox__label {
+        color: var(--minorColor) !important;
+    }
+    .van-action-sheet {
+        background: var(--contentColor);
+        .van-action-sheet__header,
+        .van-action-sheet__content {
+            color: var(--color);
+        }
     }
 }

@@ -1060,7 +1060,7 @@ export default {
             justify-content: flex-start;
             width: 100%;
             padding-top: rem(20px);
-            color: #646566;
+            color: var(--normalColor);
             font-size: rem(24px);
             .item {
                 display: flex;
@@ -1116,7 +1116,7 @@ export default {
     }
     .placeholder {
         height: rem(10px);
-        background: var(--lineColor);
+        background: var(--bgColor);
     }
     .tv-head {
         box-sizing: border-box;
@@ -1143,6 +1143,7 @@ export default {
                 line-height: rem(60px);
                 white-space: nowrap;
                 .van-tab__text {
+                    color: var(--normalColor);
                     white-space: nowrap;
                 }
             }
@@ -1200,7 +1201,7 @@ export default {
                 justify-content: center;
                 margin-top: rem(1px);
                 background: var(--contentColor);
-                box-shadow: 0 0 2px 0 #EBEDF0;
+                //box-shadow: 0 0 2px 0 #EBEDF0;
                 .option {
                     padding: rem(20px) rem(50px) rem(10px);
                     color: var(--normalColor);
@@ -1285,6 +1286,7 @@ export default {
         }
         .kIcon {
             display: inline-block;
+            color: var(--normalColor);
             vertical-align: middle;
         }
         .klineTypeRightIcon {
@@ -1398,6 +1400,7 @@ export default {
                     .inner-label {
                         flex: 1;
                         height: rem(50px);
+                        color: var(--normalColor);
                         line-height: rem(45px);
                     }
                 }

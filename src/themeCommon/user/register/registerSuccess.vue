@@ -2,7 +2,7 @@
     <div class='page-wrap'>
         <section class='registerSuccess'>
             <div class='icon'>
-                <i class='icon_chenggong'></i>
+                <i class='icon_success'></i>
             </div>
             <div class='container'>
                 <h2>{{ $t('register.openSuccess') }}</h2>

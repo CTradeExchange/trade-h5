@@ -173,7 +173,7 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background: var(--contentColor);
+    background: var(--bgColor);
 }
 .wrap {
     display: flex;

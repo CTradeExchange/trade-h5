@@ -54,7 +54,7 @@ export default {
 @import '~@/sass/mixin.scss';
 .home {
     height: 100%;
-    margin-bottom: rem(100px);
+    margin-bottom: rem(80px);
     overflow: auto;
     background: var(--contentColor);
 }

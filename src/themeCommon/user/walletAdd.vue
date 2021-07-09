@@ -274,7 +274,7 @@ export default {
     background: var(--contentColor);
     .empty {
         height: rem(20px);
-        background-color: var(--contentColor);
+        background-color: var(--bgColor);
     }
 }
 .module-form {

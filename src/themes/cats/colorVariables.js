@@ -63,7 +63,7 @@ export function setRootVariable (themeColor) {
     const invertColor = themeColor || localGet('invertColor')
     const colorsArr = Object.assign(colors[invertColor], colors.common)
     store.commit('Update_style', colorsArr)
-    const style = document.documentElement.style
+    const style = document.body.style
     for (const key in colorsArr) {
         if (Object.hasOwnProperty.call(colorsArr, key)) {
             const el = colorsArr[key]

@@ -112,6 +112,7 @@ export default {
 .personInfo {
     padding: rem(40px);
     color: var(--color);
+    background: var(--contentColor);
 }
 .personNo {
     position: relative;
@@ -151,7 +152,7 @@ export default {
     margin-top: rem(30px);
     padding: rem(20px) rem(30px);
     line-height: 1.4;
-    background: var(--contentColor);
+    background: var(--assistColor);
     border-radius: rem(10px);
     .accountView {
         font-size: rem(34px);

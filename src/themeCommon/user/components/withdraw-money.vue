@@ -510,9 +510,10 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .pageWrap {
+    background: var(--contentColor);
     .empty {
         height: rem(20px);
-        background-color: var(--lineColor);
+        background-color: var(--bgColor);
     }
     .header {
         display: flex;
@@ -581,7 +582,7 @@ export default {
     position: absolute;
     bottom: 0;
     height: rem(104px);
-    background: var(--lineColor);
+    background: var(--contentColor);
     border-color: var(--lineColor);
     span {
         color: var(--color);
