@@ -84,8 +84,9 @@ export default {
     height: 15%;
     margin: 2% !important;
     overflow: hidden;
+    background: var(--contentColor);
     border-radius: rem(10px);
-    box-shadow: rem(2px) rem(3px) rem(5px) #868383;
+    box-shadow: rem(2px) rem(3px) rem(5px) var(--minorColor);
     .notice {
         padding: rem(30px);
         .top {
@@ -98,9 +99,9 @@ export default {
         }
         .content {
             display: -webkit-box;
+            overflow: hidden;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 3;
-            overflow: hidden;
         }
     }
 }

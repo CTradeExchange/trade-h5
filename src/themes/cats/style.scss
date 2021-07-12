@@ -506,6 +506,9 @@ body {
         &::after {
             border-bottom: 1px solid var(--lineColor);
         }
+        &:active {
+            background-color: var(--primaryAssistColor);
+        }
     }
     .van-action-sheet__item {
         color: var(--color);
@@ -537,7 +540,7 @@ body {
         }
         &.van-tab--active {
             .van-tab__text {
-                color: var(--color);
+                color: var(--primary);
             }
         }
         .title {

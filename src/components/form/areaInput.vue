@@ -163,7 +163,7 @@ export default {
         width: 1px;
         height: rem(50px);
         margin-top: rem(-25px);
-        background: var(--minorColor);
+        background: var(--lineColor);
         content: '';
     }
 }

@@ -160,7 +160,7 @@ export default {
 <style lang="scss" >
 @import '~@/sass/mixin.scss';
 .popup-myAsset {
-    background-color: transparent;
+    background-color: var(--contentColor);
     .m-empty {
         padding: rem(100px) 0;
     }
@@ -279,7 +279,7 @@ export default {
             display: inline-block;
             width: rem(60px);
             height: rem(80px);
-            color: #FFF;
+            color: var(--color);
             font-size: rem(40px);
             line-height: rem(80px);
             text-align: center;
