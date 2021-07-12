@@ -54,7 +54,7 @@
             />
         </div>
         <div class='footerBtn'>
-            <van-button block :color='$style.primary' size='normal' @click='submitHandler'>
+            <van-button block :color='$style.primary' :loading='loading' size='normal' @click='submitHandler'>
                 {{ $t(direction==='buy'?'trade.buy':'trade.sell') + $t("submit") }}
             </van-button>
         </div>
@@ -170,7 +170,7 @@ export default {
                 stopLoss: state.stopLoss ? mul(state.stopLoss, p) : undefined,
                 takeProfit: state.stopProfit ? mul(state.stopProfit, p) : undefined
             }
-
+            if (state.loading) return false
             state.loading = true
             addMarketOrder(params)
                 .then(res => {
