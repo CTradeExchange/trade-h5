@@ -17,7 +17,14 @@
                     :immediate-check='false'
                     @load='onLoad'
                 >
-                    <van-collapse v-for='(item, index) in list' :key='index' v-model='activeIndex' accordion @change='handleFold(index)'>
+                    <van-collapse
+                        v-for='(item, index) in list'
+                        :key='index'
+                        v-model='activeIndex'
+                        accordion
+                        :border='false'
+                        @change='handleFold(index)'
+                    >
                         <van-collapse-item :name='index+1'>
                             <template #title>
                                 <p class='amount'>
@@ -276,6 +283,7 @@ export default {
         }
     }
     .record-list {
+        height: 100%;
         .van-collapse-item {
             border-top: solid rem(20px) var(--bgColor);
         }
