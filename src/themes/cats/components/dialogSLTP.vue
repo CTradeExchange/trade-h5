@@ -270,6 +270,6 @@ export default {
 .m-dialogZyzs {
     height: rem(630px);
     overflow-y: visible;
-    background-color: var(--bgColor);
+    background-color: var(--contentColor);
 }
 </style>

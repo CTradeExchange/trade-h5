@@ -1509,7 +1509,7 @@ export default {
             left: 50%;
             height: rem(44px);
             padding: 0 rem(14px);
-            color: #FFF;
+            color: var(--color);
             font-size: rem(28px);
             line-height: rem(46px);
             background: var(--contentColor);

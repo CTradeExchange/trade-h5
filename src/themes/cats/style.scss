@@ -591,6 +591,9 @@ body {
             border-radius: rem(8px);
         }
     }
+    .van-switch {
+        background-color: var(--bgColor);
+    }
     ::-webkit-input-placeholder {
         color: var(--placeholdColor);
     }

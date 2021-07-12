@@ -439,6 +439,6 @@ export default {
     flex-flow: column;
     height: rem(640px);
     overflow: visible;
-    background-color: var(--bgColor);
+    background-color: var(--contentColor);
 }
 </style>
