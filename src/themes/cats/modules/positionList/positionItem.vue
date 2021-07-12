@@ -140,7 +140,7 @@ export default {
             justify-content: space-between;
             width: 100%;
             margin-bottom: rem(20px);
-            color: #999;
+            color: var(--minorColor);
             font-size: rem(20px);
             line-height: 1.45;
             .th {
@@ -190,8 +190,8 @@ export default {
                 top: rem(6px);
             }
             .warn {
-                color: #333;
-                background-color: #FFA700;
+                color: var(--color);
+                background-color: var(--focusColor);
             }
             .name {
                 display: inline-block;
@@ -207,7 +207,7 @@ export default {
                 vertical-align: bottom;
             }
             .time {
-                color: #999;
+                color: var(--minorColor);
                 font-size: rem(20px);
             }
         }

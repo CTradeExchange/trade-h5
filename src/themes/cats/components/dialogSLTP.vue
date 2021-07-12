@@ -108,8 +108,8 @@ export default {
             if (props.data?.positionId) store.commit('_trade/Update_modifyPositionId', props.data.positionId)
         })
         watchEffect(() => {
-            if (props.data?.stopLoss) state.stopLossPrice = props.data.stopLossDecimal
-            if (props.data?.stopLoss) state.stopProfitPrice = props.data.takeProfitDecimal
+            if (props.data?.stopLoss > 0) state.stopLossPrice = props.data.stopLossDecimal
+            if (props.data?.takeProfit > 0) state.stopProfitPrice = props.data.takeProfitDecimal
         })
         const closed = () => { // 关闭弹出层且动画结束后触发
             state.stopLossPrice = ''
@@ -119,7 +119,10 @@ export default {
         const closeHandler = () => {
             state.showDialog = false
         }
-        const open = () => {}
+        const open = () => {
+            if (props.data?.stopLoss > 0) state.stopLossPrice = props.data.stopLossDecimal
+            if (props.data?.takeProfit > 0) state.stopProfitPrice = props.data.takeProfitDecimal
+        }
         // 获取修改止盈止损参数
         const submitParams = () => {
             const data = props.data
