@@ -33,7 +33,7 @@
                 <van-cell class='dataBar' :title="$t('trade.positionPrice')" :value='orderInfo.openPrice' />
                 <van-cell class='dataBar' :title="$t('trade.closedPrice')" :value='orderInfo.executePrice' />
                 <van-cell class='dataBar' :title="$t('trade.closeProfit')" :value='orderInfo.profit' />
-                <van-cell class='dataBar' :title="$t('trade.swap')" :value='orderInfo.interest' />
+                <!-- <van-cell class='dataBar' :title="$t('trade.swap')" :value='orderInfo.interest' /> -->
                 <van-cell v-if='orderInfo.fee' class='dataBar' :title="$t('trade.fee')" :value='orderInfo.fee' />
             </template>
 

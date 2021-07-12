@@ -33,8 +33,8 @@
                             <div class='sub' :class='[product.cur_color]'>
                                 {{ $t('trade.currentPrice') }}
                             </div>
-                            <div class='name'>
-                                {{ Number(orderInfo.direction) === 1 ? product.sell_price : product.buy_price }}
+                            <div class='name' :class='[Number(data.direction) === 1 ? product.buy_color : product.sell_color]'>
+                                {{ Number(orderInfo.direction) === 1 ? product.buy_price : product.sell_price }}
                             </div>
                         </div>
                     </div>
@@ -46,7 +46,7 @@
                             </div>
                             <div class='name'>
                                 <span class='number'>
-                                    {{ orderInfo.stopLoss ? shiftedBy(orderInfo.stopLoss, -1*product.price_digits):'--' }}
+                                    {{ orderInfo.stopLoss ? shiftedBy(orderInfo.stopLoss, -1*product.price_digits): $t("c.noSetup") }}
                                 </span>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                             </div>
                             <div class='name'>
                                 <span class='number'>
-                                    {{ orderInfo.takeProfit ? shiftedBy(orderInfo.takeProfit, -1*product.price_digits) :'--' }}
+                                    {{ orderInfo.takeProfit ? shiftedBy(orderInfo.takeProfit, -1*product.price_digits) : $t("c.noSetup") }}
                                 </span>
                             </div>
                         </div>

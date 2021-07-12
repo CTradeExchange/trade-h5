@@ -68,7 +68,7 @@
                             <div class='sub'>
                                 {{ $t('trade.currentPrice') }}
                             </div>
-                            <div class='name' :class='[product.cur_color]'>
+                            <div class='name' :class='[Number(positionData.direction) === 1 ? product.sell_color : product.buy_color]'>
                                 {{ Number(positionData.direction) === 1 ? product.sell_price : product.buy_price }}
                             </div>
                         </div>

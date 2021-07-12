@@ -41,8 +41,8 @@
                 </div><div class='layout layout-1'>
                     <div class='item item-2 van-hairline--bottom'>
                         <div class='col'>
-                            <div class='sub'>
-                                {{ $t(orderInfo.openDirection===1 ? 'trade.buy':'trade.sell') }}
+                            <div class='sub' :class="Number(orderInfo.closeDirection) === 1 ? 'riseColor' : 'fallColor'">
+                                {{ $t(orderInfo.closeDirection===1 ? 'trade.buy':'trade.sell') }}
                             </div>
                             <div class='name'>
                                 {{ orderInfo.openVolume }} {{ $t('trade.volumeUnit') }}
@@ -203,12 +203,6 @@ export default {
                 .col {
                     .name {
                         margin-bottom: rem(4px);
-                        &.riseColor {
-                            color: var(--fallColor);
-                        }
-                        &.fallColor {
-                            color: var(--riseColor);
-                        }
                         .number {
                             color: var(--minorColor);
                         }
@@ -229,12 +223,6 @@ export default {
             .sub {
                 color: var(--minorColor);
                 font-size: rem(24px);
-                &.riseColor {
-                    color: var(--fallColor);
-                }
-                &.fallColor {
-                    color: var(--riseColor);
-                }
             }
             .active {
                 color: #333;

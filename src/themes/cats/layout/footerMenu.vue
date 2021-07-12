@@ -54,7 +54,10 @@ export default {
 
         // 切换导航
         const menuHandler = (item) => {
-            router.push(item.href)
+            router.push(item.href).catch(err => {
+                console.log(err)
+                state.active = route.path
+            })
         }
         return {
             ...toRefs(state),
