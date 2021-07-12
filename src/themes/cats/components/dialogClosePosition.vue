@@ -86,14 +86,14 @@
                 </a>
             </div>
             <div class='info'>
-                <div class='row'>
+                <!-- <div class='row'>
                     <div class='name'>
                         {{ $t('trade.closeProfit') }}
                     </div>
                     <div class='val'>
                         {{ data.profitLoss>0 ? data.profitLoss : data.profitLoss }} {{ customerInfo.currency }}
                     </div>
-                </div>
+                </div> -->
                 <!-- <div class='row'>
                     <div class='name'>
                         {{ $t('trade.swap') }}

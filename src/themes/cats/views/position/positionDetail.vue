@@ -247,12 +247,6 @@ export default {
                 .col {
                     .name {
                         margin-bottom: rem(4px);
-                        &.riseColor {
-                            color: var(--fallColor);
-                        }
-                        &.fallColor {
-                            color: var(--riseColor);
-                        }
                         .number {
                             color: var(--minorColor);
                         }
@@ -263,7 +257,6 @@ export default {
                 }
             }
             .name {
-                color: var(--color);
                 font-size: rem(28px);
             }
             .code {
@@ -271,24 +264,18 @@ export default {
                 font-size: rem(20px);
             }
             .sub {
-                color: #999;
+                color: var(--minorColor);
                 font-size: rem(24px);
-                &.riseColor {
-                    color: var(--fallColor);
-                }
-                &.fallColor {
-                    color: var(--riseColor);
-                }
             }
             .active {
-                color: #333;
+                color: var(--color);
                 font-size: rem(28px);
             }
         }
         .layout-3 {
             font-size: rem(28px);
             .left {
-                color: #999;
+                color: var(--minorColor);
                 .title {
                     display: inline-block;
                     margin-right: rem(20px);
