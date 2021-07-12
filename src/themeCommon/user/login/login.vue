@@ -48,7 +48,7 @@
     </div>
 
     <!-- 设置登录密码 -->
-    <van-popup v-model:show='loginPwdPop' :close-on-click-overlay='false' :style="{ 'border-radius':'8px' }">
+    <van-popup v-model:show='loginPwdPop' :close-on-click-overlay='false' :style="{ 'border-radius':'8px','background-color': $style.bgColor }">
         <section class='popContainer'>
             <a class='noTip' href='javascript:;' @click='noTip'>
                 {{ $t('login.neverTip') }}
