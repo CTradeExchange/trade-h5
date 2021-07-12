@@ -193,7 +193,7 @@ export default {
                             title: t('common.tip'),
                             confirmButtonText: t('login.goAuthenticate'),
                             message: t('login.goAuthenticateMsg'),
-                            theme: 'round-button',
+
                         }).then(() => {
                             router.push('/authentication')
                         })
@@ -202,7 +202,7 @@ export default {
                             title: t('common.tip'),
                             confirmButtonText: t('common.close'),
                             message: t('common.inReview'),
-                            theme: 'round-button',
+
                         }).then(() => {
                             store.dispatch('_user/logout').then(() => {
                                 return router.push('/login')
@@ -215,7 +215,7 @@ export default {
                             title: t('common.tip'),
                             confirmButtonText: t('common.reSubmit'),
                             message: t('common.reviewFailed') + '\n' + t('common.reviewReson') + res.data.kycAuditRemark,
-                            theme: 'round-button',
+
                         }).then(() => {
                             router.push('/authentication')
                         })
@@ -224,7 +224,7 @@ export default {
                             title: t('common.tip'),
                             confirmButtonText: t('common.ok'),
                             message: t('common.reviewSuccess'),
-                            theme: 'round-button',
+
                         }).then(() => {
                             noticeSetPwd(res.data.loginPassStatus)
                         })

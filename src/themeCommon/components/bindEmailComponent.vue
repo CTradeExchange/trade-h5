@@ -142,7 +142,6 @@ export default {
                 if (res.check()) {
                     if (res.data === 1) {
                         return Dialog.confirm({
-                            theme: 'round-button',
                             title: t('common.tip'),
                             message: t('common.emailBinded'),
                             confirmButtonText: t('common.serivce'),

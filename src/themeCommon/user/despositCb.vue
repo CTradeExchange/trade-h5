@@ -145,7 +145,6 @@ export default {
                     confirmButtonText: t('common.backHome'),
                     cancelButtonText: t('common.serivce'),
                     message: t('deposit.serviceTips2'),
-                    theme: 'round-button',
                 }).then(() => {
                     router.push('/quote')
                 }).catch(() => {

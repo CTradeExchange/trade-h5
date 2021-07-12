@@ -176,7 +176,6 @@ export default {
             if (!customInfo.phone) {
                 return Dialog.confirm({
                     title: t('withdraw.hint'),
-                    theme: 'round-button',
                     message: t('withdraw.bindPhoneHint'),
                     confirmButtonText: t('withdraw.bindBtn'),
                     cancelButtonText: t('withdraw.close')

@@ -120,7 +120,6 @@ export default {
                     } else {
                         if (res.check()) {
                             Dialog.alert({
-                                theme: 'round-button',
                                 title: t('common.tip'),
                                 message: t('login.pwdSuccess'),
                                 confirmButtonText: t('forgot.goLogin')

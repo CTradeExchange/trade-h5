@@ -120,7 +120,6 @@
         class-name='desposit-dialog'
         :confirm-button-text='$t("deposit.agreeText")'
         :show-cancel-button='true'
-        theme='round-button'
         @cancel='onCancel'
         @confirm='onConfirm'
     >
@@ -480,7 +479,6 @@ export default {
                     state.loading = false
                     if (Number(res.data) !== 2) {
                         return Dialog.alert({
-                            theme: 'round-button',
                             title: t('common.tip'),
                             confirmButtonText: Number(res.data) === 1 ? t('common.goLook') : t('login.goAuthenticate'),
                             message: Number(res.data) === 2 ? t('deposit.KYCReviewing') : t('deposit.needKYC'),
@@ -523,7 +521,6 @@ export default {
                 state.btnDisabled = true
                 return Dialog.confirm({
                     title: t('common.tip'),
-                    theme: 'round-button',
                     message: t('deposit.serviceTips1'),
                     confirmButtonText: t('common.serivce'),
                     cancelButtonText: t('common.close')

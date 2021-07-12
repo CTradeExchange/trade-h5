@@ -117,7 +117,6 @@ export default {
                 if (!data || data.length === 0) {
                     return Dialog.alert({
                         title: t('withdraw.hint'),
-                        theme: 'round-button',
                         confirmButtonText: t('withdraw.confirm'),
                         message: t('withdraw.wayMsg'),
                     }).then(() => {

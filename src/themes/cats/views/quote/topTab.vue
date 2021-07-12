@@ -1,8 +1,6 @@
 <template>
     <van-tabs
         v-model:active='active'
-        :aaa='background'
-
         :border='border'
         class='tabs'
         :color='color'

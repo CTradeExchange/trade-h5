@@ -75,7 +75,6 @@ export default {
             }, 1000)
             Dialog.alert({
                 title: t('tip'),
-                theme: 'round-button',
                 message: t('c.otherPlaceLogin'),
                 confirmButtonText: tipTextCountDown
             }).then(() => {

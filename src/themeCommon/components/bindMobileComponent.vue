@@ -91,7 +91,6 @@ export default {
                 if (res.check()) {
                     if (Number(res.data.status) === 1) {
                         return Dialog.confirm({
-                            theme: 'round-button',
                             title: t('common.tip'),
                             message: t('common.phoneBinded'),
                             confirmButtonText: t('common.serivce'),

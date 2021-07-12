@@ -112,7 +112,7 @@
     <van-action-sheet v-model:show='chainNameVisible' :actions='chainNameList' @select='selectChainName' />
 
     <!-- 取款时间弹窗 -->
-    <van-dialog v-model:show='timeShow' theme='round-button' :title="$t('withdraw.hint')">
+    <van-dialog v-model:show='timeShow' :title="$t('withdraw.hint')">
         <div class='time-wrap'>
             <h4>{{ $t('withdraw.timeHint') }}</h4><br />
             <div v-if='timeList.length > 0' class='flex'>
@@ -367,7 +367,7 @@ export default {
                         state.loading = false
                         return Dialog.confirm({
                             title: t('withdraw.hint'),
-                            theme: 'round-button',
+
                             message: t('withdraw.withdrawLimitHint'),
                             confirmButtonText: t('withdraw.contact'),
                             cancelButtonText: t('withdraw.close')
@@ -397,7 +397,7 @@ export default {
                 if (Number(res.data) !== 2) {
                     return Dialog.alert({
                         title: t('withdraw.hint'),
-                        theme: 'round-button',
+
                         confirmButtonText: Number(res.data) === 1 ? t('withdraw.kycBtn_1') : t('withdraw.kycBtn_2'),
                         message: Number(res.data) === 2 ? t('withdraw.kycMsg_1') : t('withdraw.kycMsg_2'),
                     }).then(() => {
@@ -409,7 +409,7 @@ export default {
                 } else {
                     if (!withdrawConfig.accountActiveEnable) {
                         return Dialog.confirm({
-                            theme: 'round-button',
+
                             title: t('withdraw.hint'),
                             message: t('withdraw.activateMsg'),
                             confirmButtonText: t('withdraw.activateBtn')
@@ -772,6 +772,7 @@ export default {
                 width: rem(168px);
                 height: rem(60px);
                 font-size: rem(24px);
+                line-height: rem(60px);
                 background-color: var(--primaryAssistColor);
                 border: 1px solid var(--lineColor);
                 border-radius: rem(30px);

@@ -198,7 +198,6 @@ export function checkUserKYC ({ res, Dialog, router, store, t }) {
                 title: t('common.tip'),
                 confirmButtonText: t('login.goAuthenticate'),
                 message: t('login.goAuthenticateMsg'),
-                theme: 'round-button',
             }).then(() => {
                 router.push('/authentication')
             })
@@ -207,7 +206,6 @@ export function checkUserKYC ({ res, Dialog, router, store, t }) {
                 title: t('common.tip'),
                 confirmButtonText: t('common.close'),
                 message: t('common.inReview'),
-                theme: 'round-button',
             }).then(() => {
                 store.dispatch('_user/logout').then(() => {
                     return router.push('/login')
@@ -220,7 +218,6 @@ export function checkUserKYC ({ res, Dialog, router, store, t }) {
                 title: t('common.tip'),
                 confirmButtonText: t('common.reSubmit'),
                 message: t('common.reviewFailed'),
-                theme: 'round-button',
             }).then(() => {
                 router.push('/authentication')
             })
