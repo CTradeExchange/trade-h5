@@ -1,16 +1,15 @@
 <template>
     <div id='homeContent' ref='homeContent' class='home'>
-        <Banner :list='BannerConfig.list' />
+        <Banner :list='BannerConfig.large' />
         <Products ref='productsRef' />
         <Fastlink />
-        <BanderBanner class='BanderBanner' :list='BannerMiniConfig.list' />
+        <BanderBanner class='BanderBanner' :list='BannerConfig.mini' />
         <News class='newBar' />
     </div>
 </template>
 
 <script>
 import BannerConfig from './configs/banner'
-import BannerMiniConfig from './configs/banner_mini'
 import NoticeConfig from './configs/notice'
 import Banner from '@c/modules/banner/banner'
 import Fastlink from './components/fastlink'
@@ -45,8 +44,8 @@ export default {
         return {
             productsRef,
             BannerConfig,
-            NoticeConfig,
-            BannerMiniConfig
+            NoticeConfig
+
         }
     }
 }
