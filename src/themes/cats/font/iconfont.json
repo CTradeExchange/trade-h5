@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "22404549",
+      "name": "zixuan1",
+      "font_class": "zixuan11",
+      "unicode": "e68f",
+      "unicode_decimal": 59023
+    },
+    {
+      "icon_id": "20683927",
+      "name": "success",
+      "font_class": "success",
+      "unicode": "e6b9",
+      "unicode_decimal": 59065
+    },
+    {
       "icon_id": "20683930",
       "name": "password",
       "font_class": "password",

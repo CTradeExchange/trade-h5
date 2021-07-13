@@ -49,17 +49,17 @@
                                         {{ $t('withdrawRecord.moneyName') }}
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.amount }}
+                                        {{ item.amount }} {{ item.withdrawCurrency }}
                                     </span>
                                 </div>
-                                <div class='w-item'>
+                                <!-- <div class='w-item'>
                                     <span class='left-label'>
                                         {{ $t('withdrawRecord.coinName') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.withdrawCurrency }}
                                     </span>
-                                </div>
+                                </div> -->
                                 <div class='w-item'>
                                     <span class='left-label'>
                                         {{ $t('withdrawRecord.statusName') }}
@@ -264,7 +264,6 @@ export default {
             }
             .right-val {
                 color: var(--color);
-                font-weight: bold;
                 text-align: right;
                 &.state {
                     color: var(--primary);

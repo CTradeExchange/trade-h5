@@ -504,7 +504,7 @@ body {
             color: var(--color);
         }
         &::after {
-            border-bottom: 1px solid var(--lineColor);
+            border-color: var(--lineColor);
         }
         &:active {
             background-color: var(--primaryAssistColor);
@@ -560,7 +560,7 @@ body {
         //background: var(--contentColor);
     }
     .van-button--default {
-        border: 1px solid var(--lineColor);
+        border-color: var(--lineColor);
     }
     .van-dialog {
         background-color: var(--contentColor);

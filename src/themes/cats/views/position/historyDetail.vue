@@ -85,7 +85,8 @@
                             </div>
                         </div>
                     </div>
-                </div><div class='layout layout-3'>
+                </div>
+                <div class='layout layout-3'>
                     <div class='item van-hairline--bottom'>
                         <div class='left'>
                             <div class='title'>
@@ -94,7 +95,17 @@
                         </div><div class='right'>
                             {{ formatTime(orderInfo.openTime) }}
                         </div>
-                    </div><div class='item'>
+                    </div>
+                    <div class='item van-hairline--bottom'>
+                        <div class='left'>
+                            <div class='title'>
+                                {{ $t('history.closeType') }}
+                            </div>
+                        </div><div class='right'>
+                            {{ $t('bizType.'+orderInfo.bizType) }}
+                        </div>
+                    </div>
+                    <div class='item'>
                         <div class='left'>
                             <div class='title'>
                                 {{ $t('trade.positionId') }}

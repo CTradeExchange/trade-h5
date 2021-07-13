@@ -50,17 +50,17 @@
                                 {{ $t('coinRecord.takeCount') }}
                             </span>
                             <span class='value'>
-                                {{ item.amount }}
+                                {{ item.amount }} {{ item.withdrawCurrency }}
                             </span>
                         </div>
-                        <div class='row'>
+                        <!-- <div class='row'>
                             <span class='name'>
                                 {{ $t('coinRecord.coin') }}
                             </span>
                             <span class='value'>
                                 {{ item.withdrawCurrency }}
                             </span>
-                        </div>
+                        </div> -->
                         <div class='row'>
                             <span class='name'>
                                 {{ $t('coinRecord.chain') }}
