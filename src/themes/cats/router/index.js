@@ -5,6 +5,7 @@ import store from '../store'
 import themeRouter from '@/themeCommon/router'
 
 const routes = [
+    ...themeRouter,
     {
         path: '/',
         redirect: '/home',
@@ -148,6 +149,15 @@ const routes = [
         }
     },
     {
+        path: '/setting',
+        name: 'Setting',
+        component: () => import(/* webpackChunkName: "setting" */ '../views/setting/setting.vue'),
+        meta: {
+            title: 'cRoute.setting',
+            footerMenu: false
+        }
+    },
+    {
         path: '/otherpage/:type',
         name: 'Otherpage',
         component: () => import(/* webpackChunkName: "otherpage" */ '../views/otherpage/otherpage.vue'),
@@ -155,7 +165,6 @@ const routes = [
             title: ''
         }
     },
-    ...themeRouter
 ]
 
 const router = createRouter({

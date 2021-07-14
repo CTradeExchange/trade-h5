@@ -638,7 +638,7 @@ function appendPriceBoxToIframe (iframeWindow, sellPrice, buyPrice, isShow) {
                     </div>`
     const sellElm = div.querySelector('.sell .num')
     const buyElm = div.querySelector('.buy .num')
-    elm.appendChild(div)
+    if (elm) elm.appendChild(div)
 
     let oldSellPrice = 0
     const setSellPrice = price => {

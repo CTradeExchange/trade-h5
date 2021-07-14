@@ -28,6 +28,11 @@ export function unzip (str) {
     console.warn('解压字符', JSON.parse(strData))
     return strData
 }
+// Gzip数据压缩
+export function zip (str) {
+    var binaryString = pako.gzip(encodeURIComponent(str), { to: 'string' })
+    return btoa(binaryString)
+}
 // 获取设备类型
 export function getDevice () {
     let openFrom = 1 // h5

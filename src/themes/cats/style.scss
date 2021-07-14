@@ -483,6 +483,13 @@ body.light {
     }
 }
 body {
+    &.night {
+        .van-search__action:active,
+        .van-action-sheet__cancel:active,
+        .van-action-sheet__item:active {
+            background-color: initial;
+        }
+    }
     .van-cell,
     .van-field__control,
     .van-search__action {
