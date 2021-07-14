@@ -8,13 +8,13 @@
 
             <template #right>
                 <div class='right-wrap'>
-                    <div class='collectIcon' @click='addOptional'>
+                    <button v-preventReClick class='collectIcon' @click='addOptional'>
                         <i
                             ref='collect'
                             class='icon_zixuan1'
                             :class="{ 'icon_zixuan2':isSelfSymbol }"
                         ></i>
-                    </div>
+                    </button>
                     <div class='ft'>
                         <span
                             @click='toContractInfo'
@@ -292,6 +292,7 @@ import { QuoteSocket } from '@/plugins/socket/socket'
 import StallsAndDeal from './components/StallsAndDeal'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
 import Loading from '@/components/loading.vue'
+import topRightVue from '@/themes/mt4/layout/topRight.vue'
 
 export default {
     components: { KIcon, StudyList, tv, StallsAndDeal, Loading },
@@ -455,7 +456,6 @@ export default {
             symbolId: symbolId,
             onChartReadyFlag: false,
             loading: false
-
         })
 
         // 图表组件引用
@@ -830,10 +830,10 @@ export default {
 
         // 添加自选
         const addOptional = () => {
-            state.loading = true
+            state.loading = topRightVue
             if (isSelfSymbol.value) {
                 removeCustomerOptional({ symbolList: [symbolId] }).then(res => {
-                    if (res.code === '0') {
+                    if (res.check()) {
                         state.loading = false
                         store.dispatch('_user/queryCustomerOptionalList')
                         Toast(t('trade.removeOptionalOk'))
@@ -844,7 +844,7 @@ export default {
                 })
             } else {
                 addCustomerOptional({ symbolList: [symbolId] }).then(res => {
-                    if (res.code === '0') {
+                    if (res.check()) {
                         state.loading = false
                         store.dispatch('_user/queryCustomerOptionalList')
                         collect.value.classList.add('icon_zixuan2')
@@ -945,12 +945,11 @@ export default {
             height: 100%;
             color: #777;
             vertical-align: top;
+            background-color: var(--contentColor);
             .icon_zixuan1 {
                 font-weight: normal !important;
             }
             .icon_zixuan2 {
-                position: absolute;
-                top: 0;
                 color: #FC822F;
                 animation: heartBeat 1.3s ease-in-out forwards;
             }
@@ -967,6 +966,9 @@ export default {
                     position: absolute;
                     animation: zoomIn 0.6s linear forwards;
                 }
+            }
+            &.disabled {
+                background-color: #F00;
             }
         }
     }

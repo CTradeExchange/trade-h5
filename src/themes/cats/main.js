@@ -16,6 +16,7 @@ import Colors, { setRootVariable } from './colorVariables'
 import { setRouter } from '@/utils/request'
 import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet } from '@/utils/util'
 import BigNumber from 'bignumber.js'
+import preventReClick from '@/directives/preventReClick'
 
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 
@@ -25,6 +26,7 @@ BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 
 const app = createApp(App)
 app.use(longpress)
+app.use(preventReClick)
 app.use(VantBase).use(I18n).use(store).use(router)
 app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })
 app.component('Loading', Loading)

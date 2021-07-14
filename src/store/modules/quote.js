@@ -120,6 +120,7 @@ export default {
         // 此方法只有在账户变化后调用
         setProductAllList ({ dispatch, commit, state, rootState, rootGetters }) {
             commit('Empty_data')
+
             const customerGroupId = rootGetters.customerGroupId
             const selfSymbolProduct = rootState._base.wpSelfSymbol.find(el => el.tag === 'selfSymbol')?.data?.product || {}
             const selfSymbolList = selfSymbolProduct[customerGroupId] || []
