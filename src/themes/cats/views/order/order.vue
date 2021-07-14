@@ -180,7 +180,13 @@ export default {
                     const localData = Object.assign({}, params, data)
                     const orderId = data.orderId || data.id
                     sessionStorage.setItem('order_' + orderId, JSON.stringify(localData))
-                    router.push({ name: 'OrderSuccess', query: { orderId } })
+                    // router.push({ name: 'OrderSuccess', query: { orderId } })
+                    // Toast(t('trade.orderSuccessToast'))
+                    Toast({
+                        message: t('trade.orderSuccessToast'),
+                        duration: 3000,
+                        forbidClick: true,
+                    })
                 })
                 .catch(err => {
                     state.loading = false

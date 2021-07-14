@@ -185,7 +185,7 @@ export default {
         // 平仓接口参数
         const submitCloseParam = () => {
             if (!state.closeVolume) {
-                Toast('请输入平仓数量')
+                Toast(t('trade.inputCloseNum'))
                 return false
             }
             if (closeVolumeWarn.value) return false
@@ -219,7 +219,13 @@ export default {
                     const localData = Object.assign({}, params, data)
                     const orderId = data.orderId || data.id
                     sessionStorage.setItem('order_' + orderId, JSON.stringify(localData))
-                    router.push({ name: 'ClosePositionSuccess', query: { orderId } })
+                    // router.push({ name: 'ClosePositionSuccess', query: { orderId } })
+                    closed()
+                    Toast({
+                        message: t('trade.closeSuccessToast'),
+                        duration: 3000,
+                        forbidClick: true,
+                    })
                 })
                 .catch(err => {
                     state.loading = false
