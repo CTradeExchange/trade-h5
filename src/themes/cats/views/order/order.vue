@@ -184,7 +184,7 @@ export default {
                     // Toast(t('trade.orderSuccessToast'))
                     Toast({
                         message: t('trade.orderSuccessToast'),
-                        duration: 3000,
+                        duration: 1000,
                         forbidClick: true,
                     })
                 })

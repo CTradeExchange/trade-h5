@@ -223,7 +223,7 @@ export default {
                     closed()
                     Toast({
                         message: t('trade.closeSuccessToast'),
-                        duration: 3000,
+                        duration: 1000,
                         forbidClick: true,
                     })
                 })
