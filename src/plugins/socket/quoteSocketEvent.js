@@ -71,7 +71,7 @@ class SocketEvent {
 
     // 订阅产品报价
     send_subscribe (productIds = [], quote_type = 1, depth_level = 1) {
-        this.subscribedList = productIds
+        this.subscribedList = [...new Set(productIds)]
         const trade_type = this.$store.state._base.tradeType
 
         const list = productIds.map(el => {

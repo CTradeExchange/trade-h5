@@ -338,7 +338,8 @@
         "bindPhoneHint": "暂未绑定手机号码，请前往绑定",
         "backHome": "返回首页",
         "successText": "提交成功",
-        "successMsg": "提交成功，等待客服审核"
+        "coinSuccessMsg": "您的提币申请已经提交成功，我们将尽快完成审核，如有疑问或其他帮助请联系客服",
+        "moneySuccessMsg": "您的提现申请已经提交成功，我们将尽快完成审核，如有疑问或其他帮助请联系客服"
     },
     "withdrawMoney": {
         "moneyName": "提现金额",

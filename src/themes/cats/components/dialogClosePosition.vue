@@ -252,12 +252,11 @@ export default {
             }
         })
         watchEffect(() => { // 根据输入的手数高亮快速平仓手数
-            fastBtns.forEach(el => {
+            const fastBtnsItem = fastBtns.find(el => {
                 const elVolume = div(positionVolume.value, el.divValue)
-                if (eq(elVolume, state.closeVolume)) {
-                    state.fastBtnIndex = el.activeIndex
-                }
+                if (eq(elVolume, state.closeVolume)) return true
             })
+            state.fastBtnIndex = fastBtnsItem ? fastBtnsItem.activeIndex : -1
         })
 
         return {

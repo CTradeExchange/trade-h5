@@ -45,7 +45,7 @@
                                 {{ $t(orderInfo.closeDirection===1 ? 'trade.buy':'trade.sell') }}
                             </div>
                             <div class='name'>
-                                {{ orderInfo.openVolume }} {{ $t('trade.volumeUnit') }}
+                                {{ orderInfo.closeVolume }} {{ $t('trade.volumeUnit') }}
                             </div>
                         </div>
                         <div class='col'>

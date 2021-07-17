@@ -49,17 +49,17 @@
                                         {{ $t('deposit.amount') }}
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.intendAmount }}
+                                        {{ item.intendAmount }} {{ item.depositCurrency }}
                                     </span>
                                 </div>
-                                <div class='w-item'>
+                                <!-- <div class='w-item'>
                                     <span class='left-label'>
                                         {{ $t('common.currency') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.depositCurrency }}
                                     </span>
-                                </div>
+                                </div> -->
                                 <div class='w-item'>
                                     <span class='left-label'>
                                         {{ $t('common.status') }}
@@ -74,16 +74,22 @@
                                     <span class='left-label'>
                                         {{ $t('common.fee') }}
                                     </span>
-                                    <span class='right-val'>
-                                        {{ item.depositFee || '--' }}
+                                    <span v-if='item.depositFee' class='right-val'>
+                                        {{ item.depositFee }} {{ item.depositCurrency }}
+                                    </span>
+                                    <span v-else class='right-val'>
+                                        --
                                     </span>
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
                                         {{ $t('common.enterAccount') }}
                                     </span>
-                                    <span class='right-val'>
-                                        {{ item.finalAmount || '--' }}
+                                    <span v-if='item.finalAmount' class='right-val'>
+                                        {{ item.finalAmount }} {{ item.depositCurrency }}
+                                    </span>
+                                    <span v-else class='right-val'>
+                                        --
                                     </span>
                                 </div>
                                 <div class='w-item'>

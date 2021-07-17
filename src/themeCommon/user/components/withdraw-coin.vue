@@ -127,13 +127,13 @@
     </van-dialog>
 
     <!-- 提交成功弹窗 -->
-    <van-dialog v-model:show='withdrawSuccess' class-name='add-success' :confirm-button-text="$t('withdraw.backHome')" :show-cancel-button='false' @confirm='$router.push("/quote")'>
+    <van-dialog v-model:show='withdrawSuccess' class-name='add-success' :confirm-button-text="$t('common.sure')" :show-cancel-button='false' @confirm='$router.back()'>
         <i class='icon_success'></i>
         <p class='title'>
             {{ $t('withdraw.successText') }}
         </p>
         <p class='content'>
-            {{ $t('withdraw.successMsg') }}
+            {{ $t('withdraw.coinSuccessMsg') }}
         </p>
     </van-dialog>
 
