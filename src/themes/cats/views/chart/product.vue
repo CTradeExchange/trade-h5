@@ -1,5 +1,5 @@
 <template>
-    <div class='page-wrap'>
+    <div class='page-wrap' :class='{ isIframe: $route.query.isIframe }'>
         <LayoutTop :back='true' :menu='false'>
             <p>{{ product.symbolName }}</p>
             <p class='infomation'>
@@ -918,6 +918,13 @@ export default {
     margin-bottom: rem(120px);
     overflow: auto;
     background: var(--bgColor);
+    &.isIframe {
+        margin-bottom: 0;
+        .footerBtnBox,
+        .right-wrap {
+            display: none;
+        }
+    }
     .infomation {
         padding-top: rem(5px);
         color: var(--minorColor);

@@ -94,6 +94,13 @@ export function localSet (key, val) {
 export function localGet (key) {
     return localStorage.getItem(key)
 }
+export function sessionSet (key, val) {
+    return sessionStorage.setItem(key, val)
+}
+export function sessionGet (key) {
+    return sessionStorage.getItem(key)
+}
+
 // 格式化价格
 export function priceFormat (price, digits) {
     const _price = price / Math.pow(10, digits)

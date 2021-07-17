@@ -1,15 +1,18 @@
 import { querySymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
 import { toFixed } from '@/utils/calculation'
+import { vue_set, assign } from '@/utils/vueUtil.js'
+import { sessionSet } from '@/utils/util.js'
 import CheckAPI from '@/utils/checkAPI'
 import BigNumber from 'bignumber.js'
 
 // 处理显示的点差  点差=（买价-卖价）/pip
 function spreadText (product) {
-    if (!product.pointRatio || !product.buy_price) return
+    if (!product.hasOwnProperty('pointRatio') || !product.buy_price) return
     const pip = BigNumber(0.1).pow(product.price_digits).times(product.pointRatio).toNumber()
     const spread = BigNumber(product.buy_price).minus(product.sell_price).div(pip).toNumber()
     const spDigit = String(product.pointRatio).length - 1 // 点差小数位
-    product.spread_text = spread.toFixed(spDigit)
+    const spread_text = spread.toFixed(spDigit)
+    vue_set(product, 'spread_text', spread_text)
 }
 
 // 报价计算点差
@@ -54,7 +57,7 @@ export default {
             const productMap = state.productMap
             data.forEach(item => {
                 if (!item) return false
-                productMap[item.symbolId] = item
+                vue_set(productMap, String(item.symbolId), item)
             })
         },
         // 更新某个产品信息、报价快照
@@ -66,10 +69,10 @@ export default {
             // if(product.price && data.price) return false; // 已经拿到产品快照，不在重复处理
             const askSpread = product.hasOwnProperty('askSpread')
             data.spread_text = product.spread_text || '--'
-            Object.assign(product, data)
+            assign(product, data)
 
             // 该产品先拿到快照价格，后拿到点差，需要重新计算价格点差
-            if (!askSpread && data.hasOwnProperty('askSpread') && data.pointRatio) {
+            if (!askSpread && data.hasOwnProperty('askSpread') && data.hasOwnProperty('pointRatio')) {
                 price_spread(product, { ...data, ...product })
             }
         },
@@ -85,33 +88,39 @@ export default {
                 if (BigNumber(data.cur_price).gt(product.high_price)) data.high_price = data.cur_price
                 if (BigNumber(data.cur_price).lt(product.low_price)) data.low_price = data.cur_price
                 if (!product.buy_price_pre) { // 缓存上一口价的裸行情
-                    product.buy_price_pre = data.buy_price
-                    product.sell_price_pre = data.sell_price
-                    product.cur_price_pre = data.cur_price
-                    product.yesterday_close_price = data.yesterday_close_price
-                    product.price_digits = data.price_digits
-                    product.cur_color = product.buy_color = product.sell_color = 'grayColor'
+                    vue_set(product, 'buy_price_pre', data.buy_price)
+                    vue_set(product, 'sell_price_pre', data.sell_price)
+                    vue_set(product, 'cur_price_pre', data.cur_price)
+                    vue_set(product, 'yesterday_close_price', data.yesterday_close_price)
+                    vue_set(product, 'price_digits', data.price_digits)
+                    vue_set(product, 'cur_color', 'grayColor')
+                    vue_set(product, 'buy_color', 'grayColor')
+                    vue_set(product, 'sell_color', 'grayColor')
                 }
                 // 计算涨跌
                 product.cur_color = BigNumber(data.cur_price).eq(product.cur_price_pre) ? product.cur_color : BigNumber(data.cur_price).lt(product.cur_price_pre) ? 'fallColor' : 'riseColor'
                 product.buy_color = BigNumber(data.buy_price).eq(product.buy_price_pre) ? product.buy_color : BigNumber(data.buy_price).lt(product.buy_price_pre) ? 'fallColor' : 'riseColor'
                 product.sell_color = BigNumber(data.sell_price).eq(product.sell_price_pre) ? product.sell_color : BigNumber(data.sell_price).lt(product.sell_price_pre) ? 'fallColor' : 'riseColor'
 
-                product.upDownAmount = BigNumber(data.cur_price).minus(product.yesterday_close_price).toFixed(product.price_digits) // 涨跌额
-                product.upDownAmount_pip = priceToPip(product.upDownAmount, product) // 涨跌额(点)
-                product.upDownWidth = BigNumber(product.upDownAmount).div(product.yesterday_close_price).times(100).toFixed(2) + '%' // 涨跌幅
-                product.upDownColor = product.upDownAmount >= 0 ? 'riseColor' : 'fallColor'
+                const upDownAmount = BigNumber(data.cur_price).minus(product.yesterday_close_price).toFixed(product.price_digits) // 涨跌额
+                const upDownAmount_pip = priceToPip(upDownAmount, product) // 涨跌额(点)
+                const upDownWidth = BigNumber(upDownAmount).div(product.yesterday_close_price).times(100).toFixed(2) + '%' // 涨跌幅
+                const upDownColor = upDownAmount >= 0 ? 'riseColor' : 'fallColor'
+                vue_set(product, 'upDownAmount', upDownAmount)
+                vue_set(product, 'upDownAmount_pip', upDownAmount_pip)
+                vue_set(product, 'upDownWidth', upDownWidth)
+                vue_set(product, 'upDownColor', upDownColor)
 
                 // 更新上一口价的裸行情
                 product.cur_price_pre = data.cur_price
                 product.buy_price_pre = data.buy_price
                 product.sell_price_pre = data.sell_price
-                Object.assign(product, data)
+                assign(product, data)
                 price_spread(product, data)
             })
         },
         Update_productActivedID (state, id) {
-            sessionStorage.setItem('productActived', JSON.stringify(state.productMap[id]))
+            sessionSet('productActived', JSON.stringify(state.productMap[id]))
             state.productActivedID = id
         }
     },
@@ -172,7 +181,7 @@ export default {
                 if (res.check() && res.data) {
                     commit('Update_product', res.data)
                     if (rootState._quote.productActivedID === symbolId) {
-                        sessionStorage.setItem('productActived', JSON.stringify(productMap[symbolId]))
+                        sessionSet('productActived', JSON.stringify(productMap[symbolId]))
                     }
                 }
                 return res
