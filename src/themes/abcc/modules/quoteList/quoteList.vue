@@ -10,7 +10,7 @@
 </template>
 
 <script>
-// import quoteComp from '@c/views/trade/tradeComponent'
+// import quoteComp from '@abcc/views/trade/tradeComponent'
 export default {
     components: {
         // quoteComp,

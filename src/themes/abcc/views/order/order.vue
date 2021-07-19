@@ -2,28 +2,18 @@
     <div class='orderWrap'>
         <layoutTop>
             <div v-if='product' class='productTopInfo'>
-                <p class='productName'>
+                <p class='productName' @click='switchProductVisible=true'>
                     {{ product.symbolName }}
-                </p>
-                <p class='short_name'>
-                    {{ product.symbolCode }}
+                    <span class='icon_icon_arrow'></span>
                 </p>
             </div>
-            <template #left>
-                <span></span>
-            </template>
-            <template #right>
-                <a href='javascript:;' @click='$router.back()'>
-                    <i class='icon_icon_close_big'></i>
-                </a>
-            </template>
         </layoutTop>
 
         <div class='main'>
+            <!-- 订单类型 -->
+            <OrderTypeTab v-model='orderType' :btn-list='orderTypeList' @selected='changeOrderType' />
             <!-- 方向 -->
             <Direction v-model='direction' class='cellMarginTop' :product='product' />
-            <!-- 订单类型 -->
-            <CellType v-model='orderType' :btn-list='orderTypeList' class='cellMarginTop' :title="$t('trade.orderType')" @selected='changeOrderType' />
             <!-- 挂单设置 -->
             <PendingBar
                 v-if='orderType===2'
@@ -35,29 +25,17 @@
             />
             <!-- 手数 -->
             <OrderVolume v-if='product' v-model='volume' class='cellMarginTop' :product='product' />
-            <!-- 止盈止损 -->
-            <ProfitlossSet
-                v-if='product'
-                v-model:stopLoss='stopLoss'
-                v-model:stopProfit='stopProfit'
-                class='cellMarginTop'
-                :direction='direction'
-                :product='product'
-            />
-            <!-- 过期类型 -->
-            <CellType
-                v-if='orderType===2'
-                v-model='expireType'
-                :btn-list='expireTypeList'
-                class='mtop10'
-                :title="$t('trade.expireTime')"
-            />
+            <!-- 订单金额 -->
+            <Assets />
         </div>
-        <div class='footerBtn'>
-            <van-button block :color='$style.primary' :loading='loading' size='normal' @click='submitHandler'>
+        <div class='footerBtn' :class='[direction]'>
+            <van-button block :loading='loading' size='normal' @click='submitHandler'>
                 {{ $t(direction==='buy'?'trade.buy':'trade.sell') + $t("submit") }}
             </van-button>
         </div>
+
+        <!-- 选择产品弹窗 -->
+        <SwitchProduct v-model='switchProductVisible' />
     </div>
 </template>
 
@@ -70,17 +48,19 @@ import { gt, lt, mul } from '@/utils/calculation'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import Direction from './components/direction'
 import OrderVolume from './components/orderVolume'
-import ProfitlossSet from './components/profitLossSet'
 import PendingBar from './components/pendingBar'
-import CellType from '@c/components/cellType'
+import OrderTypeTab from './components/orderType.vue'
+import Assets from './components/assets.vue'
+import SwitchProduct from './components/switchProduct.vue'
 import { addMarketOrder } from '@/api/trade'
 import { Toast } from 'vant'
 export default {
     components: {
         Direction,
-        CellType,
         OrderVolume,
-        ProfitlossSet,
+        OrderTypeTab,
+        SwitchProduct,
+        Assets,
         PendingBar,
     },
     setup () {
@@ -91,6 +71,7 @@ export default {
         const { symbolId, direction } = route.query
         const state = reactive({
             loading: false,
+            switchProductVisible: false,
             direction: direction,
             orderType: 1, // 订单类型
             orderTypeList: [{
@@ -102,16 +83,6 @@ export default {
             }],
             volume: 0.01,
             pendingPrice: '',
-            stopLoss: '',
-            stopProfit: '',
-            expireType: 1,
-            expireTypeList: [{
-                title: t('trade.expireType2'),
-                val: 2
-            }, {
-                title: t('trade.expireType1'),
-                val: 1
-            }],
         })
         const pendingRef = ref(null)
         const profitLossRef = ref(null)
@@ -166,9 +137,6 @@ export default {
                 requestTime: Date.now(),
                 requestNum: state.volume,
                 requestPrice: mul(requestPrice, p),
-                expireType: state.expireType,
-                stopLoss: state.stopLoss ? mul(state.stopLoss, p) : undefined,
-                takeProfit: state.stopProfit ? mul(state.stopProfit, p) : undefined
             }
             if (state.loading) return false
             state.loading = true
@@ -221,6 +189,11 @@ export default {
     .productName {
         @include single-line-clamp();
     }
+    .icon_icon_arrow {
+        margin-left: rem(5px);
+        font-size: rem(24px);
+        vertical-align: 2px;
+    }
 }
 .icon_icon_close_big {
     color: var(--color);
@@ -254,5 +227,19 @@ export default {
     bottom: 0;
     left: 0;
     width: 100%;
+    &.buy {
+        .van-button {
+            color: #FFF;
+            background: var(--riseColor);
+            border-color: var(--riseColor);
+        }
+    }
+    &.sell {
+        .van-button {
+            color: #FFF;
+            background: var(--fallColor);
+            border-color: var(--fallColor);
+        }
+    }
 }
 </style>

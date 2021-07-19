@@ -143,6 +143,9 @@ i {
 .alignmiddle {
     vertical-align: middle;
 }
+.mtop5 {
+    margin-top: 5px;
+}
 .mtop10 {
     margin-top: 10px;
 }
@@ -161,7 +164,7 @@ i {
     font-family: 'vant-icon';
     font-style: normal;
     font-display: auto;
-    src: url('~@c/font/vant-icon-db1de1.woff2') format('woff2'), url('~@c/font/vant-icon-db1de1.woff') format('woff'), url('~@c/font/vant-icon-db1de1.ttf') format('truetype');
+    src: url('~@abcc/font/vant-icon-db1de1.woff2') format('woff2'), url('~@abcc/font/vant-icon-db1de1.woff') format('woff'), url('~@abcc/font/vant-icon-db1de1.ttf') format('truetype');
 }
 
 @keyframes redPacketsRain {
@@ -607,4 +610,7 @@ body {
     ::-webkit-input-placeholder {
         color: var(--placeholdColor);
     }
+
+    --van-popup-background-color: var(--contentColor);
+    --van-search-background-color: var(--contentColor);
 }

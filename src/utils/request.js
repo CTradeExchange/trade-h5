@@ -7,7 +7,8 @@ let router = null
 export const setRouter = r => (router = r)
 
 // const baseURL = 'http://18.162.240.170:10000/cats-gateway'
-const baseURL = `${apiDomain}/cats-gateway`
+const realApiDomain = apiDomain.startsWith('http') ? apiDomain : 'https:' + apiDomain
+const baseURL = `${realApiDomain}/cats-gateway`
 
 // create an axios instance
 const service = axios.create({

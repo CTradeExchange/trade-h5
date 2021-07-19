@@ -138,8 +138,8 @@
 </template>
 
 <script>
-import DialogSLTP from '@c/components/dialogSLTP'
-import DialogClosePosition from '@c/components/dialogClosePosition'
+import DialogSLTP from '@abcc/components/dialogSLTP'
+import DialogClosePosition from '@abcc/components/dialogClosePosition'
 import { reactive, toRefs, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'

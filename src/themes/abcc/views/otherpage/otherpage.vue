@@ -17,7 +17,7 @@
 
 <script>
 import top from '@/components/top'
-import myIframe from '@c/components/iframe'
+import myIframe from '@abcc/components/iframe'
 import { onBeforeUnmount, onMounted, reactive, ref, toRefs } from 'vue'
 import { useRoute } from 'vue-router'
 export default {

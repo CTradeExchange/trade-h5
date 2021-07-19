@@ -32,7 +32,7 @@ import { isEmpty, removeLoginParams, localSet, localGet } from '@/utils/util'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { changeLang } from '@/api/base'
-import Colors, { setRootVariable } from '@c/colorVariables'
+import Colors, { setRootVariable } from '@abcc/colorVariables'
 export default {
     setup (props) {
         const instance = getCurrentInstance()

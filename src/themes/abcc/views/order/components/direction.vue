@@ -1,12 +1,12 @@
 <template>
     <div v-if='product' class='directions'>
-        <div class='item sell' :class="{ 'mainColorBg':modelValue==='sell' }" @click="setDirection('sell')">
+        <div class='item sell' :class="{ 'active':modelValue==='sell' }" @click="setDirection('sell')">
             {{ $t('trade.sell') }}
             <span class='flRight price'>
                 {{ product.sell_price }}
             </span>
         </div>
-        <div class='item buy' :class="{ 'mainColorBg':modelValue==='buy' }" @click="setDirection('buy')">
+        <div class='item buy' :class="{ 'active':modelValue==='buy' }" @click="setDirection('buy')">
             <span class='price'>
                 {{ product.buy_price }}
             </span>
@@ -47,18 +47,23 @@ export default {
         padding: rem(10px) rem(20px);
         color: var(--color);
         line-height: rem(50px);
-        background: var(--primaryAssistColor);
+        background: var(--assistColor);
         border-radius: rem(6px);
         &.sell {
             margin-right: 5px;
             padding-right: rem(45px);
+            &.active {
+                color: #FFF;
+                background: var(--fallColor);
+            }
         }
         &.buy {
             margin-left: 5px;
             padding-left: rem(45px);
-        }
-        &.mainColorBg {
-            color: #FFF;
+            &.active {
+                color: #FFF;
+                background: var(--riseColor);
+            }
         }
     }
     .price {

@@ -118,7 +118,7 @@ import { useStore } from 'vuex'
 import { shiftedBy } from '@/utils/calculation'
 import { closePboOrder } from '@/api/trade'
 import { QuoteSocket } from '@/plugins/socket/socket'
-import DialogBottomTip from '@c/components/dialogBottomTip'
+import DialogBottomTip from '@abcc/components/dialogBottomTip'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
 export default {

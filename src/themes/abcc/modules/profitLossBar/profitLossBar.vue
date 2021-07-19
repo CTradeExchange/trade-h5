@@ -25,7 +25,7 @@
 
 <script>
 import { plus, div, pow, lt, gt } from '@/utils/calculation'
-import StepperComp from '@c/components/stepper'
+import StepperComp from '@abcc/components/stepper'
 
 export default {
     components: {

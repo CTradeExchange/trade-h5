@@ -10,7 +10,7 @@
 </template>
 
 <script>
-// import Optional from '@c/views/selfSymbol/optional/optional'
+// import Optional from '@abcc/views/selfSymbol/optional/optional'
 export default {
     // components: {
     //     Optional,

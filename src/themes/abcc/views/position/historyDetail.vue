@@ -129,7 +129,7 @@
 </template>
 
 <script>
-// import DialogSLTP from '@c/components/dialogSLTP'
+// import DialogSLTP from '@abcc/components/dialogSLTP'
 import { reactive, toRefs, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { isEmpty } from '@/utils/util'

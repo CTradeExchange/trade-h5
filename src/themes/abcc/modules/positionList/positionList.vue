@@ -10,7 +10,7 @@ import { computed, reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import positionItem from './positionItem'
-import DialogClosePosition from '@c/components/dialogClosePosition'
+import DialogClosePosition from '@abcc/components/dialogClosePosition'
 export default {
     components: {
         positionItem,

@@ -68,7 +68,7 @@ import { computed, reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { minus } from '@/utils/calculation'
-import DialogClosePosition from '@c/components/dialogClosePosition'
+import DialogClosePosition from '@abcc/components/dialogClosePosition'
 export default {
     components: {
         DialogClosePosition

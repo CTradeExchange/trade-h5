@@ -11,9 +11,9 @@
 <script>
 import BannerConfig from './configs/banner'
 import NoticeConfig from './configs/notice'
-import Banner from '@c/modules/banner/banner'
+import Banner from '@abcc/modules/banner/banner'
 import Fastlink from './components/fastlink'
-import BanderBanner from '@c/modules/handerBanner/handerBanner'
+import BanderBanner from '@abcc/modules/handerBanner/handerBanner'
 import News from './components/news'
 import Products from './components/products'
 import { QuoteSocket } from '@/plugins/socket/socket'

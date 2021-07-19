@@ -3,9 +3,8 @@
         <AssetsItem class='block' />
         <AssetsItem class='block' />
         <AssetsItem class='block' />
-        <AssetsItem class='block'  ></AssetsItem>
-        as
-    </div>asdas
+        <AssetsItem class='block' />
+    </div>
 </template>
 
 <script>
@@ -28,7 +27,6 @@ export default {
 @import '@/sass/mixin.scss';
 .assetsWrapper {
     padding: rem(20px);
-
     .block {
         margin-bottom: rem(20px);
     }

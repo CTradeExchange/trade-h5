@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import Fund from '@c/components/fund'
+import Fund from '@abcc/components/fund'
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 export default {

@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import top from '@c/layout/top'
+import top from '@abcc/layout/top'
 import { useStore } from 'vuex'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
