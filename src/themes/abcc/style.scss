@@ -158,6 +158,11 @@ i {
 .relative {
     position: relative;
 }
+.fullPageWrapper {
+    flex: 1;
+    margin-top: rem(90px);
+    overflow-y: auto;
+}
 
 @font-face {
     font-weight: normal;
@@ -611,6 +616,7 @@ body {
         color: var(--placeholdColor);
     }
 
+    --van-button-primary-background-color: var(--primary);
     --van-popup-background-color: var(--contentColor);
     --van-search-background-color: var(--contentColor);
 }

@@ -1,147 +1,76 @@
 <template>
-    <div class='wrapper'>
-        <FloatTip v-if='warn'>
-            {{ warn }}
-        </FloatTip>
-        {{ pendingRang }}
-        <van-row align='center' class='pendingOrderSet' justify='space-between'>
-            <van-col>
-                <div class='title'>
-                    {{ $t('trade.pending') }}
-                    <van-icon class='icon' name='question-o' size='16' @click='priceIntroduce' />
-                </div>
-                <div class='pendingRang'>
-                    &le; {{ pendingRang.limitRangeMax }} 或
-                    &ge; {{ pendingRang.stopRangeMin }}
-                </div>
-            </van-col>
-            <van-col class='relative'>
-                <StepperComp
-                    v-model='num'
-                    class='stepper'
-                    :class="{ 'warn': warn }"
-                    :controlbtn='true'
-                    :digits='product.price_digits'
-                    :step='step'
-                    @change='change'
-                    @firstMinus='firstChange'
-                    @firstPlus='firstChange'
-                />
-            </van-col>
-        </van-row>
+    <div class='orderVolume'>
+        <input
+            ref='inputEl'
+            class='input'
+            :placeholder='$t("trade.priceLabel")'
+            type='text'
+            @blur='onBlur'
+            @input='onInput'
+        />
     </div>
 </template>
 
 <script>
-import { lt, gt, pow } from '@/utils/calculation'
-import StepperComp from '@abcc/components/stepper'
-import FloatTip from './floatTip'
-import { Dialog } from 'vant'
-import { computed, onMounted, reactive, toRefs } from 'vue'
+import { reactive, ref, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import { useI18n } from 'vue-i18n'
+import { getDecimalNum, toFixed } from '@/utils/calculation'
 export default {
-    components: {
-        StepperComp,
-        FloatTip,
+    props: {
+        product: {
+            type: Object
+        },
+        modelValue: {
+            type: [Number, String],
+            default: ''
+        },
     },
-    props: ['modelValue', 'product', 'direction'],
-    emits: ['update:modelValue'],
+    emits: ['update:modelValue', 'change'],
     setup (props, { emit }) {
-        const store = useStore()
-        const { t } = useI18n({ useScope: 'global' })
-        const pendingRang = computed(() => {
-            const range = store.getters['_trade/pendingPriceRang']
-            const limitRange = props.direction === 'buy' ? range.buyLimitRange : range.sellStopRange
-            const stopRange = props.direction === 'buy' ? range.buyStopRange : range.sellLimitRange
-            return {
-                stopRangeMax: stopRange[1],
-                stopRangeMin: stopRange[0],
-                limitRangeMax: limitRange[1],
-                limitRangeMin: limitRange[0],
-                defaultBuyPrice: range.defaultBuyPrice,
-                defaultSellPrice: range.defaultSellPrice
+        const inputEl = ref(null)
+        const onInput = (e) => {
+            let newval = e.target.value
+            if (/[^0-9\.]/.test(newval)) { // 只能输入数字
+                newval = newval.replace(/[^0-9\.]/g, '')
+                e.target.value = newval
             }
-        })
-        const warn = computed(() => {
-            const modelValue = props.modelValue
-            const pendingRange = pendingRang.value
-            if (!modelValue) {
-                return false
-            } else if (lt(modelValue, pendingRange.stopRangeMin) && gt(modelValue, pendingRange.limitRangeMax)) {
-                return t('trade.pendingPriceWarn')
-            } else if (gt(modelValue, pendingRange.stopRangeMax) || lt(modelValue, pendingRange.limitRangeMin)) {
-                return t('trade.pendingPriceWarn2')
-            } else {
-                return false
+            const digits = props.product.price_digits
+            const reg = new RegExp('^\\d*(\\.?\\d{0,' + digits + '})', 'g')
+            if (getDecimalNum(newval) > digits) {
+                newval = (newval.match(reg)[0]) || ''
+                if (digits === 0 && newval.endsWith('.')) newval = newval.replace(/\./g, '') // 浏览器不允许给number输入框输入'1.'字符串
+                e.target.value = newval
             }
-        })
 
-        const step = computed(() => pow(0.1, props.product.price_digits))
-        const state = reactive({
-            num: props.modelValue
-        })
-        const change = val => emit('update:modelValue', val)
-        const priceIntroduce = () => {
-            Dialog.alert({
-                title: t('trade.priceIntroduce'),
-                message: t('trade.priceIntroContent'),
-            })
+            emit('update:modelValue', newval)
+            emit('change', newval)
         }
-        const firstChange = () => {
-            emit('update:modelValue', pendingRang.value[props.direction === 'buy' ? 'defaultBuyPrice' : 'defaultSellPrice'])
+        const onBlur = (e) => {
+            let value = e.target.value
+            if (value === props.modelValue) return false
+            value = value ? toFixed(value, this.digits) : value
+            emit('change', value)
         }
-        onMounted(() => {
-            firstChange()
-        })
         return {
-            ...toRefs(state),
-            step,
-            warn,
-            pendingRang,
-            change,
-            priceIntroduce,
-            firstChange,
+            inputEl,
+            onInput,
+            onBlur,
         }
-    },
-    watch: {
-        modelValue (newval) {
-            if (newval !== this.num) this.num = newval
-            this.$store.commit('_trade/Update_pendingPrice', newval)
-        }
-    },
-    beforeUnmount () {
-        this.$store.commit('_trade/Update_pendingPrice', '')
     }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '~@/sass/mixin.scss';
-.wrapper {
-    align-items: center;
-    line-height: 1.5;
-    .title {
+@import '@/sass/mixin.scss';
+.orderVolume {
+    margin-top: rem(20px);
+    .input {
+        width: 100%;
+        height: rem(80px);
+        font-size: rem(28px);
         line-height: 1;
-        .icon {
-            color: var(--minorColor);
-            vertical-align: -3px;
-        }
-    }
-    .pendingRang {
-        color: var(--minorColor);
-        font-size: rem(20px);
+        text-align: center;
+        background: var(--assistColor);
     }
 }
-.stepper {
-    background: var(--primaryAssistColor);
-    border-radius: rem(10px);
-    &.warn {
-        color: var(--warn);
-    }
-    :deep(.input) {
-        width: rem(240px);
-    }
-}
-
 </style>

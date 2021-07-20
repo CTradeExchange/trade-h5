@@ -104,7 +104,8 @@
     "positionDetail": "持仓明细",
     "pendingDetail": "挂单明细",
     "historyDetail": "已平仓明细",
-    "assets": "资产"
+    "assets": "资产",
+    "returnMoney": "还币"
   },
   "search": {
     "keywords": "请输入搜索关键词",
