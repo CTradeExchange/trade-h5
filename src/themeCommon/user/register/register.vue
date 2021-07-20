@@ -15,7 +15,6 @@
                 :color='style.color'
                 line-height='2px'
                 line-width='20px'
-                title-active-color='red'
                 :title-inactive-color='style.mutedColor'
             >
                 <van-tab name='mobile' :title='$t("register.phoneNo")' />

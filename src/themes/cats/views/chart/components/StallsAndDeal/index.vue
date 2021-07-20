@@ -5,7 +5,7 @@
             class='tabs'
             color='#477fd3'
             line-height='2'
-            line-width='20'
+            line-width='33.3%'
             title-active-color='#477fd3'
         >
             <van-tab v-if='statusList.indexOf("stalls") > -1' name='stalls' :title='$t("trade.sellFive")'>
@@ -88,7 +88,8 @@
                                     {{ item[2] }}
                                 </span>
                             </div>
-                        </div><div class='col volume-col'>
+                        </div>
+                        <div class='col volume-col'>
                             <span class='label'>
                                 {{ $t('trade.dealVolume') }}
                             </span>
@@ -114,7 +115,9 @@
 import { computed, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import dayjs from 'dayjs'
+
 export default {
+
     props: ['symbolId', 'settingList', 'curPrice'],
     setup (props) {
         const store = useStore()
@@ -163,7 +166,6 @@ export default {
                     state.showTabs = true
                 }
                 state.statusList = props.settingList
-                // state.activeObj = props.status
             })
 
         watch(() => props.curPrice, (newVal, oldVal) => {
@@ -311,6 +313,7 @@ export default {
             }
         }
     }
+
     .stalls-wrap {
         display: flex;
         flex-direction: row;

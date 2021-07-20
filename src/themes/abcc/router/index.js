@@ -189,6 +189,30 @@ const routes = [
             title: ''
         }
     },
+    {
+        path: '/trustDetail',
+        name: 'TrustDetail',
+        component: () => import(/* webpackChunkName: "otherpage" */ '../views/trust/trustDetail.vue'),
+        meta: {
+            title: ''
+        }
+    },
+    {
+        path: '/trustList',
+        name: 'TrustList',
+        component: () => import(/* webpackChunkName: "otherpage" */ '../views/trust/trustList.vue'),
+        meta: {
+            title: ''
+        }
+    },
+    {
+        path: '/withdrawCoin',
+        name: 'WithdrawCoin',
+        component: () => import(/* webpackChunkName: "otherpage" */ '../views/withdrawCoin/withdrawCoin.vue'),
+        meta: {
+            title: ''
+        }
+    }
 ]
 
 const router = createRouter({

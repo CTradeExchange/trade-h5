@@ -105,16 +105,25 @@
                     </div>
                 </div>
             </van-tab>
+            <van-tab :title='$t("trade.trust")'>
+                <div class='trust-wrap'>
+                    <trustItem v-for='(item, index) in 2' :key='index' />
+                    <a class='to-all' href='javascript:;' @click="$router.push('/trustList')">
+                        {{ $t('trade.allTrust') }} >
+                    </a>
+                </div>
+            </van-tab>
         </van-tabs>
     </div>
 </template>
 
 <script>
-
+import trustItem from '@abcc/modules/trust/trust.vue'
 import { computed, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import dayjs from 'dayjs'
 export default {
+    components: { trustItem },
     props: ['symbolId', 'settingList', 'curPrice'],
     setup (props) {
         const store = useStore()
@@ -309,6 +318,14 @@ export default {
                     height: 100%;
                 }
             }
+        }
+    }
+    .trust-wrap {
+        margin: 0 auto;
+        text-align: center;
+        .to-all {
+            color: var(--primary);
+            line-height: rem(75px);
         }
     }
     .stalls-wrap {
