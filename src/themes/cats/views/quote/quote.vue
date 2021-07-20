@@ -1,6 +1,6 @@
 <template>
     <div class='quoteWrap'>
-        <div class='tradeNav'>
+        <div v-if='categoryList.length > 0' class='tradeNav'>
             <TopTab
                 ref='tabList'
                 v-model='activeTab'
