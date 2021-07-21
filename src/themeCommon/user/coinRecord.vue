@@ -26,7 +26,12 @@
                                     {{ item.finalAmount }} {{ item.withdrawCurrency }}-{{ item.blockchainName }}
                                 </span>
                                 <span :class="[item.withdrawCoinStatus === 1 ? 'state-1' : 'state-2']">
-                                    {{ handleState(item.checkStatus,item.transferStatus) }}
+                                    <span class='state-text'>
+                                        {{ handleState(item.checkStatus,item.transferStatus) }}
+                                    </span>
+                                    <span class='arrow'>
+                                        <van-icon :color='$style.color' name='arrow-down' />
+                                    </span>
                                 </span>
                             </p>
                             <p class='row'>
@@ -40,9 +45,9 @@
                                 <span>{{ item.amount }} {{ item.withdrawCurrency }}</span> -->
                             </p>
                         </div>
-                        <div class='arrow'>
+                        <!-- <div class='arrow'>
                             <van-icon :color='$style.color' name='arrow-down' />
-                        </div>
+                        </div> -->
                     </div>
                     <div class='item-content'>
                         <div class='row'>
@@ -260,10 +265,15 @@ export default {
 .record-list {
     .item {
         margin-top: rem(20px);
-        padding: 0 rem(30px);
+        padding: 0 rem(20px);
         background-color: var(--contentColor);
         .arrow {
             transition: all 0.2s;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .state-text{
+            vertical-align: middle;
         }
     }
     .item-show {
@@ -289,7 +299,7 @@ export default {
         padding: rem(20px) 0;
         .inner {
             flex: 1;
-            margin-right: rem(20px);
+
             .vital {
                 display: flex;
                 justify-content: space-between;

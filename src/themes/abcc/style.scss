@@ -610,7 +610,7 @@ body {
         background-image: none;
     }
     .van-switch {
-        background-color: var(--bgColor);
+        background-color: var(--primaryAssistColor);
     }
     .van-collapse-item__content {
         background-color: var(--contentColor);
@@ -626,6 +626,7 @@ body {
     --van-picker-confirm-action-color: var(--primary);
     --van-popup-background-color: var(--contentColor);
     --van-search-background-color: var(--contentColor);
+    --van-field-placeholder-text-color: var(--placeholdColor)
     --van-picker-background-color: var(--contentColor);
     --van-picker-option-text-color: var(--color);
 }

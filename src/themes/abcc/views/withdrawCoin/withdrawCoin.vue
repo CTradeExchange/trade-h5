@@ -29,17 +29,17 @@
                 <p class='title'>
                     {{ $t('withdrawCoin.coinAddress') }}
                 </p>
-                <van-field v-model='address' label='' :placeholder='$t("withdrawCoin.addressPlaceholder")' />
+                <van-field v-model='address' :placeholder='$t("withdrawCoin.addressPlaceholder")' required />
             </div>
 
             <div class='quantity'>
                 <p class='title'>
                     {{ $t('withdrawCoin.coinCount') }}
                 </p>
-                <van-field v-model='address' label='' :placeholder='$t("withdrawCoin.coinCountPlaceholder")' />
                 <span class='all' @click='handleAll'>
                     {{ $t('common.all') }}
                 </span>
+                <van-field v-model='address' :placeholder='$t("withdrawCoin.coinCountPlaceholder")' required />
             </div>
 
             <div class='text'>
@@ -122,13 +122,14 @@ export default {
 .page-wrap {
     position: relative;
     height: 100%;
-    padding-top: rem(100px);
+    margin-top: rem(90px);
     background-color: var(--contentColor);
     .withdorw-title {
         color: var(--primary);
         font-size: rem(24px);
     }
     .withdraw-wrap {
+        border-top: solid rem(20px) var(--primaryAssistColor);
         padding: 0 rem(30px);
         .title {
             margin-top: rem(20px);
@@ -142,10 +143,10 @@ export default {
                 margin-right: rem(20px);
                 line-height: rem(70px);
                 text-align: center;
-                background-color: var(--bgColor);
+                background-color: var(--primaryAssistColor);
                 border-radius: rem(6px);
                 &.active {
-                    color: var(--contentColor);
+                    color: #fff;
                     background-color: var(--primary);
                 }
             }
@@ -154,16 +155,18 @@ export default {
         .quantity {
             position: relative;
             margin-top: rem(70px);
-            .van-field{
-                padding-left:0
+            :deep(.van-field) {
+                padding-left:0;
+
             }
             .all{
                 color: var(--primary);
                 position: absolute;
                 right: rem(20px);
                 top: rem(80px);
-
+                z-index: 1;
             }
+
         }
         .text {
             margin-top: rem(20px);

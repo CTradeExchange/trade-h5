@@ -154,7 +154,6 @@ export default {
                 .col {
                     .name {
                         margin-bottom: rem(4px);
-                        font-weight: bold;
                         &.riseColor {
                             color: var(--fallColor);
                         }
@@ -163,7 +162,6 @@ export default {
                         }
                         .number {
                             color: var(--color);
-                            font-weight: bold;
                         }
                     }
                     &:last-child {
@@ -217,7 +215,6 @@ export default {
             .right {
                 color: var(--color);
                 text-align: right;
-                font-weight: bold;
             }
         }
     }
