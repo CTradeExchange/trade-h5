@@ -81,7 +81,7 @@
                                 {{ $t('trade.direction') }}
                             </span>
                             <div class='vals'>
-                                <span class='val'>
+                                <span class='val fallColor'>
                                     买入
                                 </span>
                             </div>
@@ -117,7 +117,7 @@
             </van-tab>
             <van-tab :title='$t("trade.trust")'>
                 <div class='trust-wrap'>
-                    <trustItem v-for='(item, index) in 2' :key='index' />
+                    <trustItem v-for='(item, index) in 2' :key='index' @click.stop="$router.push('/trustDetail')" />
                     <a class='to-all' href='javascript:;' @click="$router.push('/trustList')">
                         {{ $t('trade.allTrust') }} >
                     </a>
@@ -460,6 +460,9 @@ export default {
                 &:last-child {
                     margin-right: 0;
                 }
+                &.time-col{
+                    width: 25%;
+                }
                 .label {
                     position: relative;
                     z-index: 1;
@@ -474,6 +477,7 @@ export default {
                     top: rem(34px);
                     z-index: 0;
                     min-height: 100%;
+                    color: var(--normalColor);
                     .val {
                         display: block;
                         margin: rem(15px) 0;

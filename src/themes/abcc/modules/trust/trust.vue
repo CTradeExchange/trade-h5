@@ -5,7 +5,9 @@
                 BTC/USDT
             </span>
             <span class='direction'>
-                买入 1 BTC
+                <span class='fallColor'>
+                    买入
+                </span> 1 BTC
             </span>
         </div>
         <div class='t-body'>
@@ -36,11 +38,33 @@
                 </p>
             </div>
             <div class='t-right'>
-                <van-button>撤单</van-button>
+                <van-button @click.stop='cancelOrder'>
+                    撤单
+                </van-button>
             </div>
         </div>
     </div>
 </template>
+
+<script>
+import { Toast, Dialog } from 'vant'
+export default {
+    setup (props) {
+        const cancelOrder = () => {
+            Dialog.confirm({
+                title: '提示',
+                message: '确定撤单吗?',
+            }).then(() => {
+
+            }).catch(() => {})
+        }
+
+        return {
+            cancelOrder
+        }
+    }
+}
+</script>
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
@@ -63,7 +87,6 @@
     }
     .t-body {
         display: flex;
-        align-items: center;
         justify-content: space-between;
         .t-left {
             .tl-item {
@@ -81,6 +104,7 @@
             }
         }
         .t-right {
+            position: relative;
             .van-button {
                 width: rem(124px);
                 height: rem(48px);
@@ -90,6 +114,9 @@
                 background: var(--primaryAssistColor);
                 border-color: var(--primaryAssistColor);
                 border-radius: rem(6px);
+                position: absolute;
+                right: 0;
+                bottom: 0;
             }
         }
     }

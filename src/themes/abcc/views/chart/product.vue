@@ -1425,12 +1425,12 @@ export default {
     // 底部按钮
     .footerBtnBox {
         position: absolute;
-        bottom: rem(20px);
+        bottom: 0;
         left: 0;
         z-index: 2;
         display: flex;
         width: 100%;
-        height: rem(100px);
+        //height: rem(100px);
         text-align: center;
         background: var(--contentColor);
         .watch {
@@ -1453,7 +1453,7 @@ export default {
             flex: 1;
             flex-direction: row;
             flex-wrap: nowrap;
-            padding: 0 rem(20px);
+            padding: rem(20px);
             white-space: nowrap;
             .buy {
                 margin-right: rem(20px);
