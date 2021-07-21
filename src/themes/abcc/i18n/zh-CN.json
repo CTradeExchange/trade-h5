@@ -466,5 +466,12 @@
     "1": "待审核",
     "2": "审核通过",
     "3": "审核不通过"
+  },
+  "assets": {
+    "totalAssets": "总资产",
+    "frozen": "冻结",
+    "maxLoan": "最大可借",
+    "netAssets": "净资产",
+    "totalLoan": "总借款"
   }
 }

@@ -11,6 +11,7 @@ export default {
         loginData: '', // login返回的信息
         customerInfo: '', // 用户信息
         account: '', // 交易账户信息
+        assetsInfo: '', // 资产信息
         withdrawConfig: '', // 用户取款配置
         accountAssets: {}, // msg服务推送过来的交易账户资产
         kycState: '', // kyc认证
@@ -56,6 +57,9 @@ export default {
         },
         Update_accountInfo (state, data) {
             state.account = data
+        },
+        Update_assetsInfo (state, data) {
+            state.assetsInfo = data
         },
         Update_accountAssets (state, data) {
             state.accountAssets = data
@@ -168,10 +172,10 @@ export default {
             return defaultOptions.length > 0 ? addCustomerOptional({ symbolList: defaultOptions }) : Promise.resolve()
         },
         // 查询客户总资产信息
-        queryCustomerAssetsInfo ({ state, rootGetters }) {
+        queryCustomerAssetsInfo ({ state, commit }) {
             return queryCustomerAssetsInfo().then(res => {
                 if (res.check()) {
-                    console.log(res)
+                    commit('Update_assetsInfo', res.data)
                 }
             })
         },
