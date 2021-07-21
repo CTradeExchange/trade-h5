@@ -61,15 +61,6 @@ const routes = [
                     title: 'route.chart'
                 }
             },
-
-            {
-                path: 'position',
-                name: 'Position',
-                component: () => import(/* webpackChunkName: "position" */ '../views/position/position.vue'),
-                meta: {
-                    title: 'route.trade'
-                }
-            }
         ]
     },
     {
@@ -86,38 +77,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "ReturnMoney" */ '../views/returnMoney/returnMoney.vue'),
         meta: {
             title: 'route.returnMoney',
-        }
-    },
-    {
-        path: '/closePositionSuccess',
-        name: 'ClosePositionSuccess',
-        component: () => import(/* webpackChunkName: "position" */ '../views/position/closePositionSuccess.vue'),
-        meta: {
-            title: ''
-        }
-    },
-    {
-        path: '/positionDetail',
-        name: 'PositionDetail',
-        component: () => import(/* webpackChunkName: "position" */ '../views/position/positionDetail.vue'),
-        meta: {
-            title: 'route.positionDetail'
-        }
-    },
-    {
-        path: '/pendingDetail',
-        name: 'PendingDetail',
-        component: () => import(/* webpackChunkName: "position" */ '../views/position/pendingDetail.vue'),
-        meta: {
-            title: 'route.pendingDetail'
-        }
-    },
-    {
-        path: '/historyDetail',
-        name: 'HistoryDetail',
-        component: () => import(/* webpackChunkName: "position" */ '../views/position/historyDetail.vue'),
-        meta: {
-            title: 'route.historyDetail'
         }
     },
     {

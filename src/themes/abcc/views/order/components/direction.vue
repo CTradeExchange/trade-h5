@@ -43,10 +43,10 @@ export default {
     .item {
         flex: 1;
         box-sizing: border-box;
-        height: rem(70px);
+        height: rem(80px);
         padding: rem(10px) rem(20px);
         color: var(--color);
-        line-height: rem(50px);
+        line-height: rem(60px);
         background: var(--assistColor);
         border-radius: rem(6px);
         &.sell {

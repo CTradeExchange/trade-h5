@@ -11,7 +11,7 @@
                 </p>
             </div>
             <div class='rightInfo'>
-                <van-button class='takeMoneyBtn' type='primary'>
+                <van-button class='takeMoneyBtn' type='primary' @click="$router.push({ name:'WithdrawCoin' })">
                     提币
                 </van-button>
             </div>
@@ -104,6 +104,7 @@ export default {
     color: var(--minorColor);
     line-height: 1.5;
     background: var(--contentColor);
+    border-radius: 4px;
     .totalAmount {
         color: var(--color);
         font-size: rem(50px);
@@ -118,6 +119,7 @@ export default {
 .assetInfoUl {
     margin: rem(20px);
     background: var(--contentColor);
+    border-radius: 4px;
     .item {
         display: flex;
         justify-content: space-between;

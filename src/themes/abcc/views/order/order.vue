@@ -26,7 +26,7 @@
             <!-- 手数 -->
             <OrderVolume v-if='product' v-model='volume' class='cellMarginTop' :product='product' />
             <!-- 订单金额 -->
-            <Assets />
+            <Assets v-model:operation-type='operationType' :direction='direction' :product='product' :volume='volume' />
         </div>
         <div class='footerBtn' :class='[direction]'>
             <van-button block :loading='loading' size='normal' @click='submitHandler'>
@@ -82,6 +82,7 @@ export default {
                 val: 2
             }],
             volume: 0.01,
+            operationType: 2, // 操作类型。1-普通；2-自动借款；3-自动还款
             pendingPrice: '',
         })
         const pendingRef = ref(null)
@@ -89,6 +90,7 @@ export default {
         const pendingWarn = computed(() => pendingRef.value?.warn)
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
         QuoteSocket.send_subscribe([symbolId]) // 订阅产品报价
+        store.dispatch('_user/queryAccountAssetsInfo')
         store.commit('_quote/Update_productActivedID', symbolId)
         store.commit('_trade/Update_modifyPositionId', 0)
         const product = computed(() => store.getters.productActived)

@@ -337,7 +337,6 @@ export default {
 .topTitle {
     flex: 1;
     color: var(--color);
-    font-size: rem(32px);
     text-align: center;
 }
 .page-wrap {

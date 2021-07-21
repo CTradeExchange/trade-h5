@@ -536,3 +536,27 @@ export function setDefaultWallet (data) {
         data
     })
 }
+
+/* 查询客户总资产信息 */
+export function queryCustomerAssetsInfo (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.queryCustomerAssetsInfo',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 查询账户资产信息 */
+export function queryAccountAssetsInfo (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.queryAccountAssetsInfo',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

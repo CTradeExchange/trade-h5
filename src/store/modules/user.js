@@ -1,4 +1,4 @@
-import { login, findCustomerInfo, logout, switchAccount, queryCustomerOptionalList, addCustomerOptional } from '@/api/user'
+import { login, findCustomerInfo, logout, switchAccount, queryCustomerOptionalList, addCustomerOptional, queryCustomerAssetsInfo, queryAccountAssetsInfo } from '@/api/user'
 import { removeCustomerOptional } from '@/api/trade'
 import { localSet, setToken, removeLoginParams } from '@/utils/util'
 
@@ -10,6 +10,7 @@ export default {
         zone: '86', // 区号
         loginData: '', // login返回的信息
         customerInfo: '', // 用户信息
+        account: '', // 交易账户信息
         withdrawConfig: '', // 用户取款配置
         accountAssets: {}, // msg服务推送过来的交易账户资产
         kycState: '', // kyc认证
@@ -53,6 +54,9 @@ export default {
         Update_customerInfo (state, data) {
             state.customerInfo = data
         },
+        Update_accountInfo (state, data) {
+            state.account = data
+        },
         Update_accountAssets (state, data) {
             state.accountAssets = data
         },
@@ -81,6 +85,7 @@ export default {
                     commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_loginData', data)
                     commit('Update_customerInfo', data)
+                    if (data.accountList?.length) commit('Update_accountInfo', data.accountList.find(({ accountId }) => accountId === data.accountId) || '')
                     commit('_base/UPDATE_tradeType', data.tradeType, { root: true }) // 登录后存储用户的玩法类型
                     // dispatch('findCustomerInfo')  // findCustomerInfod 的数据目前和登录的数据一样，不需要再次调用
                     if (data.optional === 1) dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
@@ -102,6 +107,7 @@ export default {
                     const data = res.data
                     commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_customerInfo', res.data)
+                    if (data.accountList?.length) commit('Update_accountInfo', data.accountList.find(({ accountId }) => accountId === data.accountId) || '')
                     if (data.optional === 1) dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
                     dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {
                         return dispatch('_quote/querySymbolBaseInfoList', productAllList, { root: true })
@@ -160,6 +166,22 @@ export default {
             if (state.customerInfo.optional === 1) return Promise.resolve()
             const defaultOptions = rootGetters.userSelfSymbolList.map(el => parseInt(el.symbolId))
             return defaultOptions.length > 0 ? addCustomerOptional({ symbolList: defaultOptions }) : Promise.resolve()
+        },
+        // 查询客户总资产信息
+        queryCustomerAssetsInfo ({ state, rootGetters }) {
+            return queryCustomerAssetsInfo().then(res => {
+                if (res.check()) {
+                    console.log(res)
+                }
+            })
+        },
+        // 查询账户资产信息
+        queryAccountAssetsInfo ({ state, commit }) {
+            return queryAccountAssetsInfo().then(res => {
+                if (res.check()) {
+                    commit('Update_accountInfo', res.data)
+                }
+            })
         },
     }
 }
