@@ -2,7 +2,7 @@
     <div class='top'>
         <slot name='left'>
             <a class='back' href='javascript:;' @click='back'>
-                <van-icon :name='leftIcon' />
+                <span class='icon_icon_back'></span>
             </a>
         </slot>
         <slot name='center'>
@@ -75,14 +75,15 @@ export default {
     align-items: center;
     justify-content: space-between;
     height: rem(100px);
+    font-size: rem(34px);
     background: var(--contentColor);
     .back {
         position: absolute;
         top: rem(26px);
-        left: rem(13px);
+        left: 0;
         z-index: 1;
+        padding: 0 rem(30px);
         color: var(--color);
-        font-size: rem(46px);
     }
     .rightClick {
         position: absolute;

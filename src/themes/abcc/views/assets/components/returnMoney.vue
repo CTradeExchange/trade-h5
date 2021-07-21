@@ -8,22 +8,32 @@
             </p>
             <div class='container'>
                 <div class='actionBar'>
-                    以 BTC
-                    <span class='icon_icon_arrow'></span>
+                    <span class='muted' @click='pickerShow=true'>
+                        以
+                    </span>
+                    <span class='currencySpan' @click='pickerShow=true'>
+                        BTC
+                    </span>
+                    <span class='icon_icon_arrow' @click='pickerShow=true'></span>
                     <input class='input' type='text' />
                     <a class='all' href='javascript:;'>
                         全部
                     </a>
                 </div>
-                <p class='mtop5 muted'>
+                <p class='mutedTip'>
                     可用 1.00000 BTC
                 </p>
                 <div class='actionBar mtop20'>
-                    还 USDT
+                    <span class='muted'>
+                        还
+                    </span>
+                    <span class='currencySpan'>
+                        USDT
+                    </span>
                     <span class='icon_icon_arrow'></span>
                     <input class='input' type='text' />
                 </div>
-                <p class='mtop5 muted'>
+                <p class='mutedTip'>
                     待还 1.00000 USDT
                 </p>
             </div>
@@ -31,6 +41,9 @@
                 还 USDT
             </van-button>
         </div>
+    </van-popup>
+    <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
+        <van-picker :columns='columns' :default-index='2' title='标题' />
     </van-popup>
 </template>
 
@@ -41,6 +54,8 @@ export default {
     emits: ['update:modelValue'],
     setup (props, { emit }) {
         const show = ref(false)
+        const pickerShow = ref(false)
+        const columns = ['USDT', 'BTC', 'USDT', 'BTC', 'USDT', 'BTC', 'USDT', 'BTC']
         watch(
             () => props.modelValue,
             newval => {
@@ -53,6 +68,8 @@ export default {
         }
         return {
             show,
+            pickerShow,
+            columns,
             closed
         }
     }
@@ -76,8 +93,9 @@ export default {
         display: flex;
         align-items: center;
         height: rem(80px);
-        padding: 0 rem(20px);
-        color: var(--minorColor);
+        padding: 0 rem(30px);
+        color: var(--color);
+        font-size: rem(28px);
         line-height: rem(80px);
         background: var(--assistColor);
         .icon_icon_arrow {
@@ -98,7 +116,16 @@ export default {
             bottom: 0;
             margin: auto;
             color: var(--primary);
+            font-size: rem(24px);
         }
+        .currencySpan {
+            margin-left: 3px;
+        }
+    }
+    .mutedTip {
+        margin-top: 5px;
+        color: var(--minorColor);
+        font-size: rem(20px);
     }
     .returnBtn {
         position: absolute;
@@ -106,5 +133,8 @@ export default {
         left: 0;
         width: 100%;
     }
+}
+.assetsPicker {
+    --van-picker-background-color: var(--contentColor);
 }
 </style>

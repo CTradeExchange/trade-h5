@@ -55,6 +55,7 @@ export default {
 .totalAssets {
     padding: rem(30px);
     background: var(--contentColor);
+    border-radius: 4px;
 }
 .totalAssetsInfo {
     position: absolute;
@@ -76,8 +77,8 @@ export default {
 }
 .assetList {
     display: grid;
-    grid-column-gap: 5px;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: auto auto auto;
+    justify-content: space-around;
     margin-top: rem(60px);
     font-size: rem(34px);
     line-height: 1.5;

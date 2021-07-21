@@ -606,17 +606,26 @@ body {
             border-radius: rem(8px);
         }
     }
+    .van-picker__mask {
+        background-image: none;
+    }
     .van-switch {
         background-color: var(--bgColor);
     }
     .van-collapse-item__content {
         background-color: var(--contentColor);
     }
+    .assetsPicker [class*=van-hairline]::after {
+        border-color: var(--placeholdColor);
+    }
     ::-webkit-input-placeholder {
         color: var(--placeholdColor);
     }
 
     --van-button-primary-background-color: var(--primary);
+    --van-picker-confirm-action-color: var(--primary);
     --van-popup-background-color: var(--contentColor);
     --van-search-background-color: var(--contentColor);
+    --van-picker-background-color: var(--contentColor);
+    --van-picker-option-text-color: var(--color);
 }

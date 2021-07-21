@@ -391,7 +391,12 @@
     "trustList": "委托列表",
     "trustDetail": "委托详情",
     "cancelOrder": "撤单",
-    "loan": "借款"
+    "loan": "借款",
+    "availableLoanContent1": "从代理处借款的最高额度，初始为0，需手动申请授信",
+    "availableLoanContent2": "代理可借额度=min[净资产*(杠杆倍数-1)- 已借未还资产，系统最大可借资产]",
+    "availableLoanAmount": "代理可借额度",
+    "autoLoan": "自动借款",
+    "autoRepayment": "自动还款"
   },
   "bizType": {
     "2": "市价平仓",
