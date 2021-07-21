@@ -111,7 +111,6 @@ export default {
     .takeMoneyBtn {
         height: rem(48px);
         color: var(--primary);
-
         --van-button-primary-background-color: var(--primaryAssistColor);
         --van-button-primary-border-color: var(--primaryAssistColor);
     }
