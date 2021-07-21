@@ -75,7 +75,7 @@
                         </div>
                     </div>
                     <div class='right'>
-                        2021-07-19 15:21:19
+                        2021/07/19 15:21:19
                     </div>
                 </div><div class='item'>
                     <div class='left'>
@@ -84,7 +84,7 @@
                         </div>
                     </div>
                     <div class='right'>
-                        ID : 1417021720616783872
+                        ID : 654543456
                     </div>
                 </div>
             </div>
@@ -154,6 +154,7 @@ export default {
                 .col {
                     .name {
                         margin-bottom: rem(4px);
+                        font-weight: bold;
                         &.riseColor {
                             color: var(--fallColor);
                         }
@@ -216,6 +217,7 @@ export default {
             .right {
                 color: var(--color);
                 text-align: right;
+                font-weight: bold;
             }
         }
     }

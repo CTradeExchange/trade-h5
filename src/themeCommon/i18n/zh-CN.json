@@ -125,7 +125,8 @@
         "settings": "设置",
         "modify": "修改",
         "setSuccess": "设置成功",
-        "noSet": "未设置"
+        "noSet": "未设置",
+        "all": "全部"
     },
     "auth": {
         "info": "需要准备的验证资料",
@@ -404,7 +405,11 @@
         "hint_2": "24小时内取款次数不超过",
         "hint_3": "提币数量不能大于可提数量",
         "hint_4": "提币数量不能小于",
-        "hint_5": "提币数量不能大于"
+        "hint_5": "提币数量不能大于",
+        "mainChainName": "主链",
+        "coinAddress": "提币地址",
+        "reciveAmount": "到账数量",
+        "addressPlaceholder": "请输入钱包地址或粘贴地址"
     },
     "coinRecord": {
         "auditStatus": {

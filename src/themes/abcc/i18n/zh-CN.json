@@ -396,7 +396,8 @@
     "availableLoanContent2": "代理可借额度=min[净资产*(杠杆倍数-1)- 已借未还资产，系统最大可借资产]",
     "availableLoanAmount": "代理可借额度",
     "autoLoan": "自动借款",
-    "autoRepayment": "自动还款"
+    "autoRepayment": "自动还款",
+    "dealTime": "成交时间"
   },
   "bizType": {
     "2": "市价平仓",

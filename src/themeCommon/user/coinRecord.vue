@@ -30,14 +30,14 @@
                                 </span>
                             </p>
                             <p class='row'>
-                                <span>{{ $t('coinRecord.time') }}</span>
+                                <!-- <span>{{ $t('coinRecord.time') }}</span>
                                 <span>{{ $t('coinRecord.service') }}</span>
-                                <span>{{ $t('coinRecord.take') }}</span>
+                                <span>{{ $t('coinRecord.take') }}</span> -->
                             </p>
                             <p class='row'>
                                 <span>{{ formatTime(item.createTime) }}</span>
-                                <span>{{ item.withdrawFee }} {{ item.withdrawCurrency }}</span>
-                                <span>{{ item.amount }} {{ item.withdrawCurrency }}</span>
+                                <!-- <span>{{ item.withdrawFee }} {{ item.withdrawCurrency }}</span>
+                                <span>{{ item.amount }} {{ item.withdrawCurrency }}</span> -->
                             </p>
                         </div>
                         <div class='arrow'>

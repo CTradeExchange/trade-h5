@@ -5,7 +5,7 @@
             class='tabs'
             color='#477fd3'
             line-height='2'
-            line-width='20'
+            line-width='33.3%'
             title-active-color='#477fd3'
         >
             <van-tab v-if='statusList.indexOf("stalls") > -1' name='stalls' :title='$t("trade.sellFive")'>
@@ -63,7 +63,7 @@
                     <div v-else class='list-wrap'>
                         <div class='col time-col'>
                             <span class='label'>
-                                {{ $t('trade.sortTime') }}
+                                {{ $t('trade.dealTime') }}
                             </span>
                             <span v-if='dealData.length' class='val forWide'>
                                 {{ formatTime(dealData[0][1]) }}
@@ -76,9 +76,19 @@
                                 </span>
                             </div>
                         </div>
+                        <div class='col'>
+                            <span class='label'>
+                                {{ $t('trade.direction') }}
+                            </span>
+                            <div class='vals'>
+                                <span class='val fallColor'>
+                                    买入
+                                </span>
+                            </div>
+                        </div>
                         <div class='col price-col'>
                             <span class='label'>
-                                {{ $t('trade.dealPrice') }}
+                                {{ $t('trade.priceLabel') }}
                             </span>
                             <span v-if='dealData.length' class='val forWide'>
                                 {{ dealData[0][2] }}
@@ -90,7 +100,7 @@
                             </div>
                         </div><div class='col volume-col'>
                             <span class='label'>
-                                {{ $t('trade.dealVolume') }}
+                                {{ $t('trade.volumes') }}
                             </span>
                             <span v-if='dealData.length' class='val forWide'>
                                 {{ dealData[0][3] }}
@@ -107,7 +117,7 @@
             </van-tab>
             <van-tab :title='$t("trade.trust")'>
                 <div class='trust-wrap'>
-                    <trustItem v-for='(item, index) in 2' :key='index' />
+                    <trustItem v-for='(item, index) in 2' :key='index' @click.stop="$router.push('/trustDetail')" />
                     <a class='to-all' href='javascript:;' @click="$router.push('/trustList')">
                         {{ $t('trade.allTrust') }} >
                     </a>
@@ -274,7 +284,7 @@ export default {
 
         // 格式化时间
         const formatTime = (val) => {
-            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+            return dayjs(val).format('HH:mm:ss')
         }
 
         return {
@@ -306,7 +316,12 @@ export default {
                 background-color: var(--contentColor);
             }
             .van-tabs__wrap {
-                height: rem(50px);
+                height: rem(80px);
+                border-bottom: solid 1px var(--lineColor);
+                .van-tab__text{
+                    font-weight: bold;
+                    font-size: rem(28px);
+                }
             }
             .van-tabs__content {
                 flex: 1;
@@ -432,9 +447,8 @@ export default {
             flex: rem(300px); // 仅用于不撑开外层
             flex-direction: row;
             flex-wrap: nowrap;
-            width: 85%;
+            width: 95%;
             margin: 0 auto;
-            padding: 0 rem(10px);
             overflow: hidden;
             .col {
                 position: relative;
@@ -446,18 +460,24 @@ export default {
                 &:last-child {
                     margin-right: 0;
                 }
+                &.time-col{
+                    width: 25%;
+                }
                 .label {
                     position: relative;
                     z-index: 1;
                     width: 100%;
                     padding: rem(5px) 0;
+                    margin-bottom: rem(10px);
+                    color: var(--minorColor);
                     background: var(--contentColor);
                 }
                 .vals {
                     position: absolute;
-                    top: rem(26px);
+                    top: rem(34px);
                     z-index: 0;
                     min-height: 100%;
+                    color: var(--normalColor);
                     .val {
                         display: block;
                         margin: rem(15px) 0;

@@ -452,7 +452,6 @@ export default {
                         state.allList = data
                         state.coinKind = coinKindList[0].name
                         state.coinKindList = coinKindList
-
                         // 根据提币币种获取筛选链名称
                         filterChainName()
                     }

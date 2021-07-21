@@ -243,25 +243,26 @@
 
         <div class='footerBtnBox'>
             <div class='trade-btn-wrap'>
-                <div class='sell fallColorBg' @click="toOrder('sell')">
-                    <p>
-                        {{ $t('trade.sell') }}
-                    </p>
-                    <p class='price ' :class="product.sell_color+'Arrow'">
-                        {{ product.sell_price }}
-                    </p>
-                </div>
                 <div class='buy riseColorBg' @click="toOrder('buy')">
                     <p>
                         {{ $t('trade.buy') }}
                     </p>
-                    <p class='price' :class="product.buy_color+'Arrow'">
+                    <!-- <p class='price'>
                         {{ product.buy_price }}
-                    </p>
+                    </p> -->
                 </div>
-                <span class='spread_text'>
+                <div class='sell fallColorBg' @click="toOrder('sell')">
+                    <p>
+                        {{ $t('trade.sell') }}
+                    </p>
+                    <!-- <p class='price '>
+                        {{ product.sell_price }}
+                    </p> -->
+                </div>
+
+                <!-- <span class='spread_text'>
                     {{ product.spread_text }}
-                </span>
+                </span> -->
             </div>
         </div>
     </div>
@@ -1424,12 +1425,12 @@ export default {
     // 底部按钮
     .footerBtnBox {
         position: absolute;
-        bottom: rem(20px);
+        bottom: 0;
         left: 0;
         z-index: 2;
         display: flex;
         width: 100%;
-        height: rem(100px);
+        //height: rem(100px);
         text-align: center;
         background: var(--contentColor);
         .watch {
@@ -1452,10 +1453,10 @@ export default {
             flex: 1;
             flex-direction: row;
             flex-wrap: nowrap;
-            padding: 0 rem(20px);
+            padding: rem(20px);
             white-space: nowrap;
             .buy {
-                margin-left: rem(20px);
+                margin-right: rem(20px);
             }
         }
         .sell,
@@ -1463,10 +1464,10 @@ export default {
             @include active();
             position: relative;
             flex: 1;
-            padding-top: rem(18px);
+            //padding-top: rem(18px);
             color: #FFF;
-            font-size: rem(24px);
-            line-height: 1;
+            font-size: rem(34px);
+            line-height: rem(100px);
             background-color: #858C9A;
             border-radius: 3px;
             &.fallColorBg {
