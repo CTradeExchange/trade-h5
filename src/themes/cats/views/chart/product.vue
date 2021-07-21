@@ -243,26 +243,25 @@
 
         <div class='footerBtnBox'>
             <div class='trade-btn-wrap'>
-                <div class='buy riseColorBg' @click="toOrder('buy')">
-                    <p>
-                        {{ $t('trade.buy') }}
-                    </p>
-                    <!-- <p class='price'>
-                        {{ product.buy_price }}
-                    </p> -->
-                </div>
                 <div class='sell fallColorBg' @click="toOrder('sell')">
                     <p>
                         {{ $t('trade.sell') }}
                     </p>
-                    <!-- <p class='price '>
+                    <p class='price ' :class="product.sell_color+'Arrow'">
                         {{ product.sell_price }}
-                    </p> -->
+                    </p>
                 </div>
-
-                <!-- <span class='spread_text'>
+                <div class='buy riseColorBg' @click="toOrder('buy')">
+                    <p>
+                        {{ $t('trade.buy') }}
+                    </p>
+                    <p class='price' :class="product.buy_color+'Arrow'">
+                        {{ product.buy_price }}
+                    </p>
+                </div>
+                <span class='spread_text'>
                     {{ product.spread_text }}
-                </span> -->
+                </span>
             </div>
         </div>
     </div>
@@ -1456,7 +1455,7 @@ export default {
             padding: 0 rem(20px);
             white-space: nowrap;
             .buy {
-                margin-right: rem(20px);
+                margin-left: rem(20px);
             }
         }
         .sell,
@@ -1464,10 +1463,10 @@ export default {
             @include active();
             position: relative;
             flex: 1;
-            //padding-top: rem(18px);
+            padding-top: rem(18px);
             color: #FFF;
-            font-size: rem(34px);
-            line-height: rem(100px);
+            font-size: rem(24px);
+            line-height: 1;
             background-color: #858C9A;
             border-radius: 3px;
             &.fallColorBg {

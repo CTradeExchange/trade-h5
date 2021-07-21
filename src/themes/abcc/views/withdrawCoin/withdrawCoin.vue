@@ -1,57 +1,56 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop :back='true' :menu='false' :right-action='rightAction' :title='$t("withdraw.coinTitle")' @rightClick='toDespositList'>
+        <LayoutTop :back='true' :menu='false' :title='$t("withdraw.coinTitle")'>
             <template #right>
-                <a class='withdorw-title' href=''>
+                <a class='withdorw-title' href='javascript:;' @click='toList'>
                     提币记录
                 </a>
             </template>
         </LayoutTop>
         <div class='withdraw-wrap'>
             <p class='title'>
-                提币币种
+                {{ $t('withdrawCoin.coinName') }}
             </p>
             <ul class='coin-list'>
-                <li class='active'>
-                    USDT
+                <li v-for='(item,index) in currencyList' :key='index' :class='{ active: currencyActive === index }' @click='handleChangeCurrency(index)'>
+                    {{ item.name }}
                 </li>
-                <li>BTC</li>
-                <li>ETH</li>
             </ul>
             <p class='title'>
-                主链
+                {{ $t('withdrawCoin.mainChainName') }}
             </p>
             <ul class='coin-list'>
-                <li class='active'>
-                    TRC20
+                <li v-for='(item,index) in chainList' :key='index' :class='{ active: chainActive === index }' @click='handleChangechain(index)'>
+                    {{ item.name }}
                 </li>
-                <li>ERC20</li>
-                <li>OMNI</li>
             </ul>
 
             <div class='address'>
                 <p class='title'>
-                    提币地址
+                    {{ $t('withdrawCoin.coinAddress') }}
                 </p>
-                <van-field v-model='address' label='' placeholder='请输入钱包地址或粘贴地址' />
+                <van-field v-model='address' label='' :placeholder='$t("withdrawCoin.addressPlaceholder")' />
             </div>
 
             <div class='quantity'>
                 <p class='title'>
-                    提币数量
+                    {{ $t('withdrawCoin.coinCount') }}
                 </p>
-                <van-field v-model='address' label='' placeholder='请输入提币数量' />
+                <van-field v-model='address' label='' :placeholder='$t("withdrawCoin.coinCountPlaceholder")' />
+                <span class='all' @click='handleAll'>
+                    {{ $t('common.all') }}
+                </span>
             </div>
 
             <div class='text'>
-                <p>可提：35000.000 USDT</p>
-                <p>手续费： 3500.000 USDT</p>
+                <p>{{ $t('withdrawCoin.can') }}：35000.000 USDT</p>
+                <p>{{ $t('withdrawCoin.service') }}： 3500.000 USDT</p>
             </div>
 
             <div class='submitBox'>
                 <div class='bottom-text'>
                     <label for=''>
-                        到账数量
+                        {{ $t('withdrawCoin.reciveAmount') }}
                     </label>
                     <span class='val'>
                         <em>10000000.00</em> USDT
@@ -67,26 +66,52 @@
 
 <script>
 import { useI18n } from 'vue-i18n'
-import { reactive, computed, onMounted, toRefs } from 'vue'
+import { reactive, computed, toRefs } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { isEmpty } from '@/utils/util'
 export default {
     setup (props) {
+        const store = useStore()
+        const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
+        const currencyList = computed(() => store.state.currencyList)
         const state = reactive({
             address: '',
-            currencyActive: 0
+            currencyActive: 0,
+            chainActive: 0
         })
-        const rightAction = {
-            title: t('deposit.depositRecord')
+
+        const chainList = computed(() => {
+            return currencyList.value.find((item, index) => index === state.currencyActive)?.subList
+        })
+
+        const handleChangeCurrency = (index) => {
+            state.currencyActive = index
+
+            if (isEmpty(currencyList.value[index].subList)) {
+                store.dispatch('getCurrencyList', currencyList.value[index].name)
+            }
+        }
+        const handleChangechain = (index) => {
+            state.chainActive = index
         }
 
-        const toWithdrawList = () => {
-
+        const toList = () => {
+            router.push('/coinRecord')
         }
+
+        store.dispatch('getCurrencyList').then(() => {
+            handleChangeCurrency(0)
+        })
 
         return {
             ...toRefs(state),
-            rightAction,
-            toWithdrawList
+            toList,
+            handleChangeCurrency,
+            handleChangechain,
+            currencyList,
+            chainList
         }
     }
 }
@@ -127,7 +152,18 @@ export default {
         }
         .address,
         .quantity {
+            position: relative;
             margin-top: rem(70px);
+            .van-field{
+                padding-left:0
+            }
+            .all{
+                color: var(--primary);
+                position: absolute;
+                right: rem(20px);
+                top: rem(80px);
+
+            }
         }
         .text {
             margin-top: rem(20px);

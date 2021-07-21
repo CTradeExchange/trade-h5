@@ -31,6 +31,7 @@ export default createStore({
         supportLanguages: supportLanguages,
         countryList: [],
         cacheViews: [],
+        currencyList: []
     },
     getters: {
         productActived (state) {
@@ -105,6 +106,9 @@ export default createStore({
         },
         Update_disabledSuccAnimtion (state, data) {
             state.disabledSuccAnimtion = data
+        },
+        Update_currencyList (state, data) {
+            state.currencyList = data
         }
     },
     actions: {
@@ -136,5 +140,25 @@ export default createStore({
                 return res
             })
         },
+        getCurrencyList ({ dispatch, commit, state }, params) {
+            return getListByParentCode(
+                { parentCode: params || 'digit_wallet_withdraw_currency' }).then(res => {
+                if (res.check()) {
+                    if (params) {
+                        state.currencyList.map(item => {
+                            if (item.name === params) {
+                                item.subList = res.data
+                            }
+                        })
+                        // currencyObj.subList = res.data
+                        // commit('Update_currencyList', currencyObj)
+                        return
+                    }
+                    commit('Update_currencyList', res.data)
+                }
+                return res
+            })
+        }
+
     }
 })

@@ -41,7 +41,7 @@
                 </van-row>
             </div>
             <div class='accountBtns invert'>
-                <button class='btn' @click="$router.push('/withdraw')">
+                <button class='btn' @click="$router.push('/withdrawCoin')">
                     {{ $t('trade.drawings') }}
                 </button>
                 <button class='btn' @click="$router.push('/desposit')">

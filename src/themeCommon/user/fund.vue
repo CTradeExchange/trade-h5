@@ -137,6 +137,7 @@ export default {
 
                 const netWorthPercent = divide(netWorth.value, parseFloat(netWorth.value + earnest))
                 const earnestPercent = divide(earnest, parseFloat(netWorth.value + earnest))
+                debugger
                 createTorus({
                     id: 'annulus',
                     width: 220,
@@ -146,8 +147,9 @@ export default {
                     label: t('common.jz'),
                     text: netWorth.value || '--',
                     data: [
-                        { color: '#3894FF', percent: netWorthPercent || 0, text: t('common.nthItem', 1) },
-                        { color: '#51C31C', percent: earnestPercent || 0, text: t('common.nthItem', 2) },
+                        { color: '#3894FF', percent: 0.5, text: t('common.nthItem', 1) },
+                        { color: '#51C31C', percent: 0.2, text: t('common.nthItem', 2) },
+                        { color: '#51C31C', percent: 0.3, text: t('common.nthItem', 2) },
                     ]
                 })
             }
@@ -158,7 +160,8 @@ export default {
         })
 
         onMounted(() => {
-
+            debugger
+            alert(5666)
         })
 
         return {

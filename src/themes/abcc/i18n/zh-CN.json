@@ -390,7 +390,8 @@
     "trustList": "委托列表",
     "trustDetail": "委托详情",
     "cancelOrder": "撤单",
-    "loan": "借款"
+    "loan": "借款",
+    "dealTime": "成交时间"
   },
   "bizType": {
     "2": "市价平仓",
