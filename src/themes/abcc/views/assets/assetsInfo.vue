@@ -1,0 +1,148 @@
+<template>
+    <div class='assetsInfoWrapper fullPageWrapper'>
+        <layoutTop>
+            <div>USDT</div>
+        </layoutTop>
+        <div class='totalAsset'>
+            <div class='leftInfo'>
+                <p>总资产</p>
+                <p class='totalAmount'>
+                    223423.12
+                </p>
+            </div>
+            <div class='rightInfo'>
+                <van-button class='takeMoneyBtn' type='primary'>
+                    提币
+                </van-button>
+            </div>
+        </div>
+
+        <ul class='assetInfoUl'>
+            <li class='item'>
+                <div class='hd'>
+                    <p>可用</p>
+                    <p class='value'>
+                        100000.000
+                    </p>
+                </div>
+                <div class='ft'>
+                    <p>冻结</p>
+                    <p class='value'>
+                        100000.000
+                    </p>
+                </div>
+            </li>
+            <li class='item'>
+                <div class='hd'>
+                    <p>借款</p>
+                    <p class='value'>
+                        100000.000
+                    </p>
+                </div>
+                <div class='ft'>
+                    <p>利息</p>
+                    <p class='value'>
+                        100000.000
+                    </p>
+                </div>
+            </li>
+            <li class='item'>
+                <div class='hd'>
+                    <p>最大可借</p>
+                    <p class='value'>
+                        100000.000
+                    </p>
+                </div>
+                <div class='ft'>
+                    <p>可提</p>
+                    <p class='value'>
+                        100000.000
+                    </p>
+                </div>
+            </li>
+        </ul>
+        <div class='footerBtn'>
+            <van-button block type='primary' @click='returnMoneyVisible=true'>
+                还币
+            </van-button>
+        </div>
+        <ReturnMoney v-model='returnMoneyVisible' />
+    </div>
+</template>
+
+<script>
+import ReturnMoney from './components/returnMoney.vue'
+import { reactive, toRefs } from '@vue/reactivity'
+// import { reactive, toRefs } from 'vue'
+// import { useStore } from 'vuex'
+export default {
+    components: {
+        ReturnMoney
+    },
+    props: ['product'],
+    setup () {
+        // const store = useStore()
+        const state = reactive({
+            returnMoneyVisible: false,
+            list: Array(3).fill()
+        })
+        return {
+            ...toRefs(state)
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+@import '@/sass/mixin.scss';
+.totalAsset {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: rem(20px);
+    padding: rem(30px);
+    color: var(--minorColor);
+    line-height: 1.5;
+    background: var(--contentColor);
+    .totalAmount {
+        color: var(--color);
+        font-size: rem(50px);
+    }
+    .takeMoneyBtn {
+        height: rem(48px);
+        color: var(--primary);
+
+        --van-button-primary-background-color: var(--primaryAssistColor);
+        --van-button-primary-border-color: var(--primaryAssistColor);
+    }
+}
+.assetInfoUl {
+    margin: rem(20px);
+    background: var(--contentColor);
+    .item {
+        display: flex;
+        justify-content: space-between;
+        padding: rem(30px);
+        color: var(--normalColor);
+        font-size: rem(24px);
+        line-height: 1.4;
+        border-bottom: 1px solid var(--lineColor);
+        &:last-child {
+            border-bottom: 0;
+        }
+        .ft {
+            text-align: right;
+        }
+        .value {
+            color: var(--minorColor);
+            font-size: rem(30px);
+        }
+    }
+}
+.footerBtn {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+</style>

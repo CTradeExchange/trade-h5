@@ -48,7 +48,7 @@ const routes = [
             {
                 path: 'assets',
                 name: 'Assets',
-                component: () => import(/* webpackChunkName: "Mine" */ '../views/assets/assets.vue'),
+                component: () => import(/* webpackChunkName: "Assets" */ '../views/assets/assets.vue'),
                 meta: {
                     title: 'route.assets',
                 }
@@ -71,6 +71,22 @@ const routes = [
                 }
             }
         ]
+    },
+    {
+        path: '/assetsInfo',
+        name: 'AssetsInfo',
+        component: () => import(/* webpackChunkName: "AssetsInfo" */ '../views/assets/assetsInfo.vue'),
+        meta: {
+            title: 'route.assets',
+        }
+    },
+    {
+        path: '/returnMoney',
+        name: 'ReturnMoney',
+        component: () => import(/* webpackChunkName: "ReturnMoney" */ '../views/returnMoney/returnMoney.vue'),
+        meta: {
+            title: 'route.returnMoney',
+        }
     },
     {
         path: '/closePositionSuccess',

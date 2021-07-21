@@ -1,5 +1,5 @@
 <template>
-    <div class='assetsItem'>
+    <div class='assetsItem' @click='toInfo'>
         <div class='rowflex currency'>
             <span>USDT</span>
             <span>2352345234.33</span>
@@ -26,13 +26,19 @@
 </template>
 
 <script>
+import { useRouter } from 'vue-router'
 // import { reactive, toRefs } from 'vue'
 // import { useStore } from 'vuex'
 export default {
     setup () {
         // const store = useStore()
-
-        return {}
+        const router = useRouter()
+        const toInfo = () => {
+            router.push({ name: 'AssetsInfo' })
+        }
+        return {
+            toInfo,
+        }
     }
 }
 </script>
@@ -48,6 +54,7 @@ export default {
     display: flex;
     justify-content: space-between;
     width: 100%;
+    line-height: 1.5;
     &.currency {
         font-size: rem(30px);
     }
