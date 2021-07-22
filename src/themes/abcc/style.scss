@@ -626,7 +626,9 @@ body {
     --van-picker-confirm-action-color: var(--primary);
     --van-popup-background-color: var(--contentColor);
     --van-search-background-color: var(--contentColor);
-    --van-field-placeholder-text-color: var(--placeholdColor)
+    --van-field-placeholder-text-color: var(--placeholdColor);
     --van-picker-background-color: var(--contentColor);
     --van-picker-option-text-color: var(--color);
+    --van-popover-action-width: rem(80px);
+    --van-popover-action-height: 30px;
 }

@@ -397,7 +397,8 @@
     "availableLoanAmount": "代理可借额度",
     "autoLoan": "自动借款",
     "autoRepayment": "自动还款",
-    "dealTime": "成交时间"
+    "dealTime": "成交时间",
+    "handicap": "盘口"
   },
   "bizType": {
     "2": "市价平仓",
