@@ -2,10 +2,7 @@
     <div class='assetsWrapper'>
         <TotalAssets class='block' />
 
-        <AssetsItem class='block' />
-        <AssetsItem class='block' />
-        <AssetsItem class='block' />
-        <AssetsItem class='block' />
+        <AssetsItem v-for='item in accountList' :key='item.accountId' class='block' :data='item' />
     </div>
 </template>
 
@@ -14,6 +11,7 @@ import AssetsItem from './components/assetsItem.vue'
 import TotalAssets from './components/totalAssets.vue'
 // import { reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
+import { computed } from '@vue/runtime-core'
 export default {
     components: {
         AssetsItem,
@@ -21,8 +19,11 @@ export default {
     },
     setup () {
         const store = useStore()
+        const accountList = computed(() => store.state._user.customerInfo?.accountList ?? [])
         store.dispatch('_user/queryCustomerAssetsInfo')
-        return {}
+        return {
+            accountList
+        }
     }
 }
 </script>

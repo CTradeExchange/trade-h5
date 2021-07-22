@@ -5,14 +5,14 @@
         </layoutTop>
         <div class='totalAsset'>
             <div class='leftInfo'>
-                <p>总资产</p>
+                <p>{{ $t('assets.totalAssets') }}</p>
                 <p class='totalAmount'>
                     223423.12
                 </p>
             </div>
             <div class='rightInfo'>
                 <van-button class='takeMoneyBtn' type='primary' @click="$router.push({ name:'WithdrawCoin' })">
-                    提币
+                    {{ $t('coinRecord.take') }}
                 </van-button>
             </div>
         </div>
@@ -20,13 +20,13 @@
         <ul class='assetInfoUl'>
             <li class='item'>
                 <div class='hd'>
-                    <p>可用</p>
+                    <p>{{ $t('trade.free') }}</p>
                     <p class='value'>
                         100000.000
                     </p>
                 </div>
                 <div class='ft'>
-                    <p>冻结</p>
+                    <p>{{ $t('assets.frozen') }}</p>
                     <p class='value'>
                         100000.000
                     </p>
@@ -34,13 +34,13 @@
             </li>
             <li class='item'>
                 <div class='hd'>
-                    <p>借款</p>
+                    <p>{{ $t('trade.loan') }}</p>
                     <p class='value'>
                         100000.000
                     </p>
                 </div>
                 <div class='ft'>
-                    <p>利息</p>
+                    <p>{{ $t('trade.swap_2') }}</p>
                     <p class='value'>
                         100000.000
                     </p>
@@ -48,13 +48,13 @@
             </li>
             <li class='item'>
                 <div class='hd'>
-                    <p>最大可借</p>
+                    <p>{{ $t('assets.maxLoan') }}</p>
                     <p class='value'>
                         100000.000
                     </p>
                 </div>
                 <div class='ft'>
-                    <p>可提</p>
+                    <p>{{ $t('withdrawCoin.can') }}</p>
                     <p class='value'>
                         100000.000
                     </p>
@@ -63,7 +63,7 @@
         </ul>
         <div class='footerBtn'>
             <van-button block type='primary' @click='returnMoneyVisible=true'>
-                还币
+                {{ $t('route.returnMoney') }}
             </van-button>
         </div>
         <ReturnMoney v-model='returnMoneyVisible' />
@@ -74,18 +74,19 @@
 import ReturnMoney from './components/returnMoney.vue'
 import { reactive, toRefs } from '@vue/reactivity'
 // import { reactive, toRefs } from 'vue'
-// import { useStore } from 'vuex'
+import { useStore } from 'vuex'
 export default {
     components: {
         ReturnMoney
     },
     props: ['product'],
     setup () {
-        // const store = useStore()
+        const store = useStore()
         const state = reactive({
             returnMoneyVisible: false,
             list: Array(3).fill()
         })
+        store.dispatch('_user/queryAccountAssetsInfo')
         return {
             ...toRefs(state)
         }

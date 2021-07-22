@@ -1,25 +1,25 @@
 <template>
     <div class='assetsItem' @click='toInfo'>
         <div class='rowflex currency'>
-            <span>USDT</span>
-            <span>2352345234.33</span>
+            <span>{{ data.currency }}</span>
+            <span>{{ data.netAssets }}</span>
         </div>
         <div class='rowflex muted mtop20'>
             <div>
-                <p>可用</p>
-                <p>5000.0000</p>
+                <p>{{ $t('trade.free') }}</p>
+                <p>{{ data.available }}</p>
                 <p class='mtop10'>
-                    借款
+                    {{ $t('trade.loan') }}
                 </p>
-                <p>5000.0000</p>
+                <p>{{ data.liabilitiesPrincipal }}</p>
             </div>
             <div class='alignRgiht'>
-                <p>冻结</p>
-                <p>5000.0000</p>
+                <p>{{ $t('assets.frozen') }}</p>
+                <p>{{ data.frozen }}</p>
                 <p class='mtop10'>
-                    利息
+                    {{ $t('trade.swap_2') }}
                 </p>
-                <p>5000.0000</p>
+                <p>{{ data.interest }}</p>
             </div>
         </div>
     </div>
@@ -30,6 +30,11 @@ import { useRouter } from 'vue-router'
 // import { reactive, toRefs } from 'vue'
 // import { useStore } from 'vuex'
 export default {
+    props: {
+        data: {
+            type: Object,
+        },
+    },
     setup () {
         // const store = useStore()
         const router = useRouter()

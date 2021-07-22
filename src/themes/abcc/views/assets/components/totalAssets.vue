@@ -4,10 +4,10 @@
             <AssetsChart />
             <div class='totalAssetsInfo'>
                 <p class='label'>
-                    总资产(USDT)
+                    {{ $t('assets.totalAssets') }}({{ assetsInfo.currency }})
                 </p>
                 <p class='totalAmount'>
-                    341234.23
+                    {{ assetsInfo.totalBalance }}
                 </p>
             </div>
         </div>
@@ -15,37 +15,42 @@
             <li class='item'>
                 <p class='muted'>
                     <span class='color_jzc'></span>
-                    净资产
+                    {{ $t('assets.netAssets') }}
                 </p>
-                <p>12312312.12</p>
+                <p>{{ assetsInfo.totalNetAssets }}</p>
             </li>
             <li class='item'>
                 <p class='muted'>
                     <span class='color_zjk'></span>
-                    总借款
+                    {{ $t('assets.totalLoan') }}
                 </p>
-                <p>1231232.12</p>
+                <p>{{ assetsInfo.totalLiabilities }}</p>
             </li>
             <li class='item'>
                 <p class='muted'>
                     <span class='color_lx'></span>
-                    利息
+                    {{ $t('trade.swap_2') }}
                 </p>
-                <p>122.12</p>
+                <p>{{ assetsInfo.totalInterest }}</p>
             </li>
         </ul>
     </div>
 </template>
 
 <script>
-// import { reactive, toRefs } from 'vue'
 import AssetsChart from './assetsChart.vue'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 export default {
     components: {
         AssetsChart,
     },
     setup () {
-        return {}
+        const store = useStore()
+        const assetsInfo = computed(() => store.state._user.assetsInfo)
+        return {
+            assetsInfo,
+        }
     }
 }
 </script>
@@ -59,7 +64,7 @@ export default {
 }
 .totalAssetsInfo {
     position: absolute;
-    top: rem(90px);
+    top: rem(140px);
     left: 50%;
     font-size: rem(28px);
     text-align: center;
