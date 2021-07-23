@@ -5,6 +5,7 @@
             class='input'
             :placeholder='$t("trade.volumes")'
             type='text'
+            :value='modelValue'
             @blur='onBlur'
             @input='onInput'
         />
@@ -48,7 +49,8 @@ export default {
         const onBlur = (e) => {
             let value = e.target.value
             if (value === props.modelValue) return false
-            value = value ? toFixed(value, this.digits) : value
+            const digits = getDecimalNum(props.product.minVolume)
+            value = value ? toFixed(value, digits) : value
             emit('change', value)
         }
         return {

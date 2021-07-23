@@ -1,19 +1,19 @@
 <template>
     <div class='assetsInfoWrapper fullPageWrapper'>
         <layoutTop>
-            <div>USDT</div>
+            <div>{{ $route.query.currency }}</div>
         </layoutTop>
-        <div class='totalAsset'>
+        <div v-if='account' class='totalAsset'>
             <div class='leftInfo'>
                 <p>{{ $t('assets.totalAssets') }}</p>
                 <p class='totalAmount'>
-                    223423.12
+                    {{ account.balance }}
                 </p>
             </div>
             <div class='rightInfo'>
-                <van-button class='takeMoneyBtn' type='primary' @click="$router.push({ name:'WithdrawCoin' })">
+                <!-- <van-button class='takeMoneyBtn' type='primary' @click="$router.push({ name:'WithdrawCoin' })">
                     {{ $t('coinRecord.take') }}
-                </van-button>
+                </van-button> -->
             </div>
         </div>
 
@@ -22,13 +22,13 @@
                 <div class='hd'>
                     <p>{{ $t('trade.free') }}</p>
                     <p class='value'>
-                        100000.000
+                        {{ account.available }}
                     </p>
                 </div>
                 <div class='ft'>
                     <p>{{ $t('assets.frozen') }}</p>
                     <p class='value'>
-                        100000.000
+                        {{ account.frozen }}
                     </p>
                 </div>
             </li>
@@ -36,13 +36,13 @@
                 <div class='hd'>
                     <p>{{ $t('trade.loan') }}</p>
                     <p class='value'>
-                        100000.000
+                        {{ account.liabilitiesPrincipal }}
                     </p>
                 </div>
                 <div class='ft'>
                     <p>{{ $t('trade.swap_2') }}</p>
                     <p class='value'>
-                        100000.000
+                        {{ account.interest }}
                     </p>
                 </div>
             </li>
@@ -50,13 +50,13 @@
                 <div class='hd'>
                     <p>{{ $t('assets.maxLoan') }}</p>
                     <p class='value'>
-                        100000.000
+                        {{ account.availableLoan }}
                     </p>
                 </div>
                 <div class='ft'>
                     <p>{{ $t('withdrawCoin.can') }}</p>
                     <p class='value'>
-                        100000.000
+                        {{ account.withdrawAmount }}
                     </p>
                 </div>
             </li>
@@ -72,9 +72,9 @@
 
 <script>
 import ReturnMoney from './components/returnMoney.vue'
-import { reactive, toRefs } from '@vue/reactivity'
-// import { reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 export default {
     components: {
         ReturnMoney
@@ -82,13 +82,19 @@ export default {
     props: ['product'],
     setup () {
         const store = useStore()
+        const route = useRoute()
         const state = reactive({
             returnMoneyVisible: false,
             list: Array(3).fill()
         })
+        const account = computed(() => {
+            const accountList = store.state._user.customerInfo?.accountList || []
+            return accountList.find(({ currency }) => currency === route.query.currency)
+        })
         store.dispatch('_user/queryAccountAssetsInfo')
         return {
-            ...toRefs(state)
+            ...toRefs(state),
+            account,
         }
     }
 }
@@ -113,6 +119,7 @@ export default {
     .takeMoneyBtn {
         height: rem(48px);
         color: var(--primary);
+
         --van-button-primary-background-color: var(--primaryAssistColor);
         --van-button-primary-border-color: var(--primaryAssistColor);
     }

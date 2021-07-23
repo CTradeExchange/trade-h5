@@ -71,10 +71,11 @@ class SocketEvent {
 
     // 订阅产品报价
     send_subscribe (productIds = [], quote_type = 1, depth_level = 1) {
+        if (!productIds || productIds.length === 0) return false
         this.subscribedList = [...new Set(productIds)]
         const trade_type = this.$store.state._base.tradeType
 
-        const list = productIds.map(el => {
+        const list = this.subscribedList.map(el => {
             return {
                 symbol_id: el, // 产品ID ，类型：uint64
                 trade_type, // 交易类型，类型：uint32，1：cfd，2：me

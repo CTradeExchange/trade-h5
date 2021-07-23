@@ -29,7 +29,7 @@
                     {{ $t('trade.availableLoanAmount') }}
                     <van-icon class='questionIcon' name='question-o' @click='availableLoanAlert=true' />
                 </van-col>
-                <van-col>0.000123 USDT</van-col>
+                <van-col>{{ account.availableLoan }} {{ account.currency }}</van-col>
             </van-row>
         </div>
 

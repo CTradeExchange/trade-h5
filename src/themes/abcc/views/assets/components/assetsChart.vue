@@ -1,5 +1,7 @@
 <template>
-    <div ref='chartEl'>
+    <div ref='chartEl' class='chartEl'>
+        <i class='firstCircle' :class='{ null: parseFloat(assetsInfo.totalLiabilitiesPrincipal)===0 }'></i>
+        <i class='lastCircle'></i>
         <svg
             v-if='renderList && renderList.length > 0'
             class='doughnut-svg'
@@ -22,16 +24,21 @@
 
 <script>
 import { reactive, toRefs, computed, onMounted, ref } from 'vue'
+import BigNumber from 'bignumber.js'
+import { useStore } from 'vuex'
+import { abs, div } from '@/utils/calculation'
 export default {
     setup (props) {
         const chartEl = ref(null)
+        const store = useStore()
+        const assetsInfo = computed(() => store.state._user.assetsInfo)
         const state = reactive({
             list: [
-                // 占比列表
-                '50%',
-                '10%',
-                '20%',
-                '20%'
+                // 占比列表, 第一个是固定50， 白色
+                '50',
+                '5',
+                '20',
+                '25'
             ],
             renderList: [], // 处理后用于渲染环形图的数据
             svgData: {
@@ -62,7 +69,16 @@ export default {
         })
 
         const renderList = computed(() => {
-            const list = handleChartData(state.list)
+            const totalNetAssets = abs(assetsInfo.value.totalNetAssets)
+            const totalLiabilitiesPrincipal = abs(assetsInfo.value.totalLiabilitiesPrincipal)
+            const totalInterest = abs(assetsInfo.value.totalInterest)
+            let total = BigNumber(totalNetAssets).plus(totalLiabilitiesPrincipal).plus(totalInterest).toString()
+            total *= 2
+            const totalNetAssetsPercent = BigNumber(totalNetAssets).div(total).times(100).toNumber()
+            const totalLiabilitiesPrincipalPercent = BigNumber(totalLiabilitiesPrincipal).div(total).times(100).toNumber()
+            const totalInterestPercent = BigNumber(totalInterest).div(total).times(100).toNumber()
+            const amountArr = [50, totalLiabilitiesPrincipalPercent, totalInterestPercent, totalNetAssetsPercent]
+            const list = handleChartData(amountArr)
             return list
         })
 
@@ -79,7 +95,7 @@ export default {
             const newList = []
             list.forEach((item, index) => {
                 const obj = {}
-                let per = +item.split('%')[0]
+                let per = +item
                 // 保留真实占比,后面需要判断是否是大小弧
                 obj.relayPer = per
                 const PI = Math.PI
@@ -118,6 +134,7 @@ export default {
         return {
             ...toRefs(state),
             chartEl,
+            assetsInfo,
             handleChartData,
             getPathItem,
             renderList,
@@ -132,5 +149,31 @@ export default {
     display: block;
     margin: 0 auto;
     /* transform: rotate(180deg); */
+}
+.chartEl {
+    position: relative;
+    .firstCircle {
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        width: 10px;
+        height: 10px;
+        margin-left: -145px;
+        background: #F2A11B;
+        border-radius: 100%;
+        &.null {
+            background: #477FD3;
+        }
+    }
+    .lastCircle {
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        width: 10px;
+        height: 10px;
+        margin-left: 135px;
+        background: #477FD3;
+        border-radius: 100%;
+    }
 }
 </style>

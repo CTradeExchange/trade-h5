@@ -540,19 +540,23 @@ export function setDefaultWallet (data) {
 /* 查询客户总资产信息 */
 export function queryCustomerAssetsInfo (data) {
     return request({
-        url: '/global/customer.app.CustomerWebApiService.queryCustomerAssetsInfo',
+        url: 'http://localhost:8090/dev-api/global/customer.app.CustomerWebApiService.queryCustomerAssetsInfo',
         method: 'post',
         headers: {
             version: '0.0.1'
         },
         data
+    }).catch(err => {
+        return {
+
+        }
     })
 }
 
 /* 查询账户资产信息 */
 export function queryAccountAssetsInfo (data) {
     return request({
-        url: '/global/customer.app.CustomerWebApiService.queryAccountAssetsInfo',
+        url: 'http://localhost:8090/dev-api/global/customer.app.CustomerWebApiService.queryAccountAssetsInfo',
         method: 'post',
         headers: {
             version: '0.0.1'

@@ -35,11 +35,12 @@ export default {
             type: Object,
         },
     },
-    setup () {
+    setup (props) {
+        // console.log(props.data)
         // const store = useStore()
         const router = useRouter()
         const toInfo = () => {
-            router.push({ name: 'AssetsInfo' })
+            router.push({ name: 'AssetsInfo', query: { currency: props.data.currency } })
         }
         return {
             toInfo,

@@ -13,13 +13,13 @@
                 </router-link>
             </template>
         </layoutTop>
-        <SelfSymbolList />
+        <SelfSymbolList ref='productListEl' />
     </div>
 </template>
 
 <script>
 import SelfSymbolList from '@abcc/modules/selfSymbolList/selfSymbolList.vue'
-import { computed } from 'vue'
+import { computed, onActivated, ref } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
@@ -29,12 +29,18 @@ export default {
     },
     setup () {
         const store = useStore()
+        const productListEl = ref(null)
         const customerInfo = computed(() => store.state._user.customerInfo)
 
         if (customerInfo.value) {
             store.dispatch('_trade/queryPositionPage')
         }
-        return {}
+        onActivated(() => {
+            if (productListEl.value) productListEl.value.calcProductsDebounce()
+        })
+        return {
+            productListEl
+        }
     }
 }
 </script>

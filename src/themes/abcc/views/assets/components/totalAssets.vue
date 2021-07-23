@@ -1,7 +1,7 @@
 <template>
     <div class='totalAssets'>
         <div class='relative'>
-            <AssetsChart />
+            <AssetsChart v-if='assetsInfo' />
             <div class='totalAssetsInfo'>
                 <p class='label'>
                     {{ $t('assets.totalAssets') }}({{ assetsInfo.currency }})
@@ -24,7 +24,7 @@
                     <span class='color_zjk'></span>
                     {{ $t('assets.totalLoan') }}
                 </p>
-                <p>{{ assetsInfo.totalLiabilities }}</p>
+                <p>{{ assetsInfo.totalLiabilitiesPrincipal }}</p>
             </li>
             <li class='item'>
                 <p class='muted'>
@@ -58,7 +58,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .totalAssets {
-    padding: rem(30px);
+    padding: rem(30px) 0;
     background: var(--contentColor);
     border-radius: 4px;
 }

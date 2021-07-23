@@ -56,10 +56,16 @@ export default {
             state.customerInfo = data
         },
         Update_accountInfo (state, data) {
-            state.account = data
+            if (state.customerInfo.accountMap[data.currency]) Object.assign(state.customerInfo.accountMap[data.currency], data)
         },
         Update_assetsInfo (state, data) {
             state.assetsInfo = data
+            const accountList = state.customerInfo?.accountList || []
+            accountList.forEach(el => {
+                if (data.accountInfoMap[el.currency]) {
+                    Object.assign(el, data.accountInfoMap[el.currency])
+                }
+            })
         },
         Update_accountAssets (state, data) {
             state.accountAssets = data
@@ -86,10 +92,18 @@ export default {
                     commit('_trade/Empty_data', null, { root: true })
                     commit('_quote/Empty_data', null, { root: true })
 
+                    // 优先将子账户列表处理成map格式
+                    const accountMap = {}
+                    if (data.accountList?.length) {
+                        data.accountList.forEach(el => {
+                            accountMap[el.currency] = el
+                        })
+                    }
+                    data.accountMap = accountMap
+
                     commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_loginData', data)
                     commit('Update_customerInfo', data)
-                    if (data.accountList?.length) commit('Update_accountInfo', data.accountList.find(({ accountId }) => accountId === data.accountId) || '')
                     commit('_base/UPDATE_tradeType', data.tradeType, { root: true }) // 登录后存储用户的玩法类型
                     // dispatch('findCustomerInfo')  // findCustomerInfod 的数据目前和登录的数据一样，不需要再次调用
                     if (data.optional === 1) dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
@@ -109,9 +123,18 @@ export default {
             return findCustomerInfo().then((res) => {
                 if (res.check()) {
                     const data = res.data
+
+                    // 优先将子账户列表处理成map格式
+                    const accountMap = {}
+                    if (data.accountList?.length) {
+                        data.accountList.forEach(el => {
+                            accountMap[el.currency] = el
+                        })
+                    }
+                    data.accountMap = accountMap
+
                     commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_customerInfo', res.data)
-                    if (data.accountList?.length) commit('Update_accountInfo', data.accountList.find(({ accountId }) => accountId === data.accountId) || '')
                     if (data.optional === 1) dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
                     dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {
                         return dispatch('_quote/querySymbolBaseInfoList', productAllList, { root: true })

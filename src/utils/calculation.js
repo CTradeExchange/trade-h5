@@ -89,3 +89,7 @@ export function equalTo (a, b) {
         return BigNumber(a).eq(b)
     }
 }
+/* 去绝对值 */
+export function abs (num1) {
+    return BigNumber(num1).abs().toString()
+}

@@ -25,14 +25,14 @@
                 {{ $t('trade.buyPrice') }}
             </span>
         </div>
-        <productListComp v-if='productList.length' :product-list='productList' />
+        <productListComp v-if='productList.length' ref='productListEl' :product-list='productList' />
     </div>
 </template>
 
 <script>
 import TopTab from './topTab'
 import productListComp from '@abcc/modules/productList/productList.vue'
-import { computed, reactive, toRefs } from 'vue'
+import { computed, onActivated, onMounted, reactive, ref, toRefs } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
@@ -43,6 +43,7 @@ export default {
     },
     setup () {
         const store = useStore()
+        const productListEl = ref(null)
         const customerInfo = computed(() => store.state._user.customerInfo)
         const customerGroupId = computed(() => store.getters.customerGroupId)
         const productMap = computed(() => store.state._quote.productMap)
@@ -79,8 +80,13 @@ export default {
         }
         const tabChange = (i) => {}
         const tabClick = (i) => {}
+
+        onActivated(() => {
+            if (productListEl.value) productListEl.value.calcProductsDebounce()
+        })
         return {
             ...toRefs(state),
+            productListEl,
             categoryList,
             productList,
             tabChange,
