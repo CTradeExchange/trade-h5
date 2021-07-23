@@ -21,8 +21,11 @@ export default {
         msgWS.open()
 
         quoteWS.addEventListener('message', evt => {
-            if (typeof evt.data === 'string' && evt.data.startsWith('p(')) return QuoteSocket.tick(evt.data)
-            else if (typeof evt.data === 'string' && evt.data.indexOf('{') !== 0) return
+            if (typeof evt.data === 'string' && evt.data.startsWith('p(')) {
+                return QuoteSocket.tick(evt.data)
+            } else if (typeof evt.data === 'string' && evt.data.startsWith('pt(')) {
+                return QuoteSocket.dealList(evt.data)
+            } else if (typeof evt.data === 'string' && evt.data.indexOf('{') !== 0) return
 
             try {
                 if (typeof evt.data === 'object') {

@@ -119,6 +119,10 @@ class SocketEvent {
     tick (p) {
         // p(1123,1,1232312,34545435345,6.23,6.23,6.24);(1124,2,1232314,34545435345,7.23,7.23,7.24)
         // 产品ID，报价序号，报价时间戳，当前价，第一档bid卖价，第一档ask买价
+
+        // 模拟成交数据
+        this.dealList(p)
+
         if (this.newPriceTimer) clearTimeout(this.newPriceTimer)
         const $store = this.$store
         const curPriceData = tickToObj(p)
@@ -139,6 +143,24 @@ class SocketEvent {
                 this.newPrice = []
             }
         }, 500)
+    }
+
+    dealList (p) {
+        // console.log('成交数据', p)
+        const priceStr = p.split(';')[0].match(/\((.+)\)/)
+        const price = priceStr[1] ?? ''
+        const priceArr = price.split(',')
+        const dealData = {
+            symbolId: priceArr[0] * 1,
+            dealTime: priceArr[3],
+            trade_direction: Math.floor(Math.random() * 2) + 1, // priceArr[6]
+            price: priceArr[4], // priceArr[4],
+            volume: priceArr[6] // priceArr[5]
+
+        }
+        setTimeout(() => {
+            this.$store.commit('_quote/Update_dealList', dealData)
+        }, 3000)
     }
 
     // 心跳机制

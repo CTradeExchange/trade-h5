@@ -15,13 +15,6 @@
                             :class="{ 'icon_zixuan2':isSelfSymbol }"
                         ></i>
                     </button>
-                    <div class='ft'>
-                        <span
-                            @click='toContractInfo'
-                        >
-                            <i class='icon_guanyu'></i>
-                        </span>
-                    </div>
                 </div>
             </template>
         </LayoutTop>
@@ -681,10 +674,6 @@ export default {
             state.moreKType = { title, ktype }
         }
 
-        const toContractInfo = () => {
-            router.push({ path: '/contract', query: { symbolId: symbolId } })
-        }
-
         const orientationChanged = () => {
 
         }
@@ -895,7 +884,6 @@ export default {
             setChartType,
             klineTypeDropdown,
             klineTypeIndex,
-            toContractInfo,
             isSelfSymbol,
             product,
             initialValue,
