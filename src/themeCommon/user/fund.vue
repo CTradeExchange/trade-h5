@@ -137,7 +137,7 @@ export default {
 
                 const netWorthPercent = divide(netWorth.value, parseFloat(netWorth.value + earnest))
                 const earnestPercent = divide(earnest, parseFloat(netWorth.value + earnest))
-                debugger
+
                 createTorus({
                     id: 'annulus',
                     width: 220,
@@ -157,11 +157,6 @@ export default {
 
         onBeforeMount(() => {
             internalInstance.appContext.config.globalProperties.$findCustomerInfo()
-        })
-
-        onMounted(() => {
-            debugger
-            alert(5666)
         })
 
         return {

@@ -8,47 +8,60 @@
             line-width='33.3%'
             title-active-color='#477fd3'
         >
-            <van-tab v-if='statusList.indexOf("stalls") > -1' name='stalls' :title='$t("trade.sellFive")'>
+            <van-tab v-if='statusList.indexOf("stalls") > -1' name='stalls' :title='$t("trade.handicap")'>
                 <!-- <van-empty v-if='product.tickResult.length === 0' image='/images/empty.png'>
                     {{ $t('trade.noStallsData') }}
                 </van-empty> -->
+
+                <div class='handicap-header'>
+                    <span>我的</span>
+                    <span>数量({{ product.baseCurrency }})</span>
+                    <span>价格({{ product.profitCurrency }})</span>
+                    <span class='depth'>
+                        <van-popover v-model:show='showPopover' :actions='depthActions' @select='onSelect'>
+                            <template #reference>
+                                <span>{{ curDigits }}</span>
+                                <span class='triangleDiv'></span>
+                            </template>
+                        </van-popover>
+                    </span>
+                    <span>数量({{ product.baseCurrency }})</span>
+                    <span>我的</span>
+                </div>
                 <div v-for='(item,index) in product.tickResult' :key='index' class='stalls-wrap'>
-                    <div class='sell-wrap'>
-                        <div class='item quantity'>
-                            <span class='label'>
-                                {{ $t('trade.sellShort') }}{{ index+1 }}
-                            </span>
-                            <span class='price riseColor '>
-                                {{ parseFloat(item.price_bid).toFixed(product.price_digits) }}
-                            </span>
-                            <span class='quantity'>
-                                {{ item.volume_bid }}
-                            </span>
-                            <span
-                                class='histogram sell-histogram'
-                                :style='"width:"+ item?.width?.sell *100 + "%"'
-                            ></span>
-                        </div>
-                    </div>
-                    <div class='scale-wrap'>
-                        <span class='left'></span>
-                        <span class='right'></span>
-                    </div>
                     <div class='buy-wrap'>
                         <div class='item quantity'>
                             <span class='label'>
-                                {{ $t('trade.buyShort') }}{{ index+1 }}
-                            </span>
-                            <span class='price fallColor'>
-                                {{ parseFloat(item.price_ask).toFixed(product.price_digits) }}
+                                0.02
                             </span>
                             <span class='quantity'>
                                 {{ item.volume_ask }}
                             </span>
                             <span
                                 class='histogram buy-histogram'
-
                                 :style='"width:"+ item?.width?.buy * 100 + "%"'
+                            ></span>
+
+                            <span class='price price-right fallColor'>
+                                {{ parseFloat(item.price_ask).toFixed(product.price_digits) }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class='sell-wrap'>
+                        <div class='item quantity'>
+                            <span class='price riseColor '>
+                                {{ parseFloat(item.price_bid).toFixed(product.price_digits) }}
+                            </span>
+                            <span class='quantity'>
+                                {{ item.volume_bid }}
+                            </span>
+                            <span class='label label-right'>
+                                0.05
+                            </span>
+
+                            <span
+                                class='histogram sell-histogram'
+                                :style='"width:"+ item?.width?.sell *100 + "%"'
                             ></span>
                         </div>
                     </div>
@@ -143,7 +156,13 @@ export default {
             statusList: props.settingList,
             isDealDelaying: false,
             timer: 0,
+            curDigits: 0.01
         })
+        const depthActions = [
+            { text: '0.01' },
+            { text: '0.1' },
+            { text: '1' },
+        ]
         const product = computed(() => store.state._quote.productMap[props.symbolId])
         const showTabs = computed(() => {
             if (props.settingList.indexOf('stalls') === -1 && props.settingList.indexOf('deal') === -1) {
@@ -287,10 +306,16 @@ export default {
             return dayjs(val).format('HH:mm:ss')
         }
 
+        const onSelect = (val) => {
+            state.curDigits = val.text
+        }
+
         return {
             product,
             formatTime,
             showTabs,
+            depthActions,
+            onSelect,
             ...toRefs(state)
         }
     }
@@ -318,7 +343,7 @@ export default {
             .van-tabs__wrap {
                 height: rem(80px);
                 border-bottom: solid 1px var(--lineColor);
-                .van-tab__text{
+                .van-tab__text {
                     font-weight: bold;
                     font-size: rem(28px);
                 }
@@ -343,16 +368,76 @@ export default {
             line-height: rem(75px);
         }
     }
+    .handicap-header {
+        //display: flex;
+        height: rem(80px);
+        padding: 0 rem(15px);
+        line-height: rem(80px);
+        >span {
+            display: inline-block;
+            color: var(--minorColor);
+            //flex: 1;\
+            //width: 20%;
+            font-size: rem(20px);
+            text-align: center;
+            &:first-child {
+                width: rem(60px);
+            }
+            &:nth-child(2) {
+                width: rem(130px);
+            }
+            &:nth-child(3) {
+                width: rem(160px);
+                text-align: right;
+            }
+            &:nth-child(5) {
+                width: rem(170px);
+                text-align: right;
+            }
+            &:nth-child(6) {
+                width: rem(60px);
+                text-align: right;
+            }
+            &.depth {
+                position: relative;
+                width: rem(100px);
+                height: rem(40px);
+                margin-top: rem(20px);
+                margin-right: rem(15px);
+                margin-left: rem(15px);
+                line-height: rem(40px);
+                text-align: left;
+                background-color: var(--bgColor);
+                span {
+                    margin-left: rem(10px);
+                    //vertical-align: middle;
+                }
+                :deep(.van-popover__wrapper) {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    .triangleDiv {
+                        width: 0;
+                        height: 0;
+                        margin-left: rem(5px);
+                        border-color: var(--minorColor) transparent transparent;
+                        border-style: solid;
+                        border-width: 5px 5px 0;
+                    }
+                }
+            }
+        }
+    }
     .stalls-wrap {
         display: flex;
         flex-direction: row;
         width: 100%;
+        padding: 0 rem(20px);
         .sell-wrap,
         .buy-wrap {
             display: flex;
             flex: 1;
             flex-direction: column;
-            // justify-content: space-around;
             justify-content: flex-start;
             color: var(--mutedColor);
             font-size: rem(22px);
@@ -365,8 +450,8 @@ export default {
                 justify-content: flex-start;
                 box-sizing: border-box;
                 width: 100%;
-                height: rem(50px);
-                padding: 0 rem(10px);
+                height: rem(60px);
+                //padding: 0 rem(10px);
                 white-space: nowrap;
                 .label,
                 .price,
@@ -375,16 +460,22 @@ export default {
                     z-index: 1;
                 }
                 .label {
-                    width: rem(50px);
+                    width: rem(80px);
+                    text-align: left;
+                    &.label-right {
+                        text-align: right;
+                    }
                 }
                 .price {
                     flex: 1;
                     margin-right: rem(10px);
                     text-align: left;
+                    &.price-right {
+                        text-align: right;
+                    }
                 }
                 .quantity {
                     color: var(--normalColor);
-                    // flex: 1;
                     text-align: right;
                 }
             }
@@ -417,17 +508,19 @@ export default {
             .histogram {
                 position: absolute;
                 top: 0;
-                right: 0;
                 width: 0;
-                max-width: 55%;
+                max-width: 100%;
                 height: 100%;
                 opacity: 0.2;
                 transition: width 0.28s ease-in-out;
                 &.sell-histogram {
-                    background: rgb(227, 82, 92);
+                    background: var(--riseColor);
+                    opacity: 0.05;
                 }
                 &.buy-histogram {
-                    background: rgb(16, 184, 115);
+                    right: 0;
+                    background: var(--fallColor);
+                    opacity: 0.05;
                 }
             }
         }
@@ -460,21 +553,22 @@ export default {
                 &:last-child {
                     margin-right: 0;
                 }
-                &.time-col{
+                &.time-col {
                     width: 25%;
                 }
                 .label {
                     position: relative;
                     z-index: 1;
                     width: 100%;
-                    padding: rem(5px) 0;
                     margin-bottom: rem(10px);
+                    padding: rem(5px) 0;
                     color: var(--minorColor);
+                    line-height: rem(50px);
                     background: var(--contentColor);
                 }
                 .vals {
                     position: absolute;
-                    top: rem(34px);
+                    top: rem(50px);
                     z-index: 0;
                     min-height: 100%;
                     color: var(--normalColor);

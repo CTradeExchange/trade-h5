@@ -858,6 +858,7 @@ export default {
             }
         }
 
+        // 跳转下单页
         const toOrder = (direction) => {
             router.push({
                 path: '/order',
@@ -874,6 +875,11 @@ export default {
 
         // 初始化图表配置
         initChartData()
+
+        // 获取产品详情
+        store.dispatch('_quote/querySymbolInfo', symbolId).then(res => {
+            if (res.invalid()) return false
+        })
 
         return {
             ...toRefs(state),
@@ -902,8 +908,7 @@ export default {
             addOptional,
             toOrder,
             collect,
-            formatTime,
-
+            formatTime
         }
     }
 }

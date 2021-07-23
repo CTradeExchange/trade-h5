@@ -400,7 +400,8 @@
     "dealTime": "成交时间",
     "inputVolume": "请输入下单数量",
     "volumeError": "下单数量不正确",
-    "pendingPriceError": "挂单价格不正确"
+    "pendingPriceError": "挂单价格不正确",
+    "handicap": "盘口"
   },
   "bizType": {
     "2": "市价平仓",
