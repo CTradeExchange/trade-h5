@@ -43,6 +43,7 @@ export default {
         productList: [], // 产品列表
         productMap: {}, // 产品列表
         productActivedID: null, // 当前操作的产品ID
+        dealList: [] // 推送的实时成交数据
     },
     mutations: {
         // 清空产品数据
@@ -122,6 +123,12 @@ export default {
         Update_productActivedID (state, id) {
             sessionSet('productActived', JSON.stringify(state.productMap[id]))
             state.productActivedID = id
+        },
+        Update_dealList (state, data = {}) {
+            if (state.dealList.length > 2000) {
+                state.dealList = []
+            }
+            state.dealList.unshift(data)
         }
     },
     actions: {

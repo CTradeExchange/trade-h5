@@ -14,19 +14,19 @@
                 </van-empty> -->
 
                 <div class='handicap-header'>
-                    <span>我的</span>
-                    <span>数量({{ product.baseCurrency }})</span>
-                    <span>价格({{ product.profitCurrency }})</span>
+                    <span>{{ $t('trade.my') }}</span>
+                    <span>{{ $t('trade.volumes') }}({{ product.baseCurrency }})</span>
+                    <span>{{ $t('trade.priceLabel') }}({{ product.profitCurrency }})</span>
                     <span class='depth'>
-                        <van-popover v-model:show='showPopover' :actions='depthActions' @select='onSelect'>
+                        <van-popover v-model:show='showPopover' :actions='digitLevelList' @select='onSelect'>
                             <template #reference>
                                 <span>{{ curDigits }}</span>
                                 <span class='triangleDiv'></span>
                             </template>
                         </van-popover>
                     </span>
-                    <span>数量({{ product.baseCurrency }})</span>
-                    <span>我的</span>
+                    <span>{{ $t('trade.volumes') }}({{ product.baseCurrency }})</span>
+                    <span>{{ $t('trade.my') }}</span>
                 </div>
                 <div v-for='(item,index) in product.tickResult' :key='index' class='stalls-wrap'>
                     <div class='buy-wrap'>
@@ -70,11 +70,28 @@
             <van-tab v-if='statusList.indexOf("deal") > -1' name='deal' :title='$t("trade.deal")'>
                 <!-- 成交记录 -->
                 <div class='deal-wrap'>
-                    <van-empty v-if='dealData.length === 0' image='/images/empty.png'>
+                    <van-empty v-if='dealList.length === 0' image='/images/empty.png'>
                         {{ $t('trade.noDealData') }}
                     </van-empty>
+                    <!-- {{ dealList }} -->
                     <div v-else class='list-wrap'>
                         <div class='col time-col'>
+                            {{ $t('trade.dealTime') }}
+                        </div>
+
+                        <div class='col'>
+                            {{ $t('trade.direction') }}
+                        </div>
+
+                        <div class='col price-col'>
+                            {{ $t('trade.priceLabel') }}
+                        </div>
+
+                        <div class='col volume-col'>
+                            {{ $t('trade.volumes') }}
+                        </div>
+
+                        <!-- <div class='col time-col'>
                             <span class='label'>
                                 {{ $t('trade.dealTime') }}
                             </span>
@@ -111,7 +128,8 @@
                                     {{ item[2] }}
                                 </span>
                             </div>
-                        </div><div class='col volume-col'>
+                        </div>
+                        <div class='col volume-col'>
                             <span class='label'>
                                 {{ $t('trade.volumes') }}
                             </span>
@@ -121,9 +139,20 @@
                             <div class='vals'>
                                 <span v-for='(item, i) in dealData' :key='i' class='val' :class='item.colorCls'>
                                     {{ item[3] }}
-                                <!-- {{ item[4] === 1 ? 'B' : 'S' }} -->
                                 </span>
                             </div>
+                        </div> -->
+                    </div>
+                    <div class='deal-content'>
+                        <div v-for='item in dealList' :key='item.symbolId' class='deal-item'>
+                            <span>{{ formatTime(item.dealTime) }}</span>
+                            <span :class="[item.trade_direction===1?'riseColor':'fallColor']">
+                                {{ Number(item.trade_direction) === 1 ? $t('trade.buy') : $t('trade.sell') }}
+                            </span>
+                            <span>
+                                {{ item.price }}
+                            </span>
+                            <span>{{ item.volume }}</span>
                         </div>
                     </div>
                 </div>
@@ -145,6 +174,7 @@ import trustItem from '@abcc/modules/trust/trust.vue'
 import { computed, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import dayjs from 'dayjs'
+import { pow } from '@/utils/calculation'
 export default {
     components: { trustItem },
     props: ['symbolId', 'settingList', 'curPrice'],
@@ -156,20 +186,35 @@ export default {
             statusList: props.settingList,
             isDealDelaying: false,
             timer: 0,
-            curDigits: 0.01
+            curDigits: 0
         })
-        const depthActions = [
-            { text: '0.01' },
-            { text: '0.1' },
-            { text: '1' },
-        ]
+
+        // 获取当前产品
         const product = computed(() => store.state._quote.productMap[props.symbolId])
+
+        // 是否显示底部 tabs
         const showTabs = computed(() => {
             if (props.settingList.indexOf('stalls') === -1 && props.settingList.indexOf('deal') === -1) {
                 return false
             }
             return true
         })
+
+        // 计算报价小数位档数
+        const digitLevelList = computed(() => {
+            const digits = []
+            var symbolDigits = product.value.symbolDigits
+            while (symbolDigits > -3) {
+                digits.push({ text: pow(0.1, symbolDigits) })
+                symbolDigits--
+            }
+            state.curDigits = digits[0]?.text
+            return digits.splice(0, 4)
+        })
+
+        // 获取成交数据
+        const dealList = computed(() => store.state._quote.dealList.filter(el => Number(el.symbolId) === Number(props.symbolId)))
+
         watch(() => [product.value.tickResult], (newValues) => {
             const result = product.value.tickResult
             const tempArr = []
@@ -314,8 +359,9 @@ export default {
             product,
             formatTime,
             showTabs,
-            depthActions,
             onSelect,
+            dealList,
+            digitLevelList,
             ...toRefs(state)
         }
     }
@@ -371,7 +417,7 @@ export default {
     .handicap-header {
         //display: flex;
         height: rem(80px);
-        padding: 0 rem(15px);
+        padding: 0 0 0 rem(15px);
         line-height: rem(80px);
         >span {
             display: inline-block;
@@ -384,7 +430,7 @@ export default {
                 width: rem(60px);
             }
             &:nth-child(2) {
-                width: rem(130px);
+                width: rem(150px);
             }
             &:nth-child(3) {
                 width: rem(160px);
@@ -392,21 +438,18 @@ export default {
             }
             &:nth-child(5) {
                 width: rem(170px);
+                margin-right: rem(8px);
                 text-align: right;
             }
             &:nth-child(6) {
-                width: rem(60px);
+                width: rem(50px);
                 text-align: right;
             }
             &.depth {
-                position: relative;
-                width: rem(100px);
+                width: rem(110px);
                 height: rem(40px);
-                margin-top: rem(20px);
-                margin-right: rem(15px);
                 margin-left: rem(15px);
                 line-height: rem(40px);
-                text-align: left;
                 background-color: var(--bgColor);
                 span {
                     margin-left: rem(10px);
@@ -419,7 +462,7 @@ export default {
                     .triangleDiv {
                         width: 0;
                         height: 0;
-                        margin-left: rem(5px);
+                        margin-left: rem(10px);
                         border-color: var(--minorColor) transparent transparent;
                         border-style: solid;
                         border-width: 5px 5px 0;
@@ -531,13 +574,12 @@ export default {
         flex-direction: column;
         width: 100%;
         height: 100%;
-        overflow: hidden;
         color: var(--mutedColor);
         font-size: rem(22px);
         line-height: rem(24px);
         .list-wrap {
             display: flex;
-            flex: rem(300px); // 仅用于不撑开外层
+            //flex: rem(300px); // 仅用于不撑开外层
             flex-direction: row;
             flex-wrap: nowrap;
             width: 95%;
@@ -548,6 +590,8 @@ export default {
                 display: flex;
                 flex-direction: column;
                 overflow: hidden;
+                color: var(--minorColor);
+                line-height: rem(50px);
                 white-space: nowrap;
                 text-align: left;
                 &:last-child {
@@ -555,16 +599,6 @@ export default {
                 }
                 &.time-col {
                     width: 25%;
-                }
-                .label {
-                    position: relative;
-                    z-index: 1;
-                    width: 100%;
-                    margin-bottom: rem(10px);
-                    padding: rem(5px) 0;
-                    color: var(--minorColor);
-                    line-height: rem(50px);
-                    background: var(--contentColor);
                 }
                 .vals {
                     position: absolute;
@@ -585,8 +619,6 @@ export default {
                     opacity: 0;
                 }
             }
-            .time-col{
-            }
             .price-col {
                 flex: 1;
                 align-items: flex-end;
@@ -597,6 +629,31 @@ export default {
                 align-items: flex-end;
                 margin-left: rem(6px);
                 text-align: right;
+            }
+        }
+        .deal-content {
+            height: rem(300px);
+            padding: 0 rem(20px);
+            overflow: 100%;
+            .deal-item {
+                line-height: rem(50px);
+                >span {
+                    display: inline-block;
+                    &:first-child {
+                        width: 25%;
+                    }
+                    &:nth-child(2) {
+                        width: 8%;
+                    }
+                    &:nth-child(3) {
+                        width: 33%;
+                        text-align: right;
+                    }
+                    &:last-child {
+                        width: 34%;
+                        text-align: right;
+                    }
+                }
             }
         }
     }
