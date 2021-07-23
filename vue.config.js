@@ -125,7 +125,8 @@ const config = {
             '/upload': {
                 target: 'http://precatsapi.cats-trade.com/upload'
             },
-        }
+        },
+        before: require('./mock/mock-server.js')
     },
     chainWebpack: config => {
         // 移除 prefetch 插件

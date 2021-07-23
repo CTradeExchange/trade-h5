@@ -260,3 +260,9 @@ export function debounce (func, wait = 200, immediate = false) {
         }
     }
 }
+
+// 返回指定值之间的随机数。不小于 min（有可能等于），并且小于（不等于）max。
+export function getRandom (min, max) {
+    if (typeof (min) === 'undefined' || typeof (min) === 'undefined') return Math.random()
+    return Math.random() * (max - min) + min
+}

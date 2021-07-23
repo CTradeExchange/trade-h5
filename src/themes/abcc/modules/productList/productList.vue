@@ -71,6 +71,7 @@ export default {
         return {
             ...toRefs(state),
             productListEl,
+            calcProductsDebounce,
             calcSubscribeProducts,
             productMap,
             openProduct,

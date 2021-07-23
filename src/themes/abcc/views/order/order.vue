@@ -81,13 +81,14 @@ export default {
                 title: t('trade.pending'),
                 val: 2
             }],
-            volume: 0.01,
+            volume: '',
             operationType: 2, // 操作类型。1-普通；2-自动借款；3-自动还款
             pendingPrice: '',
         })
         const pendingRef = ref(null)
         const profitLossRef = ref(null)
         const pendingWarn = computed(() => pendingRef.value?.warn)
+        const account = computed(() => store.state._user.account)
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
         QuoteSocket.send_subscribe([symbolId]) // 订阅产品报价
         store.dispatch('_user/queryAccountAssetsInfo')
@@ -114,6 +115,9 @@ export default {
         // 验证下单数据是否异常
         const paramsInvalid = () => {
             if (state.orderType === 2 && !state.pendingPrice) return Toast(t('trade.inputPendingPrice'))
+            else if (state.orderType === 2 && isNaN(state.pendingPrice)) return Toast(t('trade.pendingPriceError'))
+            else if (!state.volume) return Toast(t('trade.inputVolume'))
+            else if (isNaN(state.volume)) return Toast(t('trade.volumeError'))
             return pendingWarn.value || profitLossWarn.value
         }
 
@@ -122,24 +126,23 @@ export default {
             if (paramsInvalid()) return
             let requestPrice = state.direction === 'sell' ? product.value.sell_price : product.value.buy_price
             const direction = state.direction === 'sell' ? 2 : 1
-            let bizType = 1
             if (state.orderType === 2) {
                 requestPrice = state.pendingPrice
-                if (state.direction === 'buy') {
-                    bizType = lt(requestPrice, product.value.buy_price) ? 10 : 11
-                } else {
-                    bizType = gt(requestPrice, product.value.sell_price) ? 10 : 11
-                }
             }
             const p = Math.pow(10, product.value.price_digits)
             const params = {
-                bizType, // 业务类型。0-默认初始值；1-市价开；2-市价平；3-止损平仓单；4-止盈平仓单；5-爆仓强平单；6-到期平仓单；7-销户平仓单；8-手动强平单；9-延时订单；10-限价预埋单；11-停损预埋单；
+                bizType: state.orderType, // 业务类型。1-市价开；2-限价开
                 direction, // 订单买卖方向。1-买；2-卖；
                 symbolId: Number(product.value.symbol_id),
+                accountCurrency: account.value.currency,
+                accountId: account.value.accountId,
                 requestTime: Date.now(),
                 requestNum: state.volume,
+                operationType: state.operationType,
+                expireType: 1,
                 requestPrice: mul(requestPrice, p),
             }
+            console.log(params)
             if (state.loading) return false
             state.loading = true
             addMarketOrder(params)
@@ -151,7 +154,6 @@ export default {
                     const orderId = data.orderId || data.id
                     sessionStorage.setItem('order_' + orderId, JSON.stringify(localData))
                     // router.push({ name: 'OrderSuccess', query: { orderId } })
-                    // Toast(t('trade.orderSuccessToast'))
                     Toast({
                         message: t('trade.orderSuccessToast'),
                         duration: 1000,

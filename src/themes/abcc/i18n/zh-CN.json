@@ -383,7 +383,7 @@
     "dealVolume": "成交量",
     "noDealData": "暂无成交记录",
     "noStallsData": "暂无五档报价",
-    "orderSuccessToast": "下单成功，请查看仓位",
+    "orderSuccessToast": "下单成功，请查看资产",
     "inputCloseNum": "请输入平仓数量",
     "closeSuccessToast": "下单成功，请查看平仓记录",
     "trust": "委托",
@@ -398,6 +398,9 @@
     "autoLoan": "自动借款",
     "autoRepayment": "自动还款",
     "dealTime": "成交时间",
+    "inputVolume": "请输入下单数量",
+    "volumeError": "下单数量不正确",
+    "pendingPriceError": "挂单价格不正确",
     "handicap": "盘口"
   },
   "bizType": {
