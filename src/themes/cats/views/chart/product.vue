@@ -390,6 +390,13 @@ export default {
             value: 10,
         }]
 
+        let inApp = false // 是否在uniapp内运行
+        if (window.uni) {
+            window.uni.getEnv(e => {
+                inApp = !!e.plus
+            })
+        }
+
         const state = reactive({
             activeTab: 0,
             moreKType: {
@@ -858,6 +865,16 @@ export default {
         }
 
         const toOrder = (direction) => {
+            if (inApp) {
+                const msgContent = { actionType: 'toOrder', data: { symbolId, direction } }
+                window.uni.postMessage({
+                    data: {
+                        content: msgContent
+                    }
+                })
+
+                return
+            }
             router.push({
                 path: '/order',
                 query: {
