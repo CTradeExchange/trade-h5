@@ -1,6 +1,6 @@
 <template>
-    <div class='page-wrap' :class='{ isIframe: $route.query.isIframe }'>
-        <LayoutTop :back='true' :menu='false'>
+    <div class='page-wrap' :class='{ isIframe: $route.query.isUniapp }'>
+        <LayoutTop v-if='!$route.query.isUniapp' :back='true' :menu='false'>
             <p>{{ product.symbolName }}</p>
             <p class='infomation'>
                 {{ product.symbolCode }} {{ $t('trade.update') }}:{{ formatTime(product.tick_time) }}
@@ -389,13 +389,6 @@ export default {
             title_en: 'Baseline',
             value: 10,
         }]
-
-        let inApp = false // 是否在uniapp内运行
-        if (window.uni) {
-            window.uni.getEnv(e => {
-                inApp = !!e.plus
-            })
-        }
 
         const state = reactive({
             activeTab: 0,
@@ -865,14 +858,16 @@ export default {
         }
 
         const toOrder = (direction) => {
-            if (inApp) {
-                const msgContent = { actionType: 'toOrder', data: { symbolId, direction } }
-                window.uni.postMessage({
-                    data: {
-                        content: msgContent
-                    }
+            if (route.query.isUniapp && uni) {
+                // const msgContent = { actionType: 'toOrder', data: { symbolId, direction } }
+                // window.uni.postMessage({
+                //     data: {
+                //         content: msgContent
+                //     }
+                // })
+                uni.navigateTo({
+                    url: `/pages/order/index?symbolId=${symbolId}&direction=${direction}`
                 })
-
                 return
             }
             router.push({
@@ -936,11 +931,7 @@ export default {
     overflow: auto;
     background: var(--bgColor);
     &.isIframe {
-        margin-bottom: 0;
-        .footerBtnBox,
-        .right-wrap {
-            display: none;
-        }
+        margin-top: 0;
     }
     .infomation {
         padding-top: rem(5px);
