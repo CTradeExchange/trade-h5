@@ -97,8 +97,10 @@ export default {
         const pendingWarn = computed(() => pendingRef.value?.warn)
         const product = computed(() => store.getters.productActived)
         const customerInfo = computed(() => store.state._user.customerInfo)
-        const buyCurrency = computed(() => product.value[state.direction === 'buy' ? 'profitCurrency' : 'baseCurrency'])
-        const account = computed(() => customerInfo?.value?.accountMap[buyCurrency])
+        const account = computed(() => {
+            const buyCurrency = product.value[state.direction === 'buy' ? 'profitCurrency' : 'baseCurrency']
+            return customerInfo?.value?.accountMap[buyCurrency]
+        })
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
         QuoteSocket.send_subscribe([symbolId]) // 订阅产品报价
         store.dispatch('_user/queryAccountAssetsInfo')
