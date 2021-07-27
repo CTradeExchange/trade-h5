@@ -392,8 +392,9 @@
     "trustDetail": "委托详情",
     "cancelOrder": "撤单",
     "loan": "借款",
-    "availableLoanContent1": "从代理处借款的最高额度，初始为0，需手动申请授信",
-    "availableLoanContent2": "代理可借额度=min[净资产*(杠杆倍数-1)- 已借未还资产，系统最大可借资产]",
+    "availableLoanContent1": "从代理处可借款的额度，系统最大可借为{0}",
+    "availableLoanContent2": "代理可借额度=系统最大可借资产-已借未还资产",
+    "availableLoanContent3": "借款币种为{0}，日利率{1}。自下单成功开始计息，平台按小时数收取利息，整点计息，不足一小时按一小时计算。借款利息=借款本金（日利率/24）借款小时数",
     "availableLoanAmount": "代理可借额度",
     "autoLoan": "自动借款",
     "autoRepayment": "自动还款",
@@ -401,7 +402,8 @@
     "inputVolume": "请输入下单数量",
     "volumeError": "下单数量不正确",
     "pendingPriceError": "挂单价格不正确",
-    "handicap": "盘口"
+    "handicap": "盘口",
+    "nullAssets": "没有该资产账户"
   },
   "bizType": {
     "2": "市价平仓",

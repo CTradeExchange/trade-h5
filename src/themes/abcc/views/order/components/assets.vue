@@ -19,12 +19,13 @@
             <van-radio-group v-model='checked' direction='horizontal' @change='changeOperationType'>
                 <van-radio :name='2'>
                     {{ $t('trade.autoLoan') }}
+                    <van-icon class='questionIcon' name='question-o' @click='lilvAlert=true' />
                 </van-radio>
                 <van-radio :name='3'>
                     {{ $t('trade.autoRepayment') }}
                 </van-radio>
             </van-radio-group>
-            <van-row class='mtop5' justify='space-between'>
+            <van-row class='mtop10' justify='space-between'>
                 <van-col>
                     {{ $t('trade.availableLoanAmount') }}
                     <van-icon class='questionIcon' name='question-o' @click='availableLoanAlert=true' />
@@ -35,8 +36,13 @@
 
         <van-dialog v-model:show='availableLoanAlert' title=''>
             <div class='availableLoanContent'>
-                <p>{{ $t('trade.availableLoanContent1') }}</p>
+                <p>{{ $t('trade.availableLoanContent1', [account.availableLoan]) }}</p>
                 <p>{{ $t('trade.availableLoanContent2') }}</p>
+            </div>
+        </van-dialog>
+        <van-dialog v-model:show='lilvAlert' title=''>
+            <div class='availableLoanContent'>
+                <p>{{ $t('trade.availableLoanContent2', [account.currency]) }}</p>
             </div>
         </van-dialog>
     </div>
@@ -53,6 +59,7 @@ export default {
         const store = useStore()
         const checked = ref(2)
         const availableLoanAlert = ref(false)
+        const lilvAlert = ref(false)
         watch(
             () => props.operationType,
             newval => { checked.value = newval },
@@ -71,6 +78,7 @@ export default {
 
         return {
             availableLoanAlert,
+            lilvAlert,
             checked,
             changeOperationType,
             lockFunds,

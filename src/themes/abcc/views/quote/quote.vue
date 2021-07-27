@@ -75,9 +75,6 @@ export default {
         const state = reactive({
             activeTab: 0,
         })
-        if (customerInfo.value) {
-            store.dispatch('_trade/queryPositionPage')
-        }
         const tabChange = (i) => {}
         const tabClick = (i) => {}
 

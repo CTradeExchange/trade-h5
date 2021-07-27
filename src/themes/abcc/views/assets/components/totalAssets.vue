@@ -1,7 +1,7 @@
 <template>
     <div class='totalAssets'>
-        <div class='relative'>
-            <AssetsChart v-if='assetsInfo' />
+        <div v-if='assetsInfo && assetsInfo.totalBalance>0' class='totalAssetsBlock'>
+            <AssetsChart />
             <div class='totalAssetsInfo'>
                 <p class='label'>
                     {{ $t('assets.totalAssets') }}({{ assetsInfo.currency }})
@@ -62,6 +62,9 @@ export default {
     background: var(--contentColor);
     border-radius: 4px;
 }
+.totalAssetsBlock {
+    margin-bottom: rem(60px);
+}
 .totalAssetsInfo {
     position: absolute;
     top: rem(140px);
@@ -84,7 +87,6 @@ export default {
     display: grid;
     grid-template-columns: auto auto auto;
     justify-content: space-around;
-    margin-top: rem(60px);
     font-size: rem(34px);
     line-height: 1.5;
     .muted {
