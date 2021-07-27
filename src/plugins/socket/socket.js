@@ -24,7 +24,7 @@ export default {
             if (typeof evt.data === 'string' && evt.data.startsWith('p(')) {
                 return QuoteSocket.tick(evt.data)
             } else if (typeof evt.data === 'string' && evt.data.startsWith('pt(')) {
-                return QuoteSocket.dealList(evt.data)
+                return QuoteSocket.deal_tick(evt.data)
             } else if (typeof evt.data === 'string' && evt.data.indexOf('{') !== 0) return
 
             try {

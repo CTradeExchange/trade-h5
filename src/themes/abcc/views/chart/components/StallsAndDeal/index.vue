@@ -14,11 +14,18 @@
                 </van-empty> -->
 
                 <div class='handicap-header'>
-                    <span>{{ $t('trade.my') }}</span>
+                    <span v-if="userAccountType !=='G'">
+                        {{ $t('trade.my') }}
+                    </span>
                     <span>{{ $t('trade.volumes') }}({{ product.baseCurrency }})</span>
                     <span>{{ $t('trade.priceLabel') }}({{ product.profitCurrency }})</span>
                     <span class='depth'>
-                        <van-popover v-model:show='showPopover' :actions='digitLevelList' @select='onSelect'>
+                        <van-popover
+                            v-model:show='showPopover'
+                            :actions='digitLevelList'
+                            :theme='theme'
+                            @select='onSelect'
+                        >
                             <template #reference>
                                 <span>{{ curDigits }}</span>
                                 <span class='triangleDiv'></span>
@@ -26,13 +33,14 @@
                         </van-popover>
                     </span>
                     <span>{{ $t('trade.volumes') }}({{ product.baseCurrency }})</span>
-                    <span>{{ $t('trade.my') }}</span>
+                    <span v-if="userAccountType !=='G'">
+                        {{ $t('trade.my') }}
+                    </span>
                 </div>
                 <div v-for='(item,index) in product.tickResult' :key='index' class='stalls-wrap'>
                     <div class='buy-wrap'>
                         <div class='item quantity'>
-                            <span class='label'>
-                                0.02
+                            <span v-if="userAccountType !=='G'" class='label'>
                             </span>
                             <span class='quantity'>
                                 {{ item.volume_ask }}
@@ -55,8 +63,7 @@
                             <span class='quantity'>
                                 {{ item.volume_bid }}
                             </span>
-                            <span class='label label-right'>
-                                0.05
+                            <span v-if="userAccountType !=='G'" class='label label-right'>
                             </span>
 
                             <span
@@ -90,58 +97,6 @@
                         <div class='col volume-col'>
                             {{ $t('trade.volumes') }}
                         </div>
-
-                        <!-- <div class='col time-col'>
-                            <span class='label'>
-                                {{ $t('trade.dealTime') }}
-                            </span>
-                            <span v-if='dealData.length' class='val forWide'>
-                                {{ formatTime(dealData[0][1]) }}
-                            </span>
-                            <div class='vals'>
-                                <span class='val'>
-                                    <span v-for='(item, i) in dealData' :key='i' class='val' :class='item.colorCls'>
-                                        {{ formatTime(item[1]) }}
-                                    </span>
-                                </span>
-                            </div>
-                        </div>
-                        <div class='col'>
-                            <span class='label'>
-                                {{ $t('trade.direction') }}
-                            </span>
-                            <div class='vals'>
-                                <span class='val fallColor'>
-                                    买入
-                                </span>
-                            </div>
-                        </div>
-                        <div class='col price-col'>
-                            <span class='label'>
-                                {{ $t('trade.priceLabel') }}
-                            </span>
-                            <span v-if='dealData.length' class='val forWide'>
-                                {{ dealData[0][2] }}
-                            </span>
-                            <div class='vals'>
-                                <span v-for='(item, i) in dealData' :key='i' class='val' :class='item.colorCls'>
-                                    {{ item[2] }}
-                                </span>
-                            </div>
-                        </div>
-                        <div class='col volume-col'>
-                            <span class='label'>
-                                {{ $t('trade.volumes') }}
-                            </span>
-                            <span v-if='dealData.length' class='val forWide'>
-                                {{ dealData[0][3] }}
-                            </span>
-                            <div class='vals'>
-                                <span v-for='(item, i) in dealData' :key='i' class='val' :class='item.colorCls'>
-                                    {{ item[3] }}
-                                </span>
-                            </div>
-                        </div> -->
                     </div>
                     <div class='deal-content'>
                         <div v-for='item in dealList' :key='item.symbolId' class='deal-item'>
@@ -158,8 +113,11 @@
                 </div>
             </van-tab>
             <van-tab :title='$t("trade.trust")'>
-                <div class='trust-wrap'>
-                    <trustItem v-for='(item, index) in 2' :key='index' @click.stop="$router.push('/trustDetail')" />
+                <div v-if='pendingList.length === 0'>
+                    <van-empty :description='$t("common.noData")' image='/images/empty.png' />
+                </div>
+                <div v-else class='trust-wrap'>
+                    <trustItem v-for='(item, index) in pendingList' :key='index' @click.stop="$router.push('/trustDetail')" />
                     <a class='to-all' href='javascript:;' @click="$router.push('/trustList')">
                         {{ $t('trade.allTrust') }} >
                     </a>
@@ -171,10 +129,12 @@
 
 <script>
 import trustItem from '@abcc/modules/trust/trust.vue'
-import { computed, reactive, toRefs, watch } from 'vue'
+import { computed, reactive, toRefs, watch, onBeforeUnmount, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import dayjs from 'dayjs'
 import { pow } from '@/utils/calculation'
+import { localGet } from '@/utils/util'
+import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
     components: { trustItem },
     props: ['symbolId', 'settingList', 'curPrice'],
@@ -182,15 +142,27 @@ export default {
         const store = useStore()
         const state = reactive({
             dealData: [],
-            tempDealData: [],
             statusList: props.settingList,
             isDealDelaying: false,
             timer: 0,
-            curDigits: 0
+            curDigits: 0,
+            showPopover: false,
+            theme: localGet('invertColor') === 'light' ? 'light' : 'dark'
         })
 
         // 获取当前产品
         const product = computed(() => store.state._quote.productMap[props.symbolId])
+        // 获取玩法id
+        const tradeType = computed(() => store.state._base.tradeType)
+
+        // 获取账户信息
+        const customInfo = computed(() => store.state._user.customerInfo)
+
+        // 获取用户类型
+        const userAccountType = computed(() => store.getters['_user/userAccountType'])
+
+        // 获取挂单列表
+        const pendingList = computed(() => store.state._trade.pendingList)
 
         // 是否显示底部 tabs
         const showTabs = computed(() => {
@@ -208,12 +180,17 @@ export default {
                 digits.push({ text: pow(0.1, symbolDigits) })
                 symbolDigits--
             }
-            state.curDigits = digits[0]?.text
-            return digits.splice(0, 4)
+            return digits.splice(0, 5)
+        })
+
+        watchEffect(() => {
+            if (digitLevelList.value.length > 0) {
+                state.curDigits = digitLevelList.value[0]?.text
+            }
         })
 
         // 获取成交数据
-        const dealList = computed(() => store.state._quote.dealList.filter(el => Number(el.symbolId) === Number(props.symbolId)))
+        const dealList = computed(() => store.state._quote.dealList)
 
         watch(() => [product.value.tickResult], (newValues) => {
             const result = product.value.tickResult
@@ -249,103 +226,6 @@ export default {
                 // state.activeObj = props.status
             })
 
-        watch(() => props.curPrice, (newVal, oldVal) => {
-            const newList = []
-            const len = genRandomLen()
-            while (newList.length < len) {
-                const time = Date.now()
-                const volume = genRandomVolume()
-                newList.unshift([793065, time, newVal, volume, 2, 1])
-            }
-            if (newList.length && newVal && oldVal) {
-                if (newVal * 1 !== oldVal * 1) {
-                    if (newVal * 1 > oldVal * 1) {
-                        newList[newList.length - 1].colorCls = 'riseColor'
-                    } else {
-                        newList[newList.length - 1].colorCls = 'fallColor'
-                    }
-                }
-            }
-
-            state.tempDealData.unshift(...newList)
-        })
-
-        watch(() => state.tempDealData, (val, old) => {
-            if (!val.length) {
-                state.isDealDelaying = false
-            }
-
-            if (val.length && !state.isDealDelaying) {
-                state.isDealDelaying = true
-                delayMounted()
-                // console.log(val.length, 'delayMounted')
-            }
-        }, {
-            deep: true,
-            immediate: true,
-        })
-
-        const delayMounted = (time = 100) => {
-            requestAnimationFrame(() => {
-                if (!state.tempDealData.length) {
-                    return
-                }
-                // if (this.tempDealData.length > 100) {
-                //     this.tempDealData.splice(0, this.tempDealData.length - 60)
-                // }
-                state.tempDealData.splice(20)
-                if (state.dealData.length > 20) {
-                    state.dealData.pop()
-                }
-                state.dealData.unshift(state.tempDealData.splice(state.tempDealData.length - 1, 1)[0])
-
-                state.timer = setTimeout(() => {
-                    delayMounted(100 / state.tempDealData.length)
-                }, time)
-            })
-        }
-
-        // 生成随机长度，大于0
-        const genRandomLen = () => {
-            // 笔数=【1，5】随机
-            const random = Math.random()
-            let range = []
-            if (random < 0.7) {
-                // 3条概率
-                range = [0, 3]
-            } else {
-                // 5条概率
-                range = [3, 2]
-            }
-
-            let len = range[0] + Math.random() * range[1]
-            while (!len) {
-                len = range[0] + Math.random() * range[1]
-            }
-
-            return len
-        }
-
-        // 生成随机成交量，大于0
-        const genRandomVolume = () => {
-            const random = Math.random()
-            let range = []
-            if (random < 0.7) {
-                range = [0, 3]
-            } else {
-                range = [3, 10]
-            }
-            // BTC产品 数量=【0，30】随机，保留3位小数
-            // ETH产品 数量=【0，100】随机，保留3位小数
-            let volume = range[0] + Math.random() * range[1]
-            while (!volume) {
-                volume = range[0] + Math.random() * range[1]
-            }
-            volume = volume.toFixed(3)
-
-            return volume
-        }
-
         // 格式化时间
         const formatTime = (val) => {
             return dayjs(val).format('HH:mm:ss')
@@ -353,7 +233,24 @@ export default {
 
         const onSelect = (val) => {
             state.curDigits = val.text
+            QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits)
         }
+
+        // 获取委托列表
+        store.dispatch('_trade/queryPBOOrderPage', {
+            tradeType: tradeType.value,
+            customerNo: customInfo.value.customerNo,
+            accountId: customInfo.value.accountId,
+            sortFieldName: 'orderTime',
+            sortType: 'desc'
+        })
+        // 订阅盘口深度报价
+        QuoteSocket.deal_subscribe([props.symbolId], 10, digitLevelList?.value[0]?.text)
+
+        onBeforeUnmount(() => {
+            // 组件销毁取消订阅
+            QuoteSocket.cancel_subscribe(2)
+        })
 
         return {
             product,
@@ -362,6 +259,10 @@ export default {
             onSelect,
             dealList,
             digitLevelList,
+            userAccountType,
+            tradeType,
+            customInfo,
+            pendingList,
             ...toRefs(state)
         }
     }
@@ -415,14 +316,15 @@ export default {
         }
     }
     .handicap-header {
-        //display: flex;
+        display: flex;
+        align-items: center;
         height: rem(80px);
         padding: 0 0 0 rem(15px);
         line-height: rem(80px);
         >span {
             display: inline-block;
+            //flex: 1;
             color: var(--minorColor);
-            //flex: 1;\
             //width: 20%;
             font-size: rem(20px);
             text-align: center;
@@ -450,7 +352,7 @@ export default {
                 height: rem(40px);
                 margin-left: rem(15px);
                 line-height: rem(40px);
-                background-color: var(--bgColor);
+                background-color: var(--primaryAssistColor);
                 span {
                     margin-left: rem(10px);
                     //vertical-align: middle;

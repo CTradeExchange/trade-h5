@@ -30,12 +30,12 @@
                     </label>
                     <span>328458.000000USDT</span>
                 </p>
-                <p class='tl-item'>
+                <!-- <p class='tl-item'>
                     <label for=''>
                         利息
                     </label>
                     <span>12.55488USDT</span>
-                </p>
+                </p> -->
             </div>
             <div class='t-right'>
                 <van-button @click.stop='cancelOrder'>
@@ -106,6 +106,9 @@ export default {
         .t-right {
             position: relative;
             .van-button {
+                position: absolute;
+                right: 0;
+                bottom: rem(20px);
                 width: rem(124px);
                 height: rem(48px);
                 color: var(--primary);
@@ -114,9 +117,6 @@ export default {
                 background: var(--primaryAssistColor);
                 border-color: var(--primaryAssistColor);
                 border-radius: rem(6px);
-                position: absolute;
-                right: 0;
-                bottom: 0;
             }
         }
     }

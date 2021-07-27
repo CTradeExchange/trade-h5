@@ -70,23 +70,36 @@ class SocketEvent {
     }
 
     // 订阅产品报价
-    send_subscribe (productIds = [], quote_type = 1, depth_level = 1) {
+    send_subscribe (productIds = [], quote_type = 1, depth_level = 5) {
         if (!productIds || productIds.length === 0) return false
         this.subscribedList = [...new Set(productIds)]
-        const trade_type = this.$store.state._base.tradeType
+        const trade_type = Number(this.$store.state._base.tradeType)
 
         const list = this.subscribedList.map(el => {
             return {
                 symbol_id: el, // 产品ID ，类型：uint64
                 trade_type, // 交易类型，类型：uint32，1：cfd，2：me
-                quote_type, // 报价类型，类型：uint32，0：所有，1：实时报价，2：实时成交报价，没有该字段，后台默认按0处理
-                depth_level, // 深度层级，类型：uint32，该字段有效范围1到10之间，
-                // 在quote_type为0，1，或者没有quote_type字段时，需要赋值，
-                // 如果没有depth_level字段时，后台只会提供一层的报价
-                // 请求的层级大于实际报价层级，则后台按实际报价有多少层给多少层
+
             }
         })
         this.send(14000, { symbol_list: list })
+    }
+
+    // 盘口成交报价订阅
+    deal_subscribe (productIds = [], depth_level = 10, merge_accuracy) {
+        if (!productIds || productIds.length === 0) return false
+        this.subscribedList = [...new Set(productIds)]
+        const trade_type = Number(this.$store.state._base.tradeType)
+
+        const list = this.subscribedList.map(el => {
+            return {
+                symbol_id: Number(el), // 产品ID ，类型：uint64
+                trade_type, // 交易类型，类型：uint32，1：cfd，2：me
+                depth_level, // 深度层级，类型：uint32，该字段有效范围1到10之merge_accuracy,
+                merge_accuracy
+            }
+        })
+        this.send(14010, { symbol_list: list })
     }
 
     // websocket连接成功
@@ -115,14 +128,18 @@ class SocketEvent {
         $store.commit('_quote/Update_productTick', newData)
     }
 
+    // 处理盘口成交数据快照
+    ['cmd_id_14011'] (data) {
+        console.log('盘口报价数据', data)
+        const $store = this.$store
+        $store.commit('_quote/Update_dealList', data)
+    }
+
     // 实时报价
     tick (p) {
         // p(1123,1,1232312,34545435345,6.23,6.23,6.24);(1124,2,1232314,34545435345,7.23,7.23,7.24)
         // 产品ID，报价序号，报价时间戳，当前价，第一档bid卖价，第一档ask买价
-
-        // 模拟成交数据
-        this.dealList(p)
-
+        this.deal_tick(p)
         if (this.newPriceTimer) clearTimeout(this.newPriceTimer)
         const $store = this.$store
         const curPriceData = tickToObj(p)
@@ -145,7 +162,8 @@ class SocketEvent {
         }, 500)
     }
 
-    dealList (p) {
+    // 盘口实时成交数据
+    deal_tick (p) {
         // console.log('成交数据', p)
         const priceStr = p.split(';')[0].match(/\((.+)\)/)
         const price = priceStr[1] ?? ''
@@ -161,6 +179,11 @@ class SocketEvent {
         setTimeout(() => {
             this.$store.commit('_quote/Update_dealList', dealData)
         }, 3000)
+    }
+
+    // 取消订阅
+    cancel_subscribe (cancel_type = 0) {
+        this.send(14006, { cancel_type })
     }
 
     // 心跳机制
