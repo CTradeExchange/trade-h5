@@ -47,13 +47,12 @@ import { computed, reactive, ref, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import { mul } from '@/utils/calculation'
 export default {
-    props: ['direction', 'product', 'volume', 'operationType'],
+    props: ['direction', 'product', 'volume', 'operationType', 'account'],
     emits: ['update:operationType'],
     setup (props, { emit }) {
         const store = useStore()
         const checked = ref(2)
         const availableLoanAlert = ref(false)
-        const account = computed(() => store.state._user.account)
         watch(
             () => props.operationType,
             newval => { checked.value = newval },
@@ -71,7 +70,6 @@ export default {
         })
 
         return {
-            account,
             availableLoanAlert,
             checked,
             changeOperationType,

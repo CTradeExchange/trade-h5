@@ -17,8 +17,8 @@ function spreadText (product) {
 
 // 报价计算点差
 function price_spread (product, data) {
-    if (product.hasOwnProperty('askSpread') && data.buy_price) product.buy_price = BigNumber(data.buy_price).plus(product.askSpread).toFixed(product.price_digits)
-    if (product.hasOwnProperty('bidSpread') && data.sell_price) product.sell_price = BigNumber(data.sell_price).plus(product.bidSpread).toFixed(product.price_digits)
+    if (product.hasOwnProperty('askSpread') && data.buy_price) product.buy_price = BigNumber(data.buy_price).plus(product.askSpread || 0).toFixed(product.price_digits)
+    if (product.hasOwnProperty('bidSpread') && data.sell_price) product.sell_price = BigNumber(data.sell_price).plus(product.bidSpread || 0).toFixed(product.price_digits)
     spreadText(product)
 }
 /** 价格转点数  点数=价差/（Point*大点比率）
@@ -29,7 +29,7 @@ function price_spread (product, data) {
  */
 function priceToPip (price, product) {
     if (product && product.hasOwnProperty('pointRatio')) {
-        const spDigit = String(product.pointRatio).length - 1 // 点差小数位
+        const spDigit = String(product.pointRatio || 0).length - 1 // 点差小数位
         const pip = BigNumber(0.1).pow(product.price_digits).times(product.pointRatio) // 1pip=point*大点比率
         return BigNumber(price).div(pip).toFixed(spDigit)
     } else {

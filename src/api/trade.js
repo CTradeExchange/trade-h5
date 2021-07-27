@@ -37,6 +37,20 @@ export function addMarketOrder (data) {
         data
     })
 }
+
+/* 全仓杠杆下单 */
+export function addOrder (data) {
+    return request({
+        url: '/global/tradeapi.app.OrderApiService.addOrder',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            group: 'tradeApi'
+        },
+        data
+    })
+}
+
 /* 查看持仓列表 */
 export function queryPositionPage (data) {
     return request({
