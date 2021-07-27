@@ -38,7 +38,7 @@ export default {
             const digits = getDecimalNum(props.product.minVolume)
             const reg = new RegExp('^\\d*(\\.?\\d{0,' + digits + '})', 'g')
             if (getDecimalNum(newval) > digits) {
-                newval = (newval.match(reg)[0]) || ''
+                newval = (newval.match(reg) && newval.match(reg)[0]) || ''
                 if (digits === 0 && newval.endsWith('.')) newval = newval.replace(/\./g, '') // 浏览器不允许给number输入框输入'1.'字符串
                 e.target.value = newval
             }

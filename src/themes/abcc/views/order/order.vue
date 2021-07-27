@@ -26,7 +26,14 @@
             <!-- 手数 -->
             <OrderVolume v-if='product' v-model='volume' class='cellMarginTop' :product='product' />
             <!-- 订单金额 -->
-            <Assets v-model:operation-type='operationType' :direction='direction' :product='product' :volume='volume' />
+            <Assets
+                v-if='account'
+                v-model:operation-type='operationType'
+                :account='account'
+                :direction='direction'
+                :product='product'
+                :volume='volume'
+            />
         </div>
         <div class='footerBtn' :class='[direction]'>
             <van-button block :loading='loading' size='normal' @click='submitHandler'>
@@ -52,7 +59,7 @@ import PendingBar from './components/pendingBar'
 import OrderTypeTab from './components/orderType.vue'
 import Assets from './components/assets.vue'
 import SwitchProduct from './components/switchProduct.vue'
-import { addMarketOrder } from '@/api/trade'
+import { addOrder } from '@/api/trade'
 import { Toast } from 'vant'
 export default {
     components: {
@@ -88,13 +95,17 @@ export default {
         const pendingRef = ref(null)
         const profitLossRef = ref(null)
         const pendingWarn = computed(() => pendingRef.value?.warn)
-        const account = computed(() => store.state._user.account)
+        const product = computed(() => store.getters.productActived)
+        const customerInfo = computed(() => store.state._user.customerInfo)
+        const account = computed(() => {
+            const buyCurrency = product.value[state.direction === 'buy' ? 'profitCurrency' : 'baseCurrency']
+            return customerInfo?.value?.accountMap[buyCurrency]
+        })
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
         QuoteSocket.send_subscribe([symbolId]) // 订阅产品报价
         store.dispatch('_user/queryAccountAssetsInfo')
         store.commit('_quote/Update_productActivedID', symbolId)
         store.commit('_trade/Update_modifyPositionId', 0)
-        const product = computed(() => store.getters.productActived)
         // 切换订单类型
         const changeOrderType = (val) => {
             store.commit('_trade/Update_pendingEnable', val === 2)
@@ -137,15 +148,16 @@ export default {
                 accountCurrency: account.value.currency,
                 accountId: account.value.accountId,
                 requestTime: Date.now(),
-                requestNum: state.volume,
+                requestNum: Number(state.volume),
                 operationType: state.operationType,
-                expireType: 1,
                 requestPrice: mul(requestPrice, p),
+                accountDigits: account.value.digits,
+                tradeType: account.value.tradeType,
             }
             console.log(params)
             if (state.loading) return false
             state.loading = true
-            addMarketOrder(params)
+            addOrder(params)
                 .then(res => {
                     state.loading = false
                     if (res.invalid()) return false
@@ -168,6 +180,7 @@ export default {
         init()
         return {
             ...toRefs(state),
+            account,
             pendingRef,
             profitLossRef,
             pendingWarn,

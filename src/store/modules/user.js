@@ -135,6 +135,7 @@ export default {
 
                     commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_customerInfo', res.data)
+                    commit('_base/UPDATE_tradeType', data.tradeType, { root: true }) // 登录后存储用户的玩法类型
                     if (data.optional === 1) dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
                     dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {
                         return dispatch('_quote/querySymbolBaseInfoList', productAllList, { root: true })

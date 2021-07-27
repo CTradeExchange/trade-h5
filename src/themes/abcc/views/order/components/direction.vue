@@ -14,9 +14,6 @@
                 {{ $t('trade.buy') }}
             </span>
         </div>
-        <span v-if='product.spread_text' class='spread_text'>
-            {{ product.spread_text }}
-        </span>
     </div>
 </template>
 
@@ -71,23 +68,6 @@ export default {
     }
     .flRight {
         float: right;
-    }
-    .spread_text {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        display: inline-block;
-        min-width: rem(20px);
-        height: rem(40px);
-        padding: 0 rem(10px);
-        color: var(--color);
-        font-size: rem(20px);
-        line-height: rem(36px);
-        text-align: center;
-        background: var(--primaryAssistColor);
-        border: 2px solid var(--contentColor);
-        border-radius: rem(6px);
-        transform: translate3d(-50%, -50%, 1px) scale(1);
     }
 }
 </style>

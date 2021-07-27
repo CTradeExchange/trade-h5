@@ -3,7 +3,7 @@
         arrow-direction='down'
         is-link
         :title='$t("register.accountType")'
-        :value='currentAction.name'
+        :value='currentAction?.name'
         v-bind='$attrs'
         @click='actionSheetVisible=true'
     />

@@ -1,6 +1,6 @@
 <template>
-    <div class='page-wrap' :class='{ isIframe: $route.query.isIframe }'>
-        <LayoutTop :back='true' :menu='false'>
+    <div class='page-wrap' :class='{ isIframe: $route.query.isUniapp }'>
+        <LayoutTop v-if='!$route.query.isUniapp' :back='true' :menu='false'>
             <p>{{ product.symbolName }}</p>
             <p class='infomation'>
                 {{ product.symbolCode }} {{ $t('trade.update') }}:{{ formatTime(product.tick_time) }}
@@ -858,6 +858,18 @@ export default {
         }
 
         const toOrder = (direction) => {
+            if (route.query.isUniapp && uni) {
+                // const msgContent = { actionType: 'toOrder', data: { symbolId, direction } }
+                // window.uni.postMessage({
+                //     data: {
+                //         content: msgContent
+                //     }
+                // })
+                uni.navigateTo({
+                    url: `/pages/order/index?symbolId=${symbolId}&direction=${direction}`
+                })
+                return
+            }
             router.push({
                 path: '/order',
                 query: {
@@ -919,11 +931,7 @@ export default {
     overflow: auto;
     background: var(--bgColor);
     &.isIframe {
-        margin-bottom: 0;
-        .footerBtnBox,
-        .right-wrap {
-            display: none;
-        }
+        margin-top: 0;
     }
     .infomation {
         padding-top: rem(5px);
