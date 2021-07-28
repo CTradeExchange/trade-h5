@@ -20,7 +20,7 @@ export default {
     setup () {
         const store = useStore()
         const accountList = computed(() => store.state._user.customerInfo?.accountList ?? [])
-        store.dispatch('_user/queryCustomerAssetsInfo')
+        store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
         return {
             accountList
         }

@@ -40,7 +40,7 @@ export default {
         // const store = useStore()
         const router = useRouter()
         const toInfo = () => {
-            router.push({ name: 'AssetsInfo', query: { currency: props.data.currency } })
+            router.push({ name: 'AssetsInfo', query: { currency: props.data.currency, accountId: props.data.accountId } })
         }
         return {
             toInfo,

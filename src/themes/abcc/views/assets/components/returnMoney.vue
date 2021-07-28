@@ -1,5 +1,5 @@
 <template>
-    <van-popup v-model:show='show' position='bottom' @closed='closed'>
+    <van-popup v-model:show='show' position='bottom' @closed='closed' @open='onOpen'>
         <div class='returnMoneyPop'>
             <p class='closeBar'>
                 <a class='closeBtn' href='javascript:;' @click='closed'>
@@ -8,69 +8,126 @@
             </p>
             <div class='container'>
                 <div class='actionBar'>
-                    <span class='muted' @click='pickerShow=true'>
-                        以
+                    <span class='muted' @click='selectPickerField("outCurrency")'>
+                        {{ $t('trade.yi') }}
                     </span>
-                    <span class='currencySpan' @click='pickerShow=true'>
-                        BTC
+                    <span class='currencySpan' @click='selectPickerField("outCurrency")'>
+                        {{ outCurrency }}
                     </span>
-                    <span class='icon_icon_arrow' @click='pickerShow=true'></span>
-                    <input class='input' type='text' />
+                    <span class='icon_icon_arrow' @click='selectPickerField("outCurrency")'></span>
+                    <input v-model='outAmount' class='input' type='text' />
                     <a class='all' href='javascript:;'>
-                        全部
+                        {{ $t('trade.allPosition') }}
                     </a>
                 </div>
                 <p class='mutedTip'>
-                    可用 1.00000 BTC
+                    {{ $t('trade.free') + outAccount.available + outCurrency }}
                 </p>
                 <div class='actionBar mtop20'>
-                    <span class='muted'>
-                        还
+                    <span class='muted' @click='selectPickerField("inCurrency")'>
+                        {{ $t('trade.huan') }}
                     </span>
-                    <span class='currencySpan'>
-                        USDT
+                    <span class='currencySpan' @click='selectPickerField("inCurrency")'>
+                        {{ inCurrency }}
                     </span>
-                    <span class='icon_icon_arrow'></span>
-                    <input class='input' type='text' />
+                    <span class='icon_icon_arrow' @click='selectPickerField("inCurrency")'></span>
+                    ≈
+                    <input class='input' type='text' :value='inAmount' />
                 </div>
                 <p class='mutedTip'>
-                    待还 1.00000 USDT
+                    {{ $t('trade.daihuan') + inAccount.liabilitiesPrincipal + inCurrency }}
                 </p>
             </div>
             <van-button block class='returnBtn' type='primary'>
-                还 USDT
+                {{ $t('trade.huan') }} {{ inCurrency }}
             </van-button>
         </div>
     </van-popup>
     <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
-        <van-picker :columns='columns' :default-index='2' title='标题' />
+        <van-picker :columns='columns' :default-index='2' title='' @confirm='onPickerConfirm' />
     </van-popup>
 </template>
 
 <script>
-import { ref, toRefs, watch } from 'vue'
+import { computed, reactive, ref, toRefs, watch } from 'vue'
+import { useStore } from 'vuex'
+import BigNumber from 'bignumber.js'
 export default {
-    props: ['modelValue'],
+    props: ['modelValue', 'account'],
     emits: ['update:modelValue'],
     setup (props, { emit }) {
-        const show = ref(false)
-        const pickerShow = ref(false)
-        const columns = ['USDT', 'BTC', 'USDT', 'BTC', 'USDT', 'BTC', 'USDT', 'BTC']
+        const store = useStore()
+        const state = reactive({
+            show: false,
+            pickerShow: false,
+            pickerField: 'outCurrency', // 选择还币还是被还的币 outCurrency, inCurrency
+            outCurrency: '', // 以xx币还
+            inCurrency: '', // 还xx币
+            outAmount: '', // 以xx币还的金额
+        })
+        const accountMap = computed(() => store.state._user.customerInfo?.accountMap)
+        const outAccount = computed(() => accountMap?.value[state.outCurrency]) // 以xx币还的账户
+        const inAccount = computed(() => accountMap?.value[state.inCurrency]) // 还xx币的账户
+        const accountList = computed(() => store.state._user.customerInfo?.accountList || [])
+        const productList = computed(() => store.state._quote.productList)
+        const inAmount = computed(() => { // 还xx币的金额
+            const rateProduct = productList.value.find(({ baseCurrency, profitCurrency }) => (baseCurrency === state.inCurrency && profitCurrency === state.outCurrency))
+            if (state.outCurrency === state.inCurrency) {
+                return state.outAmount
+            } else if (rateProduct) {
+                if (state.outCurrency === rateProduct.profitCurrency) {
+                    return BigNumber(state.outAmount).div(rateProduct.buy_price).toFixed(inAccount.value.digits)
+                } else {
+                    return BigNumber(state.outAmount).times(rateProduct.sell_price).toFixed(inAccount.value.digits)
+                }
+            } else {
+                // 双边都是非USDT
+            }
+            return ''
+        })
+        const columns = computed(() => accountList.value.map(el => el.currency))
         watch(
             () => props.modelValue,
             newval => {
-                if (show.value !== newval) show.value = newval
+                if (state.show !== newval) state.show = newval
             },
             { immediate: true }
         )
         const closed = () => {
             emit('update:modelValue', false)
         }
+        const onOpen = () => {
+            // 默认还币为当前子账户币种
+            state.inCurrency = props.account.currency
+            state.outCurrency = props.account.currency
+            if (parseFloat(props.account.available) === 0) {
+                const accountList = store.state._user.customerInfo?.accountList || []
+                const newAccountList = accountList.slice().sort((a, b) => parseFloat(b.available) - parseFloat(a.available))
+                if (newAccountList.length && newAccountList[0].available > 0) {
+                    state.outCurrency = newAccountList[0].currency
+                }
+            }
+        }
+        // 显示选币弹窗
+        const selectPickerField = val => {
+            state.pickerField = val
+            state.pickerShow = true
+        }
+        const onPickerConfirm = val => {
+            console.log(val, state.pickerField)
+            state[state.pickerField] = val
+            state.pickerShow = false
+        }
         return {
-            show,
-            pickerShow,
+            ...toRefs(state),
+            onPickerConfirm,
+            selectPickerField,
+            outAccount,
+            inAccount,
+            inAmount,
             columns,
-            closed
+            closed,
+            onOpen,
         }
     }
 }

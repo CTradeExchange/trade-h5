@@ -66,7 +66,7 @@
                 {{ $t('route.returnMoney') }}
             </van-button>
         </div>
-        <ReturnMoney v-model='returnMoneyVisible' />
+        <ReturnMoney v-if='accountList.length' v-model='returnMoneyVisible' :account='account' />
     </div>
 </template>
 
@@ -87,13 +87,14 @@ export default {
             returnMoneyVisible: false,
             list: Array(3).fill()
         })
+        const accountList = computed(() => store.state._user.customerInfo?.accountList || [])
         const account = computed(() => {
-            const accountList = store.state._user.customerInfo?.accountList || []
-            return accountList.find(({ currency }) => currency === route.query.currency)
+            return accountList.value.find(({ currency }) => currency === route.query.currency)
         })
-        store.dispatch('_user/queryAccountAssetsInfo')
+        store.dispatch('_user/queryAccountAssetsInfo', { tradeType: 3, accountId: parseInt(route.query.accountId) })
         return {
             ...toRefs(state),
+            accountList,
             account,
         }
     }
