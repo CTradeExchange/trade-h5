@@ -16,7 +16,7 @@
             <Direction v-model='direction' class='cellMarginTop' :product='product' />
             <!-- 挂单设置 -->
             <PendingBar
-                v-if='orderType===2'
+                v-if='orderType===10'
                 ref='pendingRef'
                 v-model='pendingPrice'
                 class='cellMarginTop'
@@ -125,8 +125,8 @@ export default {
 
         // 验证下单数据是否异常
         const paramsInvalid = () => {
-            if (state.orderType === 2 && !state.pendingPrice) return Toast(t('trade.inputPendingPrice'))
-            else if (state.orderType === 2 && isNaN(state.pendingPrice)) return Toast(t('trade.pendingPriceError'))
+            if (state.orderType === 10 && !state.pendingPrice) return Toast(t('trade.inputPendingPrice'))
+            else if (state.orderType === 10 && isNaN(state.pendingPrice)) return Toast(t('trade.pendingPriceError'))
             else if (!state.volume) return Toast(t('trade.inputVolume'))
             else if (isNaN(state.volume)) return Toast(t('trade.volumeError'))
             else if (!account.value) return Toast(t('trade.nullAssets'))
@@ -138,7 +138,7 @@ export default {
             if (paramsInvalid()) return
             let requestPrice = state.direction === 'sell' ? product.value.sell_price : product.value.buy_price
             const direction = state.direction === 'sell' ? 2 : 1
-            if (state.orderType === 2) {
+            if (state.orderType === 10) {
                 requestPrice = state.pendingPrice
             }
             const p = Math.pow(10, product.value.price_digits)
