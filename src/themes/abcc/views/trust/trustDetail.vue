@@ -1,38 +1,39 @@
 <template>
     <div class='page-wrap'>
         <LayoutTop :back='true' :menu='false' :title='$t("trade.trustDetail")' />
+        <Loading :show='loading' />
         <div class='trust-detail'>
-            <div class='layout layout-1'>
+            <div v-if='pendingItem' class='layout layout-1'>
                 <div class='item item-1'>
                     <div class='left'>
                         <div class='name'>
-                            VET/USDT
+                            {{ pendingItem?.symbolName }}
                         </div>
                         <div class='code'>
-                            VETUSDT
+                            {{ pendingItem.symbolCode }}
                         </div>
                     </div>
                 </div><div class='item item-2'>
                     <div class='col'>
-                        <div class='sub riseColor'>
-                            {{ $t('trade.buy') }}
+                        <div class='sub' :class="Number(pendingItem.direction) === 1 ? 'riseColor' : 'fallColor'">
+                            {{ Number(pendingItem.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
                         </div>
                         <div class='name'>
-                            0.01 BTC
+                            {{ pendingItem.requestNum }} {{ pendingItem.accountCurrency }}
                         </div>
                     </div><div class='col'>
                         <div class='sub'>
                             {{ $t('trade.pendingPrice') }}
                         </div>
                         <div class='name'>
-                            0.066810
+                            {{ pendingPrice }}
                         </div>
                     </div><div class='col'>
                         <div class='sub'>
                             {{ $t('trade.currentPrice') }}
                         </div>
                         <div class='name fallColor'>
-                            0.066940
+                            {{ product.cur_price }}
                         </div>
                     </div>
                 </div><div class='item item-2 van-hairline--bottom'>
@@ -42,11 +43,11 @@
                         </div>
                         <div class='name'>
                             <span class='number'>
-                                10000.00 USDT
+                                --
                             </span>
                         </div>
                     </div><div class='col'>
-                        <div class='sub' @click='showInfo'>
+                        <!-- <div class='sub' @click='showInfo'>
                             <van-icon name='question-o' />
                             <span>{{ $t('trade.swap_2') }} </span>
                         </div>
@@ -54,20 +55,20 @@
                             <span class='number'>
                                 10.000 USDT
                             </span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div><div class='layout layout-3'>
-                <div class='item van-hairline--bottom'>
+                <!-- <div class='item van-hairline--bottom'>
                     <div class='left'>
                         <div class='title'>
                             {{ $t('trade.expireTime') }}
                         </div>
                     </div>
                     <div class='right'>
-                        48小时有效
+                        {{ $t( pendingItem.expireType===1?'trade.expireType1' :'trade.expireType2') }}
                     </div>
-                </div>
+                </div> -->
                 <div class='item van-hairline--bottom'>
                     <div class='left'>
                         <div class='title'>
@@ -75,7 +76,7 @@
                         </div>
                     </div>
                     <div class='right'>
-                        2021/07/19 15:21:19
+                        {{ formatTime(pendingItem.orderTime) }}
                     </div>
                 </div><div class='item'>
                     <div class='left'>
@@ -84,13 +85,13 @@
                         </div>
                     </div>
                     <div class='right'>
-                        ID : 654543456
+                        ID : {{ pendingItem.id }}
                     </div>
                 </div>
             </div>
         </div>
         <div class='submitBox'>
-            <van-button size='normal' type='primary' @click='showCancelOrderTip = true'>
+            <van-button size='normal' type='primary' @click='cancelOrder'>
                 {{ $t('trade.cancelOrder') }}
             </van-button>
         </div>
@@ -99,8 +100,32 @@
 
 <script>
 import { Toast, Dialog } from 'vant'
+import { computed, ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
+import { shiftedBy } from '@/utils/calculation'
+import { QuoteSocket } from '@/plugins/socket/socket'
+import { closePboOrder } from '@/api/trade'
+import { useI18n } from 'vue-i18n'
 export default {
     setup (props) {
+        const { t } = useI18n({ useScope: 'global' })
+        const route = useRoute()
+        const store = useStore()
+        const { id, symbolId } = route.query
+        const loading = ref(false)
+        // 获取挂单详情
+        const pendingItem = computed(() => store.state._trade.pendingMap[id])
+        // 获取玩法id
+        const tradeType = computed(() => store.state._base.tradeType)
+
+        // 获取账户信息
+        const customInfo = computed(() => store.state._user.customerInfo)
+
+        // 获取当前产品
+        const product = computed(() => store.state._quote.productMap[symbolId])
+
+        const pendingPrice = computed(() => shiftedBy(pendingItem.value?.requestPrice, -1 * pendingItem.value?.digits))
         const showInfo = () => {
             Dialog.alert({
                 title: '说明',
@@ -110,8 +135,53 @@ export default {
             })
         }
 
+        // 撤单
+        const cancelOrder = () => {
+            Dialog.confirm({
+                title: '提示',
+                message: '确定撤单吗?',
+            }).then(() => {
+                loading.value = true
+                const params = {
+                    tradeType: tradeType.value,
+                    customerNo: customInfo.value.customerNo,
+                    accountId: props.product.accountId,
+                    pboId: props.product.id,
+                    bizType: props.product.bizType
+
+                }
+
+                closePboOrder(params).then(res => {
+                    loading.value = false
+                    if (res.check()) {
+                        Toast(t('trade.cancelSuccess'))
+                        store.dispatch('_trade/queryPBOOrderPage')
+                    }
+                }).catch(err => {
+                    loading.value = false
+                    console.log(err)
+                })
+            }).catch(() => {})
+        }
+
+        // 订阅报价
+        QuoteSocket.send_subscribe([symbolId])
+
+        // 获取委托列表
+        store.dispatch('_trade/queryPBOOrderPage', {
+            tradeType: tradeType.value,
+            customerNo: customInfo.value.customerNo,
+            sortFieldName: 'orderTime',
+            sortType: 'desc'
+        })
+
         return {
-            showInfo
+            showInfo,
+            pendingItem,
+            pendingPrice,
+            product,
+            loading,
+            cancelOrder
         }
     }
 }

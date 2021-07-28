@@ -37,38 +37,37 @@
                         {{ $t('trade.my') }}
                     </span>
                 </div>
-                <div v-for='(item,index) in product.tickResult' :key='index' class='stalls-wrap'>
+                <div class='stalls-wrap'>
                     <div class='buy-wrap'>
-                        <div class='item quantity'>
-                            <span v-if="userAccountType !=='G'" class='label'>
+                        <div v-for='(item,index) in handicapList?.ask_deep' :key='index' class='item quantity'>
+                            <span class='label'>
                             </span>
                             <span class='quantity'>
                                 {{ item.volume_ask }}
                             </span>
                             <span
                                 class='histogram buy-histogram'
-                                :style='"width:"+ item?.width?.buy * 100 + "%"'
+                                :style='"width:"+ item?.width * 100 + "%"'
                             ></span>
 
                             <span class='price price-right fallColor'>
-                                {{ parseFloat(item.price_ask).toFixed(product.price_digits) }}
+                                {{ item.price_ask }}
                             </span>
                         </div>
                     </div>
                     <div class='sell-wrap'>
-                        <div class='item quantity'>
+                        <div v-for='(item,index) in handicapList?.bid_deep' :key='index' class='item quantity'>
                             <span class='price riseColor '>
-                                {{ parseFloat(item.price_bid).toFixed(product.price_digits) }}
+                                {{ item.price_bid }}
                             </span>
                             <span class='quantity'>
                                 {{ item.volume_bid }}
                             </span>
-                            <span v-if="userAccountType !=='G'" class='label label-right'>
+                            <span class='label label-right'>
                             </span>
-
                             <span
                                 class='histogram sell-histogram'
-                                :style='"width:"+ item?.width?.sell *100 + "%"'
+                                :style='"width:"+ item?.width * 100 + "%"'
                             ></span>
                         </div>
                     </div>
@@ -77,9 +76,7 @@
             <van-tab v-if='statusList.indexOf("deal") > -1' name='deal' :title='$t("trade.deal")'>
                 <!-- 成交记录 -->
                 <div class='deal-wrap'>
-                    <van-empty v-if='dealList.length === 0' image='/images/empty.png'>
-                        {{ $t('trade.noDealData') }}
-                    </van-empty>
+                    <van-empty v-if='dealList.length === 0' :description='$t("common.noData")' image='/images/empty.png' />
                     <!-- {{ dealList }} -->
                     <div v-else class='list-wrap'>
                         <div class='col time-col'>
@@ -101,7 +98,7 @@
                     <div class='deal-content'>
                         <div v-for='item in dealList' :key='item.symbolId' class='deal-item'>
                             <span>{{ formatTime(item.dealTime) }}</span>
-                            <span :class="[item.trade_direction===1?'riseColor':'fallColor']">
+                            <span :class="[Number(item.trade_direction)===1?'riseColor':'fallColor']">
                                 {{ Number(item.trade_direction) === 1 ? $t('trade.buy') : $t('trade.sell') }}
                             </span>
                             <span>
@@ -117,7 +114,7 @@
                     <van-empty :description='$t("common.noData")' image='/images/empty.png' />
                 </div>
                 <div v-else class='trust-wrap'>
-                    <trustItem v-for='(item, index) in pendingList' :key='index' @click.stop="$router.push('/trustDetail')" />
+                    <trustItem v-for='(item, index) in pendingList.slice(0,5)' :key='index' :product='item' @click.stop='toDetail(item)' />
                     <a class='to-all' href='javascript:;' @click="$router.push('/trustList')">
                         {{ $t('trade.allTrust') }} >
                     </a>
@@ -131,6 +128,7 @@
 import trustItem from '@abcc/modules/trust/trust.vue'
 import { computed, reactive, toRefs, watch, onBeforeUnmount, watchEffect } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import { pow } from '@/utils/calculation'
 import { localGet } from '@/utils/util'
@@ -139,6 +137,7 @@ export default {
     components: { trustItem },
     props: ['symbolId', 'settingList', 'curPrice'],
     setup (props) {
+        const router = useRouter()
         const store = useStore()
         const state = reactive({
             dealData: [],
@@ -183,34 +182,65 @@ export default {
             return digits.splice(0, 5)
         })
 
-        watchEffect(() => {
-            if (digitLevelList.value.length > 0) {
+        // 跳转委托详情页面
+        const toDetail = (item) => {
+            router.push({
+                path: '/trustDetail',
+                query: {
+                    id: item.id,
+                    symbolId: item.symbolId
+                }
+            })
+        }
+
+        watch(() => digitLevelList.value.length, newVal => {
+            if (newVal > 0) {
                 state.curDigits = digitLevelList.value[0]?.text
+                // 订阅盘口深度报价
+                QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits)
             }
         })
 
-        // 获取成交数据
-        const dealList = computed(() => store.state._quote.dealList)
+        // 获取盘口深度报价
+        const handicapList = computed(() => store.state._quote.handicapList.find(item => item.symbol_id === props.symbolId))
 
-        watch(() => [product.value.tickResult], (newValues) => {
-            const result = product.value.tickResult
-            const tempArr = []
-            if (result.length > 0) {
-                result.forEach(item => {
-                    tempArr.push(item.volume_ask)
-                    tempArr.push(item.volume_bid)
+        // 获取成交数据
+        const dealList = computed(() => store.state._quote.dealList.filter(item => Number(item.symbolId) === Number(props.symbolId)))
+
+        watch(() => [handicapList.value], (newValues) => {
+            const result = handicapList.value
+            const tempArr = [] // 总量
+            if (result.ask_deep.length > 0) {
+                result.ask_deep.forEach(ask => {
+                    tempArr.push(ask.volume_ask)
                 })
             }
+
+            if (result.bid_deep.length > 0) {
+                result.bid_deep.forEach(bid => {
+                    tempArr.push(bid.volume_bid)
+                })
+            }
+
             const maxValue = Math.max(...tempArr)
             const minValue = Math.min(...tempArr)
+
             const diff = maxValue - minValue
             // 计算深度
-            result.forEach(item => {
-                item.width = {
-                    buy: diff === 0 ? 0 : (parseFloat(item.volume_ask) - parseFloat(minValue)) / diff,
-                    sell: diff === 0 ? 0 : (parseFloat(item.volume_bid) - parseFloat(minValue)) / diff,
-                }
-            })
+
+            if (result.ask_deep.length > 0) {
+                result.ask_deep.forEach(ask => {
+                    ask.width = (parseFloat(ask.volume_ask) - parseFloat(minValue)) / diff
+                })
+            }
+
+            if (result.bid_deep.length > 0) {
+                result.bid_deep.forEach(bid => {
+                    bid.width = (parseFloat(bid.volume_bid) - parseFloat(minValue)) / diff
+                })
+            }
+        }, {
+            deep: true
         })
 
         watch(
@@ -228,9 +258,10 @@ export default {
 
         // 格式化时间
         const formatTime = (val) => {
-            return dayjs(val).format('HH:mm:ss')
+            return dayjs(Number(val)).format('HH:mm:ss')
         }
 
+        // 修改报价深度
         const onSelect = (val) => {
             state.curDigits = val.text
             QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits)
@@ -240,12 +271,9 @@ export default {
         store.dispatch('_trade/queryPBOOrderPage', {
             tradeType: tradeType.value,
             customerNo: customInfo.value.customerNo,
-            accountId: customInfo.value.accountId,
             sortFieldName: 'orderTime',
             sortType: 'desc'
         })
-        // 订阅盘口深度报价
-        QuoteSocket.deal_subscribe([props.symbolId], 10, digitLevelList?.value[0]?.text)
 
         onBeforeUnmount(() => {
             // 组件销毁取消订阅
@@ -263,6 +291,8 @@ export default {
             tradeType,
             customInfo,
             pendingList,
+            handicapList,
+            toDetail,
             ...toRefs(state)
         }
     }
@@ -335,7 +365,7 @@ export default {
                 width: rem(150px);
             }
             &:nth-child(3) {
-                width: rem(160px);
+                width: rem(130px);
                 text-align: right;
             }
             &:nth-child(5) {
@@ -476,6 +506,7 @@ export default {
         flex-direction: column;
         width: 100%;
         height: 100%;
+        overflow: scroll;
         color: var(--mutedColor);
         font-size: rem(22px);
         line-height: rem(24px);

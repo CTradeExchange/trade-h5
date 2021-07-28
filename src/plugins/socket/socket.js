@@ -25,6 +25,8 @@ export default {
                 return QuoteSocket.tick(evt.data)
             } else if (typeof evt.data === 'string' && evt.data.startsWith('pt(')) {
                 return QuoteSocket.deal_tick(evt.data)
+            } else if (typeof evt.data === 'string' && evt.data.startsWith('pd(')) {
+                return QuoteSocket.handicap_tick(evt.data)
             } else if (typeof evt.data === 'string' && evt.data.indexOf('{') !== 0) return
 
             try {

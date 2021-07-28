@@ -43,7 +43,8 @@ export default {
         productList: [], // 产品列表
         productMap: {}, // 产品列表
         productActivedID: null, // 当前操作的产品ID
-        dealList: [] // 推送的实时成交数据
+        handicapList: [], // 盘口实时深度报价
+        dealList: [] // 成交数据
     },
     mutations: {
         // 清空产品数据
@@ -124,11 +125,18 @@ export default {
             sessionSet('productActived', JSON.stringify(state.productMap[id]))
             state.productActivedID = id
         },
-        Update_dealList (state, data = {}) {
-            if (state.dealList.length > 2000) {
-                state.dealList = []
+        Update_handicapList (state, data = {}) {
+            // type 1: 快照 2 实时
+            if (Number(data.type === 1)) {
+                state.handicapList = data.list
+            } else {
+                state.handicapList[0].ask_deep = data.tickList.ask_deep
+                state.handicapList[0].bid_deep = data.tickList.bid_deep
             }
+        },
+        Update_dealList (state, data = {}) {
             state.dealList.unshift(data)
+            state.dealList = state.dealList.slice(0, 10)
         }
     },
     actions: {

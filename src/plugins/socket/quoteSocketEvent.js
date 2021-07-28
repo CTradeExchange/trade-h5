@@ -78,7 +78,7 @@ class SocketEvent {
         const list = this.subscribedList.map(el => {
             return {
                 symbol_id: el, // 产品ID ，类型：uint64
-                trade_type, // 交易类型，类型：uint32，1：cfd，2：me
+                trade_type: 1, // 交易类型，类型：uint32，1：cfd，2：me
 
             }
         })
@@ -94,8 +94,8 @@ class SocketEvent {
         const list = this.subscribedList.map(el => {
             return {
                 symbol_id: Number(el), // 产品ID ，类型：uint64
-                trade_type, // 交易类型，类型：uint32，1：cfd，2：me
-                depth_level, // 深度层级，类型：uint32，该字段有效范围1到10之merge_accuracy,
+                trade_type: 1, // 交易类型，类型：uint32，1：cfd，2：me
+                depth_level, // 深度层级，类型：uint32，该字段有效范围1到10之间
                 merge_accuracy
             }
         })
@@ -130,16 +130,19 @@ class SocketEvent {
 
     // 处理盘口成交数据快照
     ['cmd_id_14011'] (data) {
-        console.log('盘口报价数据', data)
+        const list = data.data?.tick_list ?? []
         const $store = this.$store
-        $store.commit('_quote/Update_dealList', data)
+        $store.commit('_quote/Update_handicapList', {
+            list,
+            type: 1
+        })
     }
 
     // 实时报价
     tick (p) {
         // p(1123,1,1232312,34545435345,6.23,6.23,6.24);(1124,2,1232314,34545435345,7.23,7.23,7.24)
         // 产品ID，报价序号，报价时间戳，当前价，第一档bid卖价，第一档ask买价
-        this.deal_tick(p)
+
         if (this.newPriceTimer) clearTimeout(this.newPriceTimer)
         const $store = this.$store
         const curPriceData = tickToObj(p)
@@ -162,23 +165,59 @@ class SocketEvent {
         }, 500)
     }
 
-    // 盘口实时成交数据
+    // 实时成交数据
     deal_tick (p) {
-        // console.log('成交数据', p)
+        console.log('成交数据', p)
         const priceStr = p.split(';')[0].match(/\((.+)\)/)
         const price = priceStr[1] ?? ''
         const priceArr = price.split(',')
         const dealData = {
-            symbolId: priceArr[0] * 1,
+            symbolId: priceArr[0],
             dealTime: priceArr[3],
-            trade_direction: Math.floor(Math.random() * 2) + 1, // priceArr[6]
+            trade_direction: priceArr[6], // Math.floor(Math.random() * 2) + 1,
             price: priceArr[4], // priceArr[4],
-            volume: priceArr[6] // priceArr[5]
+            volume: priceArr[5] // priceArr[5]
 
         }
         setTimeout(() => {
             this.$store.commit('_quote/Update_dealList', dealData)
         }, 3000)
+    }
+
+    // 实时盘口深度报价
+    handicap_tick (p) {
+        const result = p.split(';')
+        const tickList = {
+            bid_deep: [],
+            ask_deep: []
+        }
+
+        if (result.length > 0) {
+            const bidList = result[1].match(/[^\\(\\)]+(?=\))/g)
+            if (bidList.length > 0) {
+                bidList.forEach(item => {
+                    const bidOjb = {}
+                    bidOjb.price_bid = item.split(',')[0]
+                    bidOjb.volume_bid = item.split(',')[1]
+                    tickList.bid_deep.push(bidOjb)
+                })
+            }
+
+            const askList = result[2].match(/[^\\(\\)]+(?=\))/g)
+            if (askList.length > 0) {
+                askList.forEach(item => {
+                    const askOjb = {}
+                    askOjb.price_ask = item.split(',')[0]
+                    askOjb.volume_ask = item.split(',')[1]
+                    tickList.ask_deep.push(askOjb)
+                })
+            }
+
+            this.$store.commit('_quote/Update_handicapList', {
+                tickList,
+                type: 2
+            })
+        }
     }
 
     // 取消订阅
