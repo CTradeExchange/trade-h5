@@ -86,7 +86,7 @@ export default {
                 val: 1
             }, {
                 title: t('trade.pending'),
-                val: 2
+                val: 10
             }],
             volume: '',
             operationType: 2, // 操作类型。1-普通；2-自动借款；3-自动还款
