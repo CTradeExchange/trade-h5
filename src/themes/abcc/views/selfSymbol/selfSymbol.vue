@@ -32,9 +32,6 @@ export default {
         const productListEl = ref(null)
         const customerInfo = computed(() => store.state._user.customerInfo)
 
-        if (customerInfo.value) {
-            store.dispatch('_trade/queryPositionPage')
-        }
         onActivated(() => {
             if (productListEl.value) productListEl.value.calcProductsDebounce()
         })
