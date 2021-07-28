@@ -196,16 +196,16 @@ export default {
             return defaultOptions.length > 0 ? addCustomerOptional({ symbolList: defaultOptions }) : Promise.resolve()
         },
         // 查询客户总资产信息
-        queryCustomerAssetsInfo ({ state, commit }) {
-            return queryCustomerAssetsInfo().then(res => {
+        queryCustomerAssetsInfo ({ state, commit }, params) {
+            return queryCustomerAssetsInfo(params).then(res => {
                 if (res.check()) {
                     commit('Update_assetsInfo', res.data)
                 }
             })
         },
         // 查询账户资产信息
-        queryAccountAssetsInfo ({ state, commit }) {
-            return queryAccountAssetsInfo().then(res => {
+        queryAccountAssetsInfo ({ state, commit }, params) {
+            return queryAccountAssetsInfo(params).then(res => {
                 if (res.check()) {
                     commit('Update_accountInfo', res.data)
                 }

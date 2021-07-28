@@ -67,7 +67,7 @@ export default {
 }
 .totalAssetsInfo {
     position: absolute;
-    top: rem(140px);
+    top: rem(180px);
     left: 50%;
     font-size: rem(28px);
     text-align: center;
