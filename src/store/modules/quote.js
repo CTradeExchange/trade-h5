@@ -136,7 +136,7 @@ export default {
         },
         Update_dealList (state, data = {}) {
             state.dealList.unshift(data)
-            state.dealList = state.dealList.slice(0, 10)
+            state.dealList = state.dealList.splice(0, 10)
         }
     },
     actions: {

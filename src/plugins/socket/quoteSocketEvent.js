@@ -78,7 +78,7 @@ class SocketEvent {
         const list = this.subscribedList.map(el => {
             return {
                 symbol_id: el, // 产品ID ，类型：uint64
-                trade_type: 1, // 交易类型，类型：uint32，1：cfd，2：me
+                trade_type, // 交易类型，类型：uint32，1：cfd，2：me
 
             }
         })
@@ -94,7 +94,7 @@ class SocketEvent {
         const list = this.subscribedList.map(el => {
             return {
                 symbol_id: Number(el), // 产品ID ，类型：uint64
-                trade_type: 1, // 交易类型，类型：uint32，1：cfd，2：me
+                trade_type, // 交易类型，类型：uint32，1：cfd，2：me
                 depth_level, // 深度层级，类型：uint32，该字段有效范围1到10之间
                 merge_accuracy
             }

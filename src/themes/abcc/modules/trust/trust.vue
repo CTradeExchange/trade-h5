@@ -17,7 +17,7 @@
                     <label for=''>
                         {{ $t('trade.pendingPrice') }}
                     </label>
-                    <span>{{ shiftedBy(product.requestPrice, -1*product.digits) }}</span>
+                    <span>{{ shiftedBy(product.requestPrice, -1*curProduct.price_digits) }}</span>
                 </p>
                 <p class='tl-item'>
                     <label for=''>

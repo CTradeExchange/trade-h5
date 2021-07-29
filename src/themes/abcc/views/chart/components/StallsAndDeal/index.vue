@@ -14,7 +14,7 @@
                 </van-empty> -->
 
                 <div class='handicap-header'>
-                    <span v-if="userAccountType !=='G'">
+                    <span>
                         {{ $t('trade.my') }}
                     </span>
                     <span>{{ $t('trade.volumes') }}({{ product.baseCurrency }})</span>
@@ -33,14 +33,15 @@
                         </van-popover>
                     </span>
                     <span>{{ $t('trade.volumes') }}({{ product.baseCurrency }})</span>
-                    <span v-if="userAccountType !=='G'">
+                    <span>
                         {{ $t('trade.my') }}
                     </span>
                 </div>
                 <div class='stalls-wrap'>
-                    <div class='buy-wrap'>
+                    <div class='sell-wrap'>
                         <div v-for='(item,index) in handicapList?.ask_deep' :key='index' class='item quantity'>
                             <span class='label'>
+                                {{ userAccountType !=='G' ? item.unitNum === 0 ? '': item.unitNum : '--' }}
                             </span>
                             <span class='quantity'>
                                 {{ item.volume_ask }}
@@ -55,7 +56,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class='sell-wrap'>
+                    <div class='buy-wrap'>
                         <div v-for='(item,index) in handicapList?.bid_deep' :key='index' class='item quantity'>
                             <span class='price riseColor '>
                                 {{ item.price_bid }}
@@ -64,6 +65,7 @@
                                 {{ item.volume_bid }}
                             </span>
                             <span class='label label-right'>
+                                {{ userAccountType !=='G' ? item.unitNum === 0 ? '': item.unitNum : '--' }}
                             </span>
                             <span
                                 class='histogram sell-histogram'
@@ -114,7 +116,7 @@
                     <van-empty :description='$t("common.noData")' image='/images/empty.png' />
                 </div>
                 <div v-else class='trust-wrap'>
-                    <trustItem v-for='(item, index) in pendingList.slice(0,5)' :key='index' :product='item' @click.stop='toDetail(item)' />
+                    <trustItem v-for='(item, index) in pendingList.slice(0,2)' :key='index' :product='item' @click.stop='toDetail(item)' />
                     <a class='to-all' href='javascript:;' @click="$router.push('/trustList')">
                         {{ $t('trade.allTrust') }} >
                     </a>
@@ -130,8 +132,9 @@ import { computed, reactive, toRefs, watch, onBeforeUnmount, watchEffect } from 
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
-import { pow } from '@/utils/calculation'
+import { pow, shiftedBy, plus } from '@/utils/calculation'
 import { localGet } from '@/utils/util'
+
 import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
     components: { trustItem },
@@ -160,8 +163,8 @@ export default {
         // 获取用户类型
         const userAccountType = computed(() => store.getters['_user/userAccountType'])
 
-        // 获取挂单列表
-        const pendingList = computed(() => store.state._trade.pendingList)
+        // 当前产品id 的挂单列表
+        const pendingList = computed(() => store.state._trade.pendingList.filter(item => Number(item.symbolId) === Number(props.symbolId)))
 
         // 是否显示底部 tabs
         const showTabs = computed(() => {
@@ -174,7 +177,7 @@ export default {
         // 计算报价小数位档数
         const digitLevelList = computed(() => {
             const digits = []
-            var symbolDigits = product.value.symbolDigits
+            var symbolDigits = product.value.price_digits
             while (symbolDigits > -3) {
                 digits.push({ text: pow(0.1, symbolDigits) })
                 symbolDigits--
@@ -199,6 +202,8 @@ export default {
                 // 订阅盘口深度报价
                 QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits)
             }
+        }, {
+            immediate: true
         })
 
         // 获取盘口深度报价
@@ -207,16 +212,17 @@ export default {
         // 获取成交数据
         const dealList = computed(() => store.state._quote.dealList.filter(item => Number(item.symbolId) === Number(props.symbolId)))
 
+        // 计算长度
         watch(() => [handicapList.value], (newValues) => {
             const result = handicapList.value
             const tempArr = [] // 总量
-            if (result.ask_deep.length > 0) {
+            if (result?.ask_deep.length > 0) {
                 result.ask_deep.forEach(ask => {
                     tempArr.push(ask.volume_ask)
                 })
             }
 
-            if (result.bid_deep.length > 0) {
+            if (result?.bid_deep.length > 0) {
                 result.bid_deep.forEach(bid => {
                     tempArr.push(bid.volume_bid)
                 })
@@ -226,17 +232,39 @@ export default {
             const minValue = Math.min(...tempArr)
 
             const diff = maxValue - minValue
-            // 计算深度
-
-            if (result.ask_deep.length > 0) {
+            // 计算卖出报价长度
+            if (result?.ask_deep.length > 0) {
+                const sellPendingList = pendingList.value.filter(item => Number(item.direction === 1))
                 result.ask_deep.forEach(ask => {
-                    ask.width = (parseFloat(ask.volume_ask) - parseFloat(minValue)) / diff
+                    ask.width = diff === 0 ? 0 : (parseFloat(ask.volume_ask) - parseFloat(minValue)) / diff
+                    ask.unitNum = 0
+                    // 计算合并挂单数量
+                    if (sellPendingList.length > 0) {
+                        sellPendingList.forEach(sl => {
+                            const requestPrice = shiftedBy(sl.requestPrice, -1 * product.value.price_digits)
+                            if (parseFloat(requestPrice) === parseFloat(ask.price_ask)) {
+                                ask.unitNum = plus(sl.requestNum, ask.unitNum)
+                            }
+                        })
+                    }
                 })
             }
 
-            if (result.bid_deep.length > 0) {
+            // 计算买入报价长度
+            if (result?.bid_deep.length > 0) {
+                const buyPendingList = pendingList.value.filter(item => Number(item.direction === 2))
                 result.bid_deep.forEach(bid => {
-                    bid.width = (parseFloat(bid.volume_bid) - parseFloat(minValue)) / diff
+                    bid.width = diff === 0 ? 0 : (parseFloat(bid.volume_bid) - parseFloat(minValue)) / diff
+                    bid.unitNum = 0
+                    // 计算合并挂单数量
+                    if (buyPendingList.length > 0) {
+                        buyPendingList.forEach(bl => {
+                            const requestPrice = shiftedBy(bl.requestPrice, -1 * product.value.price_digits)
+                            if (parseFloat(requestPrice) === parseFloat(bid.price_bid)) {
+                                bid.unitNum = plus(bl.requestNum, bid.unitNum)
+                            }
+                        })
+                    }
                 })
             }
         }, {
@@ -277,6 +305,7 @@ export default {
 
         onBeforeUnmount(() => {
             // 组件销毁取消订阅
+
             QuoteSocket.cancel_subscribe(2)
         })
 
@@ -338,7 +367,6 @@ export default {
         }
     }
     .trust-wrap {
-        margin: 0 auto;
         text-align: center;
         .to-all {
             color: var(--primary);
@@ -360,6 +388,7 @@ export default {
             text-align: center;
             &:first-child {
                 width: rem(60px);
+                text-align: left;
             }
             &:nth-child(2) {
                 width: rem(150px);
@@ -374,7 +403,7 @@ export default {
                 text-align: right;
             }
             &:nth-child(6) {
-                width: rem(50px);
+                width: rem(80px);
                 text-align: right;
             }
             &.depth {

@@ -125,7 +125,7 @@ export default {
         // 获取当前产品
         const product = computed(() => store.state._quote.productMap[symbolId])
 
-        const pendingPrice = computed(() => shiftedBy(pendingItem.value?.requestPrice, -1 * pendingItem.value?.digits))
+        const pendingPrice = computed(() => shiftedBy(pendingItem.value?.requestPrice, -1 * product.value?.price_digits))
         const showInfo = () => {
             Dialog.alert({
                 title: '说明',
