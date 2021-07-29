@@ -46,6 +46,24 @@ export default {
         handicapList: [], // 盘口实时深度报价
         dealList: [] // 成交数据
     },
+    getters: {
+        // 用户产品板块
+        userProductCategory (state, getters, rootState, rootGetters) {
+            let _result = []
+            const customerGroupId = getters.customerGroupId
+            const wpProductCategory = state._base.wpProductCategory
+            const quoteListConfig = wpProductCategory.find(el => el.tag === 'quoteList')
+            if (!quoteListConfig) return _result
+            const categories = quoteListConfig.data.items || []
+            _result = categories.map(el => {
+                const newItem = {
+                    code_ids: el.code_ids_all[customerGroupId] ?? []
+                }
+                return Object.assign(newItem, el)
+            })
+            return _result
+        },
+    },
     mutations: {
         // 清空产品数据
         Empty_data (state) {
