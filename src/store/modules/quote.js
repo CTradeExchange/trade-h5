@@ -1,7 +1,8 @@
-import { querySymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
+import { findSymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
 import { toFixed } from '@/utils/calculation'
 import { vue_set, assign } from '@/utils/vueUtil.js'
 import { sessionSet } from '@/utils/util.js'
+import { categories, createListByPlans } from './storeUtil.js'
 import CheckAPI from '@/utils/checkAPI'
 import BigNumber from 'bignumber.js'
 
@@ -46,30 +47,25 @@ export default {
         handicapList: [], // 盘口实时深度报价
         dealList: [] // 成交数据
     },
-    getters: {
-        // 用户产品板块
-        userProductCategory (state, getters, rootState, rootGetters) {
-            let _result = []
-            const customerGroupId = getters.customerGroupId
-            const wpProductCategory = state._base.wpProductCategory
-            const quoteListConfig = wpProductCategory.find(el => el.tag === 'quoteList')
-            if (!quoteListConfig) return _result
-            const categories = quoteListConfig.data.items || []
-            _result = categories.map(el => {
-                const newItem = {
-                    code_ids: el.code_ids_all[customerGroupId] ?? []
-                }
-                return Object.assign(newItem, el)
-            })
-            return _result
-        },
-    },
     mutations: {
         // 清空产品数据
         Empty_data (state) {
             state.productList = []
             state.productMap = {}
             state.productActivedID = null
+        },
+        // 新增底层产品数据
+        add_products (state, data = []) {
+            const productMap = state.productMap
+            const productList = state.productList
+            data.forEach(({ symbolId, tradeType }) => {
+                const key = `${symbolId}_${tradeType}`
+                if (!productMap[key]) {
+                    const product = { symbolKey: key, symbolId, tradeType }
+                    productMap[key] = product
+                    productList.push(product)
+                }
+            })
         },
         // 更新产品列表
         Update_productList (state, data = []) {
@@ -84,7 +80,8 @@ export default {
         Update_product (state, data = {}) {
             const productMap = state.productMap
             const symbolId = data.symbolId || data.symbol_id
-            const product = productMap[symbolId]
+            const symbolKey = `${symbolId}_${data.tradeType}`
+            const product = productMap[symbolKey]
             if (!product) return false
             // if(product.price && data.price) return false; // 已经拿到产品快照，不在重复处理
             const askSpread = product.hasOwnProperty('askSpread')
@@ -100,8 +97,7 @@ export default {
         Update_productTick (state, dataArr = []) {
             const productMap = state.productMap
             dataArr.forEach(data => {
-                const symbolId = data.symbolId || data.symbol_id
-                const product = productMap[symbolId]
+                const product = productMap[data.symbolKey]
                 if (!product) return false
                 const digits = data.price_digits || product.price_digits
                 data.cur_price = toFixed(data.cur_price, digits) // 中间价补0操作，买卖价在计算完点差后自动补0
@@ -164,32 +160,28 @@ export default {
             commit('Empty_data')
 
             const customerGroupId = rootGetters.customerGroupId
-            const selfSymbolProduct = rootState._base.wpSelfSymbol.find(el => el.tag === 'selfSymbol')?.data?.product || {}
+            // const selfSymbolProduct = rootState._base.wpSelfSymbol.find(el => el.tag === 'selfSymbol')?.data?.product || {}
+            const selfSymbolProduct = {}
             const selfSymbolList = selfSymbolProduct[customerGroupId] || []
             const productList = [...selfSymbolList]
-            rootGetters.userProductCategory.forEach(el => {
-                productList.push(...el.code_ids)
-            })
-            const productAllList = [...new Set(productList)].map(el => ({ symbolId: parseInt(el) }))
-            commit('Update_productList', productAllList)
-            commit('Update_productActivedID', selfSymbolList[0])
-            return [...new Set(productList)]
+
+            // const wpProductCategory = rootState._base.wpProductCategory
+            // const categories = wpProductCategory.find(el => el.tag === 'quoteList')?.data.items || []
+            const symbolList = createListByPlans(categories, customerGroupId)
+            commit('add_products', symbolList)
+            if (symbolList.length) commit('Update_productActivedID', symbolList[0].symbolKey)
+            return symbolList
         },
         // 产品基础信息列表
         querySymbolBaseInfoList ({ dispatch, commit, state, rootState, rootGetters }, symbolIds = []) {
-            const productMap = state.productMap
-            if (symbolIds === null) symbolIds = rootState._quote.productList.map(el => el.symbolId)
-            const newSymbolIds = symbolIds.filter(el => !productMap[el].symbolName)
             const params = {
-                symbolIds: newSymbolIds.join(),
-                tradeType: parseInt(rootState._base.tradeType),
+                symbolTradeTypeList: symbolIds,
                 customerGroupId: rootGetters.customerGroupId,
-                accountId: rootState._user.customerInfo?.accountId,
+                customerNo: rootState._user.customerInfo?.customerNo || 0,
             }
 
-            if (newSymbolIds.length === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
-
-            return querySymbolBaseInfoList(params).then((res) => {
+            if (symbolIds.length === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
+            return findSymbolBaseInfoList(params).then((res) => {
                 if (res.check()) {
                     res.data.forEach(el => {
                         el.symbol_id = el.symbolId

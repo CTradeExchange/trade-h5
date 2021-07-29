@@ -12,6 +12,17 @@ export function querySymbolBaseInfoList (data) {
         data
     })
 }
+/* 产品基础信息列表-多玩法 */
+export function findSymbolBaseInfoList (data) {
+    return request({
+        url: '/global/customer.app.CustomerOptionalWebApiService.findSymbolBaseInfoList',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
 /* 产品信息 */
 export function querySymbolInfo (data) {
     return request({

@@ -65,7 +65,7 @@ export default {
             const products = []
             const productMapVal = productMap.value
             list.forEach(el => {
-                if (productMapVal[el]?.symbolName) products.push(productMapVal[el])
+                if (productMapVal[el + '_3']?.symbolName) products.push(productMapVal[el + '_3'])
             })
             return products
         })

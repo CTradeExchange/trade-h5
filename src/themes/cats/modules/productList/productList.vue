@@ -1,6 +1,6 @@
 <template>
     <div ref='productListEl' class='productListWrap'>
-        <productItem v-for='item in productList' :key='item' :product='productMap[item.symbolId]' @open='openProduct(item)' />
+        <productItem v-for='item in productList' :key='item' :product='productMap[item.symbolKey]' @open='openProduct(item)' />
     </div>
 </template>
 
