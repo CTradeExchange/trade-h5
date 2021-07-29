@@ -173,6 +173,7 @@ export default {
         queryPositionPage ({ dispatch, commit, state, rootState }, params) {
             if (params) positionsConfig = params
             const accountListLen = rootState._user.customerInfo?.accountList?.length
+            Object.assign(positionsConfig, { tradeType: rootState._base.tradeType })
             // dispatch('queryPBOOrderPage')
 
             if (!accountListLen) {
@@ -195,6 +196,7 @@ export default {
                 commit('Update_historyList', [])
                 return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空数据
             }
+            Object.assign(params, { tradeType: rootState._base.tradeType })
             commit('Update_historyLoading', true)
             return queryHistoryCloseOrderList(params).then((res) => {
                 commit('Update_historyLoading', false)
@@ -213,6 +215,7 @@ export default {
                 commit('Update_pendingList', [])
                 return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空数据
             }
+            Object.assign(pendingsConfig, { tradeType: rootState._base.tradeType })
             return queryPBOOrderPage(pendingsConfig).then((res) => {
                 if (res.check()) {
                     commit('Update_pendingList', res.data)
