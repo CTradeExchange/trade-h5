@@ -359,7 +359,11 @@ export default {
 
         // 获取取款限制配置
         const getWithdrawConfig = () => {
-            queryWithdrawConfig(params).then(res => {
+            queryWithdrawConfig({
+                ...params,
+                withdrawCurrency: state.coinKind,
+                blockchainName: state.chainName,
+            }).then(res => {
                 if (res.check()) {
                     const { data } = res
                     state.withdrawConfig = data
@@ -432,7 +436,7 @@ export default {
         }
 
         // 获取客户提币币种和链名称
-        const queryWithdrawCurrencyList = () => {
+        const queryWithdrawCurrencyList = (resolve) => {
             getWithdrawCurrencyList({
                 companyId: customInfo.companyId,
                 customerNo: customInfo.customerNo,
@@ -455,6 +459,7 @@ export default {
                         // 根据提币币种获取筛选链名称
                         filterChainName()
                     }
+                    resolve(res)
                 }
             })
         }
@@ -680,10 +685,13 @@ export default {
         }
 
         onMounted(() => {
-            // 获取取款限制配置
-            getWithdrawConfig()
-            // 获取客户提币币种和链名称
-            queryWithdrawCurrencyList()
+            new Promise((resolve, reject) => {
+                // 获取客户提币币种和链名称
+                queryWithdrawCurrencyList(resolve)
+            }).then((res) => {
+                // 获取取款限制配置
+                getWithdrawConfig()
+            })
         })
 
         return {
