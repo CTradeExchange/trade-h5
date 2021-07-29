@@ -43,7 +43,6 @@ export default {
     },
     setup () {
         const store = useStore()
-        const customerInfo = computed(() => store.state._user.customerInfo)
         const customerGroupId = computed(() => store.getters.customerGroupId)
         const productMap = computed(() => store.state._quote.productMap)
         // 板块分类列表
@@ -74,9 +73,6 @@ export default {
         const state = reactive({
             activeTab: 0,
         })
-        if (customerInfo.value) {
-            store.dispatch('_trade/queryPositionPage')
-        }
         const tabChange = (i) => {}
         const tabClick = (i) => {}
         return {

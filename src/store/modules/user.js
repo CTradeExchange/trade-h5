@@ -100,13 +100,14 @@ export default {
                         })
                     }
                     data.accountMap = accountMap
+                    const tradeType = data.tradeType
 
                     commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_loginData', data)
                     commit('Update_customerInfo', data)
-                    commit('_base/UPDATE_tradeType', data.tradeType, { root: true }) // 登录后存储用户的玩法类型
+                    commit('_base/UPDATE_tradeType', tradeType, { root: true }) // 登录后存储用户的玩法类型
                     // dispatch('findCustomerInfo')  // findCustomerInfod 的数据目前和登录的数据一样，不需要再次调用
-                    if (data.optional === 1) dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
+                    if (data.optional === 1) dispatch('queryCustomerOptionalList', { tradeType }) // 如果添加过自选可以直接拉取自选列表，快速显示界面
                     dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {
                         return dispatch('_quote/querySymbolBaseInfoList', productAllList, { root: true })
                     }).then(() => {
@@ -132,11 +133,12 @@ export default {
                         })
                     }
                     data.accountMap = accountMap
+                    const tradeType = data.tradeType
 
                     commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_customerInfo', res.data)
-                    commit('_base/UPDATE_tradeType', data.tradeType, { root: true }) // 登录后存储用户的玩法类型
-                    if (data.optional === 1) dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
+                    commit('_base/UPDATE_tradeType', tradeType, { root: true }) // 登录后存储用户的玩法类型
+                    if (data.optional === 1) dispatch('queryCustomerOptionalList', { tradeType }) // 如果添加过自选可以直接拉取自选列表，快速显示界面
                     dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {
                         return dispatch('_quote/querySymbolBaseInfoList', productAllList, { root: true })
                     }).then(() => {
@@ -167,8 +169,9 @@ export default {
             })
         },
         // 客户自选产品列表
-        queryCustomerOptionalList ({ dispatch, commit }, params = {}) {
-            return queryCustomerOptionalList(params).then(res => {
+        queryCustomerOptionalList ({ dispatch, commit }, params) {
+            if (params) this.queryCustomerOptionalList_params = params
+            return queryCustomerOptionalList(this.queryCustomerOptionalList_params).then(res => {
                 commit('Update_selfSymbolList', res.data)
                 return res
             })

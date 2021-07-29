@@ -19,8 +19,6 @@
 
 <script>
 import SelfSymbolList from '@c/modules/selfSymbolList/selfSymbolList.vue'
-import { computed } from 'vue'
-import { useStore } from 'vuex'
 
 export default {
     name: 'Quote',
@@ -28,12 +26,6 @@ export default {
         SelfSymbolList,
     },
     setup () {
-        const store = useStore()
-        const customerInfo = computed(() => store.state._user.customerInfo)
-
-        if (customerInfo.value) {
-            store.dispatch('_trade/queryPositionPage')
-        }
         return {}
     }
 }
