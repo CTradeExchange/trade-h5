@@ -14,33 +14,42 @@
                 </van-empty> -->
 
                 <div class='handicap-header'>
-                    <span v-if="userAccountType !=='G'">
+                    <div v-if="userAccountType !=='G'" class='my'>
                         {{ $t('trade.my') }}
-                    </span>
-                    <span>{{ $t('trade.volumes') }}({{ product.baseCurrency }})</span>
-                    <span>{{ $t('trade.priceLabel') }}({{ product.profitCurrency }})</span>
-                    <span class='depth'>
-                        <van-popover
-                            v-model:show='showPopover'
-                            :actions='digitLevelList'
-                            :theme='theme'
-                            @select='onSelect'
-                        >
-                            <template #reference>
-                                <span>{{ curDigits }}</span>
-                                <span class='triangleDiv'></span>
-                            </template>
-                        </van-popover>
-                    </span>
-                    <span>{{ $t('trade.volumes') }}({{ product.baseCurrency }})</span>
-                    <span v-if="userAccountType !=='G'">
+                    </div>
+                    <div class='alignCenter'>
+                        {{ $t('trade.volumes') }}({{ product.baseCurrency }})
+                    </div>
+                    <div class='padding alignRight '>
+                        {{ $t('trade.priceLabel') }}({{ product.profitCurrency }})
+                    </div>
+                    <div class='depth alignLeft'>
+                        <span class='depth-select'>
+                            <van-popover
+                                v-model:show='showPopover'
+                                :actions='digitLevelList'
+                                :theme='theme'
+                                @select='onSelect'
+                            >
+                                <template #reference>
+                                    <span>{{ curDigits }}</span>
+                                    <span class='triangleDiv'></span>
+                                </template>
+                            </van-popover>
+                        </span>
+                    </div>
+                    <div class='padding alignCenter'>
+                        {{ $t('trade.volumes') }}({{ product.baseCurrency }})
+                    </div>
+                    <div v-if="userAccountType !=='G'" class='my'>
                         {{ $t('trade.my') }}
-                    </span>
+                    </div>
                 </div>
                 <div class='stalls-wrap'>
-                    <div class='buy-wrap'>
-                        <div v-for='(item,index) in handicapList?.ask_deep' :key='index' class='item quantity'>
-                            <span class='label'>
+                    <div class='sell-wrap'>
+                        <div v-for='(item,index) in handicapList?.ask_deep' :key='index' class='item'>
+                            <span v-if="userAccountType !=='G'" class='label fallColor '>
+                                {{ item.unitNum === 0 ? '': item.unitNum }}
                             </span>
                             <span class='quantity'>
                                 {{ item.volume_ask }}
@@ -55,15 +64,16 @@
                             </span>
                         </div>
                     </div>
-                    <div class='sell-wrap'>
-                        <div v-for='(item,index) in handicapList?.bid_deep' :key='index' class='item quantity'>
+                    <div class='buy-wrap'>
+                        <div v-for='(item,index) in handicapList?.bid_deep' :key='index' class='item'>
                             <span class='price riseColor '>
                                 {{ item.price_bid }}
                             </span>
                             <span class='quantity'>
                                 {{ item.volume_bid }}
                             </span>
-                            <span class='label label-right'>
+                            <span v-if="userAccountType !=='G'" class='label label-right riseColor'>
+                                {{ item.unitNum === 0 ? '': item.unitNum }}
                             </span>
                             <span
                                 class='histogram sell-histogram'
@@ -114,7 +124,7 @@
                     <van-empty :description='$t("common.noData")' image='/images/empty.png' />
                 </div>
                 <div v-else class='trust-wrap'>
-                    <trustItem v-for='(item, index) in pendingList.slice(0,5)' :key='index' :product='item' @click.stop='toDetail(item)' />
+                    <trustItem v-for='(item, index) in pendingList.slice(0,2)' :key='index' :product='item' @click.stop='toDetail(item)' />
                     <a class='to-all' href='javascript:;' @click="$router.push('/trustList')">
                         {{ $t('trade.allTrust') }} >
                     </a>
@@ -130,8 +140,9 @@ import { computed, reactive, toRefs, watch, onBeforeUnmount, watchEffect } from 
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
-import { pow } from '@/utils/calculation'
+import { pow, shiftedBy, plus } from '@/utils/calculation'
 import { localGet } from '@/utils/util'
+
 import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
     components: { trustItem },
@@ -160,8 +171,8 @@ export default {
         // 获取用户类型
         const userAccountType = computed(() => store.getters['_user/userAccountType'])
 
-        // 获取挂单列表
-        const pendingList = computed(() => store.state._trade.pendingList)
+        // 当前产品id 的挂单列表
+        const pendingList = computed(() => store.state._trade.pendingList.filter(item => Number(item.symbolId) === Number(props.symbolId)))
 
         // 是否显示底部 tabs
         const showTabs = computed(() => {
@@ -174,7 +185,7 @@ export default {
         // 计算报价小数位档数
         const digitLevelList = computed(() => {
             const digits = []
-            var symbolDigits = product.value.symbolDigits
+            var symbolDigits = product.value.price_digits
             while (symbolDigits > -3) {
                 digits.push({ text: pow(0.1, symbolDigits) })
                 symbolDigits--
@@ -199,6 +210,8 @@ export default {
                 // 订阅盘口深度报价
                 QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits)
             }
+        }, {
+            immediate: true
         })
 
         // 获取盘口深度报价
@@ -207,16 +220,17 @@ export default {
         // 获取成交数据
         const dealList = computed(() => store.state._quote.dealList.filter(item => Number(item.symbolId) === Number(props.symbolId)))
 
+        // 计算长度
         watch(() => [handicapList.value], (newValues) => {
             const result = handicapList.value
             const tempArr = [] // 总量
-            if (result.ask_deep.length > 0) {
+            if (result?.ask_deep.length > 0) {
                 result.ask_deep.forEach(ask => {
                     tempArr.push(ask.volume_ask)
                 })
             }
 
-            if (result.bid_deep.length > 0) {
+            if (result?.bid_deep.length > 0) {
                 result.bid_deep.forEach(bid => {
                     tempArr.push(bid.volume_bid)
                 })
@@ -226,17 +240,39 @@ export default {
             const minValue = Math.min(...tempArr)
 
             const diff = maxValue - minValue
-            // 计算深度
-
-            if (result.ask_deep.length > 0) {
+            // 计算卖出报价长度
+            if (result?.ask_deep.length > 0) {
+                const sellPendingList = pendingList.value.filter(item => Number(item.direction === 1))
                 result.ask_deep.forEach(ask => {
-                    ask.width = (parseFloat(ask.volume_ask) - parseFloat(minValue)) / diff
+                    ask.width = diff === 0 ? 0 : (parseFloat(ask.volume_ask) - parseFloat(minValue)) / diff
+                    ask.unitNum = 0
+                    // 计算合并挂单数量
+                    if (sellPendingList.length > 0) {
+                        sellPendingList.forEach(sl => {
+                            const requestPrice = shiftedBy(sl.requestPrice, -1 * product.value.price_digits)
+                            if (parseFloat(requestPrice) === parseFloat(ask.price_ask)) {
+                                ask.unitNum = plus(sl.requestNum, ask.unitNum)
+                            }
+                        })
+                    }
                 })
             }
 
-            if (result.bid_deep.length > 0) {
+            // 计算买入报价长度
+            if (result?.bid_deep.length > 0) {
+                const buyPendingList = pendingList.value.filter(item => Number(item.direction === 2))
                 result.bid_deep.forEach(bid => {
-                    bid.width = (parseFloat(bid.volume_bid) - parseFloat(minValue)) / diff
+                    bid.width = diff === 0 ? 0 : (parseFloat(bid.volume_bid) - parseFloat(minValue)) / diff
+                    bid.unitNum = 0
+                    // 计算合并挂单数量
+                    if (buyPendingList.length > 0) {
+                        buyPendingList.forEach(bl => {
+                            const requestPrice = shiftedBy(bl.requestPrice, -1 * product.value.price_digits)
+                            if (parseFloat(requestPrice) === parseFloat(bid.price_bid)) {
+                                bid.unitNum = plus(bl.requestNum, bid.unitNum)
+                            }
+                        })
+                    }
                 })
             }
         }, {
@@ -277,6 +313,7 @@ export default {
 
         onBeforeUnmount(() => {
             // 组件销毁取消订阅
+
             QuoteSocket.cancel_subscribe(2)
         })
 
@@ -338,7 +375,6 @@ export default {
         }
     }
     .trust-wrap {
-        margin: 0 auto;
         text-align: center;
         .to-all {
             color: var(--primary);
@@ -349,55 +385,43 @@ export default {
         display: flex;
         align-items: center;
         height: rem(80px);
-        padding: 0 0 0 rem(15px);
         line-height: rem(80px);
-        >span {
+        >div {
             display: inline-block;
-            //flex: 1;
+            flex: 1;
             color: var(--minorColor);
-            //width: 20%;
             font-size: rem(20px);
-            text-align: center;
-            &:first-child {
-                width: rem(60px);
+            &.my {
+                flex: 1;
+                text-align: center;
             }
-            &:nth-child(2) {
-                width: rem(150px);
-            }
-            &:nth-child(3) {
-                width: rem(130px);
-                text-align: right;
-            }
-            &:nth-child(5) {
-                width: rem(170px);
-                margin-right: rem(8px);
-                text-align: right;
-            }
-            &:nth-child(6) {
-                width: rem(50px);
-                text-align: right;
+            &.padding {
+                // padding: 0 rem(20px);
             }
             &.depth {
-                width: rem(110px);
-                height: rem(40px);
-                margin-left: rem(15px);
-                line-height: rem(40px);
-                background-color: var(--primaryAssistColor);
-                span {
-                    margin-left: rem(10px);
-                    //vertical-align: middle;
-                }
-                :deep(.van-popover__wrapper) {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    .triangleDiv {
-                        width: 0;
-                        height: 0;
+                padding-left: rem(15px);
+                .depth-select {
+                    display: inline-block;
+                    width: rem(110px);
+                    height: rem(40px);
+                    line-height: rem(40px);
+                    background-color: var(--primaryAssistColor);
+                    span {
                         margin-left: rem(10px);
-                        border-color: var(--minorColor) transparent transparent;
-                        border-style: solid;
-                        border-width: 5px 5px 0;
+                        //vertical-align: middle;
+                    }
+                    :deep(.van-popover__wrapper) {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        .triangleDiv {
+                            width: 0;
+                            height: 0;
+                            margin-left: rem(10px);
+                            border-color: var(--minorColor) transparent transparent;
+                            border-style: solid;
+                            border-width: 5px 5px 0;
+                        }
                     }
                 }
             }
@@ -407,7 +431,7 @@ export default {
         display: flex;
         flex-direction: row;
         width: 100%;
-        padding: 0 rem(20px);
+        padding: 0 rem(5px);
         .sell-wrap,
         .buy-wrap {
             display: flex;
@@ -435,8 +459,8 @@ export default {
                     z-index: 1;
                 }
                 .label {
-                    width: rem(80px);
-                    text-align: left;
+                    flex: 1;
+                    text-align: center;
                     &.label-right {
                         text-align: right;
                     }
@@ -450,8 +474,9 @@ export default {
                     }
                 }
                 .quantity {
+                    flex: 1;
                     color: var(--normalColor);
-                    text-align: right;
+                    text-align: center;
                 }
             }
         }

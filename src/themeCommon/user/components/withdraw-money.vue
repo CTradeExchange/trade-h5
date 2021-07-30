@@ -202,7 +202,7 @@ export default {
 
             const params = {
                 // accountId: customInfo.value.accountId,
-                // accountCurrency: customInfo.value.currency,
+                accountCurrency: customInfo.value.currency,
                 amount: state.amount,
                 // companyId: customInfo.value.companyId,
                 // customerNo: customInfo.value.customerNo,
@@ -320,7 +320,7 @@ export default {
             }
 
             const params = {
-                // accountCurrency: customInfo.value.currency,
+                accountCurrency: customInfo.value.currency,
                 withdrawCurrency: state.withdrawRate.withdrawCurrency,
                 amount: state.amount,
                 rate: state.withdrawRate.exchangeRate,
@@ -350,7 +350,7 @@ export default {
                 // companyId: customInfo.value.companyId,
                 // customerNo: customInfo.value.customerNo,
                 // accountId: customInfo.value.accountId,
-                // accountCurrency: customInfo.value.currency,
+                accountCurrency: customInfo.value.currency,
                 withdrawCurrency: state.withdrawCurrency,
                 withdrawType: 1
             }
@@ -368,7 +368,7 @@ export default {
                 // customerNo: customInfo.value.customerNo,
                 // accountId: customInfo.value.accountId,
                 // customerGroupId: customInfo.value.customerGroupId,
-                // accountCurrency: customInfo.value.currency,
+                accountCurrency: customInfo.value.currency,
                 // country: customInfo.value.country,
                 withdrawMethod: 'bank'
             }

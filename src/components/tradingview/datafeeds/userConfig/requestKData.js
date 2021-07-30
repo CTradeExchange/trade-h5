@@ -211,10 +211,10 @@ function logMessageForKline(res, params) {
 
 function logMessageForTick(ticks) {
     if (ticks.length === 1) {
-        console.group('%c实时报价:⬇', 'color:green')
+        //console.group('%c实时报价:⬇', 'color:green')
     } else {
         console.group('%c获取最新两根数据:⬇', 'color:green')
     }
-    console.log(JSON.stringify(ticks))
+    //console.log(JSON.stringify(ticks))
     console.groupEnd()
 }

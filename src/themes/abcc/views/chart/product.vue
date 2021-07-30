@@ -403,10 +403,10 @@ export default {
                     title: t('chart.lastValueLine'),
                     value: 'showLastPrice'
                 },
-                {
-                    title: t('chart.positionLine'),
-                    value: 'showPositionPrice',
-                },
+                // {
+                //     title: t('chart.positionLine'),
+                //     value: 'showPositionPrice',
+                // },
                 {
                     title: t('chart.buyLine'),
                     value: 'showBuyPrice',
@@ -470,8 +470,6 @@ export default {
         const positionList = computed(() => store.state._trade.positionList)
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)
 
-        // 查询持仓列表，获取持仓线数据
-        store.dispatch('_trade/queryPositionPage')
         // 订阅产品
         const subscribList = productList.value.map(({ symbolId }) => symbolId)
         store.dispatch('_quote/querySymbolBaseInfoList', subscribList)
@@ -487,6 +485,7 @@ export default {
                     digits: product.value.symbolDigits, // 小数点
                 }
             }
+            return {}
         })
 
         const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value.find(el => el.symbolId === parseInt(symbolId))))

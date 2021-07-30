@@ -42,7 +42,7 @@
         </van-dialog>
         <van-dialog v-model:show='lilvAlert' title=''>
             <div class='availableLoanContent'>
-                <p>{{ $t('trade.availableLoanContent2', [account.currency]) }}</p>
+                <p>{{ $t('trade.availableLoanContent2', [account.currency,dailyInterest]) }}</p>
             </div>
         </van-dialog>
     </div>
@@ -51,7 +51,7 @@
 <script>
 import { computed, reactive, ref, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
-import { mul } from '@/utils/calculation'
+import { mul, div } from '@/utils/calculation'
 export default {
     props: ['direction', 'product', 'volume', 'operationType', 'account'],
     emits: ['update:operationType'],
@@ -67,6 +67,14 @@ export default {
         )
         const changeOperationType = val => emit('update:operationType', val)
 
+        const accountMap = computed(() => store.state._user.customerInfo?.accountMap)
+        const dailyInterest = computed(() => {
+            const assetsId = accountMap?.value[props.account.currency]?.assetsId
+            const interest = props.product.borrowInterestList.find(item => Number(item.assetsId) === Number(assetsId))?.value
+
+            return interest ? mul(interest, 100) + '%' : '--'
+        })
+
         // 预计占用
         const lockFunds = computed(() => {
             if (props.direction === 'buy') {
@@ -81,6 +89,7 @@ export default {
             lilvAlert,
             checked,
             changeOperationType,
+            dailyInterest,
             lockFunds,
         }
     }

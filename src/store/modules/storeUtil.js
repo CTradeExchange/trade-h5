@@ -52,8 +52,9 @@ export function createProductListByPlans (plans) {
 // 玩法map数据转换成list数组
 export function planMapToArray (params) {
     const result = Object.keys(params).map(tradeType => {
+        const symbolList = params[tradeType].symbolList || params[tradeType]
         return {
-            symbolIds: params[tradeType].join(),
+            symbolIds: symbolList.join(),
             tradeType
         }
     })
