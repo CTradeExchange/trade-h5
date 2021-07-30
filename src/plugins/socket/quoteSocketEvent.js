@@ -1,4 +1,4 @@
-import { tickFormat, tickToObj } from './socketUtil'
+import { tickFormat, tickToObj, formatSubscribe } from './socketUtil'
 import { guid } from '@/utils/util'
 
 // websocket消息事件
@@ -69,20 +69,14 @@ class SocketEvent {
         })
     }
 
-    // 订阅产品报价
-    send_subscribe (productIds = [], quote_type = 1, depth_level = 5) {
+    /* 订阅产品报价 支持两种数据格式，
+    * symbolKey的形式：['1_2','2_2']
+    * object的形式：[{symbol_id: "37", trade_type: 3}]
+    */
+    send_subscribe (productIds = []) {
         if (!productIds || productIds.length === 0) return false
-        this.subscribedList = [...new Set(productIds)]
-        const trade_type = Number(this.$store.state._base.tradeType)
-
-        const list = this.subscribedList.map(el => {
-            return {
-                symbol_id: el, // 产品ID ，类型：uint64
-                trade_type: 1, // 交易类型，类型：uint32，1：cfd，2：me
-
-            }
-        })
-        this.send(14000, { symbol_list: list })
+        this.subscribedList = formatSubscribe(productIds)
+        this.send(14000, { symbol_list: this.subscribedList })
     }
 
     // 盘口成交报价订阅
@@ -94,7 +88,7 @@ class SocketEvent {
         const list = this.subscribedList.map(el => {
             return {
                 symbol_id: Number(el), // 产品ID ，类型：uint64
-                trade_type: 1, // 交易类型，类型：uint32，1：cfd，2：me
+                trade_type, // 交易类型，类型：uint32，1：cfd，2：me
                 depth_level, // 深度层级，类型：uint32，该字段有效范围1到10之间
                 merge_accuracy
             }

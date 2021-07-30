@@ -40,7 +40,7 @@ export default {
             start -= productsScreen / 2
             start = Math.max(start, 0)
             const end = Math.round(start + productsScreen * 2)
-            const subscribeArr = props.productList.slice(start, end).map(({ symbolId }) => symbolId)
+            const subscribeArr = props.productList.slice(start, end).map(({ symbolId, tradeType }) => (`${symbolId}_${tradeType}`))
             // console.log('订阅产品', subscribeArr)
             return subscribeArr
         }

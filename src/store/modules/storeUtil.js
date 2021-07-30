@@ -21,20 +21,22 @@ export const categories = [{
 
 // 根据玩法板块创建产品列表
 export function createListByPlans (plans, customerGroupId) {
-    const plan_codeIds = {}
+    const planMap_codeIds = {}
     plans.forEach(el => {
         const code_ids_all = el.code_ids_all
         Object.keys(code_ids_all).forEach(tradeType => {
             const code_ids = code_ids_all[tradeType][customerGroupId]
-            if (!plan_codeIds[tradeType] && code_ids) {
-                plan_codeIds[tradeType] = code_ids
-            } else if (code_ids) {
-                plan_codeIds[tradeType].push(...code_ids)
+            if (!planMap_codeIds[tradeType]) {
+                planMap_codeIds[tradeType] = code_ids
+            } else {
+                planMap_codeIds[tradeType].push(...code_ids)
             }
         })
     })
-    console.log(plan_codeIds)
-    return createProductListByPlans(plan_codeIds)
+    return {
+        symbolList: createProductListByPlans(planMap_codeIds),
+        planMap: planMap_codeIds
+    }
 }
 
 // 将玩法分类的产品列表生成symbolId_tradeType的产品列表
@@ -43,6 +45,17 @@ export function createProductListByPlans (plans) {
     Object.keys(plans).forEach(tradeType => {
         const keys = plans[tradeType].map(symbolId => ({ symbolId, tradeType }))
         result.push(...keys)
+    })
+    return result
+}
+
+// 玩法map数据转换成list数组
+export function planMapToArray (params) {
+    const result = Object.keys(params).map(tradeType => {
+        return {
+            symbolIds: params[tradeType].join(),
+            tradeType
+        }
     })
     return result
 }

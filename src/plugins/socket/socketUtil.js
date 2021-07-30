@@ -131,3 +131,40 @@ export function positionsTickToObj (str) {
     }
     return result
 }
+
+/** 格式化产品订阅数据列表
+ *  productIds: symbolKey形式的数组 ['1_2','2_2']
+ */
+export function formatSubscribe (productIds) {
+    if (!productIds || productIds.length === 0) return []
+    let subscribedList = []
+    if (typeof (productIds[0]) === 'number') {
+        console.warn('产品报价订阅的参数格式错误')
+        return []
+    }
+    if (typeof (productIds[0]) === 'string' && productIds[0].includes('_')) {
+        subscribedList = [...new Set(productIds)].map(el => {
+            const data = el.split('_')
+            return {
+                symbol_id: data[0],
+                trade_type: data[1],
+            }
+        })
+    } else {
+        const symbolKeys = productMapToSymbolKey(productIds)
+        return formatSubscribe(symbolKeys)
+    }
+    console.log(subscribedList)
+    return subscribedList
+}
+/** 格式化产品订阅数据列表
+ *  productIds: object的形式：[{symbol_id: "37", trade_type: 3}]
+ */
+export function productMapToSymbolKey (productMaps = []) {
+    const symbolKey = []
+    if (!productMaps || productMaps.length === 0) return symbolKey
+    productMaps.forEach(({ symbolId, tradeType }) => {
+        symbolKey.push(`${symbolId}_${tradeType}`)
+    })
+    return symbolKey
+}

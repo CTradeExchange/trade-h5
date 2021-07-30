@@ -2,7 +2,7 @@ import { findSymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
 import { toFixed } from '@/utils/calculation'
 import { vue_set, assign } from '@/utils/vueUtil.js'
 import { sessionSet } from '@/utils/util.js'
-import { categories, createListByPlans } from './storeUtil.js'
+import { categories, createListByPlans, planMapToArray } from './storeUtil.js'
 import CheckAPI from '@/utils/checkAPI'
 import BigNumber from 'bignumber.js'
 
@@ -43,6 +43,7 @@ export default {
     state: {
         productList: [], // 产品列表
         productMap: {}, // 产品列表
+        planMap: {}, // 管理所有玩法及每个玩法下的所有产品
         productActivedID: null, // 当前操作的产品ID
         handicapList: [], // 盘口实时深度报价
         dealList: [] // 成交数据
@@ -65,6 +66,14 @@ export default {
                     productMap[key] = product
                     productList.push(product)
                 }
+            })
+        },
+        // 更新玩法列表
+        Updata_planMap (state, { plans, planMap }) {
+            plans.forEach(el => {
+                const symbolList = planMap[el.id] || []
+                const planItem = Object.assign({}, el, { symbolList })
+                state.planMap[el.id] = planItem
             })
         },
         // 更新产品列表
@@ -167,21 +176,29 @@ export default {
 
             // const wpProductCategory = rootState._base.wpProductCategory
             // const categories = wpProductCategory.find(el => el.tag === 'quoteList')?.data.items || []
-            const symbolList = createListByPlans(categories, customerGroupId)
+            const symbolAllData = createListByPlans(categories, customerGroupId)
+            const { symbolList, planMap } = symbolAllData
             commit('add_products', symbolList)
+            commit('Updata_planMap', { plans: rootState._base.plans, planMap })
             if (symbolList.length) commit('Update_productActivedID', symbolList[0].symbolKey)
-            return symbolList
+            return planMap
         },
         // 产品基础信息列表
-        querySymbolBaseInfoList ({ dispatch, commit, state, rootState, rootGetters }, symbolIds = []) {
-            if (symbolIds === null) symbolIds = rootState._quote.productList.map(({ symbolId, tradeType }) => ({ symbolId, tradeType }))
+        querySymbolBaseInfoList ({ dispatch, commit, state, rootState, rootGetters }, list = []) {
+            let symbolTradeTypeList = []
+            if (Object.prototype.toString.call(list) === '[object Object]') {
+                symbolTradeTypeList = planMapToArray(list)
+            } else if (list === null) {
+                symbolTradeTypeList = planMapToArray(state.planMap)
+            }
+
             const params = {
-                symbolTradeTypeList: symbolIds,
+                symbolTradeTypeList,
                 customerGroupId: rootGetters.customerGroupId,
                 customerNo: rootState._user.customerInfo?.customerNo || '0',
             }
 
-            if (symbolIds.length === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
+            if (symbolTradeTypeList.length === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
             return findSymbolBaseInfoList(params).then((res) => {
                 if (res.check()) {
                     res.data.forEach(el => {
@@ -193,13 +210,13 @@ export default {
             })
         },
         // 产品详细信息
-        querySymbolInfo ({ dispatch, commit, state, rootState, rootGetters }, symbolId) {
+        querySymbolInfo ({ dispatch, commit, state, rootState, rootGetters }, { symbolId, tradeType }) {
             const productMap = state.productMap
 
-            if (productMap[symbolId].contractSize) return Promise.resolve(new CheckAPI({ code: '0', data: {} }))
+            if (productMap[`${symbolId}_${tradeType}`].contractSize) return Promise.resolve(new CheckAPI({ code: '0', data: {} }))
             const params = {
                 symbolId: Number(symbolId),
-                tradeType: rootState._base.tradeType,
+                tradeType: Number(tradeType),
                 customerGroupId: rootGetters.customerGroupId,
                 // accountId: rootState._user.customerInfo?.accountId,
             }
