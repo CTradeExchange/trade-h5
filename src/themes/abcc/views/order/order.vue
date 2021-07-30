@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { reactive, toRefs, computed, ref } from 'vue'
+import { reactive, toRefs, computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
@@ -103,24 +103,47 @@ export default {
         })
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
         QuoteSocket.send_subscribe([symbolId]) // 订阅产品报价
-        store.dispatch('_user/queryAccountAssetsInfo')
+
         store.commit('_quote/Update_productActivedID', symbolId)
         store.commit('_trade/Update_modifyPositionId', 0)
+
+        // 获取账户信息
+        const queryAccountInfo = () => {
+            const currency = state.direction === 'buy' ? product.value?.profitCurrency : product.value?.baseCurrency
+            const curAccount = customerInfo.value.accountList.find(el => el.currency === currency)
+            if (curAccount)store.dispatch('_user/queryAccountAssetsInfo', { accountId: curAccount.accountId, tradeType: store.state._base.tradeType })
+            else Toast(t('trade.nullAssets'))
+        }
+
+        // 买入卖出方向变化时重新获取资产信息
+        watch(
+            () => state.direction,
+            () => {
+                queryAccountInfo()
+            },
+        )
+
         // 切换订单类型
         const changeOrderType = (val) => {
             store.commit('_trade/Update_pendingEnable', val === 2)
         }
         // 初始化设置
         const init = () => {
-            if (product.value.minVolume) {
-                state.volume = product.value.minVolume
-            } else {
-                // 获取产品详情
-                store.dispatch('_quote/querySymbolInfo', symbolId).then(res => {
-                    if (res.invalid()) return false
-                    state.volume = res.data.minVolume // 设置默认手数
-                })
-            }
+            new Promise(resolve => {
+                if (product.value.minVolume) {
+                    state.volume = product.value.minVolume
+                    resolve()
+                } else {
+                    // 获取产品详情
+                    store.dispatch('_quote/querySymbolInfo', symbolId).then(res => {
+                        if (res.invalid()) return false
+                        state.volume = res.data.minVolume // 设置默认手数
+                        resolve()
+                    })
+                }
+            }).then(() => {
+                queryAccountInfo()
+            })
         }
 
         // 验证下单数据是否异常
