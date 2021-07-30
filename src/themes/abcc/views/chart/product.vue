@@ -293,7 +293,7 @@ export default {
     setup (props) {
         const route = useRoute()
         const router = useRouter()
-        const symbolId = route.query.symbolId
+        const { symbolId, tradeType } = route.query
         const { t } = useI18n({ useScope: 'global' })
         const klineTypeDropdown = ref(null)
         const collect = ref(null)
@@ -448,6 +448,7 @@ export default {
             klineType: 0,
             initConfig: {},
             symbolId: symbolId,
+            tradeType: tradeType,
             onChartReadyFlag: false,
             loading: false
         })
@@ -459,7 +460,7 @@ export default {
             return curIndex + 1
         })
         const product = computed(() => {
-            const product = store.state._quote.productMap[symbolId]
+            const product = store.state._quote.productMap[`${symbolId}_${tradeType}`]
             if (product.cur_price) {
                 // 有产品数据就渲染图表
                 renderChart(product, state.initConfig.property)
@@ -865,7 +866,7 @@ export default {
         initChartData()
 
         // 获取产品详情
-        store.dispatch('_quote/querySymbolInfo', symbolId).then(res => {
+        store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(res => {
             if (res.invalid()) return false
         })
 

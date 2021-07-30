@@ -44,6 +44,10 @@ export default {
     setup () {
         const store = useStore()
         const productListEl = ref(null)
+        const state = reactive({
+            activeTab: 0,
+        })
+        const tradeType = 3
         const customerInfo = computed(() => store.state._user.customerInfo)
         const customerGroupId = computed(() => store.getters.customerGroupId)
         const productMap = computed(() => store.state._quote.productMap)
@@ -56,7 +60,7 @@ export default {
                 return {
                     id: el.id,
                     title: el.title,
-                    list: el.code_ids_all[customerGroupId.value]
+                    list: el.code_ids_all[tradeType][customerGroupId.value].map(el => el + '_' + tradeType)
                 }
             })
             return resultList
@@ -69,12 +73,10 @@ export default {
             list.forEach(el => {
                 if (productMapVal[el]?.symbolName) products.push(productMapVal[el])
             })
+            console.log(products)
             return products
         })
 
-        const state = reactive({
-            activeTab: 0,
-        })
         const tabChange = (i) => {}
         const tabClick = (i) => {}
 

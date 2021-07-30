@@ -2,7 +2,7 @@ import { findSymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
 import { toFixed } from '@/utils/calculation'
 import { vue_set, assign } from '@/utils/vueUtil.js'
 import { sessionSet } from '@/utils/util.js'
-import { categories, createListByPlans, planMapToArray } from './storeUtil.js'
+import { createListByPlans, planMapToArray } from './storeUtil.js'
 import CheckAPI from '@/utils/checkAPI'
 import BigNumber from 'bignumber.js'
 
@@ -174,8 +174,8 @@ export default {
             const selfSymbolList = selfSymbolProduct[customerGroupId] || []
             const productList = [...selfSymbolList]
 
-            // const wpProductCategory = rootState._base.wpProductCategory
-            // const categories = wpProductCategory.find(el => el.tag === 'quoteList')?.data.items || []
+            const wpProductCategory = rootState._base.wpProductCategory
+            const categories = wpProductCategory.find(el => el.tag === 'quoteList')?.data.items || []
             const symbolAllData = createListByPlans(categories, customerGroupId)
             const { symbolList, planMap } = symbolAllData
             commit('add_products', symbolList)
