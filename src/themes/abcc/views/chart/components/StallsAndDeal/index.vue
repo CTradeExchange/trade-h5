@@ -146,7 +146,7 @@ import { localGet } from '@/utils/util'
 import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
     components: { trustItem },
-    props: ['symbolId', 'settingList', 'curPrice'],
+    props: ['symbolId', 'settingList', 'curPrice', 'tradeType'],
     setup (props) {
         const router = useRouter()
         const store = useStore()
@@ -161,9 +161,7 @@ export default {
         })
 
         // 获取当前产品
-        const product = computed(() => store.state._quote.productMap[props.symbolId])
-        // 获取玩法id
-        const tradeType = computed(() => store.state._base.tradeType)
+        const product = computed(() => store.state._quote.productMap[`${props.symbolId}_${props.tradeType}`])
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
@@ -305,7 +303,7 @@ export default {
 
         // 获取委托列表
         store.dispatch('_trade/queryPBOOrderPage', {
-            tradeType: tradeType.value,
+            tradeType: props.tradeType,
             customerNo: customInfo.value.customerNo,
             sortFieldName: 'orderTime',
             sortType: 'desc'
@@ -325,7 +323,6 @@ export default {
             dealList,
             digitLevelList,
             userAccountType,
-            tradeType,
             customInfo,
             pendingList,
             handicapList,

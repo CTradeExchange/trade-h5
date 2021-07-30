@@ -194,7 +194,7 @@
             </div>
         </div>
         <div class='chart-wrap'>
-            <tv
+            <!-- <tv
                 v-if='initialValue'
                 ref='chartRef'
                 :initial-value='initialValue'
@@ -202,7 +202,7 @@
                 @indicatorRemoved='indicatorRemoved'
                 @onChartReady='onChartReady'
                 @orientationChanged='orientationChanged'
-            />
+            /> -->
         </div>
         <div v-show='studyVis' ref='mainStudyArea' class='study-area'>
             <div class='main-study'>
@@ -229,9 +229,11 @@
             </div>
         </div>
         <StallsAndDeal
+            v-if='product'
             :cur-price='product.cur_price'
             :setting-list='settingList'
             :symbol-id='symbolId'
+            :trade-type='tradeType'
         />
 
         <div class='footerBtnBox'>
@@ -472,8 +474,7 @@ export default {
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)
 
         // 订阅产品
-        const subscribList = productList.value.map(({ symbolId }) => symbolId)
-        store.dispatch('_quote/querySymbolBaseInfoList', subscribList)
+        const subscribList = productList.value.map(({ symbolId }) => (`${symbolId}_${tradeType}`))
         QuoteSocket.send_subscribe(subscribList)
 
         // 图表初始值
@@ -852,7 +853,7 @@ export default {
             router.push({
                 path: '/order',
                 query: {
-                    symbolId, direction
+                    symbolId, direction, tradeType
                 }
             })
         }

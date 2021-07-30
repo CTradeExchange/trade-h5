@@ -75,7 +75,8 @@ export default {
         const route = useRoute()
         const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
-        const { symbolId, direction } = route.query
+        const { symbolId, direction, tradeType } = route.query
+        const symbolKey = `${symbolId}_${tradeType}`
         const state = reactive({
             loading: false,
             switchProductVisible: false,
@@ -102,9 +103,9 @@ export default {
             return customerInfo?.value?.accountMap[buyCurrency]
         })
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
-        QuoteSocket.send_subscribe([symbolId]) // 订阅产品报价
+        QuoteSocket.send_subscribe([symbolKey]) // 订阅产品报价
 
-        store.commit('_quote/Update_productActivedID', symbolId)
+        store.commit('_quote/Update_productActivedID', symbolKey)
         store.commit('_trade/Update_modifyPositionId', 0)
 
         // 获取账户信息
@@ -135,7 +136,7 @@ export default {
                     resolve()
                 } else {
                     // 获取产品详情
-                    store.dispatch('_quote/querySymbolInfo', symbolId).then(res => {
+                    store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(res => {
                         if (res.invalid()) return false
                         state.volume = res.data.minVolume // 设置默认手数
                         resolve()
@@ -176,7 +177,7 @@ export default {
                 operationType: state.operationType,
                 requestPrice: mul(requestPrice, p),
                 accountDigits: account.value.digits,
-                tradeType: account.value.tradeType,
+                tradeType: tradeType,
             }
             console.log(params)
             if (state.loading) return false
