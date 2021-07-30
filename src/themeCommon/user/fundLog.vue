@@ -263,6 +263,7 @@ export default {
         const queryFundDetail = () => {
             const params = {
                 size: state.pagigation.size,
+                tradeType: customInfo.value.tradeType,
                 current: state.pagigation.current,
                 status: 2, // 状态。1-初始化；2-处理成功；3-处理失败；
                 startTime: state.startTime,
