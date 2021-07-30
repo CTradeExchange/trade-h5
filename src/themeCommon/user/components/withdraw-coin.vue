@@ -352,7 +352,7 @@ export default {
             // customerNo: customInfo.customerNo,
             // accountId: customInfo.accountId,
             // customerGroupId: customInfo.customerGroupId,
-            // accountCurrency: customInfo.currency,
+            accountCurrency: customInfo.currency,
             // country: customInfo.country,
             withdrawMethod: 'digit_wallet'
         }
@@ -441,6 +441,7 @@ export default {
                 companyId: customInfo.companyId,
                 customerNo: customInfo.customerNo,
                 customerGroupId: customInfo.customerGroupId,
+                accountCurrency: customInfo.currency,
                 country: customInfo.country,
                 withdrawMethod: 'digit_wallet'
             }).then(res => {
@@ -515,7 +516,7 @@ export default {
                 // companyId: customInfo.companyId,
                 // customerNo: customInfo.customerNo,
                 // accountId: customInfo.accountId,
-                // accountCurrency: customInfo.currency,
+                accountCurrency: customInfo.currency,
                 withdrawCurrency: state.coinKind,
                 withdrawType: 2
             }).then(res => {
