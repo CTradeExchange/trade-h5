@@ -14,34 +14,42 @@
                 </van-empty> -->
 
                 <div class='handicap-header'>
-                    <span>
+                    <div v-if="userAccountType !=='G'" class='my'>
                         {{ $t('trade.my') }}
-                    </span>
-                    <span>{{ $t('trade.volumes') }}({{ product.baseCurrency }})</span>
-                    <span>{{ $t('trade.priceLabel') }}({{ product.profitCurrency }})</span>
-                    <span class='depth'>
-                        <van-popover
-                            v-model:show='showPopover'
-                            :actions='digitLevelList'
-                            :theme='theme'
-                            @select='onSelect'
-                        >
-                            <template #reference>
-                                <span>{{ curDigits }}</span>
-                                <span class='triangleDiv'></span>
-                            </template>
-                        </van-popover>
-                    </span>
-                    <span>{{ $t('trade.volumes') }}({{ product.baseCurrency }})</span>
-                    <span>
+                    </div>
+                    <div class='alignCenter'>
+                        {{ $t('trade.volumes') }}({{ product.baseCurrency }})
+                    </div>
+                    <div class='padding alignRight '>
+                        {{ $t('trade.priceLabel') }}({{ product.profitCurrency }})
+                    </div>
+                    <div class='depth alignLeft'>
+                        <span class='depth-select'>
+                            <van-popover
+                                v-model:show='showPopover'
+                                :actions='digitLevelList'
+                                :theme='theme'
+                                @select='onSelect'
+                            >
+                                <template #reference>
+                                    <span>{{ curDigits }}</span>
+                                    <span class='triangleDiv'></span>
+                                </template>
+                            </van-popover>
+                        </span>
+                    </div>
+                    <div class='padding alignCenter'>
+                        {{ $t('trade.volumes') }}({{ product.baseCurrency }})
+                    </div>
+                    <div v-if="userAccountType !=='G'" class='my'>
                         {{ $t('trade.my') }}
-                    </span>
+                    </div>
                 </div>
                 <div class='stalls-wrap'>
                     <div class='sell-wrap'>
-                        <div v-for='(item,index) in handicapList?.ask_deep' :key='index' class='item quantity'>
-                            <span class='label'>
-                                {{ userAccountType !=='G' ? item.unitNum === 0 ? '': item.unitNum : '--' }}
+                        <div v-for='(item,index) in handicapList?.ask_deep' :key='index' class='item'>
+                            <span v-if="userAccountType !=='G'" class='label fallColor '>
+                                {{ item.unitNum === 0 ? '': item.unitNum }}
                             </span>
                             <span class='quantity'>
                                 {{ item.volume_ask }}
@@ -57,15 +65,15 @@
                         </div>
                     </div>
                     <div class='buy-wrap'>
-                        <div v-for='(item,index) in handicapList?.bid_deep' :key='index' class='item quantity'>
+                        <div v-for='(item,index) in handicapList?.bid_deep' :key='index' class='item'>
                             <span class='price riseColor '>
                                 {{ item.price_bid }}
                             </span>
                             <span class='quantity'>
                                 {{ item.volume_bid }}
                             </span>
-                            <span class='label label-right'>
-                                {{ userAccountType !=='G' ? item.unitNum === 0 ? '': item.unitNum : '--' }}
+                            <span v-if="userAccountType !=='G'" class='label label-right riseColor'>
+                                {{ item.unitNum === 0 ? '': item.unitNum }}
                             </span>
                             <span
                                 class='histogram sell-histogram'
@@ -377,56 +385,43 @@ export default {
         display: flex;
         align-items: center;
         height: rem(80px);
-        padding: 0 0 0 rem(15px);
         line-height: rem(80px);
-        >span {
+        >div {
             display: inline-block;
-            //flex: 1;
+            flex: 1;
             color: var(--minorColor);
-            //width: 20%;
             font-size: rem(20px);
-            text-align: center;
-            &:first-child {
-                width: rem(60px);
-                text-align: left;
+            &.my {
+                flex: 1;
+                text-align: center;
             }
-            &:nth-child(2) {
-                width: rem(150px);
-            }
-            &:nth-child(3) {
-                width: rem(130px);
-                text-align: right;
-            }
-            &:nth-child(5) {
-                width: rem(170px);
-                margin-right: rem(8px);
-                text-align: right;
-            }
-            &:nth-child(6) {
-                width: rem(80px);
-                text-align: right;
+            &.padding {
+                // padding: 0 rem(20px);
             }
             &.depth {
-                width: rem(110px);
-                height: rem(40px);
-                margin-left: rem(15px);
-                line-height: rem(40px);
-                background-color: var(--primaryAssistColor);
-                span {
-                    margin-left: rem(10px);
-                    //vertical-align: middle;
-                }
-                :deep(.van-popover__wrapper) {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    .triangleDiv {
-                        width: 0;
-                        height: 0;
+                padding-left: rem(15px);
+                .depth-select {
+                    display: inline-block;
+                    width: rem(110px);
+                    height: rem(40px);
+                    line-height: rem(40px);
+                    background-color: var(--primaryAssistColor);
+                    span {
                         margin-left: rem(10px);
-                        border-color: var(--minorColor) transparent transparent;
-                        border-style: solid;
-                        border-width: 5px 5px 0;
+                        //vertical-align: middle;
+                    }
+                    :deep(.van-popover__wrapper) {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        .triangleDiv {
+                            width: 0;
+                            height: 0;
+                            margin-left: rem(10px);
+                            border-color: var(--minorColor) transparent transparent;
+                            border-style: solid;
+                            border-width: 5px 5px 0;
+                        }
                     }
                 }
             }
@@ -436,7 +431,7 @@ export default {
         display: flex;
         flex-direction: row;
         width: 100%;
-        padding: 0 rem(20px);
+        padding: 0 rem(5px);
         .sell-wrap,
         .buy-wrap {
             display: flex;
@@ -464,8 +459,8 @@ export default {
                     z-index: 1;
                 }
                 .label {
-                    width: rem(80px);
-                    text-align: left;
+                    flex: 1;
+                    text-align: center;
                     &.label-right {
                         text-align: right;
                     }
@@ -479,8 +474,9 @@ export default {
                     }
                 }
                 .quantity {
+                    flex: 1;
                     color: var(--normalColor);
-                    text-align: right;
+                    text-align: center;
                 }
             }
         }

@@ -16,7 +16,7 @@
                     </span>
                     <span class='icon_icon_arrow' @click='selectPickerField("outCurrency")'></span>
                     <input v-model='outAmount' class='input' type='text' />
-                    <a class='all' href='javascript:;'>
+                    <a class='all' href='javascript:;' @click='handleAll'>
                         {{ $t('trade.allPosition') }}
                     </a>
                 </div>
@@ -30,9 +30,12 @@
                     <span class='currencySpan' @click='selectPickerField("inCurrency")'>
                         {{ inCurrency }}
                     </span>
+
                     <span class='icon_icon_arrow' @click='selectPickerField("inCurrency")'></span>
                     ≈
+
                     <input class='input' type='text' :value='inAmount' />
+                    <van-loading />
                 </div>
                 <p class='mutedTip'>
                     {{ $t('trade.daihuan') + inAccount.liabilitiesPrincipal + inCurrency }}
@@ -118,6 +121,11 @@ export default {
             state[state.pickerField] = val
             state.pickerShow = false
         }
+
+        const handleAll = () => {
+            state.outAmount = outAccount.value.available
+        }
+
         return {
             ...toRefs(state),
             onPickerConfirm,
@@ -128,6 +136,7 @@ export default {
             columns,
             closed,
             onOpen,
+            handleAll,
         }
     }
 }
