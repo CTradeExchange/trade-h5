@@ -174,10 +174,11 @@ export default {
         },
         // 产品基础信息列表
         querySymbolBaseInfoList ({ dispatch, commit, state, rootState, rootGetters }, symbolIds = []) {
+            if (symbolIds === null) symbolIds = rootState._quote.productList.map(({ symbolId, tradeType }) => ({ symbolId, tradeType }))
             const params = {
                 symbolTradeTypeList: symbolIds,
                 customerGroupId: rootGetters.customerGroupId,
-                customerNo: rootState._user.customerInfo?.customerNo || 0,
+                customerNo: rootState._user.customerInfo?.customerNo || '0',
             }
 
             if (symbolIds.length === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
