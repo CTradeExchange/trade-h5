@@ -1,13 +1,6 @@
 <template>
     <div class='orderWrap'>
-        <layoutTop>
-            <div v-if='product' class='productTopInfo'>
-                <p class='productName' @click='switchProductVisible=true'>
-                    {{ product.symbolName }}
-                    <span class='icon_icon_arrow'></span>
-                </p>
-            </div>
-        </layoutTop>
+        <SwitchTradeType />
 
         <div class='main'>
             <!-- 订单类型 -->
@@ -53,6 +46,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { gt, lt, mul } from '@/utils/calculation'
 import { QuoteSocket } from '@/plugins/socket/socket'
+import SwitchTradeType from './components/switchTradeType'
 import Direction from './components/direction'
 import OrderVolume from './components/orderVolume'
 import PendingBar from './components/pendingBar'
@@ -66,6 +60,7 @@ export default {
         Direction,
         OrderVolume,
         OrderTypeTab,
+        SwitchTradeType,
         SwitchProduct,
         Assets,
         PendingBar,
@@ -76,11 +71,12 @@ export default {
         const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
         const { symbolId, direction, tradeType } = route.query
-        const symbolKey = `${symbolId}_${tradeType}`
+        if (symbolId && tradeType) store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
+        const symbolKey = computed(() => store.state._quote.productActivedID)
         const state = reactive({
             loading: false,
             switchProductVisible: false,
-            direction: direction,
+            direction: direction || 'buy',
             orderType: 1, // 订单类型
             orderTypeList: [{
                 title: t('trade.marketPrice'),
@@ -103,9 +99,8 @@ export default {
             return customerInfo?.value?.accountMap[buyCurrency]
         })
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
-        QuoteSocket.send_subscribe([symbolKey]) // 订阅产品报价
+        QuoteSocket.send_subscribe([symbolKey.value]) // 订阅产品报价
 
-        store.commit('_quote/Update_productActivedID', symbolKey)
         store.commit('_trade/Update_modifyPositionId', 0)
 
         // 获取账户信息
@@ -136,6 +131,7 @@ export default {
                     resolve()
                 } else {
                     // 获取产品详情
+                    const [symbolId, tradeType] = symbolKey.value.split('_')
                     store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(res => {
                         if (res.invalid()) return false
                         state.volume = res.data.minVolume // 设置默认手数
@@ -242,9 +238,7 @@ export default {
 }
 .orderWrap {
     position: relative;
-    display: flex;
-    flex: 1;
-    margin-top: rem(90px);
+    height: 100%;
     overflow-y: auto;
     color: var(--color);
     background: var(--bgColor);

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import SelfSymbolList from '@abcc/modules/selfSymbolList/selfSymbolList.vue'
+import SelfSymbolList from '@plans/modules/selfSymbolList/selfSymbolList.vue'
 import { computed, onActivated, ref } from 'vue'
 import { useStore } from 'vuex'
 

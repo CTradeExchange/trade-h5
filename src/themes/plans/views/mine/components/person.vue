@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import Fund from '@abcc/components/fund'
+import Fund from '@plans/components/fund'
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 export default {

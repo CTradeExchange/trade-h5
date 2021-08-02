@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import Notice from '@abcc/components/notice'
+import Notice from '@plans/components/notice'
 import { useStore } from 'vuex'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -103,8 +103,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~@abcc/style.scss';
-@import '~@abcc/font/iconfont.css';
+@import '~@plans/style.scss';
+@import '~@plans/font/iconfont.css';
 @import '~@/sass/mixin.scss';
 
 </style>

@@ -96,6 +96,7 @@ export function tickToObj (p) {
     }
 
     const curPriceData = {
+        symbolKey: `${priceArr[0]}_${priceArr[1]}`,
         symbolId: priceArr[0] * 1,
         trade_type: priceArr[1],
         tick_time: priceArr[3] * 1,

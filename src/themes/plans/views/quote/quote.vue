@@ -31,7 +31,7 @@
 
 <script>
 import TopTab from './topTab'
-import productListComp from '@abcc/modules/productList/productList.vue'
+import productListComp from '@plans/modules/productList/productList.vue'
 import { computed, onActivated, onMounted, reactive, ref, toRefs } from 'vue'
 import { useStore } from 'vuex'
 

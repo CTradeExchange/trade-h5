@@ -135,7 +135,7 @@
 </template>
 
 <script>
-import trustItem from '@abcc/modules/trust/trust.vue'
+import trustItem from '@plans/modules/trust/trust.vue'
 import { computed, reactive, toRefs, watch, onBeforeUnmount, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'

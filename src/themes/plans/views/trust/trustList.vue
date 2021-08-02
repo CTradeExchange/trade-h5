@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import trustItem from '@abcc/modules/trust/trust.vue'
+import trustItem from '@plans/modules/trust/trust.vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { computed, ref, nextTick, watch } from 'vue'

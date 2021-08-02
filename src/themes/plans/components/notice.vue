@@ -78,7 +78,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~@abcc/style.scss';
+@import '~@plans/style.scss';
 .notice-wrap {
     width: 96% !important;
     height: 15%;

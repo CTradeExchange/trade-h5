@@ -28,15 +28,20 @@ export default {
                     href: '/home',
                     icon: 'icon_icon_home',
                 },
-                {
-                    title: t('route.selfSymbol'),
-                    href: '/selfSymbol',
-                    icon: 'icon_zixuan',
-                },
+                // {
+                //     title: t('route.selfSymbol'),
+                //     href: '/selfSymbol',
+                //     icon: 'icon_zixuan',
+                // },
                 {
                     title: t('route.quote'),
                     href: '/quote',
                     icon: 'icon_icon_quotes',
+                },
+                {
+                    title: t('route.trade'),
+                    href: '/order',
+                    icon: 'icon_jiaoyi1',
                 },
                 {
                     title: t('route.assets'),

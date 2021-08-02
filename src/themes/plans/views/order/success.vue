@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import SuccessAnimation from '@abcc/components/successAnimation'
+import SuccessAnimation from '@plans/components/successAnimation'
 import { computed, reactive, toRefs } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'

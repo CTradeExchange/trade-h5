@@ -1,10 +1,31 @@
 {
-  "id": "2683807",
-  "name": "themes_abcc",
+  "id": "2716699",
+  "name": "themes_plans",
   "font_family": "iconfont",
   "css_prefix_text": "icon_",
   "description": "",
   "glyphs": [
+    {
+      "icon_id": "23220494",
+      "name": "资产",
+      "font_class": "zichan",
+      "unicode": "e690",
+      "unicode_decimal": 59024
+    },
+    {
+      "icon_id": "23220504",
+      "name": "抽屉",
+      "font_class": "chouti",
+      "unicode": "e691",
+      "unicode_decimal": 59025
+    },
+    {
+      "icon_id": "23220816",
+      "name": "资金明细",
+      "font_class": "zijinmingxi2",
+      "unicode": "e692",
+      "unicode_decimal": 59026
+    },
     {
       "icon_id": "5513454",
       "name": "消息中心",

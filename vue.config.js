@@ -17,6 +17,7 @@ const alias = {
     '@c': resolve('src/themes/cats'),
     '@ct': resolve('src/themes/ctrader'),
     '@abcc': resolve('src/themes/abcc'),
+    '@plans': resolve('src/themes/plans'),
     '@admin': resolve('src_admin'),
     '@utils': resolve('src_admin/utils'),
     '@index': resolve('src_admin/pages/index'),
