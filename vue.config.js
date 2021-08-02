@@ -78,7 +78,7 @@ if (isAdminMode) {
     // H5开发模式
     Object.assign(pages, {
         index: {
-            entry: 'src/themes/abcc/main.js',
+            entry: 'src/themes/plans/main.js',
             template: 'public/index.html',
             filename: process.env.NODE_ENV === 'production' ? 'index_template.html' : 'index.html',
         }
