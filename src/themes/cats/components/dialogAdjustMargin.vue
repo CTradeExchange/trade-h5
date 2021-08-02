@@ -197,13 +197,13 @@ export default {
 }
 .m-dialogAdjust {
     z-index: 1000;
-    height: rem(740px);
+    height: rem(500px);
     overflow: visible;
     .dialog-body {
         flex: 1;
         padding: 0 rem(30px);
         .title {
-            margin: rem(50px) 0 rem(30px) 0;
+            margin: 0 0 rem(30px) 0;
             color: var(--normalColor);
             font-size: rem(28px);
         }
@@ -216,7 +216,7 @@ export default {
             border-radius: rem(6px);
             .fl {
                 margin: rem(20px) rem(20px) rem(20px) rem(10px);
-                padding-right: rem(10px);
+                padding-right: rem(20px);
                 border-right: solid 1px var(--lineColor);
                 img {
                     width: rem(24px);
@@ -224,6 +224,7 @@ export default {
                     vertical-align: middle;
                 }
                 .oper-text {
+                    color: var(--color);
                     vertical-align: middle;
                 }
                 .line {
@@ -252,7 +253,7 @@ export default {
     z-index: 1000;
     display: flex;
     flex-flow: column;
-    height: rem(640px);
+    height: rem(480px);
     overflow: visible;
     background-color: var(--contentColor);
 }

@@ -75,27 +75,18 @@
                     </div>
                     <div class='flex-item'>
                         <div class='title'>
-                            {{ $t('trade.holdMargin') }}
-                        </div>
-                        <div class='val'>
-                        </div>
-                    </div>
-                    <div class='flex-item'>
-                        <div class='title'>
                             {{ $t('trade.margin') }}
                         </div>
                         <div class='val'>
                         </div>
                     </div>
-                    <div v-if='customerInfo.tradeType===2'>
-                        <div class='price_item'>
-                            <span class='title'>
-                                {{ $t('trade.previewStopPrice') }}
-                            </span><span class=''>
-                                {{ data.previewStopPrice }}
-                            </span>
+                    <div v-if='customerInfo.tradeType===2' class='flex-item'>
+                        <div class='title alignRight'>
+                            {{ $t('trade.previewStopPrice') }}
                         </div>
-                        <div class='price_item'></div>
+                        <div class='val '>
+                            {{ data.previewStopPrice }}
+                        </div>
                     </div>
                 </div>
             </div>
