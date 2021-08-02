@@ -114,8 +114,9 @@ export function positionsTickToObj (str) {
     const positionsProfitLoss = dataArr.slice(1).map(el => {
         const elData = el.replace(/\(|\)/g, '').split(',')
         return {
-            positionId: elData[0],
-            profitLoss: elData[1] < 0 ? elData[1] : '+' + elData[1],
+            positionId: elData[0], // 持仓id
+            profitLoss: elData[1] < 0 ? elData[1] : '+' + elData[1], // 盈亏
+            previewStopPrice: elData[2], // 预估强平价
         }
     })
     const result = {
