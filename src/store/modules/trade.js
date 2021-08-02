@@ -162,9 +162,12 @@ export default {
         Update_positionProfitLossList (state, dataList = []) {
             state.positionProfitLossList = dataList
             const positionMap = state.positionMap
-            dataList.forEach(({ positionId, profitLoss }) => {
-                if (positionMap[positionId]) positionMap[positionId].profitLoss = profitLoss
-                else positionMap[positionId] = { profitLoss }
+            dataList.forEach(({ positionId, profitLoss, previewStopPrice }) => {
+                const position = positionMap[positionId]
+                if (position) {
+                    position.profitLoss = profitLoss
+                    position.previewStopPrice = previewStopPrice
+                } else positionMap[positionId] = { profitLoss }
             })
         },
     },

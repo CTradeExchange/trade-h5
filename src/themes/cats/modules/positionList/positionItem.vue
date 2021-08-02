@@ -87,6 +87,16 @@
                         <div class='val'>
                         </div>
                     </div>
+                    <div v-if='customerInfo.tradeType===2'>
+                        <div class='price_item'>
+                            <span class='title'>
+                                {{ $t('trade.previewStopPrice') }}
+                            </span><span class=''>
+                                {{ data.previewStopPrice }}
+                            </span>
+                        </div>
+                        <div class='price_item'></div>
+                    </div>
                 </div>
             </div>
             <div class='cell'>
