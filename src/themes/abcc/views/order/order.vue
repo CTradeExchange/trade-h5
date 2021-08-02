@@ -36,7 +36,11 @@
             />
         </div>
         <div class='footerBtn' :class='[direction]'>
-            <van-button block :loading='loading' size='normal' @click='submitHandler'>
+            <van-button
+                block
+                size='normal'
+                @click='submitHandler'
+            >
                 {{ $t(direction==='buy'?'trade.buy':'trade.sell') + $t("submit") }}
             </van-button>
         </div>

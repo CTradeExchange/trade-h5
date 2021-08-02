@@ -564,3 +564,25 @@ export function queryAccountAssetsInfo (data) {
         data
     })
 }
+
+// 手动还款
+export function manualRepayment (data) {
+    return request({
+        url: '/global/fund.app.DepositAppDubboService.manualRepayment',
+        method: 'post',
+        data
+    })
+}
+
+// 修改仓位占用保证金
+export function updateOccupyTheMargin (data) {
+    return request({
+        url: '/global/tradeapi.app.PositionApiService.updateOccupyTheMargin',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            group: 'tradeApi'
+        },
+        data
+    })
+}

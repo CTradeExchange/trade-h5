@@ -1,6 +1,7 @@
 <template>
     <van-popup v-model:show='show' position='bottom' @closed='closed' @open='onOpen'>
         <div class='returnMoneyPop'>
+            {{ account }}
             <p class='closeBar'>
                 <a class='closeBtn' href='javascript:;' @click='closed'>
                     <i class='icon_icon_close_big'></i>
@@ -35,13 +36,13 @@
                     ≈
 
                     <input class='input' type='text' :value='inAmount' />
-                    <van-loading />
+                    <van-loading size='18' />
                 </div>
                 <p class='mutedTip'>
                     {{ $t('trade.daihuan') + inAccount.liabilitiesPrincipal + inCurrency }}
                 </p>
             </div>
-            <van-button block class='returnBtn' type='primary'>
+            <van-button block class='returnBtn' :loading='loading' type='primary' @click='returnMoney'>
                 {{ $t('trade.huan') }} {{ inCurrency }}
             </van-button>
         </div>
@@ -55,6 +56,8 @@
 import { computed, reactive, ref, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import BigNumber from 'bignumber.js'
+import { manualRepayment } from '@/api/user'
+import { Toast } from 'vant'
 export default {
     props: ['modelValue', 'account'],
     emits: ['update:modelValue'],
@@ -67,11 +70,14 @@ export default {
             outCurrency: '', // 以xx币还
             inCurrency: '', // 还xx币
             outAmount: '', // 以xx币还的金额
+            loading: false
         })
-        const accountMap = computed(() => store.state._user.customerInfo?.accountMap)
-        const outAccount = computed(() => accountMap?.value[state.outCurrency]) // 以xx币还的账户
-        const inAccount = computed(() => accountMap?.value[state.inCurrency]) // 还xx币的账户
-        const accountList = computed(() => store.state._user.customerInfo?.accountList || [])
+
+        const customInfo = computed(() => store.state._user.customerInfo)
+
+        const outAccount = computed(() => customInfo.value?.accountMap[state.outCurrency]) // 以xx币还的账户
+        const inAccount = computed(() => customInfo.value?.accountMap[state.inCurrency]) // 还xx币的账户
+
         const productList = computed(() => store.state._quote.productList)
         const inAmount = computed(() => { // 还xx币的金额
             const rateProduct = productList.value.find(({ baseCurrency, profitCurrency }) => (baseCurrency === state.inCurrency && profitCurrency === state.outCurrency))
@@ -88,7 +94,7 @@ export default {
             }
             return ''
         })
-        const columns = computed(() => accountList.value.map(el => el.currency))
+        const columns = computed(() => customInfo?.value?.accountList.map(el => el.currency))
         watch(
             () => props.modelValue,
             newval => {
@@ -126,6 +132,28 @@ export default {
             state.outAmount = outAccount.value.available
         }
 
+        // 手动还币
+        const returnMoney = () => {
+            const params = {
+                customerNo: customInfo.value.customerNo,
+                accountId: props.account.accountId,
+                customerGroupId: customInfo.value.customerGroupId,
+                accountCurrency: state.outCurrency,
+                amount: 100
+            }
+
+            state.loading = true
+            manualRepayment(params)
+                .then(res => {
+                    state.loading = false
+                    if (res.check()) {
+                        Toast('trade.repaymentSuccess')
+                    }
+                }).catch(err => {
+                    state.loading = false
+                })
+        }
+
         return {
             ...toRefs(state),
             onPickerConfirm,
@@ -136,6 +164,7 @@ export default {
             columns,
             closed,
             onOpen,
+            returnMoney,
             handleAll,
         }
     }

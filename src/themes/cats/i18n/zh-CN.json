@@ -383,7 +383,18 @@
     "noStallsData": "暂无五档报价",
     "orderSuccessToast": "下单成功，请查看仓位",
     "inputCloseNum": "请输入平仓数量",
-    "closeSuccessToast": "下单成功，请查看平仓记录"
+    "closeSuccessToast": "下单成功，请查看平仓记录",
+    "dealTime": "成交时间",
+    "dealNo": "成交单号",
+    "modifyMargin":"调整保证金",
+    "modifyAmount":"调整金额",
+    "raise":"追加",
+    "reduce":"减少",
+    "repaymentSuccess": "还款成功",
+    "enterMarginAmount": "请输入调整金额",
+    "prospectMandatory":"预估强平价",
+    "margin": "保证金",
+    "holdMargin": "维持保证金"
   },
   "bizType": {
     "2": "市价平仓",

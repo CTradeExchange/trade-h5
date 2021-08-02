@@ -1,0 +1,259 @@
+<template>
+    <van-popup
+        v-model:show='showDialog'
+        class='m-dialogAdjust'
+        position='bottom'
+        :transition-appear='true'
+        @closed='closed'
+    >
+        <div class='dialog-header'>
+            <div class='title'>
+                <p class='productName'>
+                    {{ data.symbolName }}
+                </p>
+                <p class='lot'>
+                    {{ data.symbolName }}
+                </p>
+            </div>
+            <div class='right' @click='closeHandler'>
+                <i class='icon_icon_close_big'></i>
+            </div>
+        </div>
+        <div class='dialog-body'>
+            <p class='title'>
+                {{ $t('trade.modifyMargin') }}
+            </p>
+            <div class='input-wrap'>
+                <span class='fl' @click='operation'>
+                    <img alt='' src='../images/transfer.png' srcset='' />
+                    <span class='oper-text'>
+                        {{ operText }}
+                    </span>
+                </span>
+                <span class='line'></span>
+                <input v-model='amount' class='input' :placeholder="$t('trade.modifyAmount')" type='number' />
+                <span class='all'>
+                    {{ $t('common.all') }}
+                </span>
+            </div>
+            <p class='desc'>
+                最大追加: 548754.44USD
+            </p>
+
+            <!-- {{ data }}   {{ product }} -->
+        </div>
+        <div class='dialog-footer'>
+            <van-button
+                block
+                class='pcHandler'
+                :loading='loading'
+                @click='submitAdjustMargin'
+            >
+                {{ $t('common.sure') }}
+            </van-button>
+        </div>
+    </van-popup>
+</template>
+
+<script>
+import { reactive, toRefs, computed, watchEffect, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { Toast } from 'vant'
+import { updateOccupyTheMargin } from '@/api/user'
+import { isEmpty } from '@/utils/util'
+export default {
+
+    props: ['show', 'data'],
+    emits: ['update:show'],
+    setup (props, context) {
+        const store = useStore()
+        const router = useRouter()
+        const { t } = useI18n({ useScope: 'global' })
+
+        const state = reactive({
+            showDialog: false,
+            loading: false,
+            amount: '',
+            operType: true,
+            operText: t('trade.raise')
+        })
+
+        const tradeType = computed(() => store.state._base.tradeType)
+        const customerInfo = computed(() => store.state._user.customerInfo)
+
+        watchEffect(() => {
+            state.showDialog = props.show
+        })
+
+        const closeHandler = () => {
+            state.showDialog = false
+        }
+
+        const operation = () => {
+            state.operType = !state.operType
+            state.operText = state.operType ? t('trade.raise') : t('trade.reduce')
+        }
+
+        // 调整保证金
+        const submitAdjustMargin = () => {
+            if (isEmpty(state.amount)) {
+                return Toast(t('trade.enterMarginAmount'))
+            }
+            state.loading = true
+            const params = {
+                tradeType: tradeType.value,
+                accountId: customerInfo.value.accountList[0].accountId,
+                positionId: props.data.positionId,
+                accountDigits: props.data.openAccountDigits,
+                occupyTheMargin: state.operType ? parseFloat(state.amount) : -(parseFloat(state.amount)),
+                orderId: props.data.orderId,
+                remark: '',
+                resp: ''
+            }
+
+            updateOccupyTheMargin(params).then(res => {
+                state.loading = false
+                if (res.check()) {
+                    Toast(t('common.submitSuccess'))
+                    state.showDialog = false
+                }
+            }).catch(err => {
+                state.loading = false
+            })
+
+            // const params = submitCloseParam()
+            // if (!params) return false
+            // state.loading = true
+            // addMarketOrder(params)
+            //     .then(res => {
+            //         state.loading = false
+            //         if (res.invalid()) return false
+            //         const data = res.data
+            //         const localData = Object.assign({}, params, data)
+            //         const orderId = data.orderId || data.id
+            //         sessionStorage.setItem('order_' + orderId, JSON.stringify(localData))
+            //         // router.push({ name: 'ClosePositionSuccess', query: { orderId } })
+            //         closed()
+            //         Toast({
+            //             message: t('trade.closeSuccessToast'),
+            //             duration: 1000,
+            //             forbidClick: true,
+            //         })
+            //     })
+            //     .catch(err => {
+            //         state.loading = false
+            //     })
+        }
+        const closed = () => { // 关闭弹出层且动画结束后触发
+            context.emit('update:show', false)
+        }
+
+        return {
+            ...toRefs(state),
+            submitAdjustMargin,
+            closeHandler,
+            closed,
+            operation,
+            tradeType,
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+@import '~@/sass/mixin.scss';
+.dialog-header {
+    padding: rem(30px) 0;
+    text-align: center;
+    .productName {
+        color: var(--color);
+    }
+    .title {
+        font-size: rem(32px);
+    }
+    .lot {
+        color: #999;
+        font-size: rem(20px);
+        text-align: center;
+    }
+    .right {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: rem(25px);
+        color: var(--normalColor);
+        font-size: rem(38px);
+    }
+}
+.dialog-footer {
+    width: 100%;
+    .pcHandler {
+        color: #FFF;
+        background: var(--primary);
+        border: none;
+    }
+}
+.m-dialogAdjust {
+    z-index: 1000;
+    height: rem(740px);
+    overflow: visible;
+    .dialog-body {
+        flex: 1;
+        padding: 0 rem(30px);
+        .title {
+            margin: rem(50px) 0 rem(30px) 0;
+            color: var(--normalColor);
+            font-size: rem(28px);
+        }
+        .input-wrap {
+            display: flex;
+            align-items: center;
+            padding: 0 rem(30px);
+            //line-height: rem(80px);
+            background-color: var(--bgColor);
+            border-radius: rem(6px);
+            .fl {
+                margin: rem(20px) rem(20px) rem(20px) rem(10px);
+                padding-right: rem(10px);
+                border-right: solid 1px var(--lineColor);
+                img {
+                    width: rem(24px);
+                    margin-right: rem(10px);
+                    vertical-align: middle;
+                }
+                .oper-text {
+                    vertical-align: middle;
+                }
+                .line {
+                    // width: rem(1px);
+                    // height: 1;
+                }
+            }
+            .input {
+                flex: 1;
+            }
+            .all {
+                color: var(--primary);
+            }
+        }
+        .desc {
+            margin-top: rem(20px);
+            color: var(--minorColor);
+        }
+    }
+}
+</style>
+
+<style lang='scss'>
+@import '~@/sass/mixin.scss';
+.m-dialogAdjust {
+    z-index: 1000;
+    display: flex;
+    flex-flow: column;
+    height: rem(640px);
+    overflow: visible;
+    background-color: var(--contentColor);
+}
+</style>
