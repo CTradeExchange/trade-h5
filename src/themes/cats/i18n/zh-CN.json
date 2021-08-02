@@ -231,6 +231,7 @@
     "positionLastPrice": "最新价",
     "maxProfit": "最盈",
     "stopProfitPrice": "止盈价",
+    "previewStopPrice": "预估强平价",
     "maxLoss": "最亏",
     "stopLossPrice": "止损价",
     "late": "最近",
