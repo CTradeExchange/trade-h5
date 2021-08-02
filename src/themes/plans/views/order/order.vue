@@ -27,12 +27,30 @@
                 :product='product'
                 :volume='volume'
             />
+            <!-- 止盈止损 -->
+            <ProfitlossSet
+                v-if='product'
+                v-model:stopLoss='stopLoss'
+                v-model:stopProfit='stopProfit'
+                class='cellMarginTop'
+                :direction='direction'
+                :product='product'
+            />
         </div>
         <div class='footerBtn' :class='[direction]'>
             <van-button block :loading='loading' size='normal' @click='submitHandler'>
-                {{ $t(direction==='buy'?'trade.buy':'trade.sell') + $t("submit") }}
+                {{ $t(direction==='buy'?'trade.buyText':'trade.sellText') }}
             </van-button>
         </div>
+        <!-- 委托列表 -->
+        <Trust
+            v-if='product'
+            v-model:stopLoss='stopLoss'
+            v-model:stopProfit='stopProfit'
+            class='cellMarginTop'
+            :direction='direction'
+            :product='product'
+        />
 
         <!-- 选择产品弹窗 -->
         <SwitchProduct v-model='switchProductVisible' />
@@ -49,9 +67,11 @@ import { QuoteSocket } from '@/plugins/socket/socket'
 import SwitchTradeType from './components/switchTradeType'
 import Direction from './components/direction'
 import OrderVolume from './components/orderVolume'
+import ProfitlossSet from './components/profitLossSet'
 import PendingBar from './components/pendingBar'
 import OrderTypeTab from './components/orderType.vue'
 import Assets from './components/assets.vue'
+import Trust from './components/trust.vue'
 import SwitchProduct from './components/switchProduct.vue'
 import { addOrder } from '@/api/trade'
 import { Toast } from 'vant'
@@ -61,8 +81,10 @@ export default {
         OrderVolume,
         OrderTypeTab,
         SwitchTradeType,
+        ProfitlossSet,
         SwitchProduct,
         Assets,
+        Trust,
         PendingBar,
     },
     setup () {
@@ -88,6 +110,8 @@ export default {
             volume: '',
             operationType: 2, // 操作类型。1-普通；2-自动借款；3-自动还款
             pendingPrice: '',
+            stopLoss: '',
+            stopProfit: '',
         })
         const pendingRef = ref(null)
         const profitLossRef = ref(null)
@@ -259,10 +283,9 @@ export default {
     overflow: hidden;
 }
 .footerBtn {
-    position: absolute;
-    bottom: 0;
-    left: 0;
     width: 100%;
+    padding: rem(30px);
+    background: var(--contentColor);
     &.buy {
         .van-button {
             color: #FFF;

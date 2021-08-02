@@ -47,7 +47,7 @@ export default {
         const state = reactive({
             activeTab: 0,
         })
-        const tradeType = 3
+        const tradeType = 2
         const customerInfo = computed(() => store.state._user.customerInfo)
         const customerGroupId = computed(() => store.getters.customerGroupId)
         const productMap = computed(() => store.state._quote.productMap)
