@@ -189,6 +189,7 @@ export default {
             // 如果来源货币和目标货币相同，刚手动还款，否则通过下单还币
             if (state.outCurrency === state.inCurrency) {
                 manualRepayment({
+                    tradeType: tradeType.value,
                     customerNo: customInfo.value.customerNo,
                     accountId: props.account.accountId,
                     customerGroupId: customInfo.value.customerGroupId,
