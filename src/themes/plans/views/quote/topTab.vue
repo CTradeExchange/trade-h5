@@ -16,7 +16,6 @@
                     <div class='text'>
                         {{ item.title }}
                     </div>
-                    <div v-if='dot' class='dot'></div>
                 </div>
             </template>
         </van-tab>
@@ -61,10 +60,6 @@ export default {
         modelValue: {
             type: [String, Number],
             default: 0
-        },
-        dot: {
-            type: Boolean,
-            default: false
         }
     },
     data () {
@@ -91,69 +86,48 @@ export default {
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
 :deep(.van-tabs__wrap) {
-    height: auto;
+    height: rem(80px);
+    padding: rem(10px) 0;
+    overflow-y: hidden;
+    line-height: rem(60px);
     .van-tabs__nav {
         .van-tab {
             flex: none;
+            margin: 0 rem(10px);
             padding: 0 !important;
             text-align: left;
+            &:first-child {
+                margin: 0;
+            }
+            .van-tab__text {
+                height: 100%;
+            }
+            &.van-tab--active {
+                background: #F4F7FC;
+                border-radius: rem(6px);
+            }
         }
     }
 }
-.dot {
-    display: block;
-    width: rem(10px);
-    height: rem(10px);
-    margin: 0 auto;
-    margin-top: rem(-10px);
-    background: var(--bgColor);
-    border-radius: 50%;
-    transform: scale(0);
-    opacity: 0;
-}
 .van-tab--active {
     .text {
-        color: var(--color);
-        animation: zoomText 0.26s ease normal forwards;
-    }
-    .dot {
-        color: var(--color);
-        background-color: var(--primary);
-        animation: zoomDot 0.26s ease normal forwards;
+        color: var(--primary);
+        // animation: zoomText 0.26s ease normal forwards;
     }
 }
 .text {
+    height: 100%;
+    color: var(--color);
     font-weight: 400;
-    font-size: rem(26px);
-    line-height: rem(90px);
+    font-size: rem(28px);
+    line-height: rem(60px);
 }
 .title {
-    padding: 0 rem(20px);
+    height: 100%;
+    padding: 0 rem(26px);
     .icon {
         font-size: rem(24px);
         font-style: normal;
-    }
-}
-
-@keyframes zoomText {
-    0% {
-        font-weight: 400;
-        font-size: rem(24px);
-    }
-    100% {
-        font-weight: 700;
-        font-size: rem(40px);
-    }
-}
-
-@keyframes zoomDot {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
     }
 }
 

@@ -1,15 +1,16 @@
 <template>
     <div class='quoteWrap'>
+        <plansType :value='planType' @change='handlePlayType' />
         <div class='tradeNav'>
             <TopTab
                 ref='tabList'
-                v-model='activeTab'
+                v-model='categoryType'
                 :background='$style.contentColor'
                 class='tradeSortNav'
                 :dot='true'
                 line-height='0'
                 line-width='0'
-                :list='categoryList'
+                :list='[...categoryList]'
                 @change='tabChange'
                 @tabClick='tabClick'
             />
@@ -32,64 +33,56 @@
 <script>
 import TopTab from './topTab'
 import productListComp from '@plans/modules/productList/productList.vue'
-import { computed, onActivated, onMounted, reactive, ref, toRefs } from 'vue'
-import { useStore } from 'vuex'
+import { ref, watch } from 'vue'
+import plansType from '@/themes/plans/components/plansType.vue'
+import { useProduct } from './hooks.js'
 
 export default {
     name: 'Quote',
     components: {
         productListComp,
         TopTab,
+        plansType
     },
     setup () {
-        const store = useStore()
         const productListEl = ref(null)
-        const state = reactive({
-            activeTab: 0,
+
+        // 1.玩法类型
+        const planType = ref(1)
+        // 2.板块类型
+        const categoryType = ref(0)
+        // 监听玩法类型
+        const handlePlayType = (val) => {
+            planType.value = val
+            categoryType.value = 0
+        }
+
+        // 获取板块列表和所选板块的产品列表
+        const { categoryList, productList } = useProduct({
+            planType, categoryType
         })
-        const tradeType = 3
-        const customerInfo = computed(() => store.state._user.customerInfo)
-        const customerGroupId = computed(() => store.getters.customerGroupId)
-        const productMap = computed(() => store.state._quote.productMap)
-        // 板块分类列表
-        const categoryList = computed(() => {
-            const wpProductCategory = store.state._base.wpProductCategory || []
-            const quoteList = wpProductCategory.find(el => el.tag === 'quoteList')
-            if (!quoteList) return []
-            const resultList = quoteList.data.items.map(el => {
-                return {
-                    id: el.id,
-                    title: el.title,
-                    list: el.code_ids_all[tradeType][customerGroupId.value].map(el => el + '_' + tradeType)
-                }
-            })
-            return resultList
-        })
-        // 当前板块下的产品列表
-        const productList = computed(() => {
-            const list = categoryList.value[state.activeTab]?.list || []
-            const products = []
-            const productMapVal = productMap.value
-            list.forEach(el => {
-                if (productMapVal[el]?.symbolName) products.push(productMapVal[el])
-            })
-            console.log(products)
-            return products
-        })
+
+        // 监听玩法类型/板块类型的变化，触发产品订阅
+        // 获取productList.vue组件的ref对象和产品列表均是异步，所以第一次产品订阅在productList.vue组件内
+        watch(
+            [planType, categoryType],
+            () => {
+                if (productListEl.value) productListEl.value.calcProductsDebounce()
+            }
+        )
 
         const tabChange = (i) => {}
         const tabClick = (i) => {}
 
-        onActivated(() => {
-            if (productListEl.value) productListEl.value.calcProductsDebounce()
-        })
         return {
-            ...toRefs(state),
+            categoryType,
             productListEl,
             categoryList,
             productList,
             tabChange,
             tabClick,
+            handlePlayType,
+            planType
         }
     }
 }
@@ -100,13 +93,13 @@ export default {
 .quoteWrap {
     flex: 1;
     width: 100%;
-    margin-top: rem(90px);
+    // margin-top: rem(90px);
     padding-bottom: rem(100px);
     overflow: auto;
     background: var(--bgColor);
 }
 .tradeNav {
-    position: absolute;
+    // position: absolute;
     top: 0;
     left: 0;
     width: 100%;

@@ -4,7 +4,8 @@
         "paths": {
             "@/*": ["src/*"],
             "@m/*": ["src/themes/mobile/*"],
-            "@public/*": ["public/*"]
+            "@public/*": ["public/*"],
+            "@plans/*": ["src/themes/plans/*"]
         }
     },
     "exclude": ["node_modules", "dist"]

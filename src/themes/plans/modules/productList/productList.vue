@@ -9,7 +9,7 @@ import { computed, nextTick, reactive, ref, toRefs, watch, onMounted } from 'vue
 import { useStore } from 'vuex'
 import productItem from './productItem'
 import { useRouter } from 'vue-router'
-import { debounce, localSet } from '@/utils/util'
+import { debounce } from '@/utils/util'
 import { QuoteSocket } from '@/plugins/socket/socket'
 
 export default {
@@ -49,12 +49,16 @@ export default {
             if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
         })
 
-        watch(
+        const stop = watch(
             () => props.productList.length,
             async () => {
                 await nextTick()
                 const subscribList = calcSubscribeProducts()
                 if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
+
+                if (props.productList.length) {
+                    stop()
+                }
             },
             { immediate: true }
         )

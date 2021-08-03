@@ -27,9 +27,9 @@
             </div>
         </div>
         <div v-if='product.symbolName' class='cell'>
-            <p class='symbolCode'>
+            <!-- <p class='symbolCode'>
                 {{ product.symbolCode }}
-            </p>
+            </p> -->
             <p>
                 <span class='upDownAmount' :class='product.upDownColor'>
                     {{ product.upDownAmount }}
@@ -51,7 +51,7 @@ export default {
     props: {
         product: {
             type: Object,
-            default: {}
+            default: () => ({})
         },
     },
     setup (props, context) {
