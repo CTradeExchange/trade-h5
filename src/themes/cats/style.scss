@@ -137,8 +137,14 @@ i {
 .red {
     color: var(--warn);
 }
-.alignRgiht {
+.alignRight {
     text-align: right;
+}
+.alignCenter {
+    text-align: center;
+}
+.alignLeft {
+    text-align: left;
 }
 .alignmiddle {
     vertical-align: middle;

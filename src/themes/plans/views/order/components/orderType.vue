@@ -32,11 +32,18 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .orderTypeTab {
-    margin: 0 rem(-40px);
+    margin: 0 rem(-10px);
     border-bottom: rem(20px) solid var(--bgColor);
 
-    --van-tabs-bottom-bar-width: 50vw;
+    --van-tabs-bottom-bar-width: 20vw;
     --van-tabs-line-height: 40px;
     --van-tabs-bottom-bar-color: var(--primary);
+    :deep(.van-tab) {
+        flex: none;
+        min-width: rem(130px);
+        margin-right: rem(40px);
+        padding: 0 rem(20px);
+        text-align: center;
+    }
 }
 </style>

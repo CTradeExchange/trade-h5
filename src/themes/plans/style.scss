@@ -527,9 +527,6 @@ body {
         &::after {
             border-color: var(--lineColor);
         }
-        &:active {
-            background-color: var(--primaryAssistColor);
-        }
     }
     .van-action-sheet__item {
         color: var(--color);

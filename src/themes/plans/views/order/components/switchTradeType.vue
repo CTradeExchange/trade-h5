@@ -66,9 +66,31 @@ export default {
 }
 .productInfo {
     display: flex;
+    align-items: center;
     height: rem(104px);
     padding: 0 rem(30px);
     font-size: rem(34px);
     line-height: rem(104px);
+    .icon_chouti {
+        padding-right: rem(20px);
+        font-size: rem(29px);
+    }
+    .productName {
+        padding-right: rem(20px);
+    }
+    .upDownWidth {
+        flex: 1;
+    }
+    .chartIcon {
+        width: rem(62px);
+        height: rem(58px);
+        color: var(--primary);
+        font-weight: 500;
+        font-size: rem(30px);
+        line-height: rem(58px);
+        text-align: center;
+        background: var(--primaryAssistColor);
+        border-radius: 3px;
+    }
 }
 </style>

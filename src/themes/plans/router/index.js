@@ -61,6 +61,15 @@ const routes = [
                     title: 'route.chart'
                 }
             },
+            {
+                path: 'order',
+                name: 'Order',
+                component: () => import(/* webpackChunkName: "order" */ '../views/order/order.vue'),
+                meta: {
+                    title: 'route.order',
+                    roles: ['User'],
+                }
+            },
         ]
     },
     {
@@ -85,15 +94,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "contract" */ '../views/contract/contract.vue'),
         meta: {
             title: 'route.contract',
-            roles: ['User'],
-        }
-    },
-    {
-        path: '/order',
-        name: 'Order',
-        component: () => import(/* webpackChunkName: "order" */ '../views/order/order.vue'),
-        meta: {
-            title: 'route.order',
             roles: ['User'],
         }
     },

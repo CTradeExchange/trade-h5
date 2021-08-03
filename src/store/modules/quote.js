@@ -212,8 +212,8 @@ export default {
         // 产品详细信息
         querySymbolInfo ({ dispatch, commit, state, rootState, rootGetters }, { symbolId, tradeType }) {
             const productMap = state.productMap
-
-            if (productMap[`${symbolId}_${tradeType}`].contractSize) return Promise.resolve(new CheckAPI({ code: '0', data: {} }))
+            const symbolKey = `${symbolId}_${tradeType}`
+            if (productMap[symbolKey].contractSize) return Promise.resolve(new CheckAPI({ code: '0', data: {} }))
             const params = {
                 symbolId: Number(symbolId),
                 tradeType: Number(tradeType),
@@ -222,9 +222,10 @@ export default {
             }
             return querySymbolInfo(params).then((res) => {
                 if (res.check() && res.data) {
+                    res.data.tradeType = params.tradeType
                     commit('Update_product', res.data)
-                    if (rootState._quote.productActivedID === symbolId) {
-                        sessionSet('productActived', JSON.stringify(productMap[symbolId]))
+                    if (rootState._quote.productActivedID === symbolKey) {
+                        sessionSet('productActived', JSON.stringify(productMap[symbolKey]))
                     }
                 }
                 return res
