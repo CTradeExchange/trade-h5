@@ -121,10 +121,6 @@ export default {
             const margin = state.operType ? parseFloat(state.amount) : -parseFloat(state.amount)
             const occupyTheMargin = margin * pow(10, props.data.openAccountDigits)
 
-            debugger
-
-            return
-
             const params = {
                 tradeType: tradeType.value,
                 accountId: customerInfo.value.accountList[0].accountId,
