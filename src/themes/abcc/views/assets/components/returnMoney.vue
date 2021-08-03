@@ -15,7 +15,7 @@
                         {{ outCurrency }}
                     </span>
                     <span class='icon_icon_arrow' @click='selectPickerField("outCurrency")'></span>
-                    <input v-model='outAmount' class='input' type='text' />
+                    <input v-model='outAmount' class='input' type='number' />
                     <a class='all' href='javascript:;' @click='handleAll'>
                         {{ $t('trade.allPosition') }}
                     </a>
@@ -34,7 +34,7 @@
                     <span class='icon_icon_arrow' @click='selectPickerField("inCurrency")'></span>
                     ≈
 
-                    <input class='input' type='text' :value='inAmount' />
+                    <input class='input' readonly type='number' :value='inAmount' />
                     <van-loading v-if='computLoading' size='18' />
                 </div>
                 <p class='mutedTip'>
@@ -77,7 +77,7 @@ export default {
         })
 
         const customInfo = computed(() => store.state._user.customerInfo)
-
+        const assetsInfo = computed(() => store.state._user.assetsInfo)
         const outAccount = computed(() => customInfo.value?.accountMap[state.outCurrency]) // 以xx币还的账户
         const inAccount = computed(() => customInfo.value?.accountMap[state.inCurrency]) // 还xx币的账户
 
@@ -111,16 +111,17 @@ export default {
         )
 
         // 防抖处理还币输入框，
-        const computeReturnMoney = debounce((val) => {
+        const computeReturnMoney = debounce(() => {
             // state.searchKey = val
             state.computLoading = true
             const params = {
                 tradeType: tradeType.value,
                 sourceCurrency: state.outCurrency,
                 targetCurrency: state.inCurrency,
-                requestNum: state.amount,
+                requestNum: state.outAmount,
                 requestTime: Date.now(),
-                remark: ''
+                remark: '',
+                customerCurrency: assetsInfo.value.currency
             }
             previewOrder(params)
                 .then(res => {
@@ -135,7 +136,9 @@ export default {
                 })
         })
         watchEffect(() => {
-            computeReturnMoney(state.amount)
+            if (!isEmpty(state.outAmount)) {
+                computeReturnMoney()
+            }
         })
 
         const closed = () => {
@@ -162,7 +165,9 @@ export default {
             console.log(val, state.pickerField)
             state[state.pickerField] = val
             state.pickerShow = false
-            computeReturnMoney()
+            if (!isEmpty(state.outCurrency)) {
+                computeReturnMoney()
+            }
         }
 
         const handleAll = () => {
@@ -207,6 +212,7 @@ export default {
             onOpen,
             returnMoney,
             handleAll,
+            assetsInfo
         }
     }
 }

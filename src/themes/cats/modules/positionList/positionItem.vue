@@ -71,7 +71,7 @@
                             {{ $t('trade.originalMargin') }}
                         </div>
                         <div class='val'>
-                            {{ data.openMargin }}
+                            {{ data.occupyTheMargin }}
                         </div>
                     </div>
                     <div class='flex-item'>
