@@ -68,6 +68,7 @@ import { useRouter } from 'vue-router'
 import { Toast } from 'vant'
 import { updateOccupyTheMargin } from '@/api/user'
 import { isEmpty } from '@/utils/util'
+import { pow } from '@/utils/calculation'
 export default {
 
     props: ['show', 'data'],
@@ -116,12 +117,15 @@ export default {
                 return Toast(t('trade.enterMarginAmount'))
             }
             state.loading = true
+            // 处理金额*10 小数位次方
+            const occupyTheMargin = state.operType ? pow(parseFloat(state.amount), props.data.openAccountDigits) : pow(-(parseFloat(state.amount)), props.data.openAccountDigits)
+
             const params = {
                 tradeType: tradeType.value,
                 accountId: customerInfo.value.accountList[0].accountId,
                 positionId: props.data.positionId,
                 accountDigits: props.data.openAccountDigits,
-                occupyTheMargin: state.operType ? parseFloat(state.amount) : -(parseFloat(state.amount)),
+                occupyTheMargin,
                 orderId: props.data.orderId,
                 remark: '',
                 resp: ''
