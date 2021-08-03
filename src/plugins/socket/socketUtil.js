@@ -148,15 +148,14 @@ export function formatSubscribe (productIds) {
         subscribedList = [...new Set(productIds)].map(el => {
             const data = el.split('_')
             return {
-                symbol_id: data[0],
-                trade_type: data[1],
+                symbol_id: Number(data[0]),
+                trade_type: Number(data[1]),
             }
         })
     } else {
         const symbolKeys = productMapToSymbolKey(productIds)
         return formatSubscribe(symbolKeys)
     }
-    console.log(subscribedList)
     return subscribedList
 }
 /** 格式化产品订阅数据列表

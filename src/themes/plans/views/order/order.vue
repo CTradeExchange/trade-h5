@@ -9,7 +9,15 @@
             <Direction v-model='direction' class='cellMarginTop' :product='product' />
             <!-- 挂单设置 -->
             <PendingBar
-                v-if='orderType===10'
+                v-if='product && product.tradeType===3 && orderType===10'
+                ref='pendingRef'
+                v-model='pendingPrice'
+                class='cellMarginTop'
+                :direction='direction'
+                :product='product'
+            />
+            <PendingBarCFD
+                v-else-if='orderType===10'
                 ref='pendingRef'
                 v-model='pendingPrice'
                 class='cellMarginTop'
@@ -20,7 +28,7 @@
             <OrderVolume v-if='product' v-model='volume' class='cellMarginTop' :product='product' />
             <!-- 订单金额 -->
             <Assets
-                v-if='account'
+                v-if='account && product && product.tradeType===3'
                 v-model:operation-type='operationType'
                 :account='account'
                 :direction='direction'
@@ -45,8 +53,6 @@
         <!-- 委托列表 -->
         <Trust
             v-if='product'
-            v-model:stopLoss='stopLoss'
-            v-model:stopProfit='stopProfit'
             class='cellMarginTop'
             :direction='direction'
             :product='product'
@@ -69,11 +75,12 @@ import Direction from './components/direction'
 import OrderVolume from './components/orderVolume'
 import ProfitlossSet from './components/profitLossSet'
 import PendingBar from './components/pendingBar'
+import PendingBarCFD from './components/pendingBar_CFD'
 import OrderTypeTab from './components/orderType.vue'
 import Assets from './components/assets.vue'
 import Trust from './components/trust.vue'
 import SwitchProduct from './components/switchProduct.vue'
-import { addOrder } from '@/api/trade'
+import { addMarketOrder } from '@/api/trade'
 import { Toast } from 'vant'
 export default {
     components: {
@@ -86,11 +93,11 @@ export default {
         Assets,
         Trust,
         PendingBar,
+        PendingBarCFD,
     },
     setup () {
         const store = useStore()
         const route = useRoute()
-        const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
         const { symbolId, direction, tradeType } = route.query
         if (symbolId && tradeType) store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
@@ -119,8 +126,28 @@ export default {
         const product = computed(() => store.getters.productActived)
         const customerInfo = computed(() => store.state._user.customerInfo)
         const account = computed(() => {
-            const buyCurrency = product.value[state.direction === 'buy' ? 'profitCurrency' : 'baseCurrency']
-            return customerInfo?.value?.accountMap[buyCurrency]
+            let account = ''
+            const accountList = customerInfo.value?.accountList || []
+            const productTradeType = parseInt(product.value?.tradeType)
+            if ([1, 2].includes(productTradeType)) {
+                account = accountList.find(el => el.tradeType === productTradeType)
+            } else {
+                const outCurrency = product.value[state.direction === 'buy' ? 'profitCurrency' : 'baseCurrency']
+                account = customerInfo?.value?.accountMap[outCurrency]
+            }
+            return account
+        })
+        const bizType = computed(() => {
+            let bizType = state.orderType
+            if (bizType === 10 && [1, 2].includes(product.value?.tradeType)) {
+                const requestPrice = state.pendingPrice
+                if (state.direction === 'buy') {
+                    bizType = lt(requestPrice, product.value.buy_price) ? 10 : 11
+                } else {
+                    bizType = gt(requestPrice, product.value.sell_price) ? 10 : 11
+                }
+            }
+            return bizType
         })
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
         QuoteSocket.send_subscribe([symbolKey.value]) // 订阅产品报价
@@ -139,13 +166,13 @@ export default {
         watch(
             () => state.direction,
             () => {
-                queryAccountInfo()
+                if (product.value?.tradeType === 3) queryAccountInfo()
             },
         )
 
         // 切换订单类型
         const changeOrderType = (val) => {
-            store.commit('_trade/Update_pendingEnable', val === 2)
+            store.commit('_trade/Update_pendingEnable', val === 10)
         }
         // 初始化设置
         const init = () => {
@@ -163,7 +190,7 @@ export default {
                     })
                 }
             }).then(() => {
-                queryAccountInfo()
+                if (product.value?.tradeType === 3) queryAccountInfo()
             })
         }
 
@@ -173,13 +200,13 @@ export default {
             else if (state.orderType === 10 && isNaN(state.pendingPrice)) return Toast(t('trade.pendingPriceError'))
             else if (!state.volume) return Toast(t('trade.inputVolume'))
             else if (isNaN(state.volume)) return Toast(t('trade.volumeError'))
-            else if (!account.value) return Toast(t('trade.nullAssets'))
+            else if (product.value?.tradeType === 3 && !account.value) return Toast(t('trade.nullAssets'))
             return pendingWarn.value || profitLossWarn.value
         }
 
-        // 点击提交按钮
-        const submitHandler = () => {
-            if (paramsInvalid()) return
+        // 下单参数
+        const orderParams = () => {
+            if (paramsInvalid()) return null
             let requestPrice = state.direction === 'sell' ? product.value.sell_price : product.value.buy_price
             const direction = state.direction === 'sell' ? 2 : 1
             if (state.orderType === 10) {
@@ -187,7 +214,7 @@ export default {
             }
             const p = Math.pow(10, product.value.price_digits)
             const params = {
-                bizType: state.orderType, // 业务类型。1-市价开；2-限价开
+                bizType: bizType.value, // 业务类型。1-市价开；2-限价开
                 direction, // 订单买卖方向。1-买；2-卖；
                 symbolId: Number(product.value.symbol_id),
                 accountCurrency: account.value.currency,
@@ -199,10 +226,16 @@ export default {
                 accountDigits: account.value.digits,
                 tradeType: tradeType,
             }
-            console.log(params)
+            return params
+        }
+
+        // 点击提交按钮
+        const submitHandler = () => {
+            const params = orderParams()
+            if (!params) return
             if (state.loading) return false
             state.loading = true
-            addOrder(params)
+            addMarketOrder(params)
                 .then(res => {
                     state.loading = false
                     if (res.invalid()) return false
@@ -211,6 +244,7 @@ export default {
                     const orderId = data.orderId || data.id
                     sessionStorage.setItem('order_' + orderId, JSON.stringify(localData))
                     // router.push({ name: 'OrderSuccess', query: { orderId } })
+                    store.dispatch('_trade/queryPBOOrderPage')
                     Toast({
                         message: t('trade.orderSuccessToast'),
                         duration: 1000,
@@ -263,6 +297,7 @@ export default {
 .orderWrap {
     position: relative;
     height: 100%;
+    padding-bottom: rem(100px);
     overflow-y: auto;
     color: var(--color);
     background: var(--bgColor);
@@ -270,7 +305,7 @@ export default {
         @include scroll();
         flex: 1;
         //margin-bottom: rem(90px);
-        padding: 0 rem(40px) rem(100px) rem(40px);
+        padding: 0 rem(40px) rem(70px) rem(40px);
         overflow: auto;
         background: var(--contentColor);
     }

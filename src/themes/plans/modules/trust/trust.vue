@@ -63,7 +63,8 @@ export default {
         const loading = ref(false)
         const { t } = useI18n({ useScope: 'global' })
         // 获取当前产品
-        const curProduct = computed(() => store.state._quote.productMap[props.product.symbolId])
+        const symbolKey = `${props.product.symbolId}_${props.product.tradeType}`
+        const curProduct = computed(() => store.state._quote.productMap[symbolKey])
         // 获取玩法id
         const tradeType = computed(() => store.state._base.tradeType)
 

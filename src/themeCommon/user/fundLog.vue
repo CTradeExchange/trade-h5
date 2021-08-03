@@ -110,7 +110,7 @@
                         </div>
                         <div class='f-right'>
                             <p class='amount'>
-                                {{ item.amount }} {{ customInfo.currency }}
+                                {{ item.amount }} {{ item.currency }}
                             </p>
                             <p class='balance'>
                                 {{ $t('common.balance') + item.amountAfter }} {{ customInfo.currency }}

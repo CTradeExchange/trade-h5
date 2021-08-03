@@ -190,8 +190,8 @@ export default {
                 loginName: state.openType === 'email' ? state.email : state.mobile,
                 registerSource: getDevice(),
                 verifyCode: state.checkCode,
-                currency: state.currency,
-                tradeType: state.tradeType,
+                // currency: state.currency,
+                // tradeType: state.tradeType,
                 sendToken: token,
                 utmSource: getQueryVariable('utm_source'),
                 utmMedium: getQueryVariable('utm_medium'),
@@ -199,6 +199,7 @@ export default {
                 utmContent: getQueryVariable('utm_content'),
                 utmTerm: getQueryVariable('utm_term'),
                 protocol: state.protocol,
+                tradeTypeCurrencyList: store.state._base.wpCompanyInfo.tradeTypeCurrencyList,
                 country: state.countryCode
             }
 
