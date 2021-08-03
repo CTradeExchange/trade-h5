@@ -118,7 +118,12 @@ export default {
             }
             state.loading = true
             // 处理金额*10 小数位次方
-            const occupyTheMargin = state.operType ? pow(parseFloat(state.amount), props.data.openAccountDigits) : pow(-(parseFloat(state.amount)), props.data.openAccountDigits)
+            const margin = state.operType ? parseFloat(state.amount) : -parseFloat(state.amount)
+            const occupyTheMargin = margin * pow(10, props.data.openAccountDigits)
+
+            debugger
+
+            return
 
             const params = {
                 tradeType: tradeType.value,
