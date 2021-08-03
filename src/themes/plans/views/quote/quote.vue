@@ -10,7 +10,7 @@
                 :dot='true'
                 line-height='0'
                 line-width='0'
-                :list='[...categoryList]'
+                :list='categoryList'
                 @change='tabChange'
                 @tabClick='tabClick'
             />

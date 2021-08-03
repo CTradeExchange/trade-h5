@@ -1,5 +1,6 @@
 <template>
     <van-tabs
+        ref='tabs'
         v-model:active='active'
         :border='border'
         class='tabs'
@@ -70,6 +71,12 @@ export default {
     watch: {
         modelValue () {
             this.active = this.modelValue
+        },
+        list: {
+            deep: true,
+            handler () {
+                this.$refs.tabs && this.$refs.tabs.resize()
+            }
         }
     },
     created () {
