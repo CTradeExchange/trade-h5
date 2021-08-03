@@ -1,5 +1,6 @@
 <template>
     <div class='assetsWrapper'>
+        <TabBar />
         <TotalAssets class='block' />
 
         <AssetsItem v-for='item in accountList' :key='item.accountId' class='block' :data='item' />
@@ -7,6 +8,7 @@
 </template>
 
 <script>
+import TabBar from './components/tabBar.vue'
 import AssetsItem from './components/assetsItem.vue'
 import TotalAssets from './components/totalAssets.vue'
 // import { reactive, toRefs } from 'vue'
@@ -14,6 +16,7 @@ import { useStore } from 'vuex'
 import { computed } from '@vue/runtime-core'
 export default {
     components: {
+        TabBar,
         AssetsItem,
         TotalAssets,
     },

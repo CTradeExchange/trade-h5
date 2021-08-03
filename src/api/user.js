@@ -564,3 +564,51 @@ export function queryAccountAssetsInfo (data) {
         data
     })
 }
+
+// 手动还款
+export function manualRepayment (data) {
+    return request({
+        url: '/global/fund.app.DepositAppDubboService.manualRepayment',
+        method: 'post',
+        data
+    })
+}
+
+// 修改仓位占用保证金
+export function updateOccupyTheMargin (data) {
+    return request({
+        url: '/global/tradeapi.app.PositionApiService.updateOccupyTheMargin',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            group: 'tradeApi'
+        },
+        data
+    })
+}
+
+// 获取下单还币汇率(杠杆)
+export function previewOrder (data) {
+    return request({
+        url: '/global/tradeapi.app.OrderApiService.previewOrder',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            group: 'tradeApi'
+        },
+        data
+    })
+}
+
+// 下单还币(杠杆)
+export function addRepaymentOrder (data) {
+    return request({
+        url: '/global/tradeapi.app.OrderApiService.addRepaymentOrder',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            group: 'tradeApi'
+        },
+        data
+    })
+}

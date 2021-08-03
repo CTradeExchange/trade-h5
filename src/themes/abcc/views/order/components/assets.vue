@@ -36,8 +36,8 @@
 
         <van-dialog v-model:show='availableLoanAlert' title=''>
             <div class='availableLoanContent'>
-                <p>{{ $t('trade.availableLoanContent1', [account.availableLoan]) }}</p>
-                <p>{{ $t('trade.availableLoanContent2') }}</p>
+                <p>{{ $t('trade.availableLoanContent1', [maxBorrow]) }}</p>
+                <p>{{ $t('trade.availableLoanContent2',[account.currency,dailyInterest]) }}</p>
             </div>
         </van-dialog>
         <van-dialog v-model:show='lilvAlert' title=''>
@@ -68,11 +68,23 @@ export default {
         const changeOperationType = val => emit('update:operationType', val)
 
         const accountMap = computed(() => store.state._user.customerInfo?.accountMap)
+
+        // 日利率
         const dailyInterest = computed(() => {
             const assetsId = accountMap?.value[props.account.currency]?.assetsId
             const interest = props.product.borrowInterestList.find(item => Number(item.assetsId) === Number(assetsId))?.value
 
             return interest ? mul(interest, 100) + '%' : '--'
+        })
+
+        // 最大可借额度
+        const maxBorrow = computed(() => {
+            const assetsId = accountMap?.value[props.account.currency]?.assetsId
+            if (props.product.borrowLimitList) {
+                const borrowLimit = props.product?.borrowLimitList.find(item => Number(item.assetsId) === Number(assetsId))?.value
+                return borrowLimit || '--'
+            }
+            return '--'
         })
 
         // 预计占用
@@ -90,6 +102,7 @@ export default {
             checked,
             changeOperationType,
             dailyInterest,
+            maxBorrow,
             lockFunds,
         }
     }

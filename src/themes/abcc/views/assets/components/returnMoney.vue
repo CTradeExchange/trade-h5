@@ -15,7 +15,7 @@
                         {{ outCurrency }}
                     </span>
                     <span class='icon_icon_arrow' @click='selectPickerField("outCurrency")'></span>
-                    <input v-model='outAmount' class='input' type='text' />
+                    <input v-model='outAmount' class='input' type='number' />
                     <a class='all' href='javascript:;' @click='handleAll'>
                         {{ $t('trade.allPosition') }}
                     </a>
@@ -34,14 +34,14 @@
                     <span class='icon_icon_arrow' @click='selectPickerField("inCurrency")'></span>
                     ≈
 
-                    <input class='input' type='text' :value='inAmount' />
-                    <van-loading />
+                    <input class='input' readonly type='number' :value='inAmount' />
+                    <van-loading v-if='computLoading' size='18' />
                 </div>
                 <p class='mutedTip'>
                     {{ $t('trade.daihuan') + inAccount.liabilitiesPrincipal + inCurrency }}
                 </p>
             </div>
-            <van-button block class='returnBtn' type='primary'>
+            <van-button block class='returnBtn' :loading='loading' type='primary' @click='returnMoney'>
                 {{ $t('trade.huan') }} {{ inCurrency }}
             </van-button>
         </div>
@@ -52,13 +52,18 @@
 </template>
 
 <script>
-import { computed, reactive, ref, toRefs, watch } from 'vue'
+import { computed, reactive, ref, toRefs, watch, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import BigNumber from 'bignumber.js'
+import { useI18n } from 'vue-i18n'
+import { manualRepayment, addRepaymentOrder, previewOrder } from '@/api/user'
+import { Toast } from 'vant'
+import { debounce, isEmpty } from '@/utils/util'
 export default {
     props: ['modelValue', 'account'],
     emits: ['update:modelValue'],
     setup (props, { emit }) {
+        const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const state = reactive({
             show: false,
@@ -67,11 +72,15 @@ export default {
             outCurrency: '', // 以xx币还
             inCurrency: '', // 还xx币
             outAmount: '', // 以xx币还的金额
+            loading: false,
+            computLoading: false
         })
-        const accountMap = computed(() => store.state._user.customerInfo?.accountMap)
-        const outAccount = computed(() => accountMap?.value[state.outCurrency]) // 以xx币还的账户
-        const inAccount = computed(() => accountMap?.value[state.inCurrency]) // 还xx币的账户
-        const accountList = computed(() => store.state._user.customerInfo?.accountList || [])
+
+        const customInfo = computed(() => store.state._user.customerInfo)
+        const assetsInfo = computed(() => store.state._user.assetsInfo)
+        const outAccount = computed(() => customInfo.value?.accountMap[state.outCurrency]) // 以xx币还的账户
+        const inAccount = computed(() => customInfo.value?.accountMap[state.inCurrency]) // 还xx币的账户
+
         const productList = computed(() => store.state._quote.productList)
         const inAmount = computed(() => { // 还xx币的金额
             const rateProduct = productList.value.find(({ baseCurrency, profitCurrency }) => (baseCurrency === state.inCurrency && profitCurrency === state.outCurrency))
@@ -84,11 +93,15 @@ export default {
                     return BigNumber(state.outAmount).times(rateProduct.sell_price).toFixed(inAccount.value.digits)
                 }
             } else {
-                // 双边都是非USDT
+                // 双边都是非USDT,计算兑换数量
             }
             return ''
         })
-        const columns = computed(() => accountList.value.map(el => el.currency))
+
+        // 当前币种
+        const columns = computed(() => customInfo?.value?.accountList.map(el => el.currency))
+        const tradeType = computed(() => store.state._base.tradeType)
+
         watch(
             () => props.modelValue,
             newval => {
@@ -96,6 +109,38 @@ export default {
             },
             { immediate: true }
         )
+
+        // 防抖处理还币输入框，
+        const computeReturnMoney = debounce(() => {
+            // state.searchKey = val
+            state.computLoading = true
+            const params = {
+                tradeType: tradeType.value,
+                sourceCurrency: state.outCurrency,
+                targetCurrency: state.inCurrency,
+                requestNum: state.outAmount,
+                requestTime: Date.now(),
+                remark: '',
+                customerCurrency: assetsInfo.value.currency
+            }
+            previewOrder(params)
+                .then(res => {
+                    state.computLoading = false
+                    state.loading = false
+                    if (res.check()) {
+
+                    }
+                }).catch(err => {
+                    state.computLoading = false
+                    state.loading = false
+                })
+        })
+        watchEffect(() => {
+            if (!isEmpty(state.outAmount)) {
+                computeReturnMoney()
+            }
+        })
+
         const closed = () => {
             emit('update:modelValue', false)
         }
@@ -120,10 +165,39 @@ export default {
             console.log(val, state.pickerField)
             state[state.pickerField] = val
             state.pickerShow = false
+            if (!isEmpty(state.outCurrency)) {
+                computeReturnMoney()
+            }
         }
 
         const handleAll = () => {
             state.outAmount = outAccount.value.available
+        }
+
+        // 手动还币
+        const returnMoney = () => {
+            if (isEmpty(state.amount)) {
+                return Toast(t('trade.enterReturnAmount'))
+            }
+
+            const params = {
+                customerNo: customInfo.value.customerNo,
+                accountId: props.account.accountId,
+                customerGroupId: customInfo.value.customerGroupId,
+                accountCurrency: state.outCurrency,
+                amount: 100
+            }
+
+            state.loading = true
+            manualRepayment(params)
+                .then(res => {
+                    state.loading = false
+                    if (res.check()) {
+                        Toast('trade.repaymentSuccess')
+                    }
+                }).catch(err => {
+                    state.loading = false
+                })
         }
 
         return {
@@ -136,7 +210,9 @@ export default {
             columns,
             closed,
             onOpen,
+            returnMoney,
             handleAll,
+            assetsInfo
         }
     }
 }
