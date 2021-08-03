@@ -17,6 +17,7 @@ const alias = {
     '@c': resolve('src/themes/cats'),
     '@ct': resolve('src/themes/ctrader'),
     '@abcc': resolve('src/themes/abcc'),
+    '@plans': resolve('src/themes/plans'),
     '@admin': resolve('src_admin'),
     '@utils': resolve('src_admin/utils'),
     '@index': resolve('src_admin/pages/index'),
@@ -78,7 +79,7 @@ if (isAdminMode) {
     // H5开发模式
     Object.assign(pages, {
         index: {
-            entry: 'src/themes/abcc/main.js',
+            entry: 'src/themes/cats/main.js',
             template: 'public/index.html',
             filename: process.env.NODE_ENV === 'production' ? 'index_template.html' : 'index.html',
         }
@@ -120,7 +121,7 @@ const config = {
                 target: 'http://prewpadmin.cats-trade.com' // http://prewpadmin.cats-trade.com/
             },
             '/cats-manage-api': {
-                target: 'http://uatwph5_5.cats-trade.com' // prewph5公司id为2 prewph5_1公司id为60
+                target: 'http://prewph5_3.cats-trade.com' // prewph5公司id为2 prewph5_1公司id为60
             },
             '/upload': {
                 target: 'http://precatsapi.cats-trade.com/upload'
