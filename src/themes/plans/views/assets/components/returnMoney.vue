@@ -124,13 +124,13 @@ export default {
             // state.searchKey = val
             state.computLoading = true
             const params = {
-                tradeType: tradeType.value,
+                tradeType: 3,
                 sourceCurrency: state.outCurrency,
                 targetCurrency: state.inCurrency,
                 requestNum: state.outAmount,
                 requestTime: Date.now(),
                 remark: '',
-                customerCurrency: assetsInfo.value.currency
+                customerCurrency: 'USDT'
             }
             previewOrder(params)
                 .then(res => {
@@ -189,12 +189,13 @@ export default {
             // 如果来源货币和目标货币相同，刚手动还款，否则通过下单还币
             if (state.outCurrency === state.inCurrency) {
                 manualRepayment({
-                    tradeType: tradeType.value,
+                    tradeType: 3,
                     customerNo: customInfo.value.customerNo,
                     accountId: props.account.accountId,
                     customerGroupId: customInfo.value.customerGroupId,
                     accountCurrency: state.outCurrency,
                     amount: state.outAmount,
+                    customerCurrency: 'USDT'
                 })
                     .then(res => {
                         state.loading = false
@@ -208,13 +209,14 @@ export default {
                     })
             } else {
                 addRepaymentOrder({
-                    tradeType: tradeType.value,
+                    tradeType: 3,
                     sourceCurrency: state.outCurrency,
                     targetCurrency: state.inCurrency,
                     customerCurrency: assetsInfo.value.currency,
                     requestNum: state.outAmount,
                     requestTime: Date.now(),
-                    remark: ''
+                    remark: '',
+                    customerCurrency: 'USDT'
                 }).then(res => {
                     state.loading = false
                     if (res.check()) {
