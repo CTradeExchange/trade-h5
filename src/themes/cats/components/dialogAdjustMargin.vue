@@ -12,7 +12,7 @@
                     {{ data.symbolName }}
                 </p>
                 <p class='lot'>
-                    {{ data.symbolName }}
+                    {{ data.symbolCode }}
                 </p>
             </div>
             <div class='right' @click='closeHandler'>
@@ -32,12 +32,17 @@
                 </span>
                 <span class='line'></span>
                 <input v-model='amount' class='input' :placeholder="$t('trade.modifyAmount')" type='number' />
-                <span class='all'>
+                <span class='all' @click='handleAll'>
                     {{ $t('common.all') }}
                 </span>
             </div>
             <p class='desc'>
-                最大追加: 548754.44USD
+                <span v-if='operType'>
+                    {{ $t('trade.maxRaise') }}: {{ accountInfo.available }} {{ accountInfo.currency }}
+                </span>
+                <span v-else>
+                    {{ $t('trade.maxReduce') }}: {{ data.canReduceMargin }} {{ accountInfo.currency }}
+                </span>
             </p>
 
             <!-- {{ data }}   {{ product }} -->
@@ -82,6 +87,7 @@ export default {
 
         const tradeType = computed(() => store.state._base.tradeType)
         const customerInfo = computed(() => store.state._user.customerInfo)
+        const accountInfo = computed(() => customerInfo.value.accountList[0])
 
         watchEffect(() => {
             state.showDialog = props.show
@@ -94,6 +100,14 @@ export default {
         const operation = () => {
             state.operType = !state.operType
             state.operText = state.operType ? t('trade.raise') : t('trade.reduce')
+        }
+
+        const handleAll = () => {
+            if (state.operType) {
+                state.amount = accountInfo.value.available
+            } else {
+                state.amount = props.data.canReduceMargin
+            }
         }
 
         // 调整保证金
@@ -122,29 +136,6 @@ export default {
             }).catch(err => {
                 state.loading = false
             })
-
-            // const params = submitCloseParam()
-            // if (!params) return false
-            // state.loading = true
-            // addMarketOrder(params)
-            //     .then(res => {
-            //         state.loading = false
-            //         if (res.invalid()) return false
-            //         const data = res.data
-            //         const localData = Object.assign({}, params, data)
-            //         const orderId = data.orderId || data.id
-            //         sessionStorage.setItem('order_' + orderId, JSON.stringify(localData))
-            //         // router.push({ name: 'ClosePositionSuccess', query: { orderId } })
-            //         closed()
-            //         Toast({
-            //             message: t('trade.closeSuccessToast'),
-            //             duration: 1000,
-            //             forbidClick: true,
-            //         })
-            //     })
-            //     .catch(err => {
-            //         state.loading = false
-            //     })
         }
         const closed = () => { // 关闭弹出层且动画结束后触发
             context.emit('update:show', false)
@@ -156,7 +147,9 @@ export default {
             closeHandler,
             closed,
             operation,
+            accountInfo,
             tradeType,
+            handleAll
         }
     }
 }

@@ -395,7 +395,10 @@
     "enterMarginAmount": "请输入调整金额",
     "prospectMandatory":"预估强平价",
     "margin": "保证金",
-    "holdMargin": "维持保证金"
+    "holdMargin": "维持保证金",
+    "maxRaise": "最大追加",
+    "maxReduce":"最大减少",
+    "enterReturnAmount": "请输入还币金额"
   },
   "bizType": {
     "2": "市价平仓",

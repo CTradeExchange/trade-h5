@@ -1,7 +1,6 @@
 <template>
     <van-popup v-model:show='show' position='bottom' @closed='closed' @open='onOpen'>
         <div class='returnMoneyPop'>
-            {{ account }}
             <p class='closeBar'>
                 <a class='closeBtn' href='javascript:;' @click='closed'>
                     <i class='icon_icon_close_big'></i>
@@ -36,7 +35,7 @@
                     ≈
 
                     <input class='input' type='text' :value='inAmount' />
-                    <van-loading size='18' />
+                    <van-loading v-if='computLoading' size='18' />
                 </div>
                 <p class='mutedTip'>
                     {{ $t('trade.daihuan') + inAccount.liabilitiesPrincipal + inCurrency }}
@@ -53,15 +52,18 @@
 </template>
 
 <script>
-import { computed, reactive, ref, toRefs, watch } from 'vue'
+import { computed, reactive, ref, toRefs, watch, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import BigNumber from 'bignumber.js'
-import { manualRepayment } from '@/api/user'
+import { useI18n } from 'vue-i18n'
+import { manualRepayment, addRepaymentOrder, previewOrder } from '@/api/user'
 import { Toast } from 'vant'
+import { debounce, isEmpty } from '@/utils/util'
 export default {
     props: ['modelValue', 'account'],
     emits: ['update:modelValue'],
     setup (props, { emit }) {
+        const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const state = reactive({
             show: false,
@@ -70,7 +72,8 @@ export default {
             outCurrency: '', // 以xx币还
             inCurrency: '', // 还xx币
             outAmount: '', // 以xx币还的金额
-            loading: false
+            loading: false,
+            computLoading: false
         })
 
         const customInfo = computed(() => store.state._user.customerInfo)
@@ -90,11 +93,15 @@ export default {
                     return BigNumber(state.outAmount).times(rateProduct.sell_price).toFixed(inAccount.value.digits)
                 }
             } else {
-                // 双边都是非USDT
+                // 双边都是非USDT,计算兑换数量
             }
             return ''
         })
+
+        // 当前币种
         const columns = computed(() => customInfo?.value?.accountList.map(el => el.currency))
+        const tradeType = computed(() => store.state._base.tradeType)
+
         watch(
             () => props.modelValue,
             newval => {
@@ -102,6 +109,35 @@ export default {
             },
             { immediate: true }
         )
+
+        // 防抖处理还币输入框，
+        const computeReturnMoney = debounce((val) => {
+            // state.searchKey = val
+            state.computLoading = true
+            const params = {
+                tradeType: tradeType.value,
+                sourceCurrency: state.outCurrency,
+                targetCurrency: state.inCurrency,
+                requestNum: state.amount,
+                requestTime: Date.now(),
+                remark: ''
+            }
+            previewOrder(params)
+                .then(res => {
+                    state.computLoading = false
+                    state.loading = false
+                    if (res.check()) {
+
+                    }
+                }).catch(err => {
+                    state.computLoading = false
+                    state.loading = false
+                })
+        })
+        watchEffect(() => {
+            computeReturnMoney(state.amount)
+        })
+
         const closed = () => {
             emit('update:modelValue', false)
         }
@@ -126,6 +162,7 @@ export default {
             console.log(val, state.pickerField)
             state[state.pickerField] = val
             state.pickerShow = false
+            computeReturnMoney()
         }
 
         const handleAll = () => {
@@ -134,6 +171,10 @@ export default {
 
         // 手动还币
         const returnMoney = () => {
+            if (isEmpty(state.amount)) {
+                return Toast(t('trade.enterReturnAmount'))
+            }
+
             const params = {
                 customerNo: customInfo.value.customerNo,
                 accountId: props.account.accountId,

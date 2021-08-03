@@ -68,16 +68,18 @@
                 <div class='flex-wrap'>
                     <div class='flex-item'>
                         <div class='title'>
-                            {{ $t('trade.holdMargin') }}
+                            {{ $t('trade.originalMargin') }}
                         </div>
                         <div class='val'>
+                            {{ data.openMargin }}
                         </div>
                     </div>
                     <div class='flex-item'>
                         <div class='title'>
-                            {{ $t('trade.margin') }}
+                            {{ $t('trade.holdMargin') }}
                         </div>
                         <div class='val'>
+                            {{ data.maintenanceMargin }}
                         </div>
                     </div>
                     <div v-if='customerInfo.tradeType===2' class='flex-item'>
