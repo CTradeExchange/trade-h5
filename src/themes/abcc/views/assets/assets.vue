@@ -1,6 +1,6 @@
 <template>
     <div class='assetsWrapper'>
-        <TabBar />
+        <!-- <TabBar /> -->
         <TotalAssets class='block' />
 
         <AssetsItem v-for='item in accountList' :key='item.accountId' class='block' :data='item' />
