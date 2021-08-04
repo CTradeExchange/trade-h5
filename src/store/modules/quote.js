@@ -175,7 +175,7 @@ export default {
             const productList = [...selfSymbolList]
 
             const wpProductCategory = rootState._base.wpProductCategory
-            const categories = wpProductCategory.find(el => el.tag === 'quoteList')?.data.items || []
+            const categories = wpProductCategory.find(el => el.tag === 'quoteList')?.data.tradeTypeBlock || {}
             const symbolAllData = createListByPlans(categories, customerGroupId)
             const { symbolList, planMap } = symbolAllData
             commit('add_products', symbolList)
