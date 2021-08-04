@@ -41,7 +41,7 @@
                     <van-loading v-if='computLoading' size='18' />
                 </div>
                 <p class='mutedTip'>
-                    {{ $t('trade.daihuan') + inAccount.liabilitiesPrincipal + inCurrency }}
+                    {{ $t('trade.daihuan') + inAccount.liabilities + inCurrency }}
                 </p>
             </div>
             <van-button block class='returnBtn' :loading='loading' type='primary' @click='returnMoney'>
@@ -133,7 +133,7 @@ export default {
                 requestNum: state.outAmount,
                 requestTime: Date.now(),
                 remark: '',
-                customerCurrency: assetsInfo.value.currency,
+                customerCurrency: route.query.currency,
             }
             previewOrder(params)
                 .then(res => {
@@ -209,7 +209,7 @@ export default {
                     customerGroupId: customInfo.value.customerGroupId,
                     accountCurrency: state.outCurrency,
                     amount: state.outAmount,
-                    customerCurrency: assetsInfo.value.currency,
+                    customerCurrency: route.query.currency,
                 })
                     .then(res => {
                         state.loading = false
@@ -224,7 +224,7 @@ export default {
                     tradeType: tradeType.value,
                     sourceCurrency: state.outCurrency,
                     targetCurrency: state.inCurrency,
-                    customerCurrency: assetsInfo.value.currency,
+                    customerCurrency: route.query.currency,
                     requestNum: state.outAmount,
                     requestTime: Date.now(),
                     remark: '',

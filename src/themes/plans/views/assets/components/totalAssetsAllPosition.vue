@@ -4,11 +4,15 @@
             <div class='totalAssetsInfo'>
                 <p class='label'>
                     <span> {{ $t('assets.balance') }}({{ assetsInfo.currency }})</span>
-                    <!-- <span class='tag'>
-                    </span> -->
+                    <span class='tag'>
+                        <i
+                            class='icon_zijinmingxi2
+'
+                        ></i>
+                    </span>
                 </p>
                 <p class='totalAmount'>
-                    {{ assetsInfo.totalBalance }}
+                    --
                 </p>
             </div>
         </div>
@@ -95,14 +99,16 @@ export default {
         color: var(--minorColor);
         font-size: rem(28px);
         .tag {
-            width: rem(140px);
-            height: rem(40px);
-            color: var(--success);
-            font-size: rem(20px);
-            line-height: rem(40px);
-            text-align: center;
-            border: 1px solid var(--success);
-            border-radius: rem(6px);
+            width: rem(35px);
+            color: var(--color);
+            // width: rem(140px);
+            // height: rem(40px);
+            // color: var(--success);
+            // font-size: rem(20px);
+            // line-height: rem(40px);
+            // text-align: center;
+            // border: 1px solid var(--success);
+            // border-radius: rem(6px);
         }
     }
     .totalAmount {

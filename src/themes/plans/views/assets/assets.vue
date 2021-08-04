@@ -4,7 +4,7 @@
         <van-swipe ref='assetsSwipe' indicator-color='white' :show-indicators='false' @change='onChange'>
             <van-swipe-item>
                 <TotalAssetsAllPosition class='block' />
-                <AssetsItem v-for='item in accountList' :key='item.accountId' class='block' :data='item' />
+                <PositionList />
             </van-swipe-item>
             <van-swipe-item>
                 逐仓
@@ -22,13 +22,14 @@ import TabBar from './components/tabBar.vue'
 import AssetsItem from './components/assetsItem.vue'
 import TotalAssets from './components/totalAssets.vue'
 import TotalAssetsAllPosition from './components/totalAssetsAllPosition.vue'
-
+import PositionList from '@plans/modules/positionList/positionList'
 import { reactive, toRefs, nextTick, ref } from 'vue'
 import { useStore } from 'vuex'
 import { computed } from '@vue/runtime-core'
 export default {
     components: {
         TabBar,
+        PositionList,
         AssetsItem,
         TotalAssets,
         TotalAssetsAllPosition

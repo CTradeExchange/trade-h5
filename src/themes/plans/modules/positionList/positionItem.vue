@@ -1,74 +1,151 @@
 <template>
-    <div class='product-item' @click.stop='toPositionDetail(data)'>
-        <!-- {{ data.direction }} -->
+    <!-- @click.stop='toPositionDetail(data)' -->
+    <div class='product-item'>
         <div class='item'>
-            <div class='cell'>
-                <div class='th'>
-                    <div class='name'>
-                        {{ data.symbolName }}
+            <van-collapse v-model='activeNames' class='activeNames'>
+                <van-collapse-item name='1'>
+                    <template #title>
+                        <div class='cell'>
+                            <div class='th'>
+                                <div class='tl'>
+                                    <span class='name'>
+                                        {{ data.symbolName }}
+                                    </span>
+                                    <span class='lot'>
+                                        {{ data.symbolCode }}
+                                    </span>
+                                    <span>
+                                        <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
+                                            {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
+                                        </span>{{ positionVolume }} {{ $t('trade.volumeUnit') }}
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <span class='ft amount' :class="parseFloat(data.profitLoss) > 0 ? 'riseColor': 'fallColor'">
+                                        {{ data.profitLoss }} {{ customerInfo.currency }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <div class='cell'>
+                        <div class='flex-wrap'>
+                            <div class='flex-item'>
+                                <div class='title'>
+                                    {{ $t('trade.positionPrice') }}
+                                </div>
+                                <div class='val'>
+                                    {{ data.openPrice }}
+                                </div>
+                            </div><div class='flex-item alignRight'>
+                                <div class='title'>
+                                    {{ $t('trade.currentPrice') }}
+                                </div>
+                                <div :class='[Number(data.direction) === 1 ? product.sell_color : product.buy_color]'>
+                                    {{ Number(data.direction) === 1 ? product.sell_price : product.buy_price }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class='flex-wrap'>
+                            <div class='flex-item'>
+                                <div class='title'>
+                                    {{ $t('trade.stopProfitPrice') }}
+                                </div>
+                                <div class='val'>
+                                    {{ parseFloat(data.takeProfitDecimal) ? data.takeProfitDecimal : '——' }}
+                                </div>
+                            </div>
+                            <div class='flex-item'>
+                                <div class='title'>
+                                    {{ $t('trade.stopLossPrice') }}
+                                </div>
+                                <div class='val'>
+                                    {{ parseFloat(data.stopLossDecimal) ? data.stopLossDecimal : '——' }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class='flex-wrap'>
+                            <div class='flex-item'>
+                                <div class='title'>
+                                    {{ $t('trade.originalMargin') }}
+                                </div>
+                                <div class='val'>
+                                    {{ data.occupyTheMargin }}
+                                </div>
+                            </div>
+                            <div class='flex-item'>
+                                <div class='title'>
+                                    {{ $t('trade.holdMargin') }}
+                                </div>
+                                <div class='val'>
+                                    {{ data.maintenanceMargin }}
+                                </div>
+                            </div>
+                            <div v-if='customerInfo.tradeType===2' class='flex-item'>
+                                <div class='title alignRight'>
+                                    {{ $t('trade.previewStopPrice') }}
+                                </div>
+                                <div class='val '>
+                                    {{ data.previewStopPrice }}
+                                </div>
+                            </div>
+                        </div> -->
                     </div>
-                    <div class='lot'>
-                        {{ data.symbolCode }}
-                    </div><p>
-                        <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
-                            {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
-                        </span>{{ positionVolume }} {{ $t('trade.volumeUnit') }}
-                    </p>
-                </div><div>
-                    <span class='ft amount' :class="parseFloat(data.profitLoss) > 0 ? 'riseColor': 'fallColor'">
-                        {{ data.profitLoss }}
-                    </span><span class='currency'>
-                        {{ customerInfo.currency }}
-                    </span>
-                </div>
-            </div>
-            <div class='cell'>
-                <div class='price'>
-                    <div>
-                        <div class='price_item'>
-                            <span class='title'>
-                                {{ $t('trade.positionPrice') }}
-                            </span><span>
-                                {{ data.openPrice }}
-                            </span>
-                        </div><div class='price_item'>
-                            <span class='title'>
-                                {{ $t('trade.currentPrice') }}
-                            </span><span :class='[Number(data.direction) === 1 ? product.sell_color : product.buy_color]'>
-                                {{ Number(data.direction) === 1 ? product.sell_price : product.buy_price }}
-                            </span>
+                    <div class='cell'>
+                        <div class='flex-wrap'>
+                            <div class='flex-item'>
+                                <div class='title'>
+                                    {{ $t('trade.dealTime') }}
+                                </div>
+                                <div class='val'>
+                                    {{ formatTime(data.openTime) }}
+                                </div>
+                            </div><div class='flex-item alignRight'>
+                                <div class='title'>
+                                    {{ $t('trade.dealNo') }}
+                                </div>
+                                <div class='val'>
+                                    {{ data.orderId }}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <div class='price_item'>
-                            <span class='title'>
-                                {{ $t('trade.stopProfitPrice') }}
-                            </span><span class=''>
-                                {{ parseFloat(data.takeProfitDecimal) ? data.takeProfitDecimal : $t('trade.nosSet') }}
-                            </span>
-                        </div><div class='price_item'>
-                            <span class='title'>
-                                {{ $t('trade.stopLossPrice') }}
-                            </span><span class=''>
-                                {{ parseFloat(data.stopLossDecimal) ? data.stopLossDecimal : $t('trade.nosSet') }}
-                            </span>
+                    <div class='cell'>
+                        <div class='ft'>
+                            <div class='bd' @click.stop='toProduct(data.symbolId)'>
+                                <i class='icon_icon_chart hidden'></i>
+                            </div>
+                            <van-button
+                                v-if='Number(tradeType) === 2'
+                                hairline
+                                size='mini'
+                                type='default'
+                                @click.stop='$emit("showAdjustPopup",data)'
+                            >
+                                {{ $t('trade.modifyMargin') }}
+                            </van-button>
+                            <van-button
+                                hairline
+                                size='mini'
+                                type='default'
+                                @click.stop='$emit("showSLTP",data)'
+                            >
+                                {{ $t('trade.tackStopSetup') }}
+                            </van-button>
+                            <van-button
+                                hairline
+                                size='mini'
+                                type='default'
+                                @click.stop='$emit("showClose",data)'
+                            >
+                                {{ $t('trade.closed') }}
+                            </van-button>
                         </div>
                     </div>
-                </div>
-                <div class='ft'>
-                    <div class='bd' @click.stop='toProduct(data.symbolId)'>
-                        <i class='icon_icon_chart hidden'></i>
-                    </div>
-                    <van-button
-                        hairline
-                        size='mini'
-                        type='default'
-                        @click.stop='$emit("showClose",data)'
-                    >
-                        {{ $t('trade.closed') }}
-                    </van-button>
-                </div>
-            </div>
+                </van-collapse-item>
+            </van-collapse>
         </div>
     </div>
 
@@ -80,10 +157,10 @@ import { computed, reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { minus } from '@/utils/calculation'
-// import DialogClosePosition from '@plans/components/dialogClosePosition'
+// import DialogClosePosition from '@c/components/dialogClosePosition'
 export default {
     props: ['data'],
-    emits: ['showClose'],
+    emits: ['showClose', 'showAdjustPopup', 'showSLTP'],
     setup ({ data }) {
         const store = useStore()
         const router = useRouter()
@@ -91,12 +168,14 @@ export default {
             show: false,
             loading: false,
             cur: {},
-            cpVis: false
+            cpVis: false,
+            activeNames: ['1']
         })
         const customerInfo = computed(() => store.state._user.customerInfo)
         const positionList = computed(() => store.state._trade.positionList)
-        const product = computed(() => store.state._quote.productMap[data.symbolId])
+        const product = computed(() => store.state._quote.productMap['7_3'])
         const positionVolume = computed(() => minus(data.openVolume, data.closeVolume))
+        const tradeType = computed(() => store.state._base.tradeType)
 
         const toPositionDetail = (item) => {
             store.commit('_quote/Update_productActivedID', item.symbolId)
@@ -118,7 +197,8 @@ export default {
             positionVolume,
             toPositionDetail,
             updateShow,
-            toProduct
+            toProduct,
+            tradeType
         }
     }
 }
@@ -130,21 +210,26 @@ export default {
     .item {
         position: relative;
         margin-bottom: rem(20px);
-        padding: rem(20px) rem(30px) 0;
         overflow: hidden;
         background: var(--contentColor);
         border-radius: rem(10px);
+        :deep(.van-collapse-item__title) {
+            padding: rem(20px) rem(30px) 0 rem(30px);
+            .van-cell__right-icon {
+                color: var(--color);
+                vertical-align: middle;
+            }
+        }
         .cell {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
             width: 100%;
             margin-bottom: rem(20px);
             color: var(--minorColor);
             font-size: rem(20px);
             line-height: 1.45;
             .th {
-                flex: 1;
+                display: flex;
+                align-items: baseline;
+                justify-content: space-between;
             }
             &:last-child {
                 align-items: flex-end;
@@ -156,22 +241,26 @@ export default {
                 margin-right: rem(20px);
                 text-align: center;
             }
-            .price {
-                flex: 1;
-                .price_item {
+            .flex-wrap {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: rem(30px);
+                .flex-item {
                     display: inline-block;
-                    width: rem(220px);
-                    span {
+                    >div {
                         padding: 0 rem(4px);
                     }
                     .title {
                         margin-right: rem(4px);
                         padding: 0;
+                        color: var(--minorColor);
+                    }
+                    .val {
+                        color: var(--normalColor);
                     }
                 }
             }
             .ft {
-                text-align: right;
                 vertical-align: middle;
                 .van-button {
                     color: var(--primary);
@@ -181,13 +270,13 @@ export default {
                 }
             }
             .amount {
-                padding-right: rem(6px);
+                padding-right: rem(16px);
                 font-weight: 600;
                 font-size: rem(34px);
             }
-            .currency {
-                position: relative;
-                top: rem(6px);
+            .arrow {
+                color: var(--color);
+                vertical-align: middle;
             }
             .warn {
                 color: var(--color);
@@ -226,8 +315,9 @@ export default {
             }
         }
         .van-button {
-            width: rem(124px);
+            width: rem(265px);
             height: rem(48px);
+            margin-right: rem(10px);
             color: var(--primary) !important;
             font-size: rem(24px);
             line-height: rem(48px);
