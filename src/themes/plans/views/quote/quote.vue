@@ -31,11 +31,11 @@
 </template>
 
 <script>
-import TopTab from './topTab'
+import TopTab from '@plans/components/topTab'
 import productListComp from '@plans/modules/productList/productList.vue'
 import { ref, watch } from 'vue'
 import plansType from '@/themes/plans/components/plansType.vue'
-import { useProduct } from './hooks.js'
+import useProduct from '@plans/hooks/useProduct'
 
 export default {
     name: 'Quote',
@@ -74,6 +74,8 @@ export default {
         const tabChange = (i) => {}
         const tabClick = (i) => {}
 
+        const showSidebar = ref(false)
+
         return {
             categoryType,
             productListEl,
@@ -82,7 +84,8 @@ export default {
             tabChange,
             tabClick,
             handlePlayType,
-            planType
+            planType,
+            showSidebar
         }
     }
 }
