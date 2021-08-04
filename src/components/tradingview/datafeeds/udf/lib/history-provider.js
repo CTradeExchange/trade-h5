@@ -25,7 +25,7 @@ class HistoryProvider {
     // 实时更新k线
     async onTick(price, time){
         if(!this._onTick) return
-        const ticks = await this._requestKData.normalizeTick(price, time, this.symbolParams.resolution)
+        const ticks = await this._requestKData.normalizeTick(price, time, this.symbolParams.resolution) || []
         ticks.forEach(t => this._onTick(t))
     }
     // 用于存储udf获取的tick函数

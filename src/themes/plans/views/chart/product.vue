@@ -194,7 +194,7 @@
             </div>
         </div>
         <div class='chart-wrap'>
-            <!-- <tv
+            <tv
                 v-if='initialValue'
                 ref='chartRef'
                 :initial-value='initialValue'
@@ -202,7 +202,7 @@
                 @indicatorRemoved='indicatorRemoved'
                 @onChartReady='onChartReady'
                 @orientationChanged='orientationChanged'
-            /> -->
+            />
         </div>
         <div v-show='studyVis' ref='mainStudyArea' class='study-area'>
             <div class='main-study'>
@@ -276,7 +276,7 @@
 import { useRouter, useRoute } from 'vue-router'
 import StudyList from './components/studyList.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, reactive, toRefs, onBeforeUnmount, ref, onMounted, unref, watchEffect, watch, onUpdated, nextTick } from 'vue'
+import { computed, reactive, toRefs, ref, unref, watch } from 'vue'
 import KIcon from './icons/kIcon.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import dayjs from 'dayjs'
@@ -487,7 +487,7 @@ export default {
                     digits: product.value.symbolDigits, // 小数点
                 }
             }
-            return {}
+            return null
         })
 
         const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value.find(el => el.symbolId === parseInt(symbolId))))
