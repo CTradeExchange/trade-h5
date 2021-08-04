@@ -94,29 +94,8 @@ export default {
                     commit('Empty_data')
                     commit('_trade/Empty_data', null, { root: true })
                     commit('_quote/Empty_data', null, { root: true })
-
-                    // 优先将子账户列表处理成map格式
-                    const accountMap = {}
-                    if (data.accountList?.length) {
-                        data.accountList.forEach(el => {
-                            accountMap[el.currency] = el
-                        })
-                        Object.assign(data, data.accountList[0])
-                    }
-                    data.accountMap = accountMap
-                    const tradeType = data.tradeType
-
-                    commit('Update_kycState', res.data.kycAuditStatus)
                     commit('Update_loginData', data)
-                    commit('Update_customerInfo', data)
-                    commit('_base/UPDATE_tradeType', tradeType, { root: true }) // 登录后存储用户的玩法类型
-                    // dispatch('findCustomerInfo')  // findCustomerInfod 的数据目前和登录的数据一样，不需要再次调用
-                    if (data.optional === 1) dispatch('queryCustomerOptionalList', { tradeType }) // 如果添加过自选可以直接拉取自选列表，快速显示界面
-                    dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {
-                        return dispatch('_quote/querySymbolBaseInfoList', productAllList, { root: true })
-                    }).then(() => {
-                        if (data.optional === 0) dispatch('addCustomerOptionalDefault') // 如果没有添加过自选，拿到产品精简信息后添加自选，因为添加自选需要拿到 symbolId, symbolCode, symbolName
-                    })
+                    dispatch('saveCustomerInfo', res.data)
                 }
                 commit('Update_loginLoading', false)
                 return res
@@ -126,32 +105,32 @@ export default {
         findCustomerInfo ({ dispatch, commit, rootState }, params = {}) {
             commit('Update_loginLoading', true)
             return findCustomerInfo().then((res) => {
-                if (res.check()) {
-                    const data = res.data
-
-                    // 优先将子账户列表处理成map格式
-                    const accountMap = {}
-                    if (data.accountList?.length) {
-                        data.accountList.forEach(el => {
-                            accountMap[el.currency] = el
-                        })
-                        Object.assign(data, data.accountList[0])
-                    }
-                    data.accountMap = accountMap
-                    const tradeType = data.tradeType
-
-                    commit('Update_kycState', res.data.kycAuditStatus)
-                    commit('Update_customerInfo', res.data)
-                    commit('_base/UPDATE_tradeType', tradeType, { root: true }) // 登录后存储用户的玩法类型
-                    if (data.optional === 1) dispatch('queryCustomerOptionalList', { tradeType }) // 如果添加过自选可以直接拉取自选列表，快速显示界面
-                    dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {
-                        return dispatch('_quote/querySymbolBaseInfoList', productAllList, { root: true })
-                    }).then(() => {
-                        if (data.optional === 0) dispatch('addCustomerOptionalDefault') // 如果没有添加过自选，拿到产品精简信息后添加自选，因为添加自选需要拿到 symbolId, symbolCode, symbolName
-                    })
-                }
                 commit('Update_loginLoading', false)
+                if (res.check()) {
+                    dispatch('saveCustomerInfo', res.data)
+                }
                 return res
+            })
+        },
+        // 保存用户信息
+        saveCustomerInfo ({ dispatch, commit, rootState }, data = {}) {
+            // 优先将子账户列表处理成map格式
+            const accountMap = {}
+            if (data.accountList?.length) {
+                data.accountList.forEach(el => {
+                    accountMap[el.currency] = el
+                })
+            }
+            data.accountMap = accountMap
+            const tradeTypeList = rootState._base.plans.map(({ id }) => id)
+
+            commit('Update_kycState', data.kycAuditStatus)
+            commit('Update_customerInfo', data)
+            if (data.optional === 0) dispatch('queryCustomerOptionalList', { tradeTypeList }) // 如果添加过自选可以直接拉取自选列表，快速显示界面
+            dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {
+                return dispatch('_quote/querySymbolBaseInfoList', productAllList, { root: true })
+            }).then(() => {
+                if (data.optional === 0) dispatch('addCustomerOptionalDefault') // 如果没有添加过自选，拿到产品精简信息后添加自选，因为添加自选需要拿到 symbolId, symbolCode, symbolName
             })
         },
         logout ({ dispatch, commit, state, rootState }, params = {}) {

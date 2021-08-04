@@ -224,7 +224,7 @@ export default {
                 operationType: state.operationType,
                 requestPrice: mul(requestPrice, p),
                 accountDigits: account.value.digits,
-                tradeType: tradeType,
+                tradeType: parseInt(tradeType),
             }
             return params
         }
