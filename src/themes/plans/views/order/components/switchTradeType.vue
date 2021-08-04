@@ -1,6 +1,6 @@
 <template>
     <div class='switchTradeType'>
-        <div class='switchWrapper'>
+        <div v-if='tradeTypeList.length>1' class='switchWrapper'>
             <span v-for='item in tradeTypeList' :key='item.id' class='item' :class='{ active:item.id == product.tradeType }' @click='onChange(item)'>
                 {{ item.name }}
             </span>
@@ -13,7 +13,7 @@
             <span class='upDownWidth' :class='product.upDownColor'>
                 {{ product.upDownWidth }}
             </span>
-            <span class='chartIcon icon_icon_chart'></span>
+            <span class='chartIcon icon_icon_chart' @click="$router.push({ name:'Product', query: { symbolId:product.symbolId, tradeType:product.tradeType } })"></span>
         </div>
     </div>
 </template>

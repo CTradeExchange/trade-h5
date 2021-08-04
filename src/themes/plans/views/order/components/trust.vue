@@ -1,22 +1,75 @@
 <template>
     <div class='trustWrapper'>
         <div class='hd'>
-            <span>当前委托 (1)</span>
-            <a class='allTrust' href='javascript:;'>
-                全部委托
+            <span>{{ $t('trade.curTrust') }} ({{ pendingList.length }})</span>
+            <a class='allTrust' href='javascript:;' @click="$router.push({ name:'TrustList' })">
+                {{ $t('trade.allTrust') }}
             </a>
+        </div>
+        <div class='bd'>
+            <trustItem v-for='(item, index) in pendingList.slice(0,5)' :key='index' :product='item' @click.stop='toDetail(item)' />
         </div>
     </div>
 </template>
 
 <script>
-import { reactive, toRefs } from 'vue'
+import { computed, watch, ref, nextTick } from 'vue'
 import { useStore } from 'vuex'
+import trustItem from '@plans/modules/trust/trust.vue'
+import { useRouter } from 'vue-router'
+import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
-    setup () {
+    components: {
+        trustItem,
+    },
+    props: ['product'],
+    setup (props) {
+        const loading = ref(false)
         const store = useStore()
+        const router = useRouter()
 
-        return {}
+        // 获取挂单列表
+        const pendingList = computed(() => store.state._trade.pendingList)
+
+        // 获取账户信息
+        const customInfo = computed(() => store.state._user.customerInfo)
+
+        const toDetail = (item) => {
+            router.push({
+                path: '/trustDetail',
+                query: {
+                    id: item.id,
+                    symbolId: item.symbolId
+                }
+            })
+        }
+
+        watch(
+            () => pendingList.value?.length,
+            async (newval) => {
+                await nextTick()
+                if (!newval) return false
+                const subscribList = pendingList.value.map(el => `${el.symbolId}_${el.tradeType}`)
+                subscribList.push(props.product.symbolKey)
+                if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
+            },
+            { immediate: true }
+        )
+
+        // 获取委托列表
+        store.dispatch('_trade/queryPBOOrderPage', {
+            tradeType: props.product.tradeType,
+            customerNo: customInfo.value.customerNo,
+            sortFieldName: 'orderTime',
+            sortType: 'desc'
+        })
+
+        return {
+            toDetail,
+            pendingList,
+            loading
+
+        }
     }
 }
 </script>

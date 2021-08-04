@@ -1,10 +1,12 @@
 <template>
     <div class='totalAssets'>
         <div v-if='assetsInfo && assetsInfo.totalBalance>0' class='totalAssetsBlock'>
-            <AssetsChart />
             <div class='totalAssetsInfo'>
                 <p class='label'>
-                    {{ $t('assets.totalAssets') }}({{ assetsInfo.currency }})
+                    <span> {{ $t('assets.totalAssets') }}({{ assetsInfo.currency }})</span>
+                    <span class='tag'>
+                        100%低风险
+                    </span>
                 </p>
                 <p class='totalAmount'>
                     {{ assetsInfo.totalBalance }}
@@ -38,12 +40,10 @@
 </template>
 
 <script>
-import AssetsChart from './assetsChart.vue'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 export default {
     components: {
-        AssetsChart,
     },
     setup () {
         const store = useStore()
@@ -66,16 +66,24 @@ export default {
     margin-bottom: rem(60px);
 }
 .totalAssetsInfo {
-    position: absolute;
-    top: rem(180px);
-    left: 50%;
+    padding: 0 rem(30px);
     font-size: rem(28px);
-    text-align: center;
-    transform: translate(-50%, 0);
     .label {
+        display: flex;
+        justify-content: space-between;
         margin-top: rem(20px);
         color: var(--minorColor);
         font-size: rem(28px);
+        .tag {
+            width: rem(140px);
+            height: rem(40px);
+            color: var(--success);
+            font-size: rem(20px);
+            line-height: rem(40px);
+            text-align: center;
+            border: 1px solid var(--success);
+            border-radius: rem(6px);
+        }
     }
     .totalAmount {
         margin-top: rem(10px);

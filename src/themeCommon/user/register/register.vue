@@ -21,8 +21,8 @@
                 <van-tab name='email' :title='$t("register.email")' />
             </van-tabs>
             <form class='form'>
-                <CurrencyAction v-model='currency' class='cellRow' />
-                <TradeTypeAction v-model='tradeType' class='cellRow' />
+                <!-- <CurrencyAction v-model='currency' class='cellRow' />
+                <TradeTypeAction v-model='tradeType' class='cellRow' /> -->
                 <!-- <van-cell title="账户币种" is-link arrow-direction="down" value="USD" /> -->
                 <div v-if="openType === 'mobile'" class='cell'>
                     <areaInput
@@ -190,8 +190,8 @@ export default {
                 loginName: state.openType === 'email' ? state.email : state.mobile,
                 registerSource: getDevice(),
                 verifyCode: state.checkCode,
-                currency: state.currency,
-                tradeType: state.tradeType,
+                // currency: state.currency,
+                // tradeType: state.tradeType,
                 sendToken: token,
                 utmSource: getQueryVariable('utm_source'),
                 utmMedium: getQueryVariable('utm_medium'),
@@ -199,6 +199,7 @@ export default {
                 utmContent: getQueryVariable('utm_content'),
                 utmTerm: getQueryVariable('utm_term'),
                 protocol: state.protocol,
+                tradeTypeCurrencyList: store.state._base.wpCompanyInfo.tradeTypeCurrencyList,
                 country: state.countryCode
             }
 
@@ -243,6 +244,7 @@ export default {
                         if (Number(res.data.status) === 1) {
                             state.verifyCodeLoading = false
                             const msg = t(verifyParams.type === 1 ? 'common.existEmail' : 'common.existPhone')
+                            callback && callback(false)
                             return Toast(msg)
                         } else {
                             // state.zone = res.data.phoneArea
@@ -255,6 +257,8 @@ export default {
                                 if (res.check()) {
                                     token = res.data.token
                                     callback && callback()
+                                } else {
+                                    callback && callback(false)
                                 }
                             })
                         }

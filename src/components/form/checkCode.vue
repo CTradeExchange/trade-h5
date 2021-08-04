@@ -79,7 +79,8 @@ export default {
             this.$emit('verifyCodeSend', this.getCodeBtnCountDown.bind(this))
             // this.getCodeBtnCountDown()
         },
-        getCodeBtnCountDown () {
+        getCodeBtnCountDown (flag) {
+            if (flag === false) return (this.disabled = false)
             const getCodeBtn = this.$refs.getCodeBtn
             const originText = getCodeBtn.textContent
             let len = 60

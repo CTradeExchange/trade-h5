@@ -43,6 +43,7 @@ export function createListByPlans (plans, customerGroupId) {
 export function createProductListByPlans (plans) {
     const result = []
     Object.keys(plans).forEach(tradeType => {
+        if (!plans[tradeType]) return false
         const keys = plans[tradeType].map(symbolId => ({ symbolId, tradeType, symbolKey: `${symbolId}_${tradeType}` }))
         result.push(...keys)
     })

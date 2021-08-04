@@ -408,7 +408,8 @@
     "huan": "还",
     "daihuan": "待还",
     "buyText": "买入 / 做多",
-    "sellText": "卖出 / 做空"
+    "sellText": "卖出 / 做空",
+    "curTrust": "当前委托"
   },
   "bizType": {
     "2": "市价平仓",
