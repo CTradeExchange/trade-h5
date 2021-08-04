@@ -218,7 +218,7 @@ export default {
                 commit('Update_pendingList', [])
                 return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空数据
             }
-            Object.assign(pendingsConfig, { tradeType: rootState._base.tradeType })
+            Object.assign(pendingsConfig)
             return queryPBOOrderPage(pendingsConfig).then((res) => {
                 if (res.check()) {
                     commit('Update_pendingList', res.data)

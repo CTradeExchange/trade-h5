@@ -158,7 +158,7 @@ export default {
         const queryAccountInfo = () => {
             const currency = state.direction === 'buy' ? product.value?.profitCurrency : product.value?.baseCurrency
             const curAccount = customerInfo.value.accountList.find(el => el.currency === currency)
-            if (curAccount)store.dispatch('_user/queryAccountAssetsInfo', { accountId: curAccount.accountId, tradeType: store.state._base.tradeType })
+            if (curAccount)store.dispatch('_user/queryAccountAssetsInfo', { accountId: curAccount.accountId, tradeType: product.value?.tradeType })
             else Toast(t('trade.nullAssets'))
         }
 
