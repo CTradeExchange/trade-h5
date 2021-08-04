@@ -101,6 +101,7 @@ export default {
                         data.accountList.forEach(el => {
                             accountMap[el.currency] = el
                         })
+                        Object.assign(data, data.accountList[0])
                     }
                     data.accountMap = accountMap
                     const tradeType = data.tradeType
@@ -134,6 +135,7 @@ export default {
                         data.accountList.forEach(el => {
                             accountMap[el.currency] = el
                         })
+                        Object.assign(data, data.accountList[0])
                     }
                     data.accountMap = accountMap
                     const tradeType = data.tradeType
