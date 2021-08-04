@@ -200,7 +200,7 @@ export default {
             else if (state.orderType === 10 && isNaN(state.pendingPrice)) return Toast(t('trade.pendingPriceError'))
             else if (!state.volume) return Toast(t('trade.inputVolume'))
             else if (isNaN(state.volume)) return Toast(t('trade.volumeError'))
-            else if (product.value?.tradeType === 3 && !account.value) return Toast(t('trade.nullAssets'))
+            else if (!account.value) return Toast(t('trade.nullAssets'))
             return pendingWarn.value || profitLossWarn.value
         }
 
