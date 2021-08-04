@@ -7,7 +7,7 @@
             <span class='direction'>
                 <span :class="Number(product.direction) === 1 ? 'riseColor' : 'fallColor'">
                     {{ Number(product.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
-                </span> {{ product.requestNum }} {{ product.accountCurrency }}
+                </span> {{ product.requestNum }}
             </span>
         </div>
         <Loading :show='loading' />
@@ -23,8 +23,8 @@
                     <label for=''>
                         {{ $t('trade.currentPrice') }}
                     </label>
-                    <span :class='curProduct.cur_color'>
-                        {{ curProduct.cur_price }}
+                    <span :class='[Number(product.direction) === 1 ? curProduct.buy_color : curProduct.sell_color]'>
+                        {{ Number(product.direction) === 1 ? curProduct.buy_price : curProduct.sell_price }}
                     </span>
                 </p>
                 <p class='tl-item'>

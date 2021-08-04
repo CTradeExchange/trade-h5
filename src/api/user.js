@@ -570,6 +570,9 @@ export function manualRepayment (data) {
     return request({
         url: '/global/fund.app.DepositAppDubboService.manualRepayment',
         method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
         data
     })
 }
