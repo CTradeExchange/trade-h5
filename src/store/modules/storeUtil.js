@@ -1,37 +1,20 @@
-export const categories = [{
-    title: '数字币',
-    id: 'JKIF9408691_11',
-    tagDiplay: '3',
-    accountType: ['G', 'D', 'R_1', 'R_2'],
-    code_ids_all: {
-        1: {
-            1: ['36', '37', '38'],
-            2: ['36', '37', '38'],
-        },
-        2: {
-            1: ['36', '37', '38'],
-            2: ['36', '37', '38'],
-        },
-        3: {
-            1: ['36', '37', '38'],
-            2: ['36', '37', '38'],
-        },
-    }
-}]
-
 // 根据玩法板块创建产品列表
 export function createListByPlans (plans, customerGroupId) {
     const planMap_codeIds = {}
-    plans.forEach(el => {
-        const code_ids_all = el.code_ids_all
-        Object.keys(code_ids_all).forEach(tradeType => {
-            const code_ids = code_ids_all[tradeType][customerGroupId]
-            if (!planMap_codeIds[tradeType]) {
-                planMap_codeIds[tradeType] = code_ids
-            } else {
+    Object.keys(plans).forEach(tradeType => {
+        const categories = plans[tradeType]
+        categories.forEach(el => {
+            const code_ids = el.list[customerGroupId]
+            if (!planMap_codeIds[tradeType] && code_ids) {
+                planMap_codeIds[tradeType] = [...code_ids]
+            } else if (code_ids) {
                 planMap_codeIds[tradeType].push(...code_ids)
             }
         })
+    })
+    planMap_codeIds['1'].push('11', '24')
+    Object.keys(planMap_codeIds).forEach(tradeType => {
+        planMap_codeIds[tradeType] = [...new Set(planMap_codeIds[tradeType])]
     })
     return {
         symbolList: createProductListByPlans(planMap_codeIds),

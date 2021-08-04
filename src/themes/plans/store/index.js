@@ -57,19 +57,17 @@ export default createStore({
         },
         // 用户产品板块
         userProductCategory (state, getters) {
-            let _result = []
             const customerGroupId = getters.customerGroupId
             const wpProductCategory = state._base.wpProductCategory
             const quoteListConfig = wpProductCategory.find(el => el.tag === 'quoteList')
-            if (!quoteListConfig) return _result
-            const categories = quoteListConfig.data.items || []
-            _result = categories.map(el => {
-                const newItem = {
-                    code_ids: el.code_ids_all[customerGroupId] ?? []
-                }
-                return Object.assign(newItem, el)
+            if (!quoteListConfig) return {}
+            const categories = quoteListConfig.data.tradeTypeBlock || {}
+            Object.keys(categories).forEach(tradeType => {
+                categories[tradeType].forEach(el => {
+                    el.listByUser = el.list[customerGroupId] ?? []
+                })
             })
-            return _result
+            return categories
         },
     },
     mutations: {
