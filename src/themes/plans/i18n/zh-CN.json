@@ -382,7 +382,7 @@
     "dealPrice": "成交价",
     "dealVolume": "成交量",
     "noDealData": "暂无成交记录",
-    "noStallsData": "暂无五档报价",
+    "noStallsData": "暂无数据",
     "orderSuccessToast": "下单成功，请查看资产",
     "inputCloseNum": "请输入平仓数量",
     "closeSuccessToast": "下单成功，请查看平仓记录",
@@ -409,7 +409,25 @@
     "daihuan": "待还",
     "buyText": "买入 / 做多",
     "sellText": "卖出 / 做空",
-    "curTrust": "当前委托"
+    "curTrust": "当前委托",
+    "dealNo": "成交单号",
+    "modifyMargin":"调整保证金",
+    "modifyAmount":"调整金额",
+    "raise":"追加",
+    "reduce":"减少",
+    "repaymentSuccess": "还款成功",
+    "enterMarginAmount": "请输入调整金额",
+    "prospectMandatory":"预估强平价",
+    "margin": "保证金",
+    "holdMargin": "维持保证金",
+    "maxRaise": "最大追加",
+    "maxReduce":"最大减少",
+    "enterReturnAmount": "请输入还币金额",
+    "repayment": "还款",
+    "desposit":"充值",
+    "withdraw": "提现",
+    "surplus": "余额"
+
   },
   "bizType": {
     "2": "市价平仓",
@@ -484,6 +502,7 @@
     "frozen": "冻结",
     "maxLoan": "最大可借",
     "netAssets": "净资产",
-    "totalLoan": "总借款"
+    "totalLoan": "总借款",
+    "balance": "余额"
   }
 }

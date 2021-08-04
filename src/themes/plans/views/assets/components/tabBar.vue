@@ -1,12 +1,12 @@
 <template>
     <div class='tab-bar'>
-        <div class='tab-item' :class='{ active: curIndex === 1 }' @click='handleChangeTab(1)'>
+        <div class='tab-item' :class='{ active: curIndex === 0 }' @click='handleChangeTab(0)'>
             CFD全仓
         </div>
-        <div class='tab-item' :class='{ active: curIndex === 2 }' @click='handleChangeTab(2)'>
+        <div class='tab-item' :class='{ active: curIndex === 1 }' @click='handleChangeTab(1)'>
             CFD逐仓
         </div>
-        <div class='tab-item' :class='{ active: curIndex === 3 }' @click='handleChangeTab(3)'>
+        <div class='tab-item' :class='{ active: curIndex === 2 }' @click='handleChangeTab(2)'>
             杠杆全仓
         </div>
     </div>
@@ -15,12 +15,20 @@
 <script>
 import { computed, reactive, toRefs, watch, onBeforeUnmount, watchEffect } from 'vue'
 export default {
-    setup (props) {
+    emits: ['updateTab'],
+    props: ['index'],
+    setup (props, context) {
         const state = reactive({
-            curIndex: 1
+            curIndex: 0,
+
+        })
+
+        watchEffect(() => {
+            state.curIndex = props.index
         })
 
         const handleChangeTab = (index) => {
+            context.emit('updateTab', index)
             state.curIndex = index
         }
 

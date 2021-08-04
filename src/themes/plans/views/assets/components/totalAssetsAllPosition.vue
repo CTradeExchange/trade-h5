@@ -3,10 +3,9 @@
         <div v-if='assetsInfo && assetsInfo.totalBalance>0' class='totalAssetsBlock'>
             <div class='totalAssetsInfo'>
                 <p class='label'>
-                    <span> {{ $t('assets.totalAssets') }}({{ assetsInfo.currency }})</span>
-                    <span class='tag'>
-                        100%低风险
-                    </span>
+                    <span> {{ $t('assets.balance') }}({{ assetsInfo.currency }})</span>
+                    <!-- <span class='tag'>
+                    </span> -->
                 </p>
                 <p class='totalAmount'>
                     {{ assetsInfo.totalBalance }}
@@ -16,21 +15,28 @@
         <ul class='assetList'>
             <li class='item'>
                 <p class='muted'>
-                    {{ $t('assets.netAssets') }}
+                    {{ $t('trade.jingzhi') }}
                 </p>
-                <p>{{ assetsInfo.totalNetAssets }}</p>
+                <p>--</p>
             </li>
             <li class='item'>
                 <p class='muted'>
-                    {{ $t('assets.totalLoan') }}
+                    {{ $t('trade.marginLevel') }}
                 </p>
-                <p>{{ assetsInfo.totalLiabilitiesPrincipal }}</p>
+                <p>--</p>
             </li>
             <li class='item'>
                 <p class='muted'>
-                    {{ $t('trade.swap_2') }}
+                    {{ $t('trade.freeMargin') }}
                 </p>
-                <p>{{ assetsInfo.totalInterest }}</p>
+                <p>--</p>
+            </li>
+
+            <li class='item'>
+                <p class='muted'>
+                    {{ $t('trade.originalMargin') }}
+                </p>
+                <p>--</p>
             </li>
         </ul>
 
@@ -48,18 +54,6 @@
                 url='/withdraw'
             >
                 {{ $t('trade.withdraw') }}
-            </van-button>
-            <van-button
-                hairline
-                size='mini'
-            >
-                {{ $t('trade.loan') }}
-            </van-button>
-            <van-button
-                hairline
-                size='mini'
-            >
-                {{ $t('trade.repayment') }}
             </van-button>
         </div>
     </div>

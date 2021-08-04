@@ -56,7 +56,10 @@ export default {
             state.customerInfo = data
         },
         Update_accountInfo (state, data) {
-            if (state.customerInfo.accountMap[data.currency]) Object.assign(state.customerInfo.accountMap[data.currency], data)
+            if (state.customerInfo.accountMap[data.currency]) {
+                Object.assign(state.customerInfo.accountMap[data.currency], data)
+                Object.assign(state.customerInfo.accountList.find(item => item.currency === data.currency), data)
+            }
         },
         Update_assetsInfo (state, data) {
             state.assetsInfo = data
