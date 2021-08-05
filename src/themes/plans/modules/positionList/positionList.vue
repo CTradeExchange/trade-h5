@@ -131,6 +131,8 @@ export default {
             state.showSetProfit = val
         }
 
+        store.dispatch('_trade/queryPositionPage', { tradeType: 1 })
+
         return {
             ...toRefs(state),
             positionList,

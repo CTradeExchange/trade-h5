@@ -1,7 +1,7 @@
 <template>
     <div class='assetsWrapper'>
         <TabBar :index='curIndex' @updateTab='updateTab' />
-        <van-swipe ref='assetsSwipe' :show-indicators='false' :touchable='false' @change='onChange'>
+        <van-swipe ref='assetsSwipe' :show-indicators='false' :touchable='true' @change='onChange'>
             <van-swipe-item>
                 <TotalAssetsFullPosition class='block' />
                 <PositionList />
