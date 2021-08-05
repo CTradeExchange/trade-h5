@@ -270,6 +270,8 @@
         @removeStudy='removeStudy'
         @update:show='updateShow'
     />
+
+    <sidebarProduct v-model='showSidebar' />
 </template>
 
 <script>
@@ -289,9 +291,10 @@ import StallsAndDeal from './components/StallsAndDeal'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
 import Loading from '@/components/loading.vue'
 import topRightVue from '@/themes/mt4/layout/topRight.vue'
+import sidebarProduct from '@plans/components/sidebarProduct.vue'
 
 export default {
-    components: { KIcon, StudyList, tv, StallsAndDeal, Loading },
+    components: { KIcon, StudyList, tv, StallsAndDeal, Loading, sidebarProduct },
     setup (props) {
         const route = useRoute()
         const router = useRouter()
@@ -490,7 +493,7 @@ export default {
             return null
         })
 
-        const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value.find(el => el.symbolId === parseInt(symbolId))))
+        const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[tradeType]?.find(el => el.symbolId === parseInt(symbolId))))
 
         // 选择指标
         const onClickStudy = (type, name) => {
@@ -823,7 +826,7 @@ export default {
         const addOptional = () => {
             state.loading = topRightVue
             if (isSelfSymbol.value) {
-                removeCustomerOptional({ symbolList: [symbolId] }).then(res => {
+                removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
                     if (res.check()) {
                         state.loading = false
                         store.dispatch('_user/queryCustomerOptionalList')
@@ -834,7 +837,7 @@ export default {
                     state.loading = false
                 })
             } else {
-                addCustomerOptional({ symbolList: [symbolId] }).then(res => {
+                addCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
                     if (res.check()) {
                         state.loading = false
                         store.dispatch('_user/queryCustomerOptionalList')
@@ -871,6 +874,8 @@ export default {
             if (res.invalid()) return false
         })
 
+        const showSidebar = ref(false)
+
         return {
             ...toRefs(state),
             candleKTypeList,
@@ -897,7 +902,8 @@ export default {
             addOptional,
             toOrder,
             collect,
-            formatTime
+            formatTime,
+            showSidebar
         }
     }
 }

@@ -1,22 +1,21 @@
 import { computed, unref } from 'vue'
 import { useStore } from 'vuex'
 
-export default function ({ planType, categoryType }) {
+export default function ({ tradeType, categoryType }) {
     const store = useStore()
     const productMap = computed(() => store.state._quote.productMap)
     const userProductCategory = computed(() => store.getters.userProductCategory)
-    // const userSelfSymbolList = computed(() => store.getters.userSelfSymbolList)
+    const userSelfSymbolList = computed(() => store.getters.userSelfSymbolList)
 
     // 所选玩法的板块列表
     const categoryList = computed(() => {
+        const selfSymbol = {
+            title: '自选',
+            listByUser: unref(userSelfSymbolList)[unref(tradeType)]?.map(e => e.symbolId) || []
+        }
         return [
-            // 增加自选板块
-            // userSelfSymbolList
-            // {
-            //     listByUser: ['36'],
-            //     title: '自选_1',
-            // },
-            ...unref(userProductCategory)[unref(planType)]
+            selfSymbol,
+            ...unref(userProductCategory)[unref(tradeType)]
         ]
     })
 
@@ -26,7 +25,7 @@ export default function ({ planType, categoryType }) {
         const result = []
 
         unref(categoryList)[unref(categoryType)].listByUser.forEach(id => {
-            const newId = `${id}_${unref(planType)}`
+            const newId = `${id}_${unref(tradeType)}`
             if (productMapVal[newId]?.symbolName) {
                 result.push(productMapVal[newId])
             }

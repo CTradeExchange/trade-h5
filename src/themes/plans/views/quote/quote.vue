@@ -1,6 +1,6 @@
 <template>
     <div class='quoteWrap'>
-        <plansType :value='planType' @change='handlePlayType' />
+        <plansType :value='tradeType' @change='handleTradeType' />
         <div class='tradeNav'>
             <TopTab
                 ref='tabList'
@@ -48,24 +48,24 @@ export default {
         const productListEl = ref(null)
 
         // 1.玩法类型
-        const planType = ref(1)
+        const tradeType = ref(1)
         // 2.板块类型
         const categoryType = ref(0)
         // 监听玩法类型
-        const handlePlayType = (val) => {
-            planType.value = val
+        const handleTradeType = (val) => {
+            tradeType.value = val
             categoryType.value = 0
         }
 
         // 获取板块列表和所选板块的产品列表
         const { categoryList, productList } = useProduct({
-            planType, categoryType
+            tradeType, categoryType
         })
 
         // 监听玩法类型/板块类型的变化，触发产品订阅
         // 获取productList.vue组件的ref对象和产品列表均是异步，所以第一次产品订阅在productList.vue组件内
         watch(
-            [planType, categoryType],
+            [tradeType, categoryType],
             () => {
                 if (productListEl.value) productListEl.value.calcProductsDebounce()
             }
@@ -83,8 +83,8 @@ export default {
             productList,
             tabChange,
             tabClick,
-            handlePlayType,
-            planType,
+            handleTradeType,
+            tradeType,
             showSidebar
         }
     }

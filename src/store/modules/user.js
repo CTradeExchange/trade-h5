@@ -126,7 +126,7 @@ export default {
 
             commit('Update_kycState', data.kycAuditStatus)
             commit('Update_customerInfo', data)
-            if (data.optional === 0) dispatch('queryCustomerOptionalList', { tradeTypeList }) // 如果添加过自选可以直接拉取自选列表，快速显示界面
+            if (data.optional === 1) dispatch('queryCustomerOptionalList', { tradeTypeList }) // 如果添加过自选可以直接拉取自选列表，快速显示界面
             dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {
                 return dispatch('_quote/querySymbolBaseInfoList', productAllList, { root: true })
             }).then(() => {
