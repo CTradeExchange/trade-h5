@@ -176,7 +176,7 @@ class SocketEvent {
         dataArr.forEach(({ content }) => {
             $store.commit('_user/Update_accountAssets', content)
             if (content.positionProfitLossMessages.length > 0) {
-                $store.commit('_trade/Update_positionProfitLossList', content.positionProfitLossMessages)
+                $store.commit('_trade/Update_positionProfitLossList', { tradeType: 1, list: content.positionProfitLossMessages })
             }
         })
     }
