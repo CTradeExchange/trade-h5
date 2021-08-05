@@ -91,6 +91,9 @@ export default {
         const accountInfo = computed(() => customerInfo.value.accountList[0])
 
         watchEffect(() => {
+            if (props.show) {
+                store.dispatch('_user/findCustomerInfo', false)
+            }
             state.showDialog = props.show
         })
 
@@ -99,6 +102,7 @@ export default {
         }
 
         const operation = () => {
+            store.dispatch('_user/findCustomerInfo', false)
             state.operType = !state.operType
             state.operText = state.operType ? t('trade.raise') : t('trade.reduce')
         }
@@ -114,8 +118,13 @@ export default {
         // 调整保证金
         const submitAdjustMargin = () => {
             if (isEmpty(state.amount)) {
-                return Toast(t('trade.enterMarginAmount'))
+                return Toast(t('trade.enterMarginAmountRequire'))
             }
+
+            if (parseFloat(state.amount) < 0) {
+                return Toast(t('trade.enterMarginAmountTip'))
+            }
+
             state.loading = true
             // 处理金额*10 小数位次方
             const margin = state.operType ? parseFloat(state.amount) : -parseFloat(state.amount)
@@ -136,7 +145,11 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     Toast(t('common.submitSuccess'))
+                    state.operType = true
+                    state.operText = t('trade.raise')
+                    state.amount = ''
                     state.showDialog = false
+                    store.dispatch('_trade/queryPositionPage')
                 }
             }).catch(err => {
                 state.loading = false

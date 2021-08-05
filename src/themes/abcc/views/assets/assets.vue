@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import TabBar from './components/tabBar.vue'
+// import TabBar from './components/tabBar.vue'
 import AssetsItem from './components/assetsItem.vue'
 import TotalAssets from './components/totalAssets.vue'
 // import { reactive, toRefs } from 'vue'
@@ -16,7 +16,7 @@ import { useStore } from 'vuex'
 import { computed } from '@vue/runtime-core'
 export default {
     components: {
-        TabBar,
+        // TabBar,
         AssetsItem,
         TotalAssets,
     },

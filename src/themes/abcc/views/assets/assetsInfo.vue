@@ -62,22 +62,29 @@
             </li>
         </ul>
         <div class='footerBtn'>
+            <van-button block type='primary' @click='loanVisible=true'>
+                {{ $t('trade.loan') }}
+            </van-button>
             <van-button block type='primary' @click='returnMoneyVisible=true'>
-                {{ $t('route.returnMoney') }}
+                {{ $t('trade.repayment') }}
             </van-button>
         </div>
         <ReturnMoney v-if='accountList.length' v-model='returnMoneyVisible' :account='account' />
+        <Loan v-model='loanVisible' :account='account' />
     </div>
 </template>
 
 <script>
 import ReturnMoney from './components/returnMoney.vue'
+import Loan from './components/loan.vue'
+
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 export default {
     components: {
-        ReturnMoney
+        ReturnMoney,
+        Loan
     },
     props: ['product'],
     setup () {
@@ -85,13 +92,16 @@ export default {
         const route = useRoute()
         const state = reactive({
             returnMoneyVisible: false,
+            loanVisible: false,
             list: Array(3).fill()
         })
         const accountList = computed(() => store.state._user.customerInfo?.accountList || [])
         const account = computed(() => {
             return accountList.value.find(({ currency }) => currency === route.query.currency)
         })
+
         store.dispatch('_user/queryAccountAssetsInfo', { tradeType: 3, accountId: parseInt(route.query.accountId) })
+
         return {
             ...toRefs(state),
             accountList,
@@ -153,6 +163,16 @@ export default {
     position: fixed;
     bottom: 0;
     left: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
     width: 100%;
+    .van-button {
+        width: 45%;
+        height: rem(80px);
+        margin-bottom: rem(20px);
+        color: var(--contentColor);
+        font-size: rem(30px);
+    }
 }
 </style>

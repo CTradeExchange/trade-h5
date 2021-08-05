@@ -6,6 +6,7 @@
                     <i class='icon_icon_close_big'></i>
                 </a>
             </p>
+
             <div class='container'>
                 <div class='actionBar'>
                     <span class='muted' @click='selectPickerField("outCurrency")'>
@@ -32,13 +33,15 @@
                     </span>
 
                     <span class='icon_icon_arrow' @click='selectPickerField("inCurrency")'></span>
-                    ≈
+                    <span v-if='sameCurrency'>
+                        ≈
+                    </span>
 
                     <input class='input' readonly type='number' :value='inAmount' />
                     <van-loading v-if='computLoading' size='18' />
                 </div>
                 <p class='mutedTip'>
-                    {{ $t('trade.daihuan') + inAccount.liabilitiesPrincipal + inCurrency }}
+                    {{ $t('trade.daihuan') + inAccount.liabilities + inCurrency }}
                 </p>
             </div>
             <van-button block class='returnBtn' :loading='loading' type='primary' @click='returnMoney'>
@@ -54,6 +57,7 @@
 <script>
 import { computed, reactive, ref, toRefs, watch, watchEffect } from 'vue'
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 import BigNumber from 'bignumber.js'
 import { useI18n } from 'vue-i18n'
 import { manualRepayment, addRepaymentOrder, previewOrder } from '@/api/user'
@@ -65,15 +69,18 @@ export default {
     setup (props, { emit }) {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
+        const route = useRoute()
         const state = reactive({
             show: false,
             pickerShow: false,
-            pickerField: 'outCurrency', // 选择还币还是被还的币 outCurrency, inCurrency
+            pickerField: ' ', // 选择还币还是被还的币 outCurrency, inCurrency
             outCurrency: '', // 以xx币还
             inCurrency: '', // 还xx币
             outAmount: '', // 以xx币还的金额
             loading: false,
-            computLoading: false
+            computLoading: false,
+            inAmount: '',
+            sameCurrency: false
         })
 
         const customInfo = computed(() => store.state._user.customerInfo)
@@ -82,25 +89,10 @@ export default {
         const inAccount = computed(() => customInfo.value?.accountMap[state.inCurrency]) // 还xx币的账户
 
         const productList = computed(() => store.state._quote.productList)
-        const inAmount = computed(() => { // 还xx币的金额
-            const rateProduct = productList.value.find(({ baseCurrency, profitCurrency }) => (baseCurrency === state.inCurrency && profitCurrency === state.outCurrency))
-            if (state.outCurrency === state.inCurrency) {
-                return state.outAmount
-            } else if (rateProduct) {
-                if (state.outCurrency === rateProduct.profitCurrency) {
-                    return BigNumber(state.outAmount).div(rateProduct.buy_price).toFixed(inAccount.value.digits)
-                } else {
-                    return BigNumber(state.outAmount).times(rateProduct.sell_price).toFixed(inAccount.value.digits)
-                }
-            } else {
-                // 双边都是非USDT,计算兑换数量
-            }
-            return ''
-        })
 
         // 当前币种
         const columns = computed(() => customInfo?.value?.accountList.map(el => el.currency))
-        const tradeType = computed(() => store.state._base.tradeType)
+        const tradeType = computed(() => customInfo?.value?.accountMap[route.query.currency].tradeType)
 
         watch(
             () => props.modelValue,
@@ -109,6 +101,26 @@ export default {
             },
             { immediate: true }
         )
+
+        watchEffect(() => {
+            // 金额变动重新计算汇率
+            if (!isEmpty(state.outAmount)) {
+                const rateProduct = productList.value.find(({ baseCurrency, profitCurrency }) => (baseCurrency === state.inCurrency && profitCurrency === state.outCurrency))
+                if (state.outCurrency === state.inCurrency) {
+                    state.inAmount = state.outAmount
+                } else if (rateProduct) {
+                    if (state.outCurrency === rateProduct.profitCurrency) {
+                        state.inAmount = BigNumber(state.outAmount).div(rateProduct.buy_price).toFixed(inAccount.value.digits)
+                    } else {
+                        state.inAmount = BigNumber(state.outAmount).times(rateProduct.sell_price).toFixed(inAccount.value.digits)
+                    }
+                } else {
+                    computeReturnMoney()
+                }
+            } else {
+                state.inAmount = ''
+            }
+        })
 
         // 防抖处理还币输入框，
         const computeReturnMoney = debounce(() => {
@@ -121,24 +133,20 @@ export default {
                 requestNum: state.outAmount,
                 requestTime: Date.now(),
                 remark: '',
-                customerCurrency: assetsInfo.value.currency
+                customerCurrency: route.query.currency,
             }
             previewOrder(params)
                 .then(res => {
                     state.computLoading = false
                     state.loading = false
                     if (res.check()) {
-
+                        state.inAmount = res.data
+                    } else {
+                        state.inAmount = ''
                     }
                 }).catch(err => {
                     state.computLoading = false
-                    state.loading = false
                 })
-        })
-        watchEffect(() => {
-            if (!isEmpty(state.outAmount)) {
-                computeReturnMoney()
-            }
         })
 
         const closed = () => {
@@ -165,8 +173,11 @@ export default {
             console.log(val, state.pickerField)
             state[state.pickerField] = val
             state.pickerShow = false
-            if (!isEmpty(state.outCurrency)) {
+            if (!isEmpty(state.outAmount) && state.outCurrency !== state.inCurrency) {
                 computeReturnMoney()
+                state.sameCurrency = true
+            } else if (state.outCurrency === state.inCurrency) {
+                state.sameCurrency = false
             }
         }
 
@@ -174,30 +185,58 @@ export default {
             state.outAmount = outAccount.value.available
         }
 
+        const returnSuccess = () => {
+            Toast(t('trade.repaymentSuccess'))
+            state.show = false
+            store.dispatch('_user/queryAccountAssetsInfo', { tradeType: tradeType.value, accountId: parseInt(route.query.accountId) })
+            state.inAmount = ''
+            state.outAmount = ''
+        }
+
         // 手动还币
         const returnMoney = () => {
-            if (isEmpty(state.amount)) {
+            if (isEmpty(state.outAmount)) {
                 return Toast(t('trade.enterReturnAmount'))
             }
-
-            const params = {
-                customerNo: customInfo.value.customerNo,
-                accountId: props.account.accountId,
-                customerGroupId: customInfo.value.customerGroupId,
-                accountCurrency: state.outCurrency,
-                amount: 100
-            }
-
             state.loading = true
-            manualRepayment(params)
-                .then(res => {
+
+            // 如果来源货币和目标货币相同，刚手动还款，否则通过下单还币
+            if (state.outCurrency === state.inCurrency) {
+                manualRepayment({
+                    tradeType: tradeType.value,
+                    customerNo: customInfo.value.customerNo,
+                    accountId: props.account.accountId,
+                    customerGroupId: customInfo.value.customerGroupId,
+                    accountCurrency: state.outCurrency,
+                    amount: state.outAmount,
+                    customerCurrency: route.query.currency,
+                })
+                    .then(res => {
+                        state.loading = false
+                        if (res.check() && res.data) {
+                            returnSuccess()
+                        }
+                    }).catch(err => {
+                        state.loading = false
+                    })
+            } else {
+                addRepaymentOrder({
+                    tradeType: tradeType.value,
+                    sourceCurrency: state.outCurrency,
+                    targetCurrency: state.inCurrency,
+                    customerCurrency: route.query.currency,
+                    requestNum: state.outAmount,
+                    requestTime: Date.now(),
+                    remark: '',
+                }).then(res => {
                     state.loading = false
                     if (res.check()) {
-                        Toast('trade.repaymentSuccess')
+                        returnSuccess()
                     }
                 }).catch(err => {
                     state.loading = false
                 })
+            }
         }
 
         return {
@@ -206,7 +245,6 @@ export default {
             selectPickerField,
             outAccount,
             inAccount,
-            inAmount,
             columns,
             closed,
             onOpen,

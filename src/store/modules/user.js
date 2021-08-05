@@ -95,25 +95,29 @@ export default {
                     commit('_trade/Empty_data', null, { root: true })
                     commit('_quote/Empty_data', null, { root: true })
                     commit('Update_loginData', data)
-                    dispatch('saveCustomerInfo', res.data)
+                    dispatch('saveCustomerInfo', { flag: true, data: res.data })
                 }
                 commit('Update_loginLoading', false)
                 return res
             })
         },
         // 查询客户信息
-        findCustomerInfo ({ dispatch, commit, rootState }, params = {}) {
+        findCustomerInfo ({ dispatch, commit, rootState }, flag = true) {
+            /*
+                flag: true 获取个人信息，客户自选产品列表，产品基础信息列表
+                flag: false 只获取客户信息
+            */
             commit('Update_loginLoading', true)
             return findCustomerInfo().then((res) => {
                 commit('Update_loginLoading', false)
                 if (res.check()) {
-                    dispatch('saveCustomerInfo', res.data)
+                    dispatch('saveCustomerInfo', { flag, data: res.data })
                 }
                 return res
             })
         },
         // 保存用户信息
-        saveCustomerInfo ({ dispatch, commit, rootState }, data = {}) {
+        saveCustomerInfo ({ dispatch, commit, rootState }, { flag, data }) {
             // 优先将子账户列表处理成map格式
             const accountMap = {}
             if (data.accountList?.length) {
@@ -126,12 +130,14 @@ export default {
 
             commit('Update_kycState', data.kycAuditStatus)
             commit('Update_customerInfo', data)
-            if (data.optional === 1) dispatch('queryCustomerOptionalList', { tradeTypeList }) // 如果添加过自选可以直接拉取自选列表，快速显示界面
-            dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {
-                return dispatch('_quote/querySymbolBaseInfoList', productAllList, { root: true })
-            }).then(() => {
-                if (data.optional === 0) dispatch('addCustomerOptionalDefault') // 如果没有添加过自选，拿到产品精简信息后添加自选，因为添加自选需要拿到 symbolId, symbolCode, symbolName
-            })
+            if (flag) {
+                if (data.optional === 1) dispatch('queryCustomerOptionalList', { tradeTypeList }) // 如果添加过自选可以直接拉取自选列表，快速显示界面
+                dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {
+                    return dispatch('_quote/querySymbolBaseInfoList', productAllList, { root: true })
+                }).then(() => {
+                    if (data.optional === 0) dispatch('addCustomerOptionalDefault') // 如果没有添加过自选，拿到产品精简信息后添加自选，因为添加自选需要拿到 symbolId, symbolCode, symbolName
+                })
+            }
         },
         logout ({ dispatch, commit, state, rootState }, params = {}) {
             return logout().then(res => {
