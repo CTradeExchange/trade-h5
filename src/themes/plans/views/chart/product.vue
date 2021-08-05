@@ -473,7 +473,7 @@ export default {
             return product
         })
         const productList = computed(() => store.state._quote.productList)
-        const positionList = computed(() => store.state._trade.positionList)
+        const positionList = computed(() => store.state._trade.positionList[tradeType] || [])
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)
 
         // 订阅产品

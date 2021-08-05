@@ -44,3 +44,14 @@ export function planMapToArray (params) {
     })
     return result
 }
+
+// 缓存本次挂单列表、持仓列表的请求参数
+export function cachePendingParams (params, cacheConfig) {
+    const { tradeType } = params
+    const curType = cacheConfig[tradeType]
+    if (curType) {
+        Object.assign(curType, params)
+    } else {
+        cacheConfig[tradeType] = params
+    }
+}

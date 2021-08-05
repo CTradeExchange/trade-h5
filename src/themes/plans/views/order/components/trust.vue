@@ -29,7 +29,7 @@ export default {
         const router = useRouter()
 
         // 获取挂单列表
-        const pendingList = computed(() => store.state._trade.pendingList)
+        const pendingList = computed(() => store.state._trade.pendingList[props.product.tradeType] || [])
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)

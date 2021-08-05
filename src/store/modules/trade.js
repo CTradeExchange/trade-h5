@@ -1,5 +1,6 @@
 import { queryPositionPage, queryHistoryCloseOrderList, queryPBOOrderPage } from '@/api/trade'
 import CheckAPI from '@/utils/checkAPI'
+import { cachePendingParams } from './storeUtil.js'
 import { minus, toFixed, plus } from '@/utils/calculation'
 import BigNumber from 'bignumber.js'
 
@@ -16,8 +17,8 @@ const EmptyPendingPriceRang = {
     sellStopRange: [], // 卖出止损范围
 }
 
-let positionsConfig = {} // 持仓列表排序
-let pendingsConfig = {} // 挂单列表排序
+const positionsConfig = {} // 持仓列表排序
+const pendingsConfig = {} // 挂单列表排序
 
 export default {
     namespaced: true,
@@ -26,11 +27,11 @@ export default {
         pendingEnable: false, // 启用挂单
         pendingPrice: 0, // 挂单价格
         positionLoading: '', // 持仓列表加载
-        positionList: [], // 持仓列表
+        positionList: {}, // 持仓列表, 多玩法id为Key
         positionMap: {}, // 持仓列表map
         historyLoading: false, // 历史记录加载
         historyList: [], // 平仓历史记录列表
-        pendingList: [], // 预埋单列表
+        pendingList: {}, // 预埋单列表, 多玩法id为Key
         pendingMap: {}, // 预埋单列表
         positionProfitLossList: [] // 持仓盈亏列表
     },
@@ -115,10 +116,10 @@ export default {
     },
     mutations: {
         Empty_data (state, data) { // 清空信息
-            state.positionList = []
+            state.positionList = {}
             state.positionMap = {}
             state.historyList = []
-            state.pendingList = []
+            state.pendingList = {}
             state.pendingMap = {}
             state.positionProfitLossList = []
         },
@@ -134,15 +135,15 @@ export default {
         Update_positionLoading (state, data) {
             state.positionLoading = data
         },
-        Update_positionList (state, data) {
-            state.positionList = data
-            const positionMap = state.positionMap
-            data.forEach(item => {
-                if (!item || !item.positionId) return false
-                const curPosition = positionMap[item.positionId]
-                if (curPosition) Object.assign(item, { profitLoss: curPosition.profitLoss }) // 如果map数据中已经有此持仓信息，将之合并到item
-                positionMap[item.positionId] = item
-            })
+        Update_positionList (state, { tradeType, list }) {
+            state.positionList[tradeType] = list
+            // const positionMap = state.positionMap
+            // data.forEach(item => {
+            //     if (!item || !item.positionId) return false
+            //     const curPosition = positionMap[item.positionId]
+            //     if (curPosition) Object.assign(item, { profitLoss: curPosition.profitLoss }) // 如果map数据中已经有此持仓信息，将之合并到item
+            //     positionMap[item.positionId] = item
+            // })
         },
         Update_historyLoading (state, data) {
             state.historyLoading = data
@@ -150,14 +151,14 @@ export default {
         Update_historyList (state, data) {
             state.historyList = data
         },
-        Update_pendingList (state, data) {
-            state.pendingList = data
-            const pendingMap = state.pendingMap
-            data.forEach(item => {
-                if (!item || !item.id) return false
-                if (!pendingMap[item.id]) pendingMap[item.id] = {}
-                Object.assign(pendingMap[item.id], item)
-            })
+        Update_pendingList (state, { tradeType, list }) {
+            state.pendingList[tradeType] = list
+            // const pendingMap = state.pendingMap
+            // data.forEach(item => {
+            //     if (!item || !item.id) return false
+            //     if (!pendingMap[item.id]) pendingMap[item.id] = {}
+            //     Object.assign(pendingMap[item.id], item)
+            // })
         },
         Update_positionProfitLossList (state, dataList = []) {
             state.positionProfitLossList = dataList
@@ -174,20 +175,19 @@ export default {
     actions: {
         // 查询持仓列表
         queryPositionPage ({ dispatch, commit, state, rootState }, params) {
-            if (params) positionsConfig = params
+            cachePendingParams(params, positionsConfig) // 缓存请求参数
             const accountListLen = rootState._user.customerInfo?.accountList?.length
-            Object.assign(positionsConfig, { tradeType: rootState._base.tradeType })
-            // dispatch('queryPBOOrderPage')
+            const tradeType = params.tradeType
 
             if (!accountListLen) {
-                commit('Update_positionList', [])
+                commit('Update_positionList', { tradeType, list: [] })
                 return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空持仓
             }
             commit('Update_positionLoading', true)
-            return queryPositionPage(positionsConfig).then((res) => {
+            return queryPositionPage(positionsConfig[tradeType]).then((res) => {
                 commit('Update_positionLoading', false)
                 if (res.check()) {
-                    commit('Update_positionList', res.data)
+                    commit('Update_positionList', { tradeType, list: res.data })
                 }
                 return res
             })
@@ -212,16 +212,16 @@ export default {
         },
         // 预埋单列表
         queryPBOOrderPage ({ dispatch, commit, state, rootState }, params) {
-            if (params) pendingsConfig = params
+            cachePendingParams(params, pendingsConfig) // 缓存请求参数
             const accountListLen = rootState._user.customerInfo?.accountList?.length
+            const tradeType = params.tradeType
             if (!accountListLen) {
-                commit('Update_pendingList', [])
+                commit('Update_pendingList', { tradeType, list: [] })
                 return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空数据
             }
-            Object.assign(pendingsConfig)
-            return queryPBOOrderPage(pendingsConfig).then((res) => {
+            return queryPBOOrderPage(pendingsConfig[tradeType]).then((res) => {
                 if (res.check()) {
-                    commit('Update_pendingList', res.data)
+                    commit('Update_pendingList', { tradeType, list: res.data })
                 }
                 return res
             })

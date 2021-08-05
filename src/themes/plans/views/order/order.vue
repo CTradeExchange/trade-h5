@@ -215,6 +215,7 @@ export default {
         const orderParams = () => {
             if (paramsInvalid()) return null
             let requestPrice = state.direction === 'sell' ? product.value.sell_price : product.value.buy_price
+            const [symbolId, tradeType] = symbolKey.value.split('_')
             const direction = state.direction === 'sell' ? 2 : 1
             if (state.orderType === 10) {
                 requestPrice = state.pendingPrice
@@ -223,7 +224,7 @@ export default {
             const params = {
                 bizType: bizType.value, // 业务类型。1-市价开；2-限价开
                 direction, // 订单买卖方向。1-买；2-卖；
-                symbolId: Number(product.value.symbol_id),
+                symbolId: Number(symbolId),
                 accountCurrency: account.value.currency,
                 accountId: account.value.accountId,
                 requestTime: Date.now(),
@@ -251,7 +252,7 @@ export default {
                     const orderId = data.orderId || data.id
                     sessionStorage.setItem('order_' + orderId, JSON.stringify(localData))
                     // router.push({ name: 'OrderSuccess', query: { orderId } })
-                    store.dispatch('_trade/queryPBOOrderPage')
+                    store.dispatch('_trade/queryPBOOrderPage', { tradeType: params.tradeType })
                     Toast({
                         message: t('trade.orderSuccessToast'),
                         duration: 1000,
