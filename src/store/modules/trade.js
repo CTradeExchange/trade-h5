@@ -137,13 +137,14 @@ export default {
         },
         Update_positionList (state, { tradeType, list }) {
             state.positionList[tradeType] = list
-            // const positionMap = state.positionMap
-            // data.forEach(item => {
-            //     if (!item || !item.positionId) return false
-            //     const curPosition = positionMap[item.positionId]
-            //     if (curPosition) Object.assign(item, { profitLoss: curPosition.profitLoss }) // 如果map数据中已经有此持仓信息，将之合并到item
-            //     positionMap[item.positionId] = item
-            // })
+            const positionMap = state.positionMap
+            list.forEach(item => {
+                if (!item || !item.positionId) return false
+                const key = `${item.positionId}_${tradeType}`
+                const curPosition = positionMap[key]
+                if (curPosition) Object.assign(item, { profitLoss: curPosition.profitLoss }) // 如果map数据中已经有此持仓信息，将之合并到item
+                positionMap[key] = item
+            })
         },
         Update_historyLoading (state, data) {
             state.historyLoading = data
@@ -153,22 +154,24 @@ export default {
         },
         Update_pendingList (state, { tradeType, list }) {
             state.pendingList[tradeType] = list
-            // const pendingMap = state.pendingMap
-            // data.forEach(item => {
-            //     if (!item || !item.id) return false
-            //     if (!pendingMap[item.id]) pendingMap[item.id] = {}
-            //     Object.assign(pendingMap[item.id], item)
-            // })
+            const pendingMap = state.pendingMap
+            list.forEach(item => {
+                if (!item || !item.id) return false
+                const key = `${item.id}_${item.tradeType}`
+                if (!pendingMap[key]) pendingMap[key] = {}
+                Object.assign(pendingMap[key], item)
+            })
         },
-        Update_positionProfitLossList (state, dataList = []) {
-            state.positionProfitLossList = dataList
+        Update_positionProfitLossList (state, { tradeType, list }) {
+            state.positionProfitLossList = list
             const positionMap = state.positionMap
-            dataList.forEach(({ positionId, profitLoss, previewStopPrice }) => {
-                const position = positionMap[positionId]
+            list.forEach(({ positionId, profitLoss, previewStopPrice }) => {
+                const key = `${positionId}_${tradeType}`
+                const position = positionMap[key]
                 if (position) {
                     position.profitLoss = profitLoss
                     position.previewStopPrice = previewStopPrice
-                } else positionMap[positionId] = { profitLoss }
+                } else positionMap[key] = { profitLoss }
             })
         },
     },

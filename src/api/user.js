@@ -615,3 +615,16 @@ export function addRepaymentOrder (data) {
         data
     })
 }
+
+// 手动借款
+
+export function manualLoan (data) {
+    return request({
+        url: '/global/fund.app.DepositAppDubboService.manualLoan',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

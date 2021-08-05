@@ -406,7 +406,25 @@
     "nullAssets": "没有该资产账户",
     "yi": "以",
     "huan": "还",
-    "daihuan": "待还"
+    "get": "借",
+    "daihuan": "待还",
+    "dealNo": "成交单号",
+    "modifyMargin":"调整保证金",
+    "modifyAmount":"调整金额",
+    "raise":"追加",
+    "reduce":"减少",
+    "repaymentSuccess": "还款成功",
+    "enterMarginAmount": "请输入调整金额",
+    "prospectMandatory":"预估强平价",
+    "margin": "保证金",
+    "holdMargin": "维持保证金",
+    "maxRaise": "最大追加",
+    "maxReduce":"最大减少",
+    "enterReturnAmount": "请输入还币金额",
+    "repayment": "还款",
+    "desposit":"充值",
+    "withdraw": "提现",
+    "surplus": "余额"
   },
   "bizType": {
     "2": "市价平仓",
@@ -481,6 +499,17 @@
     "frozen": "冻结",
     "maxLoan": "最大可借",
     "netAssets": "净资产",
-    "totalLoan": "总借款"
+    "totalLoan": "总借款",
+    "loanNotice":{
+        "1": "从平台可借款的最大额度，系统最大可借为{0}\n可借额度=系统最大可借资产-已借未还资产",
+        "2": "借款币种为{0}，日利率{1}，自申请借款后起算，以小时为单位计算，整点计息，不足一小时按一小时计算。\n借款利息=借款本金*（日利率/24）*借款小时数"
+    },
+    "alreadyLoan": "已借",
+    "dailyRate": "日利率",
+    "loanAmountNotice": "借款数量不能为空",
+    "loanAmountNaN": "借款数量不能为负数",
+    "loanSuccess": "借款成功",
+    "loanAmountExcess": "超出最大可借额度"
   }
+  
 }
