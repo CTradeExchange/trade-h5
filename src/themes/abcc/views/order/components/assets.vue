@@ -1,12 +1,12 @@
 <template>
     <div class='orderAssets'>
-        <van-row justify='space-between'>
+        <!-- <van-row justify='space-between'>
             <van-col>{{ $t('trade.estimatedMargin') }}</van-col>
             <van-col>
                 {{ lockFunds }}
                 {{ direction==='buy'?product.profitCurrency:product.baseCurrency }}
             </van-col>
-        </van-row>
+        </van-row> -->
         <van-row justify='space-between'>
             <van-col>{{ $t('trade.free') }}</van-col>
             <van-col>
