@@ -1,6 +1,10 @@
 <template>
     <div class='tab-bar'>
-        <div class='tab-item' :class='{ active: curIndex === 0 }' @click='handleChangeTab(0)'>
+        <div v-for='(item,key) in planMap' :key='key' class='tab-item' :class='{ active: Number(curIndex+1) === Number(key) }' @click='handleChangeTab(key)'>
+            {{ item.name }}
+        </div>
+
+        <!-- <div class='tab-item' :class='{ active: curIndex === 0 }' @click='handleChangeTab(0)'>
             CFD全仓
         </div>
         <div class='tab-item' :class='{ active: curIndex === 1 }' @click='handleChangeTab(1)'>
@@ -8,20 +12,24 @@
         </div>
         <div class='tab-item' :class='{ active: curIndex === 2 }' @click='handleChangeTab(2)'>
             杠杆全仓
-        </div>
+        </div> -->
     </div>
 </template>
 
 <script>
 import { computed, reactive, toRefs, watch, onBeforeUnmount, watchEffect } from 'vue'
+import { useStore } from 'vuex'
 export default {
     emits: ['updateTab'],
     props: ['index'],
     setup (props, context) {
+        const store = useStore()
         const state = reactive({
             curIndex: 0,
 
         })
+
+        const planMap = computed(() => store.state._quote.planMap)
 
         watchEffect(() => {
             state.curIndex = props.index
@@ -34,6 +42,7 @@ export default {
 
         return {
             handleChangeTab,
+            planMap,
              ...toRefs(state)
         }
     }

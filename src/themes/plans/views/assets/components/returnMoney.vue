@@ -133,7 +133,7 @@ export default {
                 requestNum: state.outAmount,
                 requestTime: Date.now(),
                 remark: '',
-                customerCurrency: route.query.currency,
+                customerCurrency: assetsInfo.value.currency,
             }
             previewOrder(params)
                 .then(res => {
@@ -209,7 +209,7 @@ export default {
                     customerGroupId: customInfo.value.customerGroupId,
                     accountCurrency: state.outCurrency,
                     amount: state.outAmount,
-                    customerCurrency: route.query.currency,
+                    customerCurrency: assetsInfo.value.currency,
                 })
                     .then(res => {
                         state.loading = false
@@ -224,7 +224,7 @@ export default {
                     tradeType: tradeType.value,
                     sourceCurrency: state.outCurrency,
                     targetCurrency: state.inCurrency,
-                    customerCurrency: route.query.currency,
+                    customerCurrency: assetsInfo.value.currency,
                     requestNum: state.outAmount,
                     requestTime: Date.now(),
                     remark: '',
@@ -238,6 +238,8 @@ export default {
                 })
             }
         }
+
+        store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
 
         return {
             ...toRefs(state),

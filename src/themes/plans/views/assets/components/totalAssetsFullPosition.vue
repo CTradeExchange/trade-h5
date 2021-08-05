@@ -13,7 +13,7 @@
                     </span>
                 </p>
                 <p class='totalAmount'>
-                    654568.54564
+                    --
                 </p>
             </div>
         </div>

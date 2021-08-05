@@ -47,7 +47,7 @@ export default {
 
         // 监听tab变化
         const updateTab = (val) => {
-            assetsSwipe.value.swipeTo(val)
+            assetsSwipe.value.swipeTo(val - 1)
         }
 
         const onChange = (index) => {
