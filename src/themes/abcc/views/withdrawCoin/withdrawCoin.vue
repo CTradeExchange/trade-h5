@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { useI18n } from 'vue-i18n'
+// import { useI18n } from 'vue-i18n'
 import { reactive, computed, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
@@ -74,7 +74,7 @@ export default {
     setup (props) {
         const store = useStore()
         const router = useRouter()
-        const { t } = useI18n({ useScope: 'global' })
+        // const { t } = useI18n({ useScope: 'global' })
         const currencyList = computed(() => store.state.currencyList)
         const state = reactive({
             address: '',
@@ -129,8 +129,8 @@ export default {
         font-size: rem(24px);
     }
     .withdraw-wrap {
-        border-top: solid rem(20px) var(--primaryAssistColor);
         padding: 0 rem(30px);
+        border-top: solid rem(20px) var(--primaryAssistColor);
         .title {
             margin-top: rem(20px);
             margin-bottom: rem(20px);
@@ -146,7 +146,7 @@ export default {
                 background-color: var(--primaryAssistColor);
                 border-radius: rem(6px);
                 &.active {
-                    color: #fff;
+                    color: #FFF;
                     background-color: var(--primary);
                 }
             }
@@ -156,17 +156,15 @@ export default {
             position: relative;
             margin-top: rem(70px);
             :deep(.van-field) {
-                padding-left:0;
-
+                padding-left: 0;
             }
-            .all{
-                color: var(--primary);
+            .all {
                 position: absolute;
-                right: rem(20px);
                 top: rem(80px);
+                right: rem(20px);
                 z-index: 1;
+                color: var(--primary);
             }
-
         }
         .text {
             margin-top: rem(20px);

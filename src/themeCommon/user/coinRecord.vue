@@ -176,11 +176,11 @@ export default {
             3: t('withdrawRecord.auditStatus.3')
         }
 
-        const transferStatus = {
-            1: t('withdrawRecord.transferStatus.1'),
-            2: t('withdrawRecord.transferStatus.2'),
-            3: t('withdrawRecord.transferStatus.3')
-        }
+        // const transferStatus = {
+        //     1: t('withdrawRecord.transferStatus.1'),
+        //     2: t('withdrawRecord.transferStatus.2'),
+        //     3: t('withdrawRecord.transferStatus.3')
+        // }
         const handleState = (checkStatus, transferStatus) => {
             // 存款成功 待支付 已取消
             if (Number(checkStatus) === 3 || Number(transferStatus) === 3) {
@@ -268,11 +268,11 @@ export default {
         padding: 0 rem(20px);
         background-color: var(--contentColor);
         .arrow {
-            transition: all 0.2s;
             display: inline-block;
             vertical-align: middle;
+            transition: all 0.2s;
         }
-        .state-text{
+        .state-text {
             vertical-align: middle;
         }
     }
@@ -299,7 +299,6 @@ export default {
         padding: rem(20px) 0;
         .inner {
             flex: 1;
-
             .vital {
                 display: flex;
                 justify-content: space-between;

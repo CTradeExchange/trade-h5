@@ -313,7 +313,6 @@ export default {
             }
         }
     }
-
     .stalls-wrap {
         display: flex;
         flex-direction: row;
