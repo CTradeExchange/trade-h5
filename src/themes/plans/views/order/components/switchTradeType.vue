@@ -25,11 +25,28 @@ export default {
     emits: ['switchTradeType'],
     setup (props, { emit }) {
         const store = useStore()
+        const productMap = computed(() => store.state._quote.productMap)
         const tradeTypeList = computed(() => store.state._base.plans)
         const product = computed(() => store.getters['_trade/product'])
+
+        const findProductInCategory = (category, tradeType) => {
+            let resultProduct = null
+            for (let i = 0; i < category.length; i++) {
+                if (resultProduct) return resultProduct
+                const item = category[i]
+                item.listByUser.forEach(el => {
+                    const symbolKey = `${el}_${tradeType}`
+                    if (productMap.value[symbolKey]?.symbolName) resultProduct = productMap.value[symbolKey]
+                })
+            }
+        }
         const onChange = (data) => {
             if (data.id == product.value?.tradeType) return false
             emit('switchTradeType', data)
+            const category = store.getters.userProductCategory[data.id]
+            if (!category) return false
+            const changeProduct = findProductInCategory(category, data.id)
+            if (changeProduct) store.commit('_quote/Update_productActivedID', changeProduct.symbolKey)
         }
         return {
             product,

@@ -8,7 +8,6 @@ export default {
         wpSelfSymbol: null, //   wordpress自选产品配置
         wpProductCategory: [], // wordpress配置的产品板块
         wpNav: null, //   wordpress公司配置信息
-        tradeType: localStorage.getItem('tradeType'), //   先存储公司默认的玩法类型，用户登录后存储用户的玩法类型
         plans: [{ id: 1, name: 'CFD全仓' }, { id: 2, name: 'CFD逐仓' }, { id: 3, name: '杠杆全仓' }],
     },
     mutations: {
@@ -21,10 +20,6 @@ export default {
         },
         UPDATE_selfSymbol (state, data) {
             state.wpSelfSymbol = data
-        },
-        UPDATE_tradeType (state, type) {
-            localStorage.setItem('tradeType', String(type))
-            state.tradeType = type
         },
         Update_wpProductCategory (state, data = []) {
             state.wpProductCategory = data
@@ -47,10 +42,10 @@ export default {
         getCompanyInfo ({ commit }) {
             return wpCompanyConfig().then(async data => {
                 if (data) {
+                    // data.companyId = 17
                     sessionStorage.setItem('utcOffset', parseFloat(data.utcOffset) * 60)
                     if (!localGet('lang')) localSet('lang', data.language)
                     commit('UPDATE_wpCompanyInfo', data)
-                    commit('UPDATE_tradeType', data.tradeTypeList[0]['id']) // 先存储公司默认的玩法类型
                 }
                 return data
             })

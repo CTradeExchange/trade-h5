@@ -150,7 +150,14 @@ export default {
             return bizType
         })
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
-        QuoteSocket.send_subscribe([symbolKey.value]) // 订阅产品报价
+        watch(
+            () => symbolKey.value,
+            newval => {
+                QuoteSocket.send_subscribe([newval])
+            },
+            { immediate: true }
+        )
+        // 订阅产品报价
 
         store.commit('_trade/Update_modifyPositionId', 0)
 
