@@ -34,7 +34,7 @@
                             {{ $t('assets.dailyRate') }}<van-icon name='question-o' @click='showInfo(2)' />
                         </span>
                         <span class='fr'>
-                            --%
+                            {{ curAccount.interestProportion }} %
                         </span>
                     </div>
                     <div class='info-item'>
@@ -55,7 +55,7 @@
     </van-popup>
 
     <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
-        <van-picker :columns='columns' :default-index='2' title='' @confirm='onPickerConfirm' />
+        <van-picker :columns='columns' :columns-field-names='customFieldName' :default-index='2' title='' @confirm='onPickerConfirm' />
     </van-popup>
 </template>
 
@@ -64,6 +64,7 @@ import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { Dialog, Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
+import { gt } from '@/utils/calculation'
 
 import { manualLoan } from '@/api/user'
 import { computed, reactive, onMounted, ref, toRefs, watch, watchEffect, nextTick } from 'vue'
@@ -87,9 +88,23 @@ export default {
 
         const customInfo = computed(() => store.state._user.customerInfo)
         // 当前币种
-        const columns = computed(() => customInfo?.value?.accountList.map(el => el.currency))
+        const columns = computed(() => customInfo?.value?.accountList.map(el => {
+            return {
+                currency: el.currency,
+                accountId: el.accountId
+            }
+        }))
 
-        const tradeType = computed(() => customInfo?.value?.accountMap[route.query.currency].tradeType)
+        // 选中的币种
+        const curAccount = computed(() =>
+            customInfo?.value?.accountMap[state.curCurrency]
+        )
+
+        // 自定义picker字段
+        const customFieldName = {
+            text: 'currency',
+            children: 'cities',
+        }
 
         // 显示选币弹窗
         const selectcurCurrency = val => {
@@ -99,9 +114,14 @@ export default {
         const onPickerConfirm = val => {
             console.log(val, state.curCurrency)
             state.pickerShow = false
-            state.curCurrency = val
-            state.maxLoan = customInfo?.value?.accountMap[val]?.availableLoan || 0
-            state.loaned = customInfo?.value?.accountMap[val]?.liabilitiesPrincipal || 0
+            state.curCurrency = val.currency
+            state.maxLoan = curAccount.value?.availableLoan || 0
+            state.loaned = isEmpty(curAccount.value?.liabilitiesPrincipal) || 0
+            // 获取最新的资产数据
+            store.dispatch('_user/queryAccountAssetsInfo', {
+                tradeType: curAccount.value?.tradeType,
+                accountId: val.accountId
+            })
         }
 
         const closed = () => {
@@ -109,7 +129,7 @@ export default {
         }
 
         const showInfo = (type) => {
-            const params = type === 1 ? [props.account.availableLoan] : [state.curCurrency, 888]
+            const params = type === 1 ? [props.account.availableLoan] : [state.curCurrency, curAccount.value?.interestProportion || '--']
             Dialog.alert({
                 message: t(`assets.loanNotice[${type}]`, params),
             }).then(() => {
@@ -129,6 +149,11 @@ export default {
             if (isEmpty(state.amount)) {
                 return Toast(t('assets.loanAmountNotice'))
             }
+
+            if (gt(state.amount, state.maxLoan)) {
+                return Toast(t('assets.loanAmountExcess'))
+            }
+
             state.loading = true
             const params = {
                 customerNo: customInfo.value.customerNo,
@@ -144,7 +169,10 @@ export default {
                     if (res.check()) {
                         Toast(t('assets.loanSuccess'))
                         state.amount = ''
-                        store.dispatch('_user/queryAccountAssetsInfo', { tradeType: tradeType.value, accountId: parseInt(route.query.accountId) })
+                        store.dispatch('_user/queryAccountAssetsInfo', {
+                            tradeType: curAccount.value?.tradeType,
+                            accountId: parseInt(route.query.accountId)
+                        })
                     } else {
                         state.amount = ''
                     }
@@ -173,6 +201,8 @@ export default {
             onPickerConfirm,
             selectcurCurrency,
             handleAll,
+            curAccount,
+            customFieldName,
             ...toRefs(state)
         }
     }
@@ -224,17 +254,17 @@ export default {
         .currencySpan {
             margin-right: rem(10px);
         }
-        .muted{
+        .muted {
             margin-right: rem(15px);
         }
     }
-    .info{
-        .info-item{
+    .info {
+        .info-item {
             display: flex;
             justify-content: space-between;
-            color: var(--minorColor);
             margin-top: rem(10px);
-            .van-icon{
+            color: var(--minorColor);
+            .van-icon {
                 margin-left: rem(5px);
             }
         }
