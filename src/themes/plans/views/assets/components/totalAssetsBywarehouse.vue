@@ -1,9 +1,10 @@
 <template>
     <div class='totalAssets'>
-        <div v-if='assetsInfo && assetsInfo.totalBalance>0' class='totalAssetsBlock'>
+        <!-- v-if='assetsInfo && assetsInfo.totalBalance>0' -->
+        <div class='totalAssetsBlock'>
             <div class='totalAssetsInfo'>
                 <p class='label'>
-                    <span> {{ $t('assets.balance') }}({{ assetsInfo.currency }})</span>
+                    <span> {{ $t('trade.asset') }}({{ assetsInfo.currency }}) </span>
                     <span class='tag'>
                         <i
                             class='icon_zijinmingxi2
@@ -11,34 +12,18 @@
                         ></i>
                     </span>
                 </p>
-                <p class='totalAmount'>
-                    --
-                </p>
             </div>
         </div>
         <ul class='assetList'>
-            <li class='item'>
-                <p class='muted'>
-                    {{ $t('trade.jingzhi') }}
-                </p>
-                <p>--</p>
-            </li>
-            <li class='item'>
-                <p class='muted'>
-                    {{ $t('trade.marginLevel') }}
-                </p>
-                <p>--</p>
-            </li>
             <li class='item'>
                 <p class='muted'>
                     {{ $t('trade.freeMargin') }}
                 </p>
                 <p>--</p>
             </li>
-
             <li class='item'>
                 <p class='muted'>
-                    {{ $t('trade.originalMargin') }}
+                    {{ $t('trade.allOriginalMargin') }}
                 </p>
                 <p>--</p>
             </li>
@@ -101,14 +86,6 @@ export default {
         .tag {
             width: rem(35px);
             color: var(--color);
-            // width: rem(140px);
-            // height: rem(40px);
-            // color: var(--success);
-            // font-size: rem(20px);
-            // line-height: rem(40px);
-            // text-align: center;
-            // border: 1px solid var(--success);
-            // border-radius: rem(6px);
         }
     }
     .totalAmount {
@@ -135,11 +112,11 @@ export default {
 }
 .btns {
     display: flex;
+    justify-content: space-between;
     .van-button {
         display: block;
-        flex: 1;
+        width: 47%;
         height: rem(60px);
-        margin-right: rem(20px);
         color: var(--primary);
         font-size: rem(24px);
         line-height: rem(60px);
