@@ -1,13 +1,14 @@
 <template>
     <div class='assetsWrapper'>
         <TabBar :index='curIndex' @updateTab='updateTab' />
-        <van-swipe ref='assetsSwipe' indicator-color='white' :show-indicators='false' @change='onChange'>
+        <van-swipe ref='assetsSwipe' :show-indicators='false' :touchable='false' @change='onChange'>
             <van-swipe-item>
-                <TotalAssetsAllPosition class='block' />
+                <TotalAssetsFullPosition class='block' />
                 <PositionList />
             </van-swipe-item>
             <van-swipe-item>
-                逐仓
+                <TotalAssetsBywarehouse class='block' />
+                <PositionList />
             </van-swipe-item>
             <van-swipe-item>
                 <TotalAssets class='block' />
@@ -21,7 +22,9 @@
 import TabBar from './components/tabBar.vue'
 import AssetsItem from './components/assetsItem.vue'
 import TotalAssets from './components/totalAssets.vue'
-import TotalAssetsAllPosition from './components/totalAssetsAllPosition.vue'
+import TotalAssetsFullPosition from './components/totalAssetsFullPosition.vue'
+import TotalAssetsBywarehouse from './components/totalAssetsBywarehouse.vue'
+
 import PositionList from '@plans/modules/positionList/positionList'
 import { reactive, toRefs, nextTick, ref } from 'vue'
 import { useStore } from 'vuex'
@@ -32,7 +35,8 @@ export default {
         PositionList,
         AssetsItem,
         TotalAssets,
-        TotalAssetsAllPosition
+        TotalAssetsBywarehouse,
+        TotalAssetsFullPosition
     },
     setup () {
         const store = useStore()

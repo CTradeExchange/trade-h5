@@ -3,6 +3,7 @@
         v-model:show='showCP'
         class='m-dialogPC'
         position='bottom'
+        teleport='body'
         :transition-appear='true'
         @closed='closed'
     >

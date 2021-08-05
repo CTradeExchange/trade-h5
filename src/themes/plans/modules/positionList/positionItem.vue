@@ -66,7 +66,7 @@
                             </div>
                         </div>
 
-                        <!-- <div class='flex-wrap'>
+                        <div class='flex-wrap'>
                             <div class='flex-item'>
                                 <div class='title'>
                                     {{ $t('trade.originalMargin') }}
@@ -83,7 +83,7 @@
                                     {{ data.maintenanceMargin }}
                                 </div>
                             </div>
-                            <div v-if='customerInfo.tradeType===2' class='flex-item'>
+                            <div class='flex-item'>
                                 <div class='title alignRight'>
                                     {{ $t('trade.previewStopPrice') }}
                                 </div>
@@ -91,7 +91,7 @@
                                     {{ data.previewStopPrice }}
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                     <div class='cell'>
                         <div class='flex-wrap'>
@@ -118,7 +118,6 @@
                                 <i class='icon_icon_chart hidden'></i>
                             </div>
                             <van-button
-                                v-if='Number(tradeType) === 2'
                                 hairline
                                 size='mini'
                                 type='default'
@@ -261,6 +260,7 @@ export default {
                 }
             }
             .ft {
+                display: flex;
                 vertical-align: middle;
                 .van-button {
                     color: var(--primary);
@@ -315,7 +315,8 @@ export default {
             }
         }
         .van-button {
-            width: rem(265px);
+            //width: rem(165px);
+            flex: 1;
             height: rem(48px);
             margin-right: rem(10px);
             color: var(--primary) !important;
