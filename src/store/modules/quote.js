@@ -1,7 +1,7 @@
 import { findSymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
 import { toFixed } from '@/utils/calculation'
 import { vue_set, assign } from '@/utils/vueUtil.js'
-import { sessionSet } from '@/utils/util.js'
+import { sessionSet, sessionGet } from '@/utils/util.js'
 import { createListByPlans, planMapToArray } from './storeUtil.js'
 import CheckAPI from '@/utils/checkAPI'
 import BigNumber from 'bignumber.js'
@@ -44,7 +44,7 @@ export default {
         productList: [], // 产品列表
         productMap: {}, // 产品列表
         planMap: {}, // 管理所有玩法及每个玩法下的所有产品
-        productActivedID: null, // 当前操作的产品ID
+        productActivedID: sessionGet('productActived'), // 当前操作的产品ID
         handicapList: [], // 盘口实时深度报价
         dealList: [] // 成交数据
     },

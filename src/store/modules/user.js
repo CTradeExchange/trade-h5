@@ -70,8 +70,8 @@ export default {
                 }
             })
         },
-        Update_accountAssets (state, data) {
-            state.accountAssets = data
+        Update_accountAssets (state, { tradeType, data }) {
+            state.accountAssets[tradeType] = data
         },
         Update_kycState (state, data) {
             state.kycState = data

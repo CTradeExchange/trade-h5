@@ -12,14 +12,17 @@
 </template>
 
 <script>
-import { reactive, toRefs, watchEffect } from 'vue'
+import { reactive, toRefs, watchEffect, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useStore } from 'vuex'
 export default {
     setup () {
         const router = useRouter()
         const route = useRoute()
+        const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
+        const symbolKey = computed(() => store.state._quote.productActivedID)
         const state = reactive({
             active: route.name,
             menuList: [
@@ -59,7 +62,12 @@ export default {
 
         // 切换导航
         const menuHandler = (item) => {
-            router.push(item.href).catch(err => {
+            let href = item.href
+            if (href === '/order') {
+                const [symbolId, tradeType] = symbolKey.value?.split('_')
+                href = `/order?symbolId=${symbolId}&tradeType=${tradeType}`
+            }
+            router.push(href).catch(err => {
                 console.log(err)
                 state.active = route.path
             })

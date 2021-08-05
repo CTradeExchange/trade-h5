@@ -121,7 +121,7 @@ const config = {
                 target: 'http://prewpadmin.cats-trade.com' // http://prewpadmin.cats-trade.com/
             },
             '/cats-manage-api': {
-                target: 'http://prewph5_3.cats-trade.com' // prewph5公司id为2 prewph5_1公司id为60
+                target: 'http://uatwph5_5.cats-trade.com' // prewph5公司id为2 prewph5_1公司id为60
             },
             '/upload': {
                 target: 'http://precatsapi.cats-trade.com/upload'

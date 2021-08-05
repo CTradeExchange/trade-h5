@@ -14,7 +14,7 @@ class SocketEvent {
         this.subscribedList = []
         this.connectNum = 0 // websocket链接连接次数
         this.preSetTime = 1 // 上一次保存价格的时间
-        this.newPrice = []
+        this.newPrice = {}
         this.newPriceTimer = null
     }
 
@@ -147,8 +147,46 @@ class SocketEvent {
         }, 30000)
     }
 
-    // 处理持仓盈亏浮动数据和账户数据
-    positionsTick (str) {
+    // 处理玩法1CFD全仓的：持仓盈亏浮动数据和账户数据
+    positionsTick (str, tradeType) {
+        // f(profitLoss,occupyMargin,availableMargin,marginRadio,netWorth,balance);(positionId,profitLoss);(positionId,profitLoss);(positionId,profitLoss)
+        if (this.newPriceTimer) clearTimeout(this.newPriceTimer)
+        const curPriceData = positionsTickToObj(str)
+        if (!this.newPrice[tradeType]) this.newPrice[tradeType] = []
+        const newPrice = this.newPrice[tradeType]
+        const now = new Date().getTime()
+        if (this.preSetTime + 125 <= now) { // 控制计算频率
+            this.preSetTime = now
+            newPrice.push(curPriceData)
+            this.floatProfitLoss(newPrice, tradeType)
+            this.newPrice[tradeType] = []
+        } else {
+            newPrice.push(curPriceData)
+        }
+
+        // 500毫秒后更新最后一组报价数据
+        this.newPriceTimer = setTimeout(() => {
+            if (newPrice.length > 0) {
+                this.floatProfitLoss(newPrice, tradeType)
+                this.newPrice[tradeType] = []
+            }
+        }, 500)
+    }
+
+    floatProfitLoss (dataArr, tradeType) {
+        const $store = this.$store
+        if (!dataArr?.length) return false
+        const last = dataArr[dataArr.length - 1]
+        $store.commit('_user/Update_accountAssets', { tradeType, data: last.content })
+        dataArr.forEach(({ content }) => {
+            if (content.positionProfitLossMessages.length > 0) {
+                $store.commit('_trade/Update_positionProfitLossList', { tradeType, list: content.positionProfitLossMessages })
+            }
+        })
+    }
+
+    // 处理玩法2CFD逐仓的：持仓盈亏浮动数据和账户数据
+    positionsTick_CFD2 (str) {
         // f(profitLoss,occupyMargin,availableMargin,marginRadio,netWorth,balance);(positionId,profitLoss);(positionId,profitLoss);(positionId,profitLoss)
         if (this.newPriceTimer) clearTimeout(this.newPriceTimer)
         const curPriceData = positionsTickToObj(str)
@@ -156,7 +194,7 @@ class SocketEvent {
         if (this.preSetTime + 125 <= now) { // 控制计算频率
             this.preSetTime = now
             this.newPrice.push(curPriceData)
-            this.floatProfitLoss(this.newPrice)
+            this.floatProfitLoss_CFD2(this.newPrice)
             this.newPrice = []
         } else {
             this.newPrice.push(curPriceData)
@@ -165,13 +203,13 @@ class SocketEvent {
         // 500毫秒后更新最后一组报价数据
         this.newPriceTimer = setTimeout(() => {
             if (this.newPrice.length > 0) {
-                this.floatProfitLoss(this.newPrice)
+                this.floatProfitLoss_CFD2(this.newPrice)
                 this.newPrice = []
             }
         }, 500)
     }
 
-    floatProfitLoss (dataArr) {
+    floatProfitLoss_CFD2 (dataArr) {
         const $store = this.$store
         dataArr.forEach(({ content }) => {
             $store.commit('_user/Update_accountAssets', content)
