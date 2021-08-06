@@ -8,7 +8,7 @@ export default {
         wpSelfSymbol: null, //   wordpress自选产品配置
         wpProductCategory: [], // wordpress配置的产品板块
         wpNav: null, //   wordpress公司配置信息
-        plans: [{ id: 1, name: 'CFD全仓' }, { id: 2, name: 'CFD逐仓' }, { id: 3, name: '杠杆全仓' }],
+        plans: [], // [{ id: 1, name: 'CFD全仓' }, { id: 2, name: 'CFD逐仓' }, { id: 3, name: '杠杆全仓' }]
     },
     mutations: {
         UPDATE_wpCompanyInfo (state, data) {
@@ -23,6 +23,9 @@ export default {
         },
         Update_wpProductCategory (state, data = []) {
             state.wpProductCategory = data
+        },
+        Update_plans (state, data = []) {
+            state.plans = data
         },
     },
     actions: {
@@ -46,6 +49,7 @@ export default {
                     sessionStorage.setItem('utcOffset', parseFloat(data.utcOffset) * 60)
                     if (!localGet('lang')) localSet('lang', data.language)
                     commit('UPDATE_wpCompanyInfo', data)
+                    commit('Update_plans', data.tradeTypeCurrencyList)
                 }
                 return data
             })
