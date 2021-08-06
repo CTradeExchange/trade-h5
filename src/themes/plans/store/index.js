@@ -50,7 +50,7 @@ export default createStore({
                 const customerGroupId = getters.customerGroupId
                 const newSelfSymbolData = {}
                 Object.keys(selfSymbolData).forEach(el => {
-                    newSelfSymbolData[el] = selfSymbolData[el][customerGroupId]
+                    newSelfSymbolData[el] = selfSymbolData[el][customerGroupId] ?? []
                 })
                 return newSelfSymbolData
             }
