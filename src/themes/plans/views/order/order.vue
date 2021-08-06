@@ -5,6 +5,8 @@
         <div class='main'>
             <!-- 订单类型 -->
             <OrderTypeTab v-model='orderType' :btn-list='orderTypeList' @selected='changeOrderType' />
+            <!-- 自动借款 -->
+            <LoanBar v-if='product && product.tradeType===3' v-model='operationType' class='cellMarginTop' />
             <!-- 方向 -->
             <Direction v-model='direction' class='cellMarginTop' :product='product' />
             <!-- 挂单设置 -->
@@ -75,6 +77,7 @@ import Direction from './components/direction'
 import OrderVolume from './components/orderVolume'
 import ProfitlossSet from './components/profitLossSet'
 import PendingBar from './components/pendingBar'
+import LoanBar from './components/loanBar'
 import PendingBarCFD from './components/pendingBar_CFD'
 import OrderTypeTab from './components/orderType.vue'
 import Assets from './components/assets.vue'
@@ -93,6 +96,7 @@ export default {
         Assets,
         Trust,
         PendingBar,
+        LoanBar,
         PendingBarCFD,
     },
     setup () {
@@ -127,6 +131,7 @@ export default {
         const customerInfo = computed(() => store.state._user.customerInfo)
         const account = computed(() => {
             let account = ''
+            if (!product.value) return account
             const accountList = customerInfo.value?.accountList || []
             const productTradeType = parseInt(product.value?.tradeType)
             if ([1, 2].includes(productTradeType)) {

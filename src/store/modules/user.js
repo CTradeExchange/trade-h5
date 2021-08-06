@@ -126,7 +126,7 @@ export default {
             const accountMap = {}
             if (data.accountList?.length) {
                 data.accountList.forEach(el => {
-                    accountMap[el.currency] = el
+                    if (el.tradeType === 3) accountMap[el.currency] = el // 存储玩法3杠杆全仓的资产账户map类型
                 })
             }
             data.accountMap = accountMap
