@@ -333,6 +333,7 @@ function normalizeInfo(info){
         description: info.description,
         symbolId: info.symbolId,
         pricescale:  Math.pow(10, info.digits),
+        tradeType: info.tradeType
     }
     return result
 }
