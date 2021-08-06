@@ -48,7 +48,7 @@ export default {
         const productListEl = ref(null)
 
         // 1.玩法类型
-        const tradeType = ref(1)
+        const tradeType = ref('1')
         // 2.板块类型
         const categoryType = ref(0)
         // 监听玩法类型
