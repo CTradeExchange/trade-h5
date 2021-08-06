@@ -71,7 +71,11 @@ export default {
             })
         },
         Update_accountAssets (state, { tradeType, data }) {
-            state.accountAssets[tradeType] = data
+            if (!tradeType) {
+                state.accountAssets = {}
+            } else {
+                state.accountAssets[tradeType] = data
+            }
         },
         Update_kycState (state, data) {
             state.kycState = data
@@ -185,8 +189,8 @@ export default {
         // 如果和没有添加过自选产品，自动添加默认自选产品
         addCustomerOptionalDefault ({ state, rootGetters }) {
             if (state.customerInfo.optional === 1) return Promise.resolve()
-            const defaultOptions = rootGetters.userSelfSymbolList.map(el => parseInt(el.symbolId))
-            return defaultOptions.length > 0 ? addCustomerOptional({ symbolList: defaultOptions }) : Promise.resolve()
+            // const defaultOptions = rootGetters.userSelfSymbolList.map(el => parseInt(el.symbolId))
+            // return defaultOptions.length > 0 ? addCustomerOptional({ symbolList: defaultOptions }) : Promise.resolve()
         },
         // 查询客户总资产信息
         queryCustomerAssetsInfo ({ state, commit }, params) {

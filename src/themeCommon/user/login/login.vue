@@ -182,8 +182,6 @@ export default {
 
                 // 登录websocket
                 instance.appContext.config.globalProperties.$MsgSocket.login()
-                // 重新登录清除账户信息
-                store.commit('_user/Update_accountAssets', {})
 
                 // 登录KYC,kycAuditStatus:0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
                 // companyKycStatus 公司KYC开户状态，1开启 2未开启

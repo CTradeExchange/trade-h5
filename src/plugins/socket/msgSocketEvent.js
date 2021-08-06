@@ -174,6 +174,7 @@ class SocketEvent {
     }
 
     floatProfitLoss (dataArr, tradeType) {
+        // if (!tradeType) debugger
         const $store = this.$store
         if (!dataArr?.length) return false
         const last = dataArr[dataArr.length - 1]
@@ -181,40 +182,6 @@ class SocketEvent {
         dataArr.forEach(({ content }) => {
             if (content.positionProfitLossMessages.length > 0) {
                 $store.commit('_trade/Update_positionProfitLossList', { tradeType, list: content.positionProfitLossMessages })
-            }
-        })
-    }
-
-    // 处理玩法2CFD逐仓的：持仓盈亏浮动数据和账户数据
-    positionsTick_CFD2 (str) {
-        // f(profitLoss,occupyMargin,availableMargin,marginRadio,netWorth,balance);(positionId,profitLoss);(positionId,profitLoss);(positionId,profitLoss)
-        if (this.newPriceTimer) clearTimeout(this.newPriceTimer)
-        const curPriceData = positionsTickToObj(str)
-        const now = new Date().getTime()
-        if (this.preSetTime + 125 <= now) { // 控制计算频率
-            this.preSetTime = now
-            this.newPrice.push(curPriceData)
-            this.floatProfitLoss_CFD2(this.newPrice)
-            this.newPrice = []
-        } else {
-            this.newPrice.push(curPriceData)
-        }
-
-        // 500毫秒后更新最后一组报价数据
-        this.newPriceTimer = setTimeout(() => {
-            if (this.newPrice.length > 0) {
-                this.floatProfitLoss_CFD2(this.newPrice)
-                this.newPrice = []
-            }
-        }, 500)
-    }
-
-    floatProfitLoss_CFD2 (dataArr) {
-        const $store = this.$store
-        dataArr.forEach(({ content }) => {
-            $store.commit('_user/Update_accountAssets', content)
-            if (content.positionProfitLossMessages.length > 0) {
-                $store.commit('_trade/Update_positionProfitLossList', { tradeType: 1, list: content.positionProfitLossMessages })
             }
         })
     }

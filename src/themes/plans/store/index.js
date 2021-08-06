@@ -48,11 +48,11 @@ export default createStore({
                 const wpSelfSymbol = state._base.wpSelfSymbol
                 const selfSymbolData = wpSelfSymbol.find(el => el.tag === 'selfSymbol')?.data?.product || {}
                 const customerGroupId = getters.customerGroupId
-                const selfSymbolIds = selfSymbolData[customerGroupId] ?? []
-                const productMap = state._quote.productMap
-                return selfSymbolIds.map(el => {
-                    return productMap[el]
-                }).filter(el => el)
+                const newSelfSymbolData = {}
+                Object.keys(selfSymbolData).forEach(el => {
+                    newSelfSymbolData[el] = selfSymbolData[el][customerGroupId]
+                })
+                return newSelfSymbolData
             }
         },
         // 用户产品板块
