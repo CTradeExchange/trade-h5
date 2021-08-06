@@ -23,7 +23,7 @@ export class RequestKData {
         }
 
         const _params = {
-            "trade_type": 1,
+            "trade_type": params.tradeType,
             "symbol_id": params.symbolId,
             "kline_type": params.klineType,
             "kline_timestamp_start": params.startTime,

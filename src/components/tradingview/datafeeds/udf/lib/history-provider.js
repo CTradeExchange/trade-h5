@@ -15,7 +15,8 @@ class HistoryProvider {
             klineType: resolutionToKlineType[resolution],
             startTime: rangeStartDate,
             endTime: rangeEndDate,
-            resolution
+            resolution,
+            tradeType: symbolInfo.tradeType
         }
 
         if(typeof firstDataRequest === 'boolean'){

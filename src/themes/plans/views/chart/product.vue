@@ -488,6 +488,7 @@ export default {
                     description: product.value.symbolCode, // 显示在图表左上角
                     symbolId: product.value.symbolId, // 产品id
                     digits: product.value.symbolDigits, // 小数点
+                    tradeType: tradeType
                 }
             }
             return null

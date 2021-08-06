@@ -11,7 +11,7 @@ export default function ({ tradeType, categoryType }) {
     const categoryList = computed(() => {
         const selfSymbol = {
             title: '自选',
-            listByUser: unref(userSelfSymbolList)[unref(tradeType)]?.map(e => e.symbolId) || []
+            listByUser: unref(userSelfSymbolList)[unref(tradeType)]
         }
         return [
             selfSymbol,
