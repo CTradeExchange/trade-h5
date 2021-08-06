@@ -3,7 +3,7 @@
         <p class='header'>
             <span>持仓（{{ positionList?.length }}）</span>
             <span class='fr fallColor'>
-                +354512.00 USD
+                
             </span>
         </p>
         <positionItem
@@ -16,10 +16,12 @@
         />
     </div>
 
+    <Loading :show='loading' />
+
     <!-- 平仓 -->
     <DialogClosePosition v-model:show='closeVisible' :data='positionData' :product='product' />
     <!-- 调整保证金 -->
-    <DialogAdjustMargin v-model:show='adjustVisible' :data='positionData' />
+    <DialogAdjustMargin v-model:show='adjustVisible' :data='positionData' :tradeType='tradeType' />
     <!-- 设置止损止盈 -->
     <DialogSLTP
         :data='positionData'
@@ -30,7 +32,7 @@
 </template>
 
 <script>
-import { computed, reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs,inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import positionItem from './positionItem'
@@ -38,6 +40,7 @@ import DialogClosePosition from '@plans/components/dialogClosePosition'
 import DialogAdjustMargin from '@plans/components/dialogAdjustMargin'
 import DialogSLTP from '@plans/components/dialogSLTP'
 export default {
+    props: ['tradeType'],
     components: {
         positionItem,
         DialogClosePosition,
@@ -54,7 +57,11 @@ export default {
             showSetProfit: false
         })
 
-        const positionList = computed(() => store.state._trade.positionList[1])
+        const curIndex = inject('curTabIndex')
+        const tradeType = computed(()=> store.state._base.plans[curIndex.value].id)
+
+        const positionList = computed(() =>  store.state._trade.positionList[tradeType.value])
+        const loading = computed(()=> store.state._trade.positionLoading)
         const product = computed(() => store.state._quote.productMap['35_3']) // state.positionData?.symbolId
 
         // 平仓
@@ -83,9 +90,10 @@ export default {
             state.showSetProfit = val
         }
 
-        store.dispatch('_trade/queryPositionPage', { tradeType: 1 })
+        
+        //store.dispatch('_trade/queryPositionPage', { tradeType: 2 })
 
-        store.dispatch('_trade/queryPBOOrderPage', { tradeType: 2 })
+        //store.dispatch('_trade/queryPBOOrderPage', { tradeType: 2 })
 
         return {
             ...toRefs(state),
@@ -94,7 +102,9 @@ export default {
             showAdjustPopup,
             showClose,
             showSLTP,
-            updateSLTPVisible
+            updateSLTPVisible,
+            tradeType,
+            loading
 
         }
     }

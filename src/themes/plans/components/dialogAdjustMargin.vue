@@ -3,7 +3,6 @@
         v-model:show='showDialog'
         class='m-dialogAdjust'
         position='bottom'
-        teleport='body'
         :transition-appear='true'
         @closed='closed'
     >
@@ -42,7 +41,7 @@
                     {{ $t('trade.maxRaise') }}: {{ accountInfo.available }} {{ accountInfo.currency }}
                 </span>
                 <span v-else>
-                    {{ $t('trade.maxReduce') }}: {{ data.canReduceMargin }} {{ accountInfo.currency }}
+                    {{ $t('trade.maxReduce') }}: {{ positionData.canReduceMargin }} {{ accountInfo.currency }}
                 </span>
             </p>
 
@@ -62,13 +61,14 @@
 </template>
 
 <script>
-import { reactive, toRefs, computed, watchEffect, onMounted } from 'vue'
+import { reactive, toRefs, computed, watchEffect, onMounted, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { Toast } from 'vant'
 import { updateOccupyTheMargin } from '@/api/user'
 import { isEmpty } from '@/utils/util'
+import { pow } from '@/utils/calculation'
 export default {
 
     props: ['show', 'data'],
@@ -89,10 +89,20 @@ export default {
         const tradeType = computed(() => store.state._base.tradeType)
         const customerInfo = computed(() => store.state._user.customerInfo)
         const accountInfo = computed(() => customerInfo.value.accountList[0])
-
-        watchEffect(() => {
-            state.showDialog = props.show
+        const positionData = computed(() => {
+            return store.state._trade.positionList.find(item => item.positionId === props.data.positionId)
         })
+
+        watch(
+            () => props.show,
+            (val) => {
+                state.showDialog = props.show
+                if (val) {
+                    store.dispatch('_trade/queryPositionPage')
+                } else {
+                    state.operType = true
+                }
+            })
 
         const closeHandler = () => {
             state.showDialog = false
@@ -100,6 +110,11 @@ export default {
 
         const operation = () => {
             state.operType = !state.operType
+            if (state.operType) {
+                store.dispatch('_trade/queryPositionPage')
+            } else {
+                store.dispatch('_user/findCustomerInfo', false)
+            }
             state.operText = state.operType ? t('trade.raise') : t('trade.reduce')
         }
 
@@ -114,15 +129,24 @@ export default {
         // 调整保证金
         const submitAdjustMargin = () => {
             if (isEmpty(state.amount)) {
-                return Toast(t('trade.enterMarginAmount'))
+                return Toast(t('trade.enterMarginAmountRequire'))
             }
+
+            if (parseFloat(state.amount) < 0) {
+                return Toast(t('trade.enterMarginAmountTip'))
+            }
+
             state.loading = true
+            // 处理金额*10 小数位次方
+            const margin = state.operType ? parseFloat(state.amount) : -parseFloat(state.amount)
+            const occupyTheMargin = margin * pow(10, props.data.openAccountDigits)
+
             const params = {
                 tradeType: tradeType.value,
                 accountId: customerInfo.value.accountList[0].accountId,
                 positionId: props.data.positionId,
                 accountDigits: props.data.openAccountDigits,
-                occupyTheMargin: state.operType ? parseFloat(state.amount) : -(parseFloat(state.amount)),
+                occupyTheMargin,
                 orderId: props.data.orderId,
                 remark: '',
                 resp: ''
@@ -132,7 +156,11 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     Toast(t('common.submitSuccess'))
+                    state.operType = true
+                    state.operText = t('trade.raise')
+                    state.amount = ''
                     state.showDialog = false
+                    store.dispatch('_trade/queryPositionPage')
                 }
             }).catch(err => {
                 state.loading = false
@@ -142,6 +170,8 @@ export default {
             context.emit('update:show', false)
         }
 
+        // store.dispatch('_trade/queryPositionPage')
+
         return {
             ...toRefs(state),
             submitAdjustMargin,
@@ -150,6 +180,7 @@ export default {
             operation,
             accountInfo,
             tradeType,
+            positionData,
             handleAll
         }
     }

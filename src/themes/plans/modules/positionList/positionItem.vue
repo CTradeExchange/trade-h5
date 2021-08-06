@@ -66,7 +66,9 @@
                             </div>
                         </div>
 
-                        <div class='flex-wrap'>
+                        
+
+                        <div class='flex-wrap' v-if='Number(tradeType) === 2'>
                             <div class='flex-item'>
                                 <div class='title'>
                                     {{ $t('trade.originalMargin') }}
@@ -118,6 +120,7 @@
                                 <i class='icon_icon_chart hidden'></i>
                             </div>
                             <van-button
+                             v-if='Number(tradeType) === 2'
                                 hairline
                                 size='mini'
                                 type='default'
@@ -152,7 +155,7 @@
 </template>
 
 <script>
-import { computed, reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs, inject  } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { minus } from '@/utils/calculation'
@@ -170,11 +173,13 @@ export default {
             cpVis: false,
             activeNames: ['1']
         })
+        const curIndex = inject('curTabIndex')
+        const tradeType = computed(()=> store.state._base.plans[curIndex.value].id)
         const customerInfo = computed(() => store.state._user.customerInfo)
         const positionList = computed(() => store.state._trade.positionList)
         const product = computed(() => store.state._quote.productMap['7_3'])
         const positionVolume = computed(() => minus(data.openVolume, data.closeVolume))
-        const tradeType = computed(() => store.state._base.tradeType)
+       
 
         const toPositionDetail = (item) => {
             store.commit('_quote/Update_productActivedID', item.symbolId)
@@ -197,6 +202,7 @@ export default {
             toPositionDetail,
             updateShow,
             toProduct,
+            curIndex,
             tradeType
         }
     }

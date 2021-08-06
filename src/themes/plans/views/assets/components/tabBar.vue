@@ -3,16 +3,6 @@
         <div v-for='(item,key) in planMap' :key='key' class='tab-item' :class='{ active: Number(curIndex+1) === Number(key) }' @click='handleChangeTab(key)'>
             {{ item.name }}
         </div>
-
-        <!-- <div class='tab-item' :class='{ active: curIndex === 0 }' @click='handleChangeTab(0)'>
-            CFD全仓
-        </div>
-        <div class='tab-item' :class='{ active: curIndex === 1 }' @click='handleChangeTab(1)'>
-            CFD逐仓
-        </div>
-        <div class='tab-item' :class='{ active: curIndex === 2 }' @click='handleChangeTab(2)'>
-            杠杆全仓
-        </div> -->
     </div>
 </template>
 

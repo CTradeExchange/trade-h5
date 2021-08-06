@@ -141,7 +141,7 @@ export default {
     components: {
         Stepper,
     },
-    props: ['show', 'product', 'data'],
+    props: ['show', 'product', 'data', 'tradeType'],
     emits: ['update:show'],
     setup (props, context) {
         const store = useStore()
@@ -203,7 +203,8 @@ export default {
                 requestPrice: mul(requestPrice, p),
                 expireType: props.data.expireType,
                 stopLoss: props.data.stopLoss,
-                takeProfit: props.data.takeProfit
+                takeProfit: props.data.takeProfit,
+                tradeType: props.tradeType
             }
             return params
         }

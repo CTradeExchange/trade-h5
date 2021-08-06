@@ -19,13 +19,13 @@
                 <p class='muted'>
                     {{ $t('trade.freeMargin') }}
                 </p>
-                <p>--</p>
+                <p>{{ userAccount?.availableMargin || '--' }} </p>
             </li>
             <li class='item'>
                 <p class='muted'>
                     {{ $t('trade.allOriginalMargin') }}
                 </p>
-                <p>--</p>
+                <p>{{userAccount?.occupyMargin || '--'}}</p>
             </li>
         </ul>
 
@@ -57,9 +57,11 @@ export default {
     setup () {
         const store = useStore()
         const assetsInfo = computed(() => store.state._user.assetsInfo)
+        const userAccount = computed(() => store.state._user.accountAssets[1])
         store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
         return {
             assetsInfo,
+            userAccount
         }
     }
 }

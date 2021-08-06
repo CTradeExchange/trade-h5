@@ -4,7 +4,7 @@
         <van-swipe ref='assetsSwipe' :show-indicators='false' :touchable='true' @change='onChange'>
             <van-swipe-item>
                 <TotalAssetsFullPosition class='block' />
-                <PositionList />
+                <PositionList  />
             </van-swipe-item>
             <van-swipe-item>
                 <TotalAssetsBywarehouse class='block' />
@@ -26,7 +26,7 @@ import TotalAssetsFullPosition from './components/totalAssetsFullPosition.vue'
 import TotalAssetsBywarehouse from './components/totalAssetsBywarehouse.vue'
 
 import PositionList from '@plans/modules/positionList/positionList'
-import { reactive, toRefs, nextTick, ref } from 'vue'
+import { reactive, toRefs, nextTick, ref,provide } from 'vue'
 import { useStore } from 'vuex'
 import { computed } from '@vue/runtime-core'
 export default {
@@ -36,23 +36,35 @@ export default {
         AssetsItem,
         TotalAssets,
         TotalAssetsBywarehouse,
-        TotalAssetsFullPosition
+        TotalAssetsFullPosition,
     },
     setup () {
         const store = useStore()
-
         const assetsSwipe = ref(null)
         const curIndex = ref(0)
+
+        
+        
         const accountList = computed(() => store.state._user.customerInfo?.accountList ?? [])
 
         // 监听tab变化
         const updateTab = (val) => {
-            assetsSwipe.value.swipeTo(val - 1)
+            assetsSwipe.value.swipeTo(Number(val) - 1)
+            getPositionData(Number(val))
+            curIndex.value = val
         }
 
         const onChange = (index) => {
             curIndex.value = index
         }
+
+        provide('curTabIndex', curIndex)
+
+        const getPositionData = (tradeType)=>{
+            store.dispatch('_trade/queryPositionPage', { tradeType })
+        }
+
+        store.dispatch('_trade/queryPositionPage', { tradeType: 1 })
 
         store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
         return {
