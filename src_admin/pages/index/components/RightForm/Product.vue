@@ -308,8 +308,8 @@ export default {
                             type: type,
                             isGroup: true,
                             children: data.map(v => ({
-                                id: id + '_' + v.id,
-                                label: `${v.name}[${v.id}](${v.code})`,
+                                id: id + '_' + v.symbolId,
+                                label: `${v.name}[${v.symbolId}](${v.code})`,
                                 rawId: v.id,
                                 leaf: true
                             }))
@@ -392,7 +392,7 @@ export default {
             })
         },
         showDialog (type) {
-            debugger
+            // debugger
             // console.log(this.elementTag)
             this.activeTradeType = type
             this.tradeTypeAccountGroupProduct = this.tradeTypeProduct[type]

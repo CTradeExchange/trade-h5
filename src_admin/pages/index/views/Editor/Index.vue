@@ -336,7 +336,7 @@ export default {
                 if (ev && ev.preventDefault) {
                     ev.preventDefault()
                 }
-                debugger
+                // debugger
                 const tradeTypeBlockCollect = store.state.editor.tradeTypeBlockCollect
 
                 const config = deepClone(store.state.editor.elementList.map(item => ({
