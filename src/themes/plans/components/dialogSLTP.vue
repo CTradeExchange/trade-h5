@@ -102,8 +102,18 @@ export default {
             stopLossPrice: '',
             stopProfitPrice: '',
         })
+
+        //获取账户
+        const account = computed(()=> store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(tradeType.value)))
+
+        //玩法id
+        const tradeType = computed(()=> store.state._quote.curTradeType)
+
+        //提示信息
         const warn = computed(() => modifyProfitLossRef.value?.stopLossWarn || modifyProfitLossRef.value?.stopProfitWarn)
+
         const positionVolume = computed(() => minus(props.data?.openVolume, props.data?.closeVolume))
+
         watchEffect(() => {
             state.showDialog = props.show
             if (props.data?.positionId) store.commit('_trade/Update_modifyPositionId', props.data.positionId)
@@ -137,6 +147,8 @@ export default {
                 positionId: data.positionId,
                 stopLoss: !state.stopLossPrice ? 0 : mul(state.stopLossPrice, p),
                 takeProfit: !state.stopProfitPrice ? 0 : mul(state.stopProfitPrice, p),
+                tradeType: tradeType.value,
+                accountId: account.value.accountId,
             }
             return params
         }

@@ -1,6 +1,6 @@
 <template>
     <div class='totalAssets'>
-        <div v-if='assetsInfo && assetsInfo.totalBalance>0' class='totalAssetsBlock'>
+        <div v-if='assetsInfo' class='totalAssetsBlock'>
             <div class='totalAssetsInfo'>
                 <p class='label'>
                     <span> {{ $t('assets.totalAssets') }}({{ assetsInfo.currency }})</span>
@@ -49,7 +49,7 @@
             >
                 {{ $t('trade.withdraw') }}
             </van-button>
-            <van-button
+            <!-- <van-button
                 hairline
                 size='mini'
             >
@@ -60,13 +60,13 @@
                 size='mini'
             >
                 {{ $t('trade.repayment') }}
-            </van-button>
+            </van-button> -->
         </div>
     </div>
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 export default {
     components: {
@@ -74,7 +74,13 @@ export default {
     setup () {
         const store = useStore()
         const assetsInfo = computed(() => store.state._user.assetsInfo)
-        store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
+
+        const tradeType = computed(() => store.state._quote.curTradeType)
+        watchEffect(() => {
+            if (['3'].indexOf(tradeType.value) > -1) {
+                store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
+            }
+        })
         return {
             assetsInfo,
         }

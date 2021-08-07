@@ -4,6 +4,7 @@
         class='m-dialogAdjust'
         position='bottom'
         :transition-appear='true'
+        teleport='body'
         @closed='closed'
     >
         <div class='dialog-header'>
@@ -19,6 +20,7 @@
                 <i class='icon_icon_close_big'></i>
             </div>
         </div>
+
         <div class='dialog-body'>
             <p class='title'>
                 {{ $t('trade.modifyMargin') }}
@@ -38,14 +40,14 @@
             </div>
             <p class='desc'>
                 <span v-if='operType'>
-                    {{ $t('trade.maxRaise') }}: {{ accountInfo.available }} {{ accountInfo.currency }}
+                    {{ $t('trade.maxRaise') }}: {{ accountInfo?.available }} {{ accountInfo?.currency }}
                 </span>
                 <span v-else>
-                    {{ $t('trade.maxReduce') }}: {{ positionData.canReduceMargin }} {{ accountInfo.currency }}
+                    {{ $t('trade.maxReduce') }}: {{ positionData.canReduceMargin }} {{ accountInfo?.currency }}
                 </span>
             </p>
 
-            <!-- {{ data }}   {{ product }} -->
+            
         </div>
         <div class='dialog-footer'>
             <van-button
@@ -86,11 +88,15 @@ export default {
             operText: t('trade.raise')
         })
 
-        const tradeType = computed(() => store.state._base.tradeType)
+        const tradeType = computed(()=> store.state._quote.curTradeType)
         const customerInfo = computed(() => store.state._user.customerInfo)
-        const accountInfo = computed(() => customerInfo.value.accountList[0])
+        
+        //获取账户
+        const accountInfo = computed(()=> 
+           store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(tradeType.value)))
+
         const positionData = computed(() => {
-            return store.state._trade.positionList.find(item => item.positionId === props.data.positionId)
+            return store.state._trade.positionList[tradeType.value].find(item => item.positionId === props.data.positionId)
         })
 
         watch(
@@ -98,7 +104,7 @@ export default {
             (val) => {
                 state.showDialog = props.show
                 if (val) {
-                    store.dispatch('_trade/queryPositionPage')
+                    store.dispatch('_trade/queryPositionPage',{ tradeType: tradeType.value })
                 } else {
                     state.operType = true
                 }
@@ -111,7 +117,7 @@ export default {
         const operation = () => {
             state.operType = !state.operType
             if (state.operType) {
-                store.dispatch('_trade/queryPositionPage')
+                store.dispatch('_trade/queryPositionPage',{ tradeType: tradeType.value })
             } else {
                 store.dispatch('_user/findCustomerInfo', false)
             }
@@ -143,7 +149,7 @@ export default {
 
             const params = {
                 tradeType: tradeType.value,
-                accountId: customerInfo.value.accountList[0].accountId,
+                accountId: accountInfo.value.accountId,
                 positionId: props.data.positionId,
                 accountDigits: props.data.openAccountDigits,
                 occupyTheMargin,
@@ -160,7 +166,7 @@ export default {
                     state.operText = t('trade.raise')
                     state.amount = ''
                     state.showDialog = false
-                    store.dispatch('_trade/queryPositionPage')
+                    store.dispatch('_trade/queryPositionPage',{ tradeType: tradeType.value })
                 }
             }).catch(err => {
                 state.loading = false
@@ -170,7 +176,6 @@ export default {
             context.emit('update:show', false)
         }
 
-        // store.dispatch('_trade/queryPositionPage')
 
         return {
             ...toRefs(state),

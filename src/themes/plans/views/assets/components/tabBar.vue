@@ -1,6 +1,6 @@
 <template>
     <div class='tab-bar'>
-        <div v-for='(item,key) in planMap' :key='key' class='tab-item' :class='{ active: Number(curIndex+1) === Number(key) }' @click='handleChangeTab(key)'>
+        <div v-for='item in planMap' :key='item.id' class='tab-item' :class='{ active: Number(curIndex+1) === Number(item.id) }' @click='handleChangeTab(item.id)'>
             {{ item.name }}
         </div>
     </div>
@@ -19,7 +19,7 @@ export default {
 
         })
 
-        const planMap = computed(() => store.state._quote.planMap)
+        const planMap = computed(() => store.state._base.plans)
 
         watchEffect(() => {
             state.curIndex = props.index
@@ -46,7 +46,7 @@ export default {
     margin-bottom: rem(40px);
     .tab-item {
         display: inline-block;
-        margin-right: rem(55px);
+        margin-right: rem(45px);
         color: var(--minorColor);
         font-weight: bold;
         font-size: rem(28px);

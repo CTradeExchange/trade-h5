@@ -9,12 +9,12 @@ export default function ({ tradeType, categoryType }) {
 
     // 所选玩法的板块列表
     const categoryList = computed(() => {
-        const selfSymbol = {
-            title: '自选',
-            listByUser: unref(userSelfSymbolList)[unref(tradeType)]
-        }
+        // const selfSymbol = {
+        //     title: '自选',
+        //     listByUser: unref(userSelfSymbolList)[unref(tradeType)]
+        // }
         return [
-            selfSymbol,
+            //selfSymbol,
             ...unref(userProductCategory)[unref(tradeType)]
         ]
     })
