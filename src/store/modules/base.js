@@ -46,6 +46,11 @@ export default {
             return wpCompanyConfig().then(async data => {
                 if (data) {
                     // data.companyId = 17
+                    if (data.tradeTypeCurrencyList) {
+                        data.tradeTypeCurrencyList.forEach(el => {
+                            el.tradeType = el.id
+                        })
+                    }
                     sessionStorage.setItem('utcOffset', parseFloat(data.utcOffset) * 60)
                     if (!localGet('lang')) localSet('lang', data.language)
                     commit('UPDATE_wpCompanyInfo', data)
