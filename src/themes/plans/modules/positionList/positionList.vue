@@ -1,29 +1,34 @@
 <template>
     <div class='position-wrap'>
         <p class='header'>
-            <span>持仓（{{ positionList?.length }}）</span>
+            <span>{{ $t('trade.position') }}({{ positionList?.length }})</span>
             <span class='fr fallColor'>
-                
+                {{ userAccount?.profitLoss || '--' }}
             </span>
         </p>
+
+        <van-loading v-if='loading' class='loading' />
         <positionItem
             v-for='item in positionList'
+            v-else
             :key='item'
             :data='item'
+            :product='product'
             @showAdjustPopup='showAdjustPopup'
             @showClose='showClose'
             @showSLTP='showSLTP'
         />
     </div>
 
-    <Loading :show='loading' />
+    <!-- {{ subscribList }} -->
 
     <!-- 平仓 -->
     <DialogClosePosition v-model:show='closeVisible' :data='positionData' :product='product' />
     <!-- 调整保证金 -->
-    <DialogAdjustMargin v-model:show='adjustVisible' :data='positionData' :tradeType='tradeType' />
+    <DialogAdjustMargin v-model:show='adjustVisible' :data='positionData' />
     <!-- 设置止损止盈 -->
     <DialogSLTP
+        v-if='showSetProfit'
         :data='positionData'
         :product='product'
         :show='showSetProfit'
@@ -32,7 +37,8 @@
 </template>
 
 <script>
-import { computed, reactive, toRefs,inject } from 'vue'
+import { QuoteSocket } from '@/plugins/socket/socket'
+import { computed, reactive, toRefs, watch, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import positionItem from './positionItem'
@@ -40,7 +46,6 @@ import DialogClosePosition from '@plans/components/dialogClosePosition'
 import DialogAdjustMargin from '@plans/components/dialogAdjustMargin'
 import DialogSLTP from '@plans/components/dialogSLTP'
 export default {
-    props: ['tradeType'],
     components: {
         positionItem,
         DialogClosePosition,
@@ -57,12 +62,44 @@ export default {
             showSetProfit: false
         })
 
-        const curIndex = inject('curTabIndex')
-        const tradeType = computed(()=> store.state._base.plans[curIndex.value].id)
+        const tradeType = computed(() => store.state._quote.curTradeType)
 
-        const positionList = computed(() =>  store.state._trade.positionList[tradeType.value])
-        const loading = computed(()=> store.state._trade.positionLoading)
-        const product = computed(() => store.state._quote.productMap['35_3']) // state.positionData?.symbolId
+        watchEffect(() => {
+            // 获取持仓列表 并订阅报价
+
+            if ([1, 2].indexOf(Number(tradeType.value)) > -1) {
+                store.dispatch('_trade/queryPositionPage', { tradeType: tradeType.value }).then(res => {
+                    state.loading = false
+                    if (res.check()) {
+                        const subscribList = positionList.value.map(el => {
+                            return {
+                                symbolId: el.symbolId,
+                                tradeType: tradeType.value
+                            }
+                        })
+                        QuoteSocket.send_subscribe(subscribList)
+                    }
+                }).catch(() => {
+                    state.loading = false
+                })
+            }
+        })
+
+        const positionList = computed(() => store.state._trade.positionList[tradeType.value])
+
+        const userAccount = computed(() => store.state._user.accountAssets[tradeType.value])
+
+        const loading = computed(() => store.state._trade.positionLoading)
+        const product = computed(() => store.state._quote.productMap[state.positionData?.symbolId + '_' + tradeType.value]) // state.positionData?.symbolId
+
+        // 订阅报价
+        /*  const subscribList = computed(() => {
+            const caa = positionList.value?.map(item => {
+                return { tradeTtype: tradeType.value, Symbol: item.symbolId }
+            })
+
+            return caa
+        }) */
 
         // 平仓
         const showClose = (data) => {
@@ -82,6 +119,7 @@ export default {
 
         // 设置止盈止损
         const showSLTP = (data) => {
+            debugger
             state.positionData = data
             state.showSetProfit = true
         }
@@ -89,11 +127,6 @@ export default {
         const updateSLTPVisible = (val) => {
             state.showSetProfit = val
         }
-
-        
-        //store.dispatch('_trade/queryPositionPage', { tradeType: 2 })
-
-        //store.dispatch('_trade/queryPBOOrderPage', { tradeType: 2 })
 
         return {
             ...toRefs(state),
@@ -104,8 +137,8 @@ export default {
             showSLTP,
             updateSLTPVisible,
             tradeType,
-            loading
-
+            loading,
+            userAccount
         }
     }
 }
@@ -128,5 +161,9 @@ export default {
             font-size: rem(34px);
         }
     }
+}
+.loading {
+    line-height: rem(100px);
+    background: var(--contentColor);
 }
 </style>

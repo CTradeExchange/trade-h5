@@ -21,6 +21,7 @@
                         {{ $t('trade.allPosition') }}
                     </a>
                 </div>
+
                 <p class='mutedTip'>
                     {{ $t('trade.free') + outAccount.available + outCurrency }}
                 </p>
@@ -91,7 +92,7 @@ export default {
         const productList = computed(() => store.state._quote.productList)
 
         // 当前币种
-        const columns = computed(() => customInfo?.value?.accountList.map(el => el.currency))
+        const columns = computed(() => customInfo?.value?.accountList.filter(item => item.tradeType === 3).map(el => el.currency))
         const tradeType = computed(() => customInfo?.value?.accountMap[route.query.currency].tradeType)
 
         watch(
@@ -157,17 +158,17 @@ export default {
             state.inCurrency = props.account.currency
             state.outCurrency = props.account.currency
             if (parseFloat(props.account.available) === 0) {
-                const accountList = store.state._user.customerInfo?.accountList || []
+                const accountList = store.state._user.customerInfo?.accountList.filter(item => item.tradeType === 3) || []
                 const newAccountList = accountList.slice().sort((a, b) => parseFloat(b.available) - parseFloat(a.available))
                 if (newAccountList.length && newAccountList[0].available > 0) {
-                    state.outCurrency = newAccountList[0].currency
+                    // state.outCurrency = newAccountList[0].currency
                 }
             }
         }
         // 显示选币弹窗
         const selectPickerField = val => {
-            state.pickerField = val
-            state.pickerShow = true
+            // state.pickerField = val
+            // state.pickerShow = true
         }
         const onPickerConfirm = val => {
             console.log(val, state.pickerField)

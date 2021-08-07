@@ -57,8 +57,8 @@ export default {
     setup () {
         const store = useStore()
         const assetsInfo = computed(() => store.state._user.assetsInfo)
-        const userAccount = computed(() => store.state._user.accountAssets[1])
-        store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
+        const userAccount = computed(() => store.state._user.accountAssets[2])
+        
         return {
             assetsInfo,
             userAccount

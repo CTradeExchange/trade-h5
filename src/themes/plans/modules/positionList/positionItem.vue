@@ -66,15 +66,13 @@
                             </div>
                         </div>
 
-                        
-
-                        <div class='flex-wrap' v-if='Number(tradeType) === 2'>
+                        <div v-if='Number(tradeType) === 2' class='flex-wrap'>
                             <div class='flex-item'>
                                 <div class='title'>
                                     {{ $t('trade.originalMargin') }}
                                 </div>
                                 <div class='val'>
-                                    {{ data.occupyTheMargin }}
+                                    {{ data.occupyTheMargin || '--' }}
                                 </div>
                             </div>
                             <div class='flex-item'>
@@ -82,15 +80,15 @@
                                     {{ $t('trade.holdMargin') }}
                                 </div>
                                 <div class='val'>
-                                    {{ data.maintenanceMargin }}
+                                    {{ data?.maintenanceMargin || '--' }}
                                 </div>
                             </div>
                             <div class='flex-item'>
                                 <div class='title alignRight'>
                                     {{ $t('trade.previewStopPrice') }}
                                 </div>
-                                <div class='val '>
-                                    {{ data.previewStopPrice }}
+                                <div class='val alignRight'>
+                                    {{ data.previewStopPrice || '--' }}
                                 </div>
                             </div>
                         </div>
@@ -120,7 +118,7 @@
                                 <i class='icon_icon_chart hidden'></i>
                             </div>
                             <van-button
-                             v-if='Number(tradeType) === 2'
+                                v-if='Number(tradeType) === 2'
                                 hairline
                                 size='mini'
                                 type='default'
@@ -150,12 +148,10 @@
             </van-collapse>
         </div>
     </div>
-
-    <!-- <DialogClosePosition v-if='cpVis' :data='data' :show='cpVis' @update:show='updateShow' /> -->
 </template>
 
 <script>
-import { computed, reactive, toRefs, inject  } from 'vue'
+import { computed, reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { minus } from '@/utils/calculation'
@@ -173,13 +169,12 @@ export default {
             cpVis: false,
             activeNames: ['1']
         })
-        const curIndex = inject('curTabIndex')
-        const tradeType = computed(()=> store.state._base.plans[curIndex.value].id)
+
+        const tradeType = computed(() => store.state._quote.curTradeType)
         const customerInfo = computed(() => store.state._user.customerInfo)
         const positionList = computed(() => store.state._trade.positionList)
-        const product = computed(() => store.state._quote.productMap['7_3'])
+        const product = computed(() => store.state._quote.productMap[data.symbolId + '_' + tradeType.value])
         const positionVolume = computed(() => minus(data.openVolume, data.closeVolume))
-       
 
         const toPositionDetail = (item) => {
             store.commit('_quote/Update_productActivedID', item.symbolId)
@@ -190,7 +185,7 @@ export default {
         }
 
         const toProduct = (symbolId) => {
-            router.push({ path: '/product', query: { symbolId } })
+            router.push({ path: '/product', query: { symbolId, tradeType: tradeType.value } })
         }
 
         return {
@@ -202,7 +197,6 @@ export default {
             toPositionDetail,
             updateShow,
             toProduct,
-            curIndex,
             tradeType
         }
     }
