@@ -8,7 +8,6 @@ import MixinGlobal from './mixin'
 import { Dialog } from 'vant'
 import Socket, { MsgSocket } from '@/plugins/socket/socket'
 import FindCustomerInfo from '@plans/plugins/findCustomerInfo'
-import longpress from '@/directives/longpress'
 import Loading from '@/components/loading'
 import PageComp from '@plans/components/PageComp.vue'
 import LayoutTop from '@plans/layout/top'
@@ -25,7 +24,6 @@ BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 // const Vconsole = new VConsole()
 
 const app = createApp(App)
-app.use(longpress)
 app.use(preventReClick)
 app.use(VantBase).use(I18n).use(store).use(router)
 app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })

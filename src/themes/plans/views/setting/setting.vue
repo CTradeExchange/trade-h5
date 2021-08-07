@@ -1,11 +1,6 @@
 <template>
     <LayoutTop :back='true' :menu='false' title='' />
     <div class='page-wrap'>
-        <van-cell :title='$t("setting.enableNews")'>
-            <template #right-icon>
-                <van-switch v-model='checked' active-color='#54C41C' size='24px' @change='changeNewsState' />
-            </template>
-        </van-cell>
         <van-cell v-if='customInfo' is-link :title='$t(Number(customInfo.loginPassStatus) === 1 ?"forgot.setPwd" : "login.modifyLoginPwd")' to='/setLoginPwd' />
         <van-cell v-if='customInfo && !customInfo.phone' is-link :title='$t("setting.bindPhone")' to='/bindMobile' />
         <van-cell v-if='customInfo && !customInfo.email' is-link :title='$t("setting.bindEmail")' to='/bindEmail' />
@@ -47,7 +42,6 @@ export default {
         const store = useStore()
         const router = useRouter()
         const state = reactive({
-            checked: false,
             loading: false,
             langVisible: false,
             colorVisible: false,
@@ -62,16 +56,6 @@ export default {
             const cur = colorsActions.find(el => el.val === store.state.invertColor)
             return cur ? cur.name : ''
         })
-
-        onBeforeMount(() => {
-            if (!isEmpty(localGet('openNews'))) {
-                state.checked = JSON.parse(localGet('openNews'))
-            }
-        })
-
-        const changeNewsState = (state) => {
-            localSet('openNews', state)
-        }
 
         const handleLogout = () => {
             Dialog.confirm({
@@ -144,7 +128,6 @@ export default {
             colorsActions,
             customInfo,
             handleLogout,
-            changeNewsState,
             langText,
             langSelect,
             colorSelect,
