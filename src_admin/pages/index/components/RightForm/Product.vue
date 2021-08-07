@@ -58,8 +58,8 @@
 </template>
 
 <script>
-import { forOwn, isPlainObject, flatten } from 'lodash'
-import { accountGroup, querySymbolGroup, accountGroupSymbol, tradeTypeAccountGroupSymbol } from '@index/Api/editor'
+import { forOwn, forEach, isPlainObject, flatten } from 'lodash'
+import { tradeTypeAccountGroupSymbol } from '@index/Api/editor'
 export default {
     name: 'Product',
     props: {
@@ -297,8 +297,8 @@ export default {
                 */
                 // debugger
                 const tradeTypeCustomerGroup = {}
-                forOwn(productList, (value, key) => {
-                    tradeTypeCustomerGroup[key] = Object.values(value.data).map((el) => {
+                forEach(productList, (value) => {
+                    tradeTypeCustomerGroup[value.id] = Object.values(value.data).map((el) => {
                         const firstItem = Object.values(el)[0]
                         const { id, name, type, data } = firstItem
                         // debugger
