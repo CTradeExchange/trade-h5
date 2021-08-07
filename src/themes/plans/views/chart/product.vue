@@ -15,6 +15,13 @@
                             :class="{ 'icon_zixuan2':isSelfSymbol }"
                         ></i>
                     </button>
+                    <div v-if='String(tradeType) !== "3"' class='ft'>
+                        <span
+                            @click='toContractInfo'
+                        >
+                            <i class='icon_guanyu'></i>
+                        </span>
+                    </div>
                 </div>
             </template>
         </LayoutTop>
@@ -877,6 +884,10 @@ export default {
 
         const showSidebar = ref(false)
 
+        const toContractInfo = () => {
+            router.push({ path: '/contract', query: { symbolId, tradeType } })
+        }
+
         return {
             ...toRefs(state),
             candleKTypeList,
@@ -904,7 +915,8 @@ export default {
             toOrder,
             collect,
             formatTime,
-            showSidebar
+            showSidebar,
+            toContractInfo
         }
     }
 }

@@ -76,7 +76,7 @@ import { useStore } from 'vuex'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { isEmpty, objArraySort } from '@/utils/util'
-import dayjs, { _dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useI18n } from 'vue-i18n'
 import { mul } from '@/utils/calculation'
@@ -93,8 +93,9 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const utcOffset = parseFloat(sessionStorage.getItem('utcOffset')) || dayjs().utcOffset()
         const symbolId = route.query.symbolId
-        const product = computed(() => store.state._quote.productMap[symbolId])
-        if (product.value) store.dispatch('_quote/querySymbolInfo', symbolId)
+        const tradeType = route.query.tradeType
+        const product = computed(() => store.state._quote.productMap[`${symbolId}_${tradeType}`])
+        if (product.value) store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType })
         else router.replace('/')
         const usedMarginSet = computed(() => {
             if (!isEmpty(product.value.usedMarginSet)) {
@@ -105,6 +106,7 @@ export default {
                     return el
                 })
             }
+            return []
         })
         // 交易时间
         const tradeTimeList = computed(() => {
