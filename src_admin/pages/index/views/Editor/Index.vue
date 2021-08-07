@@ -336,7 +336,7 @@ export default {
                 if (ev && ev.preventDefault) {
                     ev.preventDefault()
                 }
-                // debugger
+                debugger
                 const tradeTypeBlockCollect = store.state.editor.tradeTypeBlockCollect
 
                 const config = deepClone(store.state.editor.elementList.map(item => ({
@@ -352,7 +352,7 @@ export default {
                         item.data.items.forEach((el, idx) => {
                             // const tradeTypeBlock = []
                             if (tradeTypeBlockCollect[idx]) {
-                                forOwn(tradeTypeBlockCollect[idx], (_, key) => {
+                                forOwn(tradeTypeBlockCollect[idx], (value, key) => {
                                     if (['data', 'value'].indexOf(key) === -1) {
                                         if (!tradeTypeBlock[key]) {
                                             tradeTypeBlock[key] = []
@@ -360,7 +360,7 @@ export default {
                                         tradeTypeBlock[key].push({
                                             id: el.id,
                                             title: el.title,
-                                            list: el.code_ids_all
+                                            list: value
                                         })
                                     }
                                 })
