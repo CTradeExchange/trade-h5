@@ -12,7 +12,6 @@ export function createListByPlans (plans, customerGroupId) {
             }
         })
     })
-    planMap_codeIds['1'].push('11', '24')
     Object.keys(planMap_codeIds).forEach(tradeType => {
         planMap_codeIds[tradeType] = [...new Set(planMap_codeIds[tradeType])]
     })
