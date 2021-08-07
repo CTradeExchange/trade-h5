@@ -1,6 +1,6 @@
 <template>
     <div class='quoteWrap'>
-        <plansType :value='tradeType' @change='handleTradeType' />
+        <plansType v-if='plansList.length>1' :list='plansList' :value='tradeType' @change='handleTradeType' />
         <div class='tradeNav'>
             <TopTab
                 ref='tabList'
@@ -33,9 +33,10 @@
 <script>
 import TopTab from '@plans/components/topTab'
 import productListComp from '@plans/modules/productList/productList.vue'
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import plansType from '@/themes/plans/components/plansType.vue'
 import useProduct from '@plans/hooks/useProduct'
+import { useStore } from 'vuex'
 
 export default {
     name: 'Quote',
@@ -45,10 +46,13 @@ export default {
         plansType
     },
     setup () {
+        const store = useStore()
         const productListEl = ref(null)
+        // 玩法列表
+        const plansList = computed(() => store.state._base.plans.slice(1))
 
         // 1.玩法类型
-        const tradeType = ref('1')
+        const tradeType = ref(plansList.value[0].id)
         // 2.板块类型
         const categoryType = ref(0)
         // 监听玩法类型
@@ -79,6 +83,7 @@ export default {
         return {
             categoryType,
             productListEl,
+            plansList,
             categoryList,
             productList,
             tabChange,
@@ -94,12 +99,19 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .quoteWrap {
+    display: flex;
     flex: 1;
+    flex-direction: column;
+    justify-content: flex-start;
     width: 100%;
     // margin-top: rem(90px);
     padding-bottom: rem(100px);
     overflow: auto;
     background: var(--bgColor);
+    .productListWrap {
+        flex: 1;
+        overflow-y: auto;
+    }
 }
 .tradeNav {
     // position: absolute;
