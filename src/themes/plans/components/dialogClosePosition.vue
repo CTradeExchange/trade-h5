@@ -159,13 +159,13 @@ export default {
             fastBtnIndex: 1,
             closeVolume: '',
         })
-        
-        const account = computed(()=> store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(tradeType.value)))
+
+        const account = computed(() => store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(tradeType.value)))
         const customerInfo = computed(() => store.state._user.customerInfo)
         const volumeDigit = computed(() => getDecimalNum(props.product.minVolume))
         const positionVolume = computed(() => minus(props.data?.openVolume, props.data?.closeVolume))
         const positionVolumeMin = computed(() => props.product.minVolume)
-        const tradeType = computed(()=> store.state._quote.curTradeType)
+        const tradeType = computed(() => store.state._quote.curTradeType)
         const closeVolumeWarn = computed(() => { // 检测平仓手数是否合法
             const minVolume = props.product?.minVolume ?? 0
             const closeVolume = state.closeVolume
@@ -234,6 +234,7 @@ export default {
                         duration: 1000,
                         forbidClick: true,
                     })
+                    store.dispatch('_trade/queryPositionPage', { tradeType: tradeType.value })
                 })
                 .catch(err => {
                     state.loading = false

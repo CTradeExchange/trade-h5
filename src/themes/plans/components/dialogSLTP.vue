@@ -5,6 +5,7 @@
         get-container='body'
         position='bottom'
         teleport='body'
+        :transition-appear='true'
         @closed='closed'
         @open='open'
     >
@@ -103,13 +104,13 @@ export default {
             stopProfitPrice: '',
         })
 
-        //获取账户
-        const account = computed(()=> store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(tradeType.value)))
+        // 获取账户
+        const account = computed(() => store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(tradeType.value)))
 
-        //玩法id
-        const tradeType = computed(()=> store.state._quote.curTradeType)
+        // 玩法id
+        const tradeType = computed(() => store.state._quote.curTradeType)
 
-        //提示信息
+        // 提示信息
         const warn = computed(() => modifyProfitLossRef.value?.stopLossWarn || modifyProfitLossRef.value?.stopProfitWarn)
 
         const positionVolume = computed(() => minus(props.data?.openVolume, props.data?.closeVolume))

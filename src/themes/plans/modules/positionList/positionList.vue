@@ -9,9 +9,9 @@
 
         <van-loading v-if='loading' class='loading' />
         <positionItem
-            v-for='item in positionList'
+            v-for='(item,index) in positionList'
             v-else
-            :key='item'
+            :key='index'
             :data='item'
             :product='product'
             @showAdjustPopup='showAdjustPopup'
@@ -23,9 +23,16 @@
     <!-- {{ subscribList }} -->
 
     <!-- 平仓 -->
-    <DialogClosePosition v-model:show='closeVisible' :data='positionData' :product='product' />
+    <DialogClosePosition
+        v-model:show='closeVisible'
+        :data='positionData'
+        :product='product'
+    />
     <!-- 调整保证金 -->
-    <DialogAdjustMargin v-model:show='adjustVisible' :data='positionData' />
+    <DialogAdjustMargin
+        v-model:show='adjustVisible'
+        :data='positionData'
+    />
     <!-- 设置止损止盈 -->
     <DialogSLTP
         v-if='showSetProfit'
@@ -90,24 +97,15 @@ export default {
         const userAccount = computed(() => store.state._user.accountAssets[tradeType.value])
 
         const loading = computed(() => store.state._trade.positionLoading)
-        const product = computed(() => store.state._quote.productMap[state.positionData?.symbolId + '_' + tradeType.value]) // state.positionData?.symbolId
-
-        // 订阅报价
-        /*  const subscribList = computed(() => {
-            const caa = positionList.value?.map(item => {
-                return { tradeTtype: tradeType.value, Symbol: item.symbolId }
-            })
-
-            return caa
-        }) */
+        const product = computed(() => store.state._quote.productMap[state.positionData?.symbolId + '_' + tradeType.value])
 
         // 平仓
         const showClose = (data) => {
-            store.commit('_quote/Update_productActivedID', data.symbolId)
+            store.commit('_quote/Update_productActivedID', data.symbolId + '_' + tradeType.value)
             state.positionData = data
             state.closeVisible = true
             if (!product.value.minVolume) {
-                store.dispatch('_quote/querySymbolInfo', data.symbolId)
+                store.dispatch('_quote/querySymbolInfo', { symbolId: data.symbolId, tradeType: tradeType.value })
             }
         }
 
@@ -119,9 +117,9 @@ export default {
 
         // 设置止盈止损
         const showSLTP = (data) => {
-            debugger
             state.positionData = data
             state.showSetProfit = true
+            store.commit('_quote/Update_productActivedID', data.symbolId + '_' + tradeType.value)
         }
 
         const updateSLTPVisible = (val) => {
@@ -155,7 +153,6 @@ export default {
         color: var(--color);
         font-size: rem(28px);
         line-height: rem(100px);
-        border-bottom: solid 1px var(--lineColor);
         .fr {
             font-weight: bold;
             font-size: rem(34px);

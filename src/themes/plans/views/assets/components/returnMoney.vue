@@ -208,9 +208,8 @@ export default {
                     customerNo: customInfo.value.customerNo,
                     accountId: props.account.accountId,
                     customerGroupId: customInfo.value.customerGroupId,
-                    accountCurrency: state.outCurrency,
+                    accountCurrency: assetsInfo.value.currency,
                     amount: state.outAmount,
-                    customerCurrency: assetsInfo.value.currency,
                 })
                     .then(res => {
                         state.loading = false

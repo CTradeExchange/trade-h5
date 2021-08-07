@@ -3,8 +3,8 @@
         v-model:show='showDialog'
         class='m-dialogAdjust'
         position='bottom'
-        :transition-appear='true'
         teleport='body'
+        :transition-appear='true'
         @closed='closed'
     >
         <div class='dialog-header'>
@@ -46,8 +46,6 @@
                     {{ $t('trade.maxReduce') }}: {{ positionData.canReduceMargin }} {{ accountInfo?.currency }}
                 </span>
             </p>
-
-            
         </div>
         <div class='dialog-footer'>
             <van-button
@@ -88,12 +86,12 @@ export default {
             operText: t('trade.raise')
         })
 
-        const tradeType = computed(()=> store.state._quote.curTradeType)
+        const tradeType = computed(() => store.state._quote.curTradeType)
         const customerInfo = computed(() => store.state._user.customerInfo)
-        
-        //获取账户
-        const accountInfo = computed(()=> 
-           store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(tradeType.value)))
+
+        // 获取账户
+        const accountInfo = computed(() =>
+            store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(tradeType.value)))
 
         const positionData = computed(() => {
             return store.state._trade.positionList[tradeType.value].find(item => item.positionId === props.data.positionId)
@@ -104,7 +102,7 @@ export default {
             (val) => {
                 state.showDialog = props.show
                 if (val) {
-                    store.dispatch('_trade/queryPositionPage',{ tradeType: tradeType.value })
+                    store.dispatch('_trade/queryPositionPage', { tradeType: tradeType.value })
                 } else {
                     state.operType = true
                 }
@@ -117,7 +115,7 @@ export default {
         const operation = () => {
             state.operType = !state.operType
             if (state.operType) {
-                store.dispatch('_trade/queryPositionPage',{ tradeType: tradeType.value })
+                store.dispatch('_trade/queryPositionPage', { tradeType: tradeType.value })
             } else {
                 store.dispatch('_user/findCustomerInfo', false)
             }
@@ -166,7 +164,7 @@ export default {
                     state.operText = t('trade.raise')
                     state.amount = ''
                     state.showDialog = false
-                    store.dispatch('_trade/queryPositionPage',{ tradeType: tradeType.value })
+                    store.dispatch('_trade/queryPositionPage', { tradeType: tradeType.value })
                 }
             }).catch(err => {
                 state.loading = false
@@ -175,7 +173,6 @@ export default {
         const closed = () => { // 关闭弹出层且动画结束后触发
             context.emit('update:show', false)
         }
-
 
         return {
             ...toRefs(state),

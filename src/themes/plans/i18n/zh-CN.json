@@ -429,7 +429,9 @@
     "surplus": "余额",
     "allOriginalMargin": "总占用保证金",
     "previewStopPrice": "预估强平价",
-    "get": "借"
+    "get": "借",
+    "enterMarginAmountRequire": "请输入调整金额",
+    "enterMarginAmountTip": "调整金额不能为负数"
 
   },
   "bizType": {

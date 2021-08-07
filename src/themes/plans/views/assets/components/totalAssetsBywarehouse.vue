@@ -25,7 +25,7 @@
                 <p class='muted'>
                     {{ $t('trade.allOriginalMargin') }}
                 </p>
-                <p>{{userAccount?.occupyMargin || '--'}}</p>
+                <p>{{ userAccount?.occupyMargin || '--' }}</p>
             </li>
         </ul>
 
@@ -58,7 +58,7 @@ export default {
         const store = useStore()
         const assetsInfo = computed(() => store.state._user.assetsInfo)
         const userAccount = computed(() => store.state._user.accountAssets[2])
-        
+
         return {
             assetsInfo,
             userAccount

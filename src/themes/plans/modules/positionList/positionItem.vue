@@ -1,9 +1,13 @@
 <template>
     <!-- @click.stop='toPositionDetail(data)' -->
     <div class='product-item'>
-        <div class='item'>
-            <van-collapse v-model='activeNames' class='activeNames'>
-                <van-collapse-item name='1'>
+        <div class='item' :data='activeNames'>
+            <van-collapse
+                v-model='activeNames'
+                :accordion='true'
+                class='activeNames'
+            >
+                <van-collapse-item :name='data.positionId'>
                     <template #title>
                         <div class='cell'>
                             <div class='th'>
@@ -151,14 +155,13 @@
 </template>
 
 <script>
-import { computed, reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { minus } from '@/utils/calculation'
-// import DialogClosePosition from '@c/components/dialogClosePosition'
 export default {
     props: ['data'],
-    emits: ['showClose', 'showAdjustPopup', 'showSLTP'],
+    // emits: ['showClose', 'showAdjustPopup', 'showSLTP'],
     setup ({ data }) {
         const store = useStore()
         const router = useRouter()
@@ -167,12 +170,12 @@ export default {
             loading: false,
             cur: {},
             cpVis: false,
-            activeNames: ['1']
+            activeNames: ''
         })
 
         const tradeType = computed(() => store.state._quote.curTradeType)
         const customerInfo = computed(() => store.state._user.customerInfo)
-        const positionList = computed(() => store.state._trade.positionList)
+        const positionList = computed(() => store.state._trade.positionList[tradeType.value])
         const product = computed(() => store.state._quote.productMap[data.symbolId + '_' + tradeType.value])
         const positionVolume = computed(() => minus(data.openVolume, data.closeVolume))
 
@@ -187,6 +190,11 @@ export default {
         const toProduct = (symbolId) => {
             router.push({ path: '/product', query: { symbolId, tradeType: tradeType.value } })
         }
+
+        onMounted(() => {
+            // 默认展开第一个
+            if (positionList.value.length > 0) { state.activeNames = positionList.value[0].positionId }
+        })
 
         return {
             ...toRefs(state),
