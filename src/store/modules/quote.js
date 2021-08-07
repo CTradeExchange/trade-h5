@@ -47,7 +47,7 @@ export default {
         productActivedID: sessionGet('productActived'), // 当前操作的产品ID
         handicapList: [], // 盘口实时深度报价
         dealList: [], // 成交数据,
-        curTradeType: 1  //资产页面当前选中的玩法id
+        curTradeType: 1 // 资产页面当前选中的玩法id
     },
     mutations: {
         // 清空产品数据
@@ -162,7 +162,7 @@ export default {
             state.dealList.unshift(data)
             state.dealList = state.dealList.splice(0, 10)
         },
-        Update_tradeType(state, id){
+        Update_tradeType (state, id) {
             state.curTradeType = id
         }
     },

@@ -49,7 +49,7 @@ export default {
         const store = useStore()
         const productListEl = ref(null)
         // 玩法列表
-        const plansList = computed(() => store.state._base.plans.slice(1))
+        const plansList = computed(() => store.state._base.plans)
 
         // 1.玩法类型
         const tradeType = ref(plansList.value[0].id)

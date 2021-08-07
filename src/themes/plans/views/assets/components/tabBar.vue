@@ -1,13 +1,13 @@
 <template>
-    <div class='tab-bar'>
-        <div v-for='item in planMap' :key='item.id' class='tab-item' :class='{ active: Number(curIndex+1) === Number(item.id) }' @click='handleChangeTab(item.id)'>
+    <div v-if='plans.length > 1' class='tab-bar'>
+        <div v-for='item in plans' :key='item.id' class='tab-item' :class='{ active: Number(curIndex+1) === Number(item.id) }' @click='handleChangeTab(item.id)'>
             {{ item.name }}
         </div>
     </div>
 </template>
 
 <script>
-import { computed, reactive, toRefs, watch, onBeforeUnmount, watchEffect } from 'vue'
+import { computed, reactive, toRefs, watch, onBeforeUnmount, onMounted, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 export default {
     emits: ['updateTab'],
@@ -19,7 +19,7 @@ export default {
 
         })
 
-        const planMap = computed(() => store.state._base.plans)
+        const plans = computed(() => store.state._base.plans)
 
         watchEffect(() => {
             state.curIndex = props.index
@@ -30,9 +30,15 @@ export default {
             state.curIndex = index
         }
 
+        onMounted(() => {
+            if (plans.value.length === 1) {
+                store.commit('_quote/Update_tradeType', plans.value[0].id)
+            }
+        })
+
         return {
             handleChangeTab,
-            planMap,
+            plans,
              ...toRefs(state)
         }
     }

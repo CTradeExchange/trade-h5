@@ -77,7 +77,7 @@ export default {
 
         const tradeType = computed(() => store.state._quote.curTradeType)
         watchEffect(() => {
-            if (['3'].indexOf(tradeType.value) > -1) {
+            if ([3].indexOf(Number(tradeType.value)) > -1) {
                 store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
             }
         })
