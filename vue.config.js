@@ -118,10 +118,35 @@ const config = {
         },
         proxy: {
             '/wp-json/wp': {
-                target: 'http://prewpadmin.cats-trade.com' // http://prewpadmin.cats-trade.com/
+                target: 'http://uatwpadmin.cats-trade.com', // http://prewpadmin.cats-trade.com/
+                // changeOrigin: false,
+                disableHostCheck: true,
+                onProxyReq: function (proxyReq, req, res, options) { // 由于vue中使用了body-parser 导致http中的body被序列化两次，从而使得配置代理后后端无法获取body中的数据
+                    if (req.body) {
+                        const reg = new RegExp('application/json')
+                        if (reg.test(proxyReq.getHeader('Content-Type'))) {
+                            const bodyData = JSON.stringify(req.body)
+                            proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData))
+                            // stream the content
+                            proxyReq.write(bodyData)
+                        }
+                    }
+                }
             },
             '/cats-manage-api': {
-                target: 'http://uatwph5_5.cats-trade.com' // prewph5公司id为2 prewph5_1公司id为60
+                target: 'http://uatwph5_5.cats-trade.com', // prewph5公司id为2 prewph5_1公司id为60
+                disableHostCheck: true,
+                onProxyReq: function (proxyReq, req, res, options) { // 由于vue中使用了body-parser 导致http中的body被序列化两次，从而使得配置代理后后端无法获取body中的数据
+                    if (req.body) {
+                        const reg = new RegExp('application/json')
+                        if (reg.test(proxyReq.getHeader('Content-Type'))) {
+                            const bodyData = JSON.stringify(req.body)
+                            proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData))
+                            // stream the content
+                            proxyReq.write(bodyData)
+                        }
+                    }
+                }
             },
             '/upload': {
                 target: 'http://precatsapi.cats-trade.com/upload'

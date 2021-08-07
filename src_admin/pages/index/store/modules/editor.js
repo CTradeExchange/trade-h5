@@ -1,4 +1,4 @@
-import Vue from 'vue'
+// import Vue from 'vue'
 import { deepClone } from '@utils/deepClone'
 export default {
     namespaced: true,
@@ -6,7 +6,10 @@ export default {
         activated: null,
         elementList: [],
         getProducting: false,
-        accountGroupProduct: []
+        accountGroupProduct: [],
+        tradeTypeBlockProduct: {},
+        tradeTypeSelfSymbol: {},
+        tradeTypeBlockCollect: [],
     },
     mutations: {
         /**
@@ -117,6 +120,7 @@ export default {
             const activeData = state.elementList.filter(
                 (item) => item.id === state.activated
             )[0]
+            debugger
             // Vue.set(activeData.data, data.key, data.value);
             activeData.data[data.key] = data.value
         },
@@ -126,6 +130,24 @@ export default {
          */
         UPDATE_ACCOUNT_PRODUCT (state, data) {
             state.accountGroupProduct = data
+        },
+        /**
+         * 更新玩法板块产品.
+         * @param {string} data - 产品信息.
+         */
+        UPDATE_TRADETYPE_PRODUCT (state, data) {
+            state.tradeTypeBlockProduct = data
+        },
+        UPDATE_TRADETYPE_BLOCK_COLLECT (state, data) {
+            // debugger
+            state.tradeTypeBlockCollect = data
+        },
+        /**
+         * 更新玩法自选产品.
+         * @param {string} data - 产品信息.
+         */
+        UPDATE_TRADETYPE_SELFSYMBOL (state, data) {
+            state.tradeTypeSelfSymbol = data
         },
         /**
          * 获取产品信息中.

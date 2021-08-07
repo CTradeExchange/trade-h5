@@ -37,7 +37,7 @@
                         <el-divider v-if='element.formConfig && element.formConfig.length > 0' content-position='left'>
                             组件设置
                         </el-divider>
-                        <right-form :active-data='activeData' :element-config='element.formConfig' />
+                        <right-form :active-data='activeData' :element-config='element.formConfig' :element-tag='element.tag' />
                     </el-form>
                 <!-- <a
                         class="document-link"
@@ -146,8 +146,9 @@
 
 <script>
 import File from '@index/components/RightForm/File'
-import { computed, reactive, toRefs, watch } from 'vue'
+import { computed, reactive, toRefs, watch, watchEffect } from 'vue'
 import { useStore } from 'vuex'
+import { forOwn, isPlainObject } from 'lodash'
 export default {
     components: {
         File
@@ -160,6 +161,7 @@ export default {
             }
         }
     },
+
     setup (props, context) {
         const store = useStore()
         const state = reactive({
@@ -187,7 +189,41 @@ export default {
         })
 
         const activeData = computed(() => {
+            // debugger
             return element.value.data || {}
+        })
+        watchEffect(() => {
+            if (Object.keys(activeData.value).length > 0) {
+                // debugger
+                if (activeData.value?.product) {
+                    store.commit('editor/UPDATE_TRADETYPE_SELFSYMBOL', activeData.value.product)
+                } else {
+                    const tradeTypeBlock = activeData.value.tradeTypeBlock
+                    const BlockEumn = {
+
+                    }
+                    if (isPlainObject(tradeTypeBlock)) {
+                        forOwn(tradeTypeBlock, (value, key) => {
+                            if (Array.isArray(value)) {
+                                value.forEach(item => {
+                                    if (!BlockEumn[item.id]) {
+                                        BlockEumn[item.id] = {}
+                                    }
+                                    BlockEumn[item.id][key] = item.list
+                                })
+                            }
+                        })
+                    }
+                    const sortKey = Object.keys(BlockEumn).sort(function (a, b) {
+                        return parseInt(a.slice(a.lastIndexOf('_') + 1)) - parseInt(b.slice(b.lastIndexOf('_') + 1))
+                    })
+                    const initTradeTypeBlock = []
+                    sortKey.forEach(item => {
+                        initTradeTypeBlock.push(BlockEumn[item])
+                    })
+                    store.commit('editor/UPDATE_TRADETYPE_BLOCK_COLLECT', initTradeTypeBlock)
+                }
+            }
         })
 
         watch(() => state.extend, (newVal) => {

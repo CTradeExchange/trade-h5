@@ -1,12 +1,15 @@
 <template>
     <div class='m-product'>
         <el-form-item :label='config.label'>
-            <div @click='showDialog'>
-                <el-input
+            <div>
+                <el-button v-for='trade in tradeTypeList' :key='trade.id' type='text' @click='showDialog(trade.id)'>
+                    {{ trade.name }}
+                </el-button>
+                <!-- <el-input
                     :model-value='showNum'
                     placeholder='请选择'
                     readonly
-                />
+                /> -->
             </div>
         </el-form-item>
         <el-drawer
@@ -43,7 +46,7 @@
                     v-loading='treeLoading'
                     :check-on-click-node='true'
                     class='tree'
-                    :data='accountGroupProduct'
+                    :data='tradeTypeAccountGroupProduct'
                     node-key='id'
                     :props='props'
                     show-checkbox
@@ -55,7 +58,8 @@
 </template>
 
 <script>
-import { accountGroup, querySymbolGroup, accountGroupSymbol } from '@index/Api/editor'
+import { forOwn, isPlainObject, flatten } from 'lodash'
+import { accountGroup, querySymbolGroup, accountGroupSymbol, tradeTypeAccountGroupSymbol } from '@index/Api/editor'
 export default {
     name: 'Product',
     props: {
@@ -65,6 +69,11 @@ export default {
                 return {}
             }
         },
+        activeBlock: {},
+        blockIndex: {},
+        elementTag: {},
+        selfSymbol: {},
+        tradeTypeCollect: {},
         activeData: {
             type: Object,
         }
@@ -79,15 +88,24 @@ export default {
                     return !node.childNodes.length && !/[0-9]+_[0-9]+/.test(data.id)
                 }
             },
+            tradeTypeList: [{ id: '1', name: 'CFD合约全仓' }, { id: '2', name: 'CFD合约逐仓' }, { id: '3', name: '现货杠杆全仓' }],
             show: false,
             treeLoading: false,
             filterText: '',
+            activeTradeType: '',
             treeDefaultOpenKeys: [],
+            defaultCheckedKeys: [],
+            tradeTypeAccountGroupProduct: [],
         }
     },
     computed: {
         accountGroupProduct () {
             return this.$store.state.editor.accountGroupProduct
+        },
+        tradeTypeProduct () {
+            // debugger
+            // console.log('--activeBlock---', this.activeBlock)
+            return this.$store.state.editor.tradeTypeBlockProduct
         },
         getProducting () {
             return this.$store.state.editor.getProducting
@@ -100,9 +118,10 @@ export default {
             }
         },
         productIds () {
+            // debugger
             const _ids = []
             for (const key in this.activeData) {
-                if (this.activeData[key]) {
+                if (this.activeData[key] && key !== 'tradeTypeCollect') {
                     this.activeData[key].forEach(item => {
                         _ids.push(key + '_' + item)
                     })
@@ -124,14 +143,101 @@ export default {
         checkAll () {
             this.$refs.tree.setCheckedKeys(this.accountGroupProduct.map(item => (item.id)))
         },
+        // async initView () {
+        //     this.treeLoading = true
+        //     if (this.accountGroupProduct.length <= 0 && !this.getProducting) {
+        //         this.$store.commit('editor/UPDATE_GET_PRODUCTING', true)
+        //         const groupList = await this.getAccountGroup()
+        //         const symbolList = await querySymbolGroup()
+        //         const productList = await this.getProductList(groupList.map(item => (item.id)).join(','))
+
+        //         /*
+        //         groupList.forEach(item => {
+        //             item.children  = [...(symbolList.data || [])].map(e => {
+        //                 return {
+        //                     // ...e,
+        //                     label: e.name,
+        //                     id: item.id+ '.' + e.id,
+        //                     rawId: e.id
+        //                 }
+        //             })
+        //         })
+
+        //         // 生成树
+        //         for (let key in productList) {
+        //             const otherProducts = []
+        //             let dataList = productList[key]
+        //             const matchGroup = groupList.find(e => e.id === key)
+
+        //             if(matchGroup && dataList.length){
+        //                 // 货币列表
+        //                 dataList.forEach((item) => {
+        //                     const symbolGroupIds = item.symbol_group_ids.split(',').filter(n => n)
+
+        //                     const child = {
+        //                         id: matchGroup.id + '_' + item.id,
+        //                         label: `${item.name}[${item.id}](${item.code})`,
+        //                         rawId: item.id,
+        //                         leaf: true
+        //                     }
+
+        //                     if(symbolGroupIds.length){
+        //                         // 产品类别
+        //                         symbolGroupIds.forEach(sid => {
+        //                             // 账户类别
+        //                             const target = matchGroup.children.find(e=>e.rawId === sid)
+        //                             if(target){
+        //                                 (target.children || (target.children=[])).push(child)
+        //                             }
+        //                         })
+        //                     } else {
+        //                         otherProducts.push(child)
+        //                     }
+        //                 })
+        //             }
+
+        //             matchGroup.children.push({
+        //                 label: '其他',
+        //                 id: matchGroup.id+ '.' + 'other',
+        //                 children: otherProducts
+        //             })
+        //         }
+
+        //         // 过滤空产品组
+        //         groupList.forEach(e => {
+        //             e.children = e.children.filter(item => item.children)
+        //         })
+        //         */
+
+        //         for (const key in productList) {
+        //             const dataList = productList[key]
+        //             const matchGroup = groupList.find(e => e.id === key)
+        //             dataList.forEach((item) => {
+        //                 if (!Array.isArray(matchGroup.children)) {
+        //                     matchGroup.children = []
+        //                 }
+        //                 matchGroup.children.push({
+        //                     id: matchGroup.id + '_' + item.id,
+        //                     label: `${item.name}[${item.id}](${item.code})`,
+        //                     rawId: item.id,
+        //                     leaf: true
+        //                 })
+        //             })
+        //         }
+
+        //         this.$store.commit('editor/UPDATE_ACCOUNT_PRODUCT', groupList.filter(item => (item.children)))
+        //         this.treeDefaultOpenKeys = groupList.map(item => (item.id))
+        //     }
+        //     this.treeLoading = false
+        // },
         async initView () {
             this.treeLoading = true
-            if (this.accountGroupProduct.length <= 0 && !this.getProducting) {
+            if (Object.keys(this.tradeTypeProduct).length === 0 && !this.getProducting) {
                 this.$store.commit('editor/UPDATE_GET_PRODUCTING', true)
-                const groupList = await this.getAccountGroup()
-                const symbolList = await querySymbolGroup()
-                const productList = await this.getProductList(groupList.map(item => (item.id)).join(','))
-
+                // const groupList = await this.getAccountGroup()
+                // const symbolList = await querySymbolGroup()
+                const productList = await this.getProductList()
+                // console.log('tradeTypeCollect---', this.tradeTypeCollect)
                 /*
                 groupList.forEach(item => {
                     item.children  = [...(symbolList.data || [])].map(e => {
@@ -189,25 +295,29 @@ export default {
                     e.children = e.children.filter(item => item.children)
                 })
                 */
-
-                for (const key in productList) {
-                    const dataList = productList[key]
-                    const matchGroup = groupList.find(e => e.id === key)
-                    dataList.forEach((item) => {
-                        if (!Array.isArray(matchGroup.children)) {
-                            matchGroup.children = []
+                // debugger
+                const tradeTypeCustomerGroup = {}
+                forOwn(productList, (value, key) => {
+                    tradeTypeCustomerGroup[key] = Object.values(value.data).map((el) => {
+                        const firstItem = Object.values(el)[0]
+                        const { id, name, type, data } = firstItem
+                        // debugger
+                        return {
+                            id: id,
+                            label: name,
+                            type: type,
+                            isGroup: true,
+                            children: data.map(v => ({
+                                id: id + '_' + v.id,
+                                label: `${v.name}[${v.id}](${v.code})`,
+                                rawId: v.id,
+                                leaf: true
+                            }))
                         }
-                        matchGroup.children.push({
-                            id: matchGroup.id + '_' + item.id,
-                            label: `${item.name}[${item.id}](${item.code})`,
-                            rawId: item.id,
-                            leaf: true
-                        })
                     })
-                }
-
-                this.$store.commit('editor/UPDATE_ACCOUNT_PRODUCT', groupList.filter(item => (item.children)))
-                this.treeDefaultOpenKeys = groupList.map(item => (item.id))
+                })
+                this.$store.commit('editor/UPDATE_TRADETYPE_PRODUCT', tradeTypeCustomerGroup)
+                // this.treeDefaultOpenKeys = groupList.map(item => (item.id))
             }
             this.treeLoading = false
         },
@@ -218,32 +328,54 @@ export default {
         handleInput (val) {
             this.$refs.tree.filter(val)
         },
-        getAccountGroup () {
-            return new Promise((resolve, reject) => {
-                accountGroup()
-                    .then(res => {
-                        if (!res.success) {
-                            this.$message.error(res.message)
-                            resolve([])
-                            return
-                        }
-                        const groupList = (res.data || []).map(item => ({
-                            id: item.id,
-                            label: item.name,
-                            type: item.type,
-                            isGroup: true
-                        }))
-                        resolve(groupList)
-                    })
-                    .catch(error => {
-                        console.log(error)
-                        resolve([])
-                    })
-            })
-        },
+        // getAccountGroup () {
+        //     return new Promise((resolve, reject) => {
+        //         accountGroup()
+        //             .then(res => {
+        //                 if (!res.success) {
+        //                     this.$message.error(res.message)
+        //                     resolve([])
+        //                     return
+        //                 }
+        //                 const groupList = (res.data || []).map(item => ({
+        //                     id: item.id,
+        //                     label: item.name,
+        //                     type: item.type,
+        //                     isGroup: true
+        //                 }))
+        //                 resolve(groupList)
+        //             })
+        //             .catch(error => {
+        //                 console.log(error)
+        //                 resolve([])
+        //             })
+        //     })
+        // },
         getProductList (ids) {
             return new Promise((resolve, reject) => {
-                accountGroupSymbol(ids)
+                // accountGroupSymbol(ids)
+                //     .then(res => {
+                //         if (!res.success) {
+                //             this.$message.error(res.message)
+                //             resolve({})
+                //             return
+                //         }
+                //         if (!res.data) {
+                //             resolve({})
+                //             return
+                //         }
+                //         const _obj = {}
+                //         res.data.forEach(item => {
+                //             for (const key in item) {
+                //                 if (item[key].length > 0) {
+                //                     _obj[key] = item[key]
+                //                 }
+                //             }
+                //         })
+                //         resolve(_obj)
+                //     })
+                //     .catch(error => { console.log(error); resolve({}) })
+                tradeTypeAccountGroupSymbol()
                     .then(res => {
                         if (!res.success) {
                             this.$message.error(res.message)
@@ -254,33 +386,47 @@ export default {
                             resolve({})
                             return
                         }
-                        const _obj = {}
-                        res.data.forEach(item => {
-                            for (const key in item) {
-                                if (item[key].length > 0) {
-                                    _obj[key] = item[key]
-                                }
-                            }
-                        })
-                        resolve(_obj)
+                        resolve(res.data)
                     })
                     .catch(error => { console.log(error); resolve({}) })
             })
         },
-        showDialog () {
-            this.treeDefaultOpenKeys = this.accountGroupProduct.map(item => (item.id))
+        showDialog (type) {
+            // debugger
+            // console.log(this.elementTag)
+            this.activeTradeType = type
+            this.tradeTypeAccountGroupProduct = this.tradeTypeProduct[type]
+            if (this.elementTag === 'selfSymbol') {
+                if (isPlainObject(this.selfSymbol?.[type])) {
+                    const customerSelfSymbolIds = []
+                    forOwn(this.selfSymbol[type], (value, key) => {
+                        customerSelfSymbolIds.push(value.map(v => (key + '_' + v)))
+                    })
+                    this.defaultCheckedKeys = flatten(customerSelfSymbolIds)
+                }
+            } else {
+                if (isPlainObject(this.tradeTypeCollect[this.blockIndex]?.[type])) {
+                    const customerGroupSymbolIds = []
+                    forOwn(this.tradeTypeCollect[this.blockIndex][type], (value, key) => {
+                        customerGroupSymbolIds.push(value.map(v => (key + '_' + v)))
+                    })
+                    this.defaultCheckedKeys = flatten(customerGroupSymbolIds)
+                }
+            }
+
             this.show = true
         },
         opened () {
             if (this.$refs.tree) {
-                this.$refs.tree.setCheckedKeys(this.productIds)
+                this.$refs.tree.setCheckedKeys(this.defaultCheckedKeys)
             }
         },
         async handleClose (done) {
+            // debugger
             // 计算出选中的结果
             const _data = this.$refs.tree.getCheckedKeys()
             const result = {}
-
+            // debugger
             _data.forEach(id => {
                 const match = id.match(/^([0-9]+)_([0-9]+)/)
                 if (!match) {
@@ -295,8 +441,8 @@ export default {
                     result[parentId] = [productId]
                 }
             })
-
-            this.$emit('formChange', result)
+            console.log('activeTradeType--', this.activeTradeType, this.activeBlock, this.tradeTypeCollect)
+            this.$emit('formChange', result, this.activeTradeType)
             done()
         },
     }

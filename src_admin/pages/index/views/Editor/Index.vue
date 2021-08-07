@@ -140,12 +140,12 @@ import RightPanel from './components/RightPanel'
 import ShowJson from './components/ShowJson'
 import { getQuery, zip, unzip, randomStr } from '@utils/index'
 import { deepClone } from '@utils/deepClone'
-import { pcComponentsConfig, mobileComponentsConfig } from '@admin/components/config'
+import { mobileComponentsConfig } from '@admin/components/config'
 import previewRender from '../../preview/preview'
 import * as pageConfig from './pageBaseConfig'
 import html2canvas from 'html2canvas'
 import Mousetrap from 'mousetrap'
-
+import { forOwn } from 'lodash'
 import { onMounted, onUnmounted, reactive, toRefs } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
@@ -266,7 +266,7 @@ export default {
                             return Object.assign({ formConfig: config, hidden: componentsObj[target.tag].hidden }, target)
                         })
                         store.commit('editor/RESET_ELEMENT', storeData)
-                        ELEMENIINDEX = index + 1
+                        // ELEMENIINDEX = index + 1
                     })
                     .catch(error => {
                         console.log(error)
@@ -336,14 +336,45 @@ export default {
                 if (ev && ev.preventDefault) {
                     ev.preventDefault()
                 }
+                // debugger
+                const tradeTypeBlockCollect = store.state.editor.tradeTypeBlockCollect
+
                 const config = deepClone(store.state.editor.elementList.map(item => ({
                     id: item.id,
                     tag: item.tag,
                     data: item.data
                 })))
+
+                const tradeTypeBlock = {}
                 config.forEach(item => {
                     addId(item.data)
+                    if (Array.isArray(item.data.items) && item.data.items.length > 0) {
+                        item.data.items.forEach((el, idx) => {
+                            // const tradeTypeBlock = []
+                            if (tradeTypeBlockCollect[idx]) {
+                                forOwn(tradeTypeBlockCollect[idx], (_, key) => {
+                                    if (['data', 'value'].indexOf(key) === -1) {
+                                        if (!tradeTypeBlock[key]) {
+                                            tradeTypeBlock[key] = []
+                                        }
+                                        tradeTypeBlock[key].push({
+                                            id: el.id,
+                                            title: el.title,
+                                            list: el.code_ids_all
+                                        })
+                                    }
+                                })
+                            }
+                            if (el.tradeTypeCollect) delete el.tradeTypeCollect
+                        })
+                        item.data.tradeTypeBlock = Object.assign({}, tradeTypeBlock)
+                        // if (item.data.code_ids_all) delete item.data.code_ids_all
+                    }
+                    if (item.tag === 'selfSymbol') {
+                        item.data.product = store.state.editor.tradeTypeSelfSymbol
+                    }
                 })
+
                 modifyPageConfig(Object.assign({}, state.pageConf, {
                     page_code: state.pageCode,
                     content: zip(JSON.stringify(config)),

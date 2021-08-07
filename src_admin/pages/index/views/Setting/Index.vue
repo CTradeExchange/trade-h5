@@ -90,20 +90,14 @@
                                     placeholder='请输入'
                                 />
                             </el-form-item>
-                            <el-form-item label='账户币种列表'>
-                                <el-input
-                                    v-model='form.currencyList'
-                                    placeholder='请输入'
-                                    type='textarea'
-                                />
-                            </el-form-item>
+
                             <el-form-item label='游客账户组'>
                                 <el-input
                                     v-model='form.customerGroupId'
                                     placeholder='请输入'
                                 />
                             </el-form-item>
-                            <el-form-item label='玩法'>
+                            <!-- <el-form-item label='玩法'>
                                 <div class='play-settings'>
                                     <div class='p-left'>
                                         <el-input
@@ -123,7 +117,23 @@
                                     </div>
                                 </div>
                             </el-form-item>
-
+                            <el-form-item label='账户币种列表'>
+                                <el-input
+                                    v-model='form.currencyList'
+                                    placeholder='请输入'
+                                    type='textarea'
+                                />
+                            </el-form-item> -->
+                            <el-form-item label='玩法币种'>
+                                <div v-for='(item) in tradeTypeAssets' :key='item.id'>
+                                    <el-transfer
+                                        v-model='checkedTradeTypeAssets[item.id]'
+                                        :data='item.assetsList'
+                                        :render-content='renderFunc'
+                                        :titles='[`可选${item.name}`, `已选${item.name}`]'
+                                    />
+                                </div>
+                            </el-form-item>
                             <el-form-item label='apiService'>
                                 <el-input
                                     v-model='form.apiService'
@@ -334,11 +344,12 @@
 </template>
 
 <script>
-import { getPageConfig, modifyPageConfig, pushPage, getCompanyInfo, queryCountryList } from '@index/Api/editor'
+import { getPageConfig, modifyPageConfig, pushPage, queryCountryList, tradeTypeAccountAssets } from '@index/Api/editor'
 import File from '@index/components/RightForm/File'
 import city from './data/city.json'
 import province from './data/province.json'
 import { deepClone } from '@utils/deepClone'
+import { keyBy, forOwn, isPlainObject } from 'lodash'
 const treeData = province.map(province => {
     const children = city.filter(item => (item.province === province.province))
     if (children.length > 0) {
@@ -354,7 +365,14 @@ export default {
     data () {
         return {
             filterText: '',
+            selectTradeType: '',
+            tradeTypeCurrencyCollect: [],
+            // accountCurrencyList: [],
+            tradeTypeList: [],
+            checkedTradeTypeAssets: {},
+            tradeTypeAssets: [],
             form: {
+                tradeTypeCurrencyList: [],
                 companyId: '',
                 customerGroupId: '',
                 googleAnalytics: '',
@@ -373,13 +391,14 @@ export default {
                 other: {
                     isInitSymbol: ''
                 },
-                tradeTypeList: '',
+                // tradeTypeList: '',
+                // tradeTypeList: '',
                 apiService: '',
                 quoteService: '',
                 msgService: '',
                 tradeService: '',
                 utcOffset: '',
-                currencyList: '',
+                // currencyList: '',
                 defaultZone: '',
                 appVersion: '1.0.0',
             },
@@ -413,8 +432,12 @@ export default {
         this.createTimezoneList()
         this.getPageConfig()
         this.queryCountryList()
+        this.getTradeTypeAssets()
     },
     methods: {
+        renderFunc (_, option) {
+            return <span>{ option.key } - { option.label }</span>
+        },
         createTimezoneList () {
             const [min, max] = this.utcOffsetList
             this.utcOffsetList = new Array(max - min).fill(0).map((el, i) => min + i)
@@ -429,6 +452,34 @@ export default {
                 }
             })
         },
+        getTradeTypeAssets () {
+            tradeTypeAccountAssets({}).then(res => {
+                const { data, success } = res
+                // const tradeTypeAssetsList = []
+                // debugger
+                if (success && Array.isArray(data)) {
+                    this.tradeTypeList = data.map(el => ({ id: el.id, name: el.name }))
+                    this.tradeTypeAssets = data.map(item => {
+                        let customerGroupAssets = []
+                        if (isPlainObject(item.data)) {
+                            forOwn(item.data, (value, key) => {
+                                if (key === '1' && Array.isArray(value.data)) {
+                                    customerGroupAssets = value.data.map(el => ({ key: el.code, label: el.name }))
+                                }
+                            })
+                        }
+                        return {
+                            id: item.id,
+                            name: item.name,
+                            assetsList: customerGroupAssets
+                        }
+                    })
+                }
+                console.log('this.tradeTypeAssets', this.tradeTypeAssets)
+                // debugger
+                //
+            })
+        },
         getPageConfig () {
             this.getLoading = true
             getPageConfig('SysSetting')
@@ -437,6 +488,7 @@ export default {
                         this.$message.error(res.message)
                         return
                     }
+                    // debugger
                     let content = res.data.content && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.content) : {}
                     content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
                     this.$refs.tree.setCheckedKeys(content.disabledProvince || [])
@@ -444,8 +496,22 @@ export default {
                     this.form = Object.assign(this.form, content, { other })
 
                     try {
-                        this.form.tradeTypeList = this.form.tradeTypeList && JSON.stringify(this.form.tradeTypeList)
-                        this.form.currencyList = this.form.currencyList && JSON.stringify(this.form.currencyList)
+                        let tradeTypeCurrencyEumn = {}
+                        if (Array.isArray(content?.tradeTypeCurrencyList)) {
+                            tradeTypeCurrencyEumn = keyBy(content.tradeTypeCurrencyList, 'id')
+                        }
+                        const initTradeTypeAssets = {}
+                        if (Array.isArray(content.tradeTypeList)) {
+                            content.tradeTypeList.forEach(el => {
+                                initTradeTypeAssets[String(el.id)] = tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency.split(',') : []
+                            })
+                        }
+                        this.checkedTradeTypeAssets = initTradeTypeAssets
+                        // debugger
+                        this.tradeTypeCurrencyCollect = content.tradeTypeList.map(el => ({ id: el.id, name: el.name, currencyList: tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency.split(',') : [] }))
+                        // this.accountCurrencyList = this.form.currencyList
+                        // this.form.tradeTypeList = this.form.tradeTypeList && JSON.stringify(this.form.tradeTypeList)
+                        // this.form.currencyList = this.form.currencyList && JSON.stringify(this.form.currencyList)
                     } catch (error) {
                         console.error(error)
                     }
@@ -465,14 +531,18 @@ export default {
         },
         submit () {
             return new Promise((resolve, reject) => {
+                // console.log(this.tradeTypeCurrencyCollect)
+                // debugger
                 this.submitLoading = true
                 const _other = JSON.stringify(this.form.other)
                 console.log(_other)
                 const _formData = deepClone(this.form)
                 delete _formData.other
                 try {
-                    _formData.tradeTypeList = JSON.parse(_formData.tradeTypeList)
-                    _formData.currencyList = JSON.parse(_formData.currencyList)
+                    // _formData.tradeTypeList = JSON.parse(_formData.tradeTypeList)
+                    // _formData.currencyList = JSON.parse(_formData.currencyList)
+                    _formData.tradeTypeCurrencyList = this.tradeTypeList.map(el => ({ id: el.id, name: el.name, allCurrency: this.checkedTradeTypeAssets[String(el.id)] ? this.checkedTradeTypeAssets[String(el.id)].join(',') : [] }))
+                    // console.log('tradeTypeCurrencyList', _formData.tradeTypeCurrencyList)
                 } catch (error) {
                     console.error(error)
                 }
@@ -508,6 +578,7 @@ export default {
             if (!submitData) {
                 return
             }
+
             pushPage({ pageCode: this.pageData.page_code })
 
                 .then(res => {
@@ -533,30 +604,33 @@ export default {
         updateBackground (url) {
             this.form.languageuri = url
         },
-        getTradeTypeList () {
-            this.tradeTypeListLoading = true
-            getCompanyInfo()
-                .then(res => {
-                    if (res.success) {
-                        this.form.companyId === '' ? this.form.companyId = res.data.companyId : null
-                        !this.form.customerGroupId ? this.form.customerGroupId = res.data.customerGroupId : null
+        // getTradeTypeList () {
+        //     this.tradeTypeListLoading = true
+        //     getCompanyInfo()
+        //         .then(res => {
+        //             if (res.success) {
+        //                 this.form.companyId === '' ? this.form.companyId = res.data.companyId : null
+        //                 !this.form.customerGroupId ? this.form.customerGroupId = res.data.customerGroupId : null
 
-                        try {
-                            if (this.form.tradeTypeList === '' && Array.isArray(res.data.tradeTypeList)) {
-                                this.form.tradeTypeList = JSON.stringify(res.data.tradeTypeList)
-                            }
-                            if (this.form.currencyList === '' && Array.isArray(res.data.currencyList)) {
-                                this.form.currencyList = JSON.stringify(res.data.currencyList)
-                            }
-                        } catch (error) {
-                            console.error(error)
-                        }
-                    }
-                })
-                .finally(() => {
-                    this.tradeTypeListLoading = false
-                })
-        }
+        //                 try {
+        //                     // debugger
+        //                     if (this.form.tradeTypeList === '' && Array.isArray(res.data.tradeTypeList)) {
+        //                         // this.form.tradeTypeList = JSON.stringify(res.data.tradeTypeList)
+        //                         this.form.tradeTypeList = res.data.currencyList
+        //                     }
+        //                     if (this.form.currencyList === '' && Array.isArray(res.data.currencyList)) {
+        //                         this.form.currencyList = JSON.stringify(res.data.currencyList)
+        //                         // this.form.currencyList = res.data.currencyList
+        //                     }
+        //                 } catch (error) {
+        //                     console.error(error)
+        //                 }
+        //             }
+        //         })
+        //         .finally(() => {
+        //             this.tradeTypeListLoading = false
+        //         })
+        // }
     }
 }
 </script>
@@ -603,6 +677,15 @@ export default {
                 background: #F5F7FA;
                 border: 1px solid #DCDFE6;
                 border-left: none;
+            }
+        }
+    }
+    .el-transfer-panel {
+        .el-transfer-panel__header {
+            .el-checkbox {
+                .el-checkbox__label {
+                    font-size: 14px;
+                }
             }
         }
     }

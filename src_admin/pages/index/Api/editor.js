@@ -43,6 +43,22 @@ export function accountGroupSymbol (id) {
         method: 'get'
     })
 }
+// 获取玩法板块
+export function tradeTypeAccountGroupSymbol () {
+    return request({
+        url: '/wp-json/wp/v2/queryAllTradeAccountGroupSymbol',
+        params: {},
+        method: 'get'
+    })
+}
+// 获取玩法账户币种
+export function tradeTypeAccountAssets () {
+    return request({
+        url: '/wp-json/wp/v2/queryAllCatsTradeTypeAssets',
+        params: {},
+        method: 'get'
+    })
+}
 // 发布
 export function pushPage (data) {
     return request({

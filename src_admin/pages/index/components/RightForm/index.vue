@@ -123,11 +123,16 @@
                 />
                 <Product
                     v-else-if="config.type === 'Product'"
+                    :active-block='activeBlock'
                     :active-data='activeData[config.name]'
+                    :block-index='blockIndex'
                     :config='config'
+                    :element-tag='elementTag'
+                    :self-symbol='tradeTypeSelfSymbol'
+                    :trade-type-collect='tradeTypeCollect'
                     @formChange='
-                        (formData) => {
-                            updateFormData(config.name, formData);
+                        (formData,type) => {
+                            updateFormData(config.name, formData,type);
                         }
                     '
                 />
@@ -138,6 +143,7 @@
                         }}
                     </el-divider>
                     <right-form
+                        :active-block='config._id'
                         :active-data='activeData[config.name]'
                         :element-config='config.formConfig'
                     />
@@ -184,16 +190,20 @@
                                     </el-button>
                                 </el-divider>
                                 <right-form
+                                    :active-block='config._id'
                                     :active-data='
                                         activeData[config.name][ArrayIndex]
                                     '
+
+                                    :block-index='ArrayIndex'
                                     :element-config='ArrayItem'
+                                    :trade-type-collect='tradeTypeCollect'
                                 />
                             </div>
                         </template>
                     </draggable>
                     <el-row>
-                        <el-col :span='24' style='text-align: center'>
+                        <el-col :span='24' style='text-align: center;'>
                             <el-button
                                 v-if='config.formConfig.length < config.max'
                                 icon='el-icon-plus'
@@ -239,6 +249,10 @@ export default {
                 return []
             }
         },
+        activeBlock: {},
+        blockIndex: {},
+        elementTag: {},
+        // tradeTypeCollect: {},
         activeData: {
             type: Object,
             default () {
@@ -248,7 +262,23 @@ export default {
     },
     data () {
         return {
+            // tradeTypeCollect: [],
+            // tradeTypeSelfSymbol: {},
         }
+    },
+    computed: {
+        tradeTypeCollect () {
+            return this.$store.state.editor.tradeTypeBlockCollect
+        },
+        tradeTypeSelfSymbol () {
+            return this.$store.state.editor.tradeTypeSelfSymbol
+        },
+        tradeTypeBlockProduct () {
+            return this.$store.state.editor.tradeTypeBlockProduct
+        }
+    },
+    created () {
+        console.log('---activeData-----', this.activeData)
     },
     methods: {
         addRow (formConfig, data) {
@@ -265,8 +295,37 @@ export default {
             console.log(evt)
             this.$store.commit('editor/CHANGE_INDEX_FROM_ROW', evt)
         },
-        updateFormData (key, data) {
-            this.activeData[key] = data
+        updateFormData (key, data, type) { // 此处提交版块产品
+            if (key === 'product') {
+                const newSelfData = { ...this.tradeTypeSelfSymbol }
+                newSelfData[type] = data
+                this.$store.commit('editor/UPDATE_TRADETYPE_SELFSYMBOL', newSelfData)
+            } else {
+                const newData = [...this.tradeTypeCollect]
+                if (newData[this.blockIndex]) {
+                    newData[this.blockIndex][type] = data
+                } else {
+                    newData[this.blockIndex] = { [type]: data }
+                }
+                this.$store.commit('editor/UPDATE_TRADETYPE_BLOCK_COLLECT', newData)
+            }
+
+            // const newTradeTypeData = { ...this.activeData['tradeTypeCollect'], [type]: data }
+
+            // this.$store.commit('editor/UPDATE_FORM_DATA', { key: 'tradeTypeCollect', value: newTradeTypeData })
+            // if (key === 'product') {
+
+            //     // this.activeData[key][type] = data
+            // } else {
+            //     const xinData = { ...this.activeData[key], [type]: data }
+            //     this.$store.commit('editor/UPDATE_FORM_DATA', { key: key, value: xinData })
+            //     // this.activeData[key] = data
+            //     // if (this.activeData['tradeTypeCollect']) {
+            //     //     this.activeData['tradeTypeCollect'][type] = data
+            //     // }
+            // }
+
+            // this.activeData[key] = { ...data, tradeTypeCollect: { value: type, data } }
             // this.$store.commit('editor/UPDATE_FORM_DATA', {key:key,value:data})
         }
     }
@@ -280,8 +339,8 @@ export default {
 .rightForm {
     padding-bottom: 10px;
 }
- .odd {
-    background-color: #fafafa;
-  }
+.odd {
+    background-color: #FAFAFA;
+}
 
 </style>
