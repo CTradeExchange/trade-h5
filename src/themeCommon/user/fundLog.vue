@@ -131,12 +131,14 @@ import Top from '@/components/top'
 import { useStore } from 'vuex'
 import { isEmpty, priceFormat } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 export default {
     components: {
         Top,
     },
     setup (props) {
         const store = useStore()
+        const route = useRoute()
         const proDownItem = ref(null)
         const dateDownItem = ref(null)
         const { t, tm } = useI18n({ useScope: 'global' })
@@ -263,7 +265,7 @@ export default {
         const queryFundDetail = () => {
             const params = {
                 size: state.pagigation.size,
-                tradeType: customInfo.value.tradeType,
+                tradeType: parseInt(route.query.tradeType),
                 current: state.pagigation.current,
                 status: 2, // 状态。1-初始化；2-处理成功；3-处理失败；
                 startTime: state.startTime,
