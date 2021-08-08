@@ -41,9 +41,15 @@ export default createStore({
             return state._user.customerInfo?.customerGroupId ?? state._base.wpCompanyInfo?.customerGroupId
         },
         // 用户自选列表
-        userSelfSymbolList (state, getters) {
+        userSelfSymbolList (state, getters,) {
             if (state._user.customerInfo?.optional === 1) {
-                return state._user.selfSymbolList
+                // return state._user.selfSymbolList
+                const selfSymbolList = state._user.selfSymbolList
+                const result = {}
+                Object.keys(selfSymbolList).forEach(el => {
+                    result[el] = selfSymbolList[el].map(item => item.symbolId)
+                })
+                return result
             } else {
                 const wpSelfSymbol = state._base.wpSelfSymbol
                 const selfSymbolData = wpSelfSymbol.find(el => el.tag === 'selfSymbol')?.data?.product || {}
