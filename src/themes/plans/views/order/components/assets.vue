@@ -51,7 +51,7 @@
 <script>
 import { computed, reactive, ref, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
-import { mul, div } from '@/utils/calculation'
+import { mul, div, toFixed } from '@/utils/calculation'
 export default {
     props: ['direction', 'product', 'volume', 'operationType', 'account'],
     emits: ['update:operationType'],
@@ -77,11 +77,14 @@ export default {
 
         // 预计占用
         const lockFunds = computed(() => {
+            let amount = ''
             if (props.direction === 'buy') {
-                return mul(props.volume, props.product.buy_price)
+                amount = mul(props.volume, props.product.buy_price)
             } else {
-                return props.volume
+                amount = props.volume
             }
+            if (amount === '') amount = 0
+            return toFixed(amount, props.account.digits)
         })
 
         return {

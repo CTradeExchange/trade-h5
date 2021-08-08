@@ -258,6 +258,7 @@ export default {
                     sessionStorage.setItem('order_' + orderId, JSON.stringify(localData))
                     // router.push({ name: 'OrderSuccess', query: { orderId } })
                     store.dispatch('_trade/queryPBOOrderPage', { tradeType: params.tradeType })
+                    queryAccountInfo()
                     Toast({
                         message: t('trade.orderSuccessToast'),
                         duration: 1000,
