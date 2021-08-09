@@ -22,7 +22,7 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 export default {
-    emits: ['switchTradeType'],
+    emits: ['change'],
     setup (props, { emit }) {
         const store = useStore()
         const productMap = computed(() => store.state._quote.productMap)
@@ -43,11 +43,11 @@ export default {
         }
         const onChange = (data) => {
             if (data.id == product.value?.tradeType) return false
-            emit('switchTradeType', data)
             const category = store.getters.userProductCategory[data.id]
             if (!category) return false
             const changeProductKey = findProductInCategory(category, data.id)
             if (changeProductKey) store.commit('_quote/Update_productActivedID', changeProductKey)
+            emit('change', data)
         }
         return {
             product,

@@ -176,7 +176,7 @@ export default {
 
         // 买入卖出方向变化时重新获取资产信息
         watch(
-            () => state.direction,
+            () => [state.direction, product.value?.tradeType],
             () => {
                 if (product.value?.tradeType === 3) queryAccountInfo()
             },
