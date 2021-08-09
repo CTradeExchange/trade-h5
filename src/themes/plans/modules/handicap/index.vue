@@ -6,10 +6,10 @@
         <div class='alignCenter'>
             {{ $t('trade.volumes') }}({{ product.baseCurrency }})
         </div>
-        <div class='padding alignRight '>
+        <div class='padding' :class="showField ? 'alignRight' : 'alignCenter'">
             {{ $t('trade.priceLabel') }}({{ product.profitCurrency }})
         </div>
-        <div class='depth alignLeft'>
+        <div v-if='showField' class='depth alignLeft'>
             <span class='depth-select'>
                 <van-popover
                     v-model:show='showPopover'
@@ -24,6 +24,9 @@
                 </van-popover>
             </span>
         </div>
+        <div v-else class='alignCenter'>
+            {{ $t('trade.priceLabel') }}({{ product.profitCurrency }})
+        </div>
         <div class='padding alignCenter'>
             {{ $t('trade.volumes') }}({{ product.baseCurrency }})
         </div>
@@ -31,11 +34,11 @@
             {{ $t('trade.my') }}
         </div>
     </div>
+    <van-empty v-if='!handicapList' :description='$t("common.noData")' image='/images/empty.png'>
+        <!-- {{ $t('trade.noStallsData') }} -->
+    </van-empty>
     <div class='stalls-wrap'>
-        <van-empty v-if='handicapList?.ask_deep.length === 0' image='/images/empty.png'>
-            {{ $t('trade.noStallsData') }}
-        </van-empty>
-        <div v-else class='sell-wrap'>
+        <div class='sell-wrap'>
             <div v-for='(item,index) in handicapList?.ask_deep' :key='index' class='item'>
                 <span v-if='showField' class='label fallColor '>
                     {{ item.unitNum === 0 ? '': item.unitNum }}
@@ -99,24 +102,26 @@ export default {
         const handicapList = computed(() => store.state._quote.handicapList.find(item => item.symbol_id === props.symbolId))
 
         // 当前产品id 的挂单列表
-        const pendingList = computed(() => store.state._trade.pendingList.filter(item => Number(item.symbolId) === Number(props.symbolId)))
+        const pendingList = computed(() => {
+            return store.state._trade.pendingList[route.query.tradeType]
+        })
 
         // 获取当前产品
         const product = computed(() => store.state._quote.productMap[props.symbolId + '_' + route.query.tradeType])
 
         // 是否显示'我的'列
-        const showField = () => {
-            if (userAccountType.value.userAccountType !== 'G' && props.showPending) {
+        const showField = computed(() => {
+            if (userAccountType.value !== 'G' && props.showPending) {
                 return true
             } else {
                 return false
             }
-        }
+        })
 
         // 计算报价小数位档数
         const digitLevelList = computed(() => {
             const digits = []
-            var symbolDigits = product.value.price_digits
+            var symbolDigits = product.value?.price_digits
             while (symbolDigits > -3) {
                 digits.push({ text: pow(0.1, symbolDigits) })
                 symbolDigits--
@@ -130,7 +135,7 @@ export default {
             if (newVal > 0) {
                 state.curDigits = digitLevelList.value[0]?.text
                 // 订阅盘口深度报价
-                QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits)
+                QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits, route.query.tradeType)
             }
         }, {
             immediate: true
@@ -158,7 +163,7 @@ export default {
             const diff = maxValue - minValue
             // 计算卖出报价长度
             if (result?.ask_deep.length > 0) {
-                const sellPendingList = pendingList.value.filter(item => Number(item.direction === 1))
+                const sellPendingList = pendingList.value && pendingList.value.filter(item => Number(item.direction === 1))
                 result.ask_deep.forEach(ask => {
                     ask.width = diff === 0 ? 0 : (parseFloat(ask.volume_ask) - parseFloat(minValue)) / diff
                     ask.unitNum = 0
@@ -176,7 +181,7 @@ export default {
 
             // 计算买入报价长度
             if (result?.bid_deep.length > 0) {
-                const buyPendingList = pendingList.value.filter(item => Number(item.direction === 2))
+                const buyPendingList = pendingList.value && pendingList.value.filter(item => Number(item.direction === 2))
                 result.bid_deep.forEach(bid => {
                     bid.width = diff === 0 ? 0 : (parseFloat(bid.volume_bid) - parseFloat(minValue)) / diff
                     bid.unitNum = 0
@@ -201,9 +206,12 @@ export default {
             QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits)
         }
 
+        store.dispatch('_trade/queryPBOOrderPage', {
+            tradeType: route.query.tradeType
+        })
+
         onBeforeUnmount(() => {
             // 组件销毁取消订阅
-
             QuoteSocket.cancel_subscribe(2)
         })
 
@@ -283,6 +291,7 @@ export default {
         color: var(--mutedColor);
         font-size: rem(22px);
         .item {
+            position: relative;
             // flex: 1;
             display: flex;
             flex-direction: row;
@@ -319,7 +328,25 @@ export default {
             .quantity {
                 flex: 1;
                 color: var(--normalColor);
-                text-align: center;
+                //text-align: center;
+            }
+            .histogram {
+                position: absolute;
+                top: 0;
+                width: 0;
+                max-width: 100%;
+                height: 100%;
+                opacity: 0.2;
+                transition: width 0.28s ease-in-out;
+                &.sell-histogram {
+                    background: var(--riseColor);
+                    opacity: 0.05;
+                }
+                &.buy-histogram {
+                    right: 0;
+                    background: var(--fallColor);
+                    opacity: 0.05;
+                }
             }
         }
     }
@@ -343,28 +370,6 @@ export default {
             flex: 1;
             height: rem(10px);
             // background: linear-gradient(127deg, transparent rem(5px), rgb(247, 75, 33) 0);
-        }
-    }
-    .quantity {
-        position: relative;
-        z-index: 0;
-        .histogram {
-            position: absolute;
-            top: 0;
-            width: 0;
-            max-width: 100%;
-            height: 100%;
-            opacity: 0.2;
-            transition: width 0.28s ease-in-out;
-            &.sell-histogram {
-                background: var(--riseColor);
-                opacity: 0.05;
-            }
-            &.buy-histogram {
-                right: 0;
-                background: var(--fallColor);
-                opacity: 0.05;
-            }
         }
     }
 }
