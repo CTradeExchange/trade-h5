@@ -48,7 +48,7 @@
             />
         </div>
         <div class='footerBtn' :class='[direction]'>
-            <van-button block :loading='loading' size='normal' @click='submitHandler'>
+            <van-button block :disabled='loading' :loading='loading' size='normal' @click='submitHandler'>
                 {{ $t(direction==='buy'?'trade.buyText':'trade.sellText') }}
             </van-button>
         </div>

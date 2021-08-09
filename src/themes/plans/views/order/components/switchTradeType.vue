@@ -32,12 +32,13 @@ export default {
         const findProductInCategory = (category, tradeType) => {
             let resultProduct = null
             for (let i = 0; i < category.length; i++) {
-                if (resultProduct) return resultProduct
                 const item = category[i]
                 item.listByUser.forEach(el => {
+                    if (resultProduct) return
                     const symbolKey = `${el}_${tradeType}`
-                    if (productMap.value[symbolKey]?.symbolName) resultProduct = productMap.value[symbolKey]
+                    if (productMap.value[symbolKey]?.symbolName) resultProduct = symbolKey
                 })
+                if (resultProduct) return resultProduct
             }
         }
         const onChange = (data) => {
@@ -45,8 +46,8 @@ export default {
             emit('switchTradeType', data)
             const category = store.getters.userProductCategory[data.id]
             if (!category) return false
-            const changeProduct = findProductInCategory(category, data.id)
-            if (changeProduct) store.commit('_quote/Update_productActivedID', changeProduct.symbolKey)
+            const changeProductKey = findProductInCategory(category, data.id)
+            if (changeProductKey) store.commit('_quote/Update_productActivedID', changeProductKey)
         }
         return {
             product,
