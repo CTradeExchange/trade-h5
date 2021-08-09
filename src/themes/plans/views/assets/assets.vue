@@ -54,6 +54,7 @@ export default {
         const accountList = computed(() =>
             store.state._user.customerInfo?.accountList.filter(item => item.tradeType === 3) ?? []
         )
+        const customerInfo = computed(() => store.state._user.customerInfo)
 
         const tradeType = computed(() => store.state._quote.curTradeType)
 
@@ -62,22 +63,31 @@ export default {
 
         const positionList = computed(() => store.state._trade.positionList[tradeType.value])
 
+        // 获取持仓列表
+        const queryPositionList = () => {
+            const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType.value))?.accountId
+            store.dispatch('_trade/queryPositionPage', {
+                tradeType: tradeType.value,
+                accountId
+            }).then(res => {
+                if (res.check()) {
+                    const subscribList = positionList.value.map(el => {
+                        return {
+                            symbolId: el.symbolId,
+                            tradeType: tradeType.value
+                        }
+                    })
+                    QuoteSocket.send_subscribe(subscribList)
+                }
+            }).catch(() => {
+            })
+        }
+
         watchEffect(() => {
             // 获取持仓列表 并订阅报价
             console.log('tradeType.value', tradeType.value)
             if ([1, 2].indexOf(Number(tradeType.value)) > -1) {
-                store.dispatch('_trade/queryPositionPage', { tradeType: tradeType.value }).then(res => {
-                    if (res.check()) {
-                        const subscribList = positionList.value.map(el => {
-                            return {
-                                symbolId: el.symbolId,
-                                tradeType: tradeType.value
-                            }
-                        })
-                        QuoteSocket.send_subscribe(subscribList)
-                    }
-                }).catch(() => {
-                })
+                queryPositionList()
             } else if ((Number(tradeType.value)) === 3) {
                 store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
             }

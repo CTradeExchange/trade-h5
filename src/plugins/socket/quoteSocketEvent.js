@@ -80,10 +80,10 @@ class SocketEvent {
     }
 
     // 盘口成交报价订阅
-    deal_subscribe (productIds = [], depth_level = 10, merge_accuracy) {
+    deal_subscribe (productIds = [], depth_level = 10, merge_accuracy, trade_type) {
         if (!productIds || productIds.length === 0) return false
         this.subscribedList = [...new Set(productIds)]
-        const trade_type = Number(this.$store.state._base.tradeType)
+        // const trade_type = Number(this.$store.state._base.tradeType)
 
         const list = this.subscribedList.map(el => {
             return {

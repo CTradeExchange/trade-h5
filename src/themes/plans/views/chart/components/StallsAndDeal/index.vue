@@ -29,7 +29,7 @@ import DealList from '@plans/modules/realTimeDealList/index'
 
 import { computed, reactive, toRefs, watch, onBeforeUnmount, watchEffect } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import dayjs from 'dayjs'
 
 export default {
@@ -37,7 +37,9 @@ export default {
     props: ['symbolId', 'settingList', 'curPrice'],
     setup (props) {
         const router = useRouter()
+        const route = useRoute()
         const store = useStore()
+        const tradeType = route.query.tradeType
         const state = reactive({
             statusList: props.settingList,
             isDealDelaying: false,
@@ -48,15 +50,16 @@ export default {
         // 当前产品id 的挂单列表
         const pendingList = computed(() => store.state._trade.pendingList.filter(item => Number(item.symbolId) === Number(props.symbolId)))
 
-        // 获取玩法id
-        const tradeType = computed(() => store.state._base.tradeType)
-
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
 
         // 是否显示挂单数量
         const showPending = computed(() => {
-            return true
+            if (Number(tradeType) === 3 || Number(tradeType) === 1) {
+                return true
+            } else {
+                return false
+            }
         })
 
         // 是否显示底部 tabs
@@ -66,17 +69,6 @@ export default {
             }
             return true
         })
-
-        // 跳转委托详情页面
-        const toDetail = (item) => {
-            router.push({
-                path: '/trustDetail',
-                query: {
-                    id: item.id,
-                    symbolId: item.symbolId
-                }
-            })
-        }
 
         watch(
             () => props.settingList,
@@ -96,21 +88,12 @@ export default {
             return dayjs(Number(val)).format('HH:mm:ss')
         }
 
-        // 获取委托列表
-        store.dispatch('_trade/queryPBOOrderPage', {
-            tradeType: tradeType.value,
-            customerNo: customInfo.value.customerNo,
-            sortFieldName: 'orderTime',
-            sortType: 'desc'
-        })
-
         return {
             formatTime,
             showTabs,
             tradeType,
             customInfo,
             pendingList,
-            toDetail,
             showPending,
             ...toRefs(state)
         }
