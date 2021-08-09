@@ -44,7 +44,6 @@
 </template>
 
 <script>
-import { QuoteSocket } from '@/plugins/socket/socket'
 import { computed, reactive, toRefs, watch, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
@@ -69,27 +68,8 @@ export default {
             showSetProfit: false
         })
 
-        const tradeType = computed(() => store.state._quote.curTradeType)
-
-        watchEffect(() => {
-            // 获取持仓列表 并订阅报价
-
-            if ([1, 2].indexOf(Number(tradeType.value)) > -1) {
-                store.dispatch('_trade/queryPositionPage', { tradeType: tradeType.value }).then(res => {
-                    state.loading = false
-                    if (res.check()) {
-                        const subscribList = positionList.value.map(el => {
-                            return {
-                                symbolId: el.symbolId,
-                                tradeType: tradeType.value
-                            }
-                        })
-                        QuoteSocket.send_subscribe(subscribList)
-                    }
-                }).catch(() => {
-                    state.loading = false
-                })
-            }
+        const tradeType = computed(() => {
+            return store.state._quote.curTradeType
         })
 
         const positionList = computed(() => store.state._trade.positionList[tradeType.value])
