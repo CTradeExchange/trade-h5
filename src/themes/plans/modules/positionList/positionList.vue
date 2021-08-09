@@ -68,9 +68,7 @@ export default {
             showSetProfit: false
         })
 
-        const tradeType = computed(() => {
-            return store.state._quote.curTradeType
-        })
+        const tradeType = computed(() => store.state._quote.curTradeType)
 
         const positionList = computed(() => store.state._trade.positionList[tradeType.value])
 
@@ -85,7 +83,10 @@ export default {
             state.positionData = data
             state.closeVisible = true
             if (!product.value.minVolume) {
-                store.dispatch('_quote/querySymbolInfo', { symbolId: data.symbolId, tradeType: tradeType.value })
+                store.dispatch('_quote/querySymbolInfo', {
+                    symbolId: data.symbolId,
+                    tradeType: tradeType.value
+                })
             }
         }
 

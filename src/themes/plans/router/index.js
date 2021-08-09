@@ -171,7 +171,16 @@ const routes = [
         meta: {
             title: ''
         }
-    }
+    },
+    {
+        path: '/positionDetail',
+        name: 'PositionDetail',
+        component: () => import(/* webpackChunkName: "otherpage" */ '../views/position/positionDetail.vue'),
+        meta: {
+            title: 'route.positionDetail'
+        }
+    },
+
 ]
 
 const router = createRouter({
