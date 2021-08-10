@@ -224,6 +224,8 @@ export default {
                 requestPrice: mul(requestPrice, p),
                 accountDigits: account.value.digits,
                 tradeType: parseInt(tradeType),
+                stopLoss: mul(state.stopLoss, p),
+                takeProfit: mul(state.stopProfit, p)
             }
             return params
         }
