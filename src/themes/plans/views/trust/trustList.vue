@@ -13,7 +13,7 @@
 
 <script>
 import trustItem from '@plans/modules/trust/trust.vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { computed, ref, nextTick, watch } from 'vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
@@ -24,6 +24,7 @@ export default {
     setup (props) {
         const loading = ref(false)
         const store = useStore()
+        const route = useRoute()
         const router = useRouter()
 
         // 获取挂单列表
@@ -58,10 +59,10 @@ export default {
 
         // 获取委托列表
         store.dispatch('_trade/queryPBOOrderPage', {
-            tradeType: tradeType.value,
             customerNo: customInfo.value.customerNo,
             sortFieldName: 'orderTime',
-            sortType: 'desc'
+            sortType: 'desc',
+            tradeType: route.query.tradeType,
         })
 
         return {

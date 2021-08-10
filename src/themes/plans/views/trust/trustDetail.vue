@@ -2,8 +2,8 @@
     <div class='page-wrap'>
         <LayoutTop :back='true' :menu='false' :title='$t("trade.trustDetail")' />
         <Loading :show='loading' />
-        <div class='trust-detail'>
-            <div v-if='pendingItem' class='layout layout-1'>
+        <div v-if='pendingItem' class='trust-detail'>
+            <div class='layout layout-1'>
                 <div class='item item-1'>
                     <div class='left'>
                         <div class='name'>
@@ -112,18 +112,16 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const route = useRoute()
         const store = useStore()
-        const { id, symbolId } = route.query
+        const { id, symbolId, tradeType } = route.query
         const loading = ref(false)
         // 获取挂单详情
-        const pendingItem = computed(() => store.state._trade.pendingMap[id])
-        // 获取玩法id
-        const tradeType = computed(() => store.state._base.tradeType)
+        const pendingItem = computed(() => store.state._trade.pendingMap[`${id}_${tradeType}`])
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
-
+        const symbolKey = `${symbolId}_${tradeType}`
         // 获取当前产品
-        const product = computed(() => store.state._quote.productMap[symbolId])
+        const product = computed(() => store.state._quote.productMap[symbolKey])
 
         const pendingPrice = computed(() => shiftedBy(pendingItem.value?.requestPrice, -1 * product.value?.price_digits))
         const showInfo = () => {
@@ -143,19 +141,18 @@ export default {
             }).then(() => {
                 loading.value = true
                 const params = {
-                    tradeType: tradeType.value,
+                    tradeType: tradeType,
                     customerNo: customInfo.value.customerNo,
                     accountId: props.product.accountId,
                     pboId: props.product.id,
                     bizType: props.product.bizType
-
                 }
 
                 closePboOrder(params).then(res => {
                     loading.value = false
                     if (res.check()) {
                         Toast(t('trade.cancelSuccess'))
-                        store.dispatch('_trade/queryPBOOrderPage')
+                        queryPBOOrderPage()
                     }
                 }).catch(err => {
                     loading.value = false
@@ -168,12 +165,14 @@ export default {
         QuoteSocket.send_subscribe([symbolId])
 
         // 获取委托列表
-        store.dispatch('_trade/queryPBOOrderPage', {
-            tradeType: tradeType.value,
-            customerNo: customInfo.value.customerNo,
-            sortFieldName: 'orderTime',
-            sortType: 'desc'
-        })
+        const queryPBOOrderPage = () => {
+            store.dispatch('_trade/queryPBOOrderPage', {
+                tradeType: tradeType,
+                customerNo: customInfo.value.customerNo,
+                sortFieldName: 'orderTime',
+                sortType: 'desc'
+            })
+        }
 
         return {
             showInfo,
