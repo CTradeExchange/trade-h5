@@ -168,7 +168,9 @@ export default {
                 if (res.check()) {
                     store.dispatch('_trade/queryPositionPage', {
                         tradeType: tradeType.value,
-                        accountId
+                        accountId,
+                        sortFieldName: 'openTime',
+                        sortType: 'desc',
                     })
                     Toast(t('trade.modifySuccess'))
                     closed()

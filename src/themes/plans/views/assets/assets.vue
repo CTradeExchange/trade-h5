@@ -73,6 +73,8 @@ export default {
             const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType.value))?.accountId
             store.dispatch('_trade/queryPositionPage', {
                 tradeType: tradeType.value,
+                sortFieldName: 'openTime',
+                sortType: 'desc',
                 accountId
             }).then(res => {
                 if (res.check()) {

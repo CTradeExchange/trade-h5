@@ -172,7 +172,9 @@ export default {
                     state.showDialog = false
                     store.dispatch('_trade/queryPositionPage', {
                         tradeType: tradeType.value,
-                        accountId: accountInfo.value.accountId
+                        accountId: accountInfo.value.accountId,
+                        sortFieldName: 'openTime',
+                        sortType: 'desc',
                     })
                 }
             }).catch(err => {

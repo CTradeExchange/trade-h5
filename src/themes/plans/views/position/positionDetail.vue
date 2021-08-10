@@ -165,9 +165,16 @@ export default {
         const tradeType = computed(() => store.state._quote.curTradeType)
 
         const assetsInfo = computed(() => store.state._user.customerInfo.accountList.find(el => Number(el.tradeType) === Number(tradeType.value)))
+
+        const customerInfo = computed(() => store.state._user.customerInfo)
+
         const positionData = computed(() => store.state._trade.positionMap[positionId + '_' + tradeType.value])
+
         const product = computed(() => store.state._quote.productMap[symbolId + '_' + tradeType.value])
+
         const positionVolume = computed(() => minus(positionData.value?.openVolume, positionData.value?.closeVolume))
+
+        const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType.value))?.accountId
         // 初始化设置
         const init = () => {
             if (!product.value.minVolume) {
@@ -180,7 +187,10 @@ export default {
             // 订阅报价
             QuoteSocket.send_subscribe([symbolId])
             if (positionId && !positionData.value?.positionId) {
-                store.dispatch('_trade/queryPositionPage', { tradeType: tradeType.value })
+                store.dispatch('_trade/queryPositionPage', {
+                    tradeType: tradeType.value,
+                    accountId
+                })
             }
         }
 

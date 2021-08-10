@@ -237,6 +237,8 @@ export default {
                     })
                     store.dispatch('_trade/queryPositionPage', {
                         tradeType: tradeType.value,
+                        sortFieldName: 'openTime',
+                        sortType: 'desc',
                         accountId
                     })
                 })
