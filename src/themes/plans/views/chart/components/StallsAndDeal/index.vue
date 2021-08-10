@@ -17,7 +17,7 @@
             </van-tab>
             <van-tab v-if='statusList.indexOf("deal") > -1' name='deal' :title='$t("trade.deal")'>
                 <!-- 实时成交记录 -->
-                <DealList />
+                <DealList :symbol-id='symbolId' />
             </van-tab>
         </van-tabs>
     </div>
@@ -30,7 +30,6 @@ import DealList from '@plans/modules/realTimeDealList/index'
 import { computed, reactive, toRefs, watch, onBeforeUnmount, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
-import dayjs from 'dayjs'
 
 export default {
     components: { Handicap, DealList },
@@ -55,7 +54,7 @@ export default {
 
         // 是否显示挂单数量
         const showPending = computed(() => {
-            if (Number(tradeType) === 3 || Number(tradeType) === 1) {
+            if (Number(tradeType) === 3) {
                 return true
             } else {
                 return false
@@ -83,13 +82,7 @@ export default {
                 // state.activeObj = props.status
             })
 
-        // 格式化时间
-        const formatTime = (val) => {
-            return dayjs(Number(val)).format('HH:mm:ss')
-        }
-
         return {
-            formatTime,
             showTabs,
             tradeType,
             customInfo,

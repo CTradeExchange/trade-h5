@@ -3,6 +3,7 @@
         <TabBar :index='curIndex' @updateTab='updateTab' />
         <van-swipe
             ref='assetsSwipe'
+
             :show-indicators='false'
             :touchable='true'
             @change='onChange'
@@ -31,9 +32,9 @@ import TotalAssetsFullPosition from './components/totalAssetsFullPosition.vue'
 import TotalAssetsBywarehouse from './components/totalAssetsBywarehouse.vue'
 
 import PositionList from '@plans/modules/positionList/positionList'
-import { reactive, toRefs, nextTick, ref, provide } from 'vue'
+import { reactive, toRefs, nextTick, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { computed, watchEffect } from '@vue/runtime-core'
+import { computed, watchEffect, watch } from '@vue/runtime-core'
 import { isEmpty } from '@/utils/util'
 import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
@@ -61,7 +62,11 @@ export default {
         // 获取玩法列表
         const plans = computed(() => store.state._base.plans)
 
+        // 获取持仓列表
         const positionList = computed(() => store.state._trade.positionList[tradeType.value])
+
+        // 获取当前 tab 下标
+        const tabIndex = computed(() => plans.value.findIndex(item => Number(item.tradeType) === Number(tradeType.value)))
 
         // 获取持仓列表
         const queryPositionList = () => {
@@ -83,14 +88,30 @@ export default {
             })
         }
 
-        watchEffect(() => {
-            // 获取持仓列表 并订阅报价
-            console.log('tradeType.value', tradeType.value)
-            if ([1, 2].indexOf(Number(tradeType.value)) > -1) {
+        // watchEffect(() => {
+        //     // 获取持仓列表 并订阅报价
+        //     console.log('tradeType.value', tradeType.value)
+        //     if ([1, 2].indexOf(Number(tradeType.value)) > -1) {
+        //         queryPositionList()
+        //     } else if ((Number(tradeType.value)) === 3) {
+        //         store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
+        //     }
+
+        //     assetsSwipe.value && assetsSwipe.value.swipeTo(tabIndex.value)
+        // })
+
+        watch(() => tabIndex.value, (val) => {
+            console.log('当前的tab', val)
+        })
+
+        watch(() => tradeType.value, (val) => {
+            if ([1, 2].indexOf(Number(val)) > -1) {
                 queryPositionList()
-            } else if ((Number(tradeType.value)) === 3) {
+            } else if ((Number(val)) === 3) {
                 store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
             }
+        }, {
+            immediate: true
         })
 
         // 监听tab变化
@@ -106,9 +127,14 @@ export default {
         }
 
         const onChange = (index) => {
+            // 跳转到对应的tab页
             curIndex.value = index
             store.commit('_quote/Update_tradeType', plans.value[index].id)
         }
+
+        onMounted(() => {
+            assetsSwipe.value && assetsSwipe.value.swipeTo(tabIndex.value)
+        })
 
         return {
             accountList,

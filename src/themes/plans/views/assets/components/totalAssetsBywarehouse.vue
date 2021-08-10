@@ -53,7 +53,9 @@ export default {
     },
     setup () {
         const store = useStore()
-        const assetsInfo = computed(() => store.state._user.assetsInfo)
+        const tradeType = computed(() => store.state._quote.curTradeType)
+        const assetsInfo = computed(() => store.state._user.customerInfo.accountList.find(el => Number(el.tradeType) === Number(tradeType.value)))
+
         const userAccount = computed(() => store.state._user.accountAssets[2])
 
         return {

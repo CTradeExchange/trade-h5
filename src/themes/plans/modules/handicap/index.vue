@@ -34,10 +34,8 @@
             {{ $t('trade.my') }}
         </div>
     </div>
-    <van-empty v-if='!handicapList' :description='$t("common.noData")' image='/images/empty.png'>
-        <!-- {{ $t('trade.noStallsData') }} -->
-    </van-empty>
-    <div class='stalls-wrap'>
+    <van-empty v-if='!handicapList' :description='$t("common.noData")' image='/images/empty.png' />
+    <div class='stalls-wrap' :class='{ padding: !showField }'>
         <div class='sell-wrap'>
             <div v-for='(item,index) in handicapList?.ask_deep' :key='index' class='item'>
                 <span v-if='showField' class='label fallColor '>
@@ -61,7 +59,7 @@
                 <span class='price riseColor '>
                     {{ item.price_bid }}
                 </span>
-                <span class='quantity'>
+                <span class='quantity alignRight'>
                     {{ item.volume_bid }}
                 </span>
                 <span v-if='showField' class='label label-right riseColor'>
@@ -168,7 +166,7 @@ export default {
                     ask.width = diff === 0 ? 0 : (parseFloat(ask.volume_ask) - parseFloat(minValue)) / diff
                     ask.unitNum = 0
                     // 计算合并挂单数量
-                    if (sellPendingList.length > 0 && props.showPending) {
+                    if (sellPendingList?.length > 0 && props.showPending) {
                         sellPendingList.forEach(sl => {
                             const requestPrice = shiftedBy(sl.requestPrice, -1 * product.value.price_digits)
                             if (parseFloat(requestPrice) === parseFloat(ask.price_ask)) {
@@ -186,7 +184,7 @@ export default {
                     bid.width = diff === 0 ? 0 : (parseFloat(bid.volume_bid) - parseFloat(minValue)) / diff
                     bid.unitNum = 0
                     // 计算合并挂单数量
-                    if (buyPendingList.length > 0 && props.showPending) {
+                    if (buyPendingList?.length > 0 && props.showPending) {
                         buyPendingList.forEach(bl => {
                             const requestPrice = shiftedBy(bl.requestPrice, -1 * product.value.price_digits)
                             if (parseFloat(requestPrice) === parseFloat(bid.price_bid)) {
@@ -203,7 +201,7 @@ export default {
         // 修改报价深度
         const onSelect = (val) => {
             state.curDigits = val.text
-            QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits)
+            QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits, route.query.tradeType)
         }
 
         store.dispatch('_trade/queryPBOOrderPage', {
@@ -282,6 +280,9 @@ export default {
     flex-direction: row;
     width: 100%;
     padding: 0 rem(5px);
+    &.padding {
+        padding: 0 rem(50px);
+    }
     .sell-wrap,
     .buy-wrap {
         display: flex;

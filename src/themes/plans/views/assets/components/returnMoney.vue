@@ -239,7 +239,7 @@ export default {
             }
         }
 
-        store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
+        // store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
 
         return {
             ...toRefs(state),

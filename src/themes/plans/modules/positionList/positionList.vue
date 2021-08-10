@@ -10,7 +10,6 @@
         <van-loading v-if='loading' class='loading' />
         <positionItem
             v-for='(item,index) in positionList'
-            v-else
             :key='index'
             :data='item'
             :product='product'

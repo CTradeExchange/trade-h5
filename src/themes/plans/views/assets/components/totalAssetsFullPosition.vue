@@ -65,12 +65,14 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 export default {
-    components: {
-    },
+
     setup () {
         const store = useStore()
-        const assetsInfo = computed(() => store.state._user.assetsInfo)
         const userAccount = computed(() => store.state._user.accountAssets[1])
+
+        const tradeType = computed(() => store.state._quote.curTradeType)
+
+        const assetsInfo = computed(() => store.state._user.customerInfo.accountList.find(el => Number(el.tradeType) === Number(tradeType.value)))
 
         return {
             assetsInfo,

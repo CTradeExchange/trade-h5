@@ -37,17 +37,26 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-
+import dayjs from 'dayjs'
 export default {
-
+    props: ['symbolId'],
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         // 获取成交数据
-        const dealList = computed(() => store.state._quote.dealList.filter(item => Number(item.symbolId) === Number(props.symbolId)))
+        const dealList = computed(() => {
+            const aa = store.state._quote.dealList.filter(item => Number(item.symbolId) === Number(props.symbolId))
+            return aa
+        })
+
+        // 格式化时间
+        const formatTime = (val) => {
+            return dayjs(Number(val)).format('HH:mm:ss')
+        }
 
         return {
-            dealList
+            dealList,
+            formatTime
         }
     }
 }

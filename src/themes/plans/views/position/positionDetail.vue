@@ -23,14 +23,14 @@
                         </div> -->
                         <div class='col'>
                             <div class='sub'>
-                                {{ $t('trade.profit') }}({{ customerInfo.currency }})
+                                {{ $t('trade.profit') }}({{ assetsInfo.currency }})
                             </div>
                             <div class='name' :class="parseFloat(positionData.profitLoss) > 0 ? 'riseColor': 'fallColor'">
                                 {{ positionData.profitLoss }}
                             </div>
                         </div><div class='col'>
                             <div class='sub'>
-                                {{ $t('trade.swap_2') }}({{ customerInfo.currency }})
+                                {{ $t('trade.swap_2') }}({{ assetsInfo.currency }})
                             </div>
                             <div class='name'>
                                 {{ positionData.interest || '--' }}
@@ -141,8 +141,8 @@
 </template>
 
 <script>
-import DialogSLTP from '@c/components/dialogSLTP'
-import DialogClosePosition from '@c/components/dialogClosePosition'
+import DialogSLTP from '@plans/components/dialogSLTP'
+import DialogClosePosition from '@plans/components/dialogClosePosition'
 import { reactive, toRefs, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
@@ -164,8 +164,7 @@ export default {
         const { orderId, positionId, symbolId } = route.query
         const tradeType = computed(() => store.state._quote.curTradeType)
 
-        store.commit('_quote/Update_productActivedID', symbolId + '_' + tradeType.value)
-        const customerInfo = computed(() => store.state._user.customerInfo)
+        const assetsInfo = computed(() => store.state._user.customerInfo.accountList.find(el => Number(el.tradeType) === Number(tradeType.value)))
         const positionData = computed(() => store.state._trade.positionMap[positionId + '_' + tradeType.value])
         const product = computed(() => store.state._quote.productMap[symbolId + '_' + tradeType.value])
         const positionVolume = computed(() => minus(positionData.value?.openVolume, positionData.value?.closeVolume))
@@ -184,13 +183,8 @@ export default {
                 store.dispatch('_trade/queryPositionPage', { tradeType: tradeType.value })
             }
         }
-        onMounted(() => {
-            init()
-        })
 
-        const setProfitSuccess = () => {
-
-        }
+        const setProfitSuccess = () => {}
         const updateSLTPVisible = (val) => {
             state.showSetProfit = val
         }
@@ -198,6 +192,13 @@ export default {
         const closeHandler = () => {
             state.closeVisible = true
         }
+
+        store.commit('_quote/Update_productActivedID', symbolId + '_' + tradeType.value)
+
+        onMounted(() => {
+            init()
+        })
+
         return {
             ...toRefs(state),
             setProfitSuccess,
@@ -207,7 +208,7 @@ export default {
             product,
             positionData,
             orderId,
-            customerInfo,
+            assetsInfo,
             positionId
         }
     }
