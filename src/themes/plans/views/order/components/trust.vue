@@ -2,7 +2,7 @@
     <div class='trustWrapper'>
         <div class='hd'>
             <span>{{ $t('trade.curTrust') }} ({{ pendingList.length }})</span>
-            <a class='allTrust' href='javascript:;' @click="$router.push({ name:'TrustList' })">
+            <a class='allTrust' href='javascript:;' @click="$router.push({ name:'TrustList',query:{ tradeType:product.tradeType } })">
                 {{ $t('trade.allTrust') }}
             </a>
         </div>
@@ -39,7 +39,8 @@ export default {
                 path: '/trustDetail',
                 query: {
                     id: item.id,
-                    symbolId: item.symbolId
+                    symbolId: item.symbolId,
+                    tradeType: props.product.tradeType
                 }
             })
         }
