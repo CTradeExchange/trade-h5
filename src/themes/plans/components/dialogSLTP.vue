@@ -81,7 +81,7 @@
 
 <script>
 import { reactive, toRefs, watchEffect, computed, ref } from 'vue'
-import ModifyProfitLoss from '@c/components/modifyProfitLoss'
+import ModifyProfitLoss from '@plans/components/modifyProfitLoss'
 import { updateOrder, updatePboOrder } from '@/api/trade'
 import { equalTo, mul, pow, minus } from '@/utils/calculation'
 import { useI18n } from 'vue-i18n'
@@ -171,6 +171,7 @@ export default {
                         accountId,
                         sortFieldName: 'openTime',
                         sortType: 'desc',
+                        hideLoading: true
                     })
                     Toast(t('trade.modifySuccess'))
                     closed()
@@ -180,6 +181,13 @@ export default {
                 console.log(err)
             })
         }
+
+        // 获取产品详情
+        store.dispatch('_quote/querySymbolInfo', {
+            symbolId: props.data.symbolId, tradeType: tradeType.value
+        }).then(res => {
+            if (res.invalid()) return false
+        })
 
         return {
             ...toRefs(state),
