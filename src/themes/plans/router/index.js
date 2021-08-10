@@ -182,6 +182,14 @@ const routes = [
             title: 'route.positionDetail'
         }
     },
+    {
+        path: '/loan',
+        name: 'Loan',
+        component: () => import(/* webpackChunkName: "otherpage" */ '../views/loan/loan.vue'),
+        meta: {
+            title: 'route.loan'
+        }
+    }
 
 ]
 

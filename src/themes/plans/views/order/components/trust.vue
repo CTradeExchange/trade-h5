@@ -61,7 +61,7 @@ export default {
             tradeType: props.product.tradeType,
             customerNo: customInfo.value.customerNo,
             sortFieldName: 'orderTime',
-            sortType: 'desc'
+            sortType: 'desc',
         })
 
         return {

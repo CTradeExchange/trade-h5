@@ -90,22 +90,6 @@ export default {
             })
         }
 
-        // watchEffect(() => {
-        //     // 获取持仓列表 并订阅报价
-        //     console.log('tradeType.value', tradeType.value)
-        //     if ([1, 2].indexOf(Number(tradeType.value)) > -1) {
-        //         queryPositionList()
-        //     } else if ((Number(tradeType.value)) === 3) {
-        //         store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
-        //     }
-
-        //     assetsSwipe.value && assetsSwipe.value.swipeTo(tabIndex.value)
-        // })
-
-        watch(() => tabIndex.value, (val) => {
-            console.log('当前的tab', val)
-        })
-
         watch(() => tradeType.value, (val) => {
             if ([1, 2].indexOf(Number(val)) > -1) {
                 queryPositionList()

@@ -78,7 +78,7 @@ export default {
             }).then(() => {
                 loading.value = true
                 const params = {
-                    tradeType: tradeType.value,
+                    tradeType: props.product.tradeType,
                     customerNo: customInfo.value.customerNo,
                     accountId: props.product.accountId,
                     pboId: props.product.id,
@@ -90,7 +90,12 @@ export default {
                     loading.value = false
                     if (res.check()) {
                         Toast(t('trade.cancelSuccess'))
-                        store.dispatch('_trade/queryPBOOrderPage')
+                        store.dispatch('_trade/queryPBOOrderPage', {
+                            tradeType: props.product.tradeType,
+                            sortFieldName: 'orderTime',
+                            sortType: 'desc',
+
+                        })
                     }
                 }).catch(err => {
                     loading.value = false
