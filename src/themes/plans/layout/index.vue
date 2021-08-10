@@ -25,6 +25,7 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import footerMenu from './footerMenu'
 export default {
+    name: 'Layout',
     components: {
         footerMenu,
     },

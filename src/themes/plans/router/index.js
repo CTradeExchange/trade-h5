@@ -9,7 +9,9 @@ const routes = [
     {
         path: '/',
         redirect: '/home',
+        name: 'Layout',
         component: Layout,
+        keepAlive: true,
         children: [
             {
                 path: 'home',

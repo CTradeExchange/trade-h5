@@ -30,7 +30,7 @@ export default createStore({
         bankDict: [],
         supportLanguages: supportLanguages,
         countryList: [],
-        cacheViews: [],
+        cacheViews: ['Layout'],
         currencyList: []
     },
     getters: {

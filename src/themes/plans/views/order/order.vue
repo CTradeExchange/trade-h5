@@ -2,55 +2,60 @@
     <div class='orderWrap'>
         <SwitchTradeType />
 
-        <div class='main'>
-            <!-- 订单类型 -->
-            <OrderTypeTab v-model='orderType' :btn-list='orderTypeList' @selected='changeOrderType' />
-            <!-- 自动借款 -->
-            <LoanBar v-if='product && product.tradeType===3' v-model='operationType' class='cellMarginTop' />
-            <!-- 方向 -->
-            <Direction v-model='direction' class='cellMarginTop' :product='product' />
-            <!-- 挂单设置 -->
-            <PendingBar
-                v-if='product && product.tradeType===3 && orderType===10'
-                ref='pendingRef'
-                v-model='pendingPrice'
-                class='cellMarginTop'
-                :direction='direction'
-                :product='product'
-            />
-            <PendingBarCFD
-                v-else-if='orderType===10'
-                ref='pendingRef'
-                v-model='pendingPrice'
-                class='cellMarginTop'
-                :direction='direction'
-                :product='product'
-            />
-            <!-- 手数 -->
-            <OrderVolume v-if='product' v-model='volume' class='cellMarginTop' :product='product' />
-            <!-- 订单金额 -->
-            <Assets
-                v-if='account && product && product.tradeType===3'
-                v-model:operation-type='operationType'
-                :account='account'
-                :direction='direction'
-                :product='product'
-                :volume='volume'
-            />
-            <!-- 止盈止损 -->
-            <ProfitlossSet
-                v-if='product'
-                v-model:stopLoss='stopLoss'
-                v-model:stopProfit='stopProfit'
-                class='cellMarginTop'
-                :direction='direction'
-                :product='product'
-            />
-        </div>
-        <div class='footerBtn' :class='[direction]'>
-            <van-button block :disabled='loading' :loading='loading' size='normal' @click='submitHandler'>
-                {{ $t(direction==='buy'?'trade.buyText':'trade.sellText') }}
-            </van-button>
+        <div v-if='product' class='main'>
+            <div v-if='false' class='left'>
+                <OrderHandicap />
+            </div>
+            <div class='right'>
+                <!-- 订单类型 -->
+                <OrderTypeTab v-model='orderType' :btn-list='orderTypeList' @selected='changeOrderType' />
+                <!-- 自动借款 -->
+                <LoanBar v-if='product.tradeType===3' v-model='operationType' class='cellMarginTop' />
+                <!-- 方向 -->
+                <Direction v-model='direction' class='cellMarginTop' :product='product' />
+                <!-- 挂单设置 -->
+                <PendingBar
+                    v-if='product.tradeType===3 && orderType===10'
+                    ref='pendingRef'
+                    v-model='pendingPrice'
+                    class='cellMarginTop'
+                    :direction='direction'
+                    :product='product'
+                />
+                <PendingBarCFD
+                    v-else-if='orderType===10'
+                    ref='pendingRef'
+                    v-model='pendingPrice'
+                    class='cellMarginTop'
+                    :direction='direction'
+                    :product='product'
+                />
+                <!-- 手数 -->
+                <OrderVolume v-if='product' v-model='volume' class='cellMarginTop' :product='product' />
+                <!-- 订单金额 -->
+                <Assets
+                    v-if='account && product.tradeType===3'
+                    v-model:operation-type='operationType'
+                    :account='account'
+                    :direction='direction'
+                    :product='product'
+                    :volume='volume'
+                />
+                <!-- 止盈止损 -->
+                <ProfitlossSet
+                    v-if='product'
+                    v-model:stopLoss='stopLoss'
+                    v-model:stopProfit='stopProfit'
+                    class='cellMarginTop'
+                    :direction='direction'
+                    :product='product'
+                />
+                <div class='footerBtn' :class='[direction]'>
+                    <van-button block :disabled='loading' :loading='loading' size='normal' @click='submitHandler'>
+                        {{ $t(direction==='buy'?'trade.buyText':'trade.sellText') }}
+                    </van-button>
+                </div>
+            </div>
         </div>
         <!-- 委托列表 -->
         <Trust
@@ -82,7 +87,9 @@ import PendingBarCFD from './components/pendingBar_CFD'
 import OrderTypeTab from './components/orderType.vue'
 import Assets from './components/assets.vue'
 import Trust from './components/trust.vue'
+import OrderHandicap from './components/handicap.vue'
 import SwitchProduct from './components/switchProduct.vue'
+import hooks from './orderHooks'
 import { addMarketOrder } from '@/api/trade'
 import { Toast } from 'vant'
 export default {
@@ -93,6 +100,7 @@ export default {
         SwitchTradeType,
         ProfitlossSet,
         SwitchProduct,
+        OrderHandicap,
         Assets,
         Trust,
         PendingBar,
@@ -129,31 +137,8 @@ export default {
         const pendingWarn = computed(() => pendingRef.value?.warn)
         const product = computed(() => store.getters.productActived)
         const customerInfo = computed(() => store.state._user.customerInfo)
-        const account = computed(() => {
-            let account = ''
-            if (!product.value) return account
-            const accountList = customerInfo.value?.accountList || []
-            const productTradeType = parseInt(product.value?.tradeType)
-            if ([1, 2].includes(productTradeType)) {
-                account = accountList.find(el => el.tradeType === productTradeType)
-            } else {
-                const outCurrency = product.value[state.direction === 'buy' ? 'profitCurrency' : 'baseCurrency']
-                account = customerInfo?.value?.accountMap[outCurrency]
-            }
-            return account
-        })
-        const bizType = computed(() => {
-            let bizType = state.orderType
-            if (bizType === 10 && [1, 2].includes(product.value?.tradeType)) {
-                const requestPrice = state.pendingPrice
-                if (state.direction === 'buy') {
-                    bizType = lt(requestPrice, product.value.buy_price) ? 10 : 11
-                } else {
-                    bizType = gt(requestPrice, product.value.sell_price) ? 10 : 11
-                }
-            }
-            return bizType
-        })
+        const { bizType, account } = hooks(state)
+
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
         watch(
             () => symbolKey.value,
@@ -168,6 +153,7 @@ export default {
 
         // 获取账户信息
         const queryAccountInfo = () => {
+            console.log(product.value?.symbolKey)
             const currency = state.direction === 'buy' ? product.value?.profitCurrency : product.value?.baseCurrency
             const curAccount = customerInfo.value.accountList.find(el => el.currency === currency)
             if (curAccount)store.dispatch('_user/queryAccountAssetsInfo', { accountId: curAccount.accountId, tradeType: product.value?.tradeType })
@@ -317,11 +303,19 @@ export default {
     background: var(--bgColor);
     .main {
         @include scroll();
+        display: flex;
         flex: 1;
         //margin-bottom: rem(90px);
-        padding: 0 rem(40px) rem(70px) rem(40px);
+        padding: 0 rem(40px) rem(40px) rem(40px);
         overflow: auto;
         background: var(--contentColor);
+        .left {
+            width: rem(250px);
+            margin-right: rem(30px);
+        }
+        .right {
+            flex: 1;
+        }
     }
 }
 .cellMarginTop {
@@ -333,7 +327,7 @@ export default {
 }
 .footerBtn {
     width: 100%;
-    padding: rem(30px);
+    margin-top: rem(100px);
     background: var(--contentColor);
     &.buy {
         .van-button {
