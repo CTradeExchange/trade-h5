@@ -26,9 +26,9 @@ export default {
         const store = useStore()
         const route = useRoute()
         const router = useRouter()
-
+        const { tradeType } = route.query
         // 获取挂单列表
-        const pendingList = computed(() => store.state._trade.pendingList)
+        const pendingList = computed(() => store.state._trade.pendingList[tradeType] || [])
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)

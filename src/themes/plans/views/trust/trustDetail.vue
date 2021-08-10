@@ -110,6 +110,7 @@ import { useI18n } from 'vue-i18n'
 export default {
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
+        const router = useRouter()
         const route = useRoute()
         const store = useStore()
         const { id, symbolId, tradeType } = route.query
@@ -122,6 +123,7 @@ export default {
         const symbolKey = `${symbolId}_${tradeType}`
         // 获取当前产品
         const product = computed(() => store.state._quote.productMap[symbolKey])
+        const account = computed(() => store.state._user.customerInfo?.accountList?.find(el => el.tradeType === 2))
 
         const pendingPrice = computed(() => shiftedBy(pendingItem.value?.requestPrice, -1 * product.value?.price_digits))
         const showInfo = () => {
@@ -143,14 +145,15 @@ export default {
                 const params = {
                     tradeType: tradeType,
                     customerNo: customInfo.value.customerNo,
-                    accountId: props.product.accountId,
-                    pboId: props.product.id,
-                    bizType: props.product.bizType
+                    accountId: account.value.accountId,
+                    pboId: pendingItem.value.id,
+                    bizType: pendingItem.value.bizType
                 }
 
                 closePboOrder(params).then(res => {
                     loading.value = false
                     if (res.check()) {
+                        router.back()
                         Toast(t('trade.cancelSuccess'))
                         queryPBOOrderPage()
                     }

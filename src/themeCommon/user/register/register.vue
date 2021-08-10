@@ -78,7 +78,7 @@ import InputComp from '@/components/form/input'
 import areaInput from '@/components/form/areaInput'
 import CurrencyAction from './components/currencyAction'
 import TradeTypeAction from './components/tradeTypeAction'
-import { getDevice, getQueryVariable, setToken, getArrayObj } from '@/utils/util'
+import { getDevice, getQueryVariable, setToken, getArrayObj, localGet } from '@/utils/util'
 import { register, openAccount, checkKycApply, checkUserStatus } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
 import { useStore } from 'vuex'
@@ -207,6 +207,11 @@ export default {
                 params.phoneArea = '+' + String(state.countryZone)
             } else {
                 params.emailArea = String(state.countryZone)
+            }
+
+            if (localGet('b_superiorAgent')) {
+                params.thirdServerCode = localGet('b_superiorAgent')
+                params.thirdServerSource = 'agent'
             }
 
             const validator = new Schema(RuleFn(t))
