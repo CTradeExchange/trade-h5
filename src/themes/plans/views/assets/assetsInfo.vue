@@ -98,7 +98,7 @@ export default {
         })
         const accountList = computed(() => store.state._user.customerInfo?.accountList || [])
         const account = computed(() => {
-            return accountList.value.find(({ currency }) => currency === route.query.currency)
+            return accountList.value.filter(el => [3, 9].includes(el.tradeType)).find(({ currency }) => currency === route.query.currency)
         })
 
         store.dispatch('_user/queryAccountAssetsInfo', { tradeType: 3, accountId: parseInt(route.query.accountId) })

@@ -1,6 +1,6 @@
 <template>
     <div class='orderWrap'>
-        <SwitchTradeType />
+        <SwitchTradeType @change='init' />
 
         <div v-if='product' class='main'>
             <div v-if='false' class='left'>
@@ -153,7 +153,6 @@ export default {
 
         // 获取账户信息
         const queryAccountInfo = () => {
-            console.log(product.value?.symbolKey)
             const currency = state.direction === 'buy' ? product.value?.profitCurrency : product.value?.baseCurrency
             const curAccount = customerInfo.value.accountList.find(el => el.currency === currency)
             if (curAccount)store.dispatch('_user/queryAccountAssetsInfo', { accountId: curAccount.accountId, tradeType: product.value?.tradeType })
@@ -188,6 +187,7 @@ export default {
                     })
                 }
             }).then(() => {
+                store.dispatch('_trade/queryPBOOrderPage', { tradeType: product.value?.tradeType })
                 if (product.value?.tradeType === 3) queryAccountInfo()
             })
         }
@@ -259,6 +259,7 @@ export default {
         init()
         return {
             ...toRefs(state),
+            init,
             account,
             pendingRef,
             profitLossRef,
