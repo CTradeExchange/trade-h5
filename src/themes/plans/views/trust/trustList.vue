@@ -30,9 +30,6 @@ export default {
         // 获取挂单列表
         const pendingList = computed(() => store.state._trade.pendingList)
 
-        // 获取玩法id
-        const tradeType = computed(() => store.state._base.tradeType)
-
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
 

@@ -189,6 +189,14 @@ const routes = [
         meta: {
             title: 'route.loan'
         }
+    },
+    {
+        path: '/record',
+        name: 'Record',
+        component: () => import(/* webpackChunkName: "record" */ '../views/record/record.vue'),
+        meta: {
+            title: ''
+        }
     }
 
 ]

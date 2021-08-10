@@ -61,7 +61,7 @@
 <script>
 import { computed, reactive, ref, toRefs, watch, watchEffect, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import BigNumber from 'bignumber.js'
 import { useI18n } from 'vue-i18n'
 import { manualRepayment, addRepaymentOrder, previewOrder } from '@/api/user'
@@ -72,6 +72,7 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const route = useRoute()
+        const router = useRouter()
         const state = reactive({
             show: false,
             pickerShow: false,
@@ -219,7 +220,7 @@ export default {
         }
 
         const toRecord = () => {
-            route.push({
+            router.push({
                 path: '/record',
                 query: {
                     accountId: route.query.accountId

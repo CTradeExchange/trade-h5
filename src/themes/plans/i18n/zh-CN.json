@@ -524,5 +524,11 @@
     "loanAmount": "借款数量",
     "loanRecord": "借款记录",
     "returnRecord": "还款记录"
+  },
+  "record":{
+    "repaymentAmount": "还款数量",
+    "records": "借还款记录",
+    "loanRecord": "借款记录",
+    "repaymentRecord": "还款记录"
   }
 }
