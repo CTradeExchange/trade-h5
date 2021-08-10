@@ -219,6 +219,7 @@ export default {
             const params = submitCloseParam()
             if (!params) return false
             state.loading = true
+            const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType.value))?.accountId
             addMarketOrder(params)
                 .then(res => {
                     state.loading = false
@@ -234,7 +235,10 @@ export default {
                         duration: 1000,
                         forbidClick: true,
                     })
-                    store.dispatch('_trade/queryPositionPage', { tradeType: tradeType.value })
+                    store.dispatch('_trade/queryPositionPage', {
+                        tradeType: tradeType.value,
+                        accountId
+                    })
                 })
                 .catch(err => {
                     state.loading = false
