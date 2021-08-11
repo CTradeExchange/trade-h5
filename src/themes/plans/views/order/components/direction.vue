@@ -1,5 +1,5 @@
 <template>
-    <div v-if='product' class='directions'>
+    <div v-if='product' class='directions' :class="{ 'tradeType9': false && [3,9].includes(product.tradeType) }">
         <div class='item sell' :class="{ 'active':modelValue==='sell' }" @click="setDirection('sell')">
             {{ $t('trade.sell') }}
             <span class='flRight price'>
@@ -37,6 +37,17 @@ export default {
 .directions {
     position: relative;
     display: flex;
+    &.tradeType9 {
+        text-align: center;
+        .item {
+            padding: 0 !important;
+            line-height: rem(80px);
+        }
+        .flRight {
+            float: none;
+            text-align: center;
+        }
+    }
     .item {
         flex: 1;
         box-sizing: border-box;

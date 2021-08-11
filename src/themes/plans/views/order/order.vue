@@ -10,12 +10,12 @@
                 <!-- 订单类型 -->
                 <OrderTypeTab v-model='orderType' :btn-list='orderTypeList' @selected='changeOrderType' />
                 <!-- 自动借款 -->
-                <LoanBar v-if='product.tradeType===3' v-model='operationType' class='cellMarginTop' />
+                <LoanBar v-if='[3,9].includes(product.tradeType)' v-model='operationType' class='cellMarginTop' />
                 <!-- 方向 -->
                 <Direction v-model='direction' class='cellMarginTop' :product='product' />
                 <!-- 挂单设置 -->
                 <PendingBar
-                    v-if='product.tradeType===3 && orderType===10'
+                    v-if='[3,9].includes(product.tradeType) && orderType===10'
                     ref='pendingRef'
                     v-model='pendingPrice'
                     class='cellMarginTop'
@@ -34,7 +34,7 @@
                 <OrderVolume v-if='product' v-model='volume' class='cellMarginTop' :product='product' />
                 <!-- 订单金额 -->
                 <Assets
-                    v-if='account && product.tradeType===3'
+                    v-if='account && [3,9].includes(product.tradeType)'
                     v-model:operation-type='operationType'
                     :account='account'
                     :direction='direction'
@@ -163,7 +163,7 @@ export default {
         watch(
             () => [state.direction, product.value?.tradeType],
             () => {
-                if (product.value?.tradeType === 3) queryAccountInfo()
+                if ([3, 9].includes(product.value?.tradeType)) queryAccountInfo()
             },
         )
 
@@ -188,7 +188,7 @@ export default {
                 }
             }).then(() => {
                 store.dispatch('_trade/queryPBOOrderPage', { tradeType: product.value?.tradeType })
-                if (product.value?.tradeType === 3) queryAccountInfo()
+                if ([3, 9].includes(product.value?.tradeType)) queryAccountInfo()
             })
         }
 
@@ -248,7 +248,7 @@ export default {
                     store.dispatch('_trade/queryPBOOrderPage', { tradeType: params.tradeType })
                     queryAccountInfo()
                     Toast({
-                        message: t('trade.orderSuccessToast'),
+                        message: params.bizType === 1 ? t('trade.orderSuccessToast') : t('trade.orderPendingSuccessToast'),
                         duration: 1000,
                         forbidClick: true,
                     })
