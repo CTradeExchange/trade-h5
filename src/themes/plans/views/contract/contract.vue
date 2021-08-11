@@ -38,7 +38,7 @@
                     </span>
                 </div>
             </van-cell>
-            <van-cell :title="$t('contract.feeType')" :value='$t(parseFloat(product.feeFormula)===1?"contract.ratio":"contract.amount")' />
+            <van-cell :title="$t('contract.feeType')" :value='["1","3"].includes(product.feeFormula)?$t("contract.ratio"):$t("contract.amount")' />
             <van-cell :title="$t('fee')" :value='fee' />
             <van-cell :title="$t('contract.interest')" :value='interest' />
             <van-cell :title="$t('contract.zone')" :value="'GMT +' + (0 - new Date().getTimezoneOffset() / 60)" />
@@ -140,7 +140,7 @@ export default {
         })
         // 手续费
         const fee = computed(() => {
-            return parseFloat(product.value.feeFormula) === 1 ? mul(product.value.feeRate, 100) + '%' : product.value.fee
+            return ['1', '3'].includes(product.value.feeFormula) ? mul(product.value.feeRate, 100) + '%' : product.value.fee
         })
         // 手续费
         const expireTime = computed(() => {
