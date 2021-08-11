@@ -81,7 +81,7 @@
                 </div><div class='item'>
                     <div class='left'>
                         <div class='title'>
-                            {{ $t('trade.positionId') }}
+                            {{ $t('trade.pendingNo') }}
                         </div>
                     </div>
                     <div class='right'>
