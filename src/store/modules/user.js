@@ -133,12 +133,11 @@ export default {
                 })
             }
             data.accountMap = accountMap
-            const tradeTypeList = rootState._base.plans.map(({ id }) => id)
 
             commit('Update_kycState', data.kycAuditStatus)
             commit('Update_customerInfo', data)
             if (flag) {
-                if (data.optional === 1) dispatch('queryCustomerOptionalList', { tradeTypeList }) // 如果添加过自选可以直接拉取自选列表，快速显示界面
+                if (data.optional === 1) dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
                 dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {
                     return dispatch('_quote/querySymbolBaseInfoList', productAllList, { root: true })
                 }).then(() => {
@@ -166,9 +165,10 @@ export default {
             })
         },
         // 客户自选产品列表
-        queryCustomerOptionalList ({ dispatch, commit }, params) {
-            if (params) this.queryCustomerOptionalList_params = params
-            return queryCustomerOptionalList(this.queryCustomerOptionalList_params).then(res => {
+        queryCustomerOptionalList ({ dispatch, commit, rootState }) {
+            const tradeTypeList = rootState._base.plans.map(({ id }) => id)
+
+            return queryCustomerOptionalList({ tradeTypeList }).then(res => {
                 commit('Update_selfSymbolList', res.data)
                 return res
             })

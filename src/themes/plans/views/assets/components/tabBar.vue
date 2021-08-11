@@ -1,6 +1,6 @@
 <template>
     <div v-if='plans.length > 1' class='tab-bar'>
-        <div v-for='(item, i) in plans' :key='i' class='tab-item' :class='{ active: Number(curIndex+1) === Number(item.id) }' @click='handleChangeTab(i)'>
+        <div v-for='(item, i) in plans' :key='i' class='tab-item' :class='{ active: curIndex === i }' @click='handleChangeTab(i)'>
             {{ item.name }}
         </div>
     </div>
@@ -16,7 +16,6 @@ export default {
         const store = useStore()
         const state = reactive({
             curIndex: 0,
-
         })
 
         const plans = computed(() => store.state._base.plans)
@@ -48,6 +47,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .tab-bar {
+    width: 100%;
     height: rem(54px);
     margin-top: rem(10px);
     margin-bottom: rem(40px);

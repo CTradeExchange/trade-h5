@@ -2,7 +2,7 @@
     <div class='page-wrap' :class='{ isIframe: $route.query.isIframe }'>
         <LayoutTop :back='true' :menu='false'>
             <p class='symbolName'>
-                <i class='icon_chouti' @click='showSidebar=true'></i>
+                <i v-if='product.symbolName' class='icon_chouti' @click='showSidebar=true'></i>
                 {{ product.symbolName }}
             </p>
             <p class='infomation'>

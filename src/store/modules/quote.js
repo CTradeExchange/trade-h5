@@ -47,7 +47,7 @@ export default {
         productActivedID: sessionGet('productActived'), // 当前操作的产品ID
         handicapList: [], // 盘口实时深度报价
         dealList: [], // 成交数据,
-        curTradeType: 1 // 资产页面当前选中的玩法id
+        curTradeType: '' // 资产页面当前选中的玩法id
     },
     getters: {
         // 用户自选列表

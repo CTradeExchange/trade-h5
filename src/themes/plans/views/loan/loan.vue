@@ -14,7 +14,7 @@
                     <span class='currencySpan'>
                         {{ curCurrency }}
                     </span>
-                    <span class='icon_icon_arrow'></span>
+                    <van-icon name='arrow' />
                 </div>
                 <div class='actionBar'>
                     <input v-model='amount' class='input' :placeholder='$t("assets.loanAmount")' type='number' />

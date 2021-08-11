@@ -1,31 +1,51 @@
 <template>
     <div class='assetsWrapper'>
-        <TabBar :index='curIndex' @updateTab='updateTab' />
+        <plansType class='plansType' :list='plans' :value='tradeType' @change='handleTradeType' />
         <van-swipe
             ref='assetsSwipe'
-
+            duration='300'
+            :initial-swipe='1'
             :show-indicators='false'
             :touchable='true'
             @change='onChange'
         >
-            <van-swipe-item v-if='filterShow(1)'>
+            <van-swipe-item v-for='item in plans' :key='item.id'>
+                <div v-if='Number(item.id) === 1' class='plans-item'>
+                    <TotalAssetsFullPosition class='block' />
+                    <PositionList />
+                </div>
+                <div v-if='Number(item.id) === 2' class='plans-item'>
+                    <TotalAssetsBywarehouse class='block' />
+                    <PositionList />
+                </div>
+                <div v-if='[3,9].indexOf(Number(item.id)) > -1' class='plans-item'>
+                    <TotalAssets class='block' />
+                    <AssetsItem v-for='account in accountList' :key='account.accountId' class='block' :data='account' />
+                </div>
+            </van-swipe-item>
+
+            <!-- <van-swipe-item v-if='filterShow(1)'>
                 <TotalAssetsFullPosition class='block' />
-                <PositionList v-if='Number(tradeType) === 1' />
+                <PositionList />
             </van-swipe-item>
             <van-swipe-item v-if='filterShow(2)'>
                 <TotalAssetsBywarehouse class='block' />
-                <PositionList v-if='Number(tradeType) === 2' />
+                <PositionList />
             </van-swipe-item>
             <van-swipe-item v-if='filterShow(3)'>
                 <TotalAssets class='block' />
                 <AssetsItem v-for='item in accountList' :key='item.accountId' class='block' :data='item' />
             </van-swipe-item>
+            <van-swipe-item v-if='filterShow(9)'>
+                <TotalAssets class='block' />
+                <AssetsItem v-for='item in accountList' :key='item.accountId' class='block' :data='item' />
+            </van-swipe-item>
+        </van-swipe> -->
         </van-swipe>
     </div>
 </template>
 
 <script>
-import TabBar from './components/tabBar.vue'
 import AssetsItem from './components/assetsItem.vue'
 import TotalAssets from './components/totalAssets.vue'
 import TotalAssetsFullPosition from './components/totalAssetsFullPosition.vue'
@@ -37,14 +57,15 @@ import { useStore } from 'vuex'
 import { computed, watchEffect, watch } from '@vue/runtime-core'
 import { isEmpty } from '@/utils/util'
 import { QuoteSocket } from '@/plugins/socket/socket'
+import plansType from '@/themes/plans/components/plansType.vue'
 export default {
     components: {
-        TabBar,
         PositionList,
         AssetsItem,
         TotalAssets,
         TotalAssetsBywarehouse,
         TotalAssetsFullPosition,
+        plansType
     },
     setup () {
         const store = useStore()
@@ -53,7 +74,7 @@ export default {
 
         // 获取账户列表
         const accountList = computed(() =>
-            store.state._user.customerInfo?.accountList.filter(item => [3, 9].includes(item.tradeType)) ?? []
+            store.state._user?.customerInfo?.accountList && store.state._user?.customerInfo?.accountList.filter(item => [3, 9].indexOf(Number(item.tradeType)) > -1)
         )
         const customerInfo = computed(() => store.state._user.customerInfo)
 
@@ -66,10 +87,13 @@ export default {
         const positionList = computed(() => store.state._trade.positionList[tradeType.value])
 
         // 获取当前 tab 下标
-        const tabIndex = computed(() => plans.value.findIndex(item => Number(item.tradeType) === Number(tradeType.value)))
+        const tabIndex = computed(() => plans.value.findIndex(item => Number(item.id) === Number(tradeType.value)))
 
         // 获取持仓列表
         const queryPositionList = () => {
+            if (isEmpty(customerInfo.value)) {
+                return
+            }
             const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType.value))?.accountId
             store.dispatch('_trade/queryPositionPage', {
                 tradeType: tradeType.value,
@@ -100,10 +124,10 @@ export default {
             immediate: true
         })
 
-        // 监听tab变化
-        const updateTab = (val) => {
-            assetsSwipe.value.swipeTo(val)
-            curIndex.value = val
+        const handleTradeType = (val) => {
+            console.log('curIndex', val)
+            const curIndex = plans.value.findIndex(item => item.id === val)
+            assetsSwipe.value.swipeTo(curIndex)
         }
 
         const filterShow = (tradeType) => {
@@ -113,8 +137,6 @@ export default {
         }
 
         const onChange = (index) => {
-            // 跳转到对应的tab页
-            curIndex.value = index
             store.commit('_quote/Update_tradeType', plans.value[index].id)
         }
 
@@ -124,13 +146,13 @@ export default {
 
         return {
             accountList,
-            updateTab,
             onChange,
             curIndex,
             assetsSwipe,
             tradeType,
             plans,
-            filterShow
+            filterShow,
+            handleTradeType
         }
     }
 }
