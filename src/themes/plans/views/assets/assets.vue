@@ -1,14 +1,20 @@
 <template>
     <div class='assetsWrapper'>
         <TabBar :index='curIndex' @updateTab='updateTab' />
-        <van-swipe ref='assetsSwipe' :show-indicators='false' :touchable='true' @change='onChange'>
+        <van-swipe
+            ref='assetsSwipe'
+
+            :show-indicators='false'
+            :touchable='true'
+            @change='onChange'
+        >
             <van-swipe-item v-if='filterShow(1)'>
                 <TotalAssetsFullPosition class='block' />
-                <PositionList />
+                <PositionList v-if='Number(tradeType) === 1' />
             </van-swipe-item>
             <van-swipe-item v-if='filterShow(2)'>
                 <TotalAssetsBywarehouse class='block' />
-                <PositionList />
+                <PositionList v-if='Number(tradeType) === 2' />
             </van-swipe-item>
             <van-swipe-item v-if='filterShow(3)'>
                 <TotalAssets class='block' />
@@ -26,9 +32,11 @@ import TotalAssetsFullPosition from './components/totalAssetsFullPosition.vue'
 import TotalAssetsBywarehouse from './components/totalAssetsBywarehouse.vue'
 
 import PositionList from '@plans/modules/positionList/positionList'
-import { reactive, toRefs, nextTick, ref, provide } from 'vue'
+import { reactive, toRefs, nextTick, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { computed, watchEffect } from '@vue/runtime-core'
+import { computed, watchEffect, watch } from '@vue/runtime-core'
+import { isEmpty } from '@/utils/util'
+import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
     components: {
         TabBar,
@@ -43,31 +51,76 @@ export default {
         const assetsSwipe = ref(null)
         const curIndex = ref(0)
 
+        // 获取账户列表
         const accountList = computed(() =>
             store.state._user.customerInfo?.accountList.filter(item => item.tradeType === 3) ?? []
         )
+        const customerInfo = computed(() => store.state._user.customerInfo)
 
         const tradeType = computed(() => store.state._quote.curTradeType)
 
+        // 获取玩法列表
         const plans = computed(() => store.state._base.plans)
+
+        // 获取持仓列表
+        const positionList = computed(() => store.state._trade.positionList[tradeType.value])
+
+        // 获取当前 tab 下标
+        const tabIndex = computed(() => plans.value.findIndex(item => Number(item.tradeType) === Number(tradeType.value)))
+
+        // 获取持仓列表
+        const queryPositionList = () => {
+            const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType.value))?.accountId
+            store.dispatch('_trade/queryPositionPage', {
+                tradeType: tradeType.value,
+                sortFieldName: 'openTime',
+                sortType: 'desc',
+                accountId
+            }).then(res => {
+                if (res.check()) {
+                    const subscribList = positionList.value.map(el => {
+                        return {
+                            symbolId: el.symbolId,
+                            tradeType: tradeType.value
+                        }
+                    })
+                    QuoteSocket.send_subscribe(subscribList)
+                }
+            }).catch(() => {
+            })
+        }
+
+        watch(() => tradeType.value, (val) => {
+            if ([1, 2].indexOf(Number(val)) > -1) {
+                queryPositionList()
+            } else if ((Number(val)) === 3) {
+                store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
+            }
+        }, {
+            immediate: true
+        })
 
         // 监听tab变化
         const updateTab = (val) => {
-            assetsSwipe.value.swipeTo(Number(val) - 1)
+            assetsSwipe.value.swipeTo(val)
             curIndex.value = val
-            // store.commit('_quote/Update_tradeType', val)
         }
 
         const filterShow = (tradeType) => {
             if (plans.value.length > 0) {
-                return plans.value.find(el => Number(el.id) === Number(tradeType))
+                return !isEmpty(plans.value.find(el => Number(el.id) === Number(tradeType)))
             }
         }
 
         const onChange = (index) => {
+            // 跳转到对应的tab页
             curIndex.value = index
             store.commit('_quote/Update_tradeType', plans.value[index].id)
         }
+
+        onMounted(() => {
+            assetsSwipe.value && assetsSwipe.value.swipeTo(tabIndex.value)
+        })
 
         return {
             accountList,

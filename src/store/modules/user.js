@@ -53,18 +53,19 @@ export default {
             state.loginData = data
         },
         Update_customerInfo (state, data) {
+            console.log(data)
             state.customerInfo = data
         },
         Update_accountInfo (state, data) {
             if (state.customerInfo.accountMap[data.currency]) {
                 Object.assign(state.customerInfo.accountMap[data.currency], data)
-                Object.assign(state.customerInfo.accountList.find(item => item.currency === data.currency), data)
+                // Object.assign(state.customerInfo.accountList.filter(el => [3, 9].includes(el.tradeType)).find(item => item.currency === data.currency), data)
             }
         },
         Update_assetsInfo (state, data) {
             state.assetsInfo = data
             const accountList = state.customerInfo?.accountList || []
-            accountList.forEach(el => {
+            accountList.filter(el => [3, 9].includes(el.tradeType)).forEach(el => {
                 if (data.accountInfoMap[el.currency]) {
                     Object.assign(el, data.accountInfoMap[el.currency])
                 }

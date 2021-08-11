@@ -26,12 +26,12 @@ export default {
             //     href: '/home?nocache',
             //     role: ['D', 'R_3', 'R_2', 'R_1'],
             // },
-            {
-                icon: require('../../../images/fund.png'),
-                title: '资金明细',
-                href: '/fundLog',
-                role: ['D', 'R_3', 'R_2', 'R_1'],
-            },
+            // {
+            //     icon: require('../../../images/fund.png'),
+            //     title: '资金明细',
+            //     href: '/fundLog',
+            //     role: ['D', 'R_3', 'R_2', 'R_1'],
+            // },
             {
                 icon: require('../../../images/msg.png'),
                 title: '消息中心',

@@ -92,7 +92,7 @@ export default {
         const productList = computed(() => store.state._quote.productList)
 
         // 当前币种
-        const columns = computed(() => customInfo?.value?.accountList.filter(item => item.tradeType === 3).map(el => el.currency))
+        const columns = computed(() => customInfo?.value?.accountList.filter(item => [3, 9].includes(item.tradeType)).map(el => el.currency))
         const tradeType = computed(() => customInfo?.value?.accountMap[route.query.currency].tradeType)
 
         watch(
@@ -158,7 +158,7 @@ export default {
             state.inCurrency = props.account.currency
             state.outCurrency = props.account.currency
             if (parseFloat(props.account.available) === 0) {
-                const accountList = store.state._user.customerInfo?.accountList.filter(item => item.tradeType === 3) || []
+                const accountList = store.state._user.customerInfo?.accountList.filter(item => [3, 9].includes(item.tradeType)) || []
                 const newAccountList = accountList.slice().sort((a, b) => parseFloat(b.available) - parseFloat(a.available))
                 if (newAccountList.length && newAccountList[0].available > 0) {
                     // state.outCurrency = newAccountList[0].currency
@@ -239,7 +239,7 @@ export default {
             }
         }
 
-        store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
+        // store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
 
         return {
             ...toRefs(state),

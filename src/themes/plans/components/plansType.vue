@@ -1,13 +1,13 @@
 <template>
     <div class='playType'>
-        <span v-for='item in props.list' :key='item.id' class='item' :class='{ active: props.value === item.id }' @click='() => onClick(item)'>
-            {{ item.name }}
-        </span>
+        <van-tabs v-model:active='active' class='tabs' :swipe-threshold='1'>
+            <van-tab v-for='item in props.list' :key='item.id' :name='item.id' :title='item.name' />
+        </van-tabs>
     </div>
 </template>
 
 <script>
-
+import { computed } from 'vue'
 export default {
     props: {
         value: {
@@ -20,12 +20,14 @@ export default {
         }
     },
     setup (props, context) {
-        const onClick = (item) => {
-            context.emit('change', item.id)
-        }
+        const active = computed({
+            get: () => props.value,
+            set: (val) => context.emit('change', val)
+        })
+
         return {
-            onClick,
-            props
+            props,
+            active
         }
     }
 }
@@ -44,19 +46,43 @@ export default {
     padding-left: rem(30px);
     background-color: var(--contentColor);
     border: 1px solid var(--bgColor);
-    .item {
-        margin-left: rem(55px);
-        color: var(--minorColor);
-        font-weight: bold;
-        font-size: rem(28px);
-        white-space: nowrap;
-        &:first-child {
-            margin-left: 0;
+    // .item {
+    //     margin-left: rem(55px);
+    //     color: var(--minorColor);
+    //     font-weight: bold;
+    //     font-size: rem(28px);
+    //     white-space: nowrap;
+    //     &:first-child {
+    //         margin-left: 0;
+    //     }
+    //     &.active {
+    //         color: var(--color);
+    //         font-weight: bold;
+    //         font-size: rem(38px);
+    //     }
+    // }
+    .tabs {
+        :deep(.van-tab) {
+            margin-left: rem(55px);
+            padding: 0;
+            font-weight: bold;
+            font-size: rem(28px);
+            &:first-child {
+                margin-left: 0;
+            }
+            .van-tab__text {
+                color: var(--minorColor);
+            }
         }
-        &.active {
-            color: var(--color);
+        :deep(.van-tab--active) {
             font-weight: bold;
             font-size: rem(38px);
+            .van-tab__text {
+                color: var(--color);
+            }
+        }
+        :deep(.van-tabs__line) {
+            display: none;
         }
     }
 }

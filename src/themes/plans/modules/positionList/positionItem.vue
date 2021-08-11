@@ -1,5 +1,4 @@
 <template>
-    <!-- @click.stop='toPositionDetail(data)' -->
     <div class='product-item'>
         <div class='item' :data='activeNames'>
             <van-collapse
@@ -33,7 +32,7 @@
                             </div>
                         </div>
                     </template>
-                    <div class='cell'>
+                    <div class='cell' @click.stop='toPositionDetail(data)'>
                         <div class='flex-wrap'>
                             <div class='flex-item'>
                                 <div class='title'>

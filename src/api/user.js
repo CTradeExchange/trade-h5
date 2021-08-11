@@ -628,3 +628,15 @@ export function manualLoan (data) {
         data
     })
 }
+
+/* 查询借还款流水列表 */
+export function queryLiabilitiesWaterByPage (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.queryLiabilitiesWaterByPage',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

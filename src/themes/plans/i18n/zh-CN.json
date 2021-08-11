@@ -105,7 +105,8 @@
     "pendingDetail": "挂单明细",
     "historyDetail": "已平仓明细",
     "assets": "资产",
-    "returnMoney": "还币"
+    "returnMoney": "还币",
+    "loan": "借款"
   },
   "search": {
     "keywords": "请输入搜索关键词",
@@ -384,6 +385,7 @@
     "noDealData": "暂无成交记录",
     "noStallsData": "暂无数据",
     "orderSuccessToast": "下单成功，请查看资产",
+    "orderPendingSuccessToast": "下单成功，请查看委托列表",
     "inputCloseNum": "请输入平仓数量",
     "closeSuccessToast": "下单成功，请查看平仓记录",
     "trust": "委托",
@@ -423,6 +425,7 @@
     "maxRaise": "最大追加",
     "maxReduce":"最大减少",
     "enterReturnAmount": "请输入还币金额",
+    "enterReturnAmountLess": "还币金额不能小于0",
     "repayment": "还款",
     "desposit":"充值",
     "withdraw": "提现",
@@ -516,8 +519,17 @@
     "alreadyLoan": "已借",
     "dailyRate": "日利率",
     "loanAmountNotice": "借款数量不能为空",
-    "loanAmountNaN": "借款数量不能为负数",
+    "loanAmountLess": "借款数量不能小于0",
     "loanSuccess": "借款成功",
-    "loanAmountExcess": "超出最大可借额度"
+    "loanAmountExcess": "超出最大可借额度",
+    "loanAmount": "借款数量",
+    "loanRecord": "借款记录",
+    "returnRecord": "还款记录"
+  },
+  "record":{
+    "repaymentAmount": "还款数量",
+    "records": "借还款记录",
+    "loanRecord": "借款记录",
+    "repaymentRecord": "还款记录"
   }
 }

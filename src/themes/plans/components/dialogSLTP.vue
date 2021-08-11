@@ -81,7 +81,7 @@
 
 <script>
 import { reactive, toRefs, watchEffect, computed, ref } from 'vue'
-import ModifyProfitLoss from '@c/components/modifyProfitLoss'
+import ModifyProfitLoss from '@plans/components/modifyProfitLoss'
 import { updateOrder, updatePboOrder } from '@/api/trade'
 import { equalTo, mul, pow, minus } from '@/utils/calculation'
 import { useI18n } from 'vue-i18n'
@@ -106,6 +106,9 @@ export default {
 
         // 获取账户
         const account = computed(() => store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(tradeType.value)))
+
+        // 客户信息
+        const customerInfo = computed(() => store.state._user.customerInfo)
 
         // 玩法id
         const tradeType = computed(() => store.state._quote.curTradeType)
@@ -155,13 +158,21 @@ export default {
         }
         // 提交修改止盈止损
         const submitHandler = () => {
+            const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType.value))?.accountId
             const params = submitParams()
             if (!params) return false
             state.loading = true
             updateOrder(params).then(res => {
                 state.loading = false
+
                 if (res.check()) {
-                    store.dispatch('_trade/queryPositionPage')
+                    store.dispatch('_trade/queryPositionPage', {
+                        tradeType: tradeType.value,
+                        accountId,
+                        sortFieldName: 'openTime',
+                        sortType: 'desc',
+                        hideLoading: true
+                    })
                     Toast(t('trade.modifySuccess'))
                     closed()
                 }
@@ -170,6 +181,13 @@ export default {
                 console.log(err)
             })
         }
+
+        // 获取产品详情
+        store.dispatch('_quote/querySymbolInfo', {
+            symbolId: props.data.symbolId, tradeType: tradeType.value
+        }).then(res => {
+            if (res.invalid()) return false
+        })
 
         return {
             ...toRefs(state),

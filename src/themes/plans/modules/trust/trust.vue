@@ -1,5 +1,5 @@
 <template>
-    <div class='trust-item'>
+    <div v-if='product && curProduct' class='trust-item'>
         <div class='t-header'>
             <span class='product-name'>
                 {{ product.symbolName }}
@@ -65,8 +65,6 @@ export default {
         // 获取当前产品
         const symbolKey = `${props.product.symbolId}_${props.product.tradeType}`
         const curProduct = computed(() => store.state._quote.productMap[symbolKey])
-        // 获取玩法id
-        const tradeType = computed(() => store.state._base.tradeType)
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
@@ -78,7 +76,7 @@ export default {
             }).then(() => {
                 loading.value = true
                 const params = {
-                    tradeType: tradeType.value,
+                    tradeType: props.product.tradeType,
                     customerNo: customInfo.value.customerNo,
                     accountId: props.product.accountId,
                     pboId: props.product.id,
@@ -90,7 +88,12 @@ export default {
                     loading.value = false
                     if (res.check()) {
                         Toast(t('trade.cancelSuccess'))
-                        store.dispatch('_trade/queryPBOOrderPage')
+                        store.dispatch('_trade/queryPBOOrderPage', {
+                            tradeType: props.product.tradeType,
+                            sortFieldName: 'orderTime',
+                            sortType: 'desc',
+
+                        })
                     }
                 }).catch(err => {
                     loading.value = false

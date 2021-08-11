@@ -10,7 +10,6 @@
         <van-loading v-if='loading' class='loading' />
         <positionItem
             v-for='(item,index) in positionList'
-            v-else
             :key='index'
             :data='item'
             :product='product'
@@ -44,7 +43,6 @@
 </template>
 
 <script>
-import { QuoteSocket } from '@/plugins/socket/socket'
 import { computed, reactive, toRefs, watch, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
@@ -71,27 +69,6 @@ export default {
 
         const tradeType = computed(() => store.state._quote.curTradeType)
 
-        watchEffect(() => {
-            // 获取持仓列表 并订阅报价
-
-            if ([1, 2].indexOf(Number(tradeType.value)) > -1) {
-                store.dispatch('_trade/queryPositionPage', { tradeType: tradeType.value }).then(res => {
-                    state.loading = false
-                    if (res.check()) {
-                        const subscribList = positionList.value.map(el => {
-                            return {
-                                symbolId: el.symbolId,
-                                tradeType: tradeType.value
-                            }
-                        })
-                        QuoteSocket.send_subscribe(subscribList)
-                    }
-                }).catch(() => {
-                    state.loading = false
-                })
-            }
-        })
-
         const positionList = computed(() => store.state._trade.positionList[tradeType.value])
 
         const userAccount = computed(() => store.state._user.accountAssets[tradeType.value])
@@ -105,7 +82,10 @@ export default {
             state.positionData = data
             state.closeVisible = true
             if (!product.value.minVolume) {
-                store.dispatch('_quote/querySymbolInfo', { symbolId: data.symbolId, tradeType: tradeType.value })
+                store.dispatch('_quote/querySymbolInfo', {
+                    symbolId: data.symbolId,
+                    tradeType: tradeType.value
+                })
             }
         }
 

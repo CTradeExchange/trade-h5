@@ -1,6 +1,6 @@
 <template>
     <div v-if='plans.length > 1' class='tab-bar'>
-        <div v-for='item in plans' :key='item.id' class='tab-item' :class='{ active: Number(curIndex+1) === Number(item.id) }' @click='handleChangeTab(item.id)'>
+        <div v-for='(item, i) in plans' :key='i' class='tab-item' :class='{ active: Number(curIndex+1) === Number(item.id) }' @click='handleChangeTab(i)'>
             {{ item.name }}
         </div>
     </div>
@@ -48,6 +48,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .tab-bar {
+    height: rem(54px);
     margin-top: rem(10px);
     margin-bottom: rem(40px);
     .tab-item {
@@ -56,6 +57,7 @@ export default {
         color: var(--minorColor);
         font-weight: bold;
         font-size: rem(28px);
+        transition: all 0.3s;
         &.active {
             color: var(--color);
             font-size: rem(38px);

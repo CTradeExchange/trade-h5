@@ -49,6 +49,68 @@ export default {
         dealList: [], // 成交数据,
         curTradeType: 1 // 资产页面当前选中的玩法id
     },
+    getters: {
+        // 用户自选列表
+        userSelfSymbolList (state, getters, rootState, rootGetters) {
+            if (rootState._user.customerInfo?.optional === 1) {
+                const selfSymbolList = rootState._user.selfSymbolList
+                const result = {}
+                Object.keys(selfSymbolList).forEach(el => {
+                    result[el] = selfSymbolList[el].map(item => item.symbolId)
+                })
+                return result
+            } else {
+                const wpSelfSymbol = rootState._base.wpSelfSymbol
+                const selfSymbolData = wpSelfSymbol.find(el => el.tag === 'selfSymbol')?.data?.product || {}
+                const customerGroupId = rootGetters.customerGroupId
+                const newSelfSymbolData = {}
+                Object.keys(selfSymbolData).forEach(el => {
+                    newSelfSymbolData[el] = selfSymbolData[el][customerGroupId] ?? []
+                })
+                return newSelfSymbolData
+            }
+        },
+        /* 用户自选列表的symbolKey集合
+            return ['12_2'...]
+        */
+        userSelfSymbolKeys (state, getters) {
+            const selfSymbolList = getters.userSelfSymbolList
+            const keysList = []
+            Object.keys(selfSymbolList).forEach(tradeType => {
+                const items = selfSymbolList[tradeType].map(id => `${id}_${tradeType}`)
+                keysList.push(...items)
+            })
+            return [...new Set(keysList)]
+        },
+        // 用户产品板块
+        userProductCategory (state, getters, rootState, rootGetters) {
+            const customerGroupId = rootGetters.customerGroupId
+            const wpProductCategory = rootState._base.wpProductCategory
+            const quoteListConfig = wpProductCategory.find(el => el.tag === 'quoteList')
+            if (!quoteListConfig) return {}
+            const categories = quoteListConfig.data.tradeTypeBlock || {}
+            Object.keys(categories).forEach(tradeType => {
+                categories[tradeType].forEach(el => {
+                    el.listByUser = el.list[customerGroupId] ?? []
+                })
+            })
+            return categories
+        },
+        /* 用户产品板块的symbolKey集合
+         * return ['12_2'...]
+        */
+        userProductCategoryKeys (state, getters) {
+            const category = getters.userProductCategory
+            const keysList = []
+            Object.keys(category).forEach(tradeType => {
+                category[tradeType].forEach(item => {
+                    const items = item.listByUser.map(id => `${id}_${tradeType}`)
+                    keysList.push(...items)
+                })
+            })
+            return [...new Set(keysList)]
+        },
+    },
     mutations: {
         // 清空产品数据
         Empty_data (state) {
@@ -169,18 +231,12 @@ export default {
     actions: {
         // 整理当前账户组的所有产品列表，自选产品+产品板块的产品
         // 此方法只有在账户变化后调用
-        setProductAllList ({ dispatch, commit, state, rootState, rootGetters }) {
+        setProductAllList ({ dispatch, commit, state, rootState, rootGetters, getters }) {
             commit('Empty_data')
-
-            const customerGroupId = rootGetters.customerGroupId
-            // const selfSymbolProduct = rootState._base.wpSelfSymbol.find(el => el.tag === 'selfSymbol')?.data?.product || {}
-            const selfSymbolProduct = {}
-            const selfSymbolList = selfSymbolProduct[customerGroupId] || []
-            const productList = [...selfSymbolList]
-
-            const wpProductCategory = rootState._base.wpProductCategory
-            const categories = wpProductCategory.find(el => el.tag === 'quoteList')?.data.tradeTypeBlock || {}
-            const symbolAllData = createListByPlans(categories, customerGroupId)
+            let allSymbolKeys = getters.userSelfSymbolKeys.concat(getters.userProductCategoryKeys)
+            allSymbolKeys = [...new Set(allSymbolKeys)]
+            const symbolAllData = createListByPlans(allSymbolKeys)
+            console.log(symbolAllData)
             const { symbolList, planMap } = symbolAllData
             commit('add_products', symbolList)
             commit('Updata_planMap', { plans: rootState._base.plans, planMap })

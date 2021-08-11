@@ -1,56 +1,61 @@
 <template>
     <div class='orderWrap'>
-        <SwitchTradeType />
+        <SwitchTradeType @change='init' />
 
-        <div class='main'>
-            <!-- 订单类型 -->
-            <OrderTypeTab v-model='orderType' :btn-list='orderTypeList' @selected='changeOrderType' />
-            <!-- 自动借款 -->
-            <LoanBar v-if='product && product.tradeType===3' v-model='operationType' class='cellMarginTop' />
-            <!-- 方向 -->
-            <Direction v-model='direction' class='cellMarginTop' :product='product' />
-            <!-- 挂单设置 -->
-            <PendingBar
-                v-if='product && product.tradeType===3 && orderType===10'
-                ref='pendingRef'
-                v-model='pendingPrice'
-                class='cellMarginTop'
-                :direction='direction'
-                :product='product'
-            />
-            <PendingBarCFD
-                v-else-if='orderType===10'
-                ref='pendingRef'
-                v-model='pendingPrice'
-                class='cellMarginTop'
-                :direction='direction'
-                :product='product'
-            />
-            <!-- 手数 -->
-            <OrderVolume v-if='product' v-model='volume' class='cellMarginTop' :product='product' />
-            <!-- 订单金额 -->
-            <Assets
-                v-if='account && product && product.tradeType===3'
-                v-model:operation-type='operationType'
-                :account='account'
-                :direction='direction'
-                :product='product'
-                :volume='volume'
-            />
-            <!-- 止盈止损 -->
-            <ProfitlossSet
-                v-if='product'
-                v-model:stopLoss='stopLoss'
-                v-model:stopProfit='stopProfit'
-                class='cellMarginTop'
-                :direction='direction'
-                :product='product'
-            />
-        </div>
-        <div class='footerBtn' :class='[direction]'>
-            <van-button block :loading='loading' size='normal' @click='submitHandler'>
-                {{ $t(direction==='buy'?'trade.buyText':'trade.sellText') }}
-            </van-button>
+        <div v-if='product' class='main'>
+            <div v-if='false' class='left'>
+                <OrderHandicap />
+            </div>
+            <div class='right'>
+                <!-- 订单类型 -->
+                <OrderTypeTab v-model='orderType' :btn-list='orderTypeList' @selected='changeOrderType' />
+                <!-- 自动借款 -->
+                <LoanBar v-if='[3,9].includes(product.tradeType)' v-model='operationType' class='cellMarginTop' />
+                <!-- 方向 -->
+                <Direction v-model='direction' class='cellMarginTop' :product='product' />
+                <!-- 挂单设置 -->
+                <PendingBar
+                    v-if='[3,9].includes(product.tradeType) && orderType===10'
+                    ref='pendingRef'
+                    v-model='pendingPrice'
+                    class='cellMarginTop'
+                    :direction='direction'
+                    :product='product'
+                />
+                <PendingBarCFD
+                    v-else-if='orderType===10'
+                    ref='pendingRef'
+                    v-model='pendingPrice'
+                    class='cellMarginTop'
+                    :direction='direction'
+                    :product='product'
+                />
+                <!-- 手数 -->
+                <OrderVolume v-if='product' v-model='volume' class='cellMarginTop' :product='product' />
+                <!-- 订单金额 -->
+                <Assets
+                    v-if='account && [3,9].includes(product.tradeType)'
+                    v-model:operation-type='operationType'
+                    :account='account'
+                    :direction='direction'
+                    :product='product'
+                    :volume='volume'
+                />
+                <!-- 止盈止损 -->
+                <ProfitlossSet
+                    v-if='product'
+                    v-model:stopLoss='stopLoss'
+                    v-model:stopProfit='stopProfit'
+                    class='cellMarginTop'
+                    :direction='direction'
+                    :product='product'
+                />
+                <div class='footerBtn' :class='[direction]'>
+                    <van-button block :disabled='loading' :loading='loading' size='normal' @click='submitHandler'>
+                        {{ $t(direction==='buy'?'trade.buyText':'trade.sellText') }}
+                    </van-button>
+                </div>
+            </div>
         </div>
         <!-- 委托列表 -->
         <Trust
@@ -82,7 +87,9 @@ import PendingBarCFD from './components/pendingBar_CFD'
 import OrderTypeTab from './components/orderType.vue'
 import Assets from './components/assets.vue'
 import Trust from './components/trust.vue'
+import OrderHandicap from './components/handicap.vue'
 import SwitchProduct from './components/switchProduct.vue'
+import hooks from './orderHooks'
 import { addMarketOrder } from '@/api/trade'
 import { Toast } from 'vant'
 export default {
@@ -93,6 +100,7 @@ export default {
         SwitchTradeType,
         ProfitlossSet,
         SwitchProduct,
+        OrderHandicap,
         Assets,
         Trust,
         PendingBar,
@@ -129,31 +137,8 @@ export default {
         const pendingWarn = computed(() => pendingRef.value?.warn)
         const product = computed(() => store.getters.productActived)
         const customerInfo = computed(() => store.state._user.customerInfo)
-        const account = computed(() => {
-            let account = ''
-            if (!product.value) return account
-            const accountList = customerInfo.value?.accountList || []
-            const productTradeType = parseInt(product.value?.tradeType)
-            if ([1, 2].includes(productTradeType)) {
-                account = accountList.find(el => el.tradeType === productTradeType)
-            } else {
-                const outCurrency = product.value[state.direction === 'buy' ? 'profitCurrency' : 'baseCurrency']
-                account = customerInfo?.value?.accountMap[outCurrency]
-            }
-            return account
-        })
-        const bizType = computed(() => {
-            let bizType = state.orderType
-            if (bizType === 10 && [1, 2].includes(product.value?.tradeType)) {
-                const requestPrice = state.pendingPrice
-                if (state.direction === 'buy') {
-                    bizType = lt(requestPrice, product.value.buy_price) ? 10 : 11
-                } else {
-                    bizType = gt(requestPrice, product.value.sell_price) ? 10 : 11
-                }
-            }
-            return bizType
-        })
+        const { bizType, account } = hooks(state)
+
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
         watch(
             () => symbolKey.value,
@@ -176,9 +161,9 @@ export default {
 
         // 买入卖出方向变化时重新获取资产信息
         watch(
-            () => state.direction,
+            () => [state.direction, product.value?.tradeType],
             () => {
-                if (product.value?.tradeType === 3) queryAccountInfo()
+                if ([3, 9].includes(product.value?.tradeType)) queryAccountInfo()
             },
         )
 
@@ -202,7 +187,8 @@ export default {
                     })
                 }
             }).then(() => {
-                if (product.value?.tradeType === 3) queryAccountInfo()
+                store.dispatch('_trade/queryPBOOrderPage', { tradeType: product.value?.tradeType })
+                if ([3, 9].includes(product.value?.tradeType)) queryAccountInfo()
             })
         }
 
@@ -238,6 +224,8 @@ export default {
                 requestPrice: mul(requestPrice, p),
                 accountDigits: account.value.digits,
                 tradeType: parseInt(tradeType),
+                stopLoss: mul(state.stopLoss, p),
+                takeProfit: mul(state.stopProfit, p)
             }
             return params
         }
@@ -258,8 +246,9 @@ export default {
                     sessionStorage.setItem('order_' + orderId, JSON.stringify(localData))
                     // router.push({ name: 'OrderSuccess', query: { orderId } })
                     store.dispatch('_trade/queryPBOOrderPage', { tradeType: params.tradeType })
+                    queryAccountInfo()
                     Toast({
-                        message: t('trade.orderSuccessToast'),
+                        message: params.bizType === 1 ? t('trade.orderSuccessToast') : t('trade.orderPendingSuccessToast'),
                         duration: 1000,
                         forbidClick: true,
                     })
@@ -272,6 +261,7 @@ export default {
         init()
         return {
             ...toRefs(state),
+            init,
             account,
             pendingRef,
             profitLossRef,
@@ -316,11 +306,19 @@ export default {
     background: var(--bgColor);
     .main {
         @include scroll();
+        display: flex;
         flex: 1;
         //margin-bottom: rem(90px);
-        padding: 0 rem(40px) rem(70px) rem(40px);
+        padding: 0 rem(40px) rem(40px) rem(40px);
         overflow: auto;
         background: var(--contentColor);
+        .left {
+            width: rem(250px);
+            margin-right: rem(30px);
+        }
+        .right {
+            flex: 1;
+        }
     }
 }
 .cellMarginTop {
@@ -332,7 +330,7 @@ export default {
 }
 .footerBtn {
     width: 100%;
-    padding: rem(30px);
+    margin-top: rem(100px);
     background: var(--contentColor);
     &.buy {
         .van-button {

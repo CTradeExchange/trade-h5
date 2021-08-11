@@ -62,10 +62,10 @@
             </li>
         </ul>
         <div class='footerBtn'>
-            <van-button block type='primary' @click='loanVisible=true'>
+            <van-button block type='primary' @click='toLoan'>
                 {{ $t('trade.loan') }}
             </van-button>
-            <van-button block type='primary' @click='returnMoneyVisible=true'>
+            <van-button block type='primary' @click='toReturnMoney'>
                 {{ $t('trade.repayment') }}
             </van-button>
         </div>
@@ -80,7 +80,7 @@ import Loan from './components/loan.vue'
 
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 export default {
     components: {
         ReturnMoney,
@@ -90,6 +90,7 @@ export default {
     setup () {
         const store = useStore()
         const route = useRoute()
+        const router = useRouter()
         const state = reactive({
             returnMoneyVisible: false,
             loanVisible: false,
@@ -97,15 +98,37 @@ export default {
         })
         const accountList = computed(() => store.state._user.customerInfo?.accountList || [])
         const account = computed(() => {
-            return accountList.value.find(({ currency }) => currency === route.query.currency)
+            return accountList.value.filter(el => [3, 9].includes(el.tradeType)).find(({ currency }) => currency === route.query.currency)
         })
 
         store.dispatch('_user/queryAccountAssetsInfo', { tradeType: 3, accountId: parseInt(route.query.accountId) })
+
+        const toLoan = () => {
+            router.push({
+                path: '/loan',
+                query: {
+                    currency: route.query.currency,
+                    accountId: parseInt(route.query.accountId)
+                }
+            })
+        }
+
+        const toReturnMoney = () => {
+            router.push({
+                path: '/returnMoney',
+                query: {
+                    currency: route.query.currency,
+                    accountId: parseInt(route.query.accountId)
+                }
+            })
+        }
 
         return {
             ...toRefs(state),
             accountList,
             account,
+            toLoan,
+            toReturnMoney
         }
     }
 }

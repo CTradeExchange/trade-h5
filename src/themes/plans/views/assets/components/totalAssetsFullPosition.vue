@@ -6,10 +6,7 @@
                 <p class='label'>
                     <span> {{ $t('assets.balance') }}({{ assetsInfo.currency }}) </span>
                     <span class='tag'>
-                        <i
-                            class='icon_zijinmingxi2
-'
-                        ></i>
+                        <i class='icon_zijinmingxi2' @click="$router.push({ name:'FundLog',query:{ tradeType:3 } })"></i>
                     </span>
                 </p>
                 <p class='totalAmount'>
@@ -68,13 +65,14 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 export default {
-    components: {
-    },
+
     setup () {
         const store = useStore()
-        const assetsInfo = computed(() => store.state._user.assetsInfo)
         const userAccount = computed(() => store.state._user.accountAssets[1])
-        store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
+
+        const tradeType = computed(() => store.state._quote.curTradeType)
+
+        const assetsInfo = computed(() => store.state._user.customerInfo.accountList.find(el => Number(el.tradeType) === Number(tradeType.value)))
 
         return {
             assetsInfo,

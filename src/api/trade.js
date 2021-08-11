@@ -15,11 +15,12 @@ export function querySymbolBaseInfoList (data) {
 /* 产品基础信息列表-多玩法 */
 export function findSymbolBaseInfoList (data) {
     return request({
-        url: '/global/customer.app.CustomerOptionalWebApiService.findSymbolBaseInfoList',
+        url: '/global/config.app.AppSymbolDubboService.getSymbolBaseList',
+        // url: '/global/customer.app.CustomerOptionalWebApiService.findSymbolBaseInfoList',
         method: 'post',
-        headers: {
-            version: '0.0.1',
-        },
+        // headers: {
+        //     version: '0.0.1',
+        // },
         data
     })
 }

@@ -9,7 +9,9 @@ const routes = [
     {
         path: '/',
         redirect: '/home',
+        name: 'Layout',
         component: Layout,
+        keepAlive: true,
         children: [
             {
                 path: 'home',
@@ -171,7 +173,32 @@ const routes = [
         meta: {
             title: ''
         }
+    },
+    {
+        path: '/positionDetail',
+        name: 'PositionDetail',
+        component: () => import(/* webpackChunkName: "otherpage" */ '../views/position/positionDetail.vue'),
+        meta: {
+            title: 'route.positionDetail'
+        }
+    },
+    {
+        path: '/loan',
+        name: 'Loan',
+        component: () => import(/* webpackChunkName: "otherpage" */ '../views/loan/loan.vue'),
+        meta: {
+            title: 'route.loan'
+        }
+    },
+    {
+        path: '/record',
+        name: 'Record',
+        component: () => import(/* webpackChunkName: "record" */ '../views/record/record.vue'),
+        meta: {
+            title: ''
+        }
     }
+
 ]
 
 const router = createRouter({

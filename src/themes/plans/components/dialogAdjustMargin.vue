@@ -87,7 +87,6 @@ export default {
         })
 
         const tradeType = computed(() => store.state._quote.curTradeType)
-        const customerInfo = computed(() => store.state._user.customerInfo)
 
         // 获取账户
         const accountInfo = computed(() =>
@@ -102,9 +101,11 @@ export default {
             (val) => {
                 state.showDialog = props.show
                 if (val) {
-                    store.dispatch('_trade/queryPositionPage', { tradeType: tradeType.value })
-                } else {
-                    state.operType = true
+                    store.dispatch('_trade/queryPositionPage', {
+                        tradeType: tradeType.value,
+                        hideLoading: true,
+                        accountId: accountInfo.value.accountId
+                    })
                 }
             })
 
@@ -114,8 +115,13 @@ export default {
 
         const operation = () => {
             state.operType = !state.operType
+
             if (state.operType) {
-                store.dispatch('_trade/queryPositionPage', { tradeType: tradeType.value })
+                store.dispatch('_trade/queryPositionPage', {
+                    tradeType: tradeType.value,
+                    hideLoading: true,
+                    accountId: accountInfo.value.accountId
+                })
             } else {
                 store.dispatch('_user/findCustomerInfo', false)
             }
@@ -132,7 +138,7 @@ export default {
 
         // 调整保证金
         const submitAdjustMargin = () => {
-            if (isEmpty(state.amount)) {
+            if (isEmpty(state.amount) || parseFloat(state.amount) === 0) {
                 return Toast(t('trade.enterMarginAmountRequire'))
             }
 
@@ -164,7 +170,12 @@ export default {
                     state.operText = t('trade.raise')
                     state.amount = ''
                     state.showDialog = false
-                    store.dispatch('_trade/queryPositionPage', { tradeType: tradeType.value })
+                    store.dispatch('_trade/queryPositionPage', {
+                        tradeType: tradeType.value,
+                        accountId: accountInfo.value.accountId,
+                        sortFieldName: 'openTime',
+                        sortType: 'desc',
+                    })
                 }
             }).catch(err => {
                 state.loading = false
