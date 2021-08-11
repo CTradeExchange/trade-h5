@@ -1,5 +1,5 @@
 <template>
-    <div class='trust-item'>
+    <div v-if='product && curProduct' class='trust-item'>
         <div class='t-header'>
             <span class='product-name'>
                 {{ product.symbolName }}
@@ -65,8 +65,6 @@ export default {
         // 获取当前产品
         const symbolKey = `${props.product.symbolId}_${props.product.tradeType}`
         const curProduct = computed(() => store.state._quote.productMap[symbolKey])
-        // 获取玩法id
-        const tradeType = computed(() => store.state._base.tradeType)
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
