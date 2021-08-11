@@ -193,7 +193,7 @@ export default {
                     customerNo: customInfo.value.customerNo,
                     accountId: route.query.accountId,
                     customerGroupId: customInfo.value.customerGroupId,
-                    accountCurrency: assetsInfo.value.currency,
+                    accountCurrency: route.query.currency,
                     amount: state.outAmount,
                 })
                     .then(res => {
