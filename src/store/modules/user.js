@@ -53,21 +53,32 @@ export default {
             state.loginData = data
         },
         Update_customerInfo (state, data) {
-            console.log(data)
+            if (!data) return false
             state.customerInfo = data
         },
         Update_accountInfo (state, data) {
-            if (state.customerInfo.accountMap[data.currency]) {
-                Object.assign(state.customerInfo.accountMap[data.currency], data)
-                // Object.assign(state.customerInfo.accountList.filter(el => [3, 9].includes(el.tradeType)).find(item => item.currency === data.currency), data)
-            }
+            if (!data) return false
+            const accountList = state.customerInfo?.accountList || []
+            accountList.forEach(el => {
+                const { currency, tradeType } = el
+                if (currency === data.currency && tradeType === data.tradeType) {
+                    Object.assign(el, data)
+                }
+            })
+            // if (state.customerInfo.accountMap[data.currency]) {
+            //     Object.assign(state.customerInfo.accountMap[data.currency], data)
+            //     // Object.assign(state.customerInfo.accountList.filter(el => [3, 9].includes(el.tradeType)).find(item => item.currency === data.currency), data)
+            // }
         },
         Update_assetsInfo (state, data) {
+            if (!data) return false
             state.assetsInfo = data
             const accountList = state.customerInfo?.accountList || []
-            accountList.filter(el => [3, 9].includes(el.tradeType)).forEach(el => {
-                if (data.accountInfoMap[el.currency]) {
-                    Object.assign(el, data.accountInfoMap[el.currency])
+            accountList.forEach(el => {
+                const { currency, tradeType } = el
+                const account = data.accountInfoMap[currency]
+                if (account && account.tradeType === tradeType) {
+                    Object.assign(el, account)
                 }
             })
         },

@@ -1,6 +1,7 @@
 <template>
     <div class='orderWrap'>
-        <SwitchTradeType @change='init' />
+        <plansType v-if='plansList.length>1' :list='plansList' :value='productTradeType' @change='handleTradeType' />
+        <SwitchTradeType @switchProduct='switchProductVisible=true' />
 
         <div v-if='product' class='main'>
             <div v-if='false' class='left'>
@@ -43,7 +44,7 @@
                 />
                 <!-- 止盈止损 -->
                 <ProfitlossSet
-                    v-if='product'
+                    v-if='product && [1,2].includes(product.tradeType)'
                     v-model:stopLoss='stopLoss'
                     v-model:stopProfit='stopProfit'
                     class='cellMarginTop'
@@ -65,8 +66,8 @@
             :product='product'
         />
 
-        <!-- 选择产品弹窗 -->
-        <SwitchProduct v-model='switchProductVisible' />
+        <!-- 侧边栏-切换产品 -->
+        <sidebarProduct v-model='switchProductVisible' @select='onSelectProduct' />
     </div>
 </template>
 
@@ -88,7 +89,8 @@ import OrderTypeTab from './components/orderType.vue'
 import Assets from './components/assets.vue'
 import Trust from './components/trust.vue'
 import OrderHandicap from './components/handicap.vue'
-import SwitchProduct from './components/switchProduct.vue'
+import plansType from '@plans/components/plansType.vue'
+import sidebarProduct from '@plans/components/sidebarProduct.vue'
 import hooks from './orderHooks'
 import { addMarketOrder } from '@/api/trade'
 import { Toast } from 'vant'
@@ -98,9 +100,10 @@ export default {
         OrderVolume,
         OrderTypeTab,
         SwitchTradeType,
+        plansType,
         ProfitlossSet,
-        SwitchProduct,
         OrderHandicap,
+        sidebarProduct,
         Assets,
         Trust,
         PendingBar,
@@ -110,6 +113,7 @@ export default {
     setup () {
         const store = useStore()
         const route = useRoute()
+        const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
         const { symbolId, direction, tradeType } = route.query
         if (symbolId && tradeType) store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
@@ -137,39 +141,58 @@ export default {
         const pendingWarn = computed(() => pendingRef.value?.warn)
         const product = computed(() => store.getters.productActived)
         const customerInfo = computed(() => store.state._user.customerInfo)
-        const { bizType, account } = hooks(state)
+        const { bizType, account, findProductInCategory, switchProduct } = hooks(state)
+        // 玩法列表
+        const plansList = computed(() => store.state._base.plans)
+        // 1.玩法类型
+        const productTradeType = ref(tradeType)
 
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
-        watch(
-            () => symbolKey.value,
-            newval => {
-                QuoteSocket.send_subscribe([newval])
-            },
-            { immediate: true }
-        )
+
         // 订阅产品报价
 
         store.commit('_trade/Update_modifyPositionId', 0)
 
         // 获取账户信息
         const queryAccountInfo = () => {
-            const currency = state.direction === 'buy' ? product.value?.profitCurrency : product.value?.baseCurrency
-            const curAccount = customerInfo.value.accountList.find(el => el.currency === currency)
+            if ([3, 9].indexOf(product.value?.tradeType) === -1) return false
+            const proCurrency = state.direction === 'buy' ? product.value?.profitCurrency : product.value?.baseCurrency
+            const curAccount = customerInfo.value.accountList.find(({ currency, tradeType }) => (currency === proCurrency && tradeType === product.value.tradeType))
             if (curAccount)store.dispatch('_user/queryAccountAssetsInfo', { accountId: curAccount.accountId, tradeType: product.value?.tradeType })
             else Toast(t('trade.nullAssets'))
         }
 
         // 买入卖出方向变化时重新获取资产信息
         watch(
-            () => [state.direction, product.value?.tradeType],
+            () => state.direction,
             () => {
-                if ([3, 9].includes(product.value?.tradeType)) queryAccountInfo()
+                queryAccountInfo()
             },
         )
-
+        // 监听玩法类型
+        const handleTradeType = (tradeType) => {
+            productTradeType.value = tradeType
+            const category = store.getters.userProductCategory[tradeType]
+            if (!category) return false
+            const changeProductKey = findProductInCategory(category, tradeType)
+            if (changeProductKey) {
+                const [symbolId, tradeType] = changeProductKey.split('_')
+                switchProduct(symbolId, tradeType).then(() => {
+                    init()
+                })
+            }
+        }
         // 切换订单类型
         const changeOrderType = (val) => {
             store.commit('_trade/Update_pendingEnable', val === 10)
+        }
+        // 侧边栏-切换产品
+        const onSelectProduct = (product, close) => {
+            const { symbolId, tradeType } = product
+            switchProduct(symbolId, tradeType).then(res => {
+                init()
+                close()
+            })
         }
         // 初始化设置
         const init = () => {
@@ -187,6 +210,7 @@ export default {
                     })
                 }
             }).then(() => {
+                QuoteSocket.send_subscribe([symbolKey.value])
                 store.dispatch('_trade/queryPBOOrderPage', { tradeType: product.value?.tradeType })
                 if ([3, 9].includes(product.value?.tradeType)) queryAccountInfo()
             })
@@ -262,8 +286,12 @@ export default {
         return {
             ...toRefs(state),
             init,
+            plansList,
+            productTradeType,
+            onSelectProduct,
             account,
             pendingRef,
+            handleTradeType,
             profitLossRef,
             pendingWarn,
             profitLossWarn,

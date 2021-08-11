@@ -98,7 +98,7 @@ export default {
         })
 
         // 当前币种
-        const columns = computed(() => customInfo?.value?.accountList.filter(item => item.tradeType === 3).map(el => el.currency))
+        const columns = computed(() => customInfo?.value?.accountList.filter(item => [3, 9].includes(item.tradeType)).map(el => el.currency))
         const tradeType = computed(() => customInfo?.value?.accountMap[route.query.currency].tradeType)
 
         watchEffect(() => {
@@ -233,7 +233,7 @@ export default {
             state.inCurrency = route.query.currency
             state.outCurrency = route.query.currency
             if (parseFloat(account.value.available) === 0) {
-                const accountList = store.state._user.customerInfo?.accountList.filter(item => item.tradeType === 3) || []
+                const accountList = store.state._user.customerInfo?.accountList.filter(item => [3, 9].includes(item.tradeType)) || []
                 const newAccountList = accountList.slice().sort((a, b) => parseFloat(b.available) - parseFloat(a.available))
                 if (newAccountList.length && newAccountList[0].available > 0) {
                     // state.outCurrency = newAccountList[0].currency

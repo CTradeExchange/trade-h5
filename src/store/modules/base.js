@@ -47,6 +47,7 @@ export default {
                 if (data) {
                     // data.companyId = 17
                     if (data.tradeTypeCurrencyList) {
+                        data.tradeTypeCurrencyList = data.tradeTypeCurrencyList.filter(el => el.allCurrency)
                         data.tradeTypeCurrencyList.forEach(el => {
                             el.tradeType = el.id
                         })
