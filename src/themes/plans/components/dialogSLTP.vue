@@ -185,8 +185,6 @@ export default {
         // 获取产品详情
         store.dispatch('_quote/querySymbolInfo', {
             symbolId: props.data.symbolId, tradeType: tradeType.value
-        }).then(res => {
-            if (res.invalid()) return false
         })
 
         return {
