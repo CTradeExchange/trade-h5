@@ -855,6 +855,8 @@ export default {
                 addCustomerOptional({ symbolList: [getSymbolId()], tradeType: getTradeType() }).then(res => {
                     if (res.check()) {
                         state.loading = false
+                        // 手动修改optional值
+                        store.commit('_user/Update_optional', 1)
                         store.dispatch('_user/queryCustomerOptionalList')
                         collect.value.classList.add('icon_zixuan2')
 

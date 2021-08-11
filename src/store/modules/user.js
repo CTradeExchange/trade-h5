@@ -84,6 +84,9 @@ export default {
         Update_selfSymbolList (state, data) {
             state.selfSymbolList = data
         },
+        Update_optional (state, data) {
+            state.customerInfo.optional = data
+        }
     },
     actions: {
         // 登录
@@ -174,6 +177,8 @@ export default {
         // 添加自选产品
         addCustomerOptionals ({ dispatch, commit, state, rootState }, params = []) {
             if (!params || !params.length) return Promise.resolve()
+            // 手动修改optional值
+            commit('Update_optional', 1)
             return addCustomerOptional({ symbolList: params }).then(res => {
                 dispatch('queryCustomerOptionalList') // 拉取自选列表
                 return res
