@@ -39,7 +39,7 @@ export function querySymbolInfo (data) {
 
 /* 下单 */
 export function addMarketOrder (data) {
-    if (parseInt(data.tradeType) === 3) return addOrder(data)
+    if ([3, 9].includes(parseInt(data.tradeType))) return addOrder(data)
     return request({
         url: '/global/tradeapi.app.OrderApiService.addMarketOrder',
         method: 'post',
