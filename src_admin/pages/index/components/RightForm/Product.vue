@@ -88,7 +88,6 @@ export default {
                     return !node.childNodes.length && !/[0-9]+_[0-9]+/.test(data.id)
                 }
             },
-            tradeTypeList: [{ id: '1', name: 'CFD合约全仓' }, { id: '2', name: 'CFD合约逐仓' }, { id: '3', name: '现货杠杆全仓' }],
             show: false,
             treeLoading: false,
             filterText: '',
@@ -99,6 +98,9 @@ export default {
         }
     },
     computed: {
+        tradeTypeList () {
+            return this.$store.state.editor.tradeTypeList
+        },
         accountGroupProduct () {
             return this.$store.state.editor.accountGroupProduct
         },
@@ -141,7 +143,7 @@ export default {
             this.$refs.tree.setCheckedKeys([])
         },
         checkAll () {
-            this.$refs.tree.setCheckedKeys(this.accountGroupProduct.map(item => (item.id)))
+            this.$refs.tree.setCheckedKeys((this.tradeTypeProduct[this.activeTradeType] || []).map(item => (item.id)))
         },
         // async initView () {
         //     this.treeLoading = true
@@ -295,8 +297,8 @@ export default {
                     e.children = e.children.filter(item => item.children)
                 })
                 */
-                // debugger
                 const tradeTypeCustomerGroup = {}
+                const tradeTypes = productList.map(el => ({ id: el.id, name: el.name }))
                 forEach(productList, (value) => {
                     tradeTypeCustomerGroup[value.id] = Object.values(value.data).map((el) => {
                         const firstItem = Object.values(el)[0]
@@ -317,6 +319,7 @@ export default {
                     })
                 })
                 this.$store.commit('editor/UPDATE_TRADETYPE_PRODUCT', tradeTypeCustomerGroup)
+                this.$store.commit('editor/UPDATE_TRADETYPE_LIST', tradeTypes)
                 // this.treeDefaultOpenKeys = groupList.map(item => (item.id))
             }
             this.treeLoading = false
@@ -462,7 +465,7 @@ export default {
     }
 }
 .product-scrollbar {
-    height: calc(100vh - 60px);
+    height: calc(100vh - 160px);
     padding: 0;
     overflow: hidden;
     .tree {
