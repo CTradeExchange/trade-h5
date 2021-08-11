@@ -1,7 +1,10 @@
 <template>
     <div class='page-wrap' :class='{ isIframe: $route.query.isIframe }'>
         <LayoutTop :back='true' :menu='false'>
-            <p>{{ product.symbolName }}</p>
+            <p class='symbolName'>
+                <i class='icon_chouti' @click='showSidebar=true'></i>
+                {{ product.symbolName }}
+            </p>
             <p class='infomation'>
                 {{ product.symbolCode }} {{ $t('trade.update') }}:{{ formatTime(product.tick_time) }}
             </p>
@@ -277,8 +280,8 @@
         @removeStudy='removeStudy'
         @update:show='updateShow'
     />
-
-    <sidebarProduct v-model='showSidebar' />
+    <!-- 侧边栏-切换产品 -->
+    <sidebarProduct v-model='showSidebar' @select='onSelect' />
 </template>
 
 <script>
@@ -305,7 +308,11 @@ export default {
     setup (props) {
         const route = useRoute()
         const router = useRouter()
-        const { symbolId, tradeType } = route.query
+        const symbolId = ref(route.query.symbolId)
+        const tradeType = ref(route.query.tradeType)
+        const getSymbolId = () => unref(symbolId)
+        const getTradeType = () => unref(tradeType)
+
         const { t } = useI18n({ useScope: 'global' })
         const klineTypeDropdown = ref(null)
         const collect = ref(null)
@@ -459,8 +466,8 @@ export default {
             settingList: [],
             klineType: 0,
             initConfig: {},
-            symbolId: symbolId,
-            tradeType: tradeType,
+            symbolId: getSymbolId(),
+            tradeType: getTradeType(),
             onChartReadyFlag: false,
             loading: false
         })
@@ -472,7 +479,7 @@ export default {
             return curIndex + 1
         })
         const product = computed(() => {
-            const product = store.state._quote.productMap[`${symbolId}_${tradeType}`]
+            const product = store.state._quote.productMap[`${getSymbolId()}_${getTradeType()}`]
             if (product.cur_price) {
                 // 有产品数据就渲染图表
                 renderChart(product, state.initConfig.property)
@@ -480,11 +487,11 @@ export default {
             return product
         })
         const productList = computed(() => store.state._quote.productList)
-        const positionList = computed(() => store.state._trade.positionList[tradeType] || [])
+        const positionList = computed(() => store.state._trade.positionList[getTradeType()] || [])
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)
 
         // 订阅产品
-        const subscribList = productList.value.map(({ symbolId }) => (`${symbolId}_${tradeType}`))
+        const subscribList = productList.value.map(({ symbolId }) => (`${symbolId}_${getTradeType()}`))
         QuoteSocket.send_subscribe(subscribList)
 
         // 图表初始值
@@ -495,13 +502,13 @@ export default {
                     description: product.value.symbolCode, // 显示在图表左上角
                     symbolId: product.value.symbolId, // 产品id
                     digits: product.value.symbolDigits, // 小数点
-                    tradeType: tradeType
+                    tradeType: getTradeType()
                 }
             }
             return null
         })
 
-        const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[tradeType]?.find(el => el.symbolId === parseInt(symbolId))))
+        const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId()))))
 
         // 选择指标
         const onClickStudy = (type, name) => {
@@ -587,7 +594,7 @@ export default {
         }
 
         const setPositionLine = () => {
-            const positionProducts = positionList.value.filter(item => item.symbolId === Number(symbolId))
+            const positionProducts = positionList.value.filter(item => item.symbolId === Number(getSymbolId()))
             if (positionProducts.length > 0) {
                 const temp = []
                 positionProducts.forEach(item => {
@@ -834,7 +841,7 @@ export default {
         const addOptional = () => {
             state.loading = topRightVue
             if (isSelfSymbol.value) {
-                removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
+                removeCustomerOptional({ symbolList: [getSymbolId()], tradeType: getTradeType() }).then(res => {
                     if (res.check()) {
                         state.loading = false
                         store.dispatch('_user/queryCustomerOptionalList')
@@ -845,7 +852,7 @@ export default {
                     state.loading = false
                 })
             } else {
-                addCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
+                addCustomerOptional({ symbolList: [getSymbolId()], tradeType: getTradeType() }).then(res => {
                     if (res.check()) {
                         state.loading = false
                         store.dispatch('_user/queryCustomerOptionalList')
@@ -864,7 +871,7 @@ export default {
             router.push({
                 path: '/order',
                 query: {
-                    symbolId, direction, tradeType
+                    symbolId: getSymbolId(), direction, tradeType: getTradeType()
                 }
             })
         }
@@ -878,14 +885,32 @@ export default {
         initChartData()
 
         // 获取产品详情
-        store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(res => {
+        store.dispatch('_quote/querySymbolInfo', { symbolId: getSymbolId(), tradeType: getTradeType() }).then(res => {
             if (res.invalid()) return false
         })
 
         const showSidebar = ref(false)
 
         const toContractInfo = () => {
-            router.push({ path: '/contract', query: { symbolId, tradeType } })
+            router.push({ path: '/contract', query: { symbolId: getSymbolId(), tradeType: getTradeType() } })
+        }
+
+        // 侧边栏-切换产品
+        const onSelect = (product, close) => {
+            console.log(product)
+            router.replace({
+                query: {
+                    ...route.query,
+                    symbolId: product.symbolId,
+                    tradeType: product.tradeType,
+                }
+            }).then(() => {
+                symbolId.value = product.symbolId
+                tradeType.value = product.tradeType
+                // 重置图表
+                chartRef.value.reset()
+                close()
+            })
         }
 
         return {
@@ -916,7 +941,8 @@ export default {
             collect,
             formatTime,
             showSidebar,
-            toContractInfo
+            toContractInfo,
+            onSelect
         }
     }
 }
@@ -932,6 +958,17 @@ export default {
     margin-bottom: rem(120px);
     overflow: auto;
     background: var(--bgColor);
+    .symbolName {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+        .icon_chouti {
+            margin-right: rem(20px);
+            font-size: rem(26px);
+        }
+    }
     &.isIframe {
         margin-bottom: 0;
         .footerBtnBox,

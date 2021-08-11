@@ -1,45 +1,44 @@
 <template>
-    <!-- <van-cell is-link @click='showPopup'>
-        展示弹出层
-    </van-cell> -->
-    <van-popup v-model:show='show' position='left' :style="{ height: '100%' }">
+    <van-popup v-model:show='show' position='left' :style="{ height: '100%' }" @closed='onClosed'>
         <div class='sidebarProduct'>
-            <plansType class='plansType' :value='tradeType' @change='handleTradeType' />
-            <van-search
-                v-model='searchValue'
-                class='search'
-                placeholder='请输入搜索关键词'
-                show-action
+            <plansType v-if='reRender' class='plansType' :list='plansList' :value='tradeType' @change='handleTradeType' />
+            <search
+                :trade-type='tradeType'
                 @cancel='onCancel'
-                @search='onSearch'
-            />
-            <TopTab
-                v-model='categoryType'
-                :background='$style.contentColor'
-                class='tabs'
-                :dot='true'
-                line-height='0'
-                line-width='0'
-                :list='categoryList'
-            />
-            <div class='listWrap'>
-                <div v-for='item in productList' :key='item.id' class='li'>
-                    {{ item.symbolName }}
+                @select='onClick'
+            >
+                <TopTab
+                    v-model='categoryType'
+                    :background='$style.contentColor'
+                    class='tabs'
+                    :dot='true'
+                    line-height='0'
+                    line-width='0'
+                    :list='categoryList'
+                />
+                <div class='listWrap'>
+                    <div v-for='item in productList' :key='item.id' class='li' @click='() => onClick(item)'>
+                        {{ item.symbolName }}
+                    </div>
                 </div>
-            </div>
+            </search>
         </div>
     </van-popup>
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { ref, computed, unref, toRaw, nextTick } from 'vue'
 import plansType from '@/themes/plans/components/plansType.vue'
 import TopTab from '@plans/components/topTab'
 import useProduct from '@plans/hooks/useProduct'
+import search from './search'
+import { useStore } from 'vuex'
+
 export default {
     components: {
         plansType,
-        TopTab
+        TopTab,
+        search
     },
     props: {
         modelValue: {
@@ -47,19 +46,38 @@ export default {
             default: false
         }
     },
-    emits: ['update:modelValue'],
+    emits: ['update:modelValue', 'select'],
     setup (props, context) {
-        const show = ref(props.modelValue)
-        watch(() => props.modelValue, (val) => {
-            show.value = val
+        const store = useStore()
+        const reRender = ref(true)
+        const show = computed({
+            get: () => props.modelValue,
+            set: val => {
+                context.emit('update:modelValue', val)
+            }
         })
 
+        const onClosed = () => {
+            tradeType.value = unref(plansList)[0].id
+            categoryType.value = 0
+            reRender.value = false
+            nextTick(() => {
+                reRender.value = true
+            })
+        }
+
+        // 取消按钮事件
+        const onCancel = () => {
+            show.value = false
+        }
+
+        // 玩法列表
+        const plansList = computed(() => store.state._base.plans)
+
         // 1.玩法类型
-        const tradeType = ref(1)
+        const tradeType = ref(unref(plansList)[0].id)
         // 2.板块类型
         const categoryType = ref(0)
-        // 搜索值
-        const searchValue = ref('')
         // 监听玩法类型
         const handleTradeType = (val) => {
             tradeType.value = val
@@ -71,27 +89,21 @@ export default {
             tradeType, categoryType
         })
 
-        // 监听玩法类型/板块类型的变化，触发产品订阅
-        // 获取productList.vue组件的ref对象和产品列表均是异步，所以第一次产品订阅在productList.vue组件内
-        // watch(
-        //     [tradeType, categoryType],
-        //     () => {
-        //     }
-        // )
-
-        const onCancel = () => {}
-        const onSearch = () => {}
-
+        const onClick = product => {
+            context.emit('select', toRaw(product), onCancel)
+        }
         return {
             show,
             tradeType,
             handleTradeType,
-            searchValue,
             categoryType,
             categoryList,
             productList,
-            onSearch,
-            onCancel
+            plansList,
+            onCancel,
+            onClick,
+            onClosed,
+            reRender
         }
     }
 }
@@ -107,6 +119,10 @@ export default {
     width: rem(640px);
     height: 100%;
     overflow: hidden;
+    .plansType {
+        flex: 0 0 rem(100px);
+        border: 0;
+    }
     .plansType,
     .search,
     .tabs {

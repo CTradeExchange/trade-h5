@@ -49,7 +49,11 @@ export default {
 
         // 图表实例
         const chart = ref(null)
-        onMounted(() => {
+        // 图表实例化状态
+        const chartReady = ref(false)
+
+        const initChart = (cb = () => {}) => {
+            chartReady.value = false
             const { options } = props
             chart.value = createChart({
                 // 容器id
@@ -65,6 +69,8 @@ export default {
                 // 扩展
                 extension: options.extension
             }, () => {
+                chartReady.value = true
+
                 // 监听是否横屏
                 unref(chart).subscribe('isLandscape', (bool) => {
                     isLandscape.value = bool
@@ -79,7 +85,21 @@ export default {
                 })
                 // 图表实例创建完成后回调
                 context.emit('onChartReady')
+                cb()
             })
+        }
+
+        // 对方法增加判断
+        const withMethod = (fn) => {
+            if (!unref(chartReady)) {
+                // console.log(fn.name, '图表未准备好')
+                return () => {}
+            }
+            return fn
+        }
+
+        onMounted(() => {
+            initChart()
         })
         onUnmounted(() => {
             unref(chart).destroyed()
@@ -120,6 +140,11 @@ export default {
         const setTick = (price, time) => {
             unref(chart).setTick(price, time)
         }
+        // 重新初始化图表
+        const reset = (cb) => {
+            unref(chart) && unref(chart).destroyed()
+            initChart(cb)
+        }
 
         /** 图表相关-end */
 
@@ -127,14 +152,15 @@ export default {
             resolutionList,
             isLandscape,
             chart,
-            setSymbol,
-            setResolution,
-            updateIndicator,
-            updatePosition,
-            setChartType,
-            updateLineData,
-            updateProperty,
-            setTick
+            setSymbol: withMethod(setSymbol),
+            setResolution: withMethod(setResolution),
+            updateIndicator: withMethod(updateIndicator),
+            updatePosition: withMethod(updatePosition),
+            setChartType: withMethod(setChartType),
+            updateLineData: withMethod(updateLineData),
+            updateProperty: withMethod(updateProperty),
+            setTick: withMethod(setTick),
+            reset
         }
     }
 }
