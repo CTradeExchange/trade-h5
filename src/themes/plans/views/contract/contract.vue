@@ -95,7 +95,7 @@ export default {
         const symbolId = route.query.symbolId
         const tradeType = route.query.tradeType
         const product = computed(() => store.state._quote.productMap[`${symbolId}_${tradeType}`])
-        if (product.value) store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType })
+        if (product.value) store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType, forceQuery: true })
         else router.replace('/')
         const usedMarginSet = computed(() => {
             if (!isEmpty(product.value.usedMarginSet)) {

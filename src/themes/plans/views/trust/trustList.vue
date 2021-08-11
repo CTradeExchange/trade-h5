@@ -6,7 +6,7 @@
             <van-empty :description='$t("common.noData")' image='/images/empty.png' />
         </div>
         <div v-else class='trust-wrap'>
-            <trustItem v-for='(item, index) in pendingList' :key='index' :product='item' @click.stop='toDetail(item)' />
+            <trustItem v-for='item in pendingList' :key='item.id' :product='item' @click.stop='toDetail(item)' />
         </div>
     </div>
 </template>

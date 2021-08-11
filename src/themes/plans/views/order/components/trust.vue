@@ -7,7 +7,7 @@
             </a>
         </div>
         <div class='bd'>
-            <trustItem v-for='(item, index) in pendingList.slice(0,5)' :key='index' :product='item' @click.stop='toDetail(item)' />
+            <trustItem v-for='item in pendingList.slice(0,5)' :key='item.id' :product='item' @click.stop='toDetail(item)' />
         </div>
     </div>
 </template>

@@ -270,11 +270,11 @@ export default {
             })
         },
         // 产品详细信息
-        querySymbolInfo ({ dispatch, commit, state, rootState, rootGetters }, { symbolId, tradeType }) {
+        querySymbolInfo ({ dispatch, commit, state, rootState, rootGetters }, { symbolId, tradeType, forceQuery }) {
             const productMap = state.productMap
             const symbolKey = `${symbolId}_${tradeType}`
             const product = productMap[symbolKey]
-            if (product.contractSize) return Promise.resolve(product)
+            if (product.contractSize && !forceQuery) return Promise.resolve(product)
             const params = {
                 symbolId: Number(symbolId),
                 tradeType: Number(tradeType),
