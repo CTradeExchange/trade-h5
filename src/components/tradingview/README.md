@@ -136,6 +136,8 @@
 | `updateLineData`  | 更新买卖价线（全量更新）                 | Function(props: object)          | { buyPrice, sellPrice }                  |
 | `updatePosition`  | 更新持仓 （全量更新）                    | Function(props: array)           | [ { text, quantity, price, color }, ...] |
 | `setTick`         | 实时更新 tick                            | Function(price, time)            | --                                       |
+| `reset`         | 重新初始化图表                          | Function(cb)            | --                                       |
+
 
 ## 参数说明
 
