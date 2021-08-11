@@ -4,7 +4,7 @@
         <div class='totalAssetsBlock'>
             <div class='totalAssetsInfo'>
                 <p class='label'>
-                    <span> {{ $t('trade.asset') }}({{ assetsInfo.currency }}) </span>
+                    <span> {{ $t('trade.asset') }}({{ assetsInfo?.currency }}) </span>
                     <span class='tag'>
                         <i class='icon_zijinmingxi2' @click="$router.push({ name:'FundLog',query:{ tradeType:2 } })"></i>
                     </span>

@@ -34,7 +34,7 @@
             </li>
         </ul>
 
-        <div class='btns'>
+        <div v-if='Number(tradeType) === 3' class='btns'>
             <van-button
                 hairline
                 size='mini'
@@ -74,9 +74,10 @@ export default {
     setup () {
         const store = useStore()
         const assetsInfo = computed(() => store.state._user.assetsInfo)
-
+        const tradeType = computed(() => store.state._quote.curTradeType)
         return {
             assetsInfo,
+            tradeType
         }
     }
 }

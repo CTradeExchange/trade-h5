@@ -3,23 +3,38 @@
         <TabBar :index='curIndex' @updateTab='updateTab' />
         <van-swipe
             ref='assetsSwipe'
-
+            :initial-swipe='1'
             :show-indicators='false'
             :touchable='true'
             @change='onChange'
         >
-            <van-swipe-item v-if='filterShow(1)'>
+            <van-swipe-item v-for='item in plans' :key='item.id'>
+                <div v-if='Number(item.id) === 1' class='plans-item'>
+                    <TotalAssetsFullPosition class='block' />
+                    <PositionList />
+                </div>
+                <div v-if='Number(item.id) === 2' class='plans-item'>
+                    <TotalAssetsBywarehouse class='block' />
+                    <PositionList />
+                </div>
+                <div v-if='[3,9].indexOf(Number(item.id)) > -1' class='plans-item'>
+                    <TotalAssets class='block' />
+                    <AssetsItem v-for='account in accountList' :key='account.accountId' class='block' :data='account' />
+                </div>
+            </van-swipe-item>
+
+            <!-- <van-swipe-item v-if='filterShow(1)'>
                 <TotalAssetsFullPosition class='block' />
-                <PositionList v-if='Number(tradeType) === 1' />
+                <PositionList />
             </van-swipe-item>
             <van-swipe-item v-if='filterShow(2)'>
                 <TotalAssetsBywarehouse class='block' />
-                <PositionList v-if='Number(tradeType) === 2' />
+                <PositionList />
             </van-swipe-item>
             <van-swipe-item v-if='filterShow(3)'>
                 <TotalAssets class='block' />
                 <AssetsItem v-for='item in accountList' :key='item.accountId' class='block' :data='item' />
-            </van-swipe-item>
+            </van-swipe-item> -->
         </van-swipe>
     </div>
 </template>
@@ -53,7 +68,7 @@ export default {
 
         // 获取账户列表
         const accountList = computed(() =>
-            store.state._user.customerInfo?.accountList.filter(item => item.tradeType === 3) ?? []
+            store.state._user.customerInfo?.accountList.filter(item => [3, 9].indexOf(Number(item.tradeType)) > -1) ?? []
         )
         const customerInfo = computed(() => store.state._user.customerInfo)
 
@@ -115,6 +130,7 @@ export default {
         const onChange = (index) => {
             // 跳转到对应的tab页
             curIndex.value = index
+            console.log('rtaraasdtype', plans.value[index].id)
             store.commit('_quote/Update_tradeType', plans.value[index].id)
         }
 
