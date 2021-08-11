@@ -84,21 +84,23 @@ export default {
             amount: '',
             curCurrency: route.query.currency,
             loading: false,
-            accountId: ''
+            accountId: route.query.accountId,
+            tradeType: route.query.tradeType
         })
 
         const customInfo = computed(() => store.state._user.customerInfo)
         // 当前币种
-        const columns = computed(() => customInfo?.value?.accountList.filter(item => [3, 9].includes(item.tradeType)).map(el => {
+        const columns = computed(() => accountList.value.filter(item => item.tradeType === Number(state.tradeType)).map(el => {
             return {
                 currency: el.currency,
                 accountId: el.accountId
             }
-        }))
+        })
+        )
 
         const accountList = computed(() => store.state._user.customerInfo?.accountList || [])
 
-        const account = computed(() => accountList.value.find(({ currency }) => currency === state.curCurrency))
+        const account = computed(() => accountList.value.find(({ currency, tradeType }) => currency === state.curCurrency && tradeType === Number(state.tradeType)))
 
         // 选中的币种
         const curAccount = computed(() =>
@@ -124,7 +126,7 @@ export default {
 
             // 获取最新的资产数据
             store.dispatch('_user/queryAccountAssetsInfo', {
-                tradeType: account.value?.tradeType,
+                tradeType: state.tradeType,
                 accountId: val.accountId
             })
         }
@@ -161,7 +163,8 @@ export default {
                 accountId: state.accountId,
                 customerGroupId: customInfo.value.customerGroupId,
                 accountCurrency: state.curCurrency,
-                amount: state.amount
+                amount: state.amount,
+                tradeType: state.tradeType
             }
             manualLoan(params)
                 .then(res => {
@@ -171,7 +174,7 @@ export default {
                         Toast(t('assets.loanSuccess'))
                         state.amount = ''
                         store.dispatch('_user/queryAccountAssetsInfo', {
-                            tradeType: account.value?.tradeType,
+                            tradeType: state.tradeType,
                             accountId: state.accountId
                         })
                     } else {
@@ -186,14 +189,15 @@ export default {
             router.push({
                 path: '/record',
                 query: {
-                    accountId: route.query.accountId
+                    accountId: state.accountId,
+                    tradeType: state.tradeType
                 }
             })
         }
 
         store.dispatch('_user/queryAccountAssetsInfo', {
-            tradeType: 3,
-            accountId: parseInt(route.query.accountId)
+            tradeType: state.tradeType,
+            accountId: parseInt(state.accountId)
         })
 
         return {

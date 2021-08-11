@@ -83,13 +83,17 @@ export default {
             loading: false,
             computLoading: false,
             inAmount: '',
-            sameCurrency: false
+            sameCurrency: false,
+            tradeType: route.query.tradeType
         })
 
         const customInfo = computed(() => store.state._user.customerInfo)
         const assetsInfo = computed(() => store.state._user.assetsInfo)
-        const outAccount = computed(() => customInfo.value?.accountMap[state.outCurrency]) // 以xx币还的账户
-        const inAccount = computed(() => customInfo.value?.accountMap[state.inCurrency]) // 还xx币的账户
+        const outAccount = computed(() => {
+            return customInfo.value?.accountList.find(item => item.tradeType === Number(state.tradeType) && item.currency === state.outCurrency)
+        }) // 以xx币还的账户
+
+        const inAccount = computed(() => customInfo.value?.accountList.find(item => item.tradeType === Number(state.tradeType) && item.currency === state.inCurrency)) // 还xx币的账户
 
         const accountList = computed(() => store.state._user.customerInfo?.accountList || [])
 
@@ -98,8 +102,7 @@ export default {
         })
 
         // 当前币种
-        const columns = computed(() => customInfo?.value?.accountList.filter(item => [3, 9].includes(item.tradeType)).map(el => el.currency))
-        const tradeType = computed(() => customInfo?.value?.accountMap[route.query.currency].tradeType)
+        const columns = computed(() => accountList.value.filter(item => item.tradeType === Number(state.tradeType)).map(el => el.currency))
 
         watchEffect(() => {
             // 金额变动重新计算汇率
@@ -119,7 +122,7 @@ export default {
             // state.searchKey = val
             state.computLoading = true
             const params = {
-                tradeType: tradeType.value,
+                tradeType: state.tradeType,
                 sourceCurrency: state.outCurrency,
                 targetCurrency: state.inCurrency,
                 requestNum: state.outAmount,
@@ -143,8 +146,8 @@ export default {
 
         // 显示选币弹窗
         const selectPickerField = val => {
-            state.pickerField = val
-            state.pickerShow = true
+            // state.pickerField = val
+            // state.pickerShow = true
         }
         const onPickerConfirm = val => {
             console.log(val, state.pickerField)
@@ -165,7 +168,9 @@ export default {
         const returnSuccess = () => {
             Toast(t('trade.repaymentSuccess'))
             state.show = false
-            store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
+            store.dispatch('_user/queryCustomerAssetsInfo', {
+                tradeType: state.tradeType
+            })
             state.inAmount = ''
             state.outAmount = ''
         }
@@ -184,7 +189,7 @@ export default {
             // 如果来源货币和目标货币相同，刚手动还款，否则通过下单还币
             if (state.outCurrency === state.inCurrency) {
                 manualRepayment({
-                    tradeType: tradeType.value,
+                    tradeType: state.tradeType,
                     customerNo: customInfo.value.customerNo,
                     accountId: account.value.accountId,
                     customerGroupId: customInfo.value.customerGroupId,
@@ -201,7 +206,7 @@ export default {
                     })
             } else {
                 addRepaymentOrder({
-                    tradeType: tradeType.value,
+                    tradeType: state.tradeType,
                     sourceCurrency: state.outCurrency,
                     targetCurrency: state.inCurrency,
                     customerCurrency: assetsInfo.value.currency,
@@ -223,7 +228,8 @@ export default {
             router.push({
                 path: '/record',
                 query: {
-                    accountId: route.query.accountId
+                    accountId: route.query.accountId,
+                    tradeType: state.tradeType
                 }
             })
         }
@@ -241,7 +247,7 @@ export default {
             }
         })
 
-        store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
+        store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: state.tradeType })
 
         return {
             ...toRefs(state),

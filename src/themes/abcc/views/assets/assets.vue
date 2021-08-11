@@ -34,7 +34,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .assetsWrapper {
-    padding: rem(20px) rem(20px) rem(100px);
+    padding: 0 rem(20px) rem(100px);
     .block {
         margin-bottom: rem(20px);
         border-radius: 4px;

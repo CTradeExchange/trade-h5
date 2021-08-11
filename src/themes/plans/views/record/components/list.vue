@@ -22,7 +22,7 @@ export default {
         liabilitiesType: {
             type: [Number, String],
             require: true,
-            default: ''
+            default: '',
         }
     },
     setup (props) {
@@ -33,12 +33,13 @@ export default {
             loading: false,
             finished: false,
             current: 1,
-            refreshing: false
+            refreshing: false,
+            tradeType: route.query.tradeType
         })
 
         const getList = () => {
             const params = {
-                tradeType: 3,
+                tradeType: state.tradeType,
                 accountId: Number(route.query.accountId),
                 liabilitiesType: props.liabilitiesType,
                 current: state.current,

@@ -75,17 +75,11 @@
 </template>
 
 <script>
-import ReturnMoney from './components/returnMoney.vue'
-import Loan from './components/loan.vue'
-
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 export default {
-    components: {
-        ReturnMoney,
-        Loan
-    },
+
     props: ['product'],
     setup () {
         const store = useStore()
@@ -94,21 +88,27 @@ export default {
         const state = reactive({
             returnMoneyVisible: false,
             loanVisible: false,
-            list: Array(3).fill()
+            list: Array(3).fill(),
+            tradeType: route.query.tradeType
         })
         const accountList = computed(() => store.state._user.customerInfo?.accountList || [])
+
         const account = computed(() => {
-            return accountList.value.filter(el => [3, 9].includes(el.tradeType)).find(({ currency }) => currency === route.query.currency)
+            return accountList.value.find(item => item.tradeType === Number(state.tradeType) && item.currency === route.query.currency)
         })
 
-        store.dispatch('_user/queryAccountAssetsInfo', { tradeType: 3, accountId: parseInt(route.query.accountId) })
+        store.dispatch('_user/queryAccountAssetsInfo', {
+            tradeType: route.query.tradeType,
+            accountId: parseInt(route.query.accountId)
+        })
 
         const toLoan = () => {
             router.push({
                 path: '/loan',
                 query: {
                     currency: route.query.currency,
-                    accountId: parseInt(route.query.accountId)
+                    accountId: parseInt(route.query.accountId),
+                    tradeType: route.query.tradeType
                 }
             })
         }
@@ -118,7 +118,8 @@ export default {
                 path: '/returnMoney',
                 query: {
                     currency: route.query.currency,
-                    accountId: parseInt(route.query.accountId)
+                    accountId: parseInt(route.query.accountId),
+                    tradeType: route.query.tradeType
                 }
             })
         }

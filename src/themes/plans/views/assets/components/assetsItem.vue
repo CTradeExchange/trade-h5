@@ -27,8 +27,8 @@
 
 <script>
 import { useRouter } from 'vue-router'
-// import { reactive, toRefs } from 'vue'
-// import { useStore } from 'vuex'
+import { useStore } from 'vuex'
+import { reactive, toRefs, computed } from 'vue'
 export default {
     props: {
         data: {
@@ -37,10 +37,18 @@ export default {
     },
     setup (props) {
         // console.log(props.data)
-        // const store = useStore()
+        const store = useStore()
         const router = useRouter()
+        const tradeType = computed(() => store.state._quote.curTradeType)
         const toInfo = () => {
-            router.push({ name: 'AssetsInfo', query: { currency: props.data.currency, accountId: props.data.accountId } })
+            router.push({
+                name: 'AssetsInfo',
+                query: {
+                    currency: props.data.currency,
+                    accountId: props.data.accountId,
+                    tradeType: tradeType.value
+                }
+            })
         }
         return {
             toInfo,

@@ -74,7 +74,7 @@ export default {
 
         // 获取账户列表
         const accountList = computed(() =>
-            store.state._user?.customerInfo?.accountList && store.state._user?.customerInfo?.accountList.filter(item => [3, 9].indexOf(Number(item.tradeType)) > -1)
+            store.state._user?.customerInfo?.accountList && store.state._user?.customerInfo?.accountList.filter(item => Number(item.tradeType) === Number(tradeType.value))
         )
         const customerInfo = computed(() => store.state._user.customerInfo)
 
@@ -117,8 +117,8 @@ export default {
         watch(() => tradeType.value, (val) => {
             if ([1, 2].indexOf(Number(val)) > -1) {
                 queryPositionList()
-            } else if ((Number(val)) === 3) {
-                store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 3 })
+            } else if ([3, 9].indexOf(Number(val) > -1)) {
+                store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: val })
             }
         }, {
             immediate: true
@@ -161,10 +161,13 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .assetsWrapper {
-    padding: rem(20px) rem(20px) rem(100px);
+    padding: 0 rem(20px) rem(100px);
     .block {
         margin-bottom: rem(20px);
         border-radius: 4px;
+    }
+    .playType {
+        background-color: var(--bgColor);
     }
 }
 </style>
