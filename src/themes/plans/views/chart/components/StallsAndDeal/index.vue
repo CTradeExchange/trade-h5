@@ -27,15 +27,14 @@
 import Handicap from '@plans/modules/handicap/index'
 import DealList from '@plans/modules/realTimeDealList/index'
 
-import { computed, reactive, toRefs, watch, onBeforeUnmount, watchEffect } from 'vue'
+import { computed, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 export default {
     components: { Handicap, DealList },
     props: ['symbolId', 'settingList', 'curPrice'],
     setup (props) {
-        const router = useRouter()
         const route = useRoute()
         const store = useStore()
         const tradeType = route.query.tradeType
@@ -54,7 +53,7 @@ export default {
 
         // 是否显示挂单数量
         const showPending = computed(() => {
-            if (Number(tradeType) === 3) {
+            if ([3, 9].includes(Number(tradeType))) {
                 return true
             } else {
                 return false

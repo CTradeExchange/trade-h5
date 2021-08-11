@@ -18,7 +18,7 @@
                             :class="{ 'icon_zixuan2':isSelfSymbol }"
                         ></i>
                     </button>
-                    <div v-if='String(tradeType) !== "3"' class='ft'>
+                    <div v-if='![3,9].includes(product.tradeType)' class='ft'>
                         <span
                             @click='toContractInfo'
                         >
