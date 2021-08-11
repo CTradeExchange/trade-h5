@@ -7,6 +7,7 @@ export default {
         elementList: [],
         getProducting: false,
         accountGroupProduct: [],
+        tradeTypeList: [],
         tradeTypeBlockProduct: {},
         tradeTypeSelfSymbol: {},
         tradeTypeBlockCollect: [],
@@ -137,6 +138,13 @@ export default {
          */
         UPDATE_TRADETYPE_PRODUCT (state, data) {
             state.tradeTypeBlockProduct = data
+        },
+        /**
+         * 更新玩法
+         * @param {string} data - 产品信息.
+         */
+        UPDATE_TRADETYPE_LIST (state, data) {
+            state.tradeTypeList = data
         },
         UPDATE_TRADETYPE_BLOCK_COLLECT (state, data) {
             // debugger
