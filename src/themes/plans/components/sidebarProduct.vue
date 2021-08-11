@@ -1,7 +1,7 @@
 <template>
     <van-popup v-model:show='show' position='left' :style="{ height: '100%' }" @closed='onClosed'>
         <div class='sidebarProduct'>
-            <plansType v-if='reRender' class='plansType' :value='tradeType' @change='handleTradeType' />
+            <plansType ref='plansTypeRef' class='plansType' :value='tradeType' @change='handleTradeType' />
             <search
                 :trade-type='tradeType'
                 @cancel='onCancel'
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { ref, computed, unref, toRaw, nextTick } from 'vue'
+import { ref, computed, unref, toRaw } from 'vue'
 import plansType from '@/themes/plans/components/plansType.vue'
 import TopTab from '@plans/components/topTab'
 import useProduct from '@plans/hooks/useProduct'
@@ -49,7 +49,6 @@ export default {
     emits: ['update:modelValue', 'select'],
     setup (props, context) {
         const store = useStore()
-        const reRender = ref(true)
         const show = computed({
             get: () => props.modelValue,
             set: val => {
@@ -57,13 +56,12 @@ export default {
             }
         })
 
+        const plansTypeRef = ref(null)
+
         const onClosed = () => {
             tradeType.value = unref(plansList)[0].id
             categoryType.value = 0
-            reRender.value = false
-            nextTick(() => {
-                reRender.value = true
-            })
+            unref(plansTypeRef) && unref(plansTypeRef).reset()
         }
 
         // 取消按钮事件
@@ -103,7 +101,7 @@ export default {
             onCancel,
             onClick,
             onClosed,
-            reRender
+            plansTypeRef
         }
     }
 }
