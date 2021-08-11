@@ -1,7 +1,7 @@
 <template>
     <van-popup v-model:show='show' position='left' :style="{ height: '100%' }" @closed='onClosed'>
         <div class='sidebarProduct'>
-            <plansType v-if='reRender' class='plansType' :list='plansList' :value='tradeType' @change='handleTradeType' />
+            <plansType v-if='reRender' class='plansType' :value='tradeType' @change='handleTradeType' />
             <search
                 :trade-type='tradeType'
                 @cancel='onCancel'
