@@ -1,10 +1,5 @@
 <template>
     <div class='switchTradeType'>
-        <!-- <div v-if='tradeTypeList.length>1' class='switchWrapper'>
-            <span v-for='item in tradeTypeList' :key='item.id' class='item' :class='{ active:item.id == product.tradeType }' @click='onChange(item)'>
-                {{ item.name }}
-            </span>
-        </div> -->
         <div class='productInfo'>
             <span class='icon_chouti' @click="$emit('switchProduct')"></span>
             <span class='productName'>
@@ -19,41 +14,11 @@
 </template>
 
 <script>
-import { computed } from 'vue'
-import { useStore } from 'vuex'
 export default {
-    emits: ['change', 'switchProduct'],
+    props: ['product'],
+    emits: ['switchProduct'],
     setup (props, { emit }) {
-        const store = useStore()
-        const productMap = computed(() => store.state._quote.productMap)
-        const tradeTypeList = computed(() => store.state._base.plans)
-        const product = computed(() => store.getters['_trade/product'])
-
-        const findProductInCategory = (category, tradeType) => {
-            let resultProduct = null
-            for (let i = 0; i < category.length; i++) {
-                const item = category[i]
-                item.listByUser.forEach(el => {
-                    if (resultProduct) return
-                    const symbolKey = `${el}_${tradeType}`
-                    if (productMap.value[symbolKey]?.symbolName) resultProduct = symbolKey
-                })
-                if (resultProduct) return resultProduct
-            }
-        }
-        const onChange = (data) => {
-            if (data.id == product.value?.tradeType) return false
-            const category = store.getters.userProductCategory[data.id]
-            if (!category) return false
-            const changeProductKey = findProductInCategory(category, data.id)
-            if (changeProductKey) store.commit('_quote/Update_productActivedID', changeProductKey)
-            emit('change', data)
-        }
-        return {
-            product,
-            tradeTypeList,
-            onChange
-        }
+        return {}
     }
 }
 </script>

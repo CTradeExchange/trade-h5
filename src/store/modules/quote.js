@@ -273,12 +273,12 @@ export default {
         querySymbolInfo ({ dispatch, commit, state, rootState, rootGetters }, { symbolId, tradeType }) {
             const productMap = state.productMap
             const symbolKey = `${symbolId}_${tradeType}`
-            if (productMap[symbolKey].contractSize) return Promise.resolve(new CheckAPI({ code: '0', data: {} }))
+            const product = productMap[symbolKey]
+            if (product.contractSize) return Promise.resolve(product)
             const params = {
                 symbolId: Number(symbolId),
                 tradeType: Number(tradeType),
                 customerGroupId: rootGetters.customerGroupId,
-                // accountId: rootState._user.customerInfo?.accountId,
             }
             return querySymbolInfo(params).then((res) => {
                 if (res.check() && res.data) {
@@ -288,7 +288,7 @@ export default {
                         sessionSet('productActived', JSON.stringify(productMap[symbolKey]))
                     }
                 }
-                return res
+                return res.data
             })
         },
     }

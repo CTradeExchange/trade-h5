@@ -6,12 +6,21 @@
 
 <script>
 import { reactive, toRefs, watchEffect } from 'vue'
+import { useI18n } from 'vue-i18n'
 export default {
-    props: ['modelValue', 'btnList'],
+    props: ['modelValue'],
     emits: ['update:modelValue', 'selected'],
     setup (props, { emit }) {
+        const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
-            orderType: 1
+            orderType: 1,
+            btnList: [{
+                title: t('trade.marketPrice'),
+                val: 1
+            }, {
+                title: t('trade.pending'),
+                val: 10
+            }]
         })
         watchEffect(() => {
             if (props.modelValue !== state.orderType) state.orderType = props.modelValue

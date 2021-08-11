@@ -1,7 +1,7 @@
 <template>
     <div class='orderWrap'>
         <plansType v-if='plansList.length>1' :list='plansList' :value='productTradeType' @change='handleTradeType' />
-        <SwitchTradeType @switchProduct='switchProductVisible=true' />
+        <SwitchTradeType :product='product' @switchProduct='switchProductVisible=true' />
 
         <div v-if='product' class='main'>
             <div v-if='false' class='left'>
@@ -9,7 +9,7 @@
             </div>
             <div class='right'>
                 <!-- 订单类型 -->
-                <OrderTypeTab v-model='orderType' :btn-list='orderTypeList' @selected='changeOrderType' />
+                <OrderTypeTab v-model='orderType' @selected='changeOrderType' />
                 <!-- 自动借款 -->
                 <LoanBar v-if='[3,9].includes(product.tradeType)' v-model='operationType' class='cellMarginTop' />
                 <!-- 方向 -->
@@ -53,7 +53,7 @@
                 />
                 <div class='footerBtn' :class='[direction]'>
                     <van-button block :disabled='loading' :loading='loading' size='normal' @click='submitHandler'>
-                        {{ $t(direction==='buy'?'trade.buyText':'trade.sellText') }}
+                        {{ direction==='buy'?$t('trade.buyText'):$t('trade.sellText') }}
                     </van-button>
                 </div>
             </div>
@@ -123,13 +123,6 @@ export default {
             switchProductVisible: false,
             direction: direction || 'buy',
             orderType: 1, // 订单类型
-            orderTypeList: [{
-                title: t('trade.marketPrice'),
-                val: 1
-            }, {
-                title: t('trade.pending'),
-                val: 10
-            }],
             volume: '',
             operationType: 2, // 操作类型。1-普通；2-自动借款；3-自动还款
             pendingPrice: '',
@@ -148,8 +141,6 @@ export default {
         const productTradeType = ref(tradeType)
 
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
-
-        // 订阅产品报价
 
         store.commit('_trade/Update_modifyPositionId', 0)
 
@@ -172,9 +163,7 @@ export default {
         // 监听玩法类型
         const handleTradeType = (tradeType) => {
             productTradeType.value = tradeType
-            const category = store.getters.userProductCategory[tradeType]
-            if (!category) return false
-            const changeProductKey = findProductInCategory(category, tradeType)
+            const changeProductKey = findProductInCategory(tradeType)
             if (changeProductKey) {
                 const [symbolId, tradeType] = changeProductKey.split('_')
                 switchProduct(symbolId, tradeType).then(() => {
@@ -196,23 +185,13 @@ export default {
         }
         // 初始化设置
         const init = () => {
-            new Promise(resolve => {
-                if (product.value.minVolume) {
-                    state.volume = product.value.minVolume
-                    resolve()
-                } else {
-                    // 获取产品详情
-                    const [symbolId, tradeType] = symbolKey.value.split('_')
-                    store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(res => {
-                        if (res.invalid()) return false
-                        state.volume = res.data.minVolume // 设置默认手数
-                        resolve()
-                    })
-                }
-            }).then(() => {
+            // 获取产品详情
+            const [symbolId, tradeType] = symbolKey.value.split('_')
+            store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
+                state.volume = product.minVolume // 设置默认手数
                 QuoteSocket.send_subscribe([symbolKey.value])
-                store.dispatch('_trade/queryPBOOrderPage', { tradeType: product.value?.tradeType })
-                if ([3, 9].includes(product.value?.tradeType)) queryAccountInfo()
+                store.dispatch('_trade/queryPBOOrderPage', { tradeType: product.tradeType })
+                if ([3, 9].includes(product.tradeType)) queryAccountInfo()
             })
         }
 

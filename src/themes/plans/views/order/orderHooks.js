@@ -36,7 +36,9 @@ export default function hooks (state) {
         return bizType
     })
     // 查找板块分类下第一个有效的产品
-    const findProductInCategory = (category, tradeType) => {
+    const findProductInCategory = (tradeType) => {
+        const category = store.getters.userProductCategory[tradeType]
+        if (!category) return false
         let resultProduct = null
         for (let i = 0; i < category.length; i++) {
             const item = category[i]
