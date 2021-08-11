@@ -53,7 +53,7 @@ export default {
 
         // 获取账户列表
         const accountList = computed(() =>
-            store.state._user.customerInfo?.accountList.filter(item => item.tradeType === 3) ?? []
+            store.state._user.customerInfo?.accountList.filter(item => [3, 9].includes(item.tradeType)) ?? []
         )
         const customerInfo = computed(() => store.state._user.customerInfo)
 

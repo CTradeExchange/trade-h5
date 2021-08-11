@@ -53,16 +53,18 @@ export default {
             state.loginData = data
         },
         Update_customerInfo (state, data) {
-            console.log(data)
+            if (!data) return false
             state.customerInfo = data
         },
         Update_accountInfo (state, data) {
+            if (!data) return false
             if (state.customerInfo.accountMap[data.currency]) {
                 Object.assign(state.customerInfo.accountMap[data.currency], data)
                 // Object.assign(state.customerInfo.accountList.filter(el => [3, 9].includes(el.tradeType)).find(item => item.currency === data.currency), data)
             }
         },
         Update_assetsInfo (state, data) {
+            if (!data) return false
             state.assetsInfo = data
             const accountList = state.customerInfo?.accountList || []
             accountList.filter(el => [3, 9].includes(el.tradeType)).forEach(el => {

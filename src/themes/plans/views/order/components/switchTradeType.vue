@@ -1,12 +1,12 @@
 <template>
     <div class='switchTradeType'>
-        <div v-if='tradeTypeList.length>1' class='switchWrapper'>
+        <!-- <div v-if='tradeTypeList.length>1' class='switchWrapper'>
             <span v-for='item in tradeTypeList' :key='item.id' class='item' :class='{ active:item.id == product.tradeType }' @click='onChange(item)'>
                 {{ item.name }}
             </span>
-        </div>
+        </div> -->
         <div class='productInfo'>
-            <span class='icon_chouti'></span>
+            <span class='icon_chouti' @click="$emit('switchProduct')"></span>
             <span class='productName'>
                 {{ product.symbolName }}
             </span>
@@ -22,7 +22,7 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 export default {
-    emits: ['change'],
+    emits: ['change', 'switchProduct'],
     setup (props, { emit }) {
         const store = useStore()
         const productMap = computed(() => store.state._quote.productMap)
