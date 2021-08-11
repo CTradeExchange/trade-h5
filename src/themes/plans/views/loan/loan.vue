@@ -89,7 +89,7 @@ export default {
 
         const customInfo = computed(() => store.state._user.customerInfo)
         // 当前币种
-        const columns = computed(() => customInfo?.value?.accountList.filter(item => item.tradeType === 3).map(el => {
+        const columns = computed(() => customInfo?.value?.accountList.filter(item => [3, 9].includes(item.tradeType)).map(el => {
             return {
                 currency: el.currency,
                 accountId: el.accountId
