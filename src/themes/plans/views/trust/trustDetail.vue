@@ -143,7 +143,7 @@ export default {
             }).then(() => {
                 loading.value = true
                 const params = {
-                    tradeType: tradeType,
+                    tradeType,
                     customerNo: customInfo.value.customerNo,
                     accountId: account.value.accountId,
                     pboId: pendingItem.value.id,
@@ -165,17 +165,24 @@ export default {
         }
 
         // 订阅报价
-        QuoteSocket.send_subscribe([symbolId])
+        QuoteSocket.send_subscribe([{ symbolId, tradeType }])
 
         // 获取委托列表
         const queryPBOOrderPage = () => {
             store.dispatch('_trade/queryPBOOrderPage', {
-                tradeType: tradeType,
+                tradeType,
                 customerNo: customInfo.value.customerNo,
                 sortFieldName: 'orderTime',
                 sortType: 'desc'
             })
         }
+
+        store.dispatch('_trade/queryPBOOrderPage', {
+            tradeType,
+            customerNo: customInfo.value.customerNo,
+            sortFieldName: 'orderTime',
+            sortType: 'desc'
+        })
 
         return {
             showInfo,

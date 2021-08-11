@@ -50,8 +50,13 @@ export default {
             async (newval) => {
                 await nextTick()
                 if (!newval) return false
-                const subscribList = pendingList.value.map(el => `${el.symbolId}_${el.tradeType}`)
-                subscribList.push(props.product.symbolKey)
+                const subscribList = pendingList.value.map(el => {
+                    return {
+                        symbolId: el.symbolId,
+                        tradeType: el.tradeType
+                    }
+                })
+
                 if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
             },
             { immediate: true }
