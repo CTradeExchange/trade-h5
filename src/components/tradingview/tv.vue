@@ -91,11 +91,12 @@ export default {
 
         // 对方法增加判断
         const withMethod = (fn) => {
-            if (!unref(chartReady)) {
-                // console.log(fn.name, '图表未准备好')
-                return () => {}
+            return (...args) => {
+                if (unref(chartReady)) {
+                    // console.log(fn.name, '图表未准备好')
+                    return fn(...args)
+                }
             }
-            return fn
         }
 
         onMounted(() => {

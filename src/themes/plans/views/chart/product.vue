@@ -887,9 +887,7 @@ export default {
         initChartData()
 
         // 获取产品详情
-        store.dispatch('_quote/querySymbolInfo', { symbolId: getSymbolId(), tradeType: getTradeType() }).then(res => {
-            if (res.invalid()) return false
-        })
+        store.dispatch('_quote/querySymbolInfo', { symbolId: getSymbolId(), tradeType: getTradeType() })
 
         const showSidebar = ref(false)
 
