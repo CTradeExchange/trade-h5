@@ -191,7 +191,7 @@ export default {
                 manualRepayment({
                     tradeType: state.tradeType,
                     customerNo: customInfo.value.customerNo,
-                    accountId: account.value.accountId,
+                    accountId: route.query.accountId,
                     customerGroupId: customInfo.value.customerGroupId,
                     accountCurrency: assetsInfo.value.currency,
                     amount: state.outAmount,

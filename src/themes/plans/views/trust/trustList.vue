@@ -38,7 +38,8 @@ export default {
                 path: '/trustDetail',
                 query: {
                     id: item.id,
-                    symbolId: item.symbolId
+                    symbolId: item.symbolId,
+                    tradeType: route.query.tradeType,
                 }
             })
         }
@@ -48,7 +49,13 @@ export default {
             async (newval) => {
                 await nextTick()
                 if (!newval) return false
-                const subscribList = pendingList.value.map(el => el.symbolId)
+                const subscribList = pendingList.value.map(el => {
+                    return {
+                        symbolId: el.symbolId,
+                        tradeType: el.tradeType
+                    }
+                })
+
                 if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
             },
             { immediate: true }

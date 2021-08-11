@@ -22,6 +22,7 @@
                 <p class='tl-item'>
                     <label for=''>
                         {{ $t('trade.currentPrice') }}
+                        <!-- {{ symbolKey }} -->
                     </label>
                     <span :class='[Number(product.direction) === 1 ? curProduct.buy_color : curProduct.sell_color]'>
                         {{ Number(product.direction) === 1 ? curProduct.buy_price : curProduct.sell_price }}
@@ -106,7 +107,8 @@ export default {
             cancelOrder,
             shiftedBy,
             loading,
-            curProduct
+            curProduct,
+            symbolKey
         }
     }
 }
