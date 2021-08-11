@@ -1,6 +1,6 @@
 <template>
     <div class='playType'>
-        <van-tabs v-if='reRender' v-model:active='active' class='tabs' :swipe-threshold='1'>
+        <van-tabs v-if='reRender' v-model:active='active' class='tabs' :data='active' :swipe-threshold='1'>
             <van-tab v-for='item in plansList' :key='item.id' :name='item.id' :title='item.name' />
         </van-tabs>
     </div>
@@ -61,7 +61,7 @@ export default {
     justify-content: flex-start;
     box-sizing: border-box;
     height: rem(100px);
-    padding-left: rem(30px);
+    padding: 0 rem(30px);
     background-color: var(--contentColor);
     border: 1px solid var(--bgColor);
     // .item {

@@ -1,5 +1,6 @@
 <template>
-    <div class='position-wrap'>
+    <van-empty v-if='positionList?.length === 0' :description="$t('trade.positionEmpty')" />
+    <div v-else class='position-wrap'>
         <p class='header'>
             <span>{{ $t('trade.position') }}({{ positionList?.length }})</span>
             <span class='fr fallColor'>
@@ -8,6 +9,7 @@
         </p>
 
         <van-loading v-if='loading' class='loading' />
+
         <positionItem
             v-for='(item,index) in positionList'
             :key='index'
@@ -69,7 +71,7 @@ export default {
 
         const tradeType = computed(() => store.state._quote.curTradeType)
 
-        const positionList = computed(() => store.state._trade.positionList[tradeType.value])
+        const positionList = computed(() => store.state._trade.positionList[tradeType.value] ?? [])
 
         const userAccount = computed(() => store.state._user.accountAssets[tradeType.value])
 
@@ -142,5 +144,8 @@ export default {
 .loading {
     line-height: rem(100px);
     background: var(--contentColor);
+}
+.van-empty {
+    background-color: var(--contentColor);
 }
 </style>
