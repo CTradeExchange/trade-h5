@@ -454,6 +454,7 @@ export default {
 
 <style lang="scss">
 .m-product {
+    height: 100%;
     .input {
         height: 60px;
         margin-top: 20px;
@@ -463,13 +464,14 @@ export default {
     .bottoms {
         padding: 20px;
     }
-}
-.product-scrollbar {
-    height: calc(100vh - 160px);
-    padding: 0;
-    overflow: hidden;
-    .tree {
-        min-height: 400px;
+    .product-scrollbar {
+        height: calc(100vh - 160px);
+        padding: 0;
+        overflow: hidden;
+        .tree {
+            min-height: 400px;
+        }
     }
 }
+
 </style>

@@ -124,14 +124,32 @@
                                     type='textarea'
                                 />
                             </el-form-item> -->
-                            <el-form-item label='玩法币种'>
-                                <div v-for='(item) in tradeTypeAssets' :key='item.id'>
-                                    <el-transfer
-                                        v-model='checkedTradeTypeAssets[item.id]'
-                                        :data='item.assetsList'
-                                        :render-content='renderFunc'
-                                        :titles='[`可选${item.name}`, `已选${item.name}`]'
-                                    />
+                            <el-form-item label='玩法&玩法币种'>
+                                <div v-for='(item) in tradeTypeAssets' :key='item.id' class='tradeType-row'>
+                                    <template v-if="['1','2'].indexOf(item.id)>-1">
+                                        <el-form-item :label='item.name'>
+                                            <el-select
+                                                v-model='checkedTradeTypeAssets[item.id]'
+                                                clearable
+                                                placeholder='请选择'
+                                            >
+                                                <el-option
+                                                    v-for='asset in item.assetsList'
+                                                    :key='asset.key'
+                                                    :label='`${asset.key} - ${asset.label}`'
+                                                    :value='asset.key'
+                                                />
+                                            </el-select>
+                                        </el-form-item>
+                                    </template>
+                                    <template v-else>
+                                        <el-transfer
+                                            v-model='checkedTradeTypeAssets[item.id]'
+                                            :data='item.assetsList'
+                                            :render-content='renderFunc'
+                                            :titles='[`可选${item.name}`, `已选${item.name}`]'
+                                        />
+                                    </template>
                                 </div>
                             </el-form-item>
                             <el-form-item label='apiService'>
@@ -503,7 +521,11 @@ export default {
                         const initTradeTypeAssets = {}
                         if (Array.isArray(content.tradeTypeList)) {
                             content.tradeTypeList.forEach(el => {
-                                initTradeTypeAssets[String(el.id)] = tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency.split(',') : []
+                                if (['1', '2'].indexOf(String(el.id)) > -1) {
+                                    initTradeTypeAssets[String(el.id)] = tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency : ''
+                                } else {
+                                    initTradeTypeAssets[String(el.id)] = tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency.split(',') : []
+                                }
                             })
                         }
                         this.checkedTradeTypeAssets = initTradeTypeAssets
@@ -541,7 +563,15 @@ export default {
                 try {
                     // _formData.tradeTypeList = JSON.parse(_formData.tradeTypeList)
                     // _formData.currencyList = JSON.parse(_formData.currencyList)
-                    _formData.tradeTypeCurrencyList = this.tradeTypeList.map(el => ({ id: el.id, name: el.name, allCurrency: this.checkedTradeTypeAssets[String(el.id)] ? this.checkedTradeTypeAssets[String(el.id)].join(',') : [] }))
+                    // debugger
+                    // console.log('this.checkedTradeTypeAssets-', this.checkedTradeTypeAssets)
+                    _formData.tradeTypeCurrencyList = this.tradeTypeList.map(el => {
+                        if (['1', '2'].indexOf(String(el.id)) > -1) {
+                            return { id: el.id, name: el.name, allCurrency: this.checkedTradeTypeAssets[String(el.id)] ? this.checkedTradeTypeAssets[String(el.id)] : '' }
+                        } else {
+                            return { id: el.id, name: el.name, allCurrency: this.checkedTradeTypeAssets[String(el.id)] ? this.checkedTradeTypeAssets[String(el.id)].join(',') : [] }
+                        }
+                    })
                     // console.log('tradeTypeCurrencyList', _formData.tradeTypeCurrencyList)
                 } catch (error) {
                     console.error(error)
@@ -688,6 +718,9 @@ export default {
                 }
             }
         }
+    }
+    .tradeType-row {
+        margin-bottom: 20px;
     }
 }
 </style>
