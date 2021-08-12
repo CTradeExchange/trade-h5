@@ -56,7 +56,7 @@
                     v-if='orderType===10 && [1,2].includes(product.tradeType)'
                     v-model='expireType'
                     :btn-list='expireTypeList'
-                    class='mtop10'
+                    class='mtop20'
                     :title="$t('trade.expireTime')"
                 />
                 <div class='footerBtn' :class='[direction]'>
