@@ -1,13 +1,19 @@
 <template>
     <div v-if='product && curProduct' class='trust-item'>
         <div class='t-header'>
-            <span class='product-name'>
-                {{ product.symbolName }}
-            </span>
+            <div class='product-name'>
+                <p>{{ product.symbolName }}</p>
+                <p class='time'>
+                    {{ formatTime(product.orderTime) }}
+                </p>
+            </div>
             <span class='direction'>
                 <span :class="Number(product.direction) === 1 ? 'riseColor' : 'fallColor'">
                     {{ Number(product.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
                 </span> {{ product.requestNum }}
+            </span>
+            <span class='fr'>
+                {{ product.expireType }}   {{ expireTypeMap['1'] }}
             </span>
         </div>
         <Loading :show='loading' />
@@ -30,22 +36,26 @@
                 </p>
                 <p class='tl-item'>
                     <label for=''>
-                        {{ $t('trade.loan') }}
+                        {{ $t('trade.stopLossPrice') }}
                     </label>
-                    <span>--</span>
+                    <span>{{ product.stopLoss }}</span>
                 </p>
-                <!-- <p class='tl-item'>
+
+                <p class='tl-item'>
                     <label for=''>
-                        利息
+                        {{ $t('trade.takeProfit') }}
                     </label>
-                    <span>12.55488USDT</span>
-                </p> -->
+                    <span>{{ product.takeProfit }}</span>
+                </p>
             </div>
             <div class='t-right'>
                 <van-button @click.stop='cancelOrder'>
                     {{ $t('trade.cancelOrder') }}
                 </van-button>
             </div>
+        </div>
+        <div>
+            #{{ product.id }}
         </div>
     </div>
 </template>
@@ -63,6 +73,10 @@ export default {
         const store = useStore()
         const loading = ref(false)
         const { t } = useI18n({ useScope: 'global' })
+        const expireTypeMap = {
+            1: t('trade.expire1'),
+            2: t('trade.expire2')
+        }
         // 获取当前产品
         const symbolKey = `${props.product.symbolId}_${props.product.tradeType}`
         const curProduct = computed(() => store.state._quote.productMap[symbolKey])
@@ -108,7 +122,8 @@ export default {
             shiftedBy,
             loading,
             curProduct,
-            symbolKey
+            symbolKey,
+            expireTypeMap
         }
     }
 }
@@ -124,10 +139,16 @@ export default {
     .t-header {
         display: flex;
         justify-content: space-between;
+        //align-items: center;
         margin-bottom: rem(30px);
         .product-name {
+            margin-right: rem(32px);
             color: var(--color);
             font-size: rem(30px);
+            .time {
+                color: var(--placeholdColor);
+                font-size: rem(20px);
+            }
         }
         .direction {
             font-size: rem(24px);

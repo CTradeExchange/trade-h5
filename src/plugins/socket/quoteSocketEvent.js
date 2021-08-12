@@ -161,7 +161,6 @@ class SocketEvent {
 
     // 实时成交数据
     deal_tick (p) {
-        console.log('成交数据', p)
         const priceStr = p.split(';')[0].match(/\((.+)\)/)
         const price = priceStr[1] ?? ''
         const priceArr = price.split(',')

@@ -434,7 +434,13 @@
     "previewStopPrice": "预估强平价",
     "get": "借",
     "enterMarginAmountRequire": "请输入调整金额",
-    "enterMarginAmountTip": "调整金额不能为负数"
+    "enterMarginAmountTip": "调整金额不能为负数",
+    "order": "订单",
+    "dealList": "成交记录",
+    "openClose": "开/平",
+    "openPosition": "开仓",
+    "closePosition": "平仓",
+    "symbol": "产品"
 
   },
   "bizType": {

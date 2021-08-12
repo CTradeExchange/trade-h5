@@ -195,7 +195,7 @@ export default {
         width: 45%;
         height: rem(80px);
         margin-bottom: rem(20px);
-        color: var(--contentColor);
+        color: #FFF;
         font-size: rem(30px);
     }
 }
