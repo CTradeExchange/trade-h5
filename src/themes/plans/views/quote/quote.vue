@@ -33,7 +33,7 @@
 <script>
 import TopTab from '@plans/components/topTab'
 import productListComp from '@plans/modules/productList/productList.vue'
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onActivated } from 'vue'
 import plansType from '@/themes/plans/components/plansType.vue'
 import useProduct from '@plans/hooks/useProduct'
 import { useStore } from 'vuex'
@@ -74,6 +74,10 @@ export default {
                 if (productListEl.value) productListEl.value.calcProductsDebounce()
             }
         )
+
+        onActivated(() => {
+            if (productListEl.value) productListEl.value.calcProductsDebounce()
+        })
 
         const tabChange = (i) => {}
         const tabClick = (i) => {}
