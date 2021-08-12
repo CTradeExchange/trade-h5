@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "23554638",
+      "name": "明细",
+      "font_class": "mingxi",
+      "unicode": "e661",
+      "unicode_decimal": 58977
+    },
+    {
+      "icon_id": "23448247",
+      "name": "转换",
+      "font_class": "zhuanhuan",
+      "unicode": "e65d",
+      "unicode_decimal": 58973
+    },
+    {
       "icon_id": "23220494",
       "name": "资产",
       "font_class": "zichan",
