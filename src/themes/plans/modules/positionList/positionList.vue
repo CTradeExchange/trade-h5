@@ -15,8 +15,8 @@
         <van-loading v-if='loading' class='loading' />
 
         <positionItem
-            v-for='(item,index) in positionList'
-            :key='index'
+            v-for='item in positionList'
+            :key='item.positionId'
             :data='item'
             :product='product'
             @showAdjustPopup='showAdjustPopup'
