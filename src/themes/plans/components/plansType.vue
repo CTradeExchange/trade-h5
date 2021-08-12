@@ -61,7 +61,7 @@ export default {
     justify-content: flex-start;
     box-sizing: border-box;
     height: rem(100px);
-    padding: 0 rem(30px);
+    padding-right: rem(30px);
     background-color: var(--contentColor);
     border: 1px solid var(--bgColor);
     // .item {
