@@ -2,7 +2,7 @@
     <div class='trustWrapper'>
         <div class='hd'>
             <span>{{ $t('trade.curTrust') }} ({{ pendingList.length }})</span>
-            <a class='allTrust' href='javascript:;' @click="$router.push({ name:'TrustList',query:{ tradeType:product.tradeType } })">
+            <a class='allTrust' href='javascript:;' @click="$router.push({ name:'OrderList',query:{ tradeType:product.tradeType } })">
                 {{ $t('trade.allTrust') }}
             </a>
         </div>
