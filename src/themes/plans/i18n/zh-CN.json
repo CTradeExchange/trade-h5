@@ -528,8 +528,10 @@
   },
   "record":{
     "repaymentAmount": "还款数量",
-    "records": "借还款记录",
+    "records": "资金记录",
     "loanRecord": "借款记录",
-    "repaymentRecord": "还款记录"
+    "repaymentRecord": "还款记录",
+    "cransferRecord": "划转记录",
+    "capitalRecord": "资金流水"
   }
 }

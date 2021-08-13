@@ -1,8 +1,7 @@
 <template>
     <list
         class='list'
-        :liabilities-type='1'
-        :request-api='queryLiabilitiesWaterByPage'
+        :liabilities-type='2'
     >
         <template #default='{ list }'>
             <div v-for='item in list' :key='item.id' class='li'>
@@ -21,6 +20,24 @@
                         </span>
                     </div>
                 </div>
+                <div class='block'>
+                    <div class='left'>
+                        <span class='label'>
+                            {{ $t("record.repaymentAmount") }}
+                        </span>
+                        <span class='num'>
+                            {{ item.liabilitiesPrincipal }}
+                        </span>
+                    </div>
+                    <div class='right'>
+                        <span class='label'>
+                            {{ $t("trade.swap_2") }}
+                        </span>
+                        <span class='num'>
+                            {{ item.interest }}
+                        </span>
+                    </div>
+                </div>
             </div>
         </template>
     </list>
@@ -29,7 +46,6 @@
 <script>
 import list from './list'
 import dayjs from 'dayjs'
-import { queryLiabilitiesWaterByPage } from '@/api/user'
 
 export default {
     components: { list },
@@ -38,8 +54,7 @@ export default {
             return dayjs(val).format('YYYY/MM/DD HH:mm:ss')
         }
         return {
-            formatTime,
-            queryLiabilitiesWaterByPage
+            formatTime
         }
     },
 }

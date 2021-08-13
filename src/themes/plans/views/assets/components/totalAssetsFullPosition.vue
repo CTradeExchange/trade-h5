@@ -6,7 +6,7 @@
                 <p class='label'>
                     <span> {{ $t('assets.balance') }}({{ assetsInfo?.currency }}) </span>
                     <span class='tag'>
-                        <i class='icon_zijinmingxi2' @click="$router.push({ name:'FundLog',query:{ tradeType:3 } })"></i>
+                        <i class='icon_zijinmingxi2' @click="$router.push({ name:'Record',query:{ tradeType: tradeType, accountId:assetsInfo.accountId } })"></i>
                     </span>
                 </p>
                 <p class='totalAmount'>
@@ -76,7 +76,8 @@ export default {
 
         return {
             assetsInfo,
-            userAccount
+            userAccount,
+            tradeType
         }
     }
 }
