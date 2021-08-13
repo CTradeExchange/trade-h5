@@ -18,7 +18,7 @@
         <button ref='getCodeBtn' class='getCodeBtn' :disabled='disabled' type='button' @click='getCode'>
             <van-loading v-if='loading' size='20px' />
             <span v-else>
-                {{ $t('login.getVerifyCode') }}
+                {{ getCodeText }}
             </span>
         </button>
         <!-- <div class='checkCodeBtn'>
@@ -58,6 +58,7 @@ export default {
             value: '',
             id: this.$attrs.id || randomId(),
             disabled: false,
+            getCodeText: this.$t('login.getVerifyCode'),
         }
     },
     emits: ['update:modelValue', 'update:zone', 'input', 'verifyCodeSend'],
@@ -76,24 +77,21 @@ export default {
         },
         getCode () {
             this.disabled = true
-            this.$emit('verifyCodeSend', this.getCodeBtnCountDown.bind(this))
+            this.$emit('verifyCodeSend', this.getCodeBtnCountDown)
             // this.getCodeBtnCountDown()
         },
         getCodeBtnCountDown (flag) {
             if (flag === false) return (this.disabled = false)
-            const getCodeBtn = this.$refs.getCodeBtn
-            const originText = getCodeBtn.textContent
             let len = 60
-
             const t = setInterval(() => {
                 if (len === 0) {
                     clearInterval(t)
-                    getCodeBtn.innerText = this.$t('register.reGet')
+                    this.getCodeText = this.$t('register.reGet')
                     this.disabled = false
                     return
                 }
                 len--
-                getCodeBtn.innerText = `${len}s`
+                this.getCodeText = `${len}s`
             }, 1000)
         }
     }
