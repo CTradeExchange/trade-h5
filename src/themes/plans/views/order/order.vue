@@ -82,9 +82,9 @@
 <script>
 import { reactive, toRefs, computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { gt, lt, mul } from '@/utils/calculation'
+import { mul } from '@/utils/calculation'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import SwitchTradeType from './components/switchTradeType'
 import Direction from './components/direction'
@@ -123,7 +123,6 @@ export default {
     setup () {
         const store = useStore()
         const route = useRoute()
-        const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
         const { symbolId, direction, tradeType } = route.query
         if (symbolId && tradeType) store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
