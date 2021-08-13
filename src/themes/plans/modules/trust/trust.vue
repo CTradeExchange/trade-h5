@@ -5,8 +5,8 @@
                 <span class='name'>
                     {{ product.symbolName }}
                 </span>
-                <span class='tag'>
-                    {{ product.expireType }}   {{ expireTypeMap['1'] }}
+                <span v-if='product.expireType' class='tag'>
+                    {{ expireTypeMap[product.expireType] }}
                 </span>
             </div>
 
@@ -43,14 +43,14 @@
                     <label for=''>
                         {{ $t('trade.stopLossPrice') }}
                     </label>
-                    <span>{{ product.stopLoss }}</span>
+                    <span>{{ product.stopLoss || '--' }}</span>
                 </p>
 
                 <p class='tl-item'>
                     <label for=''>
-                        {{ $t('trade.takeProfit') }}
+                        {{ $t('trade.stopProfitPrice') }}
                     </label>
-                    <span>{{ product.takeProfit }}</span>
+                    <span>{{ product.takeProfit || '--' }}</span>
                 </p>
 
                 <p class='tl-item'>

@@ -1,8 +1,8 @@
 <template>
     <div class='modifyProfitLoss'>
-        {{ stopLossRange }}--
+        <!-- {{ stopLossRange }}--
         {{ product.buy_price }}--
-        {{ product.sell_price }}
+        {{ product.sell_price }} -->
         <ProfitLossBar
             ref='stopLossRef'
             v-model='stopLossPrice'
