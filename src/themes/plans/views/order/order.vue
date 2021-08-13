@@ -9,7 +9,7 @@
             </div>
             <div v-if='product' class='right'>
                 <!-- 订单类型 -->
-                <OrderTypeTab v-model='orderType' @selected='changeOrderType' />
+                <OrderTypeTab v-model='orderType' :trade-type='product.tradeType' @selected='changeOrderType' />
                 <!-- 自动借款 -->
                 <LoanBar v-if='product.tradeType === 3' v-model='operationType' class='cellMarginTop' :trade-type='product.tradeType' />
                 <!-- 方向 -->
@@ -179,7 +179,7 @@ export default {
         )
         // 监听玩法类型
         const handleTradeType = (tradeType) => {
-            productTradeType.value = tradeType
+            productTradeType.value = String(tradeType)
             const changeProductKey = findProductInCategory(tradeType)
             if (changeProductKey) {
                 const [symbolId, tradeType] = changeProductKey.split('_')
@@ -196,6 +196,7 @@ export default {
         // 侧边栏-切换产品
         const onSelectProduct = (product, close) => {
             const { symbolId, tradeType } = product
+            productTradeType.value = String(tradeType)
             switchProduct(symbolId, tradeType).then(res => {
                 state.orderType = 1
                 init()
@@ -284,7 +285,6 @@ export default {
                     state.loading = false
                 })
         }
-
         init()
         return {
             ...toRefs(state),
