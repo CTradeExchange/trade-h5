@@ -98,7 +98,7 @@ export default {
                 flex-direction: column;
                 text-align: right;
                 .balance {
-                    color: #333;
+                    color: var(--color);
                     font-weight: 400;
                     font-size: rem(34px);
                     line-height: rem(36px);
