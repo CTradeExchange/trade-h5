@@ -153,15 +153,15 @@ const routes = [
     {
         path: '/trustDetail',
         name: 'TrustDetail',
-        component: () => import(/* webpackChunkName: "otherpage" */ '../views/trust/trustDetail.vue'),
+        component: () => import(/* webpackChunkName: "otherpage" */ '../views/orderList/trustDetail.vue'),
         meta: {
             title: ''
         }
     },
     {
-        path: '/trustList',
-        name: 'TrustList',
-        component: () => import(/* webpackChunkName: "otherpage" */ '../views/trust/trustList.vue'),
+        path: '/orderList',
+        name: 'OrderList',
+        component: () => import(/* webpackChunkName: "otherpage" */ '../views/orderList/orderList.vue'),
         meta: {
             title: ''
         }

@@ -7,7 +7,7 @@
             <div v-if='false' class='left'>
                 <OrderHandicap />
             </div>
-            <div class='right'>
+            <div v-if='product' class='right'>
                 <!-- 订单类型 -->
                 <OrderTypeTab v-model='orderType' @selected='changeOrderType' />
                 <!-- 自动借款 -->
@@ -32,7 +32,7 @@
                     :product='product'
                 />
                 <!-- 手数 -->
-                <OrderVolume v-if='product' v-model='volume' class='cellMarginTop' :product='product' />
+                <OrderVolume v-model='volume' class='cellMarginTop' :product='product' />
                 <!-- 订单金额 -->
                 <Assets
                     v-if='account && [3,9].includes(product.tradeType)'
@@ -44,12 +44,20 @@
                 />
                 <!-- 止盈止损 -->
                 <ProfitlossSet
-                    v-if='product && [1,2].includes(product.tradeType)'
+                    v-if=' [1,2].includes(product.tradeType)'
                     v-model:stopLoss='stopLoss'
                     v-model:stopProfit='stopProfit'
                     class='cellMarginTop'
                     :direction='direction'
                     :product='product'
+                />
+                <!-- 过期类型 -->
+                <CellType
+                    v-if='orderType===10 && [1,2].includes(product.tradeType)'
+                    v-model='expireType'
+                    :btn-list='expireTypeList'
+                    class='mtop20'
+                    :title="$t('trade.expireTime')"
                 />
                 <div class='footerBtn' :class='[direction]'>
                     <van-button block :disabled='loading' :loading='loading' size='normal' @click='submitHandler'>
@@ -87,6 +95,7 @@ import LoanBar from './components/loanBar'
 import PendingBarCFD from './components/pendingBar_CFD'
 import OrderTypeTab from './components/orderType.vue'
 import Assets from './components/assets.vue'
+import CellType from '@plans/components/cellType'
 import Trust from './components/trust.vue'
 import OrderHandicap from './components/handicap.vue'
 import plansType from '@plans/components/plansType.vue'
@@ -105,6 +114,7 @@ export default {
         OrderHandicap,
         sidebarProduct,
         Assets,
+        CellType,
         Trust,
         PendingBar,
         LoanBar,
@@ -123,6 +133,14 @@ export default {
             switchProductVisible: false,
             direction: direction || 'buy',
             orderType: 1, // 订单类型
+            expireType: 1, // 挂单过期类型
+            expireTypeList: [{
+                title: t('trade.expireType2'),
+                val: 2
+            }, {
+                title: t('trade.expireType1'),
+                val: 1
+            }],
             volume: '',
             operationType: 2, // 操作类型。1-普通；2-自动借款；3-自动还款
             pendingPrice: '',
@@ -167,6 +185,7 @@ export default {
             if (changeProductKey) {
                 const [symbolId, tradeType] = changeProductKey.split('_')
                 switchProduct(symbolId, tradeType).then(() => {
+                    state.orderType = 1
                     init()
                 })
             }
@@ -179,6 +198,7 @@ export default {
         const onSelectProduct = (product, close) => {
             const { symbolId, tradeType } = product
             switchProduct(symbolId, tradeType).then(res => {
+                state.orderType = 1
                 init()
                 close()
             })
@@ -228,7 +248,8 @@ export default {
                 accountDigits: account.value.digits,
                 tradeType: parseInt(tradeType),
                 stopLoss: mul(state.stopLoss, p),
-                takeProfit: mul(state.stopProfit, p)
+                takeProfit: mul(state.stopProfit, p),
+                expireType: state.expireType
             }
             return params
         }

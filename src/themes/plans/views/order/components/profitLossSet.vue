@@ -51,7 +51,7 @@
 
 <script>
 import { computed, reactive, ref, toRefs, watchEffect } from 'vue'
-import ProfitLossBar from '@c/modules/profitLossBar/profitLossBar'
+import ProfitLossBar from '@plans/modules/profitLossBar/profitLossBar'
 import FloatTip from './floatTip'
 import { profitLossPriceCompare } from './checkProfitLoss'
 import { useStore } from 'vuex'

@@ -34,7 +34,7 @@
 
 <script>
 import { lt, gt, pow } from '@/utils/calculation'
-import StepperComp from '@c/components/stepper'
+import StepperComp from '@plans/components/stepper'
 import FloatTip from './floatTip'
 import { Dialog } from 'vant'
 import { computed, onMounted, reactive, toRefs } from 'vue'
