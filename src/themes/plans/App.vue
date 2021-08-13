@@ -31,7 +31,7 @@ import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { MsgSocket } from '@/plugins/socket/socket'
-import { getQueryVariable, localSet } from '@/utils/util'
+import { getQueryVariable, sessionSet } from '@/utils/util'
 export default {
     components: {
         Notice
@@ -44,7 +44,7 @@ export default {
         const tipTextCountDown = ref(t('confirm') + '(3s)')
         window.store = store
         if (getQueryVariable('b_superiorAgent')) {
-            localSet('b_superiorAgent', getQueryVariable('b_superiorAgent'))
+            sessionSet('b_superiorAgent', getQueryVariable('b_superiorAgent'))
         }
         // 跳转到登录页面刷新
         const handlerLogout = () => {

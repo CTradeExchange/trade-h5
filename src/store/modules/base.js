@@ -1,18 +1,22 @@
 import { pageConfig, wpCompanyConfig, wpNav, wpSelfSymbolIndex } from '@/api/wpApi'
-import { localSet, localGet } from '@/utils/util'
+import { localSet, localGet, sessionSet } from '@/utils/util'
 
 export default {
     namespaced: true,
     state: {
+        inited: false, // 配置信息是否获取完成
         wpCompanyInfo: null, //   wordpress公司配置信息
         wpSelfSymbol: null, //   wordpress自选产品配置
         wpProductCategory: [], // wordpress配置的产品板块
         wpNav: null, //   wordpress公司配置信息
-        plans: [{ id: 1, name: 'CFD全仓' }, { id: 2, name: 'CFD逐仓' }, { id: 3, name: '杠杆全仓' }]
+        plans: [], // [{ id: 1, name: 'CFD全仓' }, { id: 2, name: 'CFD逐仓' }, { id: 3, name: '杠杆全仓' }]
     },
     mutations: {
+        UPDATE_inited (state, data) {
+            state.inited = data
+        },
         UPDATE_wpCompanyInfo (state, data) {
-            sessionStorage.setItem('companyId', data.companyId)
+            sessionSet('companyId', data.companyId)
             state.wpCompanyInfo = data
         },
         UPDATE_wpNav (state, data) {
@@ -30,7 +34,7 @@ export default {
     },
     actions: {
         // 初始化基础配置信息，如公司配置、底部导航配置、自选产品配置、产品板块配置
-        initBaseConfig ({ dispatch }) {
+        initBaseConfig ({ dispatch, commit }) {
             const baseList = [
                 dispatch('getCompanyInfo'),
                 dispatch('getNav'),
@@ -38,21 +42,21 @@ export default {
                 dispatch('getProductCategory')
             ]
             return Promise.all(baseList).then(res => {
+                commit('UPDATE_inited', true)
                 return dispatch('_quote/setProductAllList', null, { root: true })
             })
         },
         // 获取公司配置信息
         getCompanyInfo ({ commit }) {
-            return wpCompanyConfig().then(async data => {
+            return wpCompanyConfig().then(data => {
                 if (data) {
-                    // data.companyId = 17
                     if (data.tradeTypeCurrencyList) {
                         data.tradeTypeCurrencyList = data.tradeTypeCurrencyList.filter(el => el.allCurrency)
                         data.tradeTypeCurrencyList.forEach(el => {
                             el.tradeType = el.id
                         })
                     }
-                    sessionStorage.setItem('utcOffset', parseFloat(data.utcOffset) * 60)
+                    sessionSet('utcOffset', parseFloat(data.utcOffset) * 60)
                     if (!localGet('lang')) localSet('lang', data.language)
                     commit('UPDATE_wpCompanyInfo', data)
                     commit('Update_plans', data.tradeTypeCurrencyList)
