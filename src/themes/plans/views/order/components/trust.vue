@@ -2,12 +2,17 @@
     <div class='trustWrapper'>
         <div class='hd'>
             <span>{{ $t('trade.curTrust') }} ({{ pendingList.length }})</span>
-            <a class='allTrust' href='javascript:;' @click="$router.push({ name:'OrderList',query:{ tradeType:product.tradeType } })">
+            <a class='allTrust' href='javascript:;' @click="$router.push({ name:'List',query:{ tradeType:product.tradeType } })">
                 <i class='icon_mingxi'></i>
             </a>
         </div>
         <div class='bd'>
-            <trustItem v-for='item in pendingList' :key='item.id' :product='item' />
+            <van-empty
+                v-if='pendingList?.length === 0'
+                :description="$t('trade.pendingEmpty')"
+                image='/images/empty.png'
+            />
+            <trustItem v-for='item in pendingList' v-else :key='item.id' :product='item' />
         </div>
     </div>
 </template>

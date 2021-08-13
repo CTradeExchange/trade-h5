@@ -62,7 +62,7 @@
             </li>
         </ul>
         <div class='footerBtn'>
-            <van-button block type='primary' @click='toLoan'>
+            <van-button v-if='Number(tradeType) === 3' block type='primary' @click='toLoan'>
                 {{ $t('trade.loan') }}
             </van-button>
             <van-button block type='primary' @click='toReturnMoney'>
@@ -192,9 +192,11 @@ export default {
     justify-content: space-evenly;
     width: 100%;
     .van-button {
-        width: 45%;
+        //width: 45%;
+        flex: 1;
         height: rem(80px);
-        margin-bottom: rem(20px);
+        margin: rem(20px);
+        //margin-bottom: rem(20px);
         color: #FFF;
         font-size: rem(30px);
     }

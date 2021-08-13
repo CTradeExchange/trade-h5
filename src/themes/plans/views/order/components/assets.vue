@@ -21,7 +21,7 @@
                     {{ $t('trade.autoLoan') }}
                     <van-icon class='questionIcon' name='question-o' @click='lilvAlert=true' />
                 </van-radio>
-                <van-radio :name='3'>
+                <van-radio v-if='product.tradeType === 3' :name='3'>
                     {{ $t('trade.autoRepayment') }}
                 </van-radio>
             </van-radio-group>

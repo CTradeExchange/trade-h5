@@ -11,7 +11,7 @@
                 <!-- 订单类型 -->
                 <OrderTypeTab v-model='orderType' @selected='changeOrderType' />
                 <!-- 自动借款 -->
-                <LoanBar v-if='[3,9].includes(product.tradeType)' v-model='operationType' class='cellMarginTop' />
+                <LoanBar v-if='product.tradeType === 3' v-model='operationType' class='cellMarginTop' :trade-type='product.tradeType' />
                 <!-- 方向 -->
                 <Direction v-model='direction' class='cellMarginTop' :product='product' />
                 <!-- 挂单设置 -->
