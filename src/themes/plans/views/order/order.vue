@@ -210,7 +210,10 @@ export default {
             store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
                 state.volume = product.minVolume // 设置默认手数
                 QuoteSocket.send_subscribe([symbolKey.value])
-                store.dispatch('_trade/queryPBOOrderPage', { tradeType: product.tradeType })
+                store.dispatch('_trade/queryPBOOrderPage', {
+                    tradeType: product.tradeType,
+                    sortFieldName: 'orderTime'
+                })
                 if ([3, 9].includes(product.tradeType)) queryAccountInfo()
             })
         }

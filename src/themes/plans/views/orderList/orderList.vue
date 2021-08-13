@@ -1,7 +1,7 @@
 <template>
     <div class='page-wrap'>
         <LayoutTop :back='true' :menu='false' :title='tradeName' />
-        <!-- <Loading :show='loading' /> -->
+        <Loading :show='loading' />
         <van-tabs v-model:active='active' class='tabs'>
             <van-tab :title='$t("trade.curTrust")'>
                 <div v-if='pendingList.length === 0'>
@@ -9,17 +9,36 @@
                 </div>
                 <div v-else class='trust-wrap'>
                     <van-pull-refresh v-model='loading' @refresh='onRefresh'>
-                        <trustItem v-for='item in pendingList' :key='item.id' :product='item' @click.stop='toDetail(item)' />
+                        <trustItem
+                            v-for='item in pendingList'
+                            :key='item.id'
+                            :product='item'
+                            @click.stop='toDetail(item)'
+                        />
                     </van-pull-refresh>
                 </div>
             </van-tab>
             <van-tab :title='$t("trade.dealList")'>
                 <div class='filter-wrap'>
                     <van-dropdown-menu :active-color='$style.primary' :overlay='true'>
-                        <van-dropdown-item v-model='directionVal' :options='direction' />
-                        <van-dropdown-item ref='productDropdown' v-model='productVal' :options='product' @open='openProductSwitch' />
-                        <van-dropdown-item v-model='positionTypeVal' :options='positionType' />
-                        <van-dropdown-item v-model='timeVal' :options='timeList' />
+                        <van-dropdown-item
+                            v-model='directionVal'
+                            :options='direction'
+                        />
+                        <van-dropdown-item
+                            ref='productDropdown'
+                            v-model='productVal'
+                            :options='product'
+                            @open='openProductSwitch'
+                        />
+                        <van-dropdown-item
+                            v-model='positionTypeVal'
+                            :options='positionType'
+                        />
+                        <van-dropdown-item
+                            v-model='timeVal'
+                            :options='timeList'
+                        />
                     </van-dropdown-menu>
                 </div>
                 <div class='list-wrap'>
@@ -113,6 +132,7 @@ export default {
         const productDropdown = ref(null)
 
         const state = reactive({
+            active: 0,
             loading: false,
             switchProductVisible: false,
             directionVal: 0,
@@ -163,8 +183,7 @@ export default {
         }
 
         const onRefresh = () => {
-            console.log('刷新')
-            queryPBOOrderPage()
+            queryPendingList()
         }
 
         watch(
@@ -189,13 +208,18 @@ export default {
             state.switchProductVisible = true
         }
 
-        const queryPBOOrderPage = () => {
+        const queryPendingList = () => {
             // 获取委托列表
+            debugger
+            state.loading = true
             store.dispatch('_trade/queryPBOOrderPage', {
                 customerNo: customInfo.value.customerNo,
                 sortFieldName: 'orderTime',
                 sortType: 'desc',
                 tradeType: route.query.tradeType,
+            }).then(res => {
+                console.log('res res re sres ', res)
+                state.loading = false
             })
         }
 
@@ -206,7 +230,7 @@ export default {
             state.switchProductVisible = false
         }
 
-        queryPBOOrderPage()
+        queryPendingList()
 
         return {
             toDetail,

@@ -125,7 +125,6 @@ export default {
         })
 
         const handleTradeType = (val) => {
-            console.log('curIndex', val)
             const curIndex = plans.value.findIndex(item => item.id === val)
             assetsSwipe.value.swipeTo(curIndex)
         }

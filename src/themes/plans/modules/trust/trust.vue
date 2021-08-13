@@ -43,21 +43,22 @@
                     <label for=''>
                         {{ $t('trade.stopLossPrice') }}
                     </label>
-                    <span>{{ product.stopLoss || '--' }}</span>
+                    <span>{{ shiftedBy(product.stopLoss,-1*product.digits ) || '--' }}</span>
                 </p>
 
                 <p class='tl-item'>
                     <label for=''>
                         {{ $t('trade.stopProfitPrice') }}
                     </label>
-                    <span>{{ product.takeProfit || '--' }}</span>
+
+                    <span>{{ shiftedBy(product.takeProfit,-1*product.digits ) || '--' }}</span>
                 </p>
 
                 <p class='tl-item'>
                     <!-- <label for=''>
                         {{ $t('trade.trustTime') }}
                     </label> -->
-                    <span>{{ formatTime(product.orderTime,'YYYY/MM/DD hh:mm:ss') }}</span>
+                    <span>{{ formatTime(product.orderTime,'YYYY/MM/DD HH:mm:ss') }}</span>
                 </p>
 
                 <p class='tl-item'>
