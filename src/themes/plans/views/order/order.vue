@@ -211,7 +211,8 @@ export default {
                 QuoteSocket.send_subscribe([symbolKey.value])
                 store.dispatch('_trade/queryPBOOrderPage', {
                     tradeType: product.tradeType,
-                    sortFieldName: 'orderTime'
+                    sortFieldName: 'orderTime',
+                    sortType: 'desc'
                 })
                 if ([3, 9].includes(product.tradeType)) queryAccountInfo()
             })

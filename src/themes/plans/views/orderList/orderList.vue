@@ -210,7 +210,6 @@ export default {
 
         const queryPendingList = () => {
             // 获取委托列表
-            debugger
             state.loading = true
             store.dispatch('_trade/queryPBOOrderPage', {
                 customerNo: customInfo.value.customerNo,
