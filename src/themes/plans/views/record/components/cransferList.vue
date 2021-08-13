@@ -2,7 +2,6 @@
     <list
         class='list'
         :liabilities-type='2'
-        :request-api='queryLiabilitiesWaterByPage'
     >
         <template #default='{ list }'>
             <div v-for='item in list' :key='item.id' class='li'>
@@ -47,7 +46,6 @@
 <script>
 import list from './list'
 import dayjs from 'dayjs'
-import { queryLiabilitiesWaterByPage } from '@/api/user'
 
 export default {
     components: { list },
@@ -56,8 +54,7 @@ export default {
             return dayjs(val).format('YYYY/MM/DD HH:mm:ss')
         }
         return {
-            formatTime,
-            queryLiabilitiesWaterByPage
+            formatTime
         }
     },
 }
