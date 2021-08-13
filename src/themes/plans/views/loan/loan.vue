@@ -56,7 +56,14 @@
         </div>
     </div>
     <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
-        <van-picker :columns='columns' :columns-field-names='customFieldName' :default-index='2' title='' @confirm='onPickerConfirm' />
+        <van-picker
+            :columns='columns'
+            :columns-field-names='customFieldName'
+            :default-index='2'
+            title=''
+            @cancel='pickerShow = false'
+            @confirm='onPickerConfirm'
+        />
     </van-popup>
 </template>
 

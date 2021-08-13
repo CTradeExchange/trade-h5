@@ -1,5 +1,5 @@
 <template>
-    <div v-if='product && curProduct' class='trust-item'>
+    <div v-if='product && curProduct' class='trust-item' @click='toDetail(item)'>
         <div class='t-header'>
             <div class='fl'>
                 <span class='name'>
@@ -80,10 +80,12 @@ import { shiftedBy } from '@/utils/calculation'
 import { useStore } from 'vuex'
 import { closePboOrder } from '@/api/trade'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 export default {
     props: ['product'],
     setup (props) {
         const store = useStore()
+        const router = useRouter()
         const loading = ref(false)
         const { t } = useI18n({ useScope: 'global' })
         const expireTypeMap = {
@@ -96,6 +98,17 @@ export default {
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+
+        const toDetail = (item) => {
+            router.push({
+                path: '/trustDetail',
+                query: {
+                    id: props.product.id,
+                    symbolId: props.product.symbolId,
+                    tradeType: props.product.tradeType
+                }
+            })
+        }
 
         const cancelOrder = () => {
             Dialog.confirm({
@@ -136,6 +149,7 @@ export default {
             loading,
             curProduct,
             symbolKey,
+            toDetail,
             expireTypeMap
         }
     }

@@ -7,7 +7,7 @@
             </a>
         </div>
         <div class='bd'>
-            <trustItem v-for='item in pendingList' :key='item.id' :product='item' @click.stop='toDetail(item)' />
+            <trustItem v-for='item in pendingList' :key='item.id' :product='item' />
         </div>
     </div>
 </template>
@@ -33,17 +33,6 @@ export default {
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
-
-        const toDetail = (item) => {
-            router.push({
-                path: '/trustDetail',
-                query: {
-                    id: item.id,
-                    symbolId: item.symbolId,
-                    tradeType: props.product.tradeType
-                }
-            })
-        }
 
         watch(
             () => pendingList.value?.length,
@@ -71,7 +60,6 @@ export default {
         })
 
         return {
-            toDetail,
             pendingList,
             loading
 
