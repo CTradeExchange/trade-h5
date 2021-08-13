@@ -4,7 +4,7 @@
         <SwitchTradeType :product='product' @switchProduct='switchProductVisible=true' />
 
         <div v-if='product' class='main'>
-            <div v-if='false' class='left'>
+            <div v-if='[3,9].includes(product.tradeType) && false' class='left'>
                 <OrderHandicap />
             </div>
             <div v-if='product' class='right'>
@@ -59,12 +59,12 @@
                     class='mtop20'
                     :title="$t('trade.expireTime')"
                 />
-                <div class='footerBtn' :class='[direction]'>
-                    <van-button block :disabled='loading' :loading='loading' size='normal' @click='submitHandler'>
-                        {{ direction==='buy'?$t('trade.buyText'):$t('trade.sellText') }}
-                    </van-button>
-                </div>
             </div>
+        </div>
+        <div class='footerBtn' :class='[direction]'>
+            <van-button block :disabled='loading' :loading='loading' size='normal' @click='submitHandler'>
+                {{ direction==='buy'?$t('trade.buyText'):$t('trade.sellText') }}
+            </van-button>
         </div>
         <!-- 委托列表 -->
         <Trust
@@ -336,10 +336,10 @@ export default {
         @include scroll();
         display: flex;
         flex: 1;
-        //margin-bottom: rem(90px);
-        padding: 0 rem(40px) rem(40px) rem(40px);
+        padding: 0 rem(30px) rem(40px);
         overflow: auto;
         background: var(--contentColor);
+        border-top: rem(20px) solid var(--bgColor);
         .left {
             width: rem(250px);
             margin-right: rem(30px);
@@ -358,7 +358,7 @@ export default {
 }
 .footerBtn {
     width: 100%;
-    margin-top: rem(100px);
+    padding: rem(100px) rem(30px) rem(30px);
     background: var(--contentColor);
     &.buy {
         .van-button {
