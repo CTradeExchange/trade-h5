@@ -26,7 +26,7 @@
             </li>
         </ul>
 
-        <div class='btns'>
+        <div v-if='assetsInfo' class='btns'>
             <van-button
                 hairline
                 size='mini'
