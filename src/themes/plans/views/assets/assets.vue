@@ -145,6 +145,7 @@ export default {
         }
 
         onMounted(() => {
+            console.log('swipeTo', tabIndex.value)
             assetsSwipe.value && assetsSwipe.value.swipeTo(tabIndex.value === -1 ? 0 : tabIndex.value)
             if (plans.value.length > 0) {
                 store.commit('_quote/Update_tradeType', plans.value[0].id)
