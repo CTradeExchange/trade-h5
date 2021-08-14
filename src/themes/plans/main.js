@@ -11,7 +11,7 @@ import FindCustomerInfo from '@plans/plugins/findCustomerInfo'
 import Loading from '@/components/loading'
 import PageComp from '@plans/components/PageComp.vue'
 import LayoutTop from '@plans/layout/top'
-import Colors, { setRootVariable } from './colorVariables'
+import { setRootVariable } from './colorVariables'
 import { setRouter } from '@/utils/request'
 import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet } from '@/utils/util'
 import BigNumber from 'bignumber.js'
@@ -32,6 +32,10 @@ app.component('LayoutTop', LayoutTop)
 app.component('PageComp', PageComp)
 app.mixin(MixinGlobal)
 
+app.config.errorHandler = (err, vm, info) => {
+    // 处理错误  `info` 是 Vue 特定的错误信息，比如错误所在的生命周期钩子
+    console.error(err, vm, info)
+}
 // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
 const loginParams = getLoginParams()
 const token = getToken()

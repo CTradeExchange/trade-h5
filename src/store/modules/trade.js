@@ -182,12 +182,10 @@ export default {
             const hideLoading = !!params.hideLoading
             const accountListLen = rootState._user.customerInfo?.accountList?.length
             const tradeType = params.tradeType
-            console.log('params', params)
             if (!accountListLen) {
                 commit('Update_positionList', { tradeType, list: [] })
                 return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空持仓
             }
-            console.log('hideLoading', hideLoading)
             if (!hideLoading) commit('Update_positionLoading', true)
             return queryPositionPage(positionsConfig[tradeType]).then((res) => {
                 commit('Update_positionLoading', false)

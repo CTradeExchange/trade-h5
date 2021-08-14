@@ -10,7 +10,7 @@
                                 {{ product.symbolName }}
                             </div>
                             <div class='code'>
-                                {{ product.symbolName }}
+                                {{ product.symbolCode }}
                             </div>
                         </div>
                     </div>

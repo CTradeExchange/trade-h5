@@ -290,7 +290,8 @@
     "priceMeet": "当价格满足条件时",
     "limitPirce": "限价",
     "stopLoss": "停损",
-    "pending": "限价单",
+    "pending": "挂单",
+    "pending2": "限价单",
     "maxRange": "最大偏移",
     "maxRangeTip": "成交价与当前报价的最大差价，即成交价在该差值范围内才可成交",
     "point": "点",
@@ -397,7 +398,7 @@
     "availableLoanContent1": "从代理处可借款的额度，系统最大可借为{0}",
     "availableLoanContent2": "借款币种为{0}，日利率{1}。自下单成功开始计息，平台按小时数收取利息，整点计息，不足一小时按一小时计算。借款利息=借款本金（日利率/24）借款小时数",
     "availableLoanContent3": "借款币种为{0}，日利率{1}。自下单成功开始计息，平台按小时数收取利息，整点计息，不足一小时按一小时计算。借款利息=借款本金（日利率/24）借款小时数",
-    "availableLoanAmount": "代理可借额度",
+    "availableLoanAmount": "代理可借",
     "autoLoan": "自动借款",
     "autoRepayment": "自动还款",
     "dealTime": "成交时间",
@@ -434,7 +435,15 @@
     "previewStopPrice": "预估强平价",
     "get": "借",
     "enterMarginAmountRequire": "请输入调整金额",
-    "enterMarginAmountTip": "调整金额不能为负数"
+    "enterMarginAmountTip": "调整金额不能为负数",
+    "order": "订单",
+    "dealList": "成交记录",
+    "openClose": "开/平",
+    "openPosition": "开仓",
+    "closePosition": "平仓",
+    "symbol": "产品",
+    "trustTime": "委托时间",
+    "trustId": "委托编号"
 
   },
   "bizType": {
@@ -528,8 +537,10 @@
   },
   "record":{
     "repaymentAmount": "还款数量",
-    "records": "借还款记录",
+    "records": "资金记录",
     "loanRecord": "借款记录",
-    "repaymentRecord": "还款记录"
+    "repaymentRecord": "还款记录",
+    "cransferRecord": "划转记录",
+    "capitalRecord": "资金流水"
   }
 }

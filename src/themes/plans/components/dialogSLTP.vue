@@ -15,9 +15,9 @@
         <div class='dialog-header'>
             <div class='title'>
                 <p class='productName'>
-                    {{ data.symbolName }}
+                    {{ data?.symbolName }}
                 </p><p class='lot'>
-                    {{ data.symbolName }}
+                    {{ product?.symbolCode }}
                 </p>
             </div>
             <div class='right' @click='closeHandler'>
@@ -27,17 +27,6 @@
         <div class='dialog-body'>
             <div class='inputNumber'>
                 <div class='left'>
-                    <div class='name'>
-                        {{ $t('trade.hold') }}
-                    </div>
-                    <div class='val'>
-                        <span :class="parseFloat(data.direction) === 1 ? 'riseColor' : 'fallColor'">
-                            {{ parseFloat(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
-                        </span>
-                        {{ positionVolume }} {{ $t('trade.volumeUnit') }}
-                    </div>
-                </div>
-                <div class='right'>
                     <div>
                         <div class='name'>
                             {{ $t('trade.positionPrice') }}
@@ -46,11 +35,8 @@
                             {{ data.openPrice }}
                         </div>
                     </div>
-                    <!-- <div class='line'>
-                        <div class='lineInfo van-hairline--bottom'>
-                            7545
-                        </div>
-                    </div> -->
+                </div>
+                <div class='right'>
                     <div>
                         <div class='name'>
                             {{ $t('trade.currentPrice') }}
@@ -59,8 +45,18 @@
                             {{ parseFloat(data.direction)===1 ? product.sell_price:product.buy_price }}
                         </div>
                     </div>
+
+                    <div>
+                        <div class='name'>
+                            {{ $t('trade.previewStopPrice') }}
+                        </div>
+                        <div>
+                            {{ data.previewStopPrice || '--' }}
+                        </div>
+                    </div>
                 </div>
             </div>
+
             <ModifyProfitLoss
                 ref='modifyProfitLossRef'
                 v-model:stopLoss='stopLossPrice'

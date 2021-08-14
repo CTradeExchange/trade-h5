@@ -1,8 +1,8 @@
 <template>
     <div class='modifyProfitLoss'>
-        {{ stopLossRange }}--
+        <!-- {{ stopLossRange }}--
         {{ product.buy_price }}--
-        {{ product.sell_price }}
+        {{ product.sell_price }} -->
         <ProfitLossBar
             ref='stopLossRef'
             v-model='stopLossPrice'
@@ -37,10 +37,10 @@
 </template>
 
 <script>
-import ProfitLossBar from '@c/modules/profitLossBar/profitLossBar'
+import ProfitLossBar from '@plans/modules/profitLossBar/profitLossBar'
 import { computed, reactive, ref, toRefs, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { profitLossPriceCompare } from '@c/views/order/components/checkProfitLoss'
+import { profitLossPriceCompare } from '@plans/views/order/components/checkProfitLoss'
 import { useStore } from 'vuex'
 export default {
     components: {

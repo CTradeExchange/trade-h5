@@ -1,5 +1,9 @@
 <template>
-    <van-empty v-if='positionList?.length === 0' :description="$t('trade.positionEmpty')" />
+    <van-empty
+        v-if='positionList?.length === 0'
+        :description="$t('trade.positionEmpty')"
+        image='/images/empty.png'
+    />
     <div v-else class='position-wrap'>
         <p class='header'>
             <span>{{ $t('trade.position') }}({{ positionList?.length }})</span>
@@ -11,8 +15,8 @@
         <van-loading v-if='loading' class='loading' />
 
         <positionItem
-            v-for='(item,index) in positionList'
-            :key='index'
+            v-for='item in positionList'
+            :key='item.positionId'
             :data='item'
             :product='product'
             @showAdjustPopup='showAdjustPopup'
@@ -124,7 +128,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .position-wrap {
     background-color: var(--contentColor);

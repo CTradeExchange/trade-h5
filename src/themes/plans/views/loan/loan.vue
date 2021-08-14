@@ -56,7 +56,14 @@
         </div>
     </div>
     <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
-        <van-picker :columns='columns' :columns-field-names='customFieldName' :default-index='2' title='' @confirm='onPickerConfirm' />
+        <van-picker
+            :columns='columns'
+            :columns-field-names='customFieldName'
+            :default-index='2'
+            title=''
+            @cancel='pickerShow = false'
+            @confirm='onPickerConfirm'
+        />
     </van-popup>
 </template>
 
@@ -68,7 +75,7 @@ import { useI18n } from 'vue-i18n'
 import { gt } from '@/utils/calculation'
 
 import { manualLoan } from '@/api/user'
-import { computed, reactive, onMounted, ref, toRefs, watch, watchEffect, nextTick } from 'vue'
+import { computed, reactive, toRefs } from 'vue'
 import { isEmpty } from '@/utils/util'
 export default {
     props: ['modelValue'],
@@ -190,7 +197,8 @@ export default {
                 path: '/record',
                 query: {
                     accountId: state.accountId,
-                    tradeType: state.tradeType
+                    tradeType: state.tradeType,
+                    type: 1
                 }
             })
         }

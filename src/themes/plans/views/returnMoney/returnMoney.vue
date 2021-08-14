@@ -59,10 +59,9 @@
 </template>
 
 <script>
-import { computed, reactive, ref, toRefs, watch, watchEffect, onMounted } from 'vue'
+import { computed, reactive, toRefs, watchEffect, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
-import BigNumber from 'bignumber.js'
 import { useI18n } from 'vue-i18n'
 import { manualRepayment, addRepaymentOrder, previewOrder } from '@/api/user'
 import { Toast } from 'vant'
@@ -162,7 +161,11 @@ export default {
         }
 
         const handleAll = () => {
-            state.outAmount = outAccount.value.available
+            if (parseFloat(outAccount.value.available) > parseFloat(inAccount.value.liabilities)) {
+                state.outAmount = inAccount.value.liabilities
+            } else {
+                state.outAmount = outAccount.value.available
+            }
         }
 
         const returnSuccess = () => {
@@ -229,7 +232,8 @@ export default {
                 path: '/record',
                 query: {
                     accountId: route.query.accountId,
-                    tradeType: state.tradeType
+                    tradeType: state.tradeType,
+                    type: 2
                 }
             })
         }

@@ -39,7 +39,7 @@ export default {
 @import '~@/sass/mixin.scss';
 .cellBar {
     // align-items: center;
-    color: var(--color);
+    color: var(--normalColor);
     .titleCol {
         width: rem(150px);
         padding-top: rem(20px);

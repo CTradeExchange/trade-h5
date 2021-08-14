@@ -9,7 +9,8 @@
         <div class='padding' :class="showField ? 'alignRight' : 'alignCenter'">
             {{ $t('trade.priceLabel') }}({{ product.profitCurrency }})
         </div>
-        <div v-if='showField' class='depth alignLeft'>
+        <!-- v-if='[3,9].indexOf(Number(tradeType)) > -1' -->
+        <div class='depth alignLeft'>
             <span class='depth-select'>
                 <van-popover
                     v-model:show='showPopover'
@@ -24,9 +25,9 @@
                 </van-popover>
             </span>
         </div>
-        <div v-else class='alignCenter'>
+        <!-- <div v-else class='alignCenter'>
             {{ $t('trade.priceLabel') }}({{ product.profitCurrency }})
-        </div>
+        </div> -->
         <div class='padding alignCenter'>
             {{ $t('trade.volumes') }}({{ product.baseCurrency }})
         </div>
@@ -90,7 +91,8 @@ export default {
         const state = reactive({
             curDigits: 0,
             showPopover: false,
-            theme: localGet('invertColor') === 'light' ? 'light' : 'dark'
+            theme: localGet('invertColor') === 'light' ? 'light' : 'dark',
+            tradeType: route.query.tradeType
         })
 
         // 获取用户类型
@@ -101,11 +103,11 @@ export default {
 
         // 当前产品id 的挂单列表
         const pendingList = computed(() => {
-            return store.state._trade.pendingList[route.query.tradeType]
+            return store.state._trade.pendingList[state.tradeType]
         })
 
         // 获取当前产品
-        const product = computed(() => store.state._quote.productMap[props.symbolId + '_' + route.query.tradeType])
+        const product = computed(() => store.state._quote.productMap[props.symbolId + '_' + state.tradeType])
 
         // 是否显示'我的'列
         const showField = computed(() => {
@@ -133,7 +135,7 @@ export default {
             if (newVal > 0) {
                 state.curDigits = digitLevelList.value[0]?.text
                 // 订阅盘口深度报价
-                QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits, route.query.tradeType)
+                QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits, state.tradeType)
             }
         }, {
             immediate: true
@@ -201,11 +203,11 @@ export default {
         // 修改报价深度
         const onSelect = (val) => {
             state.curDigits = val.text
-            QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits, route.query.tradeType)
+            QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits, state.tradeType)
         }
 
         store.dispatch('_trade/queryPBOOrderPage', {
-            tradeType: route.query.tradeType
+            tradeType: state.tradeType
         })
 
         onBeforeUnmount(() => {

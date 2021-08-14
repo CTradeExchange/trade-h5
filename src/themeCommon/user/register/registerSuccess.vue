@@ -17,12 +17,12 @@
             {{ $t('register.tips1') }}
         </p>
         <div class='btnBox'>
-            <button class='btn' @click='toExperience'>
+            <button class='highBtn' @click='toExperience'>
                 {{ $t('register.experienceNow') }}
             </button>
-            <button class='highBtn' @click='toDesposit'>
+            <!-- <button class='highBtn' @click='toDesposit'>
                 {{ $t('register.goDeposit') }}
-            </button>
+            </button> -->
         </div>
     </div>
 </template>

@@ -56,7 +56,7 @@
                                     {{ $t('trade.stopProfitPrice') }}
                                 </div>
                                 <div class='val'>
-                                    {{ parseFloat(data.takeProfitDecimal) ? data.takeProfitDecimal : '——' }}
+                                    {{ parseFloat(data.takeProfitDecimal) ? data.takeProfitDecimal : '--' }}
                                 </div>
                             </div>
                             <div class='flex-item'>
@@ -64,7 +64,7 @@
                                     {{ $t('trade.stopLossPrice') }}
                                 </div>
                                 <div class='val'>
-                                    {{ parseFloat(data.stopLossDecimal) ? data.stopLossDecimal : '——' }}
+                                    {{ parseFloat(data.stopLossDecimal) ? data.stopLossDecimal : '--' }}
                                 </div>
                             </div>
                         </div>

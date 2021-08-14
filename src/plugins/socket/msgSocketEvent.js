@@ -36,6 +36,7 @@ class SocketEvent {
                 sendTime: Date.now(),
                 lang: 'zh-CN',
             },
+            data,
             device: getDevice(),
             seqId: this.seq_id,
             trace: guid(),

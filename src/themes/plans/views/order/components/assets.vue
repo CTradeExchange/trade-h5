@@ -21,7 +21,7 @@
                     {{ $t('trade.autoLoan') }}
                     <van-icon class='questionIcon' name='question-o' @click='lilvAlert=true' />
                 </van-radio>
-                <van-radio :name='3'>
+                <van-radio v-if='product.tradeType === 3' :name='3'>
                     {{ $t('trade.autoRepayment') }}
                 </van-radio>
             </van-radio-group>
@@ -119,6 +119,8 @@ export default {
 }
 .borrowMoney {
     margin-top: rem(80px);
+    color: var(--minorColor);
+    font-size: rem(24px);
     :deep(.van-radio__icon .van-icon) {
         line-height: 1;
     }
@@ -126,6 +128,8 @@ export default {
         font-size: rem(30px);
         vertical-align: -2px;
     }
+
+    --van-radio-label-color: var(--minorColor);
 }
 .availableLoanContent {
     padding: rem(30px);

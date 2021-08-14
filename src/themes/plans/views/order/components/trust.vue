@@ -2,12 +2,17 @@
     <div class='trustWrapper'>
         <div class='hd'>
             <span>{{ $t('trade.curTrust') }} ({{ pendingList.length }})</span>
-            <a class='allTrust' href='javascript:;' @click="$router.push({ name:'TrustList',query:{ tradeType:product.tradeType } })">
-                {{ $t('trade.allTrust') }}
+            <a class='allTrust' href='javascript:;' @click="$router.push({ name:'List',query:{ tradeType:product.tradeType } })">
+                <i class='icon_mingxi'></i>
             </a>
         </div>
         <div class='bd'>
-            <trustItem v-for='item in pendingList.slice(0,5)' :key='item.id' :product='item' @click.stop='toDetail(item)' />
+            <van-empty
+                v-if='pendingList?.length === 0'
+                :description="$t('trade.pendingEmpty')"
+                image='/images/empty.png'
+            />
+            <trustItem v-for='item in pendingList' v-else :key='item.id' :product='item' />
         </div>
     </div>
 </template>
@@ -33,17 +38,6 @@ export default {
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
-
-        const toDetail = (item) => {
-            router.push({
-                path: '/trustDetail',
-                query: {
-                    id: item.id,
-                    symbolId: item.symbolId,
-                    tradeType: props.product.tradeType
-                }
-            })
-        }
 
         watch(
             () => pendingList.value?.length,
@@ -71,7 +65,6 @@ export default {
         })
 
         return {
-            toDetail,
             pendingList,
             loading
 
@@ -94,8 +87,8 @@ export default {
         line-height: rem(70px);
         border-bottom: 1px solid var(--assistColor);
         .allTrust {
-            color: var(--primary);
-            font-size: rem(24px);
+            color: var(--normalColor);
+            font-size: rem(32px);
         }
     }
 }

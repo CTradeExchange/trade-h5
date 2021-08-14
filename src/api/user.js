@@ -640,3 +640,16 @@ export function queryLiabilitiesWaterByPage (data) {
         data
     })
 }
+
+/* 成交记录 */
+export function tradeRecordList (data) {
+    return request({
+        url: '/global/tradeapi.app.OrderApiService.tradeRecordList',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            group: 'tradeApi'
+        },
+        data
+    })
+}

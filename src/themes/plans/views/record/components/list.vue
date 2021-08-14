@@ -13,7 +13,6 @@
 
 <script>
 import { reactive } from 'vue'
-import { queryLiabilitiesWaterByPage } from '@/api/user'
 import { useRoute } from 'vue-router'
 
 export default {
@@ -23,6 +22,10 @@ export default {
             type: [Number, String],
             require: true,
             default: '',
+        },
+        requestApi: {
+            type: Function,
+            default: null
         }
     },
     setup (props) {
@@ -46,7 +49,7 @@ export default {
                 size: 20
             }
 
-            return queryLiabilitiesWaterByPage(params)
+            return props.requestApi(params)
                 .then(res => {
                     if (res.code === '0' && Array.isArray(res.data.records)) {
                         return [res.data.records, res.data.total]

@@ -1,16 +1,27 @@
 <template>
-    <div v-if='product && curProduct' class='trust-item'>
+    <div v-if='product && curProduct' class='trust-item' @click='toDetail(item)'>
         <div class='t-header'>
-            <span class='product-name'>
-                {{ product.symbolName }}
-            </span>
-            <span class='direction'>
-                <span :class="Number(product.direction) === 1 ? 'riseColor' : 'fallColor'">
-                    {{ Number(product.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
-                </span> {{ product.requestNum }}
-            </span>
+            <div class='fl'>
+                <span class='name'>
+                    {{ product.symbolName }}
+                </span>
+                <span v-if='product.expireType' class='tag'>
+                    {{ expireTypeMap[product.expireType] }}
+                </span>
+            </div>
+
+            <div class='t-right'>
+                <van-button @click.stop='cancelOrder'>
+                    {{ $t('trade.cancelOrder') }}
+                </van-button>
+            </div>
         </div>
-        <Loading :show='loading' />
+        <div class='direction'>
+            <span :class="Number(product.direction) === 1 ? 'riseColor' : 'fallColor'">
+                {{ Number(product.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
+            </span> {{ product.requestNum }}
+        </div>
+
         <div class='t-body'>
             <div class='t-left'>
                 <p class='tl-item'>
@@ -30,24 +41,36 @@
                 </p>
                 <p class='tl-item'>
                     <label for=''>
-                        {{ $t('trade.loan') }}
+                        {{ $t('trade.stopLossPrice') }}
                     </label>
-                    <span>--</span>
+                    <span>{{ shiftedBy(product.stopLoss,-1*product.digits ) || '--' }}</span>
                 </p>
-                <!-- <p class='tl-item'>
+
+                <p class='tl-item'>
                     <label for=''>
-                        利息
+                        {{ $t('trade.stopProfitPrice') }}
                     </label>
-                    <span>12.55488USDT</span>
-                </p> -->
-            </div>
-            <div class='t-right'>
-                <van-button @click.stop='cancelOrder'>
-                    {{ $t('trade.cancelOrder') }}
-                </van-button>
+
+                    <span>{{ shiftedBy(product.takeProfit,-1*product.digits ) || '--' }}</span>
+                </p>
+
+                <p class='tl-item'>
+                    <!-- <label for=''>
+                        {{ $t('trade.trustTime') }}
+                    </label> -->
+                    <span>{{ formatTime(product.orderTime,'YYYY/MM/DD HH:mm:ss') }}</span>
+                </p>
+
+                <p class='tl-item'>
+                    <!-- <label for=''>
+                        {{ $t('trade.trustId') }}
+                    </label> -->
+                    <span> #{{ product.id }}</span>
+                </p>
             </div>
         </div>
     </div>
+    <Loading :show='loading' />
 </template>
 
 <script>
@@ -57,18 +80,35 @@ import { shiftedBy } from '@/utils/calculation'
 import { useStore } from 'vuex'
 import { closePboOrder } from '@/api/trade'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 export default {
     props: ['product'],
     setup (props) {
         const store = useStore()
+        const router = useRouter()
         const loading = ref(false)
         const { t } = useI18n({ useScope: 'global' })
+        const expireTypeMap = {
+            1: t('trade.expire1'),
+            2: t('trade.expire2')
+        }
         // 获取当前产品
         const symbolKey = `${props.product.symbolId}_${props.product.tradeType}`
         const curProduct = computed(() => store.state._quote.productMap[symbolKey])
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+
+        const toDetail = (item) => {
+            router.push({
+                path: '/trustDetail',
+                query: {
+                    id: props.product.id,
+                    symbolId: props.product.symbolId,
+                    tradeType: props.product.tradeType
+                }
+            })
+        }
 
         const cancelOrder = () => {
             Dialog.confirm({
@@ -108,7 +148,9 @@ export default {
             shiftedBy,
             loading,
             curProduct,
-            symbolKey
+            symbolKey,
+            toDetail,
+            expireTypeMap
         }
     }
 }
@@ -117,46 +159,43 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .trust-item {
-    padding: rem(30px);
+    margin: rem(20px);
+    padding: rem(20px);
     background-color: var(--contentColor);
     border-bottom: solid 1px var(--lineColor);
     border-radius: rem(8px);
     .t-header {
         display: flex;
+        align-items: center;
         justify-content: space-between;
-        margin-bottom: rem(30px);
-        .product-name {
+        margin-bottom: rem(20px);
+        .fl {
+            margin-right: rem(32px);
             color: var(--color);
             font-size: rem(30px);
-        }
-        .direction {
-            font-size: rem(24px);
-        }
-    }
-    .t-body {
-        display: flex;
-        justify-content: space-between;
-        .t-left {
-            .tl-item {
-                margin-bottom: rem(10px);
-                color: var(--normalColor);
-                font-size: rem(24px);
-                text-align: left;
-                label {
-                    display: inline-block;
-                    width: rem(80px);
-                }
-                span {
-                    text-align: left;
-                }
+            // .time {
+            //     color: var(--placeholdColor);
+            //     font-size: rem(20px);
+            // }
+            .name {
+                margin-right: rem(40px);
             }
         }
+        .tag {
+            // width: 92px;
+            display: inline-block;
+            height: rem(35px);
+            padding: 0 rem(8px);
+            color: var(--minorColor);
+            font-size: rem(20px);
+            line-height: rem(35px);
+            text-align: center;
+            border: 1px solid var(--minorColor);
+            border-radius: rem(6px);
+        }
         .t-right {
-            position: relative;
+            //position: relative;
             .van-button {
-                position: absolute;
-                right: 0;
-                bottom: rem(10px);
                 width: rem(124px);
                 height: rem(48px);
                 color: var(--primary);
@@ -165,6 +204,33 @@ export default {
                 background: var(--primaryAssistColor);
                 border-color: var(--primaryAssistColor);
                 border-radius: rem(6px);
+            }
+        }
+    }
+    .direction {
+        margin: rem(20px) 0;
+    }
+    .t-body {
+        display: flex;
+        justify-content: space-between;
+        .t-left {
+            display: flex;
+            flex-wrap: wrap;
+            .tl-item {
+                width: 50%;
+                margin-bottom: rem(10px);
+                color: var(--normalColor);
+                text-align: left;
+                label {
+                    display: inline-block;
+                    width: rem(100px);
+                    margin-right: rem(20px);
+                    font-size: rem(20px);
+                }
+                span {
+                    font-size: rem(20px);
+                    text-align: left;
+                }
             }
         }
     }
