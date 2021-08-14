@@ -10,7 +10,7 @@ export default {
         zone: '86', // 区号
         loginData: '', // login返回的信息
         customerInfo: '', // 用户信息
-        account: '', // 交易账户信息
+        account: '', // 当前交易账户信息，在出入金里面用到
         assetsInfo: '', // 资产信息
         withdrawConfig: '', // 用户取款配置
         accountAssets: {}, // msg服务推送过来的交易账户资产
@@ -48,6 +48,9 @@ export default {
         },
         Update_zone (state, data) {
             state.zone = data
+        },
+        Update_account (state, accountId) {
+            state.account = state.customerInfo?.accountList?.find(el => el.accountId === parseInt(accountId))
         },
         Update_loginData (state, data) {
             state.loginData = data

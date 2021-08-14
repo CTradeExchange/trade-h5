@@ -68,8 +68,9 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         // 账户信息
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
+        const account = computed(() => store.state._user.account)
 
-        const { tab } = route.query
+        const { tab, accountId } = route.query
 
         const state = reactive({
             // 加载状态
@@ -110,7 +111,8 @@ export default {
             getWithdrawMethodList({
                 companyId: customInfo.companyId,
                 customerGroupId: customInfo.customerGroupId,
-                country: customInfo.country
+                country: customInfo.country,
+                accountId: account.value?.accountId,
             }).then(res => {
                 state.loading = false
                 const { data } = res
@@ -150,7 +152,10 @@ export default {
                 }
             })
         }
-
+        const init = () => {
+            if (accountId) store.commit('_user/Update_account', accountId)
+        }
+        init()
         onMounted(() => {
             // 获取用户提现方式
             getWithdrawWay()

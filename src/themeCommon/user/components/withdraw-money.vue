@@ -136,6 +136,7 @@ export default {
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+        const account = computed(() => store.state._user.account)
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
 
         const timeList = computed(() => {
@@ -201,8 +202,8 @@ export default {
             }
 
             const params = {
-                // accountId: customInfo.value.accountId,
-                accountCurrency: customInfo.value.currency,
+                accountId: account.value?.accountId,
+                accountCurrency: account.value?.currency,
                 amount: state.amount,
                 // companyId: customInfo.value.companyId,
                 // customerNo: customInfo.value.customerNo,
@@ -320,7 +321,8 @@ export default {
             }
 
             const params = {
-                accountCurrency: customInfo.value.currency,
+                accountId: account.value?.accountId,
+                accountCurrency: account.value?.currency,
                 withdrawCurrency: state.withdrawRate.withdrawCurrency,
                 amount: state.amount,
                 rate: state.withdrawRate.exchangeRate,
@@ -349,8 +351,8 @@ export default {
             const params = {
                 // companyId: customInfo.value.companyId,
                 // customerNo: customInfo.value.customerNo,
-                // accountId: customInfo.value.accountId,
-                accountCurrency: customInfo.value.currency,
+                accountId: account.value?.accountId,
+                accountCurrency: account.value?.currency,
                 withdrawCurrency: state.withdrawCurrency,
                 withdrawType: 1
             }
@@ -368,7 +370,8 @@ export default {
                 // customerNo: customInfo.value.customerNo,
                 // accountId: customInfo.value.accountId,
                 // customerGroupId: customInfo.value.customerGroupId,
-                accountCurrency: customInfo.value.currency,
+                accountId: account.value?.accountId,
+                accountCurrency: account.value?.currency,
                 // country: customInfo.value.country,
                 withdrawMethod: 'bank'
             }
