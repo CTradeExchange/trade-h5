@@ -1,5 +1,5 @@
 <template>
-    <van-popup v-model:show='show' position='left' :style="{ height: '100%' }" @open='onOpen'>
+    <van-popup v-model:show='show' position='left' :style="{ height: '100%' }" teleport='body' @open='onOpen'>
         <div class='sidebarProduct'>
             <plansType v-if='!hideTradeType' ref='plansTypeRef' class='plansType' :value='tradeType' @change='handleTradeType' />
             <search
