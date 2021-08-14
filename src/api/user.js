@@ -644,7 +644,7 @@ export function queryLiabilitiesWaterByPage (data) {
 /* 成交记录 */
 export function tradeRecordList (data) {
     return request({
-        url: '/global/tradeapi.app.OrderApiService.tradeRecordList',
+        url: '/global/tradeapi.app.OrderApiService.queryTradeRecordPage',
         method: 'post',
         headers: {
             version: '0.0.1',
