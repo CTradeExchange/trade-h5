@@ -494,6 +494,8 @@ export default {
         const subscribList = productList.value.map(({ symbolId }) => (`${symbolId}_${getTradeType()}`))
         QuoteSocket.send_subscribe(subscribList)
 
+        // 设置图表设置缓存
+        const locChartConfig = JSON.parse(localGet('chartConfig'))
         // 图表初始值
         const initialValue = computed(() => {
             if (product.value.symbolName) {
@@ -502,7 +504,8 @@ export default {
                     description: product.value.symbolCode, // 显示在图表左上角
                     symbolId: product.value.symbolId, // 产品id
                     digits: product.value.symbolDigits, // 小数点
-                    tradeType: getTradeType()
+                    tradeType: getTradeType(), // 玩法
+                    interval: locChartConfig.resolution // 周期
                 }
             }
             return null
@@ -755,8 +758,6 @@ export default {
         })
 
         const initChartData = () => {
-            // 设置图表设置缓存
-            const locChartConfig = JSON.parse(localGet('chartConfig'))
             const invertColor = localGet('invertColor')
             if (isEmpty(locChartConfig)) {
                 localSetChartConfig('showLastPrice', false)
