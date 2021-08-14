@@ -103,7 +103,7 @@
     <!-- 侧边栏-切换产品 -->
     <sidebarProduct
         v-model='switchProductVisible'
-        :trade-type='tradeType'
+        :default-trade-type='tradeType'
         @select='onSelectProduct'
     />
 </template>
@@ -241,7 +241,7 @@ export default {
             onRefresh,
             tradeType,
             productDropdown,
-             ...toRefs(state),
+            ...toRefs(state),
 
         }
     }

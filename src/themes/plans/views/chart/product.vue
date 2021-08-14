@@ -281,7 +281,7 @@
         @update:show='updateShow'
     />
     <!-- 侧边栏-切换产品 -->
-    <sidebarProduct v-model='showSidebar' @select='onSelect' />
+    <sidebarProduct v-model='showSidebar' :default-trade-type='tradeType' @select='onSelect' />
 </template>
 
 <script>
