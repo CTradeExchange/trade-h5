@@ -1,5 +1,5 @@
 <template>
-    <div class='assetsWrapper' :style='plans.length <= 1 ? "margin-top: 10px": ""'>
+    <div class='assetsWrapper' :class='{ mt: plans.length <= 1 }'>
         <plansType v-if='plans.length > 1' class='plansType' :list='plans' :value='tradeType' @change='handleTradeType' />
         <van-swipe
             ref='assetsSwipe'
@@ -72,7 +72,7 @@ export default {
         const assetsSwipe = ref(null)
         const curIndex = ref(0)
         const state = reactive({
-            duration: 300
+            duration: 0
         })
 
         // 获取账户列表
@@ -90,7 +90,9 @@ export default {
         const positionList = computed(() => store.state._trade.positionList[tradeType.value])
 
         // 获取当前 tab 下标
-        const tabIndex = computed(() => plans.value.findIndex(item => Number(item.id) === Number(tradeType.value)))
+        const tabIndex = computed(() => plans.value.findIndex(item =>
+            (Number(item.id) === Number(tradeType.value))
+        ))
 
         // 获取持仓列表
         const queryPositionList = () => {
@@ -143,7 +145,7 @@ export default {
         }
 
         onMounted(() => {
-            assetsSwipe.value && assetsSwipe.value.swipeTo(tabIndex.value)
+            assetsSwipe.value && assetsSwipe.value.swipeTo(tabIndex.value === -1 ? 0 : tabIndex.value)
             if (plans.value.length > 0) {
                 store.commit('_quote/Update_tradeType', plans.value[0].id)
             }
@@ -168,6 +170,9 @@ export default {
 @import '@/sass/mixin.scss';
 .assetsWrapper {
     padding: 0 rem(20px) rem(100px);
+    &.mt {
+        margin-top: rem(20px);
+    }
     .block {
         margin-bottom: rem(20px);
         border-radius: 4px;
