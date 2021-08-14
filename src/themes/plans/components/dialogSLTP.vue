@@ -116,7 +116,7 @@ export default {
 
         watchEffect(() => {
             state.showDialog = props.show
-            if (props.data?.positionId) store.commit('_trade/Update_modifyPositionId', props.data.positionId)
+            if (props.data?.positionId) store.commit('_trade/Update_modifyPositionId', props.data.positionId + '_' + props.data.tradeType)
         })
         watchEffect(() => {
             if (props.data?.stopLoss > 0) state.stopLossPrice = props.data.stopLossDecimal

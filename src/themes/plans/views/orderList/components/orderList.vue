@@ -67,6 +67,15 @@
                             {{ item.takeProfit || '--' }}
                         </span>
                     </p>
+
+                    <p class='tl-item' v-if= '[3,9].indexOf(Number(tradeType)) === 3'>
+                        <label for=''>
+                            {{ $t('trade.loan') }}
+                        </label>
+                        <span>
+                            {{ item.loanAmount ? item.loanAmount + ' ' + item.outCurrency : '--' }}
+                        </span>
+                    </p>
                     <p class='tl-item'>
                         <label for=''>
                             {{ $t('fee') }}
@@ -76,14 +85,7 @@
                         </span>
                     </p>
 
-                    <p class='tl-item'>
-                        <label for=''>
-                            {{ $t('trade.loan') }}
-                        </label>
-                        <span>
-                            {{ item.loanAmount ? item.loanAmount + ' ' + item.outCurrency : '--' }}
-                        </span>
-                    </p>
+                    
 
                     <p class='tl-item'>
                         <span>
@@ -158,10 +160,11 @@ export default {
             params: {
                 // executeStartTime: 0,
                 // executeEndTime: 0,
-            }
+            },
+            tradeType: route.query.tradeType
         })
 
-        const account = computed(() => store.state._user.customerInfo.accountList.find(el => Number(el.tradeType) === Number(route.query.tradeType)))
+        const account = computed(() => store.state._user.customerInfo.accountList.find(el => Number(el.tradeType) === Number(state.tradeType)))
 
         // 价格标签
         const priceLabel = (bizType) => {
@@ -180,9 +183,15 @@ export default {
         }
 
         const queryRecordList = () => {
+            let accountId = ''
+            if(account.value.length > 0){
+                account.value.array.forEach(element => {
+                    accountId += ','+element.accountId
+                });
+            }
             const params = {
                 accountId: account?.value.accountId,
-                tradeType: Number(route.query.tradeType),
+                tradeType: Number(state.tradeType),
                 sortFieldName: 'executeTime',
                 sortType: 'desc',
                 ...state.params
@@ -212,6 +221,7 @@ export default {
         // 开平仓筛选
         const positionTypeChange = (val) => {
             state.params.orderType = val
+            queryRecordList()
         }
         // 时间筛选
         const timeChange = (timeType) => {

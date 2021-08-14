@@ -4,7 +4,7 @@
         <van-swipe
             ref='assetsSwipe'
             :duration='duration'
-            :initial-swipe='1'
+            :initial-swipe='0'
             :show-indicators='false'
             :touchable='true'
             @change='onChange'
@@ -124,7 +124,15 @@ export default {
             })
         }
 
-        watch(() => tradeType.value, (val) => {
+        watchEffect(()=>{
+            if ([1, 2].indexOf(Number(tradeType.value)) > -1) {
+                queryPositionList()
+            } else if ([3, 9].indexOf(Number(tradeType.value)) > -1) {
+                store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: tradeType.value })
+            }
+        })
+
+        /* watch(() => tradeType.value, (val) => {
             if ([1, 2].indexOf(Number(val)) > -1) {
                 queryPositionList()
             } else if ([3, 9].indexOf(Number(val)) > -1) {
@@ -132,7 +140,7 @@ export default {
             }
         }, {
             immediate: true
-        })
+        }) */
 
         const handleTradeType = (val) => {
             const curIndex = plans.value.findIndex(item => item.id === val)
@@ -150,7 +158,6 @@ export default {
         }
 
         onMounted(() => {
-            console.log('swipeTo', tabIndex.value)
             assetsSwipe.value && assetsSwipe.value.swipeTo(tabIndex.value === -1 ? 0 : tabIndex.value)
             if (plans.value.length > 0) {
                 store.commit('_quote/Update_tradeType', plans.value[0].id)
