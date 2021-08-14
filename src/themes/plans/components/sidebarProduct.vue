@@ -1,5 +1,5 @@
 <template>
-    <van-popup v-model:show='show' position='left' :style="{ height: '100%' }" @closed='onClosed'>
+    <van-popup v-model:show='show' position='left' :style="{ height: '100%' }" @open='onOpen'>
         <div class='sidebarProduct'>
             <plansType v-if='!hideTradeType' ref='plansTypeRef' class='plansType' :value='tradeType' @change='handleTradeType' />
             <search
@@ -75,9 +75,9 @@ export default {
         // 玩法列表
         const plansList = computed(() => store.state._base.plans)
         // 默认玩法类型
-        const InitialTradeType = String(props.defaultTradeType) || unref(plansList)[0].id
+        const InitialTradeType = computed(() => String(props.defaultTradeType) || unref(plansList)[0].id)
         // 1.玩法类型
-        const tradeType = ref(InitialTradeType)
+        const tradeType = ref(unref(InitialTradeType))
         // 2.板块类型
         const categoryType = ref(0)
         // 监听玩法类型
@@ -95,11 +95,12 @@ export default {
             context.emit('select', toRaw(product), onCancel)
         }
 
-        const onClosed = () => {
-            tradeType.value = InitialTradeType
+        const onOpen = () => {
+            tradeType.value = unref(InitialTradeType)
             categoryType.value = 0
             unref(plansTypeRef) && unref(plansTypeRef).reset()
         }
+
         return {
             show,
             tradeType,
@@ -110,8 +111,8 @@ export default {
             plansList,
             onCancel,
             onClick,
-            onClosed,
-            plansTypeRef
+            plansTypeRef,
+            onOpen
         }
     }
 }
