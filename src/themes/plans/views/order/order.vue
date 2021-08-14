@@ -75,7 +75,7 @@
         />
 
         <!-- 侧边栏-切换产品 -->
-        <sidebarProduct v-model='switchProductVisible' @select='onSelectProduct' />
+        <sidebarProduct v-model='switchProductVisible' :trade-type='product.tradeType' @select='onSelectProduct' />
     </div>
 </template>
 

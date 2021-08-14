@@ -25,10 +25,11 @@ export default {
                 title: t('trade.marketPrice'),
                 val: 1
             }, {
-                title: t('trade.pending'),
+                title: [3, 9].includes(props.tradeType) ? t('trade.pending2') : t('trade.pending'),
                 val: 10
             }]
-            return parseInt(props.tradeType) === 9 ? list1 : list2
+            // return parseInt(props.tradeType) === 9 ? list1 : list2
+            return list2
         })
         watchEffect(() => {
             if (props.modelValue !== state.orderType) state.orderType = props.modelValue

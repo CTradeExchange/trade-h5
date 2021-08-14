@@ -291,6 +291,7 @@
     "limitPirce": "限价",
     "stopLoss": "停损",
     "pending": "挂单",
+    "pending2": "限价单",
     "maxRange": "最大偏移",
     "maxRangeTip": "成交价与当前报价的最大差价，即成交价在该差值范围内才可成交",
     "point": "点",
