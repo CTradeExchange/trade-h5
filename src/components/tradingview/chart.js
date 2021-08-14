@@ -46,6 +46,7 @@ class Chart {
             symbolId: initial.symbolId, // 产品id
             digits: initial.digits, // 小数点
         }
+        this.interval = initial.interval || '1'
         this.buyPrice = '' // 买价
         this.sellPrice = '' // 卖价
         // 产品id
@@ -120,7 +121,7 @@ class Chart {
             datafeed: datafeed,
             container_id: containerId.slice(1),
             symbol: this.symbolId,
-            interval: '1',
+            interval: this.interval,
             locale: 'zh'
         })
 
@@ -463,6 +464,7 @@ class Chart {
         console.log('setResolution:', val)
         this.widget.activeChart()
             .setResolution(val, () => {
+                this.interval = val
                 console.log(`%c切换周期: ${val}`, 'color:green')
             })
     }
