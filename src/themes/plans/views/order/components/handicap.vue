@@ -8,90 +8,27 @@
                 数量
             </span>
         </div>
-        <div class='priceMultiGear sell'>
-            <p class='item'>
+
+        <div v-if='handicapData' class='priceMultiGear sell'>
+            <p v-for='(item, index) in handicapData.bid_deep' :key='index' class='item'>
                 <span class='hd'>
-                    0.0000326
+                    {{ item.price_bid }}
                 </span>
                 <span class='ft'>
-                    312654
-                </span>
-            </p>
-            <p class='item'>
-                <span class='hd'>
-                    0.0000326
-                </span>
-                <span class='ft'>
-                    312654
-                </span>
-            </p>
-            <p class='item'>
-                <span class='hd'>
-                    0.0000326
-                </span>
-                <span class='ft'>
-                    312654
-                </span>
-            </p>
-            <p class='item'>
-                <span class='hd'>
-                    0.0000326
-                </span>
-                <span class='ft'>
-                    312654
-                </span>
-            </p>
-            <p class='item'>
-                <span class='hd'>
-                    0.0000326
-                </span>
-                <span class='ft'>
-                    312654
+                    {{ item.volume_bid }}
                 </span>
             </p>
         </div>
         <div class='curPrice'>
             0.0000312
         </div>
-        <div class='priceMultiGear buy'>
-            <p class='item'>
+        <div v-if='handicapData' class='priceMultiGear buy'>
+            <p v-for='(item, index) in handicapData.ask_deep' :key='index' class='item'>
                 <span class='hd'>
-                    0.0000326
+                    {{ item.price_ask }}
                 </span>
                 <span class='ft'>
-                    312654
-                </span>
-            </p>
-            <p class='item'>
-                <span class='hd'>
-                    0.0000326
-                </span>
-                <span class='ft'>
-                    312654
-                </span>
-            </p>
-            <p class='item'>
-                <span class='hd'>
-                    0.0000326
-                </span>
-                <span class='ft'>
-                    312654
-                </span>
-            </p>
-            <p class='item'>
-                <span class='hd'>
-                    0.0000326
-                </span>
-                <span class='ft'>
-                    312654
-                </span>
-            </p>
-            <p class='item'>
-                <span class='hd'>
-                    0.0000326
-                </span>
-                <span class='ft'>
-                    312654
+                    {{ item.volume_ask }}
                 </span>
             </p>
         </div>
@@ -107,10 +44,11 @@
 </template>
 
 <script>
-import { reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 export default {
-    setup () {
+    props: ['product'],
+    setup (props) {
         const store = useStore()
         const state = reactive({
             showPopover: false,
@@ -119,6 +57,9 @@ export default {
                 { text: '选项二' },
                 { text: '选项三' },
             ],
+        })
+        const handicapData = computed(() => {
+            return store.state._quote.handicapList?.find(({ symbol_id, trade_type }) => (parseInt(symbol_id) === props.product.symbolId && trade_type === props.product.tradeType))
         })
 
         // 切换深度报价小数位的长度
@@ -129,6 +70,7 @@ export default {
         return {
             ...toRefs(state),
             onSelect,
+            handicapData,
         }
     }
 }
