@@ -5,34 +5,44 @@
 </template>
 
 <script>
-import { reactive, toRefs, watchEffect } from 'vue'
+import { computed, reactive, toRefs, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 export default {
-    props: ['modelValue'],
+    props: ['modelValue', 'tradeType'],
     emits: ['update:modelValue', 'selected'],
     setup (props, { emit }) {
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
-            orderType: 1,
-            btnList: [{
+            orderType: 1
+        })
+        // 订单类型
+        const btnList = computed(() => {
+            const list1 = [{
+                title: t('trade.marketPrice'),
+                val: 1
+            }]
+            const list2 = [{
                 title: t('trade.marketPrice'),
                 val: 1
             }, {
-                title: t('trade.pending'),
+                title: [3, 9].includes(props.tradeType) ? t('trade.pending2') : t('trade.pending'),
                 val: 10
             }]
+            // return parseInt(props.tradeType) === 9 ? list1 : list2
+            return list2
         })
         watchEffect(() => {
             if (props.modelValue !== state.orderType) state.orderType = props.modelValue
         })
         const changeOrderType = (val) => {
-            console.log(val)
             emit('update:modelValue', val)
             emit('selected', val)
         }
+
         return {
             ...toRefs(state),
             changeOrderType,
+            btnList,
         }
     }
 }

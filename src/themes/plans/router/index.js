@@ -159,9 +159,9 @@ const routes = [
         }
     },
     {
-        path: '/orderList',
-        name: 'OrderList',
-        component: () => import(/* webpackChunkName: "otherpage" */ '../views/orderList/orderList.vue'),
+        path: '/list',
+        name: 'List',
+        component: () => import(/* webpackChunkName: "otherpage" */ '../views/orderList/list.vue'),
         meta: {
             title: ''
         }

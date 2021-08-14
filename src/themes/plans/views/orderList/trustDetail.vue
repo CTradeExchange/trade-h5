@@ -36,29 +36,31 @@
                             {{ product.cur_price }}
                         </div>
                     </div>
-                </div><div class='item item-2 van-hairline--bottom'>
+                </div>
+                <div class='item item-2 van-hairline--bottom'>
                     <div class='col'>
                         <div class='sub'>
-                            {{ $t('trade.loan') }}
+                            {{ $t('trade.stopLossPrice') }}
                         </div>
                         <div class='name'>
                             <span class='number'>
-                                --
+                                {{ shiftedBy(pendingItem.stopLoss,-1*pendingItem.digits ) || '--' }}
                             </span>
                         </div>
-                    </div><div class='col'>
-                        <!-- <div class='sub' @click='showInfo'>
-                            <van-icon name='question-o' />
-                            <span>{{ $t('trade.swap_2') }} </span>
+                    </div>
+                    <div class='col'>
+                        <div class='sub'>
+                            {{ $t('trade.stopProfitPrice') }}
                         </div>
                         <div class='name'>
                             <span class='number'>
-                                10.000 USDT
+                                {{ shiftedBy(pendingItem.takeProfit,-1*pendingItem.digits ) || '--' }}
                             </span>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
-            </div><div class='layout layout-3'>
+            </div>
+            <div class='layout layout-3'>
                 <!-- <div class='item van-hairline--bottom'>
                     <div class='left'>
                         <div class='title'>
@@ -190,6 +192,7 @@ export default {
             pendingPrice,
             product,
             loading,
+            shiftedBy,
             cancelOrder
         }
     }

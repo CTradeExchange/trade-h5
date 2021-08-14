@@ -150,6 +150,13 @@
                                             :titles='[`可选${item.name}`, `已选${item.name}`]'
                                         />
                                     </template>
+                                    <el-form-item class='sort-row' label='排序值(升序)'>
+                                        <el-input-number
+                                            v-model.number='tradeTypeSort[item.id]'
+                                            controls-position='right'
+                                            placeholder='请输入'
+                                        />
+                                    </el-form-item>
                                 </div>
                             </el-form-item>
                             <el-form-item label='apiService'>
@@ -388,6 +395,7 @@ export default {
             // accountCurrencyList: [],
             tradeTypeList: [],
             checkedTradeTypeAssets: {},
+            tradeTypeSort: {},
             tradeTypeAssets: [],
             form: {
                 tradeTypeCurrencyList: [],
@@ -519,6 +527,7 @@ export default {
                             tradeTypeCurrencyEumn = keyBy(content.tradeTypeCurrencyList, 'id')
                         }
                         const initTradeTypeAssets = {}
+                        const initSortTradeType = {}
                         if (Array.isArray(content.tradeTypeList)) {
                             content.tradeTypeList.forEach(el => {
                                 if (['1', '2'].indexOf(String(el.id)) > -1) {
@@ -526,9 +535,11 @@ export default {
                                 } else {
                                     initTradeTypeAssets[String(el.id)] = tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency.split(',') : []
                                 }
+                                initSortTradeType[String(el.id)] = isNaN(tradeTypeCurrencyEumn[String(el.id)].sort) ? 0 : Number(tradeTypeCurrencyEumn[String(el.id)].sort)
                             })
                         }
                         this.checkedTradeTypeAssets = initTradeTypeAssets
+                        this.tradeTypeSort = initSortTradeType
                         // debugger
                         this.tradeTypeCurrencyCollect = content.tradeTypeList.map(el => ({ id: el.id, name: el.name, currencyList: tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency.split(',') : [] }))
                         // this.accountCurrencyList = this.form.currencyList
@@ -565,13 +576,17 @@ export default {
                     // _formData.currencyList = JSON.parse(_formData.currencyList)
                     // debugger
                     // console.log('this.checkedTradeTypeAssets-', this.checkedTradeTypeAssets)
-                    _formData.tradeTypeCurrencyList = this.tradeTypeList.map(el => {
+                    const tempTradeTypeCurrencyList = this.tradeTypeList.map(el => {
                         if (['1', '2'].indexOf(String(el.id)) > -1) {
-                            return { id: el.id, name: el.name, allCurrency: this.checkedTradeTypeAssets[String(el.id)] ? this.checkedTradeTypeAssets[String(el.id)] : '' }
+                            return { id: el.id, name: el.name, sort: this.tradeTypeSort[String(el.id)], allCurrency: this.checkedTradeTypeAssets[String(el.id)] ? this.checkedTradeTypeAssets[String(el.id)] : '' }
                         } else {
-                            return { id: el.id, name: el.name, allCurrency: this.checkedTradeTypeAssets[String(el.id)] ? this.checkedTradeTypeAssets[String(el.id)].join(',') : [] }
+                            return { id: el.id, name: el.name, sort: this.tradeTypeSort[String(el.id)], allCurrency: this.checkedTradeTypeAssets[String(el.id)] ? this.checkedTradeTypeAssets[String(el.id)].join(',') : [] }
                         }
                     })
+                    tempTradeTypeCurrencyList.sort(function (a, b) {
+                        return a.sort - b.sort
+                    })
+                    _formData.tradeTypeCurrencyList = tempTradeTypeCurrencyList
                     // console.log('tradeTypeCurrencyList', _formData.tradeTypeCurrencyList)
                 } catch (error) {
                     console.error(error)
@@ -721,6 +736,9 @@ export default {
     }
     .tradeType-row {
         margin-bottom: 20px;
+    }
+    .sort-row {
+        margin-top: 10px;
     }
 }
 </style>

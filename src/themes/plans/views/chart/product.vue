@@ -772,7 +772,7 @@ export default {
                 localSetChartConfig('lineSetList', [])
                 localSetChartConfig('chartType', 1)
                 // 默认选中现价线
-                state.settingList = ['showLastPrice']
+                state.settingList = ['showLastPrice', 'stalls', 'deal']
 
                 // 图表配置
                 state.initConfig = ref({
