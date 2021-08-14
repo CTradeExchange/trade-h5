@@ -54,9 +54,9 @@ import TotalAssetsBywarehouse from './components/totalAssetsBywarehouse.vue'
 import PositionList from '@plans/modules/positionList/positionList'
 import { reactive, toRefs, nextTick, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { computed, watchEffect, watch } from '@vue/runtime-core'
+import { computed, watchEffect, watch, onUnmounted } from '@vue/runtime-core'
 import { isEmpty } from '@/utils/util'
-import { QuoteSocket } from '@/plugins/socket/socket'
+import { QuoteSocket, MsgSocket } from '@/plugins/socket/socket'
 import plansType from '@/themes/plans/components/plansType.vue'
 export default {
     components: {
@@ -116,6 +116,11 @@ export default {
                     QuoteSocket.send_subscribe(subscribList)
                 }
             }).catch(() => {
+            }).finally(() => {
+                // 订阅资产数据
+                MsgSocket.subscribedListAdd(function () {
+                    MsgSocket.subscribeAsset(tradeType.value)
+                })
             })
         }
 
@@ -149,6 +154,9 @@ export default {
             if (plans.value.length > 0) {
                 store.commit('_quote/Update_tradeType', plans.value[0].id)
             }
+        })
+        onUnmounted(() => {
+            MsgSocket.cancelSubscribeAsset()
         })
 
         return {
