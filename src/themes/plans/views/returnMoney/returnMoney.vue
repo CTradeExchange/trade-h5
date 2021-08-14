@@ -161,7 +161,11 @@ export default {
         }
 
         const handleAll = () => {
-            state.outAmount = outAccount.value.available
+            if (parseFloat(outAccount.value.available) > parseFloat(inAccount.value.liabilities)) {
+                state.outAmount = inAccount.value.liabilities
+            } else {
+                state.outAmount = outAccount.value.available
+            }
         }
 
         const returnSuccess = () => {

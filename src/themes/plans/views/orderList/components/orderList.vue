@@ -4,6 +4,7 @@
             <van-dropdown-item
                 v-model='directionVal'
                 :options='direction'
+                @change='dirdctionChange'
             />
             <van-dropdown-item
                 ref='productDropdown'
@@ -14,10 +15,12 @@
             <van-dropdown-item
                 v-model='positionTypeVal'
                 :options='positionType'
+                @change='positionTypeChange'
             />
             <van-dropdown-item
                 v-model='timeVal'
                 :options='timeList'
+                @change='timeChange'
             />
         </van-dropdown-menu>
     </div>
@@ -194,12 +197,12 @@ export default {
             productVal: 0,
             curProduct: {},
             direction: [
-                { text: t('trade.direction'), value: 0 },
+                { text: t('trade.direction'), value: '' },
                 { text: t('trade.buy'), value: 1 },
                 { text: t('trade.sell'), value: 2 },
             ],
             positionType: [
-                { text: t('trade.openClose'), value: 0 },
+                { text: t('trade.openClose'), value: '' },
                 { text: t('trade.openPosition'), value: 1 },
                 { text: t('trade.closePosition'), value: 2 },
             ],
@@ -247,13 +250,23 @@ export default {
             state.switchProductVisible = true
         }
 
+        // 方向筛选
+        const dirdctionChange = () => {}
+        // 开平仓筛选
+        const positionTypeChange = () => {}
+        // 时间筛选
+        const timeChange = () => {}
+
         queryRecordList()
 
         return {
             ...toRefs(state),
             openProductSwitch,
             productDropdown,
-            onSelectProduct
+            onSelectProduct,
+            dirdctionChange,
+            positionTypeChange,
+            timeChange
         }
     }
 }

@@ -1,9 +1,9 @@
 <template>
-    <div class='assetsWrapper'>
-        <plansType class='plansType' :list='plans' :value='tradeType' @change='handleTradeType' />
+    <div class='assetsWrapper' :style='plans.length <= 1 ? "margin-top: 10px": ""'>
+        <plansType v-if='plans.length > 1' class='plansType' :list='plans' :value='tradeType' @change='handleTradeType' />
         <van-swipe
             ref='assetsSwipe'
-            duration='300'
+            :duration='duration'
             :initial-swipe='1'
             :show-indicators='false'
             :touchable='true'
@@ -71,6 +71,9 @@ export default {
         const store = useStore()
         const assetsSwipe = ref(null)
         const curIndex = ref(0)
+        const state = reactive({
+            duration: 300
+        })
 
         // 获取账户列表
         const accountList = computed(() =>
@@ -117,7 +120,7 @@ export default {
         watch(() => tradeType.value, (val) => {
             if ([1, 2].indexOf(Number(val)) > -1) {
                 queryPositionList()
-            } else if ([3, 9].indexOf(Number(val) > -1)) {
+            } else if ([3, 9].indexOf(Number(val)) > -1) {
                 store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: val })
             }
         }, {
@@ -141,6 +144,9 @@ export default {
 
         onMounted(() => {
             assetsSwipe.value && assetsSwipe.value.swipeTo(tabIndex.value)
+            if (plans.value.length > 0) {
+                store.commit('_quote/Update_tradeType', plans.value[0].id)
+            }
         })
 
         return {
@@ -151,7 +157,8 @@ export default {
             tradeType,
             plans,
             filterShow,
-            handleTradeType
+            handleTradeType,
+            ...toRefs(state)
         }
     }
 }

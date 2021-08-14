@@ -58,7 +58,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .totalAssets {
-    padding: rem(30px) 0;
+    padding: rem(10px) rem(30px) rem(30px) rem(30px);
     background: var(--contentColor);
     border-radius: 4px;
 }

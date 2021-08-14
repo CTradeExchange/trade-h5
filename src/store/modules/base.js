@@ -9,7 +9,7 @@ export default {
         wpSelfSymbol: null, //   wordpress自选产品配置
         wpProductCategory: [], // wordpress配置的产品板块
         wpNav: null, //   wordpress公司配置信息
-        plans: [], // [{ id: 1, name: 'CFD全仓' }, { id: 2, name: 'CFD逐仓' }, { id: 3, name: '杠杆全仓' }]
+        plans: [] // [{ id: 1, name: 'CFD合约全仓' }, { id: 2, name: 'CFD合约逐仓' }, { id: 3, name: '现货杠杆全仓' }, { id: 9, name: 'ABCC现货撮合' }]
     },
     mutations: {
         UPDATE_inited (state, data) {
