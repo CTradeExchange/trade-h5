@@ -126,37 +126,45 @@
                             </el-form-item> -->
                             <el-form-item label='玩法&玩法币种'>
                                 <div v-for='(item) in tradeTypeAssets' :key='item.id' class='tradeType-row'>
-                                    <template v-if="['1','2'].indexOf(item.id)>-1">
-                                        <el-form-item :label='item.name'>
-                                            <el-select
-                                                v-model='checkedTradeTypeAssets[item.id]'
-                                                clearable
-                                                placeholder='请选择'
-                                            >
-                                                <el-option
-                                                    v-for='asset in item.assetsList'
-                                                    :key='asset.key'
-                                                    :label='`${asset.key} - ${asset.label}`'
-                                                    :value='asset.key'
-                                                />
-                                            </el-select>
+                                    <el-card :header='item.name' shadow='always'>
+                                        <template v-if="['1','2'].indexOf(item.id)>-1">
+                                            <el-form-item label='玩法币种'>
+                                                <el-select
+                                                    v-model='checkedTradeType[item.id].assets'
+                                                    clearable
+                                                    placeholder='请选择'
+                                                >
+                                                    <el-option
+                                                        v-for='asset in item.assetsList'
+                                                        :key='asset.key'
+                                                        :label='`${asset.key} - ${asset.label}`'
+                                                        :value='asset.key'
+                                                    />
+                                                </el-select>
+                                            </el-form-item>
+                                        </template>
+                                        <template v-else>
+                                            <el-transfer
+                                                v-model='checkedTradeType[item.id].assets'
+                                                :data='item.assetsList'
+                                                :render-content='renderFunc'
+                                                :titles='["可选玩法币种", "已选玩法币种"]'
+                                            />
+                                        </template>
+                                        <el-form-item class='sort-row' label='玩法别名'>
+                                            <el-input
+                                                v-model.number='checkedTradeType[item.id].alias'
+                                                placeholder='请输入'
+                                            />
                                         </el-form-item>
-                                    </template>
-                                    <template v-else>
-                                        <el-transfer
-                                            v-model='checkedTradeTypeAssets[item.id]'
-                                            :data='item.assetsList'
-                                            :render-content='renderFunc'
-                                            :titles='[`可选${item.name}`, `已选${item.name}`]'
-                                        />
-                                    </template>
-                                    <el-form-item class='sort-row' label='排序值(升序)'>
-                                        <el-input-number
-                                            v-model.number='tradeTypeSort[item.id]'
-                                            controls-position='right'
-                                            placeholder='请输入'
-                                        />
-                                    </el-form-item>
+                                        <el-form-item class='sort-row' label='排序值(升序)'>
+                                            <el-input-number
+                                                v-model.number='checkedTradeType[item.id].sort'
+                                                controls-position='right'
+                                                placeholder='请输入'
+                                            />
+                                        </el-form-item>
+                                    </el-card>
                                 </div>
                             </el-form-item>
                             <el-form-item label='apiService'>
@@ -394,8 +402,7 @@ export default {
             tradeTypeCurrencyCollect: [],
             // accountCurrencyList: [],
             tradeTypeList: [],
-            checkedTradeTypeAssets: {},
-            tradeTypeSort: {},
+            checkedTradeType: {},
             tradeTypeAssets: [],
             form: {
                 tradeTypeCurrencyList: [],
@@ -485,6 +492,15 @@ export default {
                 // debugger
                 if (success && Array.isArray(data)) {
                     this.tradeTypeList = data.map(el => ({ id: el.id, name: el.name }))
+                    const tempCheckedTradeType = {}
+                    this.tradeTypeList.forEach(el => {
+                        tempCheckedTradeType[String(el.id)] = this.checkedTradeType[String(el.id)] || {
+                            assets: ['1', '2'].indexOf(String(el.id)) ? '' : [],
+                            sort: '',
+                            alias: ''
+                        }
+                    })
+                    this.checkedTradeType = tempCheckedTradeType
                     this.tradeTypeAssets = data.map(item => {
                         let customerGroupAssets = []
                         if (isPlainObject(item.data)) {
@@ -501,9 +517,6 @@ export default {
                         }
                     })
                 }
-                console.log('this.tradeTypeAssets', this.tradeTypeAssets)
-                // debugger
-                //
             })
         },
         getPageConfig () {
@@ -526,21 +539,29 @@ export default {
                         if (Array.isArray(content?.tradeTypeCurrencyList)) {
                             tradeTypeCurrencyEumn = keyBy(content.tradeTypeCurrencyList, 'id')
                         }
-                        const initTradeTypeAssets = {}
-                        const initSortTradeType = {}
+                        const cacheCheckedTradeType = {}
+                        // const initTradeTypeAssets = {}
+                        // const initSortTradeType = {}
                         if (Array.isArray(content.tradeTypeList)) {
                             content.tradeTypeList.forEach(el => {
-                                if (['1', '2'].indexOf(String(el.id)) > -1) {
-                                    initTradeTypeAssets[String(el.id)] = tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency : ''
-                                } else {
-                                    initTradeTypeAssets[String(el.id)] = tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency.split(',') : []
+                                const { allCurrency, sort, alias } = tradeTypeCurrencyEumn[String(el.id)]
+                                cacheCheckedTradeType[String(el.id)] = {
+                                    assets: ['1', '2'].indexOf(String(el.id)) > -1 ? allCurrency : (typeof (allCurrency) === 'string' ? allCurrency.split(',') : []),
+                                    sort,
+                                    alias
                                 }
-                                initSortTradeType[String(el.id)] = isNaN(tradeTypeCurrencyEumn[String(el.id)].sort) ? 0 : Number(tradeTypeCurrencyEumn[String(el.id)].sort)
+                                // if (['1', '2'].indexOf(String(el.id)) > -1) {
+                                //     cacheCheckedTradeType[String(el.id)] = tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency : ''
+                                // } else {
+                                //     initTradeTypeAssets[String(el.id)] = tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency.split(',') : []
+                                // }
+                                // initSortTradeType[String(el.id)] = isNaN(tradeTypeCurrencyEumn[String(el.id)].sort) ? 0 : Number(tradeTypeCurrencyEumn[String(el.id)].sort)
                             })
                         }
-                        this.checkedTradeTypeAssets = initTradeTypeAssets
-                        this.tradeTypeSort = initSortTradeType
+                        // this.checkedTradeTypeAssets = initTradeTypeAssets
+                        // this.tradeTypeSort = initSortTradeType
                         // debugger
+                        this.checkedTradeType = cacheCheckedTradeType
                         this.tradeTypeCurrencyCollect = content.tradeTypeList.map(el => ({ id: el.id, name: el.name, currencyList: tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency.split(',') : [] }))
                         // this.accountCurrencyList = this.form.currencyList
                         // this.form.tradeTypeList = this.form.tradeTypeList && JSON.stringify(this.form.tradeTypeList)
@@ -577,10 +598,11 @@ export default {
                     // debugger
                     // console.log('this.checkedTradeTypeAssets-', this.checkedTradeTypeAssets)
                     const tempTradeTypeCurrencyList = this.tradeTypeList.map(el => {
+                        const { assets, sort, alias } = this.checkedTradeType[String(el.id)]
                         if (['1', '2'].indexOf(String(el.id)) > -1) {
-                            return { id: el.id, name: el.name, sort: this.tradeTypeSort[String(el.id)], allCurrency: this.checkedTradeTypeAssets[String(el.id)] ? this.checkedTradeTypeAssets[String(el.id)] : '' }
+                            return { id: el.id, name: el.name, sort, allCurrency: assets || '', alias }
                         } else {
-                            return { id: el.id, name: el.name, sort: this.tradeTypeSort[String(el.id)], allCurrency: this.checkedTradeTypeAssets[String(el.id)] ? this.checkedTradeTypeAssets[String(el.id)].join(',') : [] }
+                            return { id: el.id, name: el.name, sort, allCurrency: assets ? assets.join(',') : [], alias }
                         }
                     })
                     tempTradeTypeCurrencyList.sort(function (a, b) {
