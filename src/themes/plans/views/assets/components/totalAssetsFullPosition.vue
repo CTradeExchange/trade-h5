@@ -42,18 +42,18 @@
             </li>
         </ul>
 
-        <div class='btns'>
+        <div v-if='assetsInfo' class='btns'>
             <van-button
                 hairline
                 size='mini'
-                url='/desposit'
+                :url='"/desposit?accountId="+assetsInfo.accountId'
             >
                 {{ $t('trade.desposit') }}
             </van-button>
             <van-button
                 hairline
                 size='mini'
-                url='/withdraw'
+                :url='"/withdraw?accountId="+assetsInfo.accountId'
             >
                 {{ $t('trade.withdraw') }}
             </van-button>
