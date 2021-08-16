@@ -32,9 +32,7 @@
         </van-dropdown-menu>
     </div>
     <div class='list-wrap'>
-        <!-- {{ recordList }} -->
         <van-list
-            v-model:loading='loading'
             :finished='finished'
             :finished-text='finishedText'
             :immediate-check='false'
@@ -80,20 +78,21 @@
                                 {{ item.profitLoss || '--' }}
                             </span>
                         </p>
-                        <p class='tl-item'>
+
+                        <p v-if='showLossOrProfit(item)' class='tl-item'>
                             <label for=''>
                                 {{ $t('trade.stopLossPrice') }}
                             </label>
                             <span>
-                                {{ isEmpty(item.stopLoss) || '--' }}
+                                {{ parseFloat(item.stopLoss) > 0 ? item.stopLoss : '--' }}
                             </span>
                         </p>
-                        <p class='tl-item'>
+                        <p v-if='showLossOrProfit(item)' class='tl-item'>
                             <label for=''>
                                 {{ $t('trade.stopProfitPrice') }}
                             </label>
                             <span>
-                                {{ isEmpty(item.takeProfit) || '--' }}
+                                {{ parseFloat(item.takeProfit) > 0 ? item.takeProfit : '--' }}
                             </span>
                         </p>
 
@@ -105,7 +104,16 @@
                                 {{ item.loanAmount ? item.loanAmount + ' ' + item.outCurrency : '--' }}
                             </span>
                         </p>
-                        <p v-if='[3,9].indexOf(Number(tradeType)) > -1' class='tl-item'>
+                        <p v-if='isCloseType(item.bizType)' class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.swap') }}
+                            </label>
+                            <span>
+                                {{ item.overnightInterest || '--' }}
+                            </span>
+                        </p>
+
+                        <p class='tl-item'>
                             <label for=''>
                                 {{ $t('fee') }}
                             </label>
@@ -244,7 +252,6 @@ export default {
 
         const queryRecordList = () => {
             state.loading = true
-            state.loadingMore = false
             const accountIds = []
             if (account.value.length > 0) {
                 account.value.forEach(element => {
@@ -253,7 +260,6 @@ export default {
             }
 
             const params = {
-                accountId: accountIds[0],
                 accountIds: accountIds.toString(),
                 tradeType: Number(state.tradeType),
                 sortFieldName: 'executeTime',
@@ -263,14 +269,15 @@ export default {
 
             tradeRecordList(params).then(res => {
                 state.loading = false
+                state.loadingMore = false
                 if (res.check()) {
-                    console.log('78787878', res)
                     state.recordList = state.recordList.concat(res.data.list)
                     state.bizTypeText = res.data.bizTypeText
 
                     // 数据全部加载完成
                     if (state.params.current >= res.data.totalPage) {
                         state.finished = true
+                        state.loadingMore = true
                         state.finishedText = t('common.noMore')
                     }
                 }
@@ -283,8 +290,9 @@ export default {
         // 底部加载更多
         const onLoad = () => {
             if (!state.loadingMore) {
-                state.pagigation.current++
+                state.params.current++
                 queryRecordList()
+                state.loadingMore = true
             }
         }
 
@@ -318,8 +326,8 @@ export default {
         // 时间筛选
         const timeChange = (timeType) => {
             if (timeType === 0) {
-                state.params.executeStartTime = ''
-                state.params.executeEndTime = ''
+                state.params.executeStartTime = -1
+                state.params.executeEndTime = -1
             } else if (timeType === 1) {
                 state.params.executeStartTime = dayjs(dayjs(new Date()).format('YYYY/MM/DD 00:00:00')).valueOf()
             } else if (timeType === 2) {
@@ -342,6 +350,16 @@ export default {
             }
         }
 
+        // 是否显示止盈止损价
+        const showLossOrProfit = (item) => {
+            // 玩法cfd全仓和cfd逐仓才显示止盈止损价
+            if ([1, 2].indexOf(Number(state.tradeType)) > -1) {
+                return true
+            } else {
+                return false
+            }
+        }
+
         queryRecordList()
 
         return {
@@ -355,7 +373,9 @@ export default {
             productChange,
             priceLabel,
             isCloseType,
-            isEmpty
+            isEmpty,
+            onLoad,
+            showLossOrProfit
         }
     }
 }
