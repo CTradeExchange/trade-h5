@@ -8,7 +8,7 @@
             line-width='33.3%'
             title-active-color='#477fd3'
         >
-            <van-tab name='stalls' :title='$t("trade.handicap")'>
+            <van-tab v-if='statusList.indexOf("stalls") > -1' name='stalls' :title='$t("trade.handicap")'>
                 <!-- 盘口报价 -->
                 <Handicap
                     :show-pending='showPending'

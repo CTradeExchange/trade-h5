@@ -473,7 +473,7 @@ export default {
         })
 
         const computedLineList = computed(() => {
-            if (tradeType === 9) {
+            if (product.value.tradeType === 9) {
                 return state.lineList
             }
             return state.lineList.filter(e => !['stalls', 'deal'].includes(e.value))
@@ -765,10 +765,7 @@ export default {
                 localSetChartConfig('lineSetList', [])
                 localSetChartConfig('chartType', 1)
                 // 默认选中现价线
-                state.settingList = ['showLastPrice']
-                if (Number(product.value.tradeType) === 9) {
-                    state.settingList.push('stalls', 'deal')
-                }
+                state.settingList = ['showLastPrice', 'stalls', 'deal']
 
                 // 图表配置
                 state.initConfig = ref({
@@ -842,7 +839,7 @@ export default {
                     symbolId: product.value.symbolId, // 产品id
                     digits: product.value.symbolDigits, // 小数点
                     tradeType: getTradeType(), // 玩法
-                    interval: locChartConfig.resolution // 周期
+                    interval: locChartConfig?.resolution // 周期
                 }
             }
             return null
