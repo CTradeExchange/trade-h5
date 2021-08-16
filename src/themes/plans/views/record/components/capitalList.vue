@@ -14,13 +14,16 @@
                         <span class='businessType'>
                             {{ proBtns[item.businessType] }}
                         </span>
+                        <span class='time'>
+                            {{ formatTime(item.createTime) }}
+                        </span>
                     </div>
                     <div class='right'>
                         <span class='balance'>
                             {{ item.amount }}
                         </span>
-                        <span class='time'>
-                            {{ formatTime(item.createTime) }}
+                        <span class='amountAfter'>
+                            {{ $t('common.balance') }} {{ item.amountAfter }}
                         </span>
                     </div>
                 </div>
@@ -71,6 +74,13 @@ export default {
             &:last-child {
                 margin: 0;
             }
+            .time {
+                margin-top: rem(15px);
+                color: var(--placeholdColor);
+                font-weight: 400;
+                font-size: rem(20px);
+                line-height: rem(22px);
+            }
             .label {
                 color: var(--minorColor);
                 font-weight: 500;
@@ -106,7 +116,7 @@ export default {
                     font-size: rem(34px);
                     line-height: rem(36px);
                 }
-                .time {
+                .amountAfter {
                     margin-top: rem(15px);
                     color: var(--placeholdColor);
                     font-weight: 400;
