@@ -2,15 +2,15 @@
     <div class='orderHandicap'>
         <div class='titleBar'>
             <span class='hd'>
-                价格
+                {{ $t('trade.priceLabel') }}
             </span>
             <span class='ft'>
-                数量
+                {{ $t('trade.volumes') }}
             </span>
         </div>
 
-        <div v-if='handicapData' class='priceMultiGear sell'>
-            <p v-for='(item, index) in handicapData.bid_deep' :key='index' class='item'>
+        <div v-if='handicapList' class='priceMultiGear sell'>
+            <p v-for='(item, index) in handicapList.bid_deep' :key='index' class='item'>
                 <span class='hd'>
                     {{ item.price_bid }}
                 </span>
@@ -19,11 +19,11 @@
                 </span>
             </p>
         </div>
-        <div class='curPrice'>
-            0.0000312
+        <div class='curPrice' :class='[product.cur_color]'>
+            {{ product.cur_price }}
         </div>
-        <div v-if='handicapData' class='priceMultiGear buy'>
-            <p v-for='(item, index) in handicapData.ask_deep' :key='index' class='item'>
+        <div v-if='handicapList' class='priceMultiGear buy'>
+            <p v-for='(item, index) in handicapList.ask_deep' :key='index' class='item'>
                 <span class='hd'>
                     {{ item.price_ask }}
                 </span>
@@ -32,10 +32,10 @@
                 </span>
             </p>
         </div>
-        <van-popover v-model:show='showPopover' :actions='actions' @select='onSelect'>
+        <van-popover v-model:show='showPopover' :actions='digitLevelList' @select='onSelect'>
             <template #reference>
                 <button class='selectBtn'>
-                    0.01
+                    {{ handicapDigit }}
                     <i class='icon_arrow'></i>
                 </button>
             </template>
@@ -46,31 +46,49 @@
 <script>
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
+import computeHandicap from '@plans/hooks/handicap'
+import { pow } from '@/utils/calculation'
+import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
     props: ['product'],
     setup (props) {
         const store = useStore()
         const state = reactive({
             showPopover: false,
-            actions: [
-                { text: '选项一' },
-                { text: '选项二' },
-                { text: '选项三' },
-            ],
+            handicapDigit: pow(0.1, props.product?.symbolDigits),
         })
-        const handicapData = computed(() => {
-            return store.state._quote.handicapList?.find(({ symbol_id, trade_type }) => (parseInt(symbol_id) === props.product.symbolId && trade_type === props.product.tradeType))
+        // 获取盘口深度报价
+        const handicapList = computed(() => store.state._quote.handicapList.find(({ symbol_id }) => parseInt(symbol_id) === props.product.symbolId))
+        // 计算报价小数位档数
+        const digitLevelList = computed(() => {
+            const digits = []
+            var symbolDigits = props.product?.price_digits
+            while (symbolDigits > -3) {
+                digits.push({ text: pow(0.1, symbolDigits) })
+                symbolDigits--
+            }
+
+            return digits.splice(0, 5)
+        })
+
+        // 获取处理后的盘口数据
+        computeHandicap({
+            tradeType: props.product.tradeType,
+            symbolId: props.product.symbolId,
+            showPending: false
         })
 
         // 切换深度报价小数位的长度
         const onSelect = (val) => {
-            console.log(val)
+            state.handicapDigit = val.text
+            QuoteSocket.deal_subscribe([props.product.symbolId], 5, val.text, props.product.tradeType)
         }
 
         return {
             ...toRefs(state),
             onSelect,
-            handicapData,
+            handicapList,
+            digitLevelList,
         }
     }
 }

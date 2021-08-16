@@ -54,6 +54,7 @@ export default {
                         data.tradeTypeCurrencyList = data.tradeTypeCurrencyList.filter(el => el.allCurrency)
                         data.tradeTypeCurrencyList.forEach(el => {
                             el.tradeType = el.id
+                            el.name = el.alias || el.name
                         })
                     }
                     sessionSet('utcOffset', parseFloat(data.utcOffset) * 60)
