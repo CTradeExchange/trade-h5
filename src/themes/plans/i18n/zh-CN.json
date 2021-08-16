@@ -441,6 +441,8 @@
     "openClose": "开/平",
     "openPosition": "开仓",
     "closePosition": "平仓",
+    "priceOrLimit": "市价/限价",
+    
     "symbol": "产品",
     "trustTime": "委托时间",
     "trustId": "委托编号"

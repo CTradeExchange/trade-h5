@@ -10,11 +10,18 @@
                 ref='productDropdown'
                 v-model='productVal'
                 :options='product'
-                @open='openProductSwitch'
+                @change='productChange'
             />
             <van-dropdown-item
+                v-if='[1,2].indexOf(Number(tradeType)) > -1'
                 v-model='positionTypeVal'
                 :options='positionType'
+                @change='positionTypeChange'
+            />
+            <van-dropdown-item
+                v-if='[3,9].indexOf(Number(tradeType)) > -1'
+                v-model='positionTypeVal'
+                :options='priceTypeList'
                 @change='positionTypeChange'
             />
             <van-dropdown-item
@@ -26,80 +33,107 @@
     </div>
     <div class='list-wrap'>
         <!-- {{ recordList }} -->
-        <div v-for='item in recordList' :key='item.orderId' class='trust-item'>
-            <div class='t-header'>
-                <div class='fl'>
-                    <span class='name'>
-                        {{ item.symbolName }}
-                    </span>
+        <van-list
+            v-model:loading='loading'
+            :finished='finished'
+            :finished-text='finishedText'
+            :immediate-check='false'
+            @load='onLoad'
+        >
+            <div v-for='item in recordList' :key='item.orderId' class='trust-item'>
+                <div class='t-header'>
+                    <div class='fl'>
+                        <span class='name'>
+                            {{ item.symbolName }}
+                        </span>
+                    </div>
                 </div>
-            </div><div class='direction'>
-                {{ bizTypeText[item.bizType] }} /
-                <span :class="Number(item.direction) === 1 ? 'riseColor' : 'fallColor'">
-                    {{ Number(item.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
-                </span> {{ item.executeNum }}
-            </div><div class='t-body'>
-                <div class='t-left'>
-                    <p class='tl-item'>
-                        <label for=''>
-                            挂单价
-                        </label><span>
-                            49.00289
-                        </span>
-                    </p><p class='tl-item'>
-                        <label for=''>
-                            {{ $t('trade.dealPrice') }}
-                        </label><span class='grayColor'>
-                            {{ item.executePrice }}
-                        </span>
-                    </p><p class='tl-item'>
-                        <label for=''>
-                            {{ $t('trade.stopLossPrice') }}
-                        </label><span>
-                            {{ item.stopLoss || '--' }}
-                        </span>
-                    </p>
-                    <p class='tl-item'>
-                        <label for=''>
-                            {{ $t('trade.stopProfitPrice') }}
-                        </label>
-                        <span>
-                            {{ item.takeProfit || '--' }}
-                        </span>
-                    </p>
+                <div class='direction'>
+                    {{ bizTypeText[item.bizType] }} /
+                    <span :class="Number(item.direction) === 1 ? 'riseColor' : 'fallColor'">
+                        {{ Number(item.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
+                    </span> {{ item.executeNum }}
+                </div>
+                <div class='t-body'>
+                    <div class='t-block'>
+                        <p v-if='isCloseType(item.bizType)' class='tl-item'>
+                            <!-- 如果是平仓 显示开仓价 -->
+                            <label for=''>
+                                {{ $t('trade.positionPrice') }}
+                            </label><span>
+                                {{ item.requestPrice || '--' }}
+                            </span>
+                        </p>
+                        <p class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.dealPrice') }}
+                            </label>
+                            <span>
+                                {{ item.executePrice }}
+                            </span>
+                        </p>
+                        <p v-if='isCloseType(item.bizType)' class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.profit') }}
+                            </label>
+                            <span>
+                                {{ item.profitLoss || '--' }}
+                            </span>
+                        </p>
+                        <p class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.stopLossPrice') }}
+                            </label>
+                            <span>
+                                {{ isEmpty(item.stopLoss) || '--' }}
+                            </span>
+                        </p>
+                        <p class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.stopProfitPrice') }}
+                            </label>
+                            <span>
+                                {{ isEmpty(item.takeProfit) || '--' }}
+                            </span>
+                        </p>
 
-                    <p class='tl-item' v-if= '[3,9].indexOf(Number(tradeType)) === 3'>
-                        <label for=''>
-                            {{ $t('trade.loan') }}
-                        </label>
-                        <span>
-                            {{ item.loanAmount ? item.loanAmount + ' ' + item.outCurrency : '--' }}
-                        </span>
-                    </p>
-                    <p class='tl-item'>
-                        <label for=''>
-                            {{ $t('fee') }}
-                        </label>
-                        <span>
-                            {{ item.commission || '--' }}
-                        </span>
-                    </p>
-
-                    
-
-                    <p class='tl-item'>
-                        <span>
-                            {{ formatTime(item.executeTime,'YYYY/MM/DD HH:mm:ss' ) }}
-                        </span>
-                    </p><p class='tl-item'>
-                        <span>
-                            #{{ item.orderId }}
-                        </span>
-                    </p>
+                        <p v-if='[3,9].indexOf(Number(tradeType)) > -1' class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.loan') }}
+                            </label>
+                            <span>
+                                {{ item.loanAmount ? item.loanAmount + ' ' + item.outCurrency : '--' }}
+                            </span>
+                        </p>
+                        <p v-if='[3,9].indexOf(Number(tradeType)) > -1' class='tl-item'>
+                            <label for=''>
+                                {{ $t('fee') }}
+                            </label>
+                            <span>
+                                {{ item.commission || '--' }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class='t-body'>
+                    <div class='t-block'>
+                        <p class='tl-item'>
+                            <span>
+                                {{ formatTime(item.executeTime,'YYYY/MM/DD HH:mm:ss' ) }}
+                            </span>
+                        </p>
+                        <p class='tl-item'>
+                            <span>
+                                #{{ item.orderId }}
+                            </span>
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </van-list>
     </div>
+
+    <Loading :show='loading' />
 
     <!-- 侧边栏-切换产品 -->
     <sidebarProduct
@@ -114,6 +148,7 @@
 import sidebarProduct from '@plans/components/sidebarProduct.vue'
 import { tradeRecordList } from '@/api/user'
 import { useI18n } from 'vue-i18n'
+import { isEmpty } from '@/utils/util'
 import { useRoute, useRouter } from 'vue-router'
 import { computed, ref, nextTick, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
@@ -130,41 +165,54 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             switchProductVisible: false,
-            directionVal: '',
-            positionTypeVal: '',
-            timeVal: '',
+            directionVal: -1,
+            positionTypeVal: -1,
+            timeVal: 0,
             productVal: 0,
             curProduct: {},
             direction: [
-                { text: t('trade.direction'), value: '' },
+                { text: t('trade.direction'), value: -1 },
                 { text: t('trade.buy'), value: 1 },
                 { text: t('trade.sell'), value: 2 },
             ],
             positionType: [
-                { text: t('trade.openClose'), value: '' },
+                { text: t('trade.openClose'), value: -1 },
                 { text: t('trade.openPosition'), value: 1 },
                 { text: t('trade.closePosition'), value: 2 },
             ],
             timeList: [
-                { text: t('common.all'), value: '' },
+                { text: t('common.date'), value: 0 },
                 { text: t('common.curToday'), value: 1 },
                 { text: t('common.curWeek'), value: 2 },
                 { text: t('common.curMoney'), value: 3 },
                 { text: t('common.curThreeMonth'), value: 4 },
             ],
+            priceTypeList: [
+                { text: t('trade.priceOrLimit'), value: -1 },
+                { text: t('trade.orderTypeShort1'), value: 3 },
+                { text: t('trade.orderTypeShort2'), value: 4 },
+            ],
             product: [
-                { text: t('trade.symbol'), value: 0 },
+                { text: t('common.allProduct'), value: 0 },
+                { text: t('common.chooseProduct'), value: 1, },
             ],
             recordList: [],
             bizTypeText: {},
             params: {
+                current: 1,
+                size: 10,
                 // executeStartTime: 0,
-                // executeEndTime: 0,
+                executeEndTime: dayjs(dayjs(new Date()).format('YYYY/MM/DD 23:59:59')).valueOf()
             },
-            tradeType: route.query.tradeType
+            tradeType: route.query.tradeType,
+            loading: false,
+            finished: false,
+            finishedText: t('common.noMore'),
+            loadingMore: false,
+
         })
 
-        const account = computed(() => store.state._user.customerInfo.accountList.find(el => Number(el.tradeType) === Number(state.tradeType)))
+        const account = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.tradeType)))
 
         // 价格标签
         const priceLabel = (bizType) => {
@@ -178,19 +226,35 @@ export default {
         // 产品选择品选择产品回调
         const onSelectProduct = (p) => {
             state.curProduct = p
-            state.product[0].text = p.symbolName
+            // state.product[0].text = p.symbolName
             state.switchProductVisible = false
+            resetParams()
+            state.params.symbolId = p.symbolId
+            queryRecordList()
+        }
+
+        // 重置参数
+        const resetParams = () => {
+            state.params.current = 1
+            state.finished = false
+            state.loadingMore = true
+            // state.params.symbolId = ''
+            state.recordList = []
         }
 
         const queryRecordList = () => {
-            let accountId = ''
-            if(account.value.length > 0){
-                account.value.array.forEach(element => {
-                    accountId += ','+element.accountId
-                });
+            state.loading = true
+            state.loadingMore = false
+            const accountIds = []
+            if (account.value.length > 0) {
+                account.value.forEach(element => {
+                    accountIds.push(element.accountId)
+                })
             }
+
             const params = {
-                accountId: account?.value.accountId,
+                accountId: accountIds[0],
+                accountIds: accountIds.toString(),
                 tradeType: Number(state.tradeType),
                 sortFieldName: 'executeTime',
                 sortType: 'desc',
@@ -198,43 +262,84 @@ export default {
             }
 
             tradeRecordList(params).then(res => {
+                state.loading = false
                 if (res.check()) {
                     console.log('78787878', res)
-                    state.recordList = res.data.list
+                    state.recordList = state.recordList.concat(res.data.list)
                     state.bizTypeText = res.data.bizTypeText
+
+                    // 数据全部加载完成
+                    if (state.params.current >= res.data.totalPage) {
+                        state.finished = true
+                        state.finishedText = t('common.noMore')
+                    }
                 }
             }).catch(err => {
+                state.loadingMore = false
                 state.loading = false
             })
         }
 
-        const openProductSwitch = (val) => {
+        // 底部加载更多
+        const onLoad = () => {
+            if (!state.loadingMore) {
+                state.pagigation.current++
+                queryRecordList()
+            }
+        }
+
+        const openProductSwitch = () => {
             productDropdown.value.toggle(false)
             state.switchProductVisible = true
+        }
+
+        const productChange = (val) => {
+            if (val === 0) {
+                resetParams()
+                delete state.params.symbolId
+                queryRecordList()
+            } else {
+                state.switchProductVisible = true
+            }
         }
 
         // 方向筛选
         const dirdctionChange = (val) => {
             state.params.direction = val
+            resetParams()
             queryRecordList()
         }
         // 开平仓筛选
         const positionTypeChange = (val) => {
             state.params.orderType = val
+            resetParams()
             queryRecordList()
         }
         // 时间筛选
         const timeChange = (timeType) => {
-            if (timeType === 1) {
-                state.params.executeStartTime = dayjs(new Date()).format('YYYY/MM/DD 00:00:00')
+            if (timeType === 0) {
+                state.params.executeStartTime = ''
+                state.params.executeEndTime = ''
+            } else if (timeType === 1) {
+                state.params.executeStartTime = dayjs(dayjs(new Date()).format('YYYY/MM/DD 00:00:00')).valueOf()
             } else if (timeType === 2) {
-                state.params.executeStartTime = dayjs().startOf('week')
+                state.params.executeStartTime = dayjs(dayjs().startOf('week')).valueOf()
             } else if (timeType === 3) {
-                state.params.executeStartTime = dayjs().startOf('month')
+                state.params.executeStartTime = dayjs(dayjs().startOf('month')).valueOf()
             } else if (timeType === 4) {
-                state.params.executeStartTime = dayjs().subtract(3, 'month').format('YYYY/MM/DD')
+                state.params.executeStartTime = dayjs(dayjs().subtract(3, 'month').format('YYYY/MM/DD')).valueOf()
             }
+            resetParams()
             queryRecordList()
+        }
+
+        // 判断是否是平仓
+        const isCloseType = (bizType) => {
+            if ([4, 5, 6, 7, 8].indexOf(Number(bizType)) > -1) {
+                return true
+            } else {
+                return false
+            }
         }
 
         queryRecordList()
@@ -247,7 +352,10 @@ export default {
             dirdctionChange,
             positionTypeChange,
             timeChange,
-            priceLabel
+            productChange,
+            priceLabel,
+            isCloseType,
+            isEmpty
         }
     }
 }
@@ -289,9 +397,9 @@ export default {
             margin: rem(20px) 0;
         }
         .t-body {
-            display: flex;
-            justify-content: space-between;
-            .t-left {
+            //display: flex;
+            //justify-content: space-between;
+            .t-block {
                 display: flex;
                 flex-wrap: wrap;
                 .tl-item {

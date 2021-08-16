@@ -127,10 +127,13 @@
         "setSuccess": "设置成功",
         "noSet": "未设置",
         "all": "全部",
+        "date": "日期",
         "curToday":"当日",
         "curWeek":"当周",
         "curMoney":"当月",
-        "curThreeMonth":"最近3月"
+        "curThreeMonth":"最近3月",
+        "chooseProduct": "选择产品",
+        "allProduct": "全部产品"
     },
     "auth": {
         "info": "需要准备的验证资料",
