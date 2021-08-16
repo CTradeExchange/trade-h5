@@ -239,7 +239,7 @@
             </div>
         </div>
         <StallsAndDeal
-            v-if='product && Number(tradeType) === 9'
+            v-if='product && Number(product.tradeType) === 9'
             :cur-price='product.cur_price'
             :setting-list='settingList'
             :symbol-id='symbolId'
@@ -281,7 +281,7 @@
         @update:show='updateShow'
     />
     <!-- 侧边栏-切换产品 -->
-    <sidebarProduct v-model='showSidebar' :default-trade-type='tradeType' @select='onSelect' />
+    <sidebarProduct v-model='showSidebar' :default-trade-type='product.tradeType' @select='onSelect' />
 </template>
 
 <script>
@@ -766,7 +766,7 @@ export default {
                 localSetChartConfig('chartType', 1)
                 // 默认选中现价线
                 state.settingList = ['showLastPrice']
-                if (Number(tradeType) === 9) {
+                if (Number(product.value.tradeType) === 9) {
                     state.settingList.push('stalls', 'deal')
                 }
 
