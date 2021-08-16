@@ -19,7 +19,7 @@
                             {{ Number(pendingItem.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
                         </div>
                         <div class='name'>
-                            {{ pendingItem.requestNum }} {{ pendingItem.accountCurrency }}
+                            {{ pendingItem.requestNum }}
                         </div>
                     </div><div class='col'>
                         <div class='sub'>

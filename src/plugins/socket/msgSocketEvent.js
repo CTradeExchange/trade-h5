@@ -229,6 +229,24 @@ class SocketEvent {
         const detail = {}
         document.body.dispatchEvent(new CustomEvent('GotMsg_UserForceLogoutRet', { detail }))
     }
+
+    // 订阅资产数据
+    subscribeAsset (tradeTypes) {
+        this.subscribedListAdd(() => {
+            this.send('subscribe_asset', {
+                tradeTypes
+            })
+        })
+    }
+
+    // 取消订阅资产数据
+    cancelSubscribeAsset (tradeTypes = '1,2') {
+        this.subscribedListAdd(() => {
+            this.send('cancel_subscribe_asset', {
+                tradeTypes
+            })
+        })
+    }
 }
 
 export default SocketEvent

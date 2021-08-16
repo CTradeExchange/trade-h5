@@ -1,8 +1,9 @@
 <template>
-    <van-popup v-model:show='show' position='left' :style="{ height: '100%' }" @closed='onClosed'>
+    <van-popup v-model:show='show' position='left' :style="{ height: '100%' }" teleport='body' @open='onOpen'>
         <div class='sidebarProduct'>
-            <plansType ref='plansTypeRef' class='plansType' :value='tradeType' @change='handleTradeType' />
+            <plansType v-if='!hideTradeType' ref='plansTypeRef' class='plansType' :value='tradeType' @change='handleTradeType' />
             <search
+                :class='{ margin: hideTradeType }'
                 :trade-type='tradeType'
                 @cancel='onCancel'
                 @select='onClick'
@@ -44,6 +45,14 @@ export default {
         modelValue: {
             type: Boolean,
             default: false
+        },
+        defaultTradeType: {
+            type: [String, Number],
+            default: ''
+        },
+        hideTradeType: {
+            type: Boolean,
+            default: false
         }
     },
     emits: ['update:modelValue', 'select'],
@@ -58,12 +67,6 @@ export default {
 
         const plansTypeRef = ref(null)
 
-        const onClosed = () => {
-            tradeType.value = unref(plansList)[0].id
-            categoryType.value = 0
-            unref(plansTypeRef) && unref(plansTypeRef).reset()
-        }
-
         // 取消按钮事件
         const onCancel = () => {
             show.value = false
@@ -71,9 +74,10 @@ export default {
 
         // 玩法列表
         const plansList = computed(() => store.state._base.plans)
-
+        // 默认玩法类型
+        const InitialTradeType = computed(() => String(props.defaultTradeType) || unref(plansList)[0].id)
         // 1.玩法类型
-        const tradeType = ref(unref(plansList)[0].id)
+        const tradeType = ref(unref(InitialTradeType))
         // 2.板块类型
         const categoryType = ref(0)
         // 监听玩法类型
@@ -90,6 +94,13 @@ export default {
         const onClick = product => {
             context.emit('select', toRaw(product), onCancel)
         }
+
+        const onOpen = () => {
+            tradeType.value = unref(InitialTradeType)
+            categoryType.value = 0
+            unref(plansTypeRef) && unref(plansTypeRef).reset()
+        }
+
         return {
             show,
             tradeType,
@@ -100,8 +111,8 @@ export default {
             plansList,
             onCancel,
             onClick,
-            onClosed,
-            plansTypeRef
+            plansTypeRef,
+            onOpen
         }
     }
 }
@@ -153,6 +164,9 @@ export default {
                 border: 0;
             }
         }
+    }
+    .margin {
+        margin-top: rem(30px);
     }
 }
 </style>

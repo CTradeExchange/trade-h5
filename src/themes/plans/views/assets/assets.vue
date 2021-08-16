@@ -1,10 +1,10 @@
 <template>
-    <div class='assetsWrapper' :style='plans.length <= 1 ? "margin-top: 10px": ""'>
+    <div class='assetsWrapper' :class='{ mt: plans.length <= 1 }'>
         <plansType v-if='plans.length > 1' class='plansType' :list='plans' :value='tradeType' @change='handleTradeType' />
         <van-swipe
             ref='assetsSwipe'
             :duration='duration'
-            :initial-swipe='1'
+            :initial-swipe='0'
             :show-indicators='false'
             :touchable='true'
             @change='onChange'
@@ -54,9 +54,9 @@ import TotalAssetsBywarehouse from './components/totalAssetsBywarehouse.vue'
 import PositionList from '@plans/modules/positionList/positionList'
 import { reactive, toRefs, nextTick, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { computed, watchEffect, watch } from '@vue/runtime-core'
+import { computed, watchEffect, watch, onUnmounted } from '@vue/runtime-core'
 import { isEmpty } from '@/utils/util'
-import { QuoteSocket } from '@/plugins/socket/socket'
+import { QuoteSocket, MsgSocket } from '@/plugins/socket/socket'
 import plansType from '@/themes/plans/components/plansType.vue'
 export default {
     components: {
@@ -72,7 +72,7 @@ export default {
         const assetsSwipe = ref(null)
         const curIndex = ref(0)
         const state = reactive({
-            duration: 300
+            duration: 0
         })
 
         // 获取账户列表
@@ -90,7 +90,9 @@ export default {
         const positionList = computed(() => store.state._trade.positionList[tradeType.value])
 
         // 获取当前 tab 下标
-        const tabIndex = computed(() => plans.value.findIndex(item => Number(item.id) === Number(tradeType.value)))
+        const tabIndex = computed(() => plans.value.findIndex(item =>
+            (Number(item.id) === Number(tradeType.value))
+        ))
 
         // 获取持仓列表
         const queryPositionList = () => {
@@ -114,10 +116,23 @@ export default {
                     QuoteSocket.send_subscribe(subscribList)
                 }
             }).catch(() => {
+            }).finally(() => {
+                // 订阅资产数据
+                MsgSocket.subscribedListAdd(function () {
+                    MsgSocket.subscribeAsset(tradeType.value)
+                })
             })
         }
 
-        watch(() => tradeType.value, (val) => {
+        watchEffect(()=>{
+            if ([1, 2].indexOf(Number(tradeType.value)) > -1) {
+                queryPositionList()
+            } else if ([3, 9].indexOf(Number(tradeType.value)) > -1) {
+                store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: tradeType.value })
+            }
+        })
+
+        /* watch(() => tradeType.value, (val) => {
             if ([1, 2].indexOf(Number(val)) > -1) {
                 queryPositionList()
             } else if ([3, 9].indexOf(Number(val)) > -1) {
@@ -125,7 +140,7 @@ export default {
             }
         }, {
             immediate: true
-        })
+        }) */
 
         const handleTradeType = (val) => {
             const curIndex = plans.value.findIndex(item => item.id === val)
@@ -143,10 +158,13 @@ export default {
         }
 
         onMounted(() => {
-            assetsSwipe.value && assetsSwipe.value.swipeTo(tabIndex.value)
+            assetsSwipe.value && assetsSwipe.value.swipeTo(tabIndex.value === -1 ? 0 : tabIndex.value)
             if (plans.value.length > 0) {
                 store.commit('_quote/Update_tradeType', plans.value[0].id)
             }
+        })
+        onUnmounted(() => {
+            MsgSocket.cancelSubscribeAsset()
         })
 
         return {
@@ -168,6 +186,9 @@ export default {
 @import '@/sass/mixin.scss';
 .assetsWrapper {
     padding: 0 rem(20px) rem(100px);
+    &.mt {
+        margin-top: rem(20px);
+    }
     .block {
         margin-bottom: rem(20px);
         border-radius: 4px;

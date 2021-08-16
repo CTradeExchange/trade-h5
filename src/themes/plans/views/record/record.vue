@@ -3,13 +3,18 @@
         <layoutTop>
             <p>{{ $t("record.records") }}</p>
         </layoutTop>
-        <van-tabs v-model:active='modelActive' class='tabs' :line-height='componentList.length === 1 ? 0 : 3' :line-width='1 / componentList.length * 100 + "%"'>
-            <van-tab v-for='item in componentList' :key='item.name' :name='item.name' :title='item.title'>
-                <div class='content'>
-                    <component :is='item.component' />
-                </div>
-            </van-tab>
-        </van-tabs>
+        <template v-if='componentList.length>1'>
+            <van-tabs v-model:active='modelActive' class='tabs' :line-width='1 / componentList.length * 100 + "%"'>
+                <van-tab v-for='item in componentList' :key='item.name' :name='item.name' :title='item.title'>
+                    <div class='content'>
+                        <component :is='item.component' />
+                    </div>
+                </van-tab>
+            </van-tabs>
+        </template>
+        <template v-else-if='componentList.length === 1'>
+            <component :is='componentList[0].component' />
+        </template>
     </div>
 </template>
 

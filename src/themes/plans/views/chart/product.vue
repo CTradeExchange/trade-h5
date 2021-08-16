@@ -155,7 +155,7 @@
                         <div v-show='settingStatus' class='content van-hairline--surround' @click.stop=''>
                             <van-checkbox-group ref='checkboxGroup' v-model='settingList' @change='handleLineChange'>
                                 <van-checkbox
-                                    v-for='item in lineList'
+                                    v-for='item in computedLineList'
                                     :key='item.value'
 
                                     class='item'
@@ -239,7 +239,7 @@
             </div>
         </div>
         <StallsAndDeal
-            v-if='product'
+            v-if='product && Number(product.tradeType) === 9'
             :cur-price='product.cur_price'
             :setting-list='settingList'
             :symbol-id='symbolId'
@@ -281,7 +281,7 @@
         @update:show='updateShow'
     />
     <!-- 侧边栏-切换产品 -->
-    <sidebarProduct v-model='showSidebar' @select='onSelect' />
+    <sidebarProduct v-model='showSidebar' :default-trade-type='product.tradeType' @select='onSelect' />
 </template>
 
 <script>
@@ -472,6 +472,13 @@ export default {
             loading: false
         })
 
+        const computedLineList = computed(() => {
+            if (product.value.tradeType === 9) {
+                return state.lineList
+            }
+            return state.lineList.filter(e => !['stalls', 'deal'].includes(e.value))
+        })
+
         // 图表组件引用
         const chartRef = ref(null)
         const klineTypeIndex = computed(() => {
@@ -493,20 +500,6 @@ export default {
         // 订阅产品
         const subscribList = productList.value.map(({ symbolId }) => (`${symbolId}_${getTradeType()}`))
         QuoteSocket.send_subscribe(subscribList)
-
-        // 图表初始值
-        const initialValue = computed(() => {
-            if (product.value.symbolName) {
-                return {
-                    text: product.value.symbolName, // 用于vant组件显示
-                    description: product.value.symbolCode, // 显示在图表左上角
-                    symbolId: product.value.symbolId, // 产品id
-                    digits: product.value.symbolDigits, // 小数点
-                    tradeType: getTradeType()
-                }
-            }
-            return null
-        })
 
         const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId()))))
 
@@ -754,9 +747,9 @@ export default {
             localSetChartConfig('lineSetList', state.settingList)
         })
 
+        // 设置图表设置缓存
+        const locChartConfig = JSON.parse(localGet('chartConfig'))
         const initChartData = () => {
-            // 设置图表设置缓存
-            const locChartConfig = JSON.parse(localGet('chartConfig'))
             const invertColor = localGet('invertColor')
             if (isEmpty(locChartConfig)) {
                 localSetChartConfig('showLastPrice', false)
@@ -836,6 +829,21 @@ export default {
             }
             // renderChart(state.initConfig.property)
         }
+
+        // 图表初始值
+        const initialValue = computed(() => {
+            if (product.value.symbolName) {
+                return {
+                    text: product.value.symbolName, // 用于vant组件显示
+                    description: product.value.symbolCode, // 显示在图表左上角
+                    symbolId: product.value.symbolId, // 产品id
+                    digits: product.value.symbolDigits, // 小数点
+                    tradeType: getTradeType(), // 玩法
+                    interval: locChartConfig?.resolution // 周期
+                }
+            }
+            return null
+        })
 
         // 添加自选
         const addOptional = () => {
@@ -942,7 +950,8 @@ export default {
             formatTime,
             showSidebar,
             toContractInfo,
-            onSelect
+            onSelect,
+            computedLineList
         }
     }
 }

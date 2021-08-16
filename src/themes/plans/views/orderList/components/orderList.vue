@@ -10,11 +10,18 @@
                 ref='productDropdown'
                 v-model='productVal'
                 :options='product'
-                @open='openProductSwitch'
+                @change='productChange'
             />
             <van-dropdown-item
+                v-if='[1,2].indexOf(Number(tradeType)) > -1'
                 v-model='positionTypeVal'
                 :options='positionType'
+                @change='positionTypeChange'
+            />
+            <van-dropdown-item
+                v-if='[3,9].indexOf(Number(tradeType)) > -1'
+                v-model='positionTypeVal'
+                :options='priceTypeList'
                 @change='positionTypeChange'
             />
             <van-dropdown-item
@@ -25,66 +32,122 @@
         </van-dropdown-menu>
     </div>
     <div class='list-wrap'>
-        {{ recordList }}
-        <div v-for='item in recordList' :key='item.orderId' class='trust-item'>
-            <div class='t-header'>
-                <div class='fl'>
-                    <span class='name'>
-                        {{ item.symbolName }}
-                    </span>
+        <van-list
+            :finished='finished'
+            :finished-text='finishedText'
+            :immediate-check='false'
+            @load='onLoad'
+        >
+            <div v-for='item in recordList' :key='item.orderId' class='trust-item'>
+                <div class='t-header'>
+                    <div class='fl'>
+                        <span class='name'>
+                            {{ item.symbolName }}
+                        </span>
+                    </div>
                 </div>
-            </div><div class='direction'>
-                限价开仓 /
-                <span class='fallColor'>
-                    卖出
-                </span> 0.01
-            </div><div class='t-body'>
-                <div class='t-left'>
-                    <p class='tl-item'>
-                        <label for=''>
-                            挂单价
-                        </label><span>
-                            49.00289
-                        </span>
-                    </p><p class='tl-item'>
-                        <label for=''>
-                            成交价
-                        </label><span class='grayColor'>
-                            49.00089
-                        </span>
-                    </p><p class='tl-item'>
-                        <label for=''>
-                            止损价
-                        </label><span>
-                            0
-                        </span>
-                    </p>
-                    <p class='tl-item'>
-                        <label for=''>
-                            止盈
-                        </label>
-                        <span>
-                            0
-                        </span>
-                    </p>
-                    <p class='tl-item'>
-                        <span>
-                            2021/08/11 08:59:29
-                        </span>
-                    </p><p class='tl-item'>
-                        <span>
-                            #1425441744087977984
-                        </span>
-                    </p>
+                <div class='direction'>
+                    {{ bizTypeText[item.bizType] }} /
+                    <span :class="Number(item.direction) === 1 ? 'riseColor' : 'fallColor'">
+                        {{ Number(item.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
+                    </span> {{ item.executeNum }}
+                </div>
+                <div class='t-body'>
+                    <div class='t-block'>
+                        <p v-if='isCloseType(item.bizType)' class='tl-item'>
+                            <!-- 如果是平仓 显示开仓价 -->
+                            <label for=''>
+                                {{ $t('trade.positionPrice') }}
+                            </label><span>
+                                {{ item.requestPrice || '--' }}
+                            </span>
+                        </p>
+                        <p class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.dealPrice') }}
+                            </label>
+                            <span>
+                                {{ item.executePrice }}
+                            </span>
+                        </p>
+                        <p v-if='isCloseType(item.bizType)' class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.profit') }}
+                            </label>
+                            <span>
+                                {{ item.profitLoss || '--' }}
+                            </span>
+                        </p>
+
+                        <p v-if='showLossOrProfit(item)' class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.stopLossPrice') }}
+                            </label>
+                            <span>
+                                {{ parseFloat(item.stopLoss) > 0 ? item.stopLoss : '--' }}
+                            </span>
+                        </p>
+                        <p v-if='showLossOrProfit(item)' class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.stopProfitPrice') }}
+                            </label>
+                            <span>
+                                {{ parseFloat(item.takeProfit) > 0 ? item.takeProfit : '--' }}
+                            </span>
+                        </p>
+
+                        <p v-if='[3,9].indexOf(Number(tradeType)) > -1' class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.loan') }}
+                            </label>
+                            <span>
+                                {{ item.loanAmount ? item.loanAmount + ' ' + item.outCurrency : '--' }}
+                            </span>
+                        </p>
+                        <p v-if='isCloseType(item.bizType)' class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.swap') }}
+                            </label>
+                            <span>
+                                {{ item.overnightInterest || '--' }}
+                            </span>
+                        </p>
+
+                        <p class='tl-item'>
+                            <label for=''>
+                                {{ $t('fee') }}
+                            </label>
+                            <span>
+                                {{ item.commission || '--' }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class='t-body'>
+                    <div class='t-block'>
+                        <p class='tl-item'>
+                            <span>
+                                {{ formatTime(item.executeTime,'YYYY/MM/DD HH:mm:ss' ) }}
+                            </span>
+                        </p>
+                        <p class='tl-item'>
+                            <span>
+                                #{{ item.orderId }}
+                            </span>
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </van-list>
     </div>
+
+    <Loading :show='loading' />
 
     <!-- 侧边栏-切换产品 -->
     <sidebarProduct
         v-model='switchProductVisible'
-        :trade-type='tradeType'
+        :default-trade-type='tradeType'
+        :hide-trade-type='true'
         @select='onSelectProduct'
     />
 </template>
@@ -93,93 +156,12 @@
 import sidebarProduct from '@plans/components/sidebarProduct.vue'
 import { tradeRecordList } from '@/api/user'
 import { useI18n } from 'vue-i18n'
+import { isEmpty } from '@/utils/util'
 import { useRoute, useRouter } from 'vue-router'
 import { computed, ref, nextTick, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
-const mockResult = {
-    'bizCode': '',
-    'code': '0',
-    'msg': '成功',
-    'tm': 0,
-    'trace': null,
-    'msgParams': null,
-    'data': {
-        'companyId': 16,
-        'customerId': 2462,
-        'customerNo': '86002461',
-        'accountId': 5017,
-        'trace': null,
-        'ip': null,
-        'size': 20,
-        'current': 1,
-        'totalPage': 1,
-        'list': [
-            {
-                'orderId': 20229,
-                'bizType': 1,
-                'symbolName': 'BTC/USDT-TEST',
-                'direction': 2,
-                'requestPrice': '0.0',
-                'executePrice': '37021.6',
-                'executeNum': '0.01000000',
-                'loanAmount': '0.000000',
-                'executeTime': 1628662432860,
-                'outCurrency': null,
-                'stopLoss': null,
-                'takeProfit': null,
-                'commission': '0.000000',
-                'profitLoss': null,
-                'overnightInterest': null
-            },
-            {
-                'orderId': 20228,
-                'bizType': 1,
-                'symbolName': 'BTC/USDT-TEST',
-                'direction': 2,
-                'requestPrice': null,
-                'executePrice': '370216',
-                'executeNum': '0.01000000',
-                'loanAmount': '0',
-                'executeTime': 1628662432619,
-                'outCurrency': null,
-                'stopLoss': null,
-                'takeProfit': null,
-                'commission': '0',
-                'profitLoss': null,
-                'overnightInterest': null
-            },
-            {
-                'orderId': 20227,
-                'bizType': 1,
-                'symbolName': 'BTC/USDT-TEST',
-                'direction': 2,
-                'requestPrice': '0.0',
-                'executePrice': '37021.6',
-                'executeNum': '0.01000000',
-                'loanAmount': '0.000000',
-                'executeTime': 1628662432140,
-                'outCurrency': null,
-                'stopLoss': null,
-                'takeProfit': null,
-                'commission': '0.000000',
-                'profitLoss': null,
-                'overnightInterest': null
-            }
-        ],
-        'bizTypeText': {
-            '1': '市价开仓',
-            '2': '限价开仓',
-            '3': '停损开仓',
-            '4': '市价平仓',
-            '5': '止盈平仓',
-            '6': '止损平仓',
-            '7': '系统平仓',
-            '8': '到期平仓'
-        }
-    },
-    'fail': false,
-    'ok': true
-}
+import dayjs from 'dayjs'
+
 export default {
     components: {
         sidebarProduct
@@ -191,71 +173,192 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             switchProductVisible: false,
-            directionVal: 0,
-            positionTypeVal: 0,
+            directionVal: -1,
+            positionTypeVal: -1,
             timeVal: 0,
             productVal: 0,
             curProduct: {},
             direction: [
-                { text: t('trade.direction'), value: '' },
+                { text: t('trade.direction'), value: -1 },
                 { text: t('trade.buy'), value: 1 },
                 { text: t('trade.sell'), value: 2 },
             ],
             positionType: [
-                { text: t('trade.openClose'), value: '' },
+                { text: t('trade.openClose'), value: -1 },
                 { text: t('trade.openPosition'), value: 1 },
                 { text: t('trade.closePosition'), value: 2 },
             ],
             timeList: [
-                { text: t('common.all'), value: 0 },
+                { text: t('common.date'), value: 0 },
                 { text: t('common.curToday'), value: 1 },
                 { text: t('common.curWeek'), value: 2 },
                 { text: t('common.curMoney'), value: 3 },
                 { text: t('common.curThreeMonth'), value: 4 },
             ],
-            product: [
-                { text: t('trade.symbol'), value: 0 },
+            priceTypeList: [
+                { text: t('trade.priceOrLimit'), value: -1 },
+                { text: t('trade.orderTypeShort1'), value: 3 },
+                { text: t('trade.orderTypeShort2'), value: 4 },
             ],
-            recordList: mockResult.data.list,
-            bizTypeText: mockResult.data.bizTypeText
+            product: [
+                { text: t('common.allProduct'), value: 0 },
+                { text: t('common.chooseProduct'), value: 1, },
+            ],
+            recordList: [],
+            bizTypeText: {},
+            params: {
+                current: 1,
+                size: 10,
+                // executeStartTime: 0,
+                executeEndTime: dayjs(dayjs(new Date()).format('YYYY/MM/DD 23:59:59')).valueOf()
+            },
+            tradeType: route.query.tradeType,
+            loading: false,
+            finished: false,
+            finishedText: t('common.noMore'),
+            loadingMore: false,
+
         })
 
-        const account = computed(() => store.state._user.customerInfo.accountList.find(el => Number(el.tradeType) === Number(route.query.tradeType)))
+        const account = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.tradeType)))
+
+        // 价格标签
+        const priceLabel = (bizType) => {
+            if ([1, 2, 3].indexOf(Number(bizType)) > -1) {
+                return t('trade.dealPrice')
+            } else if ([4, 5, 6, 7, 8].indexOf(Number(bizType)) > -1) {
+                return t('trade.positionPrice')
+            }
+        }
 
         // 产品选择品选择产品回调
         const onSelectProduct = (p) => {
             state.curProduct = p
-            state.product[0].text = p.symbolName
+            // state.product[0].text = p.symbolName
             state.switchProductVisible = false
+            resetParams()
+            state.params.symbolId = p.symbolId
+            queryRecordList()
+        }
+
+        // 重置参数
+        const resetParams = () => {
+            state.params.current = 1
+            state.finished = false
+            state.loadingMore = true
+            // state.params.symbolId = ''
+            state.recordList = []
         }
 
         const queryRecordList = () => {
-            const params = {
-                accountId: account?.value.accountId,
-                tradeType: route.query.tradeType,
-                sortFieldName: 'executeTime',
-                sortType: 'desc'
+            state.loading = true
+            const accountIds = []
+            if (account.value.length > 0) {
+                account.value.forEach(element => {
+                    accountIds.push(element.accountId)
+                })
             }
+
+            const params = {
+                accountIds: accountIds.toString(),
+                tradeType: Number(state.tradeType),
+                sortFieldName: 'executeTime',
+                sortType: 'desc',
+                ...state.params
+            }
+
             tradeRecordList(params).then(res => {
+                state.loading = false
+                state.loadingMore = false
                 if (res.check()) {
-                    console.log('78787878', res)
+                    state.recordList = state.recordList.concat(res.data.list)
+                    state.bizTypeText = res.data.bizTypeText
+
+                    // 数据全部加载完成
+                    if (state.params.current >= res.data.totalPage) {
+                        state.finished = true
+                        state.loadingMore = true
+                        state.finishedText = t('common.noMore')
+                    }
                 }
             }).catch(err => {
+                state.loadingMore = false
                 state.loading = false
             })
         }
 
-        const openProductSwitch = (val) => {
+        // 底部加载更多
+        const onLoad = () => {
+            if (!state.loadingMore) {
+                state.params.current++
+                queryRecordList()
+                state.loadingMore = true
+            }
+        }
+
+        const openProductSwitch = () => {
             productDropdown.value.toggle(false)
             state.switchProductVisible = true
         }
 
+        const productChange = (val) => {
+            if (val === 0) {
+                resetParams()
+                delete state.params.symbolId
+                queryRecordList()
+            } else {
+                state.switchProductVisible = true
+            }
+        }
+
         // 方向筛选
-        const dirdctionChange = () => {}
+        const dirdctionChange = (val) => {
+            state.params.direction = val
+            resetParams()
+            queryRecordList()
+        }
         // 开平仓筛选
-        const positionTypeChange = () => {}
+        const positionTypeChange = (val) => {
+            state.params.orderType = val
+            resetParams()
+            queryRecordList()
+        }
         // 时间筛选
-        const timeChange = () => {}
+        const timeChange = (timeType) => {
+            if (timeType === 0) {
+                state.params.executeStartTime = -1
+                state.params.executeEndTime = -1
+            } else if (timeType === 1) {
+                state.params.executeStartTime = dayjs(dayjs(new Date()).format('YYYY/MM/DD 00:00:00')).valueOf()
+            } else if (timeType === 2) {
+                state.params.executeStartTime = dayjs(dayjs().startOf('week')).valueOf()
+            } else if (timeType === 3) {
+                state.params.executeStartTime = dayjs(dayjs().startOf('month')).valueOf()
+            } else if (timeType === 4) {
+                state.params.executeStartTime = dayjs(dayjs().subtract(3, 'month').format('YYYY/MM/DD')).valueOf()
+            }
+            resetParams()
+            queryRecordList()
+        }
+
+        // 判断是否是平仓
+        const isCloseType = (bizType) => {
+            if ([4, 5, 6, 7, 8].indexOf(Number(bizType)) > -1) {
+                return true
+            } else {
+                return false
+            }
+        }
+
+        // 是否显示止盈止损价
+        const showLossOrProfit = (item) => {
+            // 玩法cfd全仓和cfd逐仓才显示止盈止损价
+            if ([1, 2].indexOf(Number(state.tradeType)) > -1) {
+                return true
+            } else {
+                return false
+            }
+        }
 
         queryRecordList()
 
@@ -266,7 +369,13 @@ export default {
             onSelectProduct,
             dirdctionChange,
             positionTypeChange,
-            timeChange
+            timeChange,
+            productChange,
+            priceLabel,
+            isCloseType,
+            isEmpty,
+            onLoad,
+            showLossOrProfit
         }
     }
 }
@@ -308,9 +417,9 @@ export default {
             margin: rem(20px) 0;
         }
         .t-body {
-            display: flex;
-            justify-content: space-between;
-            .t-left {
+            //display: flex;
+            //justify-content: space-between;
+            .t-block {
                 display: flex;
                 flex-wrap: wrap;
                 .tl-item {

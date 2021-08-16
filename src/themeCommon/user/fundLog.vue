@@ -286,6 +286,7 @@ export default {
                     // 数据全部加载完成
                     if (state.list.length >= res.data.total) {
                         state.finished = true
+                        state.loadingMore = true
                         state.finishedText = t('common.noMore')
                     }
 

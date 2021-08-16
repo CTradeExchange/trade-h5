@@ -4,8 +4,8 @@
         <SwitchTradeType :product='product' @switchProduct='switchProductVisible=true' />
 
         <div v-if='product' class='main'>
-            <div v-if='[3,9].includes(product.tradeType) && false' class='left'>
-                <OrderHandicap />
+            <div v-if='orderHandicapVisible' class='left'>
+                <OrderHandicap :product='product' />
             </div>
             <div v-if='product' class='right'>
                 <!-- 订单类型 -->
@@ -75,16 +75,16 @@
         />
 
         <!-- 侧边栏-切换产品 -->
-        <sidebarProduct v-model='switchProductVisible' :trade-type='product.tradeType' @select='onSelectProduct' />
+        <sidebarProduct v-model='switchProductVisible' :default-trade-type='product.tradeType' @select='onSelectProduct' />
     </div>
 </template>
 
 <script>
-import { reactive, toRefs, computed, ref, watch } from 'vue'
+import { reactive, toRefs, computed, ref, watch, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { mul } from '@/utils/calculation'
+import { mul, pow } from '@/utils/calculation'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import SwitchTradeType from './components/switchTradeType'
 import Direction from './components/direction'
@@ -145,6 +145,7 @@ export default {
             pendingPrice: '',
             stopLoss: '',
             stopProfit: '',
+            orderHandicapVisible: false,
         })
         const pendingRef = ref(null)
         const profitLossRef = ref(null)
@@ -207,9 +208,15 @@ export default {
         const init = () => {
             // 获取产品详情
             const [symbolId, tradeType] = symbolKey.value.split('_')
+            // state.orderHandicapVisible = tradeType === '9'
             store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
                 state.volume = product.minVolume // 设置默认手数
+                // 订阅产品行情
                 QuoteSocket.send_subscribe([symbolKey.value])
+                // 订阅产品五档报价
+                const curDigits = pow(0.1, product.price_digits)
+                if (state.orderHandicapVisible)QuoteSocket.deal_subscribe([symbolId], 5, curDigits, tradeType)
+
                 store.dispatch('_trade/queryPBOOrderPage', {
                     tradeType: product.tradeType,
                     sortFieldName: 'orderTime',
@@ -285,7 +292,12 @@ export default {
                     state.loading = false
                 })
         }
+
         init()
+
+        onBeforeUnmount(() => {
+            QuoteSocket.cancel_subscribe(2)
+        })
         return {
             ...toRefs(state),
             init,

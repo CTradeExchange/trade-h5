@@ -267,6 +267,7 @@ export default {
 
         // 账户信息
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
+        const account = computed(() => store.state._user.account)
 
         // 客服信息
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
@@ -350,9 +351,9 @@ export default {
         const params = {
             // companyId: customInfo.companyId,
             // customerNo: customInfo.customerNo,
-            // accountId: customInfo.accountId,
+            accountId: account.value?.accountId,
+            accountCurrency: account.value?.currency,
             // customerGroupId: customInfo.customerGroupId,
-            accountCurrency: customInfo.currency,
             // country: customInfo.country,
             withdrawMethod: 'digit_wallet'
         }
@@ -441,7 +442,8 @@ export default {
                 companyId: customInfo.companyId,
                 customerNo: customInfo.customerNo,
                 customerGroupId: customInfo.customerGroupId,
-                accountCurrency: customInfo.currency,
+                accountId: account.value?.accountId,
+                accountCurrency: account.value?.currency,
                 country: customInfo.country,
                 withdrawMethod: 'digit_wallet'
             }).then(res => {
@@ -515,8 +517,8 @@ export default {
             queryWithdrawRate({
                 // companyId: customInfo.companyId,
                 // customerNo: customInfo.customerNo,
-                // accountId: customInfo.accountId,
-                accountCurrency: customInfo.currency,
+                accountId: account.value?.accountId,
+                accountCurrency: account.value?.currency,
                 withdrawCurrency: state.coinKind,
                 withdrawType: 2
             }).then(res => {
