@@ -2,6 +2,7 @@ import { queryPositionPage, queryHistoryCloseOrderList, queryPBOOrderPage, query
 import CheckAPI from '@/utils/checkAPI'
 import { cachePendingParams } from './storeUtil.js'
 import { minus, toFixed, plus } from '@/utils/calculation'
+import { vue_set, assign } from '@/utils/vueUtil.js'
 import BigNumber from 'bignumber.js'
 
 const EmptyProfitLossRang = {
@@ -136,14 +137,14 @@ export default {
             state.positionLoading = data
         },
         Update_positionList (state, { tradeType, list }) {
-            state.positionList[tradeType] = list
+            vue_set(state.positionList, tradeType, list)
             const positionMap = state.positionMap
             list.forEach(item => {
                 if (!item || !item.positionId) return false
                 const key = `${item.positionId}_${tradeType}`
                 const curPosition = positionMap[key]
                 if (curPosition) Object.assign(item, { profitLoss: curPosition.profitLoss }) // 如果map数据中已经有此持仓信息，将之合并到item
-                positionMap[key] = item
+                vue_set(positionMap, key, item)
             })
         },
         Update_historyLoading (state, data) {
@@ -153,13 +154,13 @@ export default {
             state.historyList = data
         },
         Update_pendingList (state, { tradeType, list }) {
-            state.pendingList[tradeType] = list
+            vue_set(state.pendingList, tradeType, list)
             const pendingMap = state.pendingMap
             list.forEach(item => {
                 if (!item || !item.id) return false
                 const key = `${item.id}_${item.tradeType}`
                 if (!pendingMap[key]) pendingMap[key] = {}
-                Object.assign(pendingMap[key], item)
+                assign(pendingMap[key], item)
             })
         },
         Update_positionProfitLossList (state, { tradeType, list }) {
@@ -171,7 +172,9 @@ export default {
                 if (position) {
                     position.profitLoss = profitLoss
                     position.previewStopPrice = previewStopPrice
-                } else positionMap[key] = { profitLoss }
+                } else {
+                    vue_set(positionMap, key, { profitLoss })
+                }
             })
         },
     },

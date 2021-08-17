@@ -1,6 +1,7 @@
 import { login, findCustomerInfo, logout, switchAccount, queryCustomerOptionalList, addCustomerOptional, queryCustomerAssetsInfo, queryAccountAssetsInfo, addCustomerOptionalBatch } from '@/api/user'
 import { removeCustomerOptional } from '@/api/trade'
-import { localSet, setToken, removeLoginParams } from '@/utils/util'
+import { localSet, setToken, removeLoginParams, sessionSet } from '@/utils/util'
+import { vue_set, assign } from '@/utils/vueUtil.js'
 
 export default {
     namespaced: true,
@@ -65,7 +66,7 @@ export default {
             accountList.forEach(el => {
                 const { currency, tradeType } = el
                 if (currency === data.currency && tradeType === data.tradeType) {
-                    Object.assign(el, data)
+                    assign(el, data)
                 }
             })
             // if (state.customerInfo.accountMap[data.currency]) {
@@ -81,7 +82,7 @@ export default {
                 const { currency, tradeType } = el
                 const account = data.accountInfoMap[currency]
                 if (account && account.tradeType === tradeType) {
-                    Object.assign(el, account)
+                    assign(el, account)
                 }
             })
         },
@@ -89,7 +90,7 @@ export default {
             if (!tradeType) {
                 state.accountAssets = {}
             } else {
-                state.accountAssets[tradeType] = data
+                vue_set(state.accountAssets, tradeType, data)
             }
         },
         Update_kycState (state, data) {
@@ -104,13 +105,13 @@ export default {
     },
     actions: {
         // 登录
-        login ({ dispatch, commit, rootState }, params = {}) {
+        login ({ dispatch, commit }, params = {}) {
             commit('Update_loginLoading', true)
             return login(params).then((res) => {
                 if (res.check()) {
                     const data = res.data
                     if (params.loginPwd) localSet('loginParams', JSON.stringify(params))
-                    window.sessionStorage.setItem('customerNo', data.customerNo)
+                    sessionSet('customerNo', data.customerNo)
                     setToken(data.token)
                     // 清空之前的账户数据和产品数据
                     commit('Empty_data')
