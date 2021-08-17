@@ -157,8 +157,8 @@ import sidebarProduct from '@plans/components/sidebarProduct.vue'
 import { tradeRecordList } from '@/api/user'
 import { useI18n } from 'vue-i18n'
 import { isEmpty } from '@/utils/util'
-import { useRoute, useRouter } from 'vue-router'
-import { computed, ref, nextTick, reactive, toRefs, watch } from 'vue'
+import { useRoute, } from 'vue-router'
+import { computed, ref, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import dayjs from 'dayjs'
 
@@ -192,7 +192,7 @@ export default {
                 { text: t('common.date'), value: 0 },
                 { text: t('common.curToday'), value: 1 },
                 { text: t('common.curWeek'), value: 2 },
-                { text: t('common.curMoney'), value: 3 },
+                { text: t('common.curMonth'), value: 3 },
                 { text: t('common.curThreeMonth'), value: 4 },
             ],
             priceTypeList: [

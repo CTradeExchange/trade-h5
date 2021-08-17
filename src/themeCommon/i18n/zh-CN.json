@@ -130,10 +130,12 @@
         "date": "日期",
         "curToday":"当日",
         "curWeek":"当周",
-        "curMoney":"当月",
+        "curMonth":"当月",
         "curThreeMonth":"最近3月",
         "chooseProduct": "选择产品",
-        "allProduct": "全部产品"
+        "allProduct": "全部产品",
+        "startDay": "开始日期",
+        "endDay": "结束日期"
     },
     "auth": {
         "info": "需要准备的验证资料",
