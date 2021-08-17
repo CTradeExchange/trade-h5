@@ -124,7 +124,7 @@
                                 {{ $t('fee') }}
                             </label>
                             <span>
-                                {{ item.commission || '--' }}
+                                {{ item.commission || '--' }} {{ item.inCurrency }}
                             </span>
                         </p>
                     </div>
