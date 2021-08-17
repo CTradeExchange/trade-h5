@@ -4,7 +4,7 @@
         <SwitchTradeType :product='product' @switchProduct='switchProductVisible=true' />
 
         <div v-if='product' class='main'>
-            <div v-if='orderHandicapVisible' class='left'>
+            <div v-if='orderHandicapVisible && product.symbolName' class='left'>
                 <OrderHandicap :product='product' />
             </div>
             <div v-if='product' class='right'>
@@ -208,13 +208,13 @@ export default {
         const init = () => {
             // 获取产品详情
             const [symbolId, tradeType] = symbolKey.value.split('_')
-            // state.orderHandicapVisible = tradeType === '9'
+            state.orderHandicapVisible = tradeType === '9'
             store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
                 state.volume = product.minVolume // 设置默认手数
                 // 订阅产品行情
                 QuoteSocket.send_subscribe([symbolKey.value])
                 // 订阅产品五档报价
-                const curDigits = pow(0.1, product.price_digits)
+                const curDigits = pow(0.1, product.symbolDigits)
                 if (state.orderHandicapVisible)QuoteSocket.deal_subscribe([symbolId], 5, curDigits, tradeType)
 
                 store.dispatch('_trade/queryPBOOrderPage', {
@@ -247,7 +247,7 @@ export default {
             }
             const p = Math.pow(10, product.value.price_digits)
             const params = {
-                bizType: bizType.value, // 业务类型。1-市价开；2-限价开
+                bizType: [3, 9].includes(parseInt(tradeType)) && bizType.value === 10 ? 13 : bizType.value, // 业务类型。1-市价开；2-限价开
                 direction, // 订单买卖方向。1-买；2-卖；
                 symbolId: Number(symbolId),
                 accountCurrency: account.value.currency,

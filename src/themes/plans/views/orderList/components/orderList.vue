@@ -11,6 +11,7 @@
                 v-model='productVal'
                 :options='product'
                 @change='productChange'
+                @click='openProductDropdown'
             />
             <van-dropdown-item
                 v-if='[1,2].indexOf(Number(tradeType)) > -1'
@@ -25,13 +26,18 @@
                 @change='positionTypeChange'
             />
             <van-dropdown-item
+                ref='timeDropdown'
                 v-model='timeVal'
                 :options='timeList'
                 @change='timeChange'
+                @click='openTimeDropdown'
             />
         </van-dropdown-menu>
     </div>
     <div class='list-wrap'>
+        <div v-if='recordList.length === 0'>
+            <van-empty :description='$t("trade.noDealData")' image='/images/empty.png' />
+        </div>
         <van-list
             :finished='finished'
             :finished-text='finishedText'
@@ -118,7 +124,7 @@
                                 {{ $t('fee') }}
                             </label>
                             <span>
-                                {{ item.commission || '--' }}
+                                {{ item.commission || '--' }} {{ item.inCurrency }}
                             </span>
                         </p>
                     </div>
@@ -150,6 +156,15 @@
         :hide-trade-type='true'
         @select='onSelectProduct'
     />
+    <van-calendar
+        v-model:show='calendarVis'
+        :color='$style.primary'
+        :min-date='minDate'
+        position='left'
+        :round='false'
+        type='range'
+        @confirm='handleConfirmDate'
+    />
 </template>
 
 <script>
@@ -170,6 +185,7 @@ export default {
         const route = useRoute()
         const store = useStore()
         const productDropdown = ref(null)
+        const timeDropdown = ref(null)
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             switchProductVisible: false,
@@ -178,6 +194,7 @@ export default {
             timeVal: 0,
             productVal: 0,
             curProduct: {},
+            minDate: new Date('2020-01-01'),
             direction: [
                 { text: t('trade.direction'), value: -1 },
                 { text: t('trade.buy'), value: 1 },
@@ -189,11 +206,12 @@ export default {
                 { text: t('trade.closePosition'), value: 2 },
             ],
             timeList: [
-                { text: t('common.date'), value: 0 },
+                { text: t('common.allDate'), value: 0 },
                 { text: t('common.curToday'), value: 1 },
                 { text: t('common.curWeek'), value: 2 },
                 { text: t('common.curMonth'), value: 3 },
                 { text: t('common.curThreeMonth'), value: 4 },
+                { text: t('common.customDate'), value: 5 },
             ],
             priceTypeList: [
                 { text: t('trade.priceOrLimit'), value: -1 },
@@ -217,6 +235,7 @@ export default {
             finished: false,
             finishedText: t('common.noMore'),
             loadingMore: false,
+            calendarVis: false
 
         })
 
@@ -234,7 +253,7 @@ export default {
         // 产品选择品选择产品回调
         const onSelectProduct = (p) => {
             state.curProduct = p
-            // state.product[0].text = p.symbolName
+            state.product[1].text = p.symbolName
             state.switchProductVisible = false
             resetParams()
             state.params.symbolId = p.symbolId
@@ -280,6 +299,9 @@ export default {
                         state.loadingMore = true
                         state.finishedText = t('common.noMore')
                     }
+                    if (state.recordList.length === 0) {
+                        state.finishedText = ''
+                    }
                 }
             }).catch(err => {
                 state.loadingMore = false
@@ -299,16 +321,6 @@ export default {
         const openProductSwitch = () => {
             productDropdown.value.toggle(false)
             state.switchProductVisible = true
-        }
-
-        const productChange = (val) => {
-            if (val === 0) {
-                resetParams()
-                delete state.params.symbolId
-                queryRecordList()
-            } else {
-                state.switchProductVisible = true
-            }
         }
 
         // 方向筛选
@@ -336,6 +348,8 @@ export default {
                 state.params.executeStartTime = dayjs(dayjs().startOf('month')).valueOf()
             } else if (timeType === 4) {
                 state.params.executeStartTime = dayjs(dayjs().subtract(3, 'month').format('YYYY/MM/DD')).valueOf()
+            } else if (timeType === 5) {
+                state.calendarVis = true
             }
             resetParams()
             queryRecordList()
@@ -360,6 +374,40 @@ export default {
             }
         }
 
+        const productChange = (val) => {
+            if (val === 0) {
+                resetParams()
+                delete state.params.symbolId
+                state.product[1].text = t('common.chooseProduct')
+                queryRecordList()
+            } else {
+                state.switchProductVisible = true
+            }
+        }
+        const openProductDropdown = (val) => {
+            if (state.productVal === 1) { state.switchProductVisible = true }
+        }
+
+        // 确定选择日期
+        const handleConfirmDate = (timeList) => {
+            console.log(timeList)
+
+            if (timeList.length > 0) {
+                state.params.executeStartTime = dayjs(timeList[0]).valueOf()
+                state.params.executeEndTime = dayjs(timeList[1]).valueOf()
+            }
+            state.timeList[5].text = dayjs(state.params.executeStartTime).format('YYYY/MM/DD HH:mm:ss') + '-' + dayjs(state.params.executeEndTime).format('YYYY/MM/DD HH:mm:ss')
+            state.calendarVis = false
+            resetParams()
+            queryRecordList()
+        }
+
+        const openTimeDropdown = () => {
+            if (state.timeVal === 5) {
+                state.calendarVis = true
+            }
+        }
+
         queryRecordList()
 
         return {
@@ -375,7 +423,11 @@ export default {
             isCloseType,
             isEmpty,
             onLoad,
-            showLossOrProfit
+            openProductDropdown,
+            showLossOrProfit,
+            handleConfirmDate,
+            timeDropdown,
+            openTimeDropdown
         }
     }
 }
@@ -384,13 +436,24 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .filter-wrap {
+    position: fixed;
+    width: 100%;
     :deep(.van-dropdown-menu) {
         background-color: var(--contentColor);
     }
+    :deep(.van-dropdown-item__option) {
+        &:last-child {
+            .van-cell__title {
+                flex: 3;
+                //border: solid 1px var(--lineColor);
+            }
+        }
+    }
 }
 .list-wrap {
+    padding-top: rem(90px);
     .trust-item {
-        margin: rem(20px);
+        margin: rem(20px) rem(20px) 0 rem(20px);
         padding: rem(20px);
         background-color: var(--contentColor);
         border-bottom: solid 1px var(--lineColor);

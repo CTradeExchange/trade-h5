@@ -1,4 +1,4 @@
-import { queryPositionPage, queryHistoryCloseOrderList, queryPBOOrderPage } from '@/api/trade'
+import { queryPositionPage, queryHistoryCloseOrderList, queryPBOOrderPage, queryAbccPboPage } from '@/api/trade'
 import CheckAPI from '@/utils/checkAPI'
 import { cachePendingParams } from './storeUtil.js'
 import { minus, toFixed, plus } from '@/utils/calculation'
@@ -223,12 +223,31 @@ export default {
                 commit('Update_pendingList', { tradeType, list: [] })
                 return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空数据
             }
-            return queryPBOOrderPage(pendingsConfig[tradeType]).then((res) => {
-                if (res.check()) {
-                    commit('Update_pendingList', { tradeType, list: res.data })
-                }
-                return res
-            })
+
+            if (Number(tradeType) === 9) {
+                return queryAbccPboPage(pendingsConfig[tradeType]).then((res) => {
+                    if (res.check()) {
+                        if (res.data.list.length > 0) {
+                            const list = res.data.list
+                            // 处理接口返回字段不一致
+                            list.forEach(item => {
+                                item.id = item.orderId
+                                item.tradeType = tradeType
+                                item.requestNum = item.executeNum
+                            })
+                        }
+                        commit('Update_pendingList', { tradeType, list: res.data.list })
+                    }
+                    return res
+                })
+            } else {
+                return queryPBOOrderPage(pendingsConfig[tradeType]).then((res) => {
+                    if (res.check()) {
+                        commit('Update_pendingList', { tradeType, list: res.data })
+                    }
+                    return res
+                })
+            }
         },
     }
 }

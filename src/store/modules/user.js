@@ -1,4 +1,4 @@
-import { login, findCustomerInfo, logout, switchAccount, queryCustomerOptionalList, addCustomerOptional, queryCustomerAssetsInfo, queryAccountAssetsInfo } from '@/api/user'
+import { login, findCustomerInfo, logout, switchAccount, queryCustomerOptionalList, addCustomerOptional, queryCustomerAssetsInfo, queryAccountAssetsInfo, addCustomerOptionalBatch } from '@/api/user'
 import { removeCustomerOptional } from '@/api/trade'
 import { localSet, setToken, removeLoginParams } from '@/utils/util'
 
@@ -207,10 +207,21 @@ export default {
             })
         },
         // 如果和没有添加过自选产品，自动添加默认自选产品
-        addCustomerOptionalDefault ({ state, rootGetters }) {
+        addCustomerOptionalDefault ({ state, rootGetters, dispatch, commit }) {
             if (state.customerInfo.optional === 1) return Promise.resolve()
-            // const defaultOptions = rootGetters.userSelfSymbolList.map(el => parseInt(el.symbolId))
-            // return defaultOptions.length > 0 ? addCustomerOptional({ symbolList: defaultOptions }) : Promise.resolve()
+            const tradeTypeCurrencyList = []
+            Object.keys(rootGetters.userSelfSymbolList).forEach(tradeType => {
+                tradeTypeCurrencyList.push({
+                    tradeType,
+                    symbolList: rootGetters.userSelfSymbolList[tradeType],
+                })
+            })
+            addCustomerOptionalBatch({ tradeTypeCurrencyList }).then(res => {
+                if (res.check()) {
+                    commit('Update_optional', 1)
+                    dispatch('queryCustomerOptionalList')
+                }
+            })
         },
         // 查询客户总资产信息
         queryCustomerAssetsInfo ({ state, commit }, params) {

@@ -124,7 +124,7 @@ export default {
             })
         }
 
-        watchEffect(()=>{
+        watchEffect(() => {
             if ([1, 2].indexOf(Number(tradeType.value)) > -1) {
                 queryPositionList()
             } else if ([3, 9].indexOf(Number(tradeType.value)) > -1) {

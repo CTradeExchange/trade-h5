@@ -43,8 +43,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 // components
 import Top from '@/components/top'
-import WithdrawMoney from './components/withdraw-money'
-import WithdrawCoin from './components/withdraw-coin'
+import WithdrawMoney from './withdraw-money'
+import WithdrawCoin from './withdraw-coin'
 // vant
 import { Dialog } from 'vant'
 // i18n
@@ -78,7 +78,7 @@ export default {
             // 导航栏选项卡
             tabs: [],
             // 当前导航栏选项卡
-            currentTab: '',
+            currentTab: route.query.currentTab,
             // 导航栏右侧标题
             rightAction: {}
         })
