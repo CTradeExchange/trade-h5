@@ -46,14 +46,14 @@
             <van-button
                 hairline
                 size='mini'
-                :url='"/desposit?accountId="+assetsInfo.accountId'
+                @click='toDesposit'
             >
                 {{ $t('trade.desposit') }}
             </van-button>
             <van-button
                 hairline
                 size='mini'
-                :url='"/withdraw?accountId="+assetsInfo.accountId'
+                @click='toWirhdraw'
             >
                 {{ $t('trade.withdraw') }}
             </van-button>
@@ -64,9 +64,11 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter, useRoute } from 'vue-router'
 export default {
 
     setup () {
+        const router = useRouter()
         const store = useStore()
         const userAccount = computed(() => store.state._user.accountAssets[1])
 
@@ -74,10 +76,44 @@ export default {
 
         const assetsInfo = computed(() => store.state._user?.customerInfo && store.state._user?.customerInfo?.accountList.find(el => Number(el.tradeType) === Number(tradeType.value)))
 
+        const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(tradeType.value)))
+        const toDesposit = () => {
+            if (accountList.value.length > 1) {
+                router.push({
+                    path: '/chooseAccount',
+                    query: {
+                        accountId: assetsInfo.value.accountId,
+                        tradeType: tradeType.value
+                    }
+                })
+            } else {
+                router.push({
+                    path: '/desposit',
+                    query: {
+                        accountId: assetsInfo.value.accountId,
+                        currency: assetsInfo.value.currency
+                    }
+                })
+            }
+        }
+
+        // 跳转提现页面
+        const toWirhdraw = () => {
+            router.push({
+                path: '/withdrawAccount',
+                query: {
+                    accountId: assetsInfo.value.accountId,
+                    tradeType: tradeType.value
+                }
+            })
+        }
+
         return {
             assetsInfo,
             userAccount,
-            tradeType
+            tradeType,
+            toDesposit,
+            toWirhdraw
         }
     }
 }

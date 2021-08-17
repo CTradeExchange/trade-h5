@@ -43,8 +43,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 // components
 import Top from '@/components/top'
-import WithdrawMoney from './components/withdraw-money'
-import WithdrawCoin from './components/withdraw-coin'
+import WithdrawMoney from '../components/withdraw-money'
+import WithdrawCoin from '../components/withdraw-coin'
 // vant
 import { Dialog } from 'vant'
 // i18n

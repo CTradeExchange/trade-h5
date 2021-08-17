@@ -39,7 +39,7 @@
 
                 <div v-if='checkedType' class='pay-item'>
                     <div v-if='PayTypes.length > 0' class='pay-type' @click='openSheet'>
-                        <img alt='' :src='require("../../assets/payment_icon/" + checkedType.paymentType + ".png")' srcset='' />
+                        <img alt='' :src='require("../../../assets/payment_icon/" + checkedType.paymentType + ".png")' srcset='' />
                         <span class='pay-name'>
                             {{ checkedType.paymentTypeAlias || checkedType.paymentType }}
                         </span>
@@ -98,14 +98,14 @@
     <van-action-sheet v-model:show='typeShow' class='pay-warpper' :round='false' :title='$t("deposit.selectPayMethods")'>
         <div class='pay-list'>
             <div v-for='(item,index) in payTypesSortEnable' :key='index' class='pay-type' @click='choosePayType(item)'>
-                <img alt='' :src='require("../../assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
+                <img alt='' :src='require("../../../assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
                 <span class='pay-name'>
                     {{ item.paymentTypeAlias || item.paymentType }}
                 </span>
                 <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
             </div>
             <div v-for='(item,index) in payTypesSortDisable' :key='index' class='pay-type' @click='choosePayType(item)'>
-                <img alt='' :src='require("../../assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
+                <img alt='' :src='require("../../../assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
                 <span class='pay-name'>
                     {{ item.paymentTypeAlias || item.paymentType }}
                 </span>
@@ -133,7 +133,7 @@
 <script>
 import Top from '@/components/top'
 import { onBeforeMount, reactive, computed, toRefs, onBeforeUnmount } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply } from '@/api/user'
 import { getListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
@@ -149,6 +149,7 @@ export default {
     },
     setup (props) {
         const router = useRouter()
+        const route = useRoute()
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
 
@@ -189,7 +190,8 @@ export default {
             despositVis: false,
             btnDisabled: false,
             resultTimeMap: {},
-            paymentTypes: []
+            paymentTypes: [],
+            currency: route.query.currency
         })
 
         // 获取账户信息
@@ -227,6 +229,7 @@ export default {
                 })
                 return temp
             }
+            return []
         })
 
         // 不在当前时间的支付通道
@@ -240,6 +243,7 @@ export default {
                 })
                 return temp
             }
+            return []
         })
 
         // 判断sessionStorage 里面有没有保存proposalNo，有则弹窗提醒
@@ -306,7 +310,7 @@ export default {
                 customerNo: customInfo.value.customerNo,
                 customerGroupId: customInfo.value.customerGroupId,
                 clientType: 'mobile',
-                accountCurrency: customInfo.value.currency,
+                accountCurrency: state.currency,
             }
             state.loading = true
             queryPayType(params).then(res => {
@@ -333,7 +337,7 @@ export default {
                 const param = {
                     customerNo: customInfo.value.customerNo,
                     accountId: customInfo.value.accountId,
-                    accountCurrency: customInfo.value.currency,
+                    accountCurrency: state.currency,
                     paymentCurrency: state.currencyChecked.split('-').length > 1 ? state.currencyChecked.split('-')[0] : state.currencyChecked
                 }
                 state.loading = true
