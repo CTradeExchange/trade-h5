@@ -17,10 +17,11 @@
                 <span class='ft'>
                     {{ item.volume_bid }}
                 </span>
+                <span class='volunmePercent' :style="{ width:item.width+'%' }"></span>
             </p>
         </div>
         <div class='curPrice' :class='[product.cur_color]'>
-            {{ product.cur_price }}
+            {{ lastPrice }}
         </div>
         <div v-if='handicapList' class='priceMultiGear buy'>
             <p v-for='(item, index) in handicapList.ask_deep' :key='index' class='item'>
@@ -30,6 +31,7 @@
                 <span class='ft'>
                     {{ item.volume_ask }}
                 </span>
+                <span class='volunmePercent buy' :style="{ width:item.width+'%' }"></span>
             </p>
         </div>
         <van-popover v-model:show='showPopover' :actions='digitLevelList' @select='onSelect'>
@@ -44,10 +46,10 @@
 </template>
 
 <script>
-import { computed, reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import computeHandicap from '@plans/hooks/handicap'
-import { pow } from '@/utils/calculation'
+import { lt, pow } from '@/utils/calculation'
 import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
     props: ['product'],
@@ -56,9 +58,12 @@ export default {
         const state = reactive({
             showPopover: false,
             handicapDigit: pow(0.1, props.product?.symbolDigits),
+            lastPriceColor: '', // 最新成交价的颜色
         })
         // 获取盘口深度报价
         const handicapList = computed(() => store.state._quote.handicapList.find(({ symbol_id }) => parseInt(symbol_id) === props.product.symbolId))
+        // 最新成交价
+        const lastPrice = computed(() => store.state._quote.dealList[0]?.price)
         // 计算报价小数位档数
         const digitLevelList = computed(() => {
             const digits = []
@@ -78,6 +83,12 @@ export default {
             showPending: false
         })
 
+        // 最新成交价的颜色
+        watch(
+            () => lastPrice.value,
+            (newval, oldval) => (state.lastPriceColor = lt(newval, oldval) ? 'fallColor' : 'riseColor')
+        )
+
         // 切换深度报价小数位的长度
         const onSelect = (val) => {
             state.handicapDigit = val.text
@@ -88,6 +99,7 @@ export default {
             ...toRefs(state),
             onSelect,
             handicapList,
+            lastPrice,
             digitLevelList,
         }
     }
@@ -114,16 +126,33 @@ export default {
             color: var(--riseColor);
         }
         .item {
+            position: relative;
             display: flex;
             justify-content: space-between;
+            .volunmePercent {
+                position: absolute;
+                top: 0;
+                right: 0;
+                max-width: 99%;
+                height: 100%;
+                background: var(--fallColor);
+                opacity: 0.05;
+                transition: all 0.3s linear;
+                content: '';
+                &.buy {
+                    background: var(--riseColor);
+                }
+            }
             .ft {
                 color: var(--normalColor);
             }
         }
     }
     .curPrice {
+        height: rem(34px);
         margin-top: rem(20px);
         font-size: rem(30px);
+        line-height: rem(34px);
     }
     .selectBtn {
         position: relative;

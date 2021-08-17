@@ -130,6 +130,17 @@ class SocketEvent {
             list,
             type: 1
         })
+        const lastData = list[0]
+        if (lastData) {
+            const dealData = {
+                symbolId: lastData.symbol_id,
+                dealTime: lastData.tick_time,
+                trade_direction: 1,
+                price: lastData.price,
+                volume: 0,
+            }
+            this.$store.commit('_quote/Update_dealList', dealData)
+        }
     }
 
     // 实时报价
@@ -172,9 +183,7 @@ class SocketEvent {
             volume: priceArr[5] // priceArr[5]
 
         }
-        setTimeout(() => {
-            this.$store.commit('_quote/Update_dealList', dealData)
-        }, 3000)
+        this.$store.commit('_quote/Update_dealList', dealData)
     }
 
     // 实时盘口深度报价

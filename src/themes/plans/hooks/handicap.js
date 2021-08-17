@@ -37,6 +37,7 @@ export default function ({ symbolId, tradeType, showPending }) {
             const sellPendingList = pendingList.value && pendingList.value.filter(item => Number(item.direction === 1))
             result.ask_deep.forEach(ask => {
                 ask.width = diff === 0 ? 0 : (parseFloat(ask.volume_ask) - parseFloat(minValue)) / diff
+                ask.width = ask.width * 100
                 ask.unitNum = 0
                 // 计算合并挂单数量
                 if (sellPendingList?.length > 0 && showPending) {
@@ -55,6 +56,7 @@ export default function ({ symbolId, tradeType, showPending }) {
             const buyPendingList = pendingList.value && pendingList.value.filter(item => Number(item.direction === 2))
             result.bid_deep.forEach(bid => {
                 bid.width = diff === 0 ? 0 : (parseFloat(bid.volume_bid) - parseFloat(minValue)) / diff
+                bid.width = bid.width * 100
                 bid.unitNum = 0
                 // 计算合并挂单数量
                 if (buyPendingList?.length > 0 && showPending) {
