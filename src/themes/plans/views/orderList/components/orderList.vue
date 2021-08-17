@@ -11,6 +11,7 @@
                 v-model='productVal'
                 :options='product'
                 @change='productChange'
+                @click='openProductDropdown'
             />
             <van-dropdown-item
                 v-if='[1,2].indexOf(Number(tradeType)) > -1'
@@ -25,16 +26,19 @@
                 @change='positionTypeChange'
             />
             <van-dropdown-item
+                ref='timeDropdown'
                 v-model='timeVal'
                 :options='timeList'
                 @change='timeChange'
+                @click='openTimeDropdown'
             />
         </van-dropdown-menu>
     </div>
     <div class='list-wrap'>
-        <!-- {{ recordList }} -->
+        <div v-if='recordList.length === 0'>
+            <van-empty :description='$t("trade.noDealData")' image='/images/empty.png' />
+        </div>
         <van-list
-            v-model:loading='loading'
             :finished='finished'
             :finished-text='finishedText'
             :immediate-check='false'
@@ -80,20 +84,21 @@
                                 {{ item.profitLoss || '--' }}
                             </span>
                         </p>
-                        <p class='tl-item'>
+
+                        <p v-if='showLossOrProfit(item)' class='tl-item'>
                             <label for=''>
                                 {{ $t('trade.stopLossPrice') }}
                             </label>
                             <span>
-                                {{ isEmpty(item.stopLoss) || '--' }}
+                                {{ parseFloat(item.stopLoss) > 0 ? item.stopLoss : '--' }}
                             </span>
                         </p>
-                        <p class='tl-item'>
+                        <p v-if='showLossOrProfit(item)' class='tl-item'>
                             <label for=''>
                                 {{ $t('trade.stopProfitPrice') }}
                             </label>
                             <span>
-                                {{ isEmpty(item.takeProfit) || '--' }}
+                                {{ parseFloat(item.takeProfit) > 0 ? item.takeProfit : '--' }}
                             </span>
                         </p>
 
@@ -105,12 +110,21 @@
                                 {{ item.loanAmount ? item.loanAmount + ' ' + item.outCurrency : '--' }}
                             </span>
                         </p>
-                        <p v-if='[3,9].indexOf(Number(tradeType)) > -1' class='tl-item'>
+                        <p v-if='isCloseType(item.bizType)' class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.swap') }}
+                            </label>
+                            <span>
+                                {{ item.overnightInterest || '--' }}
+                            </span>
+                        </p>
+
+                        <p class='tl-item'>
                             <label for=''>
                                 {{ $t('fee') }}
                             </label>
                             <span>
-                                {{ item.commission || '--' }}
+                                {{ item.commission || '--' }} {{ item.inCurrency }}
                             </span>
                         </p>
                     </div>
@@ -142,6 +156,15 @@
         :hide-trade-type='true'
         @select='onSelectProduct'
     />
+    <van-calendar
+        v-model:show='calendarVis'
+        :color='$style.primary'
+        :min-date='minDate'
+        position='left'
+        :round='false'
+        type='range'
+        @confirm='handleConfirmDate'
+    />
 </template>
 
 <script>
@@ -149,8 +172,8 @@ import sidebarProduct from '@plans/components/sidebarProduct.vue'
 import { tradeRecordList } from '@/api/user'
 import { useI18n } from 'vue-i18n'
 import { isEmpty } from '@/utils/util'
-import { useRoute, useRouter } from 'vue-router'
-import { computed, ref, nextTick, reactive, toRefs, watch } from 'vue'
+import { useRoute, } from 'vue-router'
+import { computed, ref, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import dayjs from 'dayjs'
 
@@ -162,6 +185,7 @@ export default {
         const route = useRoute()
         const store = useStore()
         const productDropdown = ref(null)
+        const timeDropdown = ref(null)
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             switchProductVisible: false,
@@ -170,6 +194,7 @@ export default {
             timeVal: 0,
             productVal: 0,
             curProduct: {},
+            minDate: new Date('2020-01-01'),
             direction: [
                 { text: t('trade.direction'), value: -1 },
                 { text: t('trade.buy'), value: 1 },
@@ -181,11 +206,12 @@ export default {
                 { text: t('trade.closePosition'), value: 2 },
             ],
             timeList: [
-                { text: t('common.date'), value: 0 },
+                { text: t('common.allDate'), value: 0 },
                 { text: t('common.curToday'), value: 1 },
                 { text: t('common.curWeek'), value: 2 },
-                { text: t('common.curMoney'), value: 3 },
+                { text: t('common.curMonth'), value: 3 },
                 { text: t('common.curThreeMonth'), value: 4 },
+                { text: t('common.customDate'), value: 5 },
             ],
             priceTypeList: [
                 { text: t('trade.priceOrLimit'), value: -1 },
@@ -209,6 +235,7 @@ export default {
             finished: false,
             finishedText: t('common.noMore'),
             loadingMore: false,
+            calendarVis: false
 
         })
 
@@ -226,7 +253,7 @@ export default {
         // 产品选择品选择产品回调
         const onSelectProduct = (p) => {
             state.curProduct = p
-            // state.product[0].text = p.symbolName
+            state.product[1].text = p.symbolName
             state.switchProductVisible = false
             resetParams()
             state.params.symbolId = p.symbolId
@@ -244,7 +271,6 @@ export default {
 
         const queryRecordList = () => {
             state.loading = true
-            state.loadingMore = false
             const accountIds = []
             if (account.value.length > 0) {
                 account.value.forEach(element => {
@@ -253,7 +279,6 @@ export default {
             }
 
             const params = {
-                accountId: accountIds[0],
                 accountIds: accountIds.toString(),
                 tradeType: Number(state.tradeType),
                 sortFieldName: 'executeTime',
@@ -263,15 +288,19 @@ export default {
 
             tradeRecordList(params).then(res => {
                 state.loading = false
+                state.loadingMore = false
                 if (res.check()) {
-                    console.log('78787878', res)
                     state.recordList = state.recordList.concat(res.data.list)
                     state.bizTypeText = res.data.bizTypeText
 
                     // 数据全部加载完成
                     if (state.params.current >= res.data.totalPage) {
                         state.finished = true
+                        state.loadingMore = true
                         state.finishedText = t('common.noMore')
+                    }
+                    if (state.recordList.length === 0) {
+                        state.finishedText = ''
                     }
                 }
             }).catch(err => {
@@ -283,24 +312,15 @@ export default {
         // 底部加载更多
         const onLoad = () => {
             if (!state.loadingMore) {
-                state.pagigation.current++
+                state.params.current++
                 queryRecordList()
+                state.loadingMore = true
             }
         }
 
         const openProductSwitch = () => {
             productDropdown.value.toggle(false)
             state.switchProductVisible = true
-        }
-
-        const productChange = (val) => {
-            if (val === 0) {
-                resetParams()
-                delete state.params.symbolId
-                queryRecordList()
-            } else {
-                state.switchProductVisible = true
-            }
         }
 
         // 方向筛选
@@ -318,8 +338,8 @@ export default {
         // 时间筛选
         const timeChange = (timeType) => {
             if (timeType === 0) {
-                state.params.executeStartTime = ''
-                state.params.executeEndTime = ''
+                state.params.executeStartTime = -1
+                state.params.executeEndTime = -1
             } else if (timeType === 1) {
                 state.params.executeStartTime = dayjs(dayjs(new Date()).format('YYYY/MM/DD 00:00:00')).valueOf()
             } else if (timeType === 2) {
@@ -328,6 +348,8 @@ export default {
                 state.params.executeStartTime = dayjs(dayjs().startOf('month')).valueOf()
             } else if (timeType === 4) {
                 state.params.executeStartTime = dayjs(dayjs().subtract(3, 'month').format('YYYY/MM/DD')).valueOf()
+            } else if (timeType === 5) {
+                state.calendarVis = true
             }
             resetParams()
             queryRecordList()
@@ -339,6 +361,50 @@ export default {
                 return true
             } else {
                 return false
+            }
+        }
+
+        // 是否显示止盈止损价
+        const showLossOrProfit = (item) => {
+            // 玩法cfd全仓和cfd逐仓才显示止盈止损价
+            if ([1, 2].indexOf(Number(state.tradeType)) > -1) {
+                return true
+            } else {
+                return false
+            }
+        }
+
+        const productChange = (val) => {
+            if (val === 0) {
+                resetParams()
+                delete state.params.symbolId
+                state.product[1].text = t('common.chooseProduct')
+                queryRecordList()
+            } else {
+                state.switchProductVisible = true
+            }
+        }
+        const openProductDropdown = (val) => {
+            if (state.productVal === 1) { state.switchProductVisible = true }
+        }
+
+        // 确定选择日期
+        const handleConfirmDate = (timeList) => {
+            console.log(timeList)
+
+            if (timeList.length > 0) {
+                state.params.executeStartTime = dayjs(timeList[0]).valueOf()
+                state.params.executeEndTime = dayjs(timeList[1]).valueOf()
+            }
+            state.timeList[5].text = dayjs(state.params.executeStartTime).format('YYYY/MM/DD HH:mm:ss') + '-' + dayjs(state.params.executeEndTime).format('YYYY/MM/DD HH:mm:ss')
+            state.calendarVis = false
+            resetParams()
+            queryRecordList()
+        }
+
+        const openTimeDropdown = () => {
+            if (state.timeVal === 5) {
+                state.calendarVis = true
             }
         }
 
@@ -355,7 +421,13 @@ export default {
             productChange,
             priceLabel,
             isCloseType,
-            isEmpty
+            isEmpty,
+            onLoad,
+            openProductDropdown,
+            showLossOrProfit,
+            handleConfirmDate,
+            timeDropdown,
+            openTimeDropdown
         }
     }
 }
@@ -364,13 +436,24 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .filter-wrap {
+    position: fixed;
+    width: 100%;
     :deep(.van-dropdown-menu) {
         background-color: var(--contentColor);
     }
+    :deep(.van-dropdown-item__option) {
+        &:last-child {
+            .van-cell__title {
+                flex: 3;
+                //border: solid 1px var(--lineColor);
+            }
+        }
+    }
 }
 .list-wrap {
+    padding-top: rem(90px);
     .trust-item {
-        margin: rem(20px);
+        margin: rem(20px) rem(20px) 0 rem(20px);
         padding: rem(20px);
         background-color: var(--contentColor);
         border-bottom: solid 1px var(--lineColor);

@@ -32,7 +32,9 @@
         "despositCb": "充值结果",
         "changeBindEmail": "更换邮箱",
         "changeBindMobile": "更换手机",
-        "chartSetting": "图表设置"
+        "chartSetting": "图表设置",
+        "chooseCurrency": "选择币种",
+        "withdrawAccount": "选择提现币种"
     },
     "login": {
         "loginBtn": "登录",
@@ -127,13 +129,16 @@
         "setSuccess": "设置成功",
         "noSet": "未设置",
         "all": "全部",
-        "date": "日期",
+        "allDate": "全部日期",
         "curToday":"当日",
         "curWeek":"当周",
-        "curMoney":"当月",
+        "curMonth":"当月",
         "curThreeMonth":"最近3月",
         "chooseProduct": "选择产品",
-        "allProduct": "全部产品"
+        "allProduct": "全部产品",
+        "startDay": "开始日期",
+        "endDay": "结束日期",
+        "customDate": "自定义时间" 
     },
     "auth": {
         "info": "需要准备的验证资料",
@@ -230,7 +235,8 @@
         "amount": "存款金额",
         "submitTime": "提交时间",
         "depositSuccess": "存款成功",
-        "inputAmount": "请输入金额"
+        "inputAmount": "请输入金额",
+        "chooseCurrency": "请选择需充值的账户币种"
     },
     "fund": {
         "marginLevel": "保证金水平",
@@ -359,7 +365,11 @@
         "backHome": "返回首页",
         "successText": "提交成功",
         "coinSuccessMsg": "您的提币申请已经提交成功，我们将尽快完成审核，如有疑问或其他帮助请联系客服",
-        "moneySuccessMsg": "您的提现申请已经提交成功，我们将尽快完成审核，如有疑问或其他帮助请联系客服"
+        "moneySuccessMsg": "您的提现申请已经提交成功，我们将尽快完成审核，如有疑问或其他帮助请联系客服",
+        "outAccount": "请选择提现的账户币种",
+        "inAccount": "请选择到账币种",
+        "withdrawRecord": "取款明细"
+        
     },
     "withdrawMoney": {
         "moneyName": "提现金额",

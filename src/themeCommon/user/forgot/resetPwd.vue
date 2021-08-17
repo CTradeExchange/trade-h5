@@ -88,7 +88,6 @@ export default {
                 } else {
                     router.push('/resetFail')
                 }
-                Toast(res.msg)
             }).catch(err => {
                 state.loading = false
                 router.push('/resetFail')

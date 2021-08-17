@@ -39,6 +39,8 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
 
+        const account = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(props.product.tradeType)))
+
         watch(
             () => pendingList.value?.length,
             async (newval) => {
@@ -56,13 +58,25 @@ export default {
             { immediate: true }
         )
 
-        // 获取委托列表
-        store.dispatch('_trade/queryPBOOrderPage', {
-            tradeType: props.product.tradeType,
-            customerNo: customInfo.value.customerNo,
-            sortFieldName: 'orderTime',
-            sortType: 'desc',
-        })
+        const queryPBOOrderPage = () => {
+            const accountIds = []
+            if (account.value.length > 0) {
+                account.value.forEach(element => {
+                    accountIds.push(element.accountId)
+                })
+            }
+
+            // 获取委托列表
+            store.dispatch('_trade/queryPBOOrderPage', {
+                tradeType: props.product.tradeType,
+                customerNo: customInfo.value.customerNo,
+                sortFieldName: 'orderTime',
+                sortType: 'desc',
+                accountIds: accountIds + ''
+            })
+        }
+
+        queryPBOOrderPage()
 
         return {
             pendingList,

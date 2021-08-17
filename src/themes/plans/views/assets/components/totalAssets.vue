@@ -1,15 +1,15 @@
 <template>
     <div class='totalAssets'>
-        <div v-if='assetsInfo' class='totalAssetsBlock'>
+        <div class='totalAssetsBlock'>
             <div class='totalAssetsInfo'>
                 <p class='label'>
-                    <span> {{ $t('assets.totalAssets') }}({{ assetsInfo.currency }})</span>
+                    <span> {{ $t('assets.totalAssets') }}({{ assetsInfo?.currency }})</span>
                     <span class='tag'>
                         100%低风险
                     </span>
                 </p>
                 <p class='totalAmount'>
-                    {{ assetsInfo.totalBalance }}
+                    {{ assetsInfo?.totalBalance }}
                 </p>
             </div>
         </div>
@@ -38,29 +38,17 @@
             <van-button
                 hairline
                 size='mini'
-                url='/desposit'
+                @click='toDesposit'
             >
                 {{ $t('trade.desposit') }}
             </van-button>
             <van-button
                 hairline
                 size='mini'
-                url='/withdraw'
+                @click='toWirhdraw'
             >
                 {{ $t('trade.withdraw') }}
             </van-button>
-            <!-- <van-button
-                hairline
-                size='mini'
-            >
-                {{ $t('trade.loan') }}
-            </van-button>
-            <van-button
-                hairline
-                size='mini'
-            >
-                {{ $t('trade.repayment') }}
-            </van-button> -->
         </div>
     </div>
 </template>
@@ -68,16 +56,54 @@
 <script>
 import { computed, watchEffect } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter, useRoute } from 'vue-router'
 export default {
     components: {
     },
     setup () {
         const store = useStore()
+        const router = useRouter()
         const assetsInfo = computed(() => store.state._user.assetsInfo)
         const tradeType = computed(() => store.state._quote.curTradeType)
+        const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(tradeType.value)))
+
+        // 跳转充值页面
+        const toDesposit = () => {
+            if (accountList.value.length > 1) {
+                router.push({
+                    path: '/despositAccount',
+                    query: {
+                        accountId: assetsInfo.value.accountId,
+                        tradeType: tradeType.value
+                    }
+                })
+            } else {
+                router.push({
+                    path: '/desposit',
+                    query: {
+                        accountId: assetsInfo.value.accountId,
+                        currency: assetsInfo.value.currency
+                    }
+                })
+            }
+        }
+
+        // 跳转提现页面
+        const toWirhdraw = () => {
+            router.push({
+                path: '/withdrawAccount',
+                query: {
+                    accountId: assetsInfo.value.accountId,
+                    tradeType: tradeType.value
+                }
+            })
+        }
+
         return {
             assetsInfo,
-            tradeType
+            tradeType,
+            toDesposit,
+            toWirhdraw
         }
     }
 }

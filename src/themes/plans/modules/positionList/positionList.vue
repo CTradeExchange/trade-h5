@@ -7,7 +7,7 @@
     <div v-else class='position-wrap'>
         <p class='header'>
             <span>{{ $t('trade.position') }}({{ positionList?.length }})</span>
-            <span class='fr fallColor'>
+            <span class='fr' :class="userAccount?.profitLoss > 0 ? 'riseColor': 'fallColor'">
                 {{ userAccount?.profitLoss || '--' }}
             </span>
         </p>

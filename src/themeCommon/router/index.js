@@ -74,7 +74,7 @@ const routes = [
     {
         path: '/withdraw',
         name: 'Withdraw',
-        component: () => import(/* webpackChunkName: "withdraw" */ '../user/withdraw.vue'),
+        component: () => import(/* webpackChunkName: "withdraw" */ '../user/withdraw/withdraw.vue'),
         meta: {
             title: 'cRoute.withdraw',
             footerMenu: false,
@@ -84,7 +84,7 @@ const routes = [
     {
         path: '/withdrawRecord',
         name: 'WithdrawRecord',
-        component: () => import(/* webpackChunkName: "withdrawRecord" */ '../user/withdrawRecord.vue'),
+        component: () => import(/* webpackChunkName: "withdrawRecord" */ '../user/withdraw/withdrawRecord.vue'),
         meta: {
             title: 'cRoute.withdrawRecord',
             footerMenu: false,
@@ -134,7 +134,7 @@ const routes = [
     {
         path: '/desposit',
         name: 'Desposit',
-        component: () => import(/* webpackChunkName: "addBank" */ '../user/desposit.vue'),
+        component: () => import(/* webpackChunkName: "addBank" */ '../user/desposit/desposit.vue'),
         meta: {
             title: 'cRoute.deposit',
             footerMenu: false,
@@ -144,7 +144,7 @@ const routes = [
     {
         path: '/despositRecord',
         name: 'DespositRecord',
-        component: () => import(/* webpackChunkName: "addBank" */ '../user/despositRecord.vue'),
+        component: () => import(/* webpackChunkName: "addBank" */ '../user/desposit/despositRecord.vue'),
         meta: {
             title: 'cRoute.depositRecord',
             footerMenu: false,
@@ -283,7 +283,7 @@ const routes = [
     {
         path: '/despositCb',
         name: 'DespositCb',
-        component: () => import(/* webpackChunkName: "page" */ '../user/despositCb.vue'),
+        component: () => import(/* webpackChunkName: "page" */ '../user/desposit/despositCb.vue'),
         meta: {
             title: 'cRoute.despositCb',
             footerMenu: false,
@@ -313,6 +313,24 @@ const routes = [
         component: () => import(/* webpackChunkName: "page" */ '../user/chartSetting.vue'),
         meta: {
             title: 'cRoute.chartSetting',
+            footerMenu: false,
+        }
+    },
+    {
+        path: '/despositAccount',
+        name: 'DespositAccount',
+        component: () => import(/* webpackChunkName: "page" */ '../user/desposit/despositAccount.vue'),
+        meta: {
+            title: 'cRoute.chooseCurrency',
+            footerMenu: false,
+        }
+    },
+    {
+        path: '/withdrawAccount',
+        name: 'WithdrawAccount',
+        component: () => import(/* webpackChunkName: "page" */ '../user/withdraw/withdrawAccount.vue'),
+        meta: {
+            title: 'cRoute.withdrawAccount',
             footerMenu: false,
         }
     },

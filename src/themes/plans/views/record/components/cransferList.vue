@@ -1,7 +1,7 @@
 <template>
     <list
-        class='list'
         :liabilities-type='2'
+        v-bind='$attrs'
     >
         <template #default='{ list }'>
             <div v-for='item in list' :key='item.id' class='li'>
@@ -62,62 +62,59 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.list {
+.li {
     width: 100%;
-    .li {
-        width: 100%;
-        margin-bottom: rem(20px);
-        padding: rem(38px) rem(30px);
-        white-space: nowrap;
-        background-color: var(--contentColor);
-        border-radius: rem(10px);
-        .block {
+    margin-bottom: rem(20px);
+    padding: rem(38px) rem(30px);
+    white-space: nowrap;
+    background-color: var(--contentColor);
+    border-radius: rem(10px);
+    .block {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 0 0 rem(30px) 0;
+        &:last-child {
+            margin: 0;
+        }
+        .label {
+            color: var(--minorColor);
+            font-weight: 500;
+            font-size: rem(24px);
+            line-height: rem(26px);
+        }
+        .num {
+            margin-top: rem(13px);
+            color: var(--normalColor);
+            font-weight: 400;
+            font-size: rem(24px);
+        }
+        .left {
             display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            margin: 0 0 rem(30px) 0;
-            &:last-child {
-                margin: 0;
-            }
-            .label {
-                color: var(--minorColor);
+            flex-direction: column;
+            .currency {
+                color: var(--color);
                 font-weight: 500;
-                font-size: rem(24px);
-                line-height: rem(26px);
+                font-size: rem(30px);
+                line-height: rem(32px);
             }
-            .num {
-                margin-top: rem(13px);
-                color: var(--normalColor);
+            .time {
+                margin-top: rem(15px);
+                color: var(--placeholdColor);
                 font-weight: 400;
-                font-size: rem(24px);
+                font-size: rem(20px);
+                line-height: rem(22px);
             }
-            .left {
-                display: flex;
-                flex-direction: column;
-                .currency {
-                    color: var(--color);
-                    font-weight: 500;
-                    font-size: rem(30px);
-                    line-height: rem(32px);
-                }
-                .time {
-                    margin-top: rem(15px);
-                    color: var(--placeholdColor);
-                    font-weight: 400;
-                    font-size: rem(20px);
-                    line-height: rem(22px);
-                }
-            }
-            .right {
-                display: flex;
-                flex-direction: column;
-                text-align: right;
-                .balance {
-                    color: var(--color);
-                    font-weight: 400;
-                    font-size: rem(34px);
-                    line-height: rem(36px);
-                }
+        }
+        .right {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+            .balance {
+                color: var(--color);
+                font-weight: 400;
+                font-size: rem(34px);
+                line-height: rem(36px);
             }
         }
     }

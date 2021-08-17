@@ -186,3 +186,16 @@ export function updatePboOrder (data) {
         data
     })
 }
+
+/* 查看 ABCC预埋单 */
+export function queryAbccPboPage (data) {
+    return request({
+        url: '/global/tradeapi.app.OrderApiService.queryPboPage',
+        method: 'post',
+        headers: {
+            group: 'tradeApi',
+            version: '0.0.1',
+        },
+        data
+    })
+}

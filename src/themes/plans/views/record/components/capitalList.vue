@@ -1,9 +1,13 @@
 <template>
     <list
-        class='list'
         :liabilities-type='1'
         :request-api='queryCapitalFlowList'
+        v-bind='$attrs'
+        :request-params='newParams'
     >
+        <template #filter v-if='false'>
+            <flowFilter @change='onChange' />
+        </template>
         <template #default='{ list }'>
             <div v-for='item in list' :key='item.id' class='li'>
                 <div class='block'>
@@ -14,13 +18,16 @@
                         <span class='businessType'>
                             {{ proBtns[item.businessType] }}
                         </span>
+                        <span class='time'>
+                            {{ formatTime(item.createTime) }}
+                        </span>
                     </div>
                     <div class='right'>
                         <span class='balance'>
                             {{ item.amount }}
                         </span>
-                        <span class='time'>
-                            {{ formatTime(item.createTime) }}
+                        <span class='amountAfter'>
+                            {{ $t('common.balance') }} {{ item.amountAfter }}
                         </span>
                     </div>
                 </div>
@@ -34,19 +41,46 @@ import list from './list'
 import dayjs from 'dayjs'
 import { queryCapitalFlowList } from '@/api/user'
 import { useI18n } from 'vue-i18n'
+import flowFilter from './flowFilter'
+import { computed, ref } from 'vue'
 
 export default {
-    components: { list },
+    components: { list, flowFilter },
+    props: {
+        requestParams: {
+            type: Object,
+            default: () => ({})
+        }
+    },
     setup (props) {
         const { tm } = useI18n({ useScope: 'global' })
         const proBtns = tm('fund.proBtns')
         const formatTime = (val) => {
             return dayjs(val).format('YYYY/MM/DD HH:mm:ss')
         }
+
+        const businessType = ref('')
+        const onChange = value => {
+            businessType.value = value
+        }
+
+        const newParams = computed(() => {
+            if (businessType.value) {
+                return {
+                    ...props.requestParams,
+                    businessType: businessType.value
+                }
+            }
+
+            return props.requestParams
+        })
+
         return {
             formatTime,
             queryCapitalFlowList,
-            proBtns
+            proBtns,
+            newParams,
+            onChange
         }
     },
 }
@@ -54,67 +88,72 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.list {
+.li {
     width: 100%;
-    .li {
-        width: 100%;
-        margin-bottom: rem(20px);
-        padding: rem(38px) rem(30px);
-        white-space: nowrap;
-        background-color: var(--contentColor);
-        border-radius: rem(10px);
-        .block {
+    margin-bottom: rem(20px);
+    padding: rem(38px) rem(30px);
+    white-space: nowrap;
+    background-color: var(--contentColor);
+    border-radius: rem(10px);
+    .block {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 0 0 rem(30px) 0;
+        &:last-child {
+            margin: 0;
+        }
+        .time {
+            margin-top: rem(15px);
+            color: var(--placeholdColor);
+            font-weight: 400;
+            font-size: rem(20px);
+            line-height: rem(22px);
+        }
+        .label {
+            color: var(--minorColor);
+            font-weight: 500;
+            font-size: rem(24px);
+            line-height: rem(26px);
+        }
+        .num {
+            margin-top: rem(13px);
+            color: var(--normalColor);
+            font-weight: 400;
+            font-size: rem(24px);
+        }
+        .left {
             display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            margin: 0 0 rem(30px) 0;
-            &:last-child {
-                margin: 0;
-            }
-            .label {
-                color: var(--minorColor);
+            flex-direction: column;
+            .currency {
+                color: var(--color);
                 font-weight: 500;
-                font-size: rem(24px);
-                line-height: rem(26px);
+                font-size: rem(30px);
+                line-height: rem(32px);
             }
-            .num {
-                margin-top: rem(13px);
-                color: var(--normalColor);
+            .businessType {
+                margin-top: rem(15px);
+            }
+        }
+        .right {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+            .balance {
+                color: var(--color);
                 font-weight: 400;
-                font-size: rem(24px);
+                font-size: rem(34px);
+                line-height: rem(36px);
             }
-            .left {
-                display: flex;
-                flex-direction: column;
-                .currency {
-                    color: var(--color);
-                    font-weight: 500;
-                    font-size: rem(30px);
-                    line-height: rem(32px);
-                }
-                .businessType {
-                    margin-top: rem(15px);
-                }
-            }
-            .right {
-                display: flex;
-                flex-direction: column;
-                text-align: right;
-                .balance {
-                    color: var(--color);
-                    font-weight: 400;
-                    font-size: rem(34px);
-                    line-height: rem(36px);
-                }
-                .time {
-                    margin-top: rem(15px);
-                    color: var(--placeholdColor);
-                    font-weight: 400;
-                    font-size: rem(20px);
-                    line-height: rem(22px);
-                }
+            .amountAfter {
+                margin-top: rem(15px);
+                color: var(--placeholdColor);
+                font-weight: 400;
+                font-size: rem(20px);
+                line-height: rem(22px);
             }
         }
     }
 }
+
 </style>

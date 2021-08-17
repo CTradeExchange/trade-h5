@@ -62,6 +62,8 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
 
+        const account = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(tradeType)))
+
         const toDetail = (item) => {
             router.push({
                 path: '/trustDetail',
@@ -96,12 +98,21 @@ export default {
 
         const queryPendingList = () => {
             // 获取委托列表
+
+            const accountIds = []
+            if (account.value.length > 0) {
+                account.value.forEach(element => {
+                    accountIds.push(element.accountId)
+                })
+            }
+
             state.loading = true
             store.dispatch('_trade/queryPBOOrderPage', {
                 customerNo: customInfo.value.customerNo,
                 sortFieldName: 'orderTime',
                 sortType: 'desc',
                 tradeType: route.query.tradeType,
+                accountIds: accountIds + ''
             }).then(res => {
                 state.loading = false
             })
