@@ -90,7 +90,13 @@ export default {
         }
 
         const next = () => {
-
+            router.push({
+                path: 'withdraw',
+                query: {
+                    currency: 'USDT',
+                    currentTab: 'coin'
+                }
+            })
         }
 
         return {

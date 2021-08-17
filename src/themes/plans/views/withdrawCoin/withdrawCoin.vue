@@ -3,7 +3,7 @@
         <LayoutTop :back='true' :menu='false' :title='$t("withdraw.coinTitle")'>
             <template #right>
                 <a class='withdorw-title' href='javascript:;' @click='toList'>
-                    提币记录
+                    {{ $t('withdraw.withdrawRecord') }}
                 </a>
             </template>
         </LayoutTop>

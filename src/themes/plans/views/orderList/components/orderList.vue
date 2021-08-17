@@ -194,7 +194,7 @@ export default {
             timeVal: 0,
             productVal: 0,
             curProduct: {},
-            minDate: new Date('2000-01-01'),
+            minDate: new Date('2020-01-01'),
             direction: [
                 { text: t('trade.direction'), value: -1 },
                 { text: t('trade.buy'), value: 1 },
@@ -396,6 +396,7 @@ export default {
                 state.params.executeStartTime = dayjs(timeList[0]).valueOf()
                 state.params.executeEndTime = dayjs(timeList[1]).valueOf()
             }
+            state.timeList[5].text = dayjs(state.params.executeStartTime).format('YYYY/MM/DD HH:mm:ss') + '-' + dayjs(state.params.executeEndTime).format('YYYY/MM/DD HH:mm:ss')
             state.calendarVis = false
             resetParams()
             queryRecordList()
@@ -440,10 +441,17 @@ export default {
     :deep(.van-dropdown-menu) {
         background-color: var(--contentColor);
     }
+    :deep(.van-dropdown-item__option) {
+        &:last-child {
+            .van-cell__title {
+                flex: 3;
+                //border: solid 1px var(--lineColor);
+            }
+        }
+    }
 }
 .list-wrap {
     padding-top: rem(90px);
-    overflow: auto;
     .trust-item {
         margin: rem(20px) rem(20px) 0 rem(20px);
         padding: rem(20px);
