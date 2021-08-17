@@ -9,29 +9,29 @@
             </span>
         </div>
 
-        <div v-if='handicapList' class='priceMultiGear sell'>
-            <p v-for='(item, index) in handicapList.bid_deep' :key='index' class='item'>
-                <span class='hd'>
-                    {{ item.price_bid }}
-                </span>
-                <span class='ft'>
-                    {{ item.volume_bid }}
-                </span>
-                <span class='volunmePercent' :style="{ width:item.width+'%' }"></span>
-            </p>
-        </div>
-        <div class='curPrice' :class='[product.cur_color]'>
-            {{ lastPrice }}
-        </div>
         <div v-if='handicapList' class='priceMultiGear buy'>
-            <p v-for='(item, index) in handicapList.ask_deep' :key='index' class='item'>
+            <p v-for='(item, index) in ask_deep' :key='index' class='item'>
                 <span class='hd'>
                     {{ item.price_ask }}
                 </span>
                 <span class='ft'>
                     {{ item.volume_ask }}
                 </span>
-                <span class='volunmePercent buy' :style="{ width:item.width+'%' }"></span>
+                <span v-if='item.width' class='volunmePercent buy' :style="{ width:item.width+'%' }"></span>
+            </p>
+        </div>
+        <div class='curPrice' :class='[product.cur_color]'>
+            {{ lastPrice }}
+        </div>
+        <div v-if='handicapList' class='priceMultiGear sell'>
+            <p v-for='(item, index) in handicapList.bid_deep.slice(0,5)' :key='index' class='item'>
+                <span class='hd'>
+                    {{ item.price_bid }}
+                </span>
+                <span class='ft'>
+                    {{ item.volume_bid }}
+                </span>
+                <span v-if='item.width' class='volunmePercent' :style="{ width:item.width+'%' }"></span>
             </p>
         </div>
         <van-popover v-model:show='showPopover' :actions='digitLevelList' @select='onSelect'>
@@ -62,6 +62,10 @@ export default {
         })
         // 获取盘口深度报价
         const handicapList = computed(() => store.state._quote.handicapList.find(({ symbol_id }) => parseInt(symbol_id) === props.product.symbolId))
+        const ask_deep = computed(() => {
+            const list = handicapList.value?.ask_deep?.slice(0)?.reverse()
+            return list.slice(0, 5) || []
+        })
         // 最新成交价
         const lastPrice = computed(() => store.state._quote.dealList[0]?.price)
         // 计算报价小数位档数
@@ -100,6 +104,7 @@ export default {
             onSelect,
             handicapList,
             lastPrice,
+            ask_deep,
             digitLevelList,
         }
     }
