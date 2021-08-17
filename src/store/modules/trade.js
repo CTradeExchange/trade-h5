@@ -227,7 +227,16 @@ export default {
             if (Number(tradeType) === 9) {
                 return queryAbccPboPage(pendingsConfig[tradeType]).then((res) => {
                     if (res.check()) {
-                        commit('Update_pendingList', { tradeType, list: res.data })
+                        if (res.data.list.length > 0) {
+                            const list = res.data.list
+                            // 处理接口返回字段不一致
+                            list.forEach(item => {
+                                item.id = item.orderId
+                                item.tradeType = tradeType
+                                item.requestNum = item.executeNum
+                            })
+                        }
+                        commit('Update_pendingList', { tradeType, list: res.data.list })
                     }
                     return res
                 })
