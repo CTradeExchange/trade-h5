@@ -3,19 +3,24 @@
         <input
             ref='inputEl'
             class='input'
-            :placeholder='$t("trade.volumes")'
+            :placeholder='placeholder'
             type='text'
             :value='modelValue'
             @blur='onBlur'
             @input='onInput'
         />
+        <a class='entryType' href='javascript:;' @click='entryTypeUpdate'>
+            <i class='icon_qiehuan'></i>
+            {{ parseInt(entryType)===2?$t('trade.volumes'):$t('trade.orderAmount') }}
+        </a>
     </div>
 </template>
 
 <script>
-import { reactive, ref, toRefs } from 'vue'
+import { computed, reactive, ref, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { getDecimalNum, toFixed } from '@/utils/calculation'
+import { useI18n } from 'vue-i18n'
 export default {
     props: {
         product: {
@@ -25,17 +30,25 @@ export default {
             type: [Number, String],
             default: ''
         },
+        entryType: {
+            type: [Number, String],
+            default: 1 // 1按数量下单 2按成交额下单
+        },
     },
-    emits: ['update:modelValue', 'change'],
+    emits: ['update:modelValue', 'change', 'update:entryType'],
     setup (props, { emit }) {
         const inputEl = ref(null)
+        const { t } = useI18n({ useScope: 'global' })
+        const placeholder = computed(() => {
+            return parseInt(props.entryType) === 1 ? t('trade.orderVolume') : t('trade.orderAmount') + `(${props.product.baseCurrency})`
+        })
         const onInput = (e) => {
             let newval = e.target.value
             if (/[^0-9\.]/.test(newval)) { // 只能输入数字
                 newval = newval.replace(/[^0-9\.]/g, '')
                 e.target.value = newval
             }
-            const digits = getDecimalNum(props.product.minVolume)
+            const digits = parseInt(props.entryType) === 1 ? getDecimalNum(props.product.minVolume) : props.product.symbolDigits
             const reg = new RegExp('^\\d*(\\.?\\d{0,' + digits + '})', 'g')
             if (getDecimalNum(newval) > digits) {
                 newval = (newval.match(reg) && newval.match(reg)[0]) || ''
@@ -53,8 +66,15 @@ export default {
             value = value ? toFixed(value, digits) : value
             emit('change', value)
         }
+
+        // 切换数量下单、金额下达
+        const entryTypeUpdate = () => {
+            emit('update:entryType', props.entryType === 1 ? 2 : 1)
+        }
         return {
             inputEl,
+            entryTypeUpdate,
+            placeholder,
             onInput,
             onBlur,
         }
@@ -65,6 +85,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .orderVolume {
+    position: relative;
     margin-top: rem(20px);
     .input {
         width: 100%;
@@ -73,6 +94,13 @@ export default {
         line-height: 1;
         text-align: center;
         background: var(--assistColor);
+    }
+    .entryType {
+        position: absolute;
+        right: rem(20px);
+        height: rem(80px);
+        color: var(--color);
+        line-height: rem(80px);
     }
 }
 </style>

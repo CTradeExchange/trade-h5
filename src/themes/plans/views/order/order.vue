@@ -32,7 +32,7 @@
                     :product='product'
                 />
                 <!-- 手数 -->
-                <OrderVolume v-model='volume' class='cellMarginTop' :product='product' />
+                <OrderVolume v-model='volume' v-model:entryType='entryType' class='cellMarginTop' :product='product' />
                 <!-- 订单金额 -->
                 <Assets
                     v-if='account && [3,9].includes(product.tradeType)'
@@ -141,6 +141,7 @@ export default {
                 val: 1
             }],
             volume: '',
+            entryType: 1, // 1按数量下单 2按成交额下单
             operationType: 2, // 操作类型。1-普通；2-自动借款；3-自动还款
             pendingPrice: '',
             stopLoss: '',
