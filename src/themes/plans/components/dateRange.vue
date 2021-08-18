@@ -17,6 +17,7 @@
     <van-calendar
         ref='calendarRef'
         v-model:show='showCalendar'
+        :allow-same-day='true'
         :color='$style.primary'
         :max-date='maxDate'
         :min-date='minDate'
