@@ -428,6 +428,18 @@ export function addCustomerOptional (data) {
         data
     })
 }
+/* 批量添加自选 */
+export function addCustomerOptionalBatch (data) {
+    return request({
+        url: '/global/customer.app.CustomerOptionalWebApiService.addBatch',
+        method: 'post',
+        headers: {
+            // group: 'tradeApi',
+            version: '0.0.1',
+        },
+        data
+    })
+}
 
 /* 更换手机 */
 export function changePhone (data) {

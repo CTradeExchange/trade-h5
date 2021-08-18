@@ -270,6 +270,7 @@ export default {
                     }
                 })
             }).catch(({ errors, fields }) => {
+                callback && callback(false)
                 state.verifyCodeLoading = false
                 if (errors) {
                     Toast(errors[0].message)

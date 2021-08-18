@@ -4,7 +4,7 @@
         <SwitchTradeType :product='product' @switchProduct='switchProductVisible=true' />
 
         <div v-if='product' class='main'>
-            <div v-if='orderHandicapVisible' class='left'>
+            <div v-if='orderHandicapVisible && product.symbolName' class='left'>
                 <OrderHandicap :product='product' />
             </div>
             <div v-if='product' class='right'>

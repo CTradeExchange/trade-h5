@@ -187,8 +187,6 @@ export default {
                     } else {
                         state.amount = ''
                     }
-                }).catch(err => {
-                    state.loading = false
                 })
         }
 

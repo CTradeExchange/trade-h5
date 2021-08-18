@@ -47,7 +47,7 @@
                 </span>
                 <span
                     class='histogram buy-histogram'
-                    :style='"width:"+ item?.width * 100 + "%"'
+                    :style='"width:"+ item?.width + "%"'
                 ></span>
 
                 <span class='price price-right fallColor'>
@@ -68,7 +68,7 @@
                 </span>
                 <span
                     class='histogram sell-histogram'
-                    :style='"width:"+ item?.width * 100 + "%"'
+                    :style='"width:"+ item?.width + "%"'
                 ></span>
             </div>
         </div>

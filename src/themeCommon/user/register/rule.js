@@ -71,7 +71,7 @@ export const checkCustomerExistRule = (t) => {
 // 开户参数效验
 export default function (t) {
     return {
-        ...checkCustomerExistRule,
+        ...checkCustomerExistRule(t),
         verifyCode: {
             required: true,
             message: t('common.inputVerifyCode'),
