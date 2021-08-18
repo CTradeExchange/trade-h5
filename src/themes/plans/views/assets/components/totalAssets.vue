@@ -82,7 +82,8 @@ export default {
                     path: '/desposit',
                     query: {
                         accountId: assetsInfo.value.accountId,
-                        currency: assetsInfo.value.currency
+                        currency: assetsInfo.value.currency,
+                        tradeType: tradeType.value
                     }
                 })
             }

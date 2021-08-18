@@ -96,7 +96,7 @@
             </div>
             <!-- 无钱包地址 -->
             <div v-else class='wallet-not' @click='goWalletAdd'>
-                <van-icon :color='style.color' name='plus' />
+                <van-icon :color='$style.color' name='plus' />
                 <span>{{ $t('withdrawCoin.walletAdd') }}</span>
             </div>
         </div>
@@ -160,9 +160,9 @@
             </div>
         </van-radio-group>
         <div class='add-handle' @click='goWalletAdd'>
-            <van-icon :color='style.color' name='plus' />
+            <van-icon :color='$style.color' name='plus' />
             <span>{{ $t('withdrawCoin.walletAdd') }}</span>
-            <van-icon :color='style.color' name='arrow' />
+            <van-icon :color='$style.color' name='arrow' />
         </div>
     </van-action-sheet>
 </template>
@@ -171,7 +171,7 @@
 // vue
 import { reactive, toRefs, computed, onMounted } from 'vue'
 // router
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 // vuex
 import { useStore } from 'vuex'
 // vant
@@ -197,11 +197,13 @@ import dayjs from 'dayjs'
 // dayjs.extend(utc)
 
 export default {
+
     setup () {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const router = useRouter()
-        const style = computed(() => store.state.style)
+        const route = useRoute()
+        const { currency } = route.query
         const state = reactive({
             // 加载状态
             loading: true,
@@ -450,6 +452,7 @@ export default {
                 if (res.check()) {
                     const { data } = res
                     const coinKindList = []
+                    debugger
                     if (data.length > 0) {
                         data.map(elem => {
                             if (!coinKindList.some(v => v.name === elem.withdrawCurrency)) {
@@ -457,7 +460,7 @@ export default {
                             }
                         })
                         state.allList = data
-                        state.coinKind = coinKindList[0].name
+                        state.coinKind = coinKindList.find(el => el.name === currency).name
                         state.coinKindList = coinKindList
                         // 根据提币币种获取筛选链名称
                         filterChainName()
@@ -470,7 +473,7 @@ export default {
         // 根据提币币种获取筛选链名称
         const filterChainName = () => {
             const chainNameList = []
-            const arr = state.allList.filter(v => v.withdrawCurrency === state.coinKind)
+            const arr = state.allList.filter(v => v.withdrawCurrency === state.coinKind && v.withdrawCurrency === currency)
             arr.map(elem => {
                 chainNameList.push({ name: elem.blockchainName })
             })
@@ -711,7 +714,7 @@ export default {
             openWalletSelect,
             selectWallet,
             onConfirm,
-            style
+
         }
     }
 }

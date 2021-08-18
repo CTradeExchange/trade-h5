@@ -49,7 +49,7 @@ export default {
                 {
                     title: t('route.assets'),
                     href: '/assets',
-                    icon: 'icon_jiaoyi1',
+                    icon: 'icon_zichan',
                 },
                 {
                     title: t('route.mine'),

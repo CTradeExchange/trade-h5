@@ -665,3 +665,15 @@ export function tradeRecordList (data) {
         data
     })
 }
+
+/* 取款货币列表 */
+export function withdrawCurrencyList (data) {
+    return request({
+        url: '/global/fund.app.WithdrawAppDubboService.withdrawCurrencyList',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

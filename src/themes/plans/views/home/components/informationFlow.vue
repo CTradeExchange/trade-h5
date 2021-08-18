@@ -4,62 +4,80 @@
             资讯参考
         </div>
         <div class='container'>
-            <van-tabs v-model:active='information.activeTab' color='rgb(60, 113, 227)' title-inactive-color='rgb(60, 113, 227)' @click='tabClick'>
-                <van-tab v-for='(tab,index) in information.newsTypes' :key='tab.id' class='extra-tabpanel' :name='index' :title='tab.name'>
-                    <template v-if='information.activeTab===0'>
-                        <div class='new-total'>
-                            <van-pull-refresh
-                                v-model='isLoading'
-                                success-text='刷新成功'
-                                @refresh='onRefresh'
+            <van-tabs v-model:active='state.activeTab' color='rgb(60, 113, 227)' title-inactive-color='rgb(60, 113, 227)' @click='tabClick'>
+                <van-tab v-for='(tab,index) in state.newsTypes' :key='tab.id' class='extra-tabpanel' :name='index' :title='tab.name'>
+                    <template v-if='state.activeTab===0'>
+                        <van-pull-refresh
+                            v-model='state.focusNews.refreshing'
+                            success-text='刷新成功'
+                            @refresh='onFocusNewsRefresh'
+                        >
+                            <van-list
+                                v-model:loading='state.focusNews.loading'
+                                :finished='state.focusNews.finished'
+                                finished-text='没有更多了'
+                                @load='onLoadFocusNews'
                             >
-                                <div v-for='news in information.newsList' :key='news.id' class='new'>
-                                    <div class='new-con'>
-                                        <div class='new-left'>
-                                            <div class='new-desc'>
-                                                <a href='javascript:void(0)'>
-                                                    <span v-if="news.top==='1'">
-                                                        置顶
-                                                    </span>
-                                                    {{ news.title }}
-                                                </a>
+                                <van-cell v-for='news in state.focusNews.list' :key='news.id' class='new'>
+                                    <template #title>
+                                        <div class='new-con'>
+                                            <div class='new-left'>
+                                                <div class='new-desc'>
+                                                    <a href='javascript:void(0)'>
+                                                        <span v-if="news.top==='1'">
+                                                            置顶
+                                                        </span>
+                                                        {{ news.title }}
+                                                    </a>
+                                                </div>
+                                                <div class='new-source'>
+                                                    <span>{{ news.resource }}</span>
+                                                    <span>4 小时前</span>
+                                                </div>
                                             </div>
-                                            <div class='new-source'>
-                                                <span>{{ news.resource }}</span>
-                                                <span>4 小时前</span>
+                                            <div class='new-right'>
+                                                <img alt='' :src='news.image' />
                                             </div>
                                         </div>
-                                        <div class='new-right'>
-                                            <img alt='' :src='news.image' />
-                                        </div>
-                                    </div>
-                                </div>
-                            </van-pull-refresh>
-                        </div>
+                                    </template>
+                                </van-cell>
+                            </van-list>
+                        </van-pull-refresh>
                     </template>
-                    <template v-if='information.activeTab===1'>
-                        <div class='story-con'>
-                            <div class='story-lists'>
+                    <template v-if='state.activeTab===1'>
+                        <van-pull-refresh
+                            v-model='state.newsFlash.refreshing'
+                            success-text='刷新成功'
+                            @refresh='onNewsFlashRefresh'
+                        >
+                            <van-list
+                                v-model:loading='state.newsFlash.loading'
+                                :finished='state.newsFlash.finished'
+                                finished-text='没有更多了'
+                                @load='onLoadNewsFlash'
+                            >
                                 <div class='story-date'>
-                                    2021年08月17日
+                                    {{ today }}
                                 </div>
-                                <div class='story-list'>
-                                    <div v-for='flash in information.newsFlash' :key='flash.id' class='story-item'>
-                                        <div class='iconfont icon-yuandianxiao'></div>
-                                        <div class='story-time'>
-                                            {{ flash.addtime_text }}
-                                        </div>
-                                        <div class='story-desc'>
-                                            <div class='story-text story-ellipsis'>
-                                                {{ flash.title }}
+                                <van-cell v-for='flash in state.newsFlash.list' :key='flash.id'>
+                                    <template #title>
+                                        <div class='story-item'>
+                                            <div class='iconfont icon-yuandianxiao'></div>
+                                            <div class='story-time'>
+                                                {{ flash.shotTime }}
+                                            </div>
+                                            <div class='story-desc'>
+                                                <div class='story-text story-ellipsis'>
+                                                    {{ flash.title }}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                    </template>
+                                </van-cell>
+                            </van-list>
+                        </van-pull-refresh>
                     </template>
-                    <template v-if='information.activeTab===2'>
+                    <template v-if='state.activeTab===2'>
                         <div class='canlendar'>
                             <div class='self-tab'>
                                 <div class='canlendar'></div>
@@ -68,7 +86,7 @@
                             <div class='canlendar'></div>
                             <div class='self-container'>
                                 <div class='self-content'>
-                                    <div v-for='calendar in information.calendarList' :key='calendar.id' class='item'>
+                                    <div v-for='calendar in state.calendarList' :key='calendar.id' class='item'>
                                         <div class='flag'>
                                             <img alt='' :src='`http://cdn.jin10.com/assets/img/commons/flag/flash/${calendar.country}.png`' />
                                         </div>
@@ -96,21 +114,41 @@
 
 <script>
 import { reactive } from 'vue'
-
+import dayjs from 'dayjs'
 import { newsListByType, newsListByTypeByPage, canlendarListByDate, articleDetail } from '@/api/information'
 export default {
 
     setup () {
-        const information = reactive({
+        const state = reactive({
             count: 0,
             isLoading: false,
+            loading: false,
+            finished: false,
+            refreshing: false,
             activeTab: 0,
             newsTypes: [],
             newsList: [],
-            newsFlash: [],
+            focusNews: { // 要闻
+                list: [],
+                page: 1,
+                pages: 1,
+                refreshing: false,
+                loading: false,
+                finished: false,
+                timeAxis: 0 // 记录最新一条的时间轴
+            },
+            newsFlash: { // 7x24
+                list: [],
+                page: 1,
+                pages: 1,
+                refreshing: false,
+                loading: false,
+                finished: false,
+                timeAxis: 0 // 记录最新一条的时间轴
+            },
             calendarList: []
         })
-
+        const today = dayjs().format('YYYY年MM月DD日')
         const getNewsListByTypeByPage = (record) => {
             newsListByTypeByPage({
                 page: 1,
@@ -119,21 +157,110 @@ export default {
                 orgid: 2 // 机构id
             }).then(({ data, page, pageSize, total }) => {
                 if (Array.isArray(data) && data.length > 0) {
-                    information.newsList = data
+                    state.newsList = data
                     // getNewsListByTypeByPage(data[0])
                 }
             })
         }
-        const getNewsFlash = () => {
+        const getNewsListByType = (params, callback) => {
+            newsListByTypeByPage(params).then(({ data, pages }) => {
+                if (typeof (callback) === 'function') {
+                    callback({ data: data, pages: pages })
+                }
+            })
+        }
+        const getNewsFlash = (callback) => {
             newsListByTypeByPage({
                 page: 1,
                 pageSize: 10,
                 type: 8, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
                 orgid: 2 // 机构id
-            }).then(({ data, page, pageSize, total }) => {
+            }).then(({ data }) => {
+                typeof (callback) === 'function' && callback()
                 if (Array.isArray(data) && data.length > 0) {
-                    information.newsFlash = data
-                    // getNewsListByTypeByPage(data[0])
+                    const tempData = data.map(el => ({ ...el, shotTime: el.addtime_text.slice(11, 16) }))
+                    if (state.newsFlash.timeAxis > 0) {
+                        const filterData = tempData.filter(el => el.addtime > state.newsFlash.timeAxis)
+                        state.newsFlash.list = [...filterData, ...state.newsFlash.list]
+                    } else {
+                        state.newsFlash.list = [...tempData]
+                    }
+                    state.newsFlash.timeAxis = data[0].addtime
+                }
+            })
+        }
+        const onLoadFocusNews = () => { // 要闻上拉加载
+            state.focusNews.page++
+            getNewsListByType({
+                page: state.focusNews.page,
+                pageSize: 10,
+                type: 7, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
+                orgid: 2 // 机构id
+            }, ({ data, pages }) => {
+                state.focusNews.loading = false
+                if (state.focusNews.page >= pages) {
+                    state.focusNews.finished = true
+                }
+                if (Array.isArray(data) && data.length > 0) {
+                    state.focusNews.list = [...state.focusNews.list, ...data]
+                }
+            })
+        }
+        const onLoadNewsFlash = () => { // 快讯上拉加载
+            // debugger
+            state.newsFlash.page++
+            getNewsListByType({
+                page: state.newsFlash.page,
+                pageSize: 10,
+                type: 8, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
+                orgid: 2 // 机构id
+            }, ({ data, pages }) => {
+                state.newsFlash.loading = false
+                if (state.newsFlash.page >= pages) {
+                    state.newsFlash.finished = true
+                }
+                if (Array.isArray(data) && data.length > 0) {
+                    state.newsFlash.list = [...state.newsFlash.list, ...data]
+                }
+            })
+        }
+        const onFocusNewsRefresh = () => { // 要闻上拉加载
+            getNewsListByType({
+                page: 1,
+                pageSize: 10,
+                type: 7, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
+                orgid: 2 // 机构id
+            }, ({ data }) => {
+                state.focusNews.refreshing = false
+                if (Array.isArray(data) && data.length > 0) {
+                    const tempData = data.map(el => ({ ...el, shotTime: el.addtime_text }))
+                    if (state.focusNews.timeAxis > 0) {
+                        const filterData = tempData.filter(el => el.addtime > state.focusNews.timeAxis)
+                        state.focusNews.list = [...filterData, ...state.focusNews.list]
+                    } else {
+                        state.focusNews.list = [...tempData]
+                    }
+                    state.focusNews.timeAxis = data[0].addtime
+                }
+            })
+        }
+        const onNewsFlashRefresh = () => { // 快讯下拉刷新
+            getNewsListByType({
+                page: 1,
+                pageSize: 10,
+                type: 8, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
+                orgid: 2 // 机构id
+            }, ({ data }) => {
+                state.newsFlash.refreshing = false
+                if (Array.isArray(data) && data.length > 0) {
+                    const tempData = data.map(el => ({ ...el, shotTime: el.addtime_text.slice(11, 16) }))
+                    if (state.newsFlash.timeAxis > 0) {
+                        const filterData = tempData.filter(el => el.addtime > state.newsFlash.timeAxis)
+                        state.newsFlash.list = [...filterData, ...state.newsFlash.list]
+                    } else {
+                        state.newsFlash.list = [...tempData]
+                    }
+                    state.newsFlash.timeAxis = data[0].addtime
                 }
             })
         }
@@ -144,16 +271,26 @@ export default {
             }).then((data) => {
                 // debugger
                 if (Array.isArray(data) && data.length > 0) {
-                    information.calendarList = data
+                    state.calendarList = data
                     // getNewsListByTypeByPage(data[0])
                 }
             })
         }
         const tabClick = (name) => {
-            if (name === 1 && information.newsFlash.length === 0) {
-                getNewsFlash()
+            if (name === 1 && state.newsFlash.list.length === 0) {
+                getNewsListByType({
+                    page: 1,
+                    pageSize: 10,
+                    type: 8, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
+                    orgid: 2 // 机构id
+                }, ({ data }) => {
+                    state.newsFlash.loading = false
+                    if (Array.isArray(data) && data.length > 0) {
+                        state.newsFlash.list = data
+                    }
+                })
             }
-            if (name === 2 && information.calendarList.length === 0) {
+            if (name === 2 && state.calendarList.length === 0) {
                 getCalendar()
             }
         }
@@ -164,16 +301,26 @@ export default {
             }).then((data) => {
                 debugger
                 if (Array.isArray(data) && data.length > 0) {
-                    information.calendarList = data
+                    state.calendarList = data
                     // getNewsListByTypeByPage(data[0])
                 }
             })
         }
         const getNewsType = () => {
-            newsListByType({ orgid: 1, langue_type: 'zn' }).then(data => {
-                if (Array.isArray(data) && data.length > 0) {
-                    information.newsTypes = data
-                    getNewsListByTypeByPage(data[0])
+            newsListByType({ orgid: 1, langue_type: 'zn' }).then(typeList => {
+                if (Array.isArray(typeList) && typeList.length > 0) {
+                    state.newsTypes = typeList
+                    getNewsListByType({
+                        page: 1,
+                        pageSize: 10,
+                        type: 7, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
+                        orgid: 2 // 机构id
+                    }, ({ data }) => {
+                        state.focusNews.loading = false
+                        if (Array.isArray(data) && data.length > 0) {
+                            state.focusNews.list = data
+                        }
+                    })
                 }
             })
         }
@@ -190,14 +337,19 @@ export default {
         //     console.log(res)
         // })
         return {
-            information,
+            state,
+            today,
             getNewsListByTypeByPage,
             getNewsType,
             getNewsFlash,
             getCalendar,
             getArticleDetail,
             onRefresh,
-            tabClick
+            tabClick,
+            onNewsFlashRefresh,
+            onFocusNewsRefresh,
+            onLoadFocusNews,
+            onLoadNewsFlash
         }
         // canlendarListByDate({
         //     timestamp: Date.now()
@@ -242,121 +394,115 @@ export default {
 .extra-tabpanel {
     padding: 0 rem(28px);
 }
-.new-total {
-    overflow: scroll;
-    .new {
-        padding: 0 rem(26px);
-        .new-con {
+.new {
+    padding: 0 rem(26px);
+    .new-con {
+        display: flex;
+        flex-direction: row;
+        padding: rem(26px) 0;
+        border-color: #F1F1F1;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        .new-left {
+            flex: 1;
+        }
+        .new-desc {
+            display: -webkit-box;
+            min-height: rem(106px);
+            max-height: rem(160px);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            a {
+                display: block;
+                color: #111;
+                font-size: rem(30px);
+                line-height: rem(54px);
+                span {
+                    height: rem(34px);
+                    margin-right: 5px;
+                    padding: rem(4px);
+                    color: #FFF;
+                    font-size: rem(18px);
+                    background-color: #DC143C;
+                    border: 1px solid #DC143C;
+                    border-radius: 2px;
+                }
+            }
+        }
+        .new-source {
             display: flex;
             flex-direction: row;
-            padding: rem(26px) 0;
-            border-color: #F1F1F1;
-            border-bottom-width: 1px;
-            border-bottom-style: solid;
-            .new-left {
-                flex: 1;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: rem(54px);
+            span {
+                color: #767E8F;
+                font-size: rem(26px);
             }
-            .new-desc {
-                display: -webkit-box;
-                min-height: rem(106px);
-                max-height: rem(160px);
-                overflow: hidden;
-                text-overflow: ellipsis;
-                -webkit-line-clamp: 3;
-                -webkit-box-orient: vertical;
-                a {
-                    display: block;
-                    color: #111;
-                    font-size: rem(30px);
-                    line-height: rem(54px);
-                    span {
-                        height: rem(34px);
-                        margin-right: 5px;
-                        padding: rem(4px);
-                        color: #FFF;
-                        font-size: rem(18px);
-                        background-color: #DC143C;
-                        border: 1px solid #DC143C;
-                        border-radius: 2px;
-                    }
-                }
-            }
-            .new-source {
-                display: flex;
-                flex-direction: row;
-                align-items: flex-end;
-                justify-content: space-between;
-                height: rem(54px);
-                span {
-                    color: #767E8F;
-                    font-size: rem(26px);
-                }
-            }
-            .new-right {
-                margin-left: rem(26px);
-                img {
-                    width: rem(240px);
-                    height: rem(160px);
-                    border-radius: rem(14px);
-                }
+        }
+        .new-right {
+            margin-left: rem(26px);
+            img {
+                width: rem(240px);
+                height: rem(160px);
+                border-radius: rem(14px);
             }
         }
     }
 }
-.story-lists {
-    padding-left: rem(66px);
-    .story-date {
-        padding: 0 rem(26px);
-        color: #626262;
-        font-weight: 700;
-        font-size: rem(26px);
-        line-height: rem(80px);
+.story-date {
+    padding: 0 rem(26px);
+    color: #626262;
+    font-weight: 700;
+    font-size: rem(26px);
+    line-height: rem(80px);
+}
+.story-item {
+    position: relative;
+    padding-left: rem(32px);
+    &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1px;
+        height: 100%;
+        background-color: #F1F1F1;
+        content: '';
     }
-    .story-item {
-        position: relative;
-        padding-left: rem(32px);
-        &::before {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 1px;
-            height: 100%;
-            background-color: #F1F1F1;
-            content: '';
-        }
-        &::after {
-            position: absolute;
-            top: rem(32px);
-            left: rem(-6px);
-            width: rem(14px);
-            height: rem(14px);
-            background-color: #A1A6B1;
-            border-radius: rem(14px);
-            content: '';
-        }
-        .icon-yuandianxiao {
-            position: absolute;
-            top: rem(14px);
-            left: rem(-18px);
-            color: #8F8E93;
-            font-size: rem(40px);
-        }
-        .story-time {
-            padding-top: rem(22px);
-            padding-bottom: rem(6px);
-            color: #8F8E93;
-            font-size: rem(26px);
-        }
-        .story-text {
-            display: -webkit-box;
-            overflow: hidden;
-            color: #111;
-            font-size: rem(28px);
-            line-height: rem(52px);
-            text-overflow: ellipsis;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-        }
+    &::after {
+        position: absolute;
+        top: rem(32px);
+        left: rem(-6px);
+        width: rem(14px);
+        height: rem(14px);
+        background-color: #A1A6B1;
+        border-radius: rem(14px);
+        content: '';
+    }
+    .icon-yuandianxiao {
+        position: absolute;
+        top: rem(14px);
+        left: rem(-18px);
+        color: #8F8E93;
+        font-size: rem(40px);
+    }
+    .story-time {
+        padding-top: rem(22px);
+        padding-bottom: rem(6px);
+        color: #8F8E93;
+        font-size: rem(26px);
+    }
+    .story-text {
+        display: -webkit-box;
+        overflow: hidden;
+        color: #111;
+        font-size: rem(28px);
+        line-height: rem(52px);
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
     }
 }
 .self-container {
