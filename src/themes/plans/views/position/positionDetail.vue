@@ -185,7 +185,6 @@ export default {
                 })
             }
             // 订阅报价
-            QuoteSocket.send_subscribe([symbolId])
             if (positionId && !positionData.value?.positionId) {
                 store.dispatch('_trade/queryPositionPage', {
                     tradeType: tradeType.value,
