@@ -4,7 +4,8 @@
         <Products ref='productsRef' />
         <Fastlink />
         <BanderBanner class='BanderBanner' :list='BannerConfig.mini' />
-        <News class='newBar' />
+        <!-- <News class='newBar' /> -->
+        <InformationFlow class='newBar' />
     </div>
 </template>
 
@@ -14,7 +15,8 @@ import NoticeConfig from './configs/notice'
 import Banner from '@plans/modules/banner/banner'
 import Fastlink from './components/fastlink'
 import BanderBanner from '@plans/modules/handerBanner/handerBanner'
-import News from './components/news'
+// import News from './components/news'
+import InformationFlow from './components/informationFlow'
 import Products from './components/products'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { ref } from '@vue/reactivity'
@@ -27,7 +29,8 @@ export default {
         Fastlink,
         Products,
         BanderBanner,
-        News,
+        // News,
+        InformationFlow,
     },
     setup () {
         const productsRef = ref(null)
