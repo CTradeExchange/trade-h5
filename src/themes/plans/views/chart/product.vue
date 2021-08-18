@@ -38,7 +38,9 @@
                         </p><!---->
                     </div><div class='others'>
                         <span :class='product.cur_color'>
-                            {{ product.upDownAmount }}({{ product.upDownAmount_pip }} {{ $t('trade.dot') }})
+                            {{ product.upDownAmount }}<template v-if='product.tradeType !== 9'>
+                                ({{ product.upDownAmount_pip }} {{ $t('trade.dot') }})
+                            </template>
                         </span><div class='others-bottom'>
                             <span class='upDownAmount' :class='product.cur_color'>
                                 {{ product.upDownWidth }}
