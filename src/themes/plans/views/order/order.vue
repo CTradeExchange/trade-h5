@@ -160,6 +160,8 @@ export default {
 
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
 
+        const accountList = computed(() => store.state._user.customerInfo.accountList)
+
         store.commit('_trade/Update_modifyPositionId', 0)
 
         // 获取账户信息
@@ -217,10 +219,19 @@ export default {
                 const curDigits = pow(0.1, product.symbolDigits)
                 if (state.orderHandicapVisible)QuoteSocket.deal_subscribe([symbolId], 5, curDigits, tradeType)
 
+                const list = accountList.value.filter(el => el.tradeType === Number(product.tradeType))
+                const accountIds = []
+                if (list.length > 0) {
+                    list.forEach(element => {
+                        accountIds.push(element.accountId)
+                    })
+                }
+
                 store.dispatch('_trade/queryPBOOrderPage', {
                     tradeType: product.tradeType,
                     sortFieldName: 'orderTime',
-                    sortType: 'desc'
+                    sortType: 'desc',
+                    accountIds: accountIds + ''
                 })
                 if ([3, 9].includes(product.tradeType)) queryAccountInfo()
             })

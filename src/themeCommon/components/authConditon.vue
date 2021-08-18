@@ -102,8 +102,16 @@ export default {
                     state.area = res.data[0].pathName
                     state.pathCode = res.data[0].pathCode
                     state.elementList = getArrayObj(state.list, 'pathCode', state.pathCode).elementList
-
                     state.areaShow = false
+
+                    /* if (state.elementList.length > 0) {
+                        state.elementList.forEach(el => {
+                            state.conditionModel[el.elementCode] = el.elementCode
+                            // 如果是 typeValue 单独处理
+                            // state.typeValue = el.elementCode
+                        })
+                    } */
+
                     getInputGroupList()
                 }
             }).catch(err => {

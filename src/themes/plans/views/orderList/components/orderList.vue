@@ -30,8 +30,14 @@
                 v-model='timeVal'
                 :options='timeList'
                 @change='timeChange'
-                @click='openTimeDropdown'
-            />
+            >
+                <template #title v-if='timeVal === 5'>
+                    {{ customDate }}
+                </template>
+                <template #default>
+                    <dateRange :is-selected='timeVal === 5' @change='onRangeChange' />
+                </template>
+            </van-dropdown-item>
         </van-dropdown-menu>
     </div>
     <div class='list-wrap'>
@@ -156,15 +162,6 @@
         :hide-trade-type='true'
         @select='onSelectProduct'
     />
-    <van-calendar
-        v-model:show='calendarVis'
-        :color='$style.primary'
-        :min-date='minDate'
-        position='left'
-        :round='false'
-        type='range'
-        @confirm='handleConfirmDate'
-    />
 </template>
 
 <script>
@@ -176,10 +173,12 @@ import { useRoute, } from 'vue-router'
 import { computed, ref, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import dayjs from 'dayjs'
+import dateRange from '@plans/components/dateRange'
 
 export default {
     components: {
-        sidebarProduct
+        sidebarProduct,
+        dateRange
     },
     setup (props) {
         const route = useRoute()
@@ -194,7 +193,7 @@ export default {
             timeVal: 0,
             productVal: 0,
             curProduct: {},
-            minDate: new Date('2020-01-01'),
+            customDate: '',
             direction: [
                 { text: t('trade.direction'), value: -1 },
                 { text: t('trade.buy'), value: 1 },
@@ -210,8 +209,8 @@ export default {
                 { text: t('common.curToday'), value: 1 },
                 { text: t('common.curWeek'), value: 2 },
                 { text: t('common.curMonth'), value: 3 },
-                { text: t('common.curThreeMonth'), value: 4 },
-                { text: t('common.customDate'), value: 5 },
+                { text: t('common.curThreeMonth'), value: 4 }
+
             ],
             priceTypeList: [
                 { text: t('trade.priceOrLimit'), value: -1 },
@@ -235,7 +234,6 @@ export default {
             finished: false,
             finishedText: t('common.noMore'),
             loadingMore: false,
-            calendarVis: false
 
         })
 
@@ -348,8 +346,6 @@ export default {
                 state.params.executeStartTime = dayjs(dayjs().startOf('month')).valueOf()
             } else if (timeType === 4) {
                 state.params.executeStartTime = dayjs(dayjs().subtract(3, 'month').format('YYYY/MM/DD')).valueOf()
-            } else if (timeType === 5) {
-                state.calendarVis = true
             }
             resetParams()
             queryRecordList()
@@ -388,24 +384,15 @@ export default {
             if (state.productVal === 1) { state.switchProductVisible = true }
         }
 
-        // 确定选择日期
-        const handleConfirmDate = (timeList) => {
-            console.log(timeList)
-
-            if (timeList.length > 0) {
-                state.params.executeStartTime = dayjs(timeList[0]).valueOf()
-                state.params.executeEndTime = dayjs(timeList[1]).valueOf()
-            }
-            state.timeList[5].text = dayjs(state.params.executeStartTime).format('YYYY/MM/DD HH:mm:ss') + '-' + dayjs(state.params.executeEndTime).format('YYYY/MM/DD HH:mm:ss')
-            state.calendarVis = false
+        const onRangeChange = (timeList) => {
+            state.timeVal = 5
             resetParams()
-            queryRecordList()
-        }
-
-        const openTimeDropdown = () => {
-            if (state.timeVal === 5) {
-                state.calendarVis = true
+            if (timeList.length > 1) {
+                state.params.executeStartTime = timeList[0]
+                state.params.executeEndTime = timeList[1]
+                state.customDate = dayjs(timeList[0]).format('YYYY/MM/DD HH:mm:ss') + '-' + dayjs(timeList[1]).format('YYYY/MM/DD HH:mm:ss')
             }
+            queryRecordList()
         }
 
         queryRecordList()
@@ -425,9 +412,8 @@ export default {
             onLoad,
             openProductDropdown,
             showLossOrProfit,
-            handleConfirmDate,
             timeDropdown,
-            openTimeDropdown
+            onRangeChange
         }
     }
 }
