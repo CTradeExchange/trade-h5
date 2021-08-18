@@ -638,13 +638,21 @@ export default {
             switch (type) {
                 case 'main': {
                     state.mainStudy = ''
+                    localSetChartConfig('mainStudy', null)
                     break
                 }
                 case 'sub': {
                     state.subStudy = ''
+                    localSetChartConfig('subStudy', null)
                     break
                 }
             }
+
+            const property = [
+                JSON.parse(JSON.parse(localGet('chartConfig')).mainStudy),
+                JSON.parse(JSON.parse(localGet('chartConfig')).subStudy)
+            ]
+            state.onChartReadyFlag && unref(chartRef).updateIndicator(property)
         }
 
         // 缓存图表设置
@@ -753,14 +761,8 @@ export default {
             const invertColor = localGet('invertColor')
             if (isEmpty(locChartConfig)) {
                 localSetChartConfig('showLastPrice', false)
-                localSetChartConfig('mainStudy', JSON.stringify({
-                    name: 'Bollinger Bands',
-                    params: [true, false, [26, 2]]
-                }))
-                localSetChartConfig('subStudy', JSON.stringify({
-                    name: 'Custom MACD',
-                    params: [false, false, [12, 26, 'close', 9]]
-                }))
+                localSetChartConfig('mainStudy', JSON.stringify(MAINSTUDIES[0]))
+                localSetChartConfig('subStudy', JSON.stringify(SUBSTUDIES[0]))
                 localSetChartConfig('resolution', 1)
                 localSetChartConfig('lineSetList', [])
                 localSetChartConfig('chartType', 1)
@@ -796,8 +798,8 @@ export default {
                     }
                 })
             } else {
-                state.mainStudy = JSON.parse(locChartConfig.mainStudy).name
-                state.subStudy = JSON.parse(locChartConfig.subStudy).name
+                state.mainStudy = JSON.parse(locChartConfig.mainStudy)?.name
+                state.subStudy = JSON.parse(locChartConfig.subStudy)?.name
                 state.activeTab = candleKTypeList.find(item => String(item.ktype) === String(locChartConfig.resolution)).ktype
 
                 state.klineType = locChartConfig.chartType
