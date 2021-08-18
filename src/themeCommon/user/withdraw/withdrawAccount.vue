@@ -73,7 +73,7 @@ export default {
             outCurrency: '',
             inCurrency: '',
             inCurrencyList: [],
-            withdrawMethod: ''
+            currentTab: ''
 
         })
 
@@ -103,6 +103,7 @@ export default {
 
         const onInPickerConfirm = val => {
             state.inPickerShow = false
+            state.withdrawMethod = val.withdrawMethod
             state.inCurrency = val.currency
         }
 
@@ -119,8 +120,9 @@ export default {
             router.push({
                 path: 'withdraw',
                 query: {
-                    currency: 'USDT',
-                    currentTab: 'coin'
+                    currency: state.inCurrency,
+                    currentTab: state.currentTab,
+                    tradeType: state.tradeType
                 }
             })
         }
@@ -140,6 +142,7 @@ export default {
                     }
                 })
                 state.inCurrency = res.data[0].currency
+                state.currentTab = res.data[0].withdrawMethod
             }
         }).catch(err => {
             state.loadingMore = false

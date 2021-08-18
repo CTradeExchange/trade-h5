@@ -8,27 +8,15 @@
             back
             left-icon='arrow-left'
             :right-action='rightAction'
+            :show-center='true'
             @rightClick='rightClick'
-        >
-            <template #tabs>
-                <div class='tabs'>
-                    <div
-                        v-for='item in tabs'
-                        :key='item.key'
-                        :class="{ 'tabs-item': true, 'tabs-item-active': item.key === currentTab }"
-                        @click='switchTabs(item.key)'
-                    >
-                        <span>{{ item.title }}</span>
-                    </div>
-                </div>
-            </template>
-        </Top>
+        />
         <!-- 提币模块 -->
-        <div v-if="currentTab === 'coin'" class='wrap'>
+        <div v-if="currentTab === 'digit_wallet'" class='wrap'>
             <WithdrawCoin />
         </div>
         <!-- 提现模块 -->
-        <div v-if="currentTab === 'money'" class='wrap'>
+        <div v-if="currentTab === 'bank'" class='wrap'>
             <WithdrawMoney />
         </div>
     </div>
@@ -158,7 +146,7 @@ export default {
         init()
         onMounted(() => {
             // 获取用户提现方式
-            getWithdrawWay()
+            // getWithdrawWay()
         })
 
         return {
