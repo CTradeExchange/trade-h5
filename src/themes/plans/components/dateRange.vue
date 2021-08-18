@@ -17,6 +17,7 @@
     <van-calendar
         ref='calendarRef'
         v-model:show='showCalendar'
+        :allow-same-day='true'
         :color='$style.primary'
         :max-date='maxDate'
         :min-date='minDate'
@@ -99,11 +100,11 @@ export default {
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
+    height: rem(43px);
+    line-height: rem(43px);
     white-space: nowrap;
     .field {
         width: 100px;
-        height: rem(60px);
-        line-height: rem(60px);
         text-align: center;
         border: 1px solid var(--lineColor);
         border-radius: rem(6px);

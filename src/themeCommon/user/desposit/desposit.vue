@@ -191,7 +191,8 @@ export default {
             btnDisabled: false,
             resultTimeMap: {},
             paymentTypes: [],
-            currency: route.query.currency
+            currency: route.query.currency,
+            accountId: route.query.accountId,
         })
 
         // 获取账户信息
@@ -426,7 +427,7 @@ export default {
 
             const params = {
                 customerNo: customInfo.value.customerNo,
-                accountId: customInfo.value.accountId,
+                accountId: state.accountId,
                 customerGroupId: customInfo.value.customerGroupId,
                 depositRateSerialNo: state.rateConfig.depositRateSerialNo,
                 paymentCurrency: state.checkedType.paymentCurrency,

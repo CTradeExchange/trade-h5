@@ -2,7 +2,7 @@
     <div class='trustWrapper'>
         <div class='hd'>
             <span>{{ $t('trade.curTrust') }} ({{ pendingList.length }})</span>
-            <a class='allTrust' href='javascript:;' @click="$router.push({ name:'List',query:{ tradeType:product.tradeType } })">
+            <a class='allTrust' href='javascript:;' @click="$router.push({ name:'List',query:{ tradeType: $route.query.tradeType } })">
                 <i class='icon_mingxi'></i>
             </a>
         </div>
@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import { computed, watch, ref, nextTick } from 'vue'
+import { computed, watch, ref, nextTick, onUpdated } from 'vue'
 import { useStore } from 'vuex'
 import trustItem from '@plans/modules/trust/trust.vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
     components: {
@@ -32,14 +32,10 @@ export default {
         const loading = ref(false)
         const store = useStore()
         const router = useRouter()
+        const route = useRoute()
 
         // 获取挂单列表
-        const pendingList = computed(() => store.state._trade.pendingList[props.product.tradeType] || [])
-
-        // 获取账户信息
-        const customInfo = computed(() => store.state._user.customerInfo)
-
-        const account = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(props.product.tradeType)))
+        const pendingList = computed(() => store.state._trade.pendingList[route.query.tradeType] || [])
 
         watch(
             () => pendingList.value?.length,
@@ -57,26 +53,6 @@ export default {
             },
             { immediate: true }
         )
-
-        const queryPBOOrderPage = () => {
-            const accountIds = []
-            if (account.value.length > 0) {
-                account.value.forEach(element => {
-                    accountIds.push(element.accountId)
-                })
-            }
-
-            // 获取委托列表
-            store.dispatch('_trade/queryPBOOrderPage', {
-                tradeType: props.product.tradeType,
-                customerNo: customInfo.value.customerNo,
-                sortFieldName: 'orderTime',
-                sortType: 'desc',
-                accountIds: accountIds + ''
-            })
-        }
-
-        queryPBOOrderPage()
 
         return {
             pendingList,

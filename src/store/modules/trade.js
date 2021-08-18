@@ -1,7 +1,7 @@
 import { queryPositionPage, queryHistoryCloseOrderList, queryPBOOrderPage, queryAbccPboPage } from '@/api/trade'
 import CheckAPI from '@/utils/checkAPI'
 import { cachePendingParams } from './storeUtil.js'
-import { minus, toFixed, plus } from '@/utils/calculation'
+import { minus, toFixed, plus, shiftedBy } from '@/utils/calculation'
 import { vue_set, assign } from '@/utils/vueUtil.js'
 import BigNumber from 'bignumber.js'
 
@@ -246,6 +246,13 @@ export default {
             } else {
                 return queryPBOOrderPage(pendingsConfig[tradeType]).then((res) => {
                     if (res.check()) {
+                        if (res.data.length > 0) {
+                            const list = res.data
+                            // 处理接口返回字段不一致
+                            list.forEach(item => {
+                                item.requestPrice = shiftedBy(item.requestPrice, -1 * item.digits)
+                            })
+                        }
                         commit('Update_pendingList', { tradeType, list: res.data })
                     }
                     return res
