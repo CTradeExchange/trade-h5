@@ -154,6 +154,7 @@ export default {
     .singleContent {
         width: 100%;
         height: 100%;
+        padding: rem(30px) 0;
     }
     :deep(.van-dropdown-menu__title) {
         &::after {
