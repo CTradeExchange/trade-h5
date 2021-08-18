@@ -40,7 +40,11 @@ export default {
         const inputEl = ref(null)
         const { t } = useI18n({ useScope: 'global' })
         const placeholder = computed(() => {
-            return parseInt(props.entryType) === 1 ? t('trade.orderVolume') : t('trade.orderAmount') + `(${props.product.baseCurrency})`
+            if ([1, 2].includes(props.product.tradeType)) {
+                return parseInt(props.entryType) === 1 ? t('trade.orderVolume') : t('trade.orderAmount') + `(${props.product.baseCurrency})`
+            } else {
+                return parseInt(props.entryType) === 1 ? t('trade.volumes') : t('trade.orderAmount')
+            }
         })
         const onInput = (e) => {
             let newval = e.target.value
