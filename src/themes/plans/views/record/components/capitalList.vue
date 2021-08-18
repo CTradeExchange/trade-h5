@@ -1,12 +1,13 @@
 <template>
     <list
+        v-if='reRender'
         :liabilities-type='1'
         :request-api='queryCapitalFlowList'
         v-bind='$attrs'
         :request-params='newParams'
     >
-        <template #filter v-if='false'>
-            <flowFilter @change='onChange' />
+        <template #filter>
+            <flowFilter :value='businessType' @change='onChange' />
         </template>
         <template #default='{ list }'>
             <div v-for='item in list' :key='item.id' class='li'>
@@ -42,7 +43,7 @@ import dayjs from 'dayjs'
 import { queryCapitalFlowList } from '@/api/user'
 import { useI18n } from 'vue-i18n'
 import flowFilter from './flowFilter'
-import { computed, ref } from 'vue'
+import { computed, ref, nextTick } from 'vue'
 
 export default {
     components: { list, flowFilter },
@@ -58,10 +59,16 @@ export default {
         const formatTime = (val) => {
             return dayjs(val).format('YYYY/MM/DD HH:mm:ss')
         }
+        const reRender = ref(true)
 
         const businessType = ref('')
         const onChange = value => {
             businessType.value = value
+
+            reRender.value = false
+            nextTick(() => {
+                reRender.value = true
+            })
         }
 
         const newParams = computed(() => {
@@ -80,7 +87,9 @@ export default {
             queryCapitalFlowList,
             proBtns,
             newParams,
-            onChange
+            onChange,
+            reRender,
+            businessType
         }
     },
 }

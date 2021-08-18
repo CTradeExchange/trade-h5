@@ -174,7 +174,17 @@ function isSameTime(resolution, latestTime, tickTime) {
         // console.log(oldMinutes, newMinutes)
         return newMinutes - oldMinutes < resolution
     } else {
-        return oldTime === newTime
+        switch(resolution){
+            case '1D':{
+                return oldTime.startOf('day').valueOf() ===newTime.startOf('day').valueOf()
+            }
+            case '1W':{
+                return oldTime.startOf('week').valueOf() ===newTime.startOf('week').valueOf()
+            }
+            case '1M':{
+                return oldTime.startOf('month').valueOf() ===newTime.startOf('month').valueOf()
+            }
+        }
     }
 
 }
@@ -211,10 +221,10 @@ function logMessageForKline(res, params) {
 
 function logMessageForTick(ticks) {
     if (ticks.length === 1) {
-        //console.group('%c实时报价:⬇', 'color:green')
+        console.groupCollapsed('%c实时报价:⬇', 'color:green')
     } else {
-        console.group('%c获取最新两根数据:⬇', 'color:green')
+        console.groupCollapsed('%c获取最新两根数据:⬇', 'color:green')
     }
-    //console.log(JSON.stringify(ticks))
+    console.log(JSON.stringify(ticks), ticks.map(e => dayjs(e.time).format('YYYY/MM/DD HH:mm:ss')))
     console.groupEnd()
 }

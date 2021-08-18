@@ -16,9 +16,9 @@
                     </van-tab>
                 </van-tabs>
             </template>
-            <template v-else-if='componentList.length === 1'>
+            <div v-else-if='componentList.length === 1' class='singleContent'>
                 <component :is='componentList[0].component' :request-params='requestParams' />
-            </template>
+            </div>
         </template>
     </div>
 </template>
@@ -150,6 +150,10 @@ export default {
         box-sizing: border-box;
         width: 100%;
         padding: rem(30px) 0;
+    }
+    .singleContent {
+        width: 100%;
+        height: 100%;
     }
     :deep(.van-dropdown-menu__title) {
         &::after {

@@ -6,10 +6,16 @@
 
 <script>
 import { useI18n } from 'vue-i18n'
-import { ref } from 'vue'
+import { computed } from 'vue'
 
 export default {
     emits: ['change'],
+    props: {
+        value: {
+            type: [String, Number],
+            default: ''
+        }
+    },
     setup (props, context) {
         const { tm } = useI18n({ useScope: 'global' })
         const proBtns = tm('fund.proBtns')
@@ -17,7 +23,10 @@ export default {
             text: proBtns[key],
             value: key
         }))
-        const flowType = ref(flowTypes[0].value)
+        const flowType = computed({
+            get: () => props.value || flowTypes[0].value,
+            set () {}
+        })
 
         const onChange = (value) => {
             context.emit('change', value)
