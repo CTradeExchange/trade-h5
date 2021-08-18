@@ -493,13 +493,14 @@ export default {
             }
             return product
         })
-        const productList = computed(() => store.state._quote.productList)
         const positionList = computed(() => store.state._trade.positionList[getTradeType()] || [])
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)
 
         // 订阅产品
-        const subscribList = productList.value.map(({ symbolId }) => (`${symbolId}_${getTradeType()}`))
-        QuoteSocket.send_subscribe(subscribList)
+        const subscribeToProduct = () => {
+            QuoteSocket.send_subscribe([`${getSymbolId()}_${getTradeType()}`])
+        }
+        subscribeToProduct()
 
         const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId()))))
 
@@ -917,6 +918,7 @@ export default {
             }).then(() => {
                 symbolId.value = product.symbolId
                 tradeType.value = product.tradeType
+                subscribeToProduct()
                 // 重置图表
                 chartRef.value.reset()
                 close()
