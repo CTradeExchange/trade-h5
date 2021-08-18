@@ -28,7 +28,7 @@
                     <label for=''>
                         {{ $t('trade.pendingPrice') }}
                     </label>
-                    <span>{{ shiftedBy(product.requestPrice, -1*curProduct.price_digits) }}</span>
+                    <span>{{ product.requestPrice }}</span>
                 </p>
                 <p class='tl-item'>
                     <label for=''>
@@ -39,32 +39,39 @@
                         {{ Number(product.direction) === 1 ? curProduct.buy_price : curProduct.sell_price }}
                     </span>
                 </p>
-                <p class='tl-item'>
+
+                <p v-if='[3,9].includes(Number(product.tradeType))' class='tl-item'>
+                    <label for=''>
+                        {{ $t('trade.loan') }}
+                    </label>
+                    <span>
+                        {{ product?.loanAmount || '--' }}
+                    </span>
+                </p>
+
+                <p v-if='[1,2].includes(Number(product.tradeType))' class='tl-item'>
                     <label for=''>
                         {{ $t('trade.stopLossPrice') }}
                     </label>
                     <span>{{ shiftedBy(product.stopLoss,-1*product.digits ) || '--' }}</span>
                 </p>
 
-                <p class='tl-item'>
+                <p v-if='[1,2].includes(Number(product.tradeType))' class='tl-item'>
                     <label for=''>
                         {{ $t('trade.stopProfitPrice') }}
                     </label>
 
                     <span>{{ shiftedBy(product.takeProfit,-1*product.digits ) || '--' }}</span>
                 </p>
-
+            </div>
+        </div>
+        <div class='t-body'>
+            <div class='t-left'>
                 <p class='tl-item'>
-                    <!-- <label for=''>
-                        {{ $t('trade.trustTime') }}
-                    </label> -->
                     <span>{{ formatTime(product.orderTime,'YYYY/MM/DD HH:mm:ss') }}</span>
                 </p>
 
                 <p class='tl-item'>
-                    <!-- <label for=''>
-                        {{ $t('trade.trustId') }}
-                    </label> -->
                     <span> #{{ product.id }}</span>
                 </p>
             </div>
@@ -77,7 +84,7 @@
 import { computed, ref } from 'vue'
 import { Toast, Dialog } from 'vant'
 import { shiftedBy } from '@/utils/calculation'
-import { useStore } from 'vuex'
+import { useStore, useRoute } from 'vuex'
 import { closePboOrder } from '@/api/trade'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -216,6 +223,7 @@ export default {
         .t-left {
             display: flex;
             flex-wrap: wrap;
+            width: 100%;
             .tl-item {
                 width: 50%;
                 margin-bottom: rem(10px);

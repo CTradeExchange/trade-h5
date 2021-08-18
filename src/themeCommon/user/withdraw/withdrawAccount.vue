@@ -14,9 +14,9 @@
             <p class='head-text'>
                 {{ $t('withdraw.inAccount') }}
             </p>
-            <div class='actionBar' @click='selectCurrency'>
+            <div class='actionBar' @click='selectInCurrency'>
                 <span class='currencySpan'>
-                    {{ curCurrency }}
+                    {{ inCurrency }}
                 </span>
                 <van-icon name='arrow' />
             </div>
@@ -29,14 +29,25 @@
         </div>
     </div>
 
-    <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
+    <van-popup v-model:show='outPickerShow' class='assetsPicker' position='bottom'>
         <van-picker
             :columns='columns'
             :columns-field-names='customFieldName'
             :default-index='0'
-            title=''
-            @cancel='pickerShow = false'
+            :title="$t('withdraw.outAccount')"
+            @cancel='outPickerShow = false'
             @confirm='onPickerConfirm'
+        />
+    </van-popup>
+
+    <van-popup v-model:show='inPickerShow' class='assetsPicker' position='bottom'>
+        <van-picker
+            :columns='inCurrencyList'
+            :columns-field-names='customFieldName'
+            :default-index='0'
+            :title=" $t('withdraw.inAccount')"
+            @cancel='inPickerShow = false'
+            @confirm='onInPickerConfirm'
         />
     </van-popup>
 </template>
@@ -46,6 +57,7 @@ import { computed, toRefs, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { withdrawCurrencyList } from '@/api/user'
 
 export default {
     setup () {
@@ -56,10 +68,16 @@ export default {
 
         const state = reactive({
             tradeType: route.query.tradeType,
-            pickerShow: false,
-            outCurrency: ''
+            outPickerShow: false,
+            inPickerShow: false,
+            outCurrency: '',
+            inCurrency: '',
+            inCurrencyList: [],
+            withdrawMethod: ''
+
         })
 
+        const { value: customInfo } = computed(() => store.state._user.customerInfo)
         // 当前币种
         const columns = computed(() => accountList.value.filter(item => item.tradeType === Number(state.tradeType)).map(el => {
             return {
@@ -79,14 +97,22 @@ export default {
         }
 
         const onPickerConfirm = val => {
-            console.log(val)
-            state.pickerShow = false
+            state.outPickerShow = false
             state.outCurrency = val.currency
+        }
+
+        const onInPickerConfirm = val => {
+            state.inPickerShow = false
+            state.inCurrency = val.currency
         }
 
         // 显示选币弹窗
         const selectCurrency = val => {
-            state.pickerShow = true
+            state.outPickerShow = true
+        }
+
+        const selectInCurrency = val => {
+            state.inPickerShow = true
         }
 
         const next = () => {
@@ -99,12 +125,35 @@ export default {
             })
         }
 
+        // 获取到账币种
+        withdrawCurrencyList({
+            customerGroupId: customInfo.customerGroupId,
+            customerNo: customInfo.customerNo
+        }).then(res => {
+            console.log(res)
+            state.currencyList = res.data
+            if (res.check() && res.data.length > 0) {
+                state.inCurrencyList = res.data.map(el => {
+                    return {
+                        currency: el.currency,
+                        withdrawMethod: el.withdrawMethod
+                    }
+                })
+                state.inCurrency = res.data[0].currency
+            }
+        }).catch(err => {
+            state.loadingMore = false
+            state.loading = false
+        })
+
         return {
             accountList,
             columns,
             onPickerConfirm,
             next,
             selectCurrency,
+            selectInCurrency,
+            onInPickerConfirm,
             customFieldName,
             ...toRefs(state)
         }

@@ -102,8 +102,7 @@ export default {
         // 获取盘口深度报价
         const handicapList = computed(() => store.state._quote.handicapList.find(item => item.symbol_id === props.symbolId))
 
-        // 当前产品id 的挂单列表
-        const pendingList = computed(() => store.state._trade.pendingList[state.tradeType])
+        const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => el.tradeType === Number(state.tradeType)))
 
         // 获取当前产品
         const product = computed(() => store.state._quote.productMap[props.symbolId + '_' + state.tradeType])
@@ -153,9 +152,22 @@ export default {
             QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits, state.tradeType)
         }
 
-        store.dispatch('_trade/queryPBOOrderPage', {
-            tradeType: state.tradeType
-        })
+        const queryPBOOrderPage = () => {
+            const accountIds = []
+            if (accountList.value.length > 0) {
+                accountList.value.forEach(element => {
+                    accountIds.push(element.accountId)
+                })
+            }
+            store.dispatch('_trade/queryPBOOrderPage', {
+                tradeType: state.tradeType,
+                sortFieldName: 'orderTime',
+                sortType: 'desc',
+                accountIds: accountIds + ''
+            })
+        }
+
+        queryPBOOrderPage()
 
         onBeforeUnmount(() => {
             // 组件销毁取消订阅
