@@ -34,7 +34,6 @@
             :columns='columns'
             :columns-field-names='customFieldName'
             :default-index='0'
-            :title="$t('withdraw.outAccount')"
             @cancel='outPickerShow = false'
             @confirm='onPickerConfirm'
         />
@@ -45,7 +44,6 @@
             :columns='inCurrencyList'
             :columns-field-names='customFieldName'
             :default-index='0'
-            :title=" $t('withdraw.inAccount')"
             @cancel='inPickerShow = false'
             @confirm='onInPickerConfirm'
         />
@@ -73,7 +71,8 @@ export default {
             outCurrency: '',
             inCurrency: '',
             inCurrencyList: [],
-            currentTab: ''
+            currentTab: '',
+            accountId: route.query.accountId
 
         })
 
@@ -98,12 +97,13 @@ export default {
 
         const onPickerConfirm = val => {
             state.outPickerShow = false
+            state.accountId = val.accountId
             state.outCurrency = val.currency
         }
 
         const onInPickerConfirm = val => {
             state.inPickerShow = false
-            state.withdrawMethod = val.withdrawMethod
+            state.currentTab = val.withdrawMethod
             state.inCurrency = val.currency
         }
 
@@ -122,7 +122,8 @@ export default {
                 query: {
                     currency: state.inCurrency,
                     currentTab: state.currentTab,
-                    tradeType: state.tradeType
+                    tradeType: state.tradeType,
+                    accountId: state.accountId
                 }
             })
         }

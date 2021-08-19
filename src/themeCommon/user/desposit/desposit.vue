@@ -193,6 +193,7 @@ export default {
             paymentTypes: [],
             currency: route.query.currency,
             accountId: route.query.accountId,
+            tradeType: route.query.tradeType
         })
 
         // 获取账户信息
@@ -426,6 +427,7 @@ export default {
             }
 
             const params = {
+                tradeType: state.tradeType,
                 customerNo: customInfo.value.customerNo,
                 accountId: state.accountId,
                 customerGroupId: customInfo.value.customerGroupId,

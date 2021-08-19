@@ -69,8 +69,6 @@
                 {{ $t('trade.repayment') }}
             </van-button>
         </div>
-        <ReturnMoney v-if='accountList.length' v-model='returnMoneyVisible' :account='account' />
-        <Loan v-model='loanVisible' :account='account' />
     </div>
 </template>
 

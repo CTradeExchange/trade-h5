@@ -71,21 +71,13 @@ export default {
             rightAction: {}
         })
 
-        // 切换导航栏选项卡
-        const switchTabs = (key) => {
-            if (key === state.currentTab) return
-            if (route.query.tab !== key) router.replace({ name: route.name, query: { tab: key } })
-            state.currentTab = key
-            switch (key) {
-                case 'coin':
-                    state.rightAction.title = t('withdraw.coinRecordText')
-                    state.rightAction.path = '/coinRecord'
-                    break
-                case 'money':
-                    state.rightAction.title = t('withdraw.moneyRecordText')
-                    state.rightAction.path = '/withdrawRecord'
-                    break
-            }
+        // 判断是显示提现记录还是提币记录
+        if (state.currentTab === 'digit_wallet') {
+            state.rightAction.title = t('withdraw.coinRecordText')
+            state.rightAction.path = '/coinRecord'
+        } else if (state.currentTab === 'bank') {
+            state.rightAction.title = t('withdraw.moneyRecordText')
+            state.rightAction.path = '/withdrawRecord'
         }
 
         // 导航栏右侧标题点击跳转
@@ -151,9 +143,8 @@ export default {
 
         return {
             ...toRefs(state),
-            switchTabs,
-            rightClick,
-            getWithdrawWay
+            rightClick
+
         }
     }
 }

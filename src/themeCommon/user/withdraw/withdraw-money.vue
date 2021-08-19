@@ -59,7 +59,7 @@
             </div>
         </div>
     </van-action-sheet>
-    <van-dialog v-model:show='withdrawSuccess' class-name='add-success' :confirm-button-text="$t('common.sure')" :show-cancel-button='false' @confirm='$router.back()'>
+    <van-dialog v-model:show='withdrawSuccess' class-name='add-success' :confirm-button-text="$t('common.sure')" :show-cancel-button='false' @confirm='$router.push("/assets")'>
         <i class='icon_success'></i>
         <p class='title'>
             {{ $t('withdraw.successText') }}
@@ -90,32 +90,12 @@ import {
     toRefs,
     onBeforeMount
 } from 'vue'
-import {
-    useRouter
-} from 'vue-router'
-import {
-    Toast,
-    Dialog
-} from 'vant'
-import {
-    isEmpty,
-    debounce
-} from '@/utils/util'
-import {
-    useStore
-} from 'vuex'
-import {
-    handleWithdraw,
-    queryWithdrawConfig,
-    queryWithdrawRate,
-    queryBankList,
-    computeWithdrawFee,
-    checkKycApply
-} from '@/api/user'
+import { useRouter, useRoute } from 'vue-router'
+import { Toast, Dialog } from 'vant'
+import { isEmpty, debounce } from '@/utils/util'
+import { useStore } from 'vuex'
+import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate, queryBankList, computeWithdrawFee, checkKycApply } from '@/api/user'
 import dayjs from 'dayjs'
-// import utc from 'dayjs/plugin/utc'
-// dayjs.extend(utc)
-// i18n
 import { useI18n } from 'vue-i18n'
 
 export default {
@@ -123,6 +103,9 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const router = useRouter()
+        const route = useRoute()
+
+        const { currency, accountId, tradeType } = route.query
 
         const weekdayMap = {
             1: t('weekdayMap.1'),
@@ -209,7 +192,7 @@ export default {
                 // customerNo: customInfo.value.customerNo,
                 // customerGroupId: customInfo.value.customerGroupId,
                 // country: customInfo.value.country,
-                withdrawCurrency: state.withdrawCurrency,
+                withdrawCurrency: state.withdrawRate.withdrawCurrency,
                 withdrawType: 1,
                 withdrawMethod: 'bank',
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo
@@ -331,7 +314,8 @@ export default {
                 bankName: state.checkedBank.bankName,
                 bankCardNo: state.checkedBank.bankCardNumber,
                 withdrawType: 1,
-                withdrawMethod: 'bank'
+                withdrawMethod: 'bank',
+                tradeType
             }
 
             state.loading = true
@@ -368,11 +352,12 @@ export default {
             const params = {
                 // companyId: customInfo.value.companyId,
                 // customerNo: customInfo.value.customerNo,
-                // accountId: customInfo.value.accountId,
+                accountId,
                 // customerGroupId: customInfo.value.customerGroupId,
-                accountId: account.value?.accountId,
-                accountCurrency: account.value?.currency,
-                // country: customInfo.value.country,
+                accountCurrency: currency,
+                withdrawCurrency: state.withdrawRate.withdrawCurrency,
+                country: customInfo.value.country,
+                withdrawType: 1,
                 withdrawMethod: 'bank'
             }
 

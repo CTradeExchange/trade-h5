@@ -13,7 +13,8 @@
                             {{ pendingItem.symbolCode }}
                         </div>
                     </div>
-                </div><div class='item item-2'>
+                </div>
+                <div class='item item-2'>
                     <div class='col'>
                         <div class='sub' :class="Number(pendingItem.direction) === 1 ? 'riseColor' : 'fallColor'">
                             {{ Number(pendingItem.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
@@ -26,7 +27,7 @@
                             {{ $t('trade.pendingPrice') }}
                         </div>
                         <div class='name'>
-                            {{ pendingPrice }}
+                            {{ pendingItem.requestPrice || '--' }}
                         </div>
                     </div><div class='col'>
                         <div class='sub'>
@@ -37,8 +38,8 @@
                         </div>
                     </div>
                 </div>
-                <div class='item item-2 van-hairline--bottom'>
-                    <div class='col'>
+                <div class='item van-hairline--bottom'>
+                    <div v-if='[1,2].includes(Number(tradeType))' class='col'>
                         <div class='sub'>
                             {{ $t('trade.stopLossPrice') }}
                         </div>
@@ -48,13 +49,23 @@
                             </span>
                         </div>
                     </div>
-                    <div class='col'>
+                    <div v-if='[1,2].includes(Number(tradeType))' class='col'>
                         <div class='sub'>
                             {{ $t('trade.stopProfitPrice') }}
                         </div>
                         <div class='name'>
                             <span class='number'>
                                 {{ shiftedBy(pendingItem.takeProfit,-1*pendingItem.digits ) || '--' }}
+                            </span>
+                        </div>
+                    </div>
+                    <div v-if='[3,9].includes(Number(tradeType))' class='col'>
+                        <div class='sub'>
+                            {{ $t('trade.loan') }}
+                        </div>
+                        <div class='name'>
+                            <span class='number'>
+                                {{ pendingItem.loanAmount || '--' }}
                             </span>
                         </div>
                     </div>
@@ -193,7 +204,8 @@ export default {
             product,
             loading,
             shiftedBy,
-            cancelOrder
+            cancelOrder,
+            tradeType
         }
     }
 }

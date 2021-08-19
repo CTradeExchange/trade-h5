@@ -303,11 +303,8 @@ export default {
             font-size: rem(20px);
         }
         .state {
+            margin-right: rem(5px);
             color: var(--primary);
-            vertical-align: middle;
-        }
-        .van-icon {
-            vertical-align: middle;
         }
     }
 }
