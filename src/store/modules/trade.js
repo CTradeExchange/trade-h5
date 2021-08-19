@@ -181,6 +181,7 @@ export default {
     actions: {
         // 查询持仓列表
         queryPositionPage ({ dispatch, commit, state, rootState }, params) {
+            if (!params.tradeType) return false
             cachePendingParams(params, positionsConfig) // 缓存请求参数
             const hideLoading = !!params.hideLoading
             const accountListLen = rootState._user.customerInfo?.accountList?.length
@@ -219,6 +220,7 @@ export default {
         },
         // 预埋单列表
         queryPBOOrderPage ({ dispatch, commit, state, rootState }, params) {
+            if (!params.tradeType) return false
             cachePendingParams(params, pendingsConfig) // 缓存请求参数
             const accountListLen = rootState._user.customerInfo?.accountList?.length
             const tradeType = params.tradeType

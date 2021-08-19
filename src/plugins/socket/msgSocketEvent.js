@@ -194,7 +194,7 @@ class SocketEvent {
 
     // 消息通知
     notice (data) {
-        const content = data.content
+        const { tradeType, updateType, show } = data.content
         // 刷新字段：updateType
         // NO_MOVEMENT(0 ,"无动作"),
         // POSITION(1 ,"刷新仓位"),
@@ -202,23 +202,23 @@ class SocketEvent {
         // AMOUNT(3 ,"刷新资金"),
         // LOGOUT(4 ,"踢出"),
         // POSITION_AND_ORDER(5, "同时刷新挂单、仓位"),
-        if (content.updateType === 1) {
-            this.$store.dispatch('_trade/queryPositionPage')
-        } else if (content.updateType === 2) {
-            this.$store.dispatch('_trade/queryPBOOrderPage')
-        } else if (content.updateType === 4) {
+        if (updateType === 1) {
+            this.$store.dispatch('_trade/queryPositionPage', { tradeType })
+        } else if (updateType === 2) {
+            this.$store.dispatch('_trade/queryPBOOrderPage', { tradeType })
+        } else if (updateType === 4) {
             setTimeout(() => {
                 this.handlerLogout()
             }, 2000)
-        } else if (content.updateType === 5) {
-            this.$store.dispatch('_trade/queryPositionPage')
-            this.$store.dispatch('_trade/queryPBOOrderPage')
+        } else if (updateType === 5) {
+            this.$store.dispatch('_trade/queryPositionPage', { tradeType })
+            this.$store.dispatch('_trade/queryPBOOrderPage', { tradeType })
         }
 
         // 展示字段：show
         // NO_MOVEMENT(0 ,"无动作"),
         // POPUP(1 ,"弹窗"), // 显示顶部消息
-        if (content.show === 1) {
+        if (show === 1) {
             const event = new CustomEvent('GotMsg_notice', { detail: data })
             document.body.dispatchEvent(event)
         }
