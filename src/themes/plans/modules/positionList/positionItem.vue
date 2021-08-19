@@ -20,7 +20,7 @@
                                     <span>
                                         <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
                                             {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
-                                        </span>{{ positionVolume }} {{ $t('trade.volumeUnit') }}
+                                        </span>{{ minus(data.openVolume, data.closeVolume) }} {{ $t('trade.volumeUnit') }}
                                     </span>
                                 </div>
 
@@ -176,7 +176,6 @@ export default {
         const customerInfo = computed(() => store.state._user.customerInfo)
         const positionList = computed(() => store.state._trade.positionList[tradeType.value])
         const product = computed(() => store.state._quote.productMap[data.symbolId + '_' + tradeType.value])
-        const positionVolume = computed(() => minus(data.openVolume, data.closeVolume))
 
         const toPositionDetail = (item) => {
             store.commit('_quote/Update_productActivedID', item.symbolId)
@@ -200,10 +199,10 @@ export default {
             positionList,
             customerInfo,
             product,
-            positionVolume,
             toPositionDetail,
             updateShow,
             toProduct,
+            minus,
             tradeType
         }
     }
