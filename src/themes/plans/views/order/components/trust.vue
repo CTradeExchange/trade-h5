@@ -71,10 +71,10 @@ export default {
     .hd {
         display: flex;
         justify-content: space-between;
-        height: rem(70px);
+        height: rem(80px);
         padding: 0 rem(30px);
         font-size: rem(28px);
-        line-height: rem(70px);
+        line-height: rem(80px);
         border-bottom: 1px solid var(--assistColor);
         .allTrust {
             color: var(--normalColor);

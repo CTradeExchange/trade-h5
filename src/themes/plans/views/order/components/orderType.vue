@@ -53,7 +53,7 @@ export default {
 .orderTypeTab {
     margin: 0 0 rem(20px);
 
-    --van-tabs-bottom-bar-width: 20vw;
+    --van-tabs-bottom-bar-width: 11vw;
     --van-tabs-line-height: 40px;
     --van-tabs-bottom-bar-color: var(--primary);
     :deep(.van-tab) {

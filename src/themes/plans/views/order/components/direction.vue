@@ -37,6 +37,7 @@ export default {
 .directions {
     position: relative;
     display: flex;
+    margin-top: rem(38px);
     &.tradeType9 {
         text-align: center;
         .item {

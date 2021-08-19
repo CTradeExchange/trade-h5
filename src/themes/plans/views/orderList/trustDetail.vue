@@ -33,8 +33,8 @@
                         <div class='sub'>
                             {{ $t('trade.currentPrice') }}
                         </div>
-                        <div class='name fallColor'>
-                            {{ product.cur_price }}
+                        <div class='name' :class="Number(pendingItem.direction) === 1 ? 'riseColor' : 'fallColor'">
+                            {{ Number(pendingItem.direction) === 1 ?product.buy_price:product.sell_price }}
                         </div>
                     </div>
                 </div>

@@ -11,9 +11,9 @@
                 <!-- 订单类型 -->
                 <OrderTypeTab v-model='orderType' :trade-type='product.tradeType' @selected='changeOrderType' />
                 <!-- 自动借款 -->
-                <LoanBar v-if='product.tradeType === 3' v-model='operationType' class='cellMarginTop' :trade-type='product.tradeType' />
+                <LoanBar v-if='[3,9].includes(product.tradeType)' v-model='operationType' :account='account' class='cellMarginTop' :product='product' />
                 <!-- 方向 -->
-                <Direction v-model='direction' class='cellMarginTop' :product='product' />
+                <Direction v-model='direction' :product='product' />
                 <!-- 挂单设置 -->
                 <PendingBar
                     v-if='[3,9].includes(product.tradeType) && orderType===10'
@@ -36,7 +36,6 @@
                 <!-- 订单金额 -->
                 <Assets
                     v-if='account && [3,9].includes(product.tradeType)'
-                    v-model:operation-type='operationType'
                     :account='account'
                     :direction='direction'
                     :product='product'
@@ -69,7 +68,7 @@
         <!-- 委托列表 -->
         <Trust
             v-if='product'
-            class='cellMarginTop'
+            class='trustList'
             :direction='direction'
             :product='product'
         />
@@ -376,6 +375,9 @@ export default {
             flex: 1;
         }
     }
+}
+.trustList {
+    margin-top: rem(20px);
 }
 .cellMarginTop {
     margin-top: rem(40px);
