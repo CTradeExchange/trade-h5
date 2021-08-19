@@ -185,7 +185,7 @@ export default {
             }
 
             const params = {
-                accountId: account.value?.accountId,
+                accountId,
                 accountCurrency: account.value?.currency,
                 amount: state.amount,
                 // companyId: customInfo.value.companyId,
@@ -304,7 +304,7 @@ export default {
             }
 
             const params = {
-                accountId: account.value?.accountId,
+                accountId,
                 accountCurrency: account.value?.currency,
                 withdrawCurrency: state.withdrawRate.withdrawCurrency,
                 amount: state.amount,
@@ -335,7 +335,7 @@ export default {
             const params = {
                 // companyId: customInfo.value.companyId,
                 // customerNo: customInfo.value.customerNo,
-                accountId: account.value?.accountId,
+                accountId,
                 accountCurrency: account.value?.currency,
                 withdrawCurrency: state.withdrawCurrency,
                 withdrawType: 1
@@ -355,7 +355,7 @@ export default {
                 accountId,
                 // customerGroupId: customInfo.value.customerGroupId,
                 accountCurrency: currency,
-                withdrawCurrency: state.withdrawRate.withdrawCurrency,
+                withdrawCurrency: state.withdrawRate?.withdrawCurrency,
                 country: customInfo.value.country,
                 withdrawType: 1,
                 withdrawMethod: 'bank'
@@ -391,9 +391,9 @@ export default {
             })
         }
 
-        const getBankList = () => {
+        const getBankList = async () => {
             state.loading = true
-            queryBankList().then(res => {
+            await queryBankList().then(res => {
                 state.loading = false
                 if (res.check()) {
                     if (res.data && res.data.length > 0) {
@@ -467,10 +467,14 @@ export default {
         }
 
         onBeforeMount(() => {
-            // 获取银行卡列表
-            getBankList()
-            // 获取取款限制配置
-            getWithdrawConfig()
+            new Promise(resolve => {
+                // 获取银行卡列表
+                getBankList()
+                resolve()
+            }).then(() => {
+                // 获取取款限制配置
+                getWithdrawConfig()
+            })
         })
 
         return {

@@ -77,14 +77,14 @@ export default {
         ))
 
         // 获取持仓列表
-        const queryPositionList = () => {
+        const queryPositionList = (tradeType) => {
             if (isEmpty(customerInfo.value)) {
                 return
             }
 
             const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType.value))?.accountId
             store.dispatch('_trade/queryPositionPage', {
-                tradeType: tradeType.value,
+                tradeType: tradeType,
                 sortFieldName: 'openTime',
                 sortType: 'desc',
                 accountId
@@ -107,33 +107,15 @@ export default {
             })
         }
 
-        watchEffect(() => {
-            if ([1, 2].indexOf(Number(tradeType.value)) > -1) {
-                queryPositionList()
-            } else if ([3, 9].indexOf(Number(tradeType.value)) > -1) {
-                store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: tradeType.value })
-            }
-        })
-
-        /* watch(() => tradeType.value, (val) => {
-            if ([1, 2].indexOf(Number(val)) > -1) {
-                queryPositionList()
-            } else if ([3, 9].indexOf(Number(val)) > -1) {
-                store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: val })
-            }
-        }, {
-            immediate: true
-        }) */
-
         const handleTradeType = (val) => {
             const curIndex = plans.value.findIndex(item => item.id === val)
             assetsSwipe.value.swipeTo(curIndex)
 
-            /* if ([1, 2].indexOf(Number(val)) > -1) {
-                queryPositionList()
+            if ([1, 2].indexOf(Number(val)) > -1) {
+                queryPositionList(val)
             } else if ([3, 9].indexOf(Number(val)) > -1) {
                 store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: val })
-            } */
+            }
         }
 
         const filterShow = (tradeType) => {
@@ -143,6 +125,7 @@ export default {
         }
 
         const onChange = (index) => {
+            console.log('index==========', index, plans.value[index].id)
             store.commit('_quote/Update_tradeType', plans.value[index].id)
         }
 
