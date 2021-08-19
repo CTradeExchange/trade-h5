@@ -124,7 +124,6 @@ export default {
         }
 
         const onChange = (index) => {
-            console.log('index==========', index, plans.value[index].id)
             store.commit('_quote/Update_tradeType', plans.value[index].id)
         }
 

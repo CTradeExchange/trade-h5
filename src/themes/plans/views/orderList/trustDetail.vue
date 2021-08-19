@@ -118,7 +118,7 @@ import { useStore } from 'vuex'
 import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
 import { shiftedBy } from '@/utils/calculation'
 import { QuoteSocket } from '@/plugins/socket/socket'
-import { closePboOrder } from '@/api/trade'
+import { closePboOrder, closeTradePboOrder } from '@/api/trade'
 import { useI18n } from 'vue-i18n'
 export default {
     setup (props) {
@@ -159,22 +159,45 @@ export default {
                     tradeType,
                     customerNo: customInfo.value.customerNo,
                     accountId: account.value.accountId,
-                    pboId: pendingItem.value.id,
+                    customerId: customInfo.value.id,
+
                     bizType: pendingItem.value.bizType
                 }
 
-                closePboOrder(params).then(res => {
-                    loading.value = false
-                    if (res.check()) {
-                        router.back()
-                        Toast(t('trade.cancelSuccess'))
-                        queryPBOOrderPage()
-                    }
-                }).catch(err => {
-                    loading.value = false
-                    console.log(err)
-                })
+                if (Number(tradeType) === 9) {
+                    closeTradePboOrder({
+                        orderId: pendingItem.value.id,
+                        ...params,
+                    }).then(res => {
+                        loading.value = false
+                        if (res.check()) {
+                            closeSuccess()
+                        }
+                    }).catch(err => {
+                        loading.value = false
+                        console.log(err)
+                    })
+                } else {
+                    closePboOrder({
+                        pboId: pendingItem.value.id,
+                        ...params,
+                    }).then(res => {
+                        loading.value = false
+                        if (res.check()) {
+                            closeSuccess()
+                        }
+                    }).catch(err => {
+                        loading.value = false
+                        console.log(err)
+                    })
+                }
             }).catch(() => {})
+        }
+
+        const closeSuccess = () => {
+            router.back()
+            Toast(t('trade.cancelSuccess'))
+            queryPBOOrderPage()
         }
 
         // 订阅报价
