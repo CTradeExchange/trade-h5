@@ -81,7 +81,6 @@ export default {
             if (isEmpty(customerInfo.value)) {
                 return
             }
-
             const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType.value))?.accountId
             store.dispatch('_trade/queryPositionPage', {
                 tradeType: tradeType,
@@ -93,7 +92,7 @@ export default {
                     const subscribList = positionList.value.map(el => {
                         return {
                             symbolId: el.symbolId,
-                            tradeType: tradeType.value
+                            tradeType: tradeType
                         }
                     })
                     QuoteSocket.send_subscribe(subscribList)
@@ -102,7 +101,7 @@ export default {
             }).finally(() => {
                 // 订阅资产数据
                 MsgSocket.subscribedListAdd(function () {
-                    MsgSocket.subscribeAsset(tradeType.value)
+                    MsgSocket.subscribeAsset(tradeType)
                 })
             })
         }
