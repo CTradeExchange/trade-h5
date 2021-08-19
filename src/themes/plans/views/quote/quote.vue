@@ -147,12 +147,11 @@ export default {
                         for(let key in selfSymbolList._value){
                             selfSymbolList._value[key].forEach((el,index)=>{
                                     if(item.symbolId===el.symbolId){
-                                        selfSymbolList._value[key].splice(index,1);
+                                        el.splice(index,1);
                                     }
                                 }
                             )
                         }
-                        store.commit('_user/Update_selfSymbolList', selfSymbolList)
                         onSearch();
                     }
                 }).catch(err => {
@@ -161,11 +160,11 @@ export default {
                 addCustomerOptional({ symbolList: [item.symbolId],tradeType:tradeType._value }).then(res => {
                     if (res.check()) {
                         store.dispatch('_user/queryCustomerOptionalList')
+                        
                         for(let key in selfSymbolList._value){
                             selfSymbolList._value[key].push(item)
                             break;
                         }
-                        store.commit('_user/Update_selfSymbolList', selfSymbolList)
                         onSearch();
                         Toast(t('trade.addOptionalOk'))
                     }
