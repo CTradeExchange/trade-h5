@@ -280,7 +280,6 @@ export default {
         }
 
         const changePayCurrency = (val) => {
-            console.log('type', val)
             state.currencyChecked = val
             getDepositExchangeRate()
         }
@@ -412,7 +411,7 @@ export default {
             }
 
             state.currencyChecked = state.paymentTypes[0]
-            await getDepositExchangeRate()
+            // await getDepositExchangeRate()
         }
 
         // 创建存款提案
@@ -514,7 +513,6 @@ export default {
                 if (res.check()) {
                     if (res.data.length > 0) {
                         res.data.forEach(item => {
-                            console.log('aaaa', state.paymentTypes)
                             state.paymentTypes.push(item.parentCode + '-' + item.code)
                         })
                         // state.currencyChecked = state.paymentTypes[0]

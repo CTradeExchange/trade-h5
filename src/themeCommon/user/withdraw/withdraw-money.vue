@@ -119,8 +119,10 @@ export default {
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
-        const account = computed(() => store.state._user.account)
+
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
+        // 账户币种
+        const accountCurrency = computed(() => store.state._user.customerInfo.accountList.find(el => el.accountId === Number(accountId))?.currency)
 
         const timeList = computed(() => {
             const timeConfigList = state.withdrawTimeConfigMap
@@ -186,13 +188,13 @@ export default {
 
             const params = {
                 accountId,
-                accountCurrency: account.value?.currency,
+                accountCurrency: accountCurrency.value,
                 amount: state.amount,
                 // companyId: customInfo.value.companyId,
                 // customerNo: customInfo.value.customerNo,
                 // customerGroupId: customInfo.value.customerGroupId,
                 // country: customInfo.value.country,
-                withdrawCurrency: state.withdrawRate.withdrawCurrency,
+                withdrawCurrency: currency,
                 withdrawType: 1,
                 withdrawMethod: 'bank',
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo
@@ -305,8 +307,8 @@ export default {
 
             const params = {
                 accountId,
-                accountCurrency: account.value?.currency,
-                withdrawCurrency: state.withdrawRate.withdrawCurrency,
+                accountCurrency: accountCurrency.value,
+                withdrawCurrency: currency,
                 amount: state.amount,
                 rate: state.withdrawRate.exchangeRate,
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
@@ -333,11 +335,11 @@ export default {
         // 获取取款汇率
         const getWithdrawRate = () => {
             const params = {
-                // companyId: customInfo.value.companyId,
-                // customerNo: customInfo.value.customerNo,
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo,
                 accountId,
-                accountCurrency: account.value?.currency,
-                withdrawCurrency: state.withdrawCurrency,
+                accountCurrency: accountCurrency.value,
+                withdrawCurrency: currency,
                 withdrawType: 1
             }
             queryWithdrawRate(params).then(res => {
@@ -350,12 +352,12 @@ export default {
         // 获取取款限制配置
         const getWithdrawConfig = () => {
             const params = {
-                // companyId: customInfo.value.companyId,
-                // customerNo: customInfo.value.customerNo,
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo,
                 accountId,
-                // customerGroupId: customInfo.value.customerGroupId,
-                accountCurrency: currency,
-                withdrawCurrency: state.withdrawRate?.withdrawCurrency,
+                customerGroupId: customInfo.value.customerGroupId,
+                accountCurrency: accountCurrency.value,
+                withdrawCurrency: currency,
                 country: customInfo.value.country,
                 withdrawType: 1,
                 withdrawMethod: 'bank'
@@ -442,7 +444,14 @@ export default {
                             confirmButtonText: t('withdraw.activateBtn')
                         }).then(() => {
                             // on confirm
-                            router.push('/desposit')
+                            router.push({
+                                path: '/desposit',
+                                query: {
+                                    accountId,
+                                    currency: accountCurrency.value,
+                                    tradeType
+                                }
+                            })
                         }).catch(() => {
                             // on cancel
                         })

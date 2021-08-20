@@ -101,6 +101,7 @@ export default {
         const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.tradeType)))
 
         state.outCurrency = columns.value[0].currency
+        state.accountId = columns.value[0].accountId
         // 自定义picker字段
         const customFieldName = {
             text: 'currency',
@@ -180,7 +181,6 @@ export default {
             onInPickerConfirm,
             customFieldName,
             selectWithdraw,
-            withdrawMethodVis,
             ...toRefs(state)
         }
     }
