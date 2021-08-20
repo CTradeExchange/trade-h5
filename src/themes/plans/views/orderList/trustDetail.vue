@@ -13,7 +13,8 @@
                             {{ pendingItem.symbolCode }}
                         </div>
                     </div>
-                </div><div class='item item-2'>
+                </div>
+                <div class='item item-2'>
                     <div class='col'>
                         <div class='sub' :class="Number(pendingItem.direction) === 1 ? 'riseColor' : 'fallColor'">
                             {{ Number(pendingItem.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
@@ -26,19 +27,19 @@
                             {{ $t('trade.pendingPrice') }}
                         </div>
                         <div class='name'>
-                            {{ pendingPrice }}
+                            {{ pendingItem.requestPrice || '--' }}
                         </div>
                     </div><div class='col'>
                         <div class='sub'>
                             {{ $t('trade.currentPrice') }}
                         </div>
-                        <div class='name fallColor'>
-                            {{ product.cur_price }}
+                        <div class='name' :class="Number(pendingItem.direction) === 1 ? 'riseColor' : 'fallColor'">
+                            {{ Number(pendingItem.direction) === 1 ?product.buy_price:product.sell_price }}
                         </div>
                     </div>
                 </div>
-                <div class='item item-2 van-hairline--bottom'>
-                    <div class='col'>
+                <div class='item van-hairline--bottom'>
+                    <div v-if='[1,2].includes(Number(tradeType))' class='col'>
                         <div class='sub'>
                             {{ $t('trade.stopLossPrice') }}
                         </div>
@@ -48,13 +49,23 @@
                             </span>
                         </div>
                     </div>
-                    <div class='col'>
+                    <div v-if='[1,2].includes(Number(tradeType))' class='col'>
                         <div class='sub'>
                             {{ $t('trade.stopProfitPrice') }}
                         </div>
                         <div class='name'>
                             <span class='number'>
                                 {{ shiftedBy(pendingItem.takeProfit,-1*pendingItem.digits ) || '--' }}
+                            </span>
+                        </div>
+                    </div>
+                    <div v-if='[3,9].includes(Number(tradeType))' class='col'>
+                        <div class='sub'>
+                            {{ $t('trade.loan') }}
+                        </div>
+                        <div class='name'>
+                            <span class='number'>
+                                {{ pendingItem.loanAmount || '--' }}
                             </span>
                         </div>
                     </div>
@@ -107,7 +118,7 @@ import { useStore } from 'vuex'
 import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
 import { shiftedBy } from '@/utils/calculation'
 import { QuoteSocket } from '@/plugins/socket/socket'
-import { closePboOrder } from '@/api/trade'
+import { closePboOrder, closeTradePboOrder } from '@/api/trade'
 import { useI18n } from 'vue-i18n'
 export default {
     setup (props) {
@@ -148,22 +159,45 @@ export default {
                     tradeType,
                     customerNo: customInfo.value.customerNo,
                     accountId: account.value.accountId,
-                    pboId: pendingItem.value.id,
+                    customerId: customInfo.value.id,
+
                     bizType: pendingItem.value.bizType
                 }
 
-                closePboOrder(params).then(res => {
-                    loading.value = false
-                    if (res.check()) {
-                        router.back()
-                        Toast(t('trade.cancelSuccess'))
-                        queryPBOOrderPage()
-                    }
-                }).catch(err => {
-                    loading.value = false
-                    console.log(err)
-                })
+                if (Number(tradeType) === 9) {
+                    closeTradePboOrder({
+                        orderId: pendingItem.value.id,
+                        ...params,
+                    }).then(res => {
+                        loading.value = false
+                        if (res.check()) {
+                            closeSuccess()
+                        }
+                    }).catch(err => {
+                        loading.value = false
+                        console.log(err)
+                    })
+                } else {
+                    closePboOrder({
+                        pboId: pendingItem.value.id,
+                        ...params,
+                    }).then(res => {
+                        loading.value = false
+                        if (res.check()) {
+                            closeSuccess()
+                        }
+                    }).catch(err => {
+                        loading.value = false
+                        console.log(err)
+                    })
+                }
             }).catch(() => {})
+        }
+
+        const closeSuccess = () => {
+            router.back()
+            Toast(t('trade.cancelSuccess'))
+            queryPBOOrderPage()
         }
 
         // 订阅报价
@@ -193,7 +227,8 @@ export default {
             product,
             loading,
             shiftedBy,
-            cancelOrder
+            cancelOrder,
+            tradeType
         }
     }
 }

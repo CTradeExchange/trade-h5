@@ -199,3 +199,16 @@ export function queryAbccPboPage (data) {
         data
     })
 }
+
+/* ABCC取消限价单 */
+export function closeTradePboOrder (data) {
+    return request({
+        url: '/global/tradeapi.app.OrderApiService.closeTradePboOrder',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            group: 'tradeApi'
+        },
+        data
+    })
+}

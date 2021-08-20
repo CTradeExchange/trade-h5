@@ -431,6 +431,26 @@ class Chart {
         return overrides
     }
 
+    // 重置K线可视区域
+    _resetVisibleRange () {
+        try {
+            const state = this.widget.activeChart().getSeries()._series.bars().state()
+            const formIndex = Math.max(state.data.length - 47, 0)
+            const fromTime = state.data[formIndex].value[0]
+            const toTime = state.data[state.data.length - 1].value[0]
+            this.widget.activeChart().setVisibleRange({
+                from: fromTime,
+                to: toTime
+            }, {
+                percentRightMargin: 17
+            })
+            // 价格框缩放还原
+            this.widget.activeChart().getSeries()._series.model().setPriceAutoScaleForAllMainSources(true)
+        } catch (error) {
+            console.error('_resetVisibleRange: ', error)
+        }
+    }
+
     /** ---------------------------- 分割线 ------------------------------------------------------------------------------------------- */
     /** ---------------------------- 以下是公开方法 ------------------------------------------------------------------------------------ */
     // 切换产品
@@ -466,6 +486,7 @@ class Chart {
             .setResolution(val, () => {
                 this.interval = val
                 console.log(`%c切换周期: ${val}`, 'color:green')
+                this._resetVisibleRange()
             })
     }
 
@@ -487,6 +508,8 @@ class Chart {
         if (!Array.isArray(value)) {
             value = [value]
         }
+
+        value = value.filter(e => e)
 
         const allStudies = this.widget.activeChart().getAllStudies()
         const temp = {}

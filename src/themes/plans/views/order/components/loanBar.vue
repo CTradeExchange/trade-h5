@@ -1,5 +1,31 @@
 <template>
-    <div class='loanBar'>
+    <div class='borrowMoney'>
+        <van-radio-group v-model='checked' direction='horizontal'>
+            <van-radio :name='2'>
+                {{ $t('trade.autoLoan') }}
+                <van-icon class='questionIcon' name='question-o' @click.stop='lilvAlert=true' />
+            </van-radio>
+            <van-radio v-if='product.tradeType === 3' class='lastRadio' :name='3'>
+                {{ $t('trade.autoRepayment') }}
+                <van-icon class='questionIcon' name='question-o' @click.stop='lilvAlert2=true' />
+            </van-radio>
+        </van-radio-group>
+
+        <!-- 自动借款的解说 -->
+        <van-dialog v-model:show='lilvAlert' title=''>
+            <div class='availableLoanContent'>
+                <p>{{ $t('trade.availableLoanContent3', [dailyInterest]) }}</p>
+            </div>
+        </van-dialog>
+        <!-- 自动还款的解说 -->
+        <van-dialog v-model:show='lilvAlert2' title=''>
+            <div class='availableLoanContent'>
+                <p>{{ $t('trade.availableLoanContent6') }}</p>
+            </div>
+        </van-dialog>
+    </div>
+
+    <!-- <div class='loanBar'>
         <div class='item sell' :class="{ 'active':modelValue===2 }" @click='setValue(2)'>
             <span class='hd'>
                 {{ $t('trade.autoLoan') }}
@@ -16,24 +42,40 @@
                 <van-icon name='question-o' @click.stop='tips' />
             </span>
         </div>
-    </div>
+    </div> -->
 </template>
 
 <script>
+import { computed, ref } from 'vue'
+import { mul } from '@/utils/calculation'
 export default {
-    props: ['modelValue'],
+    props: ['modelValue', 'product', 'account'],
     emits: ['update:modelValue'],
     setup (props, { emit }) {
-        const tips = (data) => {
-            console.log(data)
-        }
+        const lilvAlert = ref(false)
+        const lilvAlert2 = ref(false)
+        const checked = computed({
+            get: () => props.modelValue,
+            set: val => {
+                emit('update:modelValue', val)
+            }
+        })
+        const dailyInterest = computed(() => {
+            const assetsId = props.account?.assetsId
+            const interest = props.product.borrowInterestList?.find(item => Number(item.assetsId) === Number(assetsId))?.value
+
+            return interest ? mul(interest, 100) + '%' : '--'
+        })
         const setValue = (data) => {
             if (props.modelValue === data) data = 1
             emit('update:modelValue', data)
         }
         return {
+            lilvAlert,
+            lilvAlert2,
+            dailyInterest,
+            checked,
             setValue,
-            tips,
         }
     }
 }
@@ -74,6 +116,36 @@ export default {
     }
     .van-icon-question-o {
         font-size: rem(30px);
+    }
+}
+.borrowMoney {
+    margin-top: rem(38px);
+    color: var(--minorColor);
+    font-size: rem(24px);
+    :deep(.van-radio) {
+        flex: 1;
+    }
+    :deep(.van-radio__icon .van-icon) {
+        width: rem(30px);
+        height: rem(30px);
+        font-size: rem(26px);
+        line-height: 0.9;
+    }
+    .questionIcon {
+        font-size: rem(30px);
+        vertical-align: -2px;
+    }
+    .lastRadio {
+        margin-left: 10px;
+    }
+
+    --van-radio-label-color: var(--minorColor);
+}
+.availableLoanContent {
+    padding: rem(30px);
+    font-size: rem(24px);
+    p {
+        margin-top: rem(10px);
     }
 }
 </style>

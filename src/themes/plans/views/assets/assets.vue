@@ -23,24 +23,6 @@
                     <AssetsItem v-for='account in accountList' :key='account.accountId' class='block' :data='account' />
                 </div>
             </van-swipe-item>
-
-            <!-- <van-swipe-item v-if='filterShow(1)'>
-                <TotalAssetsFullPosition class='block' />
-                <PositionList />
-            </van-swipe-item>
-            <van-swipe-item v-if='filterShow(2)'>
-                <TotalAssetsBywarehouse class='block' />
-                <PositionList />
-            </van-swipe-item>
-            <van-swipe-item v-if='filterShow(3)'>
-                <TotalAssets class='block' />
-                <AssetsItem v-for='item in accountList' :key='item.accountId' class='block' :data='item' />
-            </van-swipe-item>
-            <van-swipe-item v-if='filterShow(9)'>
-                <TotalAssets class='block' />
-                <AssetsItem v-for='item in accountList' :key='item.accountId' class='block' :data='item' />
-            </van-swipe-item>
-        </van-swipe> -->
         </van-swipe>
     </div>
 </template>
@@ -95,13 +77,13 @@ export default {
         ))
 
         // 获取持仓列表
-        const queryPositionList = () => {
+        const queryPositionList = (tradeType) => {
             if (isEmpty(customerInfo.value)) {
                 return
             }
             const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType.value))?.accountId
             store.dispatch('_trade/queryPositionPage', {
-                tradeType: tradeType.value,
+                tradeType: tradeType,
                 sortFieldName: 'openTime',
                 sortType: 'desc',
                 accountId
@@ -110,7 +92,7 @@ export default {
                     const subscribList = positionList.value.map(el => {
                         return {
                             symbolId: el.symbolId,
-                            tradeType: tradeType.value
+                            tradeType: tradeType
                         }
                     })
                     QuoteSocket.send_subscribe(subscribList)
@@ -119,32 +101,23 @@ export default {
             }).finally(() => {
                 // 订阅资产数据
                 MsgSocket.subscribedListAdd(function () {
-                    MsgSocket.subscribeAsset(tradeType.value)
+                    MsgSocket.subscribeAsset(tradeType)
                 })
             })
         }
 
-        watchEffect(() => {
-            if ([1, 2].indexOf(Number(tradeType.value)) > -1) {
-                queryPositionList()
-            } else if ([3, 9].indexOf(Number(tradeType.value)) > -1) {
-                store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: tradeType.value })
-            }
-        })
-
-        /* watch(() => tradeType.value, (val) => {
-            if ([1, 2].indexOf(Number(val)) > -1) {
-                queryPositionList()
-            } else if ([3, 9].indexOf(Number(val)) > -1) {
-                store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: val })
-            }
-        }, {
-            immediate: true
-        }) */
-
         const handleTradeType = (val) => {
             const curIndex = plans.value.findIndex(item => item.id === val)
             assetsSwipe.value.swipeTo(curIndex)
+            initData(val)
+        }
+
+        const initData = (val) => {
+            if ([1, 2].indexOf(Number(val)) > -1) {
+                queryPositionList(val)
+            } else if ([3, 9].indexOf(Number(val)) > -1) {
+                store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: val })
+            }
         }
 
         const filterShow = (tradeType) => {
@@ -155,6 +128,10 @@ export default {
 
         const onChange = (index) => {
             store.commit('_quote/Update_tradeType', plans.value[index].id)
+        }
+
+        if (tradeType.value) {
+            initData(tradeType.value)
         }
 
         onMounted(() => {

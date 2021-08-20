@@ -203,7 +203,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const route = useRoute()
-        const { currency } = route.query
+        const { currency, accountId, tradeType } = route.query
         const state = reactive({
             // 加载状态
             loading: true,
@@ -351,12 +351,12 @@ export default {
 
         // 请求参数
         const params = {
-            // companyId: customInfo.companyId,
-            // customerNo: customInfo.customerNo,
-            accountId: account.value?.accountId,
+            customerNo: customInfo.customerNo,
+            accountId,
+            withdrawType: 2,
             accountCurrency: account.value?.currency,
-            // customerGroupId: customInfo.customerGroupId,
-            // country: customInfo.country,
+            customerGroupId: customInfo.customerGroupId,
+            country: customInfo.country,
             withdrawMethod: 'digit_wallet'
         }
 
@@ -444,7 +444,7 @@ export default {
                 companyId: customInfo.companyId,
                 customerNo: customInfo.customerNo,
                 customerGroupId: customInfo.customerGroupId,
-                accountId: account.value?.accountId,
+                accountId,
                 accountCurrency: account.value?.currency,
                 country: customInfo.country,
                 withdrawMethod: 'digit_wallet'
@@ -452,15 +452,16 @@ export default {
                 if (res.check()) {
                     const { data } = res
                     const coinKindList = []
-                    debugger
+
                     if (data.length > 0) {
                         data.map(elem => {
-                            if (!coinKindList.some(v => v.name === elem.withdrawCurrency)) {
+                            if (!coinKindList.some(v => v.name === elem.withdrawCurrency) && elem.withdrawCurrency === currency) {
                                 coinKindList.push({ name: elem.withdrawCurrency })
                             }
                         })
+
                         state.allList = data
-                        state.coinKind = coinKindList.find(el => el.name === currency).name
+                        state.coinKind = coinKindList[0].name
                         state.coinKindList = coinKindList
                         // 根据提币币种获取筛选链名称
                         filterChainName()
@@ -520,7 +521,7 @@ export default {
             queryWithdrawRate({
                 // companyId: customInfo.companyId,
                 // customerNo: customInfo.customerNo,
-                accountId: account.value?.accountId,
+                accountId,
                 accountCurrency: account.value?.currency,
                 withdrawCurrency: state.coinKind,
                 withdrawType: 2
@@ -671,6 +672,7 @@ export default {
             state.loading = true
             const item = {
                 ...params,
+                tradeType,
                 amount: state.coinCount,
                 withdrawCoinAmount: state.coinCount,
                 rate: state.withdrawRate.exchangeRate,

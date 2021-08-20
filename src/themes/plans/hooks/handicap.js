@@ -41,8 +41,7 @@ export default function ({ symbolId, tradeType, showPending }) {
                 // 计算合并挂单数量
                 if (sellPendingList?.length > 0 && showPending) {
                     sellPendingList.forEach(sl => {
-                        const requestPrice = shiftedBy(sl.requestPrice, -1 * product.value.price_digits)
-                        if (parseFloat(requestPrice) === parseFloat(ask.price_ask)) {
+                        if (parseFloat(sl.requestPrice) === parseFloat(ask.price_ask)) {
                             ask.unitNum = plus(sl.requestNum, ask.unitNum)
                         }
                     })
@@ -59,8 +58,7 @@ export default function ({ symbolId, tradeType, showPending }) {
                 // 计算合并挂单数量
                 if (buyPendingList?.length > 0 && showPending) {
                     buyPendingList.forEach(bl => {
-                        const requestPrice = shiftedBy(bl.requestPrice, -1 * product.value.price_digits)
-                        if (parseFloat(requestPrice) === parseFloat(bid.price_bid)) {
+                        if (parseFloat(bl.requestPrice) === parseFloat(bid.price_bid)) {
                             bid.unitNum = plus(bl.requestNum, bid.unitNum)
                         }
                     })

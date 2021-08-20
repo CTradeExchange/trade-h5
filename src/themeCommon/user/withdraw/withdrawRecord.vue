@@ -293,11 +293,7 @@ export default {
             .state {
                 margin-right: rem(10px);
                 color: var(--primary);
-                vertical-align: middle;
             }
-        }
-        .van-icon {
-            vertical-align: middle;
         }
     }
 }

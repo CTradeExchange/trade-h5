@@ -34,7 +34,7 @@
                 <span v-if='item.width' class='volunmePercent' :style="{ width:item.width+'%' }"></span>
             </p>
         </div>
-        <van-popover v-model:show='showPopover' :actions='digitLevelList' @select='onSelect'>
+        <van-popover v-model:show='showPopover' :actions='digitLevelList' class='handicapDigitsOptions' @select='onSelect'>
             <template #reference>
                 <button class='selectBtn'>
                     {{ handicapDigit }}
@@ -167,6 +167,7 @@ export default {
         color: var(--minorColor);
         font-size: rem(22px);
         line-height: 1;
+        background: var(--assistColor);
         border-radius: rem(4px);
     }
     .icon_arrow {
@@ -181,5 +182,11 @@ export default {
         border-width: 5px 5px 0;
         border-radius: 3px;
     }
+}
+</style>
+
+<style lang="scss">
+.handicapDigitsOptions {
+    --van-popover-light-background-color: var(--assistColor);
 }
 </style>

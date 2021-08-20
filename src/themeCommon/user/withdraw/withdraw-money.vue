@@ -59,7 +59,7 @@
             </div>
         </div>
     </van-action-sheet>
-    <van-dialog v-model:show='withdrawSuccess' class-name='add-success' :confirm-button-text="$t('common.sure')" :show-cancel-button='false' @confirm='$router.back()'>
+    <van-dialog v-model:show='withdrawSuccess' class-name='add-success' :confirm-button-text="$t('common.sure')" :show-cancel-button='false' @confirm='$router.push("/assets")'>
         <i class='icon_success'></i>
         <p class='title'>
             {{ $t('withdraw.successText') }}
@@ -90,32 +90,12 @@ import {
     toRefs,
     onBeforeMount
 } from 'vue'
-import {
-    useRouter
-} from 'vue-router'
-import {
-    Toast,
-    Dialog
-} from 'vant'
-import {
-    isEmpty,
-    debounce
-} from '@/utils/util'
-import {
-    useStore
-} from 'vuex'
-import {
-    handleWithdraw,
-    queryWithdrawConfig,
-    queryWithdrawRate,
-    queryBankList,
-    computeWithdrawFee,
-    checkKycApply
-} from '@/api/user'
+import { useRouter, useRoute } from 'vue-router'
+import { Toast, Dialog } from 'vant'
+import { isEmpty, debounce } from '@/utils/util'
+import { useStore } from 'vuex'
+import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate, queryBankList, computeWithdrawFee, checkKycApply } from '@/api/user'
 import dayjs from 'dayjs'
-// import utc from 'dayjs/plugin/utc'
-// dayjs.extend(utc)
-// i18n
 import { useI18n } from 'vue-i18n'
 
 export default {
@@ -123,6 +103,9 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const router = useRouter()
+        const route = useRoute()
+
+        const { currency, accountId, tradeType } = route.query
 
         const weekdayMap = {
             1: t('weekdayMap.1'),
@@ -202,14 +185,14 @@ export default {
             }
 
             const params = {
-                accountId: account.value?.accountId,
+                accountId,
                 accountCurrency: account.value?.currency,
                 amount: state.amount,
                 // companyId: customInfo.value.companyId,
                 // customerNo: customInfo.value.customerNo,
                 // customerGroupId: customInfo.value.customerGroupId,
                 // country: customInfo.value.country,
-                withdrawCurrency: state.withdrawCurrency,
+                withdrawCurrency: state.withdrawRate.withdrawCurrency,
                 withdrawType: 1,
                 withdrawMethod: 'bank',
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo
@@ -321,7 +304,7 @@ export default {
             }
 
             const params = {
-                accountId: account.value?.accountId,
+                accountId,
                 accountCurrency: account.value?.currency,
                 withdrawCurrency: state.withdrawRate.withdrawCurrency,
                 amount: state.amount,
@@ -331,7 +314,8 @@ export default {
                 bankName: state.checkedBank.bankName,
                 bankCardNo: state.checkedBank.bankCardNumber,
                 withdrawType: 1,
-                withdrawMethod: 'bank'
+                withdrawMethod: 'bank',
+                tradeType
             }
 
             state.loading = true
@@ -351,7 +335,7 @@ export default {
             const params = {
                 // companyId: customInfo.value.companyId,
                 // customerNo: customInfo.value.customerNo,
-                accountId: account.value?.accountId,
+                accountId,
                 accountCurrency: account.value?.currency,
                 withdrawCurrency: state.withdrawCurrency,
                 withdrawType: 1
@@ -368,11 +352,12 @@ export default {
             const params = {
                 // companyId: customInfo.value.companyId,
                 // customerNo: customInfo.value.customerNo,
-                // accountId: customInfo.value.accountId,
+                accountId,
                 // customerGroupId: customInfo.value.customerGroupId,
-                accountId: account.value?.accountId,
-                accountCurrency: account.value?.currency,
-                // country: customInfo.value.country,
+                accountCurrency: currency,
+                withdrawCurrency: state.withdrawRate?.withdrawCurrency,
+                country: customInfo.value.country,
+                withdrawType: 1,
                 withdrawMethod: 'bank'
             }
 
@@ -406,9 +391,9 @@ export default {
             })
         }
 
-        const getBankList = () => {
+        const getBankList = async () => {
             state.loading = true
-            queryBankList().then(res => {
+            await queryBankList().then(res => {
                 state.loading = false
                 if (res.check()) {
                     if (res.data && res.data.length > 0) {
@@ -482,10 +467,14 @@ export default {
         }
 
         onBeforeMount(() => {
-            // 获取银行卡列表
-            getBankList()
-            // 获取取款限制配置
-            getWithdrawConfig()
+            new Promise(resolve => {
+                // 获取银行卡列表
+                getBankList()
+                resolve()
+            }).then(() => {
+                // 获取取款限制配置
+                getWithdrawConfig()
+            })
         })
 
         return {

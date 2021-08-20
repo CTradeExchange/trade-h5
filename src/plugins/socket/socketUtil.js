@@ -164,7 +164,9 @@ export function formatSubscribe (productIds) {
 export function productMapToSymbolKey (productMaps = []) {
     const symbolKey = []
     if (!productMaps || productMaps.length === 0) return symbolKey
-    productMaps.forEach(({ symbol_id, trade_type }) => {
+    productMaps.forEach(el => {
+        const symbol_id = el.symbol_id || el.symbolId
+        const trade_type = el.trade_type || el.tradeType
         symbolKey.push(`${symbol_id}_${trade_type}`)
     })
     return symbolKey

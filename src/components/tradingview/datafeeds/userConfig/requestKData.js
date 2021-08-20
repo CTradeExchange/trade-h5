@@ -79,7 +79,7 @@ export class RequestKData {
                 open: latestBar.open,
                 high: Math.max(latestBar.high, price),
                 low: Math.min(latestBar.low, price),
-                close: price,
+                close: Number(price),
             })
         } else {
             // 最新两条数据

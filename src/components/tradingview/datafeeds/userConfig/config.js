@@ -68,28 +68,28 @@ export const MAINSTUDIES = [
     {
         label: 'TEMA',
         name: 'Triple EMA',
-        params: [true, false]
+        params: [true, false, [9]]
     },
 
     {
         label: 'DEMA',
         name: 'Double EMA',
-        params: [true, false]
+        params: [true, false, [9]]
     },
     {
         label: 'SMMA',
         name: 'Smoothed Moving Average',
-        params: [true, false]
+        params: [true, false, [7]]
     },
     {
         label: 'Ichimoku',
         name: 'Ichimoku Cloud',
-        params: [true, false]
+        params: [true, false, [9,26,52,26]]
     },
     {
         label: 'ENV',
         name: 'Envelopes',
-        params: [true, false]
+        params: [true, false, [20,10,10]]
     }
 ]
 
@@ -128,63 +128,63 @@ export const SUBSTUDIES = [
     {
         label: 'DMI',
         name: 'Directional Movement',
-        params: [false, false]
+        params: [false, false, [14,14]]
     },
     {
         label: 'TRIX',
         name: 'TRIX',
-        params: [false, false]
+        params: [false, false, [18]]
     },
     {
         label: 'ASI',
         name: 'Accumulative Swing Index',
-        params: [false, false]
+        params: [false, false, [10]]
     },
     {
         label: 'Momentum',
         name: 'Momentum',
-        params: [false, false]
+        params: [false, false, [10]]
     },
     {
         label: 'DPO',
         name: 'Detrended Price Oscillator',
-        params: [false, false]
+        params: [false, false, [21]]
     },
 
     {
         label: 'Aroon',
         name: 'Aroon',
-        params: [false, false]
+        params: [false, false, [14]]
     },
     {
         label: 'KST',
         name: 'Know Sure Thing',
-        params: [false, false]
+        params: [false, false, [10,15,20,30,10,10,10,15,9]]
     },
     {
         label: 'ROC',
         name: 'Rate Of Change',
-        params: [false, false]
+        params: [false, false, [9]]
     },
     {
         label: 'CRSI',
         name: 'Connors RSI',
-        params: [false, false]
+        params: [false, false, [3, 2, 100]]
     },
 
     {
         label: 'SMII',
         name: 'SMI Ergodic Indicator/Oscillator',
-        params: [false, false]
+        params: [false, false, [5,20,5]]
     },
     {
         label: 'HV',
         name: 'Historical Volatility',
-        params: [false, false, 10]
+        params: [false, false, [10]]
     },
     {
         label: 'Stoch',
         name: 'Stochastic',
-        params: [false, false]
+        params: [false, false, [14, 1, 3]]
     },
 ]

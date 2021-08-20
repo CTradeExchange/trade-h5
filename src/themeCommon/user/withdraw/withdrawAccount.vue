@@ -21,6 +21,16 @@
                 <van-icon name='arrow' />
             </div>
 
+            <p v-if='withdrawMethodVis' class='head-text'>
+                {{ $t('withdraw.withdrawMethod') }}
+            </p>
+            <div v-if='withdrawMethodVis' class='actionBar' @click='selectWithdraw'>
+                <span class='currencySpan'>
+                    {{ withdrawMethod }}
+                </span>
+                <van-icon name='arrow' />
+            </div>
+
             <div class='footerBtn'>
                 <van-button block type='primary' @click='next'>
                     {{ $t('common.nextStep') }}
@@ -34,7 +44,6 @@
             :columns='columns'
             :columns-field-names='customFieldName'
             :default-index='0'
-            :title="$t('withdraw.outAccount')"
             @cancel='outPickerShow = false'
             @confirm='onPickerConfirm'
         />
@@ -45,7 +54,6 @@
             :columns='inCurrencyList'
             :columns-field-names='customFieldName'
             :default-index='0'
-            :title=" $t('withdraw.inAccount')"
             @cancel='inPickerShow = false'
             @confirm='onInPickerConfirm'
         />
@@ -73,7 +81,10 @@ export default {
             outCurrency: '',
             inCurrency: '',
             inCurrencyList: [],
-            currentTab: ''
+            currentTab: '',
+            accountId: route.query.accountId,
+            withdrawMethod: '',
+            withdrawMethodVis: false
 
         })
 
@@ -98,13 +109,18 @@ export default {
 
         const onPickerConfirm = val => {
             state.outPickerShow = false
+            state.accountId = val.accountId
             state.outCurrency = val.currency
         }
 
         const onInPickerConfirm = val => {
             state.inPickerShow = false
-            state.withdrawMethod = val.withdrawMethod
+            state.currentTab = val.withdrawMethod
             state.inCurrency = val.currency
+
+            if (val.withdrawMethod.split(',').length > 1) {
+                state.withdrawMethodVis = true
+            }
         }
 
         // 显示选币弹窗
@@ -122,9 +138,14 @@ export default {
                 query: {
                     currency: state.inCurrency,
                     currentTab: state.currentTab,
-                    tradeType: state.tradeType
+                    tradeType: state.tradeType,
+                    accountId: state.accountId
                 }
             })
+        }
+
+        const selectWithdraw = () => {
+
         }
 
         // 获取到账币种
@@ -158,6 +179,8 @@ export default {
             selectInCurrency,
             onInPickerConfirm,
             customFieldName,
+            selectWithdraw,
+            withdrawMethodVis,
             ...toRefs(state)
         }
     }

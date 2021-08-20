@@ -193,6 +193,7 @@ export default {
             paymentTypes: [],
             currency: route.query.currency,
             accountId: route.query.accountId,
+            tradeType: route.query.tradeType
         })
 
         // 获取账户信息
@@ -311,6 +312,7 @@ export default {
                 customerNo: customInfo.value.customerNo,
                 customerGroupId: customInfo.value.customerGroupId,
                 clientType: 'mobile',
+                accountId: state.accountId,
                 accountCurrency: state.currency,
             }
             state.loading = true
@@ -337,7 +339,7 @@ export default {
             if (state.currencyChecked) {
                 const param = {
                     customerNo: customInfo.value.customerNo,
-                    accountId: customInfo.value.accountId,
+                    accountId: state.accountId,
                     accountCurrency: state.currency,
                     paymentCurrency: state.currencyChecked.split('-').length > 1 ? state.currencyChecked.split('-')[0] : state.currencyChecked
                 }
@@ -426,6 +428,7 @@ export default {
             }
 
             const params = {
+                tradeType: state.tradeType,
                 customerNo: customInfo.value.customerNo,
                 accountId: state.accountId,
                 customerGroupId: customInfo.value.customerGroupId,

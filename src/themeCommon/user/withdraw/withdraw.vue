@@ -12,11 +12,11 @@
             @rightClick='rightClick'
         />
         <!-- 提币模块 -->
-        <div v-if="currentTab === 'digit_wallet'" class='wrap'>
+        <div v-if="currentTab.includes('digit_wallet')" class='wrap'>
             <WithdrawCoin />
         </div>
         <!-- 提现模块 -->
-        <div v-if="currentTab === 'bank'" class='wrap'>
+        <div v-if="currentTab.includes('bank')" class='wrap'>
             <WithdrawMoney />
         </div>
     </div>
@@ -71,21 +71,13 @@ export default {
             rightAction: {}
         })
 
-        // 切换导航栏选项卡
-        const switchTabs = (key) => {
-            if (key === state.currentTab) return
-            if (route.query.tab !== key) router.replace({ name: route.name, query: { tab: key } })
-            state.currentTab = key
-            switch (key) {
-                case 'coin':
-                    state.rightAction.title = t('withdraw.coinRecordText')
-                    state.rightAction.path = '/coinRecord'
-                    break
-                case 'money':
-                    state.rightAction.title = t('withdraw.moneyRecordText')
-                    state.rightAction.path = '/withdrawRecord'
-                    break
-            }
+        // 判断是显示提现记录还是提币记录
+        if (state.currentTab === 'digit_wallet') {
+            state.rightAction.title = t('withdraw.coinRecordText')
+            state.rightAction.path = '/coinRecord'
+        } else if (state.currentTab === 'bank') {
+            state.rightAction.title = t('withdraw.moneyRecordText')
+            state.rightAction.path = '/withdrawRecord'
         }
 
         // 导航栏右侧标题点击跳转
@@ -93,67 +85,15 @@ export default {
             router.push(state.rightAction.path)
         }
 
-        // 获取客户提现方式
-        const getWithdrawWay = () => {
-            state.loading = true
-            getWithdrawMethodList({
-                companyId: customInfo.companyId,
-                customerGroupId: customInfo.customerGroupId,
-                country: customInfo.country,
-                accountId: account.value?.accountId,
-            }).then(res => {
-                state.loading = false
-                const { data } = res
-                if (!data || data.length === 0) {
-                    return Dialog.alert({
-                        title: t('withdraw.hint'),
-                        confirmButtonText: t('withdraw.confirm'),
-                        message: t('withdraw.wayMsg'),
-                    }).then(() => {
-                        router.go(-1)
-                    })
-                } else {
-                    // 设置默认显示提款方式
-                    const wayArr = data.map(elem => elem.withdrawMethod)
-                    const isWithdrawCoin = wayArr.some(name => name === 'digit_wallet')
-                    const isWithdrawMoney = wayArr.some(name => name === 'bank')
-                    // 显示提币功能
-                    if (isWithdrawCoin) {
-                        state.tabs.push({ title: t('withdraw.coinTitle'), key: 'coin' })
-                        state.rightAction.title = t('withdraw.coinRecordText')
-                        state.rightAction.path = '/coinRecord'
-                        state.currentTab = 'coin'
-                    }
-                    // 显示提现功能
-                    if (isWithdrawMoney) {
-                        state.tabs.push({ title: t('withdraw.moneyTitle'), key: 'money' })
-                    }
-                    // 当前显示为提现
-                    if (!isWithdrawCoin && isWithdrawMoney) {
-                        state.rightAction.title = t('withdraw.moneyRecordText')
-                        state.rightAction.path = '/withdrawRecord'
-                        state.currentTab = 'money'
-                    }
-                    if (isWithdrawCoin && isWithdrawMoney && route.query.tab) {
-                        switchTabs(tab)
-                    }
-                }
-            })
-        }
         const init = () => {
             if (accountId) store.commit('_user/Update_account', accountId)
         }
         init()
-        onMounted(() => {
-            // 获取用户提现方式
-            // getWithdrawWay()
-        })
 
         return {
             ...toRefs(state),
-            switchTabs,
-            rightClick,
-            getWithdrawWay
+            rightClick
+
         }
     }
 }

@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "23693572",
+      "name": "切换",
+      "font_class": "qiehuan",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
       "icon_id": "23631892",
       "name": "排序",
       "font_class": "paixu",
@@ -209,13 +216,6 @@
       "unicode_decimal": 58933
     },
     {
-      "icon_id": "14144729",
-      "name": "zixuan1",
-      "font_class": "zixuan1",
-      "unicode": "e63c",
-      "unicode_decimal": 58940
-    },
-    {
       "icon_id": "14144732",
       "name": "zixuan2",
       "font_class": "zixuan2",
@@ -337,7 +337,7 @@
     {
       "icon_id": "22404549",
       "name": "zixuan1",
-      "font_class": "zixuan11",
+      "font_class": "zixuan1",
       "unicode": "e68f",
       "unicode_decimal": 59023
     }

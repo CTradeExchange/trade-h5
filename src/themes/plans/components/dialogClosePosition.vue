@@ -307,7 +307,7 @@ export default {
     transform: translateY(-100%);
 }
 .stepper {
-    background: var(--primaryAssistColor);
+    background: var(--assistColor);
     border-radius: rem(10px);
     &.warn {
         color: var(--warn);
@@ -347,7 +347,7 @@ export default {
         color: var(--color);
         line-height: rem(45px);
         text-align: center;
-        background: var(--primaryAssistColor);
+        background: var(--assistColor);
         border-radius: 4px;
         &.active {
             color: #FFF;
@@ -361,6 +361,7 @@ export default {
         color: #FFF;
         background: var(--primary);
         border: none;
+        border-radius: 0;
     }
 }
 .m-dialogPC {

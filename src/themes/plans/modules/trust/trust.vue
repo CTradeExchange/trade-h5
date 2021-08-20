@@ -85,7 +85,7 @@ import { computed, ref } from 'vue'
 import { Toast, Dialog } from 'vant'
 import { shiftedBy } from '@/utils/calculation'
 import { useStore, useRoute } from 'vuex'
-import { closePboOrder } from '@/api/trade'
+import { closePboOrder, closeTradePboOrder } from '@/api/trade'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 export default {
@@ -122,32 +122,59 @@ export default {
                 title: '提示',
                 message: '确定撤单吗?',
             }).then(() => {
-                loading.value = true
-                const params = {
-                    tradeType: props.product.tradeType,
-                    customerNo: customInfo.value.customerNo,
-                    accountId: props.product.accountId,
-                    pboId: props.product.id,
-                    bizType: props.product.bizType
+                closePendingOrder()
+            }).catch(() => {})
+        }
 
-                }
+        // 取消挂单
+        const closePendingOrder = () => {
+            // if(Number())
+            loading.value = true
+            const params = {
+                tradeType: props.product.tradeType,
+                customerNo: customInfo.value.customerNo,
+                accountId: props.product.accountId,
+                bizType: props.product.bizType
 
-                closePboOrder(params).then(res => {
+            }
+
+            if (Number(props.product.tradeType) === 9) {
+                closeTradePboOrder({
+                    orderId: props.product.id,
+                        ...params,
+                }).then(res => {
                     loading.value = false
                     if (res.check()) {
-                        Toast(t('trade.cancelSuccess'))
-                        store.dispatch('_trade/queryPBOOrderPage', {
-                            tradeType: props.product.tradeType,
-                            sortFieldName: 'orderTime',
-                            sortType: 'desc',
-
-                        })
+                        closeSuccess()
                     }
                 }).catch(err => {
                     loading.value = false
                     console.log(err)
                 })
-            }).catch(() => {})
+            } else {
+                closePboOrder({
+                    pboId: props.product.id,
+                        ...params,
+                }).then(res => {
+                    loading.value = false
+                    if (res.check()) {
+                        closeSuccess()
+                    }
+                }).catch(err => {
+                    loading.value = false
+                    console.log(err)
+                })
+            }
+        }
+
+        const closeSuccess = () => {
+            Toast(t('trade.cancelSuccess'))
+            store.dispatch('_trade/queryPBOOrderPage', {
+                tradeType: props.product.tradeType,
+                sortFieldName: 'orderTime',
+                sortType: 'desc',
+
+            })
         }
 
         return {

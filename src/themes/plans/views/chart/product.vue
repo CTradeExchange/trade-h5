@@ -38,7 +38,9 @@
                         </p><!---->
                     </div><div class='others'>
                         <span :class='product.cur_color'>
-                            {{ product.upDownAmount }}({{ product.upDownAmount_pip }} {{ $t('trade.dot') }})
+                            {{ product.upDownAmount }}<template v-if='product.tradeType !== 9'>
+                                ({{ product.upDownAmount_pip }} {{ $t('trade.dot') }})
+                            </template>
                         </span><div class='others-bottom'>
                             <span class='upDownAmount' :class='product.cur_color'>
                                 {{ product.upDownWidth }}
@@ -493,13 +495,14 @@ export default {
             }
             return product
         })
-        const productList = computed(() => store.state._quote.productList)
         const positionList = computed(() => store.state._trade.positionList[getTradeType()] || [])
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)
 
         // 订阅产品
-        const subscribList = productList.value.map(({ symbolId }) => (`${symbolId}_${getTradeType()}`))
-        QuoteSocket.send_subscribe(subscribList)
+        const subscribeToProduct = () => {
+            QuoteSocket.send_subscribe([`${getSymbolId()}_${getTradeType()}`])
+        }
+        subscribeToProduct()
 
         const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId()))))
 
@@ -638,13 +641,21 @@ export default {
             switch (type) {
                 case 'main': {
                     state.mainStudy = ''
+                    localSetChartConfig('mainStudy', null)
                     break
                 }
                 case 'sub': {
                     state.subStudy = ''
+                    localSetChartConfig('subStudy', null)
                     break
                 }
             }
+
+            const property = [
+                JSON.parse(JSON.parse(localGet('chartConfig')).mainStudy),
+                JSON.parse(JSON.parse(localGet('chartConfig')).subStudy)
+            ]
+            state.onChartReadyFlag && unref(chartRef).updateIndicator(property)
         }
 
         // 缓存图表设置
@@ -753,14 +764,8 @@ export default {
             const invertColor = localGet('invertColor')
             if (isEmpty(locChartConfig)) {
                 localSetChartConfig('showLastPrice', false)
-                localSetChartConfig('mainStudy', JSON.stringify({
-                    name: 'Bollinger Bands',
-                    params: [true, false, [26, 2]]
-                }))
-                localSetChartConfig('subStudy', JSON.stringify({
-                    name: 'Custom MACD',
-                    params: [false, false, [12, 26, 'close', 9]]
-                }))
+                localSetChartConfig('mainStudy', JSON.stringify(MAINSTUDIES[0]))
+                localSetChartConfig('subStudy', JSON.stringify(SUBSTUDIES[0]))
                 localSetChartConfig('resolution', 1)
                 localSetChartConfig('lineSetList', [])
                 localSetChartConfig('chartType', 1)
@@ -796,8 +801,8 @@ export default {
                     }
                 })
             } else {
-                state.mainStudy = JSON.parse(locChartConfig.mainStudy).name
-                state.subStudy = JSON.parse(locChartConfig.subStudy).name
+                state.mainStudy = JSON.parse(locChartConfig.mainStudy)?.name
+                state.subStudy = JSON.parse(locChartConfig.subStudy)?.name
                 state.activeTab = candleKTypeList.find(item => String(item.ktype) === String(locChartConfig.resolution)).ktype
 
                 state.klineType = locChartConfig.chartType
@@ -915,6 +920,7 @@ export default {
             }).then(() => {
                 symbolId.value = product.symbolId
                 tradeType.value = product.tradeType
+                subscribeToProduct()
                 // 重置图表
                 chartRef.value.reset()
                 close()
