@@ -158,7 +158,7 @@ module.exports = {
         'quote-props': 'off',
         'no-prototype-builtins': 'off',
         'camelcase': 'off',
-        'standard/no-callback-literal': 'off'
+        'standard/no-callback-literal': 'off',
     },
     overrides: [{
         files: ['*.vue'],
