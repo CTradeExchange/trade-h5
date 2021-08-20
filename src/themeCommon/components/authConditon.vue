@@ -342,7 +342,8 @@ export default {
         width: 100%;
         color: var(--color);
         font-size: rem(34px);
-        background: var(--contentColor);
+        background: var(--bgColor);
+        border-color: var(--lineColor);
     }
 }
 </style>

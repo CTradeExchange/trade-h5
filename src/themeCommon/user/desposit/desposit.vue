@@ -624,6 +624,9 @@ export default {
                 }
                 &.active {
                     border: rem(2px) solid var(--focusColor);
+                    .t1 {
+                        color: var(--focusColor);
+                    }
                 }
             }
         }
@@ -734,8 +737,8 @@ export default {
 .next-btn {
     position: fixed;
     bottom: 0;
-    background: var(--contentColor);
-    border-color: var(--contentColor);
+    background: var(--bgColor);
+    border-color: var(--lineColor);
     span {
         color: var(--color);
         font-size: rem(34px);

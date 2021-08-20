@@ -128,16 +128,16 @@ export default {
     width: rem(640px);
     height: 100%;
     overflow: hidden;
+    background: var(--contentColor);
     .plansType {
         flex: 0 0 rem(100px);
         border: 0;
     }
     .plansType,
-    .search,
     .tabs {
         box-sizing: border-box;
         width: 100%;
-        padding: 0 rem(30px);
+        padding: 0 rem(20px);
     }
     .tabs {
         margin: rem(20px) 0 0 0;

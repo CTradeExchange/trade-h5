@@ -36,12 +36,10 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import { useI18n } from 'vue-i18n'
 import dayjs from 'dayjs'
 export default {
     props: ['symbolId'],
     setup (props) {
-        const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         // 获取成交数据
         const dealList = computed(() => {
@@ -130,7 +128,7 @@ export default {
         }
     }
     .deal-content {
-        height: rem(300px);
+        // min-height: rem(250px);
         padding: 0 rem(20px);
         overflow: 100%;
         .deal-item {

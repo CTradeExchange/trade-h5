@@ -788,7 +788,7 @@ export default {
                 height: rem(60px);
                 font-size: rem(24px);
                 line-height: rem(60px);
-                background-color: var(--primaryAssistColor);
+                background: none;
                 border: 1px solid var(--lineColor);
                 border-radius: rem(30px);
             }
@@ -851,7 +851,7 @@ export default {
         height: rem(120px);
         margin-top: rem(28px);
         padding: 0 rem(30px);
-        border: 1px solid var(--placeholdColor);
+        border: 1px solid var(--lineColor);
         border-radius: rem(4px);
         :deep(.van-icon-plus) {
             margin-right: rem(26px);
