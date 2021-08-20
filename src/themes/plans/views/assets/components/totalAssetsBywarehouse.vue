@@ -123,8 +123,8 @@ export default {
         color: var(--minorColor);
         font-size: rem(28px);
         .tag {
-            width: rem(35px);
             color: var(--color);
+            font-size: rem(30px);
         }
     }
     .totalAmount {
