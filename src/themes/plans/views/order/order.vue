@@ -51,7 +51,7 @@
                     :product='product'
                 />
                 <!-- 过期类型 -->
-                <CellType
+                <CellExpireType
                     v-if='orderType===10 && [1,2].includes(product.tradeType)'
                     v-model='expireType'
                     :btn-list='expireTypeList'
@@ -94,7 +94,7 @@ import LoanBar from './components/loanBar'
 import PendingBarCFD from './components/pendingBar_CFD'
 import OrderTypeTab from './components/orderType.vue'
 import Assets from './components/assets.vue'
-import CellType from '@plans/components/cellType'
+import CellExpireType from './components/cellExpireType'
 import Trust from './components/trust.vue'
 import OrderHandicap from './components/handicap.vue'
 import plansType from '@plans/components/plansType.vue'
@@ -113,7 +113,7 @@ export default {
         OrderHandicap,
         sidebarProduct,
         Assets,
-        CellType,
+        CellExpireType,
         Trust,
         PendingBar,
         LoanBar,
