@@ -13,7 +13,7 @@
                 </p>
                 <p>{{ data.liabilitiesPrincipal }}</p>
             </div>
-            <div class='alignRgiht'>
+            <div class='alignRight'>
                 <p>{{ $t('assets.frozen') }}</p>
                 <p>{{ data.frozen }}</p>
                 <p class='mtop10'>

@@ -139,8 +139,8 @@ export default {
         color: var(--minorColor);
         font-size: rem(28px);
         .tag {
-            width: rem(35px);
             color: var(--color);
+            font-size: rem(30px);
         }
     }
     .totalAmount {
@@ -167,16 +167,18 @@ export default {
 }
 .btns {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     .van-button {
         display: block;
-        width: 47%;
+        flex: 1;
+        //width: 47%;
         height: rem(60px);
+        margin-right: rem(30px);
         color: var(--primary);
         font-size: rem(24px);
         line-height: rem(60px);
         background: var(--primaryAssistColor);
-        border-color: var(--primaryAssistColor);
+        border-color: var(--primary);
         border-radius: rem(6px);
     }
 }

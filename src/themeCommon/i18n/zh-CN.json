@@ -368,7 +368,8 @@
         "moneySuccessMsg": "您的提现申请已经提交成功，我们将尽快完成审核，如有疑问或其他帮助请联系客服",
         "outAccount": "请选择提现的账户币种",
         "inAccount": "请选择到账币种",
-        "withdrawRecord": "取款明细"
+        "withdrawRecord": "取款明细",
+        "withdrawMethod": "请选择取款方式"
         
     },
     "withdrawMoney": {
