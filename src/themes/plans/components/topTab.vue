@@ -110,8 +110,11 @@ export default {
                 height: 100%;
             }
             &.van-tab--active {
-                background: #F4F7FC;
+                background: var(--primaryAssistColor);
                 border-radius: rem(6px);
+                .text {
+                    font-weight: 700;
+                }
             }
         }
     }

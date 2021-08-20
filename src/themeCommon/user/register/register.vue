@@ -48,7 +48,7 @@
                     <CheckCode v-model.trim='checkCode' clear :label='$t("login.verifyCode")' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
                 </div>
                 <div class='cell'>
-                    <van-checkbox v-model='protocol' shape='square'>
+                    <van-checkbox v-model='protocol' class='checkbox' shape='square'>
                         {{ $t('register.protocol') }}
                     </van-checkbox>
                 </div>
@@ -71,20 +71,18 @@
 <script>
 import Schema from 'async-validator'
 import Top from '@/components/top'
-import VueSelect from '@/components/select'
 import Loading from '@/components/loading'
 import CheckCode from '@/components/form/checkCode'
-import InputComp from '@/components/form/input'
 import areaInput from '@/components/form/areaInput'
-import CurrencyAction from './components/currencyAction'
-import TradeTypeAction from './components/tradeTypeAction'
+// import CurrencyAction from './components/currencyAction'
+// import TradeTypeAction from './components/tradeTypeAction'
 import { getDevice, getQueryVariable, setToken, getArrayObj, sessionGet } from '@/utils/util'
-import { register, openAccount, checkKycApply, checkUserStatus } from '@/api/user'
+import { register, checkUserStatus } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
 import { useStore } from 'vuex'
-import { reactive, toRefs, ref, computed, getCurrentInstance } from 'vue'
+import { reactive, toRefs, computed, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
-import { Toast, Dialog } from 'vant'
+import { Toast } from 'vant'
 import RuleFn, { checkCustomerExistRule } from './rule'
 import { pageConfig } from '@/api/wpApi'
 import { useI18n } from 'vue-i18n'
@@ -95,8 +93,8 @@ export default {
         areaInput,
         CheckCode,
         Loading,
-        CurrencyAction,
-        TradeTypeAction,
+        // CurrencyAction,
+        // TradeTypeAction,
     },
     setup () {
         const instance = getCurrentInstance()
@@ -349,6 +347,16 @@ export default {
     :deep(.van-tabs__nav--line) {
         background: var(--contentColor);
     }
+    :deep(.van-tab) {
+        .van-tab__text {
+            color: var(--minorColor);
+        }
+        &.van-tab--active {
+            .van-tab__text {
+                color: var(--color);
+            }
+        }
+    }
 }
 :deep(.cellRow) {
     padding-top: rem(24px);
@@ -374,7 +382,19 @@ export default {
 .registerBtn {
     height: rem(100px);
     color: var(--color);
-    background: var(--primaryAssistColor);
+    font-size: rem(34px);
+    background: var(--bgColor);
+    border-color: var(--lineColor);
     border-width: 1px 0 0;
+}
+.checkbox {
+    :deep(.van-badge__wrapper) {
+        width: rem(30px);
+        height: rem(30px);
+        overflow: hidden;
+        font-size: rem(26px);
+        line-height: rem(30px);
+        border-radius: 100%;
+    }
 }
 </style>

@@ -93,7 +93,11 @@ export default {
     overflow: hidden;
     .search-input {
         width: 100%;
-        padding: 0 rem(30px);
+        padding: 0 0 0 rem(30px);
+        background: var(--contentColor);
+        :deep(.van-search__action) {
+            padding: 0 rem(30px);
+        }
     }
     .content {
         box-sizing: border-box;
