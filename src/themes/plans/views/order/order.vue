@@ -160,7 +160,7 @@ export default {
 
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
 
-        const accountList = computed(() => store.state._user.customerInfo.accountList)
+        const accountList = computed(() => store.state._user.customerInfo?.accountList)
 
         store.commit('_trade/Update_modifyPositionId', 0)
 
@@ -168,7 +168,7 @@ export default {
         const queryAccountInfo = () => {
             if ([3, 9].indexOf(product.value?.tradeType) === -1) return false
             const proCurrency = state.direction === 'buy' ? product.value?.profitCurrency : product.value?.baseCurrency
-            const curAccount = customerInfo.value.accountList.find(({ currency, tradeType }) => (currency === proCurrency && tradeType === product.value.tradeType))
+            const curAccount = customerInfo.value?.accountList?.find(({ currency, tradeType }) => (currency === proCurrency && tradeType === product.value.tradeType))
             if (curAccount)store.dispatch('_user/queryAccountAssetsInfo', { accountId: curAccount.accountId, tradeType: product.value?.tradeType })
             else Toast(t('trade.nullAssets'))
         }
@@ -220,7 +220,7 @@ export default {
                 if (state.orderHandicapVisible)QuoteSocket.deal_subscribe([symbolId], 5, curDigits, tradeType)
                 if (tradeType === '9') store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
 
-                const list = accountList.value.filter(el => el.tradeType === Number(product.tradeType))
+                const list = accountList.value?.filter(el => el.tradeType === Number(product.tradeType))
                 const accountIds = []
                 if (list.length > 0) {
                     list.forEach(element => {

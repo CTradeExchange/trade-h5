@@ -5,7 +5,7 @@
         <Fastlink />
         <BanderBanner class='BanderBanner' :list='BannerConfig.mini' />
         <!-- <News class='newBar' /> -->
-        <InformationFlow class='newBar' />
+        <InformationFlow class='newBar' :lang='lang' :orgid='$store.state._base.wpCompanyInfo.orgid' />
     </div>
 </template>
 
@@ -20,7 +20,9 @@ import InformationFlow from './components/informationFlow'
 import Products from './components/products'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { ref } from '@vue/reactivity'
-import { onMounted } from '@vue/runtime-core'
+import { onActivated, onMounted } from '@vue/runtime-core'
+import { localGet } from '@/utils/util'
+import { useStore } from 'vuex'
 
 export default {
     name: 'Home',
@@ -34,17 +36,20 @@ export default {
     },
     setup () {
         const productsRef = ref(null)
+        const lang = ref(localGet('lang'))
         const calcSubscribeProducts = () => {
             let list = productsRef.value?.products || []
             list = list.map(el => el.symbolId)
             return list
         }
-        onMounted(() => {
+        onActivated(() => {
+            lang.value = localGet('lang')
             // 订阅产品
             const subscribList = calcSubscribeProducts()
             if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
         })
         return {
+            lang,
             productsRef,
             BannerConfig,
             NoticeConfig
