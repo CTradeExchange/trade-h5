@@ -431,13 +431,18 @@ export default {
             background: var(--bgColor);
             box-shadow: none;
             .van-dropdown-menu__item {
+                position: relative;
                 justify-content: space-between;
                 height: rem(48px);
                 margin: 0 rem(10px);
                 padding: 0 rem(5px);
                 background: var(--contentColor);
                 .van-dropdown-menu__title {
-
+                    position: static;
+                    &::after {
+                        right: rem(10px);
+                        border-color: transparent transparent  var(--normalColor) var(--normalColor);
+                    }
                 }
             }
         }
