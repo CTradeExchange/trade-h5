@@ -47,9 +47,11 @@
                     {{ $t('trade.daihuan') + ' ' + inAccount?.liabilities + ' ' + inCurrency }}
                 </p>
             </div>
-            <van-button block class='returnBtn' :loading='loading' type='primary' @click='returnMoney'>
-                {{ $t('trade.huan') }} {{ inCurrency }}
-            </van-button>
+            <div class='footerBtn'>
+                <van-button block class='returnBtn' :loading='loading' @click='returnMoney'>
+                    {{ $t('trade.huan') }} {{ inCurrency }}
+                </van-button>
+            </div>
         </div>
 
         <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
@@ -310,6 +312,7 @@ export default {
                 height: rem(40px);
                 margin-left: rem(20px);
                 padding-left: rem(20px);
+                line-height: rem(40px);
                 border-left: 1px solid var(--lineColor);
             }
             .all {
@@ -331,11 +334,24 @@ export default {
             color: var(--minorColor);
             font-size: rem(20px);
         }
-        .returnBtn {
-            position: absolute;
+        .footerBtn {
+            position: fixed;
             bottom: 0;
             left: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
             width: 100%;
+            .van-button {
+                flex: 1;
+                height: rem(80px);
+                margin: rem(20px);
+                //margin-bottom: rem(20px);
+                color: #FFF;
+                font-size: rem(30px);
+                //width: 45%;
+                background: var(--primary);
+            }
         }
     }
     .assetsPicker {

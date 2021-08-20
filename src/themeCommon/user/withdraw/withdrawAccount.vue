@@ -21,6 +21,16 @@
                 <van-icon name='arrow' />
             </div>
 
+            <p v-if='withdrawMethodVis' class='head-text'>
+                {{ $t('withdraw.withdrawMethod') }}
+            </p>
+            <div v-if='withdrawMethodVis' class='actionBar' @click='selectWithdraw'>
+                <span class='currencySpan'>
+                    {{ withdrawMethod }}
+                </span>
+                <van-icon name='arrow' />
+            </div>
+
             <div class='footerBtn'>
                 <van-button block type='primary' @click='next'>
                     {{ $t('common.nextStep') }}
@@ -72,7 +82,9 @@ export default {
             inCurrency: '',
             inCurrencyList: [],
             currentTab: '',
-            accountId: route.query.accountId
+            accountId: route.query.accountId,
+            withdrawMethod: '',
+            withdrawMethodVis: false
 
         })
 
@@ -105,6 +117,10 @@ export default {
             state.inPickerShow = false
             state.currentTab = val.withdrawMethod
             state.inCurrency = val.currency
+
+            if (val.withdrawMethod.split(',').length > 1) {
+                state.withdrawMethodVis = true
+            }
         }
 
         // 显示选币弹窗
@@ -126,6 +142,10 @@ export default {
                     accountId: state.accountId
                 }
             })
+        }
+
+        const selectWithdraw = () => {
+
         }
 
         // 获取到账币种
@@ -159,6 +179,8 @@ export default {
             selectInCurrency,
             onInPickerConfirm,
             customFieldName,
+            selectWithdraw,
+            withdrawMethodVis,
             ...toRefs(state)
         }
     }

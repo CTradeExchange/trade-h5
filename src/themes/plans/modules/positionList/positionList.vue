@@ -11,7 +11,7 @@
                 {{ userAccount?.profitLoss || '--' }}
             </span>
         </p>
-
+        {{ loading }}***
         <van-loading v-if='loading' class='loading' />
 
         <positionItem

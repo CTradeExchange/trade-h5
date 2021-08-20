@@ -109,7 +109,10 @@ export default {
         const handleTradeType = (val) => {
             const curIndex = plans.value.findIndex(item => item.id === val)
             assetsSwipe.value.swipeTo(curIndex)
+            initData(val)
+        }
 
+        const initData = (val) => {
             if ([1, 2].indexOf(Number(val)) > -1) {
                 queryPositionList(val)
             } else if ([3, 9].indexOf(Number(val)) > -1) {
@@ -125,6 +128,10 @@ export default {
 
         const onChange = (index) => {
             store.commit('_quote/Update_tradeType', plans.value[index].id)
+        }
+
+        if (tradeType.value) {
+            initData(tradeType.value)
         }
 
         onMounted(() => {

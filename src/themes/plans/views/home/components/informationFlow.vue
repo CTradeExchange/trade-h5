@@ -299,7 +299,6 @@ export default {
                 id,
                 orgid
             }).then((data) => {
-                debugger
                 if (Array.isArray(data) && data.length > 0) {
                     state.calendarList = data
                     // getNewsListByTypeByPage(data[0])
