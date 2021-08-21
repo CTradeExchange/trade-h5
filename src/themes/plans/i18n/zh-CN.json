@@ -577,6 +577,10 @@
     "daysAgo": "天前",
     "weekAgo": "周前",
     "monthAgo": "月前",
-    "yearAgo": "年前"
+    "yearAgo": "年前",
+    "focusNews":"要闻",
+    "newsFlash":"7x24",
+    "calendar":"财经日历"
+    
   }
 }
