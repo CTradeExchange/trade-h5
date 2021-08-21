@@ -134,11 +134,11 @@
 import Top from '@/components/top'
 import { onBeforeMount, reactive, computed, toRefs, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply } from '@/api/user'
+import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal } from '@/api/user'
 import { getListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
-import { isEmpty } from '@/utils/util'
+import { isEmpty, sessionGet } from '@/utils/util'
 import dayjs from 'dayjs'
 import { mul } from '@/utils/calculation'
 import { useI18n } from 'vue-i18n'
@@ -193,7 +193,7 @@ export default {
             paymentTypes: [],
             currency: route.query.currency,
             accountId: route.query.accountId,
-            tradeType: route.query.tradeType
+            tradeType: route.query.tradeType,
         })
 
         // 获取账户信息
@@ -254,8 +254,35 @@ export default {
         }
 
         const onConfirm = () => {
-            sessionStorage.removeItem('proposalNo')
-            router.replace('/position')
+            // 请求存款提案
+            const proposalNo = sessionGet('proposalNo')
+            if (proposalNo) {
+                const params = {
+                    customerNo: customInfo.value.customerNo,
+                    proposalNo
+                }
+                queryDepositProposal(params).then(res => {
+                    if (res.check()) {
+                        if (Number(res.data.paymentStatus) === 2) {
+                            router.push('/assets')
+                        } else {
+                            Dialog.alert({
+                                title: t('common.tip'),
+                                message: t('deposit.despositFail'),
+                                confirmButtonText: t('deposit.toRecord'),
+                            }).then(() => {
+                                router.push('/despositRecord')
+                            })
+                        }
+                        sessionStorage.removeItem('proposalNo')
+                    }
+                }).catch(err => {
+                    state.loading = false
+                    console.log(err)
+                })
+            }
+
+            // router.replace('/position')
         }
 
         const onCancel = () => {
@@ -565,7 +592,8 @@ export default {
             payTypesSortEnable,
             payTypesSortDisable,
             onlineServices,
-            changePayCurrency
+            changePayCurrency,
+
         }
     }
 }

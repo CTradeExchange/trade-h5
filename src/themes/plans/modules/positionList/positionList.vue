@@ -138,6 +138,7 @@ export default {
         color: var(--color);
         font-size: rem(28px);
         line-height: rem(100px);
+        border-bottom: solid rem(1px) var(--lineColor);
         .fr {
             font-weight: bold;
             font-size: rem(34px);
