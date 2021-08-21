@@ -146,10 +146,10 @@
 import { reactive } from 'vue'
 import dayjs from 'dayjs'
 import { useI18n } from 'vue-i18n'
-import { newsListByType, newsListByTypeByPage, canlendarListByDate, articleDetail } from '@/api/information'
+import { newsListByTypeByPage, canlendarListByDate, articleDetail } from '@/api/information'
 export default {
-
-    setup () {
+    props: ['lang', 'orgid'],
+    setup (props) {
         const state = reactive({
             count: 0,
             isLoading: false,
@@ -161,13 +161,16 @@ export default {
             canlendarType: 1,
             direction: 0,
             activeTab: 0,
-            newsTypes: [],
+            newsTypes: [
+            ],
             newsList: [],
             lastWeek: [],
             weekdays: [],
             nextWeek: [],
             extraWeekDays: [],
             timeAxis: 0,
+            firstFocusNewsParams: {},
+            firstNewsFlashParams: {},
             focusNews: { // 要闻
                 list: [],
                 page: 1,
@@ -190,6 +193,33 @@ export default {
             filterCalendarList: []
         })
         const { t } = useI18n({ useScope: 'global' })
+        state.newsTypes = [
+
+            {
+                id: 7,
+                name: t('information.focusNews')
+            },
+            {
+                id: 8,
+                name: t('information.newsFlash')
+            },
+            {
+                id: 10,
+                name: t('information.calendar')
+            }
+        ]
+        state.firstFocusNewsParams = {
+            page: 1,
+            pageSize: 10,
+            type: 7, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
+            orgid: props.orgid // 机构id
+        }
+        state.firstNewsFlashParams = {
+            page: 1,
+            pageSize: 10,
+            type: 8, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
+            orgid: props.orgid // 机构id
+        }
         const today = dayjs().format('YYYY年MM月DD日')
         // 倒序时间(刚刚，几分钟前，几个小时前，几天前，几周前，几个月前等)
         const beforeTime = (dateTimeStamp) => {
@@ -256,116 +286,102 @@ export default {
             }
             return result
         }
-        const getNewsListByTypeByPage = (record) => {
-            newsListByTypeByPage({
-                page: 1,
-                pageSize: 10,
-                type: 7, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
-                orgid: 2 // 机构id
-            }, state.lange).then(({ data, page, pageSize, total }) => {
-                if (Array.isArray(data) && data.length > 0) {
-                    state.newsList = data
-                    // getNewsListByTypeByPage(data[0])
-                }
-            })
-        }
+        // const getNewsListByTypeByPage = (record) => {
+        //     newsListByTypeByPage({
+        //         page: 1,
+        //         pageSize: 10,
+        //         type: 7, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
+        //         orgid: 2 // 机构id
+        //     }, props.lang).then(({ data, page, pageSize, total }) => {
+        //         if (Array.isArray(data) && data.length > 0) {
+        //             state.newsList = data
+        //             // getNewsListByTypeByPage(data[0])
+        //         }
+        //     })
+        // }
         const getNewsListByType = (params, callback) => {
-            newsListByTypeByPage(params, state.lange).then(({ data, pages }) => {
-                typeof (callback) === 'function' && callback({ data: data, pages: pages })
+            newsListByTypeByPage(params, props.lang).then(({ data, pages, page }) => {
+                typeof (callback) === 'function' && callback({ data, pages, page })
             })
         }
-        const getNewsFlash = (callback) => {
-            newsListByTypeByPage({
-                page: 1,
-                pageSize: 10,
-                type: 8, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
-                orgid: 2 // 机构id
-            }, state.lange).then(({ data }) => {
-                typeof (callback) === 'function' && callback()
-                if (Array.isArray(data) && data.length > 0) {
-                    const tempData = data.map(el => ({ ...el, shotTime: el.addtime_text.slice(11, 16) }))
-                    if (state.newsFlash.timeAxis > 0) {
-                        const filterData = tempData.filter(el => el.addtime > state.newsFlash.timeAxis)
-                        state.newsFlash.list = [...filterData, ...state.newsFlash.list]
-                    } else {
-                        state.newsFlash.list = [...tempData]
-                    }
-                    state.newsFlash.timeAxis = data[0].addtime
-                }
-            })
-        }
+        // const getNewsFlash = (callback) => {
+        //     newsListByTypeByPage({
+        //         page: 1,
+        //         pageSize: 10,
+        //         type: 8, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
+        //         orgid: 2 // 机构id
+        //     }, props.lang).then(({ data }) => {
+        //         typeof (callback) === 'function' && callback()
+        //         if (Array.isArray(data) && data.length > 0) {
+        //             const tempData = data.map(el => ({ ...el, shotTime: el.addtime_text.slice(11, 16) }))
+        //             if (state.newsFlash.timeAxis > 0) {
+        //                 const filterData = tempData.filter(el => el.addtime > state.newsFlash.timeAxis)
+        //                 state.newsFlash.list = [...filterData, ...state.newsFlash.list]
+        //             } else {
+        //                 state.newsFlash.list = [...tempData]
+        //             }
+        //             state.newsFlash.timeAxis = data[0].addtime
+        //         }
+        //     })
+        // }
         const onLoadFocusNews = () => { // 要闻上拉加载
-            state.focusNews.page++
-            getNewsListByType({
-                page: state.focusNews.page,
-                pageSize: 10,
-                type: 7, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
-                orgid: 2 // 机构id
-            }, ({ data, pages }) => {
+            if (state.focusNews.list.length > 0) {
+                state.focusNews.page++
+            }
+            getNewsListByType({ ...state.firstFocusNewsParams, page: state.focusNews.page }, ({ data, page, pages }) => {
                 state.focusNews.loading = false
                 if (state.focusNews.page >= pages) {
                     state.focusNews.finished = true
                 }
                 if (Array.isArray(data) && data.length > 0) {
                     const tempData = data.map(el => ({ ...el, updatetimeStr: beforeTime(el.updatetime * 1000) }))
-                    state.focusNews.list = [...state.focusNews.list, ...tempData]
+                    state.focusNews.list = Number(page) > 1 ? [...state.focusNews.list, ...tempData] : tempData
                 }
             })
         }
         const onLoadNewsFlash = () => { // 快讯上拉加载
-            // debugger
-            state.newsFlash.page++
-            getNewsListByType({
-                page: state.newsFlash.page,
-                pageSize: 10,
-                type: 8, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
-                orgid: 2 // 机构id
-            }, ({ data, pages }) => {
+            if (state.newsFlash.list.length > 0) {
+                state.newsFlash.page++
+            }
+            getNewsListByType({ ...state.firstNewsFlashParams, page: state.newsFlash.page }, ({ data, page, pages }) => {
                 state.newsFlash.loading = false
                 if (state.newsFlash.page >= pages) {
                     state.newsFlash.finished = true
                 }
                 if (Array.isArray(data) && data.length > 0) {
-                    state.newsFlash.list = [...state.newsFlash.list, ...data]
+                    const tempData = data.map(el => ({ ...el, shotTime: el.addtime_text.slice(11, 16) }))
+                    state.newsFlash.list = Number(page) > 1 ? [...state.newsFlash.list, ...tempData] : tempData
                 }
             })
         }
-        const onFocusNewsRefresh = () => { // 要闻上拉加载
-            getNewsListByType({
-                page: 1,
-                pageSize: 10,
-                type: 7, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
-                orgid: 2 // 机构id
-            }, ({ data }) => {
+        const onFocusNewsRefresh = () => { // 要闻下拉刷新
+            getNewsListByType(state.firstFocusNewsParams, ({ data }) => {
                 state.focusNews.refreshing = false
                 if (Array.isArray(data) && data.length > 0) {
                     const tempData = data.map(el => ({ ...el, shotTime: el.addtime_text }))
-                    if (state.focusNews.timeAxis > 0) {
-                        const filterData = tempData.filter(el => el.addtime > state.focusNews.timeAxis)
-                        state.focusNews.list = [...filterData, ...state.focusNews.list]
-                    } else {
-                        state.focusNews.list = [...tempData]
-                    }
+                    // if (state.focusNews.timeAxis > 0) {
+                    //     const filterData = tempData.filter(el => el.addtime > state.focusNews.timeAxis)
+                    //     state.focusNews.list = [...filterData, ...state.focusNews.list]
+                    // } else {
+                    //     state.focusNews.list = [...tempData]
+                    // }
+                    state.focusNews.list = [...tempData]
                     state.focusNews.timeAxis = data[0].addtime
                 }
             })
         }
         const onNewsFlashRefresh = () => { // 快讯下拉刷新
-            getNewsListByType({
-                page: 1,
-                pageSize: 10,
-                type: 8, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
-                orgid: 2 // 机构id
-            }, ({ data }) => {
+            getNewsListByType(state.firstNewsFlashParams, ({ data }) => {
                 state.newsFlash.refreshing = false
                 if (Array.isArray(data) && data.length > 0) {
                     const tempData = data.map(el => ({ ...el, shotTime: el.addtime_text.slice(11, 16) }))
-                    if (state.newsFlash.timeAxis > 0) {
-                        const filterData = tempData.filter(el => el.addtime > state.newsFlash.timeAxis)
-                        state.newsFlash.list = [...filterData, ...state.newsFlash.list]
-                    } else {
-                        state.newsFlash.list = [...tempData]
-                    }
+                    // if (state.newsFlash.timeAxis > 0) {
+                    //     const filterData = tempData.filter(el => el.addtime > state.newsFlash.timeAxis)
+                    //     state.newsFlash.list = [...filterData, ...state.newsFlash.list]
+                    // } else {
+                    //     state.newsFlash.list = [...tempData]
+                    // }
+                    state.newsFlash.list = [...tempData]
                     state.newsFlash.timeAxis = data[0].addtime
                 }
             })
@@ -375,28 +391,16 @@ export default {
             state.timeAxis = timeAxis
             canlendarListByDate({
                 timestamp: timeAxis
-            }).then((data) => {
-                // debugger
+            }, props.lang).then((data) => {
                 if (Array.isArray(data) && data.length > 0) {
                     state.calendarList = data
                     changeCanlendarType(state.canlendarType)
-                    // getNewsListByTypeByPage(data[0])
                 }
             })
         }
         const tabClick = (name) => {
             if (name === 1 && state.newsFlash.list.length === 0) {
-                getNewsListByType({
-                    page: 1,
-                    pageSize: 10,
-                    type: 8, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
-                    orgid: 2 // 机构id
-                }, ({ data }) => {
-                    state.newsFlash.loading = false
-                    if (Array.isArray(data) && data.length > 0) {
-                        state.newsFlash.list = data
-                    }
-                })
+                onLoadNewsFlash()
             }
             if (name === 2 && state.calendarList.length === 0) {
                 renderCalendar()
@@ -409,25 +413,6 @@ export default {
             }).then((data) => {
                 if (Array.isArray(data) && data.length > 0) {
                     state.calendarList = data
-                    // getNewsListByTypeByPage(data[0])
-                }
-            })
-        }
-        const getNewsType = () => {
-            newsListByType({ orgid: 1, langue_type: 'zn' }, state.lange).then(typeList => {
-                if (Array.isArray(typeList) && typeList.length > 0) {
-                    state.newsTypes = typeList
-                    getNewsListByType({
-                        page: 1,
-                        pageSize: 10,
-                        type: 7, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
-                        orgid: 2 // 机构id
-                    }, ({ data }) => {
-                        state.focusNews.loading = false
-                        if (Array.isArray(data) && data.length > 0) {
-                            state.focusNews.list = data.map(el => ({ ...el, updatetimeStr: beforeTime(el.updatetime * 1000) }))
-                        }
-                    })
                 }
             })
         }
@@ -470,13 +455,10 @@ export default {
         }
 
         renderCalendar()
-        getNewsType()
         return {
             state,
             today,
-            getNewsListByTypeByPage,
-            getNewsType,
-            getNewsFlash,
+            getNewsListByType,
             getCalendar,
             getArticleDetail,
             tabClick,
@@ -496,7 +478,7 @@ export default {
 @import '~@/sass/mixin.scss';
 .m-infoflow_title {
     padding: rem(20px) rem(30px);
-    color: #121C32;
+    color: var(--color);
     font-size: rem(34px);
 }
 .container {
@@ -507,12 +489,12 @@ export default {
         left: 0;
         z-index: 100;
         height: rem(80px);
-        background: #FFF;
+        background: var(--contentColor);
         border: none;
-        border-bottom: 1px solid #F1F1F1;
+        border-bottom: 1px solid var(--lineColor);
     }
     :deep(.van-tab) {
-        color: rgb(118, 126, 143);
+        color: var(--placeholdColor);
         font-size: rem(30px);
         line-height: 40px;
     }
@@ -526,7 +508,7 @@ export default {
         display: flex;
         flex-direction: row;
         padding: rem(26px) 0;
-        border-color: #F1F1F1;
+        border-color: var(--lineColor);
         border-bottom-width: 1px;
         border-bottom-style: solid;
         .new-left {
@@ -542,17 +524,17 @@ export default {
             -webkit-box-orient: vertical;
             a {
                 display: block;
-                color: #111;
+                color: var(--color);
                 font-size: rem(30px);
                 line-height: rem(54px);
                 span {
                     height: rem(34px);
                     margin-right: 5px;
                     padding: rem(4px);
-                    color: #FFF;
+                    color: var(--placeholdColor);
                     font-size: rem(18px);
-                    background-color: #DC143C;
-                    border: 1px solid #DC143C;
+                    background-color: var(--riseColor);
+                    border: 1px solid var(--riseColor);
                     border-radius: 2px;
                 }
             }
@@ -564,7 +546,7 @@ export default {
             justify-content: space-between;
             height: rem(54px);
             span {
-                color: #767E8F;
+                color: var(--placeholdColor);
                 font-size: rem(26px);
             }
         }
@@ -580,7 +562,7 @@ export default {
 }
 .story-date {
     padding: 0 rem(26px);
-    color: #626262;
+    color: var(--placeholdColor);
     font-weight: 700;
     font-size: rem(26px);
     line-height: rem(80px);
@@ -594,7 +576,7 @@ export default {
         left: 0;
         width: 1px;
         height: 100%;
-        background-color: #F1F1F1;
+        background-color: var(--lineColor);
         content: '';
     }
     &::after {
@@ -603,7 +585,7 @@ export default {
         left: rem(-6px);
         width: rem(14px);
         height: rem(14px);
-        background-color: #A1A6B1;
+        background-color: var(--lineColor);
         border-radius: rem(14px);
         content: '';
     }
@@ -611,19 +593,19 @@ export default {
         position: absolute;
         top: rem(14px);
         left: rem(-18px);
-        color: #8F8E93;
+        color: var(--assistColor);
         font-size: rem(40px);
     }
     .story-time {
         padding-top: rem(22px);
         padding-bottom: rem(6px);
-        color: #8F8E93;
+        color: var(--placeholdColor);
         font-size: rem(26px);
     }
     .story-text {
         display: -webkit-box;
         overflow: hidden;
-        color: #111;
+        color: var(--color);
         font-size: rem(28px);
         line-height: rem(52px);
         text-overflow: ellipsis;
@@ -662,8 +644,8 @@ export default {
                 justify-content: space-between;
                 min-height: rem(160px);
                 padding-bottom: 15px;
-                color: #888;
-                border-bottom: 1px solid #F1F1F1;
+                color: var(--minorColor);
+                border-bottom: 1px solid var(--lineColor);
                 .top {
                     display: flex;
                     align-items: center;
@@ -671,7 +653,7 @@ export default {
                 }
                 .middle {
                     margin-bottom: 10px;
-                    color: #555;
+                    color: var(--normalColor);
                     font-size: rem(28px);
                     line-height: rem(52px);
                     text-align: justify;
@@ -694,15 +676,15 @@ export default {
         align-items: center;
         justify-content: center;
         height: 0.93333rem;
-        background-color: #3C71E3;
+        background-color: var(--primary);
         span {
             display: block;
             height: 0.53333rem;
             padding: 0 10px;
-            color: #FFF;
+            color: var(--contentColor);
             font-size: 0.32rem;
             line-height: 0.53333rem;
-            border: 1px solid #FFF;
+            border: 1px solid var(--contentColor);
             &.t1 {
                 border-top-left-radius: 2px;
                 border-bottom-left-radius: 2px;
@@ -712,8 +694,8 @@ export default {
                 border-bottom-right-radius: 2px;
             }
             &.actived {
-                color: #3C71E3;
-                background-color: #FFF;
+                color: var(--primary);
+                background-color: var(--contentColor);
             }
         }
     }
@@ -736,11 +718,11 @@ export default {
                 vertical-align: middle;
             }
             &.actived {
-                background-color: #477FD3;
+                background-color: var(--primary);
                 border-radius: 50%;
                 transform: rotate(270deg);
                 i {
-                    color: #FFFF;
+                    color: var(--contentColor);
                 }
             }
         }
@@ -764,15 +746,15 @@ export default {
                 border-radius: rem(6px);
             }
             .actived {
-                color: #3C71E3;
-                background-color: #EDF3FF;
+                color: var(--primary);
+                background-color: var(--bgColor);
             }
         }
         .extra-week {
             position: absolute;
             top: 100%;
             width: 100%;
-            background-color: #EDF3FF;
+            background-color: var(--bgColor);
             border-radius: 0.26667rem;
         }
     }
