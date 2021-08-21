@@ -62,10 +62,10 @@
             </li>
         </ul>
         <div class='footerBtn'>
-            <van-button v-if='Number(tradeType) === 3' block type='primary' @click='toLoan'>
+            <van-button v-if='Number(tradeType) === 3' block @click='toLoan'>
                 {{ $t('trade.loan') }}
             </van-button>
-            <van-button block type='primary' @click='toReturnMoney'>
+            <van-button block :class="{ 'full': Number(tradeType) === 9 }" @click='toReturnMoney'>
                 {{ $t('trade.repayment') }}
             </van-button>
         </div>
@@ -190,13 +190,17 @@ export default {
     justify-content: space-evenly;
     width: 100%;
     .van-button {
-        //width: 45%;
-        flex: 1;
+        width: 45%;
         height: rem(80px);
-        margin: rem(20px);
-        //margin-bottom: rem(20px);
+        //margin: rem(20px);
+        margin-bottom: rem(20px);
         color: #FFF;
         font-size: rem(30px);
+        background: var(--primary);
+        &.full {
+            width: 100%;
+            margin: rem(20px);
+        }
     }
 }
 </style>

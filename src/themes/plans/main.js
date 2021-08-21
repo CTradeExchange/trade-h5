@@ -44,10 +44,6 @@ const token = getToken()
 if (isEmpty(localGet('invertColor'))) {
     localSet('invertColor', 'light')
 }
-// 启用新闻设置默认值
-if (isEmpty(localStorage.getItem('openNews'))) {
-    localStorage.setItem('openNews', true)
-}
 
 setRouter(router)
 setRootVariable(localGet('invertColor'))

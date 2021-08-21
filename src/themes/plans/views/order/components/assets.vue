@@ -16,16 +16,6 @@
         </van-row>
 
         <div class='borrowMoney'>
-            <van-radio-group v-model='checked' direction='horizontal' @change='changeOperationType'>
-                <van-radio :name='2'>
-                    {{ $t('trade.autoLoan') }}
-                    <van-icon class='questionIcon' name='question-o' @click.stop='lilvAlert=true' />
-                </van-radio>
-                <van-radio v-if='product.tradeType === 3' :name='3'>
-                    {{ $t('trade.autoRepayment') }}
-                    <van-icon class='questionIcon' name='question-o' @click.stop='lilvAlert2=true' />
-                </van-radio>
-            </van-radio-group>
             <van-row class='mtop10' justify='space-between'>
                 <van-col v-if='product.tradeType===3'>
                     {{ $t('trade.availableLoanAmount') }}
@@ -53,18 +43,6 @@
                 <p>{{ $t('trade.availableLoanContent2') }}</p>
             </div>
         </van-dialog>
-        <!-- 自动借款的解说 -->
-        <van-dialog v-model:show='lilvAlert' title=''>
-            <div class='availableLoanContent'>
-                <p>{{ $t('trade.availableLoanContent3', [dailyInterest]) }}</p>
-            </div>
-        </van-dialog>
-        <!-- 自动还款的解说 -->
-        <van-dialog v-model:show='lilvAlert2' title=''>
-            <div class='availableLoanContent'>
-                <p>{{ $t('trade.availableLoanContent6') }}</p>
-            </div>
-        </van-dialog>
     </div>
 </template>
 
@@ -73,29 +51,19 @@ import { computed, reactive, ref, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import { mul, div, toFixed } from '@/utils/calculation'
 export default {
-    props: ['direction', 'product', 'volume', 'operationType', 'account'],
-    emits: ['update:operationType'],
+    props: ['direction', 'product', 'volume', 'account'],
     setup (props, { emit }) {
         const store = useStore()
         const checked = ref(2)
         const loanTradeType9 = ref(false)
         const loanTradeType3 = ref(false)
-        const lilvAlert = ref(false)
-        const lilvAlert2 = ref(false)
         watch(
             () => props.operationType,
             newval => { checked.value = newval },
             { immediate: true }
         )
-        const changeOperationType = val => emit('update:operationType', val)
 
         const accountMap = computed(() => store.state._user.customerInfo?.accountMap)
-        const dailyInterest = computed(() => {
-            const assetsId = props.account?.assetsId
-            const interest = props.product.borrowInterestList?.find(item => Number(item.assetsId) === Number(assetsId))?.value
-
-            return interest ? mul(interest, 100) + '%' : '--'
-        })
 
         // 最大可借额度
         const maxBorrow = computed(() => {
@@ -124,11 +92,7 @@ export default {
         return {
             loanTradeType3,
             loanTradeType9,
-            lilvAlert,
-            lilvAlert2,
             checked,
-            changeOperationType,
-            dailyInterest,
             maxBorrow,
             lockFunds,
         }
@@ -144,11 +108,14 @@ export default {
     line-height: 1.5;
 }
 .borrowMoney {
-    margin-top: rem(80px);
+    margin-top: rem(20px);
     color: var(--minorColor);
     font-size: rem(24px);
     :deep(.van-radio__icon .van-icon) {
-        line-height: 1;
+        width: rem(30px);
+        height: rem(30px);
+        font-size: rem(26px);
+        line-height: 0.9;
     }
     .questionIcon {
         font-size: rem(30px);

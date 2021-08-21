@@ -3,7 +3,7 @@ import axios from 'axios'
 
 // create an axios instance
 const service = axios.create({
-    baseURL: 'https://news.displore.com.cn', // url = base url + request url
+    baseURL: '', // url = base url + request url
     timeout: 60000 // request timeout
 })
 const headers = service.defaults.headers

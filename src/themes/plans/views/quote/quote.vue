@@ -137,6 +137,9 @@ export default {
     font-size: rem(20px);
     line-height: rem(60px);
     background-color: var(--contentColor);
+    &::after {
+        border-color: var(--bgColor);
+    }
     .item {
         width: rem(210px);
         text-align: right;

@@ -139,7 +139,7 @@ export default {
 .page-wrap {
     flex: 1;
     height: 100%;
-    padding-top: rem(95px);
+    padding-top: rem(90px);
     overflow: auto;
     background-color: var(--bgColor);
     .tabs {

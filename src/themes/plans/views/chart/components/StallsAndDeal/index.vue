@@ -97,7 +97,7 @@ export default {
 @import '@/sass/mixin.scss';
 .stallsAndDeal {
     min-width: rem(200px);
-    height: rem(890px);
+    // min-height: rem(750px);
     margin-top: rem(10px);
     margin-bottom: rem(30px);
     background: var(--contentColor);

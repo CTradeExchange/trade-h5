@@ -167,6 +167,12 @@
                                     </el-card>
                                 </div>
                             </el-form-item>
+                            <el-form-item label='信息流 orgid'>
+                                <el-input
+                                    v-model='form.orgid'
+                                    placeholder='请输入'
+                                />
+                            </el-form-item>
                             <el-form-item label='apiService'>
                                 <el-input
                                     v-model='form.apiService'
@@ -427,6 +433,7 @@ export default {
                 // tradeTypeList: '',
                 // tradeTypeList: '',
                 apiService: '',
+                orgid: '',
                 quoteService: '',
                 msgService: '',
                 tradeService: '',

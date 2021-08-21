@@ -166,8 +166,9 @@ export default {
             }
             .van-button {
                 padding: 0 rem(30px);
-                background: var(--primaryAssistColor);
+                // background: var(--primaryAssistColor);
                 .btn-text {
+                    padding-right: rem(6px);
                     color: var(--color);
                     vertical-align: middle;
                 }

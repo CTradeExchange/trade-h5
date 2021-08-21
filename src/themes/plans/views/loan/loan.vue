@@ -49,10 +49,11 @@
                     </div>
                 </div>
             </div>
-
-            <van-button block class='returnBtn' :loading='loading' type='primary' @click='handleLoan'>
-                {{ $t('trade.get') }} {{ curCurrency }}
-            </van-button>
+            <div class='footerBtn'>
+                <van-button block class='returnBtn' :loading='loading' type='primary' @click='handleLoan'>
+                    {{ $t('trade.get') }} {{ curCurrency }}
+                </van-button>
+            </div>
         </div>
     </div>
     <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
@@ -290,11 +291,20 @@ export default {
                 }
             }
         }
-        .returnBtn {
-            position: absolute;
+        .footerBtn {
+            position: fixed;
             bottom: 0;
             left: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
             width: 100%;
+            .returnBtn {
+                margin: rem(20px);
+                color: #FFF;
+                font-size: rem(30px);
+                background: var(--primary);
+            }
         }
     }
     .right-title {

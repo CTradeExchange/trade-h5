@@ -78,9 +78,9 @@
 <script>
 import { computed, reactive, toRefs, watch, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
-import { pow, shiftedBy, plus } from '@/utils/calculation'
+import { pow } from '@/utils/calculation'
 import { localGet } from '@/utils/util'
 import computeHandicap from '@plans/hooks/handicap'
 export default {
@@ -180,7 +180,7 @@ export default {
             product,
             onSelect,
             digitLevelList,
-             ...toRefs(state),
+            ...toRefs(state),
             showField
         }
     }
@@ -214,7 +214,7 @@ export default {
                 width: rem(110px);
                 height: rem(40px);
                 line-height: rem(40px);
-                background-color: var(--primaryAssistColor);
+                background-color: var(--bgColor);
                 span {
                     margin-left: rem(10px);
                     //vertical-align: middle;

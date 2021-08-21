@@ -236,7 +236,9 @@
         "submitTime": "提交时间",
         "depositSuccess": "存款成功",
         "inputAmount": "请输入金额",
-        "chooseCurrency": "请选择需充值的账户币种"
+        "chooseCurrency": "请选择需充值的账户币种",
+        "despositFail": "抱歉，可能因为网络原因，尚未收到支付成功消息。如已完成支付，请稍后查看或联系在线客服处理",
+        "toRecord": "查看充值记录"
     },
     "fund": {
         "marginLevel": "保证金水平",
@@ -368,7 +370,8 @@
         "moneySuccessMsg": "您的提现申请已经提交成功，我们将尽快完成审核，如有疑问或其他帮助请联系客服",
         "outAccount": "请选择提现的账户币种",
         "inAccount": "请选择到账币种",
-        "withdrawRecord": "取款明细"
+        "withdrawRecord": "取款明细",
+        "withdrawMethod": "请选择取款方式"
         
     },
     "withdrawMoney": {

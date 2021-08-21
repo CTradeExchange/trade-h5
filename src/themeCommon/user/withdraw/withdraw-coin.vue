@@ -127,7 +127,7 @@
     </van-dialog>
 
     <!-- 提交成功弹窗 -->
-    <van-dialog v-model:show='withdrawSuccess' class-name='add-success' :confirm-button-text="$t('common.sure')" :show-cancel-button='false' @confirm='$router.back()'>
+    <van-dialog v-model:show='withdrawSuccess' class-name='add-success' :confirm-button-text="$t('common.sure')" :show-cancel-button='false' @confirm='$router.push("/assets")'>
         <i class='icon_success'></i>
         <p class='title'>
             {{ $t('withdraw.successText') }}
@@ -269,10 +269,12 @@ export default {
 
         // 账户信息
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
-        const account = computed(() => store.state._user.account)
 
         // 客服信息
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
+
+        // 账户币种
+        const accountCurrency = computed(() => store.state._user.customerInfo.accountList.find(el => el.accountId === Number(accountId))?.currency)
 
         // 周数据
         const weekdayMap = {
@@ -354,7 +356,7 @@ export default {
             customerNo: customInfo.customerNo,
             accountId,
             withdrawType: 2,
-            accountCurrency: account.value?.currency,
+            accountCurrency: accountCurrency.value,
             customerGroupId: customInfo.customerGroupId,
             country: customInfo.country,
             withdrawMethod: 'digit_wallet'
@@ -421,7 +423,14 @@ export default {
                             message: t('withdraw.activateMsg'),
                             confirmButtonText: t('withdraw.activateBtn')
                         }).then(() => {
-                            router.push('/desposit')
+                            router.push({
+                                path: '/desposit',
+                                query: {
+                                    accountId,
+                                    currency: accountCurrency.value,
+                                    tradeType
+                                }
+                            })
                         }).catch(() => {})
                     }
                     if (!withdrawConfig.timeEnable) {
@@ -445,7 +454,7 @@ export default {
                 customerNo: customInfo.customerNo,
                 customerGroupId: customInfo.customerGroupId,
                 accountId,
-                accountCurrency: account.value?.currency,
+                accountCurrency: accountCurrency.value,
                 country: customInfo.country,
                 withdrawMethod: 'digit_wallet'
             }).then(res => {
@@ -483,8 +492,6 @@ export default {
 
             // 获取钱包地址列表
             getWalletAddress()
-            // 获取配置信息
-            getWithdrawRate()
         }
 
         // 提币币种弹窗
@@ -513,7 +520,9 @@ export default {
             state.chainName = item.name
             state.chainNameVisible = false
             // 获取钱包地址列表
-            getWalletAddress()
+            // getWalletAddress()
+
+            getWithdrawFee()
         }
 
         // 获取取款汇率
@@ -522,7 +531,7 @@ export default {
                 // companyId: customInfo.companyId,
                 // customerNo: customInfo.customerNo,
                 accountId,
-                accountCurrency: account.value?.currency,
+                accountCurrency: accountCurrency.value,
                 withdrawCurrency: state.coinKind,
                 withdrawType: 2
             }).then(res => {
@@ -697,6 +706,8 @@ export default {
                 // 获取客户提币币种和链名称
                 queryWithdrawCurrencyList(resolve)
             }).then((res) => {
+                // 获取配置信息
+                getWithdrawRate()
                 // 获取取款限制配置
                 getWithdrawConfig()
             })
@@ -788,7 +799,7 @@ export default {
                 height: rem(60px);
                 font-size: rem(24px);
                 line-height: rem(60px);
-                background-color: var(--primaryAssistColor);
+                background: none;
                 border: 1px solid var(--lineColor);
                 border-radius: rem(30px);
             }
@@ -851,7 +862,7 @@ export default {
         height: rem(120px);
         margin-top: rem(28px);
         padding: 0 rem(30px);
-        border: 1px solid var(--placeholdColor);
+        border: 1px solid var(--lineColor);
         border-radius: rem(4px);
         :deep(.van-icon-plus) {
             margin-right: rem(26px);

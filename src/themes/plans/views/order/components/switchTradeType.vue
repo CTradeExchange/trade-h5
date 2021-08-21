@@ -69,7 +69,7 @@ export default {
         height: rem(58px);
         color: var(--primary);
         font-weight: 500;
-        font-size: rem(30px);
+        font-size: rem(34px);
         line-height: rem(58px);
         text-align: center;
         background: var(--primaryAssistColor);

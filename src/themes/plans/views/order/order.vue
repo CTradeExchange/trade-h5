@@ -11,9 +11,9 @@
                 <!-- 订单类型 -->
                 <OrderTypeTab v-model='orderType' :trade-type='product.tradeType' @selected='changeOrderType' />
                 <!-- 自动借款 -->
-                <LoanBar v-if='product.tradeType === 3' v-model='operationType' class='cellMarginTop' :trade-type='product.tradeType' />
+                <LoanBar v-if='[3,9].includes(product.tradeType)' v-model='operationType' :account='account' class='cellMarginTop' :product='product' />
                 <!-- 方向 -->
-                <Direction v-model='direction' class='cellMarginTop' :product='product' />
+                <Direction v-model='direction' :product='product' />
                 <!-- 挂单设置 -->
                 <PendingBar
                     v-if='[3,9].includes(product.tradeType) && orderType===10'
@@ -36,7 +36,6 @@
                 <!-- 订单金额 -->
                 <Assets
                     v-if='account && [3,9].includes(product.tradeType)'
-                    v-model:operation-type='operationType'
                     :account='account'
                     :direction='direction'
                     :product='product'
@@ -52,7 +51,7 @@
                     :product='product'
                 />
                 <!-- 过期类型 -->
-                <CellType
+                <CellExpireType
                     v-if='orderType===10 && [1,2].includes(product.tradeType)'
                     v-model='expireType'
                     :btn-list='expireTypeList'
@@ -69,7 +68,7 @@
         <!-- 委托列表 -->
         <Trust
             v-if='product'
-            class='cellMarginTop'
+            class='trustList'
             :direction='direction'
             :product='product'
         />
@@ -95,7 +94,7 @@ import LoanBar from './components/loanBar'
 import PendingBarCFD from './components/pendingBar_CFD'
 import OrderTypeTab from './components/orderType.vue'
 import Assets from './components/assets.vue'
-import CellType from '@plans/components/cellType'
+import CellExpireType from './components/cellExpireType'
 import Trust from './components/trust.vue'
 import OrderHandicap from './components/handicap.vue'
 import plansType from '@plans/components/plansType.vue'
@@ -114,7 +113,7 @@ export default {
         OrderHandicap,
         sidebarProduct,
         Assets,
-        CellType,
+        CellExpireType,
         Trust,
         PendingBar,
         LoanBar,
@@ -161,7 +160,7 @@ export default {
 
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
 
-        const accountList = computed(() => store.state._user.customerInfo.accountList)
+        const accountList = computed(() => store.state._user.customerInfo?.accountList)
 
         store.commit('_trade/Update_modifyPositionId', 0)
 
@@ -169,7 +168,7 @@ export default {
         const queryAccountInfo = () => {
             if ([3, 9].indexOf(product.value?.tradeType) === -1) return false
             const proCurrency = state.direction === 'buy' ? product.value?.profitCurrency : product.value?.baseCurrency
-            const curAccount = customerInfo.value.accountList.find(({ currency, tradeType }) => (currency === proCurrency && tradeType === product.value.tradeType))
+            const curAccount = customerInfo.value?.accountList?.find(({ currency, tradeType }) => (currency === proCurrency && tradeType === product.value.tradeType))
             if (curAccount)store.dispatch('_user/queryAccountAssetsInfo', { accountId: curAccount.accountId, tradeType: product.value?.tradeType })
             else Toast(t('trade.nullAssets'))
         }
@@ -221,7 +220,7 @@ export default {
                 if (state.orderHandicapVisible)QuoteSocket.deal_subscribe([symbolId], 5, curDigits, tradeType)
                 if (tradeType === '9') store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
 
-                const list = accountList.value.filter(el => el.tradeType === Number(product.tradeType))
+                const list = accountList.value?.filter(el => el.tradeType === Number(product.tradeType))
                 const accountIds = []
                 if (list.length > 0) {
                     list.forEach(element => {
@@ -376,6 +375,9 @@ export default {
             flex: 1;
         }
     }
+}
+.trustList {
+    margin-top: rem(20px);
 }
 .cellMarginTop {
     margin-top: rem(40px);

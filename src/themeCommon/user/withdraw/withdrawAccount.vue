@@ -21,6 +21,16 @@
                 <van-icon name='arrow' />
             </div>
 
+            <p v-if='withdrawMethodVis' class='head-text'>
+                {{ $t('withdraw.withdrawMethod') }}
+            </p>
+            <div v-if='withdrawMethodVis' class='actionBar' @click='selectWithdraw'>
+                <span class='currencySpan'>
+                    {{ withdrawMethodText }}
+                </span>
+                <van-icon name='arrow' />
+            </div>
+
             <div class='footerBtn'>
                 <van-button block type='primary' @click='next'>
                     {{ $t('common.nextStep') }}
@@ -48,6 +58,16 @@
             @confirm='onInPickerConfirm'
         />
     </van-popup>
+
+    <van-popup v-model:show='methodPickerShow' class='assetsPicker' position='bottom'>
+        <van-picker
+            :columns='methodList'
+            :columns-field-names='customMethodName'
+            :default-index='0'
+            @cancel='methodPickerShow = false'
+            @confirm='onMethonConfirm'
+        />
+    </van-popup>
 </template>
 
 <script>
@@ -55,6 +75,7 @@ import { computed, toRefs, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { localGet } from '@/utils/util'
 import { withdrawCurrencyList } from '@/api/user'
 
 export default {
@@ -72,8 +93,14 @@ export default {
             inCurrency: '',
             inCurrencyList: [],
             currentTab: '',
-            accountId: route.query.accountId
-
+            accountId: route.query.accountId,
+            withdrawMethod: '',
+            withdrawMethodVis: false,
+            withdrawMap: {},
+            lang: localGet('lang'),
+            methodPickerShow: false,
+            methodList: [],
+            withdrawMethodText: ''
         })
 
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
@@ -89,10 +116,16 @@ export default {
         const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.tradeType)))
 
         state.outCurrency = columns.value[0].currency
+        state.accountId = columns.value[0].accountId
         // 自定义picker字段
         const customFieldName = {
             text: 'currency',
             children: 'cities',
+        }
+
+        const customMethodName = {
+            text: 'methonText',
+            // values: 'values'
         }
 
         const onPickerConfirm = val => {
@@ -101,10 +134,24 @@ export default {
             state.outCurrency = val.currency
         }
 
-        const onInPickerConfirm = val => {
+        const onInPickerConfirm = (val) => {
             state.inPickerShow = false
             state.currentTab = val.withdrawMethod
             state.inCurrency = val.currency
+
+            if (val.withdrawMethod.split(',').length > 1) {
+                // 如果选择的币种支持多种取款方式
+                state.withdrawMethodVis = true
+                const methods = val.withdrawMethod.split(',')
+                state.methodList = methods.map(el => {
+                    return {
+                        val: el,
+                        methonText: state.withdrawMap[el][state.lang]
+                    }
+                })
+                state.currentTab = state.methodList[0].val
+                state.withdrawMethodText = state.methodList[0].methonText
+            }
         }
 
         // 显示选币弹窗
@@ -128,22 +175,35 @@ export default {
             })
         }
 
+        const selectWithdraw = () => {
+            state.methodPickerShow = true
+        }
+
+        // 取款方式弹窗确定
+        const onMethonConfirm = (option) => {
+            state.currentTab = option.val
+            state.withdrawMethodText = option.methonText
+            state.methodPickerShow = false
+        }
+
         // 获取到账币种
         withdrawCurrencyList({
             customerGroupId: customInfo.customerGroupId,
             customerNo: customInfo.customerNo
         }).then(res => {
-            console.log(res)
             state.currencyList = res.data
-            if (res.check() && res.data.length > 0) {
-                state.inCurrencyList = res.data.map(el => {
+
+            if (res.check() && res.data.list.length > 0) {
+                state.withdrawMap = res.data.map
+                state.inCurrencyList = res.data.list.map(el => {
                     return {
                         currency: el.currency,
                         withdrawMethod: el.withdrawMethod
                     }
                 })
-                state.inCurrency = res.data[0].currency
-                state.currentTab = res.data[0].withdrawMethod
+
+                state.inCurrency = res.data.list[0].currency
+                state.currentTab = res.data.list[0].withdrawMethod
             }
         }).catch(err => {
             state.loadingMore = false
@@ -159,6 +219,9 @@ export default {
             selectInCurrency,
             onInPickerConfirm,
             customFieldName,
+            customMethodName,
+            onMethonConfirm,
+            selectWithdraw,
             ...toRefs(state)
         }
     }
