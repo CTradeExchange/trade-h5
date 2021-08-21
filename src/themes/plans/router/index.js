@@ -197,8 +197,8 @@ const routes = [
         meta: {
             title: ''
         }
-    }
-
+    },
+    { path: '/:pathMatch(.*)*', redirect: { name: 'Mine' } },
 ]
 
 const router = createRouter({
