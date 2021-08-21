@@ -19,10 +19,8 @@ import BanderBanner from '@plans/modules/handerBanner/handerBanner'
 import InformationFlow from './components/informationFlow'
 import Products from './components/products'
 import { QuoteSocket } from '@/plugins/socket/socket'
-import { ref } from '@vue/reactivity'
-import { onActivated, onMounted } from '@vue/runtime-core'
+import { onActivated, ref } from 'vue'
 import { localGet } from '@/utils/util'
-import { useStore } from 'vuex'
 
 export default {
     name: 'Home',
