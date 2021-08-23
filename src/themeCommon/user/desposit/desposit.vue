@@ -306,6 +306,7 @@ export default {
             state.typeShow = true
         }
 
+        // 切换不同链支付通道
         const changePayCurrency = (val) => {
             state.currencyChecked = val
             getDepositExchangeRate()
@@ -420,16 +421,16 @@ export default {
             }
         }
 
-        const setPaymentList = async (payItem) => {
+        const setPaymentList = (payItem) => {
             if (payItem.channelConvertRate) {
                 state.rateConfig = {}
                 state.currencyChecked = ''
                 return
             }
-
+            debugger
             state.paymentTypes = []
             if (payItem.paymentCurrency === 'USDT') {
-                await getChainList()
+                getChainList()
             } else {
                 const splitCurrency = state.checkedType.paymentCurrency.split(',')
                 if (splitCurrency.length >= 1) {
@@ -438,7 +439,7 @@ export default {
             }
 
             state.currencyChecked = state.paymentTypes[0]
-            // await getDepositExchangeRate()
+            getDepositExchangeRate()
         }
 
         // 创建存款提案
@@ -534,16 +535,15 @@ export default {
         }
 
         // 重置币种为虚拟币的时候 获取链列表
-        const getChainList = async () => {
+        const getChainList = () => {
             state.paymentTypes = []
-            await getListByParentCode({ parentCode: 'USDT' }).then(res => {
-                if (res.check()) {
-                    if (res.data.length > 0) {
-                        res.data.forEach(item => {
-                            state.paymentTypes.push(item.parentCode + '-' + item.code)
-                        })
-                        // state.currencyChecked = state.paymentTypes[0]
-                    }
+            getListByParentCode({ parentCode: 'USDT' }).then(res => {
+                if (res.check() && res.data.length > 0) {
+                    res.data.forEach(item => {
+                        state.paymentTypes.push(item.parentCode + '-' + item.code)
+                    })
+                    state.currencyChecked = state.paymentTypes[0]
+                    getDepositExchangeRate()
                 }
             })
         }

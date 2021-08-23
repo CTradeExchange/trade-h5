@@ -34,7 +34,7 @@ export default function ({ symbolId, tradeType, showPending }) {
 
         const maxValue = Math.max(...tempArr)
         const minValue = Math.min(...tempArr)
-        debugger
+
         const diff = maxValue - minValue
         // 计算卖出报价长度
         if (result?.ask_deep.length > 0) {
