@@ -427,7 +427,7 @@ export default {
                 state.currencyChecked = ''
                 return
             }
-            debugger
+
             state.paymentTypes = []
             if (payItem.paymentCurrency === 'USDT') {
                 getChainList()
