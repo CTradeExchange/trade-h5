@@ -4,10 +4,14 @@ import { shiftedBy, plus } from '@/utils/calculation'
 export default function ({ symbolId, tradeType, showPending }) {
     const store = useStore()
     // 获取盘口深度报价
+
     const handicapList = computed(() => store.state._quote.handicapList.find(item => item.symbol_id === symbolId))
 
     // 获取当前产品
     const product = computed(() => store.state._quote.productMap[symbolId + '_' + tradeType])
+
+    // 获取产品的深度小数位
+    const deepthDigits = computed(() => store.state._quote.deepthDigits.toString().split('.')[1].length)
 
     // 当前玩法挂单列表
     const pendingList = computed(() => store.state._trade.pendingList[tradeType])
@@ -41,7 +45,8 @@ export default function ({ symbolId, tradeType, showPending }) {
                 // 计算合并挂单数量
                 if (sellPendingList?.length > 0 && showPending) {
                     sellPendingList.forEach(sl => {
-                        if (parseFloat(sl.requestPrice) === parseFloat(ask.price_ask)) {
+                        // sl.requestPrice = 43020.91
+                        if (parseFloat(sl.requestPrice).toFixed(deepthDigits.value) === parseFloat(ask.price_ask)) {
                             ask.unitNum = plus(sl.requestNum, ask.unitNum)
                         }
                     })
@@ -58,7 +63,7 @@ export default function ({ symbolId, tradeType, showPending }) {
                 // 计算合并挂单数量
                 if (buyPendingList?.length > 0 && showPending) {
                     buyPendingList.forEach(bl => {
-                        if (parseFloat(bl.requestPrice) === parseFloat(bid.price_bid)) {
+                        if (parseFloat(bl.requestPrice).toFixed(deepthDigits.value) === parseFloat(bid.price_bid)) {
                             bid.unitNum = plus(bl.requestNum, bid.unitNum)
                         }
                     })

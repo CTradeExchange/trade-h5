@@ -72,6 +72,15 @@ const routes = [
                     roles: ['User'],
                 }
             },
+            {
+                path: 'productSearch',
+                name: 'ProductSearch',
+                component: () => import(/* webpackChunkName: "order" */ '../views/productSearch/productSearch.vue'),
+                meta: {
+                    title: 'route.productSearch',
+                    roles: ['User'],
+                }
+            },
         ]
     },
     {
@@ -197,8 +206,8 @@ const routes = [
         meta: {
             title: ''
         }
-    }
-
+    },
+    { path: '/:pathMatch(.*)*', redirect: { name: 'Mine' } },
 ]
 
 const router = createRouter({

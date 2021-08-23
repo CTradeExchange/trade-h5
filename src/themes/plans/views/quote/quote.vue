@@ -14,6 +14,7 @@
                 @change='tabChange'
                 @tabClick='tabClick'
             />
+            <van-icon name="search" @click="openSearch"/>
         </div>
         <div class='titleBar van-hairline--bottom'>
             <span class='item'>
@@ -37,6 +38,7 @@ import { ref, watch, computed, onActivated } from 'vue'
 import plansType from '@/themes/plans/components/plansType.vue'
 import useProduct from '@plans/hooks/useProduct'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 export default {
     name: 'Quote',
@@ -47,6 +49,7 @@ export default {
     },
     setup () {
         const store = useStore()
+        const router = useRouter()
         const productListEl = ref(null)
         // 玩法列表
         const plansList = computed(() => store.state._base.plans)
@@ -83,8 +86,11 @@ export default {
         const tabClick = (i) => {}
 
         const showSidebar = ref(false)
-
+        const openSearch = ()=>{
+            router.push('/productSearch')
+        }
         return {
+            openSearch,
             categoryType,
             productListEl,
             plansList,
@@ -127,6 +133,15 @@ export default {
     //border-bottom: solid 4px var(--lineColor);
     .van-tab {
         background: yellow !important;
+    }
+    .tradeSortNav {
+        padding-right: rem(64px) !important;
+    }
+    i {
+        position: relative;
+        right: rem(40px);
+        bottom: rem(60px);
+        float: right;
     }
 }
 .titleBar {

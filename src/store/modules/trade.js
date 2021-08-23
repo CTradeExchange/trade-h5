@@ -239,6 +239,7 @@ export default {
                                 item.id = item.orderId
                                 item.tradeType = tradeType
                                 item.requestNum = item.executeNum
+                                item.orderTime = item.executeTime
                             })
                         }
                         commit('Update_pendingList', { tradeType, list: res.data.list })

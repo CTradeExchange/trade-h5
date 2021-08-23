@@ -27,7 +27,8 @@
             </p>
             <div class='input-wrap'>
                 <span class='fl' @click='operation'>
-                    <img alt='' src='../images/transfer.png' srcset='' />
+                    <!-- <img alt='' src='../images/transfer.png' srcset='' /> -->
+                    <i class='icon icon_qiehuan'></i>
                     <span class='oper-text'>
                         {{ operText }}
                     </span>
@@ -231,6 +232,7 @@ export default {
         color: #FFF;
         background: var(--primary);
         border: none;
+        border-radius: 0;
     }
 }
 .m-dialogAdjust {
@@ -250,13 +252,13 @@ export default {
             align-items: center;
             padding: 0 rem(30px);
             //line-height: rem(80px);
-            background-color: var(--bgColor);
+            background-color: var(--primaryAssistColor);
             border-radius: rem(6px);
             .fl {
                 margin: rem(20px) rem(20px) rem(20px) rem(10px);
                 padding-right: rem(20px);
                 border-right: solid 1px var(--lineColor);
-                img {
+                .icon {
                     width: rem(24px);
                     margin-right: rem(10px);
                     vertical-align: middle;

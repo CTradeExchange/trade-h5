@@ -79,12 +79,8 @@
 <script>
 import Top from '@/components/top'
 import { toRefs, reactive, onBeforeMount, computed, onBeforeUnmount } from 'vue'
-import {
-    queryDepositProposal
-} from '@/api/user'
-import {
-    useStore
-} from 'vuex'
+import { queryDepositProposal } from '@/api/user'
+import { useStore } from 'vuex'
 import dayjs from 'dayjs'
 import { Dialog } from 'vant'
 import { isEmpty } from '@/utils/util'

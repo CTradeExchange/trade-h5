@@ -1,5 +1,5 @@
 <template>
-    <div class='handicap-header'>
+    <div v-if='product' class='handicap-header'>
         <div v-if='showField' class='my'>
             {{ $t('trade.my') }}
         </div>
@@ -38,7 +38,7 @@
     <van-empty v-if='!handicapList' :description='$t("common.noData")' image='/images/empty.png' />
     <div class='stalls-wrap' :class='{ padding: !showField }'>
         <div class='sell-wrap'>
-            <div v-for='(item,index) in handicapList?.ask_deep' :key='index' class='item'>
+            <div v-for='(item,index) in ask_deep' :key='index' class='item'>
                 <span v-if='showField' class='label fallColor '>
                     {{ item.unitNum === 0 ? '': item.unitNum }}
                 </span>
@@ -56,7 +56,7 @@
             </div>
         </div>
         <div class='buy-wrap'>
-            <div v-for='(item,index) in handicapList?.bid_deep' :key='index' class='item'>
+            <div v-for='(item,index) in bid_deep' :key='index' class='item'>
                 <span class='price riseColor '>
                     {{ item.price_bid }}
                 </span>
@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { computed, reactive, toRefs, watch, onBeforeUnmount } from 'vue'
+import { computed, reactive, toRefs, watch, onBeforeUnmount, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
@@ -102,7 +102,10 @@ export default {
         // 获取盘口深度报价
         const handicapList = computed(() => store.state._quote.handicapList.find(item => item.symbol_id === props.symbolId))
 
-        const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => el.tradeType === Number(state.tradeType)))
+        const ask_deep = computed(() => handicapList.value?.ask_deep?.slice(0)?.reverse())
+        const bid_deep = computed(() => handicapList.value?.bid_deep?.slice(0)?.reverse())
+
+        const accountList = computed(() => store.state._user?.customerInfo?.accountList.filter(el => el.tradeType === Number(state.tradeType)))
 
         // 获取当前产品
         const product = computed(() => store.state._quote.productMap[props.symbolId + '_' + state.tradeType])
@@ -132,6 +135,7 @@ export default {
         watch(() => digitLevelList.value.length, newVal => {
             if (newVal > 0) {
                 state.curDigits = digitLevelList.value[0]?.text
+                store.commit('_quote/Update_deepthDigits', state.curDigits)
                 // 订阅盘口深度报价
                 QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits, state.tradeType)
             }
@@ -139,11 +143,11 @@ export default {
             immediate: true
         })
 
-        // 获取处理后的盘口数据
         computeHandicap({
             tradeType: state.tradeType,
             symbolId: props.symbolId,
-            showPending: true
+            showPending: true,
+            digits: state.curDigits
         })
 
         // 修改报价深度
@@ -179,6 +183,8 @@ export default {
             userAccountType,
             product,
             onSelect,
+            ask_deep,
+            bid_deep,
             digitLevelList,
             ...toRefs(state),
             showField

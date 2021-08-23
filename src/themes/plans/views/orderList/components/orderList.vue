@@ -425,13 +425,25 @@ export default {
     position: fixed;
     width: 100%;
     :deep(.van-dropdown-menu) {
-        background-color: var(--contentColor);
-    }
-    :deep(.van-dropdown-item__option) {
-        &:last-child {
-            .van-cell__title {
-                flex: 3;
-                //border: solid 1px var(--lineColor);
+        //background-color: var(--bgColor);
+        .van-dropdown-menu__bar {
+            align-items: center;
+            background: var(--bgColor);
+            box-shadow: none;
+            .van-dropdown-menu__item {
+                position: relative;
+                justify-content: space-between;
+                height: rem(48px);
+                margin: 0 rem(10px);
+                padding: 0 rem(5px);
+                background: var(--contentColor);
+                .van-dropdown-menu__title {
+                    position: static;
+                    &::after {
+                        right: rem(10px);
+                        border-color: transparent transparent  var(--normalColor) var(--normalColor);
+                    }
+                }
             }
         }
     }
@@ -439,7 +451,7 @@ export default {
 .list-wrap {
     padding-top: rem(90px);
     .trust-item {
-        margin: rem(20px) rem(20px) 0 rem(20px);
+        margin: 0 rem(20px) rem(20px) rem(20px);
         padding: rem(20px);
         background-color: var(--contentColor);
         border-bottom: solid 1px var(--lineColor);

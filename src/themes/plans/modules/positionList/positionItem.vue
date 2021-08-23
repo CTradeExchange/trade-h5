@@ -214,15 +214,27 @@ export default {
 .product-item {
     .item {
         position: relative;
-        margin-bottom: rem(20px);
+        //height: rem(100px);
+        //margin-bottom: rem(20px);
         overflow: hidden;
         background: var(--contentColor);
+        border-bottom: solid rem(1px) var(--lineColor);
         border-radius: rem(10px);
         :deep(.van-collapse-item__title) {
             padding: rem(20px) rem(30px) 0 rem(30px);
             .van-cell__right-icon {
                 color: var(--color);
                 vertical-align: middle;
+            }
+        }
+        :deep(.van-collapse) {
+            .van-cell {
+                &::after {
+                    border: none;
+                }
+            }
+            &::after {
+                border: none;
             }
         }
         .cell {
