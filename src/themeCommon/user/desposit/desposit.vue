@@ -393,16 +393,20 @@ export default {
                     let openTimeList
                     if (!isEmpty(openTime)) {
                         openTimeList = openTime.split(',')
+
                         openTimeList.forEach(item => {
                             state.resultTimeMap[payItem.id] = [].concat(state.resultTimeMap[payItem.id])
-
+                            const nowDate = dayjs()
                             const [start, end] = item.split('-')
                             const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
                             const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
 
-                            state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
-
-                            const nowDate = dayjs()
+                            if (endLocal.isAfter(todayStr, 'day')) {
+                                state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-23:59')
+                                state.resultTimeMap[payItem.id].push('00:00-' + endLocal.format('HH:mm'))
+                            } else {
+                                state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                            }
 
                             // 判断当前时间是否在设置的存款时间内
                             if (nowDate.isBetween(startLocal, endLocal)) {
