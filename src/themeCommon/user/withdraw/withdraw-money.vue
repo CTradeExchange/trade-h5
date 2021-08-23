@@ -34,7 +34,7 @@
                     </van-button>
                 </div>
                 <p class='bw-t2'>
-                    {{ $t('withdrawMoney.predictName') }} {{ computePre }} {{ checkedBank.bankCurrency }}
+                    {{ $t('withdrawMoney.predictName') }} {{ computePre }} {{ currency }}
                 </p>
             </div>
         </div>
@@ -399,7 +399,7 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     if (res.data && res.data.length > 0) {
-                        state.bankList = res.data
+                        state.bankList = res.data.filter(el => el.bankCurrency === currency)
                         state.checkedBank = res.data[0]
                         state.checkedBank.checked = true
                         state.withdrawCurrency = state.checkedBank.bankCurrency
@@ -494,6 +494,7 @@ export default {
             toAddBank,
             changeAmount,
             confirm,
+            currency,
             customInfo,
             hideMiddle,
             getWithdrawFee,

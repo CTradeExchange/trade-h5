@@ -520,7 +520,7 @@ export default {
             state.chainName = item.name
             state.chainNameVisible = false
             // 获取钱包地址列表
-            // getWalletAddress()
+            getWalletAddress()
 
             getWithdrawFee()
         }

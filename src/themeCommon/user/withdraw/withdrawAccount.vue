@@ -151,6 +151,8 @@ export default {
                 })
                 state.currentTab = state.methodList[0].val
                 state.withdrawMethodText = state.methodList[0].methonText
+            } else {
+                state.withdrawMethodVis = false
             }
         }
 

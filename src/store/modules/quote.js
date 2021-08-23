@@ -47,7 +47,8 @@ export default {
         productActivedID: sessionGet('productActived'), // 当前操作的产品ID
         handicapList: [], // 盘口实时深度报价
         dealList: [], // 成交数据,
-        curTradeType: '' // 资产页面当前选中的玩法id
+        curTradeType: '', // 资产页面当前选中的玩法id
+        deepthDigits: ''
     },
     getters: {
         // 用户自选列表
@@ -226,7 +227,11 @@ export default {
         },
         Update_tradeType (state, id) {
             state.curTradeType = id
+        },
+        Update_deepthDigits (state, data) {
+            state.deepthDigits = data
         }
+
     },
     actions: {
         // 整理当前账户组的所有产品列表，自选产品+产品板块的产品
