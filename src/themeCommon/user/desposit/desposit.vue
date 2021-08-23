@@ -702,18 +702,16 @@ export default {
         }
     }
     .pay-info {
-        display: flex;
-        flex-flow: row wrap;
-        align-content: flex-start;
         margin-top: rem(20px);
         padding: 0 rem(30px);
         background-color: var(--contentColor);
         border-top: solid rem(20px) var(--bgColor);
         .pi-item {
             flex: 0 0 50%;
+            margin: rem(10px) 0;
             color: var(--normalColor);
             font-size: rem(24px);
-            line-height: rem(96px);
+            line-height: rem(60px);
         }
         .line {
             width: 100%;

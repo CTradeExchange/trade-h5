@@ -15,7 +15,21 @@
 
                 <div v-if="item.showType === 'image'">
                     <van-uploader :after-read='afterRead' :name='item.elementCode' result-type='file'>
-                        <img :id='item.elementCode' alt='' class='upload-img' :src='require("../../assets/auth/" + item.elementCode + ".png")' srcset='' />
+                        <img
+                            v-if='item.elementValue'
+                            :id='item.elementCode'
+                            alt=''
+                            class='upload-img'
+                            :src='item.elementValue'
+                        />
+                        <img
+                            v-else
+                            :id='item.elementCode'
+                            alt=''
+                            class='upload-img'
+                            :src="require('../../assets/auth/' + item.elementCode + '.png')"
+                            srcset=''
+                        />
                         <p class='upload-text'>
                             {{ item.elementName }}
                         </p>
@@ -83,7 +97,8 @@ export default {
             value1: '',
             columns: [],
             typeCode: '',
-            extendsMap: {} // 字段和正则对应
+            elementCodeInputGroup: '',
+            extendsMap: {}, // 字段和正则对应
 
         })
         const columnsFields = { text: 'name' }
@@ -104,14 +119,20 @@ export default {
                     state.elementList = getArrayObj(state.list, 'pathCode', state.pathCode).elementList
                     state.areaShow = false
 
-                    /* if (state.elementList.length > 0) {
+                    if (state.elementList.length > 0) {
                         state.elementList.forEach(el => {
-                            state.conditionModel[el.elementCode] = el.elementCode
                             // 如果是 typeValue 单独处理
-                            // state.typeValue = el.elementCode
+                            if (el.showType === 'inputGroup') {
+                                state.elementCodeInputGroup = el.elementCodeInputGroup
+                                state.typeCode = el.elementCodeInputGroup
+                                state.conditionModel[el.elementCodeInputGroup] = el.elementValueInputGroup
+                            } else {
+                                state.conditionModel[el.elementCode] = el.elementValue
+                            }
                         })
-                    } */
+                    }
 
+                    console.log('state.conditionModel', state.conditionModel)
                     getInputGroupList()
                 }
             }).catch(err => {
@@ -138,6 +159,9 @@ export default {
             getListByParentCode({ parentCode: 'id_card_type' }).then(res => {
                 if (res.check() && res.data.length > 0) {
                     state.columns = res.data
+                    state.typeValue = state.columns.find(item => item.code === state.elementCodeInputGroup)?.name
+                    // state.typeCode = state.columns.find(item => item.code === state.elementCodeInputGroup)?.code
+
                     if (res.data.length > 0) {
                         res.data.forEach(item => {
                             state.extendsMap[item.code] = {
@@ -165,6 +189,7 @@ export default {
                 if (res.check()) {
                     document.getElementById(detail.name).src = res.data
                     state.conditionModel[detail.name] = res.data
+
                     Toast(t('auth.uploadSuccess'))
                 }
             }).catch(err => {
@@ -219,7 +244,8 @@ export default {
             } else {
                 params = {
                     levelCode,
-                    elementList: tempElementList
+                    elementList: tempElementList,
+                    pathCode: state.pathCode
                 }
                 state.loading = true
                 kycLevelApply(params).then(res => {
@@ -272,7 +298,7 @@ export default {
             getConditon,
             afterRead,
             handleConfirm,
-            columnsFields
+            columnsFields,
         }
     }
 }

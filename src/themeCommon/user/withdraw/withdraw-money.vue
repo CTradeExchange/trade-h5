@@ -400,7 +400,7 @@ export default {
                 if (res.check()) {
                     if (res.data && res.data.length > 0) {
                         state.bankList = res.data.filter(el => el.bankCurrency === currency)
-                        state.checkedBank = res.data[0]
+                        state.checkedBank = state.bankList[0]
                         state.checkedBank.checked = true
                         state.withdrawCurrency = state.checkedBank.bankCurrency
                         // 获取取款汇率
