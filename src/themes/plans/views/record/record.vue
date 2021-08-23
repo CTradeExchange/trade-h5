@@ -3,7 +3,7 @@
         <layoutTop>
             <p>{{ $t("record.records") }}</p>
             <template #right>
-                <dateFilter :show-title-icon='true' @change='onDateChange' />
+                <dateFilter class='dateFilter' :show-title-icon='true' @change='onDateChange' />
             </template>
         </layoutTop>
         <template v-if='reRender'>
@@ -156,9 +156,11 @@ export default {
         height: 100%;
         padding: rem(30px) 0;
     }
-    :deep(.van-dropdown-menu__title) {
-        &::after {
-            display: none;
+    .dateFilter {
+        :deep(.van-dropdown-menu__title) {
+            &::after {
+                display: none;
+            }
         }
     }
 }

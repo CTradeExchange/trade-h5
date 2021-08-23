@@ -7,7 +7,7 @@
         :request-params='newParams'
     >
         <template #filter>
-            <flowFilter :value='businessType' @change='onChange' />
+            <flowFilter :trade-type='tradeType' :value='businessType' @change='onChange' />
         </template>
         <template #default='{ list }'>
             <div v-for='item in list' :key='item.id' class='li'>
@@ -17,7 +17,7 @@
                             {{ item.currency }}
                         </span>
                         <span class='businessType'>
-                            {{ proBtns[item.businessType] }}
+                            {{ flowSubCategory[item.businessType1] }}
                         </span>
                         <span class='time'>
                             {{ formatTime(item.createTime) }}
@@ -44,6 +44,7 @@ import { queryCapitalFlowList } from '@/api/user'
 import { useI18n } from 'vue-i18n'
 import flowFilter from './flowFilter'
 import { computed, ref, nextTick } from 'vue'
+import { useRoute } from 'vue-router'
 
 export default {
     components: { list, flowFilter },
@@ -54,8 +55,10 @@ export default {
         }
     },
     setup (props) {
+        const route = useRoute()
+        const { tradeType } = route.query
         const { tm } = useI18n({ useScope: 'global' })
-        const proBtns = tm('fund.proBtns')
+        const flowSubCategory = tm(`fund.flowSubCategory.${tradeType}`)
         const formatTime = (val) => {
             return dayjs(val).format('YYYY/MM/DD HH:mm:ss')
         }
@@ -85,11 +88,12 @@ export default {
         return {
             formatTime,
             queryCapitalFlowList,
-            proBtns,
+            flowSubCategory,
             newParams,
             onChange,
             reRender,
-            businessType
+            businessType,
+            tradeType
         }
     },
 }
