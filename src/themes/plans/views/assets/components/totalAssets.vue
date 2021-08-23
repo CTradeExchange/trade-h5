@@ -49,6 +49,13 @@
             >
                 {{ $t('trade.withdraw') }}
             </van-button>
+            <van-button
+                hairline
+                size='mini'
+                to='/transfer'
+            >
+                {{ $t('trade.transfer') }}
+            </van-button>
         </div>
     </div>
 </template>

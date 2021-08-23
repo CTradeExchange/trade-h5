@@ -207,6 +207,14 @@ const routes = [
             title: ''
         }
     },
+    {
+        path: '/transfer',
+        name: 'Transfer',
+        component: () => import(/* webpackChunkName: "record" */ '../views/transfer/transfer.vue'),
+        meta: {
+            title: 'route.transfer'
+        }
+    },
     { path: '/:pathMatch(.*)*', redirect: { name: 'Mine' } },
 ]
 
