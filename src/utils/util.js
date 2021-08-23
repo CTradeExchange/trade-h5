@@ -126,6 +126,14 @@ export function delayAwait (fn, reset = true) {
         }).then(() => delayAwait(fn, false))
     })
 }
+/* 延迟一段时间 */
+export function delayAwaitTime (time) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve()
+        }, time)
+    })
+}
 /* 获取字符长度 */
 export const getLen = (str = '') => str.replace(/\p{Unified_Ideograph}/ug, '01').length
 

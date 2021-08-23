@@ -180,7 +180,7 @@ export default {
             }
         }
 
-        const activeIndex = ref(['0'])
+        const activeIndex = ref(0)
         const state = reactive({
             loading: false,
             size: 20,
@@ -307,8 +307,5 @@ export default {
             color: var(--primary);
         }
     }
-}
-.van-pull-refresh {
-    height: 100%;
 }
 </style>

@@ -102,6 +102,7 @@ import sidebarProduct from '@plans/components/sidebarProduct.vue'
 import hooks from './orderHooks'
 import { addMarketOrder } from '@/api/trade'
 import { Toast } from 'vant'
+import { delayAwaitTime } from '@/utils/util'
 export default {
     components: {
         Direction,
@@ -284,10 +285,14 @@ export default {
             if (state.loading) return false
             state.loading = true
             addMarketOrder(params)
-                .then(res => {
-                    state.loading = false
+                .then(async res => {
                     if (res.invalid()) return false
                     const data = res.data
+                    if (data.hasDelay === 2) {
+                        // 延时单，让loading效果多转2s
+                        await delayAwaitTime(2000)
+                    }
+                    state.loading = false
                     const localData = Object.assign({}, params, data)
                     const orderId = data.orderId || data.id
                     sessionStorage.setItem('order_' + orderId, JSON.stringify(localData))
