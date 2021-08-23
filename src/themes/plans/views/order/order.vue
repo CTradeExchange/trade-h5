@@ -286,7 +286,10 @@ export default {
             state.loading = true
             addMarketOrder(params)
                 .then(async res => {
-                    if (res.invalid()) return false
+                    if (res.invalid()) {
+                        state.loading = false
+                        return false
+                    }
                     const data = res.data
                     if (data.hasDelay === 2) {
                         // 延时单，让loading效果多转2s
