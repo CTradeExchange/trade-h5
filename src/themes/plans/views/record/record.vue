@@ -23,7 +23,7 @@
             </van-tabs>
         </template>
         <div v-else-if='componentList.length === 1' class='singleContent'>
-            <component :is='componentList[0].component' :ref='el => { el && (childs[item.name]=el)}' />
+            <component :is='componentList[0].component' :ref='el => { el && (childs[componentList[0].name]=el)}' />
         </div>
     </div>
 </template>
