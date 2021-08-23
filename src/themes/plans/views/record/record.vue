@@ -3,28 +3,33 @@
         <layoutTop>
             <p>{{ $t("record.records") }}</p>
             <template #right>
-                <dateFilter class='dateFilter' :show-title-icon='true' @change='onDateChange' />
+                <dateFilter
+                    v-for='item in componentList'
+                    v-show='item.name === modelActive'
+                    :key='item.name'
+                    class='dateFilter'
+                    :show-title-icon='true'
+                    @change='onDateChange'
+                />
             </template>
         </layoutTop>
-        <template v-if='reRender'>
-            <template v-if='componentList.length>1'>
-                <van-tabs v-model:active='modelActive' class='tabs' :line-width='1 / componentList.length * 100 + "%"'>
-                    <van-tab v-for='item in componentList' :key='item.name' :name='item.name' :title='item.title'>
-                        <div class='content'>
-                            <component :is='item.component' :request-params='requestParams' />
-                        </div>
-                    </van-tab>
-                </van-tabs>
-            </template>
-            <div v-else-if='componentList.length === 1' class='singleContent'>
-                <component :is='componentList[0].component' :request-params='requestParams' />
-            </div>
+        <template v-if='componentList.length>1'>
+            <van-tabs v-model:active='modelActive' class='tabs' :line-width='1 / componentList.length * 100 + "%"'>
+                <van-tab v-for='item in componentList' :key='item.name' :name='item.name' :title='item.title'>
+                    <div class='content'>
+                        <component :is='item.component' :ref='el => { el && (childs[item.name]=el)}' />
+                    </div>
+                </van-tab>
+            </van-tabs>
         </template>
+        <div v-else-if='componentList.length === 1' class='singleContent'>
+            <component :is='componentList[0].component' :ref='el => { el && (childs[item.name]=el)}' />
+        </div>
     </div>
 </template>
 
 <script>
-import { ref, computed, unref, nextTick } from 'vue'
+import { ref, computed, unref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import loanList from './components/loanList'
@@ -42,7 +47,6 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const tradeType = Number(route.query.tradeType)
         const type = Number(route.query.type)
-        const reRender = ref(true)
         const allList = [
             {
                 name: 1,
@@ -82,25 +86,30 @@ export default {
 
         const modelActive = ref(type || unref(componentList)[0].name)
 
-        const requestParams = ref({})
         const onDateChange = (value) => {
-            if (value) {
-                [requestParams.value.startTime, requestParams.value.endTime] = value
-            } else {
-                requestParams.value = {}
-            }
+            const child = unref(childs)[unref(modelActive)]
+            if (child && typeof child.refresh === 'function') {
+                // 更新对应子组件参数
+                let params = {}
+                const [startTime, endTime] = value || []
+                if (startTime && endTime) {
+                    params = {
+                        startTime, endTime
+                    }
+                }
 
-            reRender.value = false
-            nextTick(() => {
-                reRender.value = true
-            })
+                child.setParams(params)
+                // 调用子组件方法-重新请求数据
+                child.refresh()
+            }
         }
+
+        const childs = ref({})
         return {
             modelActive,
             componentList,
             onDateChange,
-            reRender,
-            requestParams
+            childs
         }
     }
 }

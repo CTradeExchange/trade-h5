@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { reactive, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 
 export default {
@@ -91,11 +91,19 @@ export default {
             onLoad()
         }
 
+        const refresh = () => {
+            nextTick(() => {
+                state.refreshing = true
+                onRefresh()
+            })
+        }
+
         return {
             state,
             onLoad,
             onRefresh,
-            context
+            context,
+            refresh
         }
     }
 }

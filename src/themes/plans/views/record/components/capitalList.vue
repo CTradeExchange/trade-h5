@@ -1,9 +1,9 @@
 <template>
     <list
-        v-if='reRender'
+        v-bind='$attrs'
+        ref='listRef'
         :liabilities-type='1'
         :request-api='queryCapitalFlowList'
-        v-bind='$attrs'
         :request-params='newParams'
     >
         <template #filter>
@@ -43,17 +43,11 @@ import dayjs from 'dayjs'
 import { queryCapitalFlowList } from '@/api/user'
 import { useI18n } from 'vue-i18n'
 import flowFilter from './flowFilter'
-import { computed, ref, nextTick } from 'vue'
+import { computed, ref, unref } from 'vue'
 import { useRoute } from 'vue-router'
 
 export default {
     components: { list, flowFilter },
-    props: {
-        requestParams: {
-            type: Object,
-            default: () => ({})
-        }
-    },
     setup (props) {
         const route = useRoute()
         const { tradeType } = route.query
@@ -62,38 +56,45 @@ export default {
         const formatTime = (val) => {
             return dayjs(val).format('YYYY/MM/DD HH:mm:ss')
         }
-        const reRender = ref(true)
+
+        const listRef = ref(null)
+        const refresh = () => {
+            unref(listRef) && unref(listRef).refresh()
+        }
+
+        const requestParams = ref({})
+        const setParams = (params) => {
+            requestParams.value = params || {}
+        }
 
         const businessType = ref('')
         const onChange = value => {
             businessType.value = value
-
-            reRender.value = false
-            nextTick(() => {
-                reRender.value = true
-            })
+            refresh()
         }
 
         const newParams = computed(() => {
             if (businessType.value) {
                 return {
-                    ...props.requestParams,
+                    ...unref(requestParams),
                     businessType: businessType.value
                 }
             }
 
-            return props.requestParams
+            return unref(requestParams)
         })
 
         return {
+            setParams,
+            refresh,
             formatTime,
             queryCapitalFlowList,
             flowSubCategory,
             newParams,
             onChange,
-            reRender,
             businessType,
-            tradeType
+            tradeType,
+            listRef
         }
     },
 }
