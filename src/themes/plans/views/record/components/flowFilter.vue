@@ -14,15 +14,26 @@ export default {
         value: {
             type: [String, Number],
             default: ''
+        },
+        tradeType: {
+            type: [String, Number],
+            default: ''
         }
     },
     setup (props, context) {
-        const { tm } = useI18n({ useScope: 'global' })
-        const proBtns = tm('fund.proBtns')
-        const flowTypes = Object.keys(proBtns).map(key => ({
-            text: proBtns[key],
+        const { t, tm } = useI18n({ useScope: 'global' })
+        const flowCategories = tm(`fund.flowCategories.${props.tradeType}`)
+        const flowTypes = [
+            {
+                text: t('common.all'),
+                value: ''
+            }
+        ]
+        flowTypes.push(...Object.keys(flowCategories).map(key => ({
+            text: flowCategories[key],
             value: key
-        }))
+        })))
+
         const flowType = computed({
             get: () => props.value || flowTypes[0].value,
             set () {}

@@ -34,7 +34,7 @@ export default {
     setup (props, context) {
         const { t } = useI18n({ useScope: 'global' })
         const dateOption = computed(() => [
-            { text: t('common.all'), value: 0 },
+            { text: t('common.all'), value: '' },
             { text: t('common.curToday'), value: 1 },
             { text: t('common.curWeek'), value: 2 },
             { text: t('common.curMonth'), value: 3 },
