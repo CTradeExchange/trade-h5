@@ -155,7 +155,7 @@ export default {
         const customerInfo = computed(() => store.state._user.customerInfo)
         const { bizType, account, findProductInCategory, switchProduct } = hooks(state)
         // 玩法列表
-        const plansList = computed(() => store.state._base.plans)
+        const plansList = computed(() => store.state._base.plans.filter(el => !(el.tradeType === '5' && el.isWallet)))
         // 1.玩法类型
         const productTradeType = ref(tradeType)
 
