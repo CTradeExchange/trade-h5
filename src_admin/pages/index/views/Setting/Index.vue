@@ -164,6 +164,11 @@
                                                 placeholder='请输入'
                                             />
                                         </el-form-item>
+                                        <el-form-item v-if="item.id==='5'" class='sort-row' label='是否当钱包使用'>
+                                            <el-checkbox v-model='checkedTradeType[item.id].isWallet'>
+                                                是
+                                            </el-checkbox>
+                                        </el-form-item>
                                     </el-card>
                                 </div>
                             </el-form-item>
