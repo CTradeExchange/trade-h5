@@ -60,7 +60,7 @@
         <van-picker
             :columns='columns'
             :columns-field-names='customFieldName'
-            :default-index='2'
+            :default-index='0'
             title=''
             @cancel='pickerShow = false'
             @confirm='onPickerConfirm'

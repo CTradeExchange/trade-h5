@@ -41,6 +41,13 @@
             >
                 {{ $t('trade.withdraw') }}
             </van-button>
+            <van-button
+                hairline
+                size='mini'
+                to='/transfer'
+            >
+                {{ $t('trade.transfer') }}
+            </van-button>
         </div>
     </div>
 </template>
@@ -155,12 +162,16 @@ export default {
         display: block;
         width: 50%;
         height: rem(60px);
+        margin-right: rem(20px);
         color: var(--primary);
         font-size: rem(24px);
         line-height: rem(60px);
         background: var(--primaryAssistColor);
         border-color: var(--primaryAssistColor);
         border-radius: rem(6px);
+        &:last-child {
+            margin-right: 0;
+        }
     }
 }
 </style>

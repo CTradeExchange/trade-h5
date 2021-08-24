@@ -193,7 +193,7 @@
         "inputZone": "请输入区号",
         "certificateType": "证件类型",
         "certificateNo": "证件号码",
-        "chooseCertificateType": "选择证件类型",
+        "chooseCertificateType": "请选择证件类型",
         "incorrectlyFormed": "格式不正确",
         "pleaseEnter": "请输入",
         "reGet" :"重新获取"

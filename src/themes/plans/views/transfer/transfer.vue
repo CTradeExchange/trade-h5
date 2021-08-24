@@ -11,12 +11,12 @@
                     </div> {{ $t('common.to') }}
                 </div>
                 <div class='center'>
-                    <div class='from account'>
-                        <span> 现货账户</span>
+                    <div class='from account' @click='handleFrom'>
+                        <span> {{ fromAccount }}</span>
                         <van-icon name='arrow' />
                     </div>
-                    <div class='to account'>
-                        <span> CFD杠杆</span>
+                    <div class='to account' @click='handleTo'>
+                        <span> {{ toAccount }}</span>
                         <van-icon name='arrow' />
                     </div>
                 </div>
@@ -52,17 +52,15 @@
 
         <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
             <van-picker
-                :columns='inCurrencyList'
-                :default-index='0'
+                :columns='currencyList'
                 @cancel='pickerShow = false'
                 @confirm='onPickerConfirm'
             />
         </van-popup>
-
         <van-popup v-model:show='accountShow' class='assetsPicker' position='bottom'>
             <van-picker
-                :columns='inCurrencyList'
-                :default-index='0'
+                :columns='assetsList'
+                :columns-field-names='customField'
                 @cancel='accountShow = false'
                 @confirm='onPickerConfirm'
             />
@@ -81,20 +79,49 @@ export default {
         const state = reactive({
             curCurrency: 'USDT',
             pickerShow: false,
-            inCurrencyList: ['USDT', 'BTC'],
-            accountShow: false
+            currencyList: ['USDT', 'BTC'],
+            accountShow: false,
+            loading: false,
+            fromAccount: '',
+            toAccount: '',
+            assetsList: []
         })
+
+        // 获取玩法列表
+        const plans = computed(() => store.state._base.plans)
+
+        state.fromAccount = plans.value[0].name
+        state.toAccount = plans.value.filter(el => el.name !== state.fromAccount)[0].name
 
         const handleTransfer = () => {
 
         }
-        const onPickerConfirm = () => {
-            state.pickerShow = false
+        const onPickerConfirm = (val) => {
+            state.accountShow = false
+            state.fromAccount = val.name
+        }
+        const handleFrom = () => {
+            state.accountShow = true
+            state.assetsList = plans.value.filter(el => el.name !== state.fromAccount)
+        }
+
+        const handleTo = () => {
+            state.accountShow = true
+
+            state.assetsList = plans.value.filter(el => el.name !== state.toAccount)
+        }
+        const customField = {
+            text: 'name',
+            children: 'cities',
         }
         return {
             handleTransfer,
             onPickerConfirm,
-            ...toRefs(state)
+            handleFrom,
+            handleTo,
+            customField,
+            ...toRefs(state),
+            plans
         }
     }
 }
@@ -142,6 +169,7 @@ export default {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
+                    height: rem(100px);
                     padding-right: rem(30px);
                     font-size: rem(28px);
                     line-height: rem(100px);
