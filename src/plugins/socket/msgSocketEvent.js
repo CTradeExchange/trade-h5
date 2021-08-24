@@ -202,19 +202,23 @@ class SocketEvent {
         // AMOUNT(3 ,"刷新资金"),
         // LOGOUT(4 ,"踢出"),
         // POSITION_AND_ORDER(5, "同时刷新挂单、仓位"),
+        const store = this.$store
         if (updateType === 1) {
-            this.$store.dispatch('_trade/queryPositionPage', { tradeType })
+            store.dispatch('_trade/queryPositionPage', { tradeType })
         } else if (updateType === 2) {
-            this.$store.dispatch('_trade/queryPBOOrderPage', { tradeType })
+            store.dispatch('_trade/queryPBOOrderPage', { tradeType })
         } else if (updateType === 3 && [3, 5, 9].includes(tradeType)) {
-            this.$store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
+            store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
         } else if (updateType === 4) {
             setTimeout(() => {
                 this.handlerLogout()
             }, 2000)
         } else if (updateType === 5) {
-            this.$store.dispatch('_trade/queryPositionPage', { tradeType })
-            this.$store.dispatch('_trade/queryPBOOrderPage', { tradeType })
+            store.dispatch('_trade/queryPositionPage', { tradeType })
+            store.dispatch('_trade/queryPBOOrderPage', { tradeType })
+        } else if (updateType === 6) { // 同时刷新资金和委托列表
+            if ([3, 5, 9].includes(tradeType)) store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
+            store.dispatch('_trade/queryPBOOrderPage', { tradeType })
         }
 
         // 展示字段：show
