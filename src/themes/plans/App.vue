@@ -26,7 +26,7 @@
 <script>
 import Notice from '@plans/components/notice'
 import { useStore } from 'vuex'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
@@ -90,9 +90,9 @@ export default {
         // 监听ws全局事件
         document.body.addEventListener('GotMsg_UserForceLogoutRet', kickOut, false)
         document.body.addEventListener('GotMsg_disconnect', disconnect, false)
-        onMounted(() => {
-            document.body.removeEventListener('GotMsg_UserForceLogoutRet', kickOut)
-            document.body.removeEventListener('GotMsg_disconnect', kickOut)
+        onUnmounted(() => {
+            document.body.removeEventListener('GotMsg_UserForceLogoutRet', kickOut, false)
+            document.body.removeEventListener('GotMsg_disconnect', disconnect, false)
         })
 
         return {
