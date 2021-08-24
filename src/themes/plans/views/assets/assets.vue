@@ -18,7 +18,7 @@
                     <TotalAssetsBywarehouse class='block' />
                     <PositionList />
                 </div>
-                <div v-if='[3,9].indexOf(Number(item.id)) > -1' class='plans-item'>
+                <div v-if='[3,9,5].indexOf(Number(item.id)) > -1' class='plans-item'>
                     <TotalAssets class='block' />
                     <AssetsItem v-for='account in accountList' :key='account.accountId' class='block' :data='account' />
                 </div>
