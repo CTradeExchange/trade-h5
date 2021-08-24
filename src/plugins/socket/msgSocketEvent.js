@@ -206,6 +206,8 @@ class SocketEvent {
             this.$store.dispatch('_trade/queryPositionPage', { tradeType })
         } else if (updateType === 2) {
             this.$store.dispatch('_trade/queryPBOOrderPage', { tradeType })
+        } else if (updateType === 3 && [3, 5, 9].includes(tradeType)) {
+            this.$store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
         } else if (updateType === 4) {
             setTimeout(() => {
                 this.handlerLogout()
