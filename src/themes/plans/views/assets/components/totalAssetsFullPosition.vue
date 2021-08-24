@@ -60,7 +60,7 @@
             <van-button
                 hairline
                 size='mini'
-                to='/transfer'
+                @click='toTransfer'
             >
                 {{ $t('trade.transfer') }}
             </van-button>
@@ -116,11 +116,23 @@ export default {
             })
         }
 
+        // 跳转划转记录
+        const toTransfer = () => {
+            router.push({
+                path: '/transfer',
+                query: {
+                    accountId: assetsInfo.value.accountId,
+                    tradeType: tradeType.value
+                }
+            })
+        }
+
         return {
             assetsInfo,
             userAccount,
             tradeType,
             toDesposit,
+            toTransfer,
             toWirhdraw
         }
     }

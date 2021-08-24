@@ -1,6 +1,12 @@
 <template>
     <div class='fullPageWrapper'>
-        <LayoutTop :back='true' :menu='false' />
+        <LayoutTop :back='true' :menu='false'>
+            <template #right>
+                <a class='right-title' href='javascript:;' @click='toRecord'>
+                    {{ $t('assets.transferRecord') }}
+                </a>
+            </template>
+        </LayoutTop>
         <div class='page-content'>
             <div class='transfer'>
                 <div class='label'>
@@ -20,7 +26,7 @@
                         <van-icon name='arrow' />
                     </div>
                 </div>
-                <div class='right'>
+                <div class='right' @click='handleTransfer'>
                     <i class='icon_zhuanhuan'></i>
                 </div>
             </div>
@@ -71,11 +77,15 @@
 <script>
 import { computed, reactive, toRefs } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 export default {
     setup (props, { emit }) {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
+        const router = useRouter()
+        const route = useRoute()
+        const { accountId, tradeType } = route.query
         const state = reactive({
             curCurrency: 'USDT',
             pickerShow: false,
@@ -84,7 +94,8 @@ export default {
             loading: false,
             fromAccount: '',
             toAccount: '',
-            assetsList: []
+            assetsList: [],
+            transferType: ''
         })
 
         // 获取玩法列表
@@ -94,21 +105,39 @@ export default {
         state.toAccount = plans.value.filter(el => el.name !== state.fromAccount)[0].name
 
         const handleTransfer = () => {
-
+            state.fromAccount = state.toAccount
+            state.toAccount = state.fromAccount
         }
         const onPickerConfirm = (val) => {
             state.accountShow = false
-            state.fromAccount = val.name
+
+            if (state.transferType === 1) {
+                state.fromAccount = val.name
+            } else {
+                state.toAccount = val.name
+            }
+        }
+        const toRecord = () => {
+            router.push({
+                path: '/record',
+                query: {
+                    accountId,
+                    tradeType,
+                    type: 3
+                }
+            })
         }
         const handleFrom = () => {
+            state.transferType = 1
             state.accountShow = true
-            state.assetsList = plans.value.filter(el => el.name !== state.fromAccount)
+            state.assetsList = plans.value
+            // state.assetsList = plans.value.filter(el => el.name !== state.toAccount)
         }
 
         const handleTo = () => {
+            state.transferType = 2
             state.accountShow = true
-
-            state.assetsList = plans.value.filter(el => el.name !== state.toAccount)
+            state.assetsList = plans.value.filter(el => el.name !== state.fromAccount)
         }
         const customField = {
             text: 'name',
@@ -120,6 +149,8 @@ export default {
             handleFrom,
             handleTo,
             customField,
+            toRecord,
+            handleTransfer,
             ...toRefs(state),
             plans
         }
@@ -230,6 +261,10 @@ export default {
             font-size: rem(30px);
             background: var(--primary);
         }
+    }
+    .right-title {
+        color: var(--primary);
+        font-size: rem(24px);
     }
 }
 </style>

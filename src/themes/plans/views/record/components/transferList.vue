@@ -1,60 +1,63 @@
 <template>
-    <list
+    <!-- <list
         :liabilities-type='2'
         v-bind='$attrs'
-    >
-        <template #default='{ list }'>
-            <div v-for='item in list' :key='item.id' class='li'>
-                <div class='block'>
-                    <div class='left'>
-                        <span class='currency'>
-                            {{ item.currency }}
-                        </span>
-                        <span class='time'>
-                            {{ formatTime(item.createTime) }}
-                        </span>
-                    </div>
-                    <div class='right'>
-                        <span class='balance'>
-                            {{ item.liabilities }}
-                        </span>
-                    </div>
-                </div>
-                <div class='block'>
-                    <div class='left'>
-                        <span class='label'>
-                            {{ $t("record.repaymentAmount") }}
-                        </span>
-                        <span class='num'>
-                            {{ item.liabilitiesPrincipal }}
-                        </span>
-                    </div>
-                    <div class='right'>
-                        <span class='label'>
-                            {{ $t("trade.swap_2") }}
-                        </span>
-                        <span class='num'>
-                            {{ item.interest }}
-                        </span>
-                    </div>
-                </div>
+        :request-api='queryLiabilitiesWaterByPage'
+        :request-params='requestParams'
+        <template>
+    > -->
+
+    <!-- v-for='item in list' :key='item.id' #default='{ list }' -->
+    <div v-for='item in 10' :key='item' class='li'>
+        <div class='block'>
+            <div class='left'>
+                <span class='currency'>
+                    USDT
+                </span>
+                <span class='time'>
+                    <!-- {{ formatTime(item.createTime) }} -->
+                    2021.05.23 23:51:25
+                </span>
             </div>
-        </template>
-    </list>
+            <div class='right'>
+                <span class='balance'>
+                    54545.1454
+                </span>
+            </div>
+        </div>
+        <div class='block'>
+            <div class='left'>
+                <span class='label'>
+                    {{ $t("assets.toAccount") }}
+                </span>
+                <span class='num'>
+                    现货账户
+                </span>
+            </div>
+            <div class='right'>
+                <span class='label'>
+                    {{ $t("assets.fromAccount") }}
+                </span>
+                <span class='num'>
+                    CFD全仓账户
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!--  </template></list> -->
 </template>
 
 <script>
 import list from './list'
 import dayjs from 'dayjs'
+import { queryLiabilitiesWaterByPage } from '@/api/user'
 
 export default {
     components: { list },
     setup (props) {
-        const formatTime = (val) => {
-            return dayjs(val).format('YYYY/MM/DD HH:mm:ss')
-        }
         return {
-            formatTime
+            queryLiabilitiesWaterByPage
         }
     },
 }

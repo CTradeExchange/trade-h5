@@ -149,6 +149,7 @@ export default {
                         }).then(() => {
                             if (onlineServices.value) { location.href = onlineServices.value }
                         }).catch(() => {
+                            callback && callback(false)
                             // on cancel
                         })
                     } else {

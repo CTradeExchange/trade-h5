@@ -34,7 +34,7 @@ import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import loanList from './components/loanList'
 import repaymentList from './components/repaymentList'
-// import cransferList from './components/cransferList'
+import transferList from './components/transferList'
 import capitalList from './components/capitalList'
 import dateFilter from '@plans/components/dateFilter'
 
@@ -58,11 +58,11 @@ export default {
                 title: t('record.repaymentRecord'),
                 component: repaymentList
             },
-            // {
-            //     name: 3,
-            //     title: t('record.cransferRecord'),
-            //     component: cransferList
-            // },
+            {
+                name: 3,
+                title: t('record.cransferRecord'),
+                component: transferList
+            },
             {
                 name: 4,
                 title: t('record.capitalRecord'),
@@ -72,13 +72,15 @@ export default {
         const componentList = computed(() => {
             // 过滤逻辑
             switch (tradeType) {
-                case 1:
+                case 1: {
+                    return allList.filter(e => [3, 4].includes(e.name))
+                }
                 case 2: {
                     return allList.filter(e => e.name === 4)
                 }
                 case 3:
                 case 9: {
-                    return allList.filter(e => [1, 2, 4].includes(e.name))
+                    return allList
                 }
             }
             return []

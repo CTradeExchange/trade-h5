@@ -543,7 +543,10 @@
     "loanAmount": "借款数量",
     "loanRecord": "借款记录",
     "returnRecord": "还款记录",
-    "maxTransfer": "最大可划转"
+    "maxTransfer": "最大可划转",
+    "transferRecord": "划转记录",
+    "toAccount": "划入账户",
+    "fromAccount": "划出账户"
   },
   "record":{
     "repaymentAmount": "还款数量",

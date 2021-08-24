@@ -99,6 +99,7 @@ export default {
                             if (onlineServices.value) location.href = onlineServices.value
                         }).catch(() => {
                             // on cancel
+                            callback && callback(false)
                         })
                     } else if (Number(res.data.status === -1)) {
                         return Toast(t('c.userDisable'))
