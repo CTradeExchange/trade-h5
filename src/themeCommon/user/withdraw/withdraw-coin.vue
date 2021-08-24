@@ -368,6 +368,7 @@ export default {
                 ...params,
                 withdrawCurrency: state.coinKind,
                 blockchainName: state.chainName,
+                tradeType
             }).then(res => {
                 if (res.check()) {
                     const { data } = res
@@ -549,7 +550,8 @@ export default {
                 ...params,
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
                 withdrawCurrency: state.coinKind,
-                blockchainName: state.chainName
+                blockchainName: state.chainName,
+                tradeType
             }).then(res => {
                 if (res.check()) {
                     const { data } = res

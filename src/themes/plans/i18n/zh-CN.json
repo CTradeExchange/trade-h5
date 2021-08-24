@@ -106,7 +106,8 @@
     "historyDetail": "已平仓明细",
     "assets": "资产",
     "returnMoney": "还币",
-    "loan": "借款"
+    "loan": "借款",
+    "transfer": "划转"
   },
   "search": {
     "keywords": "请输入搜索关键词",
@@ -450,7 +451,8 @@
     
     "symbol": "产品",
     "trustTime": "委托时间",
-    "trustId": "委托编号"
+    "trustId": "委托编号",
+    "transfer": "划转"
 
   },
   "bizType": {
@@ -540,7 +542,8 @@
     "loanAmountExcess": "超出最大可借额度",
     "loanAmount": "借款数量",
     "loanRecord": "借款记录",
-    "returnRecord": "还款记录"
+    "returnRecord": "还款记录",
+    "maxTransfer": "最大可划转"
   },
   "record":{
     "repaymentAmount": "还款数量",

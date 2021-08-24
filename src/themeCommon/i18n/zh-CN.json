@@ -34,7 +34,8 @@
         "changeBindMobile": "更换手机",
         "chartSetting": "图表设置",
         "chooseCurrency": "选择币种",
-        "withdrawAccount": "选择提现币种"
+        "withdrawAccount": "选择提现币种",
+        "transfer": "划转"
     },
     "login": {
         "loginBtn": "登录",
@@ -138,7 +139,9 @@
         "allProduct": "全部产品",
         "startDay": "开始日期",
         "endDay": "结束日期",
-        "customDate": "自定义时间" 
+        "customDate": "自定义时间" ,
+        "from": "从",
+        "to": "到"
     },
     "auth": {
         "info": "需要准备的验证资料",

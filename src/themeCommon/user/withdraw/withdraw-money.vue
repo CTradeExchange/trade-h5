@@ -360,7 +360,8 @@ export default {
                 withdrawCurrency: currency,
                 country: customInfo.value.country,
                 withdrawType: 1,
-                withdrawMethod: 'bank'
+                withdrawMethod: 'bank',
+                tradeType
             }
 
             queryWithdrawConfig(params).then(res => {
