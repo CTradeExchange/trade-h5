@@ -161,9 +161,6 @@ export default {
         background: var(--primaryAssistColor);
         border-color: var(--primaryAssistColor);
         border-radius: rem(6px);
-        &:last-child {
-            margin-left: rem(30px);
-        }
     }
 }
 </style>

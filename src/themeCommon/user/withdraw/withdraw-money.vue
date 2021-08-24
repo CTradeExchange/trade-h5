@@ -190,6 +190,7 @@ export default {
                 accountId,
                 accountCurrency: accountCurrency.value,
                 amount: state.amount,
+                tradeType,
                 // companyId: customInfo.value.companyId,
                 // customerNo: customInfo.value.customerNo,
                 // customerGroupId: customInfo.value.customerGroupId,
@@ -338,6 +339,7 @@ export default {
                 companyId: customInfo.value.companyId,
                 customerNo: customInfo.value.customerNo,
                 accountId,
+                tradeType,
                 accountCurrency: accountCurrency.value,
                 withdrawCurrency: currency,
                 withdrawType: 1

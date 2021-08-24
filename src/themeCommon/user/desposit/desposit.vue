@@ -152,6 +152,7 @@ export default {
         const route = useRoute()
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
+        const { currency, accountId, tradeType } = route.query
 
         const rightAction = {
             title: t('deposit.depositRecord')
@@ -190,10 +191,7 @@ export default {
             despositVis: false,
             btnDisabled: false,
             resultTimeMap: {},
-            paymentTypes: [],
-            currency: route.query.currency,
-            accountId: route.query.accountId,
-            tradeType: route.query.tradeType,
+            paymentTypes: []
         })
 
         // 获取账户信息
@@ -259,7 +257,9 @@ export default {
             if (proposalNo) {
                 const params = {
                     customerNo: customInfo.value.customerNo,
-                    proposalNo
+                    proposalNo,
+                    tradeType,
+                    accountId
                 }
                 queryDepositProposal(params).then(res => {
                     if (res.check()) {
@@ -339,8 +339,9 @@ export default {
                 customerNo: customInfo.value.customerNo,
                 customerGroupId: customInfo.value.customerGroupId,
                 clientType: 'mobile',
-                accountId: state.accountId,
-                accountCurrency: state.currency,
+                accountId,
+                tradeType,
+                accountCurrency: currency,
             }
             state.loading = true
             queryPayType(params).then(res => {
@@ -366,8 +367,9 @@ export default {
             if (state.currencyChecked) {
                 const param = {
                     customerNo: customInfo.value.customerNo,
-                    accountId: state.accountId,
-                    accountCurrency: state.currency,
+                    accountId,
+                    tradeType,
+                    accountCurrency: currency,
                     paymentCurrency: state.currencyChecked.split('-').length > 1 ? state.currencyChecked.split('-')[0] : state.currencyChecked
                 }
                 state.loading = true
@@ -459,9 +461,9 @@ export default {
             }
 
             const params = {
-                tradeType: state.tradeType,
+                tradeType,
                 customerNo: customInfo.value.customerNo,
-                accountId: state.accountId,
+                accountId,
                 customerGroupId: customInfo.value.customerGroupId,
                 depositRateSerialNo: state.rateConfig.depositRateSerialNo,
                 paymentCurrency: state.checkedType.paymentCurrency,

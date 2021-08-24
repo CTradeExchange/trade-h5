@@ -174,15 +174,13 @@ export default {
         display: block;
         width: 50%;
         height: rem(60px);
+        margin-left: rem(30px);
         color: var(--primary);
         font-size: rem(24px);
         line-height: rem(60px);
         background: var(--primaryAssistColor);
         border-color: var(--primaryAssistColor);
         border-radius: rem(6px);
-        &:last-child {
-            margin-left: rem(30px);
-        }
     }
 }
 </style>

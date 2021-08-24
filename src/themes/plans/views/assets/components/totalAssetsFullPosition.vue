@@ -167,19 +167,19 @@ export default {
 }
 .btns {
     display: flex;
+    justify-content: space-evenly;
     .van-button {
-        display: block;
+        //display: block;
+        //flex: 1;
         width: 50%;
         height: rem(60px);
+        margin-left: rem(30px);
         color: var(--primary);
         font-size: rem(24px);
         line-height: rem(60px);
         background: var(--primaryAssistColor);
         border-color: var(--primary);
         border-radius: rem(6px);
-        &:last-child {
-            margin-left: rem(30px);
-        }
     }
 }
 </style>

@@ -85,8 +85,9 @@ export default {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
 
+        const { tradeType } = route.query
+
         const state = reactive({
-            tradeType: route.query.tradeType,
             outPickerShow: false,
             inPickerShow: false,
             outCurrency: '',
@@ -105,7 +106,7 @@ export default {
 
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
         // 当前币种
-        const columns = computed(() => accountList.value.filter(item => item.tradeType === Number(state.tradeType)).map(el => {
+        const columns = computed(() => accountList.value.filter(item => item.tradeType === Number(tradeType)).map(el => {
             return {
                 currency: el.currency,
                 accountId: el.accountId
@@ -113,7 +114,7 @@ export default {
         })
         )
 
-        const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.tradeType)))
+        const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(tradeType)))
 
         state.outCurrency = columns.value[0].currency
         state.accountId = columns.value[0].accountId
@@ -171,7 +172,7 @@ export default {
                 query: {
                     currency: state.inCurrency,
                     currentTab: state.currentTab,
-                    tradeType: state.tradeType,
+                    tradeType,
                     accountId: state.accountId
                 }
             })
@@ -191,7 +192,10 @@ export default {
         // 获取到账币种
         withdrawCurrencyList({
             customerGroupId: customInfo.customerGroupId,
-            customerNo: customInfo.customerNo
+            customerNo: customInfo.customerNo,
+            tradeType,
+            accountId: state.accountId
+
         }).then(res => {
             state.currencyList = res.data
 

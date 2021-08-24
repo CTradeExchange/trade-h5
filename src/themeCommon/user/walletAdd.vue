@@ -60,7 +60,7 @@ import { reactive, toRefs, computed, onMounted } from 'vue'
 // vuex
 import { useStore } from 'vuex'
 // router
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 // components
 import Top from '@/components/top'
 // vant
@@ -79,6 +79,8 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const router = useRouter()
+        const route = useRoute()
+        const { tradeType, accountId } = route.query
         const state = reactive({
             // 提币链名称数据列表
             allList: [],
@@ -146,7 +148,10 @@ export default {
                 customerNo: customInfo.customerNo,
                 customerGroupId: customInfo.customerGroupId,
                 country: customInfo.country,
-                withdrawMethod: 'digit_wallet'
+                withdrawMethod: 'digit_wallet',
+                tradeType,
+                accountId
+
             }).then(res => {
                 if (res.check()) {
                     const { data } = res

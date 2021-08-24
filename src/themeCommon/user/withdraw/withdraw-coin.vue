@@ -355,6 +355,7 @@ export default {
         const params = {
             customerNo: customInfo.customerNo,
             accountId,
+            tradeType,
             withdrawType: 2,
             accountCurrency: accountCurrency.value,
             customerGroupId: customInfo.customerGroupId,
@@ -455,6 +456,7 @@ export default {
                 customerNo: customInfo.customerNo,
                 customerGroupId: customInfo.customerGroupId,
                 accountId,
+                tradeType,
                 accountCurrency: accountCurrency.value,
                 country: customInfo.country,
                 withdrawMethod: 'digit_wallet'
@@ -532,6 +534,7 @@ export default {
                 // companyId: customInfo.companyId,
                 // customerNo: customInfo.customerNo,
                 accountId,
+                tradeType,
                 accountCurrency: accountCurrency.value,
                 withdrawCurrency: state.coinKind,
                 withdrawType: 2
@@ -551,7 +554,7 @@ export default {
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
                 withdrawCurrency: state.coinKind,
                 blockchainName: state.chainName,
-                tradeType
+
             }).then(res => {
                 if (res.check()) {
                     const { data } = res
@@ -638,7 +641,7 @@ export default {
         // 跳转到新增钱包地址页面
         const goWalletAdd = () => {
             state.walletSelectVisible = false
-            router.push('/walletAdd')
+            router.push({ path: '/walletAdd', query: { tradeType, accountId } })
         }
 
         // 钱包地址弹窗
@@ -683,7 +686,6 @@ export default {
             state.loading = true
             const item = {
                 ...params,
-                tradeType,
                 amount: state.coinCount,
                 withdrawCoinAmount: state.coinCount,
                 rate: state.withdrawRate.exchangeRate,
