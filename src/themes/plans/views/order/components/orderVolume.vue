@@ -11,7 +11,7 @@
         />
         <a class='entryType' href='javascript:;' @click='entryTypeUpdate'>
             <i class='icon_qiehuan'></i>
-            {{ parseInt(entryType)===2?$t('trade.volumes'):$t('trade.orderAmount') }}
+            {{ parseInt(entryType)===1?$t('trade.volumes'):$t('trade.orderAmount') }}
         </a>
     </div>
 </template>
