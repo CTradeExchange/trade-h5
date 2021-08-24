@@ -4,8 +4,11 @@
         <div class='page-content'>
             <div class='transfer'>
                 <div class='label'>
-                    {{ $t('common.from') }}<span v-for='i in 3' :key='i' class='dot'>
-                    </span> {{ $t('common.to') }}
+                    {{ $t('common.from') }}
+                    <div class='dots'>
+                        <span v-for='i in 3' :key='i' class='dot'>
+                        </span>
+                    </div> {{ $t('common.to') }}
                 </div>
                 <div class='center'>
                     <div class='from account'>
@@ -109,7 +112,7 @@ export default {
             background: var(--assistColor);
             .label {
                 //flex: 1;
-                width: rem(18px);
+                width: rem(22px);
                 margin: 0 rem(30px) 0 rem(22px);
                 color: var(--minorColor);
                 font-weight: bold;
@@ -118,13 +121,18 @@ export default {
                 letter-spacing: rem(20px);
                 text-align: center;
                 word-wrap: break-word;
-                .dot {
-                    display: block;
-                    width: rem(4px);
-                    height: rem(4px);
-                    margin: rem(17px) auto rem(15px);
+                .dots {
+                    margin: rem(20px) 0;
                     text-align: center;
-                    background: var(--placeholdColor);
+                    .dot {
+                        display: block;
+                        width: rem(6px);
+                        height: rem(6px);
+                        margin: 0 auto  rem(10px) auto;
+                        text-align: center;
+                        background: var(--placeholdColor);
+                        border-radius: 50%;
+                    }
                 }
             }
             .center {
