@@ -70,7 +70,7 @@ export default {
 
         const onLoad = () => {
             getList()
-                .then(([data, total]) => {
+                .then(([data = [], total = 0]) => {
                     if (state.refreshing) {
                         state.list = []
                         state.refreshing = false
