@@ -14,7 +14,7 @@
                 @change='tabChange'
                 @tabClick='tabClick'
             />
-            <van-icon name="search" @click="openSearch"/>
+            <van-icon name='search' @click='openSearch' />
         </div>
         <div class='titleBar van-hairline--bottom'>
             <span class='item'>
@@ -52,7 +52,7 @@ export default {
         const router = useRouter()
         const productListEl = ref(null)
         // 玩法列表
-        const plansList = computed(() => store.state._base.plans)
+        const plansList = computed(() => store.state._base.plans.filter(e => e.tradeType !== '5'))
 
         // 1.玩法类型
         const tradeType = ref(plansList.value[0].id)
@@ -86,7 +86,7 @@ export default {
         const tabClick = (i) => {}
 
         const showSidebar = ref(false)
-        const openSearch = ()=>{
+        const openSearch = () => {
             router.push('/productSearch')
         }
         return {
