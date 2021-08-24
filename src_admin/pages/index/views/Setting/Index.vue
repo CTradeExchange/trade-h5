@@ -509,7 +509,8 @@ export default {
                         tempCheckedTradeType[String(el.id)] = this.checkedTradeType[String(el.id)] || {
                             assets: ['1', '2'].indexOf(String(el.id)) ? '' : [],
                             sort: '',
-                            alias: ''
+                            alias: '',
+                            isWallet: ''
                         }
                     })
                     this.checkedTradeType = tempCheckedTradeType
@@ -556,10 +557,11 @@ export default {
                         // const initSortTradeType = {}
                         if (Array.isArray(content.tradeTypeList)) {
                             content.tradeTypeList.forEach(el => {
-                                const { allCurrency, sort, alias } = tradeTypeCurrencyEumn[String(el.id)]
+                                const { allCurrency, sort, alias, isWallet } = tradeTypeCurrencyEumn[String(el.id)]
                                 cacheCheckedTradeType[String(el.id)] = {
                                     assets: ['1', '2'].indexOf(String(el.id)) > -1 ? allCurrency : (typeof (allCurrency) === 'string' ? allCurrency.split(',') : []),
                                     sort,
+                                    isWallet,
                                     alias
                                 }
                                 // if (['1', '2'].indexOf(String(el.id)) > -1) {
@@ -610,11 +612,11 @@ export default {
                     // debugger
                     // console.log('this.checkedTradeTypeAssets-', this.checkedTradeTypeAssets)
                     const tempTradeTypeCurrencyList = this.tradeTypeList.map(el => {
-                        const { assets, sort, alias } = this.checkedTradeType[String(el.id)]
+                        const { assets, sort, alias, isWallet } = this.checkedTradeType[String(el.id)]
                         if (['1', '2'].indexOf(String(el.id)) > -1) {
-                            return { id: el.id, name: el.name, sort, allCurrency: assets || '', alias }
+                            return { id: el.id, name: el.name, sort, allCurrency: assets || '', alias, isWallet }
                         } else {
-                            return { id: el.id, name: el.name, sort, allCurrency: assets ? assets.join(',') : [], alias }
+                            return { id: el.id, name: el.name, sort, allCurrency: assets ? assets.join(',') : [], alias, isWallet }
                         }
                     })
                     tempTradeTypeCurrencyList.sort(function (a, b) {
