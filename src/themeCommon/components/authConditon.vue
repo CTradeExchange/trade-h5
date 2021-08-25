@@ -159,7 +159,7 @@ export default {
             getListByParentCode({ parentCode: 'id_card_type' }).then(res => {
                 if (res.check() && res.data.length > 0) {
                     state.columns = res.data
-                    state.typeValue = state.columns.find(item => item.code === state.elementCodeInputGroup)?.name
+                    state.typeValue = state.columns.find(item => item.code === state.elementCodeInputGroup)?.name || ''
                     // state.typeCode = state.columns.find(item => item.code === state.elementCodeInputGroup)?.code
 
                     if (res.data.length > 0) {
@@ -203,7 +203,7 @@ export default {
             if (!isEmpty(state.conditionModel)) {
                 for (const key in state.conditionModel) {
                     if (state.conditionModel.hasOwnProperty(key)) {
-                        if (!isEmpty(state.extendsMap[key].extend)) {
+                        if (!isEmpty(state.extendsMap[key]?.extend)) {
                             const valueReg = new RegExp(state.extendsMap[key].extend)
                             if (!valueReg.test(state.conditionModel[key])) {
                                 return Toast(`${state.extendsMap[key].name}` + t('register.incorrectlyFormed'))
