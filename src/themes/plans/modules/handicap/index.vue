@@ -105,7 +105,7 @@ export default {
         const ask_deep = computed(() => handicapList.value?.ask_deep?.slice(0)?.reverse())
         const bid_deep = computed(() => handicapList.value?.bid_deep?.slice(0)?.reverse())
 
-        const accountList = computed(() => store.state._user?.customerInfo?.accountList.filter(el => el.tradeType === Number(state.tradeType)))
+        const accountList = computed(() => store.state._user?.customerInfo?.accountList?.filter(el => el.tradeType === Number(state.tradeType)))
 
         // 获取当前产品
         const product = computed(() => store.state._quote.productMap[props.symbolId + '_' + state.tradeType])
