@@ -626,7 +626,7 @@ export default {
                             return Toast(`${extend[key][state.lang]}` + t('register.incorrectlyFormed'))
                         }
                     }
-                    if (isEmpty(state.appendMap[key])) {
+                    if (isEmpty(state.appendMap[key]?.value)) {
                         return Toast(t('deposit.allInputRequire'))
                     }
                     state.paramsExtens[key] = state.appendMap[key]?.value
