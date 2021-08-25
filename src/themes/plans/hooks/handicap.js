@@ -5,7 +5,7 @@ export default function ({ symbolId, tradeType, showPending }) {
     const store = useStore()
     // 获取盘口深度报价
 
-    const handicapList = computed(() => store.state._quote.handicapList.find(item => item.symbol_id === symbolId))
+    const handicapList = computed(() => store.state._quote.handicapList.find(item => item.symbol_id === String(symbolId)))
 
     // 获取当前产品
     const product = computed(() => store.state._quote.productMap[symbolId + '_' + tradeType])
