@@ -52,7 +52,7 @@ export default {
         const router = useRouter()
         const productListEl = ref(null)
         // 玩法列表
-        const plansList = computed(() => store.state._base.plans.filter(e => e.tradeType !== '5'))
+        const plansList = computed(() => store.state._base.plans.filter(e => !(e.tradeType === '5' && e.isWallet)))
 
         // 1.玩法类型
         const tradeType = ref(plansList.value[0].id)
