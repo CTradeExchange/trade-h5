@@ -25,7 +25,7 @@ export default {
                 title: t('trade.marketPrice'),
                 val: 1
             }, {
-                title: [3, 9].includes(props.tradeType) ? t('trade.pending2') : t('trade.pending'),
+                title: [3, 5, 9].includes(props.tradeType) ? t('trade.pending2') : t('trade.pending'),
                 val: 10
             }]
             // return parseInt(props.tradeType) === 9 ? list1 : list2

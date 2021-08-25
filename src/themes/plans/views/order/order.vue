@@ -167,7 +167,7 @@ export default {
 
         // 获取账户信息
         const queryAccountInfo = () => {
-            if ([3, 9].indexOf(product.value?.tradeType) === -1) return false
+            if ([3, 5, 9].indexOf(product.value?.tradeType) === -1) return false
             const proCurrency = state.direction === 'buy' ? product.value?.profitCurrency : product.value?.baseCurrency
             const curAccount = customerInfo.value?.accountList?.find(({ currency, tradeType }) => (currency === proCurrency && tradeType === product.value.tradeType))
             if (curAccount)store.dispatch('_user/queryAccountAssetsInfo', { accountId: curAccount.accountId, tradeType: product.value?.tradeType })
@@ -219,7 +219,7 @@ export default {
                 // 订阅产品五档报价
                 const curDigits = pow(0.1, product.symbolDigits)
                 if (state.orderHandicapVisible)QuoteSocket.deal_subscribe([symbolId], 5, curDigits, tradeType)
-                if (tradeType === '9') store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
+                if (tradeType === '9') store.dispatch('_user/queryCustomerAssetsInfo', { tradeType }) // 拉取全仓账户币种
 
                 const list = accountList.value?.filter(el => el.tradeType === Number(product.tradeType))
                 const accountIds = []
@@ -229,13 +229,13 @@ export default {
                     })
                 }
 
+                if ([3, 5, 9].includes(product.tradeType)) queryAccountInfo()
                 store.dispatch('_trade/queryPBOOrderPage', {
                     tradeType: product.tradeType,
                     sortFieldName: 'orderTime',
                     sortType: 'desc',
                     accountIds: accountIds + ''
                 })
-                if ([3, 9].includes(product.tradeType)) queryAccountInfo()
             })
         }
 
@@ -260,7 +260,7 @@ export default {
             }
             const p = Math.pow(10, product.value.price_digits)
             const params = {
-                bizType: [3, 9].includes(parseInt(tradeType)) && bizType.value === 10 ? 13 : bizType.value, // 业务类型。1-市价开；2-限价开
+                bizType: [3, 5, 9].includes(parseInt(tradeType)) && bizType.value === 10 ? 13 : bizType.value, // 业务类型。1-市价开；2-限价开
                 direction, // 订单买卖方向。1-买；2-卖；
                 symbolId: Number(symbolId),
                 accountCurrency: account.value.currency,
