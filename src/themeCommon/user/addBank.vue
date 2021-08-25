@@ -64,7 +64,7 @@
         :confirm-button-text='$t("common.sure")'
         :show-cancel-button='showCancel'
         @cancel='cancel'
-        @confirm='toBankList'
+        @confirm='$router.back()'
     >
         <i class='icon_success'></i>
         <p class='title'>
