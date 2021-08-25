@@ -223,18 +223,6 @@
                                     type='textarea'
                                 />
                             </el-form-item>
-                            <el-form-item label='保证金提醒'>
-                                <el-input
-                                    v-model='form.marginLevel.marginLess'
-                                    placeholder='请输入'
-                                />
-                            </el-form-item>
-                            <el-form-item label='保证金警告'>
-                                <el-input
-                                    v-model='form.marginLevel.marginWarn'
-                                    placeholder='请输入'
-                                />
-                            </el-form-item>
                             <el-form-item label='语言'>
                                 <el-select
                                     v-model='form.language'
@@ -326,12 +314,6 @@
                                     v-model='form.onlineService'
                                     placeholder='请输入'
                                     type='textarea'
-                                />
-                            </el-form-item>
-                            <el-form-item label='借款还款'>
-                                <el-input
-                                    v-model='form.borrowReturn'
-                                    placeholder='请输入'
                                 />
                             </el-form-item>
                         </el-col>
@@ -428,10 +410,6 @@ export default {
                 webApiUri: '',
                 imsApiUri: '',
                 h5PreviewAddress: '',
-                marginLevel: {
-                    marginLess: '',
-                    marginWarn: ''
-                },
                 other: {
                     isInitSymbol: ''
                 },
