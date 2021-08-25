@@ -119,8 +119,8 @@ export default {
 
         const cancelOrder = () => {
             Dialog.confirm({
-                title: '提示',
-                message: '确定撤单吗?',
+                title: t('tip'),
+                message: t('trade.cancelPendingOrder'),
             }).then(() => {
                 closePendingOrder()
             }).catch(() => {})
