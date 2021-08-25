@@ -53,7 +53,7 @@ export default {
 
         // 是否显示挂单数量
         const showPending = computed(() => {
-            if ([3, 9].includes(Number(tradeType))) {
+            if ([3, 5, 9].includes(Number(tradeType))) {
                 return true
             } else {
                 return false

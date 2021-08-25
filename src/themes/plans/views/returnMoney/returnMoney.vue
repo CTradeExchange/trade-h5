@@ -245,7 +245,7 @@ export default {
             state.inCurrency = route.query.currency
             state.outCurrency = route.query.currency
             if (parseFloat(account.value.available) === 0) {
-                const accountList = store.state._user.customerInfo?.accountList.filter(item => [3, 9].includes(item.tradeType)) || []
+                const accountList = store.state._user.customerInfo?.accountList.filter(item => [3, 5, 9].includes(item.tradeType)) || []
                 const newAccountList = accountList.slice().sort((a, b) => parseFloat(b.available) - parseFloat(a.available))
                 if (newAccountList.length && newAccountList[0].available > 0) {
                     // state.outCurrency = newAccountList[0].currency

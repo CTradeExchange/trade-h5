@@ -71,7 +71,7 @@ export default {
             })
             // if (state.customerInfo.accountMap[data.currency]) {
             //     Object.assign(state.customerInfo.accountMap[data.currency], data)
-            //     // Object.assign(state.customerInfo.accountList.filter(el => [3, 9].includes(el.tradeType)).find(item => item.currency === data.currency), data)
+            //     // Object.assign(state.customerInfo.accountList.filter(el => [3, 5, 9].includes(el.tradeType)).find(item => item.currency === data.currency), data)
             // }
         },
         Update_assetsInfo (state, data) {
@@ -145,7 +145,7 @@ export default {
             const accountMap = {}
             if (data.accountList?.length) {
                 data.accountList.forEach(el => {
-                    if ([3, 9].includes(el.tradeType)) accountMap[`${el.tradeType}_${el.currency}`] = el // 存储玩法3杠杆全仓的资产账户map类型
+                    if ([3, 5, 9].includes(el.tradeType)) accountMap[`${el.tradeType}_${el.currency}`] = el // 存储玩法3杠杆全仓的资产账户map类型
                 })
             }
             data.accountMap = accountMap

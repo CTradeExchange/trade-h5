@@ -9,7 +9,7 @@
         <div class='padding' :class="showField ? 'alignRight' : 'alignCenter'">
             {{ $t('trade.priceLabel') }}({{ product.profitCurrency }})
         </div>
-        <!-- v-if='[3,9].indexOf(Number(tradeType)) > -1' -->
+        <!-- v-if='[3, 5, 9].indexOf(Number(tradeType)) > -1' -->
         <div class='depth alignLeft'>
             <span class='depth-select'>
                 <van-popover

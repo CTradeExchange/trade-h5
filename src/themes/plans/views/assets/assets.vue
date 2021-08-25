@@ -115,7 +115,7 @@ export default {
         const initData = (val) => {
             if ([1, 2].indexOf(Number(val)) > -1) {
                 queryPositionList(val)
-            } else if ([3, 9].indexOf(Number(val)) > -1) {
+            } else if ([3, 5, 9].indexOf(Number(val)) > -1) {
                 store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: val })
             }
         }
