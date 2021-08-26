@@ -533,7 +533,8 @@
         "outAccount": "请选择提现的账户币种",
         "inAccount": "请选择到账币种",
         "withdrawRecord": "取款明细",
-        "withdrawMethod": "请选择取款方式"
+        "withdrawMethod": "请选择取款方式",
+        "withdrawDigitsTip": "取款金额小数位不能大于账户货币小数位"
         
     },
     "withdrawMoney": {

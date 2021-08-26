@@ -122,7 +122,7 @@ export default {
 
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
         // 账户币种
-        const accountCurrency = computed(() => store.state._user.customerInfo.accountList.find(el => el.accountId === Number(accountId))?.currency)
+        const { value: accountCurrency } = computed(() => store.state._user.customerInfo.accountList.find(el => el.accountId === Number(accountId)))
 
         const timeList = computed(() => {
             const timeConfigList = state.withdrawTimeConfigMap
@@ -188,7 +188,7 @@ export default {
 
             const params = {
                 accountId,
-                accountCurrency: accountCurrency.value,
+                accountCurrency: accountCurrency.currency,
                 amount: state.amount,
                 tradeType,
                 // companyId: customInfo.value.companyId,
@@ -291,6 +291,8 @@ export default {
         const confirm = () => {
             const amount = parseFloat(state.amount)
             const withdrawAmount = parseFloat(state.withdrawAmount)
+            const amountDigitsLength = state.amount.toString().split('.')[1] ? state.amount.toString().split('.')[1].length : 0
+
             if (!amount) {
                 return Toast(t('withdrawMoney.hint_1'))
             }
@@ -303,13 +305,17 @@ export default {
             if (amount > parseFloat(state.singleHighAmount)) {
                 return Toast(`${t('withdrawMoney.hint_4')}${state.singleHighAmount}`)
             }
+
+            if (amountDigitsLength > accountCurrency.digits) {
+                return Toast(t('withdraw.withdrawDigitsTip'))
+            }
             if (amount > withdrawAmount) {
                 return Toast(t('withdrawMoney.hint_5'))
             }
 
             const params = {
                 accountId,
-                accountCurrency: accountCurrency.value,
+                accountCurrency: accountCurrency.currency,
                 withdrawCurrency: currency,
                 amount: state.amount,
                 rate: state.withdrawRate.exchangeRate,
@@ -341,7 +347,7 @@ export default {
                 customerNo: customInfo.value.customerNo,
                 accountId,
                 tradeType,
-                accountCurrency: accountCurrency.value,
+                accountCurrency: accountCurrency.currency,
                 withdrawCurrency: currency,
                 withdrawType: 1
             }
@@ -359,7 +365,7 @@ export default {
                 customerNo: customInfo.value.customerNo,
                 accountId,
                 customerGroupId: customInfo.value.customerGroupId,
-                accountCurrency: accountCurrency.value,
+                accountCurrency: accountCurrency.currency,
                 withdrawCurrency: currency,
                 country: customInfo.value.country,
                 withdrawType: 1,
@@ -452,7 +458,7 @@ export default {
                                 path: '/desposit',
                                 query: {
                                     accountId,
-                                    currency: accountCurrency.value,
+                                    currency: accountCurrency.currency,
                                     tradeType
                                 }
                             })

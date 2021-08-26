@@ -274,7 +274,7 @@ export default {
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
 
         // 账户币种
-        const accountCurrency = computed(() => store.state._user.customerInfo.accountList.find(el => el.accountId === Number(accountId))?.currency)
+        const { value: accountCurrency } = computed(() => store.state._user.customerInfo.accountList.find(el => el.accountId === Number(accountId)))
 
         // 周数据
         const weekdayMap = {
@@ -357,7 +357,7 @@ export default {
             accountId,
             tradeType,
             withdrawType: 2,
-            accountCurrency: accountCurrency.value,
+            accountCurrency: accountCurrency.currency,
             customerGroupId: customInfo.customerGroupId,
             country: customInfo.country,
             withdrawMethod: 'digit_wallet'
@@ -429,7 +429,7 @@ export default {
                                 path: '/desposit',
                                 query: {
                                     accountId,
-                                    currency: accountCurrency.value,
+                                    currency: accountCurrency.currency,
                                     tradeType
                                 }
                             })
@@ -457,7 +457,7 @@ export default {
                 customerGroupId: customInfo.customerGroupId,
                 accountId,
                 tradeType,
-                accountCurrency: accountCurrency.value,
+                accountCurrency: accountCurrency.currency,
                 country: customInfo.country,
                 withdrawMethod: 'digit_wallet'
             }).then(res => {
@@ -535,7 +535,7 @@ export default {
                 // customerNo: customInfo.customerNo,
                 accountId,
                 tradeType,
-                accountCurrency: accountCurrency.value,
+                accountCurrency: accountCurrency.currency,
                 withdrawCurrency: state.coinKind,
                 withdrawType: 2
             }).then(res => {
@@ -614,6 +614,7 @@ export default {
         // 点击全部取出
         const onAllTake = () => {
             state.coinCount = state.coinTotal
+            getWithdrawFee()
         }
 
         // 获取钱包地址列表
@@ -659,14 +660,19 @@ export default {
         // 点击确定
         const onConfirm = () => {
             const coinCount = parseFloat(state.coinCount)
+            const amountDigitsLength = coinCount.toString().split('.')[1] ? coinCount.toString().split('.')[1].length : 0
             if (!state.coinKind) {
                 return Toast({ message: t('withdrawCoin.coinPlaceholder') })
             }
+
             if (!state.chainName) {
                 return Toast({ message: t('withdrawCoin.chainPlaceholder') })
             }
             if (!state.coinCount) {
                 return Toast({ message: t('withdrawCoin.coinCountPlaceholder') })
+            }
+            if (amountDigitsLength > accountCurrency.digits) {
+                return Toast(t('withdraw.withdrawDigitsTip'))
             }
             if (coinCount < state.singleLowAmount) {
                 return Toast({ message: `${t('withdrawCoin.hint_4')}${state.singleLowAmount}` })
@@ -677,6 +683,7 @@ export default {
             if (!state.currentWallet) {
                 return Toast({ message: t('withdrawCoin.walletSelect') })
             }
+
             // 发起提现
             launchHandleWithdraw()
         }
