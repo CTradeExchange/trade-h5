@@ -128,6 +128,29 @@
             {{ $t('deposit.payConfirmTips') }}
         </p>
     </van-dialog>
+
+    <van-popup v-model:show='appendVis' class='append-popup' position='right' :style="{ height: '100%',width: '80%' }">
+        <div class='append-wrap'>
+            <p class='title'>
+                {{ $t('deposit.appendFiled') }}
+            </p>
+            <van-cell-group inset>
+                <van-field
+                    v-for='(item,key) in checkedType.extend'
+                    :key='key'
+                    v-model='appendMap[key].value'
+                    :data='item'
+                    :label='item[lang]'
+                    label-width='70'
+                    :placeholder='$t("common.input")+ item[lang]'
+                    required='true'
+                />
+            </van-cell-group>
+            <van-button class='confirm-btn' size='large' type='primary' @click='handleAppendField'>
+                {{ $t('common.sure') }}
+            </van-button>
+        </div>
+    </van-popup>
 </template>
 
 <script>
@@ -138,7 +161,7 @@ import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, 
 import { getListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
-import { isEmpty, sessionGet } from '@/utils/util'
+import { isEmpty, sessionGet, localGet } from '@/utils/util'
 import dayjs from 'dayjs'
 import { mul } from '@/utils/calculation'
 import { useI18n } from 'vue-i18n'
@@ -191,7 +214,11 @@ export default {
             despositVis: false,
             btnDisabled: false,
             resultTimeMap: {},
-            paymentTypes: []
+            paymentTypes: [],
+            appendVis: false,
+            lang: localGet('lang'),
+            appendMap: {},
+            paramsExtens: {}
         })
 
         // 获取账户信息
@@ -315,6 +342,7 @@ export default {
         // 切换支付方式
         const choosePayType = (item) => {
             state.checkedType = item
+            state.appendMap = state.checkedType.extend
             setPaymentList(state.checkedType)
             payTypesSortEnable.value && payTypesSortEnable.value.map(item => {
                 item.checked = false
@@ -414,6 +442,7 @@ export default {
                             if (nowDate.isBetween(startLocal, endLocal)) {
                                 payItem.timeRangeFlag = true
                                 state.checkedType = payItem
+                                state.appendMap = state.checkedType.extend
                             }
                         })
                     }
@@ -421,6 +450,7 @@ export default {
 
                 if (isEmpty(state.checkedType)) {
                     state.checkedType = state.PayTypes[0]
+                    state.appendMap = state.checkedType.extend
                     state.PayTypes[0].checked = true
                 }
                 setPaymentList(state.checkedType)
@@ -448,7 +478,6 @@ export default {
             getDepositExchangeRate()
         }
 
-        // 创建存款提案
         const next = () => {
             if (!state.amount) {
                 return Toast(t('deposit.selectAmount'))
@@ -460,6 +489,32 @@ export default {
                 return Toast(t('deposit.amountMaxTips') + `${state.checkedType.singleHighAmount}`)
             }
 
+            // 判断是否需要填写补充资料
+            if (!checkAllComplete()) {
+                state.appendVis = true
+                return
+            }
+
+            handleDeposit()
+        }
+
+        // 补充资料是否全部填写完成
+        const checkAllComplete = () => {
+            let flag = true
+            const extend = state.checkedType.extend
+            for (const key in extend) {
+                if (Object.hasOwnProperty.call(extend, key)) {
+                    const element = extend[key]
+                    if (isEmpty(element.value)) {
+                        flag = false
+                    }
+                }
+            }
+            return flag
+        }
+
+        // 创建存款提案
+        const handleDeposit = () => {
             const params = {
                 tradeType,
                 customerNo: customInfo.value.customerNo,
@@ -477,7 +532,12 @@ export default {
                 channelCode: customInfo.value.utmSource,
                 depositFrom: 'H5',
                 callbackUrl: window.location.protocol + '//' + window.location.host + '/despositCb',
-                blockchainName: (state.currencyChecked && state.currencyChecked.split('-').length > 1) ? state.currencyChecked.split('-')[1] : ''
+                blockchainName: (state.currencyChecked && state.currencyChecked.split('-').length > 1) ? state.currencyChecked.split('-')[1] : '',
+
+            }
+
+            if (!isEmpty(state.paramsExtens)) {
+                params.extend = JSON.stringify(state.paramsExtens)
             }
 
             state.loading = true
@@ -554,6 +614,28 @@ export default {
             })
         }
 
+        // 补充资料确定事件
+        const handleAppendField = () => {
+            const extend = state.checkedType.extend
+            for (const key in extend) {
+                if (Object.hasOwnProperty.call(extend, key)) {
+                    const element = extend[key]
+                    if (!isEmpty(element.regex)) {
+                        const valueReg = new RegExp(element.regex)
+                        if (!valueReg.test(state.appendMap[key]?.value)) {
+                            return Toast(`${extend[key][state.lang]}` + t('register.incorrectlyFormed'))
+                        }
+                    }
+                    if (isEmpty(state.appendMap[key]?.value)) {
+                        return Toast(t('deposit.allInputRequire'))
+                    }
+                    state.paramsExtens[key] = state.appendMap[key]?.value
+                }
+            }
+
+            handleDeposit()
+        }
+
         onBeforeMount(() => {
             // 检测客户组配置是否可存款
             if (Number(customInfo.value.deposit) === 0) {
@@ -599,6 +681,7 @@ export default {
             payTypesSortDisable,
             onlineServices,
             changePayCurrency,
+            handleAppendField
 
         }
     }
@@ -800,4 +883,23 @@ export default {
         color: var(--color);
     }
 }
+.append-popup {
+    background-color: var(--bgColor);
+    .append-wrap {
+        text-align: center;
+        //padding: 0 rem(30px);
+        background-color: var(--contentColor);
+        .title {
+            padding: rem(60px) 0;
+            color: var(--color);
+            font-size: rem(32px);
+            text-align: center;
+        }
+        .confirm-btn {
+            width: 80%;
+            margin: rem(50px) auto;
+        }
+    }
+}
+
 </style>

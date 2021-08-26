@@ -9,10 +9,10 @@
             @blur='onBlur'
             @input='onInput'
         />
-        <a class='entryType' href='javascript:;' @click='entryTypeUpdate'>
+        <!-- <a class='entryType' href='javascript:;' @click='entryTypeUpdate'>
             <i class='icon_qiehuan'></i>
             {{ parseInt(entryType)===1?$t('trade.volumes'):$t('trade.orderAmount') }}
-        </a>
+        </a> -->
     </div>
 </template>
 

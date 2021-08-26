@@ -11,12 +11,12 @@
                 <!-- 订单类型 -->
                 <OrderTypeTab v-model='orderType' :trade-type='product.tradeType' @selected='changeOrderType' />
                 <!-- 自动借款 -->
-                <LoanBar v-if='[3,9].includes(product.tradeType)' v-model='operationType' :account='account' class='cellMarginTop' :product='product' />
+                <LoanBar v-if='[3, 5, 9].includes(product.tradeType)' v-model='operationType' :account='account' class='cellMarginTop' :product='product' />
                 <!-- 方向 -->
                 <Direction v-model='direction' :product='product' />
                 <!-- 挂单设置 -->
                 <PendingBar
-                    v-if='[3,9].includes(product.tradeType) && orderType===10'
+                    v-if='[3, 5, 9].includes(product.tradeType) && orderType===10'
                     ref='pendingRef'
                     v-model='pendingPrice'
                     class='cellMarginTop'
@@ -35,7 +35,7 @@
                 <OrderVolume v-model='volume' v-model:entryType='entryType' class='cellMarginTop' :product='product' />
                 <!-- 订单金额 -->
                 <Assets
-                    v-if='account && [3,9].includes(product.tradeType)'
+                    v-if='account && [3, 5, 9].includes(product.tradeType)'
                     :account='account'
                     :direction='direction'
                     :product='product'

@@ -49,7 +49,7 @@
                                         {{ $t('withdrawRecord.moneyName') }}
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.amount }} {{ item.withdrawCurrency }}
+                                        {{ item.amount }} {{ item.accountCurrency }}
                                     </span>
                                 </div>
                                 <!-- <div class='w-item'>
@@ -72,7 +72,7 @@
 
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        {{ $t('withdrawRecord.serviceName') }}
+                                        {{ $t('withdrawRecord.serviceName') }}{{ item.accountCurrency }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.withdrawFee }}

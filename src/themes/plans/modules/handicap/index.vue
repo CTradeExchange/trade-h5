@@ -9,7 +9,7 @@
         <div class='padding' :class="showField ? 'alignRight' : 'alignCenter'">
             {{ $t('trade.priceLabel') }}({{ product.profitCurrency }})
         </div>
-        <!-- v-if='[3,9].indexOf(Number(tradeType)) > -1' -->
+        <!-- v-if='[3, 5, 9].indexOf(Number(tradeType)) > -1' -->
         <div class='depth alignLeft'>
             <span class='depth-select'>
                 <van-popover
@@ -105,7 +105,7 @@ export default {
         const ask_deep = computed(() => handicapList.value?.ask_deep?.slice(0)?.reverse())
         const bid_deep = computed(() => handicapList.value?.bid_deep?.slice(0)?.reverse())
 
-        const accountList = computed(() => store.state._user?.customerInfo?.accountList.filter(el => el.tradeType === Number(state.tradeType)))
+        const accountList = computed(() => store.state._user?.customerInfo?.accountList?.filter(el => el.tradeType === Number(state.tradeType)))
 
         // 获取当前产品
         const product = computed(() => store.state._quote.productMap[props.symbolId + '_' + state.tradeType])

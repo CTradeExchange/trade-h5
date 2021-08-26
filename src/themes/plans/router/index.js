@@ -53,6 +53,7 @@ const routes = [
                 component: () => import(/* webpackChunkName: "Assets" */ '../views/assets/assets.vue'),
                 meta: {
                     title: 'route.assets',
+                    roles: ['User'],
                 }
             },
             {

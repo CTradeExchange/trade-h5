@@ -202,6 +202,7 @@ class SocketEvent {
         // AMOUNT(3 ,"刷新资金"),
         // LOGOUT(4 ,"踢出"),
         // POSITION_AND_ORDER(5, "同时刷新挂单、仓位"),
+        // POSITION_AND_ORDER(6, "同时刷新挂单、资金"),
         const store = this.$store
         if (updateType === 1) {
             store.dispatch('_trade/queryPositionPage', { tradeType })

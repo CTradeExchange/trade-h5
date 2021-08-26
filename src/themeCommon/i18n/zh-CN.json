@@ -241,7 +241,9 @@
         "inputAmount": "请输入金额",
         "chooseCurrency": "请选择需充值的账户币种",
         "despositFail": "抱歉，可能因为网络原因，尚未收到支付成功消息。如已完成支付，请稍后查看或联系在线客服处理",
-        "toRecord": "查看充值记录"
+        "toRecord": "查看充值记录",
+        "appendFiled": "补充资料",
+        "allInputRequire": "请填写所有补充资料" 
     },
     "fund": {
         "marginLevel": "保证金水平",

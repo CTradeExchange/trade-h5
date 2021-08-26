@@ -20,7 +20,7 @@
                 @change='positionTypeChange'
             />
             <van-dropdown-item
-                v-if='[3,9].indexOf(Number(tradeType)) > -1'
+                v-if='[3, 5, 9].indexOf(Number(tradeType)) > -1'
                 v-model='positionTypeVal'
                 :options='priceTypeList'
                 @change='positionTypeChange'
@@ -108,7 +108,7 @@
                             </span>
                         </p>
 
-                        <p v-if='[3,9].indexOf(Number(tradeType)) > -1' class='tl-item'>
+                        <p v-if='[3, 5, 9].indexOf(Number(tradeType)) > -1' class='tl-item'>
                             <label for=''>
                                 {{ $t('trade.loan') }}
                             </label>

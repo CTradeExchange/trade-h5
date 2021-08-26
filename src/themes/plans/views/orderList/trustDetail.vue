@@ -59,7 +59,7 @@
                             </span>
                         </div>
                     </div>
-                    <div v-if='[3,9].includes(Number(tradeType))' class='col'>
+                    <div v-if='[3, 5, 9].includes(Number(tradeType))' class='col'>
                         <div class='sub'>
                             {{ $t('trade.loan') }}
                         </div>
@@ -151,8 +151,8 @@ export default {
         // 撤单
         const cancelOrder = () => {
             Dialog.confirm({
-                title: '提示',
-                message: '确定撤单吗?',
+                title: t('tip'),
+                message: t('trade.cancelPendingOrder'),
             }).then(() => {
                 loading.value = true
                 const params = {
