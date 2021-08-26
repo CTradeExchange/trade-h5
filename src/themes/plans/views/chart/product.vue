@@ -14,8 +14,7 @@
                     <button v-preventReClick class='collectIcon' @click='addOptional'>
                         <i
                             ref='collect'
-                            class='icon_zixuan1'
-                            :class="{ 'icon_zixuan2':isSelfSymbol }"
+                            :class="[isSelfSymbol?'icon_zixuan2':'icon_zixuan1']"
                         ></i>
                     </button>
                     <div v-if='![3, 5, 9].includes(product.tradeType)' class='ft'>
