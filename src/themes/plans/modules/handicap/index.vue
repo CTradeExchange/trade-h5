@@ -46,7 +46,7 @@
                     {{ item.volume_ask }}
                 </span>
                 <span
-                    class='histogram buy-histogram'
+                    class='histogram sell-histogram'
                     :style='"width:"+ item?.width + "%"'
                 ></span>
 
@@ -67,7 +67,7 @@
                     {{ item.unitNum === 0 ? '': item.unitNum }}
                 </span>
                 <span
-                    class='histogram sell-histogram'
+                    class='histogram buy-histogram'
                     :style='"width:"+ item?.width + "%"'
                 ></span>
             </div>
@@ -278,6 +278,7 @@ export default {
             .quantity {
                 position: relative;
                 z-index: 1;
+                text-align: center;
             }
             .label {
                 //flex: 1;

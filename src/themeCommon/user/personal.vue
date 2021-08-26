@@ -4,7 +4,7 @@
         <van-cell-group>
             <van-cell is-link :title='$t("cRoute.authentication")' to='/authentication' />
             <van-cell is-link :title='$t("cRoute.bankList")' to='/bankList' />
-            <van-cell is-link :title='$t("cRoute.walletAddress")' to='/walletAddress' />
+            <!-- <van-cell is-link :title='$t("cRoute.walletAddress")' to='/walletAddress' /> -->
         </van-cell-group>
     </div>
 </template>

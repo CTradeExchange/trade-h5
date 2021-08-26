@@ -250,7 +250,7 @@
 
         <div class='footerBtnBox'>
             <div class='trade-btn-wrap'>
-                <div class='buy riseColorBg' @click="toOrder('buy')">
+                <div class='buy fallColorBg' @click="toOrder('buy')">
                     <p>
                         {{ $t('trade.buy') }}
                     </p>
@@ -258,7 +258,7 @@
                         {{ product.buy_price }}
                     </p> -->
                 </div>
-                <div class='sell fallColorBg' @click="toOrder('sell')">
+                <div class='sell riseColorBg' @click="toOrder('sell')">
                     <p>
                         {{ $t('trade.sell') }}
                     </p>
