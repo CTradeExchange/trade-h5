@@ -22,20 +22,21 @@
                             </div>
                         </div> -->
                         <div class='col'>
-                            <div class='sub'>
+                            <div class='sub alignLeft'>
                                 {{ $t('trade.profit') }}({{ assetsInfo.currency }})
                             </div>
                             <div class='name' :class="parseFloat(positionData.profitLoss) > 0 ? 'riseColor': 'fallColor'">
                                 {{ positionData.profitLoss }}
                             </div>
-                        </div><div class='col'>
+                        </div>
+                        <!-- <div class='col'>
                             <div class='sub'>
                                 {{ $t('trade.swap_2') }}({{ assetsInfo.currency }})
                             </div>
                             <div class='name'>
                                 {{ positionData.interest || '--' }}
                             </div>
-                        </div>
+                        </div> -->
                         <!-- abcc版本不需要显示手续费 -->
                         <!-- <div class='col'>
                             <div class='sub'>

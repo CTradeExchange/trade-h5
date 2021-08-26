@@ -109,8 +109,8 @@ export default {
             digits: state.curDigits
         })
 
-        const ask_deep = computed(() => handicapResult?.value?.ask_deep?.slice(0)?.reverse())
-        const bid_deep = computed(() => handicapResult?.value?.bid_deep?.slice(0)?.reverse())
+        const ask_deep = computed(() => handicapResult?.value?.ask_deep?.slice(0))
+        const bid_deep = computed(() => handicapResult?.value?.bid_deep?.slice(0))
 
         const accountList = computed(() => store.state._user?.customerInfo?.accountList?.filter(el => el.tradeType === Number(state.tradeType)))
 
