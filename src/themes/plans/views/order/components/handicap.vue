@@ -24,7 +24,7 @@
             {{ lastPrice }}
         </div>
         <div v-if='handicapList' class='priceMultiGear sell'>
-            <p v-for='(item, index) in handicapList.bid_deep.slice(0,5)' :key='index' class='item'>
+            <p v-for='(item, index) in handicapResult.bid_deep.slice(0,5)' :key='index' class='item'>
                 <span class='hd'>
                     {{ item.price_bid }}
                 </span>
@@ -62,8 +62,16 @@ export default {
         })
         // 获取盘口深度报价
         const handicapList = computed(() => store.state._quote.handicapList.find(({ symbol_id }) => parseInt(symbol_id) === props.product.symbolId))
+
+        // 获取处理后的盘口数据
+        const { handicapResult } = computeHandicap({
+            tradeType: props.product.tradeType,
+            symbolId: props.product.symbolId,
+            showPending: false
+        })
+
         const ask_deep = computed(() => {
-            const list = handicapList.value?.ask_deep?.slice(0)?.reverse()
+            const list = handicapResult.value?.ask_deep?.slice(0)?.reverse()
             return list.slice(0, 5) || []
         })
         // 最新成交价
@@ -78,13 +86,6 @@ export default {
             }
 
             return digits.splice(0, 5)
-        })
-
-        // 获取处理后的盘口数据
-        computeHandicap({
-            tradeType: props.product.tradeType,
-            symbolId: props.product.symbolId,
-            showPending: false
         })
 
         // 最新成交价的颜色
@@ -106,6 +107,7 @@ export default {
             lastPrice,
             ask_deep,
             digitLevelList,
+            handicapResult,
         }
     }
 }
@@ -125,10 +127,10 @@ export default {
         font-size: rem(24px);
         line-height: rem(40px);
         &.sell {
-            color: var(--fallColor);
+            color: var(--riseColor);
         }
         &.buy {
-            color: var(--riseColor);
+            color: var(--fallColor);
         }
         .item {
             position: relative;
@@ -140,12 +142,12 @@ export default {
                 right: 0;
                 max-width: 99%;
                 height: 100%;
-                background: var(--fallColor);
+                background: var(--riseColor);
                 opacity: 0.05;
                 transition: all 0.3s linear;
                 content: '';
                 &.buy {
-                    background: var(--riseColor);
+                    background: var(--fallColor);
                 }
             }
             .ft {
