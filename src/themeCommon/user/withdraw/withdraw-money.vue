@@ -279,6 +279,7 @@ export default {
         // 全部取出
         const getAll = () => {
             state.amount = state.withdrawConfig.withdrawAmount
+            getWithdrawFee()
         }
 
         // 改变取款金额
