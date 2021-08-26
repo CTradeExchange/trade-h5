@@ -158,17 +158,17 @@ export default {
 
         const queryPBOOrderPage = () => {
             const accountIds = []
-            if (accountList.value.length > 0) {
+            if (accountList.value && accountList.value.length > 0) {
                 accountList.value.forEach(element => {
                     accountIds.push(element.accountId)
                 })
+                store.dispatch('_trade/queryPBOOrderPage', {
+                    tradeType: state.tradeType,
+                    sortFieldName: 'orderTime',
+                    sortType: 'desc',
+                    accountIds: accountIds + ''
+                })
             }
-            store.dispatch('_trade/queryPBOOrderPage', {
-                tradeType: state.tradeType,
-                sortFieldName: 'orderTime',
-                sortType: 'desc',
-                accountIds: accountIds + ''
-            })
         }
 
         queryPBOOrderPage()
@@ -311,11 +311,11 @@ export default {
                 opacity: 0.2;
                 transition: width 0.28s ease-in-out;
                 &.sell-histogram {
+                    right: 0;
                     background: var(--riseColor);
                     opacity: 0.05;
                 }
                 &.buy-histogram {
-                    right: 0;
                     background: var(--fallColor);
                     opacity: 0.05;
                 }
