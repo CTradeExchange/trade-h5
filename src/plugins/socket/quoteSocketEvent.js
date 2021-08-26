@@ -135,9 +135,9 @@ class SocketEvent {
             const dealData = {
                 symbolId: lastData.symbol_id,
                 dealTime: lastData.tick_time,
-                trade_direction: 1,
+                trade_direction: lastData.trade_direction,
                 price: lastData.price,
-                volume: 0,
+                volume: lastData.volume,
             }
             this.$store.commit('_quote/Update_dealList', dealData)
         }

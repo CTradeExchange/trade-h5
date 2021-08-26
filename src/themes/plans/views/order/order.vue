@@ -363,7 +363,7 @@ export default {
 .orderWrap {
     position: relative;
     height: 100%;
-    padding-bottom: rem(100px);
+    margin-bottom: rem(100px);
     overflow-y: auto;
     color: var(--color);
     background: var(--bgColor);
