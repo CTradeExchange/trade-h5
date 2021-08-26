@@ -474,7 +474,7 @@ export default {
             loading: false
         })
 
-        if (symbolId && tradeType) store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
+        if (symbolId && tradeType) store.commit('_quote/Update_productActivedID', `${symbolId.value}_${tradeType.value}`)
 
         const computedLineList = computed(() => {
             if (product.value.tradeType === 9) {
@@ -490,8 +490,8 @@ export default {
             return curIndex + 1
         })
         const product = computed(() => {
-            const product = store.state._quote.productMap[`${getSymbolId()}_${getTradeType()}`]
-            if (product.cur_price) {
+            const product = store.getters.productActived
+            if (product?.cur_price) {
                 // 有产品数据就渲染图表
                 renderChart(product, state.initConfig.property)
             }

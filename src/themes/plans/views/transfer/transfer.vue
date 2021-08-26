@@ -39,7 +39,7 @@
             <div class='action-bar'>
                 <input v-model='amount' placeholder='最少划转 0.000001' type='number' />
                 <span class='unit'>
-                    USD
+                    {{ curCurrency?.currency }}
                 </span>
                 <span class='all' @click='handleAll'>
                     {{ $t('common.all') }}
@@ -92,7 +92,6 @@ export default {
         const { accountId, tradeType } = route.query
         const state = reactive({
             currency: 'USDT',
-            curCurrency: '',
             pickerShow: false,
             currencyList: ['USDT', 'BTC'],
             accountShow: false,
@@ -110,11 +109,17 @@ export default {
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
 
         state.fromAccount = plans.value[0]
-        state.toAccount = plans.value.filter(el => el.name !== state.fromAccount)[0]
+        state.toAccount = plans.value.filter(el => el.name !== state.fromAccount.name)[0]
 
-        const { value: accountList } = computed(() => store.state._user?.customerInfo?.accountList?.filter(el => Number(el.tradeType) === Number(state.fromAccount.id)))
+        const toAccountId = computed(() => {
+            return store.state._user?.customerInfo?.accountList.find(el => Number(el.tradeType) === Number(state.toAccount.id) && el.currency === curCurrency.value.currency)
+        })
 
-        state.curCurrency = accountList[0]
+        const accountList = computed(() =>
+            store.state._user?.customerInfo?.accountList?.filter(el => Number(el.tradeType) === Number(state.fromAccount.id))
+        )
+
+        const curCurrency = computed(() => accountList.value[0])
 
         const handleTransfer = () => {
             // state.fromAccount = state.toAccount
@@ -125,18 +130,24 @@ export default {
             if (state.amount <= 0) {
                 return Toast(t('assets.transferTip2'))
             }
-            capitalTransfer({
+            if (isEmpty(toAccountId.value)) {
+                return Toast(t('assets.transferTip3'))
+            }
+
+            const params = {
                 customerNo: customInfo.customerNo,
-                accountId: '',
+                accountId: curCurrency.value.accountId,
                 customerId: customInfo.id,
                 tradeType: state.fromAccount.id,
-                accountDigit: state.curCurrency.digits,
+                accountDigit: curCurrency.value.digits,
                 toTradeType: state.toAccount.id,
-                toAccountId: '',
+                toAccountId: toAccountId.value.accountId,
                 toCustomerNo: customInfo.customerNo,
-                toAccountDigit: state.curCurrency.digits,
-                amount: ''
-            }).then(res => {
+                toAccountDigit: curCurrency.value.digits,
+                amount: state.amount
+            }
+
+            capitalTransfer(params).then(res => {
 
             }).catch(err => {
                 state.loadingMore = false
@@ -170,20 +181,20 @@ export default {
         const handleFrom = () => {
             state.transferType = 1
             state.accountShow = true
-            state.assetsList = plans.value
+            state.assetsList = plans.value.filter(el => el.name !== state.toAccount.name)
             // state.assetsList = plans.value.filter(el => el.name !== state.toAccount)
         }
 
         // 选取币种确定事件
         const onCurrencyConfirm = (val) => {
-            state.curCurrency = val
+            // state.curCurrency = val
             state.pickerShow = false
         }
 
         const handleTo = () => {
             state.transferType = 2
             state.accountShow = true
-            state.assetsList = plans.value.filter(el => el.name !== state.fromAccount)
+            state.assetsList = plans.value.filter(el => el.name !== state.fromAccount.name)
         }
         const customField = {
             text: 'name',
@@ -209,6 +220,7 @@ export default {
             handleAll,
             accountList,
             currencyField,
+            curCurrency,
             ...toRefs(state),
 
         }

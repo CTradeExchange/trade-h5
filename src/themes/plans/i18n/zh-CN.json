@@ -549,7 +549,8 @@
     "fromAccount": "划出账户",
     "riskLevel": "风险率:",
     "transferTip1": "划转金额不能为空",
-    "transferTip2": "划转金额不能为负数"
+    "transferTip2": "划转金额不能为负数",
+    "transferTip3": "转入账户没有当前币种"
   },
   "record":{
     "repaymentAmount": "还款数量",

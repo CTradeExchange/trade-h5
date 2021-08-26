@@ -10,7 +10,7 @@ export default function ({ showPending }) {
     const deepthDigits = computed(() => store.state._quote.deepthDigits.toString().split('.')[1].length)
 
     // 当前玩法挂单列表
-    const pendingList = computed(() => store.state._trade.pendingList[product.value?.tradeType])
+    const pendingList = computed(() => store.state._trade?.pendingList[product.value?.tradeType])
 
     const handicapList = computed(() => store.state._quote.handicapList.find(item => item.symbol_id === String(product.value?.symbolId)))
 

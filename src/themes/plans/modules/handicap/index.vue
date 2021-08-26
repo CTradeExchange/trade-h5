@@ -112,7 +112,7 @@ export default {
         const accountList = computed(() => store.state._user?.customerInfo?.accountList?.filter(el => el.tradeType === Number(state.tradeType)))
 
         // 获取当前产品
-        const product = computed(() => store.state._quote.productMap[props.symbolId + '_' + state.tradeType])
+        const product = computed(() => store.getters.productActived)
 
         // 是否显示'我的'列
         const showField = computed(() => {
@@ -140,11 +140,14 @@ export default {
             if (newVal > 0) {
                 state.curDigits = digitLevelList.value[0]?.text
                 store.commit('_quote/Update_deepthDigits', state.curDigits)
-                // 订阅盘口深度报价
-                QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits, state.tradeType)
             }
         }, {
             immediate: true
+        })
+
+        watch(() => product.value.symbolId, newVal => {
+            // 订阅盘口深度报价
+            QuoteSocket.deal_subscribe([newVal], 10, state.curDigits, state.tradeType)
         })
 
         // 修改报价深度
