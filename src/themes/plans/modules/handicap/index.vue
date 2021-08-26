@@ -35,7 +35,7 @@
             {{ $t('trade.my') }}
         </div>
     </div>
-    <van-empty v-if='!handicapList' :description='$t("common.noData")' image='/images/empty.png' />
+    <van-empty v-if='!handicapResult' :description='$t("common.noData")' image='/images/empty.png' />
     <div class='stalls-wrap' :class='{ padding: !showField }'>
         <div class='sell-wrap'>
             <div v-for='(item,index) in ask_deep' :key='index' class='item'>
@@ -63,7 +63,7 @@
                 <span class='quantity alignRight'>
                     {{ item.volume_bid }}
                 </span>
-                <span v-if='showField' class='label label-right riseColor'>
+                <span v-if='showField' class='label label-center riseColor'>
                     {{ item.unitNum === 0 ? '': item.unitNum }}
                 </span>
                 <span
@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { computed, reactive, toRefs, watch, onBeforeUnmount, watchEffect } from 'vue'
+import { computed, reactive, toRefs, watch, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
@@ -102,8 +102,15 @@ export default {
         // 获取盘口深度报价
         const handicapList = computed(() => store.state._quote.handicapList.find(item => item.symbol_id === props.symbolId))
 
-        const ask_deep = computed(() => handicapList.value?.ask_deep?.slice(0)?.reverse())
-        const bid_deep = computed(() => handicapList.value?.bid_deep?.slice(0)?.reverse())
+        const { handicapResult } = computeHandicap({
+            tradeType: state.tradeType,
+            symbolId: props.symbolId,
+            showPending: true,
+            digits: state.curDigits
+        })
+
+        const ask_deep = computed(() => handicapResult?.value?.ask_deep?.slice(0)?.reverse())
+        const bid_deep = computed(() => handicapResult?.value?.bid_deep?.slice(0)?.reverse())
 
         const accountList = computed(() => store.state._user?.customerInfo?.accountList?.filter(el => el.tradeType === Number(state.tradeType)))
 
@@ -143,13 +150,6 @@ export default {
             immediate: true
         })
 
-        computeHandicap({
-            tradeType: state.tradeType,
-            symbolId: props.symbolId,
-            showPending: true,
-            digits: state.curDigits
-        })
-
         // 修改报价深度
         const onSelect = (val) => {
             state.curDigits = val.text
@@ -187,7 +187,9 @@ export default {
             bid_deep,
             digitLevelList,
             ...toRefs(state),
-            showField
+            showField,
+            handicapResult
+            // handicapResult
         }
     }
 }
@@ -207,7 +209,7 @@ export default {
         color: var(--minorColor);
         font-size: rem(20px);
         &.my {
-            flex: 0 0 rem(90px);
+            flex: 0 0 rem(110px);
             text-align: center;
         }
         &.padding {
@@ -278,7 +280,8 @@ export default {
                 z-index: 1;
             }
             .label {
-                flex: 1;
+                //flex: 1;
+                width: rem(100px);
                 text-align: center;
                 &.label-right {
                     text-align: right;

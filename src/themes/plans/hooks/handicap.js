@@ -3,12 +3,6 @@ import { useStore } from 'vuex'
 import { shiftedBy, plus } from '@/utils/calculation'
 export default function ({ symbolId, tradeType, showPending }) {
     const store = useStore()
-    // 获取盘口深度报价
-
-    const handicapList = computed(() => store.state._quote.handicapList.find(item => item.symbol_id === String(symbolId)))
-
-    // 获取当前产品
-    const product = computed(() => store.state._quote.productMap[symbolId + '_' + tradeType])
 
     // 获取产品的深度小数位
     const deepthDigits = computed(() => store.state._quote.deepthDigits.toString().split('.')[1].length)
@@ -16,72 +10,72 @@ export default function ({ symbolId, tradeType, showPending }) {
     // 当前玩法挂单列表
     const pendingList = computed(() => store.state._trade.pendingList[tradeType])
 
-    const result = computed(() => {
-        return handicapList.value
-    })
+    const handicapList = computed(() => store.state._quote.handicapList.find(item => item.symbol_id === String(symbolId)))
 
-    // 计算长度
-    watch(() => [handicapList.value], (newValues) => {
-        const result = handicapList.value
-        const tempArr = [] // 总量
-        if (result?.ask_deep.length > 0) {
-            result.ask_deep.forEach(ask => {
-                tempArr.push(ask.volume_ask)
-            })
+    const handicapResult = computed(() => {
+        if (handicapList.value) {
+            const result = JSON.parse(JSON.stringify(handicapList.value))
+            const tempArr = [] // 总量
+            if (result?.ask_deep.length > 0) {
+                result.ask_deep.forEach(ask => {
+                    tempArr.push(ask.volume_ask)
+                })
+            }
+
+            if (result?.bid_deep.length > 0) {
+                result.bid_deep.forEach(bid => {
+                    tempArr.push(bid.volume_bid)
+                })
+            }
+
+            const maxValue = Math.max(...tempArr)
+            const minValue = Math.min(...tempArr)
+
+            const diff = maxValue - minValue
+            // 计算买入报价长度
+            if (result?.ask_deep.length > 0) {
+                const buyPendingList = pendingList.value && pendingList.value.filter(item => Number(item.direction === 2))
+
+                result.ask_deep.forEach(ask => {
+                    ask.width = diff === 0 ? 0 : (parseFloat(ask.volume_ask) - parseFloat(minValue)) / diff * 100
+                    ask.unitNum = 0
+                    // 计算合并挂单数量
+                    if (buyPendingList?.length > 0 && showPending) {
+                        buyPendingList.forEach(bl => {
+                            bl.requestPrice = parseFloat(parseFloat(bl.requestPrice).toFixed(deepthDigits.value))
+
+                            if (bl.requestPrice === parseFloat(ask.price_ask)) {
+                                ask.unitNum = plus(bl.requestNum, ask.unitNum)
+                            }
+                        })
+                    }
+                })
+            }
+
+            // 计算卖出报价长度
+            if (result?.bid_deep.length > 0) {
+                const sellPendingList = pendingList.value && pendingList.value.filter(item => Number(item.direction === 1))
+                result.bid_deep.forEach(bid => {
+                    bid.width = diff === 0 ? 0 : (parseFloat(bid.volume_bid) - parseFloat(minValue)) / diff * 100
+                    bid.unitNum = 0
+                    // 计算合并挂单数量
+                    if (sellPendingList?.length > 0 && showPending) {
+                        sellPendingList.forEach(sl => {
+                            sl.requestPrice = parseFloat(parseFloat(sl.requestPrice).toFixed(deepthDigits.value))
+                            if (sl.requestPrice === parseFloat(bid.price_bid)) {
+                                bid.unitNum = plus(sl.requestNum, bid.unitNum)
+                            }
+                        })
+                    }
+                })
+            }
+            return result
         }
-
-        if (result?.bid_deep.length > 0) {
-            result.bid_deep.forEach(bid => {
-                tempArr.push(bid.volume_bid)
-            })
-        }
-
-        const maxValue = Math.max(...tempArr)
-        const minValue = Math.min(...tempArr)
-
-        const diff = maxValue - minValue
-        // 计算买入报价长度
-        if (result?.ask_deep.length > 0) {
-            const buyPendingList = pendingList.value && pendingList.value.filter(item => Number(item.direction === 2))
-
-            result.ask_deep.forEach(ask => {
-                ask.width = diff === 0 ? 0 : (parseFloat(ask.volume_ask) - parseFloat(minValue)) / diff * 100
-                ask.unitNum = 0
-                // 计算合并挂单数量
-                if (buyPendingList?.length > 0 && showPending) {
-                    buyPendingList.forEach(bl => {
-                        bl.requestPrice = parseFloat(parseFloat(bl.requestPrice).toFixed(deepthDigits.value))
-
-                        if (bl.requestPrice === parseFloat(ask.price_ask)) {
-                            // ask.unitNum = plus(bl.requestNum, ask.unitNum)
-                        }
-                    })
-                }
-            })
-        }
-
-        // 计算卖出报价长度
-        if (result?.bid_deep.length > 0) {
-            const sellPendingList = pendingList.value && pendingList.value.filter(item => Number(item.direction === 1))
-            result.bid_deep.forEach(bid => {
-                bid.width = diff === 0 ? 0 : (parseFloat(bid.volume_bid) - parseFloat(minValue)) / diff * 100
-                bid.unitNum = 0
-                // 计算合并挂单数量
-                if (sellPendingList?.length > 0 && showPending) {
-                    sellPendingList.forEach(sl => {
-                        sl.requestPrice = parseFloat(parseFloat(sl.requestPrice).toFixed(deepthDigits.value))
-                        if (sl.requestPrice === parseFloat(bid.price_bid)) {
-                            // bid.unitNum = plus(sl.requestNum, bid.unitNum)
-                        }
-                    })
-                }
-            })
-        }
-    }, {
-        deep: true
+        return []
     })
 
     return {
-        result
+        handicapResult
+
     }
 }

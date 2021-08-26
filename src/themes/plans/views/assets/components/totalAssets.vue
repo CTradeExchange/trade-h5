@@ -5,7 +5,7 @@
                 <p class='label'>
                     <span> {{ $t('assets.totalAssets') }}({{ assetsInfo?.currency }})</span>
                     <span class='tag'>
-                        100%低风险
+                        {{ $t('assets.riskLevel') }} {{ assetsInfo?.closeProportion }}
                     </span>
                 </p>
                 <p class='totalAmount'>
@@ -148,8 +148,8 @@ export default {
         color: var(--minorColor);
         font-size: rem(28px);
         .tag {
-            width: rem(140px);
             height: rem(40px);
+            padding: 0 rem(10px);
             color: var(--success);
             font-size: rem(20px);
             line-height: rem(40px);

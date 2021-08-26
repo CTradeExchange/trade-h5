@@ -677,3 +677,15 @@ export function withdrawCurrencyList (data) {
         data
     })
 }
+
+/* 资金划转 */
+export function capitalTransfer (data) {
+    return request({
+        url: '/global/fund.app.DepositAppDubboService.capitalTransfer',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

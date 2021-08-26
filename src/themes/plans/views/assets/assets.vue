@@ -40,6 +40,7 @@ import { computed, watchEffect, watch, onUnmounted } from '@vue/runtime-core'
 import { isEmpty } from '@/utils/util'
 import { QuoteSocket, MsgSocket } from '@/plugins/socket/socket'
 import plansType from '@/themes/plans/components/plansType.vue'
+
 export default {
     components: {
         PositionList,
@@ -106,6 +107,7 @@ export default {
             })
         }
 
+        // 点击tab事件
         const handleTradeType = (val) => {
             const curIndex = plans.value.findIndex(item => item.id === val)
             assetsSwipe.value.swipeTo(curIndex)
@@ -120,12 +122,7 @@ export default {
             }
         }
 
-        const filterShow = (tradeType) => {
-            if (plans.value.length > 0) {
-                return !isEmpty(plans.value.find(el => Number(el.id) === Number(tradeType)))
-            }
-        }
-
+        // swipwe 滑动组件
         const onChange = (index) => {
             store.commit('_quote/Update_tradeType', plans.value[index].id)
         }
@@ -151,7 +148,6 @@ export default {
             assetsSwipe,
             tradeType,
             plans,
-            filterShow,
             handleTradeType,
             ...toRefs(state)
         }

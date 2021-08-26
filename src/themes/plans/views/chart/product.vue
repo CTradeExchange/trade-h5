@@ -241,7 +241,7 @@
             </div>
         </div>
         <StallsAndDeal
-            v-if='product && [5,9].includes(Number(product.tradeType))'
+            v-if='product && [1,3,5,9].includes(Number(product.tradeType))'
             :cur-price='product.cur_price'
             :setting-list='settingList'
             :symbol-id='symbolId'

@@ -18,30 +18,30 @@
                 </div>
                 <div class='center'>
                     <div class='from account' @click='handleFrom'>
-                        <span> {{ fromAccount }}</span>
+                        <span> {{ fromAccount.name }}</span>
                         <van-icon name='arrow' />
                     </div>
                     <div class='to account' @click='handleTo'>
-                        <span> {{ toAccount }}</span>
+                        <span> {{ toAccount.name }}</span>
                         <van-icon name='arrow' />
                     </div>
                 </div>
-                <div class='right' @click='handleTransfer'>
+                <div class='right' @click='handleSwap'>
                     <i class='icon_zhuanhuan'></i>
                 </div>
             </div>
             <div class='action-bar' @click='pickerShow=true'>
                 <span class='label'>
-                    USD
+                    {{ curCurrency?.currency }}
                 </span>
                 <van-icon name='arrow' />
             </div>
             <div class='action-bar'>
-                <input placeholder='最少划转 0.000001' type='number' />
+                <input v-model='amount' placeholder='最少划转 0.000001' type='number' />
                 <span class='unit'>
                     USD
                 </span>
-                <span class='all'>
+                <span class='all' @click='handleAll'>
                     {{ $t('common.all') }}
                 </span>
             </div>
@@ -52,15 +52,16 @@
 
         <div class='footerBtn'>
             <van-button block class='returnBtn' :loading='loading' type='primary' @click='handleTransfer'>
-                {{ $t('trade.transfer') }} {{ curCurrency }}
+                {{ $t('trade.transfer') }} {{ curCurrency?.currency }}
             </van-button>
         </div>
 
         <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
             <van-picker
-                :columns='currencyList'
+                :columns='accountList'
+                :columns-field-names='currencyField'
                 @cancel='pickerShow = false'
-                @confirm='onPickerConfirm'
+                @confirm='onCurrencyConfirm'
             />
         </van-popup>
         <van-popup v-model:show='accountShow' class='assetsPicker' position='bottom'>
@@ -79,6 +80,9 @@ import { computed, reactive, toRefs } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import { Toast } from 'vant'
+import { capitalTransfer } from '@/api/user'
+import { isEmpty } from '@/utils/util'
 export default {
     setup (props, { emit }) {
         const { t } = useI18n({ useScope: 'global' })
@@ -87,7 +91,8 @@ export default {
         const route = useRoute()
         const { accountId, tradeType } = route.query
         const state = reactive({
-            curCurrency: 'USDT',
+            currency: 'USDT',
+            curCurrency: '',
             pickerShow: false,
             currencyList: ['USDT', 'BTC'],
             accountShow: false,
@@ -95,26 +100,61 @@ export default {
             fromAccount: '',
             toAccount: '',
             assetsList: [],
-            transferType: ''
+            transferType: '',
+            amount: ''
         })
 
         // 获取玩法列表
         const plans = computed(() => store.state._base.plans)
+        // 获取账户信息
+        const { value: customInfo } = computed(() => store.state._user.customerInfo)
 
-        state.fromAccount = plans.value[0].name
-        state.toAccount = plans.value.filter(el => el.name !== state.fromAccount)[0].name
+        state.fromAccount = plans.value[0]
+        state.toAccount = plans.value.filter(el => el.name !== state.fromAccount)[0]
+
+        const { value: accountList } = computed(() => store.state._user?.customerInfo?.accountList?.filter(el => Number(el.tradeType) === Number(state.fromAccount.id)))
+
+        state.curCurrency = accountList[0]
 
         const handleTransfer = () => {
-            state.fromAccount = state.toAccount
-            state.toAccount = state.fromAccount
+            // state.fromAccount = state.toAccount
+            // state.toAccount = state.fromAccount
+            if (isEmpty(state.amount)) {
+                return Toast(t('assets.transferTip1'))
+            }
+            if (state.amount <= 0) {
+                return Toast(t('assets.transferTip2'))
+            }
+            capitalTransfer({
+                customerNo: customInfo.customerNo,
+                accountId: '',
+                customerId: customInfo.id,
+                tradeType: state.fromAccount.id,
+                accountDigit: state.curCurrency.digits,
+                toTradeType: state.toAccount.id,
+                toAccountId: '',
+                toCustomerNo: customInfo.customerNo,
+                toAccountDigit: state.curCurrency.digits,
+                amount: ''
+            }).then(res => {
+
+            }).catch(err => {
+                state.loadingMore = false
+                state.loading = false
+            })
         }
+
+        const handleAll = () => {
+
+        }
+
         const onPickerConfirm = (val) => {
             state.accountShow = false
 
             if (state.transferType === 1) {
-                state.fromAccount = val.name
+                state.fromAccount = val
             } else {
-                state.toAccount = val.name
+                state.toAccount = val
             }
         }
         const toRecord = () => {
@@ -134,6 +174,12 @@ export default {
             // state.assetsList = plans.value.filter(el => el.name !== state.toAccount)
         }
 
+        // 选取币种确定事件
+        const onCurrencyConfirm = (val) => {
+            state.curCurrency = val
+            state.pickerShow = false
+        }
+
         const handleTo = () => {
             state.transferType = 2
             state.accountShow = true
@@ -141,18 +187,30 @@ export default {
         }
         const customField = {
             text: 'name',
-            children: 'cities',
+        }
+
+        const currencyField = {
+            text: 'currency'
+        }
+
+        const handleSwap = () => {
+
         }
         return {
+            plans,
             handleTransfer,
+            handleSwap,
+            onCurrencyConfirm,
             onPickerConfirm,
             handleFrom,
             handleTo,
             customField,
             toRecord,
-            handleTransfer,
+            handleAll,
+            accountList,
+            currencyField,
             ...toRefs(state),
-            plans
+
         }
     }
 }
