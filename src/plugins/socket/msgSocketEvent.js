@@ -205,9 +205,17 @@ class SocketEvent {
         // POSITION_AND_ORDER(6, "同时刷新挂单、资金"),
         const store = this.$store
         if (updateType === 1) {
-            store.dispatch('_trade/queryPositionPage', { tradeType })
+            store.dispatch('_trade/queryPositionPage', {
+                tradeType,
+                sortFieldName: 'openTime',
+                sortType: 'desc',
+            })
         } else if (updateType === 2) {
-            store.dispatch('_trade/queryPBOOrderPage', { tradeType })
+            store.dispatch('_trade/queryPBOOrderPage', {
+                tradeType,
+                sortFieldName: 'orderTime',
+                sortType: 'desc'
+            })
         } else if (updateType === 3 && [3, 5, 9].includes(tradeType)) {
             store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
         } else if (updateType === 4) {
@@ -215,11 +223,23 @@ class SocketEvent {
                 this.handlerLogout()
             }, 2000)
         } else if (updateType === 5) {
-            store.dispatch('_trade/queryPositionPage', { tradeType })
-            store.dispatch('_trade/queryPBOOrderPage', { tradeType })
+            store.dispatch('_trade/queryPositionPage', {
+                tradeType,
+                sortFieldName: 'openTime',
+                sortType: 'desc',
+            })
+            store.dispatch('_trade/queryPBOOrderPage', {
+                tradeType,
+                sortFieldName: 'orderTime',
+                sortType: 'desc'
+            })
         } else if (updateType === 6) { // 同时刷新资金和委托列表
             if ([3, 5, 9].includes(tradeType)) store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
-            store.dispatch('_trade/queryPBOOrderPage', { tradeType })
+            store.dispatch('_trade/queryPBOOrderPage', {
+                tradeType,
+                sortFieldName: 'orderTime',
+                sortType: 'desc'
+            })
         }
 
         // 展示字段：show
