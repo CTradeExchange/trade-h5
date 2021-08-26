@@ -23,7 +23,7 @@
         <div class='curPrice' :class='[product.cur_color]'>
             {{ lastPrice }}
         </div>
-        <div v-if='handicapList' class='priceMultiGear sell'>
+        <div v-if='handicapResult && handicapResult.bid_deep' class='priceMultiGear sell'>
             <p v-for='(item, index) in handicapResult.bid_deep.slice(0,5)' :key='index' class='item'>
                 <span class='hd'>
                     {{ item.price_bid }}
@@ -65,14 +65,12 @@ export default {
 
         // 获取处理后的盘口数据
         const { handicapResult } = computeHandicap({
-            tradeType: props.product.tradeType,
-            symbolId: props.product.symbolId,
             showPending: false
         })
 
         const ask_deep = computed(() => {
             const list = handicapResult.value?.ask_deep?.slice(0)?.reverse()
-            return list.slice(0, 5) || []
+            return list?.slice(0, 5) || []
         })
         // 最新成交价
         const lastPrice = computed(() => store.state._quote.dealList[0]?.price)

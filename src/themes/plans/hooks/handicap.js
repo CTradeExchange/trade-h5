@@ -1,16 +1,18 @@
 import { computed, watch } from 'vue'
 import { useStore } from 'vuex'
 import { shiftedBy, plus } from '@/utils/calculation'
-export default function ({ symbolId, tradeType, showPending }) {
+export default function ({ showPending }) {
     const store = useStore()
+
+    const product = computed(() => store.getters.productActived)
 
     // 获取产品的深度小数位
     const deepthDigits = computed(() => store.state._quote.deepthDigits.toString().split('.')[1].length)
 
     // 当前玩法挂单列表
-    const pendingList = computed(() => store.state._trade.pendingList[tradeType])
+    const pendingList = computed(() => store.state._trade.pendingList[product.value?.tradeType])
 
-    const handicapList = computed(() => store.state._quote.handicapList.find(item => item.symbol_id === String(symbolId)))
+    const handicapList = computed(() => store.state._quote.handicapList.find(item => item.symbol_id === String(product.value?.symbolId)))
 
     const handicapResult = computed(() => {
         if (handicapList.value) {
@@ -71,7 +73,7 @@ export default function ({ symbolId, tradeType, showPending }) {
             }
             return result
         }
-        return []
+        return {}
     })
 
     return {

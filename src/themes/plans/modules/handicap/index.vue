@@ -103,10 +103,7 @@ export default {
         const handicapList = computed(() => store.state._quote.handicapList.find(item => item.symbol_id === props.symbolId))
 
         const { handicapResult } = computeHandicap({
-            tradeType: state.tradeType,
-            symbolId: props.symbolId,
             showPending: true,
-            digits: state.curDigits
         })
 
         const ask_deep = computed(() => handicapResult?.value?.ask_deep?.slice(0))

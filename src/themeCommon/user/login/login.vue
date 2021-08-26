@@ -261,8 +261,10 @@ export default {
                     if (res.check()) {
                         if (Number(res.data.status) === 2) {
                             const msg = t(verifyParams.type === 1 ? 'common.noEmail' : 'common.noPhone')
+                            callback && callback(false)
                             return Toast(msg)
                         } else if (Number(res.data.status === -1)) {
+                            callback && callback(false)
                             return Toast(t('c.userDisable'))
                         } else {
                             state.zone = res.data.phoneArea
@@ -275,7 +277,11 @@ export default {
                                     token = res.data.token
                                     // if (res.data.code) state.checkCode = res.data.code
                                     callback && callback()
+                                } else {
+                                    callback && callback(false)
                                 }
+                            }).catch(err => {
+                                callback && callback(false)
                             })
                         }
                     }
@@ -284,6 +290,7 @@ export default {
                 errors,
                 fields
             }) => {
+                callback && callback(false)
                 if (errors) {
                     Toast(errors[0].message)
                 }
