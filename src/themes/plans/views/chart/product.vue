@@ -474,6 +474,8 @@ export default {
             loading: false
         })
 
+        if (symbolId && tradeType) store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
+
         const computedLineList = computed(() => {
             if (product.value.tradeType === 9) {
                 return state.lineList
@@ -920,6 +922,7 @@ export default {
             }).then(() => {
                 symbolId.value = product.symbolId
                 tradeType.value = product.tradeType
+                store.commit('_quote/Update_productActivedID', `${product.symbolId}_${product.tradeType}`)
                 subscribeToProduct()
                 // 重置图表
                 chartRef.value.reset()
