@@ -142,6 +142,7 @@ export default {
                 return false
             }
             const p = pow(10, props.product.price_digits)
+
             const params = {
                 orderId: data.orderId,
                 positionId: data.positionId,
@@ -149,6 +150,7 @@ export default {
                 takeProfit: !state.stopProfitPrice ? 0 : mul(state.stopProfitPrice, p),
                 tradeType: tradeType.value,
                 accountId: account.value.accountId,
+                accountDigits: account.value.digits
             }
             return params
         }

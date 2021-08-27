@@ -64,7 +64,7 @@
                         {{ $t('withdrawCoin.minus') }}
                     </label>
                     <span class='value'>
-                        {{ minusCount }} {{ customInfo.currency }}
+                        {{ minusCount }}  {{ accountCurrency.currency }}
                     </span>
                 </p>
             </div>
@@ -738,6 +738,7 @@ export default {
             openWalletSelect,
             selectWallet,
             onConfirm,
+            accountCurrency
 
         }
     }

@@ -116,14 +116,14 @@
                                 {{ item.loanAmount ? item.loanAmount + ' ' + item.outCurrency : '--' }}
                             </span>
                         </p>
-                        <p v-if='isCloseType(item.bizType)' class='tl-item'>
+                        <!-- <p v-if='isCloseType(item.bizType)' class='tl-item'>
                             <label for=''>
                                 {{ $t('trade.swap') }}
                             </label>
                             <span>
                                 {{ item.overnightInterest || '--' }}
                             </span>
-                        </p>
+                        </p> -->
 
                         <p class='tl-item'>
                             <label for=''>

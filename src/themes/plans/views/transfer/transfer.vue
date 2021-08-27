@@ -102,7 +102,6 @@ export default {
             assetsList: [],
             transferType: '',
             amount: '',
-            loading: false,
             curCurrency: ''
         })
 
@@ -127,9 +126,6 @@ export default {
             const digits = state.curCurrency.digits
             return pow(0.1, digits)
         })
-
-        // 全仓逐仓的余额
-        const userAccount = computed(() => store.state._user.accountAssets[state.fromAccount.id])
 
         watchEffect(() => {
             if (accountList.value.length > 0) {
@@ -168,7 +164,9 @@ export default {
                     state.loading = false
                     state.amount = ''
                     Toast(t('assets.transferSuccess'))
-                    store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: state.fromAccount.id })
+                    if ([3, 5, 9].includes(Number(state.fromAccount.id))) {
+                        store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: state.fromAccount.id })
+                    }
                 }
             }).catch(err => {
                 state.loading = false

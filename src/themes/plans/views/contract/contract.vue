@@ -12,7 +12,7 @@
             <van-cell :title="$t('contract.singleNumbers')" :value='product.minVolume+"-"+product.maxVolume' />
             <van-cell :title="$t('contract.steper')" :value='product.volumeStep' />
             <van-cell :title="$t('contract.limitDistance')" :value='product.priceMinLimit+"/"+product.priceMaxLimit+"点"' />
-            <van-cell v-if='usedMarginSet && usedMarginSet.length' :title="$t('contract.advance')">
+            <van-cell v-if='usedMarginSet && usedMarginSet.length' class='yfk' :title="$t('contract.advance')">
                 <div class='margin-info'>
                     <span class='left-label header'>
                         {{ $t('contract.volumeRange') }}
@@ -172,10 +172,10 @@ export default {
     background-color: var(--bgColor);
     :deep(.van-cell) {
         .margin-info {
-            text-align: left;
+            display: flex;
+            justify-content: space-between;
             .left-label {
                 display: inline-block;
-                width: rem(190px);
                 margin-right: rem(10px);
                 text-align: right;
                 &.header {
@@ -184,7 +184,6 @@ export default {
             }
             .right-val {
                 display: inline-block;
-                width: rem(140px);
                 text-align: center;
                 &.header {
                     text-align: center;
@@ -202,6 +201,14 @@ export default {
         .timeListCell :deep(.van-cell__value) {
             flex: none;
             width: 70%;
+        }
+        &.yfk {
+            .van-cell__title {
+                flex: 1;
+            }
+            .van-cell__value {
+                flex: 2;
+            }
         }
     }
 }

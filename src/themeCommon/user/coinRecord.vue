@@ -87,7 +87,7 @@
                                 {{ $t('coinRecord.service') }}
                             </span>
                             <span class='value'>
-                                {{ item.withdrawFee }}
+                                {{ item.withdrawFee }} {{ item.withdrawCurrency }}
                             </span>
                         </div>
                         <div class='row'>
@@ -95,7 +95,7 @@
                                 {{ $t('coinRecord.arriveCount') }}
                             </span>
                             <span class='value'>
-                                {{ item.finalAmount }}
+                                {{ item.finalAmount }} {{ item.withdrawCurrency }}
                             </span>
                         </div>
                         <div class='row'>
