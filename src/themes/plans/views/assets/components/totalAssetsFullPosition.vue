@@ -163,7 +163,7 @@ export default {
         }
     }
     .totalAmount {
-        margin-top: rem(10px);
+        margin-top: rem(20px);
         color: var(--color);
         font-size: rem(50px);
     }

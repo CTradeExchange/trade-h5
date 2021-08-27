@@ -37,7 +37,7 @@
                 <van-icon name='arrow' />
             </div>
             <div class='action-bar'>
-                <input v-model='amount' placeholder='最少划转 0.000001' type='number' />
+                <input v-model='amount' :placeholder='$t("assets.minTransfer")+ minTransfer' type='number' />
                 <span class='unit'>
                     {{ curCurrency?.currency }}
                 </span>
@@ -55,7 +55,7 @@
                 {{ $t('trade.transfer') }} {{ curCurrency?.currency }}
             </van-button>
         </div>
-
+        <Loading :show='loading' />
         <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
             <van-picker
                 :columns='accountList'
@@ -81,6 +81,7 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
+import { pow } from '@/utils/calculation'
 import { capitalTransfer } from '@/api/user'
 import { isEmpty } from '@/utils/util'
 export default {
@@ -101,6 +102,7 @@ export default {
             assetsList: [],
             transferType: '',
             amount: '',
+            loading: false,
             curCurrency: ''
         })
 
@@ -117,20 +119,17 @@ export default {
             store.state._user?.customerInfo?.accountList?.filter(el => Number(el.tradeType) === Number(state.fromAccount.id))
         )
 
-        // 最大可划转
-        /*  const maxTransfer = computed(() => {
-            if ([1, 2].includes(Number(state.fromAccount.id))) {
-                return store.state._user.accountAssets[state.fromAccount.id]?.balance
-            } else if ([3, 5, 9].includes(Number(state.fromAccount.id))) {
-                return 0
-            }
-            return 0
-        })
- */
-
         state.fromAccount = plans.value[0]
         state.toAccount = plans.value.filter(el => el.name !== state.fromAccount.name)[0]
+        // 最大可转
         const maxTransfer = computed(() => accountList.value.find(item => item.currency === state.curCurrency.currency))
+        const minTransfer = computed(() => {
+            const digits = state.curCurrency.digits
+            return pow(0.1, digits)
+        })
+
+        // 全仓逐仓的余额
+        const userAccount = computed(() => store.state._user.accountAssets[state.fromAccount.id])
 
         watchEffect(() => {
             if (accountList.value.length > 0) {
@@ -150,7 +149,7 @@ export default {
             if (isEmpty(toAccountId.value)) {
                 return Toast(state.toAccount.name + t('common.notFound') + state.curCurrency.currency + t('common.account'))
             }
-
+            state.loading = true
             const params = {
                 customerNo: customInfo.customerNo,
                 accountId: state.curCurrency.accountId,
@@ -165,9 +164,13 @@ export default {
             }
 
             capitalTransfer(params).then(res => {
-
+                if (res.check() && res.data) {
+                    state.loading = false
+                    state.amount = ''
+                    Toast(t('assets.transferSuccess'))
+                    store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: state.fromAccount.id })
+                }
             }).catch(err => {
-                state.loadingMore = false
                 state.loading = false
             })
         }
@@ -184,6 +187,7 @@ export default {
             } else {
                 state.toAccount = val
             }
+            // abcc 现货杠杆 杠杆全仓重新拉账户资产
             if ([3, 5, 9].includes(Number(state.fromAccount.id))) {
                 store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: state.fromAccount.id })
             }
@@ -227,7 +231,7 @@ export default {
         }
 
         const handleSwap = () => {
-
+            [state.fromAccount, state.toAccount] = [state.toAccount, state.fromAccount]
         }
 
         store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: state.fromAccount.id })
@@ -245,6 +249,7 @@ export default {
             accountList,
             currencyField,
             maxTransfer,
+            minTransfer,
             ...toRefs(state),
 
         }

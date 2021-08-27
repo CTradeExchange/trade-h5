@@ -2,9 +2,8 @@
     <list
         v-bind='$attrs'
         ref='listRef'
-        :liabilities-type='1'
         :request-api='queryLiabilitiesWaterByPage'
-        :request-params='requestParams'
+        :request-params='params'
     >
         <template #default='{ list }'>
             <div v-for='item in list' :key='item.id' class='li'>
@@ -32,14 +31,27 @@
 import list from './list'
 import dayjs from 'dayjs'
 import { queryLiabilitiesWaterByPage } from '@/api/user'
-import { ref, unref } from 'vue'
+import { computed, ref, unref } from 'vue'
+import { useRoute } from 'vue-router'
 export default {
     components: { list },
     setup (props) {
+        const route = useRoute()
         const formatTime = (val) => {
             return dayjs(val).format('YYYY/MM/DD HH:mm:ss')
         }
-        const requestParams = ref({})
+        const requestParams = ref({
+
+        })
+
+        const params = computed(() => {
+            return {
+                accountId: Number(route.query.accountId),
+                liabilitiesType: 1,
+                ...requestParams.value
+            }
+        })
+
         const setParams = (params) => {
             requestParams.value = params || {}
         }
@@ -55,6 +67,7 @@ export default {
             setParams,
             refresh,
             formatTime,
+            params,
             queryLiabilitiesWaterByPage
         }
     },

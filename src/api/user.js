@@ -689,3 +689,15 @@ export function capitalTransfer (data) {
         data
     })
 }
+
+/* 划转记录 */
+export function capitalTransferRecord (data) {
+    return request({
+        url: '/global/fund.app.DepositAppDubboService.capitalTransferRecord',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

@@ -53,8 +53,6 @@ export default {
             const params = {
                 ...props.requestParams,
                 tradeType: state.tradeType,
-                accountId: Number(route.query.accountId),
-                liabilitiesType: props.liabilitiesType,
                 current: state.current,
                 size: 20
             }

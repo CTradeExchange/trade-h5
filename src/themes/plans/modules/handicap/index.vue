@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { computed, reactive, toRefs, watch, onBeforeUnmount } from 'vue'
+import { computed, reactive, toRefs, watch, onBeforeUnmount, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
@@ -135,28 +135,12 @@ export default {
             return digits.splice(0, 5)
         })
 
-        // 深度变化重新发起订阅
-        watch(() => (digitLevelList.value.length), newVal => {
-            if (newVal > 0) {
-                state.curDigits = digitLevelList.value[0]?.text
-                store.commit('_quote/Update_deepthDigits', state.curDigits)
-                QuoteSocket.deal_subscribe([product.value.symbolId], 10, state.curDigits, state.tradeType)
-            }
-        }, {
-            immediate: true
-        })
-
-        // 产品切换重新订阅
-        watch(() => ([product.value.symbolId]), newVal => {
-            // 订阅盘口深度报价
+        watchEffect(() => {
             state.curDigits = digitLevelList.value[0]?.text
-
+            store.commit('_quote/Update_deepthDigits', state.curDigits)
             if (state.curDigits) {
-                store.commit('_quote/Update_deepthDigits', state.curDigits)
                 QuoteSocket.deal_subscribe([product.value.symbolId], 10, state.curDigits, state.tradeType)
             }
-        }, {
-            // immediate: true
         })
 
         // 修改报价深度

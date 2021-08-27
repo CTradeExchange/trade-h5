@@ -159,6 +159,7 @@ export default {
 @import '@/sass/mixin.scss';
 .assetsWrapper {
     padding: 0 rem(20px) rem(100px);
+    overflow: auto;
     &.mt {
         margin-top: rem(20px);
     }
