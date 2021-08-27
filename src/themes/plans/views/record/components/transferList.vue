@@ -49,15 +49,16 @@
 
 <script>
 import list from './list'
-import dayjs from 'dayjs'
 import { computed, ref, unref } from 'vue'
 import { capitalTransferRecord } from '@/api/user'
+import { useStore } from 'vuex'
 
 export default {
     components: { list },
     setup (props) {
-        const requestParams = ref({
-        })
+        const store = useStore()
+
+        const requestParams = ref({})
         const planMap = computed(() => store.state._quote.planMap)
         const setParams = (params) => {
             requestParams.value = params || {}

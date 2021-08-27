@@ -40,9 +40,7 @@ export default {
         const formatTime = (val) => {
             return dayjs(val).format('YYYY/MM/DD HH:mm:ss')
         }
-        const requestParams = ref({
-
-        })
+        const requestParams = ref({})
 
         const params = computed(() => {
             return {
