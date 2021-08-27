@@ -46,7 +46,7 @@
                 </span>
             </div>
             <p class='tip'>
-                {{ $t('assets.maxTransfer') }} 0.05000000 BTC
+                {{ $t('assets.maxTransfer') }} {{ curCurrency?.balance }} {{ curCurrency?.currency }}
             </p>
         </div>
 
@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { computed, reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
@@ -100,7 +100,8 @@ export default {
             toAccount: '',
             assetsList: [],
             transferType: '',
-            amount: ''
+            amount: '',
+            curCurrency: ''
         })
 
         // 获取玩法列表
@@ -108,18 +109,34 @@ export default {
         // 获取账户信息
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
 
-        state.fromAccount = plans.value[0]
-        state.toAccount = plans.value.filter(el => el.name !== state.fromAccount.name)[0]
-
         const toAccountId = computed(() => {
-            return store.state._user?.customerInfo?.accountList.find(el => Number(el.tradeType) === Number(state.toAccount.id) && el.currency === curCurrency.value.currency)
+            return store.state._user?.customerInfo?.accountList.find(el => Number(el.tradeType) === Number(state.toAccount.id) && el.currency === state.curCurrency.currency)
         })
 
         const accountList = computed(() =>
             store.state._user?.customerInfo?.accountList?.filter(el => Number(el.tradeType) === Number(state.fromAccount.id))
         )
 
-        const curCurrency = computed(() => accountList.value[0])
+        // 最大可划转
+        /*  const maxTransfer = computed(() => {
+            if ([1, 2].includes(Number(state.fromAccount.id))) {
+                return store.state._user.accountAssets[state.fromAccount.id]?.balance
+            } else if ([3, 5, 9].includes(Number(state.fromAccount.id))) {
+                return 0
+            }
+            return 0
+        })
+ */
+
+        state.fromAccount = plans.value[0]
+        state.toAccount = plans.value.filter(el => el.name !== state.fromAccount.name)[0]
+        const maxTransfer = computed(() => accountList.value.find(item => item.currency === state.curCurrency.currency))
+
+        watchEffect(() => {
+            if (accountList.value.length > 0) {
+                state.curCurrency = accountList.value[0]
+            }
+        })
 
         const handleTransfer = () => {
             // state.fromAccount = state.toAccount
@@ -136,14 +153,14 @@ export default {
 
             const params = {
                 customerNo: customInfo.customerNo,
-                accountId: curCurrency.value.accountId,
+                accountId: state.curCurrency.accountId,
                 customerId: customInfo.id,
                 tradeType: state.fromAccount.id,
-                accountDigit: curCurrency.value.digits,
+                accountDigit: state.curCurrency.digits,
                 toTradeType: state.toAccount.id,
                 toAccountId: toAccountId.value.accountId,
                 toCustomerNo: customInfo.customerNo,
-                toAccountDigit: curCurrency.value.digits,
+                toAccountDigit: state.curCurrency.digits,
                 amount: state.amount
             }
 
@@ -156,7 +173,7 @@ export default {
         }
 
         const handleAll = () => {
-
+            state.amount = state.curCurrency.balance
         }
 
         const onPickerConfirm = (val) => {
@@ -166,6 +183,9 @@ export default {
                 state.fromAccount = val
             } else {
                 state.toAccount = val
+            }
+            if ([3, 5, 9].includes(Number(state.fromAccount.id))) {
+                store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: state.fromAccount.id })
             }
         }
         const toRecord = () => {
@@ -187,7 +207,9 @@ export default {
 
         // 选取币种确定事件
         const onCurrencyConfirm = (val) => {
-            // state.curCurrency = val
+            state.curCurrency = val
+            // state.maxTransfer = accountList.value.find(item => item.currency === val.currency)
+
             state.pickerShow = false
         }
 
@@ -207,6 +229,8 @@ export default {
         const handleSwap = () => {
 
         }
+
+        store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: state.fromAccount.id })
         return {
             plans,
             handleTransfer,
@@ -220,7 +244,7 @@ export default {
             handleAll,
             accountList,
             currencyField,
-            curCurrency,
+            maxTransfer,
             ...toRefs(state),
 
         }

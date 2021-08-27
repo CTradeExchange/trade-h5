@@ -118,6 +118,7 @@ export default {
             if ([1, 2].indexOf(Number(val)) > -1) {
                 queryPositionList(val)
             } else if ([3, 5, 9].indexOf(Number(val)) > -1) {
+                queryCustomerRisk(val)
                 store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: val })
             }
         }

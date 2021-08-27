@@ -136,18 +136,27 @@ export default {
         })
 
         // 深度变化重新发起订阅
-        watch(() => digitLevelList.value.length, newVal => {
+        watch(() => (digitLevelList.value.length), newVal => {
             if (newVal > 0) {
                 state.curDigits = digitLevelList.value[0]?.text
                 store.commit('_quote/Update_deepthDigits', state.curDigits)
+                QuoteSocket.deal_subscribe([product.value.symbolId], 10, state.curDigits, state.tradeType)
             }
         }, {
             immediate: true
         })
 
-        watch(() => product.value.symbolId, newVal => {
+        // 产品切换重新订阅
+        watch(() => ([product.value.symbolId]), newVal => {
             // 订阅盘口深度报价
-            QuoteSocket.deal_subscribe([newVal], 10, state.curDigits, state.tradeType)
+            state.curDigits = digitLevelList.value[0]?.text
+
+            if (state.curDigits) {
+                store.commit('_quote/Update_deepthDigits', state.curDigits)
+                QuoteSocket.deal_subscribe([product.value.symbolId], 10, state.curDigits, state.tradeType)
+            }
+        }, {
+            // immediate: true
         })
 
         // 修改报价深度
