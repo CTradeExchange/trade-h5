@@ -141,7 +141,9 @@
         "endDay": "结束日期",
         "customDate": "自定义时间" ,
         "from": "从",
-        "to": "到"
+        "to": "到",
+        "notFound": "未找到",
+        "account": "账户"
     },
     "auth": {
         "info": "需要准备的验证资料",

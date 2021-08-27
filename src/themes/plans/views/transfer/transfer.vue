@@ -148,7 +148,7 @@ export default {
                 return Toast(t('assets.transferTip2'))
             }
             if (isEmpty(toAccountId.value)) {
-                return Toast(t('assets.transferTip3'))
+                return Toast(state.toAccount.name + t('common.notFound') + state.curCurrency.currency + t('common.account'))
             }
 
             const params = {
