@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class='capitalImg'>
-                这里是一个图片
+                <img alt='' src='/images/minePlace.png' />
             </div>
         </div>
         <Fund v-if='fundVis' :show='fundVis' @update:show='updateShow' />
@@ -133,5 +133,8 @@ export default {
     line-height: rem(150px);
     text-align: center;
     background: var(--assistColor);
+    img {
+        width: 100%;
+    }
 }
 </style>

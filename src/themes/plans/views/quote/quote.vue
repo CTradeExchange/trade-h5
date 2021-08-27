@@ -14,7 +14,8 @@
                 @change='tabChange'
                 @tabClick='tabClick'
             />
-            <van-icon name='search' @click='openSearch' />
+            <!-- <van-icon class='iconSearch' name='search' @click='openSearch' /> -->
+            <i class='icon_sousuo1 iconSearch' @click='openSearch'></i>
         </div>
         <div class='titleBar van-hairline--bottom'>
             <span class='item'>
@@ -124,7 +125,7 @@ export default {
     }
 }
 .tradeNav {
-    // position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     width: 100%;
@@ -137,11 +138,11 @@ export default {
     .tradeSortNav {
         padding-right: rem(64px) !important;
     }
-    i {
-        position: relative;
-        right: rem(40px);
-        bottom: rem(60px);
-        float: right;
+    .iconSearch {
+        position: absolute;
+        top: rem(22px);
+        right: rem(28px);
+        font-size: rem(28px);
     }
 }
 .titleBar {
