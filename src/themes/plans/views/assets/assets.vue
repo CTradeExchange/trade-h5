@@ -170,5 +170,10 @@ export default {
     .playType {
         background-color: var(--bgColor);
     }
+    .plansType {
+        position: sticky;
+        top: 0;
+        z-index: 9;
+    }
 }
 </style>

@@ -1,77 +1,80 @@
 <template>
     <div class='orderWrap'>
-        <plansType v-if='plansList.length>1' :list='plansList' :value='productTradeType' @change='handleTradeType' />
-        <SwitchTradeType :product='product' @switchProduct='switchProductVisible=true' />
-
-        <div v-if='product' class='main'>
-            <div v-if='orderHandicapVisible && product.symbolName' class='left'>
-                <OrderHandicap :product='product' />
-            </div>
-            <div v-if='product' class='right'>
-                <!-- 订单类型 -->
-                <OrderTypeTab v-model='orderType' :trade-type='product.tradeType' @selected='changeOrderType' />
-                <!-- 自动借款 -->
-                <LoanBar v-if='[3, 5, 9].includes(product.tradeType)' v-model='operationType' :account='account' class='cellMarginTop' :product='product' />
-                <!-- 方向 -->
-                <Direction v-model='direction' :product='product' />
-                <!-- 挂单设置 -->
-                <PendingBar
-                    v-if='[3, 5, 9].includes(product.tradeType) && orderType===10'
-                    ref='pendingRef'
-                    v-model='pendingPrice'
-                    class='cellMarginTop'
-                    :direction='direction'
-                    :product='product'
-                />
-                <PendingBarCFD
-                    v-else-if='orderType===10'
-                    ref='pendingRef'
-                    v-model='pendingPrice'
-                    class='cellMarginTop'
-                    :direction='direction'
-                    :product='product'
-                />
-                <!-- 手数 -->
-                <OrderVolume v-model='volume' v-model:entryType='entryType' class='cellMarginTop' :product='product' />
-                <!-- 订单金额 -->
-                <Assets
-                    v-if='account && [3, 5, 9].includes(product.tradeType)'
-                    :account='account'
-                    :direction='direction'
-                    :product='product'
-                    :volume='volume'
-                />
-                <!-- 止盈止损 -->
-                <ProfitlossSet
-                    v-if=' [1,2].includes(product.tradeType)'
-                    v-model:stopLoss='stopLoss'
-                    v-model:stopProfit='stopProfit'
-                    class='cellMarginTop'
-                    :direction='direction'
-                    :product='product'
-                />
-                <!-- 过期类型 -->
-                <CellExpireType
-                    v-if='orderType===10 && [1,2].includes(product.tradeType)'
-                    v-model='expireType'
-                    :btn-list='expireTypeList'
-                    class='mtop20'
-                    :title="$t('trade.expireTime')"
-                />
-            </div>
+        <div class='orderTop'>
+            <plansType v-if='plansList.length>1' :list='plansList' :value='productTradeType' @change='handleTradeType' />
+            <SwitchTradeType :product='product' @switchProduct='switchProductVisible=true' />
         </div>
-        <div class='footerBtn' :class='[direction]'>
-            <van-button block :disabled='loading' :loading='loading' size='normal' @click='submitHandler'>
-                {{ direction==='buy'?$t('trade.buyText'):$t('trade.sellText') }}
-            </van-button>
+        <div class='container'>
+            <div v-if='product' class='main'>
+                <div v-if='orderHandicapVisible && product.symbolName' class='left'>
+                    <OrderHandicap :product='product' />
+                </div>
+                <div v-if='product' class='right'>
+                    <!-- 订单类型 -->
+                    <OrderTypeTab v-model='orderType' :trade-type='product.tradeType' @selected='changeOrderType' />
+                    <!-- 自动借款 -->
+                    <LoanBar v-if='[3, 5, 9].includes(product.tradeType)' v-model='operationType' :account='account' class='cellMarginTop' :product='product' />
+                    <!-- 方向 -->
+                    <Direction v-model='direction' :product='product' />
+                    <!-- 挂单设置 -->
+                    <PendingBar
+                        v-if='[3, 5, 9].includes(product.tradeType) && orderType===10'
+                        ref='pendingRef'
+                        v-model='pendingPrice'
+                        class='cellMarginTop'
+                        :direction='direction'
+                        :product='product'
+                    />
+                    <PendingBarCFD
+                        v-else-if='orderType===10'
+                        ref='pendingRef'
+                        v-model='pendingPrice'
+                        class='cellMarginTop'
+                        :direction='direction'
+                        :product='product'
+                    />
+                    <!-- 手数 -->
+                    <OrderVolume v-model='volume' v-model:entryType='entryType' class='cellMarginTop' :product='product' />
+                    <!-- 订单金额 -->
+                    <Assets
+                        v-if='account && [3, 5, 9].includes(product.tradeType)'
+                        :account='account'
+                        :direction='direction'
+                        :product='product'
+                        :volume='volume'
+                    />
+                    <!-- 止盈止损 -->
+                    <ProfitlossSet
+                        v-if=' [1,2].includes(product.tradeType)'
+                        v-model:stopLoss='stopLoss'
+                        v-model:stopProfit='stopProfit'
+                        class='cellMarginTop'
+                        :direction='direction'
+                        :product='product'
+                    />
+                    <!-- 过期类型 -->
+                    <CellExpireType
+                        v-if='orderType===10 && [1,2].includes(product.tradeType)'
+                        v-model='expireType'
+                        :btn-list='expireTypeList'
+                        class='mtop20'
+                        :title="$t('trade.expireTime')"
+                    />
+                </div>
+            </div>
+            <div class='footerBtn' :class='[direction]'>
+                <van-button block :disabled='loading' :loading='loading' size='normal' @click='submitHandler'>
+                    {{ direction==='buy'?$t('trade.buyText'):$t('trade.sellText') }}
+                </van-button>
+            </div>
+            <!-- 委托列表 -->
+            <Trust
+                v-if='product'
+                class='trustList'
+                :direction='direction'
+                :product='product'
+            />
         </div>
-        <!-- 委托列表 -->
-        <Trust
-            v-if='product'
-            class='trustList'
-            :direction='direction'
-            :product='product'
-        />
 
         <!-- 侧边栏-切换产品 -->
         <sidebarProduct v-model='switchProductVisible' :default-trade-type='product.tradeType' @select='onSelectProduct' />
@@ -361,12 +364,20 @@ export default {
     color: var(--color);
 }
 .orderWrap {
-    position: relative;
+    display: flex;
+    flex-direction: column;
     height: 100%;
     margin-bottom: rem(100px);
     overflow-y: auto;
     color: var(--color);
     background: var(--bgColor);
+    .orderTop {
+        height: rem(200px);
+    }
+    .container {
+        flex: 1;
+        overflow-y: auto;
+    }
     .main {
         @include scroll();
         display: flex;
