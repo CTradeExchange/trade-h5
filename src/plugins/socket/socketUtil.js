@@ -162,12 +162,12 @@ export function formatSubscribe (productIds) {
  *  productIds: object的形式：[{symbol_id: "37", trade_type: 3}]
  */
 export function productMapToSymbolKey (productMaps = []) {
-    const symbolKey = []
+    const symbolKey = new Set()
     if (!productMaps || productMaps.length === 0) return symbolKey
     productMaps.forEach(el => {
         const symbol_id = el.symbol_id || el.symbolId
         const trade_type = el.trade_type || el.tradeType
-        symbolKey.push(`${symbol_id}_${trade_type}`)
+        symbolKey.add(`${symbol_id}_${trade_type}`)
     })
-    return symbolKey
+    return [...symbolKey]
 }
