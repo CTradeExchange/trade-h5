@@ -12,16 +12,15 @@
                 <div class='block'>
                     <div class='left'>
                         <span class='currency'>
-                            USDT
+                            {{ item.outCurrencyCode }}
                         </span>
                         <span class='time'>
-                            <!-- {{ formatTime(item.createTime) }} -->
-                            2021.05.23 23:51:25
+                            {{ formatTime(item.createTime) }}
                         </span>
                     </div>
                     <div class='right'>
                         <span class='balance'>
-                            54545.1454
+                            {{ item.outAmount }}
                         </span>
                     </div>
                 </div>
@@ -31,7 +30,7 @@
                             {{ $t("assets.toAccount") }}
                         </span>
                         <span class='num'>
-                            现货账户
+                            {{ planMap[item.inTradeType]?.name }}
                         </span>
                     </div>
                     <div class='right'>
@@ -39,7 +38,7 @@
                             {{ $t("assets.fromAccount") }}
                         </span>
                         <span class='num'>
-                            CFD全仓账户
+                            {{ planMap[item.outTradeType]?.name }}
                         </span>
                     </div>
                 </div>
@@ -51,7 +50,7 @@
 <script>
 import list from './list'
 import dayjs from 'dayjs'
-import { ref, unref } from 'vue'
+import { computed, ref, unref } from 'vue'
 import { capitalTransferRecord } from '@/api/user'
 
 export default {
@@ -59,6 +58,7 @@ export default {
     setup (props) {
         const requestParams = ref({
         })
+        const planMap = computed(() => store.state._quote.planMap)
         const setParams = (params) => {
             requestParams.value = params || {}
         }
@@ -73,7 +73,8 @@ export default {
             requestParams,
             setParams,
             listRef,
-            refresh
+            refresh,
+            planMap
         }
     },
 }

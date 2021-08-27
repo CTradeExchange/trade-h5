@@ -98,7 +98,6 @@ export default {
 
         const queryPendingList = () => {
             // 获取委托列表
-
             const accountIds = []
             if (account.value.length > 0) {
                 account.value.forEach(element => {

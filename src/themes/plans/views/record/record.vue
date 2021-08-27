@@ -72,17 +72,18 @@ export default {
         const componentList = computed(() => {
             // 过滤逻辑
             switch (tradeType) {
-                case 1: {
+                case 1:
+                case 2:
+                {
                     return allList.filter(e => [3, 4].includes(e.name))
                 }
-                case 2: {
-                    return allList.filter(e => e.name === 4)
-                }
+
                 case 3:
                 case 9: {
                     return allList
                 }
             }
+
             return []
         })
 

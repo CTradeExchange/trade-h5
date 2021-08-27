@@ -552,6 +552,8 @@
     "transferTip1": "划转金额不能为空",
     "transferTip2": "划转金额不能为负数",
     "transferTip3": "转入账户没有当前币种",
+    "transferTip4": "划转金额不能大于最大可划转金额",
+    "transferTip5": "划转金额不能小于最小可划转金额",
     "transferSuccess": "划转成功"
   },
   "record":{

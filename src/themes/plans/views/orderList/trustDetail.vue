@@ -16,7 +16,7 @@
                 </div>
                 <div class='item item-2'>
                     <div class='col'>
-                        <div class='sub' :class="Number(pendingItem.direction) === 1 ? 'riseColor' : 'fallColor'">
+                        <div class='sub' :class="Number(pendingItem.direction) === 1 ? 'fallColor' : 'riseColor'">
                             {{ Number(pendingItem.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
                         </div>
                         <div class='name'>

@@ -2,7 +2,7 @@
     <van-field
         v-model='modelValue'
         :input-align='inputAlign'
-        :label='$t("register.accountCurrency")'
+        :label='$t("bank.bankCurrency")'
         :placeholder='$t("register.accountCurrency")'
         readonly
         right-icon='arrow-down'

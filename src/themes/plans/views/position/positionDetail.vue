@@ -283,7 +283,7 @@ export default {
                 font-size: rem(20px);
             }
             .sub {
-                color: var(--minorColor);
+                //color: var(--minorColor);
                 font-size: rem(24px);
             }
             .active {

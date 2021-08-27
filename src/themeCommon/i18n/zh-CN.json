@@ -546,7 +546,7 @@
         "canName": "可提金额",
         "serviceName": "手续费",
         "bankName": "收款银行卡",
-        "bankNone": "暂无银行卡",
+        "bankNone": "暂无银行卡,请添加",
         "addBtn": "去添加",
         "predictName": "预计到账",
         "bankPopupTitle": "选择收款银行卡",
@@ -558,7 +558,8 @@
         "hint_4": "取款金额不能大于",
         "hint_5": "余额不足",
         "hint_6": "可取资金不足",
-        "hint_7": "24小时内取款次数不超过"
+        "hint_7": "24小时内取款次数不超过",
+        "bankTips": "该银行卡币种与到账币种不同，不支持该笔交易"
     },
     "withdrawRecord": {
         "noneHint": "暂无数据",
@@ -664,6 +665,7 @@
         "submitSuccessTips": "您的资料已提交成功",
         "noBanks": "暂无银行卡",
         "addBank": "新增银行卡",
-        "bankList": "银行卡列表"
+        "bankList": "银行卡列表",
+        "bankCurrency": "银行卡币种"
     }
 }

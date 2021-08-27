@@ -20,18 +20,19 @@
                 <p class='bw-t'>
                     {{ $t('withdrawMoney.bankName') }}
                 </p>
-                <div v-if='bankList.length > 0' class='bank' @click='openSheet'>
-                    <i class='bank-icons-sm' :class="'bk-'+ checkedBank.bankCode"></i>
+                <div v-if='checkedBank' class='bank' @click='openSheet'>
+                    <i class='bank-icons-sm' :class="'bk-'+ checkedBank?.bankCode"></i>
                     <span class='bank-no'>
-                        {{ checkedBank.bankName }} {{ hideMiddle(checkedBank.bankCardNumber) }}
+                        {{ checkedBank?.bankName }} {{ hideMiddle(checkedBank?.bankCardNumber) }}
                     </span>
                     <van-icon name='arrow-down' />
                 </div>
-                <div v-else class='bank no-data'>
+                <div v-else class='bank no-data' @click='openSheet'>
                     <span>{{ $t('withdrawMoney.bankNone') }}</span>
-                    <van-button plain round size='mini' type='success' @click='toAddBank'>
+                    <van-icon name='arrow-down' />
+                    <!-- <van-button plain round size='mini' type='success' @click='toAddBank'>
                         {{ $t('withdrawMoney.addBtn') }}
-                    </van-button>
+                    </van-button> -->
                 </div>
                 <p class='bw-t2'>
                     {{ $t('withdrawMoney.predictName') }} {{ computePre }} {{ currency }}
@@ -45,12 +46,23 @@
     </van-button>
     <van-action-sheet v-model:show='show' :round='false' :title="$t('withdrawMoney.bankPopupTitle')">
         <div class='bank-list'>
-            <div v-for='(item, index) in bankList' :key='index' class='bank' @click='chooseBank(item)'>
-                <i class='bank-icons-sm' :class="'bk-'+ item.bankCode"></i>
-                <span class='bank-no'>
-                    {{ item.bankName }} {{ hideMiddle(item.bankCardNumber) }}
-                </span>
-                <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
+            <div
+                v-for='(item, index) in bankList'
+                :key='index'
+                class='bank'
+                :class='{ disabled: item.bankCurrency !== currency }'
+                @click='chooseBank(item)'
+            >
+                <div class='bank-item'>
+                    <i class='bank-icons-sm' :class="'bk-'+ item.bankCode"></i>
+                    <div class='bank-no'>
+                        <p>{{ item.bankName }} {{ hideMiddle(item.bankCardNumber) }}</p>
+                    </div>
+                    <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
+                </div>
+                <p v-if='item.bankCurrency !== currency' class='tips'>
+                    {{ $t('withdrawMoney.bankTips') }}
+                </p>
             </div>
             <div class='add-bank' @click='toAddBank'>
                 <van-icon class='icon-plus' name='plus' size='13' />
@@ -409,8 +421,8 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     if (res.data && res.data.length > 0) {
-                        state.bankList = res.data.filter(el => el.bankCurrency === currency)
-                        state.checkedBank = state.bankList[0]
+                        state.bankList = res.data // .filter(el => el.bankCurrency === currency)
+                        state.checkedBank = state.bankList.filter(el => el.bankCurrency === currency)[0]
                         state.checkedBank.checked = true
                         state.withdrawCurrency = state.checkedBank.bankCurrency
                         // 获取取款汇率
@@ -601,24 +613,43 @@ export default {
     }
 }
 .bank {
-    display: flex;
+    //display: flex;
+    /* justify-content: center; */
     align-items: center;
-    border: rem(2px) solid var(--normalColor);
-    border-radius: rem(4px);
+    margin: rem(10px);
+    border: rem(1px) solid var(--normalColor);
+    &.disabled {
+        pointer-events: none;
+        .bank-no {
+            color: var(--placeholdColor);
+        }
+    }
+    .bank-item {
+        display: flex;
+        align-items: center;
+        border-radius: rem(4px);
+    }
+    .tips {
+        padding: 0 rem(90px) rem(20px);
+        color: var(--placeholdColor);
+    }
     .bank-no {
         flex: 1;
     }
     .bank-icons-sm {
-        margin: rem(30px);
+        margin: rem(30px) rem(15px) rem(30px) rem(30px);
     }
     .van-icon {
         margin-right: rem(20px);
     }
     &.no-data {
-        justify-content: center;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         line-height: rem(90px);
         span {
-            margin-right: rem(20px);
+            margin-left: rem(30px);
+            color: var(--minorColor);
             vertical-align: middle;
         }
         .van-button {
@@ -637,7 +668,7 @@ export default {
     align-items: center;
     height: rem(96px);
     .icon-plus {
-        margin: rem(20px) rem(45px);
+        margin: rem(20px) rem(20px) rem(20px) rem(45px);
         vertical-align: middle;
     }
     span {

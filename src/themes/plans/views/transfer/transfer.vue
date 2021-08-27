@@ -81,7 +81,7 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
-import { pow } from '@/utils/calculation'
+import { pow, gt, lt } from '@/utils/calculation'
 import { capitalTransfer } from '@/api/user'
 import { isEmpty } from '@/utils/util'
 export default {
@@ -144,6 +144,13 @@ export default {
             }
             if (isEmpty(toAccountId.value)) {
                 return Toast(state.toAccount.name + t('common.notFound') + state.curCurrency.currency + t('common.account'))
+            }
+
+            if (gt(state.amount, maxTransfer.value.balance)) {
+                return Toast(t('assets.transferTip4'))
+            }
+            if (lt(state.amount, minTransfer.value)) {
+                return Toast(t('assets.transferTip5'))
             }
             state.loading = true
             const params = {
