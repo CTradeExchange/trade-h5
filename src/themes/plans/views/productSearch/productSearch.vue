@@ -157,7 +157,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-::v-deep .van-cell {
+:deep(.van-cell) {
     background-color: var(--bgColor) !important;
 }
 .quoteWrap {
