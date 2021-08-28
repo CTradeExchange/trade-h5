@@ -93,7 +93,7 @@ if (isAdminMode) {
 }
 
 const config = {
-    productionSourceMap: true,
+    productionSourceMap: false,
     publicPath: process.env.NODE_ENV === 'production' && isAdminMode ? '/wp-content/plugins/cats-manage/wp-admin-static/' : '/', // static/
     // indexPath: isAdminMode ? 'index.html' : 'index_template.html', // 就是这条
     lintOnSave: false,
