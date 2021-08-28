@@ -1,6 +1,7 @@
 const path = require('path')
 const dayjs = require('dayjs')
 const { queryBuildConfig } = require('./build/buildConfig.js')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const FileManagerPlugin = require('filemanager-webpack-plugin')
 var plugins = []
 const pages = {}
@@ -31,6 +32,7 @@ console.log(buildType, theme)
 if (process.env.NODE_ENV === 'production') {
     const pathStr = buildType
     const pathName = isAdminMode ? 'admin' : 'dist'
+    const outputDirDestination = `/build_folder/${pathStr}/${pathStr}/${pathName}`
     plugins.push(
         new FileManagerPlugin({
             events: {
@@ -41,7 +43,7 @@ if (process.env.NODE_ENV === 'production') {
                     // ],
                     copy: [{
                         source: resolve(`/build_folder/${pathName}`),
-                        destination: resolve(`/build_folder/${pathStr}/${pathStr}/${pathName}`)
+                        destination: resolve(outputDirDestination)
                     }],
                     archive: [
                         // { source: resolve(`${pathName}`), destination: resolve(`zip/${pathName}${dayjs().format('YYYYMMDDHHmm')}.zip`) },
@@ -60,6 +62,9 @@ if (process.env.NODE_ENV === 'production') {
             }
         })
     )
+    plugins.push(new CleanWebpackPlugin({
+        cleanOnceBeforeBuildPatterns: [resolve(`${outputDirDestination}/**`)],
+    }))
 }
 
 if (isAdminMode) {
