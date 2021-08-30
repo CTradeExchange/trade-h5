@@ -159,7 +159,7 @@ export default {
         font-size: rem(28px);
         .tag {
             color: var(--color);
-            font-size: rem(30px);
+            font-size: rem(32px);
         }
     }
     .totalAmount {

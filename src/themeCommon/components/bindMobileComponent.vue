@@ -4,7 +4,7 @@
         <Loading :show='loading' />
         <form class='form'>
             <div class='field'>
-                <areaInput v-model='mobile' v-model:zone='zoneText' clear :disabled='true' :placeholder='$t("common.inputPhone")' />
+                <areaInput v-model='mobile' v-model:zone='zoneText' clear :disabled='true' :placeholder='type === "bind" ? $t("common.inputPhone"): $t("common.inputNewPhone")' />
             </div>
             <div class='field'>
                 <!-- <label class='label'>

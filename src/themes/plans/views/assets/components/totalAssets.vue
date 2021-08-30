@@ -2,15 +2,20 @@
     <div class='totalAssets'>
         <div class='totalAssetsBlock'>
             <div class='totalAssetsInfo'>
-                <p class='label'>
-                    <span> {{ $t('assets.totalAssets') }}({{ assetsInfo?.currency }})</span>
-                    <span class='tag'>
-                        {{ $t('assets.riskLevel') }} {{ assetsInfo?.closeProportion }}
-                    </span>
-                </p>
-                <p class='totalAmount'>
+                <div class='label'>
+                    <div class='left'>
+                        <span class='total'>
+                            {{ $t('assets.totalAssets') }}({{ assetsInfo?.currency }})
+                        </span>
+                        <span class='tag'>
+                            {{ $t('assets.riskLevel') }} {{ assetsInfo?.closeProportion }}
+                        </span>
+                    </div>
+                    <i class='icon_zijinmingxi2' @click="$router.push({ name:'Record',query:{ tradeType:tradeType, accountId:assetsInfo.accountId } })"></i>
+                </div>
+                <div class='totalAmount'>
                     {{ assetsInfo?.totalBalance }}
-                </p>
+                </div>
             </div>
         </div>
         <ul class='assetList'>
@@ -143,13 +148,15 @@ export default {
     font-size: rem(28px);
     .label {
         display: flex;
+        align-items: center;
         justify-content: space-between;
         margin-top: rem(20px);
         color: var(--minorColor);
         font-size: rem(28px);
         .tag {
             height: rem(40px);
-            padding: 0 rem(10px);
+            margin-left: rem(10px);
+            padding: rem(5px) rem(10px);
             color: var(--success);
             font-size: rem(20px);
             line-height: rem(40px);
@@ -157,6 +164,10 @@ export default {
             border: 1px solid var(--success);
             border-radius: rem(6px);
         }
+    }
+    .icon_zijinmingxi2 {
+        color: var(--color);
+        font-size: rem(32px);
     }
     .totalAmount {
         margin-top: rem(20px);
