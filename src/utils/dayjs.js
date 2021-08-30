@@ -6,8 +6,9 @@ dayjs.extend(utc)
 dayjs.extend(isBetween)
 dayjs.extend(timezone)
 const dayjsEmulate = function (...args) {
-    const utcOffset = parseFloat(sessionStorage.getItem('utcOffset')) || dayjs().utcOffset()
-    return dayjs(...args).utcOffset(utcOffset)
+    return dayjs(...args) // 使用手机本地时区显示
+    // const utcOffset = parseFloat(sessionStorage.getItem('utcOffset')) || dayjs().utcOffset()
+    // return dayjs(...args).utcOffset(utcOffset)
 }
 dayjsEmulate.tz = dayjs.tz
 dayjsEmulate.utc = dayjs.utc
