@@ -636,4 +636,13 @@ body {
     --van-radio-label-color: var(--normalColor);
     --van-popover-action-width: rem(80px);
     --van-popover-action-height: 30px;
+    .van-calendar__footer {
+        .van-button {
+            height: rem(74px);
+            border-radius: rem(6px);
+        }
+    }
+    .van-calendar {
+        background-color: var(--bgColor) !important;
+    }
 }

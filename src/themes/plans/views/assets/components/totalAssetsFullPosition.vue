@@ -186,17 +186,20 @@ export default {
 }
 .btns {
     display: flex;
+    height: rem(65px);
     //justify-content: space-evenly;
     .van-button {
+        width: 50%;
         //display: block;
         //flex: 1;
-        width: 50%;
+        height: 100%;
         height: rem(60px);
         margin-right: rem(20px);
         color: var(--primary);
-        font-size: rem(24px);
+        font-size: rem(28px);
         line-height: rem(60px);
         background: var(--primaryAssistColor);
+        border: none;
         border-color: var(--primary);
         border-radius: rem(6px);
         &:last-child {

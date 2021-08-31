@@ -253,9 +253,8 @@ export default {
             }
             .bd {
                 position: relative;
-                top: rem(4px);
                 display: inline-block;
-                margin-right: rem(20px);
+                //margin-right: rem(15px);
                 text-align: center;
             }
             .flex-wrap {
@@ -321,10 +320,10 @@ export default {
         .icon_icon_chart {
             display: inline-block;
             width: rem(52px);
-            height: rem(46px);
+            height: rem(52px);
             font-size: rem(30px);
             font-style: normal;
-            line-height: rem(46px);
+            line-height: rem(52px);
             text-align: center;
             border-radius: rem(6px);
             &.hidden {
@@ -335,12 +334,13 @@ export default {
         .van-button {
             //width: rem(165px);
             flex: 1;
-            height: rem(48px);
-            margin-right: rem(10px);
+            height: rem(52px);
+            margin-left: rem(20px);
             color: var(--primary) !important;
             font-size: rem(24px);
             line-height: rem(48px);
             background: var(--primaryAssistColor) !important;
+            border: none;
             border-color: var(--primaryAssistColor) !important;
             border-radius: rem(6px);
         }

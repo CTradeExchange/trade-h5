@@ -264,6 +264,7 @@ export default {
             font-size: rem(28px);
             line-height: rem(80px);
             background: var(--assistColor);
+            border-radius: rem(6px);
             .icon_icon_arrow {
                 margin-left: rem(10px);
                 font-size: rem(24px);
@@ -304,6 +305,8 @@ export default {
                 //margin-bottom: rem(20px);
                 color: #FFF;
                 font-size: rem(30px);
+                border: none;
+                border-radius: rem(6px);
             }
         }
     }

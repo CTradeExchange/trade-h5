@@ -161,7 +161,7 @@ export default {
         justify-content: flex-start;
         box-sizing: border-box;
         width: 100%;
-        padding: rem(30px) 0;
+        padding: rem(20px) 0;
     }
     .singleContent {
         width: 100%;

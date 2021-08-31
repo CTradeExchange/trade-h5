@@ -195,15 +195,17 @@ export default {
 }
 .btns {
     display: flex;
-    .van-button {
+    height: rem(65px);
+    :deep(.van-button) {
         display: block;
         width: 50%;
-        height: rem(60px);
+        height: 100%;
         margin-right: rem(20px);
         color: var(--primary);
-        font-size: rem(24px);
-        line-height: rem(60px);
+        font-size: rem(28px);
+        line-height: rem(70px);
         background: var(--primaryAssistColor);
+        border: none;
         border-color: var(--primaryAssistColor);
         border-radius: rem(6px);
         &:last-child {

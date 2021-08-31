@@ -225,7 +225,7 @@ export default {
             bizTypeText: {},
             params: {
                 current: 1,
-                size: 10,
+                size: 20,
                 // executeStartTime: 0,
                 executeEndTime: dayjs(dayjs(new Date()).format('YYYY/MM/DD 23:59:59')).valueOf()
             },
@@ -428,6 +428,7 @@ export default {
         //background-color: var(--bgColor);
         .van-dropdown-menu__bar {
             align-items: center;
+            padding: 0 rem(10px);
             background: var(--bgColor);
             box-shadow: none;
             .van-dropdown-menu__item {
@@ -437,23 +438,26 @@ export default {
                 margin: 0 rem(10px);
                 padding: 0 rem(5px);
                 background: var(--contentColor);
+                border-radius: rem(6px);
                 .van-dropdown-menu__title {
                     position: static;
+                    color: var(--color);
                     font-size: rem(20px);
                     &::after {
                         right: rem(10px);
                         border-color: transparent transparent  var(--normalColor) var(--normalColor);
                     }
-                    .van-ellipsis {
-
-                    }
                 }
                 .van-cell__title {
                     span {
+                        color: var(--color);
                         font-size: rem(20px);
                     }
                 }
             }
+        }
+        .van-dropdown-item__option {
+            font-size: rem(20px);
         }
     }
 }
@@ -463,7 +467,6 @@ export default {
         margin: 0 rem(20px) rem(20px) rem(20px);
         padding: rem(20px);
         background-color: var(--contentColor);
-        border-bottom: solid 1px var(--lineColor);
         border-radius: rem(8px);
         .t-header {
             display: flex;

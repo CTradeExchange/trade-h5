@@ -351,6 +351,7 @@ export default {
                 font-size: rem(30px);
                 //width: 45%;
                 background: var(--primary);
+                border: none;
             }
         }
     }

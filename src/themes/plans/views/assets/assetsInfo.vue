@@ -23,13 +23,13 @@
                 <div class='hd'>
                     <p>{{ $t('trade.free') }}</p>
                     <p class='value'>
-                        {{ account.available }}
+                        {{ account?.available }}
                     </p>
                 </div>
                 <div class='ft'>
                     <p>{{ $t('assets.frozen') }}</p>
                     <p class='value'>
-                        {{ account.frozen }}
+                        {{ account?.frozen }}
                     </p>
                 </div>
             </li>
@@ -37,13 +37,13 @@
                 <div class='hd'>
                     <p>{{ $t('trade.loan') }}</p>
                     <p class='value'>
-                        {{ account.liabilitiesPrincipal }}
+                        {{ account?.liabilitiesPrincipal }}
                     </p>
                 </div>
                 <div class='ft'>
                     <p>{{ $t('trade.swap_2') }}</p>
                     <p class='value'>
-                        {{ account.interest }}
+                        {{ account?.interest }}
                     </p>
                 </div>
             </li>
@@ -51,13 +51,13 @@
                 <div class='hd'>
                     <p>{{ $t('assets.maxLoan') }}</p>
                     <p class='value'>
-                        {{ account.availableLoan }}
+                        {{ account?.availableLoan }}
                     </p>
                 </div>
                 <div class='ft'>
                     <p>{{ $t('withdrawCoin.can') }}</p>
                     <p class='value'>
-                        {{ account.withdrawAmount }}
+                        {{ account?.withdrawAmount }}
                     </p>
                 </div>
             </li>
@@ -193,11 +193,13 @@ export default {
     .van-button {
         width: 45%;
         height: rem(80px);
-        //margin: rem(20px);
         margin-bottom: rem(20px);
         color: #FFF;
         font-size: rem(30px);
         background: var(--primary);
+        border: none;
+        //margin: rem(20px);
+        border-radius: rem(6px);
         &.full {
             width: 100%;
             margin: rem(20px);

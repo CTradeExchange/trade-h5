@@ -46,7 +46,7 @@
                 </span>
             </div>
             <p class='tip'>
-                {{ $t('assets.maxTransfer') }} {{ curCurrency?.balance }} {{ curCurrency?.currency }}
+                {{ $t('assets.maxTransfer') }} {{ maxTransfer }} {{ curCurrency?.currency }}
             </p>
         </div>
 
@@ -121,7 +121,7 @@ export default {
         state.fromAccount = plans.value[0]
         state.toAccount = plans.value.filter(el => el.name !== state.fromAccount.name)[0]
         // 最大可转
-        const maxTransfer = computed(() => accountList.value.find(item => item.currency === state.curCurrency.currency))
+        const maxTransfer = computed(() => accountList.value.find(item => item.currency === state.curCurrency.currency)?.available)
         const minTransfer = computed(() => {
             const digits = state.curCurrency.digits
             return pow(0.1, digits)
@@ -267,11 +267,11 @@ export default {
 .fullPageWrapper {
     background-color: var(--contentColor);
     .page-content {
-        padding: 0 rem(30px);
+        padding: rem(30px);
         .transfer {
             display: flex;
             align-items: center;
-            background: var(--assistColor);
+            background: var(--bgColor);
             .label {
                 //flex: 1;
                 width: rem(22px);
@@ -331,7 +331,7 @@ export default {
             padding: 0 rem(30px);
             color: var(--color);
             font-size: rem(28px);
-            background: var(--assistColor);
+            background: var(--bgColor);
             border-radius: rem(6px);
             input {
                 flex: 1;
@@ -364,6 +364,8 @@ export default {
             color: #FFF;
             font-size: rem(30px);
             background: var(--primary);
+            border: none;
+            border-radius: rem(6px);
         }
     }
     .right-title {
