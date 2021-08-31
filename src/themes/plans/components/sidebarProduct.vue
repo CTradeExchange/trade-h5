@@ -1,5 +1,12 @@
 <template>
-    <van-popup v-model:show='show' position='left' :style="{ height: '100%' }" teleport='body' @open='onOpen'>
+    <van-popup
+        v-model:show='show'
+        position='left'
+        :style="{ height: '100%' }"
+        teleport='body'
+        @closed='onClosed'
+        @open='onOpen'
+    >
         <div class='sidebarProduct'>
             <plansType
                 v-if='!hideTradeType'
@@ -10,6 +17,7 @@
                 @change='handleTradeType'
             />
             <search
+                ref='searchRef'
                 :class='{ margin: hideTradeType }'
                 :trade-type='tradeType'
                 @cancel='onCancel'
@@ -73,6 +81,7 @@ export default {
         })
 
         const plansTypeRef = ref(null)
+        const searchRef = ref(null)
 
         // 取消按钮事件
         const onCancel = () => {
@@ -91,6 +100,7 @@ export default {
         const handleTradeType = (val) => {
             tradeType.value = val
             categoryType.value = 0
+            unref(searchRef) && unref(searchRef).reset()
         }
 
         // 获取板块列表和所选板块的产品列表
@@ -108,6 +118,10 @@ export default {
             unref(plansTypeRef) && unref(plansTypeRef).reset()
         }
 
+        const onClosed = () => {
+            unref(searchRef) && unref(searchRef).reset()
+        }
+
         return {
             show,
             tradeType,
@@ -119,7 +133,9 @@ export default {
             onCancel,
             onClick,
             plansTypeRef,
-            onOpen
+            onOpen,
+            searchRef,
+            onClosed
         }
     }
 }

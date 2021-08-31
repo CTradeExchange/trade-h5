@@ -57,7 +57,7 @@ export default {
                     if (String(e.tradeType) !== String(props.tradeType)) {
                         return
                     }
-                    const searchContent = e.symbolName + e.symbolCode
+                    const searchContent = e.symbolName || '' + e.symbolCode || ''
                     return searchContent.toLowerCase().includes(value.toLowerCase())
                 })
 
@@ -72,11 +72,16 @@ export default {
             context.emit('select', product)
         }
 
+        const reset = () => {
+            searchValue.value = ''
+        }
+
         return {
             searchValue,
             onCancel,
             searchResult,
-            onClick
+            onClick,
+            reset
         }
     },
 }
