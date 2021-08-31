@@ -20,7 +20,7 @@
                 <p class='bw-t'>
                     {{ $t('withdrawMoney.bankName') }}
                 </p>
-                <div v-if='checkedBank' class='bank' @click='openSheet'>
+                <div v-if='checkedBank' class='bank bank-flex' @click='openSheet'>
                     <i class='bank-icons-sm' :class="'bk-'+ checkedBank?.bankCode"></i>
                     <span class='bank-no'>
                         {{ checkedBank?.bankName }} {{ hideMiddle(checkedBank?.bankCardNumber) }}
@@ -57,12 +57,12 @@
                     <i class='bank-icons-sm' :class="'bk-'+ item.bankCode"></i>
                     <div class='bank-no'>
                         <p>{{ item.bankName }} {{ hideMiddle(item.bankCardNumber) }}</p>
+                        <p v-if='item.bankCurrency !== currency' class='tips'>
+                            {{ $t('withdrawMoney.bankTips') }}
+                        </p>
                     </div>
                     <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
                 </div>
-                <p v-if='item.bankCurrency !== currency' class='tips'>
-                    {{ $t('withdrawMoney.bankTips') }}
-                </p>
             </div>
             <div class='add-bank' @click='toAddBank'>
                 <van-icon class='icon-plus' name='plus' size='13' />
@@ -436,7 +436,7 @@ export default {
 
         // 处理银行卡号显示
         const hideMiddle = (value) => {
-            return `${value.substring(0, 4)} ${'*'.repeat(value.length - 8).replace(/(.{4})/g, '$1 ')}${value.length % 4 ? ' ' : ''}${value.slice(-4)}`
+            if (!isEmpty(value)) { return `${value.substring(0, 4)} ${'*'.repeat(value.length - 8).replace(/(.{4})/g, '$1 ')}${value.length % 4 ? ' ' : ''}${value.slice(-4)}` }
         }
 
         const checkKyc = () => {
@@ -613,8 +613,6 @@ export default {
     }
 }
 .bank {
-    //display: flex;
-    /* justify-content: center; */
     align-items: center;
     margin: rem(10px);
     border: rem(1px) solid var(--normalColor);
@@ -624,13 +622,17 @@ export default {
             color: var(--placeholdColor);
         }
     }
+    &.bank-flex {
+        display: flex;
+        justify-content: center;
+    }
     .bank-item {
         display: flex;
         align-items: center;
         border-radius: rem(4px);
     }
     .tips {
-        padding: 0 rem(90px) rem(20px);
+        //padding: 0 rem(90px) rem(20px);
         color: var(--placeholdColor);
     }
     .bank-no {
@@ -640,6 +642,7 @@ export default {
         margin: rem(30px) rem(15px) rem(30px) rem(30px);
     }
     .van-icon {
+        height: rem(40px);
         margin-right: rem(20px);
     }
     &.no-data {

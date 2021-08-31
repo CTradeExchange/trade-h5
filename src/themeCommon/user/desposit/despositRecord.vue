@@ -1,5 +1,5 @@
 <template>
-    <Top back left-icon='arrow-left' :menu='false' :right-action='false' show-center='true'>
+    <Top back left-icon='arrow-left' :menu='false' :right-action='false' :show-center='true'>
         <template #right>
         </template>
     </Top>
@@ -46,30 +46,12 @@
                             <div class='withdraw-desc'>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        {{ $t('deposit.amount') }}
+                                        {{ $t('deposit.cashAmount') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.intendAmount }} {{ item.depositCurrency }}
                                     </span>
                                 </div>
-                                <!-- <div class='w-item'>
-                                    <span class='left-label'>
-                                        {{ $t('common.currency') }}
-                                    </span>
-                                    <span class='right-val'>
-                                        {{ item.depositCurrency }}
-                                    </span>
-                                </div> -->
-                                <div class='w-item'>
-                                    <span class='left-label'>
-                                        {{ $t('common.status') }}
-                                    </span>
-                                    <span class='right-val state'>
-                                        {{ handleState(item.checkStatus, item.depositStatus) }}
-                                        <!-- {{ Number(item.depositStatus) ===2 ? '存款成功' : '待支付' }} -->
-                                    </span>
-                                </div>
-
                                 <div class='w-item'>
                                     <span class='left-label'>
                                         {{ $t('common.fee') }}
@@ -94,12 +76,28 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        {{ $t('deposit.proposalNo') }}
+                                        {{ $t('common.status') }}
                                     </span>
-                                    <span class='right-val'>
-                                        {{ item.proposalNo }}
+                                    <span class='right-val state'>
+                                        {{ handleState(item.checkStatus, item.depositStatus) }}
+                                        <!-- {{ Number(item.depositStatus) ===2 ? '存款成功' : '待支付' }} -->
                                     </span>
                                 </div>
+
+                                <div class='w-item'>
+                                    <span class='left-label'>
+                                        TXID
+                                    </span>
+                                    <span class='right-val w250'>
+                                        <span class='val'>
+                                            {{ txid || '--' }}
+                                        </span>
+                                        <span v-if='txid' class='copy-btn' :data-clipboard-text='txid' @click='copyTXID'>
+                                            <img alt='' src='../../../assets/copy.png' srcset='' />
+                                        </span>
+                                    </span>
+                                </div>
+
                                 <div class='w-item'>
                                     <span class='left-label'>
                                         {{ $t('deposit.submitTime') }}
@@ -110,7 +108,7 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        {{ $t('common.updateTime') }}
+                                        {{ $t('deposit.arriveTime') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ formatTime(item.updateTime) || '--' }}
@@ -143,10 +141,10 @@ import dayjs from 'dayjs'
 import { isEmpty } from '@/utils/util'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
+import Clipboard from 'clipboard'
 export default {
     components: {
-        Top,
-        Toast
+        Top
     },
     setup (props) {
         const router = useRouter()
@@ -188,7 +186,8 @@ export default {
             list: [],
             finishedText: t('common.noMore'),
             finished: false,
-            pageLoading: false
+            pageLoading: false,
+            txid: ''
         })
         const handleFold = (val) => {
             activeIndex.value = val
@@ -242,6 +241,16 @@ export default {
             getWithdrawList()
         }
 
+        // 复制txid
+        const copyTXID = () => {
+            var clipboard = new Clipboard('.copy-btn')
+            clipboard.on('success', e => {
+                Toast(t('common.copySuccess'))
+                // 释放内存
+                clipboard.destroy()
+            })
+        }
+
         onMounted(() => {
             getWithdrawList()
         })
@@ -254,6 +263,7 @@ export default {
             formatTime,
             onLoad,
             handleState,
+            copyTXID,
             ...toRefs(state)
         }
     }
@@ -279,8 +289,27 @@ export default {
                 color: var(--color);
                 font-weight: bold;
                 text-align: right;
+                &.w250 {
+                    width: rem(600px);
+                }
                 &.state {
                     color: var(--primary);
+                }
+                .val {
+                    display: inline-block;
+                    width: rem(300px);
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    vertical-align: middle;
+                }
+                .copy-btn {
+                    display: inline-block;
+                    margin-left: rem(5px);
+                    img {
+                        width: rem(40px);
+                        vertical-align: middle;
+                    }
                 }
             }
             .left-label {

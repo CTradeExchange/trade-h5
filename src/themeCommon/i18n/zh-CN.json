@@ -114,7 +114,7 @@
         "backHome": "返回首页",
         "noData": "暂无数据",
         "currency": "币种",
-        "enterAccount": "实际入账",
+        "enterAccount": "入账金额",
         "updateTime": "更新时间",
         "canceled": "已取消",
         "noMore": "没有更多了",
@@ -145,7 +145,8 @@
         "from": "从",
         "to": "到",
         "notFound": "未找到",
-        "account": "账户"
+        "account": "账户",
+        "copySuccess": "复制成功"
     },
     "auth": {
         "info": "需要准备的验证资料",
@@ -240,6 +241,7 @@
         "payFail": "支付失败",
         "serviceTips2": "未查询到订单信息，如有疑问请联系客服",
         "amount": "存款金额",
+        "cashAmount": "充值金额",
         "submitTime": "提交时间",
         "depositSuccess": "存款成功",
         "inputAmount": "请输入金额",
@@ -247,7 +249,8 @@
         "despositFail": "抱歉，可能因为网络原因，尚未收到支付成功消息。如已完成支付，请稍后查看或联系在线客服处理",
         "toRecord": "查看充值记录",
         "appendFiled": "补充资料",
-        "allInputRequire": "请填写所有补充资料" 
+        "allInputRequire": "请填写所有补充资料",
+        "arriveTime": "入帐时间"
     },
     "fund": {
         "marginLevel": "保证金水平",
@@ -565,7 +568,7 @@
     },
     "withdrawRecord": {
         "noneHint": "暂无数据",
-        "moneyName": "取款金额",
+        "moneyName": "提现金额",
         "coinName": "币种",
         "statusName": "状态",
         "serviceName": "手续费",
@@ -574,6 +577,7 @@
         "timeName": "提交时间",
         "remarkName": "备注",
         "noMore": "没有更多了",
+        "accountDeduction": "账户扣减",
         "auditStatus": {
             "1": "审核中",
             "2": "已取消",

@@ -99,6 +99,7 @@ export default {
         border-radius: rem(30px);
     }
     .van-icon-arrow {
+        height: rem(28px);
         margin-right: rem(10px);
         margin-left: rem(5px);
         font-weight: bold;

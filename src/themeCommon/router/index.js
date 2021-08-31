@@ -91,16 +91,7 @@ const routes = [
             roles: ['User'],
         }
     },
-    {
-        path: '/coinRecord',
-        name: 'CoinRecord',
-        component: () => import(/* webpackChunkName: "coinRecord" */ '../user/coinRecord.vue'),
-        meta: {
-            title: 'cRoute.coinRecord',
-            footerMenu: false,
-            roles: ['User'],
-        }
-    },
+
     {
         path: '/walletAddress',
         name: 'WalletAddress',

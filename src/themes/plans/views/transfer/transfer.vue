@@ -167,8 +167,8 @@ export default {
             }
 
             capitalTransfer(params).then(res => {
+                state.loading = false
                 if (res.check() && res.data) {
-                    state.loading = false
                     state.amount = ''
                     Toast(t('assets.transferSuccess'))
                     if ([3, 5, 9].includes(Number(state.fromAccount.id))) {

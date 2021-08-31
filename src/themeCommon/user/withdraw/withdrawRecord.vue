@@ -52,30 +52,12 @@
                                         {{ item.amount }} {{ item.accountCurrency }}
                                     </span>
                                 </div>
-                                <!-- <div class='w-item'>
-                                    <span class='left-label'>
-                                        {{ $t('withdrawRecord.coinName') }}
-                                    </span>
-                                    <span class='right-val'>
-                                        {{ item.withdrawCurrency }}
-                                    </span>
-                                </div> -->
                                 <div class='w-item'>
                                     <span class='left-label'>
-                                        {{ $t('withdrawRecord.statusName') }}
-                                    </span>
-                                    <span class='right-val state'>
-                                        {{ handleState(item.checkStatus,item.transferStatus) }}
-                                        <!-- {{ transferStatus[item.transferStatus] }} -->
-                                    </span>
-                                </div>
-
-                                <div class='w-item'>
-                                    <span class='left-label'>
-                                        {{ $t('withdrawRecord.serviceName') }}{{ item.accountCurrency }}
+                                        {{ $t('withdrawRecord.serviceName') }}
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.withdrawFee }}
+                                        {{ item.withdrawFee }}{{ item.accountCurrency }}
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -88,12 +70,44 @@
                                 </div>
                                 <div class='w-item'>
                                     <span class='left-label'>
+                                        {{ $t('withdrawRecord.accountDeduction') }}
+                                    </span>
+                                    <span class='right-val'>
+                                        {{ item.amount }} {{ item.accountCurrency }}
+                                    </span>
+                                </div>
+                                <div class='w-item'>
+                                    <span class='left-label'>
+                                        {{ $t('withdrawRecord.statusName') }}
+                                    </span>
+                                    <span class='right-val state'>
+                                        {{ handleState(item.checkStatus,item.transferStatus) }}
+                                        <!-- {{ transferStatus[item.transferStatus] }} -->
+                                    </span>
+                                </div>
+
+                                <div class='w-item'>
+                                    <span class='left-label'>
+                                        TXID
+                                    </span>
+                                    <span class='right-val w250'>
+                                        <span class='val'>
+                                            {{ txid || '--' }}
+                                        </span>
+                                        <span v-if='txid' class='copy-btn' :data-clipboard-text='txid' @click='copyTXID'>
+                                            <img alt='' src='../../../assets/copy.png' srcset='' />
+                                        </span>
+                                    </span>
+                                </div>
+
+                                <!-- <div class='w-item'>
+                                    <span class='left-label'>
                                         {{ $t('withdrawRecord.noName') }}
                                     </span>
                                     <span class='right-val'>
                                         {{ item.proposalNo }}
                                     </span>
-                                </div>
+                                </div> -->
                                 <div class='w-item'>
                                     <span class='left-label'>
                                         {{ $t('withdrawRecord.timeName') }}
@@ -125,6 +139,9 @@ import Top from '@/components/top'
 import { useStore } from 'vuex'
 import { queryWithdrawPageList } from '@/api/user'
 import dayjs from 'dayjs'
+import { Toast } from 'vant'
+import { useRoute, useRouter } from 'vue-router'
+import Clipboard from 'clipboard'
 import { isEmpty } from '@/utils/util'
 
 // i18n
@@ -136,8 +153,11 @@ export default {
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
+        const route = useRoute()
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+
+        const { withdrawType } = route.query
 
         // 审核状态 取款状态：审核中、已取消、成功
         const states = {
@@ -171,7 +191,8 @@ export default {
             list: [],
             finishedText: t('withdrawRecord.noMore'),
             finished: false,
-            loadingPage: false
+            loadingPage: false,
+            txid: ''
         })
         const handleFold = (val) => {
             activeIndex.value = val
@@ -189,7 +210,7 @@ export default {
                 companyId: customInfo.value.companyId,
                 customerNo: customInfo.value.customerNo,
                 accountId: customInfo.value.accountId,
-                withdrawType: 1,
+                withdrawType,
                 size: state.size,
                 current: state.current,
             }
@@ -227,6 +248,16 @@ export default {
             state.current++
         }
 
+        // 复制txid
+        const copyTXID = () => {
+            var clipboard = new Clipboard('.copy-btn')
+            clipboard.on('success', e => {
+                Toast(t('common.copySuccess'))
+                // 释放内存
+                clipboard.destroy()
+            })
+        }
+
         onMounted(() => {
             getWithdrawList()
         })
@@ -241,6 +272,7 @@ export default {
             onLoad,
             handleState,
             transferStatus,
+            copyTXID,
             ...toRefs(state)
         }
     }
@@ -265,8 +297,27 @@ export default {
             .right-val {
                 color: var(--color);
                 text-align: right;
+                &.w250 {
+                    width: rem(600px);
+                }
                 &.state {
                     color: var(--primary);
+                }
+                .val {
+                    display: inline-block;
+                    width: rem(300px);
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    vertical-align: middle;
+                }
+                .copy-btn {
+                    display: inline-block;
+                    margin-left: rem(5px);
+                    img {
+                        width: rem(40px);
+                        vertical-align: middle;
+                    }
                 }
             }
             .left-label {

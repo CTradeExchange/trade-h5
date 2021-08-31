@@ -109,8 +109,10 @@ export default {
 
         // 点击tab事件
         const handleTradeType = (val) => {
+            debugger
             const curIndex = plans.value.findIndex(item => item.id === val)
             assetsSwipe.value.swipeTo(curIndex)
+            store.commit('_quote/Update_tradeType', val)
             initData(val)
         }
 
@@ -124,16 +126,21 @@ export default {
 
         // swipwe 滑动组件
         const onChange = (index) => {
-            store.commit('_quote/Update_tradeType', plans.value[index].id)
+            debugger
+            const tradeType = plans.value[index].id
+            store.commit('_quote/Update_tradeType', tradeType)
+            // initData(tradeType)
         }
 
         onMounted(() => {
+            debugger
+            const tradeType = plans.value[tabIndex.value].id
+            console.log('**************', tradeType)
             assetsSwipe.value && assetsSwipe.value.swipeTo(tabIndex.value === -1 ? 0 : tabIndex.value)
             if (plans.value.length === 1) {
-                const tradeType = plans.value[0].id
                 store.commit('_quote/Update_tradeType', tradeType)
-                initData(tradeType)
             }
+            initData(tradeType)
         })
         onUnmounted(() => {
             MsgSocket.cancelSubscribeAsset()
