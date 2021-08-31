@@ -25,12 +25,24 @@ export default function hooks (state) {
     })
     const bizType = computed(() => {
         let bizType = state.orderType
-        if (bizType === 10 && [1, 2].includes(product.value?.tradeType)) {
-            const requestPrice = state.pendingPrice
-            if (state.direction === 'buy') {
-                bizType = lt(requestPrice, product.value.buy_price) ? 10 : 11
-            } else {
-                bizType = gt(requestPrice, product.value.sell_price) ? 10 : 11
+        const tradeType = product.value?.tradeType
+        if (state.orderType === 10 ) { // 限价单
+            if([1, 2].includes(tradeType)){
+                // CFD全仓和CFD逐仓 区分10-限价预埋单；11-停损预埋单
+                const requestPrice = state.pendingPrice
+                if (state.direction === 'buy') {
+                    bizType = lt(requestPrice, product.value.buy_price) ? 10 : 11
+                } else {
+                    bizType = gt(requestPrice, product.value.sell_price) ? 10 : 11
+                }
+            }else if([3, 5, 9].includes(tradeType)){
+                // 现货撮合、杠杆全仓、ABCC玩法限价单，按手数13，按额14
+                bizType = state.entryType===1? 13 : 14;
+            }
+        }else if(state.orderType===1){ // 市价单
+            if([3, 5].includes(tradeType) && state.entryType===2){
+                // 现货撮合、杠杆全仓 按额下单
+                bizType = 12;
             }
         }
         return bizType

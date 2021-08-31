@@ -1,11 +1,11 @@
 <template>
     <div class='borrowMoney'>
         <van-radio-group v-model='checked' direction='horizontal'>
-            <van-radio :name='2'>
+            <van-radio :name='2' @click='radioClick(2)'>
                 {{ $t('trade.autoLoan') }}
                 <van-icon class='questionIcon' name='question-o' @click.stop='lilvAlert=true' />
             </van-radio>
-            <van-radio v-if='product.tradeType === 3' class='lastRadio' :name='3'>
+            <van-radio v-if='product.tradeType === 3' class='lastRadio' :name='3' @click='radioClick(3)'>
                 {{ $t('trade.autoRepayment') }}
                 <van-icon class='questionIcon' name='question-o' @click.stop='lilvAlert2=true' />
             </van-radio>
@@ -70,12 +70,16 @@ export default {
             if (props.modelValue === data) data = 1
             emit('update:modelValue', data)
         }
+        const radioClick = (curname) => {
+            if (props.modelValue === curname) emit('update:modelValue', 1)
+        }
         return {
             lilvAlert,
             lilvAlert2,
             dailyInterest,
             checked,
             setValue,
+            radioClick,
         }
     }
 }

@@ -43,7 +43,7 @@
         "forgot": "忘记密码",
         "loginByPwd": "账号密码登录",
         "loginByCode": "验证码登录",
-        "loginNamePlaceholder": "请输入手机号或邮箱",
+        "loginNamePlaceholder": "请输入手机号或邮箱或用户编号",
         "email": "邮箱",
         "pwd": "密码",
         "verifyCode": "验证码",

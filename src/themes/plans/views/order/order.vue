@@ -7,6 +7,7 @@
         <div class='container'>
             <div v-if='product' class='main'>
                 <div v-if='orderHandicapVisible && product.symbolName' class='left'>
+                    <!-- 五档报价 -->
                     <OrderHandicap :product='product' />
                 </div>
                 <div v-if='product' class='right'>
@@ -177,11 +178,21 @@ export default {
             else Toast(t('trade.nullAssets'))
         }
 
+        // 设置按额或者按手数，切换产品或者切换方向时需要重新设置；现货撮合、杠杆玩法下单买入按额，其他都是按手数交易
+        const setVolumeType = () => {
+            if ([3, 5].includes(product.value?.tradeType) && state.direction === 'buy') {
+                state.entryType = 2
+            } else {
+                state.entryType = 1
+            }
+        }
+
         // 买入卖出方向变化时重新获取资产信息
         watch(
             () => state.direction,
             () => {
                 queryAccountInfo()
+                setVolumeType()
             },
         )
         // 监听玩法类型
@@ -215,8 +226,10 @@ export default {
             // 获取产品详情
             const [symbolId, tradeType] = symbolKey.value.split('_')
             state.orderHandicapVisible = tradeType === '9'
+            state.operationType = parseFloat(tradeType) === 3 ? 1 : 2 // 杠杆玩法默认是普通类型
+            setVolumeType() // 设置按额或者按手数交易
             store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
-                state.volume = product.minVolume // 设置默认手数
+                // state.volume = product.minVolume // 设置默认手数
                 // 订阅产品行情
                 QuoteSocket.send_subscribe([symbolKey.value])
                 // 订阅产品五档报价
@@ -257,7 +270,7 @@ export default {
             }
             const p = Math.pow(10, product.value.price_digits)
             const params = {
-                bizType: [3, 5, 9].includes(parseInt(tradeType)) && bizType.value === 10 ? 13 : bizType.value, // 业务类型。1-市价开；2-限价开
+                bizType: bizType.value, // 业务类型。1-市价开；2-限价开
                 direction, // 订单买卖方向。1-买；2-卖；
                 symbolId: Number(symbolId),
                 accountCurrency: account.value.currency,

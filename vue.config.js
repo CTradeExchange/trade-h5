@@ -62,6 +62,7 @@ if (process.env.NODE_ENV === 'production') {
             }
         })
     )
+    // 编译前清空旧的编译文件
     plugins.push(new CleanWebpackPlugin({
         cleanOnceBeforeBuildPatterns: [resolve(`${outputDirDestination}/**`)],
     }))
