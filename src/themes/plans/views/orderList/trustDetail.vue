@@ -136,7 +136,8 @@ export default {
         const symbolKey = `${symbolId}_${tradeType}`
         // 获取当前产品
         const product = computed(() => store.state._quote.productMap[symbolKey])
-        const account = computed(() => store.state._user.customerInfo?.accountList?.find(el => el.tradeType === 2))
+
+        const accountIds = computed(() => store.state._user.customerInfo?.accountList.filter(el => el.tradeType === Number(tradeType)).map(el => el.accountId))
 
         const pendingPrice = computed(() => shiftedBy(pendingItem.value?.requestPrice, -1 * product.value?.price_digits))
         const showInfo = () => {
@@ -158,9 +159,7 @@ export default {
                 const params = {
                     tradeType,
                     customerNo: customInfo.value.customerNo,
-                    accountId: account.value.accountId,
                     customerId: customInfo.value.id,
-
                     bizType: pendingItem.value.bizType
                 }
 
@@ -209,7 +208,8 @@ export default {
                 tradeType,
                 customerNo: customInfo.value.customerNo,
                 sortFieldName: 'orderTime',
-                sortType: 'desc'
+                sortType: 'desc',
+                accountIds: accountIds.value + ''
             })
         }
 
@@ -217,7 +217,8 @@ export default {
             tradeType,
             customerNo: customInfo.value.customerNo,
             sortFieldName: 'orderTime',
-            sortType: 'desc'
+            sortType: 'desc',
+            accountIds: accountIds.value + ''
         })
 
         return {
