@@ -224,13 +224,7 @@ export default {
                 if (state.orderHandicapVisible)QuoteSocket.deal_subscribe([symbolId], 5, curDigits, tradeType)
                 if (tradeType === '9') store.dispatch('_user/queryCustomerAssetsInfo', { tradeType }) // 拉取全仓账户币种
 
-                const list = accountList.value?.filter(el => el.tradeType === Number(product.tradeType))
-                const accountIds = []
-                if (list.length > 0) {
-                    list.forEach(element => {
-                        accountIds.push(element.accountId)
-                    })
-                }
+                const accountIds = accountList.value?.filter(el => el.tradeType === Number(product.tradeType)).map(el => el.accountId)
 
                 if ([3, 5, 9].includes(product.tradeType)) queryAccountInfo()
                 store.dispatch('_trade/queryPBOOrderPage', {

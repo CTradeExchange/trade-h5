@@ -204,6 +204,7 @@ class SocketEvent {
         // POSITION_AND_ORDER(5, "同时刷新挂单、仓位"),
         // POSITION_AND_ORDER(6, "同时刷新挂单、资金"),
         const store = this.$store
+        const accountIds = store.state._user.customerInfo?.accountList.filter(el => el.tradeType === Number(tradeType)).map(el => el.accountId)
         if (updateType === 1) {
             store.dispatch('_trade/queryPositionPage', {
                 tradeType,
@@ -214,7 +215,8 @@ class SocketEvent {
             store.dispatch('_trade/queryPBOOrderPage', {
                 tradeType,
                 sortFieldName: 'orderTime',
-                sortType: 'desc'
+                sortType: 'desc',
+                accountIds: accountIds + ''
             })
         } else if (updateType === 3 && [3, 5, 9].includes(tradeType)) {
             store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
@@ -231,14 +233,16 @@ class SocketEvent {
             store.dispatch('_trade/queryPBOOrderPage', {
                 tradeType,
                 sortFieldName: 'orderTime',
-                sortType: 'desc'
+                sortType: 'desc',
+                accountIds: accountIds + ''
             })
         } else if (updateType === 6) { // 同时刷新资金和委托列表
             if ([3, 5, 9].includes(tradeType)) store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
             store.dispatch('_trade/queryPBOOrderPage', {
                 tradeType,
                 sortFieldName: 'orderTime',
-                sortType: 'desc'
+                sortType: 'desc',
+                accountIds: accountIds + ''
             })
         }
 
