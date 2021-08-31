@@ -78,13 +78,14 @@ export default {
                     state.current++
                     if (!data.length || total <= state.list.length) {
                         state.finished = true
+                    } else {
+                        state.finished = false
                     }
                 })
         }
 
         const onRefresh = () => {
-            state.loading = true
-            state.finished = false
+            state.refreshing = true
             state.current = 1
             onLoad()
         }
