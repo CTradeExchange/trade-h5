@@ -64,18 +64,18 @@ export default {
         )
         const customerInfo = computed(() => store.state._user.customerInfo)
 
-        const tradeType = computed(() => store.state._quote.curTradeType)
-
         // 获取玩法列表
         const plans = computed(() => store.state._base.plans)
+
+        const tradeType = computed(() => store.state._quote.curTradeType || plans.value[0].id)
 
         // 获取持仓列表
         const positionList = computed(() => store.state._trade.positionList[tradeType.value])
 
         // 获取当前 tab 下标
-        const tabIndex = computed(() => plans.value.findIndex(item =>
-            (Number(item.id) === Number(tradeType.value))
-        ))
+        const tabIndex = computed(() => plans.value.findIndex(item => {
+            return (Number(item.id) === Number(tradeType.value))
+        }))
 
         // 获取持仓列表
         const queryPositionList = (tradeType) => {
@@ -131,14 +131,15 @@ export default {
         }
 
         onMounted(() => {
-            const tradeType = plans.value[tabIndex.value].id
-            console.log('**************', tradeType)
             assetsSwipe.value && assetsSwipe.value.swipeTo(tabIndex.value === -1 ? 0 : tabIndex.value)
+
             if (plans.value.length === 1) {
+                const tradeType = plans.value[0]?.id
                 store.commit('_quote/Update_tradeType', tradeType)
             }
-            initData(tradeType)
+            initData(tradeType.value)
         })
+
         onUnmounted(() => {
             MsgSocket.cancelSubscribeAsset()
         })

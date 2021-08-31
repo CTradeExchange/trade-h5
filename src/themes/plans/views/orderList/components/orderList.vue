@@ -439,9 +439,18 @@ export default {
                 background: var(--contentColor);
                 .van-dropdown-menu__title {
                     position: static;
+                    font-size: rem(20px);
                     &::after {
                         right: rem(10px);
                         border-color: transparent transparent  var(--normalColor) var(--normalColor);
+                    }
+                    .van-ellipsis {
+
+                    }
+                }
+                .van-cell__title {
+                    span {
+                        font-size: rem(20px);
                     }
                 }
             }
