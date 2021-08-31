@@ -3,6 +3,7 @@
         <layoutTop>
             <div>{{ $route.query.currency }}</div>
         </layoutTop>
+
         <div v-if='account' class='totalAsset'>
             <div class='leftInfo'>
                 <p>{{ $t('assets.totalAssets') }}</p>

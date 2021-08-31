@@ -15,7 +15,7 @@
                 v-model='loading'
                 class='record-list'
                 :finished='finished'
-                finished-text='没有更多了'
+                :finished-text='$t("common.noMore")'
                 @load='getWithdrawList'
             >
                 <div v-for='(item, index) in recordList' :key='index' :class="['item', item.isShow ? 'item-show' : 'item-hide']">

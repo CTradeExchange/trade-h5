@@ -9,7 +9,7 @@
                     v-model:zone='zoneText'
                     clear
                     :disabled='true'
-                    :placeholder='$t("common.inputEmail")'
+                    :placeholder='type === "bind" ? $t("common.inputEmail"): $t("common.inputNewEmail")'
                     type='email'
                 />
             </div>

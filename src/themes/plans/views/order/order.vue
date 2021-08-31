@@ -371,9 +371,6 @@ export default {
     overflow-y: auto;
     color: var(--color);
     background: var(--bgColor);
-    .orderTop {
-        height: rem(200px);
-    }
     .container {
         flex: 1;
         overflow-y: auto;

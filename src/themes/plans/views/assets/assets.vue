@@ -127,14 +127,12 @@ export default {
             store.commit('_quote/Update_tradeType', plans.value[index].id)
         }
 
-        if (tradeType.value) {
-            initData(tradeType.value)
-        }
-
         onMounted(() => {
             assetsSwipe.value && assetsSwipe.value.swipeTo(tabIndex.value === -1 ? 0 : tabIndex.value)
-            if (plans.value.length > 0) {
-                store.commit('_quote/Update_tradeType', plans.value[0].id)
+            if (plans.value.length === 1) {
+                const tradeType = plans.value[0].id
+                store.commit('_quote/Update_tradeType', tradeType)
+                initData(tradeType)
             }
         })
         onUnmounted(() => {

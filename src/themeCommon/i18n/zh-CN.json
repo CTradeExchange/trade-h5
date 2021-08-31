@@ -72,6 +72,8 @@
         "reviewSuccess": "您的资料已经审核通过，现在就开启您的财富之旅吧！",
         "inputPhone": "请输入手机号",
         "inputEmail": "请输入邮箱",
+        "inputNewPhone": "请输入新手机号",
+        "inputNewEmail": "请输入新邮箱",
         "inputRealEmail": "请输入正确的邮箱",
         "inputVerifyCode": "请输入验证码",
         "inputPwd": "请输入密码",

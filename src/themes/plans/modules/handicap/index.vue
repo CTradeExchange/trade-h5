@@ -135,8 +135,13 @@ export default {
             return digits.splice(0, 5)
         })
 
-        watchEffect(() => {
+        // 产品切换重新订阅
+        watch(() => ([product.value.symbolId]), newVal => {
             state.curDigits = digitLevelList.value[0]?.text
+        })
+
+        watchEffect(() => {
+            state.curDigits = state.curDigits || digitLevelList.value[0]?.text
             store.commit('_quote/Update_deepthDigits', state.curDigits)
             if (state.curDigits) {
                 QuoteSocket.deal_subscribe([product.value.symbolId], 10, state.curDigits, state.tradeType)
@@ -146,7 +151,6 @@ export default {
         // 修改报价深度
         const onSelect = (val) => {
             state.curDigits = val.text
-            QuoteSocket.deal_subscribe([props.symbolId], 10, state.curDigits, state.tradeType)
         }
 
         const queryPBOOrderPage = () => {
@@ -211,7 +215,7 @@ export default {
         &.depth {
             padding-left: rem(10px);
             .depth-select {
-                display: inline-block;
+                display: block;
                 width: rem(110px);
                 height: rem(40px);
                 line-height: rem(40px);
