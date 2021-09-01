@@ -188,3 +188,14 @@ export const SUBSTUDIES = [
         params: [false, false, [14, 1, 3]]
     },
 ]
+
+//图表样式名称对应关系
+export const styleNameMap = {
+    0: 'barStyle',
+    1: 'candleStyle',
+    2:'lineStyle',
+    3:'areaStyle',
+    8: 'haStyle',
+    9: 'hollowCandleStyle',
+    10:'baselineStyle',
+}

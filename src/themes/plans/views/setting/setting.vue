@@ -8,6 +8,7 @@
         <van-cell v-if='customInfo && customInfo.phone' is-link :title='$t("setting.replacePhone")' to='/changeBindMobile' />
         <van-cell is-link :title='$t("setting.setLang")' :value='langText' @click='langVisible=true' />
         <van-cell is-link :title='$t("setting.color")' :value='colorText' @click='colorVisible=true' />
+        <van-cell is-link :title='$t("common.chartColor")' :value='chartText' @click='chartSettingVisible=true' />
 
         <van-button v-if='customInfo' class='logout-btn' :loading='loading' type='primary' @click='handleLogout'>
             <span>{{ $t("setting.logout") }}</span>
@@ -15,6 +16,7 @@
 
         <van-action-sheet v-model:show='langVisible' :actions='langActions' @select='langSelect' />
         <van-action-sheet v-model:show='colorVisible' :actions='colorsActions' @select='colorSelect' />
+        <van-action-sheet v-model:show='chartSettingVisible' :actions='chartAction' @select='chartSelect' />
         <Loading :show='loading' />
     </div>
 </template>
@@ -38,6 +40,10 @@ export default {
             { val: 'night', name: '黑夜' },
             { val: 'light', name: '白天' },
         ]
+        const chartAction = [
+            { val: 1, name: t('common.redDown') },
+            { val: 2, name: t('common.redUp') },
+        ]
 
         const store = useStore()
         const router = useRouter()
@@ -46,7 +52,10 @@ export default {
             langVisible: false,
             colorVisible: false,
             lang: localGet('lang') || store.state._base.wpCompanyInfo.language,
-            langActions: store.state.supportLanguages
+            langActions: store.state.supportLanguages,
+            checked: false,
+            chartSettingVisible: false,
+            chartVal: JSON.parse(localGet('chartConfig'))?.chartColorType || 1
         })
         const langText = computed(() => {
             const curLang = state.langActions.find(el => el.val === state.lang)
@@ -56,6 +65,8 @@ export default {
             const cur = colorsActions.find(el => el.val === store.state.invertColor)
             return cur ? cur.name : ''
         })
+
+        const chartText = computed(() => chartAction.find(el => el.val === state.chartVal)?.name)
 
         const handleLogout = () => {
             Dialog.confirm({
@@ -111,18 +122,34 @@ export default {
             }
         }
 
-        // const setRootVariable = () => {
-        //     const colors = JSON.parse(sessionStorage.getItem('themeColors'))
-        //     const invertColor = localGet('invertColor')
-        //     const colorsArr = Object.assign(colors[invertColor], colors.common)
-        //     const style = document.documentElement.style
-        //     for (const key in colorsArr) {
-        //         if (Object.hasOwnProperty.call(colorsArr, key)) {
-        //             const el = colorsArr[key]
-        //             style.setProperty(`--${key}`, el)
-        //         }
-        //     }
-        // }
+        // 设置图表颜色
+        const chartSelect = (chartObj) => {
+            state.chartVal = chartObj.val
+
+            const locChartConfig = JSON.parse(localGet('chartConfig'))
+            if (isEmpty(locChartConfig)) {
+                localSet('chartConfig', JSON.stringify({
+                    'chartColorType': chartObj.val
+                }))
+            } else {
+                locChartConfig['chartColorType'] = chartObj.val
+                localSet('chartConfig', JSON.stringify(locChartConfig))
+            }
+            const themeColors = sessionStorage.getItem('themeColors')
+            if (!isEmpty(themeColors)) {
+                const { riseColor, fallColor } = JSON.parse(themeColors)?.common
+                if (chartObj.val === 1) {
+                    document.body.style.setProperty('--riseColor', riseColor)
+                    document.body.style.setProperty('--fallColor', fallColor)
+                } else {
+                    document.body.style.setProperty('--riseColor', fallColor)
+                    document.body.style.setProperty('--fallColor', riseColor)
+                }
+            }
+
+            setRootVariable()
+            state.chartSettingVisible = false
+        }
 
         return {
             colorsActions,
@@ -132,6 +159,9 @@ export default {
             langSelect,
             colorSelect,
             colorText,
+            chartAction,
+            chartSelect,
+            chartText,
             ...toRefs(state)
         }
     }

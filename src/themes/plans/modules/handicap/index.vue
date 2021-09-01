@@ -3,7 +3,7 @@
         <div v-if='showField' class='my'>
             {{ $t('trade.my') }}
         </div>
-        <div class='alignCenter'>
+        <div class='alignLeft'>
             {{ $t('trade.volumes') }}({{ product.baseCurrency }})
         </div>
         <div class='padding' :class="showField ? 'alignRight' : 'alignCenter'">
@@ -28,7 +28,7 @@
         <!-- <div v-else class='alignCenter'>
             {{ $t('trade.priceLabel') }}({{ product.profitCurrency }})
         </div> -->
-        <div class='padding alignCenter'>
+        <div class='padding alignRight'>
             {{ $t('trade.volumes') }}({{ product.baseCurrency }})
         </div>
         <div v-if='showField' class='my'>
@@ -206,7 +206,7 @@ export default {
         color: var(--minorColor);
         font-size: rem(20px);
         &.my {
-            flex: 0 0 rem(110px);
+            flex: 0 0 rem(100px);
             text-align: center;
         }
         &.padding {

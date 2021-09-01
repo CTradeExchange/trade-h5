@@ -1,5 +1,5 @@
 import { UDFCompatibleDatafeed } from './datafeeds/udf/lib/udf-compatible-datafeed'
-import { portraitOptions, landscapeOptions } from './datafeeds/userConfig/config.js'
+import { portraitOptions, landscapeOptions, styleNameMap } from './datafeeds/userConfig/config.js'
 
 // 创建Chart实例
 export function createChart (...args) {
@@ -370,7 +370,7 @@ class Chart {
                         .setPrice(this.buyPrice)
                         .setText('')
                         .setLineStyle(0)
-                        .setLineColor('#e3525c')
+                        .setLineColor(config.downColor)
                         .setQuantity(false)
                 }
             } else if (target.buyPriceLine) {
@@ -387,7 +387,7 @@ class Chart {
                         .setPrice(this.sellPrice)
                         .setText('')
                         .setLineStyle(0)
-                        .setLineColor('#10b873')
+                        .setLineColor(config.upColor)
                         .setQuantity(false)
                 }
             } else if (target.sellPriceLine) {
@@ -426,6 +426,12 @@ class Chart {
             } else if (key === 'showLastPrice') {
                 overrides['mainSeriesProperties.showPriceLine'] = property[key]
                 overrides['scalesProperties.showSeriesLastValue'] = property[key]
+            } else if (['upColor', 'downColor'].includes(key)) {
+                const styleName = styleNameMap[property.chartType]
+                overrides['mainSeriesProperties.' + styleName + '.upColor'] = property.upColor
+                overrides['mainSeriesProperties.' + styleName + '.borderUpColor'] = property.upColor
+                overrides['mainSeriesProperties.' + styleName + '.downColor'] = property.downColor
+                overrides['mainSeriesProperties.' + styleName + '.borderDownColor'] = property.downColor
             }
         })
         return overrides

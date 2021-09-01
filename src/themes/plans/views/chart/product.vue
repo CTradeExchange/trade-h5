@@ -281,6 +281,7 @@
         @removeStudy='removeStudy'
         @update:show='updateShow'
     />
+
     <!-- 侧边栏-切换产品 -->
     <sidebarProduct v-model='showSidebar' :default-trade-type='product.tradeType' @select='onSelect' />
 </template>
@@ -501,6 +502,9 @@ export default {
         const positionList = computed(() => store.state._trade.positionList[getTradeType()] || [])
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)
 
+        // 颜色值
+        const style = computed(() => store.state.style)
+
         // 订阅产品
         const subscribeToProduct = () => {
             QuoteSocket.send_subscribe([`${getSymbolId()}_${getTradeType()}`])
@@ -546,10 +550,14 @@ export default {
 
         // 设置图表类型
         const setChartType = (item) => {
+            var property = {}
             state.klineType = item.value
 
             state.onChartReadyFlag && unref(chartRef).setChartType(Number(item.value))
             localSetChartConfig('chartType', item.value)
+
+            property.chartType = item.value
+            state.onChartReadyFlag && unref(chartRef).updateProperty(property)
             klineTypeDropdown.value.toggle()
         }
 
@@ -772,6 +780,9 @@ export default {
                 localSetChartConfig('resolution', 1)
                 localSetChartConfig('lineSetList', [])
                 localSetChartConfig('chartType', 1)
+                localSetChartConfig('chartColorType', 1)
+                localSetChartConfig('upColor', style.value.riseColor)
+                localSetChartConfig('downColor', style.value.fallColor)
                 // 默认选中现价线
                 state.settingList = ['showLastPrice', 'stalls', 'deal']
 
@@ -810,7 +821,6 @@ export default {
 
                 state.klineType = locChartConfig.chartType
                 state.settingList = locChartConfig.lineSetList
-
                 state.initConfig = ref({
                     property: {
                         showLastPrice: locChartConfig.showLastPrice, // 现价线
@@ -820,7 +830,12 @@ export default {
                         showSeriesOHLC: true, // 高开低收
                         showBarChange: true, // 涨跌幅
                         chartType: locChartConfig.chartType, // 图表类型
-                        showSeriesTitle: false // K线标题
+                        showSeriesTitle: false, // K线标题
+                        upColor: style.value.fallColor,
+                        downColor: style.value.riseColor
+                        /*  localSetChartConfig('upColor', style.value.fallColor)
+                localSetChartConfig('downColor', style.value.riseColor) */
+
                     },
                     indicators: [
                         JSON.parse(locChartConfig.mainStudy),
@@ -965,7 +980,8 @@ export default {
             showSidebar,
             toContractInfo,
             onSelect,
-            computedLineList
+            computedLineList,
+            style
         }
     }
 }

@@ -46,7 +46,7 @@
 import { computed, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import dayjs from 'dayjs'
-import { getLen } from '@/utils/util'
+import { getLen, localGet } from '@/utils/util'
 export default {
     props: {
         product: {
@@ -63,6 +63,9 @@ export default {
             const tick_time = props.product.tick_time ?? ''
             return tick_time ? dayjs(Number(tick_time)).format('HH:mm:ss') : ''
         })
+
+        const chartColorType = computed(() => Number(JSON.parse(localGet('chartConfig'))?.chartColorType) || 1)
+
         const state = reactive({
             bgClass: ''
         })
@@ -71,9 +74,9 @@ export default {
             () => props.product.sell_price,
             (val) => {
                 if (price === 0) {
-                    if (props.product.sell_color === 'riseColor') {
+                    if ((props.product.sell_color === 'riseColor' && chartColorType.value === 1) || (props.product.sell_color === 'fallColor' && chartColorType.value === 2)) {
                         state.bgClass = 'riseColorBgAni'
-                    } else if (props.product.sell_color === 'fallColor') {
+                    } else if ((props.product.sell_color === 'fallColor' && chartColorType.value === 1) || (props.product.sell_color === 'riseColor' && chartColorType.value === 2)) {
                         state.bgClass = 'fallColorBgAni'
                     }
                     price = val

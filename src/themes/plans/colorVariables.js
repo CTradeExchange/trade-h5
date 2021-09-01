@@ -70,9 +70,19 @@ function updateBodyClass (themeColor) {
 // 设置root变量
 export function setRootVariable (themeColor) {
     const invertColor = themeColor || localGet('invertColor')
+    const chartColorType = JSON.parse(localGet('chartConfig'))?.chartColorType || 1
     const colorsArr = Object.assign(colors[invertColor], colors.common)
     updateBodyClass(invertColor)
-    store.commit('Update_style', colorsArr)
+    const { riseColor, fallColor } = colorsArr
+
+    if (Number(chartColorType) === 1) {
+        colorsArr.riseColor = riseColor
+        colorsArr.fallColor = fallColor
+    } else {
+        colorsArr.riseColor = fallColor
+        colorsArr.fallColor = riseColor
+    }
+
     const style = document.body.style
     for (const key in colorsArr) {
         if (Object.hasOwnProperty.call(colorsArr, key)) {
@@ -80,6 +90,7 @@ export function setRootVariable (themeColor) {
             style.setProperty(`--${key}`, el)
         }
     }
+    store.commit('Update_style', colorsArr)
     sessionStorage.setItem('themeColors', JSON.stringify(colors))
 }
 
