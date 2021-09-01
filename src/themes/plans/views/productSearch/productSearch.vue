@@ -1,21 +1,21 @@
 <template>
     <div class='quoteWrap'>
         <plansType v-if='plansList.length>1' :list='plansList' :value='tradeType' @change='handleTradeType' />
-        <div class="search_box">
-            <div class="search_input">
-                 <van-search
-                    v-model="state.searchKey"
-                    show-action
+        <div class='search_box' :class='{ top: plansList.length>1 }'>
+            <div class='search_input'>
+                <van-search
+                    v-model='state.searchKey'
                     clearable
-                    placeholder="请输入搜索关键词"
-                    @search="onSearch"
-                    @cancel="onCancel"
+                    placeholder='请输入搜索关键词'
+                    show-action
+                    @cancel='onCancel'
+                    @search='onSearch'
                     @update:model-value='updateVal'
                 />
             </div>
-            <div class="search_products">
-                <div class="product_item" v-for="item in state.searchList" :key="item.symbolId" @click="openProduct(item.id)">
-                    <span>{{item.code}}</span>
+            <div class='search_products'>
+                <div v-for='item in state.searchList' :key='item.symbolId' class='product_item' @click='openProduct(item.id)'>
+                    <span>{{ item.code }}</span>
                     <button v-preventReClick class='collectIcon' @click.stop='addOptional(item)'>
                         <i
                             class='icon_zixuan1'
@@ -34,10 +34,9 @@ import plansType from '@/themes/plans/components/plansType.vue'
 import useProduct from '@plans/hooks/useProduct'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
+import { addCustomerOptional, removeCustomerOptional, getSymbolList } from '@/api/trade'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
-import { getSymbolList } from '@/api/trade'
 
 export default {
     name: 'Quote',
@@ -46,9 +45,9 @@ export default {
     },
     setup () {
         const state = reactive({
-            searchKey: "",
-            searchFlag:false,
-            searchList:[]
+            searchKey: '',
+            searchFlag: false,
+            searchList: []
         })
         const { t } = useI18n({ useScope: 'global' })
         const router = useRouter()
@@ -65,40 +64,40 @@ export default {
         // 监听玩法类型
         const handleTradeType = (val) => {
             tradeType.value = val
-            console.log("val",val)
-            state.searchList = [];
-            state.searchKey = '';
+            console.log('val', val)
+            state.searchList = []
+            state.searchKey = ''
         }
 
-        const onSearch = () =>{
+        const onSearch = () => {
             if (!state.searchKey) return false
             getSymbolList({ name: state.searchKey, tradeType: tradeType.value }).then(res => {
                 if (res.check()) {
-                    let list = res.data || []
+                    const list = res.data || []
                     state.searchList = list
-                    console.log("selfSymbolList",selfSymbolList)
-                    const currentSelfSymbolList = selfSymbolList.value[tradeType.value];
-                    let isSelfSymbol = false;
-                    state.searchList.forEach(item=>{
-                        item.isSelfSymbol = isSelfSymbol;
-                        currentSelfSymbolList.forEach(el=>{
-                            if(item.id===el.symbolId||item.id===el.id){
-                                item.isSelfSymbol = true;
+                    console.log('selfSymbolList', selfSymbolList)
+                    const currentSelfSymbolList = selfSymbolList.value[tradeType.value]
+                    const isSelfSymbol = false
+                    state.searchList.forEach(item => {
+                        item.isSelfSymbol = isSelfSymbol
+                        currentSelfSymbolList.forEach(el => {
+                            if (item.id === el.symbolId || item.id === el.id) {
+                                item.isSelfSymbol = true
                             }
                         })
                     })
-                    console.log("state.searchList",state.searchList)
+                    console.log('state.searchList', state.searchList)
                 }
             })
         }
         const updateVal = (val) => {
             onSearch(val)
         }
-        const openSearch = () =>{
-            state.searchList = [];
-            state.searchFlag=true
+        const openSearch = () => {
+            state.searchList = []
+            state.searchFlag = true
         }
-        const onCancel = ()=>{
+        const onCancel = () => {
             router.push('/quote')
         }
         const openProduct = (symbolId) => {
@@ -107,34 +106,34 @@ export default {
         // 添加自选
         const addOptional = (item) => {
             if (item.isSelfSymbol) {
-                removeCustomerOptional({ symbolList: [item.id],tradeType:tradeType.value }).then(res => {
+                removeCustomerOptional({ symbolList: [item.id], tradeType: tradeType.value }).then(res => {
                     if (res.check()) {
                         store.dispatch('_user/queryCustomerOptionalList')
                         Toast(t('trade.removeOptionalOk'))
-                        for(let key in selfSymbolList.value){
-                            selfSymbolList.value[key].forEach((el,index)=>{
-                                    if(item.id===el.symbolId||item.id===el.id){
-                                        selfSymbolList.value[key].splice(index,1);
-                                    }
+                        for (const key in selfSymbolList.value) {
+                            selfSymbolList.value[key].forEach((el, index) => {
+                                if (item.id === el.symbolId || item.id === el.id) {
+                                    selfSymbolList.value[key].splice(index, 1)
                                 }
+                            }
                             )
                         }
-                        //store.commit('_user/Update_selfSymbolList', selfSymbolList)
-                        onSearch();
+                        // store.commit('_user/Update_selfSymbolList', selfSymbolList)
+                        onSearch()
                     }
                 }).catch(err => {
                 })
             } else {
-                addCustomerOptional({ symbolList: [item.id],tradeType:tradeType.value }).then(res => {
+                addCustomerOptional({ symbolList: [item.id], tradeType: tradeType.value }).then(res => {
                     if (res.check()) {
                         store.dispatch('_user/queryCustomerOptionalList')
                         selfSymbolList.value[tradeType.value].push(item)
-                        //store.commit('_user/Update_selfSymbolList', selfSymbolList)
-                        onSearch();
+                        // store.commit('_user/Update_selfSymbolList', selfSymbolList)
+                        onSearch()
                         Toast(t('trade.addOptionalOk'))
                     }
                 }).catch(err => {
-                 
+
                 })
             }
         }
@@ -142,7 +141,7 @@ export default {
         return {
             updateVal,
             openSearch,
-            addOptional ,
+            addOptional,
             openProduct,
             onSearch,
             onCancel,
@@ -176,12 +175,15 @@ export default {
     }
     .search_box {
         position: absolute;
-        top: rem(100px);
+        top: 0;
         right: 0;
         bottom: 0;
         left: 0;
         z-index: 2;
         background: var(--contentColor);
+        &.top {
+            top: rem(100px);
+        }
         .search_input {
             .van-field {
                 border-radius: 3px;

@@ -80,7 +80,7 @@ export default {
             const accountList = state.customerInfo?.accountList || []
             accountList.forEach(el => {
                 const { currency, tradeType } = el
-                const account = data.accountInfoMap[currency]
+                const account = data.accountInfoMap?.[currency]
                 if (account && account.tradeType === tradeType) {
                     assign(el, account)
                 }
