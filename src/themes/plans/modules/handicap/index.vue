@@ -42,7 +42,7 @@
                 <span v-if='showField' class='label fallColor '>
                     {{ item.unitNum === 0 ? '': item.unitNum }}
                 </span>
-                <span class='quantity'>
+                <span class='quantity alignLeft'>
                     {{ item.volume_ask }}
                 </span>
                 <span
@@ -275,7 +275,6 @@ export default {
             .quantity {
                 position: relative;
                 z-index: 1;
-                text-align: center;
             }
             .label {
                 //flex: 1;

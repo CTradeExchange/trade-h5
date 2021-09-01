@@ -146,7 +146,11 @@
         "to": "到",
         "notFound": "未找到",
         "account": "账户",
-        "copySuccess": "复制成功"
+        "copySuccess": "复制成功",
+        "redUp": "红涨绿跌",
+        "redDown": "绿涨红跌",
+        "chartColor": "图表颜色",
+        "noLogin": "请登录"
     },
     "auth": {
         "info": "需要准备的验证资料",

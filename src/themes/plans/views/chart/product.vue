@@ -482,6 +482,8 @@ export default {
             return state.lineList.filter(e => !['stalls', 'deal'].includes(e.value))
         })
 
+        const customerInfo = computed(() => store.state._user.customerInfo)
+
         // 图表组件引用
         const chartRef = ref(null)
         const klineTypeIndex = computed(() => {
@@ -853,6 +855,10 @@ export default {
 
         // 添加自选
         const addOptional = () => {
+            if (isEmpty(customerInfo.value)) {
+                Toast(t('common.noLogin'))
+                return router.push('/login')
+            }
             state.loading = topRightVue
             if (isSelfSymbol.value) {
                 removeCustomerOptional({ symbolList: [getSymbolId()], tradeType: getTradeType() }).then(res => {
