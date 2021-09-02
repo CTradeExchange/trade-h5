@@ -1,6 +1,6 @@
 <template>
-    <div class='page-wrap' :class='{ isIframe: $route.query.isIframe }'>
-        <LayoutTop :back='true' :menu='false'>
+    <div class='page-wrap' :class='{ isIframe: $route.query.isUniapp }'>
+        <LayoutTop v-if='!$route.query.isUniapp' :back='true' :menu='false'>
             <p class='symbolName'>
                 <i v-if='product.symbolName' class='icon_chouti' @click='showSidebar=true'></i>
                 {{ product.symbolName }}
@@ -905,6 +905,12 @@ export default {
 
         // 跳转下单页
         const toOrder = (direction) => {
+            if (route.query.isUniapp && uni) {
+                uni.navigateTo({
+                    url: `/pages/order/index?symbolId=${getSymbolId()}&direction=${direction}&tradeType=${getTradeType()}`
+                })
+                return
+            }
             router.push({
                 path: '/order',
                 query: {
@@ -1009,6 +1015,7 @@ export default {
         }
     }
     &.isIframe {
+        margin-top: 0;
         margin-bottom: 0;
         .footerBtnBox,
         .right-wrap {

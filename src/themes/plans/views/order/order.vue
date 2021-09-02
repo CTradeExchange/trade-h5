@@ -158,6 +158,7 @@ export default {
         const product = computed(() => store.getters.productActived)
         const customerInfo = computed(() => store.state._user.customerInfo)
         const { bizType, account, findProductInCategory, switchProduct } = hooks(state)
+        const productSwitchHistory = {} // 顶部玩法类型切换记录
         // 玩法列表
         const plansList = computed(() => store.state._base.plans.filter(el => !(el.tradeType === '5' && el.isWallet)))
         // 1.玩法类型
@@ -180,6 +181,7 @@ export default {
 
         // 设置按额或者按手数，切换产品或者切换方向时需要重新设置；现货撮合、杠杆玩法下单买入按额，其他都是按手数交易
         const setVolumeType = () => {
+            return false // 暂时屏蔽按额下单功能
             if ([3, 5].includes(product.value?.tradeType) && state.direction === 'buy') {
                 state.entryType = 2
             } else {
@@ -197,8 +199,14 @@ export default {
         )
         // 监听玩法类型
         const handleTradeType = (tradeType) => {
+            let changeProductKey = ''
             productTradeType.value = String(tradeType)
-            const changeProductKey = findProductInCategory(tradeType)
+            if (productSwitchHistory[tradeType]) {
+                changeProductKey = productSwitchHistory[tradeType]
+            } else {
+                changeProductKey = findProductInCategory(tradeType)
+                productSwitchHistory[tradeType] = changeProductKey
+            }
             if (changeProductKey) {
                 const [symbolId, tradeType] = changeProductKey.split('_')
                 switchProduct(symbolId, tradeType).then(() => {
@@ -215,6 +223,7 @@ export default {
         const onSelectProduct = (product, close) => {
             const { symbolId, tradeType } = product
             productTradeType.value = String(tradeType)
+            productSwitchHistory[tradeType] = `${symbolId}_${tradeType}`
             switchProduct(symbolId, tradeType).then(res => {
                 state.orderType = 1
                 init()
@@ -228,8 +237,9 @@ export default {
             state.orderHandicapVisible = tradeType === '9'
             state.operationType = parseFloat(tradeType) === 3 ? 1 : 2 // 杠杆玩法默认是普通类型
             setVolumeType() // 设置按额或者按手数交易
+            productSwitchHistory[tradeType] = symbolKey.value
             store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
-                // state.volume = product.minVolume // 设置默认手数
+                state.volume = product.minVolume // 设置默认手数
                 // 订阅产品行情
                 QuoteSocket.send_subscribe([symbolKey.value])
                 // 订阅产品五档报价
