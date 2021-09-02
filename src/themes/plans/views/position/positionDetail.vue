@@ -4,13 +4,13 @@
         <div v-if='positionData' class='main'>
             <div class='m-orderInfo'>
                 <div class='layout layout-1'>
-                    <div v-if='product' class='item item-1'>
+                    <div class='item item-1'>
                         <div class='left'>
                             <div class='name'>
-                                {{ product.symbolName }}
+                                {{ positionData?.symbolName }}
                             </div>
                             <div class='code'>
-                                {{ product.symbolCode }}
+                                {{ positionData?.symbolCode }}
                             </div>
                         </div>
                     </div>
@@ -23,10 +23,10 @@
                         </div> -->
                         <div class='col'>
                             <div class='sub alignLeft'>
-                                {{ $t('trade.profit') }}({{ assetsInfo.currency }})
+                                {{ $t('trade.profit') }}({{ assetsInfo?.currency }})
                             </div>
-                            <div class='name' :class="parseFloat(positionData.profitLoss) > 0 ? 'riseColor': 'fallColor'">
-                                {{ positionData.profitLoss }}
+                            <div class='name' :class="parseFloat(positionData?.profitLoss) > 0 ? 'riseColor': 'fallColor'">
+                                {{ positionData?.profitLoss }}
                             </div>
                         </div>
                         <!-- <div class='col'>
@@ -51,8 +51,8 @@
                 <div class='layout layout-1'>
                     <div class='item item-2 van-hairline--bottom'>
                         <div class='col'>
-                            <div class='sub' :class="Number(positionData.direction) === 1 ? 'riseColor' : 'fallColor'">
-                                {{ Number(positionData.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
+                            <div class='sub' :class="Number(positionData?.direction) === 1 ? 'riseColor' : 'fallColor'">
+                                {{ Number(positionData?.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
                             </div><div class='name'>
                                 {{ positionVolume }} {{ $t('trade.volumeUnit') }}
                             </div>
@@ -62,15 +62,15 @@
                                 {{ $t('trade.positionPrice') }}
                             </div>
                             <div class='name'>
-                                {{ positionData.openPrice }}
+                                {{ positionData?.openPrice }}
                             </div>
                         </div>
                         <div class='col'>
                             <div class='sub'>
                                 {{ $t('trade.currentPrice') }}
                             </div>
-                            <div class='name' :class='[Number(positionData.direction) === 1 ? product.sell_color : product.buy_color]'>
-                                {{ Number(positionData.direction) === 1 ? product.sell_price : product.buy_price }}
+                            <div class='name' :class='[Number(positionData.direction) === 1 ? product?.sell_color : product?.buy_color]'>
+                                {{ Number(positionData?.direction) === 1 ? product?.sell_price : product?.buy_price }}
                             </div>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
                             </div>
                             <div class='name'>
                                 <span class='number'>
-                                    {{ parseFloat(positionData.stopLossDecimal) ? positionData.stopLossDecimal : $t('trade.nosSet') }}
+                                    {{ parseFloat(positionData?.stopLossDecimal) ? positionData?.stopLossDecimal : $t('trade.nosSet') }}
                                 </span>
                             </div>
                         </div>
@@ -91,7 +91,7 @@
                             </div>
                             <div class='name'>
                                 <span class='number'>
-                                    {{ parseFloat(positionData.takeProfitDecimal) ? positionData.takeProfitDecimal : $t('trade.nosSet') }}
+                                    {{ parseFloat(positionData?.takeProfitDecimal) ? positionData?.takeProfitDecimal : $t('trade.nosSet') }}
                                 </span>
                             </div>
                         </div>
@@ -104,7 +104,7 @@
                                 {{ $t('trade.openTime') }}
                             </div>
                         </div><div class='right'>
-                            {{ formatTime(positionData.openTime) }}
+                            {{ formatTime(positionData?.openTime) }}
                         </div>
                     </div><div class='item'>
                         <div class='left'>
@@ -162,34 +162,33 @@ export default {
             closeVisible: false,
         })
 
-        const { orderId, positionId, symbolId } = route.query
-        const tradeType = computed(() => store.state._quote.curTradeType)
+        const { orderId, positionId, symbolId, tradeType } = route.query
 
         const assetsInfo = computed(() => store.state._user.customerInfo.accountList.find(el => Number(el.tradeType) === Number(tradeType.value)))
 
         const customerInfo = computed(() => store.state._user.customerInfo)
 
-        const positionData = computed(() => store.state._trade.positionMap[positionId + '_' + tradeType.value])
+        const positionData = computed(() => store.state._trade.positionMap[positionId + '_' + tradeType])
 
         const product = computed(() => store.state._quote.productMap[symbolId + '_' + tradeType.value])
 
         const positionVolume = computed(() => minus(positionData.value?.openVolume, positionData.value?.closeVolume))
 
-        const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType.value))?.accountId
+        const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType))?.accountId
         // 初始化设置
         const init = () => {
-            if (!product.value.minVolume) {
+            if (!product.value?.minVolume) {
                 // 获取产品详情
                 store.dispatch('_quote/querySymbolInfo', {
                     symbolId,
-                    tradeType: tradeType.value
+                    tradeType: tradeType
                 })
             }
             // 订阅报价
             if (positionId && !positionData.value?.positionId) {
                 store.dispatch('_trade/queryPositionPage', {
-                    tradeType: tradeType.value,
-                    accountId
+                    tradeType: tradeType,
+                    accountId,
                 })
             }
         }

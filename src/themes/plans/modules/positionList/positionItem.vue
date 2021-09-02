@@ -179,7 +179,10 @@ export default {
 
         const toPositionDetail = (item) => {
             store.commit('_quote/Update_productActivedID', item.symbolId)
-            router.push({ path: '/positionDetail', query: { symbolId: item.symbolId, positionId: item.positionId } })
+            router.push({
+                path: '/positionDetail',
+                query: { symbolId: item.symbolId, positionId: item.positionId, tradeType: item.tradeType }
+            })
         }
         const updateShow = (val) => {
             state.cpVis = val
