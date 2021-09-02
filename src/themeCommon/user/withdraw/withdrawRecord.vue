@@ -28,7 +28,7 @@
                         <van-collapse-item :name='index+1'>
                             <template #title>
                                 <p class='amount'>
-                                    {{ item.amount }} {{ item.accountCurrency }}
+                                    {{ item.amount }} {{ item.withdrawCurrency }}
                                 </p>
                                 <p class='time'>
                                     {{ formatTime(item.createTime) }}
@@ -49,7 +49,7 @@
                                         {{ $t('withdrawRecord.moneyName') }}
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.amount }} {{ item.accountCurrency }}
+                                        {{ item.amount }} {{ item.withdrawCurrency }}
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -57,7 +57,7 @@
                                         {{ $t('withdrawRecord.serviceName') }}
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.withdrawFee }}{{ item.accountCurrency }}
+                                        {{ item.withdrawFee }}{{ item.withdrawCurrency }}
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -73,7 +73,8 @@
                                         {{ $t('withdrawRecord.accountDeduction') }}
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.amount }} {{ item.accountCurrency }}
+                                        --
+                                        <!-- {{ item.amount }} {{ item.accountCurrency }} -->
                                     </span>
                                 </div>
                                 <div class='w-item'>

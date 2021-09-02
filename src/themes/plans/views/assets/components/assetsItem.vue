@@ -39,7 +39,8 @@ export default {
         // console.log(props.data)
         const store = useStore()
         const router = useRouter()
-        const tradeType = computed(() => store.state._quote.curTradeType)
+        const plans = computed(() => store.state._base.plans)
+        const tradeType = computed(() => store.state._quote.curTradeType || plans.value[0].id)
         const toInfo = () => {
             router.push({
                 name: 'AssetsInfo',
