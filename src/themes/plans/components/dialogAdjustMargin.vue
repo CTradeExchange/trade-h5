@@ -102,11 +102,7 @@ export default {
             (val) => {
                 state.showDialog = props.show
                 if (val) {
-                    store.dispatch('_trade/queryPositionPage', {
-                        tradeType: tradeType.value,
-                        hideLoading: true,
-                        accountId: accountInfo.value.accountId
-                    })
+                    store.dispatch('_user/findCustomerInfo', false)
                 }
             })
 
@@ -118,13 +114,13 @@ export default {
             state.operType = !state.operType
 
             if (state.operType) {
+                store.dispatch('_user/findCustomerInfo', false)
+            } else {
                 store.dispatch('_trade/queryPositionPage', {
                     tradeType: tradeType.value,
                     hideLoading: true,
                     accountId: accountInfo.value.accountId
                 })
-            } else {
-                store.dispatch('_user/findCustomerInfo', false)
             }
             state.operText = state.operType ? t('trade.raise') : t('trade.reduce')
         }
