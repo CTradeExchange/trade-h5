@@ -1027,7 +1027,6 @@ export default {
     }
     &.isIframe {
         margin-top: 0;
-        margin-bottom: 0;
     }
     .infomation {
         padding-top: rem(5px);
