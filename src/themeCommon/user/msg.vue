@@ -118,8 +118,7 @@ export default {
                     tag.forEach(item => {
                         returnVal = content.replace(reg, function (matchStr) {
                             const time = matchStr.toString().replace(/<\/?time>/g, '')
-                            const timeStr = dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
-                            return timeStr
+                            return dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
                         })
                     })
                     return returnVal

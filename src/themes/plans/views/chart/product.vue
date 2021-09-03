@@ -34,8 +34,9 @@
                     <div class='hd-left'>
                         <p class='cur_price' :class='product.cur_color'>
                             {{ parseFloat(product.cur_price).toFixed(product.price_digits) }}
-                        </p><!---->
-                    </div><div class='others'>
+                        </p>
+                    </div>
+                    <div class='others'>
                         <span :class='product.cur_color'>
                             {{ product.upDownAmount }}<template v-if='product.tradeType !== 9'>
                                 ({{ product.upDownAmount_pip }} {{ $t('trade.dot') }})
@@ -43,10 +44,11 @@
                         </span><div class='others-bottom'>
                             <span class='upDownAmount' :class='product.cur_color'>
                                 {{ product.upDownWidth }}
-                            </span><!---->
+                            </span>
                         </div>
-                    </div><!---->
-                </div><div class='bd'>
+                    </div>
+                </div>
+                <div class='bd'>
                     <div class='item'>
                         <p class='priceBottom'>
                             <span>
@@ -729,16 +731,14 @@ export default {
 
         // 实时更新买卖价线
         watch(() => [product.value.buy_price, product.value.sell_price, product.value.cur_price, product.value.tick_time], (newValues) => {
-            if (state.settingList.indexOf('showLastPrice') > -1) {
+            if (Number(product.value.tradeType) !== 5 && Number(product.value.tradeType) !== 9) {
                 state.onChartReadyFlag && unref(chartRef).setTick(product.value.cur_price, product.value.tick_time)
-            }
 
-            // if (state.settingList.indexOf('showBuyPrice') > -1 || state.settingList.indexOf('showSellPrice') > -1) {
-            state.onChartReadyFlag && unref(chartRef).updateLineData({
-                buyPrice: product.value.buy_price,
-                sellPrice: product.value.sell_price
-            })
-            // }
+                state.onChartReadyFlag && unref(chartRef).updateLineData({
+                    buyPrice: product.value.buy_price,
+                    sellPrice: product.value.sell_price
+                })
+            }
         })
 
         watch(() => [state.settingList], (newValues) => {
@@ -831,10 +831,8 @@ export default {
                         showBarChange: true, // 涨跌幅
                         chartType: locChartConfig.chartType, // 图表类型
                         showSeriesTitle: false, // K线标题
-                        upColor: style.value.fallColor,
-                        downColor: style.value.riseColor
-                        /*  localSetChartConfig('upColor', style.value.fallColor)
-                localSetChartConfig('downColor', style.value.riseColor) */
+                        upColor: style.value.riseColor,
+                        downColor: style.value.fallColor
 
                     },
                     indicators: [
@@ -955,6 +953,27 @@ export default {
                 close()
             })
         }
+
+        const updateChart = data => {
+            try {
+                if (!isEmpty(data.detail)) {
+                    const res = data.detail.match(/\((.+)\)/)[1].split(',')
+                    if (Number(tradeType.value) === 5 || Number(tradeType.value) === 9) {
+                        state.onChartReadyFlag && unref(chartRef).setTick(res[4], res[3])
+
+                        state.onChartReadyFlag && unref(chartRef).updateLineData({
+                            buyPrice: product.value.buy_price,
+                            sellPrice: product.value.sell_price
+                        })
+                    }
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        // 监听当玩法为5和9的时候。并且有pt报价的时候才更新图表
+        document.body.addEventListener('GotMsg_updateChart', updateChart, false)
 
         return {
             ...toRefs(state),

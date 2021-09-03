@@ -3,7 +3,7 @@
         <div v-if='showField' class='my'>
             {{ $t('trade.my') }}
         </div>
-        <div class='alignLeft'>
+        <div class='alignLeft ' :class="!showField ? 'pl10' : ''">
             {{ $t('trade.volumes') }}({{ product.baseCurrency }})
         </div>
         <div class='padding' :class="showField ? 'alignRight' : 'alignCenter'">
@@ -28,7 +28,7 @@
         <!-- <div v-else class='alignCenter'>
             {{ $t('trade.priceLabel') }}({{ product.profitCurrency }})
         </div> -->
-        <div class='padding alignRight'>
+        <div class='alignRight' :class="!showField ? 'pr10' : ''">
             {{ $t('trade.volumes') }}({{ product.baseCurrency }})
         </div>
         <div v-if='showField' class='my'>
@@ -239,6 +239,12 @@ export default {
                     }
                 }
             }
+        }
+        &.pl10 {
+            padding-left: rem(20px);
+        }
+        &.pr10 {
+            padding-right: rem(20px);
         }
     }
 }

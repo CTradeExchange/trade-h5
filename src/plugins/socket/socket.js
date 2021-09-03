@@ -24,8 +24,12 @@ export default {
             if (typeof evt.data === 'string' && evt.data.startsWith('p(')) {
                 return QuoteSocket.tick(evt.data)
             } else if (typeof evt.data === 'string' && evt.data.startsWith('pt(')) {
+                const event = new CustomEvent('GotMsg_updateChart', { detail: evt.data })
+                document.body.dispatchEvent(event)
                 return QuoteSocket.deal_tick(evt.data)
             } else if (typeof evt.data === 'string' && evt.data.startsWith('pd(')) {
+                const event = new CustomEvent('GotMsg_updateChart', { detail: evt.data })
+                document.body.dispatchEvent(event)
                 return QuoteSocket.handicap_tick(evt.data)
             } else if (typeof evt.data === 'string' && evt.data.indexOf('{') !== 0) return
 

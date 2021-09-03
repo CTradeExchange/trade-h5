@@ -337,6 +337,7 @@ export default {
 
         onBeforeUnmount(() => {
             QuoteSocket.cancel_subscribe(2)
+            store.commit('_quote/Delete_dealList')
         })
         return {
             ...toRefs(state),

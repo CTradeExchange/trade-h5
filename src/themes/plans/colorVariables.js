@@ -76,11 +76,11 @@ export function setRootVariable (themeColor) {
     const { riseColor, fallColor } = colorsArr
 
     if (Number(chartColorType) === 1) {
-        colorsArr.riseColor = riseColor
-        colorsArr.fallColor = fallColor
-    } else {
         colorsArr.riseColor = fallColor
         colorsArr.fallColor = riseColor
+    } else {
+        colorsArr.riseColor = riseColor
+        colorsArr.fallColor = fallColor
     }
 
     const style = document.body.style
