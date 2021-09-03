@@ -19,9 +19,9 @@
                         {{ customerInfo.customerNo }}
                         <van-icon class='arrowIcon' name='arrow' />
                     </p>
-                    <span class='status invert' :class="['status'+customerInfo.kycAuditStatus]">
+                    <!-- <span class='status invert' :class="['status'+customerInfo.kycAuditStatus]">
                         {{ $tm('kycAuditStatus')[customerInfo.kycAuditStatus] }}
-                    </span>
+                    </span> -->
                 </div>
             </div>
             <div class='capitalImg'>
@@ -111,7 +111,7 @@ export default {
     }
     .arrowIcon {
         color: var(--minorColor);
-        vertical-align: middle;
+        vertical-align: 0;
     }
     .status {
         display: inline-block;

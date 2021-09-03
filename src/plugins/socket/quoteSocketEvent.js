@@ -75,8 +75,9 @@ class SocketEvent {
     */
     send_subscribe (productIds = []) {
         if (!productIds || productIds.length === 0) return false
-        this.subscribedList = formatSubscribe(productIds)
-        this.send(14000, { symbol_list: this.subscribedList })
+        this.subscribedList = productIds
+        const subscribeList = formatSubscribe(productIds)
+        this.send(14000, { symbol_list: subscribeList })
     }
 
     // 盘口成交报价订阅
@@ -194,7 +195,7 @@ class SocketEvent {
             ask_deep: []
         }
 
-        if (result.length > 0) {
+        if (result.length > 2) {
             const bidList = result[1].match(/[^\\(\\)]+(?=\))/g)
             if (bidList.length > 0) {
                 bidList.forEach(item => {
