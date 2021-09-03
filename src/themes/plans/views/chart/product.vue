@@ -42,7 +42,7 @@
                                 ({{ product.upDownAmount_pip }} {{ $t('trade.dot') }})
                             </template>
                         </span><div class='others-bottom'>
-                            <span class='upDownAmount' :class='product.cur_color'>
+                            <span class='upDownAmount' :class='product.upDownColor'>
                                 {{ product.upDownWidth }}
                             </span>
                         </div>
@@ -904,8 +904,19 @@ export default {
         // 跳转下单页
         const toOrder = (direction) => {
             if (route.query.isUniapp && uni) {
-                uni.navigateTo({
-                    url: `/pages/order/index?symbolId=${getSymbolId()}&direction=${direction}&tradeType=${getTradeType()}`
+                // uni.navigateTo({
+                //     url: `/pages/order/index?symbolId=${getSymbolId()}&direction=${direction}&tradeType=${getTradeType()}`
+                // })
+                uni.postMessage({
+                    data: {
+                        action: 'message',
+                        type: 'order',
+                        params: {
+                            tradeType: getTradeType(),
+                            symbolId: getSymbolId(),
+                            direction: direction
+                        }
+                    }
                 })
                 return
             }
@@ -1035,11 +1046,6 @@ export default {
     }
     &.isIframe {
         margin-top: 0;
-        margin-bottom: 0;
-        .footerBtnBox,
-        .right-wrap {
-            display: none;
-        }
     }
     .infomation {
         padding-top: rem(5px);
