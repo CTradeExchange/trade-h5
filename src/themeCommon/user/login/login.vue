@@ -248,7 +248,7 @@ export default {
         // 发送验证码
         const verifyCodeSendHandler = (callback) => {
             const verifyParams = {
-                type: 1,
+                type: state.loginName.includes('@') ? 1 : 2,
                 loginName: state.loginName
             }
 

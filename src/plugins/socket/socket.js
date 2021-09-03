@@ -6,6 +6,10 @@ import { ungzip } from './socketUtil'
 
 export const QuoteSocket = new QuoteSocketEvent() // 行情websocket
 export const MsgSocket = new MsgSocketEvent() // 消息websocket
+if (process.env.NODE_ENV === 'development') {
+    window.QuoteSocket = QuoteSocket
+    window.MsgSocket = MsgSocket
+}
 export default {
     install: (app, { $store, $router } = {}) => {
         const quoteWS = CreateSocket(quoteService)
