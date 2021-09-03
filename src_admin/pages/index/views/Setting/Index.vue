@@ -253,7 +253,7 @@
                                     </template>
                                 </el-input>
                             </el-form-item> -->
-                            <el-form-item label='时区'>
+                            <!-- <el-form-item label='时区'>
                                 <el-select
                                     v-model='form.utcOffset'
                                     placeholder='请输入'
@@ -265,7 +265,7 @@
                                         :value='item'
                                     />
                                 </el-select>
-                            </el-form-item>
+                            </el-form-item> -->
                             <el-form-item label='默认注册区号'>
                                 <el-select
                                     v-model='form.defaultZone'
