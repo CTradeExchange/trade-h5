@@ -1,7 +1,6 @@
 <template>
     <div class='pageWrap'>
         <Loading :show='loading' />
-        <div class='empty'></div>
         <div class='wrap'>
             <p class='header-text'>
                 {{ $t('withdrawMoney.moneyName') }}
@@ -20,7 +19,7 @@
                 <p class='bw-t'>
                     {{ $t('withdrawMoney.bankName') }}
                 </p>
-                <div v-if='checkedBank' class='bank bank-flex' @click='openSheet'>
+                <div v-if='!isEmpty(checkedBank)' class='bank bank-flex' @click='openSheet'>
                     <i class='bank-icons-sm' :class="'bk-'+ checkedBank?.bankCode"></i>
                     <span class='bank-no'>
                         {{ checkedBank?.bankName }} {{ hideMiddle(checkedBank?.bankCardNumber) }}
@@ -521,8 +520,8 @@ export default {
             hideMiddle,
             getWithdrawFee,
             timeList,
-            onlineServices
-
+            onlineServices,
+            isEmpty,
         }
     }
 

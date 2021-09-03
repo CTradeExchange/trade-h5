@@ -173,6 +173,7 @@ export default {
         onBeforeUnmount(() => {
             // 组件销毁取消订阅
             QuoteSocket.cancel_subscribe(2)
+            store.commit('_quote/Delete_dealList')
         })
 
         return {

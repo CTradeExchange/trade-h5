@@ -225,6 +225,9 @@ export default {
             state.dealList.unshift(data)
             state.dealList = state.dealList.splice(0, 10)
         },
+        Delete_dealList (state, data = {}) {
+            state.dealList = []
+        },
         Update_tradeType (state, id) {
             state.curTradeType = id
         },

@@ -42,10 +42,7 @@ export default {
     setup (props) {
         const store = useStore()
         // 获取成交数据
-        const dealList = computed(() => {
-            const aa = store.state._quote.dealList.filter(item => Number(item.symbolId) === Number(props.symbolId))
-            return aa
-        })
+        const dealList = computed(() => store.state._quote.dealList.filter(item => Number(item.symbolId) === Number(props.symbolId)))
 
         // 格式化时间
         const formatTime = (val) => {
