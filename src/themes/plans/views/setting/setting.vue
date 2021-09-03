@@ -29,11 +29,12 @@ import { isEmpty, removeLoginParams, localSet, localGet } from '@/utils/util'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { changeLang } from '@/api/base'
+import i18n, { loadLocaleMessages } from '@plans/i18n/i18n.js'
 import Colors, { setRootVariable } from '@plans/colorVariables'
 export default {
     setup (props) {
         const instance = getCurrentInstance()
-        const { t } = useI18n({ useScope: 'global' })
+        const { t, locale } = useI18n({ useScope: 'global' })
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         const colorsActions = [
@@ -94,6 +95,9 @@ export default {
                 if (res.check()) {
                     state.langVisible = false
                     state.lang = action.val
+                    loadLocaleMessages(i18n, action.val).then(() => {
+                        locale.value = action.val // change!
+                    })
                     localSet('lang', action.val)
                 }
             }).catch(err => (state.loading = false))
