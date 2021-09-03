@@ -97,6 +97,7 @@ export default {
                     state.lang = action.val
                     loadLocaleMessages(i18n, action.val).then(() => {
                         locale.value = action.val // change!
+                        store.commit('del_cacheViews', 'Home')
                     })
                     localSet('lang', action.val)
                 }
