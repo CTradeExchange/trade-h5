@@ -9,10 +9,10 @@
             @blur='onBlur'
             @input='onInput'
         />
-        <!-- <a class='entryType' href='javascript:;' @click='entryTypeUpdate'>
+        <a v-if='[2].includes(product.tradeType)' class='entryType' href='javascript:;' @click='entryTypeUpdate'>
             <i class='icon_qiehuan'></i>
             {{ parseInt(entryType)===1?$t('trade.volumes'):$t('trade.orderAmount') }}
-        </a> -->
+        </a>
     </div>
 </template>
 
@@ -73,6 +73,7 @@ export default {
 
         // 切换数量下单、金额下达
         const entryTypeUpdate = () => {
+            emit('update:modelValue', '')
             emit('update:entryType', props.entryType === 1 ? 2 : 1)
         }
         return {
