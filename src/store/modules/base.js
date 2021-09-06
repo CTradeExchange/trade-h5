@@ -57,7 +57,8 @@ export default {
                             el.name = el.alias || el.name
                         })
                     }
-                    sessionSet('utcOffset', parseFloat(data.utcOffset) * 60)
+                    sessionSet('utcOffset', 0 - new Date().getTimezoneOffset()) // 改成取本地时区时间，不找wp配置时间
+                    // sessionSet('utcOffset', parseFloat(data.utcOffset) * 60)   改成取本地时区时间，不找wp配置时间
                     if (!localGet('lang')) localSet('lang', data.language)
                     commit('UPDATE_wpCompanyInfo', data)
                     commit('Update_plans', data.tradeTypeCurrencyList)
