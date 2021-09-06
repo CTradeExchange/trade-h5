@@ -98,6 +98,7 @@ export default createStore({
         },
         add_cacheViews (state, routeName) {
             if (!routeName) return false
+            if (state.cacheViews.indexOf('Layout') === -1) state.cacheViews.push('Layout')
             if (state.cacheViews.includes(routeName)) return false
             state.cacheViews.push(routeName)
         },

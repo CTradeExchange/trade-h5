@@ -90,17 +90,24 @@ export default {
         // 选择语言
         const langSelect = (action) => {
             state.loading = true
-            changeLang(action.val).then(res => {
-                state.loading = false
-                if (res.check()) {
-                    state.langVisible = false
-                    state.lang = action.val
-                    loadLocaleMessages(i18n, action.val).then(() => {
-                        locale.value = action.val // change!
-                        store.commit('del_cacheViews', 'Home')
+            new Promise((resolve, reject) => {
+                if (customInfo.value) {
+                    return changeLang(action.val).then(res => {
+                        return res.check() ? resolve() : reject()
                     })
-                    localSet('lang', action.val)
+                } else {
+                    resolve()
                 }
+            }).then(() => {
+                state.loading = false
+                state.langVisible = false
+                state.lang = action.val
+                loadLocaleMessages(i18n, action.val).then(() => {
+                    locale.value = action.val // change!
+                    store.commit('del_cacheViews', 'Home')
+                    store.commit('del_cacheViews', 'Layout')
+                })
+                localSet('lang', action.val)
             }).catch(err => (state.loading = false))
         }
 
