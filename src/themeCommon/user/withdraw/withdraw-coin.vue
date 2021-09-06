@@ -169,7 +169,7 @@
 
 <script>
 // vue
-import { reactive, toRefs, computed, onMounted } from 'vue'
+import { reactive, toRefs, computed, onMounted, watch } from 'vue'
 // router
 import { useRouter, useRoute } from 'vue-router'
 // vuex
@@ -306,6 +306,60 @@ export default {
             }
             return tempList
         })
+
+        // 获取取款手续费
+        const getWithdrawFee = debounce(() => {
+            console.log('jisuanshouxufei ...')
+            const coinTotal = parseFloat(state.coinTotal)
+            const coinCount = parseFloat(state.coinCount)
+            if (!state.coinKind) {
+                return Toast(t('withdrawCoin.coinPlaceholder'))
+            }
+            if (!state.chainName) {
+                return Toast(t('withdrawCoin.chainPlaceholder'))
+            }
+            if (state.coinCount === '') return
+            if (coinCount < state.singleLowAmount) {
+                return Toast({ message: `${t('withdrawCoin.hint_4')}${state.singleLowAmount}` })
+            }
+            if (coinCount > state.singleHighAmount) {
+                return Toast({ message: `${t('withdrawCoin.hint_5')}${state.singleHighAmount}` })
+            }
+            if (coinCount > coinTotal) {
+                return Toast(t('withdrawCoin.hint_1'))
+            }
+
+            const item = {
+                ...params,
+                amount: state.coinCount,
+                withdrawType: 2,
+                withdrawCurrency: state.coinKind,
+                blockchainName: state.chainName,
+                withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo
+            }
+            computeWithdrawFee(item).then(res => {
+                if (res.check()) {
+                    const { data } = res
+                    state.serviceCount = data.coinFee
+                    state.arriveCount = data.coinFinalAmount
+                    state.minusCount = data.amount
+                }
+            })
+        }, 1000)
+
+        watch(
+            () => state.coinCount,
+            (newval) => {
+                getWithdrawFee()
+            },
+            { immediate: true }
+        )
+
+        // 改变提币数量
+        const changeAmount = () => {
+            // 获取取款手续费
+            // getWithdrawFee()
+        }
 
         // 时区转换
         const transferUtc = () => {
@@ -564,51 +618,6 @@ export default {
                     state.showCanMoney = true
                 }
             })
-        }
-
-        // 获取取款手续费
-        const getWithdrawFee = debounce(() => {
-            const coinTotal = parseFloat(state.coinTotal)
-            const coinCount = parseFloat(state.coinCount)
-            if (!state.coinKind) {
-                return Toast(t('withdrawCoin.coinPlaceholder'))
-            }
-            if (!state.chainName) {
-                return Toast(t('withdrawCoin.chainPlaceholder'))
-            }
-            if (state.coinCount === '') return
-            if (coinCount < state.singleLowAmount) {
-                return Toast({ message: `${t('withdrawCoin.hint_4')}${state.singleLowAmount}` })
-            }
-            if (coinCount > state.singleHighAmount) {
-                return Toast({ message: `${t('withdrawCoin.hint_5')}${state.singleHighAmount}` })
-            }
-            if (coinCount > coinTotal) {
-                return Toast(t('withdrawCoin.hint_1'))
-            }
-
-            const item = {
-                ...params,
-                amount: state.coinCount,
-                withdrawType: 2,
-                withdrawCurrency: state.coinKind,
-                blockchainName: state.chainName,
-                withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo
-            }
-            computeWithdrawFee(item).then(res => {
-                if (res.check()) {
-                    const { data } = res
-                    state.serviceCount = data.coinFee
-                    state.arriveCount = data.coinFinalAmount
-                    state.minusCount = data.amount
-                }
-            })
-        }, 1000)
-
-        // 改变提币数量
-        const changeAmount = () => {
-            // 获取取款手续费
-            getWithdrawFee()
         }
 
         // 点击全部取出
