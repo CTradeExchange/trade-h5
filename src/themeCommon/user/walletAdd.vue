@@ -219,9 +219,6 @@ export default {
             if (!state.code) {
                 return Toast({ message: t('walletAdd.codePlaceholder') })
             }
-            if (state.code !== verifyInfo.code) {
-                return Toast({ message: t('walletAdd.confirmCodePlaceholder') })
-            }
 
             // 发起api请示
             addWalletAddress({
