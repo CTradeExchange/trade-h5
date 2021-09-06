@@ -1,3 +1,4 @@
+import { isEmpty } from '@/utils/util'
 import { UDFCompatibleDatafeed } from './datafeeds/udf/lib/udf-compatible-datafeed'
 import { portraitOptions, landscapeOptions, styleNameMap } from './datafeeds/userConfig/config.js'
 
@@ -370,7 +371,7 @@ class Chart {
                         .setPrice(this.buyPrice)
                         .setText('')
                         .setLineStyle(0)
-                        .setLineColor(config.downColor)
+                        .setLineColor(config.upColor)
                         .setQuantity(false)
                 }
             } else if (target.buyPriceLine) {
@@ -387,7 +388,7 @@ class Chart {
                         .setPrice(this.sellPrice)
                         .setText('')
                         .setLineStyle(0)
-                        .setLineColor(config.upColor)
+                        .setLineColor(config.downColor)
                         .setQuantity(false)
                 }
             } else if (target.sellPriceLine) {
@@ -515,7 +516,7 @@ class Chart {
             value = [value]
         }
 
-        value = value.filter(e => e)
+        value = value.filter(e => !isEmpty(e))
 
         const allStudies = this.widget.activeChart().getAllStudies()
         const temp = {}

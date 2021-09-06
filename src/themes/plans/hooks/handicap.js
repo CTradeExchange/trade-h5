@@ -7,7 +7,13 @@ export default function ({ showPending }) {
     const product = computed(() => store.getters.productActived)
 
     // 获取产品的深度小数位
-    const deepthDigits = computed(() => store.state._quote.deepthDigits.toString().split('.')[1].length)
+    const deepthDigits = computed(() => {
+        if (parseFloat(store.state._quote?.deepthDigits) >= 1) {
+            return parseFloat(store.state._quote?.deepthDigits)
+        } else {
+            return store.state._quote?.deepthDigits?.toString().split('.')?.[1].length
+        }
+    })
 
     // 当前玩法挂单列表
     const pendingList = computed(() => store.state._trade?.pendingList[product.value?.tradeType])

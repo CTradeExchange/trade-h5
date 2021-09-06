@@ -101,9 +101,8 @@ export function genBaseConfig () {
             'vert_touch_drag_scroll',
             // 显示有关可能的鼠标/快捷键/ UI操作的弹出提示
             'popup_hints',
-            'horz_touch_drag_scroll',
             'vert_touch_drag_scroll'
-            
+
         ],
         enabled_features: [
             // 指标栏目

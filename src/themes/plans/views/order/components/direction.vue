@@ -1,17 +1,17 @@
 <template>
     <div v-if='product' class='directions' :class="{ 'tradeType9': [9].includes(product.tradeType) }">
-        <div class='item sell' :class="{ 'active':modelValue==='sell' }" @click="setDirection('sell')">
-            {{ $t('trade.sell') }}
-            <span v-if='[1,2,3].includes(product.tradeType)' class='flRight price'>
-                {{ product.sell_price }}
-            </span>
-        </div>
         <div class='item buy' :class="{ 'active':modelValue==='buy' }" @click="setDirection('buy')">
             <span v-if='[1,2,3].includes(product.tradeType)' class='price'>
                 {{ product.buy_price }}
             </span>
             <span class='flRight'>
                 {{ $t('trade.buy') }}
+            </span>
+        </div>
+        <div class='item sell' :class="{ 'active':modelValue==='sell' }" @click="setDirection('sell')">
+            {{ $t('trade.sell') }}
+            <span v-if='[1,2,3].includes(product.tradeType)' class='flRight price'>
+                {{ product.sell_price }}
             </span>
         </div>
     </div>
@@ -59,7 +59,7 @@ export default {
         background: var(--assistColor);
         border-radius: rem(6px);
         &.sell {
-            margin-right: 5px;
+            margin-left: 5px;
             padding-right: rem(45px);
             &.active {
                 color: #FFF;
@@ -67,7 +67,7 @@ export default {
             }
         }
         &.buy {
-            margin-left: 5px;
+            margin-right: 5px;
             padding-left: rem(45px);
             &.active {
                 color: #FFF;

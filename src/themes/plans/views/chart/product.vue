@@ -37,11 +37,12 @@
                         </p>
                     </div>
                     <div class='others'>
-                        <span :class='product.cur_color'>
+                        <span :class='product.upDownColor'>
                             {{ product.upDownAmount }}<template v-if='product.tradeType !== 9'>
                                 ({{ product.upDownAmount_pip }} {{ $t('trade.dot') }})
                             </template>
-                        </span><div class='others-bottom'>
+                        </span>
+                        <div class='others-bottom'>
                             <span class='upDownAmount' :class='product.upDownColor'>
                                 {{ product.upDownWidth }}
                             </span>
@@ -624,18 +625,18 @@ export default {
             const target = JSON.parse(JSON.stringify([...MAINSTUDIES, ...SUBSTUDIES].find(item => item.name === name) || null))
             switch (type) {
                 case 'main': {
-                    state.mainStudy = target.name
+                    state.mainStudy = target?.name
                     localSetChartConfig('mainStudy', JSON.stringify({
-                        name: target.name,
-                        params: target.params
+                        name: target?.name,
+                        params: target?.params
                     }))
                     break
                 }
                 case 'sub': {
-                    state.subStudy = target.name
+                    state.subStudy = target?.name
                     localSetChartConfig('subStudy', JSON.stringify({
-                        name: target.name,
-                        params: target.params
+                        name: target?.name,
+                        params: target?.params
                     }))
                     break
                 }

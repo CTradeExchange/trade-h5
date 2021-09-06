@@ -15,6 +15,7 @@
                 <van-popover
                     v-model:show='showPopover'
                     :actions='digitLevelList'
+                    placement='top'
                     :theme='theme'
                     @select='onSelect'
                 >
