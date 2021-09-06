@@ -1,17 +1,19 @@
 <template>
     <div v-if='product' class='directions' :class="{ 'tradeType9': [9].includes(product.tradeType) }">
         <div class='item buy' :class="{ 'active':modelValue==='buy' }" @click="setDirection('buy')">
-            <span v-if='[1,2,3].includes(product.tradeType)' class='price'>
-                {{ product.buy_price }}
-            </span>
-            <span class='flRight'>
+            <span>
                 {{ $t('trade.buy') }}
+            </span>
+            <span v-if='[1,2,3].includes(product.tradeType)' class='price flRight'>
+                {{ product.buy_price }}
             </span>
         </div>
         <div class='item sell' :class="{ 'active':modelValue==='sell' }" @click="setDirection('sell')">
-            {{ $t('trade.sell') }}
-            <span v-if='[1,2,3].includes(product.tradeType)' class='flRight price'>
+            <span v-if='[1,2,3].includes(product.tradeType)' class=' price'>
                 {{ product.sell_price }}
+            </span>
+            <span class='flRight'>
+                {{ $t('trade.sell') }}
             </span>
         </div>
     </div>
