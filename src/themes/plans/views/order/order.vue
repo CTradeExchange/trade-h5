@@ -14,7 +14,7 @@
                     <!-- 订单类型 -->
                     <OrderTypeTab v-model='orderType' :trade-type='product.tradeType' @selected='changeOrderType' />
                     <!-- 自动借款 -->
-                    <LoanBar v-if='[3, 5, 9].includes(product.tradeType)' v-model='operationType' :account='account' class='cellMarginTop' :product='product' />
+                    <LoanBar v-if='[3, 5, 9].includes(product.tradeType)' v-model='operationType' :account='account' class='loanBarMargin' :product='product' />
                     <!-- 方向 -->
                     <Direction v-model='direction' :product='product' />
                     <!-- 挂单设置 -->
@@ -247,7 +247,7 @@ export default {
                 QuoteSocket.send_subscribe([symbolKey.value])
                 // 订阅产品五档报价
                 const curDigits = pow(0.1, product.symbolDigits)
-                if (state.orderHandicapVisible)QuoteSocket.deal_subscribe([symbolId], 5, curDigits, tradeType)
+                if (state.orderHandicapVisible)QuoteSocket.deal_subscribe(symbolId, 5, curDigits, tradeType)
                 if (tradeType === '9') store.dispatch('_user/queryCustomerAssetsInfo', { tradeType }) // 拉取全仓账户币种
 
                 const accountIds = accountList.value?.filter(el => el.tradeType === Number(product.tradeType)).map(el => el.accountId)
@@ -326,7 +326,7 @@ export default {
                     store.dispatch('_trade/queryPBOOrderPage', { tradeType: params.tradeType })
                     queryAccountInfo()
                     Toast({
-                        message: params.bizType === 1 ? t('trade.orderSuccessToast') : t('trade.orderPendingSuccessToast'),
+                        message: [1, 12].includes(params.bizType) ? t('trade.orderSuccessToast') : t('trade.orderPendingSuccessToast'),
                         duration: 1000,
                         forbidClick: true,
                     })
@@ -413,6 +413,9 @@ export default {
         }
     }
 }
+.loanBarMargin {
+    margin: rem(25px) 0 rem(-12px);
+}
 .trustList {
     margin-top: rem(20px);
 }
@@ -425,7 +428,7 @@ export default {
 }
 .footerBtn {
     width: 100%;
-    padding: rem(100px) rem(30px) rem(30px);
+    padding: rem(50px) rem(30px) rem(30px);
     background: var(--contentColor);
     &.buy {
         .van-button {

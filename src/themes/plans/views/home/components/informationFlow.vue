@@ -66,8 +66,8 @@
                                             <div class='story-time'>
                                                 {{ flash.shotTime }}
                                             </div>
-                                            <div class='story-desc'>
-                                                <div class='story-text story-ellipsis'>
+                                            <div class='story-desc' @click='()=>flash.ellipsis=!flash.ellipsis'>
+                                                <div class='story-text' :class="{ 'story-ellipsis':flash.ellipsis }">
                                                     {{ flash.title }}
                                                 </div>
                                             </div>
@@ -349,7 +349,7 @@ export default {
                     state.newsFlash.finished = true
                 }
                 if (Array.isArray(data) && data.length > 0) {
-                    const tempData = data.map(el => ({ ...el, shotTime: el.addtime_text.slice(11, 16) }))
+                    const tempData = data.map(el => ({ ...el, ellipsis: true, shotTime: el.addtime_text.slice(11, 16) }))
                     state.newsFlash.list = Number(page) > 1 ? [...state.newsFlash.list, ...tempData] : tempData
                 }
             })
@@ -603,14 +603,16 @@ export default {
         font-size: rem(26px);
     }
     .story-text {
-        display: -webkit-box;
-        overflow: hidden;
         color: var(--color);
         font-size: rem(28px);
         line-height: rem(52px);
-        text-overflow: ellipsis;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
+        &.story-ellipsis {
+            display: -webkit-box;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
     }
 }
 .self-container {
