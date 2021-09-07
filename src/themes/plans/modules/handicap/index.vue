@@ -205,8 +205,11 @@ export default {
     >div {
         display: inline-block;
         flex: 1;
+        overflow: hidden;
         color: var(--minorColor);
         font-size: rem(20px);
+        white-space: nowrap;
+        text-overflow: ellipsis;
         &.my {
             flex: 0 0 rem(100px);
             text-align: center;
