@@ -280,9 +280,8 @@
         :prop-main-study='mainStudy'
         :prop-sub-study='subStudy'
         :show='showStudyDialog'
-        @createStudy='createStudy'
-        @removeStudy='removeStudy'
         @update:show='updateShow'
+        @updateStudy='updateStudy'
     />
 
     <!-- 侧边栏-切换产品 -->
@@ -293,7 +292,7 @@
 import { useRouter, useRoute } from 'vue-router'
 import StudyList from './components/studyList.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, reactive, toRefs, ref, unref, watch } from 'vue'
+import { computed, reactive, toRefs, ref, unref, watch, onUnmounted } from 'vue'
 import KIcon from './icons/kIcon.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import dayjs from 'dayjs'
@@ -618,6 +617,29 @@ export default {
 
                 state.onChartReadyFlag && unref(chartRef).updatePosition(temp)
             }
+        }
+
+        // 更新指标
+        const updateStudy = list => {
+            const studyList = []
+            if (list.length > 0) {
+                list.forEach(el => {
+                    const target = JSON.parse(JSON.stringify([...MAINSTUDIES, ...SUBSTUDIES].find(item => item.name === el) || null))
+                    if (target) {
+                        studyList.push(target)
+                        state[target?.type] = target?.name
+                        localSetChartConfig(target.type, JSON.stringify({
+                            name: target?.name,
+                            params: target?.params
+                        }))
+                    } else {
+                        localSetChartConfig('mainStudy', null)
+                        localSetChartConfig('subStudy', null)
+                    }
+                })
+            }
+
+            state.onChartReadyFlag && unref(chartRef).updateIndicator(studyList)
         }
 
         // 增加指标
@@ -987,14 +1009,16 @@ export default {
         // 监听当玩法为5和9的时候。并且有pt报价的时候才更新图表
         document.body.addEventListener('GotMsg_updateChart', updateChart, false)
 
+        onUnmounted(() => {
+            document.body.removeEventListener('GotMsg_updateChart', updateChart, false)
+        })
+
         return {
             ...toRefs(state),
             candleKTypeList,
             klineTypeList,
             onBeforeChange,
             onClickStudy,
-            createStudy,
-            removeStudy,
             showTips,
             updateShow,
             onClickMoreTime,
@@ -1018,7 +1042,8 @@ export default {
             toContractInfo,
             onSelect,
             computedLineList,
-            style
+            style,
+            updateStudy
         }
     }
 }

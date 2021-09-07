@@ -99,16 +99,7 @@ export default {
     },
     methods: {
         onSubmit () {
-            if (this.mainStudy !== this.propMainStudy) {
-                this.$emit('removeStudy', 'main')
-                this.$emit('createStudy', 'main', this.mainStudy)
-            }
-
-            if (this.subStudy !== this.propSubStudy) {
-                this.$emit('removeStudy', 'sub')
-                this.$emit('createStudy', 'sub', this.subStudy)
-            }
-
+            this.$emit('updateStudy', [this.mainStudy, this.subStudy])
             this.onClose()
         },
         onClose () {
