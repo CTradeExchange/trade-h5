@@ -292,7 +292,7 @@
 import { useRouter, useRoute } from 'vue-router'
 import StudyList from './components/studyList.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, reactive, toRefs, ref, unref, watch, onUnmounted } from 'vue'
+import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted } from 'vue'
 import KIcon from './icons/kIcon.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import dayjs from 'dayjs'
@@ -511,7 +511,6 @@ export default {
         const subscribeToProduct = () => {
             QuoteSocket.send_subscribe([`${getSymbolId()}_${getTradeType()}`])
         }
-        subscribeToProduct()
 
         const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId()))))
 
@@ -1009,6 +1008,9 @@ export default {
         // 监听当玩法为5和9的时候。并且有pt报价的时候才更新图表
         document.body.addEventListener('GotMsg_updateChart', updateChart, false)
 
+        onMounted(() => {
+            subscribeToProduct()
+        })
         onUnmounted(() => {
             document.body.removeEventListener('GotMsg_updateChart', updateChart, false)
         })
