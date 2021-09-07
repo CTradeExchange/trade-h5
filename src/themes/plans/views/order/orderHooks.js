@@ -27,7 +27,6 @@ export default function hooks (state) {
     const bizTypeByPendingCFD =  ()=>{
         const requestPrice = state.pendingPrice
         let bizType=''
-        if( state.entryType===2 ) return bizType=14;
         if (state.direction === 'buy') {
             bizType = lt(requestPrice, product.value.buy_price) ? 10 : 11
         } else {
@@ -41,7 +40,7 @@ export default function hooks (state) {
         const tradeType = product.value?.tradeType
         if([1,2].includes(tradeType)){
             if(state.orderType===1){
-                bizType = entryType===1 ? 1: 12
+                bizType = 1
             }else{
                 bizType = bizTypeByPendingCFD()
             }

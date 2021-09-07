@@ -296,7 +296,8 @@ export default {
                 tradeType: parseInt(tradeType),
                 stopLoss: mul(state.stopLoss, p),
                 takeProfit: mul(state.stopProfit, p),
-                expireType: state.expireType
+                expireType: state.expireType,
+                entryType: state.entryType
             }
             return params
         }
