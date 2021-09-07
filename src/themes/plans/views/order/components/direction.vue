@@ -62,7 +62,6 @@ export default {
         border-radius: rem(6px);
         &.sell {
             margin-left: 5px;
-            padding-right: rem(45px);
             &.active {
                 color: #FFF;
                 background: var(--fallColor);
@@ -70,7 +69,6 @@ export default {
         }
         &.buy {
             margin-right: 5px;
-            padding-left: rem(45px);
             &.active {
                 color: #FFF;
                 background: var(--riseColor);
