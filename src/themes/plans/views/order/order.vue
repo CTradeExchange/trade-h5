@@ -14,7 +14,7 @@
                     <!-- 订单类型 -->
                     <OrderTypeTab v-model='orderType' :trade-type='product.tradeType' @selected='changeOrderType' />
                     <!-- 自动借款 -->
-                    <LoanBar v-if='[3, 5, 9].includes(product.tradeType)' v-model='operationType' :account='account' class='cellMarginTop' :product='product' />
+                    <LoanBar v-if='[3, 5, 9].includes(product.tradeType)' v-model='operationType' :account='account' class='loanBarMargin' :product='product' />
                     <!-- 方向 -->
                     <Direction v-model='direction' :product='product' />
                     <!-- 挂单设置 -->
@@ -413,6 +413,9 @@ export default {
         }
     }
 }
+.loanBarMargin {
+    margin: rem(25px) 0 rem(-12px);
+}
 .trustList {
     margin-top: rem(20px);
 }
@@ -425,7 +428,7 @@ export default {
 }
 .footerBtn {
     width: 100%;
-    padding: rem(100px) rem(30px) rem(30px);
+    padding: rem(50px) rem(30px) rem(30px);
     background: var(--contentColor);
     &.buy {
         .van-button {

@@ -2,7 +2,7 @@
     <!-- 订单类型 -->
     <div class='typeBar'>
         <van-row class='cellBar' justify='space-between' type='flex'>
-            <van-col class='titleCol'>
+            <van-col>
                 <p class='title'>
                     {{ title }}
                 </p>
