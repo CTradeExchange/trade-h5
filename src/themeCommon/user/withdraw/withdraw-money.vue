@@ -604,7 +604,7 @@ export default {
     position: absolute;
     bottom: 0;
     height: rem(104px);
-    background: var(--contentColor);
+    background: var(--bgColor);
     border-color: var(--lineColor);
     span {
         color: var(--color);
@@ -614,8 +614,8 @@ export default {
 }
 .bank {
     align-items: center;
-    margin: rem(10px);
-    border: rem(1px) solid var(--normalColor);
+    margin: rem(10px) rem(10px) rem(10px) 0;
+    border: rem(1px) solid var(--lineColor);
     &.disabled {
         pointer-events: none;
         .bank-no {
