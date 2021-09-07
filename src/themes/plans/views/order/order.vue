@@ -247,7 +247,7 @@ export default {
                 QuoteSocket.send_subscribe([symbolKey.value])
                 // 订阅产品五档报价
                 const curDigits = pow(0.1, product.symbolDigits)
-                if (state.orderHandicapVisible)QuoteSocket.deal_subscribe([symbolId], 5, curDigits, tradeType)
+                if (state.orderHandicapVisible)QuoteSocket.deal_subscribe(symbolId, 5, curDigits, tradeType)
                 if (tradeType === '9') store.dispatch('_user/queryCustomerAssetsInfo', { tradeType }) // 拉取全仓账户币种
 
                 const accountIds = accountList.value?.filter(el => el.tradeType === Number(product.tradeType)).map(el => el.accountId)

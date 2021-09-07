@@ -145,7 +145,7 @@ export default {
             state.curDigits = state.curDigits || digitLevelList.value[0]?.text
             store.commit('_quote/Update_deepthDigits', state.curDigits)
             if (state.curDigits) {
-                QuoteSocket.deal_subscribe([product.value.symbolId], 10, state.curDigits, state.tradeType)
+                QuoteSocket.deal_subscribe(product.value.symbolId, 10, state.curDigits, state.tradeType)
             }
         })
 
