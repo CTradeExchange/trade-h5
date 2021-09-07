@@ -326,7 +326,7 @@ export default {
                     store.dispatch('_trade/queryPBOOrderPage', { tradeType: params.tradeType })
                     queryAccountInfo()
                     Toast({
-                        message: params.bizType === 1 ? t('trade.orderSuccessToast') : t('trade.orderPendingSuccessToast'),
+                        message: [1, 12].includes(params.bizType) ? t('trade.orderSuccessToast') : t('trade.orderPendingSuccessToast'),
                         duration: 1000,
                         forbidClick: true,
                     })
