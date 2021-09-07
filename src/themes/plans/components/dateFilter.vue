@@ -96,5 +96,8 @@ export default {
     :deep(.van-dropdown-item__icon) {
         color: var(--primary);
     }
+    .icon_paixu {
+        color: var(--normalColor);
+    }
 }
 </style>

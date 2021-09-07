@@ -117,6 +117,16 @@ export default {
     justify-content: flex-start;
     width: 100%;
     margin-bottom: rem(20px);
+    :deep(.van-dropdown-menu) {
+        .van-ellipsis {
+            font-size: rem(20px);
+        }
+    }
+    :deep(.van-dropdown-item) {
+        .van-cell__title {
+            font-size: rem(20px);
+        }
+    }
 }
 .scrollBody {
     display: flex;

@@ -59,6 +59,7 @@ export default {
         }
 
         function handleConfirm () {
+            const pwdReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/
             if (!state.newPwd) {
                 return Toast(t('forgot.inputNewPwd'))
             }
@@ -71,6 +72,9 @@ export default {
             if (state.newPwd !== state.confirmPwd) {
                 return Toast(t('forgot.pwdDiff'))
             }
+            if (!pwdReg.test(state.newPwd)) {
+                return Toast(t('forgot.pwdRule'))
+            }
 
             const params = {
                 type: route.query['type'], // 1邮箱，2手机号码，3客户账号
@@ -82,11 +86,9 @@ export default {
             }
             state.loading = true
             findPwd(params).then((res) => {
-                state.loading = true
+                state.loading = false
                 if (res.check()) {
                     router.push('/resetSuccess')
-                } else {
-                    router.push('/resetFail')
                 }
             }).catch(err => {
                 state.loading = false
@@ -127,7 +129,7 @@ export default {
         border-color: var(--lineColor);
         span {
             color: var(--color);
-            font-size: rem(34px);
+            font-size: rem(30px);
         }
     }
     .form-item {

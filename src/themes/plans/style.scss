@@ -554,11 +554,11 @@ body {
     .van-tab {
         background-color: var(--white);
         .van-tab__text {
-            color: var(--normalColor);
+            color: var(--minorColor);
         }
         &.van-tab--active {
             .van-tab__text {
-                color: var(--primary);
+                color: var(--color);
             }
         }
         .title {

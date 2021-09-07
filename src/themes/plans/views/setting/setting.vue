@@ -187,16 +187,16 @@ export default {
     padding-top: rem(100px);
     overflow: auto;
     color: var(--color);
-    background: var(--bgColor);
+    background: var(--contentColor);
     .logout-btn {
         position: absolute;
         bottom: 0;
         width: 100%;
-        background: var(--lineColor);
+        background: var(--bgColor);
         border-color: var(--lineColor);
         span {
             color: var(--color);
-            font-size: rem(34px);
+            font-size: rem(30px);
         }
     }
 }

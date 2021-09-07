@@ -2,8 +2,8 @@
     <div class='selectWrap' @click='show=true'>
         <span class='selectval'>
             {{ selected && selected[text] }}
+            <van-icon name='arrow-down' />
         </span>
-        <span class='icon_arrow-down'></span>
     </div>
     <van-action-sheet v-if='actions && actions.length' v-model:show='show' :actions='actions' @select='onSelect' />
 </template>
@@ -59,7 +59,7 @@ export default {
 @import '@/sass/mixin.scss';
 .selectWrap {
     position: relative;
-    display: inline-block;
+    align-items: center;
     width: 100%;
     .icon_arrow-down {
         position: absolute;
@@ -71,7 +71,7 @@ export default {
     position: relative;
     display: block;
     height: rem(75px);
-    padding: 0 rem(50px) 0 rem(5px);
+    padding: 0 rem(20px) 0 rem(5px);
     overflow: hidden;
     font-size: rem(26px);
     line-height: rem(75px);
