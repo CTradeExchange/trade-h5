@@ -375,7 +375,7 @@ import File from '@index/components/RightForm/File'
 import city from './data/city.json'
 import province from './data/province.json'
 import { deepClone } from '@utils/deepClone'
-import { keyBy, forOwn, isPlainObject } from 'lodash'
+import { keyBy, forOwn, isPlainObject, compact } from 'lodash'
 const treeData = province.map(province => {
     const children = city.filter(item => (item.province === province.province))
     if (children.length > 0) {
@@ -594,7 +594,7 @@ export default {
                         if (['1', '2'].indexOf(String(el.id)) > -1) {
                             return { id: el.id, name: el.name, sort, allCurrency: assets || '', alias, isWallet }
                         } else {
-                            return { id: el.id, name: el.name, sort, allCurrency: assets ? assets.join(',') : [], alias, isWallet }
+                            return { id: el.id, name: el.name, sort, allCurrency: assets ? compact(assets).join(',') : [], alias, isWallet }
                         }
                     })
                     tempTradeTypeCurrencyList.sort(function (a, b) {
