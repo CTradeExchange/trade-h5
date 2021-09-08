@@ -145,7 +145,7 @@ export default {
             state.curDigits = state.curDigits || digitLevelList.value[0]?.text
             store.commit('_quote/Update_deepthDigits', state.curDigits)
             if (state.curDigits) {
-                QuoteSocket.deal_subscribe(product.value.symbolId, 10, state.curDigits, state.tradeType)
+                QuoteSocket.deal_subscribe(product.value.symbolId, 10, state.curDigits, state.tradeType, 20)
             }
         })
 
@@ -224,7 +224,7 @@ export default {
                 width: rem(110px);
                 height: rem(40px);
                 line-height: rem(40px);
-                background-color: var(--bgColor);
+                background-color: var(--primaryAssistColor);
                 span {
                     margin-left: rem(10px);
                     //vertical-align: middle;
