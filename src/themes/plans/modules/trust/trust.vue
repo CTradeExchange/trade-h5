@@ -19,7 +19,7 @@
         <div class='direction'>
             <span :class="Number(product.direction) === 1 ? 'riseColor' : 'fallColor'">
                 {{ Number(product.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
-            </span> {{ product.requestNum }}
+            </span> {{ product.requestNum }} {{ Number(product.entryType) === 1 ? $t('trade.volumeUnit') : product.accountCurrency }}
         </div>
 
         <div class='t-body'>
