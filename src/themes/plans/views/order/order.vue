@@ -244,6 +244,7 @@ export default {
             store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
                 // state.volume = product.minVolume  不需要设置默认手数
                 state.volume = ''
+                state.pendingPrice = ''
                 // 订阅产品行情
                 QuoteSocket.send_subscribe([symbolKey.value])
                 // 订阅产品五档报价

@@ -99,7 +99,8 @@ export default {
             })
         }
         const firstChange = () => {
-            emit('update:modelValue', pendingRang.value[props.direction === 'buy' ? 'defaultBuyPrice' : 'defaultSellPrice'])
+            const defaultPendingPrice = pendingRang.value[props.direction === 'buy' ? 'defaultBuyPrice' : 'defaultSellPrice']
+            if (defaultPendingPrice && !isNaN(defaultPendingPrice)) emit('update:modelValue', defaultPendingPrice)
         }
         onMounted(() => {
             firstChange()
