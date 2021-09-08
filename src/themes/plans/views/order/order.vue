@@ -242,7 +242,9 @@ export default {
             setVolumeType() // 设置按额或者按手数交易
             productSwitchHistory[tradeType] = symbolKey.value
             store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
-                if (tradeType === '1') state.volume = product.minVolume // 设置默认手数
+                // state.volume = product.minVolume  不需要设置默认手数
+                state.volume = ''
+                state.pendingPrice = ''
                 // 订阅产品行情
                 QuoteSocket.send_subscribe([symbolKey.value])
                 // 订阅产品五档报价

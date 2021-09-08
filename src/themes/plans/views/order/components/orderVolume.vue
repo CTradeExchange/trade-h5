@@ -38,10 +38,12 @@ export default {
     emits: ['update:modelValue', 'change', 'update:entryType'],
     setup (props, { emit }) {
         const inputEl = ref(null)
+        const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         const placeholder = computed(() => {
             if ([1, 2].includes(props.product.tradeType)) {
-                return parseInt(props.entryType) === 1 ? t('trade.orderVolume') : t('trade.orderAmount') + `(${props.product.baseCurrency})`
+                const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === props.product.tradeType)
+                return parseInt(props.entryType) === 1 ? t('trade.orderVolume') : t('trade.orderAmount') + `(${account?.currency})`
             } else {
                 return parseInt(props.entryType) === 1 ? t('trade.volumes') : t('trade.orderAmount')
             }
