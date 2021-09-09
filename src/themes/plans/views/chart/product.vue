@@ -246,7 +246,7 @@
             v-if='product && [5,9].includes(Number(product.tradeType))'
             :cur-price='product.cur_price'
             :setting-list='settingList'
-            :symbol-id='symbolId'
+            :symbol-id='product.symbolId'
             :trade-type='tradeType'
         />
 
@@ -982,6 +982,7 @@ export default {
                 store.commit('_quote/Update_productActivedID', `${product.symbolId}_${product.tradeType}`)
                 subscribeToProduct()
                 // 重置图表
+                store.commit('_quote/Delete_dealList') // 删除成交数据
                 chartRef.value.reset()
                 close()
             })

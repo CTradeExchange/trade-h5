@@ -41,6 +41,7 @@ export default {
     props: ['symbolId'],
     setup (props) {
         const store = useStore()
+
         // 获取成交数据
         const dealList = computed(() => store.state._quote.dealList.filter(item => Number(item.symbolId) === Number(props.symbolId)))
 
@@ -66,8 +67,6 @@ export default {
     flex-direction: column;
     width: 100%;
     height: 100%;
-    max-height: rem(600px);
-    overflow: auto;
     color: var(--mutedColor);
     font-size: rem(22px);
     line-height: rem(24px);

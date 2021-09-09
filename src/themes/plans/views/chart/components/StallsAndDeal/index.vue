@@ -6,6 +6,7 @@
             color='#477fd3'
             line-height='2'
             line-width='33.3%'
+            sticky
             title-active-color='#477fd3'
         >
             <van-tab v-if='statusList.indexOf("stalls") > -1' name='stalls' :title='$t("trade.handicap")'>
@@ -97,6 +98,7 @@ export default {
 @import '@/sass/mixin.scss';
 .stallsAndDeal {
     min-width: rem(200px);
+    min-height: rem(600px);
     margin-top: rem(10px);
     margin-bottom: rem(30px);
     background: var(--contentColor);
