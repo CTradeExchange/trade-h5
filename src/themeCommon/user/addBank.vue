@@ -245,17 +245,7 @@ export default {
         border-color: var(--lineColor);
         span {
             color: var(--color);
-            font-size: rem(34px);
-        }
-        .confirm-btn {
-            position: absolute;
-            bottom: 0;
-            background: var(--contentColor);
-            border-color: var(--lineColor);
-            span {
-                color: var(--color);
-                font-size: rem(34px);
-            }
+            font-size: rem(30px);
         }
     }
 }

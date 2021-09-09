@@ -58,9 +58,8 @@ export default {
     --van-tabs-bottom-bar-color: var(--primary);
     :deep(.van-tab) {
         flex: none;
-        min-width: rem(130px);
         margin-right: rem(40px);
-        padding: 0 rem(20px);
+        padding: 0;
         text-align: center;
     }
 }

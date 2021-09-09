@@ -33,13 +33,13 @@ import { ref, watch, computed, onActivated, reactive } from 'vue'
 import plansType from '@/themes/plans/components/plansType.vue'
 import useProduct from '@plans/hooks/useProduct'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { addCustomerOptional, removeCustomerOptional, getSymbolList } from '@/api/trade'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
 
 export default {
-    name: 'Quote',
+    name: 'ProductSearch',
     components: {
         plansType
     },
@@ -50,6 +50,7 @@ export default {
             searchList: []
         })
         const { t } = useI18n({ useScope: 'global' })
+        const route = useRoute()
         const router = useRouter()
         const store = useStore()
         // 玩法列表
@@ -57,7 +58,7 @@ export default {
         const productMap = computed(() => store.state._quote.productMap)
 
         // 1.玩法类型
-        const tradeType = ref(plansList.value[0].id)
+        const tradeType = ref(route.query.tradeType || plansList.value[0].id)
 
         // 自选股
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)

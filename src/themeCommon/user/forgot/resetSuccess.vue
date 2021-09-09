@@ -7,9 +7,6 @@
         <p class='t2'>
             {{ $t('forgot.newPwdLogin') }}
         </p>
-        <p class='t3'>
-            {{ $t('forgot.tip1') }}
-        </p>
     </div>
     <van-button class='confirmBtn' @click='toLogin'>
         {{ $t('forgot.goLogin') }}

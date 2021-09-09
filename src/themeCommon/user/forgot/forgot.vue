@@ -301,11 +301,11 @@ export default {
 .next-btn {
     position: absolute;
     bottom: 0;
-    background: var(--lineColor);
+    background: var(--bgColor);
     border-color: var(--lineColor);
     span {
         color: var(--color);
-        font-size: rem(34px);
+        font-size: rem(30px);
     }
 }
 

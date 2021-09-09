@@ -1,5 +1,6 @@
 import { tickFormat, tickToObj, formatSubscribe } from './socketUtil'
 import { guid } from '@/utils/util'
+import { mul } from '@/utils/calculation'
 
 // websocket消息事件
 class SocketEvent {
@@ -10,7 +11,8 @@ class SocketEvent {
         this.timer = null
         this.$store = null
         this.requests = new Map()
-        this.subscribedList = []
+        this.subscribedList = [] // 上一次报价订阅记录
+        this.subscribeDeal = [] // 上一次盘口订阅记录
         this.preSetTime = 1 // 上一次保存价格的时间
         this.newPrice = []
         this.newPriceTimer = null
@@ -81,25 +83,26 @@ class SocketEvent {
     }
 
     // 盘口成交报价订阅
-    deal_subscribe (productIds = [], depth_level = 10, merge_accuracy, trade_type) {
-        if (!productIds || productIds.length === 0) return false
-        this.subscribedList = [...new Set(productIds)]
-        // const trade_type = Number(this.$store.state._base.tradeType)
+    deal_subscribe (symbol_id, depth_level = 10, merge_accuracy, trade_type, trade_info_count) {
+        this.subscribeDeal = [{ symbol_id, depth_level, merge_accuracy, trade_type }]
 
-        const list = this.subscribedList.map(el => {
-            return {
-                symbol_id: Number(el), // 产品ID ，类型：uint64
-                trade_type, // 交易类型，类型：uint32，1：cfd，2：me
-                depth_level, // 深度层级，类型：uint32，该字段有效范围1到10之间
-                merge_accuracy
-            }
-        })
+        const list = [{
+            symbol_id: Number(symbol_id), // 产品ID ，类型：uint64
+            trade_type, // 交易类型，类型：uint32，1：cfd，2：me
+            depth_level, // 深度层级，类型：uint32，该字段有效范围1到10之间
+            merge_accuracy,
+            trade_info_count
+        }]
         this.send(14010, { symbol_list: list })
     }
 
     // websocket连接成功
     onOpen () {
         if (this.subscribedList.length) this.send_subscribe(this.subscribedList)
+        if (this.subscribeDeal.length) {
+            const { symbol_id, depth_level, merge_accuracy, trade_type } = this.subscribeDeal[0]
+            this.deal_subscribe(symbol_id, depth_level, merge_accuracy, trade_type)
+        }
     }
 
     // 收取到消息
@@ -131,16 +134,20 @@ class SocketEvent {
             list,
             type: 1
         })
+
         const lastData = list[0]
-        if (lastData) {
-            const dealData = {
-                symbolId: lastData.symbol_id,
-                dealTime: lastData.tick_time,
-                trade_direction: lastData.trade_direction,
-                price: lastData.price,
-                volume: lastData.volume,
-            }
-            this.$store.commit('_quote/Update_dealList', dealData)
+        const dealList = list[0]?.trade_info
+        if (lastData && dealList.length > 0) {
+            dealList.forEach(el => {
+                const dealData = {
+                    symbolId: lastData.symbol_id,
+                    dealTime: mul(el.trade_time, 1000),
+                    trade_direction: el.trade_direction,
+                    price: el.price,
+                    volume: el.volume,
+                }
+                this.$store.commit('_quote/Update_dealList', dealData)
+            })
         }
     }
 

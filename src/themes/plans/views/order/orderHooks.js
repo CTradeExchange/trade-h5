@@ -23,26 +23,38 @@ export default function hooks (state) {
         }
         return account
     })
+    // CFD全仓和CFD逐仓 手数区分10-限价预埋单；11-停损预埋单，按额下单固定bizType 14
+    const bizTypeByPendingCFD =  ()=>{
+        const requestPrice = state.pendingPrice
+        let bizType=''
+        if (state.direction === 'buy') {
+            bizType = lt(requestPrice, product.value.buy_price) ? 10 : 11
+        } else {
+            bizType = gt(requestPrice, product.value.sell_price) ? 10 : 11
+        }
+        return bizType;
+    }
     const bizType = computed(() => {
-        let bizType = state.orderType
+        let bizType = state.orderType   // 1市价单  10挂单
+        let entryType = state.entryType   // 1按数量下单 2按成交额下单
         const tradeType = product.value?.tradeType
-        if (state.orderType === 10 ) { // 限价单
-            if([1, 2].includes(tradeType)){
-                // CFD全仓和CFD逐仓 区分10-限价预埋单；11-停损预埋单
-                const requestPrice = state.pendingPrice
-                if (state.direction === 'buy') {
-                    bizType = lt(requestPrice, product.value.buy_price) ? 10 : 11
-                } else {
-                    bizType = gt(requestPrice, product.value.sell_price) ? 10 : 11
-                }
-            }else if([3, 5, 9].includes(tradeType)){
-                // 现货撮合、杠杆全仓、ABCC玩法限价单，按手数13，按额14
-                bizType = state.entryType===1? 13 : 14;
+        if([1,2].includes(tradeType)){
+            if(state.orderType===1){
+                bizType = 1
+            }else{
+                bizType = bizTypeByPendingCFD()
             }
-        }else if(state.orderType===1){ // 市价单
-            if([3, 5].includes(tradeType) && state.entryType===2){
-                // 现货撮合、杠杆全仓 按额下单
-                bizType = 12;
+        }else if([3,5].includes(tradeType) ){
+            if(state.orderType===1){
+                bizType = entryType=== 1 ? 1 : 12;
+            }else{
+                bizType = entryType=== 1 ? 13 : 14;
+            }
+        }else if([9].includes(tradeType) ){
+            if(state.orderType===1){
+                bizType = 1;
+            }else{
+                bizType = 13;
             }
         }
         return bizType

@@ -179,6 +179,7 @@
         "newPwdAgain": "Input New password again",
         "inputSurePwd": "Input confirmation password",
         "pwdDiff": "New password is inconsistent with confirmation password, please check and input again",
+        "pwdSame": "原密码和新密码相同，请检查后重新输入",
         "newPwdSuccess": "Reset New password Success",
         "newPwdLogin": "Please login with New password",
         "tip1": "For security reason, withdrawal is not permitted in recent 24 hours",

@@ -43,53 +43,63 @@ export const MAINSTUDIES = [
     {
         label: 'MA',
         name: 'Moving Average mock',
-        params: [true, false, [5, 20, 30, 60, 250, 'close', 0]]
+        params: [true, false, [5, 20, 30, 60, 250, 'close', 0]],
+        type: 'mainStudy'
     },
     {
         label: 'BOLL',
         name: 'Bollinger Bands',
-        params: [true, false, [26, 2]]
+        params: [true, false, [26, 2]],
+        type: 'mainStudy'
     },
     {
         label: 'EMA',
         name: 'Custom Moving Average Exponential',
-        params: [true, false]
+        params: [true, false],
+        type: 'mainStudy'
     },
     {
         label: 'SAR',
         name: 'Parabolic SAR',
-        params: [true, false, [0.02, 0.02, 0.2]]
+        params: [true, false, [0.02, 0.02, 0.2]],
+        type: 'mainStudy'
     },
     {
         label: 'Alligator',
         name: 'Williams Alligator',
-        params: [true, false, [13, 8, 5]]
+        params: [true, false, [13, 8, 5]],
+        type: 'mainStudy'
     },
     {
         label: 'TEMA',
         name: 'Triple EMA',
-        params: [true, false, [9]]
+        params: [true, false, [9]],
+        type: 'mainStudy'
     },
 
     {
         label: 'DEMA',
         name: 'Double EMA',
-        params: [true, false, [9]]
+        params: [true, false, [9]],
+        type: 'mainStudy'
     },
     {
         label: 'SMMA',
         name: 'Smoothed Moving Average',
-        params: [true, false, [7]]
+        params: [true, false, [7]],
+        type: 'mainStudy'
     },
     {
         label: 'Ichimoku',
         name: 'Ichimoku Cloud',
-        params: [true, false, [9,26,52,26]]
+        params: [true, false, [9,26,52,26]],
+        type: 'mainStudy'
     },
     {
         label: 'ENV',
         name: 'Envelopes',
-        params: [true, false, [20,10,10]]
+        params: [true, false, [20,10,10]],
+        type: 'mainStudy'
     }
 ]
 
@@ -98,94 +108,112 @@ export const SUBSTUDIES = [
     {
         label: 'MACD',
         name: 'Custom MACD',
-        params: [false, false, [12, 26, 'close', 9]]
+        params: [false, false, [12, 26, 'close', 9]],
+        type: 'subStudy'
     },
     {
         label: 'KDJ',
         name: 'Custom KDJ',
-        params: [false, false, [9, 3, 3]]
+        params: [false, false, [9, 3, 3]],
+        type: 'subStudy'
     },
     {
         label: 'RSI',
         name: 'Custom Relative Strength Index',
-        params: [false, false]
+        params: [false, false],
+        type: 'subStudy'
     },
     {
         label: 'ATR',
         name: 'Average True Range',
-        params: [false, false, [14]]
+        params: [false, false, [14]],
+        type: 'subStudy'
     },
     {
         label: 'CCI',
         name: 'Commodity Channel Index',
-        params: [false, false, [14]]
+        params: [false, false, [14]],
+        type: 'subStudy'
     },
     {
         label: 'WR',
         name: 'Custom Williams %R',
-        params: [false, false, [14]]
+        params: [false, false, [14]],
+        type: 'subStudy'
     },
     {
         label: 'DMI',
         name: 'Directional Movement',
-        params: [false, false, [14,14]]
+        params: [false, false, [14,14]],
+        type: 'subStudy'
     },
     {
         label: 'TRIX',
         name: 'TRIX',
-        params: [false, false, [18]]
+        params: [false, false, [18]],
+        type: 'subStudy'
     },
     {
         label: 'ASI',
         name: 'Accumulative Swing Index',
-        params: [false, false, [10]]
+        params: [false, false, [10]],
+        type: 'subStudy'
     },
     {
         label: 'Momentum',
         name: 'Momentum',
-        params: [false, false, [10]]
+        params: [false, false, [10]],
+        type: 'subStudy'
     },
     {
         label: 'DPO',
         name: 'Detrended Price Oscillator',
-        params: [false, false, [21]]
+        params: [false, false, [21]],
+        type: 'subStudy'
     },
 
     {
         label: 'Aroon',
         name: 'Aroon',
-        params: [false, false, [14]]
+        params: [false, false, [14]],
+        type: 'subStudy'
     },
     {
         label: 'KST',
         name: 'Know Sure Thing',
-        params: [false, false, [10,15,20,30,10,10,10,15,9]]
+        params: [false, false, [10,15,20,30,10,10,10,15,9]],
+        type: 'subStudy'
     },
     {
         label: 'ROC',
         name: 'Rate Of Change',
-        params: [false, false, [9]]
+        params: [false, false, [9]],
+        type: 'subStudy'
     },
     {
         label: 'CRSI',
         name: 'Connors RSI',
-        params: [false, false, [3, 2, 100]]
+        params: [false, false, [3, 2, 100]],
+        type: 'subStudy'
     },
 
     {
         label: 'SMII',
         name: 'SMI Ergodic Indicator/Oscillator',
-        params: [false, false, [5,20,5]]
+        params: [false, false, [5,20,5]],
+        type: 'subStudy'
     },
     {
         label: 'HV',
         name: 'Historical Volatility',
-        params: [false, false, [10]]
+        params: [false, false, [10]],
+        type: 'subStudy'
     },
     {
         label: 'Stoch',
         name: 'Stochastic',
-        params: [false, false, [14, 1, 3]]
+        params: [false, false, [14, 1, 3]],
+        type: 'subStudy'
     },
 ]
 

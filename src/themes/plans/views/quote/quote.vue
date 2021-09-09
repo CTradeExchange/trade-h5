@@ -17,6 +17,7 @@
             <!-- <van-icon class='iconSearch' name='search' @click='openSearch' /> -->
             <i class='icon_sousuo1 iconSearch' @click='openSearch'></i>
         </div>
+
         <div class='titleBar van-hairline--bottom'>
             <span class='item'>
                 {{ $t('trade.nameCode') }}
@@ -88,7 +89,7 @@ export default {
 
         const showSidebar = ref(false)
         const openSearch = () => {
-            router.push('/productSearch')
+            router.push(`/productSearch?tradeType=${tradeType.value}`)
         }
         return {
             openSearch,

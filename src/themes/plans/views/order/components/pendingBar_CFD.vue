@@ -3,8 +3,12 @@
         <FloatTip v-if='warn'>
             {{ warn }}
         </FloatTip>
-
-        <van-row align='center' class='pendingOrderSet' justify='space-between'>
+        <PendingBar
+            v-model='pendingPrice'
+            :direction='direction'
+            :product='product'
+        />
+        <!-- <van-row align='center' class='pendingOrderSet' justify='space-between'>
             <van-col>
                 <div class='title'>
                     {{ $t('trade.pending') }}
@@ -28,13 +32,14 @@
                     @firstPlus='firstChange'
                 />
             </van-col>
-        </van-row>
+        </van-row> -->
     </div>
 </template>
 
 <script>
 import { lt, gt, pow } from '@/utils/calculation'
 import StepperComp from '@plans/components/stepper'
+import PendingBar from './pendingBar'
 import FloatTip from './floatTip'
 import { Dialog } from 'vant'
 import { computed, onMounted, reactive, toRefs } from 'vue'
@@ -44,6 +49,7 @@ export default {
     components: {
         StepperComp,
         FloatTip,
+        PendingBar,
     },
     props: ['modelValue', 'product', 'direction'],
     emits: ['update:modelValue'],
@@ -76,6 +82,10 @@ export default {
                 return false
             }
         })
+        const pendingPrice = computed({
+            get: () => props.modelValue,
+            set: val => emit('update:modelValue', val)
+        })
 
         const step = computed(() => pow(0.1, props.product.price_digits))
         const state = reactive({
@@ -89,7 +99,8 @@ export default {
             })
         }
         const firstChange = () => {
-            emit('update:modelValue', pendingRang.value[props.direction === 'buy' ? 'defaultBuyPrice' : 'defaultSellPrice'])
+            const defaultPendingPrice = pendingRang.value[props.direction === 'buy' ? 'defaultBuyPrice' : 'defaultSellPrice']
+            if (defaultPendingPrice && !isNaN(defaultPendingPrice)) emit('update:modelValue', defaultPendingPrice)
         }
         onMounted(() => {
             firstChange()
@@ -99,6 +110,7 @@ export default {
             step,
             warn,
             pendingRang,
+            pendingPrice,
             change,
             priceIntroduce,
             firstChange,

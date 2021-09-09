@@ -717,6 +717,11 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     state.withdrawSuccess = true
+                } else {
+                    state.coinCount = ''
+                    state.serviceCount = ''
+                    state.arriveCount = ''
+                    state.minusCount = ''
                 }
             })
         }
@@ -999,7 +1004,7 @@ export default {
         margin-left: rem(15px);
         color: var(--color);
         font-weight: bold;
-        font-size: rem(34px);
+        font-size: rem(30px);
         letter-spacing: 1px;
     }
 }

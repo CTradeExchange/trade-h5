@@ -382,7 +382,7 @@ export default {
 .registerBtn {
     height: rem(100px);
     color: var(--color);
-    font-size: rem(34px);
+    font-size: rem(30px);
     background: var(--bgColor);
     border-color: var(--lineColor);
     border-width: 1px 0 0;

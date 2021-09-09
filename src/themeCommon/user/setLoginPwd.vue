@@ -88,6 +88,9 @@ export default {
             if (state.newPwd !== state.confirmPwd) {
                 return Toast(t('forgot.pwdDiff'))
             }
+            if (state.oldPwd === state.newPwd) {
+                return Toast(t('forgot.pwdSame'))
+            }
 
             const toast = Toast.loading({
                 message: t('common.loading'),
@@ -173,7 +176,7 @@ export default {
         border-color: var(--lineColor);
         span {
             color: var(--color);
-            font-size: rem(34px);
+            font-size: rem(30px);
         }
     }
     .form-item {

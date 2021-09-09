@@ -5,6 +5,7 @@
             class='input'
             :placeholder='$t("trade.priceLabel")'
             type='text'
+            :value='modelValue'
             @blur='onBlur'
             @input='onInput'
         />

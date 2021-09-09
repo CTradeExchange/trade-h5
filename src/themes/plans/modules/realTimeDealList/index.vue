@@ -66,7 +66,8 @@ export default {
     flex-direction: column;
     width: 100%;
     height: 100%;
-    overflow: scroll;
+    max-height: rem(600px);
+    overflow: auto;
     color: var(--mutedColor);
     font-size: rem(22px);
     line-height: rem(24px);
