@@ -28,7 +28,7 @@
                         <van-collapse-item :name='index+1'>
                             <template #title>
                                 <p class='amount'>
-                                    {{ item.amount }} {{ item.withdrawCurrency }}
+                                    {{ item.amount }} {{ item.accountCurrency }}
                                 </p>
                                 <p class='time'>
                                     {{ formatTime(item.createTime) }}
@@ -49,7 +49,7 @@
                                         {{ $t('withdrawRecord.moneyName') }}
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.amount }} {{ item.withdrawCurrency }}
+                                        {{ item.amount }} {{ item.accountCurrency }}
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -57,7 +57,7 @@
                                         {{ $t('withdrawRecord.serviceName') }}
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.withdrawFee }}{{ item.withdrawCurrency }}
+                                        {{ item.withdrawFee }} {{ item.accountCurrency }}
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -65,7 +65,7 @@
                                         {{ $t('withdrawRecord.predictName') }}
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.finalAmount }}{{ item.withdrawCurrency }}
+                                        {{ item.finalAmount }} {{ item.withdrawCurrency }}
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -73,8 +73,7 @@
                                         {{ $t('withdrawRecord.accountDeduction') }}
                                     </span>
                                     <span class='right-val'>
-                                        --
-                                        <!-- {{ item.amount }} {{ item.accountCurrency }} -->
+                                        {{ item.accountDeductAmount }} {{ item.accountCurrency }}
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -93,9 +92,9 @@
                                     </span>
                                     <span class='right-val w250'>
                                         <span class='val'>
-                                            {{ txid || '--' }}
+                                            {{ item.txid || '--' }}
                                         </span>
-                                        <span v-if='txid' class='copy-btn' :data-clipboard-text='txid' @click='copyTXID'>
+                                        <span v-if='item.txid' class='copy-btn' :data-clipboard-text='item.txid' @click='copyTXID'>
                                             <img alt='' src='../../../assets/copy.png' srcset='' />
                                         </span>
                                     </span>
@@ -192,8 +191,7 @@ export default {
             list: [],
             finishedText: t('withdrawRecord.noMore'),
             finished: false,
-            loadingPage: false,
-            txid: ''
+            loadingPage: false
         })
         const handleFold = (val) => {
             activeIndex.value = val

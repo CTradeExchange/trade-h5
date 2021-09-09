@@ -131,7 +131,8 @@ export default {
         }
 
         onMounted(() => {
-            assetsSwipe.value && assetsSwipe.value.swipeTo(tabIndex.value === -1 ? 0 : tabIndex.value)
+            const index = tabIndex.value === -1 ? 0 : tabIndex.value
+            assetsSwipe.value && assetsSwipe.value.swipeTo(index)
 
             if (plans.value.length === 1) {
                 const tradeType = plans.value[0]?.id
