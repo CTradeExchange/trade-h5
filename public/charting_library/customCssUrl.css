@@ -1,0 +1,111 @@
+.onlyOneButtonCanBeStick-16Vrffc6 .valuesAdditionalWrapper-3BfAIuML {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.study-lgC0tuTJ {
+    flex-wrap: wrap !important;
+}
+
+.fullScreenBtn {
+    position: absolute;
+    top: 15px;
+    width: 25px;
+    height: 25px;
+    padding: 4px;
+    box-sizing: border-box;
+}
+
+[data-name="legend-series-item"] .titleWrapper-1Zs2rjQ6 {
+    font-size: 14px;
+}
+
+[data-name="legend-series-item"] .valuesWrapper-1ukbb5SP {
+    font-size: 12px;
+}
+
+[data-name="legend-series-item"] .valueTitle-1myNPdtH {
+    display: none !important;
+}
+
+.title-bcHj6pEn {
+    font-size: 12px;
+}
+
+.titleWrapper-1Zs2rjQ6, .item-3eXPhOmy {
+    min-height: 22px!important;
+}
+
+.toggleButton-3TAD9tll {
+    top: 48%;
+}
+
+.price-axis-stub-3MoqVLRB {
+    pointer-events: none !important;
+}
+
+.wrapper-1tN_aWXZ {
+    display: none !important;
+}
+
+/* .sourcesWrapper-2JcXD9TK .item-3eXPhOmy{
+    min-height:
+} */
+
+.buttons-1-XhYDHM{
+    height: 20px;
+}
+.noWrap-ODIQgNap {
+    padding-bottom: 36px;
+}
+
+.price-box {
+    position: absolute;
+    left: 7px;
+    bottom: 0;
+    height: 33px;
+    z-index: 99;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    color: #FFF;
+}
+
+.price-box.hide{
+    display: none;
+}
+
+.price-box .sell,
+.price-box .buy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 0 8px;
+    border-radius: 2px;
+}
+
+.price-box .buy {
+    margin-left: 1px;
+}
+
+.price-box .num {
+    font-size: 15px;
+}
+
+.price-box .text {
+    font-size: 11px;
+}
+
+.price-box .block {
+    background: #E3525C;
+}
+
+.price-box.rise .block {
+    background: #007B01;
+}
+
+.price-box.fall .block {
+    background: #E3525C;
+}
