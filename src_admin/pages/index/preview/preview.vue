@@ -129,7 +129,7 @@ export default {
                 }
                 itemEl.data.styleObj = styleObj
                 itemEl.data.moduleId = itemEl.id
-                const newItem = Object.assign({}, itemEl, { component: require(`@m/modules/${itemEl.tag}/${itemEl.tag}.vue`).default })
+                const newItem = Object.assign({}, itemEl, { component: require(`@h5/modules/${itemEl.tag}/${itemEl.tag}.vue`).default })
                 return newItem
             })
             list = list.filter(el => {

@@ -36,7 +36,6 @@ async function init () {
             name: 'theme',
             message: '请选择构建主题',
             choices: themes,
-            when: (answers) => answers.buildType === 'h5',
             default: 'false',
         },
     ]

@@ -11,7 +11,7 @@ import { setRouter } from '@/utils/request'
 
 setRouter(null)
 setRootVariable(Colors)
-
+if (process.env.NODE_ENV === 'development') window._store = store
 function render (container) {
     const app = createApp(App)
     app.use(longpress)

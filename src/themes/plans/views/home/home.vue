@@ -1,7 +1,8 @@
 <template>
     <div id='homeContent' ref='homeContent' class='home'>
+        <PageComp :data='pageModules' />
         <Banner :list='BannerConfig.large' />
-        <Products ref='productsRef' />
+        <Products ref='productsRef' :symbol-keys='products' />
         <Fastlink />
         <BanderBanner class='BanderBanner' :list='BannerConfig.mini' />
         <!-- <News class='newBar' /> -->
@@ -10,6 +11,7 @@
 </template>
 
 <script>
+import { pageConfig } from '@/api/wpApi'
 import BannerConfig from './configs/banner'
 import NoticeConfig from './configs/notice'
 import Banner from '@plans/modules/banner/banner'
@@ -17,7 +19,7 @@ import Fastlink from './components/fastlink'
 import BanderBanner from '@plans/modules/handerBanner/handerBanner'
 // import News from './components/news'
 import InformationFlow from './components/informationFlow'
-import Products from './components/products'
+import Products from '@plans/modules/productsSwipe/productsSwipe'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { onActivated, ref } from 'vue'
 import { localGet } from '@/utils/util'
@@ -33,21 +35,23 @@ export default {
         InformationFlow,
     },
     setup () {
+        const pageModules = ref([])
         const productsRef = ref(null)
         const lang = ref(localGet('lang'))
-        const calcSubscribeProducts = () => {
-            let list = productsRef.value?.products || []
-            list = list.map(el => el.symbolId)
-            return list
-        }
+        const products = ['3_1', '33_1', '37_2']
+        pageConfig('Home').then(res => {
+            console.log(res)
+            pageModules.value = res
+        })
         onActivated(() => {
             lang.value = localGet('lang')
             // 订阅产品
-            const subscribList = calcSubscribeProducts()
-            if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
+            QuoteSocket.send_subscribe(products)
         })
         return {
             lang,
+            pageModules,
+            products,
             productsRef,
             BannerConfig,
             NoticeConfig
