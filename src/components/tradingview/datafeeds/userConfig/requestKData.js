@@ -4,8 +4,6 @@ let isLog = true // 是否输出日志
 
 export class RequestKData {
     constructor() {
-        // 第一根k数据
-        this._leftBar = null
         // 最新一根k数据
         this._latestBar = null
         // 产品信息
@@ -18,7 +16,6 @@ export class RequestKData {
                 symbolId: params.symbolId,
                 klineType: params.klineType
             }
-            this._leftBar = null
             this._latestBar = null
         }
 
@@ -26,37 +23,25 @@ export class RequestKData {
             "trade_type": params.tradeType,
             "symbol_id": params.symbolId,
             "kline_type": params.klineType,
-            "kline_timestamp_start": params.startTime,
             "kline_timestamp_end": params.endTime,
+            "query_kline_num": params.countBack
         }
 
-        return requestKline(_params, firstDataRequest)
+        return requestKline(_params, 'history')
             .then(res => {
                 if (firstDataRequest) {
                     if (res.data.bars.length) {
                         // 记录最新bar
                         this._latestBar = { ...res.data.bars[res.data.bars.length - 1] }
-                        // 记录最左侧bar
-                        this._leftBar = { ...res.data.bars[0] }
                     }
                 }
                 return res
             })
             .then(res => {
-                console.log('exit_earlier_kline: ', res.rawData.exit_earlier_kline)
-                if (!res.data.bars.length) {
-                    let nextTime = this._leftBar ? this._leftBar.time : undefined
-                    if(!res.rawData.exit_earlier_kline){
-                        nextTime = undefined
-                        console.log(`%c${_params.kline_timestamp_start}-${_params.kline_timestamp_end}区间无数据，并且没有更早历史数据，不再进行请求`, 'color:red')
-                    } else {
-                        console.log(`%c${_params.kline_timestamp_start}-${_params.kline_timestamp_end}区间无数据，准备请求${nextTime}左侧的时间区间的历史数据`, 'color:red')
-                    }
-
+                if(!res.data.bars.length){
                     Object.assign(res.data, {
                         meta: {
-                            noData: true,
-                            nextTime
+                            noData: true
                         }
                     })
                 }
@@ -102,7 +87,6 @@ export class RequestKData {
             "trade_type": 1,
             "symbol_id": this._product.symbolId,
             "kline_type": this._product.klineType,
-            "query_type": 2,
             "query_kline_num": 2
         }
         return requestKline(params)
@@ -114,7 +98,7 @@ export class RequestKData {
 
 
 // 历史k线
-function requestKline(params) {
+function requestKline(params, type) {
     return new Promise((resolve) => {
         const fn = () => {
             if (QuoteSocket.ws.readyState === 1) {
@@ -126,9 +110,9 @@ function requestKline(params) {
         fn()
     })
         .then(() => {
-            return QuoteSocket.send(14002, params)
+            return QuoteSocket.send(14012, params)
                 .then(res => {
-                    isLog && logMessageForKline(res, params)
+                    isLog && type === 'history' &&logMessageForKline(res, params)
 
                     const checkResult = validateRes(res)
                     if (checkResult) {
@@ -146,7 +130,6 @@ function requestKline(params) {
                     }))
 
                     return {
-                        rawData: res.data,
                         data: {
                             bars
                         }
@@ -203,20 +186,16 @@ function validateRes(res) {
 
 
 function logMessageForKline(res, params) {
-    console.groupCollapsed(`%c请求历史k线:⬇`, `color:${res.ret === 200 ? 'green' : 'red'}`)
-    console.log('request:', JSON.stringify(params, null, ' '))
-    console.log('response:', JSON.stringify(res, (key, value) => {
-        if (key === 'kline_list') {
-            if (Array.isArray(value) && value.length) {
-                return `共{${value?.length}}条数据, 区间[${value[0].timestamp}, ${value[value.length - 1]?.timestamp}]`
-            } else {
-                return '没有数据'
-            }
-        }
-        return value
-    }, ' '))
-    console.log('response:', res.data?.kline_list, ' ')
-    console.groupEnd()
+    if(!res.data.kline_list.length){
+        console.log('%c----所有历史K线已请求完毕，不再继续请求----', 'color:green')
+    } else {
+        const klineList = res.data.kline_list
+        console.groupCollapsed(`%c请求历史k线:⬇`, `color:${res.ret === 200 ? 'green' : 'red'}`)
+        console.log(`共{${klineList?.length}}条数据, 区间[${klineList[0].timestamp}, ${klineList[klineList.length - 1]?.timestamp}]`)
+        console.log('request:', JSON.stringify(params, null, ' '))
+        console.log('response:', res)
+        console.groupEnd()
+    }
 }
 
 function logMessageForTick(ticks) {
