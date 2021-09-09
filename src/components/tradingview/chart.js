@@ -66,7 +66,7 @@ class Chart {
         this.chartReadyCallback = chartReadyCallback
         // 数据适配器
         this.datafeed = new UDFCompatibleDatafeed('', {
-            // isControl: true,
+            isControl: true,
             symbolInfo: initial
         })
         // 指标列表
@@ -441,8 +441,18 @@ class Chart {
     // 重置K线可视区域
     _resetVisibleRange () {
         try {
-            // 重置图表（包括缩放/刻度等）
-            this.widget.activeChart().executeActionById('chartReset')
+            const state = this.widget.activeChart().getSeries()._series.bars().state()
+            const formIndex = Math.max(state.data.length - 47, 0)
+            const fromTime = state.data[formIndex].value[0]
+            const toTime = state.data[state.data.length - 1].value[0]
+            this.widget.activeChart().setVisibleRange({
+                from: fromTime,
+                to: toTime
+            }, {
+                percentRightMargin: 17
+            })
+            // 价格框缩放还原
+            this.widget.activeChart().getSeries()._series.model().setPriceAutoScaleForAllMainSources(true)
         } catch (error) {
             console.error('_resetVisibleRange: ', error)
         }
