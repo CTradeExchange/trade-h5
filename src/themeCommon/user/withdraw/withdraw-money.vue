@@ -12,8 +12,8 @@
                 </button>
             </div>
             <div class='notice'>
-                <span>{{ $t('withdrawMoney.canName') }} {{ withdrawAmount }} {{ currency }}</span>
-                <span>{{ $t('withdrawMoney.serviceName') }} {{ fee }} {{ currency }}</span>
+                <span>{{ $t('withdrawMoney.canName') }} {{ withdrawAmount }} {{ accountCurrency?.currency }}</span>
+                <span>{{ $t('withdrawMoney.serviceName') }} {{ fee }} {{ accountCurrency?.currency }}</span>
             </div>
             <div class='bank-wrap'>
                 <p class='bw-t'>
@@ -522,6 +522,7 @@ export default {
             timeList,
             onlineServices,
             isEmpty,
+            accountCurrency
         }
     }
 
@@ -609,7 +610,7 @@ export default {
     span {
         color: var(--color);
         font-weight: bold;
-        font-size: rem(34px);
+        font-size: rem(30px);
     }
 }
 .bank {
