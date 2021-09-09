@@ -1,129 +1,129 @@
 <template>
-    <div class="pageComp">
+    <div class='pageComp'>
         <component
-            v-for="(el,index) in moduleList"
+            :is='el.component'
+            v-for='(el,index) in moduleList'
             :key="el.id+'_'+index"
-            :is="el.component"
-            :data="el.data"
-            @click.capture="moduleClick(el, $event)"
-            @openurl="openurl"
+            :data='el.data'
+            @click.capture='moduleClick(el, $event)'
+            @openurl='openurl'
         >
-            <div v-if="el.data.bindComp && el.data.bindComp.length">
-                <component :is="el.component" v-for="(el,i) in el.data.bindComp" :data="el.data" :key="index+''+i+el.id"></component>
+            <div v-if='el.data.bindComp && el.data.bindComp.length'>
+                <component :is='el.component' v-for='(o,i) in o.data.bindComp' :key="index+''+i+o.id" :data='o.data' />
             </div>
         </component>
     </div>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
     props: {
         data: {
             type: Array,
-            default: []
+            default () { return [] }
         },
     },
     computed: {
         ...mapGetters(['accountGroupId']),
-        moduleList() {
-            const {name, params} = this.$route;
-            let pageCode = name + '_' + (params.id||'')
-            let list= this.data.map((item) => {
+        moduleList () {
+            const { name, params } = this.$route
+            const pageCode = name + '_' + (params.id || '')
+            let list = this.data.map((item) => {
                 const itemEl = JSON.parse(JSON.stringify(item))
-                const {style,linkComp,linkCompPosition, background} = itemEl.data
-                const styleObj = {};
+                const { style, linkComp, linkCompPosition, background } = itemEl.data
+                const styleObj = {}
                 for (const key in style) {
                     if (style.hasOwnProperty(key)) {
-                        styleObj[key] = Number(style[key]) + 'px';
+                        styleObj[key] = Number(style[key]) + 'px'
                     }
                 }
-                if(linkComp && linkCompPosition) {
-                    Object.assign(styleObj,{
-                        position:'absolute',
-                        left:0
+                if (linkComp && linkCompPosition) {
+                    Object.assign(styleObj, {
+                        position: 'absolute',
+                        left: 0
                     })
-                    switch(linkCompPosition){
+                    switch (linkCompPosition) {
                         case 'top':
-                            styleObj.top = 0;
-                            styleObj.left = 0;
-                            styleObj.right = 0;
-                            break;
+                            styleObj.top = 0
+                            styleObj.left = 0
+                            styleObj.right = 0
+                            break
                         case 'bottom':
-                            styleObj.bottom = 0;
-                            styleObj.left = 0;
-                            styleObj.right = 0;
-                            break;
+                            styleObj.bottom = 0
+                            styleObj.left = 0
+                            styleObj.right = 0
+                            break
                         case 'bottom-left':
-                            styleObj.bottom = 0;
-                            styleObj.left = 0;
-                            break;
+                            styleObj.bottom = 0
+                            styleObj.left = 0
+                            break
                         case 'bottom-right':
-                            styleObj.bottom = 0;
-                            styleObj.right = 0;
-                            break;
+                            styleObj.bottom = 0
+                            styleObj.right = 0
+                            break
                         case 'top-right':
-                            styleObj.top = 0;
-                            styleObj.right = 0;
-                            break;
+                            styleObj.top = 0
+                            styleObj.right = 0
+                            break
                         case 'top-left':
-                            styleObj.top = 0;
-                            styleObj.left = 0;
-                            break;
+                            styleObj.top = 0
+                            styleObj.left = 0
+                            break
                     }
                 }
-                if(background){
-                    styleObj.background = `url(${background}) no-repeat`;
-                    styleObj.backgroundSize = `100% 100%`;
+                if (background) {
+                    styleObj.background = `url(${background}) no-repeat`
+                    styleObj.backgroundSize = '100% 100%'
                 }
                 itemEl.data.styleObj = styleObj
-                itemEl.data.moduleId = pageCode+'_'+itemEl.id
+                itemEl.data.moduleId = pageCode + '_' + itemEl.id
                 const newItem = Object.assign({}, itemEl, { component: require(`../modules/${itemEl.tag}/${itemEl.tag}.vue`).default })
-                return newItem;
+                return newItem
             })
             // 将绑定的组件插入到对应的模块下面
-            const linkCompList = list.filter(el=> el.data.linkComp).map(el=>{
-                const parentComp = list.find(item=>item.id===el.data.linkComp);
-                if(!parentComp) return el;
-                if(parentComp.data.bindComp){
-                    parentComp.data.bindComp.push(el);
-                }else{
-                    parentComp.data.bindComp = [el];
+            const linkCompList = list.filter(el => el.data.linkComp).map(el => {
+                const parentComp = list.find(item => item.id === el.data.linkComp)
+                if (!parentComp) return el
+                if (parentComp.data.bindComp) {
+                    parentComp.data.bindComp.push(el)
+                } else {
+                    parentComp.data.bindComp = [el]
                 }
-                return el;
-            });
+                return el
+            })
             // 过滤出没有绑定的组件，给页面遍历生成模块
-            list = list.filter(el=>!el.data.linkComp)
-            return list;
+            list = list.filter(el => !el.data.linkComp)
+            return list
         },
     },
-    created() {
+    created () {
         // this.subscriptProducts();
     },
     methods: {
-        moduleClick(data, $event) {
-            if(typeof(this.$parent.moduleClick)==='function'){
-                this.$emit('moduleClick',data, $event);
-                $event.stopPropagation();
+        moduleClick (data, $event) {
+            if (typeof (this.$parent.moduleClick) === 'function') {
+                this.$emit('moduleClick', data, $event)
+                $event.stopPropagation()
             }
             // console.log('moduleClick',data, $event)
         },
         // 订阅产品
-        subscriptProducts() {
-            if (this.data.length === 0) return false;
-            const products = [];
-            const accountGroupId = this.accountGroupId;
+        subscriptProducts () {
+            if (this.data.length === 0) return false
+            const products = []
+            const accountGroupId = this.accountGroupId
             this.data.forEach(el => {
                 if (el.tag === 'quote') {
-                    let p = el.data.product || {};
-                    p = p[accountGroupId];
-                    if(!p || !accountGroupId) return ;
+                    let p = el.data.product || {}
+                    p = p[accountGroupId]
+                    if (!p || !accountGroupId) return
                     const arr = p.map(q => Number(q))
-                    products.push(...arr);
+                    products.push(...arr)
                 }
-            });
+            })
 
-            if(products.length) console.log('pageComp subscriptProducts', products), this.$ws.send_addSubscription_proList(products)
+            if (products.length) console.log('pageComp subscriptProducts', products), this.$ws.send_addSubscription_proList(products)
         }
     },
 }

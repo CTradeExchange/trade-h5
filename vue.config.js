@@ -10,6 +10,12 @@ function resolve (dir) {
 }
 process.env.VUE_APP_build = dayjs().format('YYYY-MM-DD HH:mm')
 const NODE_ENV = process.env.NODE_ENV
+const isAdminMode = process.env.VUE_APP_isAdmin === 'true' // WordPress后台插件的开发模式
+console.log(NODE_ENV, process.env.VUE_APP_isAdmin)
+// console.log(process.env)
+const { buildType = 'cats-upload-all', theme = 'plans' } = queryBuildConfig()
+console.log(buildType, theme)
+
 const alias = {
     'vue$': 'vue/dist/vue.esm-bundler.js',
     '@public': resolve('public'),
@@ -23,12 +29,10 @@ const alias = {
     '@admin': resolve('src_admin'),
     '@utils': resolve('src_admin/utils'),
     '@index': resolve('src_admin/pages/index'),
+    '@h5': resolve(`src/themes/${theme}`),
+    '@w': resolve('src/themes/webview'),
 }
-const isAdminMode = process.env.VUE_APP_isAdmin === 'true' // WordPress后台插件的开发模式
-console.log(NODE_ENV, process.env.VUE_APP_isAdmin)
-// console.log(process.env)
-const { buildType = 'cats-upload-all', theme = 'plans' } = queryBuildConfig()
-console.log(buildType, theme)
+
 if (process.env.NODE_ENV === 'production') {
     const pathStr = buildType
     const pathName = isAdminMode ? 'admin' : 'dist'
@@ -128,7 +132,7 @@ const config = {
         },
         proxy: {
             '/wp-json/wp': {
-                target: 'http://prewpadmin_3.cats-trade.com', // http://prewpadmin.cats-trade.com/
+                target: 'http://uatwpadmin_1.cats-trade.com', // http://prewpadmin.cats-trade.com/
                 // changeOrigin: false,
                 disableHostCheck: true,
                 onProxyReq: function (proxyReq, req, res, options) { // 由于vue中使用了body-parser 导致http中的body被序列化两次，从而使得配置代理后后端无法获取body中的数据
@@ -169,6 +173,22 @@ const config = {
         config.plugins.delete('preload-index').delete('prefetch-index')
     },
     pages
+}
+
+// uniapp图表详情页面插件打包功能
+const argv = require('minimist')(process.argv.slice(2))
+if (argv && argv.type === 'webview') {
+    Object.assign(config, {
+        publicPath: './',
+        productionSourceMap: false,
+        pages: {
+            webview: {
+                entry: 'src/themes/webview/main.js',
+                template: 'public/webview.html',
+                filename: 'webview.html',
+            }
+        }
+    })
 }
 
 module.exports = config
