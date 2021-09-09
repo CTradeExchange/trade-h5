@@ -93,11 +93,13 @@ class Chart {
 
         // 第一次执行
         this._firstInit = true
-
+        // 图表初始化并准备就绪
+        this.hasReady = false
         this._init()
     }
 
     _init () {
+        this.hasReady = false
         this.destroyed()
         const { initial, containerHeight, datafeed, containerId } = this
         if (!containerHeight || !initial) {
@@ -127,6 +129,7 @@ class Chart {
         })
 
         this.widget.onChartReady(() => {
+            this.hasReady = true
             this.updateIndicator(this.indicators)
             this.updateProperty(this.property)
             this._addPriceBox()
@@ -143,7 +146,7 @@ class Chart {
 
     get _options () {
         let options = null
-        if (this.fullScreen && this._firstInit && this._orientation === 'portrait' && [90, -90].includes(window.orientation)) {
+        if (this.extension.fullScreen && this._firstInit && this._orientation === 'portrait' && [90, -90].includes(window.orientation)) {
             // 横屏，但是默认值是竖屏时
             options = landscapeOptions()
         } else {
@@ -416,6 +419,9 @@ class Chart {
 
     // 覆盖图表属性
     _applyOverrides (config) {
+        if (!this.hasReady) {
+            return
+        }
         const options = this._setProperty(config, {})
         this.widget.applyOverrides(options)
     }
