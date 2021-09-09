@@ -84,6 +84,7 @@ class SocketEvent {
 
     // 盘口成交报价订阅
     deal_subscribe (symbol_id, depth_level = 10, merge_accuracy, trade_type, trade_info_count) {
+        this.$store.commit('_quote/Delete_dealList') // 删除成交数据
         this.subscribeDeal = [{ symbol_id, depth_level, merge_accuracy, trade_type }]
 
         const list = [{
