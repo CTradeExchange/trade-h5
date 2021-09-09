@@ -3,6 +3,8 @@ import { HistoryProvider, } from './history-provider';
 import { DataPulseProvider } from './data-pulse-provider';
 import { QuotesPulseProvider } from './quotes-pulse-provider';
 import { SymbolsStorage } from './symbols-storage';
+import { resolutionToKlineType } from '../../userConfig/config.js'
+
 function extractField(data, field, arrayIndex) {
     var value = data[field];
     return Array.isArray(value) ? value[arrayIndex] : value;
@@ -12,9 +14,10 @@ function extractField(data, field, arrayIndex) {
  * See UDF protocol reference at https://github.com/tradingview/charting_library/wiki/UDF
  */
 var UDFCompatibleDatafeedBase = /** @class */ (function () {
-    function UDFCompatibleDatafeedBase(datafeedURL, quotesProvider, requester, updateFrequency) {
+    function UDFCompatibleDatafeedBase(datafeedURL, quotesProvider, requester, updateFrequency, otherConfig) {
         var _this = this;
         if (updateFrequency === void 0) { updateFrequency = 10 * 1000; }
+        this.otherConfig = otherConfig || {} // 传入其他配置
         this._configuration = defaultConfiguration();
         this._symbolsStorage = null;
         this._datafeedURL = datafeedURL;
@@ -45,6 +48,11 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
     };
     UDFCompatibleDatafeedBase.prototype.unsubscribeQuotes = function (listenerGuid) {
         this._quotesPulseProvider.unsubscribeQuotes(listenerGuid);
+    };
+    UDFCompatibleDatafeedBase.prototype.calculateHistoryDepth = function (resolution, resolutionBack, intervalBack) {
+        // 覆盖所需的历史深度
+        // return undefined;
+        return {resolutionBack: resolution, intervalBack: 20}
     };
     UDFCompatibleDatafeedBase.prototype.getMarks = function (symbolInfo, from, to, onDataCallback, resolution) {
         if (!this._configuration.supports_marks) {
@@ -166,53 +174,68 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
             logMessage("Symbol resolved: " + (Date.now() - resolveRequestStartTime) + "ms");
             onResolve(symbolInfo);
         }
-        if (!this._configuration.supports_group_request) {
-            var params = {
-                symbol: symbolName,
-            };
-            if (currencyCode !== undefined) {
-                params.currencyCode = currencyCode;
-            }
-            this._send('symbols', params)
-                .then(function (response) {
-                if (response.s !== undefined) {
+        if(this.otherConfig.isControl){
+            // 这里需要异步返回结果
+            setTimeout(() => {
+                onResultReady({
+                    ...querySymbolInfo(symbolName, this.otherConfig.symbolInfo),
+                })
+            }, 0)
+        } else {
+            if (!this._configuration.supports_group_request) {
+                var params = {
+                    symbol: symbolName,
+                };
+                if (currencyCode !== undefined) {
+                    params.currencyCode = currencyCode;
+                }
+                this._send('symbols', params)
+                    .then(function (response) {
+                    if (response.s !== undefined) {
+                        onError('unknown_symbol');
+                    }
+                    else {
+                        onResultReady(response);
+                    }
+                })
+                    .catch(function (reason) {
+                    logMessage("UdfCompatibleDatafeed: Error resolving symbol: " + getErrorMessage(reason));
                     onError('unknown_symbol');
-                }
-                else {
-                    onResultReady(response);
-                }
-            })
-                .catch(function (reason) {
-                logMessage("UdfCompatibleDatafeed: Error resolving symbol: " + getErrorMessage(reason));
-                onError('unknown_symbol');
-            });
-        }
-        else {
-            if (this._symbolsStorage === null) {
-                throw new Error('UdfCompatibleDatafeed: inconsistent configuration (symbols storage)');
+                });
             }
-            this._symbolsStorage.resolveSymbol(symbolName, currencyCode).then(onResultReady).catch(onError);
+            else {
+                if (this._symbolsStorage === null) {
+                    throw new Error('UdfCompatibleDatafeed: inconsistent configuration (symbols storage)');
+                }
+                this._symbolsStorage.resolveSymbol(symbolName, currencyCode).then(onResultReady).catch(onError);
+            }
         }
     };
-    UDFCompatibleDatafeedBase.prototype.getBars = function (symbolInfo, resolution, periodParams, onResult, onError) {
-        this._historyProvider.getBars(symbolInfo, resolution, periodParams)
+    UDFCompatibleDatafeedBase.prototype.getBars = function (symbolInfo, resolution, rangeStartDate, rangeEndDate, onResult, onError, firstDataRequest) {
+        this._historyProvider.getBars(symbolInfo, resolution, rangeStartDate, rangeEndDate, firstDataRequest)
             .then(function (result) {
             onResult(result.bars, result.meta);
         })
             .catch(onError);
     };
     UDFCompatibleDatafeedBase.prototype.subscribeBars = function (symbolInfo, resolution, onTick, listenerGuid, onResetCacheNeededCallback) {
+        this._historyProvider.setTick(onTick)
         this._dataPulseProvider.subscribeBars(symbolInfo, resolution, onTick, listenerGuid);
     };
     UDFCompatibleDatafeedBase.prototype.unsubscribeBars = function (listenerGuid) {
+        this._historyProvider.setTick(null)
         this._dataPulseProvider.unsubscribeBars(listenerGuid);
     };
     UDFCompatibleDatafeedBase.prototype._requestConfiguration = function () {
-        return this._send('config')
-            .catch(function (reason) {
-            logMessage("UdfCompatibleDatafeed: Cannot get datafeed configuration - use default, error=" + getErrorMessage(reason));
-            return null;
-        });
+        if(this.otherConfig.isControl){
+            return Promise.resolve(otherDefaultConfiguration())
+        } else {
+            return this._send('config')
+                .catch(function (reason) {
+                logMessage("UdfCompatibleDatafeed: Cannot get datafeed configuration - use default, error=" + getErrorMessage(reason));
+                return null;
+            });
+        }
     };
     UDFCompatibleDatafeedBase.prototype._send = function (urlPath, params) {
         return this._requester.sendRequest(this._datafeedURL, urlPath, params);
@@ -230,6 +253,12 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
         }
         logMessage("UdfCompatibleDatafeed: Initialized with " + JSON.stringify(configurationData));
     };
+
+    // 用于提供给用户修改产品属性
+    UDFCompatibleDatafeedBase.prototype.setSymbolInfo = function(info){
+        this.otherConfig.symbolInfo = Object.assign({}, info)
+    }
+
     return UDFCompatibleDatafeedBase;
 }());
 export { UDFCompatibleDatafeedBase };
@@ -250,4 +279,61 @@ function defaultConfiguration() {
         supports_marks: false,
         supports_timescale_marks: false,
     };
+}
+
+function otherDefaultConfiguration() {
+    return {
+        supports_search: true,
+        supports_group_request: false,
+        supported_resolutions: [
+            '1',
+            '5',
+            '15',
+            '30',
+            '60',
+            '1D'
+        ],
+        supports_marks: false,
+        supports_timescale_marks: false,
+    };
+}
+
+/* 商品信息结构 */
+function querySymbolInfo (code_id, symbolInfo) {
+    if(!code_id){
+        console.error('产品symbolId不存在')
+    }
+    const result = {
+        // name: 'asfd',
+        // ticker: '888', // 商品代码
+        // 'exchange-traded': product.short_name,   不需要这两个字段
+        // 'exchange-listed': product.short_name,   不需要这两个字段
+        timezone: 'Etc/UTC', // 交易所时区
+        minmov: 1, // 最小波动
+        minmov2: 0, // 这是一个神奇的数字来格式化复杂情况下的价格
+        pointvalue: 1,
+        session: '24x7', // 交易时段
+        has_intraday: true, // 布尔值显示商品是否具有日内（分钟）历史数据
+        has_no_volume: false, // 布尔表示商品是否拥有成交量数据
+        description: '', // 商品说明。这个商品说明将被打印在图表的标题栏中。
+        type: 'stock', // 仪表的可选类型 stock, index, forex, futures, bitcoin,  expression,  spread, cfd 或其他字符串
+        supported_resolutions: Object.keys(resolutionToKlineType),
+        pricescale: 100000000000000000, // 价格精度
+        has_weekly_and_monthly: true, // 允许周期：周/月
+        ...normalizeInfo(symbolInfo)
+    }
+
+    return result
+}
+
+
+function normalizeInfo(info){
+    const result = {
+        name: info.description,
+        description: info.description,
+        symbolId: info.symbolId,
+        pricescale:  Math.pow(10, info.digits),
+        tradeType: info.tradeType
+    }
+    return result
 }
