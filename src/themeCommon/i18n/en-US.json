@@ -371,6 +371,7 @@
                 "12011": "Force liquidation P/L",
                 "13001": "Manual add margin",
                 "13002": "Manual reduce margin",
+                "13003": "Add margin",
                 "37001": "Transfer in amount",
                 "37002": "Transfer out amount"
             },
