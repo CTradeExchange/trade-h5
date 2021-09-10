@@ -583,7 +583,7 @@ export default {
         })
 
         onUnmounted(() => {
-            if (state.previewApp) state.previewApp.unmount()
+            // if (state.previewApp) state.previewApp.unmount()
             context.emit('RESET_ELEMENT', [])
         })
 

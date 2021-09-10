@@ -104,7 +104,7 @@ if (isAdminMode) {
 
 const config = {
     productionSourceMap: false,
-    publicPath: process.env.NODE_ENV === 'production' && isAdminMode ? '/wp-content/plugins/cats-manage/wp-admin-static/' : '/', // static/
+    publicPath: process.env.NODE_ENV === 'production' && isAdminMode ? '/wp-content/plugins/cats-manage/skin/skin_2/editor/' : '/', // static/
     // indexPath: isAdminMode ? 'index.html' : 'index_template.html', // 就是这条
     lintOnSave: false,
     outputDir: isAdminMode ? './build_folder/admin' : './build_folder/dist',
@@ -132,7 +132,7 @@ const config = {
         },
         proxy: {
             '/wp-json/wp': {
-                target: 'http://uatwpadmin_1.cats-trade.com', // http://prewpadmin.cats-trade.com/
+                target: 'http://prewpadmin_3.cats-trade.com', // http://prewpadmin.cats-trade.com/
                 // changeOrigin: false,
                 disableHostCheck: true,
                 onProxyReq: function (proxyReq, req, res, options) { // 由于vue中使用了body-parser 导致http中的body被序列化两次，从而使得配置代理后后端无法获取body中的数据

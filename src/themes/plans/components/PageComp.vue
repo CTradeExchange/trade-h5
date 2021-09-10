@@ -6,7 +6,7 @@
             :key="el.id+'_'+index"
             :data='el.data'
             @click.capture='moduleClick(el, $event)'
-            @openurl='openurl'
+            @openUrl='openUrl'
         >
             <div v-if='el.data.bindComp && el.data.bindComp.length'>
                 <component :is='el.component' v-for='(o,i) in o.data.bindComp' :key="index+''+i+o.id" :data='o.data' />
@@ -17,6 +17,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { defineAsyncComponent } from 'vue'
 export default {
     props: {
         data: {
@@ -78,7 +79,8 @@ export default {
                 }
                 itemEl.data.styleObj = styleObj
                 itemEl.data.moduleId = pageCode + '_' + itemEl.id
-                const newItem = Object.assign({}, itemEl, { component: require(`../modules/${itemEl.tag}/${itemEl.tag}.vue`).default })
+                const newItem = Object.assign({}, itemEl, { component: defineAsyncComponent(() => import(`../modules/${itemEl.tag}/${itemEl.tag}.vue`)) })
+                // const newItem = Object.assign({}, itemEl, { component: require(`../modules/${itemEl.tag}/${itemEl.tag}.vue`).default })
                 return newItem
             })
             // 将绑定的组件插入到对应的模块下面
@@ -124,7 +126,7 @@ export default {
             })
 
             if (products.length) console.log('pageComp subscriptProducts', products), this.$ws.send_addSubscription_proList(products)
-        }
+        },
     },
 }
 </script>

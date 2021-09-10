@@ -78,3 +78,15 @@ export function handleCodePoints (array) {
     }
     return result
 }
+export function localSet (key, val) {
+    return localStorage.setItem(key, val)
+}
+export function localGet (key) {
+    return localStorage.getItem(key)
+}
+export function sessionSet (key, val) {
+    return sessionStorage.setItem(key, val)
+}
+export function sessionGet (key) {
+    return sessionStorage.getItem(key)
+}

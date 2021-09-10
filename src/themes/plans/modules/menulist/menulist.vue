@@ -8,7 +8,7 @@
                 :is-link='item.isLink'
                 :title='item.title'
                 value=''
-                @click="$emit('openurl', item)"
+                @click='open(item)'
             >
                 <template #icon>
                     <img
@@ -25,16 +25,18 @@
                         {{ item.describe }}
                     </span>
                 </template>
-                <van-tag v-if='item.value' slot='default' round :type='item.valueStyle'>
-                    <template>
-                        <span v-if='!h5Preview && item.dataKey'>
-                            {{ $store.getters[item.dataKey] }}
-                        </span>
-                        <span v-else-if='item.value'>
-                            {{ item.value }}
-                        </span>
-                    </template>
-                </van-tag>
+                <template #value>
+                    <van-tag v-if='item.value' round :type='item.valueStyle'>
+                        <template>
+                            <span v-if='!h5Preview && item.dataKey'>
+                                {{ $store.getters[item.dataKey] }}
+                            </span>
+                            <span v-else-if='item.value'>
+                                {{ item.value }}
+                            </span>
+                        </template>
+                    </van-tag>
+                </template>
             </van-cell>
         </van-cell-group>
         <slot></slot>
@@ -73,6 +75,9 @@ export default {
         }
     },
     methods: {
+        open (item) {
+            this.$router.push(item.href)
+        }
     },
 }
 </script>

@@ -6,7 +6,7 @@
             class='col'
             :style="{ margin: '0 ' + data.gutter + 'px' }"
         >
-            <a class='link' href='javascript:;' @click="$emit('openurl',item)">
+            <a class='link' href='javascript:;' @click="$emit('openUrl',item)">
                 <img v-if='item.src' :src='item.src' />
                 <p v-if='item.label' class='label'>
                     {{ item.label }}

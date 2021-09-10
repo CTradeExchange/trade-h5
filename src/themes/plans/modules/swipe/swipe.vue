@@ -2,7 +2,7 @@
     <div class='wrapper' :style='data.styleObj'>
         <van-swipe :autoplay='data.autoplay||3000' :loop='data.loop'>
             <van-swipe-item v-for='(item, index) in dataList' :key='index'>
-                <img-comp :data='item' @openurl="$emit('openurl', $event)" ></img-comp>
+                <ImgComp :data='item' @openUrl="$emit('openUrl', $event)" />
             </van-swipe-item>
         </van-swipe>
         <slot></slot>

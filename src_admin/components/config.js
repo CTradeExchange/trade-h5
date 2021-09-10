@@ -1,21 +1,22 @@
-import img from '@m/modules/img/config.js'
-import swipe from '@m/modules/swipe/config.js'
-import notice from '@m/modules/notice/config.js'
-import layout from '@m/modules/layout/config.js'
-// import quote from '@m/modules/quote/config.js'
-// // import infoflow from '@m/modules/infoflow/config.js';
-// import infoflow2 from '@m/modules/infoflow2/config.js'
-import menulist from '@m/modules/menulist/config.js'
-// import position from '@m/modules/position/config.js'
-import selfSymbol from '@m/modules/selfSymbol/config.js'
-import text from '@m/modules/text/config.js'
-// import tinymce from '@m/modules/tinymce/config.js'
-import redpacket from '@m/modules/redpacket/config.js'
-// import template from '@m/modules/template/config.js'
-// import mineTop from '@m/modules/mineTop/config.js'
-import quoteList from '@m/modules/quoteList/config.js'
-// import nav from '@m/modules/nav/config.js'
-import registerForm from '@m/modules/registerForm/config.js'
+import img from '@h5/modules/img/config.js'
+import swipe from '@h5/modules/swipe/config.js'
+import notice from '@h5/modules/notice/config.js'
+import layout from '@h5/modules/layout/config.js'
+// import quote from '@h5/modules/quote/config.js'
+// // import infoflow from '@h5/modules/infoflow/config.js';
+// import infoflow2 from '@h5/modules/infoflow2/config.js'
+import menulist from '@h5/modules/menulist/config.js'
+// import position from '@h5/modules/position/config.js'
+import selfSymbol from '@h5/modules/selfSymbol/config.js'
+import text from '@h5/modules/text/config.js'
+// import tinymce from '@h5/modules/tinymce/config.js'
+import redpacket from '@h5/modules/redpacket/config.js'
+// import template from '@h5/modules/template/config.js'
+import minePerson from '@h5/modules/minePerson/config.js'
+import mineTop from '@h5/modules/mineTop/config.js'
+import quoteList from '@h5/modules/quoteList/config.js'
+// import nav from '@h5/modules/nav/config.js'
+import registerForm from '@h5/modules/registerForm/config.js'
 export const mobileComponentsConfig = async () => {
     return [
         img,
@@ -33,7 +34,8 @@ export const mobileComponentsConfig = async () => {
         quoteList,
         redpacket,
         // template,
-        // mineTop,
+        minePerson,
+        mineTop,
         await registerForm()
     ]
 }

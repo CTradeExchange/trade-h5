@@ -12,7 +12,7 @@ export default {
         },
         {
             name: 'text',
-            label: '内容',
+            label: '内容-CN',
             type: 'Textarea',
         }
     ]

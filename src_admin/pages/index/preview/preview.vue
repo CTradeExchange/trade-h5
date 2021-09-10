@@ -47,6 +47,7 @@
 <script>
 import draggable from 'vuedraggable'
 import { mapState, mapMutations } from 'vuex'
+import { defineAsyncComponent } from 'vue'
 import { getQuery } from '@utils/index'
 export default {
     components: {
@@ -129,7 +130,8 @@ export default {
                 }
                 itemEl.data.styleObj = styleObj
                 itemEl.data.moduleId = itemEl.id
-                const newItem = Object.assign({}, itemEl, { component: require(`@h5/modules/${itemEl.tag}/${itemEl.tag}.vue`).default })
+                const newItem = Object.assign({}, itemEl, { component: defineAsyncComponent(()=> import(`@h5/modules/${itemEl.tag}/${itemEl.tag}.vue`)) })
+                // const newItem = Object.assign({}, itemEl, { component: require(`@h5/modules/${itemEl.tag}/${itemEl.tag}.vue`).default })
                 return newItem
             })
             list = list.filter(el => {
@@ -195,8 +197,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~@m/style.scss';
-@import '~@m/font/iconfont.css';
+@import '~@h5/style.scss';
+@import '~@h5/font/iconfont.css';
 @import '~@/sass/mixin.scss';
 .headerImg,
 .footerImg {
