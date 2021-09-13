@@ -13,7 +13,7 @@ import text from '@h5/modules/text/config.js'
 import redpacket from '@h5/modules/redpacket/config.js'
 // import template from '@h5/modules/template/config.js'
 import minePerson from '@h5/modules/minePerson/config.js'
-import mineTop from '@h5/modules/mineTop/config.js'
+// import mineTop from '@h5/modules/mineTop/config.js'
 import quoteList from '@h5/modules/quoteList/config.js'
 // import nav from '@h5/modules/nav/config.js'
 import registerForm from '@h5/modules/registerForm/config.js'
@@ -35,7 +35,7 @@ export const mobileComponentsConfig = async () => {
         redpacket,
         // template,
         minePerson,
-        mineTop,
+        // mineTop,
         await registerForm()
     ]
 }

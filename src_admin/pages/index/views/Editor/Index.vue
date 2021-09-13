@@ -336,7 +336,6 @@ export default {
                 if (ev && ev.preventDefault) {
                     ev.preventDefault()
                 }
-                // debugger
                 const tradeTypeBlockCollect = store.state.editor.tradeTypeBlockCollect
 
                 const config = deepClone(store.state.editor.elementList.map(item => ({
@@ -609,4 +608,7 @@ export default {
 
 <style lang="scss">
 @import './styles';
+.previewContainer {
+    margin: 0 auto;
+}
 </style>

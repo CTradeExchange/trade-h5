@@ -141,6 +141,8 @@ export function updateDataToH5IndexView (data) {
         method: 'get'
     })
 }
+
+// 回滚版本
 export function rollBackReleasePage (data) {
     return request({
         url: '/wp-json/wp/v2/rollBackReleasePage',
@@ -160,6 +162,15 @@ export function getCompanyInfo (data) {
 export function queryCountryList (data) {
     return request({
         url: '/wp-json/wp/v2/queryCountryList',
+        data: data,
+        method: 'get'
+    })
+}
+
+// 获取客户组玩法列表
+export function getAccountGroupTradeList (data) {
+    return request({
+        url: '/wp-json/wp/v2/getAccountGroupTradeList',
         data: data,
         method: 'get'
     })
