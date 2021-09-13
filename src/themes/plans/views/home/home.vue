@@ -1,6 +1,6 @@
 <template>
     <div id='homeContent' ref='homeContent' class='home'>
-        <PageComp :data='pageModules' />
+        <!-- <PageComp :data='pageModules' /> -->
         <Banner :list='BannerConfig.large' />
         <Products ref='productsRef' :symbol-keys='products' />
         <Fastlink />
