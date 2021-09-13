@@ -108,14 +108,13 @@
                                     v-model='form.supportLanguage'
                                     multiple
                                     placeholder='请输入'
+                                    @change='changeSupportLanguage'
                                 >
                                     <el-option
-                                        label='中文'
-                                        value='zh-CN'
-                                    />
-                                    <el-option
-                                        label='英文'
-                                        value='EN'
+                                        v-for='item in lang'
+                                        :key='item.val'
+                                        :label='item.label'
+                                        :value='item.val'
                                     />
                                 </el-select>
                             </el-form-item>
@@ -125,12 +124,10 @@
                                     placeholder='请输入'
                                 >
                                     <el-option
-                                        label='中文'
-                                        value='zh-CN'
-                                    />
-                                    <el-option
-                                        label='英文'
-                                        value='EN'
+                                        v-for='item in supportLang'
+                                        :key='item.val'
+                                        :label='item.label'
+                                        :value='item.val'
                                     />
                                 </el-select>
                             </el-form-item>
@@ -262,7 +259,7 @@
                 label-width='100px'
             >
                 <div v-for='(item) in tradeTypeAssets' :key='item.id' class='tradeType-row'>
-                    <el-checkbox v-model='item.plansChecked' label='' />
+                    <el-checkbox v-model='item.plansChecked' label='' size='medium' />
                     <el-card :header='item.name' shadow='always'>
                         <template v-if="['1','2'].indexOf(item.id)>-1">
                             <el-form-item label='玩法币种'>
@@ -275,7 +272,7 @@
                                     <el-option
                                         v-for='asset in item.assetsList'
                                         :key='asset.key'
-                                        :label='`${asset.key} - ${asset.label}`'
+                                        :label='`${asset.label}`'
                                         :value='asset.key'
                                     />
                                 </el-select>
@@ -293,6 +290,7 @@
                             <el-input
                                 v-model.number='checkedTradeType[item.id].alias'
                                 placeholder='请输入'
+                                size='medium '
                             />
                         </el-form-item>
                         <el-form-item class='sort-row' label='排序值(升序)'>
@@ -315,8 +313,9 @@
 </template>
 
 <script>
-import { getAccountGroupTradeList } from '@index/Api/editor'
+import { getAccountGroupTradeAssetsList, queryCountryList } from '@index/Api/editor'
 import { lang } from './config/lang'
+import { keyBy, forOwn, isPlainObject, compact } from 'lodash'
 export default {
     name: 'ChannelSetting',
     data () {
@@ -348,24 +347,84 @@ export default {
                 // currencyList: '',
                 defaultZone: '',
                 appVersion: '1.0.0',
+                registList: [{}]
 
             },
             accountTradeList: [],
             registrable: [],
-            lang
+            lang,
+            supportLang: [],
+            zoneList: [],
+            otherZoneList: [],
+            plansDialogVisible: false,
+            activeName: 1,
+            tradeTypeList: [],
+            checkedTradeType: {},
         }
     },
     created () {
         this.queryAccountGroupTradeList()
+        this.queryCountryList()
     },
     methods: {
         queryAccountGroupTradeList () {
-            getAccountGroupTradeList().then(res => {
+            getAccountGroupTradeAssetsList().then(res => {
                 if (res.success && res.data) {
                     this.accountTradeList = res.data
                 }
             })
-        }
+        },
+        changeSupportLanguage (val) {
+            this.supportLang = this.lang.filter(el => val.includes(el.val))
+        },
+        // 获取国家区号列表
+        queryCountryList () {
+            queryCountryList().then(res => {
+                if (res.success && res.data?.length) {
+                    const list = res.data
+                    this.zoneList = list
+                    this.otherZoneList = list
+                }
+            })
+        },
+        setPlans (item) {
+            if (item.registCountryId && item.registCustomerId) {
+                this.plansDialogVisible = true
+                const data = this.accountTradeList[item.registCustomerId]?.data
+                this.getTradeTypeAssets(data)
+            } else {
+                this.$message({
+                    message: '请先选择国家和客户组',
+                    type: 'warning'
+                })
+            }
+        },
+        getTradeTypeAssets (data) {
+            if (Array.isArray(data)) {
+                this.tradeTypeList = data.map(el => ({ id: el.trade_type, name: el.trade_name }))
+                const tempCheckedTradeType = {}
+                this.tradeTypeList.forEach(el => {
+                    tempCheckedTradeType[String(el.id)] = this.checkedTradeType[String(el.id)] || {
+                        assets: ['1', '2'].indexOf(String(el.id)) ? '' : [],
+                        sort: '',
+                        alias: '',
+                        isWallet: ''
+                    }
+                })
+                this.checkedTradeType = tempCheckedTradeType
+                this.tradeTypeAssets = data.map(item => {
+                    let customerGroupAssets = []
+                    if (Array.isArray(item.assets)) {
+                        customerGroupAssets = item.assets.map(el => ({ key: el.assets_id, label: el.code + '-' + el.name }))
+                    }
+                    return {
+                        id: item.trade_type,
+                        name: item.trade_name,
+                        assetsList: customerGroupAssets
+                    }
+                })
+            }
+        },
     }
 }
 </script>
@@ -381,6 +440,20 @@ export default {
     }
     .row {
         padding-bottom: 30px;
+    }
+    .tradeType-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 50px;
+        .el-checkbox {
+            margin: 0 50px;
+        }
+        .el-card {
+            flex: 1;
+            .el-transfer {
+                margin-bottom: 20px;
+            }
+        }
     }
 }
 </style>

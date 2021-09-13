@@ -168,9 +168,9 @@ export function queryCountryList (data) {
 }
 
 // 获取客户组玩法列表
-export function getAccountGroupTradeList (data) {
+export function getAccountGroupTradeAssetsList (data) {
     return request({
-        url: '/wp-json/wp/v2/getAccountGroupTradeList',
+        url: '/wp-json/wp/v2/getAccountGroupTradeAssetsList',
         data: data,
         method: 'get'
     })
