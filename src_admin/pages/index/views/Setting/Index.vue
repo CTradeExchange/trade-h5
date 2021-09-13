@@ -97,98 +97,6 @@
                                     placeholder='请输入'
                                 />
                             </el-form-item>
-                            <el-form-item
-                                v-for='(item,index) in form.registList'
-                                :key='item.id'
-                                :label='index === 0 ? "注册客户组" : ""'
-                            >
-                                <el-row>
-                                    <el-col :span='6'>
-                                        <el-select
-                                            v-model='form.registList[index].registCountryId'
-                                            clearable
-                                            filterable
-                                            placeholder='请选择国家'
-                                        >
-                                            <el-option
-                                                v-for='country in otherZoneList'
-                                                :key='country'
-                                                :label='country.name'
-                                                :value='country.id'
-                                            />
-                                        </el-select>
-                                    </el-col>
-                                    <el-col :span='6'>
-                                        <el-select
-                                            v-model='form.registList[index].registCustomerId'
-                                            clearable
-                                            placeholder='请选择客户组'
-                                        >
-                                            <el-option
-                                                v-for='country in customerGroupList'
-                                                :key='country'
-                                                :label='country.label'
-                                                :value='country.value'
-                                            />
-                                        </el-select>
-                                    </el-col>
-                                    <el-col :span='12'>
-                                        {{ registList }}
-                                        <el-button type='primary' @click='setPlans(item)'>
-                                            设置玩法币种
-                                        </el-button>
-                                        <el-button v-if='index === 0' type='primary' @click='addFormItem'>
-                                            添加
-                                        </el-button>
-                                        <el-button v-else type='danger' @click='removeItem(index)'>
-                                            删除
-                                        </el-button>
-                                    </el-col>
-                                </el-row>
-                            </el-form-item>
-                            <el-form-item label='可注册区号'>
-                                <el-select
-                                    v-model='form.registrable'
-                                    multiple
-                                    placeholder='请输入'
-                                >
-                                    <el-option
-                                        v-for='(item) in zoneList'
-                                        :key='item.id'
-                                        :label='item.name+" ("+item.country_code+")"'
-                                        :value='item.name+" ("+item.country_code+")"'
-                                    />
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label='默认注册区号'>
-                                <el-select
-                                    v-model='form.defaultZone'
-                                    placeholder='请输入'
-                                >
-                                    <el-option
-                                        v-for='(item) in zoneList'
-                                        :key='item.id'
-                                        :label='item.name+" ("+item.country_code+")"'
-                                        :value='item.name+" ("+item.country_code+")"'
-                                    />
-                                </el-select>
-                            </el-form-item>
-
-                            <el-form-item label='H5默认语言'>
-                                <el-select
-                                    v-model='form.language'
-                                    placeholder='请输入'
-                                >
-                                    <el-option
-                                        label='中文'
-                                        value='zh-CN'
-                                    />
-                                    <el-option
-                                        label='英文'
-                                        value='EN'
-                                    />
-                                </el-select>
-                            </el-form-item>
 
                             <!-- <el-form-item label='玩法'>
                                 <div class='play-settings'>
@@ -218,12 +126,6 @@
                                 />
                             </el-form-item> -->
 
-                            <el-form-item label='信息流 orgid'>
-                                <el-input
-                                    v-model='form.orgid'
-                                    placeholder='请输入'
-                                />
-                            </el-form-item>
                             <el-form-item label='apiService'>
                                 <el-input
                                     v-model='form.apiService'
@@ -259,14 +161,6 @@
                                 <el-input
                                     v-model='form.usdhkdCodeid'
                                     placeholder='请输入'
-                                />
-                            </el-form-item>
-                            <el-form-item label='GA埋点代码'>
-                                <el-input
-                                    v-model='form.googleAnalytics'
-                                    placeholder='请输入'
-                                    :row='5'
-                                    type='textarea'
                                 />
                             </el-form-item>
 
@@ -317,25 +211,6 @@
                                     placeholder='请输入'
                                 />
                             </el-form-item>
-                            <el-form-item label='H5地址'>
-                                <el-input
-                                    v-model='form.other.h5Address'
-                                    placeholder='请输入'
-                                />
-                            </el-form-item>
-                            <el-form-item label='H5预览地址'>
-                                <el-input
-                                    v-model='form.other.h5PreviewAddress'
-                                    placeholder='请输入'
-                                />
-                            </el-form-item>
-                            <el-form-item label='在线客服地址'>
-                                <el-input
-                                    v-model='form.onlineService'
-                                    placeholder='请输入'
-                                    type='textarea'
-                                />
-                            </el-form-item>
                         </el-col>
                     </el-row>
                 </el-tab-pane>
@@ -384,148 +259,8 @@
                         </el-col>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane class='tab pay-channel-setting' label='支付通道图片设置'>
-                    <el-row :gutter='20'>
-                        <el-col :offset='0' :span='12'>
-                            <el-tabs v-model='activeName' @tab-click='handleClick'>
-                                <el-tab-pane v-for='i in 10' :key='i' :label='"Alipay"+i' :name='i'>
-                                    <el-card class='box-card'>
-                                        <template #header>
-                                            <div class='card-header'>
-                                                <span class='pay-name'>
-                                                    Alipay{{ i }}
-                                                </span>
-                                                <span>通道logo图片配置</span>
-                                            </div>
-                                        </template>
-                                        <div class='lang-wrap'>
-                                            <el-row :gutter='20'>
-                                                <el-col :offset='0' :span='6'>
-                                                    中文简体
-                                                </el-col>
-                                                <el-col :offset='0' :span='6'>
-                                                    <el-upload
-                                                        action='https://jsonplaceholder.typicode.com/posts/'
-                                                        class='upload-demo'
-                                                        drag
-                                                        multiple
-                                                    >
-                                                        <i class='el-icon-upload'></i>
-                                                        <div class='el-upload__text'>
-                                                            将文件拖到此处，或<em>点击上传</em>
-                                                        </div>
-                                                    </el-upload>
-                                                </el-col>
-                                            </el-row>
-                                            <el-divider />
-                                            <el-row :gutter='20'>
-                                                <el-col :offset='0' :span='6'>
-                                                    中文繁体
-                                                </el-col>
-                                                <el-col :offset='0' :span='6'>
-                                                    <el-upload
-                                                        action='https://jsonplaceholder.typicode.com/posts/'
-                                                        class='upload-demo'
-                                                        drag
-                                                        multiple
-                                                    >
-                                                        <i class='el-icon-upload'></i>
-                                                        <div class='el-upload__text'>
-                                                            将文件拖到此处，或<em>点击上传</em>
-                                                        </div>
-                                                    </el-upload>
-                                                </el-col>
-                                            </el-row>
-                                            <el-divider />
-                                            <el-row :gutter='20'>
-                                                <el-col :offset='0' :span='6'>
-                                                    英文
-                                                </el-col>
-                                                <el-col :offset='0' :span='6'>
-                                                    <el-upload
-                                                        action='https://jsonplaceholder.typicode.com/posts/'
-                                                        class='upload-demo'
-                                                        drag
-                                                        multiple
-                                                    >
-                                                        <i class='el-icon-upload'></i>
-                                                        <div class='el-upload__text'>
-                                                            将文件拖到此处，或<em>点击上传</em>
-                                                        </div>
-                                                    </el-upload>
-                                                </el-col>
-                                            </el-row>
-                                            <el-divider />
-                                        </div>
-                                    </el-card>
-                                </el-tab-pane>
-                            </el-tabs>
-                        </el-col>
-                    </el-row>
-                </el-tab-pane>
             </el-tabs>
         </el-form>
-
-        <el-dialog
-            v-model='plansDialogVisible'
-            :before-close='handleClose'
-            title='玩法&玩法币种'
-            width='40%'
-        >
-            <el-form
-                label-position='right'
-                label-width='100px'
-            >
-                <div v-for='(item) in tradeTypeAssets' :key='item.id' class='tradeType-row'>
-                    <el-checkbox v-model='item.plansChecked' label='' />
-                    <el-card :header='item.name' shadow='always'>
-                        <template v-if="['1','2'].indexOf(item.id)>-1">
-                            <el-form-item label='玩法币种'>
-                                <el-select
-                                    v-model='checkedTradeType[item.id].assets'
-                                    clearable
-                                    filterable
-                                    placeholder='请选择'
-                                >
-                                    <el-option
-                                        v-for='asset in item.assetsList'
-                                        :key='asset.key'
-                                        :label='`${asset.key} - ${asset.label}`'
-                                        :value='asset.key'
-                                    />
-                                </el-select>
-                            </el-form-item>
-                        </template>
-                        <template v-else>
-                            <el-transfer
-                                v-model='checkedTradeType[item.id].assets'
-                                :data='item.assetsList'
-                                :render-content='renderFunc'
-                                :titles='["可选玩法币种", "已选玩法币种"]'
-                            />
-                        </template>
-                        <el-form-item class='sort-row' label='玩法别名'>
-                            <el-input
-                                v-model.number='checkedTradeType[item.id].alias'
-                                placeholder='请输入'
-                            />
-                        </el-form-item>
-                        <el-form-item class='sort-row' label='排序值(升序)'>
-                            <el-input-number
-                                v-model.number='checkedTradeType[item.id].sort'
-                                controls-position='right'
-                                placeholder='请输入'
-                            />
-                        </el-form-item>
-                        <el-form-item v-if="item.id==='5'" class='sort-row' label='是否当钱包使用'>
-                            <el-checkbox v-model='checkedTradeType[item.id].isWallet'>
-                                是
-                            </el-checkbox>
-                        </el-form-item>
-                    </el-card>
-                </div>
-            </el-form>
-        </el-dialog>
     </div>
 </template>
 
@@ -585,8 +320,7 @@ export default {
                 // currencyList: '',
                 defaultZone: '',
                 appVersion: '1.0.0',
-                registList: [{}],
-                registrable: []
+
             },
             zoneList: [],
             otherZoneList: [],
@@ -630,8 +364,8 @@ export default {
         this.createTimezoneList()
         this.getPageConfig()
         this.queryCountryList()
-        this.getTradeTypeAssets()
-        this.getAccountGroupTradeList()
+        // this.getTradeTypeAssets()
+        this.queryAccountGroupTradeList()
     },
     methods: {
         renderFunc (_, option) {
@@ -858,6 +592,7 @@ export default {
         setPlans (item) {
             if (item.registCountryId && item.registCustomerId) {
                 this.plansDialogVisible = true
+                // this.tradeTypeAssets = this.accountTradeList[item.registCustomerId]?.data
             } else {
                 this.$message({
                     message: '请先选择国家和客户组',
@@ -865,9 +600,9 @@ export default {
                 })
             }
         },
-        getAccountGroupTradeList () {
+        queryAccountGroupTradeList () {
             getAccountGroupTradeList().then(res => {
-                if (res.success && res.data?.length) {
+                if (res.success && res.data) {
                     this.accountTradeList = res.data
                 }
             })

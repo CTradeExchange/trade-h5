@@ -36,7 +36,13 @@ const routes = [
                 name: 'PublishList',
                 component: () =>
                     import(/* webpackChunkName: "Editor" */ '@index/views/PublishList.vue')
-            }
+            },
+            {
+                path: 'channelSetting',
+                name: 'ChannelSetting',
+                component: () =>
+                    import(/* webpackChunkName: "Editor" */ '@index/views/ChannelSetting/Index.vue')
+            },
         ]
     }
 ]
