@@ -182,7 +182,7 @@ export default {
         // 设置按额或者按手数，切换产品或者切换方向时需要重新设置；现货撮合、杠杆玩法下单买入按额，其他都是按手数交易
         const setVolumeType = () => {
             // CFD逐仓和杠杆全仓玩法才支持按额下单功能
-            if ([2, 3].includes(product.value?.tradeType)) {
+            if ([2, 3, 5].includes(product.value?.tradeType)) {
                 if ([3, 5].includes(product.value?.tradeType) && state.direction === 'buy') {
                     state.entryType = 2 // 1按数量下单 2按成交额下单
                 } else {
