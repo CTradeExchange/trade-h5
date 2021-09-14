@@ -98,7 +98,7 @@
                                     placeholder='请输入'
                                 >
                                     <el-option
-                                        v-for='(item) in zoneList'
+                                        v-for='(item) in otherZoneList'
                                         :key='item.id'
                                         :label='item.name+" ("+item.country_code+")"'
                                         :value='item.name+" ("+item.country_code+")"'
@@ -156,13 +156,13 @@
                             </el-form-item>
                             <el-form-item label='H5地址'>
                                 <el-input
-                                    v-model='form.other.h5Address'
+                                    v-model='form.h5Address'
                                     placeholder='请输入'
                                 />
                             </el-form-item>
                             <el-form-item label='H5预览地址'>
                                 <el-input
-                                    v-model='form.other.h5PreviewAddress'
+                                    v-model='form.h5PreviewAddress'
                                     placeholder='请输入'
                                 />
                             </el-form-item>
@@ -317,39 +317,21 @@
 <script>
 import { getAccountGroupTradeAssetsList, queryCountryList, getViChannel, saveViChannel } from '@index/Api/editor'
 import { lang } from '../../config/lang'
-import { keyBy, forOwn, isPlainObject, compact } from 'lodash'
+import { keyBy, forOwn, isPlainObject, cloneDeep, compact } from 'lodash'
 export default {
     name: 'ChannelSetting',
     data () {
         return {
             form: {
                 tradeTypeCurrencyList: [],
-                companyId: '',
-                customerGroupId: '',
                 googleAnalytics: '',
-                languageuri: '',
-                ipTips: '',
                 h5Address: '',
-                webScoketUri: '',
-                loginTime: '',
-                webApiUri: '',
-                imsApiUri: '',
                 h5PreviewAddress: '',
-                other: {
-                    isInitSymbol: ''
-                },
-                // tradeTypeList: '',
-                // tradeTypeList: '',
-                apiService: '',
                 orgid: '',
-                quoteService: '',
-                msgService: '',
-                tradeService: '',
-                utcOffset: '',
-                // currencyList: '',
                 defaultZone: '',
                 appVersion: '1.0.0',
-                registList: [{}]
+                registList: [{}],
+                onlineService: ''
 
             },
             accountTradeList: [],
@@ -363,13 +345,63 @@ export default {
             activeName: 1,
             tradeTypeList: [],
             checkedTradeType: {},
+            submitLoading: false,
+            pageId: ''
         }
     },
     created () {
+        this.pageId = this.$route.query.id
+        this.getPageConfig()
         this.queryAccountGroupTradeList()
         this.queryCountryList()
     },
     methods: {
+        getPageConfig () {
+            this.getLoading = true
+            getViChannel(this.pageId).then(res => {
+                if (!res.success) {
+                    this.$message.error(res.message)
+                    return
+                }
+
+                let content = res.data.content && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.content) : {}
+                content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
+
+                const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
+                this.form = Object.assign(this.form, content, { other })
+
+                try {
+                    let tradeTypeCurrencyEumn = {}
+                    if (Array.isArray(content?.tradeTypeCurrencyList)) {
+                        tradeTypeCurrencyEumn = keyBy(content.tradeTypeCurrencyList, 'id')
+                    }
+                    const cacheCheckedTradeType = {}
+                    if (Array.isArray(content.tradeTypeList)) {
+                        content.tradeTypeList.forEach(el => {
+                            const { allCurrency, sort, alias, isWallet } = tradeTypeCurrencyEumn[String(el.id)]
+                            cacheCheckedTradeType[String(el.id)] = {
+                                assets: ['1', '2'].indexOf(String(el.id)) > -1 ? allCurrency : (typeof (allCurrency) === 'string' ? allCurrency.split(',') : []),
+                                sort,
+                                isWallet,
+                                alias
+                            }
+                        })
+                    }
+
+                    this.checkedTradeType = cacheCheckedTradeType
+                    this.tradeTypeCurrencyCollect = content.tradeTypeList.map(el => ({ id: el.id, name: el.name, currencyList: tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency.split(',') : [] }))
+                } catch (error) {
+                    console.error(error)
+                }
+
+                this.pageData = res.data
+            }).catch(error => {
+                console.log(error)
+            })
+                .finally(() => {
+                    this.getLoading = false
+                })
+        },
         queryAccountGroupTradeList () {
             getAccountGroupTradeAssetsList().then(res => {
                 if (res.success && res.data) {
@@ -381,7 +413,7 @@ export default {
             this.supportLang = this.lang.filter(el => val.includes(el.val))
         },
         changeSupportArea (val) {
-
+            this.otherZoneList = this.zoneList.filter(el => val.includes(el.name + ' (' + el.country_code + ')'))
         },
         // 获取国家区号列表
         queryCountryList () {
@@ -432,7 +464,45 @@ export default {
             }
         },
         submit () {
+            debugger
+            this.submitLoading = true
+            const _formData = cloneDeep(this.form)
 
+            try {
+                const tempTradeTypeCurrencyList = this.tradeTypeList.map(el => {
+                    const { assets, sort, alias, isWallet } = this.checkedTradeType[String(el.id)]
+                    if (['1', '2'].indexOf(String(el.id)) > -1) {
+                        return { id: el.id, name: el.name, sort, allCurrency: assets || '', alias, isWallet }
+                    } else {
+                        return { id: el.id, name: el.name, sort, allCurrency: assets ? compact(assets).join(',') : [], alias, isWallet }
+                    }
+                })
+                tempTradeTypeCurrencyList.sort(function (a, b) {
+                    return a.sort - b.sort
+                })
+                _formData.tradeTypeCurrencyList = tempTradeTypeCurrencyList
+                // console.log('tradeTypeCurrencyList', _formData.tradeTypeCurrencyList)
+            } catch (error) {
+                console.error(error)
+            }
+
+            return saveViChannel(Object.assign(this.pageData, { content: JSON.stringify(_formData), id: this.pageId }))
+                .then(res => {
+                    if (!res.success) {
+                        return this.$message.error(res.message)
+                    }
+                    this.$message({
+                        message: '保存成功',
+                        type: 'success'
+                    })
+                    this.getPageConfig()
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+                .finally(() => {
+                    this.submitLoading = false
+                })
         },
         addFormItem () {
             this.otherZoneList = this.zoneList.filter(item => {

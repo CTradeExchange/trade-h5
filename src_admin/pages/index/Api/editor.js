@@ -179,8 +179,8 @@ export function getAccountGroupTradeAssetsList (data) {
 // 查询渠道基础配置
 export function getViChannel (data) {
     return request({
-        url: '/wp-json/wp/v2/vi_channel',
-        data: data,
+        url: '/wp-json/wp/v2/vi_channel?id=' + data,
+        params: {},
         method: 'get'
     })
 }
