@@ -33,6 +33,7 @@
                                     v-model='form.registrable'
                                     multiple
                                     placeholder='请输入'
+                                    @change='changeSupportArea'
                                 >
                                     <el-option
                                         v-for='(item) in zoneList'
@@ -314,7 +315,7 @@
 </template>
 
 <script>
-import { getAccountGroupTradeAssetsList, queryCountryList } from '@index/Api/editor'
+import { getAccountGroupTradeAssetsList, queryCountryList, getViChannel, saveViChannel } from '@index/Api/editor'
 import { lang } from '../../config/lang'
 import { keyBy, forOwn, isPlainObject, compact } from 'lodash'
 export default {
@@ -378,6 +379,9 @@ export default {
         },
         changeSupportLanguage (val) {
             this.supportLang = this.lang.filter(el => val.includes(el.val))
+        },
+        changeSupportArea (val) {
+
         },
         // 获取国家区号列表
         queryCountryList () {

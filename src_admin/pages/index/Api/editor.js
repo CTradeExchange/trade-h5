@@ -175,3 +175,21 @@ export function getAccountGroupTradeAssetsList (data) {
         method: 'get'
     })
 }
+
+// 查询渠道基础配置
+export function getViChannel (data) {
+    return request({
+        url: '/wp-json/wp/v2/vi_channel',
+        data: data,
+        method: 'get'
+    })
+}
+
+// 保存渠道基础配置
+export function saveViChannel (data) {
+    return request({
+        url: '/wp-json/wp/v2/vi_channel',
+        data: data,
+        method: 'post'
+    })
+}
