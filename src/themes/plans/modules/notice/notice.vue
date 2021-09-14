@@ -43,8 +43,6 @@ export default {
 
 <style lang="scss" scoped>
 :deep(.notice-swipe) {
-    height: 40px;
     overflow: hidden;
-    line-height: 40px;
 }
 </style>

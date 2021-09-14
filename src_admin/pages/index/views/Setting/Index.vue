@@ -259,148 +259,8 @@
                         </el-col>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane class='tab pay-channel-setting' label='支付通道图片设置'>
-                    <el-row :gutter='20'>
-                        <el-col :offset='0' :span='12'>
-                            <el-tabs v-model='activeName' @tab-click='handleClick'>
-                                <el-tab-pane v-for='i in 10' :key='i' :label='"Alipay"+i' :name='i'>
-                                    <el-card class='box-card'>
-                                        <template #header>
-                                            <div class='card-header'>
-                                                <span class='pay-name'>
-                                                    Alipay{{ i }}
-                                                </span>
-                                                <span>通道logo图片配置</span>
-                                            </div>
-                                        </template>
-                                        <div class='lang-wrap'>
-                                            <el-row :gutter='20'>
-                                                <el-col :offset='0' :span='6'>
-                                                    中文简体
-                                                </el-col>
-                                                <el-col :offset='0' :span='6'>
-                                                    <el-upload
-                                                        action='https://jsonplaceholder.typicode.com/posts/'
-                                                        class='upload-demo'
-                                                        drag
-                                                        multiple
-                                                    >
-                                                        <i class='el-icon-upload'></i>
-                                                        <div class='el-upload__text'>
-                                                            将文件拖到此处，或<em>点击上传</em>
-                                                        </div>
-                                                    </el-upload>
-                                                </el-col>
-                                            </el-row>
-                                            <el-divider />
-                                            <el-row :gutter='20'>
-                                                <el-col :offset='0' :span='6'>
-                                                    中文繁体
-                                                </el-col>
-                                                <el-col :offset='0' :span='6'>
-                                                    <el-upload
-                                                        action='https://jsonplaceholder.typicode.com/posts/'
-                                                        class='upload-demo'
-                                                        drag
-                                                        multiple
-                                                    >
-                                                        <i class='el-icon-upload'></i>
-                                                        <div class='el-upload__text'>
-                                                            将文件拖到此处，或<em>点击上传</em>
-                                                        </div>
-                                                    </el-upload>
-                                                </el-col>
-                                            </el-row>
-                                            <el-divider />
-                                            <el-row :gutter='20'>
-                                                <el-col :offset='0' :span='6'>
-                                                    英文
-                                                </el-col>
-                                                <el-col :offset='0' :span='6'>
-                                                    <el-upload
-                                                        action='https://jsonplaceholder.typicode.com/posts/'
-                                                        class='upload-demo'
-                                                        drag
-                                                        multiple
-                                                    >
-                                                        <i class='el-icon-upload'></i>
-                                                        <div class='el-upload__text'>
-                                                            将文件拖到此处，或<em>点击上传</em>
-                                                        </div>
-                                                    </el-upload>
-                                                </el-col>
-                                            </el-row>
-                                            <el-divider />
-                                        </div>
-                                    </el-card>
-                                </el-tab-pane>
-                            </el-tabs>
-                        </el-col>
-                    </el-row>
-                </el-tab-pane>
             </el-tabs>
         </el-form>
-
-        <el-dialog
-            v-model='plansDialogVisible'
-            :before-close='handleClose'
-            title='玩法&玩法币种'
-            width='40%'
-        >
-            <el-form
-                label-position='right'
-                label-width='100px'
-            >
-                <div v-for='(item) in tradeTypeAssets' :key='item.id' class='tradeType-row'>
-                    <el-checkbox v-model='item.plansChecked' label='' />
-                    <el-card :header='item.name' shadow='always'>
-                        <template v-if="['1','2'].indexOf(item.id)>-1">
-                            <el-form-item label='玩法币种'>
-                                <el-select
-                                    v-model='checkedTradeType[item.id].assets'
-                                    clearable
-                                    filterable
-                                    placeholder='请选择'
-                                >
-                                    <el-option
-                                        v-for='asset in item.assetsList'
-                                        :key='asset.key'
-                                        :label='`${asset.key} - ${asset.label}`'
-                                        :value='asset.key'
-                                    />
-                                </el-select>
-                            </el-form-item>
-                        </template>
-                        <template v-else>
-                            <el-transfer
-                                v-model='checkedTradeType[item.id].assets'
-                                :data='item.assetsList'
-                                :render-content='renderFunc'
-                                :titles='["可选玩法币种", "已选玩法币种"]'
-                            />
-                        </template>
-                        <el-form-item class='sort-row' label='玩法别名'>
-                            <el-input
-                                v-model.number='checkedTradeType[item.id].alias'
-                                placeholder='请输入'
-                            />
-                        </el-form-item>
-                        <el-form-item class='sort-row' label='排序值(升序)'>
-                            <el-input-number
-                                v-model.number='checkedTradeType[item.id].sort'
-                                controls-position='right'
-                                placeholder='请输入'
-                            />
-                        </el-form-item>
-                        <el-form-item v-if="item.id==='5'" class='sort-row' label='是否当钱包使用'>
-                            <el-checkbox v-model='checkedTradeType[item.id].isWallet'>
-                                是
-                            </el-checkbox>
-                        </el-form-item>
-                    </el-card>
-                </div>
-            </el-form>
-        </el-dialog>
     </div>
 </template>
 
@@ -505,7 +365,6 @@ export default {
         this.getPageConfig()
         this.queryCountryList()
         // this.getTradeTypeAssets()
-        this.queryAccountGroupTradeList()
     },
     methods: {
         renderFunc (_, option) {
@@ -716,37 +575,6 @@ export default {
             this.form.languageuri = url
         },
 
-        addFormItem () {
-            this.otherZoneList = this.zoneList.filter(item => {
-                const registIds = this.form.registList.map(el => el.registCountryId)
-                return registIds.indexOf(item.id) === -1
-            })
-
-            this.form.registList.push({})
-        },
-        removeItem (index) {
-            if (index !== 0) {
-                this.form.registList.splice(index, 1)
-            }
-        },
-        setPlans (item) {
-            if (item.registCountryId && item.registCustomerId) {
-                this.plansDialogVisible = true
-                // this.tradeTypeAssets = this.accountTradeList[item.registCustomerId]?.data
-            } else {
-                this.$message({
-                    message: '请先选择国家和客户组',
-                    type: 'warning'
-                })
-            }
-        },
-        queryAccountGroupTradeList () {
-            getAccountGroupTradeList().then(res => {
-                if (res.success && res.data) {
-                    this.accountTradeList = res.data
-                }
-            })
-        }
         // getTradeTypeList () {
         //     this.tradeTypeListLoading = true
         //     getCompanyInfo()

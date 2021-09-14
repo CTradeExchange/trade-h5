@@ -28,6 +28,20 @@
                 <el-form ref='form' label-width='120px' :model='form'>
                     <el-tabs type='border-card'>
                         <el-tab-pane class='tab' label='渠道基础设置'>
+                            <el-form-item label='可注册区号'>
+                                <el-select
+                                    v-model='form.registrable'
+                                    multiple
+                                    placeholder='请输入'
+                                >
+                                    <el-option
+                                        v-for='(item) in zoneList'
+                                        :key='item.id'
+                                        :label='item.name+" ("+item.country_code+")"'
+                                        :value='item.name+" ("+item.country_code+")"'
+                                    />
+                                </el-select>
+                            </el-form-item>
                             <el-form-item
                                 v-for='(item,index) in form.registList'
                                 :key='item.id'
@@ -76,20 +90,7 @@
                                     </el-col>
                                 </el-row>
                             </el-form-item>
-                            <el-form-item label='可注册区号'>
-                                <el-select
-                                    v-model='form.registrable'
-                                    multiple
-                                    placeholder='请输入'
-                                >
-                                    <el-option
-                                        v-for='(item) in zoneList'
-                                        :key='item.id'
-                                        :label='item.name+" ("+item.country_code+")"'
-                                        :value='item.name+" ("+item.country_code+")"'
-                                    />
-                                </el-select>
-                            </el-form-item>
+
                             <el-form-item label='默认注册区号'>
                                 <el-select
                                     v-model='form.defaultZone'
@@ -314,7 +315,7 @@
 
 <script>
 import { getAccountGroupTradeAssetsList, queryCountryList } from '@index/Api/editor'
-import { lang } from './config/lang'
+import { lang } from '../../config/lang'
 import { keyBy, forOwn, isPlainObject, compact } from 'lodash'
 export default {
     name: 'ChannelSetting',
@@ -354,6 +355,7 @@ export default {
             registrable: [],
             lang,
             supportLang: [],
+            supportArea: [],
             zoneList: [],
             otherZoneList: [],
             plansDialogVisible: false,
@@ -423,6 +425,22 @@ export default {
                         assetsList: customerGroupAssets
                     }
                 })
+            }
+        },
+        submit () {
+
+        },
+        addFormItem () {
+            this.otherZoneList = this.zoneList.filter(item => {
+                const registIds = this.form.registList.map(el => el.registCountryId)
+                return registIds.indexOf(item.id) === -1
+            })
+
+            this.form.registList.push({})
+        },
+        removeItem (index) {
+            if (index !== 0) {
+                this.form.registList.splice(index, 1)
             }
         },
     }
