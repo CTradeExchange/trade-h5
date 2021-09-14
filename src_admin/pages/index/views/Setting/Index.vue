@@ -479,7 +479,7 @@ export default {
             tradeTypeAccountAssets({}).then(res => {
                 const { data, success } = res
                 // const tradeTypeAssetsList = []
-                // debugger
+
                 if (success && Array.isArray(data)) {
                     this.tradeTypeList = data.map(el => ({ id: el.id, name: el.name }))
                     const tempCheckedTradeType = {}
@@ -518,7 +518,6 @@ export default {
                         this.$message.error(res.message)
                         return
                     }
-                    // debugger
                     let content = res.data.content && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.content) : {}
                     content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
                     this.$refs.tree.setCheckedKeys(content.disabledProvince || [])
@@ -537,7 +536,7 @@ export default {
                             content.tradeTypeList.forEach(el => {
                                 const { allCurrency, sort, alias, isWallet } = tradeTypeCurrencyEumn[String(el.id)]
                                 cacheCheckedTradeType[String(el.id)] = {
-                                    assets: ['1', '2'].indexOf(String(el.id)) > -1 ? allCurrency : (typeof (allCurrency) === 'string' ? allCurrency.split(',') : []),
+                                    assets: ['1', '2'].indexOf(String(el.id)) > -1 ? allCurrency : (typeof (allCurrency) === 'string' ? allCurrency.split(',') : allCurrency),
                                     sort,
                                     isWallet,
                                     alias
@@ -552,9 +551,9 @@ export default {
                         }
                         // this.checkedTradeTypeAssets = initTradeTypeAssets
                         // this.tradeTypeSort = initSortTradeType
-                        // debugger
+
                         this.checkedTradeType = cacheCheckedTradeType
-                        this.tradeTypeCurrencyCollect = content.tradeTypeList.map(el => ({ id: el.id, name: el.name, currencyList: tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency.split(',') : [] }))
+                        this.tradeTypeCurrencyCollect = content.tradeTypeList.map(el => ({ id: el.id, name: el.name, currencyList: tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency : [] }))
                         // this.accountCurrencyList = this.form.currencyList
                         // this.form.tradeTypeList = this.form.tradeTypeList && JSON.stringify(this.form.tradeTypeList)
                         // this.form.currencyList = this.form.currencyList && JSON.stringify(this.form.currencyList)
@@ -578,7 +577,7 @@ export default {
         submit () {
             return new Promise((resolve, reject) => {
                 // console.log(this.tradeTypeCurrencyCollect)
-                // debugger
+
                 this.submitLoading = true
                 const _other = JSON.stringify(this.form.other)
                 console.log(_other)
@@ -587,14 +586,15 @@ export default {
                 try {
                     // _formData.tradeTypeList = JSON.parse(_formData.tradeTypeList)
                     // _formData.currencyList = JSON.parse(_formData.currencyList)
-                    // debugger
+
                     // console.log('this.checkedTradeTypeAssets-', this.checkedTradeTypeAssets)
+
                     const tempTradeTypeCurrencyList = this.tradeTypeList.map(el => {
                         const { assets, sort, alias, isWallet } = this.checkedTradeType[String(el.id)]
                         if (['1', '2'].indexOf(String(el.id)) > -1) {
                             return { id: el.id, name: el.name, sort, allCurrency: assets || '', alias, isWallet }
                         } else {
-                            return { id: el.id, name: el.name, sort, allCurrency: assets ? compact(assets).join(',') : [], alias, isWallet }
+                            return { id: el.id, name: el.name, sort, allCurrency: assets ? compact(assets) : [], alias, isWallet }
                         }
                     })
                     tempTradeTypeCurrencyList.sort(function (a, b) {
@@ -672,7 +672,7 @@ export default {
         //                 !this.form.customerGroupId ? this.form.customerGroupId = res.data.customerGroupId : null
 
         //                 try {
-        //                     // debugger
+        //
         //                     if (this.form.tradeTypeList === '' && Array.isArray(res.data.tradeTypeList)) {
         //                         // this.form.tradeTypeList = JSON.stringify(res.data.tradeTypeList)
         //                         this.form.tradeTypeList = res.data.currencyList
