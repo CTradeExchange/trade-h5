@@ -431,8 +431,10 @@ export default {
                     secondForm.push(item)
                 } else {
                     elementConfig.formConfig.push(item)
-                    if (item.type === 'Href' || item.type === 'Product') {
+                    if (item.type === 'Product') {
                         elementConfig.data[item.name] = item.default || {}
+                    } else if (item.type === 'Href') {
+                        elementConfig.data[item.name] = item.default || { params: {}, query: {} }
                     } else {
                         elementConfig.data[item.name] = item.default
                     }
@@ -448,8 +450,10 @@ export default {
                         nextElement.push(nextListItem)
                     } else {
                         curElement.push(nextListItem)
-                        if (nextListItem.type === 'Href' || nextListItem.type === 'Product') {
+                        if (nextListItem.type === 'Product') {
                             form[nextListItem.name] = nextListItem.default || {}
+                        } else if (nextListItem.type === 'Href') {
+                            form[nextListItem.name] = nextListItem.default || { params: {}, query: {} }
                         } else {
                             form[nextListItem.name] = nextListItem.default
                         }
@@ -459,8 +463,10 @@ export default {
                 const nextForm = {}
                 nextElement.forEach(nextItem => {
                     nextItem.config.forEach(nextListItem => {
-                        if (nextListItem.type === 'Href' || nextListItem.type === 'Product') {
+                        if (nextListItem.type === 'Product') {
                             nextForm[nextListItem.name] = nextListItem.default || {}
+                        } else if (nextListItem.type === 'Href') {
+                            nextForm[nextListItem.name] = nextListItem.default || { params: {}, query: {} }
                         } else {
                             nextForm[nextListItem.name] = nextListItem.default
                         }

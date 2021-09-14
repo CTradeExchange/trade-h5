@@ -1,24 +1,17 @@
 <template>
     <div class='page-wrap'>
         <PageComp :data='pageModules' />
-        <!-- <Person />
-        <Menulist /> -->
     </div>
 </template>
 
 <script>
-import { pageConfig } from '@/api/wpApi'
-import Person from './components/person'
-import Menulist from './components/menulist'
 import { ref } from 'vue'
+import { useStore } from 'vuex'
 export default {
-    components: {
-        Person,
-        Menulist,
-    },
     setup () {
         const pageModules = ref([])
-        pageConfig('Mine').then(res => {
+        const store = useStore()
+        store.dispatch('_base/getPageConfig', 'Mine').then(res => {
             console.log(res)
             pageModules.value = res
         })

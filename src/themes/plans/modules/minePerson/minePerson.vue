@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="userAccountType==='G'" class='mineGuest'>
-            <img class='faceImg' src='../../images/face.png' />
+            <img class='faceImg' :src='faceImg' />
             <div class='guestBts'>
                 <button class='btn' @click="$router.push('/login')">
                     {{ $t('cRoute.login') }}
@@ -13,7 +13,7 @@
         </div>
         <div v-else class='personInfo'>
             <div class='personNo' @click="$router.push('/personal')">
-                <img class='faceImg' src='../../images/face.png' />
+                <img class='faceImg' :src='faceImg' />
                 <div v-if='customerInfo' class='customerNo'>
                     <p>
                         {{ customerInfo.customerNo }}
@@ -24,8 +24,9 @@
                     </span> -->
                 </div>
             </div>
-            <div class='capitalImg'>
-                <img alt='' src='/images/minePlace.png' />
+            <div v-if='data.src' class='capitalImg'>
+                <!-- <img alt='' src='/images/minePlace.png' /> -->
+                <ImgComp :data='data' />
             </div>
         </div>
         <Fund v-if='fundVis' :show='fundVis' @update:show='updateShow' />
@@ -34,14 +35,27 @@
 
 <script>
 import Fund from '@plans/components/fund'
+import ImgComp from '../img/img'
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
+const faceImgDefault = require('@plans/images/face.png')
 export default {
     components: {
         Fund,
+        ImgComp,
     },
-    setup () {
+    props: {
+        data: {
+            type: Object,
+            default () {
+                return {}
+            }
+        }
+    },
+    setup (props) {
         const store = useStore()
+        const faceImg = props.faceImg || faceImgDefault
+        const adImg = props.src
         const userAccountType = computed(() => store.getters['_user/userAccountType'])
         const customerInfo = computed(() => store.state._user.customerInfo)
         const assets = computed(() => store.state._user.accountAssets)
@@ -52,6 +66,7 @@ export default {
         }
         return {
             ...toRefs(state),
+            faceImg,
             userAccountType,
             updateShow,
             customerInfo,

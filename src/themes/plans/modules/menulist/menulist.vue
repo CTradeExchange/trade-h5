@@ -7,7 +7,6 @@
                 class='cellItem'
                 :is-link='item.isLink'
                 :title='item.title'
-                value=''
                 @click='open(item)'
             >
                 <template #icon>
@@ -27,14 +26,12 @@
                 </template>
                 <template #value>
                     <van-tag v-if='item.value' round :type='item.valueStyle'>
-                        <template>
-                            <span v-if='!h5Preview && item.dataKey'>
-                                {{ $store.getters[item.dataKey] }}
-                            </span>
-                            <span v-else-if='item.value'>
-                                {{ item.value }}
-                            </span>
-                        </template>
+                        <span v-if='!h5Preview && item.dataKey'>
+                            {{ $store.getters[item.dataKey] }}
+                        </span>
+                        <span v-else-if='item.value'>
+                            {{ item.value }}
+                        </span>
                     </van-tag>
                 </template>
             </van-cell>
@@ -63,8 +60,14 @@ export default {
         }
     },
     computed: {
+        userAccountType () {
+            return this.$store.getters['_user/userAccountType']
+        },
         cellList () {
-            return this.data.items.map(el => {
+            const userAccountType = this.userAccountType
+            let list = this.data.items
+            if (!this.h5Preview) list = list.filter(item => item.accountType.includes(userAccountType))
+            return list.map(el => {
                 let dataKey = null
                 const reg = /\{\{(\w+)\}\}/
                 if (el.value && el.value.trim().match(reg)) {
@@ -76,7 +79,13 @@ export default {
     },
     methods: {
         open (item) {
-            this.$router.push(item.href)
+            const toRoute = item.href
+            if (toRoute.name === 'Nest') {
+                toRoute.params.type = 'otherPage'
+                this.$router.push(toRoute)
+            } else {
+                this.$router.push({ name: toRoute.name })
+            }
         }
     },
 }

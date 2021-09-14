@@ -15,7 +15,6 @@
                 />
             </el-select>
         </el-form-item>
-        {{ elementConfig }}
         <template v-if='elementConfig && elementConfig.length > 0'>
             <el-divider content-position='center'>
                 {{ config.label }}-参数开始

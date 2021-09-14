@@ -161,6 +161,14 @@ const routes = [
         }
     },
     {
+        path: '/otherpage/:type',
+        name: 'Nest',
+        component: () => import(/* webpackChunkName: "otherpage" */ '../views/otherpage/otherpage.vue'),
+        meta: {
+            title: ''
+        }
+    },
+    {
         path: '/trustDetail',
         name: 'TrustDetail',
         component: () => import(/* webpackChunkName: "otherpage" */ '../views/orderList/trustDetail.vue'),

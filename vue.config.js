@@ -104,7 +104,7 @@ if (isAdminMode) {
 
 const config = {
     productionSourceMap: false,
-    publicPath: process.env.NODE_ENV === 'production' && isAdminMode ? '/wp-content/plugins/cats-manage/skin/skin_2/editor/' : '/', // static/
+    publicPath: process.env.NODE_ENV === 'production' && isAdminMode ? `/wp-content/plugins/cats-manage/skin/skin_${theme}/editor/` : '/', // static/
     // indexPath: isAdminMode ? 'index.html' : 'index_template.html', // 就是这条
     lintOnSave: false,
     outputDir: isAdminMode ? './build_folder/admin' : './build_folder/dist',

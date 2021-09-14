@@ -1,5 +1,6 @@
 import { pageConfig, wpCompanyConfig, wpNav, wpSelfSymbolIndex } from '@/api/wpApi'
 import { localSet, localGet, sessionSet } from '@/utils/util'
+import dayjs from 'dayjs'
 
 export default {
     namespaced: true,
@@ -85,6 +86,19 @@ export default {
             return pageConfig('TradeIndex').then(data => {
                 if (data) commit('Update_wpProductCategory', data)
                 return data
+            })
+        },
+        // 获取页面模块列表
+        getPageConfig ({ commit, rootGetters }, pageName) {
+            return pageConfig(pageName).then(modulesList => {
+                const userAccountType = rootGetters['_user/userAccountType']
+                const _result = modulesList.filter(item => {
+                    const { accountType, expiryDate } = item.data
+                    const hasRole = accountType.includes(userAccountType)
+                    const inActiveTime = expiryDate?.length === 0 ? true : dayjs().isBetween(expiryDate[0], expiryDate[1])
+                    return hasRole && inActiveTime
+                })
+                return _result
             })
         },
     }

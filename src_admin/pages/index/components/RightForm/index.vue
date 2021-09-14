@@ -300,7 +300,7 @@ export default {
                 const newSelfData = { ...this.tradeTypeSelfSymbol }
                 newSelfData[type] = data
                 this.$store.commit('editor/UPDATE_TRADETYPE_SELFSYMBOL', newSelfData)
-            } else {
+            } else if (key === 'tradeTypeBlock') {
                 const newData = [...this.tradeTypeCollect]
                 if (newData[this.blockIndex]) {
                     newData[this.blockIndex][type] = data
@@ -308,8 +308,9 @@ export default {
                     newData[this.blockIndex] = { [type]: data }
                 }
                 this.$store.commit('editor/UPDATE_TRADETYPE_BLOCK_COLLECT', newData)
+            } else {
+                this.$store.commit('editor/UPDATE_FORM_DATA', { key, value: data })
             }
-
             // const newTradeTypeData = { ...this.activeData['tradeTypeCollect'], [type]: data }
 
             // this.$store.commit('editor/UPDATE_FORM_DATA', { key: 'tradeTypeCollect', value: newTradeTypeData })

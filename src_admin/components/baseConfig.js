@@ -11,12 +11,12 @@ export const common = [
             { value: 'R_2', label: '已入金' }
         ]
     },
-    {
-        name: 'expiryDate',
-        label: '有效期',
-        type: 'DatePicker',
-        default: []
-    }
+    // {
+    //     name: 'expiryDate',
+    //     label: '有效期',
+    //     type: 'DatePicker',
+    //     default: []
+    // }
 ]
 export const img = [
     {

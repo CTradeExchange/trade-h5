@@ -30,17 +30,17 @@ export default [
         title: '搜索产品'
     },
     {
-        name: 'Certified',
+        name: 'Personal',
         title: '个人资料'
     },
     {
         name: 'ResetPwd',
         title: '修改密码'
     },
-    {
-        name: 'FundingDetails',
-        title: '资金明细'
-    },
+    // {
+    //     name: 'FundingDetails',
+    //     title: '资金明细'
+    // },
     {
         name: 'Nest',
         title: '外部地址',

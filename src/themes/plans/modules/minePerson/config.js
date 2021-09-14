@@ -1,4 +1,4 @@
-import { common } from '@admin/components/baseConfig'
+import { img } from '@admin/components/baseConfig'
 export default {
     title: '我的个人信息',
     tag: 'minePerson',
@@ -6,6 +6,12 @@ export default {
     tagIcon: 'el-icon-star-on',
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
-
+        {
+            name: 'faceImg',
+            label: '默认头像',
+            type: 'File',
+            default: ''
+        },
+        ...img,
     ]
 }
