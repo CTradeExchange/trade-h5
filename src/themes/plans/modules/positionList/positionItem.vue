@@ -45,8 +45,8 @@
                                 <div class='title'>
                                     {{ $t('trade.currentPrice') }}
                                 </div>
-                                <div :class='[Number(data.direction) === 1 ? product.sell_color : product.buy_color]'>
-                                    {{ Number(data.direction) === 1 ? product.sell_price : product.buy_price }}
+                                <div :class='[Number(data.direction) === 1 ? product?.sell_color : product?.buy_color]'>
+                                    {{ Number(data.direction) === 1 ? product?.sell_price : product?.buy_price }}
                                 </div>
                             </div>
                         </div>
@@ -154,7 +154,7 @@
 </template>
 
 <script>
-import { computed, reactive, toRefs, onMounted } from 'vue'
+import { computed, reactive, toRefs, onMounted, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { minus } from '@/utils/calculation'
@@ -192,9 +192,8 @@ export default {
             router.push({ path: '/product', query: { symbolId, tradeType: tradeType.value } })
         }
 
-        onMounted(() => {
-            // 默认展开第一个
-            if (positionList.value.length > 0) { state.activeNames = positionList.value[0].positionId }
+        watchEffect(() => {
+            if (positionList.value?.length > 0) { state.activeNames = positionList.value[0].positionId }
         })
 
         return {
