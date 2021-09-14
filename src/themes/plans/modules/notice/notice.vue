@@ -5,6 +5,7 @@
                 :autoplay='3000'
                 class='notice-swipe'
                 :show-indicators='false'
+                style='height: 20px;'
                 vertical
             >
                 <van-swipe-item>17:23:36 150****5969 激活账户，获赠200美元；</van-swipe-item>
@@ -41,8 +42,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.notice-swipe {
-    height: 40px;
-    line-height: 40px;
+:deep(.notice-swipe) {
+    overflow: hidden;
 }
 </style>

@@ -68,7 +68,7 @@
                                 />
                             </el-form-item>
 
-                            <el-form-item label='是否更新产品信息'>
+                            <el-form-item label='是否更新产品信息' label-width='120'>
                                 <el-radio-group v-model='form.other.isInitSymbol'>
                                     <el-radio label='1'>
                                         是
@@ -97,6 +97,7 @@
                                     placeholder='请输入'
                                 />
                             </el-form-item>
+
                             <!-- <el-form-item label='玩法'>
                                 <div class='play-settings'>
                                     <div class='p-left'>
@@ -124,60 +125,7 @@
                                     type='textarea'
                                 />
                             </el-form-item> -->
-                            <el-form-item label='玩法&玩法币种'>
-                                <div v-for='(item) in tradeTypeAssets' :key='item.id' class='tradeType-row'>
-                                    <el-card :header='item.name' shadow='always'>
-                                        <template v-if="['1','2'].indexOf(item.id)>-1">
-                                            <el-form-item label='玩法币种'>
-                                                <el-select
-                                                    v-model='checkedTradeType[item.id].assets'
-                                                    clearable
-                                                    placeholder='请选择'
-                                                >
-                                                    <el-option
-                                                        v-for='asset in item.assetsList'
-                                                        :key='asset.key'
-                                                        :label='`${asset.key} - ${asset.label}`'
-                                                        :value='asset.key'
-                                                    />
-                                                </el-select>
-                                            </el-form-item>
-                                        </template>
-                                        <template v-else>
-                                            <el-transfer
-                                                v-model='checkedTradeType[item.id].assets'
-                                                :data='item.assetsList'
-                                                :render-content='renderFunc'
-                                                :titles='["可选玩法币种", "已选玩法币种"]'
-                                            />
-                                        </template>
-                                        <el-form-item class='sort-row' label='玩法别名'>
-                                            <el-input
-                                                v-model.number='checkedTradeType[item.id].alias'
-                                                placeholder='请输入'
-                                            />
-                                        </el-form-item>
-                                        <el-form-item class='sort-row' label='排序值(升序)'>
-                                            <el-input-number
-                                                v-model.number='checkedTradeType[item.id].sort'
-                                                controls-position='right'
-                                                placeholder='请输入'
-                                            />
-                                        </el-form-item>
-                                        <el-form-item v-if="item.id==='5'" class='sort-row' label='是否当钱包使用'>
-                                            <el-checkbox v-model='checkedTradeType[item.id].isWallet'>
-                                                是
-                                            </el-checkbox>
-                                        </el-form-item>
-                                    </el-card>
-                                </div>
-                            </el-form-item>
-                            <el-form-item label='信息流 orgid'>
-                                <el-input
-                                    v-model='form.orgid'
-                                    placeholder='请输入'
-                                />
-                            </el-form-item>
+
                             <el-form-item label='apiService'>
                                 <el-input
                                     v-model='form.apiService'
@@ -215,29 +163,7 @@
                                     placeholder='请输入'
                                 />
                             </el-form-item>
-                            <el-form-item label='GA埋点代码'>
-                                <el-input
-                                    v-model='form.googleAnalytics'
-                                    placeholder='请输入'
-                                    :row='5'
-                                    type='textarea'
-                                />
-                            </el-form-item>
-                            <el-form-item label='语言'>
-                                <el-select
-                                    v-model='form.language'
-                                    placeholder='请输入'
-                                >
-                                    <el-option
-                                        label='中文'
-                                        value='zh-CN'
-                                    />
-                                    <el-option
-                                        label='英文'
-                                        value='EN'
-                                    />
-                                </el-select>
-                            </el-form-item>
+
                             <File
                                 :active-data='form.languageuri'
                                 :config="{ label: '语言包地址' }"
@@ -266,19 +192,7 @@
                                     />
                                 </el-select>
                             </el-form-item> -->
-                            <el-form-item label='默认注册区号'>
-                                <el-select
-                                    v-model='form.defaultZone'
-                                    placeholder='请输入'
-                                >
-                                    <el-option
-                                        v-for='(item) in zoneList'
-                                        :key='item.id'
-                                        :label='item.name+" ("+item.country_code+")"'
-                                        :value='item.name+" ("+item.country_code+")"'
-                                    />
-                                </el-select>
-                            </el-form-item>
+
                             <el-form-item label='web API地址'>
                                 <el-input
                                     v-model='form.webApiUri'
@@ -297,29 +211,10 @@
                                     placeholder='请输入'
                                 />
                             </el-form-item>
-                            <el-form-item label='H5地址'>
-                                <el-input
-                                    v-model='form.other.h5Address'
-                                    placeholder='请输入'
-                                />
-                            </el-form-item>
-                            <el-form-item label='H5预览地址'>
-                                <el-input
-                                    v-model='form.other.h5PreviewAddress'
-                                    placeholder='请输入'
-                                />
-                            </el-form-item>
-                            <el-form-item label='在线客服地址'>
-                                <el-input
-                                    v-model='form.onlineService'
-                                    placeholder='请输入'
-                                    type='textarea'
-                                />
-                            </el-form-item>
                         </el-col>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane class='tab' label='其他设置'>
+                <el-tab-pane class='tab' label='禁用开户地区设置'>
                     <el-row class='row'>
                         <el-form-item label='ip禁用提示语'>
                             <el-input
@@ -370,12 +265,13 @@
 </template>
 
 <script>
-import { getPageConfig, modifyPageConfig, pushPage, queryCountryList, tradeTypeAccountAssets } from '@index/Api/editor'
+import { getPageConfig, modifyPageConfig, pushPage, queryCountryList, tradeTypeAccountAssets, getAccountGroupTradeList } from '@index/Api/editor'
 import File from '@index/components/RightForm/File'
 import city from './data/city.json'
 import province from './data/province.json'
 import { deepClone } from '@utils/deepClone'
 import { keyBy, forOwn, isPlainObject, compact } from 'lodash'
+import { Toast } from 'vant'
 const treeData = province.map(province => {
     const children = city.filter(item => (item.province === province.province))
     if (children.length > 0) {
@@ -424,8 +320,10 @@ export default {
                 // currencyList: '',
                 defaultZone: '',
                 appVersion: '1.0.0',
+
             },
             zoneList: [],
+            otherZoneList: [],
             publishLoading: false,
             treeData: treeData,
             defaultPropsTree: {
@@ -436,7 +334,18 @@ export default {
             getLoading: false,
             pageData: {},
             utcOffsetList: [-12, 13],
-            tradeTypeListLoading: false
+            tradeTypeListLoading: false,
+            customerGroupList: [{
+                label: '默认客户组',
+                value: 1
+            }, {
+                label: 'VIP客户组',
+                value: 2
+
+            }],
+            plansDialogVisible: false,
+            activeName: 1,
+            accountTradeList: []
         }
     },
     watch: {
@@ -455,7 +364,7 @@ export default {
         this.createTimezoneList()
         this.getPageConfig()
         this.queryCountryList()
-        this.getTradeTypeAssets()
+        // this.getTradeTypeAssets()
     },
     methods: {
         renderFunc (_, option) {
@@ -472,6 +381,7 @@ export default {
                 if (res.success && res.data?.length) {
                     const list = res.data
                     this.zoneList = list
+                    this.otherZoneList = list
                 }
             })
         },
@@ -479,7 +389,7 @@ export default {
             tradeTypeAccountAssets({}).then(res => {
                 const { data, success } = res
                 // const tradeTypeAssetsList = []
-                // debugger
+
                 if (success && Array.isArray(data)) {
                     this.tradeTypeList = data.map(el => ({ id: el.id, name: el.name }))
                     const tempCheckedTradeType = {}
@@ -518,7 +428,7 @@ export default {
                         this.$message.error(res.message)
                         return
                     }
-                    // debugger
+
                     let content = res.data.content && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.content) : {}
                     content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
                     this.$refs.tree.setCheckedKeys(content.disabledProvince || [])
@@ -552,7 +462,7 @@ export default {
                         }
                         // this.checkedTradeTypeAssets = initTradeTypeAssets
                         // this.tradeTypeSort = initSortTradeType
-                        // debugger
+
                         this.checkedTradeType = cacheCheckedTradeType
                         this.tradeTypeCurrencyCollect = content.tradeTypeList.map(el => ({ id: el.id, name: el.name, currencyList: tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency.split(',') : [] }))
                         // this.accountCurrencyList = this.form.currencyList
@@ -578,16 +488,17 @@ export default {
         submit () {
             return new Promise((resolve, reject) => {
                 // console.log(this.tradeTypeCurrencyCollect)
-                // debugger
+
                 this.submitLoading = true
                 const _other = JSON.stringify(this.form.other)
                 console.log(_other)
                 const _formData = deepClone(this.form)
                 delete _formData.other
+
                 try {
                     // _formData.tradeTypeList = JSON.parse(_formData.tradeTypeList)
                     // _formData.currencyList = JSON.parse(_formData.currencyList)
-                    // debugger
+
                     // console.log('this.checkedTradeTypeAssets-', this.checkedTradeTypeAssets)
                     const tempTradeTypeCurrencyList = this.tradeTypeList.map(el => {
                         const { assets, sort, alias, isWallet } = this.checkedTradeType[String(el.id)]
@@ -663,6 +574,7 @@ export default {
         updateBackground (url) {
             this.form.languageuri = url
         },
+
         // getTradeTypeList () {
         //     this.tradeTypeListLoading = true
         //     getCompanyInfo()
@@ -672,7 +584,7 @@ export default {
         //                 !this.form.customerGroupId ? this.form.customerGroupId = res.data.customerGroupId : null
 
         //                 try {
-        //                     // debugger
+        //
         //                     if (this.form.tradeTypeList === '' && Array.isArray(res.data.tradeTypeList)) {
         //                         // this.form.tradeTypeList = JSON.stringify(res.data.tradeTypeList)
         //                         this.form.tradeTypeList = res.data.currencyList
@@ -749,10 +661,27 @@ export default {
         }
     }
     .tradeType-row {
+        display: flex;
+        align-items: center;
         margin-bottom: 20px;
+        .el-checkbox {
+            margin-right: 50px;
+        }
     }
     .sort-row {
         margin-top: 10px;
+    }
+    .pay-channel-setting {
+        .card-header {
+            .pay-name {
+                font-weight: bold;
+            }
+        }
+        .lang-wrap {
+            .el-row{
+
+            }
+        }
     }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class='m-file'>
         <el-form-item :label='config.label'>
-            <el-input v-model='activeData' placeholder='请输入' @input='input'>
+            <el-input v-model='imgUrl' placeholder='请输入' @input='input'>
                 <template #append>
                     <el-button
                         icon='el-icon-upload'
@@ -32,6 +32,7 @@ export default {
     },
     data () {
         return {
+            imgUrl: this.activeData
         }
     },
     mounted () {

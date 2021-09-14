@@ -141,6 +141,8 @@ export function updateDataToH5IndexView (data) {
         method: 'get'
     })
 }
+
+// 回滚版本
 export function rollBackReleasePage (data) {
     return request({
         url: '/wp-json/wp/v2/rollBackReleasePage',
@@ -162,5 +164,32 @@ export function queryCountryList (data) {
         url: '/wp-json/wp/v2/queryCountryList',
         data: data,
         method: 'get'
+    })
+}
+
+// 获取客户组玩法列表
+export function getAccountGroupTradeAssetsList (data) {
+    return request({
+        url: '/wp-json/wp/v2/getAccountGroupTradeAssetsList',
+        data: data,
+        method: 'get'
+    })
+}
+
+// 查询渠道基础配置
+export function getViChannel (data) {
+    return request({
+        url: '/wp-json/wp/v2/vi_channel?id=' + data,
+        params: {},
+        method: 'get'
+    })
+}
+
+// 保存渠道基础配置
+export function saveViChannel (data) {
+    return request({
+        url: '/wp-json/wp/v2/vi_channel',
+        data: data,
+        method: 'post'
     })
 }

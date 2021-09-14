@@ -72,9 +72,11 @@ export default {
             showSetProfit: false
         })
 
-        const tradeType = computed(() => store.state._quote.curTradeType)
+        // 获取玩法列表
+        const plans = computed(() => store.state._base.plans)
+        const tradeType = computed(() => store.state._quote.curTradeType || plans.value[0].id)
 
-        const positionList = computed(() => store.state._trade.positionList[tradeType.value] ?? [])
+        const positionList = computed(() => store.state._trade.positionList[Number(tradeType.value)] ?? [])
 
         const userAccount = computed(() => store.state._user.accountAssets[tradeType.value])
 
