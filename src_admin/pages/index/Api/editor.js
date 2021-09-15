@@ -3,7 +3,9 @@ export function getPageConfig (id) {
     return request({
         url: '/wp-json/wp/v2/vi_page/',
         params: {
-            page_code: id
+            page_code: id,
+            language: 'zh',
+            channelId: 1
         },
         method: 'get'
     })

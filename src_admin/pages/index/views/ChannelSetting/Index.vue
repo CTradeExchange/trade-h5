@@ -33,13 +33,14 @@
                                     v-model='form.registrable'
                                     multiple
                                     placeholder='请输入'
+                                    value-key='id'
                                     @change='changeSupportArea'
                                 >
                                     <el-option
                                         v-for='(item) in zoneList'
                                         :key='item.id'
                                         :label='item.name+" ("+item.country_code+")"'
-                                        :value='item.name+" ("+item.country_code+")"'
+                                        :value='item'
                                     />
                                 </el-select>
                             </el-form-item>
@@ -79,7 +80,7 @@
                                         </el-select>
                                     </el-col>
                                     <el-col :span='12'>
-                                        <el-button type='primary' @click='setPlans(item)'>
+                                        <el-button type='primary' @click='setPlans(item,index)'>
                                             设置玩法币种
                                         </el-button>
                                         <el-button v-if='index === 0' type='primary' @click='addFormItem'>
@@ -96,12 +97,13 @@
                                 <el-select
                                     v-model='form.defaultZone'
                                     placeholder='请输入'
+                                    value-key='country_code'
                                 >
                                     <el-option
                                         v-for='(item) in otherZoneList'
                                         :key='item.id'
                                         :label='item.name+" ("+item.country_code+")"'
-                                        :value='item.name+" ("+item.country_code+")"'
+                                        :value='item'
                                     />
                                 </el-select>
                             </el-form-item>
@@ -110,13 +112,14 @@
                                     v-model='form.supportLanguage'
                                     multiple
                                     placeholder='请输入'
+                                    value-key='val'
                                     @change='changeSupportLanguage'
                                 >
                                     <el-option
                                         v-for='item in lang'
                                         :key='item.val'
                                         :label='item.label'
-                                        :value='item.val'
+                                        :value='item'
                                     />
                                 </el-select>
                             </el-form-item>
@@ -124,12 +127,13 @@
                                 <el-select
                                     v-model='form.language'
                                     placeholder='请输入'
+                                    value-key='val'
                                 >
                                     <el-option
-                                        v-for='item in supportLang'
+                                        v-for='item in filterLang'
                                         :key='item.val'
                                         :label='item.label'
-                                        :value='item.val'
+                                        :value='item'
                                     />
                                 </el-select>
                             </el-form-item>
@@ -252,7 +256,6 @@
         </el-row>
         <el-dialog
             v-model='plansDialogVisible'
-            :before-close='handleClose'
             title='玩法&玩法币种'
             width='40%'
         >
@@ -261,7 +264,7 @@
                 label-width='100px'
             >
                 <div v-for='(item) in tradeTypeAssets' :key='item.id' class='tradeType-row'>
-                    <el-checkbox v-model='item.plansChecked' label='' size='medium' />
+                    <el-checkbox v-model='checkedTradeType[item.id].plansChecked' class='choose-checkbox' label='' size='medium' />
                     <el-card :header='item.name' shadow='always'>
                         <template v-if="['1','2'].indexOf(item.id)>-1">
                             <el-form-item label='玩法币种'>
@@ -310,6 +313,16 @@
                     </el-card>
                 </div>
             </el-form>
+            <template #footer>
+                <span class='dialog-footer'>
+                    <el-button @click='plansDialogVisible = false'>
+                        取 消
+                    </el-button>
+                    <el-button type='primary' @click='handleSavePlans'>
+                        确 定
+                    </el-button>
+                </span>
+            </template>
         </el-dialog>
     </div>
 </template>
@@ -329,15 +342,14 @@ export default {
                 h5PreviewAddress: '',
                 orgid: '',
                 defaultZone: '',
-                appVersion: '1.0.0',
                 registList: [{}],
-                onlineService: ''
-
+                onlineService: '',
+                supportLanguage: []
             },
             accountTradeList: [],
             registrable: [],
             lang,
-            supportLang: [],
+            filterLang: [],
             supportArea: [],
             zoneList: [],
             otherZoneList: [],
@@ -346,7 +358,9 @@ export default {
             tradeTypeList: [],
             checkedTradeType: {},
             submitLoading: false,
-            pageId: ''
+            pageId: '',
+            curIndex: '', // 注册客户组当前操作项
+            getLoading: false
         }
     },
     created () {
@@ -364,43 +378,18 @@ export default {
                     return
                 }
 
-                let content = res.data.content && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.content) : {}
+                let content = res.data.content ? JSON.parse(res.data.content) : {}
                 content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
+
+                console.log('渠道配置', content)
 
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                 this.form = Object.assign(this.form, content, { other })
-
-                try {
-                    let tradeTypeCurrencyEumn = {}
-                    if (Array.isArray(content?.tradeTypeCurrencyList)) {
-                        tradeTypeCurrencyEumn = keyBy(content.tradeTypeCurrencyList, 'id')
-                    }
-                    const cacheCheckedTradeType = {}
-                    if (Array.isArray(content.tradeTypeList)) {
-                        content.tradeTypeList.forEach(el => {
-                            const { allCurrency, sort, alias, isWallet } = tradeTypeCurrencyEumn[String(el.id)]
-                            cacheCheckedTradeType[String(el.id)] = {
-                                assets: ['1', '2'].indexOf(String(el.id)) > -1 ? allCurrency : (typeof (allCurrency) === 'string' ? allCurrency.split(',') : []),
-                                sort,
-                                isWallet,
-                                alias
-                            }
-                        })
-                    }
-
-                    this.checkedTradeType = cacheCheckedTradeType
-                    this.tradeTypeCurrencyCollect = content.tradeTypeList.map(el => ({ id: el.id, name: el.name, currencyList: tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency.split(',') : [] }))
-                } catch (error) {
-                    console.error(error)
-                }
-
-                this.pageData = res.data
             }).catch(error => {
                 console.log(error)
+            }).finally(() => {
+                this.getLoading = false
             })
-                .finally(() => {
-                    this.getLoading = false
-                })
         },
         queryAccountGroupTradeList () {
             getAccountGroupTradeAssetsList().then(res => {
@@ -410,10 +399,14 @@ export default {
             })
         },
         changeSupportLanguage (val) {
-            this.supportLang = this.lang.filter(el => val.includes(el.val))
+            this.filterLang = this.lang.filter(el => val.find(zo => zo.val === el.val))
         },
         changeSupportArea (val) {
-            this.otherZoneList = this.zoneList.filter(el => val.includes(el.name + ' (' + el.country_code + ')'))
+            debugger
+            this.otherZoneList = this.zoneList.filter(el =>
+                val.find(zo => zo.id === el.id)
+            )
+            // this.otherZoneList = this.zoneList.filter(el => val.includes(el.name + ' (' + el.country_code + ')'))
         },
         // 获取国家区号列表
         queryCountryList () {
@@ -425,7 +418,9 @@ export default {
                 }
             })
         },
-        setPlans (item) {
+        setPlans (item, index) {
+            this.checkedTradeType = this.form.registList[index]?.plans
+            this.curIndex = index
             if (item.registCountryId && item.registCustomerId) {
                 this.plansDialogVisible = true
                 const data = this.accountTradeList[item.registCustomerId]?.data
@@ -442,9 +437,9 @@ export default {
                 this.tradeTypeList = data.map(el => ({ id: el.trade_type, name: el.trade_name }))
                 const tempCheckedTradeType = {}
                 this.tradeTypeList.forEach(el => {
-                    tempCheckedTradeType[String(el.id)] = this.checkedTradeType[String(el.id)] || {
+                    tempCheckedTradeType[String(el.id)] = this.checkedTradeType?.[String(el.id)] || {
                         assets: ['1', '2'].indexOf(String(el.id)) ? '' : [],
-                        sort: '',
+                        sort: 0,
                         alias: '',
                         isWallet: ''
                     }
@@ -453,7 +448,7 @@ export default {
                 this.tradeTypeAssets = data.map(item => {
                     let customerGroupAssets = []
                     if (Array.isArray(item.assets)) {
-                        customerGroupAssets = item.assets.map(el => ({ key: el.assets_id, label: el.code + '-' + el.name }))
+                        customerGroupAssets = item.assets.map(el => ({ key: el.code, label: el.code + '-' + el.name }))
                     }
                     return {
                         id: item.trade_type,
@@ -464,7 +459,6 @@ export default {
             }
         },
         submit () {
-            debugger
             this.submitLoading = true
             const _formData = cloneDeep(this.form)
 
@@ -486,7 +480,12 @@ export default {
                 console.error(error)
             }
 
-            return saveViChannel(Object.assign(this.pageData, { content: JSON.stringify(_formData), id: this.pageId }))
+            saveViChannel(
+                {
+                    content: JSON.stringify(_formData),
+                    id: this.pageId,
+                    other: ''
+                })
                 .then(res => {
                     if (!res.success) {
                         return this.$message.error(res.message)
@@ -517,6 +516,20 @@ export default {
                 this.form.registList.splice(index, 1)
             }
         },
+        handleSavePlans () {
+            /* const plans = []
+            for (const key in this.checkedTradeType) {
+                if (Object.hasOwnProperty.call(this.checkedTradeType, key)) {
+                    const element = this.checkedTradeType[key]
+                    if (element.plansChecked) {
+                        plans.push(element)
+                    }
+                }
+            } */
+            this.form.registList[this.curIndex].plans = this.checkedTradeType
+            this.checkedTradeType = {}
+            this.plansDialogVisible = false
+        }
     }
 }
 </script>
@@ -537,7 +550,7 @@ export default {
         display: flex;
         align-items: center;
         margin-bottom: 50px;
-        .el-checkbox {
+        .choose-checkbox {
             margin: 0 50px;
         }
         .el-card {
