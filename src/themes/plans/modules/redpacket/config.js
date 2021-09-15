@@ -2,7 +2,7 @@ export default {
     title: '红包雨动画',
     tag: 'redpacket',
     // exclude:['nav'],   // 排除的页面code
-    tagIcon: 'el-icon-star-on',
+    tagIcon: 'el-icon-heavy-rain',
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
         {

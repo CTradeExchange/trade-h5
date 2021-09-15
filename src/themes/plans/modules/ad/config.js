@@ -1,8 +1,9 @@
 import { common, img } from '@admin/components/baseConfig'
 export default {
-    title: '轮播组件',
-    tag: 'swipe',
-    tagIcon: 'el-icon-film',
+    title: '广告组件',
+    tag: 'ad',
+    tagIcon: 'el-icon-thumb',
+    exclude: ['Register', 'TradeIndex', 'Nav', 'mine'], // 排除的页面code
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
         {
@@ -17,7 +18,7 @@ export default {
         },
         {
             name: 'autoplay',
-            label: '轮播间隔',
+            label: '自动轮播间隔',
             type: 'Select',
             default: 3000,
             options: [

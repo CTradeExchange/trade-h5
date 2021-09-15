@@ -12,7 +12,7 @@ export default {
         const pageModules = ref([])
         const store = useStore()
         store.dispatch('_base/getPageConfig', 'Mine').then(res => {
-            console.log(res)
+            console.log('pageModules', res)
             pageModules.value = res
         })
         return {

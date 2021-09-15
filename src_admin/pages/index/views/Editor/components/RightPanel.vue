@@ -4,40 +4,49 @@
             <el-tab-pane label='组件属性' name='field'>
                 <el-scrollbar class='right-scrollbar'>
                     <el-form v-if='activated' label-width='90px' size='small'>
-                        <el-divider content-position='left'>
-                            基础信息
-                        </el-divider>
-                        <el-form-item label='账户状态'>
-                            <el-checkbox-group v-model='activeData.accountType'>
-                                <el-checkbox label='G'>
-                                    游客
-                                </el-checkbox>
-                                <el-checkbox label='D'>
-                                    模拟
-                                </el-checkbox>
-                                <el-checkbox label='R_1'>
-                                    未入金
-                                </el-checkbox>
-                                <el-checkbox label='R_2'>
-                                    已入金
-                                </el-checkbox>
-                            </el-checkbox-group>
-                        </el-form-item>
-                        <el-form-item label='有效期'>
-                            <el-date-picker
-                                v-model='activeData.expiryDate'
-                                end-placeholder='结束日期'
-                                format='YYYY-MM-DD HH:mm:ss'
-                                range-separator='至'
-                                start-placeholder='开始日期'
-                                type='datetimerange'
-                                :unlink-panels='true'
-                            />
-                        </el-form-item>
-                        <el-divider v-if='element.formConfig && element.formConfig.length > 0' content-position='left'>
-                            组件设置
-                        </el-divider>
-                        <right-form :active-data='activeData' :element-config='element.formConfig' :element-tag='element.tag' />
+                        <div class='base-setting'>
+                            <el-divider content-position='left'>
+                                <h3>基础设置</h3>
+                            </el-divider>
+                            <div class='setting-wrap'>
+                                <el-form-item label='账户状态'>
+                                    <el-checkbox-group v-model='activeData.accountType'>
+                                        <el-checkbox label='G'>
+                                            游客
+                                        </el-checkbox>
+                                        <el-checkbox label='D'>
+                                            模拟
+                                        </el-checkbox>
+                                        <el-checkbox label='R_1'>
+                                            未入金
+                                        </el-checkbox>
+                                        <el-checkbox label='R_2'>
+                                            已入金
+                                        </el-checkbox>
+                                    </el-checkbox-group>
+                                </el-form-item>
+                                <el-form-item label='有效期'>
+                                    <el-date-picker
+                                        v-model='activeData.expiryDate'
+                                        end-placeholder='结束日期'
+                                        format='YYYY-MM-DD HH:mm:ss'
+                                        range-separator='至'
+                                        start-placeholder='开始日期'
+                                        type='datetimerange'
+                                        :unlink-panels='true'
+                                    />
+                                </el-form-item>
+                            </div>
+                        </div>
+
+                        <div class='component-setting'>
+                            <el-divider v-if='element.formConfig && element.formConfig.length > 0' class='component-setting' content-position='left'>
+                                <h3>组件设置</h3>
+                            </el-divider>
+                            <div class='setting-wrap'>
+                                <right-form :active-data='activeData' :element-config='element.formConfig' :element-tag='element.tag' />
+                            </div>
+                        </div>
                     </el-form>
                 <!-- <a
                         class="document-link"
@@ -297,7 +306,7 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
-    width: 480px;
+    width: 600px;
     padding-top: 3px;
     padding-bottom: 40px;
     background-color: #FFF;
@@ -311,6 +320,24 @@ export default {
     }
     .delete-btn {
         margin-left: 15px;
+    }
+    .center-tabs {
+        padding-left: 30px;
+        .base-setting {
+            padding-right: 20px;
+        }
+        .component-setting {
+            margin-top: 50px;
+            padding-right: 20px;
+        }
+        .setting-wrap {
+            margin: 10px;
+            margin-bottom: 20px;
+            padding: 20px;
+            border: solid 1px #CCC;
+            border: solid 1px #DDD;
+            border-radius: 10px;
+        }
     }
 }
 .m-spaceSetting {

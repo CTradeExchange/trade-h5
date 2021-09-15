@@ -3,7 +3,7 @@ export default {
     title: '菜单列表',
     tag: 'menulist',
     exclude: ['nav'], // 排除的页面code
-    tagIcon: 'el-icon-star-on',
+    tagIcon: 'el-icon-menu',
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
         {

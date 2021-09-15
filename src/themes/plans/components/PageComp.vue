@@ -32,6 +32,7 @@ export default {
             const pageCode = name + '_' + (params.id || '')
             let list = this.data.map((item) => {
                 const itemEl = JSON.parse(JSON.stringify(item))
+                
                 const { style, linkComp, linkCompPosition, background } = itemEl.data
                 const styleObj = {}
                 for (const key in style) {
@@ -81,6 +82,7 @@ export default {
                 itemEl.data.moduleId = pageCode + '_' + itemEl.id
                 const newItem = Object.assign({}, itemEl, { component: defineAsyncComponent(() => import(`../modules/${itemEl.tag}/${itemEl.tag}.vue`)) })
                 // const newItem = Object.assign({}, itemEl, { component: require(`../modules/${itemEl.tag}/${itemEl.tag}.vue`).default })
+                
                 return newItem
             })
             // 将绑定的组件插入到对应的模块下面

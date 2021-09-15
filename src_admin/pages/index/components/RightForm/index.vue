@@ -111,6 +111,7 @@
                         }
                     '
                 />
+
                 <File
                     v-else-if="config.type === 'File'"
                     :active-data='activeData[config.name]'
@@ -296,6 +297,8 @@ export default {
             this.$store.commit('editor/CHANGE_INDEX_FROM_ROW', evt)
         },
         updateFormData (key, data, type) { // 此处提交版块产品
+            debugger
+            this.activeData
             if (key === 'product') {
                 const newSelfData = { ...this.tradeTypeSelfSymbol }
                 newSelfData[type] = data
@@ -309,6 +312,7 @@ export default {
                 }
                 this.$store.commit('editor/UPDATE_TRADETYPE_BLOCK_COLLECT', newData)
             } else {
+                this.activeData[key] = data
                 this.$store.commit('editor/UPDATE_FORM_DATA', { key, value: data })
             }
             // const newTradeTypeData = { ...this.activeData['tradeTypeCollect'], [type]: data }
@@ -339,9 +343,12 @@ export default {
 }
 .rightForm {
     padding-bottom: 10px;
-}
-.odd {
-    background-color: #FAFAFA;
+    .list-item {
+        margin: 10px;
+        margin-bottom: 20px;
+        padding: 10px;
+        border-bottom: solid 1px #DDD;
+    }
 }
 
 </style>

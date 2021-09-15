@@ -54,7 +54,7 @@ export default {
     },
     setup (props) {
         const store = useStore()
-        const faceImg = props.faceImg || faceImgDefault
+        const faceImg = props.data.faceImg || faceImgDefault
         const adImg = props.src
         const userAccountType = computed(() => store.getters['_user/userAccountType'])
         const customerInfo = computed(() => store.state._user.customerInfo)

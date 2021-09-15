@@ -402,7 +402,6 @@ export default {
             this.filterLang = this.lang.filter(el => val.find(zo => zo.val === el.val))
         },
         changeSupportArea (val) {
-            debugger
             this.otherZoneList = this.zoneList.filter(el =>
                 val.find(zo => zo.id === el.id)
             )

@@ -2,7 +2,7 @@ export default {
     title: '文本组件',
     tag: 'text',
     // exclude:['nav'],   // 排除的页面code
-    tagIcon: 'el-icon-star-on',
+    tagIcon: 'el-icon-document',
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
         {

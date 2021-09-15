@@ -7,7 +7,7 @@ export default {
     title: '图片组件',
     tag: 'img',
     exclude: ['nav'], // 排除的页面code
-    tagIcon: 'el-icon-star-on',
+    tagIcon: 'el-icon-picture-outline',
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
         ...img

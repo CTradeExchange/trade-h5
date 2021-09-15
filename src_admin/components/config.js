@@ -17,6 +17,10 @@ import minePerson from '@h5/modules/minePerson/config.js'
 import quoteList from '@h5/modules/quoteList/config.js'
 // import nav from '@h5/modules/nav/config.js'
 import registerForm from '@h5/modules/registerForm/config.js'
+import news from '@h5/modules/news/config.js'
+import ad from '@h5/modules/ad/config.js'
+import productsSwipe from '@h5/modules/productsSwipe/config.js'
+
 export const mobileComponentsConfig = async () => {
     return [
         img,
@@ -36,7 +40,10 @@ export const mobileComponentsConfig = async () => {
         // template,
         minePerson,
         // mineTop,
-        await registerForm()
+        await registerForm(),
+        news,
+        ad,
+        productsSwipe
     ]
 }
 export const pcComponentsConfig = []
@@ -86,7 +93,7 @@ export const example = [
             {
                 name: 'items',
                 type: 'Array',
-                label: '轮播页',
+                label: '轮播项',
                 max: 5,
                 config: [
                     {

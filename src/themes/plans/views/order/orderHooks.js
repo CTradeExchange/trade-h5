@@ -52,7 +52,7 @@ export default function hooks (state) {
             }
         }else if([9].includes(tradeType) ){
             if(state.orderType===1){
-                bizType = 1;
+                bizType = 12;
             }else{
                 bizType = 13;
             }

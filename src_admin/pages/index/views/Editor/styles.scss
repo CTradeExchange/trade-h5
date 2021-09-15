@@ -1,16 +1,15 @@
-$selectedColor: #f6f7ff;
-$lighterBlue: #409eff;
-
+$selectedColor: #F6F7FF;
+$lighterBlue: #409EFF;
 .container {
     position: relative;
     width: 100%;
     height: 100%;
+    background-color: #FFF;
 }
-
 .components-list {
-    padding: 8px;
     box-sizing: border-box;
     height: 100%;
+    padding: 8px;
     .components-item {
         display: inline-block;
         width: 48%;
@@ -22,39 +21,38 @@ $lighterBlue: #409eff;
     padding-bottom: 20px;
 }
 .components-title {
-    font-size: 14px;
-    color: #222;
     margin: 6px 2px;
+    color: #222;
+    font-size: 14px;
     .svg-icon {
         color: #666;
         font-size: 18px;
     }
 }
-
 .components-body {
-    padding: 8px 10px;
+    padding: 15px;
+    font-size: 14px;
     background: $selectedColor;
-    font-size: 12px;
-    cursor: move;
     border: 1px dashed $selectedColor;
     border-radius: 3px;
+    cursor: move;
     .svg-icon {
         color: #777;
         font-size: 15px;
     }
     &:hover {
-        border: 1px dashed #787be8;
-        color: #787be8;
+        color: #787BE8;
+        border: 1px dashed #787BE8;
         .svg-icon {
-            color: #787be8;
+            color: #787BE8;
         }
     }
 }
 .left-board {
-    width: 260px;
     position: absolute;
-    left: 0;
     top: 0;
+    left: 0;
+    width: 400px;
     height: 100vh;
 }
 .left-scrollbar {
@@ -62,26 +60,26 @@ $lighterBlue: #409eff;
     overflow: hidden;
 }
 .center-scrollbar {
+    box-sizing: border-box;
     height: calc(100vh - 42px);
     overflow: hidden;
-    border-left: 1px solid #f1e8e8;
-    border-right: 1px solid #f1e8e8;
-    box-sizing: border-box;
+    border-right: 1px solid #F1E8E8;
+    border-left: 1px solid #F1E8E8;
 }
 .center-board {
-    height: 100vh;
-    width: auto;
-    margin: 0 480px 0 260px;
     box-sizing: border-box;
+    width: auto;
+    height: 100vh;
+    margin: 0 600px 0 400px;
     .row-btns {
         display: flex;
-        justify-content: space-between;
-        border: 1px solid #f1e8e8;
         align-items: center;
+        justify-content: space-between;
+        border: 1px solid #F1E8E8;
         .left {
             padding-left: 10px;
         }
-        .right  {
+        .right {
             flex: 1;
         }
     }
@@ -89,68 +87,67 @@ $lighterBlue: #409eff;
 .empty-info {
     position: absolute;
     top: 46%;
-    left: 0;
     right: 0;
-    text-align: center;
+    left: 0;
+    color: #CCB1EA;
     font-size: 18px;
-    color: #ccb1ea;
     letter-spacing: 4px;
+    text-align: center;
 }
 .action-bar {
     position: relative;
+    box-sizing: border-box;
     height: 42px;
+    padding: 0 15px;
     line-height: 42px;
     text-align: right;
-    padding: 0 15px;
-    box-sizing: border-box;
     border-top: none;
     border-left: none;
     .delete-btn {
-        color: #f56c6c;
+        color: #F56C6C;
     }
 }
 .logo-wrapper {
     position: relative;
-    height: 42px;
-    border-bottom: 1px solid #f1e8e8;
     box-sizing: border-box;
+    height: 42px;
+    border-bottom: 1px solid #F1E8E8;
     .back {
-        padding: 0 20px;
-        line-height: 42px;
         display: inline-block;
+        padding: 0 20px;
         color: #409EFF;
-        cursor: pointer;
         font-size: 16px;
+        line-height: 42px;
+        cursor: pointer;
         i {
             position: relative;
             top: 3px;
-            font-size: 24px;
             margin-right: 6px;
+            font-size: 24px;
         }
     }
 }
 .logo {
     position: absolute;
-    left: 12px;
     top: 6px;
-    line-height: 30px;
-    color: #00afff;
+    left: 12px;
+    color: #00AFFF;
     font-weight: 600;
     font-size: 16px;
+    line-height: 30px;
     white-space: nowrap;
 }
-
 .center-board-row {
-    padding: 12px 12px 40px 12px;
     box-sizing: border-box;
     min-height: 100%;
+    padding: 12px 12px 40px;
 }
 .drawing-board {
-    min-height: 500px;
     position: relative;
+    min-height: 500px;
     .components-body {
-        padding: 0;
         margin: 0;
+        padding: 0;
         font-size: 0;
     }
     .preview {
@@ -164,14 +161,14 @@ $lighterBlue: #409eff;
         display: block;
         overflow: hidden;
         &::before {
-            content: ' ';
             position: absolute;
-            left: 0;
-            right: 0;
             top: 0;
+            right: 0;
+            left: 0;
+            z-index: 2;
             height: 3px;
             background: rgb(89, 89, 223);
-            z-index: 2;
+            content: ' ';
         }
     }
     .components-item.sortable-ghost {
@@ -180,15 +177,15 @@ $lighterBlue: #409eff;
         background-color: $selectedColor;
     }
     .active-from-item {
-        & > .el-form-item {
+        &>.el-form-item {
             background: $selectedColor;
             border-radius: 6px;
         }
-        & > .drawing-item-copy,
-        & > .drawing-item-delete {
+        &>.drawing-item-copy,
+        &>.drawing-item-delete {
             display: initial;
         }
-        & > .component-name {
+        &>.component-name {
             color: $lighterBlue;
         }
     }
@@ -199,8 +196,8 @@ $lighterBlue: #409eff;
 .drawing-item {
     position: relative;
     cursor: move;
-    &.unfocus-bordered:not(.active-from-item) > div:first-child {
-        border: 1px dashed #ccc;
+    &.unfocus-bordered:not(.active-from-item)>div:first-child {
+        border: 1px dashed #CCC;
     }
     .el-form-item {
         padding: 12px 10px;
@@ -208,12 +205,12 @@ $lighterBlue: #409eff;
 }
 .drawing-row-item {
     position: relative;
-    cursor: move;
     box-sizing: border-box;
-    border: 1px dashed #ccc;
-    border-radius: 3px;
-    padding: 0 2px;
     margin-bottom: 15px;
+    padding: 0 2px;
+    border: 1px dashed #CCC;
+    border-radius: 3px;
+    cursor: move;
     .drawing-row-item {
         margin-bottom: 2px;
     }
@@ -233,57 +230,57 @@ $lighterBlue: #409eff;
         position: absolute;
         top: 0;
         left: 0;
-        font-size: 12px;
-        color: #bbb;
         display: inline-block;
         padding: 0 6px;
+        color: #BBB;
+        font-size: 12px;
     }
 }
 .drawing-item,
 .drawing-row-item {
     &:hover {
-        & > .el-form-item {
+        &>.el-form-item {
             background: $selectedColor;
             border-radius: 6px;
         }
-        & > .drawing-item-copy,
-        & > .drawing-item-delete {
+        &>.drawing-item-copy,
+        &>.drawing-item-delete {
             display: initial;
         }
     }
-    & > .drawing-item-copy,
-    & > .drawing-item-delete {
-        display: none;
+    &>.drawing-item-copy,
+    &>.drawing-item-delete {
         position: absolute;
         top: -10px;
+        z-index: 1;
+        display: none;
         width: 22px;
         height: 22px;
+        font-size: 12px;
         line-height: 22px;
         text-align: center;
-        border-radius: 50%;
-        font-size: 12px;
         border: 1px solid;
+        border-radius: 50%;
         cursor: pointer;
-        z-index: 1;
     }
-    & > .drawing-item-copy {
+    &>.drawing-item-copy {
         right: 56px;
-        border-color: $lighterBlue;
         color: $lighterBlue;
-        background: #fff;
+        background: #FFF;
+        border-color: $lighterBlue;
         &:hover {
+            color: #FFF;
             background: $lighterBlue;
-            color: #fff;
         }
     }
-    & > .drawing-item-delete {
+    &>.drawing-item-delete {
         right: 24px;
-        border-color: #f56c6c;
-        color: #f56c6c;
-        background: #fff;
+        color: #F56C6C;
+        background: #FFF;
+        border-color: #F56C6C;
         &:hover {
-            background: #f56c6c;
-            color: #fff;
+            color: #FFF;
+            background: #F56C6C;
         }
     }
 }

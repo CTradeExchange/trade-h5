@@ -3,7 +3,7 @@ export default {
     title: 'Layout布局',
     tag: 'layout',
     exclude: ['nav'], // 排除的页面code
-    tagIcon: 'el-icon-star-on',
+    tagIcon: 'el-icon-s-grid',
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
         {
@@ -19,6 +19,9 @@ export default {
                 { value: 5, label: '10px' },
                 { value: 7.5, label: '15px' },
                 { value: 10, label: '20px' },
+                { value: 15, label: '30px' },
+                { value: 20, label: '40px' },
+                { value: 25, label: '50px' },
             ]
         },
         {
