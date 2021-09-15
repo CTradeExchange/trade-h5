@@ -105,7 +105,6 @@ export default {
             return this.$store.state.editor.accountGroupProduct
         },
         tradeTypeProduct () {
-            // debugger
             // console.log('--activeBlock---', this.activeBlock)
             return this.$store.state.editor.tradeTypeBlockProduct
         },
@@ -120,7 +119,6 @@ export default {
             }
         },
         productIds () {
-            // debugger
             const _ids = []
             for (const key in this.activeData) {
                 if (this.activeData[key] && key !== 'tradeTypeCollect') {
@@ -303,7 +301,7 @@ export default {
                     tradeTypeCustomerGroup[value.id] = Object.values(value.data).map((el) => {
                         const firstItem = Object.values(el)[0]
                         const { id, name, type, data } = firstItem
-                        // debugger
+
                         return {
                             id: id,
                             label: name,
@@ -395,9 +393,9 @@ export default {
             })
         },
         showDialog (type) {
-            // debugger
             // console.log(this.elementTag)
             this.activeTradeType = type
+
             this.tradeTypeAccountGroupProduct = this.tradeTypeProduct[type]
             if (this.elementTag === 'selfSymbol') {
                 if (isPlainObject(this.selfSymbol?.[type])) {
@@ -425,11 +423,10 @@ export default {
             }
         },
         async handleClose (done) {
-            // debugger
             // 计算出选中的结果
             const _data = this.$refs.tree.getCheckedKeys()
             const result = {}
-            // debugger
+
             _data.forEach(id => {
                 const match = id.match(/^([0-9]+)_([0-9]+)/)
                 if (!match) {

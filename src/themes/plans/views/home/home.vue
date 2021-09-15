@@ -1,13 +1,13 @@
 <template>
     <div id='homeContent' ref='homeContent' class='home'>
         <!-- <BanderBanner class='BanderBanner' :list='BannerConfig.mini' /> -->
-        <!-- <PageComp :data='pageModules' /> -->
+        <PageComp :data='pageModules' />
 
-        <Banner :list='BannerConfig.large' />
+        <!-- <Banner :list='BannerConfig.large' />
         <Products ref='productsRef' :symbol-keys='products' />
         <Fastlink />
         <BanderBanner class='BanderBanner' :list='BannerConfig.mini' />
-        <InformationFlow class='newBar' :lang='lang' :orgid='$store.state._base.wpCompanyInfo.orgid' />
+        <InformationFlow class='newBar' :lang='lang' :orgid='$store.state._base.wpCompanyInfo.orgid' /> -->
     </div>
 </template>
 

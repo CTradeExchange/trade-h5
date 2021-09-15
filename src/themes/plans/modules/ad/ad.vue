@@ -1,11 +1,11 @@
 <template>
     <div class='BanderBanner'>
         <van-swipe :loop='false' :show-indicators='false' :width='300'>
-            <van-swipe-item v-for='item in list' :key='item.img' class='item'>
+            <van-swipe-item v-for='item in data.items' :key='item.src' class='item'>
                 <a v-if='item.href' href='javascript:;' @click='openUrl(item.href)'>
-                    <img :src='item.img' />
+                    <img :src='item.src || "http://prewpadmin.cats-trade.com/wp-content/uploads/2021/07/minibanner2.png"' />
                 </a>
-                <img v-else :src='item.img' />
+                <img v-else :src='item.src' />
             </van-swipe-item>
         </van-swipe>
     </div>
@@ -13,8 +13,8 @@
 
 <script>
 export default {
-    props: ['list'],
-    setup () {
+    props: ['list', 'data'],
+    setup (props) {
         return {}
     }
 }

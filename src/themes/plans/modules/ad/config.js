@@ -6,16 +6,7 @@ export default {
     exclude: ['Register', 'TradeIndex', 'Nav', 'mine'], // 排除的页面code
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
-        {
-            name: 'loop',
-            label: '自动轮播',
-            type: 'Select',
-            default: true,
-            options: [
-                { value: true, label: '是' },
-                { value: false, label: '否' },
-            ]
-        },
+
         {
             name: 'autoplay',
             label: '自动轮播间隔',

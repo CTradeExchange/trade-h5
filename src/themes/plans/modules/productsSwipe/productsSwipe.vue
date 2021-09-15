@@ -12,12 +12,16 @@
             </div>
         </li>
     </ul>
+    <div v-else class='default-wrap'>
+        <img alt='' :src='defaultImg' />
+    </div>
 </template>
 
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+const defaultImg = require('./productSwipe.png')
 export default {
     props: {
         symbolKeys: {
@@ -37,7 +41,8 @@ export default {
         return {
             productMap,
             handlerItem,
-            products
+            products,
+            defaultImg
         }
     }
 }
@@ -64,6 +69,11 @@ export default {
     }
     .change {
         font-size: rem(24px);
+    }
+}
+.default-wrap {
+    img {
+        width: 100%;
     }
 }
 </style>

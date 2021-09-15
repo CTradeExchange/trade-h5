@@ -10,6 +10,11 @@ export default {
     tagIcon: 'el-icon-s-marketing',
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
-        ...img
+        {
+            name: 'product',
+            label: '产品ID',
+            type: 'Product',
+            default: {}
+        }
     ]
 }
