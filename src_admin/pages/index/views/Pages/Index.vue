@@ -141,7 +141,7 @@ export default {
         } else if (urlParams.page === 'cats_init_manage') {
             next({ name: 'Install' })
         } else if (urlParams.page === 'cats_editor_page_manage') {
-            next({ name: 'channelSetting' })
+            next({ name: 'ChannelSetting' })
         } else {
             next()
         }
