@@ -178,7 +178,6 @@ export default {
         // 初始化设置
         const init = () => {
             if (!product.value?.minVolume) {
-                debugger
                 // 获取产品详情
                 store.dispatch('_quote/querySymbolInfo', {
                     symbolId,
