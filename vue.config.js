@@ -34,9 +34,9 @@ const alias = {
 }
 
 if (process.env.NODE_ENV === 'production') {
-    const pathStr = buildType
-    const pathName = isAdminMode ? 'admin' : 'dist'
-    const outputDirDestination = `/build_folder/${pathStr}/${pathStr}/${pathName}`
+    const pluginName = isAdminMode ? 'editor' : 'h5'
+    const outputDirDestination = `/build_folder/cats-upload-admin/cats-upload-admin/dist/skin_${theme}_2`
+    const wp_init_file = isAdminMode ? 'init_editor.ini' : 'init_h5.ini'
     plugins.push(
         new FileManagerPlugin({
             events: {
@@ -46,14 +46,17 @@ if (process.env.NODE_ENV === 'production') {
                     //     `./build_folder/${pathStr}.zip`
                     // ],
                     copy: [{
-                        source: resolve(`/build_folder/${pathName}`),
-                        destination: resolve(outputDirDestination)
+                        source: resolve('/build_folder/dist'),
+                        destination: resolve(outputDirDestination) + `/${pluginName}`
+                    }, {
+                        source: resolve(`/src/themes/${theme}/${wp_init_file}`),
+                        destination: resolve(outputDirDestination) + `/${wp_init_file}`
                     }],
                     archive: [
                         // { source: resolve(`${pathName}`), destination: resolve(`zip/${pathName}${dayjs().format('YYYYMMDDHHmm')}.zip`) },
                         {
-                            source: resolve(`./build_folder/${pathStr}`),
-                            destination: `./build_folder/${pathStr}.zip`,
+                            source: resolve('./build_folder/cats-upload-admin'),
+                            destination: `./build_folder/cats-plugin-${theme}.zip`,
                             options: {
                                 gzipOptions: {
                                     level: 1
@@ -104,10 +107,10 @@ if (isAdminMode) {
 
 const config = {
     productionSourceMap: false,
-    publicPath: process.env.NODE_ENV === 'production' && isAdminMode ? `/wp-content/plugins/cats-manage/skin/skin_${theme}/editor/` : '/', // static/
+    publicPath: process.env.NODE_ENV === 'production' && isAdminMode ? `/wp-content/plugins/cats-manage/skin/skin_${theme}_2/editor/` : '/', // static/
     // indexPath: isAdminMode ? 'index.html' : 'index_template.html', // 就是这条
     lintOnSave: false,
-    outputDir: isAdminMode ? './build_folder/admin' : './build_folder/dist',
+    outputDir: isAdminMode ? './build_folder/dist' : './build_folder/dist',
     configureWebpack: {
         plugins,
         optimization: {
