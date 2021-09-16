@@ -1,7 +1,7 @@
 <template>
     <div class='m-setting'>
         <el-row class='setting-header'>
-            <el-col class='btns' :span='12'>
+            <el-col class='btns' :span='24'>
                 <el-button-group>
                     <el-button
                         icon='el-icon-s-promotion'
@@ -24,7 +24,7 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-col class='btns' :span='12'>
+            <el-col class='btns' :span='24'>
                 <el-form ref='form' label-width='120px' :model='form'>
                     <el-tabs type='border-card'>
                         <el-tab-pane class='tab' label='渠道基础设置'>
@@ -330,6 +330,7 @@
 <script>
 import { getAccountGroupTradeAssetsList, queryCountryList, getViChannel, saveViChannel } from '@index/Api/editor'
 import { lang } from '../../config/lang'
+import { getQuery } from '@admin/utils'
 import { keyBy, forOwn, isPlainObject, cloneDeep, compact } from 'lodash'
 export default {
     name: 'ChannelSetting',
@@ -364,7 +365,8 @@ export default {
         }
     },
     created () {
-        this.pageId = this.$route.query.id
+        const urlParams = getQuery()
+        this.pageId = urlParams.id
         this.getPageConfig()
         this.queryAccountGroupTradeList()
         this.queryCountryList()
