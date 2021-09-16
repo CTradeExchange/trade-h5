@@ -32,6 +32,7 @@ function priceToPip (price, product) {
     if (product && product.hasOwnProperty('pointRatio')) {
         const spDigit = String(product.pointRatio || 0).length - 1 // 点差小数位
         const pip = BigNumber(0.1).pow(product.price_digits).times(product.pointRatio) // 1pip=point*大点比率
+        if (!parseFloat(pip)) return ''
         return BigNumber(price).div(pip).toFixed(spDigit)
     } else {
         return ''

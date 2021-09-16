@@ -30,7 +30,7 @@
         <Loading :show='loading' />
         <section class='container'>
             <div class='productInfo'>
-                <div class='hd'>
+                <div v-if='product.price_digits' class='hd'>
                     <div class='hd-left'>
                         <p class='cur_price' :class='product.cur_color'>
                             {{ parseFloat(product.cur_price).toFixed(product.price_digits) }}
