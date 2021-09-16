@@ -588,13 +588,12 @@ export default {
                     // _formData.currencyList = JSON.parse(_formData.currencyList)
 
                     // console.log('this.checkedTradeTypeAssets-', this.checkedTradeTypeAssets)
-
                     const tempTradeTypeCurrencyList = this.tradeTypeList.map(el => {
                         const { assets, sort, alias, isWallet } = this.checkedTradeType[String(el.id)]
                         if (['1', '2'].indexOf(String(el.id)) > -1) {
                             return { id: el.id, name: el.name, sort, allCurrency: assets || '', alias, isWallet }
                         } else {
-                            return { id: el.id, name: el.name, sort, allCurrency: assets ? compact(assets) : [], alias, isWallet }
+                            return { id: el.id, name: el.name, sort, allCurrency: assets ? compact(assets).join() : [], alias, isWallet }
                         }
                     })
                     tempTradeTypeCurrencyList.sort(function (a, b) {
