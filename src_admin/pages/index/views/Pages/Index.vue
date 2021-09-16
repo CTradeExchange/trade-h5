@@ -136,10 +136,12 @@ export default {
     beforeRouteEnter (to, from, next) {
         const urlParams = getQuery()
         console.log(to, from, urlParams)
-        if (urlParams.page == 'cats_sett_manage') {
+        if (urlParams.page === 'cats_sett_manage') {
             next({ name: 'Setting' })
-        } else if (urlParams.page == 'cats_init_manage') {
+        } else if (urlParams.page === 'cats_init_manage') {
             next({ name: 'Install' })
+        } else if (urlParams.page === 'cats_editor_page_manage') {
+            next({ name: 'channelSetting' })
         } else {
             next()
         }

@@ -329,7 +329,7 @@ export default {
         }
     }
     .conditon-wrap {
-        padding-bottom: rem(50px);
+        padding-bottom: rem(80px);
         .c-item {
             text-align: center;
             background: var(--contentColor);
@@ -367,7 +367,7 @@ export default {
         bottom: 0;
         width: 100%;
         color: var(--color);
-        font-size: rem(34px);
+        font-size: rem(30px);
         background: var(--bgColor);
         border-color: var(--lineColor);
     }
