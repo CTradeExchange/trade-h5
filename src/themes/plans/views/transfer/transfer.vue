@@ -56,6 +56,7 @@
             </van-button>
         </div>
         <Loading :show='loading' />
+
         <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
             <van-picker
                 :columns='accountList'
@@ -66,7 +67,7 @@
         </van-popup>
         <van-popup v-model:show='accountShow' class='assetsPicker' position='bottom'>
             <van-picker
-                :columns='assetsList'
+                :columns='plans'
                 :columns-field-names='customField'
                 @cancel='accountShow = false'
                 @confirm='onPickerConfirm'
@@ -92,9 +93,7 @@ export default {
         const route = useRoute()
         const { accountId, tradeType } = route.query
         const state = reactive({
-            currency: 'USDT',
             pickerShow: false,
-            currencyList: ['USDT', 'BTC'],
             accountShow: false,
             loading: false,
             fromAccount: '',
@@ -239,7 +238,10 @@ export default {
             [state.fromAccount, state.toAccount] = [state.toAccount, state.fromAccount]
         }
 
-        store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: state.fromAccount.id })
+        if ([3, 5, 9].includes(Number(route.query.tradeType))) {
+            store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: route.query.tradeType })
+        }
+
         return {
             plans,
             handleTransfer,
