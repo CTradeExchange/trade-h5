@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { computed, reactive, toRefs, watchEffect } from 'vue'
+import { computed, reactive, toRefs, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
@@ -126,15 +126,24 @@ export default {
             return pow(0.1, digits)
         })
 
-        watchEffect(() => {
-            if (accountList.value.length > 0) {
+        watch(() => accountList.value.length, val => {
+            if (val > 0) {
                 state.curCurrency = accountList.value[0]
+            }
+        }, {
+            immediate: true
+        })
+
+        watchEffect(() => {
+            if ([3, 5, 9].includes(Number(state.fromAccount.id))) {
+                store.dispatch('_user/queryAccountAssetsInfo', {
+                    tradeType: state.fromAccount.id,
+                    accountId: state.curCurrency.accountId
+                })
             }
         })
 
         const handleTransfer = () => {
-            // state.fromAccount = state.toAccount
-            // state.toAccount = state.fromAccount
             if (isEmpty(state.amount)) {
                 return Toast(t('assets.transferTip1'))
             }
@@ -191,10 +200,10 @@ export default {
             } else {
                 state.toAccount = val
             }
-            // abcc 现货杠杆 杠杆全仓重新拉账户资产
+            /*   // abcc 现货杠杆 杠杆全仓重新拉账户资产
             if ([3, 5, 9].includes(Number(state.fromAccount.id))) {
                 store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: state.fromAccount.id })
-            }
+            } */
         }
         const toRecord = () => {
             router.push({
@@ -216,8 +225,6 @@ export default {
         // 选取币种确定事件
         const onCurrencyConfirm = (val) => {
             state.curCurrency = val
-            // state.maxTransfer = accountList.value.find(item => item.currency === val.currency)
-
             state.pickerShow = false
         }
 

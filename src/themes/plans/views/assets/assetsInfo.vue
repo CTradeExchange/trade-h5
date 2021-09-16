@@ -66,7 +66,7 @@
             <van-button v-if='Number(tradeType) === 3' block @click='toLoan'>
                 {{ $t('trade.loan') }}
             </van-button>
-            <van-button block :class="{ 'full': Number(tradeType) === 9 }" @click='toReturnMoney'>
+            <van-button block :class="{ 'full': [5,9].includes(Number(tradeType)) }" @click='toReturnMoney'>
                 {{ $t('trade.repayment') }}
             </van-button>
         </div>
