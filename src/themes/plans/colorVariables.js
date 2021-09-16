@@ -12,12 +12,12 @@ const colors = {
     },
     night: {
         primaryAssistColor: '#2c2e3b',
-        color: '#ffffff',
+        color: '#eaebee',
         normalColor: '#9294a3',
         minorColor: '#9294a3',
         placeholdColor: '#515366',
-        contentColor: '#20212a',
-        bgColor: '#191a22',
+        contentColor: '#21262f',
+        bgColor: '#191e24',
         assistColor: '#2c2e3b',
         lineColor: '#2c2e3b'
     },
