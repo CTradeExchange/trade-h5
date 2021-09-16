@@ -209,7 +209,7 @@
     "THB": "泰铢",
     "positionNotLogin": "登录后可查看持仓、挂单相关信息",
     "positionEmpty": "暂无持仓，去交易吧",
-    "pendingEmpty": "暂无挂单，去交易吧",
+    "pendingEmpty": "暂无数据，去交易吧",
     "closedEmpty": "暂无平仓记录",
     "openPositionSuccess": "下单成功",
     "closedSuccess": "平仓成功",
