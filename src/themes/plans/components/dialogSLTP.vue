@@ -101,13 +101,10 @@ export default {
         })
 
         // 获取账户
-        const account = computed(() => store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(tradeType.value)))
+        const account = computed(() => store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(props.data.tradeType)))
 
         // 客户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
-
-        // 玩法id
-        const tradeType = computed(() => store.state._quote.curTradeType)
 
         // 提示信息
         const warn = computed(() => modifyProfitLossRef.value?.stopLossWarn || modifyProfitLossRef.value?.stopProfitWarn)
@@ -148,7 +145,7 @@ export default {
                 positionId: data.positionId,
                 stopLoss: !state.stopLossPrice ? 0 : mul(state.stopLossPrice, p),
                 takeProfit: !state.stopProfitPrice ? 0 : mul(state.stopProfitPrice, p),
-                tradeType: tradeType.value,
+                tradeType: props.data.tradeType,
                 accountId: account.value.accountId,
                 accountDigits: account.value.digits
             }
@@ -156,7 +153,7 @@ export default {
         }
         // 提交修改止盈止损
         const submitHandler = () => {
-            const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType.value))?.accountId
+            const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(props.data.tradeType))?.accountId
             const params = submitParams()
             if (!params) return false
             state.loading = true
@@ -165,7 +162,7 @@ export default {
 
                 if (res.check()) {
                     store.dispatch('_trade/queryPositionPage', {
-                        tradeType: tradeType.value,
+                        tradeType: props.data.tradeType,
                         accountId,
                         sortFieldName: 'openTime',
                         sortType: 'desc',
@@ -182,7 +179,7 @@ export default {
 
         // 获取产品详情
         store.dispatch('_quote/querySymbolInfo', {
-            symbolId: props.data.symbolId, tradeType: tradeType.value
+            symbolId: props.data.symbolId, tradeType: props.data.tradeType
         })
 
         return {
