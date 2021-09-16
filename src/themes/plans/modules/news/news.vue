@@ -147,8 +147,9 @@ import { reactive } from 'vue'
 import dayjs from 'dayjs'
 import { useI18n } from 'vue-i18n'
 import { newsListByTypeByPage, canlendarListByDate, articleDetail } from '@/api/information'
+import { localGet } from '@/utils/util'
 export default {
-    props: ['lang', 'orgid', 'data'],
+    props: ['data'],
     setup (props) {
         const state = reactive({
             count: 0,
@@ -190,7 +191,8 @@ export default {
                 timeAxis: 0 // 记录最新一条的时间轴
             },
             calendarList: [],
-            filterCalendarList: []
+            filterCalendarList: [],
+            lang: localGet('lang') || 'zh-CN'
         })
         const { t } = useI18n({ useScope: 'global' })
         state.newsTypes = [
@@ -300,7 +302,7 @@ export default {
         //     })
         // }
         const getNewsListByType = (params, callback) => {
-            newsListByTypeByPage(params, props.lang).then(
+            newsListByTypeByPage(params, state.lang).then(
                 ({ data, pages, page }) => {
                     typeof (callback) === 'function' && callback({ data, pages, page })
                 })
@@ -392,7 +394,7 @@ export default {
             state.timeAxis = timeAxis
             canlendarListByDate({
                 timestamp: timeAxis
-            }, props.lang).then((data) => {
+            }, state.lang).then((data) => {
                 if (Array.isArray(data) && data.length > 0) {
                     state.calendarList = data
                     changeCanlendarType(state.canlendarType)
