@@ -26,7 +26,10 @@
                 </span>
             </div>
         </div>
-        <!-- <div v-if='product.symbolName && false' class='cell'>
+        <div v-if='product.symbolName' class='cell'>
+            <!-- <p class='symbolCode'>
+                {{ product.symbolCode }}
+            </p> -->
             <p>
                 <span class='upDownAmount' :class='product.upDownColor'>
                     {{ product.upDownAmount }}
@@ -35,7 +38,7 @@
                     {{ product.upDownWidth }}
                 </span>
             </p>
-        </div> -->
+        </div>
     </div>
 </template>
 
@@ -102,10 +105,8 @@ export default {
 .productItem {
     @include active();
     position: relative;
-    height: rem(116px);
     padding: rem(20px) 0;
     overflow: hidden;
-    line-height: rem(76px);
     background-color: var(--contentColor);
     .cell {
         display: flex;
@@ -115,7 +116,7 @@ export default {
         padding: 0 rem(30px);
         color: var(--minorColor);
         font-size: rem(24px);
-        // line-height: 1.45;
+        line-height: 1.45;
         .th {
             position: relative;
             flex: 1;
