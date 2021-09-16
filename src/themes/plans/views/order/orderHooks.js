@@ -35,9 +35,11 @@ export default function hooks (state) {
         return bizType;
     }
     const bizType = computed(() => {
+        
         let bizType = state.orderType   // 1市价单  10挂单
         let entryType = state.entryType   // 1按数量下单 2按成交额下单
         const tradeType = product.value?.tradeType
+        
         if([1,2].includes(tradeType)){
             if(state.orderType===1){
                 bizType = 1
@@ -48,11 +50,11 @@ export default function hooks (state) {
             if(state.orderType===1){
                 bizType = entryType=== 1 ? 1 : 12;
             }else{
-                bizType = entryType=== 1 ? 13 : 14;
+                bizType = 13;
             }
         }else if([9].includes(tradeType) ){
             if(state.orderType===1){
-                bizType = 12;
+                bizType = 1;
             }else{
                 bizType = 13;
             }
