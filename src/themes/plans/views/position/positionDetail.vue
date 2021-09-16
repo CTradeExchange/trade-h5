@@ -164,13 +164,13 @@ export default {
 
         const { orderId, positionId, symbolId, tradeType } = route.query
 
-        const assetsInfo = computed(() => store.state._user.customerInfo.accountList.find(el => Number(el.tradeType) === Number(tradeType.value)))
+        const assetsInfo = computed(() => store.state._user.customerInfo.accountList.find(el => Number(el.tradeType) === Number(tradeType)))
 
         const customerInfo = computed(() => store.state._user.customerInfo)
 
         const positionData = computed(() => store.state._trade.positionMap[positionId + '_' + tradeType])
 
-        const product = computed(() => store.state._quote.productMap[symbolId + '_' + tradeType.value])
+        const product = computed(() => store.state._quote.productMap[symbolId + '_' + tradeType])
 
         const positionVolume = computed(() => minus(positionData.value?.openVolume, positionData.value?.closeVolume))
 
@@ -178,6 +178,7 @@ export default {
         // 初始化设置
         const init = () => {
             if (!product.value?.minVolume) {
+                debugger
                 // 获取产品详情
                 store.dispatch('_quote/querySymbolInfo', {
                     symbolId,
@@ -202,7 +203,7 @@ export default {
             state.closeVisible = true
         }
 
-        store.commit('_quote/Update_productActivedID', symbolId + '_' + tradeType.value)
+        store.commit('_quote/Update_productActivedID', symbolId + '_' + tradeType)
 
         onMounted(() => {
             init()

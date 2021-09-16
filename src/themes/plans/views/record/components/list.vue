@@ -59,7 +59,7 @@ export default {
 
             return props.requestApi(params)
                 .then(res => {
-                    if (res.code === '0' && Array.isArray(res.data.records)) {
+                    if (res.code === '0' && Array.isArray(res?.data?.records)) {
                         return [res.data.records, res.data.total]
                     }
                     return []

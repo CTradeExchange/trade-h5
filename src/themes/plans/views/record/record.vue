@@ -79,6 +79,7 @@ export default {
                 }
 
                 case 3:
+                case 5:
                 case 9: {
                     return allList
                 }
@@ -87,7 +88,7 @@ export default {
             return []
         })
 
-        const modelActive = ref(type || unref(componentList)[0].name)
+        const modelActive = ref(type || unref(componentList)[0]?.name)
 
         const onDateChange = (value) => {
             const child = unref(childs)[unref(modelActive)]

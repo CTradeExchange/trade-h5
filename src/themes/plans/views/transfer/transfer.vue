@@ -120,7 +120,7 @@ export default {
         state.fromAccount = plans.value[0]
         state.toAccount = plans.value.filter(el => el.name !== state.fromAccount.name)[0]
         // 最大可转
-        const maxTransfer = computed(() => accountList.value.find(item => item.currency === state.curCurrency.currency)?.available)
+        const maxTransfer = computed(() => accountList.value.find(item => item.currency === state.curCurrency.currency)?.withdrawAmount)
         const minTransfer = computed(() => {
             const digits = state.curCurrency.digits
             return pow(0.1, digits)
@@ -139,7 +139,7 @@ export default {
                 return Toast(t('assets.transferTip1'))
             }
             if (state.amount <= 0) {
-                return Toast(t('assets.transferTip2'))
+                return Toast(t('assets.transferTip6'))
             }
             if (isEmpty(toAccountId.value)) {
                 return Toast(state.toAccount.name + t('common.notFound') + state.curCurrency.currency + t('common.account'))

@@ -171,8 +171,8 @@ export default {
             cpVis: false,
             activeNames: ''
         })
-
-        const tradeType = computed(() => store.state._quote.curTradeType)
+        const plans = computed(() => store.state._base.plans)
+        const tradeType = computed(() => store.state._quote.curTradeType || plans.value[0].id)
         const customerInfo = computed(() => store.state._user.customerInfo)
         const positionList = computed(() => store.state._trade.positionList[tradeType.value])
         const product = computed(() => store.state._quote.productMap[data.symbolId + '_' + tradeType.value])
