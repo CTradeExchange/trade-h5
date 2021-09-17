@@ -15,7 +15,7 @@
                 <p class='productName'>
                     {{ data.symbolName }}
                 </p><p class='lot'>
-                    {{ data.symbolName }}
+                    {{ product.symbolCode }}
                 </p>
             </div>
             <div class='right' @click='closeHandler'>

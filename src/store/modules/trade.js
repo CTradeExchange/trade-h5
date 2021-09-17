@@ -248,7 +248,6 @@ export default {
                 })
             } else if (Number(tradeType) === 5) {
                 return queryOrderPage(pendingsConfig[tradeType]).then(res => {
-                    debugger
                     if (res.check()) {
                         if (res.data.length > 0) {
                             const list = res.data

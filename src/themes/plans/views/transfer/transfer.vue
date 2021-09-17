@@ -102,7 +102,8 @@ export default {
             transferType: '',
             amount: '',
             curCurrency: '',
-            maxTransfer: ''
+            maxTransfer: '',
+            curTradeType: ''
         })
 
         // 获取玩法列表
@@ -110,16 +111,19 @@ export default {
         // 获取账户信息
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
 
-        const toAccountId = computed(() => {
-            return store.state._user?.customerInfo?.accountList.find(el => Number(el.tradeType) === Number(state.toAccount.id) && el.currency === state.curCurrency.currency)
-        })
+        const toAccountId = computed(() =>
+            store.state._user?.customerInfo?.accountList.find(el => Number(el.tradeType) === Number(state.toAccount.id) && el.currency === state.curCurrency.currency)
+        )
 
-        const accountList = computed(() =>
-            store.state._user?.customerInfo?.accountList?.filter(el => Number(el.tradeType) === Number(state.fromAccount.id))
+        const accountList = computed(() => {
+            return store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.fromAccount.id))
+        }
+
         )
 
         state.fromAccount = plans.value[0]
         state.toAccount = plans.value.filter(el => el.name !== state.fromAccount.name)[0]
+        state.curTradeType = state.fromAccount.id
         // 最大可转
         // const maxTransfer = computed(() => accountList.value.find(item => item.currency === state.curCurrency.currency)?.withdrawAmount)
         const minTransfer = computed(() => {
@@ -127,15 +131,7 @@ export default {
             return pow(0.1, digits)
         })
 
-        watch(() => accountList.value.length, val => {
-            if (val > 0) {
-                state.curCurrency = accountList.value[0]
-            }
-        }, {
-            immediate: true
-        })
-
-        watchEffect(() => {
+        const queryAccount = () => {
             queryAccountById({
                 accountId: state.curCurrency.accountId,
                 tradeType: state.fromAccount.id
@@ -146,6 +142,19 @@ export default {
             }).catch(err => {
                 state.loading = false
             })
+        }
+
+        watch(() => accountList, val => {
+            if (val.value.length > 0) {
+                state.curCurrency = accountList.value[0]
+                state.curTradeType = accountList.value[0]?.tradeType
+            }
+        }, {
+            immediate: true
+        })
+
+        watchEffect(() => {
+            queryAccount()
         })
 
         const handleTransfer = () => {
@@ -205,6 +214,7 @@ export default {
             } else {
                 state.toAccount = val
             }
+            state.curCurrency = state.curCurrency = accountList.value.filter(el => Number(el.tradeType) === Number(state.fromAccount.tradeType))[0]
             /*   // abcc 现货杠杆 杠杆全仓重新拉账户资产
             if ([3, 5, 9].includes(Number(state.fromAccount.id))) {
                 store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: state.fromAccount.id })
@@ -247,12 +257,23 @@ export default {
         }
 
         const handleSwap = () => {
+            /* state.transferType === 1 ? state.transferType = 1 : state.transferType = 2
+
+            if (state.transferType === 2) {
+                // state.curTradeType = state.fromAccount.tradeType
+                state.curCurrency = accountList.value.filter(el => Number(el.tradeType) === Number(state.toAccount.tradeType))[0]
+            } else {
+                // state.curTradeType = state.toAccount.tradeType
+                state.curCurrency = accountList.value.filter(el => Number(el.tradeType) === Number(state.fromAccount.tradeType))[0]
+            } */
+
             [state.fromAccount, state.toAccount] = [state.toAccount, state.fromAccount]
+            state.curCurrency = state.curCurrency = accountList.value.filter(el => Number(el.tradeType) === Number(state.fromAccount.tradeType))[0]
         }
 
-        if ([3, 5, 9].includes(Number(route.query.tradeType))) {
+        /* if ([3, 5, 9].includes(Number(route.query.tradeType))) {
             store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: route.query.tradeType })
-        }
+        } */
 
         return {
             plans,
