@@ -26,47 +26,45 @@
         </div>
         <div class='dialog-body'>
             <div class='inputNumber'>
-                <div class='left'>
-                    <div>
-                        <div class='name'>
-                            {{ $t('trade.positionPrice') }}
-                        </div>
-                        <div class='open-price'>
-                            {{ data.openPrice }}
-                        </div>
+                <div class='item-block'>
+                    <div class='name'>
+                        {{ $t('trade.positionPrice') }}
+                    </div>
+                    <div class='open-price'>
+                        {{ data.openPrice }}
                     </div>
                 </div>
-                <div class='right'>
-                    <div>
-                        <div class='name'>
-                            {{ $t('trade.currentPrice') }}
-                        </div>
-                        <div :class='[parseFloat(data.direction)===1 ? product.sell_color:product.buy_color]'>
-                            {{ parseFloat(data.direction)===1 ? product.sell_price:product.buy_price }}
-                        </div>
-                    </div>
 
+                <div class='item-block'>
+                    <div class='name'>
+                        {{ $t('trade.currentPrice') }}
+                    </div>
+                    <div :class='[parseFloat(data.direction)===1 ? product.sell_color:product.buy_color]'>
+                        {{ parseFloat(data.direction)===1 ? product.sell_price:product.buy_price }}
+                    </div>
+                </div>
+
+                <div v-if='Number(product.tradeType) === 2' class='item-block'>
+                    <div class='name'>
+                        {{ $t('trade.previewStopPrice') }}
+                    </div>
                     <div>
-                        <div class='name'>
-                            {{ $t('trade.previewStopPrice') }}
-                        </div>
-                        <div>
-                            {{ data.previewStopPrice || '--' }}
-                        </div>
+                        {{ data.previewStopPrice || '--' }}
                     </div>
                 </div>
             </div>
-
-            <ModifyProfitLoss
-                ref='modifyProfitLossRef'
-                v-model:stopLoss='stopLossPrice'
-                v-model:stopProfit='stopProfitPrice'
-                class='modifyProfitLoss'
-                :direction='data.direction'
-                :order-data='data'
-                :product='product'
-            />
         </div>
+
+        <ModifyProfitLoss
+            ref='modifyProfitLossRef'
+            v-model:stopLoss='stopLossPrice'
+            v-model:stopProfit='stopProfitPrice'
+            class='modifyProfitLoss'
+            :direction='data.direction'
+            :order-data='data'
+            :product='product'
+        />
+
         <div class='dialog-footer'>
             <van-button color='#477FD3' :loading='loading' @click='submitHandler'>
                 {{ $t('save') }}
@@ -257,6 +255,11 @@ export default {
             align-items: center;
             justify-content: space-between;
             margin: 0 rem(40px) rem(20px) rem(35px);
+            .item-block {
+                &:last-child {
+                    text-align: right;
+                }
+            }
             .name {
                 padding-bottom: rem(20px);
                 color: var(--minorColor);

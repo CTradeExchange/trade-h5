@@ -701,3 +701,15 @@ export function capitalTransferRecord (data) {
         data
     })
 }
+
+/* 实时账户资金信息 */
+export function queryAccountById (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.queryAccountById',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

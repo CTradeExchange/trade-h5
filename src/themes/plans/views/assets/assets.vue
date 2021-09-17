@@ -40,7 +40,7 @@ import { computed, watchEffect, watch, onUnmounted } from '@vue/runtime-core'
 import { isEmpty } from '@/utils/util'
 import { QuoteSocket, MsgSocket } from '@/plugins/socket/socket'
 import plansType from '@/themes/plans/components/plansType.vue'
-
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 export default {
     components: {
         PositionList,
@@ -52,6 +52,7 @@ export default {
     },
     setup () {
         const store = useStore()
+        const route = useRoute()
         const assetsSwipe = ref(null)
         const curIndex = ref(0)
         const state = reactive({
@@ -76,6 +77,13 @@ export default {
         const tabIndex = computed(() => plans.value.findIndex(item => {
             return (Number(item.id) === Number(tradeType.value))
         }))
+
+        watch(() => route.path, (newVal) => {
+            console.log('监听到变化', newVal)
+            if (newVal !== '/positionDetail') {
+                MsgSocket.cancelSubscribeAsset()
+            }
+        })
 
         // 获取持仓列表
         const queryPositionList = (tradeType) => {
@@ -141,8 +149,9 @@ export default {
             initData(tradeType.value)
         })
 
-        onUnmounted(() => {
-            MsgSocket.cancelSubscribeAsset()
+        onBeforeRouteUpdate((to) => {
+            debugger
+            console.log(to, '=====')
         })
 
         return {

@@ -144,10 +144,10 @@
 <script>
 import DialogSLTP from '@plans/components/dialogSLTP'
 import DialogClosePosition from '@plans/components/dialogClosePosition'
-import { reactive, toRefs, computed, onMounted } from 'vue'
+import { reactive, toRefs, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { QuoteSocket } from '@/plugins/socket/socket'
+import { MsgSocket } from '@/plugins/socket/socket'
 import { minus } from '@/utils/calculation'
 export default {
     components: {
@@ -206,6 +206,10 @@ export default {
 
         onMounted(() => {
             init()
+        })
+
+        onUnmounted(() => {
+            MsgSocket.cancelSubscribeAsset()
         })
 
         return {

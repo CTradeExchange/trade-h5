@@ -83,7 +83,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
 import { pow, gt, lt } from '@/utils/calculation'
-import { capitalTransfer } from '@/api/user'
+import { capitalTransfer, queryAccountById } from '@/api/user'
 import { isEmpty } from '@/utils/util'
 export default {
     setup (props, { emit }) {
@@ -101,7 +101,8 @@ export default {
             assetsList: [],
             transferType: '',
             amount: '',
-            curCurrency: ''
+            curCurrency: '',
+            maxTransfer: ''
         })
 
         // 获取玩法列表
@@ -120,7 +121,7 @@ export default {
         state.fromAccount = plans.value[0]
         state.toAccount = plans.value.filter(el => el.name !== state.fromAccount.name)[0]
         // 最大可转
-        const maxTransfer = computed(() => accountList.value.find(item => item.currency === state.curCurrency.currency)?.withdrawAmount)
+        // const maxTransfer = computed(() => accountList.value.find(item => item.currency === state.curCurrency.currency)?.withdrawAmount)
         const minTransfer = computed(() => {
             const digits = state.curCurrency.digits
             return pow(0.1, digits)
@@ -135,12 +136,16 @@ export default {
         })
 
         watchEffect(() => {
-            if ([3, 5, 9].includes(Number(state.fromAccount.id))) {
-                store.dispatch('_user/queryAccountAssetsInfo', {
-                    tradeType: state.fromAccount.id,
-                    accountId: state.curCurrency.accountId
-                })
-            }
+            queryAccountById({
+                accountId: state.curCurrency.accountId,
+                tradeType: state.fromAccount.id
+            }).then(res => {
+                if (res.check()) {
+                    state.maxTransfer = res.data.withdrawAmount
+                }
+            }).catch(err => {
+                state.loading = false
+            })
         })
 
         const handleTransfer = () => {
@@ -154,7 +159,7 @@ export default {
                 return Toast(state.toAccount.name + t('common.notFound') + state.curCurrency.currency + t('common.account'))
             }
 
-            if (gt(state.amount, maxTransfer.value.balance)) {
+            if (gt(state.amount, state.maxTransfer)) {
                 return Toast(t('assets.transferTip4'))
             }
             if (lt(state.amount, minTransfer.value)) {
@@ -262,7 +267,6 @@ export default {
             handleAll,
             accountList,
             currencyField,
-            maxTransfer,
             minTransfer,
             ...toRefs(state),
 
