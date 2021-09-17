@@ -82,6 +82,7 @@ export function queryOrderPage (data) {
         url: '/global/tradeapi.app.OrderApiService.queryOrderPage',
         method: 'post',
         headers: {
+            version: '0.0.1',
             group: 'tradeApi'
         },
         data
@@ -212,3 +213,5 @@ export function closeTradePboOrder (data) {
         data
     })
 }
+
+/* 现货撮合取消委托单 */

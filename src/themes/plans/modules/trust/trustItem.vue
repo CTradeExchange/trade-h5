@@ -138,7 +138,8 @@ export default {
 
             }
 
-            if (Number(props.product.tradeType) === 9) {
+            if ([5, 9].includes(props.product.tradeType)) {
+                // ABCC撤单
                 closeTradePboOrder({
                     orderId: props.product.id,
                         ...params,

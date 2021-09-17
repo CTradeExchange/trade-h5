@@ -149,11 +149,6 @@ export default {
             initData(tradeType.value)
         })
 
-        onBeforeRouteUpdate((to) => {
-            debugger
-            console.log(to, '=====')
-        })
-
         return {
             accountList,
             onChange,

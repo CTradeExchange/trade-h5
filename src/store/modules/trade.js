@@ -1,4 +1,4 @@
-import { queryPositionPage, queryHistoryCloseOrderList, queryPBOOrderPage, queryAbccPboPage } from '@/api/trade'
+import { queryPositionPage, queryHistoryCloseOrderList, queryPBOOrderPage, queryAbccPboPage, queryOrderPage } from '@/api/trade'
 import CheckAPI from '@/utils/checkAPI'
 import { cachePendingParams } from './storeUtil.js'
 import { minus, toFixed, plus, shiftedBy } from '@/utils/calculation'
@@ -243,6 +243,23 @@ export default {
                             })
                         }
                         commit('Update_pendingList', { tradeType, list: res.data.list })
+                    }
+                    return res
+                })
+            } else if (Number(tradeType) === 5) {
+                return queryOrderPage(pendingsConfig[tradeType]).then(res => {
+                    debugger
+                    if (res.check()) {
+                        if (res.data.length > 0) {
+                            const list = res.data
+                            // 处理接口返回字段不一致
+                            list.forEach(item => {
+                                item.tradeType = tradeType
+                                item.requestNum = item.executeNum
+                                item.orderTime = item.executeTime
+                            })
+                        }
+                        commit('Update_pendingList', { tradeType, list: res.data })
                     }
                     return res
                 })
