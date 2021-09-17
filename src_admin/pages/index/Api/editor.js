@@ -191,3 +191,12 @@ export function saveViChannel (data) {
         method: 'post'
     })
 }
+
+// 初始化
+export function initChannel (data) {
+    return request({
+        url: '/wp-json/wp/v2/init_channel',
+        data: data,
+        method: 'post'
+    })
+}
