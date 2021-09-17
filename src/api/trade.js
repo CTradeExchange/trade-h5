@@ -82,7 +82,7 @@ export function queryOrderPage (data) {
         url: '/global/tradeapi.app.OrderApiService.queryOrderPage',
         method: 'post',
         headers: {
-
+            version: '0.0.1',
             group: 'tradeApi'
         },
         data
