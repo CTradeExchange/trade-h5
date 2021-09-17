@@ -50,7 +50,7 @@
                                 :label='index === 0 ? "注册客户组" : ""'
                             >
                                 <el-row>
-                                    <el-col :span='6'>
+                                    <el-col :span='4'>
                                         <el-select
                                             v-model='form.registList[index].registCountryId'
                                             clearable
@@ -65,7 +65,7 @@
                                             />
                                         </el-select>
                                     </el-col>
-                                    <el-col :span='6'>
+                                    <el-col :span='4'>
                                         <el-select
                                             v-model='form.registList[index].registCustomerId'
                                             clearable
@@ -137,12 +137,7 @@
                                     />
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label='信息流 orgid'>
-                                <el-input
-                                    v-model='form.orgid'
-                                    placeholder='请输入'
-                                />
-                            </el-form-item>
+
                             <el-form-item label='GA埋点代码'>
                                 <el-input
                                     v-model='form.googleAnalytics'
@@ -341,7 +336,6 @@ export default {
                 googleAnalytics: '',
                 h5Address: '',
                 h5PreviewAddress: '',
-                orgid: '',
                 defaultZone: '',
                 registList: [{}],
                 onlineService: '',

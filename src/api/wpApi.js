@@ -4,19 +4,6 @@ import request_wp from '@/utils/request_wp'
 /* 获取wp公司配置信息 */
 export const wpCompanyConfig = () => {
     return pageConfig('SysSetting')
-    return Promise.resolve({
-        companyId: 3,
-        trade_type: 1,
-        customerGroupId: 7,
-        currencyList: [
-            { name: '美元账户', value: 'USD' },
-            { name: '人民币', value: 'CNY' }
-        ],
-        tradeTypeList: [
-            { name: 'CFD账户', id: '1' },
-            { name: 'CFD账户222', id: '2' },
-        ],
-    })
 }
 // 获取自选产品
 export const wpSelfSymbolIndex = () => pageConfig('SelfSymbolIndex')
