@@ -59,7 +59,7 @@
                             </span>
                         </div>
                     </div>
-                    <div v-if='[3, 5, 9].includes(Number(tradeType))' class='col'>
+                    <div v-if='[3, 9].includes(Number(tradeType))' class='col'>
                         <div class='sub'>
                             {{ $t('trade.loan') }}
                         </div>

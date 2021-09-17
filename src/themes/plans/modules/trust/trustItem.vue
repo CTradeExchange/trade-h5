@@ -40,7 +40,7 @@
                     </span>
                 </p>
 
-                <p v-if='[3, 5, 9].includes(Number(product.tradeType))' class='tl-item'>
+                <p v-if='[3, 9].includes(Number(product.tradeType))' class='tl-item'>
                     <label for=''>
                         {{ $t('trade.loan') }}
                     </label>
