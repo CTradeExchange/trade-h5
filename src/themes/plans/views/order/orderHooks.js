@@ -35,29 +35,28 @@ export default function hooks (state) {
         return bizType;
     }
     const bizType = computed(() => {
-        
         let bizType = state.orderType   // 1市价单  10挂单
         let entryType = state.entryType   // 1按数量下单 2按成交额下单
         const tradeType = product.value?.tradeType
-        
+
         if([1,2].includes(tradeType)){
             if(state.orderType===1){
                 bizType = 1
             }else{
                 bizType = bizTypeByPendingCFD()
             }
-        }else if([3,5].includes(tradeType) ){
+        }else if([3].includes(tradeType) ){
             if(state.orderType===1){
                 bizType = entryType=== 1 ? 1 : 12;
             }else{
-                bizType = 13;
+                bizType = entryType=== 1 ? 13 : 14;
             }
+        }else if([5].includes(tradeType) ){ // 现货撮合玩法 市价填写12,限价填写13
+            bizType = state.orderType===1 ? 12:13
+
         }else if([9].includes(tradeType) ){
-            if(state.orderType===1){
-                bizType = 1;
-            }else{
-                bizType = 13;
-            }
+            bizType = state.orderType===1 ? 1:13
+
         }
         return bizType
     })
