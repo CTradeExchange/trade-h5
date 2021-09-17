@@ -132,9 +132,9 @@ import { h5PageList } from './h5PageList'
 import { useRouter } from 'vue-router'
 import { onMounted, reactive, ref, toRefs, getCurrentInstance } from 'vue'
 import { getQuery } from '@admin/utils'
+const urlParams = getQuery()
 export default {
     beforeRouteEnter (to, from, next) {
-        const urlParams = getQuery()
         console.log(to, from, urlParams)
         if (urlParams.page === 'cats_sett_manage') {
             next({ name: 'Setting' })
@@ -156,7 +156,7 @@ export default {
 
         const checkPageCode = (rule, value, callback) => {
             const localData = state.list.find((item) => (item.page_code == value))
-            if (state.addForm.type == 'add' && localData) {
+            if (state.addForm.type === 'add' && localData) {
                 callback(new Error('页面已存在，请重新输入'))
             } else {
                 callback()
@@ -248,7 +248,9 @@ export default {
                 page_slug: 'act_1',
                 type: 'html',
                 status: '1',
-                content: []
+                content: [],
+                id: urlParams.id,
+                language: urlParams.language
             }
             state.addForm.show = true
         }
@@ -267,7 +269,9 @@ export default {
             state.loading = true
             state.list = []
             pageList({
-                type: 'html'
+                type: 'html',
+                id: urlParams.id,
+                language: urlParams.language
             }).then(res => {
                 state.loading = false
                 if (res.success) {
@@ -285,6 +289,7 @@ export default {
         }
         const setting = (row) => {
             console.log(row)
+
             state.addForm.form = deepClone(row)
             const nameList = h5PageList.map(item => (item.name))
             if (nameList.indexOf(row.page_code) >= 0) {
@@ -293,14 +298,17 @@ export default {
             } else {
                 state.addForm.form.pageType = '2'
             }
+
             state.addForm.type = 'modify'
+            state.addForm.form.id = urlParams.id
+            state.addForm.form.language = urlParams.language
             state.addForm.show = true
         }
         const viewPublish = (row) => {
             router.push({
                 name: 'PublishList',
                 query: {
-                    id: row.page_code
+                    pageCode: row.page_code
                 }
             })
         }

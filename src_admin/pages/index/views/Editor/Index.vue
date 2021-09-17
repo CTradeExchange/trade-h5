@@ -192,11 +192,15 @@ export default {
 
         const handleGetPageConfig = () => {
             if (state.pageCode) {
-                getPageConfig(state.pageCode)
+                getPageConfig({
+                    page_code: state.pageCode,
+                    id: urlParams.id,
+                    language: urlParams.language
+                })
                     .then(res => {
                         store.commit('editor/RESET_ELEMENT', [])
                         state.pageConf = res.data
-                        const parseData = JSON.parse(res.data ? ((res.data.content.length <= 0 || res.data.content == '[]') ? '[]' : unzip(res.data.content)) : '[]')
+                        const parseData = JSON.parse(res.data ? ((res.data.content.length <= 0 || res.data.content === '[]') ? '[]' : unzip(res.data.content)) : '[]')
                         const resData = Object.prototype.toString.call(parseData) === '[object Array]' ? parseData : []
                         console.log(resData)
                         if (resData.length <= 0) {
@@ -293,7 +297,11 @@ export default {
 
         const getSettingPageData = () => {
             return new Promise((resolve, reject) => {
-                getPageConfig('SysSetting')
+                getPageConfig({
+                    page_code: 'SysSetting',
+                    id: urlParams.id,
+                    language: urlParams.language
+                })
                     .then(res => {
                         if (!res.success) {
                             ElMessage.error(res.message)
@@ -377,7 +385,9 @@ export default {
                 modifyPageConfig(Object.assign({}, state.pageConf, {
                     page_code: state.pageCode,
                     content: zip(JSON.stringify(config)),
-                    other: JSON.stringify(store.state.editor.elementOther)
+                    other: JSON.stringify(store.state.editor.elementOther),
+                    id: urlParams.id,
+                    language: urlParams.language
                 }))
                     .then(res => {
                         if (!res.success) {
@@ -526,7 +536,12 @@ export default {
                 return
             }
             const pageImg = await html2canvas(document.querySelector('.previewWrapper .drawing-board'), { allowTaint: true, useCORS: true })
-            pushPage(Object.assign({ pageCode: state.pageCode, img: pageImg.toDataURL('image/jpeg', 0.7) }, state.publishForm))
+            pushPage(Object.assign({
+                pageCode: state.pageCode,
+                img: pageImg.toDataURL('image/jpeg', 0.7),
+                id: urlParams.id,
+                language: urlParams.language
+            }, state.publishForm))
                 .then(res => {
                     state.showPublish = false
                     if (!res.success) {

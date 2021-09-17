@@ -6,7 +6,7 @@
                 v-loading='loading'
                 border
                 :data='list'
-                style='width: 100%'
+                style='width: 100%;'
             >
                 <el-table-column
                     align='center'
@@ -89,9 +89,11 @@
 <script>
 import { getPushPageList, rollBackReleasePage } from '@index/Api/editor'
 import { reactive, toRefs, onMounted, getCurrentInstance } from 'vue'
+import { getQuery } from '@admin/utils'
 import {
     useRouter, useRoute
 } from 'vue-router'
+const urlParams = getQuery()
 export default {
     name: 'PublishList',
     setup (props) {
@@ -110,7 +112,11 @@ export default {
         }
         const getList = () => {
             state.loading = true
-            getPushPageList({ pageCode: route.query.id })
+            getPushPageList({
+                pageCode: route.query.pageCode,
+                id: urlParams.id,
+                language: urlParams.language
+            })
                 .then(res => {
                     state.loading = false
                     if (!res.success) {
@@ -172,8 +178,8 @@ export default {
 
 <style scoped lang="scss">
 .m-pageList {
-    padding: 20px;
     height: 100vh;
+    padding: 20px;
     overflow-y: auto;
     .header {
         line-height: 50px;
@@ -185,8 +191,8 @@ export default {
         display: inline-block;
         height: 100px;
         img {
-            height: 100px;
             width: auto;
+            height: 100px;
         }
     }
 }

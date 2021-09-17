@@ -1,12 +1,8 @@
 import request from '@utils/request'
-export function getPageConfig (id) {
+export function getPageConfig (params) {
     return request({
         url: '/wp-json/wp/v2/vi_page/',
-        params: {
-            page_code: id,
-            language: 'zh',
-            channelId: 1
-        },
+        params,
         method: 'get'
     })
 }
