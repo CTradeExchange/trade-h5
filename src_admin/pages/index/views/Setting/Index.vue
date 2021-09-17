@@ -593,7 +593,7 @@ export default {
                         if (['1', '2'].indexOf(String(el.id)) > -1) {
                             return { id: el.id, name: el.name, sort, allCurrency: assets || '', alias, isWallet }
                         } else {
-                            return { id: el.id, name: el.name, sort, allCurrency: assets ? compact(assets).join() : [], alias, isWallet }
+                            return { id: el.id, name: el.name, sort, allCurrency: assets ? compact(assets).join() : '', alias, isWallet }
                         }
                     })
                     tempTradeTypeCurrencyList.sort(function (a, b) {
