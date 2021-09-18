@@ -49,20 +49,20 @@ export function pageConfig (id) {
         let content = res?._content ?? res
         content = reg.test(content) || typeof (content) === 'object' ? content : unzip(content)
         const data = typeof (content) === 'string' ? JSON.parse(content) : content
-        if (id === 'TradeIndex') mockQuoteData(data)
+        // if (id === 'TradeIndex') mockQuoteData(data)
         return data
     })
 }
 
 // mock多玩法配置参数信息
-function mockQuoteData (data) {
-    const quoteListConfig = data.find(el => el.tag === 'quoteList')
-    const items = quoteListConfig.data.items
-    items.forEach(el => {
-        const { code_ids_all } = el
-        const ids_all = Object.assign({}, code_ids_all)
-        code_ids_all['1'] = ids_all
-        code_ids_all['2'] = ids_all
-        code_ids_all['3'] = ids_all
-    })
-}
+// function mockQuoteData (data) {
+//     const quoteListConfig = data.find(el => el.tag === 'quoteList')
+//     const items = quoteListConfig.data.items
+//     items.forEach(el => {
+//         const { code_ids_all } = el
+//         const ids_all = Object.assign({}, code_ids_all)
+//         code_ids_all['1'] = ids_all
+//         code_ids_all['2'] = ids_all
+//         code_ids_all['3'] = ids_all
+//     })
+// }

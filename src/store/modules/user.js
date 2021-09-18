@@ -152,6 +152,13 @@ export default {
 
             commit('Update_kycState', data.kycAuditStatus)
             commit('Update_customerInfo', data)
+
+            // 根据不同客户组设置不同玩法
+            const wpCompanyInfo = rootState._base.wpCompanyInfo
+            const curCustomerGroup = wpCompanyInfo.registList.find(el => parseInt(el.customerGroupId) === data.customerGroupId)
+            const curCustomerPlans = curCustomerGroup ? curCustomerGroup.plans : wpCompanyInfo.tradeTypeCurrencyList
+            commit('_base/Update_plans', curCustomerPlans, { root: true })
+
             if (flag) {
                 if (data.optional === 1) dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
                 dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {

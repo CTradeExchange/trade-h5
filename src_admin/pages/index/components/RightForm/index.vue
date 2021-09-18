@@ -313,7 +313,7 @@ export default {
                 const newSelfData = { ...this.tradeTypeSelfSymbol }
                 newSelfData[type] = data
                 this.$store.commit('editor/UPDATE_TRADETYPE_SELFSYMBOL', newSelfData)
-            } else if (key === 'tradeTypeBlock') {
+            } else if (key === 'tradeTypeBlock' || key === 'code_ids_all') {
                 const newData = [...this.tradeTypeCollect]
                 if (newData[this.blockIndex]) {
                     newData[this.blockIndex][type] = data
