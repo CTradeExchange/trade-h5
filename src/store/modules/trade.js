@@ -1,7 +1,7 @@
 import { queryPositionPage, queryHistoryCloseOrderList, queryPBOOrderPage, queryAbccPboPage, queryOrderPage } from '@/api/trade'
 import CheckAPI from '@/utils/checkAPI'
 import { cachePendingParams } from './storeUtil.js'
-import { minus, toFixed, plus, shiftedBy } from '@/utils/calculation'
+import { minus, divide, toFixed, plus, shiftedBy } from '@/utils/calculation'
 import { vue_set, assign } from '@/utils/vueUtil.js'
 import BigNumber from 'bignumber.js'
 
@@ -254,8 +254,11 @@ export default {
                             // 处理接口返回字段不一致
                             list.forEach(item => {
                                 item.tradeType = tradeType
-                                item.requestNum = item.executeNum
-                                item.orderTime = item.executeTime
+                                debugger
+                                item.orderTime = item.requestTime
+                                if (Number(item.direction) === 1) {
+                                    item.requestNum = item.requestPrice
+                                }
                             })
                         }
                         commit('Update_pendingList', { tradeType, list: res.data })

@@ -19,7 +19,14 @@
         <div class='direction'>
             <span :class="Number(product.direction) === 1 ? 'riseColor' : 'fallColor'">
                 {{ Number(product.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
-            </span> {{ product.requestNum }} {{ Number(product.entryType) === 1 ? $t('trade.volumeUnit') : product.accountCurrency }}
+            </span>
+            &nbsp;
+            <span v-if='Number(product.tradeType) === 5'>
+                {{ product.requestNum }}&nbsp;{{ Number(product.direction) === 1 ? product.inCurrency : product.outCurrency }}
+            </span>
+            <span v-else>
+                {{ product.requestNum }}&nbsp;{{ Number(product.entryType) === 1 ? $t('trade.volumeUnit') : product.accountCurrency }}
+            </span>
         </div>
 
         <div class='t-body'>
