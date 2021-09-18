@@ -17,8 +17,12 @@ export default {
             state.inited = data
         },
         UPDATE_wpCompanyInfo (state, data) {
-            sessionSet('companyId', data.companyId)
-            state.wpCompanyInfo = data
+            if (data.companyId) sessionSet('companyId', data.companyId)
+            if (state.wpCompanyInfo) {
+                Object.assign(state.wpCompanyInfo, data)
+            } else {
+                state.wpCompanyInfo = data
+            }
         },
         UPDATE_wpNav (state, data) {
             state.wpNav = data
@@ -38,6 +42,7 @@ export default {
         initBaseConfig ({ dispatch, commit }) {
             const baseList = [
                 dispatch('getCompanyInfo'),
+                dispatch('getChannelSett'),
                 dispatch('getNav'),
                 dispatch('getWpSelfSymbols'),
                 dispatch('getProductCategory')
@@ -50,6 +55,15 @@ export default {
         // 获取公司配置信息
         getCompanyInfo ({ commit }) {
             return wpCompanyConfig().then(data => {
+                if (data) {
+                    commit('UPDATE_wpCompanyInfo', data)
+                }
+                return data
+            })
+        },
+        // 获取渠道配置信息
+        getChannelSett ({ commit }) {
+            return pageConfig('channel_sett').then(data => {
                 if (data) {
                     if (data.tradeTypeCurrencyList) {
                         data.tradeTypeCurrencyList = data.tradeTypeCurrencyList.filter(el => el.allCurrency)
@@ -95,7 +109,7 @@ export default {
                 const _result = modulesList.filter(item => {
                     const { accountType, expiryDate } = item.data
                     const hasRole = accountType.includes(userAccountType)
-                    const inActiveTime = expiryDate?.length === 0 ? true : dayjs().isBetween(expiryDate[0], expiryDate[1])
+                    const inActiveTime = !expiryDate || expiryDate?.length === 0 ? true : dayjs().isBetween(expiryDate[0], expiryDate[1])
                     return hasRole && inActiveTime
                 })
                 return _result

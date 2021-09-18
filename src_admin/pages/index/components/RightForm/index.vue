@@ -20,13 +20,25 @@
                 '
             >
                 <el-form-item
-                    v-if="config.type == 'Input' || config.type == 'Textarea'"
+                    v-if="config.type == 'Input' "
                     :label='config.label'
                     :row='8'
                 >
                     <el-input
                         v-model='activeData[config.name]'
                         placeholder='请输入'
+                        :type='config.type.toLowerCase()'
+                    />
+                </el-form-item>
+                <el-form-item
+                    v-else-if="config.type == 'Textarea'"
+                    :label='config.label'
+                    :row='8'
+                >
+                    <el-input
+                        v-model='activeData[config.name]'
+                        placeholder='请输入'
+                        :rows='20'
                         :type='config.type.toLowerCase()'
                     />
                 </el-form-item>
@@ -279,7 +291,7 @@ export default {
         }
     },
     created () {
-        console.log('---activeData-----', this.activeData)
+        // console.log('---activeData-----', this.activeData)
     },
     methods: {
         addRow (formConfig, data) {

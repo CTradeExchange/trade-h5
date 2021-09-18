@@ -143,9 +143,7 @@ export default {
     }
 }
 .capitalImg {
-    height: rem(150px);
     margin-top: rem(30px);
-    line-height: rem(150px);
     text-align: center;
     background: var(--assistColor);
     img {

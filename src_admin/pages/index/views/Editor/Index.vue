@@ -230,7 +230,8 @@ export default {
                                     const _childConfig = deepClone(_data.config)
                                     let childConfig = null
                                     if (_data.type === 'Array') {
-                                        childConfig = target.data[_data.name].map((item, _Cindex) => {
+                                        const configList = target.data[_data.name] || []
+                                        childConfig = configList.map((item, _Cindex) => {
                                             const _id = randomStr()
                                             _childConfig.forEach(configItem => {
                                                 if (configItem.type === 'Array') {

@@ -18,7 +18,7 @@ export default [
         title: '设置'
     },
     {
-        name: 'MsgList',
+        name: 'Msg',
         title: '消息中心'
     },
     {
