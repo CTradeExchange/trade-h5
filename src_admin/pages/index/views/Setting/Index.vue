@@ -527,7 +527,7 @@ export default {
                     try {
                         let tradeTypeCurrencyEumn = {}
                         if (Array.isArray(content?.tradeTypeCurrencyList)) {
-                            tradeTypeCurrencyEumn = keyBy(content.tradeTypeCurrencyList, 'id')
+                            tradeTypeCurrencyEumn = keyBy(content?.tradeTypeCurrencyList, 'id')
                         }
                         const cacheCheckedTradeType = {}
                         // const initTradeTypeAssets = {}
@@ -583,6 +583,7 @@ export default {
                 console.log(_other)
                 const _formData = deepClone(this.form)
                 delete _formData.other
+
                 try {
                     // _formData.tradeTypeList = JSON.parse(_formData.tradeTypeList)
                     // _formData.currencyList = JSON.parse(_formData.currencyList)
