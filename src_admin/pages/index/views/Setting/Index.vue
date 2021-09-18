@@ -687,11 +687,6 @@ export default {
                 font-weight: bold;
             }
         }
-        .lang-wrap {
-            .el-row{
-
-            }
-        }
     }
 }
 </style>

@@ -78,9 +78,6 @@ export default {
     font-size: rem(34px);
     background: var(--contentColor);
     .back {
-        position: absolute;
-        top: rem(26px);
-        left: 0;
         z-index: 1;
         width: rem(120px);
         padding: 0 rem(30px);
