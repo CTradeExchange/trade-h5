@@ -270,6 +270,7 @@ import File from '@index/components/RightForm/File'
 import city from './data/city.json'
 import province from './data/province.json'
 import { deepClone } from '@utils/deepClone'
+import { getQuery } from '@utils/index'
 import { keyBy, forOwn, isPlainObject, compact } from 'lodash'
 import { Toast } from 'vant'
 const treeData = province.map(province => {
@@ -279,6 +280,7 @@ const treeData = province.map(province => {
     }
     return province
 })
+const urlParams = getQuery()
 export default {
     name: 'Setting',
     components: {
@@ -422,7 +424,11 @@ export default {
         },
         getPageConfig () {
             this.getLoading = true
-            getPageConfig('SysSetting')
+            getPageConfig({
+                page_code: 'SysSetting',
+                id: urlParams.id,
+                language: urlParams.language
+            })
                 .then(res => {
                     if (!res.success) {
                         this.$message.error(res.message)
