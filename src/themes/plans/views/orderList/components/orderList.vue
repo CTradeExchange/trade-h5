@@ -50,16 +50,16 @@
             :immediate-check='false'
             @load='onLoad'
         >
-            <div v-for='item in recordList' :key='item.orderId' class='trust-item'>
+            <div v-for='(item,index) in recordList' :key='index' class='trust-item'>
                 <div class='t-header'>
                     <div class='fl'>
                         <span class='name'>
-                            {{ item.symbolName }}
+                            {{ item?.symbolName || '--' }}
                         </span>
                     </div>
                 </div>
                 <div class='direction'>
-                    {{ bizTypeText[item.bizType] }} /
+                    {{ bizTypeText ? bizTypeText[item.bizType] : '--' }} /
                     <span :class="Number(item.direction) === 1 ? 'riseColor' : 'fallColor'">
                         {{ Number(item.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
                     </span> {{ item.executeNum }}
@@ -71,7 +71,7 @@
                             <label for=''>
                                 {{ $t('trade.positionPrice') }}
                             </label><span>
-                                {{ item.requestPrice || '--' }}
+                                {{ item?.requestPrice || '--' }}
                             </span>
                         </p>
                         <p class='tl-item'>
@@ -79,7 +79,7 @@
                                 {{ $t('trade.dealPrice') }}
                             </label>
                             <span>
-                                {{ item.executePrice }}
+                                {{ item?.executePrice }}
                             </span>
                         </p>
                         <p v-if='isCloseType(item.bizType)' class='tl-item'>
@@ -87,7 +87,7 @@
                                 {{ $t('trade.profit') }}
                             </label>
                             <span>
-                                {{ item.profitLoss || '--' }}
+                                {{ item?.profitLoss || '--' }}
                             </span>
                         </p>
 
@@ -116,14 +116,6 @@
                                 {{ item.loanAmount ? item.loanAmount + ' ' + item.outCurrency : '--' }}
                             </span>
                         </p>
-                        <!-- <p v-if='isCloseType(item.bizType)' class='tl-item'>
-                            <label for=''>
-                                {{ $t('trade.swap') }}
-                            </label>
-                            <span>
-                                {{ item.overnightInterest || '--' }}
-                            </span>
-                        </p> -->
 
                         <p class='tl-item'>
                             <label for=''>
@@ -144,7 +136,7 @@
                         </p>
                         <p class='tl-item'>
                             <span>
-                                #{{ item.orderId }}
+                                #{{ item?.orderId }}
                             </span>
                         </p>
                     </div>
@@ -287,6 +279,7 @@ export default {
             tradeRecordList(params).then(res => {
                 state.loading = false
                 state.loadingMore = false
+
                 if (res.check()) {
                     state.recordList = state.recordList.concat(res.data.list)
                     state.bizTypeText = res.data.bizTypeText
