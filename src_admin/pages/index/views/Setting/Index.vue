@@ -536,7 +536,7 @@ export default {
                             content.tradeTypeList.forEach(el => {
                                 const { allCurrency, sort, alias, isWallet } = tradeTypeCurrencyEumn[String(el.id)]
                                 cacheCheckedTradeType[String(el.id)] = {
-                                    assets: ['1', '2'].indexOf(String(el.id)) > -1 ? allCurrency : (typeof (allCurrency) === 'string' ? allCurrency.split(',') : allCurrency),
+                                    assets: ['1', '2'].indexOf(String(el.id)) > -1 && allCurrency ? allCurrency : (typeof (allCurrency) === 'string' ? allCurrency.split(',') : allCurrency),
                                     sort,
                                     isWallet,
                                     alias
