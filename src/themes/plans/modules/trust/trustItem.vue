@@ -22,7 +22,7 @@
             </span>
             &nbsp;
             <span v-if='Number(product.tradeType) === 5'>
-                {{ product.requestNum }}&nbsp;{{ Number(product.direction) === 1 ? product.inCurrency : product.outCurrency }}
+                {{ product.requestNum }}&nbsp;{{ product.outCurrency }}
             </span>
             <span v-else>
                 {{ product.requestNum }}&nbsp;{{ Number(product.entryType) === 1 ? $t('trade.volumeUnit') : product.accountCurrency }}
