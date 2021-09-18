@@ -111,16 +111,15 @@
 
                             <el-form-item label='游客客户组'>
                                 <el-select
-                                    v-model='form.tradeTypeCurrencyList'
+                                    v-model='form.customerGroupId'
                                     clearable
                                     placeholder='请选择客户组'
-                                    value-key='id'
                                 >
                                     <el-option
                                         v-for='el in accountTradeList'
                                         :key='el.id'
                                         :label='el.name'
-                                        :value='el'
+                                        :value='el.id'
                                     />
                                 </el-select>
                             </el-form-item>
@@ -356,7 +355,8 @@ export default {
                 defaultZone: '',
                 registList: [{}],
                 onlineService: '',
-                supportLanguage: []
+                supportLanguage: [],
+                customerGroupId: ''
             },
             accountTradeList: [],
             registrable: [],
@@ -474,9 +474,11 @@ export default {
         submit () {
             this.submitLoading = true
             const _formData = cloneDeep(this.form)
+            debugger
 
             if (_formData.tradeTypeCurrencyList) {
-                _formData.tradeTypeCurrencyList.data = _formData.tradeTypeCurrencyList?.data.map(el => {
+                _formData.customerGroupId = Number(_formData.tradeTypeCurrencyList?.id)
+                _formData.tradeTypeCurrencyList = _formData.tradeTypeCurrencyList?.data.map(el => {
                     return {
                         trade_name: el.trade_name,
                         trade_type: el.trade_type
