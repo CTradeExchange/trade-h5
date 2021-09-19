@@ -55,7 +55,7 @@ if (loginParams || token) store.commit('_user/Update_loginLoading', true)
 // 获取到公司配置后初始化vue实例
 store.dispatch('_base/initBaseConfig').then(async () => {
     // 设置语言
-    const defaultLocal = localGet('lang')
+    const defaultLocal = localGet('lang') || 'zh-CN'
     setI18nLanguage(I18n, defaultLocal)
     await loadLocaleMessages(I18n, defaultLocal)
 

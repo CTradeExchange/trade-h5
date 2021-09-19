@@ -224,6 +224,7 @@ export default {
                     symbolList: rootGetters.userSelfSymbolList[tradeType],
                 })
             })
+            if (tradeTypeCurrencyList.length === 0) return false
             addCustomerOptionalBatch({ tradeTypeCurrencyList }).then(res => {
                 if (res.check()) {
                     commit('Update_optional', 1)

@@ -58,7 +58,6 @@ export default {
         return {
             value: '',
             id: this.$attrs.id || randomId(),
-            zoneVal: this.zone
         }
     },
     computed: {
@@ -74,11 +73,16 @@ export default {
                 })
             })
             return tempArr
-        }
-    },
-    watch: {
-        zone (newval) {
-            if (newval !== this.zoneVal) this.zoneVal = newval
+        },
+        zoneVal: {
+            get () {
+                return this.zone
+            },
+            set (value) {
+                if (!this.disabled) {
+                    this.$emit('update:zone', value)
+                }
+            }
         }
     },
     emits: ['update:modelValue', 'update:zone', 'input', 'zoneSelect'],

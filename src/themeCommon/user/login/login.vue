@@ -5,7 +5,6 @@
             <h1 class='pageTitle'>
                 {{ $t(loginType==='password'?'login.loginByPwd':'login.loginByCode') }}
             </h1>
-        <!-- <LanguageDiv /> -->
         </header>
         <form class='loginForm'>
             <div v-if="loginAccount==='mobile'" class='field'>
@@ -76,7 +75,6 @@
 
 <script>
 import Schema from 'async-validator'
-import LanguageDiv from '@m/modules/languageDiv'
 import areaInput from '@/components/form/areaInput'
 import InputComp from '@/components/form/input'
 import Vline from '@/components/vline'
@@ -100,7 +98,6 @@ export default {
     components: {
         timeline,
         timelineItem,
-        LanguageDiv,
         Vline,
         InputComp,
         areaInput,
