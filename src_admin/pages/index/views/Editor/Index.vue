@@ -138,7 +138,7 @@ import draggable from 'vuedraggable'
 import { getPageConfig, modifyPageConfig, pushPage } from '@index/Api/editor'
 import RightPanel from './components/RightPanel'
 import ShowJson from './components/ShowJson'
-import { getQuery, zip, unzip, randomStr } from '@utils/index'
+import { zip, unzip, randomStr, getQueryString } from '@utils/index'
 import { deepClone } from '@utils/deepClone'
 import { mobileComponentsConfig } from '@admin/components/config'
 import previewRender from '../../preview/preview'
@@ -154,7 +154,6 @@ let mobileComponents = null
 const pageBaseConfig = pageConfig || {}
 let ELEMENIINDEX = 0
 let ROWID = 10
-const urlParams = getQuery()
 
 export default {
     components: {
@@ -179,7 +178,7 @@ export default {
             ],
             showCode: false,
             pageConf: {},
-            pageCode: route.query.page_code || urlParams.page_code,
+            pageCode: getQueryString('page_code'),
             showPublish: false,
             publishLoading: false,
             publishForm: {
@@ -194,8 +193,8 @@ export default {
             if (state.pageCode) {
                 getPageConfig({
                     page_code: state.pageCode,
-                    id: urlParams.id,
-                    language: urlParams.language
+                    id: getQueryString('id'),
+                    language: getQueryString('language'),
                 })
                     .then(res => {
                         store.commit('editor/RESET_ELEMENT', [])
@@ -300,8 +299,8 @@ export default {
             return new Promise((resolve, reject) => {
                 getPageConfig({
                     page_code: 'SysSetting',
-                    id: urlParams.id,
-                    language: urlParams.language
+                    id: getQueryString('id'),
+                    language: getQueryString('language'),
                 })
                     .then(res => {
                         if (!res.success) {
@@ -387,8 +386,8 @@ export default {
                     page_code: state.pageCode,
                     content: zip(JSON.stringify(config)),
                     other: JSON.stringify(store.state.editor.elementOther),
-                    id: urlParams.id,
-                    language: urlParams.language
+                    channelId: getQueryString('id'),
+                    language: getQueryString('language'),
                 }))
                     .then(res => {
                         if (!res.success) {
@@ -540,8 +539,8 @@ export default {
             pushPage(Object.assign({
                 pageCode: state.pageCode,
                 img: pageImg.toDataURL('image/jpeg', 0.7),
-                id: urlParams.id,
-                language: urlParams.language
+                channelId: getQueryString('id'),
+                language: getQueryString('language'),
             }, state.publishForm))
                 .then(res => {
                     state.showPublish = false

@@ -111,15 +111,16 @@
 
                             <el-form-item label='游客客户组'>
                                 <el-select
-                                    v-model='form.customerGroupId'
+                                    v-model='form.customerGroup'
                                     clearable
                                     placeholder='请选择客户组'
+                                    value-key='id'
                                 >
                                     <el-option
                                         v-for='el in accountTradeList'
                                         :key='el.id'
                                         :label='el.name'
-                                        :value='el.id'
+                                        :value='el'
                                     />
                                 </el-select>
                             </el-form-item>
@@ -275,7 +276,7 @@
                 label-position='right'
                 label-width='100px'
             >
-                <div v-for='(item) in tradeTypeAssets' :key='item.id' class='tradeType-row'>
+                <div v-for='(item,index) in tradeTypeAssets' :key='item.id' class='tradeType-row'>
                     <el-card :header='item.name' shadow='always'>
                         <template v-if="['1','2'].indexOf(item.id)>-1">
                             <el-form-item label='玩法币种'>
@@ -341,7 +342,7 @@
 <script>
 import { getAccountGroupTradeAssetsList, queryCountryList, getViChannel, saveViChannel } from '@index/Api/editor'
 import { lang } from '../../config/lang'
-import { getQuery } from '@admin/utils'
+import { getQueryString } from '@admin/utils'
 import { keyBy, forOwn, isPlainObject, cloneDeep, compact } from 'lodash'
 export default {
     name: 'ChannelSetting',
@@ -376,8 +377,7 @@ export default {
         }
     },
     created () {
-        const urlParams = getQuery()
-        this.pageId = urlParams.id || this.$route.query.id
+        this.pageId = getQueryString('id')
         this.getPageConfig()
         this.queryAccountGroupTradeList()
         this.queryCountryList()
@@ -454,9 +454,10 @@ export default {
                         allCurrency: ['1', '2'].indexOf(String(el.id)) ? '' : [],
                         sort: 0,
                         alias: '',
-                        isWallet: ''
+                        isWallet: '',
                     }
                 })
+
                 this.checkedTradeType = tempCheckedTradeType
                 this.tradeTypeAssets = data.map(item => {
                     let customerGroupAssets = []
@@ -474,17 +475,19 @@ export default {
         submit () {
             this.submitLoading = true
             const _formData = cloneDeep(this.form)
-            debugger
 
-            if (_formData.tradeTypeCurrencyList) {
-                _formData.customerGroupId = Number(_formData.tradeTypeCurrencyList?.id)
-                _formData.tradeTypeCurrencyList = _formData.tradeTypeCurrencyList?.data.map(el => {
+            if (_formData.customerGroup) {
+                _formData.customerGroupId = _formData.customerGroup.id
+                _formData.tradeTypeCurrencyList = _formData.customerGroup?.data.map(el => {
                     return {
                         trade_name: el.trade_name,
                         trade_type: el.trade_type
                     }
                 })
             }
+
+            delete _formData.customerGroup
+
             saveViChannel(
                 {
                     content: JSON.stringify(_formData),
@@ -524,6 +527,7 @@ export default {
         handleSavePlans () {
             let assetFlag = true
             const plans = []
+
             for (const key in this.checkedTradeType) {
                 if (Object.hasOwnProperty.call(this.checkedTradeType, key)) {
                     const el = this.checkedTradeType[key]
@@ -536,7 +540,8 @@ export default {
                         alias: el.alias,
                         allCurrency: el.allCurrency,
                         isWallet: el.isWallet,
-                        sort: el.sort
+                        sort: el.sort,
+                        name: this.tradeTypeList.find(a => Number(a.id) === Number(key)).name
 
                     })
                 }

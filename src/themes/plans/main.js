@@ -13,7 +13,7 @@ import PageComp from '@plans/components/PageComp'
 import LayoutTop from '@plans/layout/top'
 import { setRootVariable } from './colorVariables'
 import { setRouter } from '@/utils/request'
-import LuckDraw from 'vue-luck-draw/vue3'
+// import LuckDraw from 'vue-luck-draw/vue3'
 import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet } from '@/utils/util'
 import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
@@ -27,7 +27,7 @@ BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 const app = createApp(App)
 app.use(preventReClick)
 app.use(VantBase).use(I18n).use(store).use(router)
-app.use(LuckDraw)
+// app.use(LuckDraw)
 app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })
 app.component('Loading', Loading)
 app.component('LayoutTop', LayoutTop)

@@ -131,16 +131,15 @@ import { deepClone } from '@utils/deepClone'
 import { h5PageList } from './h5PageList'
 import { useRouter } from 'vue-router'
 import { onMounted, reactive, ref, toRefs, getCurrentInstance } from 'vue'
-import { getQuery } from '@admin/utils'
-const urlParams = getQuery()
+import { getQueryString } from '@admin/utils'
+
 export default {
     beforeRouteEnter (to, from, next) {
-        console.log(to, from, urlParams)
-        if (urlParams.page === 'cats_sett_manage') {
+        if (getQueryString('page') === 'cats_sett_manage') {
             next({ name: 'Setting' })
-        } else if (urlParams.page === 'cats_init_manage') {
+        } else if (getQueryString('page') === 'cats_init_manage') {
             next({ name: 'Install' })
-        } else if (urlParams.page === 'cats_editor_page_manage') {
+        } else if (getQueryString('page') === 'cats_editor_page_manage') {
             next({ name: 'ChannelSetting' })
         } else {
             next()
@@ -249,8 +248,8 @@ export default {
                 type: 'html',
                 status: '1',
                 content: [],
-                id: urlParams.id,
-                language: urlParams.language
+                id: getQueryString('id'),
+                language: getQueryString('language'),
             }
             state.addForm.show = true
         }
@@ -270,8 +269,8 @@ export default {
             state.list = []
             pageList({
                 type: 'html',
-                id: urlParams.id,
-                language: urlParams.language
+                id: getQueryString('id'),
+                language: getQueryString('language'),
             }).then(res => {
                 state.loading = false
                 if (res.success) {
@@ -300,8 +299,8 @@ export default {
             }
 
             state.addForm.type = 'modify'
-            state.addForm.form.id = urlParams.id
-            state.addForm.form.language = urlParams.language
+            state.addForm.form.id = getQueryString('id')
+            state.addForm.form.language = getQueryString('language')
             state.addForm.show = true
         }
         const viewPublish = (row) => {

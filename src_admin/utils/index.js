@@ -23,7 +23,6 @@ export function randomStr (num) {
  */
 export function getQuery (_search = location.search, character = '&', objChart = '=') {
     ; /([^?]+)/.test(decodeURIComponent(_search))
-
     const result = RegExp.$1
         .split(character)
         .map(str => {
@@ -38,6 +37,14 @@ export function getQuery (_search = location.search, character = '&', objChart =
         }, {})
 
     return result
+}
+
+/* 获取URL参数 （兼容hash模式） */
+export function getQueryString (name, search) {
+    search = search || window.location.search.substr(1) || window.location.hash.split('?')[1]
+    const reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
+    const r = search.match(reg)
+    if (r != null) return unescape(r[2]); return null
 }
 
 export function guid () {

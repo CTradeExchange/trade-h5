@@ -10,7 +10,7 @@ import longpress from '@/directives/longpress'
 import Loading from '@/components/loading'
 import { setRootVariable } from '@h5/colorVariables'
 import { setRouter } from '@/utils/request'
-import LuckDraw from 'vue-luck-draw/vue3'
+// import LuckDraw from 'vue-luck-draw/vue3'
 
 setRouter(null)
 localSet('invertColor', 'light')
@@ -22,7 +22,7 @@ async function render (container) {
     app.use(store)
     app.use(I18n)
     app.use(VantBase)
-    app.use(LuckDraw)
+    // app.use(LuckDraw)
     app.component('AccountChange', MyAsset)
     app.component('MyAsset', MyAsset)
     app.component('Loading', Loading)
