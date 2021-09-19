@@ -6,7 +6,7 @@
         <van-cell v-if='customInfo && !customInfo.email' is-link :title='$t("setting.bindEmail")' to='/bindEmail' />
         <van-cell v-if='customInfo && customInfo.email' is-link :title='$t("setting.replaceEmail")' to='/changeBindEmail' />
         <van-cell v-if='customInfo && customInfo.phone' is-link :title='$t("setting.replacePhone")' to='/changeBindMobile' />
-        <van-cell is-link :title='$t("setting.setLang")' :value='langText' @click='langVisible=true' />
+        <van-cell v-if='langActions.length>1' is-link :title='$t("setting.setLang")' :value='langText' @click='langVisible=true' />
         <van-cell is-link :title='$t("setting.color")' :value='colorText' @click='colorVisible=true' />
         <van-cell is-link :title='$t("common.chartColor")' :value='chartText' @click='chartSettingVisible=true' />
 
