@@ -37,7 +37,7 @@ export function pageConfig (id) {
             data = window['wp_SysSetting']
             break
         case 'ChannelSett': // 获取wp公司配置信息
-            data = window['wp_ChannelSett']
+            data = window['ChannelSett']
             break
         default:
             break
