@@ -269,7 +269,7 @@ export default {
             state.list = []
             pageList({
                 type: 'html',
-                id: getQueryString('id'),
+                channelId: getQueryString('id'),
                 language: getQueryString('language'),
             }).then(res => {
                 state.loading = false
