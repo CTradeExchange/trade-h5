@@ -144,7 +144,7 @@
                                 <el-select
                                     v-model='form.language'
                                     placeholder='请输入'
-                                    value-key='val'
+                                    value-key='name'
                                 >
                                     <el-option
                                         v-for='item in filterLang'
@@ -392,7 +392,7 @@ export default {
 
                 let content = res.data.content ? JSON.parse(res.data.content) : {}
                 content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
-
+                this.filterLang = content.supportLanguage
                 console.log('渠道配置', content)
 
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
