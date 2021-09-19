@@ -5,10 +5,10 @@
                 {{ $t('trade.autoLoan') }}
                 <van-icon class='questionIcon' name='question-o' @click.stop='lilvAlert=true' />
             </van-radio>
-            <van-radio v-if='product.tradeType === 3' class='lastRadio' :name='3' @click='radioClick(3)'>
+            <!-- <van-radio v-if='product.tradeType === 3' class='lastRadio' :name='3' @click='radioClick(3)'>
                 {{ $t('trade.autoRepayment') }}
                 <van-icon class='questionIcon' name='question-o' @click.stop='lilvAlert2=true' />
-            </van-radio>
+            </van-radio> -->
         </van-radio-group>
 
         <!-- 自动借款的解说 -->
@@ -132,6 +132,7 @@ export default {
     :deep(.van-radio__icon .van-icon) {
         width: rem(30px);
         height: rem(30px);
+        margin-top: 2px;
         font-size: rem(26px);
         line-height: 0.9;
     }

@@ -1,7 +1,7 @@
 <template>
     <div class='trustWrapper'>
         <div class='hd'>
-            <span>{{ $t('trade.curTrust') }} ({{ pendingList.length }})</span>
+            <span>{{ $t('c.cur') + $t([1,2].includes(product.tradeType) ? 'trade.pending':'trade.trust') }} ({{ pendingList.length }})</span>
             <a class='allTrust' href='javascript:;' @click="$router.push({ name:'List',query:{ tradeType: $route.query.tradeType } })">
                 <i class='icon_mingxi'></i>
             </a>
@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import { computed, watch, ref, nextTick, onUpdated } from 'vue'
+import { computed, watch, ref, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import trustItem from '@/themes/plans/modules/trust/trustItem.vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
     components: {
@@ -31,7 +31,6 @@ export default {
     setup (props) {
         const loading = ref(false)
         const store = useStore()
-        const router = useRouter()
         const route = useRoute()
 
         // 获取挂单列表
