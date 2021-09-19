@@ -430,19 +430,19 @@ export default {
             })
         },
         setPlans (item, index) {
-            this.checkedTradeType = this.form.registList[index]?.plans
-            this.checkedTradeType.forEach(el => {
-                if ([3, 5, 9].includes(Number(el.id))) {
-                    el.allCurrency = el.allCurrency.split(',')
-                }
-            })
-
             this.curIndex = index
 
             if (item.registCountry && item.customerGroupId) {
                 this.plansDialogVisible = true
                 const data = this.accountTradeList[item.customerGroupId]?.data
-
+                this.checkedTradeType = this.form.registList[index]?.plans
+                if (this.checkedTradeType) {
+                    this.checkedTradeType.forEach(el => {
+                        if ([3, 5, 9].includes(Number(el.id))) {
+                            el.allCurrency = el.allCurrency.split(',')
+                        }
+                    })
+                }
                 this.getTradeTypeAssets(data)
             } else {
                 this.$message({
@@ -457,9 +457,9 @@ export default {
                 const tempCheckedTradeType = {}
 
                 this.tradeTypeList.forEach(el => {
-                    tempCheckedTradeType[String(el.id)] = this.checkedTradeType.find(item => item.id === el.id) ||
+                    tempCheckedTradeType[String(el.id)] = this.checkedTradeType?.find(item => item.id === el.id) ||
                         {
-                            allCurrency: ['1', '2'].indexOf(String(el.id)) ? '' : [],
+                            allCurrency: ['1', '2'].indexOf(String(el.id)) > -1 ? '' : [],
                             sort: 0,
                             alias: '',
                             isWallet: '',
