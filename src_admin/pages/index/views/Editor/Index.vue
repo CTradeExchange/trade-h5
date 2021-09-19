@@ -381,13 +381,13 @@ export default {
                         item.data.product = store.state.editor.tradeTypeSelfSymbol
                     }
                 })
-
                 modifyPageConfig(Object.assign({}, state.pageConf, {
                     page_code: state.pageCode,
                     content: zip(JSON.stringify(config)),
                     other: JSON.stringify(store.state.editor.elementOther),
                     channelId: getQueryString('id'),
                     language: getQueryString('language'),
+                    title: getQueryString('title')
                 }))
                     .then(res => {
                         if (!res.success) {
@@ -541,6 +541,7 @@ export default {
                 img: pageImg.toDataURL('image/jpeg', 0.7),
                 channelId: getQueryString('id'),
                 language: getQueryString('language'),
+                title: getQueryString('title')
             }, state.publishForm))
                 .then(res => {
                     state.showPublish = false

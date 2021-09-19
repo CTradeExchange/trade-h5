@@ -30,7 +30,7 @@
                         <el-button v-if="scope.row.page_code.indexOf('http')==0" size='small' type='text'>
                             {{ scope.row.page_code }}
                         </el-button>
-                        <el-button v-else size='small' type='text' @click='edit(scope.row.page_code)'>
+                        <el-button v-else size='small' type='text' @click='edit(scope.row)'>
                             {{ scope.row.page_code }}
                         </el-button>
                     </template>
@@ -48,7 +48,7 @@
                         <el-button v-if="scope.row.page_code.indexOf('http')==0" size='small' type='text' @click='showOtherPage(scope.row.page_code)'>
                             查看
                         </el-button>
-                        <el-button v-else size='small' type='text' @click='edit(scope.row.page_code)'>
+                        <el-button v-else size='small' type='text' @click='edit(scope.row)'>
                             设计页面
                         </el-button>
                         <el-button size='small' type='text' @click='viewPublish(scope.row)'>
@@ -253,11 +253,15 @@ export default {
             }
             state.addForm.show = true
         }
-        const edit = (code) => {
+        const edit = (row) => {
+            debugger
             router.push({
                 name: 'Editor',
                 query: {
-                    page_code: code
+                    page_code: row.page_code,
+                    id: row.channel_id,
+                    lang: 'zh',
+                    title: row.title
                 }
             })
         }
