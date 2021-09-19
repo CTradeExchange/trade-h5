@@ -89,11 +89,10 @@
 <script>
 import { getPushPageList, rollBackReleasePage } from '@index/Api/editor'
 import { reactive, toRefs, onMounted, getCurrentInstance } from 'vue'
-import { getQuery } from '@admin/utils'
+import { getQueryString } from '@admin/utils'
 import {
     useRouter, useRoute
 } from 'vue-router'
-const urlParams = getQuery()
 export default {
     name: 'PublishList',
     setup (props) {
@@ -114,8 +113,8 @@ export default {
             state.loading = true
             getPushPageList({
                 pageCode: route.query.pageCode,
-                id: urlParams.id,
-                language: urlParams.language
+                channelId: getQueryString('id'),
+                language: getQueryString('language'),
             })
                 .then(res => {
                     state.loading = false

@@ -437,6 +437,7 @@ export default {
             if (item.registCountry && item.customerGroupId) {
                 this.plansDialogVisible = true
                 const data = this.accountTradeList[item.customerGroupId]?.data
+
                 this.getTradeTypeAssets(data)
             } else {
                 this.$message({
@@ -449,13 +450,15 @@ export default {
             if (Array.isArray(data)) {
                 this.tradeTypeList = data.map(el => ({ id: el.trade_type, name: el.trade_name }))
                 const tempCheckedTradeType = {}
+
                 this.tradeTypeList.forEach(el => {
-                    tempCheckedTradeType[String(el.id)] = this.checkedTradeType?.[String(el.id)] || {
-                        allCurrency: ['1', '2'].indexOf(String(el.id)) ? '' : [],
-                        sort: 0,
-                        alias: '',
-                        isWallet: '',
-                    }
+                    tempCheckedTradeType[String(el.id)] = this.checkedTradeType.find(item => item.id === el.id) ||
+                        {
+                            allCurrency: ['1', '2'].indexOf(String(el.id)) ? '' : [],
+                            sort: 0,
+                            alias: '',
+                            isWallet: '',
+                        }
                 })
 
                 this.checkedTradeType = tempCheckedTradeType
@@ -480,8 +483,10 @@ export default {
                 _formData.customerGroupId = _formData.customerGroup.id
                 _formData.tradeTypeCurrencyList = _formData.customerGroup?.data.map(el => {
                     return {
-                        trade_name: el.trade_name,
-                        trade_type: el.trade_type
+                        name: el.trade_name,
+                        tradeType: el.trade_type,
+                        id: el.trade_type,
+                        allCurrency: el.assets.map(el => el.code).toString()
                     }
                 })
             }
@@ -541,6 +546,7 @@ export default {
                         allCurrency: el.allCurrency,
                         isWallet: el.isWallet,
                         sort: el.sort,
+                        tradeType: key,
                         name: this.tradeTypeList.find(a => Number(a.id) === Number(key)).name
 
                     })

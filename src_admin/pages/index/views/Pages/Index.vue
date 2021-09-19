@@ -247,7 +247,7 @@ export default {
                 page_slug: 'act_1',
                 type: 'html',
                 status: '1',
-                content: [],
+                content: '',
                 id: getQueryString('id'),
                 language: getQueryString('language'),
             }
@@ -310,7 +310,10 @@ export default {
             router.push({
                 name: 'PublishList',
                 query: {
-                    pageCode: row.page_code
+                    pageCode: row.page_code,
+                    id: row.channel_id,
+                    language: getQueryString('language')
+
                 }
             })
         }
