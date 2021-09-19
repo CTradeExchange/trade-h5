@@ -63,7 +63,7 @@ export default {
         },
         // 获取渠道配置信息
         getChannelSett ({ commit }) {
-            return pageConfig('channel_sett').then(data => {
+            return pageConfig('ChannelSett').then(data => {
                 if (data) {
                     // if (data.tradeTypeCurrencyList) {
                     //     data.tradeTypeCurrencyList = data.tradeTypeCurrencyList.filter(el => el.allCurrency)
@@ -74,9 +74,10 @@ export default {
                     // }
                     sessionSet('utcOffset', 0 - new Date().getTimezoneOffset()) // 改成取本地时区时间，不找wp配置时间
                     // sessionSet('utcOffset', parseFloat(data.utcOffset) * 60)   改成取本地时区时间，不找wp配置时间
-                    // if (!localGet('lang') && data.language?.val) localSet('lang', data.language.val)
+                    if (!localGet('lang') && data.language?.val) localSet('lang', data.language.val)
                     commit('UPDATE_wpCompanyInfo', data)
                     commit('Update_plans', data.tradeTypeCurrencyList)
+                    if (data.supportLanguage) commit('Update_supportLanguages', data.supportLanguage, { root: true })
                 }
                 return data
             })

@@ -114,6 +114,9 @@ export default createStore({
         },
         Update_currencyList (state, data) {
             state.currencyList = data
+        },
+        Update_supportLanguages (state, data) {
+            state.supportLanguages = data
         }
     },
     actions: {
