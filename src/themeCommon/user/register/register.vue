@@ -86,6 +86,7 @@ import { Toast } from 'vant'
 import RuleFn, { checkCustomerExistRule } from './rule'
 import { pageConfig } from '@/api/wpApi'
 import { useI18n } from 'vue-i18n'
+import hooks from './hooks'
 
 export default {
     components: {
@@ -102,6 +103,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
+        const { getCustomerGroupIdByCountry, getPlansByCountry } = hooks()
         const state = reactive({
             options: [{ country: 'Canada', code: 'CA' }],
             zone: '',
@@ -127,8 +129,8 @@ export default {
         store.dispatch('getCountryListByParentCode').then(res => {
             if (res.check() && res.data.length) {
                 const defaultZone = store.state._base.wpCompanyInfo?.defaultZone
-                if (defaultZone) {
-                    state.zone = defaultZone
+                if (defaultZone?.code) {
+                    state.zone = `${defaultZone.name} (${defaultZone.country_code})`
                 } else {
                     const firstItem = res.data[0]
                     state.zone = firstItem.name + ` (${firstItem.countryCode})`
@@ -197,7 +199,8 @@ export default {
                 utmContent: getQueryVariable('utm_content'),
                 utmTerm: getQueryVariable('utm_term'),
                 protocol: state.protocol,
-                tradeTypeCurrencyList: store.state._base.wpCompanyInfo.tradeTypeCurrencyList,
+                tradeTypeCurrencyList: getPlansByCountry(state.countryCode),
+                // customerGroupId: getCustomerGroupIdByCountry(state.countryCode),
                 country: state.countryCode
             }
 
