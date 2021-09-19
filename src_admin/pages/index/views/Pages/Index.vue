@@ -254,7 +254,6 @@ export default {
             state.addForm.show = true
         }
         const edit = (row) => {
-            debugger
             router.push({
                 name: 'Editor',
                 query: {

@@ -193,7 +193,7 @@ export default {
             if (state.pageCode) {
                 getPageConfig({
                     page_code: state.pageCode,
-                    id: getQueryString('id'),
+                    channelId: getQueryString('id'),
                     language: getQueryString('language'),
                 })
                     .then(res => {
@@ -299,7 +299,7 @@ export default {
             return new Promise((resolve, reject) => {
                 getPageConfig({
                     page_code: 'SysSetting',
-                    id: getQueryString('id'),
+                    channelId: getQueryString('id'),
                     language: getQueryString('language'),
                 })
                     .then(res => {
