@@ -111,16 +111,15 @@
 
                             <el-form-item label='游客客户组'>
                                 <el-select
-                                    v-model='form.customerGroup'
+                                    v-model='form.customerGroupId'
                                     clearable
                                     placeholder='请选择客户组'
-                                    value-key='id'
                                 >
                                     <el-option
                                         v-for='el in accountTradeList'
                                         :key='el.id'
                                         :label='el.name'
-                                        :value='el'
+                                        :value='el.id'
                                     />
                                 </el-select>
                             </el-form-item>
@@ -136,7 +135,7 @@
                                     <el-option
                                         v-for='item in lang'
                                         :key='item.val'
-                                        :label='item.label'
+                                        :label='item.name'
                                         :value='item'
                                     />
                                 </el-select>
@@ -150,7 +149,7 @@
                                     <el-option
                                         v-for='item in filterLang'
                                         :key='item.val'
-                                        :label='item.label'
+                                        :label='item.name'
                                         :value='item'
                                     />
                                 </el-select>
@@ -378,8 +377,8 @@ export default {
     },
     created () {
         this.pageId = getQueryString('id')
-        this.getPageConfig()
         this.queryAccountGroupTradeList()
+        this.getPageConfig()
         this.queryCountryList()
     },
     methods: {
@@ -479,9 +478,8 @@ export default {
             this.submitLoading = true
             const _formData = cloneDeep(this.form)
 
-            if (_formData.customerGroup) {
-                _formData.customerGroupId = _formData.customerGroup.id
-                _formData.tradeTypeCurrencyList = _formData.customerGroup?.data.map(el => {
+            if (_formData.customerGroupId) {
+                _formData.tradeTypeCurrencyList = this.accountTradeList[_formData.customerGroupId]?.data.map(el => {
                     return {
                         name: el.trade_name,
                         tradeType: el.trade_type,
@@ -490,8 +488,6 @@ export default {
                     }
                 })
             }
-
-            delete _formData.customerGroup
 
             saveViChannel(
                 {
