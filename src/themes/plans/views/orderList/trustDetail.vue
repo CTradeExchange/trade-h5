@@ -20,7 +20,7 @@
                             {{ Number(pendingItem.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
                         </div>
                         <div class='name'>
-                            {{ pendingItem.requestNum }}
+                            {{ pendingItem.requestNum }} {{ Number(pendingItem.entryType) === 1 ? $t('trade.volumeUnit') : pendingItem.accountCurrency }}
                         </div>
                     </div><div class='col'>
                         <div class='sub'>
@@ -59,7 +59,7 @@
                             </span>
                         </div>
                     </div>
-                    <div v-if='[3, 5, 9].includes(Number(tradeType))' class='col'>
+                    <div v-if='[3, 9].includes(Number(tradeType))' class='col'>
                         <div class='sub'>
                             {{ $t('trade.loan') }}
                         </div>

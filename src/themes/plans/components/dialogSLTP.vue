@@ -26,47 +26,45 @@
         </div>
         <div class='dialog-body'>
             <div class='inputNumber'>
-                <div class='left'>
-                    <div>
-                        <div class='name'>
-                            {{ $t('trade.positionPrice') }}
-                        </div>
-                        <div class='open-price'>
-                            {{ data.openPrice }}
-                        </div>
+                <div class='item-block'>
+                    <div class='name'>
+                        {{ $t('trade.positionPrice') }}
+                    </div>
+                    <div class='open-price'>
+                        {{ data.openPrice }}
                     </div>
                 </div>
-                <div class='right'>
-                    <div>
-                        <div class='name'>
-                            {{ $t('trade.currentPrice') }}
-                        </div>
-                        <div :class='[parseFloat(data.direction)===1 ? product.sell_color:product.buy_color]'>
-                            {{ parseFloat(data.direction)===1 ? product.sell_price:product.buy_price }}
-                        </div>
-                    </div>
 
+                <div class='item-block'>
+                    <div class='name'>
+                        {{ $t('trade.currentPrice') }}
+                    </div>
+                    <div :class='[parseFloat(data.direction)===1 ? product.sell_color:product.buy_color]'>
+                        {{ parseFloat(data.direction)===1 ? product.sell_price:product.buy_price }}
+                    </div>
+                </div>
+
+                <div v-if='Number(product.tradeType) === 2' class='item-block'>
+                    <div class='name'>
+                        {{ $t('trade.previewStopPrice') }}
+                    </div>
                     <div>
-                        <div class='name'>
-                            {{ $t('trade.previewStopPrice') }}
-                        </div>
-                        <div>
-                            {{ data.previewStopPrice || '--' }}
-                        </div>
+                        {{ data.previewStopPrice || '--' }}
                     </div>
                 </div>
             </div>
-
-            <ModifyProfitLoss
-                ref='modifyProfitLossRef'
-                v-model:stopLoss='stopLossPrice'
-                v-model:stopProfit='stopProfitPrice'
-                class='modifyProfitLoss'
-                :direction='data.direction'
-                :order-data='data'
-                :product='product'
-            />
         </div>
+
+        <ModifyProfitLoss
+            ref='modifyProfitLossRef'
+            v-model:stopLoss='stopLossPrice'
+            v-model:stopProfit='stopProfitPrice'
+            class='modifyProfitLoss'
+            :direction='data.direction'
+            :order-data='data'
+            :product='product'
+        />
+
         <div class='dialog-footer'>
             <van-button color='#477FD3' :loading='loading' @click='submitHandler'>
                 {{ $t('save') }}
@@ -101,13 +99,10 @@ export default {
         })
 
         // 获取账户
-        const account = computed(() => store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(tradeType.value)))
+        const account = computed(() => store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(props.data.tradeType)))
 
         // 客户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
-
-        // 玩法id
-        const tradeType = computed(() => store.state._quote.curTradeType)
 
         // 提示信息
         const warn = computed(() => modifyProfitLossRef.value?.stopLossWarn || modifyProfitLossRef.value?.stopProfitWarn)
@@ -148,7 +143,7 @@ export default {
                 positionId: data.positionId,
                 stopLoss: !state.stopLossPrice ? 0 : mul(state.stopLossPrice, p),
                 takeProfit: !state.stopProfitPrice ? 0 : mul(state.stopProfitPrice, p),
-                tradeType: tradeType.value,
+                tradeType: props.data.tradeType,
                 accountId: account.value.accountId,
                 accountDigits: account.value.digits
             }
@@ -156,7 +151,7 @@ export default {
         }
         // 提交修改止盈止损
         const submitHandler = () => {
-            const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType.value))?.accountId
+            const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(props.data.tradeType))?.accountId
             const params = submitParams()
             if (!params) return false
             state.loading = true
@@ -165,7 +160,7 @@ export default {
 
                 if (res.check()) {
                     store.dispatch('_trade/queryPositionPage', {
-                        tradeType: tradeType.value,
+                        tradeType: props.data.tradeType,
                         accountId,
                         sortFieldName: 'openTime',
                         sortType: 'desc',
@@ -182,7 +177,7 @@ export default {
 
         // 获取产品详情
         store.dispatch('_quote/querySymbolInfo', {
-            symbolId: props.data.symbolId, tradeType: tradeType.value
+            symbolId: props.data.symbolId, tradeType: props.data.tradeType
         })
 
         return {
@@ -260,6 +255,11 @@ export default {
             align-items: center;
             justify-content: space-between;
             margin: 0 rem(40px) rem(20px) rem(35px);
+            .item-block {
+                &:last-child {
+                    text-align: right;
+                }
+            }
             .name {
                 padding-bottom: rem(20px);
                 color: var(--minorColor);

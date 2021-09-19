@@ -39,7 +39,7 @@
             </li>
         </ul>
 
-        <div v-if='Number(tradeType) === 3' class='btns'>
+        <div v-if='[3,5].includes(Number(tradeType))' class='btns'>
             <van-button
                 hairline
                 size='mini'

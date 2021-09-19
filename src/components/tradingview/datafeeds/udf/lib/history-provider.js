@@ -3,20 +3,23 @@ import {  RequestKData }from '../../userConfig/requestKData'
 
 class HistoryProvider {
      constructor(datafeedUrl, requester) {
-        this._datafeedUrl = datafeedUrl;
-        this._requester = requester;
+        // this._datafeedUrl = datafeedUrl;
+        // this._requester = requester;
         this._requestKData = new RequestKData()
         this._onTick = null
     }
     // 获取历史k线
-    getBars (symbolInfo, resolution, rangeStartDate, rangeEndDate, firstDataRequest) {
+    getBars (symbolInfo, resolution, periodParams) {
+        const { countBack, firstDataRequest, from, to } = periodParams
+
         this.symbolParams = {
             symbolId: symbolInfo.symbolId,
             klineType: resolutionToKlineType[resolution],
-            startTime: rangeStartDate,
-            endTime: rangeEndDate,
+            startTime: from,
+            endTime: to,
             resolution,
-            tradeType: symbolInfo.tradeType
+            tradeType: symbolInfo.tradeType,
+            countBack: countBack
         }
 
         if(typeof firstDataRequest === 'boolean'){

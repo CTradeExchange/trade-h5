@@ -41,9 +41,12 @@ export default {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         const placeholder = computed(() => {
-            if ([1, 2].includes(props.product.tradeType)) {
-                const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === props.product.tradeType)
+            const curTradeType = props.product.tradeType
+            if ([1, 2].includes(curTradeType)) {
+                const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === curTradeType)
                 return parseInt(props.entryType) === 1 ? t('trade.orderVolume') : t('trade.orderAmount') + `(${account?.currency})`
+            } else if ([5].includes(curTradeType)) {
+                return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + `(${props.product.baseCurrency})` : t('trade.orderAmount') + `(${props.product.profitCurrency})`
             } else {
                 return parseInt(props.entryType) === 1 ? t('trade.volumes') : t('trade.orderAmount')
             }

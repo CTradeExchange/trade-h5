@@ -62,7 +62,8 @@ export default {
     setup () {
         const router = useRouter()
         const store = useStore()
-        const tradeType = computed(() => store.state._quote.curTradeType)
+        const plans = computed(() => store.state._base.plans)
+        const tradeType = computed(() => store.state._quote.curTradeType || plans.value[0].id)
         const assetsInfo = computed(() => store.state._user.customerInfo.accountList && store.state._user.customerInfo.accountList.find(el => Number(el.tradeType) === Number(tradeType.value)))
         const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(tradeType.value)))
 

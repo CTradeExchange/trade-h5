@@ -15,7 +15,7 @@
             </van-col>
         </van-row>
 
-        <div class='borrowMoney'>
+        <div v-if='[3,9].includes(product.tradeType)' class='borrowMoney'>
             <van-row class='mtop10' justify='space-between'>
                 <van-col v-if='product.tradeType===3'>
                     {{ $t('trade.availableLoanAmount') }}

@@ -32,6 +32,7 @@ function priceToPip (price, product) {
     if (product && product.hasOwnProperty('pointRatio')) {
         const spDigit = String(product.pointRatio || 0).length - 1 // 点差小数位
         const pip = BigNumber(0.1).pow(product.price_digits).times(product.pointRatio) // 1pip=point*大点比率
+        if (!parseFloat(pip)) return ''
         return BigNumber(price).div(pip).toFixed(spDigit)
     } else {
         return ''
@@ -283,21 +284,24 @@ export default {
             const symbolKey = `${symbolId}_${tradeType}`
             const product = productMap[symbolKey]
             if (product?.contractSize && !forceQuery) return Promise.resolve(product)
-            const params = {
-                symbolId: Number(symbolId),
-                tradeType: Number(tradeType),
-                customerGroupId: rootGetters.customerGroupId,
-            }
-            return querySymbolInfo(params).then((res) => {
-                if (res.check() && res.data) {
-                    res.data.tradeType = params.tradeType
-                    commit('Update_product', res.data)
-                    if (rootState._quote.productActivedID === symbolKey) {
-                        sessionSet('productActived', JSON.stringify(productMap[symbolKey]))
-                    }
+            if (tradeType) {
+                const params = {
+                    symbolId: Number(symbolId),
+                    tradeType: Number(tradeType),
+                    customerGroupId: rootGetters.customerGroupId,
                 }
-                return res.data
-            })
+
+                return querySymbolInfo(params).then((res) => {
+                    if (res.check() && res.data) {
+                        res.data.tradeType = params.tradeType
+                        commit('Update_product', res.data)
+                        if (rootState._quote.productActivedID === symbolKey) {
+                            sessionSet('productActived', JSON.stringify(productMap[symbolKey]))
+                        }
+                    }
+                    return res.data
+                })
+            }
         },
     }
 }

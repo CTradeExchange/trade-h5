@@ -27,7 +27,7 @@
 
 <script>
 
-import trustItem from '@plans/modules/trust/trust.vue'
+import trustItem from '@/themes/plans/modules/trust/trustItem.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { computed, ref, nextTick, reactive, toRefs, watch } from 'vue'

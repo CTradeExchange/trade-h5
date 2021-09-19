@@ -30,7 +30,7 @@
         <Loading :show='loading' />
         <section class='container'>
             <div class='productInfo'>
-                <div class='hd'>
+                <div v-if='product.price_digits' class='hd'>
                     <div class='hd-left'>
                         <p class='cur_price' :class='product.cur_color'>
                             {{ parseFloat(product.cur_price).toFixed(product.price_digits) }}
@@ -246,7 +246,7 @@
             v-if='product && [5,9].includes(Number(product.tradeType))'
             :cur-price='product.cur_price'
             :setting-list='settingList'
-            :symbol-id='symbolId'
+            :symbol-id='product.symbolId'
             :trade-type='tradeType'
         />
 
@@ -981,7 +981,6 @@ export default {
                 tradeType.value = product.tradeType
                 store.commit('_quote/Update_productActivedID', `${product.symbolId}_${product.tradeType}`)
                 subscribeToProduct()
-                // 重置图表
                 chartRef.value.reset()
                 close()
             })

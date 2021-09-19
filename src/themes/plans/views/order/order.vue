@@ -14,7 +14,7 @@
                     <!-- 订单类型 -->
                     <OrderTypeTab v-model='orderType' :trade-type='product.tradeType' @selected='changeOrderType' />
                     <!-- 自动借款 -->
-                    <LoanBar v-if='[3, 5, 9].includes(product.tradeType)' v-model='operationType' :account='account' class='loanBarMargin' :product='product' />
+                    <LoanBar v-if='[3, 9].includes(product.tradeType)' v-model='operationType' :account='account' class='loanBarMargin' :product='product' />
                     <!-- 方向 -->
                     <Direction v-model='direction' :product='product' />
                     <!-- 挂单设置 -->
@@ -182,8 +182,9 @@ export default {
         // 设置按额或者按手数，切换产品或者切换方向时需要重新设置；现货撮合、杠杆玩法下单买入按额，其他都是按手数交易
         const setVolumeType = () => {
             // CFD逐仓和杠杆全仓玩法才支持按额下单功能
-            if ([2, 3].includes(product.value?.tradeType)) {
-                if ([3, 5].includes(product.value?.tradeType) && state.direction === 'buy') {
+            const tradeType = parseInt(product.value?.tradeType)
+            if ([2, 3, 5].includes(tradeType)) {
+                if ([3, 5].includes(tradeType) && state.direction === 'buy') {
                     state.entryType = 2 // 1按数量下单 2按成交额下单
                 } else {
                     state.entryType = 1 // 1按数量下单 2按成交额下单
@@ -237,7 +238,7 @@ export default {
         const init = () => {
             // 获取产品详情
             const [symbolId, tradeType] = symbolKey.value.split('_')
-            state.orderHandicapVisible = tradeType === '9'
+            state.orderHandicapVisible = ['5', '9'].includes(tradeType)
             state.operationType = parseFloat(tradeType) === 3 ? 1 : 2 // 杠杆玩法默认是普通类型
             setVolumeType() // 设置按额或者按手数交易
             productSwitchHistory[tradeType] = symbolKey.value

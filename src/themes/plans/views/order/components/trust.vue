@@ -20,7 +20,7 @@
 <script>
 import { computed, watch, ref, nextTick, onUpdated } from 'vue'
 import { useStore } from 'vuex'
-import trustItem from '@plans/modules/trust/trust.vue'
+import trustItem from '@/themes/plans/modules/trust/trustItem.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
 export default {

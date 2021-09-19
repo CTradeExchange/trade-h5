@@ -144,10 +144,10 @@
 <script>
 import DialogSLTP from '@plans/components/dialogSLTP'
 import DialogClosePosition from '@plans/components/dialogClosePosition'
-import { reactive, toRefs, computed, onMounted } from 'vue'
+import { reactive, toRefs, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { QuoteSocket } from '@/plugins/socket/socket'
+import { MsgSocket } from '@/plugins/socket/socket'
 import { minus } from '@/utils/calculation'
 export default {
     components: {
@@ -164,13 +164,13 @@ export default {
 
         const { orderId, positionId, symbolId, tradeType } = route.query
 
-        const assetsInfo = computed(() => store.state._user.customerInfo.accountList.find(el => Number(el.tradeType) === Number(tradeType.value)))
+        const assetsInfo = computed(() => store.state._user.customerInfo.accountList.find(el => Number(el.tradeType) === Number(tradeType)))
 
         const customerInfo = computed(() => store.state._user.customerInfo)
 
         const positionData = computed(() => store.state._trade.positionMap[positionId + '_' + tradeType])
 
-        const product = computed(() => store.state._quote.productMap[symbolId + '_' + tradeType.value])
+        const product = computed(() => store.state._quote.productMap[symbolId + '_' + tradeType])
 
         const positionVolume = computed(() => minus(positionData.value?.openVolume, positionData.value?.closeVolume))
 
@@ -202,10 +202,14 @@ export default {
             state.closeVisible = true
         }
 
-        store.commit('_quote/Update_productActivedID', symbolId + '_' + tradeType.value)
+        store.commit('_quote/Update_productActivedID', symbolId + '_' + tradeType)
 
         onMounted(() => {
             init()
+        })
+
+        onUnmounted(() => {
+            MsgSocket.cancelSubscribeAsset()
         })
 
         return {

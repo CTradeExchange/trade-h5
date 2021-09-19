@@ -554,6 +554,7 @@
     "transferTip3": "There is no such currency for the account",
     "transferTip4": "The transfer amount cannot be greater than the Maximum transfer amount",
     "transferTip5": "The transfer amount cannot be less than the Minimum transfer amount",
+    "transferTip6": "划转金额不能小于0",
     "transferSuccess": "Transfer success"
   },
   "record":{

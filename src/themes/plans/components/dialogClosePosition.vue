@@ -15,7 +15,7 @@
                 <p class='productName'>
                     {{ data.symbolName }}
                 </p><p class='lot'>
-                    {{ data.symbolName }}
+                    {{ product.symbolCode }}
                 </p>
             </div>
             <div class='right' @click='closeHandler'>
@@ -160,12 +160,11 @@ export default {
             closeVolume: '',
         })
 
-        const account = computed(() => store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(tradeType.value)))
+        const account = computed(() => store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(props.data.tradeType)))
         const customerInfo = computed(() => store.state._user.customerInfo)
         const volumeDigit = computed(() => getDecimalNum(props.product.minVolume))
         const positionVolume = computed(() => minus(props.data?.openVolume, props.data?.closeVolume))
         const positionVolumeMin = computed(() => props.product.minVolume)
-        const tradeType = computed(() => store.state._quote.curTradeType)
         const closeVolumeWarn = computed(() => { // 检测平仓手数是否合法
             const minVolume = props.product?.minVolume ?? 0
             const closeVolume = state.closeVolume
@@ -207,7 +206,7 @@ export default {
                 expireType: props.data.expireType,
                 stopLoss: props.data.stopLoss,
                 takeProfit: props.data.takeProfit,
-                tradeType: tradeType.value,
+                tradeType: props.data.tradeType,
                 accountId: account.value.accountId,
                 accountCurrency: account.value.currency,
                 accountDigits: account.value.digits
@@ -219,7 +218,7 @@ export default {
             const params = submitCloseParam()
             if (!params) return false
             state.loading = true
-            const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType.value))?.accountId
+            const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(props.data.tradeType))?.accountId
             addMarketOrder(params)
                 .then(res => {
                     state.loading = false
@@ -236,7 +235,7 @@ export default {
                         forbidClick: true,
                     })
                     store.dispatch('_trade/queryPositionPage', {
-                        tradeType: tradeType.value,
+                        tradeType: props.data.tradeType,
                         sortFieldName: 'openTime',
                         sortType: 'desc',
                         accountId
