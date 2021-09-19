@@ -165,6 +165,7 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const store = useStore()
+        const { id, language, page_code, title } = route.query
         const state = reactive({
             leftComponents: [
                 {
@@ -178,7 +179,7 @@ export default {
             ],
             showCode: false,
             pageConf: {},
-            pageCode: getQueryString('page_code'),
+            pageCode: page_code,
             showPublish: false,
             publishLoading: false,
             publishForm: {
@@ -193,8 +194,8 @@ export default {
             if (state.pageCode) {
                 getPageConfig({
                     page_code: state.pageCode,
-                    channelId: getQueryString('id'),
-                    language: getQueryString('language'),
+                    channelId: id,
+                    language: language,
                 })
                     .then(res => {
                         store.commit('editor/RESET_ELEMENT', [])
@@ -299,8 +300,8 @@ export default {
             return new Promise((resolve, reject) => {
                 getPageConfig({
                     page_code: 'SysSetting',
-                    channelId: getQueryString('id'),
-                    language: getQueryString('language'),
+                    channelId: id,
+                    language: language,
                 })
                     .then(res => {
                         if (!res.success) {
@@ -385,9 +386,9 @@ export default {
                     page_code: state.pageCode,
                     content: zip(JSON.stringify(config)),
                     other: JSON.stringify(store.state.editor.elementOther),
-                    channelId: getQueryString('id'),
-                    language: getQueryString('language'),
-                    title: getQueryString('title')
+                    channelId: id,
+                    language,
+                    title
                 }))
                     .then(res => {
                         if (!res.success) {
@@ -539,9 +540,9 @@ export default {
             pushPage(Object.assign({
                 pageCode: state.pageCode,
                 img: pageImg.toDataURL('image/jpeg', 0.7),
-                channelId: getQueryString('id'),
-                language: getQueryString('language'),
-                title: getQueryString('title')
+                channelId: id,
+                language,
+                title
             }, state.publishForm))
                 .then(res => {
                     state.showPublish = false

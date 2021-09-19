@@ -275,7 +275,7 @@
                 label-position='right'
                 label-width='100px'
             >
-                <div v-for='(item,index) in tradeTypeAssets' :key='item.id' class='tradeType-row'>
+                <div v-for='item in tradeTypeAssets' :key='item.id' class='tradeType-row'>
                     <el-card :header='item.name' shadow='always'>
                         <template v-if="['1','2'].indexOf(item.id)>-1">
                             <el-form-item label='玩法币种'>
@@ -431,6 +431,12 @@ export default {
         },
         setPlans (item, index) {
             this.checkedTradeType = this.form.registList[index]?.plans
+            this.checkedTradeType.forEach(el => {
+                if ([3, 5, 9].includes(Number(el.id))) {
+                    el.allCurrency = el.allCurrency.split(',')
+                }
+            })
+
             this.curIndex = index
 
             if (item.registCountry && item.customerGroupId) {
@@ -536,10 +542,17 @@ export default {
                         assetFlag = false
                     }
 
+                    let allCurrency
+                    if ([3, 5, 9].includes(Number(key))) {
+                        allCurrency = el.allCurrency.toString()
+                    } else {
+                        allCurrency = el.allCurrency
+                    }
+
                     plans.push({
                         id: key,
                         alias: el.alias,
-                        allCurrency: el.allCurrency,
+                        allCurrency,
                         isWallet: el.isWallet,
                         sort: el.sort,
                         tradeType: key,

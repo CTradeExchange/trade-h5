@@ -106,7 +106,7 @@ if (isAdminMode) {
 }
 
 const config = {
-    productionSourceMap: false,
+    productionSourceMap: true,
     publicPath: process.env.NODE_ENV === 'production' && isAdminMode ? `/wp-content/plugins/cats-manage/skin/skin_${theme}_2/editor/` : '/', // static/
     // indexPath: isAdminMode ? 'index.html' : 'index_template.html', // 就是这条
     lintOnSave: false,
