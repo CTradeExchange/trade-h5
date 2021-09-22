@@ -413,9 +413,8 @@ export default {
                     that.form.language = defaultLang?.[0]
                 }
 
-                if (!that.form.registList[0].registCountry) {
+                if (!that.form.registList[0].customerGroupId) {
                     that.form.registList[0].customerGroupId = '1'
-                    that.form.registList[0].registCountry = that.form.defaultZone
                 }
             }).catch(error => {
                 console.log(error)
@@ -449,6 +448,10 @@ export default {
                     if (this.form.registrable.length === 0) {
                         this.form.registrable = [list[0]]
                         this.form.defaultZone = list[0]
+
+                        if (!this.form.registList[0].registCountry) {
+                            this.form.registList[0].registCountry = this.form.defaultZone
+                        }
                     }
                 }
             })
@@ -518,7 +521,6 @@ export default {
                     }
                 })
             }
-
             saveViChannel({
                 content: JSON.stringify(_formData), // '', //
                 id: this.pageId,
@@ -552,6 +554,7 @@ export default {
             }
         },
         handleSavePlans () {
+            debugger
             let assetFlag = true
             const plans = []
 
@@ -581,6 +584,10 @@ export default {
                     })
                 }
             }
+
+            plans.sort(function (a, b) {
+                return a.sort - b.sort
+            })
 
             if (!assetFlag) {
                 return this.$message({
