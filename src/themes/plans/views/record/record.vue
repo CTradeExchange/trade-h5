@@ -74,13 +74,14 @@ export default {
             switch (tradeType) {
                 case 1:
                 case 2:
+                case 5:
                 {
                     return allList.filter(e => [3, 4].includes(e.name))
                 }
 
                 case 3:
-                case 5:
-                case 9: {
+                case 9:
+                {
                     return allList
                 }
             }

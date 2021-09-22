@@ -21,7 +21,7 @@
                         :is='el.component'
                         :class='{ active: el.id === activated }'
                         :data='el.data'
-                        @click.native='moduleClick(el, $event)'
+                        @click='moduleClick(el, $event)'
                     >
                         <div v-if='el.data.bindComp && el.data.bindComp.length'>
                             <component
@@ -30,7 +30,7 @@
                                 :key="index+''+i+item.id"
                                 :class='{ active: item.id === activated }'
                                 :data='item.data'
-                                @click.native.stop='moduleClick(item, $event)'
+                                @click.stop='moduleClick(item, $event)'
                             />
                         </div>
                     </component>
@@ -181,10 +181,12 @@ export default {
             })
 
             // 修复notice组件被重新排序后内容不滚动的问题
-            const noticeArr = this.$refs.draggable.$children.filter(el => el.$el.classList.contains('notice'))
-            noticeArr.forEach(el => {
-                el.refresh()
-            })
+            const noticeArr = this.$refs.draggable.$children && this.$refs.draggable?.$children.filter(el => el.$el.classList.contains('notice'))
+            if(noticeArr){
+                 noticeArr.forEach(el => {
+                    el.refresh()
+                })
+            }
         },
         moduleClick (item, e) {
             console.log('click', item)

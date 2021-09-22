@@ -17,6 +17,7 @@
                                 <i class="el-icon-guide"></i>
                                 {{ item.title }}
                             </div> -->
+
                         <draggable
                             v-model='item.list'
                             class='components-draggable'
@@ -27,7 +28,7 @@
                                 pull: 'clone',
                                 put: false,
                             }"
-                            item-key='id'
+                            item-key='listIndex'
                             :sort='false'
                             @end='onEnd'
                         >
@@ -190,6 +191,7 @@ export default {
             previewApp: {},
             getLoading: false,
             pageId: getQueryString('id'),
+            drag: false
         })
 
         const handleGetPageConfig = () => {
@@ -555,10 +557,12 @@ export default {
                     ElMessageBox.confirm(`${state.pageCode}页面发布成功`, {
                         confirmButtonText: '查看发布记录',
                         cancelButtonText: '关闭',
-                    })
-                        .then(_ => {
-                            router.push({ name: 'PublishList', query: { id: state.pageCode } })
+                    }).then(_ => {
+                        router.push({
+                            name: 'PublishList',
+                            query: { pageCode: state.pageCode, id: state.pageId, lang: 'zh' }
                         })
+                    })
                         .catch(_ => { })
                 })
                 .catch(error => {

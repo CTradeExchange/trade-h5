@@ -33,7 +33,7 @@
                     </p>
                 </div>
             </li>
-            <li class='item'>
+            <li v-if='Number(tradeType) !== 5' class='item'>
                 <div class='hd'>
                     <p>{{ $t('trade.loan') }}</p>
                     <p class='value'>
@@ -48,21 +48,23 @@
                 </div>
             </li>
             <li class='item'>
-                <div class='hd'>
+                <div v-if='Number(tradeType) !== 5' class='hd'>
                     <p>{{ $t('assets.maxLoan') }}</p>
                     <p class='value'>
                         {{ account?.availableLoan }}
                     </p>
                 </div>
                 <div class='ft'>
-                    <p>{{ $t('withdrawCoin.can') }}</p>
+                    <p :class="Number(tradeType) === 5 ? 'alignLeft': 'alignRight' ">
+                        {{ $t('withdrawCoin.can') }}
+                    </p>
                     <p class='value'>
                         {{ account?.withdrawAmount }}
                     </p>
                 </div>
             </li>
         </ul>
-        <div class='footerBtn'>
+        <div v-if='Number(tradeType) !== 5' class='footerBtn'>
             <van-button v-if='Number(tradeType) === 3' block @click='toLoan'>
                 {{ $t('trade.loan') }}
             </van-button>
@@ -170,15 +172,15 @@ export default {
         font-size: rem(24px);
         line-height: 1.4;
         border-bottom: 1px solid var(--lineColor);
-        &:last-child {
-            border-bottom: 0;
-        }
         .ft {
             text-align: right;
         }
         .value {
             color: var(--minorColor);
             font-size: rem(30px);
+        }
+        &:last-child {
+            border-bottom: 0;
         }
     }
 }

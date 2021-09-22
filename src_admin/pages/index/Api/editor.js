@@ -204,7 +204,7 @@ export function initChannel (data) {
 // 自动同步国家信息
 export function reloadCountry (data) {
     return request({
-        url: '/wp-json/wp/v2/reloadCountry' + data,
+        url: '/wp-json/wp/v2/reloadCountry',
         params: {},
         method: 'get'
     })
@@ -213,7 +213,7 @@ export function reloadCountry (data) {
 // 自动同步资产信息
 export function reloadCatsTradeTypeAssets (data) {
     return request({
-        url: '/wp-json/wp/v2/reloadCatsTradeTypeAssets' + data,
+        url: '/wp-json/wp/v2/reloadCatsTradeTypeAssets',
         params: {},
         method: 'get'
     })

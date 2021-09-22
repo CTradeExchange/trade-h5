@@ -7,7 +7,7 @@
                         <span class='total'>
                             {{ $t('assets.totalAssets') }}({{ assetsInfo?.currency }})
                         </span>
-                        <span class='tag'>
+                        <span v-if='Number(tradeType) !== 5' class='tag'>
                             {{ $t('assets.riskLevel') }} {{ assetsInfo?.closeProportion }}
                         </span>
                     </div>
@@ -18,7 +18,7 @@
                 </div>
             </div>
         </div>
-        <ul class='assetList'>
+        <ul v-if='Number(tradeType) !== 5' class='assetList'>
             <li class='item'>
                 <p class='muted'>
                     {{ $t('assets.netAssets') }}
@@ -45,14 +45,14 @@
                 size='mini'
                 @click='toDesposit'
             >
-                {{ $t('trade.desposit') }}
+                {{ $t('trade.loan') }}
             </van-button>
             <van-button
                 hairline
                 size='mini'
                 @click='toWirhdraw'
             >
-                {{ $t('trade.withdraw') }}
+                {{ $t('trade.repayment') }}
             </van-button>
             <van-button
                 hairline
