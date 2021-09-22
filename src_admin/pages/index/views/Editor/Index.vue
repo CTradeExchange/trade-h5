@@ -187,7 +187,9 @@ export default {
                 releaseDescription: ''
             },
             settingPageConfig: {},
-            previewApp: {}
+            previewApp: {},
+            getLoading: false,
+            pageId: getQueryString('id'),
         })
 
         const handleGetPageConfig = () => {
@@ -595,9 +597,9 @@ export default {
         }
 
         // 获取渠道配置
-        const getPageConfig = () => {
-            this.getLoading = true
-            getViChannel(this.pageId).then(res => {
+        const getViChannelConfig = () => {
+            state.getLoading = true
+            getViChannel(state.pageId).then(res => {
                 if (!res.success) {
                     this.$message.error(res.message)
                     return
@@ -625,6 +627,7 @@ export default {
             await getSettingPageData()
             Mousetrap.bind(['del', 'backspace'], deleteComp)
             Mousetrap.bind(['command+s', 'ctrl+s'], handleModifyPageConfig)
+            getViChannelConfig()
         })
 
         onUnmounted(() => {
