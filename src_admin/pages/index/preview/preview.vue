@@ -17,23 +17,25 @@
                 @start='onStart'
             >
                 <template #item='{ element:el, index }'>
-                    <component
-                        :is='el.component'
-                        :class='{ active: el.id === activated }'
-                        :data='el.data'
-                        @click='moduleClick(el, $event)'
-                    >
-                        <div v-if='el.data.bindComp && el.data.bindComp.length'>
-                            <component
-                                :is='item.component'
-                                v-for='(item,i) in el.data.bindComp'
-                                :key="index+''+i+item.id"
-                                :class='{ active: item.id === activated }'
-                                :data='item.data'
-                                @click.stop='moduleClick(item, $event)'
-                            />
-                        </div>
-                    </component>
+                    <div>
+                        <component
+                            :is='el.component'
+                            :class='{ active: el.id === activated }'
+                            :data='el.data'
+                            @click='moduleClick(el, $event)'
+                        >
+                            <div v-if='el.data.bindComp && el.data.bindComp.length'>
+                                <component
+                                    :is='item.component'
+                                    v-for='(item,i) in el.data.bindComp'
+                                    :key="index+''+i+item.id"
+                                    :class='{ active: item.id === activated }'
+                                    :data='item.data'
+                                    @click.stop='moduleClick(item, $event)'
+                                />
+                            </div>
+                        </component>
+                    </div>
                 </template>
             </draggable>
         </div>
