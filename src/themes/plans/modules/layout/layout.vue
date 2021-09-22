@@ -51,7 +51,7 @@ export default {
 
 <style lang="scss" >
 .m-layout {
-    display: flex;
+    display: flex !important;
     min-height: 10px;
     line-height: 1.4;
     .col {

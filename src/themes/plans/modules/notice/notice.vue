@@ -22,7 +22,9 @@ export default {
     props: {
         data: {
             type: [String, Object],
-            default: {}
+            default: function () {
+                return {}
+            }
         },
     },
     created () {
