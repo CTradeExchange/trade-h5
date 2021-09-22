@@ -159,7 +159,7 @@
     "buyShort": "买",
     "marketPrice": "市价单",
     "closedOrder": "已平仓",
-    "orderVolume": "数量(手)",
+    "orderVolume": "数量",
     "dot": "点",
     "freeMargin": "可用保证金",
     "free": "可用",
