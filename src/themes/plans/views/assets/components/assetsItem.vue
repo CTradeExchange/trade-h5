@@ -8,18 +8,22 @@
             <div>
                 <p>{{ $t('trade.free') }}</p>
                 <p>{{ data.available }}</p>
-                <p class='mtop10'>
-                    {{ $t('trade.loan') }}
-                </p>
-                <p>{{ data.liabilitiesPrincipal }}</p>
+                <template v-if='Number(tradeType) !== 5'>
+                    <p class='mtop10'>
+                        {{ $t('trade.loan') }}
+                    </p>
+                    <p>{{ data.liabilitiesPrincipal }}</p>
+                </template>
             </div>
             <div class='alignRight'>
                 <p>{{ $t('assets.frozen') }}</p>
                 <p>{{ data.frozen }}</p>
-                <p class='mtop10'>
-                    {{ $t('trade.swap_2') }}
-                </p>
-                <p>{{ data.interest }}</p>
+                <template v-if='Number(tradeType) !== 5'>
+                    <p class='mtop10'>
+                        {{ $t('trade.swap_2') }}
+                    </p>
+                    <p>{{ data.interest }}</p>
+                </template>
             </div>
         </div>
     </div>
@@ -53,6 +57,7 @@ export default {
         }
         return {
             toInfo,
+            tradeType
         }
     }
 }

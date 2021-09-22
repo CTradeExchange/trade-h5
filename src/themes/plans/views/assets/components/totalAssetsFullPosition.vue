@@ -42,7 +42,7 @@
             </li>
         </ul>
         <div v-if='assetsInfo' class='btns'>
-            <van-button
+            <!-- <van-button
                 hairline
                 size='mini'
                 @click='toDesposit'
@@ -55,7 +55,7 @@
                 @click='toWirhdraw'
             >
                 {{ $t('trade.withdraw') }}
-            </van-button>
+            </van-button> -->
             <van-button
                 hairline
                 size='mini'
@@ -190,7 +190,7 @@ export default {
     height: rem(65px);
     //justify-content: space-evenly;
     .van-button {
-        width: 50%;
+        width: 100%;
         //display: block;
         //flex: 1;
         height: 100%;
