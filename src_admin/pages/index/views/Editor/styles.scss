@@ -13,7 +13,7 @@ $lighterBlue: #409EFF;
     .components-item {
         display: inline-block;
         width: 48%;
-        margin: 1%;
+        margin-bottom: 1%;
         transition: transform 0ms !important;
     }
 }
@@ -30,7 +30,7 @@ $lighterBlue: #409EFF;
     }
 }
 .components-body {
-    padding: 15px;
+    padding: 10px 6px;
     font-size: 14px;
     background: $selectedColor;
     border: 1px dashed $selectedColor;
@@ -52,7 +52,7 @@ $lighterBlue: #409EFF;
     position: absolute;
     top: 0;
     left: 0;
-    width: 300px;
+    width: 260px;
     height: 100vh;
 }
 .left-scrollbar {
@@ -70,7 +70,7 @@ $lighterBlue: #409EFF;
     box-sizing: border-box;
     width: auto;
     height: 100vh;
-    margin: 0 600px 0 300px;
+    margin: 0 400px 0 260px;
     .row-btns {
         display: flex;
         align-items: center;

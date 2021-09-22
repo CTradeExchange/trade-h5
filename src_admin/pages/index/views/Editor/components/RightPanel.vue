@@ -306,7 +306,7 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
-    width: 600px;
+    width: 400px;
     padding-top: 3px;
     padding-bottom: 40px;
     background-color: #FFF;
@@ -322,13 +322,13 @@ export default {
         margin-left: 15px;
     }
     .center-tabs {
-        padding-left: 30px;
+        padding-left: 10px;
         .base-setting {
-            padding-right: 20px;
+            padding-right: 10px;
         }
         .component-setting {
             margin-top: 50px;
-            padding-right: 20px;
+            padding-right: 10px;
         }
         .setting-wrap {
             margin: 10px;
@@ -352,7 +352,7 @@ export default {
     }
     .spaceInput {
         position: absolute;
-        width: 70px;
+        width: 80px;
     }
     .top {
         top: 5px;

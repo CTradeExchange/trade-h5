@@ -269,7 +269,7 @@
         <el-dialog
             v-model='plansDialogVisible'
             title='玩法&玩法币种'
-            width='45%'
+            width='55%'
         >
             <el-form
                 label-position='right'
@@ -554,7 +554,6 @@ export default {
             }
         },
         handleSavePlans () {
-            debugger
             let assetFlag = true
             const plans = []
 

@@ -378,6 +378,19 @@ export default {
                 this.setInfoList({ success: false, info: '终止...' })
                 return
             }
+            const initChannelState = await initChannel({
+                skinId: '0001',
+                webSite: data.h5Address,
+                webViewSite: data.h5PreviewAddress
+            })
+            if (initChannelState.success) {
+                this.setInfoList({ success: true, info: '渠道初始化成功' })
+            } else {
+                this.setInfoList({ success: true, info: '渠道初始化失败' })
+                this.setInfoList({ success: false, info: '终止...' })
+                return
+            }
+
             this.setInfoList({ loading: true, info: '文件权限检测中...' })
             const checkData = await checkEnvironment()
             if (checkData.success) {
@@ -471,12 +484,6 @@ export default {
             this.setInfoList({ loading: true, info: 'web页面初始化完成' })
             await updateDataToH5IndexView()
             await updateDataToH5Index()
-            await initChannel({
-                skinId: '0001',
-                webSite: data.h5Address,
-                webViewSite: data.h5PreviewAddress
-
-            })
 
             this.$alert('恭喜你系统初始化完成!', '温馨提示', {
                 confirmButtonText: '确定',
