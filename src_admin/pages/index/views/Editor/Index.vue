@@ -602,20 +602,14 @@ export default {
             getViChannel(state.pageId).then(res => {
                 if (!res.success) {
                     this.$message.error(res.message)
-                    return
                 }
 
-                let content = res.data.content ? JSON.parse(res.data.content) : {}
-                content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
-                this.filterLang = content.supportLanguage
-                console.log('渠道配置', content)
-
-                const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
-                this.form = Object.assign(this.form, content, { other })
+                state.settingPageConfig.h5PreviewAddress = res.data.web_view_site
+                state.settingPageConfig.h5Address = res.data.web_site
             }).catch(error => {
                 console.log(error)
             }).finally(() => {
-                this.getLoading = false
+                state.getLoading = false
             })
         }
 
