@@ -1,5 +1,5 @@
 <template>
-    <div v-if='product' class='directions' :class="{ 'tradeType9': [9].includes(product.tradeType) }">
+    <div v-if='product' class='directions' :class="{ 'tradeType9': [5,9].includes(product.tradeType) }">
         <div class='item buy' :class="{ 'active':modelValue==='buy' }" @click="setDirection('buy')">
             <span>
                 {{ $t('trade.buy') }}
