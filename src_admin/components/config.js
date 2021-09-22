@@ -15,7 +15,7 @@ import template from '@h5/modules/template/config.js'
 import minePerson from '@h5/modules/minePerson/config.js'
 // import mineTop from '@h5/modules/mineTop/config.js'
 import quoteList from '@h5/modules/quoteList/config.js'
-// import nav from '@h5/modules/nav/config.js'
+import nav from '@h5/modules/nav/config.js'
 import registerForm from '@h5/modules/registerForm/config.js'
 import news from '@h5/modules/news/config.js'
 import ad from '@h5/modules/ad/config.js'
@@ -33,7 +33,7 @@ export const mobileComponentsConfig = async () => {
         menulist,
         // position,
         selfSymbol,
-        // nav,
+        nav,
         text,
         // tinymce,
         quoteList,

@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './preview.vue'
 import store from '../store'
 import VantBase from '@h5/vantBase'
+import router from './router'
 import I18n, { setI18nLanguage, loadLocaleMessages } from '@h5/i18n/i18n.js'
 import { localGet, localSet } from '@utils/index'
 import MyAsset from '@index/components/placeholder/placeholder.vue'
@@ -20,6 +21,7 @@ async function render (container) {
     const app = createApp(App)
     app.use(longpress)
     app.use(store)
+    app.use(router)
     app.use(I18n)
     app.use(VantBase)
     // app.use(LuckDraw)
@@ -34,9 +36,16 @@ async function render (container) {
     app.mixin({
         data () {
             return {
-                h5Preview: process.env.VUE_APP_h5Preview
+                h5Preview: process.env.VUE_APP_h5Preview,
             }
         },
+        computed: {
+            $style () {
+                return {
+                    primary: '#1989fa'
+                }
+            }
+        }
     })
 
     // 获取到公司配置后初始化vue实例

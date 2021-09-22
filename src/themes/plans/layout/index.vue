@@ -17,13 +17,13 @@
             Loading...
         </template>
     </Suspense>
-    <footerMenu id='footerMenu' class='footerMenu' />
+    <footerMenu v-if='navData' id='footerMenu' class='footerMenu' :data='navData.data' />
 </template>
 
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import footerMenu from './footerMenu'
+import footerMenu from '../modules/nav/nav'
 export default {
     name: 'Layout',
     components: {
@@ -32,9 +32,10 @@ export default {
     setup () {
         const store = useStore()
         const cacheViews = computed(() => store.state.cacheViews)
-
+        const navData = computed(() => store.state._base.wpNav.find(el => el.tag === 'nav'))
         return {
-            cacheViews
+            cacheViews,
+            navData
         }
     }
 }

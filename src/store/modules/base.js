@@ -63,7 +63,7 @@ export default {
         },
         // 获取渠道配置信息
         getChannelSett ({ commit }) {
-            return pageConfig('channel_sett').then(data => {
+            return pageConfig('ChannelSett').then(data => {
                 if (data) {
                     // if (data.tradeTypeCurrencyList) {
                     //     data.tradeTypeCurrencyList = data.tradeTypeCurrencyList.filter(el => el.allCurrency)

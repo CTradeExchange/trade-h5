@@ -200,7 +200,7 @@ export default {
                 utmTerm: getQueryVariable('utm_term'),
                 protocol: state.protocol,
                 tradeTypeCurrencyList: getPlansByCountry(state.countryCode),
-                // customerGroupId: getCustomerGroupIdByCountry(state.countryCode),
+                customerGroupId: getCustomerGroupIdByCountry(state.countryCode),
                 country: state.countryCode
             }
 
