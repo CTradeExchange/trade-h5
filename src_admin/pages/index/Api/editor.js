@@ -200,3 +200,21 @@ export function initChannel (data) {
         method: 'post'
     })
 }
+
+// 自动同步国家信息
+export function reloadCountry (data) {
+    return request({
+        url: '/wp-json/wp/v2/reloadCountry' + data,
+        params: {},
+        method: 'get'
+    })
+}
+
+// 自动同步资产信息
+export function reloadCatsTradeTypeAssets (data) {
+    return request({
+        url: '/wp-json/wp/v2/reloadCatsTradeTypeAssets' + data,
+        params: {},
+        method: 'get'
+    })
+}

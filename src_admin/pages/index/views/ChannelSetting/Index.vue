@@ -155,7 +155,7 @@
                                 </el-select>
                             </el-form-item>
 
-                            <el-form-item label='GA埋点代码'>
+                            <el-form-item label='埋点代码'>
                                 <el-input
                                     v-model='form.googleAnalytics'
                                     placeholder='请输入'
@@ -170,7 +170,7 @@
                                     type='textarea'
                                 />
                             </el-form-item>
-                            <el-form-item label='H5地址'>
+                            <!-- <el-form-item label='H5地址'>
                                 <el-input
                                     v-model='form.h5Address'
                                     placeholder='请输入'
@@ -181,7 +181,7 @@
                                     v-model='form.h5PreviewAddress'
                                     placeholder='请输入'
                                 />
-                            </el-form-item>
+                            </el-form-item> -->
                         </el-tab-pane>
                         <el-tab-pane class='tab pay-channel-setting' label='支付通道图片设置'>
                             <el-row :gutter='20'>
@@ -356,10 +356,10 @@ export default {
                 registList: [{}],
                 onlineService: '',
                 supportLanguage: [],
-                customerGroupId: ''
+                customerGroupId: '',
+                registrable: [],
             },
             accountTradeList: [],
-            registrable: [],
             lang,
             filterLang: [],
             supportArea: [],
@@ -377,26 +377,46 @@ export default {
     },
     created () {
         this.pageId = getQueryString('id')
+        this.queryCountryList()
         this.queryAccountGroupTradeList()
         this.getPageConfig()
-        this.queryCountryList()
     },
     methods: {
         getPageConfig () {
             this.getLoading = true
+            const that = this
             getViChannel(this.pageId).then(res => {
                 if (!res.success) {
-                    this.$message.error(res.message)
+                    that.$message.error(res.message)
                     return
                 }
 
                 let content = res.data.content ? JSON.parse(res.data.content) : {}
                 content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
-                this.filterLang = content.supportLanguage
+                that.filterLang = content.supportLanguage
                 console.log('渠道配置', content)
 
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
-                this.form = Object.assign(this.form, content, { other })
+                that.form = Object.assign(that.form, content, { other })
+
+                // 如果未保存，写入默认值
+                if (!that.form.customerGroupId) {
+                    that.form.customerGroupId = '2'
+                }
+
+                const defaultLang = this.lang.filter(el => el.isDefault)
+                if (that.form.supportLanguage.length === 0) {
+                    that.form.supportLanguage = defaultLang
+                    that.filterLang = defaultLang
+                }
+                if (!that.form.language) {
+                    that.form.language = defaultLang?.[0]
+                }
+
+                if (!that.form.registList[0].registCountry) {
+                    that.form.registList[0].customerGroupId = '1'
+                    that.form.registList[0].registCountry = that.form.defaultZone
+                }
             }).catch(error => {
                 console.log(error)
             }).finally(() => {
@@ -426,6 +446,10 @@ export default {
                     const list = res.data
                     this.zoneList = list
                     this.otherZoneList = list
+                    if (this.form.registrable.length === 0) {
+                        this.form.registrable = [list[0]]
+                        this.form.defaultZone = list[0]
+                    }
                 }
             })
         },
@@ -495,28 +519,24 @@ export default {
                 })
             }
 
-            saveViChannel(
-                {
-                    content: JSON.stringify(_formData),
-                    id: this.pageId,
-                    other: ''
+            saveViChannel({
+                content: JSON.stringify(_formData), // '', //
+                id: this.pageId,
+                other: ''
+            }).then(res => {
+                if (!res.success) {
+                    return this.$message.error(res.message)
+                }
+                this.$message({
+                    message: '保存成功',
+                    type: 'success'
                 })
-                .then(res => {
-                    if (!res.success) {
-                        return this.$message.error(res.message)
-                    }
-                    this.$message({
-                        message: '保存成功',
-                        type: 'success'
-                    })
-                    this.getPageConfig()
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-                .finally(() => {
-                    this.submitLoading = false
-                })
+                this.getPageConfig()
+            }).catch(error => {
+                console.log(error)
+            }).finally(() => {
+                this.submitLoading = false
+            })
         },
         addFormItem () {
             this.otherZoneList = this.zoneList.filter(item => {

@@ -135,7 +135,7 @@
 
 <script>
 import draggable from 'vuedraggable'
-import { getPageConfig, modifyPageConfig, pushPage } from '@index/Api/editor'
+import { getPageConfig, modifyPageConfig, pushPage, getViChannel } from '@index/Api/editor'
 import RightPanel from './components/RightPanel'
 import ShowJson from './components/ShowJson'
 import { zip, unzip, randomStr, getQueryString } from '@utils/index'
@@ -592,6 +592,29 @@ export default {
 
         const cloneComponent = (origin) => {
             return deepClone(origin)
+        }
+
+        // 获取渠道配置
+        const getPageConfig = () => {
+            this.getLoading = true
+            getViChannel(this.pageId).then(res => {
+                if (!res.success) {
+                    this.$message.error(res.message)
+                    return
+                }
+
+                let content = res.data.content ? JSON.parse(res.data.content) : {}
+                content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
+                this.filterLang = content.supportLanguage
+                console.log('渠道配置', content)
+
+                const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
+                this.form = Object.assign(this.form, content, { other })
+            }).catch(error => {
+                console.log(error)
+            }).finally(() => {
+                this.getLoading = false
+            })
         }
 
         onMounted(async () => {

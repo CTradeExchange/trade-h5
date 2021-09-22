@@ -301,7 +301,7 @@
 
 <script>
 import anime from 'animejs/lib/anime.es.js'
-import { modifyPageConfig, pushPage, checkEnvironment, reloadSymbol, reloadAccountGroup, reloadAccountGroupByGroupId, reloadSymbolGroup, getInitPageCodeList, initPageByPageCode, updateDataToH5Index, updateDataToH5IndexView, initChannel } from '@index/Api/editor'
+import { modifyPageConfig, pushPage, checkEnvironment, reloadSymbol, reloadAccountGroup, reloadAccountGroupByGroupId, reloadSymbolGroup, getInitPageCodeList, initPageByPageCode, updateDataToH5Index, updateDataToH5IndexView, initChannel, reloadCountry, reloadCatsTradeTypeAssets } from '@index/Api/editor'
 import { deepClone } from '@utils/deepClone'
 import * as XLSX from 'xlsx'
 import Vue from 'vue'
@@ -439,6 +439,27 @@ export default {
                 this.setInfoList({ success: false, info: '终止...' })
                 return
             }
+
+            this.setInfoList({ loading: true, info: '国家信息同步中...' })
+            const reloadCountryState = await reloadCountry()
+            if (reloadCountryState.success) {
+                this.setInfoList({ success: true, info: '国家信息同步成功' })
+            } else {
+                this.setInfoList({ success: false, info: '国家信息同步失败' })
+                this.setInfoList({ success: false, info: '终止...' })
+                return
+            }
+
+            this.setInfoList({ loading: true, info: '资产信息同步中...' })
+            const reloadAssetsState = await reloadCatsTradeTypeAssets()
+            if (reloadAssetsState.success) {
+                this.setInfoList({ success: true, info: '资产信息同步成功' })
+            } else {
+                this.setInfoList({ success: false, info: '资产信息同步失败' })
+                this.setInfoList({ success: false, info: '终止...' })
+                return
+            }
+
             this.setInfoList({ loading: true, info: 'web页面初始化中...' })
             const pageCodeList = await getInitPageCodeList()
             console.log(pageCodeList)
@@ -456,6 +477,7 @@ export default {
                 webViewSite: data.h5PreviewAddress
 
             })
+
             this.$alert('恭喜你系统初始化完成!', '温馨提示', {
                 confirmButtonText: '确定',
                 callback: action => {
