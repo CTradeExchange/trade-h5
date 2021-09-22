@@ -111,6 +111,7 @@ export default {
         color: var(--placeholdColor);
     }
     .imgIcon {
+        height: 23px;
         opacity: 0.6;
         filter: grayscale(1);
     }
