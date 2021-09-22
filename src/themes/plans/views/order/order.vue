@@ -329,6 +329,8 @@ export default {
                     // router.push({ name: 'OrderSuccess', query: { orderId } })
                     store.dispatch('_trade/queryPBOOrderPage', { tradeType: params.tradeType })
                     queryAccountInfo()
+                    state.volume = ''
+                    state.pendingPrice = ''
                     Toast({
                         message: [1, 12].includes(params.bizType) ? t('trade.orderSuccessToast') : t('trade.orderPendingSuccessToast'),
                         duration: 1000,
