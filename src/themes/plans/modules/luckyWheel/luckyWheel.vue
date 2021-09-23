@@ -40,7 +40,7 @@ export default {
                 {
                     radius: '35px',
                     background: '#ffdea0',
-                    imgs: [{ src: this.data.prizeButton || prizeButton, width: '65%', top: '-50%' }]
+                    imgs: [{ src: this.data?.prizeButton || prizeButton, width: '65%', top: '-50%' }]
                 }
             ],
         }
@@ -52,7 +52,7 @@ export default {
     },
     mounted () {
         console.log(this.data)
-        this.getPrizesList()
+        // this.getPrizesList()
     },
     methods: {
         getPrizesList () {
