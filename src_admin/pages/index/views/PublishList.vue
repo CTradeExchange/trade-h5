@@ -74,14 +74,9 @@
             </el-table>
         </div>
         <el-dialog v-model='showBigImg' title='查看全图' width='500px'>
-            <div>
+            <div class='show-img'>
                 <img alt='' :src='showImgUrl' width='100%' />
             </div>
-            <span slot='footer' class='dialog-footer'>
-                <el-button type='primary' @click='showBigImg = false'>
-                    关闭
-                </el-button>
-            </span>
         </el-dialog>
     </div>
 </template>
@@ -193,6 +188,12 @@ export default {
             width: auto;
             height: 100px;
         }
+    }
+}
+.show-img {
+    text-align: center;
+    img {
+        width: 400px;
     }
 }
 </style>
