@@ -17,7 +17,7 @@
                 @start='onStart'
             >
                 <template #item='{ element:el, index }'>
-                    <div>
+                   
                         <component
                             :is='el.component'
                             :class='{ active: el.id === activated }'
@@ -35,7 +35,7 @@
                                 />
                             </div>
                         </component>
-                    </div>
+                  
                 </template>
             </draggable>
         </div>
