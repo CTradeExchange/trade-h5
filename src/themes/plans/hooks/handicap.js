@@ -79,7 +79,15 @@ export default function ({ showPending }) {
             }
             return result
         }
-        return {}
+        return {
+            ask_deep: [],
+            bid_deep: [],
+            price_digits: 0,
+            seq: Date.now().toString(),
+            symbol_id: String(product.value?.symbolId),
+            trade_info: [],
+            trade_type: product.value?.tradeType,
+        }
     })
 
     return {
