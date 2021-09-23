@@ -45,14 +45,14 @@
                 size='mini'
                 @click='toDesposit'
             >
-                {{ $t('trade.loan') }}
+                {{ Number(tradeType) === 3 ? $t('trade.loan') : $t('trade.desposit') }}
             </van-button>
             <van-button
                 hairline
                 size='mini'
                 @click='toWirhdraw'
             >
-                {{ $t('trade.repayment') }}
+                {{ Number(tradeType) === 3 ? $t('trade.repayment') : $t('trade.withdraw') }}
             </van-button>
             <van-button
                 hairline

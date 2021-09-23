@@ -150,7 +150,9 @@
         "redUp": "红涨绿跌",
         "redDown": "绿涨红跌",
         "chartColor": "涨跌颜色",
-        "noLogin": "请登录"
+        "noLogin": "请登录",
+        "kycLevel1": "基础认证",
+        "kycLevel2": "中级认证"
     },
     "auth": {
         "info": "Information Required",

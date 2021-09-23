@@ -19,9 +19,16 @@
                         {{ customerInfo.customerNo }}
                         <van-icon class='arrowIcon' name='arrow' />
                     </p>
-                    <!-- <span class='status invert' :class="['status'+customerInfo.kycAuditStatus]">
-                        {{ $tm('kycAuditStatus')[customerInfo.kycAuditStatus] }}
-                    </span> -->
+                    <span class='status invert'>
+                        <span v-if='customerInfo.kycStatus === -1'>
+                            {{ kycMap[customerInfo.kycRemark] }}
+                        </span>
+                        <span v-else>
+                            {{ customerInfo.kycRemark }}
+                        </span>
+
+                        <!-- {{ $tm('kycAuditStatus')[customerInfo.kycAuditStatus] }}  :class="['status'+customerInfo.kycAuditStatus]" -->
+                    </span>
                 </div>
             </div>
             <div v-if='data.src' class='capitalImg'>
@@ -38,6 +45,7 @@ import Fund from '@plans/components/fund'
 import ImgComp from '../img/img'
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 const faceImgDefault = require('@plans/images/face.png')
 export default {
     components: {
@@ -53,6 +61,7 @@ export default {
         }
     },
     setup (props) {
+        const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const faceImg = props.data.faceImg || faceImgDefault
         const adImg = props.src
@@ -64,6 +73,10 @@ export default {
         const updateShow = (val) => {
             state.fundVis = val
         }
+        const kycMap = {
+            1: t('common.kycLevel1'),
+            2: t('common.kycLevel2'),
+        }
         return {
             ...toRefs(state),
             faceImg,
@@ -72,6 +85,7 @@ export default {
             customerInfo,
             assets,
             miniAmountText,
+            kycMap
         }
     }
 }

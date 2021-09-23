@@ -26,19 +26,14 @@
                 </div>
                 <div class='block'>
                     <div class='left'>
-                        <span class='label'>
-                            {{ $t("assets.toAccount") }}
-                        </span>
                         <span class='num'>
-                            {{ planMap[item.inTradeType]?.name }}
+                            <strong>{{ planMap[tradeType]?.name }}</strong> -
+                            {{ directionText(item,1) }}
                         </span>
                     </div>
                     <div class='right'>
-                        <span class='label'>
-                            {{ $t("assets.fromAccount") }}
-                        </span>
                         <span class='num'>
-                            {{ planMap[item.outTradeType]?.name }}
+                            <strong>{{ planMap[item.rightTradeType]?.name }}</strong> - {{ directionText(item,2) }}
                         </span>
                     </div>
                 </div>
@@ -49,15 +44,19 @@
 
 <script>
 import list from './list'
-import { computed, ref, unref } from 'vue'
+import { computed, reactive, ref, toRef, toRefs, unref } from 'vue'
 import { capitalTransferRecord } from '@/api/user'
 import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
+import { useRouter, useRoute } from 'vue-router'
 
 export default {
     components: { list },
     setup (props) {
+        const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
-
+        const route = useRoute()
+        const { tradeType } = route.query
         const requestParams = ref({})
         const planMap = computed(() => store.state._quote.planMap)
         const setParams = (params) => {
@@ -69,13 +68,30 @@ export default {
         const refresh = () => {
             unref(listRef) && unref(listRef).refresh()
         }
+        const state = reactive({
+            rightTradeType: ''
+        })
+
+        const directionText = (item, type) => {
+            const key = Object.keys(item).find(k => Number(item[k]) === Number(tradeType))
+            if (key === 'inTradeType') {
+                item.rightTradeType = item.outTradeType
+                return type === 1 ? t('assets.toAccount') : t('assets.fromAccount')
+            } else if (key === 'outTradeType') {
+                item.rightTradeType = item.inTradeType
+                return type === 1 ? t('assets.fromAccount') : t('assets.toAccount')
+            }
+        }
         return {
             capitalTransferRecord,
             requestParams,
             setParams,
             listRef,
             refresh,
-            planMap
+            planMap,
+            tradeType,
+            directionText,
+            ...toRefs(state)
         }
     },
 }
