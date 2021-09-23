@@ -9,7 +9,7 @@
             </span>
         </div>
 
-        <div v-if='handicapList' class='priceMultiGear buy'>
+        <div class='priceMultiGear buy'>
             <p v-for='(item, index) in ask_deep' :key='index' class='item'>
                 <span class='hd'>
                     {{ item.price_ask }}
@@ -23,7 +23,7 @@
         <div class='curPrice' :class='[product.cur_color]'>
             {{ lastPrice }}
         </div>
-        <div v-if='handicapResult && handicapResult.bid_deep' class='priceMultiGear sell'>
+        <div class='priceMultiGear sell'>
             <p v-for='(item, index) in handicapResult.bid_deep.slice(0,5)' :key='index' class='item'>
                 <span class='hd'>
                     {{ item.price_bid }}
@@ -121,6 +121,7 @@ export default {
         color: var(--placeholdColor);
     }
     .priceMultiGear {
+        height: rem(200px);
         margin-top: rem(20px);
         font-size: rem(24px);
         line-height: rem(40px);
