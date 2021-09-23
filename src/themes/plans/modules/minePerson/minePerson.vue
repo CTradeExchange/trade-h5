@@ -74,8 +74,8 @@ export default {
             state.fundVis = val
         }
         const kycMap = {
-            1: t('common.kycLevel1'),
-            2: t('common.kycLevel2'),
+            level_1: t('common.kycLevel1'),
+            level_2: t('common.kycLevel2'),
         }
         return {
             ...toRefs(state),
