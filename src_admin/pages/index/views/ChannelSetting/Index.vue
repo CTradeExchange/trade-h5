@@ -474,7 +474,7 @@ export default {
             this.setPlansType = type
             this.curIndex = index
             let data = []
-            debugger
+
             if (type === 1) {
                 if (item.registCountry && item.customerGroupId) {
                     this.plansDialogVisible = true
@@ -497,13 +497,6 @@ export default {
             } else {
                 data = this.accountTradeList[this.form.customerGroupId]?.data
                 this.checkedTradeType = this.form.tradeTypeCurrencyList
-                if (this.checkedTradeType.length > 0) {
-                    this.checkedTradeType.forEach(el => {
-                        if ([3, 5, 9].includes(Number(el.id))) {
-                            el.allCurrency = el.allCurrency.split(',')
-                        }
-                    })
-                }
                 this.getTradeTypeAssets(data)
                 this.plansDialogVisible = true
             }
