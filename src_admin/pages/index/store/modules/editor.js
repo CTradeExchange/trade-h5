@@ -146,7 +146,6 @@ export default {
             state.tradeTypeList = data
         },
         UPDATE_TRADETYPE_BLOCK_COLLECT (state, data) {
-            // debugger
             state.tradeTypeBlockCollect = data
         },
         /**

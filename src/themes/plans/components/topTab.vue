@@ -12,7 +12,7 @@
     >
         <van-tab v-for='(item, index) in list' :key='index' class='tab'>
             <template #title>
-                <div class='title' @click="$emit('tabClick',item,index)">
+                <div v-if='item?.id === "selfSymbol" || item.listByUser.length > 0' class='title' @click="$emit('tabClick',item,index)">
                     <i v-if='item.icon' class='icon' :class='item.icon' :style="{ 'color':item.color }"></i>
                     <div class='text'>
                         {{ item.title }}
@@ -68,6 +68,7 @@ export default {
             active: 0
         }
     },
+
     watch: {
         modelValue () {
             this.active = this.modelValue

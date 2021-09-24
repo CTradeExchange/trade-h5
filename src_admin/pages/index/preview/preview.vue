@@ -17,12 +17,12 @@
                 @start='onStart'
             >
                 <template #item='{ element:el, index }'>
-                   
+                    <div @click='moduleClick(el, $event)'>
                         <component
                             :is='el.component'
                             :class='{ active: el.id === activated }'
                             :data='el.data'
-                            @click='moduleClick(el, $event)'
+                         
                         >
                             <div v-if='el.data.bindComp && el.data.bindComp.length'>
                                 <component
@@ -35,7 +35,7 @@
                                 />
                             </div>
                         </component>
-                  
+                    </div>
                 </template>
             </draggable>
         </div>

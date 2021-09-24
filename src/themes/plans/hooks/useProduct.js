@@ -12,6 +12,7 @@ export default function ({ tradeType, categoryType }) {
         const listByUser = unref(userSelfSymbolList)[unref(tradeType)] || []
         const selfSymbol = {
             title: '自选',
+            id: 'selfSymbol',
             listByUser: Array.isArray(listByUser) ? listByUser : [listByUser]
         }
         return [
