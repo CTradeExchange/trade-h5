@@ -96,7 +96,7 @@
                                         </el-select>
                                     </el-col>
                                     <el-col :span='12'>
-                                        <el-button type='primary' @click='setPlans(item,index)'>
+                                        <el-button type='primary' @click='setPlans(item,index,1)'>
                                             设置玩法币种
                                         </el-button>
                                         <el-button v-if='index === 0' type='primary' @click='addFormItem'>
@@ -110,18 +110,27 @@
                             </el-form-item>
 
                             <el-form-item label='游客客户组'>
-                                <el-select
-                                    v-model='form.customerGroupId'
-                                    clearable
-                                    placeholder='请选择客户组'
-                                >
-                                    <el-option
-                                        v-for='el in accountTradeList'
-                                        :key='el.id'
-                                        :label='el.name'
-                                        :value='el.id'
-                                    />
-                                </el-select>
+                                <el-row>
+                                    <el-col :span='4'>
+                                        <el-select
+                                            v-model='form.customerGroupId'
+                                            clearable
+                                            placeholder='请选择客户组'
+                                        >
+                                            <el-option
+                                                v-for='el in accountTradeList'
+                                                :key='el.id'
+                                                :label='el.name'
+                                                :value='el.id'
+                                            />
+                                        </el-select>
+                                    </el-col>
+                                    <el-col :span='8'>
+                                        <el-button type='primary' @click='setPlans(item,index,2)'>
+                                            设置玩法币种
+                                        </el-button>
+                                    </el-col>
+                                </el-row>
                             </el-form-item>
 
                             <el-form-item label='H5支持语言'>
@@ -270,6 +279,7 @@
             v-model='plansDialogVisible'
             title='玩法&玩法币种'
             width='55%'
+            @close='closeDialog'
         >
             <el-form
                 label-position='right'
@@ -277,31 +287,34 @@
             >
                 <div v-for='item in tradeTypeAssets' :key='item.id' class='tradeType-row'>
                     <el-card :header='item.name' shadow='always'>
-                        <template v-if="['1','2'].indexOf(item.id)>-1">
-                            <el-form-item label='玩法币种'>
-                                <el-select
+                        <template v-if='setPlansType === 1'>
+                            <template v-if="['1','2'].indexOf(item.id)>-1">
+                                <el-form-item label='玩法币种'>
+                                    <el-select
+                                        v-model='checkedTradeType[item.id].allCurrency'
+                                        clearable
+                                        filterable
+                                        placeholder='请选择'
+                                    >
+                                        <el-option
+                                            v-for='asset in item.assetsList'
+                                            :key='asset.key'
+                                            :label='`${asset.label}`'
+                                            :value='asset.key'
+                                        />
+                                    </el-select>
+                                </el-form-item>
+                            </template>
+                            <template v-else>
+                                <el-transfer
                                     v-model='checkedTradeType[item.id].allCurrency'
-                                    clearable
-                                    filterable
-                                    placeholder='请选择'
-                                >
-                                    <el-option
-                                        v-for='asset in item.assetsList'
-                                        :key='asset.key'
-                                        :label='`${asset.label}`'
-                                        :value='asset.key'
-                                    />
-                                </el-select>
-                            </el-form-item>
+                                    :data='item.assetsList'
+                                    :render-content='renderFunc'
+                                    :titles='["可选玩法币种", "已选玩法币种"]'
+                                />
+                            </template>
                         </template>
-                        <template v-else>
-                            <el-transfer
-                                v-model='checkedTradeType[item.id].allCurrency'
-                                :data='item.assetsList'
-                                :render-content='renderFunc'
-                                :titles='["可选玩法币种", "已选玩法币种"]'
-                            />
-                        </template>
+
                         <el-form-item class='sort-row' label='玩法别名'>
                             <el-input
                                 v-model.number='checkedTradeType[item.id].alias'
@@ -372,7 +385,8 @@ export default {
             submitLoading: false,
             pageId: '',
             curIndex: '', // 注册客户组当前操作项
-            getLoading: false
+            getLoading: false,
+            setPlansType: 1 // 1 注册客户组玩法 2 游客客户组
         }
     },
     created () {
@@ -456,14 +470,34 @@ export default {
                 }
             })
         },
-        setPlans (item, index) {
+        setPlans (item, index, type) {
+            this.setPlansType = type
             this.curIndex = index
-
-            if (item.registCountry && item.customerGroupId) {
-                this.plansDialogVisible = true
-                const data = this.accountTradeList[item.customerGroupId]?.data
-                this.checkedTradeType = this.form.registList[index]?.plans
-                if (this.checkedTradeType) {
+            let data = []
+            debugger
+            if (type === 1) {
+                if (item.registCountry && item.customerGroupId) {
+                    this.plansDialogVisible = true
+                    data = this.accountTradeList[item.customerGroupId]?.data
+                    this.checkedTradeType = this.form.registList[index]?.plans
+                    if (this.checkedTradeType) {
+                        this.checkedTradeType.forEach(el => {
+                            if ([3, 5, 9].includes(Number(el.id))) {
+                                el.allCurrency = el.allCurrency.split(',')
+                            }
+                        })
+                    }
+                    this.getTradeTypeAssets(data)
+                } else {
+                    this.$message({
+                        message: '请先选择国家和客户组',
+                        type: 'warning'
+                    })
+                }
+            } else {
+                data = this.accountTradeList[this.form.customerGroupId]?.data
+                this.checkedTradeType = this.form.tradeTypeCurrencyList
+                if (this.checkedTradeType.length > 0) {
                     this.checkedTradeType.forEach(el => {
                         if ([3, 5, 9].includes(Number(el.id))) {
                             el.allCurrency = el.allCurrency.split(',')
@@ -471,11 +505,7 @@ export default {
                     })
                 }
                 this.getTradeTypeAssets(data)
-            } else {
-                this.$message({
-                    message: '请先选择国家和客户组',
-                    type: 'warning'
-                })
+                this.plansDialogVisible = true
             }
         },
         getTradeTypeAssets (data) {
@@ -494,6 +524,7 @@ export default {
                 })
 
                 this.checkedTradeType = tempCheckedTradeType
+
                 this.tradeTypeAssets = data.map(item => {
                     let customerGroupAssets = []
                     if (Array.isArray(item.assets)) {
@@ -511,16 +542,6 @@ export default {
             this.submitLoading = true
             const _formData = cloneDeep(this.form)
 
-            if (_formData.customerGroupId) {
-                _formData.tradeTypeCurrencyList = this.accountTradeList[_formData.customerGroupId]?.data.map(el => {
-                    return {
-                        name: el.trade_name,
-                        tradeType: el.trade_type,
-                        id: el.trade_type,
-                        allCurrency: el.assets.map(el => el.code).toString()
-                    }
-                })
-            }
             saveViChannel({
                 content: JSON.stringify(_formData), // '', //
                 id: this.pageId,
@@ -564,11 +585,9 @@ export default {
                         assetFlag = false
                     }
 
-                    let allCurrency
+                    let allCurrency = el.allCurrency
                     if ([3, 5, 9].includes(Number(key))) {
                         allCurrency = el.allCurrency.toString()
-                    } else {
-                        allCurrency = el.allCurrency
                     }
 
                     plans.push({
@@ -583,21 +602,29 @@ export default {
                     })
                 }
             }
-
+            // 玩法排序
             plans.sort(function (a, b) {
                 return a.sort - b.sort
             })
 
-            if (!assetFlag) {
+            if (!assetFlag && this.setPlansType === 1) {
                 return this.$message({
                     message: '每个玩法至少选择一个币种',
                     type: 'warning'
                 })
             }
 
-            this.form.registList[this.curIndex].plans = plans
-            this.checkedTradeType = {}
+            if (this.setPlansType === 1) {
+                this.form.registList[this.curIndex].plans = plans
+            } else {
+                this.form.tradeTypeCurrencyList = plans
+            }
+
             this.plansDialogVisible = false
+        },
+        closeDialog () {
+            this.checkedTradeType = {}
+            this.tradeTypeAssets = []
         }
     }
 }
