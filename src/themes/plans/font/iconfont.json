@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "24559820",
+      "name": "认证失败",
+      "font_class": "renzhengshibai",
+      "unicode": "e667",
+      "unicode_decimal": 58983
+    },
+    {
+      "icon_id": "24559821",
+      "name": "未认证",
+      "font_class": "weirenzheng",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    },
+    {
+      "icon_id": "24559822",
+      "name": "审核中",
+      "font_class": "shenhezhong",
+      "unicode": "e669",
+      "unicode_decimal": 58985
+    },
+    {
+      "icon_id": "24559823",
+      "name": "基础认证",
+      "font_class": "jichurenzheng",
+      "unicode": "e66a",
+      "unicode_decimal": 58986
+    },
+    {
+      "icon_id": "24559824",
+      "name": "已认证",
+      "font_class": "yirenzheng",
+      "unicode": "e66d",
+      "unicode_decimal": 58989
+    },
+    {
+      "icon_id": "24559825",
+      "name": "中级认证",
+      "font_class": "zhongjirenzheng",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
       "icon_id": "23693572",
       "name": "切换",
       "font_class": "qiehuan",

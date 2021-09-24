@@ -265,7 +265,7 @@
 </template>
 
 <script>
-import { getPageConfig, modifyPageConfig, pushPage, queryCountryList, tradeTypeAccountAssets, getAccountGroupTradeList } from '@index/Api/editor'
+import { getPageConfig, modifyPageConfig, pushPage, queryCountryList, tradeTypeAccountAssets } from '@index/Api/editor'
 import File from '@index/components/RightForm/File'
 import city from './data/city.json'
 import province from './data/province.json'
@@ -438,43 +438,6 @@ export default {
                     this.$refs.tree.setCheckedKeys(content.disabledProvince || [])
                     const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                     this.form = Object.assign(this.form, content, { other })
-
-                    try {
-                        let tradeTypeCurrencyEumn = {}
-                        if (Array.isArray(content?.tradeTypeCurrencyList)) {
-                            tradeTypeCurrencyEumn = keyBy(content?.tradeTypeCurrencyList, 'id')
-                        }
-                        const cacheCheckedTradeType = {}
-                        // const initTradeTypeAssets = {}
-                        // const initSortTradeType = {}
-                        if (Array.isArray(content.tradeTypeList)) {
-                            content.tradeTypeList.forEach(el => {
-                                const { allCurrency, sort, alias, isWallet } = tradeTypeCurrencyEumn[String(el.id)]
-                                cacheCheckedTradeType[String(el.id)] = {
-                                    assets: ['1', '2'].indexOf(String(el.id)) > -1 && allCurrency ? allCurrency : (typeof (allCurrency) === 'string' ? allCurrency.split(',') : allCurrency),
-                                    sort,
-                                    isWallet,
-                                    alias
-                                }
-                                // if (['1', '2'].indexOf(String(el.id)) > -1) {
-                                //     cacheCheckedTradeType[String(el.id)] = tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency : ''
-                                // } else {
-                                //     initTradeTypeAssets[String(el.id)] = tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency.split(',') : []
-                                // }
-                                // initSortTradeType[String(el.id)] = isNaN(tradeTypeCurrencyEumn[String(el.id)].sort) ? 0 : Number(tradeTypeCurrencyEumn[String(el.id)].sort)
-                            })
-                        }
-                        // this.checkedTradeTypeAssets = initTradeTypeAssets
-                        // this.tradeTypeSort = initSortTradeType
-
-                        this.checkedTradeType = cacheCheckedTradeType
-                        this.tradeTypeCurrencyCollect = content.tradeTypeList.map(el => ({ id: el.id, name: el.name, currencyList: tradeTypeCurrencyEumn[String(el.id)]?.allCurrency ? tradeTypeCurrencyEumn[String(el.id)].allCurrency : [] }))
-                        // this.accountCurrencyList = this.form.currencyList
-                        // this.form.tradeTypeList = this.form.tradeTypeList && JSON.stringify(this.form.tradeTypeList)
-                        // this.form.currencyList = this.form.currencyList && JSON.stringify(this.form.currencyList)
-                    } catch (error) {
-                        console.error(error)
-                    }
 
                     this.pageData = res.data
                 })

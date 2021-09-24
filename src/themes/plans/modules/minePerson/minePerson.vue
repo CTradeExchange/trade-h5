@@ -12,14 +12,17 @@
             </div>
         </div>
         <div v-else class='personInfo'>
-            <div class='personNo' @click="$router.push('/personal')">
-                <img class='faceImg' :src='faceImg' />
+            <div class='personNo'>
+                <img class='faceImg' :src='faceImg' @click="$router.push('/personal')" />
                 <div v-if='customerInfo' class='customerNo'>
-                    <p>
+                    <p @click="$router.push('/personal')">
                         {{ customerInfo.customerNo }}
                         <van-icon class='arrowIcon' name='arrow' />
                     </p>
-                    <span class='status invert'>
+                    <span class='status' :class='kycStateMap[customerInfo.kycStatus].className' @click="$router.push('/authentication')">
+                        <span class='icon' :class='customerInfo.kycStatus === -1 ? kycStateMap[customerInfo.kycStatus].icon[customerInfo.kycRemark] : kycStateMap[customerInfo.kycStatus].icon'>
+                        </span>
+
                         <span v-if='customerInfo.kycStatus === -1'>
                             {{ kycMap[customerInfo.kycRemark] }}
                         </span>
@@ -77,6 +80,21 @@ export default {
             level_1: t('common.kycLevel1'),
             level_2: t('common.kycLevel2'),
         }
+        const kycStateMap = {
+            '1': { className: 'unverified', icon: 'icon_weirenzheng' },
+            '2': { className: 'check', icon: 'icon_shenhezhong' },
+            '3': { className: 'fail', icon: 'icon_renzhengshibai' },
+            '4': { className: 'success', icon: 'icon_yirenzheng' },
+            '-1': {
+                className: 'custom',
+                icon: {
+                    'level_1': 'icon_jichurenzheng',
+                    'level_2': 'icon_zhongjirenzheng',
+                }
+            }
+        }
+
+        store.dispatch('_user/findCustomerInfo')
         return {
             ...toRefs(state),
             faceImg,
@@ -85,7 +103,8 @@ export default {
             customerInfo,
             assets,
             miniAmountText,
-            kycMap
+            kycMap,
+            kycStateMap
         }
     }
 }
@@ -144,15 +163,35 @@ export default {
     }
     .status {
         display: inline-block;
+        height: rem(40px);
         margin-top: 3px;
-        padding: 3px 4px;
-        color: var(--contentColor);
-        font-size: rem(22px);
-        line-height: 1;
-        background: var(--warn);
-        border-radius: 3px;
-        &.status2 {
-            background: var(--success);
+        padding: 0 rem(20px) 0 rem(6px);
+        color: var(--color);
+        font-size: rem(20px);
+        line-height: rem(40px);
+        background: var(--bgColor);
+        border-radius: rem(20px);
+        &.unverified {
+            color: var(--minorColor);
+        }
+        &.check {
+            color: var(--primary);
+            background: var(--primaryAssistColor);
+        }
+        &.success {
+            color: #FF9E00;
+            background: rgba(255, 158, 0, 0.08);
+        }
+        &.fail {
+            color: var(--fallColor);
+            background: rgba(239, 83, 83, 0.08);
+        }
+        &.custom {
+            color: var(--success);
+            background: rgba(38, 166, 154, 0.08);
+        }
+        .icon {
+            margin-right: rem(8px);
         }
     }
 }

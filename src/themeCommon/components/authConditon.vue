@@ -368,7 +368,6 @@ export default {
         width: 100%;
         color: var(--color);
         font-size: rem(30px);
-        background: var(--bgColor);
         border-color: var(--lineColor);
     }
 }
