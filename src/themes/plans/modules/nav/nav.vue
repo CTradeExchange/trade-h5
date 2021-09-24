@@ -30,66 +30,64 @@ export default {
             }
         },
     },
-    setup (props) {
-        const router = useRouter()
-        const route = useRoute()
-        const store = useStore()
-        const { t } = useI18n({ useScope: 'global' })
-        const symbolKey = computed(() => store.state._quote.productActivedID)
-        const state = reactive({
-            active: route.name,
+    data () {
+        return {
+            active: '',
             menuList: [
                 {
-                    title: t('route.home'),
+                    title: this.$t('route.home'),
                     href: '/home',
                     icon: 'icon_icon_home',
                 },
                 {
-                    title: t('route.quote'),
+                    title: this.$t('route.quote'),
                     href: '/quote',
                     icon: 'icon_icon_quotes',
                 },
                 {
-                    title: t('route.trade'),
+                    title: this.$t('route.trade'),
                     href: '/order',
                     icon: 'icon_jiaoyi1',
                 },
                 {
-                    title: t('route.assets'),
+                    title: this.$t('route.assets'),
                     href: '/assets',
                     icon: 'icon_zichan',
                 },
                 {
-                    title: t('route.mine'),
+                    title: this.$t('route.mine'),
                     href: '/mine',
                     icon: 'icon_icon_mine',
                 },
             ]
-        })
-        watchEffect(() => (state.active = route.name))
-
-        // 切换导航
-        const menuHandler = (item) => {
-            if (process.env.VUE_APP_h5Preview) {
-                return false
-            }
-            let href = item.href
-            if (href?.name === 'Order') {
-                const [symbolId, tradeType] = symbolKey.value?.split('_')
-                href = `/order?symbolId=${symbolId}&tradeType=${tradeType}`
-            }
-            router.push(href).catch(err => {
-                state.active = route.path
-            })
         }
-        return {
-            ...toRefs(state),
-            menuHandler
+    },
+    computed: {
+        symbolKey () {
+            return this.$store.state._quote.productActivedID
         }
     },
     created () {
-        console.log(this)
+        if (!this.h5Preview) {
+            this.active = this.$route.name
+            this.$watch('$route.name', function (newval) {
+                this.active = newval
+            })
+        }
     },
+    methods: {
+        menuHandler (item) {
+            if (this.h5Preview) return false
+            let href = item.href
+            if (href?.name === 'Order') {
+                const [symbolId, tradeType] = this.symbolKey.split('_')
+                href = `/order?symbolId=${symbolId}&tradeType=${tradeType}`
+            }
+            this.$router.push(href).catch(err => {
+                this.active = this.$route.name
+            })
+        }
+    }
 }
 </script>
 

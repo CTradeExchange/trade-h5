@@ -39,3 +39,11 @@ export function cachePendingParams (params, cacheConfig) {
         cacheConfig[tradeType] = params
     }
 }
+// 玩法列表排序和别名
+export function formatPlans (plans) {
+    plans.forEach(item => {
+        if (item.alias) item.name = item.alias
+    })
+    plans.sort((a, b) => a.sort - b.sort > 0)
+    return plans
+}
