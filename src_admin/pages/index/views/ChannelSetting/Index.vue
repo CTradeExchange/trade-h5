@@ -382,6 +382,7 @@ export default {
             activeName: 1,
             tradeTypeList: [],
             checkedTradeType: {},
+            tradeTypeAssets: [],
             submitLoading: false,
             pageId: '',
             curIndex: '', // 注册客户组当前操作项
@@ -482,7 +483,7 @@ export default {
                     this.checkedTradeType = this.form.registList[index]?.plans
                     if (this.checkedTradeType) {
                         this.checkedTradeType.forEach(el => {
-                            if ([3, 5, 9].includes(Number(el.id))) {
+                            if ([3, 5, 9].includes(Number(el.id)) && typeof el.allCurrency === 'string') {
                                 el.allCurrency = el.allCurrency.split(',')
                             }
                         })
@@ -532,27 +533,40 @@ export default {
             }
         },
         submit () {
-            this.submitLoading = true
-            const _formData = cloneDeep(this.form)
+            try {
+                this.submitLoading = true
+                const _formData = cloneDeep(this.form)
 
-            saveViChannel({
-                content: JSON.stringify(_formData), // '', //
-                id: this.pageId,
-                other: ''
-            }).then(res => {
-                if (!res.success) {
-                    return this.$message.error(res.message)
+                if (_formData.registList.length > 0) {
+                    _formData.registList.forEach(el => {
+                        el.plans.forEach(item => {
+                            if ([3, 5, 9].includes(Number(item.id)) && Array.isArray(item.allCurrency)) {
+                                item.allCurrency = item.allCurrency.toString()
+                            }
+                        })
+                    })
                 }
-                this.$message({
-                    message: '保存成功',
-                    type: 'success'
+                saveViChannel({
+                    content: JSON.stringify(_formData), // '', //
+                    id: this.pageId,
+                    other: ''
+                }).then(res => {
+                    if (!res.success) {
+                        return this.$message.error(res.message)
+                    }
+                    this.$message({
+                        message: '保存成功',
+                        type: 'success'
+                    })
+                    this.getPageConfig()
+                }).catch(error => {
+                    console.log(error)
+                }).finally(() => {
+                    this.submitLoading = false
                 })
-                this.getPageConfig()
-            }).catch(error => {
-                console.log(error)
-            }).finally(() => {
-                this.submitLoading = false
-            })
+            } catch (error) {
+                console.log('error', error)
+            }
         },
         addFormItem () {
             this.otherZoneList = this.zoneList.filter(item => {

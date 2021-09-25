@@ -691,7 +691,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .pageWrap {
-    background-color: var(--bgColor);
+    //background-color: var(--conntentColor);
     .header {
         display: flex;
         align-items: center;
