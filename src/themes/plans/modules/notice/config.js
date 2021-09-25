@@ -6,14 +6,22 @@ export default {
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
         {
-            name: 'href',
-            label: '跳转地址',
-            type: 'Href',
+            name: 'items',
+            type: 'Array',
+            label: '跑马灯项',
+            max: 6,
+            config: [
+                {
+                    name: 'href',
+                    label: '跳转地址',
+                    type: 'Href',
+                },
+                {
+                    name: 'text',
+                    label: '内容-CN',
+                    type: 'Textarea',
+                },
+            ]
         },
-        {
-            name: 'text',
-            label: '内容-CN',
-            type: 'Textarea',
-        }
     ]
 }

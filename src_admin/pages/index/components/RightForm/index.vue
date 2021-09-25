@@ -38,7 +38,7 @@
                     <el-input
                         v-model='activeData[config.name]'
                         placeholder='请输入'
-                        :rows='20'
+                        :rows='5'
                         :type='config.type.toLowerCase()'
                     />
                 </el-form-item>

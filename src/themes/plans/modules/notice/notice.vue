@@ -8,9 +8,13 @@
                 style='height: 20px;'
                 vertical
             >
-                <van-swipe-item>17:23:36 150****5969 激活账户，获赠200美元；</van-swipe-item>
-                <van-swipe-item>17:15:31 130****0899 平仓欧美，单笔赚223美元；</van-swipe-item>
-                <van-swipe-item>17:03:56 156****2077 激活账户，获赠500美元；</van-swipe-item>
+                <van-swipe-item v-for='(item, index) in data.items' :key='index'>
+                    <span v-if='item?.href?.name' class='swipe-text' @click='pageTo(item.href.name)'>
+                        {{ item.text }}
+                    </span>
+                    <span v-else>
+                    </span>
+                </van-swipe-item>
             </van-swipe>
         </van-notice-bar>
         <slot></slot>
@@ -38,6 +42,9 @@ export default {
             notice.reset()
             notice.start()
             console.log('refresh')
+        },
+        pageTo (name) {
+            this.$router.push(name)
         }
     },
 }
@@ -46,5 +53,14 @@ export default {
 <style lang="scss" scoped>
 :deep(.notice-swipe) {
     overflow: hidden;
+    .swipe-text {
+        display: inline-block;
+        width: 98%;
+        overflow: hidden;
+        /* 文本不会换行 */
+        white-space: nowrap;
+        /* 当文本溢出包含元素时，以省略号表示超出的文本 */
+        text-overflow: ellipsis;
+    }
 }
 </style>
