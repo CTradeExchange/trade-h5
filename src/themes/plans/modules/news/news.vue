@@ -148,6 +148,7 @@ import dayjs from 'dayjs'
 import { useI18n } from 'vue-i18n'
 import { newsListByTypeByPage, canlendarListByDate, articleDetail } from '@/api/information'
 import { localGet } from '@/utils/util'
+const h5Preview = process.env.VUE_APP_h5Preview
 export default {
     props: ['data'],
     setup (props) {
@@ -212,13 +213,13 @@ export default {
         ]
         state.firstFocusNewsParams = {
             page: 1,
-            pageSize: 10,
+            pageSize: h5Preview ? 2 : 10,
             type: 7, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
             orgid: props.data.orgid // 机构id
         }
         state.firstNewsFlashParams = {
             page: 1,
-            pageSize: 10,
+            pageSize: h5Preview ? 2 : 10,
             type: 8, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
             orgid: props.data.orgid // 机构id
         }
@@ -328,6 +329,10 @@ export default {
         //     })
         // }
         const onLoadFocusNews = () => { // 要闻上拉加载
+            if (h5Preview && state.focusNews.list.length) {
+                state.focusNews.finished = true
+                return false
+            }
             if (state.focusNews.list.length > 0) {
                 state.focusNews.page++
             }
@@ -343,6 +348,10 @@ export default {
             })
         }
         const onLoadNewsFlash = () => { // 快讯上拉加载
+            if (h5Preview && state.newsFlash.list.length) {
+                state.newsFlash.finished = true
+                return false
+            }
             if (state.newsFlash.list.length > 0) {
                 state.newsFlash.page++
             }

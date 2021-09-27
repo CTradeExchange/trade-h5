@@ -22,17 +22,30 @@ export default {
         userAccountType (state) {
             let _type = ''
             const customerInfo = state.customerInfo
-            if (!customerInfo) {
+            switch (customerInfo?.type) { // 0真实，1模拟，2游客
+            case 0:
+                _type = 'R' // 真实
+                break
+            case 1:
+                _type = 'D' // 模拟
+                break
+            default:
                 _type = 'G' // 游客
-            } else if (customerInfo.type === 1) {
-                _type = 'D' // 模拟，
-            } else if (customerInfo.type === 0 && customerInfo.activateStatus === 2) {
-                _type = 'R_3' // 真实已激活
-            } else if (customerInfo.type === 0 && customerInfo.firstDepositTime) {
-                _type = 'R_2' // 真实已入金
-            } else if (customerInfo.type === 0 && !customerInfo.firstDepositTime) {
-                _type = 'R_1' // 真实未入金
+                break
             }
+            // if (!customerInfo) {
+            //     _type = 'G' // 游客
+            // } else if (customerInfo.type === 1) {
+            //     _type = 'D' // 模拟，
+            // } else if (customerInfo.type === 0 && customerInfo.activateStatus === 2) {
+            //     _type = 'R_3' // 真实已激活
+            // } else if (customerInfo.type === 0 && customerInfo.firstDepositTime) {
+            //     _type = 'R_2' // 真实已入金
+            // } else if (customerInfo.type === 0 && !customerInfo.firstDepositTime) {
+            //     _type = 'R_1' // 真实未入金
+            // } else {
+            //     _type = 'R' // 真实
+            // }
             return _type
         }
     },

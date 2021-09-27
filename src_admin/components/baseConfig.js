@@ -1,16 +1,17 @@
 export const common = [
-    {
-        name: 'accountType',
-        label: '账户状态',
-        type: 'Checkbox',
-        default: ['G', 'D', 'R_1', 'R_2'],
-        options: [
-            { value: 'G', label: '游客' },
-            { value: 'D', label: '模拟' },
-            { value: 'R_1', label: '未入金' },
-            { value: 'R_2', label: '已入金' }
-        ]
-    },
+    // {
+    //     name: 'accountType',
+    //     label: '账户状态',
+    //     type: 'Checkbox',
+    //     default: ['G', 'D', 'R_1', 'R_2'],
+    //     options: [
+    //         { value: 'G', label: '游客' },
+    //         // { value: 'D', label: '模拟' },
+    //         { value: 'R', label: '真实' },
+    //         // { value: 'R_1', label: '未入金' },
+    //         // { value: 'R_2', label: '已入金' }
+    //     ]
+    // },
     // {
     //     name: 'expiryDate',
     //     label: '有效期',

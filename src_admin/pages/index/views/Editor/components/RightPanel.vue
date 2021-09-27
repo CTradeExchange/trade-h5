@@ -14,15 +14,18 @@
                                         <el-checkbox label='G'>
                                             游客
                                         </el-checkbox>
-                                        <el-checkbox label='D'>
+                                        <!-- <el-checkbox label='D'>
                                             模拟
+                                        </el-checkbox> -->
+                                        <el-checkbox label='R'>
+                                            真实
                                         </el-checkbox>
-                                        <el-checkbox label='R_1'>
+                                        <!-- <el-checkbox label='R_1'>
                                             未入金
                                         </el-checkbox>
                                         <el-checkbox label='R_2'>
                                             已入金
-                                        </el-checkbox>
+                                        </el-checkbox> -->
                                     </el-checkbox-group>
                                 </el-form-item>
                                 <el-form-item label='有效期'>
