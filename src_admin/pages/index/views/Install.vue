@@ -301,7 +301,7 @@
 
 <script>
 import anime from 'animejs/lib/anime.es.js'
-import { modifyPageConfig, pushPage, checkEnvironment, reloadSymbol, reloadAccountGroup, reloadAccountGroupByGroupId, reloadSymbolGroup, getInitPageCodeList, initPageByPageCode, updateDataToH5Index, updateDataToH5IndexView, initChannel, reloadCountry, reloadCatsTradeTypeAssets } from '@index/Api/editor'
+import { modifyPageConfig, pushPage, checkEnvironment, reloadSymbol, reloadAccountGroup, reloadAccountGroupByGroupId, reloadSymbolGroup, getInitPageCodeList, initPageByPageCode, updateDataToH5Index, updateDataToH5IndexView, initChannel, reloadCountry, reloadCatsTradeTypeAssets, reloadPaymentList } from '@index/Api/editor'
 import { deepClone } from '@utils/deepClone'
 import * as XLSX from 'xlsx'
 import Vue from 'vue'
@@ -360,6 +360,20 @@ export default {
                 content: JSON.stringify(Object.assign(copyData, { marginLevel: { marginLess: data.marginLess, marginWarn: data.marginWarn } }))
             }
             const _id = 1
+
+            const initChannelState = await initChannel({
+                skinId: '0001',
+                webSite: data.h5Address,
+                webViewSite: data.h5PreviewAddress
+            })
+            if (initChannelState.success) {
+                this.setInfoList({ success: true, info: '渠道初始化成功' })
+            } else {
+                this.setInfoList({ success: true, info: '渠道初始化失败' })
+                this.setInfoList({ success: false, info: '终止...' })
+                return
+            }
+
             const modifyPageData = await modifyPageConfig(formData)
             this.setInfoList({ loading: true, info: '公司基础配置写入中...' })
             if (modifyPageData.success) {
@@ -375,18 +389,6 @@ export default {
                 this.setInfoList({ success: true, info: '公司基础配置发布成功' })
             } else {
                 this.setInfoList({ success: false, info: '公司基础配置发布失败' })
-                this.setInfoList({ success: false, info: '终止...' })
-                return
-            }
-            const initChannelState = await initChannel({
-                skinId: '0001',
-                webSite: data.h5Address,
-                webViewSite: data.h5PreviewAddress
-            })
-            if (initChannelState.success) {
-                this.setInfoList({ success: true, info: '渠道初始化成功' })
-            } else {
-                this.setInfoList({ success: true, info: '渠道初始化失败' })
                 this.setInfoList({ success: false, info: '终止...' })
                 return
             }
@@ -469,6 +471,17 @@ export default {
                 this.setInfoList({ success: true, info: '资产信息同步成功' })
             } else {
                 this.setInfoList({ success: false, info: '资产信息同步失败' })
+                this.setInfoList({ success: false, info: '终止...' })
+                return
+            }
+
+            this.setInfoList({ loading: true, info: '支付通道同步中...' })
+
+            const reloadPaymentState = await reloadPaymentList()
+            if (reloadPaymentState.success) {
+                this.setInfoList({ success: true, info: '支付通道同步成功' })
+            } else {
+                this.setInfoList({ success: false, info: '支付通道同步失败' })
                 this.setInfoList({ success: false, info: '终止...' })
                 return
             }

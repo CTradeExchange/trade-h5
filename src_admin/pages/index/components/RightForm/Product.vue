@@ -50,7 +50,6 @@
                     node-key='id'
                     :props='props'
                     show-checkbox
-                    @node-click='handleNodeClick'
                 />
             </el-scrollbar>
         </el-drawer>
@@ -395,7 +394,6 @@ export default {
         showDialog (type) {
             // console.log(this.elementTag)
             this.activeTradeType = type
-
             this.tradeTypeAccountGroupProduct = this.tradeTypeProduct[type]
             if (this.elementTag === 'selfSymbol') {
                 if (isPlainObject(this.selfSymbol?.[type])) {

@@ -466,7 +466,7 @@ export default {
                         }).then(() => {
                             // on confirm
                             router.push({
-                                path: '/desposit',
+                                path: '/deposit',
                                 query: {
                                     accountId,
                                     currency: accountCurrency.currency,

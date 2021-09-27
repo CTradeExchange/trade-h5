@@ -118,7 +118,7 @@ export default {
         })
 
         const toDesposit = () => {
-            router.push('/desposit')
+            router.push('/deposit')
         }
 
         const computePrice = (price,) => {

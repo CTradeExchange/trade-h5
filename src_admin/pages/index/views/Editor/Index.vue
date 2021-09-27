@@ -414,14 +414,14 @@ export default {
         }
 
         const toH5PreviewAddress = () => {
-            if (state.settingPageConfig.h5PreviewAddress && state.settingPageConfig.h5PreviewAddress.indexOf('http') === 0) {
-                window.open(state.settingPageConfig.h5PreviewAddress)
+            if (state.settingPageConfig.h5PreviewAddress) {
+                window.open('//' + state.settingPageConfig.h5PreviewAddress)
             }
         }
 
         const toH5Address = () => {
-            if (state.settingPageConfig.h5Address && state.settingPageConfig.h5Address.indexOf('http') === 0) {
-                window.open(state.settingPageConfig.h5Address)
+            if (state.settingPageConfig.h5Address) {
+                window.open('//' + state.settingPageConfig.h5Address)
             }
         }
 
@@ -605,7 +605,7 @@ export default {
             state.getLoading = true
             getViChannel(state.pageId).then(res => {
                 if (!res.success) {
-                    this.$message.error(res.message)
+                    return this.$message.error(res.message)
                 }
 
                 state.settingPageConfig.h5PreviewAddress = res.data.web_view_site

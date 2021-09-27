@@ -10,7 +10,7 @@
                 :key='item.accountId'
                 is-link
                 :title='item.currency'
-                :to="{ path: 'desposit', query:{ accountId: item.accountId,currency: item.currency,tradeType } }"
+                :to="{ path: 'deposit', query:{ accountId: item.accountId,currency: item.currency,tradeType } }"
             />
         </div>
     </div>

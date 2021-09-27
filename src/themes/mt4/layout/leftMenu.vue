@@ -30,7 +30,7 @@
                 <li class='item' @click="visible=false;$router.push('/chart')"> <i class='icon icon_tubiao'></i> <strong>图表</strong> </li>
                 <li class='item' @click="visible=false;$router.push('/trade')"> <i class='icon icon_jiaoyi'></i> <strong>交易</strong> </li>
                 <li class='item' @click="visible=false;$router.push('/history')"> <i class='icon icon_lishi'></i> <strong>历史</strong> </li> -->
-                <li class='item' @click="visible=false;$router.push({ path:'/desposit' })">
+                <li class='item' @click="visible=false;$router.push({ path:'/deposit' })">
                     <i class='icon icon_cunkuan'></i> <strong>{{ $t('cRoute.deposit') }}</strong>
                 </li>
                 <li class='item' @click="visible=false;$router.push('/withdraw')">

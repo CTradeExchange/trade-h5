@@ -44,7 +44,7 @@
                 <button class='btn' @click="$router.push('/withdraw')">
                     {{ $t('trade.drawings') }}
                 </button>
-                <button class='btn' @click="$router.push('/desposit')">
+                <button class='btn' @click="$router.push('/deposit')">
                     {{ $t('depositText') }}
                 </button>
             </div>

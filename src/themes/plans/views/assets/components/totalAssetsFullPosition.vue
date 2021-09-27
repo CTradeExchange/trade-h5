@@ -96,7 +96,7 @@ export default {
                 })
             } else {
                 router.push({
-                    path: '/desposit',
+                    path: '/deposit',
                     query: {
                         accountId: assetsInfo.value.accountId,
                         currency: assetsInfo.value.currency,

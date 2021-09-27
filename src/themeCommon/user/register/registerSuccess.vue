@@ -47,7 +47,7 @@ export default {
             return router.replace({ name: 'Quote' })
         }
         const toDesposit = () => {
-            return router.replace({ name: 'Desposit' })
+            return router.replace({ name: 'Deposit' })
         }
 
         return {

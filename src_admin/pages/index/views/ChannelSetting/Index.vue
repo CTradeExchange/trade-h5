@@ -65,7 +65,7 @@
                                 :label='index === 0 ? "注册客户组" : ""'
                             >
                                 <el-row>
-                                    <el-col :span='4'>
+                                    <el-col :span='6'>
                                         <el-select
                                             v-model='form.registList[index].registCountry'
                                             clearable
@@ -81,7 +81,7 @@
                                             />
                                         </el-select>
                                     </el-col>
-                                    <el-col :span='4'>
+                                    <el-col :span='6'>
                                         <el-select
                                             v-model='form.registList[index].customerGroupId'
                                             clearable
@@ -111,7 +111,7 @@
 
                             <el-form-item label='游客客户组'>
                                 <el-row>
-                                    <el-col :span='4'>
+                                    <el-col :span='6'>
                                         <el-select
                                             v-model='form.customerGroupId'
                                             clearable
@@ -192,78 +192,38 @@
                                 />
                             </el-form-item> -->
                         </el-tab-pane>
-                        <el-tab-pane class='tab pay-channel-setting' label='支付通道图片设置'>
+                        <el-tab-pane class='tab pay-channel-setting' label='支付通道图标设置'>
                             <el-row :gutter='20'>
                                 <el-col :offset='0' :span='24'>
                                     <el-tabs v-model='activeName' @tab-click='handleClick'>
-                                        <el-tab-pane v-for='i in 10' :key='i' :label='"Alipay"+i' :name='i'>
+                                        <el-tab-pane v-for='(item,index) in pyamentList' :key='index' :label='item.paymentName' :name='index'>
                                             <el-card class='box-card'>
                                                 <template #header>
-                                                    <div class='card-header'>
-                                                        <span class='pay-name'>
-                                                            Alipay{{ i }}
-                                                        </span>
-                                                        <span>通道logo图片配置</span>
-                                                    </div>
+                                                    提示：该界面非必填，不填时取系统默认图标
                                                 </template>
                                                 <div class='lang-wrap'>
-                                                    <el-row :gutter='20'>
-                                                        <el-col :offset='0' :span='6'>
-                                                            中文简体
+                                                    <el-row v-for='(l, i) in lang' :key='i' align='middle' :gutter='20'>
+                                                        <el-col :offset='0' :span='2'>
+                                                            {{ l.name }}
                                                         </el-col>
                                                         <el-col :offset='0' :span='6'>
-                                                            <el-upload
-                                                                action='https://jsonplaceholder.typicode.com/posts/'
-                                                                class='upload-demo'
-                                                                drag
-                                                                multiple
-                                                            >
-                                                                <i class='el-icon-upload'></i>
-                                                                <div class='el-upload__text'>
-                                                                    将文件拖到此处，或<em>点击上传</em>
+                                                            <div class='upload' @click='uploadFile(item,l)'>
+                                                                <div v-if='form.paymentIconList[item.paymentName][l.val].imgUrl' class='img-wrap'>
+                                                                    <img alt='' :src='form.paymentIconList[item.paymentName][l.val].imgUrl' />
                                                                 </div>
-                                                            </el-upload>
-                                                        </el-col>
-                                                    </el-row>
-                                                    <el-divider />
-                                                    <el-row :gutter='20'>
-                                                        <el-col :offset='0' :span='6'>
-                                                            中文繁体
-                                                        </el-col>
-                                                        <el-col :offset='0' :span='6'>
-                                                            <el-upload
-                                                                action='https://jsonplaceholder.typicode.com/posts/'
-                                                                class='upload-demo'
-                                                                drag
-                                                                multiple
-                                                            >
-                                                                <i class='el-icon-upload'></i>
-                                                                <div class='el-upload__text'>
-                                                                    将文件拖到此处，或<em>点击上传</em>
+                                                                <div v-else>
+                                                                    <i class='el-icon-plus'></i>
+                                                                    <p>点击上传图片</p>
                                                                 </div>
-                                                            </el-upload>
+                                                            </div>
                                                         </el-col>
+                                                        <el-col :offset='0' :span='9'>
+                                                            <el-form-item label='支付通道别名'>
+                                                                <el-input v-model='form.paymentIconList[item.paymentName][l.val].alias' clearable placeholder='请输入支付通道别名' size='normal' />
+                                                            </el-form-item>
+                                                        </el-col>
+                                                        <el-divider />
                                                     </el-row>
-                                                    <el-divider />
-                                                    <el-row :gutter='20'>
-                                                        <el-col :offset='0' :span='6'>
-                                                            英文
-                                                        </el-col>
-                                                        <el-col :offset='0' :span='6'>
-                                                            <el-upload
-                                                                action='https://jsonplaceholder.typicode.com/posts/'
-                                                                class='upload-demo'
-                                                                drag
-                                                                multiple
-                                                            >
-                                                                <i class='el-icon-upload'></i>
-                                                                <div class='el-upload__text'>
-                                                                    将文件拖到此处，或<em>点击上传</em>
-                                                                </div>
-                                                            </el-upload>
-                                                        </el-col>
-                                                    </el-row>
-                                                    <el-divider />
                                                 </div>
                                             </el-card>
                                         </el-tab-pane>
@@ -352,10 +312,11 @@
 </template>
 
 <script>
-import { getAccountGroupTradeAssetsList, queryCountryList, getViChannel, saveViChannel } from '@index/Api/editor'
+import { getAccountGroupTradeAssetsList, queryCountryList, getViChannel, saveViChannel, queryPaymentArray } from '@index/Api/editor'
 import { lang } from '../../config/lang'
 import { getQueryString } from '@admin/utils'
 import { keyBy, forOwn, isPlainObject, cloneDeep, compact } from 'lodash'
+import { isEmpty } from '@/utils/util'
 export default {
     name: 'ChannelSetting',
     data () {
@@ -371,6 +332,7 @@ export default {
                 supportLanguage: [],
                 customerGroupId: '',
                 registrable: [],
+                paymentIconList: {}, // 支付通道图标列表
             },
             accountTradeList: [],
             lang,
@@ -379,7 +341,7 @@ export default {
             zoneList: [],
             otherZoneList: [],
             plansDialogVisible: false,
-            activeName: 1,
+            activeName: 0,
             tradeTypeList: [],
             checkedTradeType: {},
             tradeTypeAssets: [],
@@ -387,7 +349,10 @@ export default {
             pageId: '',
             curIndex: '', // 注册客户组当前操作项
             getLoading: false,
-            setPlansType: 1 // 1 注册客户组玩法 2 游客客户组
+            setPlansType: 1, // 1 注册客户组玩法 2 游客客户组
+            pyamentList: [],
+
+            payIcon: {}
         }
     },
     created () {
@@ -395,6 +360,7 @@ export default {
         this.queryCountryList()
         this.queryAccountGroupTradeList()
         this.getPageConfig()
+        this.getPaymentArray()
     },
     methods: {
         getPageConfig () {
@@ -405,6 +371,7 @@ export default {
                     that.$message.error(res.message)
                     return
                 }
+                debugger
 
                 let content = res.data.content ? JSON.parse(res.data.content) : {}
                 content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
@@ -452,6 +419,27 @@ export default {
                 val.find(zo => zo.id === el.id)
             )
             // this.otherZoneList = this.zoneList.filter(el => val.includes(el.name + ' (' + el.country_code + ')'))
+        },
+        getPaymentArray () {
+            const that = this
+            queryPaymentArray().then(res => {
+                if (res.success && res.data) {
+                    that.pyamentList = res.data
+                    if (that.pyamentList.length > 0 && isEmpty(that.form.paymentIconList)) {
+                        that.pyamentList.forEach(el => {
+                            that.form.paymentIconList[el.paymentName] = {}
+                            that.lang.forEach(lang => {
+                                that.form.paymentIconList[el.paymentName][lang.val] = {
+                                    alias: '',
+                                    imgUrl: ''
+                                }
+                            })
+                        })
+
+                        console.log('paymentIconList', that.form.paymentIconList)
+                    }
+                }
+            })
         },
         // 获取国家区号列表
         queryCountryList () {
@@ -546,6 +534,7 @@ export default {
                         })
                     })
                 }
+
                 saveViChannel({
                     content: JSON.stringify(_formData), // '', //
                     id: this.pageId,
@@ -632,7 +621,31 @@ export default {
         closeDialog () {
             this.checkedTradeType = {}
             this.tradeTypeAssets = []
-        }
+        },
+        uploadFile (item, lang) {
+            try {
+                // 调用wp的方法上传图片
+                if (window.tb_show) {
+                    tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true')
+                    // 设置callBack
+                    window.send_to_editor = (html) => {
+                        if (window.tb_remove) {
+                            tb_remove()
+                        }
+                        console.log(html)
+                        const _div = document.createElement('div')
+                        _div.innerHTML = html
+                        const imgUrl = _div.querySelector('img').src
+                        console.log('imgUrl', imgUrl)
+                        this.form.paymentIconList[item.paymentName][lang.val].imgUrl = imgUrl
+                    }
+                } else {
+                    console.log('执行WordPress window.tb_show方法显示上传图片功能')
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        },
     }
 }
 </script>
@@ -660,6 +673,39 @@ export default {
             flex: 1;
             .el-transfer {
                 margin-bottom: 20px;
+            }
+        }
+    }
+    .pay-channel-setting {
+        .upload {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 180px;
+            height: 180px;
+            overflow: hidden;
+            text-align: center;
+            border: 1px dashed #D9D9D9;
+            border-radius: 6px;
+            cursor: pointer;
+            &:hover {
+                border: 1px dashed #477FD3;
+            }
+            .el-icon-plus {
+                display: block;
+                font-weight: bold;
+                font-size: 14px;
+                vertical-align: middle;
+            }
+            .img-wrap {
+                padding: 10px;
+                img {
+
+                }
+                .tip {
+                    line-height: 30px;
+                }
             }
         }
     }

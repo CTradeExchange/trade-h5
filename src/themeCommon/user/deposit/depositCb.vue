@@ -154,7 +154,7 @@ export default {
         }
 
         onBeforeRouteLeave((to, from) => {
-            router.push('/desposit')
+            router.push('/deposit')
         })
 
         onBeforeMount(() => {

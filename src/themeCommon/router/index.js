@@ -123,9 +123,9 @@ const routes = [
         }
     },
     {
-        path: '/desposit',
-        name: 'Desposit',
-        component: () => import(/* webpackChunkName: "addBank" */ '../user/desposit/desposit.vue'),
+        path: '/deposit',
+        name: 'Deposit',
+        component: () => import(/* webpackChunkName: "addBank" */ '../user/deposit/deposit.vue'),
         meta: {
             title: 'cRoute.deposit',
             footerMenu: false,
@@ -133,9 +133,9 @@ const routes = [
         }
     },
     {
-        path: '/despositRecord',
-        name: 'DespositRecord',
-        component: () => import(/* webpackChunkName: "addBank" */ '../user/desposit/despositRecord.vue'),
+        path: '/depositRecord',
+        name: 'DepositRecord',
+        component: () => import(/* webpackChunkName: "addBank" */ '../user/deposit/depositRecord.vue'),
         meta: {
             title: 'cRoute.depositRecord',
             footerMenu: false,
@@ -272,11 +272,11 @@ const routes = [
         }
     },
     {
-        path: '/despositCb',
-        name: 'DespositCb',
-        component: () => import(/* webpackChunkName: "page" */ '../user/desposit/despositCb.vue'),
+        path: '/depositCb',
+        name: 'DepositCb',
+        component: () => import(/* webpackChunkName: "page" */ '../user/deposit/depositCb.vue'),
         meta: {
-            title: 'cRoute.despositCb',
+            title: 'cRoute.depositCb',
             footerMenu: false,
         }
     },
@@ -308,9 +308,9 @@ const routes = [
         }
     },
     {
-        path: '/despositAccount',
-        name: 'DespositAccount',
-        component: () => import(/* webpackChunkName: "page" */ '../user/desposit/despositAccount.vue'),
+        path: '/depositAccount',
+        name: 'DepositAccount',
+        component: () => import(/* webpackChunkName: "page" */ '../user/deposit/depositAccount.vue'),
         meta: {
             title: 'cRoute.chooseCurrency',
             footerMenu: false,

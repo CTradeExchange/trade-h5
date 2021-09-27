@@ -218,3 +218,21 @@ export function reloadCatsTradeTypeAssets (data) {
         method: 'get'
     })
 }
+
+// 获取支付通道列表
+export function queryPaymentArray (data) {
+    return request({
+        url: '/wp-json/wp/v2/queryPaymentArray',
+        params: {},
+        method: 'get'
+    })
+}
+
+// 初始化支付通道
+export function reloadPaymentList (data) {
+    return request({
+        url: '/wp-json/wp/v2/reloadPaymentList',
+        params: {},
+        method: 'get'
+    })
+}
