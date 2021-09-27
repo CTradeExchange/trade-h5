@@ -382,7 +382,7 @@ export default {
                         item.data.tradeTypeBlock = Object.assign({}, tradeTypeBlock)
                         // if (item.data.code_ids_all) delete item.data.code_ids_all
                     }
-                    if (item.tag === 'selfSymbol') {
+                    if (['selfSymbol', 'productsSwipe'].includes(item.tag)) {
                         item.data.product = store.state.editor.tradeTypeSelfSymbol
                     }
                 })
@@ -494,7 +494,7 @@ export default {
             store.commit('editor/ADD_ELEMENT', {
                 formConfig: elementConfig.formConfig,
                 data: Object.assign({
-                    accountType: ['G', 'D', 'R_1', 'R_2'],
+                    accountType: ['G', 'R'], //, 'D', 'R_1', 'R_2'
                     expiryDate: [],
                     linkComp: '',
                     linkCompPosition: '',
