@@ -39,9 +39,9 @@
 
                 <div v-if='checkedType' class='pay-item'>
                     <div v-if='PayTypes.length > 0' class='pay-type' @click='openSheet'>
-                        <img alt='' :src='require("../../../assets/payment_icon/" + checkedType.paymentType + ".png")' srcset='' />
+                        <img alt='' :src='checkedType.imgUrl || require("../../../assets/payment_icon/" + checkedType.paymentType + ".png")' srcset='' />
                         <span class='pay-name'>
-                            {{ checkedType.paymentTypeAlias || checkedType.paymentType }}
+                            {{ checkedType.alias || checkedType.paymentTypeAlias || checkedType.paymentType }}
                         </span>
                         <van-icon name='arrow-down' />
                     </div>
@@ -98,16 +98,16 @@
     <van-action-sheet v-model:show='typeShow' class='pay-warpper' :round='false' :title='$t("deposit.selectPayMethods")'>
         <div class='pay-list'>
             <div v-for='(item,index) in payTypesSortEnable' :key='index' class='pay-type' @click='choosePayType(item)'>
-                <img alt='' :src='require("../../../assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
+                <img alt='' :src='item.imgUrl || require("../../../assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
                 <span class='pay-name'>
-                    {{ item.paymentTypeAlias || item.paymentType }}
+                    {{ item.alias || item.paymentTypeAlias || item.paymentType }}
                 </span>
                 <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
             </div>
             <div v-for='(item,index) in payTypesSortDisable' :key='index' class='pay-type' @click='choosePayType(item)'>
-                <img alt='' :src='require("../../../assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
+                <img alt='' :src='item.imgUrl || require("../../../assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
                 <span class='pay-name'>
-                    {{ item.paymentTypeAlias || item.paymentType }}
+                    {{ item.alias || item.paymentTypeAlias || item.paymentType }}
                 </span>
                 <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
             </div>
@@ -224,6 +224,8 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
+        // 获取wp配置的支付通道图标
+        const paymentIconList = computed(() => store.state._base.wpCompanyInfo.paymentIconList)
 
         // 计算存款手续费
         const computeFee = computed(() => {
@@ -308,8 +310,6 @@ export default {
                     console.log(err)
                 })
             }
-
-            // router.replace('/position')
         }
 
         const onCancel = () => {
@@ -376,7 +376,19 @@ export default {
                 if (res.check()) {
                     state.loading = false
                     if (res.data && res.data.length > 0) {
-                        state.PayTypes = res.data
+                        if (res.data.length > 0) {
+                            res.data.forEach(el => {
+                                if (el.paymentType === 'coinbridge') {
+                                    el.alias = paymentIconList.value[el.paymentCode][state.lang].alias || ''
+                                    el.imgUrl = paymentIconList.value[el.paymentCode][state.lang].imgUrl || ''
+                                } else {
+                                    el.alias = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].alias || ''
+                                    el.imgUrl = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].imgUrl || ''
+                                }
+                            })
+                            state.PayTypes = res.data
+                        }
+
                         // 处理时区时间
                         handleShowTime()
                     }

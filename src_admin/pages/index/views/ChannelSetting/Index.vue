@@ -204,9 +204,9 @@
                                                 <div class='lang-wrap'>
                                                     <el-row v-for='(l, i) in lang' :key='i' align='middle' :gutter='20'>
                                                         <el-col :offset='0' :span='2'>
-                                                            {{ l.name }}
+                                                            <h3>{{ l.name }}</h3>
                                                         </el-col>
-                                                        <el-col :offset='0' :span='6'>
+                                                        <el-col :offset='0' :span='4'>
                                                             <div class='upload' @click='uploadFile(item,l)'>
                                                                 <div v-if='form.paymentIconList[item.paymentName][l.val].imgUrl' class='img-wrap'>
                                                                     <img alt='' :src='form.paymentIconList[item.paymentName][l.val].imgUrl' />
@@ -217,9 +217,12 @@
                                                                 </div>
                                                             </div>
                                                         </el-col>
-                                                        <el-col :offset='0' :span='9'>
+                                                        <el-col :offset='0' :span='12'>
                                                             <el-form-item label='支付通道别名'>
-                                                                <el-input v-model='form.paymentIconList[item.paymentName][l.val].alias' clearable placeholder='请输入支付通道别名' size='normal' />
+                                                                <el-input v-model='form.paymentIconList[item.paymentName][l.val].alias' class='alias-input' clearable placeholder='请输入支付通道别名' size='normal' />
+                                                                <el-button type='primary' @click='resetPayment(item,l)'>
+                                                                    重置
+                                                                </el-button>
                                                             </el-form-item>
                                                         </el-col>
                                                         <el-divider />
@@ -371,7 +374,6 @@ export default {
                     that.$message.error(res.message)
                     return
                 }
-                debugger
 
                 let content = res.data.content ? JSON.parse(res.data.content) : {}
                 content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
@@ -646,6 +648,10 @@ export default {
                 console.log(error)
             }
         },
+        resetPayment (item, lang) {
+            this.form.paymentIconList[item.paymentName][lang.val].alias = ''
+            this.form.paymentIconList[item.paymentName][lang.val].imgUrl = ''
+        }
     }
 }
 </script>
@@ -677,6 +683,10 @@ export default {
         }
     }
     .pay-channel-setting {
+        .alias-input {
+            width: 70%;
+            margin-right: 30px;
+        }
         .upload {
             position: relative;
             display: flex;
