@@ -65,16 +65,18 @@ export default {
         },
         cellList () {
             const userAccountType = this.userAccountType
-            let list = this.data.items
-            if (!this.h5Preview) list = list.filter(item => item.accountType.includes(userAccountType))
-            return list.map(el => {
-                let dataKey = null
-                const reg = /\{\{(\w+)\}\}/
-                if (el.value && el.value.trim().match(reg)) {
-                    dataKey = el.value.trim().match(reg)[1]
-                }
-                return Object.assign({}, el, { dataKey })
-            })
+            const list = this.data.items
+            if (!this.h5Preview && this.data.accountType.includes(userAccountType)) {
+                return list.map(el => {
+                    let dataKey = null
+                    const reg = /\{\{(\w+)\}\}/
+                    if (el.value && el.value.trim().match(reg)) {
+                        dataKey = el.value.trim().match(reg)[1]
+                    }
+                    return Object.assign({}, el, { dataKey })
+                })
+            }
+            return []
         }
     },
     methods: {

@@ -124,20 +124,23 @@
                     </el-divider>
                     <el-form class='extendForm'>
                         <el-row v-for='(item, index) in extend' :key='index' class='row'>
-                            <el-col :span='10'>
-                                <el-input v-model='item.key'>
+                            <el-col :span='8'>
+                                <el-input v-model='item.key' placeholder='Key'>
                                     <template slot='prepend'>
                                         Key
                                     </template>
                                 </el-input>
                             </el-col>
-                            <el-col :span='12'>
-                                <el-input v-model='item.value'>
+                            <el-col :span='1' />
+
+                            <el-col :span='8'>
+                                <el-input v-model='item.value' placeholder='Value'>
                                     <template slot='prepend'>
                                         Value
                                     </template>
                                 </el-input>
                             </el-col>
+                            <el-col :span='1' />
                             <el-col :span='2'>
                                 <el-button icon='el-icon-delete' type='danger' @click='deleteExtendRow(index)' />
                             </el-col>
@@ -355,7 +358,8 @@ export default {
     }
     .spaceInput {
         position: absolute;
-        width: 80px;
+        width: 70px;
+        font-size: 12px;
     }
     .top {
         top: 5px;
@@ -369,12 +373,12 @@ export default {
     }
     .left {
         top: 50%;
-        left: 10px;
+        left: 5px;
         margin-top: -17px;
     }
     .right {
         top: 50%;
-        right: 10px;
+        right: 5px;
         margin-top: -17px;
     }
     .margin {

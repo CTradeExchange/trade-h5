@@ -358,12 +358,12 @@ export default {
             payIcon: {}
         }
     },
-    created () {
-        this.pageId = getQueryString('id')
-        this.queryCountryList()
-        this.queryAccountGroupTradeList()
-        this.getPageConfig()
-        this.getPaymentArray()
+    async created () {
+        this.pageId = await getQueryString('id')
+        await this.queryCountryList()
+        await this.queryAccountGroupTradeList()
+        await this.getPageConfig()
+        await this.getPaymentArray()
     },
     methods: {
         getPageConfig () {

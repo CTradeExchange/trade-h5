@@ -28,7 +28,7 @@ export default {
                     name: 'title',
                     label: '标题',
                     type: 'Input',
-                    default: ''
+                    default: '默认文字'
                 },
                 {
                     name: 'value',

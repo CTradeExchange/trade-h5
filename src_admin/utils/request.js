@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { guid } from '@utils/index'
 const service = axios.create({
     baseURL: '',
     // baseURL: 'http://wp2.wangzhangshun.com',
@@ -14,6 +15,8 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
     config => {
+        const headers = config.headers
+        headers.trace = guid()
         return config
     },
     error => {
