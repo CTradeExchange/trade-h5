@@ -139,7 +139,7 @@
                                 :key='item.name'
                                 :class="{ 'mainColor':klineType === item.value }"
                                 is-link
-                                @click='setChartType(item)'
+                                @click='setChartType(item.value)'
                             >
                                 <template #title>
                                     <span class='custom-title'>
@@ -550,14 +550,14 @@ export default {
         }
 
         // 设置图表类型
-        const setChartType = (item) => {
+        const setChartType = (klineType) => {
             var property = {}
-            state.klineType = item.value
+            state.klineType = klineType
 
-            state.onChartReadyFlag && unref(chartRef).setChartType(Number(item.value))
-            localSetChartConfig('chartType', item.value)
+            state.onChartReadyFlag && unref(chartRef).setChartType(Number(klineType))
+            localSetChartConfig('chartType', klineType)
 
-            property.chartType = item.value
+            property.chartType = klineType
             state.onChartReadyFlag && unref(chartRef).updateProperty(property)
             klineTypeDropdown.value.toggle()
         }
@@ -598,6 +598,8 @@ export default {
                 buyPrice: product.buy_price,
                 sellPrice: product.sell_price
             })
+
+            state.onChartReadyFlag && unref(chartRef).setChartType(Number(property.chartType))
             setPositionLine()
         }
 
@@ -870,7 +872,8 @@ export default {
 
             // state.settingList = chartConfig.lineSet
             }
-            // renderChart(state.initConfig.property)
+
+            // renderChart(product.value, state.initConfig.property)
         }
 
         // 图表初始值
@@ -981,7 +984,9 @@ export default {
                 tradeType.value = product.tradeType
                 store.commit('_quote/Update_productActivedID', `${product.symbolId}_${product.tradeType}`)
                 subscribeToProduct()
-                chartRef.value.reset()
+                initChartData()
+                renderChart(product, state.initConfig.property)
+                // chartRef.value.reset()
                 close()
             })
         }
