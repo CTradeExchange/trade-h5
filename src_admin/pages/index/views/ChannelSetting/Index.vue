@@ -206,7 +206,7 @@
                                                         <el-col :offset='0' :span='2'>
                                                             <h3>{{ l.name }}</h3>
                                                         </el-col>
-                                                        <el-col :offset='0' :span='4'>
+                                                        <el-col :offset='0' :span='6'>
                                                             <div class='upload' @click='uploadFile(item,l)'>
                                                                 <div v-if='form.paymentIconList[item.paymentName][l.val].imgUrl' class='img-wrap'>
                                                                     <img alt='' :src='form.paymentIconList[item.paymentName][l.val].imgUrl' />
@@ -217,7 +217,7 @@
                                                                 </div>
                                                             </div>
                                                         </el-col>
-                                                        <el-col :offset='0' :span='12'>
+                                                        <el-col :offset='0' :span='14'>
                                                             <el-form-item label='支付通道别名'>
                                                                 <el-input v-model='form.paymentIconList[item.paymentName][l.val].alias' class='alias-input' clearable placeholder='请输入支付通道别名' size='normal' />
                                                                 <el-button type='primary' @click='resetPayment(item,l)'>
