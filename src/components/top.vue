@@ -106,8 +106,8 @@ export default {
         vertical-align: middle;
     }
     .title {
-        width: 60%;
-        max-width: 60%;
+        position: absolute;
+        width: 100%;
         margin: 0 auto;
         color: var(--color);
         font-size: rem(34px);

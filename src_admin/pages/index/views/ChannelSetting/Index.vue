@@ -204,7 +204,7 @@
                                                 <div class='lang-wrap'>
                                                     <el-row v-for='(l, i) in lang' :key='i' align='middle' :gutter='20'>
                                                         <el-col :offset='0' :span='2'>
-                                                            <h3>{{ l.name }}</h3>
+                                                            <h4>{{ l.name }}</h4>
                                                         </el-col>
                                                         <el-col :offset='0' :span='6'>
                                                             <div class='upload' @click='uploadFile(item,l)'>

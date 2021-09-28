@@ -129,9 +129,7 @@ export default {
 
             if (products.length) console.log('pageComp subscriptProducts', products), this.$ws.send_addSubscription_proList(products)
         },
-        openUrl(item){
-            this.$router.push({name: item.href.name})
-        }
+     
     },
 }
 </script>
