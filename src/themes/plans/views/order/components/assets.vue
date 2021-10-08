@@ -69,7 +69,8 @@ export default {
         const maxBorrow = computed(() => {
             const assetsCurrency = store.state._user.assetsInfo?.currency
             if (props.product.tradeType === 9) return props.product.totalCredit + assetsCurrency // abcc玩法显示总授信
-            const assetsId = accountMap?.value[props.account.currency]?.assetsId
+            const accountMapKey = `${props.product.tradeType}_${props.account.currency}`
+            const assetsId = accountMap?.value[accountMapKey]?.assetsId
             if (props.product.borrowLimitList) {
                 const borrowLimit = props.product?.borrowLimitList.find(item => Number(item.assetsId) === Number(assetsId))?.value
                 return borrowLimit || '--'
