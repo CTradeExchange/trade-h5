@@ -395,7 +395,7 @@ export default {
             // console.log(this.elementTag)
             this.activeTradeType = type
             this.tradeTypeAccountGroupProduct = this.tradeTypeProduct[type]
-            if (this.elementTag === 'selfSymbol') {
+            if (this.elementTag === 'selfSymbol' || this.elementTag === 'productsSwipe') {
                 if (isPlainObject(this.selfSymbol?.[type])) {
                     const customerSelfSymbolIds = []
                     forOwn(this.selfSymbol[type], (value, key) => {
