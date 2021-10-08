@@ -122,7 +122,7 @@ export default {
             loginName: '',
             pwd: '',
             checkCode: '',
-            loginType: 'checkCode',
+            loginType: 'password', // checkCode
             loginAccount: 'mobile',
         })
         let token = ''

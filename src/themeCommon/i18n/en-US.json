@@ -133,15 +133,15 @@
         "noSet": "Not set up",
         "all": "All",
         "allDate": "All date",
-        "curToday":"Current Day",
-        "curWeek":"Current Week",
-        "curMonth":"Current Month",
-        "curThreeMonth":"Pass 3 months",
+        "curToday": "Current Day",
+        "curWeek": "Current Week",
+        "curMonth": "Current Month",
+        "curThreeMonth": "Pass 3 months",
         "chooseProduct": "Choose Product",
         "allProduct": "All Products",
         "startDay": "Start Date",
         "endDay": "End Date",
-        "customDate": "Custom Date" ,
+        "customDate": "Custom Date",
         "from": "From",
         "to": "To",
         "notFound": "Not found",
@@ -208,7 +208,7 @@
         "chooseCertificateType": "Please choose certificate type",
         "incorrectlyFormed": "Incorrect format",
         "pleaseEnter": "Please enter",
-        "reGet" :"Get again"
+        "reGet": "Get again"
     },
     "chart": {
         "candleStick": "Candle Stick",
@@ -248,6 +248,7 @@
         "payFail": "Payment failed",
         "serviceTips2": "No order information found, please contact customer service if in doubt",
         "amount": "Deposit amount",
+        "cashAmount": "充值金额",
         "submitTime": "Submission Time",
         "depositSuccess": "Deposit success",
         "inputAmount": "Please enter the amount",
@@ -255,7 +256,8 @@
         "despositFail": "Sorry, you may not have received a payment success message for network reasons. If payment has been made, please check back later or contact online customer service",
         "toRecord": "View deposit records",
         "appendFiled": "Additional Information",
-        "allInputRequire": "Please fill in all additional information" 
+        "allInputRequire": "Please fill in all additional information",
+        "arriveTime": "入帐时间"
     },
     "fund": {
         "marginLevel": "margin level",
@@ -269,9 +271,8 @@
         "allDayTime": "All Date",
         "timeZone": "Time Zone",
         "selectTimeZone": "Select Time zone",
-
         "flowCategories": {
-            "1":{
+            "1": {
                 "1": "Deposit",
                 "2": "Withdrawal",
                 "3": "System reset",
@@ -311,9 +312,16 @@
                 "34": "System repayment",
                 "39": "Transfer",
                 "41": "Force repayment"
+            },
+            "5": {
+                "50": "存款",
+                "51": "取款",
+                "52": "额度调整",
+                "53": "冻结",
+                "54": "交易",
+                "55": "划转"
             }
         },
-
         "flowSubCategory": {
             "1": {
                 "1001": "Front-end deposit",
@@ -341,8 +349,8 @@
                 "6007": "Force liquidation P/L",
                 "6008": "Settlement date liquidation P/L",
                 "6009": "Force liquidation P/L",
-                "36001":"Transfer in amount",
-                "36002":"Transfer out amount"
+                "36001": "Transfer in amount",
+                "36002": "Transfer out amount"
             },
             "2": {
                 "7001": "Front-end deposit",
@@ -447,236 +455,257 @@
                 "39002": "Transfer out amount",
                 "41001": "Force liquidation principal repayment",
                 "41002": "Force liquidation interest repayment"
+            },
+            "5": {
+                "50001": "前端存款",
+                "50002": "存款手续费",
+                "51001": "前端取款",
+                "51002": "取消取款",
+                "51003": "取款手续费",
+                "51004": "取消手续费",
+                "51005": "确认转账",
+                "52001": "额度调整_存款",
+                "52002": "额度调整_取款",
+                "52003": "额度调整_其他",
+                "52004": "额度调整_赠金",
+                "52005": "额度调整_释放不可提",
+                "52006": "额度调整_不可提",
+                "53001": "冻结",
+                "53002": "解冻",
+                "54001": "入账金额",
+                "54002": "出账金额",
+                "54003": "交易手续费",
+                "55001": "划入金额",
+                "55002": "划出金额"
+            },
+            "directionBtns": [
+                {
+                    "name": "All details",
+                    "value": 0
+                },
+                {
+                    "name": "Credit",
+                    "value": 1
+                },
+                {
+                    "name": "Debit",
+                    "value": 2
+                }
+            ],
+            "dateBtns": [
+                {
+                    "name": "All date",
+                    "value": 0
+                },
+                {
+                    "name": "Today",
+                    "value": 1
+                },
+                {
+                    "name": "Last week",
+                    "value": 2
+                },
+                {
+                    "name": "Last month",
+                    "value": 3
+                },
+                {
+                    "name": "Last 3 months",
+                    "value": 4
+                }
+            ]
+        },
+        "msg": {
+            "typesOptions": [
+                {
+                    "text": "All message",
+                    "value": ""
+                },
+                {
+                    "text": "account message",
+                    "value": "USER_MESSAGE"
+                },
+                {
+                    "text": "Fund message",
+                    "value": "CASH_MESSAGE"
+                },
+                {
+                    "text": "Trade message",
+                    "value": "TRADE_MESSAGE"
+                }
+            ]
+        },
+        "setting": {
+            "enableNews": "Enable news",
+            "bindPhone": "Connect mobile",
+            "bindEmail": "Connect email",
+            "replaceEmail": "Change email",
+            "replacePhone": "Change mobile",
+            "logout": "Logout",
+            "logoutConfirm": "Confirm Logout?",
+            "setLang": "Language setting",
+            "color": "Color"
+        },
+        "withdraw": {
+            "wayMsg": "No withdrawal currently",
+            "successHint": "Success",
+            "coinTitle": "Withdraw",
+            "moneyTitle": "Withdraw",
+            "coinRecordText": "Withdrawal record",
+            "moneyRecordText": "Withdrawal record",
+            "confirm": "Confirm",
+            "hint": "Hint",
+            "close": "Close",
+            "contact": "Contact Customer Service",
+            "timeName": "Withdrawal time",
+            "timeHint": "No Withdrawal service during this time",
+            "withdrawLimitHint": "This account is not allow to withdraw, please contact Customer Service if your are in doubt",
+            "kycBtn_1": "To check",
+            "kycBtn_2": "To authenticate",
+            "kycMsg_1": "KYC is under review, please be patient",
+            "kycMsg_2": "KYC authentication is needed for this manipulation",
+            "activateMsg": "You need to activate your account to withdraw",
+            "activateBtn": "Go activate",
+            "bindBtn": "To connect",
+            "bindPhoneHint": "Mobile no. is not connected yet, go to connect",
+            "backHome": "Back home",
+            "successText": "Submit success",
+            "coinSuccessMsg": "Your withdrawal request is submitted, we will process as soon as possible, please contact Customer Service if you have questions.",
+            "moneySuccessMsg": "Your withdrawal request is submitted, we will process as soon as possible, please contact Customer Service if you have questions.",
+            "outAccount": "Please select the account currency to withdraw",
+            "inAccount": "Please select the account currency to receive money",
+            "withdrawRecord": "Withdrawal details",
+            "withdrawMethod": "Select withdraw method",
+            "withdrawDigitsTip": "The decimal place of the withdrawal amount cannot be greater than the decimal place of the account currency"
+        },
+        "withdrawMoney": {
+            "moneyName": "Withdraw amount",
+            "moneyPlaceholder": "Input withdraw amount",
+            "allBtn": "Withdraw all",
+            "canName": "Available withdrawal amount",
+            "serviceName": "Fee",
+            "bankName": "Bank card",
+            "bankNone": "No bank card, please add",
+            "addBtn": "Add",
+            "predictName": "Expect receive",
+            "bankPopupTitle": "Select bank card",
+            "bankPopupBtn": "Add bank card",
+            "unit": "time",
+            "hint_1": "Input correct amount",
+            "hint_2": "Select bank card",
+            "hint_3": "Withdraw amount should not be less than",
+            "hint_4": "Withdraw amount should not be greater than",
+            "hint_5": "Insuffient balance",
+            "hint_6": "Insuffient balance to withdraw",
+            "hint_7": "Within 24 hours no of Withdrawal should not be more than",
+            "bankTips": "This transaction is not support because the bank card currency is different with account currency"
+        },
+        "withdrawRecord": {
+            "noneHint": "No data",
+            "moneyName": "Withdraw amount",
+            "coinName": "Coin",
+            "statusName": "Status",
+            "serviceName": "Fee",
+            "predictName": "Credit amount",
+            "noName": "Request no.",
+            "timeName": "Submit time",
+            "remarkName": "Remark",
+            "noMore": "No more",
+            "auditStatus": {
+                "1": "Under review",
+                "2": "Cancelled",
+                "3": "Success"
+            },
+            "transferStatus": {
+                "1": "Pending transfer",
+                "2": "Transfer failed",
+                "3": "Transfer success"
             }
         },
-        "directionBtns": [
-            {
-                "name": "All details",
-                "value": 0
-            },
-            {
-                "name": "Credit",
-                "value": 1
-            },
-            {
-                "name": "Debit",
-                "value": 2
-            }
-        ],
-        "dateBtns": [
-            {
-                "name": "All date",
-                "value": 0
-            },
-            {
-                "name": "Today",
-                "value": 1
-            },
-            {
-                "name": "Last week",
-                "value": 2
-            },
-            {
-                "name": "Last month",
-                "value": 3
-            },
-            {
-                "name": "Last 3 months",
-                "value": 4
-            }
-        ]
-    },
-    "msg": {
-        "typesOptions": [
-            {
-                "text": "All message",
-                "value": ""
-            },
-            {
-                "text": "account message",
-                "value": "USER_MESSAGE"
-            },
-            {
-                "text": "Fund message",
-                "value": "CASH_MESSAGE"
-            },
-            {
-                "text": "Trade message",
-                "value": "TRADE_MESSAGE"
-            }
-        ]
-    },
-    "setting": {
-        "enableNews": "Enable news",
-        "bindPhone": "Connect mobile",
-        "bindEmail": "Connect email",
-        "replaceEmail": "Change email",
-        "replacePhone": "Change mobile",
-        "logout": "Logout",
-        "logoutConfirm": "Confirm Logout?",
-        "setLang": "Language setting",
-        "color": "Color"
-    },
-    "withdraw": {
-        "wayMsg": "No withdrawal currently",
-        "successHint": "Success",
-        "coinTitle": "Withdraw",
-        "moneyTitle": "Withdraw",
-        "coinRecordText": "Withdrawal record",
-        "moneyRecordText": "Withdrawal record",
-        "confirm": "Confirm",
-        "hint": "Hint",
-        "close": "Close",
-        "contact": "Contact Customer Service",
-        "timeName": "Withdrawal time",
-        "timeHint": "No Withdrawal service during this time",
-        "withdrawLimitHint": "This account is not allow to withdraw, please contact Customer Service if your are in doubt",
-        "kycBtn_1": "To check",
-        "kycBtn_2": "To authenticate",
-        "kycMsg_1": "KYC is under review, please be patient",
-        "kycMsg_2": "KYC authentication is needed for this manipulation",
-        "activateMsg": "You need to activate your account to withdraw",
-        "activateBtn": "Go activate",
-        "bindBtn": "To connect",
-        "bindPhoneHint": "Mobile no. is not connected yet, go to connect",
-        "backHome": "Back home",
-        "successText": "Submit success",
-        "coinSuccessMsg": "Your withdrawal request is submitted, we will process as soon as possible, please contact Customer Service if you have questions.",
-        "moneySuccessMsg": "Your withdrawal request is submitted, we will process as soon as possible, please contact Customer Service if you have questions.",
-        "outAccount": "Please select the account currency to withdraw",
-        "inAccount": "Please select the account currency to receive money",
-        "withdrawRecord": "Withdrawal details",
-        "withdrawMethod": "Select withdraw method",
-        "withdrawDigitsTip": "The decimal place of the withdrawal amount cannot be greater than the decimal place of the account currency"
-        
-    },
-    "withdrawMoney": {
-        "moneyName": "Withdraw amount",
-        "moneyPlaceholder": "Input withdraw amount",
-        "allBtn": "Withdraw all",
-        "canName": "Available withdrawal amount",
-        "serviceName": "Fee",
-        "bankName": "Bank card",
-        "bankNone": "No bank card, please add",
-        "addBtn": "Add",
-        "predictName": "Expect receive",
-        "bankPopupTitle": "Select bank card",
-        "bankPopupBtn": "Add bank card",
-        "unit": "time",
-        "hint_1": "Input correct amount",
-        "hint_2": "Select bank card",
-        "hint_3": "Withdraw amount should not be less than",
-        "hint_4": "Withdraw amount should not be greater than",
-        "hint_5": "Insuffient balance",
-        "hint_6": "Insuffient balance to withdraw",
-        "hint_7": "Within 24 hours no of Withdrawal should not be more than",
-        "bankTips": "This transaction is not support because the bank card currency is different with account currency"
-    },
-    "withdrawRecord": {
-        "noneHint": "No data",
-        "moneyName": "Withdraw amount",
-        "coinName": "Coin",
-        "statusName": "Status",
-        "serviceName": "Fee",
-        "predictName": "Credit amount",
-        "noName": "Request no.",
-        "timeName": "Submit time",
-        "remarkName": "Remark",
-        "noMore": "No more",
-        "auditStatus": {
-            "1": "Under review",
-            "2": "Cancelled",
-            "3": "Success"
+        "withdrawCoin": {
+            "coinName": "Coin",
+            "coinPlaceholder": "Select coin",
+            "chainName": "Network",
+            "chainPlaceholder": "Select network",
+            "coinCount": "Withdraw quantity",
+            "coinCountPlaceholder": "Input quantity to withdraw",
+            "allBtn": "Withdraw all",
+            "can": "Available to withdraw",
+            "service": "Fee",
+            "predict": "Expect receive",
+            "minus": "Debit account",
+            "unit": "time",
+            "walletSelect": "Select wallet address to receive",
+            "walletHint": "Please ensure the network match the addresses network, otherwise withdrawal cannot be received",
+            "walletAdd": "Add wallet address",
+            "hint_1": "Insufficent amount to withdraw",
+            "hint_2": "Within 24 hours no of Withdrawal should not be more than",
+            "hint_3": "Withdraw quantity cannot exceed the amount available to withdraw",
+            "hint_4": "Withdraw quantity cannot less than",
+            "hint_5": "Withdraw quantity cannot exceed",
+            "mainChainName": "Main network",
+            "coinAddress": "Coin address",
+            "reciveAmount": "Amount receive",
+            "addressPlaceholder": "Input wallet address or paste wallet address"
         },
-        "transferStatus": {
-            "1": "Pending transfer",
-            "2": "Transfer failed",
-            "3": "Transfer success"
+        "coinRecord": {
+            "auditStatus": {
+                "1": "Under review",
+                "2": "Completed",
+                "3": "Failed"
+            },
+            "time": "Time",
+            "service": "Fee",
+            "take": "Withdraw",
+            "takeCount": "Quantity",
+            "coin": "Coin",
+            "chain": "Chain name",
+            "status": "Status",
+            "arriveCount": "Quantity received",
+            "takeNo": "Request no.",
+            "submitTime": "Submit time",
+            "remark": "Remark",
+            "noData": "No withdrawal record"
+        },
+        "walletAdd": {
+            "coinName": "Coin",
+            "coinPlaceholder": "Select Coin",
+            "chainName": "Network name",
+            "chainPlaceholder": "Select network name",
+            "addressPlaceholder": "Input wallet address",
+            "namePlaceholder": "Input wallet name (optional)",
+            "codePlaceholder": "Input mobile verification code",
+            "confirmCodePlaceholder": "Input correct code",
+            "codeBtn": "Get code",
+            "codeHint": "seconds to get again",
+            "confirm": "Confirm"
+        },
+        "walletAddress": {
+            "deleteBtn": "Delete",
+            "none": "No wallet address is added",
+            "addBtn": "Add wallet address",
+            "addHint": "Confirm to delete this wallet address?"
+        },
+        "bank": {
+            "inputBankPersonName": "Input card holder's name",
+            "inputBankNo": "Input bank card number",
+            "inputRealBankNo": "Input correct bank card number",
+            "inputBankName": "Select bank name",
+            "inputBankCurrency": "Select bank card currency",
+            "inputOpenProvince": "Select account opening address",
+            "inputOpenAddress": "Input account opening address",
+            "bankNo": "Bank card no.",
+            "bankPersonName": "Card holder's name",
+            "bankName": "Bank name",
+            "openAddress": "account opening address",
+            "inputOpenAddressText": "Input account opening address",
+            "branchAddress": "Branch address",
+            "inputBranchAddress": "Please input branch address (optional)",
+            "submitSuccessTips": "Your information is submitted",
+            "noBanks": "No bank card",
+            "addBank": "Add bank card",
+            "bankList": "Bank list",
+            "bankCurrency": "Bank card currency"
         }
-    },
-    "withdrawCoin": {
-        "coinName": "Coin",
-        "coinPlaceholder": "Select coin",
-        "chainName": "Network",
-        "chainPlaceholder": "Select network",
-        "coinCount": "Withdraw quantity",
-        "coinCountPlaceholder": "Input quantity to withdraw",
-        "allBtn": "Withdraw all",
-        "can": "Available to withdraw",
-        "service": "Fee",
-        "predict": "Expect receive",
-        "minus": "Debit account",
-        "unit": "time",
-        "walletSelect": "Select wallet address to receive",
-        "walletHint": "Please ensure the network match the addresses network, otherwise withdrawal cannot be received",
-        "walletAdd": "Add wallet address",
-        "hint_1": "Insufficent amount to withdraw",
-        "hint_2": "Within 24 hours no of Withdrawal should not be more than",
-        "hint_3": "Withdraw quantity cannot exceed the amount available to withdraw",
-        "hint_4": "Withdraw quantity cannot less than",
-        "hint_5": "Withdraw quantity cannot exceed",
-        "mainChainName": "Main network",
-        "coinAddress": "Coin address",
-        "reciveAmount": "Amount receive",
-        "addressPlaceholder": "Input wallet address or paste wallet address"
-    },
-    "coinRecord": {
-        "auditStatus": {
-            "1": "Under review",
-            "2": "Completed",
-            "3": "Failed"
-        },
-        "time": "Time",
-        "service": "Fee",
-        "take": "Withdraw",
-        "takeCount": "Quantity",
-        "coin": "Coin",
-        "chain": "Chain name",
-        "status": "Status",
-        "arriveCount": "Quantity received",
-        "takeNo": "Request no.",
-        "submitTime": "Submit time",
-        "remark": "Remark",
-        "noData": "No withdrawal record"
-    },
-    "walletAdd": {
-        "coinName": "Coin",
-        "coinPlaceholder": "Select Coin",
-        "chainName": "Network name",
-        "chainPlaceholder": "Select network name",
-        "addressPlaceholder": "Input wallet address",
-        "namePlaceholder": "Input wallet name (optional)",
-        "codePlaceholder": "Input mobile verification code",
-        "confirmCodePlaceholder": "Input correct code",
-        "codeBtn": "Get code",
-        "codeHint": "seconds to get again",
-        "confirm": "Confirm"
-    },
-    "walletAddress": {
-        "deleteBtn": "Delete",
-        "none": "No wallet address is added",
-        "addBtn": "Add wallet address",
-        "addHint": "Confirm to delete this wallet address?"
-    },
-    "bank": {
-        "inputBankPersonName": "Input card holder's name",
-        "inputBankNo": "Input bank card number",
-        "inputRealBankNo": "Input correct bank card number",
-        "inputBankName": "Select bank name",
-        "inputBankCurrency": "Select bank card currency",
-        "inputOpenProvince": "Select account opening address",
-        "inputOpenAddress": "Input account opening address",
-        "bankNo": "Bank card no.",
-        "bankPersonName": "Card holder's name",
-        "bankName": "Bank name",
-        "openAddress": "account opening address",
-        "inputOpenAddressText": "Input account opening address",
-        "branchAddress": "Branch address",
-        "inputBranchAddress": "Please input branch address (optional)",
-        "submitSuccessTips": "Your information is submitted",
-        "noBanks": "No bank card",
-        "addBank": "Add bank card",
-        "bankList": "Bank list",
-        "bankCurrency": "Bank card currency"
     }
 }

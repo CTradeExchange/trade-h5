@@ -227,8 +227,9 @@ const routes = [
     { path: '/:pathMatch(.*)*', redirect: { name: 'Mine' } },
 ]
 
+const basePath = '/' + (location.pathname.split('/')[1] || 'zh') + '/'
 const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
+    history: createWebHistory(basePath),
     routes
 })
 
