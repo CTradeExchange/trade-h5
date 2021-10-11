@@ -254,7 +254,6 @@ export default {
                             // 处理接口返回字段不一致
                             list.forEach(item => {
                                 item.tradeType = tradeType
-                                debugger
                                 item.orderTime = item.requestTime
                                 if (Number(item.direction) === 1) {
                                     item.requestNum = item.requestPrice

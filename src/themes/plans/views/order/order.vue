@@ -35,7 +35,7 @@
                         :product='product'
                     />
                     <!-- 手数 -->
-                    <OrderVolume v-model='volume' v-model:entryType='entryType' class='cellMarginTop' :product='product' />
+                    <OrderVolume v-model='volume' v-model:entryType='entryType' :account='account' class='cellMarginTop' :product='product' />
                     <!-- 订单金额 -->
                     <Assets
                         v-if='account && [3, 5, 9].includes(product.tradeType)'
