@@ -308,9 +308,9 @@ const routes = [
         }
     },
     {
-        path: '/despositAccount',
-        name: 'DespositAccount',
-        component: () => import(/* webpackChunkName: "page" */ '../user/desposit/despositAccount.vue'),
+        path: '/chooseAccount',
+        name: 'chooseAccount',
+        component: () => import(/* webpackChunkName: "page" */ '../user/chooseAccount.vue'),
         meta: {
             title: 'cRoute.chooseCurrency',
             footerMenu: false,

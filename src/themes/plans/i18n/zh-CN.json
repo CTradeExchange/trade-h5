@@ -455,8 +455,9 @@
     "trustId": "委托编号",
     "orderComplete": "已成交",
     "transfer": "划转",
-    "cancelPendingOrder": "确定撤单吗?"
-
+    "cancelPendingOrder": "确定撤单吗?",
+    "loanCurrency": "请选择借款币种",
+    "repaymentCurrency": "请选择还款币种"
   },
   "bizType": {
     "2": "市价平仓",
