@@ -637,7 +637,6 @@ export default {
         }
 
         store.dispatch('_user/findCustomerInfo', false).then(res => {
-            console.log('sss', res)
             if (res.check()) {
                 if (Number(customInfo.value.deposit) === 0) {
                     state.btnDisabled = true
