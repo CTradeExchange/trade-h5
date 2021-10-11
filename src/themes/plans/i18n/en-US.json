@@ -454,7 +454,9 @@
     "trustTime": "Order Time",
     "trustId": "Order Number",
     "transfer": "Transfer",
-    "cancelPendingOrder": "Are you sure to cancel order?"
+    "cancelPendingOrder": "Are you sure to cancel order?",
+    "loanCurrency": "请选择借款币种",
+    "repaymentCurrency": "请选择还款币种"
 
   },
   "bizType": {
