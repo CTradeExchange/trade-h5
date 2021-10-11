@@ -2,7 +2,13 @@
     <div class='page-wrap'>
         <LayoutTop />
         <div class='page-content'>
-            <p class='head-text'>
+            <p v-if='Number(type) === 1' class='head-text'>
+                {{ $t('trade.loanCurrency') }}
+            </p>
+            <p v-else-if='Number(type) === 3' class='head-text'>
+                {{ $t('trade.repaymentCurrency') }}
+            </p>
+            <p v-else class='head-text'>
                 {{ $t('deposit.chooseCurrency') }}
             </p>
             <van-cell
@@ -10,7 +16,7 @@
                 :key='item.accountId'
                 is-link
                 :title='item.currency'
-                :to="{ path: 'deposit', query:{ accountId: item.accountId,currency: item.currency,tradeType } }"
+                :to='{ path: routeName, query:{ accountId: item.accountId,currency: item.currency,tradeType } }'
             />
         </div>
     </div>
@@ -28,15 +34,27 @@ export default {
         const route = useRoute()
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
-
+        const { type } = route.query
         const state = reactive({
             tradeType: route.query.tradeType
+        })
+
+        const routeName = computed(() => {
+            if (Number(type) === 1) {
+                return 'loan'
+            } else if (Number(type) === 3) {
+                return 'returnMoney'
+            } else {
+                return 'deposit'
+            }
         })
 
         const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.tradeType)))
 
         return {
             accountList,
+            type,
+            routeName,
             ...toRefs(state)
         }
     }

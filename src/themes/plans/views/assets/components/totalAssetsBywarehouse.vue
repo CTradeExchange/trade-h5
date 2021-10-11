@@ -73,7 +73,7 @@ export default {
         const toDesposit = () => {
             if (accountList.value.length > 1) {
                 router.push({
-                    path: '/depositAccount',
+                    path: '/chooseAccount',
                     query: {
                         accountId: assetsInfo.value.accountId,
                         tradeType: tradeType.value

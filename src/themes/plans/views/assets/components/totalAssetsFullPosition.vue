@@ -91,7 +91,8 @@ export default {
                     path: '/chooseAccount',
                     query: {
                         accountId: assetsInfo.value.accountId,
-                        tradeType: tradeType.value
+                        tradeType: tradeType.value,
+                        type: 1
                     }
                 })
             } else {
