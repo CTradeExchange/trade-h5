@@ -207,7 +207,7 @@ export default {
         }
 
         const handleAll = () => {
-            state.amount = state.curCurrency.balance
+            state.amount = state.maxTransfer
         }
 
         const onPickerConfirm = (val) => {
@@ -219,6 +219,7 @@ export default {
                 state.toAccount = val
             }
             state.curCurrency = state.curCurrency = accountList.value.filter(el => Number(el.tradeType) === Number(state.fromAccount.tradeType))[0]
+            state.amount = ''
             /*   // abcc 现货杠杆 杠杆全仓重新拉账户资产
             if ([3, 5, 9].includes(Number(state.fromAccount.id))) {
                 store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: state.fromAccount.id })
@@ -245,6 +246,7 @@ export default {
         const onCurrencyConfirm = (val) => {
             state.curCurrency = val
             state.pickerShow = false
+            state.amount = ''
         }
 
         const handleTo = () => {
@@ -272,7 +274,8 @@ export default {
             } */
 
             [state.fromAccount, state.toAccount] = [state.toAccount, state.fromAccount]
-            state.curCurrency = state.curCurrency = accountList.value.filter(el => Number(el.tradeType) === Number(state.fromAccount.tradeType))[0]
+            state.curCurrency = accountList.value.filter(el => Number(el.tradeType) === Number(state.fromAccount.tradeType))[0]
+            state.amount = ''
         }
 
         /* if ([3, 5, 9].includes(Number(route.query.tradeType))) {
@@ -303,13 +306,13 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .fullPageWrapper {
-    background-color: var(--contentColor);
+    //background-color: var(--contentColor);
     .page-content {
         padding: rem(30px);
         .transfer {
             display: flex;
             align-items: center;
-            background: var(--bgColor);
+            background: var(--contentColor);
             .label {
                 //flex: 1;
                 width: rem(22px);
@@ -369,7 +372,7 @@ export default {
             padding: 0 rem(30px);
             color: var(--color);
             font-size: rem(28px);
-            background: var(--bgColor);
+            background: var(--contentColor);
             border-radius: rem(6px);
             input {
                 flex: 1;

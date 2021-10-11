@@ -113,7 +113,7 @@
 
 <script>
 import { Toast, Dialog } from 'vant'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
 import { shiftedBy } from '@/utils/calculation'
@@ -199,9 +199,6 @@ export default {
             queryPBOOrderPage()
         }
 
-        // 订阅报价
-        QuoteSocket.send_subscribe([{ symbolId, tradeType }])
-
         // 获取委托列表
         const queryPBOOrderPage = () => {
             store.dispatch('_trade/queryPBOOrderPage', {
@@ -219,6 +216,11 @@ export default {
             sortFieldName: 'orderTime',
             sortType: 'desc',
             accountIds: accountIds.value + ''
+        })
+
+        onMounted(() => {
+            // 订阅报价
+            QuoteSocket.send_subscribe([{ symbolId, tradeType }])
         })
 
         return {

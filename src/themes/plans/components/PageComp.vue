@@ -134,7 +134,7 @@ export default {
 .pageComp {
     &>div {
         position: relative;
-        background: #FFF;
+        background: var(--contentColor);
     }
 }
 </style>

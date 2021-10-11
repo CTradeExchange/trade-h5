@@ -107,10 +107,10 @@
                                 </div>
                             </div><div class='flex-item alignRight'>
                                 <div class='title'>
-                                    {{ $t('trade.dealNo') }}
+                                    {{ $t('trade.positionNo') }}
                                 </div>
                                 <div class='val'>
-                                    {{ data.orderId }}
+                                    {{ data.positionId }}
                                 </div>
                             </div>
                         </div>
