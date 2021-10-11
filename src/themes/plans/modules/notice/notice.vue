@@ -1,6 +1,6 @@
 <template>
     <div class='notice' :style='data.styleObj'>
-        <van-notice-bar background='#fff' color='#666' left-icon='volume-o' :scrollable='false'>
+        <van-notice-bar :background='$style.bgColor' color='#666' left-icon='volume-o' :scrollable='false'>
             <van-swipe
                 :autoplay='3000'
                 class='notice-swipe'

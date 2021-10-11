@@ -421,6 +421,7 @@
     "sellText": "Sell / Short",
     "curTrust": "Current pending",
     "dealNo": "Execution Number",
+    "positionNo": "持仓单号",
     "modifyMargin":"Adjust margin",
     "modifyAmount":"Adjust amount",
     "raise":"Raise",

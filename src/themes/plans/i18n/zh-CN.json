@@ -421,6 +421,7 @@
     "sellText": "卖出 / 做空",
     "curTrust": "当前委托",
     "dealNo": "成交单号",
+    "positionNo": "持仓单号",
     "modifyMargin":"调整保证金",
     "modifyAmount":"调整金额",
     "raise":"追加",
