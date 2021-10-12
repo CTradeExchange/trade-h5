@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -16,6 +17,7 @@ import { setRouter } from '@/utils/request'
 import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet } from '@/utils/util'
 import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
+skywalkingRegister()
 
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 
@@ -35,6 +37,7 @@ app.mixin(MixinGlobal)
 app.config.errorHandler = (err, vm, info) => {
     // 处理错误  `info` 是 Vue 特定的错误信息，比如错误所在的生命周期钩子
     console.error(err, vm, info)
+    skywalkingRreportErrors(err)
 }
 // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
 const loginParams = getLoginParams()
