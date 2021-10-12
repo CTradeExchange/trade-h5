@@ -42,18 +42,6 @@
             <van-cell :title="$t('fee')" :value='fee' />
             <van-cell :title="$t('contract.interest')" :value='interest' />
             <van-cell :title="$t('contract.zone')" :value="'GMT +' + (0 - new Date().getTimezoneOffset() / 60)" />
-            <van-cell v-if='quoteTimeList && quoteTimeList.length' class='timeListCell' :title="$t('contract.quoteTime')">
-                <template v-for='(item,index) in quoteTimeList' :key='index'>
-                    <div v-if='item.length' class='item-item'>
-                        {{ $t('weekdayMap.'+ item[0].dayOfWeek) }}:
-                        <template>
-                            <span v-for='el in item' :key='el.timeStr' class='timeItem'>
-                                {{ el.timeStr }}
-                            </span>
-                        </template>
-                    </div>
-                </template>
-            </van-cell>
             <van-cell v-if='tradeTimeList && tradeTimeList.length' class='timeListCell' :title="$t('contract.tradeTime')">
                 <template v-for='(item,index) in tradeTimeList' :key='index'>
                     <div v-if='item.length' class='item-item'>
@@ -117,15 +105,6 @@ export default {
             }
             return []
         })
-        // 行情时间
-        const quoteTimeList = computed(() => {
-            if (!isEmpty(product.value.quoteTimeList)) {
-                const newTimeList = sortTimeList(product.value.quoteTimeList, utcOffset)
-                timeListFormat(newTimeList)
-                return newTimeList
-            }
-            return []
-        })
         // 结算时间
         const eodTime = computed(() => {
             if (!isEmpty(product.value.eodTime)) {
@@ -152,7 +131,6 @@ export default {
         return {
             product,
             tradeTimeList,
-            quoteTimeList,
             eodTime,
             interest,
             fee,
@@ -198,10 +176,6 @@ export default {
                 }
             }
         }
-        .timeListCell :deep(.van-cell__value) {
-            flex: none;
-            width: 70%;
-        }
         &.yfk {
             .van-cell__title {
                 flex: 1;
@@ -210,6 +184,10 @@ export default {
                 flex: 2;
             }
         }
+    }
+    .timeListCell :deep(.van-cell__value) {
+        flex: none;
+        width: 70%;
     }
 }
 </style>
