@@ -11,6 +11,16 @@ export default {
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
         {
+            name: 'area',
+            label: '地区',
+            type: 'Radio',
+            default: true,
+            options: [
+                { value: 1, label: '中国大陆' },
+                { value: 2, label: '其它地区' }
+            ]
+        },
+        {
             name: 'orgid',
             label: 'orgid',
             type: 'Input',
