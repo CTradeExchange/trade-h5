@@ -1,5 +1,4 @@
 import { createApp } from 'vue'
-import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -17,7 +16,8 @@ import { setRouter } from '@/utils/request'
 import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet } from '@/utils/util'
 import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
-skywalkingRegister()
+import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
+skywalkingRegister(router)
 
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 
