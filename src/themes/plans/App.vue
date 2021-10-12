@@ -41,6 +41,7 @@ export default {
         const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
         const cacheViews = computed(() => store.state.cacheViews)
+        const googleAnalytics = computed(() => store.state._base.wpCompanyInfo.googleAnalytics)
         const tipTextCountDown = ref(t('confirm') + '(3s)')
         window.store = store
         if (getQueryVariable('b_superiorAgent')) {
@@ -84,6 +85,9 @@ export default {
                 handlerLogout()
             })
         }
+
+        // 插入谷歌统计代码
+        document.querySelector('head').append(googleAnalytics.value)
 
         document.documentElement.classList.add(store.state.invertColor)
 

@@ -11,7 +11,7 @@ export default {
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
         {
-            name: 'area',
+            name: 'newsArea',
             label: '地区',
             type: 'Radio',
             default: true,

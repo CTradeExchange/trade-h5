@@ -303,7 +303,7 @@ export default {
         //     })
         // }
         const getNewsListByType = (params, callback) => {
-            newsListByTypeByPage(params, state.lang).then(
+            newsListByTypeByPage(params, state.lang, props.data.newsArea).then(
                 ({ data, pages, page }) => {
                     typeof (callback) === 'function' && callback({ data, pages, page })
                 })
@@ -403,7 +403,7 @@ export default {
             state.timeAxis = timeAxis
             canlendarListByDate({
                 timestamp: timeAxis
-            }, state.lang).then((data) => {
+            }, state.lang, props.data.newsArea).then((data) => {
                 if (Array.isArray(data) && data.length > 0) {
                     state.calendarList = data
                     changeCanlendarType(state.canlendarType)
