@@ -255,9 +255,6 @@ export default {
                             list.forEach(item => {
                                 item.tradeType = tradeType
                                 item.orderTime = item.requestTime
-                                if (Number(item.direction) === 1) {
-                                    item.requestNum = item.requestPrice
-                                }
                             })
                         }
                         commit('Update_pendingList', { tradeType, list: res.data })
