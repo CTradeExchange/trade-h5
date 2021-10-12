@@ -25,6 +25,9 @@
                 <span v-if='Number(product.tradeType) === 5'>
                     {{ product.requestNum }}&nbsp;{{ product.outCurrency }}
                 </span>
+                <span v-else-if='Number(product.tradeType) === 3'>
+                    {{ product.requestNum }}&nbsp;{{ product.accountCurrency }}
+                </span>
                 <span v-else>
                     {{ product.requestNum }}&nbsp;{{ Number(product.entryType) === 1 ? $t('trade.volumeUnit') : product.accountCurrency }}
                 </span>
