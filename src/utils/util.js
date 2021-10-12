@@ -25,7 +25,7 @@ export function unzip (str) {
     const data = pako.inflate(binData)
     strData = String.fromCharCode.apply(null, new Uint16Array(data))
     strData = decodeURIComponent(strData)
-    console.warn('解压字符', JSON.parse(strData))
+    // console.warn('解压字符', JSON.parse(strData))
     return strData
 }
 // Gzip数据压缩

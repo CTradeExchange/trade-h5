@@ -26,12 +26,12 @@
 <script>
 import Notice from '@plans/components/notice'
 import { useStore } from 'vuex'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { MsgSocket } from '@/plugins/socket/socket'
-import { getQueryVariable, sessionSet } from '@/utils/util'
+import { getQueryVariable, sessionSet, unzip } from '@/utils/util'
 export default {
     components: {
         Notice
@@ -87,7 +87,20 @@ export default {
         }
 
         // 插入谷歌统计代码
-        document.querySelector('head').append(googleAnalytics.value)
+        onMounted(() => {
+            try {
+                if (googleAnalytics.value) {
+                    var result = ''
+                    const reg = /<?script[^>]*>[^<]*<\/script>/gi
+                    const analyticsScript = unzip(googleAnalytics.value).match(reg)
+                    for (var i in analyticsScript) result += analyticsScript[i] + '\n'
+                    result = result.replace(/<\/?script>/g, '')
+                    eval(result)
+                }
+            } catch (error) {
+
+            }
+        })
 
         document.documentElement.classList.add(store.state.invertColor)
 

@@ -168,7 +168,7 @@
                                 <el-input
                                     v-model='form.googleAnalytics'
                                     placeholder='请输入'
-                                    :row='5'
+                                    row='10'
                                     type='textarea'
                                 />
                             </el-form-item>
@@ -383,6 +383,8 @@ export default {
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                 that.form = Object.assign(that.form, content, { other })
 
+                that.form.googleAnalytics = window.unzip(that.form.googleAnalytics)
+
                 // 如果未保存，写入默认值
                 if (!that.form.customerGroupId) {
                     that.form.customerGroupId = '2'
@@ -536,6 +538,8 @@ export default {
                         })
                     })
                 }
+
+                _formData.googleAnalytics = window.zip(_formData.googleAnalytics)
 
                 saveViChannel({
                     content: JSON.stringify(_formData), // '', //
