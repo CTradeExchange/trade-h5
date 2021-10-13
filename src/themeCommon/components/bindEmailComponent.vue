@@ -122,9 +122,11 @@ export default {
         // 发送验证码
         const handleVerifyCodeSend = (callback) => {
             if (isEmpty(state.email)) {
+                callback && callback(false)
                 return Toast(t('common.inputEmail'))
             }
             if (!emailReg.test(state.email)) {
+                callback && callback(false)
                 return Toast(t('common.inputRealEmail'))
             }
             const params = {
@@ -141,6 +143,7 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     if (res.data === 1) {
+                        callback && callback(false)
                         return Dialog.confirm({
                             title: t('common.tip'),
                             message: t('common.emailBinded'),

@@ -70,10 +70,12 @@ export default {
         // 发送验证码
         const handleVerifyCodeSend = (callback) => {
             if (isEmpty(state.mobile)) {
+                callback && callback(false)
                 return Toast(t('common.inputPhone'))
             }
 
             if (!RegExp(mobileReg.value).test(state.mobile)) {
+                callback && callback(false)
                 return Toast(t('common.inputRealPhone'))
             }
 
@@ -90,6 +92,7 @@ export default {
             checkUserStatus(existParams).then(res => {
                 if (res.check()) {
                     if (Number(res.data.status) === 1) {
+                        callback && callback(false)
                         return Dialog.confirm({
                             title: t('common.tip'),
                             message: t('common.phoneBinded'),
@@ -102,6 +105,7 @@ export default {
                             callback && callback(false)
                         })
                     } else if (Number(res.data.status === -1)) {
+                        callback && callback(false)
                         return Toast(t('c.userDisable'))
                     } else {
                         verifyCodeSend(params).then(res => {
