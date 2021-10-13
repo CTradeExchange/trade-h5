@@ -25,7 +25,7 @@
 import { toRefs, reactive, computed, getCurrentInstance, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
-import { isEmpty, removeLoginParams, localSet, localGet } from '@/utils/util'
+import { isEmpty, removeLoginParams, localSet, localGet, setCookie } from '@/utils/util'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { changeLang } from '@/api/base'
@@ -102,12 +102,22 @@ export default {
                 state.loading = false
                 state.langVisible = false
                 state.lang = action.val
+
+                // 替换URL
+                const str = location.pathname
+                const firstSlash = str.indexOf('/') + 1
+                const twoSlash = str.indexOf('/', firstSlash) // 第二个斜杠下标
+                const pathTemp = str.substring(twoSlash).substring(1, str.length)
+                location.pathname = action.val + '/' + pathTemp
+
                 loadLocaleMessages(i18n, action.val).then(() => {
                     locale.value = action.val // change!
                     store.commit('del_cacheViews', 'Home')
                     store.commit('del_cacheViews', 'Layout')
                 })
                 localSet('lang', action.val)
+
+                setCookie('lang', action.val, 'd90')
             }).catch(err => (state.loading = false))
         }
 

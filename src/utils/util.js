@@ -274,3 +274,44 @@ export function getRandom (min, max) {
     if (typeof (min) === 'undefined' || typeof (min) === 'undefined') return Math.random()
     return Math.random() * (max - min) + min
 }
+
+/*
+设置cookie
+time 参数
+s是指秒 s20代表20秒
+h是指小时，如12小时则是：h12
+d是天数，30天则：d30
+y是年 1年则是 1y
+*/
+
+export function setCookie (name, value, time) {
+    var strsec = getsec(time)
+    var exp = new Date()
+    exp.setTime(exp.getTime() + strsec * 1)
+    document.cookie = name + '=' + escape(value) + ';expires=' + exp.toGMTString() + ';path=/'
+}
+
+// 读取cookie
+export function getCookie (cookName) {
+    var cookieStr = document.cookie.split(';')
+    for (var i = 0; i < cookieStr.length; i++) {
+        var val = cookieStr[i].split('=')
+
+        if (escape(cookName) === val[0]) { return unescape(val[1]) }
+    }
+    return null
+}
+
+function getsec (str) {
+    var str1 = str.substring(1, str.length) * 1
+    var str2 = str.substring(0, 1)
+    if (str2 === 's') {
+        return str1 * 1000
+    } else if (str2 === 'h') {
+        return str1 * 60 * 60 * 1000
+    } else if (str2 === 'd') {
+        return str1 * 24 * 60 * 60 * 1000
+    } else if (str2 === 'y') {
+        return str1 * 365 * 24 * 60 * 60 * 1000
+    }
+}

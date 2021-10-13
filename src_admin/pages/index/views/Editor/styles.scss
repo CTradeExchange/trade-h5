@@ -78,9 +78,18 @@ $lighterBlue: #409EFF;
         border: 1px solid #F1E8E8;
         .left {
             padding-left: 10px;
+            :deep(.el-button--text) {
+                vertical-align: middle;
+            }
         }
         .right {
             flex: 1;
+        }
+        .tips {
+            margin-left: 10px;
+            color: #333;
+            line-height: 40px;
+            vertical-align: middle;
         }
     }
 }

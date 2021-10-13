@@ -51,6 +51,9 @@
 
         <div class='center-board'>
             <div class='row-btns'>
+                <h4 class='tips'>
+                    当前编辑页面语言: <strong> {{ lang }}</strong>
+                </h4>
                 <div class='left'>
                     <el-button
                         icon='el-icon-reading'
@@ -67,6 +70,7 @@
                         H5真实地址
                     </el-button>
                 </div>
+
                 <div class='right action-bar'>
                     <!-- <el-button icon="el-icon-view" type="text" @click="showJson">
                     查看json
@@ -166,7 +170,7 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const store = useStore()
-        const { id, language, page_code, title } = route.query
+        const { id, lang, page_code, title } = route.query
         const state = reactive({
             leftComponents: [
                 {
@@ -199,7 +203,7 @@ export default {
                 getPageConfig({
                     page_code: state.pageCode,
                     channelId: id,
-                    language: language,
+                    language: lang,
                 })
                     .then(res => {
                         store.commit('editor/RESET_ELEMENT', [])
@@ -305,7 +309,7 @@ export default {
                 getPageConfig({
                     page_code: 'SysSetting',
                     channelId: id,
-                    language: language,
+                    language: lang,
                 })
                     .then(res => {
                         if (!res.success) {
@@ -391,7 +395,7 @@ export default {
                     content: zip(JSON.stringify(config)),
                     other: JSON.stringify(store.state.editor.elementOther),
                     channelId: id,
-                    language,
+                    language: lang,
                     title
                 }))
                     .then(res => {
@@ -545,7 +549,7 @@ export default {
                 pageCode: state.pageCode,
                 img: pageImg.toDataURL('image/jpeg', 0.7),
                 channelId: id,
-                language,
+                language: lang,
                 title
             }, state.publishForm))
                 .then(res => {
@@ -645,6 +649,7 @@ export default {
             cloneComponent,
             elementAdd,
             empty,
+            lang,
             addComponent,
             ...toRefs(state)
         }

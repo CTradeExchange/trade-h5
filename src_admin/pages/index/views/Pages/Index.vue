@@ -23,6 +23,10 @@
                 </el-row>
             </el-collapse-item>
         </el-collapse>
+        <el-tabs v-model='activeLang'>
+            <el-tab-pane v-for='item in lang' :key='item.val' :label='item.name' :name='item.val' />
+        </el-tabs>
+
         <div class='data-list'>
             <el-table v-loading='loading' border :data='list' style='width: 100%;'>
                 <el-table-column align='center' label='页面编码' prop='page_code'>
@@ -130,9 +134,9 @@ import { pageList, modifyPageConfig } from '@index/Api/editor'
 import { deepClone } from '@utils/deepClone'
 import { h5PageList } from './h5PageList'
 import { useRouter } from 'vue-router'
-import { onMounted, reactive, ref, toRefs, getCurrentInstance } from 'vue'
+import { onMounted, reactive, ref, toRefs, getCurrentInstance, watch } from 'vue'
 import { getQueryString } from '@admin/utils'
-
+import { lang } from '../../config/lang'
 export default {
     beforeRouteEnter (to, from, next) {
         if (getQueryString('page') === 'cats_sett_manage') {
@@ -190,12 +194,20 @@ export default {
                         }
                     ]
                 },
-                type: 'add'
+                type: 'add',
 
             },
             loading: false,
-            searchForm: {}
+            searchForm: {},
+            activeLang: 'zh-CN'
         })
+
+        watch(
+            () => state.activeLang,
+            (val) => {
+                getPageList()
+            }
+        )
 
         const changePage = () => {
             const info = state.h5PageList.find(item => (item.name == val))
@@ -205,9 +217,9 @@ export default {
         }
 
         const changeType = (type) => {
-            if (type == '1') {
+            if (Number(type) === 1) {
                 state.addForm.form.page_slug = 'h5'
-            } else if (type == '2') {
+            } else if (Number(type) === 2) {
                 state.addForm.form.page_slug = 'act_1'
             }
         }
@@ -224,7 +236,7 @@ export default {
                         if (!res.success) {
                             ctx.$message.error(res.message)
                         }
-                        ctx.$message.success(state.addForm.type == 'add' ? '新建成功' : '编辑成功')
+                        ctx.$message.success(state.addForm.type === 'add' ? '新建成功' : '编辑成功')
                         getPageList()
                         state.addForm.show = false
                     })
@@ -249,7 +261,7 @@ export default {
                 status: '1',
                 content: '',
                 id: getQueryString('id'),
-                language: getQueryString('language'),
+                language: state.activeLang // getQueryString('language'),
             }
             state.addForm.show = true
         }
@@ -259,7 +271,7 @@ export default {
                 query: {
                     page_code: row.page_code,
                     id: row.channel_id,
-                    lang: 'zh',
+                    lang: state.activeLang,
                     title: row.title
                 }
             })
@@ -273,7 +285,7 @@ export default {
             pageList({
                 type: 'html',
                 channelId: getQueryString('id'),
-                language: getQueryString('language'),
+                language: state.activeLang,
             }).then(res => {
                 state.loading = false
                 if (res.success) {
@@ -303,7 +315,7 @@ export default {
 
             state.addForm.type = 'modify'
             state.addForm.form.id = getQueryString('id')
-            state.addForm.form.language = getQueryString('language')
+            state.addForm.form.language = state.activeLang // getQueryString('language')
             state.addForm.show = true
         }
         const viewPublish = (row) => {
@@ -312,7 +324,7 @@ export default {
                 query: {
                     pageCode: row.page_code,
                     id: row.channel_id,
-                    language: getQueryString('language')
+                    language: state.activeLang // getQueryString('language')
 
                 }
             })
@@ -335,6 +347,7 @@ export default {
             viewPublish,
             checkPageCode,
             addFormModal,
+            lang,
             ...toRefs(state)
         }
     }
@@ -345,6 +358,7 @@ export default {
 <style lang="scss" scoped>
 .m-pageList {
     height: 100vh;
+    margin: 30px;
     overflow-y: auto;
     .search {
         :deep(.el-collapse-item__wrap) {
@@ -353,7 +367,6 @@ export default {
     }
     .data-list {
         margin-top: 20px;
-        padding: 0 20px;
     }
     .headerBtns {
         margin-bottom: 20px;
