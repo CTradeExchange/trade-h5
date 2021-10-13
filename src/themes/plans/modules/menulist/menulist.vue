@@ -66,7 +66,7 @@ export default {
         cellList () {
             const userAccountType = this.userAccountType
             const list = this.data.items
-            if (!this.h5Preview && this.data.accountType.includes(userAccountType)) {
+            if (this.h5Preview || this.data.accountType.includes(userAccountType)) {
                 return list.map(el => {
                     let dataKey = null
                     const reg = /\{\{(\w+)\}\}/

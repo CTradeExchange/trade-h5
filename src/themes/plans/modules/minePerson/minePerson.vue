@@ -50,6 +50,7 @@ import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 const faceImgDefault = require('@plans/images/face.png')
+const h5Preview = process.env.VUE_APP_h5Preview
 export default {
     components: {
         Fund,
@@ -94,7 +95,7 @@ export default {
             }
         }
 
-        store.dispatch('_user/findCustomerInfo')
+        if (!h5Preview) { store.dispatch('_user/findCustomerInfo') }
         return {
             ...toRefs(state),
             faceImg,

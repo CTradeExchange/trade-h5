@@ -283,7 +283,6 @@ h是指小时，如12小时则是：h12
 d是天数，30天则：d30
 y是年 1年则是 1y
 */
-
 export function setCookie (name, value, time) {
     var strsec = getsec(time)
     var exp = new Date()

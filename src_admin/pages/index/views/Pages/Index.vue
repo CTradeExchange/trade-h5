@@ -302,8 +302,6 @@ export default {
                 })
         }
         const setting = (row) => {
-            console.log(row)
-
             state.addForm.form = deepClone(row)
             const nameList = h5PageList.map(item => (item.name))
             if (nameList.indexOf(row.page_code) >= 0) {
