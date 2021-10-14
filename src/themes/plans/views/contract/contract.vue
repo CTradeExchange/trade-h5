@@ -65,7 +65,7 @@
                 </template>
             </van-cell>
             <van-cell v-if='product.eodTime' :title="$t('contract.eodTime')" :value='eodTime' />
-            <van-cell v-if='expireTime' :title='$t("contract.expireTime")' :value='expireTime' />
+            <van-cell v-if='expireTime && product.endTime' :title='$t("contract.expireTime")' :value='expireTime' />
         </div>
     </div>
 </template>
