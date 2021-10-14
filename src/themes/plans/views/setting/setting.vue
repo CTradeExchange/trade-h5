@@ -192,7 +192,7 @@ export default {
         position: absolute;
         bottom: 0;
         width: 100%;
-        background: var(--bgColor);
+        background: var(--primaryAssistColor);
         border-color: var(--lineColor);
         span {
             color: var(--color);

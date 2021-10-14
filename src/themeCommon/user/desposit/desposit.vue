@@ -417,6 +417,7 @@ export default {
         const handleShowTime = () => {
             if (state.PayTypes.length > 0) {
                 const todayStr = dayjs().format('YYYY-MM-DD')
+                const tomorrowStr = dayjs().add(1, 'day')
 
                 state.PayTypes.forEach(payItem => {
                     const openTime = payItem.openTime
@@ -431,11 +432,11 @@ export default {
                             const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
                             const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
 
-                            if (endLocal.isAfter(todayStr, 'day')) {
+                            if ((startLocal.isAfter(todayStr, 'day') && endLocal.isAfter(todayStr, 'day')) || (startLocal.isBefore(tomorrowStr, 'day') && endLocal.isBefore(tomorrowStr, 'day'))) {
+                                state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                            } else {
                                 state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-23:59')
                                 state.resultTimeMap[payItem.id].push('00:00-' + endLocal.format('HH:mm'))
-                            } else {
-                                state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
                             }
 
                             // 判断当前时间是否在设置的存款时间内

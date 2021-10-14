@@ -97,7 +97,12 @@
                 </p>
 
                 <p class='tl-item'>
-                    <span> #{{ product.id }}</span>
+                    <span v-if='Number(product.tradeType) === 3'>
+                        # {{ product.orderId }}
+                    </span>
+                    <span v-else>
+                        # {{ product.id }}
+                    </span>
                 </p>
             </div>
         </div>
