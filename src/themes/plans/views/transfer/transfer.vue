@@ -308,7 +308,7 @@ export default {
 .fullPageWrapper {
     //background-color: var(--contentColor);
     .page-content {
-        padding: rem(30px);
+        padding: rem(20px);
         .transfer {
             display: flex;
             align-items: center;

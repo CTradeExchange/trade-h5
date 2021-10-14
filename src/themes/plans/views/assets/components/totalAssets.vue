@@ -85,10 +85,11 @@ export default {
         const toDesposit = () => {
             if (accountList.value.length > 1) {
                 router.push({
-                    path: '/despositAccount',
+                    path: '/chooseAccount',
                     query: {
                         accountId: assetsInfo.value.accountId,
-                        tradeType: tradeType.value
+                        tradeType: tradeType.value,
+                        type: Number(tradeType.value) === 3 ? 1 : 2 // type =1 借款 2 充值
                     }
                 })
             } else {
@@ -105,13 +106,24 @@ export default {
 
         // 跳转提现页面
         const toWirhdraw = () => {
-            router.push({
-                path: '/withdrawAccount',
-                query: {
-                    accountId: assetsInfo.value.accountId,
-                    tradeType: tradeType.value
-                }
-            })
+            if (Number(tradeType.value) === 3) {
+                router.push({
+                    path: '/chooseAccount',
+                    query: {
+                        accountId: assetsInfo.value.accountId,
+                        tradeType: tradeType.value,
+                        type: 3 // type =3 还款
+                    }
+                })
+            } else {
+                router.push({
+                    path: '/withdrawAccount',
+                    query: {
+                        accountId: assetsInfo.value.accountId,
+                        tradeType: tradeType.value
+                    }
+                })
+            }
         }
 
         // 跳转划转记录
