@@ -257,6 +257,7 @@ export default {
                             const params = {
                                 bizType: state.openType === 'mobile' ? 'SMS_REGISTER_VERIFICATION_CODE' : 'EMAIL_REGISTER_VERIFICATION_CODE',
                                 toUser: state.openType === 'mobile' ? '+' + state.countryZone + ' ' + state.mobile : state.email,
+                                nationCode: state.countryCode
                             }
                             verifyCodeSend(params).then(res => {
                                 state.verifyCodeLoading = false
