@@ -17,9 +17,9 @@
                     </div> {{ $t('common.to') }}
                 </div>
                 <div class='center'>
-                    <div class='from account' @click='handleFrom'>
+                    <div class='from account'>
                         <span> {{ fromAccount.name }}</span>
-                        <van-icon name='arrow' />
+                        <!-- <van-icon name='arrow' /> -->
                     </div>
                     <div class='to account' @click='handleTo'>
                         <span> {{ toAccount.name }}</span>
@@ -117,13 +117,17 @@ export default {
 
         const accountList = computed(() => {
             return store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.fromAccount.id))
-        }
-
-        )
+        })
 
         state.fromAccount = plans.value[0]
-        state.toAccount = plans.value.filter(el => el.name !== state.fromAccount.name)[0]
+
+        if (Number(tradeType) === 5) {
+            state.toAccount = plans.value.filter(el => el.name !== state.fromAccount.name)[0]
+        } else {
+            state.toAccount = plans.value.find(el => Number(el.id) === Number(tradeType))
+        }
         state.curTradeType = state.fromAccount.id
+
         // 最大可转
         // const maxTransfer = computed(() => accountList.value.find(item => item.currency === state.curCurrency.currency)?.withdrawAmount)
         const minTransfer = computed(() => {

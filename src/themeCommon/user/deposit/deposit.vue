@@ -155,7 +155,7 @@
 
 <script>
 import Top from '@/components/top'
-import { onBeforeMount, reactive, computed, toRefs, onBeforeUnmount } from 'vue'
+import { onBeforeMount, reactive, computed, toRefs, onBeforeUnmount, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal } from '@/api/user'
 import { getListByParentCode } from '@/api/base'
@@ -648,23 +648,24 @@ export default {
             handleDeposit()
         }
 
-        onBeforeMount(() => {
-            // 检测客户组配置是否可存款
-            if (Number(customInfo.value.deposit) === 0) {
-                state.btnDisabled = true
-                return Dialog.confirm({
-                    title: t('common.tip'),
-                    message: t('deposit.serviceTips1'),
-                    confirmButtonText: t('common.serivce'),
-                    cancelButtonText: t('common.close')
-                }).then(() => {
-                    if (onlineServices.value) { location.href = onlineServices.value }
-                }).catch(() => {
+        store.dispatch('_user/findCustomerInfo', false).then(res => {
+            if (res.check()) {
+                if (Number(customInfo.value.deposit) === 0) {
+                    state.btnDisabled = true
+                    return Dialog.confirm({
+                        title: t('common.tip'),
+                        message: t('deposit.serviceTips1'),
+                        confirmButtonText: t('common.serivce'),
+                        cancelButtonText: t('common.close')
+                    }).then(() => {
+                        if (onlineServices.value) { location.href = onlineServices.value }
+                    }).catch(() => {
                     // on cancel
-                })
-            } else {
-                // 检测存款是否需要kyc
-                checkKyc()
+                    })
+                } else {
+                    // 检测存款是否需要kyc
+                    checkKyc()
+                }
             }
         })
 

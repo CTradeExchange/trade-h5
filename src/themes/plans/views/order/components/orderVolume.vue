@@ -26,6 +26,9 @@ export default {
         product: {
             type: Object
         },
+        account: {
+            type: Object
+        },
         modelValue: {
             type: [Number, String],
             default: ''
@@ -45,21 +48,22 @@ export default {
             if ([1, 2].includes(curTradeType)) {
                 const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === curTradeType)
                 return parseInt(props.entryType) === 1 ? t('trade.orderVolume') : t('trade.orderAmount') + `(${account?.currency})`
-            } else if ([3].includes(curTradeType)) {
-                return t('trade.orderVolume') + `(${props.product.baseCurrency})`
-            } else if ([5].includes(curTradeType)) {
+            // } else if ([3].includes(curTradeType)) {
+            //     return t('trade.orderVolume') + `(${props.product.baseCurrency})`
+            } else if ([3, 5].includes(curTradeType)) {
                 return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + `(${props.product.baseCurrency})` : t('trade.orderAmount') + `(${props.product.profitCurrency})`
             } else {
                 return parseInt(props.entryType) === 1 ? t('trade.volumes') : t('trade.orderAmount')
             }
         })
+
         const onInput = (e) => {
             let newval = e.target.value
             if (/[^0-9\.]/.test(newval)) { // 只能输入数字
                 newval = newval.replace(/[^0-9\.]/g, '')
                 e.target.value = newval
             }
-            const digits = parseInt(props.entryType) === 1 ? getDecimalNum(props.product.minVolume) : props.product.symbolDigits
+            const digits = parseInt(props.entryType) === 1 ? getDecimalNum(props.product.minVolume) : props.account.digits
             const reg = new RegExp('^\\d*(\\.?\\d{0,' + digits + '})', 'g')
             if (getDecimalNum(newval) > digits) {
                 newval = (newval.match(reg) && newval.match(reg)[0]) || ''

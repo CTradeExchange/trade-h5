@@ -16,17 +16,28 @@
                 </van-button>
             </div>
         </div>
-        <div class='direction'>
-            <span :class="Number(product.direction) === 1 ? 'riseColor' : 'fallColor'">
-                {{ Number(product.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
-            </span>
-            &nbsp;
-            <span v-if='Number(product.tradeType) === 5'>
-                {{ product.requestNum }}&nbsp;{{ product.outCurrency }}
-            </span>
-            <span v-else>
-                {{ product.requestNum }}&nbsp;{{ Number(product.entryType) === 1 ? $t('trade.volumeUnit') : product.accountCurrency }}
-            </span>
+        <div class='directionCell'>
+            <div class='direction item'>
+                <span :class="Number(product.direction) === 1 ? 'riseColor' : 'fallColor'">
+                    {{ Number(product.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
+                </span>
+                &nbsp;
+                <span v-if='Number(product.tradeType) === 5'>
+                    {{ product.requestNum }}&nbsp;{{ product.outCurrency }}
+                </span>
+                <span v-else-if='Number(product.tradeType) === 3'>
+                    {{ product.requestNum }}&nbsp;{{ product.accountCurrency }}
+                </span>
+                <span v-else>
+                    {{ product.requestNum }}&nbsp;{{ Number(product.entryType) === 1 ? $t('trade.volumeUnit') : product.accountCurrency }}
+                </span>
+            </div>
+            <div v-if='product.tradeType===5' class='item orderComplete'>
+                <span class='label'>
+                    {{ $t('trade.orderComplete') }}
+                </span>
+                <span>{{ product.executeNum }}</span>
+            </div>
         </div>
 
         <div class='t-body'>
@@ -149,7 +160,7 @@ export default {
                 // ABCC撤单
                 closeTradePboOrder({
                     orderId: props.product.id,
-                        ...params,
+                    ...params,
                 }).then(res => {
                     loading.value = false
                     if (res.check()) {
@@ -162,7 +173,7 @@ export default {
             } else {
                 closePboOrder({
                     pboId: props.product.id,
-                        ...params,
+                    ...params,
                 }).then(res => {
                     loading.value = false
                     if (res.check()) {
@@ -249,8 +260,21 @@ export default {
             }
         }
     }
-    .direction {
+    .directionCell {
+        display: flex;
         margin: rem(20px) 0;
+        .item {
+            flex: 1;
+        }
+        .orderComplete {
+            color: var(--normalColor);
+            font-size: rem(20px);
+            .label {
+                display: inline-block;
+                width: rem(100px);
+                margin-right: rem(20px);
+            }
+        }
     }
     .t-body {
         display: flex;

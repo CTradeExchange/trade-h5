@@ -448,6 +448,11 @@ class Chart {
         }
     }
 
+    // 判断是否存在历史数据
+    _hasBars () {
+        return !!this.widget.activeChart().getSeries().barsCount()
+    }
+
     /** ---------------------------- 分割线 ------------------------------------------------------------------------------------------- */
     /** ---------------------------- 以下是公开方法 ------------------------------------------------------------------------------------ */
     // 切换产品
@@ -489,6 +494,9 @@ class Chart {
 
     // 更新买/卖价格线
     updateLineData = ({ buyPrice, sellPrice }) => {
+        if (!this._hasBars()) {
+            return
+        }
         this.buyPrice = buyPrice
         this.sellPrice = sellPrice
 

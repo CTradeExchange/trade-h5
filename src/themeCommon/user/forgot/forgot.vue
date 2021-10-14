@@ -126,8 +126,10 @@ export default {
                     if (res.check()) {
                         if (Number(res.data.status) === 2) {
                             const msg = t(state.curTab === 0 ? 'common.unExistPhone' : 'common.unExistEmail')
+                            callback && callback(false)
                             return Toast(msg)
                         } else if (Number(res.data.status === -1)) {
+                            callback && callback(false)
                             return Toast(t('c.userDisable'))
                         } else {
                             state.countryZone = res.data.phoneArea
@@ -136,11 +138,11 @@ export default {
                                 toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
                             }).then(res => {
                                 if (res.check()) {
-                                    if (res.code === '0') {
-                                        state.sendToken = res.data.token
-                                        Toast(t('common.verifySended'))
-                                        callback && callback()
-                                    }
+                                    state.sendToken = res.data.token
+                                    Toast(t('common.verifySended'))
+                                    callback && callback()
+                                } else {
+                                    callback && callback(false)
                                 }
                             })
                         }

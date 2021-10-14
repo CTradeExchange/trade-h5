@@ -79,7 +79,6 @@ export default {
         }))
 
         watch(() => route.path, (newVal) => {
-            console.log('监听到变化', newVal)
             if (newVal !== '/positionDetail') {
                 MsgSocket.cancelSubscribeAsset()
             }

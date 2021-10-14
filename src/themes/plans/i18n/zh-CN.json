@@ -453,6 +453,7 @@
     "symbol": "产品",
     "trustTime": "委托时间",
     "trustId": "委托编号",
+    "orderComplete": "已成交",
     "transfer": "划转",
     "cancelPendingOrder": "确定撤单吗?",
     "loanCurrency": "请选择借款币种",
