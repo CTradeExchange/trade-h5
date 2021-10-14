@@ -44,7 +44,7 @@
     "eodTime": "Settlement time",
     "feeType": "Fee type",
     "float": "floating",
-    "interest": "Interest (buy/sell)",
+    "interest": "隔夜利息(买/卖)",
     "interestRate": "Annual Interest Rate",
     "limitDistance": "Minimum / Maximum pending order distance",
     "margins": "Margin requirements",
