@@ -19,7 +19,7 @@
                 </div>
             </van-tab>
             <van-tab :title='$t("trade.dealList")'>
-                <orderList />
+                <orderList ref='orderListRef' />
             </van-tab>
         </van-tabs>
     </div>
@@ -39,13 +39,14 @@ export default {
         trustItem,
         orderList
     },
-    setup (props) {
+    setup (props, context) {
         const { t } = useI18n({ useScope: 'global' })
         const loading = ref(false)
         const store = useStore()
         const route = useRoute()
         const router = useRouter()
         const { tradeType } = route.query
+        const orderListRef = ref()
 
         const state = reactive({
             active: 0,
@@ -96,6 +97,15 @@ export default {
             { immediate: true }
         )
 
+        watch(() => state.active, newVal => {
+            if (Number(newVal) === 0) {
+                queryPendingList()
+            } else if (Number(newVal) === 1 && orderListRef.value) {
+                orderListRef.value.resetParams()
+                orderListRef.value.queryRecordList()
+            }
+        })
+
         const queryPendingList = () => {
             // 获取委托列表
             const accountIds = []
@@ -126,6 +136,7 @@ export default {
             tradeName,
             onRefresh,
             tradeType,
+            orderListRef,
              ...toRefs(state),
 
         }

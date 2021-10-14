@@ -121,7 +121,7 @@ export default {
             const activeData = state.elementList.filter(
                 (item) => item.id === state.activated
             )[0]
-            debugger
+
             // Vue.set(activeData.data, data.key, data.value);
             activeData.data[data.key] = data.value
         },
