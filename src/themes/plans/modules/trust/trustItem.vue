@@ -2,11 +2,11 @@
     <div v-if='product && curProduct' class='trust-item' @click='toDetail(item)'>
         <div class='t-header'>
             <div class='fl'>
+                <span :class="Number(product.direction) === 1 ? 'riseColor' : 'fallColor'">
+                    {{ Number(product.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
+                </span>&nbsp;
                 <span class='name'>
                     {{ product.symbolName }}
-                </span>
-                <span v-if='product.expireType' class='tag'>
-                    {{ expireTypeMap[product.expireType] }}
                 </span>
             </div>
 
@@ -16,35 +16,51 @@
                 </van-button>
             </div>
         </div>
-        <div class='directionCell'>
-            <div class='direction item'>
-                <span :class="Number(product.direction) === 1 ? 'riseColor' : 'fallColor'">
-                    {{ Number(product.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
-                </span>
-                &nbsp;
-                <span v-if='Number(product.tradeType) === 5'>
-                    {{ product.requestNum }}&nbsp;{{ product.outCurrency }}
-                </span>
-                <span v-else-if='Number(product.tradeType) === 3'>
-                    {{ product.requestNum }}&nbsp;{{ product.accountCurrency }}
-                </span>
-                <span v-else>
-                    {{ product.requestNum }}&nbsp;{{ Number(product.entryType) === 1 ? $t('trade.volumeUnit') : product.accountCurrency }}
-                </span>
-            </div>
-            <div v-if='product.tradeType===5' class='item orderComplete'>
-                <span class='label'>
-                    {{ $t('trade.orderComplete') }}
-                </span>
-                <span>{{ product.executeNum }}</span>
-            </div>
-        </div>
 
         <div class='t-body'>
             <div class='t-left'>
                 <p class='tl-item'>
                     <label for=''>
-                        {{ $t('trade.pendingPrice') }}
+                        <span v-if='Number(product.tradeType) === 5'>
+                            {{ Number(product.direction) === 1 ? $t('trade.pendingAmount') + ' ('+ product.outCurrency +')' : $t('trade.pendingUnit') + ' ('+ product.outCurrency +')' }}
+                        </span>
+                        <span v-else-if='Number(product.tradeType) === 3'>
+                            {{ Number(product.entryType) === 1 ? $t('trade.pendingUnit')+ ' (' +product.accountCurrency + ')' : $t('trade.pendingAmount') + ' ('+product.accountCurrency + ')' }}
+                        </span>
+                        <span v-else>
+                            {{ Number(product.entryType) === 1 ? $t('trade.pendingUnit')+ ' (' +$t('trade.volumeUnit') + ')' : $t('trade.pendingAmount') + ' ('+product.accountCurrency + ')' }}
+                        </span>
+                    </label>
+                    <span>{{ product.requestNum }}</span>
+                </p>
+                <p v-if='product.expireType' class='tl-item'>
+                    <label for=''>
+                        {{ $t('trade.expire') }}
+                    </label>
+                    <span class='tag'>
+                        {{ expireTypeMap[product.expireType] }}
+                    </span>
+                </p>
+
+                <p v-if='[3, 9].includes(Number(product.tradeType))' class='tl-item'>
+                    <label for=''>
+                        {{ $t('trade.loan') }}
+                    </label>
+                    <span>
+                        {{ product?.loanAmount ? product.loanAmount + ' ' + product.accountCurrency : '--' }}
+                    </span>
+                </p>
+
+                <p v-if='Number(product.tradeType) === 5' class='tl-item'>
+                    <label for=''>
+                        {{ $t('trade.orderComplete') }}
+                    </label>
+                    <span>{{ product.executeNum }}</span>
+                </p>
+
+                <p class='tl-item'>
+                    <label for=''>
+                        {{ $t('trade.trustPrice') }}
                     </label>
                     <span>{{ product.requestPrice }}</span>
                 </p>
@@ -55,15 +71,6 @@
                     </label>
                     <span :class='[Number(product.direction) === 1 ? curProduct.buy_color : curProduct.sell_color]'>
                         {{ Number(product.direction) === 1 ? curProduct.buy_price : curProduct.sell_price }}
-                    </span>
-                </p>
-
-                <p v-if='[3, 9].includes(Number(product.tradeType))' class='tl-item'>
-                    <label for=''>
-                        {{ $t('trade.loan') }}
-                    </label>
-                    <span>
-                        {{ product?.loanAmount || '--' }}
                     </span>
                 </p>
 
@@ -290,13 +297,18 @@ export default {
                 text-align: left;
                 label {
                     display: inline-block;
-                    width: rem(100px);
+                    width: rem(180px);
                     margin-right: rem(20px);
+                    overflow: hidden;
                     font-size: rem(20px);
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    vertical-align: middle;
                 }
                 span {
                     font-size: rem(20px);
                     text-align: left;
+                    vertical-align: middle;
                 }
             }
         }

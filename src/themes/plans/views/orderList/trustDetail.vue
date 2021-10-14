@@ -65,7 +65,7 @@
                         </div>
                         <div class='name'>
                             <span class='number'>
-                                {{ pendingItem.loanAmount || '--' }}
+                                {{ pendingItem?.loanAmount ? pendingItem.loanAmount + ' ' + pendingItem.accountCurrency : '--' }}
                             </span>
                         </div>
                     </div>

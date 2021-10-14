@@ -454,8 +454,10 @@
     "trustId": "Order Number",
     "orderComplete": "已成交",
     "transfer": "Transfer",
-    "cancelPendingOrder": "Are you sure to cancel order?"
-
+    "cancelPendingOrder": "Are you sure to cancel order?",
+    "pendingAmount": "委托额",
+    "trustPrice": "委托价",
+    "pendingUnit": "委托量"
   },
   "bizType": {
     "2": "Market close",

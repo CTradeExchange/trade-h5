@@ -457,7 +457,10 @@
     "transfer": "划转",
     "cancelPendingOrder": "确定撤单吗?",
     "loanCurrency": "请选择借款币种",
-    "repaymentCurrency": "请选择还款币种"
+    "repaymentCurrency": "请选择还款币种",
+    "pendingAmount": "委托额",
+    "trustPrice": "委托价",
+    "pendingUnit": "委托量"
   },
   "bizType": {
     "2": "市价平仓",
