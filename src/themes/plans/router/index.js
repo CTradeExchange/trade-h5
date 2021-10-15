@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Layout from '../layout/index'
-import { delayAwait, getToken } from '@/utils/util'
+import { delayAwait, getToken, localGet } from '@/utils/util'
 import store from '../store'
 import themeRouter from '@/themeCommon/router'
 
@@ -227,7 +227,8 @@ const routes = [
     { path: '/:pathMatch(.*)*', redirect: { name: 'Mine' } },
 ]
 
-const basePath = '/' + (location.pathname.split('/')[1] || 'zh-CN') + '/'
+const lang = localGet('lang') || 'zh-CN'
+const basePath = '/' + (location.pathname.split('/')[1] || lang) + '/'
 const router = createRouter({
     history: createWebHistory(basePath),
     routes
