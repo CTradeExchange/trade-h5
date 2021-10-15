@@ -127,7 +127,7 @@
                                     </el-col>
                                     <el-col :span='8'>
                                         <el-button type='primary' @click='setPlans(item,index,2)'>
-                                            设置玩法币种
+                                            设置玩法别名
                                         </el-button>
                                     </el-col>
                                 </el-row>
