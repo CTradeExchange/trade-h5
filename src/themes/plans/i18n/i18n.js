@@ -2,9 +2,9 @@ import { nextTick } from 'vue'
 import { createI18n } from 'vue-i18n'
 // import zhCN_common from '../../../themeCommon/i18n/zh-CN.json'
 // import zhCN from './zh-CN.json'
-import {localGet} from '@/utils/util';
+import {getCookie} from '@/utils/util';
 
-const defaultLocal = localGet('lang')
+const defaultLocal = getCookie('lang')
 
 const i18n = setupI18n(defaultLocal)
 

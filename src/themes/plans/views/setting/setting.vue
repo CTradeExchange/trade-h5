@@ -25,7 +25,7 @@
 import { toRefs, reactive, computed, getCurrentInstance, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
-import { isEmpty, removeLoginParams, localSet, localGet, setCookie } from '@/utils/util'
+import { isEmpty, removeLoginParams, localSet, localGet, setCookie, getCookie } from '@/utils/util'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { changeLang } from '@/api/base'
@@ -52,7 +52,7 @@ export default {
             loading: false,
             langVisible: false,
             colorVisible: false,
-            lang: localGet('lang') || store.state._base.wpCompanyInfo.language,
+            lang: getCookie('lang') || store.state._base.wpCompanyInfo.language,
             langActions: store.state.supportLanguages,
             checked: false,
             chartSettingVisible: false,
@@ -115,9 +115,8 @@ export default {
                     store.commit('del_cacheViews', 'Home')
                     store.commit('del_cacheViews', 'Layout')
                 })
-                localSet('lang', action.val)
 
-                setCookie('lang', action.val, 'd90')
+                setCookie('lang', action.val, 'y10')
             }).catch(err => (state.loading = false))
         }
 

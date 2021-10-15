@@ -14,7 +14,7 @@ import LayoutTop from '@plans/layout/top'
 import { setRootVariable } from './colorVariables'
 import { setRouter } from '@/utils/request'
 // import LuckDraw from 'vue-luck-draw/vue3'
-import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet } from '@/utils/util'
+import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet, getCookie } from '@/utils/util'
 import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
 import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
@@ -58,7 +58,7 @@ if (loginParams || token) store.commit('_user/Update_loginLoading', true)
 // 获取到公司配置后初始化vue实例
 store.dispatch('_base/initBaseConfig').then(async () => {
     // 设置语言
-    const defaultLocal = localGet('lang') || 'zh-CN'
+    const defaultLocal = getCookie('lang') || 'zh-CN'
     setI18nLanguage(I18n, defaultLocal)
     await loadLocaleMessages(I18n, defaultLocal)
 

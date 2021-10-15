@@ -17,6 +17,7 @@
 
 <script>
 import { onMounted, reactive, ref, toRefs } from 'vue'
+import { getCookie } from '@/utils/util'
 // import { encrypt } from '@/utils/index'
 export default {
     name: 'Iframe',
@@ -44,8 +45,8 @@ export default {
         const showUrl = url => {
             let sourceParams = window.sessionStorage.getItem('sourceParams') ? window.sessionStorage.getItem('sourceParams').substring(1) : ''
             sourceParams = sourceParams.replace('pagewidth', 'pagewidth11') // 废弃缓存里面sourceParams中的pagewidth字段，使用下面新的字段
-            const lang = localStorage['lang']
-            if (url && url != 'about:blank') {
+            const lang = getCookie('lang')
+            if (url && url !== 'about:blank') {
                 return `${url}${url.indexOf('?') > 0 ? '&' : '?'}pagewidth=${this.pageWidth}&isprd=${isPRD}&${sourceParams}&lang=${lang}`
             } else {
                 return url
