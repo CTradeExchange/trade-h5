@@ -34,17 +34,20 @@
             </div>
         </form>
         <LoginByCustomerNo @submit='loginSubmit' />
-    <!-- <div class='otherLogin'>
+        <!-- <div class='otherLogin'>
             <LoginByGoogle />
             <span class='empty'></span>
             <LoginByFacebook />
         </div> -->
-    <!-- <footer class='footer'>
+        <!-- <footer class='footer'>
             <a class='link' href='javascript:;'>
                 <i class='icon_icon_service'></i>
                 在线客服
             </a>
         </footer> -->
+        <div class='support'>
+            Trade Switcher提供技术支持<br /> tradeswitcher.com
+        </div>
     </div>
 
     <!-- 设置登录密码 -->
@@ -349,6 +352,15 @@ export default {
         margin-bottom: rem(10px);
         font-weight: normal;
         font-size: rem(50px);
+    }
+    .support {
+        position: absolute;
+        bottom: rem(50px);
+        width: 100%;
+        color: var(--placeholdColor);
+        font-size: rem(20px);
+        line-height: rem(40px);
+        text-align: center;
     }
 }
 .icon_icon_close_big {
