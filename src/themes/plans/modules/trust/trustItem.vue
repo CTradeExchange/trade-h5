@@ -44,7 +44,7 @@
 
                 <div v-if='[3, 9].includes(Number(product.tradeType))' class='tl-item'>
                     <div class='label'>
-                        {{ $t('trade.loan')(product.accountCurrency) }}
+                        {{ $t('trade.loan')+ '(' + product.accountCurrency + ')' }}
                     </div>
                     <span>
                         {{ product?.loanAmount || '--' }}
@@ -314,7 +314,6 @@ export default {
                     color: var(--minorColor);
                 }
                 span {
-                    font-size: rem(20px);
                     text-align: left;
                     vertical-align: middle;
                 }
