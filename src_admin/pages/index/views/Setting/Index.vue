@@ -425,8 +425,6 @@ export default {
             this.getLoading = true
             getPageConfig({
                 page_code: 'SysSetting',
-                channelId: getQueryString('id'),
-                language: getQueryString('language')
             })
                 .then(res => {
                     if (!res.success) {
