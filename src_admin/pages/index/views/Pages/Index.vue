@@ -130,13 +130,13 @@
 </template>
 
 <script>
-import { pageList, modifyPageConfig } from '@index/Api/editor'
+import { pageList, modifyPageConfig, getViChannel } from '@index/Api/editor'
 import { deepClone } from '@utils/deepClone'
 import { h5PageList } from './h5PageList'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { onMounted, reactive, ref, toRefs, getCurrentInstance, watch } from 'vue'
 import { getQueryString } from '@admin/utils'
-import { lang } from '../../config/lang'
+
 export default {
     beforeRouteEnter (to, from, next) {
         if (getQueryString('page') === 'cats_sett_manage') {
@@ -152,6 +152,7 @@ export default {
     name: 'Pages',
     setup (props) {
         const router = useRouter()
+        const route = useRoute()
         const addFormModal = ref(null)
         const {
             ctx
@@ -199,7 +200,9 @@ export default {
             },
             loading: false,
             searchForm: {},
-            activeLang: 'zh-CN'
+            activeLang: 'zh-CN',
+            lang: []
+
         })
 
         watch(
@@ -208,6 +211,25 @@ export default {
                 getPageList()
             }
         )
+
+        // 获取页面配置
+        const getPageConfig = () => {
+            const that = this
+            getViChannel(route.query.id).then(res => {
+                if (!res.success) {
+                    that.$message.error(res.message)
+                    return
+                }
+
+                let content = res.data.content ? JSON.parse(res.data.content) : {}
+                content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
+
+                state.lang = content.supportLanguage
+            }).catch(error => {
+                console.log(error)
+            }).finally(() => {
+            })
+        }
 
         const changePage = () => {
             const info = state.h5PageList.find(item => (item.name == val))
@@ -330,6 +352,7 @@ export default {
 
         onMounted(() => {
             getPageList()
+            getPageConfig()
         })
 
         return {
@@ -345,7 +368,6 @@ export default {
             viewPublish,
             checkPageCode,
             addFormModal,
-            lang,
             ...toRefs(state)
         }
     }
