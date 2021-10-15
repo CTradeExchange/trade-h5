@@ -197,6 +197,7 @@ class SocketEvent {
 
     // 实时盘口深度报价
     handicap_tick (p) {
+        debugger
         const result = p.split(';')
         const tickList = {
             bid_deep: [],
@@ -205,7 +206,7 @@ class SocketEvent {
 
         if (result.length > 2) {
             const bidList = result[1].match(/[^\\(\\)]+(?=\))/g)
-            if (bidList.length > 0) {
+            if (bidList && bidList.length > 0) {
                 bidList.forEach(item => {
                     const bidOjb = {}
                     bidOjb.price_bid = item.split(',')[0]
@@ -215,7 +216,7 @@ class SocketEvent {
             }
 
             const askList = result[2].match(/[^\\(\\)]+(?=\))/g)
-            if (askList.length > 0) {
+            if (askList && askList.length > 0) {
                 askList.forEach(item => {
                     const askOjb = {}
                     askOjb.price_ask = item.split(',')[0]

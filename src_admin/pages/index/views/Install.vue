@@ -593,6 +593,7 @@ export default {
     width: 600px;
     height: 500px;
     margin-left: -400px;
+    padding-bottom: 20px;
     color: #666;
     font-size: 16px;
     text-align: left;

@@ -405,7 +405,9 @@ export default {
             openProductDropdown,
             showLossOrProfit,
             timeDropdown,
-            onRangeChange
+            onRangeChange,
+            resetParams,
+            queryRecordList
         }
     }
 }

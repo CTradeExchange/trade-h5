@@ -10,7 +10,6 @@
             <van-cell :title="$t('contract.profitCurrency')" :value='product.profitCurrency' />
             <van-cell :title="$t('contract.spread')" :value="$t('contract.float')" />
             <van-cell :title="$t('contract.singleNumbers')" :value='product.minVolume+"-"+product.maxVolume' />
-            <van-cell :title="$t('contract.steper')" :value='product.volumeStep' />
             <van-cell :title="$t('contract.limitDistance')" :value='product.priceMinLimit+"/"+product.priceMaxLimit+"点"' />
             <van-cell v-if='usedMarginSet && usedMarginSet.length' class='yfk' :title="$t('contract.advance')">
                 <div class='margin-info'>

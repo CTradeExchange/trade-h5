@@ -200,7 +200,7 @@ export default {
             const params = {
                 accountId,
                 accountCurrency: accountCurrency.currency,
-                amount: state.amount,
+                amount: state.amount.toString(),
                 tradeType,
                 // companyId: customInfo.value.companyId,
                 // customerNo: customInfo.value.customerNo,

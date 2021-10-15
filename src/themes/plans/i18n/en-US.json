@@ -45,7 +45,7 @@
     "eodTime": "Settlement time",
     "feeType": "Fee type",
     "float": "floating",
-    "interest": "Interest (buy/sell)",
+    "interest": "隔夜利息(买/卖)",
     "interestRate": "Annual Interest Rate",
     "limitDistance": "Minimum / Maximum pending order distance",
     "margins": "Margin requirements",
@@ -457,8 +457,10 @@
     "transfer": "Transfer",
     "cancelPendingOrder": "Are you sure to cancel order?",
     "loanCurrency": "请选择借款币种",
-    "repaymentCurrency": "请选择还款币种"
-
+    "repaymentCurrency": "请选择还款币种",
+    "pendingAmount": "委托额",
+    "trustPrice": "委托价",
+    "pendingUnit": "委托量"
   },
   "bizType": {
     "2": "Market close",
