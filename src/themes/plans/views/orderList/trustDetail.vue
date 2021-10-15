@@ -7,6 +7,10 @@
                 <div class='item item-1'>
                     <div class='left'>
                         <div class='name'>
+                            <span class='sub' :class="Number(pendingItem.direction) === 1 ? 'fallColor' : 'riseColor'">
+                                {{ Number(pendingItem.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
+                            </span>
+
                             {{ pendingItem?.symbolName }}
                         </div>
                         <div class='code'>
@@ -16,15 +20,23 @@
                 </div>
                 <div class='item item-2'>
                     <div class='col'>
-                        <div class='sub' :class="Number(pendingItem.direction) === 1 ? 'fallColor' : 'riseColor'">
-                            {{ Number(pendingItem.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
+                        <div class='sub'>
+                            <span v-if='Number(pendingItem.tradeType) === 5'>
+                                {{ Number(pendingItem.direction) === 1 ? $t('trade.pendingAmount') + ' ('+ pendingItem.outCurrency +')' : $t('trade.pendingUnit') + ' ('+ pendingItem.outCurrency +')' }}
+                            </span>
+                            <span v-else-if='Number(pendingItem.tradeType) === 3'>
+                                {{ Number(pendingItem.entryType) === 1 ? $t('trade.pendingUnit')+ ' (' +pendingItem.accountCurrency + ')' : $t('trade.pendingAmount') + ' ('+pendingItem.accountCurrency + ')' }}
+                            </span>
+                            <span v-else>
+                                {{ Number(pendingItem.entryType) === 1 ? $t('trade.pendingUnit')+ ' (' +$t('trade.volumeUnit') + ')' : $t('trade.pendingAmount') + ' ('+pendingItem.accountCurrency + ')' }}
+                            </span>
                         </div>
                         <div class='name'>
                             {{ pendingItem.requestNum }} {{ Number(pendingItem.entryType) === 1 ? $t('trade.volumeUnit') : pendingItem.accountCurrency }}
                         </div>
                     </div><div class='col'>
                         <div class='sub'>
-                            {{ $t('trade.pendingPrice') }}
+                            {{ $t('trade.trustPrice') }}
                         </div>
                         <div class='name'>
                             {{ pendingItem.requestPrice || '--' }}
@@ -34,7 +46,7 @@
                             {{ $t('trade.currentPrice') }}
                         </div>
                         <div class='name' :class="Number(pendingItem.direction) === 1 ? 'riseColor' : 'fallColor'">
-                            {{ Number(pendingItem.direction) === 1 ?product.buy_price:product.sell_price }}
+                            {{ Number(pendingItem.direction) === 1 ? product.buy_price : product.sell_price }}
                         </div>
                     </div>
                 </div>
@@ -61,7 +73,7 @@
                     </div>
                     <div v-if='[3, 9].includes(Number(tradeType))' class='col'>
                         <div class='sub'>
-                            {{ $t('trade.loan') }}
+                            {{ $t('trade.loan')+ '(' + pendingItem.accountCurrency + ')' }}
                         </div>
                         <div class='name'>
                             <span class='number'>
@@ -98,7 +110,7 @@
                         </div>
                     </div>
                     <div class='right'>
-                        ID : {{ pendingItem.id }}
+                        ID : {{ Number(pendingItem.tradeType) === 3 ? pendingItem.orderId : pendingItem.id }}
                     </div>
                 </div>
             </div>

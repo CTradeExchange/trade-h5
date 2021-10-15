@@ -53,7 +53,7 @@
 
                 <div v-if='Number(product.tradeType) === 5' class='tl-item'>
                     <div class='label'>
-                        {{ $t('trade.orderComplete') }}
+                        {{ $t('trade.orderComplete')+'('+ product.outCurrency +')' }}
                     </div>
                     <span>{{ product.executeNum }}</span>
                 </div>
