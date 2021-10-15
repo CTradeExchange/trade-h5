@@ -82,6 +82,7 @@ export default {
             level_2: t('common.kycLevel2'),
         }
         const kycStateMap = {
+            '0': { className: 'unverified', icon: 'icon_weirenzheng' },
             '1': { className: 'unverified', icon: 'icon_weirenzheng' },
             '2': { className: 'check', icon: 'icon_shenhezhong' },
             '3': { className: 'fail', icon: 'icon_renzhengshibai' },
@@ -95,7 +96,6 @@ export default {
             }
         }
 
-        if (!h5Preview) { store.dispatch('_user/findCustomerInfo') }
         return {
             ...toRefs(state),
             faceImg,

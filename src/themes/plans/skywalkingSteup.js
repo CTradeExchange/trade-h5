@@ -11,7 +11,7 @@ export function skywalkingRegister (router) {
         service,
         pagePath: location.href,
         serviceVersion,
-        noTraceOrigins: ['https://prodcn.displore.com.cn'],
+        noTraceOrigins: ['https://abcn.displore.com.cn', 'https://aben.displore.com.cn', 'https://abin.displore.com.cn', 'https://prodin.displore.com.cn', 'https://proden.displore.com.cn', 'https://prodcn.displore.com.cn'],
         // enableSPA: true,
     })
 
