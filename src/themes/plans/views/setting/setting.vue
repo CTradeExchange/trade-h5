@@ -1,5 +1,5 @@
 <template>
-    <LayoutTop :back='true' :menu='false' title='' />
+    <LayoutTop :custom-back='true' :menu='false' title='' @back='back' />
     <div class='page-wrap'>
         <van-cell v-if='customInfo' is-link :title='$t(Number(customInfo.loginPassStatus) === 1 ?"forgot.setPwd" : "login.modifyLoginPwd")' to='/setLoginPwd' />
         <van-cell v-if='customInfo && !customInfo.phone' is-link :title='$t("setting.bindPhone")' to='/bindMobile' />
@@ -173,6 +173,10 @@ export default {
             state.chartSettingVisible = false
         }
 
+        const back = () => {
+            return router.replace('/mine')
+        }
+
         return {
             colorsActions,
             customInfo,
@@ -184,6 +188,7 @@ export default {
             chartAction,
             chartSelect,
             chartText,
+            back,
             ...toRefs(state)
         }
     }

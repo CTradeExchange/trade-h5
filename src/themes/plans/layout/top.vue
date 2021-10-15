@@ -30,7 +30,7 @@ export default {
         // AccountChange,
         // MyAsset
     },
-    props: ['title'],
+    props: ['title', 'customBack'],
     data () {
         return {
             iframePage: ['OpenAccount'],
@@ -49,10 +49,9 @@ export default {
     },
     methods: {
         back () {
-            if (this.$route.name == 'Nest') {
+            if (this.customBack || this.$route.name === 'Nest') {
                 this.$emit('back')
             } else {
-                this.$emit('back')
                 if (this.iframePage.indexOf(this.$route.name) >= 0) {
                     this.$router.go(this.historyLength - window.history.length - 1)
                 } else {
