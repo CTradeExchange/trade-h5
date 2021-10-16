@@ -18,6 +18,7 @@ import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, loc
 import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
 import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
+import { getPreDemoAccountParams } from './officialDemoAccount.js'
 skywalkingRegister(router)
 
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
@@ -42,7 +43,7 @@ app.config.errorHandler = (err, vm, info) => {
     skywalkingRreportErrors(err)
 }
 // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
-const loginParams = getLoginParams()
+let loginParams = getLoginParams()
 const token = getToken()
 
 // 设置默认主题色
@@ -54,6 +55,7 @@ setRouter(router)
 setRootVariable(localGet('invertColor'))
 
 if (loginParams || token) store.commit('_user/Update_loginLoading', true)
+else if (location.search.includes('from=officialWebsite')) loginParams = getPreDemoAccountParams() // 从官网过来自动分配pre的Demo账号
 
 // 获取到公司配置后初始化vue实例
 store.dispatch('_base/initBaseConfig').then(async () => {

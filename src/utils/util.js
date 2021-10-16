@@ -18,6 +18,7 @@ export function guid () {
 }
 
 // Gzip解压 对应wp接口数据
+window['unzip'] = unzip
 export function unzip (str) {
     let strData = atob(str)
     const charData = strData.split('').map((t) => (t.charCodeAt(0)))
@@ -28,6 +29,7 @@ export function unzip (str) {
     // console.warn('解压字符', JSON.parse(strData))
     return strData
 }
+window['zip'] = zip
 // Gzip数据压缩
 export function zip (str) {
     var binaryString = pako.gzip(encodeURIComponent(str), { to: 'string' })
