@@ -96,6 +96,7 @@
         "existPhone": "Mobile no. exist already",
         "tryAgain": "Try again",
         "inputRealVerifyCode": "Please input correct verification code",
+        "getVerifyCode": "请先获取验证码",
         "colon": "：",
         "customerNo": "Account Number",
         "cancel": "Cancel",

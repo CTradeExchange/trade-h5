@@ -331,7 +331,7 @@ export default {
 
             const item = {
                 ...params,
-                amount: state.coinCount,
+                amount: state.coinCount.toString(),
                 withdrawType: 2,
                 withdrawCurrency: state.coinKind,
                 blockchainName: state.chainName,

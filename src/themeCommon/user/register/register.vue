@@ -118,7 +118,8 @@ export default {
             tradeType: 1,
             email: '',
             pageui: '',
-            protocol: true
+            protocol: true,
+            visited: false // 是否已点击过获取验证码
         })
         let token = ''
 
@@ -182,6 +183,9 @@ export default {
         // 提交注册
         const registerHandler = () => {
             clearTimeout(delayer)
+            if (!state.visited) {
+                return Toast(t('common.getVerifyCode'))
+            }
             if (!token) {
                 return Toast(t('common.inputRealVerifyCode'))
             }
@@ -227,6 +231,7 @@ export default {
         }
         // 发送验证码
         const verifyCodeSendHandler = (callback) => {
+            state.visited = true
             const verifyParams = {
                 type: state.openType === 'mobile' ? 2 : 1,
                 loginName: state.openType === 'mobile' ? state.mobile : state.email,
@@ -387,7 +392,7 @@ export default {
     height: rem(100px);
     color: var(--color);
     font-size: rem(30px);
-    background: var(--bgColor);
+    background: var(--primaryAssistColor);
     border-color: var(--lineColor);
     border-width: 1px 0 0;
 }

@@ -1,6 +1,7 @@
 import { computed, watch } from 'vue'
 import { useStore } from 'vuex'
 import { shiftedBy, plus } from '@/utils/calculation'
+import { deepClone } from '@/utils/deepClone'
 export default function ({ showPending }) {
     const store = useStore()
 
@@ -42,7 +43,7 @@ export default function ({ showPending }) {
             const diff = maxValue - minValue
             // 计算买入报价长度
             if (result?.ask_deep.length > 0) {
-                const buyPendingList = pendingList.value && pendingList.value.filter(item => Number(item.direction === 2))
+                const buyPendingList = deepClone(pendingList.value && pendingList.value.filter(item => Number(item.direction === 2)))
 
                 result.ask_deep.forEach(ask => {
                     ask.width = diff === 0 ? 0 : (parseFloat(ask.volume_ask) - parseFloat(minValue)) / diff * 100
@@ -62,7 +63,7 @@ export default function ({ showPending }) {
 
             // 计算卖出报价长度
             if (result?.bid_deep.length > 0) {
-                const sellPendingList = pendingList.value && pendingList.value.filter(item => Number(item.direction === 1))
+                const sellPendingList = deepClone(pendingList.value && pendingList.value.filter(item => Number(item.direction === 1)))
                 result.bid_deep.forEach(bid => {
                     bid.width = diff === 0 ? 0 : (parseFloat(bid.volume_bid) - parseFloat(minValue)) / diff * 100
                     bid.unitNum = 0

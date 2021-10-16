@@ -96,6 +96,7 @@
         "existPhone": "手机号已存在",
         "tryAgain": "再试试",
         "inputRealVerifyCode": "请输入正确的验证码",
+        "getVerifyCode": "请先获取验证码",
         "colon": "：",
         "customerNo": "客户编号",
         "cancel": "取消",
