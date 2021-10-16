@@ -67,7 +67,7 @@ export default {
             return pageConfig('ChannelSett').then(data => {
                 if (data) {
                     // 设置玩法别名和排序
-                    data.registList.forEach(el => formatPlans(el.plans))
+                    data.registList.forEach(el => formatPlans(el.plans || []))
                     formatPlans(data.tradeTypeCurrencyList)
 
                     sessionSet('utcOffset', 0 - new Date().getTimezoneOffset()) // 改成取本地时区时间，不找wp配置时间

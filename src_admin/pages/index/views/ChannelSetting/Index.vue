@@ -246,7 +246,7 @@
         >
             <el-form
                 label-position='right'
-                label-width='100px'
+                label-width='110px'
             >
                 <div v-for='item in tradeTypeAssets' :key='item.id' class='tradeType-row'>
                     <el-card :header='item.name' shadow='always'>
@@ -383,7 +383,7 @@ export default {
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                 that.form = Object.assign(that.form, content, { other })
 
-                that.form.googleAnalytics = window.unzip(that.form.googleAnalytics)
+                if (that.form.googleAnalytics) { that.form.googleAnalytics = window.unzip(that.form.googleAnalytics) }
 
                 // 如果未保存，写入默认值
                 if (!that.form.customerGroupId) {
@@ -531,20 +531,46 @@ export default {
 
                 if (_formData.registList.length > 0) {
                     _formData.registList.forEach(el => {
-                        el.plans.forEach(item => {
-                            if ([3, 5, 9].includes(Number(item.id)) && Array.isArray(item.allCurrency)) {
-                                item.allCurrency = item.allCurrency.toString()
-                            }
+                        if (isEmpty(el.plans)) {
+                            this.$message({
+                                message: '请先设置玩法币种',
+                                type: 'warning'
+                            })
+                            throw new Error('noPlans')
+                        } else {
+                            el.plans.forEach(item => {
+                                if ([3, 5, 9].includes(Number(item.id)) && Array.isArray(item.allCurrency)) {
+                                    item.allCurrency = item.allCurrency.toString()
+                                }
+                            })
+                        }
+                    })
+                }
+
+                // 游客玩法如果没设置则取默认
+                if (this.form.tradeTypeCurrencyList.length === 0) {
+                    const plans = []
+
+                    this.accountTradeList[2].data.forEach(el => {
+                        plans.push({
+                            id: el.trade_type,
+                            alias: '',
+                            isWallet: '',
+                            sort: 0,
+                            tradeType: el.trade_type,
+                            name: el.trade_name
+
                         })
                     })
+                    _formData.tradeTypeCurrencyList = plans
                 }
 
                 _formData.googleAnalytics = window.zip(_formData.googleAnalytics)
 
                 saveViChannel({
-                    content: JSON.stringify(_formData), // '', //
+                    content: JSON.stringify(_formData), // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', //
                     id: this.pageId,
-                    other: ''
+                    other: '',
                 }).then(res => {
                     if (!res.success) {
                         return this.$message.error(res.message)
