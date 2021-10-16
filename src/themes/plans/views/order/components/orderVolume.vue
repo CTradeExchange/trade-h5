@@ -47,7 +47,7 @@ export default {
             const curTradeType = props.product.tradeType
             if ([1, 2].includes(curTradeType)) {
                 const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === curTradeType)
-                return parseInt(props.entryType) === 1 ? t('trade.orderVolume') : t('trade.orderAmount') + `(${account?.currency})`
+                return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + '(' + t('trade.volumeUnit') + ')' : t('trade.orderAmount') + `(${account?.currency})`
             // } else if ([3].includes(curTradeType)) {
             //     return t('trade.orderVolume') + `(${props.product.baseCurrency})`
             } else if ([3, 5].includes(curTradeType)) {

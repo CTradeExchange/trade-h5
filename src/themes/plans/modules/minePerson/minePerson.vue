@@ -19,7 +19,7 @@
                         {{ customerInfo.customerNo }}
                         <van-icon class='arrowIcon' name='arrow' />
                     </p>
-                    <span class='status' :class='kycStateMap[customerInfo.kycStatus].className' @click="$router.push('/authentication')">
+                    <span v-if='Number(customerInfo.kycStatus) !== 0' class='status' :class='kycStateMap[customerInfo.kycStatus].className' @click="$router.push('/authentication')">
                         <span class='icon' :class='customerInfo.kycStatus === -1 ? kycStateMap[customerInfo.kycStatus].icon[customerInfo.kycRemark] : kycStateMap[customerInfo.kycStatus].icon'>
                         </span>
 

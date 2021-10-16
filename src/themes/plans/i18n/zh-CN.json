@@ -385,6 +385,7 @@
     "sellFive": "五档",
     "deal": "成交",
     "dealPrice": "成交价",
+    "dealAvgPrice": "成交均价",
     "dealVolume": "成交量",
     "noDealData": "暂无成交记录",
     "noStallsData": "暂无数据",

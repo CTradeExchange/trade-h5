@@ -385,6 +385,7 @@
     "sellFive": "Five quote",
     "deal": "Execute",
     "dealPrice": "Execution Price",
+    "dealAvgPrice": "成交均价",
     "dealVolume": "Volume",
     "noDealData": "No trade record",
     "noStallsData": "No data",

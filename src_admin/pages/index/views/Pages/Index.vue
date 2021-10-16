@@ -215,7 +215,7 @@ export default {
         // 获取页面配置
         const getPageConfig = () => {
             const that = this
-            getViChannel(route.query.id).then(res => {
+            getViChannel(getQueryString('id')).then(res => {
                 if (!res.success) {
                     that.$message.error(res.message)
                     return

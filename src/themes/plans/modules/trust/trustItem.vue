@@ -21,8 +21,12 @@
             <div class='t-left'>
                 <div class='tl-item'>
                     <div class='label'>
-                        <span v-if='Number(product.tradeType) === 5'>
+                        <span v-if='[5,9].includes(Number(product.tradeType))'>
                             {{ Number(product.direction) === 1 ? $t('trade.pendingAmount') + ' ('+ product.outCurrency +')' : $t('trade.pendingUnit') + ' ('+ product.outCurrency +')' }}
+                        </span>
+
+                        <span v-else-if='Number(product.tradeType) === 1'>
+                            {{ $t('trade.pendingUnit')+ ' (' +$t('trade.volumeUnit') + ')' }}
                         </span>
                         <span v-else-if='Number(product.tradeType) === 3'>
                             {{ Number(product.entryType) === 1 ? $t('trade.pendingUnit')+ ' (' +product.accountCurrency + ')' : $t('trade.pendingAmount') + ' ('+product.accountCurrency + ')' }}
@@ -44,7 +48,7 @@
 
                 <div v-if='[3, 9].includes(Number(product.tradeType))' class='tl-item'>
                     <div class='label'>
-                        {{ $t('trade.loan')+ '(' + product.accountCurrency + ')' }}
+                        {{ $t('trade.loan') }} ({{ Number(product.tradeType) === 3 ? product.accountCurrency : product.outCurrency }})
                     </div>
                     <span>
                         {{ product?.loanAmount || '--' }}

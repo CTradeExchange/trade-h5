@@ -53,19 +53,64 @@
             <div v-for='(item,index) in recordList' :key='index' class='trust-item'>
                 <div class='t-header'>
                     <div class='fl'>
+                        <span :class="Number(item.direction) === 1 ? 'riseColor' : 'fallColor'">
+                            {{ Number(item.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
+                        </span>&nbsp;
                         <span class='name'>
                             {{ item?.symbolName || '--' }}
                         </span>
                     </div>
+                    <div class='fr'>
+                        {{ bizTypeText ? bizTypeText[item.bizType] : '--' }}
+                    </div>
                 </div>
-                <div class='direction'>
-                    {{ bizTypeText ? bizTypeText[item.bizType] : '--' }} /
-                    <span :class="Number(item.direction) === 1 ? 'riseColor' : 'fallColor'">
-                        {{ Number(item.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
-                    </span> {{ item.executeNum }}
-                </div>
+
                 <div class='t-body'>
                     <div class='t-block'>
+                        <p class='tl-item'>
+                            <label for=''>
+                                <span v-if='[5,9].includes(Number(tradeType)) '>
+                                    {{ Number(item.direction) === 1 ? $t('trade.pendingAmount') + ' ('+ item.outCurrency +')' : $t('trade.pendingUnit') + ' ('+ item.outCurrency +')' }}
+                                </span>
+                                <span v-else-if='Number(tradeType) === 3'>
+                                    {{ Number(item.entryType) === 1 ? $t('trade.pendingUnit')+ ' (' +item.outCurrency + ')' : $t('trade.pendingAmount') + ' ('+item.outCurrency + ')' }}
+                                </span>
+                                <span v-else-if='Number(tradeType) === 1'>
+                                    {{ $t('trade.pendingUnit')+ ' (' +$t('trade.volumeUnit') + ')' }}
+                                </span>
+                                <span v-else>
+                                    {{ Number(item.numberStatisticMode) === 1 ? $t('trade.pendingUnit')+ ' (' +$t('trade.volumeUnit') + ')' : $t('trade.pendingAmount') + ' ('+item.accountCurrency + ')' }}
+                                </span>
+                            </label>
+                            <span>
+                                {{ item.requestNum || '--' }}
+                            </span>
+                        </p>
+
+                        <p class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.dealVolume') }}
+                                <span v-if='[1,2].includes(Number(tradeType)) '>
+                                    ({{ $t('trade.volumeUnit') }})
+                                </span>
+                                <span v-else>
+                                    ({{ item.outCurrency }})
+                                </span>
+                            </label>
+                            <span>
+                                {{ item?.executeNum || '--' }}
+                            </span>
+                        </p>
+
+                        <p v-if='Number(item.bizType)===2' class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.trustPrice') }}
+                            </label>
+                            <span>
+                                {{ item?.requestPrice || '--' }}
+                            </span>
+                        </p>
+
                         <p v-if='isCloseType(item.bizType)' class='tl-item'>
                             <!-- 如果是平仓 显示开仓价 -->
                             <label for=''>
@@ -76,7 +121,7 @@
                         </p>
                         <p class='tl-item'>
                             <label for=''>
-                                {{ $t('trade.dealPrice') }}
+                                {{ $t('trade.dealAvgPrice') }}
                             </label>
                             <span>
                                 {{ item?.executePrice }}
@@ -108,12 +153,12 @@
                             </span>
                         </p>
 
-                        <p v-if='[3, 9].indexOf(Number(tradeType)) > -1' class='tl-item'>
+                        <p v-if='[3, 9].includes(Number(tradeType)) ' class='tl-item'>
                             <label for=''>
-                                {{ $t('trade.loan') }}
+                                {{ $t('trade.loan') }}({{ item.outCurrency }})
                             </label>
                             <span>
-                                {{ item.loanAmount ? item.loanAmount + ' ' + item.outCurrency : '--' }}
+                                {{ item.loanAmount || '--' }}
                             </span>
                         </p>
 
@@ -122,7 +167,7 @@
                                 {{ $t('fee') }}
                             </label>
                             <span>
-                                {{ item.commission || '--' }} {{ item.inCurrency }}
+                                {{ item.commission || '--' }}
                             </span>
                         </p>
                     </div>
@@ -135,7 +180,10 @@
                             </span>
                         </p>
                         <p class='tl-item'>
-                            <span>
+                            <span v-if='[1, 2].includes(Number(tradeType)) '>
+                                #{{ item?.dealId }}
+                            </span>
+                            <span v-else>
                                 #{{ item?.orderId }}
                             </span>
                         </p>
@@ -493,16 +541,21 @@ export default {
                     width: 50%;
                     margin-bottom: rem(10px);
                     color: var(--normalColor);
+                    line-height: rem(35px);
                     text-align: left;
                     label {
                         display: inline-block;
-                        width: rem(100px);
+                        width: rem(130px);
                         margin-right: rem(20px);
                         font-size: rem(20px);
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        vertical-align: middle;
                     }
                     span {
                         font-size: rem(20px);
                         text-align: left;
+                        vertical-align: middle;
                     }
                 }
             }

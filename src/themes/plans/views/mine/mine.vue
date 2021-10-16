@@ -38,7 +38,7 @@ export default {
         width: 100%;
         color: var(--placeholdColor);
         font-size: rem(20px);
-        line-height: rem(40px);
+        line-height: rem(32px);
         text-align: center;
     }
 }

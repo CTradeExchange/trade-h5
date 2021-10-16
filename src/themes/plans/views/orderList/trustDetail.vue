@@ -24,6 +24,9 @@
                             <span v-if='Number(pendingItem.tradeType) === 5'>
                                 {{ Number(pendingItem.direction) === 1 ? $t('trade.pendingAmount') + ' ('+ pendingItem.outCurrency +')' : $t('trade.pendingUnit') + ' ('+ pendingItem.outCurrency +')' }}
                             </span>
+                            <span v-else-if='Number(pendingItem.tradeType) === 1'>
+                                {{ $t('trade.pendingUnit')+ ' (' +$t('trade.volumeUnit') + ')' }}
+                            </span>
                             <span v-else-if='Number(pendingItem.tradeType) === 3'>
                                 {{ Number(pendingItem.entryType) === 1 ? $t('trade.pendingUnit')+ ' (' +pendingItem.accountCurrency + ')' : $t('trade.pendingAmount') + ' ('+pendingItem.accountCurrency + ')' }}
                             </span>
