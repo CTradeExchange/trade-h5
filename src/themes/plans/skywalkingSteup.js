@@ -1,10 +1,11 @@
 import ClientMonitor from 'skywalking-client-js'
 
-const collectorDomain = 'https://preskyapi.cats-trade.com'
+const collectorDomain = window['SkyWalkingService']
 const service = 'test-ui'
 const serviceVersion = 'v1.0.0'
 
 export function skywalkingRegister (router) {
+    if (!collectorDomain) return false
     // 注册skywalking
     ClientMonitor.register({
         collector: collectorDomain,
@@ -28,6 +29,7 @@ export function skywalkingRegister (router) {
 }
 
 export function skywalkingRreportErrors (err) {
+    if (!collectorDomain) return false
     ClientMonitor.reportFrameErrors({
         collector: collectorDomain,
         service: 'test-ui',
