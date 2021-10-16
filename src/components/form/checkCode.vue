@@ -62,6 +62,9 @@ export default {
         }
     },
     emits: ['update:modelValue', 'update:zone', 'input', 'verifyCodeSend'],
+    beforeUnmount () {
+        clearInterval(this.interval)
+    },
     methods: {
         onClear () {
             this.$emit('update:modelValue', '')
@@ -83,9 +86,9 @@ export default {
         getCodeBtnCountDown (flag) {
             if (flag === false) return (this.disabled = false)
             let len = 60
-            const t = setInterval(() => {
+            this.interval = setInterval(() => {
                 if (len === 0) {
-                    clearInterval(t)
+                    clearInterval(this.interval)
                     this.getCodeText = this.$t('register.reGet')
                     this.disabled = false
                     return
@@ -93,8 +96,8 @@ export default {
                 len--
                 this.getCodeText = `${len}s`
             }, 1000)
-        }
-    }
+        },
+    },
 }
 </script>
 
