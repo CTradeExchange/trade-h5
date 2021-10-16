@@ -314,14 +314,11 @@ export default {
             align-items: center;
             background: var(--contentColor);
             .label {
-                //flex: 1;
-                width: rem(22px);
                 margin: 0 rem(30px) 0 rem(22px);
                 color: var(--minorColor);
                 font-weight: bold;
                 font-size: rem(28px);
                 line-height: rem(27px);
-                letter-spacing: rem(20px);
                 text-align: center;
                 word-wrap: break-word;
                 .dots {

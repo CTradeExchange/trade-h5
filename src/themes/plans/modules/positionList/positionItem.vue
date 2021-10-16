@@ -277,6 +277,11 @@ export default {
                     .val {
                         color: var(--normalColor);
                     }
+                    &:nth-child(2n) {
+                        .val {
+                            text-align: right;
+                        }
+                    }
                 }
             }
             .ft {
