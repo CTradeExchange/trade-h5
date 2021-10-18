@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { QuoteSocket } from '@/plugins/socket/socket'
-let isLog = true // 是否输出日志
+let isLog = false // 是否输出日志
 
 export class RequestKData {
     constructor() {
@@ -9,13 +9,18 @@ export class RequestKData {
         // 产品信息
         this._product = {}
     }
+
+    setProduct(productInfo){
+        Object.assign(this._product, productInfo)
+    }
     getKline(params, firstDataRequest) {
         if (firstDataRequest) {
             // 第一次调用此商品/周期的历史记录
-            this._product = {
+            this.setProduct({
                 symbolId: params.symbolId,
-                klineType: params.klineType
-            }
+                klineType: params.klineType,
+                tradeType: params.tradeType
+            })
             this._latestBar = null
         }
 
@@ -51,10 +56,11 @@ export class RequestKData {
 
     // 统一处理tick（替换或请求最新两根数据）
     async normalizeTick(price, tickTime, resolution) {
-        if (!price || !this._latestBar) {
+        const latestBar = this._latestBar
+
+        if (!price || !latestBar) {
             return
         }
-        const latestBar = this._latestBar
         let ticks = []
 
         if (isSameTime(resolution, latestBar.time, tickTime)) {
@@ -71,10 +77,6 @@ export class RequestKData {
             ticks = await this._getLatestKline()
         }
 
-        if (!ticks.length) {
-            Promise.reject()
-        }
-
         this._latestBar = ticks[ticks.length - 1]
         isLog && logMessageForTick(ticks)
 
@@ -84,7 +86,7 @@ export class RequestKData {
     // 获取最新两条数据
     _getLatestKline() {
         const params = {
-            "trade_type": 1,
+            "trade_type": this._product.tradeType,
             "symbol_id": this._product.symbolId,
             "kline_type": this._product.klineType,
             "query_kline_num": 2

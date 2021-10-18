@@ -4,7 +4,11 @@ var DataPulseProvider = /** @class */ (function () {
         this._subscribers = {};
         this._requestsPending = 0;
         this._historyProvider = historyProvider;
-        // setInterval(this._updateData.bind(this), updateFrequency);
+
+        /**
+         * 快速切换周期，图表会缓存最近一定数量的订阅者和数据，导致在缓存的周期内来回切换，不会触发subscribeBars和getbars,无法直接获取指定被缓存的订阅者函数，实时报价就无法更新
+         */
+        // setInterval(this._updateData.bind(this), 200);
     }
     DataPulseProvider.prototype.subscribeBars = function (symbolInfo, resolution, newDataCallback, listenerGuid) {
         if (this._subscribers.hasOwnProperty(listenerGuid)) {
@@ -17,6 +21,10 @@ var DataPulseProvider = /** @class */ (function () {
             resolution: resolution,
             symbolInfo: symbolInfo,
         };
+        if(Object.keys(this._subscribers).length === 1){
+            // 未曾切换过周期时
+            this._historyProvider.setTick(this._subscribers[listenerGuid].listener)
+        }
         logMessage("DataPulseProvider: subscribed for #" + listenerGuid + " - {" + symbolInfo.name + ", " + resolution + "}");
     };
     DataPulseProvider.prototype.unsubscribeBars = function (listenerGuid) {

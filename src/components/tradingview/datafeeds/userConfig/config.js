@@ -20,6 +20,7 @@ export const resolutionToKlineType = {
     '15': '3',
     '30': '4',
     '60': '5',
+    '120': '6',
     '240': '7',
     '1D': '8',
     '1W': '9',
@@ -55,7 +56,7 @@ export const MAINSTUDIES = [
     {
         label: 'EMA',
         name: 'Custom Moving Average Exponential',
-        params: [true, false],
+        params: [true, false, [12,26, 'close']],
         type: 'mainStudy'
     },
     {
@@ -120,7 +121,7 @@ export const SUBSTUDIES = [
     {
         label: 'RSI',
         name: 'Custom Relative Strength Index',
-        params: [false, false],
+        params: [false, false, [6,12,24]],
         type: 'subStudy'
     },
     {

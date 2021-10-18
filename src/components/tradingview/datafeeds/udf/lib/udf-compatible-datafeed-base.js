@@ -213,11 +213,9 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
             .catch(onError);
     };
     UDFCompatibleDatafeedBase.prototype.subscribeBars = function (symbolInfo, resolution, onTick, listenerGuid, onResetCacheNeededCallback) {
-        this._historyProvider.setTick(onTick)
         this._dataPulseProvider.subscribeBars(symbolInfo, resolution, onTick, listenerGuid);
     };
     UDFCompatibleDatafeedBase.prototype.unsubscribeBars = function (listenerGuid) {
-        this._historyProvider.setTick(null)
         this._dataPulseProvider.unsubscribeBars(listenerGuid);
     };
     UDFCompatibleDatafeedBase.prototype._requestConfiguration = function () {

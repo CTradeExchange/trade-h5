@@ -6,7 +6,7 @@ export function genBaseConfig () {
         autosize: true,
         container_id: 'tv_chart_container',
         library_path: '/charting_library/',
-        custom_css_url: 'customCssUrl.css?v=1.0.1',
+        custom_css_url: 'customCssUrl.css?v=1.0.2',
         locale: 'zh',
         charts_storage_api_version: '1.1',
         user_id: 'public_user_id',
@@ -34,8 +34,8 @@ export function genBaseConfig () {
             //  Point&Figure = 6    #点数图
             //  Line Break = 7      #新价图
             'mainSeriesProperties.style': 1, // K线样式 0美国K线 1K线 2线形图 3面积图
-            'mainSeriesProperties.showPriceLine': true, // 现价线
-            'scalesProperties.showSeriesLastValue': true, // 现价标签
+            'mainSeriesProperties.showPriceLine': false, // 现价线
+            'scalesProperties.showSeriesLastValue': false, // 现价标签 (配置出的现价线标签会重复显示多个的bug，因此改为手动创建现价线)
             'mainSeriesProperties.priceLineColor': 'rgb(71, 127, 211)',
             'mainSeriesProperties.priceAxisProperties.autoScaleDisabled': false,
             'mainSeriesProperties.priceAxisProperties.percentage': false,

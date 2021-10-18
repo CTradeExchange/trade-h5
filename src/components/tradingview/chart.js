@@ -66,7 +66,6 @@ class Chart {
         this.chartReadyCallback = chartReadyCallback
         // 数据适配器
         this.datafeed = new UDFCompatibleDatafeed('', {
-            // isControl: true,
             symbolInfo: initial
         })
         // 指标列表
@@ -165,6 +164,7 @@ class Chart {
     _bindEvent () {
         this._bindResize()
         this._bindClick()
+        this._addSubscribeEvents()
     }
 
     // 监听窗口变化
@@ -257,6 +257,51 @@ class Chart {
                 isDrawing = false
             }, 50)
         })
+    }
+
+    // 订阅图表事件
+    _addSubscribeEvents () {
+        // 监听周期改变
+        let timer = null
+        let _interval = this.interval
+        this.widget.activeChart().onIntervalChanged()
+            .subscribe(null, (interval) => {
+                _interval = interval
+                this.datafeed._historyProvider.setTick(null)
+
+                const rec = () => {
+                    clearTimeout(timer)
+                    timer = setTimeout(() => {
+                        const { _subscribers } = this.datafeed._dataPulseProvider
+                        const listenerGuid = Object.keys(_subscribers).find(key => new RegExp(`_#_${_interval}$`).test(key))
+                        if (listenerGuid) {
+                            console.log({ listenerGuid, _interval })
+                            this.datafeed._historyProvider.setResolution(_interval)
+                            this.datafeed._historyProvider.setTick(_subscribers[listenerGuid].listener)
+                        } else {
+                            rec()
+                        }
+                    }, 300)
+                }
+
+                rec()
+            })
+
+        // 监听数据加载
+        let dataLoaded = false
+        this.widget.activeChart().onDataLoaded()
+            .subscribe(null,
+                () => {
+                    if (dataLoaded) {
+                        return
+                    }
+                    dataLoaded = true
+                    const lastBar = this.widget.activeChart().getSeries().data().last()
+                    if (lastBar) {
+                        this._setLastPrice(lastBar.value[4])
+                    }
+                },
+                true)
     }
 
     // 批量创建指标
@@ -424,15 +469,18 @@ class Chart {
         Object.keys(property || {}).forEach(key => {
             if (['showSeriesTitle', 'showSeriesOHLC', 'showBarChange'].includes(key)) {
                 overrides[`paneProperties.legendProperties.${key}`] = property[key]
-            } else if (key === 'showLastPrice') {
-                overrides['mainSeriesProperties.showPriceLine'] = property[key]
-                overrides['scalesProperties.showSeriesLastValue'] = property[key]
             } else if (['upColor', 'downColor'].includes(key)) {
                 const styleName = styleNameMap[property.chartType]
-                overrides['mainSeriesProperties.' + styleName + '.upColor'] = property.upColor
-                overrides['mainSeriesProperties.' + styleName + '.borderUpColor'] = property.upColor
-                overrides['mainSeriesProperties.' + styleName + '.downColor'] = property.downColor
-                overrides['mainSeriesProperties.' + styleName + '.borderDownColor'] = property.downColor
+
+                if (['barStyle', 'candleStyle', 'haStyle', 'hollowCandleStyle'].includes(styleName)) {
+                    overrides['mainSeriesProperties.' + styleName + '.upColor'] = property.upColor
+                    overrides['mainSeriesProperties.' + styleName + '.downColor'] = property.downColor
+                }
+
+                if (['candleStyle', 'haStyle', 'hollowCandleStyle'].includes(styleName)) {
+                    overrides['mainSeriesProperties.' + styleName + '.borderUpColor'] = property.upColor
+                    overrides['mainSeriesProperties.' + styleName + '.borderDownColor'] = property.downColor
+                }
             }
         })
         return overrides
@@ -451,6 +499,29 @@ class Chart {
     // 判断是否存在历史数据
     _hasBars () {
         return !!this.widget.activeChart().getSeries().barsCount()
+    }
+
+    // 手动更新现价线
+    _setLastPrice (price) {
+        const { _linesMap, symbolId } = this
+        !_linesMap[symbolId] && (_linesMap[symbolId] = {})
+        const target = _linesMap[symbolId]
+
+        if (this.property.showLastPrice && !target.showLastPrice) {
+            target.showLastPrice = this.widget.activeChart().createOrderLine()
+                .setPrice(price)
+                .setText('')
+                .setLineStyle(1)
+                .setLineColor('#467fd3')
+                .setQuantity(false)
+        }
+
+        if (this.property.showLastPrice) {
+            target.showLastPrice.setPrice(price)
+        } else {
+            target.showLastPrice.remove()
+            target.showLastPrice = null
+        }
     }
 
     /** ---------------------------- 分割线 ------------------------------------------------------------------------------------------- */
@@ -592,6 +663,7 @@ class Chart {
     // 实时tick
     setTick (price, time) {
         this.datafeed._historyProvider.onTick(price, time)
+        this._setLastPrice(price)
     }
 
     // 批量创建持仓线
