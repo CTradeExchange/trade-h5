@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { QuoteSocket } from '@/plugins/socket/socket'
-let isLog = false // 是否输出日志
+let isLog = true // 是否输出日志
 
 export class RequestKData {
     constructor() {
