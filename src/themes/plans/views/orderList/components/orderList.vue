@@ -102,7 +102,7 @@
                             </span>
                         </p>
 
-                        <p v-if='Number(item.bizType)===2' class='tl-item'>
+                        <p class='tl-item'>
                             <label for=''>
                                 {{ $t('trade.trustPrice') }}
                             </label>
