@@ -70,16 +70,16 @@
                         <p class='tl-item'>
                             <label for=''>
                                 <span v-if='[5,9].includes(Number(tradeType)) '>
-                                    {{ Number(item.direction) === 1 ? $t('trade.pendingAmount') + ' ('+ item.outCurrency +')' : $t('trade.pendingUnit') + ' ('+ item.outCurrency +')' }}
+                                    {{ Number(item.direction) === 1 ? $t('trade.pendingAmount') + '('+ item.outCurrency +')' : $t('trade.pendingUnit') + '('+ item.outCurrency +')' }}
                                 </span>
                                 <span v-else-if='Number(tradeType) === 3'>
-                                    {{ Number(item.entryType) === 1 ? $t('trade.pendingUnit')+ ' (' +item.outCurrency + ')' : $t('trade.pendingAmount') + ' ('+item.outCurrency + ')' }}
+                                    {{ Number(item.entryType) === 1 ? $t('trade.pendingUnit')+ '(' +item.outCurrency + ')' : $t('trade.pendingAmount') + '('+item.outCurrency + ')' }}
                                 </span>
                                 <span v-else-if='Number(tradeType) === 1'>
                                     {{ $t('trade.pendingUnit')+ ' (' +$t('trade.volumeUnit') + ')' }}
                                 </span>
                                 <span v-else>
-                                    {{ Number(item.numberStatisticMode) === 1 ? $t('trade.pendingUnit')+ ' (' +$t('trade.volumeUnit') + ')' : $t('trade.pendingAmount') + ' ('+item.accountCurrency + ')' }}
+                                    {{ Number(item.numberStatisticMode) === 1 ? $t('trade.pendingUnit')+ '(' +$t('trade.volumeUnit') + ')' : $t('trade.pendingAmount') + ' ('+item.accountCurrency + ')' }}
                                 </span>
                             </label>
                             <span>
@@ -102,15 +102,6 @@
                             </span>
                         </p>
 
-                        <p class='tl-item'>
-                            <label for=''>
-                                {{ $t('trade.trustPrice') }}
-                            </label>
-                            <span>
-                                {{ item?.requestPrice || '--' }}
-                            </span>
-                        </p>
-
                         <p v-if='isCloseType(item.bizType)' class='tl-item'>
                             <!-- 如果是平仓 显示开仓价 -->
                             <label for=''>
@@ -119,20 +110,21 @@
                                 {{ item?.requestPrice || '--' }}
                             </span>
                         </p>
+                        <p v-else class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.trustPrice') }}
+                            </label>
+                            <span>
+                                {{ item?.requestPrice || '--' }}
+                            </span>
+                        </p>
+
                         <p class='tl-item'>
                             <label for=''>
                                 {{ $t('trade.dealAvgPrice') }}
                             </label>
                             <span>
                                 {{ item?.executePrice }}
-                            </span>
-                        </p>
-                        <p v-if='isCloseType(item.bizType)' class='tl-item'>
-                            <label for=''>
-                                {{ $t('trade.profit') }}
-                            </label>
-                            <span>
-                                {{ item?.profitLoss || '--' }}
                             </span>
                         </p>
 
@@ -150,6 +142,14 @@
                             </label>
                             <span>
                                 {{ parseFloat(item.takeProfit) > 0 ? item.takeProfit : '--' }}
+                            </span>
+                        </p>
+                        <p v-if='isCloseType(item.bizType)' class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.profit') }}
+                            </label>
+                            <span>
+                                {{ item?.profitLoss || '--' }}
                             </span>
                         </p>
 
@@ -404,7 +404,7 @@ export default {
         // 是否显示止盈止损价
         const showLossOrProfit = (item) => {
             // 玩法cfd全仓和cfd逐仓才显示止盈止损价
-            if ([1, 2].indexOf(Number(state.tradeType)) > -1) {
+            if ([1, 2].indexOf(Number(state.tradeType)) > -1 && !isCloseType(item.bizType)) {
                 return true
             } else {
                 return false
@@ -545,7 +545,7 @@ export default {
                     text-align: left;
                     label {
                         display: inline-block;
-                        width: rem(130px);
+                        width: rem(150px);
                         margin-right: rem(20px);
                         font-size: rem(20px);
                         white-space: nowrap;
