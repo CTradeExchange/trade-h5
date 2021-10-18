@@ -52,7 +52,7 @@ export default function ({ showPending }) {
                     // 计算合并挂单数量
                     if (buyPendingList?.length > 0 && showPending) {
                         buyPendingList.forEach(bl => {
-                            if (deepthDigits.value > 0) {
+                            if (deepthDigits.value >= 0) {
                                 bl.requestPrice = parseFloat(retainDecimal(bl.requestPrice, deepthDigits.value))
                             } else {
                                 const tempNum = retainDecimal(bl.requestPrice, 0)
@@ -76,7 +76,7 @@ export default function ({ showPending }) {
                     // 计算合并挂单数量
                     if (sellPendingList?.length > 0 && showPending) {
                         sellPendingList.forEach(sl => {
-                            if (deepthDigits.value > 0) {
+                            if (deepthDigits.value >= 0) {
                                 sl.requestPrice = parseFloat(retainDecimal(sl.requestPrice, deepthDigits.value))
                             } else {
                                 const tempNum = retainDecimal(sl.requestPrice, 0)
