@@ -40,7 +40,8 @@
     <div class='stalls-wrap' :class='{ padding: !showField }'>
         <div class='sell-wrap'>
             <div v-for='(item,index) in ask_deep' :key='index' class='item'>
-                <span v-if='showField' class='label fallColor '>
+                &nbsp;&nbsp;&nbsp;
+                <span v-if='showField' class='label fallColor alignLeft'>
                     {{ item.unitNum === 0 ? '': item.unitNum }}
                 </span>
                 <span class='quantity alignLeft'>
@@ -64,9 +65,10 @@
                 <span class='quantity alignRight'>
                     {{ item.volume_bid }}
                 </span>
-                <span v-if='showField' class='label label-center riseColor'>
+                <span v-if='showField' class='label alignRight riseColor'>
                     {{ item.unitNum === 0 ? '': item.unitNum }}
                 </span>
+                &nbsp;&nbsp;&nbsp;
                 <span
                     class='histogram buy-histogram'
                     :style='"width:"+ item?.width + "%"'
@@ -290,10 +292,6 @@ export default {
             .label {
                 //flex: 1;
                 width: rem(100px);
-                text-align: center;
-                &.label-right {
-                    text-align: right;
-                }
             }
             .price {
                 flex: 1;
