@@ -93,3 +93,15 @@ export function equalTo (a, b) {
 export function abs (num1) {
     return BigNumber(num1).abs().toString()
 }
+
+/* 保留小数位 不四舍五入 */
+export function retainDecimal (num, decimal) {
+    num = num.toString()
+    const index = num.indexOf('.')
+    if (index !== -1) {
+        num = num.substring(0, decimal + index + 1)
+    } else {
+        num = num.substring(0)
+    }
+    return parseFloat(num).toFixed(decimal)
+}

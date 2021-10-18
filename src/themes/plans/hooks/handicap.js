@@ -1,16 +1,17 @@
 import { computed, watch } from 'vue'
 import { useStore } from 'vuex'
-import { shiftedBy, plus } from '@/utils/calculation'
+import { shiftedBy, plus, retainDecimal } from '@/utils/calculation'
 import { deepClone } from '@/utils/deepClone'
 export default function ({ showPending }) {
     const store = useStore()
-
     const product = computed(() => store.getters.productActived)
 
     // 获取产品的深度小数位
     const deepthDigits = computed(() => {
-        if (parseFloat(store.state._quote?.deepthDigits) >= 1) {
-            return parseFloat(store.state._quote?.deepthDigits)
+        if (parseFloat(store.state._quote?.deepthDigits) === 1) {
+            return 0
+        } else if (parseFloat(store.state._quote?.deepthDigits) > 1) {
+            return -(store.state._quote?.deepthDigits.length - 1)
         } else {
             return store.state._quote?.deepthDigits?.toString().split('.')?.[1].length
         }
@@ -51,7 +52,12 @@ export default function ({ showPending }) {
                     // 计算合并挂单数量
                     if (buyPendingList?.length > 0 && showPending) {
                         buyPendingList.forEach(bl => {
-                            bl.requestPrice = parseFloat(parseFloat(bl.requestPrice).toFixed(deepthDigits.value))
+                            if (deepthDigits.value > 0) {
+                                bl.requestPrice = parseFloat(retainDecimal(bl.requestPrice, deepthDigits.value))
+                            } else {
+                                const tempNum = retainDecimal(bl.requestPrice, 0)
+                                bl.requestPrice = tempNum - parseInt(tempNum.substr(deepthDigits.value))
+                            }
 
                             if (bl.requestPrice === parseFloat(ask.price_ask)) {
                                 ask.unitNum = plus(bl.requestNum, ask.unitNum)
@@ -70,7 +76,13 @@ export default function ({ showPending }) {
                     // 计算合并挂单数量
                     if (sellPendingList?.length > 0 && showPending) {
                         sellPendingList.forEach(sl => {
-                            sl.requestPrice = parseFloat(parseFloat(sl.requestPrice).toFixed(deepthDigits.value))
+                            if (deepthDigits.value > 0) {
+                                sl.requestPrice = parseFloat(retainDecimal(sl.requestPrice, deepthDigits.value))
+                            } else {
+                                const tempNum = retainDecimal(sl.requestPrice, 0)
+                                sl.requestPrice = tempNum - parseInt(tempNum.substr(deepthDigits.value))
+                            }
+
                             if (sl.requestPrice === parseFloat(bid.price_bid)) {
                                 bid.unitNum = plus(sl.requestNum, bid.unitNum)
                             }
