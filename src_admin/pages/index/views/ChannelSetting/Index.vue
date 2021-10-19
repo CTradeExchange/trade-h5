@@ -25,7 +25,7 @@
         </el-row>
         <el-row>
             <el-col class='btns' :span='24'>
-                <el-form ref='form' label-width='120px' :model='form'>
+                <el-form ref='form' label-width='100px' :model='form'>
                     <el-tabs type='border-card'>
                         <el-tab-pane class='tab' label='渠道基础设置'>
                             <el-form-item label='可注册区号'>
@@ -62,7 +62,7 @@
                             <el-form-item
                                 v-for='(item,index) in form.registList'
                                 :key='item.id'
-                                :label='index === 0 ? "注册客户组" : ""'
+                                :label='index === 0 ? "注册国家" : ""'
                             >
                                 <el-row>
                                     <el-col :span='6'>
@@ -81,7 +81,10 @@
                                             />
                                         </el-select>
                                     </el-col>
-                                    <el-col :span='6'>
+                                    <el-col :span='8'>
+                                        <label class='label' for=''>
+                                            客户组
+                                        </label>
                                         <el-select
                                             v-model='form.registList[index].customerGroupId'
                                             clearable
@@ -95,7 +98,7 @@
                                             />
                                         </el-select>
                                     </el-col>
-                                    <el-col :span='12'>
+                                    <el-col :span='8'>
                                         <el-button type='primary' @click='setPlans(item,index,1)'>
                                             设置玩法币种
                                         </el-button>
@@ -111,7 +114,7 @@
 
                             <el-form-item label='游客客户组'>
                                 <el-row>
-                                    <el-col :span='6'>
+                                    <el-col :span='8'>
                                         <el-select
                                             v-model='form.customerGroupId'
                                             clearable
@@ -241,7 +244,7 @@
         <el-dialog
             v-model='plansDialogVisible'
             title='玩法&玩法币种'
-            width='55%'
+            width='60%'
             @close='closeDialog'
         >
             <el-form
@@ -711,6 +714,10 @@ export default {
                 margin-bottom: 20px;
             }
         }
+    }
+    .label {
+        margin-right: 5px;
+        color: #606266;
     }
     .pay-channel-setting {
         .alias-input {

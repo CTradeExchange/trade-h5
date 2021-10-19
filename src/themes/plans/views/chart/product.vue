@@ -14,7 +14,7 @@
                     <button v-preventReClick class='collectIcon' @click='addOptional'>
                         <i
                             ref='collect'
-                            :class="[isSelfSymbol?'icon_zixuan2':'icon_zixuan1']"
+                            :class="[!isSelfSymbol?'icon_zixuan1':'icon_zixuan2']"
                         ></i>
                     </button>
                     <div v-if='![3, 5, 9].includes(product.tradeType)' class='ft'>
@@ -904,7 +904,7 @@ export default {
                         state.loading = false
                         store.dispatch('_user/queryCustomerOptionalList')
                         Toast(t('trade.removeOptionalOk'))
-                        collect.value.classList.remove('icon_zixuan2')
+                        // collect.value.classList.remove('icon_zixuan2')
                     }
                 }).catch(err => {
                     state.loading = false
@@ -916,7 +916,7 @@ export default {
                         // 手动修改optional值
                         store.commit('_user/Update_optional', 1)
                         store.dispatch('_user/queryCustomerOptionalList')
-                        collect.value.classList.add('icon_zixuan2')
+                        // collect.value.classList.add('icon_zixuan2')
 
                         Toast(t('trade.addOptionalOk'))
                     }
@@ -984,9 +984,9 @@ export default {
                 tradeType.value = product.tradeType
                 store.commit('_quote/Update_productActivedID', `${product.symbolId}_${product.tradeType}`)
                 subscribeToProduct()
-                initChartData()
+                // initChartData()
                 renderChart(product, state.initConfig.property)
-                // chartRef.value.reset()
+                chartRef.value.reset()
                 close()
             })
         }
