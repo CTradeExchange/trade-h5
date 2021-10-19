@@ -33,7 +33,7 @@
                 </a>
             </div>
         </form>
-        <LoginByCustomerNo @submit='loginSubmit' />
+
         <!-- <div class='otherLogin'>
             <LoginByGoogle />
             <span class='empty'></span>
@@ -86,7 +86,6 @@ import CheckCode from '@/components/form/checkCode'
 import LoginByGoogle from '@/components/loginByGoogle/loginByGoogle'
 import LoginByFacebook from '@/components/loginByFacebook/loginByFacebook'
 import Top from '@/components/top'
-import LoginByCustomerNo from './components/loginByCustomerNo'
 import { getDevice, localGet, localSet, getArrayObj } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
 import { computed, reactive, toRefs, getCurrentInstance } from 'vue'
@@ -108,7 +107,6 @@ export default {
         areaInput,
         LoginByGoogle,
         LoginByFacebook,
-        LoginByCustomerNo,
         CheckCode,
         Top,
     },

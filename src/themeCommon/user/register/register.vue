@@ -20,6 +20,7 @@
                 <van-tab name='mobile' :title='$t("register.phoneNo")' />
                 <van-tab name='email' :title='$t("register.email")' />
             </van-tabs>
+
             <form class='form'>
                 <!-- <CurrencyAction v-model='currency' class='cellRow' />
                 <TradeTypeAction v-model='tradeType' class='cellRow' /> -->
@@ -132,9 +133,11 @@ export default {
                 const defaultZone = store.state._base.wpCompanyInfo?.defaultZone
                 if (defaultZone?.code) {
                     state.zone = `${defaultZone.name} (${defaultZone.country_code})`
+                    state.countryZone = defaultZone.country_code
                 } else {
                     const firstItem = res.data[0]
                     state.zone = firstItem.name + ` (${firstItem.countryCode})`
+                    state.countryZone = defaultZone.countryCode
                 }
             }
         })
@@ -262,7 +265,7 @@ export default {
                             const params = {
                                 bizType: state.openType === 'mobile' ? 'SMS_REGISTER_VERIFICATION_CODE' : 'EMAIL_REGISTER_VERIFICATION_CODE',
                                 toUser: state.openType === 'mobile' ? '+' + state.countryZone + ' ' + state.mobile : state.email,
-                                nationCode: state.countryCode
+                                country: state.countryCode
                             }
                             verifyCodeSend(params).then(res => {
                                 state.verifyCodeLoading = false
