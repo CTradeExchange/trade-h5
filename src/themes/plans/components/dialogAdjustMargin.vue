@@ -44,7 +44,7 @@
                     {{ $t('trade.maxRaise') }}: {{ accountInfo?.available }} {{ accountInfo?.currency }}
                 </span>
                 <span v-else>
-                    {{ $t('trade.maxReduce') }}: {{ positionData.canReduceMargin }} {{ accountInfo?.currency }}
+                    {{ $t('trade.maxReduce') }}: {{ positionData?.canReduceMargin }} {{ accountInfo?.currency }}
                 </span>
             </p>
         </div>
@@ -94,7 +94,7 @@ export default {
             store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(tradeType.value)))
 
         const positionData = computed(() => {
-            return store.state._trade.positionList[tradeType.value].find(item => item.positionId === props.data.positionId)
+            return store.state._trade.positionList[tradeType.value]?.find(item => item.positionId === props.data.positionId)
         })
 
         watch(

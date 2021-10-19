@@ -984,9 +984,9 @@ export default {
                 tradeType.value = product.tradeType
                 store.commit('_quote/Update_productActivedID', `${product.symbolId}_${product.tradeType}`)
                 subscribeToProduct()
-                initChartData()
+                // initChartData()
                 renderChart(product, state.initConfig.property)
-                // chartRef.value.reset()
+                chartRef.value.reset()
                 close()
             })
         }

@@ -446,6 +446,8 @@ export default {
 
                             if ((startLocal.isAfter(todayStr, 'day') && endLocal.isAfter(todayStr, 'day')) || (startLocal.isBefore(tomorrowStr, 'day') && endLocal.isBefore(tomorrowStr, 'day'))) {
                                 state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                            } else if (endLocal.isSame(tomorrowStr, 'day')) {
+                                state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-24:00')
                             } else {
                                 state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-23:59')
                                 state.resultTimeMap[payItem.id].push('00:00-' + endLocal.format('HH:mm'))
@@ -458,6 +460,31 @@ export default {
                                 state.appendMap = state.checkedType.extend
                             }
                         })
+
+                        // 处理时间重叠情况
+                        /* const resultTime = state.resultTimeMap[payItem.id].reverse().filter(el => el)
+                        const finalTimeResult = []
+                        for (let index = 0; index < resultTime.length; index++) {
+                            const el = resultTime[index]
+
+                            if (!isEmpty(el)) {
+                                const start = el.split('-')[0]
+                                const end = el.split('-')[1]
+                                const nextStart = resultTime[index + 1] && resultTime[index + 1].split('-')[0]
+                                const nextEnd = resultTime[index + 1] && resultTime[index + 1].split('-')[1]
+                                const lastStart = resultTime[resultTime.length - 1] && resultTime[resultTime.length - 1].split('-')[0]
+                                const lastEnd = resultTime[resultTime.length - 1] && resultTime[resultTime.length - 1].split('-')[1]
+                                // 如果是连续时间
+                                if (dayjs(`${todayStr} ${end}`).add(1, 'minute').isSame(dayjs(`${todayStr} ${nextStart}`))) {
+                                    finalTimeResult.push(start + '-' + nextEnd)
+                                } else if (dayjs(`${todayStr} ${end}`).add(1, 'minute').isSame(dayjs(`${todayStr} ${lastStart}`))) {
+                                    finalTimeResult.push(start + '-' + lastEnd)
+                                } else {
+                                    // finalTimeResult.push(start + '-' + end)
+                                }
+                            }
+                        }
+                        if (finalTimeResult.length > 0) { state.resultTimeMap[payItem.id] = finalTimeResult } */
                     }
                 })
 
