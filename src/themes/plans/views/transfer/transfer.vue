@@ -119,7 +119,8 @@ export default {
             return store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.fromAccount.id))
         })
 
-        state.fromAccount = plans.value[0]
+        // 默认从现货撮合转出
+        state.fromAccount = plans.value.find(el => Number(el.id) === 5)
 
         if (Number(tradeType) === 5) {
             state.toAccount = plans.value.filter(el => el.name !== state.fromAccount.name)[0]
