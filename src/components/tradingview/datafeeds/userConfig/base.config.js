@@ -4,7 +4,7 @@ import customIndicatorsGetter from './customIndicators'
 export function genBaseConfig () {
     return {
         autosize: true,
-        container_id: 'tv_chart_container',
+        container: 'tv_chart_container',
         library_path: '/charting_library/',
         custom_css_url: 'customCssUrl.css?v=1.0.2',
         locale: 'zh',

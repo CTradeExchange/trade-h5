@@ -117,7 +117,7 @@ class Chart {
         this.widget = window.tvWidget = new window.TradingView.widget({
             ...options,
             datafeed: datafeed,
-            container_id: containerId.slice(1),
+            container: containerId.slice(1),
             symbol: this.symbolId,
             interval: this.interval,
             locale: 'zh'
@@ -266,16 +266,29 @@ class Chart {
             .subscribe(null, (interval) => {
                 _interval = interval
                 this.datafeed._historyProvider.setTick(null)
-
+                this.datafeed._historyProvider._previousBar = null
                 const rec = () => {
                     clearTimeout(timer)
                     timer = setTimeout(() => {
                         const { _subscribers } = this.datafeed._dataPulseProvider
                         const listenerGuid = Object.keys(_subscribers).find(key => new RegExp(`_#_${_interval}$`).test(key))
                         if (listenerGuid) {
-                            // console.log({ listenerGuid, _interval })
+                            // 切换周期后，修改产品信息
                             this.datafeed._historyProvider.setResolution(_interval)
                             this.datafeed._historyProvider.setTick(_subscribers[listenerGuid].listener)
+
+                            // 更新最新价为当前周期数据的最后一根k线
+                            const lastBar = this.widget.activeChart().getSeries().data().last()
+                            if (lastBar) {
+                                this._setLastPrice(lastBar.value[4])
+                                this.datafeed._historyProvider._previousBar = {
+                                    time: lastBar.value[6],
+                                    close: lastBar.value[4],
+                                    open: lastBar.value[1],
+                                    high: lastBar.value[2],
+                                    low: lastBar.value[3],
+                                }
+                            }
                         } else {
                             rec()
                         }
@@ -286,14 +299,9 @@ class Chart {
             })
 
         // 监听数据加载
-        let dataLoaded = false
         this.widget.activeChart().onDataLoaded()
             .subscribe(null,
                 () => {
-                    if (dataLoaded) {
-                        return
-                    }
-                    dataLoaded = true
                     const lastBar = this.widget.activeChart().getSeries().data().last()
                     if (lastBar) {
                         this._setLastPrice(lastBar.value[4])
@@ -517,7 +525,7 @@ class Chart {
         if (this.property.showLastPrice) {
             target.showLastPrice.setPrice(price)
         } else {
-            target.showLastPrice.remove()
+            target.showLastPrice && target.showLastPrice.remove()
             target.showLastPrice = null
         }
     }
@@ -552,10 +560,11 @@ class Chart {
 
     // 切换周期
     setResolution = (val) => {
+        console.log(`%c开始切换周期: ${val}`, 'color:rgba(0,0,0,0.3)')
         this.widget.activeChart()
             .setResolution(val, () => {
                 this.interval = val
-                console.log(`%c切换周期: ${val}`, 'color:green')
+                console.log(`%c周期切换成功: ${val}`, 'color:rgba(0,0,0,0.6)')
                 this._resetVisibleRange()
             })
     }
