@@ -52,6 +52,9 @@ export default {
             return store
                 .dispatch('_user/logout')
                 .then(() => {
+                    return router.push('/home') // 创建一个访问首页的浏览器历史记录
+                })
+                .then(() => {
                     return router.push('/login')
                 })
                 .then(() => {

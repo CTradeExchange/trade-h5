@@ -1,7 +1,7 @@
 import axios from 'axios'
 import CheckAPI from './checkAPI'
 import { login } from '@/api/user'
-import { guid, getLoginParams, getToken, setToken, removeLoginParams, localGet } from '@/utils/util'
+import { guid, getLoginParams, getToken, setToken, removeLoginParams, getCookie } from '@/utils/util'
 import { apiDomain } from '@/config'
 let router = null
 export const setRouter = r => (router = r)
@@ -26,7 +26,7 @@ service.interceptors.request.use(
         const token = getToken()
         config.toastErr = config.toastErr ?? true
         headers.trace = guid()
-        headers.lang = localGet('lang')
+        headers.lang = getCookie('lang')
         if (token) headers.token = token
         headers.companyId = companyId
         if (config.method === 'get') {

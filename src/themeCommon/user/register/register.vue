@@ -405,7 +405,7 @@ export default {
         height: rem(30px);
         overflow: hidden;
         font-size: rem(26px);
-        line-height: rem(30px);
+        line-height: rem(24px);
         border-radius: 100%;
     }
 }

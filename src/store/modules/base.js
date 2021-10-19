@@ -72,9 +72,8 @@ export default {
 
                     sessionSet('utcOffset', 0 - new Date().getTimezoneOffset()) // 改成取本地时区时间，不找wp配置时间
                     // sessionSet('utcOffset', parseFloat(data.utcOffset) * 60)   改成取本地时区时间，不找wp配置时间
-                    if (isEmpty(getCookie('lang')) || getCookie('lang') !== data.language.val) {
-                        localSet('lang', data.language.val || 'zh-CN')
-                        setCookie('lang', data.language.val || 'zh-CN', 'y10')
+                    if (isEmpty(getCookie('lang'))) {
+                        setCookie('lang', data.language.val || 'zh-CN', 'y10') // 语言都存储在cookie里面
                     }
 
                     commit('UPDATE_wpCompanyInfo', data)

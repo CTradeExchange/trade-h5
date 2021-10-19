@@ -298,7 +298,7 @@ export function getCookie (cookName) {
     for (var i = 0; i < cookieStr.length; i++) {
         var val = cookieStr[i].split('=')
 
-        if (escape(cookName) === val[0]) { return unescape(val[1]) }
+        if (val.length && escape(cookName) === val[0].trim()) { return unescape(val[1]) }
     }
     return null
 }

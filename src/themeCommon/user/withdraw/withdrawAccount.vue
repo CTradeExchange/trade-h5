@@ -75,7 +75,7 @@ import { computed, toRefs, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { localGet } from '@/utils/util'
+import { getCookie } from '@/utils/util'
 import { withdrawCurrencyList } from '@/api/user'
 
 export default {
@@ -98,7 +98,7 @@ export default {
             withdrawMethod: '',
             withdrawMethodVis: false,
             withdrawMap: {},
-            lang: localGet('lang'),
+            lang: getCookie('lang'),
             methodPickerShow: false,
             methodList: [],
             withdrawMethodText: ''

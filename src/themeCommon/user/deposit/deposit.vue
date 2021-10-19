@@ -161,7 +161,7 @@ import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, 
 import { getListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
-import { isEmpty, sessionGet, localGet } from '@/utils/util'
+import { isEmpty, sessionGet, getCookie } from '@/utils/util'
 import dayjs from 'dayjs'
 import { mul } from '@/utils/calculation'
 import { useI18n } from 'vue-i18n'
@@ -216,7 +216,7 @@ export default {
             resultTimeMap: {},
             paymentTypes: [],
             appendVis: false,
-            lang: localGet('lang'),
+            lang: getCookie('lang'),
             appendMap: {},
             paramsExtens: {}
         })
