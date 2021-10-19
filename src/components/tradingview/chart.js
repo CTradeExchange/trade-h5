@@ -103,9 +103,7 @@ class Chart {
             return
         }
 
-        console.group('%c当前产品:⬇', 'color:green')
-        console.log(JSON.stringify(initial))
-        console.groupEnd()
+        console.log(`%c当前产品: ${[initial.description, initial.symbolId, initial.digits].join(',')}`, 'color:#2196f3')
 
         // 获取横竖屏配置项
         const options = { ...this._options }
@@ -275,7 +273,7 @@ class Chart {
                         const { _subscribers } = this.datafeed._dataPulseProvider
                         const listenerGuid = Object.keys(_subscribers).find(key => new RegExp(`_#_${_interval}$`).test(key))
                         if (listenerGuid) {
-                            console.log({ listenerGuid, _interval })
+                            // console.log({ listenerGuid, _interval })
                             this.datafeed._historyProvider.setResolution(_interval)
                             this.datafeed._historyProvider.setTick(_subscribers[listenerGuid].listener)
                         } else {
@@ -554,7 +552,6 @@ class Chart {
 
     // 切换周期
     setResolution = (val) => {
-        console.log('setResolution:', val)
         this.widget.activeChart()
             .setResolution(val, () => {
                 this.interval = val

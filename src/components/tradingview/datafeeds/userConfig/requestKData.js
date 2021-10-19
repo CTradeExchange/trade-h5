@@ -202,7 +202,7 @@ function logMessageForKline(res, params) {
 
 function logMessageForTick(ticks) {
     if (ticks.length === 1) {
-        console.groupCollapsed('%c实时报价:⬇', 'color:green')
+        console.groupCollapsed('%c实时报价:⬇', 'color:rgba(0,0,0,0.2)')
     } else {
         console.groupCollapsed('%c获取最新两根数据:⬇', 'color:green')
     }

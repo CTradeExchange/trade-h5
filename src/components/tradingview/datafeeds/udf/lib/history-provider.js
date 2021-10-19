@@ -40,7 +40,6 @@ class HistoryProvider {
     }
     // 用于存储udf获取的tick函数
     setTick(cb){
-        console.log('setTick')
         this.resolveQueue.forEach(fn => fn([]))
         this.resolveQueue.length = 0
         this._onTick = cb
