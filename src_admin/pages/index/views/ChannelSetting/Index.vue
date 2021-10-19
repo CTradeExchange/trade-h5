@@ -114,7 +114,7 @@
 
                             <el-form-item label='游客客户组'>
                                 <el-row>
-                                    <el-col :span='8'>
+                                    <el-col :span='6'>
                                         <el-select
                                             v-model='form.customerGroupId'
                                             clearable

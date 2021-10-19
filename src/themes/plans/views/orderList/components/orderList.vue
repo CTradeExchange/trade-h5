@@ -69,12 +69,10 @@
                     <div class='t-block'>
                         <p class='tl-item'>
                             <label for=''>
-                                <span v-if='[5,9].includes(Number(tradeType)) '>
-                                    {{ Number(item.direction) === 1 ? $t('trade.pendingAmount') + '('+ item.outCurrency +')' : $t('trade.pendingUnit') + '('+ item.outCurrency +')' }}
+                                <span v-if='[3,5,9].includes(Number(tradeType)) '>
+                                    {{ Number(item.direction) === 1 ? $t('trade.pendingAmount') + '('+item.outCurrency + ')' : $t('trade.pendingUnit')+ '(' +item.outCurrency + ')' }}
                                 </span>
-                                <span v-else-if='Number(tradeType) === 3'>
-                                    {{ Number(item.entryType) === 1 ? $t('trade.pendingUnit')+ '(' +item.outCurrency + ')' : $t('trade.pendingAmount') + '('+item.outCurrency + ')' }}
-                                </span>
+
                                 <span v-else-if='Number(tradeType) === 1'>
                                     {{ $t('trade.pendingUnit')+ ' (' +$t('trade.volumeUnit') + ')' }}
                                 </span>
@@ -89,9 +87,12 @@
 
                         <p class='tl-item'>
                             <label for=''>
-                                {{ $t('trade.dealVolume') }}
+                                <span v-if='[3,5,9].includes(Number(tradeType)) '>
+                                    {{ Number(item.direction) === 1 ? $t('trade.orderAmount') : $t('trade.dealVolume') }}
+                                </span>
+
                                 <span v-if='[1,2].includes(Number(tradeType)) '>
-                                    ({{ $t('trade.volumeUnit') }})
+                                    {{ $t('trade.dealVolume') }}({{ $t('trade.volumeUnit') }})
                                 </span>
                                 <span v-else>
                                     ({{ item.outCurrency }})
@@ -153,7 +154,7 @@
                             </span>
                         </p>
 
-                        <p v-if='[3, 9].includes(Number(tradeType)) ' class='tl-item'>
+                        <p v-if='[3, 9].includes(Number(tradeType))' class='tl-item'>
                             <label for=''>
                                 {{ $t('trade.loan') }}({{ item.outCurrency }})
                             </label>
@@ -165,9 +166,21 @@
                         <p class='tl-item'>
                             <label for=''>
                                 {{ $t('fee') }}
+                                <span v-if='[3, 5].includes(Number(tradeType)) '>
+                                    ({{ item.inCurrency || '--' }})
+                                </span>
                             </label>
                             <span>
                                 {{ item.commission || '--' }}
+                            </span>
+                        </p>
+
+                        <p v-if='Number(tradeType) === 2 && isCloseType(item.bizType)' class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.swap') }}
+                            </label>
+                            <span>
+                                {{ item.overnightInterest || '--' }}
                             </span>
                         </p>
                     </div>

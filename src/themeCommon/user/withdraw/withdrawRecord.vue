@@ -344,6 +344,9 @@ export default {
                 margin-right: rem(10px);
                 color: var(--primary);
             }
+            .van-icon {
+                top: -2px;
+            }
         }
     }
 }
