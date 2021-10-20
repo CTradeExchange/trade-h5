@@ -69,6 +69,11 @@ export default {
                     // 设置玩法别名和排序
                     data.registList.forEach(el => formatPlans(el.plans || []))
                     formatPlans(data.tradeTypeCurrencyList)
+                    if (data.registrable?.length) {
+                        data.registrable.forEach(el => {
+                            el.countryCode = el.country_code
+                        })
+                    }
 
                     sessionSet('utcOffset', 0 - new Date().getTimezoneOffset()) // 改成取本地时区时间，不找wp配置时间
                     // sessionSet('utcOffset', parseFloat(data.utcOffset) * 60)   改成取本地时区时间，不找wp配置时间
