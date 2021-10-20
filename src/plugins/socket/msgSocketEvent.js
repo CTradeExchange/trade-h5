@@ -12,6 +12,7 @@ class SocketEvent {
         this.$router = null
         this.requests = new Map()
         this.subscribedList = []
+        this.loginStatus = 0 // websocket登录状态， 0未登录 1登录中 2已登录
         this.connectNum = 0 // websocket链接连接次数
         this.preSetTime = 1 // 上一次保存价格的时间
         this.newPrice = {}
@@ -96,6 +97,8 @@ class SocketEvent {
 
     // 登录
     login () {
+        if (this.loginStatus !== 0) return false
+        this.loginStatus = 1
         return this.send('login')
     }
 
@@ -126,13 +129,23 @@ class SocketEvent {
     onOpen () {
         const token = getToken()
         this.connectNum++
-        if (this.connectNum > 1 && token) this.login() // 重连后自动登录
+        if (token) this.login() // 重连后自动登录
         const executeFn = () => {
             const fn = this.subscribedList.shift()
             fn && fn()
             if (this.subscribedList.length) executeFn()
         }
         executeFn()
+    }
+
+    // websocket 断开
+    onDisconnect () {
+        this.loginStatus = 0
+    }
+
+    // websocket 登录成功
+    subscribe_success () {
+        this.loginStatus = 2
     }
 
     // 心跳机制

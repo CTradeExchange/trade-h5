@@ -22,13 +22,13 @@ import { computed, watch, ref, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import trustItem from '@/themes/plans/modules/trust/trustItem.vue'
 import { useRoute } from 'vue-router'
-import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
     components: {
         trustItem,
     },
     props: ['product'],
-    setup (props) {
+    emits: ['quoteSubscribe'],
+    setup (props, { emit }) {
         const loading = ref(false)
         const store = useStore()
         const route = useRoute()
@@ -40,15 +40,7 @@ export default {
             () => pendingList.value?.length,
             async (newval) => {
                 await nextTick()
-                if (!newval) return false
-                const subscribList = pendingList.value.map(el => {
-                    return {
-                        symbolId: el.symbolId,
-                        tradeType: el.tradeType
-                    }
-                })
-
-                if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
+                emit('quoteSubscribe')
             },
             { immediate: true }
         )

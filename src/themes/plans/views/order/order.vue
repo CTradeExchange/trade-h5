@@ -74,6 +74,7 @@
                 class='trustList'
                 :direction='direction'
                 :product='product'
+                @quoteSubscribe='quoteSubscribe'
             />
         </div>
 
@@ -234,6 +235,16 @@ export default {
                 close()
             })
         }
+
+        // 下单页面的行情订阅，包括当前产品和挂单列表的产品
+        const quoteSubscribe = () => {
+            // 获取挂单列表
+            const [symbolId, tradeType] = symbolKey.value.split('_')
+            const pendingList = store.state._trade.pendingList[tradeType] || []
+            const list = pendingList.concat([{ symbolId, tradeType }])
+            QuoteSocket.send_subscribe(list)
+        }
+
         // 初始化设置
         const init = () => {
             // 获取产品详情
@@ -246,8 +257,8 @@ export default {
                 // state.volume = product.minVolume  不需要设置默认手数
                 state.volume = ''
                 state.pendingPrice = ''
-                // 订阅产品行情
-                QuoteSocket.send_subscribe([symbolKey.value])
+
+                quoteSubscribe() // 订阅产品行情
                 // 订阅产品五档报价
                 const curDigits = pow(0.1, product.symbolDigits)
                 if (state.orderHandicapVisible)QuoteSocket.deal_subscribe(symbolId, 5, curDigits, tradeType, 1)
@@ -362,6 +373,7 @@ export default {
             profitLossWarn,
             product,
             changeOrderType,
+            quoteSubscribe,
             submitHandler,
         }
     }

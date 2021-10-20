@@ -61,6 +61,7 @@ export default {
 
         msgWS.addEventListener('close', function (err) {
             console.log('close', err)
+            MsgSocket.onDisconnect() // 断开链接
         })
 
         msgWS.addEventListener('message', evt => {
