@@ -491,10 +491,17 @@ export default {
                     })
                 }
             } else {
-                data = this.accountTradeList[this.form.customerGroupId]?.data
-                this.checkedTradeType = this.form.tradeTypeCurrencyList
-                this.getTradeTypeAssets(data)
-                this.plansDialogVisible = true
+                if (isEmpty(this.form.customerGroupId)) {
+                    return this.$message({
+                        message: '请先选择游客客户组',
+                        type: 'warning'
+                    })
+                } else {
+                    data = this.accountTradeList[this.form.customerGroupId]?.data
+                    this.checkedTradeType = this.form.tradeTypeCurrencyList
+                    this.getTradeTypeAssets(data)
+                    this.plansDialogVisible = true
+                }
             }
         },
         getTradeTypeAssets (data) {

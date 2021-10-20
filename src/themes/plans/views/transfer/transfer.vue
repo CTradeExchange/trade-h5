@@ -16,14 +16,15 @@
                         </span>
                     </div> {{ $t('common.to') }}
                 </div>
+
                 <div class='center'>
-                    <div class='from account'>
+                    <div class='from account' @click='handleFrom(fromAccount.id)'>
                         <span> {{ fromAccount.name }}</span>
-                        <!-- <van-icon name='arrow' /> -->
+                        <van-icon v-if='Number(fromAccount.id) !== 5' name='arrow' />
                     </div>
-                    <div class='to account' @click='handleTo'>
+                    <div class='to account' @click='handleTo(toAccount.id)'>
                         <span> {{ toAccount.name }}</span>
-                        <van-icon name='arrow' />
+                        <van-icon v-if='Number(toAccount.id) !== 5' name='arrow' />
                     </div>
                 </div>
                 <div class='right' @click='handleSwap'>
@@ -107,7 +108,7 @@ export default {
         })
 
         // 获取玩法列表
-        const plans = computed(() => store.state._base.plans)
+        const plans = computed(() => store.state._base.plans.filter(el => Number(el.id) !== 5))
         // 获取账户信息
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
 
@@ -120,7 +121,7 @@ export default {
         })
 
         // 默认从现货撮合转出
-        state.fromAccount = plans.value.find(el => Number(el.id) === 5)
+        state.fromAccount = store.state._base.plans.find(el => Number(el.id) === 5)
 
         if (Number(tradeType) === 5) {
             state.toAccount = plans.value.filter(el => el.name !== state.fromAccount.name)[0]
@@ -213,6 +214,7 @@ export default {
         }
 
         const onPickerConfirm = (val) => {
+            debugger
             state.accountShow = false
 
             if (state.transferType === 1) {
@@ -237,7 +239,8 @@ export default {
                 }
             })
         }
-        const handleFrom = () => {
+        const handleFrom = (tradeType) => {
+            if (Number(tradeType) === 5) return
             state.transferType = 1
             state.accountShow = true
             state.assetsList = plans.value.filter(el => el.name !== state.toAccount.name)
@@ -251,7 +254,8 @@ export default {
             state.amount = ''
         }
 
-        const handleTo = () => {
+        const handleTo = (tradeType) => {
+            if (Number(tradeType) === 5) return
             state.transferType = 2
             state.accountShow = true
             state.assetsList = plans.value.filter(el => el.name !== state.fromAccount.name)
@@ -265,16 +269,6 @@ export default {
         }
 
         const handleSwap = () => {
-            /* state.transferType === 1 ? state.transferType = 1 : state.transferType = 2
-
-            if (state.transferType === 2) {
-                // state.curTradeType = state.fromAccount.tradeType
-                state.curCurrency = accountList.value.filter(el => Number(el.tradeType) === Number(state.toAccount.tradeType))[0]
-            } else {
-                // state.curTradeType = state.toAccount.tradeType
-                state.curCurrency = accountList.value.filter(el => Number(el.tradeType) === Number(state.fromAccount.tradeType))[0]
-            } */
-
             [state.fromAccount, state.toAccount] = [state.toAccount, state.fromAccount]
             state.curCurrency = accountList.value.filter(el => Number(el.tradeType) === Number(state.fromAccount.tradeType))[0]
             state.amount = ''
