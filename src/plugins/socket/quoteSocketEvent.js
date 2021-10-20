@@ -197,7 +197,6 @@ class SocketEvent {
 
     // 实时盘口深度报价
     handicap_tick (p) {
-        debugger
         const result = p.split(';')
         const tickList = {
             bid_deep: [],

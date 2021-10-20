@@ -204,7 +204,6 @@ export default {
         )
         // 监听玩法类型
         const handleTradeType = (tradeType) => {
-            debugger
             let changeProductKey = ''
             productTradeType.value = String(tradeType)
             if (productSwitchHistory[tradeType]) {

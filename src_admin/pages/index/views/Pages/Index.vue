@@ -195,7 +195,7 @@ export default {
             },
             loading: false,
             searchForm: {},
-            activeLang: getQueryString('language'),
+            activeLang: route.query.language || 'zh-CN',
             lang: []
 
         })

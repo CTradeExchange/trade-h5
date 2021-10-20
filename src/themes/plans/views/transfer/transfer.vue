@@ -214,7 +214,6 @@ export default {
         }
 
         const onPickerConfirm = (val) => {
-            debugger
             state.accountShow = false
 
             if (state.transferType === 1) {

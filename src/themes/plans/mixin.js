@@ -30,7 +30,6 @@ export default {
         // },
         // 用wp配置的URL
         openUrl (toRoute) {
-            debugger
             if (toRoute.href.name === 'Nest') {
                 toRoute.href.params.type = 'otherPage'
                 this.$router.push(toRoute.href)
