@@ -198,6 +198,7 @@ export default {
                 if (res.check() && res.data) {
                     state.amount = ''
                     Toast(t('assets.transferSuccess'))
+                    queryAccount()
                     if ([3, 5, 9].includes(Number(state.fromAccount.id))) {
                         store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: state.fromAccount.id })
                     }
