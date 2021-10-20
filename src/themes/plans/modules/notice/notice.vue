@@ -56,7 +56,7 @@ export default {
     overflow: hidden;
     .swipe-text {
         display: inline-block;
-        width: 98%;
+        width: 100%;
         overflow: hidden;
         /* 文本不会换行 */
         white-space: nowrap;
