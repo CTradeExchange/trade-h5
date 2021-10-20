@@ -137,7 +137,7 @@ export function positionsTickToObj (str) {
 /** 格式化产品订阅数据列表
  *  productIds: symbolKey形式的数组 ['1_2','2_2']
  */
-export function formatSubscribe (productIds) {
+export function formatSubscribe (productIds, productMap) {
     if (!productIds || productIds.length === 0) return []
     let subscribedList = []
     if (typeof (productIds[0]) === 'number') {
@@ -147,14 +147,16 @@ export function formatSubscribe (productIds) {
     if (typeof (productIds[0]) === 'string' && productIds[0].includes('_')) {
         subscribedList = [...new Set(productIds)].map(el => {
             const data = el.split('_')
+            const product = productMap[el]
             return {
                 symbol_id: Number(data[0]),
                 trade_type: Number(data[1]),
+                trade_mode: product?.dealModel,
             }
         })
     } else {
         const symbolKeys = productMapToSymbolKey(productIds)
-        return formatSubscribe(symbolKeys)
+        return formatSubscribe(symbolKeys, productMap)
     }
     return subscribedList
 }

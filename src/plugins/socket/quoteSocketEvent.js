@@ -77,9 +77,14 @@ class SocketEvent {
     */
     send_subscribe (productIds = []) {
         if (!productIds || productIds.length === 0) return false
-        this.subscribedList = productIds
-        const subscribeList = formatSubscribe(productIds)
-        this.send(14000, { symbol_list: subscribeList })
+        const productMap = this.$store.state._quote.productMap
+
+        // 拿到产品精简信息后，根据交易模式进行订阅产品行情
+        this.$store.dispatch('_quote/querySymbolBaseInfoList').then((res) => {
+            this.subscribedList = productIds
+            const subscribeList = formatSubscribe(productIds, productMap)
+            this.send(14000, { symbol_list: subscribeList })
+        })
     }
 
     // 盘口成交报价订阅

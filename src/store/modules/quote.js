@@ -42,6 +42,7 @@ function priceToPip (price, product) {
 export default {
     namespaced: true,
     state: {
+        symbolBaseLoaded: 0, // 产品精简信息加载状态 0未开始 1加载中 2加载完成
         productList: [], // 产品列表
         productMap: {}, // 产品列表
         planMap: {}, // 管理所有玩法及每个玩法下的所有产品
@@ -119,6 +120,7 @@ export default {
             state.productList = []
             state.productMap = {}
             state.productActivedID = null
+            state.Update_symbolBaseLoaded = 0
         },
         // 新增底层产品数据
         add_products (state, data = []) {
@@ -234,6 +236,9 @@ export default {
         },
         Update_deepthDigits (state, data) {
             state.deepthDigits = data
+        },
+        Update_symbolBaseLoaded (state, data) {
+            state.symbolBaseLoaded = data
         }
 
     },
@@ -266,17 +271,23 @@ export default {
                 customerGroupId: rootGetters.customerGroupId,
                 customerNo: rootState._user.customerInfo?.customerNo || '0',
             }
+            if (symbolTradeTypeList.length === 0 && state.symbolBaseLoaded === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
 
-            if (symbolTradeTypeList.length === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
-            return findSymbolBaseInfoList(params).then((res) => {
-                if (res.check()) {
-                    res.data.forEach(el => {
-                        el.symbol_id = el.symbolId
-                        commit('Update_product', el)
-                    })
-                }
-                return res
-            })
+            // 加载产品精简属性的方法，可能存在多地同时调用
+            if (state.symbolBaseLoaded === 0) {
+                commit('Update_symbolBaseLoaded', 1)
+                this.requestSymbolBase = findSymbolBaseInfoList(params).then((res) => {
+                    if (res.check()) {
+                        res.data.forEach(el => {
+                            el.symbol_id = el.symbolId
+                            commit('Update_product', el)
+                        })
+                    }
+                    commit('Update_symbolBaseLoaded', 2)
+                    return res
+                })
+            }
+            return this.requestSymbolBase
         },
         // 产品详细信息
         querySymbolInfo ({ dispatch, commit, state, rootState, rootGetters }, { symbolId, tradeType, forceQuery }) {
