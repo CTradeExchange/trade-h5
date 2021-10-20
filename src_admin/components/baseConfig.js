@@ -31,14 +31,14 @@ export const img = [
         label: '跳转地址',
         type: 'Href'
     },
-    {
-        name: 'target',
-        label: '打开方式',
-        type: 'Select',
-        default: 'self',
-        options: [
-            { value: 'self', label: '当前页' },
-            { value: '_blank', label: '新页' }
-        ]
-    }
+    // {
+    //     name: 'target',
+    //     label: '打开方式',
+    //     type: 'Select',
+    //     default: 'self',
+    //     options: [
+    //         { value: 'self', label: '当前页' },
+    //         { value: '_blank', label: '新页' }
+    //     ]
+    // }
 ]

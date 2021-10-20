@@ -16,8 +16,10 @@ export default {
                     name: 'src',
                     label: '图片地址',
                     type: 'File',
-                    default: '/wp-content/uploads/cats_business/nav_home.png'
+                    default: '/wp-content/uploads/cats_business/nav_home.png',
+                    tips: '建议尺寸(px): 80*80'
                 },
+
                 {
                     name: 'href',
                     label: '跳转地址',

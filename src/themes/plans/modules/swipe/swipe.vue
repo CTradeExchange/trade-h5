@@ -1,6 +1,6 @@
 <template>
     <div class='wrapper' :style='data.styleObj'>
-        <van-swipe :autoplay='data.autoplay||3000' :loop='data.loop'>
+        <van-swipe :autoplay='data.loop ? (data.autoplay || 3000) : 0' :loop='data.loop'>
             <van-swipe-item v-for='(item, index) in dataList' :key='index'>
                 <ImgComp :data='item' @openUrl="$emit('openUrl', $event)" />
             </van-swipe-item>

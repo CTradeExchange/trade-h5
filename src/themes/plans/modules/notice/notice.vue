@@ -9,10 +9,11 @@
                 vertical
             >
                 <van-swipe-item v-for='(item, index) in data.items' :key='index'>
-                    <span v-if='item?.href?.name' class='swipe-text' @click='pageTo(item.href.name)'>
+                    <span v-if='item?.href?.name' class='swipe-text' @click="$emit('openUrl',item)">
                         {{ item.text }}
                     </span>
                     <span v-else>
+                        {{ item.text }}
                     </span>
                 </van-swipe-item>
             </van-swipe>

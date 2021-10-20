@@ -13,6 +13,9 @@
                 </template>
             </el-input>
         </el-form-item>
+        <div v-if='config.tips' class='tips-wrap'>
+            {{ config.tips }}
+        </div>
     </div>
 </template>
 
@@ -66,5 +69,16 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.m-file {
+    margin-bottom: 18px;
+    .el-form-item {
+        margin-bottom: 0 !important;
+    }
+}
+.tips-wrap {
+    margin-top: 5px;
+    padding-left: 90px;
+    color: #E6A23C;
+}
 </style>

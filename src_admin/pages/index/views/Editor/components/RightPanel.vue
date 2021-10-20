@@ -119,7 +119,7 @@
                             </el-radio-group>
                         </el-form-item>
                     </el-form>
-                    <el-divider content-position='left'>
+                    <!-- <el-divider content-position='left'>
                         扩展字段设置
                     </el-divider>
                     <el-form class='extendForm'>
@@ -152,7 +152,7 @@
                                 添加
                             </el-button>
                         </el-col>
-                    </el-row>
+                    </el-row> -->
                 </el-scrollbar>
             </el-tab-pane>
         </el-tabs>
