@@ -577,7 +577,8 @@
             "inAccount": "Please select the account currency to receive money",
             "withdrawRecord": "Withdrawal details",
             "withdrawMethod": "Select withdraw method",
-            "withdrawDigitsTip": "The decimal place of the withdrawal amount cannot be greater than the decimal place of the account currency"
+            "withdrawDigitsTip": "The decimal place of the withdrawal amount cannot be greater than the decimal place of the account currency",
+            "tips1": "暂不可取款，请稍后再试或联系客服"
         },
         "withdrawMoney": {
             "moneyName": "Withdraw amount",

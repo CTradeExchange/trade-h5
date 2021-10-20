@@ -77,6 +77,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getCookie } from '@/utils/util'
 import { withdrawCurrencyList } from '@/api/user'
+import { Toast } from 'vant'
 
 export default {
     setup () {
@@ -167,6 +168,9 @@ export default {
         }
 
         const next = () => {
+            if (columns.value.length === 0 || state.inCurrencyList.length === 0) {
+                return Toast(t('withdraw.tips1'))
+            }
             router.push({
                 path: 'withdraw',
                 query: {
