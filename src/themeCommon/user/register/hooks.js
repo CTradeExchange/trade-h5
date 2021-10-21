@@ -7,7 +7,8 @@ export default function () {
     // 根据国家获取对应的客户组
     const getCustomerGroupByCountry = country => {
         if (!country || !registList.value?.length) return null
-        const _resultGroup = registList.value.find(el => el.registCountry.code === country)
+        let _resultGroup = registList.value.find(el => el.registCountry.code === country)
+        if (!_resultGroup) _resultGroup = registList.value.find(el => el.registCountry.isOther)
         return _resultGroup
     }
     // 根据国家获取对应的客户组ID

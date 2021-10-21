@@ -94,14 +94,14 @@
                                 删除
                             </el-button>
                         </el-divider>
-                        <el-form-item label='组件ID'>
+                        <!-- <el-form-item label='组件ID'>
                             <el-input :disabled='true' :value='element.id' />
                         </el-form-item>
                         <el-form-item label='绑定组件ID'>
                             <el-select v-model='activeData.linkComp' clearable placeholder='请选择'>
                                 <el-option v-for='item in showElementList' :key='item.id' :label='item.id' :value='item.id' />
                             </el-select>
-                        </el-form-item>
+                        </el-form-item> -->
                         <el-form-item v-if='activeData.linkComp' label='组件对齐'>
                             <el-radio-group v-model='activeData.linkCompPosition'>
                                 <el-radio label='top-right'>
@@ -314,7 +314,6 @@ export default {
     right: 0;
     width: 400px;
     padding-top: 3px;
-    padding-bottom: 40px;
     background-color: #FFF;
     .right-scrollbar {
         height: calc(100vh - 57px);
@@ -358,8 +357,12 @@ export default {
     }
     .spaceInput {
         position: absolute;
-        width: 70px;
+        width: 50px;
         font-size: 12px;
+        :deep(.el-input__inner) {
+            padding: 0 5px;
+            text-align: center;
+        }
     }
     .top {
         top: 5px;

@@ -25,7 +25,7 @@
         </el-row>
         <el-row>
             <el-col class='btns' :span='24'>
-                <el-form ref='form' label-width='100px' :model='form'>
+                <el-form ref='form' label-width='100px' :model='form' :rules='rules'>
                     <el-tabs type='border-card'>
                         <el-tab-pane class='tab' label='渠道基础设置'>
                             <el-form-item label='可注册区号'>
@@ -69,6 +69,7 @@
                                         <el-select
                                             v-model='form.registList[index].registCountry'
                                             clearable
+                                            :disabled='form.registList[index].registCountry?.isOther'
                                             filterable
                                             placeholder='请选择国家'
                                             value-key='id'
@@ -136,7 +137,7 @@
                                 </el-row>
                             </el-form-item>
 
-                            <el-form-item label='H5支持语言'>
+                            <el-form-item label='H5支持语言' prop='supportLanguage'>
                                 <el-select
                                     v-model='form.supportLanguage'
                                     multiple
@@ -152,7 +153,7 @@
                                     />
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label='H5默认语言'>
+                            <el-form-item label='H5默认语言' prop='language'>
                                 <el-select
                                     v-model='form.language'
                                     placeholder='请输入'
@@ -283,9 +284,10 @@
 
                         <el-form-item class='sort-row' label='玩法别名'>
                             <el-input
-                                v-model.number='checkedTradeType[item.id].alias'
+                                v-model='checkedTradeType[item.id].alias'
                                 placeholder='请输入'
                                 size='medium '
+                                type='text'
                             />
                         </el-form-item>
                         <el-form-item class='sort-row' label='排序值(升序)'>
@@ -355,10 +357,27 @@ export default {
             pageId: '',
             curIndex: '', // 注册客户组当前操作项
             getLoading: false,
-            setPlansType: 1, // 1 注册客户组玩法 2 游客客户组
+            setPlansType: 1, // 1 注册客户组玩法 2 游客客户组 3 非默认客户组
             pyamentList: [],
 
-            payIcon: {}
+            payIcon: {},
+            rules: {
+                supportLanguage: [
+                    {
+                        required: true,
+                        message: '请选择支持语言',
+                        trigger: 'blur',
+                    },
+
+                ],
+                language: [
+                    {
+                        required: true,
+                        message: '请选择默认语言',
+                        trigger: 'blur',
+                    }
+                ]
+            }
         }
     },
     async created () {
@@ -405,6 +424,14 @@ export default {
                 if (!that.form.registList[0].customerGroupId) {
                     that.form.registList[0].customerGroupId = '1'
                 }
+
+                that.otherZoneList = that.form.registrable.concat(
+                    {
+                        id: 9999,
+                        isOther: true,
+                        name: '全部',
+                    }
+                )
             }).catch(error => {
                 console.log(error)
             }).finally(() => {
@@ -424,7 +451,11 @@ export default {
         changeSupportArea (val) {
             this.otherZoneList = this.zoneList.filter(el =>
                 val.find(zo => zo.id === el.id)
-            )
+            ).concat({
+                id: 9999,
+                isOther: true,
+                name: '全部',
+            })
             // this.otherZoneList = this.zoneList.filter(el => val.includes(el.name + ' (' + el.country_code + ')'))
         },
         getPaymentArray () {
@@ -450,32 +481,45 @@ export default {
         },
         // 获取国家区号列表
         queryCountryList () {
+            const that = this
             queryCountryList().then(res => {
                 if (res.success && res.data?.length) {
                     const list = res.data
-                    this.zoneList = list
-                    this.otherZoneList = list
-                    if (this.form.registrable.length === 0) {
-                        this.form.registrable = [list[0]]
+                    that.zoneList = list
+                    // this.otherZoneList = list
+                    if (that.form.registrable.length === 0) {
+                        that.form.registrable = [list[0]]
                         this.form.defaultZone = list[0]
 
-                        if (!this.form.registList[0].registCountry) {
-                            this.form.registList[0].registCountry = this.form.defaultZone
+                        // 默认第一个是其它
+                        if (!that.form.registList[0].registCountry) {
+                            that.form.registList[0].registCountry =
+                                {
+                                    id: 9999,
+                                    isOther: true,
+                                    name: '全部',
+                                }
                         }
                     }
                 }
             })
         },
         setPlans (item, index, type) {
+            debugger
             this.setPlansType = type
             this.curIndex = index
             let data = []
 
             if (type === 1) {
+                if (Number(item.customerGroupId) !== 1) {
+                    // 只有默认客户组才可以设置币种
+                    this.setPlansType = 3
+                }
                 if (item.registCountry && item.customerGroupId) {
                     this.plansDialogVisible = true
                     data = this.accountTradeList[item.customerGroupId]?.data
                     this.checkedTradeType = this.form.registList[index]?.plans
+                    // 遍历选中的玩法币种
                     if (this.checkedTradeType) {
                         this.checkedTradeType.forEach(el => {
                             if ([3, 5, 9].includes(Number(el.id)) && typeof el.allCurrency === 'string') {
@@ -483,6 +527,7 @@ export default {
                             }
                         })
                     }
+
                     this.getTradeTypeAssets(data)
                 } else {
                     this.$message({
@@ -504,7 +549,10 @@ export default {
                 }
             }
         },
+
+        // 已填写的数据回填
         getTradeTypeAssets (data) {
+            debugger
             if (Array.isArray(data)) {
                 this.tradeTypeList = data.map(el => ({ id: el.trade_type, name: el.trade_name }))
                 const tempCheckedTradeType = {}
@@ -518,6 +566,7 @@ export default {
                             isWallet: '',
                         }
                 })
+                debugger
 
                 this.checkedTradeType = tempCheckedTradeType
 
@@ -536,75 +585,84 @@ export default {
         },
         submit () {
             try {
-                this.submitLoading = true
-                const _formData = cloneDeep(this.form)
+                this.$refs['form'].validate((valid) => {
+                    if (!valid) {
+                        console.log('error submit!!')
+                        return false
+                    } else {
+                        this.submitLoading = true
+                        const _formData = cloneDeep(this.form)
 
-                if (_formData.registList.length > 0) {
-                    _formData.registList.forEach(el => {
-                        if (isEmpty(el.plans)) {
-                            this.$message({
-                                message: '请先设置玩法币种',
-                                type: 'warning'
-                            })
-                            throw new Error('noPlans')
-                        } else {
-                            el.plans.forEach(item => {
-                                if ([3, 5, 9].includes(Number(item.id)) && Array.isArray(item.allCurrency)) {
-                                    item.allCurrency = item.allCurrency.toString()
+                        if (_formData.registList.length > 0) {
+                            _formData.registList.forEach(el => {
+                                if (isEmpty(el.plans)) {
+                                    this.$message({
+                                        message: '请先设置玩法币种',
+                                        type: 'warning'
+                                    })
+                                    this.submitLoading = false
+
+                                    throw new Error('noPlans')
+                                } else {
+                                    el.plans.forEach(item => {
+                                        if ([3, 5, 9].includes(Number(item.id)) && Array.isArray(item.allCurrency)) {
+                                            item.allCurrency = item.allCurrency.toString()
+                                        }
+                                    })
                                 }
                             })
                         }
-                    })
-                }
 
-                // 游客玩法如果没设置则取默认
-                if (this.form.tradeTypeCurrencyList.length === 0) {
-                    const plans = []
+                        // 游客玩法如果没设置则取默认
+                        if (this.form.tradeTypeCurrencyList.length === 0) {
+                            const plans = []
 
-                    this.accountTradeList[2].data.forEach(el => {
-                        plans.push({
-                            id: el.trade_type,
-                            alias: '',
-                            isWallet: '',
-                            sort: 0,
-                            tradeType: el.trade_type,
-                            name: el.trade_name
+                            this.accountTradeList[2].data.forEach(el => {
+                                plans.push({
+                                    id: el.trade_type,
+                                    alias: '',
+                                    isWallet: '',
+                                    sort: 0,
+                                    tradeType: el.trade_type,
+                                    name: el.trade_name
 
+                                })
+                            })
+                            _formData.tradeTypeCurrencyList = plans
+                        }
+
+                        _formData.googleAnalytics = window.zip(_formData.googleAnalytics)
+
+                        saveViChannel({
+                            content: JSON.stringify(_formData), // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', //
+                            id: this.pageId,
+                            other: '',
+                        }).then(res => {
+                            if (!res.success) {
+                                return this.$message.error(res.message)
+                            }
+                            this.$message({
+                                message: '保存成功',
+                                type: 'success'
+                            })
+                            this.getPageConfig()
+                        }).catch(error => {
+                            console.log(error)
+                        }).finally(() => {
+                            this.submitLoading = false
                         })
-                    })
-                    _formData.tradeTypeCurrencyList = plans
-                }
-
-                _formData.googleAnalytics = window.zip(_formData.googleAnalytics)
-
-                saveViChannel({
-                    content: JSON.stringify(_formData), // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', //
-                    id: this.pageId,
-                    other: '',
-                }).then(res => {
-                    if (!res.success) {
-                        return this.$message.error(res.message)
                     }
-                    this.$message({
-                        message: '保存成功',
-                        type: 'success'
-                    })
-                    this.getPageConfig()
-                }).catch(error => {
-                    console.log(error)
-                }).finally(() => {
-                    this.submitLoading = false
                 })
             } catch (error) {
                 console.log('error', error)
             }
         },
         addFormItem () {
-            this.otherZoneList = this.zoneList.filter(item => {
-                const registIds = this.form.registList.map(el => el.registCountry)
+            /*  this.otherZoneList = this.zoneList.filter(item => {
+                const registIds = this.form.registList.map(el => el.registCountry.id)
                 return registIds.indexOf(item.id) === -1
             })
-
+ */
             this.form.registList.push({})
         },
         removeItem (index) {
@@ -614,7 +672,23 @@ export default {
         },
         handleSavePlans () {
             let assetFlag = true
+
             const plans = []
+
+            // 非默认客户不设置币种。默认全部币种
+            if (Number(this.setPlansType === 3)) {
+                const curCustomerGroupId = this.form.registList[this.curIndex].customerGroupId
+                if (Number(curCustomerGroupId) !== 1) {
+                    this.accountTradeList[curCustomerGroupId].data && this.accountTradeList[curCustomerGroupId].data.forEach(el => {
+                        const allCurrency = el.assets.map(item => item.code)
+                        if ([3, 5, 9].includes(Number(el.trade_type))) {
+                            this.checkedTradeType[el.trade_type].allCurrency = allCurrency
+                        } else {
+                            this.checkedTradeType[el.trade_type].allCurrency = allCurrency.toString()
+                        }
+                    })
+                }
+            }
 
             for (const key in this.checkedTradeType) {
                 if (Object.hasOwnProperty.call(this.checkedTradeType, key)) {
@@ -623,9 +697,9 @@ export default {
                         assetFlag = false
                     }
 
-                    let allCurrency = el.allCurrency
+                    let allCurrency = el.allCurrency || ''
                     if ([3, 5, 9].includes(Number(key))) {
-                        allCurrency = el.allCurrency.toString()
+                        allCurrency = allCurrency.toString()
                     }
 
                     plans.push({
@@ -652,10 +726,10 @@ export default {
                 })
             }
 
-            if (this.setPlansType === 1) {
-                this.form.registList[this.curIndex].plans = plans
-            } else {
+            if (this.setPlansType === 2) {
                 this.form.tradeTypeCurrencyList = plans
+            } else {
+                this.form.registList[this.curIndex].plans = plans
             }
 
             this.plansDialogVisible = false
