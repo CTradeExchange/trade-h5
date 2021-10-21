@@ -96,6 +96,7 @@ export default {
 .footerMenu {
     background: var(--contentColor);
     &.h5Preview {
+        position: relative;
         padding-top: 140%;
         &::after {
             display: none;

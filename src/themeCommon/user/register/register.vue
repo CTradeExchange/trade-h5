@@ -40,6 +40,7 @@
                         v-model.trim='email'
                         v-model:zone='zone'
                         clear
+                        input-type='text'
                         :placeholder='$t("register.email")'
                         type='email'
                         @zoneSelect='zoneSelect'
@@ -134,10 +135,12 @@ export default {
                 if (defaultZone?.code) {
                     state.zone = `${defaultZone.name} (${defaultZone.country_code})`
                     state.countryZone = defaultZone.country_code
+                    state.countryCode = defaultZone.code
                 } else {
                     const firstItem = res.data[0]
                     state.zone = firstItem.name + ` (${firstItem.countryCode})`
                     state.countryZone = defaultZone.countryCode
+                    state.countryCode = defaultZone.code
                 }
             }
         })

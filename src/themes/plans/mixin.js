@@ -30,11 +30,11 @@ export default {
         // },
         // 用wp配置的URL
         openUrl (toRoute) {
-            if (toRoute.name === 'Nest') {
-                toRoute.params.type = 'otherPage'
-                this.$router.push(toRoute)
+            if (toRoute.href.name === 'Nest') {
+                toRoute.href.params.type = 'otherPage'
+                this.$router.push(toRoute.href)
             } else {
-                this.$router.push({ name: toRoute.name })
+                this.$router.push({ name: toRoute.href.name })
             }
         },
         // 日期时间格式化

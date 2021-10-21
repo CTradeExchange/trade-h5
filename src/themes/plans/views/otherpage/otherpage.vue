@@ -30,7 +30,7 @@ export default {
         const contentIframe = ref(null)
         const state = reactive({
             loading: true,
-            title: route.query.pageTitle || '',
+            title: route.query.title || '',
         })
 
         // 给子页面发送消息

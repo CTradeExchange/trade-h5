@@ -9,7 +9,7 @@
                 class='input'
                 v-bind='$attrs'
                 required
-                type='tel'
+                :type='inputType'
                 :value='modelValue'
                 @input='onInput'
             />
@@ -41,6 +41,10 @@ export default {
             type: [Number, String],
             default: ''
         },
+        inputType: {
+            type: [String, Number],
+            default: 'tel'
+        },
         label: {
             type: [String, Number],
             default: ''
@@ -62,7 +66,8 @@ export default {
     },
     computed: {
         countryList () {
-            const countryList = this.$store.state.countryList
+            let countryList = this.$store.state._base.wpCompanyInfo?.registrable
+            if (!countryList?.length) countryList = this.$store.state.countryList
             const tempArr = []
             countryList.forEach(item => {
                 tempArr.push({

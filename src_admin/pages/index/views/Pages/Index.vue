@@ -2,25 +2,20 @@
     <div class='m-pageList'>
         <el-collapse :value="['1']">
             <el-collapse-item class='search' name='1' title='页面列表'>
-                <el-form ref='form' inline label-position='left' label-width='60px' :model='searchForm'>
-                <!-- <el-form-item label="code">
-                        <el-input v-model="searchForm.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="标题">
-                        <el-input v-model="searchForm.name"></el-input>
-                    </el-form-item> -->
+                <!-- <el-form ref='form' inline label-position='left' label-width='60px' :model='searchForm'>
+
                 </el-form>
                 <el-row>
                     <el-col class='footerBtns' :span='24'>
                         <el-button icon='el-icon-edit' type='success' @click='create'>
                             新建
                         </el-button>
-                        <!-- <el-button icon="el-icon-delete">重置</el-button> -->
+
                         <el-button icon='el-icon-search' :loading='loading' type='primary' @click='getPageList'>
                             查询
                         </el-button>
                     </el-col>
-                </el-row>
+                </el-row> -->
             </el-collapse-item>
         </el-collapse>
         <el-tabs v-model='activeLang'>
@@ -46,9 +41,9 @@
                 <el-table-column align='center' label='操作人' prop='updater' width='100' />
                 <el-table-column align='center' fixed='right' label='操作' width='200'>
                     <template #default='scope'>
-                        <el-button size='small' type='text' @click='setting(scope.row)'>
+                        <!-- <el-button size='small' type='text' @click='setting(scope.row)'>
                             编辑
-                        </el-button>
+                        </el-button> -->
                         <el-button v-if="scope.row.page_code.indexOf('http')==0" size='small' type='text' @click='showOtherPage(scope.row.page_code)'>
                             查看
                         </el-button>
@@ -200,7 +195,7 @@ export default {
             },
             loading: false,
             searchForm: {},
-            activeLang: 'zh-CN',
+            activeLang: route.query.language || 'zh-CN',
             lang: []
 
         })
@@ -209,6 +204,12 @@ export default {
             () => state.activeLang,
             (val) => {
                 getPageList()
+                router.replace({
+                    query: {
+                        id: getQueryString('id'),
+                        language: state.activeLang
+                    }
+                })
             }
         )
 
