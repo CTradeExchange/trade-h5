@@ -505,7 +505,6 @@ export default {
             })
         },
         setPlans (item, index, type) {
-            debugger
             this.setPlansType = type
             this.curIndex = index
             let data = []
@@ -552,7 +551,6 @@ export default {
 
         // 已填写的数据回填
         getTradeTypeAssets (data) {
-            debugger
             if (Array.isArray(data)) {
                 this.tradeTypeList = data.map(el => ({ id: el.trade_type, name: el.trade_name }))
                 const tempCheckedTradeType = {}
@@ -566,7 +564,6 @@ export default {
                             isWallet: '',
                         }
                 })
-                debugger
 
                 this.checkedTradeType = tempCheckedTradeType
 
@@ -737,6 +734,7 @@ export default {
         closeDialog () {
             this.checkedTradeType = {}
             this.tradeTypeAssets = []
+            this.form.tradeTypeCurrencyList = []
         },
         uploadFile (item, lang) {
             try {
