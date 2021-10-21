@@ -34,7 +34,7 @@
                 />
                 <div class='listWrap'>
                     <div v-for='item in productList' :key='item.id' class='li' @click='() => onClick(item)'>
-                        {{ item.displayName }}
+                        {{ item.symbolName }}
                     </div>
                 </div>
             </search>

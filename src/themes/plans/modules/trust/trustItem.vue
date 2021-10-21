@@ -6,7 +6,7 @@
                     {{ Number(product.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
                 </span>&nbsp;
                 <span class='name'>
-                    {{ product.displayName }}
+                    {{ product.symbolName }}
                 </span>
             </div>
 

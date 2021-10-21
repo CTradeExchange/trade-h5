@@ -2,7 +2,7 @@
     <ul v-if='products.length' class='products'>
         <li v-for='product in products' :key='product.symbolId' class='item' @click='handlerItem(product)'>
             <div class='name'>
-                {{ product.displayName }}
+                {{ product.symbolName }}
             </div>
             <div class='price' :class='[product.cur_color]'>
                 {{ product.cur_price || '--' }}

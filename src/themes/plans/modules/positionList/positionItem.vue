@@ -12,7 +12,7 @@
                             <div class='th'>
                                 <div class='tl'>
                                     <span class='name'>
-                                        {{ data.displayName }}
+                                        {{ data.symbolName }}
                                     </span>
                                     <span class='lot'>
                                         {{ data.symbolCode }}

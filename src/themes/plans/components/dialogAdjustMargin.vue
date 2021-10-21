@@ -10,7 +10,7 @@
         <div class='dialog-header'>
             <div class='title'>
                 <p class='productName'>
-                    {{ data.displayName }}
+                    {{ data.symbolName }}
                 </p>
                 <p class='lot'>
                     {{ data.symbolCode }}

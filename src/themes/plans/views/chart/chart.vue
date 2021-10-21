@@ -132,9 +132,9 @@ export default {
         // 产品下拉列表
         const computedProductList = computed(
             () => productList.value
-                .filter(e => e.displayName)
+                .filter(e => e.symbolName)
                 .map(e => ({
-                    text: e.displayName, // 用于vant组件显示
+                    text: e.symbolName, // 用于vant组件显示
                     description: e.symbolCode, // 显示在图表左上角
                     symbolId: e.symbolId, // 产品id
                     digits: e.symbolDigits, // 小数点

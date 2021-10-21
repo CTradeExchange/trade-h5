@@ -11,7 +11,7 @@
                                 {{ Number(pendingItem.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
                             </span>
 
-                            {{ pendingItem?.displayName }}
+                            {{ pendingItem?.symbolName }}
                         </div>
                         <div class='code'>
                             {{ pendingItem.symbolCode }}

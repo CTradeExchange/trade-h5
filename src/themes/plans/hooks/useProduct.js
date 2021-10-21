@@ -28,7 +28,7 @@ export default function ({ tradeType, categoryType }) {
 
         unref(categoryList)[unref(categoryType)].listByUser.forEach(id => {
             const newId = `${id}_${unref(tradeType)}`
-            if (productMapVal[newId]?.displayName) {
+            if (productMapVal[newId]?.symbolName) {
                 result.push(productMapVal[newId])
             }
         })

@@ -56,7 +56,7 @@ export default {
             const sortField = state.displayType === 1 ? 'upDownAmount_pip' : 'upDownAmount'
             if (state.sortType === 2) list = list.slice(0).sort((a, b) => parseFloat(b[sortField]) - parseFloat(a[sortField]))
             if (state.sortType === 3) list = list.slice(0).sort((a, b) => parseFloat(a[sortField]) - parseFloat(b[sortField]))
-            list = list.filter(el => productMap.value[el.symbolId] && productMap.value[el.symbolId].displayName)
+            list = list.filter(el => productMap.value[el.symbolId] && productMap.value[el.symbolId].symbolName)
             return list
         })
 

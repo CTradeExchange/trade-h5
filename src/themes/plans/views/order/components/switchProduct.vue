@@ -18,8 +18,8 @@
                     @leave='leave'
                 >
                     <li v-for='(item,i) in productList' :key='item.symbolId' class='dd item' :data-index='i'>
-                        <p class='displayName'>
-                            {{ item.displayName }}
+                        <p class='symbolName'>
+                            {{ item.symbolName }}
                         </p>
                         <p class='symbolCode'>
                             {{ item.symbolCode }}
@@ -51,7 +51,7 @@ export default {
             // return allList
             if (!state.searchKey) return allList
             const resultList = allList.filter(el => {
-                const searchContent = el.displayName + el.symbolCode
+                const searchContent = el.symbolName + el.symbolCode
                 return searchContent.toLowerCase().includes(state.searchKey.toLowerCase())
             })
             return resultList
@@ -120,7 +120,7 @@ export default {
             border-bottom: 1px solid var(--bgColor);
         }
     }
-    .displayName {
+    .symbolName {
         font-size: rem(30px);
         line-height: 1.5;
     }

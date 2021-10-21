@@ -13,7 +13,7 @@
                 <div class='listWrap'>
                     <transitionList>
                         <div v-for='item in searchResult' :key='item.symbolKey' class='list-item li' @click='() => onClick(item)'>
-                            {{ item.displayName }}
+                            {{ item.symbolName }}
                         </div>
                     </transitionList>
                 </div>
@@ -58,7 +58,7 @@ export default {
                         return
                     }
 
-                    const searchContent = (e.displayName || '') + (e.symbolCode || '')
+                    const searchContent = (e.symbolName || '') + (e.symbolCode || '')
                     return searchContent.toLowerCase().includes(value.toLowerCase())
                 })
 

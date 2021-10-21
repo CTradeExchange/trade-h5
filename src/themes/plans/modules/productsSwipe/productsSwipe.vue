@@ -9,7 +9,7 @@
                     <ul class='productsSwipe'>
                         <li v-for='product in item' :key='product.symbolId' class='item' @click='handlerItem(product)'>
                             <div class='name'>
-                                {{ product.displayName }}
+                                {{ product.symbolName }}
                             </div>
                             <div class='price' :class='[product.cur_color]'>
                                 {{ product.cur_price || '--' }}
