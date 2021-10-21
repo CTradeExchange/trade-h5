@@ -69,6 +69,7 @@
                                         <el-select
                                             v-model='form.registList[index].registCountry'
                                             clearable
+                                            :disabled='form.registList[index].registCountry?.isOther'
                                             filterable
                                             placeholder='请选择国家'
                                             value-key='id'
@@ -286,6 +287,7 @@
                                 v-model.number='checkedTradeType[item.id].alias'
                                 placeholder='请输入'
                                 size='medium '
+                                type='text'
                             />
                         </el-form-item>
                         <el-form-item class='sort-row' label='排序值(升序)'>
@@ -355,7 +357,7 @@ export default {
             pageId: '',
             curIndex: '', // 注册客户组当前操作项
             getLoading: false,
-            setPlansType: 1, // 1 注册客户组玩法 2 游客客户组
+            setPlansType: 1, // 1 注册客户组玩法 2 游客客户组 3 非默认客户组
             pyamentList: [],
 
             payIcon: {}
@@ -405,6 +407,14 @@ export default {
                 if (!that.form.registList[0].customerGroupId) {
                     that.form.registList[0].customerGroupId = '1'
                 }
+
+                that.otherZoneList = that.form.registrable.concat(
+                    {
+                        id: 9999,
+                        isOther: true,
+                        name: '全部',
+                    }
+                )
             }).catch(error => {
                 console.log(error)
             }).finally(() => {
@@ -424,7 +434,11 @@ export default {
         changeSupportArea (val) {
             this.otherZoneList = this.zoneList.filter(el =>
                 val.find(zo => zo.id === el.id)
-            )
+            ).concat({
+                id: 9999,
+                isOther: true,
+                name: '全部',
+            })
             // this.otherZoneList = this.zoneList.filter(el => val.includes(el.name + ' (' + el.country_code + ')'))
         },
         getPaymentArray () {
@@ -450,18 +464,29 @@ export default {
         },
         // 获取国家区号列表
         queryCountryList () {
+            const that = this
             queryCountryList().then(res => {
                 if (res.success && res.data?.length) {
                     const list = res.data
-                    this.zoneList = list
-                    this.otherZoneList = list
-                    if (this.form.registrable.length === 0) {
-                        this.form.registrable = [list[0]]
+                    that.zoneList = list
+                    // this.otherZoneList = list
+                    if (that.form.registrable.length === 0) {
+                        that.form.registrable = [list[0]]
                         this.form.defaultZone = list[0]
 
-                        if (!this.form.registList[0].registCountry) {
-                            this.form.registList[0].registCountry = this.form.defaultZone
+                        // 默认第一个是其它
+                        if (!that.form.registList[0].registCountry) {
+                            that.form.registList[0].registCountry =
+                                {
+                                    id: 9999,
+                                    isOther: true,
+                                    name: '全部',
+                                }
                         }
+
+                        // if (!that.form.registList[0]?.registCountry) {
+                        //     that.form.registList[0].registCountry = that.form.defaultZone
+                        // }
                     }
                 }
             })
@@ -471,11 +496,17 @@ export default {
             this.curIndex = index
             let data = []
 
+            if (Number(item.customerGroupId) !== 1) {
+                // 只有默认客户组才可以设置币种
+                this.setPlansType = 3
+            }
+
             if (type === 1) {
                 if (item.registCountry && item.customerGroupId) {
                     this.plansDialogVisible = true
                     data = this.accountTradeList[item.customerGroupId]?.data
                     this.checkedTradeType = this.form.registList[index]?.plans
+                    // 遍历选中的玩法币种
                     if (this.checkedTradeType) {
                         this.checkedTradeType.forEach(el => {
                             if ([3, 5, 9].includes(Number(el.id)) && typeof el.allCurrency === 'string') {
@@ -483,6 +514,7 @@ export default {
                             }
                         })
                     }
+
                     this.getTradeTypeAssets(data)
                 } else {
                     this.$message({
@@ -546,6 +578,8 @@ export default {
                                 message: '请先设置玩法币种',
                                 type: 'warning'
                             })
+                            this.submitLoading = false
+
                             throw new Error('noPlans')
                         } else {
                             el.plans.forEach(item => {
@@ -578,7 +612,7 @@ export default {
                 _formData.googleAnalytics = window.zip(_formData.googleAnalytics)
 
                 saveViChannel({
-                    content: JSON.stringify(_formData), // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', //
+                    content: JSON.stringify(_formData), // ', // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}',
                     id: this.pageId,
                     other: '',
                 }).then(res => {
@@ -600,11 +634,11 @@ export default {
             }
         },
         addFormItem () {
-            this.otherZoneList = this.zoneList.filter(item => {
-                const registIds = this.form.registList.map(el => el.registCountry)
+            /*  this.otherZoneList = this.zoneList.filter(item => {
+                const registIds = this.form.registList.map(el => el.registCountry.id)
                 return registIds.indexOf(item.id) === -1
             })
-
+ */
             this.form.registList.push({})
         },
         removeItem (index) {
@@ -614,7 +648,20 @@ export default {
         },
         handleSavePlans () {
             let assetFlag = true
+            const curCustomerGroupId = this.form.registList[this.curIndex].customerGroupId
             const plans = []
+
+            // 非默认客户不设置币种。默认全部币种
+            if (Number(curCustomerGroupId) !== 1) {
+                this.accountTradeList[curCustomerGroupId].data && this.accountTradeList[curCustomerGroupId].data.forEach(el => {
+                    const allCurrency = el.assets.map(item => item.code)
+                    if ([3, 5, 9].includes(Number(el.trade_type))) {
+                        this.checkedTradeType[el.trade_type].allCurrency = allCurrency
+                    } else {
+                        this.checkedTradeType[el.trade_type].allCurrency = allCurrency.toString()
+                    }
+                })
+            }
 
             for (const key in this.checkedTradeType) {
                 if (Object.hasOwnProperty.call(this.checkedTradeType, key)) {
@@ -652,10 +699,10 @@ export default {
                 })
             }
 
-            if (this.setPlansType === 1) {
-                this.form.registList[this.curIndex].plans = plans
-            } else {
+            if (this.setPlansType === 2) {
                 this.form.tradeTypeCurrencyList = plans
+            } else {
+                this.form.registList[this.curIndex].plans = plans
             }
 
             this.plansDialogVisible = false
