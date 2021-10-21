@@ -18,7 +18,8 @@ export default {
             options: [
                 { value: 1, label: '中国大陆' },
                 { value: 2, label: '其它地区' }
-            ]
+            ],
+            default: 1
         },
         {
             name: 'orgid',

@@ -284,7 +284,7 @@
 
                         <el-form-item class='sort-row' label='玩法别名'>
                             <el-input
-                                v-model.number='checkedTradeType[item.id].alias'
+                                v-model='checkedTradeType[item.id].alias'
                                 placeholder='请输入'
                                 size='medium '
                                 type='text'
@@ -505,16 +505,16 @@ export default {
             })
         },
         setPlans (item, index, type) {
+            debugger
             this.setPlansType = type
             this.curIndex = index
             let data = []
 
-            if (Number(item.customerGroupId) !== 1) {
-                // 只有默认客户组才可以设置币种
-                this.setPlansType = 3
-            }
-
             if (type === 1) {
+                if (Number(item.customerGroupId) !== 1) {
+                    // 只有默认客户组才可以设置币种
+                    this.setPlansType = 3
+                }
                 if (item.registCountry && item.customerGroupId) {
                     this.plansDialogVisible = true
                     data = this.accountTradeList[item.customerGroupId]?.data
@@ -549,7 +549,10 @@ export default {
                 }
             }
         },
+
+        // 已填写的数据回填
         getTradeTypeAssets (data) {
+            debugger
             if (Array.isArray(data)) {
                 this.tradeTypeList = data.map(el => ({ id: el.trade_type, name: el.trade_name }))
                 const tempCheckedTradeType = {}
@@ -563,6 +566,7 @@ export default {
                             isWallet: '',
                         }
                 })
+                debugger
 
                 this.checkedTradeType = tempCheckedTradeType
 
@@ -581,7 +585,6 @@ export default {
         },
         submit () {
             try {
-                debugger
                 this.$refs['form'].validate((valid) => {
                     if (!valid) {
                         console.log('error submit!!')
@@ -631,7 +634,7 @@ export default {
                         _formData.googleAnalytics = window.zip(_formData.googleAnalytics)
 
                         saveViChannel({
-                            content: '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', // JSON.stringify(_formData), // ',
+                            content: JSON.stringify(_formData), // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', //
                             id: this.pageId,
                             other: '',
                         }).then(res => {
@@ -669,19 +672,22 @@ export default {
         },
         handleSavePlans () {
             let assetFlag = true
-            const curCustomerGroupId = this.form.registList[this.curIndex].customerGroupId
+
             const plans = []
 
             // 非默认客户不设置币种。默认全部币种
-            if (Number(curCustomerGroupId) !== 1) {
-                this.accountTradeList[curCustomerGroupId].data && this.accountTradeList[curCustomerGroupId].data.forEach(el => {
-                    const allCurrency = el.assets.map(item => item.code)
-                    if ([3, 5, 9].includes(Number(el.trade_type))) {
-                        this.checkedTradeType[el.trade_type].allCurrency = allCurrency
-                    } else {
-                        this.checkedTradeType[el.trade_type].allCurrency = allCurrency.toString()
-                    }
-                })
+            if (Number(this.setPlansType === 3)) {
+                const curCustomerGroupId = this.form.registList[this.curIndex].customerGroupId
+                if (Number(curCustomerGroupId) !== 1) {
+                    this.accountTradeList[curCustomerGroupId].data && this.accountTradeList[curCustomerGroupId].data.forEach(el => {
+                        const allCurrency = el.assets.map(item => item.code)
+                        if ([3, 5, 9].includes(Number(el.trade_type))) {
+                            this.checkedTradeType[el.trade_type].allCurrency = allCurrency
+                        } else {
+                            this.checkedTradeType[el.trade_type].allCurrency = allCurrency.toString()
+                        }
+                    })
+                }
             }
 
             for (const key in this.checkedTradeType) {
@@ -691,9 +697,9 @@ export default {
                         assetFlag = false
                     }
 
-                    let allCurrency = el.allCurrency
+                    let allCurrency = el.allCurrency || ''
                     if ([3, 5, 9].includes(Number(key))) {
-                        allCurrency = el.allCurrency.toString()
+                        allCurrency = allCurrency.toString()
                     }
 
                     plans.push({

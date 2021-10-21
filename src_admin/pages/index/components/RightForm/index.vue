@@ -6,7 +6,7 @@
         >
             <template
                 v-if='
-                    !config.hidden &&
+                    !config.hidden ||
                         !(
                             (config.exclude &&
                                 config.exclude.includes(
