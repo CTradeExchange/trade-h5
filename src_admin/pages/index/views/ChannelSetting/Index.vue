@@ -25,7 +25,7 @@
         </el-row>
         <el-row>
             <el-col class='btns' :span='24'>
-                <el-form ref='form' label-width='100px' :model='form'>
+                <el-form ref='form' label-width='100px' :model='form' :rules='rules'>
                     <el-tabs type='border-card'>
                         <el-tab-pane class='tab' label='渠道基础设置'>
                             <el-form-item label='可注册区号'>
@@ -137,7 +137,7 @@
                                 </el-row>
                             </el-form-item>
 
-                            <el-form-item label='H5支持语言'>
+                            <el-form-item label='H5支持语言' prop='supportLanguage'>
                                 <el-select
                                     v-model='form.supportLanguage'
                                     multiple
@@ -153,7 +153,7 @@
                                     />
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label='H5默认语言'>
+                            <el-form-item label='H5默认语言' prop='language'>
                                 <el-select
                                     v-model='form.language'
                                     placeholder='请输入'
@@ -360,7 +360,24 @@ export default {
             setPlansType: 1, // 1 注册客户组玩法 2 游客客户组 3 非默认客户组
             pyamentList: [],
 
-            payIcon: {}
+            payIcon: {},
+            rules: {
+                supportLanguage: [
+                    {
+                        required: true,
+                        message: '请选择支持语言',
+                        trigger: 'blur',
+                    },
+
+                ],
+                language: [
+                    {
+                        required: true,
+                        message: '请选择默认语言',
+                        trigger: 'blur',
+                    }
+                ]
+            }
         }
     },
     async created () {
@@ -483,10 +500,6 @@ export default {
                                     name: '全部',
                                 }
                         }
-
-                        // if (!that.form.registList[0]?.registCountry) {
-                        //     that.form.registList[0].registCountry = that.form.defaultZone
-                        // }
                     }
                 }
             })
@@ -568,66 +581,74 @@ export default {
         },
         submit () {
             try {
-                this.submitLoading = true
-                const _formData = cloneDeep(this.form)
+                debugger
+                this.$refs['form'].validate((valid) => {
+                    if (!valid) {
+                        console.log('error submit!!')
+                        return false
+                    } else {
+                        this.submitLoading = true
+                        const _formData = cloneDeep(this.form)
 
-                if (_formData.registList.length > 0) {
-                    _formData.registList.forEach(el => {
-                        if (isEmpty(el.plans)) {
-                            this.$message({
-                                message: '请先设置玩法币种',
-                                type: 'warning'
-                            })
-                            this.submitLoading = false
+                        if (_formData.registList.length > 0) {
+                            _formData.registList.forEach(el => {
+                                if (isEmpty(el.plans)) {
+                                    this.$message({
+                                        message: '请先设置玩法币种',
+                                        type: 'warning'
+                                    })
+                                    this.submitLoading = false
 
-                            throw new Error('noPlans')
-                        } else {
-                            el.plans.forEach(item => {
-                                if ([3, 5, 9].includes(Number(item.id)) && Array.isArray(item.allCurrency)) {
-                                    item.allCurrency = item.allCurrency.toString()
+                                    throw new Error('noPlans')
+                                } else {
+                                    el.plans.forEach(item => {
+                                        if ([3, 5, 9].includes(Number(item.id)) && Array.isArray(item.allCurrency)) {
+                                            item.allCurrency = item.allCurrency.toString()
+                                        }
+                                    })
                                 }
                             })
                         }
-                    })
-                }
 
-                // 游客玩法如果没设置则取默认
-                if (this.form.tradeTypeCurrencyList.length === 0) {
-                    const plans = []
+                        // 游客玩法如果没设置则取默认
+                        if (this.form.tradeTypeCurrencyList.length === 0) {
+                            const plans = []
 
-                    this.accountTradeList[2].data.forEach(el => {
-                        plans.push({
-                            id: el.trade_type,
-                            alias: '',
-                            isWallet: '',
-                            sort: 0,
-                            tradeType: el.trade_type,
-                            name: el.trade_name
+                            this.accountTradeList[2].data.forEach(el => {
+                                plans.push({
+                                    id: el.trade_type,
+                                    alias: '',
+                                    isWallet: '',
+                                    sort: 0,
+                                    tradeType: el.trade_type,
+                                    name: el.trade_name
 
+                                })
+                            })
+                            _formData.tradeTypeCurrencyList = plans
+                        }
+
+                        _formData.googleAnalytics = window.zip(_formData.googleAnalytics)
+
+                        saveViChannel({
+                            content: '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', // JSON.stringify(_formData), // ',
+                            id: this.pageId,
+                            other: '',
+                        }).then(res => {
+                            if (!res.success) {
+                                return this.$message.error(res.message)
+                            }
+                            this.$message({
+                                message: '保存成功',
+                                type: 'success'
+                            })
+                            this.getPageConfig()
+                        }).catch(error => {
+                            console.log(error)
+                        }).finally(() => {
+                            this.submitLoading = false
                         })
-                    })
-                    _formData.tradeTypeCurrencyList = plans
-                }
-
-                _formData.googleAnalytics = window.zip(_formData.googleAnalytics)
-
-                saveViChannel({
-                    content: JSON.stringify(_formData), // ', // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}',
-                    id: this.pageId,
-                    other: '',
-                }).then(res => {
-                    if (!res.success) {
-                        return this.$message.error(res.message)
                     }
-                    this.$message({
-                        message: '保存成功',
-                        type: 'success'
-                    })
-                    this.getPageConfig()
-                }).catch(error => {
-                    console.log(error)
-                }).finally(() => {
-                    this.submitLoading = false
                 })
             } catch (error) {
                 console.log('error', error)

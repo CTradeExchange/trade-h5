@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :style='data.styleObj'>
         <div v-if="userAccountType==='G'" class='mineGuest'>
             <img class='faceImg' :src='faceImg' />
             <div class='guestBts'>

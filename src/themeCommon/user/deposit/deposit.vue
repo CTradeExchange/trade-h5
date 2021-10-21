@@ -446,7 +446,7 @@ export default {
 
                             if ((startLocal.isAfter(todayStr, 'day') && endLocal.isAfter(todayStr, 'day')) || (startLocal.isBefore(tomorrowStr, 'day') && endLocal.isBefore(tomorrowStr, 'day'))) {
                                 state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
-                            } else if (endLocal.isSame(tomorrowStr, 'day')) {
+                            } else if (endLocal.isSame(tomorrowStr, 'minute')) {
                                 state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-24:00')
                             } else {
                                 state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-23:59')
@@ -460,6 +460,21 @@ export default {
                                 state.appendMap = state.checkedType.extend
                             }
                         })
+
+                        // 重新排序
+                        const newTimeList = [] // 排序并筛选后的时间列表
+                        state.resultTimeMap[payItem.id].filter(el => el).forEach(item => {
+                            if (item.split('-')[0] === '00:00') {
+                                newTimeList.unshift(item)
+                            } else {
+                                newTimeList.push(item)
+                            }
+                        })
+                        // state.resultTimeMap[payItem.id] = newTimeList
+
+                        // 处理时间重叠情况,如果第一段的结束时间和第二段开始时间相差一分钟则合并
+                        /*
+                         */
 
                         // 处理时间重叠情况
                         /* const resultTime = state.resultTimeMap[payItem.id].reverse().filter(el => el)
