@@ -2,7 +2,7 @@
     <div class='searchResultItem'>
         <div class='product' @click='toProduct'>
             <div class='name'>
-                <span>{{ product.symbolName }}</span>
+                <span>{{ product.displayName }}</span>
             </div>
             <div class='block'>
                 <span class='symbol-code'>

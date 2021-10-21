@@ -2,7 +2,7 @@
     <div class='contractWrapper'>
         <top
             :sub-title='product.symbolCode'
-            :title='product.symbolName'
+            :title='product.displayName'
         />
         <div class='container'>
             <van-cell :title='$t("contract.symbolCode")' :value='product.symbolCode' />

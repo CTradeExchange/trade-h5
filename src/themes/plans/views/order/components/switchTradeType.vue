@@ -3,7 +3,7 @@
         <div class='productInfo'>
             <span class='icon_chouti' @click="$emit('switchProduct')"></span>
             <span class='productName'>
-                {{ product.symbolName }}
+                {{ product.displayName }}
             </span>
             <span class='upDownWidth' :class='product.upDownColor'>
                 {{ product.upDownWidth }}

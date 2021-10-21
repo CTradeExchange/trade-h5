@@ -5,7 +5,7 @@
             <div class='cell'>
                 <div class='th'>
                     <div class='name'>
-                        {{ data.symbolName }}
+                        {{ data.displayName }}
                     </div>
                     <div class='lot'>
                         {{ data.symbolCode }}

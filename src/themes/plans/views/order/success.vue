@@ -13,7 +13,7 @@
         <div class='orderInfo'>
             <div class='product'>
                 <p class='productTitle'>
-                    {{ product.symbolName }}
+                    {{ product.displayName }}
                 </p>
                 <p class='productCode'>
                     {{ product.symbolCode }}

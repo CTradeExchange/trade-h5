@@ -1,13 +1,13 @@
 <template>
     <div class='productItem of-1px-bottom' :class='[bgClass]' :data-symbolId='product.symbolId' @click="$emit('open')">
-        <div v-if='product.symbolName' class='cell'>
+        <div v-if='product.displayName' class='cell'>
             <p
                 class='th name'
                 :class='[
                     getLen(product.simplified) > 10 && "small",
                     getLen(product.simplified) > 15 && "mini"]'
             >
-                {{ product.symbolName }}
+                {{ product.displayName }}
             </p>
             <div class='tb'>
                 <span
@@ -26,7 +26,7 @@
                 </span>
             </div>
         </div>
-        <!-- <div v-if='product.symbolName' class='cell'>
+        <!-- <div v-if='product.displayName' class='cell'>
             <p>
                 <span class='upDownAmount' :class='product.upDownColor'>
                     {{ product.upDownAmount }}
@@ -55,7 +55,7 @@ export default {
         const store = useStore()
 
         const quoteMode = computed(() => store.state.quoteMode)
-        const longName = computed(() => getLen(props.product?.symbolName) > 10)
+        const longName = computed(() => getLen(props.product?.displayName) > 10)
         const tickTime = computed(() => {
             const tick_time = props.product.tick_time ?? ''
             return tick_time ? dayjs(Number(tick_time)).format('HH:mm:ss') : ''

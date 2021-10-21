@@ -57,7 +57,7 @@
                             {{ Number(item.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
                         </span>&nbsp;
                         <span class='name'>
-                            {{ item?.symbolName || '--' }}
+                            {{ item?.displayName || '--' }}
                         </span>
                     </div>
                     <div class='fr'>
@@ -304,7 +304,7 @@ export default {
         // 产品选择品选择产品回调
         const onSelectProduct = (p) => {
             state.curProduct = p
-            state.product[1].text = p.symbolName
+            state.product[1].text = p.displayName
             state.switchProductVisible = false
             resetParams()
             state.params.symbolId = p.symbolId

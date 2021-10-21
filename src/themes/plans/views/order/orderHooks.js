@@ -70,7 +70,7 @@ export default function hooks (state) {
             item.listByUser.forEach(el => {
                 if (resultProduct) return
                 const symbolKey = `${el}_${tradeType}`
-                if (productMap.value[symbolKey]?.symbolName) resultProduct = symbolKey
+                if (productMap.value[symbolKey]?.displayName) resultProduct = symbolKey
             })
             if (resultProduct) return resultProduct
         }

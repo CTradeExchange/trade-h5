@@ -1,9 +1,9 @@
 <template>
     <div class='page-wrap' :class='{ isIframe: $route.query.isUniapp }'>
         <LayoutTop v-if='!$route.query.isUniapp' :back='true' :menu='false'>
-            <p class='symbolName'>
-                <i v-if='product.symbolName' class='icon_chouti' @click='showSidebar=true'></i>
-                {{ product.symbolName }}
+            <p class='displayName'>
+                <i v-if='product.displayName' class='icon_chouti' @click='showSidebar=true'></i>
+                {{ product.displayName }}
             </p>
             <p class='infomation'>
                 {{ product.symbolCode }} {{ $t('trade.update') }}:{{ formatTime(product.tick_time) }}
@@ -878,12 +878,13 @@ export default {
 
         // 图表初始值
         const initialValue = computed(() => {
-            if (product.value.symbolName) {
+            if (product.value.displayName) {
                 return {
-                    text: product.value.symbolName, // 用于vant组件显示
+                    text: product.value.displayName, // 用于vant组件显示
                     description: product.value.symbolCode, // 显示在图表左上角
                     symbolId: product.value.symbolId, // 产品id
                     digits: product.value.symbolDigits, // 小数点
+                    dealMode: product.value.dealMode, // 成交模式
                     tradeType: getTradeType(), // 玩法
                     interval: locChartConfig?.resolution // 周期
                 }
@@ -1065,7 +1066,7 @@ export default {
     margin-bottom: rem(120px);
     overflow: auto;
     background: var(--bgColor);
-    .symbolName {
+    .displayName {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;

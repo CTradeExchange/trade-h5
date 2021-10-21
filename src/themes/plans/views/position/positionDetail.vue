@@ -7,7 +7,7 @@
                     <div class='item item-1'>
                         <div class='left'>
                             <div class='name'>
-                                {{ positionData?.symbolName }}
+                                {{ positionData?.displayName }}
                             </div>
                             <div class='code'>
                                 {{ positionData?.symbolCode }}

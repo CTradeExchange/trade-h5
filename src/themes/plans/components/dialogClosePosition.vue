@@ -13,7 +13,7 @@
         <div class='dialog-header'>
             <div class='title'>
                 <p class='productName'>
-                    {{ data.symbolName }}
+                    {{ data.displayName }}
                 </p><p class='lot'>
                     {{ product.symbolCode }}
                 </p>

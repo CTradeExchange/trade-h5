@@ -6,7 +6,7 @@
         </div>
         <div class='container'>
             <div v-if='product' class='main'>
-                <div v-if='orderHandicapVisible && product.symbolName' class='left'>
+                <div v-if='orderHandicapVisible && product.displayName' class='left'>
                     <!-- 五档报价 -->
                     <OrderHandicap :product='product' />
                 </div>
