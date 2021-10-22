@@ -513,9 +513,9 @@ class Chart {
         !_linesMap[symbolId] && (_linesMap[symbolId] = {})
         const target = _linesMap[symbolId]
 
-        if (this.property.showLastPrice && !target.showLastPrice) {
-            target.showLastPrice = this.widget.activeChart().createOrderLine()
-                .setPrice(price)
+        if (this.property.showLastPrice && !target.lastPriceLine) {
+            target.lastPriceLine = this.widget.activeChart().createOrderLine()
+                .setPrice(10)
                 .setText('')
                 .setLineStyle(1)
                 .setLineColor('#467fd3')
@@ -523,10 +523,10 @@ class Chart {
         }
 
         if (this.property.showLastPrice) {
-            target.showLastPrice.setPrice(price)
+            target.lastPriceLine.setPrice(price)
         } else {
-            target.showLastPrice && target.showLastPrice.remove()
-            target.showLastPrice = null
+            target.lastPriceLine && target.lastPriceLine.remove()
+            target.lastPriceLine = null
         }
     }
 
@@ -552,7 +552,7 @@ class Chart {
 
     // 切换图表类型
     setChartType = (type) => {
-        if (typeof type === 'number') {
+        if (typeof type === 'number' && !isNaN(type)) {
             // 0:Bar 1:Candle 2:Line 3:Area ,8:Heikin-Ashi ,9: Hollow Candle 10: Baseline 12 10Hi-Lo
             this.widget.activeChart().setChartType(type)
         }
