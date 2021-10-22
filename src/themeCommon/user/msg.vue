@@ -58,7 +58,7 @@ export default {
     },
     setup (props) {
         const store = useStore()
-        const { t, tm } = useI18n({ useScope: 'global' })
+        const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             list: [],
             loading: false,
@@ -68,7 +68,24 @@ export default {
             type: '',
             errorTip: '',
             rightAction: { title: 444 },
-            options: tm('msg.typesOptions')
+            options: [
+                {
+                    'text': t('msg.all'),
+                    'value': ''
+                },
+                {
+                    'text': t('msg.accountMsg'),
+                    'value': 'USER_MESSAGE'
+                },
+                {
+                    'text': t('msg.assetsMsg'),
+                    'value': 'CASH_MESSAGE'
+                },
+                {
+                    'text': t('msg.tradeMsg'),
+                    'value': 'TRADE_MESSAGE'
+                }
+            ]
         })
         const isError = computed(() => !!state.isError)
 

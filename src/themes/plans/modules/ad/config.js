@@ -6,24 +6,10 @@ export default {
     exclude: ['Register', 'TradeIndex', 'Nav', 'mine'], // 排除的页面code
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
-
-        {
-            name: 'autoplay',
-            label: '自动轮播间隔',
-            type: 'Select',
-            default: 3000,
-            options: [
-                { value: 1000, label: '1000ms' },
-                { value: 2000, label: '2000ms' },
-                { value: 3000, label: '3000ms' },
-                { value: 5000, label: '5000ms' },
-                { value: 7000, label: '7000ms' },
-            ]
-        },
         {
             name: 'items',
             type: 'Array',
-            label: '轮播项',
+            label: '广告项',
             max: 5,
             config: [
                 ...common,
