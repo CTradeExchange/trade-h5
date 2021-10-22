@@ -84,7 +84,7 @@
                                     <span class='right-val'>
                                         {{ item.finalAmount }}
                                         <template v-if='item.withdrawType === 1'>
-                                            {{ item.accountCurrency }}
+                                            {{ item.withdrawCurrency }}
                                         </template>
                                         <template v-if='item.withdrawType === 2'>
                                             {{ item.withdrawCurrency }}-{{ item.blockchainName }}
@@ -96,13 +96,7 @@
                                         {{ $t('withdrawRecord.accountDeduction') }}
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.accountDeductAmount }}
-                                        <template v-if='item.withdrawType === 1'>
-                                            {{ item.withdrawCurrency }}
-                                        </template>
-                                        <template v-if='item.withdrawType === 2'>
-                                            {{ item.accountCurrency }}
-                                        </template>
+                                        {{ item.accountDeductAmount }} {{ item.accountCurrency }}
                                     </span>
                                 </div>
                                 <div class='w-item'>
