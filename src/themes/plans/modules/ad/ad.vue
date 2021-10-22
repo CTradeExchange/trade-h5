@@ -1,8 +1,8 @@
 <template>
-    <div class='BanderBanner'>
+    <div class='BanderBanner' :style='data.styleObj'>
         <van-swipe :loop='false' :show-indicators='false' :width='300'>
             <van-swipe-item v-for='item in data.items' :key='item.src' class='item'>
-                <a v-if='item.href' href='javascript:;' @click='openUrl(item.href)'>
+                <a v-if='item.href' href='javascript:;' @click="$emit('openUrl',item)">
                     <img :src='item.src || "http://prewpadmin.cats-trade.com/wp-content/uploads/2021/07/minibanner2.png"' />
                 </a>
                 <img v-else :src='item.src' />

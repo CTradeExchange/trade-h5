@@ -193,11 +193,8 @@
                             </span>
                         </p>
                         <p class='tl-item'>
-                            <span v-if='[1, 2].includes(Number(tradeType)) '>
+                            <span>
                                 #{{ item?.dealId }}
-                            </span>
-                            <span v-else>
-                                #{{ item?.orderId }}
                             </span>
                         </p>
                     </div>

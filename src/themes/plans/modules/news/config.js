@@ -14,12 +14,11 @@ export default {
             name: 'newsArea',
             label: '地区',
             type: 'Radio',
-            default: true,
+            default: 1,
             options: [
                 { value: 1, label: '中国大陆' },
                 { value: 2, label: '其它地区' }
             ],
-            default: 1
         },
         {
             name: 'orgid',

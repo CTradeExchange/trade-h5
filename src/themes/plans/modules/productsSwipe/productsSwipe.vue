@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :style='data.styleObj'>
         <div v-if='h5Preview' class='default-wrap'>
             <img alt='' :src='defaultImg' />
         </div>

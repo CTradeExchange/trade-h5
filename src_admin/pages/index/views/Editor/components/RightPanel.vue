@@ -84,10 +84,10 @@
                                 </div>
                             </div>
                         </div>
-                        <el-divider content-position='left'>
+                        <!-- <el-divider content-position='left'>
                             样式设置
                         </el-divider>
-                        <File :active-data='activeData.background' :config="{ label:'背景图片' }" @formChange='updateBackground' />
+                        <File :active-data='activeData.background' :config="{ label:'背景图片' }" @formChange='updateBackground' /> -->
                         <el-divider content-position='left'>
                             位置设置
                             <el-button v-if='!element.hidden' class='delete-btn' icon='el-icon-delete' type='text' @click='deleteElement(activated)'>

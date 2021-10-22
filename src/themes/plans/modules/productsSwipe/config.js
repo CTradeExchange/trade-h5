@@ -6,7 +6,7 @@ img.forEach(item => {
 export default {
     title: '产品行情轮播',
     tag: 'productsSwipe',
-    exclude: ['nav'], // 排除的页面code
+    include: ['home'], // 只有这些页面显示
     tagIcon: 'el-icon-s-marketing',
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
