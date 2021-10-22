@@ -463,7 +463,7 @@ export default {
             queryPaymentArray().then(res => {
                 if (res.success && res.data) {
                     that.pyamentList = res.data
-                    if (that.pyamentList.length > 0 && isEmpty(that.form.paymentIconList)) {
+                    if (that.pyamentList.length > 0) {
                         that.pyamentList.forEach(el => {
                             that.form.paymentIconList[el.paymentName] = {}
                             that.lang.forEach(lang => {
