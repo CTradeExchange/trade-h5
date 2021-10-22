@@ -516,7 +516,7 @@ export default {
                     extend: {}
 
                 }, elementConfig.data),
-                id: `${data.tag}_${ELEMENIINDEX}`,
+                id: `${data.tag}_${randomStr()}`,
                 hidden: data.hidden,
                 tag: data.tag,
                 index: index || 0

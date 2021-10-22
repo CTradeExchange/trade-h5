@@ -1,6 +1,6 @@
 <template>
     <div class='imgsg' :style='data.styleObj'>
-        <a v-if='data.href' href='javascript:;' @click='openUrl(data.href)'>
+        <a v-if='data.href' href='javascript:;' @click='openUrl(data)'>
             <img alt='' class='img' :src='data.src || placeholder' />
         </a>
         <img v-else alt='' class='img' :src='data.src || placeholder' />

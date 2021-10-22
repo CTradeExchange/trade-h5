@@ -5,6 +5,21 @@
                 <el-scrollbar class='right-scrollbar'>
                     <el-form v-if='activated' label-width='90px' size='small'>
                         <div class='base-setting'>
+                            <el-popconfirm
+                                v-if='!element.hidden'
+                                cancel-button-text='取消'
+                                confirm-button-text='删除'
+                                icon='el-icon-info'
+                                icon-color='red'
+                                title='确定要删除该组件吗？'
+                                @confirm='deleteElement'
+                            >
+                                <template #reference>
+                                    <el-button class='delete-btn' icon='el-icon-delete' type='text'>
+                                        删除组件
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
                             <el-divider content-position='left'>
                                 <h3>基础设置</h3>
                             </el-divider>
@@ -94,10 +109,10 @@
                                 删除
                             </el-button>
                         </el-divider>
-                        <!-- <el-form-item label='组件ID'>
+                        <el-form-item label='组件ID'>
                             <el-input :disabled='true' :value='element.id' />
                         </el-form-item>
-                        <el-form-item label='绑定组件ID'>
+                        <!--<el-form-item label='绑定组件ID'>
                             <el-select v-model='activeData.linkComp' clearable placeholder='请选择'>
                                 <el-option v-for='item in showElementList' :key='item.id' :label='item.id' :value='item.id' />
                             </el-select>
@@ -279,8 +294,8 @@ export default {
             state.extend.splice(index, 1)
         }
 
-        const deleteElement = (id) => {
-            store.commit('editor/DELETE_ELEMENT', id)
+        const deleteElement = () => {
+            store.commit('editor/DELETE_ELEMENT', activated.value)
         }
 
         const addExtendRow = () => {
