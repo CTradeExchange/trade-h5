@@ -174,7 +174,7 @@ export default {
                 verifyCodeCheck({
                     bizType: state.curTab === 0 ? 'SMS_PASSWORD_VERIFICATION_CODE' : 'EMAIL_PASSWORD_VERIFICATION_CODE',
                     toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
-                    sendToken: state.sendToken,
+                    sendToken: state.sendToken || '11',
                     code: state.curTab === 0 ? state.checkCode : state.emailCode
                 }).then(res => {
                     state.loading = false
