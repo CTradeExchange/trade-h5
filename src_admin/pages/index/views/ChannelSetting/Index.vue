@@ -90,6 +90,7 @@
                                             v-model='form.registList[index].customerGroupId'
                                             clearable
                                             placeholder='请选择客户组'
+                                            @change='customerChange(index)'
                                         >
                                             <el-option
                                                 v-for='el in accountTradeList'
@@ -199,8 +200,8 @@
                         <el-tab-pane class='tab pay-channel-setting' label='支付通道图标设置'>
                             <el-row :gutter='20'>
                                 <el-col :offset='0' :span='24'>
-                                    <el-tabs v-model='activeName' @tab-click='handleClick'>
-                                        <el-tab-pane v-for='(item,index) in pyamentList' :key='index' :label='item.paymentName' :name='index'>
+                                    <el-tabs v-model='activeName'>
+                                        <el-tab-pane v-for='(item,index) in pyamentList' :key='index' :label='item.paymentName'>
                                             <el-card class='box-card'>
                                                 <template #header>
                                                     提示：该界面非必填，不填时取系统默认图标
@@ -223,7 +224,7 @@
                                                         </el-col>
                                                         <el-col :offset='0' :span='14'>
                                                             <el-form-item label='支付通道别名'>
-                                                                <el-input v-model='form.paymentIconList[item.paymentName][l.val].alias' class='alias-input' clearable placeholder='请输入支付通道别名' size='normal' />
+                                                                <el-input v-model='form.paymentIconList[item.paymentName][l.val].alias' class='alias-input' clearable placeholder='请输入支付通道别名' />
                                                                 <el-button type='primary' @click='resetPayment(item,l)'>
                                                                     重置
                                                                 </el-button>
@@ -349,7 +350,7 @@ export default {
             zoneList: [],
             otherZoneList: [],
             plansDialogVisible: false,
-            activeName: 0,
+            activeName: '0',
             tradeTypeList: [],
             checkedTradeType: {},
             tradeTypeAssets: [],
@@ -359,7 +360,6 @@ export default {
             getLoading: false,
             setPlansType: 1, // 1 注册客户组玩法 2 游客客户组 3 非默认客户组
             pyamentList: [],
-
             payIcon: {},
             rules: {
                 supportLanguage: [
@@ -473,8 +473,6 @@ export default {
                                 }
                             })
                         })
-
-                        console.log('paymentIconList', that.form.paymentIconList)
                     }
                 }
             })
@@ -582,23 +580,24 @@ export default {
         },
         submit () {
             try {
+                const that = this
                 this.$refs['form'].validate((valid) => {
                     if (!valid) {
                         console.log('error submit!!')
                         return false
                     } else {
-                        this.submitLoading = true
+                        // 表单验证通过
+                        that.submitLoading = true
                         const _formData = cloneDeep(this.form)
 
                         if (_formData.registList.length > 0) {
                             _formData.registList.forEach(el => {
-                                if (isEmpty(el.plans)) {
-                                    this.$message({
+                                if (isEmpty(el.plans) && Number(el.customerGroupId) === 1) {
+                                    that.$message({
                                         message: '请先设置玩法币种',
                                         type: 'warning'
                                     })
-                                    this.submitLoading = false
-
+                                    that.submitLoading = false
                                     throw new Error('noPlans')
                                 } else {
                                     el.plans.forEach(item => {
@@ -611,10 +610,9 @@ export default {
                         }
 
                         // 游客玩法如果没设置则取默认
-                        if (this.form.tradeTypeCurrencyList.length === 0) {
+                        if (that.form.tradeTypeCurrencyList.length === 0) {
                             const plans = []
-
-                            this.accountTradeList[2].data.forEach(el => {
+                            that.accountTradeList[2].data.forEach(el => {
                                 plans.push({
                                     id: el.trade_type,
                                     alias: '',
@@ -632,27 +630,49 @@ export default {
 
                         saveViChannel({
                             content: JSON.stringify(_formData), // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', //
-                            id: this.pageId,
+                            id: that.pageId,
                             other: '',
                         }).then(res => {
                             if (!res.success) {
                                 return this.$message.error(res.message)
                             }
-                            this.$message({
+                            that.$message({
                                 message: '保存成功',
                                 type: 'success'
                             })
-                            this.getPageConfig()
+                            that.getPageConfig()
                         }).catch(error => {
                             console.log(error)
                         }).finally(() => {
-                            this.submitLoading = false
+                            that.submitLoading = false
                         })
                     }
                 })
             } catch (error) {
                 console.log('error', error)
             }
+        },
+        customerChange (index) {
+            this.curIndex = index
+            const customerGroupId = this.form.registList[index].customerGroupId
+            const plans = []
+            this.accountTradeList[customerGroupId].data.forEach(el => {
+                let allCurrency = el.assets.map(el => el.code) || ''
+                if ([3, 5, 9].includes(Number(el.trade_type))) {
+                    allCurrency = allCurrency.toString()
+                }
+                plans.push({
+                    id: el.trade_type,
+                    alias: '',
+                    isWallet: '',
+                    sort: 0,
+                    allCurrency,
+                    tradeType: el.trade_type,
+                    name: el.trade_name
+
+                })
+            })
+            this.form.registList[index].plans = plans
         },
         addFormItem () {
             /*  this.otherZoneList = this.zoneList.filter(item => {
@@ -667,6 +687,7 @@ export default {
                 this.form.registList.splice(index, 1)
             }
         },
+
         handleSavePlans () {
             let assetFlag = true
 
