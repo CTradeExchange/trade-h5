@@ -1,5 +1,5 @@
 <template>
-    <div class='m-infoflow'>
+    <div class='m-infoflow' :style='data.styleObj'>
         <div class='m-infoflow_title'>
             {{ $t('information.reference') }}
         </div>

@@ -520,24 +520,10 @@
         ]
     },
     "msg": {
-        "typesOptions": [
-            {
-                "text": "全部消息",
-                "value": ""
-            },
-            {
-                "text": "账户消息",
-                "value": "USER_MESSAGE"
-            },
-            {
-                "text": "资金消息",
-                "value": "CASH_MESSAGE"
-            },
-            {
-                "text": "交易消息",
-                "value": "TRADE_MESSAGE"
-            }
-        ]
+        "all": "全部消息",
+        "accountMsg": "账户消息",
+        "tradeMsg": "交易消息",
+        "assetsMsg": "资金消息"
     },
     "setting": {
         "enableNews": "启用新闻",

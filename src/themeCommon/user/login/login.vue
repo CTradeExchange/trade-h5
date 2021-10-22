@@ -184,6 +184,8 @@ export default {
 
                 // 登录websocket
                 instance.appContext.config.globalProperties.$MsgSocket.login()
+                store.commit('del_cacheViews', 'Home')
+                store.commit('del_cacheViews', 'Layout')
 
                 // 登录KYC,kycAuditStatus:0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
                 // companyKycStatus 公司KYC开户状态，1开启 2未开启

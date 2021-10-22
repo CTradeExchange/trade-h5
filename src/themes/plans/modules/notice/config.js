@@ -20,6 +20,7 @@ export default {
                     name: 'text',
                     label: '内容',
                     type: 'Textarea',
+                    default: '默认文字'
                 },
             ]
         },

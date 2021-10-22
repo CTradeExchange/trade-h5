@@ -57,6 +57,7 @@ export default {
                     _div.innerHTML = html
                     const imgUrl = _div.querySelector('img').src
                     this.$emit('formChange', imgUrl)
+                    this.imgUrl = imgUrl
                 }
             } else {
                 console.log('执行WordPress window.tb_show方法显示上传图片功能')

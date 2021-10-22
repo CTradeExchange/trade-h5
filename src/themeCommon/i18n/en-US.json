@@ -517,24 +517,11 @@
             ]
         },
         "msg": {
-            "typesOptions": [
-                {
-                    "text": "All message",
-                    "value": ""
-                },
-                {
-                    "text": "account message",
-                    "value": "USER_MESSAGE"
-                },
-                {
-                    "text": "Fund message",
-                    "value": "CASH_MESSAGE"
-                },
-                {
-                    "text": "Trade message",
-                    "value": "TRADE_MESSAGE"
-                }
-            ]
+            "all": "All message",
+            "accountMsg": "account message",
+            "tradeMsg": "Trade message",
+            "assetsMsg": "Fund message"
+
         },
         "setting": {
             "enableNews": "Enable news",

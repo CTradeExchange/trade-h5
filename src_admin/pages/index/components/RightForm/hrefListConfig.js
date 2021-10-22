@@ -1,14 +1,14 @@
 import { h5PageList } from '@index/views/Pages/h5PageList.js'
 export default [
     ...h5PageList.filter(item => (!item.notHref)),
-    {
-        name: 'DepositFunds',
-        title: '入金'
-    },
-    {
-        name: 'WithAmount',
-        title: '出金'
-    },
+    // {
+    //     name: 'DepositFunds',
+    //     title: '入金'
+    // },
+    // {
+    //     name: 'WithAmount',
+    //     title: '出金'
+    // },
     {
         name: 'Login',
         title: '登录'
@@ -22,10 +22,6 @@ export default [
         title: '消息中心'
     },
     {
-        name: 'mt4',
-        title: 'MT4出入金'
-    },
-    {
         name: 'Search',
         title: '搜索产品'
     },
@@ -34,7 +30,7 @@ export default [
         title: '个人资料'
     },
     {
-        name: 'ResetPwd',
+        name: 'SetLoginPwd',
         title: '修改密码'
     },
     // {
@@ -45,14 +41,7 @@ export default [
         name: 'Nest',
         title: '外部地址',
         config: [
-            {
-                position: 'params',
-                type: 'Input',
-                name: 'id',
-                label: 'id',
-                hidden: true,
-                default: 'queryinfo',
-            },
+
             {
                 position: 'query',
                 type: 'Input',

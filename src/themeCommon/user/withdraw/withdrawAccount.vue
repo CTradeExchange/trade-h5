@@ -32,7 +32,7 @@
             </div>
 
             <div class='footerBtn'>
-                <van-button block type='primary' @click='next'>
+                <van-button block :disabled='disabled' type='primary' @click='next'>
                     {{ $t('common.nextStep') }}
                 </van-button>
             </div>
@@ -102,7 +102,8 @@ export default {
             lang: getCookie('lang'),
             methodPickerShow: false,
             methodList: [],
-            withdrawMethodText: ''
+            withdrawMethodText: '',
+            disabled: false
         })
 
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
@@ -168,9 +169,6 @@ export default {
         }
 
         const next = () => {
-            if (columns.value.length === 0 || state.inCurrencyList.length === 0) {
-                return Toast(t('withdraw.tips1'))
-            }
             router.push({
                 path: 'withdraw',
                 query: {
@@ -204,6 +202,7 @@ export default {
             state.currencyList = res.data
 
             if (res.check() && res.data.list.length > 0) {
+                state.disabled = false
                 state.withdrawMap = res.data.map
                 state.inCurrencyList = res.data.list.map(el => {
                     return {
@@ -214,6 +213,11 @@ export default {
 
                 state.inCurrency = res.data.list[0].currency
                 state.currentTab = res.data.list[0].withdrawMethod
+            } else {
+                if (columns.value.length === 0 || state.inCurrencyList.length === 0) {
+                    state.disabled = true
+                    return Toast(t('withdraw.tips1'))
+                }
             }
         }).catch(err => {
             state.loadingMore = false
