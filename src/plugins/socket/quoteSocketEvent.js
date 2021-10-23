@@ -77,32 +77,41 @@ class SocketEvent {
     */
     send_subscribe (productIds = []) {
         if (!productIds || productIds.length === 0) return false
-        this.subscribedList = productIds
-        const subscribeList = formatSubscribe(productIds)
-        this.send(14000, { symbol_list: subscribeList })
+        const productMap = this.$store.state._quote.productMap
+
+        // 拿到产品精简信息后，根据交易模式进行订阅产品行情
+        this.$store.dispatch('_quote/querySymbolBaseInfoList').then((res) => {
+            this.subscribedList = productIds
+            const subscribeList = formatSubscribe(productIds, productMap)
+            this.send(14000, { symbol_list: subscribeList })
+        })
     }
 
     // 盘口成交报价订阅
     deal_subscribe (symbol_id, depth_level = 10, merge_accuracy, trade_type, trade_info_count) {
         this.$store.commit('_quote/Delete_dealList') // 删除成交数据
-        this.subscribeDeal = [{ symbol_id, depth_level, merge_accuracy, trade_type }]
-
-        const list = [{
-            symbol_id: Number(symbol_id), // 产品ID ，类型：uint64
-            trade_type, // 交易类型，类型：uint32，1：cfd，2：me
-            depth_level, // 深度层级，类型：uint32，该字段有效范围1到10之间
-            merge_accuracy,
-            trade_info_count
-        }]
-        this.send(14010, { symbol_list: list })
+        const productMap = this.$store.state._quote.productMap
+        this.$store.dispatch('_quote/querySymbolBaseInfoList').then(() => {
+            const product = productMap[`${symbol_id}_${trade_type}`]
+            this.subscribeDeal = [{ symbol_id, depth_level, merge_accuracy, trade_type, trade_info_count, trade_mode: product.dealMode }]
+            const list = [{
+                symbol_id: Number(symbol_id), // 产品ID ，类型：uint64
+                trade_mode: product.dealMode, // 成交模式
+                trade_type, // 交易类型，类型：uint32，1：cfd，2：me
+                depth_level, // 深度层级，类型：uint32，该字段有效范围1到10之间
+                merge_accuracy,
+                trade_info_count
+            }]
+            this.send(14010, { symbol_list: list })
+        })
     }
 
     // websocket连接成功
     onOpen () {
         if (this.subscribedList.length) this.send_subscribe(this.subscribedList)
         if (this.subscribeDeal.length) {
-            const { symbol_id, depth_level, merge_accuracy, trade_type } = this.subscribeDeal[0]
-            this.deal_subscribe(symbol_id, depth_level, merge_accuracy, trade_type)
+            const { symbol_id, depth_level, merge_accuracy, trade_type, trade_info_count, trade_mode } = this.subscribeDeal[0]
+            this.deal_subscribe(symbol_id, depth_level, merge_accuracy, trade_type, trade_info_count, trade_mode)
         }
     }
 
@@ -154,8 +163,8 @@ class SocketEvent {
 
     // 实时报价
     tick (p) {
-        // p(1123,1,1232312,34545435345,6.23,6.23,6.24);(1124,2,1232314,34545435345,7.23,7.23,7.24)
-        // 产品ID，报价序号，报价时间戳，当前价，第一档bid卖价，第一档ask买价
+        // p(symbol_id,trade_type,trade_mode,seq,tick_time,price,price_bid1,price_ask1,volume_bid1,volume_ask1);
+        // p(产品ID，报价交易类型，成交模式，报价序号，报价时间戳，当前价，第一档bid价，第一档ask价, 第一档bid量, 第一档ask量);
 
         if (this.newPriceTimer) clearTimeout(this.newPriceTimer)
         const $store = this.$store

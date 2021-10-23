@@ -28,7 +28,13 @@
                         <van-collapse-item :name='index+1'>
                             <template #title>
                                 <p class='amount'>
-                                    {{ item.amount }} {{ item.accountCurrency }}
+                                    {{ item.amount }}
+                                    <template v-if='item.withdrawType === 1'>
+                                        {{ item.accountCurrency }}
+                                    </template>
+                                    <template v-if='item.withdrawType === 2'>
+                                        {{ item.withdrawCurrency }}-{{ item.blockchainName }}
+                                    </template>
                                 </p>
                                 <p class='time'>
                                     {{ formatTime(item.createTime) }}
@@ -38,7 +44,6 @@
                                 <div class='right-lump'>
                                     <span class='state'>
                                         {{ handleState(item.checkStatus,item.transferStatus) }}
-                                        <!-- {{ states[item.checkStatus] }} -->
                                     </span>
                                     <van-icon :name='activeIndex === index+1 ? "arrow-up" : "arrow-down"' />
                                 </div>
@@ -49,7 +54,13 @@
                                         {{ $t('withdrawRecord.moneyName') }}
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.amount }} {{ item.accountCurrency }}
+                                        {{ item.amount }}
+                                        <template v-if='item.withdrawType === 1'>
+                                            {{ item.accountCurrency }}
+                                        </template>
+                                        <template v-if='item.withdrawType === 2'>
+                                            {{ item.withdrawCurrency }}-{{ item.blockchainName }}
+                                        </template>
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -57,7 +68,13 @@
                                         {{ $t('withdrawRecord.serviceName') }}
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.withdrawFee }} {{ item.accountCurrency }}
+                                        {{ item.withdrawFee }}
+                                        <template v-if='item.withdrawType === 1'>
+                                            {{ item.accountCurrency }}
+                                        </template>
+                                        <template v-if='item.withdrawType === 2'>
+                                            {{ item.withdrawCurrency }}-{{ item.blockchainName }}
+                                        </template>
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -65,7 +82,13 @@
                                         {{ $t('withdrawRecord.predictName') }}
                                     </span>
                                     <span class='right-val'>
-                                        {{ item.finalAmount }} {{ item.withdrawCurrency }}
+                                        {{ item.finalAmount }}
+                                        <template v-if='item.withdrawType === 1'>
+                                            {{ item.withdrawCurrency }}
+                                        </template>
+                                        <template v-if='item.withdrawType === 2'>
+                                            {{ item.withdrawCurrency }}-{{ item.blockchainName }}
+                                        </template>
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -183,7 +206,7 @@ export default {
             }
         }
 
-        const activeIndex = ref(['0'])
+        const activeIndex = ref('0')
         const state = reactive({
             loading: false,
             size: 20,

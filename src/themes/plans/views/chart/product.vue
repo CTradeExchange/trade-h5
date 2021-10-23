@@ -884,6 +884,7 @@ export default {
                     description: product.value.symbolCode, // 显示在图表左上角
                     symbolId: product.value.symbolId, // 产品id
                     digits: product.value.symbolDigits, // 小数点
+                    dealMode: product.value.dealMode, // 成交模式
                     tradeType: getTradeType(), // 玩法
                     interval: locChartConfig?.resolution // 周期
                 }
