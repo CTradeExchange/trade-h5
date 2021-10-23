@@ -670,21 +670,23 @@ export default {
         customerChange (index) {
             this.curIndex = index
             const customerGroupId = this.form.registList[index].customerGroupId
-            const plans = []
-            this.accountTradeList[customerGroupId].data.forEach(el => {
-                const allCurrency = el.assets.map(el => el.code) || ''
-                plans.push({
-                    id: el.trade_type,
-                    alias: '',
-                    isWallet: '',
-                    sort: 0,
-                    allCurrency: allCurrency.toString(),
-                    tradeType: el.trade_type,
-                    name: el.trade_name
+            if (Number(customerGroupId) !== 1) {
+                const plans = []
+                this.accountTradeList[customerGroupId].data.forEach(el => {
+                    const allCurrency = el.assets.map(el => el.code) || ''
+                    plans.push({
+                        id: el.trade_type,
+                        alias: '',
+                        isWallet: '',
+                        sort: 0,
+                        allCurrency: allCurrency.toString(),
+                        tradeType: el.trade_type,
+                        name: el.trade_name
 
+                    })
                 })
-            })
-            this.form.registList[index].plans = plans
+                this.form.registList[index].plans = plans
+            }
         },
         addFormItem () {
             this.handleCountry()
