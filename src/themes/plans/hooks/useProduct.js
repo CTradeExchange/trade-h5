@@ -15,9 +15,11 @@ export default function ({ tradeType, categoryType }) {
             id: 'selfSymbol',
             listByUser: Array.isArray(listByUser) ? listByUser : [listByUser]
         }
+        const tradeTypeQuote = unref(userProductCategory)[unref(tradeType)] || []
+
         return [
             selfSymbol,
-            ...unref(userProductCategory)[unref(tradeType)]
+            ...tradeTypeQuote
         ]
     })
 

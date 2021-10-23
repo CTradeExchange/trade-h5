@@ -125,22 +125,24 @@ export default {
         })
         let token = ''
 
-        pageConfig('Register').then(res => {
-            state.pageui = res
-        })
+        // pageConfig('Register').then(res => {
+        //     state.pageui = res
+        // })
         // 获取国家区号
         store.dispatch('getCountryListByParentCode').then(res => {
             if (res.check() && res.data.length) {
                 const defaultZone = store.state._base.wpCompanyInfo?.defaultZone
+                const countryList = store.state._base.wpCompanyInfo?.registrable || res.data
                 if (defaultZone?.code) {
                     state.zone = `${defaultZone.name} (${defaultZone.country_code})`
                     state.countryZone = defaultZone.country_code
                     state.countryCode = defaultZone.code
                 } else {
-                    const firstItem = res.data[0]
-                    state.zone = firstItem.name + ` (${firstItem.countryCode})`
-                    state.countryZone = defaultZone.countryCode
-                    state.countryCode = defaultZone.code
+                    const firstItem = countryList[0]
+                    const countryCode = firstItem.countryCode || firstItem.country_code
+                    state.zone = firstItem.name + ` (${countryCode})`
+                    state.countryZone = countryCode
+                    state.countryCode = firstItem.code
                 }
             }
         })

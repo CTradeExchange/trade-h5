@@ -190,6 +190,8 @@ export default {
                 } else {
                     state.entryType = 1 // 1按数量下单 2按成交额下单
                 }
+            } else {
+                state.entryType = 1 // 1按数量下单 2按成交额下单
             }
         }
 
