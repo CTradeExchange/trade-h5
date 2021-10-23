@@ -73,10 +73,12 @@
                                             filterable
                                             placeholder='请选择国家'
                                             value-key='id'
+                                            @focus='countryChange'
                                         >
                                             <el-option
-                                                v-for='country in otherZoneList'
+                                                v-for='country in registZoneList'
                                                 :key='country'
+                                                :disabled='country.disabled'
                                                 :label='country.name'
                                                 :value='country'
                                             />
@@ -349,6 +351,7 @@ export default {
             supportArea: [],
             zoneList: [],
             otherZoneList: [],
+            registZoneList: [],
             plansDialogVisible: false,
             activeName: '0',
             tradeTypeList: [],
@@ -425,11 +428,12 @@ export default {
                     that.form.registList[0].customerGroupId = '1'
                 }
 
-                that.otherZoneList = that.form.registrable.concat(
+                that.otherZoneList = that.form.registrable
+                this.registZoneList = that.otherZoneList.concat(
                     {
                         id: 9999,
                         isOther: true,
-                        name: '全部',
+                        name: '其它',
                     }
                 )
             }).catch(error => {
@@ -451,11 +455,14 @@ export default {
         changeSupportArea (val) {
             this.otherZoneList = this.zoneList.filter(el =>
                 val.find(zo => zo.id === el.id)
-            ).concat({
-                id: 9999,
-                isOther: true,
-                name: '全部',
-            })
+            )
+            this.registZoneList = this.otherZoneList.concat(
+                {
+                    id: 9999,
+                    isOther: true,
+                    name: '其它',
+                }
+            )
             // this.otherZoneList = this.zoneList.filter(el => val.includes(el.name + ' (' + el.country_code + ')'))
         },
         getPaymentArray () {
@@ -589,16 +596,24 @@ export default {
                         // 表单验证通过
                         that.submitLoading = true
                         const _formData = cloneDeep(this.form)
-
                         if (_formData.registList.length > 0) {
                             _formData.registList.forEach(el => {
+                                if (isEmpty(el.customerGroupId)) {
+                                    that.$message({
+                                        message: '请先选择客户组',
+                                        type: 'warning'
+                                    })
+                                    that.submitLoading = false
+                                    throw new Error('no-customerGroupId')
+                                }
+
                                 if (isEmpty(el.plans) && Number(el.customerGroupId) === 1) {
                                     that.$message({
                                         message: '请先设置玩法币种',
                                         type: 'warning'
                                     })
                                     that.submitLoading = false
-                                    throw new Error('noPlans')
+                                    throw new Error('no-plans')
                                 } else {
                                     el.plans.forEach(item => {
                                         if ([3, 5, 9].includes(Number(item.id)) && Array.isArray(item.allCurrency)) {
@@ -672,12 +687,21 @@ export default {
             this.form.registList[index].plans = plans
         },
         addFormItem () {
-            /*  this.otherZoneList = this.zoneList.filter(item => {
-                const registIds = this.form.registList.map(el => el.registCountry.id)
-                return registIds.indexOf(item.id) === -1
-            })
- */
+            this.handleCountry()
             this.form.registList.push({})
+        },
+        countryChange () {
+            this.handleCountry()
+        },
+        // 处理注册国家下拉框数据，不能重复选择国家
+        handleCountry () {
+            this.registZoneList.map(item => {
+                const registIds = this.form.registList.map(el => el.registCountry.id)
+                item.disabled = false
+                if (registIds.indexOf(item.id) > -1) {
+                    item.disabled = true
+                }
+            })
         },
         removeItem (index) {
             if (index !== 0) {

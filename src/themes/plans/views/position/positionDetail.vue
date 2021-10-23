@@ -26,17 +26,17 @@
                                 {{ $t('trade.profit') }}({{ assetsInfo?.currency }})
                             </div>
                             <div class='name' :class="parseFloat(positionData?.profitLoss) > 0 ? 'riseColor': 'fallColor'">
-                                {{ positionData?.profitLoss }}
+                                {{ positionData?.profitLoss || '--' }}
                             </div>
                         </div>
-                        <!-- <div class='col'>
+                        <div v-if='Number(positionData.tradeType) === 2' class='col'>
                             <div class='sub'>
                                 {{ $t('trade.swap_2') }}({{ assetsInfo.currency }})
                             </div>
                             <div class='name'>
                                 {{ positionData.interest || '--' }}
                             </div>
-                        </div> -->
+                        </div>
                         <!-- abcc版本不需要显示手续费 -->
                         <!-- <div class='col'>
                             <div class='sub'>
@@ -70,7 +70,7 @@
                                 {{ $t('trade.currentPrice') }}
                             </div>
                             <div class='name' :class='[Number(positionData.direction) === 1 ? product?.sell_color : product?.buy_color]'>
-                                {{ Number(positionData?.direction) === 1 ? product?.sell_price : product?.buy_price }}
+                                {{ (Number(positionData?.direction) === 1 ? product?.sell_price : product?.buy_price) || '--' }}
                             </div>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
                             </div>
                         </div>
                         <div class='col'>
-                            <div class='sub'>
+                            <div class='sub alignRight'>
                                 {{ $t('trade.stopProfitPrice') }}
                             </div>
                             <div class='name'>
@@ -273,8 +273,10 @@ export default {
                             color: var(--minorColor);
                         }
                     }
-                    &:last-child {
-                        text-align: right;
+                    :nth-child(1n) {
+                        .name {
+                            text-align: left;
+                        }
                     }
                 }
             }
