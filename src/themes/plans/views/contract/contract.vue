@@ -67,7 +67,7 @@ import dayjs from 'dayjs'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useI18n } from 'vue-i18n'
 import { mul } from '@/utils/calculation'
-import { sortTimeList, timeListFormat } from './contractUtil'
+import { sortTimeList, timeListFormat, timeListSort } from './contractUtil'
 import BigNumber from 'bignumber.js'
 export default {
     components: {
@@ -100,7 +100,12 @@ export default {
             if (!isEmpty(product.value.tradeTimeList)) {
                 const newTimeList = sortTimeList(product.value.tradeTimeList, utcOffset)
                 timeListFormat(newTimeList)
-                return newTimeList
+                console.log(newTimeList)
+                const timeStrList = JSON.parse(JSON.stringify(newTimeList))
+                timeStrList.forEach((el, i) => {
+                    timeStrList[i] = timeListSort(el)
+                })
+                return timeStrList
             }
             return []
         })

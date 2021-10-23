@@ -54,3 +54,32 @@ export const timeListFormat = (data) => {
         })
     })
 }
+
+// 将时间列表排序
+function timesSort (dataList = []) {
+    const todayStr = dayjs().format('YYYY-MM-DD ')
+    const list = dataList.map(el => (el.timeStr = el.timeStr.split('-'), el))
+    for (let index = 1; index < list.length; index++) {
+        const [prevStart, prevEnd] = list[index - 1].timeStr
+        const [curStart, curEnd] = list[index].timeStr
+        const isBetweenStart = dayjs(todayStr + curStart).isBetween(todayStr + prevStart, todayStr + prevEnd, null, '[]')
+        const isBetweenEnd = dayjs(todayStr + curEnd).isBetween(todayStr + prevStart, todayStr + prevEnd, null, '[]')
+        if (isBetweenStart && isBetweenEnd) {
+            list.splice(index, 1)
+            const newDataList = list.map(el => (el.timeStr = el.timeStr.join('-'), el))
+            return timesSort(newDataList)
+        } else if (isBetweenStart) {
+            list[index - 1].timeStr[1] = curEnd
+            list.splice(index, 1)
+            const newDataList = list.map(el => (el.timeStr = el.timeStr.join('-'), el))
+            return timesSort(newDataList)
+        }
+    }
+    return list
+}
+export const timeListSort = (dataList = []) => {
+    const list = timesSort(dataList)
+    const result = list.map(el => (el.timeStr = el.timeStr.join('-'), el))
+    console.log(result)
+    return result
+}
