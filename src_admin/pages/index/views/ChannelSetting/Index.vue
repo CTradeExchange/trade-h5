@@ -657,16 +657,13 @@ export default {
             const customerGroupId = this.form.registList[index].customerGroupId
             const plans = []
             this.accountTradeList[customerGroupId].data.forEach(el => {
-                let allCurrency = el.assets.map(el => el.code) || ''
-                if ([3, 5, 9].includes(Number(el.trade_type))) {
-                    allCurrency = allCurrency.toString()
-                }
+                const allCurrency = el.assets.map(el => el.code) || ''
                 plans.push({
                     id: el.trade_type,
                     alias: '',
                     isWallet: '',
                     sort: 0,
-                    allCurrency,
+                    allCurrency: allCurrency.toString(),
                     tradeType: el.trade_type,
                     name: el.trade_name
 

@@ -49,28 +49,6 @@ export default {
                     type: 'Product',
                     default: {}
                 },
-                {
-                    name: 'tagsList',
-                    label: '标签',
-                    type: 'Array',
-                    filterName: 'tagDiplay',
-                    exclude: ['3'],
-                    max: 20,
-                    config: [
-                        {
-                            name: 'name',
-                            label: '标签名',
-                            type: 'Input',
-                            default: ''
-                        },
-                        {
-                            name: 'code_ids_all',
-                            label: '标签产品',
-                            type: 'Product',
-                            default: {}
-                        }
-                    ]
-                }
             ]
         }
     ]
