@@ -81,12 +81,17 @@
     </van-dialog>
     <van-dialog v-model:show='timeShow' :title="$t('withdraw.hint')">
         <div class='time-wrap'>
-            <h4>{{ $t('withdraw.timeHint') }} </h4><br />
+            <h4>{{ $t('withdraw.timeHint') }} </h4>
+            <p>{{ $t('withdraw.timeName') }}：</p>
             <div v-if='timeList.length > 0' class='flex'>
-                <p>{{ $t('withdraw.timeName') }}：</p>
                 <div class='time-text'>
-                    <p v-for='(item,index) in timeList' :key='index'>
-                        {{ item.weekDay }}：{{ item.openTimeLocal.toString() }}
+                    <p v-for='(item,index) in timeList' :key='index' class='time-text-flex'>
+                        <span class='time-label'>
+                            {{ item.weekDay }}：
+                        </span>
+                        <span class='time-val'>
+                            {{ item.openTimeLocal.toString() }}
+                        </span>
                     </p><br />
                 </div>
             </div>
@@ -143,6 +148,7 @@ export default {
                 for (const key in timeConfigList) {
                     if (Object.hasOwnProperty.call(timeConfigList, key)) {
                         const item = timeConfigList[key]
+
                         if (!isEmpty(item.openTimeLocal)) {
                             tempList.push({
                                 weekDay: weekdayMap[item.weekDay],
@@ -224,8 +230,14 @@ export default {
             const todayStr = dayjs().format('YYYY-MM-DD')
             state.withdrawConfig.withdrawTimeConfigList.forEach(el => {
                 el.openTimeLocal = []
-                state.withdrawTimeConfigMap[el.weekDay] = el
+                state.withdrawTimeConfigMap[el.weekDay] = {
+                    weekDay: el.weekDay,
+                    openTime: el.openTime,
+                    openTimeLocal: []
+                }
             })
+
+            // 处理跨天逻辑
             for (const key in state.withdrawTimeConfigMap) {
                 if (Object.hasOwnProperty.call(state.withdrawTimeConfigMap, key)) {
                     const el = state.withdrawTimeConfigMap[key]
@@ -248,16 +260,39 @@ export default {
                                     }
                                     state.withdrawTimeConfigMap[weekDay] = elNext
                                 }
+
                                 if (startLocal.isAfter(todayStr, 'day')) {
                                     elNext.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
                                 } else if (endLocal.isAfter(todayStr, 'day')) {
-                                    elNext.openTimeLocal.push('00:00-' + endLocal.format('HH:mm'))
+                                    elNext.openTimeLocal.unshift('00:00-' + endLocal.format('HH:mm'))
                                     el.openTimeLocal.push(startLocal.format('HH:mm') + '-23:59')
                                 } else if (el.openTime !== '00:00-00:00' || el.openTime !== '') {
                                     el.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
                                 }
                             })
                         }
+                    }
+                }
+            }
+
+            // 处理时间合并
+            for (const key in state.withdrawTimeConfigMap) {
+                if (Object.hasOwnProperty.call(state.withdrawTimeConfigMap, key)) {
+                    const el = state.withdrawTimeConfigMap[key]
+                    if (Array.isArray(el.openTimeLocal)) {
+                        el.openTimeLocal.forEach((time, index) => {
+                            const start = el.openTimeLocal[0].split('-')[0]
+
+                            const end = time.split('-')[1]
+                            const nextStart = el.openTimeLocal[index + 1] && el.openTimeLocal[index + 1].split('-')[0]
+                            const nextEnd = el.openTimeLocal[index + 1] && el.openTimeLocal[index + 1].split('-')[1]
+
+                            if (dayjs(`${todayStr} ${end}`).add(1, 'minute').isSame(dayjs(`${todayStr} ${nextStart}`))) {
+                                el.openTimeLocal = start + '-' + nextEnd
+                            } else {
+
+                            }
+                        })
                     }
                 }
             }
@@ -706,10 +741,23 @@ export default {
 .time-wrap {
     padding: 0 rem(30px);
     font-size: rem(28px);
+    h4 {
+        margin: rem(15px) 0;
+    }
     .flex {
         display: flex;
         .time-text {
             flex: 1;
+            .time-text-flex {
+                display: flex;
+                margin-top: rem(10px);
+                .time-label {
+                    flex: 1;
+                }
+                .time-val {
+                    flex: 3;
+                }
+            }
         }
     }
 }
