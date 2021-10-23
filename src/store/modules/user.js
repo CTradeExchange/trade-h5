@@ -12,7 +12,7 @@ export default {
         loginData: '', // login返回的信息
         customerInfo: '', // 用户信息
         account: '', // 当前交易账户信息，在出入金里面用到
-        assetsInfo: '', // 资产信息
+        assetsInfo: {}, // 资产信息
         withdrawConfig: '', // 用户取款配置
         accountAssets: {}, // msg服务推送过来的交易账户资产
         kycState: '', // kyc认证
@@ -89,7 +89,7 @@ export default {
         },
         Update_assetsInfo (state, data) {
             if (!data) return false
-            state.assetsInfo = data
+            state.assetsInfo[data.tradeType] = data
             const accountList = state.customerInfo?.accountList || []
             accountList.forEach(el => {
                 const { currency, tradeType } = el

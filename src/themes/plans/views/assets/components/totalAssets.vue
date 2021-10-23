@@ -75,7 +75,7 @@ export default {
     setup () {
         const store = useStore()
         const router = useRouter()
-        const assetsInfo = computed(() => store.state._user.assetsInfo)
+        const assetsInfo = computed(() => store.state._user.assetsInfo[tradeType.value])
         // 获取玩法列表
         const plans = computed(() => store.state._base.plans)
         const tradeType = computed(() => store.state._quote.curTradeType || plans.value[0].id)
