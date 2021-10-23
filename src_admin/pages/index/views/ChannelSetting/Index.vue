@@ -26,8 +26,8 @@
         <el-row>
             <el-col class='btns' :span='24'>
                 <el-form ref='form' label-width='100px' :model='form' :rules='rules'>
-                    <el-tabs type='border-card'>
-                        <el-tab-pane class='tab' label='渠道基础设置'>
+                    <el-tabs v-model='optionName' type='border-card'>
+                        <el-tab-pane class='tab' label='渠道基础设置' name='first'>
                             <el-form-item label='可注册区号'>
                                 <el-select
                                     v-model='form.registrable'
@@ -199,7 +199,7 @@
                                 />
                             </el-form-item> -->
                         </el-tab-pane>
-                        <el-tab-pane class='tab pay-channel-setting' label='支付通道图标设置'>
+                        <el-tab-pane class='tab pay-channel-setting' label='支付通道图标设置' name='second'>
                             <el-row :gutter='20'>
                                 <el-col :offset='0' :span='24'>
                                     <el-tabs v-model='activeName'>
@@ -240,6 +240,9 @@
                                     </el-tabs>
                                 </el-col>
                             </el-row>
+                        </el-tab-pane>
+                        <el-tab-pane class='tab' label='存取款界面设置' name='third'>
+                            <amount-set ref='amountSet' />
                         </el-tab-pane>
                     </el-tabs>
                 </el-form>
@@ -328,10 +331,18 @@ import { lang } from '../../config/lang'
 import { getQueryString } from '@admin/utils'
 import { keyBy, forOwn, isPlainObject, cloneDeep, compact } from 'lodash'
 import { isEmpty } from '@/utils/util'
+
+// components
+import amountSet from './components/amount-set.vue'
+
 export default {
     name: 'ChannelSetting',
+    components: {
+        amountSet
+    },
     data () {
         return {
+            optionName: 'first', // 当前选项卡
             form: {
                 tradeTypeCurrencyList: [],
                 googleAnalytics: '',
@@ -404,6 +415,9 @@ export default {
                 content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
                 that.filterLang = content.supportLanguage
                 console.log('渠道配置', content)
+
+                // 设置存款数据
+                this.$refs['amountSet'].setData(content)
 
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                 that.form = Object.assign(that.form, content, { other })
@@ -640,6 +654,9 @@ export default {
                             })
                             _formData.tradeTypeCurrencyList = plans
                         }
+
+                        // 设置存款数据
+                        _formData.depositData = this.$refs['amountSet'].getData()
 
                         _formData.googleAnalytics = window.zip(_formData.googleAnalytics)
 
