@@ -24,6 +24,7 @@ export class RequestKData {
         const _params = {
             "trade_type": params.tradeType,
             "symbol_id": params.symbolId,
+            "trade_mode": params.dealMode,
             "kline_type": params.klineType,
             "kline_timestamp_end": params.endTime,
             "query_kline_num": params.countBack

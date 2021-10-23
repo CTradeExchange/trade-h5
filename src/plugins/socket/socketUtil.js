@@ -57,53 +57,14 @@ export function tickToObj (p) {
     const price = priceStr[1] ?? ''
     const priceArr = price.split(',')
 
-    const priceTickArr = p.split(';')
-    // priceTickArr.shift()
-    const tickResult = []
-
-    if (priceTickArr.length > 2) {
-        priceTickArr.forEach((item, index) => {
-            if (item) {
-                const tickObj = {}
-                if (Number(index) === 0) {
-                    item = item.replace('(', '').replace(')', '')
-                    tickObj.price_bid = priceArr[5]
-                    tickObj.price_ask = priceArr[6]
-                    tickObj.volume_bid = priceArr[7]
-                    tickObj.volume_ask = priceArr[8]
-                    tickResult.push(tickObj)
-                } else {
-                    item = item.replace('(', '').replace(')', '')
-                    tickObj.price_bid = item.split(',')[0]
-                    tickObj.price_ask = item.split(',')[1]
-                    tickObj.volume_bid = item.split(',')[2]
-                    tickObj.volume_ask = item.split(',')[3]
-                    tickResult.push(tickObj)
-                }
-            }
-        })
-    } else {
-        priceTickArr.forEach(item => {
-            if (item) {
-                const tickObj = {}
-                tickObj.price_bid = priceArr[5]
-                tickObj.price_ask = priceArr[6]
-                tickObj.volume_bid = priceArr[7]
-                tickObj.volume_ask = priceArr[8]
-                tickResult.push(tickObj)
-            }
-        })
-    }
-
     const curPriceData = {
         symbolKey: `${priceArr[0]}_${priceArr[1]}`,
         symbolId: priceArr[0] * 1,
         trade_type: priceArr[1],
-        tick_time: priceArr[3] * 1,
-        cur_price: priceArr[4],
-        sell_price: priceArr[5],
-        buy_price: priceArr[6],
-        tickResult
+        tick_time: priceArr[4] * 1,
+        cur_price: priceArr[5],
+        sell_price: priceArr[6],
+        buy_price: priceArr[7],
     }
     return curPriceData
 }
@@ -137,7 +98,7 @@ export function positionsTickToObj (str) {
 /** 格式化产品订阅数据列表
  *  productIds: symbolKey形式的数组 ['1_2','2_2']
  */
-export function formatSubscribe (productIds) {
+export function formatSubscribe (productIds, productMap) {
     if (!productIds || productIds.length === 0) return []
     let subscribedList = []
     if (typeof (productIds[0]) === 'number') {
@@ -147,14 +108,16 @@ export function formatSubscribe (productIds) {
     if (typeof (productIds[0]) === 'string' && productIds[0].includes('_')) {
         subscribedList = [...new Set(productIds)].map(el => {
             const data = el.split('_')
+            const product = productMap[el]
             return {
                 symbol_id: Number(data[0]),
                 trade_type: Number(data[1]),
+                trade_mode: product?.dealMode,
             }
         })
     } else {
         const symbolKeys = productMapToSymbolKey(productIds)
-        return formatSubscribe(symbolKeys)
+        return formatSubscribe(symbolKeys, productMap)
     }
     return subscribedList
 }

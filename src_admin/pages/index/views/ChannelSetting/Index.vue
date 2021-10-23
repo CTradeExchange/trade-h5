@@ -782,11 +782,11 @@ export default {
             try {
                 // 调用wp的方法上传图片
                 if (window.tb_show) {
-                    tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true')
+                    window.tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true')
                     // 设置callBack
                     window.send_to_editor = (html) => {
                         if (window.tb_remove) {
-                            tb_remove()
+                            window.tb_remove()
                         }
                         console.log(html)
                         const _div = document.createElement('div')
@@ -810,7 +810,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .m-setting {
     height: calc(100vh);
     .setting-header {

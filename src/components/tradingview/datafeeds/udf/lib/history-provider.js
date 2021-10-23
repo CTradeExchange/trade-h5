@@ -13,9 +13,9 @@ class HistoryProvider {
     // 获取历史k线
     async getBars (symbolInfo, resolution, periodParams) {
         const { countBack, firstDataRequest, from, to } = periodParams
-
         this.symbolParams = {
             symbolId: symbolInfo.symbolId,
+            dealMode: symbolInfo.dealMode,
             klineType: resolutionToKlineType[resolution],
             startTime: from,
             endTime: to,
