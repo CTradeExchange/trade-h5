@@ -18,9 +18,9 @@
                     <p class='t1'>
                         {{ item.amount }} {{ checkedType.accountCurrency }}
                     </p>
-                    <!-- <p class='t2'>
-                        赠送${{ item.present }}
-                    </p> -->
+                    <p v-if='item.describe' class='t2'>
+                        {{ item.describe }}
+                    </p>
                 </div>
                 <div class='amount-item' :class='{ active: currIndex === 99 }' @click='openOtherMoney'>
                     {{ $t('deposit.otherAmount') }}
@@ -176,31 +176,12 @@ export default {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         const { currency, accountId, tradeType } = route.query
-
         const rightAction = {
             title: t('deposit.depositRecord')
         }
-        const amountList = [
-            {
-                amount: 50,
-                present: 5
-            },
-            {
-                amount: 100,
-                present: 10
-            }, {
-                amount: 500,
-                present: 50
-            }, {
-                amount: 1000,
-                present: 100
-            }, {
-                amount: 2000,
-                present: 200
-            }
-        ]
 
         const state = reactive({
+            amountList: [],
             currencyChecked: '',
             otherAmountVis: false,
             currIndex: 0,
@@ -224,6 +205,8 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
+        // 获取存款配置数据
+        const depositData = computed(() => store.state._base.wpCompanyInfo?.depositData)
         // 获取wp配置的支付通道图标
         const paymentIconList = computed(() => store.state._base.wpCompanyInfo.paymentIconList)
 
@@ -412,7 +395,6 @@ export default {
                     accountCurrency: currency,
                     paymentCurrency: state.currencyChecked.split('-').length > 1 ? state.currencyChecked.split('-')[0] : state.currencyChecked
                 }
-                state.loading = true
                 queryDepositExchangeRate(param).then(res => {
                     state.loading = false
                     if (res.check()) {
@@ -712,14 +694,47 @@ export default {
             }
         })
 
+        // 设置存款数据
+        const setAmountList = () => {
+            const arr = []
+            const isDeposit = true
+            let data = {}
+            // 已存款
+            if (isDeposit) {
+                data = depositData.value.isAlready ? depositData.value['already'] : depositData.value['default']
+            } else {
+                // 未存款
+                data = depositData.value.isNot ? depositData.value['not'] : depositData.value['default']
+            }
+            // 处理存款数据
+            for (const key in data) {
+                const item = data[key]
+                if (item.amount) {
+                    arr.push({
+                        amount: item.amount,
+                        describe: item[state.lang]?.describe
+                    })
+                }
+            }
+            // 没有存款数据默认选择其它金额
+            if (arr.length === 0) {
+                state.currIndex = 99
+            }
+            state.amountList = arr
+        }
+
         onBeforeUnmount(() => {
             sessionStorage.removeItem('proposalNo')
+        })
+
+        onMounted(() => {
+            // 设置存款金额数据
+            setAmountList()
         })
 
         return {
             ...toRefs(state),
             rightAction,
-            amountList,
             checkAmount,
             toDespositList,
             openSheet,

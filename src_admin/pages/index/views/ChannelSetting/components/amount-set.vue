@@ -101,7 +101,9 @@ export default {
 
         // 设置存款数据
         setData (content) {
-            this.depositData = cloneDeep(content.depositData)
+            if (content.depositData) {
+                this.depositData = cloneDeep(content.depositData)
+            }
         },
 
         // 获取存款数据
