@@ -35,7 +35,8 @@ const alias = {
 
 if (process.env.NODE_ENV === 'production') {
     const pluginName = isAdminMode ? 'editor' : 'h5'
-    const outputDirDestination = `/build_folder/cats-upload-admin/cats-upload-admin/dist/skin_${theme}_2`
+    const packageName = isAdminMode ? 'cats-upload-admin' : 'cats-upload-h5' // zip包名字
+    const outputDirDestination = `/build_folder/${packageName}/${packageName}/dist/skin_${theme}_2`
     const wp_init_file = isAdminMode ? 'init_editor.ini' : 'init_h5.ini'
     plugins.push(
         new FileManagerPlugin({
@@ -55,8 +56,8 @@ if (process.env.NODE_ENV === 'production') {
                     archive: [
                         // { source: resolve(`${pathName}`), destination: resolve(`zip/${pathName}${dayjs().format('YYYYMMDDHHmm')}.zip`) },
                         {
-                            source: resolve('./build_folder/cats-upload-admin'),
-                            destination: `./build_folder/cats-plugin-${theme}.zip`,
+                            source: resolve(`./build_folder/${packageName}`),
+                            destination: `./build_folder/${packageName}.zip`,
                             options: {
                                 gzipOptions: {
                                     level: 1
@@ -135,7 +136,7 @@ const config = {
         },
         proxy: {
             '/wp-json/wp': {
-                target: 'http://prewpadmin_9.cats-trade.com', // http://prewpadmin.cats-trade.com/
+                target: 'http://prewpadmin.cats-trade.com', // http://prewpadmin.cats-trade.com/
                 // changeOrigin: false,
                 disableHostCheck: true,
                 onProxyReq: function (proxyReq, req, res, options) { // 由于vue中使用了body-parser 导致http中的body被序列化两次，从而使得配置代理后后端无法获取body中的数据
@@ -151,7 +152,7 @@ const config = {
                 }
             },
             '/cats-manage-api': {
-                target: 'http://prewph5_9.cats-trade.com', // prewph5公司id为2 prewph5_1公司id为60
+                target: 'http://prewph5.cats-trade.com', // prewph5公司id为2 prewph5_1公司id为60
                 disableHostCheck: true,
                 onProxyReq: function (proxyReq, req, res, options) { // 由于vue中使用了body-parser 导致http中的body被序列化两次，从而使得配置代理后后端无法获取body中的数据
                     if (req.body) {
