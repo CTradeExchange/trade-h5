@@ -415,6 +415,7 @@ export default {
 
                 state.PayTypes.forEach(payItem => {
                     const openTime = payItem.openTime
+                    // console.log('排序前的时间', payItem.openTime)
                     let openTimeList
                     if (!isEmpty(openTime)) {
                         openTimeList = openTime.split(',')
@@ -443,6 +444,8 @@ export default {
                             }
                         })
 
+                        // console.log('转换时区后的时间', state.resultTimeMap[payItem.id])
+
                         // 重新排序
                         const newTimeList = [] // 排序并筛选后的时间列表
                         state.resultTimeMap[payItem.id].filter(el => el).forEach(item => {
@@ -452,36 +455,28 @@ export default {
                                 newTimeList.push(item)
                             }
                         })
-                        // state.resultTimeMap[payItem.id] = newTimeList
+
+                        // console.log('排序后的时间', newTimeList)
 
                         // 处理时间重叠情况,如果第一段的结束时间和第二段开始时间相差一分钟则合并
-                        /*
-                         */
-
-                        // 处理时间重叠情况
-                        /* const resultTime = state.resultTimeMap[payItem.id].reverse().filter(el => el)
                         const finalTimeResult = []
-                        for (let index = 0; index < resultTime.length; index++) {
-                            const el = resultTime[index]
-
+                        for (let index = 0; index < newTimeList.length; index++) {
+                            const el = newTimeList[index]
                             if (!isEmpty(el)) {
                                 const start = el.split('-')[0]
                                 const end = el.split('-')[1]
-                                const nextStart = resultTime[index + 1] && resultTime[index + 1].split('-')[0]
-                                const nextEnd = resultTime[index + 1] && resultTime[index + 1].split('-')[1]
-                                const lastStart = resultTime[resultTime.length - 1] && resultTime[resultTime.length - 1].split('-')[0]
-                                const lastEnd = resultTime[resultTime.length - 1] && resultTime[resultTime.length - 1].split('-')[1]
-                                // 如果是连续时间
+                                const nextStart = newTimeList[index + 1] && newTimeList[index + 1].split('-')[0]
+                                const nextEnd = newTimeList[index + 1] && newTimeList[index + 1].split('-')[1]
                                 if (dayjs(`${todayStr} ${end}`).add(1, 'minute').isSame(dayjs(`${todayStr} ${nextStart}`))) {
                                     finalTimeResult.push(start + '-' + nextEnd)
-                                } else if (dayjs(`${todayStr} ${end}`).add(1, 'minute').isSame(dayjs(`${todayStr} ${lastStart}`))) {
-                                    finalTimeResult.push(start + '-' + lastEnd)
+                                    index++
                                 } else {
-                                    // finalTimeResult.push(start + '-' + end)
+                                    finalTimeResult.push(start + '-' + end)
                                 }
                             }
                         }
-                        if (finalTimeResult.length > 0) { state.resultTimeMap[payItem.id] = finalTimeResult } */
+
+                        state.resultTimeMap[payItem.id] = finalTimeResult
                     }
                 })
 
