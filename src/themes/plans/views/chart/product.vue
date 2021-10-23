@@ -541,11 +541,10 @@ export default {
             } else {
                 state.studyVis = true
             }
-
             state.onChartReadyFlag && unref(chartRef).setResolution(name)
-
             localSetChartConfig('resolution', name)
-
+            localSetChartConfig('moreKTypes', false)
+            state.moreKType = { title: t('chart.more'), ktype: null }
             return true
         }
 
@@ -726,6 +725,7 @@ export default {
             initOtherTime(title, ktype)
             state.onChartReadyFlag && unref(chartRef).setResolution(ktype)
             localSetChartConfig('resolution', ktype)
+            localSetChartConfig('moreKTypes', true)
             state.moreTimeIsOpened = false
         }
 
@@ -841,10 +841,19 @@ export default {
             } else {
                 state.mainStudy = JSON.parse(locChartConfig.mainStudy)?.name
                 state.subStudy = JSON.parse(locChartConfig.subStudy)?.name
-                state.activeTab = candleKTypeList.find(item => String(item.ktype) === String(locChartConfig.resolution)).ktype
 
                 state.klineType = locChartConfig.chartType
                 state.settingList = locChartConfig.lineSetList
+
+                const resolutionText = candleKTypeList.find(el => String(el.ktype) === String(locChartConfig?.resolution)).title || t('chart.1min')
+                state.moreKType.title = resolutionText
+                if (locChartConfig.moreKTypes) {
+                    state.activeTab = 'moreKTypes'
+                } else {
+                    state.activeTab = candleKTypeList.find(item => String(item.ktype) === String(locChartConfig.resolution)).ktype
+                    state.moreKType = { title: t('chart.more'), ktype: null }
+                }
+
                 state.initConfig = ref({
                     property: {
                         showLastPrice: locChartConfig.showLastPrice, // 现价线
