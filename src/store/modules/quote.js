@@ -120,7 +120,7 @@ export default {
             state.productList = []
             state.productMap = {}
             state.productActivedID = null
-            state.Update_symbolBaseLoaded = 0
+            state.symbolBaseLoaded = 0
         },
         // 新增底层产品数据
         add_products (state, data = []) {

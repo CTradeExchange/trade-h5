@@ -120,6 +120,7 @@ export default {
         // 登录
         login ({ dispatch, commit }, params = {}) {
             commit('Update_loginLoading', true)
+            commit('_quote/Update_symbolBaseLoaded', 0, { root: true })
             return login(params).then((res) => {
                 if (res.check()) {
                     const data = res.data
