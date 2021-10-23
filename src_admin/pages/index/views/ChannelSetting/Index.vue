@@ -26,8 +26,8 @@
         <el-row>
             <el-col class='btns' :span='24'>
                 <el-form ref='form' label-width='100px' :model='form' :rules='rules'>
-                    <el-tabs type='border-card'>
-                        <el-tab-pane class='tab' label='渠道基础设置'>
+                    <el-tabs v-model='optionName' type='border-card'>
+                        <el-tab-pane class='tab' label='渠道基础设置' name='first'>
                             <el-form-item label='可注册区号'>
                                 <el-select
                                     v-model='form.registrable'
@@ -73,10 +73,12 @@
                                             filterable
                                             placeholder='请选择国家'
                                             value-key='id'
+                                            @focus='countryChange'
                                         >
                                             <el-option
-                                                v-for='country in otherZoneList'
+                                                v-for='country in registZoneList'
                                                 :key='country'
+                                                :disabled='country.disabled'
                                                 :label='country.name'
                                                 :value='country'
                                             />
@@ -90,6 +92,7 @@
                                             v-model='form.registList[index].customerGroupId'
                                             clearable
                                             placeholder='请选择客户组'
+                                            @change='customerChange(index)'
                                         >
                                             <el-option
                                                 v-for='el in accountTradeList'
@@ -196,11 +199,11 @@
                                 />
                             </el-form-item> -->
                         </el-tab-pane>
-                        <el-tab-pane class='tab pay-channel-setting' label='支付通道图标设置'>
+                        <el-tab-pane class='tab pay-channel-setting' label='支付通道图标设置' name='second'>
                             <el-row :gutter='20'>
                                 <el-col :offset='0' :span='24'>
-                                    <el-tabs v-model='activeName' @tab-click='handleClick'>
-                                        <el-tab-pane v-for='(item,index) in pyamentList' :key='index' :label='item.paymentName' :name='index'>
+                                    <el-tabs v-model='activeName'>
+                                        <el-tab-pane v-for='(item,index) in pyamentList' :key='index' :label='item.paymentName'>
                                             <el-card class='box-card'>
                                                 <template #header>
                                                     提示：该界面非必填，不填时取系统默认图标
@@ -223,7 +226,7 @@
                                                         </el-col>
                                                         <el-col :offset='0' :span='14'>
                                                             <el-form-item label='支付通道别名'>
-                                                                <el-input v-model='form.paymentIconList[item.paymentName][l.val].alias' class='alias-input' clearable placeholder='请输入支付通道别名' size='normal' />
+                                                                <el-input v-model='form.paymentIconList[item.paymentName][l.val].alias' class='alias-input' clearable placeholder='请输入支付通道别名' />
                                                                 <el-button type='primary' @click='resetPayment(item,l)'>
                                                                     重置
                                                                 </el-button>
@@ -237,6 +240,9 @@
                                     </el-tabs>
                                 </el-col>
                             </el-row>
+                        </el-tab-pane>
+                        <el-tab-pane class='tab' label='存取款界面设置' name='third'>
+                            <amount-set ref='amountSet' />
                         </el-tab-pane>
                     </el-tabs>
                 </el-form>
@@ -325,10 +331,18 @@ import { lang } from '../../config/lang'
 import { getQueryString } from '@admin/utils'
 import { keyBy, forOwn, isPlainObject, cloneDeep, compact } from 'lodash'
 import { isEmpty } from '@/utils/util'
+
+// components
+import amountSet from './components/amount-set.vue'
+
 export default {
     name: 'ChannelSetting',
+    components: {
+        amountSet
+    },
     data () {
         return {
+            optionName: 'first', // 当前选项卡
             form: {
                 tradeTypeCurrencyList: [],
                 googleAnalytics: '',
@@ -348,8 +362,9 @@ export default {
             supportArea: [],
             zoneList: [],
             otherZoneList: [],
+            registZoneList: [],
             plansDialogVisible: false,
-            activeName: 0,
+            activeName: '0',
             tradeTypeList: [],
             checkedTradeType: {},
             tradeTypeAssets: [],
@@ -359,7 +374,6 @@ export default {
             getLoading: false,
             setPlansType: 1, // 1 注册客户组玩法 2 游客客户组 3 非默认客户组
             pyamentList: [],
-
             payIcon: {},
             rules: {
                 supportLanguage: [
@@ -402,6 +416,9 @@ export default {
                 that.filterLang = content.supportLanguage
                 console.log('渠道配置', content)
 
+                // 设置存款数据
+                this.$refs['amountSet'].setData(content)
+
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                 that.form = Object.assign(that.form, content, { other })
 
@@ -425,11 +442,12 @@ export default {
                     that.form.registList[0].customerGroupId = '1'
                 }
 
-                that.otherZoneList = that.form.registrable.concat(
+                that.otherZoneList = that.form.registrable
+                this.registZoneList = that.otherZoneList.concat(
                     {
                         id: 9999,
                         isOther: true,
-                        name: '全部',
+                        name: '其它',
                     }
                 )
             }).catch(error => {
@@ -451,11 +469,14 @@ export default {
         changeSupportArea (val) {
             this.otherZoneList = this.zoneList.filter(el =>
                 val.find(zo => zo.id === el.id)
-            ).concat({
-                id: 9999,
-                isOther: true,
-                name: '全部',
-            })
+            )
+            this.registZoneList = this.otherZoneList.concat(
+                {
+                    id: 9999,
+                    isOther: true,
+                    name: '其它',
+                }
+            )
             // this.otherZoneList = this.zoneList.filter(el => val.includes(el.name + ' (' + el.country_code + ')'))
         },
         getPaymentArray () {
@@ -473,8 +494,6 @@ export default {
                                 }
                             })
                         })
-
-                        console.log('paymentIconList', that.form.paymentIconList)
                     }
                 }
             })
@@ -582,24 +601,33 @@ export default {
         },
         submit () {
             try {
+                const that = this
                 this.$refs['form'].validate((valid) => {
                     if (!valid) {
                         console.log('error submit!!')
                         return false
                     } else {
-                        this.submitLoading = true
+                        // 表单验证通过
+                        that.submitLoading = true
                         const _formData = cloneDeep(this.form)
-
                         if (_formData.registList.length > 0) {
                             _formData.registList.forEach(el => {
-                                if (isEmpty(el.plans)) {
-                                    this.$message({
+                                if (isEmpty(el.customerGroupId)) {
+                                    that.$message({
+                                        message: '请先选择客户组',
+                                        type: 'warning'
+                                    })
+                                    that.submitLoading = false
+                                    throw new Error('no-customerGroupId')
+                                }
+
+                                if (isEmpty(el.plans) && Number(el.customerGroupId) === 1) {
+                                    that.$message({
                                         message: '请先设置玩法币种',
                                         type: 'warning'
                                     })
-                                    this.submitLoading = false
-
-                                    throw new Error('noPlans')
+                                    that.submitLoading = false
+                                    throw new Error('no-plans')
                                 } else {
                                     el.plans.forEach(item => {
                                         if ([3, 5, 9].includes(Number(item.id)) && Array.isArray(item.allCurrency)) {
@@ -611,10 +639,9 @@ export default {
                         }
 
                         // 游客玩法如果没设置则取默认
-                        if (this.form.tradeTypeCurrencyList.length === 0) {
+                        if (that.form.tradeTypeCurrencyList.length === 0) {
                             const plans = []
-
-                            this.accountTradeList[2].data.forEach(el => {
+                            that.accountTradeList[2].data.forEach(el => {
                                 plans.push({
                                     id: el.trade_type,
                                     alias: '',
@@ -628,25 +655,28 @@ export default {
                             _formData.tradeTypeCurrencyList = plans
                         }
 
+                        // 设置存款数据
+                        _formData.depositData = this.$refs['amountSet'].getData()
+
                         _formData.googleAnalytics = window.zip(_formData.googleAnalytics)
 
                         saveViChannel({
                             content: JSON.stringify(_formData), // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', //
-                            id: this.pageId,
+                            id: that.pageId,
                             other: '',
                         }).then(res => {
                             if (!res.success) {
                                 return this.$message.error(res.message)
                             }
-                            this.$message({
+                            that.$message({
                                 message: '保存成功',
                                 type: 'success'
                             })
-                            this.getPageConfig()
+                            that.getPageConfig()
                         }).catch(error => {
                             console.log(error)
                         }).finally(() => {
-                            this.submitLoading = false
+                            that.submitLoading = false
                         })
                     }
                 })
@@ -654,19 +684,50 @@ export default {
                 console.log('error', error)
             }
         },
+        customerChange (index) {
+            this.curIndex = index
+            const customerGroupId = this.form.registList[index].customerGroupId
+            if (Number(customerGroupId) !== 1) {
+                const plans = []
+                this.accountTradeList[customerGroupId].data.forEach(el => {
+                    const allCurrency = el.assets.map(el => el.code) || ''
+                    plans.push({
+                        id: el.trade_type,
+                        alias: '',
+                        isWallet: '',
+                        sort: 0,
+                        allCurrency: allCurrency.toString(),
+                        tradeType: el.trade_type,
+                        name: el.trade_name
+
+                    })
+                })
+                this.form.registList[index].plans = plans
+            }
+        },
         addFormItem () {
-            /*  this.otherZoneList = this.zoneList.filter(item => {
-                const registIds = this.form.registList.map(el => el.registCountry.id)
-                return registIds.indexOf(item.id) === -1
-            })
- */
+            this.handleCountry()
             this.form.registList.push({})
+        },
+        countryChange () {
+            this.handleCountry()
+        },
+        // 处理注册国家下拉框数据，不能重复选择国家
+        handleCountry () {
+            this.registZoneList.map(item => {
+                const registIds = this.form.registList.map(el => el.registCountry.id)
+                item.disabled = false
+                if (registIds.indexOf(item.id) > -1) {
+                    item.disabled = true
+                }
+            })
         },
         removeItem (index) {
             if (index !== 0) {
                 this.form.registList.splice(index, 1)
             }
         },
+
         handleSavePlans () {
             let assetFlag = true
 
