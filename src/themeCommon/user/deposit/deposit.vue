@@ -361,13 +361,8 @@ export default {
                     if (res.data && res.data.length > 0) {
                         if (res.data.length > 0) {
                             res.data.forEach(el => {
-                                if (el.paymentType === 'coinbridge') {
-                                    el.alias = paymentIconList.value[el.paymentCode][state.lang].alias || ''
-                                    el.imgUrl = paymentIconList.value[el.paymentCode][state.lang].imgUrl || ''
-                                } else {
-                                    el.alias = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].alias || ''
-                                    el.imgUrl = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].imgUrl || ''
-                                }
+                                el.alias = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].alias || ''
+                                el.imgUrl = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].imgUrl || require('../../../assets/payment_icon/default.png')
                             })
                             state.PayTypes = res.data
                         }

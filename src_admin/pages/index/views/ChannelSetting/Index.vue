@@ -215,8 +215,8 @@
                                                         </el-col>
                                                         <el-col :offset='0' :span='6'>
                                                             <div class='upload' @click='uploadFile(item,l)'>
-                                                                <div v-if='form.paymentIconList[item.paymentName][l.val].imgUrl' class='img-wrap'>
-                                                                    <img alt='' :src='form.paymentIconList[item.paymentName][l.val].imgUrl' />
+                                                                <div v-if='form.paymentIconList[item.paymentCode+"_"+item.paymentType][l.val].imgUrl' class='img-wrap'>
+                                                                    <img alt='' :src='form.paymentIconList[item.paymentCode+"_"+item.paymentType][l.val].imgUrl' />
                                                                 </div>
                                                                 <div v-else>
                                                                     <i class='el-icon-plus'></i>
@@ -226,7 +226,7 @@
                                                         </el-col>
                                                         <el-col :offset='0' :span='14'>
                                                             <el-form-item label='支付通道别名'>
-                                                                <el-input v-model='form.paymentIconList[item.paymentName][l.val].alias' class='alias-input' clearable placeholder='请输入支付通道别名' />
+                                                                <el-input v-model='form.paymentIconList[item.paymentCode+"_"+item.paymentType][l.val].alias' class='alias-input' clearable placeholder='请输入支付通道别名' />
                                                                 <el-button type='primary' @click='resetPayment(item,l)'>
                                                                     重置
                                                                 </el-button>
@@ -486,9 +486,10 @@ export default {
                     that.pyamentList = res.data
                     if (that.pyamentList.length > 0) {
                         that.pyamentList.forEach(el => {
-                            that.form.paymentIconList[el.paymentName] = {}
+                            that.form.paymentIconList[el.paymentCode + '_' + el.paymentType] = {}
+                            debugger
                             that.lang.forEach(lang => {
-                                that.form.paymentIconList[el.paymentName][lang.val] = {
+                                that.form.paymentIconList[el.paymentCode + '_' + el.paymentType][lang.val] = {
                                     alias: '',
                                     imgUrl: ''
                                 }
@@ -657,6 +658,8 @@ export default {
 
                         // 设置存款数据
                         _formData.depositData = this.$refs['amountSet'].getData()
+
+                        // _formData.paymentIconList = {}
 
                         _formData.googleAnalytics = window.zip(_formData.googleAnalytics)
 
