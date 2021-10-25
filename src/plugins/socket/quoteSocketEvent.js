@@ -195,10 +195,10 @@ class SocketEvent {
         const priceArr = price.split(',')
         const dealData = {
             symbolId: priceArr[0],
-            dealTime: priceArr[3],
-            trade_direction: priceArr[6], // Math.floor(Math.random() * 2) + 1,
-            price: priceArr[4], // priceArr[4],
-            volume: priceArr[5] // priceArr[5]
+            dealTime: priceArr[4],
+            trade_direction: priceArr[7], // Math.floor(Math.random() * 2) + 1,
+            price: priceArr[5], // priceArr[4],
+            volume: priceArr[6] // priceArr[5]
 
         }
         this.$store.commit('_quote/Update_dealList', dealData)
