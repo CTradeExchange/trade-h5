@@ -104,7 +104,7 @@
                                     </el-col>
                                     <el-col :span='8'>
                                         <el-button type='primary' @click='setPlans(item,index,1)'>
-                                            设置玩法币种
+                                            设置币种或别名
                                         </el-button>
                                         <el-button v-if='index === 0' type='primary' @click='addFormItem'>
                                             添加
@@ -687,6 +687,7 @@ export default {
         customerChange (index) {
             this.curIndex = index
             const customerGroupId = this.form.registList[index].customerGroupId
+
             if (Number(customerGroupId) !== 1) {
                 const plans = []
                 this.accountTradeList[customerGroupId].data.forEach(el => {
@@ -697,6 +698,21 @@ export default {
                         isWallet: '',
                         sort: 0,
                         allCurrency: allCurrency.toString(),
+                        tradeType: el.trade_type,
+                        name: el.trade_name
+
+                    })
+                })
+                this.form.registList[index].plans = plans
+            } else {
+                const plans = []
+                this.accountTradeList[customerGroupId].data.forEach(el => {
+                    plans.push({
+                        id: el.trade_type,
+                        alias: '',
+                        isWallet: '',
+                        sort: 0,
+                        allCurrency: '',
                         tradeType: el.trade_type,
                         name: el.trade_name
 
@@ -795,7 +811,7 @@ export default {
         closeDialog () {
             this.checkedTradeType = {}
             this.tradeTypeAssets = []
-            this.form.tradeTypeCurrencyList = []
+            // this.form.tradeTypeCurrencyList = []
         },
         uploadFile (item, lang) {
             try {

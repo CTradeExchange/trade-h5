@@ -9,10 +9,10 @@ export default [
     //     name: 'WithAmount',
     //     title: '出金'
     // },
-    {
-        name: 'Login',
-        title: '登录'
-    },
+    // {
+    //     name: 'Login',
+    //     title: '登录'
+    // },
     {
         name: 'Setting',
         title: '设置'
@@ -21,18 +21,18 @@ export default [
         name: 'Msg',
         title: '消息中心'
     },
-    {
-        name: 'Search',
-        title: '搜索产品'
-    },
+    // {
+    //     name: 'Search',
+    //     title: '搜索产品'
+    // },
     {
         name: 'Personal',
         title: '个人资料'
     },
-    {
-        name: 'SetLoginPwd',
-        title: '修改密码'
-    },
+    // {
+    //     name: 'SetLoginPwd',
+    //     title: '修改密码'
+    // },
     // {
     //     name: 'FundingDetails',
     //     title: '资金明细'
