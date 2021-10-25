@@ -692,7 +692,7 @@ export default {
         // 设置存款数据
         const setAmountList = () => {
             const arr = []
-            const isDeposit = true
+            const isDeposit = customInfo.value.capitalInStatus === 1
             let data = {}
             // 已存款
             if (isDeposit) {
