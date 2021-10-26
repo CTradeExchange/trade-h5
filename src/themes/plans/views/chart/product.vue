@@ -1005,9 +1005,9 @@ export default {
             try {
                 if (!isEmpty(data.detail)) {
                     const res = data.detail.match(/\((.+)\)/)[1].split(',')
-                    if (Number(tradeType.value) === 5 || Number(tradeType.value) === 9) {
-                        state.onChartReadyFlag && unref(chartRef).setTick(res[4], res[3])
-
+                    // 玩
+                    if ([5, 9].includes(Number(tradeType))) {
+                        state.onChartReadyFlag && unref(chartRef).setTick(res[5], res[4])
                         state.onChartReadyFlag && unref(chartRef).updateLineData({
                             buyPrice: product.value.buy_price,
                             sellPrice: product.value.sell_price

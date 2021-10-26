@@ -41,7 +41,14 @@ export default [
         name: 'Nest',
         title: '外部地址',
         config: [
-
+            {
+                position: 'params',
+                type: 'Input',
+                name: 'id',
+                label: 'id',
+                hidden: true,
+                default: 'queryinfo',
+            },
             {
                 position: 'query',
                 type: 'Input',

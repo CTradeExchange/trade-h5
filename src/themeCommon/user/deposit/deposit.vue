@@ -361,8 +361,12 @@ export default {
                     if (res.data && res.data.length > 0) {
                         if (res.data.length > 0) {
                             res.data.forEach(el => {
-                                el.alias = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].alias || ''
-                                el.imgUrl = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].imgUrl || require('../../../assets/payment_icon/default.png')
+                                if (paymentIconList.value[el.paymentCode + '_' + el.paymentType]) {
+                                    el.alias = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].alias || ''
+                                    el.imgUrl = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].imgUrl || require('../../../assets/payment_icon/default.png')
+                                } else {
+                                    el.imgUrl = require('../../../assets/payment_icon/default.png')
+                                }
                             })
                             state.PayTypes = res.data
                         }
@@ -421,10 +425,10 @@ export default {
                             const [start, end] = item.split('-')
                             const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
                             const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
-
+                            debugger
                             if ((startLocal.isAfter(todayStr, 'day') && endLocal.isAfter(todayStr, 'day')) || (startLocal.isBefore(tomorrowStr, 'day') && endLocal.isBefore(tomorrowStr, 'day'))) {
                                 state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
-                            } else if (endLocal.isSame(tomorrowStr, 'minute')) {
+                            } else if (endLocal.format('HH:mm') === '00:00') {
                                 state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-24:00')
                             } else {
                                 state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-23:59')
