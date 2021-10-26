@@ -157,7 +157,7 @@
 import Top from '@/components/top'
 import { onBeforeMount, reactive, computed, toRefs, onBeforeUnmount, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal } from '@/api/user'
+import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal, judgeIsAlreadyDeposit } from '@/api/user'
 import { getListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
@@ -686,31 +686,37 @@ export default {
 
         // 设置存款数据
         const setAmountList = () => {
-            const arr = []
-            const isDeposit = customInfo.value.capitalInStatus === 1
-            let data = {}
-            // 已存款
-            if (isDeposit) {
-                data = depositData.value.isAlready ? depositData.value['already'] : depositData.value['default']
-            } else {
-                // 未存款
-                data = depositData.value.isNot ? depositData.value['not'] : depositData.value['default']
-            }
-            // 处理存款数据
-            for (const key in data) {
-                const item = data[key]
-                if (item.amount) {
-                    arr.push({
-                        amount: item.amount,
-                        describe: item[state.lang]?.describe
-                    })
+            judgeIsAlreadyDeposit({
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo,
+                accountId
+            }).then(res => {
+                const arr = []
+                const isDeposit = res.data
+                let data = {}
+                // 已存款
+                if (isDeposit) {
+                    data = depositData.value.isAlready ? depositData.value['already'] : depositData.value['default']
+                } else {
+                    // 未存款
+                    data = depositData.value.isNot ? depositData.value['not'] : depositData.value['default']
                 }
-            }
-            // 没有存款数据默认选择其它金额
-            if (arr.length === 0) {
-                state.currIndex = 99
-            }
-            state.amountList = arr
+                // 处理存款数据
+                for (const key in data) {
+                    const item = data[key]
+                    if (item.amount) {
+                        arr.push({
+                            amount: item.amount,
+                            describe: item[state.lang]?.describe
+                        })
+                    }
+                }
+                // 没有存款数据默认选择其它金额
+                if (arr.length === 0) {
+                    state.currIndex = 99
+                }
+                state.amountList = arr
+            })
         }
 
         onBeforeUnmount(() => {
