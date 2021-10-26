@@ -283,7 +283,7 @@
                                     v-model='checkedTradeType[item.id].allCurrency'
                                     :data='item.assetsList'
                                     :render-content='renderFunc'
-                                    :titles='["可选玩法币种", "已选玩法币种"]'
+                                    :titles='["可选币种", "已选币种"]'
                                 />
                             </template>
                         </template>
