@@ -4,7 +4,7 @@ import Layout from '../layout/index'
 const routes = [
     ...themeRouter,
     {
-        path: 'login',
+        path: '/login',
         name: 'Login',
         component: () => import(/* webpackChunkName: "Login" */ '../views/login/login.vue'),
         meta: {
@@ -14,7 +14,7 @@ const routes = [
         }
     },
     {
-        path: 'register',
+        path: '/register',
         name: 'Register',
         component: () => import(/* webpackChunkName: "Register" */ '../views/register/register.vue'),
         meta: {
@@ -24,7 +24,7 @@ const routes = [
         }
     },
     {
-        path: 'forgot',
+        path: '/forgot',
         name: 'Forgot',
         component: () => import(/* webpackChunkName: "Forgot" */ '../views/forgot/forgot.vue'),
         meta: {
