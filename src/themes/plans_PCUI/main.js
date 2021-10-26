@@ -20,7 +20,6 @@ import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.j
 import { getPreDemoAccountParams } from './officialDemoAccount.js'
 // import ElementPlus from 'element-plus'
 // import 'element-plus/lib/theme-chalk/index.css'
-import 'flex.css'
 skywalkingRegister(router)
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 
