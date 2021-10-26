@@ -21,7 +21,6 @@ export default {
     name: 'Home',
     setup () {
         const store = useStore()
-
         return {}
     }
 }

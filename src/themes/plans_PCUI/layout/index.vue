@@ -6,9 +6,7 @@
                 <keep-alive :include='cacheViews'>
                     <component
                         :is='Component'
-                        :key='
-                            route.meta.usePathKey ? route.path : undefined
-                        '
+                        :key='route.meta.usePathKey ? route.path : undefined'
                     />
                 </keep-alive>
             </router-view>
@@ -40,18 +38,18 @@ export default {
 
 <style lang="scss">
 @import '@/sass/mixin.scss';
-#app {
-    display: flex;
-    flex-flow: column;
-}
-.pageWrap {
-    flex: 1;
-    padding-bottom: rem(100px);
-    overflow-y: auto;
-    &.noFoot {
-        z-index: 2;
-        padding-bottom: 0;
-        background: var(--contentColor);
-    }
-}
+// #app {
+//     display: flex;
+//     flex-flow: column;
+// }
+// .pageWrap {
+//     flex: 1;
+//     padding-bottom: rem(100px);
+//     overflow-y: auto;
+//     &.noFoot {
+//         z-index: 2;
+//         padding-bottom: 0;
+//         background: var(--contentColor);
+//     }
+// }
 </style>

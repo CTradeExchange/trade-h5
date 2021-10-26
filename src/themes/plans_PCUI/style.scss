@@ -1,4 +1,10 @@
 @import '~@/sass/mixin.scss';
+
+.auto-width {
+	width: 1200px;
+	margin: 0 auto;
+}
+
 :root {
     /*  --color: #333;
     --minorColor: #989898;
@@ -42,8 +48,7 @@ body,
     background-color: var(--bgColor);
 }
 body {
-    font-size: 16px;
-    font-size: rem(26px);
+    font-size: 14px;
     /* no */
     // font-family: 'PingFang SC', '-apple-system', 'Heiti SC', 'Helvetica', 'Helvetica Neue', 'Droid Sans Fallback', 'Droid Sans';
     //font-family: 'Trebuchet MS', 'roboto', 'ubuntu', 'sans-serif';
