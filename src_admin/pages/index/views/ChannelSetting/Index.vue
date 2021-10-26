@@ -447,7 +447,7 @@ export default {
                     {
                         id: 9999,
                         isOther: true,
-                        name: '其它',
+                        name: '全部',
                     }
                 )
             }).catch(error => {
@@ -474,11 +474,12 @@ export default {
                 {
                     id: 9999,
                     isOther: true,
-                    name: '其它',
+                    name: '全部',
                 }
             )
             // this.otherZoneList = this.zoneList.filter(el => val.includes(el.name + ' (' + el.country_code + ')'))
         },
+        // 获取支付通道
         getPaymentArray () {
             const that = this
             queryPaymentArray().then(res => {
@@ -840,7 +841,7 @@ export default {
                         _div.innerHTML = html
                         const imgUrl = _div.querySelector('img').src
                         console.log('imgUrl', imgUrl)
-                        this.form.paymentIconList[item.paymentName][lang.val].imgUrl = imgUrl
+                        this.form.paymentIconList[item.paymentCode + '_' + item.paymentType][lang.val].imgUrl = imgUrl
                     }
                 } else {
                     console.log('执行WordPress window.tb_show方法显示上传图片功能')
@@ -850,8 +851,8 @@ export default {
             }
         },
         resetPayment (item, lang) {
-            this.form.paymentIconList[item.paymentName][lang.val].alias = ''
-            this.form.paymentIconList[item.paymentName][lang.val].imgUrl = ''
+            this.form.paymentIconList[item.paymentCode + '_' + item.paymentType][lang.val].alias = ''
+            this.form.paymentIconList[item.paymentCode + '_' + item.paymentType][lang.val].imgUrl = ''
         }
     }
 }
