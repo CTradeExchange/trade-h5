@@ -486,14 +486,15 @@ export default {
                     that.pyamentList = res.data
                     if (that.pyamentList.length > 0) {
                         that.pyamentList.forEach(el => {
-                            that.form.paymentIconList[el.paymentCode + '_' + el.paymentType] = {}
-                            debugger
-                            that.lang.forEach(lang => {
-                                that.form.paymentIconList[el.paymentCode + '_' + el.paymentType][lang.val] = {
-                                    alias: '',
-                                    imgUrl: ''
-                                }
-                            })
+                            if (isEmpty(that.form.paymentIconList[el.paymentCode + '_' + el.paymentType])) {
+                                that.form.paymentIconList[el.paymentCode + '_' + el.paymentType] = {}
+                                that.lang.forEach(lang => {
+                                    that.form.paymentIconList[el.paymentCode + '_' + el.paymentType][lang.val] = {
+                                        alias: '',
+                                        imgUrl: ''
+                                    }
+                                })
+                            }
                         })
                     }
                 }
@@ -613,6 +614,14 @@ export default {
                         const _formData = cloneDeep(this.form)
                         if (_formData.registList.length > 0) {
                             _formData.registList.forEach(el => {
+                                if (isEmpty(el.registCountry)) {
+                                    that.$message({
+                                        message: '请先选择注册国家',
+                                        type: 'warning'
+                                    })
+                                    that.submitLoading = false
+                                    throw new Error('no-registCountry')
+                                }
                                 if (isEmpty(el.customerGroupId)) {
                                     that.$message({
                                         message: '请先选择客户组',
