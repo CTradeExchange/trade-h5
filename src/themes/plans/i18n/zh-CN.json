@@ -405,6 +405,8 @@
     "availableLoanContent4": "客户可借款的额度，系统最大可借为{0}",
     "availableLoanContent5": "可借额度=系统最大可借-已借未还",
     "availableLoanContent6": "您的账户若有即将获得的币种借款未还，下单时系统在完成交易后自动帮您还款",
+    "availableLoanContent7": "指个人最大杠杆借款额度",
+    "availableLoanContent8": "可借额度=最小值（[全仓杠杆账户內净资产*(最大杠杆倍数-1)- 未还借入资产],币种最大可借限额)",
     "availableLoanAgent": "代理可借",
     "availableLoanAmount": "可借额度",
     "autoLoan": "自动借款",
