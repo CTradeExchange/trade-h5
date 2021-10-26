@@ -1,6 +1,7 @@
 import ClientMonitor from 'skywalking-client-js'
 
-const collectorDomain = window['isPRD'] ? 'https://skyapi.cats-trade.com' : 'https://preskyapi.cats-trade.com'
+const isDev = process.env.NODE_ENV === 'development'
+const collectorDomain = window['isPRD'] && !isDev ? 'https://skyapi.cats-trade.com' : 'https://preskyapi.cats-trade.com'
 const service = 'test-ui'
 const serviceVersion = 'v1.0.0'
 
