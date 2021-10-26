@@ -6,21 +6,16 @@ export default (t) => {
         },
         loginName: [
             {
-                message: t('common.inputPhone'),
+                message: t('login.loginNamePlaceholder'),
                 validator: (rule, value, callback, source, options) => {
-                    return source.type === 2 ? !!value : true
-                },
-            },
-            {
-                message: t('common.inputEmail'),
-                validator: (rule, value, callback, source, options) => {
-                    return source.type === 1 ? !!value : true
+                    return !!value
                 },
             },
             {
                 message: t('common.inputRealEmail'),
                 validator: (rule, value, callback, source, options) => {
-                    return source.type === 1 ? emailReg.test(value) : true
+                    const isEmail = value.includes('@')
+                    return isEmail ? emailReg.test(value) : true
                 },
             }
         ],
@@ -33,6 +28,7 @@ export default (t) => {
         loginPwd: {
             message: t('common.inputPwd'),
             validator: (rule, value, callback, source, options) => {
+                // console.log(rule, value, callback, source, options)
                 return options.loginType === 'password' ? !!value : true
             },
         },

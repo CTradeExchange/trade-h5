@@ -3,10 +3,10 @@ import { useStore } from 'vuex'
 import Schema from 'async-validator'
 import md5 from 'js-md5'
 import { useI18n } from 'vue-i18n'
-import { getDevice, localGet, localSet, getArrayObj } from '@/utils/util'
-import MsgSocket from '@/plugins/socket/msgSocketEvent'
+import { getDevice } from '@/utils/util'
+import { MsgSocket } from '@/plugins/socket/socket'
 import RuleFn from './rule'
-import { Toast, Dialog } from 'vant'
+import { Toast } from 'vant'
 export default function () {
     const router = useRouter()
     const route = useRoute()
@@ -26,92 +26,90 @@ export default function () {
             loginName: state.loginName,
             device: getDevice(),
             verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
-            loginPwd: state.loginType === 'password' ? md5(state.pwd) : undefined,
+            loginPwd: state.loginType === 'password' ? state.pwd : undefined,
             sendToken: state.loginType === 'checkCode' ? state.token : undefined,
         }
 
         const validator = new Schema(RuleFn(t))
 
-        return new Promise((resolve) => {
-
+        return new Promise((resolve, reject) => {
+            validator.validate(
+                loginParams,
+                {
+                    ...loginParams,
+                    loginType: state.loginType,
+                    first: true,
+                },
+                (errors, fields) => {
+                    // console.log(errors, fields)
+                    if (errors) {
+                        state.loading = false
+                        Toast(errors[0].message)
+                        reject()
+                        return
+                    }
+                    return store.dispatch('_user/login', {
+                        ...loginParams,
+                        loginPwd: md5(state.pwd)
+                    }).then(res => {
+                        if (res.check()) {
+                            MsgSocket.login()
+                        }
+                        resolve(res)
+                        return res
+                    })
+                })
         })
-        validator.validate(
-            {
-                ...loginParams
-            }, {
-                ...state,
-                first: true
-            }, (errors, fields) => {
-                // console.log(errors, fields)
-                if (errors) {
-                    state.loading = false
-                    Toast(errors[0].message)
-                    return
-                }
-                return store.dispatch('_user/login', loginParams)
-            })
     }
-    // 发送登录接口
-    // const loginSubmit = (params) => {
-    //     state.loading = true
-    //     return store.dispatch('_user/login', params).then(res => {
-    //         state.loading = false
-    //         // console.log(res)
-    //         if (res.invalid()) return res
 
-    //         // 登录websocket
-    //         MsgSocket.login()
-    //         store.commit('del_cacheViews', 'Home')
-    //         store.commit('del_cacheViews', 'Layout')
+    // 发送验证码
+    // const sendVerifyCode = (callback) => {
+    //     const verifyParams = {
+    //         type: state.loginName.includes('@') ? 1 : 2,
+    //         loginName: state.loginName
+    //     }
 
-    //         return res
-
-    //         // 登录KYC,kycAuditStatus:0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
-    //         // companyKycStatus 公司KYC开户状态，1开启 2未开启
-    //         if (Number(res.data.companyKycStatus) === 1) {
-    //             if (Number(res.data.kycAuditStatus === 0)) {
-    //                 return Dialog.alert({
-    //                     title: t('common.tip'),
-    //                     confirmButtonText: t('login.goAuthenticate'),
-    //                     message: t('login.goAuthenticateMsg'),
-
-    //                 }).then(() => {
-    //                     router.push('/authentication')
-    //                 })
-    //             } else if (Number(res.data.kycAuditStatus === 1)) {
-    //                 return Dialog.alert({
-    //                     title: t('common.tip'),
-    //                     confirmButtonText: t('common.close'),
-    //                     message: t('common.inReview'),
-
-    //                 }).then(() => {
-    //                     store.dispatch('_user/logout').then(() => {
-    //                         return router.push('/login')
-    //                     }).then(() => {
-    //                         location.reload()
+    //     const validator = new Schema(RuleFn(t))
+    //     validator.validate({
+    //         ...verifyParams
+    //     }).then(res => {
+    //         // 检测客户是否存在,同时获取区号
+    //         checkUserStatus(verifyParams).then(res => {
+    //             if (res.check()) {
+    //                 if (Number(res.data.status) === 2) {
+    //                     const msg = t(verifyParams.type === 1 ? 'common.noEmail' : 'common.noPhone')
+    //                     callback && callback(false)
+    //                     return Toast(msg)
+    //                 } else if (Number(res.data.status === -1)) {
+    //                     callback && callback(false)
+    //                     return Toast(t('c.userDisable'))
+    //                 } else {
+    //                     state.zone = res.data.phoneArea
+    //                     const params = {
+    //                         bizType: state.loginName.includes('@') ? 'EMAIL_LOGIN_VERIFICATION_CODE' : 'SMS_LOGIN_VERIFICATION_CODE',
+    //                         toUser: state.loginName.includes('@') ? state.loginName : String(state.zone) + ' ' + state.loginName,
+    //                     }
+    //                     verifyCodeSend(params).then(res => {
+    //                         if (res.check()) {
+    //                             token = res.data.token
+    //                             // if (res.data.code) state.checkCode = res.data.code
+    //                             callback && callback()
+    //                         } else {
+    //                             callback && callback(false)
+    //                         }
+    //                     }).catch(err => {
+    //                         callback && callback(false)
     //                     })
-    //                 })
-    //             } else if (Number(res.data.kycAuditStatus === 3)) {
-    //                 return Dialog.alert({
-    //                     title: t('common.tip'),
-    //                     confirmButtonText: t('common.reSubmit'),
-    //                     message: t('common.reviewFailed') + '\n' + t('common.reviewReson') + res.data.kycAuditRemark,
-
-    //                 }).then(() => {
-    //                     router.push('/authentication')
-    //                 })
-    //             } else if (Number(res.data.kycAuditStatus === 2)) {
-    //                 Dialog.alert({
-    //                     title: t('common.tip'),
-    //                     confirmButtonText: t('common.ok'),
-    //                     message: t('common.reviewSuccess'),
-
-    //                 }).then(() => {
-    //                     noticeSetPwd(res.data.loginPassStatus)
-    //                 })
+    //                 }
     //             }
-    //         } else if (Number(res.data.companyKycStatus) === 2) {
-    //             noticeSetPwd(res.data.loginPassStatus)
+    //         })
+    //     }).catch(({
+    //         errors,
+    //         fields
+    //     }) => {
+    //         callback && callback(false)
+    //         if (errors) {
+    //             Toast(errors[0].message)
     //         }
     //     })
     // }
@@ -119,5 +117,6 @@ export default function () {
     return {
         loginToPath,
         loginSubmit,
+        // sendVerifyCode,
     }
 }
