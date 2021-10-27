@@ -55,8 +55,9 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const productListEl = ref(null)
         // 玩法列表
+        const isWallet = store.state._base.wpCompanyInfo.isWallet
         const plansList = computed(() =>
-            store.state._base.plans.filter(e => !(e.tradeType === '5' && e.isWallet))
+            store.state._base.plans.filter(e => !(e.tradeType === '5' && isWallet))
                 .map(el => {
                     el.name = t('tradeType.' + el.tradeType)
                     return el

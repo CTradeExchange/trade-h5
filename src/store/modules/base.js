@@ -66,6 +66,8 @@ export default {
         getChannelSett ({ commit }) {
             return pageConfig('ChannelSett').then(data => {
                 if (data) {
+                    data.customerGroupId = '2' // 游客客户组
+
                     // 设置玩法别名和排序
                     // data.registList.forEach(el => formatPlans(el.plans || []))
                     if (data.registrable?.length) {
