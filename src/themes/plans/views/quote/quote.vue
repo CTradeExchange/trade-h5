@@ -1,5 +1,5 @@
 <template>
-    <div class='quoteWrap'>
+    <div class='quoteWrap' :class='{ hasNav: $hasNav }'>
         <plansType v-if='plansList.length>1' :list='plansList' :value='tradeType' @change='handleTradeType' />
         <div class='tradeNav'>
             <TopTab
@@ -125,9 +125,11 @@ export default {
     justify-content: flex-start;
     width: 100%;
     // margin-top: rem(90px);
-    padding-bottom: rem(100px);
     overflow: auto;
     background: var(--bgColor);
+    &.hasNav{
+        padding-bottom: rem(100px);
+    }
     .productListWrap {
         flex: 1;
         overflow-y: auto;

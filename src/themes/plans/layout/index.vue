@@ -33,6 +33,9 @@ export default {
         const store = useStore()
         const cacheViews = computed(() => store.state.cacheViews)
         const navData = computed(() => store.state._base.wpNav.find(el => el.tag === 'nav'))
+        store.dispatch('_base/getPageConfig', 'Nav').then(res => {
+            store.commit('_base/UPDATE_wpNav', res)
+        })
         return {
             cacheViews,
             navData

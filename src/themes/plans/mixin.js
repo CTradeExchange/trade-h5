@@ -11,6 +11,9 @@ export default {
         $style () {
             return this.$store.state.style
         },
+        $hasNav () {
+            return this.$store.state._base.wpNav?.length
+        },
         accountCurrency () {
             return this.$store.state._user.customerInfo?.currency
         }
