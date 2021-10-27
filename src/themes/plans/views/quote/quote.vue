@@ -41,7 +41,7 @@ import plansType from '@/themes/plans/components/plansType.vue'
 import useProduct from '@plans/hooks/useProduct'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-
+import { useI18n } from 'vue-i18n'
 export default {
     name: 'Quote',
     components: {
@@ -52,12 +52,19 @@ export default {
     setup () {
         const store = useStore()
         const router = useRouter()
+        const { t } = useI18n({ useScope: 'global' })
         const productListEl = ref(null)
         // 玩法列表
-        const plansList = computed(() => store.state._base.plans.filter(e => !(e.tradeType === '5' && e.isWallet)))
+        const plansList = computed(() =>
+            store.state._base.plans.filter(e => !(e.tradeType === '5' && e.isWallet))
+                .map(el => {
+                    el.name = t('tradeType.' + el.tradeType)
+                    return el
+                })
+        )
 
         // 1.玩法类型
-        const tradeType = ref(plansList.value[0].id)
+        const tradeType = ref(plansList.value[0].tradeType)
         // 2.板块类型
         const categoryType = ref(0)
         // 监听玩法类型

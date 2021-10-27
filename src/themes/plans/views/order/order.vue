@@ -161,7 +161,13 @@ export default {
         const { bizType, account, findProductInCategory, switchProduct } = hooks(state)
         const productSwitchHistory = {} // 顶部玩法类型切换记录
         // 玩法列表
-        const plansList = computed(() => store.state._base.plans.filter(el => !(el.tradeType === '5' && el.isWallet)))
+        const plansList = computed(() =>
+            store.state._base.plans.filter(el => !(el.tradeType === '5' && el.isWallet))
+                .map(el => {
+                    el.name = t('tradeType.' + el.tradeType)
+                    return el
+                })
+        )
         // 1.玩法类型
         const productTradeType = ref(tradeType)
 

@@ -38,6 +38,13 @@
     "otherPlaceLogin": "Your account is logged in from a different location, please log in again",
     "loadError": "Load failed, please try again later"
   },
+  "tradeType":{
+    "1": "合约全仓",
+    "2": "合约逐仓",
+    "3": "现货杠杆全仓",
+    "5": "现货撮合",
+    "9": "ABCC杠杆"
+  },
   "contract": {
     "advance": "Prepayment",
     "amount": "Amount",

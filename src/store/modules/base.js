@@ -67,8 +67,7 @@ export default {
             return pageConfig('ChannelSett').then(data => {
                 if (data) {
                     // 设置玩法别名和排序
-                    data.registList.forEach(el => formatPlans(el.plans || []))
-                    formatPlans(data.tradeTypeCurrencyList)
+                    // data.registList.forEach(el => formatPlans(el.plans || []))
                     if (data.registrable?.length) {
                         data.registrable.forEach(el => {
                             el.countryCode = el.country_code
@@ -82,7 +81,10 @@ export default {
                     }
 
                     commit('UPDATE_wpCompanyInfo', data)
-                    commit('Update_plans', data.tradeTypeCurrencyList)
+
+                    // 游客玩法
+                    const guestPlans = data.defaultPlans['2']
+                    commit('Update_plans', guestPlans)
                     if (data.supportLanguage) commit('Update_supportLanguages', data.supportLanguage, { root: true })
                 }
                 return data
