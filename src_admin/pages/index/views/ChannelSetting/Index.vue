@@ -98,6 +98,7 @@
                                             <el-option
                                                 v-for='el in accountTradeList'
                                                 :key='el.id'
+                                                :disabled='el.disabled'
                                                 :label='el.name'
                                                 :value='el.id'
                                             />
@@ -473,7 +474,12 @@ export default {
         queryAccountGroupTradeList () {
             getAccountGroupTradeAssetsList().then(res => {
                 if (res.success && res.data) {
-                    this.accountTradeList = Object.values(res.data).filter(el => Number(el.id) !== 2)
+                    Object.values(res.data).forEach(el => {
+                        if (Number(el.id) === 2) {
+                            el.disabled = true
+                        }
+                    })
+                    this.accountTradeList = res.data
                 }
             })
         },
