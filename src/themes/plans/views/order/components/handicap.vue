@@ -69,7 +69,7 @@ export default {
         })
 
         const ask_deep = computed(() => {
-            const list = handicapResult.value?.ask_deep?.slice(0)?.reverse()
+            const list = handicapResult.value?.ask_deep?.slice(0)
             return list?.slice(0, 5) || []
         })
         // 最新成交价
@@ -125,10 +125,13 @@ export default {
         margin-top: rem(20px);
         font-size: rem(24px);
         line-height: rem(40px);
+
         &.sell {
             color: var(--riseColor);
         }
         &.buy {
+             display: flex;
+            flex-flow: column-reverse;
             color: var(--fallColor);
         }
         .item {
@@ -155,6 +158,7 @@ export default {
         }
     }
     .curPrice {
+        text-align: center;
         height: rem(34px);
         margin-top: rem(20px);
         font-size: rem(30px);
