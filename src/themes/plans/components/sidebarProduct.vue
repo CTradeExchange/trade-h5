@@ -88,8 +88,10 @@ export default {
             show.value = false
         }
 
+        const isWallet = store.state._base.wpCompanyInfo.isWallet
+
         // 玩法列表
-        const plansList = computed(() => store.state._base.plans.filter(e => !(e.tradeType === '5' && e.isWallet)))
+        const plansList = computed(() => store.state._base.plans.filter(e => !(e.tradeType === '5' && isWallet)))
         // 默认玩法类型
         const InitialTradeType = computed(() => String(props.defaultTradeType) || unref(plansList)[0].id)
         // 1.玩法类型

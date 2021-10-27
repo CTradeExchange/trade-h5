@@ -161,8 +161,9 @@ export default {
         const { bizType, account, findProductInCategory, switchProduct } = hooks(state)
         const productSwitchHistory = {} // 顶部玩法类型切换记录
         // 玩法列表
+        const isWallet = store.state._base.wpCompanyInfo.isWallet
         const plansList = computed(() =>
-            store.state._base.plans.filter(el => !(el.tradeType === '5' && el.isWallet))
+            store.state._base.plans.filter(el => !(el.tradeType === '5' && isWallet))
                 .map(el => {
                     el.name = t('tradeType.' + el.tradeType)
                     return el
