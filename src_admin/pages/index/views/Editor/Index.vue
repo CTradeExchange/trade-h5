@@ -51,9 +51,11 @@
 
         <div class='center-board'>
             <div class='row-btns'>
-                <h4 class='tips'>
-                    当前编辑页面语言: <strong> {{ lang }}</strong>
-                </h4>
+                <div class='tips'>
+                    页面：<strong> {{ title }}</strong>
+                    &nbsp;&nbsp;
+                    语言: <strong> {{ lang }}</strong>
+                </div>
                 <div class='left'>
                     <el-button
                         icon='el-icon-reading'
@@ -650,6 +652,7 @@ export default {
             elementAdd,
             empty,
             lang,
+            title,
             addComponent,
             ...toRefs(state)
         }
