@@ -938,10 +938,12 @@ export default {
 
         // 跳转下单页
         const toOrder = (direction) => {
+            // eslint-disable-next-line no-undef
             if (route.query.isUniapp && uni) {
                 // uni.navigateTo({
                 //     url: `/pages/order/index?symbolId=${getSymbolId()}&direction=${direction}&tradeType=${getTradeType()}`
                 // })
+                // eslint-disable-next-line no-undef
                 uni.postMessage({
                     data: {
                         action: 'message',
@@ -1006,7 +1008,7 @@ export default {
                 if (!isEmpty(data.detail)) {
                     const res = data.detail.match(/\((.+)\)/)[1].split(',')
                     // 玩
-                    if ([5, 9].includes(Number(tradeType))) {
+                    if ([5, 9].includes(Number(unref(tradeType)))) {
                         state.onChartReadyFlag && unref(chartRef).setTick(res[5], res[4])
                         state.onChartReadyFlag && unref(chartRef).updateLineData({
                             buyPrice: product.value.buy_price,
