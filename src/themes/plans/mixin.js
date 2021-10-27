@@ -32,7 +32,7 @@ export default {
         openUrl (toRoute) {
             if (toRoute.href.name === 'Nest') {
                 toRoute.href.params.type = 'otherPage'
-                this.$router.push(toRoute.href)
+                toRoute.href.query.url && this.$router.push(toRoute.href)
             } else {
                 this.$router.push({ name: toRoute.href.name })
             }

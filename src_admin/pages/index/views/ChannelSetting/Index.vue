@@ -473,7 +473,7 @@ export default {
         queryAccountGroupTradeList () {
             getAccountGroupTradeAssetsList().then(res => {
                 if (res.success && res.data) {
-                    this.accountTradeList = res.data
+                    this.accountTradeList = Object.values(res.data).filter(el => Number(el.id) !== 2)
                 }
             })
         },
