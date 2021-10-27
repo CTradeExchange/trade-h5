@@ -63,6 +63,7 @@
                                 v-for='(item,index) in form.registList'
                                 :key='item.id'
                                 :label='index === 0 ? "注册国家" : ""'
+                                prop='registList'
                             >
                                 <el-row>
                                     <el-col :span='6'>
@@ -393,6 +394,13 @@ export default {
                     {
                         required: true,
                         message: '请选择默认语言',
+                        trigger: 'blur',
+                    }
+                ],
+                registList: [
+                    {
+                        required: true,
+                        message: '请选择注册国家',
                         trigger: 'blur',
                     }
                 ]
