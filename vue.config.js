@@ -92,9 +92,6 @@ if (isAdminMode) {
         // }
     })
 } else {
-    Object.assign(alias, {
-        'dayjs': resolve('src/utils/dayjs.js')
-    })
     // H5开发模式
     Object.assign(pages, {
         index: {
