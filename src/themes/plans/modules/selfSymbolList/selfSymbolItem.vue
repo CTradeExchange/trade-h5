@@ -45,7 +45,6 @@
 <script>
 import { computed, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
-import dayjs from 'dayjs'
 import { getLen } from '@/utils/util'
 export default {
     props: ['product', 'displayType'],
@@ -56,7 +55,7 @@ export default {
         const longName = computed(() => getLen(props.product?.symbolName) > 10)
         const tickTime = computed(() => {
             const tick_time = props.product.tick_time ?? ''
-            return tick_time ? dayjs(Number(tick_time)).format('HH:mm:ss') : ''
+            return tick_time ? window.dayjs(Number(tick_time)).format('HH:mm:ss') : ''
         })
         const state = reactive({
             bgClass: ''

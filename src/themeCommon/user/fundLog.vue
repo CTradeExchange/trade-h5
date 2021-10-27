@@ -126,7 +126,6 @@
 <script>
 import { toRefs, reactive, ref, computed, onBeforeMount } from 'vue'
 import { queryCapitalFlowList } from '@/api/user'
-import dayjs from 'dayjs'
 import Top from '@/components/top'
 import { useStore } from 'vuex'
 import { isEmpty, priceFormat } from '@/utils/util'
@@ -192,14 +191,14 @@ export default {
         const onDate = (item) => {
             state.dateTitle = item.name
             if (item.value === 1) {
-                state.date = dayjs(new Date()).format('YYYY/MM/DD 00:00:00') + '-' + dayjs(new Date()).format('YYYY/MM/DD 23:59:59')
+                state.date = window.dayjs(new Date()).format('YYYY/MM/DD 00:00:00') + '-' + window.dayjs(new Date()).format('YYYY/MM/DD 23:59:59')
             } else if (item.value === 2) {
-                state.date = dayjs().subtract(7, 'day').format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
-                state.dateRange = [dayjs().subtract(7, 'day').format('YYYY/MM/DD'), dayjs(new Date()).format('YYYY/MM/DD')]
+                state.date = window.dayjs().subtract(7, 'day').format('YYYY/MM/DD') + '-' + window.dayjs(new Date()).format('YYYY/MM/DD')
+                state.dateRange = [window.dayjs().subtract(7, 'day').format('YYYY/MM/DD'), window.dayjs(new Date()).format('YYYY/MM/DD')]
             } else if (item.value === 3) {
-                state.date = dayjs().subtract(1, 'month').format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
+                state.date = window.dayjs().subtract(1, 'month').format('YYYY/MM/DD') + '-' + window.dayjs(new Date()).format('YYYY/MM/DD')
             } else if (item.value === 4) {
-                state.date = dayjs().subtract(3, 'month').format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
+                state.date = window.dayjs().subtract(3, 'month').format('YYYY/MM/DD') + '-' + window.dayjs(new Date()).format('YYYY/MM/DD')
             } else if (item.value === 0) {
                 state.date = ''
             }
@@ -233,7 +232,7 @@ export default {
         const dateConfirm = () => {
             if (!isEmpty(state.date)) {
                 state.startTime = new Date(state.date.split('-')[0]).getTime()
-                state.endTime = new Date(dayjs(state.date.split('-')[1])).getTime()
+                state.endTime = new Date(window.dayjs(state.date.split('-')[1])).getTime()
             } else {
                 state.startTime = 0
                 state.endTime = 0
@@ -302,7 +301,7 @@ export default {
         }
 
         const formatTime = (val) => {
-            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+            return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
 
         onBeforeMount(() => {
