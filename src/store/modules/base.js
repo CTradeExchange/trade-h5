@@ -1,7 +1,6 @@
 import { pageConfig, wpCompanyConfig, wpNav, wpSelfSymbolIndex } from '@/api/wpApi'
 import { localSet, localGet, getCookie, sessionSet, setCookie, isEmpty } from '@/utils/util'
 import { formatPlans } from './storeUtil.js'
-import dayjs from 'dayjs'
 
 export default {
     namespaced: true,
@@ -66,9 +65,10 @@ export default {
         getChannelSett ({ commit }) {
             return pageConfig('ChannelSett').then(data => {
                 if (data) {
+                    data.customerGroupId = '2' // 游客客户组
+
                     // 设置玩法别名和排序
-                    data.registList.forEach(el => formatPlans(el.plans || []))
-                    formatPlans(data.tradeTypeCurrencyList)
+                    // data.registList.forEach(el => formatPlans(el.plans || []))
                     if (data.registrable?.length) {
                         data.registrable.forEach(el => {
                             el.countryCode = el.country_code
@@ -82,7 +82,10 @@ export default {
                     }
 
                     commit('UPDATE_wpCompanyInfo', data)
-                    commit('Update_plans', data.tradeTypeCurrencyList)
+
+                    // 游客玩法
+                    const guestPlans = data.defaultPlans['2']
+                    commit('Update_plans', guestPlans)
                     if (data.supportLanguage) commit('Update_supportLanguages', data.supportLanguage, { root: true })
                 }
                 return data
@@ -116,7 +119,7 @@ export default {
                 const _result = modulesList.filter(item => {
                     const { accountType, expiryDate } = item.data
                     const hasRole = accountType.includes(userAccountType)
-                    const inActiveTime = !expiryDate || expiryDate?.length === 0 ? true : dayjs().isBetween(expiryDate[0], expiryDate[1])
+                    const inActiveTime = !expiryDate || expiryDate?.length === 0 ? true : window.dayjs().isBetween(expiryDate[0], expiryDate[1])
                     return hasRole && inActiveTime
                 })
                 return _result

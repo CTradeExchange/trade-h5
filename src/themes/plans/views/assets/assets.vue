@@ -41,6 +41,7 @@ import { isEmpty } from '@/utils/util'
 import { QuoteSocket, MsgSocket } from '@/plugins/socket/socket'
 import plansType from '@/themes/plans/components/plansType.vue'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 export default {
     components: {
         PositionList,
@@ -53,6 +54,7 @@ export default {
     setup () {
         const store = useStore()
         const route = useRoute()
+        const { t } = useI18n({ useScope: 'global' })
         const assetsSwipe = ref(null)
         const curIndex = ref(0)
         const state = reactive({
@@ -66,7 +68,7 @@ export default {
         const customerInfo = computed(() => store.state._user.customerInfo)
 
         // 获取玩法列表
-        const plans = computed(() => store.state._base.plans)
+        const plans = computed(() => store.state._base.plans.map(el => (el.name = t('tradeType.' + el.tradeType), el)))
 
         const tradeType = computed(() => store.state._quote.curTradeType || plans.value[0].id)
 

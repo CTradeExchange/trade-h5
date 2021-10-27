@@ -144,7 +144,6 @@
 
 <script>
 import { reactive } from 'vue'
-import dayjs from 'dayjs'
 import { useI18n } from 'vue-i18n'
 import { newsListByTypeByPage, canlendarListByDate, articleDetail } from '@/api/information'
 export default {
@@ -220,7 +219,7 @@ export default {
             type: 8, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
             orgid: props.orgid // 机构id
         }
-        const today = dayjs().format('YYYY年MM月DD日')
+        const today = window.dayjs().format('YYYY年MM月DD日')
         // 倒序时间(刚刚，几分钟前，几个小时前，几天前，几周前，几个月前等)
         const beforeTime = (dateTimeStamp) => {
             var minute = 1000 * 60 // 把分，时，天，周，半个月，一个月用毫秒表示
@@ -438,9 +437,9 @@ export default {
             ]
             // 星期几
             // debugger
-            const dayOfWeek = dayjs(time).day()
+            const dayOfWeek = window.dayjs(time).day()
             const computeTime = dayOfWeek === 0 ? (time - 86400000) : time
-            const startWeek = dayjs(computeTime).startOf('week')
+            const startWeek = window.dayjs(computeTime).startOf('week')
             const computeDayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek
             const tempTimeAxis = startWeek.add(computeDayOfWeek, 'day').valueOf()
             state.lastWeek = [-6, -5, -4, -3, -2, -1, 0].map((item, index) => ({ weekday: weekLang[index], timeAxis: startWeek.add(item, 'day').valueOf(), date: startWeek.add(item, 'day').format('MM/DD') }))

@@ -38,6 +38,13 @@
     "otherPlaceLogin": "Your account is logged in from a different location, please log in again",
     "loadError": "Load failed, please try again later"
   },
+  "tradeType":{
+    "1": "合约全仓",
+    "2": "合约逐仓",
+    "3": "现货杠杆全仓",
+    "5": "现货撮合",
+    "9": "ABCC杠杆"
+  },
   "contract": {
     "advance": "Prepayment",
     "amount": "Amount",
@@ -405,6 +412,8 @@
     "availableLoanContent4": "The amount that client can borrow, the maximum amount can borrow from system is {0}",
     "availableLoanContent5": "The amount that can be borrowed=the maximum amount that the system can borrow-loaned amount but not repay yet",
     "availableLoanContent6": "If your account has outstanding loans currency to be obtained, the system will automatically repay the money after trade done",
+    "availableLoanContent7": "指个人最大杠杆借款额度",
+    "availableLoanContent8": "可借额度=最小值（[全仓杠杆账户內净资产*(最大杠杆倍数-1)- 未还借入资产],币种最大可借限额)",
     "availableLoanAgent": "Available loan amount Agent can borrow",
     "availableLoanAmount": "Available loan amount",
     "autoLoan": "Auto-loan",

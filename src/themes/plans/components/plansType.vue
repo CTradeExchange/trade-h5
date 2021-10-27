@@ -9,6 +9,7 @@
 <script>
 import { computed, ref, nextTick } from 'vue'
 import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 
 export default {
     props: {
@@ -23,9 +24,10 @@ export default {
     },
     setup (props, context) {
         const store = useStore()
+        const { t } = useI18n({ useScope: 'global' })
 
         // 玩法列表
-        const plansList = computed(() => props.list || store.state._base.plans)
+        const plansList = computed(() => props.list || store.state._base.plans.map(el => (el.name = t('tradeType.' + el.tradeType), el)))
         const active = computed({
             get: () => props.value,
             set: (val) => context.emit('change', val)
