@@ -17,7 +17,8 @@ export class RequestKData {
             this.setProduct({
                 symbolId: params.symbolId,
                 klineType: params.klineType,
-                tradeType: params.tradeType
+                tradeType: params.tradeType,
+                trade_mode: params.dealMode,
             })
         }
 
@@ -49,7 +50,8 @@ export class RequestKData {
             "trade_type": this._product.tradeType,
             "symbol_id": this._product.symbolId,
             "kline_type": this._product.klineType,
-            "query_kline_num": 2
+            "query_kline_num": 2,
+            "trade_mode": this._product.trade_mode
         }
 
         return requestKline(params)
