@@ -100,7 +100,6 @@ export default {
             if (!isEmpty(product.value.tradeTimeList)) {
                 const newTimeList = sortTimeList(product.value.tradeTimeList, utcOffset)
                 timeListFormat(newTimeList)
-                console.log(newTimeList)
                 const timeStrList = JSON.parse(JSON.stringify(newTimeList))
                 timeStrList.forEach((el, i) => {
                     timeStrList[i] = timeListSort(el)
