@@ -103,8 +103,8 @@
                                         </el-select>
                                     </el-col>
                                     <el-col :span='8'>
-                                        <el-button type='primary' @click='setPlans(item,index,1)'>
-                                            设置币种或别名
+                                        <el-button :disabled='form.registList[index].disabledSetCurrency' type='primary' @click='setPlans(item,index,1)'>
+                                            设置币种
                                         </el-button>
                                         <el-button v-if='index === 0' type='primary' @click='addFormItem'>
                                             添加
@@ -116,7 +116,11 @@
                                 </el-row>
                             </el-form-item>
 
-                            <el-form-item label='游客客户组'>
+                            <el-form-item label='现货仅当钱包' size='normal'>
+                                <el-checkbox v-model='form.isWallet' :indeterminate='false' label='' />
+                            </el-form-item>
+
+                            <!-- <el-form-item label='游客客户组'>
                                 <el-row>
                                     <el-col :span='6'>
                                         <el-select
@@ -138,7 +142,7 @@
                                         </el-button>
                                     </el-col>
                                 </el-row>
-                            </el-form-item>
+                            </el-form-item> -->
 
                             <el-form-item label='H5支持语言' prop='supportLanguage'>
                                 <el-select
@@ -288,7 +292,7 @@
                             </template>
                         </template>
 
-                        <el-form-item class='sort-row' label='玩法别名'>
+                        <!-- <el-form-item class='sort-row' label='玩法别名'>
                             <el-input
                                 v-model='checkedTradeType[item.id].alias'
                                 placeholder='请输入'
@@ -307,7 +311,7 @@
                             <el-checkbox v-model='checkedTradeType[item.id].isWallet'>
                                 是
                             </el-checkbox>
-                        </el-form-item>
+                        </el-form-item> -->
                     </el-card>
                 </div>
             </el-form>
@@ -354,6 +358,7 @@ export default {
                 supportLanguage: [],
                 customerGroupId: '',
                 registrable: [],
+                isWallet: false,
                 paymentIconList: {}, // 支付通道图标列表
             },
             accountTradeList: [],
@@ -391,7 +396,8 @@ export default {
                         trigger: 'blur',
                     }
                 ]
-            }
+            },
+
         }
     },
     async created () {
@@ -541,7 +547,7 @@ export default {
                     data = this.accountTradeList[item.customerGroupId]?.data
                     this.checkedTradeType = this.form.registList[index]?.plans
                     // 遍历选中的玩法币种
-                    if (this.checkedTradeType) {
+                    if (!isEmpty(this.checkedTradeType)) {
                         this.checkedTradeType.forEach(el => {
                             if ([3, 5, 9].includes(Number(el.id)) && typeof el.allCurrency === 'string') {
                                 el.allCurrency = el.allCurrency.split(',')
@@ -632,9 +638,10 @@ export default {
                                     throw new Error('no-customerGroupId')
                                 }
 
-                                if (isEmpty(el.plans) && Number(el.customerGroupId) === 1) {
+                                const hasCurrency = el.plans.every(el => el.allCurrency)
+                                if (!hasCurrency && Number(el.customerGroupId) === 1) {
                                     that.$message({
-                                        message: '请先设置玩法币种',
+                                        message: '请先设置币种',
                                         type: 'warning'
                                     })
                                     that.submitLoading = false
@@ -673,6 +680,23 @@ export default {
 
                         _formData.googleAnalytics = window.zip(_formData.googleAnalytics)
 
+                        // 获取默认客户组和游客组玩法列表
+                        _formData.defaultPlans = {}
+                        for (const key in that.accountTradeList) {
+                            if (Object.hasOwnProperty.call(that.accountTradeList, key)) {
+                                const element = that.accountTradeList[key]
+                                if ([1, 2].includes(Number(element.id))) {
+                                    _formData.defaultPlans[element.id] = element.data.map(el => {
+                                        return {
+                                            id: el.trade_type,
+                                            tradeType: el.trade_type,
+                                            name: el.trade_name
+                                        }
+                                    })
+                                }
+                            }
+                        }
+
                         saveViChannel({
                             content: JSON.stringify(_formData), // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', //
                             id: that.pageId,
@@ -702,6 +726,8 @@ export default {
             const customerGroupId = this.form.registList[index].customerGroupId
 
             if (Number(customerGroupId) !== 1) {
+                this.form.registList[index].disabledSetCurrency = true
+                this.disabledSetCurrency = false
                 const plans = []
                 this.accountTradeList[customerGroupId].data.forEach(el => {
                     const allCurrency = el.assets.map(el => el.code) || ''
@@ -718,6 +744,8 @@ export default {
                 })
                 this.form.registList[index].plans = plans
             } else {
+                this.form.registList[index].disabledSetCurrency = false
+                // this.form.registList[index].plans = {}
                 const plans = []
                 this.accountTradeList[customerGroupId].data.forEach(el => {
                     plans.push({
@@ -736,7 +764,7 @@ export default {
         },
         addFormItem () {
             this.handleCountry()
-            this.form.registList.push({})
+            this.form.registList.push({ disabledSetCurrency: true })
         },
         countryChange () {
             this.handleCountry()
