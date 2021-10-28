@@ -184,7 +184,7 @@ export default {
             currencyChecked: '',
             otherAmountVis: false,
             currIndex: 0,
-            amount: 50,
+            amount: '',
             typeShow: false,
             PayTypes: [],
             checkedType: '',
@@ -337,8 +337,7 @@ export default {
         }
 
         const openOtherMoney = () => {
-            state.otherAmountVis = !state.otherAmountVis
-            state.amount = ''
+            state.otherAmountVis = true
             state.currIndex = 99
             state.presentAmount = ''
         }
@@ -717,6 +716,7 @@ export default {
                 // 没有存款数据默认选择其它金额
                 if (arr.length === 0) {
                     state.currIndex = 99
+                    state.otherAmountVis = true
                 }
                 state.amountList = arr
             })
