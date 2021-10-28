@@ -87,7 +87,7 @@
                 </div>
             </div>
             <div class='layout layout-3'>
-                <!-- <div class='item van-hairline--bottom'>
+                <div v-if='[1, 2].includes(Number(tradeType))' class='item van-hairline--bottom'>
                     <div class='left'>
                         <div class='title'>
                             {{ $t('trade.expireTime') }}
@@ -96,7 +96,7 @@
                     <div class='right'>
                         {{ $t( pendingItem.expireType===1?'trade.expireType1' :'trade.expireType2') }}
                     </div>
-                </div> -->
+                </div>
                 <div class='item van-hairline--bottom'>
                     <div class='left'>
                         <div class='title'>

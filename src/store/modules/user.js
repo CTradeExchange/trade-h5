@@ -168,10 +168,11 @@ export default {
             commit('Update_customerInfo', data)
 
             // 根据不同客户组设置不同玩法
-            const wpCompanyInfo = rootState._base.wpCompanyInfo
-            const curCustomerGroup = wpCompanyInfo.registList.find(el => parseInt(el.customerGroupId) === data.customerGroupId)
-            const curCustomerPlans = curCustomerGroup ? curCustomerGroup.plans : wpCompanyInfo.tradeTypeCurrencyList
-            commit('_base/Update_plans', curCustomerPlans, { root: true })
+            const plansList = data.accountList.reduce((acc, item) => {
+                if (acc.findIndex(el => el.tradeType * 1 === item.tradeType) === -1) acc.push({ tradeType: String(item.tradeType), id: String(item.tradeType) })
+                return acc
+            }, [])
+            commit('_base/Update_plans', plansList, { root: true })
 
             if (flag) {
                 if (data.optional === 1) dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
@@ -206,7 +207,7 @@ export default {
             const tradeTypeList = rootState._base.plans.map(({ id }) => id)
 
             return queryCustomerOptionalList({ tradeTypeList }).then(res => {
-                commit('Update_selfSymbolList', res.data)
+                commit('Update_selfSymbolList', res.data || [])
                 return res
             })
         },

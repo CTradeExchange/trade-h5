@@ -295,7 +295,6 @@ import { useI18n } from 'vue-i18n'
 import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted } from 'vue'
 import KIcon from './icons/kIcon.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
-import dayjs from 'dayjs'
 import { useStore } from 'vuex'
 import { Dialog, Toast } from 'vant'
 import { isEmpty, localSet, localGet } from '@/utils/util'
@@ -938,10 +937,12 @@ export default {
 
         // 跳转下单页
         const toOrder = (direction) => {
+            // eslint-disable-next-line no-undef
             if (route.query.isUniapp && uni) {
                 // uni.navigateTo({
                 //     url: `/pages/order/index?symbolId=${getSymbolId()}&direction=${direction}&tradeType=${getTradeType()}`
                 // })
+                // eslint-disable-next-line no-undef
                 uni.postMessage({
                     data: {
                         action: 'message',
@@ -965,7 +966,7 @@ export default {
 
         // 格式化时间
         const formatTime = (val) => {
-            if (val) { return dayjs(Number(val)).format('HH:mm:ss') }
+            if (val) { return window.dayjs(Number(val)).format('HH:mm:ss') }
         }
 
         // 初始化图表配置
@@ -1005,9 +1006,9 @@ export default {
             try {
                 if (!isEmpty(data.detail)) {
                     const res = data.detail.match(/\((.+)\)/)[1].split(',')
-                    if (Number(tradeType.value) === 5 || Number(tradeType.value) === 9) {
-                        state.onChartReadyFlag && unref(chartRef).setTick(res[4], res[3])
-
+                    // 玩
+                    if ([5, 9].includes(Number(unref(tradeType)))) {
+                        state.onChartReadyFlag && unref(chartRef).setTick(res[5], res[4])
                         state.onChartReadyFlag && unref(chartRef).updateLineData({
                             buyPrice: product.value.buy_price,
                             sellPrice: product.value.sell_price

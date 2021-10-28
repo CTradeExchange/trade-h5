@@ -48,7 +48,6 @@
 import { onBeforeMount, computed, reactive, toRefs, onUnmounted } from 'vue'
 import { queryPlatFormMessageLogList } from '@/api/user'
 import { useStore } from 'vuex'
-import dayjs from 'dayjs'
 import Top from '@/components/top'
 import { isEmpty } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
@@ -135,7 +134,7 @@ export default {
                     tag.forEach(item => {
                         returnVal = content.replace(reg, function (matchStr) {
                             const time = matchStr.toString().replace(/<\/?time>/g, '')
-                            return dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
+                            return window.dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
                         })
                     })
                     return returnVal
@@ -173,7 +172,7 @@ export default {
         }
 
         const formatTime = (val) => {
-            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+            return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
 
         return {

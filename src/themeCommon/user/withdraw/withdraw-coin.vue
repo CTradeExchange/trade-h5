@@ -192,9 +192,6 @@ import {
 // 工具方法
 import { isEmpty, debounce } from '@/utils/util'
 // 插件
-import dayjs from 'dayjs'
-// import utc from 'dayjs/plugin/utc'
-// dayjs.extend(utc)
 
 export default {
 
@@ -363,7 +360,7 @@ export default {
 
         // 时区转换
         const transferUtc = () => {
-            const todayStr = dayjs().format('YYYY-MM-DD')
+            const todayStr = window.dayjs().format('YYYY-MM-DD')
             state.withdrawConfig.withdrawTimeConfigList.forEach(el => {
                 el.openTimeLocal = []
                 state.withdrawTimeConfigMap[el.weekDay] = el
@@ -376,8 +373,8 @@ export default {
                         if (timeRange.length > 0) {
                             timeRange.forEach(timeRangeItem => {
                                 const [start, end] = timeRangeItem.split('-')
-                                const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
-                                const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
+                                const startLocal = window.dayjs.utc(`${todayStr} ${start}`).local()
+                                const endLocal = window.dayjs.utc(`${todayStr} ${end}`).local()
 
                                 // 第二天
                                 const weekDay = key < 7 ? Number(key) + 1 : 1

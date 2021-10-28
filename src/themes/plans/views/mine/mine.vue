@@ -1,5 +1,5 @@
 <template>
-    <div class='page-wrap'>
+    <div class='page-wrap' :class='{ hasNav: $hasNav }'>
         <PageComp :data='pageModules' />
         <div class='support'>
             Trade Switcher提供技术支持<br /> tradeswitcher.com
@@ -29,12 +29,17 @@ export default {
 @import '@/sass/mixin.scss';
 .page-wrap {
     height: 100%;
-    padding-bottom: rem(100px);
     overflow: auto;
     background: var(--bgColor);
+    &.hasNav{
+        padding-bottom: rem(100px);
+        .support{
+            bottom: rem(120px);
+        }
+    }
     .support {
         position: absolute;
-        bottom: rem(120px);
+        bottom: rem(20px);
         width: 100%;
         color: var(--placeholdColor);
         font-size: rem(20px);

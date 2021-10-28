@@ -32,8 +32,8 @@
         <!-- 杠杆玩法可借额度的解说 -->
         <van-dialog v-model:show='loanTradeType3' title=''>
             <div class='availableLoanContent'>
-                <p>{{ $t('trade.availableLoanContent4', [maxBorrow]) }}</p>
-                <p>{{ $t('trade.availableLoanContent5') }}</p>
+                <p>{{ $t('trade.availableLoanContent7') }}</p>
+                <p>{{ $t('trade.availableLoanContent8') }}</p>
             </div>
         </van-dialog>
         <!-- 代理可借的解说 -->

@@ -18,8 +18,23 @@ import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
 import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
 import { getPreDemoAccountParams } from './officialDemoAccount.js'
-// import ElementPlus from 'element-plus'
-// import 'element-plus/lib/theme-chalk/index.css'
+
+// element-plus
+import 'element-plus/lib/theme-chalk/index.css'
+import {
+    ElLoading,
+    ElDialog,
+    ElMessageBox,
+    ElMessage,
+    ElCarousel,
+    ElCarouselItem,
+    ElDropdown,
+    ElDropdownMenu,
+    ElDropdownItem,
+    ElScrollbar,
+    ElInfiniteScroll
+} from 'element-plus'
+
 skywalkingRegister(router)
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 
@@ -28,9 +43,10 @@ BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 // const Vconsole = new VConsole()
 
 const app = createApp(App)
+app.use(ElLoading).use(ElDialog).use(ElMessageBox).use(ElMessage).use(ElCarousel).use(ElCarouselItem).use(ElDropdown)
+    .use(ElDropdownMenu).use(ElDropdownItem).use(ElScrollbar).use(ElInfiniteScroll)
 app.use(preventReClick)
 app.use(VantBase).use(I18n).use(store).use(router)
-// app.use(ElementPlus).use(store).use(router)
 app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })
 app.component('Loading', Loading)
 app.component('LayoutTop', LayoutTop)

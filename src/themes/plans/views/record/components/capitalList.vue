@@ -39,7 +39,6 @@
 
 <script>
 import list from './list'
-import dayjs from 'dayjs'
 import { queryCapitalFlowList } from '@/api/user'
 import { useI18n } from 'vue-i18n'
 import flowFilter from './flowFilter'
@@ -54,7 +53,7 @@ export default {
         const { tm } = useI18n({ useScope: 'global' })
         const flowSubCategory = tm(`fund.flowSubCategory.${tradeType}`)
         const formatTime = (val) => {
-            return dayjs(val).format('YYYY/MM/DD HH:mm:ss')
+            return window.dayjs(val).format('YYYY/MM/DD HH:mm:ss')
         }
 
         const listRef = ref(null)
