@@ -15,16 +15,19 @@
             Loading...
         </template>
     </Suspense>
+    <footerNav />
 </template>
 
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import topNav from './topNav'
+import footerNav from './footer.vue'
 export default {
     name: 'Layout',
     components: {
         topNav,
+        footerNav
     },
     setup () {
         const store = useStore()
