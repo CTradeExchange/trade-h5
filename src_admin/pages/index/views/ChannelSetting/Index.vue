@@ -43,6 +43,16 @@
                                         :value='item'
                                     />
                                 </el-select>
+                                <el-popover
+                                    content='表示前端注册时可选择的区号,不选择默认所有国家区号均可注册'
+                                    placement='top-start'
+                                    trigger='hover'
+                                    :width='200'
+                                >
+                                    <template #reference>
+                                        <img alt='' class='img-tip' src='../../../../imgs/tip.png' />
+                                    </template>
+                                </el-popover>
                             </el-form-item>
                             <el-form-item label='默认注册区号'>
                                 <el-select
@@ -85,7 +95,7 @@
                                             />
                                         </el-select>
                                     </el-col>
-                                    <el-col :span='8'>
+                                    <el-col :span='7'>
                                         <label class='label' for=''>
                                             客户组
                                         </label>
@@ -103,8 +113,18 @@
                                                 :value='el.id'
                                             />
                                         </el-select>
+                                        <el-popover
+                                            content='默认客户组是系统自动创建的,需点击右侧【设置币种】按钮选择开户币种'
+                                            placement='top-start'
+                                            trigger='hover'
+                                            :width='200'
+                                        >
+                                            <template #reference>
+                                                <img alt='' class='img-tip' src='../../../../imgs/tip.png' />
+                                            </template>
+                                        </el-popover>
                                     </el-col>
-                                    <el-col :span='8'>
+                                    <el-col :span='6'>
                                         <el-button :disabled='form.registList[index].disabledSetCurrency' type='primary' @click='setPlans(item,index,1)'>
                                             设置币种
                                         </el-button>
@@ -120,6 +140,16 @@
 
                             <el-form-item label='现货仅当钱包' size='normal'>
                                 <el-checkbox v-model='form.isWallet' :indeterminate='false' label='' />
+                                <el-popover
+                                    content='设置了现货仅当钱包,前端的【现货】玩法会隐藏“交易”和“行情”页面,现货只保留“资产”页面'
+                                    placement='top-start'
+                                    trigger='hover'
+                                    :width='200'
+                                >
+                                    <template #reference>
+                                        <img alt='' class='img-tip' src='../../../../imgs/tip.png' />
+                                    </template>
+                                </el-popover>
                             </el-form-item>
 
                             <!-- <el-form-item label='游客客户组'>
@@ -212,7 +242,9 @@
                                         <el-tab-pane v-for='(item,index) in pyamentList' :key='index' :label='item.paymentName'>
                                             <el-card class='box-card'>
                                                 <template #header>
-                                                    提示：该界面非必填，不填时取系统默认图标
+                                                    <span class='tip'>
+                                                        提示：该界面非必填，不填时取系统默认图标
+                                                    </span>
                                                 </template>
                                                 <div class='lang-wrap'>
                                                     <el-row v-for='(l, i) in lang' :key='i' align='middle' :gutter='20'>
@@ -655,7 +687,7 @@ export default {
                                 const hasCurrency = el?.plans && el?.plans.every(el => el.allCurrency)
                                 if (!hasCurrency && Number(el.customerGroupId) === 1) {
                                     that.$message({
-                                        message: '请先设置币种',
+                                        message: '“默认客户组”需设置开户币种,请点击【设置币种】按钮',
                                         type: 'warning'
                                     })
                                     that.submitLoading = false
@@ -912,6 +944,12 @@ export default {
     .row {
         padding-bottom: 30px;
     }
+    .img-tip{
+        cursor: pointer;
+        width: 18px;
+        vertical-align: middle;
+        margin-left: 10px;
+    }
     .tradeType-row {
         display: flex;
         align-items: center;
@@ -965,6 +1003,11 @@ export default {
                     line-height: 30px;
                 }
             }
+        }
+    }
+    .box-card{
+        .tip{
+            color: red;
         }
     }
 }

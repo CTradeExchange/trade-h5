@@ -1,7 +1,7 @@
 import { common } from '@admin/components/baseConfig'
 export default {
     title: '行情列表',
-    hidden: false,
+    hidden: true,
     tag: 'quoteList',
     tagIcon: 'el-icon-star-on',
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
