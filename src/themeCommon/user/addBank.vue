@@ -22,6 +22,7 @@
                     @click='currencyShow=true'
                 /> -->
                 <CurrencyAction v-model='currency' v-model:show='currencyShow' class='cellRow' input-align='left' />
+
                 <van-field
                     v-model='area'
                     :label='$t("bank.openAddress")'
@@ -38,21 +39,21 @@
         </van-button>
     </div>
 
-    <van-action-sheet
-        v-model:show='areaShow'
-        class='action-sheet-area'
-    >
-        <van-area :area-list='areaList' columns-num='2' :title='$t("bank.openAddress")' @cancel='areaShow=false' @confirm='handleAreaConfirm' />
-    </van-action-sheet>
-    <van-action-sheet
-        v-model:show='currencyShow'
-        :actions='currencyActions'
-        :cancel-text='$t("common.cancel")'
-        close-on-click-action
-        @select='onSelectCurrency'
-    />
+    <van-popup v-model:show='areaShow' position='bottom'>
+        <van-picker
+            ref='picker'
+            :columns='provinceCities'
+            @change='onChangeArea'
+            @confirm='areaConfirm'
+        />
+    </van-popup>
 
-    <van-popup v-model:show='bankShow' class='popup-bank' position='right' :style="{ height: '100%' }">
+    <van-popup
+        v-model:show='bankShow'
+        class='popup-bank'
+        position='right'
+        :style="{ height: '100%' }"
+    >
         <div class='bank-list'>
             <div v-for='item in bankDict' :key='item.code' class='bank-item' @click='onSelectBank(item)'>
                 <i class='bank-icons-sm' :class="'bk-'+ item.code"></i>
@@ -77,32 +78,12 @@
             {{ $t('bank.submitSuccessTips') }}
         </p>
     </van-dialog>
-
-    <!-- <van-action-sheet
-        v-model:show='bankShow'
-        cancel-text='取消'
-        close-on-click-action
-        @select='onSelectBank'
-    >
-        <van-search
-            v-model='value'
-            background='#fff'
-            placeholder='请输入银行名称关键词'
-            show-action
-            @cancel='onCancel'
-            @search='onSearch'
-        />
-        <div v-for='(item, index) in banksActions' :key='index' class='bank-item' @click='onSelectBank(item)'>
-            {{ item.name }}
-        </div>
-    </van-action-sheet> -->
 </template>
 
 <script>
 import { useRouter } from 'vue-router'
 import top from '@/components/top'
-import { reactive, toRefs, computed } from 'vue'
-import { areaList } from '@/utils/area'
+import { reactive, toRefs, computed, ref, watch } from 'vue'
 import RuleFn from './addbank_rule'
 import { useStore } from 'vuex'
 import Schema from 'async-validator'
@@ -117,19 +98,13 @@ export default {
         top,
         CurrencyAction
     },
-    setup (props, { emit, attrs }) {
+    async setup (props, { emit, attrs }) {
         const router = useRouter()
         const store = useStore()
+        const picker = ref(null)
         const { t } = useI18n({ useScope: 'global' })
         const bankDict = computed(() => store.state.bankDict)
         const customInfo = computed(() => store.state._user.customerInfo)
-
-        getCountryListByParentCode({
-            parentCode: 'ISO_3166_156'
-        }).then(res => {
-            debugger
-        })
-        store.dispatch('getCountryListByParentCode')
 
         const state = reactive({
             userName: '',
@@ -144,16 +119,41 @@ export default {
             currencyShow: false,
             addSuccessShow: false,
             showCancel: false,
-            currencyActions: [{ name: t('common.RMB') }, { name: t('common.dollar') }
-            ]
+            provinceCities: []
         })
 
-        const handleAreaConfirm = (area) => {
-            if (area) {
-                state.area = area.map(item => item.name)
-                state.areaShow = false
-            }
+        const getProvinceCities = async (parentCode) => {
+            state.loading = true
+            await getCountryListByParentCode({ parentCode }).then(res => {
+                if (res.check()) {
+                    if (res.data.length > 0) {
+                        if (state.provinceCities.length > 0) {
+                            state.provinceCities.forEach(pc => {
+                                res.data.forEach(el => {
+                                    if (pc.code === el.parentCode) {
+                                        pc.children = res.data.map(el => { return { text: el.displayName } })
+                                    }
+                                })
+                            })
+                        } else {
+                            res.data.forEach(el => {
+                                state.provinceCities.push({
+                                    text: el.displayName,
+                                    code: el.code,
+                                    children: []
+                                })
+                            })
+                        }
+                    }
+                }
+            })
         }
+
+        await getProvinceCities(customInfo.value.country)
+        if (state.provinceCities.length > 0) {
+            getProvinceCities(state.provinceCities[0]?.code)
+        }
+
         const onSelectBank = (item) => {
             state.bankShow = false
             state.bankName = item.name
@@ -163,6 +163,13 @@ export default {
         const onSelectCurrency = (item) => {
             state.currencyShow = false
             state.currency = item.name
+        }
+
+        const onChangeArea = async (values) => {
+            await getProvinceCities(values[0].code)
+            const citys = state.provinceCities.find(el => el.code === values[0].code).children
+            picker.value.setColumnValues(1, citys)
+            // picker.value.setColumnValues(1, provinceCities[values[0]])
         }
 
         // 提交处理
@@ -227,18 +234,24 @@ export default {
             state.area = ''
         }
 
+        const areaConfirm = (val) => {
+            state.areaShow = false
+            state.area = val.map(el => el.text).join()
+        }
+
         store.dispatch('getBankDictList')
 
         return {
-            areaList,
             onSelectBank,
             onSelectCurrency,
-            handleAreaConfirm,
             ...toRefs(state),
             handleConfirm,
             toBankList,
             bankDict,
-            cancel
+            cancel,
+            picker,
+            onChangeArea,
+            areaConfirm
         }
     }
 }
