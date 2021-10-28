@@ -1,3 +1,4 @@
+import { ref, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import Schema from 'async-validator'
@@ -6,6 +7,8 @@ import { useI18n } from 'vue-i18n'
 import { getDevice } from '@/utils/util'
 import { MsgSocket } from '@/plugins/socket/socket'
 import RuleFn from './rule'
+import { checkUserStatus } from '@/api/user'
+import { verifyCodeSend } from '@/api/base'
 import { Toast } from 'vant'
 export default function () {
     const router = useRouter()
@@ -63,60 +66,70 @@ export default function () {
     }
 
     // 发送验证码
-    // const sendVerifyCode = (callback) => {
-    //     const verifyParams = {
-    //         type: state.loginName.includes('@') ? 1 : 2,
-    //         loginName: state.loginName
-    //     }
+    const verifyCodeBtnText = ref(t('signIn.getVerifyCode'))
+    const sendVerifyCode = (params) => {
+        const verifyParams = {
+            type: params.loginName.includes('@') ? 1 : 2,
+            loginName: params.loginName
+        }
 
-    //     const validator = new Schema(RuleFn(t))
-    //     validator.validate({
-    //         ...verifyParams
-    //     }).then(res => {
-    //         // 检测客户是否存在,同时获取区号
-    //         checkUserStatus(verifyParams).then(res => {
-    //             if (res.check()) {
-    //                 if (Number(res.data.status) === 2) {
-    //                     const msg = t(verifyParams.type === 1 ? 'common.noEmail' : 'common.noPhone')
-    //                     callback && callback(false)
-    //                     return Toast(msg)
-    //                 } else if (Number(res.data.status === -1)) {
-    //                     callback && callback(false)
-    //                     return Toast(t('c.userDisable'))
-    //                 } else {
-    //                     state.zone = res.data.phoneArea
-    //                     const params = {
-    //                         bizType: state.loginName.includes('@') ? 'EMAIL_LOGIN_VERIFICATION_CODE' : 'SMS_LOGIN_VERIFICATION_CODE',
-    //                         toUser: state.loginName.includes('@') ? state.loginName : String(state.zone) + ' ' + state.loginName,
-    //                     }
-    //                     verifyCodeSend(params).then(res => {
-    //                         if (res.check()) {
-    //                             token = res.data.token
-    //                             // if (res.data.code) state.checkCode = res.data.code
-    //                             callback && callback()
-    //                         } else {
-    //                             callback && callback(false)
-    //                         }
-    //                     }).catch(err => {
-    //                         callback && callback(false)
-    //                     })
-    //                 }
-    //             }
-    //         })
-    //     }).catch(({
-    //         errors,
-    //         fields
-    //     }) => {
-    //         callback && callback(false)
-    //         if (errors) {
-    //             Toast(errors[0].message)
-    //         }
-    //     })
-    // }
+        const validator = new Schema(RuleFn(t))
+        return validator.validate({
+            ...verifyParams
+        }).then(res => {
+            // 检测客户是否存在,同时获取区号
+            return checkUserStatus(verifyParams).then(res => {
+                if (res.check()) {
+                    if (Number(res.data.status) === 2) {
+                        const msg = verifyParams.type === 1 ? t('common.noEmail') : t('common.noPhone')
+                        return Toast(msg)
+                    } else if (Number(res.data.status === -1)) {
+                        return Toast(t('c.userDisable'))
+                    } else {
+                        const zone = res.data.phoneArea
+                        const sendParams = {
+                            bizType: params.loginName.includes('@') ? 'EMAIL_LOGIN_VERIFICATION_CODE' : 'SMS_LOGIN_VERIFICATION_CODE',
+                            toUser: params.loginName.includes('@') ? params.loginName : String(zone) + ' ' + params.loginName,
+                        }
+                        return verifyCodeSend(sendParams).then((res) => {
+                            verifyCountDown() // 倒计时
+                            return res
+                        })
+                    }
+                }
+            })
+        }).catch(({
+            errors,
+            fields
+        }) => {
+            if (errors) {
+                Toast(errors[0].message)
+            }
+        })
+    }
+
+    // 验证码倒计时
+    let verifyCountDownTimer = null
+    const verifyCountDown = () => {
+        verifyCodeBtnText.value = 60
+        verifyCountDownTimer = setInterval(() => {
+            verifyCodeBtnText.value--
+            if (verifyCodeBtnText.value === 0) {
+                verifyCodeBtnText.value = t('signIn.getVerifyCode')
+                clearInterval(verifyCountDownTimer)
+            }
+        }, 1000)
+    }
+
+    // 离开时清除定时器
+    onUnmounted(() => {
+        verifyCountDownTimer && clearInterval(verifyCountDownTimer)
+    })
 
     return {
         loginToPath,
         loginSubmit,
-        // sendVerifyCode,
+        verifyCodeBtnText,
+        sendVerifyCode,
     }
 }

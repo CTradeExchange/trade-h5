@@ -59,7 +59,7 @@
     },
     "editor.minimap.enabled": true,
     "i18n-ally.localesPaths": [
-        "src/themes/plans/i18n",
+        "src/themes/plans_PCUI/i18n",
         "src/themeCommon/i18n",
     ], //
         
