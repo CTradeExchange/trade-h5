@@ -1,5 +1,5 @@
 <template>
-    <div class='quoteWrap'>
+    <div class='quoteWrap' :class='{ hasNav: $hasNav }'>
         <plansType v-if='plansList.length>1' :list='plansList' :value='tradeType' @change='handleTradeType' />
         <div class='tradeNav'>
             <TopTab
@@ -41,7 +41,7 @@ import plansType from '@/themes/plans/components/plansType.vue'
 import useProduct from '@plans/hooks/useProduct'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-
+import { useI18n } from 'vue-i18n'
 export default {
     name: 'Quote',
     components: {
@@ -52,12 +52,20 @@ export default {
     setup () {
         const store = useStore()
         const router = useRouter()
+        const { t } = useI18n({ useScope: 'global' })
         const productListEl = ref(null)
         // 玩法列表
-        const plansList = computed(() => store.state._base.plans.filter(e => !(e.tradeType === '5' && e.isWallet)))
+        const isWallet = store.state._base.wpCompanyInfo.isWallet
+        const plansList = computed(() =>
+            store.state._base.plans.filter(e => !(e.tradeType === '5' && isWallet))
+                .map(el => {
+                    el.name = t('tradeType.' + el.tradeType)
+                    return el
+                })
+        )
 
         // 1.玩法类型
-        const tradeType = ref(plansList.value[0].id)
+        const tradeType = ref(plansList.value[0].tradeType)
         // 2.板块类型
         const categoryType = ref(0)
         // 监听玩法类型
@@ -117,9 +125,11 @@ export default {
     justify-content: flex-start;
     width: 100%;
     // margin-top: rem(90px);
-    padding-bottom: rem(100px);
     overflow: auto;
     background: var(--bgColor);
+    &.hasNav{
+        padding-bottom: rem(100px);
+    }
     .productListWrap {
         flex: 1;
         overflow-y: auto;

@@ -63,6 +63,7 @@
                                 v-for='(item,index) in form.registList'
                                 :key='item.id'
                                 :label='index === 0 ? "注册国家" : ""'
+                                prop='registList'
                             >
                                 <el-row>
                                     <el-col :span='6'>
@@ -97,14 +98,15 @@
                                             <el-option
                                                 v-for='el in accountTradeList'
                                                 :key='el.id'
+                                                :disabled='el.disabled'
                                                 :label='el.name'
                                                 :value='el.id'
                                             />
                                         </el-select>
                                     </el-col>
                                     <el-col :span='8'>
-                                        <el-button type='primary' @click='setPlans(item,index,1)'>
-                                            设置玩法币种
+                                        <el-button :disabled='form.registList[index].disabledSetCurrency' type='primary' @click='setPlans(item,index,1)'>
+                                            设置币种
                                         </el-button>
                                         <el-button v-if='index === 0' type='primary' @click='addFormItem'>
                                             添加
@@ -116,7 +118,11 @@
                                 </el-row>
                             </el-form-item>
 
-                            <el-form-item label='游客客户组'>
+                            <el-form-item label='现货仅当钱包' size='normal'>
+                                <el-checkbox v-model='form.isWallet' :indeterminate='false' label='' />
+                            </el-form-item>
+
+                            <!-- <el-form-item label='游客客户组'>
                                 <el-row>
                                     <el-col :span='6'>
                                         <el-select
@@ -138,7 +144,7 @@
                                         </el-button>
                                     </el-col>
                                 </el-row>
-                            </el-form-item>
+                            </el-form-item> -->
 
                             <el-form-item label='H5支持语言' prop='supportLanguage'>
                                 <el-select
@@ -215,8 +221,8 @@
                                                         </el-col>
                                                         <el-col :offset='0' :span='6'>
                                                             <div class='upload' @click='uploadFile(item,l)'>
-                                                                <div v-if='form.paymentIconList[item.paymentName][l.val].imgUrl' class='img-wrap'>
-                                                                    <img alt='' :src='form.paymentIconList[item.paymentName][l.val].imgUrl' />
+                                                                <div v-if='form.paymentIconList[item.paymentCode+"_"+item.paymentType][l.val].imgUrl' class='img-wrap'>
+                                                                    <img alt='' :src='form.paymentIconList[item.paymentCode+"_"+item.paymentType][l.val].imgUrl' />
                                                                 </div>
                                                                 <div v-else>
                                                                     <i class='el-icon-plus'></i>
@@ -226,7 +232,7 @@
                                                         </el-col>
                                                         <el-col :offset='0' :span='14'>
                                                             <el-form-item label='支付通道别名'>
-                                                                <el-input v-model='form.paymentIconList[item.paymentName][l.val].alias' class='alias-input' clearable placeholder='请输入支付通道别名' />
+                                                                <el-input v-model='form.paymentIconList[item.paymentCode+"_"+item.paymentType][l.val].alias' class='alias-input' clearable placeholder='请输入支付通道别名' />
                                                                 <el-button type='primary' @click='resetPayment(item,l)'>
                                                                     重置
                                                                 </el-button>
@@ -283,12 +289,12 @@
                                     v-model='checkedTradeType[item.id].allCurrency'
                                     :data='item.assetsList'
                                     :render-content='renderFunc'
-                                    :titles='["可选玩法币种", "已选玩法币种"]'
+                                    :titles='["可选币种", "已选币种"]'
                                 />
                             </template>
                         </template>
 
-                        <el-form-item class='sort-row' label='玩法别名'>
+                        <!-- <el-form-item class='sort-row' label='玩法别名'>
                             <el-input
                                 v-model='checkedTradeType[item.id].alias'
                                 placeholder='请输入'
@@ -307,7 +313,7 @@
                             <el-checkbox v-model='checkedTradeType[item.id].isWallet'>
                                 是
                             </el-checkbox>
-                        </el-form-item>
+                        </el-form-item> -->
                     </el-card>
                 </div>
             </el-form>
@@ -354,6 +360,7 @@ export default {
                 supportLanguage: [],
                 customerGroupId: '',
                 registrable: [],
+                isWallet: false,
                 paymentIconList: {}, // 支付通道图标列表
             },
             accountTradeList: [],
@@ -390,8 +397,16 @@ export default {
                         message: '请选择默认语言',
                         trigger: 'blur',
                     }
+                ],
+                registList: [
+                    {
+                        required: true,
+                        message: '请选择注册国家',
+                        trigger: 'blur',
+                    }
                 ]
-            }
+            },
+
         }
     },
     async created () {
@@ -447,7 +462,7 @@ export default {
                     {
                         id: 9999,
                         isOther: true,
-                        name: '其它',
+                        name: '全部',
                     }
                 )
             }).catch(error => {
@@ -459,6 +474,11 @@ export default {
         queryAccountGroupTradeList () {
             getAccountGroupTradeAssetsList().then(res => {
                 if (res.success && res.data) {
+                    Object.values(res.data).forEach(el => {
+                        if (Number(el.id) === 2) {
+                            el.disabled = true
+                        }
+                    })
                     this.accountTradeList = res.data
                 }
             })
@@ -474,11 +494,12 @@ export default {
                 {
                     id: 9999,
                     isOther: true,
-                    name: '其它',
+                    name: '全部',
                 }
             )
             // this.otherZoneList = this.zoneList.filter(el => val.includes(el.name + ' (' + el.country_code + ')'))
         },
+        // 获取支付通道
         getPaymentArray () {
             const that = this
             queryPaymentArray().then(res => {
@@ -486,13 +507,15 @@ export default {
                     that.pyamentList = res.data
                     if (that.pyamentList.length > 0) {
                         that.pyamentList.forEach(el => {
-                            that.form.paymentIconList[el.paymentName] = {}
-                            that.lang.forEach(lang => {
-                                that.form.paymentIconList[el.paymentName][lang.val] = {
-                                    alias: '',
-                                    imgUrl: ''
-                                }
-                            })
+                            if (isEmpty(that.form.paymentIconList[el.paymentCode + '_' + el.paymentType])) {
+                                that.form.paymentIconList[el.paymentCode + '_' + el.paymentType] = {}
+                                that.lang.forEach(lang => {
+                                    that.form.paymentIconList[el.paymentCode + '_' + el.paymentType][lang.val] = {
+                                        alias: '',
+                                        imgUrl: ''
+                                    }
+                                })
+                            }
                         })
                     }
                 }
@@ -538,7 +561,7 @@ export default {
                     data = this.accountTradeList[item.customerGroupId]?.data
                     this.checkedTradeType = this.form.registList[index]?.plans
                     // 遍历选中的玩法币种
-                    if (this.checkedTradeType) {
+                    if (!isEmpty(this.checkedTradeType)) {
                         this.checkedTradeType.forEach(el => {
                             if ([3, 5, 9].includes(Number(el.id)) && typeof el.allCurrency === 'string') {
                                 el.allCurrency = el.allCurrency.split(',')
@@ -612,6 +635,14 @@ export default {
                         const _formData = cloneDeep(this.form)
                         if (_formData.registList.length > 0) {
                             _formData.registList.forEach(el => {
+                                if (isEmpty(el.registCountry)) {
+                                    that.$message({
+                                        message: '请先选择注册国家',
+                                        type: 'warning'
+                                    })
+                                    that.submitLoading = false
+                                    throw new Error('no-registCountry')
+                                }
                                 if (isEmpty(el.customerGroupId)) {
                                     that.$message({
                                         message: '请先选择客户组',
@@ -621,9 +652,10 @@ export default {
                                     throw new Error('no-customerGroupId')
                                 }
 
-                                if (isEmpty(el.plans) && Number(el.customerGroupId) === 1) {
+                                const hasCurrency = el.plans.every(el => el.allCurrency)
+                                if (!hasCurrency && Number(el.customerGroupId) === 1) {
                                     that.$message({
-                                        message: '请先设置玩法币种',
+                                        message: '请先设置币种',
                                         type: 'warning'
                                     })
                                     that.submitLoading = false
@@ -658,7 +690,26 @@ export default {
                         // 设置存款数据
                         _formData.depositData = this.$refs['amountSet'].getData()
 
+                        // _formData.paymentIconList = {}
+
                         _formData.googleAnalytics = window.zip(_formData.googleAnalytics)
+
+                        // 获取默认客户组和游客组玩法列表
+                        _formData.defaultPlans = {}
+                        for (const key in that.accountTradeList) {
+                            if (Object.hasOwnProperty.call(that.accountTradeList, key)) {
+                                const element = that.accountTradeList[key]
+                                if ([1, 2].includes(Number(element.id))) {
+                                    _formData.defaultPlans[element.id] = element.data.map(el => {
+                                        return {
+                                            id: el.trade_type,
+                                            tradeType: el.trade_type,
+                                            name: el.trade_name
+                                        }
+                                    })
+                                }
+                            }
+                        }
 
                         saveViChannel({
                             content: JSON.stringify(_formData), // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', //
@@ -687,7 +738,10 @@ export default {
         customerChange (index) {
             this.curIndex = index
             const customerGroupId = this.form.registList[index].customerGroupId
+
             if (Number(customerGroupId) !== 1) {
+                this.form.registList[index].disabledSetCurrency = true
+                this.disabledSetCurrency = false
                 const plans = []
                 this.accountTradeList[customerGroupId].data.forEach(el => {
                     const allCurrency = el.assets.map(el => el.code) || ''
@@ -703,11 +757,28 @@ export default {
                     })
                 })
                 this.form.registList[index].plans = plans
+            } else {
+                this.form.registList[index].disabledSetCurrency = false
+                // this.form.registList[index].plans = {}
+                const plans = []
+                this.accountTradeList[customerGroupId].data.forEach(el => {
+                    plans.push({
+                        id: el.trade_type,
+                        alias: '',
+                        isWallet: '',
+                        sort: 0,
+                        allCurrency: '',
+                        tradeType: el.trade_type,
+                        name: el.trade_name
+
+                    })
+                })
+                this.form.registList[index].plans = plans
             }
         },
         addFormItem () {
             this.handleCountry()
-            this.form.registList.push({})
+            this.form.registList.push({ disabledSetCurrency: true })
         },
         countryChange () {
             this.handleCountry()
@@ -795,7 +866,7 @@ export default {
         closeDialog () {
             this.checkedTradeType = {}
             this.tradeTypeAssets = []
-            this.form.tradeTypeCurrencyList = []
+            // this.form.tradeTypeCurrencyList = []
         },
         uploadFile (item, lang) {
             try {
@@ -812,7 +883,7 @@ export default {
                         _div.innerHTML = html
                         const imgUrl = _div.querySelector('img').src
                         console.log('imgUrl', imgUrl)
-                        this.form.paymentIconList[item.paymentName][lang.val].imgUrl = imgUrl
+                        this.form.paymentIconList[item.paymentCode + '_' + item.paymentType][lang.val].imgUrl = imgUrl
                     }
                 } else {
                     console.log('执行WordPress window.tb_show方法显示上传图片功能')
@@ -822,8 +893,8 @@ export default {
             }
         },
         resetPayment (item, lang) {
-            this.form.paymentIconList[item.paymentName][lang.val].alias = ''
-            this.form.paymentIconList[item.paymentName][lang.val].imgUrl = ''
+            this.form.paymentIconList[item.paymentCode + '_' + item.paymentType][lang.val].alias = ''
+            this.form.paymentIconList[item.paymentCode + '_' + item.paymentType][lang.val].imgUrl = ''
         }
     }
 }

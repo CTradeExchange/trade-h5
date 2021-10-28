@@ -47,7 +47,6 @@
 
 <script>
 import list from './list'
-import dayjs from 'dayjs'
 import { queryLiabilitiesWaterByPage } from '@/api/user'
 import { computed, ref, unref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -55,7 +54,7 @@ export default {
     components: { list },
     setup (props) {
         const formatTime = (val) => {
-            return dayjs(val).format('YYYY/MM/DD HH:mm:ss')
+            return window.dayjs(val).format('YYYY/MM/DD HH:mm:ss')
         }
         const route = useRoute()
         const requestParams = ref({})

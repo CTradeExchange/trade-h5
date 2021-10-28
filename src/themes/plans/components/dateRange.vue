@@ -31,7 +31,6 @@
 
 <script>
 import { ref, unref, computed, watch } from 'vue'
-import dayjs from 'dayjs'
 
 export default {
     props: {
@@ -52,7 +51,7 @@ export default {
         // 自定义时间范围
         const range = ref([])
         // 自定义时间显示
-        const rangeText = computed(() => unref(range).map(e => dayjs(e).format('YYYY-MM-DD')))
+        const rangeText = computed(() => unref(range).map(e => window.dayjs(e).format('YYYY-MM-DD')))
 
         // 日历控件Ref
         const calendarRef = ref(null)
@@ -69,8 +68,8 @@ export default {
         // 确定时间
         const onRangeConfirm = (value) => {
             showCalendar.value = false
-            const startTime = dayjs(value[0]).valueOf('day')
-            const endTime = dayjs(value[1]).endOf('day').valueOf()
+            const startTime = window.dayjs(value[0]).valueOf('day')
+            const endTime = window.dayjs(value[1]).endOf('day').valueOf()
             if (range.value[0] === startTime && range.value[1] === endTime) {
                 // 数据没有变化，不作响应
                 return

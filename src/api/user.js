@@ -392,6 +392,18 @@ export function bindEmail (data) {
     })
 }
 
+/* 判断用户是否已入金 */
+export function judgeIsAlreadyDeposit (data) {
+    return request({
+        url: '/global/fund.app.DepositAppDubboService.judgeIsAlreadyDeposit',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
 /* 查询存款提案 */
 export function queryDepositProposal (data) {
     return request({

@@ -38,8 +38,11 @@
         </van-button>
     </div>
 
-    <van-action-sheet v-model:show='areaShow' class='action-sheet-area'>
-        <van-area :area-list='areaList' columns-num='2' :title='$t("bank.openAddress")' @cancel='show=false' @confirm='handleAreaConfirm' />
+    <van-action-sheet
+        v-model:show='areaShow'
+        class='action-sheet-area'
+    >
+        <van-area :area-list='areaList' columns-num='2' :title='$t("bank.openAddress")' @cancel='areaShow=false' @confirm='handleAreaConfirm' />
     </van-action-sheet>
     <van-action-sheet
         v-model:show='currencyShow'

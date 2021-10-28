@@ -63,7 +63,6 @@ import { useStore } from 'vuex'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { isEmpty, objArraySort } from '@/utils/util'
-import dayjs from 'dayjs'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useI18n } from 'vue-i18n'
 import { mul } from '@/utils/calculation'
@@ -78,7 +77,7 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const { t } = useI18n({ useScope: 'global' })
-        const utcOffset = parseFloat(sessionStorage.getItem('utcOffset')) || dayjs().utcOffset()
+        const utcOffset = parseFloat(sessionStorage.getItem('utcOffset')) || window.dayjs().utcOffset()
         const symbolId = route.query.symbolId
         const tradeType = route.query.tradeType
         const product = computed(() => store.state._quote.productMap[`${symbolId}_${tradeType}`])
@@ -100,7 +99,6 @@ export default {
             if (!isEmpty(product.value.tradeTimeList)) {
                 const newTimeList = sortTimeList(product.value.tradeTimeList, utcOffset)
                 timeListFormat(newTimeList)
-                console.log(newTimeList)
                 const timeStrList = JSON.parse(JSON.stringify(newTimeList))
                 timeStrList.forEach((el, i) => {
                     timeStrList[i] = timeListSort(el)
@@ -112,7 +110,7 @@ export default {
         // 结算时间
         const eodTime = computed(() => {
             if (!isEmpty(product.value.eodTime)) {
-                return dayjs().utc().startOf('day').utcOffset(utcOffset).add(product.value.eodTime, 'minute').format('HH:mm')
+                return window.dayjs().utc().startOf('day').utcOffset(utcOffset).add(product.value.eodTime, 'minute').format('HH:mm')
             }
             return ''
         })
@@ -128,7 +126,7 @@ export default {
         // 手续费
         const expireTime = computed(() => {
             if (product.value.endTime === 9999999999999) return null
-            return dayjs(product.value.endTime).format('YYYY-MM-DD HH:mm:ss')
+            return window.dayjs(product.value.endTime).format('YYYY-MM-DD HH:mm:ss')
         })
 
         QuoteSocket.send_subscribe([symbolId])

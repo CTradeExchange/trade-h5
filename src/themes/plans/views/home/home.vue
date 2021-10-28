@@ -1,5 +1,5 @@
 <template>
-    <div id='homeContent' ref='homeContent' class='home'>
+    <div id='homeContent' ref='homeContent' class='home' :class='{ hasNav: $hasNav }'>
         <PageComp :data='pageModules' />
     </div>
 </template>
@@ -51,9 +51,11 @@ export default {
 @import '~@/sass/mixin.scss';
 .home {
     height: 100%;
-    margin-bottom: rem(80px);
     overflow: auto;
     background: var(--contentColor);
+    &.hasNav{
+        margin-bottom: rem(80px);
+    }
 }
 .noticeBar,
 .newBar {

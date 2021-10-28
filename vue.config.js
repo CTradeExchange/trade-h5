@@ -92,9 +92,6 @@ if (isAdminMode) {
         // }
     })
 } else {
-    // Object.assign(alias, {
-    //     'dayjs': resolve('src/utils/dayjs.js')
-    // })
     // H5开发模式
     Object.assign(pages, {
         index: {
@@ -137,7 +134,7 @@ const config = {
         },
         proxy: {
             '/wp-json/wp': {
-                target: 'http://prewpadmin_9.cats-trade.com', // http://prewpadmin.cats-trade.com/
+                target: 'http://prewpadmin_8.cats-trade.com', // http://prewpadmin.cats-trade.com/
                 // changeOrigin: false,
                 disableHostCheck: true,
                 onProxyReq: function (proxyReq, req, res, options) { // 由于vue中使用了body-parser 导致http中的body被序列化两次，从而使得配置代理后后端无法获取body中的数据
@@ -153,7 +150,7 @@ const config = {
                 }
             },
             '/cats-manage-api': {
-                target: 'http://prewph5_9.cats-trade.com', // prewph5公司id为2 prewph5_1公司id为60
+                target: 'http://prewph5_8.cats-trade.com', // prewph5公司id为2 prewph5_1公司id为60
                 disableHostCheck: true,
                 onProxyReq: function (proxyReq, req, res, options) { // 由于vue中使用了body-parser 导致http中的body被序列化两次，从而使得配置代理后后端无法获取body中的数据
                     if (req.body) {
