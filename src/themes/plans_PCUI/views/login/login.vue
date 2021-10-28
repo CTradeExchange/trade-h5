@@ -86,7 +86,7 @@ export default {
             pwd: '',
             checkCode: '',
             token: '', // 验证码token
-            loginType: 'checkCode', // password 密码登录   checkCode 验证码登录
+            loginType: 'password', // password 密码登录   checkCode 验证码登录
         })
 
         const { loginSubmit, loginToPath, verifyCodeBtnText, sendVerifyCode } = LoginHook()
