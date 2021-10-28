@@ -190,6 +190,9 @@ export default {
         &:last-of-type {
             margin-right: 0;
         }
+        &:hover {
+            color: var(--primary);
+        }
     }
     .active {
         color: var(--primary);
@@ -259,6 +262,7 @@ export default {
                     font-size: 16px;
                     color: #fff;
                     border-radius: 4px;
+                    cursor: pointer;
                     &.buy {
                         background: var(--riseColor);
                     }

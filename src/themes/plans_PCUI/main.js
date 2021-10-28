@@ -22,13 +22,17 @@ import { getPreDemoAccountParams } from './officialDemoAccount.js'
 // element-plus
 import 'element-plus/lib/theme-chalk/index.css'
 import {
+    ElLoading,
+    ElDialog,
     ElMessageBox,
     ElMessage,
     ElCarousel,
     ElCarouselItem,
     ElDropdown,
     ElDropdownMenu,
-    ElDropdownItem
+    ElDropdownItem,
+    ElScrollbar,
+    ElInfiniteScroll
 } from 'element-plus'
 
 skywalkingRegister(router)
@@ -39,13 +43,8 @@ BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 // const Vconsole = new VConsole()
 
 const app = createApp(App)
-app.use(ElCarousel)
-app.use(ElCarouselItem)
-app.use(ElDropdown)
-app.use(ElDropdownMenu)
-app.use(ElDropdownItem)
-app.use(ElMessageBox)
-app.use(ElMessage)
+app.use(ElLoading).use(ElDialog).use(ElMessageBox).use(ElMessage).use(ElCarousel).use(ElCarouselItem).use(ElDropdown)
+    .use(ElDropdownMenu).use(ElDropdownItem).use(ElScrollbar).use(ElInfiniteScroll)
 app.use(preventReClick)
 app.use(VantBase).use(I18n).use(store).use(router)
 app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })

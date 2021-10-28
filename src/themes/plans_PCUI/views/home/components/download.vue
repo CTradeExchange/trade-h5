@@ -19,6 +19,32 @@
                             <p>开启移动交易</p>
                         </div>
                     </div>
+                    <ul class='block-2'>
+                        <li>
+                            <i class='icon el-icon-mobile-phone'></i>
+                            <span>App Store</span>
+                        </li>
+                        <li>
+                            <i class='icon el-icon-mobile-phone'></i>
+                            <span>Android</span>
+                        </li>
+                        <li>
+                            <i class='icon el-icon-mobile-phone'></i>
+                            <span>Google Play</span>
+                        </li>
+                        <li>
+                            <i class='icon el-icon-mobile-phone'></i>
+                            <span>Mac OS</span>
+                        </li>
+                        <li>
+                            <i class='icon el-icon-mobile-phone'></i>
+                            <span>Windows</span>
+                        </li>
+                        <li>
+                            <i class='icon el-icon-mobile-phone'></i>
+                            <span>API</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -34,6 +60,7 @@ export default {
 <style lang="scss" scoped>
 .download-module {
     height: 782px;
+    margin-top: 90px;
     background: url('~@planspc/images/home/download-bg.png');
     background-size: cover;
     .download-case {
@@ -59,11 +86,11 @@ export default {
                 }
             }
             .case-right {
+                width: 380px;
                 padding-top: 49px;
                 .block-1 {
                     display: flex;
                     align-items: center;
-                    width: 379px;
                     height: 112px;
                     background: rgba(71, 127, 211, 0.15);
                     border: 1px solid #485AAE;
@@ -84,6 +111,31 @@ export default {
                             margin-top: 5px;
                             font-size: 14px;
                             color: #B7C0E7;
+                        }
+                    }
+                }
+                .block-2 {
+                    display: flex;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                    li {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        width: 80px;
+                        margin-right: 60px;
+                        margin-top: 54px;
+                        &:nth-of-type(3n) {
+                            margin-right: 0;
+                        }
+                        .icon {
+                            font-size: 36px;
+                        }
+                        span {
+                            margin-top: 18px;
+                            font-size: 14px;
+                            color: #fff;
                         }
                     }
                 }

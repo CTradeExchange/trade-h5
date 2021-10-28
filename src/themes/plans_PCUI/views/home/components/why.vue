@@ -8,6 +8,7 @@
         </p>
         <ul class='why-ul'>
             <li>
+                <i class='icon el-icon-mobile-phone'></i>
                 <p class='name'>
                     0手续费买卖数字货币
                 </p>
@@ -16,6 +17,7 @@
                 </p>
             </li>
             <li>
+                <i class='icon el-icon-mobile-phone'></i>
                 <p class='name'>
                     最优的交易费率
                 </p>
@@ -24,6 +26,7 @@
                 </p>
             </li>
             <li>
+                <i class='icon el-icon-mobile-phone'></i>
                 <p class='name'>
                     可信赖的安全保障
                 </p>
@@ -32,6 +35,7 @@
                 </p>
             </li>
             <li>
+                <i class='icon el-icon-mobile-phone'></i>
                 <p class='name'>
                     24*7小时客服支持
                 </p>
@@ -65,16 +69,23 @@ export default {
         display: flex;
         margin-top: 55px;
         li {
+            display: flex;
+            flex-direction: column;
             width: 245px;
             margin-right: 64px;
             &:last-of-type {
                 margin-right: 0;
             }
+            .icon {
+                font-size: 50px;
+                color: var(--normalColor);
+            }
             .name {
+                margin-top: 25px;
                 font-size: 16px;
             }
             .describe {
-                margin-top: 16px;
+                margin-top: 18px;
                 line-height: 22px;
                 font-size: 14px;
                 color: var(--normalColor);
