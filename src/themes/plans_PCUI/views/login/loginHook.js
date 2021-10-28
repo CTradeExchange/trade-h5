@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import Schema from 'async-validator'
@@ -120,6 +120,11 @@ export default function () {
             }
         }, 1000)
     }
+
+    // 离开时清除定时器
+    onUnmounted(() => {
+        verifyCountDownTimer && clearInterval(verifyCountDownTimer)
+    })
 
     return {
         loginToPath,
