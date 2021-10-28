@@ -162,7 +162,6 @@ import { getListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
 import { isEmpty, sessionGet, getCookie } from '@/utils/util'
-import dayjs from 'dayjs'
 import { mul } from '@/utils/calculation'
 import { useI18n } from 'vue-i18n'
 
@@ -409,8 +408,8 @@ export default {
 
         const handleShowTime = () => {
             if (state.PayTypes.length > 0) {
-                const todayStr = dayjs().format('YYYY-MM-DD')
-                const tomorrowStr = dayjs().add(1, 'day')
+                const todayStr = window.dayjs().format('YYYY-MM-DD')
+                const tomorrowStr = window.dayjs().add(1, 'day')
 
                 state.PayTypes.forEach(payItem => {
                     const openTime = payItem.openTime
@@ -421,10 +420,10 @@ export default {
 
                         openTimeList.forEach(item => {
                             state.resultTimeMap[payItem.id] = [].concat(state.resultTimeMap[payItem.id])
-                            const nowDate = dayjs()
+                            const nowDate = window.dayjs()
                             const [start, end] = item.split('-')
-                            const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
-                            const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
+                            const startLocal = window.dayjs.utc(`${todayStr} ${start}`).local()
+                            const endLocal = window.dayjs.utc(`${todayStr} ${end}`).local()
 
                             if ((startLocal.isAfter(todayStr, 'day') && endLocal.isAfter(todayStr, 'day')) || (startLocal.isBefore(tomorrowStr, 'day') && endLocal.isBefore(tomorrowStr, 'day'))) {
                                 state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
@@ -466,7 +465,7 @@ export default {
                                 const end = el.split('-')[1]
                                 const nextStart = newTimeList[index + 1] && newTimeList[index + 1].split('-')[0]
                                 const nextEnd = newTimeList[index + 1] && newTimeList[index + 1].split('-')[1]
-                                if (dayjs(`${todayStr} ${end}`).add(1, 'minute').isSame(dayjs(`${todayStr} ${nextStart}`))) {
+                                if (window.dayjs(`${todayStr} ${end}`).add(1, 'minute').isSame(window.dayjs(`${todayStr} ${nextStart}`))) {
                                     finalTimeResult.push(start + '-' + nextEnd)
                                     index++
                                 } else {
@@ -592,11 +591,11 @@ export default {
         const computeTime = (val) => {
             if (!isEmpty(val)) {
                 // 0 点时的时间戳
-                const time = (dayjs(new Date(new Date(new Date().toLocaleDateString()).getTime()))).valueOf()
+                const time = (window.dayjs(new Date(new Date(new Date().toLocaleDateString()).getTime()))).valueOf()
                 if (Number(val) === 1440) {
                     return '24:00'
                 } else {
-                    return dayjs(time + val * 60 * 1000).format('HH:mm')
+                    return window.dayjs(time + val * 60 * 1000).format('HH:mm')
                 }
             }
         }

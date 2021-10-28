@@ -295,7 +295,6 @@ import { useI18n } from 'vue-i18n'
 import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted } from 'vue'
 import KIcon from './icons/kIcon.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
-import dayjs from 'dayjs'
 import { useStore } from 'vuex'
 import { Dialog, Toast } from 'vant'
 import { isEmpty, localSet, localGet } from '@/utils/util'
@@ -967,7 +966,7 @@ export default {
 
         // 格式化时间
         const formatTime = (val) => {
-            if (val) { return dayjs(Number(val)).format('HH:mm:ss') }
+            if (val) { return window.dayjs(Number(val)).format('HH:mm:ss') }
         }
 
         // 初始化图表配置

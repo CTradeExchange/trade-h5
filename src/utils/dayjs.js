@@ -13,7 +13,7 @@ const dayjsEmulate = function (...args) {
 dayjsEmulate.tz = dayjs.tz
 dayjsEmulate.utc = dayjs.utc
 window.dayjsEmulate = dayjsEmulate
-window.dayjs = dayjsEmulate
+window.dayjs = dayjs
 window._dayjs = dayjs
 export default dayjsEmulate
 export const _dayjs = dayjs

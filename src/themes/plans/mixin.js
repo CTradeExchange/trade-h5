@@ -1,5 +1,5 @@
 import { getQueryVariable } from '@/utils/util'
-import dayjs from 'dayjs'
+
 /* 全局mixin */
 export default {
     data () {
@@ -42,7 +42,7 @@ export default {
         },
         // 日期时间格式化
         formatTime (val, fmt = 'YYYY-MM-DD HH:mm:ss') {
-            return dayjs(val).format(fmt)
+            return window.dayjs(val).format(fmt)
         }
     }
 }

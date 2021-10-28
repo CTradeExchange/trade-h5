@@ -18,7 +18,6 @@
 <script>
 import { ref, unref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import dayjs from 'dayjs'
 import dateRange from './dateRange'
 export default {
     components: {
@@ -42,14 +41,14 @@ export default {
         ])
 
         const getTime = (type) => {
-            return dayjs().startOf(type).valueOf()
+            return window.dayjs().startOf(type).valueOf()
         }
 
         const period = {
             1: getTime('day'),
             2: getTime('week'),
             3: getTime('month'),
-            4: dayjs().startOf('month').subtract(3, 'month').valueOf()
+            4: window.dayjs().startOf('month').subtract(3, 'month').valueOf()
         }
         // 下拉菜单Ref
         const dropdownItemRef = ref(null)
@@ -58,7 +57,7 @@ export default {
         // 监听下拉菜单变化
         const onDateChange = (value) => {
             const startTime = period[value]
-            const endTime = dayjs().endOf('day').valueOf()
+            const endTime = window.dayjs().endOf('day').valueOf()
             context.emit('change', startTime ? [startTime, endTime] : null)
         }
 

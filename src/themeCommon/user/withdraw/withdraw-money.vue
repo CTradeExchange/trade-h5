@@ -111,7 +111,6 @@ import { Toast, Dialog } from 'vant'
 import { isEmpty, debounce } from '@/utils/util'
 import { useStore } from 'vuex'
 import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate, queryBankList, computeWithdrawFee, checkKycApply } from '@/api/user'
-import dayjs from 'dayjs'
 import { useI18n } from 'vue-i18n'
 
 export default {
@@ -227,7 +226,7 @@ export default {
         }, 1000)
 
         const transferUtc = () => {
-            const todayStr = dayjs().format('YYYY-MM-DD')
+            const todayStr = window.dayjs().format('YYYY-MM-DD')
             state.withdrawConfig.withdrawTimeConfigList.forEach(el => {
                 el.openTimeLocal = []
                 state.withdrawTimeConfigMap[el.weekDay] = {
@@ -246,8 +245,8 @@ export default {
                         if (timeRange.length > 0) {
                             timeRange.forEach(timeRangeItem => {
                                 const [start, end] = timeRangeItem.split('-')
-                                const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
-                                const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
+                                const startLocal = window.dayjs.utc(`${todayStr} ${start}`).local()
+                                const endLocal = window.dayjs.utc(`${todayStr} ${end}`).local()
 
                                 // 第二天
                                 const weekDay = key < 7 ? Number(key) + 1 : 1
@@ -287,7 +286,7 @@ export default {
                             const nextStart = el.openTimeLocal[index + 1] && el.openTimeLocal[index + 1].split('-')[0]
                             const nextEnd = el.openTimeLocal[index + 1] && el.openTimeLocal[index + 1].split('-')[1]
 
-                            if (dayjs(`${todayStr} ${end}`).add(1, 'minute').isSame(dayjs(`${todayStr} ${nextStart}`))) {
+                            if (window.dayjs(`${todayStr} ${end}`).add(1, 'minute').isSame(window.dayjs(`${todayStr} ${nextStart}`))) {
                                 el.openTimeLocal = start + '-' + nextEnd
                             } else {
 

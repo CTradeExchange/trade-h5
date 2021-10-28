@@ -1,4 +1,3 @@
-import dayjs from 'dayjs'
 import { QuoteSocket } from '@/plugins/socket/socket'
 let isLog = true // 是否输出日志
 

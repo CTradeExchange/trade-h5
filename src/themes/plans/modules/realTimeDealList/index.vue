@@ -36,7 +36,6 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import dayjs from 'dayjs'
 export default {
     props: ['symbolId'],
     setup (props) {
@@ -47,7 +46,7 @@ export default {
 
         // 格式化时间
         const formatTime = (val) => {
-            return dayjs(Number(val)).format('HH:mm:ss')
+            return window.dayjs(Number(val)).format('HH:mm:ss')
         }
 
         return {
