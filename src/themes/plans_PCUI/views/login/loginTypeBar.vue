@@ -1,8 +1,8 @@
 <template>
     <div class='loginTypeBar'>
         <van-tabs v-model:active='type'>
-            <van-tab name='password' title='密码' />
-            <van-tab name='checkCode' title='验证码' />
+            <van-tab name='password' :title='$t("signIn.pwd")' />
+            <van-tab name='checkCode' :title='$t("signIn.verifyCode")' />
         </van-tabs>
     </div>
 </template>
@@ -15,7 +15,7 @@ export default {
     setup (props, { emit }) {
         const type = computed({
             get: () => {
-                return props.loginType
+                return props.modelValue
             },
             set: (val) => {
                 emit('update:modelValue', val)
@@ -36,7 +36,9 @@ export default {
             flex: none;
             margin: 0 10px;
         }
-        --van-tabs-bottom-bar-color: var(--primary)
+        .van-tabs__line{
+            background: var(--primary);
+        }
     }
 }
 </style>
