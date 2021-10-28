@@ -652,7 +652,7 @@ export default {
                                     throw new Error('no-customerGroupId')
                                 }
 
-                                const hasCurrency = el.plans.every(el => el.allCurrency)
+                                const hasCurrency = el?.plans && el?.plans.every(el => el.allCurrency)
                                 if (!hasCurrency && Number(el.customerGroupId) === 1) {
                                     that.$message({
                                         message: '请先设置币种',

@@ -108,6 +108,7 @@ import { useStore } from 'vuex'
 import Schema from 'async-validator'
 import { Toast } from 'vant'
 import { addBank } from '@/api/user'
+import { getCountryListByParentCode } from '@/api/base'
 import CurrencyAction from '@/components/currencyAction'
 import { useI18n } from 'vue-i18n'
 
@@ -122,6 +123,13 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const bankDict = computed(() => store.state.bankDict)
         const customInfo = computed(() => store.state._user.customerInfo)
+
+        getCountryListByParentCode({
+            parentCode: 'ISO_3166_156'
+        }).then(res => {
+            debugger
+        })
+        store.dispatch('getCountryListByParentCode')
 
         const state = reactive({
             userName: '',
