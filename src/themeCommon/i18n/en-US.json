@@ -1,4 +1,8 @@
 {
+    "theme": {
+        "day": "day",
+        "night": "night"
+    },
     "cRoute": {
         "login": "Login",
         "register": "Register",

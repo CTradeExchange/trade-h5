@@ -1,4 +1,8 @@
 {
+    "theme": {
+        "day": "白天",
+        "night": "黑夜"
+    },
     "cRoute": {
         "login": "登录",
         "register": "注册开户",

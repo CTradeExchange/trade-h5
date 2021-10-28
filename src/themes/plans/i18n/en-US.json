@@ -470,7 +470,8 @@
     "repaymentCurrency": "Please select the repayment currency",
     "pendingAmount": "Entrusted amount",
     "trustPrice": "Commission price",
-    "pendingUnit": "Entrusted amount"
+    "pendingUnit": "Entrusted amount",
+    "favorites": "Favorites"
   },
   "bizType": {
     "2": "Market close",
