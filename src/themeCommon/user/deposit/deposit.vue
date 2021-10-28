@@ -492,7 +492,7 @@ export default {
                 state.currencyChecked = ''
                 return
             }
-            debugger
+
             state.paymentTypes = []
             if (payItem.paymentCurrency === 'USDT') {
                 getChainList()
@@ -550,7 +550,7 @@ export default {
                 accountId,
                 customerGroupId: customInfo.value.customerGroupId,
                 depositRateSerialNo: state.rateConfig.depositRateSerialNo,
-                paymentCurrency: state.currencyChecked,
+                paymentCurrency: state.checkedType.paymentCurrency === 'USDT' ? 'USDT' : state.currencyChecked,
                 accountCurrency: state.rateConfig.accountCurrency,
                 exchangeRate: state.rateConfig.exchangeRate,
                 paymentChannelCode: state.checkedType.paymentCode,
