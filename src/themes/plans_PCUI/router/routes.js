@@ -92,18 +92,18 @@ const routes = [
             },
         ]
     },
-    {
-        path: '/:params/setting',
-        name: 'Setting',
-        component: {
-            centerView: () => import(/* webpackChunkName: "Forgot" */ '../views/setting/setting.vue')
-        },
-        meta: {
-            title: 'route.setting',
-            keepAlive: true,
-            roles: [],
-        }
-    },
+    // {
+    //     path: '/:params/setting',
+    //     name: 'Setting',
+    //     component: {
+    //         centerView: () => import(/* webpackChunkName: "Forgot" */ '../views/setting/setting.vue')
+    //     },
+    //     meta: {
+    //         title: 'route.setting',
+    //         keepAlive: true,
+    //         roles: [],
+    //     }
+    // },
 ]
 
 export default routes
