@@ -18,7 +18,7 @@
         </div>
         <div v-if="loading !== 'noMore'" class='load-more'>
             <a href='javascript:;' @click='getNewsLilst'>
-                <span>加载更多</span>
+                <span>{{ $t('loadMore') }}</span>
                 <i class='el-icon-arrow-down'></i>
             </a>
         </div>

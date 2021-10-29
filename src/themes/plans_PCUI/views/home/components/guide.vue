@@ -1,23 +1,23 @@
 <template>
     <div class='guide-module auto-width'>
         <h3 class='title'>
-            新手指引
+            {{ $t('home.guide.title') }}
         </h3>
         <p class='subhead'>
-            开启数字货币交易学习
+            {{ $t('home.guide.describe') }}
         </p>
         <ul class='guide-ul'>
             <li>
                 <img src='@planspc/images/home/guide-1.png' />
-                <p>如何购买数字货币</p>
+                <p>{{ $t('home.guide.text1') }}</p>
             </li>
             <li>
                 <img src='@planspc/images/home/guide-2.png' />
-                <p>急速了解交易规则</p>
+                <p>{{ $t('home.guide.text2') }}</p>
             </li>
             <li>
                 <img src='@planspc/images/home/guide-3.png' />
-                <p>小白进场适合买什么数字货币</p>
+                <p>{{ $t('home.guide.text3') }}</p>
             </li>
         </ul>
     </div>

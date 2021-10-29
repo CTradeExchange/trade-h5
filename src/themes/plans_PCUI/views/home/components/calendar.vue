@@ -176,7 +176,7 @@ export default {
         })
 
         onDeactivated(() => {
-            document.removeEventListener('click')
+            document.removeEventListener('click', () => {})
         })
 
         return {

@@ -18,17 +18,17 @@
             <div class='flow-module auto-width'>
                 <div class='flow-left'>
                     <h3 class='title'>
-                        要闻
+                        {{ $t('information.focusNews') }}
                     </h3>
                     <news />
                 </div>
                 <div class='flow-right'>
                     <div class='tabs'>
                         <span :class="{ 'active': currentFlow === 1 }" @click='switchFlow(1)'>
-                            7x24
+                            {{ $t('information.newsFlash') }}
                         </span>
                         <span :class="{ 'active': currentFlow === 2 }" @click='switchFlow(2)'>
-                            财经日历
+                            {{ $t('information.calendar') }}
                         </span>
                     </div>
                     <!-- 7x24 -->

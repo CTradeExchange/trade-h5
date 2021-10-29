@@ -1,14 +1,14 @@
 <template>
     <div class='quick-module auto-width'>
         <h3 class='title'>
-            让财富更自由
+            {{ $t('home.quick.title') }}
         </h3>
         <p class='describe'>
-            全球顶级交易平台，一键投资数字货币、外汇、贵金属、指数等多种交易产品
+            {{ $t('home.quick.describe') }}
         </p>
         <div class='register-box'>
-            <input placeholder='输入您的邮箱或手机号' />
-            <button>注册</button>
+            <input :placeholder="$t('signIn.mobileEmailPlaceholder')" />
+            <button>{{ $t('register') }}</button>
         </div>
     </div>
 </template>

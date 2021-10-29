@@ -11,131 +11,131 @@
                 <ul>
                     <li>
                         <h4 class='title'>
-                            关于
+                            {{ $t('footer.about.title') }}
                         </h4>
                         <p class='name'>
                             <a href='javascript:;'>
-                                Cats 2.0
+                                {{ $t('footer.about.1') }}
                             </a>
                         </p>
                         <p class='name'>
                             <a href='javascript:;'>
-                                职业机会
+                                {{ $t('footer.about.2') }}
                             </a>
                         </p>
                         <p class='name'>
                             <a href='javascript:;'>
-                                费率标准
+                                {{ $t('footer.about.3') }}
                             </a>
                         </p>
                         <p class='name'>
                             <a href='javascript:;'>
-                                合作伙伴
+                                {{ $t('footer.about.4') }}
                             </a>
                         </p>
                     </li>
                     <li>
                         <h4 class='title'>
-                            工具
+                            {{ $t('footer.tool.title') }}
                         </h4>
                         <p class='name'>
                             <a href='javascript:;'>
-                                客户端下载
+                                {{ $t('footer.tool.1') }}
                             </a>
                         </p>
                         <p class='name'>
                             <a href='javascript:;'>
-                                API文档
+                                {{ $t('footer.tool.2') }}
                             </a>
                         </p>
                         <p class='name'>
                             <a href='javascript:;'>
-                                数字资产介绍
+                                {{ $t('footer.tool.3') }}
                             </a>
                         </p>
                         <p class='name'>
                             <a href='javascript:;'>
-                                官方验证通道
+                                {{ $t('footer.tool.4') }}
                             </a>
                         </p>
                         <p class='name'>
                             <a href='javascript:;'>
-                                历史数据下载
+                                {{ $t('footer.tool.5') }}
                             </a>
                         </p>
                     </li>
                     <li>
                         <h4 class='title'>
-                            服务
+                            {{ $t('footer.serve.title') }}
                         </h4>
                         <p class='name'>
                             <a href='javascript:;'>
-                                费率
+                                {{ $t('footer.serve.1') }}
                             </a>
                         </p>
                         <p class='name'>
                             <a href='javascript:;'>
-                                借币额度
+                                {{ $t('footer.serve.2') }}
                             </a>
                         </p>
                         <p class='name'>
                             <a href='javascript:;'>
-                                帮助中心
+                                {{ $t('footer.serve.3') }}
                             </a>
                         </p>
                         <p class='name'>
                             <a href='javascript:;'>
-                                新手指南
+                                {{ $t('footer.serve.4') }}
                             </a>
                         </p>
                         <p class='name'>
                             <a href='javascript:;'>
-                                合约课堂
+                                {{ $t('footer.serve.5') }}
                             </a>
                         </p>
                     </li>
                     <li>
                         <h4 class='title'>
-                            支持
+                            {{ $t('footer.support.title') }}
                         </h4>
                         <p class='name'>
                             <a href='javascript:;'>
-                                合作申请
+                                {{ $t('footer.support.1') }}
                             </a>
                         </p>
                         <p class='name'>
                             <a href='javascript:;'>
-                                机构服务
+                                {{ $t('footer.support.2') }}
                             </a>
                         </p>
                         <p class='name'>
                             <a href='javascript:;'>
-                                大客户权益
+                                {{ $t('footer.support.3') }}
                             </a>
                         </p>
                         <p class='name'>
                             <a href='javascript:;'>
-                                广告权限申请
+                                {{ $t('footer.support.4') }}
                             </a>
                         </p>
                     </li>
                     <li>
                         <h4 class='title'>
-                            条款
+                            {{ $t('footer.terms.title') }}
                         </h4>
                         <p class='name'>
                             <a href='javascript:;'>
-                                用户协议
+                                {{ $t('footer.terms.1') }}
                             </a>
                         </p>
                         <p class='name'>
                             <a href='javascript:;'>
-                                隐私条款
+                                {{ $t('footer.terms.2') }}
                             </a>
                         </p>
                         <p class='name'>
                             <a href='javascript:;'>
-                                交易规则
+                                {{ $t('footer.terms.3') }}
                             </a>
                         </p>
                     </li>
@@ -146,11 +146,8 @@
 </template>
 
 <script>
-import { reactive, toRefs } from 'vue'
-import { useStore } from 'vuex'
 export default {
     setup () {
-        const store = useStore()
         return {}
     }
 }

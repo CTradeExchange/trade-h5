@@ -1,46 +1,46 @@
 <template>
     <div class='why-module auto-width'>
         <h3 class='title'>
-            为什么选择我们？
+            {{ $t('home.why.title') }}
         </h3>
         <p class='subhead'>
-            选择CATS作为交易加密数字货币的原因
+            {{ $t('home.why.describe') }}
         </p>
         <ul class='why-ul'>
             <li>
-                <i class='icon el-icon-mobile-phone'></i>
+                <img src='@planspc/images/home/why-icon1.png' />
                 <p class='name'>
-                    0手续费买卖数字货币
+                    {{ $t('home.why.title1') }}
                 </p>
                 <p class='describe'>
-                    使用多种支付方式交易数字货币，0手续费，安全快捷
+                    {{ $t('home.why.text1') }}
                 </p>
             </li>
             <li>
-                <i class='icon el-icon-mobile-phone'></i>
+                <img src='@planspc/images/home/why-icon2.png' />
                 <p class='name'>
-                    最优的交易费率
+                    {{ $t('home.why.title2') }}
                 </p>
                 <p class='describe'>
-                    优惠的交易费率，富有竞争力的VIP权益，享受最优品质的服务
+                    {{ $t('home.why.text2') }}
                 </p>
             </li>
             <li>
-                <i class='icon el-icon-mobile-phone'></i>
+                <img src='@planspc/images/home/why-icon3.png' />
                 <p class='name'>
-                    可信赖的安全保障
+                    {{ $t('home.why.title3') }}
                 </p>
                 <p class='describe'>
-                    我们全面的安全措施保护您的数字资产免受所有风险。
+                    {{ $t('home.why.text3') }}
                 </p>
             </li>
             <li>
-                <i class='icon el-icon-mobile-phone'></i>
+                <img src='@planspc/images/home/why-icon4.png' />
                 <p class='name'>
-                    24*7小时客服支持
+                    {{ $t('home.why.title4') }}
                 </p>
                 <p class='describe'>
-                    24*7小时全天候、全日制运营模式，第一时间为您解答相关咨询。
+                    {{ $t('home.why.text4') }}
                 </p>
             </li>
         </ul>
@@ -76,9 +76,9 @@ export default {
             &:last-of-type {
                 margin-right: 0;
             }
-            .icon {
-                font-size: 50px;
-                color: var(--normalColor);
+            img {
+                width: 68px;
+                height: 68px;
             }
             .name {
                 margin-top: 25px;

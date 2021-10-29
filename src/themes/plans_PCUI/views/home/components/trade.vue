@@ -66,7 +66,7 @@
             </ul>
             <div class='view-more'>
                 <router-link to='/'>
-                    <span>查看更多</span>
+                    <span>{{ $t('examineMore') }}</span>
                     <i class='el-icon-arrow-right'></i>
                 </router-link>
             </div>

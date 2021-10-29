@@ -2,10 +2,10 @@
     <div class='download-module'>
         <div class='download-case auto-width'>
             <h3 class='title'>
-                交易随时随地
+                {{ $t('home.download.title') }}
             </h3>
             <p class='describe'>
-                多终端，多设备，随时随地开启交易
+                {{ $t('home.download.describe') }}
             </p>
             <div class='case'>
                 <div class='case-left'>
@@ -15,33 +15,33 @@
                     <div class='block-1'>
                         <img src='@planspc/images/home/download-code.png' />
                         <div class='text'>
-                            <h4>iOS & Android 扫码下载APP</h4>
-                            <p>开启移动交易</p>
+                            <h4>{{ $t('home.download.tip1') }}</h4>
+                            <p>{{ $t('home.download.tip2') }}</p>
                         </div>
                     </div>
                     <ul class='block-2'>
                         <li>
-                            <i class='icon el-icon-mobile-phone'></i>
+                            <img src='@planspc/images/home/download-icon1.png' />
                             <span>App Store</span>
                         </li>
                         <li>
-                            <i class='icon el-icon-mobile-phone'></i>
+                            <img src='@planspc/images/home/download-icon2.png' />
                             <span>Android</span>
                         </li>
                         <li>
-                            <i class='icon el-icon-mobile-phone'></i>
+                            <img src='@planspc/images/home/download-icon3.png' />
                             <span>Google Play</span>
                         </li>
                         <li>
-                            <i class='icon el-icon-mobile-phone'></i>
+                            <img src='@planspc/images/home/download-icon4.png' />
                             <span>Mac OS</span>
                         </li>
                         <li>
-                            <i class='icon el-icon-mobile-phone'></i>
+                            <img src='@planspc/images/home/download-icon5.png' />
                             <span>Windows</span>
                         </li>
                         <li>
-                            <i class='icon el-icon-mobile-phone'></i>
+                            <img src='@planspc/images/home/download-icon6.png' />
                             <span>API</span>
                         </li>
                     </ul>
@@ -129,8 +129,9 @@ export default {
                         &:nth-of-type(3n) {
                             margin-right: 0;
                         }
-                        .icon {
-                            font-size: 36px;
+                        img {
+                            width: 30px;
+                            height: 30px;
                         }
                         span {
                             margin-top: 18px;
