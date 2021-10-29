@@ -1,6 +1,11 @@
 <template>
     <div class='quote'>
-        <p>这里是行情页面</p>
+        <router-view />
+        <p>
+            <a href='javascript:;' @click="$router.push($route.path+'/depost?symbolId=28&tradeType=1')">
+                这里是行情页面
+            </a>
+        </p>
         <p>这里是行情页面</p>
         <p>这里是行情页面</p>
         <p>这里是行情页面</p>

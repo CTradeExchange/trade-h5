@@ -1,5 +1,13 @@
 import themeRouter from '@/themeCommon/router'
 import Layout from '../layout/index'
+// import popupLayout from '../layout/popupLayout'
+
+const h5Children = [
+    {
+        path: 'depost',
+        component: () => import(/* webpackChunkName: "Contract" */ '../views/contract/contract.vue'),
+    }
+]
 
 const routes = [
     ...themeRouter,
@@ -48,7 +56,8 @@ const routes = [
                     title: 'route.home',
                     keepAlive: true,
                     roles: [],
-                }
+                },
+                children: h5Children
             },
             {
                 path: 'quote',
@@ -58,7 +67,8 @@ const routes = [
                     title: 'route.quote',
                     keepAlive: true,
                     roles: [],
-                }
+                },
+                children: h5Children
             },
             {
                 path: 'order',
@@ -81,6 +91,18 @@ const routes = [
                 }
             },
         ]
+    },
+    {
+        path: '/:params/setting',
+        name: 'Setting',
+        component: {
+            centerView: () => import(/* webpackChunkName: "Forgot" */ '../views/setting/setting.vue')
+        },
+        meta: {
+            title: 'route.setting',
+            keepAlive: true,
+            roles: [],
+        }
     },
 ]
 

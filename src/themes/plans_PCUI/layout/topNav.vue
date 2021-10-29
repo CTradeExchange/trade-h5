@@ -61,6 +61,7 @@
                     </el-dropdown>
                 </div>
                 <div class='item'>
+<<<<<<< HEAD
                     <i class='icon icon_zichan' :title="$t('header.assets')"></i>
                 </div>
                 <div class='item'>
@@ -68,12 +69,22 @@
                 </div>
                 <div class='item'>
                     <i class='icon icon_shezhi' :title="$t('header.set')"></i>
+=======
+                    <i class='icon icon_xiaoxizhongxin' title='资产'></i>
+                </div>
+                <div class='item'>
+                    <i class='icon icon_gerenxinxi' title='个人消息'></i>
+                </div>
+                <div class='item'>
+                    <i class='icon icon_shezhi' title='设置'></i>
+>>>>>>> 9cd6699756337ca4c6049d9637727535e8a96275
                 </div>
                 <div class='line'></div>
             </div>
             <!-- 操作功能 -->
             <div class='handle-feature'>
                 <div class='item'>
+<<<<<<< HEAD
                     <i class='icon icon_kefu' :title="$t('header.service')"></i>
                 </div>
                 <div class='item'>
@@ -90,6 +101,16 @@
                 <div class='item'>
                     <el-dropdown>
                         <i class='icon icon_yuyan' :title="$t('header.language')"></i>
+=======
+                    <i class='icon icon_kefu' title='客服'></i>
+                </div>
+                <div class='item'>
+                    <i class='icon icon_xiazai' title='下载'></i>
+                </div>
+                <div class='item'>
+                    <el-dropdown>
+                        <i class='icon icon_yuyan' title='语言'></i>
+>>>>>>> 9cd6699756337ca4c6049d9637727535e8a96275
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item>简体中文</el-dropdown-item>
@@ -102,7 +123,11 @@
                 </div>
                 <div class='item'>
                     <el-dropdown>
+<<<<<<< HEAD
                         <i class='icon icon_zhuanhuanchengbaitian' :title="$t('header.theme')"></i>
+=======
+                        <i class='icon icon_zhuanhuanchengheiye' title='主题'></i>
+>>>>>>> 9cd6699756337ca4c6049d9637727535e8a96275
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item>白天</el-dropdown-item>
