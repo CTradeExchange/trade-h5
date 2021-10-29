@@ -86,7 +86,7 @@ export default {
     setup () {
         const state = reactive({
             // 当前信息流选项卡
-            currentFlow: 2
+            currentFlow: 1
         })
 
         // 切换信息流
