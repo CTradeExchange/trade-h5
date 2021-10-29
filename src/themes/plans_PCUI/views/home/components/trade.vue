@@ -121,6 +121,7 @@ export default {
         onMounted(() => {
             // 设置默认玩法
             state.tradeType = Number(plansList.value[0].tradeType)
+            getPlansData()
         })
 
         return {
