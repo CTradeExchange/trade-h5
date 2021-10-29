@@ -21,10 +21,9 @@
                         </span>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item>现货交易</el-dropdown-item>
-                                <el-dropdown-item>杠杆交易</el-dropdown-item>
-                                <el-dropdown-item>合约全仓</el-dropdown-item>
-                                <el-dropdown-item>合约逐仓</el-dropdown-item>
+                                <el-dropdown-item v-for='item in plansList' :key='item.id'>
+                                    {{ item.name }}
+                                </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
@@ -117,8 +116,19 @@
 </template>
 
 <script>
-export default {
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 
+export default {
+    setup () {
+        const store = useStore()
+        // 玩法列表
+        const plansList = computed(() => store.state._base.plans)
+
+        return {
+            plansList
+        }
+    }
 }
 </script>
 
