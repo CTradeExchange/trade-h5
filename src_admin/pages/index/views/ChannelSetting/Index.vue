@@ -25,10 +25,13 @@
         </el-row>
         <el-row>
             <el-col class='btns' :span='24'>
-                <el-form ref='form' label-width='100px' :model='form' :rules='rules'>
+                <el-form ref='form' label-width='110px' :model='form' :rules='rules'>
                     <el-tabs v-model='optionName' type='border-card'>
                         <el-tab-pane class='tab' label='渠道基础设置' name='first'>
-                            <el-form-item label='可注册区号'>
+                            <el-form-item
+                                label='可注册区号'
+                                prop='registrable'
+                            >
                                 <el-select
                                     v-model='form.registrable'
                                     multiple
@@ -54,7 +57,10 @@
                                     </template>
                                 </el-popover>
                             </el-form-item>
-                            <el-form-item label='默认注册区号'>
+                            <el-form-item
+                                label='默认注册区号'
+                                prop='defaultZone'
+                            >
                                 <el-select
                                     v-model='form.defaultZone'
                                     placeholder='请输入'
@@ -386,7 +392,7 @@ export default {
                 googleAnalytics: '',
                 h5Address: '',
                 h5PreviewAddress: '',
-                defaultZone: '',
+                defaultZone: {},
                 registList: [{}],
                 onlineService: '',
                 supportLanguage: [],
@@ -436,7 +442,22 @@ export default {
                         message: '请选择注册国家',
                         trigger: 'blur',
                     }
+                ],
+                registrable: [
+                    {
+                        required: true,
+                        message: '请选择可注册区号',
+                        trigger: 'blur',
+                    }
+                ],
+                defaultZone: [
+                    {
+                        required: true,
+                        message: '请选择默认注册区号',
+                        trigger: 'blur',
+                    }
                 ]
+
             },
 
         }
@@ -529,6 +550,7 @@ export default {
                     name: '全部',
                 }
             )
+            this.form.defaultZone = ''
             // this.otherZoneList = this.zoneList.filter(el => val.includes(el.name + ' (' + el.country_code + ')'))
         },
         // 获取支付通道
@@ -818,7 +840,7 @@ export default {
         // 处理注册国家下拉框数据，不能重复选择国家
         handleCountry () {
             this.registZoneList.map(item => {
-                const registIds = this.form.registList.map(el => el.registCountry.id)
+                const registIds = this.form.registList.map(el => el.registCountry?.id)
                 item.disabled = false
                 if (registIds.indexOf(item.id) > -1) {
                     item.disabled = true
