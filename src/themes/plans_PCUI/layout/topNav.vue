@@ -59,27 +59,27 @@
                     </el-dropdown>
                 </div>
                 <div class='item'>
-                    <i class='icon el-icon-chat-dot-round' title='资产'></i>
+                    <i class='icon icon_xiaoxizhongxin' title='资产'></i>
                 </div>
                 <div class='item'>
-                    <i class='icon el-icon-chat-dot-round' title='个人消息'></i>
+                    <i class='icon icon_gerenxinxi' title='个人消息'></i>
                 </div>
                 <div class='item'>
-                    <i class='icon el-icon-chat-dot-round' title='设置'></i>
+                    <i class='icon icon_shezhi' title='设置'></i>
                 </div>
                 <div class='line'></div>
             </div>
             <!-- 操作功能 -->
             <div class='handle-feature'>
                 <div class='item'>
-                    <i class='icon el-icon-service' title='客服'></i>
+                    <i class='icon icon_kefu' title='客服'></i>
                 </div>
                 <div class='item'>
-                    <i class='icon el-icon-service' title='下载'></i>
+                    <i class='icon icon_xiazai' title='下载'></i>
                 </div>
                 <div class='item'>
                     <el-dropdown>
-                        <i class='icon el-icon-service' title='语言'></i>
+                        <i class='icon icon_yuyan' title='语言'></i>
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item>简体中文</el-dropdown-item>
@@ -92,7 +92,7 @@
                 </div>
                 <div class='item'>
                     <el-dropdown>
-                        <i class='icon el-icon-service' title='主题'></i>
+                        <i class='icon icon_zhuanhuanchengheiye' title='主题'></i>
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item>白天</el-dropdown-item>
