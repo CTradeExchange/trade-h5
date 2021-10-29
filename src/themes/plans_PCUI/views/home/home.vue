@@ -20,20 +20,25 @@
                     <h3 class='title'>
                         要闻
                     </h3>
-                    <div class='case'>
-                        <news />
-                    </div>
+                    <news />
                 </div>
                 <div class='flow-right'>
                     <div class='tabs'>
-                        <span class='active'>
+                        <span :class="{ 'active': currentFlow === 1 }" @click='switchFlow(1)'>
                             7x24
                         </span>
-                        <span>
+                        <span :class="{ 'active': currentFlow === 2 }" @click='switchFlow(2)'>
                             财经日历
                         </span>
                     </div>
-                    <div class='case'></div>
+                    <!-- 7x24 -->
+                    <div v-show='currentFlow === 1'>
+                        <seven />
+                    </div>
+                    <!-- 财经日历 -->
+                    <div v-show='currentFlow === 2'>
+                        <calendar />
+                    </div>
                 </div>
             </div>
             <!-- 下载模块 -->
@@ -58,9 +63,10 @@ import news from './components/news.vue'
 import download from './components/download.vue'
 import guide from './components/guide.vue'
 import why from './components/why.vue'
+import seven from './components/seven.vue'
+import calendar from './components/calendar.vue'
 
 import { reactive, toRefs } from 'vue'
-import { useStore } from 'vuex'
 export default {
     name: 'Home',
     components: {
@@ -73,11 +79,25 @@ export default {
         news,
         download,
         guide,
-        why
+        why,
+        seven,
+        calendar
     },
     setup () {
-        const store = useStore()
-        return {}
+        const state = reactive({
+            // 当前信息流选项卡
+            currentFlow: 2
+        })
+
+        // 切换信息流
+        const switchFlow = (num) => {
+            state.currentFlow = num
+        }
+
+        return {
+            ...toRefs(state),
+            switchFlow
+        }
     }
 }
 </script>
@@ -127,9 +147,6 @@ export default {
                 color: var(--color);
                 border-bottom: 3px solid var(--primary);
             }
-        }
-        .case {
-            height: 600px;
         }
     }
 }

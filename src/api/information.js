@@ -25,7 +25,6 @@ export function newsListByTypeByPage (data, lang = 'en-US', newsArea = 1) {
     const baseURL = baseLangURL[newsArea][lang]
     return request({
         url: baseURL + '/api/article/newsListByTypeByPage',
-
         data
     })
 }
