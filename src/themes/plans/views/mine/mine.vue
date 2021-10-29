@@ -2,7 +2,7 @@
     <div class='page-wrap' :class='{ hasNav: $hasNav }'>
         <PageComp :data='pageModules' />
         <div class='support'>
-            {{ $t('common.techSupport') }} <br /> tradeswitcher.com
+            {{ $t('common.techSupport') }} <br />
         </div>
     </div>
 </template>

@@ -46,7 +46,7 @@
             </a>
         </footer> -->
         <div class='support'>
-            {{ $t('common.techSupport') }} <br /> tradeswitcher.com
+            {{ $t('common.techSupport') }} <br />
         </div>
     </div>
 
