@@ -157,7 +157,8 @@
         "chartColor": "涨跌颜色",
         "noLogin": "请登录",
         "kycLevel1": "基础认证",
-        "kycLevel2": "中级认证"
+        "kycLevel2": "中级认证",
+        "techSupport": "Trade Switcher提供技术支持"
     },
     "auth": {
         "info": "需要准备的验证资料",

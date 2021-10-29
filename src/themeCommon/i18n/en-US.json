@@ -157,7 +157,8 @@
         "chartColor": "Chart color",
         "noLogin": "Please log in",
         "kycLevel1": "Basic certification",
-        "kycLevel2": "Intermediate certification"
+        "kycLevel2": "Intermediate certification",
+        "techSupport": "Powered by Trade Switcher"
     },
     "auth": {
         "info": "Information Required",
