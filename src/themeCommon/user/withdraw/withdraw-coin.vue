@@ -114,11 +114,13 @@
     <!-- 取款时间弹窗 -->
     <van-dialog v-model:show='timeShow' :title="$t('withdraw.hint')">
         <div class='time-wrap'>
-            <h4 v-if='timeList.length > 0'>
+            <h4>
                 {{ $t('withdraw.timeHint') }}
             </h4><br />
             <div v-if='timeList.length > 0' class='flex'>
-                <p>{{ $t('withdraw.timeName') }}：</p>
+                <p v-if='timeList.length > 0'>
+                    {{ $t('withdraw.timeName') }}：
+                </p>
                 <div class='time-text'>
                     <p v-for='(item,index) in timeList' :key='index'>
                         {{ item.weekDay }}：{{ item.openTimeLocal.toString() }}
