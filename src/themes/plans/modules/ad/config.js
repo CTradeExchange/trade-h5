@@ -1,6 +1,6 @@
 import { common, img } from '@admin/components/baseConfig'
 export default {
-    title: '广告组件',
+    title: '右侧Banner',
     tag: 'ad',
     tagIcon: 'el-icon-thumb',
     exclude: ['Register', 'TradeIndex', 'Nav', 'mine'], // 排除的页面code
