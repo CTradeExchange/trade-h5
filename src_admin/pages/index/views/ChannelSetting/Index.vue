@@ -144,7 +144,7 @@
                                 </el-row>
                             </el-form-item>
 
-                            <el-form-item label='现货仅当钱包' size='normal'>
+                            <el-form-item label='现货仅当钱包'>
                                 <el-checkbox v-model='form.isWallet' :indeterminate='false' label='' />
                                 <el-popover
                                     content='设置了现货仅当钱包,前端的【现货】玩法会隐藏“交易”和“行情”页面,现货只保留“资产”页面'
@@ -821,7 +821,7 @@ export default {
                         alias: '',
                         isWallet: '',
                         sort: 0,
-                        allCurrency: '',
+                        allCurrency: [],
                         tradeType: el.trade_type,
                         name: el.trade_name
 
