@@ -1,7 +1,7 @@
 <template>
     <el-carousel arrow='never' class='swiper-module' height='540px'>
         <el-carousel-item v-for='(item, index) in 2' :key='index'>
-            <img src='@planspc/images/home/banner.png' />
+            <img src='@planspc/images/home/banner.png' @click="$router.push($route.path+'/depost?symbolId=28&tradeType=1')" />
         </el-carousel-item>
     </el-carousel>
 </template>

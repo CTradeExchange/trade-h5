@@ -7,10 +7,10 @@ import VantBase from './vantBase'
 import MixinGlobal from './mixin'
 import { Dialog } from 'vant'
 import Socket, { MsgSocket } from '@/plugins/socket/socket'
-import FindCustomerInfo from '@plans/plugins/findCustomerInfo'
+import FindCustomerInfo from '@planspc/plugins/findCustomerInfo'
 import Loading from '@/components/loading'
-import PageComp from '@plans/components/PageComp'
-import LayoutTop from '@plans/layout/top'
+// import PageComp from '@planspc/components/PageComp'
+import LayoutTop from '@planspc/layout/centerViewTop'
 import { setRootVariable } from './colorVariables'
 import { setRouter } from '@/utils/request'
 import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet, getCookie } from '@/utils/util'
@@ -51,7 +51,7 @@ app.use(VantBase).use(I18n).use(store).use(router)
 app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })
 app.component('Loading', Loading)
 app.component('LayoutTop', LayoutTop)
-app.component('PageComp', PageComp)
+// app.component('PageComp', PageComp)
 app.mixin(MixinGlobal)
 
 app.config.errorHandler = (err, vm, info) => {

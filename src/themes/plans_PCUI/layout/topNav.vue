@@ -32,32 +32,23 @@
         </div>
         <div class='nav-right'>
             <!-- 未登录 -->
-            <div v-if='false' class='handle-not'>
-                <router-link class='login' to='/'>
-                    {{ $t('login') }}
+            <div v-if="userAccountType==='G'" class='handle-not'>
+                <router-link class='login' to='/login'>
+                    {{ $t('c.login') }}
                 </router-link>
                 <router-link class='register' to='/'>
-                    {{ $t('rigister') }}
+                    {{ $t('c.rigister') }}
                 </router-link>
             </div>
             <!-- 已登录 -->
-            <div class='handle-have'>
+            <div v-else class='handle-have'>
                 <div class='item'>
-                    <el-dropdown>
-                        <div class='user'>
-                            <div class='head'>
-                                <i class='el-icon-s-custom'></i>
-                            </div>
-                            <span class='no'>
-                                86000148
-                            </span>
-                        </div>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item>{{ $t('quitLogin') }}</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
+                    <div class='user'>
+                        <i class='head el-icon-s-custom'></i>
+                        <span class='no'>
+                            {{ customerInfo.customerNo }}
+                        </span>
+                    </div>
                 </div>
                 <div class='item'>
                     <i class='icon icon_zichan' :title="$t('header.assets')"></i>
@@ -66,7 +57,33 @@
                     <i class='icon icon_xiaoxizhongxin1' :title="$t('header.information')"></i>
                 </div>
                 <div class='item'>
-                    <i class='icon icon_shezhi' :title="$t('header.set')"></i>
+                    <el-dropdown>
+                        <div class='user'>
+                            <i class='icon icon_shezhi' :title="$t('header.set')"></i>
+                        </div>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item @click='handRoutTo("/bindEmail")'>
+                                    绑定邮箱
+                                </el-dropdown-item>
+                                <el-dropdown-item @click='handRoutTo("/bindMobile")'>
+                                    绑定手机
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <div>
+                                        颜色涨跌
+                                    </div>
+                                    <el-dropdown-menu>
+                                        <el-dropdown-item> 红涨绿跌 </el-dropdown-item>
+                                        <el-dropdown-item> 绿涨红跌 </el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown-item>
+                                <el-dropdown-item @click='logoutHandler'>
+                                    退出登录
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
                 </div>
                 <div class='line'></div>
             </div>
@@ -118,15 +135,44 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-
+import { MsgSocket } from '@/plugins/socket/socket'
+import { useRoute, useRouter } from 'vue-router'
+// import UpDownColor from './components/upDownColor'
+// import SettingIcon from './components/settingIcon'
 export default {
+    // components: {
+    //     UpDownColor,
+    //     SettingIcon,
+    // },
     setup () {
+        const route = useRoute()
+        const router = useRouter()
         const store = useStore()
         // 玩法列表
         const plansList = computed(() => store.state._base.plans)
+        const userAccountType = computed(() => store.getters['_user/userAccountType'])
+        const customerInfo = computed(() => store.state._user.customerInfo)
 
+        // 路由跳转
+        const handRoutTo = (path) => router.push(route.path + path)
+
+        // 退出登录
+        const logoutHandler = () => {
+            MsgSocket.logout()
+            Promise.resolve().then(() => {
+                return store.dispatch('_user/logout')
+            }).then(() => {
+                return router.push({ name: 'Login' })
+            }).then(() => {
+                location.reload()
+            })
+        }
         return {
-            plansList
+            plansList,
+            userAccountType,
+            customerInfo,
+            logoutHandler,
+            handRoutTo,
         }
     }
 }

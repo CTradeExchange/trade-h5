@@ -8,8 +8,6 @@
     "complete": "完成",
     "save": "保存",
     "confirm": "确定",
-	"login": "登录",
-	"register": "注册",
 	"quitLogin": "退出登录",
     "reInput": "请重新输入",
 	"examineMore": "查看更多",
@@ -30,6 +28,8 @@
       "deny": "否"
     },
     "c": {
+      "login": "登录",
+      "register": "注册",
       "managAccount": "管理账户",
       "loginAccont": "登录账户",
       "onlineService": "客服",
