@@ -10,6 +10,7 @@
     "confirm": "确定",
 	"login": "登录",
 	"register": "注册",
+	"handle": "操作",
 	"quitLogin": "退出登录",
     "reInput": "请重新输入",
 	"examineMore": "查看更多",
@@ -210,5 +211,13 @@
 			"title4": "24*7小时客服支持",
 			"text4": "24*7小时全天候、全日制运营模式，第一时间为您解答相关咨询。"
 		}
+	},
+	"trade": {
+		"name": "名称",
+		"newPrice": "最新价",
+		"changePrice": "涨跌价",
+		"changePercent": "涨跌幅",
+		"buy": "买入",
+		"sale": "卖出"
 	}
 }

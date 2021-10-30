@@ -5,7 +5,9 @@
         :close-on-click-modal='false'
         :title='detailInfo.title'
         width='800px'
-    />
+    >
+        <div v-html='detailInfo.content'></div>
+    </el-dialog>
 </template>
 
 <script>
@@ -22,7 +24,6 @@ export default {
 
         // 打开弹窗
         const open = (data) => {
-            console.log(1111, data)
             state.detailInfo = data
             state.show = true
         }

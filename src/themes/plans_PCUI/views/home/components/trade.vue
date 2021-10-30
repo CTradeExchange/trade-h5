@@ -7,7 +7,7 @@
                     v-for='item in plansList'
                     :key='item.tradeType'
                     :class="{ 'active': Number(item.tradeType) === tradeType }"
-                    @click='switchPlans(item)'
+                    @click='switchPlan(Number(item.tradeType))'
                 >
                     <span>{{ item.alias || item.name }}</span>
                 </li>
@@ -16,8 +16,13 @@
         <!-- 分类选项 -->
         <div class='category-tabs'>
             <ul>
-                <li v-for='(item, index) in 5' :key='index' :class="{ 'active': index === categoryType }" @click='switchCategory(index)'>
-                    <span>自选{{ index + 1 }}</span>
+                <li
+                    v-for='(item, index) in categoryList'
+                    :key='index'
+                    :class="{ 'active': index === categoryType }"
+                    @click='switchCategory(index)'
+                >
+                    <span>{{ item.title }}</span>
                 </li>
             </ul>
         </div>
@@ -25,41 +30,47 @@
         <div class='product-module'>
             <ul class='header-block'>
                 <li>
-                    <span>名称</span>
+                    <span>{{ $t('trade.name') }}</span>
                 </li>
                 <li>
-                    <span>最新价</span>
+                    <span>{{ $t('trade.newPrice') }}</span>
                 </li>
                 <li>
-                    <span>涨跌额</span>
+                    <span>{{ $t('trade.changePrice') }}</span>
                 </li>
                 <li>
-                    <span>涨跌幅</span>
+                    <span>{{ $t('trade.changePercent') }}</span>
                 </li>
                 <li>
-                    <span>操作</span>
+                    <span>{{ $t('handle') }}</span>
                 </li>
             </ul>
             <ul class='product-list'>
-                <li v-for='(item, index) in 5' :key='index'>
+                <li v-for='item in filterProductList' :key='item.symbolKey'>
                     <div>
-                        <span>BTC/USDT</span>
+                        <span>{{ item.symbolName }}</span>
                     </div>
                     <div>
-                        <span>50027.66</span>
+                        <span>
+                            {{ item.cur_price || '--' }}
+                        </span>
                     </div>
                     <div>
-                        <span>56.66</span>
+                        <span>
+                            {{ item.upDownAmount || '--' }}
+                        </span>
                     </div>
                     <div>
-                        <span>-1.73%</span>
+                        <span :class='item.upDownColor'>
+                            {{ item.upDownWidth || '--' }}
+                        </span>
                     </div>
                     <div class='handle'>
                         <button class='buy'>
-                            买入
+                            {{ $t('trade.buy') }}
                         </button>
                         <button class='sale'>
-                            卖出
+                            {{ $t('trade.sale') }}
                         </button>
                     </div>
                 </li>
@@ -75,61 +86,67 @@
 </template>
 
 <script>
-import { computed, reactive, onMounted, toRefs } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useStore } from 'vuex'
-import useProduct from '@plans/hooks/useProduct'
+import useProduct from '@planspc/hooks/useProduct'
 
 export default {
-    setup () {
+    emits: ['update'],
+    setup (props, context) {
         const store = useStore()
-        const state = reactive({
-            tradeType: '',
-            categoryType: 0,
-            categoryList: [],
-            productList: []
-        })
-
         // 玩法列表
         const plansList = computed(() => store.state._base.plans)
+        // 玩法类型
+        const tradeType = ref(Number(plansList.value[0].tradeType))
+        // 分类类型
+        const categoryType = ref(0)
+        // 过滤后的产品列表数据
+        const filterProductList = ref([])
 
-        // 获取玩当下的分类和产品数据
-        const getPlansData = () => {
-            const { categoryList, productList } = useProduct({
-                tradeType: state.tradeType,
-                categoryType: state.categoryType
-            })
-            state.categoryType = categoryList.value[0].id
-            state.categoryList = categoryList
-            state.productList = productList
-        }
+        // 获取板块列表和所选板块的产品列表
+        const { categoryList, productList } = useProduct({
+            tradeType, categoryType, isSelfSymbol: true
+        })
 
         // 切换玩法
-        const switchPlans = (item) => {
-            const tradeType = Number(item.tradeType)
-            if (state.tradeType !== tradeType) {
-                state.tradeType = tradeType
+        const switchPlan = (val) => {
+            if (tradeType.value !== val) {
+                tradeType.value = val
             }
         }
 
         // 切换分类
         const switchCategory = (index) => {
-            if (state.categoryType !== index) {
-                state.categoryType = index
+            if (categoryType.value !== index) {
+                categoryType.value = index
             }
         }
 
-        onMounted(() => {
-            // 设置默认玩法
-            state.tradeType = Number(plansList.value[0].tradeType)
-            getPlansData()
+        // 监听玩法类型、分类类型
+        watch([tradeType, categoryType, productList], () => {
+            // 只显示指定数量数据
+            const list = []
+            const keys = []
+            for (let i = 0; i < 6; i++) {
+                const item = productList.value[i]
+                if (item) {
+                    list.push(item)
+                    keys.push(item.symbolKey)
+                }
+            }
+            filterProductList.value = list
+            context.emit('update', keys)
         })
 
         return {
-            ...toRefs(state),
             plansList,
-            switchPlans,
-            switchCategory,
-            getPlansData
+            tradeType,
+            categoryType,
+            categoryList,
+            productList,
+            filterProductList,
+            switchPlan,
+            switchCategory
         }
     }
 }
@@ -231,68 +248,68 @@ export default {
             }
         }
     }
-    .product-list {
-        li {
-            display: flex;
-            align-items: center;
-            height: 64px;
-            background: var(--contentColor);
-            cursor: pointer;
-            div {
-                flex: 1;
+}
+.product-list {
+    li {
+        display: flex;
+        align-items: center;
+        height: 64px;
+        background: var(--contentColor);
+        cursor: pointer;
+        div {
+            flex: 1;
+            color: var(--color);
+            span {
+                font-size: 20px;
+            }
+            &:first-of-type {
                 span {
-                    font-size: 20px;
-                    color: var(--color);
-                }
-                &:first-of-type {
-                    span {
-                        margin-left: 16px;
-                    }
+                    margin-left: 16px;
                 }
             }
-            .handle {
-                display: flex;
-                justify-content: flex-end;
-                button {
-                    display: inline-flex;
-                    justify-content: center;
-                    align-items: center;
-                    width: 80px;
-                    height: 32px;
-                    margin-right: 16px;
-                    font-size: 16px;
-                    color: #fff;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    &.buy {
-                        background: var(--riseColor);
-                    }
-                    &.sale {
-                        background: var(--fallColor);
-                    }
+        }
+        .handle {
+            display: flex;
+            justify-content: flex-end;
+            button {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                width: 80px;
+                height: 32px;
+                margin-right: 16px;
+                font-size: 16px;
+                color: #fff;
+                border-radius: 4px;
+                cursor: pointer;
+                &.buy {
+                    background: var(--riseColor);
+                }
+                &.sale {
+                    background: var(--fallColor);
                 }
             }
-            &:hover {
-                background: var(--bgColor);
-                border-radius: 10px;
-            }
+        }
+        &:hover {
+            background: var(--bgColor);
+            border-radius: 10px;
         }
     }
-    .view-more {
-        display: flex;
-        justify-content: center;
+}
+.view-more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    cursor: pointer;
+    a {
+        display: inline-flex;
         align-items: center;
-        height: 50px;
-        cursor: pointer;
-        a {
-            display: inline-flex;
-            align-items: center;
-            height: 100%;
-            color: var(--minorColor);
-        }
-        span {
-            font-size: 14px;
-        }
+        height: 100%;
+        color: var(--minorColor);
+    }
+    span {
+        font-size: 14px;
     }
 }
 </style>
