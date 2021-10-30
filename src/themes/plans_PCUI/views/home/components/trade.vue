@@ -42,7 +42,7 @@
                     <span>{{ $t('trade.changePercent') }}</span>
                 </li>
                 <li>
-                    <span>{{ $t('handle') }}</span>
+                    <span>{{ $t('c.handle') }}</span>
                 </li>
             </ul>
             <ul class='product-list'>
@@ -105,7 +105,7 @@ export default {
 
         // 获取板块列表和所选板块的产品列表
         const { categoryList, productList } = useProduct({
-            tradeType, categoryType, isSelfSymbol: true
+            tradeType, categoryType, isSelfSymbol: false
         })
 
         // 切换玩法

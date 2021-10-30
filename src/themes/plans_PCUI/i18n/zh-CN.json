@@ -8,9 +8,6 @@
     "complete": "完成",
     "save": "保存",
     "confirm": "确定",
-	"login": "登录",
-	"register": "注册",
-	"handle": "操作",
 	"quitLogin": "退出登录",
     "reInput": "请重新输入",
 	"examineMore": "查看更多",
@@ -31,6 +28,9 @@
       "deny": "否"
     },
     "c": {
+      "login": "登录",
+      "register": "注册",
+	  "handle": "操作",
       "managAccount": "管理账户",
       "loginAccont": "登录账户",
       "onlineService": "客服",
@@ -202,6 +202,7 @@
 		"why": {
 			"title": "为什么选择我们？",
 			"describe": "选择CATS作为交易加密数字货币的原因",
+			"title1": "0手续费买卖数字货币",
 			"title1": "0手续费买卖数字货币",
 			"text1": "使用多种支付方式交易数字货币，0手续费，安全快捷",
 			"title2": "最优的交易费率",

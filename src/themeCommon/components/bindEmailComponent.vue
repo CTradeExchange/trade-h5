@@ -98,7 +98,7 @@ export default {
                         Toast(t('common.emailBindSuccess'))
                         store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
-                            router.replace('/setting')
+                            router.back()
                         }, 1500)
                     }
                 }).catch(err => {
@@ -111,7 +111,7 @@ export default {
                         Toast(t('common.replaceEmailSuccess'))
                         store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
-                            router.replace('/setting')
+                            router.back()
                         }, 1500)
                     }
                 }).catch(err => {

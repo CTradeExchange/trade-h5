@@ -8,13 +8,13 @@
                     {{ loginType==='password' ? $t("signIn.loginByPwd") : $t("signIn.loginByCode") }}
                 </h2>
                 <div class='field'>
-                    <compInput v-model.trim='loginName' block :placeholder="$t('login.loginNamePlaceholder')" />
+                    <compInput v-model.trim='loginName' block :placeholder="$t('signIn.loginNamePlaceholder')" />
                 </div>
                 <div v-if="loginType==='password'" class='field'>
-                    <compInput v-model='pwd' block :placeholder="$t('login.pwd')" pwd type='password' />
+                    <compInput v-model='pwd' block :placeholder="$t('signIn.pwd')" pwd type='password' />
                 </div>
                 <div v-else class='field'>
-                    <compInput v-model.trim='checkCode' block :placeholder="$t('login.verifyCode')">
+                    <compInput v-model.trim='checkCode' block :placeholder="$t('signIn.verifyCode')">
                         <van-button
                             class='verifyCodeBtn'
                             :disabled='!isNaN(verifyCodeBtnText)'
@@ -29,7 +29,7 @@
                     </compInput>
                 </div>
                 <van-button block class='loginBtn' :disabled='loading' type='primary' @click='loginHandle'>
-                    {{ $t('login.loginBtn') }}
+                    {{ $t('signIn.loginBtn') }}
                 </van-button>
             </form>
             <div class='linkBar'>
