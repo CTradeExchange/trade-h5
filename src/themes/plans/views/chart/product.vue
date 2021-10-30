@@ -835,7 +835,8 @@ export default {
                     ],
                     extension: {
                         theme: invertColor === 'light' ? 'Light' : 'Dark', // 主题 "Light" | "Dark"
-                        fullScreen: false // 全屏功能（右上角缩放按钮、横屏监听等）
+                        fullScreen: false, // 全屏功能（右上角缩放按钮、横屏监听等）
+                        orientation: 'landscape'
                     }
                 })
             } else {
@@ -875,7 +876,8 @@ export default {
                     ],
                     extension: {
                         theme: invertColor === 'light' ? 'Light' : 'Dark', // 主题 "Light" | "Dark"
-                        fullScreen: false // 全屏功能（右上角缩放按钮、横屏监听等）
+                        fullScreen: false, // 全屏功能（右上角缩放按钮、横屏监听等）
+                        orientation: 'landscape'
                     }
                 })
 
