@@ -1,5 +1,5 @@
 import { getQueryVariable } from '@/utils/util'
-import dayjs from 'dayjs'
+
 /* 全局mixin */
 export default {
     data () {
@@ -10,6 +10,9 @@ export default {
     computed: {
         $style () {
             return this.$store.state.style
+        },
+        $hasNav () {
+            return this.$store.state._base.wpNav?.length
         },
         accountCurrency () {
             return this.$store.state._user.customerInfo?.currency
@@ -32,14 +35,14 @@ export default {
         openUrl (toRoute) {
             if (toRoute.href.name === 'Nest') {
                 toRoute.href.params.type = 'otherPage'
-                this.$router.push(toRoute.href)
+                toRoute.href.query.url && this.$router.push(toRoute.href)
             } else {
                 this.$router.push({ name: toRoute.href.name })
             }
         },
         // 日期时间格式化
         formatTime (val, fmt = 'YYYY-MM-DD HH:mm:ss') {
-            return dayjs(val).format(fmt)
+            return window.dayjs(val).format(fmt)
         }
     }
 }

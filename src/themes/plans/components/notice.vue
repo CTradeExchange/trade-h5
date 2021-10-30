@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
 import { isEmpty } from '@/utils/util'
 import { onUnmounted, reactive, toRefs } from 'vue'
 export default {
@@ -56,7 +55,7 @@ export default {
                     tag.forEach(item => {
                         returnVal = content.replace(reg, function (matchStr) {
                             const time = matchStr.toString().replace(/<\/?time>/g, '')
-                            const timeStr = dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
+                            const timeStr = window.dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
                             return timeStr
                         })
                     })

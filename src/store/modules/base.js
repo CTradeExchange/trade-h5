@@ -1,7 +1,6 @@
 import { pageConfig, wpCompanyConfig, wpNav, wpSelfSymbolIndex } from '@/api/wpApi'
 import { localSet, localGet, getCookie, sessionSet, setCookie, isEmpty } from '@/utils/util'
 import { formatPlans } from './storeUtil.js'
-import dayjs from 'dayjs'
 
 export default {
     namespaced: true,
@@ -120,7 +119,7 @@ export default {
                 const _result = modulesList.filter(item => {
                     const { accountType, expiryDate } = item.data
                     const hasRole = accountType.includes(userAccountType)
-                    const inActiveTime = !expiryDate || expiryDate?.length === 0 ? true : dayjs().isBetween(expiryDate[0], expiryDate[1])
+                    const inActiveTime = !expiryDate || expiryDate?.length === 0 ? true : window.dayjs().isBetween(expiryDate[0], expiryDate[1])
                     return hasRole && inActiveTime
                 })
                 return _result

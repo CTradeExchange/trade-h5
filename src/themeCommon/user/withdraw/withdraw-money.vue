@@ -82,7 +82,9 @@
     <van-dialog v-model:show='timeShow' :title="$t('withdraw.hint')">
         <div class='time-wrap'>
             <h4>{{ $t('withdraw.timeHint') }} </h4>
-            <p>{{ $t('withdraw.timeName') }}：</p>
+            <p v-if='timeList.length > 0'>
+                {{ $t('withdraw.timeName') }}：
+            </p>
             <div v-if='timeList.length > 0' class='flex'>
                 <div class='time-text'>
                     <p v-for='(item,index) in timeList' :key='index' class='time-text-flex'>
@@ -111,7 +113,6 @@ import { Toast, Dialog } from 'vant'
 import { isEmpty, debounce } from '@/utils/util'
 import { useStore } from 'vuex'
 import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate, queryBankList, computeWithdrawFee, checkKycApply } from '@/api/user'
-import dayjs from 'dayjs'
 import { useI18n } from 'vue-i18n'
 
 export default {
@@ -227,7 +228,7 @@ export default {
         }, 1000)
 
         const transferUtc = () => {
-            const todayStr = dayjs().format('YYYY-MM-DD')
+            const todayStr = window.dayjs().format('YYYY-MM-DD')
             state.withdrawConfig.withdrawTimeConfigList.forEach(el => {
                 el.openTimeLocal = []
                 state.withdrawTimeConfigMap[el.weekDay] = {
@@ -246,8 +247,8 @@ export default {
                         if (timeRange.length > 0) {
                             timeRange.forEach(timeRangeItem => {
                                 const [start, end] = timeRangeItem.split('-')
-                                const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
-                                const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
+                                const startLocal = window.dayjs.utc(`${todayStr} ${start}`).local()
+                                const endLocal = window.dayjs.utc(`${todayStr} ${end}`).local()
 
                                 // 第二天
                                 const weekDay = key < 7 ? Number(key) + 1 : 1
@@ -263,6 +264,8 @@ export default {
 
                                 if (startLocal.isAfter(todayStr, 'day')) {
                                     elNext.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                                } else if (endLocal.format('HH:mm') === '00:00') {
+                                    el.openTimeLocal.push(startLocal.format('HH:mm') + '-24:00')
                                 } else if (endLocal.isAfter(todayStr, 'day')) {
                                     elNext.openTimeLocal.unshift('00:00-' + endLocal.format('HH:mm'))
                                     el.openTimeLocal.push(startLocal.format('HH:mm') + '-23:59')
@@ -287,10 +290,10 @@ export default {
                             const nextStart = el.openTimeLocal[index + 1] && el.openTimeLocal[index + 1].split('-')[0]
                             const nextEnd = el.openTimeLocal[index + 1] && el.openTimeLocal[index + 1].split('-')[1]
 
-                            if (dayjs(`${todayStr} ${end}`).add(1, 'minute').isSame(dayjs(`${todayStr} ${nextStart}`))) {
+                            if (window.dayjs(`${todayStr} ${end}`).add(1, 'minute').isSame(window.dayjs(`${todayStr} ${nextStart}`)) ||
+                                end === nextStart
+                            ) {
                                 el.openTimeLocal = start + '-' + nextEnd
-                            } else {
-
                             }
                         })
                     }

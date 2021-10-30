@@ -63,6 +63,7 @@
                 >
                     <template #default='scope'>
                         <el-button
+                            disabled
                             size='small'
                             type='text'
                             @click='rollback(scope.row.id)'

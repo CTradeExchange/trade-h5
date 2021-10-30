@@ -25,10 +25,13 @@
         </el-row>
         <el-row>
             <el-col class='btns' :span='24'>
-                <el-form ref='form' label-width='100px' :model='form' :rules='rules'>
+                <el-form ref='form' label-width='110px' :model='form' :rules='rules'>
                     <el-tabs v-model='optionName' type='border-card'>
                         <el-tab-pane class='tab' label='渠道基础设置' name='first'>
-                            <el-form-item label='可注册区号'>
+                            <el-form-item
+                                label='可注册区号'
+                                prop='registrable'
+                            >
                                 <el-select
                                     v-model='form.registrable'
                                     multiple
@@ -43,8 +46,21 @@
                                         :value='item'
                                     />
                                 </el-select>
+                                <el-popover
+                                    content='表示前端注册时可选择的区号,不选择默认所有国家区号均可注册'
+                                    placement='top-start'
+                                    trigger='hover'
+                                    :width='200'
+                                >
+                                    <template #reference>
+                                        <img alt='' class='img-tip' src='../../../../imgs/tip.png' />
+                                    </template>
+                                </el-popover>
                             </el-form-item>
-                            <el-form-item label='默认注册区号'>
+                            <el-form-item
+                                label='默认注册区号'
+                                prop='defaultZone'
+                            >
                                 <el-select
                                     v-model='form.defaultZone'
                                     placeholder='请输入'
@@ -63,6 +79,7 @@
                                 v-for='(item,index) in form.registList'
                                 :key='item.id'
                                 :label='index === 0 ? "注册国家" : ""'
+                                prop='registList'
                             >
                                 <el-row>
                                     <el-col :span='6'>
@@ -84,7 +101,7 @@
                                             />
                                         </el-select>
                                     </el-col>
-                                    <el-col :span='8'>
+                                    <el-col :span='7'>
                                         <label class='label' for=''>
                                             客户组
                                         </label>
@@ -97,12 +114,23 @@
                                             <el-option
                                                 v-for='el in accountTradeList'
                                                 :key='el.id'
+                                                :disabled='el.disabled'
                                                 :label='el.name'
                                                 :value='el.id'
                                             />
                                         </el-select>
+                                        <el-popover
+                                            content='默认客户组是系统自动创建的,需点击右侧【设置币种】按钮选择开户币种'
+                                            placement='top-start'
+                                            trigger='hover'
+                                            :width='200'
+                                        >
+                                            <template #reference>
+                                                <img alt='' class='img-tip' src='../../../../imgs/tip.png' />
+                                            </template>
+                                        </el-popover>
                                     </el-col>
-                                    <el-col :span='8'>
+                                    <el-col :span='6'>
                                         <el-button :disabled='form.registList[index].disabledSetCurrency' type='primary' @click='setPlans(item,index,1)'>
                                             设置币种
                                         </el-button>
@@ -118,6 +146,16 @@
 
                             <el-form-item label='现货仅当钱包' size='normal'>
                                 <el-checkbox v-model='form.isWallet' :indeterminate='false' label='' />
+                                <el-popover
+                                    content='设置了现货仅当钱包,前端的【现货】玩法会隐藏“交易”和“行情”页面,现货只保留“资产”页面'
+                                    placement='top-start'
+                                    trigger='hover'
+                                    :width='200'
+                                >
+                                    <template #reference>
+                                        <img alt='' class='img-tip' src='../../../../imgs/tip.png' />
+                                    </template>
+                                </el-popover>
                             </el-form-item>
 
                             <!-- <el-form-item label='游客客户组'>
@@ -210,7 +248,9 @@
                                         <el-tab-pane v-for='(item,index) in pyamentList' :key='index' :label='item.paymentName'>
                                             <el-card class='box-card'>
                                                 <template #header>
-                                                    提示：该界面非必填，不填时取系统默认图标
+                                                    <span class='tip'>
+                                                        提示：该界面非必填，不填时取系统默认图标
+                                                    </span>
                                                 </template>
                                                 <div class='lang-wrap'>
                                                     <el-row v-for='(l, i) in lang' :key='i' align='middle' :gutter='20'>
@@ -352,7 +392,7 @@ export default {
                 googleAnalytics: '',
                 h5Address: '',
                 h5PreviewAddress: '',
-                defaultZone: '',
+                defaultZone: {},
                 registList: [{}],
                 onlineService: '',
                 supportLanguage: [],
@@ -395,7 +435,29 @@ export default {
                         message: '请选择默认语言',
                         trigger: 'blur',
                     }
+                ],
+                registList: [
+                    {
+                        required: true,
+                        message: '请选择注册国家',
+                        trigger: 'blur',
+                    }
+                ],
+                registrable: [
+                    {
+                        required: true,
+                        message: '请选择可注册区号',
+                        trigger: 'blur',
+                    }
+                ],
+                defaultZone: [
+                    {
+                        required: true,
+                        message: '请选择默认注册区号',
+                        trigger: 'blur',
+                    }
                 ]
+
             },
 
         }
@@ -465,6 +527,11 @@ export default {
         queryAccountGroupTradeList () {
             getAccountGroupTradeAssetsList().then(res => {
                 if (res.success && res.data) {
+                    Object.values(res.data).forEach(el => {
+                        if (Number(el.id) === 2) {
+                            el.disabled = true
+                        }
+                    })
                     this.accountTradeList = res.data
                 }
             })
@@ -483,6 +550,7 @@ export default {
                     name: '全部',
                 }
             )
+            this.form.defaultZone = ''
             // this.otherZoneList = this.zoneList.filter(el => val.includes(el.name + ' (' + el.country_code + ')'))
         },
         // 获取支付通道
@@ -638,10 +706,10 @@ export default {
                                     throw new Error('no-customerGroupId')
                                 }
 
-                                const hasCurrency = el.plans.every(el => el.allCurrency)
+                                const hasCurrency = el?.plans && el?.plans.every(el => el.allCurrency)
                                 if (!hasCurrency && Number(el.customerGroupId) === 1) {
                                     that.$message({
-                                        message: '请先设置币种',
+                                        message: '“默认客户组”需设置开户币种,请点击【设置币种】按钮',
                                         type: 'warning'
                                     })
                                     that.submitLoading = false
@@ -772,7 +840,7 @@ export default {
         // 处理注册国家下拉框数据，不能重复选择国家
         handleCountry () {
             this.registZoneList.map(item => {
-                const registIds = this.form.registList.map(el => el.registCountry.id)
+                const registIds = this.form.registList.map(el => el.registCountry?.id)
                 item.disabled = false
                 if (registIds.indexOf(item.id) > -1) {
                     item.disabled = true
@@ -898,6 +966,12 @@ export default {
     .row {
         padding-bottom: 30px;
     }
+    .img-tip{
+        cursor: pointer;
+        width: 18px;
+        vertical-align: middle;
+        margin-left: 10px;
+    }
     .tradeType-row {
         display: flex;
         align-items: center;
@@ -951,6 +1025,11 @@ export default {
                     line-height: 30px;
                 }
             }
+        }
+    }
+    .box-card{
+        .tip{
+            color: red;
         }
     }
 }

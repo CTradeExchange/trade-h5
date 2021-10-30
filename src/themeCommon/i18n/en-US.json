@@ -1,4 +1,8 @@
 {
+    "theme": {
+        "day": "day",
+        "night": "night"
+    },
     "cRoute": {
         "login": "Login",
         "register": "Register",
@@ -96,7 +100,7 @@
         "existPhone": "Mobile no. exist already",
         "tryAgain": "Try again",
         "inputRealVerifyCode": "Please input correct verification code",
-        "getVerifyCode": "请先获取验证码",
+        "getVerifyCode": "Please get the verification code first",
         "colon": "：",
         "customerNo": "Account Number",
         "cancel": "Cancel",
@@ -147,13 +151,14 @@
         "to": "To",
         "notFound": "Not found",
         "account": "Account",
-        "copySuccess": "复制成功",
-        "redUp": "红涨绿跌",
-        "redDown": "绿涨红跌",
-        "chartColor": "涨跌颜色",
-        "noLogin": "请登录",
-        "kycLevel1": "基础认证",
-        "kycLevel2": "中级认证"
+        "copySuccess": "Copy succeeded",
+        "redUp": "Red up and green down",
+        "redDown": "Green up and red down",
+        "chartColor": "Chart color",
+        "noLogin": "Please log in",
+        "kycLevel1": "Basic certification",
+        "kycLevel2": "Intermediate certification",
+        "techSupport": "Powered by Trade Switcher"
     },
     "auth": {
         "info": "Information Required",
@@ -182,7 +187,7 @@
         "newPwdAgain": "Input New password again",
         "inputSurePwd": "Input confirmation password",
         "pwdDiff": "New password is inconsistent with confirmation password, please check and input again",
-        "pwdSame": "原密码和新密码相同，请检查后重新输入",
+        "pwdSame": "The original password and the new password are the same, please check and re-enter",
         "newPwdSuccess": "Reset New password Success",
         "newPwdLogin": "Please login with New password",
         "tip1": "For security reason, withdrawal is not permitted in recent 24 hours",
@@ -249,7 +254,7 @@
         "payFail": "Payment failed",
         "serviceTips2": "No order information found, please contact customer service if in doubt",
         "amount": "Deposit amount",
-        "cashAmount": "充值金额",
+        "cashAmount": "Deposit amount",
         "submitTime": "Submission Time",
         "depositSuccess": "Deposit success",
         "inputAmount": "Please enter the amount",
@@ -258,7 +263,7 @@
         "toRecord": "View deposit records",
         "appendFiled": "Additional Information",
         "allInputRequire": "Please fill in all additional information",
-        "arriveTime": "入帐时间"
+        "arriveTime": "Credit time"
     },
     "fund": {
         "marginLevel": "margin level",
@@ -315,12 +320,12 @@
                 "41": "Force repayment"
             },
             "5": {
-                "50": "存款",
-                "51": "取款",
-                "52": "额度调整",
-                "53": "冻结",
-                "54": "交易",
-                "55": "划转"
+                "50": "Deposit",
+                "51": "Withdrawal",
+                "52": "Limit Adjustment",
+                "53": "Freeze",
+                "54": "Transaction",
+                "55": "Transfer"
             }
         },
         "flowSubCategory": {
@@ -458,26 +463,26 @@
                 "41002": "Force liquidation interest repayment"
             },
             "5": {
-                "50001": "前端存款",
-                "50002": "存款手续费",
-                "51001": "前端取款",
-                "51002": "取消取款",
-                "51003": "取款手续费",
-                "51004": "取消手续费",
-                "51005": "确认转账",
-                "52001": "额度调整_存款",
-                "52002": "额度调整_取款",
-                "52003": "额度调整_其他",
-                "52004": "额度调整_赠金",
-                "52005": "额度调整_释放不可提",
-                "52006": "额度调整_不可提",
-                "53001": "冻结",
-                "53002": "解冻",
-                "54001": "入账金额",
-                "54002": "出账金额",
-                "54003": "交易手续费",
-                "55001": "划入金额",
-                "55002": "划出金额"
+                "50001": "Front-end deposit",
+                "50002": "Deposit fee",
+                "51001": "Front-end withdrawal",
+                "51002": "Cancel Withdrawal",
+                "51003": "Withdrawal fee",
+                "51004": "Cancellation fee",
+                "51005": "Transfer confirmed",
+                "52001": "Limit adjustment_deposit",
+                "52002": "Limit adjustment_withdrawal",
+                "52003": "Limit adjustment_other",
+                "52004": "Limit adjustment_Bonus",
+                "52005": "Limit adjustment_release not withdrawable",
+                "52006": "Limit adjustment_not withdrawable",
+                "53001": "Frozen",
+                "53002": "Unfreeze",
+                "54001": "Credit amount",
+                "54002": "Withdrawal amount",
+                "54003": "Trading fee",
+                "55001": "Credit amount",
+                "55002": "Transfer amount"
             }
         },
         "directionBtns": [
@@ -565,7 +570,7 @@
         "withdrawRecord": "Withdrawal details",
         "withdrawMethod": "Select withdraw method",
         "withdrawDigitsTip": "The decimal place of the withdrawal amount cannot be greater than the decimal place of the account currency",
-        "tips1": "暂不可取款，请稍后再试或联系客服"
+        "tips1": "Withdrawal is temporarily unavailable, please try again later or contact customer service"
     },
     "withdrawMoney": {
         "moneyName": "Withdraw amount",

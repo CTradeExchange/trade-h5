@@ -1,6 +1,5 @@
 import { resolutionToKlineType } from '../../userConfig/config.js'
 import {  RequestKData }from '../../userConfig/requestKData'
-import dayjs from 'dayjs'
 class HistoryProvider {
      constructor(datafeedUrl, requester) {
         this._requestKData = new RequestKData()
@@ -100,8 +99,8 @@ function isSameTime(resolution, latestTime, tickTime) {
     tickTime = tickTime * 1
     if (latestTime > tickTime) return true
 
-    let oldTime = dayjs(latestTime)
-    let newTime = dayjs(tickTime)
+    let oldTime = window.dayjs(latestTime)
+    let newTime = window.dayjs(tickTime)
 
     if (/^[0-9]+$/.test(resolution)) {
         // 小于日k
@@ -130,7 +129,7 @@ function logMessageForTick(ticks) {
     } else {
         console.groupCollapsed('%c获取最新两根数据:⬇', 'color:green')
     }
-    console.log(JSON.stringify(ticks), ticks.map(e => dayjs(e.time).format('YYYY/MM/DD HH:mm:ss')))
+    console.log(JSON.stringify(ticks), ticks.map(e => window.dayjs(e.time).format('YYYY/MM/DD HH:mm:ss')))
     console.groupEnd()
 }
 
@@ -141,7 +140,7 @@ function logMessageForKline(bars, params) {
         console.groupCollapsed(`%c请求历史k线:⬇`, `color:green`)
 
         console.log(
-            `区间[${[bars[0], bars[bars.length-1]].filter(e => e).map(e => [dayjs(e.time).format('YYYY/MM/DD HH:mm:ss')])}], ${bars.length}条数据`
+            `区间[${[bars[0], bars[bars.length-1]].filter(e => e).map(e => [window.dayjs(e.time).format('YYYY/MM/DD HH:mm:ss')])}], ${bars.length}条数据`
         )
         console.log('参数:', JSON.stringify(params, null, ' '))
         console.log('数据:', bars)

@@ -161,7 +161,6 @@ import { reactive, toRefs, ref, computed, onMounted } from 'vue'
 import Top from '@/components/top'
 import { useStore } from 'vuex'
 import { queryWithdrawPageList } from '@/api/user'
-import dayjs from 'dayjs'
 import { Toast } from 'vant'
 import { useRoute, useRouter } from 'vue-router'
 import Clipboard from 'clipboard'
@@ -261,7 +260,7 @@ export default {
         }
 
         const formatTime = (val) => {
-            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+            return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
 
         // 底部加载更多

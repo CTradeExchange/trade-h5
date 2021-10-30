@@ -156,9 +156,10 @@ export default {
         // 保存用户信息
         saveCustomerInfo ({ dispatch, commit, rootState }, { flag, data }) {
             // 优先将子账户列表处理成map格式
+            const accountList = data.accountList
             const accountMap = {}
-            if (data.accountList?.length) {
-                data.accountList.forEach(el => {
+            if (accountList?.length) {
+                accountList.forEach(el => {
                     if ([3, 5, 9].includes(el.tradeType)) accountMap[`${el.tradeType}_${el.currency}`] = el // 存储玩法3杠杆全仓的资产账户map类型
                 })
             }
@@ -168,10 +169,14 @@ export default {
             commit('Update_customerInfo', data)
 
             // 根据不同客户组设置不同玩法
-            const plansList = data.accountList.reduce((acc, item) => {
-                if (acc.findIndex(el => el.tradeType * 1 === item.tradeType) === -1) acc.push({ tradeType: String(item.tradeType), id: String(item.tradeType) })
-                return acc
-            }, [])
+            const plansAll = rootState._base.wpCompanyInfo.defaultPlans['1'] // 默认客户组所有的方法
+            const plansList = plansAll.filter(el => accountList.find(e => e.tradeType === parseFloat(el.tradeType))).map(el => {
+                return {
+                    tradeType: el.tradeType,
+                    id: el.tradeType
+                }
+            })
+
             commit('_base/Update_plans', plansList, { root: true })
 
             if (flag) {

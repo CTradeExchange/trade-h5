@@ -1,5 +1,3 @@
-import dayjs from 'dayjs'
-
 // 交易时间排序及按时区按天归类，返回的时间是处理完时区后的时间
 export const sortTimeList = (timeList, utcOffset) => {
     timeList.sort((a, b) => a.startTime - b.startTime)
@@ -48,8 +46,8 @@ export const timeListFormat = (data) => {
         el.sort((a, b) => a.startTime - b.startTime)
         el.forEach(item => {
             const { startTime, endTime } = item
-            const startTimeStr = dayjs().utc().startOf('day').add(startTime, 'minute').format('HH:mm')
-            const endTimeStr = dayjs().utc().startOf('day').add(endTime, 'minute').format('HH:mm')
+            const startTimeStr = window.dayjs().utc().startOf('day').add(startTime, 'minute').format('HH:mm')
+            const endTimeStr = window.dayjs().utc().startOf('day').add(endTime, 'minute').format('HH:mm')
             let timeStr = ''
             if (endTime === Number(1440)) {
                 timeStr = startTimeStr + '-' + '24:00'
@@ -63,13 +61,13 @@ export const timeListFormat = (data) => {
 
 // 将时间列表排序
 function timesSort (dataList = []) {
-    const todayStr = dayjs().format('YYYY-MM-DD ')
+    const todayStr = window.dayjs().format('YYYY-MM-DD ')
     const list = dataList.map(el => (el.timeStr = el.timeStr.split('-'), el))
     for (let index = 1; index < list.length; index++) {
         const [prevStart, prevEnd] = list[index - 1].timeStr
         const [curStart, curEnd] = list[index].timeStr
-        const isBetweenStart = dayjs(todayStr + curStart).isBetween(todayStr + prevStart, todayStr + prevEnd, null, '[]')
-        const isBetweenEnd = dayjs(todayStr + curEnd).isBetween(todayStr + prevStart, todayStr + prevEnd, null, '[]')
+        const isBetweenStart = window.dayjs(todayStr + curStart).isBetween(todayStr + prevStart, todayStr + prevEnd, null, '[]')
+        const isBetweenEnd = window.dayjs(todayStr + curEnd).isBetween(todayStr + prevStart, todayStr + prevEnd, null, '[]')
         if (isBetweenStart && isBetweenEnd) {
             list.splice(index, 1)
             const newDataList = list.map(el => (el.timeStr = el.timeStr.join('-'), el))
