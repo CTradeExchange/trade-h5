@@ -32,6 +32,7 @@ import {
     ElDropdownMenu,
     ElDropdownItem,
     ElTimeline,
+    ElPopover,
     ElTimelineItem,
     ElEmpty
 } from 'element-plus'
@@ -45,7 +46,7 @@ BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 
 const app = createApp(App)
 app.use(ElLoading).use(ElDialog).use(ElMessageBox).use(ElMessage).use(ElCarousel).use(ElCarouselItem).use(ElDropdown)
-    .use(ElDropdownMenu).use(ElDropdownItem).use(ElTimeline).use(ElTimelineItem).use(ElEmpty)
+    .use(ElDropdownMenu).use(ElDropdownItem).use(ElTimeline).use(ElTimelineItem).use(ElEmpty).use(ElPopover)
 app.use(preventReClick)
 app.use(VantBase).use(I18n).use(store).use(router)
 app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })

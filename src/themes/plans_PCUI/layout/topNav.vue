@@ -57,33 +57,7 @@
                     <i class='icon icon_xiaoxizhongxin1' :title="$t('header.information')"></i>
                 </div>
                 <div class='item'>
-                    <el-dropdown>
-                        <div class='user'>
-                            <i class='icon icon_shezhi' :title="$t('header.set')"></i>
-                        </div>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item @click='handRoutTo("/bindEmail")'>
-                                    绑定邮箱
-                                </el-dropdown-item>
-                                <el-dropdown-item @click='handRoutTo("/bindMobile")'>
-                                    绑定手机
-                                </el-dropdown-item>
-                                <el-dropdown-item>
-                                    <div>
-                                        颜色涨跌
-                                    </div>
-                                    <el-dropdown-menu>
-                                        <el-dropdown-item> 红涨绿跌 </el-dropdown-item>
-                                        <el-dropdown-item> 绿涨红跌 </el-dropdown-item>
-                                    </el-dropdown-menu>
-                                </el-dropdown-item>
-                                <el-dropdown-item @click='logoutHandler'>
-                                    退出登录
-                                </el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
+                    <SettingIcon />
                 </div>
                 <div class='line'></div>
             </div>
@@ -135,15 +109,12 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import { MsgSocket } from '@/plugins/socket/socket'
 import { useRoute, useRouter } from 'vue-router'
-// import UpDownColor from './components/upDownColor'
-// import SettingIcon from './components/settingIcon'
+import SettingIcon from './components/settingIcon'
 export default {
-    // components: {
-    //     UpDownColor,
-    //     SettingIcon,
-    // },
+    components: {
+        SettingIcon,
+    },
     setup () {
         const route = useRoute()
         const router = useRouter()
@@ -156,22 +127,10 @@ export default {
         // 路由跳转
         const handRoutTo = (path) => router.push(route.path + path)
 
-        // 退出登录
-        const logoutHandler = () => {
-            MsgSocket.logout()
-            Promise.resolve().then(() => {
-                return store.dispatch('_user/logout')
-            }).then(() => {
-                return router.push({ name: 'Login' })
-            }).then(() => {
-                location.reload()
-            })
-        }
         return {
             plansList,
             userAccountType,
             customerInfo,
-            logoutHandler,
             handRoutTo,
         }
     }
