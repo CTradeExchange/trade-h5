@@ -183,7 +183,7 @@ export default {
             amountList: [],
             currencyChecked: '',
             otherAmountVis: false,
-            currIndex: 0,
+            currIndex: '',
             amount: '',
             typeShow: false,
             PayTypes: [],
