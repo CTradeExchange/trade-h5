@@ -1,173 +1,175 @@
 <template>
-    <div class='content'>
-        <div class='symbol-info'>
-            <div class='item symbol-name'>
-                <p class='name'>
-                    {{ product.symbolName }}
-                </p>
-                <p class='code'>
-                    {{ product.symbolCode }}
-                </p>
-            </div>
-
-            <div class='item range'>
-                <p :class='product.cur_color'>
-                    {{ parseFloat(product.cur_price).toFixed(product.price_digits) }}
-                </p>
-                <p>
-                    <span> {{ product.upDownAmount }}   </span>
-                    <span :class='product.upDownColor'>
-                        {{ product.upDownWidth }}
-                    </span>
-                </p>
-            </div>
-            <div class='item'>
-                <p>开 23162.5</p>
-                <p>收 23162.5</p>
-            </div>
-
-            <div class='item'>
-                <p>高 23162.5</p>
-                <p>低 23162.5</p>
-            </div>
-
-            <div class='item collect'>
-                <i class='icon_zixuan1'></i>
-            </div>
+    <div class='symbol-info'>
+        <div class='item symbol-name'>
+            <p class='name'>
+                {{ product.symbolName }}
+            </p>
+            <p class='code'>
+                {{ product.symbolCode }}
+            </p>
         </div>
-        <div class='tv-head'>
-            <div class='tabs-wrap'>
-                <van-tabs
-                    v-model:active='activeTab'
-                    :before-change='onBeforeChange'
-                    class='tabs'
-                    :color='$style.primary'
-                    line-height='2'
-                    line-width='20'
-                    title-active-color='$style.primary'
-                >
-                    <van-tab
-                        v-for='(item) in candleKTypeList'
-                        :key='item.ktype'
-                        :name='item.ktype'
-                        :title='item.title'
-                    />
-                </van-tabs>
 
-                <div class='flex-right'>
-                    <van-dropdown-menu class='kIcon-wrap'>
-                        <van-dropdown-item ref='klineTypeDropdown' v-model='klineType'>
-                            <template #title>
-                                <KIcon class='kIcon' :value='klineTypeIndex' />
-                            </template>
-                            <van-cell
-                                v-for='(item, i) in klineTypeList'
-                                :key='item.name'
-                                :class="{ 'mainColor':klineType === item.value }"
-                                is-link
-                                @click='setChartType(item.value)'
-                            >
-                                <template #title>
-                                    <span class='custom-title'>
-                                        <KIcon class='kIcon' :value='i+1' />
-                                        {{ item['title_zh'] }}
-                                    </span>
-                                </template>
-                                <template #right-icon>
-                                    <van-icon v-if='klineType===item.value' class='klineTypeRightIcon' name='success' />
-                                </template>
-                            </van-cell>
-                        </van-dropdown-item>
-                    </van-dropdown-menu>
-                    <div class='setting' @click='settingStatus = !settingStatus'>
-                        <van-icon class='icon' name='setting-o' />
+        <div class='item range'>
+            <p :class='product.cur_color'>
+                {{ parseFloat(product.cur_price).toFixed(product.price_digits) }}
+            </p>
+            <p>
+                <span :class='product.upDownColor'>
+                    {{ product.upDownAmount }}
+                </span>&nbsp;
+                <span :class='product.upDownColor'>
+                    {{ product.upDownWidth }}
+                </span>
+            </p>
+        </div>
+        <div class='item ohlc'>
+            <p>{{ $t('chart.open') }} {{ product.open_price }}</p>
+            <p>{{ $t('chart.close') }} {{ product.yesterday_close_price }}</p>
+        </div>
 
-                        <div v-show='settingStatus' class='content van-hairline--surround' @click.stop=''>
-                            <van-checkbox-group ref='checkboxGroup' v-model='settingList' @change='handleLineChange'>
-                                <van-checkbox
-                                    v-for='item in computedLineList'
-                                    :key='item.value'
+        <div class='item ohlc'>
+            <p>{{ $t('chart.high') }} {{ product.high_price }}</p>
+            <p>{{ $t('chart.low') }} {{ product.high_price }}</p>
+        </div>
 
-                                    class='item'
-                                    icon-size='16px'
-                                    :name='item.value'
+        <div class='item collect'>
+            <i class='icon icon_zixuan1'></i>
+        </div>
+    </div>
+    <div class='tv-head'>
+        <div class='tabs-wrap'>
+            <van-tabs
+                v-model:active='activeTab'
+                :before-change='onBeforeChange'
+                class='tabs'
+                :color='$style.primary'
+                line-height='2'
+                line-width='20'
+                title-active-color='$style.primary'
+            >
+                <van-tab
+                    v-for='(item) in candleKTypeList'
+                    :key='item.ktype'
+                    :name='item.ktype'
+                    :title='item.title'
+                />
+            </van-tabs>
+            <div class='tv-right'>
+                <div class='dropdown'>
+                    <el-dropdown trigger='click'>
+                        <KIcon class='kIcon' :value='klineTypeIndex' />
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item
+                                    v-for='(item, i) in klineTypeList'
+                                    :key='item.name'
+                                    :class="{ 'mainColor':klineType === item.value }"
+                                    @click='setChartType(item.value)'
                                 >
-                                    {{ item.title }}
-                                </van-checkbox>
-                            </van-checkbox-group>
-                        </div>
-                        <div
-                            v-show='settingStatus'
-                            class='mask'
-                            @click.stop='settingStatus = false'
-                            @touchmove.stop='settingStatus = false'
-                        >
-                        </div>
-                    </div>
+                                    <KIcon class='kIcon' :value='i+1' />
+                                    {{ item['title_zh'] }}
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
                 </div>
-            </div>
-        </div>
-        <div v-show='studyVis' ref='mainStudyArea' class='study-area'>
-            <div class='main-study'>
-                <div class='content'>
-                    <div
-                        v-for='(item, i) in mainStudyList'
-                        :key='i'
-                        class='item'
-                        :class='{ active: mainStudy === item.name }'
-                        :color='$style.primary'
-                    >
-                        <span
-                            class='inner-label'
-                            @click='onClickStudy("main", item.name)'
-                        >
-                            {{ item.label }}
-                        </span>
+
+                <div class='setting' @click='settingStatus = !settingStatus'>
+                    <van-icon class='icon' name='setting-o' />
+
+                    <div v-show='settingStatus' class='content van-hairline--surround' @click.stop=''>
+                        <van-checkbox-group ref='checkboxGroup' v-model='settingList' @change='handleLineChange'>
+                            <van-checkbox
+                                v-for='item in computedLineList'
+                                :key='item.value'
+
+                                class='item'
+                                icon-size='16px'
+                                :name='item.value'
+                            >
+                                {{ item.title }}
+                            </van-checkbox>
+                        </van-checkbox-group>
                     </div>
-                    <span class='item more' @click='showStudyDialog = true'>
-                        <span class='inner-label'>
-                            {{ $t('chart.more') }}
-                        </span>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class='chart-content'>
-            <tv
-                v-if='initialValue'
-                ref='chartRef'
-                :initial-value='initialValue'
-                :options='initConfig'
-                @indicatorRemoved='indicatorRemoved'
-                @onChartReady='onChartReady'
-                @orientationChanged='orientationChanged'
-            />
-        </div>
-        <div v-show='studyVis' ref='mainStudyArea' class='study-area'>
-            <div class='main-study'>
-                <div class='content'>
                     <div
-                        v-for='(item, i) in sideStudyList'
-                        :key='i'
-                        class='item'
-                        :class='{ active: subStudy === item.name }'
+                        v-show='settingStatus'
+                        class='mask'
+                        @click.stop='settingStatus = false'
+                        @touchmove.stop='settingStatus = false'
                     >
-                        <span
-                            class='inner-label'
-                            @click='onClickStudy("sub", item.name)'
-                        >
-                            {{ item.label }}
-                        </span>
                     </div>
-                    <span class='item more' @click='showStudyDialog = true'>
-                        <span class='inner-label'>
-                            {{ $t('chart.more') }}
-                        </span>
-                    </span>
                 </div>
             </div>
         </div>
     </div>
+    <div v-show='studyVis' ref='mainStudyArea' class='study-area'>
+        <div class='main-study'>
+            <div class='content'>
+                <div
+                    v-for='(item, i) in mainStudyList'
+                    :key='i'
+                    class='item'
+                    :class='{ active: mainStudy === item.name }'
+                    :color='$style.primary'
+                >
+                    <span
+                        class='inner-label'
+                        @click='onClickStudy("main", item.name)'
+                    >
+                        {{ item.label }}
+                    </span>
+                </div>
+                <span class='item more' @click='showStudyDialog = true'>
+                    <span class='inner-label'>
+                        {{ $t('chart.more') }}
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class='chart'>
+        <tv
+            v-if='initialValue'
+            ref='chartRef'
+            :initial-value='initialValue'
+            :options='initConfig'
+            @indicatorRemoved='indicatorRemoved'
+            @onChartReady='onChartReady'
+            @orientationChanged='orientationChanged'
+        />
+    </div>
+    <div v-show='studyVis' ref='mainStudyArea' class='study-area'>
+        <div class='main-study'>
+            <div class='content'>
+                <div
+                    v-for='(item, i) in sideStudyList'
+                    :key='i'
+                    class='item'
+                    :class='{ active: subStudy === item.name }'
+                >
+                    <span
+                        class='inner-label'
+                        @click='onClickStudy("sub", item.name)'
+                    >
+                        {{ item.label }}
+                    </span>
+                </div>
+                <span class='item more' @click='showStudyDialog = true'>
+                    <span class='inner-label'>
+                        {{ $t('chart.more') }}
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <StudyList
+        :prop-main-study='mainStudy'
+        :prop-sub-study='subStudy'
+        :show='showStudyDialog'
+        @update:show='updateShow'
+        @updateStudy='updateStudy'
+    />
 </template>
 
 <script>
@@ -178,9 +180,11 @@ import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { isEmpty, localSet, localGet } from '@/utils/util'
+import KIcon from './icons/kIcon.vue'
+import StudyList from './studyList.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 export default {
-    components: { tv },
+    components: { tv, KIcon, StudyList },
     setup () {
         const route = useRoute()
         const { t } = useI18n({ useScope: 'global' })
@@ -278,7 +282,6 @@ export default {
 
         // 图表组件引用
         const chartRef = ref(null)
-        const klineTypeDropdown = ref(null)
 
         const state = reactive({
             activeName: 'first',
@@ -292,6 +295,33 @@ export default {
             settingList: [],
             initConfig: {},
             onChartReadyFlag: false,
+            lineList: [
+                {
+                    title: t('chart.lastValueLine'),
+                    value: 'showLastPrice'
+                },
+                // {
+                //     title: t('chart.positionLine'),
+                //     value: 'showPositionPrice',
+                // },
+                {
+                    title: t('chart.buyLine'),
+                    value: 'showBuyPrice',
+                },
+                {
+                    title: t('chart.sellLine'),
+                    value: 'showSellPrice',
+                },
+                {
+                    title: t('trade.buySellFive'),
+                    value: 'stalls',
+                },
+                {
+                    title: t('trade.dealData'),
+                    value: 'deal',
+                }
+            ],
+            showStudyDialog: false,
 
         })
 
@@ -316,17 +346,11 @@ export default {
             }
             return null
         })
-
-        // 实时更新买卖价线
-        watch(() => [product.value.buy_price, product.value.sell_price, product.value.cur_price, product.value.tick_time], (newValues) => {
-            if (Number(product.value.tradeType) !== 5 && Number(product.value.tradeType) !== 9) {
-                state.onChartReadyFlag && unref(chartRef).setTick(product.value.cur_price, product.value.tick_time)
-
-                state.onChartReadyFlag && unref(chartRef).updateLineData({
-                    buyPrice: product.value.buy_price,
-                    sellPrice: product.value.sell_price
-                })
+        const computedLineList = computed(() => {
+            if (product.value.tradeType === 9) {
+                return state.lineList
             }
+            return state.lineList.filter(e => !['stalls', 'deal'].includes(e.value))
         })
 
         const orientationChanged = () => {
@@ -346,6 +370,18 @@ export default {
             renderChart(product, state.initConfig.property)
             return product
         })
+
+        // 实时更新买卖价线
+        /* watch(() => [product.value.buy_price, product.value.sell_price, product.value.cur_price, product.value.tick_time], (newValues) => {
+            if (Number(product.value.tradeType) !== 5 && Number(product.value.tradeType) !== 9) {
+                state.onChartReadyFlag && unref(chartRef).setTick(product.value.cur_price, product.value.tick_time)
+
+                state.onChartReadyFlag && unref(chartRef).updateLineData({
+                    buyPrice: product.value.buy_price,
+                    sellPrice: product.value.sell_price
+                })
+            }
+        }) */
 
         const handleClick = () => {
 
@@ -419,6 +455,29 @@ export default {
             state.onChartReadyFlag && unref(chartRef).updateIndicator(property)
         }
 
+        // 更新指标
+        const updateStudy = list => {
+            const studyList = []
+            if (list.length > 0) {
+                list.forEach(el => {
+                    const target = JSON.parse(JSON.stringify([...MAINSTUDIES, ...SUBSTUDIES].find(item => item.name === el) || null))
+                    if (target) {
+                        studyList.push(target)
+                        state[target?.type] = target?.name
+                        localSetChartConfig(target.type, JSON.stringify({
+                            name: target?.name,
+                            params: target?.params
+                        }))
+                    } else {
+                        localSetChartConfig('mainStudy', null)
+                        localSetChartConfig('subStudy', null)
+                    }
+                })
+            }
+
+            state.onChartReadyFlag && unref(chartRef).updateIndicator(studyList)
+        }
+
         // 缓存图表设置
         const localSetChartConfig = (key, value) => {
             const chartConfig = JSON.parse(localGet('chartConfig'))
@@ -448,8 +507,8 @@ export default {
         const renderChart = (product, property) => {
             state.onChartReadyFlag && unref(chartRef).updateProperty(property)
             state.onChartReadyFlag && unref(chartRef).updateLineData({
-                buyPrice: 444.14, // product.buy_price,
-                sellPrice: 445.11 // product.sell_price
+                buyPrice: product.buy_price,
+                sellPrice: product.sell_price
             })
 
             state.onChartReadyFlag && unref(chartRef).setChartType(Number(property.chartType))
@@ -464,6 +523,10 @@ export default {
             if (name === state.mainStudy) {
                 removeStudy('main')
             }
+        }
+
+        const updateShow = (val) => {
+            state.showStudyDialog = val
         }
 
         // 设置图表设置缓存
@@ -541,7 +604,7 @@ export default {
                     ],
                     extension: {
                         theme: invertColor === 'light' ? 'Light' : 'Dark', // 主题 "Light" | "Dark"
-                        fullScreen: false // 全屏功能（右上角缩放按钮、横屏监听等）
+                        fullScreen: true // 全屏功能（右上角缩放按钮、横屏监听等）
                     }
                 })
             }
@@ -557,7 +620,35 @@ export default {
 
             property.chartType = klineType
             state.onChartReadyFlag && unref(chartRef).updateProperty(property)
-            klineTypeDropdown.value.toggle()
+        }
+
+        // 设置图表线
+        const handleLineChange = (val, v) => {
+            var property = {}
+            if (val.indexOf('showBuyPrice') > -1) {
+                property.showBuyPrice = true
+            } else {
+                property.showBuyPrice = false
+            }
+
+            if (val.indexOf('showPositionPrice') > -1) {
+                property.showPositionPrice = true
+            } else {
+                property.showPositionPrice = false
+            }
+
+            if (val.indexOf('showSellPrice') > -1) {
+                property.showSellPrice = true
+            } else {
+                property.showSellPrice = false
+            }
+
+            if (val.indexOf('showLastPrice') > -1) {
+                property.showLastPrice = true
+            } else {
+                property.showLastPrice = false
+            }
+            renderChart(product.value, property)
         }
 
         // 更新图表数据
@@ -619,7 +710,11 @@ export default {
             initialValue,
             orientationChanged,
             setChartType,
-            product
+            product,
+            computedLineList,
+            handleLineChange,
+            updateShow,
+            updateStudy
 
         }
     }
@@ -628,103 +723,495 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/sass/mixin.scss";
-.content{
-    .symbol-info{
+.symbol-info{
 
-        padding: 18px 16px;
-        display: flex;
-        align-items: center;
-        >div{
+    padding: 18px 16px;
+    display: flex;
+    align-items: center;
+    >div{
+        flex: 1;
+        &.item{
+            .name{
+                font-size: 16px;
+                font-weight: bold;
+            }
+            .code{
+                color: var(--minorColor);
+            }
+            &.ohlc{
+                color: var(--normalColor);
+            }
 
-            flex: 1;
-            &.item{
-                .name{
-                    font-size: 16px;
-                    font-weight: bold;
-                }
-                .code{
-                    color: var(--minorColor);
-                }
-                &:last-child{
-                    text-align: right;
-                    flex: 0;
-                }
-                &.collect{
-                    cursor: pointer;
+            &.collect{
+                color: var(--normalColor);
+                cursor: pointer;
+                text-align: right;
+                flex: 1;
+                .icon{
+                    font-size: 20px;
                 }
             }
         }
     }
-    .study-area {
+}
+.tv-head {
+    box-sizing: border-box;
+    // 若高度调整，需同时处理vant-tab组件内的高度和行高等
+    width: 100%;
+    background-color: var(--contentColor);
+}
+.tabs-wrap {
+    display: flex;
+    padding-top: 5px;
+    border-top: solid 1px var(--lineColor);
+    border-bottom: solid 1px var(--lineColor);
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    height: 100%;
+        padding-right: 10px;
+    .van-popup {
+        @include scroll();
+    }
+    .tabs {
+        //flex: 1;
+        width: 530px;
+        :deep(.van-tab) {
+            flex: 1;
+            padding-bottom: 5px;
+            flex-basis: auto !important;
+            padding: 0;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        :deep(.van-tabs__wrap) {
+            height: 30px;
+            .van-tabs__nav--line {
+                padding-bottom: 0;
+            }
+            .van-tabs__line {
+                bottom: 0;
+                width: 27px!important;
+                height: 3px!important;
+            }
+
+        }
+    }
+    .other-time-tab {
+        min-width: rem(61px);
+        white-space: nowrap;
+        text-align: center;
+    }
+    .more-time {
+        position: relative;
+        height: 100%;
+        padding: 0 4px 0 0;
+        color: #646566;
+        font-size: rem(24px);
+        line-height: rem(60px);
+        background-color: var(--contentColor);
+        &::after {
+            position: absolute;
+            top: 50%;
+            right: 1px;
+            margin-top: -5px;
+            border: 3px solid;
+            border-color: transparent transparent var(--normalColor) var(--normalColor);
+            -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+            opacity: 0.8;
+            content: '';
+        }
+        &.opened {
+            &::after {
+                margin-top: -1px;
+                // border-color: transparent transparent currentColor currentColor;
+                transform: rotate(135deg);
+            }
+        }
+        .options {
+            position: absolute;
+            top: rem(71px);
+            left: rem(-100px);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: rem(1px);
+            background: var(--contentColor);
+            //box-shadow: 0 0 2px 0 #EBEDF0;
+            .option {
+                padding: rem(20px) rem(50px) rem(10px);
+                color: var(--normalColor);
+                line-height: rem(30px);
+                white-space: nowrap;
+                &.active {
+                    color: var(--primary);
+                }
+            }
+        }
+        .mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+    }
+    .loadingIcon {
         display: flex;
         flex-direction: row;
-        flex-wrap: nowrap;
         align-items: center;
+        justify-content: center;
+        width: rem(80px);
+        text-align: center;
+        background: #FFF;
+    }
+    .tv-right{
+        display: flex;
+        align-items: center;
+        .dropdown,.setting{
+            margin: 0 10px;
+        }
+        .setting {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--contentColor);
+            .icon {
+                color: var(--normalColor);
+                font-size: rem(32px);
+            }
+            .content {
+                position: absolute;
+                top: rem(72px);
+                right: 0;
+                z-index: 10;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                align-items: flex-start;
+                justify-content: center;
+                background: var(--contentColor);
+                box-shadow: 0 0 2px 0 var(--contentColor);
+                .item {
+                    padding: rem(20px) rem(50px) rem(10px);
+                    line-height: rem(30px);
+                    white-space: nowrap;
+                    cursor: pointer;
+                    &.active {
+                        :deep(&.van-checkbox__icon--disabled) {
+                            .van-icon {
+                                background-color: #EBEDF0;
+                                border-color: #C8C9CC;
+                            }
+                        }
+                        .van-icon {
+                            background-color: red;
+                            border-color: red;
+                        }
+                        .van-checkbox__label {
+                            color: red;
+                            &.van-checkbox__label--disabled {
+                                color: #C8C9CC;
+                            }
+                        }
+                    }
+                    :deep(.van-checkbox__label) {
+                        color: var(--color);
+                    }
+                }
+            }
+            .mask {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 9;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+            }
+        }
+    }
+
+    .study-wrap,
+
+    .chartPositinLine {
+        font-size: rem(40px);
+    }
+    .study-wrap {
+        width: rem(120px);
+        :deep(.van-dropdown-menu__bar) {
+            .van-dropdown-menu__bar {
+                box-sizing: border-box;
+                width: 100%;
+                height: 100%;
+                padding-right: 13px;
+            }
+        }
+    }
+
+    .kIcon {
+        display: inline-block;
+        color: var(--normalColor);
+        vertical-align: middle;
+    }
+
+}
+.study-area {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    height: 30px;
+    line-height: 30px;
+    background: var(--contentColor);
+    .main-study,
+    .side-study {
+        display: flex;
+        flex: 1;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: flex-end;
         justify-content: flex-start;
-        width: 100%;
-        height: 30px;
-        line-height: 30px;
-        background: var(--contentColor);
-        .main-study,
-        .side-study {
+
+        .content {
             display: flex;
             flex: 1;
             flex-direction: row;
             flex-wrap: nowrap;
-            align-items: flex-end;
-            justify-content: flex-start;
-
-            .content {
+            justify-content: space-around;
+            white-space: nowrap;
+            .item {
                 display: flex;
                 flex: 1;
+                    cursor: pointer;
                 flex-direction: row;
-                flex-wrap: nowrap;
-                justify-content: space-around;
-                white-space: nowrap;
-                .item {
-                    display: flex;
-                    flex: 1;
-                    flex-direction: row;
-                    align-items: flex-end;
-                    justify-content: center;
-                    padding: 0 rem(10px);
-                    color: #646566;
-                    text-align: center;
-                    &.active {
-                        color: var(--primary);
-                        .inner-label {
-                            color: var(--primary);
-                        }
-                    }
-                    &.disabled {
-                        color: var(--minorColor);
-                    }
+                align-items: flex-end;
+                justify-content: center;
+                padding: 0 rem(10px);
+                color: #646566;
+                text-align: center;
+                &.active {
+                    color: var(--primary);
                     .inner-label {
-                        flex: 1;
-                        height: 25px;
-                        color: var(--normalColor);
-                        line-height: 25px;
+                        color: var(--primary);
                     }
+                }
+                &.disabled {
+                    color: var(--minorColor);
+                }
+                .inner-label {
+                    flex: 1;
+                    height: 25px;
+                    color: var(--normalColor);
+                    line-height: 25px;
                 }
             }
         }
-        .more {
+    }
+    .more {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: center;
+        margin: 0 10px;
+        .inner-label {
+            flex: 1;
+            height: 25px;
+            line-height:25;
+        }
+    }
+}
+.more-time {
+        position: relative;
+        height: 100%;
+        padding: 0 4px 0 0;
+        color: #646566;
+        font-size: rem(24px);
+        line-height: rem(60px);
+        background-color: var(--contentColor);
+        &::after {
+            position: absolute;
+            top: 50%;
+            right: 1px;
+            margin-top: -5px;
+            border: 3px solid;
+            border-color: transparent transparent var(--normalColor) var(--normalColor);
+            -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+            opacity: 0.8;
+            content: '';
+        }
+        &.opened {
+            &::after {
+                margin-top: -1px;
+                // border-color: transparent transparent currentColor currentColor;
+                transform: rotate(135deg);
+            }
+        }
+        .options {
+            position: absolute;
+            top: rem(71px);
+            left: rem(-100px);
+            z-index: 10;
             display: flex;
-            flex-direction: row;
-            align-items: flex-end;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            margin: 0 10px;
-            .inner-label {
-                flex: 1;
-                height: 25px;
-                line-height:25;
+            margin-top: rem(1px);
+            background: var(--contentColor);
+            //box-shadow: 0 0 2px 0 #EBEDF0;
+            .option {
+                padding: rem(20px) rem(50px) rem(10px);
+                color: var(--normalColor);
+                line-height: rem(30px);
+                white-space: nowrap;
+                &.active {
+                    color: var(--primary);
+                }
+            }
+        }
+        .mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+    }
+    .loadingIcon {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: rem(80px);
+        text-align: center;
+        background: #FFF;
+    }
+    .flex-right {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+    .study-wrap,
+    .kIcon-wrap {
+        height: auto;
+        :deep(.van-dropdown-menu__title) {
+            color: #646566;
+            font-size: rem(24px);
+        }
+        :deep(.van-dropdown-menu__bar) {
+            width: 100%;
+            height: 100%;
+            box-shadow: none;
+        }
+        .mainColor {
+            color: var(--primary);
+        }
+    }
+
+    .study-wrap {
+        width: rem(120px);
+        :deep(.van-dropdown-menu__bar) {
+            .van-dropdown-menu__bar {
+                box-sizing: border-box;
+                width: 100%;
+                height: 100%;
+                padding-right: 13px;
             }
         }
     }
-    .chart-content{
-        height: 326px;
+    .kIcon-wrap {
+        width: rem(80px);
+        padding-right: 0;
+        :deep(.van-dropdown-menu__item) {
+            background-color: var(--contentColor);
+            .van-dropdown-menu__title::after {
+                display: none;
+            }
+        }
     }
-
+    .kIcon {
+        display: inline-block;
+        color: var(--normalColor);
+        vertical-align: middle;
+    }
+    .klineTypeRightIcon {
+        padding-top: rem(10px);
+        font-size: rem(36px);
+    }
+    .setting {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--contentColor);
+        .icon {
+            color: var(--normalColor);
+            font-size: rem(32px);
+        }
+        .content {
+            position: absolute;
+            top: rem(72px);
+            right: 0;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            align-items: flex-start;
+            justify-content: center;
+            background: var(--contentColor);
+            box-shadow: 0 0 2px 0 var(--contentColor);
+            .item {
+                padding: rem(20px) rem(50px) rem(10px);
+                line-height: rem(30px);
+                white-space: nowrap;
+                &.active {
+                    :deep(&.van-checkbox__icon--disabled) {
+                        .van-icon {
+                            background-color: #EBEDF0;
+                            border-color: #C8C9CC;
+                        }
+                    }
+                    .van-icon {
+                        background-color: red;
+                        border-color: red;
+                    }
+                    .van-checkbox__label {
+                        color: red;
+                        &.van-checkbox__label--disabled {
+                            color: #C8C9CC;
+                        }
+                    }
+                }
+                :deep(.van-checkbox__label) {
+                    color: var(--color);
+                }
+            }
+        }
+        .mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+    }
+.chart{
+    height: 330px;
 }
 
 </style>

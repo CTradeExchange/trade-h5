@@ -36,8 +36,10 @@
             {{ $t('trade.my') }}
         </div>
     </div>
-    <van-empty v-if='!handicapResult' :description='$t("common.noData")' image='/images/empty.png' />
+    ****{{ handicapResult }}****
+    <van-empty v-if='!ask_deep' :description='$t("common.noData")' image='/images/empty.png' />
     <div class='stalls-wrap' :class='{ padding: !showField }'>
+        4454545
         <div class='sell-wrap'>
             <div v-for='(item,index) in ask_deep' :key='index' class='item'>
                 &nbsp;&nbsp;&nbsp;
@@ -106,7 +108,7 @@ export default {
         const handicapList = computed(() => store.state._quote.handicapList.find(item => item.symbol_id === props.symbolId))
 
         const { handicapResult } = computeHandicap({
-            showPending: true,
+            showPending: true
         })
 
         const ask_deep = computed(() => handicapResult?.value?.ask_deep?.slice(0))
