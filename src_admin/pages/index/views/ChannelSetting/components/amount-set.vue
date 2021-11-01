@@ -1,13 +1,9 @@
 <template>
     <div>
         <el-form ref='form' class='form-module' label-width='140px'>
-            <el-form-item label='存款状态'>
-                <el-radio-group v-model='depositStatus'>
-                    <el-radio v-for='item in statusList' :key='item.label' :label='item.label'>
-                        {{ item.name }}
-                    </el-radio>
-                </el-radio-group>
-            </el-form-item>
+            <el-tabs v-model='depositStatus'>
+                <el-tab-pane v-for='item in statusList' :key='item.label' :label='item.name' :name='item.label' />
+            </el-tabs>
             <el-form-item label='设置顺序'>
                 <el-row :gutter='gutter'>
                     <el-col v-for='(item, key) in depositData[depositStatus]' :key='depositStatus + key' class='sort-col' :span='span'>

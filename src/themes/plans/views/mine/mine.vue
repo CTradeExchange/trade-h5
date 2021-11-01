@@ -2,7 +2,7 @@
     <div class='page-wrap' :class='{ hasNav: $hasNav }'>
         <PageComp :data='pageModules' />
         <div class='support'>
-            Trade Switcher提供技术支持<br /> tradeswitcher.com
+            {{ $t('common.techSupport') }} <br />
         </div>
     </div>
 </template>

@@ -38,8 +38,8 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         const colorsActions = [
-            { val: 'night', name: '黑夜' },
-            { val: 'light', name: '白天' },
+            { val: 'night', name: t('theme.night') },
+            { val: 'light', name: t('theme.day') },
         ]
         const chartAction = [
             { val: 1, name: t('common.redDown') },

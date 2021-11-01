@@ -4,7 +4,7 @@ img.forEach(item => {
     config[item.name] = item
 })
 export default {
-    title: '图片组件',
+    title: '单图Banner',
     tag: 'img',
     exclude: ['nav'], // 排除的页面code
     tagIcon: 'el-icon-picture-outline',
