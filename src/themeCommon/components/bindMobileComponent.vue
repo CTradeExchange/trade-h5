@@ -149,7 +149,7 @@ export default {
                         Toast(t('common.phoneBindSuccess'))
                         store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
-                            router.push('/setting')
+                            router.back()
                         }, 1500)
                     }
                 }).catch(err => {
@@ -162,7 +162,7 @@ export default {
                         Toast(t('common.replacePhoneSuccess'))
                         store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
-                            router.replace('/setting')
+                            router.back()
                         }, 1500)
                     }
                 }).catch(err => {

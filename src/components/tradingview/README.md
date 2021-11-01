@@ -58,6 +58,7 @@
                 extension: {
                      theme: 'Light' // 主题 "Light" | "Dark"
                      fullScreen: false // 全屏功能（右上角缩放按钮、横屏监听等）
+                     orientation: 'portrait' // 非必填，默认值portrait，可选值: 'portrait' ｜ 'landscape' (竖屏｜横屏)
                 }
             }
             // 产品修改成功后回调

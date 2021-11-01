@@ -2,8 +2,8 @@
     <div class='quote'>
         <router-view />
         <p>
-            <a href='javascript:;' @click="$router.push($route.path+'/depost?symbolId=28&tradeType=1')">
-                这里是行情页面
+            <a href='javascript:;' @click="$router.push($route.path+'/bindEmail?symbolId=28&tradeType=1')">
+                这里是绑定邮箱
             </a>
         </p>
         <p>这里是行情页面</p>
@@ -22,6 +22,7 @@
 <script>
 import { reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
+
 export default {
     name: 'Quote',
     setup () {

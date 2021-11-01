@@ -1,12 +1,17 @@
 <template>
     <div class='trustWrapper'>
         <div class='hd'>
-            <span>{{ $t('c.cur') + $t([1,2].includes(product.tradeType) ? 'trade.pending':'trade.trust') }} ({{ pendingList.length }})</span>
+            <span v-if='Number(product.tradeType) === 5'>
+                {{ $t('trade.dealList') }}
+            </span>
+            <span v-else>
+                {{ $t('c.cur') + $t([1,2].includes(product.tradeType) ? 'trade.pending':'trade.trust') }} ({{ pendingList.length }})
+            </span>
             <a class='allTrust' href='javascript:;' @click="$router.push({ name:'List',query:{ tradeType: $route.query.tradeType } })">
                 <i class='icon_mingxi'></i>
             </a>
         </div>
-        <div class='bd'>
+        <div v-if='Number(product.tradeType) !== 5' class='bd'>
             <van-empty
                 v-if='pendingList?.length === 0'
                 :description="$t('trade.pendingEmpty')"

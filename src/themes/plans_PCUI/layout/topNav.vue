@@ -32,32 +32,23 @@
         </div>
         <div class='nav-right'>
             <!-- 未登录 -->
-            <div v-if='false' class='handle-not'>
-                <router-link class='login' to='/'>
-                    {{ $t('login') }}
+            <div v-if="userAccountType==='G'" class='handle-not'>
+                <router-link class='login' to='/login'>
+                    {{ $t('c.login') }}
                 </router-link>
                 <router-link class='register' to='/'>
-                    {{ $t('rigister') }}
+                    {{ $t('c.register') }}
                 </router-link>
             </div>
             <!-- 已登录 -->
-            <div class='handle-have'>
+            <div v-else class='handle-have'>
                 <div class='item'>
-                    <el-dropdown>
-                        <div class='user'>
-                            <div class='head'>
-                                <i class='el-icon-s-custom'></i>
-                            </div>
-                            <span class='no'>
-                                86000148
-                            </span>
-                        </div>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item>{{ $t('quitLogin') }}</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
+                    <div class='user'>
+                        <i class='head el-icon-s-custom'></i>
+                        <span class='no'>
+                            {{ customerInfo.customerNo }}
+                        </span>
+                    </div>
                 </div>
                 <div class='item'>
                     <i class='icon icon_zichan' :title="$t('header.assets')"></i>
@@ -118,7 +109,7 @@
                     </el-dropdown>
                 </div>
                 <div class='item'>
-                    <i class='icon icon_shezhi' :title="$t('header.set')"></i>
+                    <SettingIcon />
                 </div>
                 <div class='line'></div>
                 
@@ -175,8 +166,15 @@ import { useStore } from 'vuex'
 import Top from '@/components/top'
 import { isEmpty } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router'
+import SettingIcon from './components/settingIcon'
 export default {
+    components: {
+        SettingIcon,
+    },
     setup () {
+        const route = useRoute()
+        const router = useRouter()
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
@@ -302,8 +300,20 @@ export default {
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
+        
+        // 玩法列表
+        const plansList = computed(() => store.state._base.plans)
+        const userAccountType = computed(() => store.getters['_user/userAccountType'])
+        const customerInfo = computed(() => store.state._user.customerInfo)
+
+        // 路由跳转
+        const handRoutTo = (path) => router.push(route.path + path)
 
         return {
+            plansList,
+            userAccountType,
+            customerInfo,
+            handRoutTo,
             getMsgList,
             isError,
             customInfo,

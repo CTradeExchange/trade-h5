@@ -8,13 +8,20 @@
                     {{ loginType==='password' ? $t("signIn.loginByPwd") : $t("signIn.loginByCode") }}
                 </h2>
                 <div class='field'>
-                    <compInput v-model.trim='loginName' block :placeholder="$t('login.loginNamePlaceholder')" />
+                    <compInput ref='loginNameEl' v-model.trim='loginName' block :placeholder="$t('signIn.loginNamePlaceholder')" @keyup.enter='onLoginNameKeyupEnter' />
                 </div>
                 <div v-if="loginType==='password'" class='field'>
-                    <compInput v-model='pwd' block :placeholder="$t('login.pwd')" pwd type='password' />
+                    <compInput
+                        ref='pwdEl'
+                        v-model='pwd'
+                        block
+                        :placeholder="$t('signIn.pwd')"
+                        type='password'
+                        @keyup.enter='loginHandle'
+                    />
                 </div>
                 <div v-else class='field'>
-                    <compInput v-model.trim='checkCode' block :placeholder="$t('login.verifyCode')">
+                    <compInput ref='checkCodeEl' v-model.trim='checkCode' block :placeholder="$t('signIn.verifyCode')" @keyup.enter='loginHandle'>
                         <van-button
                             class='verifyCodeBtn'
                             :disabled='!isNaN(verifyCodeBtnText)'
@@ -29,7 +36,7 @@
                     </compInput>
                 </div>
                 <van-button block class='loginBtn' :disabled='loading' type='primary' @click='loginHandle'>
-                    {{ $t('login.loginBtn') }}
+                    {{ $t('signIn.loginBtn') }}
                 </van-button>
             </form>
             <div class='linkBar'>
@@ -58,7 +65,7 @@ import topNav from '@planspc/layout/topNav'
 import loginTypeBar from './loginTypeBar'
 import compInput from '@planspc/components/form/input'
 import LoginPwdDialog from './loginPwdDialog.vue'
-import { reactive, toRefs } from 'vue'
+import { reactive, ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
@@ -76,6 +83,9 @@ export default {
     setup () {
         const router = useRouter()
         const store = useStore()
+        const loginNameEl = ref()
+        const pwdEl = ref()
+        const checkCodeEl = ref()
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             loading: false,
@@ -180,11 +190,29 @@ export default {
             })
         }
 
+        // 按键回车键
+        const onLoginNameKeyupEnter = () => {
+            console.log('onLoginNameKeyupEnter')
+            if (state.loginType === 'password' && state.pwd === '') {
+                const iputEl = pwdEl.value?.$el?.querySelector('input')
+                iputEl && iputEl.focus()
+            } else if (state.loginType === 'checkCode' && state.checkCode === '') {
+                const iputEl = checkCodeEl.value?.$el?.querySelector('input')
+                iputEl && iputEl.focus()
+            } else {
+                console.log('调用登录')
+            }
+        }
+
         return {
             ...toRefs(state),
             loginHandle,
             verifyCodeBtnText,
             sendVerifyHandler,
+            loginNameEl,
+            pwdEl,
+            checkCodeEl,
+            onLoginNameKeyupEnter,
         }
     }
 }

@@ -6,7 +6,23 @@ const h5Children = [
     {
         path: 'depost',
         component: () => import(/* webpackChunkName: "Contract" */ '../views/contract/contract.vue'),
-    }
+    },
+    {
+        path: 'bindEmail',
+        component: () => import(/* webpackChunkName: "Setting" */ '../views/setting/bindEmail.vue'),
+        meta: {
+            title: 'cRoute.bindEmail',
+            footerMenu: false,
+        }
+    },
+    {
+        path: 'bindMobile',
+        component: () => import(/* webpackChunkName: "Setting" */ '../views/setting/bindMobile.vue'),
+        meta: {
+            title: 'cRoute.bindMobile',
+            footerMenu: false,
+        }
+    },
 ]
 
 const routes = [

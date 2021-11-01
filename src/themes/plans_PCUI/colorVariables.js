@@ -1,7 +1,7 @@
 import { localGet } from '@/utils/util'
 import store from './store'
 
-const colors = {
+export const colors = {
     common: {
         primary: '#477fd3',
         riseColor: '#ef5353',

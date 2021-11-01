@@ -3,7 +3,7 @@
         <!-- 轮播模块 -->
         <swiper />
         <!-- 产品模块 -->
-        <product />
+        <product @update='setProductKeys' />
         <!-- 公共模块 -->
         <notice />
         <!-- 内容模块 -->
@@ -13,7 +13,7 @@
             <!-- 广告模块 -->
             <ad />
             <!-- 交易模块 -->
-            <trade />
+            <trade @update='setTradeKeys' />
             <!-- 信息流模块 -->
             <div class='flow-module auto-width'>
                 <div class='flow-left'>
@@ -66,7 +66,8 @@ import why from './components/why.vue'
 import seven from './components/seven.vue'
 import calendar from './components/calendar.vue'
 
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs, onActivated, onDeactivated } from 'vue'
+import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
     name: 'Home',
     components: {
@@ -86,7 +87,13 @@ export default {
     setup () {
         const state = reactive({
             // 当前信息流选项卡
-            currentFlow: 1
+            currentFlow: 1,
+            // 产品组件symbolKey
+            productKeys: [],
+            // 行情组件symbolKey
+            tradeKeys: [],
+            // 需要订阅产品的symbolKey
+            allProductKeys: []
         })
 
         // 切换信息流
@@ -94,9 +101,42 @@ export default {
             state.currentFlow = num
         }
 
+        // 设置产品组件symbolKey
+        const setProductKeys = (keys) => {
+            state.productKeys = keys
+            sendSubscribe()
+        }
+
+        // 设置交易组件symbolKey
+        const setTradeKeys = (keys) => {
+            state.tradeKeys = keys
+            sendSubscribe()
+        }
+
+        // 发送行情订阅
+        const sendSubscribe = () => {
+            const arr = state.productKeys.concat(state.tradeKeys)
+            state.allProductKeys = [...new Set(arr)]
+            QuoteSocket.send_subscribe(state.allProductKeys)
+        }
+
+        // 发送行情订阅
+        onActivated(() => {
+            if (state.allProductKeys.length > 0) {
+                sendSubscribe()
+            }
+        })
+
+        // 取消行情订阅
+        onDeactivated(() => {
+            QuoteSocket.cancel_subscribe()
+        })
+
         return {
             ...toRefs(state),
-            switchFlow
+            switchFlow,
+            setProductKeys,
+            setTradeKeys
         }
     }
 }

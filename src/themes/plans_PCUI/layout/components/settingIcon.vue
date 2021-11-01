@@ -1,0 +1,137 @@
+<template>
+    <el-popover
+        placement='bottom'
+        trigger='hover'
+        :width='152'
+    >
+        <template #reference>
+            <i class='icon icon_shezhi' :title='$t("header.set")'></i>
+        </template>
+        <div class='settingDrapdown'>
+            <ul class='list'>
+                <li v-if='customInfo' class='item'>
+                    {{ customInfo.phone ? $t("setting.replacePhone") : $t('setting.bindEmail') }}
+                </li>
+                <li v-if='customInfo' class='item'>
+                    {{ customInfo.email ? $t("setting.replaceEmail") : $t('setting.bindEmail') }}
+                </li>
+                <li class='item flexBetween'>
+                    <span>{{ $t('setting.chartColor') }}</span>
+                    <van-icon class='arrowIcon' name='arrow' />
+                    <div class='subDrapdown'>
+                        <ul class='list'>
+                            <li v-for='(item,i) in chartColorAction' :key='i' class='item flexBetween' :class='{ active:item.val===chartColorActive }' @click='changeChartColor(item)'>
+                                <span>{{ item.name }}</span>
+                                <van-icon v-show='item.val===chartColorActive' name='success' />
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class='item' @click='logoutHandler'>
+                    {{ $t('quitLogin') }}
+                </li>
+            </ul>
+        </div>
+    </el-popover>
+</template>
+
+<script>
+import { reactive, ref, computed } from 'vue'
+import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
+import { localGet, localSet } from '@/utils/util'
+import { colors } from '@planspc/colorVariables'
+import { MsgSocket } from '@/plugins/socket/socket'
+
+export default {
+    setup () {
+        const store = useStore()
+        const { t } = useI18n({ useScope: 'global' })
+        const customInfo = computed(() => store.state._user.customerInfo)
+        const chartColorAction = [
+            { val: '1', name: t('common.redDown') },
+            { val: '2', name: t('common.redUp') },
+        ]
+        const chartColorActive = ref(localGet('chartColorActive') || '1')
+        // 设置涨跌颜色
+        const changeChartColor = item => {
+            localSet('chartColorActive', item.val)
+            chartColorActive.value = item.val
+            const { riseColor, fallColor } = colors.common
+            if (item.val === '1') {
+                document.body.style.setProperty('--riseColor', riseColor)
+                document.body.style.setProperty('--fallColor', fallColor)
+            } else {
+                document.body.style.setProperty('--riseColor', fallColor)
+                document.body.style.setProperty('--fallColor', riseColor)
+            }
+        }
+        // 退出登录
+        const logoutHandler = () => {
+            MsgSocket.logout()
+            Promise.resolve().then(() => {
+                return store.dispatch('_user/logout')
+            }).then(() => {
+                return router.push({ name: 'Login' })
+            }).then(() => {
+                location.reload()
+            })
+        }
+        return {
+            customInfo,
+            chartColorActive,
+            chartColorAction,
+            changeChartColor,
+            logoutHandler,
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+@import '@/sass/mixin.scss';
+.icon {
+    font-size: 20px;
+    color: #D6DAE1;
+    cursor: pointer;
+}
+.settingDrapdown{
+    font-size: 14px;
+    .item{
+        position: relative;
+        padding: 0 10px 0 17px;
+        height: 40px;
+        border-radius: 5px;
+        line-height: 40px;
+        cursor: pointer;
+        .arrowIcon{
+            float: right;
+            display: none;
+        }
+        &:hover, &.active{
+            color: var(--primary);
+            background: #F4F7FC;
+            .arrowIcon,.subDrapdown{
+                display: block;
+            }
+        }
+    }
+    .flexBetween{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .subDrapdown{
+        display: none;
+        position: absolute;
+        border-radius: 5px;
+        background: var(--contentColor);
+        padding: 8px;
+        color: var(--color);
+        left: 100%;
+        top: 0;
+        width: 100%;
+        box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+    }
+}
+</style>

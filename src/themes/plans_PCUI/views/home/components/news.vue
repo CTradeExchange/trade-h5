@@ -24,7 +24,7 @@
         </div>
     </div>
     <!-- 新闻详情弹窗 -->
-    <!-- <news-dialog /> -->
+    <news-dialog ref='dialog' />
 </template>
 
 <script>
@@ -32,7 +32,7 @@
 import newsDialog from './news-dialog.vue'
 import { beforeTime } from '../util.js'
 
-import { reactive, onMounted, toRefs, computed } from 'vue'
+import { ref, reactive, onMounted, toRefs, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { getCookie } from '@/utils/util'
@@ -45,6 +45,7 @@ export default {
     setup () {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
+        const dialog = ref(null)
         const wpCompanyInfo = computed(() => store.state._base.wpCompanyInfo)
         const state = reactive({
             lang: getCookie('lang') || 'zh-CN',
@@ -82,7 +83,7 @@ export default {
                 orgid: item.orgid
             }
             articleDetail(params, state.lang).then(res => {
-
+                dialog.value.open(res)
             })
         }
 
@@ -94,7 +95,8 @@ export default {
         return {
             ...toRefs(state),
             getNewsLilst,
-            openNewsDialog
+            openNewsDialog,
+            dialog
         }
     }
 }
