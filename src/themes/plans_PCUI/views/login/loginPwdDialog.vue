@@ -78,5 +78,62 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-
+.popContainer {
+    position: relative;
+    width: 400px;
+    background: var(--contentColor);
+    border-radius: 8px;
+    .kycTimeLine {
+        padding: rem(60px);
+    }
+    .containerBox {
+        padding: rem(80px) rem(60px);
+    }
+    .tipContent {
+        font-size: rem(28px);
+        line-height: 1.5;
+        text-align: center;
+    }
+    .iconPwd {
+        padding-bottom: rem(35px);
+        text-align: center;
+    }
+    .icon_password {
+        color: var(--primary);
+        font-size: rem(60px);
+    }
+    .noTip {
+        position: absolute;
+        top: rem(20px);
+        right: rem(20px);
+        color: var(--minorColor);
+    }
+    .btnBox {
+        position: relative;
+        display: flex;
+        color: var(--color);
+        font-size: rem(34px);
+        text-align: center;
+        background: var(--bgColor);
+        border-top: 1px solid var(--lineColor);
+        &::after {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1px;
+            height: rem(50px);
+            background: var(--lineColor);
+            transform: translateY(-50%);
+            content: '';
+        }
+        .btn {
+            @include active();
+            flex: 1;
+            height: rem(100px);
+            cursor: pointer;
+            line-height: 1;
+            background: none;
+        }
+    }
+}
 </style>

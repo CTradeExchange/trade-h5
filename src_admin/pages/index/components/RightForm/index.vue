@@ -20,7 +20,7 @@
                 '
             >
                 <el-form-item
-                    v-if="config.type == 'Input' "
+                    v-if="config.type == 'Input' && !config.hidden "
                     :label='config.label'
                     :row='8'
                 >

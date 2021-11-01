@@ -151,7 +151,7 @@
                                 />
                             </el-form-item>
 
-                            <el-form-item label='USDCNY_CODE'>
+                            <!-- <el-form-item label='USDCNY_CODE'>
                                 <el-input
                                     v-model='form.usdcnyCodeid'
                                     placeholder='请输入'
@@ -168,7 +168,7 @@
                                 :active-data='form.languageuri'
                                 :config="{ label: '语言包地址' }"
                                 @formChange='updateBackground'
-                            />
+                            /> -->
                             <!-- <el-form-item label='登录保持时间'>
                                 <el-input
                                     v-model='form.loginTime'
@@ -193,7 +193,7 @@
                                 </el-select>
                             </el-form-item> -->
 
-                            <el-form-item label='web API地址'>
+                            <!-- <el-form-item label='web API地址'>
                                 <el-input
                                     v-model='form.webApiUri'
                                     placeholder='请输入'
@@ -210,11 +210,11 @@
                                     v-model='form.imsApiUri'
                                     placeholder='请输入'
                                 />
-                            </el-form-item>
+                            </el-form-item> -->
                         </el-col>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane class='tab' label='禁用开户地区设置'>
+                <!-- <el-tab-pane class='tab' label='禁用开户地区设置'>
                     <el-row class='row'>
                         <el-form-item label='ip禁用提示语'>
                             <el-input
@@ -258,7 +258,7 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                </el-tab-pane>
+                </el-tab-pane> -->
             </el-tabs>
         </el-form>
     </div>
@@ -433,7 +433,7 @@ export default {
                     }
                     let content = res.data.content && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.content) : {}
                     content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
-                    this.$refs.tree.setCheckedKeys(content.disabledProvince || [])
+                    // this.$refs.tree.setCheckedKeys(content.disabledProvince || [])
                     const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                     this.form = Object.assign(this.form, content, { other })
 
@@ -482,7 +482,7 @@ export default {
                     console.error(error)
                 }
 
-                _formData.disabledProvince = this.$refs.tree.getCheckedKeys(true)
+                // _formData.disabledProvince = this.$refs.tree.getCheckedKeys(true)
                 return modifyPageConfig(Object.assign(this.pageData, { content: JSON.stringify(_formData), other: _other }))
                     .then(res => {
                         if (!res.success) {

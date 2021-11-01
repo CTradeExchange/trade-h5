@@ -90,6 +90,27 @@
     }
 }
 
+@mixin scroll-pc() {
+    scrollbar-color: #DFDFDF white;
+    scrollbar-width: thin;
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    &::-webkit-scrollbar-track {
+        background: #EEE;
+        border-radius: 10px;
+        box-shadow: 0 0 3px #DFDFDF inset;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: #C2C2C2;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background: #7D7D7D;
+    }
+}
+
 @mixin borderline($color: #ebedf0) {
     position: absolute;
     right: 0;

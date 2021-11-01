@@ -494,7 +494,7 @@ export default {
                 const pagePubData = await pushPage({ pageCode: page.pageCode })
                 this.setInfoList({ success: pageData.success, info: `${page.title}${pageData.success ? '写入成功' : '写入失败'}` })
             }
-            this.setInfoList({ loading: true, info: 'web页面初始化完成' })
+            this.setInfoList({ success: true, info: 'web页面初始化完成' })
             await updateDataToH5IndexView()
             await updateDataToH5Index()
 
@@ -514,7 +514,7 @@ export default {
                 }
             })
             this.infoList.push(data)
-            this.$refs['scroll'].wrap.scrollTop = this.$refs['scroll'].wrap.scrollHeight + 100
+
             // 显示重试按钮
             if (data.success === false && !this.reInput) {
                 this.reInput = this.$confirm(`系统初始化失败(${data.info})!`, '温馨提示', {
@@ -529,6 +529,9 @@ export default {
                     this.$router.push({ name: 'Setting' })
                 })
             }
+            setTimeout(() => {
+                this.$refs['scroll'].wrap.scrollTop = this.$refs['scroll'].wrap.scrollHeight + 50
+            }, 500)
         },
         setSysData () {
             modifyPageConfig

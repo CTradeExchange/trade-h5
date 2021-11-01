@@ -222,7 +222,6 @@ import { isEmpty } from '@/utils/util'
 import { useRoute, } from 'vue-router'
 import { computed, ref, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import dayjs from 'dayjs'
 import dateRange from '@plans/components/dateRange'
 
 export default {
@@ -277,7 +276,7 @@ export default {
                 current: 1,
                 size: 20,
                 // executeStartTime: 0,
-                executeEndTime: dayjs(dayjs(new Date()).format('YYYY/MM/DD 23:59:59')).valueOf()
+                executeEndTime: window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 23:59:59')).valueOf()
             },
             tradeType: route.query.tradeType,
             loading: false,
@@ -390,13 +389,13 @@ export default {
                 state.params.executeStartTime = -1
                 state.params.executeEndTime = -1
             } else if (timeType === 1) {
-                state.params.executeStartTime = dayjs(dayjs(new Date()).format('YYYY/MM/DD 00:00:00')).valueOf()
+                state.params.executeStartTime = window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 00:00:00')).valueOf()
             } else if (timeType === 2) {
-                state.params.executeStartTime = dayjs(dayjs().startOf('week')).valueOf()
+                state.params.executeStartTime = window.dayjs(window.dayjs().startOf('week')).valueOf()
             } else if (timeType === 3) {
-                state.params.executeStartTime = dayjs(dayjs().startOf('month')).valueOf()
+                state.params.executeStartTime = window.dayjs(window.dayjs().startOf('month')).valueOf()
             } else if (timeType === 4) {
-                state.params.executeStartTime = dayjs(dayjs().subtract(3, 'month').format('YYYY/MM/DD')).valueOf()
+                state.params.executeStartTime = window.dayjs(window.dayjs().subtract(3, 'month').format('YYYY/MM/DD')).valueOf()
             }
             resetParams()
             queryRecordList()
@@ -441,7 +440,7 @@ export default {
             if (timeList.length > 1) {
                 state.params.executeStartTime = timeList[0]
                 state.params.executeEndTime = timeList[1]
-                state.customDate = dayjs(timeList[0]).format('YYYY/MM/DD HH:mm:ss') + '-' + dayjs(timeList[1]).format('YYYY/MM/DD HH:mm:ss')
+                state.customDate = window.dayjs(timeList[0]).format('YYYY/MM/DD HH:mm:ss') + '-' + window.dayjs(timeList[1]).format('YYYY/MM/DD HH:mm:ss')
             }
             queryRecordList()
         }

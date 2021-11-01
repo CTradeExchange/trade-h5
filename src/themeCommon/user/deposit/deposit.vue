@@ -157,12 +157,11 @@
 import Top from '@/components/top'
 import { onBeforeMount, reactive, computed, toRefs, onBeforeUnmount, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal } from '@/api/user'
+import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal, judgeIsAlreadyDeposit } from '@/api/user'
 import { getListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
 import { isEmpty, sessionGet, getCookie } from '@/utils/util'
-import dayjs from 'dayjs'
 import { mul } from '@/utils/calculation'
 import { useI18n } from 'vue-i18n'
 
@@ -184,8 +183,8 @@ export default {
             amountList: [],
             currencyChecked: '',
             otherAmountVis: false,
-            currIndex: 0,
-            amount: 50,
+            currIndex: '',
+            amount: '',
             typeShow: false,
             PayTypes: [],
             checkedType: '',
@@ -338,8 +337,7 @@ export default {
         }
 
         const openOtherMoney = () => {
-            state.otherAmountVis = !state.otherAmountVis
-            state.amount = ''
+            state.otherAmountVis = true
             state.currIndex = 99
             state.presentAmount = ''
         }
@@ -361,12 +359,11 @@ export default {
                     if (res.data && res.data.length > 0) {
                         if (res.data.length > 0) {
                             res.data.forEach(el => {
-                                if (el.paymentType === 'coinbridge') {
-                                    el.alias = paymentIconList.value[el.paymentCode][state.lang].alias || ''
-                                    el.imgUrl = paymentIconList.value[el.paymentCode][state.lang].imgUrl || ''
-                                } else {
+                                if (paymentIconList.value[el.paymentCode + '_' + el.paymentType]) {
                                     el.alias = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].alias || ''
-                                    el.imgUrl = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].imgUrl || ''
+                                    el.imgUrl = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].imgUrl || require('../../../assets/payment_icon/default.png')
+                                } else {
+                                    el.imgUrl = require('../../../assets/payment_icon/default.png')
                                 }
                             })
                             state.PayTypes = res.data
@@ -410,8 +407,8 @@ export default {
 
         const handleShowTime = () => {
             if (state.PayTypes.length > 0) {
-                const todayStr = dayjs().format('YYYY-MM-DD')
-                const tomorrowStr = dayjs().add(1, 'day')
+                const todayStr = window.dayjs().format('YYYY-MM-DD')
+                const tomorrowStr = window.dayjs().add(1, 'day')
 
                 state.PayTypes.forEach(payItem => {
                     const openTime = payItem.openTime
@@ -422,14 +419,14 @@ export default {
 
                         openTimeList.forEach(item => {
                             state.resultTimeMap[payItem.id] = [].concat(state.resultTimeMap[payItem.id])
-                            const nowDate = dayjs()
+                            const nowDate = window.dayjs()
                             const [start, end] = item.split('-')
-                            const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
-                            const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
+                            const startLocal = window.dayjs.utc(`${todayStr} ${start}`).local()
+                            const endLocal = window.dayjs.utc(`${todayStr} ${end}`).local()
 
                             if ((startLocal.isAfter(todayStr, 'day') && endLocal.isAfter(todayStr, 'day')) || (startLocal.isBefore(tomorrowStr, 'day') && endLocal.isBefore(tomorrowStr, 'day'))) {
                                 state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
-                            } else if (endLocal.isSame(tomorrowStr, 'minute')) {
+                            } else if (endLocal.format('HH:mm') === '00:00') {
                                 state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-24:00')
                             } else {
                                 state.resultTimeMap[payItem.id].push(startLocal.format('HH:mm') + '-23:59')
@@ -467,7 +464,7 @@ export default {
                                 const end = el.split('-')[1]
                                 const nextStart = newTimeList[index + 1] && newTimeList[index + 1].split('-')[0]
                                 const nextEnd = newTimeList[index + 1] && newTimeList[index + 1].split('-')[1]
-                                if (dayjs(`${todayStr} ${end}`).add(1, 'minute').isSame(dayjs(`${todayStr} ${nextStart}`))) {
+                                if (window.dayjs(`${todayStr} ${end}`).add(1, 'minute').isSame(window.dayjs(`${todayStr} ${nextStart}`))) {
                                     finalTimeResult.push(start + '-' + nextEnd)
                                     index++
                                 } else {
@@ -553,7 +550,7 @@ export default {
                 accountId,
                 customerGroupId: customInfo.value.customerGroupId,
                 depositRateSerialNo: state.rateConfig.depositRateSerialNo,
-                paymentCurrency: state.checkedType.paymentCurrency,
+                paymentCurrency: state.checkedType.paymentCurrency === 'USDT' ? 'USDT' : state.currencyChecked,
                 accountCurrency: state.rateConfig.accountCurrency,
                 exchangeRate: state.rateConfig.exchangeRate,
                 paymentChannelCode: state.checkedType.paymentCode,
@@ -593,11 +590,11 @@ export default {
         const computeTime = (val) => {
             if (!isEmpty(val)) {
                 // 0 点时的时间戳
-                const time = (dayjs(new Date(new Date(new Date().toLocaleDateString()).getTime()))).valueOf()
+                const time = (window.dayjs(new Date(new Date(new Date().toLocaleDateString()).getTime()))).valueOf()
                 if (Number(val) === 1440) {
                     return '24:00'
                 } else {
-                    return dayjs(time + val * 60 * 1000).format('HH:mm')
+                    return window.dayjs(time + val * 60 * 1000).format('HH:mm')
                 }
             }
         }
@@ -691,31 +688,38 @@ export default {
 
         // 设置存款数据
         const setAmountList = () => {
-            const arr = []
-            const isDeposit = true
-            let data = {}
-            // 已存款
-            if (isDeposit) {
-                data = depositData.value.isAlready ? depositData.value['already'] : depositData.value['default']
-            } else {
-                // 未存款
-                data = depositData.value.isNot ? depositData.value['not'] : depositData.value['default']
-            }
-            // 处理存款数据
-            for (const key in data) {
-                const item = data[key]
-                if (item.amount) {
-                    arr.push({
-                        amount: item.amount,
-                        describe: item[state.lang]?.describe
-                    })
+            judgeIsAlreadyDeposit({
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo,
+                accountId
+            }).then(res => {
+                const arr = []
+                const isDeposit = res.data
+                let data = {}
+                // 已存款
+                if (isDeposit) {
+                    data = depositData.value.isAlready ? depositData.value['already'] : depositData.value['default']
+                } else {
+                    // 未存款
+                    data = depositData.value.isNot ? depositData.value['not'] : depositData.value['default']
                 }
-            }
-            // 没有存款数据默认选择其它金额
-            if (arr.length === 0) {
-                state.currIndex = 99
-            }
-            state.amountList = arr
+                // 处理存款数据
+                for (const key in data) {
+                    const item = data[key]
+                    if (item.amount) {
+                        arr.push({
+                            amount: item.amount,
+                            describe: item[state.lang]?.describe
+                        })
+                    }
+                }
+                // 没有存款数据默认选择其它金额
+                if (arr.length === 0) {
+                    state.currIndex = 99
+                    state.otherAmountVis = true
+                }
+                state.amountList = arr
+            })
         }
 
         onBeforeUnmount(() => {

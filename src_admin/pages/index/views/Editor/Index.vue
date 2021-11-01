@@ -51,9 +51,11 @@
 
         <div class='center-board'>
             <div class='row-btns'>
-                <h4 class='tips'>
-                    当前编辑页面语言: <strong> {{ lang }}</strong>
-                </h4>
+                <div class='tips'>
+                    页面：<strong> {{ title }}</strong>
+                    &nbsp;&nbsp;
+                    语言: <strong> {{ lang }}</strong>
+                </div>
                 <div class='left'>
                     <el-button
                         icon='el-icon-reading'
@@ -80,7 +82,7 @@
                         type='text'
                         @click='handleModifyPageConfig'
                     >
-                        保存
+                        保存配置
                     </el-button>
                     <el-button
                         class='delete-btn'
@@ -95,7 +97,7 @@
                         type='text'
                         @click='showPublish = true'
                     >
-                        发布
+                        发布线上
                     </el-button>
                 </div>
             </div>
@@ -195,7 +197,8 @@ export default {
             previewApp: {},
             getLoading: false,
             pageId: getQueryString('id'),
-            drag: false
+            drag: false,
+            submitType: 0
         })
 
         const handleGetPageConfig = () => {
@@ -405,10 +408,13 @@ export default {
                             return
                         }
                         resolve(true)
-                        ElMessage.success({
-                            message: '保存成功',
-                            type: 'success'
-                        })
+                        if (state.submitType === 0) {
+                            ElMessage.success({
+                                message: '保存成功',
+                                type: 'success'
+                            })
+                        }
+                        state.submitType = 0
                     })
                     .catch(error => {
                         resolve(false)
@@ -540,6 +546,7 @@ export default {
 
         const handlePublish = async () => {
             state.publishLoading = true
+            state.submitType = 1
             const modifyData = await handleModifyPageConfig()
             if (!modifyData) {
                 return
@@ -650,6 +657,7 @@ export default {
             elementAdd,
             empty,
             lang,
+            title,
             addComponent,
             ...toRefs(state)
         }

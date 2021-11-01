@@ -36,6 +36,7 @@ export function createChart (...args) {
     extension = {
         theme: 'Light' // 主题
         fullScreen: false // 全屏功能（右上角缩放按钮、横屏监听等）
+        orientation: 'portrait' // 非必填，默认值portrait，可选值: 'portrait' ｜ 'landscape' (竖屏｜横屏)
     }
  */
 
@@ -74,7 +75,7 @@ class Chart {
         this._indicatorsEntity = []
 
         // 默认竖屏
-        this._orientation = 'portrait'
+        this._orientation = extension.orientation || 'portrait'
         // 价格线实例
         this._linesMap = {}
         // 持仓线实例

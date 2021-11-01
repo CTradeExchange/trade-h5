@@ -7,10 +7,10 @@ import VantBase from './vantBase'
 import MixinGlobal from './mixin'
 import { Dialog } from 'vant'
 import Socket, { MsgSocket } from '@/plugins/socket/socket'
-import FindCustomerInfo from '@plans/plugins/findCustomerInfo'
+import FindCustomerInfo from '@planspc/plugins/findCustomerInfo'
 import Loading from '@/components/loading'
-import PageComp from '@plans/components/PageComp'
-import LayoutTop from '@plans/layout/top'
+// import PageComp from '@planspc/components/PageComp'
+import LayoutTop from '@planspc/layout/centerViewTop'
 import { setRootVariable } from './colorVariables'
 import { setRouter } from '@/utils/request'
 import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet, getCookie } from '@/utils/util'
@@ -18,8 +18,25 @@ import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
 import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
 import { getPreDemoAccountParams } from './officialDemoAccount.js'
-// import ElementPlus from 'element-plus'
-// import 'element-plus/lib/theme-chalk/index.css'
+
+// element-plus
+import 'element-plus/lib/theme-chalk/index.css'
+import {
+    ElLoading,
+    ElDialog,
+    ElMessageBox,
+    ElMessage,
+    ElCarousel,
+    ElCarouselItem,
+    ElDropdown,
+    ElDropdownMenu,
+    ElDropdownItem,
+    ElTimeline,
+    ElPopover,
+    ElTimelineItem,
+    ElEmpty
+} from 'element-plus'
+
 skywalkingRegister(router)
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 
@@ -28,13 +45,14 @@ BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 // const Vconsole = new VConsole()
 
 const app = createApp(App)
+app.use(ElLoading).use(ElDialog).use(ElMessageBox).use(ElMessage).use(ElCarousel).use(ElCarouselItem).use(ElDropdown)
+    .use(ElDropdownMenu).use(ElDropdownItem).use(ElTimeline).use(ElTimelineItem).use(ElEmpty).use(ElPopover)
 app.use(preventReClick)
 app.use(VantBase).use(I18n).use(store).use(router)
-// app.use(ElementPlus).use(store).use(router)
 app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })
 app.component('Loading', Loading)
 app.component('LayoutTop', LayoutTop)
-app.component('PageComp', PageComp)
+// app.component('PageComp', PageComp)
 app.mixin(MixinGlobal)
 
 app.config.errorHandler = (err, vm, info) => {

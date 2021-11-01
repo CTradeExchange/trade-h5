@@ -34,7 +34,7 @@ export default {
                     name: 'label',
                     label: '文字',
                     type: 'Input',
-                    default: ''
+                    default: '默认文字'
                 },
                 ...img
             ]

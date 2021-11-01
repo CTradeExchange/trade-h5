@@ -5,31 +5,39 @@
             <loginTypeBar v-model='loginType' />
             <form class='loginForm'>
                 <h2 class='loginTitle'>
-                    账号密码登录
+                    {{ loginType==='password' ? $t("signIn.loginByPwd") : $t("signIn.loginByCode") }}
                 </h2>
                 <div class='field'>
-                    <compInput v-model.trim='loginName' block :placeholder="$t('login.loginNamePlaceholder')" />
+                    <compInput v-model.trim='loginName' block :placeholder="$t('signIn.loginNamePlaceholder')" />
                 </div>
                 <div v-if="loginType==='password'" class='field'>
-                    <compInput v-model='pwd' block :placeholder="$t('login.pwd')" pwd type='password' />
+                    <compInput v-model='pwd' block :placeholder="$t('signIn.pwd')" pwd type='password' />
                 </div>
                 <div v-else class='field'>
-                    <compInput v-model.trim='checkCode' block :placeholder="$t('login.verifyCode')">
-                        <van-button size='small' type='primary'>
-                            获取验证码
+                    <compInput v-model.trim='checkCode' block :placeholder="$t('signIn.verifyCode')">
+                        <van-button
+                            class='verifyCodeBtn'
+                            :disabled='!isNaN(verifyCodeBtnText)'
+                            :loading='sendVerifyLoading'
+                            plain
+                            size='small'
+                            type='primary'
+                            @click='sendVerifyHandler'
+                        >
+                            {{ verifyCodeBtnText }}
                         </van-button>
                     </compInput>
                 </div>
                 <van-button block class='loginBtn' :disabled='loading' type='primary' @click='loginHandle'>
-                    {{ $t('login.loginBtn') }}
+                    {{ $t('signIn.loginBtn') }}
                 </van-button>
             </form>
             <div class='linkBar'>
                 <router-link to='/register'>
-                    注册
+                    {{ $t('signIn.register') }}
                 </router-link>
                 <router-link to='/forgot'>
-                    忘记密码
+                    {{ $t('signIn.forgot') }}
                 </router-link>
             </div>
         </div>
@@ -50,16 +58,12 @@ import topNav from '@planspc/layout/topNav'
 import loginTypeBar from './loginTypeBar'
 import compInput from '@planspc/components/form/input'
 import LoginPwdDialog from './loginPwdDialog.vue'
-import Schema from 'async-validator'
-import md5 from 'js-md5'
 import { reactive, toRefs } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import { getDevice, localGet, localSet, getArrayObj } from '@/utils/util'
-import MsgSocket from '@/plugins/socket/msgSocketEvent'
-import RuleFn from './rule'
-import { Toast, Dialog } from 'vant'
+import { localGet } from '@/utils/util'
+import { Dialog } from 'vant'
 import LoginHook from './loginHook'
 export default {
     name: 'Login',
@@ -77,6 +81,7 @@ export default {
             loading: false,
             pwdVisible: false,
             loginPwdPop: false,
+            sendVerifyLoading: false,
             loginName: '',
             pwd: '',
             checkCode: '',
@@ -84,7 +89,7 @@ export default {
             loginType: 'password', // password 密码登录   checkCode 验证码登录
         })
 
-        const { loginSubmit, loginToPath } = LoginHook()
+        const { loginSubmit, loginToPath, verifyCodeBtnText, sendVerifyCode } = LoginHook()
 
         // 点击登录
         const loginHandle = () => {
@@ -158,9 +163,28 @@ export default {
                 loginToPath()
             }
         }
+
+        // 发送验证码
+        const sendVerifyHandler = () => {
+            const param = {
+                loginName: state.loginName,
+            }
+            state.sendVerifyLoading = false
+            sendVerifyCode(param).then(res => {
+                console.log(res)
+                if (res.check()) {
+                    state.token = res.data.token
+                }
+            }).finally(() => {
+                state.sendVerifyLoading = false
+            })
+        }
+
         return {
             ...toRefs(state),
             loginHandle,
+            verifyCodeBtnText,
+            sendVerifyHandler,
         }
     }
 }
@@ -201,10 +225,20 @@ export default {
         font-size: 20px;
         margin-top: 40px;
     }
+    .verifyCodeBtn{
+        width: 90px;
+        margin-right: 8px;
+        font-size: 14px;
+        border: 0;
+        background: none;
+    }
 }
 .linkBar{
     margin-top: 10px;
     display: flex;
     justify-content: space-between;
+    a{
+        color: var(--color)
+    }
 }
 </style>

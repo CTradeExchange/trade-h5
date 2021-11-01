@@ -114,9 +114,13 @@
     <!-- 取款时间弹窗 -->
     <van-dialog v-model:show='timeShow' :title="$t('withdraw.hint')">
         <div class='time-wrap'>
-            <h4>{{ $t('withdraw.timeHint') }}</h4><br />
+            <h4>
+                {{ $t('withdraw.timeHint') }}
+            </h4><br />
             <div v-if='timeList.length > 0' class='flex'>
-                <p>{{ $t('withdraw.timeName') }}：</p>
+                <p v-if='timeList.length > 0'>
+                    {{ $t('withdraw.timeName') }}：
+                </p>
                 <div class='time-text'>
                     <p v-for='(item,index) in timeList' :key='index'>
                         {{ item.weekDay }}：{{ item.openTimeLocal.toString() }}
@@ -192,9 +196,6 @@ import {
 // 工具方法
 import { isEmpty, debounce } from '@/utils/util'
 // 插件
-import dayjs from 'dayjs'
-// import utc from 'dayjs/plugin/utc'
-// dayjs.extend(utc)
 
 export default {
 
@@ -363,11 +364,17 @@ export default {
 
         // 时区转换
         const transferUtc = () => {
-            const todayStr = dayjs().format('YYYY-MM-DD')
+            const todayStr = window.dayjs().format('YYYY-MM-DD')
             state.withdrawConfig.withdrawTimeConfigList.forEach(el => {
                 el.openTimeLocal = []
-                state.withdrawTimeConfigMap[el.weekDay] = el
+                state.withdrawTimeConfigMap[el.weekDay] = {
+                    weekDay: el.weekDay,
+                    openTime: el.openTime,
+                    openTimeLocal: []
+                }
             })
+
+            // 处理跨天逻辑
             for (const key in state.withdrawTimeConfigMap) {
                 if (Object.hasOwnProperty.call(state.withdrawTimeConfigMap, key)) {
                     const el = state.withdrawTimeConfigMap[key]
@@ -376,8 +383,8 @@ export default {
                         if (timeRange.length > 0) {
                             timeRange.forEach(timeRangeItem => {
                                 const [start, end] = timeRangeItem.split('-')
-                                const startLocal = dayjs.utc(`${todayStr} ${start}`).local()
-                                const endLocal = dayjs.utc(`${todayStr} ${end}`).local()
+                                const startLocal = window.dayjs.utc(`${todayStr} ${start}`).local()
+                                const endLocal = window.dayjs.utc(`${todayStr} ${end}`).local()
 
                                 // 第二天
                                 const weekDay = key < 7 ? Number(key) + 1 : 1
@@ -390,16 +397,41 @@ export default {
                                     }
                                     state.withdrawTimeConfigMap[weekDay] = elNext
                                 }
+
                                 if (startLocal.isAfter(todayStr, 'day')) {
                                     elNext.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                                } else if (endLocal.format('HH:mm') === '00:00') {
+                                    el.openTimeLocal.push(startLocal.format('HH:mm') + '-24:00')
                                 } else if (endLocal.isAfter(todayStr, 'day')) {
-                                    elNext.openTimeLocal.push('00:00-' + endLocal.format('HH:mm'))
+                                    elNext.openTimeLocal.unshift('00:00-' + endLocal.format('HH:mm'))
                                     el.openTimeLocal.push(startLocal.format('HH:mm') + '-23:59')
                                 } else if (el.openTime !== '00:00-00:00' || el.openTime !== '') {
                                     el.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
                                 }
                             })
                         }
+                    }
+                }
+            }
+
+            // 处理时间合并
+            for (const key in state.withdrawTimeConfigMap) {
+                if (Object.hasOwnProperty.call(state.withdrawTimeConfigMap, key)) {
+                    const el = state.withdrawTimeConfigMap[key]
+                    if (Array.isArray(el.openTimeLocal)) {
+                        el.openTimeLocal.forEach((time, index) => {
+                            const start = el.openTimeLocal[0].split('-')[0]
+
+                            const end = time.split('-')[1]
+                            const nextStart = el.openTimeLocal[index + 1] && el.openTimeLocal[index + 1].split('-')[0]
+                            const nextEnd = el.openTimeLocal[index + 1] && el.openTimeLocal[index + 1].split('-')[1]
+
+                            if (window.dayjs(`${todayStr} ${end}`).add(1, 'minute').isSame(window.dayjs(`${todayStr} ${nextStart}`)) ||
+                                end === nextStart
+                            ) {
+                                el.openTimeLocal = start + '-' + nextEnd
+                            }
+                        })
                     }
                 }
             }

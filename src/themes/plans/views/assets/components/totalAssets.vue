@@ -23,19 +23,19 @@
                 <p class='muted'>
                     {{ $t('assets.netAssets') }}
                 </p>
-                <p>{{ assetsInfo.totalNetAssets }}</p>
+                <p>{{ assetsInfo?.totalNetAssets }}</p>
             </li>
             <li class='item'>
                 <p class='muted'>
                     {{ $t('assets.totalLoan') }}
                 </p>
-                <p>{{ assetsInfo.totalLiabilitiesPrincipal }}</p>
+                <p>{{ assetsInfo?.totalLiabilitiesPrincipal }}</p>
             </li>
             <li class='item'>
                 <p class='muted'>
                     {{ $t('trade.swap_2') }}
                 </p>
-                <p>{{ assetsInfo.totalInterest }}</p>
+                <p>{{ assetsInfo?.totalInterest }}</p>
             </li>
         </ul>
 
