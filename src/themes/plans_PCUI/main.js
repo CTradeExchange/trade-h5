@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import '@/utils/dayjs'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -20,7 +21,8 @@ import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.j
 import { getPreDemoAccountParams } from './officialDemoAccount.js'
 
 // element-plus
-import 'element-plus/lib/theme-chalk/index.css'
+// import 'element-plus/lib/theme-chalk/index.css'
+import 'element-plus/dist/index.css'
 import {
     ElLoading,
     ElDialog,

@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    <div class='priceMultiGear buy'>
+    <div v-if='ask_deep.length>0' class='priceMultiGear buy'>
         <p v-for='(item, index) in ask_deep' :key='index' class='item'>
             <span class='hd'>
                 {{ item.price_ask }}
@@ -36,6 +36,7 @@
             <span v-if='item.width' class='volunmePercent buy' :style="{ width:item.width+'%' }"></span>
         </p>
     </div>
+    <van-empty v-else :description='$t("common.noData")' image='/images/empty.png' />
     <div class='curPrice' :class='[product.cur_color]'>
         {{ lastPrice }}
     </div>
@@ -80,34 +81,50 @@ export default {
         })
 
         const ask_deep = computed(() => {
-            const list = handicapResult.value?.ask_deep?.slice(0)
-            return list?.slice(0, 5) || []
+            debugger
+            const askResult = handicapResult.value?.ask_deep?.slice(0, 5) || []
+            if (askResult.length < 5) {
+                return fillPosition(askResult, 1)
+            } else {
+                return askResult
+            }
         })
 
         const bid_deep = computed(() => {
             const bidREsult = handicapResult.value.bid_deep.slice(0, 5)
             if (bidREsult.length < 5) {
-                return fillPosition(bidREsult)
+                return fillPosition(bidREsult, 2)
             } else {
                 return bidREsult
             }
         })
 
         // 报价不够5档，补空位
-        const fillPosition = (data) => {
+        const fillPosition = (data, type) => {
+            const keyLabel = {
+                priceLabel: {
+                    1: 'price_ask',
+                    2: 'price_bid'
+                },
+                volume: {
+                    1: 'volume_ask',
+                    2: 'volume_bid'
+                }
+            }
             const result = data
             if (Array.isArray(result) && result.length > 0) {
                 let fillLength = 5 - data.length
                 while (fillLength > 0) {
                     result.push({
-                        price_bid: '--',
-                        volume_bid: '--',
+                        [keyLabel.priceLabel[type]]: '--',
+                        [keyLabel.volume[type]]: '--',
                         with: 0,
                         unitNum: 0
                     })
                     fillLength--
                 }
             }
+
             return result
         }
 
@@ -165,12 +182,12 @@ export default {
     display: flex;
     padding-right: 16px;
     justify-content: space-between;
-    margin-top: 10px;
+    margin-top: 12px;
+    margin-bottom: 5px;
     color: var(--placeholdColor);
 }
 .priceMultiGear {
-
-    margin-top: 10px;
+    margin-top: 15px;
     font-size: 14px;
     line-height: 20px;
     height: 114px;
@@ -183,7 +200,7 @@ export default {
         color: var(--fallColor);
     }
     .item {
-        line-height: 25px;
+        line-height: 26px;
         position: relative;
         display: flex;
         justify-content: space-between;
@@ -203,23 +220,24 @@ export default {
         }
         .ft {
             color: var(--normalColor);
+            min-width: 10%;
         }
     }
 }
 .curPrice {
-    height: rem(34px);
-    margin-top: rem(20px);
+    height: 17px;
+    margin-top: 10px;
     font-size: 18px;
-    line-height: rem(34px);
 }
 .selectBtn {
+    border-radius: 4px;
+    cursor: pointer;
     position: relative;
     height: 24px;
     padding: 0 30px 0 10px;
     color: var(--minorColor);
     line-height: 24px;
     background: var(--assistColor);
-    border-radius: rem(4px);
     width: 72px;
 }
 .icon_arrow {

@@ -1,11 +1,11 @@
 <template>
     <van-popup
         v-model:show='showList'
-        :close-on-click-overlay='false'
+        :close-on-click-overlay='true'
         closeable
         :get-container='getContainer'
         round
-        :style="{ width: '50%' }"
+        :style="{ width: '40%' }"
         @click-close-icon='onClose'
         @closed='closed'
     >
@@ -21,7 +21,7 @@
                     class='item of-1px'
                     :class="{ 'active': mainStudy === item.name }"
                     :style="[{ 'font-size': item.label.length >=6 ? '0.28rem': '' } ]"
-                    @touchend='onClick("main", item.name)'
+                    @click='onClick("main", item.name)'
                 >
                     {{ item.label }}
                 </span>
@@ -37,7 +37,7 @@
                     class='item of-1px'
                     :class="{ 'active': subStudy === item.name }"
                     :style="[{ 'font-size': item.label.length >6 ? '0.28rem': '' } ]"
-                    @touchend='onClick("sub", item.name)'
+                    @click='onClick("sub", item.name)'
                 >
                     {{ item.label }}
                 </span>
@@ -153,6 +153,8 @@ export default {
             margin-bottom: rem(20px);
             padding: 0 rem(25px);
             .item {
+                cursor: pointer;
+                padding: 10px 10px;
                 flex: 0 0 rem(112px);
                 box-sizing: border-box;
                 margin: rem(10px) rem(5px);
@@ -171,13 +173,15 @@ export default {
         }
         .submit {
             box-sizing: border-box;
-            width: 100%;
-            height: rem(70px);
-            margin-top: rem(30px);
+            width: 90%;
+            height: 35px;
             color: #FFF;
-            line-height: rem(70px);
+            line-height: 35px;
             text-align: center;
             background: var(--primary);
+            margin: 10px auto;
+            border-radius: 10px;
+            cursor: pointer;
         }
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <p class='title'>
-        成交
+        {{ $t('trade.deal') }}
     </p>
     <van-empty v-if='dealList.length === 0' :description='$t("common.noData")' image='/images/empty.png' />
     <div v-else>

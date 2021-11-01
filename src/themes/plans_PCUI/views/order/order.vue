@@ -4,12 +4,12 @@
             <div class='quote-wrap'>
                 {{ $t('trade.deal') }}
             </div>
-            <div class='chart-wrap'>
+            <div class='middle-wrap'>
                 <div class='chart-content'>
                     <chart />
                 </div>
                 <div class='trade-content'>
-                    <trade />
+                    <!-- <trade /> -->
                 </div>
             </div>
             <div v-if='Number(tradeType) === 5' class='right-wrap'>
@@ -31,11 +31,11 @@
 
 <script>
 import { reactive, toRefs, computed } from 'vue'
-import chart from './components/chart.vue'
+import chart from './pages/chart.vue'
 import { useRouter, useRoute } from 'vue-router'
-import handicap from './components/handicap.vue'
-import dealList from './components/dealList.vue'
-import trade from './components/trade.vue'
+import handicap from './pages/handicap.vue'
+import dealList from './pages/dealList.vue'
+import trade from './pages/trade.vue'
 
 import { useStore } from 'vuex'
 export default {
@@ -82,7 +82,7 @@ export default {
             width: 360px;
         }
 
-        .chart-wrap {
+        .middle-wrap {
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -94,6 +94,9 @@ export default {
             }
             .chart-content{
                 //padding: 10px;
+            }
+            .trade-content{
+                padding: 16px 16px 0 16px;
             }
         }
 

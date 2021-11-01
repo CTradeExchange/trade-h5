@@ -180,7 +180,7 @@ import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { isEmpty, localSet, localGet } from '@/utils/util'
-import KIcon from './icons/kIcon.vue'
+import KIcon from './components/icons/kIcon.vue'
 import StudyList from './studyList.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 export default {
@@ -571,7 +571,8 @@ export default {
                     ],
                     extension: {
                         theme: invertColor === 'light' ? 'Light' : 'Dark', // 主题 "Light" | "Dark"
-                        fullScreen: false // 全屏功能（右上角缩放按钮、横屏监听等）
+                        fullScreen: false, // 全屏功能（右上角缩放按钮、横屏监听等）,
+                        orientation: 'portrait'
                     }
                 })
             } else {
@@ -604,7 +605,8 @@ export default {
                     ],
                     extension: {
                         theme: invertColor === 'light' ? 'Light' : 'Dark', // 主题 "Light" | "Dark"
-                        fullScreen: true // 全屏功能（右上角缩放按钮、横屏监听等）
+                        fullScreen: true, // 全屏功能（右上角缩放按钮、横屏监听等）
+                        orientation: 'landscape'
                     }
                 })
             }
