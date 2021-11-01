@@ -9,11 +9,11 @@
         </template>
         <div class='settingDrapdown'>
             <ul class='list'>
-                <li class='item'>
-                    {{ $t('setting.bindEmail') }}
+                <li v-if='customInfo' class='item'>
+                    {{ customInfo.phone ? $t("setting.replacePhone") : $t('setting.bindEmail') }}
                 </li>
-                <li class='item'>
-                    {{ $t('setting.bindPhone') }}
+                <li v-if='customInfo' class='item'>
+                    {{ customInfo.email ? $t("setting.replaceEmail") : $t('setting.bindEmail') }}
                 </li>
                 <li class='item flexBetween'>
                     <span>{{ $t('setting.chartColor') }}</span>
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { reactive, ref, toRefs } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { localGet, localSet } from '@/utils/util'
@@ -47,6 +47,7 @@ export default {
     setup () {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
+        const customInfo = computed(() => store.state._user.customerInfo)
         const chartColorAction = [
             { val: '1', name: t('common.redDown') },
             { val: '2', name: t('common.redUp') },
@@ -77,6 +78,7 @@ export default {
             })
         }
         return {
+            customInfo,
             chartColorActive,
             chartColorAction,
             changeChartColor,
