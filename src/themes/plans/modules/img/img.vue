@@ -38,14 +38,6 @@ export default {
     a {
         display: block;
     }
-    &::before {
-        position: absolute;
-        width: 5px;
-        height: 100%;
-        background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
-        transform: rotate(30deg) scaleY(2);
-        content: '';
-    }
     .img {
         display: block;
         width: 100%;

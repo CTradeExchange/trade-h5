@@ -10,21 +10,20 @@
                 <div class='item'>
                     <router-link to='/quote'>
                         <span class='link'>
-                            行情
+                            {{ $t('header.quote') }}
                         </span>
                     </router-link>
                 </div>
                 <div class='item'>
                     <el-dropdown>
                         <span class='link'>
-                            交易<i class='el-icon-caret-bottom'></i>
+                            {{ $t('header.trade') }}<i class='el-icon-caret-bottom'></i>
                         </span>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item>现货交易</el-dropdown-item>
-                                <el-dropdown-item>杠杆交易</el-dropdown-item>
-                                <el-dropdown-item>合约全仓</el-dropdown-item>
-                                <el-dropdown-item>合约逐仓</el-dropdown-item>
+                                <el-dropdown-item v-for='item in plansList' :key='item.id'>
+                                    {{ item.name }}
+                                </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
@@ -33,53 +32,54 @@
         </div>
         <div class='nav-right'>
             <!-- 未登录 -->
-            <div class='handle-not'>
-                <router-link class='login' to='/'>
-                    登录
+            <div v-if="userAccountType==='G'" class='handle-not'>
+                <router-link class='login' to='/login'>
+                    {{ $t('c.login') }}
                 </router-link>
                 <router-link class='register' to='/'>
-                    注册
+                    {{ $t('c.register') }}
                 </router-link>
             </div>
             <!-- 已登录 -->
-            <div v-if='false' class='handle-have'>
+            <div v-else class='handle-have'>
                 <div class='item'>
-                    <el-dropdown>
-                        <div class='user'>
-                            <i class='head el-icon-s-custom'></i>
-                            <span class='no'>
-                                565666
-                            </span>
-                        </div>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item>退出登录</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
+                    <div class='user'>
+                        <i class='head el-icon-s-custom'></i>
+                        <span class='no'>
+                            {{ customerInfo.customerNo }}
+                        </span>
+                    </div>
                 </div>
                 <div class='item'>
-                    <i class='icon el-icon-chat-dot-round' title='资产'></i>
+                    <i class='icon icon_zichan' :title="$t('header.assets')"></i>
                 </div>
                 <div class='item'>
-                    <i class='icon el-icon-chat-dot-round' title='个人消息'></i>
+                    <i class='icon icon_xiaoxizhongxin1' :title="$t('header.information')"></i>
                 </div>
                 <div class='item'>
-                    <i class='icon el-icon-chat-dot-round' title='设置'></i>
+                    <SettingIcon />
                 </div>
                 <div class='line'></div>
             </div>
             <!-- 操作功能 -->
             <div class='handle-feature'>
                 <div class='item'>
-                    <i class='icon el-icon-service' title='客服'></i>
-                </div>
-                <div class='item'>
-                    <i class='icon el-icon-service' title='下载'></i>
+                    <i class='icon icon_kefu' :title="$t('header.service')"></i>
                 </div>
                 <div class='item'>
                     <el-dropdown>
-                        <i class='icon el-icon-service' title='语言'></i>
+                        <i class='icon icon_xiazai' :title="$t('header.download')"></i>
+                        <template #dropdown>
+                            <div class='download-dialog'>
+                                <img src='@planspc/images/home/download-code.png' />
+                                <p>{{ $t('header.downloadTip') }}</p>
+                            </div>
+                        </template>
+                    </el-dropdown>
+                </div>
+                <div class='item'>
+                    <el-dropdown>
+                        <i class='icon icon_yuyan' :title="$t('header.language')"></i>
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item>简体中文</el-dropdown-item>
@@ -92,7 +92,7 @@
                 </div>
                 <div class='item'>
                     <el-dropdown>
-                        <i class='icon el-icon-service' title='主题'></i>
+                        <i class='icon icon_zhuanhuanchengbaitian' :title="$t('header.theme')"></i>
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item>白天</el-dropdown-item>
@@ -107,8 +107,33 @@
 </template>
 
 <script>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute, useRouter } from 'vue-router'
+import SettingIcon from './components/settingIcon'
 export default {
+    components: {
+        SettingIcon,
+    },
+    setup () {
+        const route = useRoute()
+        const router = useRouter()
+        const store = useStore()
+        // 玩法列表
+        const plansList = computed(() => store.state._base.plans)
+        const userAccountType = computed(() => store.getters['_user/userAccountType'])
+        const customerInfo = computed(() => store.state._user.customerInfo)
 
+        // 路由跳转
+        const handRoutTo = (path) => router.push(route.path + path)
+
+        return {
+            plansList,
+            userAccountType,
+            customerInfo,
+            handRoutTo,
+        }
+    }
 }
 </script>
 
@@ -192,13 +217,28 @@ export default {
                     margin-right: 0;
                 }
                 .user {
+                    display: flex;
+                    align-items: center;
                     color: #D6DAE1;
                     cursor: pointer;
                     .head {
-                        margin-right: 2px;
-                        font-size: 20px;
+                        display: inline-flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 28px;
+                        height: 28px;
+                        margin-right: 8px;
+                        background: #91B6EE;
+                        border-radius: 50%;
+                        overflow: hidden;
+                        i {
+                            margin-top: 10px;
+                            font-size: 24px;
+                            color: #fff;
+                        }
                     }
                     .no {
+                        margin-top: 4px;
                         font-size: 16px;
                     }
                 }
@@ -231,6 +271,23 @@ export default {
                 }
             }
         }
+    }
+}
+
+.download-dialog {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 15px;
+    img {
+        width: 88px;
+        height: 88px;
+    }
+    p {
+        width: 88px;
+        line-height: 20px;
+        font-size: 14px;
+        color: var(--color);
     }
 }
 

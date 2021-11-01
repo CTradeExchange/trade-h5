@@ -470,7 +470,8 @@
     "repaymentCurrency": "请选择还款币种",
     "pendingAmount": "委托额",
     "trustPrice": "委托价",
-    "pendingUnit": "委托量"
+    "pendingUnit": "委托量",
+    "favorites": "自选"
   },
   "bizType": {
     "2": "市价平仓",
@@ -613,6 +614,5 @@
     "focusNews":"要闻",
     "newsFlash":"7x24",
     "calendar":"财经日历"
-    
   }
 }

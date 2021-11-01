@@ -1,13 +1,15 @@
 <template>
     <div v-if='product' class='handicap-header'>
-        <div v-if='showField' class='my'>
+        <!-- <div v-if='showField' class='my'>
             {{ $t('trade.my') }}
-        </div>
+        </div> -->
         <div class='alignLeft ' :class="!showField ? 'pl10' : ''">
-            {{ $t('trade.volumes') }}({{ product.baseCurrency }})
+            {{ $t('trade.volumes') }}
+            <!-- ({{ product.baseCurrency }}) -->
         </div>
         <div class='padding' :class="showField ? 'alignRight' : 'alignCenter'">
-            {{ $t('trade.priceLabel') }}({{ product.profitCurrency }})
+            {{ $t('trade.priceLabel') }}
+            <!-- ({{ product.profitCurrency }}) -->
         </div>
         <!-- v-if='[3, 5, 9].indexOf(Number(tradeType)) > -1' -->
         <div class='depth alignLeft'>
@@ -30,11 +32,12 @@
             {{ $t('trade.priceLabel') }}({{ product.profitCurrency }})
         </div> -->
         <div class='alignRight' :class="!showField ? 'pr10' : ''">
-            {{ $t('trade.volumes') }}({{ product.baseCurrency }})
+            {{ $t('trade.volumes') }}
+            <!-- ({{ product.baseCurrency }}) -->
         </div>
-        <div v-if='showField' class='my'>
+        <!-- <div v-if='showField' class='my'>
             {{ $t('trade.my') }}
-        </div>
+        </div> -->
     </div>
     ****{{ handicapResult }}****
     <van-empty v-if='!ask_deep' :description='$t("common.noData")' image='/images/empty.png' />
@@ -43,9 +46,9 @@
         <div class='sell-wrap'>
             <div v-for='(item,index) in ask_deep' :key='index' class='item'>
                 &nbsp;&nbsp;&nbsp;
-                <span v-if='showField' class='label fallColor alignLeft'>
+                <!-- <span v-if='showField' class='label fallColor alignLeft'>
                     {{ item.unitNum === 0 ? '': item.unitNum }}
-                </span>
+                </span> -->
                 <span class='quantity alignLeft'>
                     {{ item.volume_ask }}
                 </span>
@@ -67,9 +70,9 @@
                 <span class='quantity alignRight'>
                     {{ item.volume_bid }}
                 </span>
-                <span v-if='showField' class='label alignRight riseColor'>
+                <!-- <span v-if='showField' class='label alignRight riseColor'>
                     {{ item.unitNum === 0 ? '': item.unitNum }}
-                </span>
+                </span> -->
                 &nbsp;&nbsp;&nbsp;
                 <span
                     class='histogram buy-histogram'
@@ -205,6 +208,7 @@ export default {
     display: flex;
     align-items: center;
     height: rem(80px);
+    padding: 0 rem(20px);
     line-height: rem(80px);
     >div {
         display: inline-block;

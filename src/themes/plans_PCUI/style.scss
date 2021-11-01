@@ -23,6 +23,7 @@ body,
 }
 body {
     font-size: 14px;
+    line-height: 1.5;
     /* no */
     // font-family: 'PingFang SC', '-apple-system', 'Heiti SC', 'Helvetica', 'Helvetica Neue', 'Droid Sans Fallback', 'Droid Sans';
     //font-family: 'Trebuchet MS', 'roboto', 'ubuntu', 'sans-serif';
@@ -36,34 +37,34 @@ a {
     color: var(--primary);
 }
 .riseColor {
-    color: var(--riseColor);
+    color: var(--riseColor) !important;
 }
 .riseColorBg {
-    color: var(--color);
-    background-color: var(--riseColor);
+    color: var(--color) !important;
+    background-color: var(--riseColor) !important;
 }
 .fallColor {
-    color: var(--fallColor);
+    color: var(--fallColor) !important;
 }
 .fallColorBg {
-    color: var(--color);
-    background-color: var(--fallColor);
+    color: var(--color) !important;
+    background-color: var(--fallColor) !important;
 }
 .grayColorBg {
-    color: var(--color);
-    background-color: var(--minorColor);
+    color: var(--color) !important;
+    background-color: var(--minorColor) !important;
 }
 .grayColor {
-    color: var(--minorColor);
+    color: var(--minorColor) !important;
 }
 .buyColor {
-    color: var(--riseColor);
+    color: var(--riseColor) !important;
 }
 .sellColor {
-    color: var(--fallColor);
+    color: var(--fallColor) !important;
 }
 .successColor {
-    color: var(--success);
+    color: var(--success) !important;
 }
 [class*='icon_'] {
     font-family: iconfont;
@@ -654,4 +655,32 @@ body {
 	height: 50px;
 	background-color: #9f9f9f;
 	-webkit-border-radius: 4px;
+}
+
+// element-plus
+.el-overlay {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	.el-dialog {
+		display: flex;
+		flex-direction: column;
+		margin: 0 !important;
+		max-height: 80%;
+		border-radius: 10px;
+		overflow: hidden;
+		.el-icon-close {
+			font-size: 22px;
+		}
+		.el-dialog__body {
+			@include scroll-pc();
+			flex: 1;
+			min-height: 200px;
+			padding: 20px;
+			overflow-y: auto;
+			img {
+				max-width: 100%;
+			}
+		}
+	}
 }

@@ -9,7 +9,7 @@
         </p>
     </div>
     <van-button class='confirmBtn' @click='toLogin'>
-        {{ $t('forgot.goLogin') }}
+        <span>{{ $t('forgot.goLogin') }}</span>
     </van-button>
 </template>
 
@@ -66,8 +66,7 @@ export default {
     position: absolute;
     bottom: 0;
     width: 100%;
-    background: var(--lineColor);
-    border-color: var(--lineColor);
+    background: var(--primaryAssistColor);
     span {
         color: var(--color);
         font-size: rem(34px);

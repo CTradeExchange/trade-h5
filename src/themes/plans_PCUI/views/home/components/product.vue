@@ -1,16 +1,18 @@
 <template>
     <div class='product-module'>
         <ul>
-            <li v-for='(item, index) in 5' :key='index'>
+            <li v-for='item in productList' :key='item.symbloKey'>
                 <p class='row_1'>
-                    <span>加元日元</span>
-                    <strong>-0.15%</strong>
+                    <span>{{ item.symbolName }}</span>
+                    <strong :class='item.upDownColor'>
+                        {{ item.upDownWidth || '--' }}
+                    </strong>
                 </p>
                 <p class='row_2'>
-                    <span>2.2264</span>
+                    <span>{{ item.cur_price || '--' }}</span>
                 </p>
                 <p class='row_3'>
-                    <span>-0.592</span>
+                    <span>{{ item.upDownAmount || '--' }}</span>
                 </p>
             </li>
         </ul>
@@ -18,10 +20,24 @@
 </template>
 
 <script>
-export default {
-    setup () {
-        return {
+import { computed, unref } from 'vue'
+import { useStore } from 'vuex'
 
+export default {
+    emits: ['update'],
+    setup (props, context) {
+        const store = useStore()
+        // 产品map数据
+        const productMap = unref(computed(() => store.state._quote.productMap))
+        // 产品symbolKey集合
+        const productKeys = ['32_1', '33_1', '5_2', '6_2', '9_2']
+        // 产品列表数据
+        const productList = productKeys.map(key => productMap[key]).filter(elem => elem)
+
+        context.emit('update', productKeys)
+
+        return {
+            productList
         }
     }
 }
@@ -68,7 +84,6 @@ export default {
             strong {
                 font-size: 16px;
                 font-weight: normal;
-                color: #EF5350;
             }
         }
         .row_2 {

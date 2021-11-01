@@ -82,7 +82,7 @@
                         type='text'
                         @click='handleModifyPageConfig'
                     >
-                        保存
+                        保存配置
                     </el-button>
                     <el-button
                         class='delete-btn'
@@ -97,7 +97,7 @@
                         type='text'
                         @click='showPublish = true'
                     >
-                        发布
+                        发布线上
                     </el-button>
                 </div>
             </div>
@@ -197,7 +197,8 @@ export default {
             previewApp: {},
             getLoading: false,
             pageId: getQueryString('id'),
-            drag: false
+            drag: false,
+            submitType: 0
         })
 
         const handleGetPageConfig = () => {
@@ -407,10 +408,13 @@ export default {
                             return
                         }
                         resolve(true)
-                        ElMessage.success({
-                            message: '保存成功',
-                            type: 'success'
-                        })
+                        if (state.submitType === 0) {
+                            ElMessage.success({
+                                message: '保存成功',
+                                type: 'success'
+                            })
+                        }
+                        state.submitType = 0
                     })
                     .catch(error => {
                         resolve(false)
@@ -542,6 +546,7 @@ export default {
 
         const handlePublish = async () => {
             state.publishLoading = true
+            state.submitType = 1
             const modifyData = await handleModifyPageConfig()
             if (!modifyData) {
                 return

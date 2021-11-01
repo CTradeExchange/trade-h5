@@ -1,7 +1,9 @@
 import { computed, unref } from 'vue'
 import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 
 export default function ({ tradeType, categoryType }) {
+    const { t } = useI18n({ useScope: 'global' })
     const store = useStore()
     const productMap = computed(() => store.state._quote.productMap)
     const userProductCategory = computed(() => store.getters.userProductCategory)
@@ -11,7 +13,7 @@ export default function ({ tradeType, categoryType }) {
     const categoryList = computed(() => {
         const listByUser = unref(userSelfSymbolList)[unref(tradeType)] || []
         const selfSymbol = {
-            title: '自选',
+            title: t('trade.favorites'),
             id: 'selfSymbol',
             listByUser: Array.isArray(listByUser) ? listByUser : [listByUser]
         }

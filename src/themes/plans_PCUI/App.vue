@@ -120,7 +120,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~@plans/font/iconfont.css';
+@import '~@planspc/font/iconfont.css';
 @import '~@/sass/mixin.scss';
 @import './style.scss';
 

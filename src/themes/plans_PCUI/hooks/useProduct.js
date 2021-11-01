@@ -1,7 +1,7 @@
 import { computed, unref } from 'vue'
 import { useStore } from 'vuex'
 
-export default function ({ tradeType, categoryType }) {
+export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
     const store = useStore()
     const productMap = computed(() => store.state._quote.productMap)
     const userProductCategory = computed(() => store.getters.userProductCategory)
@@ -17,10 +17,7 @@ export default function ({ tradeType, categoryType }) {
         }
         const tradeTypeQuote = unref(userProductCategory)[unref(tradeType)] || []
 
-        return [
-            selfSymbol,
-            ...tradeTypeQuote
-        ]
+        return isSelfSymbol ? [selfSymbol, ...tradeTypeQuote] : [...tradeTypeQuote]
     })
 
     // 所选板块的产品列表
