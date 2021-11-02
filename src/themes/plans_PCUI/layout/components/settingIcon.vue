@@ -9,10 +9,13 @@
         </template>
         <div class='settingDrapdown'>
             <ul class='list'>
-                <li v-if='customInfo' class='item'>
-                    {{ customInfo.phone ? $t("setting.replacePhone") : $t('setting.bindEmail') }}
+                <li v-if='customInfo' class='item' @click='handRoutTo("/setLoginPwd")'>
+                    {{ Number(customInfo.loginPassStatus) === 1 ? $t("forgot.setPwd") : $t('login.modifyLoginPwd') }}
                 </li>
-                <li v-if='customInfo' class='item'>
+                <li v-if='customInfo' class='item' @click='handRoutTo("/bindEmail")'>
+                    {{ customInfo.phone ? $t("setting.replacePhone") : $t('setting.bindPhone') }}
+                </li>
+                <li v-if='customInfo' class='item' @click='handRoutTo("/bindMobile")'>
                     {{ customInfo.email ? $t("setting.replaceEmail") : $t('setting.bindEmail') }}
                 </li>
                 <li class='item flexBetween'>
@@ -42,9 +45,12 @@ import { useI18n } from 'vue-i18n'
 import { localGet, localSet } from '@/utils/util'
 import { colors } from '@planspc/colorVariables'
 import { MsgSocket } from '@/plugins/socket/socket'
+import { useRouter, useRoute } from 'vue-router'
 
 export default {
     setup () {
+        const router = useRouter()
+        const route = useRoute()
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         const customInfo = computed(() => store.state._user.customerInfo)
@@ -77,12 +83,17 @@ export default {
                 location.reload()
             })
         }
+
+        // 路由跳转
+        const handRoutTo = (path) => router.push(route.path + path)
+
         return {
             customInfo,
             chartColorActive,
             chartColorAction,
             changeChartColor,
             logoutHandler,
+            handRoutTo,
         }
     }
 }

@@ -81,7 +81,6 @@ export default {
         })
 
         const ask_deep = computed(() => {
-            debugger
             const askResult = handicapResult.value?.ask_deep?.slice(0, 5) || []
             if (askResult.length < 5) {
                 return fillPosition(askResult, 1)
@@ -234,11 +233,10 @@ export default {
     cursor: pointer;
     position: relative;
     height: 24px;
-    padding: 0 30px 0 10px;
+    padding: 0 24px 0 10px;
     color: var(--minorColor);
     line-height: 24px;
     background: var(--assistColor);
-    width: 72px;
 }
 .icon_arrow {
     position: absolute;
@@ -258,6 +256,6 @@ export default {
 <style lang="scss">
 .handicapDigitsOptions {
     --van-popover-light-background-color: var(--assistColor);
-    width: 72px;
+    //width: 72px;
 }
 </style>

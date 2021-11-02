@@ -6,6 +6,230 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "25354059",
+      "name": "合约全仓账户",
+      "font_class": "heyuequancangzhanghu",
+      "unicode": "e69c",
+      "unicode_decimal": 59036
+    },
+    {
+      "icon_id": "25354060",
+      "name": "现货交易账户",
+      "font_class": "xianhuojiaoyizhanghu",
+      "unicode": "e69d",
+      "unicode_decimal": 59037
+    },
+    {
+      "icon_id": "25354061",
+      "name": "合约逐仓账户",
+      "font_class": "heyuezhucangzhanghu",
+      "unicode": "e69e",
+      "unicode_decimal": 59038
+    },
+    {
+      "icon_id": "25354062",
+      "name": "杠杆交易账户",
+      "font_class": "gangganjiaoyizhanghu",
+      "unicode": "e69f",
+      "unicode_decimal": 59039
+    },
+    {
+      "icon_id": "25354063",
+      "name": "资金记录",
+      "font_class": "zijinjilu",
+      "unicode": "e6a0",
+      "unicode_decimal": 59040
+    },
+    {
+      "icon_id": "25348899",
+      "name": "失败",
+      "font_class": "shibai",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
+    },
+    {
+      "icon_id": "25342733",
+      "name": "删除",
+      "font_class": "shanchu",
+      "unicode": "e69a",
+      "unicode_decimal": 59034
+    },
+    {
+      "icon_id": "25342692",
+      "name": "问号",
+      "font_class": "wenhao",
+      "unicode": "e698",
+      "unicode_decimal": 59032
+    },
+    {
+      "icon_id": "25342693",
+      "name": "合约详情",
+      "font_class": "heyuexiangqing",
+      "unicode": "e699",
+      "unicode_decimal": 59033
+    },
+    {
+      "icon_id": "25342685",
+      "name": "线型图",
+      "font_class": "xianxingtu",
+      "unicode": "e68b",
+      "unicode_decimal": 59019
+    },
+    {
+      "icon_id": "25342686",
+      "name": "勾",
+      "font_class": "gou",
+      "unicode": "e695",
+      "unicode_decimal": 59029
+    },
+    {
+      "icon_id": "25342687",
+      "name": "基准线",
+      "font_class": "jizhunxian",
+      "unicode": "e696",
+      "unicode_decimal": 59030
+    },
+    {
+      "icon_id": "25342688",
+      "name": "面积图",
+      "font_class": "mianjitu",
+      "unicode": "e697",
+      "unicode_decimal": 59031
+    },
+    {
+      "icon_id": "25342678",
+      "name": "美国线",
+      "font_class": "meiguoxian1",
+      "unicode": "e690",
+      "unicode_decimal": 59024
+    },
+    {
+      "icon_id": "25342679",
+      "name": "空心K线图",
+      "font_class": "kongxinKxiantu",
+      "unicode": "e691",
+      "unicode_decimal": 59025
+    },
+    {
+      "icon_id": "25342680",
+      "name": "平均K线图",
+      "font_class": "pingjunKxiantu",
+      "unicode": "e694",
+      "unicode_decimal": 59028
+    },
+    {
+      "icon_id": "25342673",
+      "name": "下单界面小实星",
+      "font_class": "xiadanjiemianxiaoshixing1",
+      "unicode": "e689",
+      "unicode_decimal": 59017
+    },
+    {
+      "icon_id": "25342674",
+      "name": "下单界面小空星",
+      "font_class": "xiadanjiemianxiaokongxing1",
+      "unicode": "e68a",
+      "unicode_decimal": 59018
+    },
+    {
+      "icon_id": "25342393",
+      "name": "图表K线",
+      "font_class": "tubiaoKxian",
+      "unicode": "e684",
+      "unicode_decimal": 59012
+    },
+    {
+      "icon_id": "25342394",
+      "name": "下单界面小空星",
+      "font_class": "xiadanjiemianxiaokongxing",
+      "unicode": "e685",
+      "unicode_decimal": 59013
+    },
+    {
+      "icon_id": "25342395",
+      "name": "下单界面小实星",
+      "font_class": "xiadanjiemianxiaoshixing",
+      "unicode": "e686",
+      "unicode_decimal": 59014
+    },
+    {
+      "icon_id": "25342388",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "e681",
+      "unicode_decimal": 59009
+    },
+    {
+      "icon_id": "25342389",
+      "name": "图表设置",
+      "font_class": "tubiaoshezhi",
+      "unicode": "e682",
+      "unicode_decimal": 59010
+    },
+    {
+      "icon_id": "25342390",
+      "name": "自选空心",
+      "font_class": "zixuankongxin",
+      "unicode": "e683",
+      "unicode_decimal": 59011
+    },
+    {
+      "icon_id": "25342379",
+      "name": "tg",
+      "font_class": "tg",
+      "unicode": "e67e",
+      "unicode_decimal": 59006
+    },
+    {
+      "icon_id": "25342380",
+      "name": "消息",
+      "font_class": "xiaoxi",
+      "unicode": "e67f",
+      "unicode_decimal": 59007
+    },
+    {
+      "icon_id": "25342381",
+      "name": "蓝色自选",
+      "font_class": "lansezixuan",
+      "unicode": "e680",
+      "unicode_decimal": 59008
+    },
+    {
+      "icon_id": "25342373",
+      "name": "weibo",
+      "font_class": "weibo",
+      "unicode": "e67d",
+      "unicode_decimal": 59005
+    },
+    {
+      "icon_id": "25342370",
+      "name": "fb",
+      "font_class": "fb",
+      "unicode": "e67a",
+      "unicode_decimal": 59002
+    },
+    {
+      "icon_id": "25342371",
+      "name": "ins",
+      "font_class": "ins",
+      "unicode": "e67b",
+      "unicode_decimal": 59003
+    },
+    {
+      "icon_id": "25342372",
+      "name": "tw",
+      "font_class": "tw",
+      "unicode": "e67c",
+      "unicode_decimal": 59004
+    },
+    {
+      "icon_id": "25342361",
+      "name": "指向箭头左",
+      "font_class": "zhixiangjiantouzuo",
+      "unicode": "e679",
+      "unicode_decimal": 59001
+    },
+    {
       "icon_id": "25265008",
       "name": "下拉箭头",
       "font_class": "xialajiantou",

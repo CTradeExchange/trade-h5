@@ -28,7 +28,6 @@ service.interceptors.request.use(
 // response interceptor
 service.interceptors.response.use(
     response => {
-        // debugger
         if (response.status === 200) {
             const res = response.data
             return Promise.resolve(res.data)

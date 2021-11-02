@@ -1,22 +1,24 @@
 <template>
-    <div class='contract'>
-        这里是一个入金页面
-    </div>
+    <centerViewDialog class='contractPage'>
+        <contractComp />
+    </centerViewDialog>
 </template>
 
 <script>
-import { reactive, toRefs } from 'vue'
-import { useStore } from 'vuex'
-export default {
-    setup () {
-        const store = useStore()
+import centerViewDialog from '@planspc/layout/centerViewDialog'
+import contractComp from './components/contractComp'
 
-        return {}
+export default {
+    components: {
+        centerViewDialog,
+        contractComp
     }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '@/sass/mixin.scss';
-
+.contractPage {
+    line-height: 50px;
+}
 </style>

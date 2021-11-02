@@ -219,12 +219,10 @@ export default {
         })
 
         const activeData = computed(() => {
-            // debugger
             return element.value.data || {}
         })
         watchEffect(() => {
             if (Object.keys(activeData.value).length > 0) {
-                // debugger
                 if (activeData.value?.product) {
                     store.commit('editor/UPDATE_TRADETYPE_SELFSYMBOL', activeData.value.product)
                 } else {

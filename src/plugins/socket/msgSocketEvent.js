@@ -188,7 +188,6 @@ class SocketEvent {
     }
 
     floatProfitLoss (dataArr, tradeType) {
-        // if (!tradeType) debugger
         const $store = this.$store
         if (!dataArr?.length) return false
         const last = dataArr[dataArr.length - 1]
