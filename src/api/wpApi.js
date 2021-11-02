@@ -49,6 +49,7 @@ export function pageConfig (id) {
         let content = res?._content ?? res
         content = reg.test(content) || typeof (content) === 'object' ? content : unzip(content)
         const data = typeof (content) === 'string' ? JSON.parse(content) : content
+        if (id === 'SysSetting' && window['wp_SysSetting'] === '') window['wp_SysSetting'] = JSON.stringify(res)
         // if (id === 'TradeIndex') mockQuoteData(data)
         return data
     })
