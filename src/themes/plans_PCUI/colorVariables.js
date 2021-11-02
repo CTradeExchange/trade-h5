@@ -1,7 +1,7 @@
 import { localGet } from '@/utils/util'
 import store from './store'
 
-const colors = {
+export const colors = {
     common: {
         primary: '#477fd3',
         riseColor: '#ef5353',
@@ -32,6 +32,7 @@ const colors = {
         assistColor: '#f8f8f8',
         lineColor: '#eeeeee'
     },
+    // disable: '#eeeeee'
 
     /* 'color': '#333',
     'mutedColor': '#989898',

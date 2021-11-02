@@ -82,7 +82,9 @@
     <van-dialog v-model:show='timeShow' :title="$t('withdraw.hint')">
         <div class='time-wrap'>
             <h4>{{ $t('withdraw.timeHint') }} </h4>
-            <p>{{ $t('withdraw.timeName') }}：</p>
+            <p v-if='timeList.length > 0'>
+                {{ $t('withdraw.timeName') }}：
+            </p>
             <div v-if='timeList.length > 0' class='flex'>
                 <div class='time-text'>
                     <p v-for='(item,index) in timeList' :key='index' class='time-text-flex'>
@@ -262,6 +264,8 @@ export default {
 
                                 if (startLocal.isAfter(todayStr, 'day')) {
                                     elNext.openTimeLocal.push(startLocal.format('HH:mm') + '-' + endLocal.format('HH:mm'))
+                                } else if (endLocal.format('HH:mm') === '00:00') {
+                                    el.openTimeLocal.push(startLocal.format('HH:mm') + '-24:00')
                                 } else if (endLocal.isAfter(todayStr, 'day')) {
                                     elNext.openTimeLocal.unshift('00:00-' + endLocal.format('HH:mm'))
                                     el.openTimeLocal.push(startLocal.format('HH:mm') + '-23:59')
@@ -286,10 +290,10 @@ export default {
                             const nextStart = el.openTimeLocal[index + 1] && el.openTimeLocal[index + 1].split('-')[0]
                             const nextEnd = el.openTimeLocal[index + 1] && el.openTimeLocal[index + 1].split('-')[1]
 
-                            if (window.dayjs(`${todayStr} ${end}`).add(1, 'minute').isSame(window.dayjs(`${todayStr} ${nextStart}`))) {
+                            if (window.dayjs(`${todayStr} ${end}`).add(1, 'minute').isSame(window.dayjs(`${todayStr} ${nextStart}`)) ||
+                                end === nextStart
+                            ) {
                                 el.openTimeLocal = start + '-' + nextEnd
-                            } else {
-
                             }
                         })
                     }

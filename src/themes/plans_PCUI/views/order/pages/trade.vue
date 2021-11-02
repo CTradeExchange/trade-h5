@@ -1,0 +1,482 @@
+<template>
+    <div class='trade-header'>
+        <!-- 订单类型 -->
+        <OrderTypeTab v-model='orderType' :trade-type='product.tradeType' @selected='changeOrderType' />
+        <div class='switch'>
+            <span> 止盈止损</span>
+            <van-switch v-model='enabled' size='20' />
+        </div>
+    </div>
+
+    <div class='trade-wrap'>
+        <div class='buy-wrap'>
+            <div class='form-item disable'>
+                <label for=''>
+                    买入价 &nbsp;&nbsp;市场最优价买入
+                </label>
+            </div>
+
+            <div class='form-item'>
+                <label for=''>
+                    买入量
+                </label>
+                <OrderVolume v-model='buy.volume' v-model:entryType='entryType' :account='account' class='cellMarginTop' :product='product' />
+                <span>{{ $t('trade.volumeUnit') }}</span>
+            </div>
+
+            <!-- 挂单设置 -->
+            <PendingBar
+                v-if='[3, 5, 9].includes(product.tradeType) && orderType===10'
+                ref='pendingRef'
+                v-model='buy.pendingPrice'
+                class='cellMarginTop'
+                direction='buy'
+                :product='product'
+            />
+            <PendingBarCFD
+                v-else-if='orderType===10'
+                ref='pendingRef'
+                v-model='buy.pendingPrice'
+                class='cellMarginTop'
+                direction='buy'
+                :product='product'
+            />
+
+            <!-- 止盈止损 -->
+            <ProfitlossSet
+                v-if=' [1,2].includes(product.tradeType)'
+                v-model:stopLoss='buy.stopLoss'
+                v-model:stopProfit='buy.stopProfit'
+                class='cellMarginTop'
+                direction='buy'
+                :enabled='enabled'
+                :product='product'
+            />
+
+            <!-- 过期类型 -->
+            <CellExpireType
+                v-if='orderType===10 && [1,2].includes(product.tradeType)'
+                v-model='buy.expireType'
+                :btn-list='expireTypeList'
+                class='mtop20'
+                :title="$t('trade.expireTime')"
+            />
+
+            <div class='balance'>
+                <p class='label'>
+                    可用
+                </p>
+                <div class='val'>
+                    <span>  50000.154 USD</span>
+                    <router-link to='/'>
+                        划转
+                    </router-link>
+                </div>
+            </div>
+
+            <div class='footerBtn buy'>
+                <van-button block :disabled='buy.loading' :loading='buy.loading' size='normal' @click='submitHandler("buy")'>
+                    {{ $t('trade.buyText') }}
+                </van-button>
+            </div>
+        </div>
+        <div class='sell-wrap'>
+            <div class='form-item disable'>
+                <label for=''>
+                    卖出价&nbsp;&nbsp; 市场最优价卖出
+                </label>
+            </div>
+            <div class='form-item'>
+                <label for=''>
+                    卖出量
+                </label>
+                <OrderVolume v-model='sell.volume' v-model:entryType='entryType' :account='account' class='cellMarginTop' :product='product' />
+                <span>{{ $t('trade.volumeUnit') }}</span>
+            </div>
+            <!-- 挂单设置 -->
+            <PendingBar
+                v-if='[3, 5, 9].includes(product.tradeType) && orderType===10'
+                ref='pendingRef'
+                v-model='sell.pendingPrice'
+                class='cellMarginTop'
+                direction='buy'
+                :product='product'
+            />
+            <PendingBarCFD
+                v-else-if='orderType===10'
+                ref='pendingRef'
+                v-model='sell.pendingPrice'
+                class='cellMarginTop'
+                direction='sell'
+                :product='product'
+            />
+
+            <!-- 止盈止损 -->
+            <ProfitlossSet
+                v-if=' [1,2].includes(product.tradeType)'
+                v-model:stopLoss='sell.stopLoss'
+                v-model:stopProfit='sell.stopProfit'
+                class='cellMarginTop'
+                direction='sell'
+                :enabled='enabled'
+                :product='product'
+            />
+
+            <!-- 过期类型 -->
+            <CellExpireType
+                v-if='orderType===10 && [1,2].includes(product.tradeType)'
+                v-model='sell.expireType'
+                :btn-list='expireTypeList'
+                class='mtop20'
+                :title="$t('trade.expireTime')"
+            />
+
+            <div class='balance'>
+                <p class='label'>
+                    可用
+                </p>
+                <div class='val'>
+                    <span>  50000.154 USD</span>
+                    <router-link to='/'>
+                        划转
+                    </router-link>
+                </div>
+            </div>
+            <div class='footerBtn sell'>
+                <van-button block :disabled='sell.loading' :loading='sell.loading' size='normal' @click='submitHandler("sell")'>
+                    {{ $t('trade.sellText') }}
+                </van-button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import { reactive, toRefs, computed, ref, watch, onBeforeUnmount } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useStore } from 'vuex'
+import { Toast } from 'vant'
+import { QuoteSocket } from '@/plugins/socket/socket'
+import { delayAwaitTime } from '@/utils/util'
+import { addMarketOrder } from '@/api/trade'
+import { mul, pow } from '@/utils/calculation'
+import hooks from '../orderHooks'
+import OrderVolume from './components/orderVolume'
+import pendingBar from './components/pendingBar'
+import CellExpireType from './components/cellExpireType'
+import ProfitlossSet from './components/profitLossSet'
+import OrderTypeTab from './components/orderType.vue'
+import PendingBarCFD from './components/pendingBar_CFD'
+
+export default {
+    components: {
+        OrderVolume,
+        pendingBar,
+        ProfitlossSet,
+        CellExpireType,
+        OrderTypeTab,
+        PendingBarCFD
+    },
+    setup () {
+        const { t } = useI18n({ useScope: 'global' })
+        const store = useStore()
+        const product = computed(() => store.getters.productActived)
+        const pendingRef = ref(null)
+        const profitLossRef = ref(null)
+        const state = reactive({
+            active: 0,
+            buy: {
+                volume: '',
+                stopLoss: '',
+                stopProfit: '',
+                expireType: 1, // 挂单过期类型
+                pendingPrice: '',
+                loading: false,
+            },
+            sell: {
+                volume: '',
+                stopLoss: '',
+                stopProfit: '',
+                expireType: 1, // 挂单过期类型
+                pendingPrice: '',
+                loading: false,
+            },
+            operationType: 2, // 操作类型。1-普通；2-自动借款；3-自动还款
+            entryType: 1, // 1按数量下单 2按成交额下单
+
+            enabled: false,
+
+            orderType: 1, // 订单类型
+            expireTypeList: [{
+                title: t('trade.expireType2'),
+                val: 2
+            }, {
+                title: t('trade.expireType1'),
+                val: 1
+            }],
+            submitType: ''
+        })
+
+        const { bizType, account, findProductInCategory, switchProduct } = hooks(state)
+
+        const customerInfo = computed(() => store.state._user.customerInfo)
+        const pendingWarn = computed(() => pendingRef.value?.warn)
+        const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
+        const symbolKey = computed(() => store.state._quote.productActivedID)
+        const accountList = computed(() => store.state._user.customerInfo?.accountList)
+
+        // 点击提交按钮
+        const submitHandler = (type) => {
+            state.submitType = type
+            const params = orderParams()
+            if (!params) return
+            if (state[state.submitType].loading) return false
+            state[state.submitType].loading = true
+            addMarketOrder(params)
+                .then(async res => {
+                    if (res.invalid()) {
+                        state[state.submitType].loading = false
+                        return false
+                    }
+                    const data = res.data
+                    if (data.hasDelay === 2) {
+                        // 延时单，让loading效果多转2s
+                        await delayAwaitTime(2000)
+                    }
+                    state[state.submitType].loading = false
+                    const localData = Object.assign({}, params, data)
+                    const orderId = data.orderId || data.id
+                    sessionStorage.setItem('order_' + orderId, JSON.stringify(localData))
+                    // router.push({ name: 'OrderSuccess', query: { orderId } })
+                    store.dispatch('_trade/queryPBOOrderPage', { tradeType: params.tradeType })
+                    queryAccountInfo()
+                    state[state.submitType].volume = ''
+                    state[state.submitType].pendingPrice = ''
+                    Toast({
+                        message: [1, 12].includes(params.bizType) ? t('trade.orderSuccessToast') : t('trade.orderPendingSuccessToast'),
+                        duration: 1000,
+                        forbidClick: true,
+                    })
+                })
+                .catch(err => {
+                    state[state.submitType].loading = false
+                })
+        }
+
+        // 验证下单数据是否异常
+        const paramsInvalid = () => {
+            if (state.orderType === 10 && !state[state.submitType].pendingPrice) return Toast(t('trade.inputPendingPrice'))
+            else if (state.orderType === 10 && isNaN(state[state.submitType].pendingPrice)) return Toast(t('trade.pendingPriceError'))
+            else if (!state[state.submitType].volume) return Toast(t('trade.inputVolume'))
+            else if (isNaN(state[state.submitType].volume)) return Toast(t('trade.volumeError'))
+            else if (!account.value) return Toast(t('trade.nullAssets'))
+            return pendingWarn.value || profitLossWarn.value
+        }
+
+        // 下单参数
+        const orderParams = (ype) => {
+            if (paramsInvalid()) return null
+            let requestPrice = state.submitType === 'sell' ? product.value.sell_price : product.value.buy_price
+            const [symbolId, tradeType] = symbolKey.value.split('_')
+            const direction = state.submitType === 'sell' ? 2 : 1
+            if (state.orderType === 10) {
+                requestPrice = state[state.submitType].pendingPrice
+            }
+            const p = Math.pow(10, product.value.price_digits)
+            const params = {
+                bizType: bizType.value, // 业务类型。1-市价开；2-限价开
+                direction, // 订单买卖方向。1-买；2-卖；
+                symbolId: Number(symbolId),
+                accountCurrency: account.value.currency,
+                accountId: account.value.accountId,
+                requestTime: Date.now(),
+                requestNum: Number(state[state.submitType].volume),
+                operationType: state.operationType,
+                requestPrice: mul(requestPrice, p),
+                accountDigits: account.value.digits,
+                tradeType: parseInt(tradeType),
+                stopLoss: mul(state[state.submitType].stopLoss, p),
+                takeProfit: mul(state[state.submitType].stopProfit, p),
+                expireType: state[state.submitType].expireType,
+                entryType: state.entryType
+            }
+            return params
+        }
+
+        // 获取账户信息
+        const queryAccountInfo = () => {
+            if ([3, 5, 9].indexOf(product.value?.tradeType) === -1) return false
+            const proCurrency = state.submitType === 'buy' ? product.value?.profitCurrency : product.value?.baseCurrency
+            const curAccount = customerInfo.value?.accountList?.find(({ currency, tradeType }) => (currency === proCurrency && tradeType === product.value.tradeType))
+            if (curAccount)store.dispatch('_user/queryAccountAssetsInfo', { accountId: curAccount.accountId, tradeType: product.value?.tradeType })
+            else Toast(t('trade.nullAssets'))
+        }
+
+        // 切换订单类型
+        const changeOrderType = (val) => {
+            store.commit('_trade/Update_pendingEnable', val === 10)
+        }
+
+        // 设置按额或者按手数，切换产品或者切换方向时需要重新设置；现货撮合、杠杆玩法下单买入按额，其他都是按手数交易
+        const setVolumeType = () => {
+            // CFD逐仓和杠杆全仓玩法才支持按额下单功能
+            const tradeType = parseInt(product.value?.tradeType)
+            if ([2, 3, 5].includes(tradeType)) {
+                if ([3, 5].includes(tradeType) && state.direction === 'buy') {
+                    state.entryType = 2 // 1按数量下单 2按成交额下单
+                } else {
+                    state.entryType = 1 // 1按数量下单 2按成交额下单
+                }
+            } else {
+                state.entryType = 1 // 1按数量下单 2按成交额下单
+            }
+        }
+
+        // 初始化设置
+        const init = () => {
+            // 获取产品详情
+            const [symbolId, tradeType] = symbolKey.value.split('_')
+            state.operationType = parseFloat(tradeType) === 3 ? 1 : 2 // 杠杆玩法默认是普通类型
+            setVolumeType() // 设置按额或者按手数交易
+
+            store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
+                // state.volume = product.minVolume  不需要设置默认手数
+                // state[state.submitType].volume = ''
+                // state[state.submitType].pendingPrice = ''
+
+                if (tradeType === '9') store.dispatch('_user/queryCustomerAssetsInfo', { tradeType }) // 拉取全仓账户币种
+
+                const accountIds = accountList.value?.filter(el => el.tradeType === Number(product.tradeType)).map(el => el.accountId)
+
+                if ([3, 5, 9].includes(product.tradeType)) queryAccountInfo()
+                store.dispatch('_trade/queryPBOOrderPage', {
+                    tradeType: product.tradeType,
+                    sortFieldName: 'orderTime',
+                    sortType: 'desc',
+                    accountIds: accountIds + ''
+                })
+            })
+        }
+
+        init()
+
+        return {
+            orderType: 1, // 订单类型
+            bizType,
+            product,
+            account,
+            pendingWarn,
+            submitHandler,
+            profitLossRef,
+            changeOrderType,
+            ...toRefs(state),
+        }
+    }
+
+}
+</script>
+
+<style lang="scss" scoped>
+@import '@/sass/mixin.scss';
+.trade-header{
+    display: flex;
+    justify-content: space-between;
+    .tabs-trade{
+        width: 150px;
+        margin-bottom: 20px;
+
+        :deep(.van-tab) {
+            flex: 1;
+            padding-bottom: 5px;
+            flex-basis: auto !important;
+            padding: 0;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        :deep(.van-tabs__wrap) {
+            height: 30px;
+            .van-tabs__nav--line {
+                padding-bottom: 0;
+            }
+            .van-tabs__line {
+                bottom: 0;
+            }
+        }
+    }
+    .switch{
+        display: flex;
+        align-items: center;
+        >span{
+            margin-right: 9px;
+        }
+    }
+}
+
+.trade-wrap{
+    display: flex;
+    width: 100%;
+    .buy-wrap{
+        flex: 1;
+        padding-right: 15px;
+        margin-right: 15px;
+        border-right: dashed 1px var(--lineColor);
+    }
+    .sell-wrap{
+        flex: 1;
+    }
+    .form-item{
+        color: var(--minorColor);
+        height: 40px;
+        background: var(--bgColor);
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 14px;
+        margin-bottom: 16px;
+        label{
+            margin-right: 9px;
+            color: var(--normalColor);
+        }
+        &.disable{
+            background-color: var(--lineColor);
+        }
+    }
+    .balance{
+        display: flex;
+        justify-content: space-between;
+        margin: 12px 0;
+        .label{
+            color: var(--minorColor);
+        }
+        .val{
+            color: var(--normalColor);
+            >a{
+                color: var(--primary);
+            }
+        }
+    }
+    .footerBtn {
+        width: 100%;
+        background: var(--contentColor);
+        height: 40px;
+        border-radius: 4px;
+        &.buy {
+            .van-button {
+                color: #FFF;
+                background: var(--riseColor);
+                border-color: var(--riseColor);
+                border-radius: 4px;
+            }
+        }
+        &.sell {
+            .van-button {
+                color: #FFF;
+                background: var(--fallColor);
+                border-color: var(--fallColor);
+                border-radius: 4px;
+            }
+        }
+    }
+}
+
+</style>

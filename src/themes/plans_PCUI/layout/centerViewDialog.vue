@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-model='dialogVisible' :before-close='beforeClose' :custom-class='customClass' width='520px'>
+    <el-dialog v-model='dialogVisible' :before-close='beforeClose' :close-on-click-modal='false' :custom-class='customClass' width='520px'>
         <slot></slot>
     </el-dialog>
 </template>

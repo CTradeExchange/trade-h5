@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import '@/utils/dayjs'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -20,7 +21,7 @@ import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.j
 import { getPreDemoAccountParams } from './officialDemoAccount.js'
 
 // element-plus
-import 'element-plus/lib/theme-chalk/index.css'
+import 'element-plus/dist/index.css'
 import {
     ElLoading,
     ElDialog,
@@ -32,10 +33,9 @@ import {
     ElDropdownMenu,
     ElDropdownItem,
     ElTimeline,
-    ElTimelineItem,
     ElEmpty,
-    ElTable,
-    ElTableColumn
+    ElPopover,
+    ElTimelineItem,
 } from 'element-plus'
 
 skywalkingRegister(router)
@@ -47,7 +47,7 @@ BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 
 const app = createApp(App)
 app.use(ElLoading).use(ElDialog).use(ElMessageBox).use(ElMessage).use(ElCarousel).use(ElCarouselItem).use(ElDropdown)
-    .use(ElDropdownMenu).use(ElDropdownItem).use(ElTimeline).use(ElTimelineItem).use(ElEmpty).use(ElTable).use(ElTableColumn)
+    .use(ElDropdownMenu).use(ElDropdownItem).use(ElTimeline).use(ElTimelineItem).use(ElEmpty).use(ElPopover)
 app.use(preventReClick)
 app.use(VantBase).use(I18n).use(store).use(router)
 app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })

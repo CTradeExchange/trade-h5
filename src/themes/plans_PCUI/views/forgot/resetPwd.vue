@@ -1,0 +1,166 @@
+<template>
+    <div class='pageWrap'>
+        <topNav class='header' />
+        <div class='container'>
+            <div class='content'>
+                <!-- <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a> -->
+                <Loading :show='loading' />
+                <header class='header'>
+                    <h1 class='pageTitle'>
+                        {{ $t('forgot.setPwd') }}
+                    </h1>
+                    <h6>{{ $t('forgot.pwdRule') }}</h6>
+                </header>
+                <van-cell-group>
+                    <div class='form-item'>
+                        <Field v-model='newPwd' label='' :placeholder='$t("forgot.inputNewPwd")' :type='newPwdVis ? "text" : "password"' />
+                        <span class='icon' :class="newPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("newPwdVis")'></span>
+                    </div>
+                    <div class='form-item'>
+                        <Field v-model='confirmPwd' label='' :placeholder='$t("forgot.newPwdAgain")' :type='confirmVis ? "text" : "password"' />
+                        <span class='icon' :class="confirmVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("confirmVis")'></span>
+                    </div>
+                </van-cell-group>
+                <van-button class='confirmBtn' @click='handleConfirm'>
+                    <span>{{ $t('common.sure') }}</span>
+                </van-button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import topNav from '@planspc/layout/topNav'
+import { reactive, toRefs } from 'vue'
+import { Field, Toast } from 'vant'
+import { useRouter, useRoute } from 'vue-router'
+import { findPwd } from '@/api/user'
+import md5 from 'js-md5'
+import { useI18n } from 'vue-i18n'
+
+export default {
+    components: {
+        topNav,
+        Field
+    },
+    setup (props) {
+        const router = useRouter()
+        const route = useRoute()
+        const { t } = useI18n({ useScope: 'global' })
+        const state = reactive({
+            newPwd: '',
+            confirmPwd: '',
+            newPwdVis: false,
+            confirmVis: false,
+            loading: false
+        })
+
+        function changeState (type) {
+            state[type] = !state[type]
+        }
+
+        function handleConfirm () {
+            const pwdReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/
+            if (!state.newPwd) {
+                return Toast(t('forgot.inputNewPwd'))
+            }
+            if (!state.confirmPwd) {
+                return Toast(t('forgot.inputSurePwd'))
+            }
+            if (state.newPwd.length < 6 || state.newPwd.length > 16) {
+                return Toast(t('forgot.pwdRule'))
+            }
+            if (state.newPwd !== state.confirmPwd) {
+                return Toast(t('forgot.pwdDiff'))
+            }
+            if (!pwdReg.test(state.newPwd)) {
+                return Toast(t('forgot.pwdRule'))
+            }
+
+            const params = {
+                type: route.query['type'], // 1邮箱，2手机号码，3客户账号
+                loginName: route.query['loginName'],
+                verifyCode: route.query['verifyCode'],
+                newPwd: md5(state.confirmPwd),
+                sendToken: route.query['sendToken'],
+                verifyCodeToken: route.query['verifyCodeToken']
+            }
+            state.loading = true
+            findPwd(params).then((res) => {
+                state.loading = false
+                if (res.check()) {
+                    router.push('/resetSuccess')
+                }
+            }).catch(err => {
+                state.loading = false
+                router.push('/resetFail')
+            })
+        }
+
+        return {
+            ...toRefs(state),
+            changeState,
+            handleConfirm
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+@import '@/sass/mixin.scss';
+.pageWrap {
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    background: var(--assistColor);
+    .container {
+        flex: 1;
+        overflow: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .content{
+            width:520px;
+            padding: 60px;
+            border-radius: 10px;
+                background-color: var(--contentColor);
+        }
+    }
+    .header {
+        // display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: rem(40px) rem(30px);
+    }
+    .pageTitle {
+        margin-bottom: rem(10px);
+        font-weight: normal;
+        font-size: rem(50px);
+    }
+    .confirmBtn {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: var(--lineColor);
+        border-color: var(--lineColor);
+        span {
+            color: var(--color);
+            font-size: rem(30px);
+        }
+    }
+    .form-item {
+        position: relative;
+        .icon {
+            position: absolute;
+            top: rem(25px);
+            right: rem(50px);
+            z-index: 99;
+            cursor: pointer;
+            &::before {
+                font-size: rem(30px);
+            }
+        }
+    }
+}
+</style>

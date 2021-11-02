@@ -17,18 +17,17 @@ export default {
         })
         // 订单类型
         const btnList = computed(() => {
-            const list1 = [{
-                title: t('trade.marketPrice'),
-                val: 1
-            }]
-            const list2 = [{
-                title: t('trade.marketPrice'),
-                val: 1
-            }, {
-                title: [3, 5, 9].includes(props.tradeType) ? t('trade.pending2') : t('trade.pending'),
-                val: 10
-            }]
-            // return parseInt(props.tradeType) === 9 ? list1 : list2
+            const list2 = [
+                {
+                    title: t('trade.marketPrice'),
+                    val: 1
+                },
+                props.tradeType !== 5 ? {
+                    title: [3, 5, 9].includes(props.tradeType) ? t('trade.pending2') : t('trade.pending'),
+                    val: 10
+                } : {}
+            ]
+
             return list2
         })
         watchEffect(() => {

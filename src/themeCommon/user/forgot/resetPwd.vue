@@ -38,6 +38,7 @@ import md5 from 'js-md5'
 import { useI18n } from 'vue-i18n'
 
 export default {
+    name: 'ResetPwd',
     components: {
         Top,
         Field

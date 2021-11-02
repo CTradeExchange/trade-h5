@@ -1,5 +1,7 @@
 <template>
     <div class='home'>
+        <router-view />
+
         <!-- 轮播模块 -->
         <swiper />
         <!-- 产品模块 -->
