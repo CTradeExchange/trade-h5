@@ -39,10 +39,8 @@
             {{ $t('trade.my') }}
         </div> -->
     </div>
-    ****{{ handicapResult }}****
     <van-empty v-if='!ask_deep' :description='$t("common.noData")' image='/images/empty.png' />
     <div class='stalls-wrap' :class='{ padding: !showField }'>
-        4454545
         <div class='sell-wrap'>
             <div v-for='(item,index) in ask_deep' :key='index' class='item'>
                 &nbsp;&nbsp;&nbsp;

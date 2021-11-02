@@ -139,7 +139,7 @@ export default {
         Update_positionList (state, { tradeType, list }) {
             vue_set(state.positionList, tradeType, list)
             const positionMap = state.positionMap
-            list.forEach(item => {
+            list && list.forEach(item => {
                 if (!item || !item.positionId) return false
                 const key = `${item.positionId}_${tradeType}`
                 const curPosition = positionMap[key]

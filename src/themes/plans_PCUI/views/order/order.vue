@@ -9,7 +9,7 @@
                     <chart />
                 </div>
                 <div class='trade-content'>
-                    <!-- <trade /> -->
+                    <trade />
                 </div>
             </div>
             <div v-if='Number(tradeType) === 5' class='right-wrap'>
@@ -96,7 +96,9 @@ export default {
                 //padding: 10px;
             }
             .trade-content{
-                padding: 16px 16px 0 16px;
+                position: relative;
+                margin-top: 8px;
+                padding: 5px 16px 20px 16px;
             }
         }
 

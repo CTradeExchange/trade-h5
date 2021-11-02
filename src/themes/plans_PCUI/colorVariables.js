@@ -32,6 +32,7 @@ export const colors = {
         assistColor: '#f8f8f8',
         lineColor: '#eeeeee'
     },
+    // disable: '#eeeeee'
 
     /* 'color': '#333',
     'mutedColor': '#989898',
