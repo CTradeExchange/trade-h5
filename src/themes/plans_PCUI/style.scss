@@ -631,29 +631,32 @@ body {
 
 
 // element-plus
-.el-overlay {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	.el-dialog {
+.dialog-layer {
+	.el-overlay {
 		display: flex;
-		flex-direction: column;
-		margin: 0 !important;
-		max-height: 80%;
-		border-radius: 10px;
-		overflow: hidden;
-		.el-icon-close {
-			font-size: 22px;
-		}
-		.el-dialog__body {
-			@include scroll-pc();
-			flex: 1;
-			min-height: 200px;
-			padding: 20px;
-			overflow-y: auto;
-			img {
-				max-width: 100%;
+		justify-content: center;
+		align-items: center;
+		.el-dialog {
+			display: flex;
+			flex-direction: column;
+			margin: 0 !important;
+			max-height: 80%;
+			border-radius: 10px;
+			overflow: hidden;
+			.el-icon-close {
+				font-size: 22px;
+			}
+			.el-dialog__body {
+				@include scroll-pc();
+				flex: 1;
+				min-height: 200px;
+				padding: 20px;
+				overflow-y: auto;
+				img {
+					max-width: 100%;
+				}
 			}
 		}
 	}
 }
+

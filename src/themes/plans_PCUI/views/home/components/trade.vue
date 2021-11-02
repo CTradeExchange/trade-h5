@@ -9,7 +9,7 @@
                     :class="{ 'active': Number(item.tradeType) === tradeType }"
                     @click='switchPlan(Number(item.tradeType))'
                 >
-                    <span>{{ item.alias || item.name }}</span>
+                    <span>{{ $t('tradeType.' + item.tradeType) }}</span>
                 </li>
             </ul>
         </div>
@@ -70,7 +70,7 @@
                             {{ $t('trade.buy') }}
                         </button>
                         <button class='sale'>
-                            {{ $t('trade.sale') }}
+                            {{ $t('trade.sell') }}
                         </button>
                     </div>
                 </li>
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import useProduct from '@planspc/hooks/useProduct'
 
@@ -122,8 +122,8 @@ export default {
             }
         }
 
-        // 监听玩法类型、分类类型
-        watch([tradeType, categoryType, productList], () => {
+        // 设置产品数据
+        const setProducts = () => {
             // 只显示指定数量数据
             const list = []
             const keys = []
@@ -136,6 +136,15 @@ export default {
             }
             filterProductList.value = list
             context.emit('update', keys)
+        }
+
+        // 监听玩法类型、分类类型
+        watch([tradeType, categoryType, productList], () => {
+            setProducts()
+        })
+
+        onMounted(() => {
+            setProducts()
         })
 
         return {
