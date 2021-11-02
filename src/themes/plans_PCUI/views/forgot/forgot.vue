@@ -1,49 +1,53 @@
 <template>
-    <topNav class='header' />
-    <div class='pageWrap'>
-        <Loading :show='loading' />
-        <header class='header'>
-            <h1 class='pageTitle'>
-                {{ $t('forgot.forgot') }}
-            </h1>
-        </header>
-        <div class='tabs-wrap'>
-            <van-tabs
-                v-model:active='active'
-                :color='style.color'
-                line-height='2px'
-                line-width='20px'
-                :title-active-color='style.color'
-                :title-inactive-color='style.mutedColor'
-                type='line'
-                @click='handleTabChange'
-            >
-                <van-tab :title='$t("forgot.retrievedByPhone")' />
-                <van-tab :title='$t("forgot.retrievedByEmail")' />
-            </van-tabs>
-        </div>
-        <div class='tabs-content'>
-            <form v-show='curTab === 0' class='loginForm'>
-                <div class='field'>
-                    <InputComp v-model.trim='mobile' clear :label='$t("common.inputPhone")' />
-                </div>
-                <div class='field'>
-                    <checkCode v-model.trim='checkCode' :label='$t("common.inputVerifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
-                </div>
-            </form>
+    <div class='forgot'>
+        <topNav class='header' />
+        <div class='container'>
+            <div class='content'>
+                <Loading :show='loading' />
+                <header class='header'>
+                    <h1 class='pageTitle'>
+                        {{ $t('forgot.forgot') }}
+                    </h1>
+                </header>
+                <div class='tabs-wrap'>
+                    <van-tabs
+                        v-model:active='active'
 
-            <form v-show='curTab === 1' class='loginForm'>
-                <div class='field'>
-                    <InputComp v-model.trim='email' clear :label='$t("common.inputEmail")' />
+                        :color='style.primary'
+                        line-width='66px'
+                        :title-active-color='style.primary'
+                        :title-inactive-color='style.primary'
+                        type='line'
+                        @click='handleTabChange'
+                    >
+                        <van-tab :title='$t("forgot.retrievedByPhone")' />
+                        <van-tab :title='$t("forgot.retrievedByEmail")' />
+                    </van-tabs>
                 </div>
-                <div class='field'>
-                    <checkCode v-model.trim='emailCode' :label='$t("common.inputVerifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+                <div class='tabs-content'>
+                    <form v-show='curTab === 0' class='loginForm'>
+                        <div class='field'>
+                            <InputComp v-model.trim='mobile' clear :label='$t("common.inputPhone")' />
+                        </div>
+                        <div class='field verifyCodeCell'>
+                            <checkCode v-model.trim='checkCode' :label='$t("common.inputVerifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+                        </div>
+                    </form>
+
+                    <form v-show='curTab === 1' class='loginForm'>
+                        <div class='field'>
+                            <InputComp v-model.trim='email' clear :label='$t("common.inputEmail")' />
+                        </div>
+                        <div class='field verifyCodeCell'>
+                            <checkCode v-model.trim='emailCode' :label='$t("common.inputVerifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+                        </div>
+                    </form>
                 </div>
-            </form>
+                <van-button block class='next-btn' type='primary' @click='next'>
+                    <span>{{ $t('common.nextStep') }}</span>
+                </van-button>
+            </div>
         </div>
-        <van-button block class='next-btn' type='primary' @click='next'>
-            <span>{{ $t('common.nextStep') }}</span>
-        </van-button>
     </div>
 </template>
 
@@ -51,24 +55,25 @@
 import topNav from '@planspc/layout/topNav'
 import InputComp from '@/components/form/input'
 import { reactive, toRefs, computed } from 'vue'
-import areaInput from '@/components/form/areaInput'
+// import areaInput from '@/components/form/areaInput'
 import checkCode from '@/components/form/checkCode'
 import { Toast } from 'vant'
 import { useRouter } from 'vue-router'
-import uInput from '@/components/input.vue'
+// import uInput from '@/components/input.vue'
 import Schema from 'async-validator'
 import RuleFn from './rule'
 import { useStore } from 'vuex'
 import { verifyCodeSend, verifyCodeCheck } from '@/api/base'
 import { checkUserStatus } from '@/api/user'
-import { isEmpty, getArrayObj } from '@/utils/util'
+// import { isEmpty, getArrayObj } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 export default {
+    name: 'Forgot',
     components: {
         topNav,
         InputComp,
         checkCode,
-        uInput
+        // uInput
     },
     setup (props) {
         const style = computed(() => store.state.style)
@@ -216,27 +221,50 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.pageWrap {
+.forgot {
     position: relative;
+    display: flex;
+    flex-flow: column;
     height: 100%;
-    background: var(--contentColor);
+    background: var(--assistColor);
+    .container {
+        flex: 1;
+        overflow: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .content{
+            width:520px;
+            padding: 60px;
+            border-radius: 10px;
+                background-color: var(--contentColor);
+        }
+    }
     .header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin: rem(40px) rem(30px);
+        margin: 0 0 10px;
     }
     .pageTitle {
-        margin-bottom: rem(10px);
-        font-weight: normal;
-        font-size: rem(50px);
+    margin-bottom: 0;
+    font-size: 32px;
+    font-weight: bold;
     }
     .tabs-wrap {
         width: 40%;
-        margin: rem(60px) auto 0;
-        :deep(.van-tabs__nav--line) {
-            background: var(--contentColor);
+        :deep{
+            .van-tab{
+                font-size:16px;
+                &.van-tab--active{
+                    font-weight: bold;
+                }
+            }
+            .van-tabs__nav--line{
+                background: var(--contentColor);
+            }
         }
+
     }
 }
 .icon_icon_close_big {
@@ -247,13 +275,25 @@ export default {
     font-size: rem(34px);
 }
 .loginForm {
-    margin: rem(40px) rem(30px);
+    margin: 30px 0 40px;
     .field {
         position: relative;
         display: flex;
         align-items: center;
+        :deep{
+            .inputWrapper{
+                    background-color: var(--bgColor);
+    border-radius: 4px;
+    .input {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    font-size: 16px;
+}
+            }
+        }
         &:not(:first-of-type) {
-            margin-top: rem(30px);
+            margin-top: 24px;
         }
         &.toolWrap {
             justify-content: space-between;
@@ -296,21 +336,43 @@ export default {
     }
 }
 .next-btn {
-    position: absolute;
-    bottom: 0;
-    background: var(--bgColor);
-    border-color: var(--lineColor);
-    span {
-        color: var(--color);
-        font-size: rem(30px);
-    }
+    // position: absolute;
+    // bottom: 0;
+        position: relative;
+    color: var(--contentColor);
+    background: var(--primary);
+    border-color: var(--primary);
+    border-width: 1px 0 0;
+    height: 48px;
+    border-radius: 4px;
+    font-size: 20px;
+    // span {
+    //     color: var(--color);
+    //     font-size: rem(30px);
+    // }
 }
-
-</style>
-
-<style>
-
-.pageWrap .van-tabs__line {
-    background-color: #333;
+.verifyCodeCell{
+    :deep{
+        .checkCodeBar{
+                background-color: var(--assistColor);
+    border-radius: 4px;
+    border-bottom: none;
+            .checkCodeInput{
+                font-size: 16px;
+            }
+            .getCodeBtn{
+font-size: 16px;
+    margin: 0 18px;
+    color: var(--primary);
+    cursor: pointer;
+            }
+            .input {
+    width: 100%;
+    height: 48px;
+    padding: 0 5px;
+        padding-left: 18px;
+}
+        }
+    }
 }
 </style>

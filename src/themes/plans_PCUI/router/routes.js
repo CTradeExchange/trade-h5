@@ -23,6 +23,14 @@ const h5Children = [
             footerMenu: false,
         }
     },
+    {
+        path: 'setLoginPwd',
+        component: () => import(/* webpackChunkName: "setLoginPwd" */ '../views/setting/setLoginPwd.vue'),
+        meta: {
+            title: 'cRoute.setLoginPwd',
+            roles: ['User']
+        }
+    },
 ]
 
 const routes = [
@@ -55,6 +63,32 @@ const routes = [
             title: 'route.forgot',
             keepAlive: true,
             roles: [],
+        }
+    },
+    {
+        path: '/resetPwd',
+        name: 'ResetPwd',
+        component: () => import(/* webpackChunkName: "Forgot" */ '../views/forgot/resetPwd.vue'),
+        meta: {
+            title: 'route.resetPwd',
+            keepAlive: true,
+            roles: [],
+        }
+    },
+    {
+        path: '/resetSuccess',
+        name: 'ResetSuccess',
+        component: () => import(/* webpackChunkName: "resetSuccess" */ '../views/forgot/resetSuccess.vue'),
+        meta: {
+            title: 'cRoute.resetPwdSuccess'
+        }
+    },
+    {
+        path: '/resetFail',
+        name: 'ResetFail',
+        component: () => import(/* webpackChunkName: "resetFail" */ '../views/forgot/resetFail.vue'),
+        meta: {
+            title: 'cRoute.resetPwdFaid'
         }
     },
     {

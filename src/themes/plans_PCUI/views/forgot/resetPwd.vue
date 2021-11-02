@@ -1,35 +1,36 @@
 <template>
     <div class='pageWrap'>
-        <Top back left-icon='arrow-left' :menu='false' :right-action='false'>
-            <template #right>
-            </template>
-        </Top>
-        <!-- <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a> -->
-        <Loading :show='loading' />
-        <header class='header'>
-            <h1 class='pageTitle'>
-                {{ $t('forgot.setPwd') }}
-            </h1>
-            <h6>{{ $t('forgot.pwdRule') }}</h6>
-        </header>
-        <van-cell-group>
-            <div class='form-item'>
-                <Field v-model='newPwd' label='' :placeholder='$t("forgot.inputNewPwd")' :type='newPwdVis ? "text" : "password"' />
-                <span class='icon' :class="newPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("newPwdVis")'></span>
+        <topNav class='header' />
+        <div class='container'>
+            <div class='content'>
+                <!-- <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a> -->
+                <Loading :show='loading' />
+                <header class='header'>
+                    <h1 class='pageTitle'>
+                        {{ $t('forgot.setPwd') }}
+                    </h1>
+                    <h6>{{ $t('forgot.pwdRule') }}</h6>
+                </header>
+                <van-cell-group>
+                    <div class='form-item'>
+                        <Field v-model='newPwd' label='' :placeholder='$t("forgot.inputNewPwd")' :type='newPwdVis ? "text" : "password"' />
+                        <span class='icon' :class="newPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("newPwdVis")'></span>
+                    </div>
+                    <div class='form-item'>
+                        <Field v-model='confirmPwd' label='' :placeholder='$t("forgot.newPwdAgain")' :type='confirmVis ? "text" : "password"' />
+                        <span class='icon' :class="confirmVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("confirmVis")'></span>
+                    </div>
+                </van-cell-group>
+                <van-button class='confirmBtn' @click='handleConfirm'>
+                    <span>{{ $t('common.sure') }}</span>
+                </van-button>
             </div>
-            <div class='form-item'>
-                <Field v-model='confirmPwd' label='' :placeholder='$t("forgot.newPwdAgain")' :type='confirmVis ? "text" : "password"' />
-                <span class='icon' :class="confirmVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("confirmVis")'></span>
-            </div>
-        </van-cell-group>
-        <van-button class='confirmBtn' @click='handleConfirm'>
-            <span>{{ $t('common.sure') }}</span>
-        </van-button>
+        </div>
     </div>
 </template>
 
 <script>
-import Top from '@/components/top'
+import topNav from '@planspc/layout/topNav'
 import { reactive, toRefs } from 'vue'
 import { Field, Toast } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
@@ -38,9 +39,8 @@ import md5 from 'js-md5'
 import { useI18n } from 'vue-i18n'
 
 export default {
-    name: 'ResetPwd',
     components: {
-        Top,
+        topNav,
         Field
     },
     setup (props) {
@@ -110,7 +110,23 @@ export default {
 @import '@/sass/mixin.scss';
 .pageWrap {
     position: relative;
+    display: flex;
+    flex-flow: column;
     height: 100%;
+    background: var(--assistColor);
+    .container {
+        flex: 1;
+        overflow: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .content{
+            width:520px;
+            padding: 60px;
+            border-radius: 10px;
+                background-color: var(--contentColor);
+        }
+    }
     .header {
         // display: flex;
         align-items: center;

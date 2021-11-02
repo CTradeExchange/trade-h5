@@ -29,7 +29,7 @@
                 <TradeTypeAction v-model='tradeType' class='cellRow' /> -->
                     <!-- <van-cell title="账户币种" is-link arrow-direction="down" value="USD" /> -->
                     <div v-if="openType === 'mobile'" class='cell'>
-                        <areaInput
+                        <areaInputPc
                             v-model.trim='mobile'
                             v-model:zone='zone'
                             clear
@@ -39,7 +39,7 @@
                         />
                     </div>
                     <div v-else class='cell'>
-                        <areaInput
+                        <areaInputPc
                             v-model.trim='email'
                             v-model:zone='zone'
                             clear
@@ -78,10 +78,10 @@
 <script>
 import topNav from '@planspc/layout/topNav'
 import Schema from 'async-validator'
-import Top from '@/components/top'
+// import Top from '@/components/top'
 import Loading from '@/components/loading'
 import CheckCode from '@/components/form/checkCode'
-import areaInput from '@/components/form/areaInput'
+import areaInputPc from '@/components/form/areaInputPc'
 // import CurrencyAction from './components/currencyAction'
 // import TradeTypeAction from './components/tradeTypeAction'
 import { getDevice, getQueryVariable, setToken, getArrayObj, sessionGet } from '@/utils/util'
@@ -99,7 +99,7 @@ import hooks from './hooks'
 export default {
     components: {
         topNav,
-        areaInput,
+        areaInputPc,
         CheckCode,
         Loading,
         // CurrencyAction,
@@ -323,13 +323,18 @@ export default {
     display: flex;
     flex-flow: column;
     height: 100%;
-    background: var(--contentColor);
+    background: var(--assistColor);
     .container {
         flex: 1;
         overflow: auto;
-        width:520px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         .content{
+            width:520px;
             padding: 60px;
+            border-radius: 10px;
+                background-color: var(--contentColor);
         }
     }
     .footerBtn {
@@ -338,8 +343,18 @@ export default {
 }
 .pageTitle {
     margin-bottom: 10px;
-    padding: 0 30px;
-    font-size: 46px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    h5{
+    font-size: 32px;
+    color: var(--color);
+    }
+    a{
+        font-size:14px;
+        color:var(--color);
+    }
 }
 .banner {
     margin-top: 60px;
@@ -360,15 +375,18 @@ export default {
     }
     .zone {
         flex: none;
-        width: rem(200px);
-        margin-right: rem(20px);
+    width: 152px;
+    margin-right: 10px;
+
     }
     :deep{
      .inputWrapper{
+         background-color: var(--bgColor);
+    border-radius: 4px;
          .input{
             width: 100%;
                 height: 48px;
-                padding: 0 5px;
+                   padding: 0 16px;
                 font-size: 16px;
          }
 
@@ -380,7 +398,7 @@ export default {
     width: 40%;
     margin: rem(60px) auto 0;
     :deep(.van-tabs__nav--line) {
-        background: var(--contentColor);
+        background-color: var(--contentColor);
     }
     :deep(.van-tab) {
         .van-tab__text {
@@ -416,49 +434,60 @@ export default {
 }
 .registerBtn {
 
-    color: var(--color);
-    background: var(--primaryAssistColor);
-    border-color: var(--lineColor);
+    color: var(--contentColor);
+    background: var(--primary);
+    border-color: var(--primary);
     border-width: 1px 0 0;
         height: 48px;
-    background: #477FD3;
     border-radius: 4px;
     font-size: 20px;
 }
 .checkbox {
+        align-items: flex-start;
     :deep(.van-badge__wrapper) {
     width: 16px;
     height: 16px;
     overflow: hidden;
     font-size: 14px;
     line-height: 16px;
-    border-radius: 100%;
     }
     :deep(.van-checkbox__icon) {
+            margin-top: 4px;
     flex: none;
     height: 16px;
     font-size: 12px;
     line-height: 16px;
     cursor: pointer;
+        background-color: var(--primary);
+    border-color: var(--primary);
+        border-radius: 4px;
     }
     :deep(.van-checkbox__label) {
       line-height: 20px;
     font-size: 14px;
+        color: var(--placeholdColor);
     }
 }
 .verifyCodeCell{
     :deep{
         .checkCodeBar{
+                background-color: var(--assistColor);
+    border-radius: 4px;
+    border-bottom: none;
             .checkCodeInput{
                 font-size: 16px;
             }
             .getCodeBtn{
-                font-size:16px;
+font-size: 16px;
+    margin: 0 18px;
+    color: var(--primary);
+    cursor: pointer;
             }
             .input {
     width: 100%;
     height: 48px;
     padding: 0 5px;
+        padding-left: 18px;
 }
         }
     }

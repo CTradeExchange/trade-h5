@@ -1,7 +1,8 @@
 import axios from 'axios'
 import CheckAPI from './checkAPI'
 import { login } from '@/api/user'
-import { guid, getLoginParams, getToken, setToken, removeLoginParams, getCookie } from '@/utils/util'
+import { guid, getLoginParams, getToken, removeLoginParams, getCookie } from '@/utils/util'
+import { encryptParams } from '@/utils/requestEncrypt'
 import { apiDomain } from '@/config'
 let router = null
 export const setRouter = r => (router = r)
@@ -24,8 +25,10 @@ service.interceptors.request.use(
         const headers = config.headers
         const companyId = sessionStorage.getItem('companyId')
         const token = getToken()
+        const timestamp = Date.now()
         config.toastErr = config.toastErr ?? true
         headers.trace = guid()
+        headers.timestamp = timestamp
         headers.lang = getCookie('lang')
         if (token) headers.token = token
         headers.companyId = companyId
@@ -36,6 +39,7 @@ service.interceptors.request.use(
 
             if (!config.isUpload) {
                 config.data = Object.assign({}, postData)
+                // config.data = { data: encryptParams(config.data, timestamp) }
             }
         }
         return config
