@@ -118,27 +118,19 @@ export default {
                     newPwd: md5(state.confirmPwd)
                 }).then((res) => {
                     toast.clear()
-                    if (isFirstSet.value) {
-                        if (res.check()) {
-                            router.push('/resetSuccess')
-                        } else {
-                            router.push('/resetFail')
-                        }
-                    } else {
-                        if (res.check()) {
-                            Dialog.alert({
-                                title: t('common.tip'),
-                                message: t('login.pwdSuccess'),
-                                confirmButtonText: t('forgot.goLogin')
+                    if (res.check()) {
+                        Dialog.alert({
+                            title: t('common.tip'),
+                            message: t('login.pwdSuccess'),
+                            confirmButtonText: t('forgot.goLogin')
+                        }).then(() => {
+                            // 注销登录
+                            store.dispatch('_user/logout').then(() => {
+                                return router.push('/login')
                             }).then(() => {
-                                // 注销登录
-                                store.dispatch('_user/logout').then(() => {
-                                    return router.push('/login')
-                                }).then(() => {
-                                    location.reload()
-                                })
+                                location.reload()
                             })
-                        }
+                        })
                     }
                 })
             }
