@@ -184,6 +184,9 @@
 .icon_success:before {
   content: "\e6b9";
 }
+.icon_fail:before {
+  content: "\e6b9";
+}
 
 .icon_password:before {
   content: "\e6bc";

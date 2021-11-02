@@ -58,6 +58,32 @@ const routes = [
         }
     },
     {
+        path: '/resetPwd',
+        name: 'ResetPwd',
+        component: () => import(/* webpackChunkName: "Forgot" */ '../views/forgot/resetPwd.vue'),
+        meta: {
+            title: 'route.resetPwd',
+            keepAlive: true,
+            roles: [],
+        }
+    },
+    {
+        path: '/resetSuccess',
+        name: 'ResetSuccess',
+        component: () => import(/* webpackChunkName: "resetSuccess" */ '../views/forgot/resetSuccess.vue'),
+        meta: {
+            title: 'cRoute.resetPwdSuccess'
+        }
+    },
+    {
+        path: '/resetFail',
+        name: 'ResetFail',
+        component: () => import(/* webpackChunkName: "resetFail" */ '../views/forgot/resetFail.vue'),
+        meta: {
+            title: 'cRoute.resetPwdFaid'
+        }
+    },
+    {
         path: '/',
         redirect: '/home',
         name: 'Layout',
