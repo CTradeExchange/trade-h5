@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2890191 */
-  src: url('iconfont.woff2?t=1635477256792') format('woff2'),
-       url('iconfont.woff?t=1635477256792') format('woff'),
-       url('iconfont.ttf?t=1635477256792') format('truetype');
+  src: url('iconfont.woff2?t=1635822211756') format('woff2'),
+       url('iconfont.woff?t=1635822211756') format('woff'),
+       url('iconfont.ttf?t=1635822211756') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,134 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon_heyuequancangzhanghu:before {
+  content: "\e69c";
+}
+
+.icon_xianhuojiaoyizhanghu:before {
+  content: "\e69d";
+}
+
+.icon_heyuezhucangzhanghu:before {
+  content: "\e69e";
+}
+
+.icon_gangganjiaoyizhanghu:before {
+  content: "\e69f";
+}
+
+.icon_zijinjilu:before {
+  content: "\e6a0";
+}
+
+.icon_shibai:before {
+  content: "\e69b";
+}
+
+.icon_shanchu:before {
+  content: "\e69a";
+}
+
+.icon_wenhao:before {
+  content: "\e698";
+}
+
+.icon_heyuexiangqing:before {
+  content: "\e699";
+}
+
+.icon_xianxingtu:before {
+  content: "\e68b";
+}
+
+.icon_gou:before {
+  content: "\e695";
+}
+
+.icon_jizhunxian:before {
+  content: "\e696";
+}
+
+.icon_mianjitu:before {
+  content: "\e697";
+}
+
+.icon_meiguoxian1:before {
+  content: "\e690";
+}
+
+.icon_kongxinKxiantu:before {
+  content: "\e691";
+}
+
+.icon_pingjunKxiantu:before {
+  content: "\e694";
+}
+
+.icon_xiadanjiemianxiaoshixing1:before {
+  content: "\e689";
+}
+
+.icon_xiadanjiemianxiaokongxing1:before {
+  content: "\e68a";
+}
+
+.icon_tubiaoKxian:before {
+  content: "\e684";
+}
+
+.icon_xiadanjiemianxiaokongxing:before {
+  content: "\e685";
+}
+
+.icon_xiadanjiemianxiaoshixing:before {
+  content: "\e686";
+}
+
+.icon_sousuo:before {
+  content: "\e681";
+}
+
+.icon_tubiaoshezhi:before {
+  content: "\e682";
+}
+
+.icon_zixuankongxin:before {
+  content: "\e683";
+}
+
+.icon_tg:before {
+  content: "\e67e";
+}
+
+.icon_xiaoxi:before {
+  content: "\e67f";
+}
+
+.icon_lansezixuan:before {
+  content: "\e680";
+}
+
+.icon_weibo:before {
+  content: "\e67d";
+}
+
+.icon_fb:before {
+  content: "\e67a";
+}
+
+.icon_ins:before {
+  content: "\e67b";
+}
+
+.icon_tw:before {
+  content: "\e67c";
+}
+
+.icon_zhixiangjiantouzuo:before {
+  content: "\e679";
 }
 
 .icon_xialajiantou:before {
