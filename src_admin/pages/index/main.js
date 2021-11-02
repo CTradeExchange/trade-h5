@@ -6,7 +6,8 @@ import '@index/style/common.scss'
 import RightForm from '@index/components/RightForm/index.vue'
 import ElementPlus, { ElMessage } from 'element-plus'
 import VueParticles from 'vue-particles'
-import 'element-plus/lib/theme-chalk/index.css'
+// import 'element-plus/lib/theme-chalk/index.css'
+import 'element-plus/dist/index.css'
 const app = createApp(App)
 app.config.globalProperties.$message = ElMessage
 

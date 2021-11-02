@@ -54,13 +54,13 @@
                     <i class='icon icon_zichan' :title="$t('header.assets')"></i>
                 </div>
                 <div class='item'>
-                    <el-dropdown trigger='click'>
+                    <el-dropdown trigger="click" @visible-change="changeDropdown">
                         <i class='icon icon_xiaoxizhongxin1' :title="$t('header.information')"></i>
                         <template #dropdown>
-                            <div id='information_head' class='information_box'>
-                                <div class='information_head'>
-                                    <div class='current_type' @click='dropTypeVisible = !dropTypeVisible'>
-                                        <span>{{ informationType }}</span><i class='icon el-icon-caret-bottom'></i>
+                            <div class='information_box' id="information_head">
+                                <div class="information_head" >
+                                    <div class="current_type" @click="dropTypeVisible = !dropTypeVisible">
+                                        <span>{{informationType}}</span><i class='icon el-icon-caret-bottom'></i>
                                     </div>
                                 <!--
                                     <van-dropdown-menu get-container="#information_head">
@@ -161,11 +161,12 @@
 import { onBeforeMount, computed, reactive, toRefs, onUnmounted } from 'vue'
 import { queryPlatFormMessageLogList } from '@/api/user'
 import { useStore } from 'vuex'
-import Top from '@/components/top'
 import { isEmpty } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import SettingIcon from './components/settingIcon'
+import { ElNotification } from 'element-plus'
+
 export default {
     components: {
         SettingIcon,
@@ -202,8 +203,9 @@ export default {
                     'value': 'TRADE_MESSAGE'
                 }
             ],
-            informationType: '全部消息',
-            dropTypeVisible: false,
+            informationType:"全部消息",
+            dropTypeVisible:false,
+            noticeContent:''
         })
         const isError = computed(() => !!state.isError)
 
@@ -223,7 +225,11 @@ export default {
             state.dropTypeVisible = !state.dropTypeVisible
             getMsgList()
         }
-
+        const changeDropdown = (val) =>{
+            if(val){
+                getMsgList();
+            }
+        }
         const getMsgList = () => {
             state.pageLoading = true
             state.errorTip = ''
@@ -269,14 +275,35 @@ export default {
                 console.log(error)
             }
         }
-
-        // 获取到顶部消息通知，同时刷新消息列表
-        const gotMsg = () => {
+        // 获取到顶部消息通知，notice全局通知，同时刷新消息列表
+        const gotMsg = (res) => {
+            //全局通知
+            state.noticeContent = res.detail.content
+             ElNotification({
+                title: state.noticeContent.title || $t('c.biaoTi') ,
+                dangerouslyUseHTMLString: true,
+                message: `<div class='content'>${computeHtmlTime(state.noticeContent.text)}</div>`,
+            })
+            //刷新消息列表
             onRefresh()
         }
         document.body.addEventListener('GotMsg_notice', gotMsg, false)
         onBeforeMount(() => {
-            // getMsgList()
+            //全局消息测试代码
+            // let noticeContent = {
+            //     title:"这是标题",
+            //     text:"按时发货卡蒂狗蓝思科技哦啊合适了复健科更换接口过分了四大金刚三打两建开会搞四六级咖啡馆来得及咖啡馆离开<time>1635822889134</time>",
+            //     createTime:"1635822889145"
+            // }
+            // //getMsgList()
+            // setInterval(function(){
+            //     ElNotification({
+            //     title:  noticeContent.title || $t('c.biaoTi') ,
+            //     dangerouslyUseHTMLString: true,
+            //     message: `<div style="font-size:14px;color:#333333">${computeHtmlTime(noticeContent.text)}</div>
+            //     <div style="font-size:12px;color:#999999">${window.dayjs(Number(noticeContent.createTime)).format('YYYY-MM-DD HH:mm:ss')}</div>`,
+            // })
+            // },5000)
         })
         onUnmounted(() => {
             document.body.removeEventListener('GotMsg_notice', gotMsg)
@@ -320,6 +347,7 @@ export default {
             onLoad,
             changeType,
             computeHtmlTime,
+            changeDropdown,
             ...toRefs(state)
         }
     }

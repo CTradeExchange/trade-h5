@@ -50,8 +50,8 @@ export default {
         // 设置登录密码
         const loginPwdSet = () => {
             emit('update:modelValue', false)
-            router.push({
-                name: 'SetLoginPwd'
+            router.replace('/home').then(() => {
+                router.push('/home/setLoginPwd')
             })
         }
         // 下次设置登录密码

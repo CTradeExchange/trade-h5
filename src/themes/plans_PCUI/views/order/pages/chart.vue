@@ -11,14 +11,14 @@
 
         <div class='item range'>
             <p :class='product.cur_color'>
-                {{ parseFloat(product.cur_price).toFixed(product.price_digits) }}
+                {{ product.cur_price ? parseFloat(product.cur_price).toFixed(product.price_digits) : '--' }}
             </p>
             <p>
                 <span :class='product.upDownColor'>
-                    {{ product.upDownAmount }}
+                    {{ product.upDownAmount ? product.upDownAmount : '--' }}
                 </span>&nbsp;
                 <span :class='product.upDownColor'>
-                    {{ product.upDownWidth }}
+                    {{ product.upDownWidth ? product.upDownWidth : '--' }}
                 </span>
             </p>
         </div>
@@ -34,6 +34,7 @@
 
         <div class='item collect'>
             <i class='icon icon_zixuan1'></i>
+            <i v-if='[1, 2].includes(product.tradeType)' class='icon icon_guanyu' @click='$router.push(contractRoute)'></i>
         </div>
     </div>
     <div class='tv-head'>
@@ -370,6 +371,9 @@ export default {
             renderChart(product, state.initConfig.property)
             return product
         })
+
+        // 合约属性路由
+        const contractRoute = computed(() => (`${route.path}/contract?symbolId=${product.value?.symbolId}&tradeType=${product.value?.tradeType}`))
 
         // 实时更新买卖价线
         /* watch(() => [product.value.buy_price, product.value.sell_price, product.value.cur_price, product.value.tick_time], (newValues) => {
@@ -716,7 +720,8 @@ export default {
             computedLineList,
             handleLineChange,
             updateShow,
-            updateStudy
+            updateStudy,
+            contractRoute
 
         }
     }
@@ -751,6 +756,7 @@ export default {
                 flex: 1;
                 .icon{
                     font-size: 20px;
+                    margin-left: 16px;
                 }
             }
         }

@@ -436,7 +436,7 @@ export default {
                 t('information.sunday')
             ]
             // 星期几
-            // debugger
+
             const dayOfWeek = window.dayjs(time).day()
             const computeTime = dayOfWeek === 0 ? (time - 86400000) : time
             const startWeek = window.dayjs(computeTime).startOf('week')

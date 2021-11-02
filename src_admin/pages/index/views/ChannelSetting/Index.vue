@@ -145,7 +145,7 @@
                             </el-form-item>
 
                             <el-form-item label='现货仅当钱包'>
-                                <el-checkbox v-model='form.isWallet' :indeterminate='false' label='' />
+                                <el-checkbox v-model='form.isWallet' class='checkBox' :indeterminate='false' label='' />
                                 <el-popover
                                     content='设置了现货仅当钱包,前端的【现货】玩法会隐藏“交易”和“行情”页面,现货只保留“资产”页面'
                                     placement='top-start'
@@ -585,7 +585,7 @@ export default {
                     // this.otherZoneList = list
                     if (that.form.registrable.length === 0) {
                         that.form.registrable = [list[0]]
-                        this.form.defaultZone = list[0]
+                        this.form.defaultZone = that.form.registrable[0]
 
                         // 默认第一个是其它
                         if (!that.form.registList[0].registCountry) {
@@ -965,6 +965,9 @@ export default {
     }
     .row {
         padding-bottom: 30px;
+    }
+    .checkBox{
+        vertical-align: middle;
     }
     .img-tip{
         cursor: pointer;
