@@ -27,7 +27,7 @@ service.interceptors.request.use(
         const token = getToken()
         const timestamp = Date.now()
         config.toastErr = config.toastErr ?? true
-        headers.trace = config.url.includes('login') && false ? 'x' : guid()
+        headers.trace = guid()
         headers.timestamp = timestamp
         headers.lang = getCookie('lang')
         if (token) headers.token = token

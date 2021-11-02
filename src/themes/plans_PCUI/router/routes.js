@@ -23,6 +23,14 @@ const h5Children = [
             footerMenu: false,
         }
     },
+    {
+        path: 'setLoginPwd',
+        component: () => import(/* webpackChunkName: "setLoginPwd" */ '../views/setting/setLoginPwd.vue'),
+        meta: {
+            title: 'cRoute.setLoginPwd',
+            roles: ['User']
+        }
+    },
 ]
 
 const routes = [
