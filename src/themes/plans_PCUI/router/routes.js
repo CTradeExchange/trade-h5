@@ -56,6 +56,16 @@ const routes = [
         }
     },
     {
+        path: '/register/success',
+        name: 'RegisterSuccess',
+        component: () => import(/* webpackChunkName: "Register" */ '../views/register/registerSuccess.vue'),
+        meta: {
+            title: 'route.registerSuccess',
+            keepAlive: true,
+            roles: [],
+        }
+    },
+    {
         path: '/forgot',
         name: 'Forgot',
         component: () => import(/* webpackChunkName: "Forgot" */ '../views/forgot/forgot.vue'),

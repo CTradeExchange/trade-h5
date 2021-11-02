@@ -54,13 +54,13 @@
                     <i class='icon icon_zichan' :title="$t('header.assets')"></i>
                 </div>
                 <div class='item'>
-                     <el-dropdown trigger="click">
+                    <el-dropdown trigger='click'>
                         <i class='icon icon_xiaoxizhongxin1' :title="$t('header.information')"></i>
                         <template #dropdown>
-                                <div class='information_box' id="information_head">
-                                <div class="information_head" >
-                                    <div class="current_type" @click="dropTypeVisible = !dropTypeVisible">
-                                        <span>{{informationType}}</span><i class='icon el-icon-caret-bottom'></i>
+                            <div id='information_head' class='information_box'>
+                                <div class='information_head'>
+                                    <div class='current_type' @click='dropTypeVisible = !dropTypeVisible'>
+                                        <span>{{ informationType }}</span><i class='icon el-icon-caret-bottom'></i>
                                     </div>
                                 <!--
                                     <van-dropdown-menu get-container="#information_head">
@@ -68,9 +68,11 @@
                                     </van-dropdown-menu>
                                 -->
                                 </div>
-                                <div class="type_list" v-if="dropTypeVisible">
+                                <div v-if='dropTypeVisible' class='type_list'>
                                     <ul>
-                                        <li v-for="item in options" :class="{activeLi:type==item.value}" @click="changeType(item)">{{item.text}}</li>
+                                        <li v-for='item in options' :class='{ activeLi:type==item.value }' @click='changeType(item)'>
+                                            {{ item.text }}
+                                        </li>
                                     </ul>
                                 </div>
                                 <Loading :show='pageLoading' />
@@ -101,9 +103,6 @@
                                         </van-list>
                                     </van-pull-refresh>
                                 </div>
-
-
-
                             </div>
                         </template>
                     </el-dropdown>
@@ -112,7 +111,6 @@
                     <SettingIcon />
                 </div>
                 <div class='line'></div>
-                
             </div>
             <!-- 操作功能 -->
             <div class='handle-feature'>
@@ -204,18 +202,18 @@ export default {
                     'value': 'TRADE_MESSAGE'
                 }
             ],
-            informationType:"全部消息",
-            dropTypeVisible:false,
+            informationType: '全部消息',
+            dropTypeVisible: false,
         })
         const isError = computed(() => !!state.isError)
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
 
-        const changeType  = (item) => {
+        const changeType = (item) => {
             console.log(item)
-            if(state.type==item.value){
-                return;
+            if (state.type == item.value) {
+                return
             }
             state.type = item.value
             state.informationType = item.text
@@ -278,7 +276,7 @@ export default {
         }
         document.body.addEventListener('GotMsg_notice', gotMsg, false)
         onBeforeMount(() => {
-            getMsgList()
+            // getMsgList()
         })
         onUnmounted(() => {
             document.body.removeEventListener('GotMsg_notice', gotMsg)
@@ -300,7 +298,7 @@ export default {
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
-        
+
         // 玩法列表
         const plansList = computed(() => store.state._base.plans)
         const userAccountType = computed(() => store.getters['_user/userAccountType'])
@@ -438,7 +436,7 @@ export default {
                     color: #D6DAE1;
                     cursor: pointer;
                 }
-                
+
             }
             .line {
                 width: 1px;
