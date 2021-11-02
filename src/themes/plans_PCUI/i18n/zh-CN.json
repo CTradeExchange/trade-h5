@@ -620,5 +620,38 @@
         "pendingAmount": "委托额",
         "trustPrice": "委托价",
         "pendingUnit": "委托量"
+    },
+    "contract": {
+        "advance": "预付款",
+        "amount": "金额",
+        "contractSize": "合约大小",
+        "eodTime": "结算时间",
+        "feeType": "手续费类型",
+        "float": "浮动",
+        "interest": "隔夜利息(买/卖)",
+        "interestRate": "年利率",
+        "limitDistance": "最小/最大挂单距离",
+        "margins": "保证金要求",
+        "profitCurrency": "收益货币",
+        "quoteTime": "行情时间",
+        "ratio": "比例",
+        "singleNumbers": "单笔交易手数",
+        "spread": "点差",
+        "steper": "手数步长",
+        "symbolCode": "产品代码",
+        "tradeTime": "交易时间",
+        "volumeRange": "手数范围",
+        "volumes": "手数",
+        "zone": "所在时区",
+        "expireTime": "到期时间"
+    },
+    "weekdayMap": {
+        "1": "周一",
+        "2": "周二",
+        "3": "周三",
+        "4": "周四",
+        "5": "周五",
+        "6": "周六",
+        "7": "周日"
     }
 }

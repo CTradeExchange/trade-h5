@@ -31,6 +31,14 @@ const h5Children = [
             roles: ['User']
         }
     },
+    {
+        path: 'contract',
+        component: () => import(/* webpackChunkName: "contract" */ '../views/contract/contract.vue'),
+        meta: {
+            title: '',
+            roles: ['User']
+        }
+    },
 ]
 
 const routes = [
@@ -128,7 +136,8 @@ const routes = [
                     title: 'route.order',
                     keepAlive: true,
                     roles: [],
-                }
+                },
+                children: h5Children
             },
             {
                 path: 'assets',
