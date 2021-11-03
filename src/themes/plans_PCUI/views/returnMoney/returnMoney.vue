@@ -1,17 +1,17 @@
 <template>
-    <centerViewDialog class='transferPage'>
-        <transferMain />
+    <centerViewDialog class='returnMoneyPage'>
+        <returnMoneyMain />
     </centerViewDialog>
 </template>
 
 <script>
 import centerViewDialog from '@planspc/layout/centerViewDialog'
-import transferMain from './components/transferMain'
+import returnMoneyMain from './components/returnMoneyMain'
 
 export default {
     components: {
         centerViewDialog,
-        transferMain
+        returnMoneyMain
     }
 }
 </script>
@@ -20,5 +20,6 @@ export default {
 @import '@/sass/mixin.scss';
 .bindEmailPage {
     line-height: 50px;
+
 }
 </style>

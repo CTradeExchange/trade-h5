@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import Notice from '@planspc/components/notice'
 import { useStore } from 'vuex'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -27,9 +26,6 @@ import { useI18n } from 'vue-i18n'
 import { MsgSocket } from '@/plugins/socket/socket'
 import { getQueryVariable, sessionSet, unzip } from '@/utils/util'
 export default {
-    components: {
-        Notice
-    },
     setup () {
         const store = useStore()
         const router = useRouter()

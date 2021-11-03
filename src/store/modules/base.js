@@ -10,6 +10,7 @@ export default {
         wpSelfSymbol: null, //   wordpress自选产品配置
         wpProductCategory: [], // wordpress配置的产品板块
         wpNav: null, //   wordpress公司配置信息
+        plansNames: {}, // 完成类型，从语言包里面获取
         plans: [] // [{ id: 1, name: 'CFD合约全仓' }, { id: 2, name: 'CFD合约逐仓' }, { id: 3, name: '现货杠杆全仓' }, { id: 9, name: 'ABCC现货撮合' }]
     },
     mutations: {
@@ -34,7 +35,17 @@ export default {
             state.wpProductCategory = data
         },
         Update_plans (state, data = []) {
+            const plansNames = state.plansNames
+            data.forEach(el => {
+                el.name = plansNames[el.id]
+            })
             state.plans = data
+        },
+        Update_plansNames (state, plansNames) {
+            state.plansNames = plansNames
+            state.plans.forEach(el => {
+                el.name = plansNames[el.id]
+            })
         },
     },
     actions: {

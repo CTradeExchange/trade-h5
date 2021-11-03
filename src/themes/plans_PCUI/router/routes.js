@@ -92,6 +92,20 @@ const h5Children = [
             title: 'cRoute.bankList',
         }
     },
+    {
+        path: 'loan', // 借款
+        component: () => import(/* webpackChunkName: "loan" */ '../views/loan/loan.vue'),
+        meta: {
+            title: 'route.loan',
+        }
+    },
+    {
+        path: 'returnMoney', // 还款
+        component: () => import(/* webpackChunkName: "returnMoney" */ '../views/returnMoney/returnMoney.vue'),
+        meta: {
+            title: 'route.returnMoney',
+        }
+    },
 ]
 
 const routes = [
