@@ -3,7 +3,8 @@
         <router-view />
         <div class='content-top'>
             <div class='quote-wrap'>
-                {{ $t('trade.deal') }}
+                <!-- {{ $t('trade.deal') }} -->
+                <sidebarProduct />
             </div>
             <div class='middle-wrap'>
                 <div class='chart-content'>
@@ -42,6 +43,7 @@ import { useRouter, useRoute } from 'vue-router'
 import handicap from './pages/handicap.vue'
 import dealList from './pages/dealList.vue'
 import trade from './pages/trade.vue'
+import sidebarProduct from '@planspc/components/sidebarProduct'
 
 import { useStore } from 'vuex'
 export default {
@@ -49,17 +51,20 @@ export default {
         chart,
         handicap,
         dealList,
-        trade
+        trade,
+        sidebarProduct
     },
     setup () {
         const store = useStore()
         const route = useRoute()
         const { tradeType, symbolId } = route.query
-        store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
+        // store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
         const product = computed(() => store.getters.productActived)
         const tradeContentHeight = computed(() => {
-            if ([3, 5].includes(Number(product.value.tradeType))) {
+            if (Number(product.value.tradeType) === 5) {
                 return '265px'
+            } else if (Number(product.value.tradeType) === 3) {
+                return '340px'
             } else {
                 return '430px'
             }
@@ -100,6 +105,9 @@ export default {
 
         .quote-wrap {
             width: 360px;
+            // height: 709px;
+            display: flex;
+            flex-direction: row;
         }
 
         .middle-wrap {

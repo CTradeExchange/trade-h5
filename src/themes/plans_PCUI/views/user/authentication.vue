@@ -1,56 +1,63 @@
 <template>
-    <div>
-        <LayoutTop :back='true' :menu='false' title='' @backEvent='back' />
-        <div class='page-wrap'>
-            <Loading :show='loading' />
-            <div v-if='list.length === 0' class='empty-data'>
-                <van-empty :description='$t("auth.noRequired")' image='/images/empty.png' />
-            </div>
-            <div v-else>
-                <p class='title'>
-                    {{ $t('auth.authComplete') }}
-                </p>
-                <div class='auth-list'>
-                    <div v-for='(item,index) in list' :key='index' class='auth-item'>
-                        <img alt='' class='auth-img' :src="require('../../themes/mt4/images/'+ item.levelCode +'.png')" />
-                        <div class='content'>
-                            <p class='t1'>
-                                {{ item.levelName }}
-                            </p>
-                            <p class='t2'>
-                                {{ $t('auth.authPass') }} [{{ item.businessNameList.toString() }}]
-                            </p>
-                        </div>
-                        <div v-if='item.preLevelObj && item.preLevelObj.status !== 2'>
-                            <span class='notice'>
-                                {{ $t('auth.executeAuth', [item.preLevelObj.levelName]) }}
-                            </span>
-                        </div>
-                        <div v-else>
-                            <van-button plain round size='small' @click='handleNext(item)'>
-                                <template #default>
-                                    <span class='btn-text'>
-                                        {{ item.statusName }}
-                                    </span>
-                                    <van-icon :color='style.color' name='arrow' />
-                                </template>
-                            </van-button>
+    <centerViewDialog>
+        <div>
+            <LayoutTop :back='true' :menu='false' title='' @backEvent='back' />
+            <div class='page-wrap'>
+                <Loading :show='loading' />
+                <div v-if='list.length === 0' class='empty-data'>
+                    <van-empty :description='$t("auth.noRequired")' image='/images/empty.png' />
+                </div>
+                <div v-else>
+                    <p class='title'>
+                        {{ $t('auth.authComplete') }}
+                    </p>
+                    <div class='auth-list'>
+                        <div v-for='(item,index) in list' :key='index' class='auth-item'>
+                            <img alt='' class='auth-img' :src="require('@/themes/mt4/images/'+ item.levelCode +'.png')" />
+                            <div class='content'>
+                                <p class='t1'>
+                                    {{ item.levelName }}
+                                </p>
+                                <p class='t2'>
+                                    {{ $t('auth.authPass') }} [{{ item.businessNameList.toString() }}]
+                                </p>
+                            </div>
+                            <div v-if='item.preLevelObj && item.preLevelObj.status !== 2'>
+                                <span class='notice'>
+                                    {{ $t('auth.executeAuth', [item.preLevelObj.levelName]) }}
+                                </span>
+                            </div>
+                            <div v-else>
+                                <van-button plain round size='small' @click='handleNext(item)'>
+                                    <template #default>
+                                        <span class='btn-text'>
+                                            {{ item.statusName }}
+                                        </span>
+                                        <van-icon :color='style.color' name='arrow' />
+                                    </template>
+                                </van-button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </centerViewDialog>
 </template>
 
 <script>
-
+import centerViewDialog from '@planspc/layout/centerViewDialog'
 import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
 import { findAllBizKycList } from '@/api/user'
 import { useStore } from 'vuex'
 import { toRefs, reactive, computed, onBeforeMount } from 'vue'
 import { getArrayObj } from '@/utils/util'
+
 export default {
+    name: 'Authentication',
+    components: {
+        centerViewDialog
+    },
     setup (props, { emit, attrs }) {
         const store = useStore()
         const router = useRouter()
@@ -84,7 +91,7 @@ export default {
         const handleNext = (item) => {
             if (Number(item.status) === 0 || Number(item.status) === 3) {
                 router.push({
-                    path: '/authForm',
+                    path: route.path.slice(0, -15) + '/authForm',
                     query: {
                         levelCode: item.levelCode,
                         businessCode: route.query.businessCode
@@ -135,6 +142,7 @@ export default {
         color: var(--minorColor);
         line-height: rem(80px);
         border-bottom: solid 1px var(--lineColor);
+            padding-top: 22px;
     }
     .auth-list {
         margin-top: rem(30px);

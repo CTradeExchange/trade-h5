@@ -27,16 +27,13 @@
 
 <script>
 import centerViewDialog from '@planspc/layout/centerViewDialog'
-import bindEmailComponent from '@/themeCommon/user/chooseAccount'
 import { computed, toRefs, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-
 export default {
     components: {
         centerViewDialog,
-        bindEmailComponent
     },
     setup () {
         const router = useRouter()
@@ -71,11 +68,11 @@ export default {
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '@/sass/mixin.scss';
 .page-wrap {
-    width: 400px;
-    height: 600px;
+    width: 100%;
+    height: 100%;
     margin-top: rem(90px);
     overflow: auto;
     //background: var(--contentColor);

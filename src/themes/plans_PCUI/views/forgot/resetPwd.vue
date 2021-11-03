@@ -125,32 +125,44 @@ export default {
             padding: 60px;
             border-radius: 10px;
                 background-color: var(--contentColor);
+
         }
     }
     .header {
         // display: flex;
         align-items: center;
         justify-content: space-between;
-        margin: rem(40px) rem(30px);
+        margin: 0 0 40px;
+        h6{
+            font-size:16px;
+            font-weight: normal;
+
+        }
     }
     .pageTitle {
-        margin-bottom: rem(10px);
-        font-weight: normal;
-        font-size: rem(50px);
+font-weight: bold;
+    font-size: 32px;
+    color: var(--color);
     }
     .confirmBtn {
-        position: absolute;
-        bottom: 0;
+        // position: absolute;
+        // bottom: 0;
         width: 100%;
-        background: var(--lineColor);
-        border-color: var(--lineColor);
+        background: var(--primary);
+        color: var(--contentColor);
+                    font-size: 20px;
+                    border-radius: 4px;
+                    padding: 0;
+                    margin-top:18px;
         span {
-            color: var(--color);
-            font-size: rem(30px);
+           color: var(--contentColor);
         }
     }
     .form-item {
         position: relative;
+        margin-bottom: 24px;
+            border-radius: 4px;
+    overflow: hidden;
         .icon {
             position: absolute;
             top: rem(25px);
@@ -159,6 +171,11 @@ export default {
             cursor: pointer;
             &::before {
                 font-size: rem(30px);
+            }
+        }
+        :deep{
+           .van-field {
+                background-color: var(--bgColor);
             }
         }
     }
