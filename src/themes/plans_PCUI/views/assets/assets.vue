@@ -3,7 +3,7 @@
         <div class='assets-content'>
             <div class='assets-side'>
                 <h2 class='title'>
-                    {{ $t('assets.accountAssets') }}
+                    {{ $t('trade.accountAssets') }}
                 </h2>
                 <div class='plans-list'>
                     <ul>

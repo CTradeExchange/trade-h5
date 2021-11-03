@@ -3,7 +3,7 @@
         <div class='assets-header'>
             <p class='all'>
                 <span class='label'>
-                    {{ $t('assets.totalAssets') }}({{ assetsInfo?.currency }})
+                    {{ $t('trade.totalAssets') }}({{ assetsInfo?.currency }})
                 </span>
             </p>
             <p class='total-money'>
@@ -11,27 +11,27 @@
             </p>
             <div class='assets-handle'>
                 <button class='btn' @click='goRecharge'>
-                    {{ $t('assets.recharge') }}
+                    {{ $t('trade.desposit') }}
                 </button>
                 <button class='btn' @click='goWithdraw'>
-                    {{ $t('assets.withdraw') }}
+                    {{ $t('trade.withdraw') }}
                 </button>
                 <button class='btn' @click='goTransfer'>
-                    {{ $t('assets.transfer') }}
+                    {{ $t('trade.transfer') }}
                 </button>
                 <div class='record-link' @click='goRecord'>
                     <i class='icon_zijinmingxi1'></i>
-                    <span>{{ $t('assets.fundRecord') }}</span>
+                    <span>{{ $t('trade.fundRecord') }}</span>
                 </div>
             </div>
         </div>
         <div class='assets-body'>
             <el-table :cell-style="{ background:'none' }" :data='accountList' :empty-text="$t('c.noData')">
-                <el-table-column :label="$t('assets.name')" prop='currency' />
-                <el-table-column :label="$t('assets.totalAssets')" prop='balance' />
-                <el-table-column :label="$t('assets.free')" prop='available' />
-                <el-table-column :label="$t('assets.frozen')" prop='frozen' />
-                <el-table-column :label="$t('assets.carry')" prop='withdrawAmount' />
+                <el-table-column :label="$t('trade.name')" prop='currency' />
+                <el-table-column :label="$t('trade.totalAssets')" prop='balance' />
+                <el-table-column :label="$t('trade.free')" prop='available' />
+                <el-table-column :label="$t('trade.frozen')" prop='frozen' />
+                <el-table-column :label="$t('trade.carry')" prop='withdrawAmount' />
             </el-table>
         </div>
     </div>

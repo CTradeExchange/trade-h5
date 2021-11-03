@@ -295,6 +295,7 @@ export default {
             const symbolKey = `${symbolId}_${tradeType}`
             const product = productMap[symbolKey]
             if (product?.contractSize && !forceQuery) return Promise.resolve(product)
+
             if (tradeType) {
                 const params = {
                     symbolId: Number(symbolId),
