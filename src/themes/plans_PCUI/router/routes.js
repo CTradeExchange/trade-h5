@@ -32,6 +32,48 @@ const h5Children = [
         }
     },
     {
+        path: 'bankList',
+        component: () => import(/* webpackChunkName: "bankList" */ '../views/user/bankList.vue'),
+        meta: {
+            title: 'cRoute.bankList',
+            roles: ['User']
+        }
+    },
+    {
+        path: 'addBank',
+        component: () => import(/* webpackChunkName: "addBank" */ '../views/user/addBank.vue'),
+        meta: {
+            title: 'cRoute.addBank',
+            roles: ['User']
+        }
+    },
+    {
+        path: 'authentication',
+        name: 'Authentication',
+        component: () => import(/* webpackChunkName: "addBank" */ '../views/user/authentication.vue'),
+        meta: {
+            title: 'cRoute.authentication',
+            roles: ['User']
+        }
+    },
+    {
+        path: 'authForm',
+        component: () => import(/* webpackChunkName: "addBank" */ '../views/user/authForm.vue'),
+        meta: {
+            title: 'cRoute.authForm',
+            roles: ['User']
+        }
+    },
+    {
+        path: 'kycCommitted',
+        name: 'KycCommitted',
+        component: () => import(/* webpackChunkName: "addBank" */ '../views/user/kycCommitted.vue'),
+        meta: {
+            title: 'cRoute.kycCommitted',
+            roles: ['User']
+        }
+    },
+    {
         path: 'contract',
         component: () => import(/* webpackChunkName: "contract" */ '../views/contract/contract.vue'),
         meta: {
