@@ -658,33 +658,36 @@ body {
 }
 
 // element-plus
-.el-overlay {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	.el-dialog {
-		display: flex;
-		flex-direction: column;
-		margin: 0 !important;
-		max-height: 80%;
-		border-radius: 10px;
-		overflow: hidden;
-		.el-icon-close {
-			font-size: 22px;
+.dialog-layer {
+	.el-overlay {
+		.el-overlay-dialog {
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
-		.el-dialog__body {
-			@include scroll-pc();
-			flex: 1;
-			min-height: 200px;
-			padding: 20px;
-			overflow-y: auto;
-			img {
-				max-width: 100%;
+		.el-dialog {
+			display: flex;
+			flex-direction: column;
+			margin: 0 !important;
+			max-height: 80%;
+			border-radius: 10px;
+			overflow: hidden;
+			.el-icon-close {
+				font-size: 22px;
+			}
+			.el-dialog__header {
+				text-align: center;
+				color: var(--color);
+			}
+			.el-dialog__body {
+				@include scroll-pc();
+				flex: 1;
+				padding: 20px;
+				overflow-y: auto;
+				img {
+					max-width: 100%;
+				}
 			}
 		}
 	}
-}
-
-.disable{
-    color: var(--disable);
 }

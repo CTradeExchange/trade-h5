@@ -1,39 +1,29 @@
 <template>
     <section class='search-component'>
-        <van-search
-            v-model='searchValue'
-            class='search-input'
-            clearable
-            :placeholder='$t("search.keywords")'
-            show-action
-            @cancel='onCancel'
-        />
-        <div v-if='searchValue' class='content'>
-            <template v-if='searchResult.length'>
-                <div class='listWrap'>
-                    <transitionList>
-                        <div v-for='item in searchResult' :key='item.symbolKey' class='list-item li' @click='() => onClick(item)'>
-                            {{ item.symbolName }}
-                        </div>
-                    </transitionList>
-                </div>
+        <el-input v-model='searchValue' class='search-input' clearable placeholder='请输入关键字搜索' @input='onSearch'>
+            <template #prefix>
+                <el-icon class='el-input__icon'>
+                    <Search />
+                </el-icon>
             </template>
-            <div v-else class='empty'>
-                {{ $t('c.noData') }}
-            </div>
-        </div>
-        <slot v-else></slot>
+        </el-input>
+        <slot></slot>
     </section>
 </template>
 
 <script>
-import { ref, computed, unref } from 'vue'
+import { ref } from 'vue'
 import { useStore } from 'vuex'
-import transitionList from './transitionList'
+import { ElInput, ElIcon } from 'element-plus'
+import { Search } from '@element-plus/icons'
+import { getSymbolList } from '@/api/trade'
+import { debounce } from '@/utils/util'
 
 export default {
     components: {
-        transitionList,
+        [ElInput.name]: ElInput,
+        [ElIcon.name]: ElIcon,
+        Search
     },
     props: {
         tradeType: {
@@ -41,48 +31,32 @@ export default {
             default: ''
         }
     },
-    emits: ['cancel', 'select'],
+    emits: ['onSelect', 'onSearch'],
     setup (props, context) {
         const store = useStore()
-        const productList = computed(() => store.state._quote.productList)
-        // 搜索值
         const searchValue = ref('')
-        // 搜索结果
-        const searchResult = computed(() => {
-            const value = unref(searchValue)
-            if (!value) return []
-
-            const result = unref(productList)
-                .filter(e => {
-                    if (String(e.tradeType) !== String(props.tradeType)) {
-                        return
-                    }
-
-                    const searchContent = (e.symbolName || '') + (e.symbolCode || '')
-                    return searchContent.toLowerCase().includes(value.toLowerCase())
-                })
-
-            return result
-        })
-
-        const onCancel = () => {
-            context.emit('cancel')
-        }
-
         const onClick = product => {
-            context.emit('select', product)
+            context.emit('onSelect', product)
         }
 
-        const reset = () => {
-            searchValue.value = ''
-        }
+        // 搜索
+        const onSearch = debounce((key) => {
+            context.emit('onInput', key)
+            if (key) {
+                getSymbolList({ name: key, customerGroupId: store.getters.customerGroupId, tradeType: props.tradeType }).then(res => {
+                    if (res.check()) {
+                        context.emit('onSearch', res.data || [])
+                    }
+                })
+            } else {
+                context.emit('onSearch', [])
+            }
+        })
 
         return {
             searchValue,
-            onCancel,
-            searchResult,
             onClick,
-            reset
+            onSearch
         }
     },
 }
@@ -95,11 +69,12 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    align-items: center;
     width: 100%;
     overflow: hidden;
     .search-input {
-        width: 100%;
-        padding: 0 0 0 rem(30px);
+        width: 328px;
+        height: 40px;
         background: var(--contentColor);
         :deep(.van-search__content) {
             padding-left: 0;

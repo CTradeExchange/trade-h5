@@ -72,6 +72,7 @@ export default {
             handicapDigit: pow(0.1, props.product?.symbolDigits),
             lastPriceColor: '', // 最新成交价的颜色
         })
+
         // 获取盘口深度报价
         const handicapList = computed(() => store.state._quote.handicapList.find(({ symbol_id }) => parseInt(symbol_id) === props.product.symbolId))
 
@@ -219,7 +220,8 @@ export default {
         }
         .ft {
             color: var(--normalColor);
-            min-width: 10%;
+            min-width : 30%;
+            text-align: right;
         }
     }
 }

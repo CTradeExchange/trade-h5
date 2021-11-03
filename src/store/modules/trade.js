@@ -195,7 +195,7 @@ export default {
                 commit('Update_positionLoading', false)
 
                 if (res.check()) {
-                    commit('Update_positionList', { tradeType, list: res.data })
+                    commit('Update_positionList', { tradeType, list: res.data || [] })
                 }
                 return res
             })

@@ -1,13 +1,15 @@
 <template>
-    <el-dialog
-        v-model='show'
-        :before-close='close'
-        :close-on-click-modal='false'
-        :title='detailInfo.title'
-        width='800px'
-    >
-        <div v-html='detailInfo.content'></div>
-    </el-dialog>
+    <div class='dialog-layer'>
+        <el-dialog
+            v-model='show'
+            :before-close='close'
+            :close-on-click-modal='false'
+            :title='detailInfo.title'
+            width='800px'
+        >
+            <div v-html='detailInfo.content'></div>
+        </el-dialog>
+    </div>
 </template>
 
 <script>

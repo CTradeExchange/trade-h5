@@ -75,7 +75,7 @@ export default {
 @import '~@/sass/mixin.scss';
 .profitLossBar {
     align-items: center;
-    padding-top: rem(30px);
+    padding-top: 16px;
     color: var(--minorColor);
     line-height: 1.5;
 }

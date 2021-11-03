@@ -2,45 +2,54 @@
     <div class='trade-header'>
         <!-- 订单类型 -->
         <OrderTypeTab v-model='orderType' :trade-type='product.tradeType' @selected='changeOrderType' />
-        <div class='switch'>
-            <span> 止盈止损</span>
+        <div v-if='[1,2].includes(product.tradeType)' class='switch'>
+            <span>{{ $t('trade.tackStopSetup') }}</span>
             <van-switch v-model='enabled' size='20' />
         </div>
     </div>
 
+    <LoanBar v-if='[3, 9].includes(product.tradeType)' v-model='operationType' :account='account' class='loanBarMargin' :product='product' />
+
     <div class='trade-wrap'>
         <div class='buy-wrap'>
-            <div class='form-item disable'>
+            <!-- 挂单设置 -->
+            <div v-if='[3, 5, 9].includes(product.tradeType) && orderType===10' class='form-item'>
+                <PendingBar
+                    ref='pendingRef'
+                    v-model='buy.pendingPrice'
+                    class='cellMarginTop'
+                    direction='buy'
+                    :product='product'
+                />
+            </div>
+            <div v-else-if='orderType===10' class='form-item'>
+                <PendingBarCFD
+                    ref='pendingRef'
+                    v-model='buy.pendingPrice'
+                    class='cellMarginTop'
+                    direction='buy'
+                    :product='product'
+                />
+            </div>
+            <div v-else class='form-item disable'>
                 <label for=''>
-                    买入价 &nbsp;&nbsp;市场最优价买入
+                    {{ $t('trade.buyPrice') }}  &nbsp;&nbsp;
+                    <span class='minor'>
+                        {{ $t('trade.bestPriceBuy') }}
+                    </span>
                 </label>
             </div>
 
             <div class='form-item'>
-                <label for=''>
-                    买入量
-                </label>
-                <OrderVolume v-model='buy.volume' v-model:entryType='entryType' :account='account' class='cellMarginTop' :product='product' />
-                <span>{{ $t('trade.volumeUnit') }}</span>
+                <OrderVolume
+                    v-model='buy.volume'
+                    v-model:entryType='buy.entryType'
+                    :account='account'
+                    class='cellMarginTop'
+                    direction='buy'
+                    :product='product'
+                />
             </div>
-
-            <!-- 挂单设置 -->
-            <PendingBar
-                v-if='[3, 5, 9].includes(product.tradeType) && orderType===10'
-                ref='pendingRef'
-                v-model='buy.pendingPrice'
-                class='cellMarginTop'
-                direction='buy'
-                :product='product'
-            />
-            <PendingBarCFD
-                v-else-if='orderType===10'
-                ref='pendingRef'
-                v-model='buy.pendingPrice'
-                class='cellMarginTop'
-                direction='buy'
-                :product='product'
-            />
 
             <!-- 止盈止损 -->
             <ProfitlossSet
@@ -62,54 +71,69 @@
                 :title="$t('trade.expireTime')"
             />
 
-            <div class='balance'>
-                <p class='label'>
-                    可用
-                </p>
-                <div class='val'>
-                    <span>  50000.154 USD</span>
-                    <router-link to='/'>
-                        划转
-                    </router-link>
-                </div>
-            </div>
-
-            <div class='footerBtn buy'>
+            <!-- 订单金额 -->
+            <Assets
+                v-if='account'
+                :account='account'
+                direction='buy'
+                :product='product'
+                :volume='volume'
+            />
+            <div v-if='customerInfo' class='footerBtn buy'>
                 <van-button block :disabled='buy.loading' :loading='buy.loading' size='normal' @click='submitHandler("buy")'>
                     {{ $t('trade.buyText') }}
                 </van-button>
             </div>
+            <div v-else class='login-bar'>
+                <router-link to='login'>
+                    登录
+                </router-link> 或
+                <router-link to='register'>
+                    注册
+                </router-link>
+            </div>
         </div>
         <div class='sell-wrap'>
-            <div class='form-item disable'>
-                <label for=''>
-                    卖出价&nbsp;&nbsp; 市场最优价卖出
-                </label>
-            </div>
-            <div class='form-item'>
-                <label for=''>
-                    卖出量
-                </label>
-                <OrderVolume v-model='sell.volume' v-model:entryType='entryType' :account='account' class='cellMarginTop' :product='product' />
-                <span>{{ $t('trade.volumeUnit') }}</span>
-            </div>
             <!-- 挂单设置 -->
-            <PendingBar
-                v-if='[3, 5, 9].includes(product.tradeType) && orderType===10'
-                ref='pendingRef'
-                v-model='sell.pendingPrice'
-                class='cellMarginTop'
-                direction='buy'
-                :product='product'
-            />
-            <PendingBarCFD
-                v-else-if='orderType===10'
-                ref='pendingRef'
-                v-model='sell.pendingPrice'
-                class='cellMarginTop'
-                direction='sell'
-                :product='product'
-            />
+            <div v-if='[3, 5, 9].includes(product.tradeType) && orderType===10' class='form-item'>
+                <PendingBar
+                    v-if='[3, 5, 9].includes(product.tradeType) && orderType===10'
+                    ref='pendingRef'
+                    v-model='sell.pendingPrice'
+                    class='cellMarginTop'
+                    direction='buy'
+                    :product='product'
+                />
+            </div>
+            <div v-else-if='orderType===10' class='form-item'>
+                <PendingBarCFD
+
+                    ref='pendingRef'
+                    v-model='sell.pendingPrice'
+                    class='cellMarginTop'
+                    direction='sell'
+                    :product='product'
+                />
+            </div>
+            <div v-else class='form-item'>
+                <label for=''>
+                    {{ $t('trade.sellPrice') }} &nbsp;&nbsp;
+                    <span class='minor'>
+                        {{ $t('trade.bestPriceSell') }}
+                    </span>
+                </label>
+            </div>
+
+            <div class='form-item'>
+                <OrderVolume
+                    v-model='sell.volume'
+                    v-model:entryType='sell.entryType'
+                    :account='account'
+                    class='cellMarginTop'
+                    direction='sell'
+                    :product='product'
+                />
+            </div>
 
             <!-- 止盈止损 -->
             <ProfitlossSet
@@ -131,21 +155,27 @@
                 :title="$t('trade.expireTime')"
             />
 
-            <div class='balance'>
-                <p class='label'>
-                    可用
-                </p>
-                <div class='val'>
-                    <span>  50000.154 USD</span>
-                    <router-link to='/'>
-                        划转
-                    </router-link>
-                </div>
-            </div>
-            <div class='footerBtn sell'>
+            <!-- 可用余额 -->
+            <Assets
+                v-if='account'
+                :account='account'
+                direction='sell'
+                :product='product'
+                :volume='volume'
+            />
+
+            <div v-if='customerInfo' class='footerBtn sell'>
                 <van-button block :disabled='sell.loading' :loading='sell.loading' size='normal' @click='submitHandler("sell")'>
                     {{ $t('trade.sellText') }}
                 </van-button>
+            </div>
+            <div v-else class='login-bar'>
+                <router-link to='login'>
+                    登录
+                </router-link> 或
+                <router-link to='register'>
+                    注册
+                </router-link>
             </div>
         </div>
     </div>
@@ -167,6 +197,8 @@ import CellExpireType from './components/cellExpireType'
 import ProfitlossSet from './components/profitLossSet'
 import OrderTypeTab from './components/orderType.vue'
 import PendingBarCFD from './components/pendingBar_CFD'
+import LoanBar from './components/loanBar'
+import Assets from './components/assets.vue'
 
 export default {
     components: {
@@ -175,7 +207,9 @@ export default {
         ProfitlossSet,
         CellExpireType,
         OrderTypeTab,
-        PendingBarCFD
+        PendingBarCFD,
+        LoanBar,
+        Assets
     },
     setup () {
         const { t } = useI18n({ useScope: 'global' })
@@ -192,6 +226,7 @@ export default {
                 expireType: 1, // 挂单过期类型
                 pendingPrice: '',
                 loading: false,
+                entryType: 1, // 1按数量下单 2按成交额下单
             },
             sell: {
                 volume: '',
@@ -200,9 +235,9 @@ export default {
                 expireType: 1, // 挂单过期类型
                 pendingPrice: '',
                 loading: false,
+                entryType: 1, // 1按数量下单 2按成交额下单
             },
             operationType: 2, // 操作类型。1-普通；2-自动借款；3-自动还款
-            entryType: 1, // 1按数量下单 2按成交额下单
 
             enabled: false,
 
@@ -298,7 +333,7 @@ export default {
                 stopLoss: mul(state[state.submitType].stopLoss, p),
                 takeProfit: mul(state[state.submitType].stopProfit, p),
                 expireType: state[state.submitType].expireType,
-                entryType: state.entryType
+                entryType: state[state.submitType].entryType
             }
             return params
         }
@@ -321,14 +356,18 @@ export default {
         const setVolumeType = () => {
             // CFD逐仓和杠杆全仓玩法才支持按额下单功能
             const tradeType = parseInt(product.value?.tradeType)
+
             if ([2, 3, 5].includes(tradeType)) {
                 if ([3, 5].includes(tradeType) && state.direction === 'buy') {
-                    state.entryType = 2 // 1按数量下单 2按成交额下单
+                    state['buy'].entryType = 2 // 1按数量下单 2按成交额下单
+                    state['sell'].entryType = 2
                 } else {
-                    state.entryType = 1 // 1按数量下单 2按成交额下单
+                    state['buy'].entryType = 1 // 1按数量下单 2按成交额下单
+                    state['sell'].entryType = 1
                 }
             } else {
-                state.entryType = 1 // 1按数量下单 2按成交额下单
+                state['buy'].entryType = 1 // 1按数量下单 2按成交额下单
+                state['sell'].entryType = 1
             }
         }
 
@@ -338,7 +377,6 @@ export default {
             const [symbolId, tradeType] = symbolKey.value.split('_')
             state.operationType = parseFloat(tradeType) === 3 ? 1 : 2 // 杠杆玩法默认是普通类型
             setVolumeType() // 设置按额或者按手数交易
-
             store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
                 // state.volume = product.minVolume  不需要设置默认手数
                 // state[state.submitType].volume = ''
@@ -369,6 +407,7 @@ export default {
             submitHandler,
             profitLossRef,
             changeOrderType,
+            customerInfo,
             ...toRefs(state),
         }
     }
@@ -419,7 +458,7 @@ export default {
         flex: 1;
         padding-right: 15px;
         margin-right: 15px;
-        border-right: dashed 1px var(--lineColor);
+        border-right: dashed 1px var(--placeholdColor);
     }
     .sell-wrap{
         flex: 1;
@@ -436,30 +475,21 @@ export default {
         label{
             margin-right: 9px;
             color: var(--normalColor);
+            .minor{
+                color: var(--minorColor);
+            }
         }
         &.disable{
             background-color: var(--lineColor);
         }
     }
-    .balance{
-        display: flex;
-        justify-content: space-between;
-        margin: 12px 0;
-        .label{
-            color: var(--minorColor);
-        }
-        .val{
-            color: var(--normalColor);
-            >a{
-                color: var(--primary);
-            }
-        }
-    }
+
     .footerBtn {
         width: 100%;
         background: var(--contentColor);
         height: 40px;
         border-radius: 4px;
+        font-weight: bold;
         &.buy {
             .van-button {
                 color: #FFF;
@@ -475,6 +505,17 @@ export default {
                 border-color: var(--fallColor);
                 border-radius: 4px;
             }
+        }
+    }
+    .login-bar{
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        border-radius: 4px;
+        color: var(--normalColor);
+        background: var(--lineColor);
+        >a{
+            color: var(--primary);
         }
     }
 }

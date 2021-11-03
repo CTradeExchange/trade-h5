@@ -3,13 +3,14 @@
         <router-view />
         <div class='content-top'>
             <div class='quote-wrap'>
-                {{ $t('trade.deal') }}
+                <!-- {{ $t('trade.deal') }} -->
+                <sidebarProduct />
             </div>
             <div class='middle-wrap'>
                 <div class='chart-content'>
                     <chart />
                 </div>
-                <div class='trade-content'>
+                <div class='trade-content' :style="'height: '+ tradeContentHeight">
                     <trade />
                 </div>
             </div>
@@ -26,6 +27,11 @@
         </div>
         <div class='orders-wrap'>
             订单
+            <p>
+                <a href='javascript:;' @click="$router.push($route.path+'/transfer?accountId=1600&tradeType=1')">
+                    划转
+                </a>
+            </p>
         </div>
     </div>
 </template>
@@ -37,6 +43,7 @@ import { useRouter, useRoute } from 'vue-router'
 import handicap from './pages/handicap.vue'
 import dealList from './pages/dealList.vue'
 import trade from './pages/trade.vue'
+import sidebarProduct from '@planspc/components/sidebarProduct'
 
 import { useStore } from 'vuex'
 export default {
@@ -44,14 +51,31 @@ export default {
         chart,
         handicap,
         dealList,
-        trade
+        trade,
+        sidebarProduct
     },
     setup () {
         const store = useStore()
         const route = useRoute()
         const { tradeType, symbolId } = route.query
+        // store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
         const product = computed(() => store.getters.productActived)
-        return { chart, product, tradeType, symbolId }
+        const tradeContentHeight = computed(() => {
+            if (Number(product.value.tradeType) === 5) {
+                return '265px'
+            } else if (Number(product.value.tradeType) === 3) {
+                return '340px'
+            } else {
+                return '430px'
+            }
+        })
+        return {
+            chart,
+            product,
+            tradeType,
+            symbolId,
+            tradeContentHeight
+        }
     },
 }
 </script>
@@ -81,6 +105,9 @@ export default {
 
         .quote-wrap {
             width: 360px;
+            // height: 709px;
+            display: flex;
+            flex-direction: row;
         }
 
         .middle-wrap {
@@ -94,17 +121,18 @@ export default {
                  background: var(--contentColor);
             }
             .chart-content{
-                //padding: 10px;
+                margin-bottom: 8px;
+                height: 436px;
+                overflow: hidden;
+
             }
             .trade-content{
                 position: relative;
-                margin-top: 8px;
                 padding: 5px 16px 20px 16px;
             }
         }
 
         .right-wrap {
-
             display: flex;
             flex-direction: column;
             justify-content: space-between;

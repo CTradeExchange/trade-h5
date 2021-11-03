@@ -37,39 +37,43 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-.cellBar {
+.typeBar{
+    margin-top: 16px;
+    .cellBar {
     // align-items: center;
     color: var(--normalColor);
-    .titleCol {
-        width: rem(150px);
-        padding-top: rem(20px);
+        .titleCol {
+            width: rem(150px);
+            padding-top: rem(20px);
+        }
+        .radioGroup {
+            display: flex;
+            flex: 1;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
     }
-    .radioGroup {
-        display: flex;
-        flex: 1;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-    }
-}
-.btn {
+    .btn {
 
-    padding: 6px 12px;
-    color: var(color);
-    font-size: rem(24px);
-    line-height: 1;
-    text-align: center;
-    background: var(--assistColor);
-    border-radius: 4px;
-    cursor: pointer;
-    &.active {
-        color: var(--primary);
-        background: var(--primaryAssistColor);
-    }
-    &+.btn {
-        margin-left: rem(20px);
-    }
-    &:disabled {
-        opacity: 0.5;
+        padding: 6px 12px;
+        color: var(color);
+        font-size: rem(24px);
+        line-height: 1;
+        text-align: center;
+        background: var(--assistColor);
+        border-radius: 4px;
+        cursor: pointer;
+        &.active {
+            color: var(--primary);
+            background: var(--primaryAssistColor);
+        }
+        &+.btn {
+            margin-left: rem(20px);
+        }
+        &:disabled {
+            opacity: 0.5;
+        }
     }
 }
+
 </style>

@@ -150,7 +150,7 @@ export default {
         background: none;
     }
     .input {
-        width: rem(180px);
+        width: rem(240px);
         color: var(--color);
         font-size: rem(28px);
     }

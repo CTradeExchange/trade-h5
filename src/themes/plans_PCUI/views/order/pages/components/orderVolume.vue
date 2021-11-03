@@ -1,18 +1,42 @@
 <template>
+    <div v-if='product.tradeType === 2' class='trade-type'>
+        <el-dropdown @command='entryTypeUpdate'>
+            <span class='el-dropdown-link'>
+                {{ parseInt(entryType)===1 ? $tm('trade.volumeMap')[direction] : $t('trade.orderAmount') }}
+                <i class='icon icon_icon_arrow'></i>
+            </span>
+            <template #dropdown>
+                <el-dropdown-menu>
+                    <el-dropdown-item>{{ $tm('trade.volumeMap')[direction] }}</el-dropdown-item>
+                    <el-dropdown-item>{{ $t('trade.orderAmount') }}</el-dropdown-item>
+                </el-dropdown-menu>
+            </template>
+        </el-dropdown>
+    </div>
+
+    <div v-if='product.tradeType === 3' class='trade-type'>
+        {{ direction === 'buy' ? $t('trade.orderAmount') : $t('trade.volumes') }}
+    </div>
+    <div v-else class='trade-type'>
+        {{ $tm('trade.volumeMap')[direction] }}
+    </div>
+
     <div class='orderVolume'>
         <input
             ref='inputEl'
             class='input'
-            :placeholder='placeholder'
             type='text'
             :value='modelValue'
             @blur='onBlur'
             @input='onInput'
         />
-        <a v-if='[2].includes(product.tradeType)' class='entryType' href='javascript:;' @click='entryTypeUpdate'>
+        <!-- <a v-if='[2].includes(product.tradeType)' class='entryType' href='javascript:;' @click='entryTypeUpdate'>
             <i class='icon_qiehuan'></i>
             {{ parseInt(entryType)===1?$t('trade.volumes'):$t('trade.orderAmount') }}
-        </a>
+        </a> -->
+    </div>
+    <div class='right-val'>
+        {{ placeholder }}
     </div>
 </template>
 
@@ -37,21 +61,23 @@ export default {
             type: [Number, String],
             default: 1 // 1按数量下单 2按成交额下单
         },
+        direction: {
+            type: String
+        }
     },
     emits: ['update:modelValue', 'change', 'update:entryType'],
     setup (props, { emit }) {
         const inputEl = ref(null)
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
+
         const placeholder = computed(() => {
             const curTradeType = props.product.tradeType
             if ([1, 2].includes(curTradeType)) {
                 const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === curTradeType)
-                return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + '(' + t('trade.volumeUnit') + ')' : t('trade.orderAmount') + `(${account?.currency})`
-            // } else if ([3].includes(curTradeType)) {
-            //     return t('trade.orderVolume') + `(${props.product.baseCurrency})`
+                return parseInt(props.entryType) === 1 ? t('trade.volumeUnit') : account?.currency
             } else if ([3, 5].includes(curTradeType)) {
-                return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + `(${props.product.baseCurrency})` : t('trade.orderAmount') + `(${props.product.profitCurrency})`
+                return props.direction === 'buy' ? props.product.profitCurrency : props.product.baseCurrency
             } else {
                 return parseInt(props.entryType) === 1 ? t('trade.volumes') : t('trade.orderAmount')
             }
@@ -100,6 +126,13 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
+
+.trade-type{
+    cursor: pointer;
+    .icon{
+        font-size: 12px;
+    }
+}
 .orderVolume {
     position: relative;
     flex: 1;

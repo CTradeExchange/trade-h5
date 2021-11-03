@@ -57,12 +57,13 @@ export default {
     --van-tabs-bottom-bar-color: var(--primary);
     :deep(.van-tab) {
         flex: none;
-        margin-right: rem(40px);
+        margin-right: 20px;
         padding: 0;
         text-align: center;
     }
      :deep(.van-tabs__line){
-        width: 40px;
+        width: 35px;
+        bottom: 17px;
     }
 }
 </style>
