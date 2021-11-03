@@ -222,10 +222,11 @@ const routes = [
                 component: () => import(/* webpackChunkName: "Assets" */ '../views/assets/assets.vue'),
                 meta: {
                     title: 'route.assets',
-                    keepAlive: true,
-                    roles: [],
-                }
-            },
+                    keepAlive: false,
+                    roles: []
+                },
+                children: h5Children
+            }
         ]
     },
     // {

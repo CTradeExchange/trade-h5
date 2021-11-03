@@ -27,10 +27,10 @@
                 </li>
             </ul>
             <div class='assets-handle'>
-                <button class='btn'>
+                <button class='btn' @click='goLoan'>
                     {{ $t('trade.loan') }}
                 </button>
-                <button class='btn'>
+                <button class='btn' @click='goRepayment'>
                     {{ $t('trade.repayment') }}
                 </button>
                 <button class='btn' @click='goTransfer'>
@@ -52,10 +52,14 @@
                 <el-table-column :label="$t('trade.swap_2')" prop='interest' />
                 <el-table-column :label="$t('trade.carry')" prop='withdrawAmount' />
                 <el-table-column align='right' fixed='right' :label="$t('c.handle')" width='120'>
-                    <template #default>
+                    <template #default='scope'>
                         <div class='handle'>
-                            <button>{{ $t('trade.loan') }}</button>
-                            <button>{{ $t('trade.repayment') }}</button>
+                            <button @click='goLoan(scope.row)'>
+                                {{ $t('trade.loan') }}
+                            </button>
+                            <button @click='goRepayment(scope.row)'>
+                                {{ $t('trade.repayment') }}
+                            </button>
                         </div>
                     </template>
                 </el-table-column>
@@ -67,6 +71,7 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 export default {
     props: {
@@ -78,6 +83,7 @@ export default {
     },
     setup (props) {
         const store = useStore()
+        const router = useRouter()
         // 用户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
         // 资产信息
@@ -85,19 +91,72 @@ export default {
         // 资产列表
         const accountList = computed(() => customerInfo.value?.accountList.filter(el => Number(el.tradeType) === props.tradeType))
 
+        // 跳转到借款页面
+        const goLoan = (row) => {
+            if (row.accountId) {
+                router.push({
+                    path: '/assets/loan',
+                    query: {
+                        currency: row.currency,
+                        accountId: row.accountId,
+                        tradeType: props.tradeType
+                    }
+                })
+            } else {
+                router.push({
+                    path: '/assets/chooseAccount',
+                    query: {
+                        accountId: assetsInfo.value.accountId,
+                        tradeType: props.tradeType,
+                        type: 1
+                    }
+                })
+            }
+        }
+
+        // 跳转到还款页面
+        const goRepayment = (row) => {
+            if (row.accountId) {
+                router.push({
+                    path: '/assets/returnMoney',
+                    query: {
+                        currency: row.currency,
+                        accountId: row.accountId,
+                        tradeType: props.tradeType
+                    }
+                })
+            } else {
+                router.push({
+                    path: '/assets/chooseAccount',
+                    query: {
+                        accountId: assetsInfo.value.accountId,
+                        tradeType: props.tradeType,
+                        type: 3
+                    }
+                })
+            }
+        }
+
         // 跳转到划转页面
         const goTransfer = () => {
-            console.log('跳转到划转页面')
+            router.push({
+                path: '/assets/transfer',
+                query: {
+                    tradeType: props.tradeType
+                }
+            })
         }
 
         // 跳转到资金记录页面
         const goRecord = () => {
-            console.log('跳转到资金记录页面')
+
         }
 
         return {
             assetsInfo,
             accountList,
+            goLoan,
+            goRepayment,
             goTransfer,
             goRecord
         }
