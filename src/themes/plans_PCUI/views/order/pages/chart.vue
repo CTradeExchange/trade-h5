@@ -33,7 +33,12 @@
         </div>
 
         <div class='item collect'>
-            <i class='icon icon_zixuan1'></i>
+            <i
+                v-preventReClick
+                class='icon icon_zixuan1'
+                :class="[!isSelfSymbol?'icon_zixuan1':'icon_zixuan2']"
+                @click='addOptional'
+            ></i>
             <i v-if='[1, 2].includes(product.tradeType)' class='icon icon_guanyu'></i>
         </div>
     </div>
@@ -171,10 +176,12 @@
         @update:show='updateShow'
         @updateStudy='updateStudy'
     />
+    <Loading :show='loading' />
 </template>
 
 <script>
 import { reactive, toRefs, computed, unref, ref, watch, onMounted, onUnmounted } from 'vue'
+import { Dialog, Toast } from 'vant'
 import tv from '@/components/tradingview/tv'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
@@ -183,11 +190,14 @@ import { QuoteSocket } from '@/plugins/socket/socket'
 import { isEmpty, localSet, localGet } from '@/utils/util'
 import KIcon from './components/icons/kIcon.vue'
 import StudyList from './studyList.vue'
+import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
+import Loading from '@/components/loading.vue'
 export default {
     components: { tv, KIcon, StudyList },
     setup () {
         const route = useRoute()
+        const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const { tradeType, symbolId } = route.query
@@ -323,8 +333,13 @@ export default {
                 }
             ],
             showStudyDialog: false,
+            loading: false
 
         })
+
+        // 是否是自选
+        const isSelfSymbol = computed(() => store.state._user.selfSymbolList[tradeType]?.find(el => el.symbolId === parseInt(symbolId))
+        )
 
         // 图表类型
         const klineTypeIndex = computed(() => {
@@ -372,8 +387,22 @@ export default {
             return product
         })
 
+        const customerInfo = computed(() => store.state._user.customerInfo)
+
+        // 重新渲染图表
+        const renderChart = (product, property) => {
+            state.onChartReadyFlag && unref(chartRef).updateProperty(property)
+            state.onChartReadyFlag && unref(chartRef).updateLineData({
+                buyPrice: product.buy_price,
+                sellPrice: product.sell_price
+            })
+
+            state.onChartReadyFlag && unref(chartRef).setChartType(Number(property.chartType))
+            // setPositionLine()
+        }
+
         // 实时更新买卖价线
-        /* watch(() => [product.value.buy_price, product.value.sell_price, product.value.cur_price, product.value.tick_time], (newValues) => {
+        watch(() => [product.value.buy_price, product.value.sell_price, product.value.cur_price, product.value.tick_time], (newValues) => {
             if (Number(product.value.tradeType) !== 5 && Number(product.value.tradeType) !== 9) {
                 state.onChartReadyFlag && unref(chartRef).setTick(product.value.cur_price, product.value.tick_time)
 
@@ -382,10 +411,45 @@ export default {
                     sellPrice: product.value.sell_price
                 })
             }
-        }) */
+        })
 
         const handleClick = () => {
 
+        }
+
+        // 添加自选
+        const addOptional = () => {
+            if (isEmpty(customerInfo.value)) {
+                Toast(t('common.noLogin'))
+                return router.push('/login')
+            }
+            state.loading = true
+            if (isSelfSymbol.value) {
+                removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
+                    if (res.check()) {
+                        state.loading = false
+                        store.dispatch('_user/queryCustomerOptionalList')
+                        Toast(t('trade.removeOptionalOk'))
+                        // collect.value.classList.remove('icon_zixuan2')
+                    }
+                }).catch(err => {
+                    state.loading = false
+                })
+            } else {
+                addCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
+                    if (res.check()) {
+                        state.loading = false
+                        // 手动修改optional值
+                        store.commit('_user/Update_optional', 1)
+                        store.dispatch('_user/queryCustomerOptionalList')
+                        // collect.value.classList.add('icon_zixuan2')
+
+                        Toast(t('trade.addOptionalOk'))
+                    }
+                }).catch(err => {
+                    state.loading = false
+                })
+            }
         }
 
         // 选择指标
@@ -502,18 +566,6 @@ export default {
             state.onChartReadyFlag && unref(chartRef).setResolution(name)
             localSetChartConfig('resolution', name)
             return true
-        }
-
-        // 重新渲染图表
-        const renderChart = (product, property) => {
-            state.onChartReadyFlag && unref(chartRef).updateProperty(property)
-            state.onChartReadyFlag && unref(chartRef).updateLineData({
-                buyPrice: product.buy_price,
-                sellPrice: product.sell_price
-            })
-
-            state.onChartReadyFlag && unref(chartRef).setChartType(Number(property.chartType))
-            // setPositionLine()
         }
 
         // 指标移除回调
@@ -690,7 +742,7 @@ export default {
         }
 
         // 获取产品详情
-        store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType })
+        store.dispatch('_quote/querySymbolInfo', { 'symbolId': 139, 'tradeType': 2 })
 
         onMounted(() => {
             subscribeToProduct()
@@ -717,8 +769,9 @@ export default {
             computedLineList,
             handleLineChange,
             updateShow,
-            updateStudy
-
+            updateStudy,
+            addOptional,
+            isSelfSymbol
         }
     }
 }
@@ -753,6 +806,10 @@ export default {
                 .icon{
                     font-size: 20px;
                     margin-left: 16px;
+                    &.icon_zixuan2{
+                        color: #fc822f;
+                        animation: heartBeat 1.3s ease-in-out forwards;
+                    }
                 }
             }
         }
@@ -988,6 +1045,7 @@ export default {
         justify-content: flex-start;
 
         .content {
+            width: 460px;
             display: flex;
             flex: 1;
             flex-direction: row;

@@ -338,7 +338,6 @@ export default {
             const [symbolId, tradeType] = symbolKey.value.split('_')
             state.operationType = parseFloat(tradeType) === 3 ? 1 : 2 // 杠杆玩法默认是普通类型
             setVolumeType() // 设置按额或者按手数交易
-
             store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
                 // state.volume = product.minVolume  不需要设置默认手数
                 // state[state.submitType].volume = ''
@@ -460,6 +459,7 @@ export default {
         background: var(--contentColor);
         height: 40px;
         border-radius: 4px;
+        font-weight: bold;
         &.buy {
             .van-button {
                 color: #FFF;

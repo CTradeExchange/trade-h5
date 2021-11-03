@@ -49,6 +49,7 @@ export default {
         const store = useStore()
         const route = useRoute()
         const { tradeType, symbolId } = route.query
+        store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
         const product = computed(() => store.getters.productActived)
         return { chart, product, tradeType, symbolId }
     },
@@ -98,6 +99,7 @@ export default {
             .trade-content{
                 position: relative;
                 margin-top: 8px;
+                height: 458px;
                 padding: 5px 16px 20px 16px;
             }
         }
