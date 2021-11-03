@@ -37,8 +37,10 @@ import {
     ElPopover,
     ElTimelineItem,
     ElTable,
-    ElTableColumn
+    ElTableColumn,
+    ElCheckbox
 } from 'element-plus'
+import Setup from './setup'
 
 skywalkingRegister(router)
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
@@ -50,7 +52,7 @@ BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 const app = createApp(App)
 app.use(ElLoading).use(ElDialog).use(ElMessageBox).use(ElMessage).use(ElCarousel).use(ElCarouselItem).use(ElDropdown)
     .use(ElDropdownMenu).use(ElDropdownItem).use(ElTimeline).use(ElTimelineItem).use(ElEmpty).use(ElPopover).use(ElTable)
-    .use(ElTableColumn)
+    .use(ElTableColumn).use(ElCheckbox)
 app.use(preventReClick)
 app.use(VantBase).use(I18n).use(store).use(router)
 app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })
@@ -85,6 +87,9 @@ store.dispatch('_base/initBaseConfig').then(async () => {
     const defaultLocal = getCookie('lang') || 'zh-CN'
     setI18nLanguage(I18n, defaultLocal)
     await loadLocaleMessages(I18n, defaultLocal)
+
+    const { tm } = I18n.global
+    store.commit('_base/Update_plansNames', tm('tradeType'))
 
     // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
     if (loginParams || token) {

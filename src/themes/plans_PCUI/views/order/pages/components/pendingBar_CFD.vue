@@ -4,6 +4,8 @@
             {{ warn }}
         </FloatTip>
 
+        <label>{{ $tm('trade.priceMap')[direction] }}</label>
+
         <PendingBar
             v-model='pendingPrice'
             :direction='direction'
@@ -105,8 +107,10 @@ export default {
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
 .wrapper {
+    display: flex;
     align-items: center;
     line-height: 1.5;
+    width: 100%;
     .title {
         line-height: 1;
         .icon {

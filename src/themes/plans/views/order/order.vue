@@ -46,7 +46,7 @@
                     />
                     <!-- 止盈止损 -->
                     <ProfitlossSet
-                        v-if=' [1,2].includes(product.tradeType)'
+                        v-if='[1,2].includes(product.tradeType)'
                         v-model:stopLoss='stopLoss'
                         v-model:stopProfit='stopProfit'
                         class='cellMarginTop'
