@@ -21,7 +21,6 @@ import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.j
 import { getPreDemoAccountParams } from './officialDemoAccount.js'
 
 // element-plus
-// import 'element-plus/lib/theme-chalk/index.css'
 import 'element-plus/dist/index.css'
 import {
     ElLoading,
@@ -34,10 +33,9 @@ import {
     ElDropdownMenu,
     ElDropdownItem,
     ElTimeline,
+    ElEmpty,
     ElPopover,
     ElTimelineItem,
-    ElEmpty,
-    ElSelect,
 } from 'element-plus'
 
 skywalkingRegister(router)
@@ -49,7 +47,7 @@ BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 
 const app = createApp(App)
 app.use(ElLoading).use(ElDialog).use(ElMessageBox).use(ElMessage).use(ElCarousel).use(ElCarouselItem).use(ElDropdown)
-    .use(ElDropdownMenu).use(ElDropdownItem).use(ElTimeline).use(ElTimelineItem).use(ElEmpty).use(ElSelect).use(ElPopover)
+    .use(ElDropdownMenu).use(ElDropdownItem).use(ElTimeline).use(ElTimelineItem).use(ElEmpty).use(ElPopover)
 app.use(preventReClick)
 app.use(VantBase).use(I18n).use(store).use(router)
 app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })
@@ -88,8 +86,8 @@ store.dispatch('_base/initBaseConfig').then(async () => {
     // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
     if (loginParams || token) {
         Promise.resolve().then(() => {
-            if (loginParams) return store.dispatch('_user/login', loginParams)
-            else return store.dispatch('_user/findCustomerInfo')
+            if (token) return store.dispatch('_user/findCustomerInfo')
+            else return store.dispatch('_user/login', loginParams)
         }).then(res => {
             if (typeof (res.check) === 'function' && res.check()) {
                 checkUserKYC({ res, Dialog, router, store, t: I18n.global.t })

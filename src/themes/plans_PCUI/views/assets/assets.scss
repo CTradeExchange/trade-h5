@@ -1,0 +1,146 @@
+@import '@/sass/mixin.scss';
+
+.assets-module {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+	overflow: hidden;
+}
+.assets-header {
+    padding: 22px;
+    line-height: 1;
+    background: var(--contentColor);
+    border-radius: 10px;
+    position: relative;
+    .all {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        .label {
+            margin-right: 16px;
+            color: var(--minorColor);
+        }
+        .risk {
+            padding: 2px 4px;
+            color: var(--success);
+            border: 1px solid var(--success);
+            border-radius: 4px;
+        }
+    }
+    .total-money {
+        margin-top: 18px;
+        font-size: 40px;
+        color: var(--color);
+    }
+    .assets-ul {
+        display: flex;
+        margin-top: 25px;
+        li {
+            display: inline-flex;
+            flex-direction: column;
+            width: 20%;
+            span {
+                font-size: 14px;
+                color: var(--minorColor);
+            }
+            strong {
+                margin-top: 10px;
+                font-size: 24px;
+                color: var(--color);
+            }
+        }
+    }
+    .assets-handle {
+        display: flex;
+        position: absolute;
+        top: 20px;
+        right: 22px;
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 88px;
+            height: 40px;
+            margin-left: 16px;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--primary);
+            background: var(--primaryAssistColor);
+            border-radius: 4px;
+            cursor: pointer;
+            &:hover {
+                color: #fff;
+                background: var(--primary);
+            }
+        }
+        .record-link {
+            display: inline-flex;
+            align-items: center;
+            margin-left: 20px;
+            color: var(--normalColor);
+            cursor: pointer;
+            i {
+                margin-right: 6px;
+                font-size: 20px;
+            }
+            span {
+                font-size: 14px;
+            }
+            &:hover {
+                span {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}
+.assets-body {
+    flex: 1;
+    margin-top: 16px;
+    padding: 0 20px;
+    background: var(--contentColor);
+    border-radius: 10px;
+	:deep(.el-table) {
+		thead {
+			tr {
+				height: 50px;
+				font-size: 12px;
+				color: var(--minorColor);
+				th {
+					font-weight: normal;
+					border-bottom: 1px solid var(--lineColor);
+				}
+			}
+		}
+		tbody {
+			tr {
+				height: 62px;
+				font-size: 14px;
+				color: var(--color);
+				td {
+					border-bottom: 1px solid var(--lineColor);
+				}
+			}
+		}
+		.el-table__body-wrapper {
+			@include scroll-pc();
+		}
+	}
+	.handle {
+		display: flex;
+		justify-content: flex-end;
+	    button {
+	        margin-right: 15px;
+	        font-size: 14px;
+	        color: var(--primary);
+	        background: none;
+	        cursor: pointer;
+	        &:last-of-type {
+	            margin-right: 0;
+	        }
+			&:hover {
+				text-decoration: underline;
+			}
+	    }
+	}
+}

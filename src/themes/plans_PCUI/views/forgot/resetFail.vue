@@ -4,7 +4,7 @@
         <div class='container'>
             <div class='content'>
                 <div class='wrap'>
-                    <i class='icon_fail'></i>
+                    <i class='icon_shibai'></i>
                     <p class='t1'>
                         {{ $t('forgot.setPwdFailed') }}
                     </p>
@@ -16,7 +16,6 @@
                     <van-button class='confirmBtn' @click='$router.push("/forgot")'>
                         {{ $t('common.tryAgain') }}
                     </van-button>
-                    <span class='line'></span>
                     <van-button class='confirmBtn' @click='toService'>
                         {{ $t('common.serivce') }}
                     </van-button>
@@ -75,18 +74,17 @@ export default {
     }
 }
 .wrap {
-    padding-top: 40px;
     text-align: center;
-    .icon_fail {
-        color: var(--success);
+    .icon_shibai {
+        color: var(--warn);
         font-size: 64px;
     }
     .t1 {
         color: var(--color);
         font-size: 32px;
+        padding-top:10px;
     }
     .t2 {
-        margin-top: 24px;
         color: var(--color);
         font-size: 16px;
     }
@@ -102,21 +100,23 @@ export default {
     margin-top:36px;
     display: flex;
     align-items: center;
+        justify-content: space-between;
     width: 100%;
-    background: var(--lineColor);
-    .line {
-        width: rem(2px);
-        height: rem(47px);
-        background: var(--placeholder);
-    }
+
     .confirmBtn {
-        flex: 1;
         background: var(--primary);
-        border-color: var(--primary);
         color: var(--contentColor);
+                    font-size: 20px;
+                    border-radius: 4px;
+                    width:182px;
+                    padding: 0;
+        &:first-child{
+            background: var(--primaryAssistColor);
+            color:var(--primary);
+        }
         span {
             color: var(--contentColor);
-            font-size: 24px;
+
         }
     }
 }

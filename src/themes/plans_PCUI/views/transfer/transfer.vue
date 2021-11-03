@@ -1,24 +1,25 @@
 <template>
-    <centerViewDialog class='contractPage'>
-        <contractComp />
+    <centerViewDialog class='bindEmailPage'>
+        <bindEmailComponent type='bind' />
     </centerViewDialog>
 </template>
 
 <script>
 import centerViewDialog from '@planspc/layout/centerViewDialog'
-import contractComp from './components/contractComp'
+import bindEmailComponent from '@/themeCommon/components/bindEmailComponent'
 
 export default {
     components: {
         centerViewDialog,
-        contractComp
+        bindEmailComponent
     }
 }
 </script>
 
 <style lang="scss">
 @import '@/sass/mixin.scss';
-.contractPage {
+.bindEmailPage {
     line-height: 50px;
+
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
     <div class='page-wrap'>
+        <router-view />
         <div class='content-top'>
             <div class='quote-wrap'>
                 {{ $t('trade.deal') }}

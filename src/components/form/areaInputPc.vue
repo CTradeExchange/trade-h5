@@ -6,7 +6,7 @@
                 <el-option
                     v-for='item in countryList'
                     :key='item.code'
-                    :label="type === 'mobile' ? item.name: item.countryName"
+                    :label='item.name'
                     :value='item.code'
                 />
             </el-select>
@@ -31,6 +31,7 @@
 
 <script>
 // import VueSelect from '@/components/select'
+import { find } from 'lodash'
 import { randomId } from '@/utils/util'
 export default {
     components: {
@@ -77,13 +78,16 @@ export default {
             let countryList = this.$store.state._base.wpCompanyInfo?.registrable
             if (!countryList?.length) countryList = this.$store.state.countryList
             const tempArr = []
-            // debugger
+
             countryList.forEach(item => {
+                // debugger
+                const lable = this.type === 'mobile' ? item.name + ' (' + item.countryCode + ')' : item.name
+                const value = this.type === 'mobile' ? item.countryCode : item.code
                 tempArr.push({
-                    name: item.name + ' (' + item.countryCode + ')',
-                    code: item.countryCode,
+                    name: lable,
+                    code: value,
                     countryCode: item.code,
-                    countryName: item.name
+                    countryName: item.name,
                 })
             })
             return tempArr
@@ -109,7 +113,16 @@ export default {
             this.$emit('update:modelValue', $event.target.value)
             this.$emit('input', $event.target.value)
         },
-        zoneOnSelect (item) {
+        zoneOnSelect (val) {
+            // {
+            //     code: "86",
+            //     countryCode: "ISO_3166_156",
+            //     countryName: "中国大陆",
+            //     name: "中国大陆 (86)",
+            // }
+            const typeKey = this.type === 'mobile' ? 'code' : 'countryCode'
+            const item = find(this.countryList, { [typeKey]: val })
+            // debugger
             if (!this.disabled) {
                 this.$emit('update:zone', item.name)
                 this.$emit('zoneSelect', item)
@@ -130,8 +143,8 @@ export default {
     }
     .zone {
         flex: none;
-        // width: rem(220px);
-        margin-right: rem(20px);
+margin-right: 10px;
+    width: 152px;
         &.disabled {
             color: #C5C5C5;
             pointer-events: none;
