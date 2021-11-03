@@ -18,8 +18,10 @@ export default {
 
 <style lang="scss">
 @import '@/sass/mixin.scss';
-.bindEmailPage {
-    line-height: 50px;
-
+.loanPage{
+    .page-wrap .returnMoneyPop .footerBtn {
+        position: absolute !important;
+    }
 }
+
 </style>
