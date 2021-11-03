@@ -165,7 +165,7 @@ export default {
         // 获取到顶部消息通知，notice全局通知，同时刷新消息列表
         const gotMsg = (res) => {
             //全局通知
-            state.noticeContent = res.detail.content
+            state.noticeContent = res.detail.content;
              ElNotification({
                 title: state.noticeContent.title || $t('c.biaoTi') ,
                 dangerouslyUseHTMLString: true,
@@ -180,15 +180,13 @@ export default {
             // let noticeContent = {
             //     title:"这是标题",
             //     text:"按时发货卡蒂狗蓝思科技哦啊合适了复健科更换接口过分了四大金刚三打两建开会搞四六级咖啡馆来得及咖啡馆离开<time>1635822889134</time>",
-            //     createTime:"1635822889145"
             // }
             // //getMsgList()
             // setInterval(function(){
             //     ElNotification({
             //     title:  noticeContent.title || $t('c.biaoTi') ,
             //     dangerouslyUseHTMLString: true,
-            //     message: `<div style="font-size:14px;color:#333333">${computeHtmlTime(noticeContent.text)}</div>
-            //     <div style="font-size:12px;color:#999999">${window.dayjs(Number(noticeContent.createTime)).format('YYYY-MM-DD HH:mm:ss')}</div>`,
+            //     message: `<div style="font-size:14px;color:#333333">${computeHtmlTime(noticeContent.text)}</div> `,
             // })
             // },5000)
         })

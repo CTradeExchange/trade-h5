@@ -115,7 +115,6 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import SettingIcon from './components/settingIcon'
 import Msg from './components/msg'
-import { ElNotification } from 'element-plus'
 
 export default {
     components: {
