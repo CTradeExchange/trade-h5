@@ -17,16 +17,7 @@
                         :label='item.currency'
                         :value='item.accountId'
                     />
-                </el-select>
-                <!--
-                    <div class='actionBar' @click='selectcurCurrency'>
-                    <span class='currencySpan'>
-                        {{ curCurrency }}
-                    </span>
-                    <van-icon name='arrow' />
-                </div>
-                -->
-                
+                </el-select>  
                 <div class='actionBar'>
                     <input v-model='amount' class='input' :placeholder='$t("assets.loanAmount")' type='number' />
                     <a class='all' href='javascript:;' @click='handleAll'>
@@ -122,7 +113,6 @@ export default {
         }
 
         const changeCurrency = val => {
-            console.log(val, state.curCurrency)
             state.accountId = val
             columns.value.forEach(el=>{
                 if(el.accountId == val){
