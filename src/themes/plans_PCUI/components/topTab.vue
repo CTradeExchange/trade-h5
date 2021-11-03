@@ -1,31 +1,17 @@
 <template>
-    <van-tabs
-        ref='tabs'
-        v-model:active='active'
-        :border='border'
-        class='tabs'
-        :color='color'
-        :ellipsis='false'
-        line-width='30'
-        :type='type'
-        @change='updataActive'
-    >
-        <van-tab v-for='(item, index) in list' :key='index' class='tab'>
-            <template #title>
-                <div v-if='item?.id === "selfSymbol" || item.listByUser.length > 0' class='title' @click="$emit('tabClick',item,index)">
-                    <i v-if='item.icon' class='icon' :class='item.icon' :style="{ 'color':item.color }"></i>
-                    <div class='text'>
-                        {{ item.title }}
-                    </div>
-                </div>
-            </template>
-        </van-tab>
-    </van-tabs>
+    <el-tabs v-model:active='active' @tab-click='updataActive'>
+        <el-tab-pane v-for='(item, index) in list' :key='index' class='tab' :label='item.title' :name='String(index)' />
+    </el-tabs>
 </template>
 
 <script>
+import { ElTabs, ElTabPane } from 'element-plus'
 export default {
     name: 'Tab',
+    components: {
+        [ElTabs.name]: ElTabs,
+        [ElTabPane.name]: ElTabPane
+    },
     emits: ['update:modelValue', 'tabClick'],
     props: {
         type: {
@@ -85,7 +71,7 @@ export default {
     },
     methods: {
         updataActive (data) {
-            this.$emit('update:modelValue', data)
+            this.$emit('update:modelValue', data.paneName)
         }
     }
 }

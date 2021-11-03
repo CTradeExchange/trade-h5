@@ -3,7 +3,8 @@
         <router-view />
         <div class='content-top'>
             <div class='quote-wrap'>
-                {{ $t('trade.deal') }}
+                <!-- {{ $t('trade.deal') }} -->
+                <sidebarProduct />
             </div>
             <div class='middle-wrap'>
                 <div class='chart-content'>
@@ -42,6 +43,7 @@ import { useRouter, useRoute } from 'vue-router'
 import handicap from './pages/handicap.vue'
 import dealList from './pages/dealList.vue'
 import trade from './pages/trade.vue'
+import sidebarProduct from '@planspc/components/sidebarProduct'
 
 import { useStore } from 'vuex'
 export default {
@@ -49,7 +51,8 @@ export default {
         chart,
         handicap,
         dealList,
-        trade
+        trade,
+        sidebarProduct
     },
     setup () {
         const store = useStore()
@@ -102,6 +105,9 @@ export default {
 
         .quote-wrap {
             width: 360px;
+            // height: 709px;
+            display: flex;
+            flex-direction: row;
         }
 
         .middle-wrap {
