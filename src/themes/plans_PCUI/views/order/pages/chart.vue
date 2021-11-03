@@ -784,8 +784,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/sass/mixin.scss";
 .symbol-info{
-
-    padding: 18px 16px;
+    padding: 11px 16px;
     display: flex;
     align-items: center;
     >div{
@@ -827,7 +826,7 @@ export default {
 }
 .tabs-wrap {
     display: flex;
-    padding-top: 5px;
+    padding-top: 3px;
     border-top: solid 1px var(--lineColor);
     border-bottom: solid 1px var(--lineColor);
     flex-direction: row;
@@ -1277,7 +1276,7 @@ export default {
         }
     }
 .chart{
-    height: 330px;
+    height: 275px;
 }
 
 </style>

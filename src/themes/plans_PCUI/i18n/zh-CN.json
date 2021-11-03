@@ -595,7 +595,18 @@
 		"repaymentCurrency": "请选择还款币种",
 		"pendingAmount": "委托额",
 		"trustPrice": "委托价",
-		"pendingUnit": "委托量"
+		"pendingUnit": "委托量",
+        "volumeMap": {
+            "buy": "买入量",
+            "sell":  "卖出量"
+        },
+        "priceMap":{
+            "buy": "买入价",
+            "sell": "卖出价"
+        },
+        "bestPriceBuy": "市场最优价买入",
+        "bestPriceSell": "市场最优价卖出"
+
 	},
 	"contract": {
 		"advance": "预付款",

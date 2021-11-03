@@ -18,8 +18,8 @@ export default function hooks (state) {
         if ([1, 2].includes(tradeType)) {
             account = accountList.find(el => el.tradeType === tradeType)
         } else {
-            const outCurrency = product.value[state.direction === 'buy' ? 'profitCurrency' : 'baseCurrency']
-            account = customerInfo?.value?.accountMap[`${tradeType}_${outCurrency}`]
+            const outCurrency = product.value[state.direction === 'buy' ? 'profitCurrency' : 'baseCurrency'] || ''
+            account = (outCurrency && customerInfo.value)  ? customerInfo?.value?.accountMap[`${tradeType}_${outCurrency}`] : {}
         }
         return account
     })

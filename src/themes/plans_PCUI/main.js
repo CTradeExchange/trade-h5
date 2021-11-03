@@ -37,7 +37,8 @@ import {
     ElPopover,
     ElTimelineItem,
     ElTable,
-    ElTableColumn
+    ElTableColumn,
+    ElCheckbox
 } from 'element-plus'
 
 skywalkingRegister(router)
@@ -49,7 +50,7 @@ BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 
 const app = createApp(App)
 app.use(ElLoading).use(ElDialog).use(ElMessageBox).use(ElMessage).use(ElCarousel).use(ElCarouselItem).use(ElDropdown)
-    .use(ElDropdownMenu).use(ElDropdownItem).use(ElTimeline).use(ElTimelineItem).use(ElEmpty).use(ElPopover).use(ElTable).use(ElTableColumn)
+    .use(ElDropdownMenu).use(ElDropdownItem).use(ElTimeline).use(ElTimelineItem).use(ElEmpty).use(ElPopover).use(ElTable).use(ElTableColumn).use(ElCheckbox)
 app.use(preventReClick)
 app.use(VantBase).use(I18n).use(store).use(router)
 app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })
