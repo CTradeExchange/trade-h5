@@ -33,6 +33,7 @@
                 </a>
             </p>
         </div>
+        <assetsModule />
     </div>
 </template>
 
@@ -44,6 +45,7 @@ import handicap from './pages/handicap.vue'
 import dealList from './pages/dealList.vue'
 import trade from './pages/trade.vue'
 import sidebarProduct from '@planspc/components/sidebarProduct'
+import assetsModule from './pages/assets.vue'
 
 import { useStore } from 'vuex'
 export default {
@@ -52,7 +54,8 @@ export default {
         handicap,
         dealList,
         trade,
-        sidebarProduct
+        sidebarProduct,
+        assetsModule,
     },
     setup () {
         const store = useStore()
