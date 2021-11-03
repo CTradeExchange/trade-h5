@@ -47,11 +47,11 @@
 		"loadError": "加载失败，请稍后重试"
 	},
     "tradeType":{
-      "1": "合约全仓",
-      "2": "合约逐仓",
-      "3": "现货杠杆全仓",
-      "5": "现货撮合",
-      "9": "ABCC杠杆"
+        "1": "合约全仓",
+        "2": "合约逐仓",
+        "3": "杠杆",
+        "5": "现货",
+        "9": "ABCC杠杆"
     },
     "signIn": {
 		"loginBtn": "登录",
@@ -631,7 +631,7 @@
 		"7": "周日"
 	},
 	"assets": {
-		"accountAssets": "账户资产",
+        "accountAssets": "账户资产",
 		"asset": "资产",
 		"totalAssets": "总资产",
 		"frozen": "冻结",
@@ -639,13 +639,27 @@
 		"totalLoan": "总借款",
 		"interest": "利息",
 		"balance": "余额",
-		"alreadyLoan": "已借",
-		"dailyRate": "日利率",
+        "loanNotice":{
+            "1": "从平台可借款的最大额度，系统最大可借为{0}\n可借额度=系统最大可借资产-已借未还资产",
+            "2": "借款币种为{0}，日利率{1}，自申请借款后起算，以小时为单位计算，整点计息，不足一小时按一小时计算。\n借款利息=借款本金*（日利率/24）*借款小时数"
+        },
+        "alreadyLoan": "已借",
+        "dailyRate": "日利率",
+        "loanAmountNotice": "借款数量不能为空",
+        "loanAmountLess": "借款数量不能小于0",
+        "loanSuccess": "借款成功",
+        "loanAmountExcess": "超出最大可借额度",
+        "loanAmount": "借款数量",
+        "loanRecord": "借款记录",
+        "returnRecord": "还款记录",
 		"riskLevel": "风险率:",
 		"recharge": "充值",
 		"withdraw": "提现",
 		"transfer": "划转",
 		"fundRecord": "资金记录",
+        "transferRecord": "划转记录",
+        "toAccount": "转入",
+        "fromAccount": "转出",
 		"name": "名称",
 		"free": "可用",
 		"carry": "可提",
@@ -680,6 +694,15 @@
 		"maxReduce": "最大减少",
 		"enterMarginAmount": "请输入调整金额",
 		"enterMarginAmountTip": "调整金额不能为负数",
+        "maxTransfer": "最大可划转",
+        "minTransfer": "最少可划转",
+        "transferTip1": "划转金额不能为空",
+        "transferTip2": "划转金额不能为负数",
+        "transferTip3": "转入账户没有当前币种",
+        "transferTip4": "划转金额不能大于最大可划转金额",
+        "transferTip5": "划转金额不能小于最小可划转金额",
+        "transferTip6": "划转金额不能小于0",
+        "transferSuccess": "划转成功",
 		"confirmClose": "确认平仓"
 	}
 }

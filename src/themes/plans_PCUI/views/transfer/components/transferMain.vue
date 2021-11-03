@@ -12,18 +12,51 @@
                 <div class='label'>
                     {{ $t('common.from') }}
                     <div class='dots'>
-                        <span v-for='i in 3' :key='i' class='dot'>
-                        </span>
+                        <span v-for='i in 3' :key='i' class='dot'></span>
                     </div> {{ $t('common.to') }}
                 </div>
 
                 <div class='center'>
-                    <div class='from account' @click='handleFrom(fromAccount.id)'>
-                        <span> {{ fromAccount.name }}</span>
+                    <div class='from account'>
+                        <span v-if="fromAccount.id==='5'" class='accountTradeTypeName'>
+                            {{ fromAccount.name }}
+                        </span>
+                        <el-select
+                            v-else
+                            v-model='fromAccountTradeType'
+                            class='accountSelect'
+                            :disabled="fromAccount.tradeType==='5'"
+                            placeholder='Select'
+                            @change='fromAccountChange'
+                        >
+                            <el-option
+                                v-for='item in plans'
+                                :key='item.tradeType'
+                                :label='item.name'
+                                :value='item.tradeType'
+                            />
+                        </el-select>
                         <van-icon v-if='Number(fromAccount.id) !== 5' name='arrow' />
                     </div>
-                    <div class='to account' @click='handleTo(toAccount.id)'>
-                        <span> {{ toAccount.name }}</span>
+                    <div class='to account'>
+                        <span v-if="toAccount.id==='5'" class='accountTradeTypeName'>
+                            {{ toAccount.name }}
+                        </span>
+                        <el-select
+                            v-else
+                            v-model='toAccountTradeType'
+                            class='accountSelect'
+                            :disabled="toAccount.tradeType==='5'"
+                            placeholder='Select'
+                            @change='toAccountChange'
+                        >
+                            <el-option
+                                v-for='item in plans'
+                                :key='item.tradeType'
+                                :label='item.name'
+                                :value='item.tradeType'
+                            />
+                        </el-select>
                         <van-icon v-if='Number(toAccount.id) !== 5' name='arrow' />
                     </div>
                 </div>
@@ -31,10 +64,15 @@
                     <i class='icon_zhuanhuan'></i>
                 </div>
             </div>
-            <div class='action-bar' @click='pickerShow=true'>
-                <span class='label'>
-                    {{ curCurrency?.currency }}
-                </span>
+            <div class='action-bar'>
+                <el-select v-model='curCurrencyValue' class='accountSelect' placeholder='Select' @change='curCurrencyChange'>
+                    <el-option
+                        v-for='item in accountList'
+                        :key='item.currency'
+                        :label='item.currency'
+                        :value='item.currency'
+                    />
+                </el-select>
                 <van-icon name='arrow' />
             </div>
             <div class='action-bar'>
@@ -57,23 +95,6 @@
             </van-button>
         </div>
         <Loading :show='loading' />
-
-        <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
-            <van-picker
-                :columns='accountList'
-                :columns-field-names='currencyField'
-                @cancel='pickerShow = false'
-                @confirm='onCurrencyConfirm'
-            />
-        </van-popup>
-        <van-popup v-model:show='accountShow' class='assetsPicker' position='bottom'>
-            <van-picker
-                :columns='plans'
-                :columns-field-names='customField'
-                @cancel='accountShow = false'
-                @confirm='onPickerConfirm'
-            />
-        </van-popup>
     </div>
 </template>
 
@@ -94,15 +115,16 @@ export default {
         const route = useRoute()
         const { accountId, tradeType } = route.query
         const state = reactive({
-            pickerShow: false,
-            accountShow: false,
             loading: false,
             fromAccount: '',
             toAccount: '',
+            fromAccountTradeType: '', // 转出的玩法
+            toAccountTradeType: '', // 转入的玩法
             assetsList: [],
             transferType: '',
             amount: '',
             curCurrency: '',
+            curCurrencyValue: '', // 划转币种
             maxTransfer: '',
             curTradeType: ''
         })
@@ -127,8 +149,10 @@ export default {
             state.toAccount = plans.value.filter(el => el.name !== state.fromAccount.name)[0]
         } else {
             state.toAccount = plans.value.find(el => Number(el.id) === Number(tradeType))
+            state.toAccountTradeType = state.toAccount.tradeType
         }
         state.curTradeType = state.fromAccount.id
+        state.curCurrencyValue = accountList.value[0].currency
 
         // 最大可转
         // const maxTransfer = computed(() => accountList.value.find(item => item.currency === state.curCurrency.currency)?.withdrawAmount)
@@ -153,6 +177,7 @@ export default {
         watch(() => accountList, val => {
             if (val.value.length > 0) {
                 state.curCurrency = accountList.value[0]
+                state.curCurrencyValue = state.curCurrency.currency
                 state.curTradeType = accountList.value[0]?.tradeType
             }
         }, {
@@ -213,63 +238,33 @@ export default {
             state.amount = state.maxTransfer
         }
 
-        const onPickerConfirm = (val) => {
-            state.accountShow = false
-
-            if (state.transferType === 1) {
-                state.fromAccount = val
-            } else {
-                state.toAccount = val
-            }
-            state.curCurrency = state.curCurrency = accountList.value.filter(el => Number(el.tradeType) === Number(state.fromAccount.tradeType))[0]
-            state.amount = ''
-            /*   // abcc 现货杠杆 杠杆全仓重新拉账户资产
-            if ([3, 5, 9].includes(Number(state.fromAccount.id))) {
-                store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: state.fromAccount.id })
-            } */
-        }
         const toRecord = () => {
-            router.push({
-                path: '/record',
-                query: {
-                    accountId,
-                    tradeType,
-                    type: 3
-                }
-            })
-        }
-        const handleFrom = (tradeType) => {
-            if (Number(tradeType) === 5) return
-            state.transferType = 1
-            state.accountShow = true
-            state.assetsList = plans.value.filter(el => el.name !== state.toAccount.name)
-            // state.assetsList = plans.value.filter(el => el.name !== state.toAccount)
+            const routeParent = route.matched[route.matched.length - 2]
+            router.push(routeParent.path + `/fundRecord?tradeType=${tradeType}&accountId=${accountId}&type=3`)
         }
 
-        // 选取币种确定事件
-        const onCurrencyConfirm = (val) => {
-            state.curCurrency = val
-            state.pickerShow = false
+        // 切换转出账户
+        const fromAccountChange = (val) => {
+            state.fromAccount = store.state._base.plans.find(el => Number(el.id) === Number(val))
+            state.curCurrency = accountList.value.find(el => Number(el.tradeType) === Number(state.fromAccount.tradeType))
             state.amount = ''
         }
-
-        const handleTo = (tradeType) => {
-            if (Number(tradeType) === 5) return
-            state.transferType = 2
-            state.accountShow = true
-            state.assetsList = plans.value.filter(el => el.name !== state.fromAccount.name)
+        // 切换转出账户
+        const toAccountChange = (val) => {
+            state.toAccount = store.state._base.plans.find(el => Number(el.id) === Number(val))
+            state.curCurrency = accountList.value.find(el => Number(el.tradeType) === Number(state.fromAccount.tradeType))
+            state.amount = ''
         }
-        const customField = {
-            text: 'name',
-        }
-
-        const currencyField = {
-            text: 'currency'
+        // 切换币种
+        const curCurrencyChange = (val) => {
+            state.curCurrency = accountList.value.find(el => el.currency === val)
         }
 
         const handleSwap = () => {
-            [state.fromAccount, state.toAccount] = [state.toAccount, state.fromAccount]
+            [state.fromAccount, state.toAccount] = [state.toAccount, state.fromAccount];
+            [state.toAccountTradeType, state.fromAccountTradeType] = [state.fromAccountTradeType, state.toAccountTradeType]
             state.curCurrency = accountList.value.filter(el => Number(el.tradeType) === Number(state.fromAccount.tradeType))[0]
+            state.curCurrencyValue = state.curCurrency.currency
             state.amount = ''
         }
 
@@ -281,15 +276,12 @@ export default {
             plans,
             handleTransfer,
             handleSwap,
-            onCurrencyConfirm,
-            onPickerConfirm,
-            handleFrom,
-            handleTo,
-            customField,
             toRecord,
             handleAll,
+            fromAccountChange,
+            toAccountChange,
+            curCurrencyChange,
             accountList,
-            currencyField,
             minTransfer,
             ...toRefs(state),
 
@@ -384,8 +376,24 @@ export default {
             color: var(--minorColor);
         }
     }
+    .accountSelect{
+        width: 100%;
+        :deep(.el-input__suffix){
+            display: none;
+        }
+        :deep(.el-input__inner){
+            border: 0;
+        }
+        --el-disabled-border-base: transparent;
+        --el-disabled-fill-base: transparent;
+        --el-input-border: transparent;
+        --el-disabled-color-base: var(--color);
+    }
+    .accountTradeTypeName{
+        padding-left: 15px;
+    }
     .footerBtn {
-        position: fixed;
+        position: absolute;
         bottom: 0;
         left: 0;
         display: flex;
