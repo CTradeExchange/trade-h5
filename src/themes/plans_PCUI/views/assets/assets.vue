@@ -70,7 +70,7 @@ export default {
         // 玩法列表
         const plansList = unref(computed(() => store.state._base.plans))
         // 设置默认玩法
-        state.tradeType = 1 // Number(plansList[0].tradeType)
+        state.tradeType = Number(plansList[0].tradeType)
 
         // 初始化数据
         const initData = () => {

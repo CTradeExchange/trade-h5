@@ -84,7 +84,7 @@ export default {
         const assetsInfo = computed(() => store.state._user.assetsInfo[props.tradeType])
         // 资产列表
         const accountList = computed(() => customerInfo.value?.accountList.filter(el => Number(el.tradeType) === props.tradeType))
-
+        console.log('accountList', accountList)
         // 跳转到划转页面
         const goTransfer = () => {
             console.log('跳转到划转页面')
