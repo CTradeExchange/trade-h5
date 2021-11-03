@@ -54,63 +54,13 @@
                     <i class='icon icon_zichan' :title="$t('header.assets')"></i>
                 </div>
                 <div class='item'>
-                    <el-dropdown trigger="click" @visible-change="changeDropdown">
-                        <i class='icon icon_xiaoxizhongxin1' :title="$t('header.information')"></i>
-                        <template #dropdown>
-                            <div class='information_box' id="information_head">
-                                <div class="information_head" >
-                                    <div class="current_type" @click="dropTypeVisible = !dropTypeVisible">
-                                        <span>{{informationType}}</span><i class='icon el-icon-caret-bottom'></i>
-                                    </div>
-                                <!--
-                                    <van-dropdown-menu get-container="#information_head">
-                                        <van-dropdown-item v-model='type' :options='options' @change='changeType' />
-                                    </van-dropdown-menu>
-                                -->
-                                </div>
-                                <div v-if='dropTypeVisible' class='type_list'>
-                                    <ul>
-                                        <li v-for='item in options' :class='{ activeLi:type==item.value }' @click='changeType(item)'>
-                                            {{ item.text }}
-                                        </li>
-                                    </ul>
-                                </div>
-                                <Loading :show='pageLoading' />
-                                <div class='msg-list'>
-                                    <div v-if='list.length === 0'>
-                                        <van-empty :description='$t("common.noData")' image='/images/empty.png' />
-                                    </div>
-                                    <van-pull-refresh v-else v-model='loading' @refresh='onRefresh'>
-                                        <van-list
-                                            v-model:error='isError'
-                                            v-model:loading='loading'
-                                            :error-text='errorTip'
-                                            :finished='finished'
-                                            :finished-text='$t("common.noMore")'
-                                            @load='onLoad'
-                                        >
-                                            <div v-for='(item,index) in list' :key='index' class='msg-item'>
-                                                <p class='msg-title'>
-                                                    {{ item.title === 'null'? '': item.title }}
-                                                </p>
-                                                <p class='msg-content'>
-                                                    {{ computeHtmlTime(item.content) }}
-                                                </p>
-                                                <p class='msg-time'>
-                                                    {{ formatTime(item.createTime) }}
-                                                </p>
-                                            </div>
-                                        </van-list>
-                                    </van-pull-refresh>
-                                </div>
-                            </div>
-                        </template>
-                    </el-dropdown>
+                    <Msg />
                 </div>
                 <div class='item'>
                     <SettingIcon />
                 </div>
                 <div class='line'></div>
+                
             </div>
             <!-- 操作功能 -->
             <div class='handle-feature'>
@@ -159,17 +109,18 @@
 
 <script>
 import { onBeforeMount, computed, reactive, toRefs, onUnmounted } from 'vue'
-import { queryPlatFormMessageLogList } from '@/api/user'
 import { useStore } from 'vuex'
 import { isEmpty } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import SettingIcon from './components/settingIcon'
+import Msg from './components/msg'
 import { ElNotification } from 'element-plus'
 
 export default {
     components: {
         SettingIcon,
+        Msg
     },
     setup () {
         const route = useRoute()
@@ -177,155 +128,21 @@ export default {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
-            list: [],
-            loading: false,
-            finished: false,
-            pageLoading: false,
-            current: 1,
-            type: '',
-            errorTip: '',
             rightAction: { title: 444 },
-            options: [
-                {
-                    'text': t('msg.all'),
-                    'value': ''
-                },
-                {
-                    'text': t('msg.accountMsg'),
-                    'value': 'USER_MESSAGE'
-                },
-                {
-                    'text': t('msg.assetsMsg'),
-                    'value': 'CASH_MESSAGE'
-                },
-                {
-                    'text': t('msg.tradeMsg'),
-                    'value': 'TRADE_MESSAGE'
-                }
-            ],
-            informationType:"全部消息",
-            dropTypeVisible:false,
-            noticeContent:''
         })
-        const isError = computed(() => !!state.isError)
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
-
-        const changeType = (item) => {
-            console.log(item)
-            if (state.type == item.value) {
-                return
-            }
-            state.type = item.value
-            state.informationType = item.text
-            state.current = 1
-            state.finished = false
-            state.list = []
-            state.dropTypeVisible = !state.dropTypeVisible
-            getMsgList()
-        }
-        const changeDropdown = (val) =>{
-            if(val){
-                getMsgList();
-            }
-        }
-        const getMsgList = () => {
-            state.pageLoading = true
-            state.errorTip = ''
-            queryPlatFormMessageLogList({
-                current: state.current,
-                parentType: state.type,
-            }).then(res => {
-                state.loading = false
-                state.pageLoading = false
-                if (res.check()) {
-                    if (res.data.records && res.data.records.length > 0) {
-                        state.list = state.list.concat(res.data.records)
-                    }
-
-                    // 数据全部加载完成
-                    if (res.data.size * res.data.current >= res.data.total) {
-                        state.finished = true
-                    }
-                }
-            }).catch(err => {
-                state.errorTip = t('c.loadError')
-                state.pageLoading = false
-            })
-        }
-
-        const computeHtmlTime = (content) => {
-            try {
-                const reg = /<?time[^>]*>[^<]*<\/time>/gi
-                const tag = content.match(reg)
-                let returnVal
-                if (!isEmpty(tag) && tag.length > 0) {
-                    tag.forEach(item => {
-                        returnVal = content.replace(reg, function (matchStr) {
-                            const time = matchStr.toString().replace(/<\/?time>/g, '')
-                            return window.dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
-                        })
-                    })
-                    return returnVal
-                } else {
-                    return content
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        // 获取到顶部消息通知，notice全局通知，同时刷新消息列表
-        const gotMsg = (res) => {
-            //全局通知
-            state.noticeContent = res.detail.content
-             ElNotification({
-                title: state.noticeContent.title || $t('c.biaoTi') ,
-                dangerouslyUseHTMLString: true,
-                message: `<div class='content'>${computeHtmlTime(state.noticeContent.text)}</div>`,
-            })
-            //刷新消息列表
-            onRefresh()
-        }
-        document.body.addEventListener('GotMsg_notice', gotMsg, false)
         onBeforeMount(() => {
-            //全局消息测试代码
-            // let noticeContent = {
-            //     title:"这是标题",
-            //     text:"按时发货卡蒂狗蓝思科技哦啊合适了复健科更换接口过分了四大金刚三打两建开会搞四六级咖啡馆来得及咖啡馆离开<time>1635822889134</time>",
-            //     createTime:"1635822889145"
-            // }
-            // //getMsgList()
-            // setInterval(function(){
-            //     ElNotification({
-            //     title:  noticeContent.title || $t('c.biaoTi') ,
-            //     dangerouslyUseHTMLString: true,
-            //     message: `<div style="font-size:14px;color:#333333">${computeHtmlTime(noticeContent.text)}</div>
-            //     <div style="font-size:12px;color:#999999">${window.dayjs(Number(noticeContent.createTime)).format('YYYY-MM-DD HH:mm:ss')}</div>`,
-            // })
-            // },5000)
+
         })
         onUnmounted(() => {
-            document.body.removeEventListener('GotMsg_notice', gotMsg)
+            
         })
-
-        // 上拉刷新
-        const onRefresh = () => {
-            state.current = 1
-            state.finished = false
-            state.list = []
-            getMsgList()
-        }
-        // 底部加载更多
-        const onLoad = () => {
-            state.current++
-            getMsgList()
-        }
-
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
-
+        
         // 玩法列表
         const plansList = computed(() => store.state._base.plans)
         const userAccountType = computed(() => store.getters['_user/userAccountType'])
@@ -339,15 +156,8 @@ export default {
             userAccountType,
             customerInfo,
             handRoutTo,
-            getMsgList,
-            isError,
             customInfo,
             formatTime,
-            onRefresh,
-            onLoad,
-            changeType,
-            computeHtmlTime,
-            changeDropdown,
             ...toRefs(state)
         }
     }
@@ -464,7 +274,7 @@ export default {
                     color: #D6DAE1;
                     cursor: pointer;
                 }
-
+                
             }
             .line {
                 width: 1px;
