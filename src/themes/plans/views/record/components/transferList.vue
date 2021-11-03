@@ -27,13 +27,13 @@
                 <div class='block'>
                     <div class='left'>
                         <span class='num'>
-                            <strong>{{ planMap[tradeType]?.name }}</strong> -
+                            <strong>{{ $t('tradeType['+tradeType+']') }}</strong> -
                             {{ directionText(item,1) }}
                         </span>
                     </div>
                     <div class='right'>
                         <span class='num'>
-                            <strong>{{ planMap[item.rightTradeType]?.name }}</strong> - {{ directionText(item,2) }}
+                            <strong>{{ $t('tradeType['+item.rightTradeType+']') }}</strong> - {{ directionText(item,2) }}
                         </span>
                     </div>
                 </div>
@@ -58,7 +58,6 @@ export default {
         const route = useRoute()
         const { tradeType } = route.query
         const requestParams = ref({})
-        const planMap = computed(() => store.state._quote.planMap)
         const setParams = (params) => {
             requestParams.value = params || {}
         }
@@ -88,7 +87,6 @@ export default {
             setParams,
             listRef,
             refresh,
-            planMap,
             tradeType,
             directionText,
             ...toRefs(state)
