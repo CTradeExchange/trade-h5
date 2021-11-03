@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "23448247",
+      "name": "转换",
+      "font_class": "zhuanhuan",
+      "unicode": "e65d",
+      "unicode_decimal": 58973
+    },
+    {
       "icon_id": "25354059",
       "name": "合约全仓账户",
       "font_class": "heyuequancangzhanghu",

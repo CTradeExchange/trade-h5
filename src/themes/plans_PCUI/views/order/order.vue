@@ -26,6 +26,11 @@
         </div>
         <div class='orders-wrap'>
             订单
+            <p>
+                <a href='javascript:;' @click="$router.push($route.path+'/transfer?accountId=1600&tradeType=1')">
+                    划转
+                </a>
+            </p>
         </div>
     </div>
 </template>
