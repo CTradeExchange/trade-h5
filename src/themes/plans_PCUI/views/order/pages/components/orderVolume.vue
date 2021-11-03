@@ -1,5 +1,5 @@
 <template>
-    <div v-if='[2].includes(product.tradeType)' class='trade-type'>
+    <div v-if='product.tradeType === 2' class='trade-type'>
         <el-dropdown @command='entryTypeUpdate'>
             <span class='el-dropdown-link'>
                 {{ parseInt(entryType)===1 ? $tm('trade.volumeMap')[direction] : $t('trade.orderAmount') }}
@@ -12,6 +12,10 @@
                 </el-dropdown-menu>
             </template>
         </el-dropdown>
+    </div>
+
+    <div v-if='product.tradeType === 3' class='trade-type'>
+        {{ direction === 'buy' ? $t('trade.orderAmount') : $t('trade.volumes') }}
     </div>
     <div v-else class='trade-type'>
         {{ $tm('trade.volumeMap')[direction] }}
@@ -72,10 +76,8 @@ export default {
             if ([1, 2].includes(curTradeType)) {
                 const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === curTradeType)
                 return parseInt(props.entryType) === 1 ? t('trade.volumeUnit') : account?.currency
-            // } else if ([3].includes(curTradeType)) {
-            //     return t('trade.orderVolume') + `(${props.product.baseCurrency})`
             } else if ([3, 5].includes(curTradeType)) {
-                return parseInt(props.entryType) === 1 ? `(${props.product.baseCurrency})` : `(${props.product.profitCurrency})`
+                return props.direction === 'buy' ? props.product.profitCurrency : props.product.baseCurrency
             } else {
                 return parseInt(props.entryType) === 1 ? t('trade.volumes') : t('trade.orderAmount')
             }

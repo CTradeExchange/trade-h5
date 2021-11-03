@@ -55,11 +55,13 @@ export default {
         const store = useStore()
         const route = useRoute()
         const { tradeType, symbolId } = route.query
-        store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
+        // store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
         const product = computed(() => store.getters.productActived)
         const tradeContentHeight = computed(() => {
-            if ([3, 5].includes(Number(product.value.tradeType))) {
+            if (Number(product.value.tradeType) === 5) {
                 return '265px'
+            } else if (Number(product.value.tradeType) === 3) {
+                return '340px'
             } else {
                 return '430px'
             }

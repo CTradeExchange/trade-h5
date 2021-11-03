@@ -1040,15 +1040,8 @@ export default {
     background: var(--contentColor);
     .main-study,
     .side-study {
-        display: flex;
-        flex: 1;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-items: flex-end;
-        justify-content: flex-start;
-
+        width: 600px;
         .content {
-            width: 460px;
             display: flex;
             flex: 1;
             flex-direction: row;
