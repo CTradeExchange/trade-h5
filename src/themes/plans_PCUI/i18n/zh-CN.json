@@ -326,7 +326,7 @@
 		"closeProfit": "平仓盈亏",
 		"confirmClose": "确认平仓",
 		"closeNetProfit": "平仓净盈亏",
-		"positionProfit": "盈亏",
+		"positionProfit": "持仓盈亏",
 		"swap": "隔夜利息",
 		"swap_2": "利息",
 		"unit": "单位",
@@ -595,7 +595,24 @@
 		"repaymentCurrency": "请选择还款币种",
 		"pendingAmount": "委托额",
 		"trustPrice": "委托价",
-		"pendingUnit": "委托量"
+		"pendingUnit": "委托量",
+		"accountAssets": "账户资产",
+		"totalAssets": "总资产",
+		"fundRecord": "资金记录",
+		"riskLevel": "风险率:",
+		"totalLoan": "总借款",
+		"carry": "可提",
+		"frozen": "冻结",
+        "volumeMap": {
+            "buy": "买入量",
+            "sell":  "卖出量"
+        },
+        "priceMap":{
+            "buy": "买入价",
+            "sell": "卖出价"
+        },
+        "bestPriceBuy": "市场最优价买入",
+        "bestPriceSell": "市场最优价卖出"
 	},
 	"contract": {
 		"advance": "预付款",

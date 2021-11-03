@@ -9,17 +9,17 @@
         >
             <div class='body-module'>
                 <div class='title'>
-                    {{ $t('assets.modifyMargin') }}
+                    {{ $t('trade.modifyMargin') }}
                 </div>
                 <div class='box'>
                     <div class='switch' @click='onSwitch'>
                         <i class='el-icon-sort'></i>
-                        <span>{{ operType ? $t('assets.raise') : $t('assets.reduce') }}</span>
+                        <span>{{ operType ? $t('trade.raise') : $t('trade.reduce') }}</span>
                     </div>
                     <view class='line' />
                     <input
                         v-model='amount'
-                        :placeholder="$t('assets.modifyAmount')"
+                        :placeholder="$t('trade.modifyAmount')"
                         type='number'
                     />
                     <button class='all' @click='onAll'>
@@ -28,15 +28,15 @@
                 </div>
                 <div class='tip'>
                     <span v-if='operType'>
-                        {{ $t('assets.maxRaise') }}：{{ accountInfo.available }} {{ accountInfo.currency }}
+                        {{ $t('trade.maxRaise') }}：{{ accountInfo.available }} {{ accountInfo.currency }}
                     </span>
                     <span v-else>
-                        {{ $t('assets.maxReduce') }}：{{ positionData.canReduceMargin }} {{ accountInfo.currency }}
+                        {{ $t('trade.maxReduce') }}：{{ positionData.canReduceMargin }} {{ accountInfo.currency }}
                     </span>
                 </div>
             </div>
             <template #footer>
-                <button v-loading='isSubmit' class='confirm-btn' @click='onConfirm'>
+                <button v-loading='isSubmit' class='handle-btn' @click='onConfirm'>
                     {{ $t('confirm') }}
                 </button>
             </template>
@@ -56,19 +56,14 @@ import { ElMessage } from 'element-plus'
 import { updateOccupyTheMargin } from '@/api/user'
 
 export default {
-    props: {
-        // 持仓数据
-        data: {
-            type: Object,
-            default: () => {}
-        }
-    },
-    setup (props) {
+    setup () {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             // 是否显示弹窗
             show: false,
+            // 持仓数据
+            data: {},
             // 调整类型 true:追加 false:减少
             operType: true,
             // 调整的金额
@@ -79,12 +74,13 @@ export default {
         // 账户列表
         const accountList = computed(() => store.state._user.customerInfo?.accountList)
         // 账户信息
-        const accountInfo = computed(() => accountList.value.find(el => Number(el.tradeType) === Number(props.data.tradeType)))
+        const accountInfo = computed(() => accountList.value.find(el => Number(el.tradeType) === Number(state.data.tradeType)))
         // 持仓数据
-        const positionData = computed(() => store.state._trade.positionList[props.data.tradeType]?.find(item => item.positionId === props.data.positionId))
+        const positionData = computed(() => store.state._trade.positionList[state.data.tradeType]?.find(item => item.positionId === state.data.positionId))
 
         // 打开弹窗
-        const open = () => {
+        const open = (row) => {
+            state.data = row
             state.operType = true
             state.amount = ''
             state.isSubmit = false
@@ -105,7 +101,7 @@ export default {
 
         // 点击全部
         const onAll = () => {
-            state.amount = state.operType ? accountInfo.value.available : props.positionData.canReduceMargin
+            state.amount = state.operType ? accountInfo.value.available : positionData.value.canReduceMargin
         }
 
         // 确定调整保证金
@@ -114,13 +110,13 @@ export default {
             if (isEmpty(state.amount) || parseFloat(state.amount) === 0) {
                 ElMessage({
                     type: 'warning',
-                    message: t('assets.enterMarginAmount'),
+                    message: t('trade.enterMarginAmount'),
                 })
             }
             if (parseFloat(state.amount) < 0) {
                 ElMessage({
                     type: 'warning',
-                    message: t('assets.enterMarginAmountTip'),
+                    message: t('trade.enterMarginAmountTip'),
                 })
             }
 
@@ -129,7 +125,7 @@ export default {
 
         // 发起调整保证金请求
         const submitData = () => {
-            const data = props.data
+            const data = state.data
             const margin = state.operType ? parseFloat(state.amount) : -parseFloat(state.amount)
             const occupyTheMargin = margin * pow(10, data.openAccountDigits)
             const params = {
@@ -148,7 +144,7 @@ export default {
                 state.isSubmit = false
                 ElMessage({
                     type: 'success',
-                    message: t('c.handleSuccess'),
+                    message: t('c.handleSuccess')
                 })
             }).catch(res => {
                 state.isSubmit = false
@@ -161,7 +157,7 @@ export default {
 
         // 获取持仓列表
         const queryPositionList = () => {
-            const data = props.data
+            const data = state.data
             store.dispatch('_trade/queryPositionPage', {
                 tradeType: data.tradeType,
                 sortFieldName: 'openTime',
@@ -184,12 +180,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dialog-layer {
-    :deep(.el-dialog__header) {
-        text-align: center;
-        color: var(--color);
-    }
-}
 .body-module {
     .title {
         color: var(--minorColor);
@@ -241,7 +231,7 @@ export default {
         font-size: 14px;
     }
 }
-.confirm-btn {
+.handle-btn {
     display: flex;
     justify-content: center;
     align-items: center;

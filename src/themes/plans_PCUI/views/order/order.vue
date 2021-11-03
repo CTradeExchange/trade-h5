@@ -9,7 +9,7 @@
                 <div class='chart-content'>
                     <chart />
                 </div>
-                <div class='trade-content'>
+                <div class='trade-content' :style="'height: '+ tradeContentHeight">
                     <trade />
                 </div>
             </div>
@@ -57,7 +57,20 @@ export default {
         const { tradeType, symbolId } = route.query
         store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
         const product = computed(() => store.getters.productActived)
-        return { chart, product, tradeType, symbolId }
+        const tradeContentHeight = computed(() => {
+            if ([3, 5].includes(Number(product.value.tradeType))) {
+                return '265px'
+            } else {
+                return '430px'
+            }
+        })
+        return {
+            chart,
+            product,
+            tradeType,
+            symbolId,
+            tradeContentHeight
+        }
     },
 }
 </script>
@@ -100,18 +113,18 @@ export default {
                  background: var(--contentColor);
             }
             .chart-content{
-                //padding: 10px;
+                margin-bottom: 8px;
+                height: 436px;
+                overflow: hidden;
+
             }
             .trade-content{
                 position: relative;
-                margin-top: 8px;
-                height: 458px;
                 padding: 5px 16px 20px 16px;
             }
         }
 
         .right-wrap {
-
             display: flex;
             flex-direction: column;
             justify-content: space-between;

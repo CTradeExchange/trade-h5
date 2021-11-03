@@ -25,6 +25,9 @@ export default {
             type: [Number, String],
             default: ''
         },
+        direction: {
+            type: String
+        }
     },
     emits: ['update:modelValue', 'change'],
     setup (props, { emit }) {
@@ -64,7 +67,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .orderVolume {
-    margin-top: rem(20px);
+    flex: 1;
     .input {
         width: 100%;
         height: rem(80px);

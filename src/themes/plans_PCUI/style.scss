@@ -660,9 +660,11 @@ body {
 // element-plus
 .dialog-layer {
 	.el-overlay {
-		display: flex;
-		justify-content: center;
-		align-items: center;
+		.el-overlay-dialog {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 		.el-dialog {
 			display: flex;
 			flex-direction: column;
@@ -673,10 +675,13 @@ body {
 			.el-icon-close {
 				font-size: 22px;
 			}
+			.el-dialog__header {
+				text-align: center;
+				color: var(--color);
+			}
 			.el-dialog__body {
 				@include scroll-pc();
 				flex: 1;
-				min-height: 200px;
 				padding: 20px;
 				overflow-y: auto;
 				img {

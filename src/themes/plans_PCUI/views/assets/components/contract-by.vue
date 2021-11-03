@@ -3,15 +3,15 @@
         <div class='assets-header'>
             <ul class='assets-ul'>
                 <li>
-                    <span>{{ $t('assets.freeMargin') }}</span>
+                    <span>{{ $t('trade.freeMargin') }}</span>
                     <strong>{{ userAccount?.availableMargin || '--' }}</strong>
                 </li>
                 <li>
-                    <span>{{ $t('assets.allOriginalMargin') }}</span>
+                    <span>{{ $t('trade.allOriginalMargin') }}</span>
                     <strong>{{ userAccount?.occupyMargin || '--' }}</strong>
                 </li>
                 <li>
-                    <span>{{ $t('assets.positionProfit') }}</span>
+                    <span>{{ $t('trade.positionProfit') }}</span>
                     <strong :class="userAccount?.profitLoss > 0 ? 'riseColor': 'fallColor'">
                         {{ userAccount?.profitLoss || '--' }}
                     </strong>
@@ -19,78 +19,78 @@
             </ul>
             <div class='assets-handle'>
                 <button class='btn' @click='goTransfer'>
-                    {{ $t('assets.transfer') }}
+                    {{ $t('trade.transfer') }}
                 </button>
                 <div class='record-link' @click='goRecord'>
                     <i class='icon_zijinmingxi1'></i>
-                    <span>{{ $t('assets.fundRecord') }}</span>
+                    <span>{{ $t('trade.fundRecord') }}</span>
                 </div>
             </div>
         </div>
         <div class='assets-body'>
             <el-table :cell-style="{ background:'none' }" :data='positionList' :empty-text="$t('c.noData')">
-                <el-table-column :label="$t('assets.name')" prop='symbolName' width='120' />
-                <el-table-column :label="$t('assets.profit') + '('+ assetsInfo.currency +')'" width='120'>
+                <el-table-column :label="$t('trade.name')" prop='symbolName' width='120' />
+                <el-table-column :label="$t('trade.profit') + '('+ assetsInfo.currency +')'" width='120'>
                     <template #default='scope'>
                         <span :class="parseFloat(scope.row.profitLoss) > 0 ? 'riseColor': 'fallColor'">
                             {{ scope.row.profitLoss }}
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('assets.interest') + '('+ assetsInfo.currency +')'" prop='interest' />
-                <el-table-column :label="$t('assets.direction')" width='80'>
+                <el-table-column :label="$t('trade.swap_2') + '('+ assetsInfo.currency +')'" prop='interest' />
+                <el-table-column :label="$t('trade.direction')" width='80'>
                     <template #default='scope'>
                         <span :class="Number(scope.row.direction) === 1 ? 'riseColor' : 'fallColor'">
                             {{ Number(scope.row.direction) === 1 ? $t('trade.buy') : $t('trade.sell') }}
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('assets.pendingUnit') + '(' + $t('assets.volumeUnit') + ')'" width='80'>
+                <el-table-column :label="$t('trade.pendingUnit') + '(' + $t('trade.volumeUnit') + ')'" width='80'>
                     <template #default='scope'>
                         <span>{{ minus(scope.row.openVolume, scope.row.closeVolume) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('assets.positionPrice')">
+                <el-table-column :label="$t('trade.positionPrice')">
                     <template #default='scope'>
                         <span>{{ scope.row.openPrice }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('assets.currentPrice')">
+                <el-table-column :label="$t('trade.currentPrice')">
                     <template #default='scope'>
                         <span>{{ Number(scope.row.direction) === 1 ? currentProduct(scope.row).sell_price : currentProduct(scope.row).buy_price }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('assets.prospectMandatory')">
+                <el-table-column :label="$t('trade.prospectMandatory')">
                     <template #default='scope'>
                         <span>{{ scope.row.previewStopPrice || '--' }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('assets.originalMargin')">
+                <el-table-column :label="$t('trade.originalMargin')">
                     <template #default='scope'>
                         <span> {{ scope.row.occupyTheMargin || '--' }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('assets.holdMargin')">
+                <el-table-column :label="$t('trade.holdMargin')">
                     <template #default='scope'>
                         <span>{{ scope.row.maintenanceMargin || '--' }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('assets.stopLossPrice')" width='80'>
+                <el-table-column :label="$t('trade.stopLossPrice')" width='80'>
                     <template #default='scope'>
                         <span>{{ parseFloat(scope.row.stopLossDecimal) ? scope.row.stopLossDecimal : '--' }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('assets.stopProfitPrice')" width='80'>
+                <el-table-column :label="$t('trade.stopProfitPrice')" width='80'>
                     <template #default='scope'>
                         <span>{{ parseFloat(scope.row.takeProfitDecimal) ? scope.row.takeProfitDecimal : '--' }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('assets.openTime')" width='100'>
+                <el-table-column :label="$t('trade.openTime')" width='100'>
                     <template #default='scope'>
                         <span>{{ formatTime(scope.row.openTime) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('assets.positionId')" width='120'>
+                <el-table-column :label="$t('trade.positionId')" width='120'>
                     <template #default='scope'>
                         <span>{{ scope.row.positionId }}</span>
                     </template>
@@ -99,31 +99,44 @@
                     <template #default='scope'>
                         <div class='handle'>
                             <button @click='openAdjustMargin(scope.row)'>
-                                {{ $t('assets.modifyMargin') }}
+                                {{ $t('trade.modifyMargin') }}
                             </button>
-                            <button>{{ $t('assets.tackStopSetup') }}</button>
-                            <button>{{ $t('assets.closed') }}</button>
+                            <button @click='openSltp(scope.row)'>
+                                {{ $t('trade.tackStopSetup') }}
+                            </button>
+                            <button @click='openClosePosition(scope.row)'>
+                                {{ $t('trade.closed') }}
+                            </button>
                         </div>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
     </div>
+
     <!-- 调整保证金组件 -->
-    <adjust-margin ref='adjustMargin' :data='data' :product='product' />
+    <adjust-margin ref='adjustMargin' />
+    <!-- 平仓组件 -->
+    <close-position ref='closePosition' />
+    <!-- 止盈止损 -->
+    <sltp ref='sltp' />
 </template>
 
 <script>
 // compontens
 import adjustMargin from './adjust-margin.vue'
+import closePosition from './close-position.vue'
+import sltp from './sltp.vue'
 
-import { computed, ref, reactive, toRefs } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import { minus } from '@/utils/calculation'
 
 export default {
     components: {
-        adjustMargin
+        adjustMargin,
+        closePosition,
+        sltp
     },
     props: {
         // 玩法类型
@@ -135,12 +148,8 @@ export default {
     setup (props) {
         const store = useStore()
         const adjustMargin = ref(null)
-        const state = reactive({
-            // 弹窗data数据
-            data: {},
-            // 弹窗产品数据
-            product: {}
-        })
+        const closePosition = ref(null)
+        const sltp = ref(null)
         // 产品map数据
         const productMap = computed(() => store.state._quote.productMap)
         // 用户信息
@@ -168,13 +177,24 @@ export default {
 
         // 调整保证金弹窗
         const openAdjustMargin = (row) => {
-            state.data = row
-            adjustMargin.value.open()
+            adjustMargin.value.open(row)
+        }
+
+        // 平仓调窗
+        const openClosePosition = (row) => {
+            store.commit('_quote/Update_productActivedID', row.symbolId + '_' + row.tradeType)
+            closePosition.value.open(row)
+        }
+
+        // 止盈止损弹窗
+        const openSltp = (row) => {
+            store.commit('_quote/Update_productActivedID', row.symbolId + '_' + row.tradeType)
+            store.commit('_trade/Update_modifyPositionId', row.positionId + '_' + row.tradeType)
+            sltp.value.open(row)
         }
 
         return {
             minus,
-            ...toRefs(state),
             productMap,
             userAccount,
             assetsInfo,
@@ -183,7 +203,11 @@ export default {
             goTransfer,
             goRecord,
             adjustMargin,
-            openAdjustMargin
+            openAdjustMargin,
+            closePosition,
+            openClosePosition,
+            sltp,
+            openSltp
         }
     }
 }
