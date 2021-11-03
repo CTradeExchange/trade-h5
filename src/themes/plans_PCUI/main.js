@@ -19,29 +19,7 @@ import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
 import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
 import { getPreDemoAccountParams } from './officialDemoAccount.js'
-
-// element-plus
-import 'element-plus/dist/index.css'
-import {
-    ElLoading,
-    ElDialog,
-    ElMessageBox,
-    ElMessage,
-    ElCarousel,
-    ElCarouselItem,
-    ElDropdown,
-    ElDropdownMenu,
-    ElDropdownItem,
-    ElTimeline,
-    ElEmpty,
-    ElPopover,
-    ElTimelineItem,
-    ElTable,
-    ElSelect,
-    ElOption,
-    ElOptionGroup,
-    ElTableColumn
-} from 'element-plus'
+import Setup from './setup'
 
 skywalkingRegister(router)
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
@@ -51,9 +29,7 @@ BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 // const Vconsole = new VConsole()
 
 const app = createApp(App)
-app.use(ElLoading).use(ElDialog).use(ElMessageBox).use(ElMessage).use(ElCarousel).use(ElCarouselItem).use(ElDropdown)
-    .use(ElDropdownMenu).use(ElDropdownItem).use(ElTimeline).use(ElTimelineItem).use(ElEmpty).use(ElPopover).use(ElTable).use(ElTableColumn)
-    .use(ElSelect).use(ElOption).use(ElOptionGroup)
+Setup(app)
 app.use(preventReClick)
 app.use(VantBase).use(I18n).use(store).use(router)
 app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })
