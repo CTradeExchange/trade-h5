@@ -58,7 +58,7 @@ export default {
         const store = useStore()
         const route = useRoute()
         const { tradeType, symbolId } = route.query
-        // store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
+        store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
         const product = computed(() => store.getters.productActived)
         const tradeContentHeight = computed(() => {
             if (Number(product.value.tradeType) === 5) {
@@ -89,9 +89,8 @@ export default {
     background: var(--bgColor);
 
     .content-top {
-        min-height: 710px;
+        max-height: 874px;
         display: flex;
-        //justify-content: space-evenly;
         justify-content: space-between;
 
         >div {
