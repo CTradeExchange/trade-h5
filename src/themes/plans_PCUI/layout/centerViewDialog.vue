@@ -58,8 +58,8 @@ export default {
     }
     .el-dialog__body {
         padding: 0;
-        min-height: 500px;
-        max-height: 75vh;
+        // min-height: 500px;
+        height: 75vh;
         display: flex;
         flex-flow: column;
         background: var(--bgColor);
