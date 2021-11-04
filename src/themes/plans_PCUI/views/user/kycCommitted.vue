@@ -1,0 +1,66 @@
+<template>
+    <centerViewDialog>
+        <div class='pageWrap'>
+            <i class='icon_success'></i>
+            <p class='t1'>
+                {{ $t('auth.tips1') }}
+            </p>
+
+            <p class='t2'>
+                {{ $t('auth.tips2') }}
+            </p>
+
+            <div class='btns'>
+                <van-button hairline type='success' @click='$router.replace({ name: "Home" })'>
+                    {{ $t('common.backHome') }}
+                </van-button>
+                <van-button hairline type='default' @click='$router.replace({ name: "Authentication" })'>
+                    {{ $t('common.lookProcess') }}
+                </van-button>
+            </div>
+        </div>
+    </centerViewDialog>
+</template>
+
+<script>
+import centerViewDialog from '@planspc/layout/centerViewDialog'
+// import { useRouter } from 'vue-router'
+export default {
+    name: 'KycCommitted',
+    components: {
+        centerViewDialog
+    },
+    setup (props, context) {
+        // const router = useRouter()
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+@import '@/sass/mixin.scss';
+.pageWrap {
+    padding: rem(200px) rem(30px) rem(30px);
+    text-align: center;
+    background: var(--contentColor);
+    .icon_success {
+        color: var(--success);
+        font-size: rem(96px);
+    }
+    .t1 {
+        margin-top: rem(20px);
+        font-weight: bold;
+        font-size: rem(36px);
+    }
+    .t2 {
+        margin-top: rem(100px);
+        line-height: rem(50px);
+        text-align: left;
+    }
+    .btns {
+        display: flex;
+        justify-content: space-around;
+        margin-top: rem(50px);
+    }
+}
+
+</style>
