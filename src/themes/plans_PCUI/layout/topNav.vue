@@ -89,15 +89,7 @@
                     </a>
                 </div>
                 <div class='item'>
-                    <el-dropdown>
-                        <i class='icon icon_xiazai' :title="$t('header.download')"></i>
-                        <template #dropdown>
-                            <div class='download-dialog'>
-                                <img src='@planspc/images/home/download-code.png' />
-                                <p>{{ $t('header.downloadTip') }}</p>
-                            </div>
-                        </template>
-                    </el-dropdown>
+                    <DownloadIcon />
                 </div>
                 <div class='item'>
                     <LangIcon />
@@ -120,13 +112,15 @@ import SettingIcon from './components/settingIcon'
 import ThemeIcon from './components/themeIcon'
 import LangIcon from './components/langIcon'
 import Msg from './components/msg'
+import DownloadIcon from './components/downloadIcon'
 
 export default {
     components: {
         SettingIcon,
         ThemeIcon,
         LangIcon,
-        Msg
+        Msg,
+        DownloadIcon
     },
     setup () {
         const route = useRoute()
@@ -134,8 +128,16 @@ export default {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
-            rightAction: { title: 444 },
-            plansName: t('header.trade')
+            rightAction: { title: 444 }
+        })
+
+        const plansName = computed(() => {
+            if (route.query.tradeType) {
+                const tradeType = route.query.tradeType
+                return t('tradeType[' + tradeType + ']')
+            } else {
+                return t('header.trade')
+            }
         })
 
         // 获取账户信息
@@ -160,8 +162,9 @@ export default {
 
         const changePlans = (item) => {
             state.plansName = item.name
-            const symbolId = store.state._quote.productList.find(el => Number(el.tradeType) === Number(item.id))?.symbolId
+            const symbolId = store.state._quote.productList.filter(el => Number(el.tradeType) === Number(item.id))[1].symbolId
             store.commit('_quote/Update_productActivedID', `${symbolId}_${item.id}`)
+
             router.push({
                 name: 'Order',
                 query: {
@@ -183,6 +186,7 @@ export default {
             customInfo,
             formatTime,
             changePlans,
+            plansName,
             ...toRefs(state)
         }
     }
@@ -401,33 +405,6 @@ export default {
                 font-size: 12px;
                 line-height: 30px;
             }
-        }
-    }
-}
-.download-dialog {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px 15px;
-    img {
-        width: 88px;
-        height: 88px;
-    }
-    p {
-        width: 88px;
-        line-height: 20px;
-        font-size: 14px;
-        color: var(--color);
-    }
-}
-
-.el-dropdown-menu {
-    .el-dropdown-menu__item {
-        font-size: 14px;
-        color: var(--color);
-        &:hover {
-            color: var(--primary);
-            background: var(--primaryAssistColor);
         }
     }
 }

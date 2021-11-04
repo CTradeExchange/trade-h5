@@ -181,10 +181,11 @@
 </template>
 
 <script>
-import { reactive, toRefs, computed, ref, watch, onBeforeUnmount } from 'vue'
+import { reactive, toRefs, computed, ref, watch, onUnmounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
+import { useRoute, useRouter } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { delayAwaitTime, isEmpty } from '@/utils/util'
 import { addMarketOrder } from '@/api/trade'
@@ -213,6 +214,8 @@ export default {
     setup () {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
+        const route = useRoute()
+        const router = useRouter()
         const product = computed(() => store.getters.productActived)
         const pendingRef = ref(null)
         const profitLossRef = ref(null)
@@ -343,7 +346,7 @@ export default {
             const proCurrency = state.submitType === 'buy' ? product.value?.profitCurrency : product.value?.baseCurrency
             const curAccount = customerInfo.value?.accountList?.find(({ currency, tradeType }) => (currency === proCurrency && tradeType === product.value.tradeType))
             if (curAccount)store.dispatch('_user/queryAccountAssetsInfo', { accountId: curAccount.accountId, tradeType: product.value?.tradeType })
-            else Toast(t('trade.nullAssets'))
+            // else Toast(t('trade.nullAssets'))
         }
 
         // 切换订单类型
@@ -394,6 +397,13 @@ export default {
                 }
             })
         }
+
+        // 监听路由变化
+        watch(
+            () => route.query, (val, oval) => {
+                init()
+            }
+        )
 
         init()
 

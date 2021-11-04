@@ -297,8 +297,8 @@ export default {
         const state = reactive({
             activeName: 'first',
             studyVis: true,
-            mainStudyList: MAINSTUDIES.slice(0, 5), // 主图
-            sideStudyList: SUBSTUDIES.slice(0, 5), // 副图
+            mainStudyList: MAINSTUDIES.slice(0, 8), // 主图
+            sideStudyList: SUBSTUDIES.slice(0, 8), // 副图
             mainStudy: 'Moving Average mock',
             subStudy: 'Custom MACD',
             activeTab: 0,
@@ -379,11 +379,7 @@ export default {
         // 产品信息
         const product = computed(() => {
             const product = store.getters.productActived
-            if (product?.cur_price) {
-                // 有产品数据就渲染图表
-                renderChart(product, state.initConfig.property)
-            }
-            renderChart(product, state.initConfig.property)
+
             return product
         })
 
@@ -580,6 +576,7 @@ export default {
             }
         }
 
+        // 指标弹窗
         const updateShow = (val) => {
             state.showStudyDialog = val
         }
@@ -727,30 +724,42 @@ export default {
             }
         }
 
-        // 订阅产品
-        const subscribeToProduct = () => {
-            QuoteSocket.send_subscribe([symbolId + '_' + tradeType])
+        // 监听主题修改回调
+        const changeTheme = () => {
+            chartRef.value.reset()
+        }
+
+        // 监听玩法回调
+        const changePlans = () => {
+            renderChart(product, state.initConfig.property)
+            chartRef.value.reset()
+            QuoteSocket.send_subscribe([`${product.value.symbolId}_${product.value.tradeType}`])
         }
 
         // 初始化图表配置
         initChartData()
-
-        // 监听当玩法为5和9的时候。并且有pt报价的时候才更新图表
-        document.body.addEventListener('GotMsg_updateChart', updateChart, false)
 
         // 图表创建完成回调
         const onChartReady = () => {
             state.onChartReadyFlag = true
         }
 
-        // 获取产品详情
-        store.dispatch('_quote/querySymbolInfo', { 'symbolId': 139, 'tradeType': 2 })
+        // 监听路由变化
+        watch(
+            () => route.query,
+            (val, oval) => {
+                changePlans()
+            }
+        )
 
-        onMounted(() => {
-            subscribeToProduct()
-        })
+        // 监听主题修改
+        document.body.addEventListener('Launch_theme', changeTheme, false)
+        // 监听当玩法为5和9的时候。并且有pt报价的时候才更新图表
+        document.body.addEventListener('GotMsg_updateChart', updateChart, false)
+
         onUnmounted(() => {
             document.body.removeEventListener('GotMsg_updateChart', updateChart, false)
+            document.body.removeEventListener('Launch_theme', changeTheme, false)
         })
 
         return {
@@ -941,6 +950,8 @@ export default {
             margin: 0 10px;
         }
         .setting {
+            margin-top: -5px;
+            cursor: pointer;
             position: relative;
             display: flex;
             align-items: center;
@@ -1023,6 +1034,7 @@ export default {
         display: inline-block;
         color: var(--normalColor);
         vertical-align: middle;
+        cursor: pointer;
     }
 
 }
@@ -1040,7 +1052,7 @@ export default {
     background: var(--contentColor);
     .main-study,
     .side-study {
-        width: 600px;
+        width: 800px;
         .content {
             display: flex;
             flex: 1;
@@ -1210,6 +1222,7 @@ export default {
         font-size: rem(36px);
     }
     .setting {
+        cursor: pointer;
         position: relative;
         display: flex;
         align-items: center;

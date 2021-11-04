@@ -138,10 +138,8 @@ export default {
     flex: 1;
     .input {
         width: 100%;
-        font-size: rem(28px);
         line-height: 1;
         text-align: center;
-        background: var(--assistColor);
     }
     .entryType {
         position: absolute;

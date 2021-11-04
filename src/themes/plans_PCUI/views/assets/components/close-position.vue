@@ -242,7 +242,7 @@ export default {
         display: flex;
         justify-content: space-between;
         margin-bottom: 25px;
-        font-size: 13px;
+        font-size: 14px;
         .col {
             display: inline-flex;
             flex-direction: column;
