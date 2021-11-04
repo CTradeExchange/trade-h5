@@ -66,10 +66,10 @@
                         </span>
                     </div>
                     <div class='handle'>
-                        <button class='buy'>
+                        <button class='buy' @click='toOrder(item)'>
                             {{ $t('trade.buy') }}
                         </button>
-                        <button class='sale'>
+                        <button class='sale' @click='toOrder(item)'>
                             {{ $t('trade.sell') }}
                         </button>
                     </div>
@@ -89,10 +89,12 @@
 import { computed, ref, watch, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import useProduct from '@planspc/hooks/useProduct'
+import { useRouter } from 'vue-router'
 
 export default {
     emits: ['update'],
     setup (props, context) {
+        const router = useRouter()
         const store = useStore()
         // 玩法列表
         const plansList = computed(() => store.state._base.plans)
@@ -138,6 +140,11 @@ export default {
             context.emit('update', keys)
         }
 
+        // 去交易
+        const toOrder = item => {
+            router.push(`/order?symbolId=${item.symbolId}&tradeType=${item.tradeType}`)
+        }
+
         // 监听玩法类型、分类类型
         watch([tradeType, categoryType, productList], () => {
             setProducts()
@@ -155,6 +162,7 @@ export default {
             productList,
             filterProductList,
             switchPlan,
+            toOrder,
             switchCategory
         }
     }
