@@ -106,19 +106,7 @@
                     </el-dropdown>
                 </div>
                 <div class='item'>
-                    <el-dropdown>
-                        <i class='icon icon_zhuanhuanchengbaitian' :title="$t('header.theme')"></i>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item @click="changeTheme('light')">
-                                    白天
-                                </el-dropdown-item>
-                                <el-dropdown-item @click="changeTheme('night')">
-                                    黑夜
-                                </el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
+                    <ThemeIcon />
                 </div>
             </div>
         </div>
@@ -132,12 +120,13 @@ import { isEmpty } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import SettingIcon from './components/settingIcon'
+import ThemeIcon from './components/themeIcon'
 import Msg from './components/msg'
-import Colors, { setRootVariable } from '@planspc/colorVariables'
 
 export default {
     components: {
         SettingIcon,
+        ThemeIcon,
         Msg
     },
     setup () {
@@ -169,24 +158,6 @@ export default {
         // 路由跳转
         const handRoutTo = (path) => router.push(route.path + path)
 
-        // 切换白天黑夜模式主题
-        const changeTheme = theme => {
-            // 设置全局变量
-            store.commit('Update_invertColor', theme)
-            setRootVariable(theme)
-            state.colorVisible = false
-
-            document.body.style.setProperty('--color', Colors[theme].color)
-            document.body.style.setProperty('--contentColor', Colors[theme].contentColor)
-            document.body.style.setProperty('--primaryAssistColor', Colors[theme].primaryAssistColor)
-            document.body.style.setProperty('--bgColor', Colors[theme].bgColor)
-            document.body.style.setProperty('--normalColor', Colors[theme].normalColor)
-            document.body.style.setProperty('--minorColor', Colors[theme].minorColor)
-            document.body.style.setProperty('--lineColor', Colors[theme].lineColor)
-            document.body.style.setProperty('--assistColor', Colors[theme].assistColor)
-            document.body.style.setProperty('--placeholdColor', Colors[theme].placeholdColor)
-        }
-
         return {
             plansList,
             userAccountType,
@@ -194,7 +165,6 @@ export default {
             handRoutTo,
             customInfo,
             formatTime,
-            changeTheme,
             ...toRefs(state)
         }
     }
