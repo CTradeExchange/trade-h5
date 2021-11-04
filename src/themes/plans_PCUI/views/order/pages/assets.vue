@@ -157,7 +157,7 @@ export default {
                     MsgSocket.subscribedListAdd(function () {
                         MsgSocket.subscribeAsset(tradeType)
                     })
-                    store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
+                    // store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
                 }
             },
             { immediate: true }

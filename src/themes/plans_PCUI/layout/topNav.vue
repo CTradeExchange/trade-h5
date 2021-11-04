@@ -15,13 +15,18 @@
                     </router-link>
                 </div>
                 <div class='item'>
-                    <el-dropdown>
+                    <el-dropdown @command='changePlans'>
                         <span class='link'>
-                            {{ $t('header.trade') }}<i class='el-icon-caret-bottom'></i>
+                            {{ plansName }}
+                            <i class='el-icon-caret-bottom'></i>
                         </span>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item v-for='item in plansList' :key='item.id'>
+                                <el-dropdown-item
+                                    v-for='item in plansList'
+                                    :key='item.id'
+                                    :command='item'
+                                >
                                     {{ item.name }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
@@ -41,7 +46,7 @@
                 </router-link>
             </div>
             <!-- 已登录 -->
-            <div v-else class='handle-have'>
+            <div v-else-if='customerInfo' class='handle-have'>
                 <div class='item'>
                     <div class='user'>
                         <i class='head el-icon-s-custom'></i>
@@ -61,11 +66,11 @@
                         <i class='icon icon_gerenxinxi' :title="$t('cRoute.personal')"></i>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item @click="handRoutTo('/authentication')">
-                                    身份认证
+                                <el-dropdown-item v-if='customerInfo.companyKycStatus===1' @click="handRoutTo('/authentication')">
+                                    {{ $t('cRoute.regKyc') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item @click="handRoutTo('/bankList')">
-                                    银行卡列表
+                                    {{ $t('cRoute.bankList') }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
@@ -130,6 +135,7 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             rightAction: { title: 444 },
+            plansName: t('header.trade')
         })
 
         // 获取账户信息
@@ -152,6 +158,19 @@ export default {
         const userAccountType = computed(() => store.getters['_user/userAccountType'])
         const customerInfo = computed(() => store.state._user.customerInfo)
 
+        const changePlans = (item) => {
+            state.plansName = item.name
+            const symbolId = store.state._quote.productList.find(el => Number(el.tradeType) === Number(item.id))?.symbolId
+            store.commit('_quote/Update_productActivedID', `${symbolId}_${item.id}`)
+            router.push({
+                name: 'Order',
+                query: {
+                    symbolId,
+                    tradeType: item.id
+                }
+            })
+        }
+
         // 路由跳转
         const handRoutTo = (path) => router.push(route.path + path)
 
@@ -163,6 +182,7 @@ export default {
             handRoutTo,
             customInfo,
             formatTime,
+            changePlans,
             ...toRefs(state)
         }
     }

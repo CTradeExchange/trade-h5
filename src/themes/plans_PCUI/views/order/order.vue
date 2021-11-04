@@ -63,7 +63,7 @@ export default {
         const route = useRoute()
         const router = useRouter()
         const { tradeType, symbolId } = route.query
-        store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
+        // store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
         const product = computed(() => store.getters.productActived)
 
         if (isEmpty(product.value)) {

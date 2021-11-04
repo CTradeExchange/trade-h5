@@ -100,6 +100,20 @@ const h5Children = [
         }
     },
     {
+        path: 'depositRecord', // 入金记录
+        component: () => import(/* webpackChunkName: "deposit" */ '../views/deposit/depositRecord.vue'),
+        meta: {
+            title: 'cRoute.depositRecord',
+        }
+    },
+    {
+        path: 'depositCb', // 入金结果
+        component: () => import(/* webpackChunkName: "deposit" */ '../views/deposit/depositCb.vue'),
+        meta: {
+            title: 'cRoute.despositCb',
+        }
+    },
+    {
         path: 'withdrawAccount', // 选择提现币种
         component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdrawAccount/withdrawAccount.vue'),
         meta: {
@@ -131,7 +145,7 @@ const h5Children = [
         path: 'fundRecord', // 资金流水
         component: () => import(/* webpackChunkName: "fundRecord" */ '../views/fundRecord/fundRecord.vue'),
         meta: {
-            title: 'cRoute.bankList',
+            title: 'cRoute.fundLog',
         }
     },
     {

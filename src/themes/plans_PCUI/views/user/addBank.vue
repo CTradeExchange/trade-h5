@@ -87,6 +87,7 @@
 </template>
 
 <script>
+import '@vant/touch-emulator'
 import centerViewDialog from '@planspc/layout/centerViewDialog'
 import { useRouter, useRoute } from 'vue-router'
 import top from '@/components/top'
@@ -97,7 +98,7 @@ import Schema from 'async-validator'
 import { Toast } from 'vant'
 import { addBank } from '@/api/user'
 import { getCountryListByParentCode } from '@/api/base'
-import CurrencyAction from '@/components/currencyAction'
+import CurrencyAction from '@planspc/components/currencyAction'
 import { useI18n } from 'vue-i18n'
 
 export default {
@@ -276,6 +277,20 @@ export default {
     flex: 1;
     background-color: var(--bgColor);
     overflow: hidden;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    .filed-wrap{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    :deep{
+        .van-cell-group{
+            height: 100%;
+    flex: 1;
+        }
+    }
+}
     .confirm-btn {
         position: absolute;
         bottom: 0;
@@ -300,7 +315,7 @@ position: absolute;
     }
     .van-action-sheet{
                     right: 0;
-    bottom: calc(-100% + 80px) ;
+    bottom: 0 ;
     width: 100%;
     position: absolute;
     }
@@ -383,4 +398,5 @@ position: absolute;
         background-color: var(--contentColor);
     }
 }
+
 </style>

@@ -67,7 +67,7 @@ export default {
     .pageWrap {
         @include scroll-pc();
         flex: 1;
-        padding-bottom: 1.3333333333rem;
+        padding-bottom: 1rem;
         overflow-y: auto;
     }
     .topNav {
