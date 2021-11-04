@@ -57,10 +57,24 @@
                     <Msg />
                 </div>
                 <div class='item'>
+                    <el-dropdown>
+                        <i class='icon icon_gerenxinxi' :title="$t('cRoute.personal')"></i>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item>
+                                    身份认证
+                                </el-dropdown-item>
+                                <el-dropdown-item @click="handRoutTo('/bankList')">
+                                    银行卡列表
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
+                <div class='item'>
                     <SettingIcon />
                 </div>
                 <div class='line'></div>
-                
             </div>
             <!-- 操作功能 -->
             <div class='handle-feature'>
@@ -136,12 +150,12 @@ export default {
 
         })
         onUnmounted(() => {
-            
+
         })
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
-        
+
         // 玩法列表
         const plansList = computed(() => store.state._base.plans)
         const userAccountType = computed(() => store.getters['_user/userAccountType'])
@@ -273,7 +287,7 @@ export default {
                     color: #D6DAE1;
                     cursor: pointer;
                 }
-                
+
             }
             .line {
                 width: 1px;
