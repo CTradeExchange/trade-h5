@@ -17,7 +17,7 @@ import { useStore } from 'vuex'
 import { setCookie } from '@/utils/util'
 import { changeLang } from '@/api/base'
 import { useI18n } from 'vue-i18n'
-import i18n, { loadLocaleMessages } from '@plans/i18n/i18n.js'
+import i18n, { loadLocaleMessages } from '@planspc/i18n/i18n.js'
 export default {
     setup () {
         const store = useStore()

@@ -75,7 +75,7 @@
 
 <script>
 import { reactive, toRefs, watchEffect, computed, ref } from 'vue'
-import ModifyProfitLoss from '@plans/components/modifyProfitLoss'
+import ModifyProfitLoss from '@planspc/components/modifyProfitLoss'
 import { updateOrder, updatePboOrder } from '@/api/trade'
 import { equalTo, mul, pow, minus } from '@/utils/calculation'
 import { useI18n } from 'vue-i18n'
