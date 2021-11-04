@@ -41,12 +41,12 @@
                 <router-link class='login' to='/login'>
                     {{ $t('c.login') }}
                 </router-link>
-                <router-link class='register' to='/'>
+                <router-link class='register' to='/register'>
                     {{ $t('c.register') }}
                 </router-link>
             </div>
             <!-- 已登录 -->
-            <div v-else class='handle-have'>
+            <div v-else-if='customerInfo' class='handle-have'>
                 <div class='item'>
                     <div class='user'>
                         <i class='head el-icon-s-custom'></i>
@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <div class='item'>
-                    <i class='icon icon_zichan' :title="$t('header.assets')"></i>
+                    <i class='icon icon_zichan' :title="$t('header.assets')" @click="$router.push('/assets')"></i>
                 </div>
                 <div class='item'>
                     <Msg />
@@ -66,11 +66,11 @@
                         <i class='icon icon_gerenxinxi' :title="$t('cRoute.personal')"></i>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item>
-                                    身份认证
+                                <el-dropdown-item v-if='customerInfo.companyKycStatus===1' @click="handRoutTo('/authentication')">
+                                    {{ $t('cRoute.regKyc') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item @click="handRoutTo('/bankList')">
-                                    银行卡列表
+                                    {{ $t('cRoute.bankList') }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
@@ -83,8 +83,10 @@
             </div>
             <!-- 操作功能 -->
             <div class='handle-feature'>
-                <div class='item'>
-                    <i class='icon icon_kefu' :title="$t('header.service')"></i>
+                <div v-if='onlineService' class='item'>
+                    <a :href='onlineService' target='_blank'>
+                        <i class='icon icon_kefu' :title="$t('header.service')"></i>
+                    </a>
                 </div>
                 <div class='item'>
                     <el-dropdown>
@@ -138,6 +140,9 @@ export default {
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+        // 在线客服地址
+        const onlineService = computed(() => store.state._base.wpCompanyInfo?.onlineService)
+
         onBeforeMount(() => {
 
         })
@@ -171,6 +176,7 @@ export default {
 
         return {
             plansList,
+            onlineService,
             userAccountType,
             customerInfo,
             handRoutTo,
