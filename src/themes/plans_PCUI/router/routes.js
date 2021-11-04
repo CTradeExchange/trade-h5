@@ -45,7 +45,7 @@ const h5Children = [
     },
     {
         path: 'authentication',
-        name: 'Authentication',
+        // name: 'Authentication',
         component: () => import(/* webpackChunkName: "addBank" */ '../views/user/authentication.vue'),
         meta: {
             title: 'cRoute.authentication',
@@ -62,7 +62,7 @@ const h5Children = [
     },
     {
         path: 'kycCommitted',
-        name: 'KycCommitted',
+        // name: 'KycCommitted',
         component: () => import(/* webpackChunkName: "addBank" */ '../views/user/kycCommitted.vue'),
         meta: {
             title: 'cRoute.kycCommitted',
@@ -278,10 +278,11 @@ const routes = [
                 component: () => import(/* webpackChunkName: "Assets" */ '../views/assets/assets.vue'),
                 meta: {
                     title: 'route.assets',
-                    keepAlive: true,
-                    roles: [],
-                }
-            },
+                    keepAlive: false,
+                    roles: []
+                },
+                children: h5Children
+            }
         ]
     },
     // {

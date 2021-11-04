@@ -1,4 +1,6 @@
 <template>
+    <router-view />
+
     <div class='assets'>
         <div class='assets-content'>
             <div class='assets-side'>
@@ -49,7 +51,7 @@ import cashLever from './components/cash-lever.vue'
 import contractAll from './components/contract-all.vue'
 import contractBy from './components/contract-by.vue'
 
-import { unref, reactive, toRefs, computed, onMounted } from 'vue'
+import { unref, reactive, toRefs, computed, onMounted, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import { QuoteSocket, MsgSocket } from '@/plugins/socket/socket'
 
@@ -114,6 +116,12 @@ export default {
         onMounted(() => {
             // 初始化数据
             initData()
+        })
+
+        onUnmounted(() => {
+            // 取消订阅
+            QuoteSocket.cancel_subscribe()
+            MsgSocket.cancelSubscribeAsset()
         })
 
         return {

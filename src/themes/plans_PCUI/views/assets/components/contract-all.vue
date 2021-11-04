@@ -124,6 +124,7 @@ import sltp from './sltp.vue'
 
 import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import { minus } from '@/utils/calculation'
 
 export default {
@@ -140,6 +141,7 @@ export default {
     },
     setup (props) {
         const store = useStore()
+        const router = useRouter()
         const closePosition = ref(null)
         const sltp = ref(null)
         // 产品map数据
@@ -159,12 +161,18 @@ export default {
 
         // 跳转到划转页面
         const goTransfer = () => {
-            console.log('跳转到划转页面')
+            router.push({
+                path: '/assets/transfer',
+                query: {
+                    accountId: assetsInfo.value.accountId,
+                    tradeType: props.tradeType
+                }
+            })
         }
 
         // 跳转到资金记录页面
         const goRecord = () => {
-            console.log('跳转到资金记录页面')
+
         }
 
         // 平仓调窗

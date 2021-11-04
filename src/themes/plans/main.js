@@ -20,13 +20,13 @@ import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
 import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
 import { getPreDemoAccountParams } from './officialDemoAccount.js'
+
+// 调试工具
+import VConsole from 'vconsole'
 skywalkingRegister(router)
 
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
-
-// 调试工具
-// import VConsole from 'vconsole'
-// const Vconsole = new VConsole()
+const Vconsole = new VConsole()
 
 const app = createApp(App)
 app.use(preventReClick)

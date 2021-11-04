@@ -77,7 +77,7 @@
                 :account='account'
                 direction='buy'
                 :product='product'
-                :volume='volume'
+                :volume='buy.volume'
             />
             <div v-if='customerInfo' class='footerBtn buy'>
                 <van-button block :disabled='buy.loading' :loading='buy.loading' size='normal' @click='submitHandler("buy")'>
@@ -86,10 +86,10 @@
             </div>
             <div v-else class='login-bar'>
                 <router-link to='login'>
-                    登录
-                </router-link> 或
+                    {{ $t('c.login') }}
+                </router-link> {{ $t('c.or') }}
                 <router-link to='register'>
-                    注册
+                    {{ $t('c.register') }}
                 </router-link>
             </div>
         </div>
@@ -107,7 +107,6 @@
             </div>
             <div v-else-if='orderType===10' class='form-item'>
                 <PendingBarCFD
-
                     ref='pendingRef'
                     v-model='sell.pendingPrice'
                     class='cellMarginTop'
@@ -161,7 +160,7 @@
                 :account='account'
                 direction='sell'
                 :product='product'
-                :volume='volume'
+                :volume='sell.volume'
             />
 
             <div v-if='customerInfo' class='footerBtn sell'>
@@ -171,10 +170,10 @@
             </div>
             <div v-else class='login-bar'>
                 <router-link to='login'>
-                    登录
-                </router-link> 或
+                    {{ $t('c.login') }}
+                </router-link> {{ $t('c.or') }}
                 <router-link to='register'>
-                    注册
+                    {{ $t('c.register') }}
                 </router-link>
             </div>
         </div>
@@ -187,12 +186,12 @@ import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
 import { QuoteSocket } from '@/plugins/socket/socket'
-import { delayAwaitTime } from '@/utils/util'
+import { delayAwaitTime, isEmpty } from '@/utils/util'
 import { addMarketOrder } from '@/api/trade'
 import { mul, pow } from '@/utils/calculation'
 import hooks from '../orderHooks'
 import OrderVolume from './components/orderVolume'
-import pendingBar from './components/pendingBar'
+import PendingBar from './components/pendingBar'
 import CellExpireType from './components/cellExpireType'
 import ProfitlossSet from './components/profitLossSet'
 import OrderTypeTab from './components/orderType.vue'
@@ -203,7 +202,7 @@ import Assets from './components/assets.vue'
 export default {
     components: {
         OrderVolume,
-        pendingBar,
+        PendingBar,
         ProfitlossSet,
         CellExpireType,
         OrderTypeTab,
@@ -382,17 +381,19 @@ export default {
                 // state[state.submitType].volume = ''
                 // state[state.submitType].pendingPrice = ''
 
-                if (tradeType === '9') store.dispatch('_user/queryCustomerAssetsInfo', { tradeType }) // 拉取全仓账户币种
+                if (!isEmpty(customerInfo.value)) {
+                    if (tradeType === '9') store.dispatch('_user/queryCustomerAssetsInfo', { tradeType }) // 拉取全仓账户币种
 
-                const accountIds = accountList.value?.filter(el => el.tradeType === Number(product.tradeType)).map(el => el.accountId)
+                    const accountIds = accountList.value?.filter(el => el.tradeType === Number(product.tradeType)).map(el => el.accountId)
 
-                if ([3, 5, 9].includes(product.tradeType)) queryAccountInfo()
-                store.dispatch('_trade/queryPBOOrderPage', {
-                    tradeType: product.tradeType,
-                    sortFieldName: 'orderTime',
-                    sortType: 'desc',
-                    accountIds: accountIds + ''
-                })
+                    if ([3, 5, 9].includes(product.tradeType)) queryAccountInfo()
+                    store.dispatch('_trade/queryPBOOrderPage', {
+                        tradeType: product.tradeType,
+                        sortFieldName: 'orderTime',
+                        sortType: 'desc',
+                        accountIds: accountIds + ''
+                    })
+                }
             })
         }
 
