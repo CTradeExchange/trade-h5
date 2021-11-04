@@ -135,6 +135,7 @@ export default {
     flex: 1;
     overflow: auto;
     background: var(--bgColor);
+        padding-top: 48px;
     .empty-data {
         padding-top: rem(200px);
     }
@@ -142,7 +143,6 @@ export default {
         color: var(--minorColor);
         line-height: rem(80px);
         border-bottom: solid 1px var(--lineColor);
-            padding-top: 22px;
     }
     .auth-list {
         margin-top: rem(30px);

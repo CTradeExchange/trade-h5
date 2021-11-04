@@ -65,24 +65,24 @@
                     @confirm='areaConfirm'
                 />
             </van-popup>
+            <van-dialog
+                v-model:show='addSuccessShow'
+                class-name='add-success'
+                :confirm-button-text='$t("common.sure")'
+                get-container='#addBankPage'
+                :show-cancel-button='showCancel'
+                @cancel='cancel'
+                @confirm='$router.back()'
+            >
+                <i class='icon_success'></i>
+                <p class='title'>
+                    {{ $t('common.tip') }}
+                </p>
+                <p class='content'>
+                    {{ $t('bank.submitSuccessTips') }}
+                </p>
+            </van-dialog>
         </div>
-
-        <van-dialog
-            v-model:show='addSuccessShow'
-            class-name='add-success'
-            :confirm-button-text='$t("common.sure")'
-            :show-cancel-button='showCancel'
-            @cancel='cancel'
-            @confirm='$router.back()'
-        >
-            <i class='icon_success'></i>
-            <p class='title'>
-                {{ $t('common.tip') }}
-            </p>
-            <p class='content'>
-                {{ $t('bank.submitSuccessTips') }}
-            </p>
-        </van-dialog>
     </centerViewDialog>
 </template>
 
@@ -275,6 +275,7 @@ export default {
     position: relative;
     flex: 1;
     background-color: var(--bgColor);
+    overflow: hidden;
     .confirm-btn {
         position: absolute;
         bottom: 0;
@@ -289,7 +290,22 @@ export default {
         .popup-bank,.popup-area{
             position: absolute !important;
         }
+        .van-overlay{
+position: absolute;
+        }
+            .popup-area{
+            right: 0;
+    bottom: 0;
+    width: 100%;
     }
+    .van-popup--bottom{
+                    right: 0;
+    bottom: calc(-100% + 80px) ;
+    width: 100%;
+    position: absolute;
+    }
+    }
+
 }
 
 </style>
