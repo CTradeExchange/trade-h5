@@ -114,7 +114,7 @@
                     :product='product'
                 />
             </div>
-            <div v-else class='form-item'>
+            <div v-else class='form-item disable'>
                 <label for=''>
                     {{ $t('trade.sellPrice') }} &nbsp;&nbsp;
                     <span class='minor'>
@@ -382,8 +382,6 @@ export default {
                 // state[state.submitType].pendingPrice = ''
 
                 if (!isEmpty(customerInfo.value)) {
-                    if (tradeType === '9') store.dispatch('_user/queryCustomerAssetsInfo', { tradeType }) // 拉取全仓账户币种
-
                     const accountIds = accountList.value?.filter(el => el.tradeType === Number(product.tradeType)).map(el => el.accountId)
 
                     if ([3, 5, 9].includes(product.tradeType)) queryAccountInfo()
