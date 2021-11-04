@@ -1,0 +1,55 @@
+<template>
+    <div class='categoryList'>
+        <el-tabs v-model='activeName'>
+            <el-tab-pane v-for='(item, index) in props.list' :key='item.id' :label='item.title' :name='index' />
+        </el-tabs>
+    </div>
+</template>
+
+<script setup>
+import { computed } from 'vue'
+import { ElTabs, ElTabPane } from 'element-plus'
+
+const props = defineProps({
+    modelValue: {
+        type: String,
+        default: ''
+    },
+    list: {
+        type: Array,
+        default: () => []
+    }
+})
+const emit = defineEmits(['update:modelValue'])
+const activeName = computed({
+    get: () => props.modelValue,
+    set: val => {
+        emit('update:modelValue', val)
+    }
+})
+
+</script>
+
+<style lang="scss" scoped>
+.categoryList{
+    padding: 20px 20px 0;
+    :deep{
+        .el-tabs__header{
+            margin: 0;
+            .el-tabs__item{
+                height: 40px;
+                line-height: 40px;
+                padding: 0 15px;
+                background: #F8F8F8;
+                border-radius: 4px;
+                margin-right: 10px;
+                font-size: 14px;
+                font-weight: 400;
+            }
+        }
+        .el-tabs__nav-wrap::after, .el-tabs__active-bar{
+            display: none;
+        }
+    }
+}
+</style>

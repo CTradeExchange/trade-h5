@@ -19,10 +19,10 @@
                     {{ item.symbolCode }}
                 </span>
                 <span class='price'>
-                    {{ productMap[item.symbolKey]?.price }}
+                    {{ productMap[item.symbolKey]?.price || '- -' }}
                 </span>
                 <span class='change' :class='[productMap[item.symbolKey]?.upDownColor]'>
-                    {{ productMap[item.symbolKey]?.upDownWidth }}
+                    {{ productMap[item.symbolKey]?.upDownWidth || '- -' }}
                 </span>
             </div>
         </div>

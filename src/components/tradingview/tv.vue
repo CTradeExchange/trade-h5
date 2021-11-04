@@ -147,6 +147,11 @@ export default {
             initChart(cb)
         }
 
+        // 更改图表主题
+        const changeTheme = (name) => {
+            unref(chart) && unref(chart).changeTheme(name)
+        }
+
         /** 图表相关-end */
 
         return {
@@ -161,6 +166,7 @@ export default {
             updateLineData: withMethod(updateLineData),
             updateProperty: withMethod(updateProperty),
             setTick: withMethod(setTick),
+            changeTheme: withMethod(changeTheme),
             reset
         }
     }

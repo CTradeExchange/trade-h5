@@ -156,7 +156,7 @@ export default {
         // 保存用户信息
         saveCustomerInfo ({ dispatch, commit, rootState }, { flag, data }) {
             // 优先将子账户列表处理成map格式
-            const accountList = data.accountList
+            const accountList = data.accountList || []
             const accountMap = {}
             if (accountList?.length) {
                 accountList.forEach(el => {
@@ -211,6 +211,7 @@ export default {
         queryCustomerOptionalList ({ dispatch, commit, rootState }) {
             const tradeTypeList = rootState._base.plans.map(({ id }) => id)
 
+            if (tradeTypeList.length === 0) return Promise.resolve()
             return queryCustomerOptionalList({ tradeTypeList }).then(res => {
                 commit('Update_selfSymbolList', res.data || [])
                 return res

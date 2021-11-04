@@ -1,10 +1,10 @@
 <template>
     <section v-if='$store.state._user.customerInfo' class='assetsModule'>
         <h2 class='tradeTypeName'>
-            {{ tradeTypeNames[tradeType] }}
+            {{ tradeTypeNames[product.tradeType] }}
         </h2>
         <!-- 合约全仓 -->
-        <div v-if="tradeType==='1'" class='rightActions'>
+        <div v-if='product.tradeType===1' class='rightActions'>
             <div class='assetItem'>
                 <p>{{ $t('assets.balance') }}({{ accountTradeType1.currency }})</p>
                 <p class='amount'>
@@ -35,12 +35,12 @@
                     {{ accountTradeType1?.occupyMargin || '--' }}
                 </p>
             </div>
-            <van-button class='btn' type='primary' @click="$router.push($route.path+'/transfer?tradeType='+tradeType)">
+            <van-button class='btn' type='primary' @click="$router.push($route.path+'/transfer?tradeType='+product.tradeType)">
                 {{ $t('trade.transfer') }}
             </van-button>
         </div>
         <!-- 合约逐仓 -->
-        <div v-else-if="tradeType==='2'" class='rightActions'>
+        <div v-else-if='product.tradeType===2' class='rightActions'>
             <div class='assetItem'>
                 <p>{{ $t('assets.freeMargin') }}</p>
                 <p class='amount'>
@@ -53,12 +53,12 @@
                     {{ accountTradeType2?.occupyMargin || '--' }}
                 </p>
             </div>
-            <van-button class='btn' type='primary' @click="$router.push($route.path+'/transfer?tradeType='+tradeType)">
+            <van-button class='btn' type='primary' @click="$router.push($route.path+'/transfer?tradeType='+product.tradeType)">
                 {{ $t('trade.transfer') }}
             </van-button>
         </div>
         <!-- 杠杆全仓 -->
-        <div v-else-if="tradeType==='3'" class='rightActions'>
+        <div v-else-if='product.tradeType===3' class='rightActions'>
             <div class='assetItem'>
                 <p>{{ $t('assets.totalAssets') }}({{ assetsInfo?.currency }})</p>
                 <p class='amount'>
@@ -89,31 +89,31 @@
                     {{ assetsInfo?.closeProportion }}
                 </p>
             </div>
-            <van-button class='btn' type='primary' @click="$router.push($route.path+'/transfer?tradeType='+tradeType)">
+            <van-button class='btn' type='primary' @click='goLoan'>
                 {{ $t('trade.loan') }}
             </van-button>
-            <van-button class='btn' type='primary' @click="$router.push($route.path+'/transfer?tradeType='+tradeType)">
+            <van-button class='btn' type='primary' @click='goRepayment'>
                 {{ $t('trade.repayment') }}
             </van-button>
-            <van-button class='btn' type='primary' @click="$router.push($route.path+'/transfer?tradeType='+tradeType)">
+            <van-button class='btn' type='primary' @click="$router.push($route.path+'/transfer?tradeType='+product.tradeType)">
                 {{ $t('trade.transfer') }}
             </van-button>
         </div>
         <!-- 现货撮合 -->
-        <div v-else-if="tradeType==='5'" class='rightActions'>
+        <div v-else-if='product.tradeType===5' class='rightActions'>
             <div class='assetItem'>
                 <p>{{ $t('assets.totalAssets') }}({{ assetsInfo?.currency }})</p>
                 <p class='amount'>
                     {{ assetsInfo.totalBalance }}
                 </p>
             </div>
-            <van-button class='btn' type='primary' @click="$router.push($route.path+'/transfer?tradeType='+tradeType)">
+            <van-button class='btn' type='primary' @click='goDesposit'>
                 {{ $t('trade.desposit') }}
             </van-button>
-            <van-button class='btn' type='primary' @click="$router.push($route.path+'/transfer?tradeType='+tradeType)">
+            <van-button class='btn' type='primary' @click='goWithdraw'>
                 {{ $t('trade.withdraw') }}
             </van-button>
-            <van-button class='btn' type='primary' @click="$router.push($route.path+'/transfer?tradeType='+tradeType)">
+            <van-button class='btn' type='primary' @click="$router.push($route.path+'/transfer?tradeType='+product.tradeType)">
                 {{ $t('trade.transfer') }}
             </van-button>
         </div>
@@ -123,7 +123,7 @@
 <script>
 import { reactive, computed, onUnmounted, watch } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { MsgSocket } from '@/plugins/socket/socket'
 import { isEmpty } from '@/utils/util'
@@ -131,17 +131,18 @@ export default {
     setup () {
         const store = useStore()
         const route = useRoute()
+        const router = useRouter()
         const { t, tm } = useI18n({ useScope: 'global' })
+        const product = computed(() => store.getters.productActived)
         const tradeTypeNames = tm('tradeType')
-        const { tradeType } = route.query
 
         // 3,5,9玩法资产
-        const assetsInfo = computed(() => (store.state._user.assetsInfo[tradeType] || {}))
+        const assetsInfo = computed(() => (store.state._user.assetsInfo[product.value?.tradeType] || {}))
 
         // 合约全仓资产
         const accountTradeType1 = computed(() => {
             const accountAssets = store.state._user.accountAssets['1']
-            const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === parseInt(tradeType))
+            const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === parseInt(product.value?.tradeType))
             return Object.assign({}, account, accountAssets)
         })
 
@@ -149,13 +150,71 @@ export default {
         const accountTradeType2 = computed(() => store.state._user.accountAssets['2'])
         const customerInfo = computed(() => store.state._user.customerInfo)
 
+        // 跳转充值页面
+        const goDesposit = () => {
+            if (store.state._user.customerInfo?.accountList?.length > 1) {
+                router.push({
+                    path: '/order/chooseAccount',
+                    query: {
+                        accountId: assetsInfo.value.accountId,
+                        tradeType: product.value?.tradeType,
+                        type: 2
+                    }
+                })
+            } else {
+                router.push({
+                    path: '/order/deposit',
+                    query: {
+                        accountId: assetsInfo.value.accountId,
+                        currency: assetsInfo.value.currency,
+                        tradeType: product.value?.tradeType
+                    }
+                })
+            }
+        }
+
+        // 跳转提现页面
+        const goWithdraw = () => {
+            router.push({
+                path: '/order/withdrawAccount',
+                query: {
+                    accountId: assetsInfo.value.accountId,
+                    tradeType: product.value?.tradeType
+                }
+            })
+        }
+
+        // 跳转到借款页面
+        const goLoan = () => {
+            router.push({
+                path: '/assets/chooseAccount',
+                query: {
+                    accountId: assetsInfo.value.accountId,
+                    tradeType: product.value?.tradeType,
+                    type: 1
+                }
+            })
+        }
+
+        // 跳转到还款页面
+        const goRepayment = () => {
+            router.push({
+                path: '/assets/chooseAccount',
+                query: {
+                    accountId: assetsInfo.value.accountId,
+                    tradeType: product.value?.tradeType,
+                    type: 3
+                }
+            })
+        }
+
         watch(
-            () => tradeType,
+            () => product.value?.tradeType,
             newval => {
                 if (!isEmpty(customerInfo.value)) {
                     // 订阅资产数据
                     MsgSocket.subscribedListAdd(function () {
-                        MsgSocket.subscribeAsset(tradeType)
+                        MsgSocket.subscribeAsset(product.value?.tradeType)
                     })
                     // store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
                 }
@@ -168,11 +227,15 @@ export default {
         })
 
         return {
-            tradeType,
+            product,
             tradeTypeNames,
             assetsInfo,
             accountTradeType1,
             accountTradeType2,
+            goDesposit,
+            goWithdraw,
+            goLoan,
+            goRepayment,
         }
     }
 }

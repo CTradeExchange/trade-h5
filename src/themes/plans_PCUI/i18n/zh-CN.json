@@ -614,7 +614,10 @@
         },
         "bestPriceBuy": "市场最优价买入",
         "bestPriceSell": "市场最优价卖出",
-        "favorites": "自选"
+        "favorites": "自选",
+        "upDownWidth": "涨跌幅",
+        "highPrice": "最高价",
+        "lowPrice": "最低价"
 	},
 	"contract": {
 		"advance": "预付款",
