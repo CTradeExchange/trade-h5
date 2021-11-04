@@ -612,7 +612,8 @@
             "sell": "卖出价"
         },
         "bestPriceBuy": "市场最优价买入",
-        "bestPriceSell": "市场最优价卖出"
+        "bestPriceSell": "市场最优价卖出",
+        "favorites": "自选"
 	},
 	"contract": {
 		"advance": "预付款",

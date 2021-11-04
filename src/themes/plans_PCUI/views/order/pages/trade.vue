@@ -75,7 +75,7 @@
             <Assets
                 v-if='account'
                 :account='account'
-                :direction='direction'
+                direction='buy'
                 :product='product'
                 :volume='volume'
             />
@@ -159,7 +159,7 @@
             <Assets
                 v-if='account'
                 :account='account'
-                :direction='direction'
+                direction='sell'
                 :product='product'
                 :volume='volume'
             />
@@ -458,7 +458,7 @@ export default {
         flex: 1;
         padding-right: 15px;
         margin-right: 15px;
-        border-right: dashed 1px var(--lineColor);
+        border-right: dashed 1px var(--placeholdColor);
     }
     .sell-wrap{
         flex: 1;

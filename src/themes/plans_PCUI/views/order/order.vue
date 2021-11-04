@@ -3,7 +3,8 @@
         <router-view />
         <div class='content-top'>
             <div class='quote-wrap'>
-                {{ $t('trade.deal') }}
+                <!-- {{ $t('trade.deal') }} -->
+                <sidebarProduct />
             </div>
             <div class='middle-wrap'>
                 <div class='chart-content'>
@@ -32,6 +33,7 @@
                 </a>
             </p>
         </div>
+        <assetsModule />
     </div>
 </template>
 
@@ -42,6 +44,8 @@ import { useRouter, useRoute } from 'vue-router'
 import handicap from './pages/handicap.vue'
 import dealList from './pages/dealList.vue'
 import trade from './pages/trade.vue'
+import sidebarProduct from '@planspc/components/sidebarProduct'
+import assetsModule from './pages/assets.vue'
 
 import { useStore } from 'vuex'
 export default {
@@ -49,7 +53,9 @@ export default {
         chart,
         handicap,
         dealList,
-        trade
+        trade,
+        sidebarProduct,
+        assetsModule,
     },
     setup () {
         const store = useStore()
@@ -58,8 +64,10 @@ export default {
         store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
         const product = computed(() => store.getters.productActived)
         const tradeContentHeight = computed(() => {
-            if ([3, 5].includes(Number(product.value.tradeType))) {
+            if (Number(product.value.tradeType) === 5) {
                 return '265px'
+            } else if (Number(product.value.tradeType) === 3) {
+                return '340px'
             } else {
                 return '430px'
             }
@@ -84,9 +92,8 @@ export default {
     background: var(--bgColor);
 
     .content-top {
-        min-height: 710px;
+        max-height: 874px;
         display: flex;
-        //justify-content: space-evenly;
         justify-content: space-between;
 
         >div {
@@ -100,6 +107,9 @@ export default {
 
         .quote-wrap {
             width: 360px;
+            // height: 709px;
+            display: flex;
+            flex-direction: row;
         }
 
         .middle-wrap {
