@@ -298,7 +298,7 @@ position: absolute;
     bottom: 0;
     width: 100%;
     }
-    .van-popup--bottom{
+    .van-action-sheet{
                     right: 0;
     bottom: calc(-100% + 80px) ;
     width: 100%;
