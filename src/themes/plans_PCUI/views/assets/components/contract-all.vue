@@ -72,7 +72,7 @@
                 </el-table-column>
                 <el-table-column :label="$t('trade.currentPrice')">
                     <template #default='scope'>
-                        <span>{{ Number(scope.row.direction) === 1 ? currentProduct(scope.row).sell_price : currentProduct(scope.row).buy_price }}</span>
+                        <span>{{ Number(scope.row.direction) === 1 ? currentProduct(scope.row)?.sell_price : currentProduct(scope.row)?.buy_price }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column :label="$t('trade.stopLossPrice')">
