@@ -76,8 +76,13 @@ export default {
     props: {
         businessCode: {
             type: String
+        },
+        platform: {
+            type: String,
+            default: 'h5'
         }
     },
+
     setup (props) {
         const router = useRouter()
         const route = useRoute()
@@ -234,6 +239,12 @@ export default {
                 kycApply(params).then(res => {
                     state.loading = false
                     if (res.check()) {
+                        if (props.platform === 'web') {
+                            // debugger
+                            router.push({ path: route.path.slice(0, -9) + '/kycCommitted' })
+                        } else {
+                            router.replace({ name: 'KycCommitted' })
+                        }
                         router.replace({ name: 'KycCommitted' })
                         sessionStorage.removeItem('kycList')
                     }
@@ -251,7 +262,12 @@ export default {
                 kycLevelApply(params).then(res => {
                     state.loading = false
                     if (res.check()) {
-                        router.replace({ name: 'KycCommitted' })
+                        if (props.platform === 'web') {
+                            // debugger
+                            router.push({ path: route.path.slice(0, -9) + '/kycCommitted' })
+                        } else {
+                            router.replace({ name: 'KycCommitted' })
+                        }
                     }
                 }).catch(err => {
                     state.loading = false
