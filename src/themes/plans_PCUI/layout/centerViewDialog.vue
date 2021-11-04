@@ -44,33 +44,43 @@ export default {
 .el-overlay{
     z-index: 999 !important;
 }
+.el-overlay-dialog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .centerViewDialog {
+    margin: auto;
+    border-radius: 10px;
+    overflow: hidden;
     .el-dialog__header {
         display: none;
     }
     .el-dialog__body {
         padding: 0;
         min-height: 500px;
+        max-height: 75vh;
         display: flex;
         flex-flow: column;
     }
     .pageWrap {
+        @include scroll-pc();
         flex: 1;
         padding-bottom: 1.3333333333rem;
         overflow-y: auto;
     }
-    .topNav {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 2;
-        display: flex;
-        align-items: center;
-        width: 100%;
-        height: 42px;
-        color: var(--color);
-        font-size: 14px;
-        background: var(--contentColor);
-    }
+    // .topNav {
+    //     position: absolute;
+    //     top: 0;
+    //     left: 0;
+    //     z-index: 2;
+    //     display: flex;
+    //     align-items: center;
+    //     width: 100%;
+    //     height: 42px;
+    //     color: var(--color);
+    //     font-size: 14px;
+    //     background: var(--contentColor);
+    // }
 }
 </style>
