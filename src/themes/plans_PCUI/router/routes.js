@@ -100,6 +100,20 @@ const h5Children = [
         }
     },
     {
+        path: 'depositRecord', // 入金记录
+        component: () => import(/* webpackChunkName: "deposit" */ '../views/deposit/depositRecord.vue'),
+        meta: {
+            title: 'cRoute.depositRecord',
+        }
+    },
+    {
+        path: 'depositCb', // 入金结果
+        component: () => import(/* webpackChunkName: "deposit" */ '../views/deposit/depositCb.vue'),
+        meta: {
+            title: 'cRoute.despositCb',
+        }
+    },
+    {
         path: 'withdrawAccount', // 提现
         component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdrawAccount/withdrawAccount.vue'),
         meta: {

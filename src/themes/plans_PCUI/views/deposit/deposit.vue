@@ -3,9 +3,9 @@
         <div class='pageWrap'>
             <LayoutTop :back='true' :menu='false'>
                 <template #right>
-                    <a class='right-title' href='javascript:;'>
+                    <router-link class='right-title' to='/assets/depositRecord'>
                         {{ $t('deposit.depositRecord') }}
-                    </a>
+                    </router-link>
                 </template>
             </LayoutTop>
             <div class='wrap'>
@@ -31,22 +31,39 @@
                         {{ checkedType.accountCurrency }}
                     </span>
                 </div>
-                <div class='pay-wrap'>
+                <div v-if='PayTypes.length > 0' class='pay-wrap'>
                     <p class='bw-t'>
                         {{ $t('deposit.selectPayMethods') }}
                     </p>
-
                     <div v-if='checkedType' class='pay-item'>
-                        <div v-if='PayTypes.length > 0' class='pay-type' @click='openSheet'>
-                            <img alt='' :src='checkedType.imgUrl || require("@/assets/payment_icon/" + checkedType.paymentType + ".png")' srcset='' />
-                            <span class='pay-name'>
-                                {{ checkedType.alias || checkedType.paymentTypeAlias || checkedType.paymentType }}
-                            </span>
-                            <van-icon name='arrow-down' />
-                        </div>
-                        <div v-else class='pay-type no-data'>
-                            {{ $t('deposit.noPayPassway') }}
-                        </div>
+                        <el-popover v-model:visible='typeShow' placement='bottom' trigger='click' :width='480'>
+                            <template #reference>
+                                <div class='pay-type'>
+                                    <img alt='' :src='checkedType.imgUrl || require("@/assets/payment_icon/" + checkedType.paymentType + ".png")' srcset='' />
+                                    <span class='pay-name'>
+                                        {{ checkedType.alias || checkedType.paymentTypeAlias || checkedType.paymentType }}
+                                    </span>
+                                    <van-icon name='arrow-down' />
+                                </div>
+                            </template>
+                            <div class='pay-list'>
+                                <div v-for='(item,index) in payTypesSortEnable' :key='index' class='pay-type' @click='choosePayType(item)'>
+                                    <img alt='' :src='item.imgUrl || require("@/assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
+                                    <span class='pay-name'>
+                                        {{ item.alias || item.paymentTypeAlias || item.paymentType }}
+                                    </span>
+                                    <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
+                                </div>
+                                <div v-for='(item,index) in payTypesSortDisable' :key='index' class='pay-type' @click='choosePayType(item)'>
+                                    <img alt='' :src='item.imgUrl || require("@/assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
+                                    <span class='pay-name'>
+                                        {{ item.alias || item.paymentTypeAlias || item.paymentType }}
+                                    </span>
+                                    <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
+                                </div>
+                            </div>
+                        </el-popover>
+
                         <div v-if='paymentTypes.length > 1' class='currency-wrap'>
                             <van-radio-group v-model='currencyChecked' @change='changePayCurrency'>
                                 <van-radio v-for='(item,index) in paymentTypes' :key='index' class='currency-radio' icon-size='20px' :name='item'>
@@ -72,6 +89,9 @@
                         </div>
                     </div>
                 </div>
+                <div v-else class='pay-type no-data'>
+                    {{ $t('deposit.noPayPassway') }}
+                </div>
 
                 <div class='pay-info'>
                     <div class='pi-item'>
@@ -95,25 +115,6 @@
             <span>{{ $t('common.nextStep') }}</span>
         </van-button>
 
-        <van-action-sheet v-model:show='typeShow' class='pay-warpper' :round='false' :title='$t("deposit.selectPayMethods")'>
-            <div class='pay-list'>
-                <div v-for='(item,index) in payTypesSortEnable' :key='index' class='pay-type' @click='choosePayType(item)'>
-                    <img alt='' :src='item.imgUrl || require("@/assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
-                    <span class='pay-name'>
-                        {{ item.alias || item.paymentTypeAlias || item.paymentType }}
-                    </span>
-                    <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
-                </div>
-                <div v-for='(item,index) in payTypesSortDisable' :key='index' class='pay-type' @click='choosePayType(item)'>
-                    <img alt='' :src='item.imgUrl || require("@/assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
-                    <span class='pay-name'>
-                        {{ item.alias || item.paymentTypeAlias || item.paymentType }}
-                    </span>
-                    <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
-                </div>
-            </div>
-        </van-action-sheet>
-
         <van-dialog
             v-model:show='despositVis'
             :cancel-button-text='$t("deposit.denyText")'
@@ -129,7 +130,7 @@
             </p>
         </van-dialog>
 
-        <van-popup v-model:show='appendVis' class='append-popup' position='right' :style="{ height: '100%',width: '80%' }">
+        <van-popup v-model:show='appendVis' class='append-popup' position='right' :style="{ height: '100%',width: '500px' }">
             <div class='append-wrap'>
                 <p class='title'>
                     {{ $t('deposit.appendFiled') }}
@@ -282,7 +283,7 @@ export default {
                                 message: t('deposit.despositFail'),
                                 confirmButtonText: t('deposit.toRecord'),
                             }).then(() => {
-                                router.push('/depositRecord')
+                                router.push('/assets/depositRecord')
                             })
                         }
                         sessionStorage.removeItem('proposalNo')
@@ -307,11 +308,8 @@ export default {
 
         const toDespositList = () => {
             router.push({
-                path: '/depositRecord'
+                path: '/assets/depositRecord'
             })
-        }
-        const openSheet = () => {
-            state.typeShow = true
         }
 
         // 切换不同链支付通道
@@ -554,9 +552,8 @@ export default {
                 country: customInfo.value.country,
                 channelCode: customInfo.value.utmSource,
                 depositFrom: 'H5',
-                callbackUrl: window.location.protocol + '//' + window.location.host + '/depositCb',
-                blockchainName: (state.currencyChecked && state.currencyChecked.split('-').length > 1) ? state.currencyChecked.split('-')[1] : '',
-
+                callbackUrl: window.location.protocol + '//' + window.location.host + '/assets/depositCb',
+                blockchainName: (state.currencyChecked && state.currencyChecked.split('-').length > 1) ? state.currencyChecked.split('-')[1] : ''
             }
 
             if (!isEmpty(state.paramsExtens)) {
@@ -566,7 +563,6 @@ export default {
             handleDesposit(params).then(res => {
                 if (res.check()) {
                     if (res.data.browserOpenUrl) {
-                        console.log(res.data)
                         sessionStorage.setItem('proposalNo', res.data.proposalNo)
                         window.location.href = res.data.browserOpenUrl
                     }
@@ -604,7 +600,7 @@ export default {
                             message: Number(res.data) === 2 ? t('deposit.KYCReviewing') : t('deposit.needKYC'),
                         }).then(() => {
                             router.replace({
-                                name: 'Authentication',
+                                path: '/assets/authForm',
                                 query: {
                                     businessCode: 'cashin'
                                 }
@@ -706,6 +702,9 @@ export default {
                 if (arr.length === 0) {
                     state.currIndex = 99
                     state.otherAmountVis = true
+                } else {
+                    state.currIndex = 0
+                    state.amount = arr[0].amount
                 }
                 state.amountList = arr
             })
@@ -725,7 +724,6 @@ export default {
             rightAction,
             checkAmount,
             toDespositList,
-            openSheet,
             choosePayType,
             openOtherMoney,
             getDepositExchangeRate,
@@ -825,12 +823,12 @@ export default {
             .bw-t {
                 color: var(--color);
                 font-size: rem(28px);
-                line-height: rem(72px);
+                line-height: rem(80px);
             }
             .notice {
                 display: flex;
                 justify-content: space-between;
-                line-height: rem(72px);
+                line-height: rem(80px);
                 .left-val {
                     display: flex;
                     //align-items: center;
@@ -852,13 +850,11 @@ export default {
         }
     }
     .pay-info {
-        margin-top: rem(20px);
-        padding: 0 rem(30px);
+        padding: rem(20px) rem(30px);
         background-color: var(--contentColor);
         border-top: solid rem(20px) var(--bgColor);
         .pi-item {
             flex: 0 0 50%;
-            margin: rem(10px) 0;
             color: var(--normalColor);
             font-size: rem(24px);
             line-height: rem(60px);
@@ -876,6 +872,7 @@ export default {
     justify-content: center;
     border: rem(2px) solid var(--lineColor);
     border-radius: rem(4px);
+    cursor: pointer;
     .pay-name {
         flex: 1;
         color: var(--color);
