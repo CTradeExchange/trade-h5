@@ -1,7 +1,7 @@
 <template>
     <centerViewDialog>
+        <LayoutTop />
         <div class='page-wrap'>
-            <LayoutTop />
             <div class='page-content'>
                 <p v-if='Number(type) === 1' class='head-text'>
                     {{ $t('trade.loanCurrency') }}
@@ -73,7 +73,6 @@ export default {
 .page-wrap {
     width: 100%;
     height: 100%;
-    margin-top: rem(90px);
     overflow: auto;
     //background: var(--contentColor);
     .page-content {
