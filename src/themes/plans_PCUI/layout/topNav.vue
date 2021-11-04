@@ -15,13 +15,18 @@
                     </router-link>
                 </div>
                 <div class='item'>
-                    <el-dropdown>
+                    <el-dropdown @command='changePlans'>
                         <span class='link'>
-                            {{ $t('header.trade') }}<i class='el-icon-caret-bottom'></i>
+                            {{ plansName }}
+                            <i class='el-icon-caret-bottom'></i>
                         </span>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item v-for='item in plansList' :key='item.id'>
+                                <el-dropdown-item
+                                    v-for='item in plansList'
+                                    :key='item.id'
+                                    :command='item'
+                                >
                                     {{ item.name }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
@@ -128,6 +133,7 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             rightAction: { title: 444 },
+            plansName: t('header.trade')
         })
 
         // 获取账户信息
@@ -147,6 +153,19 @@ export default {
         const userAccountType = computed(() => store.getters['_user/userAccountType'])
         const customerInfo = computed(() => store.state._user.customerInfo)
 
+        const changePlans = (item) => {
+            state.plansName = item.name
+            const symbolId = store.state._quote.productList.find(el => Number(el.tradeType) === Number(item.id))?.symbolId
+            store.commit('_quote/Update_productActivedID', `${symbolId}_${item.id}`)
+            router.push({
+                name: 'Order',
+                query: {
+                    symbolId,
+                    tradeType: item.id
+                }
+            })
+        }
+
         // 路由跳转
         const handRoutTo = (path) => router.push(route.path + path)
 
@@ -157,6 +176,7 @@ export default {
             handRoutTo,
             customInfo,
             formatTime,
+            changePlans,
             ...toRefs(state)
         }
     }
