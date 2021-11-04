@@ -12,7 +12,7 @@ export default function (productList) {
 
     // 订阅当前屏和上半屏、下半屏的产品报价，给上层组件使用
     const calcSubscribeProducts = () => {
-        const el = productListEl.value
+        const el = unref(productListEl)
         if (!el || el.children.length === 0) return []
         const elHeight = el.clientHeight
         const scrollTop = el.scrollTop
@@ -31,24 +31,22 @@ export default function (productList) {
         if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
     })
 
-    const stop = watch(
-        () => [unref(productList).length, unref(productListEl)],
+    watch(
+        () => productList.value,
         async () => {
             await nextTick()
             calcProductsDebounce()
-            if (unref(productList).length) {
-                stop()
-            }
         },
         { immediate: true }
     )
 
     onMounted(() => {
-        productListEl.value.addEventListener('scroll', calcProductsDebounce, false)
+        unref(productListEl) && unref(productListEl).addEventListener('scroll', calcProductsDebounce, false)
     })
 
     return {
         productListEl,
-        productMap
+        productMap,
+        refresh: calcProductsDebounce
     }
 }

@@ -13,11 +13,7 @@
             <template v-else #default>
                 <TopTab
                     v-model='categoryType'
-                    :background='$style.contentColor'
                     class='tabs'
-                    :dot='true'
-                    line-height='0'
-                    line-width='0'
                     :list='categoryList'
                 />
                 <ProductList :list='productList' />
@@ -37,10 +33,8 @@ import ProductList from './ProductList'
 const store = useStore()
 const productActived = computed(() => store.getters.productActived)
 // 玩法类型
-const InitialTradeType = computed(() => String(unref(productActived).tradeType))
-// 1.玩法类型
-const tradeType = ref(unref(InitialTradeType))
-// 2.板块类型
+const tradeType = computed(() => String(unref(productActived).tradeType))
+// 板块类型
 const categoryType = ref(0)
 // 获取板块列表和所选板块的产品列表
 const { categoryList, productList } = useProduct({
@@ -97,6 +91,7 @@ const onInput = (val) => {
                 background: #F8F8F8;
                 border-radius: 4px;
                 margin: 0 0 0 8px;
+                font-weight: 400;
             }
         }
     }
