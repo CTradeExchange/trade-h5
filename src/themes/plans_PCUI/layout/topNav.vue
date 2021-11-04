@@ -208,6 +208,13 @@ export default {
     background-color: rgba(0,0,0,1);
     position: relative;
     z-index: 100;
+    &.Home{
+        position: sticky;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0,0,0,.5);
+    }
     .nav-left {
         display: flex;
         align-items: center;

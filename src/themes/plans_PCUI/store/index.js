@@ -4,7 +4,7 @@ import User from '@/store/modules/user'
 import Quote from '@/store/modules/quote'
 import Trade from '@/store/modules/trade'
 import { getListByParentCode, getCountryListByParentCode } from '@/api/base'
-import Colors from '@plans/colorVariables'
+import Colors from '@planspc/colorVariables'
 import { localGet, localSet } from '@/utils/util'
 
 const style = {

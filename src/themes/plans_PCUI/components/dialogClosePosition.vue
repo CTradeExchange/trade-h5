@@ -131,7 +131,7 @@
 import { reactive, toRefs, computed, watchEffect, onMounted } from 'vue'
 import { div, eq, getDecimalNum, gt, lt, minus, mul } from '@/utils/calculation'
 import { useStore } from 'vuex'
-import Stepper from '@plans/components/stepper'
+import Stepper from '@planspc/components/stepper'
 import BigNumber from 'bignumber.js'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'

@@ -1,54 +1,57 @@
 <template>
-    <div class='home'>
+    <div class='homePage'>
         <router-view />
 
         <!-- 轮播模块 -->
-        <swiper />
-        <!-- 产品模块 -->
-        <product @update='setProductKeys' />
-        <!-- 公共模块 -->
-        <notice />
-        <!-- 内容模块 -->
-        <div class='content-module'>
-            <!-- 快速注册 -->
-            <quick />
-            <!-- 广告模块 -->
-            <ad />
-            <!-- 交易模块 -->
-            <trade @update='setTradeKeys' />
-            <!-- 信息流模块 -->
-            <div class='flow-module auto-width'>
-                <div class='flow-left'>
-                    <h3 class='title'>
-                        {{ $t('information.focusNews') }}
-                    </h3>
-                    <news />
+        <swiper ref='swiperRef' />
+
+        <div class='relativeFloor'>
+            <!-- 产品模块 -->
+            <product @update='setProductKeys' />
+            <!-- 公共模块 -->
+            <notice />
+            <!-- 内容模块 -->
+            <div class='content-module'>
+                <!-- 快速注册 -->
+                <quick />
+                <!-- 广告模块 -->
+                <ad />
+                <!-- 交易模块 -->
+                <trade @update='setTradeKeys' />
+                <!-- 信息流模块 -->
+                <div class='flow-module auto-width'>
+                    <div class='flow-left'>
+                        <h3 class='title'>
+                            {{ $t('information.focusNews') }}
+                        </h3>
+                        <news />
+                    </div>
+                    <div class='flow-right'>
+                        <div class='tabs'>
+                            <span :class="{ 'active': currentFlow === 1 }" @click='switchFlow(1)'>
+                                {{ $t('information.newsFlash') }}
+                            </span>
+                            <span :class="{ 'active': currentFlow === 2 }" @click='switchFlow(2)'>
+                                {{ $t('information.calendar') }}
+                            </span>
+                        </div>
+                        <!-- 7x24 -->
+                        <div v-show='currentFlow === 1'>
+                            <seven />
+                        </div>
+                        <!-- 财经日历 -->
+                        <div v-show='currentFlow === 2'>
+                            <calendar />
+                        </div>
+                    </div>
                 </div>
-                <div class='flow-right'>
-                    <div class='tabs'>
-                        <span :class="{ 'active': currentFlow === 1 }" @click='switchFlow(1)'>
-                            {{ $t('information.newsFlash') }}
-                        </span>
-                        <span :class="{ 'active': currentFlow === 2 }" @click='switchFlow(2)'>
-                            {{ $t('information.calendar') }}
-                        </span>
-                    </div>
-                    <!-- 7x24 -->
-                    <div v-show='currentFlow === 1'>
-                        <seven />
-                    </div>
-                    <!-- 财经日历 -->
-                    <div v-show='currentFlow === 2'>
-                        <calendar />
-                    </div>
-                </div>
+                <!-- 下载模块 -->
+                <download />
+                <!-- 指引模块 -->
+                <guide />
+                <!-- 为什么选择模块 -->
+                <why />
             </div>
-            <!-- 下载模块 -->
-            <download />
-            <!-- 指引模块 -->
-            <guide />
-            <!-- 为什么选择模块 -->
-            <why />
         </div>
     </div>
 </template>
@@ -68,7 +71,7 @@ import why from './components/why.vue'
 import seven from './components/seven.vue'
 import calendar from './components/calendar.vue'
 
-import { reactive, toRefs, onActivated, onDeactivated } from 'vue'
+import { reactive, toRefs, onActivated, onDeactivated, onMounted, onUnmounted, ref } from 'vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
     name: 'Home',
@@ -97,6 +100,8 @@ export default {
             // 需要订阅产品的symbolKey
             allProductKeys: []
         })
+        const swiperRef = ref(null)
+        const swiperEl = null
 
         // 切换信息流
         const switchFlow = (num) => {
@@ -122,20 +127,45 @@ export default {
             QuoteSocket.send_subscribe(state.allProductKeys)
         }
 
+        // 监听首页滚动时，设置顶部导航位置
+        const homeScroll = event => {
+            const scrollTop = document.documentElement.scrollTop
+            const headerEl = document.querySelector('.header-nav')
+            const fixedTop = headerEl.offsetHeight + swiperEl.offsetHeight
+            console.log(headerEl.offsetHeight, swiperEl.offsetHeight, scrollTop)
+            if (scrollTop > fixedTop) {
+                headerEl.style.top = fixedTop - scrollTop + 'px'
+            } else {
+                headerEl.style.top = 0
+            }
+        }
+
         // 发送行情订阅
-        onActivated(() => {
+        onMounted(() => {
             if (state.allProductKeys.length > 0) {
                 sendSubscribe()
             }
+            // 头部固定
+            const headerEl = document.querySelector('.header-nav')
+            if (headerEl) headerEl.classList.add('fixedHeader')
+
+            // 滚动条滑动时设置顶部导航位置
+            // swiperEl = swiperRef.value.$el
+            // document.addEventListener('scroll', homeScroll, false)
         })
 
         // 取消行情订阅
-        onDeactivated(() => {
+        onUnmounted(() => {
+            const headerEl = document.querySelector('.header-nav')
+            if (headerEl) headerEl.classList.remove('fixedHeader')
             QuoteSocket.cancel_subscribe()
+
+            document.removeEventListener('scroll', homeScroll, false)
         })
 
         return {
             ...toRefs(state),
+            swiperRef,
             switchFlow,
             setProductKeys,
             setTradeKeys
@@ -145,6 +175,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.homePage{
+    position: relative;
+    padding-top: 490px;
+    .relativeFloor{
+        position: relative;
+        z-index: 101;
+    }
+}
+
 // 内容模块
 .content-module {
     padding: 90px 0;

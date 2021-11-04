@@ -1,7 +1,7 @@
 <template>
     <div class='authConditionWrapper'>
         <LayoutTop back :menu='false' />
-        <auth-condition :business-code='businessCode' />
+        <auth-condition :business-code='businessCode' :platform='platform' />
     </div>
 </template>
 
@@ -12,6 +12,12 @@ import authCondition from '@/themeCommon/components/authConditon'
 export default {
     components: {
         authCondition,
+    },
+    props: {
+        platform: {
+            type: String,
+            default: 'h5'
+        }
     },
     setup (props) {
         const route = useRoute()

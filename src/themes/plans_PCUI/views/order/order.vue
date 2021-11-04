@@ -33,7 +33,9 @@
                 </a>
             </p>
         </div>
-        <assetsModule />
+        <van-sticky class='assetsSticky' :offset-bottom='10' position='bottom'>
+            <assetsModule />
+        </van-sticky>
     </div>
 </template>
 
@@ -179,6 +181,11 @@ export default {
         margin-top: 8px;
         min-height: 300px;
         background: var(--contentColor);
+    }
+    .assetsSticky{
+        :deep(.van-sticky--fixed){
+            box-shadow: 0 0 10px rgba(0,0,0,.15);
         }
+    }
 }
 </style>
