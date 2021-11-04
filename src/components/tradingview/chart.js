@@ -698,6 +698,11 @@ class Chart {
             return entity
         })
     }
+
+    // 更改图表主题
+    changeTheme (name) {
+        this.widget.changeTheme(name)
+    }
 }
 
 function appendBtnToIframe ({ el, type, fillColor = '#ccc', style = {} }, callback) {
