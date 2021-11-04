@@ -73,7 +73,6 @@ export default {
         width: 100%;
         line-height: 1;
         text-align: center;
-        background: var(--assistColor);
     }
 }
 </style>

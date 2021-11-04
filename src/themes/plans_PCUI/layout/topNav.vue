@@ -128,8 +128,16 @@ export default {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
-            rightAction: { title: 444 },
-            plansName: t('header.trade')
+            rightAction: { title: 444 }
+        })
+
+        const plansName = computed(() => {
+            if (route.query.tradeType) {
+                const tradeType = route.query.tradeType
+                return t('tradeType[' + tradeType + ']')
+            } else {
+                return t('header.trade')
+            }
         })
 
         // 获取账户信息
@@ -154,8 +162,9 @@ export default {
 
         const changePlans = (item) => {
             state.plansName = item.name
-            const symbolId = store.state._quote.productList.find(el => Number(el.tradeType) === Number(item.id))?.symbolId
+            const symbolId = store.state._quote.productList.filter(el => Number(el.tradeType) === Number(item.id))[1].symbolId
             store.commit('_quote/Update_productActivedID', `${symbolId}_${item.id}`)
+
             router.push({
                 name: 'Order',
                 query: {
@@ -177,6 +186,7 @@ export default {
             customInfo,
             formatTime,
             changePlans,
+            plansName,
             ...toRefs(state)
         }
     }
