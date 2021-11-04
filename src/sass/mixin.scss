@@ -91,16 +91,17 @@
 }
 
 @mixin scroll-pc() {
-    scrollbar-color: #DFDFDF white;
     scrollbar-width: thin;
     &::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+        width: 7px;
+        height: 7px;
     }
     &::-webkit-scrollbar-track {
-        background: #EEE;
+        background: var(--bgColor);
         border-radius: 10px;
-        box-shadow: 0 0 3px #DFDFDF inset;
+		outline: 1px solid var(--lineColor);
+		outline-offset: -1px;
+		border: 1px solid var(--lineColor);
     }
     &::-webkit-scrollbar-thumb {
         background: #C2C2C2;
