@@ -53,6 +53,7 @@ export default {
         min-height: 500px;
         display: flex;
         flex-flow: column;
+        background: var(--bgColor);
     }
     .pageWrap {
         flex: 1;
