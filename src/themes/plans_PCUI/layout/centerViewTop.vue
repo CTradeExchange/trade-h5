@@ -59,12 +59,9 @@ export default {
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
 .topNav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 2;
     display: flex;
     align-items: center;
+    flex-shrink: 0;
     width: 100%;
     height: rem(90px);
     color: var(--color);

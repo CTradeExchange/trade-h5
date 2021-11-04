@@ -44,20 +44,30 @@ export default {
 .el-overlay{
     z-index: 999 !important;
 }
+.el-overlay-dialog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .centerViewDialog {
+    margin: auto;
+    border-radius: 10px;
+    overflow: hidden;
     .el-dialog__header {
         display: none;
     }
     .el-dialog__body {
-        padding: 0;
-        min-height: 500px;
         display: flex;
         flex-flow: column;
+        padding: 0;
+        height: 600px;
+        max-height: 80%;
         background: var(--bgColor);
     }
     .pageWrap {
+        @include scroll-pc();
         flex: 1;
-        padding-bottom: 1.3333333333rem;
+        padding-bottom: 1rem;
         overflow-y: auto;
     }
     .topNav {

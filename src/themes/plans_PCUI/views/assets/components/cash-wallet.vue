@@ -10,7 +10,7 @@
                 {{ assetsInfo?.totalBalance }}
             </p>
             <div class='assets-handle'>
-                <button class='btn' @click='goRecharge'>
+                <button class='btn' @click='goDesposit'>
                     {{ $t('trade.desposit') }}
                 </button>
                 <button class='btn' @click='goWithdraw'>
@@ -40,6 +40,7 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 export default {
     props: {
@@ -51,6 +52,7 @@ export default {
     },
     setup (props) {
         const store = useStore()
+        const router = useRouter()
         // 用户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
         // 资产信息
@@ -58,30 +60,59 @@ export default {
         // 资产列表
         const accountList = computed(() => customerInfo.value?.accountList.filter(el => Number(el.tradeType) === props.tradeType))
 
-        // 跳转到充值页面
-        const goRecharge = () => {
-            console.log('跳转到充值页面')
+        // 跳转充值页面
+        const goDesposit = () => {
+            if (accountList.value.length > 1) {
+                router.push({
+                    path: '/assets/chooseAccount',
+                    query: {
+                        accountId: assetsInfo.value.accountId,
+                        tradeType: props.tradeType,
+                        type: 2
+                    }
+                })
+            } else {
+                router.push({
+                    path: '/assets/deposit',
+                    query: {
+                        accountId: assetsInfo.value.accountId,
+                        currency: assetsInfo.value.currency,
+                        tradeType: props.tradeType
+                    }
+                })
+            }
         }
 
-        // 跳转到提现页面
+        // 跳转提现页面
         const goWithdraw = () => {
-            console.log('跳转到提现页面')
+            router.push({
+                path: '/assets/withdrawAccount',
+                query: {
+                    accountId: assetsInfo.value.accountId,
+                    tradeType: props.tradeType
+                }
+            })
         }
 
         // 跳转到划转页面
         const goTransfer = () => {
-            console.log('跳转到划转页面')
+            router.push({
+                path: '/assets/transfer',
+                query: {
+                    tradeType: props.tradeType
+                }
+            })
         }
 
         // 跳转到资金记录页面
         const goRecord = () => {
-            console.log('跳转到资金记录页面')
+
         }
 
         return {
             assetsInfo,
             accountList,
-            goRecharge,
+            goDesposit,
             goWithdraw,
             goTransfer,
             goRecord

@@ -57,7 +57,7 @@
                 </el-table-column>
                 <el-table-column :label="$t('trade.currentPrice')">
                     <template #default='scope'>
-                        <span>{{ Number(scope.row.direction) === 1 ? currentProduct(scope.row).sell_price : currentProduct(scope.row).buy_price }}</span>
+                        <span>{{ Number(scope.row.direction) === 1 ? currentProduct(scope.row)?.sell_price : currentProduct(scope.row)?.buy_price }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column :label="$t('trade.prospectMandatory')">
@@ -130,6 +130,7 @@ import sltp from './sltp.vue'
 
 import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import { minus } from '@/utils/calculation'
 
 export default {
@@ -147,6 +148,7 @@ export default {
     },
     setup (props) {
         const store = useStore()
+        const router = useRouter()
         const adjustMargin = ref(null)
         const closePosition = ref(null)
         const sltp = ref(null)
@@ -167,7 +169,13 @@ export default {
 
         // 跳转到划转页面
         const goTransfer = () => {
-            console.log('跳转到划转页面')
+            router.push({
+                path: '/assets/transfer',
+                query: {
+                    accountId: assetsInfo.value.accountId,
+                    tradeType: props.tradeType
+                }
+            })
         }
 
         // 跳转到资金记录页面

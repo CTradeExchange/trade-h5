@@ -1,7 +1,7 @@
 <template>
     <div class='page-wrap'>
         <router-view />
-        <div class='content-top'>
+        <div class='content-top' :style="'height: '+ contentHeight">
             <div class='quote-wrap'>
                 <!-- {{ $t('trade.deal') }} -->
                 <sidebarProduct />
@@ -21,7 +21,7 @@
                 </div>
                 <!-- 实时成交记录 -->
                 <div class='deal-content'>
-                    <dealList :symbol-id='product.symbolId' />
+                    <dealList :symbol-id='product?.symbolId' />
                 </div>
             </div>
         </div>
@@ -46,6 +46,7 @@ import dealList from './pages/dealList.vue'
 import trade from './pages/trade.vue'
 import sidebarProduct from '@planspc/components/sidebarProduct'
 import assetsModule from './pages/assets.vue'
+import { isEmpty } from '@/utils/util'
 
 import { useStore } from 'vuex'
 export default {
@@ -60,16 +61,31 @@ export default {
     setup () {
         const store = useStore()
         const route = useRoute()
+        const router = useRouter()
         const { tradeType, symbolId } = route.query
-        store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
+        // store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
         const product = computed(() => store.getters.productActived)
+
+        if (isEmpty(product.value)) {
+            router.push('/')
+        }
         const tradeContentHeight = computed(() => {
-            if (Number(product.value.tradeType) === 5) {
+            if (Number(product.value?.tradeType) === 5) {
                 return '265px'
-            } else if (Number(product.value.tradeType) === 3) {
+            } else if (Number(product.value?.tradeType) === 3) {
                 return '340px'
             } else {
                 return '430px'
+            }
+        })
+
+        const contentHeight = computed(() => {
+            if (Number(product.value?.tradeType) === 3) {
+                return '785px'
+            } else if (Number(product.value?.tradeType) === 5) {
+                return '710px'
+            } else {
+                return '874px'
             }
         })
         return {
@@ -77,7 +93,8 @@ export default {
             product,
             tradeType,
             symbolId,
-            tradeContentHeight
+            tradeContentHeight,
+            contentHeight
         }
     },
 }

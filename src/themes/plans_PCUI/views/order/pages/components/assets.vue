@@ -113,7 +113,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .orderAssets {
-    margin-top: 16px;
+    margin-top: 10px;
     margin-bottom: 16px;
     color: var(--minorColor);
     line-height: 1.5;
