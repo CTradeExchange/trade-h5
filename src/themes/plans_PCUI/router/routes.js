@@ -100,10 +100,17 @@ const h5Children = [
         }
     },
     {
-        path: 'withdrawAccount', // 提现
+        path: 'withdrawAccount', // 选择提现币种
         component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdrawAccount/withdrawAccount.vue'),
         meta: {
             title: 'cRoute.withdrawAccount',
+        }
+    },
+    {
+        path: 'withdraw', // 提现
+        component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdrawAccount/withdraw.vue'),
+        meta: {
+            title: 'cRoute.withdraw',
         }
     },
     {
@@ -118,6 +125,13 @@ const h5Children = [
         component: () => import(/* webpackChunkName: "Bank" */ '../views/bank/addBank.vue'),
         meta: {
             title: 'cRoute.addBank',
+        }
+    },
+    {
+        path: 'walletAdd', // 添加钱包
+        component: () => import(/* webpackChunkName: "Bank" */ '../views/wallet/walletAdd.vue'),
+        meta: {
+            title: 'cRoute.walletAdd',
         }
     },
     {
