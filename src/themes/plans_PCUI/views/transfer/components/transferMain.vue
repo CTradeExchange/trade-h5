@@ -149,8 +149,8 @@ export default {
             state.toAccount = plans.value.filter(el => el.name !== state.fromAccount.name)[0]
         } else {
             state.toAccount = plans.value.find(el => Number(el.id) === Number(tradeType))
-            state.toAccountTradeType = state.toAccount.tradeType
         }
+        state.toAccountTradeType = state.toAccount.tradeType
         state.curTradeType = state.fromAccount.id
         state.curCurrencyValue = accountList.value[0].currency
 

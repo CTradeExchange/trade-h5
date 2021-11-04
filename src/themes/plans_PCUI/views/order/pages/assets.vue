@@ -126,6 +126,7 @@ import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { MsgSocket } from '@/plugins/socket/socket'
+import { isEmpty } from '@/utils/util'
 export default {
     setup () {
         const store = useStore()
@@ -146,15 +147,18 @@ export default {
 
         // 合约逐仓资产
         const accountTradeType2 = computed(() => store.state._user.accountAssets['2'])
+        const customerInfo = computed(() => store.state._user.customerInfo)
 
         watch(
             () => tradeType,
             newval => {
-                // 订阅资产数据
-                MsgSocket.subscribedListAdd(function () {
-                    MsgSocket.subscribeAsset(tradeType)
-                })
-                store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
+                if (!isEmpty(customerInfo.value)) {
+                    // 订阅资产数据
+                    MsgSocket.subscribedListAdd(function () {
+                        MsgSocket.subscribeAsset(tradeType)
+                    })
+                    store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
+                }
             },
             { immediate: true }
         )

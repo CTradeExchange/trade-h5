@@ -3,7 +3,6 @@
         <FloatTip v-if='warn'>
             {{ warn }}
         </FloatTip>
-
         <label>{{ $tm('trade.priceMap')[direction] }}</label>
 
         <PendingBar
@@ -107,10 +106,10 @@ export default {
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
 .wrapper {
+    width: 100%;
     display: flex;
     align-items: center;
     line-height: 1.5;
-    width: 100%;
     .title {
         line-height: 1;
         .icon {

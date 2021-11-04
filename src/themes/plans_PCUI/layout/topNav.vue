@@ -36,12 +36,12 @@
                 <router-link class='login' to='/login'>
                     {{ $t('c.login') }}
                 </router-link>
-                <router-link class='register' to='/'>
+                <router-link class='register' to='/register'>
                     {{ $t('c.register') }}
                 </router-link>
             </div>
             <!-- 已登录 -->
-            <div v-else class='handle-have'>
+            <div v-else-if='customerInfo' class='handle-have'>
                 <div class='item'>
                     <div class='user'>
                         <i class='head el-icon-s-custom'></i>
@@ -51,21 +51,37 @@
                     </div>
                 </div>
                 <div class='item'>
-                    <i class='icon icon_zichan' :title="$t('header.assets')"></i>
+                    <i class='icon icon_zichan' :title="$t('header.assets')" @click="$router.push('/assets')"></i>
                 </div>
                 <div class='item'>
                     <Msg />
                 </div>
                 <div class='item'>
+                    <el-dropdown>
+                        <i class='icon icon_gerenxinxi' :title="$t('cRoute.personal')"></i>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item v-if='customerInfo.companyKycStatus===1' @click="handRoutTo('/authentication')">
+                                    {{ $t('cRoute.regKyc') }}
+                                </el-dropdown-item>
+                                <el-dropdown-item @click="handRoutTo('/bankList')">
+                                    {{ $t('cRoute.bankList') }}
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
+                <div class='item'>
                     <SettingIcon />
                 </div>
                 <div class='line'></div>
-                
             </div>
             <!-- 操作功能 -->
             <div class='handle-feature'>
-                <div class='item'>
-                    <i class='icon icon_kefu' :title="$t('header.service')"></i>
+                <div v-if='onlineService' class='item'>
+                    <a :href='onlineService' target='_blank'>
+                        <i class='icon icon_kefu' :title="$t('header.service')"></i>
+                    </a>
                 </div>
                 <div class='item'>
                     <el-dropdown>
@@ -79,28 +95,10 @@
                     </el-dropdown>
                 </div>
                 <div class='item'>
-                    <el-dropdown>
-                        <i class='icon icon_yuyan' :title="$t('header.language')"></i>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item>简体中文</el-dropdown-item>
-                                <el-dropdown-item>繁体中文</el-dropdown-item>
-                                <el-dropdown-item>ENGLISH</el-dropdown-item>
-                                <el-dropdown-item>Русский</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
+                    <LangIcon />
                 </div>
                 <div class='item'>
-                    <el-dropdown>
-                        <i class='icon icon_zhuanhuanchengbaitian' :title="$t('header.theme')"></i>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item>白天</el-dropdown-item>
-                                <el-dropdown-item>黑夜</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
+                    <ThemeIcon />
                 </div>
             </div>
         </div>
@@ -114,11 +112,15 @@ import { isEmpty } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import SettingIcon from './components/settingIcon'
+import ThemeIcon from './components/themeIcon'
+import LangIcon from './components/langIcon'
 import Msg from './components/msg'
 
 export default {
     components: {
         SettingIcon,
+        ThemeIcon,
+        LangIcon,
         Msg
     },
     setup () {
@@ -132,16 +134,19 @@ export default {
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+        // 在线客服地址
+        const onlineService = computed(() => store.state._base.wpCompanyInfo?.onlineService)
+
         onBeforeMount(() => {
 
         })
         onUnmounted(() => {
-            
+
         })
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
-        
+
         // 玩法列表
         const plansList = computed(() => store.state._base.plans)
         const userAccountType = computed(() => store.getters['_user/userAccountType'])
@@ -152,6 +157,7 @@ export default {
 
         return {
             plansList,
+            onlineService,
             userAccountType,
             customerInfo,
             handRoutTo,
@@ -273,7 +279,7 @@ export default {
                     color: #D6DAE1;
                     cursor: pointer;
                 }
-                
+
             }
             .line {
                 width: 1px;

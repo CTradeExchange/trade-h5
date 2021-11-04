@@ -131,6 +131,7 @@ export default {
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
 .wrapper {
+    width: 100%;
     align-items: center;
     line-height: 1.5;
     .title {
