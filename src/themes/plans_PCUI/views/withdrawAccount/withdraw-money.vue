@@ -43,7 +43,7 @@
     <van-button block class='confirm-btn' type='primary' @click='confirm'>
         <span>{{ $t('withdraw.confirm') }}</span>
     </van-button>
-    <van-action-sheet v-model:show='show' :round='false' :title="$t('withdrawMoney.bankPopupTitle')">
+    <van-dialog v-model:show='show' :round='false' :title="$t('withdrawMoney.bankPopupTitle')">
         <div class='bank-list'>
             <div
                 v-for='(item, index) in bankList'
@@ -69,7 +69,7 @@
                 <van-icon class='icon-arrow' name='arrow' size='13' />
             </div>
         </div>
-    </van-action-sheet>
+    </van-dialog>
     <van-dialog v-model:show='withdrawSuccess' class-name='add-success' :confirm-button-text="$t('common.sure')" :show-cancel-button='false' @confirm='$router.push("/assets")'>
         <i class='icon_success'></i>
         <p class='title'>
