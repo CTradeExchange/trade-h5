@@ -62,6 +62,7 @@ export default {
         max-height: 75vh;
         display: flex;
         flex-flow: column;
+        background: var(--bgColor);
     }
     .pageWrap {
         @include scroll-pc();
