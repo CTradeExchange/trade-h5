@@ -564,7 +564,7 @@ export default {
                 if (res.check()) {
                     if (res.data.browserOpenUrl) {
                         sessionStorage.setItem('proposalNo', res.data.proposalNo)
-                        window.location.href = res.data.browserOpenUrl
+                        window.open(res.data.browserOpenUrl, '_blank')
                     }
                 } else {
                     Toast(res.msg)
@@ -765,7 +765,7 @@ export default {
         .header-text {
             padding: rem(46px) rem(30px) rem(40px) rem(30px);
             color: var(--color);
-            font-size: rem(28px);
+            font-size: rem(32px);
         }
         .amount-list {
             display: flex;
@@ -822,7 +822,7 @@ export default {
             border-top: solid rem(20px) var(--bgColor);
             .bw-t {
                 color: var(--color);
-                font-size: rem(28px);
+                font-size: rem(32px);
                 line-height: rem(80px);
             }
             .notice {
@@ -856,7 +856,7 @@ export default {
         .pi-item {
             flex: 0 0 50%;
             color: var(--normalColor);
-            font-size: rem(24px);
+            font-size: rem(28px);
             line-height: rem(60px);
         }
         .line {

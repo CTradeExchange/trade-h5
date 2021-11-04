@@ -16,7 +16,6 @@
                     v-for='item in accountList'
                     :key='item.accountId'
                     is-link
-                    replace
                     :title='item.currency'
                     :to='{ path: routeName, query:{ accountId: item.accountId,currency: item.currency,tradeType } }'
                 />

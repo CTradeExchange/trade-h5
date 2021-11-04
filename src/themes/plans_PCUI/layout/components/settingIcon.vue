@@ -112,6 +112,7 @@ export default {
         position: relative;
         padding: 0 10px 0 17px;
         height: 40px;
+        color: var(--color);
         border-radius: 5px;
         line-height: 40px;
         cursor: pointer;
@@ -121,7 +122,6 @@ export default {
         }
         &:hover, &.active{
             color: var(--primary);
-            background: #F4F7FC;
             .arrowIcon,.subDrapdown{
                 display: block;
             }

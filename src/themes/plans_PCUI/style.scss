@@ -627,15 +627,55 @@ body {
     .van-calendar {
         background-color: var(--bgColor) !important;
     }
-
     .van-button--primary{
         background-color: var(--primary);
         border: 1px solid var(--primary);
     }
     .van-button--plain.van-button--primary{
         color: var(--primary);
-
     }
+	
+	// element-plus
+	.el-dialog {
+		background: var(--contentColor);
+		.el-dialog__title {
+			color: var(--color);
+		}
+		.el-icon-close {
+			&:hover {
+				color: var(--primary);
+			}
+		}
+	}
+	.el-dropdown-menu {
+		background: var(--contentColor);
+	}
+	.el-dropdown-menu__item, .el-select-dropdown__item {
+		color: var(--color);
+		&.selected {
+			color: var(--primary);
+			background: var(--contentColor) !important;
+		}
+		&:hover {
+			color: var(--primary);
+			background: var(--contentColor) !important;
+		}
+	}
+	.el-input__inner {
+		background: transparent;
+	}
+	.el-popper {
+		background: var(--contentColor) !important;
+		border: 1px solid var(--lineColor) !important;
+		&.is-light {
+			border: 1px solid var(--lineColor) !important;
+			.el-popper__arrow::before {
+				background: var(--contentColor) !important;
+				border-left-color: var(--lineColor) !important;
+				border-top-color: var(--lineColor) !important;
+			}
+		}
+	}
 }
 
 /* 滚动条 */

@@ -89,15 +89,7 @@
                     </a>
                 </div>
                 <div class='item'>
-                    <el-dropdown>
-                        <i class='icon icon_xiazai' :title="$t('header.download')"></i>
-                        <template #dropdown>
-                            <div class='download-dialog'>
-                                <img src='@planspc/images/home/download-code.png' />
-                                <p>{{ $t('header.downloadTip') }}</p>
-                            </div>
-                        </template>
-                    </el-dropdown>
+                    <DownloadIcon />
                 </div>
                 <div class='item'>
                     <LangIcon />
@@ -120,13 +112,15 @@ import SettingIcon from './components/settingIcon'
 import ThemeIcon from './components/themeIcon'
 import LangIcon from './components/langIcon'
 import Msg from './components/msg'
+import DownloadIcon from './components/downloadIcon'
 
 export default {
     components: {
         SettingIcon,
         ThemeIcon,
         LangIcon,
-        Msg
+        Msg,
+        DownloadIcon
     },
     setup () {
         const route = useRoute()
@@ -394,33 +388,6 @@ export default {
                 font-size: 12px;
                 line-height: 30px;
             }
-        }
-    }
-}
-.download-dialog {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px 15px;
-    img {
-        width: 88px;
-        height: 88px;
-    }
-    p {
-        width: 88px;
-        line-height: 20px;
-        font-size: 14px;
-        color: var(--color);
-    }
-}
-
-.el-dropdown-menu {
-    .el-dropdown-menu__item {
-        font-size: 14px;
-        color: var(--color);
-        &:hover {
-            color: var(--primary);
-            background: var(--primaryAssistColor);
         }
     }
 }
