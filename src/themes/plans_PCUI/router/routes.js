@@ -135,24 +135,10 @@ const h5Children = [
         }
     },
     {
-        path: 'addBank', // 添加银行卡
-        component: () => import(/* webpackChunkName: "Bank" */ '../views/bank/addBank.vue'),
-        meta: {
-            title: 'cRoute.addBank',
-        }
-    },
-    {
         path: 'walletAdd', // 添加钱包
         component: () => import(/* webpackChunkName: "Bank" */ '../views/wallet/walletAdd.vue'),
         meta: {
             title: 'cRoute.walletAdd',
-        }
-    },
-    {
-        path: 'bankList', // 银行卡列表
-        component: () => import(/* webpackChunkName: "Bank" */ '../views/bank/bankList.vue'),
-        meta: {
-            title: 'cRoute.bankList',
         }
     },
     {
@@ -186,7 +172,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "Login" */ '../views/login/login.vue'),
         meta: {
             title: 'route.login',
-            keepAlive: true,
             roles: [],
         }
     },
@@ -196,7 +181,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "Register" */ '../views/register/register.vue'),
         meta: {
             title: 'route.register',
-            keepAlive: true,
             roles: [],
         }
     },
@@ -206,7 +190,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "Register" */ '../views/register/registerSuccess.vue'),
         meta: {
             title: 'route.registerSuccess',
-            keepAlive: true,
             roles: [],
         }
     },
@@ -216,7 +199,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "Forgot" */ '../views/forgot/forgot.vue'),
         meta: {
             title: 'route.forgot',
-            keepAlive: true,
             roles: [],
         }
     },
@@ -226,7 +208,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "Forgot" */ '../views/forgot/resetPwd.vue'),
         meta: {
             title: 'route.resetPwd',
-            keepAlive: true,
+            // keepAlive: true,
             roles: [],
         }
     },
@@ -251,7 +233,7 @@ const routes = [
         redirect: '/home',
         name: 'Layout',
         component: Layout,
-        keepAlive: true,
+        // keepAlive: true,
         children: [
             {
                 path: 'home',
@@ -259,7 +241,7 @@ const routes = [
                 component: () => import(/* webpackChunkName: "Home" */ '../views/home/home.vue'),
                 meta: {
                     title: 'route.home',
-                    keepAlive: true,
+                    // keepAlive: true,
                     roles: [],
                 },
                 children: h5Children
@@ -270,7 +252,6 @@ const routes = [
                 component: () => import(/* webpackChunkName: "Quote" */ '../views/quote/quote.vue'),
                 meta: {
                     title: 'route.quote',
-                    keepAlive: true,
                     roles: [],
                 },
                 children: h5Children
@@ -281,7 +262,6 @@ const routes = [
                 component: () => import(/* webpackChunkName: "Order" */ '../views/order/order.vue'),
                 meta: {
                     title: 'route.order',
-                    keepAlive: true,
                     roles: [],
                 },
                 children: h5Children
@@ -292,7 +272,6 @@ const routes = [
                 component: () => import(/* webpackChunkName: "Assets" */ '../views/assets/assets.vue'),
                 meta: {
                     title: 'route.assets',
-                    keepAlive: false,
                     roles: []
                 },
                 children: h5Children

@@ -1,60 +1,67 @@
 <template>
-    <div class='layout'>
-        <Top
-            back
-            left-icon='arrow-left'
-            show-center
-        />
-        <div class='container'>
-            <div class='empty'></div>
-            <div class='module-form'>
-                <div class='select' @click='coinKindVisible = true'>
-                    <label>{{ $t('walletAdd.coinName') }}</label>
-                    <div class='option'>
-                        <input v-model='coinKind' :placeholder="$t('walletAdd.coinPlaceholder')" readonly type='text' />
-                        <van-icon name='arrow-down' />
+    <centerViewDialog>
+        <div class='layout'>
+            <Top
+                back
+                left-icon='arrow-left'
+                show-center
+            />
+            <div class='container'>
+                <div class='empty'></div>
+                <div class='module-form'>
+                    <div class='select' @click='coinKindVisible = true'>
+                        <label class="select_lab">{{ $t('walletAdd.coinName') }}</label>
+                        <el-select class="currencyBox" v-model='coinKind' :placeholder="$t('walletAdd.coinPlaceholder')" placeholder='Select' @change='selectCoinKind'>
+                            <el-option
+                                v-for='item in coinKindList'
+                                :key='item.name'
+                                :label='item.name'
+                                :value='item.name'
+                            />
+                        </el-select> 
+                    </div>
+                    <div class='select' @click='chainNameVisible = true'>
+                        <label class="select_lab">{{ $t('walletAdd.chainName') }}</label>
+                        <el-select class="currencyBox" v-model='chainName' :placeholder="$t('walletAdd.chainPlaceholder')"  placeholder='Select' @change='selectChainName'>
+                            <el-option
+                                v-for='item in chainNameList'
+                                :key='item.name'
+                                :label='item.name'
+                                :value='item.name'
+                            />
+                        </el-select> 
                     </div>
                 </div>
-                <div class='select' @click='chainNameVisible = true'>
-                    <label>{{ $t('walletAdd.chainName') }}</label>
-                    <div class='option'>
-                        <input v-model='chainName' :placeholder="$t('walletAdd.chainPlaceholder')" readonly type='text' />
-                        <van-icon name='arrow-down' />
+                <div class='empty'></div>
+                <div class='module-import'>
+                    <div class='box'>
+                        <input v-model='address' :placeholder="$t('walletAdd.addressPlaceholder')" type='text' />
+                    </div>
+                    <div class='box'>
+                        <input v-model='name' :placeholder="$t('walletAdd.namePlaceholder')" type='text' />
+                    </div>
+                    <div class='box'>
+                        <input v-model='code' :placeholder="$t('walletAdd.codePlaceholder')" />
+                        <span v-if='countDown === 0' class='get' @click='getCode'>
+                            {{ $t('walletAdd.codeBtn') }}
+                        </span>
+                        <span v-else class='time'>
+                            {{ countDown }}{{ $t('walletAdd.codeHint') }}
+                        </span>
                     </div>
                 </div>
             </div>
-            <div class='empty'></div>
-            <div class='module-import'>
-                <div class='box'>
-                    <input v-model='address' :placeholder="$t('walletAdd.addressPlaceholder')" type='text' />
-                </div>
-                <div class='box'>
-                    <input v-model='name' :placeholder="$t('walletAdd.namePlaceholder')" type='text' />
-                </div>
-                <div class='box'>
-                    <input v-model='code' :placeholder="$t('walletAdd.codePlaceholder')" />
-                    <span v-if='countDown === 0' class='get' @click='getCode'>
-                        {{ $t('walletAdd.codeBtn') }}
-                    </span>
-                    <span v-else class='time'>
-                        {{ countDown }}{{ $t('walletAdd.codeHint') }}
-                    </span>
-                </div>
-            </div>
-        </div>
-        <!-- 底部按钮 -->
-        <button class='footer-btn' @click='onConfirm'>
-            <span>{{ $t('walletAdd.confirm') }}</span>
+            <!-- 底部按钮 -->
+            <button class='footer-btn' @click='onConfirm'>
+                <span>{{ $t('walletAdd.confirm') }}</span>
         </button>
-
-        <!-- 提币币种弹窗 -->
-        <van-action-sheet v-model:show='coinKindVisible' :actions='coinKindList' class='action-sheet-coin' @select='selectCoinKind' />
-        <!-- 链名称弹窗 -->
-        <van-action-sheet v-model:show='chainNameVisible' :actions='chainNameList' class='action-sheet-chain' @select='selectChainName' />
     </div>
+    </centerViewDialog>
+    
 </template>
 
 <script>
+import centerViewDialog from '@planspc/layout/centerViewDialog'
 // vue
 import { reactive, toRefs, computed, onMounted } from 'vue'
 // vuex
@@ -73,7 +80,8 @@ import { verifyCodeSend } from '@/api/base'
 
 export default {
     components: {
-        Top
+        Top,
+        centerViewDialog
     },
     setup () {
         const { t } = useI18n({ useScope: 'global' })
@@ -100,10 +108,6 @@ export default {
             code: '',
             // 当前验证码倒计时时间
             countDown: 0,
-            // 是否显示提币币种选项弹窗
-            coinKindVisible: false,
-            // 是否显示链名称选项弹窗
-            chainNameVisible: false,
             // 发送验证码返回的信息
             verifyInfo: {
                 code: '',
@@ -130,16 +134,14 @@ export default {
         }
         // 点击选择提币币种
         const selectCoinKind = (item) => {
-            state.coinKind = item.name
+            state.coinKind = item
             state.chainName = ''
-            state.coinKindVisible = false
             // 根据提币币种筛选链名称
             filterChainName()
         }
         // 点击选项链名称
         const selectChainName = (item) => {
-            state.chainName = item.name
-            state.chainNameVisible = false
+            state.chainName = item
         }
         // 获取客户提币币种和链名称
         const queryWithdrawCurrencyList = () => {
@@ -288,6 +290,16 @@ export default {
         color: var(--color);
         font-size: rem(28px);
         border-bottom: 1px solid var(--lineColor);
+        :deep(.el-select){
+            width:100%;
+        }
+        :deep(.el-input__inner){
+            border: none;
+            text-align:right;
+        }
+        .select_lab{
+            width:70px;
+        }
         .option {
             display: inline-flex;
             flex: 1;

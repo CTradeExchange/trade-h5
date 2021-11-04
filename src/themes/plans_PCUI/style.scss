@@ -148,6 +148,10 @@ i {
     margin-top: rem(90px);
     overflow-y: auto;
 }
+.fixedHeader{
+    position: sticky !important;
+    top: 0;
+}
 
 @font-face {
     font-weight: normal;

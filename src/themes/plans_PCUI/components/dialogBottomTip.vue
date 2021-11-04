@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import i18n from '@plans/i18n/i18n'
+import i18n from '@planspc/i18n/i18n'
 
 export default {
     name: 'DialogBottomTip',

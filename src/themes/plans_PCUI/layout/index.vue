@@ -1,5 +1,5 @@
 <template>
-    <topNav />
+    <topNav :class='[$route.name]' />
     <Suspense>
         <template #default>
             <router-view v-slot='{ Component, route }'>

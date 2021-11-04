@@ -25,7 +25,7 @@
 
 <script>
 import { plus, div, pow, lt, gt } from '@/utils/calculation'
-import StepperComp from '@plans/components/stepper'
+import StepperComp from '@planspc/components/stepper'
 
 export default {
     components: {

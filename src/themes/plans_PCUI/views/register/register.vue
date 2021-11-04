@@ -5,9 +5,9 @@
             <div class='content'>
                 <div class='pageTitle'>
                     <h5>{{ $t('register.openAccount') }}</h5>
-                    <a href=''>
-                        已有账号
-                    </a>
+                    <router-link to='/login'>
+                        {{ $t('register.hasAccount') }}
+                    </router-link>
                 </div>
                 <div class='banner'>
                     <img alt='' src='https://testcms.ixmiddle.com/docs/registerBanner.png' srcset='' />

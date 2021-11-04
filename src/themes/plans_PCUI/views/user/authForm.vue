@@ -1,6 +1,6 @@
 <template>
     <centerViewDialog class='bindMobilePage'>
-        <authFormComponent class='authForm' type='bind' />
+        <authFormComponent class='authForm' platform='web' />
     </centerViewDialog>
 </template>
 

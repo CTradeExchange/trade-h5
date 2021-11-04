@@ -5,20 +5,35 @@
 
         <div class='empty'></div>
         <div class='module-form'>
-            <div class='select' @click='openCoinKind'>
+            
+            <div class='select'>
                 <label>{{ $t('withdrawCoin.coinName') }}</label>
                 <div class='option'>
-                    <input v-model='coinKind' :placeholder="$t('withdrawCoin.coinPlaceholder')" readonly type='text' />
-                    <van-icon name='arrow-down' />
+                    <el-select class="currencyBox" v-model='coinKind' placeholder='Select' @change='selectCoinKind'>
+                        <el-option
+                            v-for='item in coinKindList'
+                            :key='item.name'
+                            :label='item.name'
+                            :value='item.name'
+                        />
+                    </el-select> 
                 </div>
             </div>
-            <div class='select' @click='openChainName'>
+
+            <div class='select'>
                 <label>{{ $t('withdrawCoin.chainName') }}</label>
                 <div class='option'>
-                    <input v-model='chainName' :placeholder="$t('withdrawCoin.chainPlaceholder')" readonly type='text' />
-                    <van-icon name='arrow-down' />
+                    <el-select class="currencyBox" v-model='chainName' placeholder='Select' @change='selectChainName'>
+                        <el-option
+                            v-for='item in chainNameList'
+                            :key='item.name'
+                            :label='item.name'
+                            :value='item.name'
+                        />
+                    </el-select> 
                 </div>
             </div>
+
             <div class='block'>
                 <div class='title'>
                     <span>{{ $t('withdrawCoin.coinCount') }}</span>
@@ -36,6 +51,7 @@
                     </strong>
                 </p>
             </div>
+
             <div class='case'>
                 <p class='row'>
                     <label class='name'>
@@ -105,12 +121,6 @@
         <span>{{ $t('withdraw.confirm') }}</span>
     </van-button>
 
-    <!-- 提币币种弹窗 -->
-    <van-action-sheet v-model:show='coinKindVisible' :actions='coinKindList' @select='selectCoinKind' />
-
-    <!-- 链名称弹窗 -->
-    <van-action-sheet v-model:show='chainNameVisible' :actions='chainNameList' @select='selectChainName' />
-
     <!-- 取款时间弹窗 -->
     <van-dialog v-model:show='timeShow' :title="$t('withdraw.hint')">
         <div class='time-wrap'>
@@ -142,7 +152,7 @@
     </van-dialog>
 
     <!-- 选择钱包地址弹窗 -->
-    <van-action-sheet v-model:show='walletSelectVisible' class='wallet-select' :round='false' :title="$t('withdrawCoin.walletSelect')">
+    <van-dialog v-model:show='walletSelectVisible' class='wallet-select' :round='false' :title="$t('withdrawCoin.walletSelect')">
         <van-radio-group v-model='walletId' @change='selectWallet'>
             <div class='wallet-list'>
                 <div v-for='item in addressList' :key='item.id' class='item'>
@@ -168,7 +178,7 @@
             <span>{{ $t('withdrawCoin.walletAdd') }}</span>
             <van-icon :color='$style.color' name='arrow' />
         </div>
-    </van-action-sheet>
+    </van-dialog>
 </template>
 
 <script>
@@ -226,12 +236,8 @@ export default {
             chainNameList: [],
             // 提币币种
             coinKind: '',
-            // 是否显示提币币种选项弹窗
-            coinKindVisible: false,
             // 链名称
             chainName: '',
-            // 是否显示链名称选项弹窗
-            chainNameVisible: false,
             // 全部提币数量
             coinTotal: '',
             // 提币数量
@@ -561,6 +567,7 @@ export default {
                         state.allList = data
                         state.coinKind = coinKindList[0].name
                         state.coinKindList = coinKindList
+                        console.log("coinKindList",state.coinKindList)
                         // 根据提币币种获取筛选链名称
                         filterChainName()
                     }
@@ -583,31 +590,19 @@ export default {
             getWalletAddress()
         }
 
-        // 提币币种弹窗
-        const openCoinKind = () => {
-            state.coinKindVisible = true
-        }
-
         // 点击选择提币币种
         const selectCoinKind = (item) => {
-            state.coinKind = item.name
+            state.coinKind = name
             state.chainName = ''
-            state.coinKindVisible = false
             // 初据初始化
             init()
             // 根据提币币种获取筛选链名称
             filterChainName()
         }
 
-        // 链名称弹窗
-        const openChainName = () => {
-            state.chainNameVisible = true
-        }
-
         // 点击选择链名称
         const selectChainName = (item) => {
-            state.chainName = item.name
-            state.chainNameVisible = false
+            state.chainName = item
             // 获取钱包地址列表
             getWalletAddress()
 
@@ -773,9 +768,7 @@ export default {
         return {
             ...toRefs(state),
             customInfo,
-            openCoinKind,
             selectCoinKind,
-            openChainName,
             selectChainName,
             timeList,
             changeAmount,
@@ -811,6 +804,13 @@ export default {
         color: var(--color);
         font-size: rem(28px);
         border-bottom: 1px solid var(--lineColor);
+        :deep(.el-select){
+            width:100%;
+        }
+        :deep(.el-input__inner){
+            border: none;
+            text-align:right;
+        }
         .option {
             display: inline-flex;
             flex: 1;
