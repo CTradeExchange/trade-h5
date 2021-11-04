@@ -135,24 +135,10 @@ const h5Children = [
         }
     },
     {
-        path: 'addBank', // 添加银行卡
-        component: () => import(/* webpackChunkName: "Bank" */ '../views/bank/addBank.vue'),
-        meta: {
-            title: 'cRoute.addBank',
-        }
-    },
-    {
         path: 'walletAdd', // 添加钱包
         component: () => import(/* webpackChunkName: "Bank" */ '../views/wallet/walletAdd.vue'),
         meta: {
             title: 'cRoute.walletAdd',
-        }
-    },
-    {
-        path: 'bankList', // 银行卡列表
-        component: () => import(/* webpackChunkName: "Bank" */ '../views/bank/bankList.vue'),
-        meta: {
-            title: 'cRoute.bankList',
         }
     },
     {
