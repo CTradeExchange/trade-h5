@@ -118,14 +118,14 @@ export default {
         }
 
         const getMsgList = () => {
-            state.pageLoading = true
+            //state.pageLoading = true
             state.errorTip = ''
             queryPlatFormMessageLogList({
                 current: state.current,
                 parentType: state.type,
             }).then(res => {
-                state.loading = false
-                state.pageLoading = false
+                //state.loading = false
+                //state.pageLoading = false
                 if (res.check()) {
                     if (res.data.records && res.data.records.length > 0) {
                         state.list = state.list.concat(res.data.records)
@@ -138,7 +138,7 @@ export default {
                 }
             }).catch(err => {
                 state.errorTip = t('c.loadError')
-                state.pageLoading = false
+                //state.pageLoading = false
             })
         }
 
