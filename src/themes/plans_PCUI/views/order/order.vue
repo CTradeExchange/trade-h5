@@ -14,7 +14,7 @@
                     <trade />
                 </div>
             </div>
-            <div v-if='Number(tradeType) === 5' class='right-wrap'>
+            <div v-if='Number(product.tradeType) === 5' class='right-wrap'>
                 <!-- 盘口报价 -->
                 <div class='handicap-content'>
                     <handicap :product='product' />
@@ -65,6 +65,8 @@ export default {
         const { tradeType, symbolId } = route.query
         // store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
         const product = computed(() => store.getters.productActived)
+        // 获取产品详情
+        store.dispatch('_quote/querySymbolInfo', { 'symbolId': product.value.symbolId, 'tradeType': product.value.tradeType })
 
         if (isEmpty(product.value)) {
             router.push('/')
