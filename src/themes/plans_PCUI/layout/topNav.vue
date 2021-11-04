@@ -93,17 +93,7 @@
                     </el-dropdown>
                 </div>
                 <div class='item'>
-                    <el-dropdown>
-                        <i class='icon icon_yuyan' :title="$t('header.language')"></i>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item>简体中文</el-dropdown-item>
-                                <el-dropdown-item>繁体中文</el-dropdown-item>
-                                <el-dropdown-item>ENGLISH</el-dropdown-item>
-                                <el-dropdown-item>Русский</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
+                    <LangIcon />
                 </div>
                 <div class='item'>
                     <ThemeIcon />
@@ -121,12 +111,14 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import SettingIcon from './components/settingIcon'
 import ThemeIcon from './components/themeIcon'
+import LangIcon from './components/langIcon'
 import Msg from './components/msg'
 
 export default {
     components: {
         SettingIcon,
         ThemeIcon,
+        LangIcon,
         Msg
     },
     setup () {
