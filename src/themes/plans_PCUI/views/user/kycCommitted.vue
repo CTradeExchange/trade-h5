@@ -14,7 +14,7 @@
                 <van-button hairline type='success' @click='$router.replace({ name: "Home" })'>
                     {{ $t('common.backHome') }}
                 </van-button>
-                <van-button hairline type='default' @click='$router.replace({ name: "Authentication" })'>
+                <van-button hairline type='default' @click='backAuth'>
                     {{ $t('common.lookProcess') }}
                 </van-button>
             </div>
@@ -24,14 +24,23 @@
 
 <script>
 import centerViewDialog from '@planspc/layout/centerViewDialog'
-// import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 export default {
     name: 'KycCommitted',
     components: {
         centerViewDialog
     },
     setup (props, context) {
-        // const router = useRouter()
+        const router = useRouter()
+        const route = useRoute()
+        const backAuth = () => {
+            router.push({
+                path: route.path.slice(0, -13) + '/authentication'
+            })
+        }
+        return {
+            backAuth
+        }
     }
 }
 </script>
