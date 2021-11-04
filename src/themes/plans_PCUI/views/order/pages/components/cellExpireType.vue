@@ -3,9 +3,7 @@
     <div class='typeBar'>
         <van-row class='cellBar' justify='space-between' type='flex'>
             <van-col>
-                <p class='title'>
-                    {{ title }}
-                </p>
+                {{ title }}
             </van-col>
             <van-col class='radioGroup'>
                 <button
@@ -41,7 +39,7 @@ export default {
     margin-top: 16px;
     .cellBar {
     // align-items: center;
-    color: var(--normalColor);
+    color: var(--minorColor);
         .titleCol {
             width: rem(150px);
             padding-top: rem(20px);

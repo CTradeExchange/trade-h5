@@ -17,6 +17,7 @@ import { reactive, ref, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { getDecimalNum, toFixed } from '@/utils/calculation'
 export default {
+    name: 'PendingBar',
     props: {
         product: {
             type: Object
@@ -70,8 +71,6 @@ export default {
     flex: 1;
     .input {
         width: 100%;
-        height: rem(80px);
-        font-size: rem(28px);
         line-height: 1;
         text-align: center;
         background: var(--assistColor);
