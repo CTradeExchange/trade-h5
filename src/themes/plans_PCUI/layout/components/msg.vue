@@ -114,9 +114,11 @@ export default {
         }
         const showing = () =>{
             //js修改pop框的padding值防止全局污染
-           document.getElementsByClassName("infoPop")[0].style.padding = "0px";
+            let nodes = document.getElementsByClassName("infoPop");
+            nodes.forEach(node=>{
+                node.style.padding = "0px";
+            })
         }
-
         const getMsgList = () => {
             //state.pageLoading = true
             state.errorTip = ''
