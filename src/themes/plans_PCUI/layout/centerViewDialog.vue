@@ -57,11 +57,11 @@ export default {
         display: none;
     }
     .el-dialog__body {
-        padding: 0;
-        // min-height: 500px;
-        height: 75vh;
         display: flex;
         flex-flow: column;
+        padding: 0;
+        height: 600px;
+        max-height: 80%;
         background: var(--bgColor);
     }
     .pageWrap {
@@ -70,18 +70,18 @@ export default {
         padding-bottom: 1.3333333333rem;
         overflow-y: auto;
     }
-    // .topNav {
-    //     position: absolute;
-    //     top: 0;
-    //     left: 0;
-    //     z-index: 2;
-    //     display: flex;
-    //     align-items: center;
-    //     width: 100%;
-    //     height: 42px;
-    //     color: var(--color);
-    //     font-size: 14px;
-    //     background: var(--contentColor);
-    // }
+    .topNav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 42px;
+        color: var(--color);
+        font-size: 14px;
+        background: var(--contentColor);
+    }
 }
 </style>

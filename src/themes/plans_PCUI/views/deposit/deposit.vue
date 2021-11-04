@@ -1,13 +1,13 @@
 <template>
     <centerViewDialog>
-        <LayoutTop :back='true' :menu='false'>
-            <template #right>
-                <a class='right-title' href='javascript:;'>
-                    {{ $t('deposit.depositRecord') }}
-                </a>
-            </template>
-        </LayoutTop>
         <div class='pageWrap'>
+            <LayoutTop :back='true' :menu='false'>
+                <template #right>
+                    <a class='right-title' href='javascript:;'>
+                        {{ $t('deposit.depositRecord') }}
+                    </a>
+                </template>
+            </LayoutTop>
             <div class='wrap'>
                 <p class='header-text'>
                     {{ $t('deposit.selectAmount') }}
@@ -754,6 +754,7 @@ export default {
 }
 
 .pageWrap {
+    margin-top: 42px;
     background-color: var(--contentColor);
     .header {
         display: flex;
