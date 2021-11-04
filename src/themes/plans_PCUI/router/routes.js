@@ -145,7 +145,7 @@ const h5Children = [
         path: 'fundRecord', // 资金流水
         component: () => import(/* webpackChunkName: "fundRecord" */ '../views/fundRecord/fundRecord.vue'),
         meta: {
-            title: 'cRoute.bankList',
+            title: 'cRoute.fundLog',
         }
     },
     {

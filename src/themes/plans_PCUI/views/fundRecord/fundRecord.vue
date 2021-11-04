@@ -1,32 +1,24 @@
 <template>
-    <div class='fundRecordPage'>
-        <p>这里是fundRecord页面</p>
-        <p>这里是fundRecord页面</p>
-        <p>这里是fundRecord页面</p>
-        <p>这里是fundRecord页面</p>
-        <p>这里是fundRecord页面</p>
-        <p>这里是fundRecord页面</p>
-        <p>这里是fundRecord页面</p>
-        <p>这里是fundRecord页面</p>
-        <p>这里是fundRecord页面</p>
-        <p>这里是fundRecord页面</p>
-    </div>
+    <centerViewDialog class='fundRecordPage'>
+        <fundRecordMain />
+    </centerViewDialog>
 </template>
 
 <script>
-import { reactive, toRefs } from 'vue'
-import { useStore } from 'vuex'
+import centerViewDialog from '@planspc/layout/centerViewDialog'
+import fundRecordMain from './components/fundRecordMain'
 
 export default {
-    setup () {
-        const store = useStore()
-
-        return {}
+    components: {
+        centerViewDialog,
+        fundRecordMain
     }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '@/sass/mixin.scss';
-
+.fundRecordPage {
+    line-height: 50px;
+}
 </style>

@@ -41,7 +41,7 @@
                 </router-link>
             </div>
             <!-- 已登录 -->
-            <div v-else class='handle-have'>
+            <div v-else-if='customerInfo' class='handle-have'>
                 <div class='item'>
                     <div class='user'>
                         <i class='head el-icon-s-custom'></i>
@@ -61,11 +61,11 @@
                         <i class='icon icon_gerenxinxi' :title="$t('cRoute.personal')"></i>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item @click="handRoutTo('/authentication')">
-                                    身份认证
+                                <el-dropdown-item v-if='customerInfo.companyKycStatus===1' @click="handRoutTo('/authentication')">
+                                    {{ $t('cRoute.regKyc') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item @click="handRoutTo('/bankList')">
-                                    银行卡列表
+                                    {{ $t('cRoute.bankList') }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
