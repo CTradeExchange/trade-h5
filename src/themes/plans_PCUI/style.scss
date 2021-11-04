@@ -627,6 +627,11 @@ body {
     .van-calendar {
         background-color: var(--bgColor) !important;
     }
+
+    .van-button--primary{
+        background-color: var(--primary);
+        border: 1px solid var(--primary);
+    }
 }
 
 /* 滚动条 */

@@ -37,6 +37,9 @@ export default {
             document.body.style.setProperty('--lineColor', Colors[theme].lineColor)
             document.body.style.setProperty('--assistColor', Colors[theme].assistColor)
             document.body.style.setProperty('--placeholdColor', Colors[theme].placeholdColor)
+
+            const event = new CustomEvent('Launch_theme', { detail: theme })
+            document.body.dispatchEvent(event)
         }
         return {
             changeTheme
