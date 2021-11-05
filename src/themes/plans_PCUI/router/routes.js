@@ -162,6 +162,13 @@ const h5Children = [
             title: 'route.returnMoney',
         }
     },
+    {
+        path: 'record', // 资金记录
+        component: () => import(/* webpackChunkName: "returnMoney" */ '../views/record/record.vue'),
+        meta: {
+            title: 'route.records',
+        }
+    },
 ]
 
 const routes = [

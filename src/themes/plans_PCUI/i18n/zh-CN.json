@@ -100,8 +100,20 @@
 		"assets": "资产",
 		"returnMoney": "还币",
 		"loan": "借款",
-		"transfer": "划转"
+		"transfer": "划转",
+        "records": "资金记录"
 	},
+    "historyList": {
+        "noMore": "没有更多了"
+    },
+    "record":{
+        "repaymentAmount": "还款数量",
+        "records": "资金记录",
+        "loanRecord": "借款记录",
+        "repaymentRecord": "还款记录",
+        "cransferRecord": "划转记录",
+        "capitalRecord": "资金流水"
+    },
 	"information":{
 		"refresh": "刷新成功",
 		"noMore": "没有更多了",
