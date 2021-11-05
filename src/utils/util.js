@@ -221,7 +221,9 @@ export function checkUserKYC ({ res, Dialog, router, store, t }) {
                 confirmButtonText: t('login.goAuthenticate'),
                 message: t('login.goAuthenticateMsg'),
             }).then(() => {
-                router.push('/authentication')
+                return router.push('/home')
+            }).then(() => {
+                router.push('/home/authentication')
             })
         } else if (Number(res.data.kycAuditStatus === 1)) {
             Dialog.alert({
@@ -241,7 +243,9 @@ export function checkUserKYC ({ res, Dialog, router, store, t }) {
                 confirmButtonText: t('common.reSubmit'),
                 message: t('common.reviewFailed'),
             }).then(() => {
-                router.push('/authentication')
+                return router.push('/home')
+            }).then(() => {
+                router.push('/home/authentication')
             })
         }
     }

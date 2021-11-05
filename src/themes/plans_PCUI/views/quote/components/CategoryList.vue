@@ -40,11 +40,15 @@ const activeName = computed({
                 height: 40px;
                 line-height: 40px;
                 padding: 0 15px;
-                background: #F8F8F8;
+                background: var(--assistColor);
+                color: var(--color);
                 border-radius: 4px;
                 margin-right: 10px;
                 font-size: 14px;
                 font-weight: 400;
+                &.is-active{
+                    color: var(--el-color-primary);
+                }
             }
         }
         .el-tabs__nav-wrap::after, .el-tabs__active-bar{

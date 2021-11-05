@@ -6,7 +6,7 @@
             :duration='duration'
             :initial-swipe='0'
             :show-indicators='false'
-            :touchable='true'
+            :touchable='false'
             @change='onChange'
         >
             <van-swipe-item v-for='item in plans' :key='item.id'>

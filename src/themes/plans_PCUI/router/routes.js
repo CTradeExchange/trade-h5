@@ -49,7 +49,7 @@ const h5Children = [
         component: () => import(/* webpackChunkName: "addBank" */ '../views/user/authentication.vue'),
         meta: {
             title: 'cRoute.authentication',
-            roles: ['User']
+            // roles: ['User']
         }
     },
     {
@@ -57,7 +57,7 @@ const h5Children = [
         component: () => import(/* webpackChunkName: "addBank" */ '../views/user/authForm.vue'),
         meta: {
             title: 'cRoute.authForm',
-            roles: ['User']
+            // roles: ['User']
         }
     },
     {
@@ -66,7 +66,7 @@ const h5Children = [
         component: () => import(/* webpackChunkName: "addBank" */ '../views/user/kycCommitted.vue'),
         meta: {
             title: 'cRoute.kycCommitted',
-            roles: ['User']
+            // roles: ['User']
         }
     },
     {
@@ -162,6 +162,13 @@ const h5Children = [
             title: 'route.returnMoney',
         }
     },
+    {
+        path: 'regKyc', // 注册KYC
+        component: () => import(/* webpackChunkName: "RegKyc" */ '../views/register/regKyc.vue'),
+        meta: {
+            title: 'route.RegKyc',
+        }
+    }
 ]
 
 const routes = [
@@ -182,7 +189,8 @@ const routes = [
         meta: {
             title: 'route.register',
             roles: [],
-        }
+        },
+        children: h5Children
     },
     {
         path: '/register/success',

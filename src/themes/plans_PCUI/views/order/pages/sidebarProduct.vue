@@ -13,7 +13,6 @@
             <template v-else #default>
                 <TopTab
                     v-model='categoryType'
-                    class='tabs'
                     :list='categoryList'
                 />
                 <ProductList :list='productList' />
@@ -24,11 +23,11 @@
 
 <script setup>
 import { ref, computed, unref } from 'vue'
-import TopTab from '@planspc/components/topTab'
-import useProduct from '@planspc/hooks/useProduct'
-import search from './search'
 import { useStore } from 'vuex'
-import ProductList from './ProductList'
+import useProduct from '@planspc/hooks/useProduct'
+import search from './components/search'
+import TopTab from './components/topTab'
+import ProductList from './components/ProductList'
 
 const store = useStore()
 const productActived = computed(() => store.getters.productActived)
@@ -70,32 +69,6 @@ const onInput = (val) => {
     background: var(--contentColor);
     border-radius: 10px;
     padding: 16px 0;
-    .tabs {
-        box-sizing: border-box;
-        width: 100%;
-        padding: 0 rem(20px);
-    }
-    .tabs {
-        margin: 16px 0 0 0;
-        :deep{
-            .el-tabs__nav-wrap::after, .el-tabs__active-bar{
-                display: none;
-            }
-            .el-tabs__header{
-                margin: 0;
-            }
-            .el-tabs__item{
-                height: 32px;
-                line-height: 32px;
-                padding: 0 11px;
-                background: #F8F8F8;
-                border-radius: 4px;
-                margin: 0 0 0 8px;
-                font-weight: 400;
-            }
-        }
-    }
-
     .margin {
         margin-top: rem(30px);
     }

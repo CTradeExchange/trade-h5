@@ -101,6 +101,13 @@ export default {
 
         const { loginSubmit, loginToPath, verifyCodeBtnText, sendVerifyCode } = LoginHook()
 
+        // 跳转路由
+        const toRoute = path => {
+            router.push('/home').then(() => {
+                router.push('/home' + path)
+            })
+        }
+
         // 点击登录
         const loginHandle = () => {
             state.loading = true
@@ -123,7 +130,7 @@ export default {
                             message: t('login.goAuthenticateMsg'),
 
                         }).then(() => {
-                            router.push('/authentication')
+                            toRoute('/authentication')
                         })
                     } else if (Number(res.data.kycAuditStatus === 1)) {
                         return Dialog.alert({
@@ -145,7 +152,7 @@ export default {
                             message: t('common.reviewFailed') + '\n' + t('common.reviewReson') + res.data.kycAuditRemark,
 
                         }).then(() => {
-                            router.push('/authentication')
+                            toRoute('/authentication')
                         })
                     } else if (Number(res.data.kycAuditStatus === 2)) {
                         Dialog.alert({

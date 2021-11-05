@@ -46,7 +46,7 @@ import { useRouter, useRoute } from 'vue-router'
 import handicap from './pages/handicap.vue'
 import dealList from './pages/dealList.vue'
 import trade from './pages/trade.vue'
-import sidebarProduct from '@planspc/components/sidebarProduct'
+import sidebarProduct from './pages/sidebarProduct'
 import assetsModule from './pages/assets.vue'
 import { isEmpty } from '@/utils/util'
 
@@ -65,7 +65,7 @@ export default {
         const route = useRoute()
         const router = useRouter()
         const { tradeType, symbolId } = route.query
-        // store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
+        store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
         const product = computed(() => store.getters.productActived)
         // 获取产品详情
         store.dispatch('_quote/querySymbolInfo', { 'symbolId': product.value.symbolId, 'tradeType': product.value.tradeType })
@@ -93,7 +93,6 @@ export default {
             }
         })
         return {
-            chart,
             product,
             tradeType,
             symbolId,
