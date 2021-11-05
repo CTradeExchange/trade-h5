@@ -7,8 +7,8 @@
             {{ $t('home.quick.describe') }}
         </p>
         <div class='register-box'>
-            <input :placeholder="$t('signIn.mobileEmailPlaceholder')" />
-            <button>
+            <input v-model.trim='registerAccount' :placeholder="$t('signIn.mobileEmailPlaceholder')" />
+            <button @click='goRegister'>
                 {{ $t('c.register') }}
             </button>
         </div>
@@ -16,6 +16,27 @@
 </template>
 
 <script>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+export default {
+    setup () {
+        const router = useRouter()
+        const registerAccount = ref('')
+
+        // 去注册
+        const goRegister = () => {
+            const query = {}
+            query[registerAccount.value.includes('@') ? 'email' : 'mobile'] = registerAccount.value
+            router.push({ name: 'Register', query })
+        }
+
+        return {
+            registerAccount,
+            goRegister,
+        }
+    }
+}
 </script>
 
 <style lang="scss" scoped>
