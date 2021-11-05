@@ -188,7 +188,8 @@ export default {
             //     ElNotification({
             //     title:  noticeContent.title || $t('c.biaoTi') ,
             //     dangerouslyUseHTMLString: true,
-            //     message: `<div style="font-size:14px;color:#333333">${computeHtmlTime(noticeContent.text)}</div> `,
+            //     message: `<div>${computeHtmlTime(noticeContent.text)}</div> `,
+            //     duration :0
             // })
             // },5000)
         })
@@ -228,10 +229,13 @@ export default {
     }
 }
 </script>
-<style lang="scss" scoped>
-    .el-popper{
-        padding:0 !important;
+<style lang="scss">
+.el-notification{
+    background-color: var(--contentColor) !important;
+    .el-notification__title,.el-notification__content{
+        color: var(--color) !important;
     }
+}
 </style>
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
@@ -247,10 +251,11 @@ export default {
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
     background-color:rgba(0, 0, 0, 0.2);
     .information_head{
+        color: var(--color);
         border-radius: 3px 3px 0 0;
         width:100%;
         height:48px;
-        background-color:#ffffff;
+        background-color: var(--contentColor);
         text-align:center;
         box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
         .current_type{
@@ -259,7 +264,7 @@ export default {
             cursor:pointer;
             i{
                 margin-left:4px;
-                color:#dcdfe6;
+                color: var(--color);
                 cursor:pointer;
             }
         }
@@ -273,12 +278,13 @@ export default {
             right:0px;
             z-index:1;
             li{
+                color: var(--color);
                 width:100%;
                 height:40px;
                 line-height: 44px;
                 font-size: 14px;
                 text-align:center;
-                background-color:#ffffff;
+                background-color: var(--contentColor);
                 cursor:pointer;
             }
         }
