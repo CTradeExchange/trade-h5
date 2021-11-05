@@ -9,7 +9,7 @@ const privkey = 'MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBALVIvQl1lFNwdnW
 // request入参加密
 export function encryptParams (data = {}, timestamp) {
     data = Object.assign({}, data, { timestamp })
-    const keys = Object.keys(data).filter(el => ['string', 'number'].includes(typeof (data[el]))).sort((a, b) => a.localeCompare(b))
+    const keys = Object.keys(data).filter(el => ['string', 'number'].includes(typeof (data[el])) && data[el] !== '').sort((a, b) => a.localeCompare(b))
     const encryptA = keys.map(el => `&${el}=${data[el]}`)
     const encryptB = `timestamp=${timestamp}`
     const encryptC = encryptB + encryptA.join('')
