@@ -375,8 +375,10 @@ export default {
 
         // 初始化设置
         const init = () => {
+            state.orderType = 1
             // 获取产品详情
             const [symbolId, tradeType] = symbolKey.value.split('_')
+            store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
             state.operationType = parseFloat(tradeType) === 3 ? 1 : 2 // 杠杆玩法默认是普通类型
             setVolumeType() // 设置按额或者按手数交易
             store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
@@ -517,6 +519,7 @@ export default {
         }
     }
     .login-bar{
+        margin-top: 16px;
         height: 40px;
         line-height: 40px;
         text-align: center;

@@ -8,20 +8,20 @@
             </div>
             <div class='middle-wrap'>
                 <div class='chart-content'>
-                    <chart />
+                    <Chart />
                 </div>
                 <div class='trade-content' :style="'height: '+ tradeContentHeight">
-                    <trade />
+                    <Trade />
                 </div>
             </div>
             <div v-if='Number(product.tradeType) === 5' class='right-wrap'>
                 <!-- 盘口报价 -->
                 <div class='handicap-content'>
-                    <handicap :product='product' />
+                    <Handicap :product='product' />
                 </div>
                 <!-- 实时成交记录 -->
                 <div class='deal-content'>
-                    <dealList :symbol-id='product?.symbolId' />
+                    <DealList :symbol-id='product?.symbolId' />
                 </div>
             </div>
         </div>
@@ -41,11 +41,11 @@
 
 <script>
 import { reactive, toRefs, computed } from 'vue'
-import chart from './pages/chart.vue'
+import Chart from './pages/chart.vue'
 import { useRouter, useRoute } from 'vue-router'
-import handicap from './pages/handicap.vue'
-import dealList from './pages/dealList.vue'
-import trade from './pages/trade.vue'
+import Handicap from './pages/handicap.vue'
+import DealList from './pages/dealList.vue'
+import Trade from './pages/trade.vue'
 import sidebarProduct from '@planspc/components/sidebarProduct'
 import assetsModule from './pages/assets.vue'
 import { isEmpty } from '@/utils/util'
@@ -53,10 +53,10 @@ import { isEmpty } from '@/utils/util'
 import { useStore } from 'vuex'
 export default {
     components: {
-        chart,
-        handicap,
-        dealList,
-        trade,
+        Chart,
+        Handicap,
+        DealList,
+        Trade,
         sidebarProduct,
         assetsModule,
     },
@@ -93,7 +93,6 @@ export default {
             }
         })
         return {
-            chart,
             product,
             tradeType,
             symbolId,

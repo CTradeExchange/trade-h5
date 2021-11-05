@@ -17,22 +17,24 @@ export default {
         })
         // 订单类型
         const btnList = computed(() => {
-            const list2 = [
+            const list = [
                 {
                     title: t('trade.marketPrice'),
                     val: 1
-                },
-                props.tradeType !== 5 ? {
-                    title: [3, 5, 9].includes(props.tradeType) ? t('trade.pending2') : t('trade.pending'),
-                    val: 10
-                } : {}
+                }
             ]
-
-            return list2
+            if ([1, 2, 3, 9].includes(props.tradeType)) {
+                list.push({
+                    title: [3, 9].includes(props.tradeType) ? t('trade.pending2') : t('trade.pending'),
+                    val: 10
+                })
+            }
+            return list
         })
         watchEffect(() => {
             if (props.modelValue !== state.orderType) state.orderType = props.modelValue
         })
+
         const changeOrderType = (val) => {
             emit('update:modelValue', val)
             emit('selected', val)
