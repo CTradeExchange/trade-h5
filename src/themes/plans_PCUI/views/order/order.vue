@@ -8,20 +8,20 @@
             </div>
             <div class='middle-wrap'>
                 <div class='chart-content'>
-                    <Chart />
+                    <chart />
                 </div>
                 <div class='trade-content' :style="'height: '+ tradeContentHeight">
-                    <Trade />
+                    <trade />
                 </div>
             </div>
             <div v-if='Number(product.tradeType) === 5' class='right-wrap'>
                 <!-- 盘口报价 -->
                 <div class='handicap-content'>
-                    <Handicap :product='product' />
+                    <handicap :product='product' />
                 </div>
                 <!-- 实时成交记录 -->
                 <div class='deal-content'>
-                    <DealList :symbol-id='product?.symbolId' />
+                    <dealList :symbol-id='product?.symbolId' />
                 </div>
             </div>
         </div>
@@ -41,22 +41,22 @@
 
 <script>
 import { reactive, toRefs, computed } from 'vue'
-import Chart from './pages/chart.vue'
+import chart from './pages/chart.vue'
 import { useRouter, useRoute } from 'vue-router'
-import Handicap from './pages/handicap.vue'
-import DealList from './pages/dealList.vue'
-import Trade from './pages/trade.vue'
-import sidebarProduct from '@planspc/components/sidebarProduct'
+import handicap from './pages/handicap.vue'
+import dealList from './pages/dealList.vue'
+import trade from './pages/trade.vue'
+import sidebarProduct from './pages/sidebarProduct'
 import assetsModule from './pages/assets.vue'
 import { isEmpty } from '@/utils/util'
 
 import { useStore } from 'vuex'
 export default {
     components: {
-        Chart,
-        Handicap,
-        DealList,
-        Trade,
+        chart,
+        handicap,
+        dealList,
+        trade,
         sidebarProduct,
         assetsModule,
     },

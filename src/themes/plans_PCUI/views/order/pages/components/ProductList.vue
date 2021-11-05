@@ -156,10 +156,10 @@ watch(() => [props.list.length],
             cursor: pointer;
             .name{
                 font-weight: 400;
-                color: #333333;
+                color: var(--color);
             }
             &:hover{
-                background: #F8F8F8;
+                background: var(--bgColor);
                 border-radius: 4px;
             }
         }

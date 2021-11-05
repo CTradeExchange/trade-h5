@@ -689,32 +689,24 @@ body {
 }
 
 /* 滚动条 */
-// ::-webkit-scrollbar-thumb:horizontal { /*水平滚动条的样式*/
-// 	width: 5px;
-// 	background-color: #CCCCCC;
-// 	-webkit-border-radius: 6px;
-// }
-// ::-webkit-scrollbar-track-piece {
-// 	background-color: #fff; /*滚动条的背景颜色*/
-// 	-webkit-border-radius: 0; /*滚动条的圆角宽度*/
-// }
-// ::-webkit-scrollbar {
-// 	width: 10px; /*滚动条的宽度*/
-// 	height: 8px; /*滚动条的高度*/
-// }
-// ::-webkit-scrollbar-thumb:vertical { /*垂直滚动条的样式*/
-// 	height: 10px;
-// 	background-color: #999;
-// 	-webkit-border-radius: 4px;
-// 	outline: 2px solid #fff;
-// 	outline-offset: -2px;
-// 	border: 2px solid #fff;
-// }
-// ::-webkit-scrollbar-thumb:hover { /*滚动条的hover样式*/
-// 	height: 50px;
-// 	background-color: #9f9f9f;
-// 	-webkit-border-radius: 4px;
-// }
+::-webkit-scrollbar {
+	width: 7px;
+	height: 7px;
+}
+::-webkit-scrollbar-track {
+	background: var(--bgColor);
+	border-radius: 10px;
+	outline: 1px solid var(--lineColor);
+	outline-offset: -1px;
+	border: 1px solid var(--lineColor);
+}
+::-webkit-scrollbar-thumb {
+	background: #C2C2C2;
+	border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: #7D7D7D;
+}
 
 // element-plus
 .dialog-layer {
@@ -728,14 +720,16 @@ body {
 			display: flex;
 			flex-direction: column;
 			margin: 0 !important;
-			max-height: 80%;
+			height: 80%;
 			border-radius: 10px;
 			overflow: hidden;
 			.el-icon-close {
 				font-size: 22px;
 			}
 			.el-dialog__header {
+				width: 90%;
 				text-align: center;
+				margin: auto;
 				color: var(--color);
 			}
 			.el-dialog__body {
