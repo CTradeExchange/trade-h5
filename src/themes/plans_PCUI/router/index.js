@@ -20,10 +20,10 @@ router.beforeEach((to, from, next) => {
     }
     const roles = to.meta?.roles ?? []
     const customerInfo = store.state._user.customerInfo
-    const unKYCPages = ['Authentication', 'Home', 'RegisterSuccess', 'RegKyc', 'AddBank', 'Personal', 'AuthForm', 'BankList', 'Setting', 'KycCommitted']
-    if (customerInfo && customerInfo?.kycAuditStatus !== 2 && unKYCPages.indexOf(to.name) === -1) {
+    const unKYCPages = ['Authentication', 'Home', 'Register', 'RegisterSuccess', 'RegKyc', 'AddBank', 'Personal', 'AuthForm', 'BankList', 'Setting', 'KycCommitted']
+    if (customerInfo && customerInfo?.kycAuditStatus !== 2 && to.name && unKYCPages.indexOf(to.name) === -1) {
         // 未审核通过的用户直接跳转到KYC页面
-        next({ name: 'Authentication' })
+        next('/home/authentication')
     } else if (token && roles.length && roles.includes('Guest')) {
         // 仅游客访问，登录用户访问时跳转到行情页面
         next({ name: 'Quote' })
