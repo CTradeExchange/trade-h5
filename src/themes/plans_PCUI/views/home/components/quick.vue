@@ -8,7 +8,9 @@
         </p>
         <div class='register-box'>
             <input :placeholder="$t('signIn.mobileEmailPlaceholder')" />
-            <button>{{ $t('c.register') }}</button>
+            <button>
+                {{ $t('c.register') }}
+            </button>
         </div>
     </div>
 </template>
