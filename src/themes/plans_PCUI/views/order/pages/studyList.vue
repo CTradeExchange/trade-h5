@@ -149,18 +149,17 @@ export default {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            justify-content: space-between;
+            justify-content: flex-start;
             margin-bottom: rem(20px);
-            padding: 0 rem(25px);
+            padding: 15px;
             .item {
                 cursor: pointer;
                 padding: 10px 10px;
                 flex: 0 0 rem(112px);
                 box-sizing: border-box;
-                margin: rem(10px) rem(5px);
+                margin: 6px 10px;
                 color: var(--color);
                 font-weight: normal;
-                font-size: rem(24px);
                 line-height: rem(40px);
                 text-align: center;
                 border: 1px solid var(--lineColor);
