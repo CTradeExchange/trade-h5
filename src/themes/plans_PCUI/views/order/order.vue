@@ -65,7 +65,7 @@ export default {
         const route = useRoute()
         const router = useRouter()
         const { tradeType, symbolId } = route.query
-        // store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
+        store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
         const product = computed(() => store.getters.productActived)
         // 获取产品详情
         store.dispatch('_quote/querySymbolInfo', { 'symbolId': product.value.symbolId, 'tradeType': product.value.tradeType })

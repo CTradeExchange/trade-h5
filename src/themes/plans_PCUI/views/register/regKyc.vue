@@ -1,17 +1,21 @@
 <template>
-    <Top
-        back
-        left-icon='arrow-left'
-        :menu='false'
-    />
+    <centerViewDialog>
+        <div>
+            <Top
+                back
+                left-icon='arrow-left'
+                :menu='false'
+            />
 
-    <auth-condition business-code='open_account'>
-        <template #notice>
-            <p class='notice'>
-                {{ $t('register.tips2') }}
-            </p>
-        </template>
-    </auth-condition>
+            <auth-condition business-code='open_account' platform='web'>
+                <template #notice>
+                    <p class='notice'>
+                        {{ $t('register.tips2') }}
+                    </p>
+                </template>
+            </auth-condition>
+        </div>
+    </centerViewDialog>
 </template>
 
 <script>
@@ -19,9 +23,12 @@ import Top from '@/components/top'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import authCondition from '@/themeCommon/components/authConditon'
 import { useStore } from 'vuex'
+import centerViewDialog from '@planspc/layout/centerViewDialog'
+
 export default {
     components: {
         authCondition,
+        centerViewDialog,
         Top
     },
     setup (props) {

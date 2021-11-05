@@ -71,6 +71,8 @@
             </div>
         </div>
 
+        <router-view />
+
         <Loading :show='loading' />
     </div>
 </template>
@@ -183,7 +185,7 @@ export default {
                         sessionStorage.setItem('kycList', JSON.stringify(res.data.list))
                         router.replace(
                             {
-                                name: 'RegKyc',
+                                path: '/register/regKyc',
                                 query: { levelCode: res.data.list[0].levelCode }
                             })
                     } else {

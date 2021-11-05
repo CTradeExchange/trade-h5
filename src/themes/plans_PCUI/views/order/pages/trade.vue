@@ -4,7 +4,11 @@
         <OrderTypeTab v-model='orderType' :trade-type='product.tradeType' @selected='changeOrderType' />
         <div v-if='[1,2].includes(product.tradeType)' class='switch'>
             <span>{{ $t('trade.tackStopSetup') }}</span>
-            <van-switch v-model='enabled' size='20' />
+            <van-switch
+                v-model='enabled'
+                :active-color='$style.success'
+                size='20'
+            />
         </div>
     </div>
 

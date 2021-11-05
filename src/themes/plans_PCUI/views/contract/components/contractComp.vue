@@ -145,6 +145,10 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
+.contractWrapper{
+    height: 100%;
+    overflow: auto;
+}
 .container {
     flex: 1;
     padding-top: rem(100px);

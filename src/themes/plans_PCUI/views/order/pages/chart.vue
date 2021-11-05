@@ -297,8 +297,8 @@ export default {
         const state = reactive({
             activeName: 'first',
             studyVis: true,
-            mainStudyList: MAINSTUDIES.slice(0, 8), // 主图
-            sideStudyList: SUBSTUDIES.slice(0, 8), // 副图
+            mainStudyList: MAINSTUDIES.slice(0, 10), // 主图
+            sideStudyList: SUBSTUDIES.slice(0, 10), // 副图
             mainStudy: 'Moving Average mock',
             subStudy: 'Custom MACD',
             activeTab: 0,
@@ -725,15 +725,18 @@ export default {
         }
 
         // 监听主题修改回调
-        const changeTheme = () => {
-            chartRef.value.reset()
+        const changeTheme = (val) => {
+            const theme = val.detail === 'light' ? 'Light' : 'Dark'
+            chartRef.value.changeTheme(theme)
         }
 
-        // 监听玩法回调
-        const changePlans = () => {
-            renderChart(product, state.initConfig.property)
-            chartRef.value.reset()
+        // 监听路由变化
+        const changeRoute = () => {
             QuoteSocket.send_subscribe([`${product.value.symbolId}_${product.value.tradeType}`])
+            const invertColor = localGet('invertColor')
+            chartRef.value.reset()
+            // changeTheme({ 'detail': invertColor })
+            // renderChart(product, state.initConfig.property)
         }
 
         // 初始化图表配置
@@ -748,7 +751,7 @@ export default {
         watch(
             () => route.query,
             (val, oval) => {
-                changePlans()
+                changeRoute()
             }
         )
 
