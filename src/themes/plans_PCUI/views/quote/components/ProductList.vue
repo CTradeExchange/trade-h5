@@ -149,7 +149,6 @@ watch(() => [props.list.length],
     justify-content: flex-start;
     box-sizing: border-box;
     width: 100%;
-    color: var(--color);
     font-size: rem(30px);
     line-height: rem(32px);
     overflow: hidden;
@@ -164,6 +163,7 @@ watch(() => [props.list.length],
     .lowPrice,
     .change{
         flex: 0 0 163px;
+        color: var(--color);
         @include ellipsis();
     }
     .btns{
@@ -185,7 +185,7 @@ watch(() => [props.list.length],
         width: 100%;
         padding: 0 20px;
         font-size: 14px;
-        color: #999999;
+        color: var(--minorColor);
         line-height: 16px;
         margin-bottom: 17px;
     }
@@ -206,10 +206,9 @@ watch(() => [props.list.length],
             }
             .name{
                 font-weight: 400;
-                color: #333333;
             }
             &:hover{
-                background: #F8F8F8;
+                background: var(--bgColor);
                 border-radius: 4px;
             }
         }
@@ -229,8 +228,10 @@ watch(() => [props.list.length],
                 font-size: 16px;
                 font-weight: 400;
                 cursor: pointer;
+                background: var(--riseColor);
                 &:last-child{
                     margin-left: 20px;
+                    background: var(--fallColor);
                 }
             }
         }

@@ -1,5 +1,5 @@
 <template>
-    <el-tabs v-model:active='active' @tab-click='updataActive'>
+    <el-tabs v-model:active='active' class='tabs' @tab-click='updataActive'>
         <el-tab-pane v-for='(item, index) in list' :key='index' class='tab' :label='item.title' :name='String(index)' />
     </el-tabs>
 </template>
@@ -79,4 +79,35 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
+
+.tabs {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 rem(20px);
+}
+.tabs {
+    margin: 16px 0 0 0;
+    :deep{
+        .el-tabs__nav-wrap::after, .el-tabs__active-bar{
+            display: none;
+        }
+        .el-tabs__header{
+            margin: 0;
+        }
+        .el-tabs__item{
+            height: 32px;
+            line-height: 32px;
+            padding: 0 11px!important;
+            background: var(--assistColor);
+            color: var(--color);
+            border-radius: 4px;
+            margin: 0 0 0 8px;
+            font-weight: 400;
+            color: var(---color);
+            &.is-active{
+                color: var(--el-color-primary);
+            }
+        }
+    }
+}
 </style>

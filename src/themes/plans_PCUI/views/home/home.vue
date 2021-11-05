@@ -3,7 +3,7 @@
         <router-view />
 
         <!-- 轮播模块 -->
-        <swiper ref='swiperRef' />
+        <swiper />
 
         <div class='relativeFloor'>
             <!-- 产品模块 -->
@@ -100,8 +100,6 @@ export default {
             // 需要订阅产品的symbolKey
             allProductKeys: []
         })
-        const swiperRef = ref(null)
-        const swiperEl = null
 
         // 切换信息流
         const switchFlow = (num) => {
@@ -127,19 +125,6 @@ export default {
             QuoteSocket.send_subscribe(state.allProductKeys)
         }
 
-        // 监听首页滚动时，设置顶部导航位置
-        const homeScroll = event => {
-            const scrollTop = document.documentElement.scrollTop
-            const headerEl = document.querySelector('.header-nav')
-            const fixedTop = headerEl.offsetHeight + swiperEl.offsetHeight
-            console.log(headerEl.offsetHeight, swiperEl.offsetHeight, scrollTop)
-            if (scrollTop > fixedTop) {
-                headerEl.style.top = fixedTop - scrollTop + 'px'
-            } else {
-                headerEl.style.top = 0
-            }
-        }
-
         // 发送行情订阅
         onMounted(() => {
             if (state.allProductKeys.length > 0) {
@@ -148,10 +133,6 @@ export default {
             // 头部固定
             const headerEl = document.querySelector('.header-nav')
             if (headerEl) headerEl.classList.add('fixedHeader')
-
-            // 滚动条滑动时设置顶部导航位置
-            // swiperEl = swiperRef.value.$el
-            // document.addEventListener('scroll', homeScroll, false)
         })
 
         // 取消行情订阅
@@ -159,13 +140,10 @@ export default {
             const headerEl = document.querySelector('.header-nav')
             if (headerEl) headerEl.classList.remove('fixedHeader')
             QuoteSocket.cancel_subscribe()
-
-            document.removeEventListener('scroll', homeScroll, false)
         })
 
         return {
             ...toRefs(state),
-            swiperRef,
             switchFlow,
             setProductKeys,
             setTradeKeys

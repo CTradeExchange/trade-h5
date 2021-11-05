@@ -124,12 +124,17 @@ const addOptional = ({ id: symbolId, tradeType = props.tradeType }) => {
 
 <style lang="scss">
 .quote-autocomplete{
-    color: red;
-    .item{
-         display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: space-between;
+    .el-autocomplete-suggestion{
+        --el-text-color-regular: var(--color);
+        li:hover{
+            --el-text-color-regular: var(--contentColor);
+        }
+        .item{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+        }
     }
 }
 </style>
