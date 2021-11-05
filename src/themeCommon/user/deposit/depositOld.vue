@@ -9,18 +9,16 @@
         @rightClick='toDespositList'
     />
     <!-- 内容区域 -->
-    <div class='page-content'>
+    <div class='pageWrap'>
         <!-- 页面加载状态 -->
         <Loading :show='loading' />
-        <!-- 存款金额筛选 -->
-        <div class='amount-filter'>
+        <div class='wrap'>
+            <p class='header-text'>
+                {{ $t('deposit.selectAmount') }}
+            </p>
+            <!-- 存款金额列表 -->
             <div class='amount-list'>
-                <div
-                    v-for='(item,index) in amountList'
-                    :key='index'
-                    :class="{ 'item': true, active: currIndex === index }"
-                    @click='checkAmount(index, item)'
-                >
+                <div v-for='(item,index) in amountList' :key='index' class='amount-item' :class='{ active: currIndex === index }' @click='checkAmount(index,item)'>
                     <p class='t1'>
                         {{ item.amount }} {{ checkedType.accountCurrency }}
                     </p>
@@ -28,53 +26,72 @@
                         {{ item.describe }}
                     </p>
                 </div>
-                <div :class="{ 'item': true, active: currIndex === 99 }" @click='openOtherMoney'>
-                    <p class='t1'>
-                        {{ $t('deposit.otherAmount') }}
-                    </p>
+                <div class='amount-item' :class='{ active: currIndex === 99 }' @click='openOtherMoney'>
+                    {{ $t('deposit.otherAmount') }}
                 </div>
             </div>
-            <div v-show='otherAmountVis' class='other-amount'>
-                <input v-model='amount' :placeholder='$t("deposit.inputAmount")' type='number' />
-                <van-icon v-if='amount' name='clear' @click="amount = ''" />
+            <div v-show='otherAmountVis' class='other-money'>
+                <input v-model='amount' class='input-amount' :placeholder='$t("deposit.inputAmount")' type='number' />
+                <span class='label-amount'>
+                    {{ checkedType.accountCurrency }}
+                </span>
             </div>
-        </div>
-        <!-- 支付方式 -->
-        <div class='pay-wrap'>
-            <p class='title'>
-                {{ $t('deposit.selectPayMethods') }}
-            </p>
-            <div class='pay-module'>
-                <div v-for='item in payTypesSortEnable' :key='item.id' class='pay-case'>
-                    <van-radio-group v-model='payTypeId'>
-                        <div class='pay-channel' @click='choosePayType(item)'>
-                            <img class='icon' :src='item.imgUrl || require("@/assets/payment_icon/" + item.paymentType + ".png")' />
-                            <span class='name'>
-                                {{ item.alias || item.paymentTypeAlias || item.paymentType }}
-                            </span>
-                            <van-icon v-if='paymentTypes.length > 0 && item.id === payTypeId' name='arrow-down' />
-                            <van-radio v-else :name='item.id' />
-                        </div>
-                    </van-radio-group>
-                    <div :class="['currency-list', item.id === payTypeId ? 'show' : 'hide']">
+
+            <div class='pay-wrap'>
+                <p class='bw-t'>
+                    {{ $t('deposit.selectPayMethods') }}
+                </p>
+                <div v-if='checkedType' class='pay-item'>
+                    <!-- 支付通道 -->
+                    <div v-if='PayTypes.length > 0' class='pay-type' @click='openSheet'>
+                        <img alt='' :src='checkedType.imgUrl || require("@/assets/payment_icon/" + checkedType.paymentType + ".png")' srcset='' />
+                        <span class='pay-name'>
+                            {{ checkedType.alias || checkedType.paymentTypeAlias || checkedType.paymentType }}
+                        </span>
+                        <van-icon name='arrow-down' />
+                    </div>
+                    <div v-else class='pay-type no-data'>
+                        {{ $t('deposit.noPayPassway') }}
+                    </div>
+                    <!-- 支付货币 -->
+                    <div v-if='paymentTypes.length > 1' class='currency-wrap'>
                         <van-radio-group v-model='currencyChecked' @change='changePayCurrency'>
-                            <div v-for='currency in paymentTypes' :key='currency' class='item' @click='currencyChecked = currency'>
-                                <span class='name'>
-                                    {{ currency }}
-                                </span>
-                                <van-radio :name='currency' />
-                            </div>
+                            <van-radio v-for='(item,index) in paymentTypes' :key='index' class='currency-radio' icon-size='20px' :name='item'>
+                                {{ item }}
+                            </van-radio>
                         </van-radio-group>
+                    </div>
+                    <!-- 存款限制提示 -->
+                    <div class='notice'>
+                        <div class='left-val'>
+                            <span class='label'>
+                                {{ $t('deposit.depositTime') + $t('common.colon') }}
+                            </span>
+                            <div class='left-time'>
+                                <p v-for='(item,index) in resultTimeMap[checkedType.id]' :key='index'>
+                                    {{ item }}
+                                </p>
+                            </div>
+                        </div>
+                        <span class='right-val'>
+                            {{ $t('deposit.amountLimit') + $t('common.colon') }}  {{ checkedType.singleLowAmount }}-{{ checkedType.singleHighAmount }} {{ checkedType.accountCurrency }}
+                        </span>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- 支付信息 -->
-        <div class='pay-info'>
-            <p class='item'>
-                <span>{{ $t('deposit.expectInBank') }}</span>
-                <strong>{{ computeAccount }} {{ checkedType.accountCurrency }}</strong>
-            </p>
+            <!-- 存款计算费用 -->
+            <div class='pay-info'>
+                <div class='pi-item'>
+                    {{ $t('deposit.expectPay') }} {{ computeExpectedpay || '--' }} {{ currencyChecked }}
+                </div>
+                <div class='pi-item'>
+                    {{ $t('deposit.expectInBank') }} {{ amount && checkedType ? parseFloat(amount) - parseFloat(computeFee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
+                </div>
+                <div class='line'></div>
+                <div class='pi-item'>
+                    {{ $t('common.fee') }} {{ computeFee }} {{ checkedType.accountCurrency }}
+                </div>
+            </div>
         </div>
     </div>
 
@@ -98,6 +115,26 @@
             {{ $t('deposit.payConfirmTips') }}
         </p>
     </van-dialog>
+
+    <!-- 支付通道弹窗 -->
+    <van-action-sheet v-model:show='typeShow' class='pay-warpper' :round='false' :title='$t("deposit.selectPayMethods")'>
+        <div class='pay-list'>
+            <div v-for='(item,index) in payTypesSortEnable' :key='index' class='pay-type' @click='choosePayType(item)'>
+                <img alt='' :src='item.imgUrl || require("@/assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
+                <span class='pay-name'>
+                    {{ item.alias || item.paymentTypeAlias || item.paymentType }}
+                </span>
+                <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
+            </div>
+            <div v-for='(item,index) in payTypesSortDisable' :key='index' class='pay-type' @click='choosePayType(item)'>
+                <img alt='' :src='item.imgUrl || require("@/assets/payment_icon/" + item.paymentType + ".png")' srcset='' />
+                <span class='pay-name'>
+                    {{ item.alias || item.paymentTypeAlias || item.paymentType }}
+                </span>
+                <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
+            </div>
+        </div>
+    </van-action-sheet>
 
     <!-- 补充资料弹窗 -->
     <van-popup v-model:show='appendVis' class='append-popup' position='right' :style="{ height: '100%', width: '80%' }">
@@ -173,8 +210,6 @@ export default {
             PayTypes: [],
             // 当前选择的支付通道
             checkedType: '',
-            // 当前选择的支付通道id
-            payTypeId: '',
             // 支付通道币种列表
             paymentTypes: [],
             // 当前选择的支付通道币种
@@ -241,24 +276,15 @@ export default {
 
         // 计算存款手续费
         const computeFee = computed(() => {
-            // feeType  1：固定金额手续费 2：百分比手续费
-            if (Number(state.checkedType.feeType === 1)) {
-                return state.checkedType.fee
-            } else if (Number(state.checkedType.feeType === 2)) {
-                return mul(state.amount, (state.checkedType.fee))
-            } else {
-                return 0
+            if (state.amount >= state.checkedType.singleLowAmount && state.amount <= state.checkedType.singleHighAmount) {
+                // feeType  1：固定金额手续费 2：百分比手续费
+                if (Number(state.checkedType.feeType === 1)) {
+                    return state.checkedType.fee
+                } else if (Number(state.checkedType.feeType === 2)) {
+                    return mul(state.amount, (state.checkedType.fee))
+                }
             }
-        })
-
-        // 计算预计到账金额
-        const computeAccount = computed(() => {
-            if (state.amount && state.checkedType) {
-                const value = parseFloat(state.amount) - parseFloat(computeFee.value)
-                return value > 0 ? value : 0
-            } else {
-                return '--'
-            }
+            return 0
         })
 
         // 计算预计支付金额
@@ -326,7 +352,6 @@ export default {
         const openOtherMoney = () => {
             state.otherAmountVis = true
             state.currIndex = 99
-            state.amount = ''
         }
 
         // 获取支付通道
@@ -384,7 +409,6 @@ export default {
             })
 
             state.checkedType = item
-            state.payTypeId = item.id
             state.appendMap = state.checkedType.extend
             item.checked = true
             state.typeShow = false
@@ -534,7 +558,6 @@ export default {
 
                 if (isEmpty(state.checkedType)) {
                     state.checkedType = state.PayTypes[0]
-                    state.payTypeId = state.PayTypes[0].id
                     state.appendMap = state.checkedType.extend
                     state.PayTypes[0].checked = true
                 }
@@ -767,175 +790,190 @@ export default {
             computeFee,
             handleShowTime,
             computeExpectedpay,
-            computeAccount,
             payTypesSortEnable,
             payTypesSortDisable,
             onlineServices,
             changePayCurrency,
             handleAppendField
+
         }
     }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-
-.page-content {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 0 rem(30px);
-    background: var(--bgColor);
-    overflow-y: auto;
-}
-
-// 存款金额筛选
-.amount-filter {
-    padding-top: rem(30px);
-    .amount-list {
+.pageWrap {
+    background-color: var(--contentColor);
+    .header {
         display: flex;
-        flex-wrap: wrap;
-        .item {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: rem(216px);
-            height: rem(96px);
-            margin-right: rem(20px);
-            margin-bottom: rem(20px);
-            background: var(--contentColor);
-            border: 1px solid var(--lineColor);
-            border-radius: rem(10px);
-            &:nth-of-type(3n) {
-                margin-right: 0;
-            }
-            .t1 {
-                font-size: rem(28px);
-                color: var(--color);
-            }
-            .t2 {
-                padding: rem(3px) rem(10px);
-                font-size: rem(20px);
-                color: var(--focusColor);
-                background: rgba(242, 161, 27, .1);
-                border-radius: rem(30px);
-            }
-        }
-        .active {
-            background: rgba(242, 161, 27, .1);
-            border: 1px solid var(--focusColor);
-            .t1 {
-                color: var(--focusColor);
-            }
-            .t2 {
-                color: var(--focusColor);
-            }
-        }
-    }
-    .other-amount {
-        display: flex;
-        height: rem(96px);
         align-items: center;
-        padding-left: rem(32px);
-        padding-right: rem(25px);
-        background: var(--contentColor);
-        border: 1px solid var(--lineColor);
-        border-radius: rem(10px);
-        input {
-            flex: 1;
-            height: 100%;
+        justify-content: space-between;
+        margin: rem(40px) rem(30px);
+    }
+    .wrap {
+        background-color: var(--contentColor);
+        .header-text {
+            padding: rem(46px) rem(30px) rem(40px) rem(30px);
+            color: var(--color);
             font-size: rem(28px);
         }
-        .van-icon-clear {
-            font-size: rem(36px);
-            color: var(--minorColor);
-        }
-    }
-}
-
-// 支付方式
-.pay-wrap {
-    .title {
-        line-height: 1;
-        padding-top: rem(42px);
-        padding-bottom: rem(36px);
-        font-size: rem(28px);
-        font-weight: bold;
-        color: var(--color);
-    }
-    .pay-module {
-        padding-left: rem(40px);
-        padding-right: rem(32px);
-        background: var(--contentColor);
-        border-radius: rem(10px);
-        overflow: hidden;
-        .van-icon {
-            line-height: 1;
-        }
-        .pay-case {
-            .pay-channel {
+        .amount-list {
+            display: flex;
+            flex-flow: row wrap;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 rem(30px);
+            .amount-item {
                 display: flex;
+                flex: 1;
+                flex-basis: rem(30px);
+                flex-direction: column;
                 align-items: center;
-                height: rem(112px);
-                border-bottom: 1px solid var(--lineColor);
-                .icon {
-                    width: rem(60px);
-                    height: rem(60px);
-                    margin-right: rem(35px);
-                }
-                .name {
-                    flex: 1;
-                    font-size: rem(28px);
+                justify-content: center;
+                width: 47%;
+                min-width: 47%;
+                max-width: 47%;
+                height: rem(80px);
+                margin-bottom: rem(30px);
+                color: var(--color);
+                text-align: center;
+                border: rem(2px) solid var(--placeholdColor);
+                border-radius: rem(10px);
+                .t1 {
                     color: var(--color);
+                    font-size: rem(28px);
                 }
-            }
-            .currency-list {
-                overflow: hidden;
-                &.show {
-                    max-height: rem(1000px);
-                    transition: all .3s ease-in-out;
+                .t2 {
+                    color: var(--focusColor);
+                    font-size: rem(20px);
                 }
-                &.hide {
-                    max-height: 0;
-                }
-                .item {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    height: rem(112px);
-                    border-bottom: 1px solid var(--lineColor);
-                    .name {
-                        font-size: rem(28px);
-                        color: var(--color);
+                &.active {
+                    border: rem(2px) solid var(--focusColor);
+                    .t1 {
+                        color: var(--focusColor);
                     }
                 }
             }
         }
-    }
-}
+        .other-money {
+            display: flex;
+            margin-top: rem(32px);
+            padding: 0 rem(30px) rem(35px) rem(30px);
+            border-bottom: solid 1px var(--lineColor);
+            .input-amount {
+                flex: 1;
+            }
+            .label-amount {
+                color: var(--color);
+                font-size: rem(28px);
+            }
+        }
+        .pay-wrap {
+            padding: 0 rem(30px);
+            border-top: solid rem(20px) var(--bgColor);
+            .bw-t {
+                color: var(--color);
+                font-size: rem(28px);
+                line-height: rem(72px);
+            }
+            .notice {
+                display: flex;
+                justify-content: space-between;
+                line-height: rem(72px);
+                .left-val {
+                    display: flex;
+                    //align-items: center;
+                    color: var(--normalColor);
+                    .label{
 
-// 支付信息
-.pay-info {
-    padding-bottom: rem(60px);
-    .item {
-        display: flex;
-        align-items: center;
-        height: rem(70px);
-        span {
-            margin-right: rem(10px);
-            color: var(--minorColor);
+                    }
+                    .left-time {
+                        padding: rem(16px) 0;
+                        p {
+                            line-height: rem(40px);
+                        }
+                    }
+                }
+                .right-val {
+                    color: var(--normalColor);
+                }
+            }
+        }
+    }
+    .pay-info {
+        padding: 0 rem(30px);
+        background-color: var(--contentColor);
+        border-top: solid rem(20px) var(--bgColor);
+        .pi-item {
+            flex: 0 0 50%;
+            margin: rem(10px) 0;
+            color: var(--normalColor);
             font-size: rem(24px);
+            line-height: rem(60px);
         }
-        strong {
-            font-size: rem(28px);
-            color: var(--focusColor);
+        .line {
+            width: 100%;
+            height: 1px;
+            background-color: var(--lineColor);
         }
     }
 }
+.pay-type {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: rem(2px) solid var(--lineColor);
+    border-radius: rem(4px);
+    .pay-name {
+        flex: 1;
+        color: var(--color);
+    }
+    img {
+        width: rem(55px);
+        height: rem(55px);
+        margin: rem(20px) rem(30px);
+    }
+    .van-icon {
+        margin-right: rem(20px);
+    }
+    &.no-data {
+        line-height: rem(80px);
+    }
+}
+.currency-wrap {
+    padding: rem(30px) 0 0 rem(30px);
+    border: solid 1px var(--lineColor);
+    border-top: none;
+    .currency-radio {
+        margin-bottom: rem(20px);
+        :deep(.van-radio__label) {
+            color: var(--color);
+        }
+    }
+}
+.pay-list .pay-type {
+    border-color: var(--lineColor);
+    border-style: solid;
+    border-width: 0 0 1px;
+}
+.next-btn {
+    position: fixed;
+    bottom: 0;
+    background: var(--bgColor);
+    border-color: var(--lineColor);
+    span {
+        color: var(--color);
+        font-size: rem(34px);
+    }
+}
 
-// 存款提示弹窗
+</style>
+
+<style lang="scss">
+@import '@/sass/mixin.scss';
 .desposit-dialog {
     padding: rem(30px) rem(30px) 0 rem(30px);
     text-align: center;
@@ -957,8 +995,6 @@ export default {
         color: var(--color);
     }
 }
-
-// 补充资料弹窗
 .append-popup {
     background-color: var(--bgColor);
     .append-wrap {
