@@ -76,7 +76,7 @@
                 </li>
             </ul>
             <div class='view-more'>
-                <router-link to='/'>
+                <router-link to='/quote'>
                     <span>{{ $t('examineMore') }}</span>
                     <i class='el-icon-arrow-right'></i>
                 </router-link>

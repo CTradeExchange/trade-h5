@@ -143,8 +143,8 @@ export default {
     }
     .zone {
         flex: none;
-margin-right: 10px;
-    width: 152px;
+        margin-right: 10px;
+        width: 152px;
         &.disabled {
             color: #C5C5C5;
             pointer-events: none;
@@ -196,6 +196,8 @@ margin-right: 10px;
     }
 }
 .van-icon-clear {
+    position: absolute;
+    right: 10px;
     color: var(--minorColor);
     font-size: rem(36px);
 }
