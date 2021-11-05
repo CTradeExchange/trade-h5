@@ -46,7 +46,7 @@ import { useRouter, useRoute } from 'vue-router'
 import handicap from './pages/handicap.vue'
 import dealList from './pages/dealList.vue'
 import trade from './pages/trade.vue'
-import sidebarProduct from '@planspc/components/sidebarProduct'
+import sidebarProduct from './pages/sidebarProduct'
 import assetsModule from './pages/assets.vue'
 import { isEmpty } from '@/utils/util'
 
