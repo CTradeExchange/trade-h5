@@ -1,4 +1,5 @@
 <template>
+    <!-- 头部导航 -->
     <Top
         back
         left-icon='arrow-left'
@@ -7,12 +8,15 @@
         :show-center='true'
         @rightClick='toDespositList'
     />
+    <!-- 内容区域 -->
     <div class='pageWrap'>
+        <!-- 页面加载状态 -->
         <Loading :show='loading' />
         <div class='wrap'>
             <p class='header-text'>
                 {{ $t('deposit.selectAmount') }}
             </p>
+            <!-- 存款金额列表 -->
             <div class='amount-list'>
                 <div v-for='(item,index) in amountList' :key='index' class='amount-item' :class='{ active: currIndex === index }' @click='checkAmount(index,item)'>
                     <p class='t1'>
@@ -32,14 +36,15 @@
                     {{ checkedType.accountCurrency }}
                 </span>
             </div>
+
             <div class='pay-wrap'>
                 <p class='bw-t'>
                     {{ $t('deposit.selectPayMethods') }}
                 </p>
-
                 <div v-if='checkedType' class='pay-item'>
+                    <!-- 支付通道 -->
                     <div v-if='PayTypes.length > 0' class='pay-type' @click='openSheet'>
-                        <img alt='' :src='checkedType.imgUrl || require("../../../assets/payment_icon/" + checkedType.paymentType + ".png")' srcset='' />
+                        <img alt='' :src='checkedType.imgUrl || require("@/assets/payment_icon/" + checkedType.paymentType + ".png")' srcset='' />
                         <span class='pay-name'>
                             {{ checkedType.alias || checkedType.paymentTypeAlias || checkedType.paymentType }}
                         </span>
@@ -48,6 +53,7 @@
                     <div v-else class='pay-type no-data'>
                         {{ $t('deposit.noPayPassway') }}
                     </div>
+                    <!-- 支付货币 -->
                     <div v-if='paymentTypes.length > 1' class='currency-wrap'>
                         <van-radio-group v-model='currencyChecked' @change='changePayCurrency'>
                             <van-radio v-for='(item,index) in paymentTypes' :key='index' class='currency-radio' icon-size='20px' :name='item'>
@@ -55,7 +61,7 @@
                             </van-radio>
                         </van-radio-group>
                     </div>
-
+                    <!-- 存款限制提示 -->
                     <div class='notice'>
                         <div class='left-val'>
                             <span class='label'>
@@ -73,7 +79,7 @@
                     </div>
                 </div>
             </div>
-
+            <!-- 存款计算费用 -->
             <div class='pay-info'>
                 <div class='pi-item'>
                     {{ $t('deposit.expectPay') }} {{ computeExpectedpay || '--' }} {{ currencyChecked }}
@@ -82,9 +88,6 @@
                     {{ $t('deposit.expectInBank') }} {{ amount && checkedType ? parseFloat(amount) - parseFloat(computeFee) : '--' }} {{ amount ? checkedType.accountCurrency : '' }}
                 </div>
                 <div class='line'></div>
-                <!-- <div class='pi-item'>
-                    赠送金额 {{ presentAmount || '--' }} {{ checkedType.accountCurrency }}
-                </div> -->
                 <div class='pi-item'>
                     {{ $t('common.fee') }} {{ computeFee }} {{ checkedType.accountCurrency }}
                 </div>
@@ -92,9 +95,28 @@
         </div>
     </div>
 
+    <!-- 存款按钮 -->
     <van-button block class='next-btn' :disabled='btnDisabled' type='primary' @click='next'>
         <span>{{ $t('common.nextStep') }}</span>
     </van-button>
+
+    <!-- 存款弹窗提示 -->
+    <van-dialog
+        v-model:show='despositVis'
+        :cancel-button-text='$t("deposit.denyText")'
+        class-name='desposit-dialog'
+        :confirm-button-text='$t("deposit.agreeText")'
+        :show-cancel-button='true'
+        @cancel='onCancel'
+        @confirm='onConfirm'
+    >
+        <h4>{{ $t('deposit.payConfirm') }}</h4>
+        <p class='title'>
+            {{ $t('deposit.payConfirmTips') }}
+        </p>
+    </van-dialog>
+
+    <!-- 支付通道弹窗 -->
     <van-action-sheet v-model:show='typeShow' class='pay-warpper' :round='false' :title='$t("deposit.selectPayMethods")'>
         <div class='pay-list'>
             <div v-for='(item,index) in payTypesSortEnable' :key='index' class='pay-type' @click='choosePayType(item)'>
@@ -114,22 +136,8 @@
         </div>
     </van-action-sheet>
 
-    <van-dialog
-        v-model:show='despositVis'
-        :cancel-button-text='$t("deposit.denyText")'
-        class-name='desposit-dialog'
-        :confirm-button-text='$t("deposit.agreeText")'
-        :show-cancel-button='true'
-        @cancel='onCancel'
-        @confirm='onConfirm'
-    >
-        <h4>{{ $t('deposit.payConfirm') }}</h4>
-        <p class='title'>
-            {{ $t('deposit.payConfirmTips') }}
-        </p>
-    </van-dialog>
-
-    <van-popup v-model:show='appendVis' class='append-popup' position='right' :style="{ height: '100%',width: '80%' }">
+    <!-- 补充资料弹窗 -->
+    <van-popup v-model:show='appendVis' class='append-popup' position='right' :style="{ height: '100%', width: '80%' }">
         <div class='append-wrap'>
             <p class='title'>
                 {{ $t('deposit.appendFiled') }}
@@ -155,15 +163,15 @@
 
 <script>
 import Top from '@/components/top'
-import { onBeforeMount, reactive, computed, toRefs, onBeforeUnmount, onMounted } from 'vue'
+import { reactive, computed, toRefs, onBeforeUnmount, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal, judgeIsAlreadyDeposit } from '@/api/user'
-import { getListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
+import { useI18n } from 'vue-i18n'
 import { isEmpty, sessionGet, getCookie } from '@/utils/util'
 import { mul } from '@/utils/calculation'
-import { useI18n } from 'vue-i18n'
+import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal, judgeIsAlreadyDeposit } from '@/api/user'
+import { getListByParentCode } from '@/api/base'
 
 export default {
     components: {
@@ -174,40 +182,97 @@ export default {
         const route = useRoute()
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
+        // 币种、账户id、玩法类型
         const { currency, accountId, tradeType } = route.query
+        // 导航栏右部文字
         const rightAction = {
             title: t('deposit.depositRecord')
         }
 
         const state = reactive({
-            amountList: [],
-            currencyChecked: '',
-            otherAmountVis: false,
-            currIndex: '',
-            amount: '',
-            typeShow: false,
-            PayTypes: [],
-            checkedType: '',
-            rateConfig: '',
-            presentAmount: 5,
+            // 页面加载状态
             loading: false,
-            despositVis: false,
-            btnDisabled: false,
-            resultTimeMap: {},
-            paymentTypes: [],
-            appendVis: false,
+            // 当前语言
             lang: getCookie('lang'),
+            // 是否禁用提交按钮
+            btnDisabled: false,
+            // 存款金额列表
+            amountList: [],
+            // 当前选择的存款金额下标，其它金额：99
+            currIndex: '',
+            // 当前选择的存款金额数量
+            amount: '',
+            // 是否显示其它金额输入框
+            otherAmountVis: false,
+            // 是否显示支付通道弹窗
+            typeShow: false,
+            // 全部支付通道
+            PayTypes: [],
+            // 当前选择的支付通道
+            checkedType: '',
+            // 支付通道币种列表
+            paymentTypes: [],
+            // 当前选择的支付通道币种
+            currencyChecked: '',
+            // 当前支付通道存款时间
+            resultTimeMap: {},
+            // 是否显示存款提示弹窗
+            despositVis: false,
+            // 存款配置数据
+            rateConfig: '',
+            // 补充资料
+            appendVis: false,
             appendMap: {},
             paramsExtens: {}
         })
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+        // 联系客服链接
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
         // 获取存款配置数据
         const depositData = computed(() => store.state._base.wpCompanyInfo?.depositData)
         // 获取wp配置的支付通道图标
         const paymentIconList = computed(() => store.state._base.wpCompanyInfo.paymentIconList)
+
+        // 设置存款数据
+        const setAmountList = () => {
+            judgeIsAlreadyDeposit({
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo,
+                accountId
+            }).then(res => {
+                const arr = []
+                const isDeposit = res.data
+                let data = {}
+                // 已存款
+                if (isDeposit) {
+                    data = depositData.value.isAlready ? depositData.value['already'] : depositData.value['default']
+                } else {
+                    // 未存款
+                    data = depositData.value.isNot ? depositData.value['not'] : depositData.value['default']
+                }
+                // 处理存款数据
+                for (const key in data) {
+                    const item = data[key]
+                    if (item.amount) {
+                        arr.push({
+                            amount: item.amount,
+                            describe: item[state.lang]?.describe
+                        })
+                    }
+                }
+                // 没有存款数据默认选择其它金额
+                if (arr.length === 0) {
+                    state.currIndex = 99
+                    state.otherAmountVis = true
+                } else {
+                    state.currIndex = 0
+                    state.amount = arr[0].amount
+                }
+                state.amountList = arr
+            })
+        }
 
         // 计算存款手续费
         const computeFee = computed(() => {
@@ -225,11 +290,10 @@ export default {
         // 计算预计支付金额
         const computeExpectedpay = computed(() => {
             // 计算方式：存款金额 * 汇率
-
             return state.rateConfig.exchangeRate ? mul(state.amount, state.rateConfig.exchangeRate) : '--'
         })
 
-        // 处理支付通道排序
+        // 处理当前可用的支付通道并排序
         const payTypesSortEnable = computed(() => {
             if (state.PayTypes.length > 0) {
                 const temp = state.PayTypes.filter(item => item.timeRangeFlag && item.openTime)
@@ -243,7 +307,7 @@ export default {
             return []
         })
 
-        // 不在当前时间的支付通道
+        // 处理当前不可用的支付通道
         const payTypesSortDisable = computed(() => {
             if (state.PayTypes.length > 0) {
                 const temp = state.PayTypes.filter(item => !item.timeRangeFlag && item.openTime)
@@ -257,89 +321,37 @@ export default {
             return []
         })
 
-        // 判断sessionStorage 里面有没有保存proposalNo，有则弹窗提醒
-        if (sessionStorage.getItem('proposalNo')) {
-            state.despositVis = true
-        }
-
-        const onConfirm = () => {
-            // 请求存款提案
-            const proposalNo = sessionGet('proposalNo')
-            if (proposalNo) {
-                const params = {
-                    customerNo: customInfo.value.customerNo,
-                    proposalNo,
-                    tradeType,
-                    accountId
+        // 计算存款时间
+        const computeTime = (val) => {
+            if (!isEmpty(val)) {
+                // 0 点时的时间戳
+                const time = (window.dayjs(new Date(new Date(new Date().toLocaleDateString()).getTime()))).valueOf()
+                if (Number(val) === 1440) {
+                    return '24:00'
+                } else {
+                    return window.dayjs(time + val * 60 * 1000).format('HH:mm')
                 }
-                queryDepositProposal(params).then(res => {
-                    if (res.check()) {
-                        if (Number(res.data.paymentStatus) === 2) {
-                            router.push('/assets')
-                        } else {
-                            Dialog.alert({
-                                title: t('common.tip'),
-                                message: t('deposit.despositFail'),
-                                confirmButtonText: t('deposit.toRecord'),
-                            }).then(() => {
-                                router.push('/depositRecord')
-                            })
-                        }
-                        sessionStorage.removeItem('proposalNo')
-                    }
-                }).catch(err => {
-                    state.loading = false
-                    console.log(err)
-                })
             }
         }
 
-        const onCancel = () => {
-            sessionStorage.removeItem('proposalNo')
-            state.despositVis = false
-        }
-
-        const checkAmount = (index, item) => {
-            state.otherAmountVis = false
-            state.currIndex = index
-            state.amount = item.amount
-            state.presentAmount = item.present
-        }
-
+        // 跳转到存款记录页面
         const toDespositList = () => {
             router.push({
                 path: '/depositRecord'
             })
         }
-        const openSheet = () => {
-            state.typeShow = true
+
+        // 切换存款金额
+        const checkAmount = (index, item) => {
+            state.otherAmountVis = false
+            state.currIndex = index
+            state.amount = item.amount
         }
 
-        // 切换不同链支付通道
-        const changePayCurrency = (val) => {
-            state.currencyChecked = val
-            getDepositExchangeRate()
-        }
-
-        // 切换支付方式
-        const choosePayType = (item) => {
-            state.checkedType = item
-            state.appendMap = state.checkedType.extend
-            setPaymentList(state.checkedType)
-            payTypesSortEnable.value && payTypesSortEnable.value.map(item => {
-                item.checked = false
-            })
-            payTypesSortDisable.value && payTypesSortDisable.value.map(item => {
-                item.checked = false
-            })
-            item.checked = true
-            state.typeShow = false
-        }
-
+        // 切换其它存款金额
         const openOtherMoney = () => {
             state.otherAmountVis = true
             state.currIndex = 99
-            state.presentAmount = ''
         }
 
         // 获取支付通道
@@ -361,9 +373,9 @@ export default {
                             res.data.forEach(el => {
                                 if (paymentIconList.value[el.paymentCode + '_' + el.paymentType]) {
                                     el.alias = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].alias || ''
-                                    el.imgUrl = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].imgUrl || require('../../../assets/payment_icon/default.png')
+                                    el.imgUrl = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].imgUrl || require('@/assets/payment_icon/default.png')
                                 } else {
-                                    el.imgUrl = require('../../../assets/payment_icon/default.png')
+                                    el.imgUrl = require('@/assets/payment_icon/default.png')
                                 }
                             })
                             state.PayTypes = res.data
@@ -379,6 +391,73 @@ export default {
                 }
             }).catch(err => {
                 state.loading = false
+            })
+        }
+
+        // 打开支付通道弹窗
+        const openSheet = () => {
+            state.typeShow = true
+        }
+
+        // 切换支付通道
+        const choosePayType = (item) => {
+            payTypesSortEnable.value && payTypesSortEnable.value.map(elem => {
+                elem.checked = false
+            })
+            payTypesSortDisable.value && payTypesSortDisable.value.map(elem => {
+                elem.checked = false
+            })
+
+            state.checkedType = item
+            state.appendMap = state.checkedType.extend
+            item.checked = true
+            state.typeShow = false
+            // 设置支付货币列表
+            setPaymentList(state.checkedType)
+        }
+
+        // 切换不同支付货币
+        const changePayCurrency = (val) => {
+            state.currencyChecked = val
+            // 获取存款货币对汇率
+            getDepositExchangeRate()
+        }
+
+        // 设置支付货币列表
+        const setPaymentList = (payItem) => {
+            // 当前支付通道不需要支付货币列表
+            if (payItem.channelConvertRate) {
+                state.rateConfig = {}
+                state.paymentTypes = []
+                state.currencyChecked = ''
+                return
+            }
+
+            // 支付币种为USDT获取链名称列表
+            if (payItem.paymentCurrency === 'USDT') {
+                getChainList()
+            } else {
+                // 设置支付币种列表数据
+                state.paymentTypes = state.checkedType.paymentCurrency.split(',')
+                state.currencyChecked = state.paymentTypes[0]
+                // 获取存款货币对汇率
+                getDepositExchangeRate()
+            }
+        }
+
+        // 获取币种链名称列表数据
+        const getChainList = () => {
+            const paymentTypes = []
+            getListByParentCode({ parentCode: 'USDT' }).then(res => {
+                if (res.check() && res.data.length > 0) {
+                    res.data.forEach(item => {
+                        paymentTypes.push(item.parentCode + '-' + item.code)
+                    })
+                    state.paymentTypes = paymentTypes
+                    state.currencyChecked = paymentTypes[0]
+                    // 获取存款货币对汇率
+                    getDepositExchangeRate()
+                }
             })
         }
 
@@ -405,6 +484,7 @@ export default {
             }
         }
 
+        // 处理支付通道存款时间
         const handleShowTime = () => {
             if (state.PayTypes.length > 0) {
                 const todayStr = window.dayjs().format('YYYY-MM-DD')
@@ -436,7 +516,6 @@ export default {
                             // 判断当前时间是否在设置的存款时间内
                             if (nowDate.isBetween(startLocal, endLocal)) {
                                 payItem.timeRangeFlag = true
-                                state.checkedType = payItem
                                 state.appendMap = state.checkedType.extend
                             }
                         })
@@ -482,31 +561,12 @@ export default {
                     state.appendMap = state.checkedType.extend
                     state.PayTypes[0].checked = true
                 }
+                // 设置支付货币列表
                 setPaymentList(state.checkedType)
             }
         }
 
-        const setPaymentList = (payItem) => {
-            if (payItem.channelConvertRate) {
-                state.rateConfig = {}
-                state.currencyChecked = ''
-                return
-            }
-
-            state.paymentTypes = []
-            if (payItem.paymentCurrency === 'USDT') {
-                getChainList()
-            } else {
-                const splitCurrency = state.checkedType.paymentCurrency.split(',')
-                if (splitCurrency.length >= 1) {
-                    state.paymentTypes = splitCurrency
-                }
-            }
-
-            state.currencyChecked = state.paymentTypes[0]
-            getDepositExchangeRate()
-        }
-
+        // 点击下一步
         const next = () => {
             if (!state.amount) {
                 return Toast(t('deposit.selectAmount'))
@@ -527,21 +587,6 @@ export default {
             handleDeposit()
         }
 
-        // 补充资料是否全部填写完成
-        const checkAllComplete = () => {
-            let flag = true
-            const extend = state.checkedType.extend
-            for (const key in extend) {
-                if (Object.hasOwnProperty.call(extend, key)) {
-                    const element = extend[key]
-                    if (isEmpty(element.value)) {
-                        flag = false
-                    }
-                }
-            }
-            return flag
-        }
-
         // 创建存款提案
         const handleDeposit = () => {
             const params = {
@@ -551,7 +596,7 @@ export default {
                 customerGroupId: customInfo.value.customerGroupId,
                 depositRateSerialNo: state.rateConfig.depositRateSerialNo,
                 paymentCurrency: state.checkedType.paymentCurrency === 'USDT' ? 'USDT' : state.currencyChecked,
-                accountCurrency: state.rateConfig.accountCurrency,
+                accountCurrency: state.checkedType.accountCurrency,
                 exchangeRate: state.rateConfig.exchangeRate,
                 paymentChannelCode: state.checkedType.paymentCode,
                 paymentChannelType: state.checkedType.paymentType,
@@ -586,61 +631,19 @@ export default {
             })
         }
 
-        // 计算存款时间
-        const computeTime = (val) => {
-            if (!isEmpty(val)) {
-                // 0 点时的时间戳
-                const time = (window.dayjs(new Date(new Date(new Date().toLocaleDateString()).getTime()))).valueOf()
-                if (Number(val) === 1440) {
-                    return '24:00'
-                } else {
-                    return window.dayjs(time + val * 60 * 1000).format('HH:mm')
+        // 补充资料是否全部填写完成
+        const checkAllComplete = () => {
+            let flag = true
+            const extend = state.checkedType.extend
+            for (const key in extend) {
+                if (Object.hasOwnProperty.call(extend, key)) {
+                    const element = extend[key]
+                    if (isEmpty(element.value)) {
+                        flag = false
+                    }
                 }
             }
-        }
-
-        // 检查是否需要KYC认证
-        const checkKyc = () => {
-            state.loading = true
-            checkKycApply({
-                businessCode: 'cashin'
-            }).then(res => {
-                if (res.check()) {
-                    state.loading = false
-                    if (Number(res.data) !== 2) {
-                        return Dialog.alert({
-                            title: t('common.tip'),
-                            confirmButtonText: Number(res.data) === 1 ? t('common.goLook') : t('login.goAuthenticate'),
-                            message: Number(res.data) === 2 ? t('deposit.KYCReviewing') : t('deposit.needKYC'),
-                        }).then(() => {
-                            router.replace({
-                                name: 'Authentication',
-                                query: {
-                                    businessCode: 'cashin'
-                                }
-                            })
-                        })
-                    }
-                    getPayTypes()
-                }
-            }).catch(err => {
-                state.loading = false
-                console.log(err)
-            })
-        }
-
-        // 重置币种为虚拟币的时候 获取链列表
-        const getChainList = () => {
-            state.paymentTypes = []
-            getListByParentCode({ parentCode: 'USDT' }).then(res => {
-                if (res.check() && res.data.length > 0) {
-                    res.data.forEach(item => {
-                        state.paymentTypes.push(item.parentCode + '-' + item.code)
-                    })
-                    state.currencyChecked = state.paymentTypes[0]
-                    getDepositExchangeRate()
-                }
-            })
+            return flag
         }
 
         // 补充资料确定事件
@@ -665,70 +668,110 @@ export default {
             handleDeposit()
         }
 
-        store.dispatch('_user/findCustomerInfo', false).then(res => {
-            if (res.check()) {
-                if (Number(customInfo.value.deposit) === 0) {
-                    state.btnDisabled = true
-                    return Dialog.confirm({
-                        title: t('common.tip'),
-                        message: t('deposit.serviceTips1'),
-                        confirmButtonText: t('common.serivce'),
-                        cancelButtonText: t('common.close')
-                    }).then(() => {
-                        if (onlineServices.value) { location.href = onlineServices.value }
-                    }).catch(() => {
-                    // on cancel
-                    })
-                } else {
-                    // 检测存款是否需要kyc
-                    checkKyc()
+        // 点击存款提示弹窗确认按钮
+        const onConfirm = () => {
+            // 请求存款提案
+            const proposalNo = sessionGet('proposalNo')
+            if (proposalNo) {
+                const params = {
+                    customerNo: customInfo.value.customerNo,
+                    proposalNo,
+                    tradeType,
+                    accountId
                 }
+                queryDepositProposal(params).then(res => {
+                    if (res.check()) {
+                        if (Number(res.data.paymentStatus) === 2) {
+                            router.push('/assets')
+                        } else {
+                            Dialog.alert({
+                                title: t('common.tip'),
+                                message: t('deposit.despositFail'),
+                                confirmButtonText: t('deposit.toRecord'),
+                            }).then(() => {
+                                router.push('/depositRecord')
+                            })
+                        }
+                        sessionStorage.removeItem('proposalNo')
+                    }
+                }).catch(err => {
+                    state.loading = false
+                    console.log(err)
+                })
             }
-        })
+        }
 
-        // 设置存款数据
-        const setAmountList = () => {
-            judgeIsAlreadyDeposit({
-                companyId: customInfo.value.companyId,
-                customerNo: customInfo.value.customerNo,
-                accountId
+        // 点击存款提示弹窗取消按钮
+        const onCancel = () => {
+            sessionStorage.removeItem('proposalNo')
+            state.despositVis = false
+        }
+
+        // 检查是否需要KYC认证
+        const checkKyc = () => {
+            state.loading = true
+            checkKycApply({
+                businessCode: 'cashin'
             }).then(res => {
-                const arr = []
-                const isDeposit = res.data
-                let data = {}
-                // 已存款
-                if (isDeposit) {
-                    data = depositData.value.isAlready ? depositData.value['already'] : depositData.value['default']
-                } else {
-                    // 未存款
-                    data = depositData.value.isNot ? depositData.value['not'] : depositData.value['default']
-                }
-                // 处理存款数据
-                for (const key in data) {
-                    const item = data[key]
-                    if (item.amount) {
-                        arr.push({
-                            amount: item.amount,
-                            describe: item[state.lang]?.describe
+                if (res.check()) {
+                    state.loading = false
+                    // kyc弹窗提示
+                    if (Number(res.data) !== 2) {
+                        return Dialog.alert({
+                            title: t('common.tip'),
+                            confirmButtonText: Number(res.data) === 1 ? t('common.goLook') : t('login.goAuthenticate'),
+                            message: Number(res.data) === 2 ? t('deposit.KYCReviewing') : t('deposit.needKYC'),
+                        }).then(() => {
+                            router.replace({
+                                name: 'Authentication',
+                                query: {
+                                    businessCode: 'cashin'
+                                }
+                            })
                         })
                     }
+                    // 获取支付通道
+                    getPayTypes()
                 }
-                // 没有存款数据默认选择其它金额
-                if (arr.length === 0) {
-                    state.currIndex = 99
-                    state.otherAmountVis = true
-                }
-                state.amountList = arr
+            }).catch(err => {
+                state.loading = false
+                console.log(err)
             })
         }
 
-        onBeforeUnmount(() => {
-            sessionStorage.removeItem('proposalNo')
-        })
-
         onMounted(() => {
+            // 判断sessionStorage 里面有没有保存proposalNo，有则弹窗提醒
+            if (sessionStorage.getItem('proposalNo')) {
+                state.despositVis = true
+            }
             // 设置存款金额数据
             setAmountList()
+            // 获取客户信息
+            store.dispatch('_user/findCustomerInfo', false).then(res => {
+                if (res.check()) {
+                    // 是否显示联系客服弹窗
+                    if (Number(customInfo.value.deposit) === 0) {
+                        state.btnDisabled = true
+                        return Dialog.confirm({
+                            title: t('common.tip'),
+                            message: t('deposit.serviceTips1'),
+                            confirmButtonText: t('common.serivce'),
+                            cancelButtonText: t('common.close')
+                        }).then(() => {
+                            if (onlineServices.value) { location.href = onlineServices.value }
+                        }).catch(() => {
+                            // on cancel
+                        })
+                    } else {
+                        // 检测存款是否需要kyc
+                        checkKyc()
+                    }
+                }
+            })
+        })
+
+        onBeforeUnmount(() => {
+            sessionStorage.removeItem('proposalNo')
         })
 
         return {
@@ -861,7 +904,6 @@ export default {
         }
     }
     .pay-info {
-        margin-top: rem(20px);
         padding: 0 rem(30px);
         background-color: var(--contentColor);
         border-top: solid rem(20px) var(--bgColor);
@@ -971,5 +1013,4 @@ export default {
         }
     }
 }
-
 </style>
