@@ -241,11 +241,11 @@ export default {
                     if (res.check()) {
                         if (props.platform === 'web') {
                             // debugger
-                            router.push({ path: route.path.slice(0, -9) + '/kycCommitted' })
+                            const parentPath = route.matched[route.matched.length - 2]
+                            router.push({ path: parentPath.path + '/kycCommitted' })
                         } else {
                             router.replace({ name: 'KycCommitted' })
                         }
-                        router.replace({ name: 'KycCommitted' })
                         sessionStorage.removeItem('kycList')
                     }
                 }).catch(err => {
@@ -264,7 +264,8 @@ export default {
                     if (res.check()) {
                         if (props.platform === 'web') {
                             // debugger
-                            router.push({ path: route.path.slice(0, -9) + '/kycCommitted' })
+                            const parentPath = route.matched[route.matched.length - 2]
+                            router.push({ path: parentPath.path + '/kycCommitted' })
                         } else {
                             router.replace({ name: 'KycCommitted' })
                         }

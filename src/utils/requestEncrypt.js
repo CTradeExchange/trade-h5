@@ -7,7 +7,7 @@ const privkey = 'MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBALVIvQl1lFNwdnW
 // const privkey = '-----BEGIN RSA PRIVATE KEY----- MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBALVIvQl1lFNwdnWZ6y7yPvgR4n1v5u7nC+MQRNOajZ2pBduPGAlVuqvxvFL7GFoKyydJDIxvfOYiYRt7o+Bdl54dE+yw0krCEzpOvU14AEx5zCCewnFGIMK3BdfNgh1XIehokbGN+/1lydCoo3kfI4OJXLh4mNIBopxbJmZ6GhlDAgMBAAECgYEApg3F0qdYQYHvkFN4AR22nkbLnzjkYQtUcR4S3X1hoPwVOIN/cfWMMzoP1jbYnInsgsS/8Neioa72IlWDy94PJR8W5yQ68Nwd1bc461Q9G2xr9+MxgvI+6yxk8MI5E1vET7yTo9z/cMWlHj5HSKC3hV2yefxjE22TnxuxJW7PflkCQQD9ClWkpnblUjkBFU39/nw6YpvQMOkDVmrXx7+1+4MPYevmYHIlFXrVzMlT6KhJ9Qc/h3TTaXSmCjDizEp7dT2NAkEAt2eMR3oLxgEa3lndynnEBxtXYHvioDvg56xED+Six69s4K2w/suGhP69OcfFhxPKI7fMU36kT7kQzDqHzO72DwJBANT9afFZnSKR/yGGSUvOdcq/TeAEC16f0vcmT5xixIKiLeqQrAPC/M4RvjU+1MjL0voKjq+VSHaqhVOiGd+pY9ECQQCBnhfhCBs8A9nmXSLHj0kAMM2O7d8bmVX4xaGQjeiRMaTEIV0epd5bLeGz7UDnlw/cMHCibbVYdpWtkIwbRKL3AkBn5o/tC0B8/T8mPKIQz4ZnvqxP29j3kET9s0gW1+ZuCZDnsolLU28oPYmVBkfEYQLfYTED+tGzmz/fGFgyDT9C -----END RSA PRIVATE KEY-----'
 
 // request入参加密
-export function encryptParams (data = {}, timestamp) {
+export function encryptParams (data = {}, timestamp, pubKey) {
     data = Object.assign({}, data, { timestamp })
     const keys = Object.keys(data).filter(el => ['string', 'number'].includes(typeof (data[el])) && data[el] !== '').sort((a, b) => a.localeCompare(b))
     const encryptA = keys.map(el => `&${el}=${data[el]}`)
@@ -23,14 +23,14 @@ export function encryptParams (data = {}, timestamp) {
 
     /* 加密 */
     const newDataStr = JSON.stringify(newData)
-    const encryptedDataString = encryptByChunk(newDataStr)
+    const encryptedDataString = encryptByChunk(newDataStr, pubKey)
     // console.log(encryptC, encryptD, newData, encryptedDataString)
     // console.log('解出来的', decryptByChunk(encryptedDataString))
     return encryptedDataString
 }
 
 // request入参分块加密
-export function encryptByChunk (str) {
+export function encryptByChunk (str, pubKey) {
     const encryptor = new JSEncrypt() // 创建加密对象实例
     encryptor.setPublicKey(pubKey)// 设置公钥
     const chunk = 100

@@ -563,6 +563,8 @@ body {
     }
     .van-button--default {
         border-color: var(--lineColor);
+        background: var(--contentColor);
+        color: var(--color);
     }
     .van-dialog {
         background-color: var(--contentColor);
@@ -616,6 +618,9 @@ body {
     --van-search-background-color: var(--contentColor);
     --van-field-placeholder-text-color: var(--placeholdColor);
     --van-picker-background-color: var(--contentColor);
+    --van-button-default-background-color: var(--contentColor);
+    --van-button-plain-background-color: var(--contentColor);
+    --van-button-default-color: var(--color);
     --van-picker-option-text-color: var(--color);
     --van-popover-light-text-color: var(--color);
     --van-active-color: var(--primaryAssistColor);
