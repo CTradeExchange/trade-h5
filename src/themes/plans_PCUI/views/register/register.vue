@@ -88,8 +88,8 @@ import { getDevice, getQueryVariable, setToken, getArrayObj, sessionGet } from '
 import { register, checkUserStatus } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
 import { useStore } from 'vuex'
-import { reactive, toRefs, computed, getCurrentInstance } from 'vue'
-import { useRouter } from 'vue-router'
+import { reactive, toRefs, computed, getCurrentInstance, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { Toast } from 'vant'
 import RuleFn, { checkCustomerExistRule } from './rule'
 // import { pageConfig } from '@/api/wpApi'
@@ -110,6 +110,7 @@ export default {
         const delayer = null
         const store = useStore()
         const router = useRouter()
+        const route = useRoute()
         const { t } = useI18n({ useScope: 'global' })
         const { getCustomerGroupIdByCountry, getPlansByCountry } = hooks()
         const state = reactive({
@@ -303,6 +304,17 @@ export default {
             state.countryZone = data.code
             state.countryCode = data.countryCode
         }
+
+        onMounted(() => {
+            const { mobile, email } = route.query
+            if (mobile) {
+                state.mobile = mobile
+                state.openType = 'mobile'
+            } else if (email) {
+                state.email = email
+                state.openType = 'email'
+            }
+        })
 
         return {
             ...toRefs(state),
