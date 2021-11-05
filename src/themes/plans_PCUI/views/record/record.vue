@@ -182,6 +182,10 @@ export default {
             }
         }
     }
+    :deep(.van-dropdown-item) {
+        width: 520px;
+        margin: auto;
+    }
 }
 
 </style>
