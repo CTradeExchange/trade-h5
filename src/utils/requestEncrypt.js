@@ -32,6 +32,7 @@ export function encryptParams (data = {}, timestamp, pubKey) {
 // request入参分块加密
 export function encryptByChunk (str, pubKey) {
     const encryptor = new JSEncrypt() // 创建加密对象实例
+    str = encodeURI(str)
     encryptor.setPublicKey(pubKey)// 设置公钥
     const chunk = 100
     let i = 0
