@@ -54,7 +54,7 @@ const list = toRef(props, 'list')
 const { productListEl, productMap } = subscribeProducts(list)
 // 切换当前选中产品
 const onClick = product => {
-    // store.commit('_quote/Update_productActivedID', `${product.symbolId}_${product.tradeType}`)
+    store.commit('_quote/Update_productActivedID', `${product.symbolId}_${product.tradeType}`)
     router.replace({
         query: {
             ...route.query,

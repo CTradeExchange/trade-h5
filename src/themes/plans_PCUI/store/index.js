@@ -79,7 +79,6 @@ export default createStore({
     mutations: {
         Update_style (state, data) {
             state.style = data
-            // console.log('style==================', state.style)
         },
         Update_quoteMode (state, data = 1) {
             state.quoteMode = data

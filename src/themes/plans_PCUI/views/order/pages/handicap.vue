@@ -64,6 +64,7 @@
 <script>
 import { computed, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter, useRoute } from 'vue-router'
 import computeHandicap from '@planspc/hooks/handicap'
 import { lt, pow } from '@/utils/calculation'
 import { QuoteSocket } from '@/plugins/socket/socket'
@@ -72,6 +73,7 @@ export default {
     props: ['product'],
     setup (props) {
         const store = useStore()
+        const route = useRoute()
         const state = reactive({
             showPopover: false,
             handicapDigit: pow(0.1, props.product?.symbolDigits),
@@ -153,6 +155,15 @@ export default {
             (newval, oldval) => (state.lastPriceColor = lt(newval, oldval) ? 'fallColor' : 'riseColor')
         )
 
+        // 监听路由变化
+        watch(
+            () => route.query, (val, oval) => {
+                QuoteSocket.deal_subscribe(props.product.symbolId, 5, curDigits, props.product.tradeType, 1)
+            }, {
+                immediate: true
+            }
+        )
+
         // 切换深度报价小数位的长度
         const onSelect = (val) => {
             state.handicapDigit = val.text
@@ -160,7 +171,6 @@ export default {
         }
 
         const curDigits = pow(0.1, props.product.symbolDigits)
-        QuoteSocket.deal_subscribe(props.product.symbolId, 5, curDigits, props.product.tradeType, 1)
 
         return {
             ...toRefs(state),
