@@ -8,6 +8,7 @@ export default function (productList) {
     const store = useStore()
     // 产品列表
     const productMap = computed(() => store.state._quote.productMap)
+    const product = computed(() => store.getters.productActived)
     const productListEl = ref(null)
 
     // 订阅当前屏和上半屏、下半屏的产品报价，给上层组件使用
@@ -28,6 +29,8 @@ export default function (productList) {
     }
     const calcProductsDebounce = debounce(() => {
         const subscribList = calcSubscribeProducts()
+        // 把当前路由的产品加入订阅列表
+        subscribList.unshift(product.value?.symbolKey)
         if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
     })
 

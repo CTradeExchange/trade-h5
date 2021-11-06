@@ -193,6 +193,7 @@ import StudyList from './studyList.vue'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import Loading from '@/components/loading.vue'
+import { ElMessage } from 'element-plus'
 export default {
     components: { tv, KIcon, StudyList },
     setup () {
@@ -377,11 +378,7 @@ export default {
         const style = computed(() => store.state.style)
 
         // 产品信息
-        const product = computed(() => {
-            const product = store.getters.productActived
-
-            return product
-        })
+        const product = computed(() => store.getters.productActived)
 
         const customerInfo = computed(() => store.state._user.customerInfo)
 
@@ -418,34 +415,30 @@ export default {
         // 添加自选
         const addOptional = () => {
             if (isEmpty(customerInfo.value)) {
-                Toast(t('common.noLogin'))
+                ElMessage.warning(t('common.noLogin'))
                 return router.push('/login')
             }
-            state.loading = true
             if (isSelfSymbol.value) {
                 removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
                     if (res.check()) {
-                        state.loading = false
                         store.dispatch('_user/queryCustomerOptionalList')
-                        Toast(t('trade.removeOptionalOk'))
+
+                        ElMessage.success(t('trade.removeOptionalOk'))
                         // collect.value.classList.remove('icon_zixuan2')
                     }
                 }).catch(err => {
-                    state.loading = false
                 })
             } else {
                 addCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
                     if (res.check()) {
-                        state.loading = false
                         // 手动修改optional值
                         store.commit('_user/Update_optional', 1)
                         store.dispatch('_user/queryCustomerOptionalList')
                         // collect.value.classList.add('icon_zixuan2')
 
-                        Toast(t('trade.addOptionalOk'))
+                        ElMessage.success(t('trade.addOptionalOk'))
                     }
                 }).catch(err => {
-                    state.loading = false
                 })
             }
         }
@@ -662,6 +655,9 @@ export default {
                     }
                 })
             }
+            console.log('upColor', style.value.riseColor)
+            console.log('downColor', style.value.fallColor)
+            console.log('state.initConfig.property', state.initConfig.property)
         }
 
         // 设置图表类型
@@ -730,11 +726,19 @@ export default {
             chartRef.value.changeTheme(theme)
         }
 
+        // 监听图表颜色修改
+        const changeChartColor = () => {
+            initChartData()
+            console.log('state.initConfig.property', state.initConfig.property)
+            renderChart(product, state.initConfig.property)
+            chartRef.value && chartRef.value.reset()
+        }
+
         // 监听路由变化
         const changeRoute = () => {
             QuoteSocket.send_subscribe([`${product.value.symbolId}_${product.value.tradeType}`])
-            const invertColor = localGet('invertColor')
-            chartRef.value.reset()
+            // const invertColor = localGet('invertColor')
+            chartRef.value && chartRef.value.reset()
             // changeTheme({ 'detail': invertColor })
             // renderChart(product, state.initConfig.property)
         }
@@ -749,20 +753,26 @@ export default {
 
         // 监听路由变化
         watch(
-            () => route.query,
-            (val, oval) => {
+            () => route.query, (val, oval) => {
                 changeRoute()
+            }, {
+                immediate: true
             }
         )
+
+        // QuoteSocket.send_subscribe([`${product.value.symbolId}_${product.value.tradeType}`])
 
         // 监听主题修改
         document.body.addEventListener('Launch_theme', changeTheme, false)
         // 监听当玩法为5和9的时候。并且有pt报价的时候才更新图表
         document.body.addEventListener('GotMsg_updateChart', updateChart, false)
+        // 监听设置图表颜色
+        document.body.addEventListener('Launch_chartColor', changeChartColor, false)
 
         onUnmounted(() => {
             document.body.removeEventListener('GotMsg_updateChart', updateChart, false)
             document.body.removeEventListener('Launch_theme', changeTheme, false)
+            document.body.addEventListener('Launch_chartColor', changeChartColor, false)
         })
 
         return {
