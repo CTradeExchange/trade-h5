@@ -16,7 +16,7 @@
         <div class='amount-filter'>
             <div class='amount-list'>
                 <div
-                    v-for='(item,index) in amountList'
+                    v-for='(item, index) in amountList'
                     :key='index'
                     :class="{ 'item': true, active: currIndex === index }"
                     @click='checkAmount(index, item)'
@@ -44,8 +44,8 @@
             <p class='title'>
                 {{ $t('deposit.selectPayMethods') }}
             </p>
-            <div class='pay-module'>
-                <div v-for='item in payTypesSortEnable' :key='item.id' class='pay-case'>
+            <div v-if='payTypesSortEnable.length > 0' class='pay-module'>
+                <div v-for='(item, index) in payTypesSortEnable' :key='index' class='pay-case'>
                     <van-radio-group v-model='payTypeId'>
                         <div class='pay-channel' @click='choosePayType(item)'>
                             <img class='icon' :src='item.imgUrl || require("@/assets/payment_icon/" + item.paymentType + ".png")' />
@@ -68,6 +68,9 @@
                     </div>
                 </div>
             </div>
+            <p v-else class='none-channel'>
+                {{ $t('deposit.noneChannelTip') }}
+            </p>
         </div>
         <!-- 支付信息 -->
         <div class='pay-info'>
@@ -79,9 +82,11 @@
     </div>
 
     <!-- 存款按钮 -->
-    <van-button block class='next-btn' :disabled='btnDisabled' type='primary' @click='next'>
-        <span>{{ $t('common.nextStep') }}</span>
-    </van-button>
+    <div class='footer-handle'>
+        <van-button block class='next-btn' type='primary' @click='next'>
+            <span>{{ $t('deposit.confirmPay') }} {{ computeExpectedpay || '--' }}{{ currencyChecked }}</span>
+        </van-button>
+    </div>
 
     <!-- 存款弹窗提示 -->
     <van-dialog
@@ -126,12 +131,12 @@
 
 <script>
 import Top from '@/components/top'
-import { reactive, computed, toRefs, onBeforeUnmount, onMounted } from 'vue'
+import { reactive, computed, toRefs, onBeforeUnmount, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
-import { isEmpty, sessionGet, getCookie } from '@/utils/util'
+import { isEmpty, sessionGet, getCookie, arrayObjSort } from '@/utils/util'
 import { mul } from '@/utils/calculation'
 import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal, judgeIsAlreadyDeposit } from '@/api/user'
 import { getListByParentCode } from '@/api/base'
@@ -171,6 +176,8 @@ export default {
             typeShow: false,
             // 全部支付通道
             PayTypes: [],
+            // 可用并排序的支付通道
+            payTypesSortEnable: [],
             // 当前选择的支付通道
             checkedType: '',
             // 当前选择的支付通道id
@@ -267,34 +274,6 @@ export default {
             return state.rateConfig.exchangeRate ? mul(state.amount, state.rateConfig.exchangeRate) : '--'
         })
 
-        // 处理当前可用的支付通道并排序
-        const payTypesSortEnable = computed(() => {
-            if (state.PayTypes.length > 0) {
-                const temp = state.PayTypes.filter(item => item.timeRangeFlag && item.openTime)
-                temp.forEach(item => {
-                    if (state.checkedType.paymentTypeAlias === item.paymentTypeAlias) {
-                        item.checked = true
-                    }
-                })
-                return temp
-            }
-            return []
-        })
-
-        // 处理当前不可用的支付通道
-        const payTypesSortDisable = computed(() => {
-            if (state.PayTypes.length > 0) {
-                const temp = state.PayTypes.filter(item => !item.timeRangeFlag && item.openTime)
-                temp.forEach(item => {
-                    if (state.checkedType.paymentTypeAlias === item.paymentTypeAlias) {
-                        item.checked = true
-                    }
-                })
-                return temp
-            }
-            return []
-        })
-
         // 计算存款时间
         const computeTime = (val) => {
             if (!isEmpty(val)) {
@@ -307,6 +286,46 @@ export default {
                 }
             }
         }
+
+        // 监听当前存款金额
+        watch(() => state.amount, () => {
+            if (state.PayTypes.length > 0 && state.amount) {
+                // 筛选在存款时间内的支付通道
+                let temp = state.PayTypes.filter(item => item.timeRangeFlag && item.openTime)
+                // 筛选在存款金额内的支付通道
+                if (state.amount) {
+                    temp = temp.filter(v => (parseFloat(state.amount) >= v.singleLowAmount && parseFloat(state.amount) <= v.singleHighAmount))
+                }
+                // 对支付通道进行排序
+                temp.sort(arrayObjSort('sort'))
+                if (temp.length > 0) {
+                    state.payTypesSortEnable = temp
+                    state.checkedType = temp[0]
+                    state.payTypeId = temp[0].id
+                    state.appendMap = temp[0].extend
+                    // 设置支付货币列表
+                    setPaymentList(state.checkedType)
+                } else {
+                    state.payTypesSortEnable = []
+                    state.checkedType = ''
+                    state.payTypeId = ''
+                    state.paymentTypes = []
+                    state.currencyChecked = ''
+                }
+            } else {
+                state.payTypesSortEnable = []
+            }
+        })
+
+        // 监听支付币种
+        watch(() => state.currencyChecked, () => {
+            if (state.currencyChecked) {
+                // 获取存款货币对汇率
+                getDepositExchangeRate()
+            } else {
+                state.rateConfig = {}
+            }
+        })
 
         // 跳转到存款记录页面
         const toDespositList = () => {
@@ -376,13 +395,6 @@ export default {
 
         // 切换支付通道
         const choosePayType = (item) => {
-            payTypesSortEnable.value && payTypesSortEnable.value.map(elem => {
-                elem.checked = false
-            })
-            payTypesSortDisable.value && payTypesSortDisable.value.map(elem => {
-                elem.checked = false
-            })
-
             state.checkedType = item
             state.payTypeId = item.id
             state.appendMap = state.checkedType.extend
@@ -395,15 +407,12 @@ export default {
         // 切换不同支付货币
         const changePayCurrency = (val) => {
             state.currencyChecked = val
-            // 获取存款货币对汇率
-            getDepositExchangeRate()
         }
 
         // 设置支付货币列表
         const setPaymentList = (payItem) => {
             // 当前支付通道不需要支付货币列表
             if (payItem.channelConvertRate) {
-                state.rateConfig = {}
                 state.paymentTypes = []
                 state.currencyChecked = ''
                 return
@@ -416,8 +425,6 @@ export default {
                 // 设置支付币种列表数据
                 state.paymentTypes = state.checkedType.paymentCurrency.split(',')
                 state.currencyChecked = state.paymentTypes[0]
-                // 获取存款货币对汇率
-                getDepositExchangeRate()
             }
         }
 
@@ -431,8 +438,6 @@ export default {
                     })
                     state.paymentTypes = paymentTypes
                     state.currencyChecked = paymentTypes[0]
-                    // 获取存款货币对汇率
-                    getDepositExchangeRate()
                 }
             })
         }
@@ -531,15 +536,6 @@ export default {
                         state.resultTimeMap[payItem.id] = finalTimeResult
                     }
                 })
-
-                if (isEmpty(state.checkedType)) {
-                    state.checkedType = state.PayTypes[0]
-                    state.payTypeId = state.PayTypes[0].id
-                    state.appendMap = state.checkedType.extend
-                    state.PayTypes[0].checked = true
-                }
-                // 设置支付货币列表
-                setPaymentList(state.checkedType)
             }
         }
 
@@ -768,8 +764,6 @@ export default {
             handleShowTime,
             computeExpectedpay,
             computeAccount,
-            payTypesSortEnable,
-            payTypesSortDisable,
             onlineServices,
             changePayCurrency,
             handleAppendField
@@ -784,7 +778,7 @@ export default {
 .page-content {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    flex: 1;
     padding: 0 rem(30px);
     background: var(--bgColor);
     overflow-y: auto;
@@ -914,6 +908,17 @@ export default {
             }
         }
     }
+    .none-channel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: rem(150px);
+        font-size: rem(24px);
+        color: var(--color);
+        background: var(--contentColor);
+        border: 1px solid var(--lineColor);
+        border-radius: rem(10px);
+    }
 }
 
 // 支付信息
@@ -931,6 +936,22 @@ export default {
         strong {
             font-size: rem(28px);
             color: var(--focusColor);
+        }
+    }
+}
+
+// 底部按钮
+.footer-handle {
+    display: flex;
+    flex-shrink: 0;
+    padding: rem(30px);
+    .next-btn {
+        height: rem(80px);
+        background: var(--primary);
+        border-radius: rem(10px);
+        span {
+            color: #fff;
+            font-size: rem(30px);
         }
     }
 }

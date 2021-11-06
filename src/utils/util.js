@@ -210,6 +210,22 @@ export function objArraySort (objArr, key) {
     const result = objArr.slice(0)
     return result.sort((a, b) => a[key] - b[key])
 }
+
+/* 数组对象排序 */
+export function arrayObjSort (prop) {
+    return function (obj1, obj2) {
+        var val1 = obj1[prop]
+        var val2 = obj2[prop]
+        if (val1 < val2) {
+            return -1
+        } else if (val1 > val2) {
+            return 1
+        } else {
+            return 0
+        }
+    }
+}
+
 /* 检测用户KYC状态 */
 export function checkUserKYC ({ res, Dialog, router, store, t }) {
     // 登录KYC,0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过

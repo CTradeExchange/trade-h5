@@ -236,6 +236,7 @@
         "amountLimit": "金额限制",
         "expectPay": "预计支付",
         "expectInBank": "预计到账",
+		"confirmPay": "确认支付",
         "payConfirm": "支付确认",
         "payConfirmTips": "您是否已完成该笔充值支付?",
         "denyText": "否，关闭",
@@ -263,7 +264,8 @@
         "toRecord": "查看充值记录",
         "appendFiled": "补充资料",
         "allInputRequire": "请填写所有补充资料",
-        "arriveTime": "入帐时间"
+        "arriveTime": "入帐时间",
+		"noneChannelTip": "当前存款金额暂无可用支付通道，请重新调整！"
     },
     "fund": {
         "marginLevel": "保证金水平",
