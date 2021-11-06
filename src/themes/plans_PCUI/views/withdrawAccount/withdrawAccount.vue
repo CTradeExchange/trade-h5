@@ -270,6 +270,7 @@ export default {
         :deep(.el-input__inner){
             border: none;
             background: var(--assistColor);
+            color: var(--color);
         }
         .head-text {
             color: var(--minorColor);

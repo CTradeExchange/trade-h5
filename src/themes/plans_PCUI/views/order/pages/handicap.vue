@@ -1,7 +1,12 @@
 <template>
     <div class='title'>
         <p>{{ $t('trade.handicap') }}</p>
-        <van-popover v-model:show='showPopover' :actions='digitLevelList' class='handicapDigitsOptions' @select='onSelect'>
+        <van-popover
+            v-model:show='showPopover'
+            :actions='digitLevelList'
+            class='handicapDigitsOptions'
+            @select='onSelect'
+        >
             <template #reference>
                 <button class='selectBtn'>
                     {{ handicapDigit }}
@@ -14,12 +19,12 @@
         <span class='hd'>
             {{ $t('trade.priceLabel') }}({{ product.profitCurrency }})
         </span>
-        <span class='ft'>
+        <span class='ft alignRight'>
             {{ $t('trade.volumes') }}({{ product.baseCurrency }})
         </span>
-        <div class='my'>
+        <span class='my alignRight'>
             {{ $t('trade.my') }}
-        </div>
+        </span>
     </div>
 
     <div v-if='ask_deep.length>0' class='priceMultiGear buy'>
@@ -27,10 +32,10 @@
             <span class='hd'>
                 {{ item.price_ask }}
             </span>
-            <span class='ft aligRight'>
+            <span class='ft'>
                 {{ item.volume_ask }}
             </span>
-            <span>
+            <span class='my'>
                 {{ item.unitNum === 0 ? '': item.unitNum }}
             </span>
             <span v-if='item.width' class='volunmePercent buy' :style="{ width:item.width+'%' }"></span>
@@ -48,7 +53,7 @@
             <span class='ft'>
                 {{ item.volume_bid }}
             </span>
-            <span>
+            <span class='my'>
                 {{ item.unitNum === 0 ? '': item.unitNum }}
             </span>
             <span v-if='item.width' class='volunmePercent' :style="{ width:item.width+'%' }"></span>
@@ -174,17 +179,23 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .title{
-        padding-right: 16px;
+    padding-right: 10px;
     display: flex;
     justify-content: space-between;
 }
 .titleBar {
     display: flex;
-    padding-right: 16px;
+    padding-right: 10px;
     justify-content: space-between;
     margin-top: 12px;
     margin-bottom: 5px;
     color: var(--placeholdColor);
+    >span{
+        flex: 1;
+        &.my{
+            flex: 0.8;
+        }
+    }
 }
 .priceMultiGear {
     margin-top: 15px;
@@ -195,7 +206,7 @@ export default {
         color: var(--riseColor);
     }
     &.buy {
-            display: flex;
+        display: flex;
         flex-flow: column-reverse;
         color: var(--fallColor);
     }
@@ -220,9 +231,18 @@ export default {
         }
         .ft {
             color: var(--normalColor);
-            min-width : 30%;
+            flex: 1;
             text-align: right;
         }
+        .hd{
+            flex: 1;
+        }
+        .my{
+            flex: 0.8;
+            text-align: right;
+            padding-right: 10px;
+        }
+
     }
 }
 .curPrice {

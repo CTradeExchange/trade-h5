@@ -8,7 +8,7 @@ const privkey = 'MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBALVIvQl1lFNwdnW
 
 // request入参加密
 export function encryptParams (data = {}, timestamp, pubKey) {
-    data = Object.assign({}, data, { timestamp })
+    if (Object.prototype.toString.call(data, null) === '[object Object]') data = Object.assign({}, data, { timestamp })
     const keys = Object.keys(data).filter(el => ['string', 'number'].includes(typeof (data[el])) && data[el] !== '').sort((a, b) => a.localeCompare(b))
     const encryptA = keys.map(el => `&${el}=${data[el]}`)
     const encryptB = `timestamp=${timestamp}`
@@ -32,6 +32,7 @@ export function encryptParams (data = {}, timestamp, pubKey) {
 // request入参分块加密
 export function encryptByChunk (str, pubKey) {
     const encryptor = new JSEncrypt() // 创建加密对象实例
+    str = encodeURI(str)
     encryptor.setPublicKey(pubKey)// 设置公钥
     const chunk = 100
     let i = 0

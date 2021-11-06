@@ -163,6 +163,13 @@ const h5Children = [
         }
     },
     {
+        path: 'record', // 资金记录
+        component: () => import(/* webpackChunkName: "returnMoney" */ '../views/record/record.vue'),
+        meta: {
+            title: 'route.records',
+        }
+    },
+    {
         path: 'regKyc', // 注册KYC
         component: () => import(/* webpackChunkName: "RegKyc" */ '../views/register/regKyc.vue'),
         meta: {
