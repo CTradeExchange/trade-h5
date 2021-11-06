@@ -189,8 +189,8 @@ import { reactive, toRefs, computed, ref, watch, onUnmounted, onBeforeUnmount } 
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
+import { QuoteSocket, MsgSocket } from '@/plugins/socket/socket'
 import { useRoute, useRouter } from 'vue-router'
-import { QuoteSocket } from '@/plugins/socket/socket'
 import { delayAwaitTime, isEmpty } from '@/utils/util'
 import { addMarketOrder } from '@/api/trade'
 import { mul, pow } from '@/utils/calculation'
@@ -346,11 +346,12 @@ export default {
 
         // 获取账户信息
         const queryAccountInfo = () => {
-            if ([3, 5, 9].indexOf(product.value?.tradeType) === -1) return false
+            if ([1, 2].includes(product.value?.tradeType)) return
             const proCurrency = state.submitType === 'buy' ? product.value?.profitCurrency : product.value?.baseCurrency
             const curAccount = customerInfo.value?.accountList?.find(({ currency, tradeType }) => (currency === proCurrency && tradeType === product.value.tradeType))
-            if (curAccount)store.dispatch('_user/queryAccountAssetsInfo', { accountId: curAccount.accountId, tradeType: product.value?.tradeType })
-            // else Toast(t('trade.nullAssets'))
+            if (curAccount) {
+                store.dispatch('_user/queryAccountAssetsInfo', { accountId: curAccount.accountId, tradeType: product.value?.tradeType })
+            }
         }
 
         // 切换订单类型
@@ -392,8 +393,7 @@ export default {
 
                 if (!isEmpty(customerInfo.value)) {
                     const accountIds = accountList.value?.filter(el => el.tradeType === Number(product.tradeType)).map(el => el.accountId)
-
-                    if ([3, 5, 9].includes(product.tradeType)) queryAccountInfo()
+                    queryAccountInfo()
                     store.dispatch('_trade/queryPBOOrderPage', {
                         tradeType: product.tradeType,
                         sortFieldName: 'orderTime',
