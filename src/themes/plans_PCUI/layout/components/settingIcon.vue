@@ -39,11 +39,11 @@
 </template>
 
 <script>
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref, computed, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import { localGet, localSet } from '@/utils/util'
-import { colors } from '@planspc/colorVariables'
+import { localGet, localSet, isEmpty } from '@/utils/util'
+import { colors, setRootVariable } from '@planspc/colorVariables'
 import { MsgSocket } from '@/plugins/socket/socket'
 import { useRouter, useRoute } from 'vue-router'
 
@@ -58,11 +58,24 @@ export default {
             { val: '1', name: t('common.redDown') },
             { val: '2', name: t('common.redUp') },
         ]
-        const chartColorActive = ref(localGet('chartColorActive') || '1')
+        const state = reactive({
+            chartColorActive: JSON.parse(localGet('chartConfig'))?.chartColorType || '1'
+        })
+
         // 设置涨跌颜色
         const changeChartColor = item => {
-            localSet('chartColorActive', item.val)
-            chartColorActive.value = item.val
+            const locChartConfig = JSON.parse(localGet('chartConfig'))
+            if (isEmpty(locChartConfig)) {
+                localSet('chartConfig', JSON.stringify({
+                    'chartColorType': item.val
+                }))
+            } else {
+                locChartConfig['chartColorType'] = item.val
+                localSet('chartConfig', JSON.stringify(locChartConfig))
+            }
+
+            state.chartColorActive = item.val
+
             const { riseColor, fallColor } = colors.common
             if (item.val === '1') {
                 document.body.style.setProperty('--riseColor', riseColor)
@@ -71,6 +84,9 @@ export default {
                 document.body.style.setProperty('--riseColor', fallColor)
                 document.body.style.setProperty('--fallColor', riseColor)
             }
+            setRootVariable()
+            const event = new CustomEvent('Launch_chartColor', { detail: item.val })
+            document.body.dispatchEvent(event)
         }
         // 退出登录
         const logoutHandler = () => {
@@ -89,11 +105,11 @@ export default {
 
         return {
             customInfo,
-            chartColorActive,
             chartColorAction,
             changeChartColor,
             logoutHandler,
             handRoutTo,
+            ...toRefs(state)
         }
     }
 }

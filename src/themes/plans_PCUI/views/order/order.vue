@@ -184,6 +184,7 @@ export default {
     .assetsSticky{
         :deep(.van-sticky--fixed){
             box-shadow: 0 0 10px rgba(0,0,0,.15);
+            background-color: #fff;
         }
     }
 }
