@@ -22,7 +22,7 @@
                     @click='checkAmount(index, item)'
                 >
                     <p class='t1'>
-                        {{ item.amount }} {{ checkedType.accountCurrency }}
+                        {{ item.amount }} {{ currency }}
                     </p>
                     <p v-if='item.describe' class='t2'>
                         {{ item.describe }}
@@ -76,7 +76,7 @@
         <div class='pay-info'>
             <p class='item'>
                 <span>{{ $t('deposit.expectInBank') }}</span>
-                <strong>{{ computeAccount }} {{ checkedType.accountCurrency }}</strong>
+                <strong>{{ computeAccount }} {{ currency }}</strong>
             </p>
         </div>
     </div>
@@ -749,6 +749,7 @@ export default {
 
         return {
             ...toRefs(state),
+            currency,
             rightAction,
             checkAmount,
             toDespositList,
