@@ -36,7 +36,7 @@ import { ref, reactive, onMounted, toRefs, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { getCookie } from '@/utils/util'
-import { newsListByTypeByPage, articleDetail } from '@/api/information'
+import { newsListByTypeByPage } from '@/api/information'
 
 export default {
     components: {
@@ -78,13 +78,7 @@ export default {
 
         // 打开新闻详情弹窗
         const openNewsDialog = (item) => {
-            const params = {
-                id: item.id,
-                orgid: item.orgid
-            }
-            articleDetail(params, state.lang).then(res => {
-                dialog.value.open(res)
-            })
+            dialog.value.open(item)
         }
 
         onMounted(() => {
