@@ -52,17 +52,17 @@
                             <span class='name'>
                                 {{ item.alias || item.paymentTypeAlias || item.paymentType }}
                             </span>
-                            <van-icon v-if='paymentTypes.length > 0 && item.id === payTypeId' name='arrow-down' />
+                            <van-icon v-if='paymentTypes.length > 1 && item.id === payTypeId' name='arrow-down' />
                             <van-radio v-else :name='item.id' />
                         </div>
                     </van-radio-group>
-                    <div :class="['currency-list', item.id === payTypeId ? 'show' : 'hide']">
+                    <div :class="['currency-list', (item.id === payTypeId && paymentTypes.length > 1) ? 'show' : 'hide']">
                         <van-radio-group v-model='currencyChecked' @change='changePayCurrency'>
-                            <div v-for='currency in paymentTypes' :key='currency' class='item' @click='currencyChecked = currency'>
+                            <div v-for='currencyItem in paymentTypes' :key='currencyItem' class='item' @click='currencyChecked = currencyItem'>
                                 <span class='name'>
-                                    {{ currency }}
+                                    {{ currencyItem }}
                                 </span>
-                                <van-radio :name='currency' />
+                                <van-radio :name='currencyItem' />
                             </div>
                         </van-radio-group>
                     </div>
@@ -84,7 +84,7 @@
     <!-- 存款按钮 -->
     <div class='footer-handle'>
         <van-button block class='next-btn' type='primary' @click='next'>
-            <span>{{ $t('deposit.confirmPay') }} {{ computeExpectedpay || '--' }}{{ currencyChecked }}</span>
+            <span>{{ $t('deposit.confirmPay') }} {{ computeExpectedpay }}{{ currencyChecked }}</span>
         </van-button>
     </div>
 
@@ -127,6 +127,11 @@
             </van-button>
         </div>
     </van-popup>
+
+    <!-- 支付表单 -->
+    <form id='payForm' :action='despositResult.url' method='post'>
+        <input name='proposalNo' type='text' :value='despositResult.proposalNo' />
+    </form>
 </template>
 
 <script>
@@ -195,7 +200,9 @@ export default {
             // 补充资料
             appendVis: false,
             appendMap: {},
-            paramsExtens: {}
+            paramsExtens: {},
+            // 存款提案创建成功返回的数据
+            despositResult: {}
         })
 
         // 获取账户信息
@@ -271,7 +278,7 @@ export default {
         // 计算预计支付金额
         const computeExpectedpay = computed(() => {
             // 计算方式：存款金额 * 汇率
-            return state.rateConfig.exchangeRate ? mul(state.amount, state.rateConfig.exchangeRate) : '--'
+            return state.rateConfig.exchangeRate ? mul(state.amount, state.rateConfig.exchangeRate) : ''
         })
 
         // 计算存款时间
@@ -288,7 +295,7 @@ export default {
         }
 
         // 监听当前存款金额
-        watch(() => state.amount, () => {
+        watch([() => state.amount, () => state.PayTypes], () => {
             if (state.PayTypes.length > 0 && state.amount) {
                 // 筛选在存款时间内的支付通道
                 let temp = state.PayTypes.filter(item => item.timeRangeFlag && item.openTime)
@@ -544,6 +551,9 @@ export default {
             if (!state.amount) {
                 return Toast(t('deposit.selectAmount'))
             }
+            if (!state.checkedType) {
+                return Toast(t('deposit.selectPayMethods'))
+            }
             if (Number(state.amount) < Number(state.checkedType.singleLowAmount)) {
                 return Toast(t('deposit.amountMinTips') + `${state.checkedType.singleLowAmount}`)
             }
@@ -569,7 +579,7 @@ export default {
                 customerGroupId: customInfo.value.customerGroupId,
                 depositRateSerialNo: state.rateConfig.depositRateSerialNo,
                 paymentCurrency: state.checkedType.paymentCurrency === 'USDT' ? 'USDT' : state.currencyChecked,
-                accountCurrency: state.checkedType.accountCurrency,
+                accountCurrency: currency,
                 exchangeRate: state.rateConfig.exchangeRate,
                 paymentChannelCode: state.checkedType.paymentCode,
                 paymentChannelType: state.checkedType.paymentType,
@@ -579,8 +589,7 @@ export default {
                 channelCode: customInfo.value.utmSource,
                 depositFrom: 'H5',
                 callbackUrl: window.location.protocol + '//' + window.location.host + '/depositCb',
-                blockchainName: (state.currencyChecked && state.currencyChecked.split('-').length > 1) ? state.currencyChecked.split('-')[1] : '',
-
+                blockchainName: (state.currencyChecked && state.currencyChecked.split('-').length > 1) ? state.currencyChecked.split('-')[1] : ''
             }
 
             if (!isEmpty(state.paramsExtens)) {
@@ -591,17 +600,28 @@ export default {
             handleDesposit(params).then(res => {
                 state.loading = false
                 if (res.check()) {
-                    if (res.data.browserOpenUrl) {
-                        console.log(res.data)
-                        sessionStorage.setItem('proposalNo', res.data.proposalNo)
-                        window.location.href = res.data.browserOpenUrl
-                    }
+                    state.despositResult = res.data
+                    despositSuccess()
                 } else {
                     Toast(res.msg)
                 }
             }).catch(err => {
                 state.loading = false
             })
+        }
+
+        // 存款提案创建成功
+        const despositSuccess = () => {
+            const despositResult = state.despositResult
+            sessionStorage.setItem('proposalNo', despositResult.proposalNo)
+            // 提交表单
+            if (despositResult.submitType === 'post_data') {
+                console.log('MD支付功能开发中...')
+                // document.getElementById('payForm').submit()
+            } else {
+                // 跳转到新页面
+                window.location.href = despositResult.browserOpenUrl
+            }
         }
 
         // 补充资料是否全部填写完成
@@ -997,6 +1017,19 @@ export default {
             width: 80%;
             margin: rem(50px) auto;
         }
+    }
+}
+
+// 支付表单
+#payForm {
+    width: 100%;
+    padding: 0 rem(30px);
+    background: var(--contentColor);
+    position: fixed;
+    bottom: -100%;
+    opacity: 0;
+    input {
+        height: rem(80px);
     }
 }
 </style>
