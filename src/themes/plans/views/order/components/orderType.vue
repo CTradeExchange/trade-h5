@@ -1,19 +1,33 @@
 <template>
-    <van-tabs v-model:active='orderType' class='orderTypeTab' @change='changeOrderType'>
-        <van-tab v-for='(item,i) in btnList' :key='i' :name='item.val' :title='item.title' />
-    </van-tabs>
+    <div class='orderTypeTabWrapper'>
+        <van-tabs v-model:active='orderType' class='orderTypeTab' @change='changeOrderType'>
+            <van-tab v-for='(item,i) in btnList' :key='i' :name='item.val' :title='item.title' />
+        </van-tabs>
+        <a class='multipleBtn' href='javascript:;' @click='multipleSetVisible=true'>
+            <span class='text'>
+                20x
+            </span>
+            <i class='icon_icon_arrow'></i>
+        </a>
+    </div>
+    <MultipleSet v-model='multipleSetVisible' />
 </template>
 
 <script>
 import { computed, reactive, toRefs, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
+import MultipleSet from './multipleSet'
 export default {
+    components: {
+        MultipleSet,
+    },
     props: ['modelValue', 'tradeType'],
     emits: ['update:modelValue', 'selected'],
     setup (props, { emit }) {
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
-            orderType: 1
+            orderType: 1,
+            multipleSetVisible: false,
         })
         // 订单类型
         const btnList = computed(() => {
@@ -52,8 +66,33 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.orderTypeTab {
+.orderTypeTabWrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin: 0 0 rem(20px);
+    .multipleBtn{
+        height: rem(48px);
+        line-height: rem(48px);
+        color: var(--color);
+        background: var(--bgColor);
+        padding: 0 rem(16px);
+        border-radius: rem(6px);
+        @include active();
+
+        .text{
+            display: inline-block;
+            padding-right: rem(20px);
+            font-size: rem(26px);
+        }
+        .icon_icon_arrow{
+            font-size: rem(20px);
+            vertical-align: 1px;
+        }
+    }
+}
+
+.orderTypeTab {
 
     --van-tabs-bottom-bar-width: 11vw;
     --van-tabs-line-height: 40px;
