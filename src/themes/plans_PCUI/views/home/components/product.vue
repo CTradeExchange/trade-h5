@@ -30,7 +30,7 @@ export default {
         // 产品map数据
         const productMap = unref(computed(() => store.state._quote.productMap))
         // 产品symbolKey集合
-        const productKeys = ['32_1', '33_1', '5_2', '6_2', '9_2']
+        const productKeys = ['1_5', '57_5', '83_5', '326_5', '331_5']
         // 产品列表数据
         const productList = productKeys.map(key => productMap[key]).filter(elem => elem)
 

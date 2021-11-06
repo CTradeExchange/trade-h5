@@ -43,10 +43,9 @@ import { reactive, ref, computed, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { localGet, localSet, isEmpty } from '@/utils/util'
-import { colors } from '@planspc/colorVariables'
+import { colors, setRootVariable } from '@planspc/colorVariables'
 import { MsgSocket } from '@/plugins/socket/socket'
 import { useRouter, useRoute } from 'vue-router'
-import { setRootVariable } from '@plans/colorVariables'
 
 export default {
     setup () {
