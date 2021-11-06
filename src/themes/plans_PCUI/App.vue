@@ -96,10 +96,15 @@ export default {
         })
 
         document.documentElement.classList.add(store.state.invertColor)
-
         // 监听ws全局事件
         document.body.addEventListener('GotMsg_UserForceLogoutRet', kickOut, false)
         document.body.addEventListener('GotMsg_disconnect', disconnect, false)
+
+        // 跳珠新路由滚动到顶部
+        router.afterEach((to, from, next) => {
+            window, scrollTo(0, 0)
+        })
+
         onUnmounted(() => {
             document.body.removeEventListener('GotMsg_UserForceLogoutRet', kickOut, false)
             document.body.removeEventListener('GotMsg_disconnect', disconnect, false)
