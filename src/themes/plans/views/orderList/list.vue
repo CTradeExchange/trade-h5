@@ -56,7 +56,7 @@ export default {
 
         })
 
-        const tradeName = computed(() => store.state._base.plans.find(({ id }) => id === tradeType)?.name)
+        const tradeName = computed(() => t('tradeType[' + tradeType + ']'))
 
         // 获取挂单列表
         const pendingList = computed(() => store.state._trade.pendingList[tradeType] || [])

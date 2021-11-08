@@ -36,6 +36,7 @@ export default {
     components: { list },
     setup (props) {
         const route = useRoute()
+        const { accountId } = route.query
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY/MM/DD HH:mm:ss')
         }
@@ -43,7 +44,7 @@ export default {
 
         const params = computed(() => {
             return {
-                accountId: Number(route.query.accountId),
+                accountId: accountId,
                 liabilitiesType: 1,
                 ...requestParams.value
             }
