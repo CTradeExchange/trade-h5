@@ -71,6 +71,11 @@ const commonOptions = {
 
     :deep{
         .table{
+            background-color: var(--bgColor);
+            .el-table__cell{
+                background-color: var(--bgColor);
+                color: var(--color);
+            }
             .el-table__body{
                 .el-table__cell{
                     padding: 8px 0;
