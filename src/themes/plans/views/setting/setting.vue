@@ -71,6 +71,8 @@ export default {
 
         const handleLogout = () => {
             Dialog.confirm({
+                confirmButtonText: t('common.sure'),
+                cancelButtonText: t('common.cancel'),
                 title: t('common.tip'),
                 message: t('setting.logoutConfirm'),
             }).then(() => {

@@ -3,7 +3,7 @@
         {{ $t('trade.deal') }}
     </p>
     <van-empty v-if='dealList.length === 0' :description='$t("common.noData")' image='/images/empty.png' />
-    <div v-else>
+    <div v-else class='content'>
         <div class='list-wrap'>
             <div class='col time-col'>
                 {{ $t('trade.dealTime') }}
@@ -60,6 +60,7 @@ export default {
     color: var(--color);
     margin-bottom: 5px;
 }
+
 .list-wrap {
     font-size: 12px;
     display: flex;
@@ -109,27 +110,36 @@ export default {
         text-align: right;
     }
 }
-.deal-list {
-    // min-height: rem(250px);
-    //padding: 0 rem(20px);
-    overflow: 100%;
-    .deal-item {
-        line-height: 27px;
-        >span {
-            display: inline-block;
-            &:first-child {
-                width: 30%;
-            }
+.content{
+    position: relative;
 
-            &:nth-child(2) {
-                width: 34%;
-                text-align: right;
-            }
-            &:last-child {
-                width: 36%;
-                text-align: right;
+    .deal-list {
+        position: absolute;
+        width: 100%;
+        overflow: auto;
+        height: 265px;
+
+        .deal-item {
+            line-height: 27px;
+            >span {
+                display: inline-block;
+                &:first-child {
+                    width: 30%;
+                }
+
+                &:nth-child(2) {
+                    width: 34%;
+                    text-align: right;
+                }
+                &:last-child {
+                    width: 36%;
+                    text-align: right;
+                }
             }
         }
     }
+    .deal-list::-webkit-scrollbar {
+            display: none;
+        }
 }
 </style>

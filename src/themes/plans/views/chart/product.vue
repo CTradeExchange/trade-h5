@@ -28,61 +28,60 @@
             </template>
         </LayoutTop>
         <Loading :show='loading' />
-        <section class='container'>
-            <div class='productInfo'>
-                <div v-if='product.price_digits' class='hd'>
-                    <div class='hd-left'>
-                        <p class='cur_price' :class='product.cur_color'>
-                            {{ parseFloat(product.cur_price).toFixed(product.price_digits) }}
-                        </p>
-                    </div>
-                    <div class='others'>
-                        <span :class='product.upDownColor'>
-                            {{ product.upDownAmount }}<template v-if='product.tradeType !== 9'>
-                                ({{ product.upDownAmount_pip }} {{ $t('trade.dot') }})
-                            </template>
-                        </span>
-                        <div class='others-bottom'>
-                            <span class='upDownAmount' :class='product.upDownColor'>
-                                {{ product.upDownWidth }}
-                            </span>
-                        </div>
-                    </div>
+
+        <div class='productInfo'>
+            <div v-if='product.price_digits' class='hd'>
+                <div class='hd-left'>
+                    <p class='cur_price' :class='product.cur_color'>
+                        {{ parseFloat(product.cur_price).toFixed(product.price_digits) }}
+                    </p>
                 </div>
-                <div class='bd'>
-                    <div class='item'>
-                        <p class='priceBottom'>
-                            <span>
-                                {{ $t('trade.todayOpen') }}
-                            </span>
-                            <span>
-                                {{ product.open_price }}
-                            </span>
-                        </p><p>
-                            <span>
-                                {{ $t('trade.yesterdayClosed') }}
-                            </span>
-                            <span>
-                                {{ product.yesterday_close_price }}
-                            </span>
-                        </p>
-                    </div><div class='item'>
-                        <p class='priceBottom'>
-                            {{ $t('trade.high') }}
-                            <span>
-                                {{ product.high_price }}
-                            </span>
-                        </p>
-                        <p>
-                            {{ $t('trade.low') }}
-                            <span>
-                                {{ product.low_price }}
-                            </span>
-                        </p>
+                <div class='others'>
+                    <span :class='product.upDownColor'>
+                        {{ product.upDownAmount }}<template v-if='product.tradeType !== 9'>
+                            ({{ product.upDownAmount_pip }} {{ $t('trade.dot') }})
+                        </template>
+                    </span>
+                    <div class='others-bottom'>
+                        <span class='upDownAmount' :class='product.upDownColor'>
+                            {{ product.upDownWidth }}
+                        </span>
                     </div>
                 </div>
             </div>
-        </section>
+            <div class='bd'>
+                <div class='item'>
+                    <p class='priceBottom'>
+                        <span>
+                            {{ $t('trade.todayOpen') }}
+                        </span>
+                        <span>
+                            {{ product.open_price }}
+                        </span>
+                    </p><p>
+                        <span>
+                            {{ $t('trade.yesterdayClosed') }}
+                        </span>
+                        <span>
+                            {{ product.yesterday_close_price }}
+                        </span>
+                    </p>
+                </div><div class='item'>
+                    <p class='priceBottom'>
+                        {{ $t('trade.high') }}
+                        <span>
+                            {{ product.high_price }}
+                        </span>
+                    </p>
+                    <p>
+                        {{ $t('trade.low') }}
+                        <span>
+                            {{ product.low_price }}
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
         <div class='placeholder'></div>
         <div class='tv-head'>
             <div class='tabs-wrap'>
@@ -1136,15 +1135,8 @@ export default {
         }
     }
     .productInfo {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
         padding: rem(10px) rem(20px) rem(10px) rem(20px);
         background: var(--contentColor);
-        transform: translateZ(1px);
-        // margin-bottom: rem(10px);
         .hd {
             display: flex;
             flex-direction: row;
