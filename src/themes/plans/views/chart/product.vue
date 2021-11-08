@@ -492,14 +492,7 @@ export default {
             const curIndex = klineTypeList.findIndex(el => el.value === state.klineType)
             return curIndex + 1
         })
-        const product = computed(() => {
-            const product = store.getters.productActived
-            if (product?.cur_price) {
-                // 有产品数据就渲染图表
-                renderChart(product, state.initConfig.property)
-            }
-            return product
-        })
+        const product = computed(() => store.getters.productActived)
         const positionList = computed(() => store.state._trade.positionList[getTradeType()] || [])
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)
 
@@ -879,11 +872,7 @@ export default {
                         orientation: 'portrait'
                     }
                 })
-
-            // state.settingList = chartConfig.lineSet
             }
-
-            // renderChart(product.value, state.initConfig.property)
         }
 
         // 图表初始值
@@ -1073,10 +1062,10 @@ export default {
 @import '~@/sass/animations.scss';
 .page-wrap {
     width: 100%;
-    height: 100%;
+    //height: 100%;
     margin-top: rem(90px);
     margin-bottom: rem(120px);
-    overflow: auto;
+    //overflow: auto;
     background: var(--bgColor);
     .symbolName {
         display: flex;
@@ -1590,7 +1579,7 @@ export default {
 
     // 底部按钮
     .footerBtnBox {
-        position: absolute;
+        position: fixed;
         bottom: 0;
         left: 0;
         z-index: 2;
