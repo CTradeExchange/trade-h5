@@ -9,20 +9,20 @@
             >
                 {{ product.symbolName }}
             </p>
-            <div class='tb'>
-                <span
-                    class='sell_price'
-                    :class='[product.sell_color, "digits"+product.price_digits]'
-                >
-                    {{ !product.sell_price && product.sell_price != 0 ? '- -' : product.sell_price }}
-                </span>
-            </div>
             <div class='ft'>
                 <span
                     class='buy_price'
                     :class='[product.buy_color, "digits"+product.price_digits]'
                 >
                     {{ !product.buy_price && product.buy_price != 0 ? '- -' : product.buy_price }}
+                </span>
+            </div>
+            <div class='tb'>
+                <span
+                    class='sell_price'
+                    :class='[product.sell_color, "digits"+product.price_digits]'
+                >
+                    {{ !product.sell_price && product.sell_price != 0 ? '- -' : product.sell_price }}
                 </span>
             </div>
         </div>
@@ -122,11 +122,11 @@ export default {
         }
         .tb {
             width: rem(210px);
-            text-align: left;
+            text-align: right
         }
         .ft {
             width: rem(210px);
-            text-align: right;
+            text-align: left;
         }
     }
     .price {

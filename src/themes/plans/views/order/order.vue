@@ -437,6 +437,7 @@ export default {
         }
         .right {
             flex: 1;
+            padding-top: rem(10px);
         }
     }
 }

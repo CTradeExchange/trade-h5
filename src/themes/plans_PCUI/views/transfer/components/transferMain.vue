@@ -341,6 +341,7 @@ export default {
             .right {
                 //flex: 1;
                 .icon_zhuanhuan {
+                    cursor: pointer;
                     margin: 0 rem(32px);
                     color: var(--primary);
                     font-size: rem(44px);
@@ -348,6 +349,7 @@ export default {
             }
         }
         .action-bar {
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -368,6 +370,7 @@ export default {
             }
             .all {
                 color: var(--primary);
+                cursor: pointer;
             }
         }
         .tip {

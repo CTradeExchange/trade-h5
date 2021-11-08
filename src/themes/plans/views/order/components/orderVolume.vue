@@ -11,7 +11,7 @@
         />
         <a v-if='[2].includes(product.tradeType)' class='entryType' href='javascript:;' @click='entryTypeUpdate'>
             <i class='icon_qiehuan'></i>
-            {{ parseInt(entryType)===1?$t('trade.volumes'):$t('trade.orderAmount') }}
+            {{ parseInt(entryType)===1?$t('trade.volumes'):$t('trade.margin') }}
         </a>
     </div>
 </template>
@@ -45,11 +45,14 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const placeholder = computed(() => {
             const curTradeType = props.product.tradeType
-            if ([1, 2].includes(curTradeType)) {
+            if (curTradeType === 1) {
                 const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === curTradeType)
                 return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + '(' + t('trade.volumeUnit') + ')' : t('trade.orderAmount') + `(${account?.currency})`
             // } else if ([3].includes(curTradeType)) {
             //     return t('trade.orderVolume') + `(${props.product.baseCurrency})`
+            } else if (curTradeType === 2) {
+                const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === curTradeType)
+                return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + '(' + t('trade.volumeUnit') + ')' : t('trade.margin') + `(${account?.currency})`
             } else if ([3, 5].includes(curTradeType)) {
                 return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + `(${props.product.baseCurrency})` : t('trade.orderAmount') + `(${props.product.profitCurrency})`
             } else {

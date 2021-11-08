@@ -1,5 +1,13 @@
 <template>
     <div class='orderHandicap'>
+        <van-popover v-model:show='showPopover' :actions='digitLevelList' class='handicapDigitsOptions' @select='onSelect'>
+            <template #reference>
+                <button class='selectBtn'>
+                    {{ handicapDigit }}
+                    <i class='icon_arrow'></i>
+                </button>
+            </template>
+        </van-popover>
         <div class='titleBar'>
             <span class='hd'>
                 {{ $t('trade.priceLabel') }}
@@ -34,14 +42,6 @@
                 <span v-if='item.width' class='volunmePercent' :style="{ width:item.width+'%' }"></span>
             </p>
         </div>
-        <van-popover v-model:show='showPopover' :actions='digitLevelList' class='handicapDigitsOptions' @select='onSelect'>
-            <template #reference>
-                <button class='selectBtn'>
-                    {{ handicapDigit }}
-                    <i class='icon_arrow'></i>
-                </button>
-            </template>
-        </van-popover>
     </div>
 </template>
 
@@ -114,6 +114,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .orderHandicap {
+    padding-top: rem(25px);
     .titleBar {
         display: flex;
         justify-content: space-between;
@@ -167,7 +168,6 @@ export default {
     .selectBtn {
         position: relative;
         height: rem(40px);
-        margin-top: rem(10px);
         padding: 0 rem(60px) 0 rem(15px);
         color: var(--minorColor);
         font-size: rem(22px);
