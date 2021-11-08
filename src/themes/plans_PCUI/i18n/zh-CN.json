@@ -527,6 +527,7 @@
 		"addOptionalOk": "已添加自选",
 		"removeOptionalOk": "已取消自选",
 		"cancelSuccess": "取消成功",
+		"cancelFail": "取消失败",
 		"sellFive": "五档",
 		"deal": "成交",
 		"dealPrice": "成交价",
@@ -629,7 +630,8 @@
         "favorites": "自选",
         "upDownWidth": "涨跌幅",
         "highPrice": "最高价",
-        "lowPrice": "最低价"
+        "lowPrice": "最低价",
+        "allTransaction": "所有成交记录"
 	},
 	"contract": {
 		"advance": "预付款",

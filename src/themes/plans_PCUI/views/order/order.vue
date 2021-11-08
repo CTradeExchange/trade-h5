@@ -3,7 +3,7 @@
         <router-view />
         <div class='content-top' :style="'height: '+ contentHeight">
             <div class='quote-wrap'>
-                <!-- {{ $t('trade.deal') }} -->
+                <!-- 产品列表/搜索 -->
                 <sidebarProduct />
             </div>
             <div class='middle-wrap'>
@@ -26,12 +26,8 @@
             </div>
         </div>
         <div class='orders-wrap'>
-            订单
-            <p>
-                <a href='javascript:;' @click="$router.push($route.path+'/transfer?accountId=1600&tradeType=1')">
-                    划转
-                </a>
-            </p>
+            <!-- 委托/记录/资产 -->
+            <userRecord />
         </div>
         <van-sticky class='assetsSticky' :offset-bottom='10' position='bottom'>
             <assetsModule />
@@ -49,8 +45,9 @@ import trade from './pages/trade.vue'
 import sidebarProduct from './pages/sidebarProduct'
 import assetsModule from './pages/assets.vue'
 import { isEmpty } from '@/utils/util'
-
 import { useStore } from 'vuex'
+import userRecord from './pages/userRecord'
+
 export default {
     components: {
         chart,
@@ -59,6 +56,7 @@ export default {
         trade,
         sidebarProduct,
         assetsModule,
+        userRecord
     },
     setup () {
         const store = useStore()

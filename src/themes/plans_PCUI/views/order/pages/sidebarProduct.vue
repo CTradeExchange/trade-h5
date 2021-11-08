@@ -1,7 +1,6 @@
 <template>
     <div class='sidebarProduct'>
         <search
-            :class='{ margin: hideTradeType }'
             :trade-type='tradeType'
             @onInput='onInput'
             @onSearch='onSearch'
