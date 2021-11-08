@@ -22,7 +22,7 @@
                 </ul>
             </div>
             <Loading :show='pageLoading' />
-            <div class='msg-list'>
+            <div class='msg-list' v-loading="msgLoading">
                 <div v-if='list.length === 0'>
                     <van-empty :description='$t("common.noData")' image='/images/empty.png' />
                 </div>
@@ -92,7 +92,8 @@ export default {
             ],
             informationType:"全部消息",
             dropTypeVisible:false,
-            noticeContent:''
+            noticeContent:'',
+            msgLoading:false
         })
         const isError = computed(() => !!state.isError)
 
@@ -107,9 +108,14 @@ export default {
             state.finished = false
             state.list = []
             state.dropTypeVisible = !state.dropTypeVisible
+            state.msgLoading = true;
             getMsgList()
         }
         const showPop = () =>{
+            state.current = 1
+            state.finished = false
+            state.list = []
+            state.msgLoading = true;
             getMsgList();
         }
         const showing = () =>{
@@ -126,8 +132,7 @@ export default {
                 current: state.current,
                 parentType: state.type,
             }).then(res => {
-                //state.loading = false
-                //state.pageLoading = false
+                state.msgLoading = false;
                 if (res.check()) {
                     if (res.data.records && res.data.records.length > 0) {
                         state.list = state.list.concat(res.data.records)
@@ -139,8 +144,8 @@ export default {
                     }
                 }
             }).catch(err => {
+                state.msgLoading = false;
                 state.errorTip = t('c.loadError')
-                //state.pageLoading = false
             })
         }
 
@@ -199,6 +204,7 @@ export default {
 
         // 上拉刷新
         const onRefresh = () => {
+            state.msgLoading = true;
             state.current = 1
             state.finished = false
             state.list = []
@@ -206,6 +212,7 @@ export default {
         }
         // 底部加载更多
         const onLoad = () => {
+            state.msgLoading = true;
             state.current++
             getMsgList()
         }
