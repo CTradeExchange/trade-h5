@@ -180,7 +180,13 @@ export default {
 
         // 跳转到资金记录页面
         const goRecord = () => {
-            console.log('跳转到资金记录页面')
+            router.push({
+                path: '/assets/record',
+                query: {
+                    accountId: assetsInfo.value.accountId,
+                    tradeType: props.tradeType
+                }
+            })
         }
 
         // 调整保证金弹窗

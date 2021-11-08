@@ -149,7 +149,13 @@ export default {
 
         // 跳转到资金记录页面
         const goRecord = () => {
-
+            router.push({
+                path: '/assets/record',
+                query: {
+                    accountId: assetsInfo.value.accountId,
+                    tradeType: props.tradeType
+                }
+            })
         }
 
         return {
