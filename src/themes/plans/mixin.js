@@ -20,17 +20,17 @@ export default {
     },
     methods: {
         // 用iframe打开url地址
-        // openUrl (url, pageTitle = '') {
-        //     if (pageTitle === '' && getQueryVariable('title', url)) pageTitle = getQueryVariable('title', url)
-        //     this.$router.push({
-        //         name: 'Otherpage',
-        //         params: { type: 'page' },
-        //         query: {
-        //             url: encodeURIComponent(url),
-        //             pageTitle,
-        //         }
-        //     })
-        // },
+        openOuterUrl (url, pageTitle = '') {
+            if (pageTitle === '' && getQueryVariable('title', url)) pageTitle = getQueryVariable('title', url)
+            this.$router.push({
+                name: 'Otherpage',
+                params: { type: 'page' },
+                query: {
+                    url: encodeURIComponent(url),
+                    pageTitle,
+                }
+            })
+        },
         // 用wp配置的URL
         openUrl (toRoute) {
             if (toRoute.href.name === 'Nest') {
