@@ -129,8 +129,14 @@
     </van-popup>
 
     <!-- 支付表单 -->
-    <form id='payForm' :action='despositResult.url' method='post'>
-        <input name='proposalNo' type='text' :value='despositResult.proposalNo' />
+    <form id='payForm' :action='despositResult.url' class='payForm' method='post'>
+        <input
+            v-for='(value, key) in JSON.parse(despositResult.data)'
+            :key='key'
+            :name='key'
+            type='text'
+            :value='value'
+        />
     </form>
 </template>
 
@@ -202,7 +208,9 @@ export default {
             appendMap: {},
             paramsExtens: {},
             // 存款提案创建成功返回的数据
-            despositResult: {}
+            despositResult: {
+                data: '{}'
+            }
         })
 
         // 获取账户信息
@@ -353,6 +361,7 @@ export default {
             state.otherAmountVis = true
             state.currIndex = 99
             state.amount = ''
+            state.currencyChecked = ''
         }
 
         // 获取支付通道
@@ -616,8 +625,9 @@ export default {
             sessionStorage.setItem('proposalNo', despositResult.proposalNo)
             // 提交表单
             if (despositResult.submitType === 'post_data') {
-                console.log('MD支付功能开发中...')
-                // document.getElementById('payForm').submit()
+                setTimeout(() => {
+                    document.getElementById('payForm').submit()
+                }, 200)
             } else {
                 // 跳转到新页面
                 window.location.href = despositResult.browserOpenUrl
@@ -1021,7 +1031,7 @@ export default {
 }
 
 // 支付表单
-#payForm {
+.payForm {
     width: 100%;
     padding: 0 rem(30px);
     background: var(--contentColor);
@@ -1029,7 +1039,8 @@ export default {
     bottom: -100%;
     opacity: 0;
     input {
-        height: rem(80px);
+        width: 100%;
+        height: rem(50px);
     }
 }
 </style>
