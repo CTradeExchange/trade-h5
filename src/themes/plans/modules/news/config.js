@@ -24,6 +24,7 @@ export default {
             name: 'orgid',
             label: 'orgid',
             type: 'Input',
+            default: 1
         }
     ]
 }
