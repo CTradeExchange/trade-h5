@@ -262,6 +262,7 @@ export default {
             .input {
                 flex: 1;
                 height: rem(40px);
+                line-height: rem(40px);
             }
             .all {
                 position: absolute;

@@ -276,14 +276,14 @@ export default {
         font-size: rem(22px);
         .item {
             position: relative;
-            // flex: 1;
             display: flex;
             flex-direction: row;
             flex-wrap: nowrap;
             align-items: center;
             justify-content: flex-start;
             box-sizing: border-box;
-            width: 100%;
+            //width: 100%;
+            overflow: hidden;
             height: rem(60px);
             //padding: 0 rem(10px);
             white-space: nowrap;
@@ -312,13 +312,13 @@ export default {
                 //text-align: center;
             }
             .histogram {
-                position: absolute;
-                top: 0;
-                width: 0;
-                max-width: 100%;
-                height: 100%;
-                opacity: 0.2;
-                transition: width 0.28s ease-in-out;
+                 position: absolute;
+                // top: 0;
+                // width: 0;
+                // max-width: 100%;
+                 height: 100%;
+                 opacity: 0.2;
+                // transition: width 0.28s ease-in-out;
                 &.sell-histogram {
                     right: 0;
                     background: var(--riseColor);
