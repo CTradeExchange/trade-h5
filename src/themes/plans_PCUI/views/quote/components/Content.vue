@@ -56,7 +56,7 @@ watch(() => unref(tradeType), () => {
             bottom: -1px;
             width: 100%;
             height: 2px;
-            background-color: #F8F8F8;
+            background-color: var(--lineColor);
             z-index: var(--el-index-normal);
         }
 

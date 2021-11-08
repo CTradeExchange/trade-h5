@@ -23,11 +23,9 @@ export default {
             let _type = ''
             const customerInfo = state.customerInfo
             switch (customerInfo?.type) { // 0真实，1模拟，2游客
-            case 0:
-                _type = 'R' // 真实
-                break
-            case 1:
-                _type = 'D' // 模拟
+            case 0: // 真实
+            case 1: // 测试组  开发产品讨论确定 1 当成测试用户
+                _type = 'R'
                 break
             default:
                 _type = 'G' // 游客

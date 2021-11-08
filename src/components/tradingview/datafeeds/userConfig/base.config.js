@@ -98,17 +98,18 @@ export function genBaseConfig () {
             // 禁用右边价格坐标弹窗
             'scales_context_menu',
             // 禁用图表上下滑动，上下滑动是直接滑动页面
-            'vert_touch_drag_scroll',
+            //'vert_touch_drag_scroll',
             // 显示有关可能的鼠标/快捷键/ UI操作的弹出提示
             'popup_hints',
-            'vert_touch_drag_scroll'
+            'pinch_scale'
 
         ],
         enabled_features: [
             // 指标栏目
             'dont_show_boolean_study_arguments',
             // 阻止滚动到第一个历史 K 线的左侧
-            'fix_left_edge'
+            'fix_left_edge',
+            'chart_zoom'
         ],
 
     }
