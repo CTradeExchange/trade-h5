@@ -702,6 +702,7 @@ class Chart {
     // 更改图表主题
     changeTheme (name) {
         this.widget.changeTheme(name)
+        this.extension.theme = name
     }
 }
 
