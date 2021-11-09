@@ -58,7 +58,7 @@ export default {
     mounted () {
         this.initEvent()
     },
-    emits: ['update:modelValue', 'change', 'firstMinus', 'firstPlus'],
+    emits: ['update:modelValue', 'change', 'firstMinus', 'firstPlus', 'blur'],
     methods: {
         minus () {
             if (this.disabledMinus) return false
@@ -87,6 +87,7 @@ export default {
             if (value === this.modelValue) return false
             value = value ? toFixed(value, this.digits) : value
             this.$emit('change', value)
+            this.$emit('blur', value)
         },
         plus () {
             if (this.disabledPlus) return

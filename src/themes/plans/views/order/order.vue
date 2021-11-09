@@ -4,6 +4,7 @@
             <plansType v-if='plansList.length>1' :list='plansList' :value='productTradeType' @change='handleTradeType' />
             <SwitchTradeType :product='product' @switchProduct='switchProductVisible=true' />
         </div>
+
         <div class='container'>
             <div v-if='product' class='main'>
                 <div v-if='orderHandicapVisible && product.symbolName' class='left'>
@@ -12,7 +13,7 @@
                 </div>
                 <div v-if='product' class='right'>
                     <!-- 订单类型 -->
-                    <OrderTypeTab v-model='orderType' :trade-type='product.tradeType' @selected='changeOrderType' />
+                    <OrderTypeTab v-model='orderType' v-model:multipleVal='multipleVal' :product='product' :trade-type='product.tradeType' @selected='changeOrderType' />
                     <!-- 自动借款 -->
                     <LoanBar v-if='[3, 9].includes(product.tradeType)' v-model='operationType' :account='account' class='loanBarMargin' :product='product' />
                     <!-- 方向 -->
@@ -152,6 +153,7 @@ export default {
             stopLoss: '',
             stopProfit: '',
             orderHandicapVisible: false,
+            multipleVal: '', // 杠杆倍数
         })
         const pendingRef = ref(null)
         const profitLossRef = ref(null)
@@ -322,6 +324,7 @@ export default {
                 expireType: state.expireType,
                 entryType: state.entryType
             }
+            if (product.value.marginInfo.type !== '1') params.crossLevelNum = parseInt(state.multipleVal)
             return params
         }
 

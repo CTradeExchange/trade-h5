@@ -3,14 +3,14 @@
         <van-tabs v-model:active='orderType' class='orderTypeTab' @change='changeOrderType'>
             <van-tab v-for='(item,i) in btnList' :key='i' :name='item.val' :title='item.title' />
         </van-tabs>
-        <a class='multipleBtn' href='javascript:;' @click='multipleSetVisible=true'>
+        <a v-if="product.marginInfo?.type!=='1'" class='multipleBtn' href='javascript:;' @click='multipleSetVisible=true'>
             <span class='text'>
-                20x
+                {{ mVal }}x
             </span>
             <i class='icon_icon_arrow'></i>
         </a>
     </div>
-    <MultipleSet v-model='multipleSetVisible' />
+    <MultipleSet v-if="product.marginInfo && product.marginInfo.type!=='1'" v-model='multipleSetVisible' v-model:multipleVal='mVal' :product='product' />
 </template>
 
 <script>
@@ -21,14 +21,20 @@ export default {
     components: {
         MultipleSet,
     },
-    props: ['modelValue', 'tradeType'],
-    emits: ['update:modelValue', 'selected'],
+    props: ['modelValue', 'tradeType', 'multipleVal', 'product'],
+    emits: ['update:modelValue', 'selected', 'update:multipleVal'],
     setup (props, { emit }) {
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             orderType: 1,
             multipleSetVisible: false,
         })
+
+        const mVal = computed({
+            get: () => props.multipleVal,
+            set: val => emit('update:multipleVal', val)
+        })
+
         // 订单类型
         const btnList = computed(() => {
             const list = [
@@ -57,6 +63,7 @@ export default {
 
         return {
             ...toRefs(state),
+            mVal,
             changeOrderType,
             btnList,
         }
