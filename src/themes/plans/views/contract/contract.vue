@@ -11,7 +11,7 @@
             <van-cell :title="$t('contract.spread')" :value="$t('contract.float')" />
             <van-cell :title="$t('contract.singleNumbers')" :value='product.minVolume+"-"+product.maxVolume' />
             <van-cell :title="$t('contract.limitDistance')" :value='product.priceMinLimit+"/"+product.priceMaxLimit+"点"' />
-            <van-cell v-if='marginInfo.type==="1" && usedMarginSet && usedMarginSet.length' class='yfk' :title="$t('contract.advance')">
+            <van-cell v-if='product.marginInfo?.type==="1" && usedMarginSet && usedMarginSet.length' class='yfk' :title="$t('contract.advance')">
                 <div class='margin-info'>
                     <span class='left-label header'>
                         {{ $t('contract.volumeRange') }}
