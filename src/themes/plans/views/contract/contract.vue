@@ -84,7 +84,7 @@ export default {
         if (product.value) store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType, forceQuery: true })
         else router.replace('/')
         const usedMarginSet = computed(() => {
-            if (product.value.marginInfo.type === '1' && !isEmpty(product.value.usedMarginSet)) {
+            if (product.value.marginInfo?.type === '1' && !isEmpty(product.value.usedMarginSet)) {
                 const contractSize = product.value.contractSize
                 return objArraySort(product.value.usedMarginSet, 'rangeLeft').map(el => {
                     el.rangeLeftVolume = BigNumber(el.rangeLeft).div(contractSize).toNumber()
