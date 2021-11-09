@@ -16,7 +16,7 @@
 <script>
 import { computed, reactive, toRefs, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
-import MultipleSet from './multipleSet'
+import MultipleSet from '@plans/components/multipleSet'
 export default {
     components: {
         MultipleSet,
