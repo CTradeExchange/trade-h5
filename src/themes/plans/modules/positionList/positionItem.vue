@@ -17,6 +17,10 @@
                                     <span class='lot'>
                                         {{ data.symbolCode }}
                                     </span>
+                                    <span v-if='data.crossLevelNum' class='multipleVal' @click.stop='$emit("showMultiplePopup",data)'>
+                                        <i>{{ data.crossLevelNum }}x</i>
+                                        <i class='icon_icon_arrow'></i>
+                                    </span>
                                     <span>
                                         <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
                                             {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
@@ -351,6 +355,24 @@ export default {
             border: none;
             border-color: var(--primaryAssistColor) !important;
             border-radius: rem(6px);
+        }
+        .multipleVal{
+            vertical-align: middle;
+            position: relative;
+            height: rem(32px);
+            line-height: rem(32px);
+            padding-left: rem(8px);
+            padding-right: rem(50px);
+            font-size: rem(24px);
+            color: var(--primary);
+            border-radius: 3px;
+            border: 1px solid var(--primary);
+        }
+        .icon_icon_arrow{
+            font-size: rem(22px);
+            position: absolute;
+            right: 4px;
+            top: -0.5px;
         }
     }
 }

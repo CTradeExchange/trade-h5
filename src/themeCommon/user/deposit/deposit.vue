@@ -381,9 +381,10 @@ export default {
                     if (res.data && res.data.length > 0) {
                         if (res.data.length > 0) {
                             res.data.forEach(el => {
-                                if (paymentIconList.value[el.paymentCode + '_' + el.paymentType]) {
-                                    el.alias = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].alias || ''
-                                    el.imgUrl = paymentIconList.value[el.paymentCode + '_' + el.paymentType][state.lang].imgUrl || require('@/assets/payment_icon/default.png')
+                                const iconKey = el.paymentCode + '_' + el.paymentType + '_' + el.merchantNo
+                                if (paymentIconList.value[iconKey]) {
+                                    el.alias = paymentIconList.value[iconKey][state.lang].alias || ''
+                                    el.imgUrl = paymentIconList.value[iconKey][state.lang].imgUrl || require('@/assets/payment_icon/default.png')
                                 } else {
                                     el.imgUrl = require('@/assets/payment_icon/default.png')
                                 }
