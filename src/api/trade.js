@@ -213,5 +213,17 @@ export function closeTradePboOrder (data) {
         data
     })
 }
+/* 修改仓位杠杆倍数 */
+export function updateCrossLevelNum (data) {
+    return request({
+        url: '/global/tradeapi.app.PositionApiService.updateCrossLevelNum',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            group: 'tradeApi'
+        },
+        data
+    })
+}
 
 /* 现货撮合取消委托单 */

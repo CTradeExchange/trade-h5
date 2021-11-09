@@ -1,6 +1,6 @@
 <template>
     <!-- 杠杆倍数设置 -->
-    <van-popup v-model:show='show' position='bottom'>
+    <van-popup v-model:show='show' position='bottom' teleport='body' @open='open'>
         <div class='multipleSet'>
             <div v-show='warn' class='warnRangeTip'>
                 {{ $t('trade.unRangeMultilpe') }}
@@ -46,17 +46,22 @@
                 </div>
             </div>
 
-            <van-button block type='primary' @click='saveClick'>
+            <van-button block :disabled='loading' type='primary' @click='saveClick'>
                 {{ $t('trade.saveSetting') }}
             </van-button>
         </div>
     </van-popup>
+    <Loading :show='loading' />
 </template>
 
 <script>
 import { computed, onMounted, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
+import { updateCrossLevelNum } from '@/api/trade'
 import StepperComp from '@plans/components/stepper'
+import { Toast } from 'vant'
+import { useI18n } from 'vue-i18n'
+
 export default {
     components: {
         StepperComp,
@@ -70,18 +75,23 @@ export default {
             default: false
         },
         multipleVal: {
-            type: String,
+            type: [String, Number],
+            default: ''
+        },
+        position: {
+            type: [String, Object],
             default: ''
         },
     },
-    emits: ['update:modelValue', 'update:multipleVal'],
+    emits: ['update:modelValue', 'update:multipleVal', 'save'],
     setup (props, { emit }) {
         const store = useStore()
+        const { t } = useI18n({ useScope: 'global' })
         const show = computed({
             get: () => props.modelValue,
             set: val => emit('update:modelValue', val)
         })
-
+        const accountInfo = computed(() => store.state._user.customerInfo?.accountList?.find(el => el.tradeType === props.product.tradeType))
         const marginInfo = computed(() => props.product?.marginInfo)
 
         // 杠杆倍数范围
@@ -101,11 +111,15 @@ export default {
         })
 
         const state = reactive({
-            multipleValue: props.multipleVal,
+            loading: false,
+            multipleValue: '',
             max: 100,
             min: 1,
             step: 1,
         })
+        const open = () => {
+            state.multipleValue = String(props.multipleVal)
+        }
 
         // const change = (val) => {
         //     if (marginInfo.value.type !== '2') return false
@@ -123,8 +137,39 @@ export default {
             if (warn.value) {
                 return false
             }
-            emit('update:multipleVal', state.multipleValue)
-            emit('update:modelValue', false)
+            Promise.resolve().then(() => {
+                if (props.position) {
+                    return savePosition(state.multipleValue)
+                }
+                return true
+            }).then((result) => {
+                if (result) {
+                    emit('update:multipleVal', state.multipleValue)
+                    emit('update:modelValue', false)
+                    emit('save', state.multipleValue)
+                }
+            })
+        }
+        // 修改仓位杠杆倍数
+        const savePosition = (val) => {
+            state.loading = true
+            return updateCrossLevelNum({
+                positionId: props.position.positionId,
+                orderId: props.position.orderId,
+                tradeType: props.position.tradeType,
+                accountDigits: accountInfo.value.digits,
+                accountId: accountInfo.value.accountId,
+                crossLevelNum: parseInt(val),
+            }).then(res => {
+                if (res.check()) {
+                    Toast(t('trade.modifySuccess'))
+                    store.dispatch('_trade/queryPositionPage', { tradeType: props.position.tradeType })
+                    return true
+                }
+                return false
+            }).finally(err => {
+                state.loading = false
+            })
         }
 
         onMounted(() => {
@@ -140,11 +185,13 @@ export default {
         return {
             ...toRefs(state),
             show,
+            open,
             marginInfo,
             multipleList,
             // multipleValue,
             multipleRange,
             warn,
+            savePosition,
             firstChange,
             saveClick,
         }

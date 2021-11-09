@@ -20,6 +20,7 @@
             :product='product'
             @showAdjustPopup='showAdjustPopup'
             @showClose='showClose'
+            @showMultiplePopup='showMultiplePopup'
             @showSLTP='showSLTP'
         />
     </div>
@@ -45,19 +46,30 @@
         :show='showSetProfit'
         @update:show='updateSLTPVisible'
     />
+    <!-- 设置止损止盈 -->
+    <MultipleSet
+        v-if="product && product.marginInfo && product.marginInfo.type!=='1'"
+        v-model='multipleSetVisible'
+        v-model:multipleVal='mVal'
+        :position='positionData'
+        :product='product'
+        @save='saveMultiple'
+    />
 </template>
 
 <script>
-import { computed, reactive, toRefs, watch, watchEffect } from 'vue'
+import { computed, reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import positionItem from './positionItem'
 import DialogClosePosition from '@plans/components/dialogClosePosition'
 import DialogAdjustMargin from '@plans/components/dialogAdjustMargin'
 import DialogSLTP from '@plans/components/dialogSLTP'
+import MultipleSet from '@plans/components/multipleSet'
 export default {
     components: {
         positionItem,
+        MultipleSet,
         DialogClosePosition,
         DialogAdjustMargin,
         DialogSLTP
@@ -68,6 +80,8 @@ export default {
         const state = reactive({
             closeVisible: false,
             adjustVisible: false,
+            multipleSetVisible: false,
+            mVal: '',
             positionData: null,
             showSetProfit: false
         })
@@ -109,6 +123,24 @@ export default {
             store.commit('_quote/Update_productActivedID', data.symbolId + '_' + tradeType.value)
         }
 
+        // 设置杠杆倍数
+        const showMultiplePopup = (data) => {
+            state.positionData = data
+            state.multipleSetVisible = true
+            state.mVal = data.crossLevelNum
+            store.commit('_quote/Update_productActivedID', data.symbolId + '_' + tradeType.value)
+            if (!product.value.minVolume) {
+                store.dispatch('_quote/querySymbolInfo', {
+                    symbolId: data.symbolId,
+                    tradeType: tradeType.value
+                })
+            }
+        }
+        // 保存杠杆倍数
+        const saveMultiple = (val) => {
+            console.log(val)
+        }
+
         const updateSLTPVisible = (val) => {
             state.showSetProfit = val
         }
@@ -120,7 +152,9 @@ export default {
             showAdjustPopup,
             showClose,
             showSLTP,
+            showMultiplePopup,
             updateSLTPVisible,
+            saveMultiple,
             tradeType,
             loading,
             userAccount
