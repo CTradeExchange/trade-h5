@@ -2,65 +2,59 @@
     <!-- 杠杆倍数设置 -->
     <van-popup v-model:show='show' position='bottom'>
         <div class='multipleSet'>
+            <div v-show='warn' class='warnRangeTip'>
+                {{ $t('trade.unRangeMultilpe') }}
+            </div>
             <div class='header'>
                 <p class='title'>
-                    杠杆设置
+                    {{ $t('trade.multilpSetting') }}
                 </p>
-                <a class='close' href='javascript:;'>
+                <a class='close' href='javascript:;' @click="$emit('update:modelValue', false)">
                     <i class='icon_icon_close_big'></i>
                 </a>
             </div>
             <div class='body'>
-                <StepperComp
-                    v-model='num'
-                    class='stepper'
-                    :class="{ 'warn': warn }"
-                    :controlbtn='true'
-                    :digits='0'
-                    :max='max'
-                    :min='min'
-                    :step='step'
-                    @change='change'
-                    @firstMinus='firstChange'
-                    @firstPlus='firstChange'
-                />
-                <div class='multipleRange'>
-                    杠杆范围：1x-10x
-                </div>
-                <div class='multipleVal'>
-                    5x
-                </div>
-                <ul class='multipleList'>
-                    <li class='item'>
-                        1x
-                    </li>
-                    <li class='item active'>
-                        5x
-                    </li>
-                    <li class='item'>
-                        10x
-                    </li>
-                    <li class='item'>
-                        20x
-                    </li>
-                    <li class='item'>
-                        50x
-                    </li>
-                </ul>
+                <template v-if="marginInfo.type==='2'">
+                    <StepperComp
+                        v-model='multipleValue'
+                        class='stepper'
+                        :controlbtn='true'
+                        :digits='0'
+                        :max='Number(multipleRange[1])'
+                        :min='Number(multipleRange[0])'
+                        :step='step'
+                        @firstMinus='firstChange'
+                        @firstPlus='firstChange'
+                    />
+                    <div class='multipleRange'>
+                        {{ $t('trade.multilpRange') }}{{ multipleRange[0] }}x - {{ multipleRange[1] }}x
+                    </div>
+                </template>
+                <template v-else>
+                    <div class='multipleVal'>
+                        {{ multipleValue }}x
+                    </div>
+                    <ul class='multipleList'>
+                        <li v-for='item in multipleList' :key='item' class='item' :class='{ active:multipleValue===item }' @click='multipleValue = item'>
+                            {{ item }}x
+                        </li>
+                    </ul>
+                </template>
+
                 <div class='warnTip'>
-                    过高的杠杆会增加仓位强平风险，请注意自身风险承受级别，合理设置杠杆
+                    {{ $t('trade.multilpSettingTip1') }}
                 </div>
             </div>
 
-            <van-button block type='primary'>
-                保存设置
+            <van-button block type='primary' @click='saveClick'>
+                {{ $t('trade.saveSetting') }}
             </van-button>
         </div>
     </van-popup>
 </template>
 
 <script>
-import { computed, reactive, toRefs } from 'vue'
+import { computed, onMounted, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import StepperComp from '@plans/components/stepper'
 export default {
@@ -68,34 +62,91 @@ export default {
         StepperComp,
     },
     props: {
+        product: {
+            type: Object
+        },
         modelValue: {
             type: Boolean,
             default: false
         },
+        multipleVal: {
+            type: String,
+            default: ''
+        },
     },
-    emits: ['update:modelValue'],
+    emits: ['update:modelValue', 'update:multipleVal'],
     setup (props, { emit }) {
         const store = useStore()
         const show = computed({
             get: () => props.modelValue,
             set: val => emit('update:modelValue', val)
         })
+
+        const marginInfo = computed(() => props.product?.marginInfo)
+
+        // 杠杆倍数范围
+        const multipleRange = computed(() => marginInfo?.value?.type === '2' ? marginInfo.value.values.split('-') : [])
+
+        // 杠杆倍数固定列表
+        const multipleList = computed(() => marginInfo?.value?.type === '3' ? marginInfo.value.values.split(',') : [])
+        const warn = computed(() => {
+            if (marginInfo.value.type !== '2') return false
+            if (Number(state.multipleValue) < multipleRange.value[0]) {
+                return true
+            } else if (Number(state.multipleValue) > multipleRange.value[1]) {
+                return true
+            } else {
+                return false
+            }
+        })
+
         const state = reactive({
-            num: '',
+            multipleValue: props.multipleVal,
             max: 100,
             min: 1,
             step: 1,
-            warn: 1,
         })
 
-        const change = () => {}
+        // const change = (val) => {
+        //     if (marginInfo.value.type !== '2') return false
+        //     console.log(val)
+        //     if (Number(val) < multipleRange.value[0]) {
+        //         emit('update:multipleVal', multipleRange.value[0])
+        //     } else if (Number(val) > multipleRange.value[1]) {
+        //         emit('update:multipleVal', multipleRange.value[1])
+        //     }
+        // }
         const firstChange = () => {}
+
+        // 保存设置
+        const saveClick = () => {
+            if (warn.value) {
+                return false
+            }
+            emit('update:multipleVal', state.multipleValue)
+            emit('update:modelValue', false)
+        }
+
+        onMounted(() => {
+            if (marginInfo?.value?.type === '2') {
+                emit('update:multipleVal', multipleRange.value[0])
+            } else if (marginInfo?.value?.type === '3') {
+                const val = multipleList.value[0]
+                state.multipleValue = val
+                emit('update:multipleVal', val)
+            }
+        })
 
         return {
             ...toRefs(state),
             show,
-            change,
+            marginInfo,
+            multipleList,
+            // multipleValue,
+            multipleRange,
+            warn,
             firstChange,
+            saveClick,
         }
     }
 }
@@ -104,6 +155,14 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .multipleSet{
+    position: relative;
+    .warnRangeTip{
+        padding: rem(10px);
+        line-height: 1.4;
+        color: var(--warn);
+        text-align: center;
+        background: #FFF0E2;
+    }
     .header{
         height: rem(100px);
         line-height: rem(100px);

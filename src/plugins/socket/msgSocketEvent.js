@@ -148,6 +148,11 @@ class SocketEvent {
         this.loginStatus = 2
     }
 
+    // websocket 登录登录失败，登录失败只能是token失效，这时可直接给用户退出登录
+    subscribe_fail () {
+        this.handlerLogout()
+    }
+
     // 心跳机制
     initPing () {
         const ws = this.ws

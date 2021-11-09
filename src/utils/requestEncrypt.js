@@ -44,7 +44,7 @@ export function encryptByChunk (str, pubKey) {
         encryptedStr += encryptor.encrypt(str.slice(i * chunk, (i + 1) * chunk))
         if (i < strLen - 1) encryptedStr += ','
     }
-    encryptedStr += encryptor.encrypt(str.slice(i * chunk))
+    // encryptedStr += encryptor.encrypt(str.slice(i * chunk))
 
     return encryptedStr
 }
