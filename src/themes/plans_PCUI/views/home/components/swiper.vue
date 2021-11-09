@@ -11,7 +11,6 @@
 import bannerImg from '@planspc/images/home/banner.png'
 export default {
     setup () {
-        console.log(bannerImg)
         return {
             bannerImg
         }

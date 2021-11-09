@@ -189,7 +189,6 @@ import { reactive, toRefs, computed, ref, watch, onUnmounted, onBeforeUnmount } 
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
-import { QuoteSocket, MsgSocket } from '@/plugins/socket/socket'
 import { useRoute, useRouter } from 'vue-router'
 import { delayAwaitTime, isEmpty } from '@/utils/util'
 import { addMarketOrder } from '@/api/trade'

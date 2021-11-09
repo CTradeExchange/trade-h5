@@ -44,7 +44,7 @@ export default {
 
         const params = computed(() => {
             return {
-                accountId: accountId,
+                accountId,
                 liabilitiesType: 1,
                 ...requestParams.value
             }
