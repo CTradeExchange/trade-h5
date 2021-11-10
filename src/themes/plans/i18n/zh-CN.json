@@ -567,7 +567,7 @@
     "loanRecord": "借款记录",
     "returnRecord": "还款记录",
     "maxTransfer": "最大可划转",
-    "minTransfer": "最少可划转",
+    "minTransfer": "最少划转",
     "transferRecord": "划转记录",
     "toAccount": "转入",
     "fromAccount": "转出",
