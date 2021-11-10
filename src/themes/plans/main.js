@@ -20,13 +20,12 @@ import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
 import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
 import { getPreDemoAccountParams } from './officialDemoAccount.js'
+import VConsole from 'vconsole' // 调试工具
 
-// 调试工具
-import VConsole from 'vconsole'
-skywalkingRegister(router)
+const Vconsole = new VConsole()
+const isProduction = process.env.NODE_ENV === 'production'
 
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
-const Vconsole = new VConsole()
 
 const app = createApp(App)
 app.use(preventReClick)
@@ -60,6 +59,8 @@ else if (location.search.includes('from=officialWebsite')) loginParams = getPreD
 
 // 获取到公司配置后初始化vue实例
 store.dispatch('_base/initBaseConfig').then(async () => {
+    if (isProduction) skywalkingRegister(router)
+
     // 设置语言
     const defaultLocal = getCookie('lang') || 'zh-CN'
     setI18nLanguage(I18n, defaultLocal)
