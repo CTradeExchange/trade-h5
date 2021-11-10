@@ -135,7 +135,7 @@ export default {
     width: 100%;
     height: 100%;
     padding: 0 rem(20px);
-    overflow-y: auto;
+    //overflow-y: auto;
     .list {
         flex: 0 0 auto;
         width: 100%;

@@ -21,7 +21,7 @@
                                         <i>{{ data.crossLevelNum }}x</i>
                                         <i class='icon_icon_arrow'></i>
                                     </span>
-                                    <span>
+                                    <span v-if='data.tradeType!==2'>
                                         <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
                                             {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
                                         </span>{{ minus(data.openVolume, data.closeVolume) }} {{ $t('trade.volumeUnit') }}
@@ -33,6 +33,11 @@
                                         {{ data.profitLoss }} {{ customerInfo.currency }}
                                     </span>
                                 </div>
+                            </div>
+                            <div v-if='data.tradeType===2'>
+                                <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
+                                    {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
+                                </span>{{ minus(data.openVolume, data.closeVolume) }} {{ $t('trade.volumeUnit') }}
                             </div>
                         </div>
                     </template>

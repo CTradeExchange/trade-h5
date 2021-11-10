@@ -166,7 +166,7 @@ export default {
             store.commit('_quote/Update_productActivedID', `${symbolId}_${item.id}`)
 
             router.push({
-                name: 'Order',
+                path: '/order',
                 query: {
                     symbolId,
                     tradeType: item.id

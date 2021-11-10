@@ -210,7 +210,7 @@ export default {
             () => {
                 state.volume = ''
                 queryAccountInfo()
-                setVolumeType()
+                if (product.value?.tradeType !== 2) setVolumeType()
             },
         )
         // 监听玩法类型
@@ -324,7 +324,7 @@ export default {
                 expireType: state.expireType,
                 entryType: state.entryType
             }
-            if (product.value.marginInfo.type !== '1') params.crossLevelNum = parseInt(state.multipleVal)
+            if (tradeType === '2' && product.value.marginInfo?.type !== '1') params.crossLevelNum = parseInt(state.multipleVal)
             return params
         }
 

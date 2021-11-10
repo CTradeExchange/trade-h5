@@ -131,18 +131,13 @@ export default {
         // 获取国家区号
         store.dispatch('getCountryListByParentCode').then(res => {
             if (res.check() && res.data.length) {
+                const countryList = store.state.countryList
                 const defaultZone = store.state._base.wpCompanyInfo?.defaultZone
-                const countryList = store.state._base.wpCompanyInfo?.registrable || res.data
-                if (defaultZone?.code) {
-                    state.zone = `${defaultZone.name} (${defaultZone.country_code})`
-                    state.countryZone = defaultZone.country_code
-                    state.countryCode = defaultZone.code
-                } else {
-                    const firstItem = countryList[0]
-                    const countryCode = firstItem.countryCode || firstItem.country_code
-                    state.zone = firstItem.name + ` (${countryCode})`
-                    state.countryZone = countryCode
-                    state.countryCode = firstItem.code
+                const defaultZoneConfig = defaultZone ? countryList.find(el => el.code === defaultZone.code) : countryList[0]
+                if (defaultZoneConfig?.code) {
+                    state.zone = `${defaultZoneConfig.name} (${defaultZoneConfig.countryCode})`
+                    state.countryZone = defaultZoneConfig.countryCode
+                    state.countryCode = defaultZoneConfig.code
                 }
             }
         })

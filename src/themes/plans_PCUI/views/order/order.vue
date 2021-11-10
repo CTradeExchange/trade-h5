@@ -8,9 +8,11 @@
             </div>
             <div class='middle-wrap'>
                 <div class='chart-content'>
+                    <!-- 图表 -->
                     <chart />
                 </div>
                 <div class='trade-content' :style="'height: '+ tradeContentHeight">
+                    <!-- 交易下单 -->
                     <trade />
                 </div>
             </div>
@@ -30,6 +32,7 @@
             <userRecord />
         </div>
         <van-sticky class='assetsSticky' :offset-bottom='10' position='bottom'>
+            <!-- 资产 -->
             <assetsModule />
         </van-sticky>
     </div>
@@ -65,12 +68,12 @@ export default {
         const { tradeType, symbolId } = route.query
         store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
         const product = computed(() => store.getters.productActived)
-        // 获取产品详情
-        store.dispatch('_quote/querySymbolInfo', { 'symbolId': product.value.symbolId, 'tradeType': product.value.tradeType })
-
         if (isEmpty(product.value)) {
             router.push('/')
         }
+        // 获取产品详情
+        store.dispatch('_quote/querySymbolInfo', { 'symbolId': product.value.symbolId, 'tradeType': product.value.tradeType })
+
         const tradeContentHeight = computed(() => {
             if (Number(product.value?.tradeType) === 5) {
                 return '265px'

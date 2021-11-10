@@ -5,7 +5,7 @@
     },
     "cRoute": {
         "login": "Login",
-        "register": "Register",
+        "register": "Open an account",
         "registerSuccess": "Register Success",
         "forgot": "Forget Password",
         "resetPwd": "Reset Password",
@@ -210,7 +210,7 @@
         "area": "Please select area",
         "inputZone": "Input Zone",
         "certificateType": "Certificate Type",
-        "certificateNo": "Certificate No.",
+        "certificateNo": "ID no.",
         "chooseCertificateType": "Please choose certificate type",
         "incorrectlyFormed": "Incorrect format",
         "pleaseEnter": "Please enter",
