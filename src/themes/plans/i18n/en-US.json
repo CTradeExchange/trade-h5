@@ -472,11 +472,11 @@
     "trustPrice": "Limit price",
     "pendingUnit": "Entrusted amount",
     "favorites": "Favorites",
-    "unRangeMultilpe": "杠杆倍数不在范围内",
-    "multilpSetting": "杠杆设置",
-    "multilpRange": "杠杆范围：",
-    "multilpSettingTip1": "过高的杠杆会增加仓位强平风险，请注意自身风险承受级别，合理设置杠杆",
-    "saveSetting": "保存设置"
+    "unRangeMultilpe": "Leverage ratio is not within the range",
+    "multilpSetting": "Leverage ratio setting",
+    "multilpRange": "Leverage ratio range：",
+    "multilpSettingTip1": "Over leverage will increase the risk of liquidation，please remind the risk level",
+   "saveSetting": "Save"
   },
   "bizType": {
     "2": "Market close",
