@@ -2,11 +2,11 @@
     <div class='page-wrap' :class='{ isIframe: $route.query.isUniapp }'>
         <LayoutTop v-if='!$route.query.isUniapp' :back='true' :menu='false'>
             <p class='symbolName'>
-                <i v-if='product.symbolName' class='icon_chouti' @click='showSidebar=true'></i>
-                {{ product.symbolName }}
+                <i v-if='product?.symbolName' class='icon_chouti' @click='showSidebar=true'></i>
+                {{ product?.symbolName }}
             </p>
             <p class='infomation'>
-                {{ product.symbolCode }} {{ $t('trade.update') }}:{{ formatTime(product.tick_time) }}
+                {{ product?.symbolCode }} {{ $t('trade.update') }}:{{ formatTime(product?.tick_time) }}
             </p>
 
             <template #right>
@@ -17,7 +17,7 @@
                             :class="[!isSelfSymbol?'icon_zixuan1':'icon_zixuan2']"
                         ></i>
                     </button>
-                    <div v-if='![3, 5, 9].includes(product.tradeType)' class='ft'>
+                    <div v-if='![3, 5, 9].includes(product?.tradeType)' class='ft'>
                         <span
                             @click='toContractInfo'
                         >
@@ -30,21 +30,21 @@
         <Loading :show='loading' />
 
         <div class='productInfo'>
-            <div v-if='product.price_digits' class='hd'>
+            <div v-if='product?.price_digits' class='hd'>
                 <div class='hd-left'>
-                    <p class='cur_price' :class='product.cur_color'>
-                        {{ parseFloat(product.cur_price).toFixed(product.price_digits) }}
+                    <p class='cur_price' :class='product?.cur_color'>
+                        {{ parseFloat(product?.cur_price).toFixed(product?.price_digits) }}
                     </p>
                 </div>
                 <div class='others'>
-                    <span :class='product.upDownColor'>
-                        {{ product.upDownAmount }}<template v-if='product.tradeType !== 9'>
-                            ({{ product.upDownAmount_pip }} {{ $t('trade.dot') }})
+                    <span :class='product?.upDownColor'>
+                        {{ product.upDownAmount }}<template v-if='product?.tradeType !== 9'>
+                            ({{ product?.upDownAmount_pip }} {{ $t('trade.dot') }})
                         </template>
                     </span>
                     <div class='others-bottom'>
-                        <span class='upDownAmount' :class='product.upDownColor'>
-                            {{ product.upDownWidth }}
+                        <span class='upDownAmount' :class='product?.upDownColor'>
+                            {{ product?.upDownWidth }}
                         </span>
                     </div>
                 </div>
@@ -56,27 +56,27 @@
                             {{ $t('trade.todayOpen') }}
                         </span>
                         <span>
-                            {{ product.open_price }}
+                            {{ product?.open_price }}
                         </span>
                     </p><p>
                         <span>
                             {{ $t('trade.yesterdayClosed') }}
                         </span>
                         <span>
-                            {{ product.yesterday_close_price }}
+                            {{ product?.yesterday_close_price }}
                         </span>
                     </p>
                 </div><div class='item'>
                     <p class='priceBottom'>
                         {{ $t('trade.high') }}
                         <span>
-                            {{ product.high_price }}
+                            {{ product?.high_price }}
                         </span>
                     </p>
                     <p>
                         {{ $t('trade.low') }}
                         <span>
-                            {{ product.low_price }}
+                            {{ product?.low_price }}
                         </span>
                     </p>
                 </div>
@@ -242,10 +242,10 @@
             </div>
         </div>
         <StallsAndDeal
-            v-if='product && [5,9].includes(Number(product.tradeType))'
-            :cur-price='product.cur_price'
+            v-if='product && [5,9].includes(Number(product?.tradeType))'
+            :cur-price='product?.cur_price'
             :setting-list='settingList'
-            :symbol-id='product.symbolId'
+            :symbol-id='product?.symbolId'
             :trade-type='tradeType'
         />
 
@@ -284,7 +284,7 @@
     />
 
     <!-- 侧边栏-切换产品 -->
-    <sidebarProduct v-model='showSidebar' :default-trade-type='product.tradeType' @select='onSelect' />
+    <sidebarProduct v-model='showSidebar' :default-trade-type='product?.tradeType' @select='onSelect' />
 </template>
 
 <script>
@@ -585,8 +585,8 @@ export default {
         const renderChart = (product, property) => {
             state.onChartReadyFlag && unref(chartRef).updateProperty(property)
             state.onChartReadyFlag && unref(chartRef).updateLineData({
-                buyPrice: product.buy_price,
-                sellPrice: product.sell_price
+                buyPrice: product?.buy_price,
+                sellPrice: product?.sell_price
             })
 
             state.onChartReadyFlag && unref(chartRef).setChartType(Number(property.chartType))
@@ -745,13 +745,13 @@ export default {
         }
 
         // 实时更新买卖价线
-        watch(() => [product.value.buy_price, product.value.sell_price, product.value.cur_price, product.value.tick_time], (newValues) => {
-            if (Number(product.value.tradeType) !== 5 && Number(product.value.tradeType) !== 9) {
-                state.onChartReadyFlag && unref(chartRef).setTick(product.value.cur_price, product.value.tick_time)
+        watch(() => [product.value?.buy_price, product.value?.sell_price, product.value?.cur_price, product.value?.tick_time], (newValues) => {
+            if (Number(product.value?.tradeType) !== 5 && Number(product.value?.tradeType) !== 9) {
+                state.onChartReadyFlag && unref(chartRef).setTick(product.value?.cur_price, product.value?.tick_time)
 
                 state.onChartReadyFlag && unref(chartRef).updateLineData({
-                    buyPrice: product.value.buy_price,
-                    sellPrice: product.value.sell_price
+                    buyPrice: product.value?.buy_price,
+                    sellPrice: product.value?.sell_price
                 })
             }
         })
@@ -1000,8 +1000,8 @@ export default {
                     if ([5, 9].includes(Number(unref(tradeType)))) {
                         state.onChartReadyFlag && unref(chartRef).setTick(res[5], res[4])
                         state.onChartReadyFlag && unref(chartRef).updateLineData({
-                            buyPrice: product.value.buy_price,
-                            sellPrice: product.value.sell_price
+                            buyPrice: product.value?.buy_price,
+                            sellPrice: product.value?.sell_price
                         })
                     }
                 }
