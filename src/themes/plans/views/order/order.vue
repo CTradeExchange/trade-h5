@@ -210,7 +210,7 @@ export default {
             () => {
                 state.volume = ''
                 queryAccountInfo()
-                setVolumeType()
+                if (product.value?.tradeType !== 2) setVolumeType()
             },
         )
         // 监听玩法类型
