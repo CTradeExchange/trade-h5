@@ -48,7 +48,7 @@
     />
     <!-- 设置止损止盈 -->
     <MultipleSet
-        v-if="product && product.marginInfo && product.marginInfo.type!=='1'"
+        v-if="product && product.tradeType==='2' && product.marginInfo && product.marginInfo.type!=='1'"
         v-model='multipleSetVisible'
         v-model:multipleVal='mVal'
         :position='positionData'
