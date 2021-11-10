@@ -2,18 +2,18 @@ import { unref, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { minus } from '@/utils/calculation'
 import { useStore } from 'vuex'
-import dayjs from 'dayjs'
-import { router } from 'vue-router'
+import { useRouter } from 'vue-router'
 import ClosePosition from '@planspc/views/assets/components/close-position.vue'
 import Sltp from '@planspc/views/assets/components/sltp.vue'
 import AdjustMargin from '@planspc/views/assets/components/adjust-margin.vue'
 
-const formatTime = val => dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+const formatTime = val => window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
 
 // 获取资产列表配置
 export const getAssetColumns = (tradeType) => {
     const { t } = useI18n({ useScope: 'global' })
     const store = useStore()
+    const router = useRouter()
     const customerInfo = computed(() => store.state._user.customerInfo)
     const productMap = computed(() => store.state._quote.productMap)
     const currentProduct = (row) => {
