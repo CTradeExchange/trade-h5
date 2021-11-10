@@ -33,7 +33,7 @@ const gotoOrder = (symbolKey) => {
 }
 // 产品列表
 const productMap = computed(() => store.state._quote.productMap)
-const list = ['5_1', '6_1', '49_1', '53_1', '2_1']
+const list = ['27_1', '4_1', '7_1', '33_2', '12_2']
 QuoteSocket.send_subscribe(list)
 </script>
 

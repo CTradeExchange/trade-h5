@@ -731,7 +731,7 @@
 		"enterMarginAmount": "请输入调整金额",
 		"enterMarginAmountTip": "调整金额不能为负数",
         "maxTransfer": "最大可划转",
-        "minTransfer": "最少可划转",
+        "minTransfer": "最少划转",
         "transferTip1": "划转金额不能为空",
         "transferTip2": "划转金额不能为负数",
         "transferTip3": "转入账户没有当前币种",
