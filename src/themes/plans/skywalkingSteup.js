@@ -1,10 +1,19 @@
 import ClientMonitor from 'skywalking-client-js'
 
-const collectorDomain = window['isPRD'] ? 'https://skyapi.cats-trade.com' : 'https://preskyapi.cats-trade.com'
-const service = 'test-ui'
 const serviceVersion = 'v1.0.0'
 
+// 计算skywalking的环境配置
+function calculatConfig () {
+    const { apiService, companyId } = JSON.parse(window.wp_SysSetting)
+    const apiServiceDomain = apiService.split('//')[1]
+    const isPre = apiServiceDomain.startsWith('pre')
+    const collectorDomain = isPre ? 'https://preskyapi.cats-trade.com' : 'https://skyapi.cats-trade.com'
+    const service = `${isPre ? 'pre' : 'prd'}-${companyId}`
+    return { collectorDomain, service }
+}
+
 export function skywalkingRegister (router) {
+    const { collectorDomain, service } = calculatConfig()
     if (!collectorDomain) return false
     // 注册skywalking
     ClientMonitor.register({
@@ -29,10 +38,11 @@ export function skywalkingRegister (router) {
 }
 
 export function skywalkingRreportErrors (err) {
+    const { collectorDomain, service } = calculatConfig()
     if (!collectorDomain) return false
     ClientMonitor.reportFrameErrors({
         collector: collectorDomain,
-        service: 'cats2-h5',
+        service,
         pagePath: location.href,
         serviceVersion: 'v1.0.0',
     }, err)
