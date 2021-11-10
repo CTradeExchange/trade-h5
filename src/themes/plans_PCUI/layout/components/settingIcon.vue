@@ -1,5 +1,6 @@
 <template>
     <el-popover
+        ref='popover'
         placement='bottom'
         trigger='hover'
         :width='152'
@@ -53,6 +54,7 @@ export default {
         const route = useRoute()
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
+        const popover = ref(null)
         const customInfo = computed(() => store.state._user.customerInfo)
         const chartColorAction = [
             { val: '1', name: t('common.redDown') },
@@ -101,10 +103,14 @@ export default {
         }
 
         // 路由跳转
-        const handRoutTo = (path) => router.push(route.path + path)
+        const handRoutTo = (path) => {
+            popover.value.hide()
+            router.push(route.path + path)
+        }
 
         return {
             customInfo,
+            popover,
             chartColorAction,
             changeChartColor,
             logoutHandler,
