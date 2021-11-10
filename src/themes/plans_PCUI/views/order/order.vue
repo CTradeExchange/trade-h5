@@ -8,9 +8,11 @@
             </div>
             <div class='middle-wrap'>
                 <div class='chart-content'>
+                    <!-- 图表 -->
                     <chart />
                 </div>
                 <div class='trade-content' :style="'height: '+ tradeContentHeight">
+                    <!-- 交易下单 -->
                     <trade />
                 </div>
             </div>
@@ -30,6 +32,7 @@
             <userRecord />
         </div>
         <van-sticky class='assetsSticky' :offset-bottom='10' position='bottom'>
+            <!-- 资产 -->
             <assetsModule />
         </van-sticky>
     </div>

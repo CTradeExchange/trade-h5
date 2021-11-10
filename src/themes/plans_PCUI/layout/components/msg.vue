@@ -1,28 +1,30 @@
 <template>
     <el-popover
         placement='bottom'
+        popper-class='infoPop'
         trigger='hover'
-        @after-enter="showPop"
-        @show="showing"
-        :width="400"
-        popper-class="infoPop"
+        :width='400'
+        @after-enter='showPop'
+        @show='showing'
     >
         <template #reference>
             <i class='icon icon_xiaoxizhongxin1' :title="$t('header.information')"></i>
         </template>
         <div class='information_box'>
-            <div class="information_head" >
-                <div class="current_type" @click="dropTypeVisible = !dropTypeVisible">
-                    <span>{{informationType}}</span><i class='icon el-icon-caret-bottom'></i>
+            <div class='information_head'>
+                <div class='current_type' @click='dropTypeVisible = !dropTypeVisible'>
+                    <span>{{ informationType }}</span><i class='icon el-icon-caret-bottom'></i>
                 </div>
             </div>
-            <div class="type_list" v-if="dropTypeVisible">
+            <div v-if='dropTypeVisible' class='type_list'>
                 <ul>
-                    <li v-for="item in options" :class="{activeLi:type==item.value}" @click="changeType(item)">{{item.text}}</li>
+                    <li v-for='item in options' :class='{ activeLi:type==item.value }' @click='changeType(item)'>
+                        {{ item.text }}
+                    </li>
                 </ul>
             </div>
             <Loading :show='pageLoading' />
-            <div class='msg-list' v-loading="msgLoading">
+            <div v-loading='msgLoading' class='msg-list'>
                 <div v-if='list.length === 0'>
                     <van-empty :description='$t("common.noData")' image='/images/empty.png' />
                 </div>
@@ -54,7 +56,7 @@
 </template>
 
 <script>
-import { onBeforeMount, computed, reactive , toRefs, onUnmounted } from 'vue'
+import { onBeforeMount, computed, reactive, toRefs, onUnmounted } from 'vue'
 import { queryPlatFormMessageLogList } from '@/api/user'
 import { isEmpty } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
@@ -63,7 +65,7 @@ import { ElNotification } from 'element-plus'
 export default {
     setup () {
         const { t } = useI18n({ useScope: 'global' })
-        
+
         const state = reactive({
             list: [],
             loading: false,
@@ -90,17 +92,17 @@ export default {
                     'value': 'TRADE_MESSAGE'
                 }
             ],
-            informationType:"全部消息",
-            dropTypeVisible:false,
-            noticeContent:'',
-            msgLoading:false
+            informationType: '全部消息',
+            dropTypeVisible: false,
+            noticeContent: '',
+            msgLoading: false
         })
         const isError = computed(() => !!state.isError)
 
-        const changeType  = (item) => {
+        const changeType = (item) => {
             console.log(item)
-            if(state.type==item.value){
-                return;
+            if (state.type == item.value) {
+                return
             }
             state.type = item.value
             state.informationType = item.text
@@ -108,31 +110,31 @@ export default {
             state.finished = false
             state.list = []
             state.dropTypeVisible = !state.dropTypeVisible
-            state.msgLoading = true;
+            state.msgLoading = true
             getMsgList()
         }
-        const showPop = () =>{
+        const showPop = () => {
             state.current = 1
             state.finished = false
             state.list = []
-            state.msgLoading = true;
-            getMsgList();
+            state.msgLoading = true
+            getMsgList()
         }
-        const showing = () =>{
-            //js修改pop框的padding值防止全局污染
-            let nodes = document.getElementsByClassName("infoPop");
-            nodes.forEach(node=>{
-                node.style.padding = "0px";
+        const showing = () => {
+            // js修改pop框的padding值防止全局污染
+            const nodes = document.getElementsByClassName('infoPop')
+            nodes && nodes.forEach(node => {
+                node.style.padding = '0px'
             })
         }
         const getMsgList = () => {
-            //state.pageLoading = true
+            // state.pageLoading = true
             state.errorTip = ''
             queryPlatFormMessageLogList({
                 current: state.current,
                 parentType: state.type,
             }).then(res => {
-                state.msgLoading = false;
+                state.msgLoading = false
                 if (res.check()) {
                     if (res.data.records && res.data.records.length > 0) {
                         state.list = state.list.concat(res.data.records)
@@ -144,7 +146,7 @@ export default {
                     }
                 }
             }).catch(err => {
-                state.msgLoading = false;
+                state.msgLoading = false
                 state.errorTip = t('c.loadError')
             })
         }
@@ -171,19 +173,19 @@ export default {
         }
         // 获取到顶部消息通知，notice全局通知，同时刷新消息列表
         const gotMsg = (res) => {
-            //全局通知
-            state.noticeContent = res.detail.content;
-             ElNotification({
-                title: state.noticeContent.title || $t('c.biaoTi') ,
+            // 全局通知
+            state.noticeContent = res.detail.content
+            ElNotification({
+                title: state.noticeContent.title || $t('c.biaoTi'),
                 dangerouslyUseHTMLString: true,
                 message: `<div class='content'>${computeHtmlTime(state.noticeContent.text)}</div>`,
             })
-            //刷新消息列表
+            // 刷新消息列表
             onRefresh()
         }
         document.body.addEventListener('GotMsg_notice', gotMsg, false)
         onBeforeMount(() => {
-            //全局消息测试代码
+            // 全局消息测试代码
             // let noticeContent = {
             //     title:"这是标题",
             //     text:"按时发货卡蒂狗蓝思科技哦啊合适了复健科更换接口过分了四大金刚三打两建开会搞四六级咖啡馆来得及咖啡馆离开<time>1635822889134</time>",
@@ -204,7 +206,7 @@ export default {
 
         // 上拉刷新
         const onRefresh = () => {
-            state.msgLoading = true;
+            state.msgLoading = true
             state.current = 1
             state.finished = false
             state.list = []
@@ -212,7 +214,7 @@ export default {
         }
         // 底部加载更多
         const onLoad = () => {
-            state.msgLoading = true;
+            state.msgLoading = true
             state.current++
             getMsgList()
         }
@@ -220,7 +222,7 @@ export default {
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
-        
+
         return {
             getMsgList,
             isError,
@@ -236,6 +238,7 @@ export default {
     }
 }
 </script>
+
 <style lang="scss">
 .el-notification{
     background-color: var(--contentColor) !important;
@@ -244,6 +247,7 @@ export default {
     }
 }
 </style>
+
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .icon {

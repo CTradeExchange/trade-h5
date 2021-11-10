@@ -1,4 +1,5 @@
 <template>
+    <router-view />
     <div class='quote'>
         <TopModule />
         <Content />
