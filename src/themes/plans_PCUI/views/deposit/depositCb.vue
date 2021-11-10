@@ -74,7 +74,7 @@
 
 <script>
 import centerViewDialog from '@planspc/layout/centerViewDialog'
-import { toRefs, reactive, onBeforeMount, computed, onBeforeUnmount } from 'vue'
+import { toRefs, reactive, onMounted, computed, onBeforeUnmount } from 'vue'
 import { queryDepositProposal } from '@/api/user'
 import { useStore } from 'vuex'
 import { Dialog } from 'vant'
@@ -90,6 +90,8 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const { t } = useI18n({ useScope: 'global' })
+        // 币种、账户id、玩法类型
+        // const { currency, accountId, tradeType } = route.query
         const state = reactive({
             loading: false,
             despositObj: ''
@@ -133,11 +135,11 @@ export default {
             } else {
                 Dialog.confirm({
                     title: t('common.tip'),
-                    confirmButtonText: t('common.backHome'),
+                    confirmButtonText: t('common.back'),
                     cancelButtonText: t('common.serivce'),
                     message: t('deposit.serviceTips2'),
                 }).then(() => {
-                    router.replace('/home')
+                    window.close()
                 }).catch(() => {
                     if (onlineServices.value) { location.href = onlineServices.value }
                 })
@@ -149,10 +151,10 @@ export default {
         }
 
         onBeforeRouteLeave((to, from) => {
-            // router.push('/assets/deposit')
+            window.close()
         })
 
-        onBeforeMount(() => {
+        onMounted(() => {
             getDespostProposal()
         })
 

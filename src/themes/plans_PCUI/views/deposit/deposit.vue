@@ -173,7 +173,7 @@ export default {
             // 页面加载状态
             loading: false,
             // 当前语言
-            lang: getCookie('lang'),
+            lang: getCookie('lang') || 'zh-CN',
             // 是否禁用提交按钮
             btnDisabled: false,
             // 存款金额列表
@@ -583,6 +583,7 @@ export default {
 
         // 创建存款提案
         const handleDeposit = () => {
+            const callbackUrl = `${window.location.protocol}//${window.location.host}/${state.lang}/depositCb?accountId=${accountId}&currency=${currency}&tradeType=${tradeType}`
             const params = {
                 tradeType,
                 customerNo: customInfo.value.customerNo,
@@ -594,12 +595,13 @@ export default {
                 exchangeRate: state.rateConfig.exchangeRate,
                 paymentChannelCode: state.checkedType.paymentCode,
                 paymentChannelType: state.checkedType.paymentType,
+                paymentMerchantNo: state.checkedType.merchantNo,
                 paymentChannelClientType: 'mobile',
                 depositAmount: state.amount,
                 country: customInfo.value.country,
                 channelCode: customInfo.value.utmSource,
                 depositFrom: 'H5',
-                callbackUrl: window.location.protocol + '//' + window.location.host + '/depositCb',
+                callbackUrl,
                 blockchainName: (state.currencyChecked && state.currencyChecked.split('-').length > 1) ? state.currencyChecked.split('-')[1] : ''
             }
 

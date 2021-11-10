@@ -594,6 +594,7 @@ export default {
                 exchangeRate: state.rateConfig.exchangeRate,
                 paymentChannelCode: state.checkedType.paymentCode,
                 paymentChannelType: state.checkedType.paymentType,
+                paymentMerchantNo: state.checkedType.merchantNo,
                 paymentChannelClientType: 'mobile',
                 depositAmount: state.amount,
                 country: customInfo.value.country,

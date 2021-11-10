@@ -78,7 +78,7 @@
 
 <script>
 import Top from '@/components/top'
-import { toRefs, reactive, onBeforeMount, computed, onBeforeUnmount } from 'vue'
+import { toRefs, reactive, onMounted, computed, onBeforeUnmount } from 'vue'
 import { queryDepositProposal } from '@/api/user'
 import { useStore } from 'vuex'
 import { Dialog } from 'vant'
@@ -101,7 +101,6 @@ export default {
             despositObj: ''
         })
         const customInfo = computed(() => store.state._user.customerInfo)
-
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
 
         const statusMap = {
@@ -167,7 +166,7 @@ export default {
             }
         })
 
-        onBeforeMount(() => {
+        onMounted(() => {
             getDespostProposal()
         })
 
