@@ -94,6 +94,8 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const { t } = useI18n({ useScope: 'global' })
+        // 币种、账户id、玩法类型
+        const { currency, accountId, tradeType } = route.query
         const state = reactive({
             loading: false,
             despositObj: ''
@@ -141,7 +143,7 @@ export default {
                     cancelButtonText: t('common.serivce'),
                     message: t('deposit.serviceTips2'),
                 }).then(() => {
-                    router.push('/quote')
+                    router.push('/home')
                 }).catch(() => {
                     if (onlineServices.value) { location.href = onlineServices.value }
                 })
@@ -153,7 +155,16 @@ export default {
         }
 
         onBeforeRouteLeave((to, from) => {
-            router.push('/deposit')
+            if (to.path !== '/home') {
+                router.push({
+                    path: '/deposit',
+                    query: {
+                        accountId,
+                        currency,
+                        tradeType
+                    }
+                })
+            }
         })
 
         onBeforeMount(() => {
