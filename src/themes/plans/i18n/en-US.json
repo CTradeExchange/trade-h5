@@ -548,7 +548,7 @@
   },
   "kycStateTextMap": {
     "1": "Unverified",
-    "2": "Under review",
+    "2": "Under verification",
     "3": "Averification failed",
     "4": "Verified"
   },
