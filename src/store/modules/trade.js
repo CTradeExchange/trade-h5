@@ -4,6 +4,7 @@ import { cachePendingParams } from './storeUtil.js'
 import { minus, divide, toFixed, plus, shiftedBy } from '@/utils/calculation'
 import { vue_set, assign } from '@/utils/vueUtil.js'
 import BigNumber from 'bignumber.js'
+import { tradeRecordList } from '@/api/user'
 
 const EmptyProfitLossRang = {
     buyProfitRange: [], // 买入止盈范围
@@ -34,7 +35,8 @@ export default {
         historyList: [], // 平仓历史记录列表
         pendingList: {}, // 预埋单列表, 多玩法id为Key
         pendingMap: {}, // 预埋单列表
-        positionProfitLossList: [] // 持仓盈亏列表
+        positionProfitLossList: [], // 持仓盈亏列表
+        tradeRecordData: {} // 成交记录 （包括其他字段枚举值）
     },
     getters: {
         // 当前操作的产品
@@ -177,6 +179,9 @@ export default {
                 }
             })
         },
+        Update_tradeRecordData (state, data) {
+            state.tradeRecordData = data
+        }
     },
     actions: {
         // 查询持仓列表
@@ -277,5 +282,29 @@ export default {
                 })
             }
         },
+        // 查询成交记录
+        tradeRecordList ({ dispatch, commit, state, rootState, rootGetters }, payload) {
+            const product = rootGetters.productActived
+            const tradeType = Number(product.tradeType)
+            const account = rootState._user.customerInfo.accountList?.filter(el => Number(el.tradeType) === tradeType) || []
+            const accountIds = account.map(e => e.accountId).toString()
+            const params = {
+                accountIds,
+                tradeType,
+                sortFieldName: 'executeTime',
+                sortType: 'desc',
+                executeStartTime: window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 00:00:00')).valueOf(),
+                executeEndTime: window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 23:59:59')).valueOf(),
+                current: 1,
+                size: 10,
+            }
+            tradeRecordList(params)
+                .then(res => {
+                    if (res.check()) {
+                        commit('Update_tradeRecordData', res.data)
+                    }
+                })
+                .catch(err => console.error(err))
+        }
     }
 }

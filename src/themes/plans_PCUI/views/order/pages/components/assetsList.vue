@@ -6,11 +6,11 @@
 </template>
 
 <script setup>
-import { computed, unref, watch } from 'vue'
+import { computed, unref, watch, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import customTable from './customTable'
-import { ElButton } from 'element-plus'
 import { getAssetColumns } from './tableConfig'
+import { MsgSocket, QuoteSocket } from '@/plugins/socket/socket'
 
 const props = defineProps({
     tradeType: {
@@ -25,8 +25,19 @@ const props = defineProps({
 const store = useStore()
 // 用户信息
 const customerInfo = computed(() => store.state._user.customerInfo)
+// 持仓列表
 // 资产列表
-const tableData = computed(() => store.state._trade.positionList[props.tradeType])
+const accountList = computed(() => customerInfo.value?.accountList.filter(el => Number(el.tradeType) === props.tradeType))
+const positionList = computed(() => store.state._trade.positionList[props.tradeType])
+const tableData = computed(() => {
+    if ([1, 2].includes(props.tradeType)) {
+        return unref(positionList)
+    } else if ([3, 5, 9].includes(props.tradeType)) {
+        console.log(unref(accountList))
+        return unref(accountList)
+    }
+    return []
+})
 const tableOptions = computed(() => (
     {
         ...props.commonOptions,
@@ -34,7 +45,8 @@ const tableOptions = computed(() => (
     }
 ))
 
-watch(() => props.tradeType, () => {
+// 获取持仓列表数据
+const queryPositionList = () => {
     if (unref(customerInfo)) {
         const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(props.tradeType))?.accountId
         store.dispatch('_trade/queryPositionPage', {
@@ -43,16 +55,39 @@ watch(() => props.tradeType, () => {
             sortType: 'desc',
             accountId
         })
+            .then(res => {
+                const productKeys = []
+                const { data } = res
+                if (data) {
+                    data.map(elem => {
+                        productKeys.push(elem.symbolId + '_' + elem.tradeType)
+                    })
+                }
+                // 订阅行情数据
+                QuoteSocket.send_subscribe(productKeys)
+            })
     }
+}
+
+const initData = () => {
+    const val = props.tradeType
+    if ([1, 2].includes(val)) {
+        queryPositionList(val)
+    } else if ([3, 5, 9].includes(val)) {
+        store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: val })
+    }
+    // 订阅资产数据
+    MsgSocket.subscribeAsset(val)
+}
+
+onUnmounted(() => {
+    // 取消订阅
+    QuoteSocket.cancel_subscribe()
+    MsgSocket.cancelSubscribeAsset()
 })
-
-const handleLoan = (row) => {
-    console.log(row)
-}
-const handleRepayment = (row) => {
-    console.log(row)
-}
-
+watch(() => props.tradeType, () => {
+    initData()
+})
 </script>
 
 <style lang="scss" scoped>
