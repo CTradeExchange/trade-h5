@@ -199,7 +199,7 @@ export default {
     justify-content: space-between;
     height: 50px;
     padding: 0 16px;
-    background-color: rgba(0,0,0,1);
+    background-color: rgba(21,25,30,1);
     position: relative;
     z-index: 100;
     &.Home{

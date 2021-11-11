@@ -18,16 +18,20 @@ export default function hooks (state) {
         if ([1, 2].includes(tradeType)) {
             account = accountList.find(el => el.tradeType === tradeType)
         } else {
-            const outCurrency = product.value[state.direction === 'buy' ? 'profitCurrency' : 'baseCurrency'] || ''
-            account = (outCurrency && customerInfo.value)  ? customerInfo?.value?.accountMap[`${tradeType}_${outCurrency}`] : {}
+            const buyCurrency = product.value?.profitCurrency    
+            const sellCurrency = product.value?.baseCurrency
+            account = {
+                buy: (buyCurrency && customerInfo.value)  ? customerInfo?.value?.accountMap[`${tradeType}_${buyCurrency}`] : {},
+                sell: (sellCurrency && customerInfo.value)  ? customerInfo?.value?.accountMap[`${tradeType}_${sellCurrency}`] : {}
+            }
         }
         return account
     })
     // CFD全仓和CFD逐仓 手数区分10-限价预埋单；11-停损预埋单，按额下单固定bizType 14
     const bizTypeByPendingCFD =  ()=>{
-        const requestPrice = state.pendingPrice
+        const requestPrice = state[state.submitType].pendingPrice
         let bizType=''
-        if (state.direction === 'buy') {
+        if (state.submitType === 'buy') {
             bizType = lt(requestPrice, product.value.buy_price) ? 10 : 11
         } else {
             bizType = gt(requestPrice, product.value.sell_price) ? 10 : 11
@@ -36,7 +40,7 @@ export default function hooks (state) {
     }
     const bizType = computed(() => {
         let bizType = state.orderType   // 1市价单  10挂单
-        let entryType = state.entryType   // 1按数量下单 2按成交额下单
+        let entryType = state[state.submitType].entryType   // 1按数量下单 2按成交额下单
         const tradeType = product.value?.tradeType
 
         if([1,2].includes(tradeType)){

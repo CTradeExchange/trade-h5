@@ -14,7 +14,7 @@
         </el-dropdown>
     </div>
 
-    <div v-else-if='product.tradeType === 3' class='trade-type'>
+    <div v-else-if='[3,5].includes(product.tradeType)' class='trade-type'>
         {{ direction === 'buy' ? $t('trade.orderAmount') : $t('trade.volumes') }}
     </div>
     <div v-else class='trade-type'>
