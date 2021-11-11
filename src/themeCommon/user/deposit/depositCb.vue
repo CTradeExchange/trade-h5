@@ -4,7 +4,9 @@
             back
             left-icon='arrow-left'
             :menu='false'
+            on-back
             :right-action='false'
+            @back='onBack'
         />
         <Loading :show='loading' />
         <div v-if='despositObj' class='wrap'>
@@ -83,7 +85,7 @@ import { queryDepositProposal } from '@/api/user'
 import { useStore } from 'vuex'
 import { Dialog } from 'vant'
 import { isEmpty } from '@/utils/util'
-import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 export default {
     components: {
@@ -156,18 +158,17 @@ export default {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
 
-        onBeforeRouteLeave((to, from) => {
-            if (to.path !== '/home') {
-                router.push({
-                    path: '/deposit',
-                    query: {
-                        accountId,
-                        currency,
-                        tradeType
-                    }
-                })
-            }
-        })
+        // 点击返回
+        const onBack = () => {
+            router.push({
+                path: '/deposit',
+                query: {
+                    accountId,
+                    currency,
+                    tradeType
+                }
+            })
+        }
 
         onMounted(() => {
             getDespostProposal()
@@ -181,6 +182,7 @@ export default {
             formatTime,
             statusMap,
             onlineServices,
+            onBack,
             ...toRefs(state)
         }
     }
@@ -190,6 +192,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .wrap {
+    background: var(--contentColor);
     text-align: center;
     .icon {
         display: inline-block;
