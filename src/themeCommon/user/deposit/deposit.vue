@@ -112,14 +112,14 @@
             </p>
             <van-cell-group inset>
                 <van-field
-                    v-for='(item,key) in checkedType.extend'
+                    v-for='(item, key) in checkedType.extend'
                     :key='key'
                     v-model='appendMap[key].value'
                     :data='item'
                     :label='item[lang]'
                     label-width='70'
-                    :placeholder='$t("common.input")+ item[lang]'
-                    required='true'
+                    :placeholder="$t('common.input') + item[lang]"
+                    :required='true'
                 />
             </van-cell-group>
             <van-button class='confirm-btn' size='large' type='primary' @click='handleAppendField'>

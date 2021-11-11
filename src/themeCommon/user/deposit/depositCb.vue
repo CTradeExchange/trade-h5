@@ -119,11 +119,14 @@ export default {
             }
         }
         const getDespostProposal = () => {
-            const orderId = route.query.orderId
+            const orderId = sessionStorage.getItem('proposalNo')
             if (!isEmpty(orderId)) {
                 const params = {
                     customerNo: customInfo.value.customerNo,
-                    proposalNo: orderId
+                    proposalNo: orderId,
+                    tradeType,
+                    accountId,
+                    currency
                 }
                 state.loading = true
                 queryDepositProposal(params).then(res => {

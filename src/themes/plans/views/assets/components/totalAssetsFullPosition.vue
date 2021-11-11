@@ -71,12 +71,16 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
+import { Toast } from 'vant'
+import { useI18n } from 'vue-i18n'
+
 export default {
 
     setup () {
         const router = useRouter()
         const store = useStore()
         const userAccount = computed(() => store.state._user.accountAssets[1])
+        const { t } = useI18n({ useScope: 'global' })
 
         // 获取玩法列表
         const plans = computed(() => store.state._base.plans)
@@ -86,6 +90,7 @@ export default {
 
         const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(tradeType.value)))
         const toDesposit = () => {
+            if (!checkAssets()) return
             if (accountList.value.length > 1) {
                 router.push({
                     path: '/chooseAccount',
@@ -109,6 +114,7 @@ export default {
 
         // 跳转提现页面
         const toWirhdraw = () => {
+            if (!checkAssets()) return
             router.push({
                 path: '/withdrawAccount',
                 query: {
@@ -120,6 +126,7 @@ export default {
 
         // 跳转划转记录
         const toTransfer = () => {
+            if (!checkAssets()) return
             router.push({
                 path: '/transfer',
                 query: {
@@ -127,6 +134,16 @@ export default {
                     tradeType: tradeType.value
                 }
             })
+        }
+
+        // 验证是否有资产
+        const checkAssets = () => {
+            if (assetsInfo.value) {
+                return true
+            } else {
+                Toast(t('trade.nullAssets'))
+                return false
+            }
         }
 
         return {
