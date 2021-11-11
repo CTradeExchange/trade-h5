@@ -876,7 +876,7 @@ export default {
 
         // 图表初始值
         const initialValue = computed(() => {
-            if (product.value.symbolName) {
+            if (product.value?.symbolName) {
                 return {
                     text: product.value.symbolName, // 用于vant组件显示
                     description: product.value.symbolCode, // 显示在图表左上角
