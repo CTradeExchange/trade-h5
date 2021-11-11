@@ -29,18 +29,20 @@
 
     <!-- 平仓 -->
     <DialogClosePosition
+        v-if='product'
         v-model:show='closeVisible'
         :data='positionData'
         :product='product'
     />
     <!-- 调整保证金 -->
     <DialogAdjustMargin
+        v-if='product'
         v-model:show='adjustVisible'
         :data='positionData'
     />
     <!-- 设置止损止盈 -->
     <DialogSLTP
-        v-if='showSetProfit'
+        v-if='product && showSetProfit'
         :data='positionData'
         :product='product'
         :show='showSetProfit'
