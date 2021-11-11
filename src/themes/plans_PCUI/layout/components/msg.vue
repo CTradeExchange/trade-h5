@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { onBeforeMount, computed, reactive, toRefs, onUnmounted } from 'vue'
+import { onBeforeMount, computed, reactive, toRefs, onUnmounted , nextTick } from 'vue'
 import { queryPlatFormMessageLogList } from '@/api/user'
 import { isEmpty } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
@@ -120,7 +120,8 @@ export default {
             state.msgLoading = true
             getMsgList()
         }
-        const showing = () => {
+        const showing = async() => {
+            await nextTick()
             // js修改pop框的padding值防止全局污染
             const nodes = document.getElementsByClassName('infoPop')
             nodes && nodes.forEach(node => {

@@ -88,7 +88,7 @@ class SocketEvent {
     }
 
     // 盘口成交报价订阅
-    deal_subscribe (symbol_id, depth_level = 10, merge_accuracy, trade_type, trade_info_count) {
+    deal_subscribe (symbol_id, depth_level = 10, merge_accuracy, trade_type, trade_info_count = 20) {
         this.$store.commit('_quote/Delete_dealList') // 删除成交数据
         const productMap = this.$store.state._quote.productMap
         this.$store.dispatch('_quote/querySymbolBaseInfoList').then(() => {

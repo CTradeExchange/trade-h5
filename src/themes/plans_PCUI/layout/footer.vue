@@ -156,7 +156,7 @@ export default {
 <style lang="scss" scoped>
 .footer-nav {
     height: 380px;
-    background: #21262F;
+    background: #15191E;
     .footer-auto {
         display: flex;
         justify-content: space-between;

@@ -243,9 +243,7 @@ export default {
                 entryType: 1, // 1按数量下单 2按成交额下单
             },
             operationType: 2, // 操作类型。1-普通；2-自动借款；3-自动还款
-
             enabled: false,
-
             orderType: 1, // 订单类型
             expireTypeList: [{
                 title: t('trade.expireType2'),
@@ -287,8 +285,18 @@ export default {
                     const localData = Object.assign({}, params, data)
                     const orderId = data.orderId || data.id
                     sessionStorage.setItem('order_' + orderId, JSON.stringify(localData))
-                    // router.push({ name: 'OrderSuccess', query: { orderId } })
+
+                    // 刷新委托列表
                     store.dispatch('_trade/queryPBOOrderPage', { tradeType: params.tradeType })
+                    // 刷新成交记录
+                    store.dispatch('_trade/tradeRecordList')
+                    // 刷新持仓列表
+                    store.dispatch('_trade/queryPositionPage', {
+                        tradeType: params.tradeType,
+                        sortFieldName: 'openTime',
+                        sortType: 'desc',
+                    })
+
                     queryAccountInfo()
                     state[state.submitType].volume = ''
                     state[state.submitType].pendingPrice = ''
