@@ -95,7 +95,7 @@ export default {
         // 切换深度报价小数位的长度
         const onSelect = (val) => {
             state.handicapDigit = val.text
-            QuoteSocket.deal_subscribe(props.product.symbolId, 5, val.text, props.product.tradeType, 1)
+            QuoteSocket.deal_subscribe(props.product.symbolId, 5, val.text, props.product.tradeType, 20)
         }
 
         return {

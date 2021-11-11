@@ -26,42 +26,41 @@
             {{ $t('trade.my') }}
         </span>
     </div>
-    <template v-if='ask_deep.length>0'>
-        <div class='priceMultiGear buy'>
-            <p v-for='(item, index) in ask_deep' :key='index' class='item'>
-                <span class='hd'>
-                    {{ item.price_ask }}
-                </span>
-                <span class='ft'>
-                    {{ item.volume_ask }}
-                </span>
-                <span class='my'>
-                    {{ item.unitNum === 0 ? '': item.unitNum }}
-                </span>
-                <span v-if='item.width' class='volunmePercent buy' :style="{ width:item.width+'%' }"></span>
-            </p>
-        </div>
 
-        <div class='curPrice' :class='[product.cur_color]'>
-            {{ lastPrice || '--' }}
-        </div>
-        <div class='priceMultiGear sell'>
-            <p v-for='(item, index) in bid_deep' :key='index' class='item'>
-                <span class='hd'>
-                    {{ item.price_bid }}
-                </span>
-                <span class='ft'>
-                    {{ item.volume_bid }}
-                </span>
-                <span class='my'>
-                    {{ item.unitNum === 0 ? '': item.unitNum }}
-                </span>
-                <span v-if='item.width' class='volunmePercent' :style="{ width:item.width+'%' }"></span>
-            </p>
-        </div>
-    </template>
+    <div class='priceMultiGear buy'>
+        <p v-for='(item, index) in ask_deep' :key='index' class='item'>
+            <span class='hd'>
+                {{ item.price_ask }}
+            </span>
+            <span class='ft'>
+                {{ item.volume_ask }}
+            </span>
+            <span class='my'>
+                {{ item.unitNum === 0 ? '': item.unitNum }}
+            </span>
+            <span v-if='item.width' class='volunmePercent buy' :style="{ width:item.width+'%' }"></span>
+        </p>
+    </div>
 
-    <van-empty v-else :description='$t("common.noData")' image='/images/empty.png' />
+    <div class='curPrice' :class='[product.cur_color]'>
+        {{ lastPrice || '--' }}
+    </div>
+    <div class='priceMultiGear sell'>
+        <p v-for='(item, index) in bid_deep' :key='index' class='item'>
+            <span class='hd'>
+                {{ item.price_bid }}
+            </span>
+            <span class='ft'>
+                {{ item.volume_bid }}
+            </span>
+            <span class='my'>
+                {{ item.unitNum === 0 ? '': item.unitNum }}
+            </span>
+            <span v-if='item.width' class='volunmePercent' :style="{ width:item.width+'%' }"></span>
+        </p>
+    </div>
+
+    <van-empty :description='$t("common.noData")' image='/images/empty.png' />
 </template>
 
 <script>
@@ -122,13 +121,13 @@ export default {
 
         // 最新成交价的颜色
         watch(
-            () => lastPrice.value,
+            () => lastPrice && lastPrice.value,
             (newval, oldval) => (state.lastPriceColor = lt(newval, oldval) ? 'fallColor' : 'riseColor')
         )
 
         watch(() => state.curDigit, val => {
             if (!isEmpty(val)) {
-                QuoteSocket.deal_subscribe(product.value?.symbolId, 5, state.curDigit, product.value?.tradeType, 1)
+                QuoteSocket.deal_subscribe(product.value?.symbolId, 5, state.curDigit, product.value?.tradeType, 20)
             }
         })
 
@@ -149,7 +148,7 @@ export default {
                 }
             }
             const result = data
-            if (Array.isArray(result) && result.length > 0) {
+            if (Array.isArray(result)) {
                 let fillLength = 5 - data.length
                 while (fillLength > 0) {
                     result.push({
@@ -182,7 +181,7 @@ export default {
         // 切换深度报价小数位的长度
         const onSelect = (val) => {
             handicapDigit.value = val.text
-            QuoteSocket.deal_subscribe(product.value?.symbolId, 5, val.text, product.value?.tradeType, 1)
+            QuoteSocket.deal_subscribe(product.value?.symbolId, 5, val.text, product.value?.tradeType, 20)
         }
 
         return {
