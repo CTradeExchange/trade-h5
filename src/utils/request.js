@@ -10,7 +10,7 @@ export const setRouter = r => (router = r)
 // const baseURL = 'http://18.162.240.170:10000/cats-gateway'
 const realApiDomain = apiDomain && apiDomain.startsWith('http') ? apiDomain : 'https:' + apiDomain
 const baseURL = `${realApiDomain}/cats-gateway`
-const development = process.env.NODE_ENV
+const development = process.env.NODE_ENV === 'development'
 
 // create an axios instance
 const service = axios.create({

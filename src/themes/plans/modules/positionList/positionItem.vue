@@ -17,11 +17,11 @@
                                     <span class='lot'>
                                         {{ data.symbolCode }}
                                     </span>
-                                    <span v-if='data.crossLevelNum' class='multipleVal' @click.stop='$emit("showMultiplePopup",data)'>
+                                    <!-- <span v-if='data.crossLevelNum' class='multipleVal' @click.stop='$emit("showMultiplePopup",data)'>
                                         <i>{{ data.crossLevelNum }}x</i>
                                         <i class='icon_icon_arrow'></i>
-                                    </span>
-                                    <span v-if='data.tradeType!==2'>
+                                    </span> -->
+                                    <span>
                                         <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
                                             {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
                                         </span>{{ minus(data.openVolume, data.closeVolume) }} {{ $t('trade.volumeUnit') }}
@@ -34,11 +34,11 @@
                                     </span>
                                 </div>
                             </div>
-                            <div v-if='data.tradeType===2'>
+                            <!-- <div v-if='data.tradeType===2'>
                                 <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
                                     {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
                                 </span>{{ minus(data.openVolume, data.closeVolume) }} {{ $t('trade.volumeUnit') }}
-                            </div>
+                            </div> -->
                         </div>
                     </template>
                     <div class='cell' @click.stop='toPositionDetail(data)'>
