@@ -26,8 +26,8 @@
                         <span v-if='customerInfo.kycStatus === -1'>
                             {{ kycMap[customerInfo.kycRemark] }}
                         </span>
-                        <span v-else>
-                            {{ customerInfo.kycRemark }}
+                        <span v-else-if='customerInfo.kycStatus!==0'>
+                            {{ kycStateTextMap[customerInfo.kycStatus] }}
                         </span>
 
                         <!-- {{ $tm('kycAuditStatus')[customerInfo.kycAuditStatus] }}  :class="['status'+customerInfo.kycAuditStatus]" -->
@@ -65,7 +65,7 @@ export default {
         }
     },
     setup (props) {
-        const { t } = useI18n({ useScope: 'global' })
+        const { t, tm } = useI18n({ useScope: 'global' })
         const store = useStore()
         const faceImg = props.data.faceImg || faceImgDefault
         const adImg = props.src
@@ -81,6 +81,7 @@ export default {
             level_1: t('common.kycLevel1'),
             level_2: t('common.kycLevel2'),
         }
+        const kycStateTextMap = tm('kycStateTextMap')
         const kycStateMap = {
             '0': { className: 'unverified', icon: 'icon_weirenzheng' },
             '1': { className: 'unverified', icon: 'icon_weirenzheng' },
@@ -105,6 +106,7 @@ export default {
             assets,
             miniAmountText,
             kycMap,
+            kycStateTextMap,
             kycStateMap
         }
     }
