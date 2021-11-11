@@ -34,8 +34,8 @@ const tradeType = computed(() => unref(product).tradeType)
 const loading = ref(false)
 const tableOptions = computed(() => {
     return {
-    ...props.commonOptions,
-    columns: getTransactionColumns(props.tradeType)
+        ...props.commonOptions,
+        columns: getTransactionColumns(props.tradeType)
     }
 })
 
@@ -43,7 +43,7 @@ const tableData = ref([])
 // 接口原始数据
 const rawResponse = ref({})
 // 成交记录
-const account = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(unref(tradeType))))
+const account = computed(() => store.state._user.customerInfo.accountList?.filter(el => Number(el.tradeType) === Number(unref(tradeType))) || [])
 const accountIds = computed(() => account.value.map(e => e.accountId).toString())
 const queryRecordList = () => {
     const params = {

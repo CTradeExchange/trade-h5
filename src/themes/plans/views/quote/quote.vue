@@ -36,7 +36,7 @@
 <script>
 import TopTab from '@plans/components/topTab'
 import productListComp from '@plans/modules/productList/productList.vue'
-import { ref, watch, computed, onActivated } from 'vue'
+import { ref, watch, computed, onActivated, unref, nextTick } from 'vue'
 import plansType from '@/themes/plans/components/plansType.vue'
 import useProduct from '@plans/hooks/useProduct'
 import { useStore } from 'vuex'
@@ -63,21 +63,24 @@ export default {
                     return el
                 })
         )
-
+        const symbolKey = computed(() => store.state._quote.productActivedID || '')
+        const productTradeType = computed(() => unref(symbolKey).split('_')[1] || 0)
         // 1.玩法类型
-        const tradeType = ref(plansList.value[0].tradeType)
+        const tradeType = ref(unref(productTradeType))
         // 2.板块类型
         const categoryType = ref(0)
-        // 监听玩法类型
-        const handleTradeType = (val) => {
-            tradeType.value = val
-            categoryType.value = 0
-        }
-
         // 获取板块列表和所选板块的产品列表
         const { categoryList, productList } = useProduct({
             tradeType, categoryType
         })
+
+        // 监听玩法类型
+        const handleTradeType = async (val) => {
+            tradeType.value = val
+            categoryType.value = 0
+            await nextTick()
+            unref(productList).length && store.commit('_quote/Update_productActivedID', unref(productList)[0].symbolId + '_' + val)
+        }
 
         // 监听玩法类型/板块类型的变化，触发产品订阅
         // 获取productList.vue组件的ref对象和产品列表均是异步，所以第一次产品订阅在productList.vue组件内
