@@ -254,7 +254,10 @@ export default {
             const { symbolList, planMap } = symbolAllData
             commit('add_products', symbolList)
             commit('Updata_planMap', { plans: rootState._base.plans, planMap })
-            if (symbolList.length) commit('Update_productActivedID', symbolList[0].symbolKey)
+            const firstTradeType = rootState._base.plans[0].tradeType
+            const firstProductSymbolId = planMap[firstTradeType][0]
+            const firstProductSymbolKey = firstProductSymbolId + '_' + firstTradeType
+            if (symbolList.length) commit('Update_productActivedID', firstProductSymbolKey)
             return planMap
         },
         // 产品基础信息列表
