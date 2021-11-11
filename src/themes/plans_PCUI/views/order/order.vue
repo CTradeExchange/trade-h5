@@ -19,7 +19,7 @@
             <div v-if='Number(product.tradeType) === 5' class='right-wrap'>
                 <!-- 盘口报价 -->
                 <div class='handicap-content'>
-                    <handicap :product='product' />
+                    <handicap />
                 </div>
                 <!-- 实时成交记录 -->
                 <div class='deal-content'>

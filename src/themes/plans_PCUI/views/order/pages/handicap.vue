@@ -9,7 +9,7 @@
         >
             <template #reference>
                 <button class='selectBtn'>
-                    {{ handicapDigit }}
+                    {{ curDigit }}
                     <i class='icon_arrow'></i>
                 </button>
             </template>
@@ -26,62 +26,76 @@
             {{ $t('trade.my') }}
         </span>
     </div>
+    <template v-if='ask_deep.length>0'>
+        <div class='priceMultiGear buy'>
+            <p v-for='(item, index) in ask_deep' :key='index' class='item'>
+                <span class='hd'>
+                    {{ item.price_ask }}
+                </span>
+                <span class='ft'>
+                    {{ item.volume_ask }}
+                </span>
+                <span class='my'>
+                    {{ item.unitNum === 0 ? '': item.unitNum }}
+                </span>
+                <span v-if='item.width' class='volunmePercent buy' :style="{ width:item.width+'%' }"></span>
+            </p>
+        </div>
 
-    <div v-if='ask_deep.length>0' class='priceMultiGear buy'>
-        <p v-for='(item, index) in ask_deep' :key='index' class='item'>
-            <span class='hd'>
-                {{ item.price_ask }}
-            </span>
-            <span class='ft'>
-                {{ item.volume_ask }}
-            </span>
-            <span class='my'>
-                {{ item.unitNum === 0 ? '': item.unitNum }}
-            </span>
-            <span v-if='item.width' class='volunmePercent buy' :style="{ width:item.width+'%' }"></span>
-        </p>
-    </div>
+        <div class='curPrice' :class='[product.cur_color]'>
+            {{ lastPrice || '--' }}
+        </div>
+        <div class='priceMultiGear sell'>
+            <p v-for='(item, index) in bid_deep' :key='index' class='item'>
+                <span class='hd'>
+                    {{ item.price_bid }}
+                </span>
+                <span class='ft'>
+                    {{ item.volume_bid }}
+                </span>
+                <span class='my'>
+                    {{ item.unitNum === 0 ? '': item.unitNum }}
+                </span>
+                <span v-if='item.width' class='volunmePercent' :style="{ width:item.width+'%' }"></span>
+            </p>
+        </div>
+    </template>
+
     <van-empty v-else :description='$t("common.noData")' image='/images/empty.png' />
-    <div class='curPrice' :class='[product.cur_color]'>
-        {{ lastPrice }}
-    </div>
-    <div class='priceMultiGear sell'>
-        <p v-for='(item, index) in bid_deep' :key='index' class='item'>
-            <span class='hd'>
-                {{ item.price_bid }}
-            </span>
-            <span class='ft'>
-                {{ item.volume_bid }}
-            </span>
-            <span class='my'>
-                {{ item.unitNum === 0 ? '': item.unitNum }}
-            </span>
-            <span v-if='item.width' class='volunmePercent' :style="{ width:item.width+'%' }"></span>
-        </p>
-    </div>
 </template>
 
 <script>
-import { computed, reactive, toRefs, watch } from 'vue'
+import { computed, reactive, toRefs, watch, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import computeHandicap from '@planspc/hooks/handicap'
 import { lt, pow } from '@/utils/calculation'
 import { QuoteSocket } from '@/plugins/socket/socket'
+import { isEmpty } from '@/utils/util'
 export default {
     name: 'Handicap',
-    props: ['product'],
     setup (props) {
         const store = useStore()
         const route = useRoute()
         const state = reactive({
             showPopover: false,
-            handicapDigit: pow(0.1, props.product?.symbolDigits),
             lastPriceColor: '', // 最新成交价的颜色
+            curDigit: ''
+        })
+
+        const product = computed(() => store.getters.productActived)
+
+        const handicapDigit = computed({
+            get () {
+                return pow(0.1, product.value?.symbolDigits)
+            },
+            set (val) {
+                state.curDigit = val
+            }
         })
 
         // 获取盘口深度报价
-        const handicapList = computed(() => store.state._quote.handicapList.find(({ symbol_id }) => parseInt(symbol_id) === props.product.symbolId))
+        const handicapList = computed(() => store.state._quote.handicapList.find(({ symbol_id }) => parseInt(symbol_id) === product.value.symbolId))
 
         // 获取处理后的盘口数据
         const { handicapResult } = computeHandicap({
@@ -104,6 +118,22 @@ export default {
             } else {
                 return bidREsult
             }
+        })
+
+        // 最新成交价的颜色
+        watch(
+            () => lastPrice.value,
+            (newval, oldval) => (state.lastPriceColor = lt(newval, oldval) ? 'fallColor' : 'riseColor')
+        )
+
+        watch(() => state.curDigit, val => {
+            if (!isEmpty(val)) {
+                QuoteSocket.deal_subscribe(product.value?.symbolId, 5, state.curDigit, product.value?.tradeType, 1)
+            }
+        })
+
+        watchEffect(() => {
+            state.curDigit = handicapDigit.value
         })
 
         // 报价不够5档，补空位
@@ -140,7 +170,7 @@ export default {
         // 计算报价小数位档数
         const digitLevelList = computed(() => {
             const digits = []
-            var symbolDigits = props.product?.price_digits
+            var symbolDigits = product.value?.price_digits
             while (symbolDigits > -3) {
                 digits.push({ text: pow(0.1, symbolDigits) })
                 symbolDigits--
@@ -149,28 +179,11 @@ export default {
             return digits.splice(0, 5)
         })
 
-        // 最新成交价的颜色
-        watch(
-            () => lastPrice.value,
-            (newval, oldval) => (state.lastPriceColor = lt(newval, oldval) ? 'fallColor' : 'riseColor')
-        )
-
-        // 监听路由变化
-        watch(
-            () => route.query, (val, oval) => {
-                QuoteSocket.deal_subscribe(props.product.symbolId, 5, curDigits, props.product.tradeType, 1)
-            }, {
-                immediate: true
-            }
-        )
-
         // 切换深度报价小数位的长度
         const onSelect = (val) => {
-            state.handicapDigit = val.text
-            QuoteSocket.deal_subscribe(props.product.symbolId, 5, val.text, props.product.tradeType, 1)
+            handicapDigit.value = val.text
+            QuoteSocket.deal_subscribe(product.value?.symbolId, 5, val.text, product.value?.tradeType, 1)
         }
-
-        const curDigits = pow(0.1, props.product.symbolDigits)
 
         return {
             ...toRefs(state),
@@ -181,6 +194,8 @@ export default {
             bid_deep,
             digitLevelList,
             handicapResult,
+            product,
+            handicapDigit
         }
     }
 }
@@ -214,6 +229,7 @@ export default {
     height: 114px;
     &.sell {
         color: var(--riseColor);
+        margin-top: 0;
     }
     &.buy {
         display: flex;
@@ -256,8 +272,7 @@ export default {
     }
 }
 .curPrice {
-    height: 17px;
-    margin-top: 10px;
+    line-height: 42px;
     font-size: 18px;
 }
 .selectBtn {
