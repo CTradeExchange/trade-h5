@@ -61,6 +61,8 @@ export function changeLang (lang) {
         headers: {
             version: '0.0.1',
         },
-        data: { lang }
+        data: {
+            newLang: lang
+        }
     })
 }

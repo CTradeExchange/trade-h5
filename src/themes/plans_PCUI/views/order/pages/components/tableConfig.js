@@ -332,7 +332,7 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.orderType'),
                 align: 'right',
                 formatter: (row, column, cellValue, index, rawResponse) => {
-                    return rawResponse.data.bizTypeText[row.bizType]
+                    return rawResponse.bizTypeText[row.bizType]
                 }
             },
             {
@@ -378,7 +378,7 @@ export const getTransactionColumns = (tradeType) => {
                 formatter: row => parseFloat(row.profitLoss) > 0 ? row.profitLoss : '--',
                 directives: { if: row => isCloseType(row.bizType) }
             },
-            { name: t('trade.fee'), prop: 'commission', align: 'right' },
+            { name: t('trade.fee'), prop: 'commission', align: 'right', width: 120 },
             { name: t('trade.pendingNo'), prop: 'dealId', align: 'right' },
         ],
         2: [
@@ -395,7 +395,7 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.orderType'),
                 align: 'right',
                 formatter: (row, column, cellValue, index, rawResponse) => {
-                    return rawResponse.data.bizTypeText[row.bizType]
+                    return rawResponse.bizTypeText[row.bizType]
                 }
             },
             {
@@ -468,7 +468,7 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.orderType'),
                 align: 'right',
                 formatter: (row, column, cellValue, index, rawResponse) => {
-                    return rawResponse.data.bizTypeText[row.bizType]
+                    return rawResponse.bizTypeText[row.bizType]
                 }
             },
             {
@@ -532,7 +532,7 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.orderType'),
                 align: 'right',
                 formatter: (row, column, cellValue, index, rawResponse) => {
-                    return rawResponse.data.bizTypeText[row.bizType]
+                    return rawResponse.bizTypeText[row.bizType]
                 }
             },
             {

@@ -2,9 +2,9 @@
     <div class='userRecord'>
         <div class='headbar'>
             <el-tabs v-model='activeName' class='tabs'>
-                <el-tab-pane label='当前委托' name='0' />
-                <el-tab-pane label='成交记录' name='1' />
-                <el-tab-pane label='资产' name='2' />
+                <el-tab-pane :label='$t("trade.curTrust")' name='0' />
+                <el-tab-pane :label='$t("trade.dealList")' name='1' />
+                <el-tab-pane :label='[1,2].includes(Number(tradeType)) ? $t("trade.position") : $t("trade.asset") ' name='2' />
             </el-tabs>
             <div v-if='activeName === "1"' class='link'>
                 {{ $t('trade.allTransaction') }}
