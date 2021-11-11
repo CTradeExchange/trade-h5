@@ -240,7 +240,7 @@ export default {
 
         const toRecord = () => {
             const routeParent = route.matched[route.matched.length - 2]
-            router.push(routeParent.path + `/fundRecord?tradeType=${tradeType}&accountId=${accountId}&type=3`)
+            router.push(routeParent.path + `/record?tradeType=${tradeType}&accountId=${accountId}&type=3`)
         }
 
         // 切换转出账户
