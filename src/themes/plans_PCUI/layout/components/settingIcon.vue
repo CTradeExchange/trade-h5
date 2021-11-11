@@ -13,10 +13,10 @@
                 <li v-if='customInfo' class='item' @click='handRoutTo("/setLoginPwd")'>
                     {{ Number(customInfo.loginPassStatus) === 1 ? $t("forgot.setPwd") : $t('login.modifyLoginPwd') }}
                 </li>
-                <li v-if='customInfo' class='item' @click='handRoutTo("/bindEmail")'>
+                <li v-if='customInfo' class='item' @click='handRoutTo("/bindMobile")'>
                     {{ customInfo.phone ? $t("setting.replacePhone") : $t('setting.bindPhone') }}
                 </li>
-                <li v-if='customInfo' class='item' @click='handRoutTo("/bindMobile")'>
+                <li v-if='customInfo' class='item' @click='handRoutTo("/bindEmail")'>
                     {{ customInfo.email ? $t("setting.replaceEmail") : $t('setting.bindEmail') }}
                 </li>
                 <li class='item flexBetween'>

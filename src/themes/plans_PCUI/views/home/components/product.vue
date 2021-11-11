@@ -1,7 +1,7 @@
 <template>
     <div class='product-module'>
         <ul>
-            <li v-for='item in productList' :key='item.symbloKey'>
+            <li v-for='item in productList' :key='item.symbloKey' @click='goOrder(item)'>
                 <p class='row_1'>
                     <span>{{ item.symbolName }}</span>
                     <strong :class='item.upDownColor'>
@@ -22,11 +22,13 @@
 <script>
 import { computed, unref } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 export default {
     emits: ['update'],
     setup (props, context) {
         const store = useStore()
+        const router = useRouter()
         // 产品map数据
         const productMap = unref(computed(() => store.state._quote.productMap))
         // 产品symbolKey集合
@@ -34,10 +36,22 @@ export default {
         // 产品列表数据
         const productList = productKeys.map(key => productMap[key]).filter(elem => elem)
 
+        // 跳转到下单页面
+        const goOrder = (item) => {
+            router.push({
+                path: '/order',
+                query: {
+                    symbolId: item.symbolId,
+                    tradeType: item.tradeType
+                }
+            })
+        }
+
         context.emit('update', productKeys)
 
         return {
-            productList
+            productList,
+            goOrder
         }
     }
 }

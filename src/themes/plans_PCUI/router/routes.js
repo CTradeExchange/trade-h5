@@ -141,13 +141,13 @@ const h5Children = [
             title: 'cRoute.walletAdd',
         }
     },
-    {
-        path: 'fundRecord', // 资金流水
-        component: () => import(/* webpackChunkName: "fundRecord" */ '../views/fundRecord/fundRecord.vue'),
-        meta: {
-            title: 'cRoute.fundLog',
-        }
-    },
+    // {
+    //     path: 'fundRecord', // 资金流水
+    //     component: () => import(/* webpackChunkName: "fundRecord" */ '../views/fundRecord/fundRecord.vue'),
+    //     meta: {
+    //         title: 'cRoute.fundLog',
+    //     }
+    // },
     {
         path: 'loan', // 借款
         component: () => import(/* webpackChunkName: "loan" */ '../views/loan/loan.vue'),

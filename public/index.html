@@ -51,10 +51,86 @@
             transform: translateZ(0) rotate(360deg);
         }
     }
+    .unsupported{
+        text-align: center;
+        font-size: 16px;
+        color: #666;
+        padding-top: 100px;
+    }
+    .unsupported .text1{
+        font-size: 36px;
+        color: #333;
+        font-weight: bold;
+    }
+    .broswer-list{
+        width: 1200px;
+        margin: 0 auto;
+    }
+    .broswer-item{
+        display: inline-block;
+        font-size: 16px;
+        color: #666;
+        text-align: center;
+        width: 75px;
+        margin-left: 60px;
+        text-decoration: none;
+    }
+    .broswer-item >i{
+        display: block;
+        width: 100%;
+        width: 70px;
+        height: 70px;
+        margin-bottom: 20px;
+    }
+    .chrome{
+        background: url('/images/browser/chrome.png');
+    } 
+    .safari{
+        background: url('/images/browser/safari.png');
+    }
+    .firefox{
+        background: url('/images/browser/firefox.png');
+    }
+    .opera{
+        background: url('/images/browser/opera.png');
+    }
+    .browser360{
+        background: url('/images/browser/browser360.png');
+    }
+    .browserQQ{
+        background: url('/images/browser/browserQQ.png');
+    }
+    .liebao{
+        background: url('/images/browser/liebao.png');
+    }
     </style>
 </head>
 
 <body>
+    <script type="text/javascript">
+        (function(window) {   
+            if(!!window.ActiveXObject || "ActiveXObject" in window) {
+                var str = "温馨提醒";
+                var str2 = "为确保您获得顺畅的交易体验，请使用以下浏览器访问交易平台"
+               
+                var htmlText = "<pre class='unsupported'><p class='text1'>"+ str +"</p><p class='text2'>"+ str2 +"</p></pre>"
+                +"<div class='broswer-list'>"
+                +"<a class='broswer-item' target='_blank' href='https://www.google.com/chrome/'><i class='chrome'></i><p>Chrome</p></a>"    
+                +"<a class='broswer-item' target='_blank' href='https://support.apple.com/downloads/safari'><i class='safari'></i><p>Safari</p></a>"
+                +"<a class='broswer-item' target='_blank' href='https://www.mozilla.org/en-US/firefox/new/'><i class='firefox'></i><p>火狐</p></a>"
+                +"<a class='broswer-item' target='_blank' href='https://www.opera.com/zh-cn/browsers'><i class='opera'></i><p>Opera</p></a>"
+                +"<a class='broswer-item' target='_blank' href='https://browser.360.cn/'><i class='browser360'></i><p>360浏览器</p></a>"
+                +"<a class='broswer-item' target='_blank' href='https://www.liebao.cn/'><i class='liebao'></i><p>猎豹</p></a>"
+                +"<a class='broswer-item' target='_blank' href='https://browser.qq.com/'><i class='browserQQ'></i><p>QQ浏览器</p></a>"
+                +"</div>"
+                document.write(htmlText)
+                document.execCommand("Stop"); 
+            }
+
+           
+        })(window);
+         
+  </script>
     <noscript>
         <strong>We're sorry but <%= htmlWebpackPlugin.options.title
                 %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
@@ -138,6 +214,7 @@
         /* ##wp_tradeService end## */
     </script>
     <script type="text/javascript" src="/libs/uni-app/uni.webview.1.5.2.js"></script>
+    
 </body>
 
 </html>
