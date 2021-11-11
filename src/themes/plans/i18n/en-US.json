@@ -547,10 +547,10 @@
     "3": "Not verified"
   },
   "kycStateTextMap": {
-    "1": "未验证",
-    "2": "审核中",
-    "3": "认证失败",
-    "4": "已认证"
+    "1": "Unverified",
+    "2": "Under review",
+    "3": "Averification failed",
+    "4": "Verified"
   },
   "assets": {
     "totalAssets": "Total Assets",
