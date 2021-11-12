@@ -42,11 +42,19 @@ export default {
         const requestParams = ref({})
 
         const params = computed(() => {
-            return {
-                accountId: Number(route.query.accountId),
-                liabilitiesType: 1,
-                ...requestParams.value
+            if(route.query.accountId){
+                return {
+                    accountId: Number(route.query.accountId),
+                    liabilitiesType: 1,
+                    ...requestParams.value
+                }
+            }else{
+                return {
+                    liabilitiesType: 1,
+                    ...requestParams.value
+                }
             }
+            
         })
 
         const setParams = (params) => {
