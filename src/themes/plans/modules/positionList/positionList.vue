@@ -5,6 +5,7 @@
         image='/images/empty.png'
     />
     <div v-else class='position-wrap'>
+        {{ adjustVisible }}
         <p class='header'>
             <span>{{ $t('trade.position') }}({{ positionList?.length }})</span>
             <span class='fr' :class="userAccount?.profitLoss > 0 ? 'riseColor': 'fallColor'">
@@ -36,7 +37,6 @@
     />
     <!-- 调整保证金 -->
     <DialogAdjustMargin
-        v-if='product'
         v-model:show='adjustVisible'
         :data='positionData'
     />
@@ -114,6 +114,7 @@ export default {
 
         // 调整保证金
         const showAdjustPopup = (data) => {
+            debugger
             state.positionData = data
             state.adjustVisible = true
         }
