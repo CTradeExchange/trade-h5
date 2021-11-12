@@ -196,7 +196,7 @@ export default {
         margin-right: rem(20px);
         color: var(--primary);
         font-size: rem(28px);
-        line-height: rem(60px);
+        line-height: rem(65px);
         background: var(--primaryAssistColor);
         border: none;
         border-color: var(--primaryAssistColor);
