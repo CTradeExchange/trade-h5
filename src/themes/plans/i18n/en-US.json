@@ -166,7 +166,7 @@
     "buyShort": "Buy",
     "marketPrice": "Market",
     "closedOrder": "Closed",
-    "orderVolume": "Quantity (lots)",
+    "orderVolume": "Quantity",
     "dot": "dot",
     "freeMargin": "Available margin",
     "free": "Available",
