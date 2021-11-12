@@ -29,8 +29,12 @@ const tableOptions = computed(() => {
         columns: getTransactionColumns(props.tradeType)
     }
 })
+// 获取账户信息
+const customerInfo = computed(() => store.state._user.customerInfo)
 
-store.dispatch('_trade/tradeRecordList')
+if (customerInfo.value) {
+    store.dispatch('_trade/tradeRecordList')
+}
 
 // 接口原始数据
 const rawResponse = computed(() => store.state._trade.tradeRecordData || {})
