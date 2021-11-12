@@ -195,6 +195,7 @@ export default {
                         message: t('trade.closeSuccessToast')
                     })
                     queryPositionList()
+                    store.dispatch('_trade/tradeRecordList')
                 } else {
                     ElMessage({
                         type: 'warning',
