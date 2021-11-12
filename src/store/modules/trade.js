@@ -293,8 +293,8 @@ export default {
                 tradeType,
                 sortFieldName: 'executeTime',
                 sortType: 'desc',
-                executeStartTime: window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 00:00:00')).valueOf(),
-                executeEndTime: window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 23:59:59')).valueOf(),
+                // executeStartTime: window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 00:00:00')).valueOf(),
+                // executeEndTime: window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 23:59:59')).valueOf(),
                 current: 1,
                 size: 10,
             }

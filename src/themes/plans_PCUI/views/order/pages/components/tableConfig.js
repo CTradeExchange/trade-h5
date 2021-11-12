@@ -94,7 +94,7 @@ export const getAssetColumns = (tradeType) => {
             {
                 name: t('trade.profit') + '(' + unref(assetsInfo).currency + ')',
                 align: 'right',
-                width: 100,
+                minWidth: 150,
                 formatter: row => {
                     return <span className={[parseFloat(row.profitLoss) > 0 ? 'riseColor' : 'fallColor']}>{row.profitLoss}</span>
                 }

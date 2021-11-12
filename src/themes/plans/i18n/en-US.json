@@ -166,7 +166,7 @@
     "buyShort": "Buy",
     "marketPrice": "Market",
     "closedOrder": "Closed",
-    "orderVolume": "Quantity (lots)",
+    "orderVolume": "Quantity",
     "dot": "dot",
     "freeMargin": "Available margin",
     "free": "Available",
@@ -545,6 +545,12 @@
     "1": "To be reviewed",
     "2": "Verified",
     "3": "Not verified"
+  },
+  "kycStateTextMap": {
+    "1": "Unverified",
+    "2": "Under verification",
+    "3": "Averification failed",
+    "4": "Verified"
   },
   "assets": {
     "totalAssets": "Total Assets",

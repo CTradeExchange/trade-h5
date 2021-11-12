@@ -87,7 +87,7 @@ onUnmounted(() => {
 })
 watch(() => props.tradeType, () => {
     initData()
-})
+}, { immediate: true })
 </script>
 
 <style lang="scss" scoped>

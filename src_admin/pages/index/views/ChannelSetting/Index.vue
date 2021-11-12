@@ -259,8 +259,8 @@
                                                         </el-col>
                                                         <el-col :offset='0' :span='6'>
                                                             <div class='upload' @click='uploadFile(item,l)'>
-                                                                <div v-if='form.paymentIconList[item.paymentCode+"_"+item.paymentType][l.val].imgUrl' class='img-wrap'>
-                                                                    <img alt='' :src='form.paymentIconList[item.paymentCode+"_"+item.paymentType][l.val].imgUrl' />
+                                                                <div v-if='form.paymentIconList[item.paymentCode+"_"+item.paymentType+"_"+item.merchantNo][l.val].imgUrl' class='img-wrap'>
+                                                                    <img alt='' :src='form.paymentIconList[item.paymentCode+"_"+item.paymentType+"_"+item.merchantNo][l.val].imgUrl' />
                                                                 </div>
                                                                 <div v-else>
                                                                     <i class='el-icon-plus'></i>
@@ -270,7 +270,7 @@
                                                         </el-col>
                                                         <el-col :offset='0' :span='14'>
                                                             <el-form-item label='支付通道别名'>
-                                                                <el-input v-model='form.paymentIconList[item.paymentCode+"_"+item.paymentType][l.val].alias' class='alias-input' clearable placeholder='请输入支付通道别名' />
+                                                                <el-input v-model='form.paymentIconList[item.paymentCode+"_"+item.paymentType+"_"+item.merchantNo][l.val].alias' class='alias-input' clearable placeholder='请输入支付通道别名' />
                                                                 <el-button type='primary' @click='resetPayment(item,l)'>
                                                                     重置
                                                                 </el-button>
@@ -561,10 +561,11 @@ export default {
                     that.pyamentList = res.data
                     if (that.pyamentList.length > 0) {
                         that.pyamentList.forEach(el => {
-                            if (isEmpty(that.form.paymentIconList[el.paymentCode + '_' + el.paymentType])) {
-                                that.form.paymentIconList[el.paymentCode + '_' + el.paymentType] = {}
+                            const uniqueKey = el.paymentCode + '_' + el.paymentType + '_' + el.merchantNo
+                            if (isEmpty(that.form.paymentIconList[uniqueKey])) {
+                                that.form.paymentIconList[uniqueKey] = {}
                                 that.lang.forEach(lang => {
-                                    that.form.paymentIconList[el.paymentCode + '_' + el.paymentType][lang.val] = {
+                                    that.form.paymentIconList[uniqueKey][lang.val] = {
                                         alias: '',
                                         imgUrl: ''
                                     }
@@ -937,7 +938,8 @@ export default {
                         _div.innerHTML = html
                         const imgUrl = _div.querySelector('img').src
                         console.log('imgUrl', imgUrl)
-                        this.form.paymentIconList[item.paymentCode + '_' + item.paymentType][lang.val].imgUrl = imgUrl
+                        const uniqueKey = item.paymentCode + '_' + item.paymentType + '_' + item.merchantNo
+                        this.form.paymentIconList[uniqueKey][lang.val].imgUrl = imgUrl
                     }
                 } else {
                     console.log('执行WordPress window.tb_show方法显示上传图片功能')
@@ -947,8 +949,9 @@ export default {
             }
         },
         resetPayment (item, lang) {
-            this.form.paymentIconList[item.paymentCode + '_' + item.paymentType][lang.val].alias = ''
-            this.form.paymentIconList[item.paymentCode + '_' + item.paymentType][lang.val].imgUrl = ''
+            const uniqueKey = item.paymentCode + '_' + item.paymentType + '_' + item.merchantNo
+            this.form.paymentIconList[uniqueKey][lang.val].alias = ''
+            this.form.paymentIconList[uniqueKey][lang.val].imgUrl = ''
         }
     }
 }

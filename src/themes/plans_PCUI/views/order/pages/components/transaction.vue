@@ -35,6 +35,4 @@ store.dispatch('_trade/tradeRecordList')
 // 接口原始数据
 const rawResponse = computed(() => store.state._trade.tradeRecordData || {})
 const tableData = computed(() => unref(rawResponse)?.list || [])
-window.rawResponse = rawResponse
-window.tableData = tableData
 </script>

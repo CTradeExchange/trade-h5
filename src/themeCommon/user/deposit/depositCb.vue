@@ -4,7 +4,9 @@
             back
             left-icon='arrow-left'
             :menu='false'
+            on-back
             :right-action='false'
+            @back='onBack'
         />
         <Loading :show='loading' />
         <div v-if='despositObj' class='wrap'>
@@ -83,7 +85,7 @@ import { queryDepositProposal } from '@/api/user'
 import { useStore } from 'vuex'
 import { Dialog } from 'vant'
 import { isEmpty } from '@/utils/util'
-import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 export default {
     components: {
@@ -119,11 +121,14 @@ export default {
             }
         }
         const getDespostProposal = () => {
-            const orderId = route.query.orderId
+            const orderId = sessionStorage.getItem('proposalNo')
             if (!isEmpty(orderId)) {
                 const params = {
                     customerNo: customInfo.value.customerNo,
-                    proposalNo: orderId
+                    proposalNo: orderId,
+                    tradeType,
+                    accountId,
+                    currency
                 }
                 state.loading = true
                 queryDepositProposal(params).then(res => {
@@ -153,8 +158,10 @@ export default {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
 
-        onBeforeRouteLeave((to, from) => {
-            if (to.path !== '/home') {
+        // 点击返回
+        const onBack = () => {
+            router.replace('/home')
+            setTimeout(() => {
                 router.push({
                     path: '/deposit',
                     query: {
@@ -163,8 +170,8 @@ export default {
                         tradeType
                     }
                 })
-            }
-        })
+            }, 20)
+        }
 
         onMounted(() => {
             getDespostProposal()
@@ -178,6 +185,7 @@ export default {
             formatTime,
             statusMap,
             onlineServices,
+            onBack,
             ...toRefs(state)
         }
     }
@@ -187,6 +195,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .wrap {
+    background: var(--contentColor);
     text-align: center;
     .icon {
         display: inline-block;

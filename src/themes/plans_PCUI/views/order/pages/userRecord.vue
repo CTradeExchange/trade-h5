@@ -73,7 +73,7 @@ const commonOptions = {
         .table{
             background-color: var(--bgColor);
             .el-table__cell{
-                background-color: var(--bgColor);
+                background: var(--bgColor)!important;
                 color: var(--color);
             }
             .el-table__body{

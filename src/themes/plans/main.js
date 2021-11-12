@@ -20,9 +20,9 @@ import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
 import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
 import { getPreDemoAccountParams } from './officialDemoAccount.js'
-import VConsole from 'vconsole' // 调试工具
+// import VConsole from 'vconsole' // 调试工具
 
-const Vconsole = new VConsole()
+// const Vconsole = new VConsole()
 const isProduction = process.env.NODE_ENV === 'production'
 
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
