@@ -258,7 +258,7 @@
         "submitTime": "Submission Time",
         "depositSuccess": "Deposit success",
         "inputAmount": "Please enter the amount",
-        "chooseCurrency": "Please select the account currency",
+        "chooseCurrency": "Please select the currency",
         "despositFail": "Sorry, you may not have received a payment success message for network reasons. If payment has been made, please check back later or contact online customer service",
         "toRecord": "View deposit records",
         "appendFiled": "Additional Information",
