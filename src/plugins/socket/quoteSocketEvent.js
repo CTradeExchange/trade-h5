@@ -147,8 +147,9 @@ class SocketEvent {
 
         const lastData = list[0]
         const dealList = list[0]?.trade_info
+
         if (lastData && dealList.length > 0) {
-            dealList.forEach(el => {
+            dealList.reverse().forEach(el => {
                 const dealData = {
                     symbolId: lastData.symbol_id,
                     dealTime: mul(el.trade_time, 1000),

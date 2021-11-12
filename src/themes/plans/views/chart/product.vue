@@ -477,7 +477,7 @@ export default {
         if (symbolId && tradeType) store.commit('_quote/Update_productActivedID', `${symbolId.value}_${tradeType.value}`)
 
         const computedLineList = computed(() => {
-            if (product.value.tradeType === 9) {
+            if (product.value?.tradeType === 9) {
                 return state.lineList
             }
             return state.lineList.filter(e => !['stalls', 'deal'].includes(e.value))

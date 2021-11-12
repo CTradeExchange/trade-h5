@@ -39,8 +39,8 @@
     "loadError": "Load failed, please try again later"
   },
   "tradeType":{
-    "1": "Cross Futures",
-    "2": "Isolated Futures",
+    "1": "Contract Cross",
+    "2": "Contract Isolated",
     "3": "Margin",
     "5": "Spot",
     "9": "ABCC Margin"
