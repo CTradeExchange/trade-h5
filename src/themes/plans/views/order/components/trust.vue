@@ -5,7 +5,7 @@
                 {{ $t('trade.dealList') }}
             </span>
             <span v-else>
-                {{ $t('c.cur') + $t([1,2].includes(product.tradeType) ? 'trade.pending':'trade.trust') }} ({{ pendingList.length }})
+                {{ $t('c.cur') +' '+ $t([1,2].includes(product.tradeType) ? 'trade.pending':'trade.trust') }} ({{ pendingList.length }})
             </span>
             <a class='allTrust' href='javascript:;' @click="$router.push({ name:'List',query:{ tradeType: $route.query.tradeType } })">
                 <i class='icon_mingxi'></i>

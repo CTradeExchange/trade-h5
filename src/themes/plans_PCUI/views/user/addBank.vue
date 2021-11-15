@@ -60,7 +60,9 @@
             >
                 <van-picker
                     ref='picker'
+                    :cancel-button-text="$t('common.cancel')"
                     :columns='provinceCities'
+                    :confirm-button-text="$t('common.sure')"
                     @change='onChangeArea'
                     @confirm='areaConfirm'
                 />

@@ -335,13 +335,13 @@ export default {
                 bizType: bizType.value, // 业务类型。1-市价开；2-限价开
                 direction, // 订单买卖方向。1-买；2-卖；
                 symbolId: Number(symbolId),
-                accountCurrency: account.value.currency,
-                accountId: account.value.accountId,
+                accountCurrency: account.value[state.submitType].currency,
+                accountId: account.value[state.submitType].accountId,
                 requestTime: Date.now(),
                 requestNum: Number(state[state.submitType].volume),
                 operationType: state.operationType,
                 requestPrice: mul(requestPrice, p),
-                accountDigits: account.value.digits,
+                accountDigits: account.value[state.submitType].digits,
                 tradeType: parseInt(tradeType),
                 stopLoss: mul(state[state.submitType].stopLoss, p),
                 takeProfit: mul(state[state.submitType].stopProfit, p),

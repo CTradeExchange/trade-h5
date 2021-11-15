@@ -157,6 +157,7 @@ import { onMounted, onUnmounted, reactive, toRefs } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { sessionSet } from '@/utils/util'
 let mobileComponents = null
 const pageBaseConfig = pageConfig || {}
 let ELEMENIINDEX = 0
@@ -621,6 +622,7 @@ export default {
 
                 state.settingPageConfig.h5PreviewAddress = res.data.web_view_site
                 state.settingPageConfig.h5Address = res.data.web_site
+                sessionSet('web_site', res.data.web_site)
             }).catch(error => {
                 console.log(error)
             }).finally(() => {

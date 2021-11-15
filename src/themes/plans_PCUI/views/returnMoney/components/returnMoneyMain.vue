@@ -54,8 +54,19 @@
             </div>
         </div>
 
-        <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
-            <van-picker :columns='columns' :default-index='2' title='' @confirm='onPickerConfirm' />
+        <van-popup
+            v-model:show='pickerShow'
+            class='assetsPicker'
+            position='bottom'
+        >
+            <van-picker
+                :cancel-button-text="$t('common.cancel')"
+                :columns='columns'
+                :confirm-button-text="$t('common.sure')"
+                :default-index='2'
+                title=''
+                @confirm='onPickerConfirm'
+            />
         </van-popup>
     </div>
 </template>

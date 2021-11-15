@@ -41,8 +41,10 @@
 
     <van-popup v-model:show='outPickerShow' class='assetsPicker' position='bottom'>
         <van-picker
+            :cancel-button-text="$t('common.cancel')"
             :columns='columns'
             :columns-field-names='customFieldName'
+            :confirm-button-text="$t('common.sure')"
             :default-index='0'
             @cancel='outPickerShow = false'
             @confirm='onPickerConfirm'
@@ -51,8 +53,10 @@
 
     <van-popup v-model:show='inPickerShow' class='assetsPicker' position='bottom'>
         <van-picker
+            :cancel-button-text="$t('common.cancel')"
             :columns='inCurrencyList'
             :columns-field-names='customFieldName'
+            :confirm-button-text="$t('common.sure')"
             :default-index='0'
             @cancel='inPickerShow = false'
             @confirm='onInPickerConfirm'
@@ -61,8 +65,11 @@
 
     <van-popup v-model:show='methodPickerShow' class='assetsPicker' position='bottom'>
         <van-picker
+            :cancel-button-text="$t('common.cancel')"
             :columns='methodList'
             :columns-field-names='customMethodName'
+            :confirm-button-text="$t('common.sure')"
+
             :default-index='0'
             @cancel='methodPickerShow = false'
             @confirm='onMethonConfirm'

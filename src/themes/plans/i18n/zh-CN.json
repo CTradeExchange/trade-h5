@@ -406,6 +406,7 @@
     "trustDetail": "委托详情",
     "cancelOrder": "撤单",
     "loan": "借款",
+    "borrowed":"借款",
     "availableLoanContent1": "从代理处可借款的额度，系统最大可借为{0}",
     "availableLoanContent2": "代理可借=系统最大可借-已借未还",
     "availableLoanContent3": "您的账户可用资金不足且有足额借款额度，在下单时系统将自动帮您完成借款并交易。自下单成功开始计息，平台按小时数收取利息，整点计息，不足一小时按一小时计算。借款利息=借款本金 *（日利率/24）* 借款小时数，日利率{0}。",
