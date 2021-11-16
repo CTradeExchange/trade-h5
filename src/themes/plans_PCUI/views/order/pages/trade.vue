@@ -291,13 +291,16 @@ export default {
                     // 刷新成交记录
                     store.dispatch('_trade/tradeRecordList')
                     // 刷新持仓列表
-                    store.dispatch('_trade/queryPositionPage', {
-                        tradeType: params.tradeType,
-                        sortFieldName: 'openTime',
-                        sortType: 'desc',
-                    })
+                    if ([1, 2].includes(product.value?.tradeType)) {
+                        store.dispatch('_trade/queryPositionPage', {
+                            tradeType: params.tradeType,
+                            sortFieldName: 'openTime',
+                            sortType: 'desc',
+                        })
+                    } else {
+                        queryAccountInfo()
+                    }
 
-                    queryAccountInfo()
                     state[state.submitType].volume = ''
                     state[state.submitType].pendingPrice = ''
                     Toast({
@@ -335,13 +338,13 @@ export default {
                 bizType: bizType.value, // 业务类型。1-市价开；2-限价开
                 direction, // 订单买卖方向。1-买；2-卖；
                 symbolId: Number(symbolId),
-                accountCurrency: account.value[state.submitType].currency,
-                accountId: account.value[state.submitType].accountId,
+                accountCurrency: account.value[state.submitType]?.currency,
+                accountId: account.value[state.submitType]?.accountId,
                 requestTime: Date.now(),
                 requestNum: Number(state[state.submitType].volume),
-                operationType: state.operationType,
+                operationType: state.operationType ? 2 : 1,
                 requestPrice: mul(requestPrice, p),
-                accountDigits: account.value[state.submitType].digits,
+                accountDigits: account.value[state.submitType]?.digits,
                 tradeType: parseInt(tradeType),
                 stopLoss: mul(state[state.submitType].stopLoss, p),
                 takeProfit: mul(state[state.submitType].stopProfit, p),
@@ -397,7 +400,10 @@ export default {
                 // state.volume = product.minVolume  不需要设置默认手数
                 // state[state.submitType].volume = ''
                 // state[state.submitType].pendingPrice = ''
-
+                state.buy.stopLoss = ''
+                state.buy.stopProfit = ''
+                state.sell.stopProfit = ''
+                state.sell.stopProfit = ''
                 if (!isEmpty(customerInfo.value)) {
                     const accountIds = accountList.value?.filter(el => el.tradeType === Number(product.tradeType)).map(el => el.accountId)
                     queryAccountInfo()

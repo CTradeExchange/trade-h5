@@ -44,7 +44,7 @@ export default {
             }
         })
         const dailyInterest = computed(() => {
-            const assetsId = props.account['buy']?.assetsId
+            const assetsId = props.account?.assetsId
             const interest = props.product.borrowInterestList?.find(item => Number(item.assetsId) === Number(assetsId))?.value
 
             return interest ? mul(interest, 100) + '%' : '--'

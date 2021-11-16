@@ -11,12 +11,16 @@ export default function hooks (state) {
     const productMap = computed(() => store.state._quote.productMap)
     const product = computed(() => store.getters.productActived)
     const account = computed(() => {
-        let account = ''
+        let account = {}
         if (!product.value) return account
         const accountList = customerInfo.value?.accountList || []
         const tradeType = parseInt(product.value?.tradeType)
         if ([1, 2].includes(tradeType)) {
-            account = accountList.find(el => el.tradeType === tradeType)
+            let accountTemp = accountList.find(el => el.tradeType === tradeType)
+            account = {
+                buy: accountTemp,
+                sell: accountTemp
+            } 
         } else {
             const buyCurrency = product.value?.profitCurrency    
             const sellCurrency = product.value?.baseCurrency

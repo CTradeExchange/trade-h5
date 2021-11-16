@@ -111,6 +111,14 @@
                                 {{ item?.requestPrice || '--' }}
                             </span>
                         </p>
+                        <p v-else-if='Number(item.bizType) === 1' class='tl-item'>
+                            <label for=''>
+                                {{ $t('trade.trustPrice') }}
+                            </label>
+                            <span>
+                                --
+                            </span>
+                        </p>
                         <p v-else class='tl-item'>
                             <label for=''>
                                 {{ $t('trade.trustPrice') }}
