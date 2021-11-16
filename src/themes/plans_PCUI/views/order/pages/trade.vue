@@ -351,6 +351,7 @@ export default {
                 expireType: state[state.submitType].expireType,
                 entryType: state[state.submitType].entryType
             }
+
             return params
         }
 
@@ -388,22 +389,26 @@ export default {
             }
         }
 
+        const resetForm = () => {
+            state.buy.stopLoss = ''
+            state.buy.stopProfit = ''
+            state.buy.volume = ''
+            state.sell.stopProfit = ''
+            state.sell.stopLoss = ''
+            state.sell.volume = ''
+        }
+
         // 初始化设置
         const init = () => {
+            resetForm()
             state.orderType = 1
             // 获取产品详情
             const [symbolId, tradeType] = symbolKey.value.split('_')
             store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
-            state.operationType = parseFloat(tradeType) === 3 ? 1 : 2 // 杠杆玩法默认是普通类型
+            state.operationType = parseFloat(tradeType) !== 3 // 杠杆玩法默认是普通类型
             setVolumeType() // 设置按额或者按手数交易
             store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
-                // state.volume = product.minVolume  不需要设置默认手数
-                // state[state.submitType].volume = ''
-                // state[state.submitType].pendingPrice = ''
-                state.buy.stopLoss = ''
-                state.buy.stopProfit = ''
-                state.sell.stopProfit = ''
-                state.sell.stopProfit = ''
+                state.sell.volume = ''
                 if (!isEmpty(customerInfo.value)) {
                     const accountIds = accountList.value?.filter(el => el.tradeType === Number(product.tradeType)).map(el => el.accountId)
                     queryAccountInfo()

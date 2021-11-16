@@ -15,7 +15,7 @@
                         <img alt='' class='auth-img' :src="require('../../themes/mt4/images/'+ item.levelCode +'.png')" />
                         <div class='content'>
                             <p class='t1'>
-                                {{ item.levelName }}
+                                {{ kycMap[item.levelCode] }}
                             </p>
                             <p class='t2'>
                                 {{ $t('auth.authPass') }} [{{ item.businessNameList.toString() }}]
@@ -30,7 +30,7 @@
                             <van-button plain round size='small' @click='handleNext(item)'>
                                 <template #default>
                                     <span class='btn-text'>
-                                        {{ item.statusName }}
+                                        {{ kycAuditStatus[item.status] }}
                                     </span>
                                     <van-icon :color='style.color' name='arrow' />
                                 </template>
@@ -50,8 +50,10 @@ import { findAllBizKycList } from '@/api/user'
 import { useStore } from 'vuex'
 import { toRefs, reactive, computed, onBeforeMount } from 'vue'
 import { getArrayObj } from '@/utils/util'
+import { useI18n } from 'vue-i18n'
 export default {
     setup (props, { emit, attrs }) {
+        const { t, tm } = useI18n({ useScope: 'global' })
         const store = useStore()
         const router = useRouter()
         const route = useRoute()
@@ -61,7 +63,13 @@ export default {
             loading: false,
         })
 
+        const kycMap = {
+            level_1: t('common.kycLevel1'),
+            level_2: t('common.kycLevel2'),
+        }
+
         const kycState = computed(() => store.state._user.kycState)
+        const kycAuditStatus = tm('kycAuditStatus')
 
         const getAuthCondition = () => {
             state.loading = true
@@ -116,6 +124,8 @@ export default {
             handleNext,
             back,
             style,
+            kycMap,
+            kycAuditStatus,
             ...toRefs(state)
         }
     }

@@ -73,8 +73,8 @@
 		"loginPwd": "Login password",
 		"originPwd": "Please input original password",
 		"pwdSuccess": "Change password success",
-		"modifyLoginPwd": "Change login password",
-		"getVerifyCode": "Get verification code",
+		"modifyLoginPwd": "Change login Password",
+		"getVerifyCode": "Get Code",
 		"mobileEmailPlaceholder": "Please input your email / mobile"
 	},
 	"route": {

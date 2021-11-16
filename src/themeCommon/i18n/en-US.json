@@ -1,7 +1,7 @@
 {
     "theme": {
-        "day": "Day",
-        "night": "Light"
+        "day": "Light",
+        "night": "Dark"
     },
     "cRoute": {
         "login": "Login",
@@ -60,8 +60,8 @@
         "loginPwd": "Login Password",
         "originPwd": "Input original password",
         "pwdSuccess": "Change password success",
-        "modifyLoginPwd": "Change Login password",
-        "getVerifyCode": "Get verification code"
+        "modifyLoginPwd": "Change Login Password",
+        "getVerifyCode": "Get Code"
     },
     "common": {
         "tip": "Tips",
@@ -666,13 +666,13 @@
     "walletAdd": {
         "coinName": "Coin",
         "coinPlaceholder": "Select Coin",
-        "chainName": "Network name",
-        "chainPlaceholder": "Select network name",
+        "chainName": "Network",
+        "chainPlaceholder": "Select network",
         "addressPlaceholder": "Input wallet address",
         "namePlaceholder": "Input wallet name (optional)",
         "codePlaceholder": "Input mobile verification code",
         "confirmCodePlaceholder": "Input correct code",
-        "codeBtn": "Get code",
+        "codeBtn": "Get Code",
         "codeHint": "seconds to get again",
         "confirm": "Confirm"
     },
