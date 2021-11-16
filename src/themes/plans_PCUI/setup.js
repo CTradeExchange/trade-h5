@@ -15,14 +15,19 @@ import {
     ElPopover,
     ElTimelineItem,
     ElTable,
-    ElSelect,
+    ElTableColumn,
+    ElCheckbox,
     ElOption,
     ElOptionGroup,
-    ElTableColumn
+    ElSelect
 } from 'element-plus'
 
 export default function (app) {
     app.use(ElLoading).use(ElDialog).use(ElMessageBox).use(ElMessage).use(ElCarousel).use(ElCarouselItem).use(ElDropdown)
         .use(ElDropdownMenu).use(ElDropdownItem).use(ElTimeline).use(ElTimelineItem).use(ElEmpty).use(ElPopover).use(ElTable).use(ElTableColumn)
-        .use(ElSelect).use(ElOption).use(ElOptionGroup)
+        .use(ElCheckbox)
+        .use(ElOption)
+        .use(ElOptionGroup)
+        .use(ElSelect)
+        .use(ElOption).use(ElOptionGroup)
 };

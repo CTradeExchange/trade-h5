@@ -87,4 +87,10 @@ service.interceptors.response.use(
     }
 )
 
+// 修改请求地址
+export const modifybaseURL = (baseURL) => {
+    console.log(baseURL)
+    service.defaults.baseURL = baseURL + '/cats-gateway'
+}
+
 export default service
