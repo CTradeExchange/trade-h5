@@ -29,7 +29,7 @@
             </p>
         </div>
         <div class='curPrice' :class='[product.cur_color]'>
-            {{ lastPrice }}
+            {{ lastPrice || '--' }}
         </div>
         <div class='priceMultiGear sell'>
             <p v-for='(item, index) in bid_deep' :key='index' class='item'>

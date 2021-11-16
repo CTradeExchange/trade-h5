@@ -236,6 +236,7 @@
         "amountLimit": "Amount limit",
         "expectPay": "Expect payment",
         "expectInBank": "Expect receive account",
+        "confirmPay": "Confirm Payment",
         "payConfirm": "Payment confirmatio",
         "payConfirmTips": "Have you completed this payment?",
         "denyText": "No, off",
@@ -263,7 +264,8 @@
         "toRecord": "View deposit records",
         "appendFiled": "Additional Information",
         "allInputRequire": "Please fill in all additional information",
-        "arriveTime": "Credit time"
+        "arriveTime": "Credit time",
+        "noneChannelTip": "There is no payment channel available for the current deposit amount, please re-select another payment channel or enter different amount"
     },
     "fund": {
         "marginLevel": "margin level",

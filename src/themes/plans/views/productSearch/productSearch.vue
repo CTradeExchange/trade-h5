@@ -5,8 +5,9 @@
             <div class='search_input'>
                 <van-search
                     v-model='state.searchKey'
+                    :action-text='$t("common.cancel")'
                     clearable
-                    placeholder='请输入搜索关键词'
+                    :placeholder='$t("search.keywords")'
                     show-action
                     @cancel='onCancel'
                     @search='onSearch'

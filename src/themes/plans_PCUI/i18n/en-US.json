@@ -655,7 +655,8 @@
 		"volumeRange": "Volume range",
 		"volumes": "Volume",
 		"zone": "Zone",
-		"expireTime": "Expire time"
+		"expireTime": "Expire time",
+        "point": " point"
 	},
 	"weekdayMap": {
 		"1": "Monday",

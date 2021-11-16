@@ -67,7 +67,8 @@
     "volumeRange": "手数范围",
     "volumes": "手数",
     "zone": "所在时区",
-    "expireTime": "到期时间"
+    "expireTime": "到期时间",
+    "point": "点"
   },
   "depositText": "入金",
   "emptyHistory": "无历史记录",
@@ -118,7 +119,7 @@
     "transfer": "划转"
   },
   "search": {
-    "keywords": "请输入搜索关键词",
+    "keywords": "请输入产品名称/代码/拼音搜索",
     "placeholder": "请输入搜索关键词",
     "norecord": "暂无搜索记录",
     "nodata": "未搜索到结果",

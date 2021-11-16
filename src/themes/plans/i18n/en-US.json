@@ -67,7 +67,8 @@
     "volumeRange": "Lot Range",
     "volumes": "Lots Volume",
     "zone": "Time Zone",
-    "expireTime": "Expiration Time"
+    "expireTime": "Expiration Time",
+    "point": " point"
   },
   "depositText": "Deposit",
   "emptyHistory": "No history",
@@ -118,7 +119,7 @@
     "transfer": "Transfer"
   },
   "search": {
-    "keywords": "Enter search keywords",
+    "keywords": "Please enter product name/code/phonics to search",
     "placeholder": "Please enter the search keywords",
     "norecord": "No search history at this time",
     "nodata": "No results found",

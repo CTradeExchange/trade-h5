@@ -2,7 +2,7 @@
     <van-popup v-model:show='show' position='left' :style="{ height: '100%' }" @click-overlay='popClose' @update:modelValue='updateSearchKey'>
         <div class='switchProductContainer'>
             <div class='topSearch'>
-                <van-search v-model='fakeKey' placeholder='请输入搜索关键词' />
+                <van-search v-model='fakeKey' :placeholder='$t("search.keywords")' />
             </div>
             <div class='productsList'>
                 <p class='dt'>
