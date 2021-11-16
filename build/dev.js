@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const inquirer = require('inquirer')
 const child_process = require('child_process')
+const { uat, pre } = require('./h5_environment.js')
 
 function resolvePath (_path) {
     return path.join(__dirname, _path)
@@ -26,6 +27,28 @@ async function init () {
     const questions = [
         {
             type: 'list',
+            name: 'h5Environment',
+            message: '请选择调试环境：',
+            choices: ['uat', 'pre', 'other'],
+            default: 'uat',
+        },
+        {
+            type: 'list',
+            name: 'h5URL',
+            message: '请选择WP地址：',
+            when: answers => answers.h5Environment !== 'other',
+            choices: answers => answers.h5Environment === 'uat' ? uat : pre,
+            default: '',
+        },
+        {
+            type: 'input',
+            name: 'h5URL_input',
+            message: '请输入WP H5地址：',
+            when: answers => answers.h5Environment === 'other',
+            default: 'http://prewph5_9.cats-trade.com',
+        },
+        {
+            type: 'list',
             name: 'buildType',
             message: '构建单个WP插件还是构建所有的WP插件',
             choices: ['h5', 'wp-editor'],
@@ -42,6 +65,7 @@ async function init () {
     inquirer.prompt(questions)
         .then((answers) => {
             console.log(answers)
+            if (answers.h5URL_input) answers.h5URL = answers.h5URL_input
             Object.assign(process.env, answers)
             const command = answers.buildType === 'h5' ? 'npm run dev_h5' : 'npm run dev_admin'
             child_process.execSync(command, { stdio: [0, 1, 2] })

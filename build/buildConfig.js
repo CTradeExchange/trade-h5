@@ -1,7 +1,8 @@
 const queryBuildConfig = () => {
-    const { buildType, theme } = process.env
+    const { buildType, theme, h5URL } = process.env
     return {
         buildType,
+        h5URL,
         theme
     }
 }
