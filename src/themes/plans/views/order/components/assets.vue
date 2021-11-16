@@ -9,7 +9,15 @@
         </van-row> -->
         <van-row justify='space-between'>
             <van-col>{{ $t('trade.free') }}</van-col>
-            <van-col>
+            <van-col v-if='Number(product.tradeType) === 1' class='balance'>
+                {{ accountTradeType1?.availableMargin }}
+                {{ account.currency }}
+            </van-col>
+            <van-col v-else-if='Number(product.tradeType) === 2' class='balance'>
+                {{ accountTradeType2?.availableMargin }}
+                {{ account.currency }}
+            </van-col>
+            <van-col v-else>
                 {{ account.available }}
                 {{ direction==='buy'?product.profitCurrency:product.baseCurrency }}
             </van-col>
@@ -47,8 +55,9 @@
 </template>
 
 <script>
-import { computed, reactive, ref, toRefs, watch } from 'vue'
+import { computed, reactive, ref, toRefs, watch, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
+import { MsgSocket } from '@/plugins/socket/socket'
 import { mul, div, toFixed } from '@/utils/calculation'
 export default {
     props: ['direction', 'product', 'volume', 'account'],
@@ -64,6 +73,16 @@ export default {
         )
 
         const accountMap = computed(() => store.state._user.customerInfo?.accountMap)
+
+        // 合约全仓资产
+        const accountTradeType1 = computed(() => {
+            const accountAssets = store.state._user.accountAssets['1']
+            const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === parseInt(props.product?.tradeType))
+            return Object.assign({}, account, accountAssets)
+        })
+
+        // 合约逐仓资产
+        const accountTradeType2 = computed(() => store.state._user.accountAssets['2'])
 
         // 最大可借额度
         const maxBorrow = computed(() => {
@@ -90,12 +109,22 @@ export default {
             return toFixed(amount, props.account.digits)
         })
 
+        MsgSocket.subscribedListAdd(function () {
+            MsgSocket.subscribeAsset(props.product?.tradeType)
+        })
+
+        onUnmounted(() => {
+            MsgSocket.cancelSubscribeAsset()
+        })
+
         return {
             loanTradeType3,
             loanTradeType9,
             checked,
             maxBorrow,
             lockFunds,
+            accountTradeType1,
+            accountTradeType2
         }
     }
 }

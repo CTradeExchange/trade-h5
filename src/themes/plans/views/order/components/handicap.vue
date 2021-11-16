@@ -32,7 +32,7 @@
             {{ lastPrice }}
         </div>
         <div class='priceMultiGear sell'>
-            <p v-for='(item, index) in handicapResult.bid_deep.slice(0,5)' :key='index' class='item'>
+            <p v-for='(item, index) in bid_deep' :key='index' class='item'>
                 <span class='hd'>
                     {{ item.price_bid }}
                 </span>
@@ -69,9 +69,23 @@ export default {
         })
 
         const ask_deep = computed(() => {
-            const list = handicapResult.value?.ask_deep?.slice(0)
-            return list?.slice(0, 5) || []
+            const askResult = handicapResult.value?.ask_deep?.slice(0, 5) || []
+            if (askResult.length < 5) {
+                return fillPosition(askResult, 1)
+            } else {
+                return askResult
+            }
         })
+
+        const bid_deep = computed(() => {
+            const bidREsult = handicapResult.value.bid_deep.slice(0, 5)
+            if (bidREsult.length < 5) {
+                return fillPosition(bidREsult, 2)
+            } else {
+                return bidREsult
+            }
+        })
+
         // 最新成交价
         const lastPrice = computed(() => store.state._quote.dealList[0]?.price)
         // 计算报价小数位档数
@@ -92,6 +106,35 @@ export default {
             (newval, oldval) => (state.lastPriceColor = lt(newval, oldval) ? 'fallColor' : 'riseColor')
         )
 
+        // 报价不够5档，补空位
+        const fillPosition = (data, type) => {
+            const keyLabel = {
+                priceLabel: {
+                    1: 'price_ask',
+                    2: 'price_bid'
+                },
+                volume: {
+                    1: 'volume_ask',
+                    2: 'volume_bid'
+                }
+            }
+            const result = data
+            if (Array.isArray(result)) {
+                let fillLength = 5 - data.length
+                while (fillLength > 0) {
+                    result.push({
+                        [keyLabel.priceLabel[type]]: '--',
+                        [keyLabel.volume[type]]: '--',
+                        with: 0,
+                        unitNum: 0
+                    })
+                    fillLength--
+                }
+            }
+
+            return result
+        }
+
         // 切换深度报价小数位的长度
         const onSelect = (val) => {
             state.handicapDigit = val.text
@@ -104,6 +147,7 @@ export default {
             handicapList,
             lastPrice,
             ask_deep,
+            bid_deep,
             digitLevelList,
             handicapResult,
         }
