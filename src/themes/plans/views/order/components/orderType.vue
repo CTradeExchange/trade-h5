@@ -3,12 +3,12 @@
         <van-tabs v-model:active='orderType' class='orderTypeTab' @change='changeOrderType'>
             <van-tab v-for='(item,i) in btnList' :key='i' :name='item.val' :title='item.title' />
         </van-tabs>
-        <!-- <a v-if="product.tradeType===2 && product.marginInfo?.type!=='1'" class='multipleBtn' href='javascript:;' @click='multipleSetVisible=true'>
+        <a v-if="product.tradeType===2 && product.marginInfo?.type!=='1'" class='multipleBtn' href='javascript:;' @click='multipleSetVisible=true'>
             <span class='text'>
                 {{ mVal }}x
             </span>
             <i class='icon_icon_arrow'></i>
-        </a> -->
+        </a>
     </div>
     <MultipleSet v-if="product && product.tradeType===2 && product.marginInfo && product.marginInfo.type!=='1'" v-model='multipleSetVisible' v-model:multipleVal='mVal' :product='product' />
 </template>
