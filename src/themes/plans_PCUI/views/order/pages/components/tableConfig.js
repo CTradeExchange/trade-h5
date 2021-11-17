@@ -160,10 +160,10 @@ export const getAssetColumns = (tradeType) => {
                     default: ({ row }) => {
                         return (
                             <>
-                                <span className="link" onclick={openSltp.bind(null, row)} type="text">
+                                <span className='link' onclick={openSltp.bind(null, row)} type='text'>
                                     { t('trade.tackStopSetup') }
                                 </span>
-                                <span className="link" onclick={openClosePosition.bind(null, row)} type="text">
+                                <span className='link' onclick={openClosePosition.bind(null, row)} type='text'>
                                     { t('trade.closed') }
                                 </span>
                                 {/* 平仓组件 */}
@@ -239,13 +239,13 @@ export const getAssetColumns = (tradeType) => {
                     default: ({ row }) => {
                         return (
                             <>
-                                <span className="link" onclick={openAdjustMargin.bind(null, row)} type="text">
+                                <span className='link' onclick={openAdjustMargin.bind(null, row)} type='text'>
                                     { t('trade.modifyMargin') }
                                 </span>
-                                <span className="link" onclick={openSltp.bind(null, row)} type="text">
+                                <span className='link' onclick={openSltp.bind(null, row)} type='text'>
                                     { t('trade.tackStopSetup') }
                                 </span>
-                                <span className="link" onclick={openClosePosition.bind(null, row)} type="text">
+                                <span className='link' onclick={openClosePosition.bind(null, row)} type='text'>
                                     { t('trade.closed') }
                                 </span>
 
@@ -275,10 +275,10 @@ export const getAssetColumns = (tradeType) => {
                     default: ({ row }) => {
                         return (
                             <>
-                                <span className="link" onclick={goLoan.bind(null, row)} type="text">
+                                <span className='link' onclick={goLoan.bind(null, row)} type='text'>
                                     { t('trade.loan') }
                                 </span>
-                                <span className="link" onclick={goRepayment.bind(null, row)} type="text">
+                                <span className='link' onclick={goRepayment.bind(null, row)} type='text'>
                                     { t('trade.repayment') }
                                 </span>
                             </>

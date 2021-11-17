@@ -5,7 +5,7 @@
             :before-close='close'
             :close-on-click-modal='false'
             :title='data.symbolName'
-            width='400px'
+            width='500px'
         >
             <div class='body-module'>
                 <div class='title'>
@@ -50,7 +50,7 @@ import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { isEmpty } from '@/utils/util.js'
 import { pow } from '@/utils/calculation.js'
-import { ElMessage } from 'element-plus'
+import { Toast } from 'vant'
 
 // api
 import { updateOccupyTheMargin } from '@/api/user'
@@ -108,16 +108,10 @@ export default {
         const onConfirm = () => {
             // 参数验证
             if (isEmpty(state.amount) || parseFloat(state.amount) === 0) {
-                ElMessage({
-                    type: 'warning',
-                    message: t('trade.enterMarginAmount'),
-                })
+                Toast(t('trade.enterMarginAmount'))
             }
             if (parseFloat(state.amount) < 0) {
-                ElMessage({
-                    type: 'warning',
-                    message: t('trade.enterMarginAmountTip'),
-                })
+                Toast(t('trade.enterMarginAmountTip'))
             }
 
             submitData()
@@ -142,16 +136,10 @@ export default {
             updateOccupyTheMargin(params).then(() => {
                 state.show = false
                 state.isSubmit = false
-                ElMessage({
-                    type: 'success',
-                    message: t('c.handleSuccess')
-                })
+                Toast(t('c.handleSuccess'))
             }).catch(res => {
                 state.isSubmit = false
-                ElMessage({
-                    type: 'warning',
-                    message: res.msg,
-                })
+                Toast(res.msg)
             })
         }
 
