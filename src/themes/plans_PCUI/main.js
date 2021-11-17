@@ -64,6 +64,9 @@ store.dispatch('_base/initBaseConfig').then(async () => {
     if (isProduction) skywalkingRegister(router)
     else modifybaseURL(store.state._base.wpCompanyInfo.apiService)
 
+    // 注册websocket插件
+    app.use(Socket, { $store: store, $router: router })
+
     // 设置语言
     const defaultLocal = getCookie('lang') || 'zh-CN'
     setI18nLanguage(I18n, defaultLocal)

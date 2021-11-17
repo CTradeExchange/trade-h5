@@ -326,7 +326,7 @@ export default {
 .page-wrap {
     flex: 1;
     height: 100%;
-    padding-top: rem(30px);
+    padding-top: rem(20px);
     overflow: auto;
     background-color: var(--bgColor);
     .notice {

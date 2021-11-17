@@ -1,5 +1,5 @@
 <template>
-    <LayoutTop :back='true' :menu='false' title='' />
+    <Top back show-center />
     <div class='page-wrap'>
         <van-radio-group v-model='checked'>
             <van-cell-group>
@@ -19,8 +19,13 @@
 </template>
 
 <script>
+import Top from '@/components/top'
 import { toRefs, reactive } from 'vue'
+
 export default {
+    components: {
+        Top
+    },
     setup (props) {
         const state = reactive({
             checked: '1'

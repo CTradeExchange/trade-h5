@@ -263,9 +263,10 @@ export default {
     flex: 1;
     background-color: var(--bgColor);
     .confirm-btn {
+        height: rem(90px);
         position: absolute;
         bottom: 0;
-        background: var(--lineColor);
+        background: var(--contentColor);
         border-color: var(--lineColor);
         span {
             color: var(--color);

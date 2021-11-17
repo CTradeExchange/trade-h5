@@ -199,7 +199,6 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .page-wrap {
-    flex: 1;
     padding-top: rem(100px);
     overflow: auto;
     color: var(--color);
@@ -208,7 +207,8 @@ export default {
         position: absolute;
         bottom: 0;
         width: 100%;
-        background: var(--primaryAssistColor);
+        height: rem(90px);
+        background: var(--contentColor);
         border-color: var(--lineColor);
         span {
             color: var(--color);

@@ -50,7 +50,12 @@ export function pageConfig (id) {
         content = reg.test(content) || typeof (content) === 'object' ? content : unzip(content)
         const data = typeof (content) === 'string' ? JSON.parse(content) : content
         if (id === 'SysSetting' && window['wp_SysSetting'] === '') window['wp_SysSetting'] = JSON.stringify(res)
-        // if (id === 'TradeIndex') mockQuoteData(data)
+        if (NODE_ENV === 'development' && id === 'SysSetting') {
+            window['apiService'] = data.apiService
+            window['quoteService'] = data.quoteService
+            window['msgService'] = data.msgService
+            window['tradeService'] = data.tradeService
+        }
         return data
     })
 }

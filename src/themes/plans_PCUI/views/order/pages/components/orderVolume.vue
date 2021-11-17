@@ -89,7 +89,7 @@ export default {
                 newval = newval.replace(/[^0-9\.]/g, '')
                 e.target.value = newval
             }
-            const digits = parseInt(props.entryType) === 1 ? getDecimalNum(props.product.minVolume) : props.account.digits
+            const digits = parseInt(props.entryType) === 1 ? props.product.numberDigits : props.account.digits
             const reg = new RegExp('^\\d*(\\.?\\d{0,' + digits + '})', 'g')
             if (getDecimalNum(newval) > digits) {
                 newval = (newval.match(reg) && newval.match(reg)[0]) || ''
@@ -103,7 +103,7 @@ export default {
         const onBlur = (e) => {
             let value = e.target.value
             if (value === props.modelValue) return false
-            const digits = getDecimalNum(props.product.minVolume)
+            const digits = props.product.numberDigits
             value = value ? toFixed(value, digits) : value
             emit('change', value)
         }

@@ -1,5 +1,5 @@
 <template>
-    <LayoutTop :back='true' :menu='false' title='' />
+    <Top back show-center />
     <div class='page-wrap'>
         <Loading :show='loading' />
         <div class='list'>
@@ -34,11 +34,15 @@
 </template>
 
 <script>
+import Top from '@/components/top'
 import { toRefs, reactive, onBeforeMount } from 'vue'
 import { queryBankList } from '@/api/user'
 import { useRouter } from 'vue-router'
 
 export default {
+    components: {
+        Top
+    },
     setup (props) {
         const router = useRouter()
         const state = reactive({
@@ -87,7 +91,6 @@ export default {
 @import '@/sass/mixin.scss';
 .page-wrap {
     flex: 1;
-    padding-top: rem(100px);
     overflow: auto;
     background: var(--bgColor);
     .list {

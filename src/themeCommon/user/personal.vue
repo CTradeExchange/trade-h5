@@ -1,5 +1,5 @@
 <template>
-    <LayoutTop :back='true' :menu='false' title='' @backEvent='back' />
+    <Top back show-center />
     <div class='page-wrap'>
         <van-cell-group>
             <van-cell is-link :title='$t("cRoute.authentication")' to='/authentication' />
@@ -10,8 +10,13 @@
 </template>
 
 <script>
+import Top from '@/components/top'
 import { useRouter } from 'vue-router'
+
 export default {
+    components: {
+        Top
+    },
     setup (props) {
         const router = useRouter()
         const back = () => {

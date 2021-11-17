@@ -162,7 +162,7 @@ export default {
 
         const account = computed(() => store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(props.data.tradeType)))
         const customerInfo = computed(() => store.state._user.customerInfo)
-        const volumeDigit = computed(() => getDecimalNum(props.product.minVolume))
+        const volumeDigit = computed(() => props.product.numberDigits)
         const positionVolume = computed(() => minus(props.data?.openVolume, props.data?.closeVolume))
         const positionVolumeMin = computed(() => props.product.minVolume)
         const closeVolumeWarn = computed(() => { // 检测平仓手数是否合法

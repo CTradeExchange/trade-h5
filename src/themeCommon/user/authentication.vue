@@ -1,6 +1,7 @@
 <template>
     <div>
-        <LayoutTop :back='true' :menu='false' title='' @backEvent='back' />
+        <!-- 头部导航 -->
+        <Top back on-back show-center @back='back' />
         <div class='page-wrap'>
             <Loading :show='loading' />
             <div v-if='list.length === 0' class='empty-data'>
@@ -44,14 +45,18 @@
 </template>
 
 <script>
-
+import Top from '@/components/top'
 import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
 import { findAllBizKycList } from '@/api/user'
 import { useStore } from 'vuex'
 import { toRefs, reactive, computed, onBeforeMount } from 'vue'
 import { getArrayObj } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
+
 export default {
+    components: {
+        Top
+    },
     setup (props, { emit, attrs }) {
         const { t, tm } = useI18n({ useScope: 'global' })
         const store = useStore()
@@ -142,6 +147,7 @@ export default {
         padding-top: rem(200px);
     }
     .title {
+        padding: 0 rem(25px);
         color: var(--minorColor);
         line-height: rem(80px);
         border-bottom: solid 1px var(--lineColor);

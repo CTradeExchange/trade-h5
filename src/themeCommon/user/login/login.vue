@@ -96,6 +96,7 @@ import RuleFn from './rule'
 import md5 from 'js-md5'
 import { timeline, timelineItem } from '@/components/timeline'
 import { checkUserStatus } from '@/api/user'
+import { setQuoteService } from '@/plugins/socket/socket'
 import { useI18n } from 'vue-i18n'
 
 export default {
@@ -181,6 +182,9 @@ export default {
                 state.loading = false
                 // console.log(res)
                 if (res.invalid()) return false
+
+                // 切换登录后的行情websocket
+                setQuoteService()
 
                 // 登录websocket
                 instance.appContext.config.globalProperties.$MsgSocket.login()

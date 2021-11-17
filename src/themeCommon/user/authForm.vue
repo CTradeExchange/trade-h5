@@ -1,17 +1,20 @@
 <template>
     <div class='authConditionWrapper'>
-        <LayoutTop back :menu='false' />
+        <Top back show-center />
         <auth-condition :business-code='businessCode' :platform='platform' />
     </div>
 </template>
 
 <script>
+import Top from '@/components/top'
+import authCondition from '@/themeCommon/components/authConditon'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import authCondition from '@/themeCommon/components/authConditon'
+
 export default {
     components: {
-        authCondition,
+        Top,
+        authCondition
     },
     props: {
         platform: {
@@ -34,6 +37,5 @@ export default {
 @import '@/sass/mixin.scss';
 .authConditionWrapper {
     height: 100%;
-    padding-top: rem(50px);
 }
 </style>
