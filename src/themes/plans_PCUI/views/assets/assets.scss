@@ -108,6 +108,9 @@
 		.el-table__fixed-right::before {
 			background: none;
 		}
+		.el-table__cell.is-right {
+			background: var(--contentColor) !important;
+		}
 		thead {
 			tr {
 				height: 50px;

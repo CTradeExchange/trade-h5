@@ -5,7 +5,7 @@
             :before-close='close'
             :close-on-click-modal='false'
             :title='data.symbolName'
-            width='400px'
+            width='500px'
         >
             <div class='body-module'>
                 <div class='row'>
@@ -71,7 +71,7 @@ import { reactive, toRefs, computed, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { pow, minus, divide, getDecimalNum, mul, div, eq } from '@/utils/calculation'
-import { ElMessage } from 'element-plus'
+import { Toast } from 'vant'
 import { addMarketOrder } from '@/api/trade'
 import stepper from '@planspc/components/stepper'
 
@@ -152,10 +152,7 @@ export default {
         // 平仓接口参数
         const submitCloseParam = () => {
             if (!state.count) {
-                ElMessage({
-                    type: 'warning',
-                    message: t('trade.inputCloseNum')
-                })
+                Toast(t('trade.inputCloseNum'))
                 return
             }
             const data = state.data
@@ -190,24 +187,15 @@ export default {
                 state.isSubmit = false
                 if (res.check()) {
                     state.show = false
-                    ElMessage({
-                        type: 'success',
-                        message: t('trade.closeSuccessToast')
-                    })
+                    Toast(t('trade.closeSuccessToast'))
                     queryPositionList()
                     store.dispatch('_trade/tradeRecordList')
                 } else {
-                    ElMessage({
-                        type: 'warning',
-                        message: res.msg
-                    })
+                    Toast(res.msg)
                 }
             }).catch(res => {
                 state.isSubmit = false
-                ElMessage({
-                    type: 'warning',
-                    message: res.msg
-                })
+                Toast(res.msg)
             })
         }
 

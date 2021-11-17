@@ -5,7 +5,7 @@
             :before-close='close'
             :close-on-click-modal='false'
             :title='data.symbolName'
-            width='400px'
+            width='500px'
         >
             <div class='body-module'>
                 <div class='row'>
@@ -64,7 +64,7 @@ import { ref, reactive, toRefs, computed, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { equalTo, mul, pow } from '@/utils/calculation'
 import { useI18n } from 'vue-i18n'
-import { ElMessage } from 'element-plus'
+import { Toast } from 'vant'
 import modifyProfitLoss from '@planspc/components/modifyProfitLoss'
 import { updateOrder } from '@/api/trade'
 
@@ -124,10 +124,7 @@ export default {
         const submitParams = () => {
             const data = state.data
             if (equalTo(data.takeProfit, state.stopLossPrice) && equalTo(data.stopLoss, state.stopProfitPrice)) {
-                ElMessage({
-                    type: 'warning',
-                    message: t('trade.unModify')
-                })
+                Toast(t('trade.unModify'))
                 return false
             }
             const p = pow(10, product.value.price_digits)
@@ -153,23 +150,14 @@ export default {
                 state.isSubmit = false
                 if (res.check()) {
                     queryPositionList()
-                    ElMessage({
-                        type: 'success',
-                        message: t('trade.modifySuccess')
-                    })
+                    Toast(t('trade.modifySuccess'))
                     state.show = false
                 } else {
-                    ElMessage({
-                        type: 'warning',
-                        message: res.msg
-                    })
+                    Toast(res.msg)
                 }
             }).catch(res => {
                 state.isSubmit = false
-                ElMessage({
-                    type: 'warning',
-                    message: res.msg
-                })
+                Toast(res.msg)
             })
         }
 
