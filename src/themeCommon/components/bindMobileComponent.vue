@@ -1,6 +1,6 @@
 <template>
     <div class='pageWrap'>
-        <LayoutTop :back='true' :menu='false' />
+        <Top back show-center />
         <Loading :show='loading' />
         <form class='form'>
             <div class='field'>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-
+import Top from '@/components/top'
 import areaInput from '@/components/form/areaInput'
 import CheckCode from '@/components/form/checkCode'
 import { toRefs, reactive, computed } from 'vue'
@@ -33,6 +33,7 @@ import { bindPhone, changePhone, checkUserStatus } from '@/api/user'
 import { useI18n } from 'vue-i18n'
 export default {
     components: {
+        Top,
         areaInput,
         CheckCode
     },
@@ -186,9 +187,8 @@ export default {
 @import '@/sass/mixin.scss';
 .pageWrap {
     position: relative;
-    padding-top: rem(100px);
     .form {
-        //margin-top: rem(30px);
+        padding-top: rem(20px);
         .field {
             padding: 0 rem(30px);
             background: var(--contentColor);
@@ -197,13 +197,14 @@ export default {
             }
         }
         .confirm-btn {
+            height: rem(90px);
             position: absolute;
             bottom: 0;
-            background: var(--lineColor);
+            background: var(--contentColor);
             border-color: var(--lineColor);
             span {
                 color: var(--color);
-                font-size: rem(34px);
+                font-size: rem(32px);
             }
         }
     }

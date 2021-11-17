@@ -947,6 +947,7 @@ export default {
         justify-content: center;
         align-items: center;
         height: rem(150px);
+        padding: 0 rem(20px);
         font-size: rem(24px);
         color: var(--color);
         background: var(--contentColor);

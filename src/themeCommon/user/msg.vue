@@ -236,7 +236,7 @@ export default {
     position: relative !important;
     background-color: var(--contentColor);
     :deep(.van-dropdown-menu__bar) {
-        height: rem(100px);
+        height: rem(90px);
         background-color: var(--contentColor);
         .van-dropdown-menu__title {
             color: var(--color);

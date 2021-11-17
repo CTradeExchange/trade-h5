@@ -10,7 +10,7 @@
                 <p>{{ data.available }}</p>
                 <template v-if='Number(tradeType) !== 5'>
                     <p class='mtop10'>
-                        {{ $t('trade.loan') }}
+                        {{ $t('trade.borrowed') }}
                     </p>
                     <p>{{ data.liabilitiesPrincipal }}</p>
                 </template>

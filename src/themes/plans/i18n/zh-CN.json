@@ -67,7 +67,8 @@
     "volumeRange": "手数范围",
     "volumes": "手数",
     "zone": "所在时区",
-    "expireTime": "到期时间"
+    "expireTime": "到期时间",
+    "point": "点"
   },
   "depositText": "入金",
   "emptyHistory": "无历史记录",
@@ -118,7 +119,7 @@
     "transfer": "划转"
   },
   "search": {
-    "keywords": "请输入搜索关键词",
+    "keywords": "请输入产品名称/代码/拼音搜索",
     "placeholder": "请输入搜索关键词",
     "norecord": "暂无搜索记录",
     "nodata": "未搜索到结果",
@@ -406,6 +407,7 @@
     "trustDetail": "委托详情",
     "cancelOrder": "撤单",
     "loan": "借款",
+    "borrowed":"借款",
     "availableLoanContent1": "从代理处可借款的额度，系统最大可借为{0}",
     "availableLoanContent2": "代理可借=系统最大可借-已借未还",
     "availableLoanContent3": "您的账户可用资金不足且有足额借款额度，在下单时系统将自动帮您完成借款并交易。自下单成功开始计息，平台按小时数收取利息，整点计息，不足一小时按一小时计算。借款利息=借款本金 *（日利率/24）* 借款小时数，日利率{0}。",

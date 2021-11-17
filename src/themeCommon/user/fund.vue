@@ -1,5 +1,5 @@
 <template>
-    <LayoutTop :back='true' :menu='false' title='' />
+    <Top back show-center />
     <div class='page-wrap'>
         <div class='header'>
             <div class='header-info'>
@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import Top from '@/components/top'
 import { toRefs, reactive, onMounted, computed, onUpdated, onBeforeMount, getCurrentInstance } from 'vue'
 import { createTorus } from '@/plugins/createTorus'
 import { useStore } from 'vuex'
@@ -86,6 +87,9 @@ import { divide } from '@/utils/calculation'
 import { useI18n } from 'vue-i18n'
 
 export default {
+    components: {
+        Top
+    },
     setup (props) {
         const router = useRouter()
         const store = useStore()

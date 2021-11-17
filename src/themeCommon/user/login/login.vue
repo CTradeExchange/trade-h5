@@ -222,14 +222,7 @@ export default {
                             router.push('/authentication')
                         })
                     } else if (Number(res.data.kycAuditStatus === 2)) {
-                        Dialog.alert({
-                            title: t('common.tip'),
-                            confirmButtonText: t('common.ok'),
-                            message: t('common.reviewSuccess'),
-
-                        }).then(() => {
-                            noticeSetPwd(res.data.loginPassStatus)
-                        })
+                        noticeSetPwd(res.data.loginPassStatus)
                     }
                 } else if (Number(res.data.companyKycStatus) === 2) {
                     noticeSetPwd(res.data.loginPassStatus)

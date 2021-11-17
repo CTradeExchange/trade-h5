@@ -13,8 +13,8 @@ const NODE_ENV = process.env.NODE_ENV
 const isAdminMode = process.env.VUE_APP_isAdmin === 'true' // WordPress后台插件的开发模式
 console.log(NODE_ENV, process.env.VUE_APP_isAdmin)
 // console.log(process.env)
-const { buildType = 'cats-upload-all', theme = 'plans' } = queryBuildConfig()
-console.log(buildType, theme)
+const { buildType = 'cats-upload-all', theme = 'plans', h5URL } = queryBuildConfig()
+console.log(buildType, theme, h5URL)
 
 const alias = {
     'vue$': 'vue/dist/vue.esm-bundler.js',
@@ -134,7 +134,7 @@ const config = {
         },
         proxy: {
             '/wp-json/wp': {
-                target: 'http://prewpadmin_8.cats-trade.com', // http://prewpadmin.cats-trade.com/
+                target: 'http://prewpadmin_9.cats-trade.com', // http://prewpadmin.cats-trade.com/
                 // changeOrigin: false,
                 disableHostCheck: true,
                 onProxyReq: function (proxyReq, req, res, options) { // 由于vue中使用了body-parser 导致http中的body被序列化两次，从而使得配置代理后后端无法获取body中的数据
@@ -150,7 +150,7 @@ const config = {
                 }
             },
             '/cats-manage-api': {
-                target: 'http://prewph5_8.cats-trade.com', // prewph5公司id为2 prewph5_1公司id为60
+                target: h5URL, // prewph5公司id为2 prewph5_1公司id为60  'http://prewph5_9.cats-trade.com'
                 disableHostCheck: true,
                 onProxyReq: function (proxyReq, req, res, options) { // 由于vue中使用了body-parser 导致http中的body被序列化两次，从而使得配置代理后后端无法获取body中的数据
                     if (req.body) {

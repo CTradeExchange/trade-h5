@@ -13,16 +13,16 @@ import Loading from '@/components/loading'
 import PageComp from '@plans/components/PageComp'
 import LayoutTop from '@plans/layout/top'
 import { setRootVariable } from './colorVariables'
-import { setRouter } from '@/utils/request'
+import { setRouter, modifybaseURL } from '@/utils/request'
 // import LuckDraw from 'vue-luck-draw/vue3'
 import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet, getCookie } from '@/utils/util'
 import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
 import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
 import { getPreDemoAccountParams } from './officialDemoAccount.js'
-import VConsole from 'vconsole' // 调试工具
+// import VConsole from 'vconsole' // 调试工具
 
-const Vconsole = new VConsole()
+// const Vconsole = new VConsole()
 const isProduction = process.env.NODE_ENV === 'production'
 
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
@@ -60,6 +60,7 @@ else if (location.search.includes('from=officialWebsite')) loginParams = getPreD
 // 获取到公司配置后初始化vue实例
 store.dispatch('_base/initBaseConfig').then(async () => {
     if (isProduction) skywalkingRegister(router)
+    else modifybaseURL(store.state._base.wpCompanyInfo.apiService)
 
     // 设置语言
     const defaultLocal = getCookie('lang') || 'zh-CN'

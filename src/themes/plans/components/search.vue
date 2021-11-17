@@ -2,6 +2,7 @@
     <section class='search-component'>
         <van-search
             v-model='searchValue'
+            :action-text='$t("common.cancel")'
             class='search-input'
             clearable
             :placeholder='$t("search.keywords")'

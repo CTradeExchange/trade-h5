@@ -29,7 +29,7 @@
 
         <div class='item ohlc'>
             <p>{{ $t('chart.high') }} {{ product.high_price }}</p>
-            <p>{{ $t('chart.low') }} {{ product.high_price }}</p>
+            <p>{{ $t('chart.low') }} {{ product.low_price }}</p>
         </div>
 
         <div class='item collect'>

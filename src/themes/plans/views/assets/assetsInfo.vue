@@ -35,7 +35,7 @@
             </li>
             <li v-if='Number(tradeType) !== 5' class='item'>
                 <div class='hd'>
-                    <p>{{ $t('trade.loan') }}</p>
+                    <p>{{ $t('trade.borrowed') }}</p>
                     <p class='value'>
                         {{ account?.liabilitiesPrincipal }}
                     </p>
@@ -58,7 +58,7 @@
                     <p :class="Number(tradeType) === 5 ? 'alignLeft': 'alignRight' ">
                         {{ $t('withdrawCoin.can') }}
                     </p>
-                    <p class='value'>
+                    <p class='value alignLeft'>
                         {{ account?.withdrawAmount }}
                     </p>
                 </div>

@@ -212,11 +212,10 @@ export default {
         //display: block;
         //flex: 1;
         height: 100%;
-        height: rem(60px);
         margin-right: rem(20px);
         color: var(--primary);
         font-size: rem(28px);
-        line-height: rem(60px);
+        line-height: rem(65px);
         background: var(--primaryAssistColor);
         border: none;
         border-color: var(--primary);

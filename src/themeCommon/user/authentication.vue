@@ -1,6 +1,7 @@
 <template>
     <div>
-        <LayoutTop :back='true' :menu='false' title='' @backEvent='back' />
+        <!-- 头部导航 -->
+        <Top back on-back show-center @back='back' />
         <div class='page-wrap'>
             <Loading :show='loading' />
             <div v-if='list.length === 0' class='empty-data'>
@@ -15,7 +16,7 @@
                         <img alt='' class='auth-img' :src="require('../../themes/mt4/images/'+ item.levelCode +'.png')" />
                         <div class='content'>
                             <p class='t1'>
-                                {{ item.levelName }}
+                                {{ kycMap[item.levelCode] }}
                             </p>
                             <p class='t2'>
                                 {{ $t('auth.authPass') }} [{{ item.businessNameList.toString() }}]
@@ -30,7 +31,7 @@
                             <van-button plain round size='small' @click='handleNext(item)'>
                                 <template #default>
                                     <span class='btn-text'>
-                                        {{ item.statusName }}
+                                        {{ kycAuditStatus[item.status] }}
                                     </span>
                                     <van-icon :color='style.color' name='arrow' />
                                 </template>
@@ -44,14 +45,20 @@
 </template>
 
 <script>
-
+import Top from '@/components/top'
 import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
 import { findAllBizKycList } from '@/api/user'
 import { useStore } from 'vuex'
 import { toRefs, reactive, computed, onBeforeMount } from 'vue'
 import { getArrayObj } from '@/utils/util'
+import { useI18n } from 'vue-i18n'
+
 export default {
+    components: {
+        Top
+    },
     setup (props, { emit, attrs }) {
+        const { t, tm } = useI18n({ useScope: 'global' })
         const store = useStore()
         const router = useRouter()
         const route = useRoute()
@@ -61,7 +68,13 @@ export default {
             loading: false,
         })
 
+        const kycMap = {
+            level_1: t('common.kycLevel1'),
+            level_2: t('common.kycLevel2'),
+        }
+
         const kycState = computed(() => store.state._user.kycState)
+        const kycAuditStatus = tm('kycAuditStatus')
 
         const getAuthCondition = () => {
             state.loading = true
@@ -116,6 +129,8 @@ export default {
             handleNext,
             back,
             style,
+            kycMap,
+            kycAuditStatus,
             ...toRefs(state)
         }
     }
@@ -132,6 +147,7 @@ export default {
         padding-top: rem(200px);
     }
     .title {
+        padding: 0 rem(25px);
         color: var(--minorColor);
         line-height: rem(80px);
         border-bottom: solid 1px var(--lineColor);

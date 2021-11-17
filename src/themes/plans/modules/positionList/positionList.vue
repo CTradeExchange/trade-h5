@@ -36,7 +36,6 @@
     />
     <!-- 调整保证金 -->
     <DialogAdjustMargin
-        v-if='product'
         v-model:show='adjustVisible'
         :data='positionData'
     />

@@ -58,8 +58,10 @@
     </div>
     <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
         <van-picker
+            :cancel-button-text="$t('common.cancel')"
             :columns='columns'
             :columns-field-names='customFieldName'
+            :confirm-button-text="$t('common.sure')"
             :default-index='0'
             title=''
             @cancel='pickerShow = false'

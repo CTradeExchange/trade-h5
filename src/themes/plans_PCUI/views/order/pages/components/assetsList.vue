@@ -86,7 +86,7 @@ onUnmounted(() => {
     MsgSocket.cancelSubscribeAsset()
 })
 watch(() => props.tradeType, () => {
-    initData()
+    if (customerInfo.value) initData()
 }, { immediate: true })
 </script>
 

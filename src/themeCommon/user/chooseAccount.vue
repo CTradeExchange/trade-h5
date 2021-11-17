@@ -1,6 +1,6 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop />
+        <Top back show-center />
         <div class='page-content'>
             <p v-if='Number(type) === 1' class='head-text'>
                 {{ $t('trade.loanCurrency') }}
@@ -23,12 +23,16 @@
 </template>
 
 <script>
+import Top from '@/components/top'
 import { computed, toRefs, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 export default {
+    components: {
+        Top
+    },
     setup () {
         const router = useRouter()
         const route = useRoute()
@@ -67,7 +71,6 @@ export default {
 .page-wrap {
     width: 100%;
     height: 100%;
-    margin-top: rem(90px);
     overflow: auto;
     //background: var(--contentColor);
     .page-content {

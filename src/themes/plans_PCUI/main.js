@@ -13,37 +13,16 @@ import Loading from '@/components/loading'
 // import PageComp from '@planspc/components/PageComp'
 import LayoutTop from '@planspc/layout/centerViewTop'
 import { setRootVariable } from './colorVariables'
-import { setRouter } from '@/utils/request'
+import { setRouter, modifybaseURL } from '@/utils/request'
 import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet, getCookie } from '@/utils/util'
 import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
 import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
 import { getPreDemoAccountParams } from './officialDemoAccount.js'
-
-// element-plus
-import 'element-plus/dist/index.css'
-import {
-    ElLoading,
-    ElDialog,
-    ElMessageBox,
-    ElMessage,
-    ElCarousel,
-    ElCarouselItem,
-    ElDropdown,
-    ElDropdownMenu,
-    ElDropdownItem,
-    ElTimeline,
-    ElEmpty,
-    ElPopover,
-    ElTimelineItem,
-    ElTable,
-    ElTableColumn,
-    ElCheckbox,
-    ElSelect
-} from 'element-plus'
 import Setup from './setup'
 
-skywalkingRegister(router)
+const isProduction = process.env.NODE_ENV === 'production'
+
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 
 // 调试工具
@@ -51,9 +30,7 @@ BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
 // const Vconsole = new VConsole()
 
 const app = createApp(App)
-app.use(ElLoading).use(ElDialog).use(ElMessageBox).use(ElMessage).use(ElCarousel).use(ElCarouselItem).use(ElDropdown)
-    .use(ElDropdownMenu).use(ElDropdownItem).use(ElTimeline).use(ElTimelineItem).use(ElEmpty).use(ElPopover).use(ElTable)
-    .use(ElTableColumn).use(ElCheckbox).use(ElSelect)
+Setup(app)
 app.use(preventReClick)
 app.use(VantBase).use(I18n).use(store).use(router)
 app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })
@@ -84,6 +61,9 @@ else if (location.search.includes('from=officialWebsite')) loginParams = getPreD
 
 // 获取到公司配置后初始化vue实例
 store.dispatch('_base/initBaseConfig').then(async () => {
+    if (isProduction) skywalkingRegister(router)
+    else modifybaseURL(store.state._base.wpCompanyInfo.apiService)
+
     // 设置语言
     const defaultLocal = getCookie('lang') || 'zh-CN'
     setI18nLanguage(I18n, defaultLocal)

@@ -234,6 +234,10 @@ export default {
                         duration: 1000,
                         forbidClick: true,
                     })
+
+                    // 刷新成交记录
+                    store.dispatch('_trade/tradeRecordList')
+                    // 刷新持仓列表
                     store.dispatch('_trade/queryPositionPage', {
                         tradeType: props.data.tradeType,
                         sortFieldName: 'openTime',

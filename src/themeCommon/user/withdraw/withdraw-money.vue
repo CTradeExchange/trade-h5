@@ -615,13 +615,14 @@ export default {
             }
         }
         .notice {
-            display: flex;
+            //display: flex;
             margin-top: rem(30px);
             margin-bottom: rem(40px);
             span {
-                flex: 1;
+                display: block;
                 color: var(--minorColor);
                 font-size: rem(24px);
+                margin-top: rem(16px);
             }
         }
         .bank-wrap {

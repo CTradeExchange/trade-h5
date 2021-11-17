@@ -255,7 +255,7 @@ export default {
             commit('add_products', symbolList)
             commit('Updata_planMap', { plans: rootState._base.plans, planMap })
             const firstTradeType = rootState._base.plans[0]?.tradeType
-            const firstProductSymbolId = firstTradeType ? planMap[firstTradeType][0] : ''
+            const firstProductSymbolId = firstTradeType && planMap[firstTradeType] ? planMap[firstTradeType][0] : ''
             const firstProductSymbolKey = firstProductSymbolId + '_' + firstTradeType
             if (symbolList.length) commit('Update_productActivedID', firstProductSymbolKey)
             return planMap

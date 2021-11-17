@@ -1,11 +1,10 @@
 <template>
     <el-popover
         placement='bottom'
-        popper-class='infoPop'
+        popper-class='infoPop-msg'
         trigger='hover'
         :width='400'
         @after-enter='showPop'
-        @show='showing'
     >
         <template #reference>
             <i class='icon icon_xiaoxizhongxin1' :title="$t('header.information')"></i>
@@ -120,14 +119,6 @@ export default {
             state.msgLoading = true
             getMsgList()
         }
-        const showing = async() => {
-            await nextTick()
-            // js修改pop框的padding值防止全局污染
-            const nodes = document.getElementsByClassName('infoPop')
-            nodes && nodes.forEach(node => {
-                node.style.padding = '0px'
-            })
-        }
         const getMsgList = () => {
             // state.pageLoading = true
             state.errorTip = ''
@@ -233,7 +224,6 @@ export default {
             changeType,
             computeHtmlTime,
             showPop,
-            showing,
             ...toRefs(state)
         }
     }
@@ -247,10 +237,14 @@ export default {
         color: var(--color) !important;
     }
 }
+.infoPop-msg {
+    padding: 0 !important;
+}
 </style>
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
+
 .icon {
     font-size: 20px;
     color: #D6DAE1;

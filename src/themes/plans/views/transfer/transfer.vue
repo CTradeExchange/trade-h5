@@ -60,16 +60,20 @@
 
         <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
             <van-picker
+                :cancel-button-text="$t('common.cancel')"
                 :columns='accountList'
                 :columns-field-names='currencyField'
+                :confirm-button-text="$t('common.sure')"
                 @cancel='pickerShow = false'
                 @confirm='onCurrencyConfirm'
             />
         </van-popup>
         <van-popup v-model:show='accountShow' class='assetsPicker' position='bottom'>
             <van-picker
+                :cancel-button-text="$t('common.cancel')"
                 :columns='plans'
                 :columns-field-names='customField'
+                :confirm-button-text="$t('common.sure')"
                 @cancel='accountShow = false'
                 @confirm='onPickerConfirm'
             />

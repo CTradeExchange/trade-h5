@@ -39,7 +39,7 @@
                     <OrderVolume v-model='volume' v-model:entryType='entryType' :account='account' class='cellMarginTop' :product='product' />
                     <!-- 订单金额 -->
                     <Assets
-                        v-if='account && [3, 5, 9].includes(product.tradeType)'
+                        v-if='account'
                         :account='account'
                         :direction='direction'
                         :product='product'
@@ -50,7 +50,6 @@
                         v-if='[1,2].includes(product.tradeType)'
                         v-model:stopLoss='stopLoss'
                         v-model:stopProfit='stopProfit'
-                        class='cellMarginTop'
                         :direction='direction'
                         :product='product'
                     />
@@ -324,7 +323,7 @@ export default {
                 expireType: state.expireType,
                 entryType: state.entryType
             }
-            // if (tradeType === '2' && product.value.marginInfo?.type !== '1') params.crossLevelNum = parseInt(state.multipleVal)
+            if (tradeType === '2' && product.value.marginInfo?.type !== '1') params.crossLevelNum = parseInt(state.multipleVal)
             return params
         }
 
