@@ -211,7 +211,7 @@ class SocketEvent {
 
     // 消息通知
     notice (data) {
-        const { tradeType, updateType, show } = data.content
+        const { tradeType, updateType, show, bizType } = data.content
         // 刷新字段：updateType
         // NO_MOVEMENT(0 ,"无动作"),
         // POSITION(1 ,"刷新仓位"),
@@ -261,6 +261,10 @@ class SocketEvent {
                 sortType: 'desc',
                 accountIds: accountIds + ''
             })
+        }
+
+        if (bizType === 'AUDIT_CUSTOMER_SUCCESS') {
+            store.dispatch('_user/findCustomerInfo', false)
         }
 
         // 展示字段：show
