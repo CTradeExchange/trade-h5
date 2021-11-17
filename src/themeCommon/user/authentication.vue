@@ -26,7 +26,7 @@
                                 {{ $t('auth.executeAuth', [item.preLevelObj.levelName]) }}
                             </span>
                         </div>
-                        <div v-else>
+                        <div v-else class='btn'>
                             <van-button plain round size='small' @click='handleNext(item)'>
                                 <template #default>
                                     <span class='btn-text'>
@@ -182,7 +182,7 @@ export default {
                 .btn-text {
                     padding-right: rem(6px);
                     color: var(--color);
-                    vertical-align: middle;
+                    //vertical-align: middle;
                 }
                 .van-icon {
                     vertical-align: middle;
@@ -191,6 +191,11 @@ export default {
             .notice {
                 color: var(--minorColor);
                 font-size: rem(24px);
+            }
+        }
+        .btn{
+            :deep(.van-button){
+                background: var(--primaryAssistColor);
             }
         }
     }
