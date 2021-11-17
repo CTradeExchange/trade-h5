@@ -300,7 +300,8 @@ export default {
                     } else {
                         queryAccountInfo()
                     }
-
+                    // 清除表单
+                    resetForm()
                     state[state.submitType].volume = ''
                     state[state.submitType].pendingPrice = ''
                     Toast({
@@ -374,11 +375,10 @@ export default {
         const setVolumeType = () => {
             // CFD逐仓和杠杆全仓玩法才支持按额下单功能
             const tradeType = parseInt(product.value?.tradeType)
-
             if ([2, 3, 5].includes(tradeType)) {
-                if ([3, 5].includes(tradeType) && state.direction === 'buy') {
+                if ([3, 5].includes(tradeType)) {
                     state['buy'].entryType = 2 // 1按数量下单 2按成交额下单
-                    state['sell'].entryType = 2
+                    state['sell'].entryType = 1
                 } else {
                     state['buy'].entryType = 1 // 1按数量下单 2按成交额下单
                     state['sell'].entryType = 1

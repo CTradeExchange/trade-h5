@@ -31,7 +31,7 @@ const app = createApp(App)
 app.use(preventReClick)
 app.use(VantBase).use(I18n).use(store).use(router)
 // app.use(LuckDraw)
-app.use(Socket, { $store: store, $router: router }).use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })
+app.use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })
 app.component('Loading', Loading)
 app.component('LayoutTop', LayoutTop)
 app.component('PageComp', PageComp)
@@ -61,6 +61,9 @@ else if (location.search.includes('from=officialWebsite')) loginParams = getPreD
 store.dispatch('_base/initBaseConfig').then(async () => {
     if (isProduction) skywalkingRegister(router)
     else modifybaseURL(store.state._base.wpCompanyInfo.apiService)
+
+    // 注册websocket插件
+    app.use(Socket, { $store: store, $router: router })
 
     // 设置语言
     const defaultLocal = getCookie('lang') || 'zh-CN'

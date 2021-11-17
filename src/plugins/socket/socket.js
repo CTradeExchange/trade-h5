@@ -1,8 +1,9 @@
-import { quoteService, msgService, tradeService } from '@/config'
+import { msgService, tradeService } from '@/config'
 import CreateSocket from './createSocket'
 import QuoteSocketEvent from './quoteSocketEvent'
 import MsgSocketEvent from './msgSocketEvent'
 import { ungzip } from './socketUtil'
+import { getToken } from '@/utils/util.js'
 
 export const QuoteSocket = new QuoteSocketEvent() // 行情websocket
 export const MsgSocket = new MsgSocketEvent() // 消息websocket
@@ -10,8 +11,35 @@ if (process.env.NODE_ENV === 'development') {
     window.QuoteSocket = QuoteSocket
     window.MsgSocket = MsgSocket
 }
+
+/** 获取 - 行情服务websocket地址
+ * 游客用户使用 /quote_guest
+ * 登录用户使用 /quote
+ */
+export const getQuoteService = () => {
+    const token = getToken()
+    let quoteService = window['quoteService']
+    if (token) {
+        quoteService += '?token=' + token
+    } else {
+        quoteService = quoteService.replace('/quote', '/quote_guest')
+    }
+    return quoteService
+}
+
+/** 设置 - 行情服务websocket地址 */
+export const setQuoteService = () => {
+    const url = getQuoteService()
+    QuoteSocket.ws.url = url
+    QuoteSocket.ws.close()
+    setTimeout(() => {
+        QuoteSocket.ws.open()
+    }, 100)
+}
+
 export default {
     install: (app, { $store, $router } = {}) => {
+        const quoteService = getQuoteService()
         const quoteWS = CreateSocket(quoteService)
         const msgWS = CreateSocket(msgService)
         const tradeWS = CreateSocket(tradeService)
