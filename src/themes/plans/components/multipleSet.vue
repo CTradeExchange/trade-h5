@@ -155,6 +155,7 @@ export default {
             state.loading = true
             return updateCrossLevelNum({
                 positionId: props.position.positionId,
+                symbolId: props.product.symbolId,
                 orderId: props.position.orderId,
                 tradeType: props.position.tradeType,
                 accountDigits: accountInfo.value.digits,
