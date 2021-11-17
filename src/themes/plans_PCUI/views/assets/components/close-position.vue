@@ -106,7 +106,7 @@ export default {
         // 持有手数
         const positionVolume = computed(() => minus(state.data.openVolume, state.data.closeVolume))
         // 手数小数位
-        const volumeDigit = computed(() => getDecimalNum(product.value.minVolume))
+        const volumeDigit = computed(() => props.product.numberDigits)
         // 账户列表
         const accountList = computed(() => store.state._user.customerInfo?.accountList)
         // 账户信息
