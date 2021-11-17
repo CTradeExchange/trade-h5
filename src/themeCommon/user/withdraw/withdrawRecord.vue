@@ -11,6 +11,7 @@
                     <van-empty :description="$t('withdrawRecord.noneHint')" image='/images/empty.png' />
                 </div>
                 <van-list
+                    v-else
                     v-model:loading='loading'
                     :finished='finished'
                     :finished-text='finishedText'
@@ -252,6 +253,9 @@ export default {
                         if (isEmpty(res.data.records)) {
                             state.finishedText = ''
                         }
+                    } else {
+                        state.loading = false
+                        state.loadingPage = false
                     }
                 }
             }).catch(err => {
@@ -347,6 +351,7 @@ export default {
         }
     }
     .record-list {
+        height: 100%;
         .van-collapse-item {
             border-top: solid rem(20px) var(--bgColor);
         }
