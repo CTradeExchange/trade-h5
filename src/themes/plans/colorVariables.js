@@ -1,6 +1,6 @@
 import { localGet } from '@/utils/util'
 import store from './store'
-
+import Base from '@/store/modules/base'
 const colors = {
     common: {
         primary: '#477fd3',
@@ -68,9 +68,12 @@ function updateBodyClass (themeColor) {
 }
 
 // 设置root变量
-export function setRootVariable (themeColor) {
+export function setRootVariable (themeColor,primaryColor) {
     const invertColor = themeColor || localGet('invertColor')
     const chartColorType = JSON.parse(localGet('chartConfig'))?.chartColorType || 1
+    if(primaryColor){
+        colors.common.primary = primaryColor;
+    }
     const colorsArr = Object.assign(colors[invertColor], colors.common)
     updateBodyClass(invertColor)
     const { riseColor, fallColor } = colorsArr
