@@ -212,7 +212,9 @@
                                     />
                                 </el-select>
                             </el-form-item>
-
+                            <el-form-item label='主题颜色' prop='themeColor'>
+                                <el-color-picker v-model="form.themeColor" show-alpha :predefine="predefineColors" />
+                            </el-form-item>
                             <el-form-item label='埋点代码'>
                                 <el-input
                                     v-model='form.googleAnalytics'
@@ -393,6 +395,7 @@ export default {
                 h5Address: '',
                 h5PreviewAddress: '',
                 defaultZone: {},
+                themeColor:'#477fd3',
                 registList: [{}],
                 onlineService: '',
                 supportLanguage: [],
@@ -459,6 +462,22 @@ export default {
                 ]
 
             },
+            predefineColors: [
+                '#477fd3',
+                '#ff8c00',
+                '#ffd700',
+                '#90ee90',
+                '#00ced1',
+                '#1e90ff',
+                '#c71585',
+                'rgba(255, 69, 0, 0.68)',
+                'rgb(255, 120, 0)',
+                'hsv(51, 100, 98)',
+                'hsva(120, 40, 94, 0.5)',
+                'hsl(181, 100%, 37%)',
+                'hsla(209, 100%, 56%, 0.73)',
+                '#c7158577',
+            ]
 
         }
     },
