@@ -224,7 +224,9 @@
                                 @click='
                                     addRow(
                                         config.formConfig,
-                                        activeData[config.name]
+                                        activeData[config.name],
+                                        config,
+                                        activeData
                                     )
                                 '
                             >
@@ -290,11 +292,22 @@ export default {
             return this.$store.state.editor.tradeTypeBlockProduct
         }
     },
+    watch: {
+        activeData: {
+            handler (newVal) {
+                if (newVal.accountType) {
+                    // newVal.saved = true
+                    console.log('aaaaaaaaaaaaaa', newVal)
+                }
+            }
+        }
+    },
     created () {
         // console.log('---activeData-----', this.activeData)
     },
     methods: {
-        addRow (formConfig, data) {
+        addRow (formConfig, data, config, activeData) {
+            activeData.saved = true
             this.$store.commit('editor/ADD_FROM_ROW', {
                 formConfig: formConfig,
                 data: data

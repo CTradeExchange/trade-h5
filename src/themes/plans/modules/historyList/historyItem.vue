@@ -196,7 +196,7 @@ export default {
                 font-size: rem(20px);
             }
         }
-        .icon_icon_chart {
+        .icon_tubiao {
             display: inline-block;
             width: rem(52px);
             height: rem(46px);

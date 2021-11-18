@@ -49,7 +49,7 @@
                     </div>
                 </div><div class='ft'>
                     <div class='bd' @click.stop='toProduct(data.symbolId)'>
-                        <i class='icon_icon_chart hidden'></i>
+                        <i class='icon_tubiao hidden'></i>
                     </div>
                     <van-button
                         color='#477fd3'
@@ -202,7 +202,7 @@ export default {
                 font-size: rem(20px);
             }
         }
-        .icon_icon_chart {
+        .icon_tubiao {
             display: inline-block;
             width: rem(52px);
             height: rem(46px);

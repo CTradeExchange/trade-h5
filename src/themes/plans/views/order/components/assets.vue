@@ -115,8 +115,12 @@ export default {
             return toFixed(amount, props.account.digits)
         })
 
-        MsgSocket.subscribedListAdd(function () {
-            MsgSocket.subscribeAsset(props.product?.tradeType)
+        watch(() => props.product?.tradeType, val => {
+            MsgSocket.subscribedListAdd(function () {
+                MsgSocket.subscribeAsset(val)
+            })
+        }, {
+            immediate: true
         })
 
         onUnmounted(() => {

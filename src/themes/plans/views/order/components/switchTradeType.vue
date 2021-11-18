@@ -57,7 +57,6 @@ export default {
     line-height: rem(104px);
     .icon_chouti1 {
         padding-right: rem(20px);
-        font-size: rem(29px);
     }
     .productName {
         padding-right: rem(20px);
