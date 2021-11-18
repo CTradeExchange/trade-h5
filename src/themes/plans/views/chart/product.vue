@@ -37,10 +37,11 @@
                     </p>
                 </div>
                 <div class='others'>
-                    <span :class='product?.upDownColor'>
-                        {{ product.upDownAmount }}<template v-if='product?.tradeType !== 9'>
+                    <span v-if='[1,2].includes(product?.tradeType)' :class='product?.upDownColor'>
+                        {{ product.upDownAmount }}
+                        <span>
                             ({{ product?.upDownAmount_pip }} {{ $t('trade.dot') }})
-                        </template>
+                        </span>
                     </span>
                     <div class='others-bottom'>
                         <span class='upDownAmount' :class='product?.upDownColor'>
