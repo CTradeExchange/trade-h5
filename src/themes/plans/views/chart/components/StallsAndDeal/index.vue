@@ -1,5 +1,6 @@
 <template>
-    <div v-if='showTabs' class='stallsAndDeal'>
+    {{ showTabs }}
+    <div class='stallsAndDeal'>
         <van-tabs
             ref='tabs'
             class='tabs'
@@ -9,14 +10,14 @@
             sticky
             title-active-color='#477fd3'
         >
-            <van-tab v-if='statusList.indexOf("stalls") > -1' name='stalls' :title='$t("trade.handicap")'>
+            <van-tab name='stalls' :title='$t("trade.handicap")'>
                 <!-- 盘口报价 -->
                 <Handicap
                     :show-pending='showPending'
                     :symbol-id='symbolId'
                 />
             </van-tab>
-            <van-tab v-if='statusList.indexOf("deal") > -1' name='deal' :title='$t("trade.deal")'>
+            <van-tab name='deal' :title='$t("trade.deal")'>
                 <!-- 实时成交记录 -->
                 <DealList :symbol-id='symbolId' />
             </van-tab>
@@ -40,7 +41,6 @@ export default {
         const store = useStore()
         const tradeType = route.query.tradeType
         const state = reactive({
-            statusList: props.settingList,
             isDealDelaying: false,
             timer: 0,
 
@@ -60,30 +60,7 @@ export default {
                 return false
             }
         })
-
-        // 是否显示底部 tabs
-        const showTabs = computed(() => {
-            if (props.settingList.indexOf('stalls') === -1 && props.settingList.indexOf('deal') === -1) {
-                return false
-            }
-            return true
-        })
-
-        watch(
-            () => props.settingList,
-            (val) => {
-                console.log(props.settingList)
-                if (props.settingList.indexOf('stalls') === -1 && props.settingList.indexOf('deal') === -1) {
-                    state.showTabs = false
-                } else {
-                    state.showTabs = true
-                }
-                state.statusList = props.settingList
-                // state.activeObj = props.status
-            })
-
         return {
-            showTabs,
             tradeType,
             customInfo,
             pendingList,

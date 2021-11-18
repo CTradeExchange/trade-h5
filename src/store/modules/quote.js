@@ -196,7 +196,8 @@ export default {
 
                 const upDownAmount = BigNumber(data.cur_price).minus(product.yesterday_close_price).toFixed(product.price_digits) // 涨跌额
                 const upDownAmount_pip = priceToPip(upDownAmount, product) // 涨跌额(点)
-                const upDownWidth = BigNumber(upDownAmount).div(product.yesterday_close_price).times(100).toFixed(2) + '%' // 涨跌幅
+                const upDownWidthTemp = BigNumber(upDownAmount).div(product.yesterday_close_price).times(100).toFixed(2)
+                const upDownWidth = upDownWidthTemp > 0 ? '+' + upDownWidthTemp + '%' : upDownWidthTemp + '%' // 涨跌幅
                 const upDownColor = parseFloat(upDownAmount) === 0 ? 'grayColor' : (parseFloat(upDownAmount) > 0 ? 'riseColor' : 'fallColor')
                 vue_set(product, 'upDownAmount', upDownAmount)
                 vue_set(product, 'upDownAmount_pip', upDownAmount_pip)

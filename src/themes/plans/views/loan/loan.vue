@@ -63,6 +63,7 @@
             :columns-field-names='customFieldName'
             :confirm-button-text="$t('common.sure')"
             :default-index='0'
+            :duration='0.2'
             title=''
             @cancel='pickerShow = false'
             @confirm='onPickerConfirm'

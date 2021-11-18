@@ -2,6 +2,7 @@
     <van-popup
         v-model:show='showDialog'
         class='m-dialog m-dialogZyzs'
+        :duration='0.2'
         get-container='body'
         position='bottom'
         teleport='body'

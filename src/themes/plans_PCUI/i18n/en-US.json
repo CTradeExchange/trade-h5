@@ -48,8 +48,8 @@
         "or": "Or"
 	},
     "tradeType":{
-        "1": "Contract Cross",
-        "2": "Contract Isolated",
+        "1": "Cross Futures",
+        "2": "Cross Isolated",
         "3": "Margin",
         "5": "Spot",
         "9": "ABCC leverage"

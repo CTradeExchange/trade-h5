@@ -28,7 +28,7 @@
     "managAccount": "Manage Accounts",
     "loginAccont": "Login account",
     "onlineService": "Customer Service",
-    "cur": "Current",
+    "cur": "Current ",
     "noSetup": "Not setup",
     "noData": "No data",
     "look": "View",
@@ -39,8 +39,8 @@
     "loadError": "Load failed, please try again later"
   },
   "tradeType":{
-    "1": "Contract Cross",
-    "2": "Contract Isolated",
+    "1": "Cross Futures",
+    "2": "Cross Isolated",
     "3": "Margin",
     "5": "Spot",
     "9": "ABCC Margin"

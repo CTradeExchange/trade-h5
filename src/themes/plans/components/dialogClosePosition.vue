@@ -2,6 +2,7 @@
     <van-popup
         v-model:show='showCP'
         class='m-dialogPC'
+        :duration='0.2'
         position='bottom'
         teleport='body'
         :transition-appear='true'

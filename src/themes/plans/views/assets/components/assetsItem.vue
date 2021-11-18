@@ -5,24 +5,32 @@
             <span>{{ data.netAssets }}</span>
         </div>
         <div class='rowflex muted mtop20'>
-            <div>
+            <div class='asset-info'>
                 <p>{{ $t('trade.free') }}</p>
-                <p>{{ data.available }}</p>
+                <p class='val'>
+                    {{ data.available }}
+                </p>
                 <template v-if='Number(tradeType) !== 5'>
                     <p class='mtop10'>
                         {{ $t('trade.borrowed') }}
                     </p>
-                    <p>{{ data.liabilitiesPrincipal }}</p>
+                    <p class='val'>
+                        {{ data.liabilitiesPrincipal }}
+                    </p>
                 </template>
             </div>
-            <div class='alignRight'>
+            <div class='alignRight asset-info'>
                 <p>{{ $t('assets.frozen') }}</p>
-                <p>{{ data.frozen }}</p>
+                <p class='val'>
+                    {{ data.frozen }}
+                </p>
                 <template v-if='Number(tradeType) !== 5'>
                     <p class='mtop10'>
                         {{ $t('trade.swap_2') }}
                     </p>
-                    <p>{{ data.interest }}</p>
+                    <p class='val'>
+                        {{ data.interest }}
+                    </p>
                 </template>
             </div>
         </div>
@@ -77,6 +85,11 @@ export default {
     line-height: 1.5;
     &.currency {
         font-size: rem(30px);
+    }
+    .asset-info{
+        .val{
+            color: var(--color);
+        }
     }
 }
 </style>

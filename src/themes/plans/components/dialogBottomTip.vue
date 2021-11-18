@@ -3,6 +3,7 @@
         <van-popup
             v-model:show='showDialog'
             class='m-dialog m-dialogTips'
+            :duration='0.2'
             get-container='body'
             position='bottom'
             @closed='close'

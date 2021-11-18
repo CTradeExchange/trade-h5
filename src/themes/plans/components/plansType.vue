@@ -86,7 +86,7 @@ export default {
             margin-left: rem(55px);
             padding: 0;
             font-weight: bold;
-            font-size: rem(28px);
+            font-size: rem(32px);
             &:first-child {
                 margin-left: 0;
             }
@@ -96,7 +96,7 @@ export default {
         }
         :deep(.van-tab--active) {
             font-weight: bold;
-            font-size: rem(38px);
+            font-size: rem(48px);
             .van-tab__text {
                 color: var(--color);
             }

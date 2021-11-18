@@ -6,7 +6,7 @@
                 <p class='label'>
                     <span> {{ $t('assets.balance') }}({{ assetsInfo?.currency }}) </span>
                     <span class='tag'>
-                        <i class='icon_zijinmingxi2' @click="$router.push({ name:'Record',query:{ tradeType: tradeType, accountId:assetsInfo.accountId } })"></i>
+                        <i class='icon_zijinmingxi' @click="$router.push({ name:'Record',query:{ tradeType: tradeType, accountId:assetsInfo.accountId } })"></i>
                     </span>
                 </p>
                 <p class='totalAmount'>
@@ -19,43 +19,37 @@
                 <p class='muted'>
                     {{ $t('trade.jingzhi') }}
                 </p>
-                <p> {{ userAccount?.netWorth || '--' }} </p>
+                <p>
+                    {{ userAccount?.netWorth || '--' }}
+                </p>
             </li>
             <li class='item'>
                 <p class='muted'>
                     {{ $t('trade.marginLevel') }}
                 </p>
-                <p>{{ userAccount?.marginRadio }}%</p>
+                <p>
+                    {{ userAccount?.marginRadio }}%
+                </p>
             </li>
             <li class='item'>
                 <p class='muted'>
                     {{ $t('trade.freeMargin') }}
                 </p>
-                <p>{{ userAccount?.availableMargin || '--' }}</p>
+                <p>
+                    {{ userAccount?.availableMargin || '--' }}
+                </p>
             </li>
 
             <li class='item'>
                 <p class='muted'>
                     {{ $t('trade.originalMargin') }}
                 </p>
-                <p>{{ userAccount?.occupyMargin || '--' }}</p>
+                <p>
+                    {{ userAccount?.occupyMargin || '--' }}
+                </p>
             </li>
         </ul>
         <div v-if='assetsInfo' class='btns'>
-            <!-- <van-button
-                hairline
-                size='mini'
-                @click='toDesposit'
-            >
-                {{ $t('trade.desposit') }}
-            </van-button>
-            <van-button
-                hairline
-                size='mini'
-                @click='toWirhdraw'
-            >
-                {{ $t('trade.withdraw') }}
-            </van-button> -->
             <van-button
                 hairline
                 size='mini'
@@ -89,40 +83,6 @@ export default {
         const assetsInfo = computed(() => store.state._user?.customerInfo && store.state._user?.customerInfo?.accountList.find(el => Number(el.tradeType) === Number(tradeType.value)))
 
         const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(tradeType.value)))
-        const toDesposit = () => {
-            if (!checkAssets()) return
-            if (accountList.value.length > 1) {
-                router.push({
-                    path: '/chooseAccount',
-                    query: {
-                        accountId: assetsInfo.value.accountId,
-                        tradeType: tradeType.value,
-                        type: 1
-                    }
-                })
-            } else {
-                router.push({
-                    path: '/deposit',
-                    query: {
-                        accountId: assetsInfo.value.accountId,
-                        currency: assetsInfo.value.currency,
-                        tradeType: tradeType.value
-                    }
-                })
-            }
-        }
-
-        // 跳转提现页面
-        const toWirhdraw = () => {
-            if (!checkAssets()) return
-            router.push({
-                path: '/withdrawAccount',
-                query: {
-                    accountId: assetsInfo.value.accountId,
-                    tradeType: tradeType.value
-                }
-            })
-        }
 
         // 跳转划转记录
         const toTransfer = () => {
@@ -150,9 +110,7 @@ export default {
             assetsInfo,
             userAccount,
             tradeType,
-            toDesposit,
-            toTransfer,
-            toWirhdraw
+            toTransfer
         }
     }
 }
@@ -184,7 +142,8 @@ export default {
     .totalAmount {
         margin-top: rem(20px);
         color: var(--color);
-        font-size: rem(50px);
+        font-size: rem(70px);
+        letter-spacing: rem(-2px);
     }
 }
 .assetList {

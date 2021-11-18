@@ -1,19 +1,26 @@
 <template>
     <div class='m-layout' :style='data.styleObj'>
+        {{ data.saved }}---
+        <div v-if='data.saved === false'>
+            <img alt='' :src="require('./layout.png')" />
+        </div>
         <div
             v-for='(item, i) in dataList'
+            v-else
             :key='i'
             class='col'
             :style="{ margin: '0 ' + data.gutter + 'px' }"
         >
             <a class='link' href='javascript:;' @click="$emit('openUrl',item)">
                 <img v-if='item.src' :src='item.src' />
+                <img v-else alt='' src='/wp-content/uploads/cats_business/icon2.png' />
                 <p v-if='item.label' class='label'>
                     {{ item.label }}
                 </p>
             </a>
         </div>
-        <slot></slot>
+        <slot>
+        </slot>
     </div>
 </template>
 
@@ -30,7 +37,7 @@ export default {
                 return {
                     href: '',
                     src: '',
-                    target: '',
+                    target: ''
                 }
             }
         },
@@ -43,6 +50,21 @@ export default {
         },
         span () {
             return Math.round(24 / this.dataList.length)
+        },
+        saved () {
+            return ''
+        }
+    },
+    watch: {
+        'data.items': {
+            handler (newVal) {
+                debugger
+                console.log('55555555555555', newVal)
+                if (newVal.accountType) {
+                    // newVal.saved = true
+                    // console.log('aaaaaaaaaaaaaa', newVal)
+                }
+            }
         }
     },
 

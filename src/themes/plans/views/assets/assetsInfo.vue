@@ -151,6 +151,7 @@ export default {
     .totalAmount {
         color: var(--color);
         font-size: rem(50px);
+        letter-spacing: rem(-2px);
     }
     .takeMoneyBtn {
         height: rem(48px);

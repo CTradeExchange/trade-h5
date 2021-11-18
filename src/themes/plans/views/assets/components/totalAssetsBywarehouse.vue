@@ -4,23 +4,20 @@
         <div class='totalAssetsBlock'>
             <div class='totalAssetsInfo'>
                 <p class='label'>
-                    <span> {{ $t('trade.asset') }}({{ assetsInfo?.currency }}) </span>
+                    <span> {{ $t('trade.freeMargin') }}({{ assetsInfo?.currency }}) </span>
                     <span class='tag'>
-                        <i class='icon_zijinmingxi2' @click="$router.push({ name:'Record',query:{ tradeType:tradeType, accountId:assetsInfo.accountId } })"></i>
+                        <i class='icon_zijinmingxi' @click="$router.push({ name:'Record',query:{ tradeType:tradeType, accountId:assetsInfo.accountId } })"></i>
                     </span>
+                </p>
+                <p class='totalAmount'>
+                    {{ userAccount?.availableMargin || '--' }}
                 </p>
             </div>
         </div>
         <ul class='assetList'>
             <li class='item'>
                 <p class='muted'>
-                    {{ $t('trade.freeMargin') }}
-                </p>
-                <p>{{ userAccount?.availableMargin || '--' }} </p>
-            </li>
-            <li class='item'>
-                <p class='muted'>
-                    {{ $t('trade.allOriginalMargin') }}
+                    {{ $t('trade.allOriginalMargin') }}({{ assetsInfo?.currency }})
                 </p>
                 <p>{{ userAccount?.occupyMargin || '--' }}</p>
             </li>
@@ -167,7 +164,9 @@ export default {
     .totalAmount {
         margin-top: rem(20px);
         color: var(--color);
-        font-size: rem(50px);
+        font-size: rem(70px);
+        letter-spacing: rem(-2px);
+        letter-spacing: rem(-2px);
     }
 }
 .assetList {

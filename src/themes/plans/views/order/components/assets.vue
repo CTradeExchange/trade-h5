@@ -10,15 +10,21 @@
         <van-row justify='space-between'>
             <van-col>{{ $t('trade.free') }}</van-col>
             <van-col v-if='Number(product.tradeType) === 1' class='balance'>
-                {{ accountTradeType1?.availableMargin }}
+                <span class='val'>
+                    {{ accountTradeType1?.availableMargin }}
+                </span>
                 {{ account.currency }}
             </van-col>
             <van-col v-else-if='Number(product.tradeType) === 2' class='balance'>
-                {{ accountTradeType2?.availableMargin }}
+                <span class='val'>
+                    {{ accountTradeType2?.availableMargin }}
+                </span>
                 {{ account.currency }}
             </van-col>
             <van-col v-else>
-                {{ account.available }}
+                <span class='val'>
+                    {{ account.available }}
+                </span>
                 {{ direction==='buy'?product.profitCurrency:product.baseCurrency }}
             </van-col>
         </van-row>
@@ -136,6 +142,9 @@ export default {
     margin-top: rem(20px);
     color: var(--minorColor);
     line-height: 1.5;
+    .val{
+        color: var(--color);
+    }
 }
 .borrowMoney {
     margin-top: rem(20px);
