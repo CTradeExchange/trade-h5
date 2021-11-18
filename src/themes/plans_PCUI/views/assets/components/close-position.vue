@@ -102,11 +102,11 @@ export default {
             currentValue: 1
         })
         // 产品数据
-        const product = computed(() => store.state._quote.productMap[state.data.symbolId + '_' + state.data.tradeType])
+        const product = computed(() => store.state._quote.productMap[state.data.symbolId + '_' + state.data.tradeType] || {})
         // 持有手数
         const positionVolume = computed(() => minus(state.data.openVolume, state.data.closeVolume))
         // 手数小数位
-        const volumeDigit = computed(() => props.product.numberDigits)
+        const volumeDigit = computed(() => product.numberDigits)
         // 账户列表
         const accountList = computed(() => store.state._user.customerInfo?.accountList)
         // 账户信息
