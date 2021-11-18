@@ -71,6 +71,7 @@ export default {
         background: var(--assistColor);
         border-radius: rem(6px);
         font-weight: bold;
+        font-size: rem(28px);
         &.sell {
             margin-left: 5px;
             background: v-bind(fallColor);

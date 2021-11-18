@@ -463,6 +463,7 @@ export default {
     font-weight: bold;
     &.buy {
         .van-button {
+            font-size: rem(30px);
             color: #FFF;
             background: var(--riseColor);
             border-color: var(--riseColor);
@@ -470,6 +471,7 @@ export default {
     }
     &.sell {
         .van-button {
+            font-size: rem(30px);
             color: #FFF;
             background: var(--fallColor);
             border-color: var(--fallColor);

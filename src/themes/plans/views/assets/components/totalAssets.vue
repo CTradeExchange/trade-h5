@@ -177,7 +177,7 @@ export default {
     border-radius: 4px;
 }
 .totalAssetsBlock {
-    margin-bottom: rem(50px);
+    margin-bottom: rem(40px);
 }
 .totalAssetsInfo {
     font-size: rem(28px);
@@ -205,7 +205,7 @@ export default {
         font-size: rem(32px);
     }
     .totalAmount {
-        margin-top: rem(20px);
+        margin-top: rem(10px);
         color: var(--color);
         font-size: rem(70px);
         letter-spacing: rem(-2px);
