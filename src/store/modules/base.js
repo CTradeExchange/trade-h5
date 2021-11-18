@@ -1,6 +1,7 @@
 import { pageConfig, wpCompanyConfig, wpNav, wpSelfSymbolIndex } from '@/api/wpApi'
 import { localSet, localGet, getCookie, sessionSet, setCookie, isEmpty } from '@/utils/util'
 import { formatPlans } from './storeUtil.js'
+import Colors, { setRootVariable } from '@plans/colorVariables'
 
 export default {
     namespaced: true,
@@ -91,7 +92,7 @@ export default {
                     if (isEmpty(getCookie('lang'))) {
                         setCookie('lang', data.language.val || 'zh-CN', 'y10') // 语言都存储在cookie里面
                     }
-
+                    setRootVariable(localGet('invertColor'),data.themeColor)
                     commit('UPDATE_wpCompanyInfo', data)
 
                     // 游客玩法
