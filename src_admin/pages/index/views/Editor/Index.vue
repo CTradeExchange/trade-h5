@@ -357,12 +357,13 @@ export default {
                 if (ev && ev.preventDefault) {
                     ev.preventDefault()
                 }
-                const tradeTypeBlockCollect = store.state.editor.tradeTypeBlockCollect
 
+                const tradeTypeBlockCollect = store.state.editor.tradeTypeBlockCollect
                 const config = deepClone(store.state.editor.elementList.map(item => ({
                     id: item.id,
                     tag: item.tag,
-                    data: item.data
+                    data: item.data,
+                    hideUserRole: item.hideUserRole
                 })))
 
                 const tradeTypeBlock = {}
@@ -394,6 +395,7 @@ export default {
                         item.data.product = store.state.editor.tradeTypeSelfSymbol
                     }
                 })
+
                 modifyPageConfig(Object.assign({}, state.pageConf, {
                     page_code: state.pageCode,
                     content: zip(JSON.stringify(config)),
@@ -502,6 +504,7 @@ export default {
                 elementConfig.formConfig.push(Object.assign({ _id: randomStr() }, second, { formConfig: second.type === 'Object' ? curElement : [curElement] }))
                 elementConfig.data[second.name] = second.type === 'Array' ? [form] : form
             })
+            debugger
             store.commit('editor/ADD_ELEMENT', {
                 formConfig: elementConfig.formConfig,
                 data: Object.assign({
@@ -520,13 +523,16 @@ export default {
                         'padding-bottom': '',
                         'padding-left': '',
                     },
-                    extend: {}
+                    extend: {},
+                    saved: false
 
                 }, elementConfig.data),
                 id: `${data.tag}_${randomStr()}`,
                 hidden: data.hidden,
                 tag: data.tag,
-                index: index || 0
+                index: index || 0,
+                hideUserRole: element.hideUserRole
+
             })
             ++ELEMENIINDEX
         }

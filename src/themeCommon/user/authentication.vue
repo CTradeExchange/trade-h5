@@ -24,7 +24,7 @@
                         </div>
                         <div v-if='item.preLevelObj && item.preLevelObj.status !== 2'>
                             <span class='notice'>
-                                {{ $t('auth.executeAuth', [item.preLevelObj.levelName]) }}
+                                {{ $t('auth.executeAuth', [kycMap[item.preLevelObj.levelCode]]) }}
                             </span>
                         </div>
                         <div v-else class='btn'>
@@ -188,10 +188,10 @@ export default {
                 .btn-text {
                     padding-right: rem(6px);
                     color: var(--color);
-                    //vertical-align: middle;
+                    vertical-align: middle;
                 }
                 .van-icon {
-                    vertical-align: middle;
+                    vertical-align: rem(-2px);
                 }
             }
             .notice {

@@ -20,41 +20,43 @@
                                     </el-button>
                                 </template>
                             </el-popconfirm>
-                            <el-divider content-position='left'>
-                                <h3>基础设置</h3>
-                            </el-divider>
-                            <div class='setting-wrap'>
-                                <el-form-item label='账户状态'>
-                                    <el-checkbox-group v-model='activeData.accountType'>
-                                        <el-checkbox label='G'>
-                                            游客
-                                        </el-checkbox>
-                                        <!-- <el-checkbox label='D'>
+                            <template v-if='!element.hideUserRole'>
+                                <el-divider content-position='left'>
+                                    <h3>基础设置</h3>
+                                </el-divider>
+                                <div class='setting-wrap'>
+                                    <el-form-item label='账户状态'>
+                                        <el-checkbox-group v-model='activeData.accountType'>
+                                            <el-checkbox label='G'>
+                                                游客
+                                            </el-checkbox>
+                                            <!-- <el-checkbox label='D'>
                                             模拟
                                         </el-checkbox> -->
-                                        <el-checkbox label='R'>
-                                            真实
-                                        </el-checkbox>
+                                            <el-checkbox label='R'>
+                                                真实
+                                            </el-checkbox>
                                         <!-- <el-checkbox label='R_1'>
                                             未入金
                                         </el-checkbox>
                                         <el-checkbox label='R_2'>
                                             已入金
                                         </el-checkbox> -->
-                                    </el-checkbox-group>
-                                </el-form-item>
-                                <el-form-item label='有效期'>
-                                    <el-date-picker
-                                        v-model='activeData.expiryDate'
-                                        end-placeholder='结束日期'
-                                        format='YYYY-MM-DD HH:mm:ss'
-                                        range-separator='至'
-                                        start-placeholder='开始日期'
-                                        type='datetimerange'
-                                        :unlink-panels='true'
-                                    />
-                                </el-form-item>
-                            </div>
+                                        </el-checkbox-group>
+                                    </el-form-item>
+                                    <el-form-item label='有效期'>
+                                        <el-date-picker
+                                            v-model='activeData.expiryDate'
+                                            end-placeholder='结束日期'
+                                            format='YYYY-MM-DD HH:mm:ss'
+                                            range-separator='至'
+                                            start-placeholder='开始日期'
+                                            type='datetimerange'
+                                            :unlink-panels='true'
+                                        />
+                                    </el-form-item>
+                                </div>
+                            </template>
                         </div>
 
                         <div class='component-setting'>

@@ -263,6 +263,7 @@ class SocketEvent {
             })
         }
 
+        // kyc审核通过刷新客户信息
         if (bizType === 'AUDIT_CUSTOMER_SUCCESS') {
             store.dispatch('_user/findCustomerInfo', false)
         }

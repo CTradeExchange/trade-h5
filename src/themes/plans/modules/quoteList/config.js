@@ -3,6 +3,7 @@ export default {
     title: '行情列表',
     hidden: true,
     tag: 'quoteList',
+    hideUserRole: true,
     tagIcon: 'el-icon-star-on',
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [

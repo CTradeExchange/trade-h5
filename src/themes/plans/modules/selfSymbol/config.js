@@ -4,6 +4,7 @@ export default {
     tag: 'selfSymbol',
     hidden: true, // 左侧模块列表不显示
     tagIcon: 'el-icon-star-on',
+    hideUserRole: true,
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
         {

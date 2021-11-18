@@ -1,6 +1,6 @@
 import { img } from '@admin/components/baseConfig'
 export default {
-    title: 'Layout布局',
+    title: '栅格组件',
     tag: 'layout',
     exclude: ['nav'], // 排除的页面code
     tagIcon: 'el-icon-s-grid',
@@ -36,7 +36,8 @@ export default {
                     type: 'Input',
                     default: '默认文字'
                 },
-                ...img
+                ...img,
+
             ]
         },
     ]

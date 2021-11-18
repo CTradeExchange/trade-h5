@@ -33,7 +33,6 @@ export default {
 @import '@/sass/mixin.scss';
 .page-wrap {
     height: 100%;
-    padding-top: rem(100px);
     background-color: var(--bgColor);
 }
 </style>
