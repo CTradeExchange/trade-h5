@@ -27,12 +27,22 @@
     </div>
 
     <!-- 指标弹出层 -->
-    <van-popup v-model:show='showIndicator' position='right' :style="{ height: '100%', width: '100%' }">
+    <van-popup
+        v-model:show='showIndicator'
+        :duration='0.2'
+        position='right'
+        :style="{ height: '100%', width: '100%' }"
+    >
         <Indicator v-if='showIndicator' @back='onBack' />
     </van-popup>
 
     <!-- 设置弹出层 -->
-    <van-popup v-model:show='showSetting' position='right' :style="{ height: '100%', width: '100%' }">
+    <van-popup
+        v-model:show='showSetting'
+        :duration='0.2'
+        position='right'
+        :style="{ height: '100%', width: '100%' }"
+    >
         <ChartSetting @back-event='onBackEvent' />
     </van-popup>
 </template>

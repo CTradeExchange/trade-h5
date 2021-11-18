@@ -1,14 +1,15 @@
 <template>
     <div class='switchTradeType'>
         <div class='productInfo'>
-            <span class='icon_chouti' @click="$emit('switchProduct')"></span>
+            <span class='icon_chouti1' @click="$emit('switchProduct')"></span>
             <span class='productName'>
                 {{ product.symbolName }}
             </span>
             <span class='upDownWidth' :class='product.upDownColor'>
                 {{ product.upDownWidth }}
+                <!-- {{ parseFloat(product.upDownWidth) > 0 ? '+'+ product.upDownWidth : '-'+ Math.abs(parseFloat(product.upDownWidth)) }} -->
             </span>
-            <span class='chartIcon icon_icon_chart' @click="$router.push({ name:'Product', query: { symbolId:product.symbolId, tradeType:product.tradeType } })"></span>
+            <span class='chartIcon icon_tubiao' @click="$router.push({ name:'Product', query: { symbolId:product.symbolId, tradeType:product.tradeType } })"></span>
         </div>
     </div>
 </template>
@@ -54,7 +55,7 @@ export default {
     padding: 0 rem(30px);
     font-size: rem(34px);
     line-height: rem(104px);
-    .icon_chouti {
+    .icon_chouti1 {
         padding-right: rem(20px);
         font-size: rem(29px);
     }
@@ -67,12 +68,11 @@ export default {
     .chartIcon {
         width: rem(62px);
         height: rem(58px);
-        color: var(--primary);
+        color: var(--normalColor);
         font-weight: 500;
-        font-size: rem(34px);
+        font-size: rem(28px);
         line-height: rem(58px);
         text-align: center;
-        background: var(--primaryAssistColor);
         border-radius: 3px;
     }
 }

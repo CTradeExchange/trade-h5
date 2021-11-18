@@ -3,6 +3,7 @@
         v-model:show='showList'
         :close-on-click-overlay='false'
         closeable
+        :duration='0.2'
         :get-container='getContainer'
         round
         :style="{ width: '90%' }"

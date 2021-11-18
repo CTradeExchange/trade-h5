@@ -60,6 +60,7 @@
                 :columns='columns'
                 :confirm-button-text="$t('common.sure')"
                 :default-index='2'
+                :duration='0.2'
                 title=''
                 @confirm='onPickerConfirm'
             />

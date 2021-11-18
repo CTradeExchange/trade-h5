@@ -35,13 +35,15 @@
                             {{ Number(product.entryType) === 1 ? $t('trade.pendingUnit')+ ' (' +$t('trade.volumeUnit') + ')' : $t('trade.pendingAmount') + ' ('+product.accountCurrency + ')' }}
                         </span>
                     </div>
-                    <span>{{ product.requestNum }}</span>
+                    <span class='val'>
+                        {{ product.requestNum }}
+                    </span>
                 </div>
                 <div v-if='product.expireType' class='tl-item'>
                     <div class='label'>
                         {{ $t('trade.expire') }}
                     </div>
-                    <span class='tag'>
+                    <span class='tag val'>
                         {{ expireTypeMap[product.expireType] }}
                     </span>
                 </div>
@@ -50,7 +52,7 @@
                     <div class='label'>
                         {{ $t('trade.loan') }} ({{ Number(product.tradeType) === 3 ? product.accountCurrency : product.outCurrency }})
                     </div>
-                    <span>
+                    <span class='val'>
                         {{ product?.loanAmount || '--' }}
                     </span>
                 </div>
@@ -59,14 +61,18 @@
                     <div class='label'>
                         {{ $t('trade.orderComplete')+'('+ product.outCurrency +')' }}
                     </div>
-                    <span>{{ product.executeNum }}</span>
+                    <span class='val'>
+                        {{ product.executeNum }}
+                    </span>
                 </div>
 
                 <div class='tl-item'>
                     <div class='label'>
                         {{ $t('trade.trustPrice') }}
                     </div>
-                    <span>{{ product.requestPrice }}</span>
+                    <span class='val'>
+                        {{ product.requestPrice }}
+                    </span>
                 </div>
                 <div class='tl-item'>
                     <div class='label'>
@@ -82,7 +88,9 @@
                     <div class='label'>
                         {{ $t('trade.stopLossPrice') }}
                     </div>
-                    <span>{{ shiftedBy(product.stopLoss,-1*product.digits ) || '--' }}</span>
+                    <span class='val'>
+                        {{ shiftedBy(product.stopLoss,-1*product.digits ) || '--' }}
+                    </span>
                 </div>
 
                 <div v-if='[1,2].includes(Number(product.tradeType))' class='tl-item'>
@@ -90,7 +98,9 @@
                         {{ $t('trade.stopProfitPrice') }}
                     </div>
 
-                    <span>{{ shiftedBy(product.takeProfit,-1*product.digits ) || '--' }}</span>
+                    <span class='val'>
+                        {{ shiftedBy(product.takeProfit,-1*product.digits ) || '--' }}
+                    </span>
                 </div>
             </div>
         </div>
@@ -242,10 +252,6 @@ export default {
             margin-right: rem(32px);
             color: var(--color);
             font-size: rem(30px);
-            // .time {
-            //     color: var(--placeholdColor);
-            //     font-size: rem(20px);
-            // }
             .name {
                 margin-right: rem(40px);
             }
@@ -290,6 +296,7 @@ export default {
                 width: rem(100px);
                 margin-right: rem(20px);
             }
+
         }
     }
     .t-body {
@@ -316,6 +323,9 @@ export default {
                 }
                 .label {
                     color: var(--minorColor);
+                }
+                .val{
+                    color: var(--color);
                 }
                 span {
                     text-align: left;

@@ -460,6 +460,7 @@ export default {
     width: 100%;
     padding: rem(50px) rem(30px) rem(30px);
     background: var(--contentColor);
+    font-weight: bold;
     &.buy {
         .van-button {
             color: #FFF;

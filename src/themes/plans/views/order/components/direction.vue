@@ -20,15 +20,25 @@
 </template>
 
 <script>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 export default {
     props: ['modelValue', 'product'],
     emits: ['update:modelValue'],
     setup (props, { emit }) {
+        const store = useStore()
+        // 颜色值
+        const style = computed(() => store.state.style)
         const setDirection = (data) => {
             emit('update:modelValue', data)
         }
+        // 16进制颜色透明度
+        const fallColor = style.value.fallColor + '0D'
+        const riseColor = style.value.riseColor + '0D'
         return {
-            setDirection
+            setDirection,
+            fallColor,
+            riseColor
         }
     }
 }
@@ -60,16 +70,21 @@ export default {
         line-height: rem(60px);
         background: var(--assistColor);
         border-radius: rem(6px);
+        font-weight: bold;
         &.sell {
             margin-left: 5px;
+            background: v-bind(fallColor);
             &.active {
+                opacity: 1;
                 color: #FFF;
                 background: var(--fallColor);
             }
         }
         &.buy {
             margin-right: 5px;
+            background: v-bind(riseColor);
             &.active {
+                opacity: 1;
                 color: #FFF;
                 background: var(--riseColor);
             }

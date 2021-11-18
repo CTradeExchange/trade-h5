@@ -322,12 +322,12 @@ export default {
                 color: var(--color);
                 font-size: rem(28px);
                 line-height: rem(38px);
-                vertical-align: bottom;
+                vertical-align: middle;
             }
             .lot {
                 display: inline-block;
                 margin-left: 0.5em;
-                vertical-align: bottom;
+                vertical-align: middle;
             }
             .time {
                 color: var(--minorColor);

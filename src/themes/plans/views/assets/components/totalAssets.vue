@@ -43,6 +43,7 @@
             <van-button
                 hairline
                 size='mini'
+                type='primary'
                 @click='toDesposit'
             >
                 {{ Number(tradeType) === 3 ? $t('trade.loan') : $t('trade.desposit') }}
@@ -50,10 +51,13 @@
             <van-button
                 hairline
                 size='mini'
+                type='primary'
                 @click='toWirhdraw'
             >
                 {{ Number(tradeType) === 3 ? $t('trade.repayment') : $t('trade.withdraw') }}
             </van-button>
+        </div>
+        <div class='btns2'>
             <van-button
                 hairline
                 size='mini'
@@ -203,7 +207,8 @@ export default {
     .totalAmount {
         margin-top: rem(20px);
         color: var(--color);
-        font-size: rem(50px);
+        font-size: rem(70px);
+        letter-spacing: rem(-2px);
     }
 }
 .assetList {
@@ -224,22 +229,33 @@ export default {
 }
 .btns {
     display: flex;
-    height: rem(65px);
+    height: rem(70px);
     :deep(.van-button) {
         display: block;
         width: 50%;
         height: 100%;
         margin-right: rem(20px);
-        color: var(--primary);
         font-size: rem(28px);
         line-height: rem(70px);
-        background: var(--primaryAssistColor);
         border: none;
-        border-color: var(--primaryAssistColor);
         border-radius: rem(6px);
         &:last-child {
             margin-right: 0;
         }
+    }
+}
+.btns2{
+    height: rem(70px);
+    margin-top: rem(30px);
+    :deep(.van-button) {
+        width: 100%;
+        font-size: rem(28px);
+        line-height: rem(70px);
+        height: 100%;
+        background: var(--primaryAssistColor);
+        border-color: var(--primaryAssistColor);
+        color: var(--primary);
+        border-radius: rem(6px);
     }
 }
 </style>

@@ -25,7 +25,7 @@
                     </div>
                     <div class='right'>
                         <span class='balance'>
-                            {{ item.amount }}
+                            {{ item.amount > 0 ? '+ '+item.amount : '- '+ Math.abs(item.amount) }}
                         </span>
                         <span class='amountAfter'>
                             {{ $t('common.balance') }} {{ item.amountAfter }}

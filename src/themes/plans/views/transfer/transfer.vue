@@ -58,7 +58,12 @@
         </div>
         <Loading :show='loading' />
 
-        <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
+        <van-popup
+            v-model:show='pickerShow'
+            class='assetsPicker'
+            :duration='0.2'
+            position='bottom'
+        >
             <van-picker
                 :cancel-button-text="$t('common.cancel')"
                 :columns='accountList'
@@ -68,7 +73,12 @@
                 @confirm='onCurrencyConfirm'
             />
         </van-popup>
-        <van-popup v-model:show='accountShow' class='assetsPicker' position='bottom'>
+        <van-popup
+            v-model:show='accountShow'
+            class='assetsPicker'
+            :duration='0.2'
+            position='bottom'
+        >
             <van-picker
                 :cancel-button-text="$t('common.cancel')"
                 :columns='plans'

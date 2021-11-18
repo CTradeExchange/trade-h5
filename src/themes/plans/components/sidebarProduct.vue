@@ -1,6 +1,7 @@
 <template>
     <van-popup
         v-model:show='show'
+        :duration='0.2'
         position='left'
         :style="{ height: '100%' }"
         teleport='body'
