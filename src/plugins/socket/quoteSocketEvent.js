@@ -11,6 +11,7 @@ class SocketEvent {
         this.timer = null
         this.$store = null
         this.requests = new Map()
+        this.subscribedMap = {} // 根据不同模块增量订阅
         this.subscribedList = [] // 上一次报价订阅记录
         this.subscribeDeal = [] // 上一次盘口订阅记录
         this.preSetTime = 1 // 上一次保存价格的时间
@@ -85,6 +86,15 @@ class SocketEvent {
             const subscribeList = formatSubscribe(productIds, productMap)
             this.send(14000, { symbol_list: subscribeList })
         })
+    }
+
+    /** 增量订阅产品
+        @param Object {} 需要订阅的数据, moduleId 模块ID，symbolKeys 模块ID里面需要订阅的产品
+     */
+    add_subscribe ({ moduleId, symbolKeys }) {
+        this.subscribedMap[moduleId] = symbolKeys
+        const symbolkeyAll = Object.values(this.subscribedMap).flat()
+        this.send_subscribe(symbolkeyAll)
     }
 
     // 盘口成交报价订阅
