@@ -10,6 +10,7 @@ export default function (productList) {
     const productMap = computed(() => store.state._quote.productMap)
     const product = computed(() => store.getters.productActived)
     const productListEl = ref(null)
+    const subscribList = ref([])
 
     // 订阅当前屏和上半屏、下半屏的产品报价，给上层组件使用
     const calcSubscribeProducts = () => {
@@ -28,10 +29,10 @@ export default function (productList) {
         return subscribeArr
     }
     const calcProductsDebounce = debounce(() => {
-        const subscribList = calcSubscribeProducts()
+        subscribList.value = calcSubscribeProducts()
         // 把当前路由的产品加入订阅列表
-        subscribList.unshift(product.value?.symbolKey)
-        if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
+        subscribList.value.unshift(product.value?.symbolKey)
+        if (subscribList.value.length > 0) QuoteSocket.send_subscribe(subscribList.value)
     })
 
     watch(
@@ -50,6 +51,7 @@ export default function (productList) {
     return {
         productListEl,
         productMap,
+        subscribList,
         refresh: calcProductsDebounce
     }
 }

@@ -290,7 +290,17 @@ const routes = [
                     roles: []
                 },
                 children: h5Children
-            }
+            },
+            {
+                path: 'transRecords',
+                name: 'TransRecords',
+                component: () => import(/* webpackChunkName: "Quote" */ '../views/transRecords/transRecords.vue'),
+                meta: {
+                    title: 'route.transRecords',
+                    roles: [],
+                },
+                children: h5Children
+            },
         ]
     },
     // {
