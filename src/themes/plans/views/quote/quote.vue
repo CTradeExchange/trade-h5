@@ -154,9 +154,9 @@ export default {
     }
     .iconSearch {
         position: absolute;
-        top: rem(22px);
+        top: rem(30px);
         right: rem(28px);
-        font-size: rem(28px);
+        font-size: rem(32px);
     }
 }
 .titleBar {

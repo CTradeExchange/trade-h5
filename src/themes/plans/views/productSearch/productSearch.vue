@@ -19,8 +19,7 @@
                     <span>{{ item.code }}</span>
                     <button v-preventReClick class='collectIcon' @click.stop='addOptional(item)'>
                         <i
-                            class='icon_zixuan1'
-                            :class="{ 'icon_zixuan2':item.isSelfSymbol }"
+                            :class="item.isSelfSymbol ? 'icon_zixuan2': 'icon_zixuan1'"
                         ></i>
                     </button>
                 </div>
@@ -190,6 +189,12 @@ export default {
             .van-field {
                 border-radius: 3px;
             }
+            :deep(.van-cell){
+                padding-left: 0;
+            }
+            :deep(.van-search__action){
+                padding: 0 rem(40px)
+            }
         }
         .search_label {
             display: inline-block;
@@ -204,7 +209,7 @@ export default {
                 border-bottom: 1px solid #F8F8F8;
                 button {
                     float: right;
-                    background: var(--bgColor) !important;
+                    background: none;
                 }
                 .icon_zixuan2 {
                     color: #FC822F;

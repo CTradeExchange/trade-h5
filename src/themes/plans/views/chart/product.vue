@@ -291,7 +291,7 @@
 import { useRouter, useRoute } from 'vue-router'
 import StudyList from './components/studyList.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted  } from 'vue'
+import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted } from 'vue'
 import KIcon from './icons/kIcon.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import { useStore } from 'vuex'
@@ -1078,6 +1078,7 @@ export default {
         justify-content: center;
         .icon_chouti1 {
             margin-right: rem(20px);
+            font-size: rem(26px);
         }
     }
     &.isIframe {

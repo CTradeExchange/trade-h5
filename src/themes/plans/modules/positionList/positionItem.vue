@@ -335,7 +335,7 @@ export default {
             display: inline-block;
             width: rem(52px);
             height: rem(52px);
-            font-size: rem(30px);
+            font-size: rem(26px);
             font-style: normal;
             line-height: rem(52px);
             text-align: center;
