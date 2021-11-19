@@ -16,7 +16,11 @@
             </div>
             <div class='search_products'>
                 <div v-for='item in state.searchList' :key='item.symbolId' class='product_item' @click='openProduct(item.id)'>
-                    <span>{{ item.code }}</span>
+                    <span>
+                        <span v-for='(childName,index) in item.name' :key='index' :class="{ 'activeText':isSearchText(childName) }">
+                            {{ childName }}
+                        </span>
+                    </span>
                     <button v-preventReClick class='collectIcon' @click.stop='addOptional(item)'>
                         <i
                             :class="item.isSelfSymbol ? 'icon_zixuan2': 'icon_zixuan1'"
@@ -68,6 +72,13 @@ export default {
             console.log('val', val)
             state.searchList = []
             state.searchKey = ''
+        }
+        const isSearchText = (val) => {
+            if (state.searchKey.indexOf(val) != -1) {
+                return true
+            } else {
+                return false
+            }
         }
 
         const onSearch = () => {
@@ -149,7 +160,8 @@ export default {
             state,
             plansList,
             handleTradeType,
-            tradeType
+            tradeType,
+            isSearchText
         }
     }
 }
@@ -214,6 +226,9 @@ export default {
                 .icon_zixuan2 {
                     color: #FC822F;
                     animation: heartBeat 1.3s ease-in-out forwards;
+                }
+                .activeText{
+                    color:#477FD3;
                 }
             }
         }

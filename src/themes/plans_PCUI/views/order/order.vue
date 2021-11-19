@@ -4,7 +4,7 @@
         <div class='content-top' :style="'height: '+ contentHeight">
             <div class='quote-wrap'>
                 <!-- 产品列表/搜索 -->
-                <sidebarProduct />
+                <productSearch />
             </div>
             <div class='middle-wrap'>
                 <div class='chart-content'>
@@ -45,7 +45,7 @@ import { useRouter, useRoute } from 'vue-router'
 import handicap from './pages/handicap.vue'
 import dealList from './pages/dealList.vue'
 import trade from './pages/trade.vue'
-import sidebarProduct from './pages/sidebarProduct'
+import productSearch from './pages/productSearch'
 import assetsModule from './pages/assets.vue'
 import { isEmpty } from '@/utils/util'
 import { useStore } from 'vuex'
@@ -57,7 +57,7 @@ export default {
         handicap,
         dealList,
         trade,
-        sidebarProduct,
+        productSearch,
         assetsModule,
         userRecord
     },

@@ -1,12 +1,14 @@
 <template>
-    <div class='sidebarProduct'>
+    <div class='productSearch'>
         <search
             :trade-type='tradeType'
             @onInput='onInput'
             @onSearch='onSearch'
         >
             <template v-if='searching' #default>
-                <ProductList :list='searchList' />
+                <slot :list='searchList' name='list'>
+                    <ProductList :list='searchList' />
+                </slot>
             </template>
             <!-- 搜索结果 -->
             <template v-else #default>
@@ -14,7 +16,9 @@
                     v-model='categoryType'
                     :list='categoryList'
                 />
-                <ProductList :list='productList' />
+                <slot :list='productList' name='list'>
+                    <ProductList :list='productList' />
+                </slot>
             </template>
         </search>
     </div>
@@ -29,6 +33,7 @@ import TopTab from './components/topTab'
 import ProductList from './components/ProductList'
 
 const store = useStore()
+const productMap = computed(() => store.state._quote.productMap)
 const productActived = computed(() => store.getters.productActived)
 // 玩法类型
 const tradeType = computed(() => String(unref(productActived).tradeType))
@@ -42,13 +47,19 @@ const { categoryList, productList } = useProduct({
 const searching = ref(false)
 const searchList = ref([])
 const onSearch = (result) => {
-    searchList.value = result.map(e => ({
-        ...e,
-        symbolId: e.id,
-        symbolKey: unref(tradeType) + '_' + e.id,
-        tradeType: unref(tradeType),
-        symbolCode: e.code
-    }))
+    const list = []
+    result.forEach(e => {
+        if (!unref(productMap)[e.id + '_' + unref(tradeType)]) return
+        list.push({
+                ...e,
+                symbolId: e.id,
+                symbolKey: unref(tradeType) + '_' + e.id,
+                tradeType: unref(tradeType),
+                symbolCode: e.code,
+                symbolName: e.name
+        })
+    })
+    searchList.value = list
 }
 const onInput = (val) => {
     searching.value = !!val
@@ -57,7 +68,7 @@ const onInput = (val) => {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.sidebarProduct {
+.productSearch {
     width: 360px;
     display: flex;
     flex-direction: column;

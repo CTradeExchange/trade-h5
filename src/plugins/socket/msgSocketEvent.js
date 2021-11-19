@@ -235,6 +235,7 @@ class SocketEvent {
                 sortType: 'desc',
                 accountIds: accountIds + ''
             })
+            store.dispatch('_trade/tradeRecordList')
         } else if (updateType === 3 && [3, 5, 9].includes(tradeType)) {
             store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
         } else if (updateType === 4) {
