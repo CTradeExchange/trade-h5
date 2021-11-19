@@ -11,17 +11,15 @@
                     show-action
                     @cancel='onCancel'
                     @search='onSearch'
-                    @update:model-value='updateVal'
+                    @update:model-value='updateVal' 
                 />
             </div>
             <div class='search_products'>
                 <div v-for='item in state.searchList' :key='item.symbolId' class='product_item' @click='openProduct(item.id)'>
-                    <span>{{ item.code }}</span>
+                    <span><span :class="{'activeText':isSearchText(childName)}" v-for="childName in item.name">{{childName}}</span></span>
                     <button v-preventReClick class='collectIcon' @click.stop='addOptional(item)'>
-                        <i
-                            class='icon_zixuan1'
-                            :class="{ 'icon_zixuan2':item.isSelfSymbol }"
-                        ></i>
+                        <i v-if='item.isSelfSymbol' class='icon icon_zixuan2'></i>
+                        <i v-else class='icon icon_zixuan1'></i>
                     </button>
                 </div>
             </div>
@@ -69,6 +67,13 @@ export default {
             console.log('val', val)
             state.searchList = []
             state.searchKey = ''
+        }
+        const isSearchText = (val) =>{
+            if(state.searchKey.indexOf(val)!=-1){
+                return true;
+            }else{
+                return false;
+            }
         }
 
         const onSearch = () => {
@@ -150,7 +155,8 @@ export default {
             state,
             plansList,
             handleTradeType,
-            tradeType
+            tradeType,
+            isSearchText
         }
     }
 }
@@ -209,6 +215,9 @@ export default {
                 .icon_zixuan2 {
                     color: #FC822F;
                     animation: heartBeat 1.3s ease-in-out forwards;
+                }
+                .activeText{
+                    color:#477FD3;
                 }
             }
         }
