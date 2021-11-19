@@ -41,7 +41,6 @@
 
         <div v-if='[3,5].includes(Number(tradeType))' class='btns'>
             <van-button
-                hairline
                 size='mini'
                 type='primary'
                 @click='toDesposit'
@@ -49,7 +48,6 @@
                 {{ Number(tradeType) === 3 ? $t('trade.loan') : $t('trade.desposit') }}
             </van-button>
             <van-button
-                hairline
                 size='mini'
                 type='primary'
                 @click='toWirhdraw'
@@ -59,7 +57,6 @@
         </div>
         <div class='btns2'>
             <van-button
-                hairline
                 size='mini'
                 @click='toTransfer'
             >
@@ -209,6 +206,7 @@ export default {
         color: var(--color);
         font-size: rem(70px);
         letter-spacing: rem(-2px);
+        word-break: break-all;
     }
 }
 .assetList {

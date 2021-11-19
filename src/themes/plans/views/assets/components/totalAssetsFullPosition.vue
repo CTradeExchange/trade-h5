@@ -51,7 +51,6 @@
         </ul>
         <div v-if='assetsInfo' class='btns'>
             <van-button
-                hairline
                 size='mini'
                 @click='toTransfer'
             >
@@ -144,6 +143,7 @@ export default {
         color: var(--color);
         font-size: rem(70px);
         letter-spacing: rem(-2px);
+        word-break: break-all;
     }
 }
 .assetList {

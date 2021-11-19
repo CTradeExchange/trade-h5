@@ -253,7 +253,7 @@ export default {
             width: 100%;
             margin-bottom: rem(20px);
             color: var(--minorColor);
-            font-size: rem(20px);
+            font-size: rem(24px);
             line-height: 1.45;
             .th {
                 display: flex;
@@ -284,7 +284,7 @@ export default {
                         color: var(--minorColor);
                     }
                     .val {
-                        color: var(--normalColor);
+                        color: var(--color);
                     }
                     &:nth-child(2n) {
                         .val {

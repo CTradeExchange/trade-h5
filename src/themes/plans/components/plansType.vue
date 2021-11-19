@@ -64,6 +64,7 @@ export default {
     box-sizing: border-box;
     height: rem(100px);
     padding-right: rem(30px);
+    padding-left: rem(20px);
     background-color: var(--contentColor);
     border: 1px solid var(--bgColor);
     // .item {

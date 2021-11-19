@@ -24,22 +24,7 @@
         </ul>
 
         <div v-if='assetsInfo' class='btns'>
-            <!-- <van-button
-                hairline
-                size='mini'
-                @click='toDesposit'
-            >
-                {{ $t('trade.desposit') }}
-            </van-button>
             <van-button
-                hairline
-                size='mini'
-                @click='toWirhdraw'
-            >
-                {{ $t('trade.withdraw') }}
-            </van-button> -->
-            <van-button
-                hairline
                 size='mini'
                 @click='toTransfer'
             >
@@ -70,40 +55,6 @@ export default {
 
         const userAccount = computed(() => store.state._user.accountAssets[2])
 
-        // 跳转充值页面
-        const toDesposit = () => {
-            if (!checkAssets()) return
-            if (accountList.value.length > 1) {
-                router.push({
-                    path: '/chooseAccount',
-                    query: {
-                        accountId: assetsInfo.value.accountId,
-                        tradeType: tradeType.value
-                    }
-                })
-            } else {
-                router.push({
-                    path: '/deposit',
-                    query: {
-                        accountId: assetsInfo.value.accountId,
-                        currency: assetsInfo.value.currency,
-                        tradeType: tradeType.value
-                    }
-                })
-            }
-        }
-
-        // 跳转提现页面
-        const toWirhdraw = () => {
-            if (!checkAssets()) return
-            router.push({
-                path: '/withdrawAccount',
-                query: {
-                    accountId: assetsInfo.value.accountId,
-                    tradeType: tradeType.value
-                }
-            })
-        }
         // 跳转划转记录
         const toTransfer = () => {
             if (!checkAssets()) return
@@ -130,8 +81,6 @@ export default {
             assetsInfo,
             userAccount,
             tradeType,
-            toDesposit,
-            toWirhdraw,
             toTransfer
         }
     }
@@ -167,6 +116,7 @@ export default {
         font-size: rem(70px);
         letter-spacing: rem(-2px);
         letter-spacing: rem(-2px);
+        word-break: break-all;
     }
 }
 .assetList {

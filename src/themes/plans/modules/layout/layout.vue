@@ -57,8 +57,6 @@ export default {
     watch: {
         'data.items': {
             handler (newVal) {
-                debugger
-                console.log('55555555555555', newVal)
                 if (newVal.accountType) {
                     // newVal.saved = true
                     // console.log('aaaaaaaaaaaaaa', newVal)
