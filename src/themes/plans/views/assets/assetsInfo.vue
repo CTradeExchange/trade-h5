@@ -152,6 +152,7 @@ export default {
         color: var(--color);
         font-size: rem(50px);
         letter-spacing: rem(-2px);
+        word-break: break-all;
     }
     .takeMoneyBtn {
         height: rem(48px);

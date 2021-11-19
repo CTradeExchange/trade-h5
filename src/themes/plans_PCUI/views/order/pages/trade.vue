@@ -393,9 +393,11 @@ export default {
             state.buy.stopLoss = ''
             state.buy.stopProfit = ''
             state.buy.volume = ''
+            state.buy.pendingPrice = ''
             state.sell.stopProfit = ''
             state.sell.stopLoss = ''
             state.sell.volume = ''
+            state.sell.pendingPrice = ''
         }
 
         // 初始化设置
