@@ -7,7 +7,7 @@
             :title='data.symbolName'
             width='500px'
         >
-            <div class='body-module'>
+            <div v-if='show' class='body-module'>
                 <div class='title'>
                     {{ $t('trade.modifyMargin') }}
                 </div>

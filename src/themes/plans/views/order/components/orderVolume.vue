@@ -3,10 +3,11 @@
         <input
             ref='inputEl'
             class='input'
-            :placeholder='placeholder'
+            :placeholder='placeText'
             type='text'
             :value='modelValue'
             @blur='onBlur'
+            @focus='onFocus'
             @input='onInput'
         />
         <a v-if='[2].includes(product.tradeType)' class='entryType' href='javascript:;' @click='entryTypeUpdate'>
@@ -17,7 +18,7 @@
 </template>
 
 <script>
-import { computed, reactive, ref, toRefs } from 'vue'
+import { computed, reactive, ref, toRefs, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { getDecimalNum, toFixed } from '@/utils/calculation'
 import { useI18n } from 'vue-i18n'
@@ -43,21 +44,32 @@ export default {
         const inputEl = ref(null)
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
-        const placeholder = computed(() => {
-            const curTradeType = props.product.tradeType
-            if (curTradeType === 1) {
-                const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === curTradeType)
-                return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + '(' + t('trade.volumeUnit') + ')' : t('trade.orderAmount') + `(${account?.currency})`
-            // } else if ([3].includes(curTradeType)) {
-            //     return t('trade.orderVolume') + `(${props.product.baseCurrency})`
-            } else if (curTradeType === 2) {
-                const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === curTradeType)
-                return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + '(' + t('trade.volumeUnit') + ')' : t('trade.margin') + `(${account?.currency})`
-            } else if ([3, 5].includes(curTradeType)) {
-                return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + `(${props.product.baseCurrency})` : t('trade.orderAmount') + `(${props.product.profitCurrency})`
-            } else {
-                return parseInt(props.entryType) === 1 ? t('trade.volumes') : t('trade.orderAmount')
+        const placeText = ref('')
+        const placeholder = computed({
+            get () {
+                const curTradeType = props.product.tradeType
+                if (curTradeType === 1) {
+                    const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === curTradeType)
+                    return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + '(' + t('trade.volumeUnit') + ')' : t('trade.orderAmount') + `(${account?.currency})`
+                    // } else if ([3].includes(curTradeType)) {
+                    //     return t('trade.orderVolume') + `(${props.product.baseCurrency})`
+                } else if (curTradeType === 2) {
+                    const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === curTradeType)
+                    return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + '(' + t('trade.volumeUnit') + ')' : t('trade.margin') + `(${account?.currency})`
+                } else if ([3, 5].includes(curTradeType)) {
+                    return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + `(${props.product.baseCurrency})` : t('trade.orderAmount') + `(${props.product.profitCurrency})`
+                } else {
+                    return parseInt(props.entryType) === 1 ? t('trade.volumes') : t('trade.orderAmount')
+                }
+            },
+            set (val) {
+                placeText.value = val
             }
+
+        })
+
+        watchEffect(() => {
+            placeText.value = placeholder.value
         })
 
         const onInput = (e) => {
@@ -66,7 +78,7 @@ export default {
                 newval = newval.replace(/[^0-9\.]/g, '')
                 e.target.value = newval
             }
-            const digits = parseInt(props.entryType) === 1 ? props.product.numberDigits : props.account.digits
+            const digits = parseInt(props.entryType) === 1 ? props?.product?.numberDigits : props?.account?.digits
             const reg = new RegExp('^\\d*(\\.?\\d{0,' + digits + '})', 'g')
             if (getDecimalNum(newval) > digits) {
                 newval = (newval.match(reg) && newval.match(reg)[0]) || ''
@@ -90,12 +102,19 @@ export default {
             emit('update:modelValue', '')
             emit('update:entryType', props.entryType === 1 ? 2 : 1)
         }
+
+        const onFocus = () => {
+            placeholder.value = ''
+        }
+
         return {
             inputEl,
             entryTypeUpdate,
             placeholder,
             onInput,
             onBlur,
+            onFocus,
+            placeText
         }
     }
 }

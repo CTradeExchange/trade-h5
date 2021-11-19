@@ -2,7 +2,7 @@ import { computed, watch } from 'vue'
 import { useStore } from 'vuex'
 import { shiftedBy, plus, retainDecimal } from '@/utils/calculation'
 import { deepClone } from '@/utils/deepClone'
-export default function ({ showPending }) {
+export default function ({ showPending = false } = {}) {
     const store = useStore()
     const product = computed(() => store.getters.productActived)
 
@@ -106,5 +106,24 @@ export default function ({ showPending }) {
     return {
         handicapResult
 
+    }
+}
+
+export const toolHooks = function () {
+    const store = useStore()
+    const product = computed(() => store.getters.productActived)
+
+    // 是否显示五档盘口
+    const orderHandicapVisible = computed(() => {
+        if ([5, 9].includes(product.value?.tradeType)) { // 现货、abcc玩法显示五档报价，买卖方向按钮上不显示价格
+            return true
+        } else if (product.value?.dealMode === 2) { // 蝴蝶的成交模式显示五档报价，买卖方向按钮上不显示价格
+            return true
+        } else {
+            return false
+        }
+    })
+    return {
+        orderHandicapVisible
     }
 }

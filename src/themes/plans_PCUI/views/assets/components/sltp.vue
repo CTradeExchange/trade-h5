@@ -7,7 +7,7 @@
             :title='data.symbolName'
             width='500px'
         >
-            <div class='body-module'>
+            <div v-if='show' class='body-module'>
                 <div class='row'>
                     <div class='col'>
                         <div class='name'>

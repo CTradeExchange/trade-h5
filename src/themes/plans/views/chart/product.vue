@@ -243,7 +243,7 @@
             </div>
         </div>
         <StallsAndDeal
-            v-if='product && [5,9].includes(Number(product?.tradeType))'
+            v-if='product && orderHandicapVisible'
             :cur-price='product?.cur_price'
             :symbol-id='product?.symbolId'
             :trade-type='tradeType'
@@ -302,9 +302,9 @@ import { QuoteSocket } from '@/plugins/socket/socket'
 import StallsAndDeal from './components/StallsAndDeal'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
 import Loading from '@/components/loading.vue'
-import topRightVue from '@/themes/mt4/layout/topRight.vue'
 import sidebarProduct from '@plans/components/sidebarProduct.vue'
 import Base from '@/store/modules/base'
+import { toolHooks } from '@plans/hooks/handicap'
 
 export default {
     components: { KIcon, StudyList, tv, StallsAndDeal, Loading, sidebarProduct },
@@ -315,6 +315,7 @@ export default {
         const tradeType = ref(route.query.tradeType)
         const getSymbolId = () => unref(symbolId)
         const getTradeType = () => unref(tradeType)
+        const { orderHandicapVisible } = toolHooks()
 
         const { t } = useI18n({ useScope: 'global' })
         const klineTypeDropdown = ref(null)
@@ -897,7 +898,7 @@ export default {
                 Toast(t('common.noLogin'))
                 return router.push('/login')
             }
-            state.loading = topRightVue
+            state.loading = true
             if (isSelfSymbol.value) {
                 removeCustomerOptional({ symbolList: [getSymbolId()], tradeType: getTradeType() }).then(res => {
                     if (res.check()) {
@@ -1052,6 +1053,7 @@ export default {
             computedLineList,
             style,
             primaryColor,
+            orderHandicapVisible,
             updateStudy
         }
     }

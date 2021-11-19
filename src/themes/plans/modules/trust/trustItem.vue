@@ -243,6 +243,7 @@ export default {
     background-color: var(--contentColor);
     border-bottom: solid 1px var(--lineColor);
     border-radius: rem(8px);
+    font-size: rem(24px);
     .t-header {
         display: flex;
         align-items: center;

@@ -167,8 +167,11 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .assetsWrapper {
-    padding: 0 rem(20px) rem(100px);
+    padding: 0 0 rem(100px);
     overflow: auto;
+    .plans-item{
+        padding: 0 rem(20px);
+    }
     &.mt {
         margin-top: rem(20px);
     }
