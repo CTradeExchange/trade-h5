@@ -4,11 +4,11 @@
         <van-tabs
             ref='tabs'
             class='tabs'
-            color='#477fd3'
+            :color='primaryColor'
             line-height='2'
             line-width='33.3%'
             sticky
-            title-active-color='#477fd3'
+            :title-active-color='primaryColor'
         >
             <van-tab name='stalls' :title='$t("trade.handicap")'>
                 <!-- 盘口报价 -->
@@ -28,10 +28,10 @@
 <script>
 import Handicap from '@plans/modules/handicap/index'
 import DealList from '@plans/modules/realTimeDealList/index'
-
 import { computed, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
+import Base from '@/store/modules/base'
 
 export default {
     components: { Handicap, DealList },
@@ -45,7 +45,7 @@ export default {
             timer: 0,
 
         })
-
+        const primaryColor = computed(() => Base.state.wpCompanyInfo.themeColor)
         // 当前产品id 的挂单列表
         const pendingList = computed(() => store.state._trade.pendingList.filter(item => Number(item.symbolId) === Number(props.symbolId)))
 
@@ -61,6 +61,7 @@ export default {
             }
         })
         return {
+            primaryColor,
             tradeType,
             customInfo,
             pendingList,

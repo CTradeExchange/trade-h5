@@ -1,6 +1,5 @@
 import { localGet } from '@/utils/util'
 import store from './store'
-import Base from '@/store/modules/base'
 const colors = {
     common: {
         primary: '#477fd3',

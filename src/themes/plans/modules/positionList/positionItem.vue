@@ -17,9 +17,9 @@
                                     <span class='lot'>
                                         {{ data.symbolCode }}
                                     </span>
-                                    <span v-if='data.crossLevelNum' class='multipleVal' @click.stop='$emit("showMultiplePopup",data)'>
+                                    <span v-if='data.crossLevelNum' class='multipleVal' :class="{ arrow: data.marginSetType==='2' }" @click.stop='data.marginSetType==="2" ? $emit("showMultiplePopup",data):""'>
                                         <i>{{ data.crossLevelNum }}x</i>
-                                        <i class='icon_icon_arrow'></i>
+                                        <i v-if="data.marginSetType==='2'" class='icon_icon_arrow'></i>
                                     </span>
                                     <span v-if='data.tradeType!==2'>
                                         <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
@@ -364,17 +364,21 @@ export default {
             height: rem(32px);
             line-height: rem(32px);
             padding-left: rem(8px);
-            padding-right: rem(50px);
+            padding-right: rem(10px);
             font-size: rem(24px);
             color: var(--primary);
             border-radius: 3px;
             border: 1px solid var(--primary);
-        }
-        .icon_icon_arrow{
-            font-size: rem(22px);
-            position: absolute;
-            right: 4px;
-            top: -0.5px;
+            &.arrow{
+                padding-right: rem(50px);
+            }
+
+            .icon_icon_arrow{
+                font-size: rem(22px);
+                position: absolute;
+                right: 4px;
+                top: -0.5px;
+            }
         }
     }
 }

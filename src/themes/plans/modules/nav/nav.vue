@@ -1,5 +1,5 @@
 <template>
-    <van-tabbar v-model='active' :active-color='$style.primary' class='footerMenu' :class='{ h5Preview }' z-index='102'>
+    <van-tabbar v-model='active' :active-color='primaryColor' class='footerMenu' :class='{ h5Preview }' z-index='102'>
         <van-tabbar-item v-for='item in data.items' :key='item.href' :name='item.href.name' @click='menuHandler(item)'>
             <template #icon>
                 <img
@@ -21,6 +21,7 @@ import { reactive, toRefs, watchEffect, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
+import Base from '@/store/modules/base'
 export default {
     props: {
         data: {
@@ -65,6 +66,9 @@ export default {
     computed: {
         symbolKey () {
             return this.$store.state._quote.productActivedID
+        },
+        primaryColor () {
+            return Base.state.wpCompanyInfo.themeColor
         }
     },
     created () {
