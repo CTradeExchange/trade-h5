@@ -58,7 +58,7 @@
                     <p :class="Number(tradeType) === 5 ? 'alignLeft': 'alignRight' ">
                         {{ $t('withdrawCoin.can') }}
                     </p>
-                    <p class='value alignLeft'>
+                    <p class='value' :class="Number(tradeType) === 5 ? 'alignLeft': 'alignRight' ">
                         {{ account?.withdrawAmount }}
                     </p>
                 </div>
@@ -170,7 +170,7 @@ export default {
         display: flex;
         justify-content: space-between;
         padding: rem(30px);
-        color: var(--normalColor);
+        color: var(--minorColor);
         font-size: rem(24px);
         line-height: 1.4;
         border-bottom: 1px solid var(--lineColor);
@@ -178,11 +178,7 @@ export default {
             text-align: right;
         }
         .value {
-            color: var(--minorColor);
-            font-size: rem(30px);
-        }
-        &:last-child {
-            border-bottom: 0;
+            color: var(--color);
         }
     }
 }

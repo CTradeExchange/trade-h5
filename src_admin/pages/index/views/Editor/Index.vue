@@ -504,7 +504,7 @@ export default {
                 elementConfig.formConfig.push(Object.assign({ _id: randomStr() }, second, { formConfig: second.type === 'Object' ? curElement : [curElement] }))
                 elementConfig.data[second.name] = second.type === 'Array' ? [form] : form
             })
-            debugger
+
             store.commit('editor/ADD_ELEMENT', {
                 formConfig: elementConfig.formConfig,
                 data: Object.assign({

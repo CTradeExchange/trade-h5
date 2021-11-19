@@ -271,6 +271,12 @@ export default {
             deep: true // 深度监听的参数
         })
 
+        watch(() => activeData.value, (val, newVal) => {
+            newVal.saved = true
+        }, {
+            deep: true
+        })
+
         const updateBackground = (url) => {
             activeData.value.background = url
         }

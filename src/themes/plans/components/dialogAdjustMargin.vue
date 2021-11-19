@@ -29,7 +29,7 @@
             <div class='input-wrap'>
                 <span class='fl' @click='operation'>
                     <!-- <img alt='' src='../images/transfer.png' srcset='' /> -->
-                    <i class='icon icon_qiehuan'></i>
+                    <i class='icon icon_qiehuan1'></i>
                     <span class='oper-text'>
                         {{ operText }}
                     </span>

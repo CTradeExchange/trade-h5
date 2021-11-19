@@ -131,7 +131,6 @@
                             </div>
                             <van-button
                                 v-if='Number(tradeType) === 2'
-                                hairline
                                 size='mini'
                                 type='default'
                                 @click.stop='$emit("showAdjustPopup",data)'
@@ -139,7 +138,6 @@
                                 {{ $t('trade.modifyMargin') }}
                             </van-button>
                             <van-button
-                                hairline
                                 size='mini'
                                 type='default'
                                 @click.stop='$emit("showSLTP",data)'
@@ -147,7 +145,6 @@
                                 {{ $t('trade.tackStopSetup') }}
                             </van-button>
                             <van-button
-                                hairline
                                 size='mini'
                                 type='default'
                                 @click.stop='$emit("showClose",data)'

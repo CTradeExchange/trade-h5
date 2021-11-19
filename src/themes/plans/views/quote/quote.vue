@@ -15,7 +15,7 @@
                 @tabClick='tabClick'
             />
             <!-- <van-icon class='iconSearch' name='search' @click='openSearch' /> -->
-            <i class='icon_sousuo1 iconSearch' @click='openSearch'></i>
+            <i class='icon_sousuo iconSearch' @click='openSearch'></i>
         </div>
 
         <div class='titleBar van-hairline--bottom'>
