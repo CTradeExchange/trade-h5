@@ -1,7 +1,7 @@
 <template>
     <top left-icon='arrow-left' :right-action='false' :title='title'>
         <template #right>
-            <van-loading v-if='loading' class='loadingIcon' :color='$style.primary' size='20px' />
+            <van-loading v-if='loading' class='loadingIcon' :color='primaryColor' size='20px' />
         </template>
     </top>
     <my-iframe
@@ -18,14 +18,16 @@
 <script>
 import top from '@/components/top'
 import myIframe from '@plans/components/iframe'
-import { onBeforeUnmount, onMounted, reactive, ref, toRefs } from 'vue'
+import { onBeforeUnmount, onMounted, reactive, ref, toRefs , computed } from 'vue'
 import { useRoute } from 'vue-router'
+import Base from '@/store/modules/base'
 export default {
     components: {
         top,
         myIframe,
     },
     setup () {
+        const primaryColor = computed(() => Base.state.wpCompanyInfo.themeColor)
         const route = useRoute()
         const contentIframe = ref(null)
         const state = reactive({
@@ -75,6 +77,7 @@ export default {
             ...toRefs(state),
             pageOnLoad,
             contentIframe,
+            primaryColor
         }
     }
 }

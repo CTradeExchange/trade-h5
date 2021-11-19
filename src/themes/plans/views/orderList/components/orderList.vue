@@ -1,6 +1,6 @@
 <template>
     <div class='filter-wrap'>
-        <van-dropdown-menu :active-color='$style.primary' :overlay='true'>
+        <van-dropdown-menu :active-color='primaryColor' :overlay='true'>
             <van-dropdown-item
                 v-model='directionVal'
                 :options='direction'
@@ -231,6 +231,7 @@ import { useRoute, } from 'vue-router'
 import { computed, ref, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import dateRange from '@plans/components/dateRange'
+import Base from '@/store/modules/base'
 
 export default {
     components: {
@@ -295,7 +296,7 @@ export default {
         })
 
         const account = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.tradeType)))
-
+        const primaryColor = computed(() => Base.state.wpCompanyInfo.themeColor)
         // 价格标签
         const priceLabel = (bizType) => {
             if ([1, 2, 3].indexOf(Number(bizType)) > -1) {
@@ -472,7 +473,8 @@ export default {
             timeDropdown,
             onRangeChange,
             resetParams,
-            queryRecordList
+            queryRecordList,
+            primaryColor
         }
     }
 }

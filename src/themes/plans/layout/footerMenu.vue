@@ -1,5 +1,5 @@
 <template>
-    <van-tabbar v-model='active' :active-color='$style.primary' class='footerMenu'>
+    <van-tabbar v-model='active' :active-color='primaryColor' class='footerMenu'>
         <van-tabbar-item v-for='item in menuList' :key='item.href' :name='item.href' @click='menuHandler(item)'>
             <template #icon>
                 <i class='icon' :class='item.icon'></i>
@@ -16,6 +16,7 @@ import { reactive, toRefs, watchEffect, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
+import Base from '@/store/modules/base'
 export default {
     setup () {
         const router = useRouter()
@@ -23,6 +24,7 @@ export default {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         const symbolKey = computed(() => store.state._quote.productActivedID)
+        const primaryColor = computed(() => Base.state.wpCompanyInfo.themeColor)
         const state = reactive({
             active: route.name,
             menuList: [
@@ -59,7 +61,7 @@ export default {
             ]
         })
         watchEffect(() => (state.active = route.path))
-
+        
         // 切换导航
         const menuHandler = (item) => {
             let href = item.href
@@ -74,7 +76,8 @@ export default {
         }
         return {
             ...toRefs(state),
-            menuHandler
+            menuHandler,
+            primaryColor
         }
     }
 }

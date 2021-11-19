@@ -31,7 +31,9 @@ import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { MsgSocket } from '@/plugins/socket/socket'
-import { getQueryVariable, sessionSet, unzip } from '@/utils/util'
+import { localGet , getQueryVariable, sessionSet, unzip } from '@/utils/util'
+import Base from '@/store/modules/base'
+import { setRootVariable } from '@plans/colorVariables'
 export default {
     components: {
         Notice
@@ -91,6 +93,8 @@ export default {
 
         // 插入谷歌统计代码
         onMounted(() => {
+            console.log("Base1231A23",Base)
+            setRootVariable(localGet('invertColor'),Base.state.wpCompanyInfo.themeColor)
             try {
                 if (googleAnalytics.value) {
                     var result = ''

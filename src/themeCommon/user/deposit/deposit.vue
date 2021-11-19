@@ -983,6 +983,7 @@ export default {
     .next-btn {
         height: rem(80px);
         background: var(--primary);
+        border-color: var(--primary);
         border-radius: rem(10px);
         span {
             color: #fff;

@@ -90,10 +90,10 @@
                     v-model:active='activeTab'
                     :before-change='onBeforeChange'
                     class='tabs'
-                    :color='$style.primary'
+                    :color='primaryColor'
                     line-height='2'
                     line-width='20'
-                    title-active-color='$style.primary'
+                    :title-active-color='primaryColor'
                 >
                     <van-tab
                         v-for='(item) in candleKTypeList.slice(0,6)'
@@ -190,7 +190,7 @@
                         :key='i'
                         class='item'
                         :class='{ active: mainStudy === item.name }'
-                        :color='$style.primary'
+                        :color='primaryColor'
                     >
                         <span
                             class='inner-label'
@@ -291,7 +291,7 @@
 import { useRouter, useRoute } from 'vue-router'
 import StudyList from './components/studyList.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted } from 'vue'
+import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted  } from 'vue'
 import KIcon from './icons/kIcon.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import { useStore } from 'vuex'
@@ -304,6 +304,7 @@ import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
 import Loading from '@/components/loading.vue'
 import topRightVue from '@/themes/mt4/layout/topRight.vue'
 import sidebarProduct from '@plans/components/sidebarProduct.vue'
+import Base from '@/store/modules/base'
 
 export default {
     components: { KIcon, StudyList, tv, StallsAndDeal, Loading, sidebarProduct },
@@ -484,7 +485,7 @@ export default {
         })
 
         const customerInfo = computed(() => store.state._user.customerInfo)
-
+        const primaryColor = computed(() => Base.state.wpCompanyInfo.themeColor)
         // 图表组件引用
         const chartRef = ref(null)
         const klineTypeIndex = computed(() => {
@@ -1050,6 +1051,7 @@ export default {
             onSelect,
             computedLineList,
             style,
+            primaryColor,
             updateStudy
         }
     }
@@ -1691,5 +1693,9 @@ export default {
         height: rem(720px);
     }
 }
-
+:deep(.van-checkbox__icon--checked .van-icon) {
+    color: var(--van-white)!important;
+    background-color: var(--primary)!important;
+    border-color: var(--primary)!important;
+}
 </style>

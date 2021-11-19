@@ -18,7 +18,7 @@
         ref='calendarRef'
         v-model:show='showCalendar'
         :allow-same-day='true'
-        :color='$style.primary'
+        :color='primaryColor'
         :max-date='maxDate'
         :min-date='minDate'
         position='left'
@@ -31,6 +31,7 @@
 
 <script>
 import { ref, unref, computed, watch } from 'vue'
+import Base from '@/store/modules/base'
 
 export default {
     props: {
@@ -42,6 +43,7 @@ export default {
     emits: ['change'],
     setup (props, context) {
         const showIcon = computed(() => props.isSelected)
+        const primaryColor = computed(() => Base.state.wpCompanyInfo.themeColor)
         watch(() => unref(showIcon), (val) => {
             if (!val) {
                 range.value = []
@@ -86,7 +88,8 @@ export default {
             minDate,
             maxDate,
             openRange,
-            onRangeConfirm
+            onRangeConfirm,
+            primaryColor
         }
     }
 }
