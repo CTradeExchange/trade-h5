@@ -1,6 +1,5 @@
 <template>
     <div class='m-layout' :style='data.styleObj'>
-        {{ data.saved }}---
         <div v-if='data.saved === false'>
             <img alt='' :src="require('./layout.png')" />
         </div>

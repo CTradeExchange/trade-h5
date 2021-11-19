@@ -2,7 +2,7 @@
     <div class='page-wrap' :class='{ isIframe: $route.query.isUniapp }'>
         <LayoutTop v-if='!$route.query.isUniapp' :back='true' :menu='false'>
             <p class='symbolName'>
-                <i v-if='product?.symbolName' class='icon_chouti' @click='showSidebar=true'></i>
+                <i v-if='product?.symbolName' class='icon_chouti1' @click='showSidebar=true'></i>
                 {{ product?.symbolName }}
             </p>
             <p class='infomation'>
@@ -1072,9 +1072,8 @@ export default {
         flex-wrap: nowrap;
         align-items: center;
         justify-content: center;
-        .icon_chouti {
+        .icon_chouti1 {
             margin-right: rem(20px);
-            font-size: rem(26px);
         }
     }
     &.isIframe {
@@ -1692,9 +1691,5 @@ export default {
         height: rem(720px);
     }
 }
-:deep(.van-checkbox__icon--checked .van-icon) {
-    color: var(--van-white)!important;
-    background-color: var(--primary)!important;
-    border-color: var(--primary)!important;
-}
+
 </style>

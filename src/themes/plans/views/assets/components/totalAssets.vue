@@ -177,7 +177,7 @@ export default {
     border-radius: 4px;
 }
 .totalAssetsBlock {
-    margin-bottom: rem(60px);
+    margin-bottom: rem(40px);
 }
 .totalAssetsInfo {
     font-size: rem(28px);
@@ -205,7 +205,7 @@ export default {
         font-size: rem(32px);
     }
     .totalAmount {
-        margin-top: rem(20px);
+        margin-top: rem(10px);
         color: var(--color);
         font-size: rem(70px);
         letter-spacing: rem(-2px);
@@ -229,7 +229,7 @@ export default {
 }
 .btns {
     display: flex;
-    height: rem(70px);
+    height: rem(65px);
     :deep(.van-button) {
         display: block;
         width: 50%;
@@ -245,7 +245,7 @@ export default {
     }
 }
 .btns2{
-    height: rem(70px);
+    height: rem(65px);
     margin-top: rem(30px);
     :deep(.van-button) {
         width: 100%;
@@ -256,6 +256,7 @@ export default {
         border-color: var(--primaryAssistColor);
         color: var(--primary);
         border-radius: rem(6px);
+        color: var(--primary);
     }
 }
 </style>

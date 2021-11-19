@@ -57,7 +57,6 @@ export default {
     line-height: rem(104px);
     .icon_chouti1 {
         padding-right: rem(20px);
-        font-size: rem(29px);
     }
     .productName {
         padding-right: rem(20px);
@@ -70,7 +69,6 @@ export default {
         height: rem(58px);
         color: var(--normalColor);
         font-weight: 500;
-        font-size: rem(28px);
         line-height: rem(58px);
         text-align: center;
         border-radius: 3px;
