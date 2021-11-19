@@ -31,7 +31,7 @@
             @input='onInput'
         />
         <!-- <a v-if='[2].includes(product.tradeType)' class='entryType' href='javascript:;' @click='entryTypeUpdate'>
-            <i class='icon_qiehuan'></i>
+            <i class='icon_qiehuan1'></i>
             {{ parseInt(entryType)===1?$t('trade.volumes'):$t('trade.orderAmount') }}
         </a> -->
     </div>

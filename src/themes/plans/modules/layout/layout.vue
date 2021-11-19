@@ -51,17 +51,20 @@ export default {
             return Math.round(24 / this.dataList.length)
         },
         saved () {
-            return ''
+            return this.data.saved
         }
     },
     watch: {
         'data.items': {
             handler (newVal) {
+                console.log('aaaaaaaaaaaaaa', newVal)
                 if (newVal.accountType) {
                     // newVal.saved = true
+                    // this.props.data.saved = true
                     // console.log('aaaaaaaaaaaaaa', newVal)
                 }
-            }
+            },
+            deep: true,
         }
     },
 

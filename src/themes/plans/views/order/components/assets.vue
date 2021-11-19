@@ -39,7 +39,13 @@
                     {{ $t('trade.availableLoanAgent') }}
                     <van-icon class='questionIcon' name='question-o' @click='loanTradeType9=true' />
                 </van-col>
-                <van-col>{{ account.availableLoan }} {{ account.currency }}</van-col>
+                <van-col>
+                    <span class='val'>
+                        {{ account.availableLoan }}
+                    </span>
+
+                    {{ account.currency }}
+                </van-col>
             </van-row>
         </div>
 
