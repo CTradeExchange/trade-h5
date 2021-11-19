@@ -111,6 +111,7 @@ import OrderHandicap from './components/handicap.vue'
 import plansType from '@plans/components/plansType.vue'
 import sidebarProduct from '@plans/components/sidebarProduct.vue'
 import hooks from './orderHooks'
+import { toolHooks } from '@plans/hooks/handicap'
 import { addMarketOrder } from '@/api/trade'
 import { Toast } from 'vant'
 import { delayAwaitTime } from '@/utils/util'
@@ -157,7 +158,6 @@ export default {
             pendingPrice: '',
             stopLoss: '',
             stopProfit: '',
-            orderHandicapVisible: false,
             multipleVal: '', // 杠杆倍数
         })
         const pendingRef = ref(null)
@@ -166,6 +166,7 @@ export default {
         const product = computed(() => store.getters.productActived)
         const customerInfo = computed(() => store.state._user.customerInfo)
         const { bizType, account, findProductInCategory, switchProduct } = hooks(state)
+        const { orderHandicapVisible } = toolHooks()
         const productSwitchHistory = {} // 顶部玩法类型切换记录
         // 玩法列表
         const isWallet = store.state._base.wpCompanyInfo.isWallet
@@ -265,7 +266,6 @@ export default {
         const init = () => {
             // 获取产品详情
             const [symbolId, tradeType] = symbolKey.value.split('_')
-            state.orderHandicapVisible = ['5', '9'].includes(tradeType)
             state.operationType = parseFloat(tradeType) === 3 ? 1 : 2 // 杠杆玩法默认是普通类型
             setVolumeType() // 设置按额或者按手数交易
             productSwitchHistory[tradeType] = symbolKey.value
@@ -277,7 +277,7 @@ export default {
                 quoteSubscribe() // 订阅产品行情
                 // 订阅产品五档报价
                 const curDigits = pow(0.1, product.symbolDigits)
-                if (state.orderHandicapVisible)QuoteSocket.deal_subscribe(symbolId, 5, curDigits, tradeType, 20)
+                if (['5', '9'].includes(tradeType) || product.dealMode === 2) QuoteSocket.deal_subscribe(symbolId, 5, curDigits, tradeType, 20)
                 if (tradeType === '9') store.dispatch('_user/queryCustomerAssetsInfo', { tradeType }) // 拉取全仓账户币种
 
                 const accountIds = accountList.value?.filter(el => el.tradeType === Number(product.tradeType)).map(el => el.accountId)
@@ -380,6 +380,7 @@ export default {
             ...toRefs(state),
             init,
             plansList,
+            orderHandicapVisible,
             productTradeType,
             onSelectProduct,
             account,

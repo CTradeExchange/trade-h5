@@ -1,15 +1,15 @@
 <template>
-    <div v-if='product' class='directions' :class="{ 'tradeType9': [5,9].includes(product.tradeType) }">
+    <div v-if='product' class='directions' :class="{ 'center': orderHandicapVisible }">
         <div class='item buy' :class="{ 'active':modelValue==='buy' }" @click="setDirection('buy')">
             <span>
                 {{ $t('trade.buy') }}
             </span>
-            <span v-if='[1,2,3].includes(product.tradeType)' class='price flRight'>
+            <span v-if='!orderHandicapVisible' class='price flRight'>
                 {{ product.buy_price }}
             </span>
         </div>
         <div class='item sell' :class="{ 'active':modelValue==='sell' }" @click="setDirection('sell')">
-            <span v-if='[1,2,3].includes(product.tradeType)' class=' price'>
+            <span v-if='!orderHandicapVisible' class=' price'>
                 {{ product.sell_price }}
             </span>
             <span class='flRight'>
@@ -22,11 +22,14 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { toolHooks } from '@plans/hooks/handicap'
 export default {
     props: ['modelValue', 'product'],
     emits: ['update:modelValue'],
     setup (props, { emit }) {
         const store = useStore()
+        const { orderHandicapVisible } = toolHooks()
+
         // 颜色值
         const style = computed(() => store.state.style)
         const setDirection = (data) => {
@@ -37,6 +40,7 @@ export default {
         const riseColor = style.value.riseColor + '0D'
         return {
             setDirection,
+            orderHandicapVisible,
             fallColor,
             riseColor
         }
@@ -50,7 +54,7 @@ export default {
     position: relative;
     display: flex;
     margin-top: rem(38px);
-    &.tradeType9 {
+    &.center {
         text-align: center;
         .item {
             padding: 0 !important;

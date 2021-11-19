@@ -17,6 +17,7 @@
 import { computed, reactive, toRefs, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MultipleSet from '@plans/components/multipleSet'
+import { toolHooks } from '@plans/hooks/handicap'
 export default {
     components: {
         MultipleSet,
@@ -25,6 +26,7 @@ export default {
     emits: ['update:modelValue', 'selected', 'update:multipleVal'],
     setup (props, { emit }) {
         const { t } = useI18n({ useScope: 'global' })
+        const { orderHandicapVisible } = toolHooks()
         const state = reactive({
             orderType: 1,
             multipleSetVisible: false,
@@ -44,7 +46,7 @@ export default {
                 }
             ]
 
-            if ([1, 2, 3, 9].includes(props.tradeType)) {
+            if (!orderHandicapVisible.value) {
                 list.push({
                     title: [3, 9].includes(props.tradeType) ? t('trade.pending2') : t('trade.pending'),
                     val: 10
@@ -65,6 +67,7 @@ export default {
             ...toRefs(state),
             mVal,
             changeOrderType,
+            orderHandicapVisible,
             btnList,
         }
     }
