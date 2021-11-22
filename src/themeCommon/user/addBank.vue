@@ -43,6 +43,7 @@
         <van-picker
             ref='picker'
             :columns='provinceCities'
+            @cancel='areaShow=false'
             @change='onChangeArea'
             @confirm='areaConfirm'
         />
