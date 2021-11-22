@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "25902231",
+      "name": "美国线",
+      "font_class": "meiguoxian",
+      "unicode": "e69f",
+      "unicode_decimal": 59039
+    },
+    {
+      "icon_id": "25902110",
+      "name": "线型图",
+      "font_class": "xianxingtu",
+      "unicode": "e69c",
+      "unicode_decimal": 59036
+    },
+    {
+      "icon_id": "25902111",
+      "name": "平均k线图",
+      "font_class": "pingjunkxiantu",
+      "unicode": "e69d",
+      "unicode_decimal": 59037
+    },
+    {
+      "icon_id": "25902112",
+      "name": "空心k线图",
+      "font_class": "kongxinkxiantu",
+      "unicode": "e69e",
+      "unicode_decimal": 59038
+    },
+    {
+      "icon_id": "25902094",
+      "name": "基准线",
+      "font_class": "jizhunxian",
+      "unicode": "e69a",
+      "unicode_decimal": 59034
+    },
+    {
+      "icon_id": "25902096",
+      "name": "面积图",
+      "font_class": "mianjitu",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
+    },
+    {
       "icon_id": "25891810",
       "name": "icon_reduce",
       "font_class": "icon_reduce",

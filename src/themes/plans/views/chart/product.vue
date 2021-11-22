@@ -14,14 +14,14 @@
                     <button v-preventReClick class='collectIcon' @click='addOptional'>
                         <i
                             ref='collect'
-                            :class="[!isSelfSymbol?'icon_zixuan1':'icon_zixuan2']"
+                            :class="[!isSelfSymbol?'icon_zixuan11':'icon_zixuan2']"
                         ></i>
                     </button>
                     <div v-if='![3, 5, 9].includes(product?.tradeType)' class='ft'>
                         <span
                             @click='toContractInfo'
                         >
-                            <i class='icon_guanyu'></i>
+                            <i class='icon_guanyu1'></i>
                         </span>
                     </div>
                 </div>
@@ -154,8 +154,7 @@
                         </van-dropdown-item>
                     </van-dropdown-menu>
                     <div class='setting' @click='settingStatus = !settingStatus'>
-                        <van-icon class='icon' name='setting-o' />
-
+                        <i class='icon icon_shezhi'></i>
                         <div v-show='settingStatus' class='content van-hairline--surround' @click.stop=''>
                             <van-checkbox-group ref='checkboxGroup' v-model='settingList' @change='handleLineChange'>
                                 <van-checkbox
@@ -1102,7 +1101,7 @@ export default {
             a {
                 display: inline-block;
             }
-            .icon_guanyu {
+            .icon_guanyu1 {
                 color: rgb(153, 153, 153);
             }
         }
@@ -1112,7 +1111,7 @@ export default {
             color: #777;
             vertical-align: top;
             background-color: var(--contentColor);
-            .icon_zixuan1 {
+            .icon_zixuan11 {
                 font-weight: normal !important;
             }
             .icon_zixuan2 {
@@ -1438,6 +1437,7 @@ export default {
             display: inline-block;
             color: var(--normalColor);
             vertical-align: middle;
+            width: rem(60px);
         }
         .klineTypeRightIcon {
             padding-top: rem(10px);
@@ -1452,7 +1452,7 @@ export default {
             background: var(--contentColor);
             .icon {
                 color: var(--normalColor);
-                font-size: rem(32px);
+                font-size: rem(28px);
             }
             .content {
                 position: absolute;
