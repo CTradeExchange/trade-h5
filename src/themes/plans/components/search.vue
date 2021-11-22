@@ -102,12 +102,19 @@ export default {
         width: 100%;
         padding: 0 0 0 rem(30px);
         background: var(--contentColor);
+        :deep(.van-cell){
+            background: var(--bgColor);
+            border-radius: rem(10px);
+        }
         :deep(.van-search__content) {
             padding-left: 0;
+            border-radius: rem(10px);
+
         }
         :deep(.van-search__action) {
             padding: 0 rem(30px);
         }
+
     }
     .content {
         box-sizing: border-box;

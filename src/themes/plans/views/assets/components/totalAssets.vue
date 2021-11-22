@@ -190,7 +190,7 @@ export default {
             margin-left: rem(10px);
             padding: rem(5px) rem(10px);
             color: var(--success);
-            font-size: rem(20px);
+            font-size: rem(24px);
             line-height: rem(40px);
             text-align: center;
             border: 1px solid var(--success);

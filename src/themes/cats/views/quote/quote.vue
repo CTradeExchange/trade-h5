@@ -14,7 +14,7 @@
                 @tabClick='tabClick'
             />
         </div>
-        <div class='titleBar van-hairline--bottom'>
+        <div class='titleBar'>
             <span class='item'>
                 {{ $t('trade.nameCode') }}
             </span>
@@ -113,7 +113,7 @@ export default {
     height: rem(60px);
     padding: 0 rem(30px);
     color: var(--minorColor);
-    font-size: rem(20px);
+    font-size: rem(24px);
     line-height: rem(60px);
     background-color: var(--contentColor);
     .item {

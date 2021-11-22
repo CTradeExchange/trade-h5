@@ -74,7 +74,7 @@ export default {
         border-bottom: 1px solid var(--assistColor);
         .allTrust {
             color: var(--normalColor);
-            font-size: rem(32px);
+            font-size: rem(36px);
         }
     }
 }

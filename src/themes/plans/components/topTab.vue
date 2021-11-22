@@ -96,6 +96,7 @@ export default {
 :deep(.van-tabs__wrap) {
     height: rem(80px);
     padding: rem(10px) 0;
+    margin-top: rem(10px);
     overflow-y: hidden;
     line-height: rem(60px);
     .van-tabs__nav {

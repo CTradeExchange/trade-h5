@@ -11,15 +11,20 @@
                     show-action
                     @cancel='onCancel'
                     @search='onSearch'
-                    @update:model-value='updateVal' 
+                    @update:model-value='updateVal'
                 />
             </div>
             <div class='search_products'>
                 <div v-for='item in state.searchList' :key='item.symbolId' class='product_item' @click='openProduct(item.id)'>
-                    <span><span :class="{'activeText':isSearchText(childName)}" v-for="childName in item.name">{{childName}}</span></span>
+                    <span>
+                        <span v-for='(childName,index) in item.name' :key='index' :class="{ 'activeText':isSearchText(childName) }">
+                            {{ childName }}
+                        </span>
+                    </span>
                     <button v-preventReClick class='collectIcon' @click.stop='addOptional(item)'>
-                        <i v-if='item.isSelfSymbol' class='icon icon_zixuan2'></i>
-                        <i v-else class='icon icon_zixuan1'></i>
+                        <i
+                            :class="item.isSelfSymbol ? 'icon_zixuan2': 'icon_zixuan1'"
+                        ></i>
                     </button>
                 </div>
             </div>
@@ -68,11 +73,11 @@ export default {
             state.searchList = []
             state.searchKey = ''
         }
-        const isSearchText = (val) =>{
-            if(state.searchKey.indexOf(val)!=-1){
-                return true;
-            }else{
-                return false;
+        const isSearchText = (val) => {
+            if (state.searchKey.indexOf(val) != -1) {
+                return true
+            } else {
+                return false
             }
         }
 
@@ -196,6 +201,12 @@ export default {
             .van-field {
                 border-radius: 3px;
             }
+            :deep(.van-cell){
+                padding-left: 0;
+            }
+            :deep(.van-search__action){
+                padding: 0 rem(40px)
+            }
         }
         .search_label {
             display: inline-block;
@@ -210,7 +221,7 @@ export default {
                 border-bottom: 1px solid #F8F8F8;
                 button {
                     float: right;
-                    background: var(--bgColor) !important;
+                    background: none;
                 }
                 .icon_zixuan2 {
                     color: #FC822F;

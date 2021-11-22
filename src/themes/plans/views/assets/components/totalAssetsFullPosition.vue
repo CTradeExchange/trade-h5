@@ -134,8 +134,8 @@ export default {
         color: var(--minorColor);
         font-size: rem(28px);
         .tag {
-            color: var(--color);
-            font-size: rem(32px);
+            color: var(--normalColor);
+            font-size: rem(38px);
         }
     }
     .totalAmount {
