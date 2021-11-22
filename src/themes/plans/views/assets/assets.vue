@@ -91,7 +91,7 @@ export default {
             if (isEmpty(customerInfo.value)) {
                 return
             }
-            const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType.value))?.accountId
+            const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType))?.accountId
             store.dispatch('_trade/queryPositionPage', {
                 tradeType: tradeType,
                 sortFieldName: 'openTime',
