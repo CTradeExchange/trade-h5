@@ -282,6 +282,11 @@ export default {
             color: var(--minorColor);
         }
     }
+    .dialog-footer{
+        .van-button{
+            font-size: rem(28px)
+        }
+    }
 }
 </style>
 

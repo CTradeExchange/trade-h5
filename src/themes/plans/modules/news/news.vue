@@ -4,7 +4,7 @@
             {{ $t('information.reference') }}
         </div>
         <div class='container'>
-            <van-tabs v-model:active='state.activeTab' color='rgb(60, 113, 227)' title-inactive-color='rgb(60, 113, 227)' @click='tabClick'>
+            <van-tabs v-model:active='state.activeTab' :color='$style.primary' :title-inactive-color='$style.primary' @click='tabClick'>
                 <van-tab v-for='(tab,index) in state.newsTypes' :key='tab.id' class='extra-tabpanel' :name='index' :title='tab.name'>
                     <template v-if='state.activeTab===0'>
                         <van-pull-refresh

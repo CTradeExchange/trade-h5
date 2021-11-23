@@ -2,7 +2,7 @@
     <div class='top'>
         <slot name='left'>
             <a class='back' href='javascript:;' @click='back'>
-                <span class='icon_icon_back1'></span>
+                <span class='icon_icon_back'></span>
             </a>
         </slot>
         <slot name='center'>

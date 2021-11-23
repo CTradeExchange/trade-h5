@@ -200,7 +200,7 @@ export default {
         }
     }
     .icon_zijinmingxi {
-        color: var(--color);
+        color: var(--normalColor);
         font-size: rem(38px);
     }
     .totalAmount {
