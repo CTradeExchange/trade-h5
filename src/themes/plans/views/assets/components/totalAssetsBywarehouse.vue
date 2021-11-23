@@ -111,7 +111,7 @@ export default {
         }
     }
     .totalAmount {
-        margin-top: rem(20px);
+        margin-top: rem(10px);
         color: var(--color);
         font-size: rem(70px);
         letter-spacing: rem(-2px);

@@ -282,6 +282,7 @@ export default {
                     }
                     .val {
                         color: var(--color);
+                        font-size: rem(28px);
                     }
                     &:nth-child(2n) {
                         .val {

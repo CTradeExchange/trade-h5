@@ -213,7 +213,7 @@
                                 </el-select>
                             </el-form-item>
                             <el-form-item label='主题颜色' prop='themeColor'>
-                                <el-color-picker v-model="form.themeColor" show-alpha :predefine="predefineColors" />
+                                <el-color-picker v-model='form.themeColor' :predefine='predefineColors' show-alpha />
                             </el-form-item>
                             <el-form-item label='埋点代码'>
                                 <el-input
@@ -395,7 +395,7 @@ export default {
                 h5Address: '',
                 h5PreviewAddress: '',
                 defaultZone: {},
-                themeColor:'#477fd3',
+                themeColor: '#477fd3',
                 registList: [{}],
                 onlineService: '',
                 supportLanguage: [],
@@ -734,11 +734,13 @@ export default {
                                     })
                                     that.submitLoading = false
                                     throw new Error('no-plans')
-                                } else {
+                                } else if (Number(el.customerGroupId) !== 1) {
                                     el.plans.forEach(item => {
-                                        if ([3, 5, 9].includes(Number(item.id)) && Array.isArray(item.allCurrency)) {
-                                            item.allCurrency = item.allCurrency.toString()
-                                        }
+                                        const allCurrency = that.accountTradeList[el.customerGroupId].data.find(el => Number(el.trade_type) === Number(item.id)).assets.map(item => item.code).toString()
+                                        item.allCurrency = allCurrency
+                                        // if ([3, 5, 9].includes(Number(item.id)) && Array.isArray(item.allCurrency)) {
+                                        //     item.allCurrency = item.allCurrency.toString()
+                                        // }
                                     })
                                 }
                             })

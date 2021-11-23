@@ -365,7 +365,7 @@ export default {
                 .icon_zhuanhuan {
                     margin: 0 rem(32px);
                     color: var(--primary);
-                    font-size: rem(44px);
+                    font-size: rem(40px);
                 }
             }
         }

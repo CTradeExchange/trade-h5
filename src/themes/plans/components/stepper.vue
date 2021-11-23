@@ -1,6 +1,8 @@
 <template>
     <div class='stepper'>
-        <button ref='minus' class='minus van-stepper__minus' :disabled='disabledMinus' @click='minus'></button>
+        <button ref='minus' class='minus van-stepper__minus' :disabled='disabledMinus' @click='minus'>
+            <i class='icon_icon_reduce'></i>
+        </button>
         <input
             class='input inputEl'
             :disabled='disabled'
@@ -10,7 +12,9 @@
             @blur='blur'
             @input='input'
         />
-        <button ref='plus' class='plus van-stepper__plus' :disabled='disabledPlus' @click='plus'></button>
+        <button ref='plus' class='plus van-stepper__plus' :disabled='disabledPlus' @click='plus'>
+            <i class='icon_icon_plus'></i>
+        </button>
     </div>
 </template>
 

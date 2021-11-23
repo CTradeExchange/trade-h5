@@ -292,16 +292,6 @@ export default {
             return this.$store.state.editor.tradeTypeBlockProduct
         }
     },
-    watch: {
-        activeData: {
-            handler (newVal) {
-                if (newVal.accountType) {
-                    // newVal.saved = true
-                    console.log('aaaaaaaaaaaaaa', newVal)
-                }
-            }
-        }
-    },
     created () {
         // console.log('---activeData-----', this.activeData)
     },

@@ -22,7 +22,7 @@
                 </p>
             </div>
             <div class='right' @click='closeHandler'>
-                <i class='icon_icon_close_big'></i>
+                <i class='icon_guanbi'></i>
             </div>
         </div>
         <div class='dialog-body'>
@@ -67,7 +67,7 @@
         />
 
         <div class='dialog-footer'>
-            <van-button color='#477FD3' :loading='loading' @click='submitHandler'>
+            <van-button :loading='loading' @click='submitHandler'>
                 {{ $t('save') }}
             </van-button>
         </div>
@@ -227,9 +227,9 @@ export default {
         position: absolute;
         top: 0;
         right: 0;
-        padding: rem(25px);
+        padding:rem(40px) rem(25px) rem(25px) rem(25px);
         color: var(--normalColor);
-        font-size: rem(38px);
+        font-size: rem(28px);
     }
 }
 .modifyProfitLoss {
@@ -264,7 +264,6 @@ export default {
             .name {
                 padding-bottom: rem(20px);
                 color: var(--minorColor);
-                font-size: rem(20px);
             }
             .open-price {
                 color: var(--color);
