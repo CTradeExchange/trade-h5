@@ -1,7 +1,16 @@
 <template>
     <div class='m-setting'>
         <el-row class='setting-header'>
-            <el-col class='btns' :span='24'>
+            <el-col :span='12'>
+                <div class='toPages'>
+                    <i class='el-icon-back'></i>
+                    <router-link :to="'/pages?id='+ pageId">
+                        页面列表
+                    </router-link>
+                </div>
+            </el-col>
+
+            <el-col class='btns' :span='12'>
                 <el-button-group>
                     <el-button
                         icon='el-icon-s-promotion'
@@ -985,6 +994,13 @@ export default {
         padding: 20px;
         .btns {
             text-align: right;
+        }
+         .toPages{
+             line-height: 40px;
+             font-size: 14px;
+            a{
+                color: #477FD3;
+            }
         }
     }
     .row {

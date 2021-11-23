@@ -100,6 +100,7 @@ export function positionsTickToObj (str) {
  */
 export function formatSubscribe (productIds, productMap) {
     if (!productIds || productIds.length === 0) return []
+    productIds = productIds.filter(el => el)
     let subscribedList = []
     if (typeof (productIds[0]) === 'number') {
         console.warn('产品报价订阅的参数格式错误')

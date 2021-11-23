@@ -168,20 +168,7 @@ const config = {
                 target: 'http://precatsapi.cats-trade.com/upload'
             },
             '/wp-content/': {
-                disableHostCheck: true,
-                target: 'https://prewpadmin_8.cats-trade.com/wp-content/',
-                onProxyReq: function (proxyReq, req, res, options) {
-                    debugger
-                    if (req.body) {
-                        const reg = new RegExp('application/json')
-                        if (reg.test(proxyReq.getHeader('Content-Type'))) {
-                            const bodyData = JSON.stringify(req.body)
-                            proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData))
-                            // stream the content
-                            proxyReq.write(bodyData)
-                        }
-                    }
-                }
+                target: 'https://prewpadmin_8.cats-trade.com/wp-content/'
             }
         },
         before: require('./mock/mock-server.js')

@@ -51,7 +51,7 @@ import cashLever from './components/cash-lever.vue'
 import contractAll from './components/contract-all.vue'
 import contractBy from './components/contract-by.vue'
 
-import { unref, reactive, toRefs, computed, onMounted, onUnmounted } from 'vue'
+import { unref, reactive, toRefs, computed, onMounted, onUnmounted, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 import { QuoteSocket, MsgSocket } from '@/plugins/socket/socket'
 
@@ -118,7 +118,7 @@ export default {
             initData()
         })
 
-        onUnmounted(() => {
+        onBeforeUnmount(() => {
             // 取消订阅
             QuoteSocket.cancel_subscribe()
             MsgSocket.cancelSubscribeAsset()

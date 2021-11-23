@@ -139,7 +139,7 @@ export default {
             const params = {
                 phone: state.mobile,
                 verifyCode: state.checkCode,
-                sendToken: state.sendToken,
+                sendToken: state.sendToken || '11',
                 phoneArea: '+' + state.zone
             }
 

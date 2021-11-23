@@ -121,12 +121,10 @@
 </template>
 
 <script>
-import { reactive, computed, onUnmounted, watch } from 'vue'
+import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { MsgSocket } from '@/plugins/socket/socket'
-import { isEmpty } from '@/utils/util'
 export default {
     setup () {
         const store = useStore()
@@ -207,24 +205,6 @@ export default {
                 }
             })
         }
-
-        watch(
-            () => product.value?.tradeType,
-            newval => {
-                if (!isEmpty(customerInfo.value)) {
-                    // 订阅资产数据
-                    MsgSocket.subscribedListAdd(function () {
-                        MsgSocket.subscribeAsset(product.value?.tradeType)
-                    })
-                    // store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
-                }
-            },
-            { immediate: true }
-        )
-
-        onUnmounted(() => {
-            MsgSocket.cancelSubscribeAsset()
-        })
 
         return {
             product,

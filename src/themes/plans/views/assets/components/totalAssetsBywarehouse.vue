@@ -101,6 +101,8 @@ export default {
     font-size: rem(28px);
     .label {
         display: flex;
+        height: rem(46px);
+        line-height: rem(46px);
         justify-content: space-between;
         margin-top: rem(20px);
         color: var(--minorColor);

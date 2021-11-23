@@ -181,6 +181,8 @@ export default {
     .label {
         display: flex;
         align-items: center;
+        height: rem(46px);
+        line-height: rem(46px);
         justify-content: space-between;
         margin-top: rem(20px);
         color: var(--minorColor);
@@ -198,8 +200,8 @@ export default {
         }
     }
     .icon_zijinmingxi {
-        color: var(--color);
-        font-size: rem(32px);
+        color: var(--normalColor);
+        font-size: rem(38px);
     }
     .totalAmount {
         margin-top: rem(10px);
