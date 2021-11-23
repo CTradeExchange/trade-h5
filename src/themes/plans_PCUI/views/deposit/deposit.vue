@@ -733,7 +733,7 @@ export default {
                             message: Number(res.data) === 2 ? t('deposit.KYCReviewing') : t('deposit.needKYC'),
                         }).then(() => {
                             router.replace({
-                                name: 'Authentication',
+                                path: '/assets/authentication',
                                 query: {
                                     businessCode: 'cashin'
                                 }
