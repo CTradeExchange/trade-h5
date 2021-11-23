@@ -1,17 +1,28 @@
 <template>
     <customTable
+        :component-refs='componentRefs'
         :data='tableData'
         :options='tableOptions'
-    />
+    >
+        <template #dependencies>
+            <!-- table需要的依赖组件， 例如操作按钮打开其他组件 -->
+            <ClosePosition :ref='el => componentRefs.closePosition = el' />
+            <Sltp :ref='el => componentRefs.sltp = el' />
+            <AdjustMargin :ref='el => componentRefs.adjustMargin = el' />
+        </template>
+    </customTable>
 </template>
 
 <script setup>
-import { computed, unref, watch, onUnmounted } from 'vue'
+import { computed, unref, watch, onUnmounted, ref } from 'vue'
 import { useStore } from 'vuex'
 import customTable from './customTable'
 import { getAssetColumns } from './tableConfig'
-import { MsgSocket, QuoteSocket } from '@/plugins/socket/socket'
-
+import { QuoteSocket } from '@/plugins/socket/socket'
+import AdjustMargin from '@planspc/views/assets/components/adjust-margin.vue'
+import ClosePosition from '@planspc/views/assets/components/close-position.vue'
+import Sltp from '@planspc/views/assets/components/sltp.vue'
+const componentRefs = ref({})
 const props = defineProps({
     tradeType: {
         type: [String, Number],
@@ -76,18 +87,20 @@ const initData = () => {
     } else if ([3, 5, 9].includes(val)) {
         store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: val })
     }
-    // 订阅资产数据
-    MsgSocket.subscribeAsset(val)
 }
 
-onUnmounted(() => {
-    // 取消订阅
-    QuoteSocket.cancel_subscribe()
-    MsgSocket.cancelSubscribeAsset()
-})
 watch(() => props.tradeType, () => {
     if (customerInfo.value) initData()
 }, { immediate: true })
+
+const symbolKeys = computed(() => tableData.value.map(e => `${e.symbolId}_${props.tradeType}`))
+watch(() => symbolKeys.value, () => {
+    QuoteSocket.add_subscribe({ moduleId: 'assetsList', symbolKeys: symbolKeys.value })
+}, {
+    immediate: true,
+    deep: true
+})
+
 </script>
 
 <style lang="scss" scoped>

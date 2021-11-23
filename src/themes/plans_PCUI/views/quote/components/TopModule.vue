@@ -1,6 +1,6 @@
 <template>
     <div class='header'>
-        <div v-for='symbolKey in list' :key='symbolKey' class='item' @click='gotoOrder(symbolKey)'>
+        <div v-for='symbolKey in symbolKeys' :key='symbolKey' class='item' @click='gotoOrder(symbolKey)'>
             <span class='name'>
                 {{ productMap[symbolKey]?.symbolCode || '- -' }}
             </span>
@@ -33,8 +33,8 @@ const gotoOrder = (symbolKey) => {
 }
 // 产品列表
 const productMap = computed(() => store.state._quote.productMap)
-const list = ['27_1', '4_1', '7_1', '33_2', '12_2']
-QuoteSocket.send_subscribe(list)
+const symbolKeys = ['27_1', '4_1', '7_1', '33_2', '12_2']
+QuoteSocket.add_subscribe({ moduleId: 'topQuote', symbolKeys })
 </script>
 
 <style lang="scss" scoped>

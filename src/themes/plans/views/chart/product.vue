@@ -14,14 +14,14 @@
                     <button v-preventReClick class='collectIcon' @click='addOptional'>
                         <i
                             ref='collect'
-                            :class="[!isSelfSymbol?'icon_zixuan1':'icon_zixuan2']"
+                            :class="[!isSelfSymbol?'icon_zixuan11':'icon_zixuan2']"
                         ></i>
                     </button>
                     <div v-if='![3, 5, 9].includes(product?.tradeType)' class='ft'>
                         <span
                             @click='toContractInfo'
                         >
-                            <i class='icon_guanyu'></i>
+                            <i class='icon_guanyu1'></i>
                         </span>
                     </div>
                 </div>
@@ -126,6 +126,7 @@
                         @click.stop='moreTimeIsOpened = false'
                         @touchmove.stop='moreTimeIsOpened = false'
                     ></div>
+                    <i class='icon_icon_arrow'></i>
                 </div>
 
                 <div class='flex-right'>
@@ -154,8 +155,7 @@
                         </van-dropdown-item>
                     </van-dropdown-menu>
                     <div class='setting' @click='settingStatus = !settingStatus'>
-                        <van-icon class='icon' name='setting-o' />
-
+                        <i class='icon icon_shezhi'></i>
                         <div v-show='settingStatus' class='content van-hairline--surround' @click.stop=''>
                             <van-checkbox-group ref='checkboxGroup' v-model='settingList' @change='handleLineChange'>
                                 <van-checkbox
@@ -291,7 +291,7 @@
 import { useRouter, useRoute } from 'vue-router'
 import StudyList from './components/studyList.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted  } from 'vue'
+import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted } from 'vue'
 import KIcon from './icons/kIcon.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import { useStore } from 'vuex'
@@ -1078,6 +1078,7 @@ export default {
         justify-content: center;
         .icon_chouti1 {
             margin-right: rem(20px);
+            font-size: rem(26px);
         }
     }
     &.isIframe {
@@ -1101,17 +1102,17 @@ export default {
             a {
                 display: inline-block;
             }
-            .icon_guanyu {
-                color: rgb(153, 153, 153);
+            .icon_guanyu1 {
+                color: var(--normalColor);
             }
         }
         .collectIcon {
             width: rem(40px);
             height: 100%;
-            color: #777;
+            color: var(--normalColor);
             vertical-align: top;
             background-color: var(--contentColor);
-            .icon_zixuan1 {
+            .icon_zixuan11 {
                 font-weight: normal !important;
             }
             .icon_zixuan2 {
@@ -1309,9 +1310,11 @@ export default {
                 height: rem(60px);
                 .van-tabs__nav--line {
                     padding-bottom: 0;
+                    padding-right: 0;
                 }
                 .van-tabs__line {
                     bottom: 0;
+                    width: auto;
                 }
             }
         }
@@ -1328,18 +1331,7 @@ export default {
             font-size: rem(24px);
             line-height: rem(60px);
             background-color: var(--contentColor);
-            &::after {
-                position: absolute;
-                top: 50%;
-                right: 1px;
-                margin-top: -5px;
-                border: 3px solid;
-                border-color: transparent transparent var(--normalColor) var(--normalColor);
-                -webkit-transform: rotate(-45deg);
-                transform: rotate(-45deg);
-                opacity: 0.8;
-                content: '';
-            }
+
             &.opened {
                 &::after {
                     margin-top: -1px;
@@ -1378,6 +1370,10 @@ export default {
                 height: 100%;
                 opacity: 0;
             }
+            .icon_icon_arrow{
+                font-size: rem(20px);
+                color: var(--minorColor);
+            }
         }
         .loadingIcon {
             display: flex;
@@ -1396,9 +1392,12 @@ export default {
         .study-wrap,
         .kIcon-wrap {
             height: auto;
+
             :deep(.van-dropdown-menu__title) {
                 color: #646566;
                 font-size: rem(24px);
+                    padding-right: 0;
+                    padding-left: rem(28px);
             }
             :deep(.van-dropdown-menu__bar) {
                 width: 100%;
@@ -1437,6 +1436,8 @@ export default {
             display: inline-block;
             color: var(--normalColor);
             vertical-align: middle;
+            width: rem(60px);
+            text-align: center;
         }
         .klineTypeRightIcon {
             padding-top: rem(10px);
@@ -1451,7 +1452,7 @@ export default {
             background: var(--contentColor);
             .icon {
                 color: var(--normalColor);
-                font-size: rem(32px);
+                font-size: rem(28px);
             }
             .content {
                 position: absolute;
@@ -1605,6 +1606,7 @@ export default {
             flex-wrap: nowrap;
             padding: rem(20px);
             white-space: nowrap;
+            font-weight: bold;
             .buy {
                 margin-right: rem(20px);
             }

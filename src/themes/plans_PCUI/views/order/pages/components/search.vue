@@ -1,6 +1,6 @@
 <template>
     <section class='search-component'>
-        <el-input v-model='searchValue' class='search-input' clearable placeholder='请输入关键字搜索' @input='onSearch'>
+        <el-input v-model='searchValue' class='search-input' clearable :placeholder='$t("transRecords.searchPlaceholder")' @input='onSearch'>
             <template #prefix>
                 <el-icon class='el-input__icon'>
                     <Search />
@@ -75,12 +75,14 @@ export default {
     .search-input {
         width: 328px;
         height: 40px;
-        background: var(--contentColor);
-        :deep(.van-search__content) {
-            padding-left: 0;
-        }
-        :deep(.van-search__action) {
-            padding: 0 rem(30px);
+        :deep{
+            .el-input__inner{
+                border-color: transparent;
+                background: var(--bgColor);
+                &:focus{
+                    border-color: var(--el-input-focus-border,var(--el-color-primary));
+                }
+            }
         }
     }
     .content {

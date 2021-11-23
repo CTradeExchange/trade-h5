@@ -279,17 +279,7 @@ class Chart {
                             this.datafeed._historyProvider.setTick(_subscribers[listenerGuid].listener)
 
                             // 更新最新价为当前周期数据的最后一根k线
-                            const lastBar = this.widget.activeChart().getSeries().data().last()
-                            if (lastBar) {
-                                this._setLastPrice(lastBar.value[4])
-                                this.datafeed._historyProvider._previousBar = {
-                                    time: lastBar.value[6],
-                                    close: lastBar.value[4],
-                                    open: lastBar.value[1],
-                                    high: lastBar.value[2],
-                                    low: lastBar.value[3],
-                                }
-                            }
+                            this._setLastPriceFromLastBar()
                         } else {
                             rec()
                         }
@@ -303,10 +293,7 @@ class Chart {
         this.widget.activeChart().onDataLoaded()
             .subscribe(null,
                 () => {
-                    const lastBar = this.widget.activeChart().getSeries().data().last()
-                    if (lastBar) {
-                        this._setLastPrice(lastBar.value[4])
-                    }
+                    this._setLastPriceFromLastBar()
                 },
                 true)
     }
@@ -409,13 +396,17 @@ class Chart {
     }
 
     // 价格线
-    _setLine (config) {
+    _setLine (config = {}) {
         const { _linesMap, symbolId } = this
         !_linesMap[symbolId] && (_linesMap[symbolId] = {})
         const target = _linesMap[symbolId]
+        const isShowBuyPrice = typeof config.showBuyPrice === 'boolean' ? config.showBuyPrice : this.property.showBuyPrice
+        const showSellPrice = typeof config.showSellPrice === 'boolean' ? config.showSellPrice : this.property.showSellPrice
+        const upColor = config.upColor || this.property.upColor
+        const downColor = config.downColor || this.property.downColor
 
-        if (typeof config.showBuyPrice === 'boolean') {
-            if (config.showBuyPrice) {
+        if (typeof isShowBuyPrice === 'boolean') {
+            if (isShowBuyPrice) {
                 if (target.buyPriceLine) {
                     target.buyPriceLine.setPrice(this.buyPrice)
                 } else {
@@ -423,7 +414,7 @@ class Chart {
                         .setPrice(this.buyPrice)
                         .setText('')
                         .setLineStyle(0)
-                        .setLineColor(config.upColor)
+                        .setLineColor(upColor)
                         .setQuantity(false)
                 }
             } else if (target.buyPriceLine) {
@@ -431,8 +422,8 @@ class Chart {
                 target.buyPriceLine = null
             }
         }
-        if (typeof config.showSellPrice === 'boolean') {
-            if (config.showSellPrice) {
+        if (typeof showSellPrice === 'boolean') {
+            if (showSellPrice) {
                 if (target.sellPriceLine) {
                     target.sellPriceLine.setPrice(this.sellPrice)
                 } else {
@@ -440,7 +431,7 @@ class Chart {
                         .setPrice(this.sellPrice)
                         .setText('')
                         .setLineStyle(0)
-                        .setLineColor(config.downColor)
+                        .setLineColor(downColor)
                         .setQuantity(false)
                 }
             } else if (target.sellPriceLine) {
@@ -509,25 +500,40 @@ class Chart {
     }
 
     // 手动更新现价线
-    _setLastPrice (price) {
+    _setLastPrice (price, isShowLastPrice = this.property.showLastPrice) {
         const { _linesMap, symbolId } = this
         !_linesMap[symbolId] && (_linesMap[symbolId] = {})
         const target = _linesMap[symbolId]
 
-        if (this.property.showLastPrice && !target.lastPriceLine) {
+        if (isShowLastPrice && !target.lastPriceLine) {
             target.lastPriceLine = this.widget.activeChart().createOrderLine()
-                .setPrice(10)
+                .setPrice(price)
                 .setText('')
                 .setLineStyle(1)
                 .setLineColor('#467fd3')
                 .setQuantity(false)
         }
 
-        if (this.property.showLastPrice) {
+        if (isShowLastPrice) {
             target.lastPriceLine.setPrice(price)
         } else {
             target.lastPriceLine && target.lastPriceLine.remove()
             target.lastPriceLine = null
+        }
+    }
+
+    // 更新最新价为当前周期数据的最后一根k线
+    _setLastPriceFromLastBar (bool) {
+        const lastBar = this.widget.activeChart().getSeries().data().last()
+        if (lastBar) {
+            this._setLastPrice(lastBar.value[4], bool)
+            this.datafeed._historyProvider._previousBar = {
+                time: lastBar.value[6],
+                close: lastBar.value[4],
+                open: lastBar.value[1],
+                high: lastBar.value[2],
+                low: lastBar.value[3],
+            }
         }
     }
 
@@ -578,7 +584,7 @@ class Chart {
         this.buyPrice = buyPrice
         this.sellPrice = sellPrice
 
-        this._setLine(this.property)
+        this._setLine()
         if (this.priceBox) {
             this.priceBox.setSellPrice(sellPrice)
             this.priceBox.setBuyPrice(buyPrice)
@@ -656,15 +662,21 @@ class Chart {
 
     // 覆盖图表配置
     updateProperty (config) {
-        // 提前合并属性
-        Object.assign(this.property, config)
-
         this._applyOverrides(config)
         config.property && this.setChartType(config.property.chartType)
-        // this._setLine(config)
         if (typeof config.showPositionPrice === 'boolean') {
             !config.showPositionPrice && this.updatePosition()
         }
+        // 现价线
+        if (typeof config.showLastPrice === 'boolean' && config.showLastPrice !== this.property.showLastPrice) {
+            // 更新最新价为当前周期数据的最后一根k线
+            this._setLastPriceFromLastBar(config.showLastPrice)
+        }
+
+        this._setLine(config)
+
+        // 合并属性
+        Object.assign(this.property, config)
     }
 
     // 实时tick

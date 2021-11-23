@@ -12,6 +12,7 @@
 	"reInput": "请重新输入",
 	"examineMore": "查看更多",
 	"loadMore": "加载更多",
+    "fee": "手续费",
 	"compLang": {
 		"confirm": "确定",
 		"OK": "确定",
@@ -101,7 +102,8 @@
 		"returnMoney": "还币",
 		"loan": "借款",
 		"transfer": "划转",
-        "records": "资金记录"
+        "records": "资金记录",
+        "transRecords": "成交记录"
 	},
     "historyList": {
         "noMore": "没有更多了"
@@ -144,7 +146,8 @@
 		"yearAgo": "年前",
 		"focusNews":"要闻",
 		"newsFlash":"7x24",
-		"calendar":"财经日历"
+		"calendar":"财经日历",
+        "custom": "自定义"
 	},
 	"header": {
 		"quote": "行情",
@@ -667,6 +670,12 @@
 		"6": "周六",
 		"7": "周日"
 	},
+    "kycAuditStatus": {
+        "0": "未认证",
+        "1": "待审核",
+        "2": "审核通过",
+        "3": "审核不通过"
+    },
 	"assets": {
         "accountAssets": "账户资产",
 		"asset": "资产",
@@ -741,5 +750,9 @@
         "transferTip6": "划转金额不能小于0",
         "transferSuccess": "划转成功",
 		"confirmClose": "确认平仓"
-	}
+	},
+    "transRecords": {
+        "searchPlaceholder": "请输入关键字搜索",
+        "select": "选择"
+    }
 }

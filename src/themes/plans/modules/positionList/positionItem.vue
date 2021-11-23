@@ -54,7 +54,7 @@
                                 <div class='title'>
                                     {{ $t('trade.currentPrice') }}
                                 </div>
-                                <div :class='[Number(data.direction) === 1 ? product?.sell_color : product?.buy_color]'>
+                                <div class='cur-price' :class='[Number(data.direction) === 1 ? product?.sell_color : product?.buy_color]'>
                                     {{ Number(data.direction) === 1 ? product?.sell_price : product?.buy_price }}
                                 </div>
                             </div>
@@ -68,7 +68,7 @@
                                     {{ parseFloat(data.takeProfitDecimal) ? data.takeProfitDecimal : '--' }}
                                 </div>
                             </div>
-                            <div class='flex-item'>
+                            <div class='flex-item alignRight'>
                                 <div class='title'>
                                     {{ $t('trade.stopLossPrice') }}
                                 </div>
@@ -272,16 +272,16 @@ export default {
                 margin-bottom: rem(30px);
                 .flex-item {
                     display: inline-block;
-                    >div {
-                        padding: 0 rem(4px);
-                    }
                     .title {
-                        margin-right: rem(4px);
                         padding: 0;
                         color: var(--minorColor);
                     }
                     .val {
                         color: var(--color);
+                        font-size: rem(28px);
+                    }
+                    .cur-price{
+                        font-size: rem(28px);
                     }
                     &:nth-child(2n) {
                         .val {
@@ -335,7 +335,7 @@ export default {
             display: inline-block;
             width: rem(52px);
             height: rem(52px);
-            font-size: rem(30px);
+            font-size: rem(26px);
             font-style: normal;
             line-height: rem(52px);
             text-align: center;

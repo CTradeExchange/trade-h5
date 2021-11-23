@@ -81,7 +81,7 @@ export default {
 }
 .stepper {
     background: var(--assistColor);
-    border-radius: rem(10px);
+    border-radius: rem(6px);
     &.warn {
         color: var(--warn);
     }

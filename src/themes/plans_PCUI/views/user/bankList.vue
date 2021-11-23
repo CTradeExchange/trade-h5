@@ -10,7 +10,7 @@
                 <div v-for='(item,index) in bankList' :key='index' class='bank-item' :class="'BG_'+ item.bankCode">
                     <div class='bi-head'>
                         <div class='icon-bank' :class="'BK_'+ item.bankCode">
-                            <img alt='' :src="require('@/assets/bank_icon/BK_'+ item.bankCode+ '.png')" />
+                            <img alt='' :src="'/images/bank_icon/BK_'+ item.bankCode+ '.png'" />
                         </div>
                         <span class='bank-name'>
                             {{ item.bankName }}
@@ -20,7 +20,7 @@
                         {{ hideMiddle(item.bankCardNumber) }}
                     </p>
                     <div class='bank-bg'>
-                        <img alt='' sizes='' :src="require('@/assets/bank_icon/BK_'+ item.bankCode+ '.png')" />
+                        <img alt='' sizes='' :src="'/images/bank_icon/BK_'+ item.bankCode+ '.png'" />
                     </div>
                 </div>
                 <div class='add-wrap' @click='toAdd'>

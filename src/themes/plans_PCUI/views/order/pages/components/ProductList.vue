@@ -16,10 +16,10 @@
                 <span class='name'>
                     <i v-if='isCollect(item.tradeType,item.symbolId)' class='icon icon_zixuan2' @click.stop='addOptional(item)'></i>
                     <i v-else class='icon icon_zixuan1' @click.stop='addOptional(item)'></i>
-                    {{ item.symbolCode }}
+                    {{ item.symbolName }}
                 </span>
-                <span class='price'>
-                    {{ productMap[item.symbolKey]?.price || '- -' }}
+                <span class='price' :class='[productMap[item.symbolKey]?.upDownColor]'>
+                    {{ productMap[item.symbolKey]?.cur_price || '- -' }}
                 </span>
                 <span class='change' :class='[productMap[item.symbolKey]?.upDownColor]'>
                     {{ productMap[item.symbolKey]?.upDownWidth || '- -' }}
@@ -37,6 +37,7 @@ import subscribeProducts from '@planspc/hooks/subscribeProducts'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n'
+import { QuoteSocket } from '@/plugins/socket/socket'
 
 const store = useStore()
 const router = useRouter()
@@ -51,7 +52,7 @@ const props = defineProps({
 
 // 监听列表滚动，订阅/获取产品数据
 const list = toRef(props, 'list')
-const { productListEl, productMap } = subscribeProducts(list)
+const { productListEl, productMap, subscribList } = subscribeProducts(list)
 // 切换当前选中产品
 const onClick = product => {
     store.commit('_quote/Update_productActivedID', `${product.symbolId}_${product.tradeType}`)
@@ -63,6 +64,14 @@ const onClick = product => {
         }
     })
 }
+
+//
+watch(() => subscribList.value, () => {
+    QuoteSocket.add_subscribe({ moduleId: 'productList', symbolKeys: subscribList.value })
+}, {
+    immediate: true,
+    deep: true
+})
 
 /** 添加自选逻辑 */
 const selfSymbolList = computed(() => store.state._user.selfSymbolList)

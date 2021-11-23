@@ -4,7 +4,7 @@
             {{ $t('information.reference') }}
         </div>
         <div class='container'>
-            <van-tabs v-model:active='state.activeTab' :color='primaryColor' :title-inactive-color='primaryColor' @click='tabClick'>
+            <van-tabs v-model:active='state.activeTab' :color='$style.primary' :title-inactive-color='$style.primary' @click='tabClick'>
                 <van-tab v-for='(tab,index) in state.newsTypes' :key='tab.id' class='extra-tabpanel' :name='index' :title='tab.name'>
                     <template v-if='state.activeTab===0'>
                         <van-pull-refresh
@@ -143,11 +143,10 @@
 </template>
 
 <script>
-import { reactive , computed } from 'vue'
+import { reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { newsListByTypeByPage, canlendarListByDate, articleDetail } from '@/api/information'
 import { getCookie } from '@/utils/util'
-import Base from '@/store/modules/base'
 const h5Preview = process.env.VUE_APP_h5Preview
 export default {
     props: ['data'],
@@ -223,7 +222,6 @@ export default {
             orgid: props.data.orgid // 机构id
         }
         const today = window.dayjs().format('YYYY年MM月DD日')
-         const primaryColor = computed(() => Base.state.wpCompanyInfo.themeColor)
         // 倒序时间(刚刚，几分钟前，几个小时前，几天前，几周前，几个月前等)
         const beforeTime = (dateTimeStamp) => {
             var minute = 1000 * 60 // 把分，时，天，周，半个月，一个月用毫秒表示
@@ -480,8 +478,7 @@ export default {
             onNewsFlashRefresh,
             onFocusNewsRefresh,
             onLoadFocusNews,
-            onLoadNewsFlash,
-            primaryColor
+            onLoadNewsFlash
         }
     },
 }

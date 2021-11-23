@@ -89,6 +89,7 @@ export default {
     .asset-info{
         .val{
             color: var(--color);
+            font-size: rem(28px);
         }
     }
 }

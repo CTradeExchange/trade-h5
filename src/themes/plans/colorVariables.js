@@ -3,7 +3,7 @@ import store from './store'
 const colors = {
     common: {
         primary: '#477fd3',
-        riseColor: '#ef5353',
+        riseColor: '#F60000',
         fallColor: '#26a69a',
         warn: '#ef5353',
         success: '#26a69a',
@@ -67,11 +67,11 @@ function updateBodyClass (themeColor) {
 }
 
 // 设置root变量
-export function setRootVariable (themeColor,primaryColor) {
+export function setRootVariable (themeColor, primaryColor) {
     const invertColor = themeColor || localGet('invertColor')
     const chartColorType = JSON.parse(localGet('chartConfig'))?.chartColorType || 1
-    if(primaryColor){
-        colors.common.primary = primaryColor;
+    if (primaryColor) {
+        colors.common.primary = primaryColor
     }
     const colorsArr = Object.assign(colors[invertColor], colors.common)
     updateBodyClass(invertColor)

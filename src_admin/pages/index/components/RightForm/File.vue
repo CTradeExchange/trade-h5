@@ -55,7 +55,7 @@ export default {
                     console.log(html)
                     const _div = document.createElement('div')
                     _div.innerHTML = html
-                    const imgUrl = _div.querySelector('img').src
+                    const imgUrl = _div.querySelector('img').getAttribute('src')
                     this.$emit('formChange', imgUrl)
                     this.imgUrl = imgUrl
                 }

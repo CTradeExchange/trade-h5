@@ -7,17 +7,9 @@
                         icon='el-icon-s-promotion'
                         :loading='submitLoading'
                         type='primary'
-                        @click='submit'
-                    >
-                        保存
-                    </el-button>
-                    <el-button
-                        icon='el-icon-upload'
-                        :loading='publishLoading'
-                        type='primary'
                         @click='pushPage'
                     >
-                        发布
+                        保存
                     </el-button>
                     <el-button
                         :disabled='getLoading'
@@ -491,10 +483,6 @@ export default {
                             return
                         }
                         resolve(true)
-                        this.$message({
-                            message: '保存成功',
-                            type: 'success'
-                        })
                         this.getPageConfig()
                     })
                     .catch(error => {

@@ -4,7 +4,7 @@
         <div class='content-top' :style="'height: '+ contentHeight">
             <div class='quote-wrap'>
                 <!-- 产品列表/搜索 -->
-                <sidebarProduct />
+                <productSearch />
             </div>
             <div class='middle-wrap'>
                 <div class='chart-content'>
@@ -39,17 +39,18 @@
 </template>
 
 <script>
-import { reactive, toRefs, computed } from 'vue'
+import { reactive, watch, computed, onBeforeUnmount } from 'vue'
 import chart from './pages/chart.vue'
 import { useRouter, useRoute } from 'vue-router'
 import handicap from './pages/handicap.vue'
 import dealList from './pages/dealList.vue'
 import trade from './pages/trade.vue'
-import sidebarProduct from './pages/sidebarProduct'
+import productSearch from './pages/productSearch'
 import assetsModule from './pages/assets.vue'
 import { isEmpty } from '@/utils/util'
 import { useStore } from 'vuex'
 import userRecord from './pages/userRecord'
+import { MsgSocket, QuoteSocket } from '@/plugins/socket/socket'
 
 export default {
     components: {
@@ -57,7 +58,7 @@ export default {
         handicap,
         dealList,
         trade,
-        sidebarProduct,
+        productSearch,
         assetsModule,
         userRecord
     },
@@ -67,6 +68,7 @@ export default {
         const router = useRouter()
         const { tradeType, symbolId } = route.query
         store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
+        const customerInfo = computed(() => store.state._user.customerInfo)
         const product = computed(() => store.getters.productActived)
         if (isEmpty(product.value)) {
             router.push('/')
@@ -93,6 +95,29 @@ export default {
                 return '874px'
             }
         })
+
+        watch(
+            () => product.value?.tradeType,
+            (newval, oldval) => {
+                if (!isEmpty(customerInfo.value) && parseInt(newval) !== parseInt(oldval)) {
+                    // 订阅资产数据
+                    MsgSocket.subscribedListAdd(function () {
+                        MsgSocket.subscribeAsset(product.value?.tradeType)
+                    })
+                    if ([3, 5, 9].includes(parseInt(newval))) {
+                        store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: parseInt(newval) })
+                    }
+                }
+            },
+            { immediate: true }
+        )
+
+        onBeforeUnmount(() => {
+            // 取消订阅
+            QuoteSocket.cancel_subscribe()
+            MsgSocket.cancelSubscribeAsset()
+        })
+
         return {
             product,
             tradeType,

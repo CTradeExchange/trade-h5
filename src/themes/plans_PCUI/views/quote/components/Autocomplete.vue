@@ -1,16 +1,9 @@
 <template>
-    <!-- <el-input v-model='searchValue' class='search-input' clearable placeholder='请输入关键字搜索' @input='onSearch'>
-        <template #prefix>
-            <el-icon class='el-input__icon'>
-                <Search />
-            </el-icon>
-        </template>
-    </el-input> -->
     <div class='search-input'>
         <el-autocomplete
             v-model='state'
             :fetch-suggestions='querySearch'
-            placeholder='请输入关键字搜索'
+            :placeholder='$t("transRecords.searchPlaceholder")'
             popper-class='quote-autocomplete'
             @select='gotoOrder'
         >
@@ -35,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, unref } from 'vue'
 import { ElAutocomplete, ElIcon, ElMessage } from 'element-plus'
 import { Search } from '@element-plus/icons'
 import { useStore } from 'vuex'
@@ -56,6 +49,8 @@ const props = defineProps({
 })
 
 const state = ref('')
+const productMap = computed(() => store.state._quote.productMap)
+
 // 搜索
 const querySearch = (queryString, cb) => {
     if (!queryString) {
@@ -63,7 +58,7 @@ const querySearch = (queryString, cb) => {
     }
     debounce(getSymbolList({ name: queryString, customerGroupId: store.getters.customerGroupId, tradeType: props.tradeType }).then(res => {
         if (res.check()) {
-            cb(res.data)
+            cb(res.data.filter(e => unref(productMap)[e.id + '_' + unref(props.tradeType)]))
         }
     }))
 }
@@ -117,6 +112,13 @@ const addOptional = ({ id: symbolId, tradeType = props.tradeType }) => {
             width: 100%;
             height: 100%;
         }
+        .el-input__inner{
+            border-color: transparent;
+            background: var(--bgColor);
+            &:focus{
+                border-color: var(--el-input-focus-border,var(--el-color-primary));
+            }
+        }
     }
 }
 
@@ -127,7 +129,7 @@ const addOptional = ({ id: symbolId, tradeType = props.tradeType }) => {
     .el-autocomplete-suggestion{
         --el-text-color-regular: var(--color);
         li:hover{
-            --el-text-color-regular: var(--contentColor);
+            background-color: var(--bgColor)
         }
         .item{
             display: flex;

@@ -22,7 +22,7 @@
                 </p>
             </div>
             <div class='right' @click='closeHandler'>
-                <i class='icon_icon_close_big'></i>
+                <i class='icon_guanbi'></i>
             </div>
         </div>
         <div class='dialog-body'>
@@ -67,7 +67,7 @@
         />
 
         <div class='dialog-footer'>
-            <van-button :color='primaryColor' :loading='loading' @click='submitHandler'>
+            <van-button :loading='loading' @click='submitHandler'>
                 {{ $t('save') }}
             </van-button>
         </div>
@@ -102,7 +102,6 @@ export default {
 
         // 获取账户
         const account = computed(() => store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(props.data.tradeType)))
-        const primaryColor = computed(() => Base.state.wpCompanyInfo.themeColor)
         // 客户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
 
@@ -190,8 +189,7 @@ export default {
             closed,
             open,
             closeHandler,
-            submitHandler,
-            primaryColor
+            submitHandler
         }
     }
 }
@@ -229,13 +227,13 @@ export default {
         position: absolute;
         top: 0;
         right: 0;
-        padding: rem(25px);
+        padding:rem(40px) rem(25px) rem(25px) rem(25px);
         color: var(--normalColor);
-        font-size: rem(38px);
+        font-size: rem(28px);
     }
 }
 .modifyProfitLoss {
-    margin: 0 rem(40px) rem(30px) rem(35px);
+    margin: 0 rem(30px) rem(30px) rem(30px);
 }
 .m-dialogZyzs {
     .lot {
@@ -244,7 +242,7 @@ export default {
         text-align: center;
     }
     .dialog-body {
-        padding-bottom: rem(20px);
+        height: rem(300px);
         overflow-y: visible;
         :deep(.layout-1) {
             padding-bottom: rem(30px);
@@ -255,18 +253,19 @@ export default {
         .inputNumber {
             position: relative;
             display: flex;
+            line-height: 1.45;
             align-items: center;
             justify-content: space-between;
-            margin: 0 rem(40px) rem(20px) rem(35px);
+            margin: 0 rem(30px) rem(20px) rem(30px);
+            font-size: rem(28px);
             .item-block {
                 &:last-child {
                     text-align: right;
                 }
             }
             .name {
-                padding-bottom: rem(20px);
                 color: var(--minorColor);
-                font-size: rem(20px);
+                font-size: rem(24px);
             }
             .open-price {
                 color: var(--color);
@@ -302,7 +301,6 @@ export default {
 <style lang="scss">
 @import '@/sass/mixin.scss';
 .m-dialogZyzs {
-    height: rem(630px);
     overflow-y: visible;
     background-color: var(--contentColor);
 }

@@ -117,8 +117,8 @@ export default {
                     oldPwd: md5(state.oldPwd),
                     newPwd: md5(state.confirmPwd)
                 }).then((res) => {
-                    toast.clear()
                     if (res.check()) {
+                        toast.clear()
                         Dialog.alert({
                             title: t('common.tip'),
                             message: t('login.pwdSuccess'),

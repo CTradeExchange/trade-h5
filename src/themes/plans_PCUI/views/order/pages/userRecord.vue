@@ -2,27 +2,27 @@
     <div class='userRecord'>
         <div class='headbar'>
             <el-tabs v-model='activeName' class='tabs'>
-                <el-tab-pane :label='$t("trade.curTrust")' name='0' />
+                <el-tab-pane :label='[1,2].includes(Number(tradeType)) ? "当前挂单" : $t("trade.curTrust")' name='0' />
                 <el-tab-pane :label='$t("trade.dealList")' name='1' />
                 <el-tab-pane :label='[1,2].includes(Number(tradeType)) ? $t("trade.position") : $t("trade.asset") ' name='2' />
             </el-tabs>
-            <div v-if='activeName === "1"' class='link'>
+            <router-link v-if='activeName === "1"' class='link' :to="{ name: 'TransRecords' }">
                 {{ $t('trade.allTransaction') }}
-            </div>
+            </router-link>
         </div>
-        <div class='content'>
+        <div v-if='mounted' class='content'>
             <!-- 当前委托 -->
-            <CurrentCommission v-show='activeName ==="0"' :common-options='commonOptions' :trade-type='tradeType' />
+            <CurrentCommission v-if='activeName ==="0"' :common-options='commonOptions' :trade-type='tradeType' />
             <!-- 成交记录 -->
-            <Transaction v-show='activeName ==="1"' :common-options='commonOptions' :trade-type='tradeType' />
+            <Transaction v-if='activeName ==="1"' :common-options='commonOptions' :trade-type='tradeType' />
             <!-- 资产 -->
-            <AssetsList v-show='activeName ==="2"' :common-options='commonOptions' :trade-type='tradeType' />
+            <AssetsList v-if='activeName ==="2"' :common-options='commonOptions' :trade-type='tradeType' />
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, computed, unref } from 'vue'
+import { ref, computed, unref, watch, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import { ElTabs, ElTabPane } from 'element-plus'
 import CurrentCommission from './components/currentCommission'
@@ -37,6 +37,15 @@ const activeName = ref('0')
 const commonOptions = {
     maxHeight: 350,
 }
+
+// 不同table数据混在一起了
+const mounted = ref(true)
+watch(() => tradeType.value, async () => {
+    // await nextTick()
+    mounted.value = false
+    await nextTick()
+    mounted.value = true
+})
 </script>
 
 <style lang="scss" scoped>

@@ -86,7 +86,7 @@ export default {
             const params = {
                 email: state.email,
                 verifyCode: state.checkCode,
-                sendToken: state.sendToken,
+                sendToken: state.sendToken || '11',
                 emailArea: state.zone
             }
             state.loading = true

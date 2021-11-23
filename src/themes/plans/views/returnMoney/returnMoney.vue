@@ -313,7 +313,7 @@ export default {
             }
             .icon_icon_arrow {
                 margin-left: rem(10px);
-                font-size: rem(24px);
+                font-size: rem(20px);
             }
             .input {
                 flex: 1;

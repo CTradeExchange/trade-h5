@@ -20,7 +20,7 @@
                 </p>
             </div>
             <div class='right' @click='closeHandler'>
-                <i class='icon_icon_close_big'></i>
+                <i class='icon_guanbi'></i>
             </div>
         </div>
         <div class='dialog-body'>
@@ -51,7 +51,7 @@
                         </div>
                     </div> -->
                     <div>
-                        <div class='name'>
+                        <div class='name alignRight'>
                             {{ $t('trade.currentPrice') }}
                         </div>
                         <div :class='[Number(data.direction) === 1 ? product.sell_color : product.buy_color]'>
@@ -308,7 +308,7 @@ export default {
 }
 .stepper {
     background: var(--assistColor);
-    border-radius: rem(10px);
+    border-radius: rem(6px);
     &.warn {
         color: var(--warn);
     }
@@ -331,24 +331,30 @@ export default {
         position: absolute;
         top: 0;
         right: 0;
-        padding: rem(25px);
+        padding:rem(40px) rem(25px) rem(25px) rem(25px);
         color: var(--normalColor);
-        font-size: rem(38px);
+        font-size: rem(28px);
     }
 }
 .pcBtns {
-    margin: 0 rem(40px) rem(40px) rem(35px);
-    text-align: right;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 0 15px;
     .item {
         display: inline-block;
         width: rem(120px);
         height: rem(45px);
-        margin-left: rem(30px);
+        margin-right: rem(30px);
         color: var(--color);
         line-height: rem(45px);
         text-align: center;
         background: var(--assistColor);
-        border-radius: 4px;
+        border-radius: rem(6px);
+        flex: 1;
+            margin-right: 15px;
+            &:last-child{
+                margin-right: 0;
+         }
         &.active {
             color: #FFF;
             background: var(--primary);
@@ -357,25 +363,27 @@ export default {
 }
 .dialog-footer {
     width: 100%;
+    padding: rem(30px);
     .pcHandler {
         color: #FFF;
         background: var(--primary);
         border: none;
         border-radius: 0;
+        border-radius: rem(6px);
     }
 }
 .m-dialogPC {
     z-index: 1000;
-    height: rem(740px);
     overflow: visible;
     .dialog-body {
         flex: 1;
         .inputNumber {
             position: relative;
             display: flex;
+            line-height: 1.45;
             align-items: center;
             justify-content: space-between;
-            margin: 0 rem(40px) rem(40px) rem(35px);
+            margin: 0 rem(30px) rem(40px) rem(30px);
             .title {
                 color: var(--minorColor);
                 font-size: rem(28px);
@@ -395,16 +403,11 @@ export default {
                 font-size: rem(24px);
             }
             .name {
-                padding-bottom: rem(20px);
                 color: #999;
-                font-size: rem(20px);
+                font-size: rem(24px);
             }
             .open-price {
                 color: var(--color);
-            }
-            .left,
-            .right {
-                font-size: rem(20px);
             }
             .left {
                 width: rem(300px);
@@ -458,7 +461,6 @@ export default {
     z-index: 1000;
     display: flex;
     flex-flow: column;
-    height: rem(640px);
     overflow: visible;
     background-color: var(--contentColor);
 }

@@ -95,7 +95,13 @@ export default {
         const marginInfo = computed(() => props.product?.marginInfo)
 
         // 杠杆倍数范围
-        const multipleRange = computed(() => marginInfo?.value?.type === '2' ? marginInfo.value.values.split('-') : [])
+        const multipleRange = computed(() => {
+            if (props.position) {
+                return props.position.adjustCrossLevel.split('-')
+            } else {
+                return marginInfo?.value?.type === '2' ? marginInfo.value.values.split('-') : []
+            }
+        })
 
         // 杠杆倍数固定列表
         const multipleList = computed(() => marginInfo?.value?.type === '3' ? marginInfo.value.values.split(',') : [])

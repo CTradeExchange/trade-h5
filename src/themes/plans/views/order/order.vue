@@ -474,6 +474,7 @@ export default {
             color: #FFF;
             background: var(--riseColor);
             border-color: var(--riseColor);
+            border-radius: rem(6px);
         }
     }
     &.sell {
