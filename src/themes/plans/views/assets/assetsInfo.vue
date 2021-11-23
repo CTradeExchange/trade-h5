@@ -179,6 +179,7 @@ export default {
         }
         .value {
             color: var(--color);
+            font-size: rem(28px);
         }
     }
 }

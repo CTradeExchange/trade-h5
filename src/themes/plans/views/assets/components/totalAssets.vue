@@ -11,7 +11,7 @@
                             {{ $t('assets.riskLevel') }} {{ assetsInfo?.closeProportion }}
                         </span>
                     </div>
-                    <i class='icon_zijinmingxi2' @click="$router.push({ name:'Record',query:{ tradeType:tradeType, accountId:assetsInfo.accountId } })"></i>
+                    <i class='icon_zijinmingxi' @click="$router.push({ name:'Record',query:{ tradeType:tradeType, accountId:assetsInfo.accountId } })"></i>
                 </div>
                 <div class='totalAmount'>
                     {{ assetsInfo?.totalBalance }}
@@ -181,6 +181,8 @@ export default {
     .label {
         display: flex;
         align-items: center;
+        height: rem(46px);
+        line-height: rem(46px);
         justify-content: space-between;
         margin-top: rem(20px);
         color: var(--minorColor);
@@ -197,9 +199,9 @@ export default {
             border-radius: rem(6px);
         }
     }
-    .icon_zijinmingxi2 {
+    .icon_zijinmingxi {
         color: var(--color);
-        font-size: rem(32px);
+        font-size: rem(38px);
     }
     .totalAmount {
         margin-top: rem(10px);
