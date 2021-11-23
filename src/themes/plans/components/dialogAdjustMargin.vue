@@ -18,7 +18,7 @@
                 </p>
             </div>
             <div class='right' @click='closeHandler'>
-                <i class='icon_icon_close_big'></i>
+                <i class='icon_guanbi'></i>
             </div>
         </div>
 
@@ -218,9 +218,9 @@ export default {
         position: absolute;
         top: 0;
         right: 0;
-        padding: rem(25px);
+        padding:rem(40px) rem(25px) rem(25px) rem(25px);
         color: var(--normalColor);
-        font-size: rem(38px);
+        font-size: rem(28px);
     }
 }
 .dialog-footer {
@@ -249,7 +249,7 @@ export default {
             align-items: center;
             padding: 0 rem(30px);
             //line-height: rem(80px);
-            background-color: var(--primaryAssistColor);
+            background-color: var(--assistColor);
             border-radius: rem(6px);
             .fl {
                 margin: rem(20px) rem(20px) rem(20px) rem(10px);

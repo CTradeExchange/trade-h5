@@ -174,7 +174,7 @@ export default {
             height: 100%;
             padding: rem(45px) rem(30px);
             i {
-                font-size: rem(40px);
+                font-size: rem(28px);
             }
         }
     }

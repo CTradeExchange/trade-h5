@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "25907914",
+      "name": "排序",
+      "font_class": "paixu",
+      "unicode": "e6a1",
+      "unicode_decimal": 59041
+    },
+    {
+      "icon_id": "25907827",
+      "name": "转换",
+      "font_class": "zhuanhuan",
+      "unicode": "e6a0",
+      "unicode_decimal": 59040
+    },
+    {
       "icon_id": "25902231",
       "name": "美国线",
       "font_class": "meiguoxian",
@@ -200,20 +214,6 @@
       "font_class": "zhongjirenzheng",
       "unicode": "e66e",
       "unicode_decimal": 58990
-    },
-    {
-      "icon_id": "23631892",
-      "name": "排序",
-      "font_class": "paixu",
-      "unicode": "e662",
-      "unicode_decimal": 58978
-    },
-    {
-      "icon_id": "23448247",
-      "name": "转换",
-      "font_class": "zhuanhuan",
-      "unicode": "e65d",
-      "unicode_decimal": 58973
     },
     {
       "icon_id": "23220494",

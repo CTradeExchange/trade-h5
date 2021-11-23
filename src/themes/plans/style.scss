@@ -471,13 +471,14 @@ body.light {
             height: 100%;
             padding: rem(45px) rem(30px);
             i {
-                font-size: rem(40px);
+                font-size: rem(28px);
             }
         }
     }
     .dialog-body {
         flex: 1;
         overflow-y: auto;
+        font-size: rem(24px);
         .words {
             color: var(--color);
         }
@@ -487,9 +488,11 @@ body.light {
         .van-button {
             flex: 1;
             height: rem(90px);
-            font-size: rem(34px);
+            font-size: rem(26px);
             border: none;
+            color: var(--contentColor);
             border-radius: 0;
+            background-color: var(--primary);
         }
         .van-button--plain {
             color: #477FD3;

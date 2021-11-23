@@ -126,6 +126,7 @@
                         @click.stop='moreTimeIsOpened = false'
                         @touchmove.stop='moreTimeIsOpened = false'
                     ></div>
+                    <i class='icon_icon_arrow'></i>
                 </div>
 
                 <div class='flex-right'>
@@ -1102,13 +1103,13 @@ export default {
                 display: inline-block;
             }
             .icon_guanyu1 {
-                color: rgb(153, 153, 153);
+                color: var(--normalColor);
             }
         }
         .collectIcon {
             width: rem(40px);
             height: 100%;
-            color: #777;
+            color: var(--normalColor);
             vertical-align: top;
             background-color: var(--contentColor);
             .icon_zixuan11 {
@@ -1309,9 +1310,11 @@ export default {
                 height: rem(60px);
                 .van-tabs__nav--line {
                     padding-bottom: 0;
+                    padding-right: 0;
                 }
                 .van-tabs__line {
                     bottom: 0;
+                    width: auto;
                 }
             }
         }
@@ -1328,18 +1331,7 @@ export default {
             font-size: rem(24px);
             line-height: rem(60px);
             background-color: var(--contentColor);
-            &::after {
-                position: absolute;
-                top: 50%;
-                right: 1px;
-                margin-top: -5px;
-                border: 3px solid;
-                border-color: transparent transparent var(--normalColor) var(--normalColor);
-                -webkit-transform: rotate(-45deg);
-                transform: rotate(-45deg);
-                opacity: 0.8;
-                content: '';
-            }
+
             &.opened {
                 &::after {
                     margin-top: -1px;
@@ -1378,6 +1370,10 @@ export default {
                 height: 100%;
                 opacity: 0;
             }
+            .icon_icon_arrow{
+                font-size: rem(20px);
+                color: var(--minorColor);
+            }
         }
         .loadingIcon {
             display: flex;
@@ -1396,9 +1392,12 @@ export default {
         .study-wrap,
         .kIcon-wrap {
             height: auto;
+
             :deep(.van-dropdown-menu__title) {
                 color: #646566;
                 font-size: rem(24px);
+                    padding-right: 0;
+                    padding-left: rem(28px);
             }
             :deep(.van-dropdown-menu__bar) {
                 width: 100%;
@@ -1438,6 +1437,7 @@ export default {
             color: var(--normalColor);
             vertical-align: middle;
             width: rem(60px);
+            text-align: center;
         }
         .klineTypeRightIcon {
             padding-top: rem(10px);
@@ -1606,6 +1606,7 @@ export default {
             flex-wrap: nowrap;
             padding: rem(20px);
             white-space: nowrap;
+            font-weight: bold;
             .buy {
                 margin-right: rem(20px);
             }

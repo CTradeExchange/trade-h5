@@ -41,6 +41,9 @@ export default {
     width: rem(50px);
     padding:0 rem(6px);
     font-size: rem(28px);
+    &.icon_xianxingtu{
+        font-size: rem(20px);
+    }
 }
 
 </style>
