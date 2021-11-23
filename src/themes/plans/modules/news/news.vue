@@ -771,4 +771,9 @@ export default {
         }
     }
 }
+:deep(.van-checkbox__icon--checked .van-icon) {
+    color: var(--van-white)!important;
+    background-color: var(--primary)!important;
+    border-color: var(--primary)!important;
+}
 </style>
