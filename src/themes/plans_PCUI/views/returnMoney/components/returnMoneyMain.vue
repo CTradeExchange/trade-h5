@@ -241,14 +241,8 @@ export default {
         }
 
         const toRecord = () => {
-            router.push({
-                path: '/record',
-                query: {
-                    accountId: route.query.accountId,
-                    tradeType: state.tradeType,
-                    type: 2
-                }
-            })
+            const routeParent = route.matched[route.matched.length - 2]
+            router.push(routeParent.path + `/record?tradeType=${state.tradeType}&accountId=${route.query.accountId}&type=2`)
         }
 
         onMounted(() => {

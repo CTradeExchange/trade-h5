@@ -4,7 +4,7 @@
             <LayoutTop :back='true' :menu='false' title='' @backEvent='back' />
             <div class='page-wrap'>
                 <Loading :show='loading' />
-                <div v-if='list.length === 0' class='empty-data'>
+                <div v-if='list && list.length === 0' class='empty-data'>
                     <van-empty :description='$t("auth.noRequired")' image='/images/empty.png' />
                 </div>
                 <div v-else>
@@ -31,7 +31,7 @@
                                 <van-button plain round size='small' @click='handleNext(item)'>
                                     <template #default>
                                         <span class='btn-text'>
-                                            {{ item.statusName }}
+                                            {{ kycAuditStatus[item.status] }}
                                         </span>
                                         <van-icon :color='style.color' name='arrow' />
                                     </template>
@@ -52,6 +52,7 @@ import { findAllBizKycList } from '@/api/user'
 import { useStore } from 'vuex'
 import { toRefs, reactive, computed, onBeforeMount } from 'vue'
 import { getArrayObj } from '@/utils/util'
+import { useI18n } from 'vue-i18n'
 
 export default {
     name: 'Authentication',
@@ -63,12 +64,14 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const style = computed(() => store.state.style)
+        const { t, tm } = useI18n({ useScope: 'global' })
         const state = reactive({
             list: [],
             loading: false,
         })
 
         const kycState = computed(() => store.state._user.kycState)
+        const kycAuditStatus = tm('kycAuditStatus')
 
         const getAuthCondition = () => {
             state.loading = true
@@ -123,6 +126,7 @@ export default {
             handleNext,
             back,
             style,
+            kycAuditStatus,
             ...toRefs(state)
         }
     }

@@ -10,14 +10,14 @@
 
         <div class='returnMoneyPop'>
             <div class='container'>
-                <el-select class="currencyBox" v-model='accountId' placeholder='Select' @change='changeCurrency'>
+                <el-select v-model='accountId' class='currencyBox' placeholder='Select' @change='changeCurrency'>
                     <el-option
                         v-for='item in columns'
                         :key='item.accountId'
                         :label='item.currency'
                         :value='item.accountId'
                     />
-                </el-select>  
+                </el-select>
                 <div class='actionBar'>
                     <input v-model='amount' class='input' :placeholder='$t("assets.loanAmount")' type='number' />
                     <a class='all' href='javascript:;' @click='handleAll'>
@@ -114,8 +114,8 @@ export default {
 
         const changeCurrency = val => {
             state.accountId = val
-            columns.value.forEach(el=>{
-                if(el.accountId == val){
+            columns.value.forEach(el => {
+                if (el.accountId == val) {
                     state.curCurrency = el.currency
                 }
             })
@@ -125,7 +125,6 @@ export default {
                 accountId: val
             })
         }
-
 
         const showInfo = (type) => {
             const params = type === 1 ? [account.value.availableLoan] : [state.curCurrency, account.value?.interestProportion || '--']
@@ -180,14 +179,8 @@ export default {
         }
 
         const toRecord = () => {
-            router.push({
-                path: '/record',
-                query: {
-                    accountId: state.accountId,
-                    tradeType: state.tradeType,
-                    type: 1
-                }
-            })
+            const routeParent = route.matched[route.matched.length - 2]
+            router.push(routeParent.path + `/record?tradeType=${state.tradeType}&accountId=${route.query.accountId}&type=1`)
         }
 
         store.dispatch('_user/queryAccountAssetsInfo', {

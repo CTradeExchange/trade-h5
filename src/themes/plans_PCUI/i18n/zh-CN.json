@@ -12,6 +12,7 @@
 	"reInput": "请重新输入",
 	"examineMore": "查看更多",
 	"loadMore": "加载更多",
+    "fee": "手续费",
 	"compLang": {
 		"confirm": "确定",
 		"OK": "确定",
@@ -669,6 +670,12 @@
 		"6": "周六",
 		"7": "周日"
 	},
+    "kycAuditStatus": {
+        "0": "未认证",
+        "1": "待审核",
+        "2": "审核通过",
+        "3": "审核不通过"
+    },
 	"assets": {
         "accountAssets": "账户资产",
 		"asset": "资产",
