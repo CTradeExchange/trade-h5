@@ -67,7 +67,7 @@
         />
 
         <div class='dialog-footer'>
-            <van-button color='#477FD3' :loading='loading' @click='submitHandler'>
+            <van-button :color='primaryColor' :loading='loading' @click='submitHandler'>
                 {{ $t('save') }}
             </van-button>
         </div>
@@ -81,6 +81,7 @@ import { updateOrder, updatePboOrder } from '@/api/trade'
 import { equalTo, mul, pow, minus } from '@/utils/calculation'
 import { useI18n } from 'vue-i18n'
 import { Toast } from 'vant'
+import Base from '@/store/modules/base'
 import { useStore } from 'vuex'
 export default {
     components: {
@@ -101,7 +102,7 @@ export default {
 
         // 获取账户
         const account = computed(() => store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(props.data.tradeType)))
-
+        const primaryColor = computed(() => Base.state.wpCompanyInfo.themeColor)
         // 客户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
 
@@ -190,6 +191,7 @@ export default {
             open,
             closeHandler,
             submitHandler,
+            primaryColor
         }
     }
 }
