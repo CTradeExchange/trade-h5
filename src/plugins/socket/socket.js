@@ -1,4 +1,4 @@
-import { msgService, tradeService } from '@/config'
+import { tradeService } from '@/config'
 import CreateSocket from './createSocket'
 import QuoteSocketEvent from './quoteSocketEvent'
 import MsgSocketEvent from './msgSocketEvent'
@@ -40,6 +40,7 @@ export const setQuoteService = () => {
 export default {
     install: (app, { $store, $router } = {}) => {
         const quoteService = getQuoteService()
+        const msgService = window['msgService']
         const quoteWS = CreateSocket(quoteService)
         const msgWS = CreateSocket(msgService)
         const tradeWS = CreateSocket(tradeService)

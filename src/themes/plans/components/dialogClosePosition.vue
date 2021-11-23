@@ -20,7 +20,7 @@
                 </p>
             </div>
             <div class='right' @click='closeHandler'>
-                <i class='icon_icon_close_big'></i>
+                <i class='icon_guanbi'></i>
             </div>
         </div>
         <div class='dialog-body'>
@@ -51,7 +51,7 @@
                         </div>
                     </div> -->
                     <div>
-                        <div class='name'>
+                        <div class='name alignRight'>
                             {{ $t('trade.currentPrice') }}
                         </div>
                         <div :class='[Number(data.direction) === 1 ? product.sell_color : product.buy_color]'>
@@ -331,9 +331,9 @@ export default {
         position: absolute;
         top: 0;
         right: 0;
-        padding: rem(25px);
+        padding:rem(40px) rem(25px) rem(25px) rem(25px);
         color: var(--normalColor);
-        font-size: rem(38px);
+        font-size: rem(28px);
     }
 }
 .pcBtns {
@@ -397,14 +397,10 @@ export default {
             .name {
                 padding-bottom: rem(20px);
                 color: #999;
-                font-size: rem(20px);
+                font-size: rem(24px);
             }
             .open-price {
                 color: var(--color);
-            }
-            .left,
-            .right {
-                font-size: rem(20px);
             }
             .left {
                 width: rem(300px);

@@ -79,6 +79,7 @@ export default {
     min-height: rem(600px);
     margin-top: rem(10px);
     margin-bottom: rem(30px);
+    padding-bottom: rem(90px);
     background: var(--contentColor);
     .tabs {
         display: flex;

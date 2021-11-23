@@ -2,7 +2,7 @@
     <div class='top'>
         <slot name='left'>
             <a class='back' href='javascript:;' @click='back'>
-                <span class='icon_icon_back'></span>
+                <span class='icon_icon_back1'></span>
             </a>
         </slot>
         <slot name='center'>
@@ -75,7 +75,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     height: rem(90px);
-    font-size: rem(32px);
+    font-size: rem(34px);
     background: var(--contentColor);
     .back {
         z-index: 1;
