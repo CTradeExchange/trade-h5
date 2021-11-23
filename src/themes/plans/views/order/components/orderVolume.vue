@@ -90,6 +90,7 @@ export default {
             emit('change', newval)
         }
         const onBlur = (e) => {
+            placeText.value = placeholder.value
             let value = e.target.value
             if (value === props.modelValue) return false
             const digits = props.product.numberDigits
