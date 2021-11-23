@@ -4,14 +4,6 @@
             <el-col class='btns' :span='24'>
                 <el-button-group>
                     <el-button
-                        icon='el-icon-s-promotion'
-                        :loading='submitLoading'
-                        type='primary'
-                        @click='submit'
-                    >
-                        保存
-                    </el-button>
-                    <el-button
                         icon='el-icon-upload'
                         :loading='publishLoading'
                         type='primary'
@@ -32,7 +24,7 @@
         </el-row>
         <el-form ref='form' label-width='120px' :model='form'>
             <el-tabs type='border-card'>
-                <el-tab-pane class='tab' label='AIP设置'>
+                <el-tab-pane class='tab' label='API设置'>
                     <el-row class='row'>
                         <el-col :span='12' :xs='24'>
                             <el-form-item label='apiKey'>
@@ -491,10 +483,7 @@ export default {
                             return
                         }
                         resolve(true)
-                        this.$message({
-                            message: '保存成功',
-                            type: 'success'
-                        })
+
                         this.getPageConfig()
                     })
                     .catch(error => {

@@ -11,7 +11,7 @@
                             {{ $t('assets.riskLevel') }} {{ assetsInfo?.closeProportion }}
                         </span>
                     </div>
-                    <i class='icon_zijinmingxi2' @click="$router.push({ name:'Record',query:{ tradeType:tradeType, accountId:assetsInfo.accountId } })"></i>
+                    <i class='icon_zijinmingxi' @click="$router.push({ name:'Record',query:{ tradeType:tradeType, accountId:assetsInfo.accountId } })"></i>
                 </div>
                 <div class='totalAmount'>
                     {{ assetsInfo?.totalBalance }}
@@ -197,7 +197,7 @@ export default {
             border-radius: rem(6px);
         }
     }
-    .icon_zijinmingxi2 {
+    .icon_zijinmingxi {
         color: var(--color);
         font-size: rem(32px);
     }

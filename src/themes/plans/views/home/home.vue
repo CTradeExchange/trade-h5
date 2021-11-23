@@ -1,4 +1,5 @@
 <template>
+    <floatComp />
     <div id='homeContent' ref='homeContent' class='home' :class='{ hasNav: $hasNav }'>
         <PageComp :data='pageModules' />
     </div>
@@ -8,8 +9,14 @@
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { onActivated, computed, ref } from 'vue'
 import { useStore } from 'vuex'
+import floatComp from '@plans/modules/floatComp/floatComp.vue'
+import ProfitLossBar from '@plans/modules/profitLossBar/profitLossBar'
 export default {
     name: 'Home',
+    components: {
+        floatComp,
+        ProfitLossBar
+    },
     setup () {
         const store = useStore()
         const pageModules = ref([])
