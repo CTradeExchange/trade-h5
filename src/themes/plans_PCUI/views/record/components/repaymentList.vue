@@ -70,7 +70,7 @@ export default {
 
         const params = computed(() => {
             return {
-                accountId: Number(route.query.accountId),
+                accountId: Number(route.query.accountId) || null,
                 liabilitiesType: 2,
                 ...requestParams.value
             }

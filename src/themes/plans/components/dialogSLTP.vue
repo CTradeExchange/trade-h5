@@ -81,6 +81,7 @@ import { updateOrder, updatePboOrder } from '@/api/trade'
 import { equalTo, mul, pow, minus } from '@/utils/calculation'
 import { useI18n } from 'vue-i18n'
 import { Toast } from 'vant'
+import Base from '@/store/modules/base'
 import { useStore } from 'vuex'
 export default {
     components: {
@@ -101,7 +102,6 @@ export default {
 
         // 获取账户
         const account = computed(() => store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(props.data.tradeType)))
-
         // 客户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
 
@@ -189,7 +189,7 @@ export default {
             closed,
             open,
             closeHandler,
-            submitHandler,
+            submitHandler
         }
     }
 }
@@ -233,7 +233,7 @@ export default {
     }
 }
 .modifyProfitLoss {
-    margin: 0 rem(40px) rem(30px) rem(35px);
+    margin: 0 rem(30px) rem(30px) rem(30px);
 }
 .m-dialogZyzs {
     .lot {
@@ -242,7 +242,7 @@ export default {
         text-align: center;
     }
     .dialog-body {
-        padding-bottom: rem(20px);
+        height: rem(300px);
         overflow-y: visible;
         :deep(.layout-1) {
             padding-bottom: rem(30px);
@@ -253,17 +253,19 @@ export default {
         .inputNumber {
             position: relative;
             display: flex;
+            line-height: 1.45;
             align-items: center;
             justify-content: space-between;
-            margin: 0 rem(40px) rem(20px) rem(35px);
+            margin: 0 rem(30px) rem(20px) rem(30px);
+            font-size: rem(28px);
             .item-block {
                 &:last-child {
                     text-align: right;
                 }
             }
             .name {
-                padding-bottom: rem(20px);
                 color: var(--minorColor);
+                font-size: rem(24px);
             }
             .open-price {
                 color: var(--color);
@@ -299,7 +301,6 @@ export default {
 <style lang="scss">
 @import '@/sass/mixin.scss';
 .m-dialogZyzs {
-    height: rem(630px);
     overflow-y: visible;
     background-color: var(--contentColor);
 }

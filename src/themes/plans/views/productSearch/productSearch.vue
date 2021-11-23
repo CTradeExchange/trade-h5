@@ -228,7 +228,7 @@ export default {
                     animation: heartBeat 1.3s ease-in-out forwards;
                 }
                 .activeText{
-                    color:#477FD3;
+                    color: var(--primary);
                 }
             }
         }

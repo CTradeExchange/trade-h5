@@ -18,7 +18,7 @@ import { computed, unref, watch, onUnmounted, ref } from 'vue'
 import { useStore } from 'vuex'
 import customTable from './customTable'
 import { getAssetColumns } from './tableConfig'
-import { MsgSocket, QuoteSocket } from '@/plugins/socket/socket'
+import { QuoteSocket } from '@/plugins/socket/socket'
 import AdjustMargin from '@planspc/views/assets/components/adjust-margin.vue'
 import ClosePosition from '@planspc/views/assets/components/close-position.vue'
 import Sltp from '@planspc/views/assets/components/sltp.vue'
@@ -87,15 +87,8 @@ const initData = () => {
     } else if ([3, 5, 9].includes(val)) {
         store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: val })
     }
-    // 订阅资产数据
-    MsgSocket.subscribeAsset(val)
 }
 
-onUnmounted(() => {
-    // 取消订阅
-    QuoteSocket.cancel_subscribe()
-    MsgSocket.cancelSubscribeAsset()
-})
 watch(() => props.tradeType, () => {
     if (customerInfo.value) initData()
 }, { immediate: true })

@@ -36,8 +36,8 @@ export default {
             emit('update:modelValue', data)
         }
         // 16进制颜色透明度
-        const fallColor = style.value.fallColor + '0D'
-        const riseColor = style.value.riseColor + '0D'
+        const fallColor = style.value.fallColor + '33'
+        const riseColor = style.value.riseColor + '33'
         return {
             setDirection,
             orderHandicapVisible,
@@ -72,13 +72,14 @@ export default {
         padding: rem(10px) rem(20px);
         color: var(--color);
         line-height: rem(60px);
-        background: var(--assistColor);
+        //background: var(--assistColor);
         border-radius: rem(6px);
         font-weight: bold;
         font-size: rem(28px);
         &.sell {
             margin-left: 5px;
-            background: v-bind(fallColor);
+            border: solid rem(2px) v-bind(fallColor);
+            color: var(--fallColor);
             &.active {
                 opacity: 1;
                 color: #FFF;
@@ -87,7 +88,8 @@ export default {
         }
         &.buy {
             margin-right: 5px;
-            background: v-bind(riseColor);
+             border: solid rem(2px) v-bind(riseColor);
+            color: var(--riseColor);
             &.active {
                 opacity: 1;
                 color: #FFF;

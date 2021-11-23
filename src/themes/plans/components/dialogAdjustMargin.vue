@@ -225,11 +225,12 @@ export default {
 }
 .dialog-footer {
     width: 100%;
+    padding: rem(30px);
     .pcHandler {
         color: #FFF;
         background: var(--primary);
         border: none;
-        border-radius: 0;
+        border-radius: rem(6px);
     }
 }
 .m-dialogAdjust {
@@ -279,6 +280,11 @@ export default {
         .desc {
             margin-top: rem(20px);
             color: var(--minorColor);
+        }
+    }
+    .dialog-footer{
+        .van-button{
+            font-size: rem(28px)
         }
     }
 }
