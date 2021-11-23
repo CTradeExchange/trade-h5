@@ -129,7 +129,7 @@ const addOptional = ({ id: symbolId, tradeType = props.tradeType }) => {
     .el-autocomplete-suggestion{
         --el-text-color-regular: var(--color);
         li:hover{
-            --el-text-color-regular: var(--contentColor);
+            background-color: var(--bgColor)
         }
         .item{
             display: flex;

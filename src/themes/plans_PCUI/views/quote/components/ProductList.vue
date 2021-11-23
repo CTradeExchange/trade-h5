@@ -4,12 +4,22 @@
             <span class='cell name'>
                 {{ $t('trade.name') }}
             </span>
-            <span class='cell price'>
-                {{ $t('trade.newPrice') }}
-            </span>
-            <span class='cell upDownAmount'>
-                {{ $t('trade.changePrice') }}
-            </span>
+            <template v-if='[1,2].includes(Number(props.tradeType))'>
+                <span class='cell price'>
+                    {{ $t('trade.sellPrice') }}
+                </span>
+                <span class='cell upDownAmount'>
+                    {{ $t('trade.buyPrice') }}
+                </span>
+            </template>
+            <template v-if='[3,5].includes(Number(props.tradeType))'>
+                <span class='cell price'>
+                    {{ $t('trade.newPrice') }}
+                </span>
+                <span class='cell upDownAmount'>
+                    {{ $t('trade.changePrice') }}
+                </span>
+            </template>
             <span class='cell upDownWidth'>
                 {{ $t('trade.upDownWidth') }}
             </span>
@@ -30,12 +40,22 @@
                     <i v-else class='icon icon_zixuan1 star' @click.stop='addOptional(item)'></i>
                     {{ item.symbolCode }}
                 </span>
-                <span class='price'>
-                    {{ getVal(item.symbolKey, 'price') }}
-                </span>
-                <span class='upDownAmount'>
-                    {{ getVal(item.symbolKey, 'upDownAmount') }}
-                </span>
+                <template v-if='[1,2].includes(Number(props.tradeType))'>
+                    <span class='price'>
+                        {{ getVal(item.symbolKey, 'sell_price') }}
+                    </span>
+                    <span class='upDownAmount'>
+                        {{ getVal(item.symbolKey, 'buy_price') }}
+                    </span>
+                </template>
+                <template v-if='[3,5].includes(Number(props.tradeType))'>
+                    <span class='price'>
+                        {{ getVal(item.symbolKey, 'price') }}
+                    </span>
+                    <span class='upDownAmount'>
+                        {{ getVal(item.symbolKey, 'upDownAmount') }}
+                    </span>
+                </template>
                 <span class='upDownWidth' :class='[productMap[item.symbolKey]?.upDownColor]'>
                     {{ getVal(item.symbolKey, 'upDownWidth') }}
                 </span>

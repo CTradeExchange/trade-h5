@@ -45,8 +45,8 @@ export const getPendingColumns = tradeType => {
     }
 
     const expireTypeMap = {
-        1: t('trade.expire1'),
-        2: t('trade.expire2'),
+        1: t('trade.expireType1'),
+        2: t('trade.expireType2'),
     }
 
     const cancelOrder = (row) => {
@@ -130,9 +130,11 @@ export const getPendingColumns = tradeType => {
                 </span>
             },
             {
-                name: '委托量',
+                name: t('trade.pendingUnit') + ' (' + t('trade.volumeUnit') + ')',
+                prop: 'requestNum',
                 align: 'right',
-                formatter: row => row.requestNum + `(${row.numberStatisticMode === 2 ? row.accountCurrency : '手'})`
+                width: 120,
+                // formatter: row => row.requestNum + `(${row.numberStatisticMode === 2 ? row.accountCurrency : '手'})`
             },
             { name: t('trade.trustPrice'), prop: 'requestPrice', align: 'right', width: 100 },
             {
@@ -159,7 +161,7 @@ export const getPendingColumns = tradeType => {
                 width: 180,
                 formatter: row => expireTypeMap[row.expireType]
             },
-            { name: t('trade.pendingTime'), align: 'right', width: 180, formatter: row => formatTime(row.pendingTime) },
+            { name: t('trade.pendingTime'), align: 'right', width: 180, formatter: row => formatTime(row.orderTime) },
             { name: t('trade.pendingNo'), prop: 'id', align: 'right', width: 200 },
             {
                 name: t('c.handle'),
@@ -385,29 +387,30 @@ export const getTransactionColumns = (tradeType) => {
                     return rawResponse.bizTypeText[row.bizType]
                 }
             },
+            {
+                name: t('trade.pendingUnit') + ' (' + t('trade.volumeUnit') + ')',
+                prop: 'requestNum',
+                align: 'right',
+                width: 100
+            },
             // {
-            //     name: t('trade.pendingUnit') + ' (' + t('trade.volumeUnit') + ')',
-            //     prop: 'requestNum',
+            //     name: '按额/按量',
             //     align: 'right',
-            //     width: 100
+            //     width: 120,
+            //     formatter: row => numberStatisticModeMap[row.numberStatisticMode]
+            // },
+            // {
+            //     name: '委托量/额',
+            //     align: 'right',
+            //     width: 120,
+            //     formatter: row => row.requestNum + (row.numberStatisticMode === 2 ? row.accountCurrency : '手')
             // },
             {
-                name: '按额/按量',
-                align: 'right',
-                width: 120,
-                formatter: row => numberStatisticModeMap[row.numberStatisticMode]
-            },
-            {
-                name: '委托量/额',
-                align: 'right',
-                width: 120,
-                formatter: row => row.requestNum + (row.numberStatisticMode === 2 ? row.accountCurrency : '手')
-            },
-            {
-                name: t('trade.dealVolume'),
+                name: t('trade.dealVolume') + ' (' + t('trade.volumeUnit') + ')',
+                prop: 'executeNum',
                 align: 'right',
                 width: 100,
-                formatter: row => formatExecuteNum(row.executeNum, tradeType, row)
+                // formatter: row => formatExecuteNum(row.executeNum, tradeType, row)
             },
             {
                 name: t('trade.trustPrice'),
@@ -565,7 +568,7 @@ export const getTransactionColumns = (tradeType) => {
             },
 
             {
-                name: t('trade.dealVolume'),
+                name: '成交量/额',
                 align: 'right',
                 width: 150,
                 formatter: row => formatExecuteNum(row.executeNum, tradeType, row)
@@ -590,7 +593,7 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.fee'),
                 align: 'right',
                 width: 150,
-                formatter: row => row.commission + row.outCurrency
+                formatter: row => row.commission + row.inCurrency
             },
             { name: t('trade.pendingNo'), prop: 'dealId', align: 'right' },
         ],
@@ -805,10 +808,10 @@ export const getAssetColumns = (tradeType) => {
                         const refs = onGetComponentRefs()
                         return (
                             <>
-                                <span className='link' onclick={openSltp.bind(null, row, refs.closePosition)} type='text'>
+                                <span className='link' onclick={openSltp.bind(null, row, refs.sltp)} type='text'>
                                     { t('trade.tackStopSetup') }
                                 </span>
-                                <span className='link' onclick={openClosePosition.bind(null, row, refs.sltp)} type='text'>
+                                <span className='link' onclick={openClosePosition.bind(null, row, refs.closePosition)} type='text'>
                                     { t('trade.closed') }
                                 </span>
                             </>

@@ -11,6 +11,7 @@ export default function (productList) {
     const product = computed(() => store.getters.productActived)
     const productListEl = ref(null)
     const subscribList = ref([])
+    const time = Date.now()
 
     // 订阅当前屏和上半屏、下半屏的产品报价，给上层组件使用
     const calcSubscribeProducts = () => {
@@ -32,7 +33,7 @@ export default function (productList) {
         subscribList.value = calcSubscribeProducts()
         // 把当前路由的产品加入订阅列表
         subscribList.value.unshift(product.value?.symbolKey)
-        if (subscribList.value.length > 0) QuoteSocket.send_subscribe(subscribList.value)
+        if (subscribList.value.length > 0) QuoteSocket.add_subscribe({ moduleId: 'subscribeProducts_' + time, symbolKeys: subscribList.value })
     })
 
     watch(

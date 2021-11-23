@@ -18,7 +18,7 @@
                     <i v-else class='icon icon_zixuan1' @click.stop='addOptional(item)'></i>
                     {{ item.symbolName }}
                 </span>
-                <span class='price'>
+                <span class='price' :class='[productMap[item.symbolKey]?.upDownColor]'>
                     {{ productMap[item.symbolKey]?.cur_price || '- -' }}
                 </span>
                 <span class='change' :class='[productMap[item.symbolKey]?.upDownColor]'>
