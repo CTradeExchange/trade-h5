@@ -319,7 +319,8 @@ export const getPendingColumns = tradeType => {
                 name: '委托量/额',
                 prop: 'requestNum',
                 align: 'right',
-                formatter: row => row.requestNum + (row.numberStatisticMode === 2 ? row.outCurrency : '手')
+                // formatter: row => row.requestNum + (row.numberStatisticMode === 2 ? row.outCurrency : '手')
+                formatter: row => row.requestNum + row.outCurrency
             },
             { name: t('trade.trustPrice'), prop: 'requestPrice', align: 'right' },
             {
@@ -357,7 +358,7 @@ export const getTransactionColumns = (tradeType) => {
 
     // 判断是否是平仓
     const isCloseType = (bizType) => {
-        if ([4, 5, 6, 7, 8].includes(Number(bizType))) {
+        if ([2, 4, 5, 6, 7, 8].includes(Number(bizType))) {
             return true
         } else {
             return false
@@ -631,15 +632,18 @@ export const getTransactionColumns = (tradeType) => {
                 name: '委托量/额',
                 prop: 'requestNum',
                 align: 'right',
-                width: 150,
-                formatter: row => row.requestNum + `(${row.numberStatisticMode === 2 ? row.accountCurrency : '手'})`
+                width: 170,
+                // formatter: row => row.requestNum + `(${row.numberStatisticMode === 2 ? row.accountCurrency : '手'})`
+                formatter: row => row.requestNum + row.outCurrency
+
             },
 
             {
-                name: t('trade.dealVolume'),
+                name: '成交量/额',
                 align: 'right',
-                width: 100,
-                formatter: row => formatExecuteNum(row.executeNum, tradeType, row)
+                width: 150,
+                // formatter: row => formatExecuteNum(row.executeNum, tradeType, row)
+                formatter: row => row.executeNum + row.outCurrency
             },
 
             {
@@ -678,6 +682,8 @@ export const getAssetColumns = (tradeType) => {
     // 止盈止损弹窗
     const openSltp = (row, sltp) => {
         // store.commit('_quote/Update_productActivedID', row.symbolId + '_' + row.tradeType)
+        store.dispatch('_quote/querySymbolInfo', row.symbolId)
+        store.commit('Update_stopLossPprofitProductID', row.symbolId + '_' + row.tradeType)
         store.commit('_trade/Update_modifyPositionId', row.positionId + '_' + row.tradeType)
         unref(sltp).open(row)
     }
@@ -911,7 +917,7 @@ export const getAssetColumns = (tradeType) => {
             { name: t('trade.frozen'), prop: 'frozen', align: 'right' },
             { name: t('trade.loan'), prop: 'liabilitiesPrincipal', align: 'right' },
             { name: t('trade.swap_2'), prop: 'interest', align: 'right' },
-            { name: t('assets.maxLoan'), prop: 'availableLoan', align: 'right' },
+            // { name: t('assets.maxLoan'), prop: 'availableLoan', align: 'right' },
             { name: t('trade.carry'), prop: 'withdrawAmount', align: 'right' },
             {
                 name: t('c.handle'),
