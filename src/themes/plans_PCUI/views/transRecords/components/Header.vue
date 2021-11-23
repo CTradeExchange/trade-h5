@@ -75,6 +75,7 @@ import { useI18n } from 'vue-i18n'
 import PlansType from '../../quote/components/PlansType'
 import ProductSearch from '@planspc/views/order/pages/productSearch.vue'
 import ProductList from './ProductList'
+import { useRoute, useRouter } from 'vue-router'
 
 const props = defineProps({
     params: {
@@ -84,6 +85,8 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:params'])
 const { t } = useI18n({ useScope: 'global' })
+const route = useRoute()
+const router = useRouter()
 const filterList = {
     time: [
         { text: t('common.allDate'), value: 0, executeStartTime: -1 },
@@ -125,7 +128,7 @@ const orderTypeList = computed(() => {
     return []
 })
 
-const tradeType = ref('')
+const tradeType = ref(route.query.tradeType || '')
 const timeValue = ref(filterList.time[0].value)
 const datePickerRef = ref(null)
 const timeRange = ref([])
@@ -147,6 +150,14 @@ onMounted(() => {
         direction,
         orderType,
         symbolId
+    })
+
+    watch(() => tradeType.value, () => {
+        if (route.query.tradeType !== tradeType.value) {
+            router.replace({
+                query: {}
+            })
+        }
     })
 })
 

@@ -6,7 +6,7 @@
                 <el-tab-pane :label='$t("trade.dealList")' name='1' />
                 <el-tab-pane :label='[1,2].includes(Number(tradeType)) ? $t("trade.position") : $t("trade.asset") ' name='2' />
             </el-tabs>
-            <router-link v-if='activeName === "1"' class='link' :to="{ name: 'TransRecords' }">
+            <router-link v-if='activeName === "1"' class='link' :to="{ name: 'TransRecords', query: { tradeType } }">
                 {{ $t('trade.allTransaction') }}
             </router-link>
         </div>
