@@ -488,11 +488,13 @@ body.light {
         .van-button {
             flex: 1;
             height: rem(90px);
-            font-size: rem(26px);
+            font-size: rem(28px);
             border: none;
             color: var(--contentColor);
             border-radius: 0;
             background-color: var(--primary);
+            border-radius: rem(6px);
+            margin: rem(20px) rem(30px)  rem(30px) rem(30px);
         }
         .van-button--plain {
             color: #477FD3;
