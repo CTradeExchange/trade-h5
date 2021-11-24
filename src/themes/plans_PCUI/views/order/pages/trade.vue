@@ -359,11 +359,16 @@ export default {
         // 获取账户信息
         const queryAccountInfo = () => {
             if ([1, 2].includes(product.value?.tradeType)) return
-            const proCurrency = state.submitType === 'buy' ? product.value?.profitCurrency : product.value?.baseCurrency
-            const curAccount = customerInfo.value?.accountList?.find(({ currency, tradeType }) => (currency === proCurrency && tradeType === product.value.tradeType))
-            if (curAccount) {
-                store.dispatch('_user/queryAccountAssetsInfo', { accountId: curAccount.accountId, tradeType: product.value?.tradeType })
-            }
+            const proCurrency = product.value?.profitCurrency
+            const baseCurrency = product.value?.baseCurrency
+            const curProAccount = customerInfo.value?.accountList?.find(({ currency, tradeType }) => (currency === proCurrency && tradeType === product.value.tradeType))
+            const curBaseCurrency = customerInfo.value?.accountList?.find(({ currency, tradeType }) => (currency === baseCurrency && tradeType === product.value.tradeType))
+            if (curProAccount) {
+                store.dispatch('_user/queryAccountAssetsInfo', { accountId: curProAccount.accountId, tradeType: product.value?.tradeType })
+            } else Toast(t('trade.nullAssets', [proCurrency]))
+            if (curBaseCurrency) {
+                store.dispatch('_user/queryAccountAssetsInfo', { accountId: curBaseCurrency.accountId, tradeType: product.value?.tradeType })
+            } else Toast(t('trade.nullAssets', [baseCurrency]))
         }
 
         // 切换订单类型

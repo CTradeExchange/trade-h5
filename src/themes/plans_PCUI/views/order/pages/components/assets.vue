@@ -11,7 +11,7 @@
             </van-col>
             <van-col v-else-if='Number(product.tradeType) === 2' class='balance'>
                 {{ accountTradeType2?.availableMargin }}
-                {{ account.currency }}
+                {{ account[direction].currency }}
                 <router-link :to='$route.path + "/transfer?tradeType="+ product.tradeType'>
                     {{ $t('trade.transfer') }}
                 </router-link>
@@ -50,7 +50,7 @@
                     {{ $t('trade.availableLoanAgent') }}
                     <van-icon class='questionIcon' name='question-o' @click='loanTradeType9=true' />
                 </van-col>
-                <van-col>{{ account.availableLoan }} {{ account.currency }}</van-col>
+                <van-col>{{ account[direction]?.availableLoan }} {{ account[direction]?.currency }}</van-col>
             </van-row>
         </div>
 
@@ -96,7 +96,7 @@ export default {
         const maxBorrow = computed(() => {
             const assetsCurrency = store.state._user.assetsInfo?.currency
             if (props.product.tradeType === 9) return props.product.totalCredit + assetsCurrency // abcc玩法显示总授信
-            const accountMapKey = `${props.product.tradeType}_${props.account.currency}`
+            const accountMapKey = `${props.product.tradeType}_${props.account[props.direction].currency}`
             const assetsId = accountMap?.value[accountMapKey]?.assetsId
             if (props.product.borrowLimitList) {
                 const borrowLimit = props.product?.borrowLimitList.find(item => Number(item.assetsId) === Number(assetsId))?.value
@@ -114,7 +114,7 @@ export default {
                 amount = props.volume
             }
             if (amount === '') amount = 0
-            return toFixed(amount, props.account.digits)
+            return toFixed(amount, props.account[props.direction].digits)
         })
 
         return {

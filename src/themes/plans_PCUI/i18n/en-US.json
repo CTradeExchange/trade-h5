@@ -562,7 +562,7 @@
 		"volumeError": "Order volume is incorrect",
 		"pendingPriceError": "Order price is incorrect",
 		"handicap": "Quote",
-		"nullAssets": "No such asset account",
+		"nullAssets": "No such {0} asset account",
 		"yi": "Use",
 		"huan": "Repay",
 		"daihuan": "Outstanding",
