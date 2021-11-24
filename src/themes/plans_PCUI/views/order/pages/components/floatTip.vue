@@ -16,7 +16,7 @@ export default {
 @import '~@/sass/mixin.scss';
 .floatTip {
     position: absolute;
-    top: 0;
+    top: -14px;
     left: 0;
     width: 100%;
     height: 30px;
