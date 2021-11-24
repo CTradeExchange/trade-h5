@@ -5,32 +5,31 @@
 
         <div class='empty'></div>
         <div class='module-form'>
-            
             <div class='select'>
                 <label>{{ $t('withdrawCoin.coinName') }}</label>
                 <div class='option'>
-                    <el-select class="currencyBox" v-model='coinKind' placeholder='Select' @change='selectCoinKind'>
+                    <el-select v-model='coinKind' class='currencyBox' placeholder='Select' @change='selectCoinKind'>
                         <el-option
                             v-for='item in coinKindList'
                             :key='item.name'
                             :label='item.name'
                             :value='item.name'
                         />
-                    </el-select> 
+                    </el-select>
                 </div>
             </div>
 
             <div class='select'>
                 <label>{{ $t('withdrawCoin.chainName') }}</label>
                 <div class='option'>
-                    <el-select class="currencyBox" v-model='chainName' placeholder='Select' @change='selectChainName'>
+                    <el-select v-model='chainName' class='currencyBox' placeholder='Select' @change='selectChainName'>
                         <el-option
                             v-for='item in chainNameList'
                             :key='item.name'
                             :label='item.name'
                             :value='item.name'
                         />
-                    </el-select> 
+                    </el-select>
                 </div>
             </div>
 
@@ -505,7 +504,7 @@ export default {
                         message: Number(res.data) === 2 ? t('withdraw.kycMsg_1') : t('withdraw.kycMsg_2'),
                     }).then(() => {
                         router.replace({
-                            name: 'Authentication',
+                            path: '/assets/authentication',
                             query: { businessCode: 'withdraw' }
                         })
                     })
@@ -567,7 +566,7 @@ export default {
                         state.allList = data
                         state.coinKind = coinKindList[0].name
                         state.coinKindList = coinKindList
-                        console.log("coinKindList",state.coinKindList)
+                        console.log('coinKindList', state.coinKindList)
                         // 根据提币币种获取筛选链名称
                         filterChainName()
                     }

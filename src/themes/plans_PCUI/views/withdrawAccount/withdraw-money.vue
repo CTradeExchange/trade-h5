@@ -489,7 +489,7 @@ export default {
                         message: Number(res.data) === 2 ? t('withdraw.kycMsg_1') : t('withdraw.kycMsg_2'),
                     }).then(() => {
                         router.replace({
-                            name: 'Authentication',
+                            path: '/assets/authentication',
                             query: {
                                 businessCode: 'withdraw'
                             }
