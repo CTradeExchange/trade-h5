@@ -264,8 +264,8 @@ class SocketEvent {
             })
         }
 
-        // kyc审核通过刷新客户信息
-        if (bizType === 'AUDIT_CUSTOMER_SUCCESS') {
+        // kyc审核通过或失败刷新客户信息
+        if (['AUDIT_CUSTOMER_SUCCESS', 'AUDIT_CUSTOMER_REFUSE'].includes(bizType)) {
             store.dispatch('_user/findCustomerInfo', false)
             store.dispatch('_user/findAllBizKycList')
         }

@@ -340,6 +340,7 @@ export default {
                     .van-icon-arrow{
                         position: absolute;
                         right: 20px;
+                        pointer-events: none;
                     }
                 }
             }
@@ -380,7 +381,8 @@ export default {
             }
             .van-icon-arrow{
                 position: absolute;
-                right: 10px;
+                right: 20px;
+                pointer-events: none;
             }
         }
         .tip {
@@ -396,6 +398,7 @@ export default {
         }
         :deep(.el-input__inner){
             border: 0;
+            width: 100%;
         }
         --el-disabled-border-base: transparent;
         --el-disabled-fill-base: transparent;

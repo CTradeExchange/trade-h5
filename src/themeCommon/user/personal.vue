@@ -1,5 +1,5 @@
 <template>
-    <Top back show-center />
+    <Top show-center @back='back' />
     <div class='page-wrap'>
         <van-cell-group>
             <van-cell is-link :title='$t("cRoute.authentication")' to='/authentication' />
@@ -20,7 +20,7 @@ export default {
     setup (props) {
         const router = useRouter()
         const back = () => {
-            router.replace('/quote')
+            router.replace('/mine')
         }
         return {
             back
