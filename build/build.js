@@ -36,7 +36,7 @@ async function init () {
             name: 'theme',
             message: '请选择构建主题',
             choices: themes,
-            when: (answers) => answers.buildType !== 'cats-upload-admin',
+            // when: (answers) => answers.buildType !== 'cats-upload-admin',
             default: 'false',
         },
     ]

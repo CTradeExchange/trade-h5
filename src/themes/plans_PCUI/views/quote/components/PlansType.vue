@@ -13,11 +13,17 @@ import { ElTabPane, ElTabs } from 'element-plus'
 
 const store = useStore()
 const emit = defineEmits(['update:modelValue'])
+const props = defineProps({
+    modelValue: {
+        type: [String, Number],
+        default: ''
+    },
+})
 
 // 玩法列表
 const isWallet = store.state._base.wpCompanyInfo.isWallet
 const plansList = computed(() => store.state._base.plans.filter(e => !(e.tradeType === '5' && isWallet)))
-const activePlans = ref(String(plansList.value[0]?.id))
+const activePlans = ref(String(props.modelValue || plansList.value[0]?.id))
 emit('update:modelValue', unref(activePlans))
 
 const handleClick = (val) => {

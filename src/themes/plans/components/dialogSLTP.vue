@@ -81,6 +81,7 @@ import { updateOrder, updatePboOrder } from '@/api/trade'
 import { equalTo, mul, pow, minus } from '@/utils/calculation'
 import { useI18n } from 'vue-i18n'
 import { Toast } from 'vant'
+import Base from '@/store/modules/base'
 import { useStore } from 'vuex'
 export default {
     components: {
@@ -101,7 +102,6 @@ export default {
 
         // 获取账户
         const account = computed(() => store.state._user.customerInfo.accountList.find(item => Number(item.tradeType) === Number(props.data.tradeType)))
-
         // 客户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
 
@@ -189,7 +189,7 @@ export default {
             closed,
             open,
             closeHandler,
-            submitHandler,
+            submitHandler
         }
     }
 }

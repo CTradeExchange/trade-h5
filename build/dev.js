@@ -27,28 +27,6 @@ async function init () {
     const questions = [
         {
             type: 'list',
-            name: 'h5Environment',
-            message: '请选择调试环境：',
-            choices: ['uat', 'pre', 'other'],
-            default: 'uat',
-        },
-        {
-            type: 'list',
-            name: 'h5URL',
-            message: '请选择WP地址：',
-            when: answers => answers.h5Environment !== 'other',
-            choices: answers => answers.h5Environment === 'uat' ? uat : pre,
-            default: '',
-        },
-        {
-            type: 'input',
-            name: 'h5URL_input',
-            message: '请输入WP H5地址：',
-            when: answers => answers.h5Environment === 'other',
-            default: 'http://prewph5_9.cats-trade.com',
-        },
-        {
-            type: 'list',
             name: 'buildType',
             message: '构建单个WP插件还是构建所有的WP插件',
             choices: ['h5', 'wp-editor'],
@@ -60,6 +38,29 @@ async function init () {
             message: '请选择构建主题',
             choices: themes,
             default: 'false',
+        },
+        {
+            type: 'list',
+            name: 'h5Environment',
+            message: '请选择调试环境：',
+            choices: ['uat', 'pre', 'other'],
+            when: answers => answers.buildType === 'h5',
+            default: 'uat',
+        },
+        {
+            type: 'list',
+            name: 'h5URL',
+            message: '请选择WP地址：',
+            when: answers => answers.buildType === 'h5' && answers.h5Environment !== 'other',
+            choices: answers => answers.h5Environment === 'uat' ? uat : pre,
+            default: '',
+        },
+        {
+            type: 'input',
+            name: 'h5URL_input',
+            message: '请输入WP H5地址：',
+            when: answers => answers.h5Environment === 'other',
+            default: 'http://prewph5_9.cats-trade.com',
         },
     ]
     inquirer.prompt(questions)

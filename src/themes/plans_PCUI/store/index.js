@@ -31,7 +31,8 @@ export default createStore({
         supportLanguages: supportLanguages,
         countryList: [],
         cacheViews: ['Layout'],
-        currencyList: []
+        currencyList: [],
+        stopLossPprofitProductID: '' // 用于止损止盈弹层
     },
     getters: {
         productActived (state) {
@@ -75,6 +76,11 @@ export default createStore({
             })
             return categories
         },
+        stopLossPprofitProduct (state, getters, rootState) {
+            const productID = state.stopLossPprofitProductID
+            const product = rootState._quote.productMap[productID]
+            return product
+        }
     },
     mutations: {
         Update_style (state, data) {
@@ -117,6 +123,9 @@ export default createStore({
         },
         Update_supportLanguages (state, data) {
             state.supportLanguages = data
+        },
+        Update_stopLossPprofitProductID (state, data) {
+            state.stopLossPprofitProductID = data
         }
     },
     actions: {
