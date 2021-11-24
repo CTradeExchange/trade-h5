@@ -265,7 +265,7 @@
         "appendFiled": "补充资料",
         "allInputRequire": "请填写所有补充资料",
         "arriveTime": "入帐时间",
-		"noneChannelTip": "当前存款金额暂无可用支付通道，请重新调整！"
+		"noneChannelTip": "当前存款金额暂无可用支付通道，请重新选择"
     },
     "fund": {
         "marginLevel": "保证金水平",

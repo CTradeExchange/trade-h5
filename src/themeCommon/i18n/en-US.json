@@ -265,7 +265,7 @@
         "appendFiled": "Additional Information",
         "allInputRequire": "Please fill in all additional information",
         "arriveTime": "Credit time",
-        "noneChannelTip": "There is no payment channel available for the current deposit amount, please re-select another payment channel or enter different amount"
+        "noneChannelTip": "There is no payment channel available for the current deposit amount, please select again"
     },
     "fund": {
         "marginLevel": "margin level",

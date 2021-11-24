@@ -16,7 +16,7 @@
                             <img alt='' class='auth-img' :src="require('@/themes/mt4/images/'+ item.levelCode +'.png')" />
                             <div class='content'>
                                 <p class='t1'>
-                                    {{ item.levelName }}
+                                    {{ kycMap[item.levelCode] }}
                                 </p>
                                 <p class='t2'>
                                     {{ $t('auth.authPass') }} [{{ item.businessNameList.toString() }}]
@@ -24,7 +24,7 @@
                             </div>
                             <div v-if='item.preLevelObj && item.preLevelObj.status !== 2'>
                                 <span class='notice'>
-                                    {{ $t('auth.executeAuth', [item.preLevelObj.levelName]) }}
+                                    {{ $t('auth.executeAuth', [kycMap[item.preLevelObj.levelCode]]) }}
                                 </span>
                             </div>
                             <div v-else>
@@ -69,6 +69,11 @@ export default {
             list: [],
             loading: false,
         })
+
+        const kycMap = {
+            level_1: t('common.kycLevel1'),
+            level_2: t('common.kycLevel2'),
+        }
 
         const kycState = computed(() => store.state._user.kycState)
         const kycAuditStatus = tm('kycAuditStatus')
@@ -126,6 +131,7 @@ export default {
             handleNext,
             back,
             style,
+            kycMap,
             kycAuditStatus,
             ...toRefs(state)
         }
@@ -138,12 +144,13 @@ export default {
 .page-wrap {
     flex: 1;
     overflow: auto;
+    margin-top: rem(90px);
     background: var(--bgColor);
-        padding-top: 48px;
     .empty-data {
         padding-top: rem(200px);
     }
     .title {
+        padding: 0 rem(25px);
         color: var(--minorColor);
         line-height: rem(80px);
         border-bottom: solid 1px var(--lineColor);
