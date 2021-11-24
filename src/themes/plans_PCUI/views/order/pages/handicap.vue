@@ -132,12 +132,6 @@ export default {
             }
         )
 
-        // watch(() => state.curDigit, val => {
-        //     if (!isEmpty(val)) {
-
-        //     }
-        // })
-
         watchEffect(() => {
             state.curDigit = handicapDigit.value
             console.log('**************', state.curDigit)

@@ -27,7 +27,10 @@ export default {
     state: {
         modifyPositionId: 0, // 修改持仓ID
         pendingEnable: false, // 启用挂单
-        pendingPrice: 0, // 挂单价格
+        pendingPrice: {
+            buy: 0,
+            sell: 0
+        }, // 挂单价格
         positionLoading: '', // 持仓列表加载
         positionList: {}, // 持仓列表, 多玩法id为Key
         positionMap: {}, // 持仓列表map
@@ -53,13 +56,12 @@ export default {
             const point = Math.pow(0.1, digits)
             const pip = point * product.pointRatio
 
-            let buy_price = state.pendingPrice ? state.pendingPrice : product.buy_price
-            let sell_price = state.pendingPrice ? state.pendingPrice : product.sell_price
+            let buy_price = state.pendingPrice['buy'] ? state.pendingPrice['buy'] : product.buy_price
+            let sell_price = state.pendingPrice['sell'] ? state.pendingPrice['sell'] : product.sell_price
             if (curPosition) {
                 // 如果当前是修改持仓，公式里面的价格则是：买方向取卖价、卖方向取买价
                 buy_price = sell_price = curPosition.direction === 1 ? product.sell_price : product.buy_price
             }
-
             const buyProfitMax = BigNumber(buy_price).plus(pip * product.stopLossMaxPoint).toFixed(digits) // 买入止盈范围最大值 买入价+pip*限价最大距离
             const buyProfitMin = BigNumber(buy_price).plus(pip * product.stopLossMinPoint).toFixed(digits) // 买入止盈范围最小值 买入价+pip*限价最小距离
 
@@ -131,8 +133,8 @@ export default {
         Update_pendingEnable (state, data) {
             state.pendingEnable = data
         },
-        Update_pendingPrice (state, data) {
-            state.pendingPrice = data
+        Update_pendingPrice (state, data, direction) {
+            state.pendingPrice[data.direction] = data.price
         },
         Update_positionLoading (state, data) {
             state.positionLoading = data

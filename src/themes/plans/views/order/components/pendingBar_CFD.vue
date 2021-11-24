@@ -117,13 +117,19 @@ export default {
         }
     },
     watch: {
-        modelValue (newval) {
-            if (newval !== this.num) this.num = newval
-            this.$store.commit('_trade/Update_pendingPrice', newval)
+        modelValue: {
+            handler (newval) {
+                if (newval !== this.num) this.num = newval
+                if (newval) this.$store.commit('_trade/Update_pendingPrice', { price: newval, direction: this.direction })
+            },
+            immediate: true
+        },
+        direction (newVal) {
+            this.$store.commit('_trade/Update_pendingPrice', { price: this.modelValue, direction: this.direction })
         }
     },
     beforeUnmount () {
-        this.$store.commit('_trade/Update_pendingPrice', '')
+        this.$store.commit('_trade/Update_pendingPrice', { price: '', direction: this.direction })
     }
 }
 </script>

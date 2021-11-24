@@ -62,7 +62,6 @@ export default {
             get: () => props.modelValue,
             set: val => emit('update:modelValue', val)
         })
-
         const step = computed(() => pow(0.1, props.product.price_digits))
         const state = reactive({
             num: props.modelValue
@@ -93,13 +92,16 @@ export default {
         }
     },
     watch: {
-        modelValue (newval) {
-            if (newval !== this.num) this.num = newval
-            this.$store.commit('_trade/Update_pendingPrice', newval)
+        modelValue: {
+            handler (newval) {
+                if (newval !== this.num) this.num = newval
+                if (newval) this.$store.commit('_trade/Update_pendingPrice', { price: newval, direction: this.direction })
+            },
+            immediate: true
         }
     },
     beforeUnmount () {
-        this.$store.commit('_trade/Update_pendingPrice', '')
+        this.$store.commit('_trade/Update_pendingPrice', { price: '', direction: this.direction })
     }
 }
 </script>
