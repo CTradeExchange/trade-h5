@@ -37,6 +37,7 @@
     </div>
 </template>
 
+<!-- 动态修改options会导致字段错乱，宜在外层通过if重新执行 -->
 <script setup>
 import { watch, ref, nextTick, computed } from 'vue'
 import { ElPagination } from 'element-plus'

@@ -73,7 +73,7 @@ const queryData = () => {
         .catch(err => console.error(err))
 }
 
-watch(() => [props.params, unref(currentPage)], queryData, { deep: true })
+watch(() => [props.params, unref(currentPage)], queryData, { deep: true, immediate: true })
 
 </script>
 

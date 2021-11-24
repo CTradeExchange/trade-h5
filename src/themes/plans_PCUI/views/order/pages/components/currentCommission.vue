@@ -23,10 +23,10 @@ const props = defineProps({
     }
 })
 const store = useStore()
-const tableOptions = {
+const tableOptions = computed(() => ({
     ...props.commonOptions,
     columns: getPendingColumns(props.tradeType)
-}
+}))
 const tableData = computed(() => store.state._trade.pendingList[props.tradeType] || [])
 const symbolKeys = computed(() => tableData.value.map(e => `${e.symbolId}_${e.tradeType}`))
 

@@ -38,7 +38,7 @@ const store = useStore()
 const customerInfo = computed(() => store.state._user.customerInfo)
 // 持仓列表
 // 资产列表
-const accountList = computed(() => customerInfo.value?.accountList.filter(el => Number(el.tradeType) === props.tradeType) || [])
+const accountList = computed(() => customerInfo.value?.accountList?.filter(el => Number(el.tradeType) === props.tradeType) || [])
 const positionList = computed(() => store.state._trade.positionList[props.tradeType] || [])
 const tableData = computed(() => {
     if ([1, 2].includes(props.tradeType)) {
@@ -49,12 +49,10 @@ const tableData = computed(() => {
     }
     return []
 })
-const tableOptions = computed(() => (
-    {
+const tableOptions = computed(() => ({
         ...props.commonOptions,
         columns: getAssetColumns(props.tradeType)
-    }
-))
+}))
 
 // 获取持仓列表数据
 const queryPositionList = () => {
