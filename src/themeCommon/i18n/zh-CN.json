@@ -158,6 +158,7 @@
         "noLogin": "请登录",
         "kycLevel1": "基础认证",
         "kycLevel2": "中级认证",
+        "kycLevel3": "高级认证",
         "techSupport": "由Trade Switcher提供技术支持"
     },
     "auth": {

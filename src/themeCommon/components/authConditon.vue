@@ -240,7 +240,6 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         if (props.platform === 'web') {
-                            // debugger
                             const parentPath = route.matched[route.matched.length - 2]
                             router.push({ path: parentPath.path + '/kycCommitted' })
                         } else {
@@ -386,6 +385,7 @@ export default {
         color: var(--color);
         font-size: rem(30px);
         border-color: var(--lineColor);
+        background: var(--contentColor);
     }
 }
 </style>

@@ -84,7 +84,7 @@
                         <span class='name'>
                             {{ currentWallet.currency }}-{{ currentWallet.chainName }}
                         </span>
-                        <span class='tag'>
+                        <span v-if='currentWallet.remark' class='tag'>
                             {{ currentWallet.remark }}
                         </span>
                     </p>

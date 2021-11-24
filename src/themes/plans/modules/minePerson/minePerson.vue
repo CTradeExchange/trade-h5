@@ -80,6 +80,7 @@ export default {
         const kycMap = {
             level_1: t('common.kycLevel1'),
             level_2: t('common.kycLevel2'),
+            level_3: t('common.kycLevel3'),
         }
         const kycStateTextMap = tm('kycStateTextMap')
         const kycStateMap = {

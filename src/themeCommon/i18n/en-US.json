@@ -158,6 +158,7 @@
         "noLogin": "Please log in",
         "kycLevel1": "Basic certification",
         "kycLevel2": "Intermediate certification",
+        "kycLevel3": "Advanced certification",
         "techSupport": "Powered by Trade Switcher"
     },
     "auth": {

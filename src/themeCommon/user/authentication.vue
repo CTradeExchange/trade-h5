@@ -4,7 +4,7 @@
         <Top back on-back show-center @back='back' />
         <div class='page-wrap'>
             <Loading :show='loading' />
-            <div v-if='list.length === 0' class='empty-data'>
+            <div v-if='kycList.length === 0' class='empty-data'>
                 <van-empty :description='$t("auth.noRequired")' image='/images/empty.png' />
             </div>
             <div v-else>
@@ -12,7 +12,7 @@
                     {{ $t('auth.authComplete') }}
                 </p>
                 <div class='auth-list'>
-                    <div v-for='(item,index) in list' :key='index' class='auth-item'>
+                    <div v-for='(item,index) in kycList' :key='index' class='auth-item'>
                         <img alt='' class='auth-img' :src="require('../../themes/mt4/images/'+ item.levelCode +'.png')" />
                         <div class='content'>
                             <p class='t1'>
@@ -47,7 +47,6 @@
 <script>
 import Top from '@/components/top'
 import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
-import { findAllBizKycList } from '@/api/user'
 import { useStore } from 'vuex'
 import { toRefs, reactive, computed, onBeforeMount } from 'vue'
 import { getArrayObj } from '@/utils/util'
@@ -64,33 +63,29 @@ export default {
         const route = useRoute()
         const style = computed(() => store.state.style)
         const state = reactive({
-            list: [],
             loading: false,
         })
 
         const kycMap = {
             level_1: t('common.kycLevel1'),
             level_2: t('common.kycLevel2'),
+            level_3: t('common.kycLevel3'),
         }
 
         const kycState = computed(() => store.state._user.kycState)
+        const kycList = computed(() => store.state._user.kycList)
         const kycAuditStatus = tm('kycAuditStatus')
 
         const getAuthCondition = () => {
             state.loading = true
-            findAllBizKycList().then(res => {
+            store.dispatch('_user/findAllBizKycList').then(res => {
                 state.loading = false
-                if (res.check()) {
-                    res.data.forEach(item => {
-                        if (item.preLevelName) {
-                            const temp = getArrayObj(res.data, 'levelName', item.preLevelName)
-                            item.preLevelObj = temp
-                        }
-                    })
-                    state.list = res.data
-                }
-            }).catch(err => {
-                state.loading = false
+                res.data.forEach(item => {
+                    if (item.preLevelName) {
+                        const temp = getArrayObj(res.data, 'levelName', item.preLevelName)
+                        item.preLevelObj = temp
+                    }
+                })
             })
         }
 
@@ -130,6 +125,7 @@ export default {
             back,
             style,
             kycMap,
+            kycList,
             kycAuditStatus,
             ...toRefs(state)
         }

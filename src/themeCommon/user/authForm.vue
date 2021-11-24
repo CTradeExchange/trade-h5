@@ -36,6 +36,5 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .authConditionWrapper {
-    height: 100%;
 }
 </style>

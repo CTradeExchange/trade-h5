@@ -73,6 +73,7 @@ export default {
         const kycMap = {
             level_1: t('common.kycLevel1'),
             level_2: t('common.kycLevel2'),
+            level_3: t('common.kycLevel3'),
         }
 
         const kycState = computed(() => store.state._user.kycState)
@@ -80,7 +81,7 @@ export default {
 
         const getAuthCondition = () => {
             state.loading = true
-            findAllBizKycList().then(res => {
+            store.dispatch('_user/findAllBizKycList').then(res => {
                 state.loading = false
                 if (res.check()) {
                     res.data.forEach(item => {
@@ -91,8 +92,6 @@ export default {
                     })
                     state.list = res.data
                 }
-            }).catch(err => {
-                state.loading = false
             })
         }
 
