@@ -1,7 +1,7 @@
 <template>
-    <div class='previewWrapper'>
-        <p class='headerImg'>
-            <img alt='' src='./imgs/phoneHeader.png' style='width: 100%;' />
+    <div class='previewWrapper' :class="{pc:isPC}">
+        <p class='headerImg' v-if="!isPC">
+            <img alt='' src='./images/phoneHeader.png' style='width: 100%;' />
         </p>
         <div class='phoneBody'>
             <component :is='defaultPageComp' v-if='defaultPageComp' />
@@ -22,7 +22,7 @@
                             :is='el.component'
                             :class='{ active: el.id === activated }'
                             :data='el.data'
-                         
+
                         >
                             <div v-if='el.data.bindComp && el.data.bindComp.length'>
                                 <component
@@ -40,8 +40,8 @@
             </draggable>
         </div>
 
-        <p class='footerImg'>
-            <img alt='' src='./imgs/phoneFooter.png' style='width: 100%;' />
+        <p class='footerImg' v-if="!isPC" >
+            <img alt='' src='./images/phoneFooter.png' style='width: 100%;' />
         </p>
     </div>
 </template>
@@ -57,6 +57,7 @@ export default {
     },
     data () {
         return {
+            isPC:process.env.VUE_APP_theme==='plans_PCUI',
             myArray: [
                 {
                     tag: 'img',
@@ -212,7 +213,7 @@ export default {
 }
 .phoneBody {
     padding: 0 9px;
-    background: url(./imgs/phoneBg.png) repeat-y;
+    background: url(./images/phoneBg.png) repeat-y;
     background-size: 100%;
     p {
         margin: 0;
@@ -225,6 +226,15 @@ export default {
     overflow-x: hidden;
     font-size: 12px;
     background: #F1F1F1;
+    &.pc{
+        position: relative;
+        width: 1200px;
+        transform: scale(.8);
+        transform-origin: center top;
+        .phoneBody{
+            background: #fff;
+        }
+    }
     img {
         vertical-align: top;
     }

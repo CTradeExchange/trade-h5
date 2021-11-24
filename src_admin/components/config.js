@@ -1,52 +1,7 @@
-import img from '@h5/modules/img/config.js'
-import swipe from '@h5/modules/swipe/config.js'
-import notice from '@h5/modules/notice/config.js'
-import layout from '@h5/modules/layout/config.js'
-// import quote from '@h5/modules/quote/config.js'
-// // import infoflow from '@h5/modules/infoflow/config.js';
-// import infoflow2 from '@h5/modules/infoflow2/config.js'
-import menulist from '@h5/modules/menulist/config.js'
-// import position from '@h5/modules/position/config.js'
-import selfSymbol from '@h5/modules/selfSymbol/config.js'
-import text from '@h5/modules/text/config.js'
-// import tinymce from '@h5/modules/tinymce/config.js'
-import redpacket from '@h5/modules/redpacket/config.js'
-import template from '@h5/modules/template/config.js'
-import minePerson from '@h5/modules/minePerson/config.js'
-// import mineTop from '@h5/modules/mineTop/config.js'
-import quoteList from '@h5/modules/quoteList/config.js'
-import nav from '@h5/modules/nav/config.js'
-import registerForm from '@h5/modules/registerForm/config.js'
-import news from '@h5/modules/news/config.js'
-import ad from '@h5/modules/ad/config.js'
-import luckyWheel from '@h5/modules/luckyWheel/config.js'
-import productsSwipe from '@h5/modules/productsSwipe/config.js'
+import { getThemeModules } from '@h5/modules/themeModulesAll'
 
 export const mobileComponentsConfig = async () => {
-    return [
-        img,
-        swipe,
-        notice,
-        layout,
-        // quote,
-        // infoflow2,
-        menulist,
-        // position,
-        selfSymbol,
-        nav,
-        text,
-        // tinymce,
-        quoteList,
-        redpacket,
-        template,
-        minePerson,
-        // mineTop,
-        await registerForm(),
-        news,
-        ad,
-        luckyWheel,
-        productsSwipe
-    ]
+    return getThemeModules()
 }
 export const pcComponentsConfig = []
 export const example = [

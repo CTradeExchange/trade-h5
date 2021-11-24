@@ -1,6 +1,6 @@
 <template>
     <div>
-        <img alt='' src='../../imgs/mine.png' width='100%' />
+        <img alt='' src='../../images/mine.png' width='100%' />
     </div>
 </template>
 

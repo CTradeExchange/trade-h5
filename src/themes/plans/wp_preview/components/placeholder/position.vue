@@ -1,13 +1,11 @@
 <template>
     <div>
-        <img alt='' src='../../imgs/selfSymbol.png' width='100%' />
+        <img alt='' src='../../images/position.png' width='100%' />
     </div>
 </template>
 
 <script>
-export default {
-
-}
+export default { }
 </script>
 
 <style lang="scss" scoped>
