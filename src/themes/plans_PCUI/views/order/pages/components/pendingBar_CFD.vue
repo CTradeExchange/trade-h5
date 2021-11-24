@@ -45,14 +45,15 @@ export default {
             }
         })
         const warn = computed(() => {
+            const directionText = props.direction === 'buy' ? t('trade.buy') : t('trade.sell')
             const modelValue = props.modelValue
             const pendingRange = pendingRang.value
             if (!modelValue) {
                 return false
             } else if (lt(modelValue, pendingRange.stopRangeMin) && gt(modelValue, pendingRange.limitRangeMax)) {
-                return t('trade.pendingPriceWarn')
+                return directionText + t('trade.pendingPriceWarn')
             } else if (gt(modelValue, pendingRange.stopRangeMax) || lt(modelValue, pendingRange.limitRangeMin)) {
-                return t('trade.pendingPriceWarn2')
+                return directionText + t('trade.pendingPriceWarn2')
             } else {
                 return false
             }
