@@ -252,10 +252,8 @@ export default {
         font-size: rem(28px);
         line-height: rem(70px);
         height: 100%;
-        background: var(--primaryAssistColor);
-        border-color: var(--primaryAssistColor);
         color: var(--primary);
-        border-radius: rem(6px);
+        border: solid 1px var(--primary);
         color: var(--primary);
     }
 }

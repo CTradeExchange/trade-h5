@@ -148,9 +148,7 @@ export default {
         color: var(--primary);
         font-size: rem(28px);
         line-height: rem(65px);
-        background: var(--primaryAssistColor);
-        border: none;
-        border-color: var(--primaryAssistColor);
+        border: solid 1px var(--primary);;
         border-radius: rem(6px);
         &:last-child {
             margin-right: 0;
