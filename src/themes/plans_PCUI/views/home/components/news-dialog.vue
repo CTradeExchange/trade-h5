@@ -5,7 +5,7 @@
             :before-close='close'
             :close-on-click-modal='false'
             :title='detailInfo?.title'
-            width='800px'
+            width='520px'
         >
             <div v-loading='loading' v-html='detailInfo?.content'></div>
         </el-dialog>
