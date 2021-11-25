@@ -17,7 +17,7 @@ function cats_start_upload_admin_install() {
     $sllHttp = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
     $p_data['type'] = 'H5';
     $p_data['folder'] = plugin_dir_path(__FILE__ ) . 'dist';
-    uploadAdminHttpPost($sllHttp . $_SERVER['SERVER_NAME'] . '/wp-json/wp/v2/uploadAdminEditorPluginApi',$p_data);
+    uploadAdminHttpPost($sllHttp . $_SERVER['SERVER_NAME'] . ':' .$_SERVER["SERVER_PORT"] . '/wp-json/wp/v2/uploadAdminEditorPluginApi',$p_data);
 }
 
 /**
