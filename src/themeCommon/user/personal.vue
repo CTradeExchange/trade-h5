@@ -4,6 +4,11 @@
         <van-cell-group>
             <van-cell is-link :title='$t("cRoute.authentication")' to='/authentication' />
             <van-cell is-link :title='$t("cRoute.bankList")' to='/bankList' />
+            <van-cell is-link title='人脸识别' @click="toFaceDetect" >
+                 <template #right-icon>
+                    <van-icon  :name="faceDetectSuccess ? 'success': 'arrow'" :color="faceDetectSuccess ? $style.success : $style.minorColor" />
+                </template>
+            </van-cell>
             <!-- <van-cell is-link :title='$t("cRoute.walletAddress")' to='/walletAddress' /> -->
         </van-cell-group>
     </div>
@@ -12,7 +17,7 @@
 <script>
 import Top from '@/components/top'
 import { useRouter } from 'vue-router'
-
+import { localGet } from '@/utils/util'
 export default {
     components: {
         Top
@@ -22,8 +27,16 @@ export default {
         const back = () => {
             router.replace('/mine')
         }
+        const faceDetectSuccess = localGet('faceDetectSuccess')
+        const toFaceDetect = () => {
+            if(!faceDetectSuccess){
+                router.push('/faceDetect')
+            }
+        }
         return {
-            back
+            back,
+            faceDetectSuccess,
+            toFaceDetect
         }
     }
 }

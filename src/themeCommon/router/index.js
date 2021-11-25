@@ -325,6 +325,15 @@ const routes = [
             footerMenu: false,
         }
     },
+    {
+        path: '/faceDetect',
+        name: 'FaceDetect',
+        component: () => import(/* webpackChunkName: "page" */ '../user/faceDetect.vue'),
+        meta: {
+            title: '人脸识别',
+            footerMenu: false,
+        }
+    },
 
 ]
 
