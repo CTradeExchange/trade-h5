@@ -1,8 +1,9 @@
 <template>
-    <floatComp />
+    <productsTimeSharing />
     <div id='homeContent' ref='homeContent' class='home' :class='{ hasNav: $hasNav }'>
         <PageComp :data='pageModules' />
     </div>
+    <floatComp />
 </template>
 
 <script>
@@ -10,12 +11,12 @@ import { QuoteSocket } from '@/plugins/socket/socket'
 import { onActivated, computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import floatComp from '@plans/modules/floatComp/floatComp.vue'
-import ProfitLossBar from '@plans/modules/profitLossBar/profitLossBar'
+import productsTimeSharing from '@plans/modules/productsTimeSharing/productsTimeSharing.vue'
 export default {
     name: 'Home',
     components: {
         floatComp,
-        ProfitLossBar
+        productsTimeSharing
     },
     setup () {
         const store = useStore()

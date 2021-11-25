@@ -130,7 +130,7 @@ export default {
             if (state.operType) {
                 state.amount = accountInfo.value.available
             } else {
-                state.amount = props.data.canReduceMargin
+                state.amount = positionData.value?.canReduceMargin
             }
         }
 

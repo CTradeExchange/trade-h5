@@ -149,7 +149,6 @@ export default {
         border-bottom: solid 1px var(--lineColor);
     }
     .auth-list {
-        margin-top: rem(30px);
         padding: 0 rem(30px);
         background: var(--contentColor);
         .auth-item {
