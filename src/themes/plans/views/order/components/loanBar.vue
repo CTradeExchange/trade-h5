@@ -12,13 +12,13 @@
         </van-radio-group>
 
         <!-- 自动借款的解说 -->
-        <van-dialog v-model:show='lilvAlert' title=''>
+        <van-dialog v-model:show='lilvAlert' :confirm-button-text="$t('common.sure')" title=''>
             <div class='availableLoanContent'>
                 <p>{{ $t('trade.availableLoanContent3', [dailyInterest]) }}</p>
             </div>
         </van-dialog>
         <!-- 自动还款的解说 -->
-        <van-dialog v-model:show='lilvAlert2' title=''>
+        <van-dialog v-model:show='lilvAlert2' :confirm-button-text="$t('common.sure')" title=''>
             <div class='availableLoanContent'>
                 <p>{{ $t('trade.availableLoanContent6') }}</p>
             </div>

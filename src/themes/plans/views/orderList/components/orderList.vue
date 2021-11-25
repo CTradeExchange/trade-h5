@@ -523,7 +523,7 @@ export default {
     }
 }
 .list-wrap {
-    padding-top: rem(90px);
+    padding-top: rem(100px);
     .trust-item {
         margin: 0 rem(20px) rem(20px) rem(20px);
         padding: rem(20px);
@@ -555,17 +555,19 @@ export default {
             //justify-content: space-between;
             .t-block {
                 display: flex;
+                justify-content: space-between;
                 flex-wrap: wrap;
                 .tl-item {
-                    width: 50%;
+                    display: inline-flex;
+                    justify-content: space-between;
+                    width: 47%;
                     margin-bottom: rem(10px);
                     color: var(--normalColor);
                     line-height: rem(35px);
-                    text-align: left;
                     label {
                         display: inline-block;
-                        width: rem(150px);
-                        margin-right: rem(20px);
+                        // width: rem(170px);
+                        // margin-right: rem(20px);
                         font-size: rem(20px);
                         white-space: nowrap;
                         text-overflow: ellipsis;
