@@ -2,7 +2,7 @@
     <div class='assetsItem' @click='toInfo'>
         <div class='rowflex currency'>
             <span>{{ data.currency }}</span>
-            <span>{{ data.netAssets }}</span>
+            <span>{{ parseFloat(plus (data.available,data.frozen )).toFixed(data.digits) }}</span>
         </div>
         <div class='rowflex muted mtop20'>
             <div class='asset-info'>
@@ -41,6 +41,7 @@
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { reactive, toRefs, computed } from 'vue'
+import { plus } from '@/utils/calculation'
 export default {
     props: {
         data: {
@@ -48,7 +49,7 @@ export default {
         },
     },
     setup (props) {
-        // console.log(props.data)
+        console.log('propsdata===', props.data)
         const store = useStore()
         const router = useRouter()
         const plans = computed(() => store.state._base.plans)
@@ -65,7 +66,8 @@ export default {
         }
         return {
             toInfo,
-            tradeType
+            tradeType,
+            plus
         }
     }
 }
@@ -85,6 +87,7 @@ export default {
     line-height: 1.5;
     &.currency {
         font-size: rem(30px);
+        font-weight: bold;
     }
     .asset-info{
         .val{
