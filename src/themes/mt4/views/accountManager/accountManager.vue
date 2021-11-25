@@ -33,7 +33,7 @@
             <p>锁定金额： {{ item.lockAmount }}</p> -->
         </div>
     </div>
-    <van-dialog v-model:show='show' :title='$t("attrs")'>
+    <van-dialog v-model:show='show' :confirm-button-text="$t('common.sure')" :title='$t("attrs")'>
         <div class='tishiDialog'>
             <p><strong>84769176 - Cats2.0 H5 Demo</strong></p>
             <p class='muted'>

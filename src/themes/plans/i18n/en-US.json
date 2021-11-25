@@ -16,10 +16,10 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "complete": "Complete",
-    "loading": "Data loading...",
+    "loading": "loading...",
     "vanPullRefresh": {
-      "pulling": "drop-down refresh",
-      "loosing": "Release refresh"
+      "pulling": "Pull down to refresh",
+      "loosing": "Release to refresh"
     },
     "be": "yes",
     "deny": "no"

@@ -16,10 +16,10 @@
     "cancel": "取消",
     "delete": "删除",
     "complete": "完成",
-    "loading": "数据加载中...",
+    "loading": "加载中...",
     "vanPullRefresh": {
-      "pulling": "下拉刷新",
-      "loosing": "释放刷新"
+      "pulling": "下拉即可刷新",
+      "loosing": "释放即可刷新"
     },
     "be": "是",
     "deny": "否"

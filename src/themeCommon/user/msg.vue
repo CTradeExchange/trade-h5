@@ -18,13 +18,21 @@
         <div v-if='list.length === 0'>
             <van-empty :description='$t("common.noData")' image='/images/empty.png' />
         </div>
-        <van-pull-refresh v-else v-model='loading' @refresh='onRefresh'>
+        <van-pull-refresh
+            v-else
+            v-model='loading'
+            :loading-text="$t('compLang.loading')"
+            :loosing-text="$t('compLang.vanPullRefresh.loosing')"
+            :pulling-text="$t('compLang.vanPullRefresh.pulling')"
+            @refresh='onRefresh'
+        >
             <van-list
                 v-model:error='isError'
                 v-model:loading='loading'
                 :error-text='errorTip'
                 :finished='finished'
                 :finished-text='$t("common.noMore")'
+                :loading-text="$t('compLang.loading')"
                 @load='onLoad'
             >
                 <div v-for='(item,index) in list' :key='index' class='msg-item'>

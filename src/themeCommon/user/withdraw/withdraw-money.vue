@@ -79,7 +79,7 @@
             {{ $t('withdraw.moneySuccessMsg') }}
         </p>
     </van-dialog>
-    <van-dialog v-model:show='timeShow' :title="$t('withdraw.hint')">
+    <van-dialog v-model:show='timeShow' :confirm-button-text="$t('common.sure')" :title="$t('withdraw.hint')">
         <div class='time-wrap'>
             <h4>{{ $t('withdraw.timeHint') }} </h4>
             <p v-if='timeList.length > 0'>

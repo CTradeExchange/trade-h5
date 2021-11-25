@@ -15,6 +15,7 @@
                     :finished='finished'
                     :finished-text='finishedText'
                     :immediate-check='false'
+                    :loading-text="$t('compLang.loading')"
                     @load='onLoad'
                 >
                     <van-collapse

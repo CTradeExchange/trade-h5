@@ -48,6 +48,7 @@
             :finished='finished'
             :finished-text='finishedText'
             :immediate-check='false'
+            :loading-text="$t('compLang.loading')"
             @load='onLoad'
         >
             <div v-for='(item,index) in recordList' :key='index' class='trust-item'>
