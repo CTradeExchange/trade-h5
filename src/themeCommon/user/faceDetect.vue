@@ -3,17 +3,17 @@
         <layoutTop />
         <!-- 认证成功 -->
         <div class='main'>
-            <div class="success" v-show='reacShow'>
-                <i class='icon_success' />
+            <div v-show='reacShow' class='success'>
+                <i class='icon_success'></i>
                 <p>验证成功</p>
             </div>
-           
+
             <canvas v-show='resultCanvasShow' id='mainCanvas'></canvas>
-            <div class='rect' v-show='reacShow' :style='classObj'></div>
+            <div v-show='reacShow' class='rect' :style='classObj'></div>
             <div id='mainMask' class='mask' style='display: none;'></div>
         </div>
-         <!-- 认证失败 -->
-        <div class='video' v-if="videoShow">
+        <!-- 认证失败 -->
+        <div v-if='videoShow' class='video'>
             <p class='notice'>
                 {{ $t('common.faceDetectTip') }}
             </p>
@@ -24,7 +24,7 @@
             </video>
             <div class='mask'></div>
         </div>
-        <div class='btns' v-if="videoShow">
+        <div v-if='videoShow' class='btns'>
             <van-button type='primary' @click='openCamera'>
                 开始认证
             </van-button>
@@ -32,8 +32,8 @@
                 提交验证
             </van-button>
         </div>
-        <div class='btns' v-else>
-             <van-button type='primary' @click='$router.back()'>
+        <div v-else class='btns'>
+            <van-button type='primary' @click='$router.back()'>
                 确定
             </van-button>
         </div>
@@ -96,11 +96,11 @@ export default {
             c1.getContext('2d').drawImage(video, 0, 0, mCanvas.width, mCanvas.height, 0, 0, c1.width, c1.height)
             console.log('video', video)
             divItem.appendChild(c1)
-            //隐藏video
+            // 隐藏video
             state.videoShow = false
             c1.toBlob(function (blobObj) {
                 uploadImg(blobObj)
-                console.log('blob', blobObj) //blobObj就是blob对象（类文件）
+                console.log('blob', blobObj) // blobObj就是blob对象（类文件）
             })
             document.getElementById('mainMask').style.display = 'block'
         }
@@ -129,7 +129,7 @@ export default {
                                 const val = rectangle[key] * widthrate + 'px'
                                 style += key + ':' + val + ';'
                             } else {
-                                const val = rectangle[key] * heightRate + 'px'
+                                const val = rectangle[key] * heightRate + 50 + 'px'
                                 style += key + ':' + val + ';'
                             }
                         }
@@ -150,7 +150,7 @@ export default {
 
         watch(() => state.faceDetectSuccess, newVal => {
             if (newVal) {
-                //takeSnapshot()
+                // takeSnapshot()
             }
         })
 
@@ -182,7 +182,7 @@ export default {
     }
     .video{
         position: relative;
-        height: 560px;
+        height: 510px;
         width: 100%;
         .mask{
             position: absolute;

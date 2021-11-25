@@ -160,7 +160,13 @@
         "kycLevel2": "Intermediate certification",
         "kycLevel3": "Advanced certification",
         "techSupport": "Powered by Trade Switcher",
-        "faceDetectTip": "Please face your phone and keep it well lit"
+        "faceDetectTip": "Please face your phone and keep it well lit",
+        "startVerification": "Start",
+        "submitVerification": "Submit",
+        "verifiedSuccessfully": "Verified successfully",
+        "verificationFailed": "verification failed",
+        "done": "Done",
+        "faceDetect": "Face Recognition"
     },
     "auth": {
         "info": "Information Required",
