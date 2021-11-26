@@ -3,7 +3,7 @@
         <router-view />
 
         <!-- 轮播模块 -->
-        <swiper />
+        <FullBanner v-if='fullBannerData' :data='fullBannerData.data' />
 
         <div class='relativeFloor'>
             <!-- 产品模块 -->
@@ -70,9 +70,11 @@ import guide from './components/guide.vue'
 import why from './components/why.vue'
 import seven from './components/seven.vue'
 import calendar from './components/calendar.vue'
+import FullBanner from '../../modules/fullBanner/fullBanner'
 
-import { reactive, toRefs, onActivated, onDeactivated, onMounted, onUnmounted, ref } from 'vue'
+import { reactive, toRefs, onActivated, onDeactivated, onMounted, onUnmounted, ref, computed } from 'vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
+import { useStore } from 'vuex'
 export default {
     name: 'Home',
     components: {
@@ -87,12 +89,16 @@ export default {
         guide,
         why,
         seven,
+        FullBanner,
         calendar
     },
     setup () {
+        const store = useStore()
         const state = reactive({
             // 当前信息流选项卡
             currentFlow: 1,
+            // 页面
+            pageModules: [],
             // 产品组件symbolKey
             productKeys: [],
             // 行情组件symbolKey
@@ -100,6 +106,8 @@ export default {
             // 需要订阅产品的symbolKey
             allProductKeys: []
         })
+
+        const fullBannerData = computed(() => state.pageModules.find(el => el.tag === 'fullBanner'))
 
         // 切换信息流
         const switchFlow = (num) => {
@@ -125,6 +133,12 @@ export default {
             QuoteSocket.send_subscribe(state.allProductKeys)
         }
 
+        // 获取首页配置
+        store.dispatch('_base/getPageConfig', 'Home').then(res => {
+            console.log('首页配置', res)
+            state.pageModules = res
+        })
+
         // 发送行情订阅
         onMounted(() => {
             if (state.allProductKeys.length > 0) {
@@ -144,6 +158,7 @@ export default {
 
         return {
             ...toRefs(state),
+            fullBannerData,
             switchFlow,
             setProductKeys,
             setTradeKeys
