@@ -8,7 +8,13 @@
                     <van-empty :description='$t("trade.pendingEmpty")' image='/images/empty.png' />
                 </div>
                 <div v-else class='trust-wrap'>
-                    <van-pull-refresh v-model='loading' @refresh='onRefresh'>
+                    <van-pull-refresh
+                        v-model='loading'
+                        :loading-text="$t('compLang.loading')"
+                        :loosing-text="$t('compLang.vanPullRefresh.loosing')"
+                        :pulling-text="$t('compLang.vanPullRefresh.pulling')"
+                        @refresh='onRefresh'
+                    >
                         <trustItem
                             v-for='item in pendingList'
                             :key='item.id'

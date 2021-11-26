@@ -65,6 +65,7 @@
 
     <van-dialog
         v-model:show='addSuccessShow'
+        :cancel-button-text='$t("common.cancel")'
         class-name='add-success'
         :confirm-button-text='$t("common.sure")'
         :show-cancel-button='showCancel'

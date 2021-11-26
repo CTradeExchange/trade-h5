@@ -165,6 +165,8 @@ export default {
             Dialog.confirm({
                 title: t('tip'),
                 message: t('trade.cancelPendingOrder'),
+                confirmButtonText: t('common.sure'),
+                cancelButtonText: t('common.cancel')
             }).then(() => {
                 closePendingOrder()
             }).catch(() => {})

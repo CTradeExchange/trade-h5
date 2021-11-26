@@ -88,12 +88,19 @@
             </van-dropdown-menu>
         </div>
         <div class='list'>
-            <van-pull-refresh v-model='loading' @refresh='onRefresh'>
+            <van-pull-refresh
+                v-model='loading'
+                :loading-text="$t('compLang.loading')"
+                :loosing-text="$t('compLang.vanPullRefresh.loosing')"
+                :pulling-text="$t('compLang.vanPullRefresh.pulling')"
+                @refresh='onRefresh'
+            >
                 <van-list
                     v-model:loading='loading'
                     :finished='finished'
                     :finished-text='finishedText'
                     :immediate-check='false'
+                    :loading-text="$t('compLang.loading')"
                     @load='onLoad'
                 >
                     <div v-if='list.length === 0'>

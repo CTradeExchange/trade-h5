@@ -3,11 +3,20 @@
         <slot name='filter'></slot>
     </div>
     <div class='scrollBody'>
-        <van-pull-refresh v-model='state.refreshing' v-bind='$attrs' class='list' @refresh='onRefresh'>
+        <van-pull-refresh
+            v-model='state.refreshing'
+            v-bind='$attrs'
+            class='list'
+            :loading-text="$t('compLang.loading')"
+            :loosing-text="$t('compLang.vanPullRefresh.loosing')"
+            :pulling-text="$t('compLang.vanPullRefresh.pulling')"
+            @refresh='onRefresh'
+        >
             <van-list
                 v-model:loading='state.loading'
                 :finished='state.finished'
                 :finished-text='$t("historyList.noMore")'
+                :loading-text="$t('compLang.loading')"
                 @load='onLoad'
             >
                 <slot :list='state.list'></slot>

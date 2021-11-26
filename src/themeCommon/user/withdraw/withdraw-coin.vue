@@ -112,7 +112,7 @@
     <van-action-sheet v-model:show='chainNameVisible' :actions='chainNameList' @select='selectChainName' />
 
     <!-- 取款时间弹窗 -->
-    <van-dialog v-model:show='timeShow' :title="$t('withdraw.hint')">
+    <van-dialog v-model:show='timeShow' :confirm-button-text="$t('common.sure')" :title="$t('withdraw.hint')">
         <div class='time-wrap'>
             <h4>
                 {{ $t('withdraw.timeHint') }}

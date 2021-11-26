@@ -34,13 +34,13 @@
             </van-row>
         </div>
 
-        <van-dialog v-model:show='availableLoanAlert' title=''>
+        <van-dialog v-model:show='availableLoanAlert' :confirm-button-text="$t('common.sure')" title=''>
             <div class='availableLoanContent'>
                 <p>{{ $t('trade.availableLoanContent1', [maxBorrow]) }}</p>
                 <p>{{ $t('trade.availableLoanContent2',[account.currency,dailyInterest]) }}</p>
             </div>
         </van-dialog>
-        <van-dialog v-model:show='lilvAlert' title=''>
+        <van-dialog v-model:show='lilvAlert' :confirm-button-text="$t('common.sure')" title=''>
             <div class='availableLoanContent'>
                 <p>{{ $t('trade.availableLoanContent2', [account.currency,dailyInterest]) }}</p>
             </div>

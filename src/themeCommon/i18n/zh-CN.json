@@ -160,6 +160,16 @@
         "kycLevel2": "中级认证",
         "kycLevel3": "高级认证",
         "techSupport": "由Trade Switcher提供技术支持"
+       
+    },
+    "faceAuth": {
+        "faceDetectTip": "请正对手机，保持光线充足",
+        "startVerification": "开始验证",
+        "submitVerification": "提交验证",
+        "verifiedSuccessfully": "验证成功",
+        "verificationFailed": "验证失败,请重新提交",
+        "done": "确定",
+        "faceDetect": "人脸识别"
     },
     "auth": {
         "info": "需要准备的验证资料",

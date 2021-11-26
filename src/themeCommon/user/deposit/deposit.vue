@@ -852,7 +852,8 @@ export default {
             }
         }
         .active {
-            background: rgba(242, 161, 27, .1);
+            // background: rgba(242, 161, 27, .1);
+            background: var(--primary);
             border: 1px solid var(--focusColor);
             .t1 {
                 color: var(--focusColor);
@@ -970,7 +971,8 @@ export default {
         }
         strong {
             font-size: rem(28px);
-            color: var(--focusColor);
+            // color: var(--focusColor);
+            color: var(--primary);
         }
     }
 }

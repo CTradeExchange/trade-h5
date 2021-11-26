@@ -9,6 +9,9 @@
                     <template v-if='state.activeTab===0'>
                         <van-pull-refresh
                             v-model='state.focusNews.refreshing'
+                            :loading-text="$t('compLang.loading')"
+                            :loosing-text="$t('compLang.vanPullRefresh.loosing')"
+                            :pulling-text="$t('compLang.vanPullRefresh.pulling')"
                             :success-text="$t('information.refresh')"
                             @refresh='onFocusNewsRefresh'
                         >
@@ -16,6 +19,7 @@
                                 v-model:loading='state.focusNews.loading'
                                 :finished='state.focusNews.finished'
                                 :finished-text="$t('information.noMore')"
+                                :loading-text="$t('compLang.loading')"
                                 @load='onLoadFocusNews'
                             >
                                 <van-cell v-for='news in state.focusNews.list' :key='news.id' class='new'>
@@ -47,6 +51,9 @@
                     <template v-if='state.activeTab===1'>
                         <van-pull-refresh
                             v-model='state.newsFlash.refreshing'
+                            :loading-text="$t('compLang.loading')"
+                            :loosing-text="$t('compLang.vanPullRefresh.loosing')"
+                            :pulling-text="$t('compLang.vanPullRefresh.pulling')"
                             :success-text="$t('information.refresh')"
                             @refresh='onNewsFlashRefresh'
                         >
@@ -54,6 +61,7 @@
                                 v-model:loading='state.newsFlash.loading'
                                 :finished='state.newsFlash.finished'
                                 :finished-text="$t('information.noMore')"
+                                :loading-text="$t('compLang.loading')"
                                 @load='onLoadNewsFlash'
                             >
                                 <div class='story-date'>
