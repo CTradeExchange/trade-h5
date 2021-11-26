@@ -81,7 +81,8 @@ export const getPendingColumns = tradeType => {
     // 撤单
     const handleCancelOrder = (row) => {
         ElMessageBox.confirm(t('trade.cancelPendingOrder'), t('tip'), {
-            confirmButtonText: 'OK',
+            cancelButtonText: t('cancel'),
+            confirmButtonText: t('confirm'),
             beforeClose: (action, instance, done) => {
                 if (action === 'confirm') {
                     instance.confirmButtonLoading = true
