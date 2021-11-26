@@ -1,60 +1,35 @@
 <template>
-    <Top back left-icon='arrow-left' :menu='false' :right-action='false' :show-center='true'>
-        <template #right>
-        </template>
-    </Top>
-    <Loading :show='loadingPage' />
-    <div class='page-wrap'>
-        <div class='record-list'>
-            <van-pull-refresh v-model='loading' @refresh='onRefresh'>
-                <div v-if='list.length === 0'>
-                    <van-empty :description="$t('withdrawRecord.noneHint')" image='/images/empty.png' />
-                </div>
-                <van-list
-                    v-model:loading='loading'
-                    :finished='finished'
-                    :finished-text='finishedText'
-                    :immediate-check='false'
-                    :loading-text="$t('compLang.loading')"
-                    @load='onLoad'
-                >
-                    <van-collapse
-                        v-for='(item, index) in list'
-                        :key='index'
-                        v-model='activeIndex'
-                        accordion
-                        class='aaa'
-                        @change='handleFold(index)'
+    <centerViewDialog>
+        <Top back left-icon='arrow-left' :menu='false' :right-action='false' :show-center='true'>
+            <template #right>
+            </template>
+        </Top>
+        <Loading :show='loadingPage' />
+        <div class='page-wrap'>
+            <div class='record-list'>
+                <van-pull-refresh v-model='loading' @refresh='onRefresh'>
+                    <div v-if='list.length === 0'>
+                        <van-empty :description="$t('withdrawRecord.noneHint')" image='/images/empty.png' />
+                    </div>
+                    <van-list
+                        v-model:loading='loading'
+                        :finished='finished'
+                        :finished-text='finishedText'
+                        :immediate-check='false'
+                        :loading-text="$t('compLang.loading')"
+                        @load='onLoad'
                     >
-                        <van-collapse-item :name='index+1'>
-                            <template #title>
-                                <p class='amount'>
-                                    {{ item.amount }}
-                                    <template v-if='item.withdrawType === 1'>
-                                        {{ item.accountCurrency }}
-                                    </template>
-                                    <template v-if='item.withdrawType === 2'>
-                                        {{ item.withdrawCurrency }}-{{ item.blockchainName }}
-                                    </template>
-                                </p>
-                                <p class='time'>
-                                    {{ formatTime(item.createTime) }}
-                                </p>
-                            </template>
-                            <template #right-icon>
-                                <div class='right-lump'>
-                                    <span class='state'>
-                                        {{ handleState(item.checkStatus,item.transferStatus) }}
-                                    </span>
-                                    <van-icon :name='activeIndex === index+1 ? "arrow-up" : "arrow-down"' />
-                                </div>
-                            </template>
-                            <div class='withdraw-desc'>
-                                <div class='w-item'>
-                                    <span class='left-label'>
-                                        {{ $t('withdrawRecord.moneyName') }}
-                                    </span>
-                                    <span class='right-val'>
+                        <van-collapse
+                            v-for='(item, index) in list'
+                            :key='index'
+                            v-model='activeIndex'
+                            accordion
+                            class='aaa'
+                            @change='handleFold(index)'
+                        >
+                            <van-collapse-item :name='index+1'>
+                                <template #title>
+                                    <p class='amount'>
                                         {{ item.amount }}
                                         <template v-if='item.withdrawType === 1'>
                                             {{ item.accountCurrency }}
@@ -62,99 +37,127 @@
                                         <template v-if='item.withdrawType === 2'>
                                             {{ item.withdrawCurrency }}-{{ item.blockchainName }}
                                         </template>
-                                    </span>
-                                </div>
-                                <div class='w-item'>
-                                    <span class='left-label'>
-                                        {{ $t('withdrawRecord.serviceName') }}
-                                    </span>
-                                    <span class='right-val'>
-                                        {{ item.withdrawFee }}
-                                        <template v-if='item.withdrawType === 1'>
-                                            {{ item.accountCurrency }}
-                                        </template>
-                                        <template v-if='item.withdrawType === 2'>
-                                            {{ item.withdrawCurrency }}-{{ item.blockchainName }}
-                                        </template>
-                                    </span>
-                                </div>
-                                <div class='w-item'>
-                                    <span class='left-label'>
-                                        {{ $t('withdrawRecord.predictName') }}
-                                    </span>
-                                    <span class='right-val'>
-                                        {{ item.finalAmount }}
-                                        <template v-if='item.withdrawType === 1'>
-                                            {{ item.withdrawCurrency }}
-                                        </template>
-                                        <template v-if='item.withdrawType === 2'>
-                                            {{ item.withdrawCurrency }}-{{ item.blockchainName }}
-                                        </template>
-                                    </span>
-                                </div>
-                                <div class='w-item'>
-                                    <span class='left-label'>
-                                        {{ $t('withdrawRecord.accountDeduction') }}
-                                    </span>
-                                    <span class='right-val'>
-                                        {{ item.accountDeductAmount }} {{ item.accountCurrency }}
-                                    </span>
-                                </div>
-                                <div class='w-item'>
-                                    <span class='left-label'>
-                                        {{ $t('withdrawRecord.statusName') }}
-                                    </span>
-                                    <span class='right-val state'>
-                                        {{ handleState(item.checkStatus,item.transferStatus) }}
-                                        <!-- {{ transferStatus[item.transferStatus] }} -->
-                                    </span>
-                                </div>
-
-                                <div class='w-item'>
-                                    <span class='left-label'>
-                                        TXID
-                                    </span>
-                                    <span class='right-val w250'>
-                                        <span class='val'>
-                                            {{ item.txid || '--' }}
-                                        </span>
-                                        <span v-if='item.txid' class='copy-btn' :data-clipboard-text='item.txid' @click='copyTXID'>
-                                            <img alt='' src='../../../assets/copy.png' srcset='' />
-                                        </span>
-                                    </span>
-                                </div>
-
-                                <!-- <div class='w-item'>
-                                    <span class='left-label'>
-                                        {{ $t('withdrawRecord.noName') }}
-                                    </span>
-                                    <span class='right-val'>
-                                        {{ item.proposalNo }}
-                                    </span>
-                                </div> -->
-                                <div class='w-item'>
-                                    <span class='left-label'>
-                                        {{ $t('withdrawRecord.timeName') }}
-                                    </span>
-                                    <span class='right-val'>
+                                    </p>
+                                    <p class='time'>
                                         {{ formatTime(item.createTime) }}
-                                    </span>
+                                    </p>
+                                </template>
+                                <template #right-icon>
+                                    <div class='right-lump'>
+                                        <span class='state'>
+                                            {{ handleState(item.checkStatus,item.transferStatus) }}
+                                        </span>
+                                        <van-icon :name='activeIndex === index+1 ? "arrow-up" : "arrow-down"' />
+                                    </div>
+                                </template>
+                                <div class='withdraw-desc'>
+                                    <div class='w-item'>
+                                        <span class='left-label'>
+                                            {{ $t('withdrawRecord.moneyName') }}
+                                        </span>
+                                        <span class='right-val'>
+                                            {{ item.amount }}
+                                            <template v-if='item.withdrawType === 1'>
+                                                {{ item.accountCurrency }}
+                                            </template>
+                                            <template v-if='item.withdrawType === 2'>
+                                                {{ item.withdrawCurrency }}-{{ item.blockchainName }}
+                                            </template>
+                                        </span>
+                                    </div>
+                                    <div class='w-item'>
+                                        <span class='left-label'>
+                                            {{ $t('withdrawRecord.serviceName') }}
+                                        </span>
+                                        <span class='right-val'>
+                                            {{ item.withdrawFee }}
+                                            <template v-if='item.withdrawType === 1'>
+                                                {{ item.accountCurrency }}
+                                            </template>
+                                            <template v-if='item.withdrawType === 2'>
+                                                {{ item.withdrawCurrency }}-{{ item.blockchainName }}
+                                            </template>
+                                        </span>
+                                    </div>
+                                    <div class='w-item'>
+                                        <span class='left-label'>
+                                            {{ $t('withdrawRecord.predictName') }}
+                                        </span>
+                                        <span class='right-val'>
+                                            {{ item.finalAmount }}
+                                            <template v-if='item.withdrawType === 1'>
+                                                {{ item.withdrawCurrency }}
+                                            </template>
+                                            <template v-if='item.withdrawType === 2'>
+                                                {{ item.withdrawCurrency }}-{{ item.blockchainName }}
+                                            </template>
+                                        </span>
+                                    </div>
+                                    <div class='w-item'>
+                                        <span class='left-label'>
+                                            {{ $t('withdrawRecord.accountDeduction') }}
+                                        </span>
+                                        <span class='right-val'>
+                                            {{ item.accountDeductAmount }} {{ item.accountCurrency }}
+                                        </span>
+                                    </div>
+                                    <div class='w-item'>
+                                        <span class='left-label'>
+                                            {{ $t('withdrawRecord.statusName') }}
+                                        </span>
+                                        <span class='right-val state'>
+                                            {{ handleState(item.checkStatus,item.transferStatus) }}
+                                            <!-- {{ transferStatus[item.transferStatus] }} -->
+                                        </span>
+                                    </div>
+
+                                    <div class='w-item'>
+                                        <span class='left-label'>
+                                            TXID
+                                        </span>
+                                        <span class='right-val w250'>
+                                            <span class='val'>
+                                                {{ item.txid || '--' }}
+                                            </span>
+                                            <span v-if='item.txid' class='copy-btn' :data-clipboard-text='item.txid' @click='copyTXID'>
+                                                <img alt='' src='../../../../assets/copy.png' srcset='' />
+                                            </span>
+                                        </span>
+                                    </div>
+
+                                    <!-- <div class='w-item'>
+                                        <span class='left-label'>
+                                            {{ $t('withdrawRecord.noName') }}
+                                        </span>
+                                        <span class='right-val'>
+                                            {{ item.proposalNo }}
+                                        </span>
+                                    </div> -->
+                                    <div class='w-item'>
+                                        <span class='left-label'>
+                                            {{ $t('withdrawRecord.timeName') }}
+                                        </span>
+                                        <span class='right-val'>
+                                            {{ formatTime(item.createTime) }}
+                                        </span>
+                                    </div>
+                                    <div class='w-item'>
+                                        <span class='left-label'>
+                                            {{ $t('withdrawRecord.remarkName') }}
+                                        </span>
+                                        <span class='right-val'>
+                                            {{ item.remark || '--' }}
+                                        </span>
+                                    </div>
                                 </div>
-                                <div class='w-item'>
-                                    <span class='left-label'>
-                                        {{ $t('withdrawRecord.remarkName') }}
-                                    </span>
-                                    <span class='right-val'>
-                                        {{ item.remark || '--' }}
-                                    </span>
-                                </div>
-                            </div>
-                        </van-collapse-item>
-                    </van-collapse>
-                </van-list>
-            </van-pull-refresh>
+                            </van-collapse-item>
+                        </van-collapse>
+                    </van-list>
+                </van-pull-refresh>
+            </div>
         </div>
-    </div>
+    </centerViewDialog>
+    
 </template>
 
 <script>
@@ -166,12 +169,14 @@ import { Toast } from 'vant'
 import { useRoute, useRouter } from 'vue-router'
 import Clipboard from 'clipboard'
 import { isEmpty } from '@/utils/util'
+import centerViewDialog from '@planspc/layout/centerViewDialog'
 
 // i18n
 import { useI18n } from 'vue-i18n'
 export default {
     components: {
-        Top
+        Top,
+        centerViewDialog
     },
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })

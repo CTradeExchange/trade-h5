@@ -81,10 +81,10 @@ export default {
         // 判断是显示提现记录还是提币记录
         if (state.currentTab === 'digit_wallet') {
             // state.rightAction.title = t('withdraw.coinRecordText')
-            state.rightAction.path = '/withdrawRecord?withdrawType=2'
+            state.rightAction.path = 'withdrawRecord?withdrawType=2'
         } else if (state.currentTab === 'bank') {
             // state.rightAction.title = t('withdraw.moneyRecordText')
-            state.rightAction.path = '/withdrawRecord?withdrawType=1'
+            state.rightAction.path = 'withdrawRecord?withdrawType=1'
         }
 
         // 导航栏右侧标题点击跳转

@@ -6,7 +6,7 @@
                 <p class='head-text'>
                     {{ $t('withdraw.outAccount') }}
                 </p>
-                <el-select class="currencyBox" v-model='accountId' placeholder='Select' @change='changeOutCurrency'>
+                <el-select class="currencyBox" v-model='accountId' placeholder='' @change='changeOutCurrency'>
                     <el-option
                         v-for='item in columns'
                         :key='item.accountId'
@@ -17,7 +17,7 @@
                 <p class='head-text'>
                     {{ $t('withdraw.inAccount') }}
                 </p>
-                <el-select style="padding-bottom: 20px;" class="currencyBox" v-model='inCurrency' placeholder='Select' @change='changeInCurrency'>
+                <el-select style="padding-bottom: 20px;" class="currencyBox" v-model='inCurrency' placeholder='' @change='changeInCurrency'>
                     <el-option
                         v-for='item in inCurrencyList'
                         :key='item.currency'
