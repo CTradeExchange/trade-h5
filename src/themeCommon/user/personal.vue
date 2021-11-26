@@ -4,9 +4,9 @@
         <van-cell-group>
             <van-cell is-link :title='$t("cRoute.authentication")' to='/authentication' />
             <van-cell is-link :title='$t("cRoute.bankList")' to='/bankList' />
-            <van-cell is-link title='人脸识别' @click="toFaceDetect" >
-                 <template #right-icon>
-                    <van-icon  :name="faceDetectSuccess ? 'success': 'arrow'" :color="faceDetectSuccess ? $style.success : $style.minorColor" />
+            <van-cell is-link :title='$t("faceAuth.faceDetect")' @click='toFaceDetect'>
+                <template #right-icon>
+                    <van-icon :color='faceDetectSuccess ? $style.success : $style.minorColor' :name="faceDetectSuccess ? 'success': 'arrow'" />
                 </template>
             </van-cell>
             <!-- <van-cell is-link :title='$t("cRoute.walletAddress")' to='/walletAddress' /> -->
@@ -29,7 +29,7 @@ export default {
         }
         const faceDetectSuccess = localGet('faceDetectSuccess')
         const toFaceDetect = () => {
-            if(!faceDetectSuccess){
+            if (!faceDetectSuccess) {
                 router.push('/faceDetect')
             }
         }
