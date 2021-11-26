@@ -17,7 +17,7 @@
                     <span class='currencySpan' @click='selectPickerField("outCurrency")'>
                         {{ outCurrency }}
                     </span>
-                    <span class='icon_icon_arrow' @click='selectPickerField("outCurrency")'></span>
+                    <!-- <span class='icon_icon_arrow' @click='selectPickerField("outCurrency")'></span> -->
                     <input v-model='outAmount' class='input' type='number' />
                     <a class='all' href='javascript:;' @click='handleAll'>
                         {{ $t('trade.allPosition') }}
@@ -35,7 +35,7 @@
                         {{ inCurrency }}
                     </span>
 
-                    <span class='icon_icon_arrow' @click='selectPickerField("inCurrency")'></span>
+                    <!-- <span class='icon_icon_arrow' @click='selectPickerField("inCurrency")'></span> -->
                     <span v-if='sameCurrency'>
                         ≈
                     </span>

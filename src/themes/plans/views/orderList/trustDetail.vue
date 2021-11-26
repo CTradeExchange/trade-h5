@@ -195,7 +195,7 @@ export default {
                     })
                 } else {
                     closePboOrder({
-                        pboId: pendingItem.value.id,
+                        pboId: pendingItem.value.id.toString(),
                         ...params,
                     }).then(res => {
                         loading.value = false

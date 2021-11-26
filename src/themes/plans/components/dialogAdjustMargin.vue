@@ -113,6 +113,7 @@ export default {
 
         const operation = () => {
             state.operType = !state.operType
+            state.amount = ''
 
             if (state.operType) {
                 store.dispatch('_user/findCustomerInfo', false)
@@ -130,7 +131,7 @@ export default {
             if (state.operType) {
                 state.amount = accountInfo.value.available
             } else {
-                state.amount = props.data.canReduceMargin
+                state.amount = positionData.value.canReduceMargin
             }
         }
 
@@ -218,7 +219,7 @@ export default {
         position: absolute;
         top: 0;
         right: 0;
-        padding:rem(40px) rem(25px) rem(25px) rem(25px);
+        padding:rem(35px) rem(25px) rem(25px) rem(25px);
         color: var(--normalColor);
         font-size: rem(28px);
     }

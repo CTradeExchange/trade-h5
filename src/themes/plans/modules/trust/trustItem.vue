@@ -200,7 +200,7 @@ export default {
                 })
             } else {
                 closePboOrder({
-                    pboId: props.product.id,
+                    pboId: props.product.id.toString(),
                     ...params,
                 }).then(res => {
                     loading.value = false

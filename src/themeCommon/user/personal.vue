@@ -6,7 +6,7 @@
             <van-cell is-link :title='$t("cRoute.bankList")' to='/bankList' />
             <van-cell is-link :title='$t("faceAuth.faceDetect")' @click='toFaceDetect'>
                 <template #right-icon>
-                    <van-icon :color='faceDetectSuccess ? $style.success : $style.minorColor' :name="faceDetectSuccess ? 'success': 'arrow'" />
+                    <van-icon class='right-icon' :color='faceDetectSuccess ? $style.success : $style.minorColor' :name="faceDetectSuccess ? 'success': 'arrow'" />
                 </template>
             </van-cell>
             <!-- <van-cell is-link :title='$t("cRoute.walletAddress")' to='/walletAddress' /> -->
@@ -47,5 +47,8 @@ export default {
 .page-wrap {
     height: 100%;
     background-color: var(--bgColor);
+    .right-icon{
+        font-size: rem(29px);
+    }
 }
 </style>
