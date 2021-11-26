@@ -69,7 +69,7 @@ export const getPendingColumns = tradeType => {
                 })
         } else {
             return closePboOrder({
-                pboId: row.id,
+                pboId: String(row.id),
                 ...params,
             })
                 .then(res => res.check())

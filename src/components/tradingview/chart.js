@@ -121,7 +121,6 @@ class Chart {
             container: containerId.slice(1),
             symbol: this.symbolId,
             interval: this.interval,
-            locale: 'zh'
         })
 
         this.widget.onChartReady(() => {
@@ -148,7 +147,7 @@ class Chart {
             options = this._orientation === 'portrait' ? portraitOptions() : landscapeOptions()
         }
 
-        ['theme'].forEach(key => {
+        ['theme', 'locale'].forEach(key => {
             if (this.extension[key]) {
                 options[key] = this.extension[key]
             }

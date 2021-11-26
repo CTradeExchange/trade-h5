@@ -23,13 +23,13 @@
             </p>
         </div>
         <div class='item ohlc'>
-            <p>{{ $t('chart.open') }} {{ product.open_price }}</p>
-            <p>{{ $t('chart.close') }} {{ product.yesterday_close_price }}</p>
+            <p>{{ $t('chart.open') }} {{ product.open_price || '--' }}</p>
+            <p>{{ $t('chart.close') }} {{ product.yesterday_close_price || '--' }}</p>
         </div>
 
         <div class='item ohlc'>
-            <p>{{ $t('chart.high') }} {{ product.high_price }}</p>
-            <p>{{ $t('chart.low') }} {{ product.low_price }}</p>
+            <p>{{ $t('chart.high') }} {{ product.high_price || '--' }}</p>
+            <p>{{ $t('chart.low') }} {{ product.low_price || '--' }}</p>
         </div>
 
         <div class='item collect'>
@@ -187,13 +187,14 @@ import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
-import { isEmpty, localSet, localGet } from '@/utils/util'
+import { isEmpty, localSet, localGet, getCookie } from '@/utils/util'
 import KIcon from './components/icons/kIcon.vue'
 import StudyList from './studyList.vue'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import Loading from '@/components/loading.vue'
 import { ElMessage } from 'element-plus'
+
 export default {
     components: { tv, KIcon, StudyList },
     setup () {
@@ -357,7 +358,7 @@ export default {
                     symbolId: product.value.symbolId, // 产品id
                     digits: product.value.symbolDigits, // 小数点
                     dealMode: product.value.dealMode, // 成交模式
-                    tradeType: tradeType, // 玩法
+                    tradeType: product.value.tradeType, // 玩法
                     interval: locChartConfig?.resolution // 周期
                 }
             }
@@ -578,6 +579,7 @@ export default {
         const locChartConfig = JSON.parse(localGet('chartConfig'))
         const initChartData = () => {
             const invertColor = localGet('invertColor')
+            const locale = getCookie('lang') === 'zh-CN' ? 'zh' : 'en'
             if (isEmpty(locChartConfig)) {
                 localSetChartConfig('showLastPrice', false)
                 localSetChartConfig('mainStudy', JSON.stringify(MAINSTUDIES[0]))
@@ -617,7 +619,8 @@ export default {
                     extension: {
                         theme: invertColor === 'light' ? 'Light' : 'Dark', // 主题 "Light" | "Dark"
                         fullScreen: false, // 全屏功能（右上角缩放按钮、横屏监听等）,
-                        orientation: 'portrait'
+                        orientation: 'portrait',
+                        locale
                     }
                 })
             } else {
@@ -651,7 +654,8 @@ export default {
                     extension: {
                         theme: invertColor === 'light' ? 'Light' : 'Dark', // 主题 "Light" | "Dark"
                         fullScreen: true, // 全屏功能（右上角缩放按钮、横屏监听等）
-                        orientation: 'landscape'
+                        orientation: 'landscape',
+                        locale
                     }
                 })
             }
@@ -812,6 +816,11 @@ export default {
     >div{
         flex: 1;
         &.item{
+            &.symbol-name,
+            &.range,
+            &.ohlc{
+                flex: 0 1 220px;
+            }
             .name{
                 font-size: 16px;
                 font-weight: bold;

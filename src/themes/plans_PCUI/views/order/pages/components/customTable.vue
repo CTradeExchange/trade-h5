@@ -124,5 +124,39 @@ const current = computed({
     .pagination{
         margin: 10px 0;
     }
+    :deep{
+        .el-table{
+            background-color: var(--contentColor);
+            td.el-table__cell, th.el-table__cell{
+                border-color: var(--lineColor);
+                color: var(--color);
+            }
+            .el-table__fixed-right::before,
+            .el-table__fixed::before,
+            tr,th.el-table__cell,
+            tr.hover-row .el-table__cell,
+            &::before{
+                background-color: var(--contentColor);
+            }
+            tr:hover>td.el-table__cell{
+                background-color: var(--bgColor);
+            }
+
+        }
+        .el-pagination{
+            .btn-prev,
+            .btn-next,
+            .number{
+                background-color: var(--contentColor);
+                color: var(--color);
+            }
+            .active.number{
+                color: var(--el-pagination-hover-color);
+            }
+            .number:hover{
+                color: var(--el-pagination-hover-color);
+            }
+        }
+    }
 }
 </style>
