@@ -5,7 +5,7 @@
         <div class='main'>
             <div v-show='reacShow' class='success'>
                 <i class='icon_success'></i>
-                <p>验证成功</p>
+                <p>{{ $t('faceAuth.verifiedSuccessfully') }}</p>
             </div>
 
             <canvas v-show='resultCanvasShow' id='mainCanvas'></canvas>
@@ -15,7 +15,7 @@
         <!-- 认证失败 -->
         <div v-if='videoShow' class='video'>
             <p class='notice'>
-                {{ $t('common.faceDetectTip') }}
+                {{ $t('faceAuth.faceDetectTip') }}
             </p>
             <video
                 autoplay
@@ -26,15 +26,15 @@
         </div>
         <div v-if='videoShow' class='btns'>
             <van-button type='primary' @click='openCamera'>
-                开始认证
+                {{ $t('faceAuth.startVerification') }}
             </van-button>
-            <van-button type='primary' @click='takeSnapshot'>
-                提交验证
+            <van-button :loading='loading' type='primary' @click='takeSnapshot'>
+                {{ $t('faceAuth.submitVerification') }}
             </van-button>
         </div>
         <div v-else class='btns'>
             <van-button type='primary' @click='$router.back()'>
-                确定
+                {{ $t('faceAuth.done') }}
             </van-button>
         </div>
     </div>
@@ -47,6 +47,7 @@ import axios from 'axios'
 import qs from 'qs'
 import { localSet } from '@/utils/util'
 import { Toast } from 'vant'
+import { useI18n } from 'vue-i18n'
 const constraints = {
     audio: false,
     video: true
@@ -54,12 +55,14 @@ const constraints = {
 
 export default {
     setup (props) {
+        const { t, tm } = useI18n({ useScope: 'global' })
         const state = reactive({
             faceDetectSuccess: false,
             classObj: {},
             reacShow: false,
             resultCanvasShow: false,
-            videoShow: true
+            videoShow: true,
+            btnLoading: false
         })
         let video
         const gotStream = (stream) => {
@@ -73,6 +76,7 @@ export default {
         }
 
         const takeSnapshot = (e) => {
+            state.btnLoading = true
             state.resultCanvasShow = true
             mCanvas = window.canvas = document.querySelector('#mainCanvas')
             mCanvas.width = 480
@@ -114,14 +118,13 @@ export default {
             const url = 'https://120.79.87.9:7443/facepp/v3/detect'
             axios.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).then(res => {
                 console.log('res', res)
+                state.btnLoading = false
                 if (res.data.face_num === 1) {
                     localSet('faceDetectSuccess', true)
                     state.faceDetectSuccess = true
-                    debugger
                     const rectangle = res.data.faces[0].face_rectangle
                     const widthrate = document.body.clientWidth / 1000
                     const heightRate = mCanvas.clientHeight / 1000
-                    debugger
                     let style = ''
                     for (const key in rectangle) {
                         if (rectangle.hasOwnProperty(key)) {
@@ -129,7 +132,7 @@ export default {
                                 const val = rectangle[key] * widthrate + 'px'
                                 style += key + ':' + val + ';'
                             } else {
-                                const val = rectangle[key] * heightRate + 50 + 'px'
+                                const val = rectangle[key] * heightRate + 30 + 'px'
                                 style += key + ':' + val + ';'
                             }
                         }
@@ -137,10 +140,11 @@ export default {
                     state.reacShow = true
                     state.classObj = style
                 } else {
-                    Toast('验证失败，请重新提交')
+                    Toast(t('faceAuth.verificationFailed'))
                 }
             }).catch(error => {
-                alert('失败' + error)
+                state.btnLoading = false
+                Toast(t('faceAuth.verificationFailed'))
             })
         }
 
