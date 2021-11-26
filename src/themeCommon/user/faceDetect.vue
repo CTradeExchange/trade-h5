@@ -1,6 +1,7 @@
 <template>
     <div class='page-wrap'>
         <layoutTop />
+        <Loading :show='btnLoading' />
         <!-- 认证成功 -->
         <div class='main'>
             <div v-show='reacShow' class='success'>
@@ -32,7 +33,7 @@
                 {{ $t('faceAuth.submitVerification') }}
             </van-button>
         </div>
-        <div v-else class='btns'>
+        <div v-if='faceDetectSuccess' class='btns'>
             <van-button type='primary' @click='$router.back()'>
                 {{ $t('faceAuth.done') }}
             </van-button>
@@ -132,7 +133,7 @@ export default {
                                 const val = rectangle[key] * widthrate + 'px'
                                 style += key + ':' + val + ';'
                             } else {
-                                const val = rectangle[key] * heightRate + 30 + 'px'
+                                const val = rectangle[key] * heightRate + 90 + 'px'
                                 style += key + ':' + val + ';'
                             }
                         }
@@ -231,6 +232,8 @@ export default {
        .success{
            padding: rem(60px) 0;
            .icon_success{
+               display: block;
+               margin-bottom: rem(20px);
                font-size: 40px;
                color: var(--success)
            }
