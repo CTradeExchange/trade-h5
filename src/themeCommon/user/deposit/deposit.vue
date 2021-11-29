@@ -148,7 +148,7 @@ import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { isEmpty, sessionGet, getCookie, arrayObjSort } from '@/utils/util'
-import { mul } from '@/utils/calculation'
+import { mul, divide } from '@/utils/calculation'
 import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal, judgeIsAlreadyDeposit } from '@/api/user'
 import { getListByParentCode } from '@/api/base'
 
@@ -285,8 +285,11 @@ export default {
 
         // 计算预计支付金额
         const computeExpectedpay = computed(() => {
-            // 计算方式：存款金额 * 汇率
-            return state.rateConfig.exchangeRate ? mul(state.amount, state.rateConfig.exchangeRate) : ''
+            // 计算方式
+            if (state.rateConfig.exchangeRate) {
+                return state.rateConfig.formulaSymbol === 'multiply' ? mul(state.amount, state.rateConfig.exchangeRate) : divide(state.amount, state.rateConfig.exchangeRate)
+            }
+            return ''
         })
 
         // 计算存款时间
