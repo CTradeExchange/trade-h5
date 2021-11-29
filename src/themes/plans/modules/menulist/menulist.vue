@@ -35,6 +35,7 @@
                     </van-tag>
                 </template>
             </van-cell>
+            <van-cell is-link title='退出登录' value='' />
         </van-cell-group>
         <slot></slot>
     </div>

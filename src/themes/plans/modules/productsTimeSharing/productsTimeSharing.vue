@@ -58,6 +58,7 @@ export default {
         display: flex;
         justify-content: flex-start;
         .product-item{
+
             flex: 1;
             padding: rem(23px);
             margin-right: rem(30px);
@@ -68,9 +69,7 @@ export default {
             .text2{
                 font-size: rem(40px);
             }
-            &:last-child{
-               // margin-right: 0;
-            }
+
         }
     }
 }

@@ -1,5 +1,6 @@
 <template>
     <productsTimeSharing />
+    <productsWithIcon />
     <div id='homeContent' ref='homeContent' class='home' :class='{ hasNav: $hasNav }'>
         <PageComp :data='pageModules' />
     </div>
@@ -12,11 +13,13 @@ import { onActivated, computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import floatComp from '@plans/modules/floatComp/floatComp.vue'
 import productsTimeSharing from '@plans/modules/productsTimeSharing/productsTimeSharing.vue'
+import productsWithIcon from '@plans/modules/productsWithIcon.vue'
 export default {
     name: 'Home',
     components: {
         floatComp,
-        productsTimeSharing
+        productsTimeSharing,
+        productsWithIcon
     },
     setup () {
         const store = useStore()
@@ -59,7 +62,7 @@ export default {
 @import '~@/sass/mixin.scss';
 .home {
     height: 100%;
-    overflow: auto;
+    //overflow: auto;
     background: var(--contentColor);
     &.hasNav{
         margin-bottom: rem(80px);
