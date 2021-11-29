@@ -149,7 +149,7 @@ import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { isEmpty, sessionGet, getCookie, arrayObjSort } from '@/utils/util'
-import { mul } from '@/utils/calculation'
+import { mul, divide, toFixed } from '@/utils/calculation'
 import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal, judgeIsAlreadyDeposit } from '@/api/user'
 import { getListByParentCode } from '@/api/base'
 
@@ -287,8 +287,10 @@ export default {
         // 计算预计支付金额
         const computeExpectedpay = computed(() => {
             // 计算方式
-            if (state.rateConfig.exchangeRate) {
-                return state.rateConfig.formulaSymbol === 'multiply' ? mul(state.amount, state.rateConfig.exchangeRate) : divide(state.amount, state.rateConfig.exchangeRate)
+            const rateConfig = state.rateConfig
+            if (rateConfig.exchangeRate) {
+                const value = rateConfig.formulaSymbol === 'multiply' ? mul(state.amount, rateConfig.exchangeRate) : divide(state.amount, rateConfig.exchangeRate)
+                return toFixed(value, rateConfig.targetDigits)
             }
             return ''
         })
