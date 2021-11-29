@@ -125,14 +125,16 @@ export default {
             (newval, oldval) => (state.lastPriceColor = lt(newval, oldval) ? 'fallColor' : 'riseColor')
         )
 
-        watch(() => state.curDigit, val => {
-            if (!isEmpty(val)) {
+        // 监听路由变化
+        watch(
+            () => [route.query, state.curDigit], (val, oval) => {
                 QuoteSocket.deal_subscribe(product.value?.symbolId, 5, state.curDigit, product.value?.tradeType, 20)
             }
-        })
+        )
 
         watchEffect(() => {
             state.curDigit = handicapDigit.value
+            console.log('**************', state.curDigit)
         })
 
         // 报价不够5档，补空位

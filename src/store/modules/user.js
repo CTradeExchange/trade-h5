@@ -1,4 +1,4 @@
-import { login, findCustomerInfo, logout, switchAccount, queryCustomerOptionalList, addCustomerOptional, queryCustomerAssetsInfo, queryAccountAssetsInfo, addCustomerOptionalBatch } from '@/api/user'
+import { login, findCustomerInfo, logout, switchAccount, queryCustomerOptionalList, addCustomerOptional, queryCustomerAssetsInfo, queryAccountAssetsInfo, addCustomerOptionalBatch, findAllBizKycList } from '@/api/user'
 import { removeCustomerOptional } from '@/api/trade'
 import { localSet, setToken, removeLoginParams, sessionSet } from '@/utils/util'
 import { vue_set, assign } from '@/utils/vueUtil.js'
@@ -17,6 +17,7 @@ export default {
         accountAssets: {}, // msg服务推送过来的交易账户资产
         kycState: '', // kyc认证
         selfSymbolList: [], // 自选产品列表
+        kycList: [], // kyc 验证列表
     },
     getters: {
         userAccountType (state) {
@@ -112,6 +113,9 @@ export default {
         },
         Update_optional (state, data) {
             state.customerInfo.optional = data
+        },
+        Update_kycList (state, data) {
+            state.kycList = data
         }
     },
     actions: {
@@ -267,5 +271,14 @@ export default {
                 }
             })
         },
+        // 查询客户KYC认证列表
+        findAllBizKycList ({ state, commit }) {
+            return findAllBizKycList().then(res => {
+                if (res.check()) {
+                    commit('Update_kycList', res.data)
+                    return res
+                }
+            })
+        }
     }
 }

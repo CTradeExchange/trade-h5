@@ -41,19 +41,19 @@
                     {{ item.symbolCode }}
                 </span>
                 <template v-if='[1,2].includes(Number(props.tradeType))'>
-                    <span class='price'>
+                    <span class='price' :class='[productMap[item.symbolKey]?.upDownColor]'>
                         {{ getVal(item.symbolKey, 'sell_price') }}
                     </span>
-                    <span class='upDownAmount'>
+                    <span class='upDownAmount' :class='[productMap[item.symbolKey]?.upDownColor]'>
                         {{ getVal(item.symbolKey, 'buy_price') }}
                     </span>
                 </template>
                 <template v-if='[3,5].includes(Number(props.tradeType))'>
-                    <span class='price'>
+                    <span class='price' :class='[productMap[item.symbolKey]?.upDownColor]'>
                         {{ getVal(item.symbolKey, 'price') }}
                     </span>
-                    <span class='upDownAmount'>
-                        {{ getVal(item.symbolKey, 'upDownAmount') }}
+                    <span class='upDownAmount' :class='[productMap[item.symbolKey]?.upDownColor]'>
+                        {{ getVal(item.symbolKey, 'upDownAmount') > 0 ? '+' : '' }}{{ getVal(item.symbolKey, 'upDownAmount') }}
                     </span>
                 </template>
                 <span class='upDownWidth' :class='[productMap[item.symbolKey]?.upDownColor]'>
@@ -105,7 +105,7 @@ const props = defineProps({
 const list = toRef(props, 'list')
 const { productListEl, productMap } = subscribeProducts(list)
 
-const getVal = (symbolKey, key) => unref(productMap)[symbolKey] && unref(productMap)[symbolKey]?.[key] || '- -'
+const getVal = (symbolKey, key) => unref(productMap)[symbolKey]?.[key] || '- -'
 
 // 切换当前选中产品
 const gotoOrder = product => {
@@ -183,7 +183,6 @@ watch(() => [props.list.length],
     .lowPrice,
     .change{
         flex: 0 0 163px;
-        color: var(--color);
         @include ellipsis();
     }
     .btns{

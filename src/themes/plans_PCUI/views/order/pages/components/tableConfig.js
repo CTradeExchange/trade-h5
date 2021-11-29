@@ -69,7 +69,7 @@ export const getPendingColumns = tradeType => {
                 })
         } else {
             return closePboOrder({
-                pboId: row.id,
+                pboId: String(row.id),
                 ...params,
             })
                 .then(res => res.check())
@@ -81,7 +81,8 @@ export const getPendingColumns = tradeType => {
     // 撤单
     const handleCancelOrder = (row) => {
         ElMessageBox.confirm(t('trade.cancelPendingOrder'), t('tip'), {
-            confirmButtonText: 'OK',
+            cancelButtonText: t('cancel'),
+            confirmButtonText: t('confirm'),
             beforeClose: (action, instance, done) => {
                 if (action === 'confirm') {
                     instance.confirmButtonLoading = true
@@ -182,7 +183,7 @@ export const getPendingColumns = tradeType => {
             },
         ],
         2: [
-            { name: t('trade.name'), prop: 'symbolName', align: 'left' },
+            { name: t('trade.name'), prop: 'symbolName', align: 'left', width: 100 },
             {
                 name: t('trade.direction'),
                 prop: 'direction',
@@ -214,13 +215,13 @@ export const getPendingColumns = tradeType => {
                 name: t('trade.stopLossPrice'),
                 align: 'right',
                 width: 100,
-                prop: 'stopLoss'
+                formatter: row => (row.stopLoss / Math.pow(10, row.digits)).toFixed(row.digits)
             },
             {
                 name: t('trade.stopProfitPrice'),
                 align: 'right',
                 width: 100,
-                prop: 'takeProfit'
+                formatter: row => (row.takeProfit / Math.pow(10, row.digits)).toFixed(row.digits)
             },
             {
                 name: t('trade.expireTime'),
@@ -358,7 +359,7 @@ export const getTransactionColumns = (tradeType) => {
 
     // 判断是否是平仓
     const isCloseType = (bizType) => {
-        if ([2, 4, 5, 6, 7, 8].includes(Number(bizType))) {
+        if ([4, 5, 6, 7, 8].includes(Number(bizType))) {
             return true
         } else {
             return false
@@ -418,7 +419,7 @@ export const getTransactionColumns = (tradeType) => {
                 prop: 'requestPrice',
                 align: 'right',
                 width: 120,
-                formatter: row => isCloseType(row.bizType) ? '- -' : row.requestPrice
+                formatter: row => (Number(row.bizType) === 1 || isCloseType(row.bizType)) ? '- -' : row.requestPrice
             },
             {
                 name: t('trade.positionPrice'),
@@ -444,6 +445,7 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.profit'),
                 align: 'right',
                 prop: 'profitLoss',
+                width: 100,
             },
             { name: t('trade.fee'), prop: 'commission', align: 'right', width: 120 },
             { name: t('trade.pendingNo'), prop: 'dealId', align: 'right' },
@@ -580,7 +582,7 @@ export const getTransactionColumns = (tradeType) => {
                 prop: 'requestPrice',
                 align: 'right',
                 width: 120,
-                formatter: row => isCloseType(row.bizType) ? row.requestPrice : '- -'
+                formatter: row => (Number(row.bizType) === 1 || isCloseType(row.bizType)) ? '- -' : row.requestPrice
             },
             { name: t('trade.dealAvgPrice'), prop: 'executePrice', align: 'right', width: 120, },
             {
@@ -653,7 +655,12 @@ export const getTransactionColumns = (tradeType) => {
                 width: 120,
             },
             { name: t('trade.dealAvgPrice'), prop: 'executePrice', align: 'right', width: 120, },
-            { name: t('trade.fee'), prop: 'commission', align: 'right', width: 120 },
+            {
+                name: t('trade.fee'),
+                align: 'right',
+                width: 120,
+                formatter: row => row.commission + row.inCurrency
+            },
             { name: t('trade.pendingNo'), prop: 'dealId', align: 'right' },
         ],
     }))
@@ -898,10 +905,10 @@ export const getAssetColumns = (tradeType) => {
                                 <span className='link' onclick={openAdjustMargin.bind(null, row, refs.adjustMargin)} type='text'>
                                     { t('trade.modifyMargin') }
                                 </span>
-                                <span className='link' onclick={openSltp.bind(null, row, refs.closePosition)} type='text'>
+                                <span className='link' onclick={openSltp.bind(null, row, refs.sltp)} type='text'>
                                     { t('trade.tackStopSetup') }
                                 </span>
-                                <span className='link' onclick={openClosePosition.bind(null, row, refs.sltp)} type='text'>
+                                <span className='link' onclick={openClosePosition.bind(null, row, refs.closePosition)} type='text'>
                                     { t('trade.closed') }
                                 </span>
                             </>

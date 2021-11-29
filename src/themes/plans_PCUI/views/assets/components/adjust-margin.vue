@@ -140,6 +140,8 @@ export default {
             }).catch(res => {
                 state.isSubmit = false
                 Toast(res.msg)
+            }).finally(() => {
+                queryPositionList()
             })
         }
 

@@ -9,6 +9,7 @@
                 :finished='finished'
                 :finished-text='$t("historyList.noMore")'
                 :immediate-check='false'
+                :loading-text="$t('compLang.loading')"
                 @load='onLoad'
             >
                 <HistoryItem v-for='item in orderList' :key='item' :data='item' />

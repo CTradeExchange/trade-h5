@@ -2,17 +2,17 @@
     <div class='listWrap'>
         <div class='item listHead'>
             <span class='name'>
-                名称
+                {{ $t('trade.name') }}
             </span>
             <span class='price'>
-                最新价
+                {{ $t('trade.newPrice') }}
             </span>
             <span class='change'>
-                涨跌幅
+                {{ $t('trade.changePercent') }}
             </span>
         </div>
         <div ref='productListEl' class='items' :style='[scrollBarWidth && { paddingRight: 0 }]'>
-            <div v-for='item in props.list' :key='item.id' class='item li' @click='onClick(item)'>
+            <div v-for='item in props.list' :key='item.id' class='item li' :class='[item.symbolKey === productActived.symbolKey && "active"]' @click='onClick(item)'>
                 <span class='name'>
                     <i v-if='isCollect(item.tradeType,item.symbolId)' class='icon icon_zixuan2' @click.stop='addOptional(item)'></i>
                     <i v-else class='icon icon_zixuan1' @click.stop='addOptional(item)'></i>
@@ -50,6 +50,8 @@ const props = defineProps({
     }
 })
 
+const productActived = computed(() => store.getters.productActived)
+
 // 监听列表滚动，订阅/获取产品数据
 const list = toRef(props, 'list')
 const { productListEl, productMap, subscribList } = subscribeProducts(list)
@@ -66,12 +68,12 @@ const onClick = product => {
 }
 
 //
-watch(() => subscribList.value, () => {
-    QuoteSocket.add_subscribe({ moduleId: 'productList', symbolKeys: subscribList.value })
-}, {
-    immediate: true,
-    deep: true
-})
+// watch(() => subscribList.value, () => {
+//     QuoteSocket.add_subscribe({ moduleId: 'productList', symbolKeys: subscribList.value })
+// }, {
+//     immediate: true,
+//     deep: true
+// })
 
 /** 添加自选逻辑 */
 const selfSymbolList = computed(() => store.state._user.selfSymbolList)
@@ -167,6 +169,7 @@ watch(() => [props.list.length],
                 font-weight: 400;
                 color: var(--color);
             }
+            &.active,
             &:hover{
                 background: var(--bgColor);
                 border-radius: 4px;

@@ -26,12 +26,10 @@ const props = defineProps({
 })
 const store = useStore()
 const route = useRoute()
-const tableOptions = computed(() => {
-    return {
+const tableOptions = computed(() => ({
         ...props.commonOptions,
         columns: getTransactionColumns(props.tradeType)
-    }
-})
+}))
 // 接口数据
 const rawResponse = ref({})
 const tableData = ref([])

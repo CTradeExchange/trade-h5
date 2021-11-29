@@ -56,7 +56,7 @@
             </div>
         </div>
     </div>
-    <van-popup v-model:show='pickerShow' class='assetsPicker' position='bottom'>
+    <van-popup v-model:show='pickerShow' class='assetsPicker' :confirm-button-text="$t('common.sure')" position='bottom'>
         <van-picker
             :cancel-button-text="$t('common.cancel')"
             :columns='columns'
@@ -146,6 +146,7 @@ export default {
             const params = type === 1 ? [account.value.availableLoan] : [state.curCurrency, account.value?.interestProportion || '--']
             Dialog.alert({
                 message: t(`assets.loanNotice[${type}]`, params),
+                confirmButtonText: t('common.sure')
             }).then(() => {
                 // on close
             })

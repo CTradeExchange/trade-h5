@@ -38,7 +38,7 @@ const store = useStore()
 const customerInfo = computed(() => store.state._user.customerInfo)
 // 持仓列表
 // 资产列表
-const accountList = computed(() => customerInfo.value?.accountList.filter(el => Number(el.tradeType) === props.tradeType) || [])
+const accountList = computed(() => customerInfo.value?.accountList?.filter(el => Number(el.tradeType) === props.tradeType) || [])
 const positionList = computed(() => store.state._trade.positionList[props.tradeType] || [])
 const tableData = computed(() => {
     if ([1, 2].includes(props.tradeType)) {
@@ -49,12 +49,10 @@ const tableData = computed(() => {
     }
     return []
 })
-const tableOptions = computed(() => (
-    {
+const tableOptions = computed(() => ({
         ...props.commonOptions,
         columns: getAssetColumns(props.tradeType)
-    }
-))
+}))
 
 // 获取持仓列表数据
 const queryPositionList = () => {
@@ -66,17 +64,6 @@ const queryPositionList = () => {
             sortType: 'desc',
             accountId
         })
-            .then(res => {
-                const productKeys = []
-                const { data } = res
-                if (data) {
-                    data.map(elem => {
-                        productKeys.push(elem.symbolId + '_' + elem.tradeType)
-                    })
-                }
-                // 订阅行情数据
-                QuoteSocket.send_subscribe(productKeys)
-            })
     }
 }
 
@@ -94,11 +81,11 @@ watch(() => props.tradeType, () => {
 }, { immediate: true })
 
 const symbolKeys = computed(() => tableData.value.map(e => `${e.symbolId}_${props.tradeType}`))
-watch(() => symbolKeys.value, () => {
-    QuoteSocket.add_subscribe({ moduleId: 'assetsList', symbolKeys: symbolKeys.value })
+watch(() => symbolKeys.value, (val) => {
+    val = [...new Set(val)]
+    QuoteSocket.add_subscribe({ moduleId: 'assetsList', symbolKeys: val })
 }, {
-    immediate: true,
-    deep: true
+    immediate: true
 })
 
 </script>

@@ -135,7 +135,7 @@ export default {
                 background-color: #EC4E56;
                 background-image: linear-gradient(to right, #EC4E56, #C92E36);
             }
-            &.BG_CIB {
+            &.BG_CIB,&.BG_SPDB {
                 background-color: #2F70BB;
                 background-image: linear-gradient(to right, #2F70BB, #0C53A5);
             }
@@ -151,7 +151,7 @@ export default {
                 background-color: #4492D8;
                 background-image: linear-gradient(to right, #4492D8, #2073BC);
             }
-            &.BG_JSBANK {
+            &.BG_JSBANK,&.BG_BCM {
                 background-color: #4492D8;
                 background-image: linear-gradient(to right, #4492D8, #2073BC);
             }
@@ -171,7 +171,7 @@ export default {
                 background-color: #E45B48;
                 background-image: linear-gradient(to right, #E45B48, #D64746);
             }
-            &.BG_PAB {
+            &.BG_SPABANK {
                 background-color: #E37133;
                 background-image: linear-gradient(to right, #E37133, #E95503);
             }
@@ -187,7 +187,7 @@ export default {
                 background-color: #2F70BB;
                 background-image: linear-gradient(to right, #2F70BB, #0C53A5);
             }
-            &.BG_GDBKCN22 {
+            &.BG_GDB {
                 background-color: #EC4E56;
                 background-image: linear-gradient(to right, #EC4E56, #C92E36);
             }
@@ -203,9 +203,9 @@ export default {
                 background-color: #19A165;
                 background-image: linear-gradient(to right, #19A165, #167758);
             }
-            &.BG_SPDB {
+            &.BG_SDB {
                 background-color: #3D3DB4;
-                background-image: linear-gradient(to right, #3D3DB4, #161694);
+                background-image: linear-gradient(to right, #4242f1, #03033b);
             }
             &.BG_SRCB {
                 background-color: #187AAD;
@@ -250,6 +250,10 @@ export default {
             &.BG_PBOC {
                 background-color: #EC4E56;
                 background-image: linear-gradient(to right, #EC4E56 #C92E36);
+            }
+            &.BG_BANK {
+                background-color: #727070;
+                background-image: linear-gradient(to right, #727272 #1d0d0d);
             }
             & .bank-bg {
                 position: absolute;

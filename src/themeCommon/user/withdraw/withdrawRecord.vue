@@ -6,7 +6,13 @@
     <Loading :show='loadingPage' />
     <div class='page-wrap'>
         <div class='record-list'>
-            <van-pull-refresh v-model='loading' @refresh='onRefresh'>
+            <van-pull-refresh
+                v-model='loading'
+                :loading-text="$t('compLang.loading')"
+                :loosing-text="$t('compLang.vanPullRefresh.loosing')"
+                :pulling-text="$t('compLang.vanPullRefresh.pulling')"
+                @refresh='onRefresh'
+            >
                 <div v-if='list.length === 0'>
                     <van-empty :description="$t('withdrawRecord.noneHint')" image='/images/empty.png' />
                 </div>
@@ -16,6 +22,7 @@
                     :finished='finished'
                     :finished-text='finishedText'
                     :immediate-check='false'
+                    :loading-text="$t('compLang.loading')"
                     @load='onLoad'
                 >
                     <van-collapse

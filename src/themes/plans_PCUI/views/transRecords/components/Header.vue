@@ -5,18 +5,18 @@
         </span>
         <PlansType v-model='tradeType' />
         <div class='filter'>
-            <el-date-picker
-                v-if='timeValue === "custom"'
-                ref='datePickerRef'
-                v-model='timeRange'
-                class='datePicker'
-                end-placeholder='End date'
-                range-separator='To'
-                size='small'
-                start-placeholder='Start date'
-                type='daterange'
-                @change='onTimeRangeSelect'
-            />
+            <el-config-provider :locale='locale'>
+                <el-date-picker
+                    v-if='timeValue === "custom"'
+                    ref='datePickerRef'
+                    v-model='timeRange'
+                    class='datePicker'
+                    range-separator='To'
+                    size='small'
+                    type='daterange'
+                    @change='onTimeRangeSelect'
+                />
+            </el-config-provider>
             <el-select v-model='timeValue' placeholder='Select' popper-class='timeSelect' @change='onTimeSelect'>
                 <el-option
                     v-for='item in filterList.time'
@@ -70,12 +70,16 @@
 
 <script setup>
 import { ref, onMounted, computed, unref, nextTick, watch } from 'vue'
-import { ElDatePicker, ElDialog } from 'element-plus'
+import { ElDialog, ElConfigProvider, ElDatePicker } from 'element-plus'
 import { useI18n } from 'vue-i18n'
 import PlansType from '../../quote/components/PlansType'
 import ProductSearch from '@planspc/views/order/pages/productSearch.vue'
 import ProductList from './ProductList'
 import { useRoute, useRouter } from 'vue-router'
+import i18n from '@planspc/i18n/i18n.js'
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+import en from 'element-plus/lib/locale/lang/en'
+const locale = computed(() => i18n.global.locale === 'zh-CN' ? zhCn : en)
 
 const props = defineProps({
     params: {

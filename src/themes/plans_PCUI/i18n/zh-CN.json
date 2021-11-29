@@ -565,7 +565,7 @@
 		"volumeError": "下单数量不正确",
 		"pendingPriceError": "挂单价格不正确",
 		"handicap": "盘口",
-		"nullAssets": "没有该资产账户",
+		"nullAssets": "没有 {0} 资产账户",
 		"yi": "以",
 		"huan": "还",
 		"daihuan": "待还",

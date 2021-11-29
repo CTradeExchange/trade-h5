@@ -158,7 +158,18 @@
         "noLogin": "Please log in",
         "kycLevel1": "Basic certification",
         "kycLevel2": "Intermediate certification",
+        "kycLevel3": "Advanced certification",
         "techSupport": "Powered by Trade Switcher"
+        
+    },
+    "faceAuth": {
+        "faceDetectTip": "Please face your phone and keep it well lit",
+        "startVerification": "Start",
+        "submitVerification": "Submit",
+        "verifiedSuccessfully": "Verified successfully",
+        "verificationFailed": "Verification failed, please resubmit",
+        "done": "Done",
+        "faceDetect": "Face Recognition"
     },
     "auth": {
         "info": "Information Required",
@@ -265,7 +276,7 @@
         "appendFiled": "Additional Information",
         "allInputRequire": "Please fill in all additional information",
         "arriveTime": "Credit time",
-        "noneChannelTip": "There is no payment channel available for the current deposit amount, please re-select another payment channel or enter different amount"
+        "noneChannelTip": "There is no payment channel available for the current deposit amount, please select again"
     },
     "fund": {
         "marginLevel": "margin level",

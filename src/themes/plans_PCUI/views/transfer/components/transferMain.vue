@@ -326,6 +326,7 @@ export default {
                 flex: 1;
                 border-right: solid 1px var(--lineColor);
                 .account {
+                    position: relative;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
@@ -335,6 +336,11 @@ export default {
                     line-height: rem(100px);
                     &.from {
                         border-bottom: solid 1px var(--lineColor);
+                    }
+                    .van-icon-arrow{
+                        position: absolute;
+                        right: 20px;
+                        pointer-events: none;
                     }
                 }
             }
@@ -360,6 +366,7 @@ export default {
             font-size: rem(28px);
             background: var(--contentColor);
             border-radius: rem(6px);
+            position: relative;
             input {
                 flex: 1;
             }
@@ -371,6 +378,11 @@ export default {
             .all {
                 color: var(--primary);
                 cursor: pointer;
+            }
+            .van-icon-arrow{
+                position: absolute;
+                right: 20px;
+                pointer-events: none;
             }
         }
         .tip {
@@ -386,6 +398,7 @@ export default {
         }
         :deep(.el-input__inner){
             border: 0;
+            width: 100%;
         }
         --el-disabled-border-base: transparent;
         --el-disabled-fill-base: transparent;

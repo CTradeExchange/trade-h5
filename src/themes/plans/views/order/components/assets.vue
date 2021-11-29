@@ -50,14 +50,14 @@
         </div>
 
         <!-- 杠杆玩法可借额度的解说 -->
-        <van-dialog v-model:show='loanTradeType3' title=''>
+        <van-dialog v-model:show='loanTradeType3' :confirm-button-text="$t('common.sure')" title=''>
             <div class='availableLoanContent'>
                 <p>{{ $t('trade.availableLoanContent7') }}</p>
                 <p>{{ $t('trade.availableLoanContent8') }}</p>
             </div>
         </van-dialog>
         <!-- 代理可借的解说 -->
-        <van-dialog v-model:show='loanTradeType9' title=''>
+        <van-dialog v-model:show='loanTradeType9' :confirm-button-text="$t('common.sure')" title=''>
             <div class='availableLoanContent'>
                 <p>{{ $t('trade.availableLoanContent1', [maxBorrow]) }}</p>
                 <p>{{ $t('trade.availableLoanContent2') }}</p>

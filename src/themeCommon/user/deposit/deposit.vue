@@ -148,7 +148,7 @@ import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { isEmpty, sessionGet, getCookie, arrayObjSort } from '@/utils/util'
-import { mul } from '@/utils/calculation'
+import { mul, divide, toFixed } from '@/utils/calculation'
 import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal, judgeIsAlreadyDeposit } from '@/api/user'
 import { getListByParentCode } from '@/api/base'
 
@@ -285,8 +285,13 @@ export default {
 
         // 计算预计支付金额
         const computeExpectedpay = computed(() => {
-            // 计算方式：存款金额 * 汇率
-            return state.rateConfig.exchangeRate ? mul(state.amount, state.rateConfig.exchangeRate) : ''
+            // 计算方式
+            const rateConfig = state.rateConfig
+            if (rateConfig.exchangeRate) {
+                const value = rateConfig.formulaSymbol === 'multiply' ? mul(state.amount, rateConfig.exchangeRate) : divide(state.amount, rateConfig.exchangeRate)
+                return toFixed(value, rateConfig.targetDigits)
+            }
+            return ''
         })
 
         // 计算存款时间
@@ -852,7 +857,8 @@ export default {
             }
         }
         .active {
-            background: rgba(242, 161, 27, .1);
+            // background: rgba(242, 161, 27, .1);
+            background: var(--primary);
             border: 1px solid var(--focusColor);
             .t1 {
                 color: var(--focusColor);
@@ -970,7 +976,8 @@ export default {
         }
         strong {
             font-size: rem(28px);
-            color: var(--focusColor);
+            // color: var(--focusColor);
+            color: var(--primary);
         }
     }
 }

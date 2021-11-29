@@ -331,7 +331,7 @@ export default {
         position: absolute;
         top: 0;
         right: 0;
-        padding:rem(40px) rem(25px) rem(25px) rem(25px);
+        padding:rem(35px) rem(25px) rem(25px) rem(25px);
         color: var(--normalColor);
         font-size: rem(28px);
     }

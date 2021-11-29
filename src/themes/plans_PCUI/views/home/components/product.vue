@@ -12,7 +12,9 @@
                     <span>{{ item.cur_price || '--' }}</span>
                 </p>
                 <p class='row_3'>
-                    <span>{{ item.upDownAmount || '--' }}</span>
+                    <span :class='item.upDownColor'>
+                        {{ item.upDownAmount > 0 ? '+' : '' }}{{ item.upDownAmount || '--' }}
+                    </span>
                 </p>
             </li>
         </ul>

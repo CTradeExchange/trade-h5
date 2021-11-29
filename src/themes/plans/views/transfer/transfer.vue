@@ -20,11 +20,11 @@
                 <div class='center'>
                     <div class='from account' @click='handleFrom(fromAccount.id)'>
                         <span> {{ fromAccount.name }}</span>
-                        <van-icon v-if='Number(fromAccount.id) !== 5' name='arrow' />
+                        <van-icon v-if='Number(fromAccount.id) !== 5' name='arrow' @click='handleFrom(fromAccount.id)' />
                     </div>
                     <div class='to account' @click='handleTo(toAccount.id)'>
                         <span> {{ toAccount.name }}</span>
-                        <van-icon v-if='Number(toAccount.id) !== 5' name='arrow' />
+                        <van-icon v-if='Number(toAccount.id) !== 5' name='arrow' @click='handleTo(toAccount.id)' />
                     </div>
                 </div>
                 <div class='right' @click='handleSwap'>
@@ -35,7 +35,7 @@
                 <span class='label'>
                     {{ curCurrency?.currency }}
                 </span>
-                <van-icon name='arrow' />
+                <van-icon name='arrow' @click='pickerShow=true' />
             </div>
             <div class='action-bar'>
                 <input v-model='amount' :placeholder='$t("assets.minTransfer")+ minTransfer' type='number' />

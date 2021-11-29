@@ -22,6 +22,12 @@
                     <el-table-column v-else v-bind='getColumnAttrs(col)' :formatter='getFormatter(col)' :label='col.name' :prop='col.prop' />
                 </template>
             </template>
+
+            <template #empty>
+                <span class='emptyText'>
+                    {{ $t('c.noData') }}
+                </span>
+            </template>
         </el-table>
         <!-- 分页 -->
         <el-pagination
@@ -37,6 +43,7 @@
     </div>
 </template>
 
+<!-- 动态修改options会导致字段错乱，宜在外层通过if重新执行 -->
 <script setup>
 import { watch, ref, nextTick, computed } from 'vue'
 import { ElPagination } from 'element-plus'
@@ -122,6 +129,63 @@ const current = computed({
     width: 100%;
     .pagination{
         margin: 10px 0;
+    }
+    :deep{
+        .el-table{
+            background-color: var(--contentColor);
+            th.el-table__cell{
+                color: var(--minorColor);
+            }
+            td.el-table__cell{
+                border-color: var(--lineColor);
+                color: var(--color);
+            }
+
+            .el-table__fixed-right::before,
+            .el-table__fixed::before,
+            tr,th.el-table__cell,
+            tr.hover-row .el-table__cell,
+            &::before{
+                background-color: var(--contentColor);
+            }
+            tr:hover>td.el-table__cell{
+                background-color: var(--bgColor);
+            }
+
+        }
+        .el-pagination{
+            .btn-prev,
+            .btn-next,
+            .number{
+                background-color: var(--contentColor);
+                color: var(--color);
+            }
+            .active.number{
+                color: var(--el-pagination-hover-color);
+            }
+            .number:hover{
+                color: var(--el-pagination-hover-color);
+            }
+        }
+        .empty{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            .image{
+                width: 160px;
+                height: auto;
+            }
+        }
+
+        .emptyText{
+            display: inline-block;
+            width: 160px;
+            padding-top: 140px;
+            background: url('/images/empty.png') center top no-repeat;
+            background-size: 160px auto;
+            color: var(--placeholdColor);
+        }
     }
 }
 </style>

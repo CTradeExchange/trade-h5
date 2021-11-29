@@ -35,13 +35,12 @@ const tradeType = computed(() => unref(product).tradeType)
 const activeName = ref('0')
 
 const commonOptions = {
-    maxHeight: 350,
+    height: 350,
 }
 
 // 不同table数据混在一起了
 const mounted = ref(true)
 watch(() => tradeType.value, async () => {
-    // await nextTick()
     mounted.value = false
     await nextTick()
     mounted.value = true
