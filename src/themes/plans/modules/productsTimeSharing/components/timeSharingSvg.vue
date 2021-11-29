@@ -2,7 +2,7 @@
     <div class='svg-wrap'>
         <svg class='peity' height='16' width='50'>
             <polygon fill='rgba(0,0,0,0)' :points='svgData' />
-            <polyline fill='none' :points='svgData' :stroke='$style[color]' stroke-linecap='square' stroke-width='1' />
+            <polyline fill='none' :points='svgData' :stroke='$style[color] || "#333"' stroke-linecap='square' stroke-width='1' />
         </svg>
     </div>
 </template>
