@@ -18,7 +18,7 @@
                         <p class='text3' :class='[item.upDownColor]'>
                             {{ item.upDownAmount || '--' }}
                         </p>
-                        <timeSharingSvg />
+                        <timeSharingSvg :color='item.cur_color' />
                     </div>
                 </div>
             </van-swipe-item>

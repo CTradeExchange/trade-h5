@@ -2,7 +2,7 @@
     <div class='svg-wrap'>
         <svg class='peity' height='16' width='50'>
             <polygon fill='rgba(0,0,0,0)' :points='svgData' />
-            <polyline fill='none' :points='svgData' stroke='#008555' stroke-linecap='square' stroke-width='1' />
+            <polyline fill='none' :points='svgData' :stroke='$style[color]' stroke-linecap='square' stroke-width='1' />
         </svg>
     </div>
 </template>
@@ -10,7 +10,9 @@
 <script>
 import { onActivated, computed, ref, toRefs } from 'vue'
 export default {
+    props: ['color'],
     setup (props) {
+        const color = props.color
         const svgData = computed(() => {
             let num = 300
             let result = ''
@@ -24,6 +26,7 @@ export default {
 
         return {
             svgData
+
         }
     }
 }
