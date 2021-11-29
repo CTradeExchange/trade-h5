@@ -68,12 +68,12 @@ const onClick = product => {
 }
 
 //
-watch(() => subscribList.value, () => {
-    QuoteSocket.add_subscribe({ moduleId: 'productList', symbolKeys: subscribList.value })
-}, {
-    immediate: true,
-    deep: true
-})
+// watch(() => subscribList.value, () => {
+//     QuoteSocket.add_subscribe({ moduleId: 'productList', symbolKeys: subscribList.value })
+// }, {
+//     immediate: true,
+//     deep: true
+// })
 
 /** 添加自选逻辑 */
 const selfSymbolList = computed(() => store.state._user.selfSymbolList)

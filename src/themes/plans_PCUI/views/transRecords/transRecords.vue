@@ -11,9 +11,7 @@ import { ref, nextTick, watch } from 'vue'
 import Header from './components/Header'
 import Content from './components/Content'
 
-const commonOptions = {
-    maxHeight: 530,
-}
+const commonOptions = {}
 const params = ref({})
 // 不同table数据混在一起了
 const mounted = ref(true)

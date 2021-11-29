@@ -35,7 +35,7 @@ const tradeType = computed(() => unref(product).tradeType)
 const activeName = ref('0')
 
 const commonOptions = {
-    maxHeight: 350,
+    height: 350,
 }
 
 // 不同table数据混在一起了

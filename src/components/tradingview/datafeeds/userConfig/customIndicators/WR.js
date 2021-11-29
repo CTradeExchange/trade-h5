@@ -13,20 +13,20 @@ export default function (n, precision) {
                         linewidth: 1,
                         plottype: 0,
                         trackPrice: !1,
-                        transparency: 35,
+                        transparency: 0,
                         visible: !0,
-                        color: '#000080'
+                        color: "#7E57C2"
                     }
                 },
-                precision: precision,
+                precision: 4,
                 bands: [{
-                    color: '#808080',
+                    color: "#787B86",
                     linestyle: 2,
                     linewidth: 1,
                     visible: !0,
                     value: -20
                 }, {
-                    color: '#808080',
+                    color: "#787B86",
                     linestyle: 2,
                     linewidth: 1,
                     visible: !0,
@@ -34,7 +34,7 @@ export default function (n, precision) {
                 }],
                 filledAreasStyle: {
                     fill_0: {
-                        color: '#000080',
+                        color: "#7E57C2",
                         transparency: 90,
                         visible: !0
                     }

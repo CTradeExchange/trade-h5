@@ -1,11 +1,12 @@
 <template>
-    <div class='content'>
+    <div class='content' :style='{ height: contentHeight + "px" }'>
         <customTable
             v-model:currentPage='currentPage'
             :data='tableData'
             :options='tableOptions'
             :pagination='pagination'
             :raw-response='rawResponse'
+            :style='{ height: "100%" }'
         />
     </div>
 </template>
@@ -28,6 +29,7 @@ const props = defineProps({
     }
 })
 
+const contentHeight = document.body.offsetHeight - 118
 const store = useStore()
 // table配置和数据
 const rawResponse = ref({})
@@ -35,7 +37,8 @@ const tableData = ref([])
 const tableOptions = computed(() => {
     return {
         ...props.commonOptions,
-        columns: getTransactionColumns(props.params.tradeType)
+        columns: getTransactionColumns(props.params.tradeType),
+        height: '100%',
     }
 })
 

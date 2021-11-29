@@ -64,17 +64,6 @@ const queryPositionList = () => {
             sortType: 'desc',
             accountId
         })
-            .then(res => {
-                const productKeys = []
-                const { data } = res
-                if (data) {
-                    data.map(elem => {
-                        productKeys.push(elem.symbolId + '_' + elem.tradeType)
-                    })
-                }
-                // 订阅行情数据
-                QuoteSocket.send_subscribe(productKeys)
-            })
     }
 }
 
@@ -92,11 +81,11 @@ watch(() => props.tradeType, () => {
 }, { immediate: true })
 
 const symbolKeys = computed(() => tableData.value.map(e => `${e.symbolId}_${props.tradeType}`))
-watch(() => symbolKeys.value, () => {
-    QuoteSocket.add_subscribe({ moduleId: 'assetsList', symbolKeys: symbolKeys.value })
+watch(() => symbolKeys.value, (val) => {
+    val = [...new Set(val)]
+    QuoteSocket.add_subscribe({ moduleId: 'assetsList', symbolKeys: val })
 }, {
-    immediate: true,
-    deep: true
+    immediate: true
 })
 
 </script>

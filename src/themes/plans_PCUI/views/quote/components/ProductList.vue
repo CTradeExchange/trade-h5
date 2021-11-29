@@ -183,7 +183,6 @@ watch(() => [props.list.length],
     .lowPrice,
     .change{
         flex: 0 0 163px;
-        color: var(--color);
         @include ellipsis();
     }
     .btns{

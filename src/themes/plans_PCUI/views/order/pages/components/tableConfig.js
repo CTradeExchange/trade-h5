@@ -445,6 +445,7 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.profit'),
                 align: 'right',
                 prop: 'profitLoss',
+                width: 100,
             },
             { name: t('trade.fee'), prop: 'commission', align: 'right', width: 120 },
             { name: t('trade.pendingNo'), prop: 'dealId', align: 'right' },
