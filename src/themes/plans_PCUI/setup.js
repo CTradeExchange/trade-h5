@@ -19,7 +19,8 @@ import {
     ElCheckbox,
     ElOption,
     ElOptionGroup,
-    ElSelect
+    ElSelect,
+    ElPagination
 } from 'element-plus'
 
 export default function (app) {
@@ -29,5 +30,5 @@ export default function (app) {
         .use(ElOption)
         .use(ElOptionGroup)
         .use(ElSelect)
-        .use(ElOption).use(ElOptionGroup)
+        .use(ElOption).use(ElOptionGroup).use(ElPagination)
 };

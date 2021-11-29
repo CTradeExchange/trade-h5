@@ -692,6 +692,23 @@ body {
 			}
 		}
 	}
+	.el-pagination {
+		li {
+			font-size: 16px;
+			font-weight: normal;
+			color: var(--color);
+			&:hover {
+				color: var(--primary);
+			}
+			&.active {
+				font-weight: bold;
+				color: var(--primary);
+			}
+		}
+		.el-icon {
+			font-size: 16px !important;
+		}
+	}
 }
 
 /* 滚动条 */

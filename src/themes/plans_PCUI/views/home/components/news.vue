@@ -16,12 +16,15 @@
                 </div>
             </div>
         </div>
-        <div v-if="loading !== 'noMore'" class='load-more'>
+        <div class='pagination-case'>
+            <el-pagination layout='prev, pager, next' :total='total' @current-change='changePage' />
+        </div>
+        <!-- <div v-if="loading !== 'noMore'" class='load-more'>
             <a href='javascript:;' @click='getNewsLilst'>
                 <span>{{ $t('loadMore') }}</span>
                 <i class='el-icon-arrow-down'></i>
             </a>
-        </div>
+        </div> -->
     </div>
     <!-- 新闻详情弹窗 -->
     <news-dialog ref='dialog' />
@@ -53,6 +56,7 @@ export default {
             type: 7,
             size: 10,
             list: [],
+            total: 0,
             loading: 'more'
         })
 
@@ -70,10 +74,16 @@ export default {
                 res.data.map(elem => {
                     elem.updatetimeStr = beforeTime(elem.updatetime * 1000, t)
                 })
-                state.list = state.page === 1 ? res.data : state.list.concat(res.data)
-                state.loading = state.list.length === res.total ? 'noMore' : 'more'
-                state.page += 1
+                state.list = res.data
+                state.total = res.total
+                state.loading = 'more'
             })
+        }
+
+        // 改变当前分页
+        const changePage = (value) => {
+            state.page = value
+            getNewsLilst()
         }
 
         // 打开新闻详情弹窗
@@ -89,6 +99,7 @@ export default {
         return {
             ...toRefs(state),
             getNewsLilst,
+            changePage,
             openNewsDialog,
             dialog
         }
@@ -141,6 +152,13 @@ export default {
             }
         }
     }
+}
+.pagination-case {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    font-size: 14px;
 }
 .load-more {
     display: flex;
