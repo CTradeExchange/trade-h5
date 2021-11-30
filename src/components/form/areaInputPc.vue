@@ -94,7 +94,7 @@ export default {
         },
         zoneVal: {
             get () {
-                return this.zone
+                return this.type === 'mobile' ? this.zone : this.zone.split('(')[0]
             },
             set (value) {
                 if (!this.disabled) {
