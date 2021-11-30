@@ -7,9 +7,14 @@
             <span class='price'>
                 {{ productMap[symbolKey]?.price || '- -' }}
             </span>
-            <span class='change' :class='[productMap[symbolKey]?.upDownColor]'>
-                {{ productMap[symbolKey]?.upDownWidth || '- -' }}
-            </span>
+            <div class='change'>
+                <span class='upDownAmount'>
+                    {{ productMap[symbolKey]?.upDownAmount || '- -' }}
+                </span>
+                <span class='upDownWidth' :class='[productMap[symbolKey]?.upDownColor]'>
+                    {{ productMap[symbolKey]?.upDownWidth || '- -' }}
+                </span>
+            </div>
         </div>
     </div>
 </template>
@@ -68,6 +73,9 @@ QuoteSocket.add_subscribe({ moduleId: 'topQuote', symbolKeys })
         .change{
             height: 12px;
             line-height: 14px;
+            .upDownAmount{
+                margin-right: 10px;
+            }
         }
     }
 }

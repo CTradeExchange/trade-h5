@@ -32,6 +32,11 @@
                 <el-table-column :label="$t('trade.free')" prop='available' />
                 <el-table-column :label="$t('trade.frozen')" prop='frozen' />
                 <el-table-column :label="$t('trade.carry')" prop='withdrawAmount' />
+                <template #empty>
+                    <span class='emptyText'>
+                        {{ $t('c.noData') }}
+                    </span>
+                </template>
             </el-table>
         </div>
     </div>

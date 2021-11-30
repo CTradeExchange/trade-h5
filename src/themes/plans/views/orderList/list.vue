@@ -2,7 +2,7 @@
     <div class='page-wrap'>
         <LayoutTop :back='true' :menu='false' :title='tradeName' />
         <Loading :show='loading' />
-        <van-tabs v-if='Number(tradeType) !== 5' v-model:active='active' class='tabs'>
+        <van-tabs v-if='[2,5].indexOf(Number(tradeType)) === -1' v-model:active='active' class='tabs'>
             <van-tab :title='$t("trade.curTrust")'>
                 <div v-if='pendingList.length === 0'>
                     <van-empty :description='$t("trade.pendingEmpty")' image='/images/empty.png' />

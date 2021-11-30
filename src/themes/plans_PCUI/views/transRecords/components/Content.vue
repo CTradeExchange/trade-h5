@@ -68,7 +68,7 @@ const queryData = () => {
     }
     tradeRecordList(params)
         .then(res => {
-            if (res.check()) {
+            if (res.check() && res.data) {
                 rawResponse.value = res.data
                 tableData.value = res.data.list
             }
@@ -83,5 +83,10 @@ watch(() => [props.params, unref(currentPage)], queryData, { deep: true, immedia
 <style lang="scss" scoped>
 .content{
     padding:  0 20px;
+    :deep{
+        td.el-table__cell{
+            padding: 20px 0!important;
+        }
+    }
 }
 </style>

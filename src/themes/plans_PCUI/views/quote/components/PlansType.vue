@@ -45,6 +45,9 @@ const handleClick = (val) => {
         .el-tabs__nav-wrap::after{
             display: none;
         }
+        .el-tabs__active-bar{
+            height: 3px;
+        }
         .el-tabs__item{
             font-size: 20px;
             color: var(--normalColor);

@@ -204,7 +204,7 @@ export default {
     }
     .orders-wrap{
         margin-top: 8px;
-        min-height: 300px;
+        height: 398px;
         background: var(--contentColor);
     }
     .assetsSticky{
