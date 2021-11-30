@@ -1,16 +1,16 @@
 <template>
-    <div class='content'>
+    <div class='content' :style='{ height: contentHeight + "px" }'>
         <div class='header'>
             <PlansType v-model='tradeType' />
             <Autocomplete :trade-type='tradeType' />
         </div>
-        <CategoryList v-model='categoryType' :list='categoryList' />
+        <CategoryList v-model='categoryType' :list='computedCategoryList' />
         <ProductList :list='productList' :trade-type='tradeType' />
     </div>
 </template>
 
 <script setup>
-import { ref, watch, unref } from 'vue'
+import { ref, watch, unref, computed } from 'vue'
 import PlansType from './PlansType'
 import useProduct from '@plans/hooks/useProduct'
 import ProductList from './ProductList'
@@ -23,9 +23,29 @@ const categoryType = ref('0')
 const { categoryList, productList } = useProduct({
     tradeType, categoryType
 })
+
+const computedCategoryList = computed((el) => {
+    const list = [...unref(categoryList)]
+    list.forEach(el => {
+        if (el.id === 'selfSymbol') {
+            el.slot = {
+                label: <div>
+                            <span class="icon iconfont icon_lansezixuan"></span>
+                            <span>
+                                {el.title}
+                            </span>
+                        </div>
+            }
+        }
+    })
+    return list
+})
+
 watch(() => unref(tradeType), () => {
     categoryType.value = '0'
 })
+
+const contentHeight = document.body.offsetHeight - 226
 
 </script>
 
@@ -55,11 +75,13 @@ watch(() => unref(tradeType), () => {
             left: 0;
             bottom: -1px;
             width: 100%;
-            height: 2px;
-            background-color: var(--lineColor);
+            height: 3px;
+            background-color: var(--assistColor);
             z-index: var(--el-index-normal);
         }
-
+    }
+    .icon_lansezixuan{
+        margin-right: 5px;
     }
 }
 </style>

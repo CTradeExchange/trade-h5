@@ -139,6 +139,9 @@ watch(() => [props.list.length],
         user-select: none;
         .name{
             flex: 1;
+            .icon{
+                margin-right: 4px;
+            }
         }
         .change{
             width: 85px;
@@ -149,7 +152,7 @@ watch(() => [props.list.length],
         width: 100%;
         padding: 0 16px;
         font-size: 12px;
-        color: #999999;
+        color: var(--minorColor);
         line-height: 26px;
     }
     .items{

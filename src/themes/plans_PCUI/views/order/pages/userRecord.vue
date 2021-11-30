@@ -35,7 +35,7 @@ const tradeType = computed(() => unref(product).tradeType)
 const activeName = ref('0')
 
 const commonOptions = {
-    height: 350,
+    height: 358,
 }
 
 // 不同table数据混在一起了
@@ -78,22 +78,6 @@ watch(() => tradeType.value, async () => {
     }
 
     :deep{
-        .table{
-            background-color: var(--bgColor);
-            .el-table__cell{
-                background: var(--bgColor)!important;
-                color: var(--color);
-            }
-            .el-table__body{
-                .el-table__cell{
-                    padding: 8px 0;
-                }
-            }
-        }
-        .el-button{
-            padding-top: 0;
-            padding-bottom: 0;
-        }
         .link{
             padding: 0 5px;
             cursor: pointer;

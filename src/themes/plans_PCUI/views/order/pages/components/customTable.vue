@@ -135,10 +135,15 @@ const current = computed({
             background-color: var(--contentColor);
             th.el-table__cell{
                 color: var(--minorColor);
+                font-weight: 400;
+                font-size: 12px;
+                border-color: var(--assistColor);
             }
             td.el-table__cell{
-                border-color: var(--lineColor);
+                border-color: var(--assistColor);
                 color: var(--color);
+                font-size: 14px;
+                padding: 8px 0;
             }
 
             .el-table__fixed-right::before,
