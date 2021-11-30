@@ -1,10 +1,26 @@
 <template>
     <div class='notice-module'>
         <ul>
-            <li>关于CATS2支持HUSD进行主网升级的公告</li>
-            <li>CATS2将于9月23日20:00开放GAL币币交易</li>
-            <li>关于CATS2支持HUSD进行主网升级的公告</li>
-            <li>关于CATS2支持HUSD进行主网升级的公告</li>
+            <li>
+                <a href='https://tradeswitcher.com/' target='_blank'>
+                    关于CATS2支持HUSD进行主网升级的公告
+                </a>
+            </li>
+            <li>
+                <a href='https://tradeswitcher.com/' target='_blank'>
+                    CATS2将于9月23日20:00开放GAL币币交易
+                </a>
+            </li>
+            <li>
+                <a href='https://tradeswitcher.com/' target='_blank'>
+                    关于CATS2支持HUSD进行主网升级的公告
+                </a>
+            </li>
+            <li>
+                <a href='https://tradeswitcher.com/' target='_blank'>
+                    关于CATS2支持HUSD进行主网升级的公告
+                </a>
+            </li>
         </ul>
     </div>
 </template>
@@ -28,7 +44,9 @@ export default {
         height: 100%;
         li {
             font-size: 13px;
-            color: var(--color);
+            a{
+                color: var(--color);
+            }
             &::after {
                 content: '/';
                 margin: 0 15px;
