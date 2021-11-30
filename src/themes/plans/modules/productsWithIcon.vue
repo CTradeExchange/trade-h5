@@ -38,7 +38,7 @@ export default {
         const productMap = unref(computed(() => store.state._quote.productMap))
         const productList = symbolKeys.map(key => productMap[key]).filter(elem => elem)
 
-        QuoteSocket.add_subscribe({ moduleId: 'productsTimmeSharing', symbolKeys })
+        QuoteSocket.add_subscribe({ moduleId: 'productsWithIcon', symbolKeys })
 
         const openProduct = (data) => {
             // router.push({ name: 'Order', query: { symbolId: data.symbolId, direction: 'buy' } })

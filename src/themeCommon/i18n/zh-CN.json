@@ -4,7 +4,7 @@
         "night": "黑夜"
     },
     "cRoute": {
-        "login": "登录",
+        "login": "立即登录",
         "register": "注册开户",
         "registerSuccess": "开户成功",
         "forgot": "找回密码",
@@ -159,7 +159,8 @@
         "kycLevel1": "基础认证",
         "kycLevel2": "中级认证",
         "kycLevel3": "高级认证",
-        "techSupport": "由Trade Switcher提供技术支持"
+        "techSupport": "由Trade Switcher提供技术支持",
+        "quitLogin": "退出登录"
        
     },
     "faceAuth": {
