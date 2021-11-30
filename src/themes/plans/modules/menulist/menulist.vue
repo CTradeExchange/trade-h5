@@ -117,6 +117,7 @@ export default {
 }
 .cellGroup{
     .cellItem {
+        --van-cell-icon-size:12px;
         font-size: rem(32px);
         font-weight: bold;
         line-height: rem(120px);
