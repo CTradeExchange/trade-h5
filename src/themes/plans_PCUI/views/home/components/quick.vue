@@ -41,6 +41,7 @@ export default {
 
 <style lang="scss" scoped>
 .quick-module {
+    padding-top: 90px;
     display: flex;
     flex-direction: column;
     align-items: center;
