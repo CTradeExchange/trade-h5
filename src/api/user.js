@@ -725,3 +725,15 @@ export function queryAccountById (data) {
         data
     })
 }
+/* 批量增加玩法账户信息 */
+export function increasAccount (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.openAccount',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

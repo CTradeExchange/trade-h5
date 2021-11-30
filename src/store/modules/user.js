@@ -1,8 +1,8 @@
-import { login, findCustomerInfo, logout, switchAccount, queryCustomerOptionalList, addCustomerOptional, queryCustomerAssetsInfo, queryAccountAssetsInfo, addCustomerOptionalBatch, findAllBizKycList } from '@/api/user'
+import { login, findCustomerInfo, logout, switchAccount, queryCustomerOptionalList, addCustomerOptional, queryCustomerAssetsInfo, queryAccountAssetsInfo, addCustomerOptionalBatch, findAllBizKycList, increasAccount } from '@/api/user'
 import { removeCustomerOptional } from '@/api/trade'
 import { localSet, setToken, removeLoginParams, sessionSet } from '@/utils/util'
 import { vue_set, assign } from '@/utils/vueUtil.js'
-
+import { compareAssets } from './storeUtil.js'
 export default {
     namespaced: true,
     state: {
@@ -120,7 +120,7 @@ export default {
     },
     actions: {
         // 登录
-        login ({ dispatch, commit }, params = {}) {
+        login ({ dispatch, commit, rootState }, params = {}) {
             commit('Update_loginLoading', true)
             commit('_quote/Update_symbolBaseLoaded', 0, { root: true })
             return login(params).then((res) => {
@@ -135,6 +135,10 @@ export default {
                     commit('_quote/Empty_data', null, { root: true })
                     commit('Update_loginData', data)
                     dispatch('saveCustomerInfo', { flag: true, data: res.data })
+
+                    // 对比用户的资产信息和wp配置的资产信息，自动给用户开增量资产
+                    const compareAssetsResult = compareAssets(data, rootState._base.wpCompanyInfo.registList)
+                    if (compareAssetsResult) dispatch('increasAccount', compareAssetsResult)
                 }
                 commit('Update_loginLoading', false)
                 return res
@@ -276,6 +280,15 @@ export default {
             return findAllBizKycList().then(res => {
                 if (res.check()) {
                     commit('Update_kycList', res.data)
+                    return res
+                }
+            })
+        },
+        // 批量增加玩法账户信息
+        increasAccount ({ state, dispatch }, list) {
+            return increasAccount({ tradeTypeCurrencyList: list }).then(res => {
+                if (res.check()) {
+                    dispatch('findCustomerInfo')
                     return res
                 }
             })
