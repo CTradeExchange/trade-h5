@@ -32,6 +32,15 @@ const routes = [
         }
     },
     {
+        path: '/register/handler',
+        name: 'RegisterHandler',
+        component: () => import(/* webpackChunkName: "Register" */ '../user/register/registerHandler.vue'),
+        meta: {
+            title: 'route.registerHandler',
+            roles: [],
+        }
+    },
+    {
         path: '/forgot',
         name: 'Forgot',
         component: () => import(/* webpackChunkName: "forgot" */ '../user/forgot/forgot.vue'),

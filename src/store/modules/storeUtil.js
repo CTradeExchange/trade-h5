@@ -74,7 +74,8 @@ export function compareAssets (customerInfo = {}, registList) {
     const customerGroupConfig = registList.find(el => el.customerGroupId === customerGroupId) || defaultGroupConfig
     const customerGroupConfigPlans = customerGroupConfig.plans.map(el => {
         const { allCurrency, tradeType } = el
-        const allCurrencySort = allCurrency.split(',').sort((a, b) => a.localeCompare(b)).join()
+        const currencyArray = Array.isArray(allCurrency) ? allCurrency : allCurrency.split(',')
+        const allCurrencySort = currencyArray.sort((a, b) => a.localeCompare(b)).join()
         return {
             allCurrency: allCurrencySort,
             tradeType: String(tradeType)
