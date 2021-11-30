@@ -95,7 +95,7 @@
                         <span>{{ scope.row.positionId }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column align='right' fixed='right' :label="$t('c.handle')" width='120'>
+                <el-table-column v-if='positionList.length > 0' align='right' fixed='right' :label="$t('c.handle')" width='120'>
                     <template #default='scope'>
                         <div class='handle'>
                             <button @click='openSltp(scope.row)'>
@@ -107,6 +107,11 @@
                         </div>
                     </template>
                 </el-table-column>
+                <template #empty>
+                    <span class='emptyText'>
+                        {{ $t('c.noData') }}
+                    </span>
+                </template>
             </el-table>
         </div>
     </div>
