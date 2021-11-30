@@ -46,7 +46,7 @@ export default {
                 }
             ]
 
-            if (!orderHandicapVisible.value) {
+            if (!orderHandicapVisible.value && props.tradeType !== 2) {
                 list.push({
                     title: [3, 9].includes(props.tradeType) ? t('trade.pending2') : t('trade.pending'),
                     val: 10
