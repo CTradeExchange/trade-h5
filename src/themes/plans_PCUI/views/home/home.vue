@@ -166,6 +166,7 @@ export default {
 // 内容模块
 .content-module {
     padding: 0;
+    overflow: auto;
     background-color: var(--contentColor);
 }
 
