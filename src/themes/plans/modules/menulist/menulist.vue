@@ -35,6 +35,11 @@
                     </van-tag>
                 </template>
             </van-cell>
+            <van-cell class='cellItem' is-link :title='$t("common.quitLogin")' value=''>
+                <template #icon>
+                    <img alt='' class='icon' src='/wp-content/uploads/cats_business/set.png' />
+                </template>
+            </van-cell>
         </van-cell-group>
         <slot></slot>
     </div>
@@ -88,30 +93,52 @@ export default {
             } else {
                 this.$router.push({ name: toRoute.name })
             }
-        }
+        },
+
     },
 }
 </script>
 
-<style lang="scss"
-       scoped>
+<style lang="scss" scoped>
+@import '@/sass/mixin.scss';
+
 .title {
     padding: 10px 20px;
     font-size: 14px;
     line-height: 1;
+    vertical-align: middle;;
 }
 .icon {
-    margin-top: 3px;
-    margin-right: 5px;
+    display: inline-block;
+    margin-right: rem(44px);
+    vertical-align: middle;
+    //font-size: rem(32px);
+    width: rem(64px);
+    height: rem(64px);
 }
-.cellGroup,
-.cellItem {
-    background: none;
+.cellGroup{
+    .cellItem {
+        font-size: rem(32px);
+        font-weight: bold;
+        line-height: rem(120px);
+        height: rem(120px);
+        border-top: solid rem(10px) var(--bgColor);
+        background: none;
+        display: flex;
+        align-items: center;
+        //margin-top: rem(10px);
+        &::after{
+            border: none;
+        }
+
 }
+}
+
 :deep(.van-tag--none) {
     color: #969799;
 }
 :deep(.van-cell__label:empty) {
     display: none;
 }
+
 </style>

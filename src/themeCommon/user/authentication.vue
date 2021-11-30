@@ -1,42 +1,39 @@
 <template>
-    <div>
-        <!-- 头部导航 -->
-        <Top back on-back show-center @back='back' />
-        <div class='page-wrap'>
-            <Loading :show='loading' />
-            <div v-if='kycList.length === 0' class='empty-data'>
-                <van-empty :description='$t("auth.noRequired")' image='/images/empty.png' />
-            </div>
-            <div v-else>
-                <p class='title'>
-                    {{ $t('auth.authComplete') }}
-                </p>
-                <div class='auth-list'>
-                    <div v-for='(item,index) in kycList' :key='index' class='auth-item'>
-                        <img alt='' class='auth-img' :src="require('../../themes/mt4/images/'+ item.levelCode +'.png')" />
-                        <div class='content'>
-                            <p class='t1'>
-                                {{ kycMap[item.levelCode] }}
-                            </p>
-                            <p class='t2'>
-                                {{ $t('auth.authPass') }} [{{ item.businessNameList.toString() }}]
-                            </p>
-                        </div>
-                        <div v-if='item.preLevelObj && item.preLevelObj.status !== 2'>
-                            <span class='notice'>
-                                {{ $t('auth.executeAuth', [kycMap[item.preLevelObj.levelCode]]) }}
-                            </span>
-                        </div>
-                        <div v-else class='btn'>
-                            <van-button plain round size='small' @click='handleNext(item)'>
-                                <template #default>
-                                    <span class='btn-text'>
-                                        {{ kycAuditStatus[item.status] }}
-                                    </span>
-                                    <van-icon :color='style.color' name='arrow' />
-                                </template>
-                            </van-button>
-                        </div>
+    <!-- 头部导航 -->
+    <Top back on-back @back='back' />
+
+    <div class='page-wrap'>
+        <Loading :show='loading' />
+        <p class='header'>
+            {{ $t('cRoute.regKyc') }}
+        </p>
+        <div v-if='kycList.length === 0' class='empty-data'>
+            <van-empty :description='$t("auth.noRequired")' image='/images/empty.png' />
+        </div>
+        <div v-else>
+            <div class='auth-list'>
+                <div v-for='(item,index) in kycList' :key='index' class='auth-item'>
+                    <div class='content'>
+                        <p class='t1'>
+                            {{ kycMap[item.levelCode] }}
+                        </p>
+                        <p class='t2'>
+                            {{ $t('auth.authPass') }} [{{ item.businessNameList.toString() }}]
+                        </p>
+                    </div>
+                    <div v-if='item.preLevelObj && item.preLevelObj.status !== 2'>
+                        <span class='notice'>
+                            {{ $t('auth.executeAuth', [kycMap[item.preLevelObj.levelCode]]) }}
+                        </span>
+                    </div>
+                    <div v-else class='btn'>
+                        <span v-if='[0,3].includes(Number(item.status))' class='unverified' @click='handleNext(item)'>
+                            {{ kycAuditStatus[item.status] }}
+                            <van-icon :color='style.fallColor' name='arrow' />
+                        </span>
+                        <span v-else class='state'>
+                            {{ kycAuditStatus[item.status] }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -80,12 +77,6 @@ export default {
             state.loading = true
             store.dispatch('_user/findAllBizKycList').then(res => {
                 state.loading = false
-                res.data.forEach(item => {
-                    if (item.preLevelName) {
-                        const temp = getArrayObj(res.data, 'levelName', item.preLevelName)
-                        item.preLevelObj = temp
-                    }
-                })
             })
         }
 
@@ -139,6 +130,13 @@ export default {
     flex: 1;
     overflow: auto;
     background: var(--bgColor);
+    .header{
+        font-size: rem(48px);
+        font-weight: bold;
+        padding-left: rem(30px);
+        padding-bottom: rem(30px);
+        background: var(--contentColor);
+    }
     .empty-data {
         padding-top: rem(200px);
     }
@@ -198,6 +196,13 @@ export default {
         .btn{
             :deep(.van-button){
                 background: var(--primaryAssistColor);
+            }
+            .unverified{
+                color: var(--fallColor);
+            }
+            .state{
+                color: var(--minorColor);
+                font-size: rem(24px);
             }
         }
     }

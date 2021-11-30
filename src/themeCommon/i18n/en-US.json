@@ -39,7 +39,10 @@
         "chartSetting": "Chart Setting",
         "chooseCurrency": "Select Currency",
         "withdrawAccount": "Select Withdraw Currency",
-        "transfer": "Transfer"
+        "transfer": "Transfer",
+        "securitySetting": "Security Settings",
+        "commonSetting": "Common Settings",
+        "lang": "Language"
     },
     "login": {
         "loginBtn": "Login",
@@ -156,10 +159,16 @@
         "redDown": "Green up and red down",
         "chartColor": "Color Preference",
         "noLogin": "Please log in",
-        "kycLevel1": "Basic certification",
-        "kycLevel2": "Intermediate certification",
-        "kycLevel3": "Advanced certification",
-        "techSupport": "Powered by Trade Switcher"
+        "kycLevel1": "LV1 certification",
+        "kycLevel2": "LV2 certification",
+        "kycLevel3": "LV3 certification",
+        "techSupport": "Powered by Trade Switcher",
+        "quitLogin": "Logout",
+        "mobile": "mobile",
+        "email": "email",
+        "alreadyBind": "Set",
+        "noneBind": "Not Set",
+        "commonSetting": "Common Setting"
         
     },
     "faceAuth": {
@@ -553,6 +562,7 @@
         "color": "Theme"
     },
     "withdraw": {
+        "withdrawLink": "Withdrawal Address",
         "wayMsg": "No withdrawal currently",
         "successHint": "Success",
         "coinTitle": "Withdraw",

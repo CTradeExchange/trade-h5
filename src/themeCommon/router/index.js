@@ -334,6 +334,24 @@ const routes = [
             footerMenu: false,
         }
     },
+    {
+        path: '/securitySetting',
+        name: 'SecuritySetting',
+        component: () => import(/* webpackChunkName: "page" */ '../user/securitySetting.vue'),
+        meta: {
+            title: 'cRoute.securitySetting',
+            footerMenu: false,
+        }
+    },
+    {
+        path: '/commonSetting',
+        name: 'CommonSetting',
+        component: () => import(/* webpackChunkName: "page" */ '../user/commonSetting.vue'),
+        meta: {
+            title: 'cRoute.commonSetting',
+            footerMenu: false,
+        }
+    },
 
 ]
 
