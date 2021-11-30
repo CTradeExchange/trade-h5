@@ -6,20 +6,20 @@
                 <button class='btn' @click="$router.push('/login')">
                     {{ $t('cRoute.login') }}
                 </button>
-                <button class='btn' @click="$router.push('/register')">
-                    {{ $t('cRoute.register') }}
-                </button>
             </div>
         </div>
         <div v-else class='personInfo'>
             <div class='personNo'>
-                <img class='faceImg' :src='faceImg' @click="$router.push('/personal')" />
+                <img class='faceImg' :src='faceImg' />
                 <div v-if='customerInfo' class='customerNo'>
-                    <p @click="$router.push('/personal')">
-                        {{ customerInfo.customerNo }}
-                        <van-icon class='arrowIcon' name='arrow' />
+                    <p class='text1'>
+                        Hi, {{ hideInfo(customerInfo.phone || customerInfo.email) }}
                     </p>
-                    <span v-if='Number(customerInfo.kycStatus) !== 0' class='status' :class='kycStateMap[customerInfo.kycStatus].className' @click="$router.push('/authentication')">
+                    <p class='text2'>
+                        ID: {{ customerInfo.customerNo }}
+                        <i class='icon_fuzhi copy-btn' :data-clipboard-text='customerInfo.customerNo' @click='copyCustomerNo'></i>
+                    </p>
+                    <!-- <span v-if='Number(customerInfo.kycStatus) !== 0' class='status' :class='kycStateMap[customerInfo.kycStatus].className' @click="$router.push('/authentication')">
                         <span class='icon' :class='customerInfo.kycStatus === -1 ? kycStateMap[customerInfo.kycStatus].icon[customerInfo.kycRemark] : kycStateMap[customerInfo.kycStatus].icon'>
                         </span>
 
@@ -29,9 +29,7 @@
                         <span v-else-if='customerInfo.kycStatus!==0'>
                             {{ kycStateTextMap[customerInfo.kycStatus] }}
                         </span>
-
-                        <!-- {{ $tm('kycAuditStatus')[customerInfo.kycAuditStatus] }}  :class="['status'+customerInfo.kycAuditStatus]" -->
-                    </span>
+                    </span> -->
                 </div>
             </div>
             <div v-if='data.src' class='capitalImg'>
@@ -39,21 +37,20 @@
                 <ImgComp :data='data' />
             </div>
         </div>
-        <Fund v-if='fundVis' :show='fundVis' @update:show='updateShow' />
     </div>
 </template>
 
 <script>
-import Fund from '@plans/components/fund'
+import Clipboard from 'clipboard'
 import ImgComp from '../img/img'
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
+import { Toast } from 'vant'
 const faceImgDefault = require('@plans/images/face.png')
 const h5Preview = process.env.VUE_APP_h5Preview
 export default {
     components: {
-        Fund,
         ImgComp,
     },
     props: {
@@ -73,10 +70,10 @@ export default {
         const customerInfo = computed(() => store.state._user.customerInfo)
         const assets = computed(() => store.state._user.accountAssets)
         const miniAmountText = computed(() => assets.value?.balance?.length + assets.value?.availableMargin?.length > 25)
-        const state = reactive({ fundVis: false })
-        const updateShow = (val) => {
-            state.fundVis = val
-        }
+        const state = reactive({
+
+        })
+
         const kycMap = {
             level_1: t('common.kycLevel1'),
             level_2: t('common.kycLevel2'),
@@ -98,17 +95,33 @@ export default {
             }
         }
 
+        // 处理手机号和邮箱显示
+        const hideInfo = (value) => {
+            return value.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
+        }
+
+        // 赋值账号
+        const copyCustomerNo = (value) => {
+            var clipboard = new Clipboard('.copy-btn')
+            clipboard.on('success', e => {
+                Toast(t('common.copySuccess'))
+                // 释放内存
+                clipboard.destroy()
+            })
+        }
+
         return {
             ...toRefs(state),
             faceImg,
             userAccountType,
-            updateShow,
             customerInfo,
             assets,
             miniAmountText,
             kycMap,
             kycStateTextMap,
-            kycStateMap
+            kycStateMap,
+            hideInfo,
+            copyCustomerNo
         }
     }
 }
@@ -117,12 +130,12 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .mineGuest {
-    padding: rem(40px) 0 rem(30px);
+    padding: rem(40px) 0 rem(60px);
     background: var(--contentColor);
     .faceImg {
         display: block;
-        width: rem(110px);
-        height: rem(110px);
+        width: rem(160px);
+        height: rem(160px);
         margin: 0 auto;
     }
     .guestBts {
@@ -130,13 +143,14 @@ export default {
         justify-content: space-between;
         margin: rem(50px) rem(20px) 0;
         .btn {
-            width: 45%;
+            width: 100%;
             height: rem(80px);
             color: #FFF;
-            font-size: rem(34px);
+            font-size: rem(32px);
             line-height: 1;
             background: var(--primary);
-            border-radius: rem(40px);
+            border-radius: rem(6px);
+            letter-spacing: 1px;
         }
     }
 }
@@ -147,12 +161,10 @@ export default {
 }
 .personNo {
     position: relative;
-    height: rem(110px);
-    padding-left: rem(130px);
+    text-align: center;
     .faceImg {
-        position: absolute;
-        top: 0;
-        left: 0;
+        margin: 0 auto;
+        display: block;
         width: rem(110px);
         height: rem(110px);
     }
@@ -160,6 +172,17 @@ export default {
         display: inline-block;
         padding-top: rem(15px);
         font-size: rem(32px);
+        .text1{
+            font-size: rem(48px);
+            font-weight: bold;
+        }
+        .text2{
+            font-size: rem(28px);
+            color: var(--minorColor);
+            .copy-btn{
+                font-size: rem(22px);
+            }
+        }
     }
     .arrowIcon {
         color: var(--minorColor);

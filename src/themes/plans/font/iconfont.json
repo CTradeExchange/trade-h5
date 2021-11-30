@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "26095100",
+      "name": "复制",
+      "font_class": "fuzhi",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
+    },
+    {
+      "icon_id": "26094992",
+      "name": "红涨绿跌",
+      "font_class": "hongzhanglvdie",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
+    },
+    {
+      "icon_id": "26094993",
+      "name": "绿涨红跌",
+      "font_class": "lvzhanghongdie",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
       "icon_id": "25907914",
       "name": "排序",
       "font_class": "paixu",

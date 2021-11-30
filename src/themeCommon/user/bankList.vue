@@ -1,7 +1,10 @@
 <template>
-    <Top back show-center />
+    <Top back />
     <div class='page-wrap'>
         <Loading :show='loading' />
+        <p class='header'>
+            {{ $t('cRoute.bankList') }}
+        </p>
         <div class='list'>
             <p v-if='bankList.length === 0' class='no-data'>
                 {{ $t('bank.noBanks') }}
@@ -91,8 +94,16 @@ export default {
 .page-wrap {
     flex: 1;
     overflow: auto;
-    background: var(--bgColor);
+     background: var(--contentColor);
+    .header{
+        font-size: rem(48px);
+        font-weight: bold;
+        padding-left: rem(30px);
+        padding-bottom: rem(10px);
+
+    }
     .list {
+
         padding: rem(30px);
         .bank-item {
             position: relative;
@@ -293,7 +304,9 @@ export default {
             cursor: pointer;
             .van-icon-plus {
                 margin-right: rem(10px);
-                color: var(--minorColor);
+                color: var(--color);
+                font-weight: bold;
+                margin-top: -1px;
             }
             .btn-text {
                 flex: 1;

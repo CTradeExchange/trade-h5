@@ -275,8 +275,14 @@ export default {
         findAllBizKycList ({ state, commit }) {
             return findAllBizKycList().then(res => {
                 if (res.check()) {
+                    res.data.forEach(item => {
+                        if (item.preLevelName) {
+                            const temp = res.data.find(el => el.levelName === item.preLevelName)
+                            item.preLevelObj = temp
+                        }
+                    })
+
                     commit('Update_kycList', res.data)
-                    return res
                 }
             })
         }

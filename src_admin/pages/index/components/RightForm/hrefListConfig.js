@@ -21,10 +21,14 @@ export default [
         name: 'Msg',
         title: '消息中心'
     },
-    // {
-    //     name: 'Search',
-    //     title: '搜索产品'
-    // },
+    {
+        name: 'SecuritySetting',
+        title: '安全设置'
+    },
+    {
+        name: 'CommonSetting',
+        title: '通用设置'
+    },
     {
         name: 'Personal',
         title: '个人资料'
