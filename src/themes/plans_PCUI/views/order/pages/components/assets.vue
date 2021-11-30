@@ -11,7 +11,7 @@
             </van-col>
             <van-col v-else-if='Number(product.tradeType) === 2' class='balance'>
                 {{ accountTradeType2?.availableMargin }}
-                {{ account[direction].currency }}
+                {{ account[direction]?.currency }}
                 <router-link :to='$route.path + "/transfer?tradeType="+ product.tradeType'>
                     {{ $t('trade.transfer') }}
                 </router-link>
