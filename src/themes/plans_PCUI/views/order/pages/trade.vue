@@ -429,9 +429,9 @@ export default {
             })
         }
 
-        // 监听路由变化
+        // 监听产品变化
         watch(
-            () => route.query, (val, oval) => {
+            () => product.value, (val, oval) => {
                 init()
             }
         )
