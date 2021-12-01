@@ -17,7 +17,7 @@
                     {{ item.cur_price }}
                 </p>
                 <p class='up-down' :class='[item.upDownColor]'>
-                    {{ item.upDownAmount || '--' }}
+                    {{ item.upDownWidth || '--' }}
                 </p>
             </div>
         </div>
