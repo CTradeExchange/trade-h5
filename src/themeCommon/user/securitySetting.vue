@@ -60,7 +60,14 @@
                 to='/walletAddress'
                 value=''
             />
-            <van-cell class='cellItem' is-link :title='$t("common.quitLogin")' value='' @click='handleLogout' />
+            <van-cell
+                v-if='customInfo'
+                class='cellItem'
+                is-link
+                :title='$t("common.quitLogin")'
+                value=''
+                @click='handleLogout'
+            />
         </van-cell-group>
     </div>
 </template>
@@ -125,6 +132,7 @@ export default {
     }
     .cellGroup{
         .cellItem {
+            background: var(--contentColor);
             font-size: rem(32px);
             font-weight: bold;
             line-height: rem(120px);

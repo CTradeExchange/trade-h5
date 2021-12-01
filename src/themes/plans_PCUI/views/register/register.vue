@@ -94,6 +94,7 @@ import { reactive, toRefs, computed, getCurrentInstance, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Toast } from 'vant'
 import RuleFn, { checkCustomerExistRule } from './rule'
+import { setQuoteService } from '@/plugins/socket/socket'
 // import { pageConfig } from '@/api/wpApi'
 import { useI18n } from 'vue-i18n'
 import hooks from './hooks'
@@ -179,6 +180,9 @@ export default {
                     store.commit('_user/Update_accountAssets', {})
                     // 登录websocket
                     instance.appContext.config.globalProperties.$MsgSocket.login()
+
+                    // 切换登录后的行情websocket
+                    setQuoteService()
 
                     if (res.data.list.length > 0) {
                         // 需要KYC认证

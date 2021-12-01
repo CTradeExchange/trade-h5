@@ -42,8 +42,8 @@
         "withdrawAccount": "Select Withdraw Currency",
         "transfer": "Transfer",
         "securitySetting": "Security Settings",
-        "commonSetting": "Common Settings",
-        "lang": "Language"
+        "commonSetting": "Common Settings"
+        
     },
     "login": {
         "loginBtn": "Login",
@@ -64,7 +64,7 @@
         "loginPwd": "Login Password",
         "originPwd": "Input original password",
         "pwdSuccess": "Change password success",
-        "modifyLoginPwd": "Change Login Password",
+        "modifyLoginPwd": "Change Password",
         "getVerifyCode": "Get Code"
     },
     "common": {
@@ -169,7 +169,9 @@
         "email": "email",
         "alreadyBind": "Set",
         "noneBind": "Not Set",
-        "commonSetting": "Common Setting"
+        "commonSetting": "Common Setting",
+        "lang": "Language",
+        "dark": "Dark"
         
     },
     "faceAuth": {
@@ -202,7 +204,7 @@
         "retrievedByEmail": "Eamil",
         "setPwdFailed": "New password setting failed",
         "tryLater": "Please try again later or contact Online Customer Service",
-        "setPwd": "Login Password Setting",
+        "setPwd": "Set Password",
         "pwdRule": "Password must be 6-16 characters with alphanumeric",
         "inputNewPwd": "Input new password",
         "newPwdAgain": "Input new password again",
@@ -555,13 +557,14 @@
     },
     "setting": {
         "enableNews": "Enable News",
-        "bindPhone": "Set Mobile",
+        "bindPhone": "Set Phone",
         "bindEmail": "Set Email",
         "replaceEmail": "Change Email",
-        "replacePhone": "Change Mobile",
+        "replacePhone": "Change Phone",
         "logout": "Logout",
         "logoutConfirm": "Confirm Logout?",
         "setLang": "Language",
+        "chartColor": "Color Prefence",
         "color": "Theme"
     },
     "withdraw": {

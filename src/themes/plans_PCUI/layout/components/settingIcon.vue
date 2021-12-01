@@ -3,7 +3,7 @@
         ref='popover'
         placement='bottom'
         trigger='hover'
-        :width='152'
+        :width='170'
     >
         <template #reference>
             <i class='icon icon_shezhi' :title='$t("header.set")'></i>
@@ -161,9 +161,9 @@ export default {
         background: var(--contentColor);
         padding: 8px;
         color: var(--color);
-        left: 100%;
+        right: 100%;
         top: 0;
-        width: 100%;
+        width: 150%;
         box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
     }
 }

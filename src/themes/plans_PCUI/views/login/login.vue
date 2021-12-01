@@ -49,7 +49,7 @@
             </div>
         </div>
         <div class='footer'>
-            © 2013 - 2021 CATS. All rights reserved
+            © 2021 Trade Switcher. All rights reserved
         </div>
 
         <!-- 设置登录密码弹窗 -->

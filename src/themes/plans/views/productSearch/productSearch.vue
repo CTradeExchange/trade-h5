@@ -86,8 +86,14 @@ export default {
             getSymbolList({ name: state.searchKey, tradeType: tradeType.value }).then(res => {
                 if (res.check()) {
                     const list = res.data || []
-                    state.searchList = list
-                    console.log('selfSymbolList', selfSymbolList)
+                    state.searchList = [];
+                    list.forEach(item=>{
+                        for(let el in productMap.value){
+                            if(productMap.value[el].symbolKey===(String(item.id)+'_'+tradeType.value)){
+                                state.searchList.push(item)
+                            }
+                        }
+                    })
                     const currentSelfSymbolList = selfSymbolList.value[tradeType.value]
                     const isSelfSymbol = false
                     state.searchList.forEach(item => {
@@ -98,7 +104,6 @@ export default {
                             }
                         })
                     })
-                    console.log('state.searchList', state.searchList)
                 }
             })
         }

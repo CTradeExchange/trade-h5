@@ -4,7 +4,7 @@
             <div class='nav-left'>
                 <img class='logo' src='@planspc/images/logo.png' />
                 <p class='year'>
-                    © 2013-2021 CATS
+                    © 2021 Trade Switcher
                 </p>
             </div>
             <div class='nav-right'>
@@ -163,10 +163,6 @@ export default {
     }
     .nav-left {
         padding-top: 87px;
-        .logo {
-            width: 98px;
-            height: 17px;
-        }
         .year {
             margin-top: 18px;
             font-size: 12px;
@@ -179,7 +175,7 @@ export default {
             display: flex;
         }
         li {
-            margin-right: 120px;
+            margin-right: 110px;
             &:last-of-type {
                 margin-right: 0;
             }
