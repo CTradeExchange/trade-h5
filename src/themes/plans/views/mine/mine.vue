@@ -32,16 +32,14 @@ export default {
     overflow: auto;
     background: var(--bgColor);
     .minePageComp{
-        min-height: 84vh;
+        min-height: 100%;
+        padding-bottom: rem(100px);
     }
     &.hasNav{
         padding-bottom: rem(100px);
-        .support{
-            bottom: rem(120px);
-        }
     }
     .support {
-        margin: rem(30px) auto rem(10px);
+        margin: rem(-80px) auto rem(10px);
         width: rem(200px);
         line-height: rem(32px);
         text-align: center;
