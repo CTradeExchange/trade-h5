@@ -34,6 +34,7 @@ export function register (data) {
     return request({
         url: '/register/customer.app.CustomerWebApiService.register',
         method: 'post',
+        toastErr: false,
         headers: {
             version: '0.0.1',
         },
