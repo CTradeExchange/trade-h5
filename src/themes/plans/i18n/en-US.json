@@ -119,7 +119,7 @@
     "transfer": "Transfer"
   },
   "search": {
-    "keywords": "product name/code/phonics to search",
+    "keywords": "Name/Symbol/Phonics",
     "placeholder": "Please enter the search keywords",
     "norecord": "No search history at this time",
     "nodata": "No results found",
