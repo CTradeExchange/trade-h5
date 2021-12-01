@@ -44,7 +44,7 @@
             </div>
         </div>
         <div class='assets-body'>
-            <el-table :cell-style="{ background:'none' }" :data='positionList' :empty-text="$t('c.noData')">
+            <el-table :cell-style="{ background:'none' }" :data='positionList' :empty-text="$t('c.noData')" height='100%'>
                 <el-table-column :label="$t('trade.name')" prop='symbolName' />
                 <el-table-column :label="$t('trade.profit') + '('+ assetsInfo.currency +')'">
                     <template #default='scope'>
@@ -95,7 +95,7 @@
                         <span>{{ scope.row.positionId }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column v-if='positionList.length > 0' align='right' fixed='right' :label="$t('c.handle')" width='120'>
+                <el-table-column v-if='positionList && positionList.length > 0' align='right' fixed='right' :label="$t('c.handle')" width='120'>
                     <template #default='scope'>
                         <div class='handle'>
                             <button @click='openSltp(scope.row)'>

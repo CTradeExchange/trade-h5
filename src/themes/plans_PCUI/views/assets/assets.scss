@@ -139,9 +139,6 @@
 		.el-table__body-wrapper {
 			@include scroll-pc();
 		}
-        .el-table__empty-block {
-            margin: 200px 0;
-        }
         .empty{
             display: flex;
             flex-direction: column;

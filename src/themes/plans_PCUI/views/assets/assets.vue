@@ -142,7 +142,7 @@ export default {
 }
 .assets-content {
     display: flex;
-    min-height: 1080px;
+    min-height: 820px;
 }
 .assets-side {
     width: 216px;
