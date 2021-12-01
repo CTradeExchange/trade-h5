@@ -39,7 +39,7 @@ export default {
         const router = useRouter()
         // 产品map数据
         const productMap = unref(computed(() => store.state._quote.productMap))
-        const symbolKeys = ['4_1', '7_1', '5_1'] // '33_2', '12_2'
+        const symbolKeys = ['59_1', '56_1', '28_3'] // '33_2', '12_2'
         // 产品列表数据
         const productList = symbolKeys.map(key => productMap[key]).filter(elem => elem)
         QuoteSocket.add_subscribe({ moduleId: 'productsTimmeSharing', symbolKeys })
