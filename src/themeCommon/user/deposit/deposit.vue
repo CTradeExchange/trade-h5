@@ -857,8 +857,7 @@ export default {
             }
         }
         .active {
-            // background: rgba(242, 161, 27, .1);
-            background: var(--primary);
+            background: rgba(242, 161, 27, .1);
             border: 1px solid var(--focusColor);
             .t1 {
                 color: var(--focusColor);
@@ -976,8 +975,7 @@ export default {
         }
         strong {
             font-size: rem(28px);
-            // color: var(--focusColor);
-            color: var(--primary);
+            color: var(--focusColor);
         }
     }
 }
@@ -990,7 +988,6 @@ export default {
     .next-btn {
         height: rem(80px);
         background: var(--primary);
-        border-color: var(--primary);
         border-radius: rem(10px);
         span {
             color: #fff;
