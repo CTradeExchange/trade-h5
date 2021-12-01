@@ -137,8 +137,10 @@ export default {
                     dispatch('saveCustomerInfo', { flag: true, data: res.data })
 
                     // 对比用户的资产信息和wp配置的资产信息，自动给用户开增量资产
-                    const compareAssetsResult = compareAssets(data, rootState._base.wpCompanyInfo.registList)
-                    if (compareAssetsResult) dispatch('increasAccount', compareAssetsResult)
+                    if (data.kycAuditStatus === 2) {
+                        const compareAssetsResult = compareAssets(data, rootState._base.wpCompanyInfo.registList)
+                        if (compareAssetsResult) dispatch('increasAccount', compareAssetsResult)
+                    }
                 }
                 commit('Update_loginLoading', false)
                 return res
