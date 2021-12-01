@@ -1,8 +1,5 @@
 <template>
     <div class='m-infoflow' :style='data.styleObj'>
-        <div class='m-infoflow_title'>
-            {{ $t('information.reference') }}
-        </div>
         <div class='container'>
             <van-tabs v-model:active='state.activeTab' :color='$style.primary' :title-inactive-color='$style.primary' @click='tabClick'>
                 <van-tab v-for='(tab,index) in state.newsTypes' :key='tab.id' class='extra-tabpanel' :name='index' :title='tab.name'>

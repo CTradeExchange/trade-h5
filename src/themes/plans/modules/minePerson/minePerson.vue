@@ -141,7 +141,7 @@ export default {
     .guestBts {
         display: flex;
         justify-content: space-between;
-        margin: rem(50px) rem(20px) 0;
+        margin: rem(50px) rem(30px) 0;
         .btn {
             width: 100%;
             height: rem(80px);
@@ -155,7 +155,7 @@ export default {
     }
 }
 .personInfo {
-    padding: rem(40px);
+    padding: rem(60px);
     color: var(--color);
     background: var(--contentColor);
 }
@@ -165,16 +165,17 @@ export default {
     .faceImg {
         margin: 0 auto;
         display: block;
-        width: rem(110px);
-        height: rem(110px);
+        width: rem(160px);
+        height: rem(160px);
     }
     .customerNo {
         display: inline-block;
-        padding-top: rem(15px);
+        padding-top: rem(24px);
         font-size: rem(32px);
         .text1{
             font-size: rem(48px);
             font-weight: bold;
+            margin-bottom: rem(6px);
         }
         .text2{
             font-size: rem(28px);

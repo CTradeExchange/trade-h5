@@ -219,8 +219,8 @@ export default {
         background: var(--contentColor);
     }
     .msg-item {
-        margin: rem(15px);
-        padding: rem(20px);
+        margin: rem(10px) 0;
+        padding: rem(30px);
         background-color: var(--contentColor);
         //border-top: solid rem(10px) var(--bgColor);
         .msg-title {
@@ -252,7 +252,7 @@ export default {
         //background-color: var(--contentColor);
         .van-dropdown-menu__title {
             color: var(--color);
-            margin-right: rem(30px);
+            margin-right: rem(40px);
             &::after{
                 border-color: transparent transparent var(--normalColor) var(--normalColor);
             }

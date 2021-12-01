@@ -1,10 +1,10 @@
 <template>
     <div class='page-wrap'>
-        <Top back />
+        <Top back @back='back' />
         <p class='header'>
             {{ $t('cRoute.commonSetting') }}
         </p>
-        <van-cell-group class='cellGroup'>
+        <van-cell-group :border='false' class='cellGroup'>
             <van-cell
                 class='cellItem'
                 is-link
@@ -83,6 +83,7 @@
 
 <script>
 import Top from '@/components/top'
+import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { setCookie, getCookie, isEmpty, localGet, localSet } from '@/utils/util'
 import { changeLang } from '@/api/base'
@@ -93,6 +94,7 @@ import { onBeforeMount, computed, reactive, toRefs, onUnmounted } from 'vue'
 export default {
     components: { Top },
     setup (props, context) {
+        const router = useRouter()
         const { t, locale } = useI18n({ useScope: 'global' })
         const store = useStore()
         const state = reactive({
@@ -197,12 +199,17 @@ export default {
             state.colorShow = false
         }
 
+        const back = () => {
+            return router.replace('/mine')
+        }
+
         return {
             supportLanguages,
             langSelect,
             colorSelect,
             chartAction,
             upDownColorSelect,
+            back,
             ...toRefs(state)
         }
     },
@@ -264,12 +271,16 @@ export default {
             &::after{
                 border: none;
             }
+            :deep(.van-cell__title){
+                color: var(--color);
+            }
             .lang-icon{
                 width: rem(70px);
                 margin-right: rem(20px);
             }
             .right-arrow{
                 margin-top: -2px;
+                color: var(--minorColor);
             }
             .updown-icon{
                width: rem(40px);

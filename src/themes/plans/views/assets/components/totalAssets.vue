@@ -255,7 +255,7 @@ export default {
         &.transfer-btn{
             color: var(--primary);
             border: solid 1px var(--primary);
-            color: var(--primary);
+            background: none;
         }
     }
 }
@@ -270,6 +270,7 @@ export default {
         color: var(--primary);
         border: solid 1px var(--primary);
         color: var(--primary);
+        background: none;
     }
 }
 </style>

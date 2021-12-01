@@ -147,14 +147,14 @@ export default {
         border-bottom: solid 1px var(--lineColor);
     }
     .auth-list {
-        margin-top: rem(30px);
-        padding: 0 rem(30px);
+        //margin-top: rem(10px);
+        //padding: 0 rem(30px);
         background: var(--contentColor);
         .auth-item {
             display: flex;
+            border-top: solid rem(10px) var(--bgColor);
             align-items: center;
-            padding: rem(45px) 0;
-            border-bottom: solid 1px var(--lineColor);
+            padding: rem(30px) rem(30px);
             .auth-img {
                 width: rem(60px);
                 height: rem(100px);

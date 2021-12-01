@@ -1,6 +1,6 @@
 <template>
     <div ref='wrapper' :style='data.styleObj'>
-        <van-cell-group class='cellGroup'>
+        <van-cell-group :border='false' class='cellGroup'>
             <van-cell
                 v-for='(item, key) in cellList'
                 :key='key'
@@ -125,6 +125,12 @@ export default {
         //margin-top: rem(10px);
         &::after{
             border: none;
+        }
+        :deep(.van-icon-arrow){
+            margin-top: -2px;
+        }
+        :deep(.van-cell__title){
+            color: var(--color);
         }
 
 }

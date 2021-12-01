@@ -4,7 +4,7 @@
         <p class='header'>
             {{ $t('cRoute.securitySetting') }}
         </p>
-        <van-cell-group class='cellGroup'>
+        <van-cell-group :border='false' class='cellGroup'>
             <van-cell
                 class='cellItem'
                 is-link
@@ -138,17 +138,24 @@ export default {
             line-height: rem(120px);
             height: rem(120px);
             border-top: solid rem(10px) var(--bgColor);
-            background: none;
+            background: var(--contentColor);
             display: flex;
             align-items: center;
             //margin-top: rem(10px);
             &::after{
                 border: none;
             }
+            :deep(.van-cell__title){
+                color: var(--color);
+            }
+            :deep(.van-icon-arrow){
+                margin-top: -2px;
+            }
             .right-val{
                 font-size: rem(28px);
                 color: var(--minorColor);
                 vertical-align: middle;
+                margin-right: rem(10px);
                 &.none{
                     color: var(--warn);
                 }
@@ -156,7 +163,6 @@ export default {
             .van-icon{
                 margin-top: -2px;
                 color: var(--minorColor);
-                font-size: rem(24px);
             }
 
         }
