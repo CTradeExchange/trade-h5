@@ -93,7 +93,7 @@ export default {
         }
 
         const back = () => {
-            router.replace('/personal')
+            router.replace('/mine')
         }
 
         onBeforeRouteLeave((to, from) => {

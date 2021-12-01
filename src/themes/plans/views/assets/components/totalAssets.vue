@@ -40,13 +40,13 @@
         </ul>
 
         <div v-if='[3,5].includes(Number(tradeType))' class='btns'>
-            <van-button
+            <!-- <van-button
                 size='mini'
                 type='primary'
                 @click='toDesposit'
             >
                 {{ Number(tradeType) === 3 ? $t('trade.loan') : $t('trade.desposit') }}
-            </van-button>
+            </van-button> -->
             <van-button
                 size='mini'
                 type='primary'
@@ -54,15 +54,16 @@
             >
                 {{ Number(tradeType) === 3 ? $t('trade.repayment') : $t('trade.withdraw') }}
             </van-button>
-        </div>
-        <div class='btns2'>
             <van-button
+                class='transfer-btn'
                 size='mini'
                 @click='toTransfer'
             >
                 {{ $t('trade.transfer') }}
             </van-button>
         </div>
+        <!-- <div class='btns2'>
+        </div> -->
     </div>
 </template>
 
@@ -241,6 +242,10 @@ export default {
         border-radius: rem(6px);
         &:last-child {
             margin-right: 0;
+        }
+        &.transfer-btn{
+            color: var(--primary);
+            border: solid 1px var(--primary);
         }
     }
 }
