@@ -1,6 +1,6 @@
 <template>
     <div class='float-content'>
-        <a href='https://www.baidu.com' target='_blank'>
+        <a href='https://tradeswitcher.com/' target='_blank'>
             <img alt='' src='../../../../assets/floatBtn.png' srcset='' />
         </a>
     </div>
@@ -10,7 +10,7 @@
 @import '~@/sass/mixin.scss';
 .float-content{
     position: fixed;
-    top: rem(600px);
+    bottom: rem(300px);
     z-index: 9999;
     width: rem(96px);
     height: rem(96px);

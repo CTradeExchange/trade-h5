@@ -1,30 +1,45 @@
 <template>
-    <productsTimeSharing />
-    <productsWithIcon />
+    <swipe v-if='isCompanyIdShow' :data='data' />
+    <productsTimeSharing v-if='isCompanyIdShow' />
+    <productsWithIcon v-if='isCompanyIdShow' />
     <div id='homeContent' ref='homeContent' class='home' :class='{ hasNav: $hasNav }'>
         <PageComp :data='pageModules' />
     </div>
-    <floatComp />
+    <floatComp v-if='isCompanyIdShow' />
 </template>
 
 <script>
 import { QuoteSocket } from '@/plugins/socket/socket'
-import { onActivated, computed, ref } from 'vue'
+import { onActivated, computed, ref, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import floatComp from '@plans/modules/floatComp/floatComp.vue'
 import productsTimeSharing from '@plans/modules/productsTimeSharing/productsTimeSharing.vue'
 import productsWithIcon from '@plans/modules/productsWithIcon.vue'
+import swipe from '@plans/modules/swipe/swipe.vue'
 export default {
     name: 'Home',
     components: {
         floatComp,
         productsTimeSharing,
-        productsWithIcon
+        productsWithIcon,
+        swipe
     },
     setup () {
         const store = useStore()
         const pageModules = ref([])
         const customerGroupId = computed(() => store.getters.customerGroupId)
+        // 暂时只在319公司显示
+        const isCompanyIdShow = computed(() => Number(store.state._base.wpCompanyInfo.companyId) === 319)
+
+        const state = reactive({
+            data: {
+                items: [
+                    {
+                        src: require('@plans/images/banner/banner1.png')
+                    }
+                ]
+            }
+        })
         const products = []
 
         // 产品订阅
@@ -53,6 +68,8 @@ export default {
         })
         return {
             pageModules,
+            isCompanyIdShow,
+            ...toRefs(state)
         }
     }
 }
