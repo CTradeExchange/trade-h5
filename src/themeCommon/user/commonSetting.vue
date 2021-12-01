@@ -12,6 +12,8 @@
                 to='/bindMobile'
             >
                 <template #right-icon>
+                    <img alt='' class='lang-icon' :src="'/images/country_icon/'+ lang + '.png'" />
+                    <van-icon name='arrow' />
                 </template>
             </van-cell>
             <van-cell
@@ -39,12 +41,16 @@
 
 <script>
 import Top from '@/components/top'
+import { useStore } from 'vuex'
+import { getCookie } from '@/utils/util'
 import { onBeforeMount, computed, reactive, toRefs, onUnmounted } from 'vue'
 export default {
     components: { Top },
     setup (props, context) {
+        const store = useStore()
         const state = reactive({
-            theme: false
+            theme: false,
+            lang: getCookie('lang') || store.state._base.wpCompanyInfo.language,
         })
         return {
             ...toRefs(state)
@@ -62,6 +68,26 @@ export default {
         font-weight: bold;
         padding-left: rem(30px);
         padding-bottom: rem(30px);
+    }
+    .cellGroup{
+        .cellItem {
+            font-size: rem(32px);
+            font-weight: bold;
+            line-height: rem(120px);
+            height: rem(120px);
+            border-top: solid rem(10px) var(--bgColor);
+            background: none;
+            display: flex;
+            align-items: center;
+            //margin-top: rem(10px);
+            &::after{
+                border: none;
+            }
+            .lang-icon{
+                width: rem(70px);
+                margin-right: rem(20px);
+            }
+        }
     }
 }
 </style>

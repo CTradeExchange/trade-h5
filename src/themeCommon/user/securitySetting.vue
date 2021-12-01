@@ -60,6 +60,7 @@
                 to='/walletAddress'
                 value=''
             />
+            <van-cell class='cellItem' is-link :title='$t("common.quitLogin")' value='' @click='handleLogout' />
         </van-cell-group>
     </div>
 </template>
@@ -67,18 +68,45 @@
 <script>
 import Top from '@/components/top'
 import { useStore } from 'vuex'
-import { onBeforeMount, computed, reactive, toRefs, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { Dialog } from 'vant'
+import { useRouter } from 'vue-router'
+import { onBeforeMount, computed, reactive, getCurrentInstance, toRefs, onUnmounted } from 'vue'
 export default {
     components: {
         Top,
     },
     setup (props, context) {
+        const instance = getCurrentInstance()
+        const { t, locale } = useI18n({ useScope: 'global' })
         const store = useStore()
+        const router = useRouter()
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         const state = reactive({})
+
+        const handleLogout = () => {
+            Dialog.confirm({
+                confirmButtonText: t('common.sure'),
+                cancelButtonText: t('common.cancel'),
+                title: t('common.tip'),
+                message: t('setting.logoutConfirm'),
+            }).then(() => {
+                state.loading = true
+                // 退出登录
+                instance.appContext.config.globalProperties.$MsgSocket.logout()
+                return store.dispatch('_user/logout')
+            }).then(() => {
+                return router.push('/login')
+            }).then(() => {
+                location.reload()
+            }).catch(() => {
+                // on cancel
+            })
+        }
         return {
-            customInfo
+            customInfo,
+            handleLogout
         }
     },
 }

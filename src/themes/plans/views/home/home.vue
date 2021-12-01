@@ -36,7 +36,8 @@ export default {
             data: {
                 items: [
                     {
-                        src: require('@plans/images/banner/banner1.png')
+                        src: require('@plans/images/banner/banner1.png'),
+                        href: { 'name': 'Register' }
                     }
                 ]
             }

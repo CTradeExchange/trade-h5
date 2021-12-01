@@ -35,11 +35,6 @@
                     </van-tag>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("common.quitLogin")' value=''>
-                <template #icon>
-                    <img alt='' class='icon' src='/wp-content/uploads/cats_business/set.png' />
-                </template>
-            </van-cell>
         </van-cell-group>
         <slot></slot>
     </div>
@@ -113,8 +108,8 @@ export default {
     margin-right: rem(44px);
     vertical-align: middle;
     //font-size: rem(32px);
-    width: rem(38px);
-    height: rem(38px);
+    width: rem(64px);
+    height: rem(64px);
 }
 .cellGroup{
     .cellItem {
