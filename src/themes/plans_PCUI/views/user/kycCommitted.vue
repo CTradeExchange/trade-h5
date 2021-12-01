@@ -11,7 +11,7 @@
             </p>
 
             <div class='btns'>
-                <van-button hairline type='success' @click='$router.replace({ name: "Home" })'>
+                <van-button hairline type='success' @click='toExperience'>
                     {{ $t('compLang.close') }}
                 </van-button>
             </div>
@@ -22,12 +22,14 @@
 <script>
 import centerViewDialog from '@planspc/layout/centerViewDialog'
 import { useRouter, useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 export default {
     name: 'KycCommitted',
     components: {
         centerViewDialog
     },
     setup (props, context) {
+        const store = useStore()
         const router = useRouter()
         const route = useRoute()
         const backAuth = () => {
@@ -35,7 +37,16 @@ export default {
                 path: route.path.slice(0, -13) + '/authentication'
             })
         }
+        const toExperience = () => {
+            // 退出登录 断开ws
+            store.dispatch('_user/logout').then(() => {
+                return router.push('/login')
+            }).then(() => {
+                location.reload()
+            })
+        }
         return {
+            toExperience,
             backAuth
         }
     }
