@@ -693,21 +693,28 @@ body {
 		}
 	}
 	.el-pagination {
+        display: flex;
+        align-items: center;
 		li {
 			font-size: 16px;
 			font-weight: normal;
-			color: var(--color);
+			color: var(--color) !important;
+            background-color: var(--primaryAssistColor) !important;
 			&:hover {
-				color: var(--primary);
+				color: var(--primary) !important;
 			}
 			&.active {
 				font-weight: bold;
-				color: var(--primary);
+				color: var(--primary) !important;
 			}
 		}
-		.el-icon {
-			font-size: 16px !important;
-		}
+        button {
+            color: var(--color) !important;
+            background-color: var(--primaryAssistColor) !important;
+            .el-icon {
+                font-size: 16px !important;
+            }
+        }
 	}
 }
 
