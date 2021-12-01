@@ -615,7 +615,7 @@
         "addBtn": "去添加",
         "predictName": "预计到账",
         "bankPopupTitle": "选择收款银行卡",
-        "bankPopupBtn": "新增银行卡",
+        "bankPopupBtn": "添加银行卡",
         "unit": "次",
         "hint_1": "请输入正确的金额",
         "hint_2": "请选择取款银行卡",
