@@ -260,6 +260,7 @@ const routes = [
         meta: {
             title: 'cRoute.bindMobile',
             footerMenu: false,
+            roles: ['User']
         }
     },
     {
@@ -269,6 +270,7 @@ const routes = [
         meta: {
             title: 'cRoute.bindEmail',
             footerMenu: false,
+            roles: ['User']
         }
     },
     {

@@ -117,8 +117,9 @@ export default {
         font-weight: bold;
         line-height: rem(120px);
         height: rem(120px);
+        background: var(--contentColor);
         border-top: solid rem(10px) var(--bgColor);
-        background: none;
+        //background: none;
         display: flex;
         align-items: center;
         //margin-top: rem(10px);

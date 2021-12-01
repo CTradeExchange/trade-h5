@@ -569,6 +569,7 @@
 		"buyText": "Buy / Long",
 		"sellText": "Sell / Short",
 		"curTrust": "Current order",
+		"curPending": "Current Limit",
 		"dealNo": "Trade No.",
 		"positionNo": "Position ID",
 		"modifyMargin": "Adjust margin",
@@ -741,5 +742,14 @@
         "transferTip6": "Transfer amount cannot less than 00",
         "transferSuccess": "Tranfer success",
 		"confirmClose": "Confirm close"
-	}
+	},
+    "transRecords": {
+        "searchPlaceholder": "Name/Symbol",
+        "select": "select",
+        "byAmount": "By amount/by quantity",
+        "entrustedAmount": "Order amount/Qty",
+        "volumeAmount": "Qty/Amount",
+        "orderbyAuantity": "By quantity",
+        "orderByAmount": "By amount"
+    }
 }

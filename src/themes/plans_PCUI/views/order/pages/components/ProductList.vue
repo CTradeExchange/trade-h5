@@ -76,9 +76,15 @@ const onClick = product => {
 // })
 
 /** 添加自选逻辑 */
+const customerInfo = computed(() => store.state._user.customerInfo)
 const selfSymbolList = computed(() => store.state._user.selfSymbolList)
 const isCollect = (tradeType, symbolId) => selfSymbolList.value[tradeType]?.find(el => el.symbolId === parseInt(symbolId))
 const addOptional = ({ symbolId, tradeType }) => {
+    if (!customerInfo.value) {
+        ElMessage.warning(t('common.noLogin'))
+        return router.push('/login')
+    }
+
     if (isCollect(tradeType, symbolId)) {
         removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
             if (res.check()) {
