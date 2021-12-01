@@ -572,6 +572,7 @@
 		"buyText": "买入 / 做多",
 		"sellText": "卖出 / 做空",
 		"curTrust": "当前委托",
+		"curPending": "当前挂单",
 		"dealNo": "成交单号",
 		"positionNo": "持仓单号",
 		"modifyMargin": "调整保证金",
@@ -753,6 +754,11 @@
 	},
     "transRecords": {
         "searchPlaceholder": "请输入关键字搜索",
-        "select": "选择"
+        "select": "选择",
+        "byAmount": "按额/按量",
+        "entrustedAmount": "委托量/额",
+        "volumeAmount": "成交量/额",
+        "orderbyAuantity": "按量下单",
+        "orderByAmount": "按额下单"
     }
 }
