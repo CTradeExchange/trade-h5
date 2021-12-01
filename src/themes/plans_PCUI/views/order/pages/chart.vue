@@ -335,8 +335,8 @@ export default {
                 }
             ],
             showStudyDialog: false,
-            loading: false
-
+            loading: false,
+            klineType: 1
         })
 
         // 是否是自选

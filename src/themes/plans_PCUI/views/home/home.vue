@@ -13,7 +13,7 @@
             <!-- 内容模块 -->
             <div class='content-module'>
                 <!-- 快速注册 -->
-                <quick />
+                <quick v-if='!$store.state._user.customerInfo' />
                 <!-- 广告模块 -->
                 <ad />
                 <!-- 交易模块 -->
@@ -165,7 +165,8 @@ export default {
 
 // 内容模块
 .content-module {
-    padding: 90px 0;
+    padding: 0;
+    overflow: auto;
     background-color: var(--contentColor);
 }
 

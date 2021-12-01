@@ -43,7 +43,7 @@ async function init () {
             type: 'list',
             name: 'h5Environment',
             message: '请选择调试环境：',
-            choices: ['uat', 'pre', 'other'],
+            choices: ['uat', 'pre'], //, 'other'
             when: answers => answers.buildType === 'h5',
             default: 'uat',
         },

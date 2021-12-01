@@ -464,19 +464,29 @@ class Chart {
 
     _setProperty (property, overrides) {
         Object.keys(property || {}).forEach(key => {
-            if (['showSeriesTitle', 'showSeriesOHLC', 'showBarChange'].includes(key)) {
-                overrides[`paneProperties.legendProperties.${key}`] = property[key]
-            } else if (['upColor', 'downColor'].includes(key)) {
-                const styleName = styleNameMap[property.chartType]
-
-                if (['barStyle', 'candleStyle', 'haStyle', 'hollowCandleStyle'].includes(styleName)) {
-                    overrides['mainSeriesProperties.' + styleName + '.upColor'] = property.upColor
-                    overrides['mainSeriesProperties.' + styleName + '.downColor'] = property.downColor
+            switch(key){
+                case 'showSeriesTitle':
+                case 'showSeriesOHLC':
+                case 'showBarChange':{
+                    overrides[`paneProperties.legendProperties.${key}`] = property[key]
+                    break
                 }
-
-                if (['candleStyle', 'haStyle', 'hollowCandleStyle'].includes(styleName)) {
-                    overrides['mainSeriesProperties.' + styleName + '.borderUpColor'] = property.upColor
-                    overrides['mainSeriesProperties.' + styleName + '.borderDownColor'] = property.downColor
+                case 'upColor':
+                case 'downColor':{
+                    const styleName = styleNameMap[property.chartType]
+                    if (['barStyle', 'candleStyle', 'haStyle', 'hollowCandleStyle'].includes(styleName)) {
+                        overrides['mainSeriesProperties.' + styleName + '.upColor'] = property.upColor
+                        overrides['mainSeriesProperties.' + styleName + '.downColor'] = property.downColor
+                    }
+                    if (['candleStyle', 'haStyle', 'hollowCandleStyle'].includes(styleName)) {
+                        overrides['mainSeriesProperties.' + styleName + '.borderUpColor'] = property.upColor
+                        overrides['mainSeriesProperties.' + styleName + '.borderDownColor'] = property.downColor
+                    }
+                    break
+                }
+                case 'chartType':{
+                    overrides['mainSeriesProperties.style'] = property.chartType ? property.chartType * 1 : 1
+                    break
                 }
             }
         })

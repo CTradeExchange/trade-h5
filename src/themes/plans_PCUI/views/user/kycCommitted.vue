@@ -12,10 +12,7 @@
 
             <div class='btns'>
                 <van-button hairline type='success' @click='$router.replace({ name: "Home" })'>
-                    {{ $t('common.backHome') }}
-                </van-button>
-                <van-button hairline type='default' @click='backAuth'>
-                    {{ $t('common.lookProcess') }}
+                    {{ $t('compLang.close') }}
                 </van-button>
             </div>
         </div>
@@ -56,12 +53,12 @@ export default {
         font-size: rem(96px);
     }
     .t1 {
-        margin-top: rem(20px);
+        margin: rem(20px) rem(50px);
         font-weight: bold;
         font-size: rem(36px);
     }
     .t2 {
-        margin-top: rem(100px);
+        margin: rem(100px) rem(50px);
         line-height: rem(50px);
         text-align: left;
     }

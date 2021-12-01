@@ -71,10 +71,11 @@ export function compareAssets (customerInfo = {}, registList) {
 
     // wp配置的玩法资产
     const defaultGroupConfig = registList.find(el => el.registCountry.isOther)
-    const customerGroupConfig = registList.find(el => el.customerGroupId === customerGroupId) || defaultGroupConfig
+    const customerGroupConfig = registList.find(el => parseInt(el.customerGroupId) === customerGroupId) || defaultGroupConfig
     const customerGroupConfigPlans = customerGroupConfig.plans.map(el => {
         const { allCurrency, tradeType } = el
-        const allCurrencySort = allCurrency.split(',').sort((a, b) => a.localeCompare(b)).join()
+        const currencyArray = Array.isArray(allCurrency) ? allCurrency : allCurrency.split(',')
+        const allCurrencySort = currencyArray.sort((a, b) => a.localeCompare(b)).join()
         return {
             allCurrency: allCurrencySort,
             tradeType: String(tradeType)
@@ -83,17 +84,24 @@ export function compareAssets (customerInfo = {}, registList) {
 
     // 将wp配置的资产和用户信息的资产对比
     let different = false
-    if (Object.keys(userPlans).length >= customerGroupConfigPlans.length) {
+    if (Object.keys(userPlans).length > customerGroupConfigPlans.length) {
         different = true
     } else {
         customerGroupConfigPlans.forEach(el => {
-            const { allCurrency, tradeType } = el
+            const { allCurrency, tradeType } = el // 客户组配置的资产
+            const userCurrency = userPlans[tradeType] // 用户资产
             if (!userPlans[tradeType]) {
                 return (different = true)
-            } else if (allCurrency !== userPlans[tradeType].allCurrency) {
+            } else if (!assetsIncludes(userCurrency, allCurrency)) {
                 return (different = true)
             }
         })
     }
     return different ? customerGroupConfigPlans : null
+}
+// 判断a组资产是否包含b组资产的所有成员
+function assetsIncludes (a, b) {
+    a = a.split(',')
+    b = b.split(',')
+    return b.every(cur => a.includes(cur))
 }
