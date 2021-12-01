@@ -3,7 +3,7 @@
         <div class='nav-left'>
             <router-link to='/home'>
                 <h1 class='logo'>
-                    <img alt='CATS 2.0' src='@planspc/images/logo.png' />
+                    <img alt='' src='@planspc/images/logo.png' />
                 </h1>
             </router-link>
             <div class='menus'>
@@ -217,10 +217,6 @@ export default {
             display: inline-flex;
             align-items: center;
             margin-right: 32px;
-            img {
-                width: 105px;
-                height: 17px;
-            }
         }
         .menus {
             display: flex;
