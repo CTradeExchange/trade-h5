@@ -49,7 +49,7 @@ export default {
         },
     },
     setup (props) {
-        console.log('propsdata===', props.data)
+        // console.log('propsdata===', props.data)
         const store = useStore()
         const router = useRouter()
         const plans = computed(() => store.state._base.plans)

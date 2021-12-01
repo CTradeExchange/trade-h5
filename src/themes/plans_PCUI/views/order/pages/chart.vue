@@ -735,14 +735,20 @@ export default {
             initChartData()
             console.log('state.initConfig.property', state.initConfig.property)
             renderChart(product, state.initConfig.property)
-            chartRef.value && chartRef.value.reset()
+            chartRef.value && chartRef.value.reset({
+                initialValue: initialValue.value,
+                options: unref(state.initConfig)
+            })
         }
 
         // 监听路由变化
         const changeRoute = () => {
             QuoteSocket.send_subscribe([`${product.value.symbolId}_${product.value.tradeType}`])
             // const invertColor = localGet('invertColor')
-            chartRef.value && chartRef.value.reset()
+            chartRef.value && chartRef.value.reset({
+                initialValue: initialValue.value,
+                options: unref(state.initConfig)
+            })
             // changeTheme({ 'detail': invertColor })
             // renderChart(product, state.initConfig.property)
         }
