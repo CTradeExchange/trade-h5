@@ -95,6 +95,7 @@ export default {
         const plans = computed(() => store.state._base.plans)
         const tradeType = computed(() => store.state._quote.curTradeType || plans.value[0].id)
         const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(tradeType.value)))
+        const accountInfo = computed(() => accountList?.value[0])
 
         // 跳转充值页面
         const toDesposit = () => {
@@ -103,7 +104,6 @@ export default {
                 router.push({
                     path: '/chooseAccount',
                     query: {
-                        accountId: assetsInfo.value.accountId,
                         tradeType: tradeType.value,
                         type: Number(tradeType.value) === 3 ? 1 : 2 // type =1 借款 2 充值
                     }
@@ -112,8 +112,8 @@ export default {
                 router.push({
                     path: '/deposit',
                     query: {
-                        accountId: assetsInfo.value.accountId,
-                        currency: assetsInfo.value.currency,
+                        accountId: accountInfo.value.accountId,
+                        currency: accountInfo.value.currency,
                         tradeType: tradeType.value
                     }
                 })
@@ -127,7 +127,6 @@ export default {
                 router.push({
                     path: '/chooseAccount',
                     query: {
-                        accountId: assetsInfo.value.accountId,
                         tradeType: tradeType.value,
                         type: 3 // type =3 还款
                     }
@@ -136,7 +135,8 @@ export default {
                 router.push({
                     path: '/withdrawAccount',
                     query: {
-                        accountId: assetsInfo.value.accountId,
+                        accountId: accountInfo.value.accountId,
+                        currency: accountInfo.value.currency,
                         tradeType: tradeType.value
                     }
                 })
@@ -149,7 +149,7 @@ export default {
             router.push({
                 path: '/transfer',
                 query: {
-                    accountId: assetsInfo.value.accountId,
+                    accountId: accountInfo.value.accountId,
                     tradeType: tradeType.value
                 }
             })
