@@ -17,7 +17,7 @@
         <ul class='assetList'>
             <li class='item'>
                 <p class='muted'>
-                    {{ $t('trade.allOriginalMargin') }}({{ assetsInfo?.currency }})
+                    {{ $t('trade.allOriginalMargin') }}
                 </p>
                 <p>{{ userAccount?.occupyMargin || '--' }}</p>
             </li>

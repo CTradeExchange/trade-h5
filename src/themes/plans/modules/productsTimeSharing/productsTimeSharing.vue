@@ -8,7 +8,12 @@
         >
             <van-swipe-item>
                 <div class='products-wrap'>
-                    <div v-for='(item,index) in productList' :key='index' class='product-item'>
+                    <div
+                        v-for='(item,index) in productList'
+                        :key='index'
+                        class='product-item'
+                        @click='openProduct(item)'
+                    >
                         <p class='text1'>
                             {{ item.symbolName }}
                         </p>
@@ -43,8 +48,14 @@ export default {
         // 产品列表数据
         const productList = symbolKeys.map(key => productMap[key]).filter(elem => elem)
         QuoteSocket.add_subscribe({ moduleId: 'productsTimmeSharing', symbolKeys })
+
+        const openProduct = (data) => {
+            // router.push({ name: 'Order', query: { symbolId: data.symbolId, direction: 'buy' } })
+            router.push(`/product?symbolId=${data.symbolId}&tradeType=${data.tradeType}`)
+        }
         return {
-            productList
+            productList,
+            openProduct
         }
     }
 }

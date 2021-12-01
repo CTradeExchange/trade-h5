@@ -7,7 +7,7 @@
                 <van-field
                     v-if="item.showType === 'input'"
                     v-model='conditionModel[item.elementCode]'
-                    clearable
+                    :clearable='true'
                     :label='item.elementName'
                     :placeholder='$t("common.input")+item.elementName'
                     :type='item.elementCode === "phone" ? "number" : "text"'

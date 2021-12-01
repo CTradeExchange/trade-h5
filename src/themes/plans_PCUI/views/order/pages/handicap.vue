@@ -128,13 +128,19 @@ export default {
         // 监听路由变化
         watch(
             () => [route.query, state.curDigit], (val, oval) => {
-                debugger
-                state.curDigit = val
+                state.curDigit = val[1]
                 QuoteSocket.deal_subscribe(product.value?.symbolId, 5, state.curDigit, product.value?.tradeType, 20)
             }, {
                 immediate: true
             }
         )
+        watch(() => handicapDigit.value, val => {
+            if (val) {
+                state.curDigit = val
+            }
+        }, {
+            immediate: true
+        })
 
         // watchEffect(() => {
         //     state.curDigit = handicapDigit.value

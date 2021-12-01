@@ -352,6 +352,7 @@ const routes = [
         meta: {
             title: 'cRoute.securitySetting',
             footerMenu: false,
+            roles: ['User']
         }
     },
     {
