@@ -2,7 +2,7 @@
     <div class='page-wrap' :class='{ hasNav: $hasNav }'>
         <PageComp :data='pageModules' />
         <div class='support'>
-            {{ $t('common.techSupport') }} <br />
+            <img alt='' src='/images/support.png' />
         </div>
     </div>
 </template>
@@ -40,11 +40,16 @@ export default {
     .support {
         position: absolute;
         bottom: rem(20px);
-        width: 100%;
+        width: rem(200px);
         color: var(--placeholdColor);
         font-size: rem(20px);
         line-height: rem(32px);
         text-align: center;
+        left: 50%;
+        margin-left: -(rem(100px));
+        img{
+            width: 100%;
+        }
     }
 }
 

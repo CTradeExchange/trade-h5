@@ -113,8 +113,8 @@ export default {
     margin-right: rem(44px);
     vertical-align: middle;
     //font-size: rem(32px);
-    width: rem(64px);
-    height: rem(64px);
+    width: rem(38px);
+    height: rem(38px);
 }
 .cellGroup{
     .cellItem {
