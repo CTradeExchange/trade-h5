@@ -1,7 +1,7 @@
 <template>
-    <div class='svg-wrap'>
+    <div v-if='product.symbolName' class='svg-wrap'>
         <svg fill='none' height='26' width='80' xmlns='http://www.w3.org/2000/svg'>
-            <path :d='svgData[symbolKey]' :stroke='$style[color] || "#333"' stroke-width='1.5' />
+            <path :d='svgData[product.symbolKey]' :stroke='$style[color] || "#333"' stroke-width='1.5' />
         </svg>
     </div>
 </template>
@@ -9,7 +9,7 @@
 <script>
 import { onActivated, computed, ref, toRefs } from 'vue'
 export default {
-    props: ['color', 'symbolKey'],
+    props: ['color', 'product'],
     setup (props) {
         const color = props.color
         const svgData = computed(() => {

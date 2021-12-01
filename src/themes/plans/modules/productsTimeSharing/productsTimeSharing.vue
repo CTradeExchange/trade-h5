@@ -23,7 +23,7 @@
                         <p class='text3' :class='[item.upDownColor]'>
                             {{ item.upDownWidth || '--' }}
                         </p>
-                        <timeSharingSvg :color='item.upDownColor' :symbol-key='item.symbolKey' />
+                        <timeSharingSvg :color='item.upDownColor' :product='item' />
                     </div>
                 </div>
             </van-swipe-item>
