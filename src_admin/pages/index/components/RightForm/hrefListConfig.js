@@ -14,10 +14,6 @@ export default [
     //     title: '登录'
     // },
     {
-        name: 'Setting',
-        title: '设置'
-    },
-    {
         name: 'Msg',
         title: '消息中心'
     },
@@ -32,6 +28,10 @@ export default [
     {
         name: 'Personal',
         title: '个人资料'
+    },
+    {
+        name: 'Authentication',
+        title: '身份认证'
     },
     // {
     //     name: 'SetLoginPwd',

@@ -337,7 +337,6 @@
                                 <el-transfer
                                     v-model='checkedTradeType[item.id].allCurrency'
                                     :data='item.assetsList'
-                                    :render-content='renderFunc'
                                     :titles='["可选币种", "已选币种"]'
                                 />
                             </template>
@@ -691,7 +690,6 @@ export default {
                 })
 
                 this.checkedTradeType = tempCheckedTradeType
-
                 this.tradeTypeAssets = data.map(item => {
                     let customerGroupAssets = []
                     if (Array.isArray(item.assets)) {
@@ -734,7 +732,6 @@ export default {
                                     that.submitLoading = false
                                     throw new Error('no-customerGroupId')
                                 }
-
                                 const hasCurrency = el?.plans && el?.plans.every(el => el.allCurrency)
                                 if (!hasCurrency && Number(el.customerGroupId) === 1) {
                                     that.$message({
@@ -743,7 +740,12 @@ export default {
                                     })
                                     that.submitLoading = false
                                     throw new Error('no-plans')
-                                } else if (Number(el.customerGroupId) !== 1) {
+                                } else if (Number(el.customerGroupId) === 1) {
+                                    el.plans.forEach(item => {
+                                        const allCurrency = Array.isArray(item.allCurrency) ? item.allCurrency.toString() : item.allCurrency
+                                        item.allCurrency = allCurrency
+                                    })
+                                } else {
                                     el.plans.forEach(item => {
                                         const allCurrency = that.accountTradeList[el.customerGroupId].data.find(el => Number(el.trade_type) === Number(item.id)).assets.map(item => item.code).toString()
                                         item.allCurrency = allCurrency
@@ -903,7 +905,6 @@ export default {
                     })
                 }
             }
-
             for (const key in this.checkedTradeType) {
                 if (Object.hasOwnProperty.call(this.checkedTradeType, key)) {
                     const el = this.checkedTradeType[key]
@@ -928,6 +929,7 @@ export default {
                     })
                 }
             }
+
             // 玩法排序
             plans.sort(function (a, b) {
                 return a.sort - b.sort
