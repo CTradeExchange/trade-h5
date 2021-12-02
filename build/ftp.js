@@ -5,9 +5,15 @@ const Client = require('ftp')
 const ProgressBar = require('progress')
 
 const isDir = p => fs.statSync(p).isDirectory()
+const shouldExclude = (excludeList, filePath) => excludeList.every(e => {
+    if (filePath.includes(path.resolve(__dirname, e))) {
+        console.log(chalk.gray(`Ignore directory: ${e}`))
+        return true
+    }
+})
 
 // 遍历文件夹，且通过回调函数处理每个文件（例如文件异步上传操作）
-const traverse = (sourcePath, destPath, callback) => {
+const traverse = (sourcePath, destPath, exclude, callback) => {
     const getServerPath = s => path.normalize(s.replace(sourcePath, destPath))
     const dirs = [sourcePath]
     const files = []
@@ -16,6 +22,11 @@ const traverse = (sourcePath, destPath, callback) => {
     while (dirs.length) {
         const dir = dirs.shift()
         const list = fs.readdirSync(dir)
+
+        /** 排除exclude  */
+        if (shouldExclude(exclude, dir)) {
+            continue
+        }
 
         list.forEach(e => {
             const filePath = path.resolve(dir, e)
@@ -50,9 +61,9 @@ const connectFTP = (options) => {
     })
 }
 
-module.exports = async ({ srcDir, destDir, connectOptions }) => {
-    srcDir = path.resolve(__dirname, srcDir)
-    destDir = path.normalize(destDir)
+module.exports = async ({ src, dest, connectOptions, exclude = [] }) => {
+    src = path.resolve(__dirname, src)
+    dest = path.normalize(dest)
     const { host, port, user, password } = connectOptions
     console.log(`${user}:${password}@${host}:${port}`)
     console.log(('starts to connect...'))
@@ -84,7 +95,7 @@ module.exports = async ({ srcDir, destDir, connectOptions }) => {
         })
     }
 
-    traverse(srcDir, destDir, (s, d) => {
+    traverse(src, dest, exclude, (s, d) => {
         return new Promise((resolve) => {
             put(s, d, resolve)
         })
