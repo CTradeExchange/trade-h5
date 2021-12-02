@@ -63,7 +63,6 @@ import { useStore } from 'vuex'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { isEmpty, objArraySort } from '@/utils/util'
-import { QuoteSocket } from '@/plugins/socket/socket'
 import { useI18n } from 'vue-i18n'
 import { mul } from '@/utils/calculation'
 import { sortTimeList, timeListFormat, timeListSort } from '../contractUtil'
@@ -129,7 +128,6 @@ export default {
             return window.dayjs(product.value.endTime).format('YYYY-MM-DD HH:mm:ss')
         })
 
-        QuoteSocket.send_subscribe([symbolId])
         return {
             product,
             tradeTimeList,
