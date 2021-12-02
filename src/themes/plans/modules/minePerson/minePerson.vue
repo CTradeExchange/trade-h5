@@ -13,7 +13,13 @@
                 <img class='faceImg' :src='faceImg' />
                 <div v-if='customerInfo' class='customerNo'>
                     <p class='text1'>
-                        Hi, {{ hideInfo(customerInfo.phone || customerInfo.email) }}
+                        Hi,
+                        <span v-if='customerInfo?.phone'>
+                            {{ hideMobileInfo(customerInfo?.phone) }}
+                        </span>
+                        <span v-else>
+                            {{ hideEmailInfo(customerInfo?.email) }}
+                        </span>
                     </p>
                     <p class='text2'>
                         ID: {{ customerInfo.customerNo }}
@@ -46,6 +52,7 @@ import ImgComp from '../img/img'
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
+import { hideEmailInfo, hideMobileInfo } from '@/utils/util'
 import { Toast } from 'vant'
 const faceImgDefault = require('@plans/images/face.png')
 const h5Preview = process.env.VUE_APP_h5Preview
@@ -95,11 +102,6 @@ export default {
             }
         }
 
-        // 处理手机号和邮箱显示
-        const hideInfo = (value) => {
-            return value.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
-        }
-
         // 赋值账号
         const copyCustomerNo = (value) => {
             var clipboard = new Clipboard('.copy-btn')
@@ -120,7 +122,8 @@ export default {
             kycMap,
             kycStateTextMap,
             kycStateMap,
-            hideInfo,
+            hideMobileInfo,
+            hideEmailInfo,
             copyCustomerNo
         }
     }
