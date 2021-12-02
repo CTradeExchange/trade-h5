@@ -1,7 +1,11 @@
 <template>
-    <swipe v-if='isCompanyIdShow' :data='data' />
-    <productsTimeSharing v-if='isCompanyIdShow' />
-    <productsWithIcon v-if='isCompanyIdShow' />
+    <div v-if='isCompanyIdShow'>
+        <swipe :data='data' />
+        <productsTimeSharing />
+        <productsWithIcon />
+        <floatComp />
+    </div>
+
     <div id='homeContent' ref='homeContent' class='home' :class='{ hasNav: $hasNav }'>
         <PageComp :data='pageModules' />
     </div>
@@ -10,7 +14,7 @@
 
 <script>
 import { QuoteSocket } from '@/plugins/socket/socket'
-import { onActivated, computed, ref, reactive, toRefs } from 'vue'
+import { onActivated, computed, ref, toRefs, reactive } from 'vue'
 import { useStore } from 'vuex'
 import floatComp from '@plans/modules/floatComp/floatComp.vue'
 import productsTimeSharing from '@plans/modules/productsTimeSharing/productsTimeSharing.vue'
@@ -33,9 +37,19 @@ export default {
 
         const state = reactive({
             data: {
+                loop: true,
                 items: [
                     {
-                        src: require('@plans/images/banner/banner1.png')
+                        src: require('@plans/images/banner/banner1.jpg'),
+                        href: { 'name': 'Quote' }
+                    },
+                    {
+                        src: require('@plans/images/banner/banner2.jpg'),
+                        href: { 'name': 'Quote' }
+                    },
+                    {
+                        src: require('@plans/images/banner/banner3.jpg'),
+                        href: { 'name': 'Quote' }
                     }
                 ]
             }

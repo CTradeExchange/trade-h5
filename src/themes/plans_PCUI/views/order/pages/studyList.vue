@@ -5,7 +5,7 @@
         closeable
         :get-container='getContainer'
         round
-        :style="{ width: '40%' }"
+        :style="{ width: '520px' }"
         @click-close-icon='onClose'
         @closed='closed'
     >
@@ -136,6 +136,7 @@ export default {
     max-width: rem(736px);
     .content {
         display: flex;
+        height: 100%;
         flex-direction: column;
         width: 100%;
         padding: rem(50px) 0 0;
@@ -151,7 +152,7 @@ export default {
             flex-wrap: wrap;
             justify-content: flex-start;
             margin-bottom: rem(20px);
-            padding: 15px;
+            padding: 15px 0;
             .item {
                 cursor: pointer;
                 padding: 10px 10px;
@@ -179,7 +180,7 @@ export default {
             text-align: center;
             background: var(--primary);
             margin: 10px auto;
-            border-radius: 10px;
+            border-radius: 4px;
             cursor: pointer;
         }
     }

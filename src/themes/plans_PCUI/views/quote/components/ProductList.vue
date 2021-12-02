@@ -74,6 +74,12 @@
                     </span>
                 </div>
             </div>
+
+            <div v-if='!props.list.length' class='empty'>
+                <span class='text'>
+                    {{ $t('c.noData') }}
+                </span>
+            </div>
         </div>
     </div>
 </template>
@@ -172,9 +178,9 @@ watch(() => [props.list.length],
     font-size: rem(30px);
     line-height: rem(32px);
     overflow: hidden;
-    font-weight: 500;
+    font-weight: 400;
     margin: 30px 0;
-    max-height: 500px;
+    // max-height: 500px;
     .name,
     .price,
     .upDownAmount,
@@ -191,7 +197,7 @@ watch(() => [props.list.length],
     }
     .star{
         cursor: pointer;
-        margin-right: 10px;
+        margin-right: 5px;
     }
     .item{
         display: flex;
@@ -218,7 +224,7 @@ watch(() => [props.list.length],
             width: 100%;
             height: 64px;
             line-height: 64px;
-            font-size: 14px;
+            font-size: 16px;
             border-top: 1px solid var(--assistColor);
             &:last-child{
                 border-bottom: 1px solid var(--assistColor);
@@ -255,6 +261,18 @@ watch(() => [props.list.length],
             }
         }
     }
-
+    .empty{
+        width: 160px;
+        padding-top: 140px;
+        background: url('/images/empty.png') center top no-repeat;
+        background-size: 160px auto;
+        color: var(--placeholdColor);
+        margin: 130px auto 0;
+        text-align: center;
+        .text{
+            display: inline-block;
+            margin-top: 20px;
+        }
+    }
 }
 </style>

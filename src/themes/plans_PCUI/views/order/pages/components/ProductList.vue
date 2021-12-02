@@ -76,9 +76,15 @@ const onClick = product => {
 // })
 
 /** 添加自选逻辑 */
+const customerInfo = computed(() => store.state._user.customerInfo)
 const selfSymbolList = computed(() => store.state._user.selfSymbolList)
 const isCollect = (tradeType, symbolId) => selfSymbolList.value[tradeType]?.find(el => el.symbolId === parseInt(symbolId))
 const addOptional = ({ symbolId, tradeType }) => {
+    if (!customerInfo.value) {
+        ElMessage.warning(t('common.noLogin'))
+        return router.push('/login')
+    }
+
     if (isCollect(tradeType, symbolId)) {
         removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
             if (res.check()) {
@@ -139,6 +145,9 @@ watch(() => [props.list.length],
         user-select: none;
         .name{
             flex: 1;
+            .icon{
+                margin-right: 4px;
+            }
         }
         .change{
             width: 85px;
@@ -149,7 +158,7 @@ watch(() => [props.list.length],
         width: 100%;
         padding: 0 16px;
         font-size: 12px;
-        color: #999999;
+        color: var(--minorColor);
         line-height: 26px;
     }
     .items{

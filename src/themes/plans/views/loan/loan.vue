@@ -153,7 +153,7 @@ export default {
         }
 
         const handleAll = () => {
-            state.amount = state.maxLoan
+            state.amount = account.value?.availableLoan
         }
 
         // 借款
@@ -165,7 +165,7 @@ export default {
                 return Toast(t('assets.loanAmountNotice'))
             }
 
-            if (gt(state.amount, state.maxLoan)) {
+            if (gt(state.amount, account.value?.availableLoan)) {
                 return Toast(t('assets.loanAmountExcess'))
             }
 

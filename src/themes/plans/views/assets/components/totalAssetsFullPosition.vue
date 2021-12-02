@@ -179,6 +179,7 @@ export default {
         line-height: rem(65px);
         border: solid 1px var(--primary);
         border-radius: rem(6px);
+        background: none;
         &:last-child {
             margin-right: 0;
         }

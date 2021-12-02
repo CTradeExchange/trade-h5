@@ -2,7 +2,7 @@
     <div class='assetsItem' @click='toInfo'>
         <div class='rowflex currency'>
             <span>{{ data.currency }}</span>
-            <span>{{ parseFloat(plus (data.available,data.frozen )).toFixed(data.digits) }}</span>
+            <!-- <span>{{ parseFloat(plus (data.available,data.frozen )).toFixed(data.digits) }}</span> -->
         </div>
         <div class='rowflex muted mtop20'>
             <div class='asset-info'>
@@ -49,7 +49,7 @@ export default {
         },
     },
     setup (props) {
-        console.log('propsdata===', props.data)
+        // console.log('propsdata===', props.data)
         const store = useStore()
         const router = useRouter()
         const plans = computed(() => store.state._base.plans)

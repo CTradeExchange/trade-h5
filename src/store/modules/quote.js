@@ -165,8 +165,8 @@ export default {
             assign(product, data)
 
             // 该产品先拿到快照价格，后拿到点差，需要重新计算价格点差
-            const dealModel = product.dealModel || data.dealModel
-            if (!askSpread && data.hasOwnProperty('askSpread') && data.hasOwnProperty('pointRatio') && dealModel === 1) {
+            const dealMode = product.dealMode || data.dealMode
+            if (!askSpread && data.hasOwnProperty('askSpread') && data.hasOwnProperty('pointRatio') && dealMode === 1) {
                 price_spread(product, { ...data, ...product })
             }
         },
@@ -177,7 +177,7 @@ export default {
                 const product = productMap[data.symbolKey]
                 if (!product) return false
                 const digits = data.price_digits || product.price_digits
-                const dealModel = product.dealModel || data.dealModel
+                const dealMode = product.dealMode || data.dealMode
                 data.cur_price = toFixed(data.cur_price, digits) // 中间价补0操作，买卖价在计算完点差后自动补0
                 if (BigNumber(data.cur_price).gt(product.high_price)) data.high_price = data.cur_price
                 if (BigNumber(data.cur_price).lt(product.low_price)) data.low_price = data.cur_price
@@ -211,7 +211,7 @@ export default {
                 product.buy_price_pre = data.buy_price
                 product.sell_price_pre = data.sell_price
                 assign(product, data)
-                if (dealModel === 1) price_spread(product, data)
+                if (dealMode === 1) price_spread(product, data)
             })
         },
         Update_productActivedID (state, id) {

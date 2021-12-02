@@ -1,6 +1,6 @@
 <template>
     <div ref='wrapper' :style='data.styleObj'>
-        <van-cell-group class='cellGroup'>
+        <van-cell-group :border='false' class='cellGroup'>
             <van-cell
                 v-for='(item, key) in cellList'
                 :key='key'
@@ -93,7 +93,8 @@ export default {
             } else {
                 this.$router.push({ name: toRoute.name })
             }
-        }
+        },
+
     },
 }
 </script>
@@ -117,18 +118,24 @@ export default {
 }
 .cellGroup{
     .cellItem {
-        --van-cell-icon-size:12px;
         font-size: rem(32px);
         font-weight: bold;
         line-height: rem(120px);
         height: rem(120px);
+        background: var(--contentColor);
         border-top: solid rem(10px) var(--bgColor);
-        background: none;
+        //background: none;
         display: flex;
         align-items: center;
         //margin-top: rem(10px);
         &::after{
             border: none;
+        }
+        :deep(.van-icon-arrow){
+            margin-top: -2px;
+        }
+        :deep(.van-cell__title){
+            color: var(--color);
         }
 
 }

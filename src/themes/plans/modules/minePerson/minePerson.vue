@@ -10,15 +10,22 @@
         </div>
         <div v-else class='personInfo'>
             <div class='personNo'>
-                <img class='faceImg' :src='faceImg' @click="$router.push('/personal')" />
+                <img class='faceImg' :src='faceImg' />
                 <div v-if='customerInfo' class='customerNo'>
                     <p class='text1'>
-                        Hi, {{ hideInfo(customerInfo.phone || customerInfo.email) }}
+                        Hi,
+                        <span v-if='customerInfo?.phone'>
+                            {{ hideMobileInfo(customerInfo?.phone) }}
+                        </span>
+                        <span v-else>
+                            {{ hideEmailInfo(customerInfo?.email) }}
+                        </span>
                     </p>
-                    <p class='text2' @click="$router.push('/personal')">
+                    <p class='text2'>
                         ID: {{ customerInfo.customerNo }}
+                        <i class='icon_fuzhi copy-btn' :data-clipboard-text='customerInfo.customerNo' @click='copyCustomerNo'></i>
                     </p>
-                    <span v-if='Number(customerInfo.kycStatus) !== 0' class='status' :class='kycStateMap[customerInfo.kycStatus].className' @click="$router.push('/authentication')">
+                    <!-- <span v-if='Number(customerInfo.kycStatus) !== 0' class='status' :class='kycStateMap[customerInfo.kycStatus].className' @click="$router.push('/authentication')">
                         <span class='icon' :class='customerInfo.kycStatus === -1 ? kycStateMap[customerInfo.kycStatus].icon[customerInfo.kycRemark] : kycStateMap[customerInfo.kycStatus].icon'>
                         </span>
 
@@ -28,9 +35,7 @@
                         <span v-else-if='customerInfo.kycStatus!==0'>
                             {{ kycStateTextMap[customerInfo.kycStatus] }}
                         </span>
-
-                        <!-- {{ $tm('kycAuditStatus')[customerInfo.kycAuditStatus] }}  :class="['status'+customerInfo.kycAuditStatus]" -->
-                    </span>
+                    </span> -->
                 </div>
             </div>
             <div v-if='data.src' class='capitalImg'>
@@ -42,10 +47,13 @@
 </template>
 
 <script>
+import Clipboard from 'clipboard'
 import ImgComp from '../img/img'
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
+import { hideEmailInfo, hideMobileInfo } from '@/utils/util'
+import { Toast } from 'vant'
 const faceImgDefault = require('@plans/images/face.png')
 const h5Preview = process.env.VUE_APP_h5Preview
 export default {
@@ -94,9 +102,14 @@ export default {
             }
         }
 
-        // 处理手机号和邮箱显示
-        const hideInfo = (value) => {
-            return value.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
+        // 赋值账号
+        const copyCustomerNo = (value) => {
+            var clipboard = new Clipboard('.copy-btn')
+            clipboard.on('success', e => {
+                Toast(t('common.copySuccess'))
+                // 释放内存
+                clipboard.destroy()
+            })
         }
 
         return {
@@ -109,7 +122,9 @@ export default {
             kycMap,
             kycStateTextMap,
             kycStateMap,
-            hideInfo
+            hideMobileInfo,
+            hideEmailInfo,
+            copyCustomerNo
         }
     }
 }
@@ -129,7 +144,7 @@ export default {
     .guestBts {
         display: flex;
         justify-content: space-between;
-        margin: rem(50px) rem(20px) 0;
+        margin: rem(50px) rem(30px) 0;
         .btn {
             width: 100%;
             height: rem(80px);
@@ -143,7 +158,7 @@ export default {
     }
 }
 .personInfo {
-    padding: rem(40px);
+    padding: rem(60px);
     color: var(--color);
     background: var(--contentColor);
 }
@@ -153,20 +168,24 @@ export default {
     .faceImg {
         margin: 0 auto;
         display: block;
-        width: rem(110px);
-        height: rem(110px);
+        width: rem(160px);
+        height: rem(160px);
     }
     .customerNo {
         display: inline-block;
-        padding-top: rem(15px);
+        padding-top: rem(24px);
         font-size: rem(32px);
         .text1{
             font-size: rem(48px);
             font-weight: bold;
+            margin-bottom: rem(6px);
         }
         .text2{
             font-size: rem(28px);
             color: var(--minorColor);
+            .copy-btn{
+                font-size: rem(22px);
+            }
         }
     }
     .arrowIcon {

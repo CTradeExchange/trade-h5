@@ -17,7 +17,7 @@
                     {{ item.cur_price }}
                 </p>
                 <p class='up-down' :class='[item.upDownColor]'>
-                    {{ item.upDownAmount || '--' }}
+                    {{ item.upDownWidth || '--' }}
                 </p>
             </div>
         </div>
@@ -56,6 +56,7 @@ export default {
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
 .product-wrap{
+    background: var(--contentColor);
     padding: rem(43px) rem(50px);
     .product{
         margin-bottom: rem(67px);

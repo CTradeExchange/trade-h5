@@ -209,6 +209,7 @@ const onSelect = val => {
 
 <style lang="scss" scoped>
 .header{
+    position: relative;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -216,6 +217,17 @@ const onSelect = val => {
     height: 60px;
     line-height: 60px;
     box-sizing: border-box;
+
+    &::after{
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -1px;
+        width: 100%;
+        height: 3px;
+        background-color: var(--assistColor);
+        z-index: var(--el-index-normal);
+    }
     .title{
         font-size: 16px;
         font-weight: bold;

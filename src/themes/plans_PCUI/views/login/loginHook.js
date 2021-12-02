@@ -5,7 +5,7 @@ import Schema from 'async-validator'
 import md5 from 'js-md5'
 import { useI18n } from 'vue-i18n'
 import { getDevice } from '@/utils/util'
-import { MsgSocket } from '@/plugins/socket/socket'
+import { MsgSocket, setQuoteService } from '@/plugins/socket/socket'
 import RuleFn from './rule'
 import { checkUserStatus } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
@@ -57,6 +57,9 @@ export default function () {
                     }).then(res => {
                         if (res.check()) {
                             MsgSocket.login()
+
+                            // 切换登录后的行情websocket
+                            setQuoteService()
                         }
                         resolve(res)
                         return res

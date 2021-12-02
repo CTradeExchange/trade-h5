@@ -76,10 +76,10 @@
                 </li>
             </ul>
             <div class='view-more'>
-                <router-link to='/quote'>
+                <a href='javascript:;' @click='examineMore'>
                     <span>{{ $t('examineMore') }}</span>
                     <i class='el-icon-arrow-right'></i>
-                </router-link>
+                </a>
             </div>
         </div>
     </div>
@@ -145,6 +145,12 @@ export default {
             router.push(`/order?symbolId=${item.symbolId}&tradeType=${item.tradeType}`)
         }
 
+        // 查看更多
+        const examineMore = () => {
+            const symbolId = productList.value[0].symbolId
+            router.push(`/order?symbolId=${symbolId}&tradeType=${tradeType.value}`)
+        }
+
         // 监听玩法类型、分类类型
         watch([tradeType, categoryType, productList], () => {
             setProducts()
@@ -163,6 +169,7 @@ export default {
             filterProductList,
             switchPlan,
             toOrder,
+            examineMore,
             switchCategory
         }
     }

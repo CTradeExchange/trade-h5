@@ -35,11 +35,11 @@
         <div class='item collect'>
             <i
                 v-preventReClick
-                class='icon icon_zixuan1'
-                :class="[!isSelfSymbol?'icon_zixuan1':'icon_zixuan2']"
+                class='icon'
+                :class="[!isSelfSymbol?'icon_xiadanjiemianxiaokongxing1':'icon_xiadanjiemianxiaoshixing1']"
                 @click='addOptional'
             ></i>
-            <i v-if='[1, 2].includes(product.tradeType)' class='icon icon_guanyu' @click='$router.push(contractRoute)'></i>
+            <i v-if='[1, 2].includes(product.tradeType)' class='icon icon_heyuexiangqing' @click='$router.push(contractRoute)'></i>
         </div>
     </div>
     <div class='tv-head'>
@@ -335,8 +335,8 @@ export default {
                 }
             ],
             showStudyDialog: false,
-            loading: false
-
+            loading: false,
+            klineType: 1
         })
 
         // 是否是自选
@@ -423,9 +423,7 @@ export default {
                 removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
                     if (res.check()) {
                         store.dispatch('_user/queryCustomerOptionalList')
-
                         ElMessage.success(t('trade.removeOptionalOk'))
-                        // collect.value.classList.remove('icon_zixuan2')
                     }
                 }).catch(err => {
                 })
@@ -435,7 +433,6 @@ export default {
                         // 手动修改optional值
                         store.commit('_user/Update_optional', 1)
                         store.dispatch('_user/queryCustomerOptionalList')
-                        // collect.value.classList.add('icon_zixuan2')
 
                         ElMessage.success(t('trade.addOptionalOk'))
                     }
@@ -735,14 +732,20 @@ export default {
             initChartData()
             console.log('state.initConfig.property', state.initConfig.property)
             renderChart(product, state.initConfig.property)
-            chartRef.value && chartRef.value.reset()
+            chartRef.value && chartRef.value.reset({
+                initialValue: initialValue.value,
+                options: unref(state.initConfig)
+            })
         }
 
         // 监听路由变化
         const changeRoute = () => {
-            QuoteSocket.send_subscribe([`${product.value.symbolId}_${product.value.tradeType}`])
+            // QuoteSocket.send_subscribe([`${product.value.symbolId}_${product.value.tradeType}`])
             // const invertColor = localGet('invertColor')
-            chartRef.value && chartRef.value.reset()
+            chartRef.value && chartRef.value.reset({
+                initialValue: initialValue.value,
+                options: unref(state.initConfig)
+            })
             // changeTheme({ 'detail': invertColor })
             // renderChart(product, state.initConfig.property)
         }
@@ -840,7 +843,7 @@ export default {
                 .icon{
                     font-size: 20px;
                     margin-left: 16px;
-                    &.icon_zixuan2{
+                    &.icon_xiadanjiemianxiaoshixing1{
                         color: #fc822f;
                         animation: heartBeat 1.3s ease-in-out forwards;
                     }

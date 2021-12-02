@@ -1,8 +1,8 @@
 <template>
     <div class='page-wrap' :class='{ hasNav: $hasNav }'>
-        <PageComp :data='pageModules' />
+        <PageComp class='minePageComp' :data='pageModules' />
         <div class='support'>
-            {{ $t('common.techSupport') }} <br />
+            <img alt='' src='/images/support.png' />
         </div>
     </div>
 </template>
@@ -31,20 +31,21 @@ export default {
     height: 100%;
     overflow: auto;
     background: var(--bgColor);
+    .minePageComp{
+        min-height: 100%;
+        padding-bottom: rem(100px);
+    }
     &.hasNav{
         padding-bottom: rem(100px);
-        .support{
-            bottom: rem(120px);
-        }
     }
     .support {
-        position: absolute;
-        bottom: rem(20px);
-        width: 100%;
-        color: var(--placeholdColor);
-        font-size: rem(20px);
+        margin: rem(-80px) auto rem(10px);
+        width: rem(200px);
         line-height: rem(32px);
         text-align: center;
+        img{
+            width: 100%;
+        }
     }
 }
 

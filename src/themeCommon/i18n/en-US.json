@@ -7,6 +7,7 @@
         "login": "Login",
         "register": "Open Account",
         "registerSuccess": "Register Success",
+        "registerHandler": "人工审核",
         "forgot": "Forget Password",
         "resetPwd": "Reset Password",
         "resetPwdSuccess": "Reset Psssword",
@@ -39,7 +40,10 @@
         "chartSetting": "Chart Setting",
         "chooseCurrency": "Select Currency",
         "withdrawAccount": "Select Withdraw Currency",
-        "transfer": "Transfer"
+        "transfer": "Transfer",
+        "securitySetting": "Security Settings",
+        "commonSetting": "Common Settings"
+        
     },
     "login": {
         "loginBtn": "Login",
@@ -60,7 +64,7 @@
         "loginPwd": "Login Password",
         "originPwd": "Input original password",
         "pwdSuccess": "Change password success",
-        "modifyLoginPwd": "Change Login Password",
+        "modifyLoginPwd": "Change Password",
         "getVerifyCode": "Get Code"
     },
     "common": {
@@ -156,11 +160,19 @@
         "redDown": "Green up and red down",
         "chartColor": "Color Preference",
         "noLogin": "Please log in",
-        "kycLevel1": "Basic certification",
-        "kycLevel2": "Intermediate certification",
-        "kycLevel3": "Advanced certification",
+        "kycLevel1": "LV1 certification",
+        "kycLevel2": "LV2 certification",
+        "kycLevel3": "LV3 certification",
         "techSupport": "Powered by Trade Switcher",
-        "quitLogin": "Logout"
+        "quitLogin": "Logout",
+        "mobile": "mobile",
+        "email": "email",
+        "change": "change",
+        "noneBind": "Not Set",
+        "commonSetting": "Common Setting",
+        "lang": "Language",
+        "dark": "Dark"
+        
     },
     "faceAuth": {
         "faceDetectTip": "Please face your phone and keep it well lit",
@@ -192,7 +204,7 @@
         "retrievedByEmail": "Eamil",
         "setPwdFailed": "New password setting failed",
         "tryLater": "Please try again later or contact Online Customer Service",
-        "setPwd": "Login Password Setting",
+        "setPwd": "Set Password",
         "pwdRule": "Password must be 6-16 characters with alphanumeric",
         "inputNewPwd": "Input new password",
         "newPwdAgain": "Input new password again",
@@ -213,6 +225,8 @@
         "hasAccount": "Login",
         "protocol": "Continue to open an account means that you have confirmed you are at least 18 years old and have read and agreed to \"Client Privacy Protection Policy、Investment Risk Disclosure and Disclaimer\"",
         "openSuccess": "Congratulations！You account is opened succesfully",
+        "openHandler": "您的开户申请已收到，我们将尽快处理",
+        "servicePlease": "如有疑问请联系客服",
         "tips1": "For first time login, please login with Mobile / Email + verification code you entered via Registration",
         "experienceNow": "Experience Now",
         "goDeposit": "Go Deposit",
@@ -543,16 +557,18 @@
     },
     "setting": {
         "enableNews": "Enable News",
-        "bindPhone": "Set Mobile",
+        "bindPhone": "Set Phone",
         "bindEmail": "Set Email",
         "replaceEmail": "Change Email",
-        "replacePhone": "Change Mobile",
+        "replacePhone": "Change Phone",
         "logout": "Logout",
         "logoutConfirm": "Confirm Logout?",
         "setLang": "Language",
+        "chartColor": "Color Prefence",
         "color": "Theme"
     },
     "withdraw": {
+        "withdrawLink": "Withdrawal Address",
         "wayMsg": "No withdrawal currently",
         "successHint": "Success",
         "coinTitle": "Withdraw",

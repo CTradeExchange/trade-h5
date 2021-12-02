@@ -530,6 +530,9 @@ export default {
         height: 40px;
         border-radius: 4px;
         font-weight: bold;
+        &:hover{
+            opacity: 0.7;
+        }
         &.buy {
             .van-button {
                 color: #FFF;

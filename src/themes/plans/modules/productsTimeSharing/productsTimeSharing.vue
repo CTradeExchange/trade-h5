@@ -8,7 +8,12 @@
         >
             <van-swipe-item>
                 <div class='products-wrap'>
-                    <div v-for='(item,index) in productList' :key='index' class='product-item'>
+                    <div
+                        v-for='(item,index) in productList'
+                        :key='index'
+                        class='product-item'
+                        @click='openProduct(item)'
+                    >
                         <p class='text1'>
                             {{ item.symbolName }}
                         </p>
@@ -16,9 +21,9 @@
                             {{ item.cur_price }}
                         </p>
                         <p class='text3' :class='[item.upDownColor]'>
-                            {{ item.upDownAmount || '--' }}
+                            {{ item.upDownWidth || '--' }}
                         </p>
-                        <timeSharingSvg :color='item.cur_color' :symbol-key='item.symbolKey' />
+                        <timeSharingSvg :color='item.upDownColor' :product='item' />
                     </div>
                 </div>
             </van-swipe-item>
@@ -39,12 +44,18 @@ export default {
         const router = useRouter()
         // 产品map数据
         const productMap = unref(computed(() => store.state._quote.productMap))
-        const symbolKeys = ['4_1', '7_1', '5_1'] // '33_2', '12_2'
+        const symbolKeys = ['59_1', '56_1', '28_3'] // '33_2', '12_2'
         // 产品列表数据
         const productList = symbolKeys.map(key => productMap[key]).filter(elem => elem)
         QuoteSocket.add_subscribe({ moduleId: 'productsTimmeSharing', symbolKeys })
+
+        const openProduct = (data) => {
+            // router.push({ name: 'Order', query: { symbolId: data.symbolId, direction: 'buy' } })
+            router.push(`/product?symbolId=${data.symbolId}&tradeType=${data.tradeType}`)
+        }
         return {
-            productList
+            productList,
+            openProduct
         }
     }
 }
@@ -53,6 +64,7 @@ export default {
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
 .swipe-wrap{
+    background: var(--contentColor);
     padding:0 rem(30px);
     .products-wrap{
         display: flex;

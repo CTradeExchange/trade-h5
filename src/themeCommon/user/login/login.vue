@@ -46,7 +46,7 @@
             </a>
         </footer> -->
         <div class='support'>
-            {{ $t('common.techSupport') }} <br />
+            <img alt='' src='/images/support.png' />
         </div>
     </div>
 
@@ -353,11 +353,16 @@ export default {
     .support {
         position: absolute;
         bottom: rem(30px);
-        width: 100%;
+        width: rem(200px);
+        left: 50%;
+        margin-left: rem(-100px);
         color: var(--placeholdColor);
         font-size: rem(20px);
         line-height: rem(32px);
         text-align: center;
+        img{
+            width: 100%;
+        }
     }
 }
 .icon_icon_close_big {

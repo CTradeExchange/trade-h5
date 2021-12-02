@@ -118,7 +118,9 @@ export default {
         width: 100%;
         overflow: auto;
         height: 265px;
-
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        overflow: -moz-scrollbars-none;
         .deal-item {
             line-height: 27px;
             >span {
@@ -139,7 +141,8 @@ export default {
         }
     }
     .deal-list::-webkit-scrollbar {
-            display: none;
-        }
+        display: none;
+
+    }
 }
 </style>

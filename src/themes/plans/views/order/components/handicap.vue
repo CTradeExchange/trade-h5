@@ -13,7 +13,12 @@
                 {{ $t('trade.priceLabel') }}
             </span>
             <span class='ft'>
-                {{ $t('trade.volumes') }}
+                <span v-if='Number(product.tradeType) === 2'>
+                    {{ $t('trade.quantity') }}
+                </span>
+                <span v-else>
+                    {{ $t('trade.volumes') }}
+                </span>
             </span>
         </div>
 

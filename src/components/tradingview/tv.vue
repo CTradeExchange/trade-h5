@@ -52,15 +52,15 @@ export default {
         // 图表实例化状态
         const chartReady = ref(false)
 
-        const initChart = (cb = () => {}) => {
+        const initChart = (_props = props, cb = () => {}) => {
             chartReady.value = false
-            const { options } = props
+            const { options, initialValue } = _props
             chart.value = createChart({
                 // 容器id
                 containerId: '#tv-chart-container',
                 // 产品初始值
                 initial: {
-                    ...props.initialValue
+                    ...initialValue
                 },
                 // 图表属性
                 property: options.property,
@@ -142,9 +142,9 @@ export default {
             unref(chart).setTick(price, time)
         }
         // 重新初始化图表
-        const reset = (cb) => {
+        const reset = (newProps, cb) => {
             unref(chart) && unref(chart).destroyed()
-            initChart(cb)
+            initChart(newProps, cb)
         }
 
         // 更改图表主题

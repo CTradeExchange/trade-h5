@@ -86,6 +86,7 @@ import { reactive, toRefs, computed, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
 import { Toast } from 'vant'
 import RuleFn, { checkCustomerExistRule } from './rule'
+import { setQuoteService } from '@/plugins/socket/socket'
 import { pageConfig } from '@/api/wpApi'
 import { useI18n } from 'vue-i18n'
 import hooks from './hooks'
@@ -153,7 +154,10 @@ export default {
                 state.loading = false
             }).then(res => {
                 // state.loading = false
-                if (res.check()) {
+                if (res?.code === 'CUSTOMER_API_00010001') {
+                    // 人工审核
+                    router.replace({ name: 'RegisterHandler' })
+                } else if (res.check()) {
                     // 注册成功
                     sessionStorage.setItem('RegisterParams', JSON.stringify({ ...params, openType: state.openType }))
                     sessionStorage.setItem('RegisterData', JSON.stringify(res))
@@ -165,6 +169,9 @@ export default {
                     store.commit('_user/Update_accountAssets', {})
                     // 登录websocket
                     instance.appContext.config.globalProperties.$MsgSocket.login()
+
+                    // 切换登录后的行情websocket
+                    setQuoteService()
 
                     if (res.data.list.length > 0) {
                         // 需要KYC认证

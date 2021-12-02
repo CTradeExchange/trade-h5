@@ -32,6 +32,15 @@ const routes = [
         }
     },
     {
+        path: '/register/handler',
+        name: 'RegisterHandler',
+        component: () => import(/* webpackChunkName: "Register" */ '../user/register/registerHandler.vue'),
+        meta: {
+            title: 'route.registerHandler',
+            roles: [],
+        }
+    },
+    {
         path: '/forgot',
         name: 'Forgot',
         component: () => import(/* webpackChunkName: "forgot" */ '../user/forgot/forgot.vue'),
@@ -251,6 +260,7 @@ const routes = [
         meta: {
             title: 'cRoute.bindMobile',
             footerMenu: false,
+            roles: ['User']
         }
     },
     {
@@ -260,6 +270,7 @@ const routes = [
         meta: {
             title: 'cRoute.bindEmail',
             footerMenu: false,
+            roles: ['User']
         }
     },
     {
@@ -331,6 +342,25 @@ const routes = [
         component: () => import(/* webpackChunkName: "page" */ '../user/faceDetect.vue'),
         meta: {
             title: 'faceAuth.faceDetect',
+            footerMenu: false,
+        }
+    },
+    {
+        path: '/securitySetting',
+        name: 'SecuritySetting',
+        component: () => import(/* webpackChunkName: "page" */ '../user/securitySetting.vue'),
+        meta: {
+            title: 'cRoute.securitySetting',
+            footerMenu: false,
+            roles: ['User']
+        }
+    },
+    {
+        path: '/commonSetting',
+        name: 'CommonSetting',
+        component: () => import(/* webpackChunkName: "page" */ '../user/commonSetting.vue'),
+        meta: {
+            title: 'cRoute.commonSetting',
             footerMenu: false,
         }
     },

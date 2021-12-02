@@ -13,6 +13,8 @@
 }
 html{
     font-size: 35px;
+    scrollbar-color:var(--lineColor) var(--bgColor);
+    scrollbar-width:thin;
 }
 html,
 body,
@@ -21,6 +23,8 @@ body,
     color: var(--color);
     background-color: var(--bgColor);
 	@include scroll-pc();
+    scrollbar-color:var(--lineColor) var(--bgColor);
+    scrollbar-width:thin;
 }
 body {
     font-size: 14px;
@@ -693,21 +697,28 @@ body {
 		}
 	}
 	.el-pagination {
+        display: flex;
+        align-items: center;
 		li {
 			font-size: 16px;
 			font-weight: normal;
-			color: var(--color);
+			color: var(--color) !important;
+            background-color: var(--primaryAssistColor) !important;
 			&:hover {
-				color: var(--primary);
+				color: var(--primary) !important;
 			}
 			&.active {
 				font-weight: bold;
-				color: var(--primary);
+				color: var(--primary) !important;
 			}
 		}
-		.el-icon {
-			font-size: 16px !important;
-		}
+        button {
+            color: var(--color) !important;
+            background-color: var(--primaryAssistColor) !important;
+            .el-icon {
+                font-size: 16px !important;
+            }
+        }
 	}
 }
 
@@ -730,6 +741,7 @@ body {
 ::-webkit-scrollbar-thumb:hover {
 	background: #7D7D7D;
 }
+
 
 // element-plus
 .dialog-layer {
@@ -769,5 +781,5 @@ body {
 }
 
 .icon_zixuan2{
-    color: #FC822F;
+    color: var(--focusColor);
 }

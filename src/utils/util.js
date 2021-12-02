@@ -336,3 +336,37 @@ function getsec (str) {
         return str1 * 365 * 24 * 60 * 60 * 1000
     }
 }
+
+/* 隐藏邮箱 */
+export function hideEmailInfo (email) {
+    if (String(email).indexOf('@') > 0) {
+        var newEmail; const str = email.split('@'); let _s = ''
+
+        if (str[0].length > 4) {
+            _s = str[0].substr(0, 4)
+            for (let i = 0; i < str[0].length - 4; i++) {
+                _s += '*'
+            }
+        } else {
+            _s = str[0].substr(0, 1)
+            for (let i = 0; i < str[0].length - 1; i++) {
+                _s += '*'
+            }
+        }
+        newEmail = _s + '@' + str[1]
+        return newEmail
+    } else {
+        return email
+    }
+}
+
+/* 隐藏 */
+export function hideMobileInfo (mobile) {
+    let newMobile = ''
+    if (mobile.length > 5) {
+        newMobile = mobile.substr(0, 2) + '****' + mobile.substr(mobile.length - 2)
+        return newMobile
+    } else {
+        return mobile
+    }
+}

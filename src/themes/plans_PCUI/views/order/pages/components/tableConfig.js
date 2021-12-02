@@ -7,18 +7,14 @@ import { ElMessageBox, ElMessage } from 'element-plus'
 import { closePboOrder, closeTradePboOrder } from '@/api/trade'
 
 const formatTime = val => window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
-const numberStatisticModeMap = {
-    1: '按量下单',
-    2: '按额下单'
-}
 
 // 成交量/额
-const formatExecuteNum = (val, tradeType, row) => {
+const getFormatExecuteNum = t => (val, tradeType, row) => {
     const { numberStatisticMode, direction, inCurrency, outCurrency, accountCurrency } = row
     switch (Number(tradeType)) {
     case 1:
     case 2: {
-        return val + '手'
+        return val + t('trade.volumeUnit')
     }
     case 3:
     case 5: {
@@ -30,10 +26,15 @@ const formatExecuteNum = (val, tradeType, row) => {
         break
     }
     default: {
-        return numberStatisticMode === 1 ? val + '手' : val + accountCurrency
+        return numberStatisticMode === 1 ? val + t('trade.volumeUnit') : val + accountCurrency
     }
     }
 }
+
+const getnumberStatisticModeMap = (t) => ({
+    1: t('transRecords.orderbyAuantity'),
+    2: t('transRecords.orderByAmount')
+})
 
 // 获取委托/挂单列表配置
 export const getPendingColumns = tradeType => {
@@ -48,6 +49,7 @@ export const getPendingColumns = tradeType => {
         1: t('trade.expireType1'),
         2: t('trade.expireType2'),
     }
+    const numberStatisticModeMap = getnumberStatisticModeMap(t)
 
     const cancelOrder = (row) => {
         const params = {
@@ -135,7 +137,7 @@ export const getPendingColumns = tradeType => {
                 prop: 'requestNum',
                 align: 'right',
                 width: 120,
-                // formatter: row => row.requestNum + `(${row.numberStatisticMode === 2 ? row.accountCurrency : '手'})`
+                // formatter: row => row.requestNum + `(${row.numberStatisticMode === 2 ? row.accountCurrency : t('trade.volumeUnit')})`
             },
             { name: t('trade.trustPrice'), prop: 'requestPrice', align: 'right', width: 100 },
             {
@@ -193,16 +195,16 @@ export const getPendingColumns = tradeType => {
                 </span>
             },
             {
-                name: '按额/按量',
+                name: t('transRecords.byAmount'),
                 align: 'right',
                 width: 120,
                 formatter: row => numberStatisticModeMap[row.entryType]
             },
             {
-                name: '委托量/额',
+                name: t('transRecords.entrustedAmount'),
                 align: 'right',
                 width: 120,
-                formatter: row => row.requestNum + (row.entryType === 2 ? row.accountCurrency : '手')
+                formatter: row => row.requestNum + (row.entryType === 2 ? row.accountCurrency : t('trade.volumeUnit'))
             },
             { name: t('trade.trustPrice'), prop: 'requestPrice', align: 'right', width: 120 },
             {
@@ -260,14 +262,14 @@ export const getPendingColumns = tradeType => {
                 </span>
             },
             {
-                name: '按额/按量',
+                name: t('transRecords.byAmount'),
                 align: 'right',
                 formatter: row => numberStatisticModeMap[row.entryType]
             },
             {
-                name: '委托量/额',
+                name: t('transRecords.entrustedAmount'),
                 align: 'right',
-                formatter: row => row.requestNum + (row.entryType === 2 ? row.accountCurrency : '手')
+                formatter: row => row.requestNum + (row.entryType === 2 ? row.accountCurrency : t('trade.volumeUnit'))
             },
             { name: t('trade.trustPrice'), prop: 'requestPrice', align: 'right' },
             {
@@ -311,16 +313,16 @@ export const getPendingColumns = tradeType => {
                 </span>
             },
             {
-                name: '按额/按量',
+                name: t('transRecords.byAmount'),
                 prop: 'numberStatisticMode',
                 align: 'right',
                 formatter: row => numberStatisticModeMap[row.numberStatisticMode]
             },
             {
-                name: '委托量/额',
+                name: t('transRecords.entrustedAmount'),
                 prop: 'requestNum',
                 align: 'right',
-                // formatter: row => row.requestNum + (row.numberStatisticMode === 2 ? row.outCurrency : '手')
+                // formatter: row => row.requestNum + (row.numberStatisticMode === 2 ? row.outCurrency : t('trade.volumeUnit'))
                 formatter: row => row.requestNum + row.outCurrency
             },
             { name: t('trade.trustPrice'), prop: 'requestPrice', align: 'right' },
@@ -366,6 +368,8 @@ export const getTransactionColumns = (tradeType) => {
         }
     }
 
+    const formatExecuteNum = getFormatExecuteNum(t)
+    const numberStatisticModeMap = getnumberStatisticModeMap(t)
     const columnsMap = computed(() => ({
         1: [
             {
@@ -396,16 +400,16 @@ export const getTransactionColumns = (tradeType) => {
                 width: 100
             },
             // {
-            //     name: '按额/按量',
+            //     name: t('transRecords.byAmount'),
             //     align: 'right',
             //     width: 120,
             //     formatter: row => numberStatisticModeMap[row.numberStatisticMode]
             // },
             // {
-            //     name: '委托量/额',
+            //     name: t('transRecords.entrustedAmount'),
             //     align: 'right',
             //     width: 120,
-            //     formatter: row => row.requestNum + (row.numberStatisticMode === 2 ? row.accountCurrency : '手')
+            //     formatter: row => row.requestNum + (row.numberStatisticMode === 2 ? row.accountCurrency : t('trade.volumeUnit'))
             // },
             {
                 name: t('trade.dealVolume') + ' (' + t('trade.volumeUnit') + ')',
@@ -474,18 +478,18 @@ export const getTransactionColumns = (tradeType) => {
             },
 
             {
-                name: '按额/按量',
+                name: t('transRecords.byAmount'),
                 prop: 'numberStatisticMode',
                 align: 'right',
                 width: 100,
                 formatter: row => numberStatisticModeMap[row.numberStatisticMode]
             },
             {
-                name: '委托量/额',
+                name: t('transRecords.entrustedAmount'),
                 prop: 'requestNum',
                 align: 'right',
                 width: 100,
-                formatter: row => row.requestNum + `(${row.numberStatisticMode === 2 ? row.accountCurrency : '手'})`
+                formatter: row => row.requestNum + `(${row.numberStatisticMode === 2 ? row.accountCurrency : t('trade.volumeUnit')})`
             },
 
             {
@@ -554,24 +558,24 @@ export const getTransactionColumns = (tradeType) => {
             },
 
             {
-                name: '按额/按量',
+                name: t('transRecords.byAmount'),
                 prop: 'numberStatisticMode',
                 align: 'right',
                 width: 100,
                 formatter: row => numberStatisticModeMap[row.numberStatisticMode]
             },
             {
-                name: '委托量/额',
+                name: t('transRecords.entrustedAmount'),
                 prop: 'requestNum',
                 align: 'right',
                 width: 100,
                 formatter: row => {
-                    return row.requestNum + (row.numberStatisticMode === 2 ? row.outCurrency : '手')
+                    return row.requestNum + (row.numberStatisticMode === 2 ? row.outCurrency : t('trade.volumeUnit'))
                 }
             },
 
             {
-                name: '成交量/额',
+                name: t('transRecords.volumeAmount'),
                 align: 'right',
                 width: 150,
                 formatter: row => formatExecuteNum(row.executeNum, tradeType, row)
@@ -624,24 +628,24 @@ export const getTransactionColumns = (tradeType) => {
             },
 
             {
-                name: '按额/按量',
+                name: t('transRecords.byAmount'),
                 prop: 'numberStatisticMode',
                 align: 'right',
                 width: 100,
                 formatter: row => numberStatisticModeMap[row.numberStatisticMode] || '- -'
             },
             {
-                name: '委托量/额',
+                name: t('transRecords.entrustedAmount'),
                 prop: 'requestNum',
                 align: 'right',
                 width: 170,
-                // formatter: row => row.requestNum + `(${row.numberStatisticMode === 2 ? row.accountCurrency : '手'})`
+                // formatter: row => row.requestNum + `(${row.numberStatisticMode === 2 ? row.accountCurrency : t('trade.volumeUnit')})`
                 formatter: row => row.requestNum + row.outCurrency
 
             },
 
             {
-                name: '成交量/额',
+                name: t('transRecords.volumeAmount'),
                 align: 'right',
                 width: 150,
                 // formatter: row => formatExecuteNum(row.executeNum, tradeType, row)

@@ -101,7 +101,7 @@
     background: var(--contentColor);
     border-radius: 10px;
 	:deep(.el-table) {
-		background: transparent;
+		background-color: transparent;
 		&::before {
 			background: none;
 		}
@@ -139,6 +139,24 @@
 		.el-table__body-wrapper {
 			@include scroll-pc();
 		}
+        .empty{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            .image{
+                width: 160px;
+                height: auto;
+            }
+        }
+        .emptyText{
+            display: inline-block;
+            width: 160px;
+            padding-top: 140px;
+            background: url('/images/empty.png') center top no-repeat;
+            background-size: 160px auto;
+            color: var(--placeholdColor);
+        }
 	}
 	.handle {
 		display: flex;

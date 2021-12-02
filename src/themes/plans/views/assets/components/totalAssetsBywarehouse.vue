@@ -17,7 +17,7 @@
         <ul class='assetList'>
             <li class='item'>
                 <p class='muted'>
-                    {{ $t('trade.allOriginalMargin') }}({{ assetsInfo?.currency }})
+                    {{ $t('trade.allOriginalMargin') }}
                 </p>
                 <p>{{ userAccount?.occupyMargin || '--' }}</p>
             </li>
@@ -150,6 +150,7 @@ export default {
         line-height: rem(65px);
         border: solid 1px var(--primary);;
         border-radius: rem(6px);
+        background: none;
         &:last-child {
             margin-right: 0;
         }

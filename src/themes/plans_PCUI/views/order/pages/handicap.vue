@@ -128,14 +128,24 @@ export default {
         // 监听路由变化
         watch(
             () => [route.query, state.curDigit], (val, oval) => {
+                state.curDigit = val[1]
                 QuoteSocket.deal_subscribe(product.value?.symbolId, 5, state.curDigit, product.value?.tradeType, 20)
+            }, {
+                immediate: true
             }
         )
-
-        watchEffect(() => {
-            state.curDigit = handicapDigit.value
-            console.log('**************', state.curDigit)
+        watch(() => handicapDigit.value, val => {
+            if (val) {
+                state.curDigit = val
+            }
+        }, {
+            immediate: true
         })
+
+        // watchEffect(() => {
+        //     state.curDigit = handicapDigit.value
+        //     console.log('**************', state.curDigit)
+        // })
 
         // 报价不够5档，补空位
         const fillPosition = (data, type) => {
@@ -216,7 +226,7 @@ export default {
     margin-top: 12px;
     margin-bottom: 5px;
     color: var(--placeholdColor);
-    font-size: rem(20px);
+    font-size: rem(26px);
     >span{
         flex: 1;
         &.my{

@@ -7,7 +7,7 @@ export default {
     state: {
         inited: false, // 配置信息是否获取完成
         wpCompanyInfo: null, //   wordpress公司配置信息
-        wpSelfSymbol: null, //   wordpress自选产品配置
+        wpSelfSymbol: [], //   wordpress自选产品配置
         wpProductCategory: [], // wordpress配置的产品板块
         wpNav: null, //   wordpress公司配置信息
         plansNames: {}, // 完成类型，从语言包里面获取

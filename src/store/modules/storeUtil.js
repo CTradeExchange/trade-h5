@@ -47,3 +47,61 @@ export function formatPlans (plans) {
     plans.sort((a, b) => a.sort - b.sort > 0)
     return plans
 }
+
+/* 将当前用户的玩法资产和wp配置的玩法资产对比，找出wp多出的玩法资产
+ * @param {Object} customerInfo 登录接口返回的data信息
+ * @param {Array} registList wp配置的registList客户组列表以及玩法
+*/
+export function compareAssets (customerInfo = {}, registList) {
+    const { accountList = [], customerGroupId } = customerInfo
+
+    // 用户信息的资产根据玩法tradeType将资产分类
+    const userPlans = {}
+    accountList.forEach(el => {
+        const { currency, tradeType } = el
+        if (userPlans[tradeType]) {
+            userPlans[tradeType].push(currency)
+        } else {
+            userPlans[tradeType] = [currency]
+        }
+    })
+    Object.keys(userPlans).forEach(el => {
+        userPlans[el] = userPlans[el].sort((a, b) => a.localeCompare(b)).join()
+    })
+
+    // wp配置的玩法资产
+    const defaultGroupConfig = registList.find(el => el.registCountry.isOther)
+    const customerGroupConfig = registList.find(el => parseInt(el.customerGroupId) === customerGroupId) || defaultGroupConfig
+    const customerGroupConfigPlans = customerGroupConfig.plans.map(el => {
+        const { allCurrency, tradeType } = el
+        const currencyArray = Array.isArray(allCurrency) ? allCurrency : allCurrency.split(',')
+        const allCurrencySort = currencyArray.sort((a, b) => a.localeCompare(b)).join()
+        return {
+            allCurrency: allCurrencySort,
+            tradeType: String(tradeType)
+        }
+    })
+
+    // 将wp配置的资产和用户信息的资产对比
+    let different = false
+    if (Object.keys(userPlans).length > customerGroupConfigPlans.length) {
+        different = true
+    } else {
+        customerGroupConfigPlans.forEach(el => {
+            const { allCurrency, tradeType } = el // 客户组配置的资产
+            const userCurrency = userPlans[tradeType] // 用户资产
+            if (!userPlans[tradeType]) {
+                return (different = true)
+            } else if (!assetsIncludes(userCurrency, allCurrency)) {
+                return (different = true)
+            }
+        })
+    }
+    return different ? customerGroupConfigPlans : null
+}
+// 判断a组资产是否包含b组资产的所有成员
+function assetsIncludes (a, b) {
+    a = a.split(',')
+    b = b.split(',')
+    return b.every(cur => a.includes(cur))
+}

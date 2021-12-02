@@ -119,7 +119,7 @@
     "transfer": "Transfer"
   },
   "search": {
-    "keywords": "Please enter product name/code/phonics to search",
+    "keywords": "Name/Symbol/Phonics",
     "placeholder": "Please enter the search keywords",
     "norecord": "No search history at this time",
     "nodata": "No results found",
@@ -478,7 +478,8 @@
     "multilpSetting": "Leverage ratio setting",
     "multilpRange": "Leverage ratio range：",
     "multilpSettingTip1": "Over leverage will increase the risk of liquidation，please remind the risk level",
-   "saveSetting": "Save"
+   "saveSetting": "Save",
+   "quantity": "QTY(Lots)"
   },
   "bizType": {
     "2": "Market close",

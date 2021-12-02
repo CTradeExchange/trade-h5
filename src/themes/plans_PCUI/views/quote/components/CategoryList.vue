@@ -1,7 +1,14 @@
 <template>
     <div class='categoryList'>
         <el-tabs v-model='activeName'>
-            <el-tab-pane v-for='(item, index) in props.list' :key='item.id' :label='item.title' :name='index' />
+            <el-tab-pane v-for='(item, index) in props.list' :key='item.id' :label='item.title' :name='index'>
+                <template #label>
+                    <component :is='item.slot?.label' v-if='item.slot?.label' />
+                    <template v-else>
+                        {{ item.title }}
+                    </template>
+                </template>
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -39,7 +46,7 @@ const activeName = computed({
             .el-tabs__item{
                 height: 40px;
                 line-height: 40px;
-                padding: 0 15px;
+                padding: 0 18px;
                 background: var(--assistColor);
                 color: var(--color);
                 border-radius: 4px;

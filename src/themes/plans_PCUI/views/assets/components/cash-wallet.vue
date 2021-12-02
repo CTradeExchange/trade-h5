@@ -26,12 +26,17 @@
             </div>
         </div>
         <div class='assets-body'>
-            <el-table :cell-style="{ background:'none' }" :data='accountList' :empty-text="$t('c.noData')">
+            <el-table :cell-style="{ background:'none' }" :data='accountList' :empty-text="$t('c.noData')" height='100%'>
                 <el-table-column :label="$t('trade.name')" prop='currency' />
                 <el-table-column :label="$t('trade.totalAssets')" prop='balance' />
                 <el-table-column :label="$t('trade.free')" prop='available' />
                 <el-table-column :label="$t('trade.frozen')" prop='frozen' />
                 <el-table-column :label="$t('trade.carry')" prop='withdrawAmount' />
+                <template #empty>
+                    <span class='emptyText'>
+                        {{ $t('c.noData') }}
+                    </span>
+                </template>
             </el-table>
         </div>
     </div>

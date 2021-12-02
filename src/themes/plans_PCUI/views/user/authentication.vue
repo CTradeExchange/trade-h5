@@ -4,7 +4,7 @@
             <LayoutTop :back='true' :menu='false' title='' @backEvent='back' />
             <div class='page-wrap'>
                 <Loading :show='loading' />
-                <div v-if='list && list.length === 0' class='empty-data'>
+                <div v-if='kycList && kycList.length === 0' class='empty-data'>
                     <van-empty :description='$t("auth.noRequired")' image='/images/empty.png' />
                 </div>
                 <div v-else>
@@ -12,7 +12,7 @@
                         {{ $t('auth.authComplete') }}
                     </p>
                     <div class='auth-list'>
-                        <div v-for='(item,index) in list' :key='index' class='auth-item'>
+                        <div v-for='(item,index) in kycList' :key='index' class='auth-item'>
                             <img alt='' class='auth-img' :src="require('@/themes/mt4/images/'+ item.levelCode +'.png')" />
                             <div class='content'>
                                 <p class='t1'>
@@ -75,7 +75,7 @@ export default {
             level_2: t('common.kycLevel2'),
             level_3: t('common.kycLevel3'),
         }
-
+        const kycList = computed(() => store.state._user.kycList)
         const kycState = computed(() => store.state._user.kycState)
         const kycAuditStatus = tm('kycAuditStatus')
 
@@ -83,15 +83,6 @@ export default {
             state.loading = true
             store.dispatch('_user/findAllBizKycList').then(res => {
                 state.loading = false
-                if (res.check()) {
-                    res.data.forEach(item => {
-                        if (item.preLevelName) {
-                            const temp = getArrayObj(res.data, 'levelName', item.preLevelName)
-                            item.preLevelObj = temp
-                        }
-                    })
-                    state.list = res.data
-                }
             })
         }
 
@@ -132,6 +123,7 @@ export default {
             style,
             kycMap,
             kycAuditStatus,
+            kycList,
             ...toRefs(state)
         }
     }

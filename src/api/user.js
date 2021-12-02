@@ -34,6 +34,7 @@ export function register (data) {
     return request({
         url: '/register/customer.app.CustomerWebApiService.register',
         method: 'post',
+        toastErr: false,
         headers: {
             version: '0.0.1',
         },
@@ -719,6 +720,18 @@ export function queryAccountById (data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.queryAccountById',
         method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+/* 批量增加玩法账户信息 */
+export function increasAccount (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.openAccount',
+        method: 'post',
+        toastErr: false,
         headers: {
             version: '0.0.1'
         },

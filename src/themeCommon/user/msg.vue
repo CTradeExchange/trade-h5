@@ -1,20 +1,16 @@
 <template>
     <Top class='msgTopBar'>
-        <template #center>
-            <div class='msgTopCenter'>
-                <van-dropdown-menu :active-color='$style.primary'>
-                    <van-dropdown-item v-model='type' :options='options' @change='changeType' />
-                </van-dropdown-menu>
-            </div>
-        </template>
         <template #right>
-            <div class='right-ico'>
-                <i class='icon icon_quanbuyidu'></i>
-            </div>
+            <van-dropdown-menu :active-color='$style.primary'>
+                <van-dropdown-item v-model='type' :options='options' @change='changeType' />
+            </van-dropdown-menu>
         </template>
     </Top>
     <Loading :show='pageLoading' />
     <div class='msg-list'>
+        <p class='header'>
+            {{ $t('cRoute.msg') }}
+        </p>
         <div v-if='list.length === 0'>
             <van-empty :description='$t("common.noData")' image='/images/empty.png' />
         </div>
@@ -215,11 +211,18 @@ export default {
     height: 100%;
     overflow: auto;
     background-color: var(--bgColor);
+    .header{
+        font-size: rem(48px);
+        font-weight: bold;
+        padding-left: rem(30px);
+        padding-bottom: rem(30px);
+        background: var(--contentColor);
+    }
     .msg-item {
-        margin: rem(15px);
-        padding: rem(20px);
+        margin: rem(10px) 0;
+        padding: rem(30px);
         background-color: var(--contentColor);
-        border-top: solid rem(20px) var(--bgColor);
+        //border-top: solid rem(10px) var(--bgColor);
         .msg-title {
             color: var(--color);
             font-weight: bold;
@@ -242,12 +245,17 @@ export default {
 }
 .msgTopBar {
     position: relative !important;
-    background-color: var(--contentColor);
+    //background-color: var(--contentColor);
     :deep(.van-dropdown-menu__bar) {
         height: rem(90px);
-        background-color: var(--contentColor);
+        box-shadow: none;
+        //background-color: var(--contentColor);
         .van-dropdown-menu__title {
             color: var(--color);
+            margin-right: rem(40px);
+            &::after{
+                border-color: transparent transparent var(--normalColor) var(--normalColor);
+            }
         }
     }
     :deep(.van-dropdown-item__content) {
