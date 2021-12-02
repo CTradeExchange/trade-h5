@@ -226,15 +226,6 @@ export default {
     overflow-x: hidden;
     font-size: 12px;
     background: #F1F1F1;
-    &.pc{
-        position: relative;
-        width: 1200px;
-        transform: scale(.8);
-        transform-origin: center top;
-        .phoneBody{
-            background: #fff;
-        }
-    }
     img {
         vertical-align: top;
     }

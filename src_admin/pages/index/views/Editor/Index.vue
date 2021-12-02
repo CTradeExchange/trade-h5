@@ -103,7 +103,7 @@
             </div>
             <el-scrollbar class='center-scrollbar'>
                 <el-row class='center-board-row'>
-                    <div id='previewContainer' class='previewContainer'></div>
+                    <div id='previewContainer' class='previewContainer' :class='{ "pc":isPC }'></div>
                 </el-row>
             </el-scrollbar>
         </div>
@@ -199,6 +199,7 @@ export default {
             getLoading: false,
             pageId: getQueryString('id'),
             drag: false,
+            isPC: process.env.VUE_APP_theme === 'plans_PCUI',
             submitType: 0
         })
 
@@ -214,7 +215,7 @@ export default {
                         state.pageConf = res.data
                         const parseData = JSON.parse(res.data ? ((res.data.content.length <= 0 || res.data.content === '[]') ? '[]' : unzip(res.data.content)) : '[]')
                         const resData = Object.prototype.toString.call(parseData) === '[object Array]' ? parseData : []
-                        console.log(resData)
+                        console.log('getPageConfig', resData)
                         if (resData.length <= 0) {
                             if (pageBaseConfig.hasOwnProperty(state.pageCode)) {
                                 pageBaseConfig[state.pageCode].forEach((item, index) => {
@@ -284,6 +285,13 @@ export default {
                         })
                         store.commit('editor/RESET_ELEMENT', storeData)
                         // ELEMENIINDEX = index + 1
+
+                        // 如果PCUI的首页，如果没有顶部banner模块，自动添加顶部banner模块
+                        // if (state.isPC && state.pageCode === 'Home') {
+                        //     const fullBanner = mobileComponents.find(el => el.tag === 'fullBanner')
+                        //     console.log('fullBanner', fullBanner)
+                        //     fullBanner && addComponent(fullBanner)
+                        // }
                     })
                     .catch(error => {
                         console.log(error)
@@ -363,6 +371,7 @@ export default {
                     id: item.id,
                     tag: item.tag,
                     data: item.data,
+                    listHidden: item.listHidden,
                     hideUserRole: item.hideUserRole
                 })))
 
@@ -531,6 +540,7 @@ export default {
                 hidden: data.hidden,
                 tag: data.tag,
                 index: index || 0,
+                listHidden: element.listHidden,
                 hideUserRole: element.hideUserRole
 
             })
@@ -678,5 +688,8 @@ export default {
 @import './styles';
 .previewContainer {
     margin: 0 auto;
+    &.pc{
+        width: 100%;
+    }
 }
 </style>
