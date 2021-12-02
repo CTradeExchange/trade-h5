@@ -19,21 +19,21 @@
             <van-cell
                 class='cellItem'
                 is-link
-                :title='$t("common.dark")'
-            >
-                <template #right-icon>
-                    <van-switch v-model='themeVal' size='24px' @change='colorSelect' />
-                </template>
-            </van-cell>
-            <van-cell
-                class='cellItem'
-                is-link
                 :title='Number(chartVal) === 1 ? $t("common.redDown") : $t("common.redUp")'
                 @click='colorShow=true'
             >
                 <template #right-icon>
                     <img alt='' class='updown-icon' :src='Number(chartVal) === 1 ? "/images/redDown.png" : "/images/redUp.png"' />
                     <van-icon class='right-arrow' name='arrow' />
+                </template>
+            </van-cell>
+            <van-cell
+                class='cellItem'
+                is-link
+                :title='$t("common.dark")'
+            >
+                <template #right-icon>
+                    <van-switch v-model='themeVal' size='24px' @change='colorSelect' />
                 </template>
             </van-cell>
         </van-cell-group>
