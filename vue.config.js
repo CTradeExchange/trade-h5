@@ -11,7 +11,7 @@ function resolve (dir) {
 process.env.VUE_APP_build = dayjs().format('YYYY-MM-DD HH:mm')
 const NODE_ENV = process.env.NODE_ENV
 const isAdminMode = process.env.VUE_APP_isAdmin === 'true' // WordPress后台插件的开发模式
-console.log(NODE_ENV, isAdminMode ? 'C端' : 'wp编辑器')
+console.log(NODE_ENV, isAdminMode ? 'wp编辑器' : 'C端')
 // console.log(process.env)
 const { buildType = 'cats-upload-all', theme = 'plans', h5URL, sourceMap } = queryBuildConfig()
 console.log(buildType, theme)
