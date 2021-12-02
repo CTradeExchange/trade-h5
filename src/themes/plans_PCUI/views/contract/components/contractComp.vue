@@ -148,6 +148,7 @@ export default {
 .contractWrapper{
     height: 100%;
     overflow: auto;
+    scrollbar-width:thin;
 }
 .container {
     flex: 1;

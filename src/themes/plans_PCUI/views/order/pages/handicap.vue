@@ -226,7 +226,7 @@ export default {
     margin-top: 12px;
     margin-bottom: 5px;
     color: var(--placeholdColor);
-    font-size: rem(20px);
+    font-size: rem(26px);
     >span{
         flex: 1;
         &.my{

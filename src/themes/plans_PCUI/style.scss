@@ -13,6 +13,8 @@
 }
 html{
     font-size: 35px;
+    scrollbar-color:var(--lineColor) var(--bgColor);
+    scrollbar-width:thin;
 }
 html,
 body,
@@ -21,6 +23,8 @@ body,
     color: var(--color);
     background-color: var(--bgColor);
 	@include scroll-pc();
+    scrollbar-color:var(--lineColor) var(--bgColor);
+    scrollbar-width:thin;
 }
 body {
     font-size: 14px;
@@ -737,6 +741,7 @@ body {
 ::-webkit-scrollbar-thumb:hover {
 	background: #7D7D7D;
 }
+
 
 // element-plus
 .dialog-layer {

@@ -478,7 +478,8 @@
     "multilpSetting": "杠杆设置",
     "multilpRange": "杠杆范围：",
     "multilpSettingTip1": "过高的杠杆会增加仓位强平风险，请注意自身风险承受级别，合理设置杠杆",
-    "saveSetting": "保存设置"
+    "saveSetting": "保存设置",
+    "quantity": "数量(手)"
   },
   "bizType": {
     "2": "市价平仓",
