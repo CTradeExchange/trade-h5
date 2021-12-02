@@ -37,10 +37,19 @@ export default {
 
         const state = reactive({
             data: {
+                loop: true,
                 items: [
                     {
-                        src: require('@plans/images/banner/banner1.png'),
-                        href: { 'name': 'Register' }
+                        src: require('@plans/images/banner/banner1.jpg'),
+                        href: { 'name': 'Quote' }
+                    },
+                    {
+                        src: require('@plans/images/banner/banner2.jpg'),
+                        href: { 'name': 'Quote' }
+                    },
+                    {
+                        src: require('@plans/images/banner/banner3.jpg'),
+                        href: { 'name': 'Quote' }
                     }
                 ]
             }
