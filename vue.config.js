@@ -11,10 +11,10 @@ function resolve (dir) {
 process.env.VUE_APP_build = dayjs().format('YYYY-MM-DD HH:mm')
 const NODE_ENV = process.env.NODE_ENV
 const isAdminMode = process.env.VUE_APP_isAdmin === 'true' // WordPress后台插件的开发模式
-console.log(NODE_ENV, process.env.VUE_APP_isAdmin)
+console.log(NODE_ENV, isAdminMode ? 'C端' : 'wp编辑器')
 // console.log(process.env)
-const { buildType = 'cats-upload-all', theme = 'plans', h5URL } = queryBuildConfig()
-console.log(buildType, theme, h5URL)
+const { buildType = 'cats-upload-all', theme = 'plans', h5URL, sourceMap } = queryBuildConfig()
+console.log(buildType, theme)
 process.env.VUE_APP_theme = theme
 const alias = {
     'vue$': 'vue/dist/vue.esm-bundler.js',
@@ -105,7 +105,7 @@ if (isAdminMode) {
 }
 
 const config = {
-    productionSourceMap: true,
+    productionSourceMap: sourceMap === 'true',
     publicPath: process.env.NODE_ENV === 'production' && isAdminMode ? `/wp-content/plugins/cats-manage/skin/skin_${theme}_2/editor/` : '/', // static/
     // indexPath: isAdminMode ? 'index.html' : 'index_template.html', // 就是这条
     lintOnSave: false,
@@ -134,7 +134,7 @@ const config = {
         },
         proxy: {
             '/wp-json/wp': {
-                target: 'http://prewpadmin_9.cats-trade.com', // http://prewpadmin.cats-trade.com/
+                target: 'http://prewpadmin_8.cats-trade.com', // http://prewpadmin.cats-trade.com/
                 // changeOrigin: false,
                 disableHostCheck: true,
                 onProxyReq: function (proxyReq, req, res, options) { // 由于vue中使用了body-parser 导致http中的body被序列化两次，从而使得配置代理后后端无法获取body中的数据

@@ -39,6 +39,13 @@ async function init () {
             // when: (answers) => answers.buildType !== 'cats-upload-admin',
             default: 'false',
         },
+        {
+            type: 'list',
+            name: 'sourceMap',
+            message: '请选择是否生成sourceMap',
+            choices: ['false', 'true'],
+            default: 'false',
+        },
     ]
     inquirer.prompt(questions)
         .then((answers) => {
