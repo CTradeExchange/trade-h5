@@ -42,6 +42,7 @@
                 <!-- <img alt='' src='/images/minePlace.png' /> -->
                 <ImgComp :data='data' />
             </div>
+            <fund />
         </div>
     </div>
 </template>
@@ -54,11 +55,13 @@ import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { hideEmailInfo, hideMobileInfo } from '@/utils/util'
 import { Toast } from 'vant'
+import fund from './components/fund.vue'
 const faceImgDefault = require('@plans/images/face.png')
 const h5Preview = process.env.VUE_APP_h5Preview
 export default {
     components: {
         ImgComp,
+        fund,
     },
     props: {
         data: {
@@ -158,7 +161,7 @@ export default {
     }
 }
 .personInfo {
-    padding: rem(60px);
+    padding: rem(60px) rem(20px);
     color: var(--color);
     background: var(--contentColor);
 }

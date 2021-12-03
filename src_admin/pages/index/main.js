@@ -9,10 +9,11 @@ import ElementPlus, { ElMessage } from 'element-plus'
 import VueParticles from 'vue-particles'
 // import 'element-plus/lib/theme-chalk/index.css'
 import 'element-plus/dist/index.css'
+import i18n from './i18n/i18n.js'
 const app = createApp(App)
 app.config.globalProperties.$message = ElMessage
 
-app.use(ElementPlus).use(store).use(router)
+app.use(ElementPlus).use(store).use(router).use(i18n)
 app.component(RightForm.name, RightForm)
 app.use(VueParticles)
 
