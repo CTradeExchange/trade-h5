@@ -25,6 +25,7 @@ import news from './news/config.js'
 import ad from './ad/config.js'
 import luckyWheel from './luckyWheel/config.js'
 import productsSwipe from './productsSwipe/config.js'
+import productsTimeSharing from './productsTimeSharing/config.js'
 
 export const getThemeModules = async () => {
     return [
@@ -49,6 +50,7 @@ export const getThemeModules = async () => {
         news,
         ad,
         luckyWheel,
-        productsSwipe
+        productsSwipe,
+        productsTimeSharing
     ]
 }

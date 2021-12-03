@@ -1,6 +1,10 @@
 <template>
-    <div class='swipe-wrap'>
+    <div class='swipe-wrap' :style='data.styleObj'>
+        <div v-if='h5Preview' class='default-wrap'>
+            <img alt='' src='./default.png' />
+        </div>
         <van-swipe
+            v-else
             :autoplay='0'
             class='my-swipe'
             indicator-color='white'
@@ -39,6 +43,12 @@ import { QuoteSocket } from '@/plugins/socket/socket'
 import timeSharingSvg from './components/timeSharingSvg.vue'
 export default {
     components: { timeSharingSvg },
+    props: {
+        data: {
+            type: Object,
+            default () { return {} }
+        },
+    },
     setup () {
         const store = useStore()
         const router = useRouter()
@@ -47,7 +57,7 @@ export default {
         const symbolKeys = ['59_1', '56_1', '28_3'] // '33_2', '12_2'
         // 产品列表数据
         const productList = symbolKeys.map(key => productMap[key]).filter(elem => elem)
-        QuoteSocket.add_subscribe({ moduleId: 'productsTimmeSharing', symbolKeys })
+        // QuoteSocket.add_subscribe({ moduleId: 'productsTimmeSharing', symbolKeys })
 
         const openProduct = (data) => {
             // router.push({ name: 'Order', query: { symbolId: data.symbolId, direction: 'buy' } })

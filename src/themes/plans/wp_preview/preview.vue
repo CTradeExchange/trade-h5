@@ -226,9 +226,15 @@ export default {
     overflow-x: hidden;
     font-size: 12px;
     background: #F1F1F1;
-    img {
+    >img {
         vertical-align: top;
     }
+    .default-wrap{
+        >img{
+            width: 100%;
+        }
+    }
+
 }
 .active {
     position: relative;

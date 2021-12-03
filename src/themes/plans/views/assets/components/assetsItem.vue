@@ -2,7 +2,7 @@
     <div class='assetsItem' @click='toInfo'>
         <div class='rowflex currency'>
             <span>{{ data.currency }}</span>
-            <!-- <span>{{ parseFloat(plus (data.available,data.frozen )).toFixed(data.digits) }}</span> -->
+            <span>{{ data.balance }}</span>
         </div>
         <div class='rowflex muted mtop20'>
             <div class='asset-info'>
