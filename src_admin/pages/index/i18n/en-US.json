@@ -1,3 +1,25 @@
 {
-    "title": "Page list"
+    "title": "Page list",
+    "pageCode": "Page encoding",
+    "titleName": "Title",
+    "state": "State",
+    "createTime": "Creation time",
+    "updateTime": "Update time",
+    "operator": "Operator",
+    "operate": "Operate",
+    "check": "Check",
+    "designPage": "Design page",
+    "viewHistory": "View release history",
+    "newPage": "New page",
+    "editPage": "Edit page",
+    "pageType": "Page type",
+    "innerPage": "Internal page",
+    "activePage": "Event page",
+    "pleaseChoose": "Please choose",
+    "pageAdd": "Page address",
+    "pleaseEnter": "Please enter",
+    "enable": "Enable",
+    "disable": "Disable",
+    "cancel": "Cancel",
+    "sure": "Sure"
 }

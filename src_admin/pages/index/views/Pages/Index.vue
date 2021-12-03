@@ -24,7 +24,7 @@
 
         <div class='data-list'>
             <el-table v-loading='loading' border :data='list' style='width: 100%;'>
-                <el-table-column align='center' label='页面编码' prop='page_code'>
+                <el-table-column align='center' :label="$t('pageCode')" prop='page_code'>
                     <template #default='scope'>
                         <el-button v-if="scope.row.page_code.indexOf('http')==0" size='small' type='text'>
                             {{ scope.row.page_code }}
@@ -34,24 +34,24 @@
                         </el-button>
                     </template>
                 </el-table-column>
-                <el-table-column align='center' label='标题' prop='title' />
-                <el-table-column align='center' label='状态' prop='status' width='60' />
-                <el-table-column label='创建时间' prop='create_date' width='160' />
-                <el-table-column label='更新时间' prop='update_date' width='160' />
-                <el-table-column align='center' label='操作人' prop='updater' width='100' />
-                <el-table-column align='center' fixed='right' label='操作' width='200'>
+                <el-table-column align='center' :label="$t('titleName')" prop='title' />
+                <el-table-column align='center' :label="$t('state')" prop='status' width='60' />
+                <el-table-column :label="$t('createTime')" prop='create_date' width='160' />
+                <el-table-column :label="$t('updateTime')" prop='update_date' width='160' />
+                <el-table-column align='center' :label="$t('operator')" prop='updater' width='100' />
+                <el-table-column align='center' fixed='right' :label="$t('operate')" width='200'>
                     <template #default='scope'>
                         <!-- <el-button size='small' type='text' @click='setting(scope.row)'>
                             编辑
                         </el-button> -->
                         <el-button v-if="scope.row.page_code.indexOf('http')==0" size='small' type='text' @click='showOtherPage(scope.row.page_code)'>
-                            查看
+                            {{$t('check')}}
                         </el-button>
                         <el-button v-else size='small' type='text' @click='edit(scope.row)'>
-                            设计页面
+                            {{$t('designPage')}}
                         </el-button>
                         <el-button size='small' type='text' @click='viewPublish(scope.row)'>
-                            查看发布记录
+                            {{$t('viewHistory')}}
                         </el-button>
                     </template>
                 </el-table-column>
@@ -73,51 +73,51 @@
             v-model='addForm.show'
             append-to-body
             :close-on-click-modal='false'
-            :title="addForm.type == 'add' ? '新建页面' : '编辑页面'"
+            :title="addForm.type == 'add' ? $t('newPage') : $t('editPage')"
             width='500px'
             @closed='closed'
         >
             <el-form ref='addFormModal' label-width='80px' :model='addForm.form' :rules='addForm.rules'>
-                <el-form-item label='页面类型'>
+                <el-form-item :label="$t('pageType')">
                     <el-radio-group v-model='addForm.form.pageType' :aa='addForm.form.pageType' :disabled="addForm.type ==='modify'" @change='changeType'>
                         <el-radio label='1'>
-                            内部页面
+                            {{$t('innerPage')}}
                         </el-radio>
                         <el-radio label='2'>
-                            活动页面
+                            {{$t('activePage')}}
                         </el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if='addForm.form.pageType == 1' v-model='addForm.form.page_code' :disabled="addForm.type ==='modify'" label='页面编码' prop='page_code'>
-                    <el-select v-model='addForm.form.page_code' clearable :disabled="addForm.type ==='modify'" placeholder='请选择' @change='changePage'>
+                <el-form-item v-if='addForm.form.pageType == 1' v-model='addForm.form.page_code' :disabled="addForm.type ==='modify'" :label="$t('pageCode')" prop='page_code'>
+                    <el-select v-model='addForm.form.page_code' clearable :disabled="addForm.type ==='modify'" :placeholder="$t('pleaseChoose')" @change='changePage'>
                         <el-option v-for='item in h5PageList' :key='item.name' :label='item.title' :value='item.name' />
                     </el-select>
                 </el-form-item>
                 <template v-else-if='addForm.form.pageType == 2'>
-                    <el-form-item label='页面地址' prop='page_code'>
-                        <el-input v-model='addForm.form.page_code' placeholder='请输入' />
+                    <el-form-item :label="$t('pageAdd')" prop='page_code'>
+                        <el-input v-model='addForm.form.page_code' :placeholder="$t('pleaseEnter')" />
                     </el-form-item>
-                    <el-form-item label='标题'>
-                        <el-input v-model='addForm.form.title' autocomplete='off' placeholder='请输入' />
+                    <el-form-item :label="$t('titleName')">
+                        <el-input v-model='addForm.form.title' autocomplete='off' :placeholder="$t('pleaseEnter')" />
                     </el-form-item>
                 </template>
-                <el-form-item label='状态'>
+                <el-form-item :label="$t('State')">
                     <el-radio-group v-model='addForm.form.status'>
                         <el-radio label='1'>
-                            启用
+                            {{$t('enable')}}
                         </el-radio>
                         <el-radio label='0'>
-                            禁用
+                            {{$t('disable')}}
                         </el-radio>
                     </el-radio-group>
                 </el-form-item>
             </el-form>
             <div slot='footer' class='dialog-footer'>
                 <el-button @click='addForm.show = false'>
-                    取 消
+                    {{$t('cancel')}}
                 </el-button>
                 <el-button :loading='addForm.loading' type='primary' @click='submit'>
-                    确 定
+                    {{$t('sure')}}
                 </el-button>
             </div>
         </el-dialog>
