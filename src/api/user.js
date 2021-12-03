@@ -738,3 +738,16 @@ export function increasAccount (data) {
         data
     })
 }
+
+/* 查询客户总资产 */
+export function queryCustomerAssets (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.queryCustomerAssets',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
