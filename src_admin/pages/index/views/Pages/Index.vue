@@ -1,7 +1,7 @@
 <template>
     <div class='m-pageList'>
         <el-collapse :value="['1']">
-            <el-collapse-item class='search' name='1' title='页面列表'>
+            <el-collapse-item class='search' name='1' :title="$t('title')">
                 <!-- <el-form ref='form' inline label-position='left' label-width='60px' :model='searchForm'>
 
                 </el-form>
@@ -131,6 +131,7 @@ import { h5PageList } from './h5PageList'
 import { useRouter, useRoute } from 'vue-router'
 import { onMounted, reactive, ref, toRefs, getCurrentInstance, watch } from 'vue'
 import { getQueryString } from '@admin/utils'
+import { useI18n } from 'vue-i18n'
 
 export default {
     beforeRouteEnter (to, from, next) {
@@ -146,6 +147,7 @@ export default {
     },
     name: 'Pages',
     setup (props) {
+        const { locale } = useI18n()
         const router = useRouter()
         const route = useRoute()
         const addFormModal = ref(null)
@@ -210,6 +212,8 @@ export default {
                         language: state.activeLang
                     }
                 })
+                locale.value = state.activeLang;
+                
             }
         )
 
