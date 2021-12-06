@@ -31,10 +31,13 @@
     img {
         width: 88px;
         height: 88px;
+        margin-top: 5px;
     }
     p {
-        width: 88px;
+        width: 92px;
+        text-align: center;
         line-height: 20px;
+        margin-top: 10px;
         font-size: 14px;
         color: var(--color);
     }

@@ -99,13 +99,13 @@ export default {
             }
             strong {
                 font-size: 16px;
-                font-weight: normal;
             }
         }
         .row_2 {
             margin-top: 3px;
             span {
                 font-size: 24px;
+                font-weight: bold;
                 color: #B7C0E7;
             }
         }

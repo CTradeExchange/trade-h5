@@ -46,7 +46,7 @@
                 </li>
             </ul>
             <ul class='product-list'>
-                <li v-for='item in filterProductList' :key='item.symbolKey'>
+                <li v-for='item in filterProductList' :key='item.symbolKey' @click='toOrder(item)'>
                     <div>
                         <span>{{ item.symbolName }}</span>
                     </div>
@@ -66,10 +66,10 @@
                         </span>
                     </div>
                     <div class='handle'>
-                        <button class='buy' @click='toOrder(item)'>
+                        <button class='buy'>
                             {{ $t('trade.buy') }}
                         </button>
-                        <button class='sale' @click='toOrder(item)'>
+                        <button class='sale'>
                             {{ $t('trade.sell') }}
                         </button>
                     </div>
@@ -260,6 +260,7 @@ export default {
                 color: var(--minorColor);
             }
             &:first-child {
+                min-width: 300px;
                 span {
                     margin-left: 16px;
                 }
@@ -283,8 +284,12 @@ export default {
         div {
             flex: 1;
             color: var(--color);
+            &:first-of-type {
+                min-width: 300px;
+            }
             span {
                 font-size: 20px;
+                font-weight: bold;
             }
             &:first-of-type {
                 span {
@@ -311,6 +316,9 @@ export default {
                 }
                 &.sale {
                     background: var(--fallColor);
+                }
+                &:hover {
+                    opacity: .7;
                 }
             }
         }
