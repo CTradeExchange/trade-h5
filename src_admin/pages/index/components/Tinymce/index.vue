@@ -9,7 +9,7 @@
 
 <script>
 /**
- * docs:
+ * docs: https://github.com/PanJiaChen/vue-element-admin/blob/master/src/components/Tinymce/index.vue
  * https://panjiachen.github.io/vue-element-admin-site/feature/component/rich-editor.html#tinymce
  */
 import editorImage from './components/EditorImage'

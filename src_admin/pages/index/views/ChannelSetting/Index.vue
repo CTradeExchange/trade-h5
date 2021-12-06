@@ -225,9 +225,10 @@
                             <el-form-item label='开户须知' prop='instructions'>
                                 <Tinymce
                                     ref='editor'
-                                    v-model='form.instructions'
+                                    v-model:value='form.instructions'
                                     :height='300'
                                     :toolbar="['bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat hr', 'fullscreen bullist numlist link table forecolor backcolor']"
+                                    :width='800'
                                 />
                             </el-form-item>
                             <el-form-item label='第三方登录'>
@@ -1021,6 +1022,7 @@ export default {
 <style lang="scss" scoped>
 .m-setting {
     height: calc(100vh);
+        overflow-y: scroll;
     .setting-header {
         padding: 20px;
         .btns {
