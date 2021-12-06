@@ -4,7 +4,7 @@
             <slot name='left'>
                 <!-- <AccountChange v-if='isDropdownMenu' /> -->
                 <a class='backIcon' href='javascript:void(0);' @click='back'>
-                    <i class='icon_icon_back1'></i>
+                    <i class='icon_icon_close_small'></i>
                 </a>
             </slot>
         </div>
