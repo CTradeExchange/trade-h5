@@ -9,7 +9,7 @@
 
 <script>
 /**
- * docs:
+ * docs: https://github.com/PanJiaChen/vue-element-admin/blob/master/src/components/Tinymce/index.vue
  * https://panjiachen.github.io/vue-element-admin-site/feature/component/rich-editor.html#tinymce
  */
 import editorImage from './components/EditorImage'
@@ -121,7 +121,8 @@ export default {
                 body_class: 'panel-body ',
                 object_resizing: false,
                 toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
-                menubar: this.menubar,
+                // menubar: this.menubar,
+                menubar: false,
                 plugins: plugins,
                 end_container_on_empty_block: true,
                 powerpaste_word_import: 'clean',
@@ -201,7 +202,8 @@ export default {
             window.tinymce.get(this.tinymceId).setContent(value)
         },
         getContent () {
-            window.tinymce.get(this.tinymceId).getContent()
+            // debugger
+            return window.tinymce.get(this.tinymceId).getContent()
         },
         imageSuccessCBK (arr) {
             arr.forEach(v => window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`))
