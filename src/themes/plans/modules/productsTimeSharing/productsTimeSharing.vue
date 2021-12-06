@@ -56,7 +56,6 @@ export default {
 
         const customerGroupId = computed(() => store.getters.customerGroupId)
         const symbolKeys = Object.entries(props.data.product || {}).map(([tradeType, item]) => {
-            debugger
             const list = item[customerGroupId.value] || []
             return list.map(symbolId => `${symbolId}_${tradeType}`)
         }).flat()
