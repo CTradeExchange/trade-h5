@@ -9,7 +9,7 @@
 <script>
 import { onActivated, computed, ref, toRefs } from 'vue'
 export default {
-    props: ['color', 'product'],
+    props: ['color', 'product', 'symbolKeys'],
     setup (props) {
         const color = props.color
         const svgData = computed(() => {
@@ -21,9 +21,14 @@ export default {
             }
 
             return {
-                '59_1': 'M0 17l3 9 4-7 3 1h4l3-2 4-3 3-7 4 2 3-4 4-1 3 11h4l3-3 4-5 3 3 4 1 3 2 4-6 3 4 4-7 3 1 4-5 3 1',
-                '56_1': 'M0 15l3 11 4-3 3 1 4-3h3l4-5 3-5 4-3 3-6 4-1 3 14 4 5 3-7 4-11 3 8 4 3 3 4 4-2 3 3 4-7 3 7 4-3 3-1',
-                '28_3': 'M0 22l3 4 4-2h7l3-2 4-3 3-7h4l3-4 4-3 3 5 4 4 3-2 4-7 3 2 4 1 3 1 4-1 3 1 4-6 3 2 4-4h3'
+
+                [props.symbolKeys[0]]: 'M0 17l3 9 4-7 3 1h4l3-2 4-3 3-7 4 2 3-4 4-1 3 11h4l3-3 4-5 3 3 4 1 3 2 4-6 3 4 4-7 3 1 4-5 3 1',
+                [props.symbolKeys[1]]: 'M0 15l3 11 4-3 3 1 4-3h3l4-5 3-5 4-3 3-6 4-1 3 14 4 5 3-7 4-11 3 8 4 3 3 4 4-2 3 3 4-7 3 7 4-3 3-1',
+                [props.symbolKeys[2]]: 'M0 22l3 4 4-2h7l3-2 4-3 3-7h4l3-4 4-3 3 5 4 4 3-2 4-7 3 2 4 1 3 1 4-1 3 1 4-6 3 2 4-4h3',
+                [props.symbolKeys[3]]: 'M0 17l3 9 4-7 3 1h4l3-2 4-3 3-7 4 2 3-4 4-1 3 11h4l3-3 4-5 3 3 4 1 3 2 4-6 3 4 4-7 3 1 4-5 3 1',
+                [props.symbolKeys[4]]: 'M0 15l3 11 4-3 3 1 4-3h3l4-5 3-5 4-3 3-6 4-1 3 14 4 5 3-7 4-11 3 8 4 3 3 4 4-2 3 3 4-7 3 7 4-3 3-1',
+                [props.symbolKeys[5]]: 'M0 22l3 4 4-2h7l3-2 4-3 3-7h4l3-4 4-3 3 5 4 4 3-2 4-7 3 2 4 1 3 1 4-1 3 1 4-6 3 2 4-4h3'
+
             }
         })
 

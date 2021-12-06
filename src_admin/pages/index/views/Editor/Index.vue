@@ -3,7 +3,7 @@
         <div class='left-board'>
             <div class='logo-wrapper'>
                 <div class='back' @click='back'>
-                    <i class='el-icon-arrow-left'></i>返回
+                    <i class='el-icon-arrow-left'></i>{{ $t('editor.back') }}
                 </div>
                 <!-- <div class="logo">交易H5定制平台</div> -->
             </div>
@@ -52,9 +52,9 @@
         <div class='center-board'>
             <div class='row-btns'>
                 <div class='tips'>
-                    页面：<strong> {{ title }}</strong>
+                    {{ $t("editor.page") }}：<strong> {{ title }}</strong>
                     &nbsp;&nbsp;
-                    语言: <strong> {{ lang }}</strong>
+                    {{ $t("editor.language") }}: <strong> {{ lang }}</strong>
                 </div>
                 <div class='left'>
                     <el-button
@@ -62,14 +62,14 @@
                         type='text'
                         @click='toH5PreviewAddress'
                     >
-                        H5预览地址
+                        {{ $t("editor.h5PreviewAddress") }}
                     </el-button>
                     <el-button
                         icon='el-icon-reading'
                         type='text'
                         @click='toH5Address'
                     >
-                        H5真实地址
+                        {{ $t("editor.h5RealAddress") }}
                     </el-button>
                 </div>
 
@@ -82,7 +82,7 @@
                         type='text'
                         @click='handleModifyPageConfig'
                     >
-                        保存配置
+                        {{ $t("editor.saveConfiguration") }}
                     </el-button>
                     <el-button
                         class='delete-btn'
@@ -90,14 +90,14 @@
                         type='text'
                         @click='empty'
                     >
-                        清空
+                        {{ $t("editor.empty") }}
                     </el-button>
                     <el-button
                         icon='el-icon-upload'
                         type='text'
                         @click='showPublish = true'
                     >
-                        发布线上
+                        {{ $t("editor.publishOnline") }}
                     </el-button>
                 </div>
             </div>
@@ -109,16 +109,16 @@
         </div>
         <RightPanel :page-conf='pageConf' />
         <ShowJson :show-code='showCode' />
-        <el-dialog v-model='showPublish' title='发布页面' width='600px'>
+        <el-dialog v-model='showPublish' :title="$t('editor.publishPage')" width='600px'>
             <el-form
                 label-position='left'
                 label-width='80'
                 :model='publishForm'
             >
-                <el-form-item label='发布版本'>
+                <el-form-item :label="$t('editor.releaseVersion')">
                     <el-input v-model='publishForm.releaseVersion' />
                 </el-form-item>
-                <el-form-item label='发布描述'>
+                <el-form-item :label="$t('editor.releaseDescription')">
                     <el-input
                         v-model='publishForm.releaseDescription'
                     />
@@ -126,14 +126,14 @@
             </el-form>
             <div slot='footer' class='dialog-footer'>
                 <el-button @click='showPublish = false'>
-                    取 消
+                    {{ $t("cancel") }}
                 </el-button>
                 <el-button
                     :loading='publishLoading'
                     type='primary'
                     @click='handlePublish'
                 >
-                    确 定
+                    {{ $t("sure") }}
                 </el-button>
             </div>
         </el-dialog>
@@ -149,7 +149,7 @@ import { zip, unzip, randomStr, getQueryString } from '@utils/index'
 import { deepClone } from '@utils/deepClone'
 import { mobileComponentsConfig } from '@admin/components/config'
 import previewRender from '@h5/wp_preview/preview'
-import * as pageConfig from './pageBaseConfig'
+import * as pageConfig from '@h5/wp_preview/pageBaseConfig'
 import html2canvas from 'html2canvas'
 import Mousetrap from 'mousetrap'
 import { forOwn } from 'lodash'
@@ -344,14 +344,14 @@ export default {
 
         const deleteComp = (ev) => {
             console.log(ev)
-            ElMessageBox.confirm('删除当前组件, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
+            ElMessageBox.confirm(this.$t('editor.tip2'), this.$t('editor.hint'), {
+                confirmButtonText: this.$t('editor.sure'),
+                cancelButtonText: this.$t('editor.cancel'),
                 type: 'warning'
             }).then(() => {
                 store.commit('editor/DELETE_ELEMENT', store.state.editor.activated)
                 ElMessage.success({
-                    message: '删除成功',
+                    message: this.$t('editor.deleteSuccess'),
                     type: 'success'
                 })
             })
@@ -400,7 +400,7 @@ export default {
                         item.data.tradeTypeBlock = Object.assign({}, tradeTypeBlock)
                         // if (item.data.code_ids_all) delete item.data.code_ids_all
                     }
-                    if (['selfSymbol', 'productsSwipe'].includes(item.tag)) {
+                    if (['selfSymbol', 'productsSwipe', 'productsTimeSharing'].includes(item.tag)) {
                         item.data.product = store.state.editor.tradeTypeSelfSymbol
                     }
                 })
@@ -422,7 +422,7 @@ export default {
                         resolve(true)
                         if (state.submitType === 0) {
                             ElMessage.success({
-                                message: '保存成功',
+                                message: this.$t('editor.saveSuccess'),
                                 type: 'success'
                             })
                         }
@@ -582,9 +582,9 @@ export default {
                         ElMessage.error(res.message)
                         return
                     }
-                    ElMessageBox.confirm(`${state.pageCode}页面发布成功`, {
-                        confirmButtonText: '查看发布记录',
-                        cancelButtonText: '关闭',
+                    ElMessageBox.confirm(`${state.pageCode}${this.$t('editor.saveSuccess')}`, {
+                        confirmButtonText: this.$t('editor.publishedSuccessfully'),
+                        cancelButtonText: this.$t('editor.close'),
                     }).then(_ => {
                         router.push({
                             name: 'PublishList',
@@ -609,7 +609,7 @@ export default {
         }
 
         const empty = () => {
-            ElMessageBox.confirm('确定要清空所有组件吗？', '提示', { type: 'warning' }).then(
+            ElMessageBox.confirm(this.$t('editor.tip3'), this.$t('editor.hint'), { type: 'warning' }).then(
                 () => {
                     store.commit('editor/RESET_ELEMENT', [])
                     ELEMENIINDEX = 0

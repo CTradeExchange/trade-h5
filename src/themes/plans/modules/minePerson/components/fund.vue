@@ -109,6 +109,7 @@ export default {
         font-size: rem(70px);
         margin-bottom: rem(40px);
         margin-top: rem(10px);
+        word-break: break-all;
     }
     .btns {
         display: flex;
