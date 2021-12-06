@@ -2,8 +2,8 @@
     <div v-if='isCompanyIdShow'>
         <swipe :data='data' />
         <productsTimeSharing />
-        <productsWithIcon />
-        <floatComp />
+        <!-- <productsWithIcon />
+        <floatComp /> -->
     </div>
 
     <div id='homeContent' ref='homeContent' class='home' :class='{ hasNav: $hasNav }'>
@@ -65,7 +65,7 @@ export default {
             pageModules.value = res
 
             // 找到行情模块的产品，并开始订阅
-            const productModule = res.find(el => el.tag === 'productsSwipe')
+            const productModule = res.find(el => ['productsSwipe', 'productsTimeSharing'].includes(el.tag))
             if (productModule) {
                 const symbolKeys = Object.entries(productModule.data.product || {}).map(([tradeType, item]) => {
                     const list = item[customerGroupId.value] || []
