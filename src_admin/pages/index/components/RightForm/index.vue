@@ -85,6 +85,7 @@
                 <el-form-item
                     v-else-if="config.type === 'Checkbox'"
                     :label='config.label'
+                    :rules='config.rules?config.rules:[]'
                 >
                     <el-checkbox-group
                         v-model='activeData[config.name]'
