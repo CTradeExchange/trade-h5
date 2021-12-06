@@ -355,7 +355,6 @@ export default {
         }
 
         onMounted(() => {
-            locale.value = state.activeLang;
             getPageList()
             getPageConfig()
         })
