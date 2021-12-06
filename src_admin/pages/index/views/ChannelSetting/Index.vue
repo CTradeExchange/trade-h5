@@ -18,7 +18,7 @@
                         type='primary'
                         @click='submit'
                     >
-                        保存
+                        {{$t('channelSetting.save')}}
                     </el-button>
 
                     <el-button
@@ -27,7 +27,7 @@
                         type='primary'
                         @click='getPageConfig'
                     >
-                        重置
+                        {{$t('channelSetting.reset')}}
                     </el-button>
                 </el-button-group>
             </el-col>
@@ -36,15 +36,15 @@
             <el-col class='btns' :span='24'>
                 <el-form ref='form' label-width='110px' :model='form' :rules='rules'>
                     <el-tabs v-model='optionName' type='border-card'>
-                        <el-tab-pane class='tab' label='渠道基础设置' name='first'>
+                        <el-tab-pane class='tab' :label="$t('channelSetting.basicSetting')" name='first'>
                             <el-form-item
-                                label='可注册区号'
+                                :label="$t('channelSetting.registerableCode')"
                                 prop='registrable'
                             >
                                 <el-select
                                     v-model='form.registrable'
                                     multiple
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                     value-key='id'
                                     @change='changeSupportArea'
                                 >
@@ -56,7 +56,7 @@
                                     />
                                 </el-select>
                                 <el-popover
-                                    content='表示前端注册时可选择的区号,不选择默认所有国家区号均可注册'
+                                    :content="$t('channelSetting.registerableCode')"
                                     placement='top-start'
                                     trigger='hover'
                                     :width='200'

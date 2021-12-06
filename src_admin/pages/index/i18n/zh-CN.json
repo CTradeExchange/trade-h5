@@ -75,6 +75,10 @@
         "tip3":"确定要清空所有组件吗？"
     },
     "channelSetting":{
-
+        "save":"保存",
+        "reset":"重置",
+        "basicSetting":"渠道基础设置",
+        "registerableCode":"可注册区号",
+        "tip1":"表示前端注册时可选择的区号,不选择默认所有国家区号均可注册"
     }
 }
