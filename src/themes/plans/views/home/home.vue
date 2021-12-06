@@ -9,7 +9,7 @@
     <div id='homeContent' ref='homeContent' class='home' :class='{ hasNav: $hasNav }'>
         <PageComp :data='pageModules' />
     </div>
-    <floatComp v-if='isCompanyIdShow' />
+    <!-- <floatComp v-if='isCompanyIdShow' /> -->
 </template>
 
 <script>

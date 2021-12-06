@@ -3,7 +3,7 @@
         <div class='left-board'>
             <div class='logo-wrapper'>
                 <div class='back' @click='back'>
-                    <i class='el-icon-arrow-left'></i>{{$t('editor.back')}}
+                    <i class='el-icon-arrow-left'></i>{{ $t('editor.back') }}
                 </div>
                 <!-- <div class="logo">交易H5定制平台</div> -->
             </div>
@@ -52,9 +52,9 @@
         <div class='center-board'>
             <div class='row-btns'>
                 <div class='tips'>
-                    {{$t("editor.page")}}：<strong> {{ title }}</strong>
+                    {{ $t("editor.page") }}：<strong> {{ title }}</strong>
                     &nbsp;&nbsp;
-                    {{$t("editor.language")}}: <strong> {{ lang }}</strong>
+                    {{ $t("editor.language") }}: <strong> {{ lang }}</strong>
                 </div>
                 <div class='left'>
                     <el-button
@@ -62,14 +62,14 @@
                         type='text'
                         @click='toH5PreviewAddress'
                     >
-                        {{$t("editor.h5PreviewAddress")}}
+                        {{ $t("editor.h5PreviewAddress") }}
                     </el-button>
                     <el-button
                         icon='el-icon-reading'
                         type='text'
                         @click='toH5Address'
                     >
-                        {{$t("editor.h5RealAddress")}}
+                        {{ $t("editor.h5RealAddress") }}
                     </el-button>
                 </div>
 
@@ -82,7 +82,7 @@
                         type='text'
                         @click='handleModifyPageConfig'
                     >
-                        {{$t("editor.saveConfiguration")}}
+                        {{ $t("editor.saveConfiguration") }}
                     </el-button>
                     <el-button
                         class='delete-btn'
@@ -90,14 +90,14 @@
                         type='text'
                         @click='empty'
                     >
-                        {{$t("editor.empty")}}
+                        {{ $t("editor.empty") }}
                     </el-button>
                     <el-button
                         icon='el-icon-upload'
                         type='text'
                         @click='showPublish = true'
                     >
-                        {{$t("editor.publishOnline")}}
+                        {{ $t("editor.publishOnline") }}
                     </el-button>
                 </div>
             </div>
@@ -126,14 +126,14 @@
             </el-form>
             <div slot='footer' class='dialog-footer'>
                 <el-button @click='showPublish = false'>
-                    {{$t("cancel")}}
+                    {{ $t("cancel") }}
                 </el-button>
                 <el-button
                     :loading='publishLoading'
                     type='primary'
                     @click='handlePublish'
                 >
-                    {{$t("sure")}}
+                    {{ $t("sure") }}
                 </el-button>
             </div>
         </el-dialog>

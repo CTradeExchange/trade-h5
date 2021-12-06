@@ -1,10 +1,36 @@
 <template>
     <div class='float-content'>
-        <a href='https://tradeswitcher.com/' target='_blank'>
-            <img alt='' src='../../../../assets/floatBtn.png' srcset='' />
+        <a v-if='data.href' class='link' href='javascript:;' @click='openUrl(data)'>
+            <img alt='' class='img' :src='data.src || placeholder' />
+        </a>
+        <a v-else class='link' target='_blank'>
+            <img alt='' :src='placeholder' srcset='' />
         </a>
     </div>
 </template>
+
+<script>
+const placeholder = require('./default.png')
+export default {
+    props: {
+        data: {
+            type: Object,
+            default: function () {
+                return {
+                    href: '',
+                    src: '',
+                    target: '',
+                }
+            }
+        },
+    },
+    setup (props) {
+        return {
+            placeholder
+        }
+    }
+}
+</script>
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
@@ -15,8 +41,12 @@
     width: rem(96px);
     height: rem(96px);
     right: rem(30px);
-    img{
-        width: 100%;
+    .link{
+        display: inline-block;
+        img{
+            width: 100%;
+        }
     }
+
 }
 </style>
