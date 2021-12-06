@@ -227,7 +227,7 @@
                                     ref='editor'
                                     v-model:value='form.instructions'
                                     :height='300'
-                                    :toolbar="['bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat hr', 'fullscreen bullist numlist link table forecolor backcolor']"
+                                    :toolbar="['bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat hr', 'fullscreen bullist numlist link table forecolor backcolor fontsizeselect']"
                                     :width='800'
                                 />
                             </el-form-item>
@@ -236,7 +236,7 @@
                                     <el-checkbox label='google'>
                                         Google
                                     </el-checkbox>
-                                    <el-checkbox label='Facebook'>
+                                    <el-checkbox label='facebook'>
                                         Facebook
                                     </el-checkbox>
                                     <el-checkbox label='twitter'>
