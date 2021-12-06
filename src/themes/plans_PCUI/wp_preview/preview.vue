@@ -151,17 +151,17 @@ export default {
         },
         // 某些页面的默认模块
         defaultPageComp () {
-            const urlParams = this.urlParams
-            if (urlParams?.page_code?.toLowerCase() === 'Home'.toLowerCase()) {
-                return require('../modules/fullBanner/fullBanner.vue').default
-            } else if (urlParams?.page_code?.toLowerCase() === 'PositionIndex'.toLowerCase()) {
-                return require('./components/placeholder/position.vue').default
-            } else if (urlParams?.page_code?.toLowerCase() === 'RegisterSuccess'.toLowerCase()) {
-                return require('./components/placeholder/registerSuccess.vue').default
-            } else if (urlParams?.page_code?.toLowerCase() === 'RegisterManul'.toLowerCase()) {
-                return require('./components/placeholder/registerManul.vue').default
-            }
-            return require('./components/placeholder/registerManul.vue').default
+            // const urlParams = this.urlParams
+            // if (urlParams?.page_code?.toLowerCase() === 'Home'.toLowerCase()) {
+            //     return require('../modules/fullBanner/fullBanner.vue').default
+            // } else if (urlParams?.page_code?.toLowerCase() === 'PositionIndex'.toLowerCase()) {
+            //     return require('./components/placeholder/position.vue').default
+            // } else if (urlParams?.page_code?.toLowerCase() === 'RegisterSuccess'.toLowerCase()) {
+            //     return require('./components/placeholder/registerSuccess.vue').default
+            // } else if (urlParams?.page_code?.toLowerCase() === 'RegisterManul'.toLowerCase()) {
+            //     return require('./components/placeholder/registerManul.vue').default
+            // }
+            // return require('./components/placeholder/registerManul.vue').default
         },
         // 首页全屏banner数据
         fullBannerData(){

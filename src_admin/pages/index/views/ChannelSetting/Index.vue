@@ -1,16 +1,16 @@
 <template>
     <div class='m-setting'>
         <el-row class='setting-header'>
-            <el-col :span='12'>
+            <!-- <el-col :span='12'>
                 <div class='toPages'>
                     <i class='el-icon-back'></i>
-                    <router-link :to="'/pages?id='+ pageId">
-                        {{$t('title')}}
-                    </router-link>
+                    <span @click='toPage'>
+                        页面列表
+                    </span>
                 </div>
-            </el-col>
+            </el-col> -->
 
-            <el-col class='btns' :span='12'>
+            <el-col class='btns' :span='24'>
                 <el-button-group>
                     <el-button
                         icon='el-icon-s-promotion'
@@ -355,7 +355,11 @@
                                             :value='asset.key'
                                         />
                                     </el-select>
+                                    <p class='notice'>
+                                        注：{{ Number(item.id) === 1 ? '合约全仓': '合约逐仓' }}的币种选择后禁止修改，否则会导致老客户交易失败！
+                                    </p>
                                 </el-form-item>
+                                <el-form-item label='' />
                             </template>
                             <template v-else>
                                 <el-transfer
@@ -1014,6 +1018,14 @@ export default {
             const uniqueKey = item.paymentCode + '_' + item.paymentType + '_' + item.merchantNo
             this.form.paymentIconList[uniqueKey][lang.val].alias = ''
             this.form.paymentIconList[uniqueKey][lang.val].imgUrl = ''
+        },
+        toPage () {
+            this.$router.push({
+                name: 'Pages',
+                query: {
+                    id: this.pageId
+                }
+            })
         }
     }
 }
@@ -1029,9 +1041,10 @@ export default {
             text-align: right;
         }
          .toPages{
-             line-height: 40px;
-             font-size: 14px;
-            a{
+            line-height: 40px;
+            font-size: 14px;
+            cursor: pointer;
+            span{
                 color: #477FD3;
             }
         }
@@ -1060,6 +1073,9 @@ export default {
             .el-transfer {
                 margin-bottom: 20px;
             }
+        }
+        .notice{
+            color: #F00;
         }
     }
     .label {

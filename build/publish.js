@@ -8,8 +8,9 @@ const newHtml = html.replace(/\/\*\s##wp_imsService\sstart##\s\*\/[\s\S]*wp_trad
 fs.writeFileSync(path.resolve(__dirname, '../build_folder/dist/index.html'), newHtml)
 
 ftp({
-    srcDir: '../build_folder/dist',
-    destDir: '/web2',
+    src: '../build_folder/dist', // 资源路径
+    dest: '/web2', // 服务端路径
+    exclude: ['../build_folder/dist/charting_library'], // 不上传
     connectOptions: {
         host: '172.31.0.100',
         port: 21,

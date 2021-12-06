@@ -292,9 +292,6 @@ export default {
             return this.$store.state.editor.tradeTypeBlockProduct
         }
     },
-    created () {
-        // console.log('---activeData-----', this.activeData)
-    },
     methods: {
         addRow (formConfig, data, config, activeData) {
             activeData.saved = true
@@ -312,7 +309,6 @@ export default {
             this.$store.commit('editor/CHANGE_INDEX_FROM_ROW', evt)
         },
         updateFormData (key, data, type) { // 此处提交版块产品
-            debugger
             if (key === 'product') {
                 const newSelfData = { ...this.tradeTypeSelfSymbol }
                 newSelfData[type] = data

@@ -10,24 +10,24 @@
             indicator-color='white'
             :show-indicators='false'
         >
-            <van-swipe-item>
+            <van-swipe-item v-for='(item,i ) in swiperList' :key='i'>
                 <div class='products-wrap'>
                     <div
-                        v-for='(item,index) in productList'
-                        :key='index'
+                        v-for='product in item'
+                        :key='product.symbolId'
                         class='product-item'
-                        @click='openProduct(item)'
+                        @click='openProduct(product)'
                     >
                         <p class='text1'>
-                            {{ item.symbolName }}
+                            {{ product.symbolName }}
                         </p>
-                        <p class='text2' :class='[item.cur_color]'>
-                            {{ item.cur_price }}
+                        <p class='text2' :class='[product.cur_color]'>
+                            {{ product.cur_price }}
                         </p>
-                        <p class='text3' :class='[item.upDownColor]'>
-                            {{ item.upDownWidth || '--' }}
+                        <p class='text3' :class='[product.upDownColor]'>
+                            {{ product.upDownWidth || '--' }}
                         </p>
-                        <timeSharingSvg :color='item.upDownColor' :product='item' />
+                        <timeSharingSvg :color='product.upDownColor' :product='product' :symbol-keys='symbolKeys' />
                     </div>
                 </div>
             </van-swipe-item>
@@ -39,7 +39,6 @@
 import { computed, unref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { QuoteSocket } from '@/plugins/socket/socket'
 import timeSharingSvg from './components/timeSharingSvg.vue'
 export default {
     components: { timeSharingSvg },
@@ -49,23 +48,36 @@ export default {
             default () { return {} }
         },
     },
-    setup () {
+    setup (props) {
         const store = useStore()
         const router = useRouter()
         // 产品map数据
-        const productMap = unref(computed(() => store.state._quote.productMap))
-        const symbolKeys = ['59_1', '56_1', '28_3'] // '33_2', '12_2'
+        const productMap = computed(() => store.state._quote.productMap)
+
+        const customerGroupId = computed(() => store.getters.customerGroupId)
+        const symbolKeys = Object.entries(props.data.product || {}).map(([tradeType, item]) => {
+            const list = item[customerGroupId.value] || []
+            return list.map(symbolId => `${symbolId}_${tradeType}`)
+        }).flat()
+        const products = symbolKeys.map(symbolKey => productMap.value[symbolKey]).filter(el => el)
+
         // 产品列表数据
         const productList = symbolKeys.map(key => productMap[key]).filter(elem => elem)
-        // QuoteSocket.add_subscribe({ moduleId: 'productsTimmeSharing', symbolKeys })
+        const swiperList = []
+        products.forEach((el, i) => { // 将产品分成3个一组，显示成swiper轮播
+            if (i % 3 === 0) swiperList.push([])
+            const lastItem = swiperList[swiperList.length - 1]
+            lastItem.push(el)
+        })
 
         const openProduct = (data) => {
-            // router.push({ name: 'Order', query: { symbolId: data.symbolId, direction: 'buy' } })
-            router.push(`/product?symbolId=${data.symbolId}&tradeType=${data.tradeType}`)
+            router.push({ name: 'Product', query: { symbolId: data.symbolId, tradeType: data.tradeType } })
         }
         return {
             productList,
-            openProduct
+            openProduct,
+            swiperList,
+            symbolKeys
         }
     }
 }
