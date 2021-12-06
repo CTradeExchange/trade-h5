@@ -5,7 +5,7 @@
                 <div class='toPages'>
                     <i class='el-icon-back'></i>
                     <router-link :to="'/pages?id='+ pageId">
-                        页面列表
+                        {{$t('title')}}
                     </router-link>
                 </div>
             </el-col>
