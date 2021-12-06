@@ -20,7 +20,7 @@
                     {{ $t('trade.transfer') }}
                 </button>
                 <div class='record-link' @click='goRecord'>
-                    <i class='icon_zijinmingxi1'></i>
+                    <i class='icon_zijinjilu'></i>
                     <span>{{ $t('trade.fundRecord') }}</span>
                 </div>
             </div>

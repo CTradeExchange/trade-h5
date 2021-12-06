@@ -193,6 +193,7 @@ export default {
     .tabs {
         margin-bottom: 38px;
         span {
+            padding-bottom: 6px;
             margin-right: 45px;
             font-size: 32px;
             font-weight: bold;

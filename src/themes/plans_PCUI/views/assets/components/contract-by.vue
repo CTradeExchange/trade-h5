@@ -22,7 +22,7 @@
                     {{ $t('trade.transfer') }}
                 </button>
                 <div class='record-link' @click='goRecord'>
-                    <i class='icon_zijinmingxi1'></i>
+                    <i class='icon_zijinjilu'></i>
                     <span>{{ $t('trade.fundRecord') }}</span>
                 </div>
             </div>
@@ -50,27 +50,27 @@
                         <span>{{ minus(scope.row.openVolume, scope.row.closeVolume) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.positionPrice')">
+                <el-table-column :label="$t('trade.positionPrice')" width='120'>
                     <template #default='scope'>
                         <span>{{ scope.row.openPrice }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.currentPrice')">
+                <el-table-column :label="$t('trade.currentPrice')" width='120'>
                     <template #default='scope'>
                         <span>{{ Number(scope.row.direction) === 1 ? currentProduct(scope.row)?.sell_price : currentProduct(scope.row)?.buy_price }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.prospectMandatory')">
+                <el-table-column :label="$t('trade.prospectMandatory')" width='120'>
                     <template #default='scope'>
                         <span>{{ scope.row.previewStopPrice || '--' }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.originalMargin')">
+                <el-table-column :label="$t('trade.originalMargin')" width='120'>
                     <template #default='scope'>
                         <span> {{ scope.row.occupyTheMargin || '--' }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.holdMargin')">
+                <el-table-column :label="$t('trade.holdMargin')" width='120'>
                     <template #default='scope'>
                         <span>{{ scope.row.maintenanceMargin || '--' }}</span>
                     </template>
@@ -85,7 +85,7 @@
                         <span>{{ parseFloat(scope.row.takeProfitDecimal) ? scope.row.takeProfitDecimal : '--' }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.openTime')" width='100'>
+                <el-table-column :label="$t('trade.openTime')" width='150'>
                     <template #default='scope'>
                         <span>{{ formatTime(scope.row.openTime) }}</span>
                     </template>

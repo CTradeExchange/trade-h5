@@ -271,7 +271,7 @@ export default {
             height: 25px;
             margin-left: 10px;
             font-size: 13px;
-            background: var(--primaryAssistColor);
+            background: var(--assistColor);
             border-radius: 2px;
             cursor: pointer;
         }

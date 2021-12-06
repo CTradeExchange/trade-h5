@@ -269,7 +269,7 @@
 	"trade": {
 		"name": "名称",
 		"newPrice": "最新价",
-		"changePrice": "涨跌价",
+		"changePrice": "涨跌额",
 		"changePercent": "涨跌幅",
 		"sale": "卖出",
 		"advance": "预付款",
