@@ -25,8 +25,11 @@ export default {
         },
     },
     setup (props) {
+        const h5Preview = process.env.VUE_APP_h5Preview
+        const position = h5Preview ? 'state' : 'fixed'
         return {
-            placeholder
+            placeholder,
+            position
         }
     }
 }
@@ -35,7 +38,7 @@ export default {
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
 .float-content{
-    position: fixed;
+    position: v-bind(position)!important;;
     bottom: rem(300px);
     z-index: 9999;
     width: rem(96px);
