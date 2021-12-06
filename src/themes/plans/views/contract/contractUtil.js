@@ -12,7 +12,7 @@ export const sortTimeList = (timeList, utcOffset) => {
 
         if (startTime + utcOffset >= 1440) { // 开始时间+时区后跨天
             const item = Object.assign({}, el, {
-                dayOfWeek: dayOfWeek === 7 ? 0 : dayOfWeek + 1,
+                dayOfWeek: dayOfWeek === 7 ? 1 : dayOfWeek + 1,
                 startTime: (startTime + utcOffset - 1440).toFixed(0) * 1,
                 endTime: (endTime + utcOffset - 1440).toFixed(0) * 1,
             })

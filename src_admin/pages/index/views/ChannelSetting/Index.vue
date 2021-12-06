@@ -355,7 +355,11 @@
                                             :value='asset.key'
                                         />
                                     </el-select>
+                                    <p class='notice'>
+                                        注：{{ Number(item.id) === 1 ? '合约全仓': '合约逐仓' }}的币种选择后禁止修改，否则会导致老客户交易失败！
+                                    </p>
                                 </el-form-item>
+                                <el-form-item label='' />
                             </template>
                             <template v-else>
                                 <el-transfer
@@ -1060,6 +1064,9 @@ export default {
             .el-transfer {
                 margin-bottom: 20px;
             }
+        }
+        .notice{
+            color: #F00;
         }
     }
     .label {

@@ -503,9 +503,7 @@ export default {
             }
 
             pushPage({
-                pageCode: this.pageData.page_code,
-                language: 'zh',
-                channelId: 1
+                pageCode: this.pageData.page_code
             })
 
                 .then(res => {
