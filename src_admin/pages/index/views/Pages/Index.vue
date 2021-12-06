@@ -129,7 +129,7 @@ import { pageList, modifyPageConfig, getViChannel } from '@index/Api/editor'
 import { deepClone } from '@utils/deepClone'
 import { h5PageList } from './h5PageList'
 import { useRouter, useRoute } from 'vue-router'
-import { onMounted, reactive, ref, toRefs, getCurrentInstance, watch } from 'vue'
+import { onMounted, reactive, ref, toRefs, getCurrentInstance, watch  } from 'vue'
 import { getQueryString } from '@admin/utils'
 import { useI18n } from 'vue-i18n'
 
@@ -216,7 +216,6 @@ export default {
                 
             }
         )
-
         // 获取页面配置
         const getPageConfig = () => {
             const that = this

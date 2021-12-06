@@ -221,6 +221,29 @@
                                     />
                                 </el-select>
                             </el-form-item>
+
+                            <el-form-item label='开户须知' prop='instructions'>
+                                <Tinymce
+                                    ref='editor'
+                                    v-model:value='form.instructions'
+                                    :height='300'
+                                    :toolbar="['bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat hr', 'fullscreen bullist numlist link table forecolor backcolor fontsizeselect']"
+                                    :width='800'
+                                />
+                            </el-form-item>
+                            <el-form-item label='第三方登录'>
+                                <el-checkbox-group v-model='form.thirdLogin'>
+                                    <el-checkbox label='google'>
+                                        Google
+                                    </el-checkbox>
+                                    <el-checkbox label='facebook'>
+                                        Facebook
+                                    </el-checkbox>
+                                    <el-checkbox label='twitter'>
+                                        Twitter
+                                    </el-checkbox>
+                                </el-checkbox-group>
+                            </el-form-item>
                             <el-form-item label='主题颜色' prop='themeColor'>
                                 <el-color-picker v-model='form.themeColor' :predefine='predefineColors' show-alpha />
                             </el-form-item>
@@ -239,6 +262,7 @@
                                     type='textarea'
                                 />
                             </el-form-item>
+
                             <!-- <el-form-item label='H5地址'>
                                 <el-input
                                     v-model='form.h5Address'
@@ -383,22 +407,25 @@
 import { getAccountGroupTradeAssetsList, queryCountryList, getViChannel, saveViChannel, queryPaymentArray } from '@index/Api/editor'
 import { lang } from '../../config/lang'
 import { getQueryString } from '@admin/utils'
-import { keyBy, forOwn, isPlainObject, cloneDeep, compact } from 'lodash'
+import { cloneDeep } from 'lodash'
 import { isEmpty } from '@/utils/util'
-
+import Tinymce from '@index/components/Tinymce'
 // components
 import amountSet from './components/amount-set.vue'
 
 export default {
     name: 'ChannelSetting',
     components: {
-        amountSet
+        amountSet,
+        Tinymce
     },
     data () {
         return {
             optionName: 'first', // 当前选项卡
             form: {
                 tradeTypeCurrencyList: [],
+                thirdLogin: [],
+                instructions: 'cvxcvxcv', // 开户须知
                 googleAnalytics: '',
                 h5Address: '',
                 h5PreviewAddress: '',
@@ -513,7 +540,7 @@ export default {
 
                 // 设置存款数据
                 this.$refs['amountSet'].setData(content)
-
+                this.$refs['editor'].setContent(content.instructions)
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                 that.form = Object.assign(that.form, content, { other })
 
@@ -714,6 +741,9 @@ export default {
                         // 表单验证通过
                         that.submitLoading = true
                         const _formData = cloneDeep(this.form)
+                        // debugger
+                        const aa = this.$refs['editor'].getContent()
+                        _formData.instructions = aa
                         if (_formData.registList.length > 0) {
                             _formData.registList.forEach(el => {
                                 if (isEmpty(el.registCountry)) {
@@ -1000,6 +1030,7 @@ export default {
 <style lang="scss" scoped>
 .m-setting {
     height: calc(100vh);
+        overflow-y: scroll;
     .setting-header {
         padding: 20px;
         .btns {

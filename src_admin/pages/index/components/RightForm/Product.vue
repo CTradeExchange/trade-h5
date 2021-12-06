@@ -47,6 +47,7 @@
                     :check-on-click-node='true'
                     class='tree'
                     :data='tradeTypeAccountGroupProduct'
+                    :filter-node-method='filterNode'
                     node-key='id'
                     :props='props'
                     show-checkbox
