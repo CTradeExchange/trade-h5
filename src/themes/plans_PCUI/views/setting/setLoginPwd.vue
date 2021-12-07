@@ -1,7 +1,12 @@
 <template>
     <centerViewDialog>
         <div class='pageWrap'>
-            <Top back left-icon='arrow-left' :menu='false' :right-action='false'>
+            <Top back left-icon='arrow-left' :right-action='false' show-center>
+                <template #left>
+                    <a class='topBack' href='javascript:;' @click='$router.back()'>
+                        <span class='icon_icon_close_big'></span>
+                    </a>
+                </template>
                 <template #right>
                 </template>
             </Top>
