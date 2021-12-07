@@ -7,12 +7,11 @@ export default {
             name: 'typeSupport',
             label: '注册方式',
             type: 'Checkbox',
-            default: 'mobile',
+            default: ['mobile'],
             options: [
                 { value: 'mobile', label: '手机号' },
                 { value: 'email', label: '邮箱' },
             ],
-            rules: [{ required: true, message: '注册方式必选' }]
         },
         {
             name: 'agreement_html',
