@@ -1,6 +1,6 @@
 <template>
-    <div class='textWrapper' :style='styleObject'>
-        {{ content || $t('modules.defaultContent') }}
+    <div class='textWrapper'>
+        {{ $t('modules.defaultContent') }}
         <slot></slot>
     </div>
 </template>
@@ -12,40 +12,39 @@ export default {
             type: Object,
             default: () => {
                 return {
-                    content: '',
-                    color: '',
-                    fontSize: '',
+                    typeSupport: [],
+
                 }
             }
         },
     },
     computed: {
-        styleObject () {
-            const data = this.data
-            return Object.assign({}, data.styleObj, {
-                color: data.color,
-                fontSize: data.fontSize,
-                textAlign: data.textAlign,
-            })
-        },
-        content () {
-            return this.matchVar(this.data.content)
-        }
+        // styleObject () {
+        //     const data = this.data
+        //     return Object.assign({}, data.styleObj, {
+        //         color: data.color,
+        //         fontSize: data.fontSize,
+        //         textAlign: data.textAlign,
+        //     })
+        // },
+        // content () {
+        //     return this.matchVar(this.data.content)
+        // }
     },
     methods: {
-        matchVar (content = '') {
-            const reg = /\{\{(\w+)\}\}/
-            const getters = this.$store.getters
-            if (content && content.trim().match(reg)) {
-                const res = content.trim().replace(reg, (match, f1) => {
-                    return getters[f1] ?? ''
-                })
-                console.log('matchVar', res)
-                return res
-            } else {
-                return content
-            }
-        }
+        // matchVar (content = '') {
+        //     const reg = /\{\{(\w+)\}\}/
+        //     const getters = this.$store.getters
+        //     if (content && content.trim().match(reg)) {
+        //         const res = content.trim().replace(reg, (match, f1) => {
+        //             return getters[f1] ?? ''
+        //         })
+        //         console.log('matchVar', res)
+        //         return res
+        //     } else {
+        //         return content
+        //     }
+        // }
     },
 }
 </script>

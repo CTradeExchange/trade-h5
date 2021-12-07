@@ -224,6 +224,7 @@ export default {
                             }
                             return
                         }
+
                         const componentsObj = {}
                         mobileComponents.forEach(comp => {
                             componentsObj[comp.tag] = comp
@@ -365,7 +366,7 @@ export default {
                 if (ev && ev.preventDefault) {
                     ev.preventDefault()
                 }
-
+                // debugger
                 const tradeTypeBlockCollect = store.state.editor.tradeTypeBlockCollect
                 const config = deepClone(store.state.editor.elementList.map(item => ({
                     id: item.id,

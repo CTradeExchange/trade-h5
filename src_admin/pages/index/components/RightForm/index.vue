@@ -80,12 +80,17 @@
                     v-else-if="config.type == 'Tinymce'"
                     :label='config.label'
                 >
-                    <Tinymce v-model='activeData[config.name]' :height='300' />
+                    <Tinymce
+                        v-model='activeData[config.name]'
+                        :height='300'
+                        :menubar='false'
+                        :toolbar="['bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat hr', 'fullscreen bullist numlist link table forecolor backcolor fontsizeselect']"
+                        :width='200'
+                    />
                 </el-form-item>
                 <el-form-item
                     v-else-if="config.type === 'Checkbox'"
                     :label='config.label'
-                    :rules='config.rules?config.rules:[]'
                 >
                     <el-checkbox-group
                         v-model='activeData[config.name]'
@@ -293,6 +298,9 @@ export default {
             return this.$store.state.editor.tradeTypeBlockProduct
         }
     },
+    created () {
+        // console.log('---activeData-----', this.activeData)
+    },
     methods: {
         addRow (formConfig, data, config, activeData) {
             activeData.saved = true
@@ -310,6 +318,7 @@ export default {
             this.$store.commit('editor/CHANGE_INDEX_FROM_ROW', evt)
         },
         updateFormData (key, data, type) { // 此处提交版块产品
+            debugger
             if (key === 'product') {
                 const newSelfData = { ...this.tradeTypeSelfSymbol }
                 newSelfData[type] = data
