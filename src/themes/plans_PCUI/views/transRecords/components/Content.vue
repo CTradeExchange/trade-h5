@@ -6,7 +6,6 @@
             :options='tableOptions'
             :pagination='pagination'
             :raw-response='rawResponse'
-            :style='{ height: "100%" }'
         />
     </div>
 </template>

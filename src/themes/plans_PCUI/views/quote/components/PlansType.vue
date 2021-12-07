@@ -54,7 +54,8 @@ const handleClick = (val) => {
             line-height: 22px;
             font-weight: 400;
             &.is-active{
-                color: var(--el-color-primary);
+                color: var(--primary);
+                font-weight: bold;
             }
         }
     }

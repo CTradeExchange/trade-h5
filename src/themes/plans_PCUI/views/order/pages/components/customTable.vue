@@ -4,6 +4,7 @@
             v-loading='loading'
             v-bind='tableAttrs'
             :data='props.data'
+            v-on='tableEvents'
         >
             <template v-for='(col, i) in props.options.columns' :key='i'>
                 <template v-if='getIf(col, "if")'>
@@ -96,8 +97,23 @@ const getIf = (row) => {
 
 // table属性
 const tableAttrs = computed(() => {
-    const temp = { ...props.options }
-    delete temp.columns
+    const temp = { }
+    Object.keys(props.options)
+        .forEach((key) => {
+            if (!key.includes('@') && key !== 'columns') {
+                temp[key] = props.options[key]
+            }
+        })
+    return temp
+})
+const tableEvents = computed(() => {
+    const temp = { }
+    Object.keys(props.options)
+        .forEach((key) => {
+            if (key.includes('@')) {
+                temp[key.substring(1)] = props.options[key]
+            }
+        })
     return temp
 })
 
@@ -127,11 +143,15 @@ const current = computed({
     flex-direction: column;
     align-items: flex-end;
     width: 100%;
+    height: 100%;
     .pagination{
         margin: 10px 0;
     }
     :deep{
         .el-table{
+            .el-table__body-wrapper{
+                scrollbar-width: thin;
+            }
             background-color: var(--contentColor);
             th.el-table__cell{
                 color: var(--minorColor);
@@ -144,6 +164,9 @@ const current = computed({
                 color: var(--color);
                 font-size: 14px;
                 padding: 8px 0;
+                .cell{
+                    white-space: nowrap;
+                }
             }
 
             .el-table__fixed-right::before,

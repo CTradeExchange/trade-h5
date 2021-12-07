@@ -264,7 +264,7 @@ const onSelect = val => {
                 background: var(--bgColor);
                 border-color: transparent;
                 &.is-active{
-                    border-color: var(--el-color-primary);
+                    border-color: var(--primary);
                 }
             }
         }
