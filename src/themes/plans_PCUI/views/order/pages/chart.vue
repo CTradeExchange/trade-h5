@@ -340,8 +340,7 @@ export default {
         })
 
         // 是否是自选
-        const isSelfSymbol = computed(() => store.state._user.selfSymbolList[tradeType]?.find(el => el.symbolId === parseInt(symbolId))
-        )
+        const isSelfSymbol = computed(() => store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId)))
 
         // 图表类型
         const klineTypeIndex = computed(() => {
