@@ -1,7 +1,7 @@
 <template>
     <centerViewDialog>
         <div class='page-wrap'>
-            <LayoutTop />
+            <LayoutTop icon="icon_icon_close_big"/>
             <div class='page-content'>
                 <p v-if='Number(type) === 1' class='head-text'>
                     {{ $t('trade.loanCurrency') }}
