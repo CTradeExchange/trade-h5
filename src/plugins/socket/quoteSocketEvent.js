@@ -116,6 +116,11 @@ class SocketEvent {
         })
     }
 
+    // 批量产品的K线获取
+    batchGetKlineData (list) {
+        this.send(14014, { data_list: list })
+    }
+
     // websocket连接成功
     onOpen () {
         if (this.subscribedList.length) this.send_subscribe(this.subscribedList)
@@ -170,6 +175,11 @@ class SocketEvent {
                 this.$store.commit('_quote/Update_dealList', dealData)
             })
         }
+    }
+
+    // 处理批量获取K线数据
+    ['cmd_id_14015'] (data) {
+        debugger
     }
 
     // 实时报价

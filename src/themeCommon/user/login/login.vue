@@ -8,7 +8,6 @@
         </header>
         <form class='loginForm'>
             <div v-if="loginAccount==='mobile'" class='field'>
-                <!-- <areaInput v-model.trim='loginName' v-model:zone='zone' clear placeholder='请输入手机号或邮箱' /> -->
                 <InputComp v-model.trim='loginName' clear :label="$t('login.loginNamePlaceholder')" />
             </div>
             <div v-else class='field'>
@@ -34,11 +33,22 @@
             </div>
         </form>
 
-        <div class='otherLogin'>
-            <LoginByGoogle />
+        <div class='three-way-login'>
+            <p class='title'>
+                {{ $t('login.otherLogin') }}
+            </p>
+            <div class='otherLogin'>
+                <LoginByGoogle />
+                <LoginByFacebook />
+                <LoginByTwitter />
+            <!-- <LoginByGoogle v-if="thirdLoginArr.includes('google')" />
             <span class='empty'></span>
-            <LoginByFacebook />
+            <LoginByFacebook v-if="thirdLoginArr.includes('facebook')" /> -->
+
+            <!-- twitter -->
+            </div>
         </div>
+
         <!-- <footer class='footer'>
             <a class='link' href='javascript:;'>
                 <i class='icon_icon_service'></i>
@@ -79,12 +89,13 @@
 
 <script>
 import Schema from 'async-validator'
-import areaInput from '@/components/form/areaInput'
 import InputComp from '@/components/form/input'
 import Vline from '@/components/vline'
 import CheckCode from '@/components/form/checkCode'
 import LoginByGoogle from '@/components/loginByGoogle/loginByGoogle'
 import LoginByFacebook from '@/components/loginByFacebook/loginByFacebook'
+import LoginByTwitter from '@/components/loginByTwitter/loginByTwitter'
+
 import Top from '@/components/top'
 import { getDevice, localGet, localSet, getArrayObj } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
@@ -101,13 +112,11 @@ import { useI18n } from 'vue-i18n'
 
 export default {
     components: {
-        timeline,
-        timelineItem,
         Vline,
         InputComp,
-        areaInput,
         LoginByGoogle,
         LoginByFacebook,
+        LoginByTwitter,
         CheckCode,
         Top,
     },
@@ -133,6 +142,8 @@ export default {
                 title: t(state.loginType === 'password' ? 'login.loginByCode' : 'login.loginByPwd')
             }
         })
+
+        const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo.thirdLoginArr)
 
         const changeLoginType = () => {
             const loginType = state.loginType
@@ -328,6 +339,7 @@ export default {
             loginPwdSet,
             noTip,
             loginSubmit,
+            thirdLoginArr
         }
     }
 }
@@ -446,16 +458,22 @@ export default {
         color: var(--minorColor);
     }
 }
-.otherLogin {
-    margin-top: rem(30px);
-    text-align: center;
-    .empty {
-        display: inline-block;
-        width: rem(50px);
-        height: rem(30px);
-        vertical-align: middle;
+.three-way-login{
+    margin-top: rem(200px);
+    .title{
+        text-align: center;
+        color: var(--placeholdColor);
+        margin-bottom: rem(20px);
+    }
+    .otherLogin {
+        text-align: center;
+        display: flex;
+        justify-content: space-evenly;
+        width: rem(470px);
+        margin: rem(30px) auto 0;
     }
 }
+
 .footer {
     position: absolute;
     bottom: 20px;

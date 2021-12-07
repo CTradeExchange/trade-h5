@@ -33,7 +33,7 @@
                 :title='$t("common.dark")'
             >
                 <template #right-icon>
-                    <van-switch v-model='themeVal' size='24px' @change='colorSelect' />
+                    <van-switch v-model='themeVal' :active-color='$style.success' size='24px' @change='colorSelect' />
                 </template>
             </van-cell>
         </van-cell-group>

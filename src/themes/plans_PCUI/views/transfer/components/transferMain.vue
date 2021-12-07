@@ -1,6 +1,6 @@
 <template>
     <div class='fullPageWrapper'>
-        <LayoutTop :back='true' :menu='false'>
+        <LayoutTop :back='true' :menu='false' icon="icon_icon_close_big">
             <template #right>
                 <a class='right-title' href='javascript:;' @click='toRecord'>
                     {{ $t('assets.transferRecord') }}
