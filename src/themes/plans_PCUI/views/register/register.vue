@@ -15,9 +15,9 @@
                 <van-tabs
                     v-model:active='openType'
                     class='openTypeTab'
-                    :color='style.color'
+                    :color='style.primary'
                     line-height='2px'
-                    line-width='20px'
+
                     :title-inactive-color='style.mutedColor'
                 >
                     <van-tab name='mobile' :title='$t("register.phoneNo")' />
@@ -70,7 +70,7 @@
                 </div>
             </div>
         </div>
-
+        <userLayoutFooter />
         <router-view />
 
         <Loading :show='loading' />
@@ -79,6 +79,7 @@
 
 <script>
 import topNav from '@planspc/layout/topNav'
+import userLayoutFooter from '@planspc/components/userLayoutFooter'
 import Schema from 'async-validator'
 // import Top from '@/components/top'
 import Loading from '@/components/loading'
@@ -105,6 +106,7 @@ export default {
         areaInputPc,
         CheckCode,
         Loading,
+        userLayoutFooter
         // CurrencyAction,
         // TradeTypeAction,
     },
@@ -368,6 +370,7 @@ export default {
     h5{
     font-size: 32px;
     color: var(--color);
+    font-family: Microsoft YaHei;
     }
     a{
         font-size:14px;
@@ -375,7 +378,7 @@ export default {
     }
 }
 .banner {
-    margin-top: 60px;
+    // margin-top: 60px;
     img {
         display: block;
         width: 100%;
@@ -409,22 +412,28 @@ export default {
          }
 
     }
+    .van-hairline--bottom{
+        &::after{
+            border-bottom: none;
+        }
+    }
     }
 
 }
 .openTypeTab {
     width: 40%;
-    margin: rem(60px) auto 0;
+
     :deep(.van-tabs__nav--line) {
         background-color: var(--contentColor);
     }
     :deep(.van-tab) {
         .van-tab__text {
+            font-size: 16px;
             color: var(--minorColor);
         }
         &.van-tab--active {
             .van-tab__text {
-                color: var(--color);
+                color: var(--primary);
             }
         }
     }
