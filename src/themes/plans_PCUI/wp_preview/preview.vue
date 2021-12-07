@@ -1,7 +1,15 @@
 <template>
     <div class='previewWrapper' :class="{pc:isPC}">
-        <div v-if="urlParams.page_code==='Home'" :class='{ active: fullBannerData.id === activated }'>
-            <FullBanner :data="fullBannerData.data" @click="moduleClick(fullBannerData, $event)"></FullBanner>
+        <div v-if="urlParams.page_code==='Home'" >
+            <div :class='{ active: fullBannerData.id === activated }'>
+                <FullBanner :data="fullBannerData.data" @click.stop="moduleClick(fullBannerData, $event)"></FullBanner>
+            </div>
+            <div :class='{ active: bannerProductsData.id === activated }'>
+                <BannerProducts :data="bannerProductsData.data" @click.stop="moduleClick(bannerProductsData, $event)"></BannerProducts>
+            </div>
+            <div :class='{ active: homeNoticeData.id === activated }'>
+                <HomeNotice :data="homeNoticeData.data" @click.stop="moduleClick(homeNoticeData, $event)"></HomeNotice>
+            </div>
         </div>
         <div class='phoneBody'>
             <!-- <component :is='defaultPageComp' v-if='defaultPageComp' /> -->
@@ -47,10 +55,14 @@ import draggable from 'vuedraggable'
 import { mapState, mapMutations } from 'vuex'
 import { defineAsyncComponent } from 'vue'
 import FullBanner from '../modules/fullBanner/fullBanner'
+import BannerProducts from '../modules/bannerProducts/bannerProducts'
+import HomeNotice from '../modules/homeNotice/homeNotice'
 import { getQuery } from '@utils/index'
 export default {
     components: {
         FullBanner,
+        HomeNotice,
+        BannerProducts,
         draggable,
     },
     data () {
@@ -175,6 +187,32 @@ export default {
             };
             const fullBanner = this.moduleList.find(el=>el.tag==='fullBanner')
             return fullBanner ? fullBanner : empty
+        },
+        // 首页全屏banner下的产品数据
+        bannerProductsData(){
+            const empty = {
+                data:{
+                    items:[{
+                        src:'',
+                        href:''
+                    }]
+                }
+            };
+            const module = this.moduleList.find(el=>el.tag==='bannerProducts')
+            return module ? module : empty
+        },
+        // 首页HomeNotice下的产品数据
+        homeNoticeData(){
+            const empty = {
+                data:{
+                    items:[{
+                        src:'',
+                        href:''
+                    }]
+                }
+            };
+            const module = this.moduleList.find(el=>el.tag==='homeNotice')
+            return module ? module : empty
         }
     },
     mounted () {

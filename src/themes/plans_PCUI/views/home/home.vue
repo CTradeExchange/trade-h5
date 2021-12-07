@@ -7,9 +7,9 @@
 
         <div class='relativeFloor'>
             <!-- 产品模块 -->
-            <product @update='setProductKeys' />
+            <BannerProducts v-if='bannerProductsData' :data='bannerProductsData.data' @update='setProductKeys' />
             <!-- 公共模块 -->
-            <notice />
+            <HomeNotice v-if='homeNoticeData' :data='homeNoticeData.data' />
             <!-- 内容模块 -->
             <div class='content-module'>
                 <!-- 快速注册 -->
@@ -72,6 +72,8 @@ import why from './components/why.vue'
 import seven from './components/seven.vue'
 import calendar from './components/calendar.vue'
 import FullBanner from '../../modules/fullBanner/fullBanner'
+import BannerProducts from '../../modules/bannerProducts/bannerProducts'
+import HomeNotice from '../../modules/homeNotice/homeNotice'
 
 import { reactive, toRefs, onActivated, onDeactivated, onMounted, onUnmounted, ref, computed } from 'vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
@@ -90,7 +92,9 @@ export default {
         guide,
         why,
         seven,
+        HomeNotice,
         FullBanner,
+        BannerProducts,
         calendar
     },
     setup () {
@@ -109,6 +113,8 @@ export default {
         })
 
         const fullBannerData = computed(() => state.pageModules.find(el => el.tag === 'fullBanner'))
+        const bannerProductsData = computed(() => state.pageModules.find(el => el.tag === 'bannerProducts'))
+        const homeNoticeData = computed(() => state.pageModules.find(el => el.tag === 'homeNotice'))
 
         // 切换信息流
         const switchFlow = (num) => {
@@ -160,6 +166,8 @@ export default {
         return {
             ...toRefs(state),
             fullBannerData,
+            homeNoticeData,
+            bannerProductsData,
             switchFlow,
             setProductKeys,
             setTradeKeys
