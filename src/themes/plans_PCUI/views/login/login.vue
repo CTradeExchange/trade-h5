@@ -237,6 +237,7 @@ export default {
         margin: 0 auto;
         width: 520px;
         padding: 60px;
+        border-radius: 10px;
         background: var(--contentColor);
     }
 }
@@ -244,12 +245,21 @@ export default {
     margin-top: 34px;
     .field{
         margin-top: 24px;
+        :deep(.pcInputBar){
+            border-radius: 4px;
+        }
+        :deep(.pcInput){
+            font-size: 16px;
+        }
     }
     .loginTitle{
         font-size: 32px;
+        font-weight: bold;
         line-height: 1;
     }
     .loginBtn{
+        height: 48px;
+        border-radius: 4px;
         font-size: 20px;
         margin-top: 40px;
     }
@@ -262,7 +272,7 @@ export default {
     }
 }
 .linkBar{
-    margin-top: 10px;
+    margin-top: 20px;
     display: flex;
     justify-content: space-between;
     a{
