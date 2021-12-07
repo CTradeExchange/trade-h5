@@ -18,7 +18,7 @@
                         type='primary'
                         @click='submit'
                     >
-                        {{$t('channelSetting.save')}}
+                        {{ $t('channelSetting.save') }}
                     </el-button>
 
                     <el-button
@@ -27,7 +27,7 @@
                         type='primary'
                         @click='getPageConfig'
                     >
-                        {{$t('channelSetting.reset')}}
+                        {{ $t('channelSetting.reset') }}
                     </el-button>
                 </el-button-group>
             </el-col>
@@ -222,7 +222,7 @@
                                 </el-select>
                             </el-form-item>
 
-                            <el-form-item label='开户须知' prop='instructions'>
+                            <!-- <el-form-item label='开户须知' prop='instructions'>
                                 <Tinymce
                                     ref='editor'
                                     v-model:value='form.instructions'
@@ -230,7 +230,7 @@
                                     :toolbar="['bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat hr', 'fullscreen bullist numlist link table forecolor backcolor fontsizeselect']"
                                     :width='800'
                                 />
-                            </el-form-item>
+                            </el-form-item> -->
                             <el-form-item label='第三方登录'>
                                 <el-checkbox-group v-model='form.thirdLogin'>
                                     <el-checkbox label='google'>
@@ -429,7 +429,7 @@ export default {
             form: {
                 tradeTypeCurrencyList: [],
                 thirdLogin: [],
-                instructions: 'cvxcvxcv', // 开户须知
+                // instructions: 'cvxcvxcv', // 开户须知
                 googleAnalytics: '',
                 h5Address: '',
                 h5PreviewAddress: '',
@@ -544,7 +544,7 @@ export default {
 
                 // 设置存款数据
                 this.$refs['amountSet'].setData(content)
-                this.$refs['editor'].setContent(content.instructions)
+                // this.$refs['editor'].setContent(content.instructions)
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                 that.form = Object.assign(that.form, content, { other })
 
@@ -746,8 +746,8 @@ export default {
                         that.submitLoading = true
                         const _formData = cloneDeep(this.form)
                         // debugger
-                        const aa = this.$refs['editor'].getContent()
-                        _formData.instructions = aa
+                        // const aa = this.$refs['editor'].getContent()
+                        // _formData.instructions = aa
                         if (_formData.registList.length > 0) {
                             _formData.registList.forEach(el => {
                                 if (isEmpty(el.registCountry)) {
