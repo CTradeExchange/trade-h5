@@ -158,6 +158,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { sessionSet } from '@/utils/util'
+import { useI18n } from 'vue-i18n'
 let mobileComponents = null
 const pageBaseConfig = pageConfig || {}
 let ELEMENIINDEX = 0
@@ -173,6 +174,7 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const store = useStore()
+        const { t } = useI18n({ useScope: 'global' })
         const { id, lang, page_code, title } = route.query
         const state = reactive({
             leftComponents: [
@@ -423,7 +425,7 @@ export default {
                         resolve(true)
                         if (state.submitType === 0) {
                             ElMessage.success({
-                                message: this.$t('editor.saveSuccess'),
+                                message: t('editor.saveSuccess'),
                                 type: 'success'
                             })
                         }
