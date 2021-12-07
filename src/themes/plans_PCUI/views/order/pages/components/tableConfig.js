@@ -60,7 +60,7 @@ export const getPendingColumns = tradeType => {
             bizType: row.bizType
         }
 
-        if (Number(row.tradeType) === 9) {
+        if ([5, 9].includes(Number(row.tradeType))) {
             return closeTradePboOrder({
                 orderId: row.id,
                 ...params,
