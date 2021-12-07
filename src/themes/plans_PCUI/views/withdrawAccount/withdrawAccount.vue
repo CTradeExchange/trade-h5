@@ -1,41 +1,54 @@
 <template>
     <centerViewDialog>
         <div class='page-wrap'>
-            <LayoutTop />
+            <LayoutTop>
+                <template #left>
+                    <a class='topBack' href='javascript:;' style='padding-left:0' @click='$router.back()'>
+                        <span class='icon_icon_close_big'></span>
+                    </a>
+                </template>
+            </LayoutTop>
             <div class='page-content'>
                 <p class='head-text'>
                     {{ $t('withdraw.outAccount') }}
                 </p>
-                <el-select class="currencyBox" v-model='accountId' placeholder='' @change='changeOutCurrency'>
+                <el-select v-model='accountId' class='currencyBox' placeholder='' @change='changeOutCurrency'>
                     <el-option
                         v-for='item in columns'
                         :key='item.accountId'
                         :label='item.currency'
                         :value='item.accountId'
                     />
-                </el-select> 
+                </el-select>
                 <p class='head-text'>
                     {{ $t('withdraw.inAccount') }}
                 </p>
-                <el-select style="padding-bottom: 20px;" class="currencyBox" v-model='inCurrency' placeholder='' @change='changeInCurrency'>
+                <el-select v-model='inCurrency' class='currencyBox' placeholder='' style='padding-bottom: 20px;' @change='changeInCurrency'>
                     <el-option
                         v-for='item in inCurrencyList'
                         :key='item.currency'
                         :label='item.currency'
                         :value='item.currency'
                     />
-                </el-select> 
+                </el-select>
                 <p v-if='withdrawMethodVis' class='head-text'>
                     {{ $t('withdraw.withdrawMethod') }}
                 </p>
-                <el-select style="padding-bottom: 20px;"  v-if='withdrawMethodVis' class="currencyBox" v-model='withdrawMethodText' placeholder='Select' @change='changeWithdrawMethod'>
+                <el-select
+                    v-if='withdrawMethodVis'
+                    v-model='withdrawMethodText'
+                    class='currencyBox'
+                    placeholder='Select'
+                    style='padding-bottom: 20px;'
+                    @change='changeWithdrawMethod'
+                >
                     <el-option
                         v-for='item in methodList'
                         :key='item.val'
                         :label='item.methonText'
                         :value='item.val'
                     />
-                </el-select> 
+                </el-select>
                 <div class='footerBtn'>
                     <van-button block :disabled='disabled' type='primary' @click='next'>
                         {{ $t('common.nextStep') }}
@@ -44,7 +57,6 @@
             </div>
         </div>
     </centerViewDialog>
-
 </template>
 
 <script>
@@ -119,8 +131,8 @@ export default {
         // }
         const changeOutCurrency = val => {
             state.accountId = val
-            columns.value.forEach(el=>{
-                if(el.accountId == val){
+            columns.value.forEach(el => {
+                if (el.accountId == val) {
                     state.outCurrency = el.currency
                 }
             })
@@ -149,8 +161,8 @@ export default {
         }
         const changeInCurrency = (val) => {
             state.inCurrency = val
-            state.inCurrencyList.forEach(el=>{
-                if(el.currency == val){
+            state.inCurrencyList.forEach(el => {
+                if (el.currency == val) {
                     state.currentTab = el.withdrawMethod
                 }
             })
@@ -184,8 +196,6 @@ export default {
             })
         }
 
-
-
         // 取款方式弹窗确定
         const onMethonConfirm = (option) => {
             state.currentTab = option.val
@@ -195,9 +205,9 @@ export default {
         // 取款方式确定
         const changeWithdrawMethod = (option) => {
             state.currentTab = option
-            state.methodList.forEach(item=>{
-                if(item.val==option){
-                    state.withdrawMethodText = item.methonText;
+            state.methodList.forEach(item => {
+                if (item.val == option) {
+                    state.withdrawMethodText = item.methonText
                 }
             })
         }
@@ -224,7 +234,7 @@ export default {
 
                 state.inCurrency = res.data.list[0].currency
                 state.currentTab = res.data.list[0].withdrawMethod
-                console.log("inCurrencyList",state.inCurrencyList)
+                console.log('inCurrencyList', state.inCurrencyList)
             } else {
                 if (columns.value.length === 0 || state.inCurrencyList.length === 0) {
                     state.disabled = true
