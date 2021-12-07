@@ -159,7 +159,6 @@ import { useStore } from 'vuex'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { sessionSet } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
-
 let mobileComponents = null
 const pageBaseConfig = pageConfig || {}
 let ELEMENIINDEX = 0
@@ -175,6 +174,7 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const store = useStore()
+        const { t } = useI18n({ useScope: 'global' })
         const { id, lang, page_code, title } = route.query
         const { t } = useI18n()
         const state = reactive({

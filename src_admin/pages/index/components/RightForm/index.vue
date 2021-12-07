@@ -78,6 +78,7 @@
                 </el-form-item>
                 <el-form-item
                     v-else-if="config.type == 'Tinymce'"
+                    class='tinymce-form-item'
                     :label='config.label'
                 >
                     <Tinymce
@@ -85,7 +86,7 @@
                         :height='300'
                         :menubar='false'
                         :toolbar="['bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat hr', 'fullscreen bullist numlist link table forecolor backcolor fontsizeselect']"
-                        :width='200'
+                        :width='320'
                     />
                 </el-form-item>
                 <el-form-item
@@ -368,6 +369,16 @@ export default {
         margin-bottom: 20px;
         padding: 10px;
         border-bottom: solid 1px #DDD;
+    }
+    .tinymce-form-item{
+        flex-direction: column;
+    align-items: flex-start;
+
+        :deep{
+            .el-form-item__label{
+                    text-align: left;
+            }
+        }
     }
 }
 

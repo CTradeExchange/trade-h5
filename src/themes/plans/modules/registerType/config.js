@@ -1,5 +1,7 @@
 export default {
     title: '注册类型',
+    tagIcon: 'el-icon-open',
+    // tagIcon: 'el-icon-basketball',
     tag: 'registerType',
     include: ['mine'], // 包含的页面code
     config: [
@@ -13,13 +15,5 @@ export default {
                 { value: 'email', label: '邮箱' },
             ],
         },
-        {
-            name: 'agreement_html',
-            label: '协议内容',
-            filterName: 'name',
-            include: ['agreement'],
-            default: '',
-            type: 'Tinymce'
-        }
     ]
 }

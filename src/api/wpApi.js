@@ -46,7 +46,7 @@ export function pageConfig (id) {
     }
     return request_wp(`/${id}.json?timestamp=${Date.now()}`).then(res => {
         const reg = /^(\{|\[)/
-        let content = res?._content ?? res
+        let content = res?._content || res || []
         content = reg.test(content) || typeof (content) === 'object' ? content : unzip(content)
         const data = typeof (content) === 'string' ? JSON.parse(content) : content
         if (id === 'SysSetting' && window['wp_SysSetting'] === '') window['wp_SysSetting'] = JSON.stringify(res)
