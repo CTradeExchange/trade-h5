@@ -1,7 +1,7 @@
 <template>
     <centerViewDialog>
         <div class='page-wrap'>
-            <LayoutTop />
+            <LayoutTop icon="icon_icon_close_small" />
             <div class='page-content'>
                 <p class='head-text'>
                     {{ $t('withdraw.outAccount') }}

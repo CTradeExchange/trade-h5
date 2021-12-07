@@ -1,6 +1,6 @@
 <template>
     <centerViewDialog>
-        <LayoutTop :back='true' :menu='false' title='' />
+        <LayoutTop :back='true' :menu='false' title='' icon="icon_icon_close_small" />
         <div class='page-wrap'>
             <Loading :show='loading' />
             <div class='list'>
