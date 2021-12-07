@@ -176,7 +176,6 @@ export default {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         const { id, lang, page_code, title } = route.query
-        const { t } = useI18n()
         const state = reactive({
             leftComponents: [
                 {
