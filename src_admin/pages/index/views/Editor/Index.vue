@@ -158,6 +158,8 @@ import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { sessionSet } from '@/utils/util'
+import { useI18n } from 'vue-i18n'
+
 let mobileComponents = null
 const pageBaseConfig = pageConfig || {}
 let ELEMENIINDEX = 0
@@ -174,6 +176,7 @@ export default {
         const route = useRoute()
         const store = useStore()
         const { id, lang, page_code, title } = route.query
+        const { t } = useI18n()
         const state = reactive({
             leftComponents: [
                 {
@@ -344,15 +347,14 @@ export default {
         }
 
         const deleteComp = (ev) => {
-            console.log(ev)
-            ElMessageBox.confirm(this.$t('editor.tip2'), this.$t('editor.hint'), {
-                confirmButtonText: this.$t('editor.sure'),
-                cancelButtonText: this.$t('editor.cancel'),
+            ElMessageBox.confirm(t('editor.tip2'), t('editor.hint'), {
+                confirmButtonText:t('editor.sure'),
+                cancelButtonText:t('editor.cancel'),
                 type: 'warning'
             }).then(() => {
                 store.commit('editor/DELETE_ELEMENT', store.state.editor.activated)
                 ElMessage.success({
-                    message: this.$t('editor.deleteSuccess'),
+                    message: t('editor.deleteSuccess'),
                     type: 'success'
                 })
             })
@@ -423,7 +425,7 @@ export default {
                         resolve(true)
                         if (state.submitType === 0) {
                             ElMessage.success({
-                                message: this.$t('editor.saveSuccess'),
+                                message: t('editor.saveSuccess'),
                                 type: 'success'
                             })
                         }
@@ -583,9 +585,9 @@ export default {
                         ElMessage.error(res.message)
                         return
                     }
-                    ElMessageBox.confirm(`${state.pageCode}${this.$t('editor.saveSuccess')}`, {
-                        confirmButtonText: this.$t('editor.publishedSuccessfully'),
-                        cancelButtonText: this.$t('editor.close'),
+                    ElMessageBox.confirm(`${state.pageCode}${t('editor.saveSuccess')}`, {
+                        confirmButtonText: t('editor.publishedSuccessfully'),
+                        cancelButtonText: t('editor.close'),
                     }).then(_ => {
                         router.push({
                             name: 'PublishList',
@@ -610,7 +612,8 @@ export default {
         }
 
         const empty = () => {
-            ElMessageBox.confirm(this.$t('editor.tip3'), this.$t('editor.hint'), { type: 'warning' }).then(
+            debugger
+            ElMessageBox.confirm(t('editor.tip3'), t('editor.hint'), { type: 'warning' }).then(
                 () => {
                     store.commit('editor/RESET_ELEMENT', [])
                     ELEMENIINDEX = 0
