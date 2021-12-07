@@ -1,7 +1,6 @@
 <template>
     <a class='loginByFacebook' @click='onLogin'>
         <i class='icon'></i>
-        Facebook
     </a>
 </template>
 
@@ -46,23 +45,19 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .loginByFacebook {
-    position: relative;
-    display: inline-block;
-    width: rem(220px);
-    height: rem(60px);
-    padding-left: rem(60px);
-    color: var(--white);
-    line-height: rem(60px);
-    background: var(--primary);
-    border-radius: rem(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(80px);
+    height: rem(80px);
+    border: 1px solid var(--lineColor);
+    border-radius: 50%;
     .icon {
-        position: absolute;
-        top: 1px;
-        left: 1px;
-        width: rem(56px);
-        height: rem(56px);
-        background: url(../../assets/facebook.svg) no-repeat center;
-        background-size: rem(56px);
+        display: inline-block;
+        width: rem(46px);
+        height: rem(46px);
+        background-image:  url('/images/facebook.png');
+        background-size: 100%;
     }
 }
 </style>

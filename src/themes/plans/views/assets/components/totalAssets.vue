@@ -270,6 +270,7 @@ export default {
         color: var(--primary);
         border: solid 1px var(--primary);
         color: var(--primary);
+        border-radius: rem(6px);
         background: none;
     }
 }

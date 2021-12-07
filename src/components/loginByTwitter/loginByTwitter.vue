@@ -6,15 +6,7 @@
 
 <script>
 import loadScript from '@/utils/loadScript'
-import { googleLoginVerify } from '@/api/user'
-import { log } from '@public/libs/adapter-latest'
 export default {
-    computed: {
-        companyId () {
-            debugger
-            return this.$store.state._base.wpCompanyInfo.companyId
-        }
-    },
     mounted () {
         this.renderBtn()
     },
@@ -38,7 +30,6 @@ export default {
                 console.log('Email: ' + profile.getEmail())
                 var id_token = googleUser.getAuthResponse().id_token
                 console.log('id_token: ' + id_token)
-                that.handleLogin(id_token)
             }, function (error) {
                 console.log(error)
             })
@@ -54,18 +45,7 @@ export default {
                 })
                 _this.attachSignin(document.getElementById('my-signin2'))
             })
-        },
-        handleLogin (id_token) {
-            googleLoginVerify({
-                id_token,
-                companyId: this.companyId
-            }).then(res => {
-                if (res.check()) {
-                    console.log('res', res)
-                }
-            })
         }
-
     }
 }
 </script>
@@ -84,7 +64,7 @@ export default {
         display: inline-block;
         width: rem(46px);
         height: rem(46px);
-        background-image:  url('/images/google.png');
+        background-image:  url('/images/twitter.png');
         background-size: 100%;
     }
 }

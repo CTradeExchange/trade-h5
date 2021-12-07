@@ -65,7 +65,8 @@
         "originPwd": "Input original password",
         "pwdSuccess": "Change password success",
         "modifyLoginPwd": "Change Password",
-        "getVerifyCode": "Get Code"
+        "getVerifyCode": "Get Code",
+        "otherLogin": "Or login via below"
     },
     "common": {
         "tip": "Tips",

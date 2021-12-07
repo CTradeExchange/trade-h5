@@ -33,13 +33,13 @@ export default {
     background: var(--bgColor);
     .minePageComp{
         min-height: 100%;
-        padding-bottom: rem(100px);
+        padding-bottom: rem(110px);
     }
     &.hasNav{
         padding-bottom: rem(100px);
     }
     .support {
-        margin: rem(-80px) auto rem(10px);
+        margin: rem(-70px) auto rem(10px);
         width: rem(200px);
         line-height: rem(32px);
         text-align: center;
