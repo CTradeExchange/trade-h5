@@ -34,11 +34,11 @@
             </div>
         </form>
 
-        <!-- <div class='otherLogin'>
+        <div class='otherLogin'>
             <LoginByGoogle />
             <span class='empty'></span>
             <LoginByFacebook />
-        </div> -->
+        </div>
         <!-- <footer class='footer'>
             <a class='link' href='javascript:;'>
                 <i class='icon_icon_service'></i>
