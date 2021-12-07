@@ -1,6 +1,11 @@
 <template>
     <div class='fullPageWrapper'>
         <LayoutTop :back='true' :menu='false'>
+            <template #left>
+                <a class='topBack' href='javascript:;' style='padding-left:0' @click='$router.back()'>
+                    <span class='icon_icon_close_big'></span>
+                </a>
+            </template>
             <template #right>
                 <a class='right-title' href='javascript:;' @click='toRecord'>
                     {{ $t('assets.transferRecord') }}
