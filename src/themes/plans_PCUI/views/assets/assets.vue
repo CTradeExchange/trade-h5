@@ -15,6 +15,10 @@
                             :class="{ 'active': Number(item.tradeType) === tradeType }"
                             @click='switchTradeType(Number(item.tradeType))'
                         >
+                            <i v-if='Number(item.tradeType) === 5' class='icon_xianhuojiaoyizhanghu'></i>
+                            <i v-if='Number(item.tradeType) === 3' class='icon_gangganjiaoyizhanghu'></i>
+                            <i v-if='Number(item.tradeType) === 1' class='icon_heyuequancangzhanghu'></i>
+                            <i v-if='Number(item.tradeType) === 2' class='icon_heyuezhucangzhanghu'></i>
                             <span>{{ $t('tradeType.' + item.tradeType) }}</span>
                         </li>
                     </ul>
@@ -162,7 +166,6 @@ export default {
         padding: 0 20px;
         li {
             display: flex;
-            justify-content: center;
             align-items: center;
             height: 56px;
             margin-bottom: 10px;
@@ -171,6 +174,11 @@ export default {
             background: var(--contentColor);
             border-radius: 10px;
             cursor: pointer;
+            i {
+                margin-left: 20px;
+                margin-right: 18px;
+                font-size: 18px;
+            }
             &:hover {
                 color: var(--primary);
             }
@@ -178,6 +186,9 @@ export default {
         .active {
             color: #fff;
             background: var(--primary);
+            i {
+                color: #fff;
+            }
             span {
                 color: #fff;
             }

@@ -6,7 +6,7 @@
 
 <script>
 import centerViewDialog from '@planspc/layout/centerViewDialog'
-import bindMobileComponent from '@/themeCommon/components/bindMobileComponent'
+import bindMobileComponent from './components/bindMobileComponent'
 
 export default {
     components: {

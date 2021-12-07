@@ -6,7 +6,7 @@
 
 <script>
 import centerViewDialog from '@planspc/layout/centerViewDialog'
-import bindEmailComponent from '@/themeCommon/components/bindEmailComponent'
+import bindEmailComponent from './components/bindEmailComponent'
 
 export default {
     components: {

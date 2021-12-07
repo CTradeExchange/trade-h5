@@ -48,11 +48,13 @@
                 </van-button>
             </div>
         </div>
+        <userLayoutFooter />
     </div>
 </template>
 
 <script>
 import topNav from '@planspc/layout/topNav'
+import userLayoutFooter from '@planspc/components/userLayoutFooter'
 import InputComp from '@/components/form/input'
 import { reactive, toRefs, computed } from 'vue'
 // import areaInput from '@/components/form/areaInput'
@@ -73,6 +75,7 @@ export default {
         topNav,
         InputComp,
         checkCode,
+        userLayoutFooter
         // uInput
     },
     setup (props) {
@@ -246,10 +249,12 @@ export default {
         justify-content: space-between;
         margin: 0 0 10px;
     }
+
     .pageTitle {
     margin-bottom: 0;
     font-size: 32px;
     font-weight: bold;
+    font-family: Microsoft YaHei;
     }
     .tabs-wrap {
         width: 40%;
@@ -291,6 +296,14 @@ export default {
     font-size: 16px;
 }
             }
+                .van-hairline--bottom{
+        &::after{
+            border-bottom: none;
+        }
+    }
+        }
+        &::placeholder{
+            color: var(--placeholdColor);
         }
         &:not(:first-of-type) {
             margin-top: 24px;
