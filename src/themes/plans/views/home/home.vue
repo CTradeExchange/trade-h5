@@ -1,10 +1,9 @@
 <template>
-    <div v-if='isCompanyIdShow'>
+    <!-- <div v-if='isCompanyIdShow'>
         <swipe :data='data' />
-        <productsTimeSharing />
-        <!-- <productsWithIcon />
-        <floatComp /> -->
-    </div>
+        <productsWithIcon />
+        <floatComp />
+    </div> -->
 
     <div id='homeContent' ref='homeContent' class='home' :class='{ hasNav: $hasNav }'>
         <PageComp :data='pageModules' />
@@ -18,7 +17,7 @@ import { onActivated, computed, ref, toRefs, reactive } from 'vue'
 import { useStore } from 'vuex'
 import floatComp from '@plans/modules/floatComp/floatComp.vue'
 import productsTimeSharing from '@plans/modules/productsTimeSharing/productsTimeSharing.vue'
-import productsWithIcon from '@plans/modules/productsWithIcon.vue'
+import productsWithIcon from '@plans/modules/productsWithIcon/productsWithIcon.vue'
 import swipe from '@plans/modules/swipe/swipe.vue'
 export default {
     name: 'Home',

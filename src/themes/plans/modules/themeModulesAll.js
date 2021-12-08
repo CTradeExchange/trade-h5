@@ -29,6 +29,7 @@ import productsTimeSharing from './productsTimeSharing/config.js'
 import floatComp from './floatComp/config.js'
 // import registerType from './registerType/config.js'
 // import serviceAgreement from './serviceAgreement/config.js'
+import productsWithIcon from './productsWithIcon/config.js'
 
 export const getThemeModules = async () => {
     return [
@@ -58,5 +59,6 @@ export const getThemeModules = async () => {
         floatComp,
         // registerType,
         // serviceAgreement,
+        productsWithIcon
     ]
 }

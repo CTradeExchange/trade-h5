@@ -25,10 +25,10 @@ export default [
         name: 'CommonSetting',
         title: '通用设置'
     },
-    {
-        name: 'Personal',
-        title: '个人资料'
-    },
+    // {
+    //     name: 'Personal',
+    //     title: '个人资料'
+    // },
     {
         name: 'Authentication',
         title: '身份认证'

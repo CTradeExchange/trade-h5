@@ -753,10 +753,9 @@ export function queryCustomerAssets (data) {
 }
 
 /* 谷歌登录token校验 */
-
 export function googleLoginVerify (data) {
     return request({
-        url: '/global/customer.app.CustomerThirdLoginGoogleService.verify',
+        url: '/third/login/customer.app.CustomerThirdLoginService.googleVerify',
         method: 'post',
         toastErr: false,
         headers: {
@@ -765,3 +764,30 @@ export function googleLoginVerify (data) {
         data
     })
 }
+
+/* 第三方登录 */
+export function thirdLogin (data) {
+    return request({
+        url: '/third/login/customer.app.CustomerThirdLoginService.login',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 第三方注册 */
+export function thirdRegist (data) {
+    return request({
+        url: '/third/login/customer.app.CustomerThirdLoginService.register',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+

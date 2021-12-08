@@ -346,15 +346,14 @@ export default {
         }
 
         const deleteComp = (ev) => {
-            console.log(ev)
-            ElMessageBox.confirm(this.$t('editor.tip2'), this.$t('editor.hint'), {
-                confirmButtonText: this.$t('editor.sure'),
-                cancelButtonText: this.$t('editor.cancel'),
+            ElMessageBox.confirm(t('editor.tip2'), t('editor.hint'), {
+                confirmButtonText:t('editor.sure'),
+                cancelButtonText:t('editor.cancel'),
                 type: 'warning'
             }).then(() => {
                 store.commit('editor/DELETE_ELEMENT', store.state.editor.activated)
                 ElMessage.success({
-                    message: this.$t('editor.deleteSuccess'),
+                    message: t('editor.deleteSuccess'),
                     type: 'success'
                 })
             })
@@ -403,7 +402,8 @@ export default {
                         item.data.tradeTypeBlock = Object.assign({}, tradeTypeBlock)
                         // if (item.data.code_ids_all) delete item.data.code_ids_all
                     }
-                    if (['selfSymbol', 'productsSwipe', 'productsTimeSharing'].includes(item.tag)) {
+                    
+                    if (['selfSymbol', 'productsSwipe', 'productsTimeSharing','productsWithIcon'].includes(item.tag)) {
                         item.data.product = store.state.editor.tradeTypeSelfSymbol
                     }
                 })
@@ -585,9 +585,9 @@ export default {
                         ElMessage.error(res.message)
                         return
                     }
-                    ElMessageBox.confirm(`${state.pageCode}${this.$t('editor.saveSuccess')}`, {
-                        confirmButtonText: this.$t('editor.publishedSuccessfully'),
-                        cancelButtonText: this.$t('editor.close'),
+                    ElMessageBox.confirm(`${state.pageCode}${t('editor.saveSuccess')}`, {
+                        confirmButtonText: t('editor.publishedSuccessfully'),
+                        cancelButtonText: t('editor.close'),
                     }).then(_ => {
                         router.push({
                             name: 'PublishList',
@@ -612,7 +612,7 @@ export default {
         }
 
         const empty = () => {
-            ElMessageBox.confirm(this.$t('editor.tip3'), this.$t('editor.hint'), { type: 'warning' }).then(
+            ElMessageBox.confirm(t('editor.tip3'), t('editor.hint'), { type: 'warning' }).then(
                 () => {
                     store.commit('editor/RESET_ELEMENT', [])
                     ELEMENIINDEX = 0
