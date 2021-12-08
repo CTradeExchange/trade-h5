@@ -6,20 +6,22 @@
             <p class='pageTitle'>
                 {{ $t('register.openAccount') }}
             </p>
-            <div class='banner'>
-                <img alt='' src='https://testcms.ixmiddle.com/docs/registerBanner.png' srcset='' />
+            <div v-if='registerBanner' class='banner'>
+                <img alt='' :src='registerBanner' srcset='' />
             </div>
-            <van-tabs
-                v-model:active='openType'
-                class='openTypeTab'
-                :color='style.color'
-                line-height='2px'
-                line-width='20px'
-                :title-inactive-color='style.mutedColor'
-            >
-                <van-tab name='mobile' :title='$t("register.phoneNo")' />
-                <van-tab name='email' :title='$t("register.email")' />
-            </van-tabs>
+            <div v-if='Array.isArray(registerTypes) && registerTypes.length>0'>
+                <van-tabs
+                    v-model:active='openType'
+                    class='openTypeTab'
+                    :color='style.color'
+                    line-height='2px'
+                    line-width='20px'
+                    :title-inactive-color='style.mutedColor'
+                >
+                    <van-tab v-if="registerTypes.indexOf('mobile')>-1" name='mobile' :title='$t("register.phoneNo")' />
+                    <van-tab v-if="registerTypes.indexOf('email')>-1" name='email' :title='$t("register.email")' />
+                </van-tabs>
+            </div>
 
             <form class='form'>
                 <!-- <CurrencyAction v-model='currency' class='cellRow' />
@@ -51,7 +53,7 @@
                 </div>
                 <div class='cell'>
                     <van-checkbox v-model='protocol' class='checkbox' shape='square'>
-                        {{ $t('register.protocol') }}
+                        <span v-html='instructions'></span>
                     </van-checkbox>
                 </div>
             </form>
@@ -85,9 +87,10 @@ import { useStore } from 'vuex'
 import { reactive, toRefs, computed, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
 import { Toast } from 'vant'
+import { unescape } from 'lodash'
 import RuleFn, { checkCustomerExistRule } from './rule'
 import { setQuoteService } from '@/plugins/socket/socket'
-import { pageConfig } from '@/api/wpApi'
+// import { pageConfig } from '@/api/wpApi'
 import { useI18n } from 'vue-i18n'
 import hooks from './hooks'
 
@@ -144,10 +147,33 @@ export default {
         })
         const countryList = computed(() => store.state.countryList)
         const style = computed(() => store.state.style)
+        // 注册类型
+        const registerTypes = computed(() => store.state._base.wpCompanyInfo?.registerTypes)
+        // 开户须知内容
+
+        const instructions = computed(() => {
+            const protocol = store.state._base.wpCompanyInfo?.instructions
+            return protocol ? unescape(protocol) : ''
+        })
+        // 注册页banner
+        const registerBanner = computed(() => store.state._base.wpCompanyInfo?.registerBanner)
         // 手机正则表达式
         const mobileReg = computed(() => getArrayObj(countryList.value, 'countryCode', state.countryZone).extend || ''
         )
-
+        // const showProtocol = (e) => {
+        //     e.preventDefault()
+        //     if (instructions) {
+        //         debugger
+        //         const protocolHtml = unescape(instructions.value)
+        //         Dialog.alert({
+        //             allowHtml: true,
+        //             title: '用户须知',
+        //             message: protocolHtml,
+        //         }).then(() => {
+        //         // on close
+        //         })
+        //     }
+        // }
         const registerSubmit = (params) => {
             state.loading = true
             register(params).finally(() => {
@@ -306,7 +332,11 @@ export default {
             verifyCodeSendHandler,
             style,
             countryList,
-            zoneSelect
+            zoneSelect,
+            registerTypes,
+            instructions,
+            registerBanner,
+        // showProtocol
         }
     }
 }
