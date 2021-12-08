@@ -1,6 +1,6 @@
 <template>
     <div v-if='product.symbolName' class='svg-wrap'>
-        <svg :height='height' :width='width' xmlns='http://www.w3.org/2000/svg'>
+        <svg :height='height' :width='width'>
             <polyline :points='points' :stroke="$style[product.upDownColor] || '#333'" stroke-width='1.5' style='fill: none;' />
         </svg>
         <!-- <svg fill='none' height='26' width='80' xmlns='http://www.w3.org/2000/svg'>

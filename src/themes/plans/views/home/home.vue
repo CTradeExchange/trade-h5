@@ -1,10 +1,9 @@
 <template>
-    <div v-if='isCompanyIdShow'>
+    <!-- <div v-if='isCompanyIdShow'>
         <swipe :data='data' />
-        <productsTimeSharing />
-        <!-- <productsWithIcon />
-        <floatComp /> -->
-    </div>
+        <productsWithIcon />
+        <floatComp />
+    </div> -->
 
     <div id='homeContent' ref='homeContent' class='home' :class='{ hasNav: $hasNav }'>
         <PageComp :data='pageModules' />

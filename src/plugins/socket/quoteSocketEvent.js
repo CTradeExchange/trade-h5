@@ -179,7 +179,7 @@ class SocketEvent {
 
     // 处理批量获取K线数据
     ['cmd_id_14015'] (data) {
-        debugger
+
     }
 
     // 实时报价
