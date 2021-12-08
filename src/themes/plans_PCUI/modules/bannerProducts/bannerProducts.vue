@@ -53,12 +53,6 @@ export default {
             return list.map(symbolId => `${symbolId}_${tradeType}`)
         }).flat()
         const products = symbolKeys.map(symbolKey => productMap[symbolKey]).filter(el => el).slice(0, 5)
-        // 产品symbolKey集合
-        const productKeys = ['27_1', '4_1', '7_1', '33_2', '12_2']
-        // 产品列表数据
-        const productList = productKeys.map(key => productMap[key]).filter(elem => elem)
-
-        console.log(props.data)
 
         // 跳转到下单页面
         const goOrder = (item) => {
@@ -71,11 +65,10 @@ export default {
             })
         }
 
-        context.emit('update', productKeys)
+        context.emit('update', symbolKeys)
 
         return {
             products,
-            productList,
             exampleImg,
             goOrder
         }

@@ -134,7 +134,7 @@ const config = {
         },
         proxy: {
             '/wp-json/wp': {
-                target: 'http://prewpadmin_7.cats-trade.com', // http://prewpadmin.cats-trade.com/
+                target: 'http://prewpadmin_9.cats-trade.com', // http://prewpadmin.cats-trade.com/
                 // changeOrigin: false,
                 disableHostCheck: true,
                 onProxyReq: function (proxyReq, req, res, options) { // 由于vue中使用了body-parser 导致http中的body被序列化两次，从而使得配置代理后后端无法获取body中的数据
@@ -176,7 +176,7 @@ const config = {
     chainWebpack: config => {
         // 移除 prefetch 插件
         config.plugins.delete('preload-index').delete('prefetch-index')
-        config.resolve.alias.set('vue-i18n','vue-i18n/dist/vue-i18n.cjs.js')
+        config.resolve.alias.set('vue-i18n', 'vue-i18n/dist/vue-i18n.cjs.js')
     },
     pages
 }

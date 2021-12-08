@@ -26,7 +26,7 @@ export default {
     },
     setup (props) {
         const h5Preview = process.env.VUE_APP_h5Preview
-        const position = h5Preview ? 'state' : 'fixed'
+        const position = h5Preview ? 'static' : 'fixed'
         return {
             placeholder,
             position
@@ -40,6 +40,7 @@ export default {
 .float-content{
     position: v-bind(position)!important;;
     bottom: rem(300px);
+    background: none!important;
     z-index: 9999;
     width: rem(96px);
     height: rem(96px);

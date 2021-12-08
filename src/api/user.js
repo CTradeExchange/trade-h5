@@ -756,7 +756,7 @@ export function queryCustomerAssets (data) {
 
 export function googleLoginVerify (data) {
     return request({
-        url: '/global/customer.app.CustomerThirdLoginGoogleService.verify',
+        url: '/third/login/verify/customer.app.CustomerThirdLoginGoogleService.verify',
         method: 'post',
         toastErr: false,
         headers: {
