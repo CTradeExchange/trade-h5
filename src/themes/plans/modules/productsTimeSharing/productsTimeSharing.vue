@@ -1,7 +1,7 @@
 <template>
     <div class='swipe-wrap' :style='data.styleObj'>
         <div v-if='h5Preview' class='default-wrap'>
-            <img alt='' src='./default.png' />
+            <img alt='' src='./productsTimeSharing.png' />
         </div>
         <van-swipe
             v-else

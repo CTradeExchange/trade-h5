@@ -76,6 +76,9 @@ export default {
         tradeTypeCollect: {},
         activeData: {
             type: Object,
+        },
+        currentIndex:{
+            default: 0
         }
     },
     data () {
@@ -119,6 +122,7 @@ export default {
             }
         },
         productIds () {
+            
             const _ids = []
             for (const key in this.activeData) {
                 if (this.activeData[key] && key !== 'tradeTypeCollect') {
@@ -393,11 +397,12 @@ export default {
             })
         },
         showDialog (type) {
+            
             // console.log(this.elementTag)
             this.activeTradeType = type
             this.tradeTypeAccountGroupProduct = this.tradeTypeProduct[type]
 
-            if (['selfSymbol', 'productsSwipe', 'productsTimeSharing', 'bannerProducts'].includes(this.elementTag)) {
+            if (['selfSymbol', 'productsSwipe', 'productsTimeSharing', 'bannerProducts', 'productsWithIcon'].includes(this.elementTag)) {
                 if (isPlainObject(this.selfSymbol?.[type])) {
                     const customerSelfSymbolIds = []
                     forOwn(this.selfSymbol[type], (value, key) => {

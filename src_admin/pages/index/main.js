@@ -18,7 +18,6 @@ app.config.globalProperties.$message = ElMessage
 app.use(ElementPlus).use(store).use(router).use(i18n)
 app.component(RightForm.name, RightForm)
 app.use(VueParticles)
-debugger
 const lang = localGet("lang") || getUrlLang()
 setI18nLanguage(i18n, lang)
 loadLocaleMessages(i18n, lang)

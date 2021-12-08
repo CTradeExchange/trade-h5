@@ -402,7 +402,8 @@ export default {
                         item.data.tradeTypeBlock = Object.assign({}, tradeTypeBlock)
                         // if (item.data.code_ids_all) delete item.data.code_ids_all
                     }
-                    if (['selfSymbol', 'productsSwipe', 'productsTimeSharing'].includes(item.tag)) {
+                    
+                    if (['selfSymbol', 'productsSwipe', 'productsTimeSharing','productsWithIcon'].includes(item.tag)) {
                         item.data.product = store.state.editor.tradeTypeSelfSymbol
                     }
                 })
