@@ -1,5 +1,5 @@
 <template>
-    <div class='mobileBar van-hairline--bottom'>
+    <div class='mobileBar'>
         <div class='zone' :class='{ disabled: disabled }'>
             <!-- <VueSelect v-model='zoneVal' :actions='countryList' :text="type === 'mobile' ? 'name': 'countryName'" value='name' @select='zoneOnSelect' /> -->
             <el-select v-model='zoneVal' placeholder='Select' @change='zoneOnSelect'>

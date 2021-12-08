@@ -1,13 +1,7 @@
 <template>
     <centerViewDialog>
         <div class='page-wrap'>
-            <LayoutTop>
-                <template #left>
-                    <a class='topBack' href='javascript:;' style='padding-left:0' @click='$router.back()'>
-                        <span class='icon_icon_close_big'></span>
-                    </a>
-                </template>
-            </LayoutTop>
+            <LayoutTop icon="icon_icon_close_big"/>
             <div class='page-content'>
                 <p v-if='Number(type) === 1' class='head-text'>
                     {{ $t('trade.loanCurrency') }}

@@ -249,7 +249,7 @@
 		"month": "月K",
 		"chartEmpty": "图表数据为空",
 		"studyLimitTips": "同时选择的指标数量不应超过{num}个",
-		"diffPrice": "涨跌价",
+		"diffPrice": "涨跌额",
 		"quoteChange": "涨跌幅",
 		"more": "更多",
 		"positionLine": "持仓线",

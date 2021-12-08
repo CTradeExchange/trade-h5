@@ -1,7 +1,7 @@
 <template>
     <centerViewDialog>
         <div class='fullPageWrapper record'>
-            <layoutTop>
+            <layoutTop icon="icon_icon_close_big">
                 <p>{{ $t("record.records") }}</p>
                 <template #right>
                     <dateFilter
