@@ -709,18 +709,16 @@ body {
 			font-size: 16px;
 			font-weight: normal;
 			color: var(--color) !important;
-            background-color: var(--primaryAssistColor) !important;
-			&:hover {
-				color: var(--primary) !important;
-			}
+            background-color: transparent !important;
 			&.active {
 				font-weight: bold;
+                background-color: var(--primaryAssistColor) !important;
 				color: var(--primary) !important;
 			}
 		}
         button {
             color: var(--color) !important;
-            background-color: var(--primaryAssistColor) !important;
+            background-color: transparent !important;
             .el-icon {
                 font-size: 16px !important;
             }

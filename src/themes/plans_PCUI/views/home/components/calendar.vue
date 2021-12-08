@@ -111,6 +111,7 @@ export default {
         const getCalendar = (timeAxis) => {
             state.loading = true
             state.timeAxis = timeAxis
+            state.extraWeekVisible = false
             canlendarListByDate({
                 timestamp: timeAxis
             }, state.lang, wpCompanyInfo.value.newsArea).then(data => {

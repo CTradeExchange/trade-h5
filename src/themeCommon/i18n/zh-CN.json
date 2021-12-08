@@ -112,6 +112,7 @@
         "submitSuccess": "提交成功",
         "RMB": "人民币",
         "dollar": "美元",
+        "submiting": "提交中...",
         "loading": "加载中...",
         "more": "上拉加载更多",
         "noneText": "暂无展示内容",

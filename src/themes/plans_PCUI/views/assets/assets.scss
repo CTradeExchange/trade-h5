@@ -82,7 +82,7 @@
             cursor: pointer;
             i {
                 margin-right: 6px;
-                font-size: 20px;
+                font-size: 16px;
             }
             span {
                 font-size: 14px;
@@ -131,10 +131,14 @@
 				font-size: 14px;
 				color: var(--color);
 				background: transparent;
+                cursor: pointer;
 				td {
 					border-bottom: 1px solid var(--lineColor);
 					background: transparent;
 				}
+                &:hover {
+                    background: var(--bgColor);
+                }
 			}
 		}
 		.el-table__body-wrapper {

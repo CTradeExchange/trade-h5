@@ -815,7 +815,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 
 .right-title {
@@ -844,7 +844,7 @@ export default {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            width: rem(280px);
+            width: rem(338px);
             height: rem(110px);
             margin-right: rem(20px);
             margin-bottom: rem(20px);
