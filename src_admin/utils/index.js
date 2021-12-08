@@ -41,7 +41,7 @@ export function getQuery (_search = location.search, character = '&', objChart =
 
 /* 获取URL参数 （兼容hash模式） */
 export function getQueryString (name, search) {
-    search = search || window.location.search.substr(1) || window.location.hash.split('?')[1]
+    search = search || window.location.search.substr(1) || window.location.hash.split('?')[1] || ''
     const reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
     const r = search.match(reg)
     if (r != null) return decodeURI(r[2]); return null

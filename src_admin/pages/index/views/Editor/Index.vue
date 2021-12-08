@@ -612,7 +612,6 @@ export default {
         }
 
         const empty = () => {
-            
             ElMessageBox.confirm(t('editor.tip3'), t('editor.hint'), { type: 'warning' }).then(
                 () => {
                     store.commit('editor/RESET_ELEMENT', [])
