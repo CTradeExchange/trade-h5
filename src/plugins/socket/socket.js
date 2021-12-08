@@ -34,7 +34,7 @@ export const setQuoteService = () => {
     QuoteSocket.ws.close()
     setTimeout(() => {
         QuoteSocket.ws.open()
-    }, 100)
+    }, 300)
 }
 
 export default {
