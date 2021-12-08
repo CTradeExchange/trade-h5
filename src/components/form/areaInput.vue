@@ -66,7 +66,7 @@ export default {
     },
     computed: {
         countryList () {
-            const countryList = this.$store.state.countryList
+            const countryList = this.$store.state.countryList || []
             const tempArr = []
             countryList.forEach(item => {
                 tempArr.push({

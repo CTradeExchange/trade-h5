@@ -222,15 +222,14 @@
                                 </el-select>
                             </el-form-item>
 
-                            <!-- <el-form-item label='开户须知' prop='instructions'>
+                            <el-form-item label='开户须知' prop='instructions'>
                                 <Tinymce
-                                    ref='editor'
-                                    v-model:value='form.instructions'
+                                    v-model='form.instructions'
                                     :height='300'
                                     :toolbar="['bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat hr', 'fullscreen bullist numlist link table forecolor backcolor fontsizeselect']"
                                     :width='800'
                                 />
-                            </el-form-item> -->
+                            </el-form-item>
                             <el-form-item label='第三方登录'>
                                 <el-checkbox-group v-model='form.thirdLogin'>
                                     <el-checkbox label='google'>
@@ -244,6 +243,27 @@
                                     </el-checkbox>
                                 </el-checkbox-group>
                             </el-form-item>
+                            <el-form-item label='开户类型'>
+                                <el-checkbox-group v-model='form.registerTypes'>
+                                    <el-checkbox label='mobile'>
+                                        手机号
+                                    </el-checkbox>
+                                    <el-checkbox label='email'>
+                                        邮箱
+                                    </el-checkbox>
+                                </el-checkbox-group>
+                            </el-form-item>
+                            <!-- <el-form-item class='registerBanner' label='注册页banner'>
+                                <div class='upload' @click='uploadRegitserBannerFile()'>
+                                    <div v-if='form.registerBanner' class='img-wrap'>
+                                        <img alt='' :src='form.registerBanner' />
+                                    </div>
+                                    <div v-else>
+                                        <i class='el-icon-plus'></i>
+                                        <p>点击上传图片</p>
+                                    </div>
+                                </div>
+                            </el-form-item> -->
                             <el-form-item label='主题颜色' prop='themeColor'>
                                 <el-color-picker v-model='form.themeColor' :predefine='predefineColors' show-alpha />
                             </el-form-item>
@@ -411,7 +431,7 @@
 import { getAccountGroupTradeAssetsList, queryCountryList, getViChannel, saveViChannel, queryPaymentArray } from '@index/Api/editor'
 import { lang } from '../../config/lang'
 import { getQueryString } from '@admin/utils'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, escape, unescape } from 'lodash'
 import { isEmpty } from '@/utils/util'
 import Tinymce from '@index/components/Tinymce'
 // components
@@ -429,7 +449,9 @@ export default {
             form: {
                 tradeTypeCurrencyList: [],
                 thirdLogin: [],
-                // instructions: 'cvxcvxcv', // 开户须知
+                registerTypes: [],
+                // registerBanner: '',
+                instructions: '', // 开户须知
                 googleAnalytics: '',
                 h5Address: '',
                 h5PreviewAddress: '',
@@ -539,11 +561,15 @@ export default {
 
                 let content = res.data.content ? JSON.parse(res.data.content) : {}
                 content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
+                if (content.instructions) {
+                    content.instructions = unescape(content.instructions)
+                }
                 that.filterLang = content.supportLanguage
                 console.log('渠道配置', content)
 
                 // 设置存款数据
                 this.$refs['amountSet'].setData(content)
+                // debugger
                 // this.$refs['editor'].setContent(content.instructions)
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                 that.form = Object.assign(that.form, content, { other })
@@ -745,6 +771,9 @@ export default {
                         // 表单验证通过
                         that.submitLoading = true
                         const _formData = cloneDeep(this.form)
+                        if (_formData.instructions) {
+                            _formData.instructions = escape(_formData.instructions)
+                        }
                         // debugger
                         // const aa = this.$refs['editor'].getContent()
                         // _formData.instructions = aa
@@ -989,6 +1018,29 @@ export default {
             this.tradeTypeAssets = []
             // this.form.tradeTypeCurrencyList = []
         },
+        // uploadRegitserBannerFile () {
+        //     try {
+        //         // 调用wp的方法上传图片
+        //         if (window.tb_show) {
+        //             window.tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true')
+        //             // 设置callBack
+        //             window.send_to_editor = (html) => {
+        //                 if (window.tb_remove) {
+        //                     window.tb_remove()
+        //                 }
+        //                 console.log(html)
+        //                 const _div = document.createElement('div')
+        //                 _div.innerHTML = html
+        //                 const imgUrl = _div.querySelector('img').src
+        //                 this.form.registerBanner = imgUrl
+        //             }
+        //         } else {
+        //             console.log('执行WordPress window.tb_show方法显示上传图片功能')
+        //         }
+        //     } catch (error) {
+        //         console.log(error)
+        //     }
+        // },
         uploadFile (item, lang) {
             try {
                 // 调用wp的方法上传图片
@@ -1122,6 +1174,39 @@ export default {
     .box-card{
         .tip{
             color: red;
+        }
+    }
+    .registerBanner{
+                .upload {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 180px;
+            height: 180px;
+            overflow: hidden;
+            text-align: center;
+            border: 1px dashed #D9D9D9;
+            border-radius: 6px;
+            cursor: pointer;
+            &:hover {
+                border: 1px dashed #477FD3;
+            }
+            .el-icon-plus {
+                display: block;
+                font-weight: bold;
+                font-size: 14px;
+                vertical-align: middle;
+            }
+            .img-wrap {
+                padding: 10px;
+                img {
+
+                }
+                .tip {
+                    line-height: 30px;
+                }
+            }
         }
     }
 }
