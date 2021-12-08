@@ -43,6 +43,7 @@
                             >
                                 <el-select
                                     v-model='form.registrable'
+                                    collapse-tags
                                     multiple
                                     placeholder='请输入'
                                     value-key='id'
