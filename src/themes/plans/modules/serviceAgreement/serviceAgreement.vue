@@ -1,22 +1,11 @@
 <template>
     <div class='textWrapper'>
-        <div v-if='Array.isArray(typeSupport) && typeSupport.length>0'>
-            <van-tabs
-                v-model:active='openType'
-                class='openTypeTab'
-                color='#477FD3'
-                line-height='2px'
-                line-width='20px'
-                title-inactive-color='#477FD3'
-            >
-                <van-tab v-for='(type,idx) in typeSupport' :key='idx' :name='type' :title='type==="mobile" ? $t("register.phoneNo"):$t("register.email")' />
-            </van-tabs>
-        </div>
-        <van-cell v-else>
+        <van-cell>
+            <!-- 使用 title 插槽来自定义标题 -->
             <template #title>
-                <span :style="{ color: '#f56c6c' }">
-                    请选择注册方式
-                </span>
+                <van-checkbox icon-size='14px'>
+                    继续开户表示您已确认已满18周岁且已细读并同意《客户隐私保护政策、投资风险披露及免责声明》
+                </van-checkbox>
             </template>
         </van-cell>
 
@@ -31,23 +20,25 @@ export default {
             type: Object,
             default: () => {
                 return {
-                    typeSupport: ['mobile'],
+                    agreement_html: '',
 
                 }
             }
         },
     },
-    data () {
-        return {
-            openType: 'mobile',
-        }
-    },
     computed: {
-        typeSupport () {
-            return this.data.typeSupport
-        }
+        // styleObject () {
+        //     const data = this.data
+        //     return Object.assign({}, data.styleObj, {
+        //         color: data.color,
+        //         fontSize: data.fontSize,
+        //         textAlign: data.textAlign,
+        //     })
+        // },
+        // content () {
+        //     return this.matchVar(this.data.content)
+        // }
     },
-
     methods: {
         // matchVar (content = '') {
         //     const reg = /\{\{(\w+)\}\}/

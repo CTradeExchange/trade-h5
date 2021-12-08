@@ -10,6 +10,9 @@ import text from './text/config.js'
 import quoteList from './quoteList/config.js'
 import selfSymbol from './selfSymbol/config.js'
 import fullBanner from './fullBanner/config.js'
+import bannerProducts from './bannerProducts/config.js'
+import homeNotice from './homeNotice/config.js'
+import homeRegister from './homeRegister/config.js'
 
 export const getThemeModules = async () => {
     return [
@@ -20,6 +23,9 @@ export const getThemeModules = async () => {
         quoteList,
         selfSymbol,
         fullBanner,
+        homeRegister,
+        homeNotice,
+        bannerProducts,
         text
     ]
 }

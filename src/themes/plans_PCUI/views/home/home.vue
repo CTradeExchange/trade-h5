@@ -7,13 +7,13 @@
 
         <div class='relativeFloor'>
             <!-- 产品模块 -->
-            <product @update='setProductKeys' />
+            <BannerProducts v-if='bannerProductsData' :data='bannerProductsData.data' @update='setProductKeys' />
             <!-- 公共模块 -->
-            <notice />
+            <HomeNotice v-if='homeNoticeData' :data='homeNoticeData.data' />
             <!-- 内容模块 -->
-            <div class='content-module'>
-                <!-- 快速注册 -->
-                <quick v-if='!$store.state._user.customerInfo' />
+            <div v-if='pageModules.length>0' class='content-module'>
+                <PageComp class='minePageComp' :data='pageModulesList' />
+
                 <!-- 广告模块 -->
                 <ad />
                 <!-- 交易模块 -->
@@ -59,10 +59,6 @@
 
 <script>
 // components
-import swiper from './components/swiper.vue'
-import product from './components/product.vue'
-import notice from './components/notice.vue'
-import quick from './components/quick.vue'
 import ad from './components/ad.vue'
 import trade from './components/trade.vue'
 import news from './components/news.vue'
@@ -72,17 +68,15 @@ import why from './components/why.vue'
 import seven from './components/seven.vue'
 import calendar from './components/calendar.vue'
 import FullBanner from '../../modules/fullBanner/fullBanner'
+import BannerProducts from '../../modules/bannerProducts/bannerProducts'
+import HomeNotice from '../../modules/homeNotice/homeNotice'
 
-import { reactive, toRefs, onActivated, onDeactivated, onMounted, onUnmounted, ref, computed } from 'vue'
+import { reactive, toRefs, onMounted, onUnmounted, computed } from 'vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useStore } from 'vuex'
 export default {
     name: 'Home',
     components: {
-        swiper,
-        product,
-        notice,
-        quick,
         ad,
         trade,
         news,
@@ -90,7 +84,9 @@ export default {
         guide,
         why,
         seven,
+        HomeNotice,
         FullBanner,
+        BannerProducts,
         calendar
     },
     setup () {
@@ -109,6 +105,9 @@ export default {
         })
 
         const fullBannerData = computed(() => state.pageModules.find(el => el.tag === 'fullBanner'))
+        const bannerProductsData = computed(() => state.pageModules.find(el => el.tag === 'bannerProducts'))
+        const homeNoticeData = computed(() => state.pageModules.find(el => el.tag === 'homeNotice'))
+        const pageModulesList = computed(() => state.pageModules.filter(el => ['homeNotice', 'bannerProducts', 'fullBanner'].indexOf(el.tag) === -1))
 
         // 切换信息流
         const switchFlow = (num) => {
@@ -159,7 +158,10 @@ export default {
 
         return {
             ...toRefs(state),
+            pageModulesList,
             fullBannerData,
+            homeNoticeData,
+            bannerProductsData,
             switchFlow,
             setProductKeys,
             setTradeKeys

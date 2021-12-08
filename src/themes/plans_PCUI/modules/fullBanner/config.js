@@ -2,6 +2,7 @@ import { common, img } from '@admin/components/baseConfig'
 export default {
     title: '全屏Banner',
     tag: 'fullBanner',
+    hidden: true, // 左侧模块列表不显示
     tagIcon: 'el-icon-film',
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     listHidden: true,

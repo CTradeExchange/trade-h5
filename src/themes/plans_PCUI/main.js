@@ -10,7 +10,7 @@ import { Dialog } from 'vant'
 import Socket, { MsgSocket } from '@/plugins/socket/socket'
 import FindCustomerInfo from '@planspc/plugins/findCustomerInfo'
 import Loading from '@/components/loading'
-// import PageComp from '@planspc/components/PageComp'
+import PageComp from '@planspc/components/PageComp'
 import LayoutTop from '@planspc/layout/centerViewTop'
 import { setRootVariable } from './colorVariables'
 import { setRouter, modifybaseURL } from '@/utils/request'
@@ -36,7 +36,7 @@ app.use(VantBase).use(I18n).use(store).use(router)
 app.use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })
 app.component('Loading', Loading)
 app.component('LayoutTop', LayoutTop)
-// app.component('PageComp', PageComp)
+app.component('PageComp', PageComp)
 app.mixin(MixinGlobal)
 
 app.config.errorHandler = (err, vm, info) => {

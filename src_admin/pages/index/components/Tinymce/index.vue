@@ -30,6 +30,10 @@ export default {
                 return 'vue-tinymce-' + +new Date() + ((Math.random() * 1000).toFixed(0) + '')
             }
         },
+        modelValue: {
+            type: String,
+            default: ''
+        },
         value: {
             type: String,
             default: ''
@@ -56,6 +60,7 @@ export default {
             default: 'auto'
         }
     },
+    emits: ['update:modelValue', 'input'],
     data () {
         return {
             hasChange: false,
@@ -135,14 +140,15 @@ export default {
                 link_title: false,
                 nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
                 init_instance_callback: editor => {
-                    if (_this.value) {
-                        editor.setContent(_this.value)
+                    if (_this.modelValue) {
+                        editor.setContent(_this.modelValue)
                     }
                     _this.hasInit = true
                     editor.on('NodeChange Change KeyUp SetContent', () => {
                         // debugger
                         this.hasChange = true
                         this.$emit('input', editor.getContent())
+                        this.$emit('update:modelValue', editor.getContent())
                     })
                 },
                 setup (editor) {
@@ -217,6 +223,16 @@ export default {
 .tinymce-container {
     position: relative;
     line-height: normal;
+    :deep{
+        .mce-toolbar{
+            .mce-container{
+                &>div{
+                        white-space: normal;
+                }
+            }
+        }
+    }
+
 }
 .tinymce-container {
     :deep(.mce-fullscreen) {

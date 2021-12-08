@@ -132,6 +132,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { onMounted, reactive, ref, toRefs, getCurrentInstance, watch  } from 'vue'
 import { getQueryString } from '@admin/utils'
 import { useI18n } from 'vue-i18n'
+import I18n, { setI18nLanguage, loadLocaleMessages } from '../../i18n/i18n.js'
 
 export default {
     beforeRouteEnter (to, from, next) {
@@ -212,8 +213,8 @@ export default {
                         language: state.activeLang
                     }
                 })
-                locale.value = state.activeLang;
-                
+                setI18nLanguage(I18n, state.activeLang)
+                loadLocaleMessages(I18n, state.activeLang)
             }
         )
         // 获取页面配置
