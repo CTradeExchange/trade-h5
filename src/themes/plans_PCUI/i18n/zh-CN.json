@@ -635,7 +635,8 @@
         "upDownWidth": "涨跌幅",
         "highPrice": "最高价",
         "lowPrice": "最低价",
-        "allTransaction": "所有成交记录"
+        "allTransaction": "所有成交记录",
+        "positionAmount": "持仓量"
 	},
 	"contract": {
 		"advance": "预付款",

@@ -106,12 +106,12 @@
 		&::before {
 			background: none;
 		}
-		.el-table__fixed-right::before {
-			background: none;
-		}
-		.el-table__cell.is-right {
-			background: var(--contentColor) !important;
-		}
+        .el-table__fixed-right::before {
+            background: none;
+        }
+        .el-table__cell.is-right {
+            background: var(--contentColor) !important;
+        }
 		thead {
 			tr {
 				height: 50px;
@@ -131,14 +131,13 @@
 				font-size: 14px;
 				color: var(--color);
 				background: transparent;
-                cursor: pointer;
+                // &:hover {
+                //     background: var(--bgColor);
+                // }
 				td {
 					border-bottom: 1px solid var(--lineColor);
 					background: transparent;
 				}
-                &:hover {
-                    background: var(--bgColor);
-                }
 			}
 		}
 		.el-table__body-wrapper {
