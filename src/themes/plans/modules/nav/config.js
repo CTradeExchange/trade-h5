@@ -18,7 +18,7 @@ export default {
                     label: '图片地址',
                     type: 'File',
                     default: '/wp-content/uploads/cats_business/nav_home.png',
-                    tips: '建议尺寸(px): 80*80'
+                    tips: '建议尺寸(px): 130*130'
                 },
 
                 {

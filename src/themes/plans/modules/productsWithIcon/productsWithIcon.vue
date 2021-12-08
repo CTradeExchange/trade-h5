@@ -1,8 +1,12 @@
 <template>
     <div class='product-wrap'>
-        <div v-for='(item, index) in productList' :key='index' class='product' @click='openProduct(item)'>
+        <div v-if='data.saved === false' class='default'>
+            <img alt='' :src="require('./productsWithIcon.png')" />
+        </div>
+
+        <div v-for='(item, index) in productList' v-else :key='index' class='product' @click='openProduct(item)'>
             <i class='icon'>
-                <img alt='' :src='"/images/product/" + item.symbolCode + ".png?5325"' srcset='' />
+                <img alt='' :src='"/images/product/" + item.symbolCode + ".png"' srcset='' />
             </i>
             <div class='symbol'>
                 <p class='symbol-name'>
@@ -30,7 +34,20 @@ import { computed, unref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 export default {
+    props: {
+        data: {
+            type: Object,
+            default: function () {
+                return {
+                    href: '',
+                    src: '',
+                    target: ''
+                }
+            }
+        },
+    },
     setup () {
+        const h5Preview = process.env.VUE_APP_h5Preview
         const store = useStore()
         const router = useRouter()
         const symbolKeys = ['59_1', '56_1', '193_1', '28_3', '191_1']
@@ -38,7 +55,7 @@ export default {
         const productMap = unref(computed(() => store.state._quote.productMap))
         const productList = symbolKeys.map(key => productMap[key]).filter(elem => elem)
 
-        QuoteSocket.add_subscribe({ moduleId: 'productsWithIcon', symbolKeys })
+        if (!h5Preview) { QuoteSocket.add_subscribe({ moduleId: 'productsWithIcon', symbolKeys }) }
 
         const openProduct = (data) => {
             // router.push({ name: 'Order', query: { symbolId: data.symbolId, direction: 'buy' } })
@@ -58,6 +75,12 @@ export default {
 .product-wrap{
     background: var(--contentColor);
     padding: rem(43px) rem(50px);
+    .default{
+        img{
+            width: 100%;
+        }
+
+    }
     .product{
         margin-bottom: rem(67px);
         display: flex;

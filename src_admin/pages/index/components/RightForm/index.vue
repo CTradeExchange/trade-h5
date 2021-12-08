@@ -1,9 +1,11 @@
 <template>
+{{elementConfig}}--{{activeData}}
     <div class='rightForm'>
         <div
             v-for='(config, index) in elementConfig'
             :key='config.type + config.name + index'
         >
+        
             <template
                 v-if='
                     !config.hidden ||
@@ -150,6 +152,7 @@
                     :element-tag='elementTag'
                     :self-symbol='tradeTypeSelfSymbol'
                     :trade-type-collect='tradeTypeCollect'
+                    :current-index='index'
                     @formChange='
                         (formData,type) => {
                             updateFormData(config.name, formData,type);
@@ -305,9 +308,11 @@ export default {
     methods: {
         addRow (formConfig, data, config, activeData) {
             activeData.saved = true
+            const currentIndex = data.length
+            data.currentIndex = currentIndex
             this.$store.commit('editor/ADD_FROM_ROW', {
-                formConfig: formConfig,
-                data: data
+                formConfig,
+                data
             })
         },
         deleteRow (formConfig, data, index) {

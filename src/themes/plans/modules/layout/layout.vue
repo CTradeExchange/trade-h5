@@ -24,10 +24,8 @@
 </template>
 
 <script>
-// import ImgComp from '../img/img.vue'
 export default {
     components: {
-        // ImgComp,
     },
     props: {
         data: {
@@ -53,20 +51,7 @@ export default {
         saved () {
             return this.data.saved
         }
-    },
-    watch: {
-        'data.items': {
-            handler (newVal) {
-                console.log('aaaaaaaaaaaaaa', newVal)
-                if (newVal.accountType) {
-                    // newVal.saved = true
-                    // this.props.data.saved = true
-                    // console.log('aaaaaaaaaaaaaa', newVal)
-                }
-            },
-            deep: true,
-        }
-    },
+    }
 
 }
 </script>

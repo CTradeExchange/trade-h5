@@ -17,7 +17,7 @@ import { onActivated, computed, ref, toRefs, reactive } from 'vue'
 import { useStore } from 'vuex'
 import floatComp from '@plans/modules/floatComp/floatComp.vue'
 import productsTimeSharing from '@plans/modules/productsTimeSharing/productsTimeSharing.vue'
-import productsWithIcon from '@plans/modules/productsWithIcon.vue'
+import productsWithIcon from '@plans/modules/productsWithIcon/productsWithIcon.vue'
 import swipe from '@plans/modules/swipe/swipe.vue'
 export default {
     name: 'Home',

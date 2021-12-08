@@ -10,7 +10,7 @@
 </template>
 
 <script>
-const placeholder = require('./default.png')
+const placeholder = require('./floatComp.png')
 export default {
     props: {
         data: {
