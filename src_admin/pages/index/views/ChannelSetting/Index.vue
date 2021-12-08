@@ -40,6 +40,13 @@
                             <el-form-item
                                 :label="$t('channelSetting.registerableCode')"
                                 prop='registrable'
+                                :rules = "[
+                                    {
+                                        required: true,
+                                        message: $t('channelSetting.error4'),
+                                        trigger: 'blur',
+                                    }
+                                ]"
                             >
                                 <el-select
                                     v-model='form.registrable'
@@ -56,7 +63,7 @@
                                     />
                                 </el-select>
                                 <el-popover
-                                    :content="$t('channelSetting.registerableCode')"
+                                    :content="$t('channelSetting.tip1')"
                                     placement='top-start'
                                     trigger='hover'
                                     :width='200'
@@ -67,12 +74,19 @@
                                 </el-popover>
                             </el-form-item>
                             <el-form-item
-                                label='默认注册区号'
+                                :label="$t('channelSetting.defaultAreaCode')"
                                 prop='defaultZone'
+                                :rules = "[
+                                    {
+                                        required: true,
+                                        message: $t('channelSetting.error5'),
+                                        trigger: 'blur',
+                                    }
+                                ]"
                             >
                                 <el-select
                                     v-model='form.defaultZone'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                     value-key='country_code'
                                 >
                                     <el-option
@@ -87,8 +101,15 @@
                             <el-form-item
                                 v-for='(item,index) in form.registList'
                                 :key='item.id'
-                                :label='index === 0 ? "注册国家" : ""'
+                                :label='index === 0 ? $t("channelSetting.countryRegistration") : ""'
                                 prop='registList'
+                                :rules="[
+                                    {
+                                        required: true,
+                                        message: $t('channelSetting.error3'),
+                                        trigger: 'blur',
+                                    }
+                                ]"
                             >
                                 <el-row>
                                     <el-col :span='6'>
@@ -97,7 +118,7 @@
                                             clearable
                                             :disabled='form.registList[index].registCountry?.isOther'
                                             filterable
-                                            placeholder='请选择国家'
+                                            :placeholder="$t('channelSetting.selectCountry')"
                                             value-key='id'
                                             @focus='countryChange'
                                         >
@@ -112,12 +133,12 @@
                                     </el-col>
                                     <el-col :span='7'>
                                         <label class='label' for=''>
-                                            客户组
+                                            {{$t('channelSetting.customerGroup')}}
                                         </label>
                                         <el-select
                                             v-model='form.registList[index].customerGroupId'
                                             clearable
-                                            placeholder='请选择客户组'
+                                            :placeholder="$t('channelSetting.selectCustomerGroup')"
                                             @change='customerChange(index)'
                                         >
                                             <el-option
@@ -129,7 +150,7 @@
                                             />
                                         </el-select>
                                         <el-popover
-                                            content='默认客户组是系统自动创建的,需点击右侧【设置币种】按钮选择开户币种'
+                                            :content="$t('channelSetting.content1')"
                                             placement='top-start'
                                             trigger='hover'
                                             :width='200'
@@ -141,22 +162,22 @@
                                     </el-col>
                                     <el-col :span='6'>
                                         <el-button :disabled='form.registList[index].disabledSetCurrency' type='primary' @click='setPlans(item,index,1)'>
-                                            设置币种
+                                            {{$t('channelSetting.setCurrency')}}
                                         </el-button>
                                         <el-button v-if='index === 0' type='primary' @click='addFormItem'>
-                                            添加
+                                            {{$t('channelSetting.add')}}
                                         </el-button>
                                         <el-button v-else type='danger' @click='removeItem(index)'>
-                                            删除
+                                            {{$t('editor.delete')}}
                                         </el-button>
                                     </el-col>
                                 </el-row>
                             </el-form-item>
 
-                            <el-form-item label='现货仅当钱包'>
+                            <el-form-item :label="$t('channelSetting.spotAsWallet')">
                                 <el-checkbox v-model='form.isWallet' class='checkBox' :indeterminate='false' label='' />
                                 <el-popover
-                                    content='设置了现货仅当钱包,前端的【现货】玩法会隐藏“交易”和“行情”页面,现货只保留“资产”页面'
+                                    :content="$t('channelSetting.content2')"
                                     placement='top-start'
                                     trigger='hover'
                                     :width='200'
@@ -191,11 +212,17 @@
                                 </el-row>
                             </el-form-item> -->
 
-                            <el-form-item label='H5支持语言' prop='supportLanguage'>
+                            <el-form-item :label="$t('channelSetting.h5SupportLang')" :rules="[
+                                    {
+                                        required: true,
+                                        message: this.$t('channelSetting.error1'),
+                                        trigger: 'blur',
+                                    },
+                                ]" prop='supportLanguage'>
                                 <el-select
                                     v-model='form.supportLanguage'
                                     multiple
-                                    placeholder='请输入'
+                                   :placeholder="$t('pleaseEnter')"
                                     value-key='val'
                                     @change='changeSupportLanguage'
                                 >
@@ -207,10 +234,16 @@
                                     />
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label='H5默认语言' prop='language'>
+                            <el-form-item :label="$t('channelSetting.h5DefaultLang')" :rules="[
+                                    {
+                                        required: true,
+                                        message: this.$t('channelSetting.error2'),
+                                        trigger: 'blur',
+                                    },
+                                ]" prop='language'>
                                 <el-select
                                     v-model='form.language'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                     value-key='name'
                                 >
                                     <el-option
@@ -231,7 +264,7 @@
                                     :width='800'
                                 />
                             </el-form-item> -->
-                            <el-form-item label='第三方登录'>
+                            <el-form-item :label="$t('channelSetting.worthMentioning')">
                                 <el-checkbox-group v-model='form.thirdLogin'>
                                     <el-checkbox label='google'>
                                         Google
@@ -244,21 +277,21 @@
                                     </el-checkbox>
                                 </el-checkbox-group>
                             </el-form-item>
-                            <el-form-item label='主题颜色' prop='themeColor'>
+                            <el-form-item :label="$t('channelSetting.themeColor')" prop='themeColor'>
                                 <el-color-picker v-model='form.themeColor' :predefine='predefineColors' show-alpha />
                             </el-form-item>
-                            <el-form-item label='埋点代码'>
+                            <el-form-item :label="$t('channelSetting.buriedPointCode')">
                                 <el-input
                                     v-model='form.googleAnalytics'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                     row='10'
                                     type='textarea'
                                 />
                             </el-form-item>
-                            <el-form-item label='在线客服地址'>
+                            <el-form-item :label="$t('channelSetting.onlineCustomerAddress')">
                                 <el-input
                                     v-model='form.onlineService'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                     type='textarea'
                                 />
                             </el-form-item>
@@ -276,7 +309,7 @@
                                 />
                             </el-form-item> -->
                         </el-tab-pane>
-                        <el-tab-pane class='tab pay-channel-setting' label='支付通道图标设置' name='second'>
+                        <el-tab-pane class='tab pay-channel-setting' :label="$t('channelSetting.paymentChannelIconSet')" name='second'>
                             <el-row :gutter='20'>
                                 <el-col :offset='0' :span='24'>
                                     <el-tabs v-model='activeName'>
@@ -284,7 +317,7 @@
                                             <el-card class='box-card'>
                                                 <template #header>
                                                     <span class='tip'>
-                                                        提示：该界面非必填，不填时取系统默认图标
+                                                        {{$t('channelSetting.tip2')}}
                                                     </span>
                                                 </template>
                                                 <div class='lang-wrap'>
@@ -299,15 +332,15 @@
                                                                 </div>
                                                                 <div v-else>
                                                                     <i class='el-icon-plus'></i>
-                                                                    <p>点击上传图片</p>
+                                                                    <p>{{$t('channelSetting.clickUpload')}}</p>
                                                                 </div>
                                                             </div>
                                                         </el-col>
                                                         <el-col :offset='0' :span='14'>
-                                                            <el-form-item label='支付通道别名'>
-                                                                <el-input v-model='form.paymentIconList[item.paymentCode+"_"+item.paymentType+"_"+item.merchantNo][l.val].alias' class='alias-input' clearable placeholder='请输入支付通道别名' />
+                                                            <el-form-item :label="$t('channelSetting.paymentChannelAlias')">
+                                                                <el-input v-model='form.paymentIconList[item.paymentCode+"_"+item.paymentType+"_"+item.merchantNo][l.val].alias' class='alias-input' clearable :placeholder="$t('channelSetting.enterChannelAlias')" />
                                                                 <el-button type='primary' @click='resetPayment(item,l)'>
-                                                                    重置
+                                                                    {{$t('channelSetting.reset')}}
                                                                 </el-button>
                                                             </el-form-item>
                                                         </el-col>
@@ -320,7 +353,7 @@
                                 </el-col>
                             </el-row>
                         </el-tab-pane>
-                        <el-tab-pane class='tab' label='存取款界面设置' name='third'>
+                        <el-tab-pane class='tab' :label="$t('channelSetting.interfaceSettings')" name='third'>
                             <amount-set ref='amountSet' />
                         </el-tab-pane>
                     </el-tabs>
@@ -329,7 +362,7 @@
         </el-row>
         <el-dialog
             v-model='plansDialogVisible'
-            title='玩法&玩法币种'
+            :title="$t('channelSetting.tradeType')"
             width='60%'
             @close='closeDialog'
         >
@@ -341,12 +374,12 @@
                     <el-card :header='item.name' shadow='always'>
                         <template v-if='setPlansType === 1'>
                             <template v-if="['1','2'].indexOf(item.id)>-1">
-                                <el-form-item label='玩法币种'>
+                                <el-form-item :label="$t('channelSetting.tradeType')">
                                     <el-select
                                         v-model='checkedTradeType[item.id].allCurrency'
                                         clearable
                                         filterable
-                                        placeholder='请选择'
+                                        :placeholder="$t('pleaseChoose')"
                                     >
                                         <el-option
                                             v-for='asset in item.assetsList'
@@ -356,7 +389,7 @@
                                         />
                                     </el-select>
                                     <p class='notice'>
-                                        注：{{ Number(item.id) === 1 ? '合约全仓': '合约逐仓' }}的币种选择后禁止修改，否则会导致老客户交易失败！
+                                        {{ Number(item.id) === 1 ? $t('channelSetting.tip3'): $t('channelSetting.tip4') }}
                                     </p>
                                 </el-form-item>
                                 <el-form-item label='' />
@@ -365,7 +398,7 @@
                                 <el-transfer
                                     v-model='checkedTradeType[item.id].allCurrency'
                                     :data='item.assetsList'
-                                    :titles='["可选币种", "已选币种"]'
+                                    :titles='[$t("channelSetting.optionalCurrency"), $t("channelSetting.selectedCurrency")]'
                                 />
                             </template>
                         </template>
@@ -396,10 +429,10 @@
             <template #footer>
                 <span class='dialog-footer'>
                     <el-button @click='plansDialogVisible = false'>
-                        取 消
+                        {{$t('cancel')}}
                     </el-button>
                     <el-button type='primary' @click='handleSavePlans'>
-                        确 定
+                         {{$t('sure')}}
                     </el-button>
                 </span>
             </template>
@@ -466,7 +499,7 @@ export default {
                 supportLanguage: [
                     {
                         required: true,
-                        message: '请选择支持语言',
+                        message: this.$t('channelSetting.error1'),
                         trigger: 'blur',
                     },
 
