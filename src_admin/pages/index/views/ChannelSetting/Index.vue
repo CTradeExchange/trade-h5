@@ -718,14 +718,14 @@ export default {
                     this.getTradeTypeAssets(data)
                 } else {
                     this.$message({
-                        message: '请先选择国家和客户组',
+                        message: this.$t('channelSetting.error6'),
                         type: 'warning'
                     })
                 }
             } else {
                 if (isEmpty(this.form.customerGroupId)) {
                     return this.$message({
-                        message: '请先选择游客客户组',
+                        message: this.$t('channelSetting.error'),
                         type: 'warning'
                     })
                 } else {
@@ -785,7 +785,7 @@ export default {
                             _formData.registList.forEach(el => {
                                 if (isEmpty(el.registCountry)) {
                                     that.$message({
-                                        message: '请先选择注册国家',
+                                        message: this.$t('channelSetting.error3'),
                                         type: 'warning'
                                     })
                                     that.submitLoading = false
@@ -793,7 +793,7 @@ export default {
                                 }
                                 if (isEmpty(el.customerGroupId)) {
                                     that.$message({
-                                        message: '请先选择客户组',
+                                        message:  this.$t('channelSetting.error8'),
                                         type: 'warning'
                                     })
                                     that.submitLoading = false
@@ -802,7 +802,7 @@ export default {
                                 const hasCurrency = el?.plans && el?.plans.every(el => el.allCurrency)
                                 if (!hasCurrency && Number(el.customerGroupId) === 1) {
                                     that.$message({
-                                        message: '“默认客户组”需设置开户币种,请点击【设置币种】按钮',
+                                        message: this.$t('channelSetting.error9'),
                                         type: 'warning'
                                     })
                                     that.submitLoading = false
@@ -874,7 +874,7 @@ export default {
                                 return this.$message.error(res.message)
                             }
                             that.$message({
-                                message: '保存成功',
+                                message: this.$t('channelSetting.success1'),
                                 type: 'success'
                             })
                             that.getPageConfig()
@@ -1004,7 +1004,7 @@ export default {
 
             if (!assetFlag && this.setPlansType === 1) {
                 return this.$message({
-                    message: '每个玩法至少选择一个币种',
+                    message: this.$t('channelSetting.error10'),
                     type: 'warning'
                 })
             }

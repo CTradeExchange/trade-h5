@@ -112,6 +112,12 @@
         "error2":"Please select the default language",
         "error3":"Please select the country of registration",
         "error4":"Please select a registrable area code",
-        "error5":"Please select the default registration area code"
-    }
+        "error5":"Please select the default registration area code",
+        "error6":"Please select country and customer group first",
+        "error7":"Please select the tourist customer group first",
+        "error8":"Please select customer group first",
+        "error9":"'Default Client Group' needs to set the account currency, please click the [Set Currency] button",
+        "error10":"Choose at least one currency for each gameplay",
+        "success1":"Saved successfully"
+    }   
 }
