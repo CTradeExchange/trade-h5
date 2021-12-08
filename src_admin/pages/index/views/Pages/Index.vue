@@ -128,12 +128,12 @@
 import { pageList, modifyPageConfig, getViChannel } from '@index/Api/editor'
 import { deepClone } from '@utils/deepClone'
 import { h5PageList } from './h5PageList'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute , onBeforeRouteUpdate  } from 'vue-router'
 import { onMounted, reactive, ref, toRefs, getCurrentInstance, watch  } from 'vue'
 import { getQueryString } from '@admin/utils'
 import { useI18n } from 'vue-i18n'
 import I18n, { setI18nLanguage, loadLocaleMessages } from '../../i18n/i18n.js'
-
+import {localGet,localSet} from '@/utils/util';
 export default {
     beforeRouteEnter (to, from, next) {
         if (getQueryString('page') === 'cats_sett_manage') {
@@ -213,10 +213,16 @@ export default {
                         language: state.activeLang
                     }
                 })
+                localSet("lang",state.activeLang)
                 setI18nLanguage(I18n, state.activeLang)
-                loadLocaleMessages(I18n, state.activeLang)
+                loadLocaleMessages(I18n,state.activeLang)
             }
         )
+         onBeforeRouteUpdate((to,from)=>{//当前组件路由改变后，进行触发.
+            
+            const lang = to.query.language;
+            setI18nLanguage(I18n, lang)
+        })
         // 获取页面配置
         const getPageConfig = () => {
             const that = this

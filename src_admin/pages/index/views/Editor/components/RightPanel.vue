@@ -1,7 +1,7 @@
 <template>
     <div class='right-board'>
         <el-tabs v-model='currentTab' class='center-tabs' @tab-click='handleTabClick'>
-            <el-tab-pane label='组件属性' name='field'>
+            <el-tab-pane :label="$t('editor.componentProperties')" name='field'>
                 <el-scrollbar class='right-scrollbar'>
                     <el-form v-if='activated' label-width='90px' size='small'>
                         <div class='base-setting'>

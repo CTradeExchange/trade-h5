@@ -73,5 +73,12 @@
         "publishedSuccessfully":"The page is published successfully",
         "close":"Close",
         "tip3":"Are you sure you want to clear all components?"
+    },
+    "channelSetting":{
+        "save":"保存",
+        "reset":"重置",
+        "basicSetting":"渠道基础设置",
+        "registerableCode":"可注册区号",
+        "tip1":"表示前端注册时可选择的区号,不选择默认所有国家区号均可注册"
     }
 }
