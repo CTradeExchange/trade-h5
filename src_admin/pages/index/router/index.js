@@ -5,7 +5,7 @@ const routes = [
     {
         path: '',
         component: Layout,
-        redirect: 'pages',
+        redirect: 'pages?id=1',
         children: [
             {
                 path: 'pages',
@@ -51,5 +51,6 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes
 })
+console.log(router)
 
 export default router
