@@ -154,6 +154,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/sass/mixin.scss';
+
 .homePage{
     position: relative;
     padding-top: 490px;
@@ -182,6 +184,7 @@ export default {
         padding-left: 30px;
     }
     .title {
+        @include font();
         margin-bottom: 38px;
         font-size: 32px;
         font-weight: bold;
@@ -191,6 +194,7 @@ export default {
         height: 600px;
     }
     .tabs {
+        @include font();
         margin-bottom: 38px;
         span {
             padding-bottom: 6px;

@@ -37,15 +37,15 @@
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.swap_2') + '('+ assetsInfo.currency +')'" prop='interest' />
-                <el-table-column :label="$t('trade.direction')" width='80'>
+                <el-table-column :label="$t('trade.swap_2') + '('+ assetsInfo.currency +')'" prop='interest' width='120' />
+                <el-table-column :label="$t('trade.direction')" width='100'>
                     <template #default='scope'>
                         <span :class="Number(scope.row.direction) === 1 ? 'riseColor' : 'fallColor'">
                             {{ Number(scope.row.direction) === 1 ? $t('trade.buy') : $t('trade.sell') }}
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.pendingUnit') + '(' + $t('trade.volumeUnit') + ')'" width='80'>
+                <el-table-column :label="$t('trade.pendingUnit') + '(' + $t('trade.volumeUnit') + ')'" width='120'>
                     <template #default='scope'>
                         <span>{{ minus(scope.row.openVolume, scope.row.closeVolume) }}</span>
                     </template>
@@ -85,17 +85,17 @@
                         <span>{{ parseFloat(scope.row.takeProfitDecimal) ? scope.row.takeProfitDecimal : '--' }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.openTime')" width='150'>
+                <el-table-column :label="$t('trade.openTime')" width='160'>
                     <template #default='scope'>
                         <span>{{ formatTime(scope.row.openTime) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.positionId')" width='120'>
+                <el-table-column :label="$t('trade.positionId')" width='160'>
                     <template #default='scope'>
                         <span>{{ scope.row.positionId }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column v-if='positionList && positionList.length > 0' align='right' fixed='right' :label="$t('c.handle')" width='220'>
+                <el-table-column align='right' fixed='right' :label="$t('c.handle')" min-width='220'>
                     <template #default='scope'>
                         <div class='handle'>
                             <button @click='openAdjustMargin(scope.row)'>

@@ -53,49 +53,49 @@
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.direction')">
+                <el-table-column :label="$t('trade.direction')" width='120'>
                     <template #default='scope'>
                         <span :class="Number(scope.row.direction) === 1 ? 'riseColor' : 'fallColor'">
                             {{ Number(scope.row.direction) === 1 ? $t('trade.buy') : $t('trade.sell') }}
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.pendingUnit') + '(' + $t('trade.volumeUnit') + ')'">
+                <el-table-column :label="$t('trade.pendingUnit') + '(' + $t('trade.volumeUnit') + ')'" width='120'>
                     <template #default='scope'>
                         <span>{{ minus(scope.row.openVolume, scope.row.closeVolume) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.positionPrice')">
+                <el-table-column :label="$t('trade.positionPrice')" width='120'>
                     <template #default='scope'>
                         <span>{{ scope.row.openPrice }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.currentPrice')">
+                <el-table-column :label="$t('trade.currentPrice')" width='120'>
                     <template #default='scope'>
                         <span>{{ Number(scope.row.direction) === 1 ? currentProduct(scope.row)?.sell_price : currentProduct(scope.row)?.buy_price }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.stopLossPrice')">
+                <el-table-column :label="$t('trade.stopLossPrice')" width='120'>
                     <template #default='scope'>
                         <span>{{ parseFloat(scope.row.stopLossDecimal) ? scope.row.stopLossDecimal : '--' }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.stopProfitPrice')">
+                <el-table-column :label="$t('trade.stopProfitPrice')" width='120'>
                     <template #default='scope'>
                         <span>{{ parseFloat(scope.row.takeProfitDecimal) ? scope.row.takeProfitDecimal : '--' }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.openTime')" width='150'>
+                <el-table-column :label="$t('trade.openTime')" width='160'>
                     <template #default='scope'>
                         <span>{{ formatTime(scope.row.openTime) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.positionId')" width='150'>
+                <el-table-column :label="$t('trade.positionId')" width='160'>
                     <template #default='scope'>
                         <span>{{ scope.row.positionId }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column v-if='positionList && positionList.length > 0' align='right' fixed='right' :label="$t('c.handle')" width='120'>
+                <el-table-column align='right' fixed='right' :label="$t('c.handle')" min-width='130'>
                     <template #default='scope'>
                         <div class='handle'>
                             <button @click='openSltp(scope.row)'>
