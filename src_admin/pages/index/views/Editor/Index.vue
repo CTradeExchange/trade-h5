@@ -367,7 +367,6 @@ export default {
                 if (ev && ev.preventDefault) {
                     ev.preventDefault()
                 }
-                // debugger
                 const tradeTypeBlockCollect = store.state.editor.tradeTypeBlockCollect
                 const config = deepClone(store.state.editor.elementList.map(item => ({
                     id: item.id,
@@ -402,6 +401,7 @@ export default {
                         item.data.tradeTypeBlock = Object.assign({}, tradeTypeBlock)
                         // if (item.data.code_ids_all) delete item.data.code_ids_all
                     }
+                    
                     
                     if (['selfSymbol', 'productsSwipe', 'productsTimeSharing','productsWithIcon'].includes(item.tag)) {
                         item.data.product = store.state.editor.tradeTypeSelfSymbol

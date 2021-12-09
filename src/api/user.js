@@ -3,18 +3,30 @@ import { getDevice } from '@/utils/util'
 
 /* 登录 */
 export function login (data) {
-    return request({
-        url: '/login/customer.app.CustomerWebApiService.login',
-        method: 'post',
-        // toastErr: false,
-        headers: {
-            version: '0.0.1',
-        },
-        data: {
-            device: getDevice(),
-            ...data,
-        }
-    })
+    if (data.isThird) {
+        return request({
+            url: '/third/login/customer.app.CustomerThirdLoginService.login',
+            method: 'post',
+            toastErr: false,
+            headers: {
+                version: '0.0.1'
+            },
+            data
+        })
+    } else {
+        return request({
+            url: '/login/customer.app.CustomerWebApiService.login',
+            method: 'post',
+            // toastErr: false,
+            headers: {
+                version: '0.0.1',
+            },
+            data: {
+                device: getDevice(),
+                ...data,
+            }
+        })
+    }
 }
 
 /* 登出 */
@@ -765,6 +777,19 @@ export function googleLoginVerify (data) {
     })
 }
 
+/* 谷歌登录校验token有效性 */
+export function facebookLoginVerify (data) {
+    return request({
+        url: '/third/login/customer.app.CustomerThirdLoginService.facebookVerify',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
 /* 第三方登录 */
 export function thirdLogin (data) {
     return request({
@@ -790,4 +815,3 @@ export function thirdRegist (data) {
         data
     })
 }
-

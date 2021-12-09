@@ -1,5 +1,5 @@
 <template>
-{{elementConfig}}--{{activeData}}
+--{{activeData.currentIndex}}
     <div class='rightForm'>
         <div
             v-for='(config, index) in elementConfig'

@@ -81,8 +81,13 @@ export default {
          * @param {object} data.data - 表单数据.
          */
         ADD_FROM_ROW (state, data) {
+            const currentIndex = data.data.length
             data.formConfig.push(deepClone(data.formConfig[0]))
-            data.data.push(deepClone(data.data[0]))
+            data.data.push({
+                ...deepClone(data.data[0]),
+                currentIndex
+                }
+            )
         },
         /**
          * Array类型表单删除表单元素.
