@@ -603,9 +603,6 @@ export default {
                     that.zoneList = list
                     // this.otherZoneList = list
                     if (that.form.registrable.length === 0) {
-                        that.form.registrable = [list[0]]
-                        this.form.defaultZone = that.form.registrable[0]
-
                         // 默认第一个是其它
                         if (!that.form.registList[0].registCountry) {
                             that.form.registList[0].registCountry =
