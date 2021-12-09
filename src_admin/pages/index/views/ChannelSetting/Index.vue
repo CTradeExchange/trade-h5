@@ -458,20 +458,6 @@ export default {
                         message: '请选择注册国家',
                         trigger: 'blur',
                     }
-                ],
-                registrable: [
-                    {
-                        required: true,
-                        message: '请选择可注册区号',
-                        trigger: 'blur',
-                    }
-                ],
-                defaultZone: [
-                    {
-                        required: true,
-                        message: '请选择默认注册区号',
-                        trigger: 'blur',
-                    }
                 ]
 
             },
