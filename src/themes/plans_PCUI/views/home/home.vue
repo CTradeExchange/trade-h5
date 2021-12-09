@@ -12,12 +12,8 @@
             <HomeNotice v-if='homeNoticeData' :data='homeNoticeData.data' />
             <!-- 内容模块 -->
             <div v-if='pageModules.length>0' class='content-module'>
-                <PageComp class='minePageComp' :data='pageModulesList' />
+                <PageComp class='homePageComp' :data='pageModulesList' />
 
-                <!-- 广告模块 -->
-                <ad />
-                <!-- 交易模块 -->
-                <trade @update='setTradeKeys' />
                 <!-- 信息流模块 -->
                 <div class='flow-module auto-width'>
                     <div class='flow-left'>
@@ -226,6 +222,16 @@ export default {
             color: var(--color);
             border-bottom: 3px solid var(--primary);
         }
+    }
+}
+</style>
+
+<style lang="scss">
+.homePageComp{
+    .m-layout{
+        width: 1200px;
+        margin-left: auto !important;
+        margin-right: auto !important;
     }
 }
 </style>

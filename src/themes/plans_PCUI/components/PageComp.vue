@@ -5,11 +5,12 @@
             v-for='(el,index) in moduleList'
             :key="el.id+'_'+index"
             :data='el.data'
+            :module-id='el.id'
             @click.capture='moduleClick(el, $event)'
             @openUrl='openUrl'
         >
             <div v-if='el.data.bindComp && el.data.bindComp.length'>
-                <component :is='el.component' v-for='(o,i) in o.data.bindComp' :key="index+''+i+o.id" :data='o.data' />
+                <component :is='el.component' v-for='(o,i) in o.data.bindComp' :key="index+''+i+o.id" :data='o.data' :module-id='o.id' />
             </div>
         </component>
     </div>
@@ -32,7 +33,7 @@ export default {
             const pageCode = name + '_' + (params.id || '')
             let list = this.data.map((item) => {
                 const itemEl = JSON.parse(JSON.stringify(item))
-                
+
                 const { style, linkComp, linkCompPosition, background } = itemEl.data
                 const styleObj = {}
                 for (const key in style) {
@@ -82,7 +83,7 @@ export default {
                 itemEl.data.moduleId = pageCode + '_' + itemEl.id
                 const newItem = Object.assign({}, itemEl, { component: defineAsyncComponent(() => import(`../modules/${itemEl.tag}/${itemEl.tag}.vue`)) })
                 // const newItem = Object.assign({}, itemEl, { component: require(`../modules/${itemEl.tag}/${itemEl.tag}.vue`).default })
-                
+
                 return newItem
             })
             // 将绑定的组件插入到对应的模块下面
@@ -129,7 +130,7 @@ export default {
 
             if (products.length) console.log('pageComp subscriptProducts', products), this.$ws.send_addSubscription_proList(products)
         },
-     
+
     },
 }
 </script>

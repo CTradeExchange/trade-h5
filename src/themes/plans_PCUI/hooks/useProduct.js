@@ -1,7 +1,17 @@
 import { computed, unref } from 'vue'
 import { useStore } from 'vuex'
+import globalData from './globalData'
 
 export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
+    // wp拖拽预览的时候直接返回空数据
+    const { h5Preview } = globalData()
+    if (h5Preview) {
+        return {
+            categoryList: [],
+            productList: []
+        }
+    }
+
     const store = useStore()
     const productMap = computed(() => store.state._quote.productMap)
     const userProductCategory = computed(() => store.getters.userProductCategory)
