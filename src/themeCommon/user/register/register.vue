@@ -134,7 +134,7 @@ export default {
             if (res.check() && res.data.length) {
                 const countryList = store.state.countryList
                 const defaultZone = store.state._base.wpCompanyInfo?.defaultZone
-                const defaultZoneConfig = defaultZone ? countryList.find(el => el.code === defaultZone.code) : countryList[0]
+                const defaultZoneConfig = defaultZone?.code ? countryList.find(el => el.code === defaultZone.code) : countryList[0]
                 if (defaultZoneConfig?.code) {
                     state.zone = `${defaultZoneConfig.name} (${defaultZoneConfig.countryCode})`
                     state.countryZone = defaultZoneConfig.countryCode
