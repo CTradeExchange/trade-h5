@@ -2,7 +2,7 @@
     <a id='my-sign-google' class='loginByGoogle'>
         <i class='icon'></i>
     </a>
-    <Loading :show='loading' />
+    <!-- <Loading :show='loading' /> -->
     <!-- 请补充您所在国家信息 -->
     <van-action-sheet
         v-model:show='bindAddShow'

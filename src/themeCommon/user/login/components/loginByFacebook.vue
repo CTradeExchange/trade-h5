@@ -2,7 +2,7 @@
     <a class='loginByFacebook' @click='onLogin'>
         <i class='icon'></i>
     </a>
-    <Loading :show='loading' />
+    <!-- <Loading :show='loading' /> -->
     <!-- 请补充您所在国家信息 -->
     <van-action-sheet
         v-model:show='bindAddShow'
@@ -22,6 +22,7 @@ import { Toast, Dialog } from 'vant'
 import { useRoute, useRouter } from 'vue-router'
 import { getDevice, localGet, localSet, getArrayObj, sessionGet, checkUserKYC, setToken } from '@/utils/util'
 import { setQuoteService } from '@/plugins/socket/socket'
+import hooks from '../loginHooks'
 export default {
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
