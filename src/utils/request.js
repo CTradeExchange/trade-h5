@@ -41,8 +41,7 @@ service.interceptors.request.use(
 
             if (!config.isUpload) {
                 // config.data = Object.assign({}, postData)
-                //if (development) 
-                console.warn('%c 请求原参数 %c ' + config.url, 'background-color:#5e5', 'background-color:#fe6', config.data)
+                if (development) { console.warn('%c 请求原参数 %c ' + config.url, 'background-color:#5e5', 'background-color:#fe6', config.data) }
                 config.data = SysSetting.pk ? { data: encryptParams(config.data, timestamp, SysSetting.pk) } : Object.assign({}, postData)
             }
         }
