@@ -20,7 +20,6 @@ export default function hooks (state) {
     // 处理与cats系统交互
     const handleCBLogin = (id_token) => {
         console.log('login come in ')
-        state.loading = true
         let params, loginVerifyUrl
         if (state.loginType === 'google') {
             params = {
@@ -43,7 +42,7 @@ export default function hooks (state) {
         }
 
         loginVerifyUrl(params).then(res => {
-            state.loading = false
+            state.loading = true
             if (res.check()) {
                 var { action } = res.data
                 state.userId = res.data.userId
@@ -141,13 +140,14 @@ export default function hooks (state) {
     const handleThirdRegist = () => {
         // 处理注册
         state.loading = true
-        thirdRegist({
+        const params = {
             companyId: companyId.value,
             userId: state.userId,
             thirdSource: state.thirdSource,
             customerGroupId: state.customerGroupId,
             country: state.country
-        }).then(res => {
+        }
+        thirdRegist(params).then(res => {
             state.loading = false
             if (res?.code === 'CUSTOMER_API_00010001') {
                 // 人工审核

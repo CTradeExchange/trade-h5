@@ -14,9 +14,8 @@
 </template>
 
 <script>
-import { reactive, toRefs, computed, onMounted, watch, getCurrentInstance } from 'vue'
-import loadScript from '@/utils/loadScript'
-import hello from 'hellojs/dist/hello.all.js'
+import { reactive, onMounted, toRefs } from 'vue'
+import hello from 'hellojs/dist/hello.all.min.js'
 import hooks from '../loginHooks'
 export default {
     setup (props) {
@@ -58,7 +57,8 @@ export default {
         return {
             login_twitter,
             onSelectCountry,
-            areaActions
+            areaActions,
+            ...toRefs(state)
         }
     }
 }

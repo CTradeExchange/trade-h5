@@ -379,7 +379,7 @@ export default {
         }
     }
     .confirm-btn {
-        position: absolute;
+        position: fixed;
         bottom: 0;
         width: 100%;
         color: var(--color);
