@@ -297,7 +297,9 @@ export default {
                             color: #fff;
                         }
                         &::before{
-                            margin-top: 14px;
+                            margin-top: 9px;
+                            font-size: 22px;
+                            color: #fff;
                         }
                     }
                     .no {
