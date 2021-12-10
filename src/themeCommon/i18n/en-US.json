@@ -291,7 +291,9 @@
         "appendFiled": "Additional Information",
         "allInputRequire": "Please fill in all additional information",
         "arriveTime": "Credit time",
-        "noneChannelTip": "There is no payment channel available for the current deposit amount, please select again"
+        "noneChannelTip": "There is no payment channel available for the current deposit amount, please select again",
+        "wramNotice": "Warm reminder:",
+        "noticeContent": "The payment status may not be updated in time as network and other reasons. If the payment has been made, please confirm whether the deposit have been received. If not, please contact our customer service."
     },
     "fund": {
         "marginLevel": "margin level",

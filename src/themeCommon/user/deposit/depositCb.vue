@@ -74,6 +74,10 @@
                     </span>
                 </div>
             </div>
+            <div class='notice'>
+                <p>{{ $t('deposit.wramNotice') }}</p>
+                <p>{{ $t('deposit.noticeContent') }}</p>
+            </div>
         </div>
     </div>
 </template>
@@ -231,6 +235,14 @@ export default {
                 color: var(--color);
             }
         }
+    }
+    .notice{
+        text-align: left;
+        width: 80%;
+        margin: 0 auto;
+        padding: 0 rem(40px) rem(40px);
+        line-height: rem(40px);
+        color: var(--normalColor);
     }
 }
 </style>
