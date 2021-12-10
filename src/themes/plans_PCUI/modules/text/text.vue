@@ -26,6 +26,7 @@ export default {
                 color: data.color,
                 fontSize: data.fontSize,
                 textAlign: data.textAlign,
+                fontWeight: data.fontWeight,
             })
         },
         content () {

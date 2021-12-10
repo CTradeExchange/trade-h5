@@ -347,8 +347,8 @@ export default {
 
         const deleteComp = (ev) => {
             ElMessageBox.confirm(t('editor.tip2'), t('editor.hint'), {
-                confirmButtonText:t('editor.sure'),
-                cancelButtonText:t('editor.cancel'),
+                confirmButtonText: t('editor.sure'),
+                cancelButtonText: t('editor.cancel'),
                 type: 'warning'
             }).then(() => {
                 store.commit('editor/DELETE_ELEMENT', store.state.editor.activated)
@@ -401,9 +401,8 @@ export default {
                         item.data.tradeTypeBlock = Object.assign({}, tradeTypeBlock)
                         // if (item.data.code_ids_all) delete item.data.code_ids_all
                     }
-                    
-                    
-                    if (['selfSymbol', 'productsSwipe', 'productsTimeSharing','productsWithIcon'].includes(item.tag)) {
+
+                    if (['selfSymbol', 'productsSwipe', 'productsTimeSharing', 'productsWithIcon'].includes(item.tag)) {
                         item.data.product = store.state.editor.tradeTypeSelfSymbol
                     }
                 })
@@ -571,10 +570,11 @@ export default {
             if (!modifyData) {
                 return
             }
+            const isDev = process.env.NODE_ENV === 'development'
             const pageImg = await html2canvas(document.querySelector('.previewWrapper .drawing-board'), { allowTaint: true, useCORS: true })
             pushPage(Object.assign({
                 pageCode: state.pageCode,
-                img: pageImg.toDataURL('image/jpeg', 0.7),
+                img: isDev ? '' : pageImg.toDataURL('image/jpeg', 0.7),
                 channelId: id,
                 language: lang,
                 title
