@@ -14,34 +14,6 @@
             <div v-if='pageModules.length>0' class='content-module'>
                 <PageComp class='homePageComp' :data='pageModulesList' />
 
-                <!-- 信息流模块 -->
-                <div class='flow-module auto-width'>
-                    <div class='flow-left'>
-                        <div class='tabs'>
-                            <span :class="{ 'active': currentFlow === 1 }" @click='switchFlow(1)'>
-                                {{ $t('information.focusNews') }}
-                            </span>
-                            <span :class="{ 'active': currentFlow === 2 }" @click='switchFlow(2)'>
-                                {{ $t('information.newsFlash') }}
-                            </span>
-                        </div>
-                        <!-- 新闻 -->
-                        <div v-show='currentFlow === 1'>
-                            <news />
-                        </div>
-                        <!-- 7x24 -->
-                        <div v-show='currentFlow === 2'>
-                            <seven />
-                        </div>
-                    </div>
-                    <div class='flow-right'>
-                        <h3 class='title'>
-                            {{ $t('information.calendar') }}
-                        </h3>
-                        <!-- 财经日历 -->
-                        <calendar />
-                    </div>
-                </div>
                 <!-- 下载模块 -->
                 <download />
                 <!-- 指引模块 -->
@@ -57,12 +29,10 @@
 // components
 import ad from './components/ad.vue'
 import trade from './components/trade.vue'
-import news from './components/news.vue'
 import download from './components/download.vue'
 import guide from './components/guide.vue'
 import why from './components/why.vue'
 import seven from './components/seven.vue'
-import calendar from './components/calendar.vue'
 import FullBanner from '../../modules/fullBanner/fullBanner'
 import BannerProducts from '../../modules/bannerProducts/bannerProducts'
 import HomeNotice from '../../modules/homeNotice/homeNotice'
@@ -75,7 +45,6 @@ export default {
     components: {
         ad,
         trade,
-        news,
         download,
         guide,
         why,
@@ -83,7 +52,6 @@ export default {
         HomeNotice,
         FullBanner,
         BannerProducts,
-        calendar
     },
     setup () {
         const store = useStore()
