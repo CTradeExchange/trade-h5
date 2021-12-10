@@ -153,7 +153,7 @@ import * as pageConfig from '@h5/wp_preview/pageBaseConfig'
 import html2canvas from 'html2canvas'
 import Mousetrap from 'mousetrap'
 import { forOwn } from 'lodash'
-import { onMounted, onUnmounted, reactive, toRefs } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, toRefs } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -204,6 +204,8 @@ export default {
             isPC: process.env.VUE_APP_theme === 'plans_PCUI',
             submitType: 0
         })
+
+        const activeData = computed(() => store.state.editor.activeData)
 
         const handleGetPageConfig = () => {
             if (state.pageCode) {
@@ -347,8 +349,8 @@ export default {
 
         const deleteComp = (ev) => {
             ElMessageBox.confirm(t('editor.tip2'), t('editor.hint'), {
-                confirmButtonText:t('editor.sure'),
-                cancelButtonText:t('editor.cancel'),
+                confirmButtonText: t('editor.sure'),
+                cancelButtonText: t('editor.cancel'),
                 type: 'warning'
             }).then(() => {
                 store.commit('editor/DELETE_ELEMENT', store.state.editor.activated)
@@ -401,9 +403,9 @@ export default {
                         item.data.tradeTypeBlock = Object.assign({}, tradeTypeBlock)
                         // if (item.data.code_ids_all) delete item.data.code_ids_all
                     }
-                    
-                    
-                    if (['selfSymbol', 'productsSwipe', 'productsTimeSharing','productsWithIcon'].includes(item.tag)) {
+                    debugger
+                    activeData.value
+                    if (['selfSymbol', 'productsSwipe', 'productsTimeSharing', 'productsWithIcon'].includes(item.tag)) {
                         item.data.product = store.state.editor.tradeTypeSelfSymbol
                     }
                 })

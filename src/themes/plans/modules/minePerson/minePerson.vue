@@ -4,7 +4,7 @@
             <img class='faceImg' :src='faceImg' />
             <div class='guestBts'>
                 <button class='btn' @click="$router.push('/login')">
-                    {{ $t('cRoute.login') }}
+                    {{ $t('login.loginOrRegist') }}
                 </button>
             </div>
         </div>

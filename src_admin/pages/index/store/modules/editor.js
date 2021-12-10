@@ -11,6 +11,7 @@ export default {
         tradeTypeBlockProduct: {},
         tradeTypeSelfSymbol: {},
         tradeTypeBlockCollect: [],
+        activeData: {}
     },
     mutations: {
         /**
@@ -86,7 +87,7 @@ export default {
             data.data.push({
                 ...deepClone(data.data[0]),
                 currentIndex
-                }
+            }
             )
         },
         /**
@@ -167,6 +168,14 @@ export default {
          */
         UPDATE_GET_PRODUCTING (state, data) {
             state.getProducting = data
+        },
+        /**
+         * 获取当前操作的.
+         * @param {string} data.key - 客户组id.
+         * @param {string} data.value - 产品列表.
+         */
+        UPDATE_ACTIVEDATA (state, data) {
+            state.activeData = data
         }
     }
 }

@@ -77,7 +77,7 @@ export default {
         activeData: {
             type: Object,
         },
-        currentIndex:{
+        currentIndex: {
             default: 0
         }
     },
@@ -122,7 +122,6 @@ export default {
             }
         },
         productIds () {
-            
             const _ids = []
             for (const key in this.activeData) {
                 if (this.activeData[key] && key !== 'tradeTypeCollect') {
@@ -397,7 +396,6 @@ export default {
             })
         },
         showDialog (type) {
-            
             // console.log(this.elementTag)
             this.activeTradeType = type
             this.tradeTypeAccountGroupProduct = this.tradeTypeProduct[type]
