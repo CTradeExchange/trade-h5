@@ -80,9 +80,6 @@ watch(() => unref(computedList), () => {
             cursor: pointer;
             margin-right: 5px;
         }
-        .name, .upDownWidth{
-            font-weight: 700;
-        }
         .btn{
             position: relative;
             z-index: 0;

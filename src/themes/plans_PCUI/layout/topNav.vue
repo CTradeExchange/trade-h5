@@ -49,7 +49,7 @@
             <div v-else-if='customerInfo' class='handle-have'>
                 <div class='item'>
                     <div class='user'>
-                        <i class='head el-icon-s-custom'></i>
+                        <i class='head icon_touxiang'></i>
                         <span class='no'>
                             {{ customerInfo.customerNo }}
                         </span>
@@ -295,6 +295,9 @@ export default {
                             margin-top: 10px;
                             font-size: 24px;
                             color: #fff;
+                        }
+                        &::before{
+                            margin-top: 14px;
                         }
                     }
                     .no {
