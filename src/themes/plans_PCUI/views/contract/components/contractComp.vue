@@ -1,9 +1,16 @@
 <template>
     <div class='contractWrapper'>
-        <top
+        <!-- <top
             :sub-title='product.symbolCode'
             :title='product.symbolName'
-        />
+        /> -->
+        <top :sub-title='product.symbolCode' :title='product.symbolName'>
+            <template #left>
+                <a class='topBack' href='javascript:;' style='padding-left:0' @click='$router.back()'>
+                    <span class='icon_icon_close_big'></span>
+                </a>
+            </template>
+        </top>
         <div class='container'>
             <van-cell :title='$t("contract.symbolCode")' :value='product.symbolCode' />
             <van-cell :title='$t("contract.contractSize")' :value='product.contractSize' />

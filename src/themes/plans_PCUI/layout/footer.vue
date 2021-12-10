@@ -155,6 +155,7 @@ export default {
 
 <style lang="scss" scoped>
 .footer-nav {
+    min-width: 1200px;
     height: 380px;
     background: #15191E;
     .footer-auto {

@@ -22,80 +22,80 @@
                     {{ $t('trade.transfer') }}
                 </button>
                 <div class='record-link' @click='goRecord'>
-                    <i class='icon_zijinmingxi1'></i>
+                    <i class='icon_zijinjilu'></i>
                     <span>{{ $t('trade.fundRecord') }}</span>
                 </div>
             </div>
         </div>
         <div class='assets-body'>
             <el-table :cell-style="{ background:'none' }" :data='positionList' :empty-text="$t('c.noData')" height='100%'>
-                <el-table-column :label="$t('trade.name')" prop='symbolName' width='120' />
-                <el-table-column :label="$t('trade.profit') + '('+ assetsInfo.currency +')'" width='120'>
+                <el-table-column :label="$t('trade.name')" :min-width='minWidth' prop='symbolName' />
+                <el-table-column :label="$t('trade.profit') + '('+ assetsInfo.currency +')'" :min-width='minWidth'>
                     <template #default='scope'>
                         <span :class="parseFloat(scope.row.profitLoss) > 0 ? 'riseColor': 'fallColor'">
                             {{ scope.row.profitLoss }}
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.swap_2') + '('+ assetsInfo.currency +')'" prop='interest' />
-                <el-table-column :label="$t('trade.direction')" width='80'>
+                <el-table-column :label="$t('trade.swap_2') + '('+ assetsInfo.currency +')'" :min-width='minWidth' prop='interest' />
+                <el-table-column :label="$t('trade.direction')" :min-width='minWidth'>
                     <template #default='scope'>
                         <span :class="Number(scope.row.direction) === 1 ? 'riseColor' : 'fallColor'">
                             {{ Number(scope.row.direction) === 1 ? $t('trade.buy') : $t('trade.sell') }}
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.pendingUnit') + '(' + $t('trade.volumeUnit') + ')'" width='80'>
+                <el-table-column :label="$t('trade.positionAmount') + '(' + $t('trade.volumeUnit') + ')'" :min-width='minWidth'>
                     <template #default='scope'>
                         <span>{{ minus(scope.row.openVolume, scope.row.closeVolume) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.positionPrice')">
+                <el-table-column :label="$t('trade.positionPrice')" :min-width='minWidth'>
                     <template #default='scope'>
                         <span>{{ scope.row.openPrice }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.currentPrice')">
+                <el-table-column :label="$t('trade.currentPrice')" :min-width='minWidth'>
                     <template #default='scope'>
                         <span>{{ Number(scope.row.direction) === 1 ? currentProduct(scope.row)?.sell_price : currentProduct(scope.row)?.buy_price }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.prospectMandatory')">
+                <el-table-column :label="$t('trade.prospectMandatory')" :min-width='minWidth'>
                     <template #default='scope'>
                         <span>{{ scope.row.previewStopPrice || '--' }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.originalMargin')">
+                <el-table-column :label="$t('trade.originalMargin')" :min-width='minWidth'>
                     <template #default='scope'>
                         <span> {{ scope.row.occupyTheMargin || '--' }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.holdMargin')">
+                <el-table-column :label="$t('trade.holdMargin')" :min-width='minWidth'>
                     <template #default='scope'>
                         <span>{{ scope.row.maintenanceMargin || '--' }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.stopLossPrice')" width='80'>
+                <el-table-column :label="$t('trade.stopLossPrice')" :min-width='minWidth'>
                     <template #default='scope'>
                         <span>{{ parseFloat(scope.row.stopLossDecimal) ? scope.row.stopLossDecimal : '--' }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.stopProfitPrice')" width='80'>
+                <el-table-column :label="$t('trade.stopProfitPrice')" :min-width='minWidth'>
                     <template #default='scope'>
                         <span>{{ parseFloat(scope.row.takeProfitDecimal) ? scope.row.takeProfitDecimal : '--' }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.openTime')" width='100'>
+                <el-table-column :label="$t('trade.openTime')" :min-width='160'>
                     <template #default='scope'>
                         <span>{{ formatTime(scope.row.openTime) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.positionId')" width='120'>
+                <el-table-column :label="$t('trade.positionId')" :min-width='160'>
                     <template #default='scope'>
                         <span>{{ scope.row.positionId }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column v-if='positionList && positionList.length > 0' align='right' fixed='right' :label="$t('c.handle')" width='220'>
+                <el-table-column align='right' fixed='right' :label="$t('c.handle')" min-width='220'>
                     <template #default='scope'>
                         <div class='handle'>
                             <button @click='openAdjustMargin(scope.row)'>
@@ -157,6 +157,7 @@ export default {
         const adjustMargin = ref(null)
         const closePosition = ref(null)
         const sltp = ref(null)
+        const minWidth = 130
         // 产品map数据
         const productMap = computed(() => store.state._quote.productMap)
         // 用户信息
@@ -226,7 +227,8 @@ export default {
             closePosition,
             openClosePosition,
             sltp,
-            openSltp
+            openSltp,
+            minWidth
         }
     }
 }

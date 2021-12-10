@@ -54,10 +54,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/sass/mixin.scss';
 .why-module {
     margin-top: 90px;
     color: var(--color);
     .title {
+        @include font();
         font-size: 32px;
         font-weight: bold;
     }

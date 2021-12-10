@@ -197,6 +197,7 @@ export default {
 .header-nav {
     display: flex;
     justify-content: space-between;
+    min-width: 1200px;
     height: 50px;
     padding: 0 16px;
     background-color: rgba(21,25,30,1);
@@ -297,7 +298,7 @@ export default {
                         }
                     }
                     .no {
-                        margin-top: 4px;
+                        line-height: 1;
                         font-size: 16px;
                     }
                 }
@@ -328,6 +329,10 @@ export default {
                     font-size: 20px;
                     color: #D6DAE1;
                     cursor: pointer;
+                }
+                &:deep(.icon_yuyan) {
+                    display: inline-flex;
+                    margin-top: 2px;
                 }
             }
         }

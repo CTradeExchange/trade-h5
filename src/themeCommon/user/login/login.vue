@@ -1,6 +1,6 @@
 <template>
     <div class='pageWrap'>
-        <Top :right-action='rightAction' @rightClick='changeLoginType' />
+        <Top :right-action='rightAction' @back="$router.push('/')" @rightClick='changeLoginType' />
         <header class='header'>
             <h1 class='pageTitle'>
                 {{ $t(loginType==='password'?'login.loginByPwd':'login.loginByCode') }}
@@ -187,8 +187,8 @@ export default {
 
         // 登录成功跳转
         const loginToPath = () => {
-            const toURL = route.query.back ? decodeURIComponent(route.query.back) : '/'
-            router.replace(toURL)
+            // const toURL = route.query.back ? decodeURIComponent(route.query.back) : '/'
+            router.replace('/')
         }
 
         // 发送登录接

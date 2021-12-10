@@ -198,3 +198,8 @@
         content: '';
     }
 }
+
+// 字体 
+@mixin font() {
+    font-family: 'Microsoft Yahei';
+}

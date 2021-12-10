@@ -58,6 +58,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/sass/mixin.scss';
 .download-module {
     height: 782px;
     margin-top: 90px;
@@ -67,6 +68,7 @@ export default {
         padding-top: 90px;
         color: #fff;
         .title {
+            @include font();
             font-size: 32px;
             font-weight: bold;
         }

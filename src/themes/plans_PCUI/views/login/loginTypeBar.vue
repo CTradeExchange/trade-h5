@@ -35,6 +35,7 @@ export default {
         .van-tab {
             flex: none;
             margin: 0 10px;
+            font-size: 16px;
         }
         .van-tabs__line{
             background: var(--primary);

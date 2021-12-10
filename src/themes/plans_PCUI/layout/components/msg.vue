@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { onBeforeMount, computed, reactive, toRefs, onUnmounted , nextTick } from 'vue'
+import { onBeforeMount, computed, reactive, toRefs, onUnmounted, nextTick } from 'vue'
 import { queryPlatFormMessageLogList } from '@/api/user'
 import { isEmpty } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
@@ -295,7 +295,7 @@ export default {
             }
         }
         .activeLi{
-            color:#ee0a24;
+            color: var(--primary);
         }
     }
     .msg-list {
