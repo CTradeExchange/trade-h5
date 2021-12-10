@@ -144,7 +144,7 @@ export default createStore({
             return getCountryListByParentCode({ parentCode: '-1' }).then(res => {
                 if (res.check()) {
                     const registrable = state._base.wpCompanyInfo?.registrable || []
-                    const list = res.data.filter(el => registrable.find(o => o.code === el.code))
+                    const list = registrable.length ? res.data.filter(el => registrable.find(o => o.code === el.code)) : res.data
                     commit('Update_countryList', list)
                 }
                 return res

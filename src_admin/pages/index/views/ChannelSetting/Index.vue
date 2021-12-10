@@ -43,6 +43,7 @@
                             >
                                 <el-select
                                     v-model='form.registrable'
+                                    collapse-tags
                                     multiple
                                     placeholder='请输入'
                                     value-key='id'
@@ -457,20 +458,6 @@ export default {
                         message: '请选择注册国家',
                         trigger: 'blur',
                     }
-                ],
-                registrable: [
-                    {
-                        required: true,
-                        message: '请选择可注册区号',
-                        trigger: 'blur',
-                    }
-                ],
-                defaultZone: [
-                    {
-                        required: true,
-                        message: '请选择默认注册区号',
-                        trigger: 'blur',
-                    }
                 ]
 
             },
@@ -616,9 +603,6 @@ export default {
                     that.zoneList = list
                     // this.otherZoneList = list
                     if (that.form.registrable.length === 0) {
-                        that.form.registrable = [list[0]]
-                        this.form.defaultZone = that.form.registrable[0]
-
                         // 默认第一个是其它
                         if (!that.form.registList[0].registCountry) {
                             that.form.registList[0].registCountry =
