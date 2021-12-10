@@ -65,7 +65,8 @@
         "originPwd": "请输入原密码",
         "pwdSuccess": "密码修改成功",
         "modifyLoginPwd": "修改登录密码",
-        "getVerifyCode": "获取验证码"
+        "getVerifyCode": "获取验证码",
+        "loginSuccess": "登录成功"
     },
     "common": {
         "tip": "提示",
