@@ -1,6 +1,6 @@
 <template>
     <div v-if='h5Preview'>
-        <img alt='' src='./homeQuote.png' />
+        <img alt='' class='homeQuoteImg' src='./homeQuote.png' />
     </div>
     <div v-else class='trade-module auto-width'>
         <!-- 玩法选项 -->
@@ -208,6 +208,9 @@ export default {
 <style lang="scss" scoped>
 .trade-module {
     margin-top: 96px;
+}
+.homeQuoteImg{
+    width: 100%;
 }
 
 // 玩法选项
