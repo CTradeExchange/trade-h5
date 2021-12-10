@@ -356,7 +356,7 @@ export default {
                 page_code: 'SysSetting',
                 title: '系统设置',
                 type: 'setup',
-                other: JSON.stringify({ apiKey: data.apiKey, apiId: data.apiId, apiUrl: data.apiUrl, h5Address: data.h5Address, h5PreviewAddress: data.h5PreviewAddress, isInitSymbol: data.isInitSymbol + '', apiService: data.apiService, quoteService: data.quoteService, msgService: data.msgService, tradeService: data.tradeService, btKey: data.btKey, btUrl: data.btUrl }),
+                other: JSON.stringify({ apiKey: data.apiKey, apiId: data.apiId, apiUrl: data.apiUrl, h5Address: data.h5Address, h5PreviewAddress: data.h5PreviewAddress, isInitSymbol: data.isInitSymbol + '', apiService: data.apiService, quoteService: data.quoteService, msgService: data.msgService, tradeService: data.tradeService, btKey: data.btKey, btUrl: data.btUrl, adminDomain: data.adminDomain, forwarDomain: data.forwarDomain }),
                 content: JSON.stringify(Object.assign(copyData, { marginLevel: { marginLess: data.marginLess, marginWarn: data.marginWarn } }))
             }
             const _id = 1

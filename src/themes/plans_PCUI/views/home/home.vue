@@ -14,12 +14,10 @@
             <div v-if='pageModules.length>0' class='content-module'>
                 <PageComp class='homePageComp' :data='pageModulesList' />
 
-                <!-- 下载模块 -->
-                <download />
                 <!-- 指引模块 -->
-                <guide />
+                <!-- <guide /> -->
                 <!-- 为什么选择模块 -->
-                <why />
+                <!-- <why /> -->
             </div>
         </div>
     </div>

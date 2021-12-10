@@ -34,7 +34,7 @@ export default {
             let list = this.data.map((item) => {
                 const itemEl = JSON.parse(JSON.stringify(item))
 
-                const { style, linkComp, linkCompPosition, background } = itemEl.data
+                const { style, linkComp, linkCompPosition, background,moduleAlign,height } = itemEl.data
                 const styleObj = {}
                 for (const key in style) {
                     if (style.hasOwnProperty(key)) {
@@ -78,6 +78,14 @@ export default {
                 if (background) {
                     styleObj.background = `url(${background}) no-repeat`
                     styleObj.backgroundSize = '100% 100%'
+                }
+                if(moduleAlign==='center'){
+                    styleObj.width = '1200px';
+                    styleObj.marginLeft = 'auto !important';
+                    styleObj.marginRight = 'auto !important';
+                }
+                if(height){
+                    styleObj.height = height.includes('px') ? height: height+'px';
                 }
                 itemEl.data.styleObj = styleObj
                 itemEl.data.moduleId = pageCode + '_' + itemEl.id

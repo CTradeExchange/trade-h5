@@ -15,6 +15,7 @@ import homeNotice from './homeNotice/config.js'
 import homeRegister from './homeRegister/config.js'
 import homeQuote from './homeQuote/config.js'
 import news from './news/config.js'
+import backgroundImg from './backgroundImg/config.js'
 
 export const getThemeModules = async () => {
     return [
@@ -28,6 +29,7 @@ export const getThemeModules = async () => {
         homeRegister,
         homeNotice,
         news,
+        backgroundImg,
         homeQuote,
         bannerProducts,
         text

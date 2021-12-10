@@ -573,10 +573,11 @@ export default {
             if (!modifyData) {
                 return
             }
+            const isDev = process.env.NODE_ENV === 'development'
             const pageImg = await html2canvas(document.querySelector('.previewWrapper .drawing-board'), { allowTaint: true, useCORS: true })
             pushPage(Object.assign({
                 pageCode: state.pageCode,
-                img: pageImg.toDataURL('image/jpeg', 0.7),
+                img: isDev ? '' : pageImg.toDataURL('image/jpeg', 0.7),
                 channelId: id,
                 language: lang,
                 title
