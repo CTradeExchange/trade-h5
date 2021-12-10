@@ -28,26 +28,19 @@ import hooks from '../loginHooks'
 export default {
     setup (props, context) {
         const { t } = useI18n({ useScope: 'global' })
-        const instance = getCurrentInstance()
-        const router = useRouter()
-        const route = useRoute()
         var auth2 = ''
-        const store = useStore()
 
         const state = reactive({
             bindAddShow: false,
             userId: '',
             thirdSource: '',
             customerGroupId: '',
-            country: '',
             loading: false,
-            idToken: ''
+            idToken: '',
+            loginType: 'google'
         })
 
-        const { handleCBLogin } = hooks(state)
-
-        const registList = computed(() => store.state._base.wpCompanyInfo?.registList)
-        const companyId = computed(() => store.state._base.wpCompanyInfo.companyId)
+        const { handleCBLogin, onSelectCountry, areaActions } = hooks(state)
 
         const renderBtn = () => {
             loadScript('https://apis.google.com/js/api:client.js').then(() => {
@@ -55,34 +48,10 @@ export default {
             })
         }
 
-        const areaActions = computed(() => {
-            const countryList = store.state.countryList
-            const tempArr = []
-            countryList.forEach(item => {
-                tempArr.push({
-                    name: item.name + ' (' + item.countryCode + ')',
-                    code: item.countryCode,
-                    countryCode: item.code,
-                    countryName: item.name
-                })
-            })
-
-            return tempArr
-        })
-
         const attachSignin = (element) => {
             auth2.attachClickHandler(element, {}, function (googleUser) {
-                console.log(googleUser)
-                var profile = auth2.currentUser.get().getBasicProfile()
-                console.log('ID666: ' + profile.getId())
-                console.log('Full Name: ' + profile.getName())
-                console.log('Given Name: ' + profile.getGivenName())
-                console.log('Family Name: ' + profile.getFamilyName())
-                console.log('Image URL: ' + profile.getImageUrl())
-                console.log('Email: ' + profile.getEmail())
                 var id_token = googleUser.getAuthResponse().id_token
-                console.log('id_token: ' + id_token)
-                context.emit('loginSuccess', id_token)
+                // 处理与cats系统交互
                 handleCBLogin(id_token)
             }, function (error) {
                 console.log(error)
@@ -100,195 +69,6 @@ export default {
                 attachSignin(document.getElementById('my-sign-google'))
             })
         }
-
-        // 处理与cats系统交互
-        const handleCBLogin = (id_token) => {
-            console.log('login come in ')
-            state.loading = true
-            googleLoginVerify({
-                idToken: id_token,
-                companyId: companyId.value
-            }).then(res => {
-                state.loading = false
-                if (res.check()) {
-                    var { action } = res.data
-                    state.userId = res.data.userId
-                    state.thirdSource = res.data.thirdSource
-
-                    if (action === 'register') {
-                        state.bindAddShow = true
-                    } else if (action === 'login') {
-                        handleThirdLogin()
-                    } else if (action === 'bind') {
-                        Dialog.confirm({
-                            title: t('tip'),
-                            message: '您的谷歌邮箱已注册了账号，请登录账号',
-                            confirmButtonText: t('common.sure'),
-                            cancelButtonText: t('common.cancel')
-                        }).then(() => {
-                            router.push({
-                                path: '/login',
-                                query: {
-                                    bindThirdUserId: state.userId,
-                                    thirdSource: state.thirdSource
-                                }
-                            })
-                        }).catch(() => {})
-                    }
-                }
-            }).catch(err => {
-                state.loading = false
-            })
-        }
-
-        const handleThirdRegist = () => {
-            // 处理注册
-            state.loading = true
-            thirdRegist({
-                companyId: companyId.value,
-                userId: state.userId,
-                thirdSource: state.thirdSource,
-                customerGroupId: state.customerGroupId,
-                country: state.country
-            }).then(res => {
-                state.loading = false
-                if (res?.code === 'CUSTOMER_API_00010001') {
-                    // 人工审核
-                    router.replace({ name: 'RegisterHandler' })
-                } else if (res.check()) {
-                    // 注册成功
-
-                    if (res.data.token) setToken(res.data.token)
-
-                    // 注册成功重新获取客户信息
-                    store.dispatch('_user/findCustomerInfo')
-                    // 重新登录清除账户信息
-                    store.commit('_user/Update_accountAssets', {})
-                    // 登录websocket
-                    instance.appContext.config.globalProperties.$MsgSocket.login()
-
-                    // 切换登录后的行情websocket
-                    setQuoteService()
-
-                    if (res.data.list.length > 0) {
-                        // 需要KYC认证
-                        sessionStorage.setItem('kycList', JSON.stringify(res.data.list))
-                        router.replace(
-                            {
-                                name: 'RegKyc',
-                                query: { levelCode: res.data.list[0].levelCode }
-                            })
-                    } else {
-                        router.replace({ name: 'RegisterSuccess' })
-                    }
-                } else {
-                    res.toast()
-                }
-            }).catch(err => {
-                state.loading = false
-            })
-        }
-
-        const onSelectCountry = (country) => {
-            // 调后台注册接口
-            // const tradeTypeCurrencyList = getPlansByCountry(country.countryCode)
-            state.country = country.countryCode
-            state.customerGroupId = getCustomerGroupIdByCountry(country.countryCode)?.customerGroupId
-            state.bindAddShow = false
-
-            handleThirdRegist()
-        }
-
-        // 处理三方登录
-        const handleThirdLogin = () => {
-            const params = {
-                companyId: companyId.value,
-                userId: state.userId,
-                thirdSource: state.thirdSource,
-                isThird: true // true为三方登录 false 系统登录
-            }
-            store.dispatch('_user/login', params).then(res => {
-                if (res.invalid()) return false
-
-                // 切换登录后的行情websocket
-                setQuoteService()
-
-                // 登录websocket
-                instance.appContext.config.globalProperties.$MsgSocket.login()
-                store.commit('del_cacheViews', 'Home')
-                store.commit('del_cacheViews', 'Layout')
-
-                // 登录KYC,kycAuditStatus:0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
-                // companyKycStatus 公司KYC开户状态，1开启 2未开启
-                // checkUserKYC({ res, Dialog, router, store, t: I18n.global.t })
-                if (Number(res.data.companyKycStatus) === 1) {
-                    if (Number(res.data.kycAuditStatus === 0)) {
-                        return Dialog.alert({
-                            title: t('common.tip'),
-                            confirmButtonText: t('login.goAuthenticate'),
-                            message: t('login.goAuthenticateMsg'),
-
-                        }).then(() => {
-                            router.push('/authentication')
-                        })
-                    } else if (Number(res.data.kycAuditStatus === 1)) {
-                        return Dialog.alert({
-                            title: t('common.tip'),
-                            confirmButtonText: t('common.close'),
-                            message: t('common.inReview'),
-
-                        }).then(() => {
-                            store.dispatch('_user/logout').then(() => {
-                                return router.push('/login')
-                            }).then(() => {
-                                location.reload()
-                            })
-                        })
-                    } else if (Number(res.data.kycAuditStatus === 3)) {
-                        return Dialog.alert({
-                            title: t('common.tip'),
-                            confirmButtonText: t('common.reSubmit'),
-                            message: t('common.reviewFailed') + '\n' + t('common.reviewReson') + res.data.kycAuditRemark,
-
-                        }).then(() => {
-                            router.push('/authentication')
-                        })
-                    } else if (Number(res.data.kycAuditStatus === 2)) {
-                        noticeSetPwd(res.data.loginPassStatus)
-                    }
-                } else if (Number(res.data.companyKycStatus) === 2) {
-                    noticeSetPwd(res.data.loginPassStatus)
-                }
-                const toURL = route.query.back ? decodeURIComponent(route.query.back) : '/'
-                console.log('toUrl', toURL)
-                router.replace(toURL)
-            })
-        }
-
-        // 根据国家获取对应的客户组
-        const getCustomerGroupIdByCountry = country => {
-            if (!country || !registList.value?.length) return null
-            let _resultGroup = registList.value.find(el => el.registCountry.code === country)
-            if (!_resultGroup) _resultGroup = registList.value.find(el => el.registCountry.isOther)
-            return _resultGroup
-        }
-
-        const noticeSetPwd = (loginPassStatus) => {
-            if (parseInt(loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
-                state.loginPwdPop = true
-            } else {
-                loginToPath()
-            }
-        }
-
-        // 登录成功跳转
-        const loginToPath = () => {
-            const toURL = route.query.back ? decodeURIComponent(route.query.back) : '/'
-            router.replace(toURL)
-        }
-
-        // 获取国家区号
-        store.dispatch('getCountryListByParentCode')
 
         onMounted(() => {
             renderBtn()

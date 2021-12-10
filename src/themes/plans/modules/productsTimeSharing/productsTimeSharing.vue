@@ -86,6 +86,7 @@ export default {
         const productList = symbolKeys.map(key => productMap[key]).filter(elem => elem)
         const swiperList = []
         products.forEach((el, i) => { // 将产品分成3个一组，显示成swiper轮播
+            debugger
             if (i % 3 === 0) swiperList.push([])
             const lastItem = swiperList[swiperList.length - 1]
             lastItem.push(el)

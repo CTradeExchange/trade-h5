@@ -2,23 +2,46 @@
     <a id='my-sign-twitter' class='loginByGoogle' @click="login_twitter('twitter')">
         <i class='icon'></i>
     </a>
+    <Loading :show='loading' />
+    <!-- 请补充您所在国家信息 -->
+    <van-action-sheet
+        v-model:show='bindAddShow'
+        :actions='areaActions'
+        teleport='#app'
+        title='请补充您所在国家信息'
+        @select='onSelectCountry'
+    />
 </template>
 
 <script>
-import { computed, onMounted, getCurrentInstance } from 'vue'
+import { reactive, toRefs, computed, onMounted, watch, getCurrentInstance } from 'vue'
 import loadScript from '@/utils/loadScript'
 import hello from 'hellojs/dist/hello.all.js'
+import hooks from '../loginHooks'
 export default {
     setup (props) {
+        const state = reactive({
+            bindAddShow: false,
+            userId: '',
+            thirdSource: '',
+            customerGroupId: '',
+            country: '',
+            loading: false,
+            loginType: 'twitter'
+        })
+
+        const { handleCBLogin, onSelectCountry, areaActions } = hooks(state)
+
         const login_twitter = (network) => { // 登录方法，并将twitter 作为参数传入
             // Twitter instance
             console.log(network)
             var twitter = hello(network)
             console.log(twitter)
             // Login
-            twitter.login().then(function (r) {
+            twitter.login().then(function (res) {
                 // Get Profile
-                console.log(r)
+                console.log(JSON.stringify(res))
+                handleCBLogin(res.authResponse)
                 return twitter.api('/me')
             }).then(function (p) {
                 console.log('Connected to ' + network + ' as ' + p.name)
@@ -33,7 +56,9 @@ export default {
         })
 
         return {
-            login_twitter
+            login_twitter,
+            onSelectCountry,
+            areaActions
         }
     }
 }

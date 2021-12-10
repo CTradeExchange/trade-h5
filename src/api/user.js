@@ -790,6 +790,19 @@ export function facebookLoginVerify (data) {
     })
 }
 
+/* twitter登录校验token有效性 */
+export function twitterLoginVerify (data) {
+    return request({
+        url: '/third/login/customer.app.CustomerThirdLoginService.twitterVerify',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
 /* 第三方登录 */
 export function thirdLogin (data) {
     return request({
