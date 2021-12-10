@@ -55,7 +55,7 @@ export default function hooks (state) {
                 } else if (action === 'bind') {
                     Dialog.confirm({
                         title: t('tip'),
-                        message: '您的邮箱已注册了账号，请登录账号',
+                        message: t('login.registered'),
                         confirmButtonText: t('common.sure'),
                         cancelButtonText: t('common.cancel')
                     }).then(() => {

@@ -8,23 +8,16 @@
         v-model:show='bindAddShow'
         :actions='areaActions'
         teleport='#app'
-        title='请补充您所在国家信息'
+        title='$t("login.inputCountry")'
         @select='onSelectCountry'
     />
 </template>
 
 <script>
 import { reactive, toRefs, computed, onMounted, watch, getCurrentInstance } from 'vue'
-import { useStore } from 'vuex'
-import { setQuoteService } from '@/plugins/socket/socket'
 import loadScript from '@/utils/loadScript'
-import { getDevice, localGet, localSet, getArrayObj, sessionGet, checkUserKYC, setToken } from '@/utils/util'
-import { googleLoginVerify, thirdRegist, thirdLogin } from '@/api/user'
-import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { Toast, Dialog } from 'vant'
 import hooks from '../loginHooks'
-
 export default {
     setup (props, context) {
         const { t } = useI18n({ useScope: 'global' })

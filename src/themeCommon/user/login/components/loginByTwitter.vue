@@ -8,7 +8,7 @@
         v-model:show='bindAddShow'
         :actions='areaActions'
         teleport='#app'
-        title='请补充您所在国家信息'
+        title='$t("login.inputCountry")'
         @select='onSelectCountry'
     />
 </template>
@@ -43,9 +43,7 @@ export default {
                 handleCBLogin(res.authResponse)
                 return twitter.api('/me')
             }).then(function (p) {
-                console.log('Connected to ' + network + ' as ' + p.name)
-                var res = JSON.stringify(p)// 因为得不到token，但是这步已经得到用户所有信息，所以将用户信息转成JSON字符串给后台
-                console.log(res)
+
             })
         }
         onMounted(() => {

@@ -66,7 +66,9 @@
         "pwdSuccess": "密码修改成功",
         "modifyLoginPwd": "修改登录密码",
         "getVerifyCode": "获取验证码",
-        "otherLogin": "或使用以下方式登录"
+        "otherLogin": "或使用以下方式登录",
+        "registered": "您的邮箱已注册了账号，请登录账号",
+        "inputCountry": "请补充您所在国家信息"
     },
     "common": {
         "tip": "提示",

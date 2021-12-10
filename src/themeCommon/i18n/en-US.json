@@ -66,7 +66,9 @@
         "pwdSuccess": "Change password success",
         "modifyLoginPwd": "Change Password",
         "getVerifyCode": "Get Code",
-        "otherLogin": "Or login via below"
+        "otherLogin": "Or login via below",
+        "registered": "Your email has registered an account, please login.",
+        "inputCountry": "Please add your country information."
     },
     "common": {
         "tip": "Tips",
