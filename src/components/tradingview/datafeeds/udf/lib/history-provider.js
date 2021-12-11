@@ -66,7 +66,7 @@ class HistoryProvider {
         this._previousBar = ticks[ticks.length-1]
         ticks.forEach(t => this._onTick(t))
 
-        logMessageForTick(ticks)
+        // logMessageForTick(ticks)
     }
 
     // 用于存储udf获取的tick函数

@@ -628,5 +628,10 @@
     "focusNews":"要闻",
     "newsFlash":"7x24",
     "calendar":"财经日历"
+  },
+  "riskLevel":{
+    "safety": "安全",
+    "warn": "警告",
+    "danger": "危险"
   }
 }

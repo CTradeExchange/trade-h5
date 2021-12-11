@@ -1,24 +1,24 @@
-import { common } from '@admin/components/baseConfig'
+import { defineAsyncComponent } from 'vue'
+
 export default {
-    title: '行情列表',
-    hidden: true,
+    title: '行情列表111',
     tag: 'quoteList',
     hideUserRole: true,
     tagIcon: 'el-icon-star-on',
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
-        // {
-        //     type: 'Input',
-        //     name: 'abc',
-        //     label: '基础配置1',
-        //     default: ''
-        // },
-        // {
-        //     type: 'Input',
-        //     name: 'efg',
-        //     label: '基础配置2',
-        //     default: ''
-        // },
+        {
+            name: 'styleConfig',
+            type: 'Array',
+            label: '样式选择',
+            max: 1,
+            config: [
+                {
+                    type: 'custom',
+                    component: defineAsyncComponent(() => import('./components/styleForm.vue')),
+                }
+            ],
+        },
         {
             type: 'Array',
             name: 'items',

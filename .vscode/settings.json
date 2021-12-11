@@ -61,6 +61,7 @@
     "i18n-ally.localesPaths": [
         "src/themes/plans_PCUI/i18n",
         "src/themeCommon/i18n",
+        "src_admin/pages/index/i18n",
     ], //
         
     "i18n-ally.refactor.templates": [ "$t(\"{key}\")" ],

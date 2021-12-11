@@ -8,7 +8,7 @@
                 <!-- <div class="logo">交易H5定制平台</div> -->
             </div>
             <el-scrollbar class='left-scrollbar'>
-                <div v-if="['TradeIndex','SelfSymbolIndex','Nav'].indexOf(pageCode)===-1" class='components-list'>
+                <div v-if="['SelfSymbolIndex','Nav'].indexOf(pageCode)===-1" class='components-list'>
                     <div
                         v-for='(item, listIndex) in leftComponents'
                         :key='listIndex'
@@ -305,7 +305,7 @@ export default {
         }
 
         const showComp = () => {
-            const list = []
+            let list = []
             const pageCode = state.pageCode.toLocaleLowerCase()
             mobileComponents.forEach(item => {
                 if (!item.hidden) {
@@ -318,6 +318,8 @@ export default {
                     }
                 }
             })
+            const isPCUI = process.env.VUE_APP_theme === 'plans_PCUI'
+            if (isPCUI && pageCode === 'footer') list = list.filter(el => el.tag === 'footer')
             state.leftComponents[0].list = list
         }
 

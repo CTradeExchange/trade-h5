@@ -57,12 +57,14 @@ import { defineAsyncComponent } from 'vue'
 import FullBanner from '../modules/fullBanner/fullBanner'
 import BannerProducts from '../modules/bannerProducts/bannerProducts'
 import HomeNotice from '../modules/homeNotice/homeNotice'
+import FooterComp from '../modules/footer/footer'
 import { getQuery } from '@utils/index'
 export default {
     components: {
         FullBanner,
         HomeNotice,
         BannerProducts,
+        FooterComp,
         draggable,
     },
     data () {
@@ -221,7 +223,7 @@ export default {
             };
             const module = this.moduleList.find(el=>el.tag==='homeNotice')
             return module ? module : empty
-        }
+        },
     },
     mounted () {
         window['preview'] = this

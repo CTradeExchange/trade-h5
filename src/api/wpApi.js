@@ -8,6 +8,7 @@ export const wpCompanyConfig = () => {
 // 获取自选产品
 export const wpSelfSymbolIndex = () => pageConfig('SelfSymbolIndex')
 export const wpNav = () => pageConfig('Nav')
+export const wpFooter = () => pageConfig('Footer')
 
 /* 获取页面配置信息 */
 export function pageConfig (id) {
@@ -20,6 +21,9 @@ export function pageConfig (id) {
             break
         case 'Nav':
             data = unzip(window['wp_Nav'])
+            break
+        case 'Footer':
+            data = unzip(window['wp_Footer'])
             break
         case 'Home':
             data = unzip(window['wp_Home'])

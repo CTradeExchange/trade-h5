@@ -1,5 +1,4 @@
 <template>
-    {{ showTabs }}
     <div class='stallsAndDeal'>
         <van-tabs
             ref='tabs'
