@@ -105,7 +105,7 @@ import { Toast, Dialog } from 'vant'
 import RuleFn from './rule'
 import md5 from 'js-md5'
 import { timeline, timelineItem } from '@/components/timeline'
-import { checkUserStatus, googleLoginVerify, thirdRegist, thirdLogin } from '@/api/user'
+import { checkUserStatus, thirdLoginConfig } from '@/api/user'
 import { setQuoteService } from '@/plugins/socket/socket'
 import { useI18n } from 'vue-i18n'
 //  import hooks from './hooks'
@@ -146,7 +146,21 @@ export default {
             }
         })
 
+        const companyId = computed(() => store.state._base.wpCompanyInfo.companyId)
+
         const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo.thirdLogin)
+        if (thirdLoginArr.value.length > 0) {
+            thirdLoginConfig({
+                companyId: companyId.value,
+                thirdSource: thirdLoginArr.value.join()
+            }).then(res => {
+                if (res.check()) {
+
+                }
+            }).catch(err => {
+                state.loadingPage = false
+            })
+        }
 
         const changeLoginType = () => {
             const loginType = state.loginType

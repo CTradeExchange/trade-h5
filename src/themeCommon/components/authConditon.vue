@@ -262,7 +262,6 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         if (props.platform === 'web') {
-                            // debugger
                             const parentPath = route.matched[route.matched.length - 2]
                             router.push({ path: parentPath.path + '/kycCommitted' })
                         } else {

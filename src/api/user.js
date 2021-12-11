@@ -828,3 +828,16 @@ export function thirdRegist (data) {
         data
     })
 }
+
+/* 获取三方登录配置信息 */
+export function thirdLoginConfig (data) {
+    return request({
+        url: '/global/customer.app.CustomerThirdLoginService.config',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

@@ -123,10 +123,14 @@ export default {
         display: flex;
         justify-content: flex-start;
         .product-item{
-
+            width: 100%;
             flex: 1;
             padding: rem(23px);
             margin-right: rem(30px);
+            .text1{
+                @include ellipsis();
+                width: 98%;
+            }
             .text1,.text3{
                 font-size: rem(24px);
                 margin-bottom: rem(8px);

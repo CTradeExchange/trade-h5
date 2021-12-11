@@ -1,5 +1,5 @@
 <template>
-    --{{ activeData.currentIndex }}
+    <!-- --{{ }} === {{ elementConfig }} -->
     <div class='rightForm'>
         <div
             v-for='(config, index) in elementConfig'
@@ -148,7 +148,6 @@
                     :active-data='activeData[config.name]'
                     :block-index='blockIndex'
                     :config='config'
-                    :current-index='index'
                     :element-tag='elementTag'
                     :self-symbol='tradeTypeSelfSymbol'
                     :trade-type-collect='tradeTypeCollect'
@@ -301,6 +300,16 @@ export default {
             return this.$store.state.editor.tradeTypeBlockProduct
         }
     },
+    watch: {
+        'this.activeData': {
+            handler (newVal, old) {
+                console.log('obj.a changed', newVal)
+            },
+            immediate: true,
+            deep: true
+        }
+
+    },
     created () {
         // console.log('---activeData-----', this.activeData)
     },
@@ -311,7 +320,6 @@ export default {
                 formConfig,
                 data
             })
-            this.$store.commit('editor/UPDATE_ACTIVEDATA', activeData)
         },
         deleteRow (formConfig, data, index) {
             this.$store.commit('editor/DELETE_FROM_ROW', { formConfig: formConfig, data: data, index })

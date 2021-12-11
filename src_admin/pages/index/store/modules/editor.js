@@ -11,7 +11,7 @@ export default {
         tradeTypeBlockProduct: {},
         tradeTypeSelfSymbol: {},
         tradeTypeBlockCollect: [],
-        activeData: {}
+        activeIndex: ''
     },
     mutations: {
         /**
@@ -82,13 +82,8 @@ export default {
          * @param {object} data.data - 表单数据.
          */
         ADD_FROM_ROW (state, data) {
-            const currentIndex = data.data.length
             data.formConfig.push(deepClone(data.formConfig[0]))
-            data.data.push({
-                ...deepClone(data.data[0]),
-                currentIndex
-            }
-            )
+            data.data.push(deepClone(data.data[0]))
         },
         /**
          * Array类型表单删除表单元素.
@@ -170,12 +165,12 @@ export default {
             state.getProducting = data
         },
         /**
-         * 获取当前操作的.
-         * @param {string} data.key - 客户组id.
+         * 更新当前操作的对象.
+         * @param {string} data.key - 当前操作右侧表单的下标.
          * @param {string} data.value - 产品列表.
          */
-        UPDATE_ACTIVEDATA (state, data) {
-            state.activeData = data
+        UPDATE_ACTIVEINDEX (state, data) {
+            state.activeIndex = data
         }
     }
 }

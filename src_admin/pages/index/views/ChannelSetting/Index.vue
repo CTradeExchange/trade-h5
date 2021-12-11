@@ -597,7 +597,7 @@ export default {
 
                 // 设置存款数据
                 this.$refs['amountSet'].setData(content)
-                // debugger
+
                 // this.$refs['editor'].setContent(content.instructions)
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                 that.form = Object.assign(that.form, content, { other })
@@ -799,7 +799,7 @@ export default {
                         if (_formData.instructions) {
                             _formData.instructions = escape(_formData.instructions)
                         }
-                        // debugger
+
                         // const aa = this.$refs['editor'].getContent()
                         // _formData.instructions = aa
                         if (_formData.registList.length > 0) {
@@ -814,7 +814,7 @@ export default {
                                 }
                                 if (isEmpty(el.customerGroupId)) {
                                     that.$message({
-                                        message:  this.$t('channelSetting.error8'),
+                                        message: this.$t('channelSetting.error8'),
                                         type: 'warning'
                                     })
                                     that.submitLoading = false

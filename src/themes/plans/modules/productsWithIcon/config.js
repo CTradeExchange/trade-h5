@@ -22,7 +22,7 @@ export default {
                     name: 'src',
                     label: '图标地址',
                     type: 'File',
-                    default: '/wp-content//cats_business/BTCUSDT.png',
+                    default: '/wp-content/uploads/cats_business/BTCUSDT.png',
                     tips: '建议尺寸(px): 130*130'
                 }
             ]

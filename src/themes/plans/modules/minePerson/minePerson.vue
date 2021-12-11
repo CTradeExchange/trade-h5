@@ -42,7 +42,7 @@
                 <!-- <img alt='' src='/images/minePlace.png' /> -->
                 <ImgComp :data='data' />
             </div>
-            <fund />
+            <!-- <fund /> -->
         </div>
     </div>
 </template>

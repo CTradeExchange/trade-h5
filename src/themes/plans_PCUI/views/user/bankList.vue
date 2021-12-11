@@ -1,6 +1,6 @@
 <template>
     <centerViewDialog>
-        <LayoutTop :back='true' :menu='false' title='' icon="icon_icon_close_big" />
+        <LayoutTop :back='true' icon='icon_icon_close_big' :menu='false' title='' />
         <div class='page-wrap'>
             <Loading :show='loading' />
             <div class='list'>
@@ -73,7 +73,6 @@ export default {
             return `${value.substring(0, 0)} ${'*'.repeat(value.length - 4).replace(/(.{4})/g, '$1 ')}${value.length % 4 ? ' ' : ''}${value.slice(-4)}`
         }
         const handRoutTo = (path) => {
-            // debugger
             router.push(route.path.slice(0, -9) + path)
         }
         const toAdd = () => {

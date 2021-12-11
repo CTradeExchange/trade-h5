@@ -76,9 +76,6 @@ export default {
         tradeTypeCollect: {},
         activeData: {
             type: Object,
-        },
-        currentIndex: {
-            default: 0
         }
     },
     data () {
@@ -396,7 +393,6 @@ export default {
             })
         },
         showDialog (type) {
-            // console.log(this.elementTag)
             this.activeTradeType = type
             this.tradeTypeAccountGroupProduct = this.tradeTypeProduct[type]
 
@@ -418,6 +414,8 @@ export default {
                 }
             }
 
+            // store保存当前操作右侧表单的下标
+            this.$store.commit('editor/UPDATE_ACTIVEINDEX', this.blockIndex)
             this.show = true
         },
         opened () {

@@ -148,10 +148,17 @@ export default {
                         return Dialog.confirm({
                             title: t('common.tip'),
                             message: t('common.emailBinded'),
+                            showConfirmButton: !!onlineServices.value,
                             confirmButtonText: t('common.serivce'),
                             cancelButtonText: t('common.close')
                         }).then(() => {
-                            if (onlineServices.value) { location.href = onlineServices.value }
+                            if (onlineServices.value) {
+                                router.push({
+                                    name: 'Otherpage',
+                                    params: { type: 'page' },
+                                    query: { pageTitle: t('route.onlineService'), url: encodeURIComponent(onlineServices.value) }
+                                })
+                            }
                         }).catch(() => {
                             callback && callback(false)
                             // on cancel

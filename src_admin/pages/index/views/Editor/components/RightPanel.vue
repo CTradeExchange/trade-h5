@@ -16,25 +16,25 @@
                             >
                                 <template #reference>
                                     <el-button class='delete-btn' icon='el-icon-delete' type='text'>
-                                        {{$t('editor.deleteComponent')}}
+                                        {{ $t('editor.deleteComponent') }}
                                     </el-button>
                                 </template>
                             </el-popconfirm>
                             <template v-if='!element.hideUserRole'>
                                 <el-divider content-position='left'>
-                                    <h3> {{$t('editor.basicSettings')}}</h3>
+                                    <h3> {{ $t('editor.basicSettings') }}</h3>
                                 </el-divider>
                                 <div class='setting-wrap'>
                                     <el-form-item :label="$t('editor.accountStatus')">
                                         <el-checkbox-group v-model='activeData.accountType'>
                                             <el-checkbox label='G'>
-                                                {{$t('editor.tourist')}}
+                                                {{ $t('editor.tourist') }}
                                             </el-checkbox>
                                             <!-- <el-checkbox label='D'>
                                             模拟
                                         </el-checkbox> -->
                                             <el-checkbox label='R'>
-                                                {{$t('editor.true')}}
+                                                {{ $t('editor.true') }}
                                             </el-checkbox>
                                         <!-- <el-checkbox label='R_1'>
                                             未入金
@@ -61,10 +61,14 @@
 
                         <div class='component-setting'>
                             <el-divider v-if='element.formConfig && element.formConfig.length > 0' class='component-setting' content-position='left'>
-                                <h3>{{$t('editor.componentSettings')}}</h3>
+                                <h3>{{ $t('editor.componentSettings') }}</h3>
                             </el-divider>
                             <div class='setting-wrap'>
-                                <right-form :active-data='activeData' :element-config='element.formConfig' :element-tag='element.tag' />
+                                <right-form
+                                    :active-data='activeData'
+                                    :element-config='element.formConfig'
+                                    :element-tag='element.tag'
+                                />
                             </div>
                         </div>
                     </el-form>
@@ -84,7 +88,7 @@
                 <el-scrollbar v-if='activated' class='right-scrollbar' label-width='90px'>
                     <el-form label-width='90px' size='small'>
                         <el-divider content-position='left'>
-                            {{$t('editor.spacingSetting')}}
+                            {{ $t('editor.spacingSetting') }}
                         </el-divider>
                         <div class='m-spaceSetting'>
                             <el-input v-model="activeData.style['margin-top']" class='spaceInput top' :placeholder="$t('editor.upperSpacing')" />
@@ -97,7 +101,7 @@
                                 <el-input v-model="activeData.style['padding-bottom']" class='spaceInput bottom' :placeholder="$t('editor.underFill')" />
                                 <el-input v-model="activeData.style['padding-left']" class='spaceInput left' :placeholder="$t('editor.leftPadding')" />
                                 <div class='padding'>
-                                    {{$t('editor.component')}}
+                                    {{ $t('editor.component') }}
                                 </div>
                             </div>
                         </div>
@@ -106,9 +110,9 @@
                         </el-divider>
                         <File :active-data='activeData.background' :config="{ label:'背景图片' }" @formChange='updateBackground' /> -->
                         <el-divider content-position='left'>
-                            {{$t('editor.locationSettings')}}
+                            {{ $t('editor.locationSettings') }}
                             <el-button v-if='!element.hidden' class='delete-btn' icon='el-icon-delete' type='text' @click='deleteElement(activated)'>
-                                {{$t('editor.delete')}}
+                                {{ $t('editor.delete') }}
                             </el-button>
                         </el-divider>
                         <el-form-item :label="$t('editor.componentId')">
@@ -122,16 +126,16 @@
                         <el-form-item v-if='activeData.linkComp' :label="$t('editor.componentAlignment')">
                             <el-radio-group v-model='activeData.linkCompPosition'>
                                 <el-radio label='top-right'>
-                                    {{$t('editor.upperRightCorner')}}
+                                    {{ $t('editor.upperRightCorner') }}
                                 </el-radio>
                                 <el-radio label='top-left'>
-                                    {{$t('editor.upperLeftCorner')}}
+                                    {{ $t('editor.upperLeftCorner') }}
                                 </el-radio>
                                 <el-radio label='bottom-left'>
-                                    {{$t('editor.bottomLeftCorner')}}
+                                    {{ $t('editor.bottomLeftCorner') }}
                                 </el-radio>
                                 <el-radio label='bottom-right'>
-                                    {{$t('editor.bottomRightCorner')}}
+                                    {{ $t('editor.bottomRightCorner') }}
                                 </el-radio>
                             </el-radio-group>
                         </el-form-item>
