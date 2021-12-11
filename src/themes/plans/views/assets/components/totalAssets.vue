@@ -93,7 +93,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
-        const assetsInfo = computed(() => store.state._user.assetsInfo[tradeType.value])
+        const assetsInfo = computed(() => store.state._user.assetsInfo[tradeType.value] || {})
         // 获取玩法列表
         const plans = computed(() => store.state._base.plans)
         const tradeType = computed(() => store.state._quote.curTradeType || plans.value[0].id)
