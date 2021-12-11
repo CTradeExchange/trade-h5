@@ -306,12 +306,13 @@ export default {
     },
     methods: {
         addRow (formConfig, data, config, activeData) {
+            debugger
             activeData.saved = true
             this.$store.commit('editor/ADD_FROM_ROW', {
                 formConfig,
                 data
             })
-            this.$store.commit('editor/')
+            this.$store.commit('editor/UPDATE_ACTIVEDATA', activeData)
         },
         deleteRow (formConfig, data, index) {
             this.$store.commit('editor/DELETE_FROM_ROW', { formConfig: formConfig, data: data, index })
