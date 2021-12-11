@@ -16,6 +16,7 @@ import homeRegister from './homeRegister/config.js'
 import homeQuote from './homeQuote/config.js'
 import news from './news/config.js'
 import backgroundImg from './backgroundImg/config.js'
+import footer from './footer/config.js'
 
 export const getThemeModules = async () => {
     return [
@@ -32,6 +33,7 @@ export const getThemeModules = async () => {
         backgroundImg,
         homeQuote,
         bannerProducts,
+        footer,
         text
     ]
 }
