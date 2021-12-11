@@ -68,11 +68,11 @@ export const getColumns = tradeType => {
             {
                 name: t('trade.name'),
                 align: 'left',
-                minWidth: 240,
+                minWidth: 160,
                 className: 'name',
                 formatter: row => (<span class='name'>
                     {
-                        isCollect(row.tradeType, row.symbolId) ? <i class='icon icon_xiadanjiemianxiaoshixing1 star' onclick={(event) => addOptional(event, row)}></i> : <i class='icon icon_xiadanjiemianxiaokongxing1 star' onclick={(event) => addOptional(event, row)}></i>
+                        isCollect(row.tradeType, row.symbolId) ? <i class='icon icon_hangqingliebiaoyijiazixuan star' onclick={(event) => addOptional(event, row)}></i> : <i class='icon icon_hangqingliebiaoweijiazixuan star' onclick={(event) => addOptional(event, row)}></i>
                     }
                     { row.symbolCode }
                 </span>)
@@ -127,11 +127,11 @@ export const getColumns = tradeType => {
             {
                 name: t('trade.name'),
                 align: 'left',
-                minWidth: 240,
+                minWidth: 160,
                 className: 'name',
                 formatter: row => (<span class='name'>
                     {
-                        isCollect(row.tradeType, row.symbolId) ? <i class='icon icon_xiadanjiemianxiaoshixing1 star' onclick={(event) => addOptional(event, row)}></i> : <i class='icon icon_xiadanjiemianxiaokongxing1 star' onclick={(event) => addOptional(event, row)}></i>
+                        isCollect(row.tradeType, row.symbolId) ? <i class='icon icon_hangqingliebiaoyijiazixuan star' onclick={(event) => addOptional(event, row)}></i> : <i class='icon icon_hangqingliebiaoweijiazixuan star' onclick={(event) => addOptional(event, row)}></i>
                     }
                     { row.symbolCode }
                 </span>)
@@ -186,11 +186,11 @@ export const getColumns = tradeType => {
             {
                 name: t('trade.name'),
                 align: 'left',
-                minWidth: 240,
+                minWidth: 160,
                 className: 'name',
                 formatter: row => (<span class='name'>
                     {
-                        isCollect(row.tradeType, row.symbolId) ? <i class='icon icon_xiadanjiemianxiaoshixing1 star' onclick={(event) => addOptional(event, row)}></i> : <i class='icon icon_xiadanjiemianxiaokongxing1 star' onclick={(event) => addOptional(event, row)}></i>
+                        isCollect(row.tradeType, row.symbolId) ? <i class='icon icon_hangqingliebiaoyijiazixuan star' onclick={(event) => addOptional(event, row)}></i> : <i class='icon icon_hangqingliebiaoweijiazixuan star' onclick={(event) => addOptional(event, row)}></i>
                     }
                     { row.symbolCode }
                 </span>)
@@ -198,7 +198,7 @@ export const getColumns = tradeType => {
             {
                 name: t('trade.newPrice'),
                 align: 'left',
-                minWidth: 240,
+                minWidth: 160,
                 formatter: row => (
                     <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
                         {getVal(row.symbolKey, 'price')}
@@ -208,7 +208,7 @@ export const getColumns = tradeType => {
             {
                 name: t('trade.changePrice'),
                 align: 'left',
-                minWidth: 240,
+                minWidth: 160,
                 formatter: row => (
                     <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
                         { getVal(row.symbolKey, 'upDownAmount') > 0 ? '+' : '' }{ getVal(row.symbolKey, 'upDownAmount') }
@@ -254,11 +254,11 @@ export const getColumns = tradeType => {
             {
                 name: t('trade.name'),
                 align: 'left',
-                minWidth: 240,
+                minWidth: 160,
                 className: 'name',
                 formatter: row => (<span class='name'>
                     {
-                        isCollect(row.tradeType, row.symbolId) ? <i class='icon icon_xiadanjiemianxiaoshixing1 star' onclick={(event) => addOptional(event, row)}></i> : <i class='icon icon_xiadanjiemianxiaokongxing1 star' onclick={(event) => addOptional(event, row)}></i>
+                        isCollect(row.tradeType, row.symbolId) ? <i class='icon icon_hangqingliebiaoyijiazixuan star' onclick={(event) => addOptional(event, row)}></i> : <i class='icon icon_hangqingliebiaoweijiazixuan star' onclick={(event) => addOptional(event, row)}></i>
                     }
                     { row.symbolCode }
                 </span>)
@@ -266,7 +266,7 @@ export const getColumns = tradeType => {
             {
                 name: t('trade.newPrice'),
                 align: 'left',
-                minWidth: 240,
+                minWidth: 160,
                 formatter: row => (
                     <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
                         {getVal(row.symbolKey, 'price')}
@@ -276,7 +276,7 @@ export const getColumns = tradeType => {
             {
                 name: t('trade.changePrice'),
                 align: 'left',
-                minWidth: 240,
+                minWidth: 160,
                 formatter: row => (
                     <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
                         { getVal(row.symbolKey, 'upDownAmount') > 0 ? '+' : '' }{ getVal(row.symbolKey, 'upDownAmount') }

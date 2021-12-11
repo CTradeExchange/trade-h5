@@ -78,7 +78,7 @@ export default {
         :deep{
             .el-input__inner{
                 border-color: transparent;
-                background: var(--bgColor);
+                background: var(--assistColor);
                 &:focus{
                     border-color: var(--el-input-focus-border,var(--primary));
                 }
