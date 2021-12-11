@@ -7,7 +7,10 @@
                         <span class='total'>
                             {{ $t('assets.totalAssets') }}({{ assetsInfo?.currency }})
                         </span>
-                        <span v-if='Number(tradeType) !== 5' class='tag'>
+                        <span v-if='Number(tradeType) === 3' :class='["riskLevel", "riskLevel" + assetsInfo.riskLevel]'>
+                            {{ riskLevelMap[assetsInfo.riskLevel] }}
+                        </span>
+                        <span v-else-if='Number(tradeType) !== 5' class='tag'>
                             {{ $t('assets.riskLevel') }} {{ assetsInfo?.closeProportion }}
                         </span>
                     </div>
@@ -165,12 +168,18 @@ export default {
             }
         }
 
+        const riskLevelMap = {
+            1: t('riskLevel.safety'),
+            2: t('riskLevel.warn'),
+            3: t('riskLevel.danger')
+        }
         return {
             assetsInfo,
             tradeType,
             toDesposit,
             toTransfer,
-            toWirhdraw
+            toWirhdraw,
+            riskLevelMap
         }
     }
 }
@@ -272,6 +281,42 @@ export default {
         color: var(--primary);
         border-radius: rem(6px);
         background: none;
+    }
+}
+
+.riskLevel{
+    position: relative;
+    padding-left: rem(25px);
+    margin-left: rem(10px);
+    font-size: rem(22px);
+    &::before{
+        content: '';
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 0%;
+        transform: translate(0, -50%);
+        width: rem(16px);
+        height: rem(16px);
+        border-radius: 16px;
+    }
+}
+.riskLevel1{
+    color: var(--success);
+    &::before{
+        background: var(--success);
+    }
+}
+.riskLevel2{
+    color: var(--focusColor);
+    &::before{
+        background: var(--focusColor);
+    }
+}
+.riskLevel3{
+    color: var(--warn);
+    &::before{
+        background: var(--warn);
     }
 }
 </style>
