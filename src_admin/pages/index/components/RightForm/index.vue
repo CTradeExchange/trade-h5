@@ -309,7 +309,6 @@ export default {
     },
     methods: {
         addRow (formConfig, data, config, activeData) {
-            debugger
             activeData.saved = true
             this.$store.commit('editor/ADD_FROM_ROW', {
                 formConfig,

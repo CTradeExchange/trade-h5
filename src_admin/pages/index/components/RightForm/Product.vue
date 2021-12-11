@@ -396,8 +396,6 @@ export default {
             })
         },
         showDialog (type) {
-            debugger
-            this.currentIndex
             // console.log(this.elementTag)
             this.activeTradeType = type
             this.tradeTypeAccountGroupProduct = this.tradeTypeProduct[type]

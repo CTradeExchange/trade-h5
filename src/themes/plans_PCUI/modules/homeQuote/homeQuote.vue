@@ -211,6 +211,9 @@ export default {
 }
 .homeQuoteImg{
     width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: block;
 }
 
 // 玩法选项

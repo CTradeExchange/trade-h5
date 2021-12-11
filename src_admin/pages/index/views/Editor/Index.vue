@@ -305,7 +305,7 @@ export default {
         }
 
         const showComp = () => {
-            const list = []
+            let list = []
             const pageCode = state.pageCode.toLocaleLowerCase()
             mobileComponents.forEach(item => {
                 if (!item.hidden) {
@@ -318,6 +318,8 @@ export default {
                     }
                 }
             })
+            const isPCUI = process.env.VUE_APP_theme === 'plans_PCUI'
+            if (isPCUI && pageCode === 'footer') list = list.filter(el => el.tag === 'footer')
             state.leftComponents[0].list = list
         }
 
@@ -403,9 +405,7 @@ export default {
                         item.data.tradeTypeBlock = Object.assign({}, tradeTypeBlock)
                         // if (item.data.code_ids_all) delete item.data.code_ids_all
                     }
-                    debugger
-                    activeData.value
-                    if (['selfSymbol', 'productsSwipe', 'productsTimeSharing', 'productsWithIcon'].includes(item.tag)) {
+                    if (['selfSymbol', 'productsSwipe', 'productsTimeSharing', 'productsWithIcon', 'bannerProducts'].includes(item.tag)) {
                         item.data.product = store.state.editor.tradeTypeSelfSymbol
                     }
                 })

@@ -104,7 +104,7 @@ export default {
                 instance.appContext.config.globalProperties.$MsgSocket.logout()
                 return store.dispatch('_user/logout')
             }).then(() => {
-                return router.push('/login')
+                return router.push('/mine')
             }).then(() => {
                 location.reload()
             }).catch(() => {

@@ -196,13 +196,3 @@ export default {
     }
 }
 </style>
-
-<style lang="scss">
-.homePageComp{
-    .m-layout{
-        width: 1200px;
-        margin-left: auto !important;
-        margin-right: auto !important;
-    }
-}
-</style>
