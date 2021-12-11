@@ -162,9 +162,9 @@
                                         </el-popover>
                                     </el-col>
                                     <el-col :span='6'>
-                                        <el-button :disabled='form.registList[index].disabledSetCurrency' type='primary' @click='setPlans(item,index,1)'>
+                                        <!-- <el-button :disabled='form.registList[index].disabledSetCurrency' type='primary' @click='setPlans(item,index,1)'>
                                             {{ $t('channelSetting.setCurrency') }}
-                                        </el-button>
+                                        </el-button> -->
                                         <el-button v-if='index === 0' type='primary' @click='addFormItem'>
                                             {{ $t('channelSetting.add') }}
                                         </el-button>
@@ -828,11 +828,11 @@ export default {
                                     })
                                     that.submitLoading = false
                                     throw new Error('no-plans')
-                                } else if (Number(el.customerGroupId) === 1) {
-                                    el.plans.forEach(item => {
-                                        const allCurrency = Array.isArray(item.allCurrency) ? item.allCurrency.toString() : item.allCurrency
-                                        item.allCurrency = allCurrency
-                                    })
+                                // } else if (Number(el.customerGroupId) === 1) {
+                                //     el.plans.forEach(item => {
+                                //         const allCurrency = Array.isArray(item.allCurrency) ? item.allCurrency.toString() : item.allCurrency
+                                //         item.allCurrency = allCurrency
+                                //     })
                                 } else {
                                     el.plans.forEach(item => {
                                         const allCurrency = that.accountTradeList[el.customerGroupId].data.find(el => Number(el.trade_type) === Number(item.id)).assets.map(item => item.code).toString()

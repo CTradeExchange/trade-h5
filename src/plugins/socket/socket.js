@@ -82,6 +82,9 @@ export default {
             QuoteSocket.initPing() // 心跳
             QuoteSocket.onOpen() // 连接成功
         })
+        quoteWS.addEventListener('close', function (err) {
+            console.warn('quoteWS close', err)
+        })
 
         msgWS.addEventListener('open', function () {
             MsgSocket.initPing() // 心跳
@@ -89,7 +92,7 @@ export default {
         })
 
         msgWS.addEventListener('close', function (err) {
-            console.log('close', err)
+            console.warn('msgWS close', err)
             MsgSocket.onDisconnect() // 断开链接
         })
 
