@@ -61,6 +61,7 @@ else if (location.search.includes('from=officialWebsite')) loginParams = getPreD
 
 // 获取到公司配置后初始化vue实例
 store.dispatch('_base/initBaseConfig').then(async () => {
+    store.dispatch('_base/getFooter')
     if (isProduction) skywalkingRegister(router)
     else modifybaseURL(store.state._base.wpCompanyInfo.apiService)
 

@@ -59,7 +59,6 @@ export default {
                 dispatch('getCompanyInfo'),
                 dispatch('getChannelSett'),
                 dispatch('getNav'),
-                dispatch('getFooter'),
                 dispatch('getWpSelfSymbols'),
                 dispatch('getProductCategory')
             ]
