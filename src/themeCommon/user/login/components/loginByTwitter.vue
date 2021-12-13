@@ -14,9 +14,10 @@
 </template>
 
 <script>
-import { reactive, onMounted, toRefs } from 'vue'
+import { reactive, onMounted, toRefs, computed } from 'vue'
 import hello from 'hellojs/dist/hello.all.min.js'
 import hooks from '../loginHooks'
+import { useStore } from 'vuex'
 export default {
     setup (props) {
         const state = reactive({
@@ -28,9 +29,9 @@ export default {
             loading: false,
             loginType: 'twitter'
         })
-
+        const store = useStore()
         const { handleCBLogin, onSelectCountry, areaActions } = hooks(state)
-
+        const appId = computed(() => store.state._base.thirdLoginConfig.find(el => el.thirdSource === 'twitter')?.clientId)
         const login_twitter = (network) => { // 登录方法，并将twitter 作为参数传入
             // Twitter instance
             console.log(network)
@@ -48,7 +49,7 @@ export default {
         }
         onMounted(() => {
             hello.init({
-                'twitter': '0yvXSv2dhPs9fE2bHPHt9FkkW'
+                'twitter': appId.value
             })
         })
 

@@ -17,12 +17,14 @@
 import { reactive, toRefs, computed, onMounted, watch, getCurrentInstance } from 'vue'
 import loadScript from '@/utils/loadScript'
 import { useI18n } from 'vue-i18n'
+import { useStore } from 'vuex'
 import hooks from '../loginHooks'
 export default {
     setup (props, context) {
+        const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         var auth2 = ''
-
+        const appId = computed(() => store.state._base.thirdLoginConfig.find(el => el.thirdSource === 'google')?.clientId)
         const state = reactive({
             bindAddShow: false,
             userId: '',
@@ -55,7 +57,7 @@ export default {
             gapi.load('auth2', function () {
                 // Retrieve the singleton for the GoogleAuth library and set up the client.
                 auth2 = gapi.auth2.init({
-                    client_id: '954651094385-iv1r7mo5mo24a5nlt1ldp3m5qug9u0ta.apps.googleusercontent.com', // 客户端ID
+                    client_id: appId.value, // 客户端ID
                     cookiepolicy: 'single_host_origin',
                     scope: 'profile' // 可以请求除了默认的'profile' and 'email'之外的数据
                 })

@@ -123,6 +123,7 @@ export default {
         display: flex;
         justify-content: flex-start;
         .product-item{
+            overflow: hidden;
             width: 100%;
             flex: 1;
             padding: rem(23px);

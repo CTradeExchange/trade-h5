@@ -13,7 +13,7 @@
         />
         <!-- 提币模块 -->
         <div v-if="['digit_wallet','otc365'].includes(currentTab)" class='wrap'>
-            <WithdrawCoin />
+            <WithdrawCoin :withdraw-method='currentTab' />
         </div>
         <!-- 提现模块 -->
         <div v-if="currentTab.includes('bank')" class='wrap'>

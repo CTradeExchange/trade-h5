@@ -98,14 +98,14 @@ import LoginByTwitter from '@/themeCommon/user/login/components/loginByTwitter.v
 import Top from '@/components/top'
 import { getDevice, localGet, localSet, getArrayObj, sessionGet } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
-import { computed, reactive, toRefs, getCurrentInstance, onUnmounted } from 'vue'
+import { computed, reactive, toRefs, getCurrentInstance, onUnmounted, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
 import RuleFn from './rule'
 import md5 from 'js-md5'
 import { timeline, timelineItem } from '@/components/timeline'
-import { checkUserStatus, thirdLoginConfig } from '@/api/user'
+import { checkUserStatus } from '@/api/user'
 import { setQuoteService } from '@/plugins/socket/socket'
 import { useI18n } from 'vue-i18n'
 //  import hooks from './hooks'
@@ -146,21 +146,7 @@ export default {
             }
         })
 
-        const companyId = computed(() => store.state._base.wpCompanyInfo.companyId)
-
         const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo.thirdLogin)
-        if (thirdLoginArr.value.length > 0) {
-            thirdLoginConfig({
-                companyId: companyId.value,
-                thirdSource: thirdLoginArr.value.join()
-            }).then(res => {
-                if (res.check()) {
-
-                }
-            }).catch(err => {
-                state.loadingPage = false
-            })
-        }
 
         const changeLoginType = () => {
             const loginType = state.loginType
@@ -352,6 +338,8 @@ export default {
 
         // 监听是否需要弹窗设置密码
         document.body.addEventListener('MSG_UNSET_PWD', showSetPwd, false)
+        // 获取三方登录配置
+        store.dispatch('_base/getLoginConfig')
 
         onUnmounted(() => {
             document.body.removeEventListener('MSG_UNSET_PWD', showSetPwd, false)
