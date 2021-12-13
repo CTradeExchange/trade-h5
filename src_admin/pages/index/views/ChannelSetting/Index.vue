@@ -50,6 +50,7 @@
                             >
                                 <el-select
                                     v-model='form.registrable'
+                                    collapse-tags
                                     multiple
                                     :placeholder="$t('pleaseEnter')"
                                     value-key='id'
@@ -161,9 +162,9 @@
                                         </el-popover>
                                     </el-col>
                                     <el-col :span='6'>
-                                        <el-button :disabled='form.registList[index].disabledSetCurrency' type='primary' @click='setPlans(item,index,1)'>
+                                        <!-- <el-button :disabled='form.registList[index].disabledSetCurrency' type='primary' @click='setPlans(item,index,1)'>
                                             {{ $t('channelSetting.setCurrency') }}
-                                        </el-button>
+                                        </el-button> -->
                                         <el-button v-if='index === 0' type='primary' @click='addFormItem'>
                                             {{ $t('channelSetting.add') }}
                                         </el-button>
@@ -578,20 +579,6 @@ export default {
                         message: '请选择注册国家',
                         trigger: 'blur',
                     }
-                ],
-                registrable: [
-                    {
-                        required: true,
-                        message: '请选择可注册区号',
-                        trigger: 'blur',
-                    }
-                ],
-                defaultZone: [
-                    {
-                        required: true,
-                        message: '请选择默认注册区号',
-                        trigger: 'blur',
-                    }
                 ]
 
             },
@@ -654,7 +641,7 @@ export default {
 
                 // 设置存款数据
                 this.$refs['amountSet'].setData(content)
-                // debugger
+
                 // this.$refs['editor'].setContent(content.instructions)
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                 that.form = Object.assign(that.form, content, { other })
@@ -755,9 +742,6 @@ export default {
                     that.zoneList = list
                     // this.otherZoneList = list
                     if (that.form.registrable.length === 0) {
-                        that.form.registrable = [list[0]]
-                        this.form.defaultZone = that.form.registrable[0]
-
                         // 默认第一个是其它
                         if (!that.form.registList[0].registCountry) {
                             that.form.registList[0].registCountry =
@@ -861,7 +845,7 @@ export default {
                         if (_formData.instructions) {
                             _formData.instructions = escape(_formData.instructions)
                         }
-                        // debugger
+
                         // const aa = this.$refs['editor'].getContent()
                         // _formData.instructions = aa
                         if (_formData.registList.length > 0) {
@@ -876,7 +860,7 @@ export default {
                                 }
                                 if (isEmpty(el.customerGroupId)) {
                                     that.$message({
-                                        message:  this.$t('channelSetting.error8'),
+                                        message: this.$t('channelSetting.error8'),
                                         type: 'warning'
                                     })
                                     that.submitLoading = false
@@ -890,11 +874,11 @@ export default {
                                     })
                                     that.submitLoading = false
                                     throw new Error('no-plans')
-                                } else if (Number(el.customerGroupId) === 1) {
-                                    el.plans.forEach(item => {
-                                        const allCurrency = Array.isArray(item.allCurrency) ? item.allCurrency.toString() : item.allCurrency
-                                        item.allCurrency = allCurrency
-                                    })
+                                // } else if (Number(el.customerGroupId) === 1) {
+                                //     el.plans.forEach(item => {
+                                //         const allCurrency = Array.isArray(item.allCurrency) ? item.allCurrency.toString() : item.allCurrency
+                                //         item.allCurrency = allCurrency
+                                //     })
                                 } else {
                                     el.plans.forEach(item => {
                                         const allCurrency = that.accountTradeList[el.customerGroupId].data.find(el => Number(el.trade_type) === Number(item.id)).assets.map(item => item.code).toString()

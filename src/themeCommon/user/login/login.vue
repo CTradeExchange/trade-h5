@@ -1,6 +1,6 @@
 <template>
     <div class='pageWrap'>
-        <Top :right-action='rightAction' @rightClick='changeLoginType' />
+        <Top :right-action='rightAction' @back="$router.push('/')" @rightClick='changeLoginType' />
         <header class='header'>
             <h1 class='pageTitle'>
                 {{ $t(loginType==='password'?'login.loginByPwd':'login.loginByCode') }}
@@ -38,14 +38,13 @@
                 {{ $t('login.otherLogin') }}
             </p>
             <div class='otherLogin'>
+                <!-- <LoginByGoogle v-if="thirdLoginArr.includes('google')" />
+                <LoginByFacebook v-if="thirdLoginArr.includes('facebook')" />
+                <LoginByTwitter v-if="thirdLoginArr.includes('twitter')" /> -->
+
                 <LoginByGoogle />
                 <LoginByFacebook />
                 <LoginByTwitter />
-            <!-- <LoginByGoogle v-if="thirdLoginArr.includes('google')" />
-            <span class='empty'></span>
-            <LoginByFacebook v-if="thirdLoginArr.includes('facebook')" /> -->
-
-            <!-- twitter -->
             </div>
         </div>
 
@@ -84,14 +83,6 @@
             </div>
         </section>
     </van-popup>
-
-    <!-- 请补充您所在国家信息 -->
-    <van-action-sheet
-        v-model:show='bindAddShow'
-        :actions='areaActions'
-        title='请补充您所在国家信息'
-        @select='onSelectCountry'
-    />
     <Loading :show='loading' />
 </template>
 
@@ -100,21 +91,21 @@ import Schema from 'async-validator'
 import InputComp from '@/components/form/input'
 import Vline from '@/components/vline'
 import CheckCode from '@/components/form/checkCode'
-import LoginByGoogle from '@/components/loginByGoogle/loginByGoogle'
-import LoginByFacebook from '@/components/loginByFacebook/loginByFacebook'
-import LoginByTwitter from '@/components/loginByTwitter/loginByTwitter'
+import LoginByGoogle from '@/themeCommon/user/login/components/loginByGoogle.vue'
+import LoginByFacebook from '@/themeCommon/user/login/components/loginByFacebook.vue'
+import LoginByTwitter from '@/themeCommon/user/login/components/loginByTwitter.vue'
 
 import Top from '@/components/top'
-import { getDevice, localGet, localSet, getArrayObj } from '@/utils/util'
+import { getDevice, localGet, localSet, getArrayObj, sessionGet } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
-import { computed, reactive, toRefs, getCurrentInstance } from 'vue'
+import { computed, reactive, toRefs, getCurrentInstance, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
 import RuleFn from './rule'
 import md5 from 'js-md5'
 import { timeline, timelineItem } from '@/components/timeline'
-import { checkUserStatus, googleLoginVerify } from '@/api/user'
+import { checkUserStatus, thirdLoginConfig } from '@/api/user'
 import { setQuoteService } from '@/plugins/socket/socket'
 import { useI18n } from 'vue-i18n'
 //  import hooks from './hooks'
@@ -145,7 +136,8 @@ export default {
             checkCode: '',
             loginType: 'password', // checkCode
             loginAccount: 'mobile',
-            bindAddShow: false
+            bindAddShow: false,
+            userId: ''
         })
         let token = ''
         const rightAction = computed(() => {
@@ -154,22 +146,21 @@ export default {
             }
         })
 
-        const areaActions = computed(() => {
-            const countryList = store.state.countryList
-            const tempArr = []
-            countryList.forEach(item => {
-                tempArr.push({
-                    name: item.name + ' (' + item.countryCode + ')',
-                    code: item.countryCode,
-                    countryCode: item.code,
-                    countryName: item.name
-                })
+        const companyId = computed(() => store.state._base.wpCompanyInfo.companyId)
+
+        const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo.thirdLogin)
+        if (thirdLoginArr.value.length > 0) {
+            thirdLoginConfig({
+                companyId: companyId.value,
+                thirdSource: thirdLoginArr.value.join()
+            }).then(res => {
+                if (res.check()) {
+
+                }
+            }).catch(err => {
+                state.loadingPage = false
             })
-
-            return tempArr
-        })
-
-        const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo.thirdLoginArr)
+        }
 
         const changeLoginType = () => {
             const loginType = state.loginType
@@ -183,7 +174,9 @@ export default {
                 verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
                 loginPwd: state.loginType === 'password' ? md5(state.pwd) : undefined,
                 sendToken: state.loginType === 'checkCode' ? token : undefined,
-
+                thirdSource: route.query.thirdSource || '',
+                bindThirdUserId: route.query.bindThirdUserId || '',
+                isThird: false // true为三方登录 false 系统登录
             }
 
             const validator = new Schema(RuleFn(t))
@@ -208,8 +201,8 @@ export default {
 
         // 登录成功跳转
         const loginToPath = () => {
-            const toURL = route.query.back ? decodeURIComponent(route.query.back) : '/'
-            router.replace(toURL)
+            // const toURL = route.query.back ? decodeURIComponent(route.query.back) : '/'
+            router.replace('/')
         }
 
         // 发送登录接
@@ -217,7 +210,6 @@ export default {
             state.loading = true
             store.dispatch('_user/login', params).then(res => {
                 state.loading = false
-                // console.log(res)
                 if (res.invalid()) return false
 
                 // 切换登录后的行情websocket
@@ -354,39 +346,16 @@ export default {
             loginToPath()
         }
 
-        googleLoginVerify({
-            companyId: 319,
-            idToken: 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjkzNDFhYmM0MDkyYjZmYzAzOGU0MDNjOTEwMjJkZDNlNDQ1MzliNTYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiOTU0NjUxMDk0Mzg1LWl2MXI3bW81bW8yNGE1bmx0MWxkcDNtNXF1Zzl1MHRhLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiOTU0NjUxMDk0Mzg1LWl2MXI3bW81bW8yNGE1bmx0MWxkcDNtNXF1Zzl1MHRhLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTA2NDU1Nzc1MTg5Mzg1MTk2NDEyIiwiaGQiOiJjaGl4aTg4LmNvbSIsImVtYWlsIjoibW9vcmUuaHVAY2hpeGk4OC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6ImxSeVpXZWVxbk1rLW9odnloTGtXMUEiLCJuYW1lIjoiTW9vcmUgSHUiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUFUWEFKd1M1bEJmcGZRbHJXSUwxeTZUazExd0g3d2g3RlF2U2haaDctMko9czk2LWMiLCJnaXZlbl9uYW1lIjoiTW9vcmUiLCJmYW1pbHlfbmFtZSI6Ikh1IiwibG9jYWxlIjoiemgtSEsiLCJpYXQiOjE2Mzg4NjcwMjEsImV4cCI6MTYzODg3MDYyMSwianRpIjoiOTIyNmMyZjRkNWIyOTBjZDJiODZiZDkzMjg4MmEyMTQ3MzNkNDVjNCJ9.YO1Y3WxlgXVdpRa5WOxEGe0eyE880w1bIZCsNBR1f-GwoM45M64vcMkdb9sIZtc3SH7WK8yDCCPdJ3MVT4ZdoyxwS6khupHWVtEn1bkizgTAAh7sM5L7fjmtEun7NF-CcgWBFP1ryr86ZtmLRiTfv24luB7iDiw4WBJ29OYsnhI-HNuPHhVbadpvYbnKWLlS1MIKq_LUugpUz3dh4VD370H_YhXlXwXv0tKaHEPfyrV2LUaVA4JzEfi6QUYBctDpRwMa3EqVDJqyh9I79vr4nj-iUoxf5qZbKgHfg-N7b5x3EBmgvE-coCKb7fEqgmHmZRT_WIm27g57dwrbUUvhww'
-        }).then(res => {
-            if (res.check()) {
-                const action = res.data.action
-                if (action === 'register') {
-                    Dialog.confirm({
-                        title: t('tip'),
-                        message: '您的谷歌邮箱已注册了账号，请登录账号',
-                        confirmButtonText: t('common.sure'),
-                        cancelButtonText: t('common.cancel')
-                    }).then(() => {
-                        router.push('/login')
-                    }).catch(() => {})
-                    // state.bindAddShow = true
-                } else if (action === 'login') {
-
-                } else if (action === 'bind') {
-
-                }
-            }
-        })
-
-        const onSelectCountry = (country) => {
-            // 调后台注册接口
-            // const tradeTypeCurrencyList = getPlansByCountry(country.countryCode)
-            // const customerGroupId = getCustomerGroupIdByCountry(country.countryCode)
-            state.bindAddShow = false
+        const showSetPwd = () => {
+            state.loginPwdPop = true
         }
 
-        // 获取国家区号
-        store.dispatch('getCountryListByParentCode')
+        // 监听是否需要弹窗设置密码
+        document.body.addEventListener('MSG_UNSET_PWD', showSetPwd, false)
+
+        onUnmounted(() => {
+            document.body.removeEventListener('MSG_UNSET_PWD', showSetPwd, false)
+        })
 
         return {
             ...toRefs(state),
@@ -399,9 +368,7 @@ export default {
             loginPwdSet,
             noTip,
             loginSubmit,
-            thirdLoginArr,
-            areaActions,
-            onSelectCountry
+            thirdLoginArr
         }
     }
 }

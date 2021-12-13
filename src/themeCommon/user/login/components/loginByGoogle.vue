@@ -2,18 +2,38 @@
     <a id='my-sign-google' class='loginByGoogle'>
         <i class='icon'></i>
     </a>
+    <Loading :show='loading' />
+    <!-- 请补充您所在国家信息 -->
+    <van-action-sheet
+        v-model:show='bindAddShow'
+        :actions='areaActions'
+        teleport='#app'
+        title='$t("login.inputCountry")'
+        @select='onSelectCountry'
+    />
 </template>
 
 <script>
-import { reactive, toRefs, computed, onMounted, watch } from 'vue'
-import { useStore } from 'vuex'
+import { reactive, toRefs, computed, onMounted, watch, getCurrentInstance } from 'vue'
 import loadScript from '@/utils/loadScript'
-import { googleLoginVerify } from '@/api/user'
+import { useI18n } from 'vue-i18n'
+import hooks from '../loginHooks'
 export default {
     setup (props, context) {
+        const { t } = useI18n({ useScope: 'global' })
         var auth2 = ''
-        const store = useStore()
-        const companyId = () => store.state._base.wpCompanyInfo.companyId
+
+        const state = reactive({
+            bindAddShow: false,
+            userId: '',
+            thirdSource: '',
+            customerGroupId: '',
+            loading: false,
+            idToken: '',
+            loginType: 'google'
+        })
+
+        const { handleCBLogin, onSelectCountry, areaActions } = hooks(state)
 
         const renderBtn = () => {
             loadScript('https://apis.google.com/js/api:client.js').then(() => {
@@ -23,18 +43,9 @@ export default {
 
         const attachSignin = (element) => {
             auth2.attachClickHandler(element, {}, function (googleUser) {
-                console.log(googleUser)
-                var profile = auth2.currentUser.get().getBasicProfile()
-                console.log('ID666: ' + profile.getId())
-                console.log('Full Name: ' + profile.getName())
-                console.log('Given Name: ' + profile.getGivenName())
-                console.log('Family Name: ' + profile.getFamilyName())
-                console.log('Image URL: ' + profile.getImageUrl())
-                console.log('Email: ' + profile.getEmail())
                 var id_token = googleUser.getAuthResponse().id_token
-                console.log('id_token: ' + id_token)
-                context.emit('loginSuccess', id_token)
-                handleLogin(id_token)
+                // 处理与cats系统交互
+                handleCBLogin(id_token)
             }, function (error) {
                 console.log(error)
             })
@@ -51,24 +62,15 @@ export default {
                 attachSignin(document.getElementById('my-sign-google'))
             })
         }
-        const handleLogin = (id_token) => {
-            console.log('login come in ')
-            googleLoginVerify({
-                id_token,
-                companyId: companyId.value
-            }).then(res => {
-                if (res.check()) {
-                    console.log('res', res)
-                }
-            })
-        }
 
         onMounted(() => {
             renderBtn()
         })
 
         return {
-
+            areaActions,
+            onSelectCountry,
+            ...toRefs(state)
         }
     }
 

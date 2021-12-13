@@ -1,4 +1,4 @@
-import { pageConfig, wpCompanyConfig, wpNav, wpSelfSymbolIndex } from '@/api/wpApi'
+import { pageConfig, wpCompanyConfig, wpNav, wpFooter, wpSelfSymbolIndex } from '@/api/wpApi'
 import { localSet, localGet, getCookie, sessionSet, setCookie, isEmpty } from '@/utils/util'
 import { formatPlans } from './storeUtil.js'
 
@@ -10,6 +10,7 @@ export default {
         wpSelfSymbol: [], //   wordpress自选产品配置
         wpProductCategory: [], // wordpress配置的产品板块
         wpNav: null, //   wordpress公司配置信息
+        wpFooter: null, //   wordpress公司配置PCUI的页脚信息
         plansNames: {}, // 完成类型，从语言包里面获取
         plans: [] // [{ id: 1, name: 'CFD合约全仓' }, { id: 2, name: 'CFD合约逐仓' }, { id: 3, name: '现货杠杆全仓' }, { id: 9, name: 'ABCC现货撮合' }]
     },
@@ -27,6 +28,9 @@ export default {
         },
         UPDATE_wpNav (state, data) {
             state.wpNav = data
+        },
+        UPDATE_wpFooter (state, data) {
+            state.wpFooter = data
         },
         UPDATE_selfSymbol (state, data) {
             state.wpSelfSymbol = data
@@ -106,7 +110,14 @@ export default {
             return wpNav().then(data => {
                 if (data) commit('UPDATE_wpNav', data)
                 return data
-            })
+            }).catch(err => err)
+        },
+        // 获取底部页脚配置
+        getFooter ({ commit }) {
+            return wpFooter().then(data => {
+                if (data) commit('UPDATE_wpFooter', data)
+                return data
+            }).catch(err => err)
         },
         // 获取自选产品配置
         getWpSelfSymbols ({ commit }) {

@@ -339,25 +339,8 @@ function getsec (str) {
 
 /* 隐藏邮箱 */
 export function hideEmailInfo (email) {
-    if (String(email).indexOf('@') > 0) {
-        var newEmail; const str = email.split('@'); let _s = ''
-
-        if (str[0].length > 4) {
-            _s = str[0].substr(0, 4)
-            for (let i = 0; i < str[0].length - 4; i++) {
-                _s += '*'
-            }
-        } else {
-            _s = str[0].substr(0, 1)
-            for (let i = 0; i < str[0].length - 1; i++) {
-                _s += '*'
-            }
-        }
-        newEmail = _s + '@' + str[1]
-        return newEmail
-    } else {
-        return email
-    }
+    var reg = /(.{1}).+(.{2}@.+)/g
+    return email.replace(reg, '$1****$2')
 }
 
 /* 隐藏 */

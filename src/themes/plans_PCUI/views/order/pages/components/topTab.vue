@@ -102,10 +102,11 @@ export default {
             color: var(--color);
             border-radius: 4px;
             margin: 0 0 0 8px;
-            font-weight: 400;
             color: var(---color);
+            font-weight: 400;
             &.is-active{
-                color: var(--el-color-primary);
+                color: var(--primary);
+                font-weight: bold;
             }
         }
     }

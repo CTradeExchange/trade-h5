@@ -233,7 +233,6 @@ export default {
             })
         }
         const handRoutTo = (path) => {
-            // debugger
             router.push(route.path + path)
         }
         const toBankList = () => {

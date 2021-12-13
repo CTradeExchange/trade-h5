@@ -9,7 +9,7 @@
                 class='cellItem'
                 is-link
                 :title='$t("common.mobile")'
-                to='/bindMobile'
+                :to='customInfo.phone ? "/changeBindMobile" : "/bindMobile"'
             >
                 <template #right-icon>
                     <span class='right-val' :class="customInfo.phone ? 'yet' : 'none'">
@@ -22,7 +22,7 @@
                 class='cellItem'
                 is-link
                 :title='$t("common.email")'
-                to='/bindEmail'
+                :to="customInfo.email ? '/changeBindEmail' : '/bindEmail'"
                 value=''
             >
                 <template #right-icon>
@@ -104,7 +104,7 @@ export default {
                 instance.appContext.config.globalProperties.$MsgSocket.logout()
                 return store.dispatch('_user/logout')
             }).then(() => {
-                return router.push('/login')
+                return router.push('/mine')
             }).then(() => {
                 location.reload()
             }).catch(() => {

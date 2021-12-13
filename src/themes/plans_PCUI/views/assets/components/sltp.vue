@@ -22,8 +22,8 @@
                             {{ $t('trade.currentPrice') }}
                         </div>
                         <div class='value'>
-                            <span :class='[Number(data.direction) === 1 ? product.sell_color : product.buy_color]'>
-                                {{ Number(data.direction) === 1 ? product.sell_price : product.buy_price }}
+                            <span :class='[Number(data.direction) === 1 ? product?.sell_color : product?.buy_color]'>
+                                {{ Number(data.direction) === 1 ? product?.sell_price : product?.buy_price }}
                             </span>
                         </div>
                     </div>
@@ -89,7 +89,7 @@ export default {
             stopProfitPrice: ''
         })
         // 产品数据
-        const product = computed(() => store.state._quote.productMap[state.data.symbolId + '_' + state.data.tradeType])
+        const product = computed(() => store.state._quote.productMap[state.data.symbolId + '_' + state.data.tradeType] || {})
         // 账户列表
         const accountList = computed(() => store.state._user.customerInfo?.accountList)
         // 账户信息

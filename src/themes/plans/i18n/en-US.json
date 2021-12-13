@@ -628,5 +628,10 @@
     "focusNews":"News",
     "newsFlash":"7x24",
     "calendar":"Calendar"
+  },
+  "riskLevel":{
+    "safety": "Safety",
+    "warn": "Warn",
+    "danger": "Danger"
   }
 }

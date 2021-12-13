@@ -1,7 +1,7 @@
 <template>
     <router-view />
     <div class='quote'>
-        <TopModule />
+        <!-- <TopModule /> -->
         <Content />
     </div>
 </template>

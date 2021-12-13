@@ -119,10 +119,8 @@ export default {
         height: rem(120px);
         background: var(--contentColor);
         border-top: solid rem(10px) var(--bgColor);
-        //background: none;
         display: flex;
         align-items: center;
-        //margin-top: rem(10px);
         &::after{
             border: none;
         }
@@ -131,6 +129,9 @@ export default {
         }
         :deep(.van-cell__title){
             color: var(--color);
+        }
+        :deep(.van-cell__value){
+            flex: none;
         }
 
 }

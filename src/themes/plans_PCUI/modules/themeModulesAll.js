@@ -13,6 +13,10 @@ import fullBanner from './fullBanner/config.js'
 import bannerProducts from './bannerProducts/config.js'
 import homeNotice from './homeNotice/config.js'
 import homeRegister from './homeRegister/config.js'
+import homeQuote from './homeQuote/config.js'
+import news from './news/config.js'
+import backgroundImg from './backgroundImg/config.js'
+import footer from './footer/config.js'
 
 export const getThemeModules = async () => {
     return [
@@ -25,7 +29,11 @@ export const getThemeModules = async () => {
         fullBanner,
         homeRegister,
         homeNotice,
+        news,
+        backgroundImg,
+        homeQuote,
         bannerProducts,
+        footer,
         text
     ]
 }

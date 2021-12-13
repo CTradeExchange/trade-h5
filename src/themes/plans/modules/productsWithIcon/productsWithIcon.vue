@@ -1,28 +1,31 @@
 <template>
-    <div class='product-wrap'>
-        <div v-if='data.saved === false' class='default'>
-            <img alt='' :src="require('./productsWithIcon.png')" />
-        </div>
-
-        <div v-for='(item, index) in productList' v-else :key='index' class='product' @click='openProduct(item)'>
-            <i class='icon'>
-                <img alt='' :src='"/images/product/" + item.symbolCode + ".png"' srcset='' />
-            </i>
-            <div class='symbol'>
-                <p class='symbol-name'>
-                    {{ item.symbolName }}
-                </p>
-                <p class='symbol-code'>
-                    {{ item.symbolCode }}
-                </p>
+    <div class='wrap' :style='data.styleObj'>
+        <div class='product-wrap'>
+            <div v-if='data.items.length === 0' class='default'>
+                <img alt='' :src="require('./productsWithIcon.png')" />
             </div>
-            <div class='price'>
-                <p class='cur-price' :class='[item.cur_color]'>
-                    {{ item.cur_price }}
-                </p>
-                <p class='up-down' :class='[item.upDownColor]'>
-                    {{ item.upDownWidth || '--' }}
-                </p>
+
+            <div v-for='(item, index) in data.items' v-else :key='index' class='product' @click='openProduct(item)'>
+                <i class='icon'>
+                    <img alt='' :src='item.src' srcset='' />
+                </i>
+                {{ item.product }}
+                <div class='symbol'>
+                    <p class='symbol-name'>
+                        {{ item.symbolName || '产品名称' }}
+                    </p>
+                    <p class='symbol-code'>
+                        {{ item.symbolCode || '产品编码' }}
+                    </p>
+                </div>
+                <div class='price'>
+                    <p class='cur-price' :class='[item.cur_color]'>
+                        {{ item.cur_price || '--' }}
+                    </p>
+                    <p class='up-down' :class='[item.upDownColor]'>
+                        {{ item.upDownWidth || '--' }}
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -33,6 +36,7 @@ import { QuoteSocket } from '@/plugins/socket/socket'
 import { computed, unref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import { isEmpty } from '@/utils/util'
 export default {
     props: {
         data: {
@@ -44,15 +48,30 @@ export default {
                     target: ''
                 }
             }
-        },
+        }
     },
-    setup () {
+    setup (props) {
         const h5Preview = process.env.VUE_APP_h5Preview
         const store = useStore()
         const router = useRouter()
-        const symbolKeys = ['59_1', '56_1', '193_1', '28_3', '191_1']
+        const customerGroupId = computed(() => store.getters.customerGroupId)
         // 产品map数据
         const productMap = unref(computed(() => store.state._quote.productMap))
+
+        const symbolKeys = Object.entries(props.data.product || {}).map(([tradeType, item]) => {
+            const list = item[customerGroupId.value] || []
+            return list.map(symbolId => `${symbolId}_${tradeType}`)
+        }).flat()
+
+        // const symbolKeysss = props.data.items.map(el => {
+        //     if (!isEmpty(el.product)) {
+        //         Object.entries(el.product).map(([tradeType, item]) => {
+        //             const list = item[customerGroupId.value] || []
+        //             return list.map(symbolId => `${symbolId}_${tradeType}`)
+        //         })
+        //     }
+        // })
+
         const productList = symbolKeys.map(key => productMap[key]).filter(elem => elem)
 
         if (!h5Preview) { QuoteSocket.add_subscribe({ moduleId: 'productsWithIcon', symbolKeys }) }

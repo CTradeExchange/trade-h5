@@ -133,7 +133,6 @@ export default {
         }
     },
     setup (props, b, c) {
-        // debugger
         const h5Preview = process.env.VUE_APP_h5Preview
         const instance = getCurrentInstance()
         const delayer = null

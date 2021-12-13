@@ -6,6 +6,28 @@ export default {
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
         {
+            name: 'moduleAlign',
+            label: '对齐方式',
+            type: 'Radio',
+            default: 'center',
+            options: [
+                { value: 'center', label: '居中显示' },
+                { value: 'full', label: '通栏显示' }
+            ]
+        },
+        {
+            name: 'fontWeight',
+            label: '字体粗细',
+            type: 'Radio',
+            default: 'normal',
+            options: [
+                { value: 'normal', label: '标准' },
+                { value: 'bold', label: '粗体' },
+                { value: 'bolder', label: '更粗' },
+                { value: 'lighter', label: '更细' }
+            ]
+        },
+        {
             name: 'content',
             label: '文本内容',
             type: 'Textarea',

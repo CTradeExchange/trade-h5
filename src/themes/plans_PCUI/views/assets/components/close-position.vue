@@ -33,8 +33,8 @@
                             {{ $t('trade.currentPrice') }}
                         </div>
                         <div class='value'>
-                            <span :class='[Number(data.direction) === 1 ? product.sell_color : product.buy_color]'>
-                                {{ Number(data.direction) === 1 ? product.sell_price : product.buy_price }}
+                            <span :class='[Number(data.direction) === 1 ? product?.sell_color : product?.buy_color]'>
+                                {{ Number(data.direction) === 1 ? product.sell_price : product?.buy_price }}
                             </span>
                         </div>
                     </div>
@@ -271,7 +271,7 @@ export default {
             height: 25px;
             margin-left: 10px;
             font-size: 13px;
-            background: var(--primaryAssistColor);
+            background: var(--assistColor);
             border-radius: 2px;
             cursor: pointer;
         }

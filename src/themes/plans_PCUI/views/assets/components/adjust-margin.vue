@@ -177,7 +177,7 @@ export default {
     .box {
         display: flex;
         align-items: center;
-        background: var(--primaryAssistColor);
+        background: var(--assistColor);
         height: 50px;
         margin-top: 15px;
         border-radius: 3px;

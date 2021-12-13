@@ -60,7 +60,7 @@ export const getPendingColumns = tradeType => {
             bizType: row.bizType
         }
 
-        if (Number(row.tradeType) === 9) {
+        if ([5, 9].includes(Number(row.tradeType))) {
             return closeTradePboOrder({
                 orderId: row.id,
                 ...params,
@@ -123,7 +123,7 @@ export const getPendingColumns = tradeType => {
 
     const columnsMap = computed(() => ({
         1: [
-            { name: t('trade.name'), prop: 'symbolName', align: 'left', width: 100 },
+            { name: t('trade.name'), prop: 'symbolName', align: 'left', minWidth: 100 },
             {
                 name: t('trade.direction'),
                 prop: 'direction',
@@ -136,36 +136,36 @@ export const getPendingColumns = tradeType => {
                 name: t('trade.pendingUnit') + ' (' + t('trade.volumeUnit') + ')',
                 prop: 'requestNum',
                 align: 'right',
-                width: 120,
+                minWidth: 120,
                 // formatter: row => row.requestNum + `(${row.numberStatisticMode === 2 ? row.accountCurrency : t('trade.volumeUnit')})`
             },
-            { name: t('trade.trustPrice'), prop: 'requestPrice', align: 'right', width: 100 },
+            { name: t('trade.trustPrice'), prop: 'requestPrice', align: 'right', minWidth: 100 },
             {
                 name: t('trade.currentPrice'),
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 formatter: row => Number(row.direction) === 1 ? currentProduct(row)?.sell_price : currentProduct(row)?.buy_price
             },
             {
                 name: t('trade.stopLossPrice'),
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 prop: 'stopLoss'
             },
             {
                 name: t('trade.stopProfitPrice'),
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 prop: 'takeProfit'
             },
             {
                 name: t('trade.expireTime'),
                 align: 'right',
-                width: 180,
+                minWidth: 180,
                 formatter: row => expireTypeMap[row.expireType]
             },
-            { name: t('trade.pendingTime'), align: 'right', width: 180, formatter: row => formatTime(row.orderTime) },
-            { name: t('trade.pendingNo'), prop: 'id', align: 'right', width: 200 },
+            { name: t('trade.pendingTime'), align: 'right', minWidth: 180, formatter: row => formatTime(row.orderTime) },
+            { name: t('trade.pendingNo'), prop: 'id', align: 'right', minWidth: 200 },
             {
                 name: t('c.handle'),
                 fixed: 'right',
@@ -185,7 +185,7 @@ export const getPendingColumns = tradeType => {
             },
         ],
         2: [
-            { name: t('trade.name'), prop: 'symbolName', align: 'left', width: 100 },
+            { name: t('trade.name'), prop: 'symbolName', align: 'left', minWidth: 100 },
             {
                 name: t('trade.direction'),
                 prop: 'direction',
@@ -197,42 +197,42 @@ export const getPendingColumns = tradeType => {
             {
                 name: t('transRecords.byAmount'),
                 align: 'right',
-                width: 120,
+                minWidth: 120,
                 formatter: row => numberStatisticModeMap[row.entryType]
             },
             {
                 name: t('transRecords.entrustedAmount'),
                 align: 'right',
-                width: 120,
+                minWidth: 120,
                 formatter: row => row.requestNum + (row.entryType === 2 ? row.accountCurrency : t('trade.volumeUnit'))
             },
-            { name: t('trade.trustPrice'), prop: 'requestPrice', align: 'right', width: 120 },
+            { name: t('trade.trustPrice'), prop: 'requestPrice', align: 'right', minWidth: 120 },
             {
                 name: t('trade.currentPrice'),
                 align: 'right',
-                width: 120,
+                minWidth: 120,
                 formatter: row => Number(row.direction) === 1 ? currentProduct(row)?.sell_price : currentProduct(row)?.buy_price
             },
             {
                 name: t('trade.stopLossPrice'),
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 formatter: row => (row.stopLoss / Math.pow(10, row.digits)).toFixed(row.digits)
             },
             {
                 name: t('trade.stopProfitPrice'),
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 formatter: row => (row.takeProfit / Math.pow(10, row.digits)).toFixed(row.digits)
             },
             {
                 name: t('trade.expireTime'),
                 align: 'right',
-                width: 180,
+                minWidth: 180,
                 formatter: row => expireTypeMap[row.expireType]
             },
-            { name: t('trade.pendingTime'), align: 'right', width: 180, formatter: row => formatTime(row.orderTime) },
-            { name: t('trade.pendingNo'), prop: 'id', align: 'right', width: 200 },
+            { name: t('trade.pendingTime'), align: 'right', minWidth: 180, formatter: row => formatTime(row.orderTime) },
+            { name: t('trade.pendingNo'), prop: 'id', align: 'right', minWidth: 200 },
             {
                 name: t('c.handle'),
                 fixed: 'right',
@@ -282,8 +282,8 @@ export const getPendingColumns = tradeType => {
                 align: 'right',
                 formatter: row => row.loanAmount + row.accountCurrency
             },
-            { name: t('trade.trustTime'), align: 'right', width: 180, formatter: row => formatTime(row.trustTime) },
-            { name: t('trade.pendingNo'), prop: 'id', align: 'right', width: 200 },
+            { name: t('trade.trustTime'), align: 'right', minWidth: 180, formatter: row => formatTime(row.trustTime) },
+            { name: t('trade.pendingNo'), prop: 'id', align: 'right', minWidth: 200 },
             {
                 name: t('c.handle'),
                 fixed: 'right',
@@ -331,7 +331,7 @@ export const getPendingColumns = tradeType => {
                 align: 'right',
                 formatter: row => (Number(row.direction) === 1 ? currentProduct(row)?.sell_price : currentProduct(row)?.buy_price) || '- -'
             },
-            { name: t('trade.trustTime'), align: 'right', width: 180, formatter: row => formatTime(row.trustTime) },
+            { name: t('trade.trustTime'), align: 'right', minWidth: 180, formatter: row => formatTime(row.trustTime) },
             { name: t('trade.pendingNo'), prop: 'id', align: 'right' },
             {
                 name: t('c.handle'),
@@ -375,10 +375,10 @@ export const getTransactionColumns = (tradeType) => {
             {
                 name: t('trade.dealTime'),
                 align: 'left',
-                width: 160,
+                minWidth: 160,
                 formatter: row => formatTime(row.executeTime)
             },
-            { name: t('trade.name'), prop: 'symbolName', align: 'right', width: 120 },
+            { name: t('trade.name'), prop: 'symbolName', align: 'right', minWidth: 120 },
             {
                 name: t('trade.direction'),
                 align: 'right',
@@ -397,71 +397,71 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.pendingUnit') + ' (' + t('trade.volumeUnit') + ')',
                 prop: 'requestNum',
                 align: 'right',
-                width: 100
+                minWidth: 100
             },
             // {
             //     name: t('transRecords.byAmount'),
             //     align: 'right',
-            //     width: 120,
+            //     minWidth: 120,
             //     formatter: row => numberStatisticModeMap[row.numberStatisticMode]
             // },
             // {
             //     name: t('transRecords.entrustedAmount'),
             //     align: 'right',
-            //     width: 120,
+            //     minWidth: 120,
             //     formatter: row => row.requestNum + (row.numberStatisticMode === 2 ? row.accountCurrency : t('trade.volumeUnit'))
             // },
             {
                 name: t('trade.dealVolume') + ' (' + t('trade.volumeUnit') + ')',
                 prop: 'executeNum',
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 // formatter: row => formatExecuteNum(row.executeNum, tradeType, row)
             },
             {
                 name: t('trade.trustPrice'),
                 prop: 'requestPrice',
                 align: 'right',
-                width: 120,
+                minWidth: 120,
                 formatter: row => (Number(row.bizType) === 1 || isCloseType(row.bizType)) ? '- -' : row.requestPrice
             },
             {
                 name: t('trade.positionPrice'),
                 prop: 'requestPrice',
                 align: 'right',
-                width: 120,
+                minWidth: 120,
                 formatter: row => isCloseType(row.bizType) ? row.requestPrice : '- -'
             },
-            { name: t('trade.dealAvgPrice'), prop: 'executePrice', align: 'right', width: 120, },
+            { name: t('trade.dealAvgPrice'), prop: 'executePrice', align: 'right', minWidth: 120, },
             {
                 name: t('trade.stopLossPrice'),
                 align: 'right',
-                width: 120,
+                minWidth: 120,
                 prop: 'stopLoss',
             },
             {
                 name: t('trade.stopProfitPrice'),
                 align: 'right',
-                width: 120,
+                minWidth: 120,
                 prop: 'takeProfit',
             },
             {
                 name: t('trade.profit'),
                 align: 'right',
                 prop: 'profitLoss',
-                width: 100,
+                minWidth: 100,
             },
-            { name: t('trade.fee'), prop: 'commission', align: 'right', width: 120 },
+            { name: t('trade.fee'), prop: 'commission', align: 'right', minWidth: 120 },
             { name: t('trade.pendingNo'), prop: 'dealId', align: 'right' },
         ],
         2: [
             {
                 name: t('trade.dealTime'),
                 align: 'left',
-                width: 160,
+                minWidth: 160,
                 formatter: row => formatTime(row.executeTime)
             },
-            { name: t('trade.name'), prop: 'symbolName', align: 'right', width: 120 },
+            { name: t('trade.name'), prop: 'symbolName', align: 'right', minWidth: 120 },
             {
                 name: t('trade.direction'),
                 align: 'right',
@@ -481,14 +481,14 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('transRecords.byAmount'),
                 prop: 'numberStatisticMode',
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 formatter: row => numberStatisticModeMap[row.numberStatisticMode]
             },
             {
                 name: t('transRecords.entrustedAmount'),
                 prop: 'requestNum',
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 formatter: row => row.requestNum + `(${row.numberStatisticMode === 2 ? row.accountCurrency : t('trade.volumeUnit')})`
             },
 
@@ -496,34 +496,34 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.dealVolume'),
                 prop: 'executeNum',
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 formatter: row => formatExecuteNum(row.executeNum, tradeType, row)
             },
 
             {
                 name: t('trade.trustPrice'),
                 align: 'right',
-                width: 120,
+                minWidth: 120,
                 formatter: row => isCloseType(row.bizType) ? '- -' : row.requestPrice
             },
             {
                 name: t('trade.positionPrice'),
                 prop: 'requestPrice',
                 align: 'right',
-                width: 120,
+                minWidth: 120,
                 formatter: row => isCloseType(row.bizType) ? row.requestPrice : '- -'
             },
-            { name: t('trade.dealAvgPrice'), prop: 'executePrice', align: 'right', width: 120, },
+            { name: t('trade.dealAvgPrice'), prop: 'executePrice', align: 'right', minWidth: 120, },
             {
                 name: t('trade.stopLossPrice'),
                 align: 'right',
-                width: 120,
+                minWidth: 120,
                 prop: 'stopLoss',
             },
             {
                 name: t('trade.stopProfitPrice'),
                 align: 'right',
-                width: 120,
+                minWidth: 120,
                 prop: 'takeProfit',
             },
             {
@@ -531,17 +531,17 @@ export const getTransactionColumns = (tradeType) => {
                 align: 'right',
                 prop: 'profitLoss',
             },
-            { name: t('trade.fee'), prop: 'commission', align: 'right', width: 120 },
+            { name: t('trade.fee'), prop: 'commission', align: 'right', minWidth: 120 },
             { name: t('trade.pendingNo'), prop: 'dealId', align: 'right' },
         ],
         3: [
             {
                 name: t('trade.dealTime'),
                 align: 'left',
-                width: 160,
+                minWidth: 160,
                 formatter: row => formatTime(row.executeTime)
             },
-            { name: t('trade.name'), prop: 'symbolName', align: 'right', width: 120 },
+            { name: t('trade.name'), prop: 'symbolName', align: 'right', minWidth: 120 },
             {
                 name: t('trade.direction'),
                 align: 'right',
@@ -561,14 +561,14 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('transRecords.byAmount'),
                 prop: 'numberStatisticMode',
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 formatter: row => numberStatisticModeMap[row.numberStatisticMode]
             },
             {
                 name: t('transRecords.entrustedAmount'),
                 prop: 'requestNum',
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 formatter: row => {
                     return row.requestNum + (row.numberStatisticMode === 2 ? row.outCurrency : t('trade.volumeUnit'))
                 }
@@ -577,7 +577,7 @@ export const getTransactionColumns = (tradeType) => {
             {
                 name: t('transRecords.volumeAmount'),
                 align: 'right',
-                width: 150,
+                minWidth: 150,
                 formatter: row => formatExecuteNum(row.executeNum, tradeType, row)
             },
 
@@ -585,21 +585,21 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.trustPrice'),
                 prop: 'requestPrice',
                 align: 'right',
-                width: 120,
+                minWidth: 120,
                 formatter: row => (Number(row.bizType) === 1 || isCloseType(row.bizType)) ? '- -' : row.requestPrice
             },
-            { name: t('trade.dealAvgPrice'), prop: 'executePrice', align: 'right', width: 120, },
+            { name: t('trade.dealAvgPrice'), prop: 'executePrice', align: 'right', minWidth: 120, },
             {
                 name: t('trade.loan'),
                 prop: 'loanAmount',
                 align: 'right',
-                width: 150,
+                minWidth: 150,
                 formatter: row => row.loanAmount + row.outCurrency
             },
             {
                 name: t('trade.fee'),
                 align: 'right',
-                width: 150,
+                minWidth: 150,
                 formatter: row => row.commission + row.inCurrency
             },
             { name: t('trade.pendingNo'), prop: 'dealId', align: 'right' },
@@ -608,10 +608,10 @@ export const getTransactionColumns = (tradeType) => {
             {
                 name: t('trade.dealTime'),
                 align: 'left',
-                width: 160,
+                minWidth: 160,
                 formatter: row => formatTime(row.executeTime)
             },
-            { name: t('trade.name'), prop: 'symbolName', align: 'right', width: 120 },
+            { name: t('trade.name'), prop: 'symbolName', align: 'right', minWidth: 120 },
             {
                 name: t('trade.direction'),
                 align: 'right',
@@ -631,14 +631,14 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('transRecords.byAmount'),
                 prop: 'numberStatisticMode',
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 formatter: row => numberStatisticModeMap[row.numberStatisticMode] || '- -'
             },
             {
                 name: t('transRecords.entrustedAmount'),
                 prop: 'requestNum',
                 align: 'right',
-                width: 170,
+                minWidth: 170,
                 // formatter: row => row.requestNum + `(${row.numberStatisticMode === 2 ? row.accountCurrency : t('trade.volumeUnit')})`
                 formatter: row => row.requestNum + row.outCurrency
 
@@ -647,7 +647,7 @@ export const getTransactionColumns = (tradeType) => {
             {
                 name: t('transRecords.volumeAmount'),
                 align: 'right',
-                width: 150,
+                minWidth: 150,
                 // formatter: row => formatExecuteNum(row.executeNum, tradeType, row)
                 formatter: row => row.executeNum + row.outCurrency
             },
@@ -656,13 +656,13 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.trustPrice'),
                 prop: 'requestPrice',
                 align: 'right',
-                width: 120,
+                minWidth: 120,
             },
-            { name: t('trade.dealAvgPrice'), prop: 'executePrice', align: 'right', width: 120, },
+            { name: t('trade.dealAvgPrice'), prop: 'executePrice', align: 'right', minWidth: 120, },
             {
                 name: t('trade.fee'),
                 align: 'right',
-                width: 120,
+                minWidth: 120,
                 formatter: row => row.commission + row.inCurrency
             },
             { name: t('trade.pendingNo'), prop: 'dealId', align: 'right' },
@@ -752,7 +752,7 @@ export const getAssetColumns = (tradeType) => {
 
     const columnsMap = computed(() => ({
         1: [
-            { name: t('trade.name'), prop: 'symbolName', align: 'left', width: 120 },
+            { name: t('trade.name'), prop: 'symbolName', align: 'left', minWidth: 120 },
             {
                 name: t('trade.profit') + '(' + unref(assetsInfo).currency + ')',
                 align: 'right',
@@ -773,45 +773,45 @@ export const getAssetColumns = (tradeType) => {
             {
                 name: t('trade.pendingUnit') + '(' + t('trade.volumeUnit') + ')',
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 formatter: row => minus(row.openVolume, row.closeVolume)
             },
             {
                 name: t('trade.positionPrice'),
                 prop: 'openPrice',
                 align: 'right',
-                width: 100,
+                minWidth: 100,
             },
             {
                 name: t('trade.currentPrice'),
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 formatter: row => Number(row.direction) === 1 ? currentProduct(row)?.sell_price : currentProduct(row)?.buy_price
             },
             {
                 name: t('trade.stopLossPrice'),
                 align: 'right',
-                width: 120,
+                minWidth: 120,
                 prop: 'stopLossDecimal'
                 // formatter: row => parseFloat(row.stopLossDecimal) ? row.stopLossDecimal : '--'
             },
             {
                 name: t('trade.stopProfitPrice'),
                 align: 'right',
-                width: 120,
+                minWidth: 120,
                 prop: 'takeProfitDecimal'
                 // formatter: row => parseFloat(row.takeProfitDecimal) ? row.takeProfitDecimal : '--'
             },
             {
                 name: t('trade.openTime'),
                 align: 'right',
-                width: 200,
+                minWidth: 200,
                 formatter: row => formatTime(row.openTime)
             },
             {
                 name: t('trade.positionId'),
                 prop: 'positionId',
-                width: 130,
+                minWidth: 130,
                 align: 'right',
             },
             {
@@ -819,7 +819,7 @@ export const getAssetColumns = (tradeType) => {
                 fixed: 'right',
                 className: 'operate',
                 align: 'right',
-                width: 130,
+                minWidth: 130,
                 slots: {
                     default: ({ row, onGetComponentRefs }) => {
                         const refs = onGetComponentRefs()
@@ -843,12 +843,12 @@ export const getAssetColumns = (tradeType) => {
                 name: t('trade.profit') + '(' + unref(assetsInfo).currency + ')',
                 prop: 'direction',
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 formatter: row => <span class={parseFloat(row.profitLoss) > 0 ? 'riseColor' : 'fallColor'}>
                     { row.profitLoss }
                 </span>
             },
-            { name: t('trade.swap_2') + '(' + unref(assetsInfo).currency + ')', prop: 'interest', align: 'right', width: 100, },
+            { name: t('trade.swap_2') + '(' + unref(assetsInfo).currency + ')', prop: 'interest', align: 'right', minWidth: 100, },
             {
                 name: t('trade.direction'),
                 prop: 'requestNum',
@@ -862,45 +862,45 @@ export const getAssetColumns = (tradeType) => {
                 prop: 'requestPrice',
                 align: 'right',
                 formatter: row => minus(row.openVolume, row.closeVolume),
-                width: 100,
+                minWidth: 100,
             },
-            { name: t('trade.positionPrice'), prop: 'openPrice', align: 'right', width: 100, },
+            { name: t('trade.positionPrice'), prop: 'openPrice', align: 'right', minWidth: 100, },
             {
                 name: t('trade.currentPrice'),
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 formatter: row => Number(row.direction) === 1 ? currentProduct(row)?.sell_price : currentProduct(row)?.buy_price
             },
-            { name: t('trade.prospectMandatory'), prop: 'previewStopPrice', align: 'right', width: 100, },
-            { name: t('trade.originalMargin'), prop: 'occupyTheMargin', align: 'right', width: 100, },
-            { name: t('trade.holdMargin'), prop: 'maintenanceMargin', align: 'right', width: 100, },
+            { name: t('trade.prospectMandatory'), prop: 'previewStopPrice', align: 'right', minWidth: 100, },
+            { name: t('trade.originalMargin'), prop: 'occupyTheMargin', align: 'right', minWidth: 100, },
+            { name: t('trade.holdMargin'), prop: 'maintenanceMargin', align: 'right', minWidth: 100, },
             {
                 name: t('trade.stopLossPrice'),
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 prop: 'stopLossDecimal'
                 // formatter: row => parseFloat(row.stopLossDecimal) ? row.stopLossDecimal : '--'
             },
             {
                 name: t('trade.stopProfitPrice'),
                 align: 'right',
-                width: 100,
+                minWidth: 100,
                 prop: 'takeProfitDecimal'
                 // formatter: row => parseFloat(row.takeProfitDecimal) ? row.takeProfitDecimal : '--'
             },
             {
                 name: t('trade.openTime'),
                 align: 'right',
-                width: 200,
+                minWidth: 200,
                 formatter: row => formatTime(row.openTime)
             },
-            { name: t('trade.positionId'), prop: 'positionId', align: 'right', width: 150 },
+            { name: t('trade.positionId'), prop: 'positionId', align: 'right', minWidth: 150 },
             {
                 name: t('c.handle'),
                 fixed: 'right',
                 className: 'operate',
                 align: 'right',
-                width: 220,
+                minWidth: 220,
                 slots: {
                     default: ({ row, onGetComponentRefs }) => {
                         const refs = onGetComponentRefs()
@@ -935,7 +935,7 @@ export const getAssetColumns = (tradeType) => {
                 fixed: 'right',
                 className: 'operate',
                 align: 'right',
-                width: 130,
+                minWidth: 130,
                 slots: {
                     default: ({ row }) => {
                         return (

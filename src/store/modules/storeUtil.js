@@ -72,7 +72,7 @@ export function compareAssets (customerInfo = {}, registList) {
     // wp配置的玩法资产
     const defaultGroupConfig = registList.find(el => el.registCountry.isOther)
     const customerGroupConfig = registList.find(el => parseInt(el.customerGroupId) === customerGroupId) || defaultGroupConfig
-    const customerGroupConfigPlans = customerGroupConfig.plans.map(el => {
+    const customerGroupConfigPlans = customerGroupConfig.plans.filter(el => [1, 2].indexOf(el.tradeType) === -1).map(el => {
         const { allCurrency, tradeType } = el
         const currencyArray = Array.isArray(allCurrency) ? allCurrency : allCurrency.split(',')
         const allCurrencySort = currencyArray.sort((a, b) => a.localeCompare(b)).join()

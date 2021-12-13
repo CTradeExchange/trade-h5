@@ -1,11 +1,10 @@
 <template>
-{{elementConfig}}--{{activeData}}
+    <!-- --{{ }} === {{ elementConfig }} -->
     <div class='rightForm'>
         <div
             v-for='(config, index) in elementConfig'
             :key='config.type + config.name + index'
         >
-        
             <template
                 v-if='
                     !config.hidden ||
@@ -152,7 +151,6 @@
                     :element-tag='elementTag'
                     :self-symbol='tradeTypeSelfSymbol'
                     :trade-type-collect='tradeTypeCollect'
-                    :current-index='index'
                     @formChange='
                         (formData,type) => {
                             updateFormData(config.name, formData,type);
@@ -302,14 +300,22 @@ export default {
             return this.$store.state.editor.tradeTypeBlockProduct
         }
     },
+    watch: {
+        'this.activeData': {
+            handler (newVal, old) {
+                console.log('obj.a changed', newVal)
+            },
+            immediate: true,
+            deep: true
+        }
+
+    },
     created () {
         // console.log('---activeData-----', this.activeData)
     },
     methods: {
         addRow (formConfig, data, config, activeData) {
             activeData.saved = true
-            const currentIndex = data.length
-            data.currentIndex = currentIndex
             this.$store.commit('editor/ADD_FROM_ROW', {
                 formConfig,
                 data

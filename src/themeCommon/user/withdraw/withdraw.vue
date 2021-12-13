@@ -12,7 +12,7 @@
             @rightClick='rightClick'
         />
         <!-- 提币模块 -->
-        <div v-if="currentTab.includes('digit_wallet')" class='wrap'>
+        <div v-if="['digit_wallet','otc365'].includes(currentTab)" class='wrap'>
             <WithdrawCoin />
         </div>
         <!-- 提现模块 -->

@@ -7,6 +7,16 @@ export default {
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
         {
+            name: 'moduleAlign',
+            label: '对齐方式',
+            type: 'Radio',
+            default: 'center',
+            options: [
+                { value: 'center', label: '居中显示' },
+                { value: 'full', label: '通栏显示' }
+            ]
+        },
+        {
             name: 'gutter',
             label: '栅格间距',
             type: 'Select',

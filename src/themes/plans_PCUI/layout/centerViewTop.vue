@@ -4,7 +4,7 @@
             <slot name='left'>
                 <!-- <AccountChange v-if='isDropdownMenu' /> -->
                 <a class='backIcon' href='javascript:void(0);' @click='back'>
-                    <i class='icon_icon_back1'></i>
+                    <i :class='iconName'></i>
                 </a>
             </slot>
         </div>
@@ -23,7 +23,7 @@
 <script>
 export default {
     name: 'Top',
-    props: ['title', 'customBack'],
+    props: ['title', 'customBack', 'icon'],
     data () {
         return {
             iframePage: ['OpenAccount'],
@@ -33,6 +33,9 @@ export default {
     computed: {
         isDropdownMenu () {
             return ['TradeIndex', 'PositionIndex', 'SelfSymbolIndex'].includes(this.$route.name)
+        },
+        iconName () {
+            return this.icon||'icon_icon_back1'
         }
     },
     mounted () {

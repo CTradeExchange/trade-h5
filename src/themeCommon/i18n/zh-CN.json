@@ -66,7 +66,10 @@
         "pwdSuccess": "密码修改成功",
         "modifyLoginPwd": "修改登录密码",
         "getVerifyCode": "获取验证码",
-        "otherLogin": "或使用以下方式登录"
+        "otherLogin": "或使用以下方式登录",
+        "registered": "您的邮箱已注册了账号，请登录账号",
+        "inputCountry": "请补充您所在国家信息",
+        "loginOrRegist": "登录/注册"
     },
     "common": {
         "tip": "提示",
@@ -92,10 +95,10 @@
         "emailBindSuccess": "绑定邮箱成功",
         "replaceEmailSuccess": "更换邮箱成功",
         "serivce": "联系客服",
-        "emailBinded": "该邮箱已被其他账号绑定，如有疑问请联系在线客服",
+        "emailBinded": "该邮箱在系统内已存在，如有疑问请联系客服",
         "verifySended": "验证码发送成功，请注意查收!",
         "inputRealPhone": "请输入正确的手机号",
-        "phoneBinded": "该手机号已被其他账号绑定，如有疑问请联系在线客服",
+        "phoneBinded": "该手机号在系统内已存在，如有疑问请联系客服",
         "phoneBindSuccess": "绑定手机成功",
         "replacePhoneSuccess": "更换手机成功",
         "nextStep": "下一步",
@@ -113,6 +116,7 @@
         "submitSuccess": "提交成功",
         "RMB": "人民币",
         "dollar": "美元",
+        "submiting": "提交中...",
         "loading": "加载中...",
         "more": "上拉加载更多",
         "noneText": "暂无展示内容",
@@ -292,7 +296,9 @@
         "appendFiled": "补充资料",
         "allInputRequire": "请填写所有补充资料",
         "arriveTime": "入帐时间",
-		"noneChannelTip": "当前充值金额暂无可用支付通道，请重新选择"
+		"noneChannelTip": "当前充值金额暂无可用支付通道，请重新选择",
+        "wramNotice": "温馨提示:",
+        "noticeContent": "支付状态可能会因为网络等原因未及时更新，如已支付请确认账户资金是否到账，未到账请联系客服"
     },
     "fund": {
         "marginLevel": "保证金水平",

@@ -57,12 +57,14 @@ import { defineAsyncComponent } from 'vue'
 import FullBanner from '../modules/fullBanner/fullBanner'
 import BannerProducts from '../modules/bannerProducts/bannerProducts'
 import HomeNotice from '../modules/homeNotice/homeNotice'
+import FooterComp from '../modules/footer/footer'
 import { getQuery } from '@utils/index'
 export default {
     components: {
         FullBanner,
         HomeNotice,
         BannerProducts,
+        FooterComp,
         draggable,
     },
     data () {
@@ -95,7 +97,7 @@ export default {
             let list = this.$store.state.editor.elementList
             list = list.map((item) => {
                 const itemEl = JSON.parse(JSON.stringify(item))
-                const { style, linkComp, linkCompPosition, background } = itemEl.data
+                const { style, linkComp, linkCompPosition, background, moduleAlign, height } = itemEl.data
                 const styleObj = {}
                 for (const key in style) {
                     if (style.hasOwnProperty(key)) {
@@ -138,8 +140,16 @@ export default {
                     }
                 }
                 if (background) {
-                    styleObj.background = `url(${background}) no-repeat`
+                    styleObj.background = `url(${background}) no-repeat center`
                     styleObj.backgroundSize = '100% 100%'
+                }
+                if (moduleAlign === 'center') {
+                    styleObj.width = '1200px'
+                    styleObj.marginLeft = 'auto !important'
+                    styleObj.marginRight = 'auto !important'
+                }
+                if (height) {
+                    styleObj.height = height.includes('px') ? height : height + 'px'
                 }
                 itemEl.data.styleObj = styleObj
                 itemEl.data.moduleId = itemEl.id
@@ -213,7 +223,7 @@ export default {
             };
             const module = this.moduleList.find(el=>el.tag==='homeNotice')
             return module ? module : empty
-        }
+        },
     },
     mounted () {
         window['preview'] = this

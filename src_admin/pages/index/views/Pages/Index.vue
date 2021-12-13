@@ -45,13 +45,13 @@
                             编辑
                         </el-button> -->
                         <el-button v-if="scope.row.page_code.indexOf('http')==0" size='small' type='text' @click='showOtherPage(scope.row.page_code)'>
-                            {{$t('check')}}
+                            {{ $t('check') }}
                         </el-button>
                         <el-button v-else size='small' type='text' @click='edit(scope.row)'>
-                            {{$t('designPage')}}
+                            {{ $t('designPage') }}
                         </el-button>
                         <el-button size='small' type='text' @click='viewPublish(scope.row)'>
-                            {{$t('viewHistory')}}
+                            {{ $t('viewHistory') }}
                         </el-button>
                     </template>
                 </el-table-column>
@@ -81,10 +81,10 @@
                 <el-form-item :label="$t('pageType')">
                     <el-radio-group v-model='addForm.form.pageType' :aa='addForm.form.pageType' :disabled="addForm.type ==='modify'" @change='changeType'>
                         <el-radio label='1'>
-                            {{$t('innerPage')}}
+                            {{ $t('innerPage') }}
                         </el-radio>
                         <el-radio label='2'>
-                            {{$t('activePage')}}
+                            {{ $t('activePage') }}
                         </el-radio>
                     </el-radio-group>
                 </el-form-item>
@@ -104,20 +104,20 @@
                 <el-form-item :label="$t('State')">
                     <el-radio-group v-model='addForm.form.status'>
                         <el-radio label='1'>
-                            {{$t('enable')}}
+                            {{ $t('enable') }}
                         </el-radio>
                         <el-radio label='0'>
-                            {{$t('disable')}}
+                            {{ $t('disable') }}
                         </el-radio>
                     </el-radio-group>
                 </el-form-item>
             </el-form>
             <div slot='footer' class='dialog-footer'>
                 <el-button @click='addForm.show = false'>
-                    {{$t('cancel')}}
+                    {{ $t('cancel') }}
                 </el-button>
                 <el-button :loading='addForm.loading' type='primary' @click='submit'>
-                    {{$t('sure')}}
+                    {{ $t('sure') }}
                 </el-button>
             </div>
         </el-dialog>
@@ -128,12 +128,12 @@
 import { pageList, modifyPageConfig, getViChannel } from '@index/Api/editor'
 import { deepClone } from '@utils/deepClone'
 import { h5PageList } from './h5PageList'
-import { useRouter, useRoute , onBeforeRouteUpdate  } from 'vue-router'
-import { onMounted, reactive, ref, toRefs, getCurrentInstance, watch  } from 'vue'
+import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router'
+import { onMounted, reactive, ref, toRefs, getCurrentInstance, watch } from 'vue'
 import { getQueryString } from '@admin/utils'
 import { useI18n } from 'vue-i18n'
 import I18n, { setI18nLanguage, loadLocaleMessages } from '../../i18n/i18n.js'
-import {localGet,localSet} from '@/utils/util';
+import { localGet, localSet } from '@/utils/util'
 export default {
     beforeRouteEnter (to, from, next) {
         if (getQueryString('page') === 'cats_sett_manage') {
@@ -213,14 +213,13 @@ export default {
                         language: state.activeLang
                     }
                 })
-                localSet("lang",state.activeLang)
+                localSet('lang', state.activeLang)
                 setI18nLanguage(I18n, state.activeLang)
-                loadLocaleMessages(I18n,state.activeLang)
+                loadLocaleMessages(I18n, state.activeLang)
             }
         )
-         onBeforeRouteUpdate((to,from)=>{//当前组件路由改变后，进行触发.
-            
-            const lang = to.query.language;
+        onBeforeRouteUpdate((to, from) => { // 当前组件路由改变后，进行触发.
+            const lang = to.query.language
             setI18nLanguage(I18n, lang)
         })
         // 获取页面配置

@@ -1,4 +1,4 @@
-import { login, findCustomerInfo, logout, switchAccount, queryCustomerOptionalList, addCustomerOptional, queryCustomerAssetsInfo, queryAccountAssetsInfo, addCustomerOptionalBatch, findAllBizKycList, increasAccount } from '@/api/user'
+import { login, findCustomerInfo, logout, switchAccount, queryCustomerOptionalList, addCustomerOptional, queryCustomerAssetsInfo, queryAccountAssetsInfo, addCustomerOptionalBatch, findAllBizKycList, increasAccount, thirdLogin } from '@/api/user'
 import { removeCustomerOptional } from '@/api/trade'
 import { localSet, setToken, removeLoginParams, sessionSet } from '@/utils/util'
 import { vue_set, assign } from '@/utils/vueUtil.js'
@@ -117,13 +117,21 @@ export default {
         Update_kycList (state, data) {
             state.kycList = data
         }
+
     },
     actions: {
         // 登录
         login ({ dispatch, commit, rootState }, params = {}) {
             commit('Update_loginLoading', true)
             commit('_quote/Update_symbolBaseLoaded', 0, { root: true })
-            return login(params).then((res) => {
+            let loginMethon
+
+            if (params.isThird) {
+                loginMethon = thirdLogin
+            } else {
+                loginMethon = login
+            }
+            return loginMethon(params).then((res) => {
                 if (res.check()) {
                     const data = res.data
                     if (params.loginPwd) localSet('loginParams', JSON.stringify(params))

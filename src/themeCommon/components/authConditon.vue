@@ -262,7 +262,6 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         if (props.platform === 'web') {
-                            // debugger
                             const parentPath = route.matched[route.matched.length - 2]
                             router.push({ path: parentPath.path + '/kycCommitted' })
                         } else {
@@ -379,7 +378,7 @@ export default {
         }
     }
     .confirm-btn {
-        position: absolute;
+        position: fixed;
         bottom: 0;
         width: 100%;
         color: var(--color);

@@ -61,7 +61,7 @@ export default {
             ]
         })
         watchEffect(() => (state.active = route.path))
-        
+
         // 切换导航
         const menuHandler = (item) => {
             let href = item.href

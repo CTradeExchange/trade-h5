@@ -1,5 +1,5 @@
 <template>
-    <div class='mobileBar van-hairline--bottom'>
+    <div class='mobileBar'>
         <div class='zone' :class='{ disabled: disabled }'>
             <!-- <VueSelect v-model='zoneVal' :actions='countryList' :text="type === 'mobile' ? 'name': 'countryName'" value='name' @select='zoneOnSelect' /> -->
             <el-select v-model='zoneVal' placeholder='Select' @change='zoneOnSelect'>
@@ -80,7 +80,6 @@ export default {
             const tempArr = []
 
             countryList.forEach(item => {
-                // debugger
                 const lable = this.type === 'mobile' ? item.name + ' (' + item.countryCode + ')' : item.name
                 const value = this.type === 'mobile' ? item.countryCode : item.code
                 tempArr.push({
@@ -122,7 +121,7 @@ export default {
             // }
             const typeKey = this.type === 'mobile' ? 'code' : 'countryCode'
             const item = find(this.countryList, { [typeKey]: val })
-            // debugger
+
             if (!this.disabled) {
                 this.$emit('update:zone', item.name)
                 this.$emit('zoneSelect', item)

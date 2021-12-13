@@ -54,7 +54,8 @@ const activeName = computed({
                 font-size: 14px;
                 font-weight: 400;
                 &.is-active{
-                    color: var(--el-color-primary);
+                    color: var(--primary);
+                    font-weight: 700;
                 }
             }
         }

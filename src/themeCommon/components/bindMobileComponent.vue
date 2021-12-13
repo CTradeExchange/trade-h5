@@ -98,9 +98,16 @@ export default {
                             title: t('common.tip'),
                             message: t('common.phoneBinded'),
                             confirmButtonText: t('common.serivce'),
-                            cancelButtonText: t('common.close')
+                            cancelButtonText: t('common.close'),
+                            showConfirmButton: !!onlineServices.value
                         }).then(() => {
-                            if (onlineServices.value) location.href = onlineServices.value
+                            if (onlineServices.value) {
+                                router.push({
+                                    name: 'Otherpage',
+                                    params: { type: 'page' },
+                                    query: { pageTitle: t('route.onlineService'), url: encodeURIComponent(onlineServices.value) }
+                                })
+                            }
                         }).catch(() => {
                             // on cancel
                             callback && callback(false)

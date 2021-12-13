@@ -30,6 +30,7 @@
     .total-money {
         margin-top: 18px;
         font-size: 40px;
+        font-weight: bold;
         color: var(--color);
     }
     .assets-ul {
@@ -81,7 +82,7 @@
             cursor: pointer;
             i {
                 margin-right: 6px;
-                font-size: 20px;
+                font-size: 16px;
             }
             span {
                 font-size: 14px;
@@ -105,12 +106,12 @@
 		&::before {
 			background: none;
 		}
-		.el-table__fixed-right::before {
-			background: none;
-		}
-		.el-table__cell.is-right {
-			background: var(--contentColor) !important;
-		}
+        .el-table__fixed-right::before {
+            background: none;
+        }
+        .el-table__cell.is-right {
+            background: var(--contentColor) !important;
+        }
 		thead {
 			tr {
 				height: 50px;
@@ -130,6 +131,9 @@
 				font-size: 14px;
 				color: var(--color);
 				background: transparent;
+                // &:hover {
+                //     background: var(--bgColor);
+                // }
 				td {
 					border-bottom: 1px solid var(--lineColor);
 					background: transparent;

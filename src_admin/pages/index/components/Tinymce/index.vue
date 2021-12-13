@@ -145,7 +145,6 @@ export default {
                     }
                     _this.hasInit = true
                     editor.on('NodeChange Change KeyUp SetContent', () => {
-                        // debugger
                         this.hasChange = true
                         this.$emit('input', editor.getContent())
                         this.$emit('update:modelValue', editor.getContent())
@@ -209,7 +208,6 @@ export default {
             window.tinymce.get(this.tinymceId).setContent(value)
         },
         getContent () {
-            // debugger
             return window.tinymce.get(this.tinymceId).getContent()
         },
         imageSuccessCBK (arr) {

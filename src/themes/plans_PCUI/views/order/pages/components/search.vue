@@ -80,7 +80,7 @@ export default {
                 border-color: transparent;
                 background: var(--bgColor);
                 &:focus{
-                    border-color: var(--el-input-focus-border,var(--el-color-primary));
+                    border-color: var(--el-input-focus-border,var(--primary));
                 }
             }
         }
