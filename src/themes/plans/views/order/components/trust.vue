@@ -11,7 +11,7 @@
                 <i class='icon_mingxi1'></i>
             </a>
         </div>
-        <div v-if='[5].indexOf(Number(product.tradeType)) === -1' class='bd'>
+        <div v-if='[2,5].indexOf(Number(product.tradeType)) === -1' class='bd'>
             <van-empty
                 v-if='pendingList?.length === 0'
                 :description="$t('trade.pendingEmpty')"
