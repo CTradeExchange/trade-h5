@@ -384,6 +384,21 @@
                         <el-tab-pane class='tab' :label="$t('channelSetting.interfaceSettings')" name='third'>
                             <amount-set ref='amountSet' />
                         </el-tab-pane>
+                        <el-tab-pane class='tab' :label="$t('channelSetting.tradeTypeNameSetting')" name='fourth'>
+                            <el-row :gutter='20'>
+                                <el-col :span="4">
+                                    <el-form-item>
+                                        
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="4" v-for="(val,key,index) in tradeTypes">
+                                    <el-form-item>
+                                        {{$t('channelSetting.tradeTypes'+key)}}
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            
+                        </el-tab-pane>
                     </el-tabs>
                 </el-form>
             </el-col>
@@ -473,7 +488,7 @@ import { getAccountGroupTradeAssetsList, queryCountryList, getViChannel, saveViC
 import { lang } from '../../config/lang'
 import { getQueryString } from '@admin/utils'
 import { cloneDeep, escape, unescape } from 'lodash'
-import { isEmpty } from '@/utils/util'
+import { isEmpty , localGet} from '@/utils/util'
 import Tinymce from '@index/components/Tinymce'
 // components
 import amountSet from './components/amount-set.vue'
@@ -505,6 +520,22 @@ export default {
                 registrable: [],
                 isWallet: false,
                 paymentIconList: {}, // 支付通道图标列表
+                tradeTypesConfig:{
+                    "zh-CN":{
+                        "1": "",
+                        "2": "",
+                        "3": "",
+                        "5": "",
+                        "9": ""
+                    },
+                    "en-US":{
+                        "1": "",
+                        "2": "",
+                        "3": "",
+                        "5": "",
+                        "9": ""
+                    },
+                }
             },
             accountTradeList: [],
             lang,
@@ -579,11 +610,24 @@ export default {
                 'hsl(181, 100%, 37%)',
                 'hsla(209, 100%, 56%, 0.73)',
                 '#c7158577',
-            ]
-
+            ],
+            tradeTypes:{
+                "1": "",
+                "2": "",
+                "3": "",
+                "5": "",
+                "9": ""
+            },
+        }
+    },
+    computed:{
+        currentLang(){
+            return localGet('lang')
         }
     },
     async created () {
+        // const locales = require.context('../../i18n', true, /[A-Za-z0-9-_,\s]+\.json$/i).keys()
+        // console.log("locales",locales)
         this.pageId = await getQueryString('id')
         await this.queryCountryList()
         await this.queryAccountGroupTradeList()
@@ -658,6 +702,7 @@ export default {
                         }
                     })
                     this.accountTradeList = res.data
+                    console.log("this.accountTradeList",this.accountTradeList)
                 }
             })
         },
@@ -775,6 +820,7 @@ export default {
         getTradeTypeAssets (data) {
             if (Array.isArray(data)) {
                 this.tradeTypeList = data.map(el => ({ id: el.trade_type, name: el.trade_name }))
+                console.log("this.tradeTypeList",this.tradeTypeList)
                 const tempCheckedTradeType = {}
 
                 this.tradeTypeList.forEach(el => {
@@ -901,7 +947,7 @@ export default {
                                 }
                             }
                         }
-
+                        //todo  tradeTypes里面的子项要进行非空验证，去掉空的子项便于h5端判断是否改变了玩法别名
                         saveViChannel({
                             content: JSON.stringify(_formData), // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', //
                             id: that.pageId,

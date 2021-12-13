@@ -10,7 +10,8 @@
 import { computed, ref, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-
+import { getCookie } from '@/utils/util'
+import { deepClone } from '@utils/deepClone'
 export default {
     props: {
         value: {
@@ -27,7 +28,24 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
 
         // 玩法列表
-        const plansList = computed(() => props.list || store.state._base.plans.map(el => (el.name = t('tradeType.' + el.tradeType), el)))
+        const plansList = computed(() => {
+            const lang =  getCookie('lang') || store.state._base.wpCompanyInfo.language;
+            const tradeTypesConfig = store.state._base.wpCompanyInfo.tradeTypesConfig;
+            let tradeTypes = props.list || store.state._base.plans.map(el => (el.name = t('tradeType.' + el.tradeType), el))
+            console.log("tradeTypes",tradeTypes)
+            if(store.state._base.wpCompanyInfo.tradeTypesConfig){
+                const tradeTypesEnum = store.state._base.wpCompanyInfo.tradeTypesConfig[lang];
+                for(let key in tradeTypesEnum){
+                    let arr =  tradeTypes.forEach(el=>{
+                        if(el.id==key){
+                            el.name = tradeTypesEnum[key];
+                        }
+                    })
+                    
+                }
+            }
+            return tradeTypes;
+        })
         const active = computed({
             get: () => props.value,
             set: (val) => context.emit('change', val)

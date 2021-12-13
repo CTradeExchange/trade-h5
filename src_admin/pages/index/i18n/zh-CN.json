@@ -123,6 +123,20 @@
         "error8":"请先选择客户组",
         "error9":"“默认客户组”需设置开户币种,请点击【设置币种】按钮",
         "error10":"每个玩法至少选择一个币种",
-        "success1":"保存成功"
+        "success1":"保存成功",
+        "tradeTypeNameSetting":"玩法别名设置",
+        "tradeTypes1":"合约全仓",
+        "tradeTypes2":"合约逐仓",
+        "tradeTypes3":"杠杆",
+        "tradeTypes5":"现货",
+        "tradeTypes9":"ABCC杠杆",
+
+        "tradeTypes":{
+            "1": "合约全仓",
+            "2": "合约逐仓",
+            "3": "杠杆",
+            "5": "现货",
+            "9": "ABCC杠杆"
+        }
     }
 }

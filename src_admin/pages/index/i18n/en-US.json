@@ -122,6 +122,19 @@
         "error8":"Please select customer group first",
         "error9":"'Default Client Group' needs to set the account currency, please click the [Set Currency] button",
         "error10":"Choose at least one currency for each gameplay",
-        "success1":"Saved successfully"
+        "success1":"Saved successfully",
+        "tradeTypeNameSetting":"Gameplay alias settings",
+        "tradeTypes1":"Cross Contract",
+        "tradeTypes2":"Isolated Contract",
+        "tradeTypes3":"Margin",
+        "tradeTypes5":"Spot",
+        "tradeTypes9":"ABCC Margin",
+        "tradeTypes":{
+            "1": "Cross Contract",
+            "2": "Isolated Contract",
+            "3": "Margin",
+            "5": "Spot",
+            "9": "ABCC Margin"
+        }
     }   
 }
