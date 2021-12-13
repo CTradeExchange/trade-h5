@@ -10,7 +10,7 @@
         </p>
 
         <div class='btns'>
-            <van-button hairline type='success' @click='$router.replace({ name: "Quote" })'>
+            <van-button hairline type='success' @click='$router.replace({ name: "Home" })'>
                 {{ $t('common.backHome') }}
             </van-button>
             <van-button hairline type='default' @click='$router.replace({ name: "Authentication" })'>
