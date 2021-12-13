@@ -38,13 +38,9 @@
                 {{ $t('login.otherLogin') }}
             </p>
             <div class='otherLogin'>
-                <!-- <LoginByGoogle v-if="thirdLoginArr.includes('google')" />
+                <LoginByGoogle v-if="thirdLoginArr.includes('google')" />
                 <LoginByFacebook v-if="thirdLoginArr.includes('facebook')" />
-                <LoginByTwitter v-if="thirdLoginArr.includes('twitter')" /> -->
-
-                <LoginByGoogle />
-                <LoginByFacebook />
-                <LoginByTwitter />
+                <LoginByTwitter v-if="thirdLoginArr.includes('twitter')" />
             </div>
         </div>
 

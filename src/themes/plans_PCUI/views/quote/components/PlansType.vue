@@ -58,6 +58,9 @@ const handleClick = (val) => {
                 font-weight: bold;
             }
         }
+        .el-tabs__active-bar{
+            background-color: var(--primary);
+        }
     }
 }
 </style>
