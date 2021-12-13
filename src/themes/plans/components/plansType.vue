@@ -38,7 +38,9 @@ export default {
                 for(let key in tradeTypesEnum){
                     let arr =  tradeTypes.forEach(el=>{
                         if(el.id==key){
-                            el.name = tradeTypesEnum[key];
+                            if(tradeTypesEnum[key]){ //为空的值视为没有设置别名还是取原来默认的名字
+                                el.name = tradeTypesEnum[key];
+                            }
                         }
                     })
                     
