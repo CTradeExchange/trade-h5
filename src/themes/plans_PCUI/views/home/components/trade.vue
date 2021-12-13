@@ -177,6 +177,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/sass/mixin.scss';
+
 .trade-module {
     margin-top: 96px;
 }
@@ -188,11 +190,13 @@ export default {
     }
     li {
         margin-right: 47px;
+        padding-bottom: 4px;
         cursor: pointer;
         &:last-of-type {
             margin-right: 0;
         }
         span {
+            @include font();
             font-size: 32px;
             font-weight: bold;
             color: var(--minorColor);

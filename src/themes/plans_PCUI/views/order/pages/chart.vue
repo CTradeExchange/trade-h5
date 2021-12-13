@@ -36,7 +36,7 @@
             <i
                 v-preventReClick
                 class='icon'
-                :class="[!isSelfSymbol?'icon_xiadanjiemianxiaokongxing1':'icon_xiadanjiemianxiaoshixing1']"
+                :class="[!isSelfSymbol?'icon_zixuankongxin':'icon_hangqingliebiaoyijiazixuan']"
                 @click='addOptional'
             ></i>
             <i v-if='[1, 2].includes(product.tradeType)' class='icon icon_heyuexiangqing' @click='$router.push(contractRoute)'></i>
@@ -340,8 +340,7 @@ export default {
         })
 
         // 是否是自选
-        const isSelfSymbol = computed(() => store.state._user.selfSymbolList[tradeType]?.find(el => el.symbolId === parseInt(symbolId))
-        )
+        const isSelfSymbol = computed(() => store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId)))
 
         // 图表类型
         const klineTypeIndex = computed(() => {
@@ -843,8 +842,7 @@ export default {
                 .icon{
                     font-size: 20px;
                     margin-left: 16px;
-                    &.icon_xiadanjiemianxiaoshixing1{
-                        color: #fc822f;
+                    &.icon_hangqingliebiaoyijiazixuan{
                         animation: heartBeat 1.3s ease-in-out forwards;
                     }
                 }

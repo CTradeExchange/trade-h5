@@ -14,8 +14,8 @@
         <div ref='productListEl' class='items' :style='[scrollBarWidth && { paddingRight: 0 }]'>
             <div v-for='item in props.list' :key='item.id' class='item li' :class='[item.symbolKey === productActived.symbolKey && "active"]' @click='onClick(item)'>
                 <span class='name'>
-                    <i v-if='isCollect(item.tradeType,item.symbolId)' class='icon icon_zixuan2' @click.stop='addOptional(item)'></i>
-                    <i v-else class='icon icon_zixuan1' @click.stop='addOptional(item)'></i>
+                    <i v-if='isCollect(item.tradeType,item.symbolId)' class='icon icon_hangqingliebiaoyijiazixuan' @click.stop='addOptional(item)'></i>
+                    <i v-else class='icon icon_hangqingliebiaoweijiazixuan' @click.stop='addOptional(item)'></i>
                     {{ item.symbolName }}
                 </span>
                 <span class='price' :class='[productMap[item.symbolKey]?.upDownColor]'>
@@ -180,7 +180,7 @@ watch(() => [props.list.length],
             }
             &.active,
             &:hover{
-                background: var(--bgColor);
+                background: var(--primaryAssistColor);
                 border-radius: 4px;
             }
         }

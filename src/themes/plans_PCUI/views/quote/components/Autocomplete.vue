@@ -18,8 +18,8 @@
                         {{ item.name }}
                     </span>
                     <span class='star' @click.stop='addOptional(item)'>
-                        <i v-if='isCollect(props.tradeType,item.id)' class='icon icon_zixuan2'></i>
-                        <i v-else class='icon icon_zixuan1'></i>
+                        <i v-if='isCollect(props.tradeType,item.id)' class='icon icon_hangqingliebiaoyijiazixuan'></i>
+                        <i v-else class='icon icon_hangqingliebiaoweijiazixuan'></i>
                     </span>
                 </div>
             </template>
@@ -114,9 +114,9 @@ const addOptional = ({ id: symbolId, tradeType = props.tradeType }) => {
         }
         .el-input__inner{
             border-color: transparent;
-            background: var(--bgColor);
+            background: var(--assistColor);
             &:focus{
-                border-color: var(--el-input-focus-border,var(--el-color-primary));
+                border-color: var(--el-input-focus-border,var(--primary));
             }
         }
     }

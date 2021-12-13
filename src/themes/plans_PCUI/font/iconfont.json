@@ -6,18 +6,39 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "23631892",
-      "name": "排序",
-      "font_class": "paixu",
-      "unicode": "e662",
-      "unicode_decimal": 58978
+      "icon_id": "26385709",
+      "name": "头像",
+      "font_class": "touxiang",
+      "unicode": "e6a5",
+      "unicode_decimal": 59045
     },
     {
-      "icon_id": "23448247",
+      "icon_id": "26382945",
+      "name": "行情列表已加自选",
+      "font_class": "hangqingliebiaoyijiazixuan",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
+      "icon_id": "26382946",
+      "name": "行情列表未加自选",
+      "font_class": "hangqingliebiaoweijiazixuan",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
+    },
+    {
+      "icon_id": "25907827",
       "name": "转换",
-      "font_class": "zhuanhuan",
-      "unicode": "e65d",
-      "unicode_decimal": 58973
+      "font_class": "zhuanhuan1",
+      "unicode": "e6a1",
+      "unicode_decimal": 59041
+    },
+    {
+      "icon_id": "25907914",
+      "name": "排序",
+      "font_class": "paixu1",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
     },
     {
       "icon_id": "25354059",
@@ -130,20 +151,6 @@
       "font_class": "pingjunKxiantu",
       "unicode": "e694",
       "unicode_decimal": 59028
-    },
-    {
-      "icon_id": "25342673",
-      "name": "下单界面小实星",
-      "font_class": "xiadanjiemianxiaoshixing1",
-      "unicode": "e689",
-      "unicode_decimal": 59017
-    },
-    {
-      "icon_id": "25342674",
-      "name": "下单界面小空星",
-      "font_class": "xiadanjiemianxiaokongxing1",
-      "unicode": "e68a",
-      "unicode_decimal": 59018
     },
     {
       "icon_id": "25342393",
@@ -454,27 +461,6 @@
       "unicode_decimal": 58976
     },
     {
-      "icon_id": "14045466",
-      "name": "zixuan",
-      "font_class": "zixuan",
-      "unicode": "e635",
-      "unicode_decimal": 58933
-    },
-    {
-      "icon_id": "14144729",
-      "name": "zixuan1",
-      "font_class": "zixuan1",
-      "unicode": "e63c",
-      "unicode_decimal": 58940
-    },
-    {
-      "icon_id": "14144732",
-      "name": "zixuan2",
-      "font_class": "zixuan2",
-      "unicode": "e63d",
-      "unicode_decimal": 58941
-    },
-    {
       "icon_id": "14145479",
       "name": "zhiding",
       "font_class": "zhiding",
@@ -592,13 +578,6 @@
       "font_class": "zixuan11",
       "unicode": "e68f",
       "unicode_decimal": 59023
-    },
-    {
-      "icon_id": "23220816",
-      "name": "资金明细",
-      "font_class": "zijinmingxi2",
-      "unicode": "e692",
-      "unicode_decimal": 59026
     }
   ]
 }

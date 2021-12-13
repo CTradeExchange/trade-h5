@@ -44,14 +44,14 @@
         </div>
         <div class='assets-body'>
             <el-table :cell-style="{ background: 'none' }" :data='accountList' :empty-text="$t('c.noData')" height='100%'>
-                <el-table-column :label="$t('trade.name')" prop='currency' />
-                <el-table-column :label="$t('trade.totalAssets')" prop='balance' />
-                <el-table-column :label="$t('trade.free')" prop='available' />
-                <el-table-column :label="$t('trade.frozen')" prop='frozen' />
-                <el-table-column :label="$t('trade.loan')" prop='liabilitiesPrincipal' />
-                <el-table-column :label="$t('trade.swap_2')" prop='interest' />
-                <el-table-column :label="$t('trade.carry')" prop='withdrawAmount' />
-                <el-table-column v-if='accountList.length > 0' align='right' fixed='right' :label="$t('c.handle')" width='120'>
+                <el-table-column :label="$t('trade.name')" min-width='150' prop='currency' />
+                <el-table-column :label="$t('trade.totalAssets')" min-width='150' prop='balance' />
+                <el-table-column :label="$t('trade.free')" min-width='150' prop='available' />
+                <el-table-column :label="$t('trade.frozen')" min-width='150' prop='frozen' />
+                <el-table-column :label="$t('trade.loan')" min-width='150' prop='liabilitiesPrincipal' />
+                <el-table-column :label="$t('trade.swap_2')" min-width='150' prop='interest' />
+                <el-table-column :label="$t('trade.carry')" min-width='150' prop='withdrawAmount' />
+                <el-table-column align='right' fixed='right' :label="$t('c.handle')" min-width='120'>
                     <template #default='scope'>
                         <div class='handle'>
                             <button @click='goLoan(scope.row)'>

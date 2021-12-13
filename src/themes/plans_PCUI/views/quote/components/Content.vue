@@ -1,11 +1,11 @@
 <template>
-    <div class='content' :style='{ height: contentHeight + "px" }'>
+    <div class='content'>
         <div class='header'>
             <PlansType v-model='tradeType' />
             <Autocomplete :trade-type='tradeType' />
         </div>
         <CategoryList v-model='categoryType' :list='computedCategoryList' />
-        <ProductList :list='productList' :trade-type='tradeType' />
+        <ProductList v-if='tradeType' :list='productList' :trade-type='tradeType' />
     </div>
 </template>
 
@@ -44,9 +44,6 @@ const computedCategoryList = computed((el) => {
 watch(() => unref(tradeType), () => {
     categoryType.value = '0'
 })
-
-const contentHeight = document.body.offsetHeight - 226
-
 </script>
 
 <style lang="scss" scoped>
@@ -58,6 +55,7 @@ const contentHeight = document.body.offsetHeight - 226
     align-items: flex-start;
     width: 100%;
     background: var(--contentColor);
+    border-radius: 10px;
     .header{
         position: relative;
         flex: 0 0 56px;
@@ -82,6 +80,7 @@ const contentHeight = document.body.offsetHeight - 226
     }
     .icon_lansezixuan{
         margin-right: 5px;
+        font-size: 14px;
     }
 }
 </style>

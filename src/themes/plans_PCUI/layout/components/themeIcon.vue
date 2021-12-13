@@ -1,7 +1,7 @@
 <template>
     <i
         class='icon'
-        :class="theme === 'light' ? 'icon_zhuanhuanchengbaitian' : 'icon_zhuanhuanchengheiye'"
+        :class="theme === 'light' ? 'icon_zhuanhuanchengheiye' : 'icon_zhuanhuanchengbaitian'"
         :title="$t('header.theme')"
         @click='changeTheme'
     ></i>

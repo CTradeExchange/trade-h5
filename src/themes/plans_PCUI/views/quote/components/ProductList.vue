@@ -1,101 +1,21 @@
 <template>
-    <div class='listWrap'>
-        <div class='item listHead'>
-            <span class='cell name'>
-                {{ $t('trade.name') }}
-            </span>
-            <template v-if='[1,2].includes(Number(props.tradeType))'>
-                <span class='cell price'>
-                    {{ $t('trade.sellPrice') }}
-                </span>
-                <span class='cell upDownAmount'>
-                    {{ $t('trade.buyPrice') }}
-                </span>
-            </template>
-            <template v-if='[3,5].includes(Number(props.tradeType))'>
-                <span class='cell price'>
-                    {{ $t('trade.newPrice') }}
-                </span>
-                <span class='cell upDownAmount'>
-                    {{ $t('trade.changePrice') }}
-                </span>
-            </template>
-            <span class='cell upDownWidth'>
-                {{ $t('trade.upDownWidth') }}
-            </span>
-            <span class='cell highPrice'>
-                {{ $t('trade.highPrice') }}
-            </span>
-            <span class='cell lowPrice'>
-                {{ $t('trade.lowPrice') }}
-            </span>
-            <span class='cell btns'>
-                {{ $t('trade.operating') }}
-            </span>
-        </div>
-        <div ref='productListEl' class='items' :style='[scrollBarWidth && { paddingRight: 0 }]'>
-            <div v-for='item in props.list' :key='item.id' class='item li'>
-                <span class='name'>
-                    <i v-if='isCollect(item.tradeType,item.symbolId)' class='icon icon_zixuan2 star' @click.stop='addOptional(item)'></i>
-                    <i v-else class='icon icon_zixuan1 star' @click.stop='addOptional(item)'></i>
-                    {{ item.symbolCode }}
-                </span>
-                <template v-if='[1,2].includes(Number(props.tradeType))'>
-                    <span class='price' :class='[productMap[item.symbolKey]?.upDownColor]'>
-                        {{ getVal(item.symbolKey, 'sell_price') }}
-                    </span>
-                    <span class='upDownAmount' :class='[productMap[item.symbolKey]?.upDownColor]'>
-                        {{ getVal(item.symbolKey, 'buy_price') }}
-                    </span>
-                </template>
-                <template v-if='[3,5].includes(Number(props.tradeType))'>
-                    <span class='price' :class='[productMap[item.symbolKey]?.upDownColor]'>
-                        {{ getVal(item.symbolKey, 'price') }}
-                    </span>
-                    <span class='upDownAmount' :class='[productMap[item.symbolKey]?.upDownColor]'>
-                        {{ getVal(item.symbolKey, 'upDownAmount') > 0 ? '+' : '' }}{{ getVal(item.symbolKey, 'upDownAmount') }}
-                    </span>
-                </template>
-                <span class='upDownWidth' :class='[productMap[item.symbolKey]?.upDownColor]'>
-                    {{ getVal(item.symbolKey, 'upDownWidth') }}
-                </span>
-                <span class='highPrice'>
-                    {{ getVal(item.symbolKey, 'high_price') }}
-                </span>
-                <span class='lowPrice'>
-                    {{ getVal(item.symbolKey, 'low_price') }}
-                </span>
-                <div class='btns'>
-                    <span class='btn' @click='gotoOrder(item)'>
-                        {{ $t('trade.buy') }}
-                    </span>
-                    <span class='btn' @click='gotoOrder(item)'>
-                        {{ $t('trade.sell') }}
-                    </span>
-                </div>
-            </div>
-
-            <div v-if='!props.list.length' class='empty'>
-                <span class='text'>
-                    {{ $t('c.noData') }}
-                </span>
-            </div>
-        </div>
+    <div class='productList' :style='{ minHeight: contentHeight + "px" }'>
+        <customTable
+            v-model:currentPage='currentPage'
+            :data='computedList'
+            :options='tableOptions'
+            :pagination='pagination'
+        />
     </div>
 </template>
 
 <script setup>
-import { ref, watch, nextTick, computed, toRef, unref } from 'vue'
-import { useStore } from 'vuex'
-import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
-import subscribeProducts from '@planspc/hooks/subscribeProducts'
+import { watch, computed, ref, unref } from 'vue'
+import customTable from '@planspc/views/order/pages/components/customTable.vue'
+import { getColumns } from './tableConfig.js'
+import { QuoteSocket } from '@/plugins/socket/socket'
 import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
-import { useI18n } from 'vue-i18n'
 
-const store = useStore()
-const router = useRouter()
-const { t } = useI18n({ useScope: 'global' })
 const props = defineProps({
     list: {
         type: Array,
@@ -106,173 +26,106 @@ const props = defineProps({
         default: ''
     }
 })
-
-// 监听列表滚动，订阅/获取产品数据
-const list = toRef(props, 'list')
-const { productListEl, productMap } = subscribeProducts(list)
-
-const getVal = (symbolKey, key) => unref(productMap)[symbolKey]?.[key] || '- -'
-
-// 切换当前选中产品
-const gotoOrder = product => {
-    router.push({
-        name: 'Order',
-        query: {
-            symbolId: product.symbolId,
-            tradeType: product.tradeType
-        }
-    })
-}
-
-/** 添加自选逻辑 */
-const selfSymbolList = computed(() => store.state._user.selfSymbolList)
-const isCollect = (tradeType, symbolId) => selfSymbolList.value[tradeType]?.find(el => el.symbolId === parseInt(symbolId))
-const addOptional = ({ symbolId, tradeType }) => {
-    if (isCollect(tradeType, symbolId)) {
-        removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
-            if (res.check()) {
-                store.dispatch('_user/queryCustomerOptionalList')
-                ElMessage.success(t('trade.removeOptionalOk'))
+const router = useRouter()
+const contentHeight = document.body.offsetHeight - 342
+const tableOptions = computed(() => ({
+    columns: getColumns(props.tradeType),
+    // height: '100%',
+    '@rowClick': row => {
+        router.push({
+            name: 'Order',
+            query: {
+                symbolId: row.symbolId,
+                tradeType: row.tradeType
             }
-        }).catch(err => {
-        })
-    } else {
-        addCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
-            if (res.check()) {
-                // 手动修改optional值
-                store.commit('_user/Update_optional', 1)
-                store.dispatch('_user/queryCustomerOptionalList')
-                ElMessage.success(t('trade.addOptionalOk'))
-            }
-        }).catch(err => {
         })
     }
-}
-/** 添加自选逻辑 */
+}))
 
-/** 监听是否存在滚动条，调整样式 */
-const scrollBarWidth = ref(0)
-watch(() => [props.list.length],
-      async () => {
-          await nextTick()
-          if (productListEl && props.list.length) {
-              scrollBarWidth.value = productListEl.value.offsetWidth - productListEl.value.clientWidth
-          }
-      },
-      { immediate: true }
-)
-/** 监听是否存在滚动条，调整样式 */
+// 分页
+const currentPage = ref(1)
+const size = 20
+const pagination = computed(() => {
+    return {
+        pageSize: size,
+        pageCount: Math.ceil(props.list.length / size)
+    }
+})
+const computedList = computed(() => {
+    console.log(props.list.slice((unref(currentPage) - 1) * size, unref(currentPage) * size))
+    return props.list.slice((unref(currentPage) - 1) * size, unref(currentPage) * size)
+})
+window.props = props
 
+const time = Date.now()
+watch(() => unref(computedList), () => {
+    const symbolKeys = unref(computedList).map(e => e.symbolKey)
+    QuoteSocket.add_subscribe({ moduleId: 'quote' + time, symbolKeys })
+}, {
+    immediate: true
+})
 </script>
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-.listWrap {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    box-sizing: border-box;
+
+.productList{
     width: 100%;
-    font-size: rem(30px);
-    line-height: rem(32px);
     overflow: hidden;
-    font-weight: 400;
-    margin: 30px 0;
-    // max-height: 500px;
-    .name,
-    .price,
-    .upDownAmount,
-    .upDownWidth,
-    .highPrice,
-    .lowPrice,
-    .change{
-        flex: 0 0 163px;
-        @include ellipsis();
-    }
-    .btns{
-        text-align: right;
-        flex: 0 0 180px;
-    }
-    .star{
-        cursor: pointer;
-        margin-right: 5px;
-    }
-    .item{
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        user-select: none;
-    }
-    .listHead{
-        width: 100%;
-        padding: 0 20px;
-        font-size: 14px;
-        color: var(--minorColor);
-        line-height: 16px;
-        margin-bottom: 17px;
-    }
-    .items{
-        width: 100%;
-        flex: 1;
-        overflow-x: hidden;
-        overflow-y: auto;
-        padding: 0 20px;
-        .li {
-            width: 100%;
-            height: 64px;
-            line-height: 64px;
-            font-size: 16px;
-            border-top: 1px solid var(--assistColor);
-            &:last-child{
-                border-bottom: 1px solid var(--assistColor);
-            }
-            .name{
-                font-weight: 400;
-            }
-            &:hover{
-                background: var(--bgColor);
-                border-radius: 4px;
-            }
+    display: flex;
+    flex-direction: column;
+    padding: 0 12px;
+    :deep{
+        .el-table__row{
+            cursor: pointer;
         }
-        .btns{
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: center;
-            .btn{
-                width: 80px;
-                color: #fff;
-                height: 32px;
-                line-height: 32px;
-                background: #EF5350;
-                border-radius: 4px;
-                text-align: center;
-                font-size: 16px;
-                font-weight: 400;
-                cursor: pointer;
+        .el-table__empty-block{
+            margin-top: 80px;
+        }
+        .star{
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        .btn{
+            position: relative;
+            z-index: 0;
+            display: inline-block;
+            width: 80px;
+            color: #fff;
+            height: 32px;
+            line-height: 32px;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 400;
+            cursor: pointer;
+            overflow: hidden;
+            &::before{
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: -1;
+                width: 100%;
+                height: 100%;
+                display: block;
+                content: '';
                 background: var(--riseColor);
-                &:last-child{
-                    margin-left: 20px;
+            }
+
+            &:last-child{
+                margin-left: 20px;
+                &::before{
                     background: var(--fallColor);
+                }
+            }
+
+            &:hover{
+                &::before{
+                    opacity: 0.7;
                 }
             }
         }
     }
-    .empty{
-        width: 160px;
-        padding-top: 140px;
-        background: url('/images/empty.png') center top no-repeat;
-        background-size: 160px auto;
-        color: var(--placeholdColor);
-        margin: 130px auto 0;
-        text-align: center;
-        .text{
-            display: inline-block;
-            margin-top: 20px;
-        }
-    }
 }
+
 </style>

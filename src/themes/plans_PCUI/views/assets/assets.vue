@@ -156,6 +156,7 @@ export default {
     background: var(--contentColor);
     border-radius: 10px;
     .title {
+        @include font();
         padding: 30px;
         line-height: 1;
         font-size: 30px;

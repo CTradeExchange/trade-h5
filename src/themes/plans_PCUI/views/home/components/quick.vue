@@ -40,13 +40,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/sass/mixin.scss';
 .quick-module {
     padding-top: 90px;
     display: flex;
     flex-direction: column;
     align-items: center;
     .title {
+        @include font();
         font-size: 32px;
+        font-weight: bold;
         color: var(--color);
     }
     .describe {
@@ -78,6 +81,9 @@ export default {
             background: var(--primary);
             border-radius: 4px;
             cursor: pointer;
+            &:hover {
+                opacity: .7;
+            }
         }
     }
 }

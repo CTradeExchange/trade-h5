@@ -248,11 +248,12 @@ const onSelect = val => {
                 .el-input__inner{
                     width: 120px;
                     height: 32px;
-                    background: var(--bgColor);
+                    background: var(--assistColor);
                     border-radius: 4px;
                     border-radius: 4px;
                     border: 0;
                     font-size: 14px;
+                    color: var(--normalColor);
                 }
                 .el-input__suffix, .el-input__icon{
                     line-height: 32px;
@@ -264,7 +265,7 @@ const onSelect = val => {
                 background: var(--bgColor);
                 border-color: transparent;
                 &.is-active{
-                    border-color: var(--el-color-primary);
+                    border-color: var(--primary);
                 }
             }
         }

@@ -65,7 +65,8 @@
         "originPwd": "请输入原密码",
         "pwdSuccess": "密码修改成功",
         "modifyLoginPwd": "修改登录密码",
-        "getVerifyCode": "获取验证码"
+        "getVerifyCode": "获取验证码",
+        "loginSuccess": "登录成功"
     },
     "common": {
         "tip": "提示",
@@ -110,8 +111,10 @@
         "cancel": "取消",
         "look": "查看",
         "submitSuccess": "提交成功",
+        "handleSuccess": "操作成功",
         "RMB": "人民币",
         "dollar": "美元",
+        "submiting": "提交中...",
         "loading": "加载中...",
         "more": "上拉加载更多",
         "noneText": "暂无展示内容",
