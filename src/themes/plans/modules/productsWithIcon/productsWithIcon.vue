@@ -9,21 +9,21 @@
                 <i class='icon'>
                     <img alt='' :src='item.src' srcset='' />
                 </i>
-                {{ item.product }}
                 <div class='symbol'>
                     <p class='symbol-name'>
-                        {{ item.symbolName || '产品名称' }}
+                        {{ productMap[symbolKeys[index]]?.symbolName }}
+                        <!-- {{ item.symbolName || '产品名称' }} -->
                     </p>
                     <p class='symbol-code'>
-                        {{ item.symbolCode || '产品编码' }}
+                        {{ productMap[symbolKeys[index]]?.symbolCode || '产品编码' }}
                     </p>
                 </div>
                 <div class='price'>
                     <p class='cur-price' :class='[item.cur_color]'>
-                        {{ item.cur_price || '--' }}
+                        {{ productMap[symbolKeys[index]]?.cur_price || '--' }}
                     </p>
                     <p class='up-down' :class='[item.upDownColor]'>
-                        {{ item.upDownWidth || '--' }}
+                        {{ productMap[symbolKeys[index]]?.upDownWidth || '--' }}
                     </p>
                 </div>
             </div>
@@ -58,21 +58,16 @@ export default {
         // 产品map数据
         const productMap = unref(computed(() => store.state._quote.productMap))
 
-        const symbolKeys = Object.entries(props.data.product || {}).map(([tradeType, item]) => {
-            const list = item[customerGroupId.value] || []
-            return list.map(symbolId => `${symbolId}_${tradeType}`)
+        const symbolKeys = props.data.items.map(el => {
+            if (!isEmpty(el.product)) {
+                return Object.entries(el.product).map(([tradeType, item]) => {
+                    const list = item[customerGroupId.value] || []
+                    return list.map(symbolId => `${symbolId}_${tradeType}`)
+                })
+            }
         }).flat()
 
-        // const symbolKeysss = props.data.items.map(el => {
-        //     if (!isEmpty(el.product)) {
-        //         Object.entries(el.product).map(([tradeType, item]) => {
-        //             const list = item[customerGroupId.value] || []
-        //             return list.map(symbolId => `${symbolId}_${tradeType}`)
-        //         })
-        //     }
-        // })
-
-        const productList = symbolKeys.map(key => productMap[key]).filter(elem => elem)
+        const productList = symbolKeys.flat().map(key => productMap[key]).filter(elem => elem)
 
         if (!h5Preview) { QuoteSocket.add_subscribe({ moduleId: 'productsWithIcon', symbolKeys }) }
 
@@ -83,7 +78,9 @@ export default {
 
         return {
             openProduct,
-            productList
+            productList,
+            symbolKeys,
+            productMap
         }
     }
 }

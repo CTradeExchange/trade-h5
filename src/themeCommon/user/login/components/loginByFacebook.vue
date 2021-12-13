@@ -17,10 +17,11 @@
 import { reactive, toRefs, computed, onMounted, watch, getCurrentInstance } from 'vue'
 import { useI18n } from 'vue-i18n'
 import hooks from '../loginHooks'
+import { useStore } from 'vuex'
 export default {
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
-
+        const store = useStore()
         const state = reactive({
             bindAddShow: false,
             userId: '',
@@ -31,10 +32,11 @@ export default {
             loginType: 'facebook'
         })
         const { handleCBLogin, onSelectCountry, areaActions } = hooks(state)
+        const appId = computed(() => store.state._base.thirdLoginConfig.find(el => el.thirdSource === 'facebook')?.clientId)
         const renderBtn = () => {
             window.fbAsyncInit = function () {
                 FB.init({
-                    appId: '612440896764471',
+                    appId: appId.value,
                     cookie: true, // Enable cookies to allow the server to access the session.
                     xfbml: true, // Parse social plugins on this webpage.
                     version: 'v12.0' // Use this Graph API version for this call.

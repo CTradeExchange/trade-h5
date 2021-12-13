@@ -1,6 +1,7 @@
 import { pageConfig, wpCompanyConfig, wpNav, wpFooter, wpSelfSymbolIndex } from '@/api/wpApi'
 import { localSet, localGet, getCookie, sessionSet, setCookie, isEmpty } from '@/utils/util'
 import { formatPlans } from './storeUtil.js'
+import { getThirdLoginConfig } from '@/api/base'
 
 export default {
     namespaced: true,
@@ -12,7 +13,8 @@ export default {
         wpNav: null, //   wordpress公司配置信息
         wpFooter: null, //   wordpress公司配置PCUI的页脚信息
         plansNames: {}, // 完成类型，从语言包里面获取
-        plans: [] // [{ id: 1, name: 'CFD合约全仓' }, { id: 2, name: 'CFD合约逐仓' }, { id: 3, name: '现货杠杆全仓' }, { id: 9, name: 'ABCC现货撮合' }]
+        plans: [], // [{ id: 1, name: 'CFD合约全仓' }, { id: 2, name: 'CFD合约逐仓' }, { id: 3, name: '现货杠杆全仓' }, { id: 9, name: 'ABCC现货撮合' }]
+        thirdLoginConfig: []
     },
     mutations: {
         UPDATE_inited (state, data) {
@@ -51,6 +53,9 @@ export default {
                 el.name = plansNames[el.id]
             })
         },
+        Update_trirdLoginConfig (state, data) {
+            state.thirdLoginConfig = data
+        }
     },
     actions: {
         // 初始化基础配置信息，如公司配置、底部导航配置、自选产品配置、产品板块配置
@@ -146,5 +151,20 @@ export default {
                 return _result
             })
         },
+        // 获取三方登录配置文件
+        getLoginConfig ({ state, commit, rootGetters }, pageName) {
+            const thirdLoginArr = state.wpCompanyInfo.thirdLogin
+            const companyId = state.wpCompanyInfo.companyId
+
+            if (thirdLoginArr.length > 0) {
+                return getThirdLoginConfig({
+                    companyId,
+                    thirdSource: thirdLoginArr.join()
+                }).then(res => {
+                    if (res.check()) { commit('Update_trirdLoginConfig', res.data) }
+                }).catch(err => {
+                })
+            }
+        }
     }
 }

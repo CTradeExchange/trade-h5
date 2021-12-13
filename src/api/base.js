@@ -66,3 +66,16 @@ export function changeLang (lang) {
         }
     })
 }
+
+/* 获取三方登录配置信息 */
+export function getThirdLoginConfig (data) {
+    return request({
+        url: '/global/customer.app.CustomerThirdLoginService.config',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
