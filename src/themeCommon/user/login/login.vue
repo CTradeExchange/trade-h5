@@ -34,11 +34,6 @@
             </div>
         </form>
 
-        <!-- <div class='otherLogin'>
-            <LoginByGoogle />
-            <span class='empty'></span>
-            <LoginByFacebook />
-        </div> -->
         <!-- <footer class='footer'>
             <a class='link' href='javascript:;'>
                 <i class='icon_icon_service'></i>
@@ -83,8 +78,6 @@ import areaInput from '@/components/form/areaInput'
 import InputComp from '@/components/form/input'
 import Vline from '@/components/vline'
 import CheckCode from '@/components/form/checkCode'
-import LoginByGoogle from '@/components/loginByGoogle/loginByGoogle'
-import LoginByFacebook from '@/components/loginByFacebook/loginByFacebook'
 import Top from '@/components/top'
 import { getDevice, localGet, localSet, getArrayObj } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
@@ -106,8 +99,6 @@ export default {
         Vline,
         InputComp,
         areaInput,
-        LoginByGoogle,
-        LoginByFacebook,
         CheckCode,
         Top,
     },
