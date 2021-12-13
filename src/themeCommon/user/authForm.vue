@@ -36,5 +36,8 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .authConditionWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 </style>

@@ -38,13 +38,9 @@
                 {{ $t('login.otherLogin') }}
             </p>
             <div class='otherLogin'>
-                <!-- <LoginByGoogle v-if="thirdLoginArr.includes('google')" />
+                <LoginByGoogle v-if="thirdLoginArr.includes('google')" />
                 <LoginByFacebook v-if="thirdLoginArr.includes('facebook')" />
-                <LoginByTwitter v-if="thirdLoginArr.includes('twitter')" /> -->
-
-                <LoginByGoogle />
-                <LoginByFacebook />
-                <LoginByTwitter />
+                <LoginByTwitter v-if="thirdLoginArr.includes('twitter')" />
             </div>
         </div>
 
@@ -199,7 +195,7 @@ export default {
                 if (res.invalid()) return false
 
                 // 切换登录后的行情websocket
-                setQuoteService()
+                // setQuoteService()
 
                 // 登录websocket
                 instance.appContext.config.globalProperties.$MsgSocket.login()

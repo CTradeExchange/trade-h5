@@ -47,10 +47,10 @@
                     <van-field v-model='conditionModel[typeCode]' :label='$t("register.certificateNo")' :placeholder="$t('register.pleaseEnter')+ typeValue" />
                 </div>
             </div>
-            <van-button class='confirm-btn' @click='onConfirm'>
-                {{ $t('common.submit') }}
-            </van-button>
         </div>
+        <van-button class='confirm-btn' @click='onConfirm'>
+            {{ $t('common.submit') }}
+        </van-button>
     </div>
 
     <van-popup v-model:show='showPicker' position='bottom' round>
@@ -322,10 +322,10 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .page-wrap {
+    display: flex;
+    flex-direction: column;
     flex: 1;
-    height: 100%;
-    padding-top: rem(20px);
-    overflow: auto;
+    overflow-y: auto;
     background-color: var(--bgColor);
     .notice {
         margin-top: rem(58px);
@@ -344,7 +344,9 @@ export default {
         }
     }
     .conditon-wrap {
-        padding-bottom: rem(80px);
+        flex: 1;
+        padding: rem(20px) 0;
+        overflow-y: auto;
         .c-item {
             text-align: center;
             background: var(--contentColor);
@@ -378,8 +380,6 @@ export default {
         }
     }
     .confirm-btn {
-        position: fixed;
-        bottom: 0;
         width: 100%;
         color: var(--color);
         font-size: rem(30px);

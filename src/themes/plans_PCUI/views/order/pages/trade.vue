@@ -506,7 +506,7 @@ export default {
     .form-item{
         color: var(--minorColor);
         height: 40px;
-        background: var(--bgColor);
+        background: var(--assistColor);
         border-radius: 4px;
         display: flex;
         justify-content: space-between;
