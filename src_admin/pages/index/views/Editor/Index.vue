@@ -8,7 +8,7 @@
                 <!-- <div class="logo">交易H5定制平台</div> -->
             </div>
             <el-scrollbar class='left-scrollbar'>
-                <div v-if="['SelfSymbolIndex','Nav'].indexOf(pageCode)===-1" class='components-list'>
+                <div v-if="['TradeIndex','SelfSymbolIndex','Nav'].indexOf(pageCode)===-1" class='components-list'>
                     <div
                         v-for='(item, listIndex) in leftComponents'
                         :key='listIndex'

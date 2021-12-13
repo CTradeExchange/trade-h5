@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'development') {
  */
 export const getQuoteService = () => {
     const token = getToken()
-    let quoteService = window['quoteService'] || ''
+    let quoteService = window['quoteService']
     if (token) {
         quoteService += '?token=' + token
     } else {
