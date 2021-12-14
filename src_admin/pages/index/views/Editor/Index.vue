@@ -349,12 +349,16 @@ export default {
             })
         }
 
+        let deleteConfirm = false
         const deleteComp = (ev) => {
+            if (deleteConfirm === true) return
+            deleteConfirm = true
             ElMessageBox.confirm(t('editor.tip2'), t('editor.hint'), {
                 confirmButtonText: t('editor.sure'),
                 cancelButtonText: t('editor.cancel'),
                 type: 'warning'
             }).then(() => {
+                deleteConfirm = false
                 store.commit('editor/DELETE_ELEMENT', store.state.editor.activated)
                 ElMessage.success({
                     message: t('editor.deleteSuccess'),
@@ -362,6 +366,7 @@ export default {
                 })
             })
                 .catch(error => {
+                    deleteConfirm = false
                     console.log(error)
                 })
         }
