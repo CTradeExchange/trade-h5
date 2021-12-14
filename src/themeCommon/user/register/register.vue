@@ -6,22 +6,20 @@
             <p class='pageTitle'>
                 {{ $t('register.openAccount') }}
             </p>
-            <div v-if='registerBanner' class='banner'>
-                <img alt='' :src='registerBanner' srcset='' />
+            <div class='banner'>
+                <img v-if='registerBanner' alt='' :src='registerBanner' srcset='' />
             </div>
-            <div v-if='Array.isArray(registerTypes) && registerTypes.length>0'>
-                <van-tabs
-                    v-model:active='openType'
-                    class='openTypeTab'
-                    :color='style.color'
-                    line-height='2px'
-                    line-width='20px'
-                    :title-inactive-color='style.mutedColor'
-                >
-                    <van-tab v-if="registerTypes.indexOf('mobile')>-1" name='mobile' :title='$t("register.phoneNo")' />
-                    <van-tab v-if="registerTypes.indexOf('email')>-1" name='email' :title='$t("register.email")' />
-                </van-tabs>
-            </div>
+            <van-tabs
+                v-model:active='openType'
+                class='openTypeTab'
+                :color='style.color'
+                line-height='2px'
+                line-width='20px'
+                :title-inactive-color='style.mutedColor'
+            >
+                <van-tab name='mobile' :title='$t("register.phoneNo")' />
+                <van-tab name='email' :title='$t("register.email")' />
+            </van-tabs>
 
             <form class='form'>
                 <!-- <CurrencyAction v-model='currency' class='cellRow' />
