@@ -33,7 +33,7 @@
             </div>
         </form>
 
-        <div class='three-way-login'>
+        <div v-if='thirdLoginArr.length > 0' class='three-way-login'>
             <p class='title'>
                 {{ $t('login.otherLogin') }}
             </p>
