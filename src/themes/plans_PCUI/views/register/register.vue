@@ -184,7 +184,7 @@ export default {
                     instance.appContext.config.globalProperties.$MsgSocket.login()
 
                     // 切换登录后的行情websocket
-                    setQuoteService()
+                    // setQuoteService()
 
                     if (res.data.list.length > 0) {
                         // 需要KYC认证
@@ -343,7 +343,7 @@ export default {
     display: flex;
     flex-flow: column;
     height: 100%;
-    background: var(--assistColor);
+    background: var(--bgColor);
     .container {
         flex: 1;
         overflow: auto;
@@ -460,8 +460,7 @@ export default {
     border-radius: rem(10px);
 }
 .registerBtn {
-
-    color: var(--contentColor);
+    color: #fff;
     background: var(--primary);
     border-color: var(--primary);
     border-width: 1px 0 0;

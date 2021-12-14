@@ -225,7 +225,7 @@ export default {
     justify-content: space-between;
     margin-top: 12px;
     margin-bottom: 5px;
-    color: var(--placeholdColor);
+    color: var(--minorColor);
     font-size: rem(26px);
     >span{
         flex: 1;

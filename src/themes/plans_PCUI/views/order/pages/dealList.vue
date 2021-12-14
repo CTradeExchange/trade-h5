@@ -123,6 +123,7 @@ export default {
         overflow: -moz-scrollbars-none;
         .deal-item {
             line-height: 27px;
+            color: var(--normalColor);
             >span {
                 display: inline-block;
                 &:first-child {

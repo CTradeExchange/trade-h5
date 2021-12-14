@@ -80,6 +80,7 @@ watch(() => unref(tradeType), () => {
     }
     .icon_lansezixuan{
         margin-right: 5px;
+        font-size: 14px;
     }
 }
 </style>

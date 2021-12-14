@@ -296,7 +296,7 @@ import KIcon from './icons/kIcon.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import { useStore } from 'vuex'
 import { Dialog, Toast } from 'vant'
-import { isEmpty, localSet, localGet } from '@/utils/util'
+import { isEmpty, localSet, localGet, getCookie } from '@/utils/util'
 import tv from '@/components/tradingview/tv'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import StallsAndDeal from './components/StallsAndDeal'
@@ -790,6 +790,7 @@ export default {
         const locChartConfig = JSON.parse(localGet('chartConfig'))
         const initChartData = () => {
             const invertColor = localGet('invertColor')
+            const locale = getCookie('lang') === 'zh-CN' ? 'zh' : 'en'
             if (isEmpty(locChartConfig)) {
                 localSetChartConfig('showLastPrice', false)
                 localSetChartConfig('mainStudy', JSON.stringify(MAINSTUDIES[0]))
@@ -829,7 +830,8 @@ export default {
                     extension: {
                         theme: invertColor === 'light' ? 'Light' : 'Dark', // 主题 "Light" | "Dark"
                         fullScreen: false, // 全屏功能（右上角缩放按钮、横屏监听等）
-                        orientation: 'portrait'
+                        orientation: 'portrait',
+                        locale
                     }
                 })
             } else {
@@ -870,7 +872,8 @@ export default {
                     extension: {
                         theme: invertColor === 'light' ? 'Light' : 'Dark', // 主题 "Light" | "Dark"
                         fullScreen: false, // 全屏功能（右上角缩放按钮、横屏监听等）
-                        orientation: 'portrait'
+                        orientation: 'portrait',
+                        locale
                     }
                 })
             }

@@ -16,7 +16,7 @@
         
 
         <div class='btns'>
-            <van-button hairline class="leBtn" type='success' @click='$router.replace({ name: "Quote" })'>
+            <van-button hairline class="leBtn" type='success' @click='$router.replace({ name: "Home" })'>
                 {{ $t('common.backHome') }}
             </van-button>
             <van-button hairline  class="riBtn" type='default' @click='$router.replace({ name: "Authentication" })'>

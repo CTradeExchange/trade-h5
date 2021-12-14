@@ -27,7 +27,7 @@
                 <div class='tabs-content'>
                     <form v-show='curTab === 0' class='loginForm'>
                         <div class='field'>
-                            <InputComp v-model.trim='mobile' clear :label='$t("common.inputPhone")' />
+                            <InputComp v-model.trim='mobile' class='forgotAccount' clear :label='$t("common.inputPhone")' />
                         </div>
                         <div class='field verifyCodeCell'>
                             <checkCode v-model.trim='checkCode' :label='$t("common.inputVerifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
@@ -36,7 +36,7 @@
 
                     <form v-show='curTab === 1' class='loginForm'>
                         <div class='field'>
-                            <InputComp v-model.trim='email' clear :label='$t("common.inputEmail")' />
+                            <InputComp v-model.trim='email' class='forgotAccount' clear :label='$t("common.inputEmail")' />
                         </div>
                         <div class='field verifyCodeCell'>
                             <checkCode v-model.trim='emailCode' :label='$t("common.inputVerifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
@@ -229,7 +229,10 @@ export default {
     display: flex;
     flex-flow: column;
     height: 100%;
-    background: var(--assistColor);
+    background: var(--bgColor);
+    .forgotAccount{
+        background-color: var(--assistColor) !important;
+    }
     .container {
         flex: 1;
         overflow: auto;
@@ -352,7 +355,7 @@ export default {
     // position: absolute;
     // bottom: 0;
         position: relative;
-    color: var(--contentColor);
+    color: #fff;
     background: var(--primary);
     border-color: var(--primary);
     border-width: 1px 0 0;

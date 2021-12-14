@@ -86,7 +86,7 @@ export default function hooks (state) {
             if (res.invalid()) return false
 
             // 切换登录后的行情websocket
-            setQuoteService()
+            // setQuoteService()
             // 登录websocket
             instance.appContext.config.globalProperties.$MsgSocket.login()
             store.commit('del_cacheViews', 'Home')
@@ -167,7 +167,7 @@ export default function hooks (state) {
                 instance.appContext.config.globalProperties.$MsgSocket.login()
 
                 // 切换登录后的行情websocket
-                setQuoteService()
+                // setQuoteService()
 
                 if (res.data.list.length > 0) {
                     // 需要KYC认证

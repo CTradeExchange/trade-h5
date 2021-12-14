@@ -137,7 +137,7 @@ export default {
     color: var(--minorColor);
     line-height: 1.5;
     .balance{
-        color: var(--normalColor);
+        color: var(--color);
         >a{
             color: var(--primary);
         }

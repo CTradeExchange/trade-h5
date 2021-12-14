@@ -1,5 +1,5 @@
 <template>
-    <div class='productList' :style='{ height: contentHeight + "px" }'>
+    <div class='productList' :style='{ minHeight: contentHeight + "px" }'>
         <customTable
             v-model:currentPage='currentPage'
             :data='computedList'
@@ -30,7 +30,7 @@ const router = useRouter()
 const contentHeight = document.body.offsetHeight - 342
 const tableOptions = computed(() => ({
     columns: getColumns(props.tradeType),
-    height: '100%',
+    // height: '100%',
     '@rowClick': row => {
         router.push({
             name: 'Order',
@@ -76,12 +76,15 @@ watch(() => unref(computedList), () => {
     flex-direction: column;
     padding: 0 12px;
     :deep{
+        .el-table__row{
+            cursor: pointer;
+        }
+        .el-table__empty-block{
+            margin-top: 80px;
+        }
         .star{
             cursor: pointer;
             margin-right: 5px;
-        }
-        .name, .upDownWidth{
-            font-weight: 700;
         }
         .btn{
             position: relative;

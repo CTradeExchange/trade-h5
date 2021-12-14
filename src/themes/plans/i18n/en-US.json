@@ -630,8 +630,8 @@
     "calendar":"Calendar"
   },
   "riskLevel":{
-    "safety": "Safety",
-    "warn": "Warn",
+    "safety": "Safe",
+    "warn": "Warning",
     "danger": "Danger"
   }
 }

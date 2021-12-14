@@ -69,7 +69,7 @@
         "otherLogin": "Or login via below",
         "registered": "Your email has registered an account, please login.",
         "inputCountry": "Please add your country information.",
-        "loginOrRegist": "Login/Regist"
+        "loginOrRegist": "Login / Regist"
     },
     "common": {
         "tip": "Tips",
@@ -94,7 +94,7 @@
         "sure": "Confirm",
         "emailBindSuccess": "Connect Email success",
         "replaceEmailSuccess": "Change Eamil success",
-        "serivce": "Contact Customer Service",
+        "serivce": "Contact CS",
         "emailBinded": "The email  already exists in the system, if you have any questions, please contact customer service",
         "verifySended": "Verification code sent!",
         "inputRealPhone": "Please input correct mobile",

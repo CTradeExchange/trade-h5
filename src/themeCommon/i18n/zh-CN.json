@@ -69,7 +69,8 @@
         "otherLogin": "或使用以下方式登录",
         "registered": "您的邮箱已注册了账号，请登录账号",
         "inputCountry": "请补充您所在国家信息",
-        "loginOrRegist": "登录/注册"
+        "loginOrRegist": "登录 / 注册",
+        "loginSuccess": "登录成功"
     },
     "common": {
         "tip": "提示",
@@ -114,6 +115,7 @@
         "cancel": "取消",
         "look": "查看",
         "submitSuccess": "提交成功",
+        "handleSuccess": "操作成功",
         "RMB": "人民币",
         "dollar": "美元",
         "submiting": "提交中...",

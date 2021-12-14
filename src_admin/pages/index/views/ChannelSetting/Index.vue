@@ -40,16 +40,10 @@
                             <el-form-item
                                 :label="$t('channelSetting.registerableCode')"
                                 prop='registrable'
-                                :rules="[
-                                    {
-                                        required: true,
-                                        message: $t('channelSetting.error4'),
-                                        trigger: 'blur',
-                                    }
-                                ]"
                             >
                                 <el-select
                                     v-model='form.registrable'
+                                    collapse-tags
                                     multiple
                                     :placeholder="$t('pleaseEnter')"
                                     value-key='id'
@@ -76,13 +70,6 @@
                             <el-form-item
                                 :label="$t('channelSetting.defaultAreaCode')"
                                 prop='defaultZone'
-                                :rules="[
-                                    {
-                                        required: true,
-                                        message: $t('channelSetting.error5'),
-                                        trigger: 'blur',
-                                    }
-                                ]"
                             >
                                 <el-select
                                     v-model='form.defaultZone'
@@ -103,13 +90,6 @@
                                 :key='item.id'
                                 :label='index === 0 ? $t("channelSetting.countryRegistration") : ""'
                                 prop='registList'
-                                :rules="[
-                                    {
-                                        required: true,
-                                        message: $t('channelSetting.error3'),
-                                        trigger: 'blur',
-                                    }
-                                ]"
                             >
                                 <el-row>
                                     <el-col :span='6'>
@@ -161,9 +141,9 @@
                                         </el-popover>
                                     </el-col>
                                     <el-col :span='6'>
-                                        <el-button :disabled='form.registList[index].disabledSetCurrency' type='primary' @click='setPlans(item,index,1)'>
+                                        <!-- <el-button :disabled='form.registList[index].disabledSetCurrency' type='primary' @click='setPlans(item,index,1)'>
                                             {{ $t('channelSetting.setCurrency') }}
-                                        </el-button>
+                                        </el-button> -->
                                         <el-button v-if='index === 0' type='primary' @click='addFormItem'>
                                             {{ $t('channelSetting.add') }}
                                         </el-button>
@@ -215,13 +195,6 @@
                             <el-form-item
                                 :label="$t('channelSetting.h5SupportLang')"
                                 prop='supportLanguage'
-                                :rules="[
-                                    {
-                                        required: true,
-                                        message: $t('channelSetting.error1'),
-                                        trigger: 'blur',
-                                    },
-                                ]"
                             >
                                 <el-select
                                     v-model='form.supportLanguage'
@@ -241,13 +214,6 @@
                             <el-form-item
                                 :label="$t('channelSetting.h5DefaultLang')"
                                 prop='language'
-                                :rules="[
-                                    {
-                                        required: true,
-                                        message: $t('channelSetting.error2'),
-                                        trigger: 'blur',
-                                    },
-                                ]"
                             >
                                 <el-select
                                     v-model='form.language'
@@ -284,7 +250,8 @@
                                     </el-checkbox>
                                 </el-checkbox-group>
                             </el-form-item>
-                            <el-form-item :label="$t('channelSetting.registerTypes')">
+                            <!-- 支持手机、邮箱注册 -->
+                            <!-- <el-form-item :label="$t('channelSetting.registerTypes')">
                                 <el-checkbox-group v-model='form.registerTypes'>
                                     <el-checkbox label='mobile'>
                                         {{ $t('channelSetting.mobile') }}
@@ -293,7 +260,7 @@
                                         {{ $t('channelSetting.email') }}
                                     </el-checkbox>
                                 </el-checkbox-group>
-                            </el-form-item>
+                            </el-form-item> -->
                             <!-- <el-form-item class='registerBanner' label='注册页banner'>
                                 <div class='upload' @click='uploadRegitserBannerFile()'>
                                     <div v-if='form.registerBanner' class='img-wrap'>
@@ -386,28 +353,27 @@
                         </el-tab-pane>
                         <el-tab-pane class='tab' :label="$t('channelSetting.tradeTypeNameSetting')" name='fourth'>
                             <el-row :gutter='20'>
-                                <el-col :span="4">
-                                    <el-form-item>
-                                        
-                                    </el-form-item>
+                                <el-col :span='4'>
+                                    <el-form-item />
                                 </el-col>
-                                <el-col :span="4" v-for="(val,key,index) in tradeTypes">
+                                <el-col v-for='(val,key,index) in tradeTypes' :span='4'>
                                     <el-form-item>
-                                        {{$t('channelSetting.tradeTypes'+key)}}
+                                        {{ $t('channelSetting.tradeTypes'+key) }}
                                     </el-form-item>
                                 </el-col>
                             </el-row>
-                            <el-row :gutter='20' v-for="(outVal,outKey,outIndex) in form.tradeTypesConfig">
-                                <el-col :span="4">
+                            <el-row v-for='(outVal,outKey,outIndex) in form.tradeTypesConfig' :gutter='20'>
+                                <el-col :span='4'>
                                     <el-form-item>
-                                        {{outKey}}
+                                        {{ outKey }}
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="4" v-for="(innerVal,innerKey,innerIndex) in outVal">
-                                    <el-form-item :prop="innerVal">
+                                <el-col v-for='(innerVal,innerKey,innerIndex) in outVal' :span='4'>
+                                    <el-form-item :prop='innerVal'>
                                         <el-input
-                                            v-model="form.tradeTypesConfig[outKey][innerKey]"
-                                            :placeholder="$t('pleaseEnter')" />
+                                            v-model='form.tradeTypesConfig[outKey][innerKey]'
+                                            :placeholder="$t('pleaseEnter')"
+                                        />
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -501,7 +467,7 @@ import { getAccountGroupTradeAssetsList, queryCountryList, getViChannel, saveViC
 import { lang } from '../../config/lang'
 import { getQueryString } from '@admin/utils'
 import { cloneDeep, escape, unescape } from 'lodash'
-import { isEmpty , localGet} from '@/utils/util'
+import { isEmpty, localGet } from '@/utils/util'
 import Tinymce from '@index/components/Tinymce'
 // components
 import amountSet from './components/amount-set.vue'
@@ -533,20 +499,20 @@ export default {
                 registrable: [],
                 isWallet: false,
                 paymentIconList: {}, // 支付通道图标列表
-                tradeTypesConfig:{
-                    "zh-CN":{
-                        "1": "",
-                        "2": "",
-                        "3": "",
-                        "5": "",
-                        "9": ""
+                tradeTypesConfig: {
+                    'zh-CN': {
+                        '1': '',
+                        '2': '',
+                        '3': '',
+                        '5': '',
+                        '9': ''
                     },
-                    "en-US":{
-                        "1": "",
-                        "2": "",
-                        "3": "",
-                        "5": "",
-                        "9": ""
+                    'en-US': {
+                        '1': '',
+                        '2': '',
+                        '3': '',
+                        '5': '',
+                        '9': ''
                     },
                 }
             },
@@ -592,21 +558,6 @@ export default {
                         trigger: 'blur',
                     }
                 ],
-                registrable: [
-                    {
-                        required: true,
-                        message: '请选择可注册区号',
-                        trigger: 'blur',
-                    }
-                ],
-                defaultZone: [
-                    {
-                        required: true,
-                        message: '请选择默认注册区号',
-                        trigger: 'blur',
-                    }
-                ]
-
             },
             predefineColors: [
                 '#477fd3',
@@ -624,17 +575,17 @@ export default {
                 'hsla(209, 100%, 56%, 0.73)',
                 '#c7158577',
             ],
-            tradeTypes:{
-                "1": "",
-                "2": "",
-                "3": "",
-                "5": "",
-                "9": ""
+            tradeTypes: {
+                '1': '',
+                '2': '',
+                '3': '',
+                '5': '',
+                '9': ''
             },
         }
     },
-    computed:{
-        currentLang(){
+    computed: {
+        currentLang () {
             return localGet('lang')
         }
     },
@@ -646,7 +597,7 @@ export default {
         await this.queryAccountGroupTradeList()
         await this.getPageConfig()
         await this.getPaymentArray()
-        console.log("asdasd",this.form)
+        console.log('asdasd', this.form)
     },
     methods: {
         getPageConfig () {
@@ -716,7 +667,7 @@ export default {
                         }
                     })
                     this.accountTradeList = res.data
-                    console.log("this.accountTradeList",this.accountTradeList)
+                    console.log('this.accountTradeList', this.accountTradeList)
                 }
             })
         },
@@ -834,7 +785,7 @@ export default {
         getTradeTypeAssets (data) {
             if (Array.isArray(data)) {
                 this.tradeTypeList = data.map(el => ({ id: el.trade_type, name: el.trade_name }))
-                console.log("this.tradeTypeList",this.tradeTypeList)
+                console.log('this.tradeTypeList', this.tradeTypeList)
                 const tempCheckedTradeType = {}
 
                 this.tradeTypeList.forEach(el => {
@@ -890,7 +841,7 @@ export default {
                                 }
                                 if (isEmpty(el.customerGroupId)) {
                                     that.$message({
-                                        message:  this.$t('channelSetting.error8'),
+                                        message: this.$t('channelSetting.error8'),
                                         type: 'warning'
                                     })
                                     that.submitLoading = false
@@ -904,11 +855,11 @@ export default {
                                     })
                                     that.submitLoading = false
                                     throw new Error('no-plans')
-                                } else if (Number(el.customerGroupId) === 1) {
-                                    el.plans.forEach(item => {
-                                        const allCurrency = Array.isArray(item.allCurrency) ? item.allCurrency.toString() : item.allCurrency
-                                        item.allCurrency = allCurrency
-                                    })
+                                // } else if (Number(el.customerGroupId) === 1) {
+                                //     el.plans.forEach(item => {
+                                //         const allCurrency = Array.isArray(item.allCurrency) ? item.allCurrency.toString() : item.allCurrency
+                                //         item.allCurrency = allCurrency
+                                //     })
                                 } else {
                                     el.plans.forEach(item => {
                                         const allCurrency = that.accountTradeList[el.customerGroupId].data.find(el => Number(el.trade_type) === Number(item.id)).assets.map(item => item.code).toString()
@@ -961,6 +912,7 @@ export default {
                                 }
                             }
                         }
+                        // todo  tradeTypes里面的子项要进行非空验证，去掉空的子项便于h5端判断是否改变了玩法别名
                         saveViChannel({
                             content: JSON.stringify(_formData), // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', //
                             id: that.pageId,
