@@ -53,20 +53,22 @@ export default {
     height: 100%;
     background-color: var(--contentColor);
     .registerSuccess {
-        display: flex;
         padding: rem(100px) rem(60px) rem(40px) rem(50px);
         .icon {
-            width: rem(200px);
-            color: var(--success);
+            color: var(--primary);
             font-size: rem(120px);
             text-align: center;
             margin-top: rem(10px);
         }
-        h2 {
-            margin: rem(15px) 0 rem(10px);
-            font-weight: normal;
-            font-size: rem(32px);
+        .container{
+            text-align: center;
+            h2 {
+                margin: rem(15px) 0 rem(10px);
+                font-weight: normal;
+                font-size: rem(32px);
+            }
         }
+       
         .accountNo {
             color: var(--success);
         }
