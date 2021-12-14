@@ -406,7 +406,7 @@ export default {
                         // if (item.data.code_ids_all) delete item.data.code_ids_all
                     }
 
-                    if (['selfSymbol', 'productsSwipe', 'productsTimeSharing'].includes(item.tag)) {
+                    if (['selfSymbol', 'productsSwipe', 'productsTimeSharing', 'bannerProducts'].includes(item.tag)) {
                         item.data.product = store.state.editor.tradeTypeSelfSymbol
                     } else if (['productsWithIcon'].includes(item.tag)) {
                         if (activeIndex.value) { item.data.items[activeIndex.value].product = store.state.editor.tradeTypeSelfSymbol }
