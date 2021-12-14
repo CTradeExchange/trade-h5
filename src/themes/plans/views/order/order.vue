@@ -153,7 +153,7 @@ export default {
                 val: 1
             }],
             volume: '',
-            entryType: 1, // 1按数量下单 2按成交额下单
+            entryType: 2, // 1按数量下单 2按成交额下单
             operationType: 2, // 操作类型。1-普通；2-自动借款；3-自动还款
             pendingPrice: '',
             stopLoss: '',
@@ -203,7 +203,7 @@ export default {
                 if ([3, 5].includes(tradeType) && state.direction === 'buy') {
                     state.entryType = 2 // 1按数量下单 2按成交额下单
                 } else {
-                    state.entryType = 1 // 1按数量下单 2按成交额下单
+                    state.entryType = 2 // 1按数量下单 2按成交额下单
                 }
             } else {
                 state.entryType = 1 // 1按数量下单 2按成交额下单

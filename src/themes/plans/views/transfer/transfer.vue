@@ -1,6 +1,6 @@
 <template>
     <div class='fullPageWrapper'>
-        <LayoutTop :back='true' :menu='false'>
+        <LayoutTop :back='true' :menu='false' :show-title='false'>
             <template #right>
                 <a class='right-title' href='javascript:;' @click='toRecord'>
                     {{ $t('assets.transferRecord') }}
@@ -8,6 +8,15 @@
             </template>
         </LayoutTop>
         <div class='page-content'>
+            <p class='header'>
+                {{ $t('assets.transferAsset') }}
+            </p>
+            <div class='action-bar mb60' @click='pickerShow=true'>
+                <span class='label'>
+                    {{ curCurrency?.currency }}
+                </span>
+                <van-icon name='arrow' @click='pickerShow=true' />
+            </div>
             <div class='transfer'>
                 <div class='label'>
                     {{ $t('common.from') }}
@@ -18,25 +27,25 @@
                 </div>
 
                 <div class='center'>
-                    <div class='from account' @click='handleFrom(fromAccount.id)'>
-                        <span> {{ fromAccount.name }}</span>
-                        <van-icon v-if='Number(fromAccount.id) !== 5' name='arrow' @click='handleFrom(fromAccount.id)' />
+                    <div class='from account' @click='handleFrom(fromAccount?.id)'>
+                        <span> {{ fromAccount?.name }}</span>
+                        <van-icon v-if='Number(fromAccount?.id) !== 5' name='arrow' @click='handleFrom(fromAccount?.id)' />
                     </div>
-                    <div class='to account' @click='handleTo(toAccount.id)'>
-                        <span> {{ toAccount.name }}</span>
-                        <van-icon v-if='Number(toAccount.id) !== 5' name='arrow' @click='handleTo(toAccount.id)' />
+                    <div class='to account' @click='handleTo(toAccount?.id)'>
+                        <span> {{ toAccount?.name }}</span>
+                        <van-icon v-if='Number(toAccount?.id) !== 5' name='arrow' @click='handleTo(toAccount?.id)' />
                     </div>
                 </div>
                 <div class='right' @click='handleSwap'>
-                    <i class='icon_zhuanhuan'></i>
+                    <div class='icon-wrap'>
+                        <i class='icon_zhuanhuan'></i>
+                    </div>
                 </div>
             </div>
-            <div class='action-bar' @click='pickerShow=true'>
-                <span class='label'>
-                    {{ curCurrency?.currency }}
-                </span>
-                <van-icon name='arrow' @click='pickerShow=true' />
-            </div>
+
+            <p class='header mt60'>
+                {{ $t('trade.orderVolume') }}
+            </p>
             <div class='action-bar'>
                 <input v-model='amount' :placeholder='$t("assets.minTransfer")+ minTransfer' type='number' />
                 <span class='unit'>
@@ -47,7 +56,10 @@
                 </span>
             </div>
             <p class='tip'>
-                {{ $t('assets.maxTransfer') }} {{ maxTransfer }} {{ curCurrency?.currency }}
+                {{ $t('assets.maxTransfer') }}
+                <span class='val'>
+                    {{ maxTransfer }}
+                </span> {{ curCurrency?.currency }}
             </p>
         </div>
 
@@ -315,18 +327,26 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .fullPageWrapper {
-    //background-color: var(--contentColor);
+    background-color: var(--contentColor);
     .page-content {
-        padding: rem(20px);
+        padding: 0 rem(30px);
+        .header{
+            font-size: rem(48px);
+            font-weight: bold;
+            padding-bottom: rem(10px);
+
+        }
         .transfer {
             display: flex;
             align-items: center;
-            background: var(--contentColor);
+            background: var(--assistColor);
             .label {
-                margin: 0 rem(30px) 0 rem(22px);
-                color: var(--minorColor);
+                height: rem(200px);
+                background: var(--contentColor);
+                padding: rem(40px) rem(44px) 0 0;
+                color: var(--color);
                 font-weight: bold;
-                font-size: rem(28px);
+                font-size: rem(48px);
                 line-height: rem(27px);
                 text-align: center;
                 word-wrap: break-word;
@@ -346,39 +366,56 @@ export default {
             }
             .center {
                 flex: 1;
-                border-right: solid 1px var(--lineColor);
                 .account {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
                     height: rem(100px);
                     padding-right: rem(30px);
+                    padding-left: rem(30px);
                     font-size: rem(28px);
                     line-height: rem(100px);
                     &.from {
                         border-bottom: solid 1px var(--lineColor);
                     }
+                    .van-icon {
+                        color: var(--minorColor);
+                    }
                 }
             }
             .right {
                 //flex: 1;
-                .icon_zhuanhuan {
-                    margin: 0 rem(32px);
-                    color: var(--primary);
-                    font-size: rem(40px);
+                padding-right: rem(60px);
+                padding-left: rem(70px);
+                .icon-wrap{
+                    border-radius: 50%;
+                    background: var(--primary);
+                    width: rem(64px);
+                    height: rem(64px);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    text-align: center;
+                    .icon_zhuanhuan {
+                        margin: 0 rem(32px);
+                        color: var(--contentColor);
+                        font-size: rem(32px);
+                    }
                 }
+
             }
         }
         .action-bar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: rem(80px);
-            margin-top: rem(50px);
+            height: rem(100px);
+            margin-top: rem(30px);
+            margin-bottom: rem(30px);
             padding: 0 rem(30px);
             color: var(--color);
             font-size: rem(28px);
-            background: var(--contentColor);
+            background: var(--assistColor);
             border-radius: rem(6px);
             input {
                 flex: 1;
@@ -387,15 +424,25 @@ export default {
                 margin-right: rem(30px);
                 padding-right: rem(30px);
                 border-right: solid 1px var(--lineColor);
+                color: var(--placeholdColor);
             }
             .all {
                 color: var(--primary);
             }
         }
         .tip {
-            margin-top: rem(23px);
             margin-left: rem(23px);
             color: var(--minorColor);
+            text-align: right;
+            .val{
+                color: var(--color);
+            }
+        }
+        .mt60{
+            margin-top: rem(60px);
+        }
+        .mb60{
+            margin-bottom: rem(60px);
         }
     }
     .footerBtn {
@@ -410,13 +457,14 @@ export default {
             margin: rem(20px);
             color: #FFF;
             font-size: rem(30px);
+            font-weight: bold;
             background: var(--primary);
             border: none;
             border-radius: rem(6px);
         }
     }
     .right-title {
-        color: var(--primary);
+        color: var(--color);
         font-size: rem(24px);
     }
 }

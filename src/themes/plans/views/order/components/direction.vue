@@ -78,7 +78,7 @@ export default {
         font-size: rem(28px);
         &.sell {
             margin-left: 5px;
-            border: solid rem(2px) v-bind(fallColor);
+            border: solid rem(4px) v-bind(fallColor);
             color: var(--fallColor);
             &.active {
                 opacity: 1;
@@ -88,7 +88,7 @@ export default {
         }
         &.buy {
             margin-right: 5px;
-             border: solid rem(2px) v-bind(riseColor);
+            border: solid rem(4px) v-bind(riseColor);
             color: var(--riseColor);
             &.active {
                 opacity: 1;

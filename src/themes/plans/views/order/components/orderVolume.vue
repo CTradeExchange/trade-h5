@@ -1,5 +1,13 @@
 <template>
     <div class='orderVolume'>
+        <div v-if='[2].includes(product.tradeType)' class='entry-type'>
+            <div class='left active'>
+                {{ parseInt(entryType) === 1 ? $t('trade.volumes') : $t('trade.margin') }}
+            </div>
+            <div class='right' @click='entryTypeUpdate'>
+                > {{ parseInt(entryType) === 1 ? $t('trade.margin') : $t('trade.volumes') }}
+            </div>
+        </div>
         <input
             ref='inputEl'
             class='input'
@@ -10,10 +18,6 @@
             @focus='onFocus'
             @input='onInput'
         />
-        <a v-if='[2].includes(product.tradeType)' class='entryType' href='javascript:;' @click='entryTypeUpdate'>
-            <i class='icon_qiehuan1'></i>
-            {{ parseInt(entryType)===1?$t('trade.volumes'):$t('trade.margin') }}
-        </a>
     </div>
 </template>
 
@@ -126,6 +130,17 @@ export default {
 .orderVolume {
     position: relative;
     margin-top: rem(20px);
+    .entry-type{
+        display: flex;
+        justify-content: space-between;
+        font-size: rem(28px);
+        color: var(--primary);
+        font-weight: bold;
+        margin-bottom: rem(15px);
+        .active{
+            color: var(--color);
+        }
+    }
     .input {
         width: 100%;
         height: rem(80px);
