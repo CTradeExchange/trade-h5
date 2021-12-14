@@ -152,7 +152,7 @@ export default {
 
         .el-input__inner{
                 border: none;
-                background-color: var(--bgColor);
+                background-color: var(--assistColor);
                 border-radius: 4px;
                 height: 48px;
                 line-height: 48px;
@@ -170,6 +170,7 @@ export default {
 }
 .inputWrapper {
     position: relative;
+    background-color: var(--assistColor) !important;
 }
 .input {
     width: 100%;

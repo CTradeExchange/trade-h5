@@ -1,6 +1,6 @@
 <template>
     <div class='fullPageWrapper'>
-        <LayoutTop :back='true' :menu='false' icon="icon_icon_close_big">
+        <LayoutTop :back='true' icon='icon_icon_close_big' :menu='false'>
             <template #right>
                 <a class='right-title' href='javascript:;' @click='toRecord'>
                     {{ $t('assets.transferRecord') }}
@@ -399,6 +399,7 @@ export default {
         :deep(.el-input__inner){
             border: 0;
             width: 100%;
+            color: var(--color);
         }
         --el-disabled-border-base: transparent;
         --el-disabled-fill-base: transparent;
@@ -407,6 +408,7 @@ export default {
     }
     .accountTradeTypeName{
         padding-left: 15px;
+        color: var(--color);
     }
     .footerBtn {
         position: absolute;

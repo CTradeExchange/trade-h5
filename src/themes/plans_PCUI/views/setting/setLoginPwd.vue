@@ -168,6 +168,7 @@ export default {
         margin-bottom: rem(10px);
         font-weight: normal;
         font-size: rem(50px);
+        color: var(--color);
     }
     .confirmBtn {
         position: absolute;

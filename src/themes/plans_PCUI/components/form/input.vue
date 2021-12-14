@@ -67,7 +67,7 @@ export default {
 .pcInputBar{
     display: flex;
     align-items: center;
-    background: var(--bgColor);
+    background: var(--assistColor);
 }
 .pcInput{
     height: 48px;
