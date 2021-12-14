@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { plus, div, pow, lt, gt } from '@/utils/calculation'
+import { plus, div, pow, lt, gt, toFixed } from '@/utils/calculation'
 import StepperComp from '@plans/components/stepper'
 
 export default {
@@ -64,8 +64,10 @@ export default {
         firstChange () {
             const sumVal = plus(this.max, this.min)
             const val = div(sumVal, 2)
-            this.$emit('update:modelValue', val)
-            this.$emit('change', val)
+            const digits = this.product.price_digits
+            const valFixed = toFixed(val, digits)
+            this.$emit('update:modelValue', valFixed)
+            this.$emit('change', valFixed)
         },
     },
 }
