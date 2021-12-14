@@ -40,16 +40,10 @@
                             <el-form-item
                                 :label="$t('channelSetting.registerableCode')"
                                 prop='registrable'
-                                :rules="[
-                                    {
-                                        required: true,
-                                        message: $t('channelSetting.error4'),
-                                        trigger: 'blur',
-                                    }
-                                ]"
                             >
                                 <el-select
                                     v-model='form.registrable'
+                                    collapse-tags
                                     multiple
                                     :placeholder="$t('pleaseEnter')"
                                     value-key='id'
@@ -76,13 +70,6 @@
                             <el-form-item
                                 :label="$t('channelSetting.defaultAreaCode')"
                                 prop='defaultZone'
-                                :rules="[
-                                    {
-                                        required: true,
-                                        message: $t('channelSetting.error5'),
-                                        trigger: 'blur',
-                                    }
-                                ]"
                             >
                                 <el-select
                                     v-model='form.defaultZone'
@@ -103,13 +90,6 @@
                                 :key='item.id'
                                 :label='index === 0 ? $t("channelSetting.countryRegistration") : ""'
                                 prop='registList'
-                                :rules="[
-                                    {
-                                        required: true,
-                                        message: $t('channelSetting.error3'),
-                                        trigger: 'blur',
-                                    }
-                                ]"
                             >
                                 <el-row>
                                     <el-col :span='6'>
@@ -161,9 +141,9 @@
                                         </el-popover>
                                     </el-col>
                                     <el-col :span='6'>
-                                        <el-button :disabled='form.registList[index].disabledSetCurrency' type='primary' @click='setPlans(item,index,1)'>
+                                        <!-- <el-button :disabled='form.registList[index].disabledSetCurrency' type='primary' @click='setPlans(item,index,1)'>
                                             {{ $t('channelSetting.setCurrency') }}
-                                        </el-button>
+                                        </el-button> -->
                                         <el-button v-if='index === 0' type='primary' @click='addFormItem'>
                                             {{ $t('channelSetting.add') }}
                                         </el-button>
@@ -215,13 +195,6 @@
                             <el-form-item
                                 :label="$t('channelSetting.h5SupportLang')"
                                 prop='supportLanguage'
-                                :rules="[
-                                    {
-                                        required: true,
-                                        message: $t('channelSetting.error1'),
-                                        trigger: 'blur',
-                                    },
-                                ]"
                             >
                                 <el-select
                                     v-model='form.supportLanguage'
@@ -241,13 +214,6 @@
                             <el-form-item
                                 :label="$t('channelSetting.h5DefaultLang')"
                                 prop='language'
-                                :rules="[
-                                    {
-                                        required: true,
-                                        message: $t('channelSetting.error2'),
-                                        trigger: 'blur',
-                                    },
-                                ]"
                             >
                                 <el-select
                                     v-model='form.language'
@@ -592,21 +558,6 @@ export default {
                         trigger: 'blur',
                     }
                 ],
-                registrable: [
-                    {
-                        required: true,
-                        message: '请选择可注册区号',
-                        trigger: 'blur',
-                    }
-                ],
-                defaultZone: [
-                    {
-                        required: true,
-                        message: '请选择默认注册区号',
-                        trigger: 'blur',
-                    }
-                ]
-
             },
             predefineColors: [
                 '#477fd3',
@@ -904,11 +855,11 @@ export default {
                                     })
                                     that.submitLoading = false
                                     throw new Error('no-plans')
-                                } else if (Number(el.customerGroupId) === 1) {
-                                    el.plans.forEach(item => {
-                                        const allCurrency = Array.isArray(item.allCurrency) ? item.allCurrency.toString() : item.allCurrency
-                                        item.allCurrency = allCurrency
-                                    })
+                                // } else if (Number(el.customerGroupId) === 1) {
+                                //     el.plans.forEach(item => {
+                                //         const allCurrency = Array.isArray(item.allCurrency) ? item.allCurrency.toString() : item.allCurrency
+                                //         item.allCurrency = allCurrency
+                                //     })
                                 } else {
                                     el.plans.forEach(item => {
                                         const allCurrency = that.accountTradeList[el.customerGroupId].data.find(el => Number(el.trade_type) === Number(item.id)).assets.map(item => item.code).toString()
@@ -961,6 +912,7 @@ export default {
                                 }
                             }
                         }
+                        // todo  tradeTypes里面的子项要进行非空验证，去掉空的子项便于h5端判断是否改变了玩法别名
                         saveViChannel({
                             content: JSON.stringify(_formData), // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', //
                             id: that.pageId,
