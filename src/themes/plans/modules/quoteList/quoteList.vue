@@ -1,22 +1,26 @@
 <template>
     <div>
-        <p v-if='h5Preview' align='center'>
-            <img alt='' src='./quoteList.png' style='width: 100%;' />
-        </p>
-        <div v-else>
-            <!-- <quoteComp /> -->
-        </div>
+        <!-- h5 -->
+        <template v-if='!h5Preview'>
+            <H5 v-bind='props.data' />
+        </template>
+
+        <!-- 编辑预览 -->
+        <template v-else>
+            <Edit v-bind='props.data' />
+        </template>
     </div>
 </template>
 
-<script>
-// import quoteComp from '@plans/views/trade/tradeComponent'
-export default {
-    components: {
-        // quoteComp,
-    },
-}
-</script>
+<script setup>
+import { computed } from 'vue'
+import Edit from './components/Edit.vue'
+import H5 from './components/H5.vue'
 
-<style lang="scss" scoped>
-</style>
+const props = defineProps({
+    data: {
+        type: Object,
+        default: () => ({})
+    }
+})
+</script>
