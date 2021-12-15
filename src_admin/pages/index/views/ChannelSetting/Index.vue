@@ -35,7 +35,7 @@
         <el-row>
             <el-col class='btns' :span='24'>
                 <el-form ref='form' label-width='110px' :model='form' :rules='rules'>
-                    <el-tabs v-model='optionName' type='border-card'>
+                    <el-tabs v-model='optionName' type='border-card' @tab-click="changeTabs">
                         <el-tab-pane class='tab' :label="$t('channelSetting.basicSetting')" name='first'>
                             <el-form-item
                                 :label="$t('channelSetting.registerableCode')"
@@ -582,13 +582,17 @@ export default {
         this.pageId = await getQueryString('id')
         await this.queryCountryList()
         await this.queryAccountGroupTradeList()
-        await this.getTradeTypeAccountGroupSymbol()
         await this.getPageConfig()
         await this.getPaymentArray()
         
         console.log('asdasd', this.form)
     },
     methods: {
+        changeTabs(val){
+            if(val.index==3){
+                this.getTradeTypeAccountGroupSymbol()
+            }
+        },
         getTradeTypeAccountGroupSymbol(){
             const that = this;
             tradeTypeAccountGroupSymbol()
@@ -604,6 +608,17 @@ export default {
                     res.data.forEach(el=>{
                         that.tradeTypesTemplate[el.id]="";
                     })
+                    //根据获取到得玩法过滤回显得数据
+                    const targetKeys = Object.keys(that.tradeTypesTemplate);
+                    const langKeys = Object.keys(that.form.tradeTypesConfig);
+                    langKeys.forEach(el=>{
+                        for(let key in that.form.tradeTypesConfig[el]){
+                            if(!targetKeys.includes(key)){
+                                delete that.form.tradeTypesConfig[el][key]
+                            }
+                        }
+                    }) 
+                    console.log("that.form.tradeTypesConfig",that.form.tradeTypesConfig)
                 })
         },
         getPageConfig () {
