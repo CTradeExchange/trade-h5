@@ -21,7 +21,7 @@
                             >
                                 <van-cell v-for='news in state.focusNews.list' :key='news.id' class='new'>
                                     <template #title>
-                                        <div class='new-con' @click="openOuterUrl(`https://news.displore.com.cn/article?id=${news.id}&orgid=${data.orgid}`,$t('information.details'))">
+                                        <div class='new-con' @click="openOuterUrl({ orgid: data.orgid, newsArea: data.newsArea, id: news.id, title: $t('information.details') })">
                                             <div class='new-left'>
                                                 <div class='new-desc'>
                                                     <a href='javascript:void(0)'>
