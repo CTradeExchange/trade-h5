@@ -103,13 +103,12 @@ export default {
 
     }
     .list {
-
-        padding: rem(30px);
+        padding: rem(40px) rem(80px);
         .bank-item {
             position: relative;
-            height: rem(210px);
+            height: rem(360px);
             margin-bottom: rem(30px);
-            padding: rem(30px);
+            padding: rem(40px);
             overflow: hidden;
             border-radius: rem(10px);
             &.BG_ICBC {
@@ -258,10 +257,11 @@ export default {
             }
             & .bank-bg {
                 position: absolute;
-                top: rem(90px);
-                right: rem(30px);
+                top: rem(230px);
+                right: rem(70px);
                 z-index: 1;
                 opacity: 0.1;
+                transform: scale(1.5);
                 filter: grayscale(100%) brightness(1000%);
                 img {
                     //filter: grayscale(1);
@@ -284,15 +284,16 @@ export default {
             }
             .bank-name {
                 color: #FFF;
-                font-size: rem(28px);
+                font-size: rem(40px);
+                font-weight: bold;
             }
             .bank-no {
                 position: relative;
                 z-index: 2;
-                margin-top: rem(20px);
-                margin-left: rem(90px);
+                margin-top: rem(120px);
+                margin-left: rem(10px);
                 color: #FFF;
-                font-size: rem(50px);
+                font-size: rem(56px);
             }
         }
         .add-wrap {

@@ -92,7 +92,7 @@ import LoginByFacebook from '@/themeCommon/user/login/components/loginByFacebook
 import LoginByTwitter from '@/themeCommon/user/login/components/loginByTwitter.vue'
 
 import Top from '@/components/top'
-import { getDevice, localGet, localSet, getArrayObj, sessionGet } from '@/utils/util'
+import { getDevice, localGet, localSet, getArrayObj, sessionGet, isEmpty } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
 import { computed, reactive, toRefs, getCurrentInstance, onUnmounted, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -142,7 +142,12 @@ export default {
             }
         })
 
+        const countryList = computed(() => store.state.countryList)
         const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo.thirdLogin)
+        if (isEmpty(countryList.value) && !isEmpty(thirdLoginArr.value)) {
+            // 获取国家区号
+            store.dispatch('getCountryListByParentCode')
+        }
 
         const changeLoginType = () => {
             const loginType = state.loginType
@@ -328,18 +333,8 @@ export default {
             loginToPath()
         }
 
-        const showSetPwd = () => {
-            state.loginPwdPop = true
-        }
-
-        // 监听是否需要弹窗设置密码
-        document.body.addEventListener('MSG_UNSET_PWD', showSetPwd, false)
         // 获取三方登录配置
         store.dispatch('_base/getLoginConfig')
-
-        onUnmounted(() => {
-            document.body.removeEventListener('MSG_UNSET_PWD', showSetPwd, false)
-        })
 
         return {
             ...toRefs(state),

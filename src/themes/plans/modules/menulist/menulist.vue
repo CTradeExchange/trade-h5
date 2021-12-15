@@ -105,7 +105,7 @@ export default {
 }
 .icon {
     display: inline-block;
-    margin-right: rem(44px);
+    margin-right: rem(24px);
     vertical-align: middle;
     //font-size: rem(32px);
     width: rem(64px);
@@ -114,7 +114,6 @@ export default {
 .cellGroup{
     .cellItem {
         font-size: rem(32px);
-        font-weight: bold;
         line-height: rem(120px);
         height: rem(120px);
         background: var(--contentColor);

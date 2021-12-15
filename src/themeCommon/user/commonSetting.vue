@@ -40,7 +40,7 @@
     </div>
     <van-popup
         v-model:show='langShow'
-        class='custom-popup'
+        class='custom-popup lang-popup'
         position='bottom'
         round
     >
@@ -48,12 +48,10 @@
             <div
                 v-for='(item, index) in supportLanguages'
                 :key='index'
-                class='popup-item'
+                class='lang-item'
+                :class='{ active: lang === item.val }'
                 @click='langSelect(item)'
             >
-                <span class='label'>
-                    {{ item.name }}
-                </span>
                 <img alt='' class='lang-icon' :src="'/images/country_icon/'+ item.val + '.png'" />
             </div>
         </div>
@@ -113,6 +111,7 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         const supportLanguages = computed(() => store.state.supportLanguages)
+        const langStyle = computed(() => supportLanguages.value.length <= 4 ? 'center' : 'flex-start')
 
         // 选择语言
         const langSelect = (action) => {
@@ -210,6 +209,7 @@ export default {
             chartAction,
             upDownColorSelect,
             back,
+            langStyle,
             ...toRefs(state)
         }
     },
@@ -227,15 +227,12 @@ export default {
         align-items: center;
         margin-bottom: rem(10px);
         line-height:rem(130px);
-        justify-content: space-between;
+        justify-content: flex-start;
         background: var(--contentColor);
         &:last-child{
             margin-bottom: 0;
         }
-        .lang-icon{
-            width: rem(72px);
-            height: rem(48px)
-        }
+
         .label{
             font-size: rem(32px);
         }
@@ -243,6 +240,32 @@ export default {
             width: rem(40px)
         }
     }
+
+}
+.lang-popup{
+    .popup-wrap{
+        padding: rem(42px) 0 0 rem(40px);
+        display: flex;
+        justify-content: v-bind(langStyle);
+        flex-wrap: wrap;
+        .lang-item{
+            box-sizing: content-box;
+            padding: rem(8px);
+            margin-right: rem(42px);
+            margin-bottom: rem(42px);
+            border: rem(6px) solid transparent;
+            .lang-icon{
+                width: rem(132px);
+                height: rem(88px)
+            }
+            &.active{
+                border: rem(6px) solid var(--primary);
+                border-radius: rem(20px);
+
+            }
+        }
+    }
+
 }
 </style>
 

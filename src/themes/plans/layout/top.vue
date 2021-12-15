@@ -10,7 +10,7 @@
         </div>
         <div class='main'>
             <slot>
-                {{ title?title:$t($route.meta.title) }}
+                {{ showTitle ? (title?title:$t($route.meta.title)) : '' }}
             </slot>
         </div>
         <div class='right'>
@@ -30,7 +30,18 @@ export default {
         // AccountChange,
         // MyAsset
     },
-    props: ['title', 'customBack'],
+    props: {
+        title: {
+            type: String
+        },
+        customBack: {
+            type: Object
+        },
+        showTitle: {
+            type: Boolean,
+            default: true
+        }
+    },
     data () {
         return {
             iframePage: ['OpenAccount'],
