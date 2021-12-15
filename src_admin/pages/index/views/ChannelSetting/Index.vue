@@ -853,28 +853,21 @@ export default {
                                     that.submitLoading = false
                                     throw new Error('no-customerGroupId')
                                 }
-                                // const hasCurrency = el?.plans && el?.plans.every(el => el.allCurrency)
-                                // if (!hasCurrency && Number(el.customerGroupId) === 1) {
-                                //     that.$message({
-                                //         message: this.$t('channelSetting.error9'),
-                                //         type: 'warning'
-                                //     })
-                                //     that.submitLoading = false
-                                //     throw new Error('no-plans')
-                                // } else if (Number(el.customerGroupId) === 1) {
-                                //     el.plans.forEach(item => {
-                                //         const allCurrency = Array.isArray(item.allCurrency) ? item.allCurrency.toString() : item.allCurrency
-                                //         item.allCurrency = allCurrency
-                                //     })
-                                // } else {
-                                el.plans.forEach(item => {
-                                    const allCurrency = that.accountTradeList[el.customerGroupId].data.find(el => Number(el.trade_type) === Number(item.id)).assets.map(item => item.code).toString()
-                                    item.allCurrency = allCurrency
-                                    // if ([3, 5, 9].includes(Number(item.id)) && Array.isArray(item.allCurrency)) {
-                                    //     item.allCurrency = item.allCurrency.toString()
-                                    // }
+                                const customerGroupId = el.customerGroupId
+                                const plans = that.accountTradeList[customerGroupId]?.data || []
+                                const plansList = plans.map(item => {
+                                    const { trade_type, trade_name, assets, } = item
+                                    const allCurrency = assets.map(item => item.code).toString()
+                                    return {
+                                        isWallet: '',
+                                        alias: '',
+                                        name: trade_name,
+                                        id: trade_type,
+                                        tradeType: trade_type,
+                                        allCurrency: allCurrency,
+                                    }
                                 })
-                                // }
+                                el.plans = plansList
                             })
                         }
 
