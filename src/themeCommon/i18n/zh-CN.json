@@ -179,7 +179,9 @@
         "change": "修改",
         "noneBind": "未绑定",
         "lang": "语言",
-        "dark": "黑夜模式"
+        "dark": "黑夜模式",
+        "down": "跌",
+        "up": "涨"
        
     },
     "faceAuth": {

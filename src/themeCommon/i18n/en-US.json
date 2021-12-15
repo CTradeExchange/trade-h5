@@ -175,7 +175,9 @@
         "noneBind": "Not Set",
         "commonSetting": "Common Setting",
         "lang": "Language",
-        "dark": "Dark"
+        "dark": "Dark",
+        "down": "Down",
+        "up": "Up"
         
     },
     "faceAuth": {
