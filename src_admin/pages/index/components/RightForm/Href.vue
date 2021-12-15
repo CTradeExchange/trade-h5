@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import hrefList from './hrefListConfig'
+import hrefList from '@h5/wp_preview/exportRoutes'
 export default {
     name: 'Href',
     props: {

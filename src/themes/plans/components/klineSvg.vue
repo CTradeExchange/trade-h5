@@ -1,5 +1,5 @@
 <template>
-    <div v-if='product.symbolName' class='svg-wrap'>
+    <div  class='svg-wrap'>
         <svg :height='height' :width='width'>
             <polyline :points='points' :stroke="$style[product.upDownColor] || '#333'" stroke-width='1.5' style='fill: none;' />
         </svg>

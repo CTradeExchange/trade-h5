@@ -131,6 +131,9 @@ export default {
         },
         idsNum () {
             return this.productIds.length
+        },
+        activated(){
+            return this.$store.state.editor.activated
         }
     },
     created () {
@@ -397,9 +400,9 @@ export default {
             this.tradeTypeAccountGroupProduct = this.tradeTypeProduct[type]
 
             if (['selfSymbol', 'productsSwipe', 'productsTimeSharing', 'bannerProducts', 'productsWithIcon'].includes(this.elementTag)) {
-                if (isPlainObject(this.selfSymbol?.[type])) {
+                if (isPlainObject(this.selfSymbol[this.activated]?.[type])) {
                     const customerSelfSymbolIds = []
-                    forOwn(this.selfSymbol[type], (value, key) => {
+                    forOwn(this.selfSymbol[this.activated][type], (value, key) => {
                         customerSelfSymbolIds.push(value.map(v => (key + '_' + v)))
                     })
                     this.defaultCheckedKeys = flatten(customerSelfSymbolIds)
@@ -413,9 +416,6 @@ export default {
                     this.defaultCheckedKeys = flatten(customerGroupSymbolIds)
                 }
             }
-
-            // store保存当前操作右侧表单的下标
-            this.$store.commit('editor/UPDATE_ACTIVEINDEX', this.blockIndex)
             this.show = true
         },
         opened () {
@@ -442,6 +442,7 @@ export default {
                     result[parentId] = [productId]
                 }
             })
+
             console.log('activeTradeType--', this.activeTradeType, this.activeBlock, this.tradeTypeCollect)
             this.$emit('formChange', result, this.activeTradeType)
             done()

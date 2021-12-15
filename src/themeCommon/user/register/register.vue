@@ -49,7 +49,7 @@
                 <div class='cell'>
                     <CheckCode v-model.trim='checkCode' clear :label='$t("login.verifyCode")' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
                 </div>
-                <div class='cell'>
+                <div v-if='instructions' class='cell'>
                     <van-checkbox v-model='protocol' class='checkbox' shape='square'>
                         <span v-html='instructions'></span>
                     </van-checkbox>
@@ -106,7 +106,7 @@ export default {
         const delayer = null
         const store = useStore()
         const router = useRouter()
-        const { t } = useI18n({ useScope: 'global' })
+        const { t, locale } = useI18n({ useScope: 'global' })
         const { getCustomerGroupIdByCountry, getPlansByCountry } = hooks()
         const state = reactive({
             options: [{ country: 'Canada', code: 'CA' }],
@@ -150,7 +150,9 @@ export default {
         // 开户须知内容
 
         const instructions = computed(() => {
-            const protocol = store.state._base.wpCompanyInfo?.instructions
+            const lang = locale.value
+            const wpCompanyInfo = store.state._base.wpCompanyInfo || {}
+            const protocol = wpCompanyInfo[lang === 'zh-CN' ? 'instructions_zh' : 'instructions_en']
             return protocol ? unescape(protocol) : ''
         })
         // 注册页banner

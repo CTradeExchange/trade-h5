@@ -1,6 +1,6 @@
 import request from '@/utils/request_information'
 
-const baseLangURL = {
+export const baseLangURL = {
     // 1 中国大陆地区 2 非中国大陆地区
     1: {
         'zh-CN': 'https://prodcn.displore.com.cn', // 中文

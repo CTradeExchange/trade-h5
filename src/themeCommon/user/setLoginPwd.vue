@@ -113,7 +113,6 @@ export default {
                     oldPwd: md5(state.oldPwd),
                     newPwd: md5(state.confirmPwd)
                 }).then((res) => {
-                    toast.clear()
                     if (isFirstSet.value) {
                         if (res.check()) {
                             router.push('/resetSuccess')
@@ -134,6 +133,8 @@ export default {
                                     location.reload()
                                 })
                             })
+                        } else {
+                            Toast(res.msg)
                         }
                     }
                 })
