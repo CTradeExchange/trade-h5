@@ -229,10 +229,18 @@
                                 </el-select>
                             </el-form-item>
 
-                            <el-form-item :label="$t('channelSetting.openAccountNotice')" prop='instructions'>
+                            <el-form-item v-if='configLoaded' :label="$t('channelSetting.openAccountNotice1')" prop='instructions'>
                                 <Tinymce
-                                    v-model='form.instructions'
-                                    :height='300'
+                                    v-model='form.instructions_zh'
+                                    :height='120'
+                                    :toolbar="['bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat hr', 'fullscreen bullist numlist link table forecolor backcolor fontsizeselect']"
+                                    :width='800'
+                                />
+                            </el-form-item>
+                            <el-form-item v-if='configLoaded' :label="$t('channelSetting.openAccountNotice2')" prop='instructions'>
+                                <Tinymce
+                                    v-model='form.instructions_en'
+                                    :height='120'
                                     :toolbar="['bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat hr', 'fullscreen bullist numlist link table forecolor backcolor fontsizeselect']"
                                     :width='800'
                                 />
@@ -351,25 +359,27 @@
                         <el-tab-pane class='tab' :label="$t('channelSetting.interfaceSettings')" name='third'>
                             <amount-set ref='amountSet' />
                         </el-tab-pane>
-                        <el-tab-pane class='tab' style="padding-right: 100px;" :label="$t('channelSetting.tradeTypeNameSetting')" name='fourth'>
-                            <el-row :gutter='20' style="justify-content: center;">
+                        <el-tab-pane class='tab' :label="$t('channelSetting.tradeTypeNameSetting')" name='fourth' style='padding-right: 100px;'>
+                            <el-row :gutter='20' style='justify-content: center;'>
                                 <el-col :span='3'>
                                     <el-form-item />
                                 </el-col>
-                                <el-col v-for="(val,key,index) in tradeTypesTemplate" :span='3'>
+                                <el-col v-for='(val,key,index) in tradeTypesTemplate' :span='3'>
                                     <el-form-item label-width='0'>
-                                        <p style="text-align:center;">{{ $t('channelSetting.tradeTypes'+key) }}</p>
+                                        <p style='text-align:center;'>
+                                            {{ $t('channelSetting.tradeTypes'+key) }}
+                                        </p>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
-                            <el-row style="justify-content: center;" v-for='(outVal,outKey,outIndex) in form.tradeTypesConfig' :gutter='20'>
+                            <el-row v-for='(outVal,outKey,outIndex) in form.tradeTypesConfig' :gutter='20' style='justify-content: center;'>
                                 <el-col :span='3'>
                                     <el-form-item>
                                         {{ outKey }}
                                     </el-form-item>
                                 </el-col>
                                 <el-col v-for='(innerVal,innerKey,innerIndex) in outVal' :span='3'>
-                                    <el-form-item :prop='innerVal' label-width='0'>
+                                    <el-form-item label-width='0' :prop='innerVal'>
                                         <el-input
                                             v-model='form.tradeTypesConfig[outKey][innerKey]'
                                             :placeholder="$t('pleaseEnter')"
@@ -463,7 +473,7 @@
 </template>
 
 <script>
-import { getAccountGroupTradeAssetsList, queryCountryList, getViChannel, saveViChannel, queryPaymentArray , tradeTypeAccountGroupSymbol} from '@index/Api/editor'
+import { getAccountGroupTradeAssetsList, queryCountryList, getViChannel, saveViChannel, queryPaymentArray, tradeTypeAccountGroupSymbol } from '@index/Api/editor'
 import { lang } from '../../config/lang'
 import { getQueryString } from '@admin/utils'
 import { cloneDeep, escape, unescape } from 'lodash'
@@ -480,13 +490,15 @@ export default {
     },
     data () {
         return {
+            configLoaded: false,
             optionName: 'first', // 当前选项卡
             form: {
                 tradeTypeCurrencyList: [],
                 thirdLogin: [],
                 registerTypes: [],
                 // registerBanner: '',
-                instructions: '', // 开户须知
+                instructions_zh: '', // 开户须知
+                instructions_en: '', // 开户须知
                 googleAnalytics: '',
                 h5Address: '',
                 h5PreviewAddress: '',
@@ -501,14 +513,14 @@ export default {
                 paymentIconList: {}, // 支付通道图标列表
                 tradeTypesConfig: {
                     'zh-CN': {
-                        
+
                     },
                     'en-US': {
-                        
+
                     },
                 }
             },
-            tradeTypesTemplate:{},
+            tradeTypesTemplate: {},
             accountTradeList: [],
             lang,
             filterLang: [],
@@ -578,21 +590,21 @@ export default {
     async created () {
         // const locales = require.context('../../i18n', true, /[A-Za-z0-9-_,\s]+\.json$/i).keys()
         // console.log("locales",locales)
-        
+
         this.pageId = await getQueryString('id')
         await this.queryCountryList()
         await this.queryAccountGroupTradeList()
         await this.getTradeTypeAccountGroupSymbol()
         await this.getPageConfig()
         await this.getPaymentArray()
-        
+
         console.log('asdasd', this.form)
     },
     methods: {
-        getTradeTypeAccountGroupSymbol(){
-            const that = this;
+        getTradeTypeAccountGroupSymbol () {
+            const that = this
             tradeTypeAccountGroupSymbol()
-                .then(res => {      
+                .then(res => {
                     if (!res.success) {
                         that.$message.error(res.message)
                         return
@@ -600,9 +612,9 @@ export default {
                     if (!res.data) {
                         return
                     }
-                    that.tradeTypesTemplate = {};
-                    res.data.forEach(el=>{
-                        that.tradeTypesTemplate[el.id]="";
+                    that.tradeTypesTemplate = {}
+                    res.data.forEach(el => {
+                        that.tradeTypesTemplate[el.id] = ''
                     })
                 })
         },
@@ -614,6 +626,7 @@ export default {
                     that.$message.error(res.message)
                     return
                 }
+                that.configLoaded = true
                 let content = res.data.content ? JSON.parse(res.data.content) : {}
                 content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
                 if (content.instructions) {
@@ -657,7 +670,6 @@ export default {
                         name: '全部',
                     }
                 )
-                
             }).catch(error => {
                 console.log(error)
             }).finally(() => {
@@ -673,7 +685,7 @@ export default {
                         }
                     })
                     this.accountTradeList = res.data
-                    console.log('this.accountTradeList', this.accountTradeList)
+                    // console.log('this.accountTradeList', this.accountTradeList)
                 }
             })
         },

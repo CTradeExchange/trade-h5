@@ -85,7 +85,7 @@ export default {
         }
     },
     watch: {
-        value (val) {
+        moduleValue (val) {
             if (!this.hasChange && this.hasInit) {
                 this.$nextTick(() =>
                     window.tinymce.get(this.tinymceId).setContent(val || ''))
@@ -142,8 +142,9 @@ export default {
                 init_instance_callback: editor => {
                     if (_this.modelValue) {
                         editor.setContent(_this.modelValue)
+                        _this.hasInit = true
                     }
-                    _this.hasInit = true
+
                     editor.on('NodeChange Change KeyUp SetContent', () => {
                         this.hasChange = true
                         this.$emit('input', editor.getContent())
