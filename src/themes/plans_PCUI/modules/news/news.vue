@@ -14,7 +14,7 @@
                 <newsList />
             </div>
             <!-- 7x24 -->
-            <div v-show='currentFlow === 2'>
+            <div v-if='currentFlow === 2'>
                 <seven />
             </div>
         </div>
@@ -32,11 +32,13 @@
 // components
 import newsList from './newsList.vue'
 import calendar from './calendar.vue'
+import seven from './seven.vue'
 import { reactive, toRefs } from 'vue'
 
 export default {
     components: {
         newsList,
+        seven,
         calendar,
     },
     props: {

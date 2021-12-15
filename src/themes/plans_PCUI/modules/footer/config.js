@@ -1,7 +1,7 @@
 export default {
     title: '公共底部',
     tag: 'footer',
-    includes: ['footer'],
+    include: ['footer'],
     tagIcon: 'el-icon-film',
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
     config: [
