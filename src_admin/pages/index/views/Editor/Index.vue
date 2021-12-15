@@ -405,9 +405,10 @@ export default {
                         item.data.tradeTypeBlock = Object.assign({}, tradeTypeBlock)
                         // if (item.data.code_ids_all) delete item.data.code_ids_all
                     }
-
-                    if (['selfSymbol', 'productsSwipe', 'productsTimeSharing'].includes(item.tag)) {
-                        item.data.product = store.state.editor.tradeTypeSelfSymbol
+                    
+                    const activated = store.state.editor.activated
+                    if (['selfSymbol', 'productsSwipe', 'Sharing'].includes(item.tag)) {
+                        item.data.product = store.state.editor.tradeTypeSelfSymbol[activated]
                     } else if (['productsWithIcon'].includes(item.tag)) {
                         if (activeIndex.value) { item.data.items[activeIndex.value].product = store.state.editor.tradeTypeSelfSymbol }
                     }
@@ -591,8 +592,8 @@ export default {
                         ElMessage.error(res.message)
                         return
                     }
-                    ElMessageBox.confirm(`${state.pageCode}${t('editor.saveSuccess')}`, {
-                        confirmButtonText: t('editor.publishedSuccessfully'),
+                    ElMessageBox.confirm(`${state.pageCode}${t('editor.publishedSuccessfully')}`, {
+                        confirmButtonText: t('sure'),
                         cancelButtonText: t('editor.close'),
                     }).then(_ => {
                         router.push({

@@ -61,6 +61,7 @@ export default {
         const productMap = computed(() => store.state._quote.productMap)
 
         const customerGroupId = computed(() => store.getters.customerGroupId)
+        
         const symbolKeys = Object.entries(props.data.product || {}).map(([tradeType, item]) => {
             const list = item[customerGroupId.value] || []
             return list.map(symbolId => `${symbolId}_${tradeType}`)
@@ -124,8 +125,8 @@ export default {
         justify-content: flex-start;
         .product-item{
             overflow: hidden;
-            width: 100%;
-            flex: 1;
+            // width: 100%;
+            // flex: 1;
             padding: rem(23px);
             margin-right: rem(30px);
             .text1{
