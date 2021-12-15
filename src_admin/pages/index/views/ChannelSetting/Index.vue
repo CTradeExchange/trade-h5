@@ -351,25 +351,25 @@
                         <el-tab-pane class='tab' :label="$t('channelSetting.interfaceSettings')" name='third'>
                             <amount-set ref='amountSet' />
                         </el-tab-pane>
-                        <el-tab-pane class='tab' :label="$t('channelSetting.tradeTypeNameSetting')" name='fourth'>
-                            <el-row :gutter='20'>
-                                <el-col :span='4'>
+                        <el-tab-pane class='tab' style="padding-right: 100px;" :label="$t('channelSetting.tradeTypeNameSetting')" name='fourth'>
+                            <el-row :gutter='20' style="justify-content: center;">
+                                <el-col :span='3'>
                                     <el-form-item />
                                 </el-col>
-                                <el-col v-for='(val,key,index) in tradeTypes' :span='4'>
-                                    <el-form-item>
-                                        {{ $t('channelSetting.tradeTypes'+key) }}
+                                <el-col v-for="(val,key,index) in tradeTypesTemplate" :span='3'>
+                                    <el-form-item label-width='0'>
+                                        <p style="text-align:center;">{{ $t('channelSetting.tradeTypes'+key) }}</p>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
-                            <el-row v-for='(outVal,outKey,outIndex) in form.tradeTypesConfig' :gutter='20'>
-                                <el-col :span='4'>
+                            <el-row style="justify-content: center;" v-for='(outVal,outKey,outIndex) in form.tradeTypesConfig' :gutter='20'>
+                                <el-col :span='3'>
                                     <el-form-item>
                                         {{ outKey }}
                                     </el-form-item>
                                 </el-col>
-                                <el-col v-for='(innerVal,innerKey,innerIndex) in outVal' :span='4'>
-                                    <el-form-item :prop='innerVal'>
+                                <el-col v-for='(innerVal,innerKey,innerIndex) in outVal' :span='3'>
+                                    <el-form-item :prop='innerVal' label-width='0'>
                                         <el-input
                                             v-model='form.tradeTypesConfig[outKey][innerKey]'
                                             :placeholder="$t('pleaseEnter')"
@@ -463,7 +463,7 @@
 </template>
 
 <script>
-import { getAccountGroupTradeAssetsList, queryCountryList, getViChannel, saveViChannel, queryPaymentArray } from '@index/Api/editor'
+import { getAccountGroupTradeAssetsList, queryCountryList, getViChannel, saveViChannel, queryPaymentArray , tradeTypeAccountGroupSymbol} from '@index/Api/editor'
 import { lang } from '../../config/lang'
 import { getQueryString } from '@admin/utils'
 import { cloneDeep, escape, unescape } from 'lodash'
@@ -501,21 +501,14 @@ export default {
                 paymentIconList: {}, // 支付通道图标列表
                 tradeTypesConfig: {
                     'zh-CN': {
-                        '1': '',
-                        '2': '',
-                        '3': '',
-                        '5': '',
-                        '9': ''
+                        
                     },
                     'en-US': {
-                        '1': '',
-                        '2': '',
-                        '3': '',
-                        '5': '',
-                        '9': ''
+                        
                     },
                 }
             },
+            tradeTypesTemplate:{},
             accountTradeList: [],
             lang,
             filterLang: [],
@@ -574,14 +567,7 @@ export default {
                 'hsl(181, 100%, 37%)',
                 'hsla(209, 100%, 56%, 0.73)',
                 '#c7158577',
-            ],
-            tradeTypes: {
-                '1': '',
-                '2': '',
-                '3': '',
-                '5': '',
-                '9': ''
-            },
+            ]
         }
     },
     computed: {
@@ -592,14 +578,34 @@ export default {
     async created () {
         // const locales = require.context('../../i18n', true, /[A-Za-z0-9-_,\s]+\.json$/i).keys()
         // console.log("locales",locales)
+        
         this.pageId = await getQueryString('id')
         await this.queryCountryList()
         await this.queryAccountGroupTradeList()
+        await this.getTradeTypeAccountGroupSymbol()
         await this.getPageConfig()
         await this.getPaymentArray()
+        
         console.log('asdasd', this.form)
     },
     methods: {
+        getTradeTypeAccountGroupSymbol(){
+            const that = this;
+            tradeTypeAccountGroupSymbol()
+                .then(res => {      
+                    if (!res.success) {
+                        that.$message.error(res.message)
+                        return
+                    }
+                    if (!res.data) {
+                        return
+                    }
+                    that.tradeTypesTemplate = {};
+                    res.data.forEach(el=>{
+                        that.tradeTypesTemplate[el.id]="";
+                    })
+                })
+        },
         getPageConfig () {
             this.getLoading = true
             const that = this
@@ -608,7 +614,6 @@ export default {
                     that.$message.error(res.message)
                     return
                 }
-
                 let content = res.data.content ? JSON.parse(res.data.content) : {}
                 content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
                 if (content.instructions) {
@@ -652,6 +657,7 @@ export default {
                         name: '全部',
                     }
                 )
+                
             }).catch(error => {
                 console.log(error)
             }).finally(() => {
@@ -847,28 +853,21 @@ export default {
                                     that.submitLoading = false
                                     throw new Error('no-customerGroupId')
                                 }
-                                const hasCurrency = el?.plans && el?.plans.every(el => el.allCurrency)
-                                if (!hasCurrency && Number(el.customerGroupId) === 1) {
-                                    that.$message({
-                                        message: this.$t('channelSetting.error9'),
-                                        type: 'warning'
-                                    })
-                                    that.submitLoading = false
-                                    throw new Error('no-plans')
-                                // } else if (Number(el.customerGroupId) === 1) {
-                                //     el.plans.forEach(item => {
-                                //         const allCurrency = Array.isArray(item.allCurrency) ? item.allCurrency.toString() : item.allCurrency
-                                //         item.allCurrency = allCurrency
-                                //     })
-                                } else {
-                                    el.plans.forEach(item => {
-                                        const allCurrency = that.accountTradeList[el.customerGroupId].data.find(el => Number(el.trade_type) === Number(item.id)).assets.map(item => item.code).toString()
-                                        item.allCurrency = allCurrency
-                                        // if ([3, 5, 9].includes(Number(item.id)) && Array.isArray(item.allCurrency)) {
-                                        //     item.allCurrency = item.allCurrency.toString()
-                                        // }
-                                    })
-                                }
+                                const customerGroupId = el.customerGroupId
+                                const plans = that.accountTradeList[customerGroupId]?.data || []
+                                const plansList = plans.map(item => {
+                                    const { trade_type, trade_name, assets, } = item
+                                    const allCurrency = assets.map(item => item.code).toString()
+                                    return {
+                                        isWallet: '',
+                                        alias: '',
+                                        name: trade_name,
+                                        id: trade_type,
+                                        tradeType: trade_type,
+                                        allCurrency: allCurrency,
+                                    }
+                                })
+                                el.plans = plansList
                             })
                         }
 
@@ -912,7 +911,6 @@ export default {
                                 }
                             }
                         }
-                        // todo  tradeTypes里面的子项要进行非空验证，去掉空的子项便于h5端判断是否改变了玩法别名
                         saveViChannel({
                             content: JSON.stringify(_formData), // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', //
                             id: that.pageId,
@@ -1259,6 +1257,14 @@ export default {
                     line-height: 30px;
                 }
             }
+        }
+    }
+}
+#pane-fourth{
+    .el-form-item{
+        display:block;
+        .el-form-item__content{
+            margin-left: none;
         }
     }
 }

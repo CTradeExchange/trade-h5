@@ -1,4 +1,5 @@
-import { getQueryVariable } from '@/utils/util'
+import { getQueryVariable, getCookie } from '@/utils/util'
+import { baseLangURL } from '@/api/information'
 
 /* 全局mixin */
 export default {
@@ -20,7 +21,10 @@ export default {
     },
     methods: {
         // 用iframe打开url地址
-        openOuterUrl (url, pageTitle = '') {
+        openOuterUrl (data) {
+            const lang = getCookie('lang')
+            let pageTitle = data.title
+            const url = baseLangURL[data.newsArea][lang] + `/article?id=${data.id}&orgid=${data.orgid}`
             if (pageTitle === '' && getQueryVariable('title', url)) pageTitle = getQueryVariable('title', url)
             this.$router.push({
                 name: 'Otherpage',

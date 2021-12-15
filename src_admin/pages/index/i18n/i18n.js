@@ -49,19 +49,19 @@ export async function loadLocaleMessages(i18n, locale) {
 //                 messages[locale] = locales(key)
 //             }
 //         }
-        
+
 //     })
 //     return messages
 // }
 export function getUrlLang(){
     const hashArr = location.hash.split('&')
-    let lang;
-    hashArr.forEach(item=>{
-        if(item.indexOf("lang")!=-1||item.indexOf("language")!=-1){
-            lang = item.substring()
-            lang = item.substring(item.indexOf("=")+1)
-        }
-    })
+    let lang = 'zh-CN';
+    // hashArr.forEach(item=>{
+    //     if(item.indexOf("lang")!=-1||item.indexOf("language")!=-1){
+    //         lang = item.substring()
+    //         lang = item.substring(item.indexOf("=")+1)
+    //     }
+    // })
     localSet("lang",lang)
     return lang;
 }
