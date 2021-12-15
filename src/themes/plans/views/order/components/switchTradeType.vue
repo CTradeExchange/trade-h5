@@ -61,6 +61,7 @@ export default {
     }
     .productName {
         padding-right: rem(20px);
+        font-weight: bold;
     }
     .upDownWidth {
         flex: 1;

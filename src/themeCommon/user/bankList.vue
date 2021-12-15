@@ -30,7 +30,6 @@
                 <span class='btn-text'>
                     {{ $t('bank.addBank') }}
                 </span>
-                <van-icon name='arrow' />
             </div>
         </div>
     </div>
@@ -298,10 +297,10 @@ export default {
         }
         .add-wrap {
             display: flex;
+            justify-content: center;
             align-items: center;
             padding: rem(34px);
-            background-color: var(--contentColor);
-            border: solid 1px var(--lineColor);
+            background-color: var(--assistColor);
             cursor: pointer;
             .van-icon-plus {
                 margin-right: rem(10px);
@@ -310,7 +309,6 @@ export default {
                 margin-top: -1px;
             }
             .btn-text {
-                flex: 1;
                 color: var(--color);
                 font-size: rem(28px);
             }

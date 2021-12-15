@@ -134,7 +134,6 @@ export default {
         .cellItem {
             background: var(--contentColor);
             font-size: rem(32px);
-            font-weight: bold;
             line-height: rem(120px);
             height: rem(120px);
             border-top: solid rem(10px) var(--bgColor);

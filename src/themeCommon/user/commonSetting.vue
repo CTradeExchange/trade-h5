@@ -227,7 +227,7 @@ export default {
         align-items: center;
         margin-bottom: rem(10px);
         line-height:rem(130px);
-        justify-content: flex-start;
+        justify-content: space-between;
         background: var(--contentColor);
         &:last-child{
             margin-bottom: 0;
@@ -250,16 +250,16 @@ export default {
         flex-wrap: wrap;
         .lang-item{
             box-sizing: content-box;
-            padding: rem(8px);
+            padding: rem(8px) rem(8px) rem(2px) rem(8px);
             margin-right: rem(42px);
             margin-bottom: rem(42px);
-            border: rem(6px) solid transparent;
+            border: rem(4px) solid transparent;
             .lang-icon{
                 width: rem(132px);
                 height: rem(88px)
             }
             &.active{
-                border: rem(6px) solid var(--primary);
+                border: rem(4px) solid var(--primary);
                 border-radius: rem(20px);
 
             }
@@ -282,7 +282,6 @@ export default {
     .cellGroup{
         .cellItem {
             font-size: rem(32px);
-            font-weight: bold;
             line-height: rem(120px);
             height: rem(120px);
             background: var(--contentColor);

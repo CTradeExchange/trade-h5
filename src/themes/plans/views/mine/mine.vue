@@ -40,7 +40,7 @@ export default {
     }
     .support {
         margin: rem(-70px) auto rem(10px);
-        width: rem(200px);
+        width: rem(300px);
         line-height: rem(32px);
         text-align: center;
         img{
