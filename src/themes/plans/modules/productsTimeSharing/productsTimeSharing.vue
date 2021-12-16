@@ -61,7 +61,7 @@ export default {
         const productMap = computed(() => store.state._quote.productMap)
 
         const customerGroupId = computed(() => store.getters.customerGroupId)
-        
+
         const symbolKeys = Object.entries(props.data.product || {}).map(([tradeType, item]) => {
             const list = item[customerGroupId.value] || []
             return list.map(symbolId => `${symbolId}_${tradeType}`)
@@ -98,11 +98,11 @@ export default {
             QuoteSocket.batchGetKlineData(getSubscribeData(index))
         }
 
-        // onMounted(() => {
-        if (!h5Preview && getSubscribeData(0)) {
-            QuoteSocket.batchGetKlineData(getSubscribeData(0))
-        }
-        // })
+        store.dispatch('_quote/querySymbolBaseInfoList').then(res => {
+            if (!h5Preview && getSubscribeData(0)) {
+                QuoteSocket.batchGetKlineData(getSubscribeData(0))
+            }
+        })
 
         return {
             productList,
