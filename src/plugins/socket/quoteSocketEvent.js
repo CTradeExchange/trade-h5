@@ -179,12 +179,13 @@ class SocketEvent {
 
     // 处理批量获取K线数据
     ['cmd_id_14015'] (data) {
+        console.log('收到的消息', data)
         const productMap = this.$store.state._quote.productMap
         const list = data.data?.data_list ?? []
         const that = this
         list.forEach(el => {
             const product = productMap[el.symbol_id + '_' + el.trade_type]
-            product.kline_list = el.kline_list.map(el => el.close_price) ?? []
+            product.kline_list = el.kline_list.reverse().map(el => el.close_price) ?? []
             that.$store.commit('_quote/Update_product', product)
         })
     }
