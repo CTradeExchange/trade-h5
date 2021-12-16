@@ -133,6 +133,9 @@ const config = {
             errors: true
         },
         proxy: {
+            '/wp-content/uploads': {
+                target: 'https://prewpadmin_9.cats-trade.com',
+            },
             '/wp-json/wp': {
                 target: 'http://prewpadmin_9.cats-trade.com', // http://prewpadmin.cats-trade.com/
                 // changeOrigin: false,
@@ -150,7 +153,7 @@ const config = {
                 }
             },
             '/cats-manage-api': {
-                target: h5URL || 'http://prewph5_9.cats-trade.com', // prewph5公司id为2 prewph5_1公司id为60  'http://prewph5_9.cats-trade.com'
+                target: h5URL || 'http://prewph5_9.cats-trade.com', // prewph5公司id为2 prewph5_1公司id为60  'http://prewph5_9.cats-trade.com'  // h5URL
                 disableHostCheck: true,
                 onProxyReq: function (proxyReq, req, res, options) { // 由于vue中使用了body-parser 导致http中的body被序列化两次，从而使得配置代理后后端无法获取body中的数据
                     if (req.body) {
@@ -166,9 +169,6 @@ const config = {
             },
             '/upload': {
                 target: 'http://precatsapi.cats-trade.com/upload'
-            },
-            '/wp-content/': {
-                target: 'https://prewpadmin_8.cats-trade.com/wp-content/'
             }
         },
         before: require('./mock/mock-server.js')

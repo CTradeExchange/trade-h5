@@ -359,7 +359,7 @@
                         <el-tab-pane class='tab' :label="$t('channelSetting.interfaceSettings')" name='third'>
                             <amount-set ref='amountSet' />
                         </el-tab-pane>
-                        <el-tab-pane class='tab' :label="$t('channelSetting.tradeTypeNameSetting')" name='fourth' style='padding-right: 100px;'>
+                        <el-tab-pane class='tab' :label="$t('channelSetting.tradeTypeNameSetting')" name='fourth' style='padding-right: 100px;' v-loading="fourthLoading">
                             <el-row :gutter='20' style='justify-content: center;'>
                                 <el-col :span='3'>
                                     <el-form-item />
@@ -579,7 +579,8 @@ export default {
                 'hsl(181, 100%, 37%)',
                 'hsla(209, 100%, 56%, 0.73)',
                 '#c7158577',
-            ]
+            ],
+            fourthLoading:true
         }
     },
     computed: {
@@ -610,10 +611,12 @@ export default {
             tradeTypeAccountGroupSymbol()
                 .then(res => {
                     if (!res.success) {
+                        this.fourthLoading = false;
                         that.$message.error(res.message)
                         return
                     }
                     if (!res.data) {
+                        this.fourthLoading = false;
                         return
                     }
                     that.tradeTypesTemplate = {}
@@ -624,14 +627,29 @@ export default {
                     const targetKeys = Object.keys(that.tradeTypesTemplate);
                     const langKeys = Object.keys(that.form.tradeTypesConfig);
                     langKeys.forEach(el=>{
-                        for(let key in that.form.tradeTypesConfig[el]){
-                            if(!targetKeys.includes(key)){
-                                delete that.form.tradeTypesConfig[el][key]
+                       if(Object.keys(that.form.tradeTypesConfig[el]).length){
+                           //tradeTypesConfig中多于配置返回的玩法删除
+                           for(let key in that.form.tradeTypesConfig[el]){
+                                if(!targetKeys.includes(key)){
+                                    delete that.form.tradeTypesConfig[el][key]
+                                }
                             }
+                            //tradeTypesConfig中没有的配置返回的玩法加上
+                            for(let key in targetKeys){
+                                if(!Object.keys(that.form.tradeTypesConfig[el]).includes(key)){
+                                   that.form.tradeTypesConfig[el][key] = "";
+                                }
+                            }
+                        }else{
+                            that.form.tradeTypesConfig[el] = JSON.parse(JSON.stringify(that.tradeTypesTemplate));
                         }
                     }) 
-                    console.log("that.form.tradeTypesConfig",that.form.tradeTypesConfig)
+                    this.fourthLoading = false;
                 })
+                .catch(error => {
+                    console.log(error)
+                    this.fourthLoading = false;
+                }) 
         },
         getPageConfig () {
             this.getLoading = true
