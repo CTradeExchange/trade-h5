@@ -14,6 +14,9 @@
                 />
 
                 <div v-if="item.showType === 'image'">
+                    <p class='upload-text'>
+                            {{ item.elementName }}
+                    </p>
                     <van-uploader :after-read='afterRead' :name='item.elementCode' result-type='file'>
                         <img
                             v-if='item.elementValue'
@@ -30,9 +33,7 @@
                             :src="require('../../assets/auth/' + item.elementCode + '.png')"
                             srcset=''
                         />
-                        <p class='upload-text'>
-                            {{ item.elementName }}
-                        </p>
+                        
                     </van-uploader>
                 </div>
                 <div v-if="item.showType === 'inputGroup'">
@@ -349,6 +350,7 @@ export default {
         overflow-y: auto;
         .c-item {
             text-align: center;
+            padding-top: rem(20px);
             background: var(--contentColor);
             border-bottom: solid 1px var(--lineColor);
             :deep(.van-cell) {
@@ -369,6 +371,7 @@ export default {
             }
             .upload-text {
                 margin-top: rem(20px);
+                font-size: rem(48px);
             }
             .van-uploader {
                 margin-top: rem(50px);

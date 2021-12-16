@@ -64,17 +64,46 @@
         round
     >
         <div class='popup-wrap'>
-            <div
-                v-for='(item, index) in chartAction'
-                :key='index'
-                class='popup-item'
-                @click='upDownColorSelect(item)'
-            >
-                <span class='label'>
-                    {{ item.name }}
-                </span>
-                <img alt='' class='color-icon' :src="'/images/'+ item.imgName + '.png'" />
-            </div>
+            <van-radio-group v-model='chartVal' @change='colorShow = false'>
+                <van-cell-group inset>
+                    <van-cell class='popup-item' clickable @click="chartVal = '1'">
+                        <template #title>
+                            <div class='left'>
+                                <span class='label'>
+                                    {{ $t('common.up') }}
+                                </span>
+                                <i class='icon icon_lvzhang color-green'></i>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class='label'>
+                                    {{ $t('common.down') }}
+                                </span>
+                                <i class='icon icon_hongdie color-red'></i>
+                            </div>
+                        </template>
+                        <template #right-icon>
+                            <van-radio name='1' />
+                        </template>
+                    </van-cell>
+                    <van-cell class='popup-item' clickable @click="chartVal = '2'">
+                        <template #title>
+                            <div class='left'>
+                                <span class='label'>
+                                    {{ $t('common.up') }}
+                                </span>
+                                <i class='icon icon_hongzhang color-red'></i>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class='label'>
+                                    {{ $t('common.down') }}
+                                </span>
+                                <i class='icon icon_lvdie color-green'></i>
+                            </div>
+                        </template>
+                        <template #right-icon>
+                            <van-radio name='2' />
+                        </template>
+                    </van-cell>
+                </van-cell-group>
+            </van-radio-group>
         </div>
     </van-popup>
 </template>
@@ -99,14 +128,9 @@ export default {
             themeVal: localGet('invertColor') === 'night',
             langShow: false,
             colorShow: false,
-            chartVal: JSON.parse(localGet('chartConfig'))?.chartColorType || 1,
+            chartVal: JSON.parse(localGet('chartConfig'))?.chartColorType.toString() || '1',
             lang: getCookie('lang') || store.state._base.wpCompanyInfo.language,
         })
-
-        const chartAction = [
-            { val: 1, name: t('common.redDown'), imgName: 'redDown' },
-            { val: 2, name: t('common.redUp'), imgName: 'redUp' },
-        ]
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
@@ -206,7 +230,6 @@ export default {
             supportLanguages,
             langSelect,
             colorSelect,
-            chartAction,
             upDownColorSelect,
             back,
             langStyle,
@@ -219,28 +242,57 @@ export default {
 <style lang="scss">
 @import '@/sass/mixin.scss';
 .custom-popup{
+    --van-cell-group-inset-padding: 0;
+    --van-cell-group-background-color: var(--bgColor);
     max-height: 80%;
     background: var(--bgColor);
+    .popup-wrap{
+        :deep(.van-radio-group){
+            .van-cell-group--inset{
+                margin: 0;
+            }
+
+        }
+    }
+
     .popup-item{
         padding: 0 rem(30px);
         display: flex;
         align-items: center;
         margin-bottom: rem(10px);
         line-height:rem(130px);
-        justify-content: flex-start;
+        justify-content: space-between;
         background: var(--contentColor);
         &:last-child{
             margin-bottom: 0;
         }
+        .left{
+            .label{
+                font-size: rem(32px);
+                vertical-align: middle;
+            }
+            .color-icon{
+                width: rem(40px)
+            }
+            .icon{
+                font-size: rem(50px);
+                margin-left:-3px;
+                vertical-align: middle;
+            }
+            .color-red{
+                color: var(--warn);
+            }
+            .color-green{
+                color: var(--success);
+            }
 
-        .label{
-            font-size: rem(32px);
         }
-        .color-icon{
-            width: rem(40px)
+        :deep(.van-checkbox){
+            .van-icon{
+                border-radius: 50%;
+            }
         }
     }
-
 }
 .lang-popup{
     .popup-wrap{
@@ -250,16 +302,16 @@ export default {
         flex-wrap: wrap;
         .lang-item{
             box-sizing: content-box;
-            padding: rem(8px);
+            padding: rem(8px) rem(8px) rem(2px) rem(8px);
             margin-right: rem(42px);
             margin-bottom: rem(42px);
-            border: rem(6px) solid transparent;
+            border: rem(4px) solid transparent;
             .lang-icon{
                 width: rem(132px);
                 height: rem(88px)
             }
             &.active{
-                border: rem(6px) solid var(--primary);
+                border: rem(4px) solid var(--primary);
                 border-radius: rem(20px);
 
             }
@@ -282,7 +334,6 @@ export default {
     .cellGroup{
         .cellItem {
             font-size: rem(32px);
-            font-weight: bold;
             line-height: rem(120px);
             height: rem(120px);
             background: var(--contentColor);

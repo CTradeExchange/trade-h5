@@ -174,6 +174,7 @@ export default {
         display: block;
         width: rem(160px);
         height: rem(160px);
+        border-radius: 50%;
     }
     .customerNo {
         display: inline-block;

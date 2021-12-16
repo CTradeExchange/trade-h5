@@ -589,13 +589,19 @@ export default {
         // 创建存款提案
         const handleDeposit = () => {
             const callbackUrl = `${window.location.protocol}//${window.location.host}/${state.lang}/depositCb?accountId=${accountId}&currency=${currency}&tradeType=${tradeType}`
+            let paymentCurrency
+            if (state.checkedType.paymentCurrency === 'USDT') {
+                paymentCurrency = 'USDT'
+            } else {
+                paymentCurrency = state.currencyChecked ? state.currencyChecked : state.checkedType.paymentCurrency
+            }
             const params = {
                 tradeType,
                 customerNo: customInfo.value.customerNo,
                 accountId,
                 customerGroupId: customInfo.value.customerGroupId,
                 depositRateSerialNo: state.rateConfig.depositRateSerialNo,
-                paymentCurrency: state.checkedType.paymentCurrency === 'USDT' ? 'USDT' : state.currencyChecked,
+                paymentCurrency,
                 accountCurrency: currency,
                 exchangeRate: state.rateConfig.exchangeRate,
                 paymentChannelCode: state.checkedType.paymentCode,
@@ -1014,9 +1020,15 @@ export default {
     text-align: center;
     .van-icon-info-o {
         font-size: rem(60px);
+
+    }
+    h4{
+       padding-left: rem(80px);
+       padding-top: rem(50px);
     }
     .title {
         line-height: rem(80px);
+        padding: rem(80px);
     }
     .content {
         margin: rem(20px) 0;

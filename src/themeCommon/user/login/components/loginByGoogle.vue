@@ -70,6 +70,8 @@ export default {
                 if (val) {
                     renderBtn()
                 }
+            }, {
+                immediate: true
             }
         )
 

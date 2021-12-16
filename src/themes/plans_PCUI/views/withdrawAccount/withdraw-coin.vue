@@ -207,8 +207,8 @@ import { isEmpty, debounce } from '@/utils/util'
 // 插件
 
 export default {
-
-    setup () {
+    props: ['withdrawMethod'],
+    setup (props) {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const router = useRouter()
@@ -451,7 +451,7 @@ export default {
             accountCurrency: accountCurrency.currency,
             customerGroupId: customInfo.customerGroupId,
             country: customInfo.country,
-            withdrawMethod: 'digit_wallet'
+            withdrawMethod: props.withdrawMethod
         }
 
         // 获取取款限制配置

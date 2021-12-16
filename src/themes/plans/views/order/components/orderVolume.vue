@@ -5,7 +5,8 @@
                 {{ parseInt(entryType) === 1 ? $t('trade.volumes') : $t('trade.margin') }}
             </div>
             <div class='right' @click='entryTypeUpdate'>
-                > {{ parseInt(entryType) === 1 ? $t('trade.margin') : $t('trade.volumes') }}
+                <van-icon name="arrow"/> 
+                {{ parseInt(entryType) === 1 ? $t('trade.margin') : $t('trade.volumes') }}
             </div>
         </div>
         <input
@@ -135,10 +136,15 @@ export default {
         justify-content: space-between;
         font-size: rem(28px);
         color: var(--primary);
-        font-weight: bold;
         margin-bottom: rem(15px);
+        fint-weight: 500;
         .active{
             color: var(--color);
+        }
+        .right{
+            .van-icon{
+                margin-right: -2px;
+            }
         }
     }
     .input {

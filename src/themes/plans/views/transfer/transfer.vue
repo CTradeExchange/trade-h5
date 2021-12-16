@@ -339,7 +339,6 @@ export default {
         .transfer {
             display: flex;
             align-items: center;
-            background: var(--assistColor);
             .label {
                 height: rem(200px);
                 background: var(--contentColor);
@@ -365,6 +364,9 @@ export default {
                 }
             }
             .center {
+                background: var(--assistColor);
+                border-top-left-radius: rem(6px);
+                border-bottom-left-radius: rem(6px);
                 flex: 1;
                 .account {
                     display: flex;
@@ -385,8 +387,14 @@ export default {
             }
             .right {
                 //flex: 1;
+                background: var(--assistColor);
                 padding-right: rem(60px);
                 padding-left: rem(70px);
+                height: rem(200px);
+                display: flex;
+                align-items: center;
+                border-top-right-radius: rem(6px);
+                border-bottom-right-radius: rem(6px);
                 .icon-wrap{
                     border-radius: 50%;
                     background: var(--primary);
@@ -410,7 +418,7 @@ export default {
             align-items: center;
             justify-content: space-between;
             height: rem(100px);
-            margin-top: rem(30px);
+            margin-top: rem(20px);
             margin-bottom: rem(30px);
             padding: 0 rem(30px);
             color: var(--color);

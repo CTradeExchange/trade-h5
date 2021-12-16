@@ -21,4 +21,32 @@ export default [
         name: 'Assets',
         title: '资产'
     },
+    {
+        name: 'Nest',
+        title: '外部地址',
+        config: [
+            {
+                position: 'params',
+                type: 'Input',
+                name: 'id',
+                label: 'id',
+                hidden: true,
+                default: 'queryinfo',
+            },
+            {
+                position: 'query',
+                type: 'Input',
+                name: 'url',
+                label: '链接地址',
+                default: '',
+            },
+            {
+                position: 'query',
+                type: 'Input',
+                name: 'title',
+                label: '页面标题',
+                default: '',
+            }
+        ]
+    }
 ]

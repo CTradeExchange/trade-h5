@@ -58,7 +58,7 @@ export default {
         text-align: center;
         .item {
             padding: 0 !important;
-            line-height: rem(80px);
+            line-height: rem(75px);
         }
         .flRight {
             float: none;
@@ -71,7 +71,7 @@ export default {
         height: rem(80px);
         padding: rem(10px) rem(20px);
         color: var(--color);
-        line-height: rem(60px);
+        line-height: rem(50px);
         //background: var(--assistColor);
         border-radius: rem(6px);
         font-weight: bold;

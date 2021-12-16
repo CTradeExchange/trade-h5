@@ -4,7 +4,7 @@
         "night": "Dark"
     },
     "cRoute": {
-        "login": "Login",
+        "login": "Log In",
         "register": "Open Account",
         "registerSuccess": "Register Success",
         "registerHandler": "Manually review",
@@ -46,12 +46,12 @@
         
     },
     "login": {
-        "loginBtn": "Login",
+        "loginBtn": "Log In",
         "register": "Register",
-        "forgot": "Forget Password",
-        "loginByPwd": "Login with password",
-        "loginByCode": "Login with verification code",
-        "loginNamePlaceholder": "Input Mobile/Email/Account",
+        "forgot": "Forgot Password",
+        "loginByPwd": "Log in with password",
+        "loginByCode": "Log in with verification code",
+        "loginNamePlaceholder": "Mobile/Email/Account",
         "email": "Email",
         "pwd": "Password",
         "verifyCode": "Verification Code",
@@ -65,11 +65,11 @@
         "originPwd": "Input original password",
         "pwdSuccess": "Change password success",
         "modifyLoginPwd": "Change Password",
-        "getVerifyCode": "Get Code",
-        "otherLogin": "Or login via below",
+        "getVerifyCode": "Send Code",
+        "otherLogin": "Log in via other methods",
         "registered": "Your email has registered an account, please login.",
         "inputCountry": "Please add your country information.",
-        "loginOrRegist": "Login / Regist"
+        "loginOrRegist": "Log In / Register"
     },
     "common": {
         "tip": "Tips",
@@ -175,7 +175,9 @@
         "noneBind": "Not Set",
         "commonSetting": "Common Setting",
         "lang": "Language",
-        "dark": "Dark"
+        "dark": "Dark",
+        "down": "Down",
+        "up": "Up"
         
     },
     "faceAuth": {
@@ -219,7 +221,7 @@
         "newPwdSuccess": "Reset New password Success",
         "newPwdLogin": "Please login with New password",
         "tip1": "For security reason, withdrawal is not permitted in recent 24 hours",
-        "goLogin": "Login"
+        "goLogin": "Log In"
     },
     "register": {
         "accountCurrency": "Account Currency",
@@ -227,7 +229,7 @@
         "phoneNo": "Mobile",
         "email": "Email",
         "openAccount": "Open Account",
-        "hasAccount": "Login",
+        "hasAccount": "Log In",
         "protocol": "Continue to open an account means that you have confirmed you are at least 18 years old and have read and agreed to \"Client Privacy Protection Policy、Investment Risk Disclosure and Disclaimer\"",
         "openSuccess": "Congratulations！You account is opened succesfully",
         "openHandler": "Your account opening application has been received",

@@ -373,7 +373,7 @@ export default {
     .support {
         position: absolute;
         bottom: rem(30px);
-        width: rem(200px);
+        width: rem(300px);
         left: 50%;
         margin-left: rem(-100px);
         color: var(--placeholdColor);
