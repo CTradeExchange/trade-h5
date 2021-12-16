@@ -4,7 +4,7 @@
 
 import img from './img/config.js'
 import swipe from './swipe/config.js'
-import notice from './notice/config.js'
+// import notice from './notice/config.js'
 import layout from './layout/config.js'
 import text from './text/config.js'
 import quoteList from './quoteList/config.js'
@@ -22,7 +22,7 @@ export const getThemeModules = async () => {
     return [
         img,
         swipe,
-        notice,
+        // notice,
         layout,
         quoteList,
         selfSymbol,
