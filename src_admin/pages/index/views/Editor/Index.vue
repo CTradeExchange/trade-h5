@@ -354,8 +354,8 @@ export default {
             if (deleteConfirm === true) return
             deleteConfirm = true
             ElMessageBox.confirm(t('editor.tip2'), t('editor.hint'), {
-                confirmButtonText: t('editor.sure'),
-                cancelButtonText: t('editor.cancel'),
+                confirmButtonText: t('sure'),
+                cancelButtonText: t('cancel'),
                 type: 'warning'
             }).then(() => {
                 deleteConfirm = false
@@ -410,11 +410,10 @@ export default {
                         item.data.tradeTypeBlock = Object.assign({}, tradeTypeBlock)
                         // if (item.data.code_ids_all) delete item.data.code_ids_all
                     }
-                   
+
                     const activated = store.state.editor.activated
                     if (['selfSymbol', 'productsSwipe', 'productsTimeSharing', 'bannerProducts'].includes(item.tag)) {
                         item.data.product = store.state.editor.tradeTypeSelfSymbol[activated]
-
                     } else if (['productsWithIcon'].includes(item.tag)) {
                         if (activeIndex.value) { item.data.items[activeIndex.value].product = store.state.editor.tradeTypeSelfSymbol }
                     }
