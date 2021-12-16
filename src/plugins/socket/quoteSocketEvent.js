@@ -185,7 +185,7 @@ class SocketEvent {
         const that = this
         list.forEach(el => {
             const product = productMap[el.symbol_id + '_' + el.trade_type]
-            product.kline_list = el.kline_list.reverse().map(el => el.close_price) ?? []
+            product.kline_list = el.kline_list.map(el => el.close_price) ?? []
             that.$store.commit('_quote/Update_product', product)
         })
     }
