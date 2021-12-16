@@ -13,9 +13,11 @@
                 </p>
             </div>
         </section>
+        <!--
         <p class='tips'>
             {{ $t('register.tips1') }}
         </p>
+        -->
         <div class='btnBox'>
             <button class='highBtn' @click='toExperience'>
                 {{ $t('register.experienceNow') }}
@@ -65,21 +67,26 @@ export default {
     height: 100%;
     background-color: var(--bgColor);
     .registerSuccess {
-        display: flex;
         padding: rem(80px) rem(40px)  rem(40px);
         .icon {
-            width: rem(200px);
             color: var(--success);
             font-size: rem(120px);
             text-align: center;
+            .icon_success{
+                color: var(--primary);
+            }
         }
-        h2 {
-            margin: rem(15px) 0 rem(20px);
-            font-weight: normal;
-            font-size: rem(32px);
+        .container{
+            text-align: center;
+            h2 {
+                margin: rem(15px) 0 rem(20px);
+                font-weight: normal;
+                font-size: rem(32px);
+            }
         }
+        
         .accountNo {
-            color: var(--success);
+            color: var(--primary);
         }
     }
     .tips {

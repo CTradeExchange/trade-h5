@@ -587,7 +587,8 @@
     "transferTip4": "划转金额不能大于最大可划转金额",
     "transferTip5": "划转金额不能小于最小可划转金额",
     "transferTip6": "划转金额不能小于0",
-    "transferSuccess": "划转成功"
+    "transferSuccess": "划转成功",
+    "transferAsset": "划转资产"
   },
   "record":{
     "repaymentAmount": "还款数量",

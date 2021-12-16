@@ -59,7 +59,7 @@ export default function () {
                             MsgSocket.login()
 
                             // 切换登录后的行情websocket
-                            setQuoteService()
+                            // setQuoteService()
                         }
                         resolve(res)
                         return res

@@ -23,7 +23,7 @@ export function pageConfig (id) {
             data = unzip(window['wp_Nav'])
             break
         case 'Footer':
-            data = unzip(window['wp_Footer'])
+            data = window['wp_Footer'] ? unzip(window['wp_Footer']) : '[]'
             break
         case 'Home':
             data = unzip(window['wp_Home'])

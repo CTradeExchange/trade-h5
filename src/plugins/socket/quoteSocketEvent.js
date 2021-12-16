@@ -276,11 +276,20 @@ class SocketEvent {
     // 心跳机制
     initPing () {
         const ws = this.ws
-        if (ws.readyState !== 1) return console.warn('消息websocket连接未准备好  readyState：', ws.readyState)
+        if (ws.readyState !== 1) return console.warn('quote websocket连接未准备好  readyState：', ws.readyState)
         if (this.ping) clearInterval(this.ping)
         this.ping = setInterval(() => {
             const param = this.getParam(14008, {})
             if (ws.readyState === 1) ws.send(JSON.stringify(param))
+            else if (ws.readyState !== 0) {
+                console.warn('quote websocket断开 readyState：', ws.readyState)
+                // 如果3s后还没有连接上，重新发起行情连接
+                setTimeout(() => {
+                    if (this.ws.readyState !== 0 && this.ws.readyState !== 1) ws.open()
+                }, 3000)
+            } else {
+                console.warn('quote websocket断开 readyState：', ws.readyState)
+            }
         }, 10000)
     }
 }

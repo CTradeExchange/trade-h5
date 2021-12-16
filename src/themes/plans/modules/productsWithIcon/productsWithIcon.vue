@@ -11,7 +11,7 @@
                 </i>
                 <div class='symbol'>
                     <p class='symbol-name'>
-                        {{ productMap[symbolKeys[index]]?.symbolName }}
+                        {{ productMap[symbolKeys[index]]?.symbolName || '产品名称' }}
                         <!-- {{ item.symbolName || '产品名称' }} -->
                     </p>
                     <p class='symbol-code'>

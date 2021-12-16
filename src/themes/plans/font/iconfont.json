@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "26513126",
+      "name": "红跌",
+      "font_class": "hongdie",
+      "unicode": "e6a7",
+      "unicode_decimal": 59047
+    },
+    {
+      "icon_id": "26513127",
+      "name": "红涨",
+      "font_class": "hongzhang",
+      "unicode": "e6a8",
+      "unicode_decimal": 59048
+    },
+    {
+      "icon_id": "26513128",
+      "name": "绿涨",
+      "font_class": "lvzhang",
+      "unicode": "e6a9",
+      "unicode_decimal": 59049
+    },
+    {
+      "icon_id": "26513129",
+      "name": "绿跌",
+      "font_class": "lvdie",
+      "unicode": "e6aa",
+      "unicode_decimal": 59050
+    },
+    {
+      "icon_id": "26494354",
+      "name": "绿涨红跌",
+      "font_class": "lvzhanghongdie1",
+      "unicode": "e6a6",
+      "unicode_decimal": 59046
+    },
+    {
+      "icon_id": "26494353",
+      "name": "红涨绿跌",
+      "font_class": "hongzhanglvdie1",
+      "unicode": "e6a5",
+      "unicode_decimal": 59045
+    },
+    {
       "icon_id": "26095100",
       "name": "复制",
       "font_class": "fuzhi",

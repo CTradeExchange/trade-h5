@@ -57,7 +57,7 @@ import { hideEmailInfo, hideMobileInfo } from '@/utils/util'
 import { Toast } from 'vant'
 import fund from './components/fund.vue'
 const faceImgDefault = require('@plans/images/face.png')
-const h5Preview = process.env.VUE_APP_h5Preview
+
 export default {
     components: {
         ImgComp,
@@ -143,6 +143,7 @@ export default {
         width: rem(160px);
         height: rem(160px);
         margin: 0 auto;
+        border-radius: 50%;
     }
     .guestBts {
         display: flex;
@@ -173,6 +174,7 @@ export default {
         display: block;
         width: rem(160px);
         height: rem(160px);
+        border-radius: 50%;
     }
     .customerNo {
         display: inline-block;

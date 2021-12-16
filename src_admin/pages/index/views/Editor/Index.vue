@@ -349,12 +349,16 @@ export default {
             })
         }
 
+        let deleteConfirm = false
         const deleteComp = (ev) => {
+            if (deleteConfirm === true) return
+            deleteConfirm = true
             ElMessageBox.confirm(t('editor.tip2'), t('editor.hint'), {
-                confirmButtonText: t('editor.sure'),
-                cancelButtonText: t('editor.cancel'),
+                confirmButtonText: t('sure'),
+                cancelButtonText: t('cancel'),
                 type: 'warning'
             }).then(() => {
+                deleteConfirm = false
                 store.commit('editor/DELETE_ELEMENT', store.state.editor.activated)
                 ElMessage.success({
                     message: t('editor.deleteSuccess'),
@@ -362,6 +366,7 @@ export default {
                 })
             })
                 .catch(error => {
+                    deleteConfirm = false
                     console.log(error)
                 })
         }
@@ -381,6 +386,8 @@ export default {
                 })))
 
                 const tradeTypeBlock = {}
+                const tradeTypeSelfSymbol = store.state.editor.tradeTypeSelfSymbol
+
                 config.forEach(item => {
                     addId(item.data)
                     if (Array.isArray(item.data.items) && item.data.items.length > 0) {
@@ -406,13 +413,14 @@ export default {
                         // if (item.data.code_ids_all) delete item.data.code_ids_all
                     }
 
-                    if (['selfSymbol', 'productsSwipe', 'productsTimeSharing'].includes(item.tag)) {
-                        item.data.product = store.state.editor.tradeTypeSelfSymbol
+                    const activated = store.state.editor.activated
+                    if (['selfSymbol', 'productsSwipe', 'productsTimeSharing', 'bannerProducts'].includes(item.tag)) {
+                        if (tradeTypeSelfSymbol[activated]) item.data.product = tradeTypeSelfSymbol[activated]
                     } else if (['productsWithIcon'].includes(item.tag)) {
                         if (activeIndex.value) { item.data.items[activeIndex.value].product = store.state.editor.tradeTypeSelfSymbol }
                     }
                 })
-
+                console.log('模块列表数据', config)
                 modifyPageConfig(Object.assign({}, state.pageConf, {
                     page_code: state.pageCode,
                     content: zip(JSON.stringify(config)),
@@ -591,8 +599,8 @@ export default {
                         ElMessage.error(res.message)
                         return
                     }
-                    ElMessageBox.confirm(`${state.pageCode}${t('editor.saveSuccess')}`, {
-                        confirmButtonText: t('editor.publishedSuccessfully'),
+                    ElMessageBox.confirm(`${state.pageCode}${t('editor.publishedSuccessfully')}`, {
+                        confirmButtonText: t('sure'),
                         cancelButtonText: t('editor.close'),
                     }).then(_ => {
                         router.push({

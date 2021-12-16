@@ -20,6 +20,7 @@
                                     </el-button>
                                 </template>
                             </el-popconfirm>
+
                             <template v-if='!element.hideUserRole'>
                                 <el-divider content-position='left'>
                                     <h3> {{ $t('editor.basicSettings') }}</h3>
@@ -230,7 +231,10 @@ export default {
         watchEffect(() => {
             if (Object.keys(activeData.value).length > 0) {
                 if (activeData.value?.product) {
-                    store.commit('editor/UPDATE_TRADETYPE_SELFSYMBOL', activeData.value.product)
+                    store.commit('editor/UPDATE_TRADETYPE_SELFSYMBOL_ALL', {
+                        activatedId: activated.value,
+                        data: activeData.value.product
+                    })
                 } else {
                     const tradeTypeBlock = activeData.value.tradeTypeBlock
                     const BlockEumn = {

@@ -42,9 +42,9 @@ export default function hooks (state) {
         }
 
         loginVerifyUrl(params).then(res => {
-            state.loading = true
+            state.loading = false
             if (res.check()) {
-                var { action } = res.data
+                var { action, failReason } = res.data
                 state.userId = res.data.userId
                 state.thirdSource = res.data.thirdSource
 
@@ -67,6 +67,8 @@ export default function hooks (state) {
                             }
                         })
                     }).catch(() => {})
+                } else {
+                    Toast(failReason)
                 }
             }
         }).catch(err => {
@@ -86,7 +88,7 @@ export default function hooks (state) {
             if (res.invalid()) return false
 
             // 切换登录后的行情websocket
-            setQuoteService()
+            // setQuoteService()
             // 登录websocket
             instance.appContext.config.globalProperties.$MsgSocket.login()
             store.commit('del_cacheViews', 'Home')
@@ -95,7 +97,7 @@ export default function hooks (state) {
             // 登录KYC,kycAuditStatus:0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
             // companyKycStatus 公司KYC开户状态，1开启 2未开启
             // checkUserKYC({ res, Dialog, router, store, t: I18n.global.t })
-            const { companyKycStatus, kycAuditStatus, loginPassStatus } = res.data
+            const { companyKycStatus, kycAuditStatus } = res.data
             if (Number(companyKycStatus) === 1) {
                 if (Number(kycAuditStatus === 0)) {
                     return Dialog.alert({
@@ -129,10 +131,10 @@ export default function hooks (state) {
                         router.push('/authentication')
                     })
                 } else if (Number(kycAuditStatus === 2)) {
-                    noticeSetPwd(loginPassStatus)
+                    loginToPath()
                 }
             } else if (Number(companyKycStatus) === 2) {
-                noticeSetPwd(loginPassStatus)
+                loginToPath()
             }
         })
     }
@@ -154,7 +156,6 @@ export default function hooks (state) {
                 router.replace({ name: 'RegisterHandler' })
             } else if (res.check()) {
                 // 注册成功
-                // 注册成功
                 sessionStorage.setItem('RegisterParams', JSON.stringify({ ...params, openType: 4 }))
                 sessionStorage.setItem('RegisterData', JSON.stringify(res))
                 if (res.data.token) setToken(res.data.token)
@@ -167,7 +168,7 @@ export default function hooks (state) {
                 instance.appContext.config.globalProperties.$MsgSocket.login()
 
                 // 切换登录后的行情websocket
-                setQuoteService()
+                // setQuoteService()
 
                 if (res.data.list.length > 0) {
                     // 需要KYC认证
@@ -178,7 +179,7 @@ export default function hooks (state) {
                             query: { levelCode: res.data.list[0].levelCode }
                         })
                 } else {
-                    router.replace({ name: 'RegisterSuccess' })
+                    router.replace({ name: 'Home' })
                 }
             } else {
                 res.toast()
@@ -188,20 +189,9 @@ export default function hooks (state) {
         })
     }
 
-    const noticeSetPwd = (loginPassStatus) => {
-        if (parseInt(loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
-            // 未设置密码
-            const event = new CustomEvent('MSG_UNSET_PWD', { detail: '' })
-            document.body.dispatchEvent(event)
-        } else {
-            loginToPath()
-        }
-    }
-
     // 选择国家
     const onSelectCountry = (country) => {
         // 调后台注册接口
-        // const tradeTypeCurrencyList = getPlansByCountry(country.countryCode)
         state.country = country.countryCode
         state.customerGroupId = getCustomerGroupIdByCountry(country.countryCode)?.customerGroupId
         state.bindAddShow = false
@@ -234,12 +224,8 @@ export default function hooks (state) {
                 countryName: item.name
             })
         })
-
         return tempArr
     })
-
-    // 获取国家区号
-    store.dispatch('getCountryListByParentCode')
 
     return {
         handleCBLogin,

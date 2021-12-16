@@ -325,8 +325,8 @@ export default {
             })
         },
         deleteRow (formConfig, data, index) {
-            this.$store.commit('editor/DELETE_FROM_ROW', { formConfig: formConfig, data: data, index })
-        },
+            this.$store.commit('editor/DELETE_FROM_ROW', { formConfig: formConfig, data: data, index }) 
+        },      
         onEnd (evt) {
             // 更新表单结果
             console.log(evt)
@@ -334,9 +334,8 @@ export default {
         },
         updateFormData (key, data, type) { // 此处提交版块产品
             if (key === 'product') {
-                const newSelfData = { ...this.tradeTypeSelfSymbol }
-                newSelfData[type] = data
-                this.$store.commit('editor/UPDATE_TRADETYPE_SELFSYMBOL', newSelfData)
+                const activatedId = this.$store.state.editor.activated
+                this.$store.commit('editor/UPDATE_TRADETYPE_SELFSYMBOL', { data, activatedId, type })
             } else if (key === 'tradeTypeBlock' || key === 'code_ids_all') {
                 const newData = [...this.tradeTypeCollect]
                 if (newData[this.blockIndex]) {

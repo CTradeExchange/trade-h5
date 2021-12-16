@@ -587,7 +587,8 @@
     "transferTip4": "The transfer amount cannot be greater than the Maximum transfer amount",
     "transferTip5": "The transfer amount cannot be less than the Minimum transfer amount",
     "transferTip6": "The transfer amount cannot be less than0",
-    "transferSuccess": "Transfer success"
+    "transferSuccess": "Transfer success",
+    "transferAsset": "划转资产"
   },
   "record":{
     "repaymentAmount": "Repayment quantity",
@@ -630,8 +631,8 @@
     "calendar":"Calendar"
   },
   "riskLevel":{
-    "safety": "Safety",
-    "warn": "Warn",
+    "safety": "Safe",
+    "warn": "Warning",
     "danger": "Danger"
   }
 }

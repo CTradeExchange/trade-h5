@@ -58,7 +58,7 @@ export default {
         text-align: center;
         .item {
             padding: 0 !important;
-            line-height: rem(80px);
+            line-height: rem(75px);
         }
         .flRight {
             float: none;
@@ -71,14 +71,14 @@ export default {
         height: rem(80px);
         padding: rem(10px) rem(20px);
         color: var(--color);
-        line-height: rem(60px);
+        line-height: rem(50px);
         //background: var(--assistColor);
         border-radius: rem(6px);
         font-weight: bold;
         font-size: rem(28px);
         &.sell {
             margin-left: 5px;
-            border: solid rem(2px) v-bind(fallColor);
+            border: solid rem(4px) v-bind(fallColor);
             color: var(--fallColor);
             &.active {
                 opacity: 1;
@@ -88,7 +88,7 @@ export default {
         }
         &.buy {
             margin-right: 5px;
-             border: solid rem(2px) v-bind(riseColor);
+            border: solid rem(4px) v-bind(riseColor);
             color: var(--riseColor);
             &.active {
                 opacity: 1;

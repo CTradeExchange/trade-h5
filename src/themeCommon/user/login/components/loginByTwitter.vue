@@ -8,13 +8,13 @@
         v-model:show='bindAddShow'
         :actions='areaActions'
         teleport='#app'
-        title='$t("login.inputCountry")'
+        :title='$t("login.inputCountry")'
         @select='onSelectCountry'
     />
 </template>
 
 <script>
-import { reactive, onMounted, toRefs, computed } from 'vue'
+import { reactive, onMounted, watch, toRefs, computed } from 'vue'
 import hello from 'hellojs/dist/hello.all.min.js'
 import hooks from '../loginHooks'
 import { useStore } from 'vuex'
@@ -47,11 +47,16 @@ export default {
 
             })
         }
-        onMounted(() => {
-            hello.init({
-                'twitter': appId.value
-            })
-        })
+
+        watch(
+            () => appId.value, (val) => {
+                if (val) {
+                    hello.init({
+                        'twitter': val
+                    })
+                }
+            }
+        )
 
         return {
             login_twitter,

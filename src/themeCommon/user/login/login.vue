@@ -33,18 +33,14 @@
             </div>
         </form>
 
-        <div class='three-way-login'>
+        <div v-if='thirdLoginArr.length > 0' class='three-way-login'>
             <p class='title'>
                 {{ $t('login.otherLogin') }}
             </p>
             <div class='otherLogin'>
-                <!-- <LoginByGoogle v-if="thirdLoginArr.includes('google')" />
+                <LoginByGoogle v-if="thirdLoginArr.includes('google')" />
                 <LoginByFacebook v-if="thirdLoginArr.includes('facebook')" />
-                <LoginByTwitter v-if="thirdLoginArr.includes('twitter')" /> -->
-
-                <LoginByGoogle />
-                <LoginByFacebook />
-                <LoginByTwitter />
+                <LoginByTwitter v-if="thirdLoginArr.includes('twitter')" />
             </div>
         </div>
 
@@ -96,7 +92,7 @@ import LoginByFacebook from '@/themeCommon/user/login/components/loginByFacebook
 import LoginByTwitter from '@/themeCommon/user/login/components/loginByTwitter.vue'
 
 import Top from '@/components/top'
-import { getDevice, localGet, localSet, getArrayObj, sessionGet } from '@/utils/util'
+import { getDevice, localGet, localSet, getArrayObj, sessionGet, isEmpty } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
 import { computed, reactive, toRefs, getCurrentInstance, onUnmounted, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -146,7 +142,12 @@ export default {
             }
         })
 
+        const countryList = computed(() => store.state.countryList)
         const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo.thirdLogin)
+        if (isEmpty(countryList.value) && !isEmpty(thirdLoginArr.value)) {
+            // 获取国家区号
+            store.dispatch('getCountryListByParentCode')
+        }
 
         const changeLoginType = () => {
             const loginType = state.loginType
@@ -199,7 +200,7 @@ export default {
                 if (res.invalid()) return false
 
                 // 切换登录后的行情websocket
-                setQuoteService()
+                // setQuoteService()
 
                 // 登录websocket
                 instance.appContext.config.globalProperties.$MsgSocket.login()
@@ -332,18 +333,8 @@ export default {
             loginToPath()
         }
 
-        const showSetPwd = () => {
-            state.loginPwdPop = true
-        }
-
-        // 监听是否需要弹窗设置密码
-        document.body.addEventListener('MSG_UNSET_PWD', showSetPwd, false)
         // 获取三方登录配置
         store.dispatch('_base/getLoginConfig')
-
-        onUnmounted(() => {
-            document.body.removeEventListener('MSG_UNSET_PWD', showSetPwd, false)
-        })
 
         return {
             ...toRefs(state),
@@ -382,9 +373,9 @@ export default {
     .support {
         position: absolute;
         bottom: rem(30px);
-        width: rem(200px);
+        width: rem(300px);
         left: 50%;
-        margin-left: rem(-100px);
+        margin-left: rem(-150px);
         color: var(--placeholdColor);
         font-size: rem(20px);
         line-height: rem(32px);

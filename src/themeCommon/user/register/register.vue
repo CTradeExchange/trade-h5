@@ -6,22 +6,20 @@
             <p class='pageTitle'>
                 {{ $t('register.openAccount') }}
             </p>
-            <div v-if='registerBanner' class='banner'>
-                <img alt='' :src='registerBanner' srcset='' />
+            <div class='banner'>
+                <img v-if='registerBanner' alt='' :src='registerBanner' srcset='' />
             </div>
-            <div v-if='Array.isArray(registerTypes) && registerTypes.length>0'>
-                <van-tabs
-                    v-model:active='openType'
-                    class='openTypeTab'
-                    :color='style.color'
-                    line-height='2px'
-                    line-width='20px'
-                    :title-inactive-color='style.mutedColor'
-                >
-                    <van-tab v-if="registerTypes.indexOf('mobile')>-1" name='mobile' :title='$t("register.phoneNo")' />
-                    <van-tab v-if="registerTypes.indexOf('email')>-1" name='email' :title='$t("register.email")' />
-                </van-tabs>
-            </div>
+            <van-tabs
+                v-model:active='openType'
+                class='openTypeTab'
+                :color='style.color'
+                line-height='2px'
+                line-width='20px'
+                :title-inactive-color='style.mutedColor'
+            >
+                <van-tab name='mobile' :title='$t("register.phoneNo")' />
+                <van-tab name='email' :title='$t("register.email")' />
+            </van-tabs>
 
             <form class='form'>
                 <!-- <CurrencyAction v-model='currency' class='cellRow' />
@@ -51,7 +49,7 @@
                 <div class='cell'>
                     <CheckCode v-model.trim='checkCode' clear :label='$t("login.verifyCode")' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
                 </div>
-                <div class='cell'>
+                <div v-if='instructions' class='cell'>
                     <van-checkbox v-model='protocol' class='checkbox' shape='square'>
                         <span v-html='instructions'></span>
                     </van-checkbox>
@@ -108,7 +106,7 @@ export default {
         const delayer = null
         const store = useStore()
         const router = useRouter()
-        const { t } = useI18n({ useScope: 'global' })
+        const { t, locale } = useI18n({ useScope: 'global' })
         const { getCustomerGroupIdByCountry, getPlansByCountry } = hooks()
         const state = reactive({
             options: [{ country: 'Canada', code: 'CA' }],
@@ -152,7 +150,9 @@ export default {
         // 开户须知内容
 
         const instructions = computed(() => {
-            const protocol = store.state._base.wpCompanyInfo?.instructions
+            const lang = locale.value
+            const wpCompanyInfo = store.state._base.wpCompanyInfo || {}
+            const protocol = wpCompanyInfo[lang === 'zh-CN' ? 'instructions_zh' : 'instructions_en']
             return protocol ? unescape(protocol) : ''
         })
         // 注册页banner
@@ -197,7 +197,7 @@ export default {
                     instance.appContext.config.globalProperties.$MsgSocket.login()
 
                     // 切换登录后的行情websocket
-                    setQuoteService()
+                    // setQuoteService()
 
                     if (res.data.list.length > 0) {
                         // 需要KYC认证
@@ -245,7 +245,7 @@ export default {
             }
 
             if (state.openType === 'mobile') {
-                params.phoneArea = '+' + String(state.countryZone)
+                params.phoneArea = String(state.countryZone)
             } else {
                 params.emailArea = String(state.countryZone)
             }
@@ -297,7 +297,7 @@ export default {
                             // state.zone = res.data.phoneArea
                             const params = {
                                 bizType: state.openType === 'mobile' ? 'SMS_REGISTER_VERIFICATION_CODE' : 'EMAIL_REGISTER_VERIFICATION_CODE',
-                                toUser: state.openType === 'mobile' ? '+' + state.countryZone + ' ' + state.mobile : state.email,
+                                toUser: state.openType === 'mobile' ? state.countryZone + ' ' + state.mobile : state.email,
                                 country: state.countryCode
                             }
                             verifyCodeSend(params).then(res => {
@@ -432,7 +432,7 @@ export default {
     height: rem(100px);
     color: var(--color);
     font-size: rem(30px);
-    background: var(--primaryAssistColor);
+    background: var(--bgColor);
     border-color: var(--lineColor);
     border-width: 1px 0 0;
 }

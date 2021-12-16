@@ -8,7 +8,7 @@
         v-model:show='bindAddShow'
         :actions='areaActions'
         teleport='#app'
-        title='$t("login.inputCountry")'
+        :title='$t("login.inputCountry")'
         @select='onSelectCountry'
     />
 </template>
@@ -65,9 +65,15 @@ export default {
             })
         }
 
-        onMounted(() => {
-            renderBtn()
-        })
+        watch(
+            () => appId.value, (val) => {
+                if (val) {
+                    renderBtn()
+                }
+            }, {
+                immediate: true
+            }
+        )
 
         return {
             areaActions,

@@ -103,6 +103,7 @@ export default {
         left: 0;
         width: rem(110px);
         height: rem(110px);
+        border-radius: 50%;
     }
     .customerNo {
         display: inline-block;

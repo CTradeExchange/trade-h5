@@ -154,7 +154,19 @@ export default {
          * @param {string} data - 产品信息.
          */
         UPDATE_TRADETYPE_SELFSYMBOL (state, data) {
-            state.tradeTypeSelfSymbol = data
+            if (data.activatedId) {
+                if(!state.tradeTypeSelfSymbol[data.activatedId]){
+                    state.tradeTypeSelfSymbol[data.activatedId] = {} 
+                } 
+                state.tradeTypeSelfSymbol[data.activatedId][data.type] = data.data
+            }
+        },
+        /**
+         * 从接口更新玩法自选产品.
+         * @param {string} data - 产品信息.
+         */
+        UPDATE_TRADETYPE_SELFSYMBOL_ALL (state, data) {
+           state.tradeTypeSelfSymbol[data.activatedId] = data.data
         },
         /**
          * 获取产品信息中.
@@ -163,14 +175,6 @@ export default {
          */
         UPDATE_GET_PRODUCTING (state, data) {
             state.getProducting = data
-        },
-        /**
-         * 更新当前操作的对象.
-         * @param {string} data.key - 当前操作右侧表单的下标.
-         * @param {string} data.value - 产品列表.
-         */
-        UPDATE_ACTIVEINDEX (state, data) {
-            state.activeIndex = data
         }
     }
 }

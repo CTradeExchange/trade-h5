@@ -50,12 +50,7 @@ async function render (container) {
         methods: {
             // 用wp配置的URL
             openUrl (toRoute) {
-                if (toRoute.href.name === 'Nest') {
-                    toRoute.href.params.type = 'otherPage'
-                    this.$router.push(toRoute.href)
-                } else if (toRoute.href?.name) {
-                    this.$router.push({ name: toRoute.href.name })
-                }
+                return false
             },
             // 日期时间格式化
             formatTime (val, fmt = 'YYYY-MM-DD HH:mm:ss') {

@@ -184,7 +184,7 @@ export default {
                     instance.appContext.config.globalProperties.$MsgSocket.login()
 
                     // 切换登录后的行情websocket
-                    setQuoteService()
+                    // setQuoteService()
 
                     if (res.data.list.length > 0) {
                         // 需要KYC认证
@@ -232,7 +232,7 @@ export default {
             }
 
             if (state.openType === 'mobile') {
-                params.phoneArea = '+' + String(state.countryZone)
+                params.phoneArea = String(state.countryZone)
             } else {
                 params.emailArea = String(state.countryZone)
             }
@@ -284,7 +284,7 @@ export default {
                             // state.zone = res.data.phoneArea
                             const params = {
                                 bizType: state.openType === 'mobile' ? 'SMS_REGISTER_VERIFICATION_CODE' : 'EMAIL_REGISTER_VERIFICATION_CODE',
-                                toUser: state.openType === 'mobile' ? '+' + state.countryZone + ' ' + state.mobile : state.email,
+                                toUser: state.openType === 'mobile' ? state.countryZone + ' ' + state.mobile : state.email,
                                 country: state.countryCode
                             }
                             verifyCodeSend(params).then(res => {
@@ -343,7 +343,7 @@ export default {
     display: flex;
     flex-flow: column;
     height: 100%;
-    background: var(--assistColor);
+    background: var(--bgColor);
     .container {
         flex: 1;
         overflow: auto;
@@ -460,8 +460,7 @@ export default {
     border-radius: rem(10px);
 }
 .registerBtn {
-
-    color: var(--contentColor);
+    color: #fff;
     background: var(--primary);
     border-color: var(--primary);
     border-width: 1px 0 0;

@@ -18,8 +18,8 @@ if (process.env.NODE_ENV === 'development') {
  */
 export const getQuoteService = () => {
     const token = getToken()
-    let quoteService = window['quoteService'] || ''
-    if (token) {
+    let quoteService = window['quoteService']
+    if (0 && token) {
         quoteService += '?token=' + token
     } else {
         quoteService = quoteService.replace('/quote', '/quote_guest')

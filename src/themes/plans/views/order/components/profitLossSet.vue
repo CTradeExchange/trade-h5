@@ -73,16 +73,17 @@ export default {
             stopLossPrice: '',
             stopProfitPrice: '',
         })
-        const dire = props.direction === 'buy' ? 1 : 2
         const profitLossRang = computed(() => store.getters['_trade/marketProfitLossRang'])
         const stopLossRange = computed(() => props.direction === 'buy' ? profitLossRang.value.buyStopLossRange : profitLossRang.value.sellStopLossRange)
         const profitRange = computed(() => props.direction === 'buy' ? profitLossRang.value.buyProfitRange : profitLossRang.value.sellProfitRange)
         const stopLossWarn = computed(() => {
             const warn = stopLossRef.value?.warn
+            const dire = props.direction === 'buy' ? 1 : 2
             return warn && profitLossPriceCompare('stopLoss', dire, state.stopLossPrice, profitLossRang.value, t)
         })
         const stopProfitWarn = computed(() => {
             const warn = stopProfitRef.value?.warn
+            const dire = props.direction === 'buy' ? 1 : 2
             return warn && profitLossPriceCompare('profit', dire, state.stopProfitPrice, profitLossRang.value, t)
         })
 

@@ -145,6 +145,7 @@ export default {
                 line-height: rem(32px);
             }
             .businessType {
+                color: var(--color);
                 margin-top: rem(15px);
             }
         }
