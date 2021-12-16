@@ -185,7 +185,7 @@ export default {
         // 跳转到借款页面
         const goLoan = () => {
             router.push({
-                path: '/assets/chooseAccount',
+                path: '/order/chooseAccount',
                 query: {
                     accountId: assetsInfo.value.accountId,
                     tradeType: product.value?.tradeType,
@@ -197,7 +197,7 @@ export default {
         // 跳转到还款页面
         const goRepayment = () => {
             router.push({
-                path: '/assets/chooseAccount',
+                path: '/order/chooseAccount',
                 query: {
                     accountId: assetsInfo.value.accountId,
                     tradeType: product.value?.tradeType,
