@@ -25,7 +25,7 @@ const { categoryList, productList } = useProduct({
 })
 
 const computedCategoryList = computed((el) => {
-    const list = [...unref(categoryList)]
+    const list = [...unref(categoryList)].filter(e => e.listByUser.length)
     list.forEach(el => {
         if (el.id === 'selfSymbol') {
             el.slot = {
