@@ -375,7 +375,7 @@ export default {
         bottom: rem(30px);
         width: rem(300px);
         left: 50%;
-        margin-left: rem(-100px);
+        margin-left: rem(-150px);
         color: var(--placeholdColor);
         font-size: rem(20px);
         line-height: rem(32px);

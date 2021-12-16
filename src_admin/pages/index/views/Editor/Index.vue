@@ -354,8 +354,8 @@ export default {
             if (deleteConfirm === true) return
             deleteConfirm = true
             ElMessageBox.confirm(t('editor.tip2'), t('editor.hint'), {
-                confirmButtonText: t('editor.sure'),
-                cancelButtonText: t('editor.cancel'),
+                confirmButtonText: t('sure'),
+                cancelButtonText: t('cancel'),
                 type: 'warning'
             }).then(() => {
                 deleteConfirm = false
@@ -386,6 +386,8 @@ export default {
                 })))
 
                 const tradeTypeBlock = {}
+                const tradeTypeSelfSymbol = store.state.editor.tradeTypeSelfSymbol
+
                 config.forEach(item => {
                     addId(item.data)
                     if (Array.isArray(item.data.items) && item.data.items.length > 0) {
@@ -410,16 +412,15 @@ export default {
                         item.data.tradeTypeBlock = Object.assign({}, tradeTypeBlock)
                         // if (item.data.code_ids_all) delete item.data.code_ids_all
                     }
-                   
+
                     const activated = store.state.editor.activated
                     if (['selfSymbol', 'productsSwipe', 'productsTimeSharing', 'bannerProducts'].includes(item.tag)) {
-                        item.data.product = store.state.editor.tradeTypeSelfSymbol[activated]
-
+                        if (tradeTypeSelfSymbol[activated]) item.data.product = tradeTypeSelfSymbol[activated]
                     } else if (['productsWithIcon'].includes(item.tag)) {
                         if (activeIndex.value) { item.data.items[activeIndex.value].product = store.state.editor.tradeTypeSelfSymbol }
                     }
                 })
-
+                console.log('模块列表数据', config)
                 modifyPageConfig(Object.assign({}, state.pageConf, {
                     page_code: state.pageCode,
                     content: zip(JSON.stringify(config)),
