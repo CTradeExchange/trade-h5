@@ -635,11 +635,12 @@ export default {
                                 }
                             }
                             //tradeTypesConfig中没有的配置返回的玩法加上
-                            for(let key in targetKeys){
-                                if(!Object.keys(that.form.tradeTypesConfig[el]).includes(key)){
-                                   that.form.tradeTypesConfig[el][key] = "";
-                                }
-                            }
+                            // let tradeTypesConfigChildKeys = Object.keys(that.form.tradeTypesConfig[el]);
+                            // for(let key in targetKeys){
+                            //     if(tradeTypesConfigChildKeys.includes(key)){
+                            //        that.form.tradeTypesConfig[el][key] = "";
+                            //     }
+                            // }
                         }else{
                             that.form.tradeTypesConfig[el] = JSON.parse(JSON.stringify(that.tradeTypesTemplate));
                         }
