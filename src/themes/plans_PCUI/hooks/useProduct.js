@@ -1,6 +1,7 @@
 import { computed, unref } from 'vue'
 import { useStore } from 'vuex'
 import globalData from './globalData'
+import { useI18n } from 'vue-i18n'
 
 export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
     // wp拖拽预览的时候直接返回空数据
@@ -12,6 +13,7 @@ export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
         }
     }
 
+    const { t } = useI18n({ useScope: 'global' })
     const store = useStore()
     const productMap = computed(() => store.state._quote.productMap)
     const userProductCategory = computed(() => store.getters.userProductCategory)
@@ -21,11 +23,11 @@ export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
     const categoryList = computed(() => {
         const listByUser = unref(userSelfSymbolList)[unref(tradeType)] || []
         const selfSymbol = {
-            title: '自选',
+            title: t('trade.favorites'),
             id: 'selfSymbol',
             listByUser: Array.isArray(listByUser) ? listByUser : [listByUser]
         }
-        const tradeTypeQuote = unref(userProductCategory)[unref(tradeType)] || []
+        const tradeTypeQuote = (unref(userProductCategory)[unref(tradeType)] || []).filter(e => e.listByUser.length)
 
         return isSelfSymbol ? [selfSymbol, ...tradeTypeQuote] : [...tradeTypeQuote]
     })
