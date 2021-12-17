@@ -9,6 +9,7 @@
         :actions='areaActions'
         teleport='#app'
         :title='$t("login.inputCountry")'
+        @close='loading = false'
         @select='onSelectCountry'
     />
 </template>
@@ -53,9 +54,7 @@ export default {
         }
 
         const onLogin = () => {
-            state.loading = true
             FB.login(function (response) {
-                state.loading = false
                 console.log(response)
                 if (response.status === 'connected') {
                     // Logged into your webpage and Facebook.

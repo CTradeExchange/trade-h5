@@ -19,7 +19,7 @@ export default function hooks (state) {
 
     // 处理与cats系统交互
     const handleCBLogin = (id_token) => {
-        state.loading = false
+        state.loading = true
         console.log('login come in ')
         let params, loginVerifyUrl
         if (state.loginType === 'google') {

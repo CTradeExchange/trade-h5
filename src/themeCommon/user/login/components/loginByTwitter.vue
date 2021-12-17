@@ -9,6 +9,7 @@
         :actions='areaActions'
         teleport='#app'
         :title='$t("login.inputCountry")'
+        @close='loading = false'
         @select='onSelectCountry'
     />
 </template>
@@ -33,18 +34,14 @@ export default {
         const { handleCBLogin, onSelectCountry, areaActions } = hooks(state)
         const appId = computed(() => store.state._base.thirdLoginConfig.find(el => el.thirdSource === 'twitter')?.clientId)
         const login_twitter = (network) => { // 登录方法，并将twitter 作为参数传入
-            state.loading = true
             var twitter = hello(network)
             // Login
             twitter.login().then(function (res) {
-                state.loading = false
                 // Get Profile
                 handleCBLogin(res.authResponse)
                 return twitter.api('/me')
             }, function (err) {
-                state.loading = false
             }).then(function (p) {
-                state.loading = false
             })
         }
 

@@ -9,6 +9,7 @@
         :actions='areaActions'
         teleport='#app'
         :title='$t("login.inputCountry")'
+        @close='loading = false'
         @select='onSelectCountry'
     />
     <!-- <van-button type='primary' @click='login_google("google")'>
@@ -49,12 +50,10 @@ export default {
 
         const attachSignin = (element) => {
             auth2.attachClickHandler(element, {}, function (googleUser) {
-                state.loading = true
                 var id_token = googleUser.getAuthResponse().id_token
                 // 处理与cats系统交互
                 handleCBLogin(id_token)
             }, function (error) {
-                state.loading = false
                 console.log(error)
             })
         }
@@ -71,29 +70,29 @@ export default {
             })
         }
 
-        const login_google = (network) => {
-            state.loading = true
-            var google = hello(network)
-            // Login
-            google.login().then(function (res) {
-                state.loading = false
-                // Get Profile
-                handleCBLogin(res.authResponse)
-                return google.api('/me')
-            }, function (err) {
-                state.loading = false
-            }).then(function (p) {
-                state.loading = false
-            })
-        }
+        // const login_google = (network) => {
+        //     state.loading = true
+        //     var google = hello(network)
+        //     // Login
+        //     google.login().then(function (res) {
+        //         state.loading = false
+        //         // Get Profile
+        //         handleCBLogin(res.authResponse)
+        //         return google.api('/me')
+        //     }, function (err) {
+        //         state.loading = false
+        //     }).then(function (p) {
+        //         state.loading = false
+        //     })
+        // }
 
         watch(
             () => appId.value, (val) => {
                 if (val) {
                     renderBtn()
-                    hello.init({
-                        'google': val,
-                    }, { redirect_uri: '/login' })
+                    // hello.init({
+                    //     'google': val,
+                    // }, { redirect_uri: window.location.href })
                 }
             }, {
                 immediate: true
@@ -103,7 +102,7 @@ export default {
         return {
             areaActions,
             onSelectCountry,
-            login_google,
+            // login_google,
             ...toRefs(state)
         }
     }
