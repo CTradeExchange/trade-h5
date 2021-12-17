@@ -131,6 +131,7 @@ export default {
     flex-direction: column;
     overflow-y: auto;
     background-color: var(--bgColor);
+    //padding-bottom: rem(104px);
 }
 .address-list {
     .item {
@@ -184,6 +185,9 @@ export default {
     }
 }
 .footer-btn {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
     display: flex;
     flex-shrink: 0;
     align-items: center;

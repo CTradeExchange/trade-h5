@@ -13,7 +13,7 @@
             >
                 <template #right-icon>
                     <span class='right-val' :class="customInfo.phone ? 'yet' : 'none'">
-                        {{ customInfo?.phone ? $t('common.change') : $t('common.noneBind') }}
+                        {{ customInfo?.phone ? $t('common.modify') : $t('common.noneBind') }}
                     </span>
                     <van-icon name='arrow' />
                 </template>
@@ -27,7 +27,7 @@
             >
                 <template #right-icon>
                     <span class='right-val' :class="customInfo.email ? 'yet' : 'none'">
-                        {{ customInfo?.email ? $t('common.change') : $t('common.noneBind') }}
+                        {{ customInfo?.email ? $t('common.modify') : $t('common.noneBind') }}
                     </span>
                     <van-icon name='arrow' />
                 </template>
