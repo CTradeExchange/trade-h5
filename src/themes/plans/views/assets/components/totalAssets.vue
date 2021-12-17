@@ -206,6 +206,11 @@ export default {
         margin-top: rem(20px);
         color: var(--minorColor);
         font-size: rem(28px);
+        .left{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+        }
         .tag {
             height: rem(40px);
             margin-left: rem(10px);
