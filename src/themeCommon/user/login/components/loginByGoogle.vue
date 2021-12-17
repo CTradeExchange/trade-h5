@@ -50,12 +50,10 @@ export default {
 
         const attachSignin = (element) => {
             auth2.attachClickHandler(element, {}, function (googleUser) {
-                state.loading = true
                 var id_token = googleUser.getAuthResponse().id_token
                 // 处理与cats系统交互
                 handleCBLogin(id_token)
             }, function (error) {
-                state.loading = false
                 console.log(error)
             })
         }
