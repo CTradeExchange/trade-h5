@@ -406,6 +406,8 @@ export default {
                         customerSelfSymbolIds.push(value.map(v => (key + '_' + v)))
                     })
                     this.defaultCheckedKeys = flatten(customerSelfSymbolIds)
+                } else {
+                    this.defaultCheckedKeys = []
                 }
             } else {
                 if (isPlainObject(this.tradeTypeCollect[this.blockIndex]?.[type])) {
