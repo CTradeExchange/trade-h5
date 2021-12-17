@@ -31,7 +31,6 @@ export default {
         dataList () {
             const len = this.data?.items?.length ?? 0
             if (!len) return [{ src: '' }]
-            console.log(this.data.items)
             return this.data.items
         }
     },
