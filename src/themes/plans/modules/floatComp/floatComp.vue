@@ -45,6 +45,7 @@ export default {
     width: rem(96px);
     height: rem(96px);
     right: rem(30px);
+    float: right;
     .link{
         display: inline-block;
         img{

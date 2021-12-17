@@ -132,7 +132,7 @@ export default {
         idsNum () {
             return this.productIds.length
         },
-        activated(){
+        activated () {
             return this.$store.state.editor.activated
         }
     },
