@@ -22,7 +22,7 @@ class SocketEvent {
     // 初始化
     init (ws, $store) {
         this.ws = ws
-        this.$store = $store
+        if ($store) this.$store = $store
     }
 
     // ws发送数据格式

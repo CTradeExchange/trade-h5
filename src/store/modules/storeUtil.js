@@ -66,7 +66,7 @@ export function compareAssets (customerInfo = {}, registList) {
         }
     })
     Object.keys(userPlans).forEach(el => {
-        userPlans[el] = userPlans[el].sort((a, b) => a.localeCompare(b)).join()
+        userPlans[el] = userPlans[el].sort((a, b) => a && a.localeCompare(b)).join()
     })
 
     // wp配置的玩法资产
