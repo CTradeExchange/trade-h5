@@ -69,14 +69,16 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .page-wrap {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
-    overflow: auto;
-    //background: var(--contentColor);
     .page-content {
+        flex: 1;
         margin-top: rem(20px);
-        //padding: 0 rem(20px);
+        padding: 0;
         background: var(--contentColor);
+        overflow-y: auto;
         .head-text {
             padding-left: rem(30px);
             color: var(--minorColor);

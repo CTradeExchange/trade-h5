@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "26591497",
+      "name": "汇兑",
+      "font_class": "huidui",
+      "unicode": "e6ab",
+      "unicode_decimal": 59051
+    },
+    {
+      "icon_id": "26591498",
+      "name": "直充",
+      "font_class": "zhichong",
+      "unicode": "e6ac",
+      "unicode_decimal": 59052
+    },
+    {
       "icon_id": "26513126",
       "name": "红跌",
       "font_class": "hongdie",

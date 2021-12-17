@@ -303,7 +303,14 @@
         "arriveTime": "入帐时间",
 		"noneChannelTip": "当前充值金额暂无可用支付通道，请重新选择",
         "wramNotice": "温馨提示:",
-        "noticeContent": "支付状态可能会因为网络等原因未及时更新，如已支付请确认账户资金是否到账，未到账请联系客服"
+        "noticeContent": "支付状态可能会因为网络等原因未及时更新，如已支付请确认账户资金是否到账，未到账请联系客服",
+        "assetAccount": "资产账户",
+        "rechargeWay": "充值方式",
+        "direct": "直充",
+        "directDes": "采用与资产账户相同的资产充值",
+        "exchange": "汇兑",
+        "exchangeDes": "采用与资产账户不同的资产充值",
+        "immediateRecharge": "立即充值"
     },
     "fund": {
         "marginLevel": "保证金水平",
