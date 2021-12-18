@@ -91,13 +91,13 @@ export default {
 
             const params = {
                 bizType: 'SMS_COMMON_VERIFICATION_CODE',
-                toUser: '+' + state.zone + ' ' + state.mobile
+                toUser: state.zone + ' ' + state.mobile
             }
 
             const existParams = {
                 type: 2,
                 loginName: state.mobile,
-                phoneArea: '+' + state.zone
+                phoneArea: state.zone
             }
             checkUserStatus(existParams).then(res => {
                 if (res.check()) {
