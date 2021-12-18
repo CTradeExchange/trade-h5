@@ -1,6 +1,6 @@
 <template>
     <div class='fullPageWrapper'>
-        <LayoutTop :back='true' :menu='false' :show-title='false'>
+        <LayoutTop :back='true' :menu='false'>
             <template #right>
                 <a class='right-title' href='javascript:;' @click='toRecord'>
                     {{ $t('assets.transferRecord') }}
@@ -8,15 +8,9 @@
             </template>
         </LayoutTop>
         <div class='page-content'>
-            <p class='header'>
+            <!-- <p class='header'>
                 {{ $t('assets.transferAsset') }}
-            </p>
-            <div class='action-bar mb60' @click='pickerShow=true'>
-                <span class='label'>
-                    {{ curCurrency?.currency }}
-                </span>
-                <van-icon name='arrow' @click='pickerShow=true' />
-            </div>
+            </p> -->
             <div class='transfer'>
                 <div class='label'>
                     {{ $t('common.from') }}
@@ -41,6 +35,19 @@
                         <i class='icon_zhuanhuan'></i>
                     </div>
                 </div>
+            </div>
+
+            <!-- <p class='header mt60'>
+                {{ $t('trade.orderVolume') }}
+            </p> -->
+            <p class='header mt60'>
+                资产
+            </p>
+            <div class='action-bar mb60' @click='pickerShow=true'>
+                <span class='label'>
+                    {{ curCurrency?.currency }}
+                </span>
+                <van-icon name='arrow' @click='pickerShow=true' />
             </div>
 
             <p class='header mt60'>
@@ -332,11 +339,12 @@ export default {
         padding: 0 rem(30px);
         .header{
             font-size: rem(48px);
-            font-weight: bold;
+            // font-weight: bold;
             padding-bottom: rem(10px);
 
         }
         .transfer {
+            margin-top: rem(30px);
             display: flex;
             align-items: center;
             .label {
@@ -344,7 +352,7 @@ export default {
                 background: var(--contentColor);
                 padding: rem(40px) rem(44px) 0 0;
                 color: var(--color);
-                font-weight: bold;
+                // font-weight: bold;
                 font-size: rem(48px);
                 line-height: rem(27px);
                 text-align: center;
