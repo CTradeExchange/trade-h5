@@ -78,8 +78,9 @@ import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { currencyConfig } from './config.js'
+import { currencyConfig } from './config'
 import { queryPayType } from '@/api/user'
+import { localSet } from '@/utils/util'
 import { Toast, Dialog } from 'vant'
 export default {
     components: {
@@ -108,7 +109,9 @@ export default {
             // 直充是否禁用
             directDisable: true,
             // 汇兑是否禁用
-            exchangeDisable: true
+            exchangeDisable: true,
+            // 当前直充支付通道
+            paymentInfo: ''
         })
         // 客户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
@@ -153,6 +156,7 @@ export default {
                     // 直充
                     if (elem.rechargeType.indexOf('1') !== -1) {
                         state.directDisable = false
+                        if (!state.paymentInfo) state.paymentInfo = elem
                     }
                     // 汇兑
                     if (elem.rechargeType.indexOf('2') !== -1) {
@@ -191,23 +195,15 @@ export default {
 
         // 跳转到充值页面
         const goRecharge = () => {
-            if (state.disable) return
-            const paymentTypes = state.paymentTypes
-            let item = {}
-            for (let i = 0; i < paymentTypes.length; i++) {
-                if (paymentTypes[i].rechargeType.indexOf('1') !== -1) {
-                    item = paymentTypes[i]
-                    break
-                }
-            }
             switch (state.way) {
                 // 跳转到直充页面
                 case 1:
+                    localSet('paymentInfo', JSON.stringify(state.paymentInfo))
                     router.push({
                         path: '/depositDirect',
                         query: {
                             currency: state.accountInfo.currency,
-                            paymentCode: item.paymentCode
+                            paymentCode: state.paymentInfo.paymentCode
                         }
                     })
                     break

@@ -1,11 +1,15 @@
 <template>
     <div class='page-wrap'>
+        <!-- 头部导航栏 -->
         <Top
             back
             :right-action="{ title: $t('deposit.depositRecord') }"
             show-center
             @rightClick="$router.push('/depositRecord')"
         />
+        <!-- 页面加载状态 -->
+        <Loading :show='loading' />
+        <!-- 内容区域 -->
         <div class='page-content'>
             <div class='module'>
                 <div class='currency-info'>
@@ -18,44 +22,34 @@
                     </p>
                 </div>
                 <div class='chain-list'>
-                    <div class='item active'>
+                    <div v-for='(item, index) in chainList' :key='index' :class="['item', { 'active': item === chainName }]" @click='selectChain(item)'>
                         <div class='check'>
                             <van-icon color='#fff' name='success' />
                         </div>
                         <span class='name'>
-                            OMNI
-                        </span>
-                    </div>
-                    <div class='item'>
-                        <div class='check'>
-                            <van-icon color='#fff' name='success' />
-                        </div>
-                        <span class='name'>
-                            OMNI
-                        </span>
-                    </div>
-                    <div class='item'>
-                        <div class='check'>
-                            <van-icon color='#fff' name='success' />
-                        </div>
-                        <span class='name'>
-                            OMNI
+                            {{ item }}
                         </span>
                     </div>
                 </div>
                 <div class='qr-code'>
-                    <img src='/images/code.png' />
-                    <div class='mask'>
-                        <button class='get'>
-                            获取地址
-                        </button>
+                    <!-- 有地址 -->
+                    <div v-if='address' ref='qrCode' class='qrcode'></div>
+                    <!-- 无地址 -->
+                    <div v-else class='none-address'>
+                        <img src='/images/code.png' />
+                        <div class='mask'>
+                            <button v-if='showGet' class='get' @click='applyBindAddress'>
+                                {{ $t('deposit.getAddress') }}
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class='address-box'>
+                <!-- 有地址 -->
+                <div v-if='address' class='address-box'>
                     <p class='text'>
-                        1KFHE7w8BhaENAswwryaoccDb6qcT6DbcDb6qcT6cDb6qcT6DbcDb6qcT6
+                        {{ address }}
                     </p>
-                    <button id='copy' class='copy' data-clipboard-text='111222' @click='copyAddress'>
+                    <button id='copy' class='copy' :data-clipboard-text='address' @click='copyAddress'>
                         {{ $t('common.copy') }}
                     </button>
                 </div>
@@ -74,13 +68,16 @@
 
 <script>
 import Top from '@/components/top'
-import { reactive, toRefs } from 'vue'
+import { onMounted, computed, reactive, toRefs, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import { currencyConfig } from './config.js'
+import { currencyConfig } from './config'
 import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
+import { getCryptoBlockchainInfo, getBindRechargeAddress, applyRechargeBindAddress } from '@/api/user'
+import { localGet } from '@/utils/util'
 import Clipboard from 'clipboard'
+import QRCode from 'qrcodejs2'
 export default {
     components: {
         Top
@@ -90,11 +87,91 @@ export default {
         const route = useRoute()
         const { t } = useI18n()
         const state = reactive({
+            // 页面加载状态
+            loading: true,
             // 当前币种
             currency: route.query.currency,
             // 支付通道code
-            paymentCode: route.query.paymentCode
+            paymentCode: route.query.paymentCode,
+            // 链名称列表
+            chainList: [],
+            // 当前选中链名称
+            chainName: '',
+            // 充值地址
+            address: '',
+            // 是否显示获取地址按钮
+            showGet: false,
+            // 支付通道信息
+            paymentInfo: JSON.parse(localGet('paymentInfo'))
         })
+
+        // 客户信息
+        const customerInfo = computed(() => store.state._user.customerInfo)
+        // 二维码对象
+        const qrCode = ref(null)
+        // 请求参数
+        const params = {
+            companyId: customerInfo.value.companyId,
+            customerNo: customerInfo.value.customerNo,
+            customerGroupId: customerInfo.value.customerGroupId,
+            country: customerInfo.value.country,
+            accountCurrency: state.currency,
+            paymentChannelClientType: 'mobile',
+            paymentChannelCode: state.paymentInfo.paymentCode,
+            paymentChannelType: state.paymentInfo.paymentType,
+            paymentMerchantNo: state.paymentInfo.merchantNo
+        }
+
+        // 获取直充支付通道支持币种信息
+        const getChainInfo = () => {
+            getCryptoBlockchainInfo({
+                currency: state.currency,
+                paymentCode: state.paymentCode
+            }).then(res => {
+                state.loading = false
+                if (res.check()) {
+                    state.chainList = res.data.blockchainList
+                }
+            }).catch(() => {
+                state.loading = false
+            })
+        }
+
+        // 获取直充支付钱包地址
+        const getRechargeAddress = () => {
+            params.blockchainName = state.chainName
+            getBindRechargeAddress(params).then(res => {
+                if (res.check()) {
+                    state.address = res.data.address
+                    creatQrCode()
+                } else {
+                    state.address = ''
+                    state.showGet = true
+                }
+            }).catch(() => {
+                state.address = ''
+                state.showGet = true
+            })
+        }
+
+        // 申请绑定直充支付钱包地址
+        const applyBindAddress = () => {
+            params.blockchainName = state.chainName
+            applyRechargeBindAddress(params).then(res => {
+                if (res.check()) {
+                    state.address = res.data.address
+                    creatQrCode()
+                }
+            })
+        }
+
+        // 选择链名称
+        const selectChain = (value) => {
+            state.address = ''
+            state.chainName = value
+            // 获取直充支付钱包地址
+            getRechargeAddress()
+        }
 
         // 复制地址
         const copyAddress = () => {
@@ -106,10 +183,33 @@ export default {
             })
         }
 
+        // 创建二维码
+        const creatQrCode = () => {
+            setTimeout(() => {
+                new QRCode(qrCode.value, {
+                    text: state.address,
+                    width: 150,
+                    height: 150,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                })
+            }, 100)
+        }
+
+        onMounted(() => {
+            // 获取直充支付通道支持币种信息
+            getChainInfo()
+        })
+
         return {
             ...toRefs(state),
             currencyConfig,
-            copyAddress
+            copyAddress,
+            selectChain,
+            getRechargeAddress,
+            applyBindAddress,
+            qrCode
         }
     }
 }
@@ -205,8 +305,8 @@ export default {
     .qr-code {
         display: flex;
         justify-content: center;
-        width: rem(265px);
-        height: rem(265px);
+        width: 150px;
+        height: 150px;
         margin: rem(66px) auto 0;
         position: relative;
         img {
@@ -215,27 +315,31 @@ export default {
             position: absolute;
             top: 0;
             left: 0;
-            opacity: .2;
         }
-        .mask {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            .get {
+        .none-address {
+            img {
+                opacity: .2;
+            }
+            .mask {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                width: rem(260px);
-                height: rem(88px);
-                font-size: rem(30px);
-                color: #fff;
-                background: var(--primary);
-                border-radius: rem(10px);
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                .get {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: rem(260px);
+                    height: rem(88px);
+                    font-size: rem(30px);
+                    color: #fff;
+                    background: var(--primary);
+                    border-radius: rem(10px);
+                }
             }
         }
     }
