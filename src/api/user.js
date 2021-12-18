@@ -206,7 +206,8 @@ export function getBindRechargeAddress (data) {
         headers: {
             version: '0.0.1',
         },
-        data
+        data,
+        toastErr: false
     })
 }
 /* 申请绑定直充支付钱包地址 */

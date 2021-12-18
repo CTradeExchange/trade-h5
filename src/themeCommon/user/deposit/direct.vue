@@ -375,11 +375,11 @@ export default {
     margin: rem(30px) 0;
     padding: rem(36px) rem(25px);
     background: rgba(246, 0, 0, 0.05);
-    border: 1px solid var(--riseColor);
+    border: 1px solid #F60000;
     border-radius: rem(10px);
     .title {
         font-size: rem(40px);
-        color: var(--riseColor);
+        color: #F60000;
     }
     .des {
         margin-top: rem(26px);
