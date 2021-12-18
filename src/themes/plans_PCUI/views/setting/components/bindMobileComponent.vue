@@ -149,7 +149,7 @@ export default {
                 phone: state.mobile,
                 verifyCode: state.checkCode,
                 sendToken: state.sendToken || '11',
-                phoneArea: '+' + state.zone
+                phoneArea: state.zone
             }
 
             if (props.type === 'bind') {
