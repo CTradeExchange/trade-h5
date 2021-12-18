@@ -45,13 +45,28 @@
                 </div>
                 <div class='qr-code'>
                     <img src='/images/code.png' />
+                    <div class='mask'>
+                        <button class='get'>
+                            获取地址
+                        </button>
+                    </div>
                 </div>
-                <div class='address'>
-                    <p class=''>
+                <div class='address-box'>
+                    <p class='text'>
                         1KFHE7w8BhaENAswwryaoccDb6qcT6DbcDb6qcT6cDb6qcT6DbcDb6qcT6
                     </p>
-                    <button class='copy'></button>
+                    <button id='copy' class='copy' data-clipboard-text='111222' @click='copyAddress'>
+                        {{ $t('common.copy') }}
+                    </button>
                 </div>
+            </div>
+            <div class='warn-box'>
+                <p class='title'>
+                    {{ $t('common.warning') }}
+                </p>
+                <p class='des'>
+                    {{ $t('deposit.directTip') }}
+                </p>
             </div>
         </div>
     </div>
@@ -61,21 +76,40 @@
 import Top from '@/components/top'
 import { reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 import { currencyConfig } from './config.js'
+import { Toast, Dialog } from 'vant'
+import { useI18n } from 'vue-i18n'
+import Clipboard from 'clipboard'
 export default {
     components: {
         Top
     },
     setup () {
         const store = useStore()
+        const route = useRoute()
+        const { t } = useI18n()
         const state = reactive({
             // 当前币种
-            currency: 'USDT'
+            currency: route.query.currency,
+            // 支付通道code
+            paymentCode: route.query.paymentCode
         })
+
+        // 复制地址
+        const copyAddress = () => {
+            const clipboard = new Clipboard('#copy')
+            clipboard.on('success', e => {
+                Toast(t('common.copySuccess'))
+                // 释放内存
+                clipboard.destroy()
+            })
+        }
 
         return {
             ...toRefs(state),
-            currencyConfig
+            currencyConfig,
+            copyAddress
         }
     }
 }
@@ -95,6 +129,7 @@ export default {
     overflow-y: auto;
 }
 .module {
+    min-height: rem(850px);
     margin-top: rem(100px);
     padding: 0 rem(30px) rem(35px);
     background: var(--contentColor);
@@ -170,11 +205,82 @@ export default {
     .qr-code {
         display: flex;
         justify-content: center;
-        margin-top: rem(66px);
+        width: rem(265px);
+        height: rem(265px);
+        margin: rem(66px) auto 0;
+        position: relative;
         img {
-            width: rem(265px);
-            height: rem(265px);
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: .2;
         }
+        .mask {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            .get {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: rem(260px);
+                height: rem(88px);
+                font-size: rem(30px);
+                color: #fff;
+                background: var(--primary);
+                border-radius: rem(10px);
+            }
+        }
+    }
+    .address-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: rem(25px);
+        margin-top: rem(66px);
+        background: var(--assistColor);
+        border-radius: rem(10px);
+        .text {
+            text-align: center;
+            line-height: rem(32px);
+            word-break: break-all;
+            font-size: rem(24px);
+            color: var(--color);
+        }
+        .copy {
+            margin-top: rem(16px);
+            font-size: rem(28px);
+            font-weight: bold;
+            color: var(--primary);
+            background: none;
+        }
+    }
+}
+.warn-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+    margin: rem(30px) 0;
+    padding: rem(36px) rem(25px);
+    background: rgba(246, 0, 0, 0.05);
+    border: 1px solid var(--riseColor);
+    border-radius: rem(10px);
+    .title {
+        font-size: rem(40px);
+        color: var(--riseColor);
+    }
+    .des {
+        margin-top: rem(26px);
+        font-size: rem(24px);
+        color: var(--color);
     }
 }
 </style>

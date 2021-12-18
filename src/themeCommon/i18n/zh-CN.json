@@ -164,6 +164,7 @@
         "to": "到",
         "notFound": "未找到",
         "account": "账户",
+		"copy": "复制",
         "copySuccess": "复制成功",
         "redUp": "红涨绿跌",
         "redDown": "绿涨红跌",
@@ -181,8 +182,8 @@
         "lang": "语言",
         "dark": "黑夜模式",
         "down": "跌",
-        "up": "涨"
-       
+        "up": "涨",
+		"warning": "警告"
     },
     "faceAuth": {
         "faceDetectTip": "请正对手机，保持光线充足",
@@ -310,7 +311,8 @@
         "directDes": "采用与资产账户相同的资产充值",
         "exchange": "汇兑",
         "exchangeDes": "采用与资产账户不同的资产充值",
-        "immediateRecharge": "立即充值"
+        "immediateRecharge": "立即充值",
+		"directTip": "请注意核对币种，其他币种转入此地址将无法找回"
     },
     "fund": {
         "marginLevel": "保证金水平",
@@ -622,7 +624,6 @@
         "withdrawMethod": "请选择取款方式",
         "withdrawDigitsTip": "取款金额小数位不能大于账户货币小数位",
         "tips1": "暂不可取款，请稍后再试或联系客服"
-        
     },
     "withdrawMoney": {
         "moneyName": "提现金额",

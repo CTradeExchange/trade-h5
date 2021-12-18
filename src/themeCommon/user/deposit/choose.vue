@@ -34,7 +34,7 @@
                     {{ $t('deposit.rechargeWay') }}
                 </h3>
                 <div class='recharge-way'>
-                    <div :class="['item', { 'active': way === 1, 'disable': disable }]" @click='switchDirect'>
+                    <div :class="['item', { 'active': way === 1, 'disable': disable || directDisable }]" @click='switchDirect'>
                         <div class='check'>
                             <van-icon color='#fff' name='success' />
                         </div>
@@ -48,7 +48,7 @@
                             </span>
                         </div>
                     </div>
-                    <div :class="['item', { 'active': way === 2, 'disable': disable }]" @click='switchExchange'>
+                    <div :class="['item', { 'active': way === 2, 'disable': disable || exchangeDisable }]" @click='switchExchange'>
                         <div class='check'>
                             <van-icon color='#fff' name='success' />
                         </div>
@@ -76,7 +76,7 @@
 import Top from '@/components/top'
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { currencyConfig } from './config.js'
 import { queryPayType } from '@/api/user'
@@ -88,6 +88,7 @@ export default {
     setup () {
         const store = useStore()
         const route = useRoute()
+        const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             // 页面加载状态
@@ -103,7 +104,11 @@ export default {
             // 当前选中充值方式 1.直充 2.汇兑
             way: '',
             // 是否禁用所有按钮
-            disable: true
+            disable: true,
+            // 直充是否禁用
+            directDisable: true,
+            // 汇兑是否禁用
+            exchangeDisable: true
         })
         // 客户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
@@ -142,6 +147,20 @@ export default {
                 state.way = ''
             } else {
                 state.disable = false
+                state.directDisable = true
+                state.exchangeDisable = true
+                paymentTypes.map(elem => {
+                    // 直充
+                    if (elem.rechargeType.indexOf('1') !== -1) {
+                        state.directDisable = false
+                    }
+                    // 汇兑
+                    if (elem.rechargeType.indexOf('2') !== -1) {
+                        state.exchangeDisable = false
+                    }
+                })
+                // 设置默认选中充值方式
+                state.way = state.directDisable ? 2 : 1
             }
         }
 
@@ -160,20 +179,50 @@ export default {
 
         // 充值方式切换为直充
         const switchDirect = () => {
-            if (state.disable) return
+            if (state.disable || state.directDisable) return
             state.way = 1
         }
 
         // 充值方式切换汇兑
         const switchExchange = () => {
-            if (state.disable) return
+            if (state.disable || state.exchangeDisable) return
             state.way = 2
         }
 
         // 跳转到充值页面
         const goRecharge = () => {
             if (state.disable) return
-            console.log(1111)
+            const paymentTypes = state.paymentTypes
+            let item = {}
+            for (let i = 0; i < paymentTypes.length; i++) {
+                if (paymentTypes[i].rechargeType.indexOf('1') !== -1) {
+                    item = paymentTypes[i]
+                    break
+                }
+            }
+            switch (state.way) {
+                // 跳转到直充页面
+                case 1:
+                    router.push({
+                        path: '/depositDirect',
+                        query: {
+                            currency: state.accountInfo.currency,
+                            paymentCode: item.paymentCode
+                        }
+                    })
+                    break
+                // 跳转到汇兑页面
+                case 2:
+                    router.push({
+                        path: '/deposit',
+                        query: {
+                            tradeType: state.tradeType,
+                            currency: state.accountInfo.currency,
+                            accountId: state.accountInfo.accountId
+                        }
+                    })
+                    break
+            }
         }
 
         return {
