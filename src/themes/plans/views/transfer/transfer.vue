@@ -37,11 +37,8 @@
                 </div>
             </div>
 
-            <!-- <p class='header mt60'>
-                {{ $t('trade.orderVolume') }}
-            </p> -->
             <p class='header mt60'>
-                资产
+                {{ $t('trade.asset') }}
             </p>
             <div class='action-bar mb60' @click='pickerShow=true'>
                 <span class='label'>
