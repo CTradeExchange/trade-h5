@@ -6,5 +6,5 @@ export const currencyConfig = {
     'USDT': 'Tether',
     'REEF': 'Reef Finance',
     'SAND': 'The Sandbox',
-    'Link': 'ChainLink'
+    'LINK': 'ChainLink'
 }

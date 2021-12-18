@@ -1,6 +1,10 @@
 <template>
     <div class='page-wrap'>
+        <!-- 头部导航栏 -->
         <Top back show-center />
+        <!-- 页面加载状态 -->
+        <Loading :show='loading' />
+        <!-- 页面内容 -->
         <div class='page-content'>
             <!-- 资产账户 -->
             <div class='asset-account'>
@@ -30,7 +34,7 @@
                     {{ $t('deposit.rechargeWay') }}
                 </h3>
                 <div class='recharge-way'>
-                    <div :class="['item', { 'active': way === 1 }]" @click='switchDirect'>
+                    <div :class="['item', { 'active': way === 1, 'disable': disable }]" @click='switchDirect'>
                         <div class='check'>
                             <van-icon color='#fff' name='success' />
                         </div>
@@ -44,7 +48,7 @@
                             </span>
                         </div>
                     </div>
-                    <div :class="['item', { 'active': way === 2 }]" @click='switchExchange'>
+                    <div :class="['item', { 'active': way === 2, 'disable': disable }]" @click='switchExchange'>
                         <div class='check'>
                             <van-icon color='#fff' name='success' />
                         </div>
@@ -59,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-                <div class='recharge-btn disable'>
+                <div :class="['recharge-btn', { 'disable': disable }]" @click='goRecharge'>
                     <span>{{ $t('deposit.immediateRecharge') }}</span>
                     <van-icon class='arrow' name='arrow' />
                 </div>
@@ -75,6 +79,8 @@ import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { currencyConfig } from './config.js'
+import { queryPayType } from '@/api/user'
+import { Toast, Dialog } from 'vant'
 export default {
     components: {
         Top
@@ -82,31 +88,92 @@ export default {
     setup () {
         const store = useStore()
         const route = useRoute()
-        const t = useI18n({ useScope: 'global' })
+        const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
+            // 页面加载状态
+            loading: false,
             // 玩法类型
             tradeType: route.query.tradeType,
+            // 支付通道列表
+            paymentTypes: [],
             // 当前选中币种索引
-            activeIndex: 0,
+            activeIndex: '',
+            // 当前选中币中账户
+            accountInfo: {},
             // 当前选中充值方式 1.直充 2.汇兑
-            way: 1
+            way: '',
+            // 是否禁用所有按钮
+            disable: true
         })
+        // 客户信息
+        const customerInfo = computed(() => store.state._user.customerInfo)
         // 账户列表
-        const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.tradeType)))
+        const accountList = computed(() => customerInfo.value.accountList?.filter(el => Number(el.tradeType) === Number(state.tradeType)))
+
+        // 获取支付通道
+        const getPayTypes = () => {
+            const accountInfo = state.accountInfo
+            const params = {
+                tradeType: state.tradeType,
+                companyId: customerInfo.value.companyId,
+                customerNo: customerInfo.value.customerNo,
+                customerGroupId: customerInfo.value.customerGroupId,
+                country: customerInfo.value.country,
+                clientType: 'mobile',
+                accountCurrency: accountInfo.currency,
+                accountId: accountInfo.accountId
+            }
+            queryPayType(params).then(res => {
+                if (res.check()) {
+                    state.paymentTypes = res.data
+                    filterPayment()
+                } else {
+                    state.paymentTypes = []
+                    filterPayment()
+                }
+            })
+        }
+
+        // 过滤支付通道数据
+        const filterPayment = () => {
+            const paymentTypes = state.paymentTypes
+            if (paymentTypes.length === 0) {
+                state.disable = true
+                state.way = ''
+            } else {
+                state.disable = false
+            }
+        }
 
         // 切换币种
         const switchCurrency = (index) => {
-            state.activeIndex = index
+            if (state.activeIndex === index) {
+                state.activeIndex = ''
+                state.accountInfo = {}
+            } else {
+                state.activeIndex = index
+                state.accountInfo = accountList.value[index]
+                // 获取支付通道
+                getPayTypes()
+            }
         }
 
         // 充值方式切换为直充
         const switchDirect = () => {
+            if (state.disable) return
             state.way = 1
         }
 
         // 充值方式切换汇兑
         const switchExchange = () => {
+            if (state.disable) return
             state.way = 2
+        }
+
+        // 跳转到充值页面
+        const goRecharge = () => {
+            if (state.disable) return
+            console.log(1111)
         }
 
         return {
@@ -115,7 +182,8 @@ export default {
             currencyConfig,
             switchCurrency,
             switchDirect,
-            switchExchange
+            switchExchange,
+            goRecharge
         }
     }
 }
@@ -267,7 +335,7 @@ export default {
                 }
             }
         }
-        &.disable {
+        .disable {
             background: var(--lineColor);
             opacity: .5;
         }

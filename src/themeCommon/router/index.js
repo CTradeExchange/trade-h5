@@ -152,6 +152,16 @@ const routes = [
         }
     },
     {
+        path: '/depositDirect',
+        name: 'DepositDirect',
+        component: () => import(/* webpackChunkName: "addBank" */ '../user/deposit/direct.vue'),
+        meta: {
+            title: 'cRoute.deposit',
+            footerMenu: false,
+            roles: [],
+        }
+    },
+    {
         path: '/depositRecord',
         name: 'DepositRecord',
         component: () => import(/* webpackChunkName: "addBank" */ '../user/deposit/depositRecord.vue'),

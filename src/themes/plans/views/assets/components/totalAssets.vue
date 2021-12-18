@@ -105,7 +105,7 @@ export default {
             if (!checkAssets()) return
             if (accountList.value.length > 1) {
                 router.push({
-                    path: '/chooseAccount',
+                    path: Number(tradeType.value) === 3 ? '/chooseAccount' : '/depositChoose',
                     query: {
                         tradeType: tradeType.value,
                         type: Number(tradeType.value) === 3 ? 1 : 2 // type =1 借款 2 充值
