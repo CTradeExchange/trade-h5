@@ -303,10 +303,10 @@ export default {
                 width: rem(30px);
                 height: rem(30px);
                 background: var(--primary);
-                border-radius: 0 0 0 rem(10px);
+                border-radius: 0 rem(10px) 0 rem(10px);
                 position: absolute;
-                top: 0;
-                right: 0;
+                top: -1px;
+                right: -1px;
                 &:deep(.van-icon) {
                     margin-top: rem(-5px);
                 }
@@ -336,7 +336,7 @@ export default {
             border: 1px solid transparent;
             border-radius: rem(10px);
             position: relative;
-             &:last-of-type {
+            &:last-of-type {
                 margin-bottom: 0;
             }
             .check {
@@ -371,10 +371,10 @@ export default {
                 width: rem(30px);
                 height: rem(30px);
                 background: var(--primary);
-                border-radius: 0 0 0 rem(10px);
+                border-radius: 0 rem(10px) 0 rem(10px);
                 position: absolute;
-                top: 0;
-                right: 0;
+                top: -1px;
+                right: -1px;
                 &:deep(.van-icon) {
                     margin-top: rem(-5px);
                 }

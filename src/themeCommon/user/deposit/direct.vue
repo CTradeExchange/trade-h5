@@ -190,8 +190,8 @@ export default {
                     text: state.address,
                     width: 150,
                     height: 150,
-                    colorDark: '#000000',
-                    colorLight: '#ffffff',
+                    colorDark: localGet('invertColor') === 'light' ? '#000000' : '#ffffff',
+                    colorLight: localGet('invertColor') === 'light' ? '#ffffff' : '#000000',
                     correctLevel: QRCode.CorrectLevel.H
                 })
             }, 100)
@@ -292,10 +292,10 @@ export default {
                 width: rem(30px);
                 height: rem(30px);
                 background: var(--primary);
-                border-radius: 0 0 0 rem(10px);
+                border-radius: 0 rem(10px) 0 rem(10px);
                 position: absolute;
-                top: 0;
-                right: 0;
+                top: -1px;
+                right: -1px;
                 &:deep(.van-icon) {
                     margin-top: rem(-5px);
                 }
