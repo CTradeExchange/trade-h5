@@ -50,7 +50,7 @@ export default {
     },
     data () {
         return {
-            hrefList: hrefList,
+            hrefList: hrefList.filter(item => (!item.notHref)),
             elementConfig: [],
         }
     },
