@@ -59,6 +59,6 @@ export const getThemeModules = async () => {
         floatComp,
         // registerType,
         // serviceAgreement,
-        productsWithIcon
+        // productsWithIcon
     ]
 }
