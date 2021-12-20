@@ -1,17 +1,17 @@
 <template>
     <div class='right-board'>
         <el-tabs v-model='currentTab' class='center-tabs' @tab-click='handleTabClick'>
-            <el-tab-pane label='组件属性' name='field'>
+            <el-tab-pane :label="$t('editor.componentProperties')" name='field'>
                 <el-scrollbar class='right-scrollbar'>
                     <el-form v-if='activated' label-width='90px' size='small'>
                         <div class='base-setting'>
                             <el-popconfirm
                                 v-if='!element.hidden'
-                                cancel-button-text='取消'
-                                confirm-button-text='删除'
+                                :cancel-button-text="$t('cancel')"
+                                :confirm-button-text="$t('editor.delete')"
                                 icon='el-icon-info'
                                 icon-color='red'
-                                title='确定要删除该组件吗？'
+                                :title="$t('editor.tip1')"
                                 @confirm='deleteElement'
                             >
                                 <template #reference>
@@ -23,10 +23,10 @@
 
                             <template v-if='!element.hideUserRole'>
                                 <el-divider content-position='left'>
-                                    <h3> {{ $t('editor.basicSettings') }}</h3>
+                                    <h3> {{$t('editor.basicSettings')}}</h3>
                                 </el-divider>
                                 <div class='setting-wrap'>
-                                    <el-form-item label='账户状态'>
+                                    <el-form-item :label="$t('editor.accountStatus')">
                                         <el-checkbox-group v-model='activeData.accountType'>
                                             <el-checkbox label='G'>
                                                 {{ $t('editor.tourist') }}
@@ -45,13 +45,13 @@
                                         </el-checkbox> -->
                                         </el-checkbox-group>
                                     </el-form-item>
-                                    <el-form-item label='有效期'>
+                                    <el-form-item :label="$t('editor.validPeriod')">
                                         <el-date-picker
                                             v-model='activeData.expiryDate'
-                                            end-placeholder='结束日期'
+                                            :end-placeholder="$t('editor.endDate')"
                                             format='YYYY-MM-DD HH:mm:ss'
-                                            range-separator='至'
-                                            start-placeholder='开始日期'
+                                            :range-separator="$t('editor.to')"
+                                            :start-placeholder="$t('editor.startDate')"
                                             type='datetimerange'
                                             :unlink-panels='true'
                                         />
@@ -85,22 +85,22 @@
                 <!-- {{ elementConfig }} -->
                 </el-scrollbar>
             </el-tab-pane>
-            <el-tab-pane label='组件扩展' name='extend'>
+            <el-tab-pane :label="$t('editor.componentExtension')" name='extend'>
                 <el-scrollbar v-if='activated' class='right-scrollbar' label-width='90px'>
                     <el-form label-width='90px' size='small'>
                         <el-divider content-position='left'>
                             {{ $t('editor.spacingSetting') }}
                         </el-divider>
                         <div class='m-spaceSetting'>
-                            <el-input v-model="activeData.style['margin-top']" class='spaceInput top' placeholder='上间距' />
-                            <el-input v-model="activeData.style['margin-right']" class='spaceInput right' placeholder='右间距' />
-                            <el-input v-model="activeData.style['margin-bottom']" class='spaceInput bottom' placeholder='下间距' />
-                            <el-input v-model="activeData.style['margin-left']" class='spaceInput left' placeholder='左间距' />
+                            <el-input v-model="activeData.style['margin-top']" class='spaceInput top' :placeholder="$t('editor.upperSpacing')" />
+                            <el-input v-model="activeData.style['margin-right']" class='spaceInput right' :placeholder="$t('editor.rightSpacing')" />
+                            <el-input v-model="activeData.style['margin-bottom']" class='spaceInput bottom' :placeholder="$t('editor.bottomSpacing')" />
+                            <el-input v-model="activeData.style['margin-left']" class='spaceInput left' :placeholder="$t('editor.leftSpacing')" />
                             <div class='margin'>
-                                <el-input v-model="activeData.style['padding-top']" class='spaceInput top' placeholder='上填充' />
-                                <el-input v-model="activeData.style['padding-right']" class='spaceInput right' placeholder='右填充' />
-                                <el-input v-model="activeData.style['padding-bottom']" class='spaceInput bottom' placeholder='下填充' />
-                                <el-input v-model="activeData.style['padding-left']" class='spaceInput left' placeholder='左填充' />
+                                <el-input v-model="activeData.style['padding-top']" class='spaceInput top' :placeholder="$t('editor.fillUp')" />
+                                <el-input v-model="activeData.style['padding-right']" class='spaceInput right' :placeholder="$t('editor.rightFill')" />
+                                <el-input v-model="activeData.style['padding-bottom']" class='spaceInput bottom' :placeholder="$t('editor.underFill')" />
+                                <el-input v-model="activeData.style['padding-left']" class='spaceInput left' :placeholder="$t('editor.leftPadding')" />
                                 <div class='padding'>
                                     {{ $t('editor.component') }}
                                 </div>
@@ -116,7 +116,7 @@
                                 {{ $t('editor.delete') }}
                             </el-button>
                         </el-divider>
-                        <el-form-item label='组件ID'>
+                        <el-form-item :label="$t('editor.componentId')">
                             <el-input :disabled='true' :value='element.id' />
                         </el-form-item>
                         <!--<el-form-item label='绑定组件ID'>
@@ -124,7 +124,7 @@
                                 <el-option v-for='item in showElementList' :key='item.id' :label='item.id' :value='item.id' />
                             </el-select>
                         </el-form-item> -->
-                        <el-form-item v-if='activeData.linkComp' label='组件对齐'>
+                        <el-form-item v-if='activeData.linkComp' :label="$t('editor.componentAlignment')">
                             <el-radio-group v-model='activeData.linkCompPosition'>
                                 <el-radio label='top-right'>
                                     {{ $t('editor.upperRightCorner') }}

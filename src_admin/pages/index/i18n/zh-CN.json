@@ -131,6 +131,7 @@
         "tradeTypes3":"杠杆",
         "tradeTypes5":"现货",
         "tradeTypes9":"ABCC杠杆",
+
         "tradeTypes":{
             "1": "合约全仓",
             "2": "合约逐仓",
@@ -138,11 +139,5 @@
             "5": "现货",
             "9": "ABCC杠杆"
         }
-    },
-    "quote": {
-        "style_1": "样式1",
-        "style_2": "样式2",
-        "style_3": "样式3",
-        "style_4": "样式4"
     }
 }

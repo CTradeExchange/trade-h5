@@ -9,9 +9,8 @@ import ElementPlus, { ElMessage } from 'element-plus'
 import VueParticles from 'vue-particles'
 // import 'element-plus/lib/theme-chalk/index.css'
 import 'element-plus/dist/index.css'
-import i18n, { setI18nLanguage, loadLocaleMessages, getUrlLang } from './i18n/i18n.js'
-import { localGet, localSet } from '@/utils/util'
-import Socket from '@/plugins/socket/socket'
+import i18n, { setI18nLanguage, loadLocaleMessages , getUrlLang }  from './i18n/i18n.js'
+import {localGet,localSet} from '@/utils/util';
 
 const app = createApp(App)
 app.config.globalProperties.$message = ElMessage
@@ -19,10 +18,9 @@ app.config.globalProperties.$message = ElMessage
 app.use(ElementPlus).use(store).use(router).use(i18n)
 app.component(RightForm.name, RightForm)
 app.use(VueParticles)
-const lang = localGet('lang') || getUrlLang()
+const lang = localGet("lang") || getUrlLang()
 setI18nLanguage(i18n, lang)
 loadLocaleMessages(i18n, lang)
-app.use(Socket, { $store: store, $router: router })
 // Vue.config.productionTip = false;
 // Vue.component('RightForm',RightForm);
 // new Vue({

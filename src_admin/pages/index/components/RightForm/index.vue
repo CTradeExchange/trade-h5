@@ -243,9 +243,6 @@
                         </el-col>
                     </el-row>
                 </div>
-                <template v-if="config.type == 'custom'">
-                    <component :is='config.component' :active-data='activeData' @update:activeData='updateActiveData' />
-                </template>
             </template>
         </div>
     </div>
@@ -355,15 +352,6 @@ export default {
 
             // this.activeData[key] = { ...data, tradeTypeCollect: { value: type, data } }
             // this.$store.commit('editor/UPDATE_FORM_DATA', {key:key,value:data})
-        },
-        updateActiveData (key, val) {
-            if (typeof key === 'string') {
-                // 修改单个字段
-                Object.assign(this.activeData, { [key]: val })
-            } else {
-                // 合并多字段
-                Object.assign(this.activeData, key)
-            }
         }
     }
 }
