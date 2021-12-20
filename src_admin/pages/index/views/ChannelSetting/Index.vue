@@ -35,7 +35,7 @@
         <el-row>
             <el-col class='btns' :span='24'>
                 <el-form ref='form' label-width='110px' :model='form' :rules='rules'>
-                    <el-tabs v-model='optionName' type='border-card' @tab-click="changeTabs">
+                    <el-tabs v-model='optionName' type='border-card' @tab-click='changeTabs'>
                         <el-tab-pane class='tab' :label="$t('channelSetting.basicSetting')" name='first'>
                             <el-form-item
                                 :label="$t('channelSetting.registerableCode')"
@@ -229,7 +229,7 @@
                                 </el-select>
                             </el-form-item>
 
-                            <el-form-item v-if='configLoaded' :label="$t('channelSetting.openAccountNotice1')" prop='instructions'>
+                            <el-form-item v-if='configLoaded && !isPC' :label="$t('channelSetting.openAccountNotice1')" prop='instructions'>
                                 <Tinymce
                                     v-model='form.instructions_zh'
                                     :height='120'
@@ -237,7 +237,7 @@
                                     :width='800'
                                 />
                             </el-form-item>
-                            <el-form-item v-if='configLoaded' :label="$t('channelSetting.openAccountNotice2')" prop='instructions'>
+                            <el-form-item v-if='configLoaded && !isPC' :label="$t('channelSetting.openAccountNotice2')" prop='instructions'>
                                 <Tinymce
                                     v-model='form.instructions_en'
                                     :height='120'
@@ -245,7 +245,7 @@
                                     :width='800'
                                 />
                             </el-form-item>
-                            <el-form-item :label="$t('channelSetting.worthMentioning')">
+                            <el-form-item v-if='!isPC' :label="$t('channelSetting.worthMentioning')">
                                 <el-checkbox-group v-model='form.thirdLogin'>
                                     <el-checkbox label='google'>
                                         Google
@@ -359,7 +359,7 @@
                         <el-tab-pane class='tab' :label="$t('channelSetting.interfaceSettings')" name='third'>
                             <amount-set ref='amountSet' />
                         </el-tab-pane>
-                        <el-tab-pane class='tab' :label="$t('channelSetting.tradeTypeNameSetting')" name='fourth' style='padding-right: 100px;' v-loading="fourthLoading">
+                        <el-tab-pane v-loading='fourthLoading' class='tab' :label="$t('channelSetting.tradeTypeNameSetting')" name='fourth' style='padding-right: 100px;'>
                             <el-row :gutter='20' style='justify-content: center;'>
                                 <el-col :span='3'>
                                     <el-form-item />
@@ -492,6 +492,7 @@ export default {
         return {
             configLoaded: false,
             optionName: 'first', // 当前选项卡
+            isPC: process.env.VUE_APP_theme === 'plans_PCUI',
             form: {
                 tradeTypeCurrencyList: [],
                 thirdLogin: [],
@@ -580,7 +581,7 @@ export default {
                 'hsla(209, 100%, 56%, 0.73)',
                 '#c7158577',
             ],
-            fourthLoading:true
+            fourthLoading: true
         }
     },
     computed: {
@@ -601,8 +602,8 @@ export default {
         console.log('asdasd', this.form)
     },
     methods: {
-        changeTabs(val){
-            if(val.index==3){
+        changeTabs (val) {
+            if (val.index == 3) {
                 this.getTradeTypeAccountGroupSymbol()
             }
         },
@@ -611,46 +612,46 @@ export default {
             tradeTypeAccountGroupSymbol()
                 .then(res => {
                     if (!res.success) {
-                        this.fourthLoading = false;
+                        this.fourthLoading = false
                         that.$message.error(res.message)
                         return
                     }
                     if (!res.data) {
-                        this.fourthLoading = false;
+                        this.fourthLoading = false
                         return
                     }
                     that.tradeTypesTemplate = {}
                     res.data.forEach(el => {
                         that.tradeTypesTemplate[el.id] = ''
                     })
-                    //根据获取到得玩法过滤回显得数据
-                    const targetKeys = Object.keys(that.tradeTypesTemplate);
-                    const langKeys = Object.keys(that.form.tradeTypesConfig);
-                    langKeys.forEach(el=>{
-                       if(Object.keys(that.form.tradeTypesConfig[el]).length){
-                           //tradeTypesConfig中多于配置返回的玩法删除
-                           for(let key in that.form.tradeTypesConfig[el]){
-                                if(!targetKeys.includes(key)){
+                    // 根据获取到得玩法过滤回显得数据
+                    const targetKeys = Object.keys(that.tradeTypesTemplate)
+                    const langKeys = Object.keys(that.form.tradeTypesConfig)
+                    langKeys.forEach(el => {
+                        if (Object.keys(that.form.tradeTypesConfig[el]).length) {
+                            // tradeTypesConfig中多于配置返回的玩法删除
+                            for (const key in that.form.tradeTypesConfig[el]) {
+                                if (!targetKeys.includes(key)) {
                                     delete that.form.tradeTypesConfig[el][key]
                                 }
                             }
-                            //tradeTypesConfig中没有的配置返回的玩法加上
-                            let tradeTypesConfigChildKeys = Object.keys(that.form.tradeTypesConfig[el]);
-                            targetKeys.forEach(item=>{
-                                if(!tradeTypesConfigChildKeys.includes(item)){
-                                    that.form.tradeTypesConfig[el][item] = "";
+                            // tradeTypesConfig中没有的配置返回的玩法加上
+                            const tradeTypesConfigChildKeys = Object.keys(that.form.tradeTypesConfig[el])
+                            targetKeys.forEach(item => {
+                                if (!tradeTypesConfigChildKeys.includes(item)) {
+                                    that.form.tradeTypesConfig[el][item] = ''
                                 }
                             })
-                        }else{
-                            that.form.tradeTypesConfig[el] = JSON.parse(JSON.stringify(that.tradeTypesTemplate));
+                        } else {
+                            that.form.tradeTypesConfig[el] = JSON.parse(JSON.stringify(that.tradeTypesTemplate))
                         }
-                    }) 
-                    this.fourthLoading = false;
+                    })
+                    this.fourthLoading = false
                 })
                 .catch(error => {
                     console.log(error)
-                    this.fourthLoading = false;
-                }) 
+                    this.fourthLoading = false
+                })
         },
         getPageConfig () {
             this.getLoading = true
