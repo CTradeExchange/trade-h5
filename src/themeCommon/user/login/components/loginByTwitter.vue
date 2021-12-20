@@ -2,13 +2,14 @@
     <a id='my-sign-twitter' class='loginByGoogle' @click="login_twitter('twitter')">
         <i class='icon'></i>
     </a>
-    <!-- <Loading :show='loading' /> -->
+    <Loading :show='loading' />
     <!-- 请补充您所在国家信息 -->
     <van-action-sheet
         v-model:show='bindAddShow'
         :actions='areaActions'
         teleport='#app'
         :title='$t("login.inputCountry")'
+        @close='loading = false'
         @select='onSelectCountry'
     />
 </template>
@@ -33,18 +34,14 @@ export default {
         const { handleCBLogin, onSelectCountry, areaActions } = hooks(state)
         const appId = computed(() => store.state._base.thirdLoginConfig.find(el => el.thirdSource === 'twitter')?.clientId)
         const login_twitter = (network) => { // 登录方法，并将twitter 作为参数传入
-            // Twitter instance
-            console.log(network)
             var twitter = hello(network)
-            console.log(twitter)
             // Login
             twitter.login().then(function (res) {
                 // Get Profile
-                console.log(JSON.stringify(res))
                 handleCBLogin(res.authResponse)
                 return twitter.api('/me')
+            }, function (err) {
             }).then(function (p) {
-
             })
         }
 

@@ -17,7 +17,7 @@ export default function ({ tradeType, categoryType }) {
             id: 'selfSymbol',
             listByUser: Array.isArray(listByUser) ? listByUser : [listByUser]
         }
-        const tradeTypeQuote = unref(userProductCategory)[unref(tradeType)] || []
+        const tradeTypeQuote = (unref(userProductCategory)[unref(tradeType)] || []).filter(e => e.listByUser.length)
 
         return [
             selfSymbol,

@@ -12,7 +12,7 @@
 <script setup>
 import { ref, watch, unref, computed } from 'vue'
 import PlansType from './PlansType'
-import useProduct from '@plans/hooks/useProduct'
+import useProduct from '@planspc/hooks/useProduct'
 import ProductList from './ProductList'
 import CategoryList from './CategoryList'
 import Autocomplete from './Autocomplete'
@@ -25,7 +25,7 @@ const { categoryList, productList } = useProduct({
 })
 
 const computedCategoryList = computed((el) => {
-    const list = [...unref(categoryList)].filter(e => e.listByUser.length)
+    const list = [...unref(categoryList)]
     list.forEach(el => {
         if (el.id === 'selfSymbol') {
             el.slot = {

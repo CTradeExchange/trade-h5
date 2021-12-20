@@ -303,16 +303,6 @@ export default {
             return this.$store.state.editor.tradeTypeBlockProduct
         }
     },
-    watch: {
-        'this.activeData': {
-            handler (newVal, old) {
-                console.log('obj.a changed', newVal)
-            },
-            immediate: true,
-            deep: true
-        }
-
-    },
     created () {
         // console.log('---activeData-----', this.activeData)
     },
@@ -325,8 +315,8 @@ export default {
             })
         },
         deleteRow (formConfig, data, index) {
-            this.$store.commit('editor/DELETE_FROM_ROW', { formConfig: formConfig, data: data, index }) 
-        },      
+            this.$store.commit('editor/DELETE_FROM_ROW', { formConfig: formConfig, data: data, index })
+        },
         onEnd (evt) {
             // 更新表单结果
             console.log(evt)

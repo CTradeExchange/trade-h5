@@ -180,6 +180,10 @@ export default {
             router.push(`/order?symbolId=${symbolId}&tradeType=${tradeType.value}`)
         }
 
+        watch(() => tradeType.value, () => {
+            categoryType.value = 0
+        })
+
         // 监听玩法类型、分类类型
         watch([tradeType, categoryType, productList], () => {
             setProducts()

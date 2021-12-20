@@ -9,14 +9,19 @@
         :actions='areaActions'
         teleport='#app'
         :title='$t("login.inputCountry")'
+        @close='loading = false'
         @select='onSelectCountry'
     />
+    <!-- <van-button type='primary' @click='login_google("google")'>
+        测试google
+    </van-button> -->
 </template>
 
 <script>
 import { reactive, toRefs, computed, onMounted, watch, getCurrentInstance } from 'vue'
 import loadScript from '@/utils/loadScript'
 import { useI18n } from 'vue-i18n'
+import hello from 'hellojs/dist/hello.all.min.js'
 import { useStore } from 'vuex'
 import hooks from '../loginHooks'
 export default {
@@ -65,10 +70,29 @@ export default {
             })
         }
 
+        // const login_google = (network) => {
+        //     state.loading = true
+        //     var google = hello(network)
+        //     // Login
+        //     google.login().then(function (res) {
+        //         state.loading = false
+        //         // Get Profile
+        //         handleCBLogin(res.authResponse)
+        //         return google.api('/me')
+        //     }, function (err) {
+        //         state.loading = false
+        //     }).then(function (p) {
+        //         state.loading = false
+        //     })
+        // }
+
         watch(
             () => appId.value, (val) => {
                 if (val) {
                     renderBtn()
+                    // hello.init({
+                    //     'google': val,
+                    // }, { redirect_uri: window.location.href })
                 }
             }, {
                 immediate: true
@@ -78,6 +102,7 @@ export default {
         return {
             areaActions,
             onSelectCountry,
+            // login_google,
             ...toRefs(state)
         }
     }

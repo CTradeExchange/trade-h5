@@ -1,5 +1,5 @@
 <template>
-    <div  class='svg-wrap'>
+    <div class='svg-wrap'>
         <svg :height='height' :width='width'>
             <polyline :points='points' :stroke="$style[product.upDownColor] || '#333'" stroke-width='1.5' style='fill: none;' />
         </svg>
@@ -47,7 +47,7 @@ export default {
                 let points = ''
                 // 统一处理y坐标，垂直向上偏移，也即是y坐标最高点归零
                 rawData.forEach(y => {
-                    points += x + ' ' + ((y - min) * rodio) + ' '
+                    points += x + ' ' + ((max - y) * rodio) + ' '
                     x += s
                 })
                 return points

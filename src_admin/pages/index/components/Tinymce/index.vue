@@ -155,6 +155,9 @@ export default {
                     editor.on('FullscreenStateChanged', (e) => {
                         _this.fullscreen = e.state
                     })
+                    editor.on('change', (e) => {
+                        editor.save() // 自动保存，tinymce 关闭离开页面时confirm提示框
+                    })
                 },
                 // it will try to keep these URLs intact
                 // https://www.tiny.cloud/docs-3x/reference/configuration/Configuration3x@convert_urls/

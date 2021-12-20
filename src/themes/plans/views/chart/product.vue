@@ -550,7 +550,7 @@ export default {
             localSetChartConfig('chartType', klineType)
 
             property.chartType = klineType
-            state.onChartReadyFlag && unref(chartRef).updateProperty(property)
+            // state.onChartReadyFlag && unref(chartRef).updateProperty(property)
             klineTypeDropdown.value.toggle()
         }
 

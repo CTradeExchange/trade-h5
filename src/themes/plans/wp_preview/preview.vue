@@ -258,6 +258,7 @@ export default {
 .drawing-board>div {
     position: relative;
     min-height: 15px;
+    overflow: hidden;
     &::after {
         position: absolute;
         top: 0;

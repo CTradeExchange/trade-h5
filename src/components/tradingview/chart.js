@@ -154,7 +154,7 @@ class Chart {
         })
 
         // 覆盖图表属性
-        Object.assign(options.overrides, this._setProperty(this.property, {}))
+        Object.assign(options.overrides, this._setProperty(this.property))
 
         return options
     }
@@ -458,11 +458,11 @@ class Chart {
 
     // 覆盖图表属性
     _applyOverrides (config) {
-        const options = this._setProperty(config, {})
+        const options = this._setProperty(config)
         this.widget.applyOverrides(options)
     }
 
-    _setProperty (property, overrides) {
+    _setProperty (property, overrides = {}) {
         Object.keys(property || {}).forEach(key => {
             switch (key) {
             case 'showSeriesTitle':
@@ -485,7 +485,7 @@ class Chart {
                 break
             }
             case 'chartType': {
-                overrides['mainSeriesProperties.style'] = property.chartType ? property.chartType * 1 : 1
+                overrides['mainSeriesProperties.style'] = Number(property.chartType)
                 break
             }
             }
@@ -567,10 +567,12 @@ class Chart {
     }
 
     // 切换图表类型
-    setChartType = (type) => {
-        if (typeof type === 'number' && !isNaN(type)) {
+    setChartType = (chartType) => {
+        if (typeof chartType === 'number' && !isNaN(chartType)) {
             // 0:Bar 1:Candle 2:Line 3:Area ,8:Heikin-Ashi ,9: Hollow Candle 10: Baseline 12 10Hi-Lo
-            this.widget.activeChart().setChartType(type)
+            this._applyOverrides({
+                chartType
+            })
         }
     }
 
@@ -670,9 +672,8 @@ class Chart {
     }
 
     // 覆盖图表配置
-    updateProperty (config) {
+    updateProperty (config = {}) {
         this._applyOverrides(config)
-        config.property && this.setChartType(config.property.chartType)
         if (typeof config.showPositionPrice === 'boolean') {
             !config.showPositionPrice && this.updatePosition()
         }

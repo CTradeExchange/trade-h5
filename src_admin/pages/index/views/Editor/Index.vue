@@ -413,9 +413,9 @@ export default {
                         // if (item.data.code_ids_all) delete item.data.code_ids_all
                     }
 
-                    const activated = store.state.editor.activated
+                    // const activated = store.state.editor.activated
                     if (['selfSymbol', 'productsSwipe', 'productsTimeSharing', 'bannerProducts'].includes(item.tag)) {
-                        if (tradeTypeSelfSymbol[activated]) item.data.product = tradeTypeSelfSymbol[activated]
+                        if (tradeTypeSelfSymbol[item.id]) item.data.product = tradeTypeSelfSymbol[item.id]
                     } else if (['productsWithIcon'].includes(item.tag)) {
                         if (activeIndex.value) { item.data.items[activeIndex.value].product = store.state.editor.tradeTypeSelfSymbol }
                     }
