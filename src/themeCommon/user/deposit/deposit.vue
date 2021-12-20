@@ -186,7 +186,7 @@ export default {
             // 是否显示支付通道弹窗
             typeShow: false,
             // 全部支付通道
-            PayTypes: [],
+            payTypes: [],
             // 可用并排序的支付通道
             payTypesSortEnable: [],
             // 当前选择的支付通道
@@ -308,10 +308,10 @@ export default {
         }
 
         // 监听当前存款金额
-        watch([() => state.amount, () => state.PayTypes], () => {
-            if (state.PayTypes.length > 0 && state.amount) {
+        watch([() => state.amount, () => state.payTypes], () => {
+            if (state.payTypes.length > 0 && state.amount) {
                 // 筛选在存款时间内的支付通道
-                let temp = state.PayTypes.filter(item => item.timeRangeFlag && item.openTime)
+                let temp = state.payTypes.filter(item => item.timeRangeFlag && item.openTime)
                 // 筛选在存款金额内的支付通道
                 if (state.amount) {
                     temp = temp.filter(v => (parseFloat(state.amount) >= v.singleLowAmount && parseFloat(state.amount) <= v.singleHighAmount))
@@ -385,16 +385,21 @@ export default {
                     state.loading = false
                     if (res.data && res.data.length > 0) {
                         if (res.data.length > 0) {
+                            const result = []
+                            // 过滤掉直充支付通道、设置支付通道图标
                             res.data.forEach(el => {
-                                const iconKey = el.paymentCode + '_' + el.paymentType + '_' + el.merchantNo
-                                if (paymentIconList.value[iconKey]) {
-                                    el.alias = paymentIconList.value[iconKey][state.lang].alias || ''
-                                    el.imgUrl = paymentIconList.value[iconKey][state.lang].imgUrl || require('@/assets/payment_icon/default.png')
-                                } else {
-                                    el.imgUrl = require('@/assets/payment_icon/default.png')
+                                if (el.rechargeType !== '1') {
+                                    const iconKey = el.paymentCode + '_' + el.paymentType + '_' + el.merchantNo
+                                    if (paymentIconList.value[iconKey]) {
+                                        el.alias = paymentIconList.value[iconKey][state.lang].alias || ''
+                                        el.imgUrl = paymentIconList.value[iconKey][state.lang].imgUrl || require('@/assets/payment_icon/default.png')
+                                    } else {
+                                        el.imgUrl = require('@/assets/payment_icon/default.png')
+                                    }
+                                    result.push(el)
                                 }
                             })
-                            state.PayTypes = res.data
+                            state.payTypes = result
                         }
 
                         // 处理时区时间
@@ -489,11 +494,11 @@ export default {
 
         // 处理支付通道存款时间
         const handleShowTime = () => {
-            if (state.PayTypes.length > 0) {
+            if (state.payTypes.length > 0) {
                 const todayStr = window.dayjs().format('YYYY-MM-DD')
                 const tomorrowStr = window.dayjs().add(1, 'day')
 
-                state.PayTypes.forEach(payItem => {
+                state.payTypes.forEach(payItem => {
                     const openTime = payItem.openTime
                     // console.log('排序前的时间', payItem.openTime)
                     let openTimeList

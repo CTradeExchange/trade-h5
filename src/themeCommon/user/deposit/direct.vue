@@ -131,6 +131,10 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     state.chainList = res.data.blockchainList
+                    if (state.chainList.length > 0) {
+                        state.chainName = state.chainList[0]
+                        getRechargeAddress()
+                    }
                 }
             }).catch(() => {
                 state.loading = false
@@ -143,6 +147,7 @@ export default {
             getBindRechargeAddress(params).then(res => {
                 if (res.check()) {
                     state.address = res.data.address
+                    state.showGet = false
                     creatQrCode()
                 } else {
                     state.address = ''
