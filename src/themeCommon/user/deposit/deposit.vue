@@ -311,7 +311,7 @@ export default {
         watch([() => state.amount, () => state.payTypes], () => {
             if (state.payTypes.length > 0 && state.amount) {
                 // 筛选在存款时间内的支付通道
-                let temp = state.payTypes.filter(item => item.timeRangeFlag && item.openTime)
+                let temp = state.payTypes.filter(item => item.timeRangeFlag || item.openTime === '')
                 // 筛选在存款金额内的支付通道
                 if (state.amount) {
                     temp = temp.filter(v => (parseFloat(state.amount) >= v.singleLowAmount && parseFloat(state.amount) <= v.singleHighAmount))
