@@ -197,7 +197,7 @@ export default {
 
             // 在线客服链接补充用户相关参数
             let onlineService = rootState._base.wpCompanyInfo?.onlineService
-            if (onlineService) {
+            if (onlineService && onlineService.indexOf('userid') === -1) {
                 const customerNo = data.customerNo
                 const customerName = data.name || ''
                 onlineService += `&userid=${customerNo}&name=${customerName}`
