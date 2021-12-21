@@ -9,7 +9,7 @@
                         type='primary'
                         @click='pushPage'
                     >
-                        保存
+                        {{$t('setting.save')}}
                     </el-button>
                     <el-button
                         :disabled='getLoading'
@@ -17,76 +17,76 @@
                         type='primary'
                         @click='getPageConfig'
                     >
-                        重置
+                        {{$t('setting.reset')}}
                     </el-button>
                 </el-button-group>
             </el-col>
         </el-row>
         <el-form ref='form' label-width='120px' :model='form'>
             <el-tabs type='border-card'>
-                <el-tab-pane class='tab' label='API设置'>
+                <el-tab-pane class='tab' :label="$t('setting.apiSettings')">
                     <el-row class='row'>
                         <el-col :span='12' :xs='24'>
                             <el-form-item label='apiKey'>
                                 <el-input
                                     v-model='form.other.apiKey'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
                             <el-form-item label='apiId'>
                                 <el-input
                                     v-model='form.other.apiId'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
                             <el-form-item label='apiUrl'>
                                 <el-input
                                     v-model='form.other.apiUrl'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
 
                             <el-form-item label='btKey'>
                                 <el-input
                                     v-model='form.other.btKey'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
 
                             <el-form-item label='btUrl'>
                                 <el-input
                                     v-model='form.other.btUrl'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
 
-                            <el-form-item label='是否更新产品信息' label-width='120'>
+                            <el-form-item :label="$t('setting.ifUpdate')" label-width='120'>
                                 <el-radio-group v-model='form.other.isInitSymbol'>
                                     <el-radio label='1'>
-                                        是
+                                        {{$t('setting.yes')}} 
                                     </el-radio>
                                     <el-radio label='0'>
-                                        否
+                                        {{$t('setting.no')}} 
                                     </el-radio>
                                 </el-radio-group>
                             </el-form-item>
                         </el-col>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane class='tab' label='基础设置'>
+                <el-tab-pane class='tab' :label="$t('editor.basicSettings')">
                     <el-row class='row'>
                         <el-col :span='12' :xs='24'>
-                            <el-form-item label='公司id'>
+                            <el-form-item :label="$t('setting.companyId')">
                                 <el-input
                                     v-model='form.companyId'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
 
-                            <el-form-item label='游客账户组'>
+                            <el-form-item :label="$t('setting.touristAccountGroup')">
                                 <el-input
                                     v-model='form.customerGroupId'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
 
@@ -121,25 +121,25 @@
                             <el-form-item label='apiService'>
                                 <el-input
                                     v-model='form.apiService'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
                             <el-form-item label='quoteService'>
                                 <el-input
                                     v-model='form.quoteService'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
                             <el-form-item label='msgService'>
                                 <el-input
                                     v-model='form.msgService'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
                             <el-form-item label='tradeService'>
                                 <el-input
                                     v-model='form.tradeService'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
 
@@ -329,10 +329,10 @@ export default {
             utcOffsetList: [-12, 13],
             tradeTypeListLoading: false,
             customerGroupList: [{
-                label: '默认客户组',
+                label: this.$t('setting.customerGroupList1'),
                 value: 1
             }, {
-                label: 'VIP客户组',
+                label: this.$t('setting.customerGroupList2'),
                 value: 2
 
             }],
@@ -511,9 +511,9 @@ export default {
                         this.$message.error(res.message)
                         return
                     }
-                    this.$confirm('发布成功', {
-                        confirmButtonText: '确认',
-                        cancelButtonText: '关闭',
+                    this.$confirm(this.$t('setting.Successful'), {
+                        confirmButtonText: this.$t('setting.confirm'),
+                        cancelButtonText: this.$t('editor.close'),
                     })
                         .then(_ => {
                         })
