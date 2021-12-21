@@ -1,10 +1,10 @@
 <template>
     <div>
-        <el-form ref='form' class='form-module' label-width='140px'>
+        <el-form ref='form' class='form-module' label-width='200px'>
             <el-tabs v-model='depositStatus'>
                 <el-tab-pane v-for='item in statusList' :key='item.label' :label='item.name' :name='item.label' />
             </el-tabs>
-            <el-form-item label='设置顺序'>
+            <el-form-item :label="$t('channelSetting.settingOrder')">
                 <el-row :gutter='gutter'>
                     <el-col v-for='(item, key) in depositData[depositStatus]' :key='depositStatus + key' class='sort-col' :span='span'>
                         <span class='label'>
@@ -13,7 +13,7 @@
                     </el-col>
                 </el-row>
             </el-form-item>
-            <el-form-item label='固定金额'>
+            <el-form-item :label="$t('channelSetting.fixedAmount')">
                 <el-row :gutter='gutter'>
                     <el-col v-for='(item, key) in depositData[depositStatus]' :key='depositStatus + key' :span='span'>
                         <el-input
@@ -26,7 +26,7 @@
                     </el-col>
                 </el-row>
             </el-form-item>
-            <el-form-item v-for='lang in langList' :key='lang.val' :label="'金额描述('+ lang.name +')'">
+            <el-form-item v-for='lang in langList' :key='lang.val' :label="$t('channelSetting.amountDescription')+ lang.name +')'">
                 <el-row :gutter='gutter'>
                     <el-col v-for='(item, key) in depositData[depositStatus]' :key='depositStatus + key' :span='span'>
                         <el-input
@@ -56,13 +56,13 @@ export default {
             // 每列占位
             span: 3,
             // 占位符提示
-            placeholder_1: '输入固定金额',
-            placeholder_2: '输入文字描述',
+            placeholder_1: this.$t('channelSetting.placeholder_1'),
+            placeholder_2: this.$t('channelSetting.placeholder_2'),
             // 存款状态选项数据
             statusList: [
-                { label: 'default', name: '默认', alias: 'isDefault' },
-                { label: 'not', name: '未存款', alias: 'isNot' },
-                { label: 'already', name: '已存款', alias: 'isAlready' }
+                { label: 'default', name: this.$t('channelSetting.default'), alias: 'isDefault' },
+                { label: 'not', name: this.$t('channelSetting.undeposited'), alias: 'isNot' },
+                { label: 'already', name: this.$t('channelSetting.deposited'), alias: 'isAlready' }
             ],
             // 当前存款状态
             depositStatus: '',

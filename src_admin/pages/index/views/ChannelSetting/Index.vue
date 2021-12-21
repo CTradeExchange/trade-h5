@@ -552,14 +552,14 @@ export default {
                 language: [
                     {
                         required: true,
-                        message: '请选择默认语言',
+                        message: this.$t('channelSetting.error2'),
                         trigger: 'blur',
                     }
                 ],
                 registList: [
                     {
                         required: true,
-                        message: '请选择注册国家',
+                        message: this.$t('channelSetting.error3'),
                         trigger: 'blur',
                     }
                 ],
