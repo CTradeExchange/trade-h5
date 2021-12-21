@@ -68,7 +68,7 @@ export default {
             return this.$store.state._quote.productActivedID
         },
         primaryColor () {
-            return Base.state.wpCompanyInfo?.themeColor || '#477fd3'
+            return Base.state.wpCompanyInfo?.themeColor || '#2B70AE'
         }
     },
     created () {

@@ -8,7 +8,7 @@
                 <!-- <div class="logo">交易H5定制平台</div> -->
             </div>
             <el-scrollbar class='left-scrollbar'>
-                <div v-if="['SelfSymbolIndex','Nav'].indexOf(pageCode)===-1" class='components-list'>
+                <div v-if="['TradeIndex','SelfSymbolIndex','Nav'].indexOf(pageCode)===-1" class='components-list'>
                     <div
                         v-for='(item, listIndex) in leftComponents'
                         :key='listIndex'
@@ -414,10 +414,11 @@ export default {
                     }
 
                     // const activated = store.state.editor.activated
+
                     if (['selfSymbol', 'productsSwipe', 'productsTimeSharing', 'bannerProducts'].includes(item.tag)) {
                         if (tradeTypeSelfSymbol[item.id]) item.data.product = tradeTypeSelfSymbol[item.id]
                     } else if (['productsWithIcon'].includes(item.tag)) {
-                        if (activeIndex.value) { item.data.items[activeIndex.value].product = store.state.editor.tradeTypeSelfSymbol }
+                        item.data.items[activeIndex.value].product = store.state.editor.tradeTypeSelfSymbol[item.id]
                     }
                 })
                 console.log('模块列表数据', config)

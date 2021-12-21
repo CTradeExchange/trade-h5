@@ -88,6 +88,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .loginByFacebook {
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;

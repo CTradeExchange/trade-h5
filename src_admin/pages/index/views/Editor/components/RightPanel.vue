@@ -23,7 +23,7 @@
 
                             <template v-if='!element.hideUserRole'>
                                 <el-divider content-position='left'>
-                                    <h3> {{ $t('editor.basicSettings') }}</h3>
+                                    <h3> {{$t('editor.basicSettings')}}</h3>
                                 </el-divider>
                                 <div class='setting-wrap'>
                                     <el-form-item :label="$t('editor.accountStatus')">

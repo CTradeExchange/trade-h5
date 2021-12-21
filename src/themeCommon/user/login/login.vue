@@ -143,7 +143,7 @@ export default {
         })
 
         const countryList = computed(() => store.state.countryList)
-        const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo.thirdLogin)
+        const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo?.thirdLogin || [])
         if (isEmpty(countryList.value) && !isEmpty(thirdLoginArr.value)) {
             // 获取国家区号
             store.dispatch('getCountryListByParentCode')
@@ -200,7 +200,7 @@ export default {
                 if (res.invalid()) return false
 
                 // 切换登录后的行情websocket
-                setQuoteService()
+                // setQuoteService()
 
                 // 登录websocket
                 instance.appContext.config.globalProperties.$MsgSocket.login()

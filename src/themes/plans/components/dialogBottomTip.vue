@@ -22,7 +22,7 @@
                 <van-button plain @click='close'>
                     {{ cancelTxt }}
                 </van-button>
-                <van-button color='#477FD3' @click='submit'>
+                <van-button color='#2B70AE' @click='submit'>
                     {{ confirmTxt }}
                 </van-button>
             </div>

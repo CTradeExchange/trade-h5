@@ -47,6 +47,16 @@
                     {{ $t('signIn.forgot') }}
                 </router-link>
             </div>
+            <div v-if='thirdLoginArr.length > 0' class='three-way-login'>
+                <p class='title'>
+                    {{ $t('login.otherLogin') }}
+                </p>
+                <div class='otherLogin'>
+                    <LoginByGoogle v-if="thirdLoginArr.includes('google')" />
+                    <LoginByFacebook v-if="thirdLoginArr.includes('facebook')" />
+                    <LoginByTwitter v-if="thirdLoginArr.includes('twitter')" />
+                </div>
+            </div>
         </div>
         <div class='footer'>
             © 2021 Trade Switcher. All rights reserved
@@ -65,13 +75,17 @@ import topNav from '@planspc/layout/topNav'
 import loginTypeBar from './loginTypeBar'
 import compInput from '@planspc/components/form/input'
 import LoginPwdDialog from './loginPwdDialog.vue'
-import { reactive, ref, toRefs } from 'vue'
+import { reactive, ref, toRefs, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { localGet } from '@/utils/util'
 import { Dialog } from 'vant'
 import LoginHook from './loginHook'
+import LoginByGoogle from '@/themeCommon/user/login/components/loginByGoogle.vue'
+import LoginByFacebook from '@/themeCommon/user/login/components/loginByFacebook.vue'
+import LoginByTwitter from '@/themeCommon/user/login/components/loginByTwitter.vue'
+
 export default {
     name: 'Login',
     components: {
@@ -79,6 +93,9 @@ export default {
         loginTypeBar,
         topNav,
         compInput,
+        LoginByGoogle,
+        LoginByFacebook,
+        LoginByTwitter,
     },
     setup () {
         const router = useRouter()
@@ -98,6 +115,8 @@ export default {
             token: '', // 验证码token
             loginType: 'password', // password 密码登录   checkCode 验证码登录
         })
+
+        const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo.thirdLogin)
 
         const { loginSubmit, loginToPath, verifyCodeBtnText, sendVerifyCode } = LoginHook()
 
@@ -204,6 +223,9 @@ export default {
             }
         }
 
+        // 获取三方登录配置
+        store.dispatch('_base/getLoginConfig')
+
         return {
             ...toRefs(state),
             loginHandle,
@@ -212,6 +234,7 @@ export default {
             loginNameEl,
             pwdEl,
             checkCodeEl,
+            thirdLoginArr,
             onLoginNameKeyupEnter,
         }
     }
@@ -277,6 +300,21 @@ export default {
     justify-content: space-between;
     a{
         color: var(--color)
+    }
+}
+.three-way-login{
+    margin-top: 50px;
+    .title{
+        text-align: center;
+        color: var(--placeholdColor);
+        margin-bottom: 10px;
+    }
+    .otherLogin {
+        text-align: center;
+        display: flex;
+        justify-content: space-evenly;
+        width: 200px;
+        margin: 15px auto 0;
     }
 }
 </style>
