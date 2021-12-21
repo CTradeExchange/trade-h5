@@ -20,12 +20,12 @@
         />
         <div class='toSysSetting'>
             <router-link :to="{ name: 'Setting' }">
-                使用表单设置
+                {{$t('install.label1')}}
             </router-link>
         </div>
         <div v-if="type == 'uploadFile'" class='inputFile'>
             <div class='title'>
-                项目初始化
+                {{$t('install.label2')}}
             </div>
             <el-upload
                 accept='.xlsx, .xls'
@@ -39,10 +39,10 @@
             >
                 <i class='el-icon-upload'></i>
                 <div class='el-upload__text'>
-                    上传excel配置文件初始化项目
+                    {{$t('install.label3')}}
                 </div>
                 <div class='el-upload__text'>
-                    将文件推拽至此，或<em>点击上传</em>
+                    {{$t('install.label4')}}<em>{{$t('install.label5')}}</em>
                 </div>
             </el-upload>
         </div>
@@ -332,7 +332,7 @@ export default {
                 } catch (e) {
                     this.$message({
                         type: 'success',
-                        message: '文件解析失败!'
+                        message: this.$t('install.label6')
                     })
                 }
             }
@@ -354,7 +354,7 @@ export default {
 
             const formData = {
                 page_code: 'SysSetting',
-                title: '系统设置',
+                title: this.$t('install.label41'),
                 type: 'setup',
                 other: JSON.stringify({ apiKey: data.apiKey, apiId: data.apiId, apiUrl: data.apiUrl, h5Address: data.h5Address, h5PreviewAddress: data.h5PreviewAddress, isInitSymbol: data.isInitSymbol + '', apiService: data.apiService, quoteService: data.quoteService, msgService: data.msgService, tradeService: data.tradeService, btKey: data.btKey, btUrl: data.btUrl, adminDomain: data.adminDomain, forwarDomain: data.forwarDomain }),
                 content: JSON.stringify(Object.assign(copyData, { marginLevel: { marginLess: data.marginLess, marginWarn: data.marginWarn } }))
@@ -367,47 +367,47 @@ export default {
                 webViewSite: data.h5PreviewAddress
             })
             if (initChannelState.success) {
-                this.setInfoList({ success: true, info: '渠道初始化成功' })
+                this.setInfoList({ success: true, info: this.$t('install.label7') })
             } else {
-                this.setInfoList({ success: true, info: '渠道初始化失败' })
-                this.setInfoList({ success: false, info: '终止...' })
+                this.setInfoList({ success: true, info: this.$t('install.label8') })
+                this.setInfoList({ success: false, info: this.$t('install.label9') })
                 return
             }
 
             const modifyPageData = await modifyPageConfig(formData)
-            this.setInfoList({ loading: true, info: '公司基础配置写入中...' })
+            this.setInfoList({ loading: true, info: this.$t('install.label10') })
             if (modifyPageData.success) {
-                this.setInfoList({ success: true, info: '公司基础配置写入成功' })
+                this.setInfoList({ success: true, info: this.$t('install.label11') })
             } else {
-                this.setInfoList({ success: false, info: '公司基础配置写入失败' })
-                this.setInfoList({ success: false, info: '终止...' })
+                this.setInfoList({ success: false, info: this.$t('install.label12') })
+                this.setInfoList({ success: false, info: this.$t('install.label9') })
                 return
             }
-            this.setInfoList({ loading: true, info: '公司基础配置发布中...' })
+            this.setInfoList({ loading: true, info: this.$t('install.label13') })
             const publishPage = await pushPage({ pageCode: 'SysSetting' })
             if (publishPage.success) {
-                this.setInfoList({ success: true, info: '公司基础配置发布成功' })
+                this.setInfoList({ success: true, info: this.$t('install.label14') })
             } else {
-                this.setInfoList({ success: false, info: '公司基础配置发布失败' })
-                this.setInfoList({ success: false, info: '终止...' })
+                this.setInfoList({ success: false, info: this.$t('install.label15') })
+                this.setInfoList({ success: false, info: this.$t('install.label9') })
                 return
             }
 
-            this.setInfoList({ loading: true, info: '文件权限检测中...' })
+            this.setInfoList({ loading: true, info: this.$t('install.label16') })
             const checkData = await checkEnvironment()
             if (checkData.success) {
                 checkData.data.forEach(item => {
                     this.setInfoList({ success: item.success, info: item.msg })
                     if (!item.success) {
-                        this.setInfoList({ success: false, info: '终止...' })
+                        this.setInfoList({ success: false, info: this.$t('install.label9') })
                     }
                 })
             } else {
-                this.setInfoList({ success: false, info: '文件权限检测中失败' })
-                this.setInfoList({ success: false, info: '终止...' })
+                this.setInfoList({ success: false, info: this.$t('install.label17') })
+                this.setInfoList({ success: false, info: this.$t('install.label9') })
                 return
             }
-            this.setInfoList({ loading: true, info: '基础产品信息初始化中...' })
+            this.setInfoList({ loading: true, info: this.$t('install.label18') })
             const reloadData = await reloadSymbol()
             if (reloadData.success) {
                 const _reloadData = reloadData.data[0]
@@ -417,12 +417,12 @@ export default {
                     return
                 }
             } else {
-                this.setInfoList({ success: false, info: '基础产品信息初始化失败' })
-                this.setInfoList({ success: false, info: '终止...' })
+                this.setInfoList({ success: false, info: this.$t('install.label19') })
+                this.setInfoList({ success: false, info: this.$t('install.label9') })
                 return
             }
 
-            this.setInfoList({ loading: true, info: '账户组信息初始化中...' })
+            this.setInfoList({ loading: true, info: this.$t('install.label20') })
             const accountGroupData = await reloadAccountGroup()
             if (accountGroupData.success) {
                 const _data = accountGroupData.data[0]
@@ -445,61 +445,61 @@ export default {
                     const _data = productData.data[0]
                     this.setInfoList({ success: _data.success, info: `${_data.msg || _data.errorMsg}` })
                 } else {
-                    this.setInfoList({ success: false, info: '账户组信息初始化失败' })
-                    this.setInfoList({ success: false, info: '终止...' })
+                    this.setInfoList({ success: false, info: this.$t('install.label21') })
+                    this.setInfoList({ success: false, info: this.$t('install.label9') })
                     return
                 }
             } else {
-                this.setInfoList({ success: false, info: '账户组信息初始化失败' })
-                this.setInfoList({ success: false, info: '终止...' })
+                this.setInfoList({ success: false, info: this.$t('install.label21') })
+                this.setInfoList({ success: false, info: this.$t('install.label9') })
                 return
             }
 
-            this.setInfoList({ loading: true, info: '国家信息同步中...' })
+            this.setInfoList({ loading: true, info: this.$t('install.label22') })
             const reloadCountryState = await reloadCountry()
             if (reloadCountryState.success) {
-                this.setInfoList({ success: true, info: '国家信息同步成功' })
+                this.setInfoList({ success: true, info: this.$t('install.label23') })
             } else {
-                this.setInfoList({ success: false, info: '国家信息同步失败' })
-                this.setInfoList({ success: false, info: '终止...' })
+                this.setInfoList({ success: false, info: this.$t('install.label24') })
+                this.setInfoList({ success: false, info: this.$t('install.label9') })
                 return
             }
 
-            this.setInfoList({ loading: true, info: '资产信息同步中...' })
+            this.setInfoList({ loading: true, info: this.$t('install.label25') })
             const reloadAssetsState = await reloadCatsTradeTypeAssets()
             if (reloadAssetsState.success) {
-                this.setInfoList({ success: true, info: '资产信息同步成功' })
+                this.setInfoList({ success: true, info: this.$t('install.label26') })
             } else {
-                this.setInfoList({ success: false, info: '资产信息同步失败' })
-                this.setInfoList({ success: false, info: '终止...' })
+                this.setInfoList({ success: false, info: this.$t('install.label27') })
+                this.setInfoList({ success: false, info: this.$t('install.label9') })
                 return
             }
 
-            this.setInfoList({ loading: true, info: '支付通道同步中...' })
+            this.setInfoList({ loading: true, info: this.$t('install.label28') })
 
             const reloadPaymentState = await reloadPaymentList()
             if (reloadPaymentState.success) {
-                this.setInfoList({ success: true, info: '支付通道同步成功' })
+                this.setInfoList({ success: true, info: this.$t('install.label29') })
             } else {
-                this.setInfoList({ success: false, info: '支付通道同步失败' })
-                this.setInfoList({ success: false, info: '终止...' })
+                this.setInfoList({ success: false, info: this.$t('install.label30') })
+                this.setInfoList({ success: false, info: this.$t('install.label9') })
                 return
             }
 
-            this.setInfoList({ loading: true, info: 'web页面初始化中...' })
+            this.setInfoList({ loading: true, info: this.$t('install.label31') })
             const pageCodeList = await getInitPageCodeList()
             console.log(pageCodeList)
             for (const page of pageCodeList.data) {
                 const pageData = await initPageByPageCode({ page_code: page.pageCode })
                 const pagePubData = await pushPage({ pageCode: page.pageCode })
-                this.setInfoList({ success: pageData.success, info: `${page.title}${pageData.success ? '写入成功' : '写入失败'}` })
+                this.setInfoList({ success: pageData.success, info: `${page.title}${pageData.success ? this.$t('install.label32') : this.$t('install.label33')}` })
             }
-            this.setInfoList({ success: true, info: 'web页面初始化完成' })
+            this.setInfoList({ success: true, info: this.$t('install.label34') })
             await updateDataToH5IndexView()
             await updateDataToH5Index()
 
-            this.$alert('恭喜你系统初始化完成!', '温馨提示', {
-                confirmButtonText: '确定',
+            this.$alert(this.$t('install.label35'), this.$t('install.label36'), {
+                confirmButtonText: this.$t('install.label37'),
                 callback: action => {
                     this.$router.push({ name: 'Pages' })
                 }
@@ -517,9 +517,9 @@ export default {
 
             // 显示重试按钮
             if (data.success === false && !this.reInput) {
-                this.reInput = this.$confirm(`系统初始化失败(${data.info})!`, '温馨提示', {
-                    confirmButtonText: '重试',
-                    cancelButtonText: '手动录入',
+                this.reInput = this.$confirm(`${this.$t('install.label38')}(${data.info})!`, this.$t('install.label36'), {
+                    confirmButtonText: this.$t('install.label39'),
+                    cancelButtonText: this.$t('install.label40'),
                     type: 'warning',
                 }).then(res => {
                     this.type = 'uploadFile'

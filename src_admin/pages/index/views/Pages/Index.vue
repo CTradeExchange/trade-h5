@@ -148,10 +148,10 @@ export default {
     },
     name: 'Pages',
     setup (props) {
-        const { locale } = useI18n()
         const router = useRouter()
         const route = useRoute()
         const addFormModal = ref(null)
+        const { t } = useI18n({ useScope: 'global' })
         const {
             ctx
         } = getCurrentInstance()
@@ -159,7 +159,7 @@ export default {
         const checkPageCode = (rule, value, callback) => {
             const localData = state.list.find((item) => (item.page_code == value))
             if (state.addForm.type === 'add' && localData) {
-                callback(new Error('页面已存在，请重新输入'))
+                callback(new Error(t('error1')))
             } else {
                 callback()
             }
@@ -184,7 +184,7 @@ export default {
                     page_code: [
                         {
                             required: true,
-                            message: '请输入页面标题',
+                            message: t('error2'),
                             trigger: 'blur'
                         },
                         {
@@ -268,7 +268,7 @@ export default {
                         if (!res.success) {
                             ctx.$message.error(res.message)
                         }
-                        ctx.$message.success(state.addForm.type === 'add' ? '新建成功' : '编辑成功')
+                        ctx.$message.success(state.addForm.type === 'add' ? t('createdSuccessfully') : t('createdSuccessfully'))
                         getPageList()
                         state.addForm.show = false
                     })
