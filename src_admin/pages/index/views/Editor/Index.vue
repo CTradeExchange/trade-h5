@@ -101,11 +101,11 @@
                     </el-button>
                 </div>
             </div>
-            <el-scrollbar class='center-scrollbar'>
+            <div class='center-scrollbar'>
                 <el-row class='center-board-row'>
                     <div id='previewContainer' class='previewContainer' :class='{ "pc":isPC }'></div>
                 </el-row>
-            </el-scrollbar>
+            </div>
         </div>
         <RightPanel :page-conf='pageConf' />
         <ShowJson :show-code='showCode' />
