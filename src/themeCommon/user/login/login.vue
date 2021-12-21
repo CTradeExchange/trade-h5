@@ -143,7 +143,7 @@ export default {
         })
 
         const countryList = computed(() => store.state.countryList)
-        const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo.thirdLogin)
+        const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo?.thirdLogin || [])
         if (isEmpty(countryList.value) && !isEmpty(thirdLoginArr.value)) {
             // 获取国家区号
             store.dispatch('getCountryListByParentCode')
