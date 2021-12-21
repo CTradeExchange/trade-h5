@@ -100,6 +100,15 @@ export default {
                     if (isEmpty(getCookie('lang'))) {
                         setCookie('lang', data.language.val || 'zh-CN', 'y10') // 语言都存储在cookie里面
                     }
+
+                    // 在线客服补充语言参数
+                    let onlineService = data.onlineService
+                    if (onlineService) {
+                        const lang = getCookie('lang').split('-')[0]
+                        if (onlineService.indexOf('?') === -1) onlineService += '?_tt=1'
+                        onlineService += `&lang=${lang}`
+                        data.onlineService = onlineService
+                    }
                     commit('UPDATE_wpCompanyInfo', data)
 
                     // 游客玩法
