@@ -195,6 +195,15 @@ export default {
 
             commit('_base/Update_plans', plansList, { root: true })
 
+            // 在线客服链接补充用户相关参数
+            let onlineService = rootState._base.wpCompanyInfo?.onlineService
+            if (onlineService) {
+                const customerNo = data.customerNo
+                const customerName = data.name || ''
+                onlineService += `&userid=${customerNo}&name=${customerName}`
+                commit('_base/UPDATE_wpCompanyInfo', { onlineService }, { root: true })
+            }
+
             if (flag) {
                 if (data.optional === 1) dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
                 dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {
