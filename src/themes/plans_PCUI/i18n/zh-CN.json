@@ -761,5 +761,8 @@
         "volumeAmount": "成交量/额",
         "orderbyAuantity": "按量下单",
         "orderByAmount": "按额下单"
+    },
+    "modules":{
+        "defaultContent":"这里是模块的默认文案"
     }
 }

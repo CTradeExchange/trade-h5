@@ -751,5 +751,8 @@
         "volumeAmount": "Qty/Amount",
         "orderbyAuantity": "By quantity",
         "orderByAmount": "By amount"
+    },
+    "modules":{
+        "defaultContent":"Here is the default copy of the module"
     }
 }

@@ -207,15 +207,15 @@ export default {
             () => state.activeLang,
             (val) => {
                 getPageList()
-                router.replace({
-                    query: {
-                        id: getQueryString('id'),
-                        language: state.activeLang
-                    }
-                })
-                localSet('lang', state.activeLang)
-                setI18nLanguage(I18n, state.activeLang)
-                loadLocaleMessages(I18n, state.activeLang)
+                // router.replace({
+                //     query: {
+                //         id: getQueryString('id'),
+                //         language: state.activeLang
+                //     }
+                // })
+                // localSet('lang', state.activeLang)
+                // setI18nLanguage(I18n, state.activeLang)
+                // loadLocaleMessages(I18n, state.activeLang)
             }
         )
         onBeforeRouteUpdate((to, from) => { // 当前组件路由改变后，进行触发.
