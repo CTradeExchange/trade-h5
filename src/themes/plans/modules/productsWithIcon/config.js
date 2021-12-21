@@ -16,8 +16,7 @@ export default {
                     name: 'product',
                     label: '产品ID',
                     type: 'Product',
-                    default: {},
-                    max: 1
+                    default: {}
                 },
                 {
                     name: 'src',

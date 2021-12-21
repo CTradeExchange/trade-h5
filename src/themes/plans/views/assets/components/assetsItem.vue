@@ -34,6 +34,17 @@
                 </template>
             </div>
         </div>
+        <!-- <div class='btns'>
+            <van-button type='primary'>
+                充值
+            </van-button>
+            <van-button type='primary'>
+                提现
+            </van-button>
+            <van-button type='primary'>
+                划转
+            </van-button>
+        </div> -->
     </div>
 </template>
 

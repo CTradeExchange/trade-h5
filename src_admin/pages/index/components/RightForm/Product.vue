@@ -398,7 +398,6 @@ export default {
         showDialog (type) {
             this.activeTradeType = type
             this.tradeTypeAccountGroupProduct = this.tradeTypeProduct[type]
-
             if (['selfSymbol', 'productsSwipe', 'productsTimeSharing', 'bannerProducts', 'productsWithIcon'].includes(this.elementTag)) {
                 if (isPlainObject(this.selfSymbol[this.activated]?.[type])) {
                     const customerSelfSymbolIds = []
@@ -418,6 +417,8 @@ export default {
                     this.defaultCheckedKeys = flatten(customerGroupSymbolIds)
                 }
             }
+            // store保存当前操作右侧表单的下标
+            this.$store.commit('editor/UPDATE_ACTIVEINDEX', this.blockIndex)
             this.show = true
         },
         opened () {

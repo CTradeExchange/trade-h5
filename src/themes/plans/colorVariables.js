@@ -2,9 +2,9 @@ import { localGet } from '@/utils/util'
 import store from './store'
 const colors = {
     common: {
-        primary: '#477fd3',
-        riseColor: '#F60000',
-        fallColor: '#26a69a',
+        primary: '#2B70AE',
+        riseColor: '#B72122',
+        fallColor: '#2B70AE',
         warn: '#ef5353',
         success: '#26a69a',
         focusColor: '#f2a11b'

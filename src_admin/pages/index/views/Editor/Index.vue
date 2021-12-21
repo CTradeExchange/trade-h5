@@ -414,10 +414,11 @@ export default {
                     }
 
                     // const activated = store.state.editor.activated
+
                     if (['selfSymbol', 'productsSwipe', 'productsTimeSharing', 'bannerProducts'].includes(item.tag)) {
                         if (tradeTypeSelfSymbol[item.id]) item.data.product = tradeTypeSelfSymbol[item.id]
                     } else if (['productsWithIcon'].includes(item.tag)) {
-                        if (activeIndex.value) { item.data.items[activeIndex.value].product = store.state.editor.tradeTypeSelfSymbol }
+                        item.data.items[activeIndex.value].product = store.state.editor.tradeTypeSelfSymbol[item.id]
                     }
                 })
                 console.log('模块列表数据', config)

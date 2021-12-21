@@ -11,11 +11,10 @@
                 </i>
                 <div class='symbol'>
                     <p class='symbol-name'>
-                        {{ productMap[symbolKeys[index]]?.symbolName || '产品名称' }}
-                        <!-- {{ item.symbolName || '产品名称' }} -->
+                        {{ productMap[symbolKeys[index]]?.symbolName || $t('common.symbolName') }}
                     </p>
                     <p class='symbol-code'>
-                        {{ productMap[symbolKeys[index]]?.symbolCode || '产品编码' }}
+                        {{ productMap[symbolKeys[index]]?.symbolCode || $t('common.symbolCode') }}
                     </p>
                 </div>
                 <div class='price'>
@@ -60,6 +59,13 @@ export default {
 
         const symbolKeys = props.data.items.map(el => {
             if (!isEmpty(el.product)) {
+                // const tempList = []
+                // for (const iterator in el.product) {
+                //     if (el.product[iterator]) {
+                //         tempList.push(el.product[iterator])
+                //     }
+                // }
+                // return tempList
                 return Object.entries(el.product).map(([tradeType, item]) => {
                     const list = item[customerGroupId.value] || []
                     return list.map(symbolId => `${symbolId}_${tradeType}`)

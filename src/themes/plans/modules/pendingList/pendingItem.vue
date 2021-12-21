@@ -52,7 +52,7 @@
                         <i class='icon_tubiao hidden'></i>
                     </div>
                     <van-button
-                        color='#477fd3'
+                        color='#2B70AE'
                         hairline
                         size='mini'
                         type='default'

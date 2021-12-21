@@ -177,7 +177,9 @@
         "lang": "Language",
         "dark": "Dark",
         "down": "Down",
-        "up": "Up"
+        "up": "Up",
+        "symbolName": "Product Name",
+        "symbolCode": "Product Code"
         
     },
     "faceAuth": {

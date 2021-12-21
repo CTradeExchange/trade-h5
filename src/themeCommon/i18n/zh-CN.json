@@ -181,7 +181,9 @@
         "lang": "语言",
         "dark": "黑夜模式",
         "down": "跌",
-        "up": "涨"
+        "up": "涨",
+        "symbolName": "产品名称",
+        "symbolCode": "产品代码"
        
     },
     "faceAuth": {

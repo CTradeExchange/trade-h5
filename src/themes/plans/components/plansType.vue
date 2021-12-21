@@ -29,24 +29,23 @@ export default {
 
         // 玩法列表
         const plansList = computed(() => {
-            const lang =  getCookie('lang') || store.state._base.wpCompanyInfo.language;
-            const tradeTypesConfig = store.state._base.wpCompanyInfo.tradeTypesConfig;
-            let tradeTypes = props.list || store.state._base.plans.map(el => (el.name = t('tradeType.' + el.tradeType), el))
-            console.log("tradeTypes",tradeTypes)
-            if(store.state._base.wpCompanyInfo.tradeTypesConfig){
-                const tradeTypesEnum = store.state._base.wpCompanyInfo.tradeTypesConfig[lang];
-                for(let key in tradeTypesEnum){
-                    let arr =  tradeTypes.forEach(el=>{
-                        if(el.id==key){
-                            if(tradeTypesEnum[key]){ //为空的值视为没有设置别名还是取原来默认的名字
-                                el.name = tradeTypesEnum[key];
+            const lang = getCookie('lang') || store.state._base.wpCompanyInfo.language
+            const tradeTypesConfig = store.state._base.wpCompanyInfo.tradeTypesConfig
+            const tradeTypes = props.list || store.state._base.plans.map(el => (el.name = t('tradeType.' + el.tradeType), el))
+            console.log('tradeTypes', tradeTypes)
+            if (store.state._base.wpCompanyInfo.tradeTypesConfig) {
+                const tradeTypesEnum = store.state._base.wpCompanyInfo.tradeTypesConfig[lang]
+                for (const key in tradeTypesEnum) {
+                    const arr = tradeTypes.forEach(el => {
+                        if (el.id == key) {
+                            if (tradeTypesEnum[key]) { // 为空的值视为没有设置别名还是取原来默认的名字
+                                el.name = tradeTypesEnum[key]
                             }
                         }
                     })
-                    
                 }
             }
-            return tradeTypes;
+            return tradeTypes
         })
         const active = computed({
             get: () => props.value,
@@ -77,6 +76,7 @@ export default {
 @import '@/sass/mixin.scss';
 .playType {
     display: flex;
+    padding-top: rem(10px);
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
@@ -108,6 +108,8 @@ export default {
             padding: 0;
             font-weight: bold;
             font-size: rem(32px);
+            position: relative;
+            top: rem(-6px);
             &:first-child {
                 margin-left: 0;
             }
@@ -118,6 +120,8 @@ export default {
         :deep(.van-tab--active) {
             font-weight: bold;
             font-size: rem(48px);
+            position: relative;
+            top: rem(-10px);
             .van-tab__text {
                 color: var(--color);
             }
