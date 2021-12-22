@@ -19,7 +19,7 @@ const pre = [
     'https://prewph5_3.cats-trade.com/',
     'https://prewph5_4.cats-trade.com/',
     'https://prewph5_5.cats-trade.com/',
-    'https://prewph5_6.cats-trade.com/',
+    'https://prewph5-6.cats-trade.com/',
     'https://prewph5_7.cats-trade.com/',
     'https://prewph5_8.cats-trade.com/',
     'https://prewph5_9.cats-trade.com/',
