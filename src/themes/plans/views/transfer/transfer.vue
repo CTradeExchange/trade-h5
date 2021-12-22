@@ -25,8 +25,8 @@
                 <div class='label'>
                     {{ $t('common.from') }}
                     <div class='dots'>
-                        <span v-for='i in 2' :key='i' class='dot'>
-                        </span>
+                        <span class='dot'></span>
+                        <span class='dot'></span>
                     </div> {{ $t('common.to') }}
                 </div>
 
@@ -87,7 +87,10 @@
         <!-- 资产列表 -->
         <assetsList
             v-if='pickerShow'
+            :currency='curCurrency?.currency'
             :show='pickerShow'
+            :trade-type='fromAccount.id'
+            @update:currency='onCurrencyConfirm'
             @update:show='updatePopupVis'
         />
 
@@ -279,8 +282,9 @@ export default {
             } else {
                 state.toAccount = val
             }
-            state.curCurrency = state.curCurrency = accountList.value.filter(el => Number(el.tradeType) === Number(state.fromAccount.tradeType))[0]
+            state.curCurrency = accountList.value.filter(el => Number(el.tradeType) === Number(state.fromAccount.tradeType))[0]
             state.amount = ''
+
             /*   // abcc 现货杠杆 杠杆全仓重新拉账户资产
             if ([3, 5, 9].includes(Number(state.fromAccount.id))) {
                 store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: state.fromAccount.id })
