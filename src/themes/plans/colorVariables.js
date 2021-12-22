@@ -5,7 +5,7 @@ const colors = {
         primary: '#2B70AE',
         riseColor: '#B72122',
         fallColor: '#2B70AE',
-        warn: '#ef5353',
+        warn: '#B72122',
         success: '#26a69a',
         focusColor: '#f2a11b'
     },

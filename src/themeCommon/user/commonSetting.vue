@@ -1,6 +1,6 @@
 <template>
+    <LayoutTop :back='true' :menu='false' :title='$t("route.mine")' />
     <div class='page-wrap'>
-        <Top back @back='back' />
         <p class='header'>
             {{ $t('cRoute.commonSetting') }}
         </p>
@@ -44,6 +44,12 @@
         position='bottom'
         round
     >
+        <div class='header'>
+            <div class='header-title'>
+                {{ $t('common.lang') }}
+            </div>
+            <i class='icon_guanbi' @click='langShow=false'></i>
+        </div>
         <div class='popup-wrap'>
             <div
                 v-for='(item, index) in supportLanguages'
@@ -52,7 +58,7 @@
                 :class='{ active: lang === item.val }'
                 @click='langSelect(item)'
             >
-                <img alt='' class='lang-icon' :src="'/images/country_icon/'+ item.val + '.png'" />
+                <img alt='' class='lang-icon' :src="'/images/country_icon/'+ item.val + '.png?555'" />
             </div>
         </div>
     </van-popup>
@@ -63,6 +69,12 @@
         position='bottom'
         round
     >
+        <div class='header'>
+            <div class='header-title'>
+                {{ $t('common.lang') }}
+            </div>
+            <i class='icon_guanbi' @click='langShow=false'></i>
+        </div>
         <div class='popup-wrap'>
             <van-radio-group v-model='chartVal' @change='colorShow = false'>
                 <van-cell-group inset>
@@ -135,7 +147,6 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         const supportLanguages = computed(() => store.state.supportLanguages)
-        const langStyle = computed(() => supportLanguages.value.length <= 4 ? 'center' : 'flex-start')
 
         // 选择语言
         const langSelect = (action) => {
@@ -232,7 +243,6 @@ export default {
             colorSelect,
             upDownColorSelect,
             back,
-            langStyle,
             ...toRefs(state)
         }
     },
@@ -244,8 +254,6 @@ export default {
 .custom-popup{
     --van-cell-group-inset-padding: 0;
     --van-cell-group-background-color: var(--bgColor);
-    max-height: 80%;
-    background: var(--bgColor);
     .popup-wrap{
         :deep(.van-radio-group){
             .van-cell-group--inset{
@@ -254,7 +262,6 @@ export default {
 
         }
     }
-
     .popup-item{
         padding: 0 rem(30px);
         display: flex;
@@ -296,9 +303,8 @@ export default {
 }
 .lang-popup{
     .popup-wrap{
-        padding: rem(42px) 0 0 rem(40px);
+        padding: 0 0 0 rem(40px);
         display: flex;
-        justify-content: v-bind(langStyle);
         flex-wrap: wrap;
         .lang-item{
             box-sizing: content-box;
@@ -307,12 +313,12 @@ export default {
             margin-bottom: rem(42px);
             border: rem(4px) solid transparent;
             .lang-icon{
-                width: rem(132px);
-                height: rem(88px)
+                width: rem(120px);
+                height: rem(120px)
             }
             &.active{
                 border: rem(4px) solid var(--primary);
-                border-radius: rem(20px);
+                border-radius: 50%;
 
             }
         }
@@ -324,10 +330,10 @@ export default {
 <style lang='scss' scoped>
 @import '@/sass/mixin.scss';
 .page-wrap{
+    padding-top: rem(110px);
     .header{
         background: var(--contentColor);
         font-size: rem(48px);
-        font-weight: bold;
         padding-left: rem(30px);
         padding-bottom: rem(30px);
     }
@@ -349,7 +355,7 @@ export default {
                 color: var(--color);
             }
             .lang-icon{
-                width: rem(70px);
+                width: rem(56px);
                 margin-right: rem(20px);
             }
             .right-arrow{

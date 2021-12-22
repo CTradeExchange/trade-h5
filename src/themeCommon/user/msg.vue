@@ -1,11 +1,12 @@
 <template>
-    <Top class='msgTopBar'>
+    <LayoutTop :back='true' :menu='false' :title='$t("route.mine")'>
         <template #right>
             <van-dropdown-menu :active-color='$style.primary'>
                 <van-dropdown-item v-model='type' :options='options' @change='changeType' />
             </van-dropdown-menu>
         </template>
-    </Top>
+    </LayoutTop>
+
     <Loading :show='pageLoading' />
     <div class='msg-list'>
         <p class='header'>
@@ -206,14 +207,18 @@ export default {
     position: absolute;
     width: 100%;
 }
+:deep(.van-dropdown-menu__bar){
+    box-shadow: none;
+    --van-dropdown-menu-title-font-size: 12px;
+}
 .msg-list {
     flex: 1;
     height: 100%;
     overflow: auto;
+    padding-top: rem(110px);
     background-color: var(--bgColor);
     .header{
         font-size: rem(48px);
-        font-weight: bold;
         padding-left: rem(30px);
         padding-bottom: rem(30px);
         background: var(--contentColor);
@@ -242,29 +247,6 @@ export default {
             line-height: rem(60px);
         }
     }
-}
-.msgTopBar {
-    position: relative !important;
-    //background-color: var(--contentColor);
-    :deep(.van-dropdown-menu__bar) {
-        height: rem(90px);
-        box-shadow: none;
-        //background-color: var(--contentColor);
-        .van-dropdown-menu__title {
-            color: var(--color);
-            margin-right: rem(40px);
-            &::after{
-                border-color: transparent transparent var(--normalColor) var(--normalColor);
-            }
-        }
-    }
-    :deep(.van-dropdown-item__content) {
-        .van-cell {
-            background-color: var(--contentColor);
-            .van-cell__title {
-                color: var(--color);
-            }
-        }
-    }
+
 }
 </style>

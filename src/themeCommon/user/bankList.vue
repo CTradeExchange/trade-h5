@@ -1,5 +1,5 @@
 <template>
-    <Top back />
+    <LayoutTop :back='true' :menu='false' :title='$t("route.mine")' />
     <div class='page-wrap'>
         <Loading :show='loading' />
         <p class='header'>
@@ -93,10 +93,10 @@ export default {
 .page-wrap {
     flex: 1;
     overflow: auto;
-     background: var(--contentColor);
+    padding-top: rem(110px);
+    background: var(--contentColor);
     .header{
         font-size: rem(48px);
-        font-weight: bold;
         padding-left: rem(30px);
         padding-bottom: rem(10px);
 
@@ -107,7 +107,7 @@ export default {
             position: relative;
             height: rem(360px);
             margin-bottom: rem(30px);
-            padding: rem(40px);
+            padding: rem(30px);
             overflow: hidden;
             border-radius: rem(10px);
             &.BG_ICBC {

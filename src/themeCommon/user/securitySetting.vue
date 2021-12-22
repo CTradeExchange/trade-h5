@@ -1,6 +1,6 @@
 <template>
     <div class='page-wrap'>
-        <Top back />
+        <LayoutTop :back='true' :menu='false' :title='$t("route.mine")' />
         <p class='header'>
             {{ $t('cRoute.securitySetting') }}
         </p>
@@ -122,11 +122,11 @@ export default {
 <style lang='scss' scoped>
 @import '@/sass/mixin.scss';
 .page-wrap {
+    padding-top: rem(110px);
     background: var(--bgColor);
     .header{
         background: var(--contentColor);
         font-size: rem(48px);
-        font-weight: bold;
         padding-left: rem(30px);
         padding-bottom: rem(30px);
     }

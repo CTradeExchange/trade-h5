@@ -655,3 +655,24 @@ body {
         background-color: var(--bgColor) !important;
     }
 }
+
+.custom-popup{
+    height: 92%;
+    background: var(--bgColor);
+    padding: 0 rem(30px);
+    .header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: rem(37px) 0 rem(50px);
+        .header-title{
+            font-size: rem(48px);
+            font-weight: bold;
+            color: var(--color);
+        }
+        .icon_guanbi{
+            font-size: rem(30px);
+            font-weight: bold;
+        }
+    }
+}

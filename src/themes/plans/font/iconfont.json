@@ -6,6 +6,55 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "26640272",
+      "name": "转换",
+      "font_class": "zhuanhuan",
+      "unicode": "e6a0",
+      "unicode_decimal": 59040
+    },
+    {
+      "icon_id": "26640179",
+      "name": "红涨绿跌",
+      "font_class": "hongzhanglvdie1",
+      "unicode": "e6a5",
+      "unicode_decimal": 59045
+    },
+    {
+      "icon_id": "26640180",
+      "name": "绿涨红跌",
+      "font_class": "lvzhanghongdie1",
+      "unicode": "e6a6",
+      "unicode_decimal": 59046
+    },
+    {
+      "icon_id": "26639949",
+      "name": "买入",
+      "font_class": "mairu",
+      "unicode": "e6ae",
+      "unicode_decimal": 59054
+    },
+    {
+      "icon_id": "26639948",
+      "name": "卖出",
+      "font_class": "maichu",
+      "unicode": "e6ad",
+      "unicode_decimal": 59053
+    },
+    {
+      "icon_id": "26591497",
+      "name": "汇兑",
+      "font_class": "huidui",
+      "unicode": "e6ab",
+      "unicode_decimal": 59051
+    },
+    {
+      "icon_id": "26591498",
+      "name": "直充",
+      "font_class": "zhichong",
+      "unicode": "e6ac",
+      "unicode_decimal": 59052
+    },
+    {
       "icon_id": "26513126",
       "name": "红跌",
       "font_class": "hongdie",
@@ -34,20 +83,6 @@
       "unicode_decimal": 59050
     },
     {
-      "icon_id": "26494354",
-      "name": "绿涨红跌",
-      "font_class": "lvzhanghongdie1",
-      "unicode": "e6a6",
-      "unicode_decimal": 59046
-    },
-    {
-      "icon_id": "26494353",
-      "name": "红涨绿跌",
-      "font_class": "hongzhanglvdie1",
-      "unicode": "e6a5",
-      "unicode_decimal": 59045
-    },
-    {
       "icon_id": "26095100",
       "name": "复制",
       "font_class": "fuzhi",
@@ -55,32 +90,11 @@
       "unicode_decimal": 59044
     },
     {
-      "icon_id": "26094992",
-      "name": "红涨绿跌",
-      "font_class": "hongzhanglvdie",
-      "unicode": "e6a2",
-      "unicode_decimal": 59042
-    },
-    {
-      "icon_id": "26094993",
-      "name": "绿涨红跌",
-      "font_class": "lvzhanghongdie",
-      "unicode": "e6a3",
-      "unicode_decimal": 59043
-    },
-    {
       "icon_id": "25907914",
       "name": "排序",
       "font_class": "paixu",
       "unicode": "e6a1",
       "unicode_decimal": 59041
-    },
-    {
-      "icon_id": "25907827",
-      "name": "转换",
-      "font_class": "zhuanhuan",
-      "unicode": "e6a0",
-      "unicode_decimal": 59040
     },
     {
       "icon_id": "25902231",

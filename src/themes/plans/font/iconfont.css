@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2716699 */
-  src: url('iconfont.woff2?t=1639562107386') format('woff2'),
-       url('iconfont.woff?t=1639562107386') format('woff'),
-       url('iconfont.ttf?t=1639562107386') format('truetype');
+  src: url('iconfont.woff2?t=1640065074880') format('woff2'),
+       url('iconfont.woff?t=1640065074880') format('woff'),
+       url('iconfont.ttf?t=1640065074880') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,34 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon_zhuanhuan:before {
+  content: "\e6a0";
+}
+
+.icon_hongzhanglvdie1:before {
+  content: "\e6a5";
+}
+
+.icon_lvzhanghongdie1:before {
+  content: "\e6a6";
+}
+
+.icon_mairu:before {
+  content: "\e6ae";
+}
+
+.icon_maichu:before {
+  content: "\e6ad";
+}
+
+.icon_huidui:before {
+  content: "\e6ab";
+}
+
+.icon_zhichong:before {
+  content: "\e6ac";
 }
 
 .icon_hongdie:before {
@@ -29,32 +57,12 @@
   content: "\e6aa";
 }
 
-.icon_lvzhanghongdie1:before {
-  content: "\e6a6";
-}
-
-.icon_hongzhanglvdie1:before {
-  content: "\e6a5";
-}
-
 .icon_fuzhi:before {
   content: "\e6a4";
 }
 
-.icon_hongzhanglvdie:before {
-  content: "\e6a2";
-}
-
-.icon_lvzhanghongdie:before {
-  content: "\e6a3";
-}
-
 .icon_paixu:before {
   content: "\e6a1";
-}
-
-.icon_zhuanhuan:before {
-  content: "\e6a0";
 }
 
 .icon_meiguoxian:before {

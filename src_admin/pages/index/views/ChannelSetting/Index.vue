@@ -281,7 +281,7 @@
                                 </div>
                             </el-form-item> -->
                             <el-form-item :label="$t('channelSetting.themeColor')" prop='themeColor'>
-                                <el-color-picker v-model='form.themeColor' :predefine='predefineColors' show-alpha />
+                                <el-color-picker v-model='form.themeColor' :predefine='predefineColors' />
                             </el-form-item>
                             <el-form-item :label="$t('channelSetting.buriedPointCode')">
                                 <el-input

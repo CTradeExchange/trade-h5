@@ -1,5 +1,5 @@
 <template>
-    <div id='topNav' class='topNav'>
+    <div id='topNav' class='topNav' :style='customStyle'>
         <div class='left'>
             <slot name='left'>
                 <!-- <AccountChange v-if='isDropdownMenu' /> -->
@@ -10,7 +10,9 @@
         </div>
         <div class='main'>
             <slot>
-                {{ showTitle ? (title?title:$t($route.meta.title)) : '' }}
+                <span class='title'>
+                    {{ showTitle ? (title?title:$t($route.meta.title)) : '' }}
+                </span>
             </slot>
         </div>
         <div class='right'>
@@ -40,6 +42,13 @@ export default {
         showTitle: {
             type: Boolean,
             default: true
+        },
+        bgColor: {
+            type: String,
+            default: '#fff'
+        },
+        customStyle: {
+            type: Object
         }
     },
     data () {
@@ -84,9 +93,8 @@ export default {
     display: flex;
     align-items: center;
     width: 100%;
-    height: rem(90px);
+    height: rem(110px);
     color: var(--color);
-    font-size: rem(34px);
     background: var(--contentColor);
     &.mainColorBg {
         color: var(--contentColor);
@@ -103,12 +111,12 @@ export default {
         cursor: pointer;
     }
     .left {
-        bottom: 0;
+        bottom: rem(-15px);
         left: 0;
     }
     .right {
         right: 0;
-        bottom: 0;
+        bottom: rem(-15px);
         i {
             font-size: rem(40px);
         }
@@ -118,6 +126,10 @@ export default {
         margin: 0 auto;
         color: var(--color);
         text-align: center;
+        .title{
+            font-size: rem(48px);
+            font-weight: bold;
+        }
     }
     a {
         color: inherit;
@@ -130,6 +142,7 @@ export default {
         margin-left: rem(-10px);
         padding: rem(10px);
         color: var(--color);
+        font-size: rem(30px)
     }
 }
 </style>

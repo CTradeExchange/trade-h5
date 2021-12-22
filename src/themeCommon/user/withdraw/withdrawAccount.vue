@@ -98,7 +98,7 @@ export default {
         const state = reactive({
             outPickerShow: false,
             inPickerShow: false,
-            outCurrency: '',
+            outCurrency: route.query.currency,
             inCurrency: '',
             inCurrencyList: [],
             currentTab: '',
@@ -125,7 +125,7 @@ export default {
 
         const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(tradeType)))
 
-        state.outCurrency = columns.value[0].currency
+        // state.outCurrency = columns.value[0].currency
         state.accountId = columns.value[0].accountId
         // 自定义picker字段
         const customFieldName = {

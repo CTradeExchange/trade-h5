@@ -1,17 +1,22 @@
 <template>
     <!-- 杠杆倍数设置 -->
-    <van-popup v-model:show='show' position='bottom' teleport='body' @open='open'>
+    <van-popup
+        v-model:show='show'
+        class='custom-popup'
+        position='bottom'
+        round
+        teleport='body'
+        @open='open'
+    >
         <div class='multipleSet'>
             <div v-show='warn' class='warnRangeTip'>
                 {{ $t('trade.unRangeMultilpe') }}
             </div>
             <div class='header'>
-                <p class='title'>
+                <div class='header-title'>
                     {{ $t('trade.multilpSetting') }}
-                </p>
-                <a class='close' href='javascript:;' @click="$emit('update:modelValue', false)">
-                    <i class='icon_icon_close_big'></i>
-                </a>
+                </div>
+                <i class='icon_guanbi' @click="$emit('update:modelValue', false)"></i>
             </div>
             <div class='body'>
                 <template v-if="marginInfo.type==='2'">
@@ -42,7 +47,12 @@
                 </template>
 
                 <div class='warnTip'>
-                    {{ $t('trade.multilpSettingTip1') }}
+                    <p class='t1'>
+                        {{ $t('riskLevel.warn') }}
+                    </p>
+                    <p class='t2'>
+                        {{ $t('trade.multilpSettingTip1') }}
+                    </p>
                 </div>
             </div>
 
@@ -217,22 +227,8 @@ export default {
         text-align: center;
         background: #FFF0E2;
     }
-    .header{
-        height: rem(100px);
-        line-height: rem(100px);
-        position: relative;
-        text-align: center;
-        font-size: rem(34px);
-        .close{
-            position: absolute;
-            right: rem(30px);
-            top: rem(0px);
-            font-size: rem(32px);
-            color: var(--color);
-        }
-    }
     .body{
-        padding: rem(10px) rem(30px) rem(30px);
+        padding: rem(10px) 0 rem(30px);
     }
     .stepper{
         background: var(--bgColor);
@@ -274,10 +270,24 @@ export default {
     }
     .warnTip{
         margin-top: rem(90px);
-        padding: rem(15px) rem(20px);
+        padding: rem(15px) 0;
         font-size: rem(24px);
         background: #FEF6F7;
-        color: #EF5350;
+        color: var(--warn);
+        background: rgba(183, 33, 34, 0.05);
+        border: 2px solid var(--warn);
+        border-radius: 6px;
+        padding:rem(40px);
+        text-align: center;
+        .t1{
+            margin-bottom: rem(20px);
+            font-size: rem(40px);
+            font-weight: bold;
+            color: var(--warn);
+        }
+        .t2{
+            color: var(--color);
+        }
     }
 }
 </style>

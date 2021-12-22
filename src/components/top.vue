@@ -74,7 +74,7 @@ export default {
     flex-shrink: 0;
     align-items: center;
     justify-content: space-between;
-    height: rem(90px);
+    height: rem(110px);
     font-size: rem(34px);
     background: var(--contentColor);
     .back {
@@ -110,7 +110,8 @@ export default {
         width: 100%;
         margin: 0 auto;
         color: var(--color);
-        font-size: rem(32px);
+        font-size: rem(48px);
+        font-weight: bold;
         line-height: rem(59px);
         text-align: center;
     }

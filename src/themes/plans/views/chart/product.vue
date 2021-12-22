@@ -252,17 +252,19 @@
         <div class='footerBtnBox'>
             <div class='trade-btn-wrap'>
                 <div class='buy fallColorBg' @click="toOrder('buy')">
-                    <p>
+                    <i class='icon icon_mairu'></i>
+                    <span class='text'>
                         {{ $t('trade.buy') }}
-                    </p>
+                    </span>
                     <!-- <p class='price'>
                         {{ product.buy_price }}
                     </p> -->
                 </div>
                 <div class='sell riseColorBg' @click="toOrder('sell')">
-                    <p>
+                    <i class='icon icon_maichu'></i>
+                    <span class='text'>
                         {{ $t('trade.sell') }}
-                    </p>
+                    </span>
                     <!-- <p class='price '>
                         {{ product.sell_price }}
                     </p> -->
@@ -1619,9 +1621,7 @@ export default {
             @include active();
             position: relative;
             flex: 1;
-            //padding-top: rem(18px);
             color: #FFF;
-            font-size: rem(34px);
             line-height: rem(100px);
             background-color: #858C9A;
             border-radius: 3px;
@@ -1630,6 +1630,16 @@ export default {
             }
             &.riseColorBg {
                 background-color: var(--fallColor);
+            }
+            .icon{
+                font-size: rem(20px);
+                vertical-align: middle;
+                margin-right: rem(20px);
+                opacity: 0.5;
+            }
+            .text{
+                font-size: rem(34px);
+                vertical-align: middle;
             }
         }
         .sell::after {

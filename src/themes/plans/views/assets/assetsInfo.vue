@@ -1,8 +1,6 @@
 <template>
     <div class='assetsInfoWrapper fullPageWrapper'>
-        <layoutTop>
-            <div>{{ $route.query.currency }}</div>
-        </layoutTop>
+        <layoutTop :bg-color='$style.bgColor' :title='$route.query.currency' />
 
         <div v-if='account' class='totalAsset'>
             <div class='leftInfo'>
@@ -11,10 +9,17 @@
                     {{ account.balance }}
                 </p>
             </div>
-            <div class='rightInfo'>
-                <!-- <van-button class='takeMoneyBtn' type='primary' @click="$router.push({ name:'WithdrawCoin' })">
-                    {{ $t('coinRecord.take') }}
-                </van-button> -->
+
+            <div class='assets-btns'>
+                <div class='assets-item-btn' @click='toDesposit'>
+                    {{ Number(tradeType) === 3 ? $t('trade.loan') : $t('trade.desposit') }}
+                </div>
+                <div class='assets-item-btn' @click='toWirhdraw'>
+                    {{ Number(tradeType) === 3 ? $t('trade.repayment') : $t('trade.withdraw') }}
+                </div>
+                <div class='assets-item-btn' @click='toTransfer'>
+                    {{ $t('cRoute.transfer') }}
+                </div>
             </div>
         </div>
 
@@ -64,14 +69,6 @@
                 </div>
             </li>
         </ul>
-        <div v-if='Number(tradeType) !== 5' class='footerBtn'>
-            <van-button v-if='Number(tradeType) === 3' block @click='toLoan'>
-                {{ $t('trade.loan') }}
-            </van-button>
-            <van-button block :class="{ 'full': [5,9].includes(Number(tradeType)) }" @click='toReturnMoney'>
-                {{ $t('trade.repayment') }}
-            </van-button>
-        </div>
     </div>
 </template>
 
@@ -90,37 +87,66 @@ export default {
             returnMoneyVisible: false,
             loanVisible: false,
             list: Array(3).fill(),
-            tradeType: route.query.tradeType
+            tradeType: route.query.tradeType,
+            currency: route.query.currency,
+            accountId: route.query.accountId
         })
+        // 颜色值
+        const style = computed(() => store.state.style)
+        const btnBg = style.value.primary + '19'
         const accountList = computed(() => store.state._user.customerInfo?.accountList || [])
 
         const account = computed(() => {
-            return accountList.value.find(item => item.tradeType === Number(state.tradeType) && item.currency === route.query.currency)
+            return accountList.value.find(item => item.tradeType === Number(state.tradeType) && item.currency === state.currency)
         })
 
         store.dispatch('_user/queryAccountAssetsInfo', {
-            tradeType: route.query.tradeType,
-            accountId: parseInt(route.query.accountId)
+            tradeType: state.tradeType,
+            accountId: parseInt(state.accountId)
         })
 
-        const toLoan = () => {
-            router.push({
-                path: '/loan',
-                query: {
-                    currency: route.query.currency,
-                    accountId: parseInt(route.query.accountId),
-                    tradeType: route.query.tradeType
-                }
-            })
+        const query = {
+            accountId: state.accountId,
+            currency: state.currency,
+            tradeType: state.tradeType
         }
 
-        const toReturnMoney = () => {
+        // 跳转充值页面
+        const toDesposit = () => {
+            if (Number(state.tradeType) === 3) {
+                router.push({
+                    path: '/loan',
+                    query
+                })
+            } else {
+                router.push({
+                    path: '/deposit',
+                    query
+                })
+            }
+        }
+        // 跳转提现页面
+        const toWirhdraw = () => {
+            if (Number(state.tradeType) === 3) {
+                router.push({
+                    path: '/returnMoney',
+                    query
+                })
+            } else {
+                router.push({
+                    path: '/withdrawAccount',
+                    query
+                })
+            }
+        }
+
+        // 跳转划转页面
+        const toTransfer = () => {
             router.push({
-                path: '/returnMoney',
+                path: '/transfer',
                 query: {
-                    currency: route.query.currency,
-                    accountId: parseInt(route.query.accountId),
-                    tradeType: route.query.tradeType
+                    accountId: state.accountId,
+                    tradeType: state.tradeType
                 }
             })
         }
@@ -129,8 +155,10 @@ export default {
             ...toRefs(state),
             accountList,
             account,
-            toLoan,
-            toReturnMoney
+            btnBg,
+            toDesposit,
+            toWirhdraw,
+            toTransfer
         }
     }
 }
@@ -139,15 +167,12 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .totalAsset {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: rem(20px);
+    margin: rem(20px) ;
     padding: rem(30px);
     color: var(--minorColor);
     line-height: 1.5;
     background: var(--contentColor);
-    border-radius: 4px;
+    border-radius: rem(10px);
     .totalAmount {
         color: var(--color);
         font-size: rem(50px);
@@ -161,11 +186,29 @@ export default {
         --van-button-primary-background-color: var(--primaryAssistColor);
         --van-button-primary-border-color: var(--primaryAssistColor);
     }
+    .assets-btns{
+        margin-top: rem(30px);
+        display: flex;
+        justify-content: space-between;
+        .assets-item-btn{
+            height: rem(56px);
+            line-height: rem(56px);
+            border-radius: rem(6px);
+            background: v-bind(btnBg);
+            color: var(--primary);
+            flex: 1;
+            text-align: center;
+            margin-right: rem(25px);
+            &:last-child{
+                margin-right: 0;
+            }
+        }
+    }
 }
 .assetInfoUl {
     margin: rem(20px);
     background: var(--contentColor);
-    border-radius: 4px;
+    border-radius: rem(10px);
     .item {
         display: flex;
         justify-content: space-between;

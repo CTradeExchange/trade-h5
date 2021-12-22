@@ -1,21 +1,31 @@
 <template>
+    <div class='currency-bg'>
+        <img alt='' :src='"/images/currency_icon/"+ curCurrency?.currency +".png"' />
+    </div>
     <div class='fullPageWrapper'>
-        <LayoutTop :back='true' :menu='false'>
+        <LayoutTop
+            :back='true'
+            :custom-style='customStyle'
+            :menu='false'
+            :title='$t("trade.asset")'
+        >
             <template #right>
                 <a class='right-title' href='javascript:;' @click='toRecord'>
                     {{ $t('assets.transferRecord') }}
                 </a>
             </template>
         </LayoutTop>
+
         <div class='page-content'>
             <!-- <p class='header'>
                 {{ $t('assets.transferAsset') }}
             </p> -->
+
             <div class='transfer'>
                 <div class='label'>
                     {{ $t('common.from') }}
                     <div class='dots'>
-                        <span v-for='i in 3' :key='i' class='dot'>
+                        <span v-for='i in 2' :key='i' class='dot'>
                         </span>
                     </div> {{ $t('common.to') }}
                 </div>
@@ -38,9 +48,10 @@
             </div>
 
             <p class='header mt60'>
-                {{ $t('trade.asset') }}
+                {{ $t('assets.transferAsset') }}
             </p>
             <div class='action-bar mb60' @click='pickerShow=true'>
+                <img alt='' class='currency-icon' :src='"/images/currency_icon/"+ curCurrency?.currency + ".png" || "/images/currency_icon/default.png"' srcset='' />
                 <span class='label'>
                     {{ curCurrency?.currency }}
                 </span>
@@ -73,8 +84,14 @@
             </van-button>
         </div>
         <Loading :show='loading' />
+        <!-- 资产列表 -->
+        <assetsList
+            v-if='pickerShow'
+            :show='pickerShow'
+            @update:show='updatePopupVis'
+        />
 
-        <van-popup
+        <!-- <van-popup
             v-model:show='pickerShow'
             class='assetsPicker'
             :duration='0.2'
@@ -88,7 +105,7 @@
                 @cancel='pickerShow = false'
                 @confirm='onCurrencyConfirm'
             />
-        </van-popup>
+        </van-popup> -->
         <van-popup
             v-model:show='accountShow'
             class='assetsPicker'
@@ -116,7 +133,11 @@ import { Toast } from 'vant'
 import { pow, gt, lt } from '@/utils/calculation'
 import { capitalTransfer, queryAccountById } from '@/api/user'
 import { isEmpty } from '@/utils/util'
+import assetsList from '@plans/components/assetsList.vue'
 export default {
+    components: {
+        assetsList
+    },
     setup (props, { emit }) {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
@@ -150,6 +171,13 @@ export default {
             return store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.fromAccount.id))
         })
 
+        const style = computed(() => store.state.style)
+
+        // 自定义头部样式
+        const customStyle = {
+            'background': style.value.bgColor,
+            'z-index': 0
+        }
         // 默认从现货撮合转出
         state.fromAccount = store.state._base.plans.find(el => Number(el.id) === 5)
 
@@ -303,6 +331,10 @@ export default {
             state.amount = ''
         }
 
+        const updatePopupVis = (val) => {
+            state.pickerShow = val
+        }
+
         /* if ([3, 5, 9].includes(Number(route.query.tradeType))) {
             store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: route.query.tradeType })
         } */
@@ -321,6 +353,8 @@ export default {
             accountList,
             currencyField,
             minTransfer,
+            customStyle,
+            updatePopupVis,
             ...toRefs(state),
 
         }
@@ -330,9 +364,22 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
+.currency-bg{
+    position: fixed;
+    z-index: 1;
+    right: -60px;
+    top: -55px;
+    overflow: hidden;
+    opacity: 0.1;
+    img{
+        width: 320px;
+    }
+}
 .fullPageWrapper {
-    background-color: var(--contentColor);
     .page-content {
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
         padding: 0 rem(30px);
         .header{
             font-size: rem(48px);
@@ -340,6 +387,7 @@ export default {
             padding-bottom: rem(10px);
 
         }
+
         .transfer {
             margin-top: rem(30px);
             display: flex;
@@ -347,7 +395,7 @@ export default {
             .label {
                 height: rem(200px);
                 background: var(--contentColor);
-                padding: rem(40px) rem(44px) 0 0;
+                padding: rem(45px) rem(44px) 0 rem(20px);
                 color: var(--color);
                 // font-weight: bold;
                 font-size: rem(48px);
@@ -369,7 +417,7 @@ export default {
                 }
             }
             .center {
-                background: var(--assistColor);
+                background: var(--contentColor);
                 border-top-left-radius: rem(6px);
                 border-bottom-left-radius: rem(6px);
                 flex: 1;
@@ -392,27 +440,21 @@ export default {
             }
             .right {
                 //flex: 1;
-                background: var(--assistColor);
-                padding-right: rem(60px);
-                padding-left: rem(70px);
+                background: var(--contentColor);
                 height: rem(200px);
                 display: flex;
                 align-items: center;
                 border-top-right-radius: rem(6px);
                 border-bottom-right-radius: rem(6px);
                 .icon-wrap{
-                    border-radius: 50%;
-                    background: var(--primary);
-                    width: rem(64px);
-                    height: rem(64px);
                     display: flex;
                     justify-content: center;
                     align-items: center;
                     text-align: center;
                     .icon_zhuanhuan {
                         margin: 0 rem(32px);
-                        color: var(--contentColor);
-                        font-size: rem(32px);
+                        color: var(--color);
+                        font-size: rem(40px);
                     }
                 }
 
@@ -428,7 +470,7 @@ export default {
             padding: 0 rem(30px);
             color: var(--color);
             font-size: rem(28px);
-            background: var(--assistColor);
+            background: var(--contentColor);
             border-radius: rem(6px);
             input {
                 flex: 1;
@@ -441,6 +483,13 @@ export default {
             }
             .all {
                 color: var(--primary);
+            }
+            .currency-icon{
+                width: rem(48px);
+                margin-right: rem(20px);
+            }
+            .label{
+                flex: 1;
             }
         }
         .tip {
