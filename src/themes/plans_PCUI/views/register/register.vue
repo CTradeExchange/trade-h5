@@ -172,7 +172,6 @@ export default {
         // 开户须知内容
 
         const instructions = computed(() => {
-            debugger
             const lang = locale.value
             const wpCompanyInfo = store.state._base.wpCompanyInfo || {}
             const protocol = wpCompanyInfo[lang === 'zh-CN' ? 'instructions_zh' : 'instructions_en']
