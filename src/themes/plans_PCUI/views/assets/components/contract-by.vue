@@ -45,7 +45,7 @@
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.positionAmount') + '(' + $t('trade.volumeUnit') + ')'" :min-width='minWidth'>
+                <el-table-column :label="$t('trade.myPosition') + '(' + $t('trade.volumeUnit') + ')'" :min-width='minWidth'>
                     <template #default='scope'>
                         <span>{{ minus(scope.row.openVolume, scope.row.closeVolume) }}</span>
                     </template>
@@ -60,7 +60,7 @@
                         <span>{{ Number(scope.row.direction) === 1 ? currentProduct(scope.row)?.sell_price : currentProduct(scope.row)?.buy_price }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.prospectMandatory')" :min-width='minWidth'>
+                <el-table-column :label="$t('trade.prospectMandatory')" :min-width='160'>
                     <template #default='scope'>
                         <span>{{ scope.row.previewStopPrice || '--' }}</span>
                     </template>

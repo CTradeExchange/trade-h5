@@ -63,6 +63,7 @@
                     :cancel-button-text="$t('common.cancel')"
                     :columns='provinceCities'
                     :confirm-button-text="$t('common.sure')"
+                    @cancel='areaCancel'
                     @change='onChangeArea'
                     @confirm='areaConfirm'
                 />
@@ -252,6 +253,9 @@ export default {
             state.areaShow = false
             state.area = val.map(el => el.text).join()
         }
+        const areaCancel = () => {
+            state.areaShow = false
+        }
 
         store.dispatch('getBankDictList')
 
@@ -265,7 +269,8 @@ export default {
             cancel,
             picker,
             onChangeArea,
-            areaConfirm
+            areaConfirm,
+            areaCancel
         }
     }
 }

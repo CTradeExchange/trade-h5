@@ -40,6 +40,8 @@
         margin-top: 10px;
         font-size: 14px;
         color: var(--color);
+        word-break: break-word;
+        overflow-wrap: break-word;
     }
 }
 </style>
