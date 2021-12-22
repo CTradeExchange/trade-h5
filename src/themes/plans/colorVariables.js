@@ -3,13 +3,13 @@ import store from './store'
 const colors = {
     common: {
         primary: '#2B70AE',
-        riseColor: '#B72122',
-        fallColor: '#2B70AE',
         warn: '#B72122',
         success: '#26a69a',
         focusColor: '#f2a11b'
     },
     night: {
+        riseColor: '#d04246',
+        fallColor: '#5095d4',
         primaryAssistColor: '#2c2e3b',
         color: '#eaebee',
         normalColor: '#9294a3',
@@ -21,6 +21,8 @@ const colors = {
         lineColor: '#2c2e3b'
     },
     light: {
+        riseColor: '#B72122',
+        fallColor: '#2B70AE',
         primaryAssistColor: '#f4f7fc',
         color: '#333333',
         normalColor: '#656667',
@@ -73,6 +75,7 @@ export function setRootVariable (themeColor, primaryColor) {
     if (primaryColor) {
         colors.common.primary = primaryColor
     }
+
     const colorsArr = Object.assign(colors[invertColor], colors.common)
     updateBodyClass(invertColor)
     const { riseColor, fallColor } = colorsArr

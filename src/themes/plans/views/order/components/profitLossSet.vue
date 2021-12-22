@@ -7,7 +7,7 @@
             <template #right-icon>
                 <van-switch
                     v-model='enabled'
-                    :active-color='$style.success'
+                    :active-color='$style.primary'
                     size='24'
                     @change='switchCellChange'
                 />

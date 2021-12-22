@@ -1,26 +1,19 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop />
+        <LayoutTop
+            :custom-style='{
+                "background": $style.bgColor
+            }'
+            :title='positionData?.symbolName'
+        >
+            <template #right>
+                <i class='icon_tubiao hidden' @click='toProduct(positionData.symbolId)'></i>
+            </template>
+        </LayoutTop>
         <div v-if='positionData' class='main'>
             <div class='m-orderInfo'>
                 <div class='layout layout-1'>
-                    <div class='item item-1'>
-                        <div class='left'>
-                            <div class='name'>
-                                {{ positionData?.symbolName }}
-                            </div>
-                            <div class='code'>
-                                {{ positionData?.symbolCode }}
-                            </div>
-                        </div>
-                    </div>
                     <div class='item item-2'>
-                        <!-- <div class='col'>
-                            <div class='sub'>
-                                {{ $t('trade.netProfit') }} (USD)
-                            </div><div class='name riseColor'>
-                            </div>
-                        </div> -->
                         <div class='col'>
                             <div class='sub alignLeft'>
                                 {{ $t('trade.profit') }}({{ assetsInfo?.currency }})
@@ -47,16 +40,27 @@
                             </div>
                         </div> -->
                     </div>
+                    <div class='btns'>
+                        <div class='item-btn' @click='showSetProfit = true'>
+                            {{ $t('trade.tackStopSetup') }}
+                        </div>
+                        <div class='item-btn' @click='closeHandler'>
+                            {{ $t('trade.closeOrder') }}
+                        </div>
+                    </div>
                 </div>
                 <div class='layout layout-1'>
-                    <div class='item item-2 van-hairline--bottom'>
+                    <div class='header van-hairline--bottom'>
                         <div class='col'>
-                            <div class='sub' :class="Number(positionData?.direction) === 1 ? 'riseColor' : 'fallColor'">
-                                {{ Number(positionData?.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
-                            </div><div class='name'>
+                            <span class='sub direction' :class="Number(positionData?.direction) === 1 ? 'riseColor' : 'fallColor'">
+                                {{ Number(positionData?.direction) === 1 ? $t('trade.buyShort') :$t('trade.sellShort') }}&nbsp;
+                            </span>
+                            <span class='name'>
                                 {{ positionVolume }} {{ $t('trade.volumeUnit') }}
-                            </div>
+                            </span>
                         </div>
+                    </div>
+                    <div class='item item-2 van-hairline--bottom'>
                         <div class='col'>
                             <div class='sub'>
                                 {{ $t('trade.positionPrice') }}
@@ -65,7 +69,7 @@
                                 {{ positionData?.openPrice }}
                             </div>
                         </div>
-                        <div class='col'>
+                        <div class='col alignRight'>
                             <div class='sub'>
                                 {{ $t('trade.currentPrice') }}
                             </div>
@@ -96,35 +100,26 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class='layout layout-3'>
-                    <div class='item van-hairline--bottom'>
-                        <div class='left'>
-                            <div class='title'>
+                    <div class='item item-2'>
+                        <div class='col'>
+                            <div class='sub'>
                                 {{ $t('trade.openTime') }}
                             </div>
-                        </div><div class='right'>
-                            {{ formatTime(positionData?.openTime) }}
+                            <div class='name'>
+                                {{ formatTime(positionData?.openTime) }}
+                            </div>
                         </div>
-                    </div><div class='item'>
-                        <div class='left'>
-                            <div class='title'>
+                        <div class='col'>
+                            <div class='sub alignRight'>
                                 {{ $t('trade.positionId') }}
                             </div>
-                        </div><div class='right'>
-                            ID : {{ positionId }}
+                            <div class='name'>
+                                ID : {{ positionId }}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class='submitBox'>
-            <van-button plain size='normal' type='default' @click='showSetProfit = true'>
-                {{ $t('trade.tackStopSetup') }}
-            </van-button>
-            <van-button size='normal' type='primary' @click='closeHandler'>
-                {{ $t('trade.closeOrder') }}
-            </van-button>
         </div>
     </div>
     <DialogSLTP
@@ -145,7 +140,7 @@
 import DialogSLTP from '@plans/components/dialogSLTP'
 import DialogClosePosition from '@plans/components/dialogClosePosition'
 import { reactive, toRefs, computed, onMounted, onUnmounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { MsgSocket } from '@/plugins/socket/socket'
 import { minus } from '@/utils/calculation'
@@ -157,6 +152,7 @@ export default {
     setup (props) {
         const store = useStore()
         const route = useRoute()
+        const router = useRouter()
         const state = reactive({
             showSetProfit: false,
             closeVisible: false,
@@ -173,7 +169,9 @@ export default {
         const product = computed(() => store.state._quote.productMap[symbolId + '_' + tradeType])
 
         const positionVolume = computed(() => minus(positionData.value?.openVolume, positionData.value?.closeVolume))
+        const style = computed(() => store.state.style)
 
+        const btnBg = style.value.primary + '19'
         const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType))?.accountId
         // 初始化设置
         const init = () => {
@@ -202,6 +200,10 @@ export default {
             state.closeVisible = true
         }
 
+        const toProduct = (symbolId) => {
+            router.push({ path: '/product', query: { symbolId, tradeType } })
+        }
+
         store.commit('_quote/Update_productActivedID', symbolId + '_' + tradeType)
 
         onMounted(() => {
@@ -222,7 +224,9 @@ export default {
             positionData,
             orderId,
             assetsInfo,
-            positionId
+            positionId,
+            toProduct,
+            btnBg
         }
     }
 }
@@ -237,8 +241,9 @@ export default {
     font-size: 0.37333rem;
     background: var(--bgColor);
     .m-orderInfo {
-        padding: rem(20px) rem(20px) rem(7px) rem(20px);
+        padding: rem(20px) rem(20px) 0 rem(20px);
         .layout {
+            padding: 0 rem(30px) 0;
             margin-bottom: rem(20px);
             background-color: var(--contentColor);
             border-radius: 10px;
@@ -246,10 +251,14 @@ export default {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                padding: rem(32px) rem(30px);
+                padding: 0 0 rem(30px);
                 &.item-1 {
                     padding-bottom: 0;
                 }
+            }
+            .header{
+                padding-bottom: rem(30px);
+                padding-top: rem(30px);
             }
         }
         :deep(.van-button) {
@@ -266,6 +275,7 @@ export default {
         }
         .layout-1 {
             .item-2 {
+                padding-top: rem(30px);
                 .col {
                     .name {
                         margin-bottom: rem(4px);
@@ -280,6 +290,24 @@ export default {
                     }
                 }
             }
+            .btns{
+                padding-bottom: rem(30px);
+                display: flex;
+                justify-content: space-between;
+                .item-btn{
+                    height: rem(56px);
+                    line-height: rem(56px);
+                    border-radius: rem(6px);
+                    background: v-bind(btnBg);
+                    color: var(--primary);
+                    flex: 1;
+                    text-align: center;
+                    margin-right: rem(25px);
+                    &:last-child{
+                        margin-right: 0;
+                    }
+                }
+            }
             .name {
                 font-size: rem(28px);
             }
@@ -290,49 +318,28 @@ export default {
             .sub {
                 //color: var(--minorColor);
                 font-size: rem(24px);
+
+            }
+            .direction{
+                display: inline-block;
+                width: rem(36px);
+                height: rem(36px);
+                line-height: rem(40px);
+                border-radius: rem(6px);
+                color: #fff;
+                padding-left: rem(4px);
+                font-size: rem(24px);
+                margin-right: rem(10px);
+                &.riseColor{
+                    background: var(--riseColor);
+                }
+                &.fallColor{
+                    background: var(--fallColor);
+                }
             }
             .active {
                 color: var(--color);
                 font-size: rem(28px);
-            }
-        }
-        .layout-3 {
-            font-size: rem(28px);
-            .left {
-                color: var(--minorColor);
-                .title {
-                    display: inline-block;
-                    margin-right: rem(20px);
-                }
-                i {
-                    position: relative;
-                    top: rem(6px);
-                    font-size: rem(30px);
-                }
-            }
-            .right {
-                color: var(--color);
-                text-align: right;
-            }
-        }
-    }
-    .submitBox {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        z-index: 2;
-        display: flex;
-        width: 100%;
-        .van-button {
-            flex: 1;
-            height: rem(90px);
-            font-size: rem(30px);
-            background: var(--primary);
-            border: none;
-            border-radius: 0;
-            &.van-button--default {
-                color: var(--primary);
-                background: var(--contentColor);
             }
         }
     }

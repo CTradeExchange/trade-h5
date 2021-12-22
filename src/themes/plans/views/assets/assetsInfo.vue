@@ -1,6 +1,11 @@
 <template>
     <div class='assetsInfoWrapper fullPageWrapper'>
-        <layoutTop :bg-color='$style.bgColor' :title='$route.query.currency' />
+        <layoutTop
+            :custom-style='{
+                "background": $style.bgColor
+            }'
+            :title='$route.query.currency'
+        />
 
         <div v-if='account' class='totalAsset'>
             <div class='leftInfo'>

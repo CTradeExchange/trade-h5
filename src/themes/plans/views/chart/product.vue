@@ -1071,7 +1071,7 @@ export default {
 .page-wrap {
     width: 100%;
     //height: 100%;
-    margin-top: rem(90px);
+    margin-top: rem(110px);
     margin-bottom: rem(120px);
     //overflow: auto;
     background: var(--bgColor);

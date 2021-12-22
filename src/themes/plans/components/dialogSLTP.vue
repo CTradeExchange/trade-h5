@@ -13,6 +13,12 @@
         <div v-if='!!warn' class='floatTip'>
             {{ warn }}
         </div>
+        <!-- <div class='header'>
+            <div class='header-title'>
+                {{ data?.symbolName }}
+            </div>
+            <i class='icon_guanbi' @click='$emit("update:show",false)'></i>
+        </div> -->
         <div class='dialog-header'>
             <div class='title'>
                 <p class='productName'>
