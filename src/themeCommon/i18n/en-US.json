@@ -210,7 +210,7 @@
     "forgot": {
         "forgot": "Forget Password",
         "retrievedByPhone": "Mobile",
-        "retrievedByEmail": "Eamil",
+        "retrievedByEmail": "Email",
         "setPwdFailed": "New password setting failed",
         "tryLater": "Please try again later or contact Online Customer Service",
         "setPwd": "Set Password",
