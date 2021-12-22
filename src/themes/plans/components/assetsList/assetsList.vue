@@ -22,13 +22,14 @@
                     :class='{ active: curCurrency === item.currency }'
                     @click='checkCurrency(item)'
                 >
-                    <img alt='' class='currency-icon' :src='"/images/currency_icon/"+ item.currency +".png"' srcset='' />
+                    <img alt='' class='currency-icon' :src='getCurrencyIcon(item.currency)' srcset='' />
+                    <!-- <img alt='' class='currency-icon' :src='"/images/currency_icon/"+ item.currency +".99png" || "/images/currency_icon/default.png"' srcset='' /> -->
                     <div class='name'>
                         <p class='t1'>
                             {{ item.currency }}
                         </p>
                         <p class='t2'>
-                            全称
+                            {{ assetsMap[item.currency] }}
                         </p>
                     </div>
                     <i v-if='curCurrency === item.currency' class='tick'></i>
@@ -41,6 +42,7 @@
 <script>
 import Top from '@/components/top'
 import { useStore } from 'vuex'
+import { assetsMap } from './assetsMap'
 import { onBeforeMount, computed, reactive, watch, toRefs, onUnmounted } from 'vue'
 export default {
     props: ['show', 'currency', 'tradeType'],
@@ -68,10 +70,19 @@ export default {
             context.emit('update:currency', currency)
             // state.popupShow = false
         }
+        const getCurrencyIcon = (currency) => {
+            try {
+                return require('@/assets/currency_icon/' + currency + '.png')
+            } catch (error) {
+                return require('@/assets/currency_icon/default.png')
+            }
+        }
         return {
             close,
             accountList,
             checkCurrency,
+            assetsMap,
+            getCurrencyIcon,
             ...toRefs(state)
         }
     }
@@ -81,11 +92,14 @@ export default {
 <style lang='scss' scoped>
 @import '@/sass/mixin.scss';
 .popup-wrap{
+    overflow-y: scroll;
+    height: calc(100vh - 80px);
     .assets-list{
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
         width: 100%;
+        padding-bottom: rem(100px);
         li{
             position: relative;
             padding-left: rem(30px);
@@ -106,6 +120,7 @@ export default {
             }
             .t2{
                 color: var(--minorColor);
+                font-size: rem(24px);
             }
             &.active{
                 border: rem(2px) solid var(--primary);

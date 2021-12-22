@@ -136,13 +136,13 @@ import { Toast } from 'vant'
 import { pow, gt, lt } from '@/utils/calculation'
 import { capitalTransfer, queryAccountById } from '@/api/user'
 import { isEmpty } from '@/utils/util'
-import assetsList from '@plans/components/assetsList.vue'
+import assetsList from '@plans/components/assetsList/assetsList.vue'
 export default {
     components: {
         assetsList
     },
     setup (props, { emit }) {
-        const { t } = useI18n({ useScope: 'global' })
+        const { t, tm } = useI18n({ useScope: 'global' })
         const store = useStore()
         const router = useRouter()
         const route = useRoute()
@@ -151,8 +151,8 @@ export default {
             pickerShow: false,
             accountShow: false,
             loading: false,
-            fromAccount: '',
-            toAccount: '',
+            toAccount: {},
+            fromAccount: {},
             assetsList: [],
             transferType: '',
             amount: '',
@@ -174,15 +174,24 @@ export default {
             return store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.fromAccount.id))
         })
 
-        const style = computed(() => store.state.style)
-
         // 自定义头部样式
         const customStyle = {
-            'background': style.value.bgColor,
+            'background': 'transparent',
             'z-index': 0
         }
-        // 默认从现货撮合转出
-        state.fromAccount = store.state._base.plans.find(el => Number(el.id) === 5)
+
+        const swapAccount = computed({
+            get () {
+                return store.state._base.plans.find(el => Number(el.id) === 5)
+            },
+            set (val) {
+                state.fromAccount = val
+            }
+        })
+
+        state.fromAccount = swapAccount.value
+
+        // state.fromAccount = store.state._base.plans.find(el => Number(el.id) === 5)
 
         if (Number(tradeType) === 5) {
             state.toAccount = plans.value.filter(el => el.name !== state.fromAccount.name)[0]
@@ -339,6 +348,8 @@ export default {
             state.pickerShow = val
         }
 
+        store.commit('_base/Update_plansNames', tm('tradeType'))
+
         /* if ([3, 5, 9].includes(Number(route.query.tradeType))) {
             store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: route.query.tradeType })
         } */
@@ -359,6 +370,7 @@ export default {
             minTransfer,
             customStyle,
             updatePopupVis,
+
             ...toRefs(state),
 
         }
@@ -370,7 +382,6 @@ export default {
 @import '@/sass/mixin.scss';
 .currency-bg{
     position: fixed;
-    z-index: 1;
     right: -60px;
     top: -55px;
     overflow: hidden;

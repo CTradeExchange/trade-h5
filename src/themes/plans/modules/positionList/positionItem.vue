@@ -17,14 +17,12 @@
                                     <span class='lot'>
                                         {{ data.symbolCode }}
                                     </span>
+                                    <div class='bd' @click.stop='toProduct(data.symbolId)'>
+                                        <i class='icon_tubiao hidden'></i>
+                                    </div>
                                     <span v-if='data.crossLevelNum' class='multipleVal' :class="{ arrow: data.marginSetType==='2' }" @click.stop='data.marginSetType==="2" ? $emit("showMultiplePopup",data):""'>
                                         <i>{{ data.crossLevelNum }}x</i>
                                         <i v-if="data.marginSetType==='2'" class='icon_icon_arrow'></i>
-                                    </span>
-                                    <span>
-                                        <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
-                                            {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
-                                        </span>{{ minus(data.openVolume, data.closeVolume) }} {{ $t('trade.volumeUnit') }}
                                     </span>
                                 </div>
 
@@ -35,8 +33,8 @@
                                 </div>
                             </div>
                             <div>
-                                <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
-                                    {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}&nbsp;
+                                <span class='direction' :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
+                                    {{ Number(data.direction) === 1 ? $t('trade.buyShort') :$t('trade.sellShort') }}&nbsp;
                                 </span>{{ minus(data.openVolume, data.closeVolume) }} {{ $t('trade.volumeUnit') }}
                             </div>
                         </div>
@@ -50,12 +48,21 @@
                                 <div class='val'>
                                     {{ data.openPrice }}
                                 </div>
-                            </div><div class='flex-item alignRight'>
+                            </div>
+                            <div class='flex-item alignRight'>
                                 <div class='title'>
                                     {{ $t('trade.currentPrice') }}
                                 </div>
                                 <div class='cur-price' :class='[Number(data.direction) === 1 ? product?.sell_color : product?.buy_color]'>
                                     {{ Number(data.direction) === 1 ? product?.sell_price : product?.buy_price }}
+                                </div>
+                            </div>
+                            <div class='flex-item'>
+                                <div class='title alignRight'>
+                                    {{ $t('trade.previewStopPrice') }}
+                                </div>
+                                <div class='val alignRight'>
+                                    {{ data.previewStopPrice || '--' }}
                                 </div>
                             </div>
                         </div>
@@ -95,14 +102,6 @@
                                     {{ data?.maintenanceMargin || '--' }}
                                 </div>
                             </div>
-                            <div class='flex-item'>
-                                <div class='title alignRight'>
-                                    {{ $t('trade.previewStopPrice') }}
-                                </div>
-                                <div class='val alignRight'>
-                                    {{ data.previewStopPrice || '--' }}
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class='cell'>
@@ -126,9 +125,6 @@
                     </div>
                     <div class='cell'>
                         <div class='ft'>
-                            <div class='bd' @click.stop='toProduct(data.symbolId)'>
-                                <i class='icon_tubiao hidden'></i>
-                            </div>
                             <van-button
                                 v-if='Number(tradeType) === 2'
                                 size='mini'
@@ -188,7 +184,11 @@ export default {
             store.commit('_quote/Update_productActivedID', item.symbolId)
             router.push({
                 path: '/positionDetail',
-                query: { symbolId: item.symbolId, positionId: item.positionId, tradeType: item.tradeType }
+                query: {
+                    symbolId: item.symbolId,
+                    positionId: item.positionId,
+                    tradeType: item.tradeType
+                }
             })
         }
         const updateShow = (val) => {
@@ -249,13 +249,14 @@ export default {
         .cell {
             width: 100%;
             margin-bottom: rem(20px);
-            color: var(--minorColor);
+            color: var(--color);
             font-size: rem(24px);
             line-height: 1.45;
             .th {
                 display: flex;
                 align-items: baseline;
                 justify-content: space-between;
+                margin-bottom: rem(30px);
             }
             &:last-child {
                 align-items: flex-end;
@@ -265,6 +266,26 @@ export default {
                 display: inline-block;
                 //margin-right: rem(15px);
                 text-align: center;
+            }
+            .direction{
+                display: inline-block;
+                width: rem(36px);
+                height: rem(36px);
+                line-height: rem(40px);
+                border-radius: rem(6px);
+                color: #fff;
+                padding-left: rem(4px);
+                font-size: rem(24px);
+                margin-right: rem(10px);
+                &.riseColor{
+                    background: var(--riseColor);
+                }
+                &.fallColor{
+                    background: var(--fallColor);
+                }
+            }
+            .riseColor{
+
             }
             .flex-wrap {
                 display: flex;
@@ -341,15 +362,15 @@ export default {
             text-align: center;
             border-radius: rem(6px);
             &.hidden {
-                color: var(--primary);
-                background-color: var(--primaryAssistColor);
+                color: var(--normalColor);
+                margin-right: rem(10px);
             }
         }
         .van-button {
             //width: rem(165px);
             flex: 1;
             height: rem(52px);
-            margin-left: rem(20px);
+            margin-right: rem(20px);
             color: var(--primary) !important;
             font-size: rem(24px);
             line-height: rem(48px);
@@ -357,6 +378,9 @@ export default {
             border: none;
             border-color: var(--primaryAssistColor) !important;
             border-radius: rem(6px);
+            &:last-child{
+                margin-right: 0;
+            }
         }
         .multipleVal{
             vertical-align: middle;

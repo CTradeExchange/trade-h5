@@ -15,7 +15,7 @@
                 </span>
                 <div class='btns'>
                     <span class='btn' @click='onSelect(item)'>
-                        选择
+                        {{ $t('transRecords.select') }}
                     </span>
                 </div>
             </div>
