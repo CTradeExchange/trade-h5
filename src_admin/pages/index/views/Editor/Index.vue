@@ -209,13 +209,13 @@ export default {
 
         const handleGetPageConfig = () => {
             if (state.pageCode) {
+                store.commit('editor/RESET_ELEMENT', [])
                 getPageConfig({
                     page_code: state.pageCode,
                     channelId: id,
                     language: lang,
                 })
                     .then(res => {
-                        store.commit('editor/RESET_ELEMENT', [])
                         state.pageConf = res.data
                         const parseData = JSON.parse(res.data ? ((res.data.content.length <= 0 || res.data.content === '[]') ? '[]' : unzip(res.data.content)) : '[]')
                         const resData = Object.prototype.toString.call(parseData) === '[object Array]' ? parseData : []
