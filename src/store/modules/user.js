@@ -205,8 +205,12 @@ export default {
             }
 
             if (flag) {
-                if (data.optional === 1) dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
-                dispatch('_quote/setProductAllList', null, { root: true }).then(productAllList => {
+                return Promise.resolve().then(() => {
+                    if (data.optional === 1) return dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
+                    else return null
+                }).then(() => {
+                    return dispatch('_quote/setProductAllList', null, { root: true })
+                }).then(productAllList => {
                     return dispatch('_quote/querySymbolBaseInfoList', productAllList, { root: true })
                 }).then(() => {
                     if (data.optional === 0) dispatch('addCustomerOptionalDefault') // 如果没有添加过自选，拿到产品精简信息后添加自选，因为添加自选需要拿到 symbolId, symbolCode, symbolName
