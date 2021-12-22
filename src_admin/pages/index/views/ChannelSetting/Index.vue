@@ -281,12 +281,10 @@
                                 </div>
                             </el-form-item> -->
 
-                          
                             <el-form-item v-if='!isPC' :label="$t('channelSetting.themeColor')" prop='themeColor'>
                                 <el-color-picker v-model='form.themeColor' :predefine='predefineColors' />
-
                             </el-form-item>
-                            <el-form-item  :label="$t('channelSetting.buriedPointCode')">
+                            <el-form-item :label="$t('channelSetting.buriedPointCode')">
                                 <el-input
                                     v-model='form.googleAnalytics'
                                     :placeholder="$t('pleaseEnter')"
@@ -363,9 +361,6 @@
                             <amount-set ref='amountSet' />
                         </el-tab-pane>
                         <el-tab-pane v-loading='fourthLoading' class='tab' :label="$t('channelSetting.tradeTypeNameSetting')" name='fourth' style='padding-right: 100px;'>
-                            <p style='color:#f00; font-size:14px; text-align:center; padding-bottom:20px;'>
-                                PCUI主题暂不支持此项配置
-                            </p>
                             <el-row :gutter='20' style='justify-content: center;'>
                                 <el-col :span='3'>
                                     <el-form-item />
