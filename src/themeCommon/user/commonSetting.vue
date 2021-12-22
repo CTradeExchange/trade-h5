@@ -73,12 +73,12 @@
             <div class='header-title'>
                 {{ $t('common.lang') }}
             </div>
-            <i class='icon_guanbi' @click='langShow=false'></i>
+            <i class='icon_guanbi' @click='colorShow=false'></i>
         </div>
         <div class='popup-wrap'>
             <van-radio-group v-model='chartVal' @change='colorShow = false'>
                 <van-cell-group inset>
-                    <van-cell class='popup-item' clickable @click="chartVal = '1'">
+                    <van-cell class='popup-item' clickable @click='upDownColorSelect("1")'>
                         <template #title>
                             <div class='left'>
                                 <span class='label'>
@@ -96,7 +96,7 @@
                             <van-radio name='1' />
                         </template>
                     </van-cell>
-                    <van-cell class='popup-item' clickable @click="chartVal = '2'">
+                    <van-cell class='popup-item' clickable @click='upDownColorSelect("2")'>
                         <template #title>
                             <div class='left'>
                                 <span class='label'>
@@ -140,7 +140,7 @@ export default {
             themeVal: localGet('invertColor') === 'night',
             langShow: false,
             colorShow: false,
-            chartVal: JSON.parse(localGet('chartConfig'))?.chartColorType.toString() || '1',
+            chartVal: JSON.parse(localGet('chartConfig'))?.chartColorType || '1',
             lang: getCookie('lang') || store.state._base.wpCompanyInfo.language,
         })
 
@@ -207,20 +207,22 @@ export default {
 
         // 设置红涨绿跌颜色
         const upDownColorSelect = (chartObj) => {
-            state.chartVal = chartObj.val
+            debugger
+            const curTheme = localGet('invertColor')
+            state.chartVal = chartObj
             const locChartConfig = JSON.parse(localGet('chartConfig'))
             if (isEmpty(locChartConfig)) {
                 localSet('chartConfig', JSON.stringify({
-                    'chartColorType': chartObj.val
+                    'chartColorType': chartObj
                 }))
             } else {
-                locChartConfig['chartColorType'] = chartObj.val
+                locChartConfig['chartColorType'] = chartObj
                 localSet('chartConfig', JSON.stringify(locChartConfig))
             }
             const themeColors = sessionStorage.getItem('themeColors')
             if (!isEmpty(themeColors)) {
-                const { riseColor, fallColor } = JSON.parse(themeColors)?.common
-                if (chartObj.val === 1) {
+                const { riseColor, fallColor } = JSON.parse(themeColors)[curTheme]
+                if (chartObj === 1) {
                     document.body.style.setProperty('--riseColor', riseColor)
                     document.body.style.setProperty('--fallColor', fallColor)
                 } else {

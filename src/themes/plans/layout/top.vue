@@ -107,16 +107,16 @@ export default {
         position: absolute;
         height: 100%;
         padding: 0 rem(30px);
-        line-height: rem(90px);
+        line-height: rem(110px);
         cursor: pointer;
     }
     .left {
-        bottom: rem(-15px);
+        //bottom: rem(-15px);
         left: 0;
     }
     .right {
         right: 0;
-        bottom: rem(-15px);
+        //bottom: rem(-10px);
         i {
             font-size: rem(40px);
         }
