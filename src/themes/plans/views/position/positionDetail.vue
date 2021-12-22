@@ -18,18 +18,11 @@
                             <div class='sub alignLeft'>
                                 {{ $t('trade.profit') }}({{ assetsInfo?.currency }})
                             </div>
-                            <div class='name' :class="parseFloat(positionData?.profitLoss) > 0 ? 'riseColor': 'fallColor'">
+                            <div class='name profit' :class="parseFloat(positionData?.profitLoss) > 0 ? 'riseColor': 'fallColor'">
                                 {{ positionData?.profitLoss || '--' }}
                             </div>
                         </div>
-                        <div v-if='Number(positionData.tradeType) === 2' class='col'>
-                            <div class='sub'>
-                                {{ $t('trade.swap_2') }}({{ assetsInfo.currency }})
-                            </div>
-                            <div class='name'>
-                                {{ positionData.interest || '--' }}
-                            </div>
-                        </div>
+
                         <!-- abcc版本不需要显示手续费 -->
                         <!-- <div class='col'>
                             <div class='sub'>
@@ -39,6 +32,16 @@
                                 {{ positionData.openFee || '--' }}
                             </div>
                         </div> -->
+                    </div>
+                    <div class='item'>
+                        <div v-if='Number(positionData.tradeType) === 2' class='col'>
+                            <div class='sub'>
+                                {{ $t('trade.swap_2') }}({{ assetsInfo.currency }})
+                            </div>
+                            <div class='name lx'>
+                                {{ positionData.interest || '--' }}
+                            </div>
+                        </div>
                     </div>
                     <div class='btns'>
                         <div class='item-btn' @click='showSetProfit = true'>
@@ -310,15 +313,20 @@ export default {
             }
             .name {
                 font-size: rem(28px);
+                &.lx{
+                    font-size: rem(34px);
+                }
+                &.profit{
+                    font-size: rem(70px);
+                }
             }
             .code {
                 color: var(--minorColor);
                 font-size: rem(20px);
             }
             .sub {
-                //color: var(--minorColor);
-                font-size: rem(24px);
-
+                color: var(--minorColor);
+                font-size: rem(28px);
             }
             .direction{
                 display: inline-block;
@@ -327,8 +335,8 @@ export default {
                 line-height: rem(40px);
                 border-radius: rem(6px);
                 color: #fff;
-                padding-left: rem(4px);
-                font-size: rem(24px);
+                padding-left: rem(2px);
+                font-size: rem(20px);
                 margin-right: rem(10px);
                 &.riseColor{
                     background: var(--riseColor);
