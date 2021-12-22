@@ -229,7 +229,7 @@
                                 </el-select>
                             </el-form-item>
 
-                            <el-form-item v-if='configLoaded' :label="$t('channelSetting.openAccountNotice1')" prop='instructions'>
+                            <el-form-item v-if='configLoaded && !isPC' :label="$t('channelSetting.openAccountNotice1')" prop='instructions'>
                                 <Tinymce
                                     v-model='form.instructions_zh'
                                     :height='120'
@@ -237,7 +237,7 @@
                                     :width='800'
                                 />
                             </el-form-item>
-                            <el-form-item v-if='configLoaded' :label="$t('channelSetting.openAccountNotice2')" prop='instructions'>
+                            <el-form-item v-if='configLoaded && !isPC' :label="$t('channelSetting.openAccountNotice2')" prop='instructions'>
                                 <Tinymce
                                     v-model='form.instructions_en'
                                     :height='120'
@@ -245,7 +245,7 @@
                                     :width='800'
                                 />
                             </el-form-item>
-                            <el-form-item :label="$t('channelSetting.worthMentioning')">
+                            <el-form-item v-if='!isPC' :label="$t('channelSetting.worthMentioning')">
                                 <el-checkbox-group v-model='form.thirdLogin'>
                                     <el-checkbox label='google'>
                                         Google
@@ -280,10 +280,13 @@
                                     </div>
                                 </div>
                             </el-form-item> -->
-                            <el-form-item :label="$t('channelSetting.themeColor')" prop='themeColor'>
+
+                          
+                            <el-form-item v-if='!isPC' :label="$t('channelSetting.themeColor')" prop='themeColor'>
                                 <el-color-picker v-model='form.themeColor' :predefine='predefineColors' />
+
                             </el-form-item>
-                            <el-form-item :label="$t('channelSetting.buriedPointCode')">
+                            <el-form-item  :label="$t('channelSetting.buriedPointCode')">
                                 <el-input
                                     v-model='form.googleAnalytics'
                                     :placeholder="$t('pleaseEnter')"
@@ -360,6 +363,9 @@
                             <amount-set ref='amountSet' />
                         </el-tab-pane>
                         <el-tab-pane v-loading='fourthLoading' class='tab' :label="$t('channelSetting.tradeTypeNameSetting')" name='fourth' style='padding-right: 100px;'>
+                            <p style='color:#f00; font-size:14px; text-align:center; padding-bottom:20px;'>
+                                PCUI主题暂不支持此项配置
+                            </p>
                             <el-row :gutter='20' style='justify-content: center;'>
                                 <el-col :span='3'>
                                     <el-form-item />
@@ -492,6 +498,7 @@ export default {
         return {
             configLoaded: false,
             optionName: 'first', // 当前选项卡
+            isPC: process.env.VUE_APP_theme === 'plans_PCUI',
             form: {
                 tradeTypeCurrencyList: [],
                 thirdLogin: [],
