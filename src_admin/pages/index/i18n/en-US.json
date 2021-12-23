@@ -227,25 +227,103 @@
     },
     "plans":{
         "img":"Single Image Banner",
+        "commonConfig":{
+            "src":"The map's address",
+            "href":"Jump address"
+        },
+        "imgConfig":{
+           
+        },
         "swipe":"Carousel Banner",
+        "swipeConfig":{
+            "loop":"Automatic carousel",
+            "autoplay":"Automatic rotation interval",
+            "items":"Carousel page"
+        },
         "floatComp":"Floating ad",
+        "floatCompConfig":{
+
+        },
         "layout":"Grid component",
+        "layoutConfig":{
+            "gutter":"Grid spacing",
+            "items":"Grid element"
+        },
         "luckyWheel":"Big turntable",
+        "luckyWheelConfig":{
+            "prizeButton":"Lottery button",
+            "items":"Prize awards"
+        },
         "menulist":"Menu list",
+        "menulistConfig":{
+            "items":"Menu element"
+        },
         "minePerson":"Personal information",
+        "minePersonConfig":{
+            "faceImg":"Default avatar"
+        },
         "nav":"Bottom navigation",
+        "navConfig":{
+            "items":"Navigation element"
+        },
         "news":"Information Flow",
+        "newsConfig":{
+            "newsArea":"Area",
+            "orgid":"Orgid"
+        },
         "notice":"Marquee components",
+        "noticeConfig":{
+            "items":"Marquee item"
+        },
         "productsSwipe":"Product market carousel",
+        "productsSwipeConfig":{
+            "product":"Product ID"
+        },
         "productsTimeSharing":"Time-sharing diagram",
+        "productsTimeSharingConfig":{
+            "product":"Product ID"
+        },
         "productsWithIcon":"Product List",
+        "productsWithIconConfig":{
+            "items":"Product"
+        },
         "quoteList":"Quote list",
+        "quoteListConfig":{
+            "items":"Plate"
+        },
         "redpacket":"Red envelope rain animation",
+        "redpacketConfig":{
+            "time":"Animation time (seconds)",
+            "type":"Animation type"
+        },
         "registerForm":"Registration form",
+         "registerFormConfig":{
+            "rows":"Form element"
+        },
         "registerType":"Register module",
+        "registerTypeConfig":{
+            "registerBanner":"Banner picture",
+            "typeSupport":"Way to register",
+            "agreement_html":"Agreement"
+        },
         "selfSymbol":"Optional components",
+        "selfSymbolConfig":{
+            "product":"Product"
+        },
         "serviceAgreement":"Account opening instructions",
+        "serviceAgreementConfig":{
+            "agreement_html":"Agreement"
+        },
         "template":"VUE template",
-        "text":"Text component"
+         "templateConfig":{
+            "content":"Text content"
+        },
+        "text":"Text component",
+        "textConfig":{
+            "content":"Text content",
+            "color":"Font color",
+            "fontSize":"Font size",
+            "textAlign":"Alignment"
+        }
     }
 }

@@ -586,7 +586,6 @@ export default {
                 return
             }
             const isDev = process.env.NODE_ENV === 'development'
-            debugger
             const pageImg = await html2canvas(document.querySelector('.previewWrapper .drawing-board'), { allowTaint: true, useCORS: true })
             pushPage(Object.assign({
                 pageCode: state.pageCode,
@@ -667,8 +666,16 @@ export default {
 
         onMounted(async () => {
             mobileComponents = await mobileComponentsConfig()
+            
             mobileComponents.forEach(item => {
                 item.title = t('plans.'+item.title);
+                item.config.forEach(el=>{
+                    if(el.name=="src"||el.name=="href"){
+                        el.label = t('plans.commonConfig.'+el.name)
+                    }else{
+                         el.label = t('plans.'+item.tag+'Config.'+el.name)
+                    }
+                })
             })
             state.previewApp = previewRender('#previewContainer',getCookie('lang'))
             handleGetPageConfig()
