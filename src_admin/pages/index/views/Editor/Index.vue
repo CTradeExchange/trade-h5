@@ -157,7 +157,7 @@ import { computed, onMounted, onUnmounted, reactive, toRefs } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { sessionSet } from '@/utils/util'
+import { sessionSet , getCookie } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 let mobileComponents = null
 const pageBaseConfig = pageConfig || {}
@@ -586,6 +586,7 @@ export default {
                 return
             }
             const isDev = process.env.NODE_ENV === 'development'
+            debugger
             const pageImg = await html2canvas(document.querySelector('.previewWrapper .drawing-board'), { allowTaint: true, useCORS: true })
             pushPage(Object.assign({
                 pageCode: state.pageCode,
@@ -669,7 +670,7 @@ export default {
             mobileComponents.forEach(item => {
                 item.title = t('plans.'+item.title);
             })
-            state.previewApp = previewRender('#previewContainer')
+            state.previewApp = previewRender('#previewContainer',getCookie('lang'))
             handleGetPageConfig()
             showComp()
             await getSettingPageData()

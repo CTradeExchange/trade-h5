@@ -1,9 +1,9 @@
 // export default i18n
 import { createI18n } from 'vue-i18n'
 import { nextTick } from 'vue'
-import {localGet,localSet} from '@/utils/util';
+import {getCookie} from '@/utils/util';
 
-const defaultLocal = localGet("lang") || getUrlLang()
+const defaultLocal = getCookie('lang') || 'zh-CN'
 const i18n = setupI18n(defaultLocal)
 
 export default i18n
@@ -36,32 +36,4 @@ export async function loadLocaleMessages(i18n, locale) {
     i18n.global.setLocaleMessage(locale, messages)
 
     return nextTick()
-}
-// export function loadLocaleMessages(lang) {
-//     const locale = lang||defaultLocal;
-//     const locales = require.context('../i18n', true, /[A-Za-z0-9-_,\s]+\.json$/i)
-//     const messages = {}
-//     locales.keys().forEach(key => {
-//         if(key.indexOf(locale)!=-1){
-//             const matched = key.match(/([A-Za-z0-9-_]+)\./i)
-//             if (matched && matched.length > 1) {
-//                 const locale = matched[1]
-//                 messages[locale] = locales(key)
-//             }
-//         }
-
-//     })
-//     return messages
-// }
-export function getUrlLang(){
-    const hashArr = location.hash.split('&')
-    let lang = 'zh-CN';
-    // hashArr.forEach(item=>{
-    //     if(item.indexOf("lang")!=-1||item.indexOf("language")!=-1){
-    //         lang = item.substring()
-    //         lang = item.substring(item.indexOf("=")+1)
-    //     }
-    // })
-    localSet("lang",lang)
-    return lang;
 }

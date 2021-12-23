@@ -9,8 +9,8 @@ import ElementPlus, { ElMessage } from 'element-plus'
 import VueParticles from 'vue-particles'
 // import 'element-plus/lib/theme-chalk/index.css'
 import 'element-plus/dist/index.css'
-import i18n, { setI18nLanguage, loadLocaleMessages , getUrlLang }  from './i18n/i18n.js'
-import {localGet,localSet} from '@/utils/util';
+import i18n, { setI18nLanguage, loadLocaleMessages }  from './i18n/i18n.js'
+import { getCookie } from '@/utils/util';
 
 const app = createApp(App)
 app.config.globalProperties.$message = ElMessage
@@ -18,7 +18,8 @@ app.config.globalProperties.$message = ElMessage
 app.use(ElementPlus).use(store).use(router).use(i18n)
 app.component(RightForm.name, RightForm)
 app.use(VueParticles)
-const lang = localGet("lang") || getUrlLang()
+const lang = getCookie("lang") || 'zh-CN'
+debugger
 setI18nLanguage(i18n, lang)
 loadLocaleMessages(i18n, lang)
 // Vue.config.productionTip = false;
