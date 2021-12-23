@@ -98,10 +98,12 @@
         @cancel='onCancel'
         @confirm='onConfirm'
     >
-        <h4>{{ $t('deposit.payConfirm') }}</h4>
-        <p class='title'>
-            {{ $t('deposit.payConfirmTips') }}
-        </p>
+        <div class='content'>
+            <h4>{{ $t('deposit.payConfirm') }}</h4>
+            <p class='title'>
+                {{ $t('deposit.payConfirmTips') }}
+            </p>
+        </div>
     </van-dialog>
 
     <!-- 补充资料弹窗 -->
@@ -1019,8 +1021,7 @@ export default {
     }
     .content {
         margin: rem(20px) 0;
-        color: var(--minorColor);
-        font-size: rem(28px);
+        text-align: center;
     }
 }
 .pay-warpper {
