@@ -197,8 +197,25 @@ export default {
             return queryPositionPage(positionsConfig[tradeType]).then((res) => {
                 commit('Update_positionLoading', false)
 
-                if (res.check()) {
-                    commit('Update_positionList', { tradeType, list: res.data || [] })
+                const productMap = rootState._quote.productMap
+                if (res.check() && res.data?.length) {
+                    // 持仓列表里面有wp未配置的产品，那么重新获取改产品的基础信息
+                    const emptyProducts = res.data.filter(el => {
+                        const { symbolId, tradeType } = el
+                        const symbolKey = `${symbolId}_${tradeType}`
+                        if (productMap[symbolKey]) {
+                            return false
+                        } else {
+                            return {
+                                symbolId,
+                                tradeType,
+                            }
+                        }
+                    })
+                    if (emptyProducts.length) {
+                        commit('_quote/add_products', emptyProducts, { root: true })
+                    }
+                    commit('Update_positionList', { tradeType, list: res.data })
                 }
                 return res
             })
