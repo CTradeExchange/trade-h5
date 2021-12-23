@@ -207,7 +207,6 @@ export default {
 
         // 设置红涨绿跌颜色
         const upDownColorSelect = (chartObj) => {
-            debugger
             const curTheme = localGet('invertColor')
             state.chartVal = chartObj
             const locChartConfig = JSON.parse(localGet('chartConfig'))

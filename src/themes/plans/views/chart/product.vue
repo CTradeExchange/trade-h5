@@ -1128,7 +1128,6 @@ export default {
             }
             .icon_zixuan2 {
                 color: #FC822F;
-
                 animation: heartBeat 1.3s ease-in-out forwards;
             }
             .loading {

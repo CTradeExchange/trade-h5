@@ -2,7 +2,7 @@
     <!-- 杠杆倍数设置 -->
     <van-popup
         v-model:show='show'
-        class='custom-popup'
+        class='custom-popup leverage-popup'
         position='bottom'
         round
         teleport='body'
@@ -216,8 +216,16 @@ export default {
 }
 </script>
 
+<style lang="scss">
+@import '@/sass/mixin.scss';
+.leverage-popup{
+    background-color: var(--contentColor);
+}
+</style>
+
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
+
 .multipleSet{
     position: relative;
     .warnRangeTip{

@@ -397,7 +397,7 @@
     "dealVolume": "Volume",
     "noDealData": "No trade record",
     "noStallsData": "No data",
-    "orderSuccessToast": "Order placed, please check assets",
+    "orderSuccessToast": "Order is placed, please check trade execute notification",
     "orderPendingSuccessToast": "Successful order, please check the list of delegates",
     "inputCloseNum": "Please enter quantity",
     "closeSuccessToast": "Order placed, please check closed position record",

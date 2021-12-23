@@ -108,3 +108,21 @@ export default function ({ showPending }) {
 
     }
 }
+
+export const toolHooks = function () {
+    const store = useStore()
+    const product = computed(() => store.getters.productActived)
+
+    // 是否显示五档盘口
+    const orderHandicapVisible = computed(() => {
+        if ([2].includes(product.value?.dealMode)) { // 蝴蝶的成交模式显示五档报价，买卖方向按钮上不显示价格
+            return true
+        } else {
+            return false
+        }
+    })
+
+    return {
+        orderHandicapVisible
+    }
+}
