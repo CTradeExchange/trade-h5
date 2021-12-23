@@ -2,7 +2,7 @@
     <div class='pageWrap'>
         <Top
             :menu='false'
-            :right-action='false'
+            :right-action='false' 
             :show-center='false'
             @back='back'
         />

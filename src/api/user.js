@@ -187,6 +187,40 @@ export function queryPayType (data) {
         data
     })
 }
+/* 获取直充支付通道支持币种信息 */
+export function getCryptoBlockchainInfo (data) {
+    return request({
+        url: '/global/fund.app.DepositAppDubboService.getCryptoBlockchainInfo',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+/* 获取直充支付钱包地址 */
+export function getBindRechargeAddress (data) {
+    return request({
+        url: '/global/fund.app.DepositAppDubboService.getBindRechargeAddress',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data,
+        toastErr: false
+    })
+}
+/* 申请绑定直充支付钱包地址 */
+export function applyRechargeBindAddress (data) {
+    return request({
+        url: '/global/fund.app.DepositAppDubboService.applyRechargeBindAddress',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
 
 /* 获取客户存款货币对汇率 */
 export function queryDepositExchangeRate (data) {
