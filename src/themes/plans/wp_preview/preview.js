@@ -17,7 +17,8 @@ setRouter(null)
 localSet('invertColor', 'light')
 setRootVariable(localGet('invertColor'))
 if (process.env.NODE_ENV === 'development') window._store = store
-async function render (container) {
+async function render (container,lang) {
+    console.log("lang123",lang)
     const app = createApp(App)
     app.use(longpress)
     app.use(store)
@@ -29,7 +30,7 @@ async function render (container) {
     app.component('MyAsset', MyAsset)
     app.component('Loading', Loading)
 
-    const defaultLocal = 'zh-CN'
+    const defaultLocal = lang||'zh-CN'
     setI18nLanguage(I18n, defaultLocal)
     await loadLocaleMessages(I18n, defaultLocal)
 
@@ -49,6 +50,6 @@ async function render (container) {
     })
 
     // 获取到公司配置后初始化vue实例
-    app.mount(container)
+    app.mount(container,lang)
 }
 export default render
