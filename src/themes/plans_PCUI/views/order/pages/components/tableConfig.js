@@ -5,8 +5,10 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { closePboOrder, closeTradePboOrder } from '@/api/trade'
+import { getCookie } from '@/utils/util'
 
 const formatTime = val => window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+const locale = getCookie('lang') === 'zh-CN' ? 'zh' : 'en'
 
 // 成交量/额
 const getFormatExecuteNum = t => (val, tradeType, row) => {
@@ -398,7 +400,7 @@ export const getTransactionColumns = (tradeType) => {
             {
                 name: t('trade.orderType'),
                 align: 'right',
-                width: 100,
+                minWidth: 130,
                 formatter: (row, column, cellValue, index, rawResponse) => {
                     return rawResponse.bizTypeText[row.bizType]
                 }
@@ -447,13 +449,15 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.stopLossPrice'),
                 align: 'right',
                 minWidth: 120,
-                prop: 'stopLoss',
+                // prop: 'stopLoss',
+                formatter: row => row.stopLoss * 1 !== 0 ? row.stopLoss : '- -'
             },
             {
                 name: t('trade.stopProfitPrice'),
                 align: 'right',
                 minWidth: 120,
-                prop: 'takeProfit',
+                // prop: 'takeProfit',
+                formatter: row => row.takeProfit * 1 !== 0 ? row.takeProfit : '- -'
             },
             {
                 name: t('trade.profit'),
@@ -530,13 +534,15 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.stopLossPrice'),
                 align: 'right',
                 minWidth: 120,
-                prop: 'stopLoss',
+                // prop: 'stopLoss',
+                formatter: row => row.stopLoss * 1 !== 0 ? row.stopLoss : '- -'
             },
             {
                 name: t('trade.stopProfitPrice'),
                 align: 'right',
                 minWidth: 120,
-                prop: 'takeProfit',
+                // prop: 'takeProfit',
+                formatter: row => row.takeProfit * 1 !== 0 ? row.takeProfit : '- -'
             },
             {
                 name: t('trade.profit'),
@@ -836,7 +842,7 @@ export const getAssetColumns = (tradeType) => {
                 fixed: 'right',
                 className: 'operate',
                 align: 'right',
-                minWidth: 130,
+                width: 130,
                 slots: {
                     default: ({ row, onGetComponentRefs }) => {
                         const refs = onGetComponentRefs()
@@ -918,7 +924,7 @@ export const getAssetColumns = (tradeType) => {
                 fixed: 'right',
                 className: 'operate',
                 align: 'right',
-                minWidth: 220,
+                width: locale === 'zh' ? 210 : 225,
                 slots: {
                     default: ({ row, onGetComponentRefs }) => {
                         const refs = onGetComponentRefs()

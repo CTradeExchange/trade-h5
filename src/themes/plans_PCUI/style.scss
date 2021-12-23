@@ -682,10 +682,13 @@ body {
 			color: var(--primary);
 			background: var(--contentColor) !important;
 		}
-		&:hover {
+		&:hover{
 			color: var(--primary);
 			background: var(--contentColor) !important;
 		}
+        &.hover {
+            background: none;
+        }
 	}
 	.el-input__inner {
 		background: transparent;

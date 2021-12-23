@@ -23,13 +23,13 @@
             </p>
         </div>
         <div class='item ohlc'>
-            <p>{{ $t('chart.open') }} {{ product.open_price || '--' }}</p>
-            <p>{{ $t('chart.close') }} {{ product.yesterday_close_price || '--' }}</p>
+            <p>{{ $t('trade.todayOpen') }} {{ product.open_price || '--' }}</p>
+            <p>{{ $t('trade.yesterdayClosed') }} {{ product.yesterday_close_price || '--' }}</p>
         </div>
 
         <div class='item ohlc'>
-            <p>{{ $t('chart.high') }} {{ product.high_price || '--' }}</p>
-            <p>{{ $t('chart.low') }} {{ product.low_price || '--' }}</p>
+            <p>{{ $t('trade.high') }} {{ product.high_price || '--' }}</p>
+            <p>{{ $t('trade.low') }} {{ product.low_price || '--' }}</p>
         </div>
 
         <div class='item collect'>
