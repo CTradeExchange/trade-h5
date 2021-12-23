@@ -1,5 +1,5 @@
 export default {
-    title: '红包雨动画',
+    title: 'redpacket',//'红包雨动画',
     tag: 'redpacket',
     hidden: true, // 左侧模块列表不显示
     // exclude:['nav'],   // 排除的页面code

@@ -1,5 +1,5 @@
 export default {
-    title: 'VUE模板',
+    title: 'template',//'VUE模板',
     tag: 'template',
     // exclude:['nav'],   // 排除的页面code
     tagIcon: 'el-icon-star-on',

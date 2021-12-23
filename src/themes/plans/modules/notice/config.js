@@ -1,5 +1,5 @@
 export default {
-    title: '跑马灯组件',
+    title: 'notice',//'跑马灯组件',
     tag: 'notice',
     exclude: ['nav'], // 排除的页面code
     tagIcon: 'el-icon-star-on',

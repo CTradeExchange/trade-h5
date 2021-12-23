@@ -4,7 +4,7 @@ img.forEach(item => {
     config[item.name] = item
 })
 export default {
-    title: '信息流',
+    title: 'news',//'信息流',
     tag: 'news',
     exclude: ['Register', 'TradeIndex', 'Nav', 'mine'], // 排除的页面code
     tagIcon: 'el-icon-news',

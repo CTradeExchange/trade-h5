@@ -1,6 +1,6 @@
 import { common } from '@admin/components/baseConfig'
 export default {
-    title: '行情列表',
+    title: 'quoteList',//'行情列表',
     hidden: true,
     tag: 'quoteList',
     hideUserRole: true,

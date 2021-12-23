@@ -6,7 +6,7 @@ export default async function () {
         Object.assign(item, { value: item.name, label: item.title })
     ).filter(item => (item.type === 'text'))
     return {
-        title: '注册表单',
+        title: 'registerForm',//'注册表单',
         tag: 'registerForm',
         include: ['register'], // 包含的页面code
         tagIcon: 'el-icon-star-on',
