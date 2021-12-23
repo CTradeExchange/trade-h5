@@ -666,6 +666,9 @@ export default {
 
         onMounted(async () => {
             mobileComponents = await mobileComponentsConfig()
+            mobileComponents.forEach(item => {
+                item.title = t('plans.'+item.title);
+            })
             state.previewApp = previewRender('#previewContainer')
             handleGetPageConfig()
             showComp()

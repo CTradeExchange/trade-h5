@@ -1,6 +1,6 @@
 import { img } from '@admin/components/baseConfig'
 export default {
-    title: '分时图',
+    title: 'productsTimeSharing',//'分时图',
     tag: 'productsTimeSharing',
     // include: ['mine'], // 只有这些页面显示
     tagIcon: 'el-icon-s-marketing',

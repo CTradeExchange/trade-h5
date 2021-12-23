@@ -1,6 +1,6 @@
 import { img } from '@admin/components/baseConfig'
 export default {
-    title: '栅格组件',
+    title: 'layout',//'栅格组件',
     tag: 'layout',
     exclude: ['nav'], // 排除的页面code
     tagIcon: 'el-icon-s-grid',

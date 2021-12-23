@@ -1,5 +1,5 @@
 export default {
-    title: '开户须知',
+    title: 'serviceAgreement',//'开户须知',
     tagIcon: 'el-icon-check',
     // tagIcon: 'el-icon-basketball',
     tag: 'serviceAgreement',

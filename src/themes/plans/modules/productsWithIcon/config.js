@@ -1,6 +1,6 @@
 import { img } from '@admin/components/baseConfig'
 export default {
-    title: '产品列表',
+    title: 'productsWithIcon',//'产品列表',
     tag: 'productsWithIcon',
     // include: ['mine'], // 只有这些页面显示
     tagIcon: 'el-icon-s-marketing',

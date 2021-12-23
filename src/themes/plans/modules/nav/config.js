@@ -1,6 +1,6 @@
 import { img } from '@admin/components/baseConfig'
 export default {
-    title: '底部导航',
+    title: 'nav',//'底部导航',
     tag: 'nav',
     hidden: true, // 左侧模块列表不显示
     tagIcon: 'el-icon-star-on',

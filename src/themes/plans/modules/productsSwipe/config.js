@@ -4,7 +4,7 @@ img.forEach(item => {
     config[item.name] = item
 })
 export default {
-    title: '产品行情轮播',
+    title: 'productsSwipe',//'产品行情轮播',
     tag: 'productsSwipe',
     include: ['home'], // 只有这些页面显示
     tagIcon: 'el-icon-s-marketing',

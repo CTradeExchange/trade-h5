@@ -4,7 +4,7 @@ img.forEach(item => {
     config[item.name] = item
 })
 export default {
-    title: '浮动广告',
+    title: 'floatComp',//'浮动广告',
     tag: 'floatComp',
     tagIcon: 'el-icon-picture-outline',
     document: 'https://element.eleme.cn/#/zh-CN/component/input',

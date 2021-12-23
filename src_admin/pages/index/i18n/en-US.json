@@ -224,5 +224,28 @@
         "label13":"Rollback successful",
         "label14":"To publish",
         "label15":"Closure"
+    },
+    "plans":{
+        "img":"Single Image Banner",
+        "swipe":"Carousel Banner",
+        "floatComp":"Floating ad",
+        "layout":"Grid component",
+        "luckyWheel":"Big turntable",
+        "menulist":"Menu list",
+        "minePerson":"Personal information",
+        "nav":"Bottom navigation",
+        "news":"Information Flow",
+        "notice":"Marquee components",
+        "productsSwipe":"Product market carousel",
+        "productsTimeSharing":"Time-sharing diagram",
+        "productsWithIcon":"Product List",
+        "quoteList":"Quote list",
+        "redpacket":"Red envelope rain animation",
+        "registerForm":"Registration form",
+        "registerType":"Register module",
+        "selfSymbol":"Optional components",
+        "serviceAgreement":"Account opening instructions",
+        "template":"VUE template",
+        "text":"Text component"
     }
 }

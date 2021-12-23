@@ -226,5 +226,28 @@
         "label13":"回滚成功",
         "label14":"去发布",
         "label15":"关闭"
+    },
+    "plans":{
+        "img":"单图Banner",
+        "swipe":"轮播Banner",
+        "floatComp":"浮动广告",
+        "layout":"栅格组件",
+        "luckyWheel":"大转盘",
+        "menulist":"菜单列表",
+        "minePerson":"个人信息",
+        "nav":"底部导航",
+        "news":"信息流",
+        "notice":"跑马灯组件",
+        "productsSwipe":"产品行情轮播",
+        "productsTimeSharing":"分时图",
+        "productsWithIcon":"产品列表",
+        "quoteList":"行情列表",
+        "redpacket":"红包雨动画",
+        "registerForm":"注册表单",
+        "registerType":"注册模块",
+        "selfSymbol":"自选组件",
+        "serviceAgreement":"开户须知",
+        "template":"VUE模板",
+        "text":"文本组件"
     }
 }
