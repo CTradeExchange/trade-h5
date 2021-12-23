@@ -1,9 +1,17 @@
 import { bankNoReg } from '@/utils/util'
 export default function (t) {
     return {
-        bankAccountName: [
+        firstName: [
             {
-                message: [t('bank.inputBankPersonName')],
+                message: [t('bank.bankPersonFirstName')],
+                validator: (rule, value, callback, source, options) => {
+                    return !!value
+                },
+            }
+        ],
+        lastName: [
+            {
+                message: [t('bank.bankPersonLastName')],
                 validator: (rule, value, callback, source, options) => {
                     return !!value
                 },

@@ -748,6 +748,8 @@
         "inputOpenAddress": "请输入开户行地址",
         "bankNo": "银行卡号",
         "bankPersonName": "持卡人姓名",
+        "bankPersonFirstName": "持卡人名",
+        "bankPersonLastName": "持卡人姓",
         "bankName": "银行名称",
         "openAddress": "开户地址",
         "inputOpenAddressText": "请输入开户地址",
