@@ -19,7 +19,6 @@ app.use(ElementPlus).use(store).use(router).use(i18n)
 app.component(RightForm.name, RightForm)
 app.use(VueParticles)
 const lang = getCookie("lang") || 'zh-CN'
-debugger
 setI18nLanguage(i18n, lang)
 loadLocaleMessages(i18n, lang)
 // Vue.config.productionTip = false;
