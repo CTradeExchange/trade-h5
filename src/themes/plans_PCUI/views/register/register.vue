@@ -52,11 +52,16 @@
                     <div class='cell verifyCodeCell'>
                         <CheckCode v-model.trim='checkCode' clear :label='$t("login.verifyCode")' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
                     </div>
-                    <div class='cell'>
+                    <div v-if='instructions' class='cell'>
+                        <van-checkbox v-model='protocol' class='checkbox' shape='square'>
+                            <span v-html='instructions'></span>
+                        </van-checkbox>
+                    </div>
+                    <!-- <div class='cell'>
                         <van-checkbox v-model='protocol' class='checkbox' shape='square'>
                             {{ $t('register.protocol') }}
                         </van-checkbox>
-                    </div>
+                    </div> -->
                 </form>
                 <div class='footerBtn'>
                     <van-button
@@ -94,6 +99,7 @@ import { useStore } from 'vuex'
 import { reactive, toRefs, computed, getCurrentInstance, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Toast } from 'vant'
+import { unescape } from 'lodash'
 import RuleFn, { checkCustomerExistRule } from './rule'
 import { setQuoteService } from '@/plugins/socket/socket'
 // import { pageConfig } from '@/api/wpApi'
@@ -116,7 +122,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const route = useRoute()
-        const { t } = useI18n({ useScope: 'global' })
+        const { t, locale } = useI18n({ useScope: 'global' })
         const { getCustomerGroupIdByCountry, getPlansByCountry } = hooks()
         const state = reactive({
             options: [{ country: 'Canada', code: 'CA' }],
@@ -163,6 +169,14 @@ export default {
         // 手机正则表达式
         const mobileReg = computed(() => getArrayObj(countryList.value, 'countryCode', state.countryZone).extend || ''
         )
+        // 开户须知内容
+
+        const instructions = computed(() => {
+            const lang = locale.value
+            const wpCompanyInfo = store.state._base.wpCompanyInfo || {}
+            const protocol = wpCompanyInfo[lang === 'zh-CN' ? 'instructions_zh' : 'instructions_en']
+            return protocol ? unescape(protocol) : ''
+        })
 
         const registerSubmit = (params) => {
             state.loading = true
@@ -329,6 +343,7 @@ export default {
             registerHandler,
             verifyCodeSendHandler,
             style,
+            instructions,
             countryList,
             zoneSelect
         }

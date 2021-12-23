@@ -165,7 +165,7 @@ export default {
             const thirdLoginArr = state.wpCompanyInfo.thirdLogin
             const companyId = state.wpCompanyInfo.companyId
 
-            if (thirdLoginArr.length > 0) {
+            if (thirdLoginArr && thirdLoginArr.length > 0) {
                 return getThirdLoginConfig({
                     companyId,
                     thirdSource: thirdLoginArr.join()

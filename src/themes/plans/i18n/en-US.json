@@ -397,7 +397,7 @@
     "dealVolume": "Volume",
     "noDealData": "No trade record",
     "noStallsData": "No data",
-    "orderSuccessToast": "Order placed, please check assets",
+    "orderSuccessToast": "Order is placed, please check trade execute notification",
     "orderPendingSuccessToast": "Successful order, please check the list of delegates",
     "inputCloseNum": "Please enter quantity",
     "closeSuccessToast": "Order placed, please check closed position record",
@@ -429,8 +429,8 @@
     "yi": "Use",
     "huan": "Repay",
     "daihuan": "Outstanding",
-    "buyText": "Buy / Long",
-    "sellText": "Sell / Short",
+    "buyText": "Buy {'ǀ'} Long",
+    "sellText": "Sell {'ǀ'} Short",
     "curTrust": "Current Pending",
     "dealNo": "Execution Number",
     "positionNo": "Hold Order Number",
@@ -588,7 +588,8 @@
     "transferTip5": "The transfer amount cannot be less than the Minimum transfer amount",
     "transferTip6": "The transfer amount cannot be less than0",
     "transferSuccess": "Transfer success",
-    "transferAsset": "划转资产"
+    "transferAsset": "划转资产",
+    "assets": "Assets"
   },
   "record":{
     "repaymentAmount": "Repayment quantity",

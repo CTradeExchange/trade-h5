@@ -91,7 +91,7 @@ export default {
                     'value': 'TRADE_MESSAGE'
                 }
             ],
-            informationType: '全部消息',
+            informationType: t('msg.all'),
             dropTypeVisible: false,
             noticeContent: '',
             msgLoading: false

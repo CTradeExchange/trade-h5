@@ -108,3 +108,30 @@ export default function ({ showPending }) {
 
     }
 }
+
+export const toolHooks = function () {
+    const store = useStore()
+    const product = computed(() => store.getters.productActived)
+
+    // 成交模式: 1:MM(不展示盘口和成交记录)，2:蝴蝶（不显示挂单tab），3:撮合
+    const dealModeShowMap = computed(() => {
+        return {
+            '1': {
+                handicap: false,
+                pendingTab: true
+            },
+            '2': {
+                handicap: true,
+                pendingTab: false
+            },
+            '3': {
+                handicap: true,
+                pendingTab: true
+            }
+        }
+    })
+
+    return {
+        dealModeShowMap
+    }
+}

@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === 'development') {
 export const getQuoteService = () => {
     const token = getToken()
     let quoteService = window['quoteService'] || ''
-    if (token) {
+    if (0 && token) {
         quoteService += '?token=' + token
     } else {
         quoteService = quoteService.replace('/quote', '/quote_guest')
@@ -29,6 +29,7 @@ export const getQuoteService = () => {
 
 /** 设置 - 行情服务websocket地址 */
 export const setQuoteService = () => {
+    return false
     const quoteService = getQuoteService()
     const quoteWS = CreateSocket(quoteService)
     // QuoteSocket.ws.url = quoteService

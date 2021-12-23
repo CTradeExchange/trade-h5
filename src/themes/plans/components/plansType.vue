@@ -82,7 +82,7 @@ export default {
     align-items: center;
     justify-content: flex-start;
     box-sizing: border-box;
-    height: rem(100px);
+    height: rem(110px);
     padding-right: rem(30px);
     padding-left: rem(20px);
     background-color: var(--contentColor);

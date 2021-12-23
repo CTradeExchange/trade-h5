@@ -397,7 +397,7 @@
     "dealVolume": "成交量",
     "noDealData": "暂无成交记录",
     "noStallsData": "暂无数据",
-    "orderSuccessToast": "下单成功，请查看资产",
+    "orderSuccessToast": "下单已提交，请留意成交通知",
     "orderPendingSuccessToast": "下单成功，请查看委托列表",
     "inputCloseNum": "请输入平仓数量",
     "closeSuccessToast": "下单成功，请查看平仓记录",
@@ -429,8 +429,8 @@
     "yi": "以",
     "huan": "还",
     "daihuan": "待还",
-    "buyText": "买入 / 做多",
-    "sellText": "卖出 / 做空",
+    "buyText": "买入 {'ǀ'} 做多",
+    "sellText": "卖出 {'ǀ'} 做空",
     "curTrust": "当前委托",
     "dealNo": "成交单号",
     "positionNo": "持仓单号",
@@ -588,7 +588,8 @@
     "transferTip5": "划转金额不能小于最小可划转金额",
     "transferTip6": "划转金额不能小于0",
     "transferSuccess": "划转成功",
-    "transferAsset": "划转资产"
+    "transferAsset": "划转资产",
+    "assets": "资产账户"
   },
   "record":{
     "repaymentAmount": "还款数量",

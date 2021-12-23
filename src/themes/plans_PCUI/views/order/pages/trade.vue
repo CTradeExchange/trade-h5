@@ -1,7 +1,7 @@
 <template>
     <div class='trade-header'>
         <!-- 订单类型 -->
-        <OrderTypeTab v-model='orderType' :trade-type='product.tradeType' @selected='changeOrderType' />
+        <OrderTypeTab v-model='orderType' :trade-mode='product.dealMode' :trade-type='product.tradeType' @selected='changeOrderType' />
         <div v-if='[1,2].includes(product.tradeType)' class='switch'>
             <span>{{ $t('trade.tackStopSetup') }}</span>
             <van-switch

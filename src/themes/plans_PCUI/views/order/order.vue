@@ -16,7 +16,7 @@
                     <trade />
                 </div>
             </div>
-            <div v-if='Number(product.tradeType) === 5' class='right-wrap'>
+            <div v-if='dealModeShowMap[product?.dealMode].handicap && product?.symbolName' class='right-wrap'>
                 <!-- 盘口报价 -->
                 <div class='handicap-content'>
                     <handicap />
@@ -49,6 +49,7 @@ import productSearch from './pages/productSearch'
 import assetsModule from './pages/assets.vue'
 import { isEmpty } from '@/utils/util'
 import { useStore } from 'vuex'
+import { toolHooks } from '@planspc/hooks/handicap'
 import userRecord from './pages/userRecord'
 import { MsgSocket, QuoteSocket } from '@/plugins/socket/socket'
 
@@ -66,6 +67,7 @@ export default {
         const store = useStore()
         const route = useRoute()
         const router = useRouter()
+        const { dealModeShowMap } = toolHooks()
         const { tradeType, symbolId } = route.query
         store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
         const customerInfo = computed(() => store.state._user.customerInfo)
@@ -123,7 +125,8 @@ export default {
             tradeType,
             symbolId,
             tradeContentHeight,
-            contentHeight
+            contentHeight,
+            dealModeShowMap
         }
     },
 }

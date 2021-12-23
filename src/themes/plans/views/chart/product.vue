@@ -5,9 +5,9 @@
                 <i v-if='product?.symbolName' class='icon_chouti1' @click='showSidebar=true'></i>
                 {{ product?.symbolName }}
             </p>
-            <p class='infomation'>
+            <!-- <p class='infomation'>
                 {{ product?.symbolCode }} {{ $t('trade.update') }}:{{ formatTime(product?.tick_time) }}
-            </p>
+            </p> -->
 
             <template #right>
                 <div class='right-wrap'>
@@ -252,17 +252,19 @@
         <div class='footerBtnBox'>
             <div class='trade-btn-wrap'>
                 <div class='buy fallColorBg' @click="toOrder('buy')">
-                    <p>
+                    <i class='icon icon_mairu'></i>
+                    <span class='text'>
                         {{ $t('trade.buy') }}
-                    </p>
+                    </span>
                     <!-- <p class='price'>
                         {{ product.buy_price }}
                     </p> -->
                 </div>
                 <div class='sell riseColorBg' @click="toOrder('sell')">
-                    <p>
+                    <i class='icon icon_maichu'></i>
+                    <span class='text'>
                         {{ $t('trade.sell') }}
-                    </p>
+                    </span>
                     <!-- <p class='price '>
                         {{ product.sell_price }}
                     </p> -->
@@ -1069,7 +1071,7 @@ export default {
 .page-wrap {
     width: 100%;
     //height: 100%;
-    margin-top: rem(90px);
+    margin-top: rem(110px);
     margin-bottom: rem(120px);
     //overflow: auto;
     background: var(--bgColor);
@@ -1079,6 +1081,8 @@ export default {
         flex-wrap: nowrap;
         align-items: center;
         justify-content: center;
+        font-size:rem(48px);
+        font-weight: bold;
         .icon_chouti1 {
             margin-right: rem(20px);
             font-size: rem(26px);
@@ -1098,6 +1102,7 @@ export default {
         flex-direction: row;
         flex-wrap: nowrap;
         align-items: center;
+        font-size: rem(32px);
         justify-content: center;
         height: 100%;
         .ft {
@@ -1106,7 +1111,9 @@ export default {
                 display: inline-block;
             }
             .icon_guanyu1 {
+                //font-size: rem(36px);
                 color: var(--normalColor);
+
             }
         }
         .collectIcon {
@@ -1114,6 +1121,7 @@ export default {
             height: 100%;
             color: var(--normalColor);
             vertical-align: top;
+            //font-size: rem(36px);
             background-color: var(--contentColor);
             .icon_zixuan11 {
                 font-weight: normal !important;
@@ -1619,9 +1627,7 @@ export default {
             @include active();
             position: relative;
             flex: 1;
-            //padding-top: rem(18px);
             color: #FFF;
-            font-size: rem(34px);
             line-height: rem(100px);
             background-color: #858C9A;
             border-radius: 3px;
@@ -1630,6 +1636,16 @@ export default {
             }
             &.riseColorBg {
                 background-color: var(--fallColor);
+            }
+            .icon{
+                font-size: rem(20px);
+                vertical-align: middle;
+                margin-right: rem(20px);
+                opacity: 0.5;
+            }
+            .text{
+                font-size: rem(34px);
+                vertical-align: middle;
             }
         }
         .sell::after {

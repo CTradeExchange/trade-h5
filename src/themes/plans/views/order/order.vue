@@ -71,6 +71,7 @@
             </div>
             <div class='footerBtn' :class='[direction]'>
                 <van-button block :disabled='loading' :loading='loading' size='normal' @click='submitHandler'>
+                    <i class='icon' :class='direction==="buy" ? "icon_mairu" : "icon_maichu"'></i>
                     {{ direction==='buy'?$t('trade.buyText'):$t('trade.sellText') }}
                 </van-button>
             </div>
@@ -468,6 +469,12 @@ export default {
     padding: rem(50px) rem(30px) rem(30px);
     background: var(--contentColor);
     font-weight: bold;
+    .icon{
+        font-size: rem(20px);
+        vertical-align: middle;
+        margin-right: rem(20px);
+        opacity: 0.5;
+    }
     &.buy {
         .van-button {
             font-size: rem(30px);

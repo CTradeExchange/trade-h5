@@ -1,50 +1,52 @@
 <template>
-    <div class='assetsItem' @click='toInfo'>
-        <div class='rowflex currency'>
-            <span>{{ data.currency }}</span>
-            <span>{{ data.balance }}</span>
-        </div>
-        <div class='rowflex muted mtop20'>
-            <div class='asset-info'>
-                <p>{{ $t('trade.free') }}</p>
-                <p class='val'>
-                    {{ data.available }}
-                </p>
-                <template v-if='Number(tradeType) !== 5'>
-                    <p class='mtop10'>
-                        {{ $t('trade.borrowed') }}
-                    </p>
-                    <p class='val'>
-                        {{ data.liabilitiesPrincipal }}
-                    </p>
-                </template>
+    <div class='assetsItem'>
+        <div class='assets-top' @click='toInfo'>
+            <div class='rowflex currency'>
+                <span>{{ data.currency }}</span>
+                <span>{{ data.balance }}</span>
             </div>
-            <div class='alignRight asset-info'>
-                <p>{{ $t('assets.frozen') }}</p>
-                <p class='val'>
-                    {{ data.frozen }}
-                </p>
-                <template v-if='Number(tradeType) !== 5'>
-                    <p class='mtop10'>
-                        {{ $t('trade.swap_2') }}
-                    </p>
+            <div class='rowflex muted mtop20'>
+                <div class='asset-info'>
+                    <p>{{ $t('trade.free') }}</p>
                     <p class='val'>
-                        {{ data.interest }}
+                        {{ data.available }}
                     </p>
-                </template>
+                    <template v-if='Number(tradeType) !== 5'>
+                        <p class='mtop10'>
+                            {{ $t('trade.borrowed') }}
+                        </p>
+                        <p class='val'>
+                            {{ data.liabilitiesPrincipal }}
+                        </p>
+                    </template>
+                </div>
+                <div class='alignRight asset-info'>
+                    <p>{{ $t('assets.frozen') }}</p>
+                    <p class='val'>
+                        {{ data.frozen }}
+                    </p>
+                    <template v-if='Number(tradeType) !== 5'>
+                        <p class='mtop10'>
+                            {{ $t('trade.swap_2') }}
+                        </p>
+                        <p class='val'>
+                            {{ data.interest }}
+                        </p>
+                    </template>
+                </div>
             </div>
         </div>
-        <!-- <div class='btns'>
-            <van-button type='primary'>
-                充值
-            </van-button>
-            <van-button type='primary'>
-                提现
-            </van-button>
-            <van-button type='primary'>
-                划转
-            </van-button>
-        </div> -->
+        <div class='assets-btns'>
+            <div class='assets-item-btn' @click='toDesposit'>
+                {{ Number(tradeType) === 3 ? $t('trade.loan') : $t('trade.desposit') }}
+            </div>
+            <div class='assets-item-btn' @click='toWirhdraw'>
+                {{ Number(tradeType) === 3 ? $t('trade.repayment') : $t('trade.withdraw') }}
+            </div>
+            <div class='assets-item-btn' @click='toTransfer'>
+                {{ $t('cRoute.transfer') }}
+            </div>
+        </div>
     </div>
 </template>
 
@@ -63,22 +65,72 @@ export default {
         // console.log('propsdata===', props.data)
         const store = useStore()
         const router = useRouter()
+        // 颜色值
+        const style = computed(() => store.state.style)
         const plans = computed(() => store.state._base.plans)
-        const tradeType = computed(() => store.state._quote.curTradeType || plans.value[0].id)
+        const tradeType = computed(() => store.state._quote
+            .curTradeType || plans.value[0].id)
+        const query = {
+            accountId: props.data.accountId,
+            currency: props.data.currency,
+            tradeType: tradeType.value
+        }
         const toInfo = () => {
             router.push({
                 name: 'AssetsInfo',
+                query
+            })
+        }
+        const btnBg = style.value.primary + '19'
+
+        // 跳转充值页面
+        const toDesposit = () => {
+            if (Number(tradeType.value) === 3) {
+                router.push({
+                    path: '/loan',
+                    query
+                })
+            } else {
+                router.push({
+                    path: '/deposit',
+                    query
+                })
+            }
+        }
+        // 跳转提现页面
+        const toWirhdraw = () => {
+            if (Number(tradeType.value) === 3) {
+                router.push({
+                    path: '/returnMoney',
+                    query
+                })
+            } else {
+                router.push({
+                    path: '/withdrawAccount',
+                    query
+                })
+            }
+        }
+
+        // 跳转划转页面
+        const toTransfer = () => {
+            router.push({
+                path: '/transfer',
                 query: {
-                    currency: props.data.currency,
                     accountId: props.data.accountId,
                     tradeType: tradeType.value
                 }
             })
         }
+
         return {
             toInfo,
             tradeType,
-            plus
+            plus,
+            btnBg,
+            toDesposit,
+            toWirhdraw,
+            toTransfer
         }
     }
 }
@@ -90,21 +142,40 @@ export default {
     padding: rem(30px);
     font-size: rem(24px);
     background: var(--contentColor);
-}
-.rowflex {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    line-height: 1.5;
-    &.currency {
-        font-size: rem(30px);
-        font-weight: bold;
+    .rowflex {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        line-height: 1.5;
+        &.currency {
+            font-size: rem(30px);
+            font-weight: bold;
+        }
+        .asset-info{
+            .val{
+                color: var(--color);
+                font-size: rem(28px);
+            }
+        }
     }
-    .asset-info{
-        .val{
-            color: var(--color);
-            font-size: rem(28px);
+    .assets-btns{
+        margin-top: rem(30px);
+        display: flex;
+        justify-content: space-between;
+        .assets-item-btn{
+            height: rem(56px);
+            line-height: rem(56px);
+            border-radius: rem(6px);
+            background: v-bind(btnBg);
+            color: var(--primary);
+            flex: 1;
+            text-align: center;
+            margin-right: rem(25px);
+            &:last-child{
+                margin-right: 0;
+            }
         }
     }
 }
+
 </style>

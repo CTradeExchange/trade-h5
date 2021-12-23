@@ -7,10 +7,12 @@
 <script>
 import { computed, reactive, toRefs, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { toolHooks } from '@planspc/hooks/handicap'
 export default {
-    props: ['modelValue', 'tradeType'],
+    props: ['modelValue', 'tradeType', 'tradeMode'],
     emits: ['update:modelValue', 'selected'],
     setup (props, { emit }) {
+        const { dealModeShowMap } = toolHooks()
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             orderType: 1
@@ -23,7 +25,8 @@ export default {
                     val: 1
                 }
             ]
-            if ([1, 2, 3, 9].includes(props.tradeType)) {
+
+            if (dealModeShowMap.value[props.tradeMode].pendingTab) {
                 list.push({
                     title: [3, 9].includes(props.tradeType) ? t('trade.pending2') : t('trade.pending'),
                     val: 10

@@ -2,7 +2,7 @@
     <div class='userRecord'>
         <div class='headbar'>
             <el-tabs v-model='activeName' class='tabs'>
-                <el-tab-pane :label='[1,2].includes(Number(tradeType)) ? $t("trade.curPending") : $t("trade.curTrust")' name='0' />
+                <el-tab-pane :label='[1,2].includes(Number(tradeType)) ? $t("trade.order") : $t("trade.order")' name='0' />
                 <el-tab-pane :label='$t("trade.dealList")' name='1' />
                 <el-tab-pane :label='[1,2].includes(Number(tradeType)) ? $t("trade.position") : $t("trade.asset") ' name='2' />
             </el-tabs>

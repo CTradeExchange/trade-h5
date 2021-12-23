@@ -1,6 +1,6 @@
 <template>
+    <LayoutTop :back='true' :menu='false' :title='$t("route.mine")' />
     <div class='page-wrap'>
-        <Top back @back='back' />
         <p class='header'>
             {{ $t('cRoute.commonSetting') }}
         </p>
@@ -44,6 +44,12 @@
         position='bottom'
         round
     >
+        <div class='header'>
+            <div class='header-title'>
+                {{ $t('common.lang') }}
+            </div>
+            <i class='icon_guanbi' @click='langShow=false'></i>
+        </div>
         <div class='popup-wrap'>
             <div
                 v-for='(item, index) in supportLanguages'
@@ -52,7 +58,7 @@
                 :class='{ active: lang === item.val }'
                 @click='langSelect(item)'
             >
-                <img alt='' class='lang-icon' :src="'/images/country_icon/'+ item.val + '.png'" />
+                <img alt='' class='lang-icon' :src="'/images/country_icon/'+ item.val + '.png?555'" />
             </div>
         </div>
     </van-popup>
@@ -63,10 +69,16 @@
         position='bottom'
         round
     >
+        <div class='header'>
+            <div class='header-title'>
+                {{ $t('common.lang') }}
+            </div>
+            <i class='icon_guanbi' @click='colorShow=false'></i>
+        </div>
         <div class='popup-wrap'>
             <van-radio-group v-model='chartVal' @change='colorShow = false'>
                 <van-cell-group inset>
-                    <van-cell class='popup-item' clickable @click="chartVal = '1'">
+                    <van-cell class='popup-item' clickable @click='upDownColorSelect("1")'>
                         <template #title>
                             <div class='left'>
                                 <span class='label'>
@@ -84,7 +96,7 @@
                             <van-radio name='1' />
                         </template>
                     </van-cell>
-                    <van-cell class='popup-item' clickable @click="chartVal = '2'">
+                    <van-cell class='popup-item' clickable @click='upDownColorSelect("2")'>
                         <template #title>
                             <div class='left'>
                                 <span class='label'>
@@ -128,14 +140,13 @@ export default {
             themeVal: localGet('invertColor') === 'night',
             langShow: false,
             colorShow: false,
-            chartVal: JSON.parse(localGet('chartConfig'))?.chartColorType.toString() || '1',
+            chartVal: JSON.parse(localGet('chartConfig'))?.chartColorType || '1',
             lang: getCookie('lang') || store.state._base.wpCompanyInfo.language,
         })
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         const supportLanguages = computed(() => store.state.supportLanguages)
-        const langStyle = computed(() => supportLanguages.value.length <= 4 ? 'center' : 'flex-start')
 
         // 选择语言
         const langSelect = (action) => {
@@ -196,20 +207,21 @@ export default {
 
         // 设置红涨绿跌颜色
         const upDownColorSelect = (chartObj) => {
-            state.chartVal = chartObj.val
+            const curTheme = localGet('invertColor')
+            state.chartVal = chartObj
             const locChartConfig = JSON.parse(localGet('chartConfig'))
             if (isEmpty(locChartConfig)) {
                 localSet('chartConfig', JSON.stringify({
-                    'chartColorType': chartObj.val
+                    'chartColorType': chartObj
                 }))
             } else {
-                locChartConfig['chartColorType'] = chartObj.val
+                locChartConfig['chartColorType'] = chartObj
                 localSet('chartConfig', JSON.stringify(locChartConfig))
             }
             const themeColors = sessionStorage.getItem('themeColors')
             if (!isEmpty(themeColors)) {
-                const { riseColor, fallColor } = JSON.parse(themeColors)?.common
-                if (chartObj.val === 1) {
+                const { riseColor, fallColor } = JSON.parse(themeColors)[curTheme]
+                if (chartObj === 1) {
                     document.body.style.setProperty('--riseColor', riseColor)
                     document.body.style.setProperty('--fallColor', fallColor)
                 } else {
@@ -232,7 +244,6 @@ export default {
             colorSelect,
             upDownColorSelect,
             back,
-            langStyle,
             ...toRefs(state)
         }
     },
@@ -244,8 +255,6 @@ export default {
 .custom-popup{
     --van-cell-group-inset-padding: 0;
     --van-cell-group-background-color: var(--bgColor);
-    max-height: 80%;
-    background: var(--bgColor);
     .popup-wrap{
         :deep(.van-radio-group){
             .van-cell-group--inset{
@@ -254,7 +263,6 @@ export default {
 
         }
     }
-
     .popup-item{
         padding: 0 rem(30px);
         display: flex;
@@ -296,9 +304,8 @@ export default {
 }
 .lang-popup{
     .popup-wrap{
-        padding: rem(42px) 0 0 rem(40px);
+        padding: 0 0 0 rem(40px);
         display: flex;
-        justify-content: v-bind(langStyle);
         flex-wrap: wrap;
         .lang-item{
             box-sizing: content-box;
@@ -307,12 +314,12 @@ export default {
             margin-bottom: rem(42px);
             border: rem(4px) solid transparent;
             .lang-icon{
-                width: rem(132px);
-                height: rem(88px)
+                width: rem(120px);
+                height: rem(120px)
             }
             &.active{
                 border: rem(4px) solid var(--primary);
-                border-radius: rem(20px);
+                border-radius: 50%;
 
             }
         }
@@ -324,10 +331,10 @@ export default {
 <style lang='scss' scoped>
 @import '@/sass/mixin.scss';
 .page-wrap{
+    padding-top: rem(110px);
     .header{
         background: var(--contentColor);
         font-size: rem(48px);
-        font-weight: bold;
         padding-left: rem(30px);
         padding-bottom: rem(30px);
     }
@@ -349,7 +356,7 @@ export default {
                 color: var(--color);
             }
             .lang-icon{
-                width: rem(70px);
+                width: rem(56px);
                 margin-right: rem(20px);
             }
             .right-arrow{

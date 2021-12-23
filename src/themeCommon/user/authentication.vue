@@ -1,7 +1,6 @@
 <template>
     <!-- 头部导航 -->
-    <Top back on-back @back='back' />
-
+    <LayoutTop :back='true' :menu='false' :title='$t("route.mine")' />
     <div class='page-wrap'>
         <Loading :show='loading' />
         <p class='header'>
@@ -127,12 +126,12 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .page-wrap {
+    padding-top: rem(110px);
     flex: 1;
     overflow: auto;
     background: var(--bgColor);
     .header{
         font-size: rem(48px);
-        font-weight: bold;
         padding-left: rem(30px);
         padding-bottom: rem(30px);
         background: var(--contentColor);
