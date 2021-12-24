@@ -139,7 +139,6 @@ const current = computed({
 
 <style lang="scss" scoped>
 .customTable{
-    background: chartreuse;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
