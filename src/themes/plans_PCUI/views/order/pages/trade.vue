@@ -10,7 +10,7 @@
         <div class='right-wrap'>
             <!-- 杠杆倍数设置 -->
             <a
-                v-if='showLeverage'
+                v-show='showLeverage'
                 class='multipleBtn'
                 href='javascript:;'
                 @click='multipleSetVisible = true'
