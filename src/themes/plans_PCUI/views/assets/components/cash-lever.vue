@@ -1,11 +1,14 @@
 <template>
     <div class='assets-module'>
         <div class='assets-header'>
-            <p class='all'>
+            <p v-if='assetsInfo' class='all'>
                 <span class='label'>
                     {{ $t('trade.totalAssets') }}({{ assetsInfo?.currency }})
                 </span>
-                <span class='risk'>
+                <span v-if='Number(tradeType) === 3' :class='["riskLevel", "riskLevel" + assetsInfo.riskLevel]'>
+                    {{ riskLevelMap[assetsInfo.riskLevel] }}
+                </span>
+                <span v-else-if='Number(tradeType) !== 5' class='risk'>
                     {{ $t('trade.riskLevel') }} {{ assetsInfo?.closeProportion }}
                 </span>
             </p>
@@ -77,6 +80,7 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 export default {
     props: {
@@ -89,6 +93,7 @@ export default {
     setup (props) {
         const store = useStore()
         const router = useRouter()
+        const { t } = useI18n({ useScope: 'global' })
         // 用户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
         // 资产信息
@@ -163,12 +168,19 @@ export default {
             })
         }
 
+        const riskLevelMap = {
+            1: t('riskLevel.safety'),
+            2: t('riskLevel.warn'),
+            3: t('riskLevel.danger')
+        }
+
         return {
             assetsInfo,
             accountList,
             goLoan,
             goRepayment,
             goTransfer,
+            riskLevelMap,
             goRecord
         }
     }

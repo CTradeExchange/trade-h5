@@ -95,6 +95,41 @@
         }
     }
 }
+.riskLevel{
+    position: relative;
+    padding-left: rem(25px);
+    margin-left: rem(10px);
+    font-size: rem(22px);
+    &::before{
+        content: '';
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 0%;
+        transform: translate(0, -50%);
+        width: rem(16px);
+        height: rem(16px);
+        border-radius: 16px;
+    }
+}
+.riskLevel1{
+    color: var(--success);
+    &::before{
+        background: var(--success);
+    }
+}
+.riskLevel2{
+    color: var(--focusColor);
+    &::before{
+        background: var(--focusColor);
+    }
+}
+.riskLevel3{
+    color: var(--warn);
+    &::before{
+        background: var(--warn);
+    }
+}
 .assets-body {
     flex: 1;
     margin-top: 16px;
