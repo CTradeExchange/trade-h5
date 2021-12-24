@@ -37,11 +37,17 @@
             </div>
         </div>
         <div class='assets-btns'>
-            <div class='assets-item-btn' @click='toDesposit'>
-                {{ Number(tradeType) === 3 ? $t('trade.loan') : $t('trade.desposit') }}
+            <div v-if='Number(tradeType) === 3' class='assets-item-btn' @click='toLoan'>
+                {{ $t('trade.loan') }}
             </div>
-            <div class='assets-item-btn' @click='toWirhdraw'>
-                {{ Number(tradeType) === 3 ? $t('trade.repayment') : $t('trade.withdraw') }}
+            <div v-else class='assets-item-btn' @click='toDesposit'>
+                {{ $t('trade.desposit') }}
+            </div>
+            <div v-if='Number(tradeType) === 3' class='assets-item-btn' @click='toRepayment'>
+                {{ $t('trade.repayment') }}
+            </div>
+            <div v-else class='assets-item-btn' @click='toWithdraw'>
+                {{ $t('trade.withdraw') }}
             </div>
             <div class='assets-item-btn' @click='toTransfer'>
                 {{ $t('cRoute.transfer') }}
@@ -85,31 +91,36 @@ export default {
 
         // 跳转充值页面
         const toDesposit = () => {
-            if (Number(tradeType.value) === 3) {
-                router.push({
-                    path: '/loan',
-                    query
-                })
-            } else {
-                router.push({
-                    path: '/deposit',
-                    query
-                })
-            }
+            router.push({
+                path: '/depositChoose',
+                query: {
+                    tradeType: tradeType.value
+                }
+            })
         }
+
         // 跳转提现页面
-        const toWirhdraw = () => {
-            if (Number(tradeType.value) === 3) {
-                router.push({
-                    path: '/returnMoney',
-                    query
-                })
-            } else {
-                router.push({
-                    path: '/withdrawAccount',
-                    query
-                })
-            }
+        const toWithdraw = () => {
+            router.push({
+                path: '/withdrawAccount',
+                query
+            })
+        }
+
+        // 跳转到借款页面
+        const toLoan = () => {
+            router.push({
+                path: '/loan',
+                query
+            })
+        }
+
+        // 跳转到还款页面
+        const toRepayment = () => {
+            router.push({
+                path: '/returnMoney',
+                query
+            })
         }
 
         // 跳转划转页面
@@ -129,7 +140,9 @@ export default {
             plus,
             btnBg,
             toDesposit,
-            toWirhdraw,
+            toWithdraw,
+            toLoan,
+            toRepayment,
             toTransfer
         }
     }
