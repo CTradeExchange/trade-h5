@@ -75,11 +75,11 @@ import topNav from '@planspc/layout/topNav'
 import loginTypeBar from './loginTypeBar'
 import compInput from '@planspc/components/form/input'
 import LoginPwdDialog from './loginPwdDialog.vue'
-import { reactive, ref, toRefs, computed } from 'vue'
+import { reactive, ref, toRefs, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import { localGet } from '@/utils/util'
+import { localGet, isEmpty } from '@/utils/util'
 import { Dialog } from 'vant'
 import LoginHook from './loginHook'
 import LoginByGoogle from '@/themeCommon/user/login/components/loginByGoogle.vue'
@@ -116,7 +116,8 @@ export default {
             loginType: 'password', // password 密码登录   checkCode 验证码登录
         })
 
-        const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo.thirdLogin)
+        const countryList = computed(() => store.state.countryList)
+        const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo?.thirdLogin || [])
 
         const { loginSubmit, loginToPath, verifyCodeBtnText, sendVerifyCode } = LoginHook()
 
@@ -223,8 +224,14 @@ export default {
             }
         }
 
-        // 获取三方登录配置
-        store.dispatch('_base/getLoginConfig')
+        onMounted(() => {
+            if (isEmpty(countryList.value) && !isEmpty(thirdLoginArr.value)) {
+                // 获取国家区号
+                store.dispatch('getCountryListByParentCode')
+            }
+            // 获取三方登录配置
+            store.dispatch('_base/getLoginConfig')
+        })
 
         return {
             ...toRefs(state),

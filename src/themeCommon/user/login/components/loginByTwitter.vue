@@ -7,6 +7,7 @@
     <van-action-sheet
         v-model:show='bindAddShow'
         :actions='areaActions'
+        class='loginAreaActionsheet'
         teleport='#app'
         :title='$t("login.inputCountry")'
         @close='loading = false'
