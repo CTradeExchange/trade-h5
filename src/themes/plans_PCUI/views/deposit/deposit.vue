@@ -251,14 +251,16 @@ export default {
                     }
                 }
                 // 没有存款数据默认选择其它金额
+                state.currIndex = 0
                 if (arr.length === 0) {
-                    state.currIndex = 99
+                    // state.currIndex = 99
                     state.otherAmountVis = true
                 } else {
-                    state.currIndex = 0
                     state.amount = arr[0].amount
                 }
-                state.amountList = arr
+                const defaultAmountList = [{ amount: 50 }, { amount: 100 }, { amount: 200 }, { amount: 500 }, { amount: 1000 }]
+                state.amountList = arr.length ? arr : defaultAmountList
+                checkAmount(0, defaultAmountList[0])
             })
         }
 
@@ -850,7 +852,7 @@ export default {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            width: rem(338px);
+            width: rem(330px);
             height: rem(110px);
             margin-right: rem(20px);
             margin-bottom: rem(20px);
