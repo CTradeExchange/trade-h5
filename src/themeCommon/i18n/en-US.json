@@ -259,7 +259,7 @@
         "tradeLevel": "Trade Level(not opened yet)",
         "noticeTips": "Enable Trading Level to check order price, and stop loss&profit level on chart",
         "OHLC": "Open Hig hLow Close",
-        "upAndDown": "% change"
+        "upAndDown": "change %"
     },
     "deposit": {
         "selectAmount": "Select deposit amount",
