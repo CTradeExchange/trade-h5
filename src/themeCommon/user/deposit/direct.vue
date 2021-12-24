@@ -1,12 +1,19 @@
 <template>
     <div class='page-wrap'>
         <!-- 头部导航栏 -->
-        <Top
-            back
-            :right-action="{ title: $t('deposit.depositRecord') }"
-            show-center
-            @rightClick="$router.push('/depositRecord')"
-        />
+
+        <LayoutTop
+            :custom-style='{
+                "background": $style.bgColor
+            }'
+            :title='$t("trade.desposit")'
+        >
+            <template #right>
+                <span @click="$router.push('/depositRecord')">
+                    {{ $t('deposit.depositRecord') }}
+                </span>
+            </template>
+        </LayoutTop>
         <!-- 页面加载状态 -->
         <Loading :show='loading' />
         <!-- 内容区域 -->
@@ -18,7 +25,7 @@
                         {{ currency }}
                     </p>
                     <p class='des'>
-                        {{ currencyConfig[currency] }}
+                        {{ assetsMap[currency] }}
                     </p>
                 </div>
                 <div class='chain-list'>
@@ -67,21 +74,18 @@
 </template>
 
 <script>
-import Top from '@/components/top'
 import { onMounted, computed, reactive, toRefs, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import { currencyConfig } from './config'
+// import { currencyConfig } from './config'
 import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { getCryptoBlockchainInfo, getBindRechargeAddress, applyRechargeBindAddress } from '@/api/user'
 import { localGet } from '@/utils/util'
 import Clipboard from 'clipboard'
 import QRCode from 'qrcodejs2'
+import { assetsMap } from '@/themeCommon/components/assetsList/assetsMap'
 export default {
-    components: {
-        Top
-    },
     setup () {
         const store = useStore()
         const route = useRoute()
@@ -209,7 +213,7 @@ export default {
 
         return {
             ...toRefs(state),
-            currencyConfig,
+            assetsMap,
             copyAddress,
             selectChain,
             getRechargeAddress,
@@ -227,6 +231,7 @@ export default {
     flex-direction: column;
     width: 100%;
     height: 100%;
+    padding-top: rem(110px);
 }
 .page-content {
     flex: 1;
@@ -235,7 +240,7 @@ export default {
 }
 .module {
     min-height: rem(850px);
-    margin-top: rem(100px);
+    margin-top: rem(80px);
     padding: 0 rem(30px) rem(35px);
     background: var(--contentColor);
     border-radius: rem(10px);
@@ -263,13 +268,13 @@ export default {
     }
     .chain-list {
         display: flex;
-        flex-wrap: wrap;
+        overflow-x: scroll;
         margin-top: rem(50px);
         .item {
             display: flex;
             justify-content: center;
             align-items: center;
-            width: rem(196px);
+            padding: 0 rem(60px);
             height: rem(80px);
             margin-right: rem(20px);
             background: var(--assistColor);
@@ -377,14 +382,14 @@ export default {
     flex-direction: column;
     align-items: center;
     line-height: 1;
-    margin: rem(30px) 0;
+    margin: rem(30px);
     padding: rem(36px) rem(25px);
     background: rgba(246, 0, 0, 0.05);
-    border: 1px solid #F60000;
+    border: 1px solid var(--warn);
     border-radius: rem(10px);
     .title {
         font-size: rem(40px);
-        color: #F60000;
+        color: var(--warn);
     }
     .des {
         margin-top: rem(26px);

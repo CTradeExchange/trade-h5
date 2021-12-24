@@ -1,7 +1,12 @@
 <template>
     <div class='page-wrap'>
         <!-- 头部导航栏 -->
-        <Top back show-center />
+        <LayoutTop
+            :custom-style='{
+                "background": $style.bgColor
+            }'
+            :title='$t("trade.desposit")'
+        />
         <!-- 页面加载状态 -->
         <Loading :show='loading' />
         <!-- 页面内容 -->
@@ -11,21 +16,28 @@
                 <h3 class='title'>
                     {{ $t('deposit.assetAccount') }}
                 </h3>
-                <div class='list'>
-                    <div v-for='(item, index) in accountList' :key='index' :class="['item', { 'active': activeIndex === index }]" @click='switchCurrency(index)'>
-                        <div v-if='activeIndex === index' class='check'>
-                            <van-icon color='#fff' name='success' />
-                        </div>
-                        <img :src="'/images/currency_icon/' + item.currency + '.png'" />
-                        <div class='text'>
-                            <span class='name'>
-                                {{ item.currency }}
-                            </span>
-                            <span v-if='currencyConfig[item.currency]' class='alias'>
-                                {{ currencyConfig[item.currency] }}
-                            </span>
+                <div class='action-bar' @click='pickerShow = true'>
+                    <div v-if='accountInfo' class='left'>
+                        <img alt='' class='icon' :src='getCurrencyIcon(accountInfo.currency)' srcset='' />
+                        <div class='name'>
+                            <p class='t1'>
+                                {{ accountInfo?.currency }}
+                            </p>
+                            <p class='t2'>
+                                {{ accountInfo?.fullName }}
+                            </p>
                         </div>
                     </div>
+                    <div v-else class='left'>
+                        <img alt='' class='icon' src='../../../assets/currency_icon/all.png' srcset='' />
+                        <div class='name'>
+                            <p class='t1'>
+                                请选择充值资产
+                            </p>
+                        </div>
+                    </div>
+
+                    <van-icon name='arrow' />
                 </div>
             </div>
             <!-- 充值操作 -->
@@ -63,28 +75,39 @@
                         </div>
                     </div>
                 </div>
-                <div :class="['recharge-btn', { 'disable': disable }]" @click='goRecharge'>
-                    <span>{{ $t('deposit.immediateRecharge') }}</span>
-                    <van-icon class='arrow' name='arrow' />
-                </div>
+            </div>
+        </div>
+        <div class='btn-wrap'>
+            <div :class="['recharge-btn', { 'disable': disable }]" @click='goRecharge'>
+                <span>{{ $t('deposit.immediateRecharge') }}</span>
+                <van-icon class='arrow' name='arrow' />
             </div>
         </div>
     </div>
+
+    <!-- 资产列表 -->
+    <assetsList
+        v-if='pickerShow'
+        :currency='accountInfo?.currency'
+        :show='pickerShow'
+        :trade-type='tradeType'
+        @update:currency='onCurrencyConfirm'
+        @update:show='updatePopupVis'
+    />
 </template>
 
 <script>
-import Top from '@/components/top'
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { currencyConfig } from './config'
 import { queryPayType } from '@/api/user'
 import { localSet } from '@/utils/util'
 import { Toast, Dialog } from 'vant'
+import assetsList from '@/themeCommon/components/assetsList/assetsList.vue'
 export default {
     components: {
-        Top
+        assetsList
     },
     setup () {
         const store = useStore()
@@ -98,10 +121,8 @@ export default {
             tradeType: route.query.tradeType,
             // 支付通道列表
             paymentTypes: [],
-            // 当前选中币种索引
-            activeIndex: '',
             // 当前选中币中账户
-            accountInfo: {},
+            accountInfo: '',
             // 当前选中充值方式 1.直充 2.汇兑
             way: '',
             // 是否禁用所有按钮
@@ -111,12 +132,12 @@ export default {
             // 汇兑是否禁用
             exchangeDisable: true,
             // 当前直充支付通道
-            paymentInfo: ''
+            paymentInfo: '',
+            pickerShow: false,
+            selectedCurrency: ''
         })
         // 客户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
-        // 账户列表
-        const accountList = computed(() => customerInfo.value.accountList?.filter(el => Number(el.tradeType) === Number(state.tradeType)))
 
         // 获取支付通道
         const getPayTypes = () => {
@@ -168,19 +189,6 @@ export default {
             }
         }
 
-        // 切换币种
-        const switchCurrency = (index) => {
-            if (state.activeIndex === index) {
-                state.activeIndex = ''
-                state.accountInfo = {}
-            } else {
-                state.activeIndex = index
-                state.accountInfo = accountList.value[index]
-                // 获取支付通道
-                getPayTypes()
-            }
-        }
-
         // 充值方式切换为直充
         const switchDirect = () => {
             if (state.disable || state.directDisable) return
@@ -221,14 +229,31 @@ export default {
             }
         }
 
+        const onCurrencyConfirm = val => {
+            state.accountInfo = val
+            // 获取支付通道
+            getPayTypes()
+            state.pickerShow = false
+        }
+        const updatePopupVis = val => {
+            state.pickerShow = val
+        }
+        const getCurrencyIcon = (currency) => {
+            try {
+                return require('@/assets/currency_icon/' + currency + '.png')
+            } catch (error) {
+                return require('@/assets/currency_icon/default.png')
+            }
+        }
+
         return {
             ...toRefs(state),
-            accountList,
-            currencyConfig,
-            switchCurrency,
             switchDirect,
             switchExchange,
-            goRecharge
+            goRecharge,
+            updatePopupVis,
+            onCurrencyConfirm,
+            getCurrencyIcon
         }
     }
 }
@@ -241,14 +266,18 @@ export default {
     flex-direction: column;
     width: 100%;
     height: 100%;
+    padding-top: rem(110px);
 }
 .page-content {
     flex: 1;
     overflow-y: auto;
+    position: relative;
+    padding: 0 rem(30px);
+
 }
 // 资产账户
 .asset-account {
-    padding: 0 rem(30px);
+
     margin-top: rem(30px);
     .title {
         line-height: 1;
@@ -256,6 +285,40 @@ export default {
         font-size: rem(48px);
         font-weight: normal;
         color: var(--color);
+    }
+    .action-bar{
+        background: var(--contentColor);
+        margin-bottom: rem(80px);
+        padding: 0 rem(30px);
+        height: rem(110px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--color);
+        .left{
+            display: flex;
+            align-items: center;
+            .icon{
+                width: rem(48px);
+                height: rem(48px);
+                margin-right: rem(20px);
+                vertical-align: middle;
+
+            }
+            .name{
+                .t1{
+                    font-size: rem(32px);
+                    vertical-align: middle;
+                }
+                .t2{
+                    color: var(--minorColor);
+                }
+            }
+
+        }
+        .van-icon{
+            color: var(--minorColor);
+        }
     }
     .list {
         display: flex;
@@ -317,7 +380,6 @@ export default {
 // 充值操作
 .recharge-handle {
     margin-top: rem(80px);
-    padding: 0 rem(30px);
     .title {
         line-height: 1;
         margin-bottom: rem(32px);
@@ -385,13 +447,19 @@ export default {
             opacity: .5;
         }
     }
+
+}
+.btn-wrap{
+    padding: 0 rem(30px);
+    position: absolute;
+    bottom: rem(30px);
+    width: 100%;
     .recharge-btn {
+        width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
         height: rem(80px);
-        margin-top: rem(40px);
-        margin-bottom: rem(30px);
         background: var(--primary);
         border-radius: rem(6px);
         span {
@@ -409,4 +477,5 @@ export default {
         }
     }
 }
+
 </style>

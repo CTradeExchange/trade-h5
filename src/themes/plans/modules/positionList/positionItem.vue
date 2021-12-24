@@ -390,12 +390,12 @@ export default {
             padding-left: rem(8px);
             padding-right: rem(10px);
             font-size: rem(24px);
-            color: var(--primary);
+            color: var(--color);
             border-radius: 3px;
-            border: 1px solid var(--primary);
+            border: 1px solid var(--color);
             &.arrow{
                 padding-right: rem(50px);
-                color: var(--primary);
+                color: var(--color);
             }
 
             .icon_icon_arrow{

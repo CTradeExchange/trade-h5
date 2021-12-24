@@ -232,13 +232,13 @@ const current = computed({
     padding-right: 5px;
     padding-left: 4px;
     font-size: 12px;
-    color: var(--primary);
+    color: var(--color);
     border-radius: 3px;
-    border: 1px solid var(--primary);
+    border: 1px solid var(--color);
     min-width: 45px;
     &.arrow{
         padding-right: 25px;
-        color: var(--primary);
+        color: var(--color);
     }
 
     .icon_icon_arrow{

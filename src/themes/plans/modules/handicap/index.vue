@@ -230,7 +230,8 @@ export default {
                 width: rem(110px);
                 height: rem(40px);
                 line-height: rem(40px);
-                background-color: var(--primaryAssistColor);
+                background-color: var(--assistColor);
+                border-radius: rem(6px);
                 span {
                     margin-left: rem(10px);
                     //vertical-align: middle;
@@ -321,11 +322,11 @@ export default {
                 // transition: width 0.28s ease-in-out;
                 &.sell-histogram {
                     right: 0;
-                    background: var(--riseColor);
+                    background: var(--fallColor);
                     opacity: 0.05;
                 }
                 &.buy-histogram {
-                    background: var(--fallColor);
+                    background: var(--riseColor);
                     opacity: 0.05;
                 }
             }

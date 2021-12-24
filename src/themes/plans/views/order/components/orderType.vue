@@ -90,10 +90,10 @@ export default {
         height: rem(48px);
         line-height: rem(48px);
         color: var(--color);
-        background: var(--bgColor);
+        background: var(--primaryAssistColor);
         padding: 0 rem(16px);
         border-radius: rem(6px);
-        color: var(--primary);
+        color: var(--color);
         @include active();
         .text{
             display: inline-block;

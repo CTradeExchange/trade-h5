@@ -544,12 +544,12 @@ export default {
             vertical-align: middle;
             display: inline-block;
             height: 24px;
-            color: var(--primary);
-            background: var(--bgColor);
+            color: var(--color);
+            background: var(--primaryAssistColor);
             padding: 0 rem(16px);
             border-radius: 4px;
             margin-right: rem(24px);
-            border: solid 1px var(--primary);
+            border: solid 1px var(--color);
             @include active();
             .text{
                 display: inline-block;

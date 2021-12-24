@@ -53,7 +53,8 @@ export default {
         })
         const state = reactive({
             popupShow: props.show,
-            curCurrency: props.currency
+            curCurrency: props.currency,
+            assetsMap
         })
 
         watch(() => state.popupShow, val => {
@@ -67,6 +68,8 @@ export default {
         // 选择币种
         const checkCurrency = (currency) => {
             state.curCurrency = currency.currency
+
+            currency.fullName = state.assetsMap[currency.currency]
             context.emit('update:currency', currency)
             // state.popupShow = false
         }
@@ -81,7 +84,6 @@ export default {
             close,
             accountList,
             checkCurrency,
-            assetsMap,
             getCurrencyIcon,
             ...toRefs(state)
         }

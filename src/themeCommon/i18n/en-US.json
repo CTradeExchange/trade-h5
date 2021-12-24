@@ -159,6 +159,7 @@
         "to": "To",
         "notFound": "Not found",
         "account": "Account",
+        "copy": "Copy",
         "copySuccess": "Copy succeeded",
         "redUp": "Red up and green down",
         "redDown": "Green up and red down",
@@ -179,7 +180,8 @@
         "down": "Down",
         "up": "Up",
         "symbolName": "Product Name",
-        "symbolCode": "Product Code"
+        "symbolCode": "Product Code",
+        "warning": "Warning"
         
     },
     "faceAuth": {
@@ -301,7 +303,16 @@
         "arriveTime": "Credit time",
         "noneChannelTip": "There is no payment channel available for the current deposit amount, please select again",
         "wramNotice": "Warm reminder:",
-        "noticeContent": "The payment status may not be updated in time as network and other reasons. If the payment has been made, please confirm whether the deposit have been received. If not, please contact our customer service."
+        "noticeContent": "The payment status may not be updated in time as network and other reasons. If the payment has been made, please confirm whether the deposit have been received. If not, please contact our customer service.",
+        "assetAccount": "Asset Account",
+        "rechargeWay": "Deposit way",
+        "immediateRecharge": "Deposit",
+        "directTip": "Please verify currency, cannot payback if transfer other currency to this address",
+        "getAddress": "Get Address",
+        "direct": "Direct deposit",
+        "directDes": "Deposit currency same as account currency",
+        "exchange": "Exchange",
+        "exchangeDes": "Deposit currency different with account currency"
     },
     "fund": {
         "marginLevel": "margin level",
