@@ -1,26 +1,12 @@
 <template>
-    <!--
     <van-dropdown-menu class='menu'>
         <van-dropdown-item v-model='flowType' :options='flowTypes' @change='onChange' />
     </van-dropdown-menu>
--->
-    <el-dropdown>
-        <div class='flowType'>
-            {{ flowText }}<i class='el-icon-caret-bottom'></i>
-        </div>
-        <template #dropdown>
-            <el-dropdown-menu v-model='flowType'>
-                <el-dropdown-item v-for='item in flowTypes' @click.native='onChange(item.value)'>
-                    {{ item.text }}
-                </el-dropdown-item>
-            </el-dropdown-menu>
-        </template>
-    </el-dropdown>
 </template>
 
 <script>
 import { useI18n } from 'vue-i18n'
-import { computed, reactive, toRefs } from 'vue'
+import { computed } from 'vue'
 
 export default {
     emits: ['change'],
@@ -43,10 +29,6 @@ export default {
                 value: ''
             }
         ]
-        const state = reactive({
-            flowText: t('common.all')
-        })
-
         flowTypes.push(...Object.keys(flowCategories).map(key => ({
             text: flowCategories[key],
             value: key
@@ -56,25 +38,15 @@ export default {
             get: () => props.value || flowTypes[0].value,
             set () {}
         })
-        const formatFlowType = (flowType) => {
-            flowTypes.forEach(el => {
-                if (el.value == flowType) {
-                    state.flowText = el.text
-                }
-            })
-        }
 
         const onChange = (value) => {
-            formatFlowType(value)
             context.emit('change', value)
         }
 
         return {
             flowType,
             flowTypes,
-            onChange,
-            formatFlowType,
-            ...toRefs(state)
+            onChange
         }
     }
 }
@@ -102,11 +74,4 @@ export default {
         color: var(--primary);
     }
 }
-.flowType{
-        background: var(--contentColor);
-        font-size: 12px;
-        padding: 5px;
-        margin-left: 10px;
-        color: var(--color);
-    }
 </style>

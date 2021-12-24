@@ -712,7 +712,7 @@ export default {
                                 message: t('deposit.despositFail'),
                                 confirmButtonText: t('deposit.toRecord'),
                             }).then(() => {
-                                router.push('/depositRecord')
+                                router.push('/assets/depositRecord')
                             })
                         }
                         sessionStorage.removeItem('proposalNo')
