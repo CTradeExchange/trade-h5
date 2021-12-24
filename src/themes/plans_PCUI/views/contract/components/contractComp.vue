@@ -1,9 +1,5 @@
 <template>
     <div class='contractWrapper'>
-        <!-- <top
-            :sub-title='product.symbolCode'
-            :title='product.symbolName'
-        /> -->
         <top :sub-title='product.symbolCode' :title='product.symbolName'>
             <template #left>
                 <a class='topBack' href='javascript:;' style='padding-left:0' @click='$router.back()'>
@@ -18,7 +14,7 @@
             <van-cell :title="$t('contract.spread')" :value="$t('contract.float')" />
             <van-cell :title="$t('contract.singleNumbers')" :value='product.minVolume+"-"+product.maxVolume' />
             <van-cell :title="$t('contract.limitDistance')" :value='product.priceMinLimit+"/"+product.priceMaxLimit + $t("contract.point")' />
-            <van-cell v-if='usedMarginSet && usedMarginSet.length' class='yfk' :title="$t('contract.advance')">
+            <van-cell v-if='product.marginInfo?.type==="1" && usedMarginSet && usedMarginSet.length' class='yfk' :title="$t('contract.advance')">
                 <div class='margin-info'>
                     <span class='left-label header'>
                         {{ $t('contract.volumeRange') }}
@@ -90,7 +86,7 @@ export default {
         if (product.value) store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType, forceQuery: true })
         else router.replace('/')
         const usedMarginSet = computed(() => {
-            if (!isEmpty(product.value.usedMarginSet)) {
+            if (product.value.marginInfo?.type === '1' && !isEmpty(product.value.usedMarginSet)) {
                 const contractSize = product.value.contractSize
                 return objArraySort(product.value.usedMarginSet, 'rangeLeft').map(el => {
                     el.rangeLeftVolume = BigNumber(el.rangeLeft).div(contractSize).toNumber()
