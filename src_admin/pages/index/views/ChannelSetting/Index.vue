@@ -229,7 +229,7 @@
                                 </el-select>
                             </el-form-item>
 
-                            <el-form-item v-if='configLoaded && !isPC' :label="$t('channelSetting.openAccountNotice1')" prop='instructions'>
+                            <el-form-item v-if='configLoaded ' :label="$t('channelSetting.openAccountNotice1')" prop='instructions'>
                                 <Tinymce
                                     v-model='form.instructions_zh'
                                     :height='120'
@@ -237,7 +237,7 @@
                                     :width='800'
                                 />
                             </el-form-item>
-                            <el-form-item v-if='configLoaded && !isPC' :label="$t('channelSetting.openAccountNotice2')" prop='instructions'>
+                            <el-form-item v-if='configLoaded ' :label="$t('channelSetting.openAccountNotice2')" prop='instructions'>
                                 <Tinymce
                                     v-model='form.instructions_en'
                                     :height='120'
@@ -245,7 +245,7 @@
                                     :width='800'
                                 />
                             </el-form-item>
-                            <el-form-item v-if='!isPC' :label="$t('channelSetting.worthMentioning')">
+                            <el-form-item :label="$t('channelSetting.worthMentioning')">
                                 <el-checkbox-group v-model='form.thirdLogin'>
                                     <el-checkbox label='google'>
                                         Google
