@@ -11,7 +11,7 @@
         <div ref='productListEl' class='items'>
             <div v-for='item in props.list' :key='item.id' class='item li'>
                 <span class='name'>
-                    {{ item.symbolCode }}
+                    {{ item.symbolName }}
                 </span>
                 <div class='btns'>
                     <span class='btn' @click='onSelect(item)'>

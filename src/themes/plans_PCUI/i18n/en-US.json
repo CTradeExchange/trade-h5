@@ -48,11 +48,11 @@
         "or": "Or"
 	},
     "tradeType":{
-        "1": "Contract Cross",
-        "2": "Contract Isolated",
+        "1": "Cross Contract",
+        "2": "Isolated Contract",
         "3": "Margin",
         "5": "Spot",
-        "9": "ABCC leverage"
+        "9": "ABCC Margin"
     },
     "signIn": {
 		"loginBtn": "Login",
@@ -101,7 +101,8 @@
 		"returnMoney": "Repay coin",
 		"loan": "Loan",
 		"transfer": "Transfer",
-        "records": "Records"
+        "records": "Records",
+        "transRecords": "Trade record"
 	},
     "historyList": {
         "noMore": "No more"
@@ -388,14 +389,14 @@
 		"closed": "Close",
 		"marketIsClosed": "Market is closed",
 		"morePosition": "more",
-		"todayOpen": "Open",
-		"yesterdayClosed": "Last close",
+        "todayOpen": "Open Today",
+        "yesterdayClosed": "Previous Closed",
 		"sortTime": "Time",
 		"filterToday": "Today",
 		"filterweek": "Last week",
 		"filterMonth": "Last month",
 		"dangerTag": "Danger",
-		"tackStopSetup": "Stop profit/loss",
+        "tackStopSetup": "TP / SL",
 		"updateTackStopSetup": "Update stop profit/loss",
 		"cancelPending": "Cancel",
 		"cancelPendingSuccess": "Cancel success",
@@ -461,8 +462,8 @@
 		"noPositions": "No position",
 		"noPendings": "No order",
 		"positionForGuestTip": "Check position after login",
-		"high": "High",
-		"low": "Low",
+        "high": "Highest",
+        "low": "Lowest",
 		"update": "Update",
 		"nameCode": "Name/Code",
 		"watch": "Watch",
@@ -725,7 +726,7 @@
 		"freeMargin": "Free margin",
 		"originalMargin": "Margin occupied",
 		"allOriginalMargin": "Total margin occupied",
-		"tackStopSetup": "Stop profit/loss",
+        "tackStopSetup": "TP / SL",
 		"closed": "Close",
 		"prospectMandatory": "Expect liquidation price",
 		"holdMargin": "Hold margin",

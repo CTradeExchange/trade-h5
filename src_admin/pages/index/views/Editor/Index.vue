@@ -157,7 +157,7 @@ import { computed, onMounted, onUnmounted, reactive, toRefs } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { sessionSet } from '@/utils/util'
+import { sessionSet , getCookie } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 let mobileComponents = null
 const pageBaseConfig = pageConfig || {}
@@ -666,10 +666,18 @@ export default {
 
         onMounted(async () => {
             mobileComponents = await mobileComponentsConfig()
+            
             mobileComponents.forEach(item => {
                 item.title = t('plans.'+item.title);
+                item.config.forEach(el=>{
+                    if(el.name=="src"||el.name=="href"){
+                        el.label = t('plans.commonConfig.'+el.name)
+                    }else{
+                         el.label = t('plans.'+item.tag+'Config.'+el.name)
+                    }
+                })
             })
-            state.previewApp = previewRender('#previewContainer')
+            state.previewApp = previewRender('#previewContainer',getCookie('lang'))
             handleGetPageConfig()
             showComp()
             await getSettingPageData()

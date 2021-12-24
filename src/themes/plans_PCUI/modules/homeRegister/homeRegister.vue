@@ -1,5 +1,5 @@
 <template>
-    <div class='quick-module' :style='data.styleObj'>
+    <div v-if='!customerInfo' class='quick-module' :style='data.styleObj'>
         <h3 class='title'>
             {{ $t('home.quick.title') }}
         </h3>
@@ -16,8 +16,9 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 export default {
     props: {
@@ -30,6 +31,8 @@ export default {
     },
     setup () {
         const router = useRouter()
+        const store = useStore()
+        const customerInfo = computed(() => store.state._user.customerInfo)
         const registerAccount = ref('')
 
         // 去注册
@@ -40,6 +43,7 @@ export default {
         }
 
         return {
+            customerInfo,
             registerAccount,
             goRegister,
         }

@@ -4,7 +4,8 @@
             <top left-icon='arrow-left' :menu='false' :right-action='false' :show-center='true' />
             <div class='filed-wrap'>
                 <van-cell-group>
-                    <van-field v-model='userName' :label='$t("bank.bankPersonName")' :placeholder='$t("bank.inputBankPersonName")' />
+                    <van-field v-model='firstName' :label='$t("bank.bankPersonFirstName")' :placeholder='$t("bank.bankPersonFirstName")' />
+                    <van-field v-model='lastName' :label='$t("bank.bankPersonLastName")' :placeholder='$t("bank.bankPersonLastName")' />
                     <van-field v-model='bankNo' :label='$t("bank.bankNo")' :placeholder='$t("bank.inputBankNo")' type='number' />
                     <van-field
                         v-model='bankName'
@@ -120,7 +121,8 @@ export default {
         const customInfo = computed(() => store.state._user.customerInfo)
 
         const state = reactive({
-            userName: '',
+            firstName: '',
+            lastName: '',
             bankNo: '',
             bankName: '',
             currency: 'USD',
@@ -187,6 +189,8 @@ export default {
 
         // 提交处理
         const handleConfirm = () => {
+            // firstName账户持有人名
+            // lastName账户持有人姓
             // bankAccountName账户持有人姓名
             // bankCardNumber银行卡号
             // bankCurrency银行币种
@@ -199,7 +203,8 @@ export default {
             const province = state.area.split(',')[0]
             const city = state.area.split(',')[1]
             const params = {
-                bankAccountName: state.userName,
+                firstName: state.firstName,
+                lastName: state.lastName,
                 bankCardNumber: state.bankNo,
                 bankName: state.bankName,
                 bankCurrency: state.currency,
@@ -241,7 +246,8 @@ export default {
         }
 
         const cancel = () => {
-            state.userName = ''
+            state.firstName = ''
+            state.lastName = ''
             state.bankNo = ''
             state.currency = ''
             state.bankName = ''

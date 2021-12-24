@@ -730,6 +730,8 @@
         "inputOpenAddress": "Input account opening address",
         "bankNo": "Bank card no.",
         "bankPersonName": "Holder's name",
+        "bankPersonFirstName": "Cardholder first name",
+        "bankPersonLastName": "Cardholder last name",
         "bankName": "Bank name",
         "openAddress": "Bank address",
         "inputOpenAddressText": "Input account opening address",

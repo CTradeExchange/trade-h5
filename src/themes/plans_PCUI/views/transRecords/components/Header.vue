@@ -60,7 +60,7 @@
         width='400px'
         @closed='onClosed'
     >
-        <ProductSearch class='productSearch'>
+        <ProductSearch class='productSearch' :trade-type='tradeType'>
             <template #list='{ list }'>
                 <ProductList :list='list' @onSelect='onSelect' />
             </template>
@@ -162,6 +162,13 @@ onMounted(() => {
                 query: {}
             })
         }
+
+        // 重置其他值
+        timeRange.value = []
+        onTimeSelect(timeValue.value = filterList.time[0].value)
+        direction.value = filterList.direction[0].value
+        productValue.value = filterList.product[0].value
+        orderType.value = -1
     })
 })
 

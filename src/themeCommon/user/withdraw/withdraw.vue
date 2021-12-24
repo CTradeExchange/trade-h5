@@ -12,7 +12,7 @@
             @rightClick='rightClick'
         />
         <!-- 提币模块 -->
-        <div v-if="['digit_wallet','otc365'].includes(currentTab)" class='wrap'>
+        <div v-if="['digit_wallet','coin_mdpay','otc365'].includes(currentTab)" class='wrap'>
             <WithdrawCoin :withdraw-method='currentTab' />
         </div>
         <!-- 提现模块 -->
@@ -75,10 +75,10 @@ export default {
         // state.rightAction.path = '/withdrawRecord'
 
         // 判断是显示提现记录还是提币记录
-        if (state.currentTab === 'digit_wallet') {
+        if (['digit_wallet', 'coin_mdpay', 'otc365'].includes(state.currentTab)) {
             // state.rightAction.title = t('withdraw.coinRecordText')
             state.rightAction.path = '/withdrawRecord?withdrawType=2'
-        } else if (state.currentTab === 'bank') {
+        } else {
             // state.rightAction.title = t('withdraw.moneyRecordText')
             state.rightAction.path = '/withdrawRecord?withdrawType=1'
         }

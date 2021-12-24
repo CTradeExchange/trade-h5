@@ -69,7 +69,6 @@
             :columns='methodList'
             :columns-field-names='customMethodName'
             :confirm-button-text="$t('common.sure')"
-
             :default-index='0'
             @cancel='methodPickerShow = false'
             @confirm='onMethonConfirm'
@@ -148,7 +147,6 @@ export default {
             state.inPickerShow = false
             state.currentTab = val.withdrawMethod
             state.inCurrency = val.currency
-
             if (val.withdrawMethod.split(',').length > 1) {
                 // 如果选择的币种支持多种取款方式
                 state.withdrawMethodVis = true

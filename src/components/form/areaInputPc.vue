@@ -75,8 +75,7 @@ export default {
     },
     computed: {
         countryList () {
-            let countryList = this.$store.state._base.wpCompanyInfo?.registrable
-            if (!countryList?.length) countryList = this.$store.state.countryList
+            const countryList = this.$store.state.countryList || []
             const tempArr = []
 
             countryList.forEach(item => {

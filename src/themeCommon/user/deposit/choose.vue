@@ -154,12 +154,12 @@ export default {
                 state.exchangeDisable = true
                 paymentTypes.map(elem => {
                     // 直充
-                    if (elem.rechargeType.indexOf('1') !== -1) {
+                    if (elem.rechargeType?.indexOf('1') !== -1) {
                         state.directDisable = false
                         if (!state.paymentInfo) state.paymentInfo = elem
                     }
                     // 汇兑
-                    if (elem.rechargeType.indexOf('2') !== -1) {
+                    if (elem.rechargeType?.indexOf('2') !== -1) {
                         state.exchangeDisable = false
                     }
                 })

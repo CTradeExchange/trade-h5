@@ -61,7 +61,7 @@
                     </div>
                 </div>
                 <div class='right' @click='handleSwap'>
-                    <i class='icon_zhuanhuan'></i>
+                    <i class='icon_zhuanhuan1'></i>
                 </div>
             </div>
             <div class='action-bar'>
@@ -346,7 +346,7 @@ export default {
             }
             .right {
                 //flex: 1;
-                .icon_zhuanhuan {
+                .icon_zhuanhuan1 {
                     cursor: pointer;
                     margin: 0 rem(32px);
                     color: var(--primary);
