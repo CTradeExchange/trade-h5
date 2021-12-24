@@ -26,7 +26,7 @@ export default {
                 }
             ]
 
-            if (dealModeShowMap.value[props.tradeMode].pendingTab) {
+            if (dealModeShowMap.value[props.tradeMode]?.pendingTab) {
                 list.push({
                     title: [3, 9].includes(props.tradeType) ? t('trade.pending2') : t('trade.pending'),
                     val: 10

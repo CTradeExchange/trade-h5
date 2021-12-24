@@ -139,6 +139,7 @@ const current = computed({
 
 <style lang="scss" scoped>
 .customTable{
+    background: chartreuse;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -214,6 +215,37 @@ const current = computed({
             background-size: 160px auto;
             color: var(--placeholdColor);
         }
+    }
+
+}
+</style>
+
+<style lang="scss">
+.multipleVal{
+    cursor: pointer;
+    margin-left: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    height: 24px;
+    line-height: 24px;
+    padding-right: 5px;
+    padding-left: 4px;
+    font-size: 12px;
+    color: var(--primary);
+    border-radius: 3px;
+    border: 1px solid var(--primary);
+    min-width: 45px;
+    &.arrow{
+        padding-right: 25px;
+        color: var(--primary);
+    }
+
+    .icon_icon_arrow{
+        font-size: 12px;
+        position: absolute;
+        right: 4px;
+        top: -0.5px;
     }
 }
 </style>

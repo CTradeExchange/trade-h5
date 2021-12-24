@@ -1,81 +1,77 @@
 <template>
-    <!-- 杠杆倍数设置 -->
-    <van-popup
-        v-model:show='show'
-        class='custom-popup leverage-popup'
-        position='bottom'
-        round
-        teleport='body'
-        @open='open'
-    >
-        <div class='multipleSet'>
-            <div v-show='warn' class='warnRangeTip'>
-                {{ $t('trade.unRangeMultilpe') }}
-            </div>
-            <div class='header'>
-                <div class='header-title'>
-                    {{ $t('trade.multilpSetting') }}
-                </div>
-                <i class='icon_guanbi' @click="$emit('update:modelValue', false)"></i>
-            </div>
-            <div class='body'>
-                <template v-if="marginInfo.type==='2'">
-                    <StepperComp
-                        v-model='multipleValue'
-                        class='stepper'
-                        :controlbtn='true'
-                        :digits='0'
-                        :max='Number(multipleRange[1])'
-                        :min='Number(multipleRange[0])'
-                        :step='step'
-                        @firstMinus='firstChange'
-                        @firstPlus='firstChange'
-                    />
-                    <div class='multipleRange'>
-                        {{ $t('trade.multilpRange') }}{{ multipleRange[0] }}x - {{ multipleRange[1] }}x
+    <div class='dialog-layer'>
+        <el-dialog
+            v-model='multipleShow'
+            :before-close='close'
+            :close-on-click-modal='false'
+            :title='$t("trade.multilpSetting")'
+            width='500px'
+            @open='open'
+        >
+            <div v-if='multipleShow' class='body-module'>
+                <div class='multipleSet'>
+                    <div v-show='warn' class='warnRangeTip'>
+                        {{ $t('trade.unRangeMultilpe') }}
                     </div>
-                </template>
-                <template v-else>
-                    <div class='multipleVal'>
-                        {{ multipleValue }}x
-                    </div>
-                    <ul class='multipleList'>
-                        <li v-for='item in multipleList' :key='item' class='item' :class='{ active:multipleValue===item }' @click='multipleValue = item'>
-                            {{ item }}x
-                        </li>
-                    </ul>
-                </template>
+                    <div class='body'>
+                        <template v-if="marginInfo?.type==='2'">
+                            <StepperComp
+                                v-model='multipleValue'
+                                class='stepper'
+                                :controlbtn='true'
+                                :digits='0'
+                                :max='Number(multipleRange[1])'
+                                :min='Number(multipleRange[0])'
+                                :step='step'
+                                @firstMinus='firstChange'
+                                @firstPlus='firstChange'
+                            />
+                            <div class='multipleRange'>
+                                {{ $t('trade.multilpRange') }}{{ multipleRange[0] }}x - {{ multipleRange[1] }}x
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class='multipleVal'>
+                                {{ multipleValue }}x
+                            </div>
+                            <ul class='multipleList'>
+                                <li v-for='item in multipleList' :key='item' class='item' :class='{ active:multipleValue===item }' @click='multipleValue = item'>
+                                    {{ item }}x
+                                </li>
+                            </ul>
+                        </template>
 
-                <div class='warnTip'>
-                    <p class='t1'>
-                        {{ $t('riskLevel.warn') }}
-                    </p>
-                    <p class='t2'>
-                        {{ $t('trade.multilpSettingTip1') }}
-                    </p>
+                        <div class='warnTip'>
+                            <p class='t1'>
+                                {{ $t('riskLevel.warn') }}
+                            </p>
+                            <p class='t2'>
+                                {{ $t('trade.multilpSettingTip1') }}
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <van-button block :disabled='loading' type='primary' @click='saveClick'>
-                {{ $t('trade.saveSetting') }}
-            </van-button>
-        </div>
-    </van-popup>
-    <Loading :show='loading' />
+            <template #footer>
+                <van-button block class='handle-btn' :disabled='loading || warn' type='primary' @click='saveClick'>
+                    {{ $t('trade.saveSetting') }}
+                </van-button>
+            </template>
+        </el-dialog>
+    </div>
 </template>
 
 <script>
-import { computed, onMounted, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import { updateCrossLevelNum } from '@/api/trade'
-import StepperComp from '@plans/components/stepper'
-import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
-
+import centerViewDialog from '@planspc/layout/centerViewDialog'
+import { updateCrossLevelNum } from '@/api/trade'
+import { Toast } from 'vant'
+import StepperComp from '@planspc/components/stepper'
+import { onBeforeMount, onMounted, computed, reactive, toRefs, onUnmounted, watch } from 'vue'
+import { isEmpty } from '@/utils/util'
 export default {
-    components: {
-        StepperComp,
-    },
+    components: { StepperComp },
     props: {
         product: {
             type: Object
@@ -91,7 +87,7 @@ export default {
         position: {
             type: [String, Object],
             default: ''
-        },
+        }
     },
     emits: ['update:modelValue', 'update:multipleVal', 'save'],
     setup (props, { emit }) {
@@ -99,15 +95,18 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const show = computed({
             get: () => props.modelValue,
-            set: val => emit('update:modelValue', val)
+            set: val => {
+                state.multipleShow = val
+                emit('update:modelValue', val)
+            }
         })
         const accountInfo = computed(() => store.state._user.customerInfo?.accountList?.find(el => el.tradeType === props.product.tradeType))
         const marginInfo = computed(() => props.product?.marginInfo)
 
         // 杠杆倍数范围
         const multipleRange = computed(() => {
-            if (props.position) {
-                return props.position.adjustCrossLevel.split('-')
+            if (state.position) {
+                return state.position.adjustCrossLevel.split('-')
             } else {
                 return marginInfo?.value?.type === '2' ? marginInfo.value.values.split('-') : []
             }
@@ -132,20 +131,23 @@ export default {
             max: 100,
             min: 1,
             step: 1,
+            multipleShow: false
         })
-        const open = () => {
-            state.multipleValue = String(props.multipleVal)
+
+        const open = (row) => {
+            show.value = true
+            if (!isEmpty(row)) {
+                state.multipleValue = row.crossLevelNum
+                state.position = row
+            } else {
+                state.multipleValue = String(props.multipleVal)
+            }
         }
 
-        // const change = (val) => {
-        //     if (marginInfo.value.type !== '2') return false
-        //     console.log(val)
-        //     if (Number(val) < multipleRange.value[0]) {
-        //         emit('update:multipleVal', multipleRange.value[0])
-        //     } else if (Number(val) > multipleRange.value[1]) {
-        //         emit('update:multipleVal', multipleRange.value[1])
-        //     }
-        // }
+        const close = () => {
+            show.value = false
+        }
+
         const firstChange = () => {}
 
         // 保存设置
@@ -154,7 +156,7 @@ export default {
                 return false
             }
             Promise.resolve().then(() => {
-                if (props.position) {
+                if (state.position) {
                     return savePosition(state.multipleValue)
                 }
                 return true
@@ -170,17 +172,18 @@ export default {
         const savePosition = (val) => {
             state.loading = true
             return updateCrossLevelNum({
-                positionId: props.position.positionId,
+                positionId: state.position.positionId,
                 symbolId: props.product.symbolId,
-                orderId: props.position.orderId,
-                tradeType: props.position.tradeType,
+                orderId: state.position.orderId,
+                tradeType: state.position.tradeType,
                 accountDigits: accountInfo.value.digits,
                 accountId: accountInfo.value.accountId,
                 crossLevelNum: parseInt(val),
             }).then(res => {
                 if (res.check()) {
                     Toast(t('trade.modifySuccess'))
-                    store.dispatch('_trade/queryPositionPage', { tradeType: props.position.tradeType })
+                    show.value = false
+                    store.dispatch('_trade/queryPositionPage', { tradeType: state.position.tradeType })
                     return true
                 }
                 return false
@@ -199,33 +202,30 @@ export default {
             }
         })
 
+        watch(() => show.value, val => {
+            state.multipleShow = val
+        })
+
         return {
             ...toRefs(state),
             show,
             open,
             marginInfo,
             multipleList,
-            // multipleValue,
             multipleRange,
             warn,
             savePosition,
             firstChange,
             saveClick,
+            close
         }
     }
+
 }
 </script>
 
-<style lang="scss">
+<style lang='scss' scoped>
 @import '@/sass/mixin.scss';
-.leverage-popup{
-    background-color: var(--contentColor);
-}
-</style>
-
-<style lang="scss" scoped>
-@import '@/sass/mixin.scss';
-
 .multipleSet{
     position: relative;
     .warnRangeTip{
@@ -297,5 +297,17 @@ export default {
             color: var(--color);
         }
     }
+}
+.handle-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--primary);
+    width: 100%;
+    height: 48px;
+    font-size: 16px;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
 }
 </style>

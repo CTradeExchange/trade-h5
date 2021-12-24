@@ -636,7 +636,12 @@
         "highPrice": "最高价",
         "lowPrice": "最低价",
         "allTransaction": "所有成交记录",
-        "positionAmount": "持仓量"
+        "positionAmount": "持仓量",
+        "unRangeMultilpe": "杠杆倍数不在范围内",
+        "multilpSetting": "杠杆设置",
+        "multilpRange": "杠杆范围：",
+        "multilpSettingTip1": "过高的杠杆会增加仓位强平风险，请注意自身风险承受级别，合理设置杠杆",
+        "saveSetting": "保存设置"
 	},
 	"contract": {
 		"advance": "预付款",
@@ -764,5 +769,10 @@
     },
     "modules":{
         "defaultContent":"这里是模块的默认文案"
+    },
+    "riskLevel":{
+        "safety": "安全",
+        "warn": "警告",
+        "danger": "危险"
     }
 }

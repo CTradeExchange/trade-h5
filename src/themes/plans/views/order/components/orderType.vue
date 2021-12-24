@@ -10,7 +10,12 @@
             <i class='icon_icon_arrow'></i>
         </a>
     </div>
-    <MultipleSet v-if="product && product.tradeType===2 && product.marginInfo && product.marginInfo.type!=='1'" v-model='multipleSetVisible' v-model:multipleVal='mVal' :product='product' />
+    <MultipleSet
+        v-if="product && product.tradeType===2 && product.marginInfo && product.marginInfo.type!=='1'"
+        v-model='multipleSetVisible'
+        v-model:multipleVal='mVal'
+        :product='product'
+    />
 </template>
 
 <script>
@@ -88,8 +93,8 @@ export default {
         background: var(--bgColor);
         padding: 0 rem(16px);
         border-radius: rem(6px);
+        color: var(--primary);
         @include active();
-
         .text{
             display: inline-block;
             padding-right: rem(20px);

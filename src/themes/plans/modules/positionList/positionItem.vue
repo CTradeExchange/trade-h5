@@ -34,7 +34,7 @@
                             </div>
                             <div>
                                 <span class='direction' :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
-                                    {{ Number(data.direction) === 1 ? $t('trade.buyShort') :$t('trade.sellShort') }}&nbsp;
+                                    {{ Number(data.direction) === 1 ? $t('trade.buyShort') :$t('trade.sellShort') }}
                                 </span>{{ minus(data.openVolume, data.closeVolume) }} {{ $t('trade.volumeUnit') }}
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                                     {{ Number(data.direction) === 1 ? product?.sell_price : product?.buy_price }}
                                 </div>
                             </div>
-                            <div class='flex-item'>
+                            <div v-if='Number(tradeType) === 2' class='flex-item'>
                                 <div class='title alignRight'>
                                     {{ $t('trade.previewStopPrice') }}
                                 </div>
@@ -269,12 +269,12 @@ export default {
             }
             .direction{
                 display: inline-block;
-                width: rem(36px);
                 height: rem(36px);
                 line-height: rem(40px);
                 border-radius: rem(6px);
                 color: #fff;
-                padding-left: rem(4px);
+                text-align: center;
+                padding: 0 rem(8px);
                 font-size: rem(24px);
                 margin-right: rem(10px);
                 &.riseColor{
@@ -395,6 +395,7 @@ export default {
             border: 1px solid var(--primary);
             &.arrow{
                 padding-right: rem(50px);
+                color: var(--primary);
             }
 
             .icon_icon_arrow{

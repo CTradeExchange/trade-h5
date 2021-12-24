@@ -632,7 +632,12 @@
         "upDownWidth": "Change %",
         "highPrice": "Highest price",
         "lowPrice": "Lowest price",
-        "allTransaction": "All trade record"
+        "allTransaction": "All trade record",
+        "unRangeMultilpe": "Leverage ratio is not within the range",
+        "multilpSetting": "Leverage ratio setting",
+        "multilpRange": "Leverage ratio range：",
+        "multilpSettingTip1": "Over leverage will increase the risk of liquidation，please remind the risk level",
+        "saveSetting": "Save"
 	},
 	"contract": {
 		"advance": "Prepay",
@@ -754,5 +759,10 @@
     },
     "modules":{
         "defaultContent":"Here is the default copy of the module"
+    },
+    "riskLevel":{
+        "safety": "Safe",
+        "warn": "Warning",
+        "danger": "Danger"
     }
 }

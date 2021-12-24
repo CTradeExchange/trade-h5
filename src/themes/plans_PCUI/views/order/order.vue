@@ -16,7 +16,7 @@
                     <trade />
                 </div>
             </div>
-            <div v-if='dealModeShowMap[product?.dealMode].handicap && product?.symbolName' class='right-wrap'>
+            <div v-if='dealModeShowMap[product?.dealMode]?.handicap && product?.symbolName' class='right-wrap'>
                 <!-- 盘口报价 -->
                 <div class='handicap-content'>
                     <handicap />

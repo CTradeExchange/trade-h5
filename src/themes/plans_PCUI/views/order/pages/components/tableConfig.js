@@ -720,6 +720,12 @@ export const getAssetColumns = (tradeType) => {
         unref(adjustMargin).open(row)
     }
 
+    // 杠杆倍数弹窗
+    const openMultipleSet = (row, multipleSet) => {
+        unref(multipleSet).open(row)
+        // row.crossLevelNum
+    }
+
     // 跳转到借款页面
     const goLoan = (row) => {
         if (row.accountId) {
@@ -855,7 +861,31 @@ export const getAssetColumns = (tradeType) => {
             },
         ],
         2: [
-            { name: t('trade.name'), prop: 'symbolName', className: 'symbolName', align: 'left' },
+            {
+                name: t('trade.name'),
+                prop: 'symbolName',
+                className: 'symbolName',
+                align: 'left',
+                minWidth: 150,
+                slots: {
+                    default: ({ row, onGetComponentRefs }) => {
+                        const refs = onGetComponentRefs()
+                        return (
+                            <>
+
+                                {row.symbolName}
+                                <span class='multipleVal' onclick={
+                                    openMultipleSet.bind(null, row, refs.multipleSet)
+                                }>
+                                    <i>{ row.crossLevelNum }x</i>
+                                    {row.marginSetType === '2' ? <i class='icon_icon_arrow'></i> : ''}
+                                </span>
+                            </>
+                        )
+                    }
+                }
+
+            },
             {
                 name: t('trade.profit') + '(' + unref(assetsInfo).currency + ')',
                 prop: 'direction',
