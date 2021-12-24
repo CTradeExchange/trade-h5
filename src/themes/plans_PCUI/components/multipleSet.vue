@@ -6,7 +6,6 @@
             :close-on-click-modal='false'
             :title='$t("trade.multilpSetting")'
             width='500px'
-            @open='open'
         >
             <div v-if='multipleShow' class='body-module'>
                 <div class='multipleSet'>
@@ -194,7 +193,9 @@ export default {
 
         onMounted(() => {
             if (marginInfo?.value?.type === '2') {
-                emit('update:multipleVal', multipleRange.value[0])
+                const val = multipleRange.value[0]
+                state.multipleValue = val
+                emit('update:multipleVal', val)
             } else if (marginInfo?.value?.type === '3') {
                 const val = multipleList.value[0]
                 state.multipleValue = val
