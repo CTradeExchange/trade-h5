@@ -105,25 +105,6 @@
                         </div>
                     </div>
                     <div class='cell'>
-                        <div class='flex-wrap'>
-                            <div class='flex-item'>
-                                <div class='title'>
-                                    {{ $t('trade.dealTime') }}
-                                </div>
-                                <div class='val'>
-                                    {{ formatTime(data.openTime) }}
-                                </div>
-                            </div><div class='flex-item alignRight'>
-                                <div class='title'>
-                                    {{ $t('trade.positionNo') }}
-                                </div>
-                                <div class='val'>
-                                    {{ data.positionId }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class='cell'>
                         <div class='ft'>
                             <van-button
                                 v-if='Number(tradeType) === 2'

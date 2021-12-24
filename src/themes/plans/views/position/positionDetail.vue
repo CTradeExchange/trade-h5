@@ -330,13 +330,13 @@ export default {
             }
             .direction{
                 display: inline-block;
-                width: rem(36px);
                 height: rem(36px);
                 line-height: rem(40px);
                 border-radius: rem(6px);
                 color: #fff;
-                padding-left: rem(2px);
-                font-size: rem(20px);
+                text-align: center;
+                padding: 0 rem(8px);
+                font-size: rem(24px);
                 margin-right: rem(10px);
                 &.riseColor{
                     background: var(--riseColor);

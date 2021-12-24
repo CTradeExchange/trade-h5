@@ -51,6 +51,7 @@ export default {
         const accountList = computed(() => {
             return store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(props.tradeType))
         })
+        const style = computed(() => store.state.style)
         const state = reactive({
             popupShow: props.show,
             curCurrency: props.currency,
@@ -80,8 +81,10 @@ export default {
                 return require('@/assets/currency_icon/default.png')
             }
         }
+        const bgColor = style.value.primary + '0D'
         return {
             close,
+            bgColor,
             accountList,
             checkCurrency,
             getCurrencyIcon,
@@ -125,6 +128,7 @@ export default {
                 font-size: rem(24px);
             }
             &.active{
+                background: v-bind(bgColor);
                 border: rem(2px) solid var(--primary);
                 &::after{
                     position: absolute;

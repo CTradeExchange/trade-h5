@@ -862,8 +862,8 @@ export default {
                         showBarChange: true, // 涨跌幅
                         chartType: locChartConfig.chartType, // 图表类型
                         showSeriesTitle: false, // K线标题
-                        upColor: style.value.riseColor,
-                        downColor: style.value.fallColor
+                        // upColor: style.value.riseColor,
+                        // downColor: style.value.fallColor
 
                     },
                     indicators: [

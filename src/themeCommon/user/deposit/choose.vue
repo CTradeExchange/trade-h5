@@ -136,6 +136,7 @@ export default {
             pickerShow: false,
             selectedCurrency: ''
         })
+        const style = computed(() => store.state.style)
         // 客户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
 
@@ -245,6 +246,7 @@ export default {
                 return require('@/assets/currency_icon/default.png')
             }
         }
+        const bgColor = style.value.primary + '0D'
 
         return {
             ...toRefs(state),
@@ -253,7 +255,8 @@ export default {
             goRecharge,
             updatePopupVis,
             onCurrencyConfirm,
-            getCurrencyIcon
+            getCurrencyIcon,
+            bgColor
         }
     }
 }
@@ -289,6 +292,7 @@ export default {
     .action-bar{
         background: var(--contentColor);
         margin-bottom: rem(80px);
+        border-radius: rem(10px);
         padding: 0 rem(30px);
         height: rem(110px);
         display: flex;
@@ -356,7 +360,7 @@ export default {
             }
         }
         .active {
-            background: rgba(71, 127, 210, 0.1);
+            background: v-bind(bgColor);
             border: 1px solid var(--primary);
             position: relative;
             .check {
@@ -424,7 +428,7 @@ export default {
             }
         }
         .active {
-            background: rgba(71, 127, 210, 0.1);
+            background: v-bind(bgColor);
             border: 1px solid var(--primary);
             .check {
                 display: flex;
