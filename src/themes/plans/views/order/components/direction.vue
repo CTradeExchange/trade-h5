@@ -1,15 +1,15 @@
 <template>
-    <div v-if='product' class='directions' :class="{ 'center': orderHandicapVisible }">
+    <div v-if='product' class='directions' :class="{ 'center': dealModeShowMap[product.dealMode]?.handicap }">
         <div class='item buy' :class="{ 'active':modelValue==='buy' }" @click="setDirection('buy')">
             <span>
                 {{ $t('trade.buy') }}
             </span>
-            <span v-if='!orderHandicapVisible' class='price flRight'>
+            <span v-if='!dealModeShowMap[product.dealMode]?.handicap' class='price flRight'>
                 {{ product.buy_price }}
             </span>
         </div>
         <div class='item sell' :class="{ 'active':modelValue==='sell' }" @click="setDirection('sell')">
-            <span v-if='!orderHandicapVisible' class=' price'>
+            <span v-if='!dealModeShowMap[product.dealMode]?.handicap' class=' price'>
                 {{ product.sell_price }}
             </span>
             <span class='flRight'>
@@ -28,7 +28,7 @@ export default {
     emits: ['update:modelValue'],
     setup (props, { emit }) {
         const store = useStore()
-        const { orderHandicapVisible } = toolHooks()
+        const { dealModeShowMap } = toolHooks()
 
         // 颜色值
         const style = computed(() => store.state.style)
@@ -40,7 +40,7 @@ export default {
         const riseColor = style.value.riseColor + '80'
         return {
             setDirection,
-            orderHandicapVisible,
+            dealModeShowMap,
             fallColor,
             riseColor
         }

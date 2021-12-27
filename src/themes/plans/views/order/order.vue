@@ -2,18 +2,28 @@
     <div class='orderWrap'>
         <div class='orderTop'>
             <plansType v-if='plansList.length>1' :list='plansList' :value='productTradeType' @change='handleTradeType' />
-            <SwitchTradeType :product='product' @switchProduct='switchProductVisible=true' />
+            <SwitchTradeType
+                :product='product'
+                @switchProduct='switchProductVisible=true'
+            />
         </div>
 
         <div class='container'>
             <div v-if='product' class='main'>
-                <div v-if='orderHandicapVisible && product.symbolName' class='left'>
+                <div v-if='dealModeShowMap[product.dealMode]?.handicap && product.symbolName' class='left'>
                     <!-- 五档报价 -->
                     <OrderHandicap :product='product' />
                 </div>
                 <div v-if='product' class='right'>
                     <!-- 订单类型 -->
-                    <OrderTypeTab v-model='orderType' v-model:multipleVal='multipleVal' :product='product' :trade-type='product.tradeType' @selected='changeOrderType' />
+                    <OrderTypeTab
+                        v-model='orderType'
+                        v-model:multipleVal='multipleVal'
+                        :product='product'
+                        :trade-mode='product.dealMode'
+                        :trade-type='product.tradeType'
+                        @selected='changeOrderType'
+                    />
                     <!-- 自动借款 -->
                     <LoanBar v-if='[3, 9].includes(product.tradeType)' v-model='operationType' :account='account' class='loanBarMargin' :product='product' />
                     <!-- 方向 -->
@@ -167,7 +177,7 @@ export default {
         const product = computed(() => store.getters.productActived)
         const customerInfo = computed(() => store.state._user.customerInfo)
         const { bizType, account, findProductInCategory, switchProduct } = hooks(state)
-        const { orderHandicapVisible } = toolHooks()
+        const { dealModeShowMap } = toolHooks()
         const productSwitchHistory = {} // 顶部玩法类型切换记录
         // 玩法列表
         const isWallet = store.state._base.wpCompanyInfo.isWallet
@@ -381,7 +391,7 @@ export default {
             ...toRefs(state),
             init,
             plansList,
-            orderHandicapVisible,
+            dealModeShowMap,
             productTradeType,
             onSelectProduct,
             account,

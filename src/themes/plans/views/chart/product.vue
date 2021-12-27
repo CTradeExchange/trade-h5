@@ -243,7 +243,7 @@
             </div>
         </div>
         <StallsAndDeal
-            v-if='product && orderHandicapVisible'
+            v-if='product && dealModeShowMap.value[product.trade_mode]?.handicap'
             :cur-price='product?.cur_price'
             :symbol-id='product?.symbolId'
             :trade-type='tradeType'
@@ -317,7 +317,7 @@ export default {
         const tradeType = ref(route.query.tradeType)
         const getSymbolId = () => unref(symbolId)
         const getTradeType = () => unref(tradeType)
-        const { orderHandicapVisible } = toolHooks()
+        const { dealModeShowMap } = toolHooks()
 
         const { t } = useI18n({ useScope: 'global' })
         const klineTypeDropdown = ref(null)
@@ -1058,7 +1058,7 @@ export default {
             computedLineList,
             style,
             primaryColor,
-            orderHandicapVisible,
+            dealModeShowMap,
             updateStudy
         }
     }

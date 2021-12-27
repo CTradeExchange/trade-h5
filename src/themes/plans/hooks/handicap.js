@@ -110,18 +110,25 @@ export default function ({ showPending = false } = {}) {
 }
 
 export const toolHooks = function () {
-    const store = useStore()
-    const product = computed(() => store.getters.productActived)
-
-    // 是否显示五档盘口
-    const orderHandicapVisible = computed(() => {
-        if ([2].includes(product.value?.dealMode)) { // 蝴蝶的成交模式显示五档报价，买卖方向按钮上不显示价格
-            return true
-        } else {
-            return false
+    // 成交模式: 1:MM(不展示盘口和成交记录)，2:蝴蝶（不显示挂单tab），3:撮合
+    const dealModeShowMap = computed(() => {
+        return {
+            '1': {
+                handicap: false,
+                pendingTab: true
+            },
+            '2': {
+                handicap: true,
+                pendingTab: false
+            },
+            '3': {
+                handicap: true,
+                pendingTab: true
+            }
         }
     })
+
     return {
-        orderHandicapVisible
+        dealModeShowMap
     }
 }
