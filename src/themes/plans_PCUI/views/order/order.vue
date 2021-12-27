@@ -200,8 +200,9 @@ export default {
             }
             .deal-content{
                 padding: 10px 16px 10px 16px;
-                height: 333px;
-                overflow:hidden
+                overflow:hidden;
+                flex: 1;
+                margin-top: 8px;
             }
         }
     }

@@ -60,7 +60,7 @@
         </p>
     </div>
 
-    <van-empty :description='$t("common.noData")' image='/images/empty.png' />
+    <!-- <van-empty :description='$t("common.noData")' image='/images/empty.png' /> -->
 </template>
 
 <script>
