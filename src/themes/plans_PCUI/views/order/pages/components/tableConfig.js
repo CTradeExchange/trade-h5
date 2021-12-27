@@ -729,7 +729,7 @@ export const getAssetColumns = (tradeType) => {
 
     // 杠杆倍数弹窗
     const openMultipleSet = (row, multipleSet) => {
-        unref(multipleSet).open(row)
+        if (Number(row.marginSetType) === 2) { unref(multipleSet).open(row) }
         // row.crossLevelNum
     }
 
@@ -875,7 +875,7 @@ export const getAssetColumns = (tradeType) => {
                 prop: 'symbolName',
                 className: 'symbolName',
                 align: 'left',
-                minWidth: 150,
+                width: '200',
                 slots: {
                     default: ({ row, onGetComponentRefs }) => {
                         const refs = onGetComponentRefs()
@@ -887,7 +887,7 @@ export const getAssetColumns = (tradeType) => {
                                     openMultipleSet.bind(null, row, refs.multipleSet)
                                 }>
                                     <i>{ row.crossLevelNum }x</i>
-                                    {row.marginSetType === '2' ? <i class='icon_icon_arrow'></i> : ''}
+                                    {Number(row.marginSetType) === 2 ? <i class='icon_icon_arrow'></i> : ''}
                                 </span>
                             </>
                         )

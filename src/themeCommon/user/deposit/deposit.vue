@@ -16,7 +16,7 @@
     <!-- 内容区域 -->
     <div class='page-content'>
         <p class='header'>
-            额度<!-- {{ $t('cRoute.msg') }} -->
+            {{ $t('deposit.limit') }} -->
         </p>
         <!-- 页面加载状态 -->
         <Loading :show='loading' />

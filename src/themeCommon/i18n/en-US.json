@@ -312,7 +312,8 @@
         "direct": "Direct deposit",
         "directDes": "Deposit currency same as account currency",
         "exchange": "Exchange",
-        "exchangeDes": "Deposit currency different with account currency"
+        "exchangeDes": "Deposit currency different with account currency",
+        "limit": "Amount"
     },
     "fund": {
         "marginLevel": "margin level",

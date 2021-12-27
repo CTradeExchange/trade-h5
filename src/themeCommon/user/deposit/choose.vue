@@ -32,7 +32,7 @@
                         <img alt='' class='icon' src='../../../assets/currency_icon/all.png' srcset='' />
                         <div class='name'>
                             <p class='t1'>
-                                请选择充值资产
+                                {{ $t('deposit.chooseCurrency') }}
                             </p>
                         </div>
                     </div>
