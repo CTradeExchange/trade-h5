@@ -12,7 +12,9 @@
             @change="$emit('update:stopLoss',stopLossPrice)"
         >
             <template #title>
-                <p>{{ $t('trade.stopLossPrice') }}</p>
+                <p class='label'>
+                    {{ $t('trade.stopLossPrice') }}
+                </p>
                 <p class='priceRange'>
                     &le; {{ stopLossRange[1] }}
                 </p>
@@ -27,7 +29,9 @@
             @change="$emit('update:stopProfit',stopProfitPrice)"
         >
             <template #title>
-                <p>{{ $t('trade.stopProfitPrice') }}</p>
+                <p class='label'>
+                    {{ $t('trade.stopProfitPrice') }}
+                </p>
                 <p class='priceRange'>
                     &ge; {{ profitRange[0] }}
                 </p>
@@ -92,10 +96,13 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .modifyProfitLoss{
+    .priceRange {
+        color: var(--minorColor);
+        font-size: rem(22px);
+    }
+    .label{
+        color: var(--color);
+    }
+}
 
-}
-.priceRange {
-    color: var(--minorColor);
-    font-size: rem(22px);
-}
 </style>

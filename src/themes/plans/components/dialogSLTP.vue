@@ -1,10 +1,11 @@
 <template>
     <van-popup
         v-model:show='showDialog'
-        class='m-dialog m-dialogZyzs'
+        class='m-dialog m-dialogZyzs custom-popup'
         :duration='0.2'
         get-container='body'
         position='bottom'
+        round
         teleport='body'
         :transition-appear='true'
         @closed='closed'
@@ -13,13 +14,13 @@
         <div v-if='!!warn' class='floatTip'>
             {{ warn }}
         </div>
-        <!-- <div class='header'>
+        <div class='header'>
             <div class='header-title'>
                 {{ data?.symbolName }}
             </div>
             <i class='icon_guanbi' @click='$emit("update:show",false)'></i>
-        </div> -->
-        <div class='dialog-header'>
+        </div>
+        <!-- <div class='dialog-header'>
             <div class='title'>
                 <p class='productName'>
                     {{ data?.symbolName }}
@@ -30,6 +31,8 @@
             <div class='right' @click='closeHandler'>
                 <i class='icon_guanbi'></i>
             </div>
+        </div> -->
+        <div class='popup-wrap'>
         </div>
         <div class='dialog-body'>
             <div class='inputNumber'>
@@ -239,7 +242,7 @@ export default {
     }
 }
 .modifyProfitLoss {
-    margin: 0 rem(30px) rem(30px) rem(30px);
+    margin: 0 0 rem(30px) 0;
 }
 .m-dialogZyzs {
     .lot {
@@ -248,7 +251,8 @@ export default {
         text-align: center;
     }
     .dialog-body {
-        height: rem(300px);
+        //height: rem(300px);
+        flex: none;
         overflow-y: visible;
         :deep(.layout-1) {
             padding-bottom: rem(30px);
@@ -262,7 +266,7 @@ export default {
             line-height: 1.45;
             align-items: center;
             justify-content: space-between;
-            margin: 0 rem(30px) rem(20px) rem(30px);
+            margin: 0 0 rem(20px) 0;
             font-size: rem(28px);
             .item-block {
                 &:last-child {
