@@ -258,7 +258,7 @@ export default {
                 } else {
                     state.amount = arr[0].amount
                 }
-                const defaultAmountList = [{ amount: 50 }, { amount: 100 }, { amount: 200 }, { amount: 500 }, { amount: 1000 }]
+                const defaultAmountList = [{ amount: 50 }, { amount: 100 }, { amount: 500 }, { amount: 1000 }]
                 state.amountList = arr.length ? arr : defaultAmountList
                 checkAmount(0, defaultAmountList[0])
             })

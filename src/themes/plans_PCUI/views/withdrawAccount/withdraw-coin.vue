@@ -213,7 +213,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const route = useRoute()
-        const { currency, accountId, tradeType } = route.query
+        const { currency, accountId, tradeType, currentTab } = route.query
         const state = reactive({
             // 加载状态
             loading: true,
@@ -550,7 +550,7 @@ export default {
                 tradeType,
                 accountCurrency: accountCurrency.currency,
                 country: customInfo.country,
-                withdrawMethod: 'digit_wallet'
+                withdrawMethod: currentTab
             }).then(res => {
                 if (res.check()) {
                     const { data } = res

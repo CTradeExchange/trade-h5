@@ -67,25 +67,12 @@ export default {
 
         // 跳转充值页面
         const goDesposit = () => {
-            if (accountList.value.length > 1) {
-                router.push({
-                    path: '/assets/chooseAccount',
-                    query: {
-                        accountId: assetsInfo.value.accountId,
-                        tradeType: props.tradeType,
-                        type: 2
-                    }
-                })
-            } else {
-                router.push({
-                    path: '/assets/deposit',
-                    query: {
-                        accountId: assetsInfo.value.accountId,
-                        currency: assetsInfo.value.currency,
-                        tradeType: props.tradeType
-                    }
-                })
-            }
+            router.push({
+                path: '/assets/depositChoose',
+                query: {
+                    tradeType: props.tradeType
+                }
+            })
         }
 
         // 跳转提现页面

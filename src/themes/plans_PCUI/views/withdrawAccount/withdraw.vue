@@ -4,7 +4,6 @@
             <!-- 加载中组件 -->
             <Loading :show='loading' />
             <!-- 头部导航 -->
-
             <Top
                 back
                 left-icon='arrow-left'
@@ -12,13 +11,13 @@
                 :show-center='true'
                 @rightClick='rightClick'
             />
-            <!-- 提币模块 -->
-            <div v-if="['digit_wallet','otc365'].includes(currentTab)" class='wrap'>
-                <WithdrawCoin :withdraw-method='currentTab' />
-            </div>
             <!-- 提现模块 -->
             <div v-if="currentTab.includes('bank')" class='wrap'>
                 <WithdrawMoney />
+            </div>
+            <!-- 提币模块 -->
+            <div v-else class='wrap'>
+                <WithdrawCoin :withdraw-method='currentTab' />
             </div>
         </div>
     </centerViewDialog>
@@ -79,12 +78,10 @@ export default {
         // state.rightAction.path = '/withdrawRecord'
 
         // 判断是显示提现记录还是提币记录
-        if (state.currentTab === 'digit_wallet') {
-            // state.rightAction.title = t('withdraw.coinRecordText')
-            state.rightAction.path = 'withdrawRecord?withdrawType=2'
-        } else if (state.currentTab === 'bank') {
-            // state.rightAction.title = t('withdraw.moneyRecordText')
+        if (state.currentTab === 'bank') {
             state.rightAction.path = 'withdrawRecord?withdrawType=1'
+        } else {
+            state.rightAction.path = 'withdrawRecord?withdrawType=2'
         }
 
         // 导航栏右侧标题点击跳转
