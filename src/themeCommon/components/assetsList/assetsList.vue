@@ -2,7 +2,7 @@
     <van-popup
         v-model:show='popupShow'
         class='custom-popup'
-        :duration='0.3'
+        :duration='0.2'
         position='bottom'
         round
         :transition-appear='true'

@@ -10,26 +10,30 @@
                 <div class='empty'></div>
                 <div class='module-form'>
                     <div class='select' @click='coinKindVisible = true'>
-                        <label class="select_lab">{{ $t('walletAdd.coinName') }}</label>
-                        <el-select class="currencyBox" v-model='coinKind' :placeholder="$t('walletAdd.coinPlaceholder')" placeholder='Select' @change='selectCoinKind'>
+                        <label class='select_lab'>
+                            {{ $t('walletAdd.coinName') }}
+                        </label>
+                        <el-select v-model='coinKind' class='currencyBox' placeholder='Select' :placeholder="$t('walletAdd.coinPlaceholder')" @change='selectCoinKind'>
                             <el-option
                                 v-for='item in coinKindList'
                                 :key='item.name'
                                 :label='item.name'
                                 :value='item.name'
                             />
-                        </el-select> 
+                        </el-select>
                     </div>
                     <div class='select' @click='chainNameVisible = true'>
-                        <label class="select_lab">{{ $t('walletAdd.chainName') }}</label>
-                        <el-select class="currencyBox" v-model='chainName' :placeholder="$t('walletAdd.chainPlaceholder')"  placeholder='Select' @change='selectChainName'>
+                        <label class='select_lab'>
+                            {{ $t('walletAdd.chainName') }}
+                        </label>
+                        <el-select v-model='chainName' class='currencyBox' placeholder='Select' :placeholder="$t('walletAdd.chainPlaceholder')" @change='selectChainName'>
                             <el-option
                                 v-for='item in chainNameList'
                                 :key='item.name'
                                 :label='item.name'
                                 :value='item.name'
                             />
-                        </el-select> 
+                        </el-select>
                     </div>
                 </div>
                 <div class='empty'></div>
@@ -54,10 +58,9 @@
             <!-- 底部按钮 -->
             <button class='footer-btn' @click='onConfirm'>
                 <span>{{ $t('walletAdd.confirm') }}</span>
-        </button>
-    </div>
+            </button>
+        </div>
     </centerViewDialog>
-    
 </template>
 
 <script>
@@ -75,7 +78,7 @@ import { Toast, Dialog } from 'vant'
 // i18n
 import { useI18n } from 'vue-i18n'
 // api
-import { getWithdrawCurrencyList, addWalletAddress } from '@/api/user'
+import { getCoinWithdrawCurrencyList, addWalletAddress } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
 
 export default {
@@ -145,7 +148,7 @@ export default {
         }
         // 获取客户提币币种和链名称
         const queryWithdrawCurrencyList = () => {
-            getWithdrawCurrencyList({
+            getCoinWithdrawCurrencyList({
                 companyId: customInfo.companyId,
                 customerNo: customInfo.customerNo,
                 customerGroupId: customInfo.customerGroupId,
