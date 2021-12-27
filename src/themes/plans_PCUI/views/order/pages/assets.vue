@@ -83,10 +83,10 @@
                     {{ assetsInfo?.totalInterest }}
                 </p>
             </div>
-            <div class='assetItem riskRate'>
-                <p>{{ $t('assets.riskLevel') }}</p>
-                <p class='amount'>
-                    {{ assetsInfo?.closeProportion }}
+            <div class='assetItem riskRate '>
+                <p></p>
+                <p class='amount riskLevel' :class='["riskLevel" + assetsInfo.riskLevel]'>
+                    {{ riskLevelMap[assetsInfo.riskLevel] }}
                 </p>
             </div>
             <van-button class='btn' type='primary' @click='goLoan'>
@@ -205,8 +205,14 @@ export default {
                 }
             })
         }
+        const riskLevelMap = {
+            1: t('riskLevel.safety'),
+            2: t('riskLevel.warn'),
+            3: t('riskLevel.danger')
+        }
 
         return {
+            riskLevelMap,
             product,
             tradeTypeNames,
             assetsInfo,
@@ -262,6 +268,41 @@ export default {
         border: transparent;
         margin-left: 10px;
         min-width: 80px;
+    }
+}
+.riskLevel{
+    position: relative;
+    padding-left: rem(25px);
+    margin-left: rem(10px);
+    font-size: rem(22px);
+    &::before{
+        content: '';
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 0%;
+        transform: translate(0, -50%);
+        width: rem(16px);
+        height: rem(16px);
+        border-radius: 16px;
+    }
+}
+.riskLevel1{
+    color: var(--success);
+    &::before{
+        background: var(--success);
+    }
+}
+.riskLevel2{
+    color: var(--focusColor);
+    &::before{
+        background: var(--focusColor);
+    }
+}
+.riskLevel3{
+    color: var(--warn);
+    &::before{
+        background: var(--warn);
     }
 }
 </style>
