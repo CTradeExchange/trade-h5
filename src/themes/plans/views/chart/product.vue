@@ -243,7 +243,7 @@
             </div>
         </div>
         <StallsAndDeal
-            v-if='product && dealModeShowMap.value[product.trade_mode]?.handicap'
+            v-if='product && dealModeShowMap[product.trade_mode]?.handicap'
             :cur-price='product?.cur_price'
             :symbol-id='product?.symbolId'
             :trade-type='tradeType'

@@ -3,7 +3,6 @@
         <div class='item' :data='activeNames'>
             <van-collapse
                 v-model='activeNames'
-                :accordion='true'
                 class='activeNames'
             >
                 <van-collapse-item :name='data.positionId'>
@@ -25,17 +24,18 @@
                                         <i v-if="data.marginSetType==='2'" class='icon_icon_arrow'></i>
                                     </span>
                                 </div>
-
-                                <div>
+                            </div>
+                            <div class='block'>
+                                <div class='bleft'>
+                                    <span class='direction' :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
+                                        {{ Number(data.direction) === 1 ? $t('trade.buyShort') :$t('trade.sellShort') }}
+                                    </span>{{ minus(data.openVolume, data.closeVolume) }} {{ $t('trade.volumeUnit') }}
+                                </div>
+                                <div class='bright'>
                                     <span class='ft amount' :class="parseFloat(data.profitLoss) > 0 ? 'riseColor': 'fallColor'">
                                         {{ data.profitLoss }} {{ customerInfo.currency }}
                                     </span>
                                 </div>
-                            </div>
-                            <div>
-                                <span class='direction' :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
-                                    {{ Number(data.direction) === 1 ? $t('trade.buyShort') :$t('trade.sellShort') }}
-                                </span>{{ minus(data.openVolume, data.closeVolume) }} {{ $t('trade.volumeUnit') }}
                             </div>
                         </div>
                     </template>
@@ -152,7 +152,7 @@ export default {
             loading: false,
             cur: {},
             cpVis: false,
-            activeNames: ''
+            activeNames: []
         })
         // 获取玩法列表
         const plans = computed(() => store.state._base.plans)
@@ -160,6 +160,7 @@ export default {
         const customerInfo = computed(() => store.state._user.customerInfo)
         const positionList = computed(() => store.state._trade.positionList[tradeType.value])
         const product = computed(() => store.state._quote.productMap[data.symbolId + '_' + tradeType.value])
+        const btnBg = computed(() => store.state.style.primary + '0D')
 
         const toPositionDetail = (item) => {
             store.commit('_quote/Update_productActivedID', item.symbolId)
@@ -181,7 +182,9 @@ export default {
         }
 
         watchEffect(() => {
-            if (positionList.value?.length > 0) { state.activeNames = positionList.value[0].positionId }
+            if (positionList.value?.length > 0) {
+                state.activeNames = positionList.value.map(item => item.positionId)
+            }
         })
 
         return {
@@ -193,6 +196,7 @@ export default {
             updateShow,
             toProduct,
             minus,
+            btnBg,
             tradeType
         }
     }
@@ -248,23 +252,31 @@ export default {
                 //margin-right: rem(15px);
                 text-align: center;
             }
-            .direction{
-                display: inline-block;
-                height: rem(36px);
-                line-height: rem(40px);
-                border-radius: rem(6px);
-                color: #fff;
-                text-align: center;
-                padding: 0 rem(8px);
-                font-size: rem(24px);
-                margin-right: rem(10px);
-                &.riseColor{
-                    background: var(--riseColor);
-                }
-                &.fallColor{
-                    background: var(--fallColor);
+            .block{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                .bleft{
+                  .direction{
+                        display: inline-block;
+                        height: rem(36px);
+                        line-height: rem(40px);
+                        border-radius: rem(6px);
+                        color: #fff;
+                        text-align: center;
+                        padding: 0 rem(8px);
+                        font-size: rem(24px);
+                        margin-right: rem(10px);
+                        &.riseColor{
+                            background: var(--riseColor);
+                        }
+                        &.fallColor{
+                            background: var(--fallColor);
+                        }
+                    }
                 }
             }
+
             .riseColor{
 
             }
@@ -298,7 +310,7 @@ export default {
                 .van-button {
                     color: var(--primary);
                     vertical-align: middle;
-                    background: var(--primaryAssistColor);
+                    background: v-bind(btnBg);
                     border-color: var(--primaryAssistColor);
                 }
             }
@@ -355,9 +367,9 @@ export default {
             color: var(--primary) !important;
             font-size: rem(24px);
             line-height: rem(48px);
-            background: var(--primaryAssistColor) !important;
+            background: b-bind(--btnBg) !important;
             border: none;
-            border-color: var(--primaryAssistColor) !important;
+            border-color: var(--btnBg) !important;
             border-radius: rem(6px);
             &:last-child{
                 margin-right: 0;

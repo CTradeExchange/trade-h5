@@ -224,10 +224,11 @@ export default {
             // padding: 0 rem(20px);
         }
         &.depth {
-            padding-left: rem(10px);
+            flex: none;
+            //padding-left: rem(10px);
             .depth-select {
                 display: block;
-                width: rem(110px);
+                padding:0 rem(10px);
                 height: rem(40px);
                 line-height: rem(40px);
                 background-color: var(--assistColor);

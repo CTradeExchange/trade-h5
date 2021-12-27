@@ -104,7 +104,7 @@ export default {
         })
         // 颜色值
         const style = computed(() => store.state.style)
-        const btnBg = style.value.primary + '19'
+        const btnBg = style.value.primary + '0D'
         const accountList = computed(() => store.state._user.customerInfo?.accountList || [])
 
         const account = computed(() => {
@@ -193,7 +193,7 @@ export default {
     border-radius: rem(10px);
     .totalAmount {
         color: var(--color);
-        font-size: rem(50px);
+        font-size: rem(70px);
         letter-spacing: rem(-2px);
         word-break: break-all;
     }
@@ -241,6 +241,9 @@ export default {
         .value {
             color: var(--color);
             font-size: rem(28px);
+        }
+        &:last-child{
+            border-bottom: none;
         }
     }
 }

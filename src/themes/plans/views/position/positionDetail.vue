@@ -33,8 +33,8 @@
                             </div>
                         </div> -->
                     </div>
-                    <div class='item'>
-                        <div v-if='Number(positionData.tradeType) === 2' class='col'>
+                    <div v-if='Number(positionData.tradeType) === 2' class='item'>
+                        <div class='col'>
                             <div class='sub'>
                                 {{ $t('trade.swap_2') }}({{ assetsInfo.currency }})
                             </div>
@@ -56,7 +56,7 @@
                     <div class='header van-hairline--bottom'>
                         <div class='col'>
                             <span class='sub direction' :class="Number(positionData?.direction) === 1 ? 'riseColor' : 'fallColor'">
-                                {{ Number(positionData?.direction) === 1 ? $t('trade.buyShort') :$t('trade.sellShort') }}&nbsp;
+                                {{ Number(positionData?.direction) === 1 ? $t('trade.buyShort') :$t('trade.sellShort') }}
                             </span>
                             <span class='name'>
                                 {{ positionVolume }} {{ $t('trade.volumeUnit') }}
@@ -96,7 +96,7 @@
                             <div class='sub alignRight'>
                                 {{ $t('trade.stopProfitPrice') }}
                             </div>
-                            <div class='name'>
+                            <div class='name alignRight'>
                                 <span class='number'>
                                     {{ parseFloat(positionData?.takeProfitDecimal) ? positionData?.takeProfitDecimal : $t('trade.nosSet') }}
                                 </span>
@@ -174,7 +174,7 @@ export default {
         const positionVolume = computed(() => minus(positionData.value?.openVolume, positionData.value?.closeVolume))
         const style = computed(() => store.state.style)
 
-        const btnBg = style.value.primary + '19'
+        const btnBg = style.value.primary + '0D'
         const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType))?.accountId
         // 初始化设置
         const init = () => {
@@ -254,7 +254,7 @@ export default {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                padding: 0 0 rem(30px);
+                padding: 0 0 rem(40px);
                 &.item-1 {
                     padding-bottom: 0;
                 }

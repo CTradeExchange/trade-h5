@@ -87,7 +87,7 @@ export default {
                 query
             })
         }
-        const btnBg = style.value.primary + '19'
+        const btnBg = style.value.primary + '0D'
 
         // 跳转充值页面
         const toDesposit = () => {

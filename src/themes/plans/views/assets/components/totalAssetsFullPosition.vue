@@ -123,7 +123,7 @@ export default {
     border-radius: 4px;
 }
 .totalAssetsBlock {
-    margin-bottom: rem(60px);
+    margin-bottom: rem(40px);
 }
 .totalAssetsInfo {
     font-size: rem(28px);

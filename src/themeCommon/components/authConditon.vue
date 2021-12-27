@@ -15,7 +15,7 @@
 
                 <div v-if="item.showType === 'image'">
                     <p class='upload-text'>
-                            {{ item.elementName }}
+                        {{ item.elementName }}
                     </p>
                     <van-uploader :after-read='afterRead' :name='item.elementCode' result-type='file'>
                         <img
@@ -33,7 +33,6 @@
                             :src="require('../../assets/auth/' + item.elementCode + '.png')"
                             srcset=''
                         />
-                        
                     </van-uploader>
                 </div>
                 <div v-if="item.showType === 'inputGroup'">
@@ -215,11 +214,12 @@ export default {
                                 return Toast(`${state.extendsMap[key].name}` + t('register.incorrectlyFormed'))
                             }
                         }
-
-                        tempElementList.push({
-                            elementCode: key,
-                            elementValue: state.conditionModel[key]
-                        })
+                        if (!isEmpty(state.conditionModel[key])) {
+                            tempElementList.push({
+                                elementCode: key,
+                                elementValue: state.conditionModel[key]
+                            })
+                        }
                     }
                 }
             }

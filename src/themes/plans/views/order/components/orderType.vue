@@ -89,7 +89,7 @@ export default {
         height: rem(48px);
         line-height: rem(48px);
         color: var(--color);
-        background: var(--primaryAssistColor);
+        background: var(--assistColor);
         padding: 0 rem(16px);
         border-radius: rem(6px);
         color: var(--color);

@@ -310,7 +310,7 @@ export default {
         content: '';
         display: block;
         position: absolute;
-        top: 50%;
+        top: 45%;
         left: 0%;
         transform: translate(0, -50%);
         width: rem(16px);
