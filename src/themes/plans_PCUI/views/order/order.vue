@@ -31,7 +31,7 @@
             <!-- 委托/记录/资产 -->
             <userRecord />
         </div>
-        <van-sticky class='assetsSticky' :offset-bottom='10' position='bottom'>
+        <van-sticky class='assetsSticky' :offset-bottom='0' position='bottom'>
             <!-- 资产 -->
             <assetsModule />
         </van-sticky>
