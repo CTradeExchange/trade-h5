@@ -94,7 +94,9 @@ export default {
             router.push({
                 path: '/depositChoose',
                 query: {
-                    tradeType: tradeType.value
+                    tradeType: tradeType.value,
+                    accountId: props.data.accountId,
+                    currency: props.data.currency
                 }
             })
         }

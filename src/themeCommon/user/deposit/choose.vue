@@ -97,11 +97,11 @@
 </template>
 
 <script>
-import { computed, reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { queryPayType } from '@/api/user'
+import { checkKycApply, queryPayType } from '@/api/user'
 import { localSet } from '@/utils/util'
 import { Toast, Dialog } from 'vant'
 import assetsList from '@/themeCommon/components/assetsList/assetsList.vue'
@@ -114,14 +114,15 @@ export default {
         const route = useRoute()
         const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
+        const { query } = route
         const state = reactive({
             // 页面加载状态
             loading: false,
             // 玩法类型
-            tradeType: route.query.tradeType,
+            tradeType: query.tradeType,
             // 支付通道列表
             paymentTypes: [],
-            // 当前选中币中账户
+            // 当前选中币种账户
             accountInfo: '',
             // 当前选中充值方式 1.直充 2.汇兑
             way: '',
@@ -133,9 +134,10 @@ export default {
             exchangeDisable: true,
             // 当前直充支付通道
             paymentInfo: '',
-            pickerShow: false,
-            selectedCurrency: ''
+            pickerShow: false
         })
+
+        // 颜色变量
         const style = computed(() => store.state.style)
         // 客户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
@@ -153,7 +155,13 @@ export default {
                 accountCurrency: accountInfo.currency,
                 accountId: accountInfo.accountId
             }
+            Toast.loading({
+                message: t('common.loading'),
+                forbidClick: true,
+                duration: 0
+            })
             queryPayType(params).then(res => {
+                Toast.clear()
                 if (res.check()) {
                     state.paymentTypes = res.data
                     filterPayment()
@@ -230,9 +238,48 @@ export default {
             }
         }
 
+        // 检查是否需要KYC认证
+        const checkKyc = () => {
+            Toast.loading({
+                message: t('common.loading'),
+                forbidClick: true,
+                duration: 0
+            })
+            checkKycApply({ businessCode: 'cashin' }).then(res => {
+                Toast.clear()
+                if (res.check()) {
+                    if (Number(res.data) !== 2) {
+                        return Dialog.alert({
+                            title: t('common.tip'),
+                            confirmButtonText: Number(res.data) === 1 ? t('common.goLook') : t('login.goAuthenticate'),
+                            message: Number(res.data) === 2 ? t('deposit.KYCReviewing') : t('deposit.needKYC'),
+                        }).then(() => {
+                            router.replace({
+                                name: 'Authentication',
+                                query: {
+                                    businessCode: 'cashin'
+                                }
+                            })
+                        })
+                    } else {
+                        // 设置默认选择币种
+                        if (query.accountId && query.currency) {
+                            state.accountInfo = {
+                                accountId: query.accountId,
+                                currency: query.currency
+                            }
+                            // 获取支付通道
+                            getPayTypes()
+                        }
+                    }
+                }
+            }).catch(err => {
+                Toast.clear()
+            })
+        }
+
         const onCurrencyConfirm = val => {
             state.accountInfo = val
-            // 获取支付通道
             getPayTypes()
             state.pickerShow = false
         }
@@ -247,6 +294,11 @@ export default {
             }
         }
         const bgColor = style.value.primary + '0D'
+
+        onMounted(() => {
+            // 检查是否需要KYC认证
+            checkKyc()
+        })
 
         return {
             ...toRefs(state),

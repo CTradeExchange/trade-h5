@@ -126,9 +126,7 @@ export default {
         const toDesposit = () => {
             router.push({
                 path: '/depositChoose',
-                query: {
-                    tradeType: state.tradeType
-                }
+                query
             })
         }
 

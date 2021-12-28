@@ -152,11 +152,9 @@ export default {
         const goDesposit = () => {
             if (store.state._user.customerInfo?.accountList?.length > 1) {
                 router.push({
-                    path: '/order/chooseAccount',
+                    path: '/order/depositChoose',
                     query: {
-                        accountId: assetsInfo.value.accountId,
-                        tradeType: product.value?.tradeType,
-                        type: 2
+                        tradeType: product.value?.tradeType
                     }
                 })
             } else {

@@ -6,6 +6,7 @@
                 :custom-style='{
                     "background": $style.bgColor
                 }'
+                icon='icon_icon_close_big'
                 :title='$t("trade.desposit")'
             />
             <!-- 页面加载状态 -->
@@ -102,11 +103,11 @@
 <script>
 import centerViewDialog from '@planspc/layout/centerViewDialog'
 import assetsList from './components/assetsList/assetsList'
-import { computed, reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { queryPayType } from '@/api/user'
+import { checkKycApply, queryPayType } from '@/api/user'
 import { localSet } from '@/utils/util'
 import { Toast, Dialog } from 'vant'
 export default {
@@ -158,7 +159,13 @@ export default {
                 accountCurrency: accountInfo.currency,
                 accountId: accountInfo.accountId
             }
+            Toast.loading({
+                message: t('common.loading'),
+                forbidClick: true,
+                duration: 0
+            })
             queryPayType(params).then(res => {
+                Toast.clear()
                 if (res.check()) {
                     state.paymentTypes = res.data
                     filterPayment()
@@ -166,6 +173,8 @@ export default {
                     state.paymentTypes = []
                     filterPayment()
                 }
+            }).catch(() => {
+                Toast.clear()
             })
         }
 
@@ -235,6 +244,36 @@ export default {
             }
         }
 
+        // 检查是否需要KYC认证
+        const checkKyc = () => {
+            Toast.loading({
+                message: t('common.loading'),
+                forbidClick: true,
+                duration: 0
+            })
+            checkKycApply({ businessCode: 'cashin' }).then(res => {
+                Toast.clear()
+                if (res.check()) {
+                    if (Number(res.data) !== 2) {
+                        return Dialog.alert({
+                            title: t('common.tip'),
+                            confirmButtonText: Number(res.data) === 1 ? t('common.goLook') : t('login.goAuthenticate'),
+                            message: Number(res.data) === 2 ? t('deposit.KYCReviewing') : t('deposit.needKYC'),
+                        }).then(() => {
+                            router.replace({
+                                name: 'Authentication',
+                                query: {
+                                    businessCode: 'cashin'
+                                }
+                            })
+                        })
+                    }
+                }
+            }).catch(err => {
+                Toast.clear()
+            })
+        }
+
         const onCurrencyConfirm = val => {
             state.accountInfo = val
             // 获取支付通道
@@ -252,6 +291,11 @@ export default {
             }
         }
         const bgColor = style.value.primary + '0D'
+
+        onMounted(() => {
+            // 检查是否需要KYC认证
+            checkKyc()
+        })
 
         return {
             ...toRefs(state),
