@@ -82,7 +82,7 @@
             <div class='footerBtn' :class='[direction]'>
                 <van-button block :disabled='loading' :loading='loading' size='normal' @click='submitHandler'>
                     <i class='icon' :class='direction==="buy" ? "icon_mairu" : "icon_maichu"'></i>
-                    {{ direction==='buy'?$t('trade.buyText'):$t('trade.sellText') }}
+                    {{ directionText }}
                 </van-button>
             </div>
             <!-- 委托列表 -->
@@ -194,6 +194,14 @@ export default {
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
 
         const accountList = computed(() => store.state._user.customerInfo?.accountList)
+
+        const directionText = computed(() => {
+            if ([1, 2].includes(Number(product.value.tradeType))) {
+                return state.direction === 'buy' ? t('trade.buyText') : t('trade.sellText')
+            } else {
+                return state.direction === 'buy' ? t('trade.buy') : t('trade.sell')
+            }
+        })
 
         store.commit('_trade/Update_modifyPositionId', 0)
 
@@ -404,6 +412,7 @@ export default {
             changeOrderType,
             quoteSubscribe,
             submitHandler,
+            directionText
         }
     }
 }
