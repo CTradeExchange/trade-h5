@@ -56,7 +56,14 @@
                         <p class='text'>
                             {{ address }}
                         </p>
-                        <button id='copy' class='copy' :data-clipboard-text='address' @click='copyAddress'>
+                        <button
+                            id='copy'
+                            ref='copy'
+                            class='copy'
+                            :data-clipboard-text='address'
+                            @click='copyAddress'
+                            @mouseenter='copyAddress'
+                        >
                             {{ $t('common.copy') }}
                         </button>
                     </div>
@@ -120,6 +127,7 @@ export default {
         const customerInfo = computed(() => store.state._user.customerInfo)
         // 二维码对象
         const qrCode = ref(null)
+        const copy = ref('')
         // 请求参数
         const params = {
             companyId: customerInfo.value.companyId,
@@ -202,8 +210,7 @@ export default {
 
         // 复制地址
         const copyAddress = () => {
-            const clipboard = new Clipboard('#copy')
-            console.log(clipboard)
+            const clipboard = new Clipboard(copy.value)
             clipboard.on('success', e => {
                 Toast(t('common.copySuccess'))
                 // 释放内存
@@ -237,7 +244,8 @@ export default {
             selectChain,
             getRechargeAddress,
             applyBindAddress,
-            qrCode
+            qrCode,
+            copy
         }
     }
 }
