@@ -317,7 +317,8 @@
         "immediateRecharge": "立即充值",
 		"directTip": "请注意核对币种，其他币种转入此地址将无法找回",
 		"getAddress": "获取地址",
-        "limit":"额度"
+        "limit":"额度",
+        "payType": "支付类型"
     },
     "fund": {
         "marginLevel": "保证金水平",

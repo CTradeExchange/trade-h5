@@ -52,7 +52,7 @@
         <!-- 支付方式 -->
         <div class='pay-wrap'>
             <p class='header'>
-                支付类型<!-- {{ $t('cRoute.msg') }} -->
+                {{ $t('deposit.payType') }}
             </p>
             <div v-if='payTypesSortEnable.length > 0' class='pay-module'>
                 <div v-for='(item, index) in payTypesSortEnable' :key='index' class='pay-case'>
