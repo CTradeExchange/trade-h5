@@ -1,5 +1,5 @@
 
-import { computed, unref, onMounted, watch, nextTick, ref } from 'vue'
+import { computed, unref, onMounted, watch, nextTick, ref, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { debounce } from '@/utils/util'
@@ -11,7 +11,8 @@ export default function (productList) {
     const product = computed(() => store.getters.productActived)
     const productListEl = ref(null)
     const subscribList = ref([])
-    const time = Date.now()
+    const moduleId = 'subscribeProducts_' + Date.now()
+    let unSubscribe = () => {}
 
     // 订阅当前屏和上半屏、下半屏的产品报价，给上层组件使用
     const calcSubscribeProducts = () => {
@@ -33,7 +34,9 @@ export default function (productList) {
         subscribList.value = calcSubscribeProducts()
         // 把当前路由的产品加入订阅列表
         subscribList.value.unshift(product.value?.symbolKey)
-        if (subscribList.value.length > 0) QuoteSocket.add_subscribe({ moduleId: 'subscribeProducts_' + time, symbolKeys: subscribList.value })
+        if (subscribList.value.length > 0) {
+            unSubscribe = QuoteSocket.add_subscribe({ moduleId, symbolKeys: subscribList.value })
+        }
     })
 
     watch(
@@ -47,6 +50,11 @@ export default function (productList) {
 
     onMounted(() => {
         unref(productListEl) && unref(productListEl).addEventListener('scroll', calcProductsDebounce, false)
+    })
+
+    onUnmounted(() => {
+        // 删除当前订阅
+        unSubscribe()
     })
 
     return {

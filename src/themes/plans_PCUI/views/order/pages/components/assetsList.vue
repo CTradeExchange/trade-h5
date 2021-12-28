@@ -87,12 +87,17 @@ watch(() => props.tradeType, () => {
     if (customerInfo.value) initData()
 }, { immediate: true })
 
+let unSubscribe = () => {}
 const symbolKeys = computed(() => tableData.value.map(e => `${e.symbolId}_${props.tradeType}`))
 watch(() => symbolKeys.value, (val) => {
     val = [...new Set(val)]
-    QuoteSocket.add_subscribe({ moduleId: 'assetsList', symbolKeys: val })
+    unSubscribe = QuoteSocket.add_subscribe({ moduleId: 'assetsList', symbolKeys: val })
 }, {
     immediate: true
+})
+
+onUnmounted(() => {
+    unSubscribe()
 })
 
 </script>

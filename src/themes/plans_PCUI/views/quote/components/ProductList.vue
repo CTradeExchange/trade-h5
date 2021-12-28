@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { watch, computed, ref, unref } from 'vue'
+import { watch, computed, ref, unref, onUnmounted } from 'vue'
 import customTable from '@planspc/views/order/pages/components/customTable.vue'
 import { getColumns } from './tableConfig.js'
 import { QuoteSocket } from '@/plugins/socket/socket'
@@ -55,15 +55,20 @@ const computedList = computed(() => {
     console.log(props.list.slice((unref(currentPage) - 1) * size, unref(currentPage) * size))
     return props.list.slice((unref(currentPage) - 1) * size, unref(currentPage) * size)
 })
-window.props = props
+const moduleId = 'quote_' + Date.now()
+let unSubscribe = () => {}
 
-const time = Date.now()
 watch(() => unref(computedList), () => {
     const symbolKeys = unref(computedList).map(e => e.symbolKey)
-    QuoteSocket.add_subscribe({ moduleId: 'quote' + time, symbolKeys })
+    unSubscribe = QuoteSocket.add_subscribe({ moduleId, symbolKeys })
 }, {
     immediate: true
 })
+
+onUnmounted(() => {
+    unSubscribe()
+})
+
 </script>
 
 <style lang="scss" scoped>
