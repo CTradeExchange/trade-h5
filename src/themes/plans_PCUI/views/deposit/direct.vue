@@ -1,79 +1,81 @@
 <template>
-    <div class='page-wrap'>
-        <!-- 头部导航栏 -->
-
-        <LayoutTop
-            :custom-style='{
-                "background": $style.bgColor
-            }'
-            :title='$t("trade.desposit")'
-        >
-            <template #right>
-                <span @click="$router.push('/depositRecord')">
-                    {{ $t('deposit.depositRecord') }}
-                </span>
-            </template>
-        </LayoutTop>
-        <!-- 页面加载状态 -->
-        <Loading :show='loading' />
-        <!-- 内容区域 -->
-        <div class='page-content'>
-            <div class='module'>
-                <div class='currency-info'>
-                    <img :src="'/images/currency_icon/' + currency + '.png'" />
-                    <p class='name'>
-                        {{ currency }}
+    <centerViewDialog>
+        <div class='page-wrap'>
+            <!-- 头部导航栏 -->
+            <LayoutTop
+                :custom-style='{
+                    "background": $style.bgColor
+                }'
+                :title='$t("trade.desposit")'
+            >
+                <template #right>
+                    <span @click="$router.push('/assets/depositRecord')">
+                        {{ $t('deposit.depositRecord') }}
+                    </span>
+                </template>
+            </LayoutTop>
+            <!-- 页面加载状态 -->
+            <Loading :show='loading' />
+            <!-- 内容区域 -->
+            <div class='page-content'>
+                <div class='module'>
+                    <div class='currency-info'>
+                        <img :src="'/images/currency_icon/' + currency + '.png'" />
+                        <p class='name'>
+                            {{ currency }}
+                        </p>
+                        <p class='des'>
+                            {{ assetsMap[currency] }}
+                        </p>
+                    </div>
+                    <div class='chain-list'>
+                        <div v-for='(item, index) in chainList' :key='index' :class="['item', { 'active': item === chainName }]" @click='selectChain(item)'>
+                            <div class='check'>
+                                <van-icon color='#fff' name='success' />
+                            </div>
+                            <span class='name'>
+                                {{ item }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class='qr-code'>
+                        <!-- 有地址 -->
+                        <div v-if='address' ref='qrCode' class='qrcode'></div>
+                        <!-- 无地址 -->
+                        <div v-else class='none-address'>
+                            <img src='/images/code.png' />
+                            <div class='mask'>
+                                <button v-if='showGet' class='get' @click='applyBindAddress'>
+                                    {{ $t('deposit.getAddress') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 有地址 -->
+                    <div v-if='address' class='address-box'>
+                        <p class='text'>
+                            {{ address }}
+                        </p>
+                        <button id='copy' class='copy' :data-clipboard-text='address' @click='copyAddress'>
+                            {{ $t('common.copy') }}
+                        </button>
+                    </div>
+                </div>
+                <div class='warn-box'>
+                    <p class='title'>
+                        {{ $t('common.warning') }}
                     </p>
                     <p class='des'>
-                        {{ assetsMap[currency] }}
+                        {{ $t('deposit.directTip') }}
                     </p>
                 </div>
-                <div class='chain-list'>
-                    <div v-for='(item, index) in chainList' :key='index' :class="['item', { 'active': item === chainName }]" @click='selectChain(item)'>
-                        <div class='check'>
-                            <van-icon color='#fff' name='success' />
-                        </div>
-                        <span class='name'>
-                            {{ item }}
-                        </span>
-                    </div>
-                </div>
-                <div class='qr-code'>
-                    <!-- 有地址 -->
-                    <div v-if='address' ref='qrCode' class='qrcode'></div>
-                    <!-- 无地址 -->
-                    <div v-else class='none-address'>
-                        <img src='/images/code.png' />
-                        <div class='mask'>
-                            <button v-if='showGet' class='get' @click='applyBindAddress'>
-                                {{ $t('deposit.getAddress') }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <!-- 有地址 -->
-                <div v-if='address' class='address-box'>
-                    <p class='text'>
-                        {{ address }}
-                    </p>
-                    <button id='copy' class='copy' :data-clipboard-text='address' @click='copyAddress'>
-                        {{ $t('common.copy') }}
-                    </button>
-                </div>
-            </div>
-            <div class='warn-box'>
-                <p class='title'>
-                    {{ $t('common.warning') }}
-                </p>
-                <p class='des'>
-                    {{ $t('deposit.directTip') }}
-                </p>
             </div>
         </div>
-    </div>
+    </centerviewdialog>
 </template>
 
 <script>
+import centerViewDialog from '@planspc/layout/centerViewDialog'
 import { onMounted, computed, reactive, toRefs, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
@@ -86,6 +88,9 @@ import Clipboard from 'clipboard'
 import QRCode from 'qrcodejs2'
 import { assetsMap } from '@/themeCommon/components/assetsList/assetsMap'
 export default {
+    components: {
+        centerViewDialog
+    },
     setup () {
         const store = useStore()
         const route = useRoute()
@@ -198,6 +203,7 @@ export default {
         // 复制地址
         const copyAddress = () => {
             const clipboard = new Clipboard('#copy')
+            console.log(clipboard)
             clipboard.on('success', e => {
                 Toast(t('common.copySuccess'))
                 // 释放内存
@@ -295,6 +301,7 @@ export default {
             border: 1px solid transparent;
             border-radius: rem(10px);
             position: relative;
+            cursor: pointer;
             &:nth-of-type(3n) {
                 margin-right: 0;
             }
@@ -388,6 +395,7 @@ export default {
             font-weight: bold;
             color: var(--primary);
             background: none;
+            cursor: pointer;
         }
     }
 }

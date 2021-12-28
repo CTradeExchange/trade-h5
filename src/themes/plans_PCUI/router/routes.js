@@ -102,7 +102,7 @@ const h5Children = [
         }
     },
     {
-        path: 'depositDriect', // 直充
+        path: 'depositDirect', // 直充
         component: () => import(/* webpackChunkName: "deposit" */ '../views/deposit/direct.vue'),
         meta: {
             title: 'cRoute.deposit',
