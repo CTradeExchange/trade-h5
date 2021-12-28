@@ -78,7 +78,7 @@ import { Toast, Dialog } from 'vant'
 // i18n
 import { useI18n } from 'vue-i18n'
 // api
-import { getCoinWithdrawCurrencyList, addWalletAddress } from '@/api/user'
+import { getWithdrawCurrencyList, getCoinWithdrawCurrencyList, addWalletAddress } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
 
 export default {
@@ -148,7 +148,7 @@ export default {
         }
         // 获取客户提币币种和链名称
         const queryWithdrawCurrencyList = () => {
-            getCoinWithdrawCurrencyList({
+            getWithdrawCurrencyList({
                 companyId: customInfo.companyId,
                 customerNo: customInfo.customerNo,
                 customerGroupId: customInfo.customerGroupId,
