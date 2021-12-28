@@ -257,17 +257,14 @@ export default {
                         })
                     }
                 }
-                // 没有存款数据默认选择其它金额
-                state.currIndex = 0
-                if (arr.length === 0) {
-                    //  state.currIndex = 99
-                } else {
-                    state.amount = arr[0].amount
-                }
 
+                // 没有存款数据设置默认数据
                 const defaultAmountList = [{ amount: 50 }, { amount: 100 }, { amount: 500 }, { amount: 1000 }]
+
+                // 数据赋值
                 state.amountList = arr.length ? arr : defaultAmountList
-                checkAmount(0, defaultAmountList[0])
+                state.currIndex = 0
+                state.amount = state.amountList[0].amount
             })
         }
 
@@ -345,6 +342,10 @@ export default {
             } else {
                 state.payTypesSortEnable = []
             }
+
+            // 设置当前存款金额高亮
+            const index = state.amountList.findIndex(item => parseFloat(item.amount) === parseFloat(state.amount))
+            state.currIndex = index !== -1 ? index : ''
         })
 
         // 监听支付币种
@@ -875,6 +876,7 @@ export default {
             background: var(--contentColor);
             border: 1px solid var(--lineColor);
             border-radius: rem(10px);
+            cursor: pointer;
             &:nth-of-type(2n) {
                 margin-right: 0;
             }
@@ -996,11 +998,11 @@ export default {
             padding-right: rem(32px);
             background: var(--contentColor);
             margin-bottom: rem(30px);
+            cursor: pointer;
             .pay-channel {
                 display: flex;
                 align-items: center;
                 height: rem(112px);
-                //border-bottom: 1px solid var(--lineColor);
                 .icon {
                     width: rem(60px);
                     height: rem(60px);
@@ -1044,6 +1046,7 @@ export default {
         align-items: center;
         height: rem(150px);
         padding: 0 rem(20px);
+        margin-top: rem(30px);
         font-size: rem(24px);
         color: var(--color);
         background: var(--contentColor);
