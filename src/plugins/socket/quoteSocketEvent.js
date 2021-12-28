@@ -95,6 +95,19 @@ class SocketEvent {
         this.subscribedMap[moduleId] = symbolKeys
         const symbolkeyAll = Object.values(this.subscribedMap).flat()
         this.send_subscribe(symbolkeyAll)
+
+        // 返回取消改模块订阅的方法
+        const del_subscribe = () => {
+            delete this.subscribedMap[moduleId]
+        }
+        return del_subscribe
+    }
+
+    /** 删除订阅产品
+        @param Object {} 需要删除订阅的数据, moduleId 模块ID
+     */
+    del_subscribe (moduleId) {
+        return delete this.subscribedMap[moduleId]
     }
 
     // 盘口成交报价订阅
