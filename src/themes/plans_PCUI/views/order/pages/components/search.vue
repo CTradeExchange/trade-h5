@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { ElInput, ElIcon } from 'element-plus'
 import { Search } from '@element-plus/icons'
@@ -51,6 +51,12 @@ export default {
             } else {
                 context.emit('onSearch', [])
             }
+        })
+
+        watch(() => props.tradeType, () => {
+            // 玩法更新，重置搜索
+            searchValue.value = ''
+            onSearch()
         })
 
         return {
