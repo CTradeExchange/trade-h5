@@ -87,9 +87,9 @@
                                         </span>
                                         <span class='right-val w250'>
                                             <span class='val'>
-                                                {{ txid || '--' }}
+                                                {{ item.txid || '--' }}
                                             </span>
-                                            <span v-if='txid' class='copy-btn' :data-clipboard-text='txid' @click='copyTXID'>
+                                            <span v-if='item.txid' class='copy-btn' :data-clipboard-text='item.txid' @click='copyTXID'>
                                                 <img alt='' src='@/assets/copy.png' srcset='' />
                                             </span>
                                         </span>
@@ -284,6 +284,8 @@ export default {
                 font-size: rem(24px);
             }
             .right-val {
+                display: flex;
+                justify-content: end;
                 color: var(--color);
                 font-weight: bold;
                 text-align: right;
@@ -304,6 +306,7 @@ export default {
                 .copy-btn {
                     display: inline-block;
                     margin-left: rem(5px);
+                    flex: none;
                     img {
                         width: rem(40px);
                         vertical-align: middle;

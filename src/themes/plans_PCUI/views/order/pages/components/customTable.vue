@@ -234,7 +234,7 @@ const current = computed({
     color: var(--color);
     border-radius: 3px;
     border: 1px solid var(--color);
-    min-width: 45px;
+    min-width: 36px;
     &.arrow{
         padding-right: 25px;
         color: var(--color);
