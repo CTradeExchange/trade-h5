@@ -73,7 +73,7 @@ export default {
         const tradeType = computed(() => store.state._quote.curTradeType || plans.value[0].id)
 
         // 获取持仓列表
-        const positionList = computed(() => store.state._trade.positionList[tradeType.value])
+        const positionList = computed(() => store.state._trade.positionList[tradeType.value] || [])
 
         // 获取当前 tab 下标
         const tabIndex = computed(() => plans.value.findIndex(item => {
@@ -105,13 +105,15 @@ export default {
         }
 
         const sendSubscribe = (data, tradeType) => {
-            const subscribList = data.map(el => {
-                return {
-                    symbolId: el.symbolId,
-                    tradeType: tradeType
-                }
-            })
-            QuoteSocket.send_subscribe(subscribList)
+            if (data.length > 0) {
+                const subscribList = data.map(el => {
+                    return {
+                        symbolId: el.symbolId,
+                        tradeType: tradeType
+                    }
+                })
+                QuoteSocket.send_subscribe(subscribList)
+            }
         }
 
         // 点击tab事件
