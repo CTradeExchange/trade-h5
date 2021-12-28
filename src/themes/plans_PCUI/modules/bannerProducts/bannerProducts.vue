@@ -57,7 +57,6 @@ export default {
             resultList = symbolKeys.map(symbolKey => productMap.value[symbolKey]).filter(el => el)
             return resultList
         })
-        console.log(products)
 
         // 跳转到下单页面
         const goOrder = (item) => {

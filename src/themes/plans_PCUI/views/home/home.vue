@@ -81,7 +81,6 @@ export default {
         watch(
             () => subscribeList.value,
             (newval, oldval) => {
-                console.log('发送行情订阅', newval)
                 QuoteSocket.send_subscribe(newval)
             },
             { immediate: true }
@@ -95,9 +94,6 @@ export default {
 
         // 发送行情订阅
         onMounted(() => {
-            // if (state.allProductKeys.length > 0) {
-            //     sendSubscribe()
-            // }
             // 头部固定
             const headerEl = document.querySelector('.header-nav')
             if (headerEl) headerEl.classList.add('fixedHeader')
