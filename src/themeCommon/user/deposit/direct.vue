@@ -113,6 +113,8 @@ export default {
 
         // 客户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
+        const btnBg = computed(() => store.state.style.primary + '1A')
+
         // 二维码对象
         const qrCode = ref(null)
         // 请求参数
@@ -231,7 +233,8 @@ export default {
             selectChain,
             getRechargeAddress,
             applyBindAddress,
-            qrCode
+            qrCode,
+            btnBg
         }
     }
 }
@@ -307,7 +310,7 @@ export default {
             }
         }
         .active {
-            background: rgba(71, 127, 210, 0.1);
+            background: v-bind(btnBg);
             border: 1px solid var(--primary);
             .check {
                 display: flex;

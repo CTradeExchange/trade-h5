@@ -220,16 +220,20 @@ export default {
         },
         Update_handicapList (state, data = {}) {
             // type 1: 快照 2 实时
+            // console.log('state.handicapList=====', state.handicapList)
             if (Number(data.type === 1)) {
                 state.handicapList = data.list
             } else {
-                state.handicapList[0].ask_deep = data.tickList.ask_deep
-                state.handicapList[0].bid_deep = data.tickList.bid_deep
+                state.handicapList[0].ask_deep = data.tickList?.ask_deep
+                state.handicapList[0].bid_deep = data.tickList?.bid_deep
             }
         },
         Update_dealList (state, data = {}) {
             state.dealList.unshift(data)
             state.dealList = state.dealList.splice(0, 20)
+        },
+        Delete_handicapList (state, data = {}) {
+            state.handicapList = []
         },
         Delete_dealList (state, data = {}) {
             state.dealList = []

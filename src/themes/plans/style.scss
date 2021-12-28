@@ -198,10 +198,10 @@ i {
         background: #FFF;
     }
     30% {
-        background: linear-gradient(to right, var(--contentColor), #FCF6F7);
+        background: linear-gradient(to right, var(--contentColor), rgba(183,33,34,0.1));
     }
     80% {
-        background: linear-gradient(to right, var(--contentColor), #FAF3F3);
+        background: linear-gradient(to right, var(--contentColor), rgba(183,33,34,0.1));
     }
     100% {
         background: #FFF;
@@ -213,10 +213,10 @@ i {
         background: #FFF;
     }
     30% {
-        background: linear-gradient(to right, var(--contentColor), #F0FAF8);
+        background: linear-gradient(to right, var(--contentColor), rgba(43,112,174,0.1));
     }
     80% {
-        background: linear-gradient(to right, var(--contentColor), #EAF8F6);
+        background: linear-gradient(to right, var(--contentColor), rgba(43,112,174,0.1));
     }
     100% {
         background: #FFF;

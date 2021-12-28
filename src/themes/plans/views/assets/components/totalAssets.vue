@@ -43,16 +43,16 @@
         </ul>
 
         <div v-if='[3,5].includes(Number(tradeType))' class='btns'>
-            <van-button
+            <!-- <van-button
                 v-if='Number(tradeType) === 3'
                 size='mini'
                 type='primary'
                 @click='toLoan'
             >
                 {{ $t('trade.loan') }}
-            </van-button>
+            </van-button> -->
             <van-button
-                v-else
+                v-if='Number(tradeType) === 5'
                 size='mini'
                 type='primary'
                 @click='toDesposit'
@@ -277,6 +277,7 @@ export default {
         border-radius: rem(6px);
         &:last-child {
             margin-right: 0;
+            flex: 1;
         }
         &.transfer-btn{
             color: var(--primary);

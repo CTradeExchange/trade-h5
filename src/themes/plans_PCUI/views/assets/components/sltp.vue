@@ -119,6 +119,7 @@ export default {
         const close = () => {
             state.show = false
             store.commit('Update_stopLossPprofitProductID', '')
+            state.data = {}
         }
 
         // 获取修改止盈止损参数
