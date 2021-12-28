@@ -72,7 +72,7 @@ export default {
         })
 
         const directionText = (item, type) => {
-            const key = Object.keys(item).find(k => Number(item[k]) === Number(tradeType))
+            const key = ['inTradeType', 'outTradeType'].find(k => Number(item[k]) === Number(tradeType))
             if (key === 'inTradeType') {
                 item.rightTradeType = item.outTradeType
                 return type === 1 ? t('assets.toAccount') : t('assets.fromAccount')

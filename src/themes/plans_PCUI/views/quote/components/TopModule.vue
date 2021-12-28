@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
@@ -39,7 +39,11 @@ const gotoOrder = (symbolKey) => {
 // 产品列表
 const productMap = computed(() => store.state._quote.productMap)
 const symbolKeys = ['27_1', '4_1', '7_1', '33_2', '12_2']
-QuoteSocket.add_subscribe({ moduleId: 'topQuote', symbolKeys })
+const unSubscribe = QuoteSocket.add_subscribe({ moduleId: 'topQuote', symbolKeys })
+
+onUnmounted(() => {
+    unSubscribe()
+})
 </script>
 
 <style lang="scss" scoped>

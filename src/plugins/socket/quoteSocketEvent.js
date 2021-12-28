@@ -81,7 +81,7 @@ class SocketEvent {
         const productMap = this.$store.state._quote.productMap
 
         // 拿到产品精简信息后，根据交易模式进行订阅产品行情
-        this.$store.dispatch('_quote/querySymbolBaseInfoList').then((res) => {
+        this.$store.dispatch('_quote/querySymbolBaseInfoList', null).then((res) => {
             this.subscribedList = productIds
             const subscribeList = formatSubscribe(productIds, productMap)
             this.send(14000, { symbol_list: subscribeList })
@@ -95,13 +95,27 @@ class SocketEvent {
         this.subscribedMap[moduleId] = symbolKeys
         const symbolkeyAll = Object.values(this.subscribedMap).flat()
         this.send_subscribe(symbolkeyAll)
+
+        // 返回取消改模块订阅的方法
+        const del_subscribe = () => {
+            delete this.subscribedMap[moduleId]
+        }
+        return del_subscribe
+    }
+
+    /** 删除订阅产品
+        @param Object {} 需要删除订阅的数据, moduleId 模块ID
+     */
+    del_subscribe (moduleId) {
+        return delete this.subscribedMap[moduleId]
     }
 
     // 盘口成交报价订阅
     deal_subscribe (symbol_id, depth_level = 10, merge_accuracy, trade_type, trade_info_count = 20) {
         this.$store.commit('_quote/Delete_dealList') // 删除成交数据
+        this.$store.commit('_quote/Delete_handicapList') // 删除盘口数据
         const productMap = this.$store.state._quote.productMap
-        this.$store.dispatch('_quote/querySymbolBaseInfoList').then(() => {
+        this.$store.dispatch('_quote/querySymbolBaseInfoList', null).then(() => {
             const product = productMap[`${symbol_id}_${trade_type}`]
             this.subscribeDeal = [{ symbol_id, depth_level, merge_accuracy, trade_type, trade_info_count, trade_mode: product.dealMode }]
             const list = [{
@@ -154,11 +168,14 @@ class SocketEvent {
     // 处理盘口成交数据快照
     ['cmd_id_14011'] (data) {
         const list = data.data?.tick_list ?? []
+        // console.log('list==========', list)
         const $store = this.$store
-        $store.commit('_quote/Update_handicapList', {
-            list,
-            type: 1
-        })
+        if (list) {
+            $store.commit('_quote/Update_handicapList', {
+                list,
+                type: 1
+            })
+        }
 
         const lastData = list[0]
         const dealList = list[0]?.trade_info

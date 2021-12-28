@@ -3,6 +3,7 @@ import Base from '@/store/modules/base'
 import User from '@/store/modules/user'
 import Quote from '@/store/modules/quote'
 import Trade from '@/store/modules/trade'
+import Home from './modules/home'
 import { getListByParentCode, getCountryListByParentCode } from '@/api/base'
 import Colors from '@planspc/colorVariables'
 import { localGet, localSet } from '@/utils/util'
@@ -21,6 +22,7 @@ export default createStore({
         _user: User,
         _quote: Quote,
         _trade: Trade,
+        home: Home,
     },
     state: {
         style,
@@ -152,7 +154,9 @@ export default createStore({
         getCountryListByParentCode ({ dispatch, commit, state }) {
             return getCountryListByParentCode({ parentCode: '-1' }).then(res => {
                 if (res.check()) {
-                    commit('Update_countryList', res.data)
+                    const registrable = state._base.wpCompanyInfo?.registrable || []
+                    const list = registrable.length ? res.data.filter(el => registrable.find(o => o.code === el.code)) : res.data
+                    commit('Update_countryList', list)
                 }
                 return res
             })

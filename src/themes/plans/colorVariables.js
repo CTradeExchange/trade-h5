@@ -8,8 +8,8 @@ const colors = {
         focusColor: '#f2a11b'
     },
     night: {
-        riseColor: '#d04246',
-        fallColor: '#5095d4',
+        riseColor: '#B72122',
+        fallColor: '#2B70AE',
         primaryAssistColor: '#2c2e3b',
         color: '#eaebee',
         normalColor: '#9294a3',

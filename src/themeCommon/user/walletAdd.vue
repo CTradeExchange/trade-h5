@@ -68,7 +68,7 @@ import { Toast, Dialog } from 'vant'
 // i18n
 import { useI18n } from 'vue-i18n'
 // api
-import { getWithdrawCurrencyList, addWalletAddress } from '@/api/user'
+import { getCoinWithdrawCurrencyList, getWithdrawCurrencyList, addWalletAddress } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
 
 export default {

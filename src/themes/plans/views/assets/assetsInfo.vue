@@ -16,11 +16,17 @@
             </div>
 
             <div class='assets-btns'>
-                <div class='assets-item-btn' @click='toDesposit'>
-                    {{ Number(tradeType) === 3 ? $t('trade.loan') : $t('trade.desposit') }}
+                <div v-if='Number(tradeType) === 3' class='assets-item-btn' @click='toLoan'>
+                    {{ $t('trade.loan') }}
                 </div>
-                <div class='assets-item-btn' @click='toWirhdraw'>
-                    {{ Number(tradeType) === 3 ? $t('trade.repayment') : $t('trade.withdraw') }}
+                <div v-else class='assets-item-btn' @click='toDesposit'>
+                    {{ $t('trade.desposit') }}
+                </div>
+                <div v-if='Number(tradeType) === 3' class='assets-item-btn' @click='toRepayment'>
+                    {{ $t('trade.repayment') }}
+                </div>
+                <div v-else class='assets-item-btn' @click='toWithdraw'>
+                    {{ $t('trade.withdraw') }}
                 </div>
                 <div class='assets-item-btn' @click='toTransfer'>
                     {{ $t('cRoute.transfer') }}
@@ -98,7 +104,7 @@ export default {
         })
         // 颜色值
         const style = computed(() => store.state.style)
-        const btnBg = style.value.primary + '19'
+        const btnBg = style.value.primary + '0D'
         const accountList = computed(() => store.state._user.customerInfo?.accountList || [])
 
         const account = computed(() => {
@@ -118,31 +124,34 @@ export default {
 
         // 跳转充值页面
         const toDesposit = () => {
-            if (Number(state.tradeType) === 3) {
-                router.push({
-                    path: '/loan',
-                    query
-                })
-            } else {
-                router.push({
-                    path: '/deposit',
-                    query
-                })
-            }
+            router.push({
+                path: '/depositChoose',
+                query
+            })
         }
+
         // 跳转提现页面
-        const toWirhdraw = () => {
-            if (Number(state.tradeType) === 3) {
-                router.push({
-                    path: '/returnMoney',
-                    query
-                })
-            } else {
-                router.push({
-                    path: '/withdrawAccount',
-                    query
-                })
-            }
+        const toWithdraw = () => {
+            router.push({
+                path: '/withdrawAccount',
+                query
+            })
+        }
+
+        // 跳转到借款页面
+        const toLoan = () => {
+            router.push({
+                path: '/loan',
+                query
+            })
+        }
+
+        // 跳转到还款页面
+        const toRepayment = () => {
+            router.push({
+                path: '/returnMoney',
+                query
+            })
         }
 
         // 跳转划转页面
@@ -162,7 +171,9 @@ export default {
             account,
             btnBg,
             toDesposit,
-            toWirhdraw,
+            toWithdraw,
+            toLoan,
+            toRepayment,
             toTransfer
         }
     }
@@ -180,7 +191,7 @@ export default {
     border-radius: rem(10px);
     .totalAmount {
         color: var(--color);
-        font-size: rem(50px);
+        font-size: rem(70px);
         letter-spacing: rem(-2px);
         word-break: break-all;
     }
@@ -228,6 +239,9 @@ export default {
         .value {
             color: var(--color);
             font-size: rem(28px);
+        }
+        &:last-child{
+            border-bottom: none;
         }
     }
 }

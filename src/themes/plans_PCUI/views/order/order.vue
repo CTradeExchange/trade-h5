@@ -16,7 +16,7 @@
                     <trade />
                 </div>
             </div>
-            <div v-if='dealModeShowMap[product?.dealMode].handicap && product?.symbolName' class='right-wrap'>
+            <div v-if='dealModeShowMap[product?.dealMode]?.handicap && product?.symbolName' class='right-wrap'>
                 <!-- 盘口报价 -->
                 <div class='handicap-content'>
                     <handicap />
@@ -31,7 +31,7 @@
             <!-- 委托/记录/资产 -->
             <userRecord />
         </div>
-        <van-sticky class='assetsSticky' :offset-bottom='10' position='bottom'>
+        <van-sticky class='assetsSticky' :offset-bottom='0' position='bottom'>
             <!-- 资产 -->
             <assetsModule />
         </van-sticky>
@@ -200,8 +200,9 @@ export default {
             }
             .deal-content{
                 padding: 10px 16px 10px 16px;
-                height: 333px;
-                overflow:hidden
+                overflow:hidden;
+                flex: 1;
+                margin-top: 8px;
             }
         }
     }

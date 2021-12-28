@@ -2,44 +2,44 @@
     <div class='symbol-info'>
         <div class='item symbol-name'>
             <p class='name'>
-                {{ product.symbolName }}
+                {{ product?.symbolName }}
             </p>
             <p class='code'>
-                {{ product.symbolCode }}
+                {{ product?.symbolCode }}
             </p>
         </div>
 
         <div class='item range'>
-            <p :class='product.cur_color'>
-                {{ product.cur_price ? parseFloat(product.cur_price).toFixed(product.price_digits) : '--' }}
+            <p :class='product?.cur_color'>
+                {{ product?.cur_price ? parseFloat(product?.cur_price).toFixed(product.price_digits) : '--' }}
             </p>
             <p>
-                <span :class='product.upDownColor'>
-                    {{ product.upDownAmount ? product.upDownAmount : '--' }}
+                <span :class='product?.upDownColor'>
+                    {{ product?.upDownAmount ? product?.upDownAmount : '--' }}
                 </span>&nbsp;
-                <span :class='product.upDownColor'>
-                    {{ product.upDownWidth ? product.upDownWidth : '--' }}
+                <span :class='product?.upDownColor'>
+                    {{ product?.upDownWidth ? product?.upDownWidth : '--' }}
                 </span>
             </p>
         </div>
         <div class='item ohlc'>
-            <p>{{ $t('chart.open') }} {{ product.open_price || '--' }}</p>
-            <p>{{ $t('chart.close') }} {{ product.yesterday_close_price || '--' }}</p>
+            <p>{{ $t('trade.todayOpen') }} {{ product?.open_price || '--' }}</p>
+            <p>{{ $t('trade.yesterdayClosed') }} {{ product?.yesterday_close_price || '--' }}</p>
         </div>
 
         <div class='item ohlc'>
-            <p>{{ $t('chart.high') }} {{ product.high_price || '--' }}</p>
-            <p>{{ $t('chart.low') }} {{ product.low_price || '--' }}</p>
+            <p>{{ $t('trade.high') }} {{ product?.high_price || '--' }}</p>
+            <p>{{ $t('trade.low') }} {{ product?.low_price || '--' }}</p>
         </div>
 
         <div class='item collect'>
             <i
                 v-preventReClick
                 class='icon'
-                :class="[!isSelfSymbol?'icon_zixuankongxin':'icon_hangqingliebiaoyijiazixuan']"
+                :class="[isOptional ? 'icon_hangqingliebiaoyijiazixuan' : 'icon_zixuankongxin']"
                 @click='addOptional'
             ></i>
-            <i v-if='[1, 2].includes(product.tradeType)' class='icon icon_heyuexiangqing' @click='$router.push(contractRoute)'></i>
+            <i v-if='[1, 2].includes(product?.tradeType)' class='icon icon_heyuexiangqing' @click='$router.push(contractRoute)'></i>
         </div>
     </div>
     <div class='tv-head'>
@@ -336,11 +336,26 @@ export default {
             ],
             showStudyDialog: false,
             loading: false,
-            klineType: 1
+            klineType: 1,
+            isOptional: false // 是否自选
         })
 
         // 是否是自选
-        const isSelfSymbol = computed(() => store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId)))
+        // const isSelfSymbol = computed(() => store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId)))
+        // 产品信息
+        const product = computed(() => store.getters.productActived)
+        const isSelfSymbol = computed({
+            get: () => store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId)),
+            set: (val) => {
+                state.isOptional = val
+            },
+        })
+
+        watch(() => isSelfSymbol.value, val => {
+            if (val) {
+                state.isOptional = isSelfSymbol.value
+            }
+        }, { immediate: true })
 
         // 图表类型
         const klineTypeIndex = computed(() => {
@@ -376,9 +391,6 @@ export default {
 
         // 颜色值
         const style = computed(() => store.state.style)
-
-        // 产品信息
-        const product = computed(() => store.getters.productActived)
 
         const customerInfo = computed(() => store.state._user.customerInfo)
 
@@ -419,20 +431,27 @@ export default {
                 return router.push('/login')
             }
             if (isSelfSymbol.value) {
-                removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
+                removeCustomerOptional({
+                    symbolList: [product.value.symbolId],
+                    tradeType: product.value.tradeType
+                }).then(res => {
                     if (res.check()) {
+                        isSelfSymbol.value = false
                         store.dispatch('_user/queryCustomerOptionalList')
                         ElMessage.success(t('trade.removeOptionalOk'))
                     }
                 }).catch(err => {
                 })
             } else {
-                addCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
+                addCustomerOptional({
+                    symbolList: [product.value.symbolId],
+                    tradeType: product.value.tradeType
+                }).then(res => {
                     if (res.check()) {
+                        isSelfSymbol.value = true
                         // 手动修改optional值
                         store.commit('_user/Update_optional', 1)
                         store.dispatch('_user/queryCustomerOptionalList')
-
                         ElMessage.success(t('trade.addOptionalOk'))
                     }
                 }).catch(err => {

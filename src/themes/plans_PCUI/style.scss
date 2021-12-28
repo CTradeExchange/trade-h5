@@ -682,10 +682,13 @@ body {
 			color: var(--primary);
 			background: var(--contentColor) !important;
 		}
-		&:hover {
+		&:hover{
 			color: var(--primary);
 			background: var(--contentColor) !important;
 		}
+        &.hover {
+            background: none;
+        }
 	}
 	.el-input__inner {
 		background: transparent;
@@ -789,4 +792,11 @@ body {
 }
 .icon_hangqingliebiaoweijiazixuan{
     color: var(--minorColor);
+}
+
+// pcui登录页面选择国家的actionsheet样式
+.loginAreaActionsheet,.actionsheetCenter{
+    right: 50% !important;
+    margin-right: -200px;
+    bottom: 0 !important;
 }

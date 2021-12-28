@@ -101,7 +101,8 @@
 		"returnMoney": "Repay coin",
 		"loan": "Loan",
 		"transfer": "Transfer",
-        "records": "Records"
+        "records": "Records",
+        "transRecords": "Trade record"
 	},
     "historyList": {
         "noMore": "No more"
@@ -247,7 +248,7 @@
 		"chartEmpty": "Chart data is empty",
 		"studyLimitTips": "No of indicators selected cannot exceed {num}",
 		"diffPrice": "Price change",
-		"quoteChange": "% change",
+		"quoteChange": "change %",
 		"more": "More",
 		"positionLine": "Position line",
 		"buyLine": "Bid line",
@@ -267,7 +268,7 @@
 		"name": "Name",
 		"newPrice": "New price",
 		"changePrice": "Price change",
-		"changePercent": "% change",
+		"changePercent": "change %",
 		"sale": "Sell",
 		"advance": "Prepay",
 		"advanceRatio": "Prepay ratio",
@@ -388,14 +389,14 @@
 		"closed": "Close",
 		"marketIsClosed": "Market is closed",
 		"morePosition": "more",
-		"todayOpen": "Open",
-		"yesterdayClosed": "Last close",
+        "todayOpen": "Open Today",
+        "yesterdayClosed": "Previous Closed",
 		"sortTime": "Time",
 		"filterToday": "Today",
 		"filterweek": "Last week",
 		"filterMonth": "Last month",
 		"dangerTag": "Danger",
-		"tackStopSetup": "Stop profit/loss",
+        "tackStopSetup": "TP / SL",
 		"updateTackStopSetup": "Update stop profit/loss",
 		"cancelPending": "Cancel",
 		"cancelPendingSuccess": "Cancel success",
@@ -461,8 +462,8 @@
 		"noPositions": "No position",
 		"noPendings": "No order",
 		"positionForGuestTip": "Check position after login",
-		"high": "High",
-		"low": "Low",
+        "high": "Highest",
+        "low": "Lowest",
 		"update": "Update",
 		"nameCode": "Name/Code",
 		"watch": "Watch",
@@ -632,7 +633,12 @@
         "upDownWidth": "Change %",
         "highPrice": "Highest price",
         "lowPrice": "Lowest price",
-        "allTransaction": "All trade record"
+        "allTransaction": "All trade record",
+        "unRangeMultilpe": "Leverage ratio is not within the range",
+        "multilpSetting": "Leverage ratio setting",
+        "multilpRange": "Leverage ratio range：",
+        "multilpSettingTip1": "Over leverage will increase the risk of liquidation，please remind the risk level",
+        "saveSetting": "Save"
 	},
 	"contract": {
 		"advance": "Prepay",
@@ -704,7 +710,7 @@
 		"loan": "Loan",
 		"repayment": "Repay",
 		"maxLoan": "Maximum can borrow",
-		"jingzhi": "Net asset",
+		"jingzhi": "Account Equity",
 		"profit": "P/L",
 		"direction": "Direction",
 		"pendingUnit": "Qty",
@@ -717,10 +723,10 @@
 		"positionId": "Position ID",
 		"positionProfit": "Position P/L",
 		"marginLevel": "Margin level",
-		"freeMargin": "Free margin",
-		"originalMargin": "Margin occupied",
+		"freeMargin": "Available Margin",
+		"originalMargin": "Used Margin",
 		"allOriginalMargin": "Total margin occupied",
-		"tackStopSetup": "Stop profit/loss",
+        "tackStopSetup": "TP / SL",
 		"closed": "Close",
 		"prospectMandatory": "Expect liquidation price",
 		"holdMargin": "Hold margin",
@@ -754,5 +760,10 @@
     },
     "modules":{
         "defaultContent":"Here is the default copy of the module"
+    },
+    "riskLevel":{
+        "safety": "Safe",
+        "warn": "Warning",
+        "danger": "Danger"
     }
 }

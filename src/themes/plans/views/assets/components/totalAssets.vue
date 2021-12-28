@@ -43,19 +43,37 @@
         </ul>
 
         <div v-if='[3,5].includes(Number(tradeType))' class='btns'>
+            <!-- <van-button
+                v-if='Number(tradeType) === 3'
+                size='mini'
+                type='primary'
+                @click='toLoan'
+            >
+                {{ $t('trade.loan') }}
+            </van-button> -->
             <van-button
+                v-if='Number(tradeType) === 5'
                 size='mini'
                 type='primary'
                 @click='toDesposit'
             >
-                {{ Number(tradeType) === 3 ? $t('trade.loan') : $t('trade.desposit') }}
+                {{ $t('trade.desposit') }}
             </van-button>
             <van-button
+                v-if='Number(tradeType) === 3'
+                size='mini'
+                type='primary'
+                @click='toRepayment'
+            >
+                {{ $t('trade.repayment') }}
+            </van-button>
+            <van-button
+                v-else
                 size='mini'
                 type='primary'
                 @click='toWirhdraw'
             >
-                {{ Number(tradeType) === 3 ? $t('trade.repayment') : $t('trade.withdraw') }}
+                {{ $t('trade.withdraw') }}
             </van-button>
         </div>
         <div class='btns2'>
@@ -94,47 +112,48 @@ export default {
         // 跳转充值页面
         const toDesposit = () => {
             if (!checkAssets()) return
-            if (accountList.value.length > 1) {
-                router.push({
-                    path: Number(tradeType.value) === 3 ? '/chooseAccount' : '/depositChoose',
-                    query: {
-                        tradeType: tradeType.value,
-                        type: Number(tradeType.value) === 3 ? 1 : 2 // type =1 借款 2 充值
-                    }
-                })
-            } else {
-                router.push({
-                    path: '/deposit',
-                    query: {
-                        accountId: accountInfo.value.accountId,
-                        currency: accountInfo.value.currency,
-                        tradeType: tradeType.value
-                    }
-                })
-            }
+            router.push({
+                path: '/depositChoose',
+                query: {
+                    tradeType: tradeType.value
+                }
+            })
         }
 
         // 跳转提现页面
         const toWirhdraw = () => {
             if (!checkAssets()) return
-            if (Number(tradeType.value) === 3) {
-                router.push({
-                    path: '/chooseAccount',
-                    query: {
-                        tradeType: tradeType.value,
-                        type: 3 // type =3 还款
-                    }
-                })
-            } else {
-                router.push({
-                    path: '/withdrawAccount',
-                    query: {
-                        accountId: accountInfo.value.accountId,
-                        currency: accountInfo.value.currency,
-                        tradeType: tradeType.value
-                    }
-                })
-            }
+            router.push({
+                path: '/withdrawAccount',
+                query: {
+                    accountId: accountInfo.value.accountId,
+                    currency: accountInfo.value.currency,
+                    tradeType: tradeType.value
+                }
+            })
+        }
+
+        // 跳转到借款页面
+        const toLoan = () => {
+            if (!checkAssets()) return
+            router.push({
+                path: '/chooseAccount',
+                query: {
+                    tradeType: tradeType.value,
+                    type: 1
+                }
+            })
+        }
+
+        // 跳转到还款页面
+        const toRepayment = () => {
+            router.push({
+                path: '/chooseAccount',
+                query: {
+                    tradeType: tradeType.value,
+                    type: 3
+                }
+            })
         }
 
         // 跳转划转记录
@@ -170,6 +189,8 @@ export default {
             toDesposit,
             toTransfer,
             toWirhdraw,
+            toLoan,
+            toRepayment,
             riskLevelMap
         }
     }
@@ -256,6 +277,7 @@ export default {
         border-radius: rem(6px);
         &:last-child {
             margin-right: 0;
+            flex: 1;
         }
         &.transfer-btn{
             color: var(--primary);
@@ -289,7 +311,7 @@ export default {
         content: '';
         display: block;
         position: absolute;
-        top: 50%;
+        top: 45%;
         left: 0%;
         transform: translate(0, -50%);
         width: rem(16px);

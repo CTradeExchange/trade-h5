@@ -80,12 +80,6 @@ export default {
             return (Number(item.id) === Number(tradeType.value))
         }))
 
-        watch(() => route.path, (newVal) => {
-            if (newVal !== '/positionDetail') {
-                MsgSocket.cancelSubscribeAsset()
-            }
-        })
-
         // 获取持仓列表
         const queryPositionList = (tradeType) => {
             if (isEmpty(customerInfo.value)) {
@@ -99,13 +93,7 @@ export default {
                 accountId
             }).then(res => {
                 if (res.check()) {
-                    const subscribList = positionList.value.map(el => {
-                        return {
-                            symbolId: el.symbolId,
-                            tradeType: tradeType
-                        }
-                    })
-                    QuoteSocket.send_subscribe(subscribList)
+                    sendSubscribe(res.data, tradeType)
                 }
             }).catch(() => {
             }).finally(() => {
@@ -114,6 +102,16 @@ export default {
                     MsgSocket.subscribeAsset(tradeType)
                 })
             })
+        }
+
+        const sendSubscribe = (data, tradeType) => {
+            const subscribList = data.map(el => {
+                return {
+                    symbolId: el.symbolId,
+                    tradeType: tradeType
+                }
+            })
+            QuoteSocket.send_subscribe(subscribList)
         }
 
         // 点击tab事件
@@ -136,8 +134,19 @@ export default {
         const onChange = (index) => {
             const tradeType = plans.value[index].id
             store.commit('_quote/Update_tradeType', tradeType)
-            // initData(tradeType)
         }
+
+        // 路由变化取消订阅
+        watch(() => route.path, (newVal) => {
+            if (newVal !== '/positionDetail') {
+                MsgSocket.cancelSubscribeAsset()
+            }
+        })
+
+        // 持仓列表数据变化重新订阅
+        watch(() => positionList.value, newVal => {
+            sendSubscribe(newVal)
+        })
 
         onMounted(() => {
             const index = tabIndex.value === -1 ? 0 : tabIndex.value

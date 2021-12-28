@@ -136,7 +136,7 @@ import { Toast } from 'vant'
 import { pow, gt, lt } from '@/utils/calculation'
 import { capitalTransfer, queryAccountById } from '@/api/user'
 import { isEmpty } from '@/utils/util'
-import assetsList from '@plans/components/assetsList/assetsList.vue'
+import assetsList from '@/themeCommon/components/assetsList/assetsList.vue'
 export default {
     components: {
         assetsList

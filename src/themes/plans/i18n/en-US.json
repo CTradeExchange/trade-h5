@@ -588,7 +588,7 @@
     "transferTip5": "The transfer amount cannot be less than the Minimum transfer amount",
     "transferTip6": "The transfer amount cannot be less than0",
     "transferSuccess": "Transfer success",
-    "transferAsset": "划转资产",
+    "transferAsset": "Transfer asset",
     "assets": "Assets"
   },
   "record":{

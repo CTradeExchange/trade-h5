@@ -1,7 +1,7 @@
 <template>
     <centerViewDialog>
         <div class='fullPageWrapper record'>
-            <layoutTop icon="icon_icon_close_big">
+            <layoutTop>
                 <p>{{ $t("record.records") }}</p>
                 <template #right>
                     <dateFilter
@@ -28,7 +28,6 @@
             </div>
         </div>
     </centerViewDialog>
-    
 </template>
 
 <script>
@@ -40,9 +39,9 @@ import loanList from './components/loanList'
 import repaymentList from './components/repaymentList'
 import transferList from './components/transferList'
 import capitalList from './components/capitalList'
-import dateFilter from '@plans/components/dateFilter'
+import dateFilter from '@planspc/components/dateFilter'
 
-export default {    
+export default {
     components: {
         dateFilter,
         centerViewDialog

@@ -33,7 +33,7 @@
                 :title='$t("common.dark")'
             >
                 <template #right-icon>
-                    <van-switch v-model='themeVal' :active-color='$style.success' size='24px' @change='colorSelect' />
+                    <van-switch v-model='themeVal' :active-color='$style.primary' size='24px' @change='colorSelect' />
                 </template>
             </van-cell>
         </van-cell-group>
@@ -50,6 +50,7 @@
             </div>
             <i class='icon_guanbi' @click='langShow=false'></i>
         </div>
+
         <div class='popup-wrap'>
             <div
                 v-for='(item, index) in supportLanguages'
@@ -71,13 +72,13 @@
     >
         <div class='header'>
             <div class='header-title'>
-                {{ $t('common.lang') }}
+                {{ $t('common.chartColor') }}
             </div>
             <i class='icon_guanbi' @click='colorShow=false'></i>
         </div>
         <div class='popup-wrap'>
             <van-radio-group v-model='chartVal' @change='colorShow = false'>
-                <van-cell-group inset>
+                <van-cell-group :border='false' inset>
                     <van-cell class='popup-item' clickable @click='upDownColorSelect("1")'>
                         <template #title>
                             <div class='left'>
@@ -255,22 +256,16 @@ export default {
 .custom-popup{
     --van-cell-group-inset-padding: 0;
     --van-cell-group-background-color: var(--bgColor);
-    .popup-wrap{
-        :deep(.van-radio-group){
-            .van-cell-group--inset{
-                margin: 0;
-            }
-
-        }
-    }
+    --van-cell-group-inset-border-radius: 0;
     .popup-item{
         padding: 0 rem(30px);
         display: flex;
         align-items: center;
-        margin-bottom: rem(10px);
+        margin-bottom: rem(20px);
         line-height:rem(130px);
         justify-content: space-between;
         background: var(--contentColor);
+        border-radius: rem(10px);
         &:last-child{
             margin-bottom: 0;
         }
@@ -288,29 +283,35 @@ export default {
                 vertical-align: middle;
             }
             .color-red{
-                color: var(--warn);
+                color: var(--riseColor);
             }
             .color-green{
-                color: var(--success);
+                color: var(--fallColor);
             }
 
         }
-        :deep(.van-checkbox){
-            .van-icon{
-                border-radius: 50%;
+        .van-radio{
+            .van-radio__icon--checked{
+                .van-icon{
+                    line-height: normal;
+                }
             }
         }
+        &::after{
+            border-bottom: none;
+        }
+
     }
 }
 .lang-popup{
     .popup-wrap{
-        padding: 0 0 0 rem(40px);
+        padding: 0 0 0 rem(25px);
         display: flex;
         flex-wrap: wrap;
         .lang-item{
             box-sizing: content-box;
             padding: rem(8px) rem(8px) rem(2px) rem(8px);
-            margin-right: rem(42px);
+            margin-right: rem(20px);
             margin-bottom: rem(42px);
             border: rem(4px) solid transparent;
             .lang-icon{
@@ -326,10 +327,17 @@ export default {
     }
 
 }
+
 </style>
 
 <style lang='scss' scoped>
 @import '@/sass/mixin.scss';
+.custom-popup{
+    :deep(.van-radio-group){
+        background: chocolate;
+    }
+}
+
 .page-wrap{
     padding-top: rem(110px);
     .header{

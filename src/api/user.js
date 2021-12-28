@@ -560,6 +560,18 @@ export function getWithdrawCurrencyList (data) {
     })
 }
 
+/* 获取客户可用的钱包类提币币种和链名称列表 */
+export function getCoinWithdrawCurrencyList (data) {
+    return request({
+        url: '/global/fund.app.WithdrawAppDubboService.getCoinWithdrawCurrencyList',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
 /* 获取钱包列表 */
 export function getWalletAddressList (data) {
     return request({

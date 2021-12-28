@@ -1,15 +1,15 @@
 <template>
-    <div v-if='product' class='directions' :class="{ 'center': orderHandicapVisible }">
+    <div v-if='product' class='directions' :class="{ 'center': dealModeShowMap[product.dealMode]?.handicap }">
         <div class='item buy' :class="{ 'active':modelValue==='buy' }" @click="setDirection('buy')">
             <span>
                 {{ $t('trade.buy') }}
             </span>
-            <span v-if='!orderHandicapVisible' class='price flRight'>
+            <span v-if='!dealModeShowMap[product.dealMode]?.handicap' class='price flRight'>
                 {{ product.buy_price }}
             </span>
         </div>
         <div class='item sell' :class="{ 'active':modelValue==='sell' }" @click="setDirection('sell')">
-            <span v-if='!orderHandicapVisible' class=' price'>
+            <span v-if='!dealModeShowMap[product.dealMode]?.handicap' class=' price'>
                 {{ product.sell_price }}
             </span>
             <span class='flRight'>
@@ -28,7 +28,7 @@ export default {
     emits: ['update:modelValue'],
     setup (props, { emit }) {
         const store = useStore()
-        const { orderHandicapVisible } = toolHooks()
+        const { dealModeShowMap } = toolHooks()
 
         // 颜色值
         const style = computed(() => store.state.style)
@@ -36,11 +36,11 @@ export default {
             emit('update:modelValue', data)
         }
         // 16进制颜色透明度
-        const fallColor = style.value.fallColor + '33'
-        const riseColor = style.value.riseColor + '33'
+        const fallColor = style.value.fallColor + '80'
+        const riseColor = style.value.riseColor + '80'
         return {
             setDirection,
-            orderHandicapVisible,
+            dealModeShowMap,
             fallColor,
             riseColor
         }
@@ -78,7 +78,7 @@ export default {
         font-size: rem(28px);
         &.sell {
             margin-left: 5px;
-            border: solid rem(4px) v-bind(fallColor);
+            border: solid rem(2px) v-bind(fallColor);
             color: var(--fallColor);
             &.active {
                 opacity: 1;
@@ -88,7 +88,7 @@ export default {
         }
         &.buy {
             margin-right: 5px;
-            border: solid rem(4px) v-bind(riseColor);
+            border: solid rem(2px) v-bind(riseColor);
             color: var(--riseColor);
             &.active {
                 opacity: 1;

@@ -2,7 +2,7 @@
     <van-popup
         v-model:show='popupShow'
         class='custom-popup'
-        :duration='0.3'
+        :duration='0.2'
         position='bottom'
         round
         :transition-appear='true'
@@ -51,9 +51,11 @@ export default {
         const accountList = computed(() => {
             return store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(props.tradeType))
         })
+        const style = computed(() => store.state.style)
         const state = reactive({
             popupShow: props.show,
-            curCurrency: props.currency
+            curCurrency: props.currency,
+            assetsMap
         })
 
         watch(() => state.popupShow, val => {
@@ -67,6 +69,8 @@ export default {
         // 选择币种
         const checkCurrency = (currency) => {
             state.curCurrency = currency.currency
+
+            currency.fullName = state.assetsMap[currency.currency]
             context.emit('update:currency', currency)
             // state.popupShow = false
         }
@@ -77,11 +81,12 @@ export default {
                 return require('@/assets/currency_icon/default.png')
             }
         }
+        const bgColor = style.value.primary + '0D'
         return {
             close,
+            bgColor,
             accountList,
             checkCurrency,
-            assetsMap,
             getCurrencyIcon,
             ...toRefs(state)
         }
@@ -123,6 +128,7 @@ export default {
                 font-size: rem(24px);
             }
             &.active{
+                background: v-bind(bgColor);
                 border: rem(2px) solid var(--primary);
                 &::after{
                     position: absolute;

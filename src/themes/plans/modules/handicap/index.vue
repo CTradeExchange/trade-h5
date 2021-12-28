@@ -224,13 +224,15 @@ export default {
             // padding: 0 rem(20px);
         }
         &.depth {
-            padding-left: rem(10px);
+            flex: none;
+            //padding-left: rem(10px);
             .depth-select {
                 display: block;
-                width: rem(110px);
+                padding:0 rem(10px);
                 height: rem(40px);
                 line-height: rem(40px);
-                background-color: var(--primaryAssistColor);
+                background-color: var(--assistColor);
+                border-radius: rem(6px);
                 span {
                     margin-left: rem(10px);
                     //vertical-align: middle;
@@ -321,11 +323,11 @@ export default {
                 // transition: width 0.28s ease-in-out;
                 &.sell-histogram {
                     right: 0;
-                    background: var(--riseColor);
+                    background: var(--fallColor);
                     opacity: 0.05;
                 }
                 &.buy-histogram {
-                    background: var(--fallColor);
+                    background: var(--riseColor);
                     opacity: 0.05;
                 }
             }

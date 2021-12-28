@@ -10,7 +10,12 @@
             <i class='icon_icon_arrow'></i>
         </a>
     </div>
-    <MultipleSet v-if="product && product.tradeType===2 && product.marginInfo && product.marginInfo.type!=='1'" v-model='multipleSetVisible' v-model:multipleVal='mVal' :product='product' />
+    <MultipleSet
+        v-if="product && product.tradeType===2 && product.marginInfo && product.marginInfo.type!=='1'"
+        v-model='multipleSetVisible'
+        v-model:multipleVal='mVal'
+        :product='product'
+    />
 </template>
 
 <script>
@@ -22,11 +27,11 @@ export default {
     components: {
         MultipleSet,
     },
-    props: ['modelValue', 'tradeType', 'multipleVal', 'product'],
+    props: ['modelValue', 'tradeType', 'multipleVal', 'product', 'tradeMode'],
     emits: ['update:modelValue', 'selected', 'update:multipleVal'],
     setup (props, { emit }) {
         const { t } = useI18n({ useScope: 'global' })
-        const { orderHandicapVisible } = toolHooks()
+        const { dealModeShowMap } = toolHooks()
         const state = reactive({
             orderType: 1,
             multipleSetVisible: false,
@@ -46,7 +51,7 @@ export default {
                 }
             ]
 
-            if (!orderHandicapVisible.value && Number(props.tradeType) !== 2) {
+            if (dealModeShowMap.value[props.tradeMode]?.pendingTab) {
                 list.push({
                     title: [3, 9].includes(props.tradeType) ? t('trade.pending2') : t('trade.pending'),
                     val: 10
@@ -67,7 +72,6 @@ export default {
             ...toRefs(state),
             mVal,
             changeOrderType,
-            orderHandicapVisible,
             btnList,
         }
     }
@@ -85,11 +89,11 @@ export default {
         height: rem(48px);
         line-height: rem(48px);
         color: var(--color);
-        background: var(--bgColor);
+        background: var(--assistColor);
         padding: 0 rem(16px);
         border-radius: rem(6px);
+        color: var(--color);
         @include active();
-
         .text{
             display: inline-block;
             padding-right: rem(20px);

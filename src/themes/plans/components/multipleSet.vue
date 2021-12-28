@@ -116,7 +116,7 @@ export default {
         // 杠杆倍数固定列表
         const multipleList = computed(() => marginInfo?.value?.type === '3' ? marginInfo.value.values.split(',') : [])
         const warn = computed(() => {
-            if (marginInfo.value.type !== '2') return false
+            if (marginInfo.value?.type !== '2') return false
             if (Number(state.multipleValue) < multipleRange.value[0]) {
                 return true
             } else if (Number(state.multipleValue) > multipleRange.value[1]) {
@@ -283,7 +283,7 @@ export default {
         background: #FEF6F7;
         color: var(--warn);
         background: rgba(183, 33, 34, 0.05);
-        border: 2px solid var(--warn);
+        border: rem(2px) solid var(--warn);
         border-radius: 6px;
         padding:rem(40px);
         text-align: center;

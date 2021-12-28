@@ -9,6 +9,10 @@
             <ClosePosition :ref='el => componentRefs.closePosition = el' />
             <Sltp :ref='el => componentRefs.sltp = el' />
             <AdjustMargin :ref='el => componentRefs.adjustMargin = el' />
+            <MultipleSet
+                :ref='el => componentRefs.multipleSet = el'
+                :product='product'
+            />
         </template>
     </customTable>
 </template>
@@ -22,6 +26,7 @@ import { QuoteSocket } from '@/plugins/socket/socket'
 import AdjustMargin from '@planspc/views/assets/components/adjust-margin.vue'
 import ClosePosition from '@planspc/views/assets/components/close-position.vue'
 import Sltp from '@planspc/views/assets/components/sltp.vue'
+import MultipleSet from '@planspc/components/multipleSet.vue'
 const componentRefs = ref({})
 const props = defineProps({
     tradeType: {
@@ -35,6 +40,8 @@ const props = defineProps({
 })
 const store = useStore()
 // 用户信息
+
+const product = computed(() => store.getters.productActived)
 const customerInfo = computed(() => store.state._user.customerInfo)
 // 持仓列表
 // 资产列表
@@ -80,12 +87,17 @@ watch(() => props.tradeType, () => {
     if (customerInfo.value) initData()
 }, { immediate: true })
 
+let unSubscribe = () => {}
 const symbolKeys = computed(() => tableData.value.map(e => `${e.symbolId}_${props.tradeType}`))
 watch(() => symbolKeys.value, (val) => {
     val = [...new Set(val)]
-    QuoteSocket.add_subscribe({ moduleId: 'assetsList', symbolKeys: val })
+    unSubscribe = QuoteSocket.add_subscribe({ moduleId: 'assetsList', symbolKeys: val })
 }, {
     immediate: true
+})
+
+onUnmounted(() => {
+    unSubscribe()
 })
 
 </script>

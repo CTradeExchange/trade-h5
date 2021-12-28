@@ -67,9 +67,9 @@ const queryData = () => {
     }
     tradeRecordList(params)
         .then(res => {
-            if (res.check() && res.data) {
-                rawResponse.value = res.data
-                tableData.value = res.data.list
+            if (res.check()) {
+                rawResponse.value = res.data || {}
+                tableData.value = res.data?.list || []
             }
         })
         .catch(err => console.error(err))

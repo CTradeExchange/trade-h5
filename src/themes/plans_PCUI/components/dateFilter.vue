@@ -5,7 +5,7 @@
                 <slot name='title'></slot>
             </template>
             <template #title v-else-if='showTitleIcon'>
-                <span class='icon iconfont icon_paixu'></span>
+                <span class='icon iconfont icon_paixu1'></span>
             </template>
             <template #default>
                 <!-- 自定义时间 -->
@@ -96,7 +96,10 @@ export default {
     :deep(.van-dropdown-item__icon) {
         color: var(--primary);
     }
-    .icon_paixu {
+    :deep(.van-overlay) {
+        background: none;
+    }
+    .icon_paixu1 {
         color: var(--normalColor);
     }
 }

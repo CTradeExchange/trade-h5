@@ -57,6 +57,7 @@ export default {
             return window.dayjs(val).format('YYYY/MM/DD HH:mm:ss')
         }
         const route = useRoute()
+        const { accountId } = route.query
         const requestParams = ref({})
         const setParams = (params) => {
             requestParams.value = params || {}
@@ -70,7 +71,7 @@ export default {
 
         const params = computed(() => {
             return {
-                accountId: Number(route.query.accountId) || null,
+                accountId,
                 liabilitiesType: 2,
                 ...requestParams.value
             }

@@ -1,16 +1,43 @@
 <template>
     <div class='trade-header'>
         <!-- 订单类型 -->
-        <OrderTypeTab v-model='orderType' :trade-mode='product.dealMode' :trade-type='product.tradeType' @selected='changeOrderType' />
-        <div v-if='[1,2].includes(product.tradeType)' class='switch'>
-            <span>{{ $t('trade.tackStopSetup') }}</span>
-            <van-switch
-                v-model='enabled'
-                :active-color='$style.success'
-                size='20'
-            />
+        <OrderTypeTab
+            v-model='orderType'
+            :trade-mode='product.dealMode'
+            :trade-type='product.tradeType'
+            @selected='changeOrderType'
+        />
+        <div class='right-wrap'>
+            <!-- 杠杆倍数设置 -->
+            <a
+                v-show='showLeverage'
+                class='multipleBtn'
+                href='javascript:;'
+                @click='multipleSetVisible = true'
+            >
+                <span class='text'>
+                    {{ multipleVal }}x
+                </span>
+                <i class='icon_icon_arrow'></i>
+            </a>
+            <div v-if='[1,2].includes(product.tradeType)' class='switch'>
+                <span class='label'>
+                    {{ $t('trade.tackStopSetup') }}
+                </span>
+                <van-switch
+                    v-model='enabled'
+                    :active-color='$style.success'
+                    size='20'
+                />
+            </div>
         </div>
     </div>
+    <MultipleSet
+        v-if="product && product.tradeType===2 && product.marginInfo && product.marginInfo.type!=='1'"
+        v-model='multipleSetVisible'
+        v-model:multipleVal='multipleVal'
+        :product='product'
+    />
 
     <LoanBar v-if='[3, 9].includes(product.tradeType)' v-model='operationType' :account='account' class='loanBarMargin' :product='product' />
 
@@ -202,6 +229,7 @@ import OrderTypeTab from './components/orderType.vue'
 import PendingBarCFD from './components/pendingBar_CFD'
 import LoanBar from './components/loanBar'
 import Assets from './components/assets.vue'
+import MultipleSet from '@planspc/components/multipleSet.vue'
 
 export default {
     components: {
@@ -212,9 +240,11 @@ export default {
         OrderTypeTab,
         PendingBarCFD,
         LoanBar,
-        Assets
+        Assets,
+        MultipleSet
     },
-    setup () {
+    emits: ['update:modelValue', 'selected', 'update:multipleVal'],
+    setup (props, { emit }) {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const route = useRoute()
@@ -252,7 +282,9 @@ export default {
                 title: t('trade.expireType1'),
                 val: 1
             }],
-            submitType: ''
+            submitType: '',
+            multipleVal: '', // 杠杆倍数初始值
+            multipleSetVisible: false
         })
 
         const { bizType, account, findProductInCategory, switchProduct } = hooks(state)
@@ -261,7 +293,19 @@ export default {
         const pendingWarn = computed(() => pendingRef.value?.warn)
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
         const symbolKey = computed(() => store.state._quote.productActivedID)
+
         const accountList = computed(() => store.state._user.customerInfo?.accountList)
+        const mVal = computed({
+            get () {
+                return state.multipleVal
+            },
+            set (val) {
+                state.multipleVal = val
+                emit('update:multipleVal', val)
+            }
+        })
+
+        const showLeverage = computed(() => Number(product.value.tradeType) === 2 && product.value.marginInfo?.type !== '1')
 
         // 点击提交按钮
         const submitHandler = (type) => {
@@ -352,7 +396,7 @@ export default {
                 expireType: state[state.submitType].expireType,
                 entryType: state[state.submitType].entryType
             }
-
+            if (tradeType === '2' && product.value.marginInfo?.type !== '1') params.crossLevelNum = parseInt(state.multipleVal)
             return params
         }
 
@@ -448,6 +492,8 @@ export default {
             profitLossRef,
             changeOrderType,
             customerInfo,
+            mVal,
+            showLeverage,
             ...toRefs(state),
         }
     }
@@ -459,6 +505,7 @@ export default {
 @import '@/sass/mixin.scss';
 .trade-header{
     display: flex;
+    align-items: center;
     justify-content: space-between;
     .tabs-trade{
         width: 150px;
@@ -483,10 +530,36 @@ export default {
         }
     }
     .switch{
-        display: flex;
-        align-items: center;
+        display: inline-block;
         >span{
             margin-right: 9px;
+            vertical-align: middle;
+        }
+        .van-switch{
+            vertical-align: middle;
+        }
+    }
+    .right-wrap{
+        .multipleBtn{
+            vertical-align: middle;
+            display: inline-block;
+            height: 24px;
+            color: var(--color);
+            background: var(--assistColor);
+            padding: 0 rem(16px);
+            border-radius: 4px;
+            margin-right: rem(24px);
+            border: solid 1px var(--color);
+            @include active();
+            .text{
+                display: inline-block;
+                padding-right: 10px;
+                font-size: 14px;
+
+            }
+            .icon_icon_arrow{
+                font-size: 12px;
+            }
         }
     }
 }

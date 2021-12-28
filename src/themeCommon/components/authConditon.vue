@@ -15,7 +15,7 @@
 
                 <div v-if="item.showType === 'image'">
                     <p class='upload-text'>
-                            {{ item.elementName }}
+                        {{ item.elementName }}
                     </p>
                     <van-uploader :after-read='afterRead' :name='item.elementCode' result-type='file'>
                         <img
@@ -33,7 +33,6 @@
                             :src="require('../../assets/auth/' + item.elementCode + '.png')"
                             srcset=''
                         />
-                        
                     </van-uploader>
                 </div>
                 <div v-if="item.showType === 'inputGroup'">
@@ -54,7 +53,7 @@
         </van-button>
     </div>
 
-    <van-popup v-model:show='showPicker' position='bottom' round>
+    <van-popup v-model:show='showPicker' class='actionsheetCenter' position='bottom' round>
         <van-picker
             :columns='columns'
             :columns-field-names='columnsFields'
@@ -212,14 +211,15 @@ export default {
                         if (!isEmpty(state.extendsMap[key]?.extend)) {
                             const valueReg = new RegExp(state.extendsMap[key].extend)
                             if (!valueReg.test(state.conditionModel[key])) {
-                                return Toast(`${state.extendsMap[key].name}` + t('register.incorrectlyFormed'))
+                                return Toast(`${state.extendsMap[key].name} ` + t('register.incorrectlyFormed'))
                             }
                         }
-
-                        tempElementList.push({
-                            elementCode: key,
-                            elementValue: state.conditionModel[key]
-                        })
+                        if (!isEmpty(state.conditionModel[key])) {
+                            tempElementList.push({
+                                elementCode: key,
+                                elementValue: state.conditionModel[key]
+                            })
+                        }
                     }
                 }
             }

@@ -5,8 +5,10 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { closePboOrder, closeTradePboOrder } from '@/api/trade'
+import { getCookie } from '@/utils/util'
 
 const formatTime = val => window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+const locale = getCookie('lang') === 'zh-CN' ? 'zh' : 'en'
 
 // 成交量/额
 const getFormatExecuteNum = t => (val, tradeType, row) => {
@@ -398,7 +400,7 @@ export const getTransactionColumns = (tradeType) => {
             {
                 name: t('trade.orderType'),
                 align: 'right',
-                width: 100,
+                minWidth: 130,
                 formatter: (row, column, cellValue, index, rawResponse) => {
                     return rawResponse.bizTypeText[row.bizType]
                 }
@@ -447,13 +449,15 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.stopLossPrice'),
                 align: 'right',
                 minWidth: 120,
-                prop: 'stopLoss',
+                // prop: 'stopLoss',
+                formatter: row => row.stopLoss * 1 !== 0 ? row.stopLoss : '- -'
             },
             {
                 name: t('trade.stopProfitPrice'),
                 align: 'right',
                 minWidth: 120,
-                prop: 'takeProfit',
+                // prop: 'takeProfit',
+                formatter: row => row.takeProfit * 1 !== 0 ? row.takeProfit : '- -'
             },
             {
                 name: t('trade.profit'),
@@ -483,7 +487,7 @@ export const getTransactionColumns = (tradeType) => {
             {
                 name: t('trade.orderType'),
                 align: 'right',
-                width: 100,
+                width: 120,
                 formatter: (row, column, cellValue, index, rawResponse) => {
                     return rawResponse.bizTypeText[row.bizType]
                 }
@@ -530,18 +534,21 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.stopLossPrice'),
                 align: 'right',
                 minWidth: 120,
-                prop: 'stopLoss',
+                // prop: 'stopLoss',
+                formatter: row => row.stopLoss * 1 !== 0 ? row.stopLoss : '- -'
             },
             {
                 name: t('trade.stopProfitPrice'),
                 align: 'right',
                 minWidth: 120,
-                prop: 'takeProfit',
+                // prop: 'takeProfit',
+                formatter: row => row.takeProfit * 1 !== 0 ? row.takeProfit : '- -'
             },
             {
                 name: t('trade.profit'),
                 align: 'right',
                 prop: 'profitLoss',
+                minWidth: 120,
             },
             { name: t('trade.fee'), prop: 'commission', align: 'right', minWidth: 120 },
             { name: t('trade.pendingNo'), prop: 'dealId', align: 'right' },
@@ -720,6 +727,12 @@ export const getAssetColumns = (tradeType) => {
         unref(adjustMargin).open(row)
     }
 
+    // 杠杆倍数弹窗
+    const openMultipleSet = (row, multipleSet) => {
+        if (Number(row.marginSetType) === 2) { unref(multipleSet).open(row) }
+        // row.crossLevelNum
+    }
+
     // 跳转到借款页面
     const goLoan = (row) => {
         if (row.accountId) {
@@ -809,14 +822,16 @@ export const getAssetColumns = (tradeType) => {
                 name: t('trade.stopLossPrice'),
                 align: 'right',
                 minWidth: 120,
-                prop: 'stopLossDecimal'
+                // prop: 'stopLossDecimal',
+                formatter: row => row.stopLossDecimal * 1 !== 0 ? row.stopLossDecimal : '- -'
                 // formatter: row => parseFloat(row.stopLossDecimal) ? row.stopLossDecimal : '--'
             },
             {
                 name: t('trade.stopProfitPrice'),
                 align: 'right',
                 minWidth: 120,
-                prop: 'takeProfitDecimal'
+                // prop: 'takeProfitDecimal',
+                formatter: row => row.takeProfitDecimal * 1 !== 0 ? row.takeProfitDecimal : '- -'
                 // formatter: row => parseFloat(row.takeProfitDecimal) ? row.takeProfitDecimal : '--'
             },
             {
@@ -836,7 +851,7 @@ export const getAssetColumns = (tradeType) => {
                 fixed: 'right',
                 className: 'operate',
                 align: 'right',
-                minWidth: 130,
+                width: 130,
                 slots: {
                     default: ({ row, onGetComponentRefs }) => {
                         const refs = onGetComponentRefs()
@@ -855,7 +870,31 @@ export const getAssetColumns = (tradeType) => {
             },
         ],
         2: [
-            { name: t('trade.name'), prop: 'symbolName', className: 'symbolName', align: 'left' },
+            {
+                name: t('trade.name'),
+                prop: 'symbolName',
+                className: 'symbolName',
+                align: 'left',
+                width: '200',
+                slots: {
+                    default: ({ row, onGetComponentRefs }) => {
+                        const refs = onGetComponentRefs()
+                        return (
+                            <>
+
+                                {row.symbolName}
+                                <span class='multipleVal' onclick={
+                                    openMultipleSet.bind(null, row, refs.multipleSet)
+                                }>
+                                    <i>{ row.crossLevelNum }x</i>
+                                    {Number(row.marginSetType) === 2 ? <i class='icon_icon_arrow'></i> : ''}
+                                </span>
+                            </>
+                        )
+                    }
+                }
+
+            },
             {
                 name: t('trade.profit') + '(' + unref(assetsInfo).currency + ')',
                 prop: 'direction',
@@ -896,14 +935,16 @@ export const getAssetColumns = (tradeType) => {
                 name: t('trade.stopLossPrice'),
                 align: 'right',
                 minWidth: 100,
-                prop: 'stopLossDecimal'
+                // prop: 'stopLossDecimal',
+                formatter: row => row.stopLossDecimal * 1 !== 0 ? row.stopLossDecimal : '- -'
                 // formatter: row => parseFloat(row.stopLossDecimal) ? row.stopLossDecimal : '--'
             },
             {
                 name: t('trade.stopProfitPrice'),
                 align: 'right',
                 minWidth: 100,
-                prop: 'takeProfitDecimal'
+                // prop: 'takeProfitDecimal',
+                formatter: row => row.takeProfitDecimal * 1 !== 0 ? row.takeProfitDecimal : '- -'
                 // formatter: row => parseFloat(row.takeProfitDecimal) ? row.takeProfitDecimal : '--'
             },
             {
@@ -918,7 +959,7 @@ export const getAssetColumns = (tradeType) => {
                 fixed: 'right',
                 className: 'operate',
                 align: 'right',
-                minWidth: 220,
+                width: locale === 'zh' ? 210 : 225,
                 slots: {
                     default: ({ row, onGetComponentRefs }) => {
                         const refs = onGetComponentRefs()
@@ -953,7 +994,7 @@ export const getAssetColumns = (tradeType) => {
                 fixed: 'right',
                 className: 'operate',
                 align: 'right',
-                minWidth: 130,
+                width: locale === 'zh' ? 100 : 145,
                 slots: {
                     default: ({ row }) => {
                         return (

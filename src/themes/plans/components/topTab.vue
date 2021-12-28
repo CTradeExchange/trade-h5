@@ -68,7 +68,11 @@ export default {
             active: 0
         }
     },
-
+    computed: {
+        btnBg () {
+            return this.$store.state.style.primary + '1A'
+        }
+    },
     watch: {
         modelValue () {
             this.active = this.modelValue
@@ -112,7 +116,7 @@ export default {
                 height: 100%;
             }
             &.van-tab--active {
-                background: var(--primaryAssistColor);
+                background: v-bind(btnBg);
                 border-radius: rem(6px);
                 .text {
                     font-weight: 700;

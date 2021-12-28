@@ -32,11 +32,18 @@ import search from './components/search'
 import TopTab from './components/topTab'
 import ProductList from './components/ProductList'
 
+const props = defineProps({
+    tradeType: {
+        type: [String, Number],
+        default: ''
+    }
+})
+
 const store = useStore()
 const productMap = computed(() => store.state._quote.productMap)
 const productActived = computed(() => store.getters.productActived)
 // 玩法类型
-const tradeType = computed(() => String(unref(productActived).tradeType))
+const tradeType = computed(() => props.tradeType || String(unref(productActived).tradeType))
 // 板块类型
 const categoryType = ref(0)
 // 获取板块列表和所选板块的产品列表
@@ -53,7 +60,7 @@ const onSearch = (result) => {
         list.push({
                 ...e,
                 symbolId: e.id,
-                symbolKey: unref(tradeType) + '_' + e.id,
+                symbolKey: e.id + '_' + unref(tradeType),
                 tradeType: unref(tradeType),
                 symbolCode: e.code,
                 symbolName: e.name

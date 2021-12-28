@@ -118,7 +118,6 @@ export default {
         const router = useRouter()
         const store = useStore()
         const curInstance = getCurrentInstance()
-        const { $QuoteSocket } = curInstance.appContext.app.config.globalProperties
 
         // 玩法列表
         const plansList = computed(() => store.state._base?.plans || [])
@@ -162,10 +161,7 @@ export default {
                     }
                 }
                 filterProductList.value = list
-                $QuoteSocket.add_subscribe({
-                    moduleId: props.moduleId,
-                    symbolKeys: keys,
-                })
+                store.commit('home/Update_subscribeQuoteList', keys)
             }
         }
 

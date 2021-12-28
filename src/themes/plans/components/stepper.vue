@@ -1,7 +1,7 @@
 <template>
     <div class='stepper'>
         <button ref='minus' class='minus van-stepper__minus' :disabled='disabledMinus' @click='minus'>
-            <i class='icon_icon_reduce'></i>
+            <!-- <i class='icon_icon_reduce'></i> -->
         </button>
         <input
             class='input inputEl'
@@ -13,7 +13,7 @@
             @input='input'
         />
         <button ref='plus' class='plus van-stepper__plus' :disabled='disabledPlus' @click='plus'>
-            <i class='icon_icon_plus'></i>
+            <!-- <i class='icon_icon_plus'></i> -->
         </button>
     </div>
 </template>
@@ -142,6 +142,7 @@ export default {
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
 .stepper {
+    display: flex;
     font-size: 0;
     border-radius: rem(6px);
     button,
@@ -155,7 +156,7 @@ export default {
         background: none;
     }
     .input {
-        width: rem(180px);
+        flex: 1;
         color: var(--color);
         font-size: rem(28px);
     }
