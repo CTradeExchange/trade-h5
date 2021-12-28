@@ -1,5 +1,6 @@
 import { nextTick } from 'vue'
 import { createI18n } from 'vue-i18n'
+import { Locale } from 'vant';
 // import zhCN_common from '../../../themeCommon/i18n/zh-CN.json'
 // import zhCN from './zh-CN.json'
 import {getCookie} from '@/utils/util';
@@ -33,6 +34,10 @@ export function setI18nLanguage(i18n, locale) {
 }
 
 export async function loadLocaleMessages(i18n, locale) {
+    // 设置vant组件的国际化
+    const vant_local = await import(/* webpackChunkName: "vant-[request]" */ `vant/es/locale/lang/${locale}.js`)
+    Locale.use(locale, vant_local.default);
+
     // load locale messages with dynamic import
     const messages = await import(/* webpackChunkName: "locale-[request]" */ `./${locale}.json`)
     const commonMessages = await import(/* webpackChunkName: "locale-[request]" */ `@/themeCommon/i18n/${locale}.json`)

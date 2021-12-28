@@ -1,15 +1,24 @@
 <template>
     <centerViewDialog>
+        <!-- 头部导航 -->
+        <LayoutTop
+            :custom-style='{
+                "background": $style.bgColor
+            }'
+            :title='$t("trade.desposit")'
+        >
+            <template #right>
+                <span @click='toDespositList'>
+                    {{ $t('deposit.depositRecord') }}
+                </span>
+            </template>
+        </LayoutTop>
+
         <!-- 内容区域 -->
         <div class='page-content'>
-            <!-- 头部导航 -->
-            <LayoutTop :back='true' :menu='false'>
-                <template #right>
-                    <router-link class='right-title' to='/assets/depositRecord'>
-                        {{ $t('deposit.depositRecord') }}
-                    </router-link>
-                </template>
-            </LayoutTop>
+            <p class='header'>
+                {{ $t('deposit.limit') }}
+            </p>
             <!-- 页面加载状态 -->
             <Loading :show='loading' />
             <!-- 存款金额筛选 -->
@@ -27,22 +36,24 @@
                         <p v-if='item.describe' class='t2'>
                             {{ item.describe }}
                         </p>
-                    </div>
-                    <div :class="{ 'item': true, active: currIndex === 99 }" @click='openOtherMoney'>
-                        <p class='t1'>
-                            {{ $t('deposit.otherAmount') }}
-                        </p>
+                        <div v-if='currIndex === index' class='tick'></div>
                     </div>
                 </div>
-                <div v-show='otherAmountVis' class='other-amount'>
+                <div class='other-amount'>
+                    <div class='icon-currency'>
+                        <img alt='' :src='getCurrencyIcon()' />
+                        <span class='label'>
+                            {{ currency }}
+                        </span>
+                    </div>
                     <input v-model='amount' :placeholder='$t("deposit.inputAmount")' type='number' />
-                    <van-icon v-if='amount' name='clear' @click="amount = ''" />
+                    <!-- <van-icon v-if='amount' name='clear' @click="amount = ''" /> -->
                 </div>
             </div>
             <!-- 支付方式 -->
             <div class='pay-wrap'>
-                <p class='title'>
-                    {{ $t('deposit.selectPayMethods') }}
+                <p class='header'>
+                    {{ $t('deposit.payType') }}
                 </p>
                 <div v-if='payTypesSortEnable.length > 0' class='pay-module'>
                     <div v-for='(item, index) in payTypesSortEnable' :key='index' class='pay-case'>
@@ -85,6 +96,7 @@
         <div class='footer-handle'>
             <van-button block class='next-btn' type='primary' @click='next'>
                 <span>{{ $t('deposit.confirmPay') }} {{ computeExpectedpay }}{{ currencyChecked }}</span>
+                <van-icon name='arrow' />
             </van-button>
         </div>
 
@@ -98,28 +110,30 @@
             @cancel='onCancel'
             @confirm='onConfirm'
         >
-            <h4>{{ $t('deposit.payConfirm') }}</h4>
-            <p class='title'>
-                {{ $t('deposit.payConfirmTips') }}
-            </p>
+            <div class='content'>
+                <h4>{{ $t('deposit.payConfirm') }}</h4>
+                <p class='title'>
+                    {{ $t('deposit.payConfirmTips') }}
+                </p>
+            </div>
         </van-dialog>
 
         <!-- 补充资料弹窗 -->
-        <van-popup v-model:show='appendVis' class='append-popup' position='right' :style="{ height: '100%', width: '500px' }">
+        <van-popup v-model:show='appendVis' class='append-popup' position='right' :style="{ height: '100%', width: '80%' }">
             <div class='append-wrap'>
                 <p class='title'>
                     {{ $t('deposit.appendFiled') }}
                 </p>
                 <van-cell-group inset>
                     <van-field
-                        v-for='(item,key) in checkedType.extend'
+                        v-for='(item, key) in checkedType.extend'
                         :key='key'
                         v-model='appendMap[key].value'
                         :data='item'
                         :label='item[lang]'
                         label-width='70'
-                        :placeholder='$t("common.input")+ item[lang]'
-                        required='true'
+                        :placeholder="$t('common.input') + item[lang]"
+                        :required='true'
                     />
                 </van-cell-group>
                 <van-button class='confirm-btn' size='large' type='primary' @click='handleAppendField'>
@@ -129,7 +143,7 @@
         </van-popup>
 
         <!-- 支付表单 -->
-        <form id='payForm' :action='despositResult.url' class='payForm' method='post' target='_blank'>
+        <form id='payForm' :action='despositResult.url' class='payForm' method='post'>
             <input
                 v-for='(value, key) in JSON.parse(despositResult.data)'
                 :key='key'
@@ -182,12 +196,10 @@ export default {
             currIndex: '',
             // 当前选择的存款金额数量
             amount: '',
-            // 是否显示其它金额输入框
-            otherAmountVis: false,
             // 是否显示支付通道弹窗
             typeShow: false,
             // 全部支付通道
-            PayTypes: [],
+            payTypes: [],
             // 可用并排序的支付通道
             payTypesSortEnable: [],
             // 当前选择的支付通道
@@ -250,17 +262,14 @@ export default {
                         })
                     }
                 }
-                // 没有存款数据默认选择其它金额
-                state.currIndex = 0
-                if (arr.length === 0) {
-                    // state.currIndex = 99
-                    state.otherAmountVis = true
-                } else {
-                    state.amount = arr[0].amount
-                }
+
+                // 没有存款数据设置默认数据
                 const defaultAmountList = [{ amount: 50 }, { amount: 100 }, { amount: 500 }, { amount: 1000 }]
+
+                // 数据赋值
                 state.amountList = arr.length ? arr : defaultAmountList
-                checkAmount(0, defaultAmountList[0])
+                state.currIndex = 0
+                state.amount = state.amountList[0].amount
             })
         }
 
@@ -311,10 +320,10 @@ export default {
         }
 
         // 监听当前存款金额
-        watch([() => state.amount, () => state.PayTypes], () => {
-            if (state.PayTypes.length > 0 && state.amount) {
+        watch([() => state.amount, () => state.payTypes], () => {
+            if (state.payTypes.length > 0 && state.amount) {
                 // 筛选在存款时间内的支付通道
-                let temp = state.PayTypes.filter(item => item.timeRangeFlag && item.openTime)
+                let temp = state.payTypes.filter(item => item.timeRangeFlag || item.openTime === '')
                 // 筛选在存款金额内的支付通道
                 if (state.amount) {
                     temp = temp.filter(v => (parseFloat(state.amount) >= v.singleLowAmount && parseFloat(state.amount) <= v.singleHighAmount))
@@ -338,6 +347,10 @@ export default {
             } else {
                 state.payTypesSortEnable = []
             }
+
+            // 设置当前存款金额高亮
+            const index = state.amountList.findIndex(item => parseFloat(item.amount) === parseFloat(state.amount))
+            state.currIndex = index !== -1 ? index : ''
         })
 
         // 监听支付币种
@@ -353,20 +366,18 @@ export default {
         // 跳转到存款记录页面
         const toDespositList = () => {
             router.push({
-                path: '/depositRecord'
+                path: '/assets/depositRecord'
             })
         }
 
         // 切换存款金额
         const checkAmount = (index, item) => {
-            state.otherAmountVis = false
             state.currIndex = index
             state.amount = item.amount
         }
 
         // 切换其它存款金额
         const openOtherMoney = () => {
-            state.otherAmountVis = true
             state.currIndex = 99
             state.amount = ''
             state.currencyChecked = ''
@@ -388,16 +399,21 @@ export default {
                     state.loading = false
                     if (res.data && res.data.length > 0) {
                         if (res.data.length > 0) {
+                            const result = []
+                            // 过滤掉直充支付通道、设置支付通道图标
                             res.data.forEach(el => {
-                                const iconKey = el.paymentCode + '_' + el.paymentType + '_' + el.merchantNo
-                                if (paymentIconList.value[iconKey]) {
-                                    el.alias = paymentIconList.value[iconKey][state.lang].alias || ''
-                                    el.imgUrl = paymentIconList.value[iconKey][state.lang].imgUrl || require('@/assets/payment_icon/default.png')
-                                } else {
-                                    el.imgUrl = require('@/assets/payment_icon/default.png')
+                                if (el.rechargeType !== '1') {
+                                    const iconKey = el.paymentCode + '_' + el.paymentType + '_' + el.merchantNo
+                                    if (paymentIconList.value[iconKey]) {
+                                        el.alias = paymentIconList.value[iconKey][state.lang].alias || ''
+                                        el.imgUrl = paymentIconList.value[iconKey][state.lang].imgUrl || require('@/assets/payment_icon/default.png')
+                                    } else {
+                                        el.imgUrl = require('@/assets/payment_icon/default.png')
+                                    }
+                                    result.push(el)
                                 }
                             })
-                            state.PayTypes = res.data
+                            state.payTypes = result
                         }
 
                         // 处理时区时间
@@ -492,11 +508,11 @@ export default {
 
         // 处理支付通道存款时间
         const handleShowTime = () => {
-            if (state.PayTypes.length > 0) {
+            if (state.payTypes.length > 0) {
                 const todayStr = window.dayjs().format('YYYY-MM-DD')
                 const tomorrowStr = window.dayjs().add(1, 'day')
 
-                state.PayTypes.forEach(payItem => {
+                state.payTypes.forEach(payItem => {
                     const openTime = payItem.openTime
                     // console.log('排序前的时间', payItem.openTime)
                     let openTimeList
@@ -647,11 +663,8 @@ export default {
                 }, 200)
             } else {
                 // 跳转到新页面
-                window.open(despositResult.browserOpenUrl, '_blank')
+                window.location.href = despositResult.browserOpenUrl
             }
-            setTimeout(() => {
-                state.despositVis = true
-            }, 2000)
         }
 
         // 补充资料是否全部填写完成
@@ -793,6 +806,14 @@ export default {
             })
         })
 
+        const getCurrencyIcon = () => {
+            try {
+                return require('@/assets/currency_icon/' + currency + '.png')
+            } catch (error) {
+                return require('@/assets/currency_icon/default.png')
+            }
+        }
+
         onBeforeUnmount(() => {
             sessionStorage.removeItem('proposalNo')
         })
@@ -817,7 +838,8 @@ export default {
             computeAccount,
             onlineServices,
             changePayCurrency,
-            handleAppendField
+            handleAppendField,
+            getCurrencyIcon
         }
     }
 }
@@ -826,33 +848,33 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 
-.right-title {
-    color: var(--primary);
-    font-size: 12px;
-}
-
 .page-content {
     display: flex;
     flex-direction: column;
     flex: 1;
     padding: 0 rem(30px);
-    margin-top: 42px;
     background: var(--bgColor);
     overflow-y: auto;
+    padding-top: rem(110px);
+    .header{
+        font-size: rem(48px);
+    }
 }
 
 // 存款金额筛选
 .amount-filter {
     padding-top: rem(30px);
+    margin-bottom: rem(60px);
     .amount-list {
         display: flex;
         flex-wrap: wrap;
         .item {
+            position: relative;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            width: rem(330px);
+            width: 48%;
             height: rem(110px);
             margin-right: rem(20px);
             margin-bottom: rem(20px);
@@ -860,7 +882,7 @@ export default {
             border: 1px solid var(--lineColor);
             border-radius: rem(10px);
             cursor: pointer;
-            &:nth-of-type(3n) {
+            &:nth-of-type(2n) {
                 margin-right: 0;
             }
             .t1 {
@@ -874,10 +896,34 @@ export default {
                 background: rgba(242, 161, 27, .1);
                 border-radius: rem(30px);
             }
+            .tick{
+                position: absolute;
+                right: rem(8px);
+                top: 0;
+                width: rem(10px);
+                height: rem(18px);
+                border-color: var(--contentColor);
+                border-style: solid;
+                border-width: 0 rem(4px) rem(4px) 0;
+                transform: rotate(45deg);
+                z-index: 99;
+            }
         }
         .active {
+            position: relative;
             background: rgba(242, 161, 27, .1);
             border: 1px solid var(--focusColor);
+            &::after{
+                position: absolute;
+                content: '\e728';
+                width: rem(30px);
+                height: rem(30px);
+                background: var(--primary);
+                border-radius: 0px rem(10px) 0px rem(10px);
+                right: 0;
+                top: rem(-2px);
+                font-family: 'iconfont';
+            }
             .t1 {
                 color: var(--focusColor);
             }
@@ -887,18 +933,45 @@ export default {
         }
     }
     .other-amount {
+        overflow: hidden;
         display: flex;
+        justify-content: space-between;
         height: rem(96px);
+        line-height: rem(96px);
         align-items: center;
-        padding-left: rem(32px);
+        //padding-left: rem(32px);
         padding-right: rem(25px);
-        background: var(--contentColor);
-        border: 1px solid var(--lineColor);
+        //background: var(--contentColor);
+        //border: 1px solid var(--lineColor);
         border-radius: rem(10px);
+        .icon-currency{
+            height: 100%;
+            min-width: rem(250px);
+            border-radius: rem(10px);
+            margin-right: rem(27px);
+            background: var(--contentColor);
+            padding-left: rem(30px);
+            padding-right: rem(30px);
+            img{
+                width: rem(48px);
+                height: rem(48px);
+                vertical-align: middle;
+
+                margin-right: rem(25px);
+            }
+            .label{
+                vertical-align: -3px;
+                font-size: rem(36px);
+            }
+        }
         input {
+            border-radius: rem(10px);
+            padding-left: rem(32px);
             flex: 1;
             height: 100%;
-            font-size: rem(28px);
+            font-size: rem(36px);
+            background: var(--contentColor);
+
         }
         .van-icon-clear {
             font-size: rem(36px);
@@ -918,21 +991,23 @@ export default {
         color: var(--color);
     }
     .pay-module {
-        padding-left: rem(40px);
-        padding-right: rem(32px);
-        background: var(--contentColor);
         border-radius: rem(10px);
         overflow: hidden;
+        margin-top: rem(30px);
         .van-icon {
             line-height: 1;
         }
         .pay-case {
+            border-radius: rem(10px);
+            padding-left: rem(40px);
+            padding-right: rem(32px);
+            background: var(--contentColor);
+            margin-bottom: rem(30px);
+            cursor: pointer;
             .pay-channel {
                 display: flex;
                 align-items: center;
                 height: rem(112px);
-                border-bottom: 1px solid var(--lineColor);
-                cursor: pointer;
                 .icon {
                     width: rem(60px);
                     height: rem(60px);
@@ -958,11 +1033,13 @@ export default {
                     justify-content: space-between;
                     align-items: center;
                     height: rem(112px);
-                    border-bottom: 1px solid var(--lineColor);
-                    cursor: pointer;
+                    border-top: 1px solid var(--lineColor);
                     .name {
                         font-size: rem(28px);
                         color: var(--color);
+                    }
+                    &:last-child{
+                        border-bottom: none;
                     }
                 }
             }
@@ -973,6 +1050,8 @@ export default {
         justify-content: center;
         align-items: center;
         height: rem(150px);
+        padding: 0 rem(20px);
+        margin-top: rem(30px);
         font-size: rem(24px);
         color: var(--color);
         background: var(--contentColor);
@@ -1022,20 +1101,13 @@ export default {
     text-align: center;
     .van-icon-info-o {
         font-size: rem(60px);
-
-    }
-    h4{
-       padding-left: rem(80px);
-       padding-top: rem(50px);
     }
     .title {
         line-height: rem(80px);
-        padding: rem(80px);
     }
     .content {
         margin: rem(20px) 0;
-        color: var(--minorColor);
-        font-size: rem(28px);
+        text-align: center;
     }
 }
 .pay-warpper {

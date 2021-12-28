@@ -81,7 +81,7 @@ class SocketEvent {
         const productMap = this.$store.state._quote.productMap
 
         // 拿到产品精简信息后，根据交易模式进行订阅产品行情
-        this.$store.dispatch('_quote/querySymbolBaseInfoList').then((res) => {
+        this.$store.dispatch('_quote/querySymbolBaseInfoList', null).then((res) => {
             this.subscribedList = productIds
             const subscribeList = formatSubscribe(productIds, productMap)
             this.send(14000, { symbol_list: subscribeList })
@@ -115,7 +115,7 @@ class SocketEvent {
         this.$store.commit('_quote/Delete_dealList') // 删除成交数据
         this.$store.commit('_quote/Delete_handicapList') // 删除盘口数据
         const productMap = this.$store.state._quote.productMap
-        this.$store.dispatch('_quote/querySymbolBaseInfoList').then(() => {
+        this.$store.dispatch('_quote/querySymbolBaseInfoList', null).then(() => {
             const product = productMap[`${symbol_id}_${trade_type}`]
             this.subscribeDeal = [{ symbol_id, depth_level, merge_accuracy, trade_type, trade_info_count, trade_mode: product.dealMode }]
             const list = [{

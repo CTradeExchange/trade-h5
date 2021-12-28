@@ -131,7 +131,7 @@ export default {
             } else {
                 loginMethon = login
             }
-            return loginMethon(params).then((res) => {
+            return loginMethon(params).then(async res => {
                 if (res.check()) {
                     const data = res.data
                     if (params.loginPwd) localSet('loginParams', JSON.stringify(params))
@@ -142,7 +142,9 @@ export default {
                     commit('_trade/Empty_data', null, { root: true })
                     commit('_quote/Empty_data', null, { root: true })
                     commit('Update_loginData', data)
-                    dispatch('saveCustomerInfo', { flag: true, data: res.data })
+                    await dispatch('saveCustomerInfo', res.data)
+                    await dispatch('_quote/setProductAllList', null, { root: true })
+                    dispatch('getCustomerEnything', res.data)
 
                     // 对比用户的资产信息和wp配置的资产信息，自动给用户开增量资产
                     if (data.kycAuditStatus === 2) {
@@ -161,16 +163,20 @@ export default {
                 flag: false 只获取客户信息
             */
             commit('Update_loginLoading', true)
-            return findCustomerInfo().then((res) => {
+            return findCustomerInfo().then(async res => {
                 commit('Update_loginLoading', false)
                 if (res.check()) {
-                    dispatch('saveCustomerInfo', { flag, data: res.data })
+                    await dispatch('saveCustomerInfo', res.data)
+                    if (flag) {
+                        await dispatch('_quote/setProductAllList', null, { root: true })
+                        dispatch('getCustomerEnything', res.data)
+                    }
                 }
                 return res
             })
         },
         // 保存用户信息
-        saveCustomerInfo ({ dispatch, commit, rootState }, { flag, data }) {
+        saveCustomerInfo ({ dispatch, commit, rootState }, data) {
             // 优先将子账户列表处理成map格式
             const accountList = data.accountList || []
             const accountMap = {}
@@ -203,19 +209,17 @@ export default {
                 onlineService += `&userid=${customerNo}&name=${customerName}`
                 commit('_base/UPDATE_wpCompanyInfo', { onlineService }, { root: true })
             }
-
-            if (flag) {
-                return Promise.resolve().then(() => {
-                    if (data.optional === 1) return dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
-                    else return null
-                }).then(() => {
-                    return dispatch('_quote/setProductAllList', null, { root: true })
-                }).then(productAllList => {
-                    return dispatch('_quote/querySymbolBaseInfoList', productAllList, { root: true })
-                }).then(() => {
-                    if (data.optional === 0) dispatch('addCustomerOptionalDefault') // 如果没有添加过自选，拿到产品精简信息后添加自选，因为添加自选需要拿到 symbolId, symbolCode, symbolName
-                })
-            }
+        },
+        // 更新用户、产品相关的周边信息
+        getCustomerEnything ({ dispatch, commit, rootState }, data) {
+            return Promise.resolve().then(() => {
+                if (data.optional === 1) return dispatch('queryCustomerOptionalList') // 如果添加过自选可以直接拉取自选列表，快速显示界面
+                else return null
+            }).then(() => {
+                return dispatch('_quote/querySymbolBaseInfoList', null, { root: true })
+            }).then(() => {
+                if (data.optional === 0) dispatch('addCustomerOptionalDefault') // 如果没有添加过自选，拿到产品精简信息后添加自选，因为添加自选需要拿到 symbolId, symbolCode, symbolName
+            })
         },
         logout ({ dispatch, commit, state, rootState }, params = {}) {
             return logout().then(res => {

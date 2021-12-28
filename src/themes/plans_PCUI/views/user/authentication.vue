@@ -27,15 +27,18 @@
                                     {{ $t('auth.executeAuth', [kycMap[item.preLevelObj.levelCode]]) }}
                                 </span>
                             </div>
-                            <div v-else>
-                                <van-button plain round size='small' @click='handleNext(item)'>
+                            <div v-else class='btn'>
+                                <van-button v-if='[0,3].includes(Number(item.status))' plain round size='small' @click='handleNext(item)'>
                                     <template #default>
-                                        <span class='btn-text'>
+                                        <span class='unverified' @click='handleNext(item)'>
                                             {{ kycAuditStatus[item.status] }}
+                                            <van-icon :color='style.fallColor' name='arrow' />
                                         </span>
-                                        <van-icon :color='style.color' name='arrow' />
                                     </template>
                                 </van-button>
+                                <span v-else class='state'>
+                                    {{ kycAuditStatus[item.status] }}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -190,6 +193,21 @@ export default {
             .notice {
                 color: var(--minorColor);
                 font-size: rem(24px);
+            }
+        }
+        .btn{
+            :deep(.van-button){
+                background: var(--primaryAssistColor);
+            }
+            .unverified{
+                color: var(--fallColor);
+            }
+            .state{
+                color: var(--minorColor);
+                font-size: rem(24px);
+            }
+            .van-icon-arrow{
+                vertical-align: -1px !important;
             }
         }
     }

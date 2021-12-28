@@ -1,6 +1,6 @@
 <template>
     <centerViewDialog>
-        <div>
+        <div class='registerAuthCondition'>
             <Top
                 back
                 left-icon='arrow-left'
@@ -56,5 +56,9 @@ export default {
 .notice {
     margin-bottom: rem(20px);
     padding-left: rem(30px);
+}
+.registerAuthCondition{
+    height: 100%;
+    overflow: auto;
 }
 </style>
