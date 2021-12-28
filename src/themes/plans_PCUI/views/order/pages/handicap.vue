@@ -178,6 +178,7 @@ export default {
 
         // 最新成交价
         const lastPrice = computed(() => store.state._quote.dealList[0]?.price)
+        const deallist = computed(() => store.state._quote.dealList)
         // 计算报价小数位档数
         const digitLevelList = computed(() => {
             const digits = []
@@ -206,7 +207,8 @@ export default {
             digitLevelList,
             handicapResult,
             product,
-            handicapDigit
+            handicapDigit,
+            deallist
         }
     }
 }
