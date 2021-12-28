@@ -284,7 +284,7 @@ export default {
         background: #FEF6F7;
         color: var(--warn);
         background: rgba(183, 33, 34, 0.05);
-        border: 2px solid var(--warn);
+        border: 1px solid var(--warn);
         border-radius: 6px;
         padding:rem(40px);
         text-align: center;

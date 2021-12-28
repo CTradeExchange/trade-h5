@@ -545,7 +545,7 @@ export default {
             display: inline-block;
             height: 24px;
             color: var(--color);
-            background: var(--primaryAssistColor);
+            background: var(--assistColor);
             padding: 0 rem(16px);
             border-radius: 4px;
             margin-right: rem(24px);

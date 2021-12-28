@@ -90,13 +90,31 @@ const h5Children = [
         component: () => import(/* webpackChunkName: "chooseAccount" */ '../views/chooseAccount/chooseAccount.vue'),
         meta: {
             title: 'cRoute.chooseCurrency',
+            roles: ['User']
         }
     },
     {
-        path: 'deposit', // 入金
+        path: 'depositChoose', // 选择充值方式
+        component: () => import(/* webpackChunkName: "deposit" */ '../views/deposit/choose.vue'),
+        meta: {
+            title: 'cRoute.deposit',
+            roles: ['User']
+        }
+    },
+    {
+        path: 'depositDirect', // 直充
+        component: () => import(/* webpackChunkName: "deposit" */ '../views/deposit/direct.vue'),
+        meta: {
+            title: 'cRoute.deposit',
+            roles: ['User']
+        }
+    },
+    {
+        path: 'deposit', // 汇兑
         component: () => import(/* webpackChunkName: "deposit" */ '../views/deposit/deposit.vue'),
         meta: {
             title: 'cRoute.deposit',
+            roles: ['User']
         }
     },
     {
@@ -104,6 +122,7 @@ const h5Children = [
         component: () => import(/* webpackChunkName: "deposit" */ '../views/deposit/depositRecord.vue'),
         meta: {
             title: 'cRoute.depositRecord',
+            roles: ['User']
         }
     },
     {
@@ -111,6 +130,7 @@ const h5Children = [
         component: () => import(/* webpackChunkName: "deposit" */ '../views/deposit/depositCb.vue'),
         meta: {
             title: 'cRoute.despositCb',
+            roles: ['User']
         }
     },
     {
@@ -118,6 +138,7 @@ const h5Children = [
         component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdrawAccount/withdrawAccount.vue'),
         meta: {
             title: 'cRoute.withdrawAccount',
+            roles: ['User']
         }
     },
     {
@@ -125,6 +146,7 @@ const h5Children = [
         component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdrawAccount/withdrawRecord.vue'),
         meta: {
             title: 'cRoute.withdrawRecord',
+            roles: ['User']
         }
     },
     {
@@ -132,6 +154,7 @@ const h5Children = [
         component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdrawAccount/withdraw.vue'),
         meta: {
             title: 'cRoute.withdraw',
+            roles: ['User']
         }
     },
     {
@@ -146,6 +169,7 @@ const h5Children = [
         component: () => import(/* webpackChunkName: "Bank" */ '../views/wallet/walletAdd.vue'),
         meta: {
             title: 'cRoute.walletAdd',
+            roles: ['User']
         }
     },
     // {
@@ -160,6 +184,7 @@ const h5Children = [
         component: () => import(/* webpackChunkName: "loan" */ '../views/loan/loan.vue'),
         meta: {
             title: 'route.loan',
+            roles: ['User']
         }
     },
     {
@@ -167,6 +192,7 @@ const h5Children = [
         component: () => import(/* webpackChunkName: "returnMoney" */ '../views/returnMoney/returnMoney.vue'),
         meta: {
             title: 'route.returnMoney',
+            roles: ['User']
         }
     },
     {
@@ -174,6 +200,7 @@ const h5Children = [
         component: () => import(/* webpackChunkName: "returnMoney" */ '../views/record/record.vue'),
         meta: {
             title: 'route.records',
+            roles: ['User']
         }
     },
     {

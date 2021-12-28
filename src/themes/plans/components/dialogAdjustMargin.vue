@@ -1,25 +1,19 @@
 <template>
     <van-popup
         v-model:show='showDialog'
-        class='m-dialogAdjust'
+        class='m-dialogAdjust custom-popup'
         :duration='0.2'
         position='bottom'
+        round
         teleport='body'
         :transition-appear='true'
         @closed='closed'
     >
-        <div class='dialog-header'>
-            <div class='title'>
-                <p class='productName'>
-                    {{ data.symbolName }}
-                </p>
-                <p class='lot'>
-                    {{ data.symbolCode }}
-                </p>
+        <div class='header'>
+            <div class='header-title'>
+                {{ data?.symbolName }}
             </div>
-            <div class='right' @click='closeHandler'>
-                <i class='icon_guanbi'></i>
-            </div>
+            <i class='icon_guanbi' @click='$emit("update:show",false)'></i>
         </div>
 
         <div class='dialog-body'>
@@ -226,7 +220,7 @@ export default {
 }
 .dialog-footer {
     width: 100%;
-    padding: rem(30px);
+    padding: rem(30px) 0;
     .pcHandler {
         color: #FFF;
         background: var(--primary);
@@ -236,11 +230,9 @@ export default {
 }
 .m-dialogAdjust {
     z-index: 1000;
-    height: rem(500px);
     overflow: visible;
     .dialog-body {
-        flex: 1;
-        padding: 0 rem(30px);
+        flex: none;
         .title {
             margin: 0 0 rem(30px) 0;
             color: var(--normalColor);
@@ -297,7 +289,6 @@ export default {
     z-index: 1000;
     display: flex;
     flex-flow: column;
-    height: rem(480px);
     overflow: visible;
     background-color: var(--contentColor);
 }

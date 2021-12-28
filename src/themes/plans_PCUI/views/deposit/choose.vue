@@ -1,102 +1,107 @@
 <template>
-    <div class='page-wrap'>
-        <!-- 头部导航栏 -->
-        <LayoutTop
-            :custom-style='{
-                "background": $style.bgColor
-            }'
-            :title='$t("trade.desposit")'
-        />
-        <!-- 页面加载状态 -->
-        <Loading :show='loading' />
-        <!-- 页面内容 -->
-        <div class='page-content'>
-            <!-- 资产账户 -->
-            <div class='asset-account'>
-                <h3 class='title'>
-                    {{ $t('deposit.assetAccount') }}
-                </h3>
-                <div class='action-bar' @click='pickerShow = true'>
-                    <div v-if='accountInfo' class='left'>
-                        <img alt='' class='icon' :src='getCurrencyIcon(accountInfo.currency)' srcset='' />
-                        <div class='name'>
-                            <p class='t1'>
-                                {{ accountInfo?.currency }}
-                            </p>
-                            <p class='t2'>
-                                {{ accountInfo?.fullName }}
-                            </p>
+    <centerViewDialog>
+        <div class='page-wrap'>
+            <!-- 头部导航栏 -->
+            <LayoutTop
+                :custom-style='{
+                    "background": $style.bgColor
+                }'
+                :title='$t("trade.desposit")'
+            />
+            <!-- 页面加载状态 -->
+            <Loading :show='loading' />
+            <!-- 页面内容 -->
+            <div class='page-content'>
+                <!-- 资产账户 -->
+                <div class='asset-account'>
+                    <h3 class='title'>
+                        {{ $t('deposit.assetAccount') }}
+                    </h3>
+                    <div class='asset-select'>
+                        <div class='action-bar' @click='pickerShow = !pickerShow'>
+                            <div v-if='accountInfo' class='left'>
+                                <img alt='' class='icon' :src='getCurrencyIcon(accountInfo.currency)' srcset='' />
+                                <div class='name'>
+                                    <p class='t1'>
+                                        {{ accountInfo?.currency }}
+                                    </p>
+                                    <p class='t2'>
+                                        {{ accountInfo?.fullName }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div v-else class='left'>
+                                <img alt='' class='icon' src='@/assets/currency_icon/all.png' srcset='' />
+                                <div class='name'>
+                                    <p class='t1'>
+                                        {{ $t('deposit.chooseCurrency') }}
+                                    </p>
+                                </div>
+                            </div>
+                            <van-icon name='arrow' />
                         </div>
-                    </div>
-                    <div v-else class='left'>
-                        <img alt='' class='icon' src='@/assets/currency_icon/all.png' srcset='' />
-                        <div class='name'>
-                            <p class='t1'>
-                                {{ $t('deposit.chooseCurrency') }}
-                            </p>
-                        </div>
-                    </div>
 
-                    <van-icon name='arrow' />
+                        <!-- 资产列表 -->
+                        <assetsList
+                            v-if='pickerShow'
+                            :currency='accountInfo?.currency'
+                            :show='pickerShow'
+                            :trade-type='tradeType'
+                            @update:currency='onCurrencyConfirm'
+                            @update:show='updatePopupVis'
+                        />
+                    </div>
+                </div>
+                <!-- 充值操作 -->
+                <div class='recharge-handle'>
+                    <h3 class='title'>
+                        {{ $t('deposit.rechargeWay') }}
+                    </h3>
+                    <div class='recharge-way'>
+                        <div :class="['item', { 'active': way === 1, 'disable': disable || directDisable }]" @click='switchDirect'>
+                            <div class='check'>
+                                <van-icon color='#fff' name='success' />
+                            </div>
+                            <i class='icon icon_zhichong'></i>
+                            <div class='text'>
+                                <span class='name'>
+                                    {{ $t('deposit.direct') }}
+                                </span>
+                                <span class='des'>
+                                    {{ $t('deposit.directDes') }}
+                                </span>
+                            </div>
+                        </div>
+                        <div :class="['item', { 'active': way === 2, 'disable': disable || exchangeDisable }]" @click='switchExchange'>
+                            <div class='check'>
+                                <van-icon color='#fff' name='success' />
+                            </div>
+                            <i class='icon icon_huidui'></i>
+                            <div class='text'>
+                                <span class='name'>
+                                    {{ $t('deposit.exchange') }}
+                                </span>
+                                <span class='des'>
+                                    {{ $t('deposit.exchangeDes') }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <!-- 充值操作 -->
-            <div class='recharge-handle'>
-                <h3 class='title'>
-                    {{ $t('deposit.rechargeWay') }}
-                </h3>
-                <div class='recharge-way'>
-                    <div :class="['item', { 'active': way === 1, 'disable': disable || directDisable }]" @click='switchDirect'>
-                        <div class='check'>
-                            <van-icon color='#fff' name='success' />
-                        </div>
-                        <i class='icon icon_zhichong'></i>
-                        <div class='text'>
-                            <span class='name'>
-                                {{ $t('deposit.direct') }}
-                            </span>
-                            <span class='des'>
-                                {{ $t('deposit.directDes') }}
-                            </span>
-                        </div>
-                    </div>
-                    <div :class="['item', { 'active': way === 2, 'disable': disable || exchangeDisable }]" @click='switchExchange'>
-                        <div class='check'>
-                            <van-icon color='#fff' name='success' />
-                        </div>
-                        <i class='icon icon_huidui'></i>
-                        <div class='text'>
-                            <span class='name'>
-                                {{ $t('deposit.exchange') }}
-                            </span>
-                            <span class='des'>
-                                {{ $t('deposit.exchangeDes') }}
-                            </span>
-                        </div>
-                    </div>
+            <div class='btn-wrap'>
+                <div :class="['recharge-btn', { 'disable': disable }]" @click='goRecharge'>
+                    <span>{{ $t('deposit.immediateRecharge') }}</span>
+                    <van-icon class='arrow' name='arrow' />
                 </div>
             </div>
         </div>
-        <div class='btn-wrap'>
-            <div :class="['recharge-btn', { 'disable': disable }]" @click='goRecharge'>
-                <span>{{ $t('deposit.immediateRecharge') }}</span>
-                <van-icon class='arrow' name='arrow' />
-            </div>
-        </div>
-    </div>
-
-    <!-- 资产列表 -->
-    <assetsList
-        v-if='pickerShow'
-        :currency='accountInfo?.currency'
-        :show='pickerShow'
-        :trade-type='tradeType'
-        @update:currency='onCurrencyConfirm'
-        @update:show='updatePopupVis'
-    />
+    </centerViewDialog>
 </template>
 
 <script>
+import centerViewDialog from '@planspc/layout/centerViewDialog'
+import assetsList from './components/assetsList/assetsList'
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
@@ -104,9 +109,9 @@ import { useI18n } from 'vue-i18n'
 import { queryPayType } from '@/api/user'
 import { localSet } from '@/utils/util'
 import { Toast, Dialog } from 'vant'
-import assetsList from '@/themeCommon/components/assetsList/assetsList.vue'
 export default {
     components: {
+        centerViewDialog,
         assetsList
     },
     setup () {
@@ -209,7 +214,7 @@ export default {
                 case 1:
                     localSet('paymentInfo', JSON.stringify(state.paymentInfo))
                     router.push({
-                        path: '/depositDirect',
+                        path: '/assets/depositDirect',
                         query: {
                             currency: state.accountInfo.currency,
                             paymentCode: state.paymentInfo.paymentCode
@@ -219,7 +224,7 @@ export default {
                 // 跳转到汇兑页面
                 case 2:
                     router.push({
-                        path: '/deposit',
+                        path: '/assets/deposit',
                         query: {
                             tradeType: state.tradeType,
                             currency: state.accountInfo.currency,
@@ -276,11 +281,9 @@ export default {
     overflow-y: auto;
     position: relative;
     padding: 0 rem(30px);
-
 }
 // 资产账户
 .asset-account {
-
     margin-top: rem(30px);
     .title {
         line-height: 1;
@@ -289,7 +292,11 @@ export default {
         font-weight: normal;
         color: var(--color);
     }
-    .action-bar{
+    .asset-select {
+        position: relative;
+        z-index: 100;
+    }
+    .action-bar {
         background: var(--contentColor);
         margin-bottom: rem(80px);
         border-radius: rem(10px);
@@ -299,6 +306,7 @@ export default {
         align-items: center;
         justify-content: space-between;
         color: var(--color);
+        cursor: pointer;
         .left{
             display: flex;
             align-items: center;
@@ -402,6 +410,7 @@ export default {
             border: 1px solid transparent;
             border-radius: rem(10px);
             position: relative;
+            cursor: pointer;
             &:last-of-type {
                 margin-bottom: 0;
             }
@@ -466,6 +475,7 @@ export default {
         height: rem(80px);
         background: var(--primary);
         border-radius: rem(6px);
+        cursor: pointer;
         span {
             margin-right: rem(10px);
             font-size: rem(30px);

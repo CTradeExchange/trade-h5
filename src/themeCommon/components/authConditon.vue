@@ -211,7 +211,7 @@ export default {
                         if (!isEmpty(state.extendsMap[key]?.extend)) {
                             const valueReg = new RegExp(state.extendsMap[key].extend)
                             if (!valueReg.test(state.conditionModel[key])) {
-                                return Toast(`${state.extendsMap[key].name}` + t('register.incorrectlyFormed'))
+                                return Toast(`${state.extendsMap[key].name} ` + t('register.incorrectlyFormed'))
                             }
                         }
                         if (!isEmpty(state.conditionModel[key])) {

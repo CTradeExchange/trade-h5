@@ -1,9 +1,10 @@
 <template>
     <van-popup
         v-model:show='showCP'
-        class='m-dialogPC'
+        class='m-dialogPC custom-popup'
         :duration='0.2'
         position='bottom'
+        round
         teleport='body'
         :transition-appear='true'
         @closed='closed'
@@ -11,31 +12,22 @@
         <div v-if='!!closeVolumeWarn' class='floatTip'>
             {{ closeVolumeWarn }}
         </div>
-        <div class='dialog-header'>
-            <div class='title'>
-                <p class='productName'>
-                    {{ data.symbolName }}
-                </p><p class='lot'>
-                    {{ product.symbolCode }}
-                </p>
+        <div class='header'>
+            <div class='header-title'>
+                {{ data.symbolName }}
             </div>
-            <div class='right' @click='closeHandler'>
-                <i class='icon_guanbi'></i>
-            </div>
+            <i class='icon_guanbi' @click='$emit("update:show",false)'></i>
         </div>
         <div class='dialog-body'>
-            <div class='inputNumber'>
-                <div class='left'>
-                    <div class='name'>
-                        {{ $t('trade.hold') }}
-                    </div>
-                    <div class='val'>
-                        <span :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
-                            {{ Number(data.direction) === 1 ? $t('trade.buy') :$t('trade.sell') }}
-                        </span>
-                        {{ positionVolume }} {{ $t('trade.volumeUnit') }}
-                    </div>
+            <div class='left'>
+                <div class='val'>
+                    <span class='direction' :class="Number(data.direction) === 1 ? 'riseColor' : 'fallColor'">
+                        {{ Number(data.direction) === 1 ? $t('trade.buyShort') :$t('trade.sellShort') }}
+                    </span>
+                    {{ positionVolume }} {{ $t('trade.volumeUnit') }}
                 </div>
+            </div>
+            <div class='inputNumber'>
                 <div class='right'>
                     <div>
                         <div class='name'>
@@ -180,9 +172,6 @@ export default {
                 return false
             }
         })
-        const closeHandler = () => {
-            state.showCP = false
-        }
 
         const change = () => {}
 
@@ -277,7 +266,6 @@ export default {
         return {
             ...toRefs(state),
             fastBtns,
-            closeHandler,
             closed,
             volumeDigit,
             positionVolume,
@@ -339,7 +327,6 @@ export default {
 .pcBtns {
     display: flex;
     justify-content: space-evenly;
-    padding: 0 15px;
     .item {
         display: inline-block;
         width: rem(120px);
@@ -363,7 +350,7 @@ export default {
 }
 .dialog-footer {
     width: 100%;
-    padding: rem(30px);
+    padding: rem(30px) 0;
     .pcHandler {
         color: #FFF;
         background: var(--primary);
@@ -376,17 +363,16 @@ export default {
     z-index: 1000;
     overflow: visible;
     .dialog-body {
-        flex: 1;
+        flex: none;
         .inputNumber {
             position: relative;
-            display: flex;
             line-height: 1.45;
             align-items: center;
-            justify-content: space-between;
-            margin: 0 rem(30px) rem(40px) rem(30px);
+            margin-bottom: rem(50px);
             .title {
-                color: var(--minorColor);
+                color: var(--color);
                 font-size: rem(28px);
+                margin-bottom: rem(24px);
             }
             .tipNumber {
                 color: #666;
@@ -409,9 +395,7 @@ export default {
             .open-price {
                 color: var(--color);
             }
-            .left {
-                width: rem(300px);
-            }
+
             .right {
                 display: flex;
                 flex: 1;
@@ -429,6 +413,27 @@ export default {
                 }
             }
         }
+         .left {
+            width: rem(300px);
+            margin-bottom: rem(40px);
+            .direction{
+                display: inline-block;
+                height: rem(36px);
+                line-height: rem(40px);
+                border-radius: rem(6px);
+                color: #fff;
+                text-align: center;
+                padding: 0 rem(8px);
+                font-size: rem(24px);
+                margin-right: rem(10px);
+                &.riseColor{
+                    background: var(--riseColor);
+                }
+                &.fallColor{
+                    background: var(--fallColor);
+                }
+            }
+        }
         .info {
             margin: 0 rem(40px) rem(20px) rem(35px);
             color: #999;
@@ -443,7 +448,9 @@ export default {
             .val {
                 flex: 1;
                 text-align: right;
+
             }
+
         }
         .step-2 {
             padding-bottom: rem(60px);

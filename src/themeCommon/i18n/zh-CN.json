@@ -316,7 +316,8 @@
         "exchangeDes": "采用与资产账户不同的资产充值",
         "immediateRecharge": "立即充值",
 		"directTip": "请注意核对币种，其他币种转入此地址将无法找回",
-		"getAddress": "获取地址"
+		"getAddress": "获取地址",
+        "limit":"额度"
     },
     "fund": {
         "marginLevel": "保证金水平",
