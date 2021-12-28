@@ -7,7 +7,7 @@
 
         <div class='relativeFloor'>
             <!-- 产品模块 -->
-            <BannerProducts v-if='bannerProductsData' :data='bannerProductsData.data' @update='setProductKeys' />
+            <BannerProducts v-if='bannerProductsData' :data='bannerProductsData.data' />
             <!-- 公共模块 -->
             <HomeNotice v-if='homeNoticeData' :data='homeNoticeData.data' />
             <!-- 内容模块 -->
@@ -35,7 +35,7 @@ import FullBanner from '../../modules/fullBanner/fullBanner'
 import BannerProducts from '../../modules/bannerProducts/bannerProducts'
 import HomeNotice from '../../modules/homeNotice/homeNotice'
 
-import { reactive, toRefs, onMounted, onUnmounted, computed } from 'vue'
+import { reactive, toRefs, onMounted, onUnmounted, computed, watch } from 'vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useStore } from 'vuex'
 export default {
@@ -70,30 +70,21 @@ export default {
         const bannerProductsData = computed(() => state.pageModules.find(el => el.tag === 'bannerProducts'))
         const homeNoticeData = computed(() => state.pageModules.find(el => el.tag === 'homeNotice'))
         const pageModulesList = computed(() => state.pageModules.filter(el => ['homeNotice', 'bannerProducts', 'fullBanner'].indexOf(el.tag) === -1))
+        const subscribeList = computed(() => store.state.home.subscribeBannerList.concat(store.state.home.subscribeQuoteList))
 
         // 切换信息流
         const switchFlow = (num) => {
             state.currentFlow = num
         }
 
-        // 设置产品组件symbolKey
-        const setProductKeys = (keys) => {
-            state.productKeys = keys
-            sendSubscribe()
-        }
-
-        // 设置交易组件symbolKey
-        const setTradeKeys = (keys) => {
-            state.tradeKeys = keys
-            sendSubscribe()
-        }
-
         // 发送行情订阅
-        const sendSubscribe = () => {
-            const arr = state.productKeys.concat(state.tradeKeys)
-            state.allProductKeys = [...new Set(arr)]
-            QuoteSocket.send_subscribe(state.allProductKeys)
-        }
+        watch(
+            () => subscribeList.value,
+            (newval, oldval) => {
+                QuoteSocket.send_subscribe(newval)
+            },
+            { immediate: true }
+        )
 
         // 获取首页配置
         store.dispatch('_base/getPageConfig', 'Home').then(res => {
@@ -103,9 +94,6 @@ export default {
 
         // 发送行情订阅
         onMounted(() => {
-            if (state.allProductKeys.length > 0) {
-                sendSubscribe()
-            }
             // 头部固定
             const headerEl = document.querySelector('.header-nav')
             if (headerEl) headerEl.classList.add('fixedHeader')
@@ -125,8 +113,6 @@ export default {
             homeNoticeData,
             bannerProductsData,
             switchFlow,
-            setProductKeys,
-            setTradeKeys
         }
     }
 }

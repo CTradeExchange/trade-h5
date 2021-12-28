@@ -20,12 +20,12 @@
         />
         <div class='toSysSetting'>
             <router-link :to="{ name: 'Setting' }">
-                {{$t('install.label1')}}
+                {{ $t('install.label1') }}
             </router-link>
         </div>
         <div v-if="type == 'uploadFile'" class='inputFile'>
             <div class='title'>
-                {{$t('install.label2')}}
+                {{ $t('install.label2') }}
             </div>
             <el-upload
                 accept='.xlsx, .xls'
@@ -39,10 +39,10 @@
             >
                 <i class='el-icon-upload'></i>
                 <div class='el-upload__text'>
-                    {{$t('install.label3')}}
+                    {{ $t('install.label3') }}
                 </div>
                 <div class='el-upload__text'>
-                    {{$t('install.label4')}}<em>{{$t('install.label5')}}</em>
+                    {{ $t('install.label4') }}<em>{{ $t('install.label5') }}</em>
                 </div>
             </el-upload>
         </div>
@@ -356,7 +356,7 @@ export default {
                 page_code: 'SysSetting',
                 title: this.$t('install.label41'),
                 type: 'setup',
-                other: JSON.stringify({ apiKey: data.apiKey, apiId: data.apiId, apiUrl: data.apiUrl, h5Address: data.h5Address, h5PreviewAddress: data.h5PreviewAddress, isInitSymbol: data.isInitSymbol + '', apiService: data.apiService, quoteService: data.quoteService, msgService: data.msgService, tradeService: data.tradeService, btKey: data.btKey, btUrl: data.btUrl, adminDomain: data.adminDomain, forwarDomain: data.forwarDomain }),
+                other: JSON.stringify({ apiKey: data.apiKey, apiId: data.apiId, apiUrl: data.apiUrl, h5Address: data.h5Address, h5PreviewAddress: data.h5PreviewAddress, isInitSymbol: data.isInitSymbol + '', apiService: data.apiService, quoteService: data.quoteService, msgService: data.msgService, tradeService: data.tradeService, btKey: data.btKey, btUrl: data.btUrl, adminDomain: data.adminDomain, forwardDomain: data.forwardDomain }),
                 content: JSON.stringify(Object.assign(copyData, { marginLevel: { marginLess: data.marginLess, marginWarn: data.marginWarn } }))
             }
             const _id = 1

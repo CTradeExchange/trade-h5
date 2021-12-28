@@ -21,13 +21,15 @@ export default {
 @import '@/sass/mixin.scss';
 .bindMobilePage {
     line-height: 50px;
-        .authentication{
-                :deep{
-        .page-wrap{
-            padding-top:10px;
+    .authentication {
+        :deep {
+            .page-wrap {
+                padding-top: 10px;
+            }
         }
     }
-        }
-
+    .authForm{
+        height: 100%;
+    }
 }
 </style>

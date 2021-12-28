@@ -108,6 +108,7 @@ export default {
                 symbolId: row.symbolId,
                 tradeType: row.tradeType
             })
+
             state.data = row
             state.stopLossPrice = ''
             state.stopProfitPrice = ''
@@ -154,6 +155,7 @@ export default {
                     queryPositionList()
                     Toast(t('trade.modifySuccess'))
                     state.show = false
+                    store.commit('Update_stopLossPprofitProductID', '')
                 } else {
                     Toast(res.msg)
                 }

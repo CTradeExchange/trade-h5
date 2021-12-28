@@ -85,7 +85,7 @@
             </div>
             <div class='assetItem riskRate '>
                 <p></p>
-                <p class='amount riskLevel' :class='["riskLevel" + assetsInfo.riskLevel]'>
+                <p class='riskLevel' :class='["riskLevel" + assetsInfo.riskLevel]'>
                     {{ riskLevelMap[assetsInfo.riskLevel] }}
                 </p>
             </div>
@@ -272,7 +272,7 @@ export default {
     position: relative;
     padding-left: rem(25px);
     margin-left: rem(10px);
-    font-size: rem(22px);
+    font-size: rem(28px);
     &::before{
         content: '';
         display: block;

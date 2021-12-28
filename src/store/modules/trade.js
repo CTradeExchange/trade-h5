@@ -49,6 +49,7 @@ export default {
         },
         // 市价、持仓止盈止损范围
         marketProfitLossRang (state, getters, rootState, rootGetters) {
+            console.log('aaaaaaaaaaa=', getters.product.symbolId, getters.product.tradeType)
             const product = rootGetters.stopLossPprofitProduct || getters.product
             if (!product) return EmptyProfitLossRang
             const curPosition = state.positionMap[state.modifyPositionId] // 当前修改的持仓

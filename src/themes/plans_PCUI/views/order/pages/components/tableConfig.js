@@ -572,7 +572,7 @@ export const getTransactionColumns = (tradeType) => {
             {
                 name: t('trade.orderType'),
                 align: 'right',
-                width: 100,
+                width: 120,
                 formatter: (row, column, cellValue, index, rawResponse) => {
                     return rawResponse.bizTypeText[row.bizType]
                 }
@@ -582,7 +582,7 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('transRecords.byAmount'),
                 prop: 'numberStatisticMode',
                 align: 'right',
-                mminWidth: 150,
+                width: 140,
                 formatter: row => numberStatisticModeMap[row.numberStatisticMode]
             },
             {
@@ -644,7 +644,7 @@ export const getTransactionColumns = (tradeType) => {
             {
                 name: t('trade.orderType'),
                 align: 'right',
-                minWidth: 100,
+                minWidth: 120,
                 formatter: (row, column, cellValue, index, rawResponse) => {
                     return rawResponse.bizTypeText[row.bizType]
                 }
@@ -730,7 +730,6 @@ export const getAssetColumns = (tradeType) => {
     // 杠杆倍数弹窗
     const openMultipleSet = (row, multipleSet) => {
         if (Number(row.marginSetType) === 2) { unref(multipleSet).open(row) }
-        // row.crossLevelNum
     }
 
     // 跳转到借款页面
@@ -880,15 +879,16 @@ export const getAssetColumns = (tradeType) => {
                     default: ({ row, onGetComponentRefs }) => {
                         const refs = onGetComponentRefs()
                         return (
-                            <>
 
+                            <>
                                 {row.symbolName}
-                                <span class='multipleVal' onclick={
+                                { row.crossLevelNum ? <span class='multipleVal' onclick={
                                     openMultipleSet.bind(null, row, refs.multipleSet)
                                 }>
                                     <i>{ row.crossLevelNum }x</i>
                                     {Number(row.marginSetType) === 2 ? <i class='icon_icon_arrow'></i> : ''}
-                                </span>
+                                </span> : '' }
+
                             </>
                         )
                     }

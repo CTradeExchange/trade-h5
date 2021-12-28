@@ -668,7 +668,7 @@ export default {
             mobileComponents = await mobileComponentsConfig()
             
             mobileComponents.forEach(item => {
-                item.title = t('plans.'+item.title);
+                item.title = t('plans.'+item.tag);
                 item.config.forEach(el=>{
                     if(el.name=="src"||el.name=="href"){
                         el.label = t('plans.commonConfig.'+el.name)

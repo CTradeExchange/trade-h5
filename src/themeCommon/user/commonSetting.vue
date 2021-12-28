@@ -1,5 +1,5 @@
 <template>
-    <LayoutTop :back='true' :menu='false' :title='$t("route.mine")' />
+    <LayoutTop :custom-back='true' :menu='false' :title='$t("route.mine")' @back='back' />
     <div class='page-wrap'>
         <p class='header'>
             {{ $t('cRoute.commonSetting') }}
@@ -141,7 +141,7 @@ export default {
             themeVal: localGet('invertColor') === 'night',
             langShow: false,
             colorShow: false,
-            chartVal: JSON.parse(localGet('chartConfig'))?.chartColorType || '1',
+            chartVal: JSON.parse(localGet('chartConfig'))?.chartColorType.toString() || '1',
             lang: getCookie('lang') || store.state._base.wpCompanyInfo.language,
         })
 

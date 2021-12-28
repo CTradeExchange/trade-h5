@@ -793,14 +793,17 @@ export default {
         const initChartData = () => {
             const invertColor = localGet('invertColor')
             const locale = getCookie('lang') === 'zh-CN' ? 'zh' : 'en'
-            if (isEmpty(locChartConfig)) {
+            if (isEmpty(locChartConfig) || locChartConfig.chartColorType) {
                 localSetChartConfig('showLastPrice', false)
                 localSetChartConfig('mainStudy', JSON.stringify(MAINSTUDIES[0]))
                 localSetChartConfig('subStudy', JSON.stringify(SUBSTUDIES[0]))
                 localSetChartConfig('resolution', 1)
                 localSetChartConfig('lineSetList', [])
                 localSetChartConfig('chartType', 1)
-                localSetChartConfig('chartColorType', 1)
+                if (isEmpty(locChartConfig?.chartColorType)) {
+                    localSetChartConfig('chartColorType', '1')
+                }
+
                 localSetChartConfig('upColor', style.value.riseColor)
                 localSetChartConfig('downColor', style.value.fallColor)
                 // 默认选中现价线

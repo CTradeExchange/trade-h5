@@ -238,6 +238,7 @@ export default {
     }
     .body{
         padding: rem(10px) 0 rem(30px);
+        text-align: center;
     }
     .stepper{
         background: var(--bgColor);
