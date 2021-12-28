@@ -12,6 +12,7 @@
 	"reInput": "Re-enter",
 	"examineMore": "More",
 	"loadMore": "Load more",
+    "fee": "Fee",
 	"compLang": {
 		"confirm": "Confirm",
 		"OK": "OK",
@@ -145,7 +146,8 @@
 		"yearAgo": "years ago",
 		"focusNews":"News",
 		"newsFlash":"7x24",
-		"calendar":"Calendar"
+		"calendar":"Calendar",
+        "custom": "custom"
 	},
 	"header": {
 		"quote": "Quote",
@@ -674,6 +676,12 @@
 		"6": "Saturday",
 		"7": "Sunday"
 	},
+    "kycAuditStatus": {
+        "0": "Unverified",
+        "1": "To be reviewed",
+        "2": "Verified",
+        "3": "Not verified"
+    },
 	"assets": {
         "accountAssets": "Account asset",
 		"asset": "Asset",
