@@ -194,6 +194,7 @@ import { useI18n } from 'vue-i18n'
 // api
 import {
     queryWithdrawConfig,
+    getWithdrawCurrencyList,
     getCoinWithdrawCurrencyList,
     checkKycApply,
     getWalletAddressList,
@@ -542,7 +543,7 @@ export default {
 
         // 获取客户提币币种和链名称
         const queryWithdrawCurrencyList = (resolve) => {
-            getCoinWithdrawCurrencyList({
+            getWithdrawCurrencyList({
                 companyId: customInfo.companyId,
                 customerNo: customInfo.customerNo,
                 customerGroupId: customInfo.customerGroupId,
