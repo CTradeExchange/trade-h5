@@ -46,13 +46,18 @@ export default {
         const store = useStore()
         const router = useRouter()
         // 产品map数据
-        const productMap = unref(computed(() => store.state._quote.productMap))
+        const productMap = computed(() => store.state._quote.productMap)
         const customerGroupId = computed(() => store.getters.customerGroupId)
         const symbolKeys = Object.entries(props.data.product || {}).map(([tradeType, item]) => {
             const list = item[customerGroupId.value] || []
             return list.map(symbolId => `${symbolId}_${tradeType}`)
-        }).flat()
-        const products = symbolKeys.map(symbolKey => productMap[symbolKey]).filter(el => el).slice(0, 5)
+        }).flat().slice(0, 5)
+        const products = computed(() => {
+            let resultList = []
+            resultList = symbolKeys.map(symbolKey => productMap.value[symbolKey]).filter(el => el)
+            return resultList
+        })
+        console.log(products)
 
         // 跳转到下单页面
         const goOrder = (item) => {
@@ -64,8 +69,7 @@ export default {
                 }
             })
         }
-
-        context.emit('update', symbolKeys)
+        store.commit('home/Update_subscribeBannerList', symbolKeys)
 
         return {
             products,

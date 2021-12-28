@@ -53,7 +53,7 @@
         </van-button>
     </div>
 
-    <van-popup v-model:show='showPicker' position='bottom' round>
+    <van-popup v-model:show='showPicker' class='actionsheetCenter' position='bottom' round>
         <van-picker
             :columns='columns'
             :columns-field-names='columnsFields'
