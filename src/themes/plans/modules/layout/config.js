@@ -36,8 +36,17 @@ export default {
                     type: 'Input',
                     default: '默认文字'
                 },
-                ...img,
-
+                {
+                    name: 'src',
+                    label: '图片地址',
+                    type: 'File',
+                    default: ''
+                },
+                {
+                    name: 'href',
+                    label: '跳转地址',
+                    type: 'Href'
+                }
             ]
         },
     ]

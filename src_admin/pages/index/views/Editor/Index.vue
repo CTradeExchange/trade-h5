@@ -666,15 +666,34 @@ export default {
 
         onMounted(async () => {
             mobileComponents = await mobileComponentsConfig()
-            
             mobileComponents.forEach(item => {
-                item.title = t('plans.'+item.tag);
+                let frontStr = '';
+                if(process.env.VUE_APP_theme === 'plans_PCUI'){
+                    frontStr = "pcui."
+                }else{
+                    frontStr = "plans."
+                }
+                
+                item.title = t(frontStr+item.tag);
                 item.config.forEach(el=>{
                     if(el.name=="src"||el.name=="href"){
-                        el.label = t('plans.commonConfig.'+el.name)
+                        el.label = t(frontStr+'commonConfig.'+el.name)
                     }else{
-                         el.label = t('plans.'+item.tag+'Config.'+el.name)
+                        el.label = t(frontStr+item.tag+'Config.'+el.name)
+                        //处理option
+                        if(el.options){
+                            el.options.forEach(option=>{
+                                option.label = t(frontStr+item.tag+'Config.'+el.name+'Config.'+option.value)
+                            })
+                        }
+                        //处理第二层config
+                        if(el.config){
+                            el.config.forEach(config=>{
+                                config.label = t(frontStr+item.tag+'Config.'+el.name+'Config.'+config.name)
+                            })
+                        }
                     }
+                    
                 })
             })
             state.previewApp = previewRender('#previewContainer',getCookie('lang'))
