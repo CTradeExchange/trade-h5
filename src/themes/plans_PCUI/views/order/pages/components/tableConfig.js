@@ -276,7 +276,7 @@ export const getPendingColumns = tradeType => {
                 name: t('transRecords.entrustedAmount'),
                 align: 'right',
                 minWidth: 150,
-                formatter: row => row.requestNum + (row.entryType === 2 ? row.accountCurrency : t('trade.volumeUnit'))
+                formatter: row => row.requestNum + row.accountCurrency
             },
             { name: t('trade.trustPrice'), prop: 'requestPrice', align: 'right' },
             {
