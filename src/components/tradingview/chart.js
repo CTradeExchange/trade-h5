@@ -624,6 +624,8 @@ class Chart {
 
         addList.forEach(e => {
             this.widget.activeChart().createStudy(e.name, ...e.params, {
+                'palettes.plot_0_Palette.colors.0.color': this.property.upColor, // 涨的颜色
+                'palettes.plot_0_Palette.colors.1.color': this.property.downColor, // 跌的颜色
                 precision: this.initial.digits
             }).then(id => {
                 // 更新指标实体
