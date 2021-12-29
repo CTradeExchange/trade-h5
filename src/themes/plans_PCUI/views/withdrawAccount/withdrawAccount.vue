@@ -1,7 +1,7 @@
 <template>
     <centerViewDialog>
         <div class='page-wrap'>
-            <LayoutTop icon="icon_icon_close_big" />
+            <LayoutTop icon='icon_icon_close_big' />
             <div class='page-content'>
                 <p class='head-text'>
                     {{ $t('withdraw.outAccount') }}
@@ -215,7 +215,6 @@ export default {
 
         }).then(res => {
             state.currencyList = res.data
-
             if (res.check() && res.data.list.length > 0) {
                 state.disabled = false
                 state.withdrawMap = res.data.map
@@ -225,10 +224,9 @@ export default {
                         withdrawMethod: el.withdrawMethod
                     }
                 })
-
                 state.inCurrency = res.data.list[0].currency
                 state.currentTab = res.data.list[0].withdrawMethod
-                console.log('inCurrencyList', state.inCurrencyList)
+                changeInCurrency(state.inCurrency)
             } else {
                 if (columns.value.length === 0 || state.inCurrencyList.length === 0) {
                     state.disabled = true

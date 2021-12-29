@@ -16,21 +16,21 @@
             </div>
 
             <div class='assets-btns'>
-                <div v-if='Number(tradeType) === 3' class='assets-item-btn' @click='toLoan'>
+                <!-- <div v-if='Number(tradeType) === 3' class='assets-item-btn' @click='toLoan'>
                     {{ $t('trade.loan') }}
-                </div>
-                <div v-else class='assets-item-btn' @click='toDesposit'>
+                </div> -->
+                <div v-if='Number(tradeType) === 5' class='assets-item-btn' @click='toDesposit'>
                     {{ $t('trade.desposit') }}
                 </div>
-                <div v-if='Number(tradeType) === 3' class='assets-item-btn' @click='toRepayment'>
+                <!-- <div v-if='Number(tradeType) === 3' class='assets-item-btn' @click='toRepayment'>
                     {{ $t('trade.repayment') }}
-                </div>
-                <div v-else class='assets-item-btn' @click='toWithdraw'>
+                </div> -->
+                <div v-if='Number(tradeType) === 5' class='assets-item-btn' @click='toWithdraw'>
                     {{ $t('trade.withdraw') }}
                 </div>
-                <div class='assets-item-btn' @click='toTransfer'>
+                <!-- <div class='assets-item-btn' @click='toTransfer'>
                     {{ $t('cRoute.transfer') }}
-                </div>
+                </div> -->
             </div>
         </div>
 

@@ -561,9 +561,9 @@ export function getWithdrawCurrencyList (data) {
 }
 
 /* 获取客户可用的钱包类提币币种和链名称列表 */
-export function getCoinWithdrawCurrencyList (data) {
+export function getAllWithdrawCurrencyList (data) {
     return request({
-        url: '/global/fund.app.WithdrawAppDubboService.getCoinWithdrawCurrencyList',
+        url: '/global/fund.app.WithdrawAppDubboService.getAllWithdrawCurrencyList',
         method: 'post',
         headers: {
             version: '0.0.1'

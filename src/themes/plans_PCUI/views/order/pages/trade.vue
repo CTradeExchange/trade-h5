@@ -32,6 +32,7 @@
             </div>
         </div>
     </div>
+    <!-- 杠杆设置 -->
     <MultipleSet
         v-if="product && product.tradeType===2 && product.marginInfo && product.marginInfo.type!=='1'"
         v-model='multipleSetVisible'
@@ -39,6 +40,7 @@
         :product='product'
     />
 
+    <!-- 借款 -->
     <LoanBar v-if='[3, 9].includes(product.tradeType)' v-model='operationType' :account='account' class='loanBarMargin' :product='product' />
 
     <div class='trade-wrap'>

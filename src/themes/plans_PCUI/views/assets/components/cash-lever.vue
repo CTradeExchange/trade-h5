@@ -30,9 +30,10 @@
                 </li>
             </ul>
             <div class='assets-handle'>
-                <button class='btn' @click='goLoan'>
+                <!-- 暂时屏蔽借款 -->
+                <!-- <button class='btn' @click='goLoan'>
                     {{ $t('trade.loan') }}
-                </button>
+                </button> -->
                 <button class='btn' @click='goRepayment'>
                     {{ $t('trade.repayment') }}
                 </button>
@@ -57,9 +58,9 @@
                 <el-table-column align='right' fixed='right' :label="$t('c.handle')" min-width='120'>
                     <template #default='scope'>
                         <div class='handle'>
-                            <button @click='goLoan(scope.row)'>
+                            <!-- <button @click='goLoan(scope.row)'>
                                 {{ $t('trade.loan') }}
-                            </button>
+                            </button> -->
                             <button @click='goRepayment(scope.row)'>
                                 {{ $t('trade.repayment') }}
                             </button>

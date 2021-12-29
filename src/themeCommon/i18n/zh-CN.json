@@ -16,8 +16,8 @@
         "withdraw": "提现",
         "coinRecord": "提币记录",
         "withdrawRecord": "提现记录",
-        "walletAddress": "钱包地址",
-        "walletAdd": "添加钱包地址",
+        "walletAddress": "提现地址",
+        "walletAdd": "添加提现地址",
         "addBank": "添加银行卡",
         "deposit": "充值",
         "depositRecord": "充值记录",
@@ -186,7 +186,8 @@
         "up": "涨",
         "symbolName": "产品名称",
         "symbolCode": "产品代码",
-		"warning": "警告"
+		"warning": "警告",
+        "pleaseComplete": "请完成"
     },
     "faceAuth": {
         "faceDetectTip": "请正对手机，保持光线充足",
@@ -689,9 +690,9 @@
         "predict": "预计到账",
         "minus": "账户减扣",
         "unit": "次",
-        "walletSelect": "请选择收币钱包地址",
+        "walletSelect": "请选择提现地址",
         "walletHint": "请确保收币地址币种链名称与提币币种链名称一致，否则将导致提币不到账",
-        "walletAdd": "添加钱包地址",
+        "walletAdd": "添加提现地址",
         "hint_1": "可取资金不足",
         "hint_2": "24小时内取款次数不超过",
         "hint_3": "提币数量不能大于可提数量",

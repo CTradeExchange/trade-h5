@@ -292,6 +292,8 @@ export default {
                 font-size: rem(24px);
             }
             .right-val {
+                display: flex;
+                justify-content: flex-end;
                 color: var(--color);
                 font-weight: bold;
                 text-align: right;
@@ -312,6 +314,7 @@ export default {
                 .copy-btn {
                     display: inline-block;
                     margin-left: rem(5px);
+                    flex: none;
                     img {
                         width: rem(40px);
                         vertical-align: middle;

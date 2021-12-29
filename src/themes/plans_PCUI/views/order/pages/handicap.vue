@@ -130,6 +130,8 @@ export default {
             () => [route.query, state.curDigit], (val, oval) => {
                 state.curDigit = val[1]
                 QuoteSocket.deal_subscribe(product.value?.symbolId, 5, state.curDigit, product.value?.tradeType, 20)
+                // 清除盘口数据
+                store.commit('_quote/Delete_dealList')
             }, {
                 immediate: true
             }
