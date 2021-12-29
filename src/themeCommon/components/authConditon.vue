@@ -39,7 +39,7 @@
                     <van-field
                         v-model='typeValue'
                         clickable
-                        :label='$t("register.certificateType")'
+                        :label='item.elementName'
                         :placeholder='$t("register.chooseCertificateType")'
                         readonly
                         @click='showPicker = true'
