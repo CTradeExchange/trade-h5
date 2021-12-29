@@ -199,9 +199,10 @@ export default {
                 commit('Update_positionLoading', false)
 
                 const productMap = rootState._quote.productMap
-                if (res.check() && res.data?.length) {
+                if (res.check()) {
                     // 持仓列表里面有wp未配置的产品，那么重新获取改产品的基础信息
-                    const emptyProducts = res.data.filter(el => {
+                    const list = res.data || []
+                    const emptyProducts = list.filter(el => {
                         const { symbolId, tradeType } = el
                         const symbolKey = `${symbolId}_${tradeType}`
                         if (productMap[symbolKey]) {
@@ -216,7 +217,7 @@ export default {
                     if (emptyProducts.length) {
                         commit('_quote/add_products', emptyProducts, { root: true })
                     }
-                    commit('Update_positionList', { tradeType, list: res.data })
+                    commit('Update_positionList', { tradeType, list })
                 }
                 return res
             })

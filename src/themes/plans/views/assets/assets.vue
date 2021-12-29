@@ -58,7 +58,8 @@ export default {
         const assetsSwipe = ref(null)
         const curIndex = ref(0)
         const state = reactive({
-            duration: 0
+            duration: 0,
+            alreadySub: false
         })
 
         // 获取账户列表
@@ -93,7 +94,9 @@ export default {
                 accountId
             }).then(res => {
                 if (res.check()) {
-                    sendSubscribe(res.data, tradeType)
+                    if (!state.alreadySub) {
+                        sendSubscribe(res.data)
+                    }
                 }
             }).catch(() => {
             }).finally(() => {
@@ -104,12 +107,13 @@ export default {
             })
         }
 
-        const sendSubscribe = (data, tradeType) => {
+        const sendSubscribe = (data) => {
+            console.log('dingyue-----------------')
             if (data.length > 0) {
                 const subscribList = data.map(el => {
                     return {
                         symbolId: el.symbolId,
-                        tradeType: tradeType
+                        tradeType: el.tradeType
                     }
                 })
                 QuoteSocket.send_subscribe(subscribList)
@@ -118,6 +122,7 @@ export default {
 
         // 点击tab事件
         const handleTradeType = (val) => {
+            state.alreadySub = false
             const curIndex = plans.value.findIndex(item => item.id === val)
             assetsSwipe.value.swipeTo(curIndex)
             store.commit('_quote/Update_tradeType', val)
@@ -146,8 +151,12 @@ export default {
         })
 
         // 持仓列表数据变化重新订阅
-        watch(() => positionList.value, newVal => {
-            sendSubscribe(newVal)
+        watch(() => positionList.value, (newVal, oldVal) => {
+            debugger
+            if (newVal.length > 0 && newVal.length !== oldVal.length) {
+                state.alreadySub = true
+                sendSubscribe(newVal)
+            }
         })
 
         onMounted(() => {

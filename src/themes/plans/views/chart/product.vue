@@ -793,6 +793,17 @@ export default {
         const initChartData = () => {
             const invertColor = localGet('invertColor')
             const locale = getCookie('lang') === 'zh-CN' ? 'zh' : 'en'
+
+            // 红 #ef5350  绿 #26a69a  chartColorType 1 绿涨红跌 2 红涨绿跌
+            let upColor, downColor
+            if (isEmpty(locChartConfig) || Number(locChartConfig?.chartColorType) === 1) {
+                upColor = '#26a69a'
+                downColor = '#ef5350'
+            } else {
+                upColor = '#ef5350'
+                downColor = '#26a69a'
+            }
+
             if (isEmpty(locChartConfig) || locChartConfig.chartColorType) {
                 localSetChartConfig('showLastPrice', false)
                 localSetChartConfig('mainStudy', JSON.stringify(MAINSTUDIES[0]))
@@ -804,8 +815,8 @@ export default {
                     localSetChartConfig('chartColorType', '1')
                 }
 
-                localSetChartConfig('upColor', style.value.riseColor)
-                localSetChartConfig('downColor', style.value.fallColor)
+                localSetChartConfig('upColor', upColor)
+                localSetChartConfig('downColor', downColor)
                 // 默认选中现价线
                 state.settingList = ['showLastPrice', 'stalls', 'deal']
 
@@ -819,7 +830,9 @@ export default {
                         showSeriesOHLC: true, // 高开低收
                         showBarChange: true, // 涨跌幅
                         chartType: '1', // 图表类型
-                        showSeriesTitle: false // K线标题
+                        showSeriesTitle: false, // K线标题
+                        upColor: upColor,
+                        downColor: downColor
                     },
                     indicators: [
                         {
@@ -865,8 +878,8 @@ export default {
                         showBarChange: true, // 涨跌幅
                         chartType: locChartConfig.chartType, // 图表类型
                         showSeriesTitle: false, // K线标题
-                        // upColor: style.value.riseColor,
-                        // downColor: style.value.fallColor
+                        upColor: upColor,
+                        downColor: downColor
 
                     },
                     indicators: [
