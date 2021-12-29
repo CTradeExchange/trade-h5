@@ -157,7 +157,7 @@ import { computed, onMounted, onUnmounted, reactive, toRefs } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { sessionSet , getCookie } from '@/utils/util'
+import { sessionSet, getCookie } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 let mobileComponents = null
 const pageBaseConfig = pageConfig || {}
@@ -666,37 +666,36 @@ export default {
 
         onMounted(async () => {
             mobileComponents = await mobileComponentsConfig()
-            mobileComponents.forEach(item => {
-                let frontStr = '';
-                if(process.env.VUE_APP_theme === 'plans_PCUI'){
-                    frontStr = "pcui."
-                }else{
-                    frontStr = "plans."
-                }
-                
-                item.title = t(frontStr+item.tag);
-                item.config.forEach(el=>{
-                    if(el.name=="src"||el.name=="href"){
-                        el.label = t(frontStr+'commonConfig.'+el.name)
-                    }else{
-                        el.label = t(frontStr+item.tag+'Config.'+el.name)
-                        //处理option
-                        if(el.options){
-                            el.options.forEach(option=>{
-                                option.label = t(frontStr+item.tag+'Config.'+el.name+'Config.'+option.value)
-                            })
-                        }
-                        //处理第二层config
-                        if(el.config){
-                            el.config.forEach(config=>{
-                                config.label = t(frontStr+item.tag+'Config.'+el.name+'Config.'+config.name)
-                            })
-                        }
-                    }
-                    
-                })
-            })
-            state.previewApp = previewRender('#previewContainer',getCookie('lang'))
+            // mobileComponents.forEach(item => {
+            //     let frontStr = ''
+            //     if (process.env.VUE_APP_theme === 'plans_PCUI') {
+            //         frontStr = 'pcui.'
+            //     } else {
+            //         frontStr = 'plans.'
+            //     }
+
+            //     item.title = t(frontStr + item.tag)
+            //     item.config.forEach(el => {
+            //         if (el.name == 'src' || el.name == 'href') {
+            //             el.label = t(frontStr + 'commonConfig.' + el.name)
+            //         } else {
+            //             el.label = t(frontStr + item.tag + 'Config.' + el.name)
+            //             // 处理option
+            //             if (el.options) {
+            //                 el.options.forEach(option => {
+            //                     option.label = t(frontStr + item.tag + 'Config.' + el.name + 'Config.' + option.value)
+            //                 })
+            //             }
+            //             // 处理第二层config
+            //             if (el.config) {
+            //                 el.config.forEach(config => {
+            //                     config.label = t(frontStr + item.tag + 'Config.' + el.name + 'Config.' + config.name)
+            //                 })
+            //             }
+            //         }
+            //     })
+            // })
+            state.previewApp = previewRender('#previewContainer', getCookie('lang'))
             handleGetPageConfig()
             showComp()
             await getSettingPageData()
