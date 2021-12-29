@@ -89,9 +89,9 @@
                     {{ riskLevelMap[assetsInfo.riskLevel] }}
                 </p>
             </div>
-            <van-button class='btn' type='primary' @click='goLoan'>
+            <!-- <van-button class='btn' type='primary' @click='goLoan'>
                 {{ $t('trade.loan') }}
-            </van-button>
+            </van-button> -->
             <van-button class='btn' type='primary' @click='goRepayment'>
                 {{ $t('trade.repayment') }}
             </van-button>
