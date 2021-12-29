@@ -52,7 +52,7 @@ if (isEmpty(localGet('invertColor'))) {
 }
 
 setRouter(router)
-setRootVariable(localGet('invertColor'))
+// setRootVariable(localGet('invertColor'))
 
 if (loginParams || token) store.commit('_user/Update_loginLoading', true)
 else if (location.search.includes('from=officialWebsite')) loginParams = getPreDemoAccountParams() // 从官网过来自动分配pre的Demo账号

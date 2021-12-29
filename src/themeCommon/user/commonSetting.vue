@@ -79,7 +79,11 @@
         <div class='popup-wrap'>
             <van-radio-group v-model='chartVal' @change='colorShow = false'>
                 <van-cell-group :border='false' inset>
-                    <van-cell class='popup-item' clickable @click='upDownColorSelect("1")'>
+                    <van-cell
+                        class='popup-item'
+                        clickable
+                        @click='upDownColorSelect("1")'
+                    >
                         <template #title>
                             <div class='left'>
                                 <span class='label'>
@@ -97,7 +101,11 @@
                             <van-radio name='1' />
                         </template>
                     </van-cell>
-                    <van-cell class='popup-item' clickable @click='upDownColorSelect("2")'>
+                    <van-cell
+                        class='popup-item'
+                        clickable
+                        @click='upDownColorSelect("2")'
+                    >
                         <template #title>
                             <div class='left'>
                                 <span class='label'>
@@ -283,10 +291,10 @@ export default {
                 vertical-align: middle;
             }
             .color-red{
-                color: var(--riseColor);
+                color: #B72122;
             }
             .color-green{
-                color: var(--fallColor);
+                color: #2B70AE;
             }
 
         }

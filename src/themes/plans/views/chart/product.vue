@@ -804,7 +804,7 @@ export default {
                 downColor = '#26a69a'
             }
 
-            if (isEmpty(locChartConfig) || locChartConfig.chartColorType) {
+            if (isEmpty(locChartConfig) || !locChartConfig.chartType) {
                 localSetChartConfig('showLastPrice', false)
                 localSetChartConfig('mainStudy', JSON.stringify(MAINSTUDIES[0]))
                 localSetChartConfig('subStudy', JSON.stringify(SUBSTUDIES[0]))
