@@ -186,7 +186,8 @@
         "up": "涨",
         "symbolName": "产品名称",
         "symbolCode": "产品代码",
-		"warning": "警告"
+		"warning": "警告",
+        "pleaseComplete": "请完成"
     },
     "faceAuth": {
         "faceDetectTip": "请正对手机，保持光线充足",

@@ -786,7 +786,6 @@ export default {
             selectWallet,
             onConfirm,
             accountCurrency
-
         }
     }
 }
