@@ -344,7 +344,7 @@
             "items":"跑马灯项",
             "itemsConfig":{
                 "href":"跳转地址",
-                "label":"内容"
+                "text":"内容"
             }
         },
         "productsSwipe":"产品行情轮播",
