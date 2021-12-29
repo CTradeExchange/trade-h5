@@ -590,9 +590,7 @@ export const getTransactionColumns = (tradeType) => {
                 prop: 'requestNum',
                 align: 'right',
                 minWidth: 150,
-                formatter: row => {
-                    return row.requestNum + (row.numberStatisticMode === 2 ? row.outCurrency : t('trade.volumeUnit'))
-                }
+                formatter: row => row.requestNum + row.outCurrency
             },
 
             {
