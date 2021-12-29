@@ -246,7 +246,32 @@ export default {
 
             if (tradeTypeList.length === 0) return Promise.resolve()
             return queryCustomerOptionalList({ tradeTypeList }).then(res => {
-                commit('Update_selfSymbolList', res.data || [])
+                const listObj = res.data || []
+                const symbolKeylist = []
+                const symbolIdlist = []
+                Object.keys(listObj).forEach(tradeType => {
+                    const item = listObj[tradeType]
+                    item.forEach(product => {
+                        const symbolKey = `${product.symbolId}_${tradeType}`
+                        if (symbolKeylist.indexOf(symbolKey) === -1) {
+                            symbolKeylist.push(symbolKey)
+                            symbolIdlist.push({ symbolId: product.symbolId, tradeType })
+                        }
+                    })
+                })
+
+                commit('_quote/add_products', symbolIdlist, { root: true })
+                commit('Update_selfSymbolList', listObj)
+
+                // 重新获取自选列表产品的精简信息
+                const listObjClone = Object.assign({}, listObj)
+                Object.keys(listObjClone).forEach(tradeType => {
+                    listObjClone[tradeType] = {
+                        symbolList: listObjClone[tradeType].map(el => el.symbolId)
+                    }
+                })
+                commit('_quote/Update_symbolBaseLoaded', 0, { root: true })
+                dispatch('_quote/querySymbolBaseInfoList', listObjClone, { root: true })
                 return res
             })
         },
