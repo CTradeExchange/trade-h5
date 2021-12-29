@@ -152,7 +152,6 @@ export default {
 
         // 持仓列表数据变化重新订阅
         watch(() => positionList.value, (newVal, oldVal) => {
-            debugger
             if (newVal.length > 0 && newVal.length !== oldVal.length) {
                 state.alreadySub = true
                 sendSubscribe(newVal)

@@ -168,7 +168,6 @@ class SocketEvent {
     // 处理盘口成交数据快照
     ['cmd_id_14011'] (data) {
         const list = data.data?.tick_list ?? []
-        // console.log('list==========', list)
         const $store = this.$store
         if (list) {
             $store.commit('_quote/Update_handicapList', {
