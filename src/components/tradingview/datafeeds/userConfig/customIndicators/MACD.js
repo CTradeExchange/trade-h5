@@ -46,12 +46,12 @@ export default function (n, precision) {
                     plot_0_Palette: {
                         colors: {
                             0: {
-                                color: '#eb4d5c',
+                                color: '#eb4d5c', // 涨的颜色
                                 width: 1,
                                 style: 0
                             },
                             1: {
-                                color: '#53b987',
+                                color: '#53b987',   // 跌的颜色
                                 width: 1,
                                 style: 0
                             }
