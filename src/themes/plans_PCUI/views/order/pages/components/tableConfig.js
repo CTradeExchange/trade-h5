@@ -276,7 +276,7 @@ export const getPendingColumns = tradeType => {
                 name: t('transRecords.entrustedAmount'),
                 align: 'right',
                 minWidth: 150,
-                formatter: row => row.requestNum + (row.entryType === 2 ? row.accountCurrency : t('trade.volumeUnit'))
+                formatter: row => row.requestNum + row.accountCurrency
             },
             { name: t('trade.trustPrice'), prop: 'requestPrice', align: 'right' },
             {
@@ -590,9 +590,7 @@ export const getTransactionColumns = (tradeType) => {
                 prop: 'requestNum',
                 align: 'right',
                 minWidth: 150,
-                formatter: row => {
-                    return row.requestNum + (row.numberStatisticMode === 2 ? row.outCurrency : t('trade.volumeUnit'))
-                }
+                formatter: row => row.requestNum + row.outCurrency
             },
 
             {
@@ -999,9 +997,9 @@ export const getAssetColumns = (tradeType) => {
                     default: ({ row }) => {
                         return (
                             <>
-                                <span className='link' onclick={goLoan.bind(null, row)} type='text'>
+                                {/* <span className='link' onclick={goLoan.bind(null, row)} type='text'>
                                     { t('trade.loan') }
-                                </span>
+                                </span> */}
                                 <span className='link' onclick={goRepayment.bind(null, row)} type='text'>
                                     { t('trade.repayment') }
                                 </span>

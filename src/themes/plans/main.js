@@ -66,9 +66,19 @@ store.dispatch('_base/initBaseConfig').then(async () => {
     app.use(Socket, { $store: store, $router: router })
 
     // 设置语言
-    const defaultLocal = getCookie('lang') || 'zh-CN'
-    setI18nLanguage(I18n, defaultLocal)
-    await loadLocaleMessages(I18n, defaultLocal)
+    const langLocal = getCookie('lang') || 'zh-CN'
+    setI18nLanguage(I18n, langLocal)
+    await loadLocaleMessages(I18n, langLocal)
+
+    // 设置玩法别名
+    const { tm } = I18n.global
+    const tradeTypesConfig = store.state._base.wpCompanyInfo?.tradeTypesConfig || {}
+    const tradeTypesConfigLocal = tradeTypesConfig[langLocal] || {}
+    const tradeTypeClone = tm('tradeType')
+    Object.keys(tradeTypesConfigLocal).forEach(el => {
+        if (tradeTypesConfigLocal[el]) tradeTypeClone[el] = tradeTypesConfigLocal[el]
+    })
+    store.commit('_base/Update_plansNames', tradeTypeClone)
 
     // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
     if (loginParams || token) {
