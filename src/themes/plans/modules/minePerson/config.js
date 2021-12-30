@@ -1,6 +1,6 @@
 import { img } from '@admin/components/baseConfig'
 export default {
-    title: 'minePerson',//'个人信息',
+    title: '个人信息',//'个人信息',
     tag: 'minePerson',
     include: ['mine'], // 只有这些页面显示
     tagIcon: 'el-icon-user',

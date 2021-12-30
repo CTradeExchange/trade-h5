@@ -1,6 +1,6 @@
 import { common } from '@admin/components/baseConfig'
 export default {
-    title: 'menulist',//'菜单列表',
+    title: '菜单列表',//'菜单列表',
     tag: 'menulist',
     exclude: ['nav'], // 排除的页面code
     tagIcon: 'el-icon-menu',

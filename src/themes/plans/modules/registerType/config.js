@@ -1,5 +1,5 @@
 export default {
-    title: 'registerType',//'注册模块',
+    title: '注册模块',//'注册模块',
     tagIcon: 'el-icon-open',
     // tagIcon: 'el-icon-basketball',
     tag: 'registerType',

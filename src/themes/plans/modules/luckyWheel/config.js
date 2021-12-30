@@ -1,5 +1,5 @@
 export default {
-    title: 'luckyWheel',//'大转盘',
+    title: '大转盘',//'大转盘',
     tag: 'luckyWheel',
     hidden: true,
     // exclude:['nav'],   // 排除的页面code

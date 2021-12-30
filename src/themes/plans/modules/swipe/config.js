@@ -1,6 +1,6 @@
 import { common, img } from '@admin/components/baseConfig'
 export default {
-    title: 'swipe',//'轮播Banner',
+    title: '轮播Banner',//'轮播Banner',
     tag: 'swipe',
     tagIcon: 'el-icon-film',
     document: 'https://element.eleme.cn/#/zh-CN/component/input',
