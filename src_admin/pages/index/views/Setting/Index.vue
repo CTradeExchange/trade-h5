@@ -142,6 +142,18 @@
                                     :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
+                            <el-form-item label='adminDomain' size='normal'>
+                                <el-input
+                                    v-model='form.other.adminDomain'
+                                    :placeholder="$t('pleaseEnter')"
+                                />
+                            </el-form-item>
+                            <el-form-item label='forwarDomain' size='normal'>
+                                <el-input
+                                    v-model='form.other.forwarDomain'
+                                    :placeholder="$t('pleaseEnter')"
+                                />
+                            </el-form-item>
 
                             <!-- <el-form-item label='USDCNY_CODE'>
                                 <el-input
