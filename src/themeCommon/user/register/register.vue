@@ -288,7 +288,7 @@ export default {
                 // 检测客户是否存在,同时获取区号
                 checkUserStatus(verifyParams).then(res => {
                     if (res.check()) {
-                        if (Number(res.data.status) === 1) {
+                        if (Number(res.data.status) !== 2) {
                             state.verifyCodeLoading = false
                             const msg = t(verifyParams.type === 1 ? 'common.existEmail' : 'common.existPhone')
                             callback && callback(false)
