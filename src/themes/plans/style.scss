@@ -198,10 +198,10 @@ i {
         background: #FFF;
     }
     30% {
-        background: linear-gradient(to right, var(--contentColor), #f8e8e8);
+        background: linear-gradient(to right, var(--contentColor), var(--quoteRiseBg));
     }
     80% {
-        background: linear-gradient(to right, var(--contentColor), #f8e8e8);
+        background: linear-gradient(to right, var(--contentColor), var(--quoteRiseBg));
     }
     100% {
         background: #FFF;
@@ -213,10 +213,10 @@ i {
         background: #FFF;
     }
     30% {
-        background: linear-gradient(to right, var(--contentColor), #e9f0f7);
+        background: linear-gradient(to right, var(--contentColor), var(--quoteFallBg));
     }
     80% {
-        background: linear-gradient(to right, var(--contentColor), #e9f0f7);
+        background: linear-gradient(to right, var(--contentColor), var(--quoteFallBg));
     }
     100% {
         background: #FFF;

@@ -5,6 +5,8 @@ const colors = {
         primary: '#2B70AE',
         warn: '#B72122',
         success: '#26a69a',
+        quoteRiseBg: '#f8e8e8',
+        quoteFallBg: '#e9f0f7',
         focusColor: '#f2a11b'
     },
     night: {
@@ -78,14 +80,18 @@ export function setRootVariable (themeColor, primaryColor) {
 
     const colorsArr = Object.assign({}, colors.common, colors[invertColor])
     updateBodyClass(invertColor)
-    const { riseColor, fallColor } = colorsArr
+    const { riseColor, fallColor, quoteRiseBg, quoteFallBg } = colorsArr
 
     if (Number(chartColorType) === 1) {
         colorsArr.riseColor = fallColor
         colorsArr.fallColor = riseColor
+        colorsArr.quoteRiseBg = quoteRiseBg
+        colorsArr.quoteFallBg = quoteFallBg
     } else {
         colorsArr.riseColor = riseColor
         colorsArr.fallColor = fallColor
+        colorsArr.quoteRiseBg = quoteFallBg
+        colorsArr.quoteFallBg = quoteRiseBg
     }
 
     const style = document.body.style
