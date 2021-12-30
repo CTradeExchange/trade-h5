@@ -88,9 +88,9 @@
                         <i class='icon icon_kefu' :title="$t('header.service')"></i>
                     </a>
                 </div>
-                <div class='item'>
+                <!-- <div class='item'>
                     <DownloadIcon />
-                </div>
+                </div> -->
                 <div class='item'>
                     <LangIcon />
                 </div>
