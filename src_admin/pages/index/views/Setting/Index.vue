@@ -9,7 +9,7 @@
                         type='primary'
                         @click='pushPage'
                     >
-                        {{$t('setting.save')}}
+                        {{ $t('setting.save') }}
                     </el-button>
                     <el-button
                         :disabled='getLoading'
@@ -17,7 +17,7 @@
                         type='primary'
                         @click='getPageConfig'
                     >
-                        {{$t('setting.reset')}}
+                        {{ $t('setting.reset') }}
                     </el-button>
                 </el-button-group>
             </el-col>
@@ -63,10 +63,10 @@
                             <el-form-item :label="$t('setting.ifUpdate')" label-width='120'>
                                 <el-radio-group v-model='form.other.isInitSymbol'>
                                     <el-radio label='1'>
-                                        {{$t('setting.yes')}} 
+                                        {{ $t('setting.yes') }}
                                     </el-radio>
                                     <el-radio label='0'>
-                                        {{$t('setting.no')}} 
+                                        {{ $t('setting.no') }}
                                     </el-radio>
                                 </el-radio-group>
                             </el-form-item>
@@ -511,7 +511,7 @@ export default {
                         this.$message.error(res.message)
                         return
                     }
-                    this.$confirm(this.$t('setting.Successful'), {
+                    this.$confirm(this.$t('setting.successful'), {
                         confirmButtonText: this.$t('setting.confirm'),
                         cancelButtonText: this.$t('editor.close'),
                     })
