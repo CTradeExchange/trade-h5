@@ -352,9 +352,7 @@ export default {
         })
 
         watch(() => isSelfSymbol.value, val => {
-            if (val) {
-                state.isOptional = isSelfSymbol.value
-            }
+            state.isOptional = !!val
         }, { immediate: true })
 
         // 图表类型

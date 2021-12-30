@@ -93,7 +93,6 @@ export default {
 
         // 插入谷歌统计代码
         onMounted(() => {
-            console.log('Base1231A23', Base)
             setRootVariable(localGet('invertColor'), Base.state.wpCompanyInfo.themeColor)
             try {
                 if (googleAnalytics.value) {

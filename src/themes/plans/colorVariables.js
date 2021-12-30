@@ -76,7 +76,7 @@ export function setRootVariable (themeColor, primaryColor) {
         colors.common.primary = primaryColor
     }
 
-    const colorsArr = Object.assign(colors[invertColor], colors.common)
+    const colorsArr = Object.assign({}, colors.common, colors[invertColor])
     updateBodyClass(invertColor)
     const { riseColor, fallColor } = colorsArr
 
