@@ -792,7 +792,7 @@ export const getAssetColumns = (tradeType) => {
                 align: 'right',
                 width: 100,
                 formatter: row => {
-                    return <span className={[parseFloat(row.direction) > 0 ? 'riseColor' : 'fallColor']}>
+                    return <span className={[parseFloat(row.direction) === 1 ? 'riseColor' : 'fallColor']}>
                         { Number(row.direction) === 1 ? t('trade.buy') : t('trade.sell') }
                     </span>
                 }

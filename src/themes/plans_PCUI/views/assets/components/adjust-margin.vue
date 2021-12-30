@@ -50,7 +50,7 @@ import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { isEmpty } from '@/utils/util.js'
 import { pow } from '@/utils/calculation.js'
-import { Toast } from 'vant'
+import { Toast, Dialog } from 'vant'
 
 // api
 import { updateOccupyTheMargin } from '@/api/user'
@@ -133,10 +133,17 @@ export default {
                 resp: ''
             }
             state.isSubmit = true
-            updateOccupyTheMargin(params).then(() => {
-                state.show = false
+            updateOccupyTheMargin(params).then(res => {
                 state.isSubmit = false
-                Toast(t('c.handleSuccess'))
+                if (res.check()) {
+                    state.show = false
+                    Toast(t('c.handleSuccess'))
+                } else {
+                    Dialog.alert({
+                        title: t('common.tip'),
+                        message: res.msg,
+                    })
+                }
             }).catch(res => {
                 state.isSubmit = false
                 Toast(res.msg)

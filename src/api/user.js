@@ -669,6 +669,7 @@ export function updateOccupyTheMargin (data) {
             version: '0.0.1',
             group: 'tradeApi'
         },
+        toastErr: false,
         data
     })
 }

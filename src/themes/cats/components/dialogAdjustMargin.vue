@@ -151,8 +151,9 @@ export default {
                     state.showDialog = false
                     store.dispatch('_trade/queryPositionPage')
                 }
-            }).catch(err => {
+            }).catch(res => {
                 state.loading = false
+                Toast(res.msg)
             })
         }
         const closed = () => { // 关闭弹出层且动画结束后触发

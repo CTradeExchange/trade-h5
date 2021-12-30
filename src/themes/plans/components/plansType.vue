@@ -103,6 +103,7 @@ export default {
     //     }
     // }
     .tabs {
+        width: 100%;
         :deep(.van-tab) {
             margin-left: rem(55px);
             padding: 0;

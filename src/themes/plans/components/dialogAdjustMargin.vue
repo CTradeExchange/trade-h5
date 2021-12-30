@@ -170,8 +170,9 @@ export default {
                         sortType: 'desc',
                     })
                 }
-            }).catch(err => {
+            }).catch(res => {
                 state.loading = false
+                Toast(res.msg)
             })
         }
         const closed = () => { // 关闭弹出层且动画结束后触发
