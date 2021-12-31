@@ -119,8 +119,7 @@ export default {
                 currency: el.currency,
                 accountId: el.accountId
             }
-        })
-        )
+        }))
 
         const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(tradeType)))
 
@@ -145,6 +144,11 @@ export default {
             state.inPickerShow = false
             state.currentTab = val.withdrawMethod
             state.inCurrency = val.currency
+            setMethodList(val)
+        }
+
+        // 设置取款方式
+        const setMethodList = (val) => {
             if (val.withdrawMethod.split(',').length > 1) {
                 // 如果选择的币种支持多种取款方式
                 state.withdrawMethodVis = true
@@ -216,6 +220,7 @@ export default {
 
                 state.inCurrency = res.data.list[0].currency
                 state.currentTab = res.data.list[0].withdrawMethod
+                setMethodList(res.data.list[0])
             } else {
                 if (columns.value.length === 0 || state.inCurrencyList.length === 0) {
                     state.disabled = true
