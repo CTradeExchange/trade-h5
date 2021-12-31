@@ -1,6 +1,6 @@
 <template>
     <div class='currency-bg'>
-        <img alt='' :src='"/images/currency_icon/"+ curCurrency?.currency +".png"' />
+        <img alt='' :src='getCurrencyIcon(curCurrency.currency)' />
     </div>
     <div class='fullPageWrapper'>
         <LayoutTop
@@ -51,7 +51,7 @@
                 {{ $t('assets.transferAsset') }}
             </p>
             <div class='action-bar mb60' @click='pickerShow=true'>
-                <img alt='' class='currency-icon' :src='"/images/currency_icon/"+ curCurrency?.currency + ".png" || "/images/currency_icon/default.png"' srcset='' />
+                <img alt='' class='currency-icon' :src='getCurrencyIcon(curCurrency.currency)' srcset='' />
                 <span class='label'>
                     {{ curCurrency?.currency }}
                 </span>
@@ -283,6 +283,14 @@ export default {
             state.amount = state.maxTransfer
         }
 
+        const getCurrencyIcon = (currency) => {
+            try {
+                return require('@/assets/currency_icon/' + currency + '.png')
+            } catch (error) {
+                return require('@/assets/currency_icon/default.png')
+            }
+        }
+
         const onPickerConfirm = (val) => {
             state.accountShow = false
 
@@ -370,7 +378,7 @@ export default {
             minTransfer,
             customStyle,
             updatePopupVis,
-
+            getCurrencyIcon,
             ...toRefs(state),
 
         }
