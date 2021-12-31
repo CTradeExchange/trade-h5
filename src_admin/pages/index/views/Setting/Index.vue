@@ -148,9 +148,9 @@
                                     :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
-                            <el-form-item label='forwarDomain' size='normal'>
+                            <el-form-item label='forwardDomain' size='normal'>
                                 <el-input
-                                    v-model='form.other.forwarDomain'
+                                    v-model='form.other.forwardDomain'
                                     :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
