@@ -606,12 +606,14 @@ export default {
 
         // 点击选择链名称
         const selectChainName = (item) => {
-            state.chainName = item.name
             state.chainNameVisible = false
-            // 获取钱包地址列表
-            getWalletAddress()
-
-            getWithdrawFee()
+            if (state.chainName !== item.name) {
+                state.chainName = item.name
+                getWalletAddress()
+                getWithdrawRate()
+                getWithdrawConfig()
+                getWithdrawFee()
+            }
         }
 
         // 获取取款汇率
