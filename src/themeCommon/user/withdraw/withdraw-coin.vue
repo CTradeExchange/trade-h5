@@ -184,7 +184,7 @@ import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 // api
 import {
-    getAllWithdrawCurrencyList,
+    getWithdrawCurrencyList,
     queryWithdrawConfig,
     checkKycApply,
     getWalletAddressList,
@@ -537,7 +537,7 @@ export default {
 
         // 获取客户提币币种和链名称
         const queryWithdrawCurrencyList = (resolve) => {
-            getAllWithdrawCurrencyList({
+            getWithdrawCurrencyList({
                 companyId: customInfo.companyId,
                 customerNo: customInfo.customerNo,
                 customerGroupId: customInfo.customerGroupId,

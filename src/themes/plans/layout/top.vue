@@ -43,10 +43,6 @@ export default {
             type: Boolean,
             default: true
         },
-        bgColor: {
-            type: String,
-            default: '#fff'
-        },
         customStyle: {
             type: Object
         }
