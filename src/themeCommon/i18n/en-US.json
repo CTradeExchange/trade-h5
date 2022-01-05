@@ -313,7 +313,8 @@
         "directDes": "Deposit currency same as account currency",
         "exchange": "Exchange",
         "exchangeDes": "Deposit currency different with account currency",
-        "limit": "Amount"
+        "limit": "Amount",
+        "payType": "Gateway"
     },
     "fund": {
         "marginLevel": "margin level",
