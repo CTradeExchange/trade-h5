@@ -85,14 +85,9 @@
                     {{ directionText }}
                 </van-button>
             </div>
-            <!-- 委托列表 -->
-            <Trust
-                v-if='product'
-                class='trustList'
-                :direction='direction'
-                :product='product'
-                @quoteSubscribe='quoteSubscribe'
-            />
+
+            <!-- 交易记录 -->
+            <OrderRecord ref='roderRecordRef' :trade-type='productTradeType' />
         </div>
 
         <!-- 侧边栏-切换产品 -->
@@ -117,8 +112,8 @@ import PendingBarCFD from './components/pendingBar_CFD'
 import OrderTypeTab from './components/orderType.vue'
 import Assets from './components/assets.vue'
 import CellExpireType from './components/cellExpireType'
-import Trust from './components/trust.vue'
 import OrderHandicap from './components/handicap.vue'
+import OrderRecord from './components/orderRecord.vue'
 import plansType from '@plans/components/plansType.vue'
 import sidebarProduct from '@plans/components/sidebarProduct.vue'
 import hooks from './orderHooks'
@@ -138,10 +133,10 @@ export default {
         sidebarProduct,
         Assets,
         CellExpireType,
-        Trust,
         PendingBar,
         LoanBar,
         PendingBarCFD,
+        OrderRecord
     },
     setup () {
         const store = useStore()
@@ -171,6 +166,7 @@ export default {
             stopProfit: '',
             multipleVal: '', // 杠杆倍数
         })
+        const roderRecordRef = ref(null) // 交易记录组件对象
         const pendingRef = ref(null)
         const profitLossRef = ref(null)
         const pendingWarn = computed(() => pendingRef.value?.warn)
@@ -274,11 +270,7 @@ export default {
 
         // 下单页面的行情订阅，包括当前产品和挂单列表的产品
         const quoteSubscribe = () => {
-            // 获取挂单列表
-            const [symbolId, tradeType] = symbolKey.value.split('_')
-            const pendingList = store.state._trade.pendingList[tradeType] || []
-            const list = pendingList.concat([{ symbolId, tradeType }])
-            QuoteSocket.send_subscribe(list)
+            QuoteSocket.send_subscribe([symbolKey.value])
         }
 
         // 初始化设置
@@ -302,12 +294,6 @@ export default {
                 const accountIds = accountList.value?.filter(el => el.tradeType === Number(product.tradeType)).map(el => el.accountId)
 
                 if ([3, 5, 9].includes(product.tradeType)) queryAccountInfo()
-                store.dispatch('_trade/queryPBOOrderPage', {
-                    tradeType: product.tradeType,
-                    sortFieldName: 'orderTime',
-                    sortType: 'desc',
-                    accountIds: accountIds + ''
-                })
             })
         }
 
@@ -373,9 +359,6 @@ export default {
                     const localData = Object.assign({}, params, data)
                     const orderId = data.orderId || data.id
                     sessionStorage.setItem('order_' + orderId, JSON.stringify(localData))
-                    // router.push({ name: 'OrderSuccess', query: { orderId } })
-                    store.dispatch('_trade/queryPBOOrderPage', { tradeType: params.tradeType })
-                    queryAccountInfo()
                     state.volume = ''
                     state.pendingPrice = ''
                     Toast({
@@ -383,6 +366,9 @@ export default {
                         duration: 1000,
                         forbidClick: true,
                     })
+                    // 更新数据
+                    roderRecordRef.value.init()
+                    queryAccountInfo()
                 })
                 .catch(err => {
                     state.loading = false
@@ -403,6 +389,7 @@ export default {
             productTradeType,
             onSelectProduct,
             account,
+            roderRecordRef,
             pendingRef,
             handleTradeType,
             profitLossRef,
@@ -486,6 +473,7 @@ export default {
 .footerBtn {
     width: 100%;
     padding: rem(50px) rem(30px) rem(30px);
+    margin-bottom: rem(20px);
     background: var(--contentColor);
     font-weight: bold;
     .icon{
