@@ -5,13 +5,13 @@
         image='/images/empty.png'
     />
     <div v-else class='position-wrap'>
-        <p class='header'>
+        <p v-if='showHeader' class='header'>
             <span>{{ $t('trade.position') }}({{ positionList?.length }})</span>
             <span class='fr' :class="userAccount?.profitLoss > 0 ? 'riseColor': 'fallColor'">
                 {{ userAccount?.profitLoss || '--' }}
             </span>
         </p>
-        <van-loading v-if='loading' class='loading' />
+        <van-loading v-if='loading && showHeader' class='loading' />
 
         <positionItem
             v-for='item in positionList'
@@ -74,6 +74,13 @@ export default {
         DialogClosePosition,
         DialogAdjustMargin,
         DialogSLTP
+    },
+    props: {
+        // 是否显示头部标题
+        showHeader: {
+            type: Boolean,
+            default: true
+        }
     },
     setup (props, { emit }) {
         const store = useStore()

@@ -28,11 +28,10 @@
 </template>
 
 <script>
-import AssetsItem from './components/assetsItem.vue'
 import TotalAssets from './components/totalAssets.vue'
 import TotalAssetsFullPosition from './components/totalAssetsFullPosition.vue'
 import TotalAssetsBywarehouse from './components/totalAssetsBywarehouse.vue'
-
+import AssetsItem from '@plans/modules/assets/assetsItem.vue'
 import PositionList from '@plans/modules/positionList/positionList'
 import { reactive, toRefs, nextTick, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
@@ -108,7 +107,6 @@ export default {
         }
 
         const sendSubscribe = (data) => {
-            console.log('dingyue-----------------')
             if (data.length > 0) {
                 const subscribList = data.map(el => {
                     return {

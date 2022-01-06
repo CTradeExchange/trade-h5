@@ -85,9 +85,8 @@
                     {{ directionText }}
                 </van-button>
             </div>
-
             <!-- 交易记录 -->
-            <OrderRecord ref='roderRecordRef' :trade-type='productTradeType' />
+            <OrderRecord ref='roderRecordRef' :trade-type='productTradeType' @subscribe='setProductKeys' />
         </div>
 
         <!-- 侧边栏-切换产品 -->
@@ -165,6 +164,7 @@ export default {
             stopLoss: '',
             stopProfit: '',
             multipleVal: '', // 杠杆倍数
+            productKeys: [] // 交易记录组件需要订阅的产品
         })
         const roderRecordRef = ref(null) // 交易记录组件对象
         const pendingRef = ref(null)
@@ -268,9 +268,18 @@ export default {
             })
         }
 
+        // 设置交易记录组件需要订阅的产品
+        const setProductKeys = (arr) => {
+            state.productKeys = arr
+            quoteSubscribe()
+        }
+
         // 下单页面的行情订阅，包括当前产品和挂单列表的产品
         const quoteSubscribe = () => {
-            QuoteSocket.send_subscribe([symbolKey.value])
+            let result = state.productKeys
+            result.push(symbolKey.value)
+            result = [...new Set(result)]
+            QuoteSocket.send_subscribe(result)
         }
 
         // 初始化设置
@@ -399,7 +408,8 @@ export default {
             changeOrderType,
             quoteSubscribe,
             submitHandler,
-            directionText
+            directionText,
+            setProductKeys
         }
     }
 }

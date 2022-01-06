@@ -18,21 +18,29 @@
                 :description="$t('trade.pendingEmpty')"
                 image='/images/empty.png'
             />
-            <template v-else>
+            <div class='trust-list' v-else>
                 <trustItem v-for='item in pendingList' :key='item.id' :product='item' />
-            </template>
+            </div>
         </div>
         <!-- 成交记录 -->
         <div v-if="current === 'deal'">
             <van-empty v-if='dealList.length === 0' :description='$t("trade.noDealData")' image='/images/empty.png' />
             <dealList v-else :biz-type-text='bizTypeText' :list='dealList' :trade-type='tradeType' />
         </div>
+        <!-- 持仓 -->
+        <positionList :showHeader='false' v-if="current === 'position'" />
+        <!-- 资产 -->
+        <div class='assets-list' v-if="current === 'assets'">
+            <assetsItem v-for='account in accountList' :key='account.accountId' class='block' :data='account' />
+        </div> 
     </div>
 </template>
 
 <script>
-import trustItem from '@/themes/plans/modules/trust/trustItem.vue'
-import dealList from '@/themes/plans/modules/deal/dealList.vue'
+import trustItem from '@plans/modules/trust/trustItem.vue'
+import assetsItem from '@plans/modules/assets/assetsItem.vue'
+import dealList from '@plans/modules/deal/dealList.vue'
+import positionList from '@plans/modules/positionList/positionList.vue'
 import { reactive, toRefs, watch, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -42,7 +50,9 @@ import { tradeRecordList } from '@/api/user'
 export default {
     components: {
         trustItem,
-        dealList
+        assetsItem,
+        dealList,
+        positionList
     },
     props: {
         // 玩法类型
@@ -51,7 +61,8 @@ export default {
             default: ''
         }
     },
-    setup (props) {
+    emits: ['subscribe'],
+    setup (props, { emit }) {
         const store = useStore()
         const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
@@ -65,7 +76,9 @@ export default {
             // 成交记录列表数据
             dealList: [],
             // bizTypeText
-            bizTypeText: {}
+            bizTypeText: {},
+            // 需要订阅的产品symbolKey集合
+            productKyes: []
         })
 
         // 账户列表
@@ -75,6 +88,8 @@ export default {
 
         // 监听玩法类型
         watch(() => props.tradeType, () => {
+            // 设置当前玩法
+            store.commit('_quote/Update_tradeType', props.tradeType)
             // 设置选项卡数据
             setTabList()
         }, { immediate: true })
@@ -130,17 +145,13 @@ export default {
                 case 'deal':
                     getDealRecord()
                     break
+                case 'position': 
+                    getPositionList()
+                    break
+                case 'assets':
+                    getAssetsInfo()
+                    break
             }
-        }
-
-        // 获取当前持仓、当前挂单数据
-        function getOrderPage () {
-            store.dispatch('_trade/queryPBOOrderPage', {
-                tradeType: props.tradeType,
-                sortFieldName: 'orderTime',
-                sortType: 'desc',
-                accountIds: state.accountIds.toString()
-            })
         }
 
         // 获取成交记录数据
@@ -151,13 +162,44 @@ export default {
                 executeEndTime: window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 23:59:59')).valueOf(),
                 accountIds: state.accountIds.toString(),
                 tradeType: Number(props.tradeType),
-                sortFieldName: 'executeTime',
+                sortFieldName: 'executeTime', 
                 sortType: 'desc'
-            }
-            tradeRecordList(params).then(res => {
-                if (res.check()) {
-                    state.dealList = res.data.list
+            }  
+            tradeRecordList(params).then(res => { 
+                if (res.check() && res.data) {
+                    state.dealList = res.data.list 
                     state.bizTypeText = res.data.bizTypeText
+                    state.productKyes = []
+                    subscribe()
+                }
+            })
+        }
+
+        // 获取资产数据
+        function getAssetsInfo() {
+            store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: props.tradeType }).then(() => {
+                state.productKyes = []
+                subscribe()
+            })
+        }
+
+         // 获取当前持仓、当前挂单数据
+        function getOrderPage () {
+            store.dispatch('_trade/queryPBOOrderPage', {
+                tradeType: props.tradeType,
+                sortFieldName: 'orderTime',
+                sortType: 'desc',
+                accountIds: state.accountIds.toString()
+            }).then(res => {
+                if (res.check()) {
+                    const arr = []
+                    if (res.data) {
+                        res.data.map(elem => {
+                            arr.push(elem.symbolId + '_' + elem.tradeType)
+                        })
+                    }
+                    state.productKyes = arr
+                    subscribe()
                 }
             })
         }
@@ -171,17 +213,30 @@ export default {
                 accountId: state.accountIds.toString()
             }).then(res => {
                 if (res.check()) {
-
+                    const arr = []
+                    if (res.data) {
+                         res.data.map(elem => {
+                            arr.push(elem.symbolId + '_' + elem.tradeType)
+                        })
+                    }
+                    state.productKyes = arr
+                    subscribe()
                 }
             })
+        }
+
+        // 通知父组件需要订阅的产品
+        function subscribe() {
+            emit('subscribe', state.productKyes)
         }
 
         return {
             ...toRefs(state),
             changeTab,
             goList,
+            init,
             pendingList,
-            init
+            accountList
         }
     }
 }
@@ -197,6 +252,9 @@ export default {
     padding: 0 rem(30px);
     background: var(--contentColor);
     border-bottom: rem(1px) solid var(--lineColor);
+    position: sticky;
+    top: -1px;
+    z-index: 100;
     .tabs {
         height: 100%;
         --van-tabs-bottom-bar-width: 11vw;
@@ -218,6 +276,14 @@ export default {
         line-height: 1;
         font-size: rem(34px);
         color: var(--normalColor);
+    }
+}
+.assets-list {
+    padding: 0 rem(20px);
+    margin-top: rem(20px);
+    .block {
+        margin-bottom: rem(20px);
+        border-radius: 4px;
     }
 }
 </style>
