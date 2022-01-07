@@ -7,7 +7,6 @@
             @click='checkCurrency(item)'
         >
             <img alt='' class='currency-icon' :src='getCurrencyIcon(item.currency)' srcset='' />
-            <!-- <img alt='' class='currency-icon' :src='"/images/currency_icon/"+ item.currency +".99png" || "/images/currency_icon/default.png"' srcset='' /> -->
             <div class='name'>
                 <p class='t1'>
                     {{ item.currency }}
@@ -82,7 +81,7 @@ export default {
     flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
-    height: 360px;
+    max-height: 360px;
     padding: 15px;
     background: var(--bgColor);
     border: 1px solid var(--lineColor);

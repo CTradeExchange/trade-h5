@@ -20,18 +20,18 @@ export function profitLossPriceCompare (type, direction, price, profitStopRange,
         if (type === 'stopLoss') {
             const [min, max] = buyStopLossRange
             if (gt(price, max)) {
-                return $t('trade.buy') + $t('trade.takeLoss') + $t('trade.profitLossWarnTip1', ['≤' + max])
+                return $t('trade.takeLoss') + $t('trade.profitLossWarnTip1', ['≤' + max])
             } else if (lt(price, min)) {
-                return $t('trade.buy') + $t('trade.takeLoss') + $t('trade.profitLossWarnTip2')
+                return $t('trade.takeLoss') + $t('trade.profitLossWarnTip2')
             } else {
                 return false
             }
         } else if (type === 'profit') {
             const [min, max] = buyProfitRange
             if (lt(price, min)) {
-                return $t('trade.buy') + $t('trade.takeProfit') + $t('trade.profitLossWarnTip1', ['≥' + min])
+                return $t('trade.takeProfit') + $t('trade.profitLossWarnTip1', ['≥' + min])
             } else if (gt(price, max)) {
-                return $t('trade.buy') + $t('trade.takeProfit') + $t('trade.profitLossWarnTip2')
+                return $t('trade.takeProfit') + $t('trade.profitLossWarnTip2')
             } else {
                 return false
             }
@@ -40,18 +40,18 @@ export function profitLossPriceCompare (type, direction, price, profitStopRange,
         if (type === 'stopLoss') {
             const [min, max] = sellStopLossRange
             if (lt(price, min)) {
-                return $t('trade.sell') + $t('trade.takeLoss') + $t('trade.profitLossWarnTip1', ['≥' + min])
+                return $t('trade.takeLoss') + $t('trade.profitLossWarnTip1', ['≥' + min])
             } else if (gt(price, max)) {
-                return $t('trade.sell') + $t('trade.takeLoss') + $t('trade.profitLossWarnTip2')
+                return $t('trade.takeLoss') + $t('trade.profitLossWarnTip2')
             } else {
                 return false
             }
         } else if (type === 'profit') {
             const [min, max] = sellProfitRange
             if (gt(price, max)) {
-                return $t('trade.sell') + $t('trade.takeProfit') + $t('trade.profitLossWarnTip1', ['≤' + max])
+                return $t('trade.takeProfit') + $t('trade.profitLossWarnTip1', ['≤' + max])
             } else if (lt(price, min)) {
-                return $t('trade.sell') + $t('trade.takeProfit') + $t('trade.profitLossWarnTip2')
+                return $t('trade.takeProfit') + $t('trade.profitLossWarnTip2')
             } else {
                 return false
             }

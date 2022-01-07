@@ -13,7 +13,7 @@
                         <label class='select_lab'>
                             {{ $t('walletAdd.coinName') }}
                         </label>
-                        <el-select v-model='coinKind' class='currencyBox' placeholder='Select' :placeholder="$t('walletAdd.coinPlaceholder')" @change='selectCoinKind'>
+                        <el-select v-model='coinKind' class='currencyBox' :placeholder="$t('walletAdd.coinPlaceholder')" @change='selectCoinKind'>
                             <el-option
                                 v-for='item in coinKindList'
                                 :key='item.name'
@@ -26,7 +26,7 @@
                         <label class='select_lab'>
                             {{ $t('walletAdd.chainName') }}
                         </label>
-                        <el-select v-model='chainName' class='currencyBox' placeholder='Select' :placeholder="$t('walletAdd.chainPlaceholder')" @change='selectChainName'>
+                        <el-select v-model='chainName' class='currencyBox' :placeholder="$t('walletAdd.chainPlaceholder')" @change='selectChainName'>
                             <el-option
                                 v-for='item in chainNameList'
                                 :key='item.name'

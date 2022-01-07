@@ -135,25 +135,33 @@ const h5Children = [
     },
     {
         path: 'withdrawAccount', // 选择提现币种
-        component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdrawAccount/withdrawAccount.vue'),
+        component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawAccount.vue'),
         meta: {
             title: 'cRoute.withdrawAccount',
             roles: ['User']
         }
     },
     {
-        path: 'withdrawRecord', // 选择提现币种
-        component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdrawAccount/withdrawRecord.vue'),
+        path: 'withdrawMoney', // 提现
+        component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawMoney.vue'),
         meta: {
-            title: 'cRoute.withdrawRecord',
+            title: 'cRoute.withdraw',
             roles: ['User']
         }
     },
     {
-        path: 'withdraw', // 提现
-        component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdrawAccount/withdraw.vue'),
+        path: 'withdrawCoin', // 提币
+        component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawCoin.vue'),
         meta: {
             title: 'cRoute.withdraw',
+            roles: ['User']
+        }
+    },
+    {
+        path: 'withdrawRecord', // 选择提现币种
+        component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawRecord.vue'),
+        meta: {
+            title: 'cRoute.withdrawRecord',
             roles: ['User']
         }
     },

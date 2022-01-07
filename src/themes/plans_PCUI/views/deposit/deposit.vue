@@ -119,7 +119,7 @@
         </van-dialog>
 
         <!-- 补充资料弹窗 -->
-        <van-popup v-model:show='appendVis' class='append-popup' position='right' :style="{ height: '100%', width: '80%' }">
+        <van-popup v-model:show='appendVis' class='append-popup' position='right' :style="{ height: '100%', width: '500px' }">
             <div class='append-wrap'>
                 <p class='title'>
                     {{ $t('deposit.appendFiled') }}

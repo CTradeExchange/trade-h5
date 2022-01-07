@@ -1,48 +1,60 @@
 <template>
-    <div class='pageWrap'>
-        <Loading :show='loading' />
-        <div class='wrap'>
-            <p class='header-text'>
-                {{ $t('withdrawMoney.moneyName') }}
-            </p>
-            <div class='field-wrap'>
-                <input v-model='amount' :placeholder="$t('withdrawMoney.moneyPlaceholder')" type='number' @change='changeAmount' @input='changeAmount' />
-                <button class='get-btn' plain round size='small' @click='getAll'>
-                    {{ $t('withdrawMoney.allBtn') }}
-                </button>
-            </div>
-            <div class='notice'>
-                <span>{{ $t('withdrawMoney.canName') }} {{ withdrawAmount }} {{ accountCurrency?.currency }}</span>
-                <span>{{ $t('withdrawMoney.serviceName') }} {{ fee }} {{ accountCurrency?.currency }}</span>
-            </div>
-            <div class='bank-wrap'>
-                <p class='bw-t'>
-                    {{ $t('withdrawMoney.bankName') }}
+    <centerViewDialog>
+        <div class='pageWrap'>
+            <Loading :show='loading' />
+            <!-- 头部导航 -->
+            <Top
+                back
+                left-icon='arrow-left'
+                :right-action='rightAction'
+                :show-center='true'
+                @rightClick='rightClick'
+            />
+            <div class='wrap'>
+                <p class='header-text'>
+                    {{ $t('withdrawMoney.moneyName') }}
                 </p>
-                <div v-if='!isEmpty(checkedBank)' class='bank bank-flex' @click='openSheet'>
-                    <i class='bank-icons-sm' :class="'bk-'+ checkedBank?.bankCode"></i>
-                    <span class='bank-no'>
-                        {{ checkedBank?.bankName }} {{ hideMiddle(checkedBank?.bankCardNumber) }}
-                    </span>
-                    <van-icon name='arrow-down' />
+                <div class='field-wrap'>
+                    <input v-model='amount' :placeholder="$t('withdrawMoney.moneyPlaceholder')" type='number' @change='changeAmount' @input='changeAmount' />
+                    <button class='get-btn' plain round size='small' @click='getAll'>
+                        {{ $t('withdrawMoney.allBtn') }}
+                    </button>
                 </div>
-                <div v-else class='bank no-data' @click='openSheet'>
-                    <span>{{ $t('withdrawMoney.bankNone') }}</span>
-                    <van-icon name='arrow-down' />
-                    <!-- <van-button plain round size='mini' type='success' @click='toAddBank'>
-                        {{ $t('withdrawMoney.addBtn') }}
-                    </van-button> -->
+                <div class='notice'>
+                    <span>{{ $t('withdrawMoney.canName') }} {{ withdrawAmount }} {{ accountCurrency?.currency }}</span>
+                    <span>{{ $t('withdrawMoney.serviceName') }} {{ fee }} {{ accountCurrency?.currency }}</span>
                 </div>
-                <p class='bw-t2'>
-                    {{ $t('withdrawMoney.predictName') }} {{ computePre }} {{ currency }}
-                </p>
+                <div class='bank-wrap'>
+                    <p class='bw-t'>
+                        {{ $t('withdrawMoney.bankName') }}
+                    </p>
+                    <div v-if='!isEmpty(checkedBank)' class='bank bank-flex' @click='openSheet'>
+                        <i class='bank-icons-sm' :class="'bk-'+ checkedBank?.bankCode"></i>
+                        <span class='bank-no'>
+                            {{ checkedBank?.bankName }} {{ hideMiddle(checkedBank?.bankCardNumber) }}
+                        </span>
+                        <van-icon name='arrow-down' />
+                    </div>
+                    <div v-else class='bank no-data' @click='openSheet'>
+                        <span>{{ $t('withdrawMoney.bankNone') }}</span>
+                        <van-icon name='arrow-down' />
+                        <!-- <van-button plain round size='mini' type='success' @click='toAddBank'>
+                            {{ $t('withdrawMoney.addBtn') }}
+                        </van-button> -->
+                    </div>
+                    <p class='bw-t2'>
+                        {{ $t('withdrawMoney.predictName') }} {{ computePre }} {{ currency }}
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
 
-    <van-button block class='confirm-btn' type='primary' @click='confirm'>
-        <span>{{ $t('withdraw.confirm') }}</span>
-    </van-button>
+        <van-button block class='confirm-btn' type='primary' @click='confirm'>
+            <span>{{ $t('withdraw.confirm') }}</span>
+        </van-button>
+    </centerViewDialog>
+
+    <!-- 选择银行卡弹窗 -->
     <van-dialog v-model:show='show' :round='false' :title="$t('withdrawMoney.bankPopupTitle')">
         <div class='bank-list'>
             <div
@@ -70,26 +82,32 @@
             </div>
         </div>
     </van-dialog>
-    <van-dialog v-model:show='withdrawSuccess' class-name='add-success' :confirm-button-text="$t('common.sure')" :show-cancel-button='false' @confirm='$router.push("/assets")'>
-        <i class='icon_success'></i>
-        <p class='title'>
-            {{ $t('withdraw.successText') }}
-        </p>
-        <p class='content'>
-            {{ $t('withdraw.moneySuccessMsg') }}
-        </p>
+
+    <!-- 提交成功弹窗 -->
+    <van-dialog v-model:show='withdrawSuccess' :confirm-button-text="$t('common.sure')" :show-cancel-button='false' @confirm='$router.push("/assets")'>
+        <div class='add-success'>
+            <i class='icon_success'></i>
+            <p class='title'>
+                {{ $t('withdraw.successText') }}
+            </p>
+            <p class='content'>
+                {{ $t('withdraw.moneySuccessMsg') }}
+            </p>
+        </div>
     </van-dialog>
+
+    <!-- 取款时间弹窗 -->
     <van-dialog v-model:show='timeShow' :title="$t('withdraw.hint')">
         <div class='time-wrap'>
             <h4>{{ $t('withdraw.timeHint') }} </h4>
             <p v-if='timeList.length > 0'>
-                {{ $t('withdraw.timeName') }}：
+                {{ $t('withdraw.timeName') }}:
             </p>
             <div v-if='timeList.length > 0' class='flex'>
                 <div class='time-text'>
                     <p v-for='(item,index) in timeList' :key='index' class='time-text-flex'>
                         <span class='time-label'>
-                            {{ item.weekDay }}：
+                            {{ item.weekDay }}:
                         </span>
                         <span class='time-val'>
                             {{ item.openTimeLocal.toString() }}
@@ -99,9 +117,35 @@
             </div>
         </div>
     </van-dialog>
+
+    <!-- 补充资料弹窗 -->
+    <van-popup v-model:show='appendVis' class='append-popup' position='right' :style="{ height: '100%', width: '500px' }">
+        <div class='append-wrap'>
+            <p class='title'>
+                {{ $t('deposit.appendFiled') }}
+            </p>
+            <van-cell-group inset>
+                <van-field
+                    v-for='(item, key) in extend'
+                    :key='key'
+                    v-model='item.value'
+                    :data='item'
+                    :label='item[lang]'
+                    label-width='70'
+                    :placeholder="$t('common.input') + item[lang]"
+                    :required='true'
+                />
+            </van-cell-group>
+            <van-button class='btn' size='large' type='primary' @click='handleAppendField'>
+                {{ $t('common.sure') }}
+            </van-button>
+        </div>
+    </van-popup>
 </template>
 
 <script>
+import Top from '@/components/top'
+import centerViewDialog from '@planspc/layout/centerViewDialog'
 import {
     reactive,
     computed,
@@ -110,19 +154,31 @@ import {
 } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { Toast, Dialog } from 'vant'
-import { isEmpty, debounce } from '@/utils/util'
+import { isEmpty, debounce, getCookie } from '@/utils/util'
 import { useStore } from 'vuex'
-import { handleWithdraw, queryWithdrawConfig, queryWithdrawRate, queryBankList, computeWithdrawFee, checkKycApply } from '@/api/user'
+import {
+    handleWithdraw,
+    queryWithdrawConfig,
+    queryWithdrawRate,
+    queryBankList,
+    computeWithdrawFee,
+    checkKycApply,
+    getWithdrawMethodList
+} from '@/api/user'
 import { useI18n } from 'vue-i18n'
 
 export default {
+    components: {
+        Top,
+        centerViewDialog
+    },
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const router = useRouter()
         const route = useRoute()
 
-        const { currency, accountId, tradeType } = route.query
+        const { currency, accountId, tradeType, currentTab } = route.query
 
         const weekdayMap = {
             1: t('weekdayMap.1'),
@@ -163,6 +219,11 @@ export default {
         })
 
         const state = reactive({
+            lang: getCookie('lang') || 'zh-CN', // 当前语言
+            rightAction: { // 头部导航栏右侧
+                title: t('withdraw.moneyRecordText'),
+                path: '/assets/withdrawRecord?withdrawType=1'
+            },
             withdrawAmount: '0.00', // 可提金额
             amount: '', // 提现金额
             fee: '--', // 手续费
@@ -179,7 +240,10 @@ export default {
             withdrawSuccess: false,
             withdrawCurrency: '',
             timeShow: false,
-            withdrawTimeConfigMap: {} // 处理后的时区
+            withdrawTimeConfigMap: {}, // 处理后的时区
+            appendVis: false, // 是否显示补充资料弹窗
+            extend: {}, // 需要补充资料的数据
+            paramsExtens: {} // 补充完整的资料数据
         })
 
         // 初始化数据
@@ -187,6 +251,11 @@ export default {
             state.amount = ''
             state.fee = '--'
             state.computePre = '--'
+        }
+
+        // 导航栏右侧标题点击跳转
+        const rightClick = () => {
+            router.push(state.rightAction.path)
         }
 
         // 获取取款手续费
@@ -215,7 +284,7 @@ export default {
                 // country: customInfo.value.country,
                 withdrawCurrency: currency,
                 withdrawType: 1,
-                withdrawMethod: 'bank',
+                withdrawMethod: currentTab,
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo
             }
             computeWithdrawFee(params).then(res => {
@@ -337,58 +406,6 @@ export default {
             getWithdrawFee()
         }
 
-        const confirm = () => {
-            const amount = parseFloat(state.amount)
-            const withdrawAmount = parseFloat(state.withdrawAmount)
-            const amountDigitsLength = state.amount.toString().split('.')[1] ? state.amount.toString().split('.')[1].length : 0
-
-            if (!amount) {
-                return Toast(t('withdrawMoney.hint_1'))
-            }
-            if (isEmpty(state.checkedBank)) {
-                return Toast(t('withdrawMoney.hint_2'))
-            }
-            if (amount < parseFloat(state.singleLowAmount)) {
-                return Toast(`${t('withdrawMoney.hint_3')}${state.singleLowAmount}`)
-            }
-            if (amount > parseFloat(state.singleHighAmount)) {
-                return Toast(`${t('withdrawMoney.hint_4')}${state.singleHighAmount}`)
-            }
-
-            if (amountDigitsLength > accountCurrency.digits) {
-                return Toast(t('withdraw.withdrawDigitsTip'))
-            }
-            if (amount > withdrawAmount) {
-                return Toast(t('withdrawMoney.hint_5'))
-            }
-
-            const params = {
-                accountId,
-                accountCurrency: accountCurrency.currency,
-                withdrawCurrency: currency,
-                amount: state.amount,
-                rate: state.withdrawRate.exchangeRate,
-                withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
-                bankAccountName: state.checkedBank.bankAccountName,
-                bankName: state.checkedBank.bankName,
-                bankCardNo: state.checkedBank.bankCardNumber,
-                withdrawType: 1,
-                withdrawMethod: 'bank',
-                tradeType
-            }
-
-            state.loading = true
-            handleWithdraw(params).then(res => {
-                state.loading = false
-                if (res.check()) {
-                    state.amount = ''
-                    state.withdrawSuccess = true
-                }
-            }).catch(err => {
-                state.loading = false
-            })
-        }
-
         // 获取取款汇率
         const getWithdrawRate = () => {
             const params = {
@@ -418,7 +435,7 @@ export default {
                 withdrawCurrency: currency,
                 country: customInfo.value.country,
                 withdrawType: 1,
-                withdrawMethod: 'bank',
+                withdrawMethod: currentTab,
                 tradeType
             }
 
@@ -534,7 +551,132 @@ export default {
             })
         }
 
+        // 获取提现方式
+        const getWithdrawMethods = () => {
+            getWithdrawMethodList({
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo,
+                customerGroupId: customInfo.value.customerGroupId,
+                customerId: customInfo.value.id,
+                country: customInfo.value.country,
+                tradeType,
+                accountId
+            }).then(res => {
+                res.data.map(elem => {
+                    if (elem.withdrawMethod === currentTab) {
+                        state.extend = elem.extend
+                    }
+                })
+            })
+        }
+
+        // 补充资料是否全部填写完成
+        const checkAllComplete = () => {
+            let flag = true
+            const extend = state.extend
+            for (const key in extend) {
+                if (Object.hasOwnProperty.call(extend, key)) {
+                    const element = extend[key]
+                    if (isEmpty(element.value)) {
+                        flag = false
+                    }
+                }
+            }
+            return flag
+        }
+
+        // 补充资料确定事件
+        const handleAppendField = () => {
+            const extend = state.extend
+            for (const key in extend) {
+                if (Object.hasOwnProperty.call(extend, key)) {
+                    const element = extend[key]
+                    if (!isEmpty(element.regex)) {
+                        const valueReg = new RegExp(element.regex)
+                        if (!valueReg.test(element.value)) {
+                            return Toast(`${element[state.lang]}` + t('register.incorrectlyFormed'))
+                        }
+                    }
+                    if (isEmpty(element.value)) {
+                        return Toast(t('deposit.allInputRequire'))
+                    }
+                    state.paramsExtens[key] = element.value
+                }
+            }
+            state.appendVis = false
+
+            // 发起提现
+            launchHandleWithdraw()
+        }
+
+        // 点击确定提现
+        const confirm = () => {
+            const amount = parseFloat(state.amount)
+            const withdrawAmount = parseFloat(state.withdrawAmount)
+            const amountDigitsLength = state.amount.toString().split('.')[1] ? state.amount.toString().split('.')[1].length : 0
+            if (!amount) {
+                return Toast(t('withdrawMoney.hint_1'))
+            }
+            if (isEmpty(state.checkedBank)) {
+                return Toast(t('withdrawMoney.hint_2'))
+            }
+            if (amount < parseFloat(state.singleLowAmount)) {
+                return Toast(`${t('withdrawMoney.hint_3')}${state.singleLowAmount}`)
+            }
+            if (amount > parseFloat(state.singleHighAmount)) {
+                return Toast(`${t('withdrawMoney.hint_4')}${state.singleHighAmount}`)
+            }
+
+            if (amountDigitsLength > accountCurrency.digits) {
+                return Toast(t('withdraw.withdrawDigitsTip'))
+            }
+            if (amount > withdrawAmount) {
+                return Toast(t('withdrawMoney.hint_5'))
+            }
+            // 取款方式为otc365_cny判断是否需要填写补充资料
+            if (currentTab === 'otc365_cny' && !isEmpty(state.extend) && !checkAllComplete()) {
+                state.appendVis = true
+                return
+            }
+
+            // 发起提现
+            launchHandleWithdraw()
+        }
+
+        // 创建取款提案
+        const launchHandleWithdraw = () => {
+            state.loading = true
+            const params = {
+                accountId,
+                accountCurrency: accountCurrency.currency,
+                withdrawCurrency: currency,
+                amount: state.amount,
+                rate: state.withdrawRate.exchangeRate,
+                withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
+                bankAccountName: state.checkedBank.bankAccountName,
+                bankName: state.checkedBank.bankName,
+                bankCardNo: state.checkedBank.bankCardNumber,
+                withdrawType: 1,
+                withdrawMethod: currentTab,
+                tradeType
+            }
+            if (!isEmpty(state.paramsExtens)) {
+                params.extend = JSON.stringify(state.paramsExtens)
+            }
+            handleWithdraw(params).then(res => {
+                state.loading = false
+                if (res.check()) {
+                    state.amount = ''
+                    state.withdrawSuccess = true
+                }
+            }).catch(err => {
+                state.loading = false
+            })
+        }
+
         onBeforeMount(() => {
+            // 获取提现方式
+            getWithdrawMethods()
             new Promise(resolve => {
                 // 获取银行卡列表
                 getBankList()
@@ -543,10 +685,12 @@ export default {
                 // 获取取款限制配置
                 getWithdrawConfig()
             })
+            store.commit('_user/Update_account', accountId)
         })
 
         return {
             ...toRefs(state),
+            rightClick,
             openSheet,
             chooseBank,
             getAll,
@@ -560,7 +704,8 @@ export default {
             timeList,
             onlineServices,
             isEmpty,
-            accountCurrency
+            accountCurrency,
+            handleAppendField
         }
     }
 
@@ -612,6 +757,7 @@ export default {
                 background-color: var(--primaryAssistColor);
                 border: 1px solid var(--lineColor);
                 border-radius: rem(30px);
+                cursor: pointer;
             }
         }
         .notice {
@@ -655,6 +801,7 @@ export default {
     align-items: center;
     margin: rem(10px) rem(10px) rem(10px) 0;
     border: rem(1px) solid var(--lineColor);
+    cursor: pointer;
     &.disabled {
         pointer-events: none;
         .bank-no {
@@ -761,6 +908,22 @@ export default {
                     flex: 3;
                 }
             }
+        }
+    }
+}
+// 补充资料弹窗
+.append-popup {
+    .append-wrap {
+        text-align: center;
+        .title {
+            padding: rem(60px) 0;
+            color: var(--color);
+            font-size: rem(32px);
+            text-align: center;
+        }
+        .btn {
+            width: 80%;
+            margin: rem(50px) auto;
         }
     }
 }

@@ -1,124 +1,133 @@
 <template>
-    <div class='container'>
-        <!-- 加载中组件 -->
-        <Loading :show='loading' />
-
-        <div class='empty'></div>
-        <div class='module-form'>
-            <div class='select'>
-                <label>{{ $t('withdrawCoin.coinName') }}</label>
-                <div class='option'>
-                    <el-select v-model='coinKind' class='currencyBox' placeholder='Select' @change='selectCoinKind'>
-                        <el-option
-                            v-for='item in coinKindList'
-                            :key='item.name'
-                            :label='item.name'
-                            :value='item.name'
-                        />
-                    </el-select>
+    <centerViewDialog>
+        <div class='container'>
+            <!-- 加载中组件 -->
+            <Loading :show='loading' />
+            <!-- 头部导航 -->
+            <Top
+                back
+                left-icon='arrow-left'
+                :right-action='rightAction'
+                :show-center='true'
+                @rightClick='rightClick'
+            />
+            <div class='empty'></div>
+            <div class='module-form'>
+                <div class='select'>
+                    <label>{{ $t('withdrawCoin.coinName') }}</label>
+                    <div class='option'>
+                        <el-select v-model='coinKind' class='currencyBox' placeholder='Select' @change='selectCoinKind'>
+                            <el-option
+                                v-for='item in coinKindList'
+                                :key='item.name'
+                                :label='item.name'
+                                :value='item.name'
+                            />
+                        </el-select>
+                    </div>
                 </div>
-            </div>
 
-            <div class='select'>
-                <label>{{ $t('withdrawCoin.chainName') }}</label>
-                <div class='option'>
-                    <el-select v-model='chainName' class='currencyBox' placeholder='Select' @change='selectChainName'>
-                        <el-option
-                            v-for='item in chainNameList'
-                            :key='item.name'
-                            :label='item.name'
-                            :value='item.name'
-                        />
-                    </el-select>
+                <div class='select'>
+                    <label>{{ $t('withdrawCoin.chainName') }}</label>
+                    <div class='option'>
+                        <el-select v-model='chainName' class='currencyBox' placeholder='Select' @change='selectChainName'>
+                            <el-option
+                                v-for='item in chainNameList'
+                                :key='item.name'
+                                :label='item.name'
+                                :value='item.name'
+                            />
+                        </el-select>
+                    </div>
                 </div>
-            </div>
 
-            <div class='block'>
-                <div class='title'>
-                    <span>{{ $t('withdrawCoin.coinCount') }}</span>
+                <div class='block'>
+                    <div class='title'>
+                        <span>{{ $t('withdrawCoin.coinCount') }}</span>
+                    </div>
+                    <div class='handle'>
+                        <input v-model='coinCount' :placeholder="$t('withdrawCoin.coinCountPlaceholder')" type='number' @change='changeAmount' @input='changeAmount' />
+                        <button @click='onAllTake'>
+                            {{ $t('withdrawCoin.allBtn') }}
+                        </button>
+                    </div>
+                    <p class='may'>
+                        <span>{{ $t('withdrawCoin.can') }} </span>
+                        <strong v-if='showCanMoney'>
+                            {{ coinTotal }} {{ coinKind }}-{{ chainName }}
+                        </strong>
+                    </p>
                 </div>
-                <div class='handle'>
-                    <input v-model='coinCount' :placeholder="$t('withdrawCoin.coinCountPlaceholder')" type='number' @change='changeAmount' @input='changeAmount' />
-                    <button @click='onAllTake'>
-                        {{ $t('withdrawCoin.allBtn') }}
-                    </button>
-                </div>
-                <p class='may'>
-                    <span>{{ $t('withdrawCoin.can') }} </span>
-                    <strong v-if='showCanMoney'>
-                        {{ coinTotal }} {{ coinKind }}-{{ chainName }}
-                    </strong>
-                </p>
-            </div>
 
-            <div class='case'>
-                <p class='row'>
-                    <label class='name'>
-                        {{ $t('withdrawCoin.service') }}
-                    </label>
-                    <span class='value'>
-                        {{ serviceCount }} {{ coinKind }}
-                        <span v-if='chainName'>
-                            -{{ chainName }}
-                        </span>
-                    </span>
-                </p>
-                <p class='row'>
-                    <label class='name'>
-                        {{ $t('withdrawCoin.predict') }}
-                    </label>
-                    <span class='value'>
-                        {{ arriveCount }} {{ coinKind }}
-                        <span v-if='chainName'>
-                            -{{ chainName }}
-                        </span>
-                    </span>
-                </p>
-                <p class='row'>
-                    <label class='name'>
-                        {{ $t('withdrawCoin.minus') }}
-                    </label>
-                    <span class='value'>
-                        {{ minusCount }}  {{ accountCurrency.currency }}
-                    </span>
-                </p>
-            </div>
-        </div>
-        <div class='empty'></div>
-        <div class='module-wallet'>
-            <p class='title'>
-                {{ $t('withdrawCoin.walletSelect') }}
-            </p>
-            <p class='hint'>
-                {{ $t('withdrawCoin.walletHint') }}
-            </p>
-            <!-- 有钱包地址 -->
-            <div v-if='currentWallet' class='wallet-address' @click='openWalletSelect'>
-                <div class='info'>
+                <div class='case'>
                     <p class='row'>
-                        <span class='name'>
-                            {{ currentWallet.currency }}-{{ currentWallet.chainName }}
-                        </span>
-                        <span class='tag'>
-                            {{ currentWallet.remark }}
+                        <label class='name'>
+                            {{ $t('withdrawCoin.service') }}
+                        </label>
+                        <span class='value'>
+                            {{ serviceCount }} {{ coinKind }}
+                            <span v-if='chainName'>
+                                -{{ chainName }}
+                            </span>
                         </span>
                     </p>
-                    <p class='code'>
-                        {{ currentWallet.address }}
+                    <p class='row'>
+                        <label class='name'>
+                            {{ $t('withdrawCoin.predict') }}
+                        </label>
+                        <span class='value'>
+                            {{ arriveCount }} {{ coinKind }}
+                            <span v-if='chainName'>
+                                -{{ chainName }}
+                            </span>
+                        </span>
+                    </p>
+                    <p class='row'>
+                        <label class='name'>
+                            {{ $t('withdrawCoin.minus') }}
+                        </label>
+                        <span class='value'>
+                            {{ minusCount }}  {{ accountCurrency.currency }}
+                        </span>
                     </p>
                 </div>
-                <van-icon color='#333' name='arrow-down' />
             </div>
-            <!-- 无钱包地址 -->
-            <div v-else class='wallet-not' @click='goWalletAdd'>
-                <van-icon :color='$style.color' name='plus' />
-                <span>{{ $t('withdrawCoin.walletAdd') }}</span>
+            <div class='empty'></div>
+            <div class='module-wallet'>
+                <p class='title'>
+                    {{ $t('withdrawCoin.walletSelect') }}
+                </p>
+                <p class='hint'>
+                    {{ $t('withdrawCoin.walletHint') }}
+                </p>
+                <!-- 有钱包地址 -->
+                <div v-if='currentWallet' class='wallet-address' @click='openWalletSelect'>
+                    <div class='info'>
+                        <p class='row'>
+                            <span class='name'>
+                                {{ currentWallet.currency }}-{{ currentWallet.chainName }}
+                            </span>
+                            <span class='tag'>
+                                {{ currentWallet.remark }}
+                            </span>
+                        </p>
+                        <p class='code'>
+                            {{ currentWallet.address }}
+                        </p>
+                    </div>
+                    <van-icon color='#333' name='arrow-down' />
+                </div>
+                <!-- 无钱包地址 -->
+                <div v-else class='wallet-not' @click='goWalletAdd'>
+                    <van-icon :color='$style.color' name='plus' />
+                    <span>{{ $t('withdrawCoin.walletAdd') }}</span>
+                </div>
             </div>
         </div>
-    </div>
-    <van-button class='footer-btn' @click='onConfirm'>
-        <span>{{ $t('withdraw.confirm') }}</span>
-    </van-button>
+        <van-button class='footer-btn' @click='onConfirm'>
+            <span>{{ $t('withdraw.confirm') }}</span>
+        </van-button>
+    </centerViewDialog>
 
     <!-- 取款时间弹窗 -->
     <van-dialog v-model:show='timeShow' :title="$t('withdraw.hint')">
@@ -128,11 +137,11 @@
             </h4><br />
             <div v-if='timeList.length > 0' class='flex'>
                 <p v-if='timeList.length > 0'>
-                    {{ $t('withdraw.timeName') }}：
+                    {{ $t('withdraw.timeName') }}:
                 </p>
                 <div class='time-text'>
                     <p v-for='(item,index) in timeList' :key='index'>
-                        {{ item.weekDay }}：{{ item.openTimeLocal.toString() }}
+                        {{ item.weekDay }}:{{ item.openTimeLocal.toString() }}
                     </p><br />
                 </div>
             </div>
@@ -140,14 +149,16 @@
     </van-dialog>
 
     <!-- 提交成功弹窗 -->
-    <van-dialog v-model:show='withdrawSuccess' class-name='add-success' :confirm-button-text="$t('common.sure')" :show-cancel-button='false' @confirm='$router.push("/assets")'>
-        <i class='icon_success'></i>
-        <p class='title'>
-            {{ $t('withdraw.successText') }}
-        </p>
-        <p class='content'>
-            {{ $t('withdraw.coinSuccessMsg') }}
-        </p>
+    <van-dialog v-model:show='withdrawSuccess' :confirm-button-text="$t('common.sure')" :show-cancel-button='false' @confirm='$router.push("/assets")'>
+        <div class='add-success'>
+            <i class='icon_success'></i>
+            <p class='title'>
+                {{ $t('withdraw.successText') }}
+            </p>
+            <p class='content'>
+                {{ $t('withdraw.coinSuccessMsg') }}
+            </p>
+        </div>
     </van-dialog>
 
     <!-- 选择钱包地址弹窗 -->
@@ -181,6 +192,9 @@
 </template>
 
 <script>
+// components
+import Top from '@/components/top'
+import centerViewDialog from '@planspc/layout/centerViewDialog'
 // vue
 import { reactive, toRefs, computed, onMounted, watch } from 'vue'
 // router
@@ -207,7 +221,10 @@ import { isEmpty, debounce } from '@/utils/util'
 // 插件
 
 export default {
-    props: ['withdrawMethod'],
+    components: {
+        Top,
+        centerViewDialog
+    },
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
@@ -217,6 +234,11 @@ export default {
         const state = reactive({
             // 加载状态
             loading: true,
+            // 头部导航栏右侧
+            rightAction: {
+                title: t('withdraw.moneyRecordText'),
+                path: '/assets/withdrawRecord?withdrawType=2'
+            },
             // 是否显示可提金额
             showCanMoney: false,
             // 取款限制配置
@@ -271,6 +293,11 @@ export default {
             state.serviceCount = '0.00'
             state.arriveCount = '0.00'
             state.minusCount = '0.00'
+        }
+
+        // 导航栏右侧标题点击跳转
+        const rightClick = () => {
+            router.push(state.rightAction.path)
         }
 
         // 账户信息
@@ -451,7 +478,7 @@ export default {
             accountCurrency: accountCurrency.currency,
             customerGroupId: customInfo.customerGroupId,
             country: customInfo.country,
-            withdrawMethod: props.withdrawMethod
+            withdrawMethod: currentTab
         }
 
         // 获取取款限制配置
@@ -469,7 +496,6 @@ export default {
                         state.loading = false
                         return Dialog.confirm({
                             title: t('withdraw.hint'),
-
                             message: t('withdraw.withdrawLimitHint'),
                             confirmButtonText: t('withdraw.contact'),
                             cancelButtonText: t('withdraw.close')
@@ -762,10 +788,12 @@ export default {
                 // 获取取款限制配置
                 getWithdrawConfig()
             })
+            store.commit('_user/Update_account', accountId)
         })
 
         return {
             ...toRefs(state),
+            rightClick,
             customInfo,
             selectCoinKind,
             selectChainName,
@@ -777,7 +805,6 @@ export default {
             selectWallet,
             onConfirm,
             accountCurrency
-
         }
     }
 }
@@ -859,6 +886,7 @@ export default {
                 background: none;
                 border: 1px solid var(--lineColor);
                 border-radius: rem(30px);
+                cursor: pointer;
             }
         }
         .may {
@@ -921,6 +949,7 @@ export default {
         padding: 0 rem(30px);
         border: 1px solid var(--lineColor);
         border-radius: rem(4px);
+        cursor: pointer;
         :deep(.van-icon-plus) {
             margin-right: rem(26px);
             font-weight: bold;
@@ -940,6 +969,7 @@ export default {
         padding: 0 rem(30px);
         border: 1px solid var(--lineColor);
         border-radius: rem(4px);
+        cursor: pointer;
         .info {
             flex: 1;
             .row {

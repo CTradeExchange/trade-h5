@@ -396,25 +396,6 @@ export default {
             getWithdrawFee()
         }
 
-        // 获取提现方式
-        function getWithdrawMethods () {
-            getWithdrawMethodList({
-                companyId: customInfo.value.companyId,
-                customerNo: customInfo.value.customerNo,
-                customerGroupId: customInfo.value.customerGroupId,
-                customerId: customInfo.value.id,
-                country: customInfo.value.country,
-                tradeType,
-                accountId
-            }).then(res => {
-                res.data.map(elem => {
-                    if (elem.withdrawMethod === currentTab) {
-                        state.extend = elem.extend
-                    }
-                })
-            })
-        }
-
         // 获取取款汇率
         const getWithdrawRate = () => {
             const params = {
@@ -559,6 +540,25 @@ export default {
                 }
             }).catch(err => {
                 state.loading = false
+            })
+        }
+
+        // 获取提现方式
+        const getWithdrawMethods = () => {
+            getWithdrawMethodList({
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo,
+                customerGroupId: customInfo.value.customerGroupId,
+                customerId: customInfo.value.id,
+                country: customInfo.value.country,
+                tradeType,
+                accountId
+            }).then(res => {
+                res.data.map(elem => {
+                    if (elem.withdrawMethod === currentTab) {
+                        state.extend = elem.extend
+                    }
+                })
             })
         }
 

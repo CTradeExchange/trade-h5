@@ -221,6 +221,7 @@ export default {
         // 创建二维码
         const creatQrCode = () => {
             setTimeout(() => {
+                qrCode.value.innerHTML = ''
                 new QRCode(qrCode.value, {
                     text: state.address,
                     width: 150,
@@ -298,6 +299,12 @@ export default {
         overflow-x: auto;
         margin-top: rem(50px);
         padding-bottom: rem(30px);
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        &::-webkit-scrollbar {
+            width: 0 !important;
+            display: none;
+        }
         .item {
             display: flex;
             justify-content: center;
@@ -378,6 +385,7 @@ export default {
                     color: #fff;
                     background: var(--primary);
                     border-radius: rem(10px);
+                    cursor: pointer;
                 }
             }
         }
