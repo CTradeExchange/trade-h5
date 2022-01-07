@@ -191,10 +191,12 @@ export default {
 
         // 选择链名称
         const selectChain = (value) => {
-            state.address = ''
-            state.chainName = value
-            // 获取直充支付钱包地址
-            getRechargeAddress()
+            if (state.chainName !== value) {
+                state.address = ''
+                state.chainName = value
+                // 获取直充支付钱包地址
+                getRechargeAddress()
+            }
         }
 
         // 复制地址
@@ -210,6 +212,7 @@ export default {
         // 创建二维码
         const creatQrCode = () => {
             setTimeout(() => {
+                qrCode.value.innerHTML = ''
                 new QRCode(qrCode.value, {
                     text: state.address,
                     width: 150,
@@ -287,6 +290,12 @@ export default {
         overflow-x: auto;
         margin-top: rem(50px);
         padding-bottom: rem(30px);
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        &::-webkit-scrollbar {
+            width: 0 !important;
+            display: none;
+        }
         .item {
             display: flex;
             justify-content: center;

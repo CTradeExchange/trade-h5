@@ -2,7 +2,14 @@
     <div class='container'>
         <!-- 加载中组件 -->
         <Loading :show='loading' />
-
+        <!-- 头部导航 -->
+        <Top
+            back
+            left-icon='arrow-left'
+            :right-action='rightAction'
+            :show-center='true'
+            @rightClick='rightClick'
+        />
         <div class='empty'></div>
         <div class='module-form'>
             <div class='select' @click='openCoinKind'>
@@ -172,6 +179,8 @@
 </template>
 
 <script>
+// components
+import Top from '@/components/top'
 // vue
 import { reactive, toRefs, computed, onMounted, watch } from 'vue'
 // router
@@ -195,10 +204,11 @@ import {
 } from '@api/user'
 // 工具方法
 import { isEmpty, debounce } from '@/utils/util'
-// 插件
 
 export default {
-    props: ['withdrawMethod'],
+    components: {
+        Top
+    },
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
@@ -208,6 +218,11 @@ export default {
         const state = reactive({
             // 加载状态
             loading: true,
+            // 头部导航栏右侧
+            rightAction: {
+                title: t('withdraw.moneyRecordText'),
+                path: '/withdrawRecord?withdrawType=2'
+            },
             // 是否显示可提金额
             showCanMoney: false,
             // 取款限制配置
@@ -276,6 +291,11 @@ export default {
 
         // 账户币种
         const { value: accountCurrency } = computed(() => store.state._user.customerInfo.accountList.find(el => el.accountId === Number(accountId)))
+
+        // 导航栏右侧标题点击跳转
+        const rightClick = () => {
+            router.push(state.rightAction.path)
+        }
 
         // 周数据
         const weekdayMap = {
@@ -446,7 +466,7 @@ export default {
             accountCurrency: accountCurrency.currency,
             customerGroupId: customInfo.customerGroupId,
             country: customInfo.country,
-            withdrawMethod: props.withdrawMethod
+            withdrawMethod: currentTab
         }
 
         // 获取取款限制配置
@@ -770,10 +790,12 @@ export default {
                 // 获取取款限制配置
                 getWithdrawConfig()
             })
+            store.commit('_user/Update_account', accountId)
         })
 
         return {
             ...toRefs(state),
+            rightClick,
             customInfo,
             openCoinKind,
             selectCoinKind,

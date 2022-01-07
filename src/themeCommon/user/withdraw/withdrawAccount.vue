@@ -176,15 +176,25 @@ export default {
         }
 
         const next = () => {
-            router.push({
-                path: 'withdraw',
-                query: {
-                    currency: state.inCurrency,
-                    currentTab: state.currentTab,
-                    tradeType,
-                    accountId: state.accountId
-                }
-            })
+            const query = {
+                currency: state.inCurrency,
+                currentTab: state.currentTab,
+                tradeType,
+                accountId: state.accountId
+            }
+            // 跳转到提现页面
+            if (['bank', 'otc365_cny'].includes(state.currentTab)) {
+                router.push({
+                    path: '/withdrawMoney',
+                    query
+                })
+            } else {
+                // 跳转到提币页面
+                router.push({
+                    path: '/withdrawCoin',
+                    query
+                })
+            }
         }
 
         const selectWithdraw = () => {

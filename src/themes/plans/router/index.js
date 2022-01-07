@@ -185,14 +185,6 @@ const routes = [
         }
     },
     {
-        path: '/withdrawCoin',
-        name: 'WithdrawCoin',
-        component: () => import(/* webpackChunkName: "otherpage" */ '../views/withdrawCoin/withdrawCoin.vue'),
-        meta: {
-            title: ''
-        }
-    },
-    {
         path: '/positionDetail',
         name: 'PositionDetail',
         component: () => import(/* webpackChunkName: "otherpage" */ '../views/position/positionDetail.vue'),

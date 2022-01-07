@@ -2,8 +2,8 @@
     <div class='page-wrap'>
         <LayoutTop :back='true' :menu='false' :title='tradeName' />
         <Loading :show='loading' />
-        <van-tabs v-if='[2,5].indexOf(Number(tradeType)) === -1' v-model:active='active' class='tabs'>
-            <van-tab :title='$t("trade.curTrust")'>
+        <van-tabs v-model:active='active' class='tabs'>
+            <van-tab name='pending' :title="[1, 2].includes(Number(tradeType)) ? $t('trade.curPending') : $t('trade.curTrust')">
                 <div v-if='pendingList.length === 0'>
                     <van-empty :description='$t("trade.pendingEmpty")' image='/images/empty.png' />
                 </div>
@@ -19,16 +19,14 @@
                             v-for='item in pendingList'
                             :key='item.id'
                             :product='item'
-                            @click.stop='toDetail(item)'
                         />
                     </van-pull-refresh>
                 </div>
             </van-tab>
-            <van-tab :title='$t("trade.dealList")'>
+            <van-tab name='deal' :title='$t("trade.dealList")'>
                 <orderList ref='orderListRef' />
             </van-tab>
         </van-tabs>
-        <orderList v-else ref='orderListRef' />
     </div>
 </template>
 
@@ -52,14 +50,13 @@ export default {
         const store = useStore()
         const route = useRoute()
         const router = useRouter()
-        const { tradeType } = route.query
+        const { tradeType, active } = route.query
         const orderListRef = ref()
 
         const state = reactive({
-            active: 0,
+            active: active || 'pending',
             loading: false,
-            switchProductVisible: false,
-
+            switchProductVisible: false
         })
 
         const tradeName = computed(() => t('tradeType[' + tradeType + ']'))
@@ -72,17 +69,6 @@ export default {
         const customInfo = computed(() => store.state._user.customerInfo)
 
         const account = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(tradeType)))
-
-        const toDetail = (item) => {
-            router.push({
-                path: '/trustDetail',
-                query: {
-                    id: item.id,
-                    symbolId: item.symbolId,
-                    tradeType: route.query.tradeType,
-                }
-            })
-        }
 
         const onRefresh = () => {
             queryPendingList()
@@ -138,7 +124,6 @@ export default {
         queryPendingList()
 
         return {
-            toDetail,
             pendingList,
             loading,
             tradeName,

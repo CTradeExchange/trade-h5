@@ -135,7 +135,7 @@
                     :required='true'
                 />
             </van-cell-group>
-            <van-button class='confirm-btn' size='large' type='primary' @click='handleAppendField'>
+            <van-button class='btn' size='large' type='primary' @click='handleAppendField'>
                 {{ $t('common.sure') }}
             </van-button>
         </div>
@@ -165,7 +165,6 @@ import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, 
 import { getListByParentCode } from '@/api/base'
 
 export default {
-
     setup (props) {
         const router = useRouter()
         const route = useRoute()
@@ -695,7 +694,7 @@ export default {
                     state.paramsExtens[key] = state.appendMap[key]?.value
                 }
             }
-
+            state.appendVis = false
             handleDeposit()
         }
 
@@ -842,7 +841,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-
 .page-content {
     display: flex;
     flex-direction: column;
@@ -1114,18 +1112,15 @@ export default {
 
 // 补充资料弹窗
 .append-popup {
-    background-color: var(--bgColor);
     .append-wrap {
         text-align: center;
-        //padding: 0 rem(30px);
-        background-color: var(--contentColor);
         .title {
             padding: rem(60px) 0;
             color: var(--color);
             font-size: rem(32px);
             text-align: center;
         }
-        .confirm-btn {
+        .btn {
             width: 80%;
             margin: rem(50px) auto;
         }

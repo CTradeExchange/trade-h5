@@ -9,7 +9,7 @@
                     :title='item.title'
                 />
             </van-tabs>
-            <i class='link icon_mingxi1' @click='goList'></i>
+            <i v-if="current !== 'assets' && current !== 'position'" class='link icon_mingxi1' @click='goList'></i>
         </div>
         <!-- 当前委托、当前挂单 -->
         <div v-if="current === 'pending'">
@@ -18,7 +18,7 @@
                 :description="$t('trade.pendingEmpty')"
                 image='/images/empty.png'
             />
-            <div class='trust-list' v-else>
+            <div v-else class='trust-list'>
                 <trustItem v-for='item in pendingList' :key='item.id' :product='item' />
             </div>
         </div>
@@ -28,11 +28,11 @@
             <dealList v-else :biz-type-text='bizTypeText' :list='dealList' :trade-type='tradeType' />
         </div>
         <!-- 持仓 -->
-        <positionList :showHeader='false' v-if="current === 'position'" />
+        <positionList v-if="current === 'position'" :show-header='false' />
         <!-- 资产 -->
-        <div class='assets-list' v-if="current === 'assets'">
+        <div v-if="current === 'assets'" class='assets-list'>
             <assetsItem v-for='account in accountList' :key='account.accountId' class='block' :data='account' />
-        </div> 
+        </div>
     </div>
 </template>
 
@@ -131,7 +131,8 @@ export default {
             router.push({
                 name: 'List',
                 query: {
-                    tradeType: props.tradeType
+                    tradeType: props.tradeType,
+                    active: state.current
                 }
             })
         }
@@ -145,7 +146,7 @@ export default {
                 case 'deal':
                     getDealRecord()
                     break
-                case 'position': 
+                case 'position':
                     getPositionList()
                     break
                 case 'assets':
@@ -162,12 +163,12 @@ export default {
                 executeEndTime: window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 23:59:59')).valueOf(),
                 accountIds: state.accountIds.toString(),
                 tradeType: Number(props.tradeType),
-                sortFieldName: 'executeTime', 
+                sortFieldName: 'executeTime',
                 sortType: 'desc'
-            }  
-            tradeRecordList(params).then(res => { 
+            }
+            tradeRecordList(params).then(res => {
                 if (res.check() && res.data) {
-                    state.dealList = res.data.list 
+                    state.dealList = res.data.list
                     state.bizTypeText = res.data.bizTypeText
                     state.productKyes = []
                     subscribe()
@@ -176,14 +177,14 @@ export default {
         }
 
         // 获取资产数据
-        function getAssetsInfo() {
+        function getAssetsInfo () {
             store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: props.tradeType }).then(() => {
                 state.productKyes = []
                 subscribe()
             })
         }
 
-         // 获取当前持仓、当前挂单数据
+        // 获取当前持仓、当前挂单数据
         function getOrderPage () {
             store.dispatch('_trade/queryPBOOrderPage', {
                 tradeType: props.tradeType,
@@ -215,7 +216,7 @@ export default {
                 if (res.check()) {
                     const arr = []
                     if (res.data) {
-                         res.data.map(elem => {
+                        res.data.map(elem => {
                             arr.push(elem.symbolId + '_' + elem.tradeType)
                         })
                     }
@@ -226,7 +227,7 @@ export default {
         }
 
         // 通知父组件需要订阅的产品
-        function subscribe() {
+        function subscribe () {
             emit('subscribe', state.productKyes)
         }
 

@@ -81,9 +81,28 @@ const routes = [
         }
     },
     {
-        path: '/withdraw',
-        name: 'Withdraw',
-        component: () => import(/* webpackChunkName: "withdraw" */ '../user/withdraw/withdraw.vue'),
+        path: '/withdrawAccount',
+        name: 'WithdrawAccount',
+        component: () => import(/* webpackChunkName: "page" */ '../user/withdraw/withdrawAccount.vue'),
+        meta: {
+            title: 'cRoute.withdrawAccount',
+            footerMenu: false,
+        }
+    },
+    {
+        path: '/withdrawMoney',
+        name: 'WithdrawMoney',
+        component: () => import(/* webpackChunkName: "withdraw" */ '../user/withdraw/withdrawMoney.vue'),
+        meta: {
+            title: 'cRoute.withdraw',
+            footerMenu: false,
+            roles: ['User'],
+        }
+    },
+    {
+        path: '/withdrawCoin',
+        name: 'WithdrawCoin',
+        component: () => import(/* webpackChunkName: "withdraw" */ '../user/withdraw/withdrawCoin.vue'),
         meta: {
             title: 'cRoute.withdraw',
             footerMenu: false,
@@ -100,7 +119,6 @@ const routes = [
             roles: ['User'],
         }
     },
-
     {
         path: '/walletAddress',
         name: 'WalletAddress',
@@ -344,15 +362,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "page" */ '../user/chooseAccount.vue'),
         meta: {
             title: 'cRoute.chooseCurrency',
-            footerMenu: false,
-        }
-    },
-    {
-        path: '/withdrawAccount',
-        name: 'WithdrawAccount',
-        component: () => import(/* webpackChunkName: "page" */ '../user/withdraw/withdrawAccount.vue'),
-        meta: {
-            title: 'cRoute.withdrawAccount',
             footerMenu: false,
         }
     },
