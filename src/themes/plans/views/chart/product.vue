@@ -71,12 +71,12 @@
                             {{ product.yesterday_close_price }}
                         </span>
                     </p>
-                    <p v-if='product.etf && product.currentEquity' class='priceTop'>
+                    <p v-if='product.etf ' class='priceTop'>
                         <span>
                             {{ $t('fundInfo.realtimeJZ') }}({{ product.fundCurrency }})
                         </span>
                         <span>
-                            {{ product.currentEquity }}
+                            {{ product.currentNav || '--' }}
                         </span>
                     </p>
                 </div>
@@ -93,10 +93,10 @@
                             {{ product.low_price }}
                         </span>
                     </p>
-                    <p v-if='product.etf && product.premiumRate' class='priceTop'>
+                    <p v-if='product.etf' class='priceTop'>
                         {{ $t('fundInfo.premiumRate') }}
                         <span>
-                            {{ product.premiumRate }}
+                            {{ product.premiumRate || '--' }}
                         </span>
                     </p>
                 </div>
@@ -262,7 +262,7 @@
             </div>
         </div>
         <StallsAndDeal
-            v-if='product && dealModeShowMap[product.dealMode]?.handicap'
+            v-if='product && product.tradeEnable && dealModeShowMap[product.dealMode]?.handicap'
             :cur-price='product?.cur_price'
             :symbol-id='product?.symbolId'
             :trade-type='tradeType'
