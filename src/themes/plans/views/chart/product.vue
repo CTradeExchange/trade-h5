@@ -49,35 +49,54 @@
                         </span>
                     </div>
                 </div>
+                <div v-if='product.etf' class='ft'>
+                    <ETF />
+                </div>
             </div>
-            <div class='bd'>
+            <div v-if='product' class='bd'>
                 <div class='item'>
                     <p class='priceBottom'>
                         <span>
                             {{ $t('trade.todayOpen') }}
                         </span>
                         <span>
-                            {{ product?.open_price }}
+                            {{ product.open_price }}
                         </span>
-                    </p><p>
+                    </p>
+                    <p>
                         <span>
                             {{ $t('trade.yesterdayClosed') }}
                         </span>
                         <span>
-                            {{ product?.yesterday_close_price }}
+                            {{ product.yesterday_close_price }}
                         </span>
                     </p>
-                </div><div class='item'>
+                    <p v-if='product.etf && product.currentEquity' class='priceTop'>
+                        <span>
+                            {{ $t('fundInfo.realtimeJZ') }}({{ product.fundCurrency }})
+                        </span>
+                        <span>
+                            {{ product.currentEquity }}
+                        </span>
+                    </p>
+                </div>
+                <div class='item'>
                     <p class='priceBottom'>
                         {{ $t('trade.high') }}
                         <span>
-                            {{ product?.high_price }}
+                            {{ product.high_price }}
                         </span>
                     </p>
                     <p>
                         {{ $t('trade.low') }}
                         <span>
-                            {{ product?.low_price }}
+                            {{ product.low_price }}
+                        </span>
+                    </p>
+                    <p v-if='product.etf && product.premiumRate' class='priceTop'>
+                        {{ $t('fundInfo.premiumRate') }}
+                        <span>
+                            {{ product.premiumRate }}
                         </span>
                     </p>
                 </div>
@@ -243,13 +262,13 @@
             </div>
         </div>
         <StallsAndDeal
-            v-if='product && dealModeShowMap[product.trade_mode]?.handicap'
+            v-if='product && dealModeShowMap[product.dealMode]?.handicap'
             :cur-price='product?.cur_price'
             :symbol-id='product?.symbolId'
             :trade-type='tradeType'
         />
 
-        <div class='footerBtnBox'>
+        <div v-if='product && product.tradeEnable' class='footerBtnBox'>
             <div class='trade-btn-wrap'>
                 <div class='buy fallColorBg' @click="toOrder('buy')">
                     <i class='icon icon_mairu'></i>
@@ -304,12 +323,13 @@ import { QuoteSocket } from '@/plugins/socket/socket'
 import StallsAndDeal from './components/StallsAndDeal'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
 import Loading from '@/components/loading.vue'
+import ETF from '@plans/components/etfIcon.vue'
 import sidebarProduct from '@plans/components/sidebarProduct.vue'
 import Base from '@/store/modules/base'
 import { toolHooks } from '@plans/hooks/handicap'
 
 export default {
-    components: { KIcon, StudyList, tv, StallsAndDeal, Loading, sidebarProduct },
+    components: { KIcon, StudyList, tv, StallsAndDeal, Loading, sidebarProduct, ETF },
     setup (props) {
         const route = useRoute()
         const router = useRouter()
@@ -1271,6 +1291,9 @@ export default {
                     white-space: nowrap;
                     &.priceBottom {
                         margin-bottom: rem(10px);
+                    }
+                    &.priceTop {
+                        margin-top: rem(10px);
                     }
                 }
             }

@@ -20,6 +20,13 @@
                 <!-- 实时成交记录 -->
                 <DealList :symbol-id='symbolId' />
             </van-tab>
+            <van-tab v-if='product.etf' name='fundInfo' :title='$t("fundInfo.information")'>
+                <!-- 基金资料 -->
+                <!-- <suspense>
+
+                </suspense> -->
+                <fundInformation />
+            </van-tab>
         </van-tabs>
     </div>
 </template>
@@ -27,13 +34,23 @@
 <script>
 import Handicap from '@plans/modules/handicap/index'
 import DealList from '@plans/modules/realTimeDealList/index'
-import { computed, reactive, toRefs, watch } from 'vue'
+import LoadingComponent from '@/components/loadingComponent'
+import { computed, defineAsyncComponent, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import Base from '@/store/modules/base'
 
 export default {
-    components: { Handicap, DealList },
+    components: {
+        Handicap,
+        DealList,
+        fundInformation: defineAsyncComponent({
+            loader: () => import('../fundInformation'),
+            loadingComponent: LoadingComponent,
+            delay: 0, // 在显示 loadingComponent 之前的延迟 | 默认值：200（单位 ms）
+            suspensible: false
+        })
+    },
     props: ['symbolId', 'settingList', 'curPrice'],
     setup (props) {
         const route = useRoute()
@@ -44,6 +61,7 @@ export default {
             timer: 0,
 
         })
+        const product = computed(() => store.getters.productActived)
         const primaryColor = computed(() => Base.state.wpCompanyInfo.themeColor)
         // 当前产品id 的挂单列表
         const pendingList = computed(() => store.state._trade.pendingList.filter(item => Number(item.symbolId) === Number(props.symbolId)))
@@ -61,6 +79,7 @@ export default {
         })
         return {
             primaryColor,
+            product,
             tradeType,
             customInfo,
             pendingList,

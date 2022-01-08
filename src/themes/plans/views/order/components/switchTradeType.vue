@@ -5,6 +5,7 @@
             <span class='productName'>
                 {{ product.symbolName }}
             </span>
+            <ETF v-if='product.etf' />
             <span class='upDownWidth' :class='product.upDownColor'>
                 {{ product.upDownWidth }}
                 <!-- {{ parseFloat(product.upDownWidth) > 0 ? '+'+ product.upDownWidth : '-'+ Math.abs(parseFloat(product.upDownWidth)) }} -->
@@ -15,7 +16,11 @@
 </template>
 
 <script>
+import ETF from '@plans/components/etfIcon.vue'
 export default {
+    components: {
+        ETF,
+    },
     props: ['product'],
     emits: ['switchProduct'],
     setup (props, { emit }) {

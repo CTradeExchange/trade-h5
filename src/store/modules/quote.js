@@ -1,4 +1,4 @@
-import { findSymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
+import { findSymbolBaseInfoList, querySymbolInfo, getEquityPremiumRate } from '@/api/trade'
 import { toFixed } from '@/utils/calculation'
 import { vue_set, assign } from '@/utils/vueUtil.js'
 import { sessionSet, sessionGet } from '@/utils/util.js'
@@ -317,6 +317,7 @@ export default {
                     if (res.check() && res.data) {
                         res.data.tradeType = params.tradeType
                         commit('Update_product', res.data)
+                        dispatch('queryEquityPremiumRate', { symbolId, tradeType })
                         if (rootState._quote.productActivedID === symbolKey) {
                             sessionSet('productActived', JSON.stringify(productMap[symbolKey]))
                         }
@@ -324,6 +325,28 @@ export default {
                     return res.data
                 })
             }
+        },
+        // 基金产品的实时净值和溢价率
+        queryEquityPremiumRate ({ dispatch, commit, state, rootState, rootGetters }, { symbolId, tradeType }) {
+            const params = {
+                symbolId: Number(symbolId),
+                tradeType: Number(tradeType),
+                customerGroupId: rootGetters.customerGroupId,
+            }
+
+            return getEquityPremiumRate(params).then((res) => {
+                if (res.check() && res.data) {
+                    const { data } = res
+                    commit('Update_product', {
+                        fundCurrency: data.currency,
+                        currentEquity: data.currentEquity,
+                        premiumRate: data.premiumRate,
+                        symbolId,
+                        tradeType,
+                    })
+                }
+                return res.data
+            })
         },
     }
 }

@@ -225,5 +225,77 @@ export function updateCrossLevelNum (data) {
         data
     })
 }
+/* 基金详情 */
+export function getFundInfo (data) {
+    return request({
+        url: '/global/config.app.AppSymbolDubboService.getFundInfo',
+        method: 'post',
+        // headers: {
+        //     version: '0.0.1',
+        //     group: 'tradeApi'
+        // },
+        data
+    })
+}
+/* 基金产品实时净值和溢价率 */
+export function getEquityPremiumRate (data) {
+    return request({
+        url: '/global/config.app.AppSymbolDubboService.getEquityPremiumRate',
+        method: 'post',
+        // headers: {
+        //     version: '0.0.1',
+        //     group: 'tradeApi'
+        // },
+        data
+    })
+}
+/* 市场表现走势图 */
+export function marketPerformance (data) {
+    return request({
+        url: '/global/report.app.ReportDatadDubboService.marketPerformance',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            // group: 'tradeApi'
+        },
+        data
+    })
+}
+/* 市场表现涨跌幅走势图 */
+export function marketPerformanceQuoteChange (data) {
+    return request({
+        url: '/global/report.app.ReportDatadDubboService.marketPerformanceQuoteChange',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            // group: 'tradeApi'
+        },
+        data
+    })
+}
+/* 实时投资组合排名 */
+export function investCombination (data) {
+    return request({
+        url: '/global/report.app.ReportDatadDubboService.investCombination',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            // group: 'tradeApi'
+        },
+        data
+    })
+}
+/* 单资产表现柱状图 */
+export function assetPerformance (data) {
+    return request({
+        url: '/global/report.app.ReportDatadDubboService.assetPerformance',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            // group: 'tradeApi'
+        },
+        data
+    })
+}
 
 /* 现货撮合取消委托单 */

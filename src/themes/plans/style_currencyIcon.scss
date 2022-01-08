@@ -1,0 +1,14 @@
+// 资产币种的图标
+.currencyIcon{
+    display: inline-block;
+    width: rem(32px);
+    height: rem(32px);
+    background: url(~@/assets/currency_icon/default.png) no-repeat center;
+    background-size: 100% 100%;
+    margin-right: .2em;
+    margin-bottom: 3px;
+    vertical-align: middle;
+    &.BTC{
+        background-image: url(~@/assets/currency_icon/BTC.png);
+    }
+}
