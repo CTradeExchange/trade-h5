@@ -124,6 +124,10 @@ export const toolHooks = function () {
             '3': {
                 handicap: true,
                 pendingTab: true
+            },
+            '4': {
+                handicap: true,
+                pendingTab: true
             }
         }
     })

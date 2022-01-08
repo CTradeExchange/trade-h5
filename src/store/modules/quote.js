@@ -1,4 +1,4 @@
-import { findSymbolBaseInfoList, querySymbolInfo } from '@/api/trade'
+import { findSymbolBaseInfoList, querySymbolInfo, getEquityPremiumRate } from '@/api/trade'
 import { toFixed } from '@/utils/calculation'
 import { vue_set, assign } from '@/utils/vueUtil.js'
 import { sessionSet, sessionGet } from '@/utils/util.js'
@@ -269,19 +269,19 @@ export default {
         },
         // 产品基础信息列表
         querySymbolBaseInfoList ({ dispatch, commit, state, rootState, rootGetters }, list = []) {
-            let symbolTradeTypeList = []
-            if (Object.prototype.toString.call(list) === '[object Object]') {
-                symbolTradeTypeList = planMapToArray(list)
-            } else if (list === null) {
-                symbolTradeTypeList = planMapToArray(state.planMap)
-            }
+            // let symbolTradeTypeList = []
+            // if (Object.prototype.toString.call(list) === '[object Object]') {
+            //     symbolTradeTypeList = planMapToArray(list)
+            // } else if (list === null) {
+            //     symbolTradeTypeList = planMapToArray(state.planMap)
+            // }
 
             const params = {
-                symbolTradeTypeList,
+                // symbolTradeTypeList,
                 customerGroupId: rootGetters.customerGroupId,
                 customerNo: rootState._user.customerInfo?.customerNo || '0',
             }
-            if (symbolTradeTypeList.length === 0 && state.symbolBaseLoaded === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
+            // if (symbolTradeTypeList.length === 0 && state.symbolBaseLoaded === 0) return Promise.resolve(new CheckAPI({ code: '0', data: [] }))
 
             // 加载产品精简属性的方法，可能存在多地同时调用
             if (state.symbolBaseLoaded === 0) {
@@ -317,6 +317,7 @@ export default {
                     if (res.check() && res.data) {
                         res.data.tradeType = params.tradeType
                         commit('Update_product', res.data)
+                        if (res.data.etf) dispatch('queryEquityPremiumRate', { symbolId, tradeType })
                         if (rootState._quote.productActivedID === symbolKey) {
                             sessionSet('productActived', JSON.stringify(productMap[symbolKey]))
                         }
@@ -324,6 +325,28 @@ export default {
                     return res.data
                 })
             }
+        },
+        // 基金产品的实时净值和溢价率
+        queryEquityPremiumRate ({ dispatch, commit, state, rootState, rootGetters }, { symbolId, tradeType }) {
+            const params = {
+                symbolId: Number(symbolId),
+                tradeType: Number(tradeType),
+                customerGroupId: rootGetters.customerGroupId,
+            }
+
+            return getEquityPremiumRate(params).then((res) => {
+                if (res.check() && res.data) {
+                    const { data } = res
+                    commit('Update_product', {
+                        fundCurrency: data.currency,
+                        currentNav: data.currentNav,
+                        premiumRate: data.premiumRate,
+                        symbolId,
+                        tradeType,
+                    })
+                }
+                return res.data
+            })
         },
     }
 }
