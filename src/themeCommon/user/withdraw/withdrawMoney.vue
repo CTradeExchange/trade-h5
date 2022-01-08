@@ -645,7 +645,7 @@ export default {
                 amount: state.amount,
                 rate: state.withdrawRate.exchangeRate,
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
-                bankAccountName: state.checkedBank.bankAccountName,
+                bankAccountName: state.checkedBank.lastName + state.checkedBank.firstName,
                 bankName: state.checkedBank.bankName,
                 bankCardNo: state.checkedBank.bankCardNumber,
                 withdrawType: 1,
