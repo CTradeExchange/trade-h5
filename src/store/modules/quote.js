@@ -341,8 +341,8 @@ export default {
                         fundCurrency: data.currency,
                         currentNav: data.currentNav,
                         premiumRate: data.premiumRate,
-                        symbolId,
-                        tradeType,
+                        symbolId: params.symbolId,
+                        tradeType: params.tradeType,
                     })
                 }
                 return res.data
