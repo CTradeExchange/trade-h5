@@ -1,4 +1,5 @@
 import { marketPerformance, marketPerformanceQuoteChange } from '@/api/trade'
+import { localGet } from '@/utils/util'
 import { createChart } from 'lightweight-charts'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
@@ -27,23 +28,25 @@ export const usePerformance = () => {
 
     // 市场表现走势图
     const getMarketPerformanceData = () => {
-        const { symbolId, tradeType } = product.value
-        return marketPerformance({ symbolId, tradeType }).then(res => {
+        const { symbolId } = product.value
+        return marketPerformance({ symbolId, days: 60 }).then(res => {
             if (res.check()) {
-                return [mockData(), mockData()]
+                const [data1, data2] = Object.entries(res.data)
+                return [data1[1], data2[1]]
             }
-            return [mockData(), mockData()]
+            return []
         })
     }
 
     // 市场表现走势图
     const getMarketPerformanceQuoteChange = () => {
-        const { symbolId, tradeType } = product.value
-        return marketPerformanceQuoteChange({ symbolId, tradeType }).then(res => {
+        const { symbolId } = product.value
+        return marketPerformanceQuoteChange({ symbolId, days: 60 }).then(res => {
             if (res.check()) {
-                return [mockData(), mockData()]
+                const [data1, data2] = Object.entries(res.data)
+                return [data1[1], data2[1]]
             }
-            return [mockData(), mockData()]
+            return []
         })
     }
 
@@ -52,9 +55,15 @@ export const usePerformance = () => {
         // console.log(dom, data, options)
         if (!dom || !data1?.length) return false
         const digits = product.value.price_digits || product.value.symbolDigits
+
+        const invertColor = localGet('invertColor')
         const chart = createChart(dom, {
             ...options,
             priceLineVisible: false,
+            // layout: {
+            //     backgroundColor: invertColor === 'light' ? '#fff' : '#000',
+            //     textColor: invertColor === 'light' ? '#444' : 'rgba(255, 255, 255, 0.9)',
+            // },
             rightPriceScale: {
                 visible: false,
             },
@@ -81,9 +90,6 @@ export const usePerformance = () => {
             },
             grid: {
                 vertLines: false,
-                horzLines: {
-                    color: 'rgba(197, 203, 206, 0.7)'
-                }
             },
 
         })

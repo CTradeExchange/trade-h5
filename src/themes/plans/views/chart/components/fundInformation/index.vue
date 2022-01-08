@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class=''>
         <van-tabs v-model:active='active' class='fundInfoTab' type='card'>
             <van-tab :title='$t("fundInfo.baseInfo")'>
                 <baseVue />
@@ -26,6 +26,7 @@ const active = ref(0)
 @import '~@/sass/mixin.scss';
 .fundInfoTab{
     margin: rem(30px) rem(20px);
+    min-height: 320px;
     :deep(.van-tabs__wrap){
         border: 0 !important;
     }

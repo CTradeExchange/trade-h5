@@ -36,12 +36,15 @@
                     {{ fundInfo.managerName }}
                 </span>
             </li>
-            <li v-if='fundInfo.trackIndex' class='item'>
+            <li v-if='fundInfo.trackIndex || fundInfo.trackIndexOut' class='item'>
                 <span class='hd'>
                     {{ $t('fundInfo.followIndex') }}
                 </span>
                 <span class='ft'>
-                    {{ fundInfo.trackIndex }}
+                    {{ fundInfo.trackProduct ? fundInfo.trackProduct.symbolName : fundInfo.trackIndexOut }}
+                    <i v-if='fundInfo.trackProduct'>
+                        &gt;
+                    </i>
                 </span>
             </li>
             <li v-if='fundInfo.operationMode' class='item'>
@@ -73,6 +76,7 @@ const { fundInfo } = useFundInfo()
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
+
 .cellTitle{
     font-size: rem(32px);
     line-height: rem(80px);

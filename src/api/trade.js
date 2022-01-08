@@ -242,10 +242,7 @@ export function getEquityPremiumRate (data) {
     return request({
         url: '/global/config.app.AppSymbolDubboService.getEquityPremiumRate',
         method: 'post',
-        // headers: {
-        //     version: '0.0.1',
-        //     group: 'tradeApi'
-        // },
+        toastErr: false,
         data
     })
 }

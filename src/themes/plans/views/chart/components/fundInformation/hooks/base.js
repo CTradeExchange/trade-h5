@@ -6,11 +6,16 @@ import { useStore } from 'vuex'
 export function useFundInfo () {
     const store = useStore()
     const fundInfo = ref(null)
+    const productMap = computed(() => store.state._quote.productMap)
     const symbolKey = computed(() => store.state._quote.productActivedID)
     const product = computed(() => store.getters.productActived)
     const getFundInfoData = () => {
         getFundInfo({ fundId: product.value.fundId }).then(res => {
-            if (res.check()) fundInfo.value = res.data
+            if (res.check()) {
+                const { data } = res
+                data.trackProduct = productMap.value[`${data.trackIndex}_5`]
+                fundInfo.value = data
+            }
         })
     }
 
