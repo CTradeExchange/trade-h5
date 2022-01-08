@@ -175,6 +175,7 @@ export default {
         // 过滤支付通道数据
         const filterPayment = () => {
             const paymentTypes = state.paymentTypes
+            state.paymentInfo = ''
             if (paymentTypes.length === 0) {
                 state.disable = true
                 state.way = ''
@@ -332,7 +333,6 @@ export default {
 }
 // 资产账户
 .asset-account {
-
     margin-top: rem(30px);
     .title {
         line-height: 1;
