@@ -583,14 +583,14 @@ export default {
             for (const key in extend) {
                 if (Object.hasOwnProperty.call(extend, key)) {
                     const element = extend[key]
+                    if (isEmpty(element.value)) {
+                        return Toast(t('deposit.allInputRequire'))
+                    }
                     if (!isEmpty(element.regex)) {
                         const valueReg = new RegExp(element.regex)
                         if (!valueReg.test(element.value)) {
                             return Toast(`${element[state.lang]}` + t('register.incorrectlyFormed'))
                         }
-                    }
-                    if (isEmpty(element.value)) {
-                        return Toast(t('deposit.allInputRequire'))
                     }
                     state.paramsExtens[key] = element.value
                 }

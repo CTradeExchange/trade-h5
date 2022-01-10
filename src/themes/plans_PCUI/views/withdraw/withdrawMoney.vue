@@ -21,7 +21,9 @@
                     </button>
                 </div>
                 <div class='notice'>
-                    <span>{{ $t('withdrawMoney.canName') }} {{ withdrawAmount }} {{ accountCurrency?.currency }}</span>
+                    <span class='can-name'>
+                        {{ $t('withdrawMoney.canName') }} {{ withdrawAmount }} {{ accountCurrency?.currency }}
+                    </span>
                     <span>{{ $t('withdrawMoney.serviceName') }} {{ fee }} {{ accountCurrency?.currency }}</span>
                 </div>
                 <div class='bank-wrap'>
@@ -591,14 +593,14 @@ export default {
             for (const key in extend) {
                 if (Object.hasOwnProperty.call(extend, key)) {
                     const element = extend[key]
+                    if (isEmpty(element.value)) {
+                        return Toast(t('deposit.allInputRequire'))
+                    }
                     if (!isEmpty(element.regex)) {
                         const valueReg = new RegExp(element.regex)
                         if (!valueReg.test(element.value)) {
                             return Toast(`${element[state.lang]}` + t('register.incorrectlyFormed'))
                         }
-                    }
-                    if (isEmpty(element.value)) {
-                        return Toast(t('deposit.allInputRequire'))
                     }
                     state.paramsExtens[key] = element.value
                 }
@@ -653,7 +655,7 @@ export default {
                 amount: state.amount,
                 rate: state.withdrawRate.exchangeRate,
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
-                bankAccountName: state.checkedBank.bankAccountName,
+                bankAccountName: state.checkedBank.lastName + state.checkedBank.firstName,
                 bankName: state.checkedBank.bankName,
                 bankCardNo: state.checkedBank.bankCardNumber,
                 withdrawType: 1,
@@ -764,8 +766,10 @@ export default {
             display: flex;
             margin-top: rem(30px);
             margin-bottom: rem(40px);
-            span {
+            .can-name {
                 flex: 1;
+            }
+            span {
                 color: var(--minorColor);
                 font-size: rem(24px);
             }

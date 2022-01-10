@@ -8,6 +8,7 @@
                 <span class='name'>
                     {{ product.symbolName }}
                 </span>
+                <ETF v-if='curProduct.etf' />
             </div>
 
             <div class='t-right'>
@@ -125,6 +126,7 @@
 </template>
 
 <script>
+import ETF from '@plans/components/etfIcon.vue'
 import { computed, ref } from 'vue'
 import { Toast, Dialog } from 'vant'
 import { shiftedBy } from '@/utils/calculation'
@@ -133,6 +135,9 @@ import { closePboOrder, closeTradePboOrder } from '@/api/trade'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 export default {
+    components: {
+        ETF
+    },
     props: ['product'],
     setup (props) {
         const store = useStore()
@@ -256,7 +261,7 @@ export default {
             color: var(--color);
             font-size: rem(30px);
             .name {
-                margin-right: rem(40px);
+                margin-right: rem(20px);
             }
         }
         .tag {
