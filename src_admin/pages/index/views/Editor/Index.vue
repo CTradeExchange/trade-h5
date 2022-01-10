@@ -418,7 +418,7 @@ export default {
                     if (['selfSymbol', 'productsSwipe', 'productsTimeSharing', 'bannerProducts'].includes(item.tag)) {
                         if (tradeTypeSelfSymbol[item.id]) item.data.product = tradeTypeSelfSymbol[item.id]
                     } else if (['productsWithIcon'].includes(item.tag)) {
-                        item.data.items[activeIndex.value].product = store.state.editor.tradeTypeSelfSymbol[item.id]
+                        if (activeIndex.value) item.data.items[activeIndex.value].product = store.state.editor.tradeTypeSelfSymbol[item.id]
                     }
                 })
                 console.log('模块列表数据', config)
