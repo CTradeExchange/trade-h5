@@ -127,7 +127,7 @@ export const toolHooks = function () {
             },
             '4': {
                 handicap: true,
-                pendingTab: true
+                pendingTab: false
             }
         }
     })
