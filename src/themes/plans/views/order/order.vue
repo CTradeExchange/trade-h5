@@ -79,7 +79,7 @@
                     />
                 </div>
             </div>
-            <div class='footerBtn' :class='[direction]'>
+            <div v-if='product && product.tradeEnable' class='footerBtn' :class='[direction]'>
                 <van-button block :disabled='loading' :loading='loading' size='normal' @click='submitHandler'>
                     <i class='icon' :class='direction==="buy" ? "icon_mairu" : "icon_maichu"'></i>
                     {{ directionText }}

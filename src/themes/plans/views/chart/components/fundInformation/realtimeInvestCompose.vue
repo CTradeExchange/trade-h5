@@ -7,20 +7,20 @@
         <div v-if="showBlock==='list'">
             <div class='assetsTitle cellflex'>
                 <p class='hd'>
-                    资产
+                    {{ $t('fundInfo.assets') }}
                 </p>
                 <p class='bd'>
-                    排名
+                    {{ $t('fundInfo.ranking') }}
                     <br />
                     <span class='small'>
-                        (较上期变化)
+                        ({{ $t('fundInfo.comparePrev') }})
                     </span>
                 </p>
                 <p class='ft'>
-                    权重
+                    {{ $t('fundInfo.weight') }}
                     <br />
                     <span class='small'>
-                        (较上期变化)
+                        ({{ $t('fundInfo.comparePrev') }})
                     </span>
                 </p>
             </div>
