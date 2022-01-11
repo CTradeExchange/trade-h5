@@ -662,7 +662,7 @@
         "weight":"Weights",
         "comparePrev":"Movement",
         "singleAsset":"Asset Performance",
-        "totalManager":"等共{0}人",
+        "totalManager":"{0} people in total",
         "fundChartTip":"The data is for reference only, past performance does not represent future performance!"
     }
 }

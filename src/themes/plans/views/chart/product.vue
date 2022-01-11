@@ -30,10 +30,10 @@
         <Loading :show='loading' />
 
         <div class='productInfo'>
-            <div v-if='product?.price_digits' class='hd'>
+            <div v-if='product?.symbolDigits' class='hd'>
                 <div class='hd-left'>
                     <p class='cur_price' :class='product?.cur_color'>
-                        {{ parseFloat(product?.cur_price).toFixed(product?.price_digits) }}
+                        {{ product.cur_price ? parseFloat(product?.cur_price).toFixed(product?.symbolDigits) :'' }}
                     </p>
                 </div>
                 <div class='others'>
