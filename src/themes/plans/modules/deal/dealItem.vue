@@ -60,7 +60,7 @@
                         {{ item?.requestPrice || '--' }}
                     </span>
                 </p>
-                <p v-else-if='Number(item.bizType) === 1' class='tl-item'>
+                <p v-else-if='Number(item.bizType) === 1 || Number(item.bizType) === 12' class='tl-item'>
                     <label for=''>
                         {{ $t('trade.trustPrice') }}
                     </label>
