@@ -1,8 +1,30 @@
 import { marketPerformance, marketPerformanceQuoteChange } from '@/api/trade'
 import { localGet } from '@/utils/util'
-import { createChart } from 'lightweight-charts'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import * as echarts from 'echarts/core'
+
+import {
+    TitleComponent,
+    ToolboxComponent,
+    TooltipComponent,
+    GridComponent,
+    LegendComponent
+} from 'echarts/components'
+import { LineChart } from 'echarts/charts'
+import { UniversalTransition } from 'echarts/features'
+import { CanvasRenderer } from 'echarts/renderers'
+
+echarts.use([
+    TitleComponent,
+    ToolboxComponent,
+    TooltipComponent,
+    GridComponent,
+    LegendComponent,
+    LineChart,
+    CanvasRenderer,
+    UniversalTransition
+])
 
 // 基金表现
 export const usePerformance = () => {
@@ -29,10 +51,20 @@ export const usePerformance = () => {
     // 市场表现走势图
     const getMarketPerformanceData = () => {
         const { symbolId } = product.value
-        return marketPerformance({ symbolId, days: 60 }).then(res => {
+        return marketPerformance({ symbolId, days: 60, type: 1 }).then(res => {
             if (res.check()) {
                 const [data1, data2] = Object.entries(res.data)
-                return [data1[1], data2[1]]
+                return [data1, data2]
+            }
+            return []
+        })
+    }
+    const getMarketPerformanceData1 = () => {
+        const { symbolId } = product.value
+        return marketPerformance({ symbolId, days: 60, type: 2 }).then(res => {
+            if (res.check()) {
+                const [data1, data2] = Object.entries(res.data)
+                return [data1, data2]
             }
             return []
         })
@@ -41,89 +73,89 @@ export const usePerformance = () => {
     // 市场表现走势图
     const getMarketPerformanceQuoteChange = () => {
         const { symbolId } = product.value
-        return marketPerformanceQuoteChange({ symbolId, days: 60 }).then(res => {
+        return marketPerformanceQuoteChange({ symbolId, days: 60, type: 1 }).then(res => {
             if (res.check()) {
                 const [data1, data2] = Object.entries(res.data)
-                return [data1[1], data2[1]]
+                return [data1, data2]
+            }
+            return []
+        })
+    }
+    const getMarketPerformanceQuoteChange1 = () => {
+        const { symbolId } = product.value
+        return marketPerformanceQuoteChange({ symbolId, days: 60, type: 2 }).then(res => {
+            if (res.check()) {
+                const [data1, data2] = Object.entries(res.data)
+                return [data1, data2]
             }
             return []
         })
     }
 
     // 创建市场价格 vs 基金净值的图表
-    const newChart = (dom, [data1, data2], options) => {
-        // console.log(dom, data, options)
-        if (!dom || !data1?.length) return false
+    const newChart = (chartDom, [xData, yData], options) => {
+        // console.log(chartDom, xData, yData, options)
+        if (!chartDom || !xData?.length) return false
         const digits = product.value.price_digits || product.value.symbolDigits
 
         const invertColor = localGet('invertColor')
-        const chart = createChart(dom, {
-            ...options,
-            priceLineVisible: false,
-            layout: {
-                backgroundColor: invertColor === 'light' ? '#fff' : '#000',
-                textColor: invertColor === 'light' ? '#444' : 'rgba(255, 255, 255, 0.9)',
-            },
-            rightPriceScale: {
-                visible: false,
-            },
-            leftPriceScale: {
-                visible: true,
-            },
-            handleScroll: { // 禁用图表上下滑动，让网页可以上下滑动
-                vertTouchDrag: false, // 禁止垂直上下滑动
-                pressedMouseMove: false,
-                mouseWheel: false,
-                // horzTouchDrag: false, // 禁止横向滑动
-            },
-            handleScale: { // 禁用图表上下缩放，让网页可以上下滑动
-                axisPressedMouseMove: false,
-            },
-            timeScale: {
-                tickMarkFormatter: (time) => { // 底部时间格式化
-                    const date = new Date(time.year, time.month, time.day)
-                    return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate()
+        const myChart = echarts.init(chartDom)
+
+        const option = {
+            tooltip: {
+                trigger: 'axis',
+                textStyle: {
+                    fontSize: 12,
                 },
-                shiftVisibleRangeOnNewBar: false,
-                fixLeftEdge: true,
-                fixRightEdge: true,
+                formatter: function (params) {
+                    let str = `<p style="padding-bottom:10px;">${params[0].name}</p>`
+                    params.forEach((item) => {
+                        str += `<p style="padding-bottom:5px;">
+                                <span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color:${item.color}"></span>
+                                ${item.seriesName}: <br />
+                                <span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;"></span>
+                                ${item.data}
+                                <br />
+                            </p>`
+                    })
+                    return str
+                },
+            },
+            color: ['#F1A21A', '#2B70AE'],
+            legend: {
+                data: [yData[0].name, yData[1].name], // ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
             },
             grid: {
-                vertLines: false,
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
             },
-
-        })
-        const seriesOptions = {
-            lineWidth: 1,
-            priceLineVisible: false, // 不显示最新价的线
-            lastValueVisible: false, // 不显示最新价的值
-            // color: style.value.buyColor,
-            priceScale: {
-                autoScale: false,
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: xData, // ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                axisLabel: {
+                    formatter (value, index) {
+                        return xData[0].length > 12 ? value.slice(11, 16) : value
+                    }
+                }
             },
-            priceFormat: {
-                type: 'price',
-                precision: digits,
-                minMove: Math.pow(0.1, digits).toFixed(digits) * 1,
-            }
+            yAxis: {
+                type: 'value'
+            },
+            series: yData
         }
-        const lineSeries1 = chart.addLineSeries({
-            ...seriesOptions,
-            color: '#F1A21A'
-        })
-        lineSeries1.setData(data1)
 
-        const lineSeries2 = chart.addLineSeries({
-            ...seriesOptions,
-            color: '#2B70AE'
-        })
-        lineSeries2.setData(data2)
+        option && myChart.setOption(option)
 
-        return chart
+        return myChart
     }
     return {
         getMarketPerformanceData,
+        getMarketPerformanceData1,
         getMarketPerformanceQuoteChange,
+        getMarketPerformanceQuoteChange1,
         newChart
     }
 }
