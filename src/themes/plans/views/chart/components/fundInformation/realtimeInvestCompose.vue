@@ -40,7 +40,7 @@
                     <p class='ft'>
                         <van-popover v-model:show='item.popover' placement='bottom-end' theme='dark'>
                             <p style='padding: 5px 10px; white-space: nowrap;'>
-                                {{ item.weightDot }}({{ item.previousPeriodWeightCompare }})
+                                {{ item.weightRealValue }}({{ item.previousPeriodWeightCompare }})
                             </p>
                             <template #reference>
                                 <span>
@@ -105,7 +105,6 @@ onMounted(async () => {
     getInvestCombination().then(data => {
         rangList.value = data.map(el => {
             el.popover = false
-            el.weightDot = '123.123456789%'
             return el
         })
     })
