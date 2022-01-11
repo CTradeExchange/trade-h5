@@ -93,8 +93,8 @@ export const usePerformance = () => {
     }
 
     // 创建市场价格 vs 基金净值的图表
-    const newChart = (chartDom, [xData, yData], options) => {
-        // console.log(chartDom, xData, yData, options)
+    const newChart = (chartDom, [xData, yData], opts) => {
+        // console.log(chartDom, xData, yData, opts)
         if (!chartDom || !xData?.length) return false
         const digits = product.value.price_digits || product.value.symbolDigits
 
@@ -102,19 +102,21 @@ export const usePerformance = () => {
         const myChart = echarts.init(chartDom)
 
         const option = {
+            backgroundColor: invertColor === 'light' ? '#fff' : '#000',
             tooltip: {
                 trigger: 'axis',
                 textStyle: {
                     fontSize: 12,
                 },
                 formatter: function (params) {
+                    const yAxisExt = opts && opts['yAxis.ext'] ? opts['yAxis.ext'] : ''
                     let str = `<p style="padding-bottom:10px;">${params[0].name}</p>`
                     params.forEach((item) => {
                         str += `<p style="padding-bottom:5px;">
                                 <span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color:${item.color}"></span>
                                 ${item.seriesName}: <br />
                                 <span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;"></span>
-                                ${item.data}
+                                ${item.data + yAxisExt}
                                 <br />
                             </p>`
                     })
@@ -146,7 +148,11 @@ export const usePerformance = () => {
             },
             series: yData
         }
-
+        if (opts && opts['yAxis.ext']) {
+            option.yAxis.axisLabel = {
+                formatter: '{value} ' + opts['yAxis.ext']
+            }
+        }
         option && myChart.setOption(option)
 
         return myChart

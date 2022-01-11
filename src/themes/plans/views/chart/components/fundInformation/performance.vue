@@ -58,10 +58,7 @@ onMounted(async () => {
             data: data2[1].map(el => el.value)
         })
 
-        newChart(marketPriceJZ_DOM.value, [xData, yData], {
-            width: marketPriceJZ_DOM.value.clientWidth,
-            height: 260
-        })
+        newChart(marketPriceJZ_DOM.value, [xData, yData])
     })
     getMarketPerformanceData1().then(res => {
         const [data1, data2] = res
@@ -83,10 +80,7 @@ onMounted(async () => {
             stack: 'Total',
             data: data2[1].map(el => el.value)
         })
-        newChart(marketPriceJZ_DOM1.value, [xData, yData], {
-            width: marketPriceJZ_DOM1.value.clientWidth,
-            height: 260
-        })
+        newChart(marketPriceJZ_DOM1.value, [xData, yData])
     })
 
     // 市场表现
@@ -111,8 +105,7 @@ onMounted(async () => {
             data: data2[1].map(el => el.value)
         })
         newChart(marketAppearance_DOM.value, [xData, yData], {
-            width: marketAppearance_DOM.value.clientWidth,
-            height: 260
+            'yAxis.ext': '%'
         })
     })
 
@@ -136,10 +129,8 @@ onMounted(async () => {
             stack: 'Total',
             data: data2[1].map(el => el.value)
         })
-        console.log(xData, yData)
         newChart(marketAppearance_DOM1.value, [xData, yData], {
-            width: marketAppearance_DOM1.value.clientWidth,
-            height: 260
+            'yAxis.ext': '%'
         })
     })
 })
