@@ -638,7 +638,6 @@
     "danger": "Danger"
   },
   "fundInfo":{
-        "name":"基金",
         "realtimeJZ":"NAV",
         "premiumRate":"Premium",
         "information":"FUND FACTS",
@@ -652,22 +651,17 @@
         "fundManager":"Fund Manager",
         "followIndex":"Benchmark",
         "operationMode":"Mode of operation",
-        "operationModeValue1":"封闭式",
-        "operationModeValue2":"开放式",
+        "operationModeValue1":"Closed-end fund",
+        "operationModeValue2":"Open-end fund",
         "fundType":"Fund Type",
-        "fundTypeValue":"指数型基金",
         "fundChart1":"Market Price VS Fund Nav",
         "fundChart2":"Market performance",
-        "marketPrice":"市场价格",
-        "fundJZ":"基金净值",
-        "index":"指数",
         "realtimeInvestCompose":"FUND COMPOSITION",
         "assets":"Asset",
         "ranking":"Rank",
         "weight":"Weights",
         "comparePrev":"Movement",
         "singleAsset":"Asset Performance",
-        "fundChartTip":"The data is for reference only, past performance does not represent future performance!",
-        "in1":"资料"
+        "fundChartTip":"The data is for reference only, past performance does not represent future performance!"
     }
 }
