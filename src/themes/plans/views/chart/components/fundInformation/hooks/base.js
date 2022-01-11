@@ -17,12 +17,12 @@ export function useFundInfo () {
         getFundInfo({ fundId: product.value.fundId }).then(res => {
             if (res.check()) {
                 const data = res.data || {}
-                if (data.managerName) {
-                    const managerName = data.managerName
-                    const managerArr = managerName.includes(',') ? managerName.split(',') : managerName.split('，')
-                    data.managerName = managerArr.slice(0, 3).join()
-                    data.managerName += t('fundInfo.totalManager', [managerArr.length])
-                }
+                // if (data.managerName) {
+                //     const managerName = data.managerName
+                //     const managerArr = managerName.includes(',') ? managerName.split(',') : managerName.split('，')
+                //     data.managerName = managerArr.slice(0, 3).join()
+                //     data.managerName += t('fundInfo.totalManager', [managerArr.length])
+                // }
                 if (data.trackIndex) data.trackProduct = productMap.value[`${data.trackIndex}_5`]
                 fundInfo.value = data
             }
