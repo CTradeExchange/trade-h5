@@ -47,7 +47,7 @@ export const useInvestCompose = (params) => {
         const myChart = echarts.init(chartDom)
         const invertColor = localGet('invertColor')
         const option = {
-            // backgroundColor: invertColor === 'light' ? '#fff' : '#000',
+            backgroundColor: invertColor === 'light' ? '#fff' : '#000',
             color: ['#B72122', '#E9393A', '#FF762C', '#FF9E2C', '#FFC62C', '#F1DE3F', '#D2C02A', '#B6A622', '#9E9123', '#648319', '#198351', '#2AA46B', '#41CE8D', '#6BF1B3', '#56F5DD', '#82ECFF', '#82D7FF', '#7BBCF6', '#589EDC', '#2B70AE'],
             legend: {
                 top: '5%',
@@ -88,9 +88,9 @@ export const useInvestCompose = (params) => {
     // 绘制柱状图
     const newBarChart = (chartDom, [xData, yData]) => {
         const myChart = echarts.init(chartDom)
-
+        const invertColor = localGet('invertColor')
         const option = {
-            // backgroundColor: '#000',
+            backgroundColor: invertColor === 'light' ? '#fff' : '#000',
             xAxis: {
                 type: 'category',
                 data: xData, // ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']

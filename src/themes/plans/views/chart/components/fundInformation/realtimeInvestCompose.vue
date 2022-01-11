@@ -7,20 +7,20 @@
         <div v-if="showBlock==='list'">
             <div class='assetsTitle cellflex'>
                 <p class='hd'>
-                    资产
+                    {{ $t('fundInfo.assets') }}
                 </p>
                 <p class='bd'>
-                    排名
+                    {{ $t('fundInfo.ranking') }}
                     <br />
                     <span class='small'>
-                        (较上期变化)
+                        ({{ $t('fundInfo.comparePrev') }})
                     </span>
                 </p>
                 <p class='ft'>
-                    权重
+                    {{ $t('fundInfo.weight') }}
                     <br />
                     <span class='small'>
-                        (较上期变化)
+                        ({{ $t('fundInfo.comparePrev') }})
                     </span>
                 </p>
             </div>
@@ -32,15 +32,24 @@
                         {{ item.asset }}
                     </p>
                     <p class='bd'>
-                        {{ item.range }}({{ item.previousPeriodRangeCompare }})
+                        {{ item.range }}
+                        ( <i v-if="item.previousPeriodRangeCompare!=='-'" :class='{ "downArrow":item.previousPeriodRangeCompare<0, "upArrow":item.previousPeriodRangeCompare>0 }'></i>
+                        {{ item.previousPeriodRangeCompare==='-' ? '-' : Math.abs(item.previousPeriodRangeCompare) }}
+                        )
                     </p>
                     <p class='ft'>
-                        <van-popover v-model:show='item.popover' theme='dark'>
+                        <van-popover v-model:show='item.popover' placement='bottom-end' theme='dark'>
                             <p style='padding: 5px 10px; white-space: nowrap;'>
                                 {{ item.weightDot }}({{ item.previousPeriodWeightCompare }})
                             </p>
                             <template #reference>
-                                <span>{{ item.weight }}({{ item.previousPeriodWeightCompare }})</span>
+                                <span>
+                                    {{ item.weight }}
+                                    (
+                                    <i v-if="item.previousPeriodWeightCompare!=='-'" :class='{ "downArrow":item.previousPeriodWeightCompare<0, "upArrow":item.previousPeriodWeightCompare>0 }'></i>
+                                    {{ item.previousPeriodWeightCompare==='-' ? '-' : Math.abs(item.previousPeriodWeightCompare) }}
+                                    )
+                                </span>
                             </template>
                         </van-popover>
                     </p>
@@ -172,5 +181,21 @@ onMounted(async () => {
 }
 .chartBarDOM{
     height: rem(500px);
+}
+.downArrow{
+    display: inline-block;
+    width: 0;
+    height: 0;
+    vertical-align: middle;
+    border:0 solid transparent;
+    border-radius: 3px;
+    border-width: 5px 5px 0 5px;
+    border-top-color: var(--fallColor);
+}
+.upArrow{
+    @extend .downArrow;
+    border-width: 0 5px 5px 5px;
+    border-top-color: transparent;
+    border-bottom-color: var(--riseColor);
 }
 </style>

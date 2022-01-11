@@ -60,10 +60,10 @@ export const usePerformance = () => {
         const chart = createChart(dom, {
             ...options,
             priceLineVisible: false,
-            // layout: {
-            //     backgroundColor: invertColor === 'light' ? '#fff' : '#000',
-            //     textColor: invertColor === 'light' ? '#444' : 'rgba(255, 255, 255, 0.9)',
-            // },
+            layout: {
+                backgroundColor: invertColor === 'light' ? '#fff' : '#000',
+                textColor: invertColor === 'light' ? '#444' : 'rgba(255, 255, 255, 0.9)',
+            },
             rightPriceScale: {
                 visible: false,
             },
