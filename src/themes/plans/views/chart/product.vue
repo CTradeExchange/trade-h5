@@ -262,13 +262,13 @@
             </div>
         </div>
         <StallsAndDeal
-            v-if='product && product.tradeEnable && dealModeShowMap[product.dealMode]?.handicap'
+            v-if='product && product.tradeEnable===1 && dealModeShowMap[product.dealMode]?.handicap'
             :cur-price='product?.cur_price'
             :symbol-id='product?.symbolId'
             :trade-type='tradeType'
         />
 
-        <div v-if='product && product.tradeEnable' class='footerBtnBox'>
+        <div v-if='product && product.tradeEnable===1' class='footerBtnBox'>
             <div class='trade-btn-wrap'>
                 <div class='buy fallColorBg' @click="toOrder('buy')">
                     <i class='icon icon_mairu'></i>
@@ -1024,16 +1024,24 @@ export default {
                     tradeType: product.tradeType,
                 }
             }).then(() => {
-                symbolId.value = product.symbolId
-                tradeType.value = product.tradeType
-                store.commit('_quote/Update_productActivedID', `${product.symbolId}_${product.tradeType}`)
+                close()
+            })
+        }
+
+        // 切换产品时重新初始化数据
+        watch(
+            () => route.query.symbolId,
+            newval => {
+                const query = route.query
+                symbolId.value = parseInt(query.symbolId)
+                tradeType.value = parseInt(query.tradeType)
+                store.commit('_quote/Update_productActivedID', `${query.symbolId}_${query.tradeType}`)
                 subscribeToProduct()
                 // initChartData()
                 renderChart(product, state.initConfig.property)
                 chartRef.value.reset()
-                close()
-            })
-        }
+            }
+        )
 
         const updateChart = data => {
             try {

@@ -36,11 +36,11 @@
                     {{ fundInfo.managerName }}
                 </span>
             </li>
-            <li v-if='fundInfo.trackIndex || fundInfo.trackIndexOut' class='item'>
+            <li v-if='(fundInfo.trackIndex && fundInfo.trackProduct) || fundInfo.trackIndexOut' class='item'>
                 <span class='hd'>
                     {{ $t('fundInfo.followIndex') }}
                 </span>
-                <span class='ft'>
+                <span class='ft' @click='toTrackProduct'>
                     {{ fundInfo.trackProduct ? fundInfo.trackProduct.symbolName : fundInfo.trackIndexOut }}
                     <i v-if='fundInfo.trackProduct'>
                         &gt;
@@ -70,7 +70,7 @@
 <script setup>
 import { useFundInfo } from './hooks/base'
 
-const { fundInfo } = useFundInfo()
+const { fundInfo, toTrackProduct } = useFundInfo()
 
 </script>
 
@@ -88,7 +88,13 @@ const { fundInfo } = useFundInfo()
         font-size: rem(28px);
         line-height: rem(60px);
         .hd{
+            white-space: nowrap;
             color: var(--minorColor);
+        }
+        .ft{
+            word-break: break-word;
+            line-height: 1.2;
+            padding-left: rem(40px);
         }
     }
 }

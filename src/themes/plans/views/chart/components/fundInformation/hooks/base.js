@@ -14,8 +14,8 @@ export function useFundInfo () {
     const getFundInfoData = () => {
         getFundInfo({ fundId: product.value.fundId }).then(res => {
             if (res.check()) {
-                const { data } = res
-                data.trackProduct = productMap.value[`${data.trackIndex}_5`]
+                const data = res.data || {}
+                if (data.trackIndex) data.trackProduct = productMap.value[`${data.trackIndex}_5`]
                 fundInfo.value = data
             }
         })

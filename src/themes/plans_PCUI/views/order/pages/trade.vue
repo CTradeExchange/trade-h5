@@ -112,7 +112,7 @@
                 :product='product'
                 :volume='buy.volume'
             />
-            <div v-if='customerInfo && product.tradeEnable' class='footerBtn buy'>
+            <div v-if='customerInfo && product.tradeEnable===1' class='footerBtn buy'>
                 <van-button block :disabled='buy.loading' :loading='buy.loading' size='normal' @click='submitHandler("buy")'>
                     {{ $t('trade.buyText') }}
                 </van-button>
@@ -196,7 +196,7 @@
                 :volume='sell.volume'
             />
 
-            <div v-if='customerInfo && product.tradeEnable' class='footerBtn sell'>
+            <div v-if='customerInfo && product.tradeEnable===1' class='footerBtn sell'>
                 <van-button block :disabled='sell.loading' :loading='sell.loading' size='normal' @click='submitHandler("sell")'>
                     {{ $t('trade.sellText') }}
                 </van-button>

@@ -39,6 +39,7 @@ onMounted(async () => {
     // 市场价格 vs 基金净值
     getMarketPerformanceData().then(res => {
         const [data1, data2] = res
+        if (!data1?.length || !data2?.length) return false
         const xData = []
         const yData = []
         data1[1].forEach(el => {
@@ -64,6 +65,7 @@ onMounted(async () => {
     })
     getMarketPerformanceData1().then(res => {
         const [data1, data2] = res
+        if (!data1?.length || !data2?.length) return false
         const xData = []
         const yData = []
         data1[1].forEach(el => {
@@ -90,6 +92,7 @@ onMounted(async () => {
     // 市场表现
     getMarketPerformanceQuoteChange().then(res => {
         const [data1, data2] = res
+        if (!data1?.length || !data2?.length) return false
         const xData = []
         const yData = []
         data1[1].forEach(el => {
@@ -115,6 +118,7 @@ onMounted(async () => {
 
     getMarketPerformanceQuoteChange1().then(res => {
         const [data1, data2] = res
+        if (!data1?.length || !data2?.length) return false
         const xData = []
         const yData = []
         data1[1].forEach(el => {
