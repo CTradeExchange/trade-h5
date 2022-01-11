@@ -59,7 +59,7 @@
                 <span class='hd'>
                     {{ $t('fundInfo.fundType') }}
                 </span>
-                <span class='ft'>
+                <span class='ft van-ellipsis'>
                     {{ fundInfo.fundType }}
                 </span>
             </li>
@@ -93,7 +93,6 @@ const { fundInfo, toTrackProduct } = useFundInfo()
         }
         .ft{
             word-break: break-word;
-            line-height: 1.2;
             padding-left: rem(40px);
         }
     }
