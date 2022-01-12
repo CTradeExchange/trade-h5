@@ -171,7 +171,9 @@ export default {
                                 state.elementCodeInputGroup = el.elementCodeInputGroup
                                 state.typeCode = el.elementCodeInputGroup
                                 state.conditionModel[el.elementCodeInputGroup] = el.elementValueInputGroup
-                                state.showImgList = cardTypeMap[el.elementCodeInputGroup]
+                                if (el.elementCodeInputGroup) {
+                                    state.showImgList = cardTypeMap[el.elementCodeInputGroup]
+                                }
                             } else {
                                 state.conditionModel[el.elementCode] = el.elementValue
                             }
@@ -346,7 +348,7 @@ export default {
         }
 
         const imgTypeVis = (item) => {
-            return item.showType === 'image' && state.showImgList.includes(item.elementCode)
+            return item.showType === 'image' && state.showImgList?.includes(item.elementCode)
         }
 
         onBeforeMount(() => {

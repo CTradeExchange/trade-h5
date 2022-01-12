@@ -201,7 +201,7 @@ export default {
             }
             .state{
                 color: var(--minorColor);
-                font-size: rem(24px);
+                font-size: rem(26px);
             }
         }
     }
