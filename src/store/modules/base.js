@@ -104,7 +104,8 @@ export default {
                     // 在线客服补充语言参数
                     let onlineService = data.onlineService
                     if (onlineService) {
-                        const lang = getCookie('lang').split('-')[0]
+                        let lang = getCookie('lang') || 'zh-CN'
+                        lang = lang.split('-')[0]
                         if (onlineService.indexOf('?') === -1) onlineService += '?_tt=1'
                         onlineService += `&lang=${lang}`
                         data.onlineService = onlineService
