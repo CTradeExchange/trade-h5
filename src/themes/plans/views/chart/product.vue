@@ -94,7 +94,7 @@
                         </span>
                     </p>
                     <p v-if='product.etf' class='priceTop'>
-                        {{ $t('fundInfo.premiumRate') }}
+                        {{ $t('fundInfo.premiumRate') }}({{ product.fundCurrency }})
                         <span>
                             {{ product.premiumRate || '--' }}
                         </span>
@@ -1034,15 +1034,17 @@ export default {
             async () => {
                 await nextTick()
                 const query = route.query
-                symbolId.value = parseInt(query.symbolId)
-                tradeType.value = parseInt(query.tradeType)
-                store.commit('_quote/Update_productActivedID', `${query.symbolId}_${query.tradeType}`)
-                await nextTick()
-                const product = store.getters.productActived
-                subscribeToProduct()
-                // initChartData()
-                renderChart(product, state.initConfig.property)
-                chartRef.value.reset()
+                if (query.symbolId) {
+                    symbolId.value = parseInt(query.symbolId)
+                    tradeType.value = parseInt(query.tradeType)
+                    store.commit('_quote/Update_productActivedID', `${query.symbolId}_${query.tradeType}`)
+                    await nextTick()
+                    const product = store.getters.productActived
+                    subscribeToProduct()
+                    // initChartData()
+                    renderChart(product, state.initConfig.property)
+                    chartRef.value.reset()
+                }
             }
         )
 

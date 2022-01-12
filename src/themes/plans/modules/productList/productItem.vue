@@ -151,6 +151,7 @@ export default {
         font-weight: 400;
         font-size: rem(30px);
         line-height: 1.15;
+        padding-bottom: 1px;
         &.small {
             font-size: rem(26px);
         }
