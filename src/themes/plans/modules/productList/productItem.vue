@@ -125,7 +125,7 @@ export default {
         .th {
             position: relative;
             flex: 1;
-            overflow: hidden;
+            overflow-y: visible;
         }
         .tb {
             width: rem(210px);
