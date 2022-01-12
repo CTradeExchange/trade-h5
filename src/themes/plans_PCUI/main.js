@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import '@vant/touch-emulator'
 import '@/utils/dayjs'
 import App from './App.vue'
 import router from './router'
