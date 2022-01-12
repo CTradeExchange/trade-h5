@@ -1,10 +1,7 @@
 <template>
     <div class='login'>
         <topNav class='header' />
-        <van-datetime-picker
-            title='选择年月日'
-            type='date'
-        />
+
         <div class='main'>
             <loginTypeBar v-model='loginType' />
             <form class='loginForm'>
