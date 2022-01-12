@@ -125,7 +125,7 @@ export const usePerformance = () => {
             },
             color: ['#F1A21A', '#2B70AE'],
             legend: {
-                data: [yData[0].name, yData[1].name], // ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+                data: [yData[0]?.name, yData[1]?.name], // ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
             },
             grid: {
                 left: '3%',

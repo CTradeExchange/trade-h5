@@ -39,99 +39,133 @@ onMounted(async () => {
     // 市场价格 vs 基金净值
     getMarketPerformanceData().then(res => {
         const [data1, data2] = res
-        if (!data1?.length || !data2?.length) return false
         const xData = []
         const yData = []
-        data1[1].forEach(el => {
+        const xDataSource = data1 || data2 || ['', []]
+        xDataSource[1].forEach(el => {
             xData.push(el.time)
         })
-        yData.push({
-            name: data1[0],
-            type: 'line',
-            stack: 'Total',
-            data: data1[1].map(el => el.value)
-        })
-        yData.push({
-            name: data2[0],
-            type: 'line',
-            stack: 'Total',
-            data: data2[1].map(el => el.value)
-        })
+        if (data1?.length) {
+            yData.push({
+                name: data1[0],
+                type: 'line',
+                stack: 'Total',
+                data: data1[1].map(el => el.value)
+            })
+        }
 
-        newChart(marketPriceJZ_DOM.value, [xData, yData])
+        if (data2?.length) {
+            yData.push({
+                name: data2[0],
+                type: 'line',
+                stack: 'Total',
+                data: data2[1].map(el => el.value)
+            })
+        }
+
+        if (yData) {
+            newChart(marketPriceJZ_DOM.value, [xData, yData])
+        } else {
+            marketPriceJZ_DOM.value.style.display = 'none'
+        }
     })
     getMarketPerformanceData1().then(res => {
         const [data1, data2] = res
-        if (!data1?.length || !data2?.length) return false
         const xData = []
         const yData = []
-        data1[1].forEach(el => {
+        const xDataSource = data1 || data2 || ['', []]
+        xDataSource[1].forEach(el => {
             xData.push(el.time.slice(0, 16))
         })
-        yData.push({
-            name: data1[0],
-            type: 'line',
-            stack: 'Total',
-            data: data1[1].map(el => el.value)
-        })
-        yData.push({
-            name: data2[0],
-            type: 'line',
-            stack: 'Total',
-            data: data2[1].map(el => el.value)
-        })
-        newChart(marketPriceJZ_DOM1.value, [xData, yData])
+        if (data1?.length) {
+            yData.push({
+                name: data1[0],
+                type: 'line',
+                stack: 'Total',
+                data: data1[1].map(el => el.value)
+            })
+        }
+
+        if (data2?.length) {
+            yData.push({
+                name: data2[0],
+                type: 'line',
+                stack: 'Total',
+                data: data2[1].map(el => el.value)
+            })
+        }
+        if (yData.length) {
+            newChart(marketPriceJZ_DOM1.value, [xData, yData])
+        } else {
+            marketPriceJZ_DOM1.value.style.display = 'none'
+        }
     })
 
     // 市场表现
     getMarketPerformanceQuoteChange().then(res => {
         const [data1, data2] = res
-        if (!data1?.length || !data2?.length) return false
         const xData = []
         const yData = []
-        data1[1].forEach(el => {
-            xData.push(el.time.slice(0, 16))
+        const xDataSource = data1 || data2 || ['', []]
+        xDataSource[1].forEach(el => {
+            xData.push(el.time)
         })
-        yData.push({
-            name: data1[0],
-            type: 'line',
-            stack: 'Total',
-            data: data1[1].map(el => el.value)
-        })
-        yData.push({
-            name: data2[0],
-            type: 'line',
-            stack: 'Total',
-            data: data2[1].map(el => el.value)
-        })
-        newChart(marketAppearance_DOM.value, [xData, yData], {
-            'yAxis.ext': '%'
-        })
+        if (data1?.length) {
+            yData.push({
+                name: data1[0],
+                type: 'line',
+                stack: 'Total',
+                data: data1[1].map(el => el.value)
+            })
+        }
+        if (data2?.length) {
+            yData.push({
+                name: data2[0],
+                type: 'line',
+                stack: 'Total',
+                data: data2[1].map(el => el.value)
+            })
+        }
+        if (yData.length) {
+            newChart(marketAppearance_DOM.value, [xData, yData], {
+                'yAxis.ext': '%'
+            })
+        } else {
+            marketAppearance_DOM.value.style.display = 'none'
+        }
     })
 
     getMarketPerformanceQuoteChange1().then(res => {
         const [data1, data2] = res
-        if (!data1?.length || !data2?.length) return false
         const xData = []
         const yData = []
-        data1[1].forEach(el => {
+        const xDataSource = data1 || data2 || ['', []]
+        xDataSource[1].forEach(el => {
             xData.push(el.time.slice(0, 16))
         })
-        yData.push({
-            name: data1[0],
-            type: 'line',
-            stack: 'Total',
-            data: data1[1].map(el => el.value)
-        })
-        yData.push({
-            name: data2[0],
-            type: 'line',
-            stack: 'Total',
-            data: data2[1].map(el => el.value)
-        })
-        newChart(marketAppearance_DOM1.value, [xData, yData], {
-            'yAxis.ext': '%'
-        })
+        if (data1?.length) {
+            yData.push({
+                name: data1[0],
+                type: 'line',
+                stack: 'Total',
+                data: data1[1].map(el => el.value)
+            })
+        }
+        if (data2?.length) {
+            yData.push({
+                name: data2[0],
+                type: 'line',
+                stack: 'Total',
+                data: data2[1].map(el => el.value)
+            })
+        }
+        if (yData.length) {
+            newChart(marketAppearance_DOM1.value, [xData, yData], {
+                'yAxis.ext': '%'
+            })
+        } else {
+            marketAppearance_DOM1.value.style.display = 'none'
+        }
     })
 })
 </script>

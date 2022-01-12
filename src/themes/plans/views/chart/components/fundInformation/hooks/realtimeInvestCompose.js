@@ -91,12 +91,33 @@ export const useInvestCompose = (params) => {
         const invertColor = localGet('invertColor')
         const option = {
             backgroundColor: invertColor === 'light' ? '#fff' : '#000',
+            // tooltip: {
+            //     trigger: 'axis',
+            //     textStyle: {
+            //         fontSize: 12,
+            //     },
+            //     formatter: function (params) {
+            //         const yAxisExt = '%'
+            //         let str = `<p style="padding-bottom:10px;">${params[0].name}</p>`
+            //         params.forEach((item) => {
+            //             str += `<p style="padding-bottom:5px;">
+            //                     <span style="display:inline-block;margin-right:5px;border-radius:50%;width:10px;height:10px;left:5px;background-color:${item.color}"></span>
+            //                     ${item.value + yAxisExt}
+            //                     <br />
+            //                 </p>`
+            //         })
+            //         return str
+            //     },
+            // },
             xAxis: {
                 type: 'category',
                 data: xData, // ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
             },
             yAxis: {
-                type: 'value'
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value} %'
+                }
             },
             grid: {
                 show: false,
