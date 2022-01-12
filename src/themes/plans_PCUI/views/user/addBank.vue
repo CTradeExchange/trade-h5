@@ -91,7 +91,6 @@
 </template>
 
 <script>
-import '@vant/touch-emulator'
 import centerViewDialog from '@planspc/layout/centerViewDialog'
 import { useRouter, useRoute } from 'vue-router'
 import top from '@/components/top'

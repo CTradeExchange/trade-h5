@@ -30,10 +30,10 @@
         <Loading :show='loading' />
 
         <div class='productInfo'>
-            <div v-if='product?.price_digits' class='hd'>
+            <div v-if='product?.symbolDigits' class='hd'>
                 <div class='hd-left'>
                     <p class='cur_price' :class='product?.cur_color'>
-                        {{ parseFloat(product?.cur_price).toFixed(product?.price_digits) }}
+                        {{ product.cur_price ? parseFloat(product?.cur_price).toFixed(product?.symbolDigits) :'' }}
                     </p>
                 </div>
                 <div class='others'>
@@ -312,7 +312,7 @@
 import { useRouter, useRoute } from 'vue-router'
 import StudyList from './components/studyList.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted } from 'vue'
+import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted, nextTick } from 'vue'
 import KIcon from './icons/kIcon.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import { useStore } from 'vuex'
@@ -1031,11 +1031,14 @@ export default {
         // 切换产品时重新初始化数据
         watch(
             () => route.query.symbolId,
-            newval => {
+            async () => {
+                await nextTick()
                 const query = route.query
                 symbolId.value = parseInt(query.symbolId)
                 tradeType.value = parseInt(query.tradeType)
                 store.commit('_quote/Update_productActivedID', `${query.symbolId}_${query.tradeType}`)
+                await nextTick()
+                const product = store.getters.productActived
                 subscribeToProduct()
                 // initChartData()
                 renderChart(product, state.initConfig.property)

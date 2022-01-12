@@ -1,14 +1,17 @@
 <template>
     <div class='productItem of-1px-bottom' :class='[bgClass]' :data-symbolId='product.symbolId' @click="$emit('open')">
         <div v-if='product.symbolName' class='cell'>
-            <p
+            <div
                 class='th name'
                 :class='[
                     getLen(product.simplified) > 10 && "small",
                     getLen(product.simplified) > 15 && "mini"]'
             >
                 {{ product.symbolName }}
-            </p>
+                <p v-if='product.etf'>
+                    <ETF />
+                </p>
+            </div>
             <div class='ft'>
                 <span
                     class='buy_price'
@@ -43,7 +46,11 @@
 import { computed, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import { getLen, localGet } from '@/utils/util'
+import ETF from '@plans/components/etfIcon'
 export default {
+    components: {
+        ETF,
+    },
     props: {
         product: {
             type: Object,
@@ -143,6 +150,7 @@ export default {
         color: var(--color);
         font-weight: 400;
         font-size: rem(30px);
+        line-height: 1.15;
         &.small {
             font-size: rem(26px);
         }
