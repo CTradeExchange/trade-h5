@@ -92,6 +92,7 @@
         "inputVerifyCode": "请输入验证码",
         "inputPwd": "请输入密码",
         "input": "请输入",
+        "select": "请选择",
         "submit": "提交",
         "sure": "确定",
         "emailBindSuccess": "绑定邮箱成功",
