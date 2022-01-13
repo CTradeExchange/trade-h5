@@ -9,7 +9,7 @@ export function tickFormat (data) {
         el.price_ask = toFixed(el.price_ask, digits)
         el.price_bid = toFixed(el.price_bid, digits)
     })
-    const firstTick = tick_deep[0]
+    const firstTick = tick_deep[0] || {}
     data.symbolKey = `${data.symbol_id}_${data.trade_type}`
     data.symbolId = parseInt(data.symbol_id)
     data.close_price = toFixed(data.close_price, digits)

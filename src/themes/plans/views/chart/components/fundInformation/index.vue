@@ -2,13 +2,13 @@
     <div class=''>
         <van-tabs v-model:active='active' class='fundInfoTab' type='card'>
             <van-tab :title='$t("fundInfo.baseInfo")'>
-                <baseVue />
+                <baseVue v-if='active===0' />
             </van-tab>
             <van-tab :title='$t("fundInfo.fundPerformance")'>
-                <performanceVue />
+                <performanceVue v-if='active===1' />
             </van-tab>
             <van-tab :title='$t("fundInfo.investCompose")'>
-                <realtime-invest-compose />
+                <realtime-invest-compose v-if='active===2' />
             </van-tab>
         </van-tabs>
     </div>

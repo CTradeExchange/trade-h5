@@ -96,7 +96,6 @@ export const usePerformance = () => {
     const newChart = (chartDom, [xData, yData], opts) => {
         // console.log(chartDom, xData, yData, opts)
         if (!chartDom || !xData?.length) return false
-        const digits = product.value.price_digits || product.value.symbolDigits
 
         const invertColor = localGet('invertColor')
         const myChart = echarts.init(chartDom)
@@ -125,17 +124,17 @@ export const usePerformance = () => {
             },
             color: ['#F1A21A', '#2B70AE'],
             legend: {
-                data: [yData[0].name, yData[1].name], // ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+                data: [yData[0]?.name, yData[1]?.name], // ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
             },
             grid: {
                 left: '3%',
-                right: '4%',
+                right: '5%',
                 bottom: '3%',
                 containLabel: true
             },
             xAxis: {
                 type: 'category',
-                boundaryGap: false,
+                // boundaryGap: false,
                 data: xData, // ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
                 axisLabel: {
                     formatter (value, index) {

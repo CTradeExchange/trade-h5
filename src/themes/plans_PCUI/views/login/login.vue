@@ -1,6 +1,7 @@
 <template>
     <div class='login'>
         <topNav class='header' />
+
         <div class='main'>
             <loginTypeBar v-model='loginType' />
             <form class='loginForm'>

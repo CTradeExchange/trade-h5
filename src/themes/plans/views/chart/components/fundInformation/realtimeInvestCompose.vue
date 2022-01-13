@@ -46,8 +46,8 @@
                                 <span>
                                     {{ item.weight }}
                                     (
-                                    <i v-if="item.previousPeriodWeightCompare!=='-'" :class='{ "downArrow":item.previousPeriodWeightCompare<0, "upArrow":item.previousPeriodWeightCompare>0 }'></i>
-                                    {{ item.previousPeriodWeightCompare==='-' ? '-' : Math.abs(item.previousPeriodWeightCompare) }}
+                                    <i v-if="item.previousPeriodWeightCompare!=='-'" :class='[item.arrow]'></i>
+                                    {{ item.previousPeriodWeightCompare==='-' ? '-' : item.previousPeriodWeightCompare.replace(/[\+-]/,'') }}
                                     )
                                 </span>
                             </template>
@@ -76,7 +76,7 @@ import { useInvestCompose } from './hooks/realtimeInvestCompose'
 import currencyIcon from '@/components/currencyIcon'
 
 // 显示数据列表还是显示环形图
-const showBlock = ref('list')
+const showBlock = ref('chart')
 // 切换数据列表和环形图的显示
 const switchAction = async () => {
     showBlock.value = showBlock.value === 'list' ? 'chart' : 'list'
@@ -89,7 +89,10 @@ const switchAction = async () => {
 const rangList = ref([]) // 实时投资组合排名列表
 const chartData = computed(() => {
     return rangList.value.map(el => {
-        return { value: parseFloat(el.weight), name: el.asset + ' ' + el.weight }
+        return {
+            value: parseFloat(el.weight),
+            name: el.asset + ' ' + el.weight,
+        }
     })
 })
 const assetPerformanceList = ref([]) // 实时投资组合排名
@@ -102,11 +105,14 @@ onMounted(async () => {
     await delayAwaitTime(200)
 
     // 实时投资组合排名
-    getInvestCombination().then(data => {
+    getInvestCombination().then(async data => {
         rangList.value = data.map(el => {
             el.popover = false
+            el.arrow = parseFloat(el.previousPeriodWeightCompare) < 0 ? 'downArrow' : 'upArrow'
             return el
         })
+        await nextTick()
+        newPieDoughnutChart(chartPieDOM.value, chartData.value)
     })
 
     // 单资产表现柱状图
@@ -161,7 +167,7 @@ onMounted(async () => {
         flex: 1;
     }
     .ft{
-        width: rem(240px);
+        width: rem(300px);
     }
     .small{
         font-size: rem(22px);

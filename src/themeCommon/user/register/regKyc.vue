@@ -47,7 +47,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .notice {
-    margin-bottom: rem(20px);
+    margin-top: rem(20px);
     padding-left: rem(30px);
 }
 </style>

@@ -3,17 +3,18 @@
     <div class='page-wrap'>
         <slot name='notice'></slot>
         <div class='conditon-wrap'>
-            <div v-for='(item,index) in elementList' :key='index' class='c-item'>
+            <div v-for='(item,index) in elementList' :key='index' class='condition-item'>
                 <van-field
                     v-if="item.showType === 'input'"
                     v-model='conditionModel[item.elementCode]'
+                    class='c-item'
                     :clearable='true'
                     :label='item.elementName'
                     :placeholder='$t("common.input")+item.elementName'
+                    required
                     :type='item.elementCode === "phone" ? "number" : "text"'
                 />
-
-                <div v-if="item.showType === 'image'">
+                <div v-if='imgTypeVis(item)' class='c-item'>
                     <p class='upload-text'>
                         {{ item.elementName }}
                     </p>
@@ -30,7 +31,7 @@
                             :id='item.elementCode'
                             alt=''
                             class='upload-img'
-                            :src="require('../../assets/auth/' + item.elementCode + '.png')"
+                            :src="require('../../assets/auth/upload.png')"
                             srcset=''
                         />
                     </van-uploader>
@@ -42,9 +43,23 @@
                         :label='item.elementName'
                         :placeholder='$t("register.chooseCertificateType")'
                         readonly
+                        required
+                        right-icon='arrow'
                         @click='showPicker = true'
                     />
-                    <van-field v-model='conditionModel[typeCode]' :label='$t("register.certificateNo")' :placeholder="$t('register.pleaseEnter')+ typeValue" />
+                    <van-field v-model='conditionModel[typeCode]' :label='$t("register.certificateNo")' :placeholder="$t('register.pleaseEnter')+ typeValue" required />
+                </div>
+                <div v-if="item.showType=== 'date'">
+                    <van-field
+                        v-model='conditionModel[item.elementCode]'
+                        clickable
+                        :label='item.elementName'
+                        :placeholder='$t("common.select")+item.elementName'
+                        readonly
+                        required
+                        right-icon='arrow'
+                        @click='dateShowPicker = true'
+                    />
                 </div>
             </div>
         </div>
@@ -52,6 +67,17 @@
             {{ $t('common.submit') }}
         </van-button>
     </div>
+
+    <van-popup v-model:show='dateShowPicker' class='actionsheetCenter' position='bottom' round>
+        <van-datetime-picker
+            v-model='datePickerVal'
+            :max-date='maxDate'
+            :min-date='minDate'
+            type='date'
+            @cancel='dateShowPicker = false'
+            @confirm='dateConfirm'
+        />
+    </van-popup>
 
     <van-popup v-model:show='showPicker' class='actionsheetCenter' position='bottom' round>
         <van-picker
@@ -65,12 +91,13 @@
 
 <script>
 import { useRouter, useRoute } from 'vue-router'
-import { toRefs, reactive, onBeforeMount, onBeforeUnmount } from 'vue'
+import { toRefs, reactive, onBeforeMount, onBeforeUnmount, computed } from 'vue'
 import { Toast } from 'vant'
 import { findAllLevelKyc, kycLevelApply, kycApply } from '@/api/user'
 import { getArrayObj, isEmpty } from '@/utils/util'
 import { upload, getListByParentCode } from '@/api/base'
 import { useI18n } from 'vue-i18n'
+import { deepClone } from '@/utils/deepClone'
 
 export default {
     props: {
@@ -89,6 +116,13 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const levelCode = route.query.levelCode
 
+        // 证件类型对应的上传图片项
+        const cardTypeMap = {
+            'identity_card': ['back_identity_card', 'front_identity_card'],
+            'passport': ['proof_of_passpord'],
+            'drving_license': ['proof_of_drive']
+        }
+
         const state = reactive({
             area: '',
             pathCode: '',
@@ -103,7 +137,13 @@ export default {
             columns: [],
             typeCode: '',
             elementCodeInputGroup: '',
-            extendsMap: {}, // 字段和正则对应
+            extendsMap: {}, // 字段和正则对应关系
+            showImgList: [],
+            dateShowPicker: false,
+            currentDate: '', // window.dayjs(new Date()).format('YYYY-MM-DD'),
+            minDate: new Date(1920, 0, 1),
+            maxDate: new Date(),
+            datePickerVal: new Date()
 
         })
         const columnsFields = { text: 'name' }
@@ -126,11 +166,14 @@ export default {
 
                     if (state.elementList.length > 0) {
                         state.elementList.forEach(el => {
-                            // 如果是 typeValue 单独处理
+                            // 如果是 inputGroup 单独处理
                             if (el.showType === 'inputGroup') {
                                 state.elementCodeInputGroup = el.elementCodeInputGroup
                                 state.typeCode = el.elementCodeInputGroup
                                 state.conditionModel[el.elementCodeInputGroup] = el.elementValueInputGroup
+                                if (el.elementCodeInputGroup) {
+                                    state.showImgList = cardTypeMap[el.elementCodeInputGroup]
+                                }
                             } else {
                                 state.conditionModel[el.elementCode] = el.elementValue
                             }
@@ -204,6 +247,15 @@ export default {
         }
 
         const onConfirm = () => {
+            // 证件类型只判断其中一种
+            const compareElement = deepClone(state.elementList)
+            const unCheckedColumns = state.columns.filter(el => el.code !== state.typeCode).map(item => cardTypeMap[item.code]).flat()
+            unCheckedColumns.forEach(item => {
+                const forDelIndex = compareElement.findIndex(el => el.elementCode === item)
+                compareElement.splice(forDelIndex, 1)
+                delete state.conditionModel[item]
+            })
+
             const tempElementList = []
             if (!isEmpty(state.conditionModel)) {
                 for (const key in state.conditionModel) {
@@ -224,7 +276,7 @@ export default {
                 }
             }
 
-            if (tempElementList.length < state.elementList.length) {
+            if (tempElementList.length < compareElement.length) {
                 return Toast(t('auth.allAuthPlease'))
             }
 
@@ -276,7 +328,7 @@ export default {
             }
         }
 
-        const deleterepeatData = () => {
+        const deleteRepeatData = () => {
             const tempDelData = state.columns.filter((item) => item.code !== state.typeCode)
             if (tempDelData.length > 0) {
                 tempDelData.forEach(item => {
@@ -285,12 +337,18 @@ export default {
             }
         }
 
+        // 证件类型选择
         const handleConfirm = (value) => {
             state.typeValue = value.name
             state.typeCode = value.code
             state.showPicker = false
+            state.showImgList = cardTypeMap[value.code]
             // 类型为证件类型的时候处理重复数据
-            deleterepeatData()
+            deleteRepeatData()
+        }
+
+        const imgTypeVis = (item) => {
+            return item.showType === 'image' && state.showImgList?.includes(item.elementCode)
         }
 
         onBeforeMount(() => {
@@ -304,6 +362,11 @@ export default {
             }
         })
 
+        const dateConfirm = (val) => {
+            state.conditionModel['birthday'] = window.dayjs(val).format('YYYY-MM-DD')
+            state.dateShowPicker = false
+        }
+
         onBeforeUnmount(() => {
             sessionStorage.removeItem('kycList')
         })
@@ -315,6 +378,8 @@ export default {
             afterRead,
             handleConfirm,
             columnsFields,
+            imgTypeVis,
+            dateConfirm
         }
     }
 }
@@ -348,39 +413,42 @@ export default {
         flex: 1;
         padding: rem(20px) 0;
         overflow-y: auto;
-        .c-item {
-            text-align: center;
-            padding-top: rem(20px);
-            background: var(--contentColor);
-            border-bottom: solid 1px var(--lineColor);
-            :deep(.van-cell) {
-                background-color: var(--contentColor);
-                .van-cell__title {
-                    color: var(--normalColor);
+        .condition-item{
+          .c-item {
+                text-align: center;
+                padding-top: rem(20px);
+                background: var(--contentColor);
+                border-bottom: solid 1px var(--lineColor);
+                :deep(.van-cell) {
+                    background-color: var(--contentColor);
+                    .van-cell__title {
+                        color: var(--normalColor);
+                    }
+                    .van-cell__value {
+                        color: var(--color);
+                    }
+                    .van-field__control {
+                        color: var(--color);
+                    }
                 }
-                .van-cell__value {
-                    color: var(--color);
+                .upload-img {
+                    width: rem(400px);
+                    padding: rem(30px);
+                    border:dashed 1px var(--lineColor);
+                    border-radius: rem(16px);
                 }
-                .van-field__control {
-                    color: var(--color);
+                .upload-text {
+                    margin-top: rem(20px);
+                    font-size: rem(48px);
                 }
-            }
-            .upload-img {
-                width: rem(400px);
-                height: rem(260px);
-            }
-            .upload-text {
-                margin-top: rem(20px);
-                font-size: rem(48px);
-            }
-            .van-uploader {
-                margin-top: rem(50px);
-                margin-bottom: rem(50px);
-            }
-            &:last-of-type {
-                //border-bottom: none;
+                .van-uploader {
+                    margin-top: rem(50px);
+                    margin-bottom: rem(50px);
+
+                }
             }
         }
+
     }
     .confirm-btn {
         width: 100%;
