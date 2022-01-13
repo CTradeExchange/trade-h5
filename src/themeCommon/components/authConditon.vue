@@ -14,6 +14,19 @@
                     required
                     :type='item.elementCode === "phone" ? "number" : "text"'
                 />
+                <div v-if="item.showType === 'inputGroup'">
+                    <van-field
+                        v-model='typeValue'
+                        clickable
+                        :label='item.elementName'
+                        :placeholder='$t("register.chooseCertificateType")'
+                        readonly
+                        required
+                        right-icon='arrow'
+                        @click='showPicker = true'
+                    />
+                    <van-field v-model='conditionModel[typeCode]' :label='$t("register.certificateNo")' :placeholder="$t('register.pleaseEnter')+ typeValue" required />
+                </div>
                 <div v-if='imgTypeVis(item)' class='c-item'>
                     <p class='upload-text'>
                         {{ item.elementName }}
@@ -36,19 +49,7 @@
                         />
                     </van-uploader>
                 </div>
-                <div v-if="item.showType === 'inputGroup'">
-                    <van-field
-                        v-model='typeValue'
-                        clickable
-                        :label='item.elementName'
-                        :placeholder='$t("register.chooseCertificateType")'
-                        readonly
-                        required
-                        right-icon='arrow'
-                        @click='showPicker = true'
-                    />
-                    <van-field v-model='conditionModel[typeCode]' :label='$t("register.certificateNo")' :placeholder="$t('register.pleaseEnter')+ typeValue" required />
-                </div>
+
                 <div v-if="item.showType=== 'date'">
                     <van-field
                         v-model='conditionModel[item.elementCode]'
@@ -58,7 +59,7 @@
                         readonly
                         required
                         right-icon='arrow'
-                        @click='dateShowPicker = true'
+                        @click='handleDateClick(item.elementCode)'
                     />
                 </div>
             </div>
@@ -143,7 +144,8 @@ export default {
             currentDate: '', // window.dayjs(new Date()).format('YYYY-MM-DD'),
             minDate: new Date(1920, 0, 1),
             maxDate: new Date(),
-            datePickerVal: new Date()
+            datePickerVal: new Date(),
+            checkedCode: ''
 
         })
         const columnsFields = { text: 'name' }
@@ -174,6 +176,9 @@ export default {
                                 if (el.elementCodeInputGroup) {
                                     state.showImgList = cardTypeMap[el.elementCodeInputGroup]
                                 }
+                            } else if (el.showType === 'date') {
+                                state.conditionModel[el.elementCode] = window.dayjs(Number(el.elementValue)).format('YYYY-MM-DD')
+                                state.datePickerVal = new Date(Number(el.elementValue))
                             } else {
                                 state.conditionModel[el.elementCode] = el.elementValue
                             }
@@ -198,7 +203,8 @@ export default {
             state.elementList.forEach(item => {
                 state.extendsMap[item.elementCode] = {
                     name: item.elementName,
-                    extend: item.extend
+                    extend: item.extend,
+                    showType: item.showType
                 }
             })
         }
@@ -252,14 +258,16 @@ export default {
             const unCheckedColumns = state.columns.filter(el => el.code !== state.typeCode).map(item => cardTypeMap[item.code]).flat()
             unCheckedColumns.forEach(item => {
                 const forDelIndex = compareElement.findIndex(el => el.elementCode === item)
-                compareElement.splice(forDelIndex, 1)
-                delete state.conditionModel[item]
+                if (forDelIndex !== -1) {
+                    compareElement.splice(forDelIndex, 1)
+                    delete state.conditionModel[item]
+                }
             })
 
             const tempElementList = []
             if (!isEmpty(state.conditionModel)) {
                 for (const key in state.conditionModel) {
-                    if (state.conditionModel.hasOwnProperty(key)) {
+                    if (state.conditionModel.hasOwnProperty(key) && key !== 'null') {
                         if (!isEmpty(state.extendsMap[key]?.extend)) {
                             const valueReg = new RegExp(state.extendsMap[key].extend)
                             if (!valueReg.test(state.conditionModel[key])) {
@@ -271,6 +279,11 @@ export default {
                                 elementCode: key,
                                 elementValue: state.conditionModel[key]
                             })
+                        }
+
+                        if (state.extendsMap[key]?.showType === 'date') {
+                            const dateVal = tempElementList.find(el => el.elementCode === key)
+                            dateVal.elementValue = window.dayjs(dateVal.elementValue).valueOf().toString()
                         }
                     }
                 }
@@ -347,8 +360,9 @@ export default {
             deleteRepeatData()
         }
 
+        // 判断imgge类型是否显示
         const imgTypeVis = (item) => {
-            return item.showType === 'image' && state.showImgList?.includes(item.elementCode)
+            return item.showType === 'image' && (state.showImgList?.includes(item.elementCode) || Object.values(cardTypeMap).flat().indexOf(item.elementCode) === -1)
         }
 
         onBeforeMount(() => {
@@ -363,8 +377,13 @@ export default {
         })
 
         const dateConfirm = (val) => {
-            state.conditionModel['birthday'] = window.dayjs(val).format('YYYY-MM-DD')
+            state.conditionModel[state.checkedCode] = window.dayjs(val).format('YYYY-MM-DD')
             state.dateShowPicker = false
+        }
+
+        const handleDateClick = (code) => {
+            state.checkedCode = code
+            state.dateShowPicker = true
         }
 
         onBeforeUnmount(() => {
@@ -379,7 +398,8 @@ export default {
             handleConfirm,
             columnsFields,
             imgTypeVis,
-            dateConfirm
+            dateConfirm,
+            handleDateClick
         }
     }
 }
