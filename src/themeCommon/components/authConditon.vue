@@ -58,7 +58,7 @@
                         readonly
                         required
                         right-icon='arrow'
-                        @click='dateShowPicker = true'
+                        @click='handleDateClick(item.elementCode)'
                     />
                 </div>
             </div>
@@ -143,7 +143,8 @@ export default {
             currentDate: '', // window.dayjs(new Date()).format('YYYY-MM-DD'),
             minDate: new Date(1920, 0, 1),
             maxDate: new Date(),
-            datePickerVal: new Date()
+            datePickerVal: new Date(),
+            checkedCode: ''
 
         })
         const columnsFields = { text: 'name' }
@@ -174,6 +175,9 @@ export default {
                                 if (el.elementCodeInputGroup) {
                                     state.showImgList = cardTypeMap[el.elementCodeInputGroup]
                                 }
+                            } else if (el.showType === 'date') {
+                                state.conditionModel[el.elementCode] = window.dayjs(Number(el.elementValue)).format('YYYY-MM-DD')
+                                state.datePickerVal = new Date(Number(el.elementValue))
                             } else {
                                 state.conditionModel[el.elementCode] = el.elementValue
                             }
@@ -198,7 +202,8 @@ export default {
             state.elementList.forEach(item => {
                 state.extendsMap[item.elementCode] = {
                     name: item.elementName,
-                    extend: item.extend
+                    extend: item.extend,
+                    showType: item.showType
                 }
             })
         }
@@ -271,6 +276,11 @@ export default {
                                 elementCode: key,
                                 elementValue: state.conditionModel[key]
                             })
+                        }
+
+                        if (state.extendsMap[key].showType === 'date') {
+                            const dateVal = tempElementList.find(el => el.elementCode === key)
+                            dateVal.elementValue = window.dayjs(dateVal.elementValue).valueOf().toString()
                         }
                     }
                 }
@@ -363,8 +373,13 @@ export default {
         })
 
         const dateConfirm = (val) => {
-            state.conditionModel['birthday'] = window.dayjs(val).format('YYYY-MM-DD')
+            state.conditionModel[state.checkedCode] = window.dayjs(val).format('YYYY-MM-DD')
             state.dateShowPicker = false
+        }
+
+        const handleDateClick = (code) => {
+            state.checkedCode = code
+            state.dateShowPicker = true
         }
 
         onBeforeUnmount(() => {
@@ -379,7 +394,8 @@ export default {
             handleConfirm,
             columnsFields,
             imgTypeVis,
-            dateConfirm
+            dateConfirm,
+            handleDateClick
         }
     }
 }
