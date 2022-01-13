@@ -250,7 +250,7 @@
         "certificateNo": "ID no.",
         "chooseCertificateType": "Please choose certificate type",
         "incorrectlyFormed": "Incorrect format",
-        "pleaseEnter": "Please enter",
+        "pleaseEnter": "Please enter ",
         "reGet": "Get again"
     },
     "chart": {

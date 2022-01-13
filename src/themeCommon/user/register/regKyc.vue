@@ -3,6 +3,7 @@
         back
         left-icon='arrow-left'
         :menu='false'
+        :title="$t('cRoute.authForm')"
     />
 
     <auth-condition business-code='open_account'>
@@ -48,6 +49,8 @@ export default {
 @import '@/sass/mixin.scss';
 .notice {
     margin-top: rem(20px);
+    margin-bottom: rem(20px);
     padding-left: rem(30px);
+    line-height: rem(40px);
 }
 </style>

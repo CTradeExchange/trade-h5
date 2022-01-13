@@ -414,8 +414,9 @@ export default {
     overflow-y: auto;
     background-color: var(--bgColor);
     .notice {
-        margin-top: rem(58px);
         padding-left: rem(30px);
+        line-height: rem(100px);
+
         .title {
             color: var(--minorColor);
             font-size: rem(28px);
@@ -431,7 +432,6 @@ export default {
     }
     .conditon-wrap {
         flex: 1;
-        padding: rem(20px) 0;
         overflow-y: auto;
         .condition-item{
           .c-item {
