@@ -30,10 +30,10 @@
         <Loading :show='loading' />
 
         <div class='productInfo'>
-            <div v-if='product?.symbolDigits' class='hd'>
+            <div v-if='product?.price_digits' class='hd'>
                 <div class='hd-left'>
                     <p class='cur_price' :class='product?.cur_color'>
-                        {{ product.cur_price ? parseFloat(product?.cur_price).toFixed(product?.symbolDigits) :'' }}
+                        {{ parseFloat(product?.cur_price).toFixed(product?.price_digits) }}
                     </p>
                 </div>
                 <div class='others'>
@@ -262,13 +262,13 @@
             </div>
         </div>
         <StallsAndDeal
-            v-if='product && product.tradeEnable===1 && dealModeShowMap[product.dealMode]?.handicap'
+            v-if='product && product.tradeEnable && dealModeShowMap[product.dealMode]?.handicap'
             :cur-price='product?.cur_price'
             :symbol-id='product?.symbolId'
             :trade-type='tradeType'
         />
 
-        <div v-if='product && product.tradeEnable===1' class='footerBtnBox'>
+        <div v-if='product && product.tradeEnable' class='footerBtnBox'>
             <div class='trade-btn-wrap'>
                 <div class='buy fallColorBg' @click="toOrder('buy')">
                     <i class='icon icon_mairu'></i>
@@ -312,7 +312,7 @@
 import { useRouter, useRoute } from 'vue-router'
 import StudyList from './components/studyList.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted, nextTick } from 'vue'
+import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted } from 'vue'
 import KIcon from './icons/kIcon.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import { useStore } from 'vuex'
@@ -1024,27 +1024,16 @@ export default {
                     tradeType: product.tradeType,
                 }
             }).then(() => {
-                close()
-            })
-        }
-
-        // 切换产品时重新初始化数据
-        watch(
-            () => route.query.symbolId,
-            async () => {
-                await nextTick()
-                const query = route.query
-                symbolId.value = parseInt(query.symbolId)
-                tradeType.value = parseInt(query.tradeType)
-                store.commit('_quote/Update_productActivedID', `${query.symbolId}_${query.tradeType}`)
-                await nextTick()
-                const product = store.getters.productActived
+                symbolId.value = product.symbolId
+                tradeType.value = product.tradeType
+                store.commit('_quote/Update_productActivedID', `${product.symbolId}_${product.tradeType}`)
                 subscribeToProduct()
                 // initChartData()
                 renderChart(product, state.initConfig.property)
                 chartRef.value.reset()
-            }
-        )
+                close()
+            })
+        }
 
         const updateChart = data => {
             try {
