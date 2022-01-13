@@ -108,7 +108,7 @@ export default {
 .productItem {
     @include active();
     position: relative;
-    height: rem(116px);
+    height: rem(118px);
     padding: rem(20px) 0;
     overflow: hidden;
     line-height: rem(76px);
