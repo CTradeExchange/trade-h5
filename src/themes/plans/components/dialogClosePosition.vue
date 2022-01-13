@@ -122,7 +122,7 @@
 
 <script>
 import { reactive, toRefs, computed, watchEffect, onMounted } from 'vue'
-import { div, eq, getDecimalNum, gt, lt, minus, mul } from '@/utils/calculation'
+import { div, eq, getDecimalNum, gt, lt, minus, mul, toFixed } from '@/utils/calculation'
 import { useStore } from 'vuex'
 import Stepper from '@plans/components/stepper'
 import BigNumber from 'bignumber.js'
@@ -242,9 +242,12 @@ export default {
         // 快速设置平仓手数
         const fastVolumeHandler = (item) => {
             const minVolume = props.product.minVolume
-            const newVolume = BigNumber(positionVolume.value).div(item.divValue).toString()
-            const mod = BigNumber(newVolume).mod(minVolume).toString()
-            if (eq(mod, 0)) {
+            const volumeStep = props.product.volumeStep
+            const volumeDigit = getDecimalNum(props.product.minVolume)
+            if (BigNumber(positionVolume.value).lte(minVolume)) {
+                state.closeVolume = minVolume
+            } else {
+                const newVolume = toFixed(volumeStep * Math.round((positionVolume.value / volumeStep) / parseFloat(item.divValue)), volumeDigit)
                 state.closeVolume = newVolume
             }
         }
