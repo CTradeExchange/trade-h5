@@ -15,7 +15,7 @@
                     {{ $t('withdrawMoney.moneyName') }}
                 </p>
                 <div class='field-wrap'>
-                    <input v-model='amount' :placeholder="$t('withdrawMoney.moneyPlaceholder')" type='number' @change='changeAmount' @input='changeAmount' />
+                    <input v-model='amount' :placeholder='amountPlaceholder' type='number' @change='changeAmount' @input='changeAmount' />
                     <button class='get-btn' plain round size='small' @click='getAll'>
                         {{ $t('withdrawMoney.allBtn') }}
                     </button>
@@ -157,6 +157,7 @@ import {
 import { useRouter, useRoute } from 'vue-router'
 import { Toast, Dialog } from 'vant'
 import { isEmpty, debounce, getCookie } from '@/utils/util'
+import { retainDecimal, getDecimalNum } from '@/utils/calculation'
 import { useStore } from 'vuex'
 import {
     handleWithdraw,
@@ -227,6 +228,7 @@ export default {
                 path: '/assets/withdrawRecord?withdrawType=1'
             },
             withdrawAmount: '0.00', // 可提金额
+            amountPlaceholder: currentTab !== 'otc365_cny' ? t('withdrawMoney.moneyPlaceholder') : t('withdrawMoney.moneyPlaceholder') + `(${t('withdrawMoney.digitsTip')})`, // 提现金额输入框提示
             amount: '', // 提现金额
             fee: '--', // 手续费
             computePre: '--', // 预计到账
@@ -398,12 +400,24 @@ export default {
 
         // 全部取出
         const getAll = () => {
-            state.amount = state.withdrawConfig.withdrawAmount
+            // otc365_cny限制最多输入4位小数位
+            if (currentTab === 'otc365_cny') {
+                state.amount = retainDecimal(state.withdrawConfig.withdrawAmount, 4)
+            } else {
+                state.amount = state.withdrawConfig.withdrawAmount
+            }
+            // 获取取款手续费
             getWithdrawFee()
         }
 
         // 改变取款金额
         const changeAmount = () => {
+            // otc365_cny限制最多输入4位小数位
+            if (currentTab === 'otc365_cny') {
+                if (getDecimalNum(state.amount) > 4) {
+                    state.amount = retainDecimal(state.amount, 4)
+                }
+            }
             // 获取取款手续费
             getWithdrawFee()
         }

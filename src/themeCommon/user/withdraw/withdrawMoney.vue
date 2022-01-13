@@ -103,13 +103,13 @@
         <div class='time-wrap'>
             <h4>{{ $t('withdraw.timeHint') }} </h4>
             <p v-if='timeList.length > 0'>
-                {{ $t('withdraw.timeName') }}：
+                {{ $t('withdraw.timeName') }}:
             </p>
             <div v-if='timeList.length > 0' class='flex'>
                 <div class='time-text'>
                     <p v-for='(item,index) in timeList' :key='index' class='time-text-flex'>
                         <span class='time-label'>
-                            {{ item.weekDay }}：
+                            {{ item.weekDay }}:
                         </span>
                         <span class='time-val'>
                             {{ item.openTimeLocal.toString() }}
@@ -394,7 +394,13 @@ export default {
 
         // 全部取出
         const getAll = () => {
-            state.amount = state.withdrawConfig.withdrawAmount
+            // otc365_cny限制最多输入4位小数位
+            if (currentTab === 'otc365_cny') {
+                state.amount = retainDecimal(state.withdrawConfig.withdrawAmount, 4)
+            } else {
+                state.amount = state.withdrawConfig.withdrawAmount
+            }
+            // 获取取款手续费
             getWithdrawFee()
         }
 

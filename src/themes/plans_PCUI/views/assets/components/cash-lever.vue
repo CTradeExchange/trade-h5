@@ -99,8 +99,10 @@ export default {
         const customerInfo = computed(() => store.state._user.customerInfo)
         // 资产信息
         const assetsInfo = computed(() => store.state._user.assetsInfo[props.tradeType])
-        // 资产列表
+        // 账户列表
         const accountList = computed(() => customerInfo.value?.accountList.filter(el => Number(el.tradeType) === props.tradeType))
+        // 账户信息
+        const accountInfo = computed(() => accountList?.value[0])
 
         // 跳转到借款页面
         const goLoan = (row) => {
@@ -140,7 +142,7 @@ export default {
                 router.push({
                     path: '/assets/chooseAccount',
                     query: {
-                        accountId: assetsInfo.value.accountId,
+                        accountId: accountInfo.value.accountId,
                         tradeType: props.tradeType,
                         type: 3
                     }
@@ -163,7 +165,7 @@ export default {
             router.push({
                 path: '/assets/record',
                 query: {
-                    accountId: assetsInfo.value.accountId,
+                    accountId: accountInfo.value.accountId,
                     tradeType: props.tradeType
                 }
             })
