@@ -12,7 +12,7 @@
 @import '~@/sass/mixin.scss';
 .etfIcon{
     font-size: rem(20px);
-    padding: 1px rem(5px);
+    padding: 0 rem(5px);
     color: var(--primary);
     line-height: 1;
     border: 1px solid var(--primary);
