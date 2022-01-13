@@ -128,7 +128,7 @@ export const usePerformance = () => {
             },
             grid: {
                 left: '3%',
-                right: '5%',
+                right: '6%',
                 bottom: '3%',
                 containLabel: true
             },
