@@ -646,7 +646,8 @@
         "hint_5": "Insuffient balance",
         "hint_6": "Insuffient balance to withdraw",
         "hint_7": "Within 24 hours no of Withdrawal should not be more than",
-        "bankTips": "This transaction is not support because the bank card currency is different with account currency"
+        "bankTips": "This transaction is not support because the bank card currency is different with account currency",
+        "digitsTip": "最多4位小数"
     },
     "withdrawRecord": {
         "noneHint": "No data",

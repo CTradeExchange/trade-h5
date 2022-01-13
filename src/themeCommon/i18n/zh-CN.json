@@ -334,7 +334,6 @@
         "allDayTime": "全部日期",
         "timeZone": "时间区间",
         "selectTimeZone": "请选择时间区间",
-
         "flowCategories": {
             "1":{
                 "1": "充值",
@@ -653,7 +652,8 @@
         "hint_5": "余额不足",
         "hint_6": "可取资金不足",
         "hint_7": "24小时内取款次数不超过",
-        "bankTips": "该银行卡币种与到账币种不同，不支持该笔交易"
+        "bankTips": "该银行卡币种与到账币种不同，不支持该笔交易",
+        "digitsTip": "最多4位小数" 
     },
     "withdrawRecord": {
         "noneHint": "暂无数据",
