@@ -14,6 +14,19 @@
                     required
                     :type='item.elementCode === "phone" ? "number" : "text"'
                 />
+                <div v-if="item.showType === 'inputGroup'">
+                    <van-field
+                        v-model='typeValue'
+                        clickable
+                        :label='item.elementName'
+                        :placeholder='$t("register.chooseCertificateType")'
+                        readonly
+                        required
+                        right-icon='arrow'
+                        @click='showPicker = true'
+                    />
+                    <van-field v-model='conditionModel[typeCode]' :label='$t("register.certificateNo")' :placeholder="$t('register.pleaseEnter')+ typeValue" required />
+                </div>
                 <div v-if='imgTypeVis(item)' class='c-item'>
                     <p class='upload-text'>
                         {{ item.elementName }}
@@ -36,19 +49,7 @@
                         />
                     </van-uploader>
                 </div>
-                <div v-if="item.showType === 'inputGroup'">
-                    <van-field
-                        v-model='typeValue'
-                        clickable
-                        :label='item.elementName'
-                        :placeholder='$t("register.chooseCertificateType")'
-                        readonly
-                        required
-                        right-icon='arrow'
-                        @click='showPicker = true'
-                    />
-                    <van-field v-model='conditionModel[typeCode]' :label='$t("register.certificateNo")' :placeholder="$t('register.pleaseEnter')+ typeValue" required />
-                </div>
+
                 <div v-if="item.showType=== 'date'">
                     <van-field
                         v-model='conditionModel[item.elementCode]'
@@ -257,14 +258,16 @@ export default {
             const unCheckedColumns = state.columns.filter(el => el.code !== state.typeCode).map(item => cardTypeMap[item.code]).flat()
             unCheckedColumns.forEach(item => {
                 const forDelIndex = compareElement.findIndex(el => el.elementCode === item)
-                compareElement.splice(forDelIndex, 1)
-                delete state.conditionModel[item]
+                if (forDelIndex !== -1) {
+                    compareElement.splice(forDelIndex, 1)
+                    delete state.conditionModel[item]
+                }
             })
 
             const tempElementList = []
             if (!isEmpty(state.conditionModel)) {
                 for (const key in state.conditionModel) {
-                    if (state.conditionModel.hasOwnProperty(key)) {
+                    if (state.conditionModel.hasOwnProperty(key) && key !== 'null') {
                         if (!isEmpty(state.extendsMap[key]?.extend)) {
                             const valueReg = new RegExp(state.extendsMap[key].extend)
                             if (!valueReg.test(state.conditionModel[key])) {
@@ -278,7 +281,7 @@ export default {
                             })
                         }
 
-                        if (state.extendsMap[key].showType === 'date') {
+                        if (state.extendsMap[key]?.showType === 'date') {
                             const dateVal = tempElementList.find(el => el.elementCode === key)
                             dateVal.elementValue = window.dayjs(dateVal.elementValue).valueOf().toString()
                         }
@@ -357,8 +360,9 @@ export default {
             deleteRepeatData()
         }
 
+        // 判断imgge类型是否显示
         const imgTypeVis = (item) => {
-            return item.showType === 'image' && state.showImgList?.includes(item.elementCode)
+            return item.showType === 'image' && (state.showImgList?.includes(item.elementCode) || Object.values(cardTypeMap).flat().indexOf(item.elementCode) === -1)
         }
 
         onBeforeMount(() => {
