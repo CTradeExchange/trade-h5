@@ -174,8 +174,8 @@ export default {
             })
         }
 
-        watch(() => accountList, val => {
-            if (val.value.length > 0) {
+        watch(() => accountList.value, val => {
+            if (val.length > 0) {
                 state.curCurrency = accountList.value[0]
                 state.curCurrencyValue = state.curCurrency.currency
                 state.curTradeType = accountList.value[0]?.tradeType
@@ -252,7 +252,7 @@ export default {
         // 切换转出账户
         const toAccountChange = (val) => {
             state.toAccount = store.state._base.plans.find(el => Number(el.id) === Number(val))
-            state.curCurrency = accountList.value.find(el => Number(el.tradeType) === Number(state.fromAccount.tradeType))
+            // state.curCurrency = accountList.value.find(el => Number(el.tradeType) === Number(state.fromAccount.tradeType))
             state.amount = ''
         }
         // 切换币种
