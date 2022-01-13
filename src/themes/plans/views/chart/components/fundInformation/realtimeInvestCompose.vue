@@ -80,10 +80,10 @@ const showBlock = ref('chart')
 // 切换数据列表和环形图的显示
 const switchAction = async () => {
     showBlock.value = showBlock.value === 'list' ? 'chart' : 'list'
-    // if (showBlock.value === 'chart') {
-    //     await nextTick()
-    //     newPieDoughnutChart(chartPieDOM.value, chartData.value)
-    // }
+    if (showBlock.value === 'chart') {
+        await nextTick()
+        newPieDoughnutChart(chartPieDOM.value, chartData.value)
+    }
 }
 
 const rangList = ref([]) // 实时投资组合排名列表
