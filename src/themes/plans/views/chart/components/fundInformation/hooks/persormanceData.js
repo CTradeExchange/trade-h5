@@ -104,6 +104,7 @@ export const usePerformance = () => {
             backgroundColor: invertColor === 'light' ? '#fff' : '#000',
             tooltip: {
                 trigger: 'axis',
+                extraCssText: 'z-index:99',
                 textStyle: {
                     fontSize: 12,
                 },

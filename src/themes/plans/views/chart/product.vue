@@ -1641,7 +1641,7 @@ export default {
         position: fixed;
         bottom: 0;
         left: 0;
-        z-index: 2;
+        z-index: 1000;
         display: flex;
         width: 100%;
         //height: rem(100px);

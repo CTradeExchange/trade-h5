@@ -57,7 +57,7 @@
             </ul>
         </div>
         <div v-else-if="showBlock==='chart'">
-            <div ref='chartPieDOM' class='chartPieDOM'></div>
+            <div ref='chartPieDOM' class='chartPieDOM' :style='{ height:chartPieDOMHeight }'></div>
         </div>
 
         <div class='block'>
@@ -66,6 +66,8 @@
             </h4>
             <div ref='chartBarDOM' class='chartBarDOM'></div>
         </div>
+
+        <BottomTip />
     </div>
 </template>
 
@@ -74,6 +76,7 @@ import { delayAwaitTime } from '@/utils/util'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { useInvestCompose } from './hooks/realtimeInvestCompose'
 import currencyIcon from '@/components/currencyIcon'
+import BottomTip from './bottomTip.vue'
 
 // 显示数据列表还是显示环形图
 const showBlock = ref('chart')
@@ -94,6 +97,11 @@ const chartData = computed(() => {
             name: el.asset + ' ' + el.weight,
         }
     })
+})
+// 饼图高度
+const chartPieDOMHeight = computed(() => {
+    // return 200 + 'px'
+    return 120 + rangList.value.length * 18 + 'px'
 })
 const assetPerformanceList = ref([]) // 实时投资组合排名
 const chartPieDOM = ref('')

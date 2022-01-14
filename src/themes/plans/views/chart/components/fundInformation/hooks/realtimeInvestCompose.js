@@ -25,7 +25,8 @@ export const useInvestCompose = (params) => {
         const { symbolId } = product.value
         return investCombination({ symbolId, statisticType: 1 }).then(res => {
             if (res.check()) {
-                return res.data
+                const list = res.data
+                return list
             }
             return []
         })
@@ -50,8 +51,12 @@ export const useInvestCompose = (params) => {
             backgroundColor: invertColor === 'light' ? '#fff' : '#000',
             color: ['#B72122', '#E9393A', '#FF762C', '#FF9E2C', '#FFC62C', '#F1DE3F', '#D2C02A', '#B6A622', '#9E9123', '#648319', '#198351', '#2AA46B', '#41CE8D', '#6BF1B3', '#56F5DD', '#82ECFF', '#82D7FF', '#7BBCF6', '#589EDC', '#2B70AE'],
             legend: {
-                top: '5%',
-                left: 'center',
+                top: 10,
+                bottom: '0',
+                right: 0,
+                // left: '60%',
+                // orient: 'vertical',
+                // type: 'scroll',
                 textStyle: {
                     color: '#888',
                 }
@@ -62,8 +67,9 @@ export const useInvestCompose = (params) => {
                     type: 'pie',
                     radius: ['40%', '70%'],
                     avoidLabelOverlap: false,
-                    top: '10%',
-                    // right: '40%',
+                    top: '25%',
+                    bottom: 0,
+                    // right: '30%',
                     label: {
                         show: false,
                         position: 'center'
@@ -93,6 +99,7 @@ export const useInvestCompose = (params) => {
             backgroundColor: invertColor === 'light' ? '#fff' : '#000',
             tooltip: {
                 trigger: 'axis',
+                extraCssText: 'z-index:99',
                 textStyle: {
                     fontSize: 12,
                 },

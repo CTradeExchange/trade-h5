@@ -64,11 +64,13 @@
                 </span>
             </li>
         </ul>
+        <BottomTip />
     </div>
 </template>
 
 <script setup>
 import { useFundInfo } from './hooks/base'
+import BottomTip from './bottomTip.vue'
 
 const { fundInfo, toTrackProduct } = useFundInfo()
 

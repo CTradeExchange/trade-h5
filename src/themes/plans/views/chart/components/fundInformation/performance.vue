@@ -18,15 +18,14 @@
         <div class='chartModule'>
             <div id='marketAppearance_DOM1' ref='marketAppearance_DOM1' class='chartLine'></div>
         </div>
-        <p class='minorTip'>
-            {{ $t('fundInfo.fundChartTip') }}
-        </p>
+        <BottomTip />
     </div>
 </template>
 
 <script setup>
 import { nextTick, onMounted, ref } from 'vue'
 import { usePerformance } from './hooks/persormanceData'
+import BottomTip from './bottomTip.vue'
 
 const marketPriceJZ_DOM = ref('')
 const marketPriceJZ_DOM1 = ref('')
@@ -191,11 +190,6 @@ onMounted(async () => {
         border-top: 6px solid var(--bgColor);
         margin-top: rem(40px);
         padding-top: rem(40px);
-    }
-    .minorTip{
-        text-align: center;
-        margin-top: rem(50px);
-        color: var(--minorColor);
     }
 }
 .chartLine{
