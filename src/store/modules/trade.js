@@ -244,7 +244,7 @@ export default {
             if (!params.tradeType) return false
             cachePendingParams(params, pendingsConfig) // 缓存请求参数
             const accountListLen = rootState._user.customerInfo?.accountList?.length
-            const tradeType = params.tradeType
+            const tradeType = parseInt(params.tradeType)
             if (!accountListLen) {
                 commit('Update_pendingList', { tradeType, list: [] })
                 return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空数据
