@@ -118,6 +118,7 @@ export const useInvestCompose = (params) => {
             },
             xAxis: {
                 type: 'category',
+                axisLabel: { interval: 0, rotate: 90 },
                 data: xData, // ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
             },
             yAxis: {
