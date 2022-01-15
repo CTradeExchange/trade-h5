@@ -770,14 +770,12 @@ export default {
 
         // 实时更新买卖价线
         watch(() => [product.value?.buy_price, product.value?.sell_price, product.value?.cur_price, product.value?.tick_time], (newValues) => {
-            if (Number(product.value?.tradeType) !== 5 && Number(product.value?.tradeType) !== 9) {
-                state.onChartReadyFlag && unref(chartRef).setTick(product.value?.cur_price, product.value?.tick_time)
+            state.onChartReadyFlag && unref(chartRef).setTick(product.value?.cur_price, product.value?.tick_time)
 
-                state.onChartReadyFlag && unref(chartRef).updateLineData({
-                    buyPrice: product.value?.buy_price,
-                    sellPrice: product.value?.sell_price
-                })
-            }
+            state.onChartReadyFlag && unref(chartRef).updateLineData({
+                buyPrice: product.value?.buy_price,
+                sellPrice: product.value?.sell_price
+            })
         })
 
         watch(() => [state.settingList], (newValues) => {
@@ -1048,32 +1046,8 @@ export default {
             }
         )
 
-        const updateChart = data => {
-            try {
-                if (!isEmpty(data.detail)) {
-                    const res = data.detail.match(/\((.+)\)/)[1].split(',')
-                    // 玩
-                    if ([5, 9].includes(Number(unref(tradeType)))) {
-                        state.onChartReadyFlag && unref(chartRef).setTick(res[5], res[4])
-                        state.onChartReadyFlag && unref(chartRef).updateLineData({
-                            buyPrice: product.value?.buy_price,
-                            sellPrice: product.value?.sell_price
-                        })
-                    }
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        }
-
-        // 监听当玩法为5和9的时候。并且有pt报价的时候才更新图表
-        document.body.addEventListener('GotMsg_updateChart', updateChart, false)
-
         onMounted(() => {
             subscribeToProduct()
-        })
-        onUnmounted(() => {
-            document.body.removeEventListener('GotMsg_updateChart', updateChart, false)
         })
 
         return {
