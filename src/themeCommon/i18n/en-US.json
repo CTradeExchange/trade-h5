@@ -628,7 +628,7 @@
     },
     "withdrawMoney": {
         "moneyName": "Withdraw Amount",
-        "moneyPlaceholder": "Input withdraw amount",
+        "moneyPlaceholder": "Input amount",
         "allBtn": "All",
         "canName": "Available withdrawal amount",
         "serviceName": "Fee",
@@ -647,7 +647,7 @@
         "hint_6": "Insuffient balance to withdraw",
         "hint_7": "Within 24 hours no of Withdrawal should not be more than",
         "bankTips": "This transaction is not support because the bank card currency is different with account currency",
-        "digitsTip": "最多4位小数"
+        "digitsTip": "Max 4 decimal place"
     },
     "withdrawRecord": {
         "noneHint": "No data",
