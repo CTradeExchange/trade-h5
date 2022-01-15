@@ -408,14 +408,12 @@ export default {
 
         // 实时更新买卖价线
         watch(() => [product.value.buy_price, product.value.sell_price, product.value.cur_price, product.value.tick_time], (newValues) => {
-            if (Number(product.value.tradeType) !== 5 && Number(product.value.tradeType) !== 9) {
-                state.onChartReadyFlag && unref(chartRef).setTick(product.value.cur_price, product.value.tick_time)
+            state.onChartReadyFlag && unref(chartRef).setTick(product.value.cur_price, product.value.tick_time)
 
-                state.onChartReadyFlag && unref(chartRef).updateLineData({
-                    buyPrice: product.value.buy_price,
-                    sellPrice: product.value.sell_price
-                })
-            }
+            state.onChartReadyFlag && unref(chartRef).updateLineData({
+                buyPrice: product.value.buy_price,
+                sellPrice: product.value.sell_price
+            })
         })
 
         const handleClick = () => {
@@ -718,25 +716,6 @@ export default {
             renderChart(product.value, property)
         }
 
-        // 更新图表数据
-        const updateChart = data => {
-            try {
-                if (!isEmpty(data.detail)) {
-                    const res = data.detail.match(/\((.+)\)/)[1].split(',')
-                    if (Number(tradeType) === 5 || Number(tradeType) === 9) {
-                        state.onChartReadyFlag && unref(chartRef).setTick(res[5], res[4])
-
-                        state.onChartReadyFlag && unref(chartRef).updateLineData({
-                            buyPrice: product.value.buy_price,
-                            sellPrice: product.value.sell_price
-                        })
-                    }
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        }
-
         // 监听主题修改回调
         const changeTheme = (val) => {
             const theme = val.detail === 'light' ? 'Light' : 'Dark'
@@ -787,13 +766,10 @@ export default {
 
         // 监听主题修改
         document.body.addEventListener('Launch_theme', changeTheme, false)
-        // 监听当玩法为5和9的时候。并且有pt报价的时候才更新图表
-        document.body.addEventListener('GotMsg_updateChart', updateChart, false)
         // 监听设置图表颜色
         document.body.addEventListener('Launch_chartColor', changeChartColor, false)
 
         onUnmounted(() => {
-            document.body.removeEventListener('GotMsg_updateChart', updateChart, false)
             document.body.removeEventListener('Launch_theme', changeTheme, false)
             document.body.addEventListener('Launch_chartColor', changeChartColor, false)
         })
