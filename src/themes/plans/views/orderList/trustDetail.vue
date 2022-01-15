@@ -180,7 +180,7 @@ export default {
                     bizType: pendingItem.value.bizType
                 }
 
-                if (Number(tradeType) === 9) {
+                if ([5, 9].includes(Number(tradeType))) {
                     closeTradePboOrder({
                         orderId: pendingItem.value.id,
                         ...params,
