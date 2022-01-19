@@ -73,7 +73,14 @@ export default {
         const { categoryList, productList } = useProduct({
             tradeType, categoryType
         })
-        const plansLen = computed(() => Object.keys(store.getters.userProductCategory).length)
+        const plansLen = computed(() => {
+            const userProductCategory = store.getters.userProductCategory
+            let arr = Object.keys(userProductCategory)
+            arr = arr.filter(el => {
+                return userProductCategory[el]?.listByUser?.length
+            })
+            return arr.length
+        })
 
         // 监听玩法类型
         const handleTradeType = async (val) => {

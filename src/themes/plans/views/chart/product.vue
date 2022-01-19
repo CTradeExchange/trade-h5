@@ -518,7 +518,14 @@ export default {
         const product = computed(() => store.getters.productActived)
         const positionList = computed(() => store.state._trade.positionList[getTradeType()] || [])
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)
-        const plansLen = computed(() => Object.keys(store.getters.userProductCategory).length)
+        const plansLen = computed(() => {
+            const userProductCategory = store.getters.userProductCategory
+            let arr = Object.keys(userProductCategory)
+            arr = arr.filter(el => {
+                return userProductCategory[el]?.listByUser?.length
+            })
+            return arr.length
+        })
 
         // 颜色值
         const style = computed(() => store.state.style)
