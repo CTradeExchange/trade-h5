@@ -305,7 +305,7 @@
     />
 
     <!-- 侧边栏-切换产品 -->
-    <sidebarProduct v-model='showSidebar' :default-trade-type='product?.tradeType' @select='onSelect' />
+    <sidebarProduct v-model='showSidebar' :default-trade-type='product?.tradeType' :hide-trade-type='plansLen<=1' @select='onSelect' />
 </template>
 
 <script>
@@ -518,6 +518,7 @@ export default {
         const product = computed(() => store.getters.productActived)
         const positionList = computed(() => store.state._trade.positionList[getTradeType()] || [])
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)
+        const plansLen = computed(() => Object.keys(store.getters.userProductCategory).length)
 
         // 颜色值
         const style = computed(() => store.state.style)
@@ -1082,7 +1083,8 @@ export default {
             style,
             primaryColor,
             dealModeShowMap,
-            updateStudy
+            updateStudy,
+            plansLen
         }
     }
 }

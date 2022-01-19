@@ -1,6 +1,6 @@
 <template>
     <div class='quoteWrap' :class='{ hasNav: $hasNav }'>
-        <plansType v-if='plansList.length>1' :list='plansList' :value='tradeType' @change='handleTradeType' />
+        <plansType v-if='plansLen>1' :list='plansList' :value='tradeType' @change='handleTradeType' />
         <div class='tradeNav'>
             <TopTab
                 ref='tabList'
@@ -73,6 +73,7 @@ export default {
         const { categoryList, productList } = useProduct({
             tradeType, categoryType
         })
+        const plansLen = computed(() => Object.keys(store.getters.userProductCategory).length)
 
         // 监听玩法类型
         const handleTradeType = async (val) => {
@@ -106,6 +107,7 @@ export default {
             openSearch,
             categoryType,
             productListEl,
+            plansLen,
             plansList,
             categoryList,
             productList,
