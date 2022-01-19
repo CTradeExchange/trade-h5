@@ -192,7 +192,8 @@
         "verifiedSuccessfully": "Verified successfully",
         "verificationFailed": "Verification failed, please resubmit",
         "done": "Done",
-        "faceDetect": "Face Recognition"
+        "faceDetect": "Face Recognition",
+        "faceTip": "Please go to App or Mobile Web to verify"
     },
     "auth": {
         "info": "Information Required",

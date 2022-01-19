@@ -1,7 +1,7 @@
 <template>
     <div class='page-wrap'>
         <layoutTop />
-        <Loading :show='btnLoading' />
+        <Loading :show='loading' />
         <!-- 认证成功 -->
         <div class='main'>
             <div v-show='reacShow' class='success'>
@@ -42,13 +42,16 @@
 </template>
 
 <script>
+import { useRouter, useRoute } from 'vue-router'
 import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted } from 'vue'
-import { faceDetect } from '@/api/user'
+import { faceDetect, findAllLevelKyc, kycLevelApply, kycApply } from '@/api/user'
 import axios from 'axios'
 import qs from 'qs'
-import { localSet } from '@/utils/util'
+import { localSet, getArrayObj, isEmpty } from '@/utils/util'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
+import { upload } from '@/api/base'
+
 const constraints = {
     audio: false,
     video: true
@@ -56,14 +59,20 @@ const constraints = {
 
 export default {
     setup (props) {
+        const router = useRouter()
+        const route = useRoute()
         const { t, tm } = useI18n({ useScope: 'global' })
+        const { levelCode, businessCode } = route.query
         const state = reactive({
             faceDetectSuccess: false,
             classObj: {},
             reacShow: false,
             resultCanvasShow: false,
             videoShow: true,
-            btnLoading: false
+            loading: false,
+            kycList: {},
+            uploadURL: '',
+            pathCode: '',
         })
         let video
         const gotStream = (stream) => {
@@ -73,11 +82,16 @@ export default {
         let mCanvas
 
         const openCamera = (e) => {
-            navigator.mediaDevices.getUserMedia(constraints).then(gotStream).catch(onError)
+            try {
+                navigator.mediaDevices.getUserMedia(constraints).then(gotStream).catch(onError)
+            } catch (error) {
+                console.log('暂不支持该设备')
+            }
         }
 
+        // 点击截取图片
         const takeSnapshot = (e) => {
-            state.btnLoading = true
+            state.loading = true
             state.resultCanvasShow = true
             mCanvas = window.canvas = document.querySelector('#mainCanvas')
             mCanvas.width = 480
@@ -99,7 +113,7 @@ export default {
             c1.width = 1000
             c1.height = 1000
             c1.getContext('2d').drawImage(video, 0, 0, mCanvas.width, mCanvas.height, 0, 0, c1.width, c1.height)
-            console.log('video', video)
+            console.log('video===', video)
             divItem.appendChild(c1)
             // 隐藏video
             state.videoShow = false
@@ -110,7 +124,76 @@ export default {
             document.getElementById('mainMask').style.display = 'block'
         }
 
-        const uploadImg = (base64) => {
+        // 上传图片
+        const uploadImg = (blob) => {
+            const formData = new FormData()
+            formData.append('object', blob)
+
+            upload(
+                formData
+            ).then(res => {
+                state.loading = false
+                if (res.check()) {
+                    // state.conditionModel[detail.name] = res.data
+                    // Toast(t('auth.uploadSuccess'))
+                    state.uploadURL = res.data
+                    submitKYC()
+                }
+            }).catch(err => {
+                state.loading = false
+                console.log(err)
+            })
+        }
+
+        const submitKYC = () => {
+            const { levelCode, elementList } = state.kycList
+            let paramsKycList = []
+            if (Array.isArray(elementList)) {
+                paramsKycList = elementList.map(el => {
+                    if (el.showType === 'face_photo') {
+                        return {
+                            elementCode: 'face_photo',
+                            elementValue: state.uploadURL
+                        }
+                    }
+                })
+            }
+            let params, kycApi
+
+            if (!isEmpty(props.businessCode)) {
+                params = {
+                    businessCode,
+                    levelCode,
+                    elementList: paramsKycList
+                }
+                kycApi = kycApply
+            } else {
+                params = {
+                    levelCode,
+                    elementList: paramsKycList,
+                    pathCode: state.pathCode
+                }
+                kycApi = kycLevelApply
+            }
+            state.loading = true
+            kycApi(params).then(res => {
+                state.loading = false
+                if (res.check()) {
+                    if (props.platform === 'web') {
+                        const parentPath = route.matched[route.matched.length - 2]
+                        router.push({ path: parentPath.path + '/kycCommitted' })
+                    } else {
+                        router.replace({ name: 'KycCommitted' })
+                    }
+                }
+            }).catch(err => {
+                state.loading = false
+                console.log(err)
+            })
+        }
+
+        // 提交第三方验证
+        const toVerification = (base64) => {
             const formData = new FormData()
             formData.append('api_key', 'c4wGaiW6hAbnAwSta2WdNm3v1fbdn6Lc')
             formData.append('api_secret', 'JFmsAxsey_NN_1IU7DbuzS_3O4AUcgxu')
@@ -119,7 +202,7 @@ export default {
             const url = 'https://120.79.87.9:7443/facepp/v3/detect'
             axios.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).then(res => {
                 console.log('res', res)
-                state.btnLoading = false
+                state.loading = false
                 if (res.data.face_num === 1) {
                     localSet('faceDetectSuccess', true)
                     state.faceDetectSuccess = true
@@ -144,7 +227,7 @@ export default {
                     Toast(t('faceAuth.verificationFailed'))
                 }
             }).catch(error => {
-                state.btnLoading = false
+                state.loading = false
                 Toast(t('faceAuth.verificationFailed'))
             })
         }
@@ -153,14 +236,32 @@ export default {
             console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name)
         }
 
-        watch(() => state.faceDetectSuccess, newVal => {
-            if (newVal) {
-                // takeSnapshot()
-            }
-        })
+        const getConditon = () => {
+            findAllLevelKyc({
+                levelCode: levelCode
+            }).then(res => {
+                if (res.check()) {
+                    state.kycList = res.data[0]
+                    state.pathCode = res.data[0].pathCode
+                }
+            }).catch(err => {
+
+            })
+        }
 
         onMounted(() => {
             video = document.querySelector('video')
+            getConditon()
+        })
+
+        onUnmounted(() => {
+            try {
+                window.stream.getTracks().forEach(function (track) {
+                    track.stop()
+                })
+            } catch (error) {
+                console.log('未发现设备')
+            }
         })
 
         return {
@@ -228,7 +329,7 @@ export default {
         position: relative;
         text-align: center;
        font-size: 18px;
-       padding: 0 rem(30px);
+       padding: rem(30px);
        .success{
            padding: rem(60px) 0;
            .icon_success{

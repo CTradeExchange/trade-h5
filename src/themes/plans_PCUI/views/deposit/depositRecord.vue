@@ -285,7 +285,7 @@ export default {
             }
             .right-val {
                 display: flex;
-                justify-content: end;
+                justify-content: flex-end;
                 color: var(--color);
                 font-weight: bold;
                 text-align: right;

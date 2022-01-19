@@ -197,7 +197,8 @@
         "verifiedSuccessfully": "验证成功",
         "verificationFailed": "验证失败,请重新提交",
         "done": "确定",
-        "faceDetect": "人脸识别"
+        "faceDetect": "人脸识别",
+        "faceTip": "请到App或Mobile Web进行验证"
     },
     "auth": {
         "info": "需要准备的验证资料",

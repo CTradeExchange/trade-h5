@@ -50,6 +50,14 @@
                     </van-uploader>
                 </div>
 
+                <div v-if="item.showType === 'face_photo'">
+                    <van-cell
+                        is-link
+                        :label="platform === 'web' ? $t('faceAuth.faceTip') : ''"
+                        :title='item.elementName'
+                        @click='toFaceAuth'
+                    />
+                </div>
                 <div v-if="item.showType=== 'date'">
                     <van-field
                         v-model='conditionModel[item.elementCode]'
@@ -235,7 +243,6 @@ export default {
             state.loading = true
             const formData = new FormData()
             formData.append('object', file.file)
-
             upload(
                 formData
             ).then(res => {
@@ -362,7 +369,13 @@ export default {
 
         // 判断imgge类型是否显示
         const imgTypeVis = (item) => {
-            return item.showType === 'image' && (state.showImgList?.includes(item.elementCode) || Object.values(cardTypeMap).flat().indexOf(item.elementCode) === -1)
+            // 判断是否有组合框
+            const hasInputGroup = state.elementList.find(el => el.showType === 'inputGroup')
+            // 选择的证件类型关联的图片
+            const chooseTypeFlag = state.showImgList?.includes(item.elementCode)
+            // 判断是否在证件类型关联的元素里面
+            const hasIdCardType = Object.values(cardTypeMap).flat().indexOf(item.elementCode) === -1
+            return item.showType === 'image' && (chooseTypeFlag || hasIdCardType || isEmpty(hasInputGroup))
         }
 
         onBeforeMount(() => {
@@ -386,6 +399,18 @@ export default {
             state.dateShowPicker = true
         }
 
+        // 跳转人脸识别
+        const toFaceAuth = () => {
+            if (props.platform === 'web') return
+            router.push({
+                path: '/faceDetect',
+                query: {
+                    businessCode: props.businessCode,
+                    levelCode,
+                }
+            })
+        }
+
         onBeforeUnmount(() => {
             sessionStorage.removeItem('kycList')
         })
@@ -399,7 +424,8 @@ export default {
             columnsFields,
             imgTypeVis,
             dateConfirm,
-            handleDateClick
+            handleDateClick,
+            toFaceAuth
         }
     }
 }
