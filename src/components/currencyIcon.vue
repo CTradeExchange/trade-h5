@@ -31,7 +31,6 @@ const imgWidth = ref(parseFloat(props.size) + 'px')
     display: inline-block;
     width: v-bind(imgWidth);
     margin-right: .2em;
-    margin-bottom: 4px;
     vertical-align: middle;
 }
 </style>

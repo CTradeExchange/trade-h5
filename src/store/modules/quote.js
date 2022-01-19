@@ -1,4 +1,4 @@
-import { findSymbolBaseInfoList, querySymbolInfo, getEquityPremiumRate } from '@/api/trade'
+import { findSymbolBaseInfoList, querySymbolInfo, getEquityPremiumRate, findFundPage } from '@/api/trade'
 import { toFixed } from '@/utils/calculation'
 import { vue_set, assign } from '@/utils/vueUtil.js'
 import { sessionSet, sessionGet } from '@/utils/util.js'
@@ -50,7 +50,8 @@ export default {
         handicapList: [], // 盘口实时深度报价
         dealList: [], // 成交数据,
         curTradeType: '', // 资产页面当前选中的玩法id
-        deepthDigits: ''
+        deepthDigits: '',
+        fundProductList: [], // 基金产品列表
     },
     getters: {
         // 用户自选列表
@@ -246,8 +247,15 @@ export default {
         },
         Update_symbolBaseLoaded (state, data) {
             state.symbolBaseLoaded = data
-        }
-
+        },
+        // 更新基金产品列表
+        Update_fundProductList (state, data) {
+            state.fundProductList = data
+        },
+        // 更新单个基金产品信息
+        Update_fundProduct (state, data) {
+            // state.fundProductList = data
+        },
     },
     actions: {
         // 整理当前账户组的所有产品列表，自选产品+产品板块的产品
@@ -344,6 +352,18 @@ export default {
                         symbolId: params.symbolId,
                         tradeType: params.tradeType,
                     })
+                }
+                return res.data
+            })
+        },
+        // 分页获取基金产品列表
+        findFundPage ({ dispatch, commit, state, rootState, rootGetters }, { current = 1, size = 100 } = {}) {
+            const params = {
+                customerGroupId: rootGetters.customerGroupId,
+            }
+            return findFundPage(params).then((res) => {
+                if (res.check() && res.data) {
+                    commit('Update_fundProductList', res.data.records)
                 }
                 return res.data
             })

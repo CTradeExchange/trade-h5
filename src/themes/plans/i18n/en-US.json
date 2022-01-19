@@ -116,6 +116,8 @@
     "assets": "Assets",
     "returnMoney": "Repay",
     "loan": "Borrow",
+    "fundProductList": "基金申赎",
+    "fundProductInfo": "基金详情",
     "transfer": "Transfer"
   },
   "search": {
@@ -663,6 +665,9 @@
         "comparePrev":"Movement",
         "singleAsset":"Asset Performance",
         "totalManager":"{0} people in total",
-        "fundChartTip":"The data is for reference only, past performance does not represent future performance!"
+        "fundChartTip":"The data is for reference only, past performance does not represent future performance!",
+        "fund":"基金",
+        "buy":"申购",
+        "sell":"赎回"
     }
 }
