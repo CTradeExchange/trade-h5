@@ -3,6 +3,15 @@
         <topNav class='header' />
 
         <div class='main'>
+            <!-- 登录账号类型 -->
+            <div class='account-type'>
+                <button :class="['btn', { 'active': accountType === 1 }]" @click='accountType = 1'>
+                    {{ $t('signIn.defaultLogin') }}
+                </button>
+                <button :class="['btn', { 'active': accountType === 2 }]" @click='accountType = 2'>
+                    {{ $t('signIn.fundLogin') }}
+                </button>
+            </div>
             <loginTypeBar v-model='loginType' />
             <form class='loginForm'>
                 <h2 class='loginTitle'>
@@ -107,6 +116,7 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             loading: false,
+            accountType: 1, // 账户登录方式 1.普通登录 2.基金经理
             pwdVisible: false,
             loginPwdPop: false,
             sendVerifyLoading: false,
@@ -267,9 +277,38 @@ export default {
     .main{
         margin: 0 auto;
         width: 520px;
-        padding: 60px;
+        padding: 40px 60px 60px;
         border-radius: 10px;
         background: var(--contentColor);
+    }
+    .account-type {
+        display: flex;
+        align-items: center;
+        height: 44px;
+        padding: 0 2px;
+        margin-bottom: 30px;
+        background: var(--assistColor);
+        border-radius: 22px;
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            height: 40px;
+            font-size: 18px;
+            color: var(--minorColor);
+            background: none;
+            border-radius: 20px;
+            cursor: pointer;
+            &:hover {
+                color: var(--primary);
+            }
+        }
+        .active {
+            font-weight: bold;
+            color: var(--primary);
+            background: #fff;
+        }
     }
 }
 .loginForm{

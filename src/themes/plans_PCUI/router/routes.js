@@ -343,6 +343,14 @@ const routes = [
                 },
                 children: h5Children
             },
+            {
+                path: 'fundManager', // 基金经理专区
+                component: () => import(/* webpackChunkName: "returnMoney" */ '../views/fundManager/index.vue'),
+                meta: {
+                    title: 'route.fundManager',
+                    roles: ['User']
+                }
+            }
         ]
     },
     // {

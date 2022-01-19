@@ -33,6 +33,13 @@
                         </template>
                     </el-dropdown>
                 </div>
+                <div class='item'>
+                    <router-link to='/fundManager'>
+                        <span class='link'>
+                            {{ $t('header.fundManager') }}
+                        </span>
+                    </router-link>
+                </div>
             </div>
         </div>
         <div class='nav-right'>

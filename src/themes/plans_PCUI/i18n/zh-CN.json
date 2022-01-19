@@ -76,7 +76,9 @@
 		"pwdSuccess": "密码修改成功",
 		"modifyLoginPwd": "修改登录密码",
 		"getVerifyCode": "获取验证码",
-		"mobileEmailPlaceholder": "输入您的邮箱或手机号"
+		"mobileEmailPlaceholder": "输入您的邮箱或手机号",
+		"defaultLogin": "普通登录",
+		"fundLogin": "基金登录"
 	},
 	"route": {
 		"home": "首页",
@@ -103,7 +105,8 @@
 		"loan": "借款",
 		"transfer": "划转",
         "records": "资金记录",
-        "transRecords": "成交记录"
+        "transRecords": "成交记录",
+		"fundManager": "基金经理专区"
 	},
     "historyList": {
         "noMore": "没有更多了"
@@ -159,7 +162,8 @@
 		"download": "下载",
 		"downloadTip": "iOS & Android扫码下载APP",
 		"language": "语言",
-		"theme": "主题"
+		"theme": "主题",
+		"fundManager": "基金经理专区"
 	},
 	"footer": {
 		"about": {
@@ -774,5 +778,16 @@
         "safety": "安全",
         "warn": "警告",
         "danger": "危险"
-    }
+    },
+	"fundManager": {
+		"side": {
+			"buy": "申购管理",
+			"ransom": "赎回管理",
+			"standard": "下单执行标准"
+		},
+		"buy": {
+			"title1": "申购待执行",
+			"title2": "申购执行记录"
+		}
+	}
 }
