@@ -175,6 +175,17 @@ export default {
                     state.areaShow = false
 
                     if (state.elementList.length > 0) {
+                        const hasFacePhoto = state.elementList.find(el => el.elementCode === 'face_photo')
+                        if(!isEmpty(hasFacePhoto)){
+                            router.push({
+                                path: '/faceDetect',
+                                query: {
+                                    businessCode: props.businessCode,
+                                    levelCode,
+                                }
+                            })
+                            return
+                        }
                         state.elementList.forEach(el => {
                             // 如果是 inputGroup 单独处理
                             if (el.showType === 'inputGroup') {
@@ -196,6 +207,7 @@ export default {
                     console.log('state.conditionModel', state.conditionModel)
                     getInputGroupList()
                 }
+                
             }).catch(err => {
                 state.loading = false
             })
