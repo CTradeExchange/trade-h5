@@ -81,6 +81,12 @@ export default {
             })
         }
 
+        const getQuoteDate = index => {
+            return swiperList[index] && swiperList[index].map(item => {
+                return `${item.symbolId}_${item.tradeType}`
+            })
+        }
+
         // 产品列表数据
         const productList = symbolKeys.map(key => productMap[key]).filter(elem => elem)
         const swiperList = []
@@ -96,11 +102,19 @@ export default {
 
         const onChangeSwipe = (index) => {
             QuoteSocket.batchGetKlineData(getSubscribeData(index))
+            QuoteSocket.add_subscribe({
+                moduleId: 'productsTimeSharing',
+                symbolKeys: getQuoteDate(index)
+            })
         }
 
         store.dispatch('_quote/querySymbolBaseInfoList').then(res => {
             if (!h5Preview && getSubscribeData(0)) {
                 QuoteSocket.batchGetKlineData(getSubscribeData(0))
+                QuoteSocket.add_subscribe({
+                    moduleId: 'productsTimeSharing',
+                    symbolKeys: getQuoteDate(0)
+                })
             }
         })
 
