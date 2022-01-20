@@ -116,6 +116,8 @@
     "assets": "资产",
     "returnMoney": "还款",
     "loan": "借款",
+    "fundProductList": "基金申赎",
+    "fundProductInfo": "基金详情",
     "transfer": "划转"
   },
   "search": {
@@ -663,6 +665,9 @@
       "comparePrev":"较上期变化",
       "singleAsset":"单资产表现",
       "totalManager":"等共{0}人",
-      "fundChartTip":"数据仅做参考，过往业绩不代表未来表现！"
+      "fundChartTip":"数据仅做参考，过往业绩不代表未来表现！",
+      "fund":"基金",
+      "buy":"申购",
+      "sell":"赎回"
   }
 }

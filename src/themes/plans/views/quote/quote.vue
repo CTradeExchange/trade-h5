@@ -18,6 +18,11 @@
             <i class='icon_sousuo iconSearch' @click='openSearch'></i>
         </div>
 
+        <!-- etf banner -->
+        <a v-if='categoryType===2 && tradeType==="5"' class='etfBanner' href='javascript:;' @click="$router.push('/fundProductList')">
+            <img alt='' src='/images/ETF_banner.png' />
+        </a>
+
         <div class='titleBar van-hairline--bottom'>
             <span class='item'>
                 {{ $t('trade.nameCode') }}
@@ -181,6 +186,15 @@ export default {
             width: rem(210px);
             text-align: left;
         }
+    }
+}
+.etfBanner{
+    display: block;
+    padding: rem(30px) rem(20px);
+    background: var(--contentColor);
+    img{
+        display: block;
+        width: 100%;
     }
 }
 </style>

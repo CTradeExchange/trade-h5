@@ -45,7 +45,7 @@ export default {
         Handicap,
         DealList,
         fundInformation: defineAsyncComponent({
-            loader: () => import('../fundInformation'),
+            loader: () => import('@plans/modules/fundInformation'),
             loadingComponent: LoadingComponent,
             delay: 0, // 在显示 loadingComponent 之前的延迟 | 默认值：200（单位 ms）
             suspensible: false

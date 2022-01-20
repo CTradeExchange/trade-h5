@@ -294,5 +294,13 @@ export function assetPerformance (data) {
         data
     })
 }
+/* 分页获取基金产品列表 */
+export function findFundPage (data) {
+    return request({
+        url: '/global/config.app.AppSymbolDubboService.findFundPage',
+        method: 'post',
+        data
+    })
+}
 
 /* 现货撮合取消委托单 */

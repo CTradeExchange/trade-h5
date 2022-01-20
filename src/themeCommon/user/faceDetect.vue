@@ -1,6 +1,6 @@
 <template>
     <div class='page-wrap'>
-        <layoutTop />
+        <layoutTop @back='back' :custom-back='true'/>
         <Loading :show='loading' />
         <!-- 认证成功 -->
         <div class='main'>
@@ -26,9 +26,9 @@
             <div class='mask'></div>
         </div>
         <div v-if='videoShow' class='btns'>
-            <van-button type='primary' @click='openCamera'>
+            <!-- <van-button type='primary' @click='openCamera'>
                 {{ $t('faceAuth.startVerification') }}
-            </van-button>
+            </van-button> -->
             <van-button :loading='loading' type='primary' @click='takeSnapshot'>
                 {{ $t('faceAuth.submitVerification') }}
             </van-button>
@@ -47,10 +47,11 @@ import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted }
 import { faceDetect, findAllLevelKyc, kycLevelApply, kycApply } from '@/api/user'
 import axios from 'axios'
 import qs from 'qs'
-import { localSet, getArrayObj, isEmpty } from '@/utils/util'
+import { localSet } from '@/utils/util'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { upload } from '@/api/base'
+import { getArrayObj, isEmpty } from '@/utils/util'
 
 const constraints = {
     audio: false,
@@ -62,7 +63,7 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const { t, tm } = useI18n({ useScope: 'global' })
-        const { levelCode, businessCode } = route.query
+        const { levelCode,businessCode } = route.query
         const state = reactive({
             faceDetectSuccess: false,
             classObj: {},
@@ -135,7 +136,7 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     // state.conditionModel[detail.name] = res.data
-                    // Toast(t('auth.uploadSuccess'))
+                    //Toast(t('auth.uploadSuccess'))
                     state.uploadURL = res.data
                     submitKYC()
                 }
@@ -158,38 +159,40 @@ export default {
                     }
                 })
             }
-            let params, kycApi
+            let params ,kycApi
 
             if (!isEmpty(props.businessCode)) {
-                params = {
-                    businessCode,
-                    levelCode,
-                    elementList: paramsKycList
+               params = {
+                businessCode,
+                levelCode,
+                elementList: paramsKycList
                 }
                 kycApi = kycApply
-            } else {
+                
+            }else{
                 params = {
                     levelCode,
                     elementList: paramsKycList,
                     pathCode: state.pathCode
                 }
-                kycApi = kycLevelApply
+                kycApi = kycLevelApply  
             }
             state.loading = true
             kycApi(params).then(res => {
-                state.loading = false
-                if (res.check()) {
-                    if (props.platform === 'web') {
-                        const parentPath = route.matched[route.matched.length - 2]
-                        router.push({ path: parentPath.path + '/kycCommitted' })
-                    } else {
-                        router.replace({ name: 'KycCommitted' })
+                    state.loading = false
+                    if (res.check()) {
+                        if (props.platform === 'web') {
+                            const parentPath = route.matched[route.matched.length - 2]
+                            router.push({ path: parentPath.path + '/kycCommitted' })
+                        } else {
+                            router.replace({ name: 'KycCommitted' })
+                        }
                     }
-                }
-            }).catch(err => {
-                state.loading = false
-                console.log(err)
-            })
+                }).catch(err => {
+                    state.loading = false
+                    console.log(err)
+                })
+            
         }
 
         // 提交第三方验证
@@ -248,25 +251,30 @@ export default {
 
             })
         }
-
-        onMounted(() => {
-            video = document.querySelector('video')
-            getConditon()
-        })
-
+        const back = ()=>{
+            router.push('/authentication')
+        }
         onUnmounted(() => {
             try {
-                window.stream.getTracks().forEach(function (track) {
-                    track.stop()
-                })
+                window.stream.getTracks().forEach(function(track) {
+                    track.stop();
+                 }); 
             } catch (error) {
-                console.log('未发现设备')
+                console.log('未发现设备');
             }
+            
+        })
+
+        onMounted(()=>{
+            openCamera()
+            video = document.querySelector('video')
+            getConditon()
         })
 
         return {
             openCamera,
             takeSnapshot,
+            back,
             ...toRefs(state)
         }
     }
@@ -328,8 +336,7 @@ export default {
         width: 100%;
         position: relative;
         text-align: center;
-       font-size: 18px;
-       padding: rem(30px);
+        font-size: 18px;
        .success{
            padding: rem(60px) 0;
            .icon_success{
