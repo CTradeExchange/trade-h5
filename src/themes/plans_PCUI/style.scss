@@ -725,10 +725,29 @@ body {
         }
 	}
 	.el-input__inner {
-		background: var(--contentColor);
-		border: 1px solid var(--lineColor);
+		color: var(--color);
+		background: var(--assistColor);
+		border: none;
 		&:hover {
-			border: 1px solid var(--primary);
+			border: 1px solid var(--primary) !important;
+		}
+	}
+	.el-checkbox__input {
+		&.is-checked .el-checkbox__inner {
+			background: var(--primary);
+			border-color: var(--primary);
+		}
+		&.is-indeterminate .el-checkbox__inner {
+			background: var(--primary);
+			border-color: var(--primary);
+		}
+		&.is-focus .el-checkbox__inner {
+			border-color: var(--primary);
+		}
+	}
+	.el-checkbox__inner {
+		&:hover {
+			border-color: var(--primary);
 		}
 	}
 }

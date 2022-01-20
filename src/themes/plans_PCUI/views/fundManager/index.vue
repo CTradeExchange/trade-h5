@@ -35,9 +35,16 @@
 import buyModule from './components/buy-module.vue'
 import ransomModule from './components/ransom-module.vue'
 import standardModule from './components/standard-module.vue'
-import { ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+const store = useStore()
+const router = useRouter()
 const { t } = useI18n({ useScope: 'global' })
+
+// 用户信息
+const customerInfo = computed(() => store.state._user.customerInfo)
 // 基金经理专区菜单
 const menus = ref([
     { name: t('fundManager.side.buy'), value: 'buy', icon: 'icon_xianhuojiaoyizhanghu' },
@@ -45,13 +52,20 @@ const menus = ref([
     { name: t('fundManager.side.standard'), value: 'standard', icon: 'icon_heyuequancangzhanghu' }
 ])
 // 当前选中 buy:申购管理 ransom:赎回管理 standard:下单执行标准
-const active = ref('buy')
+const active = ref('standard')
 // 切换菜单
 const switchMenu = (item) => {
     if (item.value !== active.value) {
         active.value = item.value
     }
 }
+
+onMounted(() => {
+    // 不是基金账号跳转到首页
+    if (customerInfo.value.isFund !== 1) {
+        router.replace({ name: 'Home' })
+    }
+})
 </script>
 
 <style lang="scss" scoped>

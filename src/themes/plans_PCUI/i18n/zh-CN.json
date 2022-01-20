@@ -26,7 +26,11 @@
 			"loosing": "释放刷新"
 		},
 		"be": "是",
-		"deny": "否"
+		"deny": "否",
+		"search": "搜索",
+		"add": "添加",
+		"startTime": "开始时间",
+		"endTime": "结束时间"
 	},
 	"c": {
 		"login": "登录",
@@ -106,7 +110,7 @@
 		"transfer": "划转",
         "records": "资金记录",
         "transRecords": "成交记录",
-		"fundManager": "基金经理专区"
+		"fundManager": "基金操作专区"
 	},
     "historyList": {
         "noMore": "没有更多了"
@@ -163,7 +167,7 @@
 		"downloadTip": "iOS & Android扫码下载APP",
 		"language": "语言",
 		"theme": "主题",
-		"fundManager": "基金经理专区"
+		"fundManager": "基金操作专区"
 	},
 	"footer": {
 		"about": {
@@ -787,7 +791,40 @@
 		},
 		"buy": {
 			"title1": "申购待执行",
-			"title2": "申购执行记录"
+			"title2": "申购执行记录",
+			"title3": "申购执行下单确认",
+			"orderNo": "申购订单号",
+			"woName": "白标名称",
+			"customerNo": "客户编号",
+			"payCurrency": "申购支付资产",
+			"netWorth": "申购净值",
+			"money": "申购金额",
+			"status": "份额状态",
+			"applyTime": "申请时间",
+			"batchOrder": "批量下单",
+			"executeNo": "申购执行单号",
+			"lastTime": "最后更新时间",
+			"standard": "下单执行标准"
+		},
+		"ransom": {
+			"title1": "赎回待确认",
+			"title2": "赎回确认记录",
+			"title3": "下单产品",
+			"title4": "下单比例",
+			"orderNo": "赎回订单号",
+			"woName": "白标名称",
+			"customerNo": "客户编号",
+			"receiveCurrency": "客户接受资产",
+			"lot": "赎回份额",
+			"totalLot": "总赎回份额",
+			"totalMoney": "总赎回金额",
+			"status": "份额确认状态",
+			"applyTime": "申请时间",
+			"confirmLot": "确认份额",
+			"lastTime": "最后更新时间",
+			"tip1": "选择或输入产品",
+			"tip2": "输入下单比例",
+			"tip3": "暂未设置下单执行标准，请添加！"
 		}
 	}
 }

@@ -20,7 +20,9 @@ import {
     ElOption,
     ElOptionGroup,
     ElSelect,
-    ElPagination
+    ElPagination,
+    ElInput,
+    ElIcon
 } from 'element-plus'
 
 export default function (app) {
@@ -30,5 +32,5 @@ export default function (app) {
         .use(ElOption)
         .use(ElOptionGroup)
         .use(ElSelect)
-        .use(ElOption).use(ElOptionGroup).use(ElPagination)
+        .use(ElOption).use(ElOptionGroup).use(ElPagination).use(ElInput).use(ElIcon)
 };

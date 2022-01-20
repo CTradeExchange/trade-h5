@@ -33,7 +33,7 @@
                         </template>
                     </el-dropdown>
                 </div>
-                <div class='item'>
+                <div v-if='customerInfo.isFund === 1' class='item'>
                     <router-link to='/fundManager'>
                         <span class='link'>
                             {{ $t('header.fundManager') }}
