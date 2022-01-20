@@ -47,13 +47,20 @@
 	justify-content: space-between;
 	align-items: center;
 	height: 60px;
+	.left {
+		display: flex;
+		align-items: center;
+		span {
+			margin-right: 30px;
+		}
+	}
 	.btn {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		height: 32px;
 		padding: 0 10px;
-		margin-right: 10px;
+		margin-right: 20px;
 		font-size: 13px;
 		color: #fff;
 		background: var(--primary);

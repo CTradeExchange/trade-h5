@@ -302,5 +302,3 @@ export function findFundPage (data) {
         data
     })
 }
-
-/* 现货撮合取消委托单 */

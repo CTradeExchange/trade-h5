@@ -27,7 +27,7 @@
                                 </el-select>
                             </div>
                             <div class='input'>
-                                <el-input v-model='item.ratio' clearable :placeholder="$t('fundManager.ransom.tip2')">
+                                <el-input v-model='item.ratio' clearable :placeholder="$t('fundManager.ransom.tip2')" type='number'>
                                     <template #suffix>
                                         <span>%</span>
                                     </template>
@@ -43,7 +43,7 @@
                     <button class='btn' @click='onAdd'>
                         {{ $t('compLang.add') }}
                     </button>
-                    <button v-if='list.length > 0' class='btn'>
+                    <button v-if='list.length > 0' v-loading='isSubmit' class='btn' @click='onConfirm'>
                         {{ $t('compLang.confirm') }}
                     </button>
                 </div>
@@ -53,11 +53,46 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+// api
+import { getOrderStandard, saveOrderStandard } from '@/api/fund'
+import { Toast } from 'vant'
+import { onMounted, ref, unref, computed } from 'vue'
+import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 
+const store = useStore()
+const { t } = useI18n({ useScope: 'global' })
+
+// 用户信息
+const customerInfo = unref(computed(() => store.state._user.customerInfo))
+// 是否提交中
+const isSubmit = ref(false)
+// 玩货玩法产品列表数据
+const productList = ref([])
 // 下单执行标准数据
 const list = ref([])
 
+// 获取现货玩法产品列表数据
+const getProductList = () => {
+    const arr = []
+    const list = store.state._quote.productList
+    list.map(elem => {
+        if (Number(elem.tradeType) === 5) {
+            arr.push(elem)
+        }
+    })
+    console.log(arr)
+}
+// 获取下单执行标准
+const queryOrderStandard = () => {
+    getOrderStandard({
+        companyId: customerInfo.companyId,
+        customerNo: customerInfo.customerNo,
+        customerGroupId: customerInfo.customerGroupId
+    }).then(res => {
+
+    })
+}
 // 点击添加按钮
 const onAdd = () => {
     list.value.push({
@@ -69,6 +104,25 @@ const onAdd = () => {
 const onMinus = (index) => {
     list.value = list.value.filter((elem, i) => i !== index)
 }
+// 点击确定按钮
+const onConfirm = () => {
+    isSubmit.value = true
+    saveOrderStandard({
+        configDtoList: []
+    }).then(res => {
+        isSubmit.value = false
+        if (res.check()) {
+            Toast(t('handle.handleSuccess'))
+        }
+    })
+}
+
+onMounted(() => {
+    // 获取下单执行标准
+    queryOrderStandard()
+    // 获取现货玩法产品列表数据
+    getProductList()
+})
 </script>
 
 <style lang="scss" scoped>

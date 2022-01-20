@@ -5,11 +5,11 @@
             <el-tab-pane :label="$t('fundManager.buy.title2')" name='record' />
         </el-tabs>
         <!-- 申购待执行 -->
-        <div v-show="activeName === 'wait'">
+        <div v-if="activeName === 'wait'">
             <buy-wait />
         </div>
         <!-- 申购执行记录 -->
-        <div v-show="activeName === 'record'">
+        <div v-if="activeName === 'record'">
             <buy-record />
         </div>
     </div>

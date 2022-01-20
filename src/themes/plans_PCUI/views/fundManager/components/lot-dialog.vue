@@ -7,11 +7,11 @@
             :title="$t('fundManager.ransom.confirmLot')"
             width='520px'
         >
-            <el-table border :cell-style="{ background:'none' }" :data='tableData'>
+            <el-table v-loading='isLoading' border :cell-style="{ background:'none' }" :data='tableData'>
                 <el-table-column align='center' :label="$t('fundManager.ransom.totalLot')" prop='lot' />
                 <el-table-column align='center' :label="$t('fundManager.ransom.totalMoney')" prop='amount' />
             </el-table>
-            <template #footer>
+            <template #footer v-if='!isLoading'>
                 <button v-loading='isSubmit' class='confirm-btn' @click='onConfirm'>
                     {{ $t('confirm') }}
                 </button>
@@ -21,16 +21,26 @@
 </template>
 
 <script setup>
-import { ref, defineEmits, defineExpose } from 'vue'
+import { getFundRedeemInfo, confirmFundRedeem } from '@/api/fund'
+import { ref, unref, computed, defineEmits, defineExpose } from 'vue'
+import { useStore } from 'vuex'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
 
 const emit = defineEmits(['confirm'])
+const store = useStore()
 const { t } = useI18n({ useScope: 'global' })
+
+// 用户信息
+const customerInfo = unref(computed(() => store.state._user.customerInfo))
 // 是否显示弹窗
 const show = ref(false)
+// 是否加载中
+const isLoading = ref(false)
 // 是否提交中
 const isSubmit = ref(false)
+// 基金产品id集合
+const ids = ref([])
 // 列表数据
 const tableData = ref([])
 tableData.value.push({
@@ -38,9 +48,22 @@ tableData.value.push({
     amount: '1000'
 })
 
+// 获取基金产品赎回信息
+const queryFundRedeemInfo = () => {
+    isLoading.value = true
+    getFundRedeemInfo({
+        customerNo: customerInfo.customerNo,
+        fundIdList: ids.value
+    }).then(res => {
+        isLoading.value = false
+    })
+}
 // 打开弹窗
-const open = () => {
+const open = (ids = []) => {
     show.value = true
+    ids.value = ids
+    // 获取基金产品赎回信息
+    queryFundRedeemInfo()
 }
 // 关闭弹窗
 const close = () => {
@@ -49,12 +72,19 @@ const close = () => {
 // 点击确定
 const onConfirm = () => {
     isSubmit.value = true
-    setTimeout(() => {
-        Toast(t('c.handleSuccess'))
+    confirmFundRedeem({
+        customerNo: customerInfo.customerNo,
+        fundIdList: ids.value
+    }).then(res => {
         isSubmit.value = false
-        show.value = false
-        emit('confirm')
-    }, 2000)
+        if (res.check()) {
+            setTimeout(() => {
+                show.value = false
+                Toast(t('c.handleSuccess'))
+                emit('confirm')
+            }, 2000)
+        }
+    })
 }
 
 defineExpose({

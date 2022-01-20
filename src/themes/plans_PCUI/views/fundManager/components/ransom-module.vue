@@ -5,11 +5,11 @@
             <el-tab-pane :label="$t('fundManager.ransom.title2')" name='record' />
         </el-tabs>
         <!-- 赎回待确认 -->
-        <div v-show="activeName === 'wait'">
+        <div v-if="activeName === 'wait'">
             <ransom-wait />
         </div>
         <!-- 赎回确认记录 -->
-        <div v-show="activeName === 'record'">
+        <div v-if="activeName === 'record'">
             <ransom-record />
         </div>
     </div>

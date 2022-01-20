@@ -2,22 +2,32 @@
     <div class='header-case'>
         <div class='filter'>
             <div class='item'>
-                <el-input v-model='searchParams.orderNo' clearable :placeholder="$t('fundManager.buy.orderNo')" />
+                <el-input v-model='searchParams.proposalNo' clearable :placeholder="$t('fundManager.buy.orderNo')" />
             </div>
             <div class='item'>
-                <el-input v-model='searchParams.executeNo' clearable :placeholder="$t('fundManager.buy.executeNo')" />
+                <el-input v-model='searchParams.executeId' clearable :placeholder="$t('fundManager.buy.executeNo')" />
             </div>
             <div class='item'>
-                <el-input v-model='searchParams.woName' clearable :placeholder="$t('fundManager.buy.woName')" />
+                <el-select
+                    v-model='searchParams.custumerCompanyId'
+                    clearable
+                    filterable
+                    :placeholder="$t('fundManager.buy.woName')"
+                >
+                    <el-option v-for='item in companyList' :key='item.id' :label='item.name' :value='item.id' />
+                </el-select>
             </div>
             <div class='item'>
-                <el-input v-model='searchParams.customerNo' clearable :placeholder="$t('fundManager.buy.customerNo')" />
+                <el-input v-model='searchParams.custumerSelfNo' clearable :placeholder="$t('fundManager.buy.customerNo')" />
             </div>
             <div class='item'>
-                <el-select v-model='searchParams.payCurrency' clearable :placeholder="$t('fundManager.buy.payCurrency')">
-                    <el-option label='USDT' value='USDT' />
-                    <el-option label='USD' value='USD' />
-                    <el-option label='CNY' value='CNY' />
+                <el-select
+                    v-model='searchParams.currencyPay'
+                    clearable
+                    filterable
+                    :placeholder="$t('fundManager.buy.payCurrency')"
+                >
+                    <el-option v-for='item in assetsList' :key='item.code' :label='item.code' :value='item.code' />
                 </el-select>
             </div>
             <div class='item-date'>
@@ -27,6 +37,8 @@
                     range-separator='-'
                     :start-placeholder="$t('compLang.startTime')"
                     type='daterange'
+                    value-format='YYYY-MM-DD'
+                    @change='selectTime'
                 />
             </div>
             <button class='btn' @click='onSearch'>
@@ -69,29 +81,42 @@
 </template>
 
 <script setup>
+import { getCompanyList, getCompanyAssets, getFundApplyList } from '@/api/fund'
 import { ElInput, ElDatePicker } from 'element-plus'
-import { ref, reactive } from 'vue'
+import { useStore } from 'vuex'
+import { onMounted, ref, unref, reactive, computed } from 'vue'
 
+const store = useStore()
+// 用户信息
+const customerInfo = unref(computed(() => store.state._user.customerInfo))
+// 公司列表
+const companyList = ref([])
+// 资产列表
+const assetsList = ref([])
 // 选择的区间
-const timeRange = ref([])
+const timeRange = ref(null)
 // 搜索参数
 const searchParams = reactive({
+    // 当前登陆的客户编号
+    custumerNo: customerInfo.customerNo,
+    // 类型
+    type: 2,
     // 订单号
-    orderNo: '',
-    // 申购执行单号
-    executeNo: '',
+    proposalNo: '',
+    // 申购执行id
+    executeId: '',
     // 白标名称
-    woName: '',
+    custumerCompanyId: '',
     // 客户编号
-    customerNo: '',
+    custumerSelfNo: '',
     // 申购支付资产
-    payCurrency: '',
+    currencyPay: '',
     // 开始时间
     startTime: '',
     // 结束时间
     endTime: '',
     // 当前分页页数
-    page: 1,
+    current: 1,
     // 分页数量
     size: 10
 })
@@ -117,18 +142,66 @@ const minWidth = ref(100)
 // 列表总数据量
 const total = ref(100)
 
-// 点击搜索
-const onSearch = () => {
+// 获取公司列表
+const queryCompanyList = () => {
+    getCompanyList().then(res => {
+        companyList.value = res.data
+    })
+}
+// 获取公司资产列表
+const queryAssetsList = () => {
+    getCompanyAssets({
+        companyId: customerInfo.companyId
+    }).then(res => {
+        assetsList.value = res.data
+    })
+}
+// 获取基金申购列表
+const queryApplyList = () => {
+    const params = Object.assign({}, searchParams)
+    params.proposalNo = params.proposalNo ? params.proposalNo.split(',') : ''
+    params.custumerSelfNo = params.custumerSelfNo ? params.custumerSelfNo.split(',') : ''
+    params.custumerSelfNo = params.executeId ? params.executeId.split(',') : ''
+    getFundApplyList(params).then(res => {
 
+    })
+}
+// 选择时间
+const selectTime = () => {
+    const value = timeRange.value
+    if (value) {
+        searchParams.startTime = window.dayjs(value[0]).valueOf('day')
+        searchParams.endTime = window.dayjs(value[1]).endOf('day').valueOf()
+    } else {
+        searchParams.startTime = ''
+        searchParams.endTime = ''
+    }
 }
 // 改变当前页数
-const changePage = (e) => {
-    console.log('当前页数', e)
+const changePage = (value) => {
+    searchParams.current = value
+    queryApplyList()
 }
 // 改变分页数量
-const changeSize = (e) => {
-    console.log('分页数量', e)
+const changeSize = (value) => {
+    searchParams.size = value
+    searchParams.current = 1
+    queryApplyList()
 }
+// 点击搜索
+const onSearch = () => {
+    searchParams.current = 1
+    queryApplyList()
+}
+
+onMounted(() => {
+    // 获取公司列表
+    queryCompanyList()
+    // 获取公司资产列表
+    queryAssetsList()
+    // 获取基金申购列表
+    queryApplyList()
+})
 </script>
 
 <style lang="scss" scoped>
