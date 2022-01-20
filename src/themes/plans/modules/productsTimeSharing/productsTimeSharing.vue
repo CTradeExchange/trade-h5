@@ -102,19 +102,11 @@ export default {
 
         const onChangeSwipe = (index) => {
             QuoteSocket.batchGetKlineData(getSubscribeData(index))
-            QuoteSocket.add_subscribe({
-                moduleId: 'productsTimeSharing',
-                symbolKeys: getQuoteDate(index)
-            })
         }
 
         store.dispatch('_quote/querySymbolBaseInfoList').then(res => {
             if (!h5Preview && getSubscribeData(0)) {
                 QuoteSocket.batchGetKlineData(getSubscribeData(0))
-                QuoteSocket.add_subscribe({
-                    moduleId: 'productsTimeSharing',
-                    symbolKeys: getQuoteDate(0)
-                })
             }
         })
 
