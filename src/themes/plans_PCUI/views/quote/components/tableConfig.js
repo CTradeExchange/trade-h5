@@ -1,3 +1,4 @@
+import ETF from '@planspc/components/etfIcon'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import { computed, unref } from 'vue'
@@ -70,12 +71,17 @@ export const getColumns = tradeType => {
                 align: 'left',
                 minWidth: 160,
                 className: 'name',
-                formatter: row => (<span class='name'>
+                formatter: row => (<div class='chunk'>
                     {
                         isCollect(row.tradeType, row.symbolId) ? <i class='icon icon_hangqingliebiaoyijiazixuan star' onclick={(event) => addOptional(event, row)}></i> : <i class='icon icon_hangqingliebiaoweijiazixuan star' onclick={(event) => addOptional(event, row)}></i>
                     }
-                    { row.symbolCode }
-                </span>)
+                    <div>
+                        <span class='name'>
+                            { row.symbolCode }
+                        </span>
+                        <ETF v-show={getVal(row.symbolKey, 'etf') === true} />
+                    </div>
+                </div>)
             },
             {
                 name: t('trade.sellPrice'),
@@ -129,12 +135,17 @@ export const getColumns = tradeType => {
                 align: 'left',
                 minWidth: 160,
                 className: 'name',
-                formatter: row => (<span class='name'>
+                formatter: row => (<div class='chunk'>
                     {
                         isCollect(row.tradeType, row.symbolId) ? <i class='icon icon_hangqingliebiaoyijiazixuan star' onclick={(event) => addOptional(event, row)}></i> : <i class='icon icon_hangqingliebiaoweijiazixuan star' onclick={(event) => addOptional(event, row)}></i>
                     }
-                    { row.symbolCode }
-                </span>)
+                    <div>
+                        <span class='name'>
+                            { row.symbolCode }
+                        </span>
+                        <ETF v-show={getVal(row.symbolKey, 'etf') === true} />
+                    </div>
+                </div>)
             },
             {
                 name: t('trade.sellPrice'),
@@ -188,12 +199,17 @@ export const getColumns = tradeType => {
                 align: 'left',
                 minWidth: 160,
                 className: 'name',
-                formatter: row => (<span class='name'>
+                formatter: row => (<div class='chunk'>
                     {
                         isCollect(row.tradeType, row.symbolId) ? <i class='icon icon_hangqingliebiaoyijiazixuan star' onclick={(event) => addOptional(event, row)}></i> : <i class='icon icon_hangqingliebiaoweijiazixuan star' onclick={(event) => addOptional(event, row)}></i>
                     }
-                    { row.symbolCode }
-                </span>)
+                    <div>
+                        <span class='name'>
+                            { row.symbolCode }
+                        </span>
+                        <ETF v-show={getVal(row.symbolKey, 'etf') === true} />
+                    </div>
+                </div>)
             },
             {
                 name: t('trade.newPrice'),
@@ -256,12 +272,17 @@ export const getColumns = tradeType => {
                 align: 'left',
                 minWidth: 160,
                 className: 'name',
-                formatter: row => (<span class='name'>
+                formatter: row => (<div class='chunk'>
                     {
                         isCollect(row.tradeType, row.symbolId) ? <i class='icon icon_hangqingliebiaoyijiazixuan star' onclick={(event) => addOptional(event, row)}></i> : <i class='icon icon_hangqingliebiaoweijiazixuan star' onclick={(event) => addOptional(event, row)}></i>
                     }
-                    { row.symbolCode }
-                </span>)
+                    <div>
+                        <span class='name'>
+                            { row.symbolCode }
+                        </span>
+                        <ETF v-show={getVal(row.symbolKey, 'etf') === true} />
+                    </div>
+                </div>)
             },
             {
                 name: t('trade.newPrice'),

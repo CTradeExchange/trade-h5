@@ -179,7 +179,10 @@ const current = computed({
             tr:hover>td.el-table__cell{
                 background-color: var(--bgColor);
             }
-
+            .chunk {
+                display: inline-flex;
+                align-items: center;
+            }
         }
         .el-pagination{
             .btn-prev,
