@@ -21,9 +21,12 @@
                         <div v-for='(item, index) in list' :key='index' class='item'>
                             <div class='select'>
                                 <el-select v-model='item.currency' clearable filterable :placeholder="$t('fundManager.ransom.tip1')">
-                                    <el-option label='USDT' value='USDT' />
-                                    <el-option label='USD' value='USD' />
-                                    <el-option label='CNY' value='CNY' />
+                                    <el-option
+                                        v-for='product in productList'
+                                        :key='product.symbolKey'
+                                        :label='product.symbolName'
+                                        :value='product.symbolKey'
+                                    />
                                 </el-select>
                             </div>
                             <div class='input'>
@@ -81,7 +84,7 @@ const getProductList = () => {
             arr.push(elem)
         }
     })
-    console.log(arr)
+    productList.value = arr
 }
 // 获取下单执行标准
 const queryOrderStandard = () => {
@@ -96,8 +99,8 @@ const queryOrderStandard = () => {
 // 点击添加按钮
 const onAdd = () => {
     list.value.push({
-        currency: 'CNY',
-        ratio: 20
+        currency: '',
+        ratio: ''
     })
 }
 // 点击删除按钮
@@ -106,6 +109,11 @@ const onMinus = (index) => {
 }
 // 点击确定按钮
 const onConfirm = () => {
+    for (let i = 0; i < list.value.length; i++) {
+        if (!list.value[i].currency) {
+            return Toast(t('fundManager.ransom.tip1'))
+        }
+    }
     isSubmit.value = true
     saveOrderStandard({
         configDtoList: []
