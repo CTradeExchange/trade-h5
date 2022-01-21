@@ -176,7 +176,7 @@ export default {
 
                     if (state.elementList.length > 0) {
                         const hasFacePhoto = state.elementList.find(el => el.elementCode === 'face_photo')
-                        if(!isEmpty(hasFacePhoto)){
+                        if (!isEmpty(hasFacePhoto) && platform === 'h5') {
                             router.push({
                                 path: '/faceDetect',
                                 query: {
@@ -207,7 +207,6 @@ export default {
                     console.log('state.conditionModel', state.conditionModel)
                     getInputGroupList()
                 }
-                
             }).catch(err => {
                 state.loading = false
             })
@@ -413,6 +412,7 @@ export default {
 
         // 跳转人脸识别
         const toFaceAuth = () => {
+            debugger
             if (props.platform === 'web') return
             router.push({
                 path: '/faceDetect',

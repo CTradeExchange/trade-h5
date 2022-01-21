@@ -1,6 +1,6 @@
 <template>
     <div class='page-wrap'>
-        <layoutTop @back='back' :custom-back='true'/>
+        <layoutTop :custom-back='true' @back='back' />
         <Loading :show='loading' />
         <!-- 认证成功 -->
         <div class='main'>
@@ -47,11 +47,10 @@ import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted }
 import { faceDetect, findAllLevelKyc, kycLevelApply, kycApply } from '@/api/user'
 import axios from 'axios'
 import qs from 'qs'
-import { localSet } from '@/utils/util'
+import { localSet, getArrayObj, isEmpty } from '@/utils/util'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { upload } from '@/api/base'
-import { getArrayObj, isEmpty } from '@/utils/util'
 
 const constraints = {
     audio: false,
@@ -63,7 +62,7 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const { t, tm } = useI18n({ useScope: 'global' })
-        const { levelCode,businessCode } = route.query
+        const { levelCode, businessCode } = route.query
         const state = reactive({
             faceDetectSuccess: false,
             classObj: {},
@@ -136,7 +135,7 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     // state.conditionModel[detail.name] = res.data
-                    //Toast(t('auth.uploadSuccess'))
+                    // Toast(t('auth.uploadSuccess'))
                     state.uploadURL = res.data
                     submitKYC()
                 }
@@ -159,40 +158,38 @@ export default {
                     }
                 })
             }
-            let params ,kycApi
+            let params, kycApi
 
             if (!isEmpty(props.businessCode)) {
-               params = {
-                businessCode,
-                levelCode,
-                elementList: paramsKycList
+                params = {
+                    businessCode,
+                    levelCode,
+                    elementList: paramsKycList
                 }
                 kycApi = kycApply
-                
-            }else{
+            } else {
                 params = {
                     levelCode,
                     elementList: paramsKycList,
                     pathCode: state.pathCode
                 }
-                kycApi = kycLevelApply  
+                kycApi = kycLevelApply
             }
             state.loading = true
             kycApi(params).then(res => {
-                    state.loading = false
-                    if (res.check()) {
-                        if (props.platform === 'web') {
-                            const parentPath = route.matched[route.matched.length - 2]
-                            router.push({ path: parentPath.path + '/kycCommitted' })
-                        } else {
-                            router.replace({ name: 'KycCommitted' })
-                        }
+                state.loading = false
+                if (res.check()) {
+                    if (props.platform === 'web') {
+                        const parentPath = route.matched[route.matched.length - 2]
+                        router.push({ path: parentPath.path + '/kycCommitted' })
+                    } else {
+                        router.replace({ name: 'KycCommitted' })
                     }
-                }).catch(err => {
-                    state.loading = false
-                    console.log(err)
-                })
-            
+                }
+            }).catch(err => {
+                state.loading = false
+                console.log(err)
+            })
         }
 
         // 提交第三方验证
@@ -251,21 +248,20 @@ export default {
 
             })
         }
-        const back = ()=>{
+        const back = () => {
             router.push('/authentication')
         }
         onUnmounted(() => {
             try {
-                window.stream.getTracks().forEach(function(track) {
-                    track.stop();
-                 }); 
+                window.stream.getTracks().forEach(function (track) {
+                    track.stop()
+                })
             } catch (error) {
-                console.log('未发现设备');
+                console.log('未发现设备')
             }
-            
         })
 
-        onMounted(()=>{
+        onMounted(() => {
             openCamera()
             video = document.querySelector('video')
             getConditon()
@@ -314,6 +310,7 @@ export default {
             height: 480px;
             background: rgb(255, 255, 255,0.5);
             max-width: 100%;
+            transform: scaleX(-1);
         }
     }
 
