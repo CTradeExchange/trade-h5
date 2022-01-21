@@ -1,7 +1,10 @@
 <template>
     <div ref='scrollParent' class='pageWrapp'>
         <LayoutTop :back='true' :menu='false' />
-        <div ref='lazyParent'>
+        <div v-if='fundProductList.length === 0'>
+            <van-empty :description='$t("common.noData")' image='/images/empty.png' />
+        </div>
+        <div v-else ref='lazyParent'>
             <FundCard v-for='item in fundProductList' :key='item.fundId' :fund='item' @click='goInfo(item)' />
         </div>
     </div>
