@@ -666,7 +666,14 @@
         "singleAsset":"Asset Performance",
         "totalManager":"{0} people in total",
         "fundChartTip":"The data is for reference only, past performance does not represent future performance!",
+        "marketPrice":"市场价格",
+        "totalMarketValue":"基金总市值",
         "fund":"基金",
+        "fundApplyFeeCalc":"预计申购手续费",
+        "choosePayAsset":"选择支付资产",
+        "chooseApplyAsset":"申购基金代币",
+        "inputRedeemShares":"输入赎回份额",
+        "redeemAssets":"选择接受资产",
         "buy":"申购",
         "sell":"赎回"
     }

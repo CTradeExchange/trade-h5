@@ -1,6 +1,4 @@
-import { getFundInfo } from '@/api/trade'
-import { ref, computed, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { ref, computed, watch, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -9,20 +7,13 @@ export function useFundInfo () {
     const store = useStore()
     const router = useRouter()
     const fundInfo = ref(null)
+    const fundId = inject('fundId')
     const productMap = computed(() => store.state._quote.productMap)
     const symbolKey = computed(() => store.state._quote.productActivedID)
-    const product = computed(() => store.getters.productActived)
-    const { t } = useI18n({ useScope: 'global' })
     const getFundInfoData = () => {
-        getFundInfo({ fundId: product.value.fundId }).then(res => {
+        store.dispatch('_quote/queryFundInfo', fundId).then(res => {
             if (res.check()) {
                 const data = res.data || {}
-                // if (data.managerName) {
-                //     const managerName = data.managerName
-                //     const managerArr = managerName.includes(',') ? managerName.split(',') : managerName.split('，')
-                //     data.managerName = managerArr.slice(0, 3).join()
-                //     data.managerName += t('fundInfo.totalManager', [managerArr.length])
-                // }
                 if (data.trackIndex) data.trackProduct = productMap.value[`${data.trackIndex}_5`]
                 fundInfo.value = data
             }

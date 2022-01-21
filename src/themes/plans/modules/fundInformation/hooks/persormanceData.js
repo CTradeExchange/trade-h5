@@ -1,6 +1,6 @@
 import { marketPerformance, marketPerformanceQuoteChange } from '@/api/trade'
 import { localGet } from '@/utils/util'
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 import { useStore } from 'vuex'
 import * as echarts from 'echarts/core'
 
@@ -28,8 +28,7 @@ echarts.use([
 
 // 基金表现
 export const usePerformance = () => {
-    const store = useStore()
-    const product = computed(() => store.getters.productActived)
+    const fundId = inject('fundId')
 
     // 市场价格 vs 基金净值的图表数据
     function mockData () {
@@ -50,8 +49,7 @@ export const usePerformance = () => {
 
     // 市场表现走势图
     const getMarketPerformanceData = () => {
-        const { symbolId } = product.value
-        return marketPerformance({ symbolId, days: 60, type: 1 }).then(res => {
+        return marketPerformance({ fundId, days: 60, type: 1 }).then(res => {
             if (res.check()) {
                 const [data1, data2] = Object.entries(res.data)
                 return [data1, data2]
@@ -60,8 +58,7 @@ export const usePerformance = () => {
         })
     }
     const getMarketPerformanceData1 = () => {
-        const { symbolId } = product.value
-        return marketPerformance({ symbolId, days: 60, type: 2 }).then(res => {
+        return marketPerformance({ fundId, days: 60, type: 2 }).then(res => {
             if (res.check()) {
                 const [data1, data2] = Object.entries(res.data)
                 return [data1, data2]
@@ -72,8 +69,7 @@ export const usePerformance = () => {
 
     // 市场表现走势图
     const getMarketPerformanceQuoteChange = () => {
-        const { symbolId } = product.value
-        return marketPerformanceQuoteChange({ symbolId, days: 60, type: 1 }).then(res => {
+        return marketPerformanceQuoteChange({ fundId, days: 60, type: 1 }).then(res => {
             if (res.check()) {
                 const [data1, data2] = Object.entries(res.data)
                 return [data1, data2]
@@ -82,8 +78,7 @@ export const usePerformance = () => {
         })
     }
     const getMarketPerformanceQuoteChange1 = () => {
-        const { symbolId } = product.value
-        return marketPerformanceQuoteChange({ symbolId, days: 60, type: 2 }).then(res => {
+        return marketPerformanceQuoteChange({ fundId, days: 60, type: 2 }).then(res => {
             if (res.check()) {
                 const [data1, data2] = Object.entries(res.data)
                 return [data1, data2]

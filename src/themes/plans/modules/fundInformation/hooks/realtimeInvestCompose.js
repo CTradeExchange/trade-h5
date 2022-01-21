@@ -5,8 +5,7 @@ import { LabelLayout } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
 import { assetPerformance, investCombination } from '@/api/trade'
 import { localGet } from '@/utils/util'
-import { useStore } from 'vuex'
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 
 echarts.use([
     TooltipComponent,
@@ -19,11 +18,9 @@ echarts.use([
 ])
 
 export const useInvestCompose = (params) => {
-    const store = useStore()
-    const product = computed(() => store.getters.productActived)
+    const fundId = inject('fundId')
     const getInvestCombination = () => {
-        const { symbolId } = product.value
-        return investCombination({ symbolId, statisticType: 1 }).then(res => {
+        return investCombination({ fundId, statisticType: 1 }).then(res => {
             if (res.check()) {
                 const list = res.data
                 return list
@@ -34,8 +31,7 @@ export const useInvestCompose = (params) => {
 
     // 获取单资产表现柱状图数据
     const getAssetPerformance = () => {
-        const { symbolId } = product.value
-        return assetPerformance({ symbolId }).then(res => {
+        return assetPerformance({ fundId }).then(res => {
             if (res.check()) {
                 return res.data
             }
