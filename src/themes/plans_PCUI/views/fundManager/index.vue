@@ -52,7 +52,7 @@ const menus = ref([
     { name: t('fundManager.side.standard'), value: 'standard', icon: 'icon_heyuequancangzhanghu' }
 ])
 // 当前选中 buy:申购管理 ransom:赎回管理 standard:下单执行标准
-const active = ref('standard')
+const active = ref('buy')
 // 切换菜单
 const switchMenu = (item) => {
     if (item.value !== active.value) {

@@ -20,17 +20,18 @@
                     <div class='list'>
                         <div v-for='(item, index) in list' :key='index' class='item'>
                             <div class='select'>
-                                <el-select v-model='item.currency' clearable filterable :placeholder="$t('fundManager.ransom.tip1')">
+                                <el-select v-model='item.currency' clearable filterable :placeholder="$t('fundManager.ransom.tip1')" @change='changeProduct($event, item)'>
                                     <el-option
                                         v-for='product in productList'
-                                        :key='product.symbolKey'
+                                        :key='product.symbolId'
+                                        :disabled='selectIds.includes(Number(product.symbolId))'
                                         :label='product.symbolName'
-                                        :value='product.symbolKey'
+                                        :value='product.symbolId'
                                     />
                                 </el-select>
                             </div>
                             <div class='input'>
-                                <el-input v-model='item.ratio' clearable :placeholder="$t('fundManager.ransom.tip2')" type='number'>
+                                <el-input v-model='item.ratio' clearable :placeholder="$t('fundManager.ransom.tip2')" type='number' @input='inputRatio(item)'>
                                     <template #suffix>
                                         <span>%</span>
                                     </template>
@@ -62,6 +63,8 @@ import { Toast } from 'vant'
 import { onMounted, ref, unref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
+import { isEmpty } from '@/utils/util'
+import { getDecimalNum, retainDecimal } from '@/utils/calculation'
 
 const store = useStore()
 const { t } = useI18n({ useScope: 'global' })
@@ -72,6 +75,8 @@ const customerInfo = unref(computed(() => store.state._user.customerInfo))
 const isSubmit = ref(false)
 // 玩货玩法产品列表数据
 const productList = ref([])
+// 当前选择的产品id集合
+const selectIds = ref([])
 // 下单执行标准数据
 const list = ref([])
 
@@ -96,6 +101,22 @@ const queryOrderStandard = () => {
 
     })
 }
+// 修改选择的产品
+const changeProduct = (value, item) => {
+    selectIds.value = selectIds.value.filter(id => id !== Number(item.symbolId))
+    if (value) {
+        item.symbolId = Number(value)
+        selectIds.value.push(Number(value))
+    } else {
+        item.symbolId = ''
+    }
+}
+// 输入下单比例
+const inputRatio = (item) => {
+    if (getDecimalNum(item.ratio) > 4) {
+        item.ratio = retainDecimal(item.ratio, 4)
+    }
+}
 // 点击添加按钮
 const onAdd = () => {
     list.value.push({
@@ -109,11 +130,21 @@ const onMinus = (index) => {
 }
 // 点击确定按钮
 const onConfirm = () => {
+    let totalRatio = 0
     for (let i = 0; i < list.value.length; i++) {
-        if (!list.value[i].currency) {
+        const item = list.value[i]
+        totalRatio += Number(item.ratio)
+        if (isEmpty(item.currency)) {
             return Toast(t('fundManager.ransom.tip1'))
         }
+        if (isEmpty(item.ratio)) {
+            return Toast(t('fundManager.ransom.tip2'))
+        }
     }
+    if (totalRatio > 100) {
+        return Toast(t('fundManager.ransom.tip5'))
+    }
+
     isSubmit.value = true
     saveOrderStandard({
         configDtoList: []
