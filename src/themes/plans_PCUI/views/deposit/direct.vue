@@ -20,7 +20,7 @@
             <div class='page-content'>
                 <div class='module'>
                     <div class='currency-info'>
-                        <img :src="'/images/currency_icon/' + currency + '.png'" />
+                        <CurrencyIcon :currency='currency' :size='48' />
                         <p class='name'>
                             {{ currency }}
                         </p>
@@ -83,6 +83,7 @@
 
 <script>
 import centerViewDialog from '@planspc/layout/centerViewDialog'
+import CurrencyIcon from '@/components/currencyIcon'
 import { onMounted, computed, reactive, toRefs, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
@@ -96,7 +97,8 @@ import QRCode from 'qrcodejs2'
 import { assetsMap } from '@/themeCommon/components/assetsList/assetsMap'
 export default {
     components: {
-        centerViewDialog
+        centerViewDialog,
+        CurrencyIcon
     },
     setup () {
         const store = useStore()
@@ -276,10 +278,8 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
-        img {
-            width: rem(96px);
-            height: rem(96px);
-            margin-top: rem(-48px);
+        &:deep(.currencyIcon) {
+            margin-top: -24px;
         }
         .name {
             line-height: 1;

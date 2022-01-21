@@ -108,7 +108,7 @@
                                             {{ $t('deposit.arriveTime') }}
                                         </span>
                                         <span class='right-val'>
-                                            {{ formatTime(item.updateTime) || '--' }}
+                                            {{ item.depositStatus === 2 ? formatTime(item.updateTime) : '--' }}
                                         </span>
                                     </div>
                                     <div class='w-item'>

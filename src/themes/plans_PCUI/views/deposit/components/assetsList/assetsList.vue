@@ -6,7 +6,7 @@
             :class='{ active: curCurrency === item.currency }'
             @click='checkCurrency(item)'
         >
-            <img alt='' class='currency-icon' :src='getCurrencyIcon(item.currency)' srcset='' />
+            <CurrencyIcon :currency='item.currency' :size='24' />
             <div class='name'>
                 <p class='t1'>
                     {{ item.currency }}
@@ -21,10 +21,14 @@
 </template>
 
 <script>
+import CurrencyIcon from '@/components/currencyIcon'
 import { useStore } from 'vuex'
 import { assetsMap } from './assetsMap'
 import { onBeforeMount, computed, reactive, watch, toRefs, onUnmounted } from 'vue'
 export default {
+    components: {
+        CurrencyIcon
+    },
     props: ['show', 'currency', 'tradeType'],
     setup (props, context) {
         const store = useStore()
@@ -54,20 +58,12 @@ export default {
             context.emit('update:currency', currency)
             // state.popupShow = false
         }
-        const getCurrencyIcon = (currency) => {
-            try {
-                return require('@/assets/currency_icon/' + currency + '.png')
-            } catch (error) {
-                return require('@/assets/currency_icon/default.png')
-            }
-        }
         const bgColor = style.value.primary + '0D'
         return {
             close,
             bgColor,
             accountList,
             checkCurrency,
-            getCurrencyIcon,
             ...toRefs(state)
         }
     }
@@ -101,9 +97,8 @@ export default {
         margin-bottom: rem(30px);
         border: rem(2px) solid transparent;
         cursor: pointer;
-        .currency-icon{
-            width: rem(48px);
-            margin-right: rem(20px);
+        .name {
+            margin-left: rem(15px);
         }
         .t1{
             font-size: rem(32px);

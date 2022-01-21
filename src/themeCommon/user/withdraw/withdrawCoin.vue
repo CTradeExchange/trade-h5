@@ -330,7 +330,6 @@ export default {
 
         // 获取取款手续费
         const getWithdrawFee = debounce(() => {
-            console.log('jisuanshouxufei ...')
             const coinTotal = parseFloat(state.coinTotal)
             const coinCount = parseFloat(state.coinCount)
             if (!state.coinKind) {
@@ -570,7 +569,6 @@ export default {
                 if (res.check()) {
                     const { data } = res
                     const coinKindList = []
-
                     if (data.length > 0) {
                         data.map(elem => {
                             if (!coinKindList.some(v => v.name === elem.withdrawCurrency) && elem.withdrawCurrency === currency) {

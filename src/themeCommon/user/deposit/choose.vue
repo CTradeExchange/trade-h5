@@ -18,7 +18,7 @@
                 </h3>
                 <div class='action-bar' @click='pickerShow = true'>
                     <div v-if='accountInfo' class='left'>
-                        <img alt='' class='icon' :src='getCurrencyIcon(accountInfo.currency)' srcset='' />
+                        <CurrencyIcon :currency='accountInfo.currency' :size='24' />
                         <div class='name'>
                             <p class='t1'>
                                 {{ accountInfo?.currency }}
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <div v-else class='left'>
-                        <img alt='' class='icon' src='@/assets/currency_icon/all.png' srcset='' />
+                        <CurrencyIcon :currency='accountInfo.currency' :size='24' />
                         <div class='name'>
                             <p class='t1'>
                                 {{ $t('deposit.chooseCurrency') }}
@@ -97,6 +97,7 @@
 </template>
 
 <script>
+import CurrencyIcon from '@/components/currencyIcon'
 import { computed, reactive, toRefs, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
@@ -107,6 +108,7 @@ import { Toast, Dialog } from 'vant'
 import assetsList from '@/themeCommon/components/assetsList/assetsList.vue'
 export default {
     components: {
+        CurrencyIcon,
         assetsList
     },
     setup () {
@@ -287,13 +289,6 @@ export default {
         const updatePopupVis = val => {
             state.pickerShow = val
         }
-        const getCurrencyIcon = (currency) => {
-            try {
-                return require('@/assets/currency_icon/' + currency + '.png')
-            } catch (error) {
-                return require('@/assets/currency_icon/default.png')
-            }
-        }
         const bgColor = style.value.primary + '0D'
 
         onMounted(() => {
@@ -308,7 +303,6 @@ export default {
             goRecharge,
             updatePopupVis,
             onCurrencyConfirm,
-            getCurrencyIcon,
             bgColor
         }
     }
@@ -354,14 +348,8 @@ export default {
         .left{
             display: flex;
             align-items: center;
-            .icon{
-                width: rem(48px);
-                height: rem(48px);
-                margin-right: rem(20px);
-                vertical-align: middle;
-
-            }
             .name{
+                margin-left: rem(15px);
                 .t1{
                     font-size: rem(32px);
                     vertical-align: middle;

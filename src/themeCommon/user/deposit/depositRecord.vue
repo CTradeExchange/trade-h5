@@ -118,7 +118,7 @@
                                         {{ $t('deposit.arriveTime') }}
                                     </span>
                                     <span class='right-val'>
-                                        {{ formatTime(item.updateTime) || '--' }}
+                                        {{ item.depositStatus === 2 ? formatTime(item.updateTime) : '--' }}
                                     </span>
                                 </div>
                                 <div class='w-item'>
@@ -238,7 +238,7 @@ export default {
         }
 
         const formatTime = (val) => {
-            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+            return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
 
         // 底部加载更多

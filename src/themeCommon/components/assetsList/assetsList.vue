@@ -1,7 +1,7 @@
 <template>
     <van-popup
         v-model:show='popupShow'
-        class='custom-popup'
+        class='custom-dialog'
         :duration='0.2'
         position='bottom'
         round
@@ -22,8 +22,7 @@
                     :class='{ active: curCurrency === item.currency }'
                     @click='checkCurrency(item)'
                 >
-                    <img alt='' class='currency-icon' :src='getCurrencyIcon(item.currency)' srcset='' />
-                    <!-- <img alt='' class='currency-icon' :src='"/images/currency_icon/"+ item.currency +".99png" || "/images/currency_icon/default.png"' srcset='' /> -->
+                    <CurrencyIcon :currency='item.currency' :size='24' />
                     <div class='name'>
                         <p class='t1'>
                             {{ item.currency }}
@@ -40,11 +39,14 @@
 </template>
 
 <script>
-import Top from '@/components/top'
+import CurrencyIcon from '@/components/currencyIcon'
 import { useStore } from 'vuex'
 import { assetsMap } from './assetsMap'
 import { onBeforeMount, computed, reactive, watch, toRefs, onUnmounted } from 'vue'
 export default {
+    components: {
+        CurrencyIcon
+    },
     props: ['show', 'currency', 'tradeType'],
     setup (props, context) {
         const store = useStore()
@@ -74,37 +76,55 @@ export default {
             context.emit('update:currency', currency)
             // state.popupShow = false
         }
-        const getCurrencyIcon = (currency) => {
-            try {
-                return require('@/assets/currency_icon/' + currency + '.png')
-            } catch (error) {
-                return require('@/assets/currency_icon/default.png')
-            }
-        }
         const bgColor = style.value.primary + '0D'
         return {
             close,
             bgColor,
             accountList,
             checkCurrency,
-            getCurrencyIcon,
             ...toRefs(state)
         }
     }
 }
 </script>
 
+<style lang="scss">
+@import '@/sass/mixin.scss';
+.custom-dialog{
+    display: flex;
+    flex-direction: column;
+    height: 92%;
+    overflow: hidden;
+    background: var(--bgColor);
+    .header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: rem(37px) rem(30px) rem(50px);
+        .header-title{
+            font-size: rem(48px);
+            font-weight: bold;
+            color: var(--color);
+        }
+        .icon_guanbi{
+            font-size: rem(30px);
+            font-weight: bold;
+        }
+    }
+}
+</style>
+
 <style lang='scss' scoped>
 @import '@/sass/mixin.scss';
 .popup-wrap{
     overflow-y: scroll;
-    height: calc(100vh - 80px);
+    padding: 0 rem(30px);
     .assets-list{
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
         width: 100%;
-        padding-bottom: rem(100px);
+        /* padding-bottom: rem(220px); */
         li{
             position: relative;
             padding-left: rem(30px);
@@ -116,9 +136,8 @@ export default {
             height: rem(110px);
             margin-bottom: rem(30px);
             border: rem(2px) solid transparent;
-            .currency-icon{
-                width: rem(48px);
-                margin-right: rem(20px);
+            .name {
+                margin-left: rem(20px);
             }
             .t1{
                 font-size: rem(32px);

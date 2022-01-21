@@ -41,7 +41,7 @@
                 </div>
                 <div class='other-amount'>
                     <div class='icon-currency'>
-                        <img alt='' :src='getCurrencyIcon()' />
+                        <CurrencyIcon :currency='currency' :size='24' />
                         <span class='label'>
                             {{ currency }}
                         </span>
@@ -157,6 +157,7 @@
 
 <script>
 import centerViewDialog from '@planspc/layout/centerViewDialog'
+import CurrencyIcon from '@/components/currencyIcon'
 import { reactive, computed, toRefs, onBeforeUnmount, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
@@ -169,7 +170,8 @@ import { getListByParentCode } from '@/api/base'
 
 export default {
     components: {
-        centerViewDialog
+        centerViewDialog,
+        CurrencyIcon
     },
     setup (props) {
         const router = useRouter()
@@ -806,14 +808,6 @@ export default {
             })
         })
 
-        const getCurrencyIcon = () => {
-            try {
-                return require('@/assets/currency_icon/' + currency + '.png')
-            } catch (error) {
-                return require('@/assets/currency_icon/default.png')
-            }
-        }
-
         onBeforeUnmount(() => {
             sessionStorage.removeItem('proposalNo')
         })
@@ -838,8 +832,7 @@ export default {
             computeAccount,
             onlineServices,
             changePayCurrency,
-            handleAppendField,
-            getCurrencyIcon
+            handleAppendField
         }
     }
 }
@@ -952,14 +945,8 @@ export default {
             background: var(--contentColor);
             padding-left: rem(30px);
             padding-right: rem(30px);
-            img{
-                width: rem(48px);
-                height: rem(48px);
-                vertical-align: middle;
-
-                margin-right: rem(25px);
-            }
             .label{
+                margin-left: rem(20px);
                 vertical-align: -3px;
                 font-size: rem(36px);
             }
