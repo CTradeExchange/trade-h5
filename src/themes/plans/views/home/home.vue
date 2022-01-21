@@ -48,13 +48,15 @@ export default {
             pageModules.value = res
 
             // 找到行情模块的产品，并开始订阅
-            const productModule = res.find(el => ['productsSwipe', 'productsTimeSharing'].includes(el.tag))
-            if (productModule) {
-                const symbolKeys = Object.entries(productModule.data.product || {}).map(([tradeType, item]) => {
-                    const list = item[customerGroupId.value] || []
-                    return list.map(symbolId => `${symbolId}_${tradeType}`)
-                }).flat()
-                products.push(...symbolKeys)
+            const productModule = res.filter(el => ['productsSwipe', 'productsTimeSharing'].includes(el.tag))
+            if (productModule.length > 0) {
+                productModule.forEach(el => {
+                    const symbolKeys = Object.entries(el.data.product || {}).map(([tradeType, item]) => {
+                        const list = item[customerGroupId.value] || []
+                        return list.map(symbolId => `${symbolId}_${tradeType}`)
+                    }).flat()
+                    products.push(...symbolKeys)
+                })
                 sendSubscribe()
             }
         })

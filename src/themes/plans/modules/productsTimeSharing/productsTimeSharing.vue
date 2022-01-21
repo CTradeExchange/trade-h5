@@ -81,6 +81,12 @@ export default {
             })
         }
 
+        const getQuoteDate = index => {
+            return swiperList[index] && swiperList[index].map(item => {
+                return `${item.symbolId}_${item.tradeType}`
+            })
+        }
+
         // 产品列表数据
         const productList = symbolKeys.map(key => productMap[key]).filter(elem => elem)
         const swiperList = []

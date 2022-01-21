@@ -90,7 +90,7 @@
         </div>
 
         <!-- 侧边栏-切换产品 -->
-        <sidebarProduct v-model='switchProductVisible' :default-trade-type='product.tradeType' @select='onSelectProduct' />
+        <sidebarProduct v-model='switchProductVisible' :default-trade-type='product.tradeType' :hide-trade-type='plansLen<=1' @select='onSelectProduct' />
     </div>
 </template>
 
@@ -172,6 +172,14 @@ export default {
         const pendingWarn = computed(() => pendingRef.value?.warn)
         const product = computed(() => store.getters.productActived)
         const customerInfo = computed(() => store.state._user.customerInfo)
+        const plansLen = computed(() => {
+            const userProductCategory = store.getters.userProductCategory
+            let arr = Object.keys(userProductCategory)
+            arr = arr.filter(el => {
+                return userProductCategory[el]?.find(o => o.listByUser?.length)
+            })
+            return arr.length
+        })
         const { bizType, account, findProductInCategory, switchProduct } = hooks(state)
         const { dealModeShowMap } = toolHooks()
         const productSwitchHistory = {} // 顶部玩法类型切换记录
@@ -398,6 +406,7 @@ export default {
             dealModeShowMap,
             productTradeType,
             onSelectProduct,
+            plansLen,
             account,
             roderRecordRef,
             pendingRef,
