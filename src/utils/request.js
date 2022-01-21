@@ -8,7 +8,7 @@ let router = null
 export const setRouter = r => (router = r)
 
 // const baseURL = 'http://18.162.240.170:10000/cats-gateway'
-const realApiDomain = apiDomain && apiDomain.startsWith('http') ? apiDomain : 'https:' + apiDomain
+const realApiDomain = apiDomain && apiDomain.startsWith('http') ? apiDomain : apiDomain
 const baseURL = `${realApiDomain}/cats-gateway`
 const development = process.env.NODE_ENV === 'development'
 

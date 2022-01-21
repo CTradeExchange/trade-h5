@@ -89,3 +89,61 @@ export function confirmFundRedeem (data) {
         data
     })
 }
+/* 基金相关接口 */
+
+/* 基金详情 */
+export function getFundInfo (data) {
+    return request({
+        url: '/global/config.app.AppSymbolDubboService.getFundInfo',
+        method: 'post',
+        data
+    })
+}
+
+/* 分页获取基金产品列表 */
+export function findFundPage (data) {
+    return request({
+        url: '/global/config.app.AppSymbolDubboService.findFundPage',
+        method: 'post',
+        data
+    })
+}
+
+/* 基金净值涨跌比 */
+export function fundNetValueChangeQuote (data) {
+    return request({
+        url: '/global/report.app.ReportDatadDubboService.fundNetValueChangeQuote',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
+/* 客户赎回基金 */
+export function fundRedeem (data) {
+    return request({
+        url: '/global/fund.app.FundRedeemAppDubboService.createFundRedeem',
+        method: 'post',
+        data
+    })
+}
+
+/* 客户申购基金 */
+export function fundApply (data) {
+    return request({
+        url: '/global/fund.app.FundApplyAppDubboService.apply',
+        method: 'post',
+        data
+    })
+}
+
+/* 客户申购-计算手续费、份额 */
+export function fundCalcApplyShares (data) {
+    return request({
+        url: '/global/fund.app.FundApplyAppDubboService.calcApplyShares',
+        method: 'post',
+        data
+    })
+}

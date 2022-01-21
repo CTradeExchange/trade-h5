@@ -353,3 +353,26 @@ export function hideMobileInfo (mobile) {
         return mobile
     }
 }
+
+function isElement (node) {
+    const ELEMENT_NODE_TYPE = 1
+    return (
+        node.tagName !== 'HTML' &&
+    node.tagName !== 'BODY' &&
+    node.nodeType === ELEMENT_NODE_TYPE
+    )
+}
+// 获取父层的滚动DOM
+export function getScrollParent (el, root) {
+    let node = el
+    const overflowScrollReg = /scroll|auto/i
+    while (node && node !== root && isElement(node)) {
+        const { overflowY } = window.getComputedStyle(node)
+        if (overflowScrollReg.test(overflowY)) {
+            return node
+        }
+        node = node.parentNode
+    }
+
+    return root
+}

@@ -25,7 +25,7 @@
                 <!-- <suspense>
 
                 </suspense> -->
-                <fundInformation />
+                <fundInformation :fund-id='product.fundId' />
             </van-tab>
         </van-tabs>
     </div>

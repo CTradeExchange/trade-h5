@@ -30,7 +30,6 @@ const imgWidth = ref(parseFloat(props.size) + 'px')
 .currencyIcon{
     display: inline-block;
     width: v-bind(imgWidth);
-    margin-right: .2em;
     vertical-align: middle;
 }
 </style>

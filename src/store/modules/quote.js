@@ -1,4 +1,5 @@
-import { findSymbolBaseInfoList, querySymbolInfo, getEquityPremiumRate, findFundPage } from '@/api/trade'
+import { findSymbolBaseInfoList, querySymbolInfo, getEquityPremiumRate } from '@/api/trade'
+import { findFundPage, fundNetValueChangeQuote, getFundInfo } from '@/api/fund'
 import { toFixed } from '@/utils/calculation'
 import { vue_set, assign } from '@/utils/vueUtil.js'
 import { sessionSet, sessionGet } from '@/utils/util.js'
@@ -52,6 +53,7 @@ export default {
         curTradeType: '', // 资产页面当前选中的玩法id
         deepthDigits: '',
         fundProductList: [], // 基金产品列表
+        fundInfo: null, // 当前操作的基金产品
     },
     getters: {
         // 用户自选列表
@@ -254,7 +256,16 @@ export default {
         },
         // 更新单个基金产品信息
         Update_fundProduct (state, data) {
-            // state.fundProductList = data
+            if (state.fundInfo === null) {
+                state.fundInfo = data
+            } else {
+                Object.assign(state.fundInfo, data)
+            }
+
+            if (!data?.fundId) return false
+            const fundProduct = state.fundProductList.find(el => el.fundId === data.fundId)
+            if (!fundProduct) return false
+            Object.assign(fundProduct, data)
         },
     },
     actions: {
@@ -335,23 +346,27 @@ export default {
             }
         },
         // 基金产品的实时净值和溢价率
-        queryEquityPremiumRate ({ dispatch, commit, state, rootState, rootGetters }, { symbolId, tradeType }) {
+        queryEquityPremiumRate ({ dispatch, commit, state, rootState, rootGetters }, { symbolId, currencyCode }) {
             const params = {
-                symbolId: Number(symbolId),
-                tradeType: Number(tradeType),
+                symbolId: symbolId ? Number(symbolId) : undefined,
+                currencyCode: currencyCode,
                 customerGroupId: rootGetters.customerGroupId,
             }
 
             return getEquityPremiumRate(params).then((res) => {
                 if (res.check() && res.data) {
                     const { data } = res
-                    commit('Update_product', {
-                        fundCurrency: data.currency,
-                        currentNav: data.currentNav,
-                        premiumRate: data.premiumRate,
-                        symbolId: params.symbolId,
-                        tradeType: params.tradeType,
-                    })
+                    if (symbolId) {
+                        commit('Update_product', {
+                            fundCurrency: data.currency,
+                            currentNav: data.currentNav,
+                            premiumRate: data.premiumRate,
+                            symbolId: params.symbolId,
+                            tradeType: 5,
+                        })
+                    } else if (currencyCode) {
+
+                    }
                 }
                 return res.data
             })
@@ -368,5 +383,28 @@ export default {
                 return res.data
             })
         },
+        // 获取某个基金产品净值、市场价格等数据
+        fundNetValue ({ dispatch, commit, state, rootState, rootGetters }, params) {
+            return fundNetValueChangeQuote(params).then(res => {
+                if (res.check() && res.data) {
+                    commit('Update_fundProduct', {
+                        ...res.data,
+                        fundId: params.fundId,
+                    })
+                }
+                return res
+            })
+        },
+        // 获取基金产品详情
+        queryFundInfo ({ dispatch, commit, state, rootState, rootGetters }, fundId) {
+            commit('Update_fundProduct', null)
+            fundId = parseInt(fundId)
+            return getFundInfo({ fundId }).then(res => {
+                if (res.check() && res.data) {
+                    commit('Update_fundProduct', res.data)
+                }
+                return res
+            })
+        }
     }
 }

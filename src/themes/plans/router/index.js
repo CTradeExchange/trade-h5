@@ -211,9 +211,41 @@ const routes = [
     {
         path: '/transfer',
         name: 'Transfer',
-        component: () => import(/* webpackChunkName: "record" */ '../views/transfer/transfer.vue'),
+        component: () => import(/* webpackChunkName: "transfer" */ '../views/transfer/transfer.vue'),
         meta: {
             title: 'route.transfer'
+        }
+    },
+    {
+        path: '/fundProductList',
+        name: 'FundProductList',
+        component: () => import(/* webpackChunkName: "fundProduct" */ '../views/fundProduct/fundProductList.vue'),
+        meta: {
+            title: 'route.fundProductList'
+        }
+    },
+    {
+        path: '/fundProductInfo',
+        name: 'FundProductInfo',
+        component: () => import(/* webpackChunkName: "fundProduct" */ '../views/fundProduct/fundProductInfo.vue'),
+        meta: {
+            title: 'route.fundProductInfo'
+        }
+    },
+    {
+        path: '/fundApply',
+        name: 'FundApply',
+        component: () => import(/* webpackChunkName: "fundProduct" */ '../views/fundOrder/fundApply.vue'),
+        meta: {
+            title: 'fundInfo.buy'
+        }
+    },
+    {
+        path: '/fundRedeem',
+        name: 'FundRedeem',
+        component: () => import(/* webpackChunkName: "fundProduct" */ '../views/fundOrder/fundRedeem.vue'),
+        meta: {
+            title: 'fundInfo.sell'
         }
     },
     { path: '/:pathMatch(.*)*', redirect: { name: 'Mine' } },

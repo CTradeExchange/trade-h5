@@ -1,5 +1,5 @@
 <template>
-    <div class=''>
+    <div>
         <van-tabs v-model:active='active' class='fundInfoTab' type='card'>
             <van-tab :title='$t("fundInfo.baseInfo")'>
                 <baseVue v-if='active===0' />
@@ -15,11 +15,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { provide, ref, defineProps } from 'vue'
 import baseVue from './base.vue'
 import performanceVue from './performance.vue'
 import realtimeInvestCompose from './realtimeInvestCompose.vue'
+const props = defineProps({
+    fundId: [String, Number]
+})
 const active = ref(0)
+provide('fundId', props.fundId)
 </script>
 
 <style lang="scss" scoped>
