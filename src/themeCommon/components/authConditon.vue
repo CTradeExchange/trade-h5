@@ -52,11 +52,16 @@
 
                 <div v-if="item.showType === 'face_photo'">
                     <van-cell
-                        is-link
-                        :label="platform === 'web' ? $t('faceAuth.faceTip') : ''"
+                        :is-link="platform === 'web' ? false: true"
                         :title='item.elementName'
                         @click='toFaceAuth'
-                    />
+                    >
+                        <template #label>
+                            <span v-if="platform === 'web'" :style="'color:' + $style.warn">
+                                {{ $t('faceAuth.faceTip') }}
+                            </span>
+                        </template>
+                    </van-cell>
                 </div>
                 <div v-if="item.showType=== 'date'">
                     <van-field
@@ -72,7 +77,7 @@
                 </div>
             </div>
         </div>
-        <van-button class='confirm-btn' @click='onConfirm'>
+        <van-button v-if='!hideSubmitBtn' class='confirm-btn' @click='onConfirm'>
             {{ $t('common.submit') }}
         </van-button>
     </div>
@@ -153,9 +158,12 @@ export default {
             minDate: new Date(1920, 0, 1),
             maxDate: new Date(),
             datePickerVal: new Date(),
-            checkedCode: ''
+            checkedCode: '',
+            hasFacePhoto: false
 
         })
+
+        const hideSubmitBtn = computed(() => !isEmpty(state.hasFacePhoto) && props.platform === 'web')
         const columnsFields = { text: 'name' }
 
         const getConditon = () => {
@@ -175,8 +183,8 @@ export default {
                     state.areaShow = false
 
                     if (state.elementList.length > 0) {
-                        const hasFacePhoto = state.elementList.find(el => el.elementCode === 'face_photo')
-                        if (!isEmpty(hasFacePhoto) && platform === 'h5') {
+                        state.hasFacePhoto = state.elementList.find(el => el.elementCode === 'face_photo')
+                        if (!isEmpty(state.hasFacePhoto) && props.platform === 'h5') {
                             router.push({
                                 path: '/faceDetect',
                                 query: {
@@ -412,7 +420,6 @@ export default {
 
         // 跳转人脸识别
         const toFaceAuth = () => {
-            debugger
             if (props.platform === 'web') return
             router.push({
                 path: '/faceDetect',
@@ -437,7 +444,8 @@ export default {
             imgTypeVis,
             dateConfirm,
             handleDateClick,
-            toFaceAuth
+            toFaceAuth,
+            hideSubmitBtn
         }
     }
 }
