@@ -393,7 +393,7 @@ export default {
     right: -60px;
     top: -55px;
     overflow: hidden;
-    opacity: 0.1;
+    opacity: 0.05;
     img{
         width: 320px;
     }

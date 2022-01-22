@@ -153,7 +153,7 @@ export default {
             const lang = locale.value
             const wpCompanyInfo = store.state._base.wpCompanyInfo || {}
             const protocol = wpCompanyInfo[lang === 'zh-CN' ? 'instructions_zh' : 'instructions_en']
-            return protocol ? unescape(protocol) : ''
+            return protocol ? decodeURIComponent(unescape(protocol)) : ''
         })
         // 注册页banner
         const registerBanner = computed(() => store.state._base.wpCompanyInfo?.registerBanner)

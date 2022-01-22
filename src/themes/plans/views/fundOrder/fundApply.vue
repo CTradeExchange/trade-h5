@@ -106,7 +106,7 @@ const touchCurrency = () => {
 // 提交申购或者赎回
 const submitHandler = () => {
     submitFundApply({
-        fundId,
+        fundId: parseInt(fundId),
         amountPay: unref(amountPay),
         currencyPay: unref(activeCurrency),
     }).then(res => {

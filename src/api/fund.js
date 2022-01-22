@@ -120,9 +120,6 @@ export function getFundInfo (data) {
     return request({
         url: '/global/config.app.AppSymbolDubboService.getFundInfo',
         method: 'post',
-        headers: {
-            version: '0.0.1',
-        },
         data
     })
 }
@@ -132,9 +129,6 @@ export function findFundPage (data) {
     return request({
         url: '/global/config.app.AppSymbolDubboService.findFundPage',
         method: 'post',
-        headers: {
-            version: '0.0.1',
-        },
         data
     })
 }

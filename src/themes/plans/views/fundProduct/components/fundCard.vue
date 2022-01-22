@@ -11,7 +11,7 @@
                 {{ fund.fundType }}
             </span>
             <span class='operation'>
-                {{ fund.operationMode ? $t('fundInfo.operationModeValue1') : $t('fundInfo.operationModeValue2') }}
+                {{ fund.operationMode===1 ? $t('fundInfo.operationModeValue1') : $t('fundInfo.operationModeValue2') }}
             </span>
         </div>
         <div class='desc'>
@@ -116,6 +116,7 @@ defineProps({
     margin-top: 5px;
     line-height: 1.4;
     font-size: rem(28px);
+    word-break: break-word;
 }
 .valueList{
     background: var(--contentColor);
@@ -159,13 +160,15 @@ defineProps({
                 background: var(--quoteFallBg);
             }
             &.up::after{
-                border-color: var(--riseColor) transparent transparent transparent;
+                border-width: 0 4px 7px 4px;
+                border-color: transparent transparent var(--riseColor)  transparent;
             }
             &.down{
                 color: var(--fallColor);
                 background: var(--quoteRiseBg);
             }
             &.down::after{
+                border-width: 7px 4px 0 4px;
                 border-color: var(--fallColor) transparent transparent transparent;
             }
         }

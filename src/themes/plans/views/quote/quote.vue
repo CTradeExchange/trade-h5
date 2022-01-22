@@ -19,7 +19,7 @@
         </div>
 
         <!-- etf banner -->
-        <a v-if='categoryType===2 && tradeType==="5"' class='etfBanner' href='javascript:;' @click="$router.push('/fundProductList')">
+        <a v-if='categoryType===2 && tradeType==="5"' class='etfBanner' href='javascript:;' @click='toETF'>
             <img alt='' src='/images/ETF_banner.png' />
         </a>
 
@@ -82,7 +82,8 @@ export default {
             const userProductCategory = store.getters.userProductCategory
             let arr = Object.keys(userProductCategory)
             arr = arr.filter(el => {
-                return userProductCategory[el]?.find(o => o.listByUser?.length)
+                return true
+                // return userProductCategory[el]?.find(o => o.listByUser?.length)
             })
             return arr.length
         })
@@ -115,6 +116,12 @@ export default {
         const openSearch = () => {
             router.push(`/productSearch?tradeType=${tradeType.value}`)
         }
+
+        // 进入基金产品列表页面
+        const toETF = () => {
+            store.commit('del_cacheViews', 'FundProductList')
+            router.push('/fundProductList')
+        }
         return {
             openSearch,
             categoryType,
@@ -127,6 +134,7 @@ export default {
             tabClick,
             handleTradeType,
             tradeType,
+            toETF,
             showSidebar
         }
     }
@@ -138,6 +146,7 @@ export default {
 .quoteWrap {
     display: flex;
     flex: 1;
+    height: 100%;
     flex-direction: column;
     justify-content: flex-start;
     width: 100%;
@@ -199,7 +208,7 @@ export default {
 }
 .etfBanner{
     display: block;
-    padding: rem(30px) rem(20px);
+    padding: 4px 0;
     background: var(--contentColor);
     img{
         display: block;
