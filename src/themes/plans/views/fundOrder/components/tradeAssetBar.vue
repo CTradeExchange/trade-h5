@@ -15,7 +15,14 @@
                 <span v-if='readonly'>
                     {{ modelValue }}
                 </span>
-                <input v-else :placeholder='placeholder' type='text' :value='modelValue' @input='inputHandler' />
+                <input
+                    v-else
+                    :placeholder='placeholder'
+                    type='text'
+                    :value='modelValue'
+                    @blur='onBlur'
+                    @input='onInput'
+                />
             </div>
         </div>
     </div>
@@ -23,6 +30,7 @@
 
 <script setup>
 import CurrencyIcon from '@/components/currencyIcon.vue'
+import { getDecimalNum, toFixed } from '@/utils/calculation'
 import { debounce } from '@/utils/util'
 
 import { ref, defineProps, defineEmits, computed } from 'vue'
@@ -32,6 +40,7 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    digits: [String, Number],
     label: String,
     currency: String,
     placeholder: String,
@@ -42,6 +51,32 @@ const emit = defineEmits(['input', 'touchCurrency', 'update:modelValue'])
 // 切换币种
 const chooseCurrency = () => {
     if (props.canChooseCurrency) emit('touchCurrency')
+}
+
+// 输入事件控制
+const onInput = (e) => {
+    let newval = e.target.value
+    if (/[^0-9\.]/.test(newval)) { // 只能输入数字
+        newval = newval.replace(/[^0-9\.]/g, '')
+        e.target.value = newval
+    }
+    const digits = props.digits
+    const reg = new RegExp('^\\d*(\\.?\\d{0,' + digits + '})', 'g')
+    if (getDecimalNum(newval) > digits) {
+        newval = (newval.match(reg) && newval.match(reg)[0]) || ''
+        if (digits === 0 && newval.endsWith('.')) newval = newval.replace(/\./g, '') // 浏览器不允许给number输入框输入'1.'字符串
+        e.target.value = newval
+    }
+
+    inputHandler(e)
+}
+// 离开输入框焦点再次验证
+const onBlur = (e) => {
+    let value = e.target.value
+    if (value === props.modelValue) return false
+    const digits = props.digits
+    value = value ? toFixed(value, digits) : value
+    inputHandler(e)
 }
 
 // 输入事件，防抖

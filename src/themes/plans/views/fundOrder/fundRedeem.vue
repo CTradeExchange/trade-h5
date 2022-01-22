@@ -15,7 +15,6 @@
                 :currency='fund.shareTokenCode'
                 :label=" $t('fundInfo.inputRedeemShares')"
                 :placeholder='payPlaceholder'
-                @input='calcApplyShares'
             />
             <p class='iconArrowWrapper'>
                 <i class='iconArrowDown icon_paixuxiaojiantou_xiangxia'></i>
@@ -30,19 +29,12 @@
                 @touchCurrency='touchCurrency'
             />
             <div class='fee'>
-                <p>
-                    <span class='muted'>
-                        {{ $t('fundInfo.realtimeJZ') }}：
-                    </span>
-                    {{ calcSharesNet || '--' }}
-                    {{ activeCurrency }}
-                </p>
+                <p></p>
                 <p>
                     <span class='mleft muted'>
-                        {{ $t('fundInfo.fundApplyFeeCalc') }}：
+                        {{ $t('fundInfo.redeemFeeRate') }}：
                     </span>
-                    {{ calcApplyFee || '--' }}
-                    {{ activeCurrency }}
+                    {{ redeemFeeRate || '--' }}
                 </p>
             </div>
         </div>
@@ -63,34 +55,41 @@ import TradeAssetBar from './components/tradeAssetBar.vue'
 import loadingVue from '@/components/loading.vue'
 import { orderHook } from './orderHook'
 import { computed, unref, ref } from 'vue'
+import { toFixed } from '@/utils/calculation'
+import { useRoute } from 'vue-router'
+import { Dialog } from 'vant'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n({ useScope: 'global' })
+const route = useRoute()
+const { fundId } = route.query
 
 const {
     pageTitle,
     fund,
+    accountList,
     loading,
-    calcApplyShares,
     submitFundRedeem,
     selectShow,
     selectActions,
     onSelect,
     activeCurrency,
-    curAccount,
-    calcApplyFee,
-    calcShares,
-    calcSharesNet,
 } = orderHook()
 
-// 支付资产输入框的placeholder
+const fundAccount = computed(() => accountList.value?.find(el => el.currency === fund.value?.shareTokenCode))
+const redeemFeeRate = computed(() => {
+    return toFixed(fund.value?.redemptionFeeProportion * 100, 2) + '%'
+})
+
+// 赎回份额输入框的placeholder
 const payPlaceholder = computed(() => {
-    const text = '可用' + curAccount.value?.withdrawAmount + curAccount.value?.currency
-    return unref(curAccount) ? text : '--'
+    const text = t('fundInfo.canRedeemMax') + fundAccount.value?.withdrawAmount + fundAccount.value?.currency
+    return unref(fundAccount) ? text : '--'
 })
 const amountPay = ref('')
 
 // 份额输入框的placeholder
 const sharesPlaceholder = computed(() => {
-    const text = '≈ ' + calcShares.value + fund.value.shareTokenCode
-    return unref(calcShares) ? text : '--'
+    return t('fundInfo.redeemPlaceholder')
 })
 const touchCurrency = () => {
     selectShow.value = true
@@ -99,10 +98,22 @@ const touchCurrency = () => {
 // 提交申购或者赎回
 const submitHandler = () => {
     submitFundRedeem({
+        fundId,
         shares: unref(amountPay),
         currencyCode: unref(activeCurrency),
+    }).then(res => {
+        if (res?.check && res.check()) {
+            amountPay.value = ''
+            Dialog.alert({
+                title: t('fundInfo.redeemSubmiteed'),
+                message: t('fundInfo.redeemSubmiteedDesc'),
+            }).then(() => {
+                // on close
+            })
+        }
     })
 }
+
 </script>
 
 <style lang="scss" scoped>

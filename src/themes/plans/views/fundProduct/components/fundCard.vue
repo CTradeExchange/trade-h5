@@ -1,7 +1,7 @@
 <template>
     <section class='fundCard'>
         <figure class='figureImg'>
-            <CurrencyIcon class='currencyImg' :currency='fund.shareTokenCode' size='50' />
+            <CurrencyIcon class='currencyImg' :currency='fund.shareTokenCode' size='60' />
             <h2 class='fundCurrency'>
                 {{ fund.fundName }}
             </h2>
@@ -19,6 +19,9 @@
         </div>
         <ul class='valueList'>
             <li class='item'>
+                <i class='hours24' :class="[parseInt(fund.netValueChangeQuote)<0 ? 'down':'up']">
+                    24H
+                </i>
                 <p class='muted'>
                     {{ $t('fundInfo.realtimeJZ') }}({{ fund.currency }})
                 </p>
@@ -30,6 +33,9 @@
                 </p>
             </li>
             <li class='item'>
+                <i class='hours24' :class="[parseInt(fund.netValueChangeQuote)<0 ? 'down':'up']">
+                    24H
+                </i>
                 <p class='muted'>
                     {{ $t('fundInfo.marketPrice') }}({{ fund.currency }})
                 </p>
@@ -79,7 +85,7 @@ defineProps({
 }
 .figureImg{
     position: relative;
-    padding-top: 10px;
+    padding-top: 20px;
     .currencyImg{
         position: absolute;
         top: -40px;
@@ -89,20 +95,19 @@ defineProps({
     .fundCurrency{
         margin-top: rem(20px);
         text-align: center;
-        font-size: rem(40px);
+        font-size: rem(50px);
     }
 }
 .fundType{
     margin-top: rem(78px);
-    .title{
-        font-size: rem(32px);
-        font-weight: bold;
-    }
+    text-align: center;
+    font-size: rem(32px);
+    font-weight: bold;
     .operation{
         display: inline-block;
         margin-left: rem(20px);
-        border-left: 1px solid var(--minorColor);
-        color: var(--minorColor);
+        // border-left: 1px solid var(--minorColor);
+        // color: var(--minorColor);
         padding-left: rem(20px);
         line-height: 1;
     }
@@ -122,10 +127,48 @@ defineProps({
     grid-row-gap: rem(20px);
     grid-column-gap: rem(20px);
     .item{
+        position: relative;
         background: var(--bgColor);
         border-radius: rem(10px);
         padding: rem(15px) rem(20px);
         line-height: 1.5;
+        .hours24{
+            position: absolute;
+            right: rem(15px);
+            top: rem(18px);
+            background: var(--placeholdColor);
+            font-size: rem(22px);
+            padding:0 rem(26px) 0 rem(6px);
+            border-radius: rem(6px);
+            color: var(--color);
+
+            &::after{
+                content: '';
+                position: absolute;
+                right: rem(6px);
+                top: rem(8px);
+                width: 0;
+                height: 0;
+                border: 8px solid var(--normalColor);
+                border-radius: 2px;
+                border-width: 7px 4px 0 4px;
+                border-color: var(--normalColor) transparent transparent transparent;
+            }
+            &.up{
+                color: var(--riseColor);
+                background: var(--quoteFallBg);
+            }
+            &.up::after{
+                border-color: var(--riseColor) transparent transparent transparent;
+            }
+            &.down{
+                color: var(--fallColor);
+                background: var(--quoteRiseBg);
+            }
+            &.down::after{
+                border-color: var(--fallColor) transparent transparent transparent;
+            }
+        }
     }
     .mleft5{
         margin-left: 5px;
