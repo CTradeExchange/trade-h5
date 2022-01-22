@@ -8,8 +8,8 @@
             width='520px'
         >
             <el-table v-loading='isLoading' border :cell-style="{ background:'none' }" :data='tableData'>
-                <el-table-column align='center' :label="$t('fundManager.ransom.totalLot')" prop='lot' />
-                <el-table-column align='center' :label="$t('fundManager.ransom.totalMoney')" prop='amount' />
+                <el-table-column align='center' :label="$t('fundManager.ransom.totalLot')" prop='sharesTotal' />
+                <el-table-column align='center' :label="$t('fundManager.ransom.totalMoney')" prop='amountTotal' />
             </el-table>
             <template #footer v-if='!isLoading'>
                 <button v-loading='isSubmit' class='confirm-btn' @click='onConfirm'>
@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { getFundRedeemInfo, confirmFundRedeem } from '@/api/fund'
+import { getFundRedeemMoney, confirmFundRedeem } from '@/api/fund'
 import { ref, unref, computed, defineEmits, defineExpose } from 'vue'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
@@ -43,27 +43,29 @@ const isSubmit = ref(false)
 const ids = ref([])
 // 列表数据
 const tableData = ref([])
-tableData.value.push({
-    lot: '1000USDT',
-    amount: '1000'
-})
 
-// 获取基金产品赎回信息
-const queryFundRedeemInfo = () => {
+// 获取基金产品赎回总金额
+const queryFundRedeemMoney = () => {
     isLoading.value = true
-    getFundRedeemInfo({
-        customerNo: customerInfo.customerNo,
+    getFundRedeemMoney({
         fundIdList: ids.value
     }).then(res => {
         isLoading.value = false
+        if (res.check()) {
+            show.value = true
+            const { data } = res
+            tableData.value = [{
+                sharesTotal: data.sharesTotal,
+                amountTotal: data.amountTotal
+            }]
+        }
     })
 }
 // 打开弹窗
-const open = (ids = []) => {
-    show.value = true
-    ids.value = ids
-    // 获取基金产品赎回信息
-    queryFundRedeemInfo()
+const open = (list = []) => {
+    ids.value = list
+    // 获取基金产品赎回总金额
+    queryFundRedeemMoney()
 }
 // 关闭弹窗
 const close = () => {
@@ -73,16 +75,13 @@ const close = () => {
 const onConfirm = () => {
     isSubmit.value = true
     confirmFundRedeem({
-        customerNo: customerInfo.customerNo,
         fundIdList: ids.value
     }).then(res => {
         isSubmit.value = false
         if (res.check()) {
-            setTimeout(() => {
-                show.value = false
-                Toast(t('c.handleSuccess'))
-                emit('confirm')
-            }, 2000)
+            show.value = false
+            Toast(t('c.handleSuccess'))
+            emit('confirm')
         }
     })
 }

@@ -90,8 +90,8 @@ export function getFundRedeemList (data) {
     })
 }
 
-/* 查询基金产品赎回信息 */
-export function getFundRedeemInfo (data) {
+/* 获取基金产品赎回总金额 */
+export function getFundRedeemMoney (data) {
     return request({
         url: '/global/fund.app.FundRedeemAppDubboService.calShares',
         method: 'post',

@@ -6,7 +6,7 @@
             </div>
             <div class='item'>
                 <el-select
-                    v-model='searchParams.custumerCompanyId'
+                    v-model='searchParams.customerCompanyId'
                     clearable
                     filterable
                     :placeholder="$t('fundManager.buy.woName')"
@@ -15,7 +15,7 @@
                 </el-select>
             </div>
             <div class='item'>
-                <el-input v-model='searchParams.custumerSelfNo' clearable :placeholder="$t('fundManager.buy.customerNo')" />
+                <el-input v-model='searchParams.customerSelfNo' clearable :placeholder="$t('fundManager.buy.customerNo')" />
             </div>
             <div class='item'>
                 <el-select
@@ -43,7 +43,7 @@
             </button>
         </div>
     </div>
-    <div class='body-case'>
+    <div v-loading='isLoading' class='body-case'>
         <el-table
             ref='tableRef'
             :cell-style="{ background:'none' }"
@@ -59,8 +59,8 @@
             <el-table-column :label="$t('fundManager.buy.payCurrency')" :min-width='minWidth' prop='currencyPay' />
             <el-table-column :label="$t('fundManager.buy.netWorth')" :min-width='minWidth' prop='sharesNet' />
             <el-table-column :label="$t('fundManager.buy.status')" :min-width='minWidth'>
-                <template #default>
-                    <span>{{ $t('fundManager.buy.waitExecute') }}</span>
+                <template #default='scope'>
+                    <span>{{ $t('fundManager.buyStatus.' + scope.row.executeStatus) }}</span>
                 </template>
             </el-table-column>
             <el-table-column :label="$t('fundManager.buy.applyTime')" :min-width='156' prop='createTime'>
@@ -104,6 +104,8 @@ import { onMounted, ref, unref, reactive, watch, computed } from 'vue'
 const store = useStore()
 // 用户信息
 const customerInfo = unref(computed(() => store.state._user.customerInfo))
+// 加载状态
+const isLoading = ref(false)
 // 公司列表
 const companyList = ref([])
 // 资产列表
@@ -116,16 +118,16 @@ const buyDialogRef = ref(null)
 const timeRange = ref(null)
 // 搜索参数
 const searchParams = reactive({
-    // 当前登陆的客户编号
-    custumerNo: customerInfo.customerNo,
     // 类型
     type: 1,
+    // 用户组id
+    customerGroupId: customerInfo.customerGroupId,
     // 订单号
     proposalNo: '',
     // 白标名称
-    custumerCompanyId: '',
+    customerCompanyId: '',
     // 客户编号
-    custumerSelfNo: '',
+    customerSelfNo: '',
     // 申购支付资产
     currencyPay: '',
     // 开始时间
@@ -171,14 +173,19 @@ const queryAssetsList = () => {
 // 获取基金申购列表
 const queryApplyList = () => {
     const params = Object.assign({}, searchParams)
+    params.customerSelfNo = params.customerSelfNo ? params.customerSelfNo.split(',') : []
     params.proposalNo = params.proposalNo ? params.proposalNo.split(',') : []
-    params.custumerSelfNo = params.custumerSelfNo ? params.custumerSelfNo.split(',') : []
+    params.customerCompanyId = params.customerCompanyId || null
+    isLoading.value = true
     getFundApplyList(params).then(res => {
+        isLoading.value = false
         if (res.check()) {
             const { data } = res
             tableData.value = data.records
             total.value = data.total
         }
+    }).catch(() => {
+        isLoading.value = false
     })
 }
 // 选择时间
@@ -215,7 +222,8 @@ const selectionChange = (list) => {
 // 打开批量下单弹窗
 const openBuyDialog = () => {
     if (disableBtn.value) return
-    buyDialogRef.value.open()
+    const ids = selectList.value.map(elem => elem.id)
+    buyDialogRef.value.open(ids)
 }
 // 确定批量下单
 const onConfirm = () => {

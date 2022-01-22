@@ -6,7 +6,7 @@
             </div>
             <div class='item'>
                 <el-select
-                    v-model='searchParams.custumerCompanyId'
+                    v-model='searchParams.customerCompanyId'
                     clearable
                     filterable
                     :placeholder="$t('fundManager.ransom.woName')"
@@ -15,7 +15,7 @@
                 </el-select>
             </div>
             <div class='item'>
-                <el-input v-model='searchParams.custumerNoList' clearable :placeholder="$t('fundManager.ransom.customerNo')" />
+                <el-input v-model='searchParams.customerNoList' clearable :placeholder="$t('fundManager.ransom.customerNo')" />
             </div>
             <div class='item'>
                 <el-select
@@ -43,16 +43,30 @@
             </button>
         </div>
     </div>
-    <div class='body-case'>
+    <div v-loading='isLoading' class='body-case'>
         <el-table ref='tableRef' :cell-style="{ background:'none' }" :data='tableData' :empty-text="$t('c.noData')">
-            <el-table-column :label="$t('fundManager.ransom.orderNo')" :min-width='minWidth' prop='orderNo' />
-            <el-table-column :label="$t('fundManager.ransom.woName')" :min-width='minWidth' prop='woName' />
+            <el-table-column :label="$t('fundManager.ransom.orderNo')" :min-width='minWidth' prop='proposalNo' />
+            <el-table-column :label="$t('fundManager.ransom.woName')" :min-width='minWidth' prop='companyName' />
             <el-table-column :label="$t('fundManager.ransom.customerNo')" :min-width='minWidth' prop='customerNo' />
-            <el-table-column :label="$t('fundManager.ransom.lot')" :min-width='minWidth' prop='amount' />
-            <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='minWidth' prop='payCurrency' />
-            <el-table-column :label="$t('fundManager.ransom.status')" :min-width='minWidth' prop='status' />
-            <el-table-column :label="$t('fundManager.ransom.applyTime')" :min-width='156' prop='createTime' />
-            <el-table-column :label="$t('fundManager.ransom.lastTime')" :min-width='156' prop='lastTime' />
+            <el-table-column :label="$t('fundManager.ransom.lot')" :min-width='minWidth' prop='amountRedeem' />
+            <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='minWidth' prop='currencyRedeem' />
+            <el-table-column :label="$t('fundManager.ransom.networth')" :min-width='minWidth' prop='sharesNet' />
+            <el-table-column :label="$t('fundManager.ransom.moneyTotal')" :min-width='minWidth' prop='amountRedeem' />
+            <el-table-column :label="$t('fundManager.ransom.status')" :min-width='minWidth'>
+                <template #default='scope'>
+                    <span>{{ $t('fundManager.ransomStatus.' + scope.row.sharesStatus) }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundManager.ransom.applyTime')" :min-width='156' prop='createTime'>
+                <template #default='scope'>
+                    <span>{{ formatTime(scope.row.createTime) }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundManager.ransom.lastTime')" :min-width='156' prop='updateTime'>
+                <template #default='scope'>
+                    <span>{{ formatTime(scope.row.updateTime) }}</span>
+                </template>
+            </el-table-column>
             <template #empty>
                 <span class='emptyText'>
                     {{ $t('c.noData') }}
@@ -83,6 +97,8 @@ import { onMounted, ref, unref, reactive, computed } from 'vue'
 const store = useStore()
 // 用户信息
 const customerInfo = unref(computed(() => store.state._user.customerInfo))
+// 加载状态
+const isLoading = ref(false)
 // 公司列表
 const companyList = ref([])
 // 资产列表
@@ -91,17 +107,15 @@ const assetsList = ref([])
 const timeRange = ref(null)
 // 搜索参数
 const searchParams = reactive({
-    // 当前登陆的客户编号
-    custumerNo: customerInfo.customerNo,
     // 赎回状态
     sharesStatus: 1,
     // 订单号
     proposalNoList: '',
     // 白标名称
-    custumerCompanyId: null,
+    customerCompanyId: null,
     // 客户编号
-    custumerNoList: '',
-    // 申购支付资产
+    customerNoList: '',
+    // 客户接受资产
     currencyRedeem: '',
     // 开始时间
     startTime: null,
@@ -114,19 +128,7 @@ const searchParams = reactive({
 })
 // 列表数据
 const tableData = ref([])
-for (let i = 0; i < 10; i++) {
-    tableData.value.push({
-        orderNo: '4498556551',
-        woName: '辉煌环球',
-        customerNo: '984554',
-        amount: '2000USDT',
-        payCurrency: 'USDT',
-        netWorth: '10USDT',
-        status: '待确认',
-        createTime: '2022-01-19 10:00:00',
-        lastTime: '2022-01-20 10:00:00'
-    })
-}
+
 // 列表最小宽度
 const minWidth = ref(130)
 // 列表总数据量
@@ -149,11 +151,19 @@ const queryAssetsList = () => {
 // 获取基金赎回列表
 const queryFundRedeemList = () => {
     const params = Object.assign({}, searchParams)
-    params.custumerCompanyId = params.custumerCompanyId || null
     params.proposalNoList = params.proposalNoList ? params.proposalNoList.split(',') : null
-    params.custumerNoList = params.custumerNoList ? params.custumerNoList.split(',') : null
+    params.customerNoList = params.customerNoList ? params.customerNoList.split(',') : null
+    params.customerCompanyId = params.customerCompanyId || null
+    isLoading.value = true
     getFundRedeemList(params).then(res => {
-
+        isLoading.value = false
+        if (res.check()) {
+            const { data } = res
+            tableData.value = data.records
+            total.value = data.total
+        }
+    }).catch(() => {
+        isLoading.value = false
     })
 }
 // 选择时间

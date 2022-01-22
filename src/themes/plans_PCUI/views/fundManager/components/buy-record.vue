@@ -9,7 +9,7 @@
             </div>
             <div class='item'>
                 <el-select
-                    v-model='searchParams.custumerCompanyId'
+                    v-model='searchParams.customerCompanyId'
                     clearable
                     filterable
                     :placeholder="$t('fundManager.buy.woName')"
@@ -18,7 +18,7 @@
                 </el-select>
             </div>
             <div class='item'>
-                <el-input v-model='searchParams.custumerSelfNo' clearable :placeholder="$t('fundManager.buy.customerNo')" />
+                <el-input v-model='searchParams.customerSelfNo' clearable :placeholder="$t('fundManager.buy.customerNo')" />
             </div>
             <div class='item'>
                 <el-select
@@ -46,31 +46,36 @@
             </button>
         </div>
     </div>
-    <div class='body-case'>
+    <div v-loading='isLoading' class='body-case'>
         <el-table ref='tableRef' :cell-style="{ background:'none' }" :data='tableData' :empty-text="$t('c.noData')">
             <el-table-column :label="$t('fundManager.buy.orderNo')" :min-width='minWidth' prop='proposalNo' />
-            <el-table-column :label="$t('fundManager.buy.executeNo')" :min-width='minWidth' prop='executeId' />
+            <el-table-column :label="$t('fundManager.buy.executeNo')" :min-width='minWidth' prop='executeId'>
+                <template #default='scope'>
+                    <span>{{ scope.row.executeId || '--' }}</span>
+                </template>
+            </el-table-column>
             <el-table-column :label="$t('fundManager.buy.woName')" :min-width='minWidth' prop='companyName' />
             <el-table-column :label="$t('fundManager.buy.customerNo')" :min-width='minWidth' prop='customerNo' />
             <el-table-column :label="$t('fundManager.buy.money')" :min-width='minWidth' prop='amountPay' />
             <el-table-column :label="$t('fundManager.buy.payCurrency')" :min-width='minWidth' prop='currencyPay' />
             <el-table-column :label="$t('fundManager.buy.netWorth')" :min-width='minWidth' prop='sharesNet' />
             <el-table-column :label="$t('fundManager.buy.status')" :min-width='minWidth'>
-                <template #default>
-                    <span>{{ $t('fundManager.buy.alreadyExecute') }}</span>
+                <template #default='scope'>
+                    <span>{{ $t('fundManager.buyStatus.' + scope.row.executeStatus) }}</span>
                 </template>
             </el-table-column>
             <el-table-column :label="$t('fundManager.buy.standard')" :min-width='minWidth' prop='standard'>
                 <template #default='scope'>
                     <el-popover
-                        :content='scope.row.standard'
-                        placement='bottom'
+                        :content='formatStandard(scope.row.executeList)'
+                        placement='bottom-start'
+                        :show-arrow='false'
                         trigger='hover'
                         :width='200'
                     >
                         <template #reference>
                             <span class='standard-btn'>
-                                {{ scope.row.standard }}
+                                {{ formatStandard(scope.row.executeList) }}
                             </span>
                         </template>
                     </el-popover>
@@ -116,6 +121,8 @@ import { onMounted, ref, unref, reactive, computed } from 'vue'
 const store = useStore()
 // 用户信息
 const customerInfo = unref(computed(() => store.state._user.customerInfo))
+// 加载状态
+const isLoading = ref(false)
 // 公司列表
 const companyList = ref([])
 // 资产列表
@@ -124,18 +131,18 @@ const assetsList = ref([])
 const timeRange = ref(null)
 // 搜索参数
 const searchParams = reactive({
-    // 当前登陆的客户编号
-    custumerNo: customerInfo.customerNo,
     // 类型
     type: 2,
+    // 用户组id
+    customerGroupId: customerInfo.customerGroupId,
     // 订单号
     proposalNo: '',
     // 申购执行id
     executeId: '',
     // 白标名称
-    custumerCompanyId: '',
+    customerCompanyId: '',
     // 客户编号
-    custumerSelfNo: '',
+    customerSelfNo: '',
     // 申购支付资产
     currencyPay: '',
     // 开始时间
@@ -173,15 +180,29 @@ const queryAssetsList = () => {
 const queryApplyList = () => {
     const params = Object.assign({}, searchParams)
     params.proposalNo = params.proposalNo ? params.proposalNo.split(',') : []
-    params.custumerSelfNo = params.custumerSelfNo ? params.custumerSelfNo.split(',') : []
+    params.customerSelfNo = params.customerSelfNo ? params.customerSelfNo.split(',') : []
     params.executeId = params.executeId ? params.executeId.split(',') : []
+    params.customerCompanyId = params.customerCompanyId || null
+    isLoading.value = false
     getFundApplyList(params).then(res => {
+        isLoading.value = false
         if (res.check()) {
             const { data } = res
             tableData.value = data.records
             total.value = data.total
         }
+    }).catch(() => {
+        isLoading.value = false
     })
+}
+// 格式化下单执行标准数据
+const formatStandard = (list) => {
+    if (!list) return '--'
+    let result = ''
+    list.map(elem => {
+        result += `${elem.symbolName} ${elem.rate}%、`
+    })
+    return result.substring(0, result.length - 1)
 }
 // 选择时间
 const selectTime = () => {

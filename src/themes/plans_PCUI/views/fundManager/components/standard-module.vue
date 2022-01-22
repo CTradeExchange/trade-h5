@@ -5,22 +5,28 @@
                 <div v-if='list.length === 0' class='empty'>
                     <img src='/images/empty.png' />
                     <p class='tip'>
-                        {{ $t('fundManager.ransom.tip3') }}
+                        {{ $t('fundManager.standard.tip3') }}
                     </p>
                 </div>
                 <template v-else>
                     <div class='header'>
                         <span class='title-1'>
-                            {{ $t('fundManager.ransom.title3') }}：
+                            {{ $t('fundManager.standard.title1') }}：
                         </span>
                         <span class='title-2'>
-                            {{ $t('fundManager.ransom.title4') }}：
+                            {{ $t('fundManager.standard.title2') }}：
                         </span>
                     </div>
                     <div class='list'>
                         <div v-for='(item, index) in list' :key='index' class='item'>
                             <div class='select'>
-                                <el-select v-model='item.currency' clearable filterable :placeholder="$t('fundManager.ransom.tip1')" @change='changeProduct($event, item)'>
+                                <el-select
+                                    v-model='item.symbolId'
+                                    clearable
+                                    filterable
+                                    :placeholder="$t('fundManager.standard.tip1')"
+                                    @change='changeProduct(item, index)'
+                                >
                                     <el-option
                                         v-for='product in productList'
                                         :key='product.symbolId'
@@ -31,7 +37,13 @@
                                 </el-select>
                             </div>
                             <div class='input'>
-                                <el-input v-model='item.ratio' clearable :placeholder="$t('fundManager.ransom.tip2')" type='number' @input='inputRatio(item)'>
+                                <el-input
+                                    v-model.number='item.rate'
+                                    clearable
+                                    :placeholder="$t('fundManager.standard.tip2')"
+                                    type='number'
+                                    @input='inputRatio(item)'
+                                >
                                     <template #suffix>
                                         <span>%</span>
                                     </template>
@@ -60,7 +72,7 @@
 // api
 import { getOrderStandard, saveOrderStandard } from '@/api/fund'
 import { Toast } from 'vant'
-import { onMounted, ref, unref, computed } from 'vue'
+import { onMounted, ref, unref, computed, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { isEmpty } from '@/utils/util'
@@ -80,6 +92,12 @@ const selectIds = ref([])
 // 下单执行标准数据
 const list = ref([])
 
+// 监听list数据
+watch(list, () => {
+    // 设置选择的产品id集合
+    setSelectIds()
+})
+
 // 获取现货玩法产品列表数据
 const getProductList = () => {
     const arr = []
@@ -93,31 +111,52 @@ const getProductList = () => {
 }
 // 获取下单执行标准
 const queryOrderStandard = () => {
-    getOrderStandard().then(res => {
-
+    getOrderStandard({
+        customerGroupId: customerInfo.customerGroupId
+    }).then(res => {
+        if (res.check()) {
+            const { data } = res
+            const arr = []
+            data.map(elem => {
+                arr.push({
+                    baseCurrency: elem.baseCurrency,
+                    profitCurrency: elem.profitCurrency,
+                    symbolId: elem.symbolId,
+                    rate: elem.rate
+                })
+            })
+            list.value = arr
+        }
+    })
+}
+// 设置选择的产品id集合
+const setSelectIds = () => {
+    selectIds.value = list.value.map(elem => {
+        if (elem.symbolId) return Number(elem.symbolId)
     })
 }
 // 修改选择的产品
-const changeProduct = (value, item) => {
-    selectIds.value = selectIds.value.filter(id => id !== Number(item.symbolId))
-    if (value) {
-        item.symbolId = Number(value)
-        selectIds.value.push(Number(value))
-    } else {
-        item.symbolId = ''
-    }
+const changeProduct = (data, index) => {
+    const item = list.value[index]
+    const product = productList.value.find(elem => Number(elem.symbolId) === Number(data.symbolId))
+    item.baseCurrency = product?.baseCurrency || ''
+    item.profitCurrency = product?.profitCurrency || ''
+    // 设置选择的产品id集合
+    setSelectIds()
 }
 // 输入下单比例
 const inputRatio = (item) => {
-    if (getDecimalNum(item.ratio) > 4) {
-        item.ratio = retainDecimal(item.ratio, 4)
+    if (getDecimalNum(item.rate) > 4) {
+        item.rate = retainDecimal(item.rate, 4)
     }
 }
 // 点击添加按钮
 const onAdd = () => {
     list.value.push({
-        currency: '',
-        ratio: ''
+        baseCurrency: '',
+        profitCurrency: '',
+        symbolId: '',
+        rate: ''
     })
 }
 // 点击删除按钮
@@ -129,25 +168,26 @@ const onConfirm = () => {
     let totalRatio = 0
     for (let i = 0; i < list.value.length; i++) {
         const item = list.value[i]
-        totalRatio += Number(item.ratio)
-        if (isEmpty(item.currency)) {
-            return Toast(t('fundManager.ransom.tip1'))
+        totalRatio += Number(item.rate)
+        if (isEmpty(item.symbolId)) {
+            return Toast(t('fundManager.standard.tip1'))
         }
-        if (isEmpty(item.ratio)) {
-            return Toast(t('fundManager.ransom.tip2'))
+        if (isEmpty(item.rate)) {
+            return Toast(t('fundManager.standard.tip2'))
         }
     }
     if (totalRatio > 100) {
-        return Toast(t('fundManager.ransom.tip5'))
+        return Toast(t('fundManager.standard.tip5'))
     }
 
     isSubmit.value = true
     saveOrderStandard({
-        configDtoList: []
+        customerGroupId: customerInfo.customerGroupId,
+        configDtoList: list.value
     }).then(res => {
         isSubmit.value = false
         if (res.check()) {
-            Toast(t('handle.handleSuccess'))
+            Toast(t('c.handleSuccess'))
         }
     })
 }

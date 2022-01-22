@@ -8,7 +8,7 @@
             width='520px'
         >
             <el-table v-loading='isLoading' border :cell-style="{ background:'none' }" :data='tableData'>
-                <el-table-column align='center' :label="$t('fundManager.buy.title4')" prop='currency' />
+                <el-table-column align='center' :label="$t('fundManager.buy.title4')" prop='symbolName' />
                 <el-table-column align='center' :label="$t('fundManager.buy.title5')" prop='amount' />
             </el-table>
             <template #footer v-if='!isLoading'>
@@ -22,7 +22,7 @@
 
 <script setup>
 import { getFundApplyInfo, confirmFundApply } from '@/api/fund'
-import { ref, unref, computed, defineEmits, defineExpose } from 'vue'
+import { ref, unref, computed, reactive, defineEmits, defineExpose } from 'vue'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
@@ -41,31 +41,32 @@ const isLoading = ref(false)
 const isSubmit = ref(false)
 // 基金产品id集合
 const ids = ref([])
+// 申请执行信息
+const applyInfo = reactive({})
 // 列表数据
 const tableData = ref([])
-for (let i = 0; i < 10; i++) {
-    tableData.value.push({
-        currency: 'ADA/USDT',
-        amount: '200USDT'
-    })
-}
 
 // 获取申购执行信息
 const queryFundApplyInfo = () => {
     isLoading.value = true
     getFundApplyInfo({
-        companyId: customerInfo.companyId,
-        customerNo: customerInfo.customerNo,
         customerGroupId: customerInfo.customerGroupId,
         applyIds: ids.value
     }).then(res => {
         isLoading.value = false
+        if (res.check()) {
+            show.value = true
+            const { data } = res
+            applyInfo.value = data
+            tableData.value = data.fundsApplyExecuteRecordDetailDtoList
+        }
+    }).catch(() => {
+        isLoading.value = false
     })
 }
 // 打开弹窗
-const open = (ids = []) => {
-    show.value = true
-    ids.value = ids
+const open = (list = []) => {
+    ids.value = list
     // 获取申购执行信息
     queryFundApplyInfo()
 }
@@ -77,20 +78,16 @@ const close = () => {
 const onConfirm = () => {
     isSubmit.value = true
     confirmFundApply({
-        companyId: customerInfo.companyId,
-        customerNo: customerInfo.customerNo,
         customerGroupId: customerInfo.customerGroupId,
-        applyIds: ids.value,
-        fundsApplyExecuteRecordDto: [],
-        fundsApplyExecuteRecordDetailDtoList: []
+        applyIds: applyInfo.value.applyIds,
+        fundsApplyExecuteRecordDto: applyInfo.value.fundsApplyExecuteRecordDto,
+        fundsApplyExecuteRecordDetailDtoList: applyInfo.value.fundsApplyExecuteRecordDetailDtoList
     }).then(res => {
         isSubmit.value = false
         if (res.check()) {
-            setTimeout(() => {
-                show.value = false
-                Toast(t('c.handleSuccess'))
-                emit('confirm')
-            }, 2000)
+            show.value = false
+            Toast(t('c.handleSuccess'))
+            emit('confirm')
         }
     })
 }

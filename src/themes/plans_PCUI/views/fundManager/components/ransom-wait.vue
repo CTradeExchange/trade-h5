@@ -6,7 +6,7 @@
             </div>
             <div class='item'>
                 <el-select
-                    v-model='searchParams.custumerCompanyId'
+                    v-model='searchParams.customerCompanyId'
                     clearable
                     filterable
                     :placeholder="$t('fundManager.ransom.woName')"
@@ -15,7 +15,7 @@
                 </el-select>
             </div>
             <div class='item'>
-                <el-input v-model='searchParams.custumerNoList' clearable :placeholder="$t('fundManager.ransom.customerNo')" />
+                <el-input v-model='searchParams.customerNoList' clearable :placeholder="$t('fundManager.ransom.customerNo')" />
             </div>
             <div class='item'>
                 <el-select
@@ -43,16 +43,24 @@
             </button>
         </div>
     </div>
-    <div class='body-case'>
+    <div v-loading='isLoading' class='body-case'>
         <el-table ref='tableRef' :cell-style="{ background:'none' }" :data='tableData' :empty-text="$t('c.noData')" @selection-change='selectionChange'>
             <el-table-column type='selection' width='50' />
-            <el-table-column :label="$t('fundManager.ransom.orderNo')" :min-width='minWidth' prop='orderNo' />
-            <el-table-column :label="$t('fundManager.ransom.woName')" :min-width='minWidth' prop='woName' />
+            <el-table-column :label="$t('fundManager.ransom.orderNo')" :min-width='minWidth' prop='proposalNo' />
+            <el-table-column :label="$t('fundManager.ransom.woName')" :min-width='minWidth' prop='companyName' />
             <el-table-column :label="$t('fundManager.ransom.customerNo')" :min-width='minWidth' prop='customerNo' />
-            <el-table-column :label="$t('fundManager.ransom.lot')" :min-width='minWidth' prop='amount' />
-            <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='minWidth' prop='payCurrency' />
-            <el-table-column :label="$t('fundManager.ransom.status')" :min-width='minWidth' prop='status' />
-            <el-table-column :label="$t('fundManager.ransom.applyTime')" :min-width='156' prop='createTime' />
+            <el-table-column :label="$t('fundManager.ransom.lot')" :min-width='minWidth' prop='shares' />
+            <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='minWidth' prop='currencyRedeem' />
+            <el-table-column :label="$t('fundManager.ransom.status')" :min-width='minWidth'>
+                <template #default='scope'>
+                    <span>{{ $t('fundManager.ransomStatus.' + scope.row.sharesStatus) }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundManager.ransom.applyTime')" :min-width='156' prop='createTime'>
+                <template #default='scope'>
+                    <span>{{ formatTime(scope.row.createTime) }}</span>
+                </template>
+            </el-table-column>
             <template #empty>
                 <span class='emptyText'>
                     {{ $t('c.noData') }}
@@ -65,8 +73,8 @@
                     {{ $t('fundManager.ransom.confirmLot') }}
                 </button>
                 <template v-if='!disableBtn'>
-                    <span>{{ $t('fundManager.ransom.totalMoney') }}: {{ totalLot }}{{ currency }}</span>
-                    <span>{{ $t('assets.free') }}: {{ usable }}{{ currency }}</span>
+                    <span>{{ $t('fundManager.ransom.totalMoney') }}: {{ totalLot }} {{ currency }}</span>
+                    <span>{{ $t('assets.free') }}: {{ usable }} {{ currency }}</span>
                 </template>
             </div>
             <el-pagination
@@ -87,7 +95,7 @@
 
 <script setup>
 import lotDialog from './lot-dialog.vue'
-import { getCompanyList, getCompanyAssets, getFundRedeemList } from '@/api/fund'
+import { getCompanyList, getCompanyAssets, getFundRedeemList, getFundRedeemMoney } from '@/api/fund'
 import { ElInput, ElDatePicker } from 'element-plus'
 import { Toast } from 'vant'
 import { onMounted, ref, unref, reactive, watch, computed } from 'vue'
@@ -103,10 +111,12 @@ const usable = computed(() => {
     if (currency.value) {
         const accountList = customerInfo?.accountList.filter(el => Number(el.tradeType) === 5)
         const account = accountList.find(el => el.currency === currency.value)
-        return account.available
+        return Number(account.available)
     }
     return ''
 })
+// 加载状态
+const isLoading = ref(false)
 // 公司列表
 const companyList = ref([])
 // 资产列表
@@ -119,17 +129,15 @@ const lotDialogRef = ref(null)
 const timeRange = ref(null)
 // 搜索参数
 const searchParams = reactive({
-    // 当前登陆的客户编号
-    custumerNo: customerInfo.customerNo,
     // 赎回状态
     sharesStatus: 0,
     // 订单号
     proposalNoList: '',
     // 白标名称
-    custumerCompanyId: '',
+    customerCompanyId: '',
     // 客户编号
-    custumerNoList: '',
-    // 申购支付资产
+    customerNoList: '',
+    // 客户接受资产
     currencyRedeem: '',
     // 开始时间
     startTime: null,
@@ -142,18 +150,7 @@ const searchParams = reactive({
 })
 // 列表数据
 const tableData = ref([])
-for (let i = 0; i < 10; i++) {
-    tableData.value.push({
-        orderNo: '4498556551',
-        woName: '辉煌环球',
-        customerNo: '984554',
-        amount: '2000',
-        payCurrency: 'USDT',
-        netWorth: '10USDT',
-        status: '待确认',
-        createTime: '2022-01-19 10:00:00'
-    })
-}
+
 // 列表最小宽度
 const minWidth = ref(130)
 // 列表总数据量
@@ -189,11 +186,31 @@ const queryAssetsList = () => {
 // 获取基金赎回列表
 const queryFundRedeemList = () => {
     const params = Object.assign({}, searchParams)
-    params.custumerCompanyId = params.custumerCompanyId || null
     params.proposalNoList = params.proposalNoList ? params.proposalNoList.split(',') : null
-    params.custumerNoList = params.custumerNoList ? params.custumerNoList.split(',') : null
+    params.customerNoList = params.customerNoList ? params.customerNoList.split(',') : null
+    params.customerCompanyId = params.customerCompanyId || null
+    isLoading.value = true
     getFundRedeemList(params).then(res => {
-
+        isLoading.value = false
+        if (res.check()) {
+            const { data } = res
+            tableData.value = data.records
+            total.value = data.total
+        }
+    }).catch(() => {
+        isLoading.value = false
+    })
+}
+// 获取基金产品赎回总金额
+const queryFundRedeemMoney = () => {
+    const ids = selectList.value.map(elem => elem.id)
+    getFundRedeemMoney({
+        fundIdList: ids
+    }).then(res => {
+        if (res.check()) {
+            const { data } = res
+            totalLot.value = Number(data.amountTotal)
+        }
     })
 }
 // 选择时间
@@ -217,7 +234,6 @@ const changeSize = (value) => {
     searchParams.current = 1
     searchParams.size = value
     queryFundRedeemList()
-    console.log(searchParams)
 }
 // 点击搜索
 const onSearch = () => {
@@ -228,12 +244,9 @@ const onSearch = () => {
 const selectionChange = (list) => {
     selectList.value = list
     if (list.length > 0) {
-        let total = 0
-        list.map(elem => {
-            total += parseFloat(elem.amount)
-        })
-        totalLot.value = total
-        currency.value = list[0].payCurrency
+        // 获取基金产品赎回总金额
+        queryFundRedeemMoney()
+        currency.value = list[0].currencyRedeem
     } else {
         totalLot.value = 0
         currency.value = ''
@@ -242,10 +255,11 @@ const selectionChange = (list) => {
 // 打开确认份额弹窗
 const openLotDialog = () => {
     if (disableBtn.value) return
-    if (totalLot.value > usable.value) {
-        return Toast(t('fundManager.ransom.tip4'))
+    if (Number(totalLot.value) > Number(usable.value)) {
+        return Toast(t('fundManager.ransom.tip1'))
     }
-    lotDialogRef.value.open()
+    const ids = selectList.value.map(elem => elem.id)
+    lotDialogRef.value.open(ids)
 }
 // 确认份额
 const onConfirm = () => {
@@ -253,6 +267,8 @@ const onConfirm = () => {
     tableRef.value.clearSelection()
     searchParams.current = 1
     queryFundRedeemList()
+    // 查询用户信息
+    store.dispatch('_user/findCustomerInfo', false)
 }
 
 onMounted(() => {
