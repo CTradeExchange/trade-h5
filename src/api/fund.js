@@ -126,6 +126,9 @@ export function fundRedeem (data) {
     return request({
         url: '/global/fund.app.FundRedeemAppDubboService.createFundRedeem',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data
     })
 }
@@ -135,6 +138,9 @@ export function fundApply (data) {
     return request({
         url: '/global/fund.app.FundApplyAppDubboService.apply',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data
     })
 }
@@ -144,6 +150,9 @@ export function fundCalcApplyShares (data) {
     return request({
         url: '/global/fund.app.FundApplyAppDubboService.calcApplyShares',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data
     })
 }

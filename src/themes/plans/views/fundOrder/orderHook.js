@@ -36,7 +36,7 @@ export const orderHook = () => {
     store.dispatch('_quote/queryFundInfo', fundId).then(res => {
         if (res.check()) {
             activeCurrency.value = activeCurrencyList.value[0]?.currencyCode
-            updateAccountAssetsInfo(activeCurrency.value)
+            updateAccountAssetsInfo(direction === 'buy' ? activeCurrency.value : res.data.shareTokenCode)
         }
     })
 
@@ -54,13 +54,14 @@ export const orderHook = () => {
         loading.value = true
         return fundApply(params).then(res => {
             loading.value = false
+            updateAccountAssetsInfo(activeCurrency.value)
             return res
         })
     }
     // 点击赎回
     const submitFundRedeem = (params) => {
-        if (!params?.amountPay) {
-            return Toast('请输入赎回份额')
+        if (!params?.shares) {
+            return Promise.resolve().then(() => Toast('请输入赎回份额'))
         }
         loading.value = true
         return fundRedeem(params).then(res => {
@@ -106,7 +107,7 @@ export const orderHook = () => {
             calcSharesNet.value = ''
             return false
         }
-        fundCalcApplyShares({ amountPay, currencyPay }).then(res => {
+        fundCalcApplyShares({ amountPay, currencyPay, fundId }).then(res => {
             if (res.check()) {
                 const { data } = res
                 calcApplyFee.value = data.fees
@@ -119,6 +120,7 @@ export const orderHook = () => {
     return {
         pageTitle,
         fund,
+        accountList,
         loading,
         calcApplyShares,
         submitFundApply,
@@ -127,6 +129,7 @@ export const orderHook = () => {
         selectActions,
         activeCurrency,
         curAccount,
+        updateAccountAssetsInfo,
         calcApplyFee,
         calcShares,
         calcSharesNet,

@@ -13,6 +13,7 @@
                 v-model='amountPay'
                 :can-choose-currency='true'
                 :currency='activeCurrency'
+                :digits='2'
                 :label="$t('fundInfo.choosePayAsset')"
                 :placeholder='payPlaceholder'
                 @input='calcApplyShares'
@@ -63,6 +64,12 @@ import TradeAssetBar from './components/tradeAssetBar.vue'
 import loadingVue from '@/components/loading.vue'
 import { orderHook } from './orderHook'
 import { computed, unref, ref } from 'vue'
+import { useRoute } from 'vue-router'
+import { Dialog } from 'vant'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n({ useScope: 'global' })
+const route = useRoute()
+const { fundId } = route.query
 
 const {
     pageTitle,
@@ -99,8 +106,20 @@ const touchCurrency = () => {
 // 提交申购或者赎回
 const submitHandler = () => {
     submitFundApply({
+        fundId,
         amountPay: unref(amountPay),
         currencyPay: unref(activeCurrency),
+    }).then(res => {
+        if (res.check()) {
+            amountPay.value = ''
+            calcApplyShares()
+            Dialog.alert({
+                title: t('fundInfo.applySuccessed'),
+                message: '',
+            }).then(() => {
+            // on close
+            })
+        }
     })
 }
 </script>
