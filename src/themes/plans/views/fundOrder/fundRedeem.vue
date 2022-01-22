@@ -98,7 +98,7 @@ const touchCurrency = () => {
 // 提交申购或者赎回
 const submitHandler = () => {
     submitFundRedeem({
-        fundId,
+        fundId: parseInt(fundId),
         shares: unref(amountPay),
         currencyCode: unref(activeCurrency),
     }).then(res => {

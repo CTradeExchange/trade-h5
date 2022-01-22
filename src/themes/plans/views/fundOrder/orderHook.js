@@ -107,7 +107,7 @@ export const orderHook = () => {
             calcSharesNet.value = ''
             return false
         }
-        fundCalcApplyShares({ amountPay, currencyPay, fundId }).then(res => {
+        fundCalcApplyShares({ amountPay, currencyPay, fundId: parseInt(fundId) }).then(res => {
             if (res.check()) {
                 const { data } = res
                 calcApplyFee.value = data.fees
