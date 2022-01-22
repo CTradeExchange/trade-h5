@@ -11,7 +11,7 @@
                 {{ fund.fundType }}
             </span>
             <span class='operation'>
-                {{ fund.operationMode ? $t('fundInfo.operationModeValue1') : $t('fundInfo.operationModeValue2') }}
+                {{ fund.operationMode===1 ? $t('fundInfo.operationModeValue1') : $t('fundInfo.operationModeValue2') }}
             </span>
         </div>
         <div class='desc'>

@@ -11,22 +11,25 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, onActivated } from 'vue'
 import { useRouter } from 'vue-router'
 import FundCard from './components/fundCard.vue'
 import { findFundList } from './hooks/fundInfo'
 import { debounce } from '@/utils/util'
-const rouer = useRouter()
+const router = useRouter()
 const lazyParent = ref(null)
 const scrollParent = ref(null)
 const { getFundList, fundProductList, lazyloadData } = findFundList()
+let pageScrollTop = 0
 
 // 跳转到基金详情
-const goInfo = item => rouer.push('/fundProductInfo?fundId=' + item.fundId)
+const goInfo = item => router.push('/fundProductInfo?fundId=' + item.fundId)
 
 // 滚动时加载单个基金产品的最新数据，防抖
 const lazyDataDebounce = debounce(() => {
+    if (!lazyParent.value?.children?.length) return false
     const scrollTop = scrollParent.value.scrollTop
+    pageScrollTop = scrollTop
     const viewportRange = [scrollTop, scrollTop + document.body.clientHeight] // 整个页面高度可视范围 [开始，结束]
     const childrenEl = [...lazyParent.value.children]
     // 计算子元素是否在页面可视范围内
@@ -41,6 +44,9 @@ const lazyDataDebounce = debounce(() => {
         }
     })
 })
+onActivated(() => {
+    scrollParent.value.scrollTop = pageScrollTop
+})
 
 onMounted(() => {
     getFundList().then(() => {
@@ -51,6 +57,12 @@ onMounted(() => {
 onBeforeUnmount(() => {
     scrollParent.value.removeEventListener('scroll', lazyDataDebounce, false)
 })
+</script>
+
+<script >
+export default {
+    name: 'FundProductList',
+}
 </script>
 
 <style lang="scss" scoped>
