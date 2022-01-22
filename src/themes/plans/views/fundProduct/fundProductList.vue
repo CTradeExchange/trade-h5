@@ -44,16 +44,21 @@ const lazyDataDebounce = debounce(() => {
         }
     })
 })
+
+// 页面激活时设置滚动条位置
 onActivated(() => {
     scrollParent.value.scrollTop = pageScrollTop
 })
 
+// 获取基金产品列表
 onMounted(() => {
     getFundList().then(() => {
         lazyDataDebounce()
     })
     scrollParent.value.addEventListener('scroll', lazyDataDebounce, false)
 })
+
+// 移除监听事件
 onBeforeUnmount(() => {
     scrollParent.value.removeEventListener('scroll', lazyDataDebounce, false)
 })
