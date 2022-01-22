@@ -82,7 +82,8 @@ export default {
             const userProductCategory = store.getters.userProductCategory
             let arr = Object.keys(userProductCategory)
             arr = arr.filter(el => {
-                return userProductCategory[el]?.find(o => o.listByUser?.length)
+                return true
+                // return userProductCategory[el]?.find(o => o.listByUser?.length)
             })
             return arr.length
         })
