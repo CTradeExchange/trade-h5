@@ -199,7 +199,7 @@ export default {
 }
 .etfBanner{
     display: block;
-    padding: rem(30px) rem(20px);
+    padding: 4px 0;
     background: var(--contentColor);
     img{
         display: block;

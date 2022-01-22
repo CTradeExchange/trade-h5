@@ -160,13 +160,15 @@ defineProps({
                 background: var(--quoteFallBg);
             }
             &.up::after{
-                border-color: var(--riseColor) transparent transparent transparent;
+                border-width: 0 4px 7px 4px;
+                border-color: transparent transparent var(--riseColor)  transparent;
             }
             &.down{
                 color: var(--fallColor);
                 background: var(--quoteRiseBg);
             }
             &.down::after{
+                border-width: 7px 4px 0 4px;
                 border-color: var(--fallColor) transparent transparent transparent;
             }
         }
