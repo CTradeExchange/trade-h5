@@ -48,17 +48,44 @@
     </div>
     <div class='body-case'>
         <el-table ref='tableRef' :cell-style="{ background:'none' }" :data='tableData' :empty-text="$t('c.noData')">
-            <el-table-column :label="$t('fundManager.buy.orderNo')" :min-width='minWidth' prop='orderNo' />
-            <el-table-column :label="$t('fundManager.buy.executeNo')" :min-width='minWidth' prop='executeNo' />
-            <el-table-column :label="$t('fundManager.buy.woName')" :min-width='minWidth' prop='woName' />
+            <el-table-column :label="$t('fundManager.buy.orderNo')" :min-width='minWidth' prop='proposalNo' />
+            <el-table-column :label="$t('fundManager.buy.executeNo')" :min-width='minWidth' prop='executeId' />
+            <el-table-column :label="$t('fundManager.buy.woName')" :min-width='minWidth' prop='companyName' />
             <el-table-column :label="$t('fundManager.buy.customerNo')" :min-width='minWidth' prop='customerNo' />
-            <el-table-column :label="$t('fundManager.buy.money')" :min-width='minWidth' prop='amount' />
-            <el-table-column :label="$t('fundManager.buy.payCurrency')" :min-width='minWidth' prop='payCurrency' />
-            <el-table-column :label="$t('fundManager.buy.netWorth')" :min-width='minWidth' prop='netWorth' />
-            <el-table-column :label="$t('fundManager.buy.status')" :min-width='minWidth' prop='status' />
-            <el-table-column :label="$t('fundManager.buy.standard')" :min-width='minWidth' prop='standard' />
-            <el-table-column :label="$t('fundManager.buy.applyTime')" :min-width='156' prop='createTime' />
-            <el-table-column :label="$t('fundManager.buy.lastTime')" :min-width='156' prop='lastTime' />
+            <el-table-column :label="$t('fundManager.buy.money')" :min-width='minWidth' prop='amountPay' />
+            <el-table-column :label="$t('fundManager.buy.payCurrency')" :min-width='minWidth' prop='currencyPay' />
+            <el-table-column :label="$t('fundManager.buy.netWorth')" :min-width='minWidth' prop='sharesNet' />
+            <el-table-column :label="$t('fundManager.buy.status')" :min-width='minWidth'>
+                <template #default>
+                    <span>{{ $t('fundManager.buy.alreadyExecute') }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundManager.buy.standard')" :min-width='minWidth' prop='standard'>
+                <template #default='scope'>
+                    <el-popover
+                        :content='scope.row.standard'
+                        placement='bottom'
+                        trigger='hover'
+                        :width='200'
+                    >
+                        <template #reference>
+                            <span class='standard-btn'>
+                                {{ scope.row.standard }}
+                            </span>
+                        </template>
+                    </el-popover>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundManager.buy.applyTime')" :min-width='156' prop='createTime'>
+                <template #default='scope'>
+                    <span>{{ formatTime(scope.row.createTime) }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundManager.buy.lastTime')" :min-width='156' prop='updateTime'>
+                <template #default='scope'>
+                    <span>{{ formatTime(scope.row.updateTime) }}</span>
+                </template>
+            </el-table-column>
             <template #empty>
                 <span class='emptyText'>
                     {{ $t('c.noData') }}
@@ -112,9 +139,9 @@ const searchParams = reactive({
     // 申购支付资产
     currencyPay: '',
     // 开始时间
-    startTime: '',
+    startTime: null,
     // 结束时间
-    endTime: '',
+    endTime: null,
     // 当前分页页数
     current: 1,
     // 分页数量
@@ -122,21 +149,7 @@ const searchParams = reactive({
 })
 // 列表数据
 const tableData = ref([])
-for (let i = 0; i < 10; i++) {
-    tableData.value.push({
-        orderNo: '4498556551',
-        executeNo: '446564444788',
-        woName: '辉煌环球',
-        customerNo: '984554',
-        amount: 2000,
-        payCurrency: 'USDT',
-        netWorth: '10USDT',
-        standard: 'BTC9%,USDT20%',
-        status: '待执行',
-        createTime: '2022-01-19 10:00:00',
-        lastTime: '2022-01-20: 10:00:00'
-    })
-}
+
 // 列表最小宽度
 const minWidth = ref(100)
 // 列表总数据量
@@ -159,11 +172,15 @@ const queryAssetsList = () => {
 // 获取基金申购列表
 const queryApplyList = () => {
     const params = Object.assign({}, searchParams)
-    params.proposalNo = params.proposalNo ? params.proposalNo.split(',') : ''
-    params.custumerSelfNo = params.custumerSelfNo ? params.custumerSelfNo.split(',') : ''
-    params.custumerSelfNo = params.executeId ? params.executeId.split(',') : ''
+    params.proposalNo = params.proposalNo ? params.proposalNo.split(',') : []
+    params.custumerSelfNo = params.custumerSelfNo ? params.custumerSelfNo.split(',') : []
+    params.executeId = params.executeId ? params.executeId.split(',') : []
     getFundApplyList(params).then(res => {
-
+        if (res.check()) {
+            const { data } = res
+            tableData.value = data.records
+            total.value = data.total
+        }
     })
 }
 // 选择时间
@@ -173,8 +190,8 @@ const selectTime = () => {
         searchParams.startTime = window.dayjs(value[0]).valueOf('day')
         searchParams.endTime = window.dayjs(value[1]).endOf('day').valueOf()
     } else {
-        searchParams.startTime = ''
-        searchParams.endTime = ''
+        searchParams.startTime = null
+        searchParams.endTime = null
     }
 }
 // 改变当前页数
@@ -206,4 +223,8 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 @import '../index.scss';
+.standard-btn {
+    @include ellipsis;
+    cursor: pointer;
+}
 </style>

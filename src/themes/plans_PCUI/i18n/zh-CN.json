@@ -803,10 +803,12 @@
 			"money": "申购金额",
 			"status": "份额状态",
 			"applyTime": "申请时间",
-			"batchOrder": "批量下单",
+			"executeOrder": "申购执行下单",
 			"executeNo": "申购执行单号",
 			"lastTime": "最后更新时间",
-			"standard": "下单执行标准"
+			"standard": "下单执行标准",
+			"waitExecute": "待执行",
+			"alreadyExecute": "已执行"
 		},
 		"ransom": {
 			"title1": "赎回待确认",
@@ -818,6 +820,7 @@
 			"customerNo": "客户编号",
 			"receiveCurrency": "客户接受资产",
 			"lot": "赎回份额",
+			"networth": "赎回净值",
 			"totalLot": "总赎回份额",
 			"totalMoney": "总赎回金额",
 			"status": "份额确认状态",

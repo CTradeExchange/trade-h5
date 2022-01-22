@@ -98,15 +98,15 @@ const searchParams = reactive({
     // 订单号
     proposalNoList: '',
     // 白标名称
-    custumerCompanyId: '',
+    custumerCompanyId: null,
     // 客户编号
     custumerNoList: '',
     // 申购支付资产
     currencyRedeem: '',
     // 开始时间
-    startTime: '',
+    startTime: null,
     // 结束时间
-    endTime: '',
+    endTime: null,
     // 当前分页页数
     current: 1,
     // 分页数量
@@ -149,8 +149,9 @@ const queryAssetsList = () => {
 // 获取基金赎回列表
 const queryFundRedeemList = () => {
     const params = Object.assign({}, searchParams)
-    params.proposalNoList = params.proposalNoList ? params.proposalNoList.split(',') : ''
-    params.custumerNoList = params.custumerNoList ? params.custumerNoList.split(',') : ''
+    params.custumerCompanyId = params.custumerCompanyId || null
+    params.proposalNoList = params.proposalNoList ? params.proposalNoList.split(',') : null
+    params.custumerNoList = params.custumerNoList ? params.custumerNoList.split(',') : null
     getFundRedeemList(params).then(res => {
 
     })

@@ -691,6 +691,7 @@ body {
         }
 	}
 	.el-popper {
+		color: var(--color) !important;
 		background: var(--contentColor) !important;
 		border: 1px solid var(--lineColor) !important;
 		&.is-light {

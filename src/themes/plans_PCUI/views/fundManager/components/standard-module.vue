@@ -93,11 +93,7 @@ const getProductList = () => {
 }
 // 获取下单执行标准
 const queryOrderStandard = () => {
-    getOrderStandard({
-        companyId: customerInfo.companyId,
-        customerNo: customerInfo.customerNo,
-        customerGroupId: customerInfo.customerGroupId
-    }).then(res => {
+    getOrderStandard().then(res => {
 
     })
 }

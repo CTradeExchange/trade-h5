@@ -23,6 +23,9 @@ export function getOrderStandard (data) {
     return request({
         url: '/global/fund.app.FundsOrderExecuteStandardService.getOrderExecuteStandardConfigs',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data
     })
 }
@@ -32,6 +35,9 @@ export function saveOrderStandard (data) {
     return request({
         url: '/global/fund.app.FundsOrderExecuteStandardService.saveOrderExecuteStandardConfigs',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data
     })
 }
@@ -41,6 +47,9 @@ export function getFundApplyList (data) {
     return request({
         url: '/global/fund.app.FundApplyAppDubboService.page',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data
     })
 }
@@ -50,6 +59,9 @@ export function getFundApplyInfo (data) {
     return request({
         url: '/global/fund.app.FundsApplyExecuteService.getFundsApplyExecuteInfo',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data
     })
 }
@@ -59,6 +71,9 @@ export function confirmFundApply (data) {
     return request({
         url: '/global/fund.app.FundsApplyExecuteService.confirmFundsApplyExecuteInfo',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data
     })
 }
@@ -68,6 +83,9 @@ export function getFundRedeemList (data) {
     return request({
         url: '/global/fund.app.FundRedeemAppDubboService.queryManagerPage',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data
     })
 }
@@ -77,6 +95,9 @@ export function getFundRedeemInfo (data) {
     return request({
         url: '/global/fund.app.FundRedeemAppDubboService.calShares',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data
     })
 }
@@ -86,6 +107,9 @@ export function confirmFundRedeem (data) {
     return request({
         url: '/global/fund.app.FundRedeemAppDubboService.checkShares',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data
     })
 }
@@ -96,6 +120,9 @@ export function getFundInfo (data) {
     return request({
         url: '/global/config.app.AppSymbolDubboService.getFundInfo',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data
     })
 }
@@ -105,6 +132,9 @@ export function findFundPage (data) {
     return request({
         url: '/global/config.app.AppSymbolDubboService.findFundPage',
         method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
         data
     })
 }
