@@ -32,9 +32,11 @@ const lazyDataDebounce = debounce(() => {
     // 计算子元素是否在页面可视范围内
     childrenEl.forEach((el, i) => {
         const rect = el.getBoundingClientRect()
-        const block = rect.y + rect.height
-        if (block > viewportRange[0] && block < viewportRange[1]) {
+        const [blockTop, blockBottom] = [rect.y, rect.y + rect.height]
+        if (blockTop > viewportRange[0] && blockTop < viewportRange[1]) {
             // console.log(i, '在可视范围内')
+            lazyloadData(i)
+        } else if (blockBottom > viewportRange[0] && blockBottom < viewportRange[1]) {
             lazyloadData(i)
         }
     })

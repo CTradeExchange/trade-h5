@@ -116,6 +116,7 @@ defineProps({
     margin-top: 5px;
     line-height: 1.4;
     font-size: rem(28px);
+    word-break: break-word;
 }
 .valueList{
     background: var(--contentColor);
