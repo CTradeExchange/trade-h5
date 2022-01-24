@@ -33,8 +33,8 @@
                     :end-placeholder="$t('compLang.endTime')"
                     range-separator='-'
                     :start-placeholder="$t('compLang.startTime')"
-                    type='daterange'
-                    value-format='YYYY-MM-DD'
+                    type='datetimerange'
+                    value-format='YYYY-MM-DD HH:mm:ss'
                     @change='selectTime'
                 />
             </div>
@@ -192,8 +192,8 @@ const queryApplyList = () => {
 const selectTime = () => {
     const value = timeRange.value
     if (value) {
-        searchParams.startTime = window.dayjs(value[0]).valueOf('day')
-        searchParams.endTime = window.dayjs(value[1]).endOf('day').valueOf()
+        searchParams.startTime = window.dayjs(value[0]).valueOf()
+        searchParams.endTime = window.dayjs(value[1]).valueOf()
     } else {
         searchParams.startTime = null
         searchParams.endTime = null
