@@ -40,7 +40,7 @@
         </div>
         <div class='footerBtn'>
             <van-button block :disabled='loading || fund.canRedemption!==1' size='normal' @click='submitHandler'>
-                {{ $t('fundInfo.sell') }}
+                {{ fund.canRedemption===1 ? $t('fundInfo.sell'):$t('fundInfo.disabledSell') }}
             </van-button>
         </div>
         <loadingVue :show='loading' />
