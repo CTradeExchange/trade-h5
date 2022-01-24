@@ -789,6 +789,16 @@
 			"ransom": "赎回管理",
 			"standard": "下单执行标准"
 		},
+        "executeStatus": {
+			"0": "未确认",
+			"1": "待执行",
+			"2": "执行成功",
+			"3": "执行失败"
+		},
+        "confirmStatus": {
+			"0": "待确认",
+			"1": "已确认"
+		},
 		"buy": {
 			"waitExecute": "待执行",
 			"alreadyExecute": "已执行",
@@ -803,18 +813,12 @@
 			"payCurrency": "申购支付资产",
 			"netWorth": "申购净值",
 			"money": "申购金额",
-			"status": "份额状态",
+			"status": "份额确认状态",
 			"applyTime": "申请时间",
 			"executeOrder": "申购执行下单",
 			"executeNo": "申购执行单号",
 			"lastTime": "最后更新时间",
 			"standard": "下单执行标准"
-		},
-		"buyStatus": {
-			"0": "未确认",
-			"1": "待执行",
-			"2": "执行成功",
-			"3": "执行失败"
 		},
 		"ransom": {
 			"waitConfirm": "待确认",
@@ -829,16 +833,12 @@
 			"networth": "赎回净值",
 			"moneyTotal": "赎回总金额",
 			"totalLot": "总赎回份额",
-			"totalMoney": "总赎回金额",
+			"totalMoney": "预计总赎回金额",
 			"status": "份额确认状态",
 			"applyTime": "申请时间",
 			"confirmLot": "确认份额",
 			"lastTime": "最后更新时间",
 			"tip1": "资产可用余额不足"
-		},
-		"ransomStatus": {
-			"0": "待确认",
-			"1": "已确认"
 		},
 		"standard": {
 			"title1": "下单产品",

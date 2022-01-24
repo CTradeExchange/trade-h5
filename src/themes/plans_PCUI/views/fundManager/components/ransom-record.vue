@@ -54,7 +54,7 @@
             <el-table-column :label="$t('fundManager.ransom.moneyTotal')" :min-width='minWidth' prop='amountRedeem' />
             <el-table-column :label="$t('fundManager.ransom.status')" :min-width='minWidth'>
                 <template #default='scope'>
-                    <span>{{ $t('fundManager.ransomStatus.' + scope.row.sharesStatus) }}</span>
+                    <span>{{ $t('fundManager.confirmStatus.' + scope.row.sharesStatus) }}</span>
                 </template>
             </el-table-column>
             <el-table-column :label="$t('fundManager.ransom.applyTime')" :min-width='156' prop='createTime'>

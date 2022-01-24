@@ -60,7 +60,7 @@
             <el-table-column :label="$t('fundManager.buy.netWorth')" :min-width='minWidth' prop='sharesNet' />
             <el-table-column :label="$t('fundManager.buy.status')" :min-width='minWidth'>
                 <template #default='scope'>
-                    <span>{{ $t('fundManager.buyStatus.' + scope.row.executeStatus) }}</span>
+                    <span>{{ $t('fundManager.confirmStatus.' + scope.row.sharesStatus) }}</span>
                 </template>
             </el-table-column>
             <el-table-column :label="$t('fundManager.buy.applyTime')" :min-width='156' prop='createTime'>

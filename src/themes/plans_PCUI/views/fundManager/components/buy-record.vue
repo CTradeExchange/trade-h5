@@ -61,7 +61,7 @@
             <el-table-column :label="$t('fundManager.buy.netWorth')" :min-width='minWidth' prop='sharesNet' />
             <el-table-column :label="$t('fundManager.buy.status')" :min-width='minWidth'>
                 <template #default='scope'>
-                    <span>{{ $t('fundManager.buyStatus.' + scope.row.executeStatus) }}</span>
+                    <span>{{ $t('fundManager.confirmStatus.' + scope.row.sharesStatus) }}</span>
                 </template>
             </el-table-column>
             <el-table-column :label="$t('fundManager.buy.standard')" :min-width='minWidth' prop='standard'>
@@ -183,7 +183,7 @@ const queryApplyList = () => {
     params.customerSelfNo = params.customerSelfNo ? params.customerSelfNo.split(',') : []
     params.executeId = params.executeId ? params.executeId.split(',') : []
     params.customerCompanyId = params.customerCompanyId || null
-    isLoading.value = false
+    isLoading.value = true
     getFundApplyList(params).then(res => {
         isLoading.value = false
         if (res.check()) {

@@ -116,6 +116,9 @@
 	.el-table__cell.is-right {
 		background: var(--contentColor) !important;
 	}
+    .cell {
+        line-height: 14px;
+    }
 	thead {
 		tr {
 			height: 50px;
