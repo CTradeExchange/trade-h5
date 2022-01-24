@@ -70,7 +70,7 @@
 
 <script setup>
 // api
-import { getOrderStandard, saveOrderStandard } from '@/api/fund'
+import { getAllOrderProducts, getOrderStandard, saveOrderStandard } from '@/api/fund'
 import { Toast } from 'vant'
 import { onMounted, ref, unref, computed, watch } from 'vue'
 import { useStore } from 'vuex'
@@ -98,17 +98,13 @@ watch(list, () => {
     setSelectIds()
 })
 
-// 获取现货玩法产品列表数据
+// 获取所有可设置的下单执行标准的产品
 const getProductList = () => {
-    const arr = []
-    const list = store.state._quote.productList
-    list.map(elem => {
-        if (Number(elem.tradeType) === 5) {
-            arr.push(elem)
-        }
+    getAllOrderProducts({
+        customerGroupId: customerInfo.customerGroupId
+    }).then(res => {
+        productList.value = res.data
     })
-    productList.value = arr
-    console.log(arr)
 }
 // 获取下单执行标准
 const queryOrderStandard = () => {

@@ -18,6 +18,18 @@ export function getCompanyAssets (data) {
     })
 }
 
+/* 获取所有可设置的下单执行标准的产品 */
+export function getAllOrderProducts (data) {
+    return request({
+        url: '/global/fund.app.FundsOrderExecuteStandardService.getOrderExecuteStandardConfigSymbolList',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
 /* 获取下单执行标准 */
 export function getOrderStandard (data) {
     return request({
