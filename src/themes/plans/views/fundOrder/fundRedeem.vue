@@ -13,6 +13,7 @@
                 v-model='amountPay'
                 :can-choose-currency='false'
                 :currency='fund.shareTokenCode'
+                :digits='fundAccount? fundAccount?.digits : 0'
                 :label=" $t('fundInfo.inputRedeemShares')"
                 :placeholder='payPlaceholder'
             />
@@ -82,8 +83,8 @@ const redeemFeeRate = computed(() => {
 
 // 赎回份额输入框的placeholder
 const payPlaceholder = computed(() => {
-    const text = t('fundInfo.canRedeemMax') + fundAccount.value?.withdrawAmount
-    return unref(fundAccount) ? text : '--'
+    const text = t('fundInfo.canRedeemMax') + (fundAccount.value?.withdrawAmount || 0)
+    return text
 })
 const amountPay = ref('')
 
