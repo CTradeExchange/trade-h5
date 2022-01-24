@@ -20,12 +20,12 @@
                     {{ fundInfo.upDate }}
                 </span>
             </li>
-            <li v-if='fundInfo.preShare' class='item'>
+            <li v-if='fundInfo.newShare' class='item'>
                 <span class='hd'>
                     {{ $t('fundInfo.latestPart') }}
                 </span>
                 <span class='ft'>
-                    {{ fundInfo.preShare }}
+                    {{ fundInfo.newShare }}
                 </span>
             </li>
             <li v-if='fundInfo.managerName' class='item'>

@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted, ref, onActivated } from 'vue'
+import { onBeforeUnmount, onMounted, ref, onActivated, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import FundCard from './components/fundCard.vue'
 import { findFundList } from './hooks/fundInfo'
@@ -30,16 +30,17 @@ const lazyDataDebounce = debounce(() => {
     if (!lazyParent.value?.children?.length) return false
     const scrollTop = scrollParent.value.scrollTop
     pageScrollTop = scrollTop
-    const viewportRange = [scrollTop, scrollTop + document.body.clientHeight] // 整个页面高度可视范围 [开始，结束]
+    const pageHeight = document.body.clientHeight
     const childrenEl = [...lazyParent.value.children]
     // 计算子元素是否在页面可视范围内
-    childrenEl.forEach((el, i) => {
+    childrenEl.forEach(async (el, i) => {
+        await nextTick()
         const rect = el.getBoundingClientRect()
-        const [blockTop, blockBottom] = [rect.y, rect.y + rect.height]
-        if (blockTop > viewportRange[0] && blockTop < viewportRange[1]) {
+        if (rect.top > 0 && rect.top <= pageHeight) {
             // console.log(i, '在可视范围内')
             lazyloadData(i)
-        } else if (blockBottom > viewportRange[0] && blockBottom < viewportRange[1]) {
+        } else if (rect.bottom > 0 && rect.bottom <= pageHeight) {
+            // console.log(i, '在可视范围内')
             lazyloadData(i)
         }
     })

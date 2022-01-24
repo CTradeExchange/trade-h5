@@ -13,7 +13,7 @@
                 v-model='amountPay'
                 :can-choose-currency='true'
                 :currency='activeCurrency'
-                :digits='2'
+                :digits='curAccount? curAccount?.digits : 0'
                 :label="$t('fundInfo.choosePayAsset')"
                 :placeholder='payPlaceholder'
                 @input='calcApplyShares'
