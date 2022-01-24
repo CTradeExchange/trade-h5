@@ -7,11 +7,11 @@
             </h2>
         </figure>
         <div class='fundType'>
-            <span class='title'>
-                {{ fund.fundType }}
-            </span>
             <span class='operation'>
                 {{ fund.operationMode===1 ? $t('fundInfo.operationModeValue1') : $t('fundInfo.operationModeValue2') }}
+            </span>
+            <span class='title'>
+                {{ fund.fundType }}
             </span>
         </div>
         <div class='desc'>
@@ -105,10 +105,10 @@ defineProps({
     font-weight: bold;
     .operation{
         display: inline-block;
-        margin-left: rem(20px);
+        padding-right: rem(20px);
+        // margin-right: rem(20px);
         // border-left: 1px solid var(--minorColor);
         // color: var(--minorColor);
-        padding-left: rem(20px);
         line-height: 1;
     }
 }
