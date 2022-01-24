@@ -40,7 +40,7 @@
         </div>
         <div class='footerBtn'>
             <van-button block :disabled='loading || fund.canRedemption!==1' size='normal' @click='submitHandler'>
-                {{ $t('fundInfo.sell') }}
+                {{ fund.canRedemption===1 ? $t('fundInfo.sell'):$t('fundInfo.disabledSell') }}
             </van-button>
         </div>
         <loadingVue :show='loading' />
@@ -82,7 +82,7 @@ const redeemFeeRate = computed(() => {
 
 // 赎回份额输入框的placeholder
 const payPlaceholder = computed(() => {
-    const text = t('fundInfo.canRedeemMax') + fundAccount.value?.withdrawAmount + fundAccount.value?.currency
+    const text = t('fundInfo.canRedeemMax') + fundAccount.value?.withdrawAmount
     return unref(fundAccount) ? text : '--'
 })
 const amountPay = ref('')

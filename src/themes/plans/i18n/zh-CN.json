@@ -675,11 +675,13 @@
       "inputRedeemShares":"输入赎回份额",
       "redeemAssets":"选择接受资产",
       "redeemFeeRate":"赎回手续费率",
-      "canRedeemMax":"最大可赎回",
+      "canRedeemMax":"可赎回",
       "redeemPlaceholder":"预计按T+2日净值计算金额",
       "applySuccessed":"申购成功",
       "redeemSubmiteed":"赎回已提交",
       "redeemSubmiteedDesc":"预计T+2日前确认份额，请留意份额确认消息",
+      "disabledBuy":"不支持申购",
+      "disabledSell":"不支持赎回",
       "buy":"申购",
       "sell":"赎回"
   }

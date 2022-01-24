@@ -3,12 +3,12 @@
         <div v-if='fund' class='trade-btn-wrap'>
             <div class='buy fallColorBg' :class='{ disabled:fund.canPurchase!==1 }' @click="toOrder('buy')">
                 <span class='text'>
-                    {{ $t('fundInfo.buy') }}
+                    {{ fund.canPurchase===1 ? $t('fundInfo.buy'): $t('fundInfo.disabledBuy') }}
                 </span>
             </div>
             <div class='sell riseColorBg' :class='{ disabled:fund.canRedemption!==1 }' @click="toOrder('sell')">
                 <span class='text'>
-                    {{ $t('fundInfo.sell') }}
+                    {{ fund.canRedemption===1 ? $t('fundInfo.sell'):$t('fundInfo.disabledSell') }}
                 </span>
             </div>
         </div>
@@ -81,6 +81,7 @@ const toOrder = direction => {
         }
         &.disabled{
             opacity: .5;
+            background-color: var(--minorColor);
         }
         .text {
             font-size: rem(34px);
