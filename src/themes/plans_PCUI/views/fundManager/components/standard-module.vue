@@ -108,6 +108,7 @@ const getProductList = () => {
         }
     })
     productList.value = arr
+    console.log(arr)
 }
 // 获取下单执行标准
 const queryOrderStandard = () => {
@@ -188,6 +189,8 @@ const onConfirm = () => {
         isSubmit.value = false
         if (res.check()) {
             Toast(t('c.handleSuccess'))
+            // 获取下单执行标准
+            queryOrderStandard()
         }
     })
 }
