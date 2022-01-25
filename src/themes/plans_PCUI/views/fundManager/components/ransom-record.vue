@@ -19,7 +19,7 @@
             </div>
             <div class='item'>
                 <el-select
-                    v-model='searchParams.currencyPay'
+                    v-model='searchParams.currencyRedeem'
                     clearable
                     filterable
                     :placeholder="$t('fundManager.ransom.receiveCurrency')"
