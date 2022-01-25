@@ -20,7 +20,7 @@
 
         <!-- etf banner -->
         <a v-if='categoryType===2 && tradeType==="5"' class='etfBanner' href='javascript:;' @click='toETF'>
-            <img alt='' src='/images/ETF_banner.png' />
+            <img alt='' :src='locale==="en-US" ?"/images/ETF_banner2.png":"/images/ETF_banner.png"' />
         </a>
 
         <div class='titleBar van-hairline--bottom'>
@@ -57,7 +57,8 @@ export default {
     setup () {
         const store = useStore()
         const router = useRouter()
-        const { t } = useI18n({ useScope: 'global' })
+        const { t, locale } = useI18n({ useScope: 'global' })
+        console.log(locale)
         const productListEl = ref(null)
         // 玩法列表
         const isWallet = store.state._base.wpCompanyInfo.isWallet
@@ -122,6 +123,7 @@ export default {
             router.push('/fundProductList')
         }
         return {
+            locale,
             openSearch,
             categoryType,
             productListEl,
