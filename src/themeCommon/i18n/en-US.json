@@ -193,7 +193,9 @@
         "verificationFailed": "Verification failed, please resubmit",
         "done": "Done",
         "faceDetect": "Face Recognition",
-        "faceTip": "Please go to App or Mobile Web to verify"
+        "faceTip": "Please go to App or Mobile Web to verify",
+        "openCarme": "Please open the camera to take a photo and submit it",
+        "open": "Open Camera"
     },
     "auth": {
         "info": "Information Required",
