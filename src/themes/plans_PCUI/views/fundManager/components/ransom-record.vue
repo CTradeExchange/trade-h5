@@ -54,8 +54,16 @@
                 </template>
             </el-table-column>
             <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='minWidth' prop='currencyRedeem' />
-            <el-table-column :label="$t('fundManager.ransom.networth')" :min-width='minWidth' prop='sharesNet' />
-            <el-table-column :label="$t('fundManager.ransom.moneyTotal')" :min-width='minWidth' prop='amountRedeem' />
+            <el-table-column :label="$t('fundManager.ransom.networth')" :min-width='minWidth'>
+                <template #default='scope'>
+                    <span>{{ scope.row.sharesNet }}{{ scope.row.currencyNet }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundManager.ransom.moneyTotal')" :min-width='minWidth'>
+                <template #default='scope'>
+                    <span>{{ scope.row.amountRedeem }}{{ scope.row.currencyNet }}</span>
+                </template>
+            </el-table-column>
             <el-table-column :label="$t('fundManager.ransom.status')" :min-width='minWidth'>
                 <template #default='scope'>
                     <span>{{ $t('fundManager.confirmStatus.' + scope.row.sharesStatus) }}</span>
