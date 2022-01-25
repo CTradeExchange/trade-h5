@@ -89,7 +89,7 @@ const {
 
 // 支付资产输入框的placeholder
 const payPlaceholder = computed(() => {
-    const text = t('fundInfo.available') + curAccount.value?.withdrawAmount
+    const text = t('fundInfo.available') + curAccount.value?.available
     return unref(curAccount) ? text : '--'
 })
 const amountPay = ref('')

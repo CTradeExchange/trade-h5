@@ -84,7 +84,7 @@ const inputHandler = debounce((e) => {
     if (props.readonly) return false
     emit('update:modelValue', e.target.value)
     emit('input', e.target.value, e)
-}, 1000)
+}, 800)
 
 </script>
 
