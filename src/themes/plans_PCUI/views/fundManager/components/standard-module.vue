@@ -162,6 +162,7 @@ const onMinus = (index) => {
 }
 // 点击确定按钮
 const onConfirm = () => {
+    if (isSubmit.value) return
     let totalRatio = 0
     for (let i = 0; i < list.value.length; i++) {
         const item = list.value[i]

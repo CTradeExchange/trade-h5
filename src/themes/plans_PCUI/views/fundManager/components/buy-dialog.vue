@@ -55,6 +55,7 @@ const queryFundApplyInfo = () => {
     }).then(res => {
         isLoading.value = false
         if (res.check()) {
+            isSubmit.value = false
             show.value = true
             const { data } = res
             applyInfo.value = data
@@ -76,6 +77,7 @@ const close = () => {
 }
 // 点击确定
 const onConfirm = () => {
+    if (isSubmit.value) return
     isSubmit.value = true
     confirmFundApply({
         customerGroupId: customerInfo.customerGroupId,
@@ -83,12 +85,15 @@ const onConfirm = () => {
         fundsApplyExecuteRecordDto: applyInfo.value.fundsApplyExecuteRecordDto,
         fundsApplyExecuteRecordDetailDtoList: applyInfo.value.fundsApplyExecuteRecordDetailDtoList
     }).then(res => {
-        isSubmit.value = false
         if (res.check()) {
             show.value = false
             Toast(t('c.handleSuccess'))
             emit('confirm')
+        } else {
+            isSubmit.value = false
         }
+    }).catch(() => {
+        isSubmit.value = false
     })
 }
 

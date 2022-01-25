@@ -52,6 +52,7 @@ const queryFundRedeemMoney = () => {
     }).then(res => {
         isLoading.value = false
         if (res.check()) {
+            isSubmit.value = false
             show.value = true
             const { data } = res
             tableData.value = [{
@@ -73,16 +74,20 @@ const close = () => {
 }
 // 点击确定
 const onConfirm = () => {
+    if (isSubmit.value) return
     isSubmit.value = true
     confirmFundRedeem({
         fundIdList: ids.value
     }).then(res => {
-        isSubmit.value = false
         if (res.check()) {
             show.value = false
             Toast(t('c.handleSuccess'))
             emit('confirm')
+        } else {
+            isSubmit.value = false
         }
+    }).catch(() => {
+        isSubmit.value = false
     })
 }
 

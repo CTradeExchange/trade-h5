@@ -378,7 +378,9 @@
                 "52": "Quota Adjustment",
                 "53": "Freeze",
                 "54": "Transaction",
-                "55": "Transfer"
+                "55": "Transfer",
+                "56": "Purchase",
+                "57": "Redemption"
             }
         },
         "flowSubCategory": {
@@ -535,7 +537,13 @@
                 "54002": "Withdrawal amount",
                 "54003": "Trading fee",
                 "55001": "Credit amount",
-                "55002": "Transfer amount"
+                "55002": "Transfer amount",
+                "56001": "purchase transfer out amount",
+                "56002": "purchase transfer in amount",
+                "56003": "purchase fee",
+                "57001": "redemption transfer out amount",
+                "57002": "redemption transfer in amount",
+                "57003": "redemption fee"
             }
         },
         "directionBtns": [
