@@ -59,9 +59,9 @@
             <el-table-column :label="$t('fundManager.buy.money')" :min-width='minWidth' prop='amountPay' />
             <el-table-column :label="$t('fundManager.buy.payCurrency')" :min-width='minWidth' prop='currencyPay' />
             <el-table-column :label="$t('fundManager.buy.netWorth')" :min-width='minWidth' prop='sharesNet' />
-            <el-table-column :label="$t('fundManager.buy.status')" :min-width='minWidth'>
+            <el-table-column :label="$t('fundManager.buy.executeStatus')" :min-width='minWidth'>
                 <template #default='scope'>
-                    <span>{{ $t('fundManager.confirmStatus.' + scope.row.sharesStatus) }}</span>
+                    <span>{{ $t('fundManager.executeStatus.' + scope.row.executeStatus) }}</span>
                 </template>
             </el-table-column>
             <el-table-column :label="$t('fundManager.buy.standard')" :min-width='minWidth' prop='standard'>

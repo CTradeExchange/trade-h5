@@ -810,6 +810,7 @@
 			"netWorth": "NAV",
 			"money": "Purchase amount",
 			"status": "Share confirmation status",
+            "executeStatus": "Purchase execution status",
 			"applyTime": "Application time",
 			"executeOrder": "Execute an order",
 			"executeNo": "Purchase execution order number",

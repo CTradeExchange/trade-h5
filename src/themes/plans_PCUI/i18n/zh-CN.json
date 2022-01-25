@@ -814,6 +814,7 @@
 			"netWorth": "申购净值",
 			"money": "申购金额",
 			"status": "份额确认状态",
+            "executeStatus": "申购执行状态",
 			"applyTime": "申请时间",
 			"executeOrder": "申购执行下单",
 			"executeNo": "申购执行单号",
