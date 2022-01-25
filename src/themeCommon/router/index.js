@@ -375,15 +375,6 @@ const routes = [
         }
     },
     {
-        path: '/faceDemo',
-        name: 'FaceDemo',
-        component: () => import(/* webpackChunkName: "page" */ '../user/faceDemo.vue'),
-        meta: {
-            title: 'faceAuth.faceDetect',
-            footerMenu: false,
-        }
-    },
-    {
         path: '/securitySetting',
         name: 'SecuritySetting',
         component: () => import(/* webpackChunkName: "page" */ '../user/securitySetting.vue'),
