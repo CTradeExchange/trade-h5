@@ -96,7 +96,7 @@ const amountPay = ref('')
 
 // 份额输入框的placeholder
 const sharesPlaceholder = computed(() => {
-    const text = '≈ ' + calcShares.value + fund.value.shareTokenCode
+    const text = '≈ ' + calcShares.value
     return unref(calcShares) ? text : '--'
 })
 const touchCurrency = () => {
