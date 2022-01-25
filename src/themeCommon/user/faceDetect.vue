@@ -26,10 +26,10 @@
             <div class='mask'></div>
         </div>
         <div v-if='videoShow' class='btns'>
-            <!-- <van-button type='primary' @click='openCamera'>
-                {{ $t('faceAuth.startVerification') }}
-            </van-button> -->
-            <van-button :loading='loading' type='primary' @click='takeSnapshot'>
+            <van-button v-if='!cameraFlag' type='primary' @click='openCamera'>
+                {{ $t('faceAuth.open') }}
+            </van-button>
+            <van-button v-if='cameraFlag' :loading='loading' type='primary' @click='takeSnapshot'>
                 {{ $t('faceAuth.submitVerification') }}
             </van-button>
         </div>
@@ -73,9 +73,11 @@ export default {
             kycList: {},
             uploadURL: '',
             pathCode: '',
+            cameraFlag: false
         })
         let video
         const gotStream = (stream) => {
+            state.cameraFlag = true
             window.stream = stream // 拿到stream实例存一下
             video.srcObject = stream
         }
@@ -91,37 +93,42 @@ export default {
 
         // 点击截取图片
         const takeSnapshot = (e) => {
-            state.loading = true
-            state.resultCanvasShow = true
-            mCanvas = window.canvas = document.querySelector('#mainCanvas')
-            mCanvas.width = 480
-            mCanvas.height = 360
-            mCanvas.width = video.videoWidth
-            mCanvas.height = video.videoHeight
-            mCanvas.getContext('2d').drawImage(video, 0, 0, mCanvas.width, mCanvas.height)
+            if (state.cameraFlag && window.stream && video.srcObject) {
+                state.loading = true
+                state.resultCanvasShow = true
+                mCanvas = window.canvas = document.querySelector('#mainCanvas')
+                mCanvas.width = 480
+                mCanvas.height = 360
+                mCanvas.width = video.videoWidth
+                mCanvas.height = video.videoHeight
+                mCanvas.getContext('2d').drawImage(video, 0, 0, mCanvas.width, mCanvas.height)
 
-            // 新增1张
-            var divItem = document.createElement('div')
-            divItem.style.display = 'block'
-            divItem.width = 100
-            divItem.height = divItem.width * video.videoHeight / video.videoWidth // 计算一下比例
-            divItem.style.width = divItem.width + 'px'
-            divItem.style.height = divItem.height + 'px'
-            console.log('div item size: ', divItem.width, divItem.height)
+                // 新增1张
+                var divItem = document.createElement('div')
+                divItem.style.display = 'block'
+                divItem.width = 100
+                divItem.height = divItem.width * video.videoHeight / video.videoWidth // 计算一下比例
+                divItem.style.width = divItem.width + 'px'
+                divItem.style.height = divItem.height + 'px'
+                console.log('div item size: ', divItem.width, divItem.height)
 
-            var c1 = document.createElement('canvas')
-            c1.width = 1000
-            c1.height = 1000
-            c1.getContext('2d').drawImage(video, 0, 0, mCanvas.width, mCanvas.height, 0, 0, c1.width, c1.height)
-            console.log('video===', video)
-            divItem.appendChild(c1)
-            // 隐藏video
-            state.videoShow = false
-            c1.toBlob(function (blobObj) {
-                uploadImg(blobObj)
-                console.log('blob', blobObj) // blobObj就是blob对象（类文件）
-            })
-            document.getElementById('mainMask').style.display = 'block'
+                var c1 = document.createElement('canvas')
+                c1.width = 1000
+                c1.height = 1000
+                c1.getContext('2d').drawImage(video, 0, 0, mCanvas.width, mCanvas.height, 0, 0, c1.width, c1.height)
+                console.log('video===', video)
+                divItem.appendChild(c1)
+                // 隐藏video
+                state.videoShow = false
+                c1.toBlob(function (blobObj) {
+                    uploadImg(blobObj)
+                    console.log('blob', blobObj) // blobObj就是blob对象（类文件）
+                })
+                document.getElementById('mainMask').style.display = 'block'
+            } else {
+                state.loading = false
+                return Toast(t('faceAuth.openCarme'))
+            }
         }
 
         // 上传图片
@@ -262,7 +269,6 @@ export default {
         })
 
         onMounted(() => {
-            openCamera()
             video = document.querySelector('video')
             getConditon()
         })
@@ -310,6 +316,7 @@ export default {
             height: 480px;
             background: rgb(255, 255, 255,0.5);
             max-width: 100%;
+            width: 100%;
             transform: scaleX(-1);
         }
     }

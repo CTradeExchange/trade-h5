@@ -1,6 +1,6 @@
 <template>
     <!-- 头部导航 -->
-    <LayoutTop :back='true' :menu='false' :title='$t("route.mine")' />
+    <LayoutTop :custom-back='true' :menu='false' :title='$t("route.mine")' @back='back' />
     <div class='page-wrap'>
         <Loading :show='loading' />
         <p class='header'>
