@@ -669,7 +669,7 @@
       "marketPrice":"市场价格",
       "totalMarketValue":"基金总资产",
       "fund":"基金",
-      "fundApplyFeeCalc":"预计申购手续费",
+      "fundApplyFeeCalc":"预计申购费",
       "choosePayAsset":"选择支付资产",
       "chooseApplyAsset":"申购基金代币",
       "inputRedeemShares":"输入赎回份额",
@@ -684,6 +684,7 @@
       "disabledSell":"不支持赎回",
       "subScriptePlaceholder":"请输入申购金额",
       "redeemNumPlaceholder":"请输入赎回份额",
+      "available":"可用",
       "buy":"申购",
       "sell":"赎回"
   }

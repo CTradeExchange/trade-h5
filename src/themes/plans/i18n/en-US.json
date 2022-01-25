@@ -116,8 +116,8 @@
     "assets": "Assets",
     "returnMoney": "Repay",
     "loan": "Borrow",
-    "fundProductList": "基金申赎",
-    "fundProductInfo": "基金详情",
+    "fundProductList": "Purchase and redemption",
+    "fundProductInfo": "Fund details",
     "transfer": "Transfer"
   },
   "search": {
@@ -669,7 +669,7 @@
         "marketPrice":"MarketPrice",
         "totalMarketValue":"Fund value",
         "fund":"Fund",
-        "fundApplyFeeCalc":"Estimated purchase fees",
+        "fundApplyFeeCalc":"Estimated fees",
         "choosePayAsset":"Select payment asset",
         "chooseApplyAsset":"Fund share token",
         "inputRedeemShares":"Enter redemption share",
@@ -684,6 +684,7 @@
         "disabledSell":"Suspend redemption",
         "subScriptePlaceholder":"Please enter the purchase amount",
         "redeemNumPlaceholder":"Please enter redemption shares",
+        "available":"available",
         "buy":"Subscription",
         "sell":"Redemption"
     }
