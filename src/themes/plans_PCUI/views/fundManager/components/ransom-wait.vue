@@ -49,7 +49,11 @@
             <el-table-column :label="$t('fundManager.ransom.orderNo')" :min-width='minWidth' prop='proposalNo' />
             <el-table-column :label="$t('fundManager.ransom.woName')" :min-width='minWidth' prop='companyName' />
             <el-table-column :label="$t('fundManager.ransom.customerNo')" :min-width='minWidth' prop='customerNo' />
-            <el-table-column :label="$t('fundManager.ransom.lot')" :min-width='minWidth' prop='shares' />
+            <el-table-column :label="$t('fundManager.ransom.lot')" :min-width='minWidth'>
+                <template #default='scope'>
+                    <span>{{ scope.row.shares }}{{ scope.row.currencyShares }}</span>
+                </template>
+            </el-table-column>
             <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='minWidth' prop='currencyRedeem' />
             <el-table-column :label="$t('fundManager.ransom.status')" :min-width='minWidth'>
                 <template #default='scope'>
@@ -98,18 +102,18 @@ import lotDialog from './lot-dialog.vue'
 import { getCompanyList, getCompanyAssets, getFundRedeemList, getFundRedeemMoney } from '@/api/fund'
 import { ElInput, ElDatePicker } from 'element-plus'
 import { Toast } from 'vant'
-import { onMounted, ref, unref, reactive, watch, computed } from 'vue'
+import { onMounted, ref, reactive, watch, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 
 const store = useStore()
 const { t } = useI18n({ useScope: 'global' })
 // 用户信息
-const customerInfo = unref(computed(() => store.state._user.customerInfo))
+const customerInfo = computed(() => store.state._user.customerInfo)
 // 可用
 const usable = computed(() => {
     if (currency.value) {
-        const accountList = customerInfo?.accountList.filter(el => Number(el.tradeType) === 5)
+        const accountList = customerInfo.value?.accountList.filter(el => Number(el.tradeType) === 5)
         const account = accountList.find(el => el.currency === currency.value)
         return Number(account.available)
     }
@@ -178,7 +182,7 @@ const queryCompanyList = () => {
 // 获取公司资产列表
 const queryAssetsList = () => {
     getCompanyAssets({
-        companyId: customerInfo.companyId
+        companyId: customerInfo.value.companyId
     }).then(res => {
         assetsList.value = res.data
     })

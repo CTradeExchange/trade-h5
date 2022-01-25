@@ -48,7 +48,11 @@
             <el-table-column :label="$t('fundManager.ransom.orderNo')" :min-width='minWidth' prop='proposalNo' />
             <el-table-column :label="$t('fundManager.ransom.woName')" :min-width='minWidth' prop='companyName' />
             <el-table-column :label="$t('fundManager.ransom.customerNo')" :min-width='minWidth' prop='customerNo' />
-            <el-table-column :label="$t('fundManager.ransom.lot')" :min-width='minWidth' prop='amountRedeem' />
+            <el-table-column :label="$t('fundManager.ransom.lot')" :min-width='minWidth'>
+                <template #default='scope'>
+                    <span>{{ scope.row.shares }}{{ scope.row.currencyShares }}</span>
+                </template>
+            </el-table-column>
             <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='minWidth' prop='currencyRedeem' />
             <el-table-column :label="$t('fundManager.ransom.networth')" :min-width='minWidth' prop='sharesNet' />
             <el-table-column :label="$t('fundManager.ransom.moneyTotal')" :min-width='minWidth' prop='amountRedeem' />
@@ -92,11 +96,11 @@
 import { getCompanyList, getCompanyAssets, getFundRedeemList } from '@/api/fund'
 import { ElInput, ElDatePicker } from 'element-plus'
 import { useStore } from 'vuex'
-import { onMounted, ref, unref, reactive, computed } from 'vue'
+import { onMounted, ref, reactive, computed } from 'vue'
 
 const store = useStore()
 // 用户信息
-const customerInfo = unref(computed(() => store.state._user.customerInfo))
+const customerInfo = computed(() => store.state._user.customerInfo)
 // 加载状态
 const isLoading = ref(false)
 // 公司列表
@@ -143,7 +147,7 @@ const queryCompanyList = () => {
 // 获取公司资产列表
 const queryAssetsList = () => {
     getCompanyAssets({
-        companyId: customerInfo.companyId
+        companyId: customerInfo.value.companyId
     }).then(res => {
         assetsList.value = res.data
     })

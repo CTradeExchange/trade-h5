@@ -99,11 +99,11 @@ import buyDialog from './buy-dialog.vue'
 import { getCompanyList, getCompanyAssets, getFundApplyList } from '@/api/fund'
 import { ElInput, ElDatePicker } from 'element-plus'
 import { useStore } from 'vuex'
-import { onMounted, ref, unref, reactive, watch, computed } from 'vue'
+import { onMounted, ref, reactive, watch, computed } from 'vue'
 
 const store = useStore()
 // 用户信息
-const customerInfo = unref(computed(() => store.state._user.customerInfo))
+const customerInfo = computed(() => store.state._user.customerInfo)
 // 加载状态
 const isLoading = ref(false)
 // 公司列表
@@ -121,7 +121,7 @@ const searchParams = reactive({
     // 类型
     type: 1,
     // 用户组id
-    customerGroupId: customerInfo.customerGroupId,
+    customerGroupId: customerInfo.value.customerGroupId,
     // 订单号
     proposalNo: '',
     // 白标名称
@@ -165,7 +165,7 @@ const queryCompanyList = () => {
 // 获取公司资产列表
 const queryAssetsList = () => {
     getCompanyAssets({
-        companyId: customerInfo.companyId
+        companyId: customerInfo.value.companyId
     }).then(res => {
         assetsList.value = res.data
     })

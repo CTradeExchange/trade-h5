@@ -116,11 +116,11 @@
 import { getCompanyList, getCompanyAssets, getFundApplyList } from '@/api/fund'
 import { ElInput, ElDatePicker } from 'element-plus'
 import { useStore } from 'vuex'
-import { onMounted, ref, unref, reactive, computed } from 'vue'
+import { onMounted, ref, reactive, computed } from 'vue'
 
 const store = useStore()
 // 用户信息
-const customerInfo = unref(computed(() => store.state._user.customerInfo))
+const customerInfo = computed(() => store.state._user.customerInfo)
 // 加载状态
 const isLoading = ref(false)
 // 公司列表
@@ -134,7 +134,7 @@ const searchParams = reactive({
     // 类型
     type: 2,
     // 用户组id
-    customerGroupId: customerInfo.customerGroupId,
+    customerGroupId: customerInfo.value.customerGroupId,
     // 订单号
     proposalNo: '',
     // 申购执行id
@@ -171,7 +171,7 @@ const queryCompanyList = () => {
 // 获取公司资产列表
 const queryAssetsList = () => {
     getCompanyAssets({
-        companyId: customerInfo.companyId
+        companyId: customerInfo.value.companyId
     }).then(res => {
         assetsList.value = res.data
     })

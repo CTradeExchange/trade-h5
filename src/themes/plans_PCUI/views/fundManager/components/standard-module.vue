@@ -38,7 +38,7 @@
                             </div>
                             <div class='input'>
                                 <el-input
-                                    v-model.number='item.rate'
+                                    v-model='item.rate'
                                     clearable
                                     :placeholder="$t('fundManager.standard.tip2')"
                                     type='number'
@@ -72,7 +72,7 @@
 // api
 import { getAllOrderProducts, getOrderStandard, saveOrderStandard } from '@/api/fund'
 import { Toast } from 'vant'
-import { onMounted, ref, unref, computed, watch } from 'vue'
+import { onMounted, ref, computed, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { isEmpty } from '@/utils/util'
@@ -82,7 +82,7 @@ const store = useStore()
 const { t } = useI18n({ useScope: 'global' })
 
 // 用户信息
-const customerInfo = unref(computed(() => store.state._user.customerInfo))
+const customerInfo = computed(() => store.state._user.customerInfo)
 // 是否提交中
 const isSubmit = ref(false)
 // 玩货玩法产品列表数据
@@ -101,7 +101,7 @@ watch(list, () => {
 // 获取所有可设置的下单执行标准的产品
 const getProductList = () => {
     getAllOrderProducts({
-        customerGroupId: customerInfo.customerGroupId
+        customerGroupId: customerInfo.value.customerGroupId
     }).then(res => {
         productList.value = res.data
     })
@@ -109,7 +109,7 @@ const getProductList = () => {
 // 获取下单执行标准
 const queryOrderStandard = () => {
     getOrderStandard({
-        customerGroupId: customerInfo.customerGroupId
+        customerGroupId: customerInfo.value.customerGroupId
     }).then(res => {
         if (res.check()) {
             const { data } = res
@@ -143,7 +143,7 @@ const changeProduct = (data, index) => {
 }
 // 输入下单比例
 const inputRatio = (item) => {
-    if (getDecimalNum(item.rate) > 4) {
+    if (Number(getDecimalNum(item.rate)) > 4) {
         item.rate = retainDecimal(item.rate, 4)
     }
 }
@@ -179,7 +179,7 @@ const onConfirm = () => {
 
     isSubmit.value = true
     saveOrderStandard({
-        customerGroupId: customerInfo.customerGroupId,
+        customerGroupId: customerInfo.value.customerGroupId,
         configDtoList: list.value
     }).then(res => {
         isSubmit.value = false
