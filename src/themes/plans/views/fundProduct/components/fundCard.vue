@@ -19,31 +19,35 @@
         </div>
         <ul class='valueList'>
             <li class='item'>
-                <i class='hours24' :class="[parseInt(fund.netValueChangeQuote)<0 ? 'down':'up']">
-                    24H
-                </i>
                 <p class='muted'>
                     {{ $t('fundInfo.realtimeJZ') }}({{ fund.currency }})
                 </p>
                 <p>
                     <span>{{ fund.netValue }}</span>
-                    <span class='mleft5'>
+                </p>
+                <p>
+                    <span>
                         {{ fund.netValueChangeQuote }}
                     </span>
+                    <i class='hours24' :class="[parseInt(fund.netValueChangeQuote)<0 ? 'down':'up']">
+                        24H
+                    </i>
                 </p>
             </li>
             <li class='item'>
-                <i class='hours24' :class="[parseInt(fund.netValueChangeQuote)<0 ? 'down':'up']">
-                    24H
-                </i>
                 <p class='muted'>
                     {{ $t('fundInfo.marketPrice') }}({{ fund.currency }})
                 </p>
                 <p>
                     <span>{{ fund.marketPrice }}</span>
-                    <span class='mleft5'>
+                </p>
+                <p>
+                    <span>
                         {{ fund.marketPriceChangeQuote }}
                     </span>
+                    <i class='hours24' :class="[parseInt(fund.netValueChangeQuote)<0 ? 'down':'up']">
+                        24H
+                    </i>
                 </p>
             </li>
             <li class='item'>
@@ -134,20 +138,23 @@ defineProps({
         padding: rem(15px) rem(20px);
         line-height: 1.5;
         .hours24{
-            position: absolute;
-            right: rem(15px);
-            top: rem(18px);
+            // position: absolute;
+            // right: rem(15px);
+            // top: rem(18px);
+            position: relative;
+            margin-left: 5px;
             background: var(--placeholdColor);
             font-size: rem(22px);
             padding:0 rem(26px) 0 rem(6px);
             border-radius: rem(6px);
             color: var(--color);
+            vertical-align: middle;
 
             &::after{
                 content: '';
                 position: absolute;
                 right: rem(6px);
-                top: rem(8px);
+                top: rem(4px);
                 width: 0;
                 height: 0;
                 border: 8px solid var(--normalColor);

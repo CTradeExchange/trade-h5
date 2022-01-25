@@ -49,7 +49,7 @@ export const orderHook = () => {
     // 点击申购
     const submitFundApply = (params) => {
         if (!params?.amountPay) {
-            return Toast('请输入申购金额')
+            return Toast(t('fundInfo.subScriptePlaceholder'))
         }
         loading.value = true
         return fundApply(params).then(res => {
@@ -61,7 +61,7 @@ export const orderHook = () => {
     // 点击赎回
     const submitFundRedeem = (params) => {
         if (!params?.shares) {
-            return Promise.resolve().then(() => Toast('请输入赎回份额'))
+            return Promise.resolve().then(() => Toast(t('fundInfo.redeemNumPlaceholder')))
         }
         loading.value = true
         return fundRedeem(params).then(res => {

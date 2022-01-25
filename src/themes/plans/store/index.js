@@ -68,12 +68,20 @@ export default createStore({
             const quoteListConfig = wpProductCategory.find(el => el.tag === 'quoteList')
             if (!quoteListConfig) return {}
             const categories = quoteListConfig.data.tradeTypeBlock || {}
+            const plansProducts = {}
             Object.keys(categories).forEach(tradeType => {
-                categories[tradeType].forEach(el => {
-                    el.listByUser = el.list[customerGroupId] ?? []
+                plansProducts[tradeType] = categories[tradeType].map(el => {
+                    return {
+                        ...el,
+                        listByUser: el.list[customerGroupId] ?? []
+                    }
                 })
+                // categories[tradeType].forEach(el => {
+                //     el.listByUser = el.list[customerGroupId] ?? []
+                // })
             })
-            return categories
+            return plansProducts
+            // return categories
         },
     },
     mutations: {
