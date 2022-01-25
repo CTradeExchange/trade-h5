@@ -680,8 +680,10 @@
         "applySuccessed":"Purchased successfully",
         "redeemSubmiteed":"Redemption submitted",
         "redeemSubmiteedDesc":"It is expected that the share will be confirmed before T+2, please pay attention to the share confirmation message",
-        "disabledBuy":"Subscription not supported",
-        "disabledSell":"Redemption not supported",
+        "disabledBuy":"Suspend purchase",
+        "disabledSell":"Suspend redemption",
+        "subScriptePlaceholder":"Please enter the purchase amount",
+        "redeemNumPlaceholder":"Please enter redemption shares",
         "buy":"Subscription",
         "sell":"Redemption"
     }
