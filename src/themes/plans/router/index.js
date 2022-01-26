@@ -222,7 +222,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "fundProduct" */ '../views/fundProduct/fundProductList.vue'),
         meta: {
             title: 'route.fundProductList',
-            keepAlive: true,
         }
     },
     {
