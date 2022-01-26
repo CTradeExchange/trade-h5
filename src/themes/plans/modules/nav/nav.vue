@@ -9,7 +9,7 @@
                 />
                 <i v-else-if='item.icon' class='icon' :class='item.icon'></i>
             </template>
-            <p class='title'>
+            <p v-if='item.title' class='title'>
                 {{ item.title }}
             </p>
         </van-tabbar-item>
@@ -114,7 +114,7 @@ export default {
         color: var(--placeholdColor);
     }
     .imgIcon {
-        height: 23px;
+        height: 26px;
         opacity: 0.6;
         filter: grayscale(1);
     }
@@ -124,12 +124,14 @@ export default {
     }
 }
 :deep(.van-tabbar-item__icon) {
+    margin-bottom: 0;
     font-size: rem(46px);
 }
 :deep(.van-tabbar-item__text) {
     font-size: rem(20px);
 }
 .title {
+    margin-top: rem(5px);
     text-align: center;
 }
 </style>

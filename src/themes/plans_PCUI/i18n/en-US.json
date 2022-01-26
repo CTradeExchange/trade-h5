@@ -60,7 +60,7 @@
         "9": "ABCC Margin"
     },
     "signIn": {
-        "loginBtn": "Login",
+        "loginBtn": "Log In",
         "register": "Register",
         "forgot": "Forget password",
         "loginByPwd": "Password login",
@@ -80,7 +80,9 @@
         "pwdSuccess": "Change password success",
         "modifyLoginPwd": "Change login Password",
         "getVerifyCode": "Get Code",
-        "mobileEmailPlaceholder": "Please input your email / mobile"
+        "mobileEmailPlaceholder": "Please input your email / mobile",
+        "defaultLogin": "Normal Log In",
+		"fundLogin": "Fund Log In"
     },
     "route": {
         "home": "Home",
