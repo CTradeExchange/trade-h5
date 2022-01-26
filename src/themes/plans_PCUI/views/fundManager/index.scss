@@ -19,6 +19,11 @@
 		.item-date {
 			margin-right: 10px;
 		}
+        .fixedWidth {
+            &:deep {
+				width: 195px;
+			}
+        }
 		.btn {
 			display: flex;
 			justify-content: center;

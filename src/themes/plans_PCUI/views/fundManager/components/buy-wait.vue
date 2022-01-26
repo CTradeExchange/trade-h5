@@ -52,7 +52,7 @@
             @selection-change='selectionChange'
         >
             <el-table-column type='selection' width='50' />
-            <el-table-column :label="$t('fundManager.buy.orderNo')" :min-width='minWidth' prop='proposalNo' />
+            <el-table-column :label="$t('fundManager.buy.orderNo')" :min-width='140' prop='proposalNo' />
             <el-table-column :label="$t('fundManager.buy.woName')" :min-width='minWidth' prop='companyName' />
             <el-table-column :label="$t('fundManager.buy.customerNo')" :min-width='minWidth' prop='customerNo' />
             <el-table-column :label="$t('fundManager.buy.money')" :min-width='minWidth' prop='amountPay' />
@@ -62,7 +62,7 @@
                     <span>{{ scope.row.sharesNet }}{{ scope.row.currencyNet }}</span>
                 </template>
             </el-table-column>
-            <el-table-column :label="$t('fundManager.buy.status')" :min-width='minWidth'>
+            <el-table-column :label="$t('fundManager.buy.status')" :min-width='160'>
                 <template #default='scope'>
                     <span>{{ $t('fundManager.confirmStatus.' + scope.row.sharesStatus) }}</span>
                 </template>

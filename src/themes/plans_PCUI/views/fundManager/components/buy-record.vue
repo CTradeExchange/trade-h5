@@ -48,27 +48,27 @@
     </div>
     <div v-loading='isLoading' class='body-case'>
         <el-table ref='tableRef' :cell-style="{ background:'none' }" :data='tableData' :empty-text="$t('c.noData')">
-            <el-table-column :label="$t('fundManager.buy.orderNo')" :min-width='minWidth' prop='proposalNo' />
+            <el-table-column :label="$t('fundManager.buy.orderNo')" :min-width='140' prop='proposalNo' />
             <el-table-column :label="$t('fundManager.buy.executeNo')" :min-width='minWidth' prop='executeId'>
                 <template #default='scope'>
                     <span>{{ scope.row.executeId || '--' }}</span>
                 </template>
             </el-table-column>
-            <el-table-column :label="$t('fundManager.buy.woName')" :min-width='minWidth' prop='companyName' />
+            <el-table-column :label="$t('fundManager.buy.woName')" :min-width='140' prop='companyName' />
             <el-table-column :label="$t('fundManager.buy.customerNo')" :min-width='minWidth' prop='customerNo' />
-            <el-table-column :label="$t('fundManager.buy.money')" :min-width='minWidth' prop='amountPay' />
+            <el-table-column :label="$t('fundManager.buy.money')" :min-width='140' prop='amountPay' />
             <el-table-column :label="$t('fundManager.buy.payCurrency')" :min-width='minWidth' prop='currencyPay' />
-            <el-table-column :label="$t('fundManager.buy.netWorth')" :min-width='minWidth'>
+            <el-table-column :label="$t('fundManager.buy.netWorth')" :min-width='140'>
                 <template #default='scope'>
                     <span>{{ scope.row.sharesNet }}{{ scope.row.currencyNet }}</span>
                 </template>
             </el-table-column>
-            <el-table-column :label="$t('fundManager.buy.executeStatus')" :min-width='minWidth'>
+            <el-table-column :label="$t('fundManager.buy.executeStatus')" :min-width='162'>
                 <template #default='scope'>
                     <span>{{ $t('fundManager.executeStatus.' + scope.row.executeStatus) }}</span>
                 </template>
             </el-table-column>
-            <el-table-column :label="$t('fundManager.buy.standard')" :min-width='minWidth' prop='standard'>
+            <el-table-column :label="$t('fundManager.buy.standard')" :min-width='160' prop='standard'>
                 <template #default='scope'>
                     <el-popover
                         :content='formatStandard(scope.row.executeList)'

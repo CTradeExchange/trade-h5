@@ -17,7 +17,7 @@
             <div class='item'>
                 <el-input v-model='searchParams.customerNoList' clearable :placeholder="$t('fundManager.ransom.customerNo')" />
             </div>
-            <div class='item'>
+            <div class='item fixedWidth'>
                 <el-select
                     v-model='searchParams.currencyRedeem'
                     clearable
@@ -45,7 +45,7 @@
     </div>
     <div v-loading='isLoading' class='body-case'>
         <el-table ref='tableRef' :cell-style="{ background:'none' }" :data='tableData' :empty-text="$t('c.noData')">
-            <el-table-column :label="$t('fundManager.ransom.orderNo')" :min-width='minWidth' prop='proposalNo' />
+            <el-table-column :label="$t('fundManager.ransom.orderNo')" :min-width='140' prop='proposalNo' />
             <el-table-column :label="$t('fundManager.ransom.woName')" :min-width='minWidth' prop='companyName' />
             <el-table-column :label="$t('fundManager.ransom.customerNo')" :min-width='minWidth' prop='customerNo' />
             <el-table-column :label="$t('fundManager.ransom.lot')" :min-width='minWidth'>
@@ -53,18 +53,18 @@
                     <span>{{ scope.row.shares }}{{ scope.row.currencyShares }}</span>
                 </template>
             </el-table-column>
-            <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='minWidth' prop='currencyRedeem' />
+            <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='140' prop='currencyRedeem' />
             <el-table-column :label="$t('fundManager.ransom.networth')" :min-width='minWidth'>
                 <template #default='scope'>
                     <span>{{ scope.row.sharesNet }}{{ scope.row.currencyNet }}</span>
                 </template>
             </el-table-column>
-            <el-table-column :label="$t('fundManager.ransom.moneyTotal')" :min-width='minWidth'>
+            <el-table-column :label="$t('fundManager.ransom.moneyTotal')" :min-width='160'>
                 <template #default='scope'>
                     <span>{{ scope.row.amountRedeem }}{{ scope.row.currencyNet }}</span>
                 </template>
             </el-table-column>
-            <el-table-column :label="$t('fundManager.ransom.status')" :min-width='minWidth'>
+            <el-table-column :label="$t('fundManager.ransom.status')" :min-width='160'>
                 <template #default='scope'>
                     <span>{{ $t('fundManager.confirmStatus.' + scope.row.sharesStatus) }}</span>
                 </template>

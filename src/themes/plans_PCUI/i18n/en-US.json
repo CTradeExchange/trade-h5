@@ -164,7 +164,7 @@
         "downloadTip": "iOS & Android QR code download",
         "language": "Language",
         "theme": "Theme",
-        "fundManager": "Fund operation area"
+        "fundManager": "Fund area"
     },
     "footer": {
         "about": {
@@ -803,17 +803,17 @@
 			"title3": "Purchase execution order confirmation", 
 			"title4": "Product",
 			"title5": "Buy amount",
-			"orderNo": "Purchase order number",
+			"orderNo": "Purchase Id",
 			"woName": "Company",
 			"customerNo": "Client No.",
-			"payCurrency": "Purchase payment asset",
+			"payCurrency": "Payment asset",
 			"netWorth": "NAV",
 			"money": "Purchase amount",
 			"status": "Share confirmation status",
             "executeStatus": "Purchase execution status",
 			"applyTime": "Application time",
 			"executeOrder": "Execute an order",
-			"executeNo": "Purchase execution order number",
+			"executeNo": "Execution Id",
 			"lastTime": "Update time",
 			"standard": "Order execution standard"
 		},
@@ -822,7 +822,7 @@
 			"alreadyConfirm": "Confirmed",
 			"title1": "Redemption to be confirmed",
 			"title2": "Redemption Confirmation Record",
-			"orderNo": "Redemption order number",
+			"orderNo": "Redemption Id",
 			"woName": "Company",
 			"customerNo": "Client No.",
 			"receiveCurrency": "Client accepts assets",
