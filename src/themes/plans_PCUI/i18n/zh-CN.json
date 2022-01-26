@@ -785,6 +785,7 @@
     },
 	"fundManager": {
 		"side": {
+			"title": "基金操作专区",
 			"buy": "申购管理",
 			"ransom": "赎回管理",
 			"standard": "下单执行标准"
