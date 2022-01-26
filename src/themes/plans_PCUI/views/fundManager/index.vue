@@ -5,7 +5,7 @@
         <div class='fund-content'>
             <div class='side'>
                 <h2 class='title'>
-                    {{ $t('header.fundManager') }}
+                    {{ $t('fundManager.side.title') }}
                 </h2>
                 <div class='list'>
                     <ul>
