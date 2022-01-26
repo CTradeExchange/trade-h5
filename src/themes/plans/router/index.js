@@ -237,7 +237,7 @@ const routes = [
         name: 'FundApply',
         component: () => import(/* webpackChunkName: "fundProduct" */ '../views/fundOrder/fundApply.vue'),
         meta: {
-            title: 'fundInfo.buy',
+            title: 'route.fundPurchase',
             roles: ['User'],
         }
     },
@@ -246,7 +246,7 @@ const routes = [
         name: 'FundRedeem',
         component: () => import(/* webpackChunkName: "fundProduct" */ '../views/fundOrder/fundRedeem.vue'),
         meta: {
-            title: 'fundInfo.sell',
+            title: 'route.fundRedemption',
             roles: ['User'],
         }
     },

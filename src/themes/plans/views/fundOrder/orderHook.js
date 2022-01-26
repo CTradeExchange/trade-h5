@@ -13,7 +13,7 @@ export const orderHook = () => {
     const loading = ref(false)
     const { direction, fundId } = route.query
     let pageTitle = direction === 'buy' ? t('fundInfo.buy') : t('fundInfo.sell')
-    pageTitle = t('fundInfo.fund') + ' ' + pageTitle
+    pageTitle = t('fundInfo.fund') + pageTitle
 
     const activeCurrency = ref(null) // 申购的时候表示支付资产，赎回的时候表示接受资产
     const accountList = computed(() => store.state._user.customerInfo?.accountList?.filter(el => el.tradeType === 5)) // 现货玩法的账户列表

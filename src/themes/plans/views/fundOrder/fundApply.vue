@@ -1,6 +1,6 @@
 <template>
     <div v-if='fund' class='pageWrapp'>
-        <LayoutTop :back='true' :menu='false' :title='pageTitle' />
+        <LayoutTop :back='true' :menu='false' />
         <div class='currencyBar'>
             <CurrencyIcon :currency='fund.shareTokenCode' size='28px' />
             <span class='fundCurrency'>

@@ -118,6 +118,8 @@
     "loan": "借款",
     "fundProductList": "基金申赎",
     "fundProductInfo": "基金详情",
+	"fundPurchase": "基金申购",
+	"fundRedemption": "基金赎回",
     "transfer": "划转"
   },
   "search": {
