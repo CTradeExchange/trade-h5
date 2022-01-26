@@ -41,10 +41,10 @@ export const orderHook = () => {
     })
 
     // 获取申购手续费
-    const calcApplyShares = debounce((val, e) => {
+    const calcApplyShares = (val, e) => {
         // console.log('开始获取申购手续费', val, e)
         getCalcApplyFee(val, activeCurrency.value)
-    }, 800)
+    }
 
     // 点击申购
     const submitFundApply = (params) => {

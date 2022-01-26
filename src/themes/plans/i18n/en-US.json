@@ -684,7 +684,7 @@
         "disabledSell":"Suspend redemption",
         "subScriptePlaceholder":"Please enter the purchase amount",
         "redeemNumPlaceholder":"Please enter redemption shares",
-        "available":"available",
+        "available":"Avbl",
         "buy":"Subscription",
         "sell":"Redemption"
     }
