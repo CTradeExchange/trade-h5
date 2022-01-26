@@ -649,7 +649,7 @@
         "fundSurvey":"Overview",
         "fundName":"Fund Name",
         "fundCreateTime":"Fund Inception Date",
-        "latestPart":"Shares Issuued",
+        "latestPart":"Latest shares",
         "fundManager":"Fund Manager",
         "followIndex":"Benchmark",
         "operationMode":"Mode Of Operation",
@@ -685,7 +685,7 @@
         "subScriptePlaceholder":"Please enter the purchase amount",
         "redeemNumPlaceholder":"Please enter redemption shares",
         "available":"Avbl",
-        "buy":"Subscription",
+        "buy":"Purchase",
         "sell":"Redemption"
     }
 }
