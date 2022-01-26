@@ -222,7 +222,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "fundProduct" */ '../views/fundProduct/fundProductList.vue'),
         meta: {
             title: 'route.fundProductList',
-            keepAlive: true,
         }
     },
     {
@@ -238,7 +237,8 @@ const routes = [
         name: 'FundApply',
         component: () => import(/* webpackChunkName: "fundProduct" */ '../views/fundOrder/fundApply.vue'),
         meta: {
-            title: 'fundInfo.buy'
+            title: 'fundInfo.buy',
+            roles: ['User'],
         }
     },
     {
@@ -246,7 +246,8 @@ const routes = [
         name: 'FundRedeem',
         component: () => import(/* webpackChunkName: "fundProduct" */ '../views/fundOrder/fundRedeem.vue'),
         meta: {
-            title: 'fundInfo.sell'
+            title: 'fundInfo.sell',
+            roles: ['User'],
         }
     },
     { path: '/:pathMatch(.*)*', redirect: { name: 'Mine' } },
