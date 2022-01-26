@@ -29,7 +29,7 @@
                     <span>
                         {{ fund.netValueChangeQuote }}
                     </span>
-                    <i class='hours24' :class="[parseInt(fund.netValueChangeQuote)<0 ? 'down':'up']">
+                    <i class='hours24' :class="[parseFloat(fund.netValueChangeQuote)<0 ? 'down':'up']">
                         24H
                     </i>
                 </p>
@@ -45,7 +45,7 @@
                     <span>
                         {{ fund.marketPriceChangeQuote }}
                     </span>
-                    <i class='hours24' :class="[parseInt(fund.netValueChangeQuote)<0 ? 'down':'up']">
+                    <i class='hours24' :class="[parseFloat(fund.marketPriceChangeQuote)<0 ? 'down':'up']">
                         24H
                     </i>
                 </p>

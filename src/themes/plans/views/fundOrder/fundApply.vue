@@ -4,7 +4,7 @@
         <div class='currencyBar'>
             <CurrencyIcon :currency='fund.shareTokenCode' size='28px' />
             <span class='fundCurrency'>
-                {{ fund.shareTokenCode }}
+                {{ fund.fundName }}
             </span>
         </div>
 
