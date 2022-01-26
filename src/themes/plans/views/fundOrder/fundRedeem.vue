@@ -18,7 +18,9 @@
                 :placeholder='payPlaceholder'
             />
             <p class='iconArrowWrapper'>
-                <i class='iconArrowDown icon_paixuxiaojiantou_xiangxia'></i>
+                <span>
+                    <i class='iconArrowDown icon_paixuxiaojiantou_xiangxia'></i>
+                </span>
             </p>
             <TradeAssetBar
                 v-model='sharesPlaceholder'
@@ -136,7 +138,7 @@ const submitHandler = () => {
         vertical-align: middle;
     }
     .tradeBarMtop{
-        margin-top: 40px;
+        margin-top: 25px;
     }
 }
 .tradeFormBar{
@@ -156,13 +158,24 @@ const submitHandler = () => {
     }
 }
 .iconArrowWrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: rem(60px);
     position: relative;
     text-align: center;
+    span {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: rem(60px);
+        height: rem(60px);
+        background: var(--primary);
+        border-radius: 50%;
+    }
     .iconArrowDown{
-        font-size: rem(38px);
-        position: absolute;
-        top: rem(35px);
-        color: var(--minorColor);
+        font-size: rem(36px);
+        color: #fff;
     }
 }
 .footerBtn{

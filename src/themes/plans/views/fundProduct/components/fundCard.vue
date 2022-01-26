@@ -85,6 +85,7 @@ defineProps({
     padding: rem(30px);
     margin: rem(80px) rem(30px) rem(30px) rem(30px);
     border-radius: rem(15px);
+    box-shadow: 0 0 rem(12px) rgba(0, 0, 0, .2);
     position: relative;
 }
 .figureImg{

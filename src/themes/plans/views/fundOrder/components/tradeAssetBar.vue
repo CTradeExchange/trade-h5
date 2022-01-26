@@ -98,7 +98,7 @@ const inputHandler = debounce((e) => {
         margin-top: rem(20px);
         border-radius: 6px;
         height: rem(100px);
-        border: 1px solid var(--lineColor);
+        background: var(--assistColor);
         padding: 10px 0;
         display: flex;
         align-items: center;
