@@ -167,6 +167,7 @@
 		"downloadTip": "iOS & Android扫码下载APP",
 		"language": "语言",
 		"theme": "主题",
+		"fund": "基金",
 		"fundManager": "基金操作专区"
 	},
 	"footer": {
@@ -649,7 +650,9 @@
         "multilpSetting": "杠杆设置",
         "multilpRange": "杠杆范围：",
         "multilpSettingTip1": "过高的杠杆会增加仓位强平风险，请注意自身风险承受级别，合理设置杠杆",
-        "saveSetting": "保存设置"
+        "saveSetting": "保存设置",
+		"offer": "报价",
+		"material": "资料"
 	},
 	"contract": {
 		"advance": "预付款",
@@ -850,5 +853,54 @@
 			"tip3": "暂未设置下单执行标准，请添加！",
 			"tip5": "所有下单比例加起来不能大于100%"
 		}
+	},
+	"fundInfo": {
+		"realtimeJZ": "净值",
+		"premiumRate": "溢价率",
+		"information": "资料",
+		"baseInfo": "基本信息",
+		"fundPerformance": "市场表现",
+		"investCompose": "投资组合",
+		"fundSurvey": "基金概况",
+		"fundName": "基金名称",
+		"fundCreateTime": "成立日期",
+		"latestPart": "最新份额",
+		"fundManager": "基金经理",
+		"followIndex": "跟踪指数",
+		"operationMode": "运作方式",
+		"operationModeValue1": "封闭式",
+		"operationModeValue2": "开放式",
+		"fundType": "基金类型",
+		"fundChart1": "市场价格 vs 基金净值",
+		"fundChart2": "市场表现",
+		"realtimeInvestCompose": "投资组合",
+		"assets": "资产",
+		"ranking": "排名",
+		"weight": "权重",
+		"comparePrev": "较上期变化",
+		"singleAsset": "单资产表现",
+		"totalManager": "等共{0}人",
+		"fundChartTip": "数据仅做参考，过往业绩不代表未来表现！",
+		"marketPrice": "市场价格",
+		"totalMarketValue": "基金总资产",
+		"fund": "基金",
+		"fundApplyFeeCalc": "预计申购费",
+		"choosePayAsset": "选择支付资产",
+		"chooseApplyAsset": "基金份额代币",
+		"inputRedeemShares": "输入赎回份额",
+		"redeemAssets": "选择接受资产",
+		"redeemFeeRate": "赎回手续费率",
+		"canRedeemMax": "可赎回",
+		"redeemPlaceholder": "预计按T+2日净值计算金额",
+		"applySuccessed": "申购成功",
+		"redeemSubmiteed": "赎回已提交",
+		"redeemSubmiteedDesc": "预计T+2日前确认份额，请留意份额确认消息",
+		"disabledBuy": "不支持申购",
+		"disabledSell": "不支持赎回",
+		"subScriptePlaceholder": "请输入申购金额",
+		"redeemNumPlaceholder": "请输入赎回份额",
+		"available": "可用",
+		"buy": "申购",
+		"sell": "赎回"
 	}
 }

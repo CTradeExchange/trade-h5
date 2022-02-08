@@ -7,14 +7,14 @@
                 </h1>
             </router-link>
             <div class='menus'>
-                <div class='item'>
+                <div :class="['item', { 'active': $route.path === '/quote' }]">
                     <router-link to='/quote'>
                         <span class='link'>
                             {{ $t('header.quote') }}
                         </span>
                     </router-link>
                 </div>
-                <div class='item'>
+                <div :class="['item', { 'active': $route.path === '/order' }]">
                     <el-dropdown @command='changePlans'>
                         <span class='link'>
                             {{ plansName }}
@@ -33,7 +33,14 @@
                         </template>
                     </el-dropdown>
                 </div>
-                <div v-if='customerInfo.isFund === 1' class='item'>
+                <div :class="['item', { 'active': $route.path === '/fund' }]">
+                    <router-link to='/fund'>
+                        <span class='link'>
+                            {{ $t('header.fund') }}
+                        </span>
+                    </router-link>
+                </div>
+                <div v-if='customerInfo.isFund === 1' :class="['item', { 'active': $route.path === '/fundManager' }]">
                     <router-link to='/fundManager'>
                         <span class='link'>
                             {{ $t('header.fundManager') }}
@@ -243,6 +250,11 @@ export default {
                     &:hover {
                         color: var(--primary);
                     }
+                }
+            }
+            .active {
+                .link {
+                    color: var(--primary);
                 }
             }
         }

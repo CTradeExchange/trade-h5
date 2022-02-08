@@ -2,7 +2,8 @@
     <div class='symbol-info'>
         <div class='item symbol-name'>
             <p class='name'>
-                {{ product?.symbolName }}
+                <span>{{ product?.symbolName }}</span>
+                <EtfIcon v-if='product?.etf' />
             </p>
             <p class='code'>
                 {{ product?.symbolCode }}
@@ -188,6 +189,7 @@ import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { isEmpty, localSet, localGet, getCookie } from '@/utils/util'
+import EtfIcon from '@planspc/components/etfIcon.vue'
 import KIcon from './components/icons/kIcon.vue'
 import StudyList from './studyList.vue'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
@@ -196,7 +198,7 @@ import Loading from '@/components/loading.vue'
 import { ElMessage } from 'element-plus'
 
 export default {
-    components: { tv, KIcon, StudyList },
+    components: { tv, KIcon, EtfIcon, StudyList },
     setup () {
         const route = useRoute()
         const router = useRouter()
@@ -796,7 +798,6 @@ export default {
             addOptional,
             isSelfSymbol,
             contractRoute
-
         }
     }
 }
@@ -817,8 +818,13 @@ export default {
                 flex: 0 1 220px;
             }
             .name{
+                display: flex;
+                align-items: center;
                 font-size: 16px;
                 font-weight: bold;
+                span {
+                    margin-right: rem(20px);
+                }
             }
             .code{
                 color: var(--minorColor);

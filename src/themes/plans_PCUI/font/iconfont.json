@@ -6,11 +6,25 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "26385709",
-      "name": "头像",
-      "font_class": "touxiang",
+      "icon_id": "25809436",
+      "name": "抽屉",
+      "font_class": "chouti1",
+      "unicode": "e689",
+      "unicode_decimal": 59017
+    },
+    {
+      "icon_id": "26640272",
+      "name": "转换",
+      "font_class": "zhuanhuan",
       "unicode": "e6a5",
       "unicode_decimal": 59045
+    },
+    {
+      "icon_id": "26870341",
+      "name": "置顶",
+      "font_class": "zhiding1",
+      "unicode": "e6b2",
+      "unicode_decimal": 59058
     },
     {
       "icon_id": "26382945",

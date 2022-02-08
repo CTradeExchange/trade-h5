@@ -17,13 +17,25 @@
                 </div>
             </div>
             <div v-if='dealModeShowMap[product?.dealMode]?.handicap && product?.symbolName' class='right-wrap'>
-                <!-- 盘口报价 -->
-                <div class='handicap-content'>
-                    <handicap />
+                <!-- 选项卡 -->
+                <el-tabs v-if='product.etf' v-model='activeName'>
+                    <el-tab-pane :label="$t('trade.offer')" name='offer' />
+                    <el-tab-pane :label="$t('trade.material')" name='material' />
+                </el-tabs>
+                <!-- 报价 -->
+                <div v-if="activeName === 'offer'" class='case'>
+                    <!-- 盘口报价 -->
+                    <div class='handicap-content'>
+                        <handicap />
+                    </div>
+                    <!-- 实时成交记录 -->
+                    <div class='deal-content'>
+                        <dealList :symbol-id='product?.symbolId' />
+                    </div>
                 </div>
-                <!-- 实时成交记录 -->
-                <div class='deal-content'>
-                    <dealList :symbol-id='product?.symbolId' />
+                <!-- 资料 -->
+                <div v-if="activeName === 'material'" class='case'>
+                    <fundInformation :fund-id='product.fundId' />
                 </div>
             </div>
         </div>
@@ -39,7 +51,7 @@
 </template>
 
 <script>
-import { reactive, watch, computed, onBeforeUnmount } from 'vue'
+import { reactive, toRefs, watch, computed, onBeforeUnmount, defineAsyncComponent } from 'vue'
 import chart from './pages/chart.vue'
 import { useRouter, useRoute } from 'vue-router'
 import handicap from './pages/handicap.vue'
@@ -47,6 +59,7 @@ import dealList from './pages/dealList.vue'
 import trade from './pages/trade.vue'
 import productSearch from './pages/productSearch'
 import assetsModule from './pages/assets.vue'
+import LoadingComponent from '@/components/loadingComponent'
 import { isEmpty } from '@/utils/util'
 import { useStore } from 'vuex'
 import { toolHooks } from '@planspc/hooks/handicap'
@@ -61,7 +74,13 @@ export default {
         trade,
         productSearch,
         assetsModule,
-        userRecord
+        userRecord,
+        fundInformation: defineAsyncComponent({
+            loader: () => import('@planspc/modules/fundInformation'),
+            loadingComponent: LoadingComponent,
+            delay: 0, // 在显示 loadingComponent 之前的延迟 | 默认值：200（单位 ms）
+            suspensible: false
+        })
     },
     setup () {
         const store = useStore()
@@ -98,6 +117,11 @@ export default {
             }
         })
 
+        const state = reactive({
+            // 当前选中选项卡 offer:报价 material:资料
+            activeName: 'offer'
+        })
+
         watch(
             () => product.value?.tradeType,
             (newval, oldval) => {
@@ -114,6 +138,11 @@ export default {
             { immediate: true }
         )
 
+        // 监听产品symbolId
+        watch(() => product.value?.symbolId, () => {
+            state.activeName = 'offer'
+        })
+
         onBeforeUnmount(() => {
             // 取消订阅
             QuoteSocket.cancel_subscribe()
@@ -126,7 +155,8 @@ export default {
             symbolId,
             tradeContentHeight,
             contentHeight,
-            dealModeShowMap
+            dealModeShowMap,
+            ...toRefs(state)
         }
     },
 }
@@ -188,19 +218,54 @@ export default {
             flex-direction: column;
             justify-content: space-between;
             width: 280px;
-            background: var(--bgColor);
-            >div{
-                border-radius: 10px;
-                background: var(--contentColor);
+            &:deep {
+                .el-tabs {
+                    padding: 0 20px;
+                    height: 40px;
+                }
+                .el-tabs__header {
+                    margin: 0;
+                }
+                .el-tabs__nav {
+                    display: flex;
+                    width: 100%;
+                    height: 40px;
+                }
+                .el-tabs__nav-wrap::after {
+                    display: none;
+                }
+                .el-tabs__active-bar {
+                    height: 2px;
+                }
+                .el-tabs__item {
+                    flex: 1;
+                    font-size: 14px;
+                    color: var(--normalColor);
+                    height: 40px;
+                    text-align: center;
+                    line-height: 40px;
+                    &.is-active {
+                        color: var(--primary);
+                    }
+                }
+                .el-tabs__active-bar {
+                    background-color: var(--primary);
+                }
+            }
+            .case {
+                flex: 1;
+                overflow-y: auto;
             }
             .handicap-content{
+                border-radius: 10px;
+                background: var(--contentColor);
                 padding: 10px 0 8px 16px;
                 height: 368px;
-
             }
             .deal-content{
+                border-radius: 10px;
+                background: var(--contentColor);
                 padding: 10px 16px 10px 16px;
-                overflow:hidden;
                 flex: 1;
                 margin-top: 8px;
             }

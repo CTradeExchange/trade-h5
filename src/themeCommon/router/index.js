@@ -209,16 +209,16 @@ const routes = [
             roles: ['User']
         }
     },
-    {
-        path: '/fund',
-        name: 'Fund',
-        component: () => import(/* webpackChunkName: "fundDetail" */ '../user/fund.vue'),
-        meta: {
-            title: 'cRoute.fund',
-            footerMenu: false,
-            roles: ['User']
-        }
-    },
+    // {
+    //     path: '/fund',
+    //     name: 'Fund',
+    //     component: () => import(/* webpackChunkName: "fundDetail" */ '../user/fund.vue'),
+    //     meta: {
+    //         title: 'cRoute.fund',
+    //         footerMenu: false,
+    //         roles: ['User']
+    //     }
+    // },
     {
         path: '/personal',
         name: 'Personal',

@@ -239,7 +239,7 @@ export default {
     }
 }
 .priceMultiGear {
-    margin-top: 15px;
+    margin-top: 20px;
     font-size: 14px;
     line-height: 20px;
     height: 114px;
