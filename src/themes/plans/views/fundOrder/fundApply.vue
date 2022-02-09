@@ -9,6 +9,14 @@
         </div>
 
         <div class='tradeFormBar'>
+            <div class='tradeTypeTab'>
+                <a class='item active' href='javascript:;'>
+                    {{ $t('fundInfo.buy') }}
+                </a>
+                <a class='item' href='javascript:;' @click='toRedeem'>
+                    {{ $t('fundInfo.sell') }}
+                </a>
+            </div>
             <TradeAssetBar
                 v-model='amountPay'
                 :can-choose-currency='true'
@@ -48,12 +56,16 @@
                     {{ activeCurrency }}
                 </p>
             </div>
+            <div class='footerBtn'>
+                <van-button block :disabled='loading || fund.canPurchase!==1' size='normal' @click='submitHandler'>
+                    {{ fund.canPurchase===1 ? $t('fundInfo.buy'): $t('fundInfo.disabledBuy') }}
+                </van-button>
+            </div>
         </div>
-        <div class='footerBtn'>
-            <van-button block :disabled='loading || fund.canPurchase!==1' size='normal' @click='submitHandler'>
-                {{ fund.canPurchase===1 ? $t('fundInfo.buy'): $t('fundInfo.disabledBuy') }}
-            </van-button>
-        </div>
+
+        <!-- 申购赎回记录 -->
+        <recordList />
+
         <loadingVue :show='loading' />
 
         <van-action-sheet v-model:show='selectShow' :actions='selectActions' @select='onSelect' />
@@ -63,14 +75,16 @@
 <script setup>
 import CurrencyIcon from '@/components/currencyIcon.vue'
 import TradeAssetBar from './components/tradeAssetBar.vue'
+import recordList from './components/recordList/recordList.vue'
 import loadingVue from '@/components/loading.vue'
 import { orderHook } from './orderHook'
 import { computed, unref, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n({ useScope: 'global' })
 const route = useRoute()
+const router = useRouter()
 const { fundId } = route.query
 
 const {
@@ -88,6 +102,17 @@ const {
     calcShares,
     calcSharesNet,
 } = orderHook()
+
+// 切换到赎回基金
+const toRedeem = () => {
+    router.replace({
+        name: 'FundRedeem',
+        query: {
+            ...route.query,
+            direction: 'sell'
+        }
+    })
+}
 
 // 支付资产输入框的placeholder
 const payPlaceholder = computed(() => {
@@ -132,7 +157,6 @@ const submitHandler = () => {
     margin-top: rem(110px);
     height: 100%;
     overflow-y: auto;
-    margin-bottom: rem(120px);
     .currencyBar{
         background: var(--contentColor);
         margin: rem(30px) 0;
@@ -164,6 +188,26 @@ const submitHandler = () => {
         margin-left: 10px;
     }
 }
+.tradeTypeTab{
+    margin-top: rem(10px);
+    margin-bottom: rem(30px);
+    display: grid;
+    grid-column-gap: rem(10px);
+    grid-template-columns: 1fr 1fr;
+    text-align: center;
+    .item{
+        height: rem(80px);
+        line-height: rem(80px);
+        background: var(--bgColor);
+        color: var(--color);
+        font-size: rem(30px);
+        border-radius: rem(5px);
+        &.active{
+            background-color: var(--primary);
+            color: #fff;
+        }
+    }
+}
 .iconArrowWrapper{
     display: flex;
     justify-content: center;
@@ -186,10 +230,9 @@ const submitHandler = () => {
     }
 }
 .footerBtn{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+    display: block;
+    margin-top: rem(40px);
+
     .van-button{
         background: var(--primary);
         border-color: var(--primary);
