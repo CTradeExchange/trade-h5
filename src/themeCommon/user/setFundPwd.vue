@@ -6,24 +6,48 @@
         </Top>
         <header class='header'>
             <h1 class='pageTitle'>
-                {{ $t(isFirstSet ? "common.settings" : 'common.modify') + $t("login.loginPwd") }}
+                {{ $t(isFirstSet ? "common.settings" : 'common.modify') + $t("common.fundPwd") }}
             </h1>
-            <h6>{{ $t('forgot.pwdRule') }}</h6>
+            <h6>{{ $t('common.fundPwdTip') }}</h6>
         </header>
         <van-cell-group>
             <div v-if='!isFirstSet' class='form-item'>
-                <van-field v-model='oldPwd' label='' :placeholder='$t("login.originPwd")' :type='oldPwdVis ? "text" : "password"' />
+                <van-field
+                    v-model='oldPwd'
+                    :formatter='formatter'
+                    label=''
+                    maxlength='6'
+                    :placeholder='$t("login.originPwd")'
+                    :type='oldPwdVis ? "text" : "password"'
+                />
                 <span class='icon' :class="oldPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("oldPwdVis")'></span>
             </div>
             <div class='form-item'>
-                <van-field v-model='newPwd' label='' :placeholder='$t("forgot.inputNewPwd")' :type='newPwdVis ? "text" : "password"' />
+                <van-field
+                    v-model='newPwd'
+                    :formatter='formatter'
+                    label=''
+                    maxlength='6'
+                    :placeholder='$t("forgot.inputNewPwd")'
+                    :type='newPwdVis ? "text" : "password"'
+                />
                 <span class='icon' :class="newPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("newPwdVis")'></span>
             </div>
             <div class='form-item'>
-                <van-field v-model='confirmPwd' label='' :placeholder='$t("forgot.newPwdAgain")' :type='confirmVis ? "text" : "password"' />
+                <van-field
+                    v-model='confirmPwd'
+                    :formatter='formatter'
+                    label=''
+                    maxlength='6'
+                    :placeholder='$t("forgot.newPwdAgain")'
+                    :type='confirmVis ? "text" : "password"'
+                />
                 <span class='icon' :class="confirmVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("confirmVis")'></span>
             </div>
         </van-cell-group>
+        <p class='tips'>
+            注：资金密码修改后XX小时内不可以提现，其他操作不受影响
+        </p>
         <van-button class='confirmBtn' @click='handleConfirm'>
             <span>{{ $t('common.sure') }}</span>
         </van-button>
@@ -36,13 +60,13 @@ import { reactive, toRefs, computed } from 'vue'
 import { Toast, Dialog } from 'vant'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
-import { setLoginPwd, modifyLoginPwd } from '@/api/user'
+import { bindAssertsPwd, updateAssertsPwd } from '@/api/user'
 import md5 from 'js-md5'
 import { useI18n } from 'vue-i18n'
 
 export default {
     components: {
-        Top
+        Top,
     },
     setup (props) {
         const store = useStore()
@@ -53,7 +77,7 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
 
-        const isFirstSet = computed(() => Number(customInfo.value.loginPassStatus) === 1)
+        const isFirstSet = computed(() => Number(customInfo.value.assertPassStatus) === 1)
 
         const state = reactive({
             newPwd: '',
@@ -68,8 +92,12 @@ export default {
             state[type] = !state[type]
         }
 
+        function formatter (value) {
+            // 过滤输入的非数字
+            return value.replace(/[^\d]/g, '')
+        }
+
         function handleConfirm () {
-            const pwdReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/
             if (!state.oldPwd && !isFirstSet.value) {
                 return Toast(t('login.originPwd'))
             }
@@ -79,15 +107,15 @@ export default {
             if (!state.confirmPwd) {
                 return Toast(t('forgot.inputSurePwd'))
             }
-            if (!pwdReg.test(state.newPwd)) {
-                return Toast(t('forgot.pwdRule'))
-            }
 
             if (state.newPwd !== state.confirmPwd) {
                 return Toast(t('forgot.pwdDiff'))
             }
             if (state.oldPwd === state.newPwd) {
                 return Toast(t('forgot.pwdSame'))
+            }
+            if (state.oldPwd.length !== 6 || state.newPwd.length !== 6 || state.confirmPwd.length !== 6) {
+                return Toast(t('common.fundPwdTip'))
             }
 
             const toast = Toast.loading({
@@ -96,7 +124,7 @@ export default {
             })
 
             if (isFirstSet.value) {
-                setLoginPwd({
+                bindAssertsPwd({
                     pwd: md5(state.confirmPwd)
                 }).then(res => {
                     toast.clear()
@@ -107,7 +135,7 @@ export default {
                     }
                 })
             } else {
-                modifyLoginPwd({
+                updateAssertsPwd({
                     oldPwd: md5(state.oldPwd),
                     newPwd: md5(state.confirmPwd)
                 }).then((res) => {
@@ -121,15 +149,9 @@ export default {
                         if (res.check()) {
                             Dialog.alert({
                                 title: t('common.tip'),
-                                message: t('login.pwdSuccess'),
-                                confirmButtonText: t('forgot.goLogin')
+                                message: t('login.pwdSuccess')
                             }).then(() => {
-                                // 注销登录
-                                store.dispatch('_user/logout').then(() => {
-                                    return router.push('/login')
-                                }).then(() => {
-                                    location.reload()
-                                })
+                                router.back()
                             })
                         } else {
                             Toast(res.msg)
@@ -144,6 +166,7 @@ export default {
             changeState,
             customInfo,
             isFirstSet,
+            formatter,
             handleConfirm
         }
     }
@@ -190,6 +213,11 @@ export default {
                 font-size: rem(30px);
             }
         }
+    }
+    .tips{
+        color: var(--warn);
+        padding: rem(30px);
+        font-size: rem(24px);
     }
 }
 </style>

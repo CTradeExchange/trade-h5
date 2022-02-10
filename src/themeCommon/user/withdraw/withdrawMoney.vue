@@ -143,6 +143,8 @@
             </van-button>
         </div>
     </van-popup>
+
+    <DialogFundPwd v-model:show='fundPwdVis' @confirmWithdraw='confirmWithdraw' />
 </template>
 
 <script>
@@ -168,10 +170,12 @@ import {
 } from '@/api/user'
 // vant
 import { Toast, Dialog } from 'vant'
-
+import DialogFundPwd from '@plans/components/dialogFundPwd'
+import md5 from 'js-md5'
 export default {
     components: {
-        Top
+        Top,
+        DialogFundPwd
     },
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
@@ -245,7 +249,9 @@ export default {
             withdrawTimeConfigMap: {}, // 处理后的时区
             appendVis: false, // 是否显示补充资料弹窗
             extend: {}, // 需要补充资料的数据
-            paramsExtens: {} // 补充完整的资料数据
+            paramsExtens: {}, // 补充完整的资料数据
+            fundPwdVis: false,
+            fundPwd: ''
         })
 
         // 初始化数据
@@ -450,6 +456,7 @@ export default {
             }
 
             queryWithdrawConfig(params).then(res => {
+                state.loading = false
                 if (res.check()) {
                     const { data } = res
                     state.withdrawConfig = data
@@ -476,6 +483,8 @@ export default {
                 } else {
                     Toast(res.msg)
                 }
+            }).catch(err => {
+                state.loading = false
             })
         }
 
@@ -574,11 +583,15 @@ export default {
                 tradeType,
                 accountId
             }).then(res => {
-                res.data.map(elem => {
-                    if (elem.withdrawMethod === currentTab) {
-                        state.extend = elem.extend
-                    }
-                })
+                if (res.check()) {
+                    res.data.map(elem => {
+                        if (elem.withdrawMethod === currentTab) {
+                            state.extend = elem.extend
+                        }
+                    })
+                }
+            }).catch(err => {
+                state.loading = false
             })
         }
 
@@ -595,6 +608,13 @@ export default {
                 }
             }
             return flag
+        }
+
+        // 获取资金密码
+        const confirmWithdraw = (val) => {
+            state.fundPwd = val
+            // 发起提现
+            launchHandleWithdraw()
         }
 
         // 补充资料确定事件
@@ -651,8 +671,8 @@ export default {
                 return
             }
 
-            // 发起提现
-            launchHandleWithdraw()
+            // 判断资金密码
+            state.fundPwdVis = true
         }
 
         // 创建取款提案
@@ -670,7 +690,8 @@ export default {
                 bankCardNo: state.checkedBank.bankCardNumber,
                 withdrawType: 1,
                 withdrawMethod: currentTab,
-                tradeType
+                tradeType,
+                fundPwd: md5(state.fundPwd)
             }
             if (!isEmpty(state.paramsExtens)) {
                 params.extend = JSON.stringify(state.paramsExtens)
@@ -717,7 +738,8 @@ export default {
             onlineServices,
             isEmpty,
             accountCurrency,
-            handleAppendField
+            handleAppendField,
+            confirmWithdraw
         }
     }
 

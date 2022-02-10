@@ -182,7 +182,11 @@
         "up": "Up",
         "symbolName": "Product Name",
         "symbolCode": "Product Code",
-        "warning": "Warning"
+        "warning": "Warning",
+        "fundPwd": "Fund Password",
+        "fundPwdTip":"Password is 6 digits",
+        "inputFundPwd":"Input Fund Password"
+
         
     },
     "faceAuth": {

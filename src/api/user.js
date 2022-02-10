@@ -875,3 +875,28 @@ export function thirdRegist (data) {
         data
     })
 }
+
+/* 设置资金密码 */
+export function bindAssertsPwd (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.bindAssertsPwd',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+/* 修改资金密码 */
+export function updateAssertsPwd (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.updateAssertsPwd',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
