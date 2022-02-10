@@ -4,7 +4,7 @@ const uat = [
     'https://uatwph5_2.cats-trade.com/',
     'https://uatwph5_3.cats-trade.com/',
     'https://uatwph5_4.cats-trade.com/',
-    'https://uatwph5_5.cats-trade.com/',
+    'https://uatwph5-5.cats-trade.com/',
     'https://uatwph5_6.cats-trade.com/',
     'https://uatwph5_7.cats-trade.com/',
     'https://uatwph5_8.cats-trade.com/',

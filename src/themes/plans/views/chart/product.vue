@@ -267,6 +267,9 @@
             :symbol-id='product?.symbolId'
             :trade-type='tradeType'
         />
+        <div v-else-if='product.tradeEnable===2' class='composeBox'>
+            <realtime-invest-compose :title='$t("fundInfo.indexSample")' />
+        </div>
 
         <div v-if='product && product.tradeEnable===1' class='footerBtnBox'>
             <div class='trade-btn-wrap'>
@@ -326,10 +329,11 @@ import Loading from '@/components/loading.vue'
 import ETF from '@plans/components/etfIcon.vue'
 import sidebarProduct from '@plans/components/sidebarProduct.vue'
 import Base from '@/store/modules/base'
+import realtimeInvestCompose from '@plans/modules/fundInformation/realtimeInvestCompose.vue'
 import { toolHooks } from '@plans/hooks/handicap'
 
 export default {
-    components: { KIcon, StudyList, tv, StallsAndDeal, Loading, sidebarProduct, ETF },
+    components: { KIcon, StudyList, tv, StallsAndDeal, Loading, sidebarProduct, ETF, realtimeInvestCompose },
     setup (props) {
         const route = useRoute()
         const router = useRouter()
@@ -1038,6 +1042,7 @@ export default {
         watch(
             () => route.query.symbolId,
             async () => {
+                state.onChartReadyFlag = false
                 await nextTick()
                 const query = route.query
                 if (query.symbolId) {
@@ -1755,5 +1760,11 @@ export default {
     color: var(--van-white)!important;
     background-color: var(--primary)!important;
     border-color: var(--primary)!important;
+}
+.composeBox{
+    margin-top: rem(30px);
+    padding: rem(20px) rem(20px);
+    box-sizing: content-box;
+    background: var(--contentColor);
 }
 </style>

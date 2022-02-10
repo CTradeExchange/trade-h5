@@ -2,7 +2,12 @@
     <div class='realtimeInvestCompose'>
         <h4 class='title'>
             <span class='rightSwitch icon_chouti1' @click='switchAction'></span>
-            {{ $t('fundInfo.realtimeInvestCompose') }}
+            <span v-if='title'>
+                {{ title }}
+            </span>
+            <span v-else>
+                {{ $t('fundInfo.realtimeInvestCompose') }}
+            </span>
         </h4>
         <div v-if="showBlock==='list'">
             <div class='assetsTitle cellflex'>
@@ -77,6 +82,10 @@ import { computed, nextTick, onMounted, ref } from 'vue'
 import { useInvestCompose } from './hooks/realtimeInvestCompose'
 import currencyIcon from '@/components/currencyIcon'
 import BottomTip from './bottomTip.vue'
+
+defineProps({
+    title: String
+})
 
 // 显示数据列表还是显示环形图
 const showBlock = ref('chart')

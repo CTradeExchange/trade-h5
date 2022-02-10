@@ -687,6 +687,7 @@
 		"subScriptePlaceholder": "请输入申购金额",
 		"redeemNumPlaceholder": "请输入赎回份额",
 		"available": "可用",
+		"indexSample": "指数样本",
 		"buy": "申购",
 		"sell": "赎回"
 	}

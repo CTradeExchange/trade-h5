@@ -687,6 +687,7 @@
 		"subScriptePlaceholder": "Please enter the purchase amount",
 		"redeemNumPlaceholder": "Please enter redemption shares",
 		"available": "Avbl",
+		"indexSample": "指数样本",
 		"buy": "Purchase",
 		"sell": "Redemption"
 	}

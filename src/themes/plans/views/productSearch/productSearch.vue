@@ -26,6 +26,9 @@
                             :class="item.isSelfSymbol ? 'icon_zixuan2': 'icon_zixuan1'"
                         ></i>
                     </button>
+                    <p v-if='item.etf'>
+                        <ETF />
+                    </p>
                 </div>
             </div>
         </div>
@@ -41,11 +44,13 @@ import { useRouter, useRoute } from 'vue-router'
 import { addCustomerOptional, removeCustomerOptional, getSymbolList } from '@/api/trade'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
+import ETF from '@plans/components/etfIcon'
 
 export default {
     name: 'ProductSearch',
     components: {
-        plansType
+        plansType,
+        ETF,
     },
     setup () {
         const state = reactive({
@@ -86,10 +91,10 @@ export default {
             getSymbolList({ name: state.searchKey, tradeType: tradeType.value }).then(res => {
                 if (res.check()) {
                     const list = res.data || []
-                    state.searchList = [];
-                    list.forEach(item=>{
-                        for(let el in productMap.value){
-                            if(productMap.value[el].symbolKey===(String(item.id)+'_'+tradeType.value)){
+                    state.searchList = []
+                    list.forEach(item => {
+                        for (const el in productMap.value) {
+                            if (productMap.value[el].symbolKey === (String(item.id) + '_' + tradeType.value)) {
                                 state.searchList.push(item)
                             }
                         }
