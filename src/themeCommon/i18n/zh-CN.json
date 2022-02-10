@@ -188,7 +188,10 @@
         "symbolName": "产品名称",
         "symbolCode": "产品代码",
 		"warning": "警告",
-        "pleaseComplete": "请完成"
+        "pleaseComplete": "请完成",
+        "fundPwd": "资金密码",
+        "fundPwdTip":"密码为6位数字",
+        "inputFundPwd":"请输入资金密码"
     },
     "faceAuth": {
         "faceDetectTip": "请正对手机，保持光线充足",

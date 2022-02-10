@@ -282,6 +282,16 @@ const routes = [
         }
     },
     {
+        path: '/setFundPwd',
+        name: 'setFundPwd',
+        component: () => import(/* webpackChunkName: "setLoginPwd" */ '../user/setFundPwd.vue'),
+        meta: {
+            title: 'cRoute.setLoginPwd',
+            footerMenu: false,
+            roles: ['User']
+        }
+    },
+    {
         path: '/page',
         name: 'Page',
         component: () => import(/* webpackChunkName: "page" */ '../user/page.vue'),

@@ -6,6 +6,7 @@
             v-model='val'
             class='input'
             v-bind='$attrs'
+            :maxlength='maxLength'
             :placeholder='label'
             required
             :type='pwdVisible ? "text" : "password"'
@@ -17,6 +18,7 @@
             v-model='val'
             class='input'
             v-bind='$attrs'
+            :maxlength='maxLength'
             :placeholder='label'
             required
             type='text'
@@ -48,6 +50,9 @@ export default {
             type: Boolean,
             default: false
         },
+        maxLength: {
+            type: Number
+        }
     },
     emits: ['update:modelValue', 'input'],
     data () {
