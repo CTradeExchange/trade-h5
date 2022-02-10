@@ -688,6 +688,8 @@
 		"redeemNumPlaceholder": "请输入赎回份额",
 		"available": "可用",
 		"indexSample": "指数样本",
+		"curRedeem": "当前赎回",
+		"historyRedeem": "历史赎回",
 		"buy": "申购",
 		"sell": "赎回"
 	}

@@ -192,3 +192,27 @@ export function fundCalcApplyShares (data) {
         data
     })
 }
+
+/* 客户获取基金申购列表 */
+export function fundApplyRecord (data) {
+    return request({
+        url: '/global/fund.app.FundApplyAppDubboService.customerPage',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
+/* 查询基金赎回列表 */
+export function fundRedeemRecord (data) {
+    return request({
+        url: '/global/fund.app.FundRedeemAppDubboService.page',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
