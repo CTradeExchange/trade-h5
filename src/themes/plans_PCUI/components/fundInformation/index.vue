@@ -1,20 +1,14 @@
 <template>
-    <div>
+    <div class='case'>
         <van-tabs v-model:active='active' class='fundInfoTab' type='card'>
             <van-tab :title='$t("fundInfo.baseInfo")'>
-                <div v-if='active === 0' class='case'>
-                    <baseVue />
-                </div>
+                <baseVue v-if='active === 0' />
             </van-tab>
             <van-tab :title='$t("fundInfo.fundPerformance")'>
-                <div v-if='active === 1' class='case'>
-                    <performanceVue />
-                </div>
+                <performanceVue v-if='active === 1' />
             </van-tab>
             <van-tab :title='$t("fundInfo.investCompose")'>
-                <div v-if='active === 2' class='case'>
-                    <realtime-invest-compose />
-                </div>
+                <realtime-invest-compose v-if='active === 2' />
             </van-tab>
         </van-tabs>
     </div>

@@ -54,7 +54,7 @@ export function saveOrderStandard (data) {
     })
 }
 
-/* 查询基金产品申购列表 */
+/* 基金经理-查询基金产品申购列表 */
 export function getFundApplyList (data) {
     return request({
         url: '/global/fund.app.FundApplyAppDubboService.page',
@@ -66,7 +66,7 @@ export function getFundApplyList (data) {
     })
 }
 
-/* 获取基金产品申购执行信息 */
+/* 基金经理-获取基金产品申购执行信息 */
 export function getFundApplyInfo (data) {
     return request({
         url: '/global/fund.app.FundsApplyExecuteService.getFundsApplyExecuteInfo',
@@ -78,7 +78,7 @@ export function getFundApplyInfo (data) {
     })
 }
 
-/* 确认基金产品申购执行 */
+/* 基金经理-确认基金产品申购执行 */
 export function confirmFundApply (data) {
     return request({
         url: '/global/fund.app.FundsApplyExecuteService.confirmFundsApplyExecuteInfo',
@@ -90,7 +90,7 @@ export function confirmFundApply (data) {
     })
 }
 
-/* 查询基金产品赎回列表 */
+/* 基金经理-查询基金产品赎回列表 */
 export function getFundRedeemList (data) {
     return request({
         url: '/global/fund.app.FundRedeemAppDubboService.queryManagerPage',
@@ -102,7 +102,7 @@ export function getFundRedeemList (data) {
     })
 }
 
-/* 获取基金产品赎回总金额 */
+/* 基金经理-获取基金产品赎回总金额 */
 export function getFundRedeemMoney (data) {
     return request({
         url: '/global/fund.app.FundRedeemAppDubboService.calShares',
@@ -114,7 +114,7 @@ export function getFundRedeemMoney (data) {
     })
 }
 
-/* 确认基金产品赎回 */
+/* 基金经理-确认基金产品赎回 */
 export function confirmFundRedeem (data) {
     return request({
         url: '/global/fund.app.FundRedeemAppDubboService.checkShares',

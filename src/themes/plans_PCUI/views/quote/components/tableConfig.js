@@ -12,7 +12,7 @@ export const getColumns = tradeType => {
     const { t } = useI18n({ useScope: 'global' })
     const productMap = computed(() => store.state._quote.productMap)
 
-    const getVal = (symbolKey, key) => unref(productMap)[symbolKey]?.[key] || '- -'
+    const getVal = (symbolKey, key) => unref(productMap)[symbolKey]?.[key] || '--'
 
     /** 添加自选逻辑 */
     const userSelfSymbolList = computed(() => store.getters.userSelfSymbolList || {})
@@ -79,7 +79,6 @@ export const getColumns = tradeType => {
                         <span class='name'>
                             { row.symbolCode }
                         </span>
-                        <ETF v-show={getVal(row.symbolKey, 'etf') === true} />
                     </div>
                 </div>)
             },
@@ -143,7 +142,6 @@ export const getColumns = tradeType => {
                         <span class='name'>
                             { row.symbolCode }
                         </span>
-                        <ETF v-show={getVal(row.symbolKey, 'etf') === true} />
                     </div>
                 </div>)
             },
@@ -207,7 +205,6 @@ export const getColumns = tradeType => {
                         <span class='name'>
                             { row.symbolCode }
                         </span>
-                        <ETF v-show={getVal(row.symbolKey, 'etf') === true} />
                     </div>
                 </div>)
             },

@@ -66,9 +66,14 @@ watch(() => tradeType.value, async () => {
                     --el-text-color-primary: var(--normalColor);
                     user-select: none;
                     font-weight: 400;
+                    color: var(--normalColor);
                     &.is-active{
                         font-weight: bold;
+                        color: var(--primary);
                     }
+                }
+                .el-tabs__active-bar {
+                    background-color: var(--primary);
                 }
                 .el-tabs__nav-wrap::after{
                     display: none;

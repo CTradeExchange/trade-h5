@@ -18,21 +18,31 @@
                 <fundDeal v-if='fund?.fundId' :fund='fund' />
             </div>
         </div>
+        <!-- 资产 -->
+        <van-sticky class='assetsSticky' :offset-bottom='0' position='bottom'>
+            <assetsModule />
+        </van-sticky>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useStore } from 'vuex'
 import fundList from './components/fundList.vue'
 import fundContent from './components/fundContent.vue'
 import fundDeal from './components/fundDeal.vue'
+import assetsModule from './components/assets.vue'
 
+const store = useStore()
 // 当前基金产品
 const fund = ref({})
 // 设置当前基金产品
 const setFundProduct = (data) => {
     fund.value = data
 }
+
+// 获取账户资产
+store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 5 })
 </script>
 
 <style lang="scss" scoped>
@@ -62,5 +72,11 @@ const setFundProduct = (data) => {
 }
 .right-module {
     width: 360px;
+}
+.assetsSticky {
+    :deep(.van-sticky--fixed) {
+        box-shadow: 0 0 10px rgba(0,0,0,.15);
+        background-color: var(--bgColor);
+    }
 }
 </style>

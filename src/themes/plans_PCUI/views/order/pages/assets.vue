@@ -152,14 +152,14 @@ export default {
         const goDesposit = () => {
             if (store.state._user.customerInfo?.accountList?.length > 1) {
                 router.push({
-                    path: '/order/depositChoose',
+                    path: route.path + '/depositChoose',
                     query: {
                         tradeType: product.value?.tradeType
                     }
                 })
             } else {
                 router.push({
-                    path: '/order/deposit',
+                    path: route.path + '/deposit',
                     query: {
                         accountId: assetsInfo.value.accountId,
                         currency: assetsInfo.value.currency,
@@ -172,7 +172,7 @@ export default {
         // 跳转提现页面
         const goWithdraw = () => {
             router.push({
-                path: '/order/withdrawAccount',
+                path: route.path + '/withdrawAccount',
                 query: {
                     accountId: assetsInfo.value.accountId,
                     tradeType: product.value?.tradeType
@@ -183,7 +183,7 @@ export default {
         // 跳转到借款页面
         const goLoan = () => {
             router.push({
-                path: '/order/chooseAccount',
+                path: route.path + '/chooseAccount',
                 query: {
                     accountId: assetsInfo.value.accountId,
                     tradeType: product.value?.tradeType,
@@ -195,7 +195,7 @@ export default {
         // 跳转到还款页面
         const goRepayment = () => {
             router.push({
-                path: '/order/chooseAccount',
+                path: route.path + '/chooseAccount',
                 query: {
                     accountId: assetsInfo.value.accountId,
                     tradeType: product.value?.tradeType,

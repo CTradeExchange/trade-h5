@@ -112,12 +112,12 @@
                 :product='product'
                 :volume='buy.volume'
             />
-            <div v-if='customerInfo && product.tradeEnable===1' class='footerBtn buy'>
+            <div v-if='customerInfo && product.tradeEnable === 1' class='footerBtn buy'>
                 <van-button block :disabled='buy.loading' :loading='buy.loading' size='normal' @click='submitHandler("buy")'>
                     {{ $t('trade.buyText') }}
                 </van-button>
             </div>
-            <div v-else class='login-bar'>
+            <div v-if='!customerInfo' class='login-bar'>
                 <router-link to='login'>
                     {{ $t('c.login') }}
                 </router-link> {{ $t('c.or') }}
@@ -196,12 +196,12 @@
                 :volume='sell.volume'
             />
 
-            <div v-if='customerInfo && product.tradeEnable===1' class='footerBtn sell'>
+            <div v-if='customerInfo && product.tradeEnable === 1' class='footerBtn sell'>
                 <van-button block :disabled='sell.loading' :loading='sell.loading' size='normal' @click='submitHandler("sell")'>
                     {{ $t('trade.sellText') }}
                 </van-button>
             </div>
-            <div v-else class='login-bar'>
+            <div v-if='!customerInfo' class='login-bar'>
                 <router-link to='login'>
                     {{ $t('c.login') }}
                 </router-link> {{ $t('c.or') }}
