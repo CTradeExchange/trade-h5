@@ -58,7 +58,7 @@ import handicap from './pages/handicap.vue'
 import dealList from './pages/dealList.vue'
 import trade from './pages/trade.vue'
 import productSearch from './pages/productSearch'
-import assetsModule from './pages/assets.vue'
+import assetsModule from '@planspc/components/assets.vue'
 import LoadingComponent from '@/components/loadingComponent'
 import { isEmpty } from '@/utils/util'
 import { useStore } from 'vuex'
@@ -76,7 +76,7 @@ export default {
         assetsModule,
         userRecord,
         fundInformation: defineAsyncComponent({
-            loader: () => import('@planspc/modules/fundInformation'),
+            loader: () => import('@planspc/components/fundInformation'),
             loadingComponent: LoadingComponent,
             delay: 0, // 在显示 loadingComponent 之前的延迟 | 默认值：200（单位 ms）
             suspensible: false
@@ -217,7 +217,7 @@ export default {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            width: 280px;
+            width: 360px;
             &:deep {
                 .el-tabs {
                     padding: 0 20px;

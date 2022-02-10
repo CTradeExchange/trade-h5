@@ -27,7 +27,7 @@
                 :can-choose-currency='true'
                 class='tradeBarMtop'
                 :currency='activeCurrency'
-                :label=" $t('fundInfo.redeemAssets')"
+                :label="$t('fundInfo.redeemAssets')"
                 :readonly='true'
                 @touchCurrency='touchCurrency'
             />

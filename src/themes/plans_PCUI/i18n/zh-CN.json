@@ -901,6 +901,8 @@
 		"redeemNumPlaceholder": "请输入赎回份额",
 		"available": "可用",
 		"buy": "申购",
-		"sell": "赎回"
+		"sell": "赎回",
+		"fundIcon": "基金代币",
+		"dayUpDown": "24H涨跌"
 	}
 }

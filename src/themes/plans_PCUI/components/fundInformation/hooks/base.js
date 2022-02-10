@@ -8,6 +8,7 @@ export function useFundInfo () {
     const router = useRouter()
     const fundInfo = ref(null)
     const fundId = inject('fundId')
+    const jump = inject('jump')
     const productMap = computed(() => store.state._quote.productMap)
     const symbolKey = computed(() => store.state._quote.productActivedID)
     const getFundInfoData = () => {
@@ -24,7 +25,12 @@ export function useFundInfo () {
     const toTrackProduct = () => {
         if (fundInfo.value.trackIndex && fundInfo.value.trackProduct) {
             const { symbolId, tradeType } = fundInfo.value.trackProduct
-            router.push({ name: 'Product', query: { symbolId, tradeType } })
+            const params = { name: 'Order', query: { symbolId, tradeType } }
+            if (jump === 'push') {
+                router.push(params)
+            } else {
+                router.replace(params)
+            }
         }
     }
 

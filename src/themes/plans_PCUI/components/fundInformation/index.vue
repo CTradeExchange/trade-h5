@@ -2,13 +2,19 @@
     <div>
         <van-tabs v-model:active='active' class='fundInfoTab' type='card'>
             <van-tab :title='$t("fundInfo.baseInfo")'>
-                <baseVue v-if='active===0' />
+                <div v-if='active === 0' class='case'>
+                    <baseVue />
+                </div>
             </van-tab>
             <van-tab :title='$t("fundInfo.fundPerformance")'>
-                <performanceVue v-if='active===1' />
+                <div v-if='active === 1' class='case'>
+                    <performanceVue />
+                </div>
             </van-tab>
             <van-tab :title='$t("fundInfo.investCompose")'>
-                <realtime-invest-compose v-if='active===2' />
+                <div v-if='active === 2' class='case'>
+                    <realtime-invest-compose />
+                </div>
             </van-tab>
         </van-tabs>
     </div>
@@ -20,10 +26,12 @@ import baseVue from './base.vue'
 import performanceVue from './performance.vue'
 import realtimeInvestCompose from './realtimeInvestCompose.vue'
 const props = defineProps({
-    fundId: [String, Number]
+    fundId: [String, Number],
+    jump: String
 })
 const active = ref(0)
 provide('fundId', props.fundId)
+provide('jump', props.jump)
 </script>
 
 <style lang="scss" scoped>
@@ -50,5 +58,9 @@ provide('fundId', props.fundId)
     :deep(.van-tabs__content) {
         margin-top: 10px;
     }
+}
+.case {
+    max-width: 600px;
+    margin: 0 auto;
 }
 </style>

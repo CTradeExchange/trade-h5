@@ -180,13 +180,6 @@ const h5Children = [
             roles: ['User']
         }
     },
-    // {
-    //     path: 'fundRecord', // 资金流水
-    //     component: () => import(/* webpackChunkName: "fundRecord" */ '../views/fundRecord/fundRecord.vue'),
-    //     meta: {
-    //         title: 'cRoute.fundLog',
-    //     }
-    // },
     {
         path: 'loan', // 借款
         component: () => import(/* webpackChunkName: "loan" */ '../views/loan/loan.vue'),
@@ -345,19 +338,22 @@ const routes = [
             },
             {
                 path: 'fund',
+                name: 'Fund',
                 component: () => import(/* webpackChunkName: "returnMoney" */ '../views/fund/index.vue'),
                 meta: {
                     title: 'route.fund',
-                    roles: ['User']
-                }
+                },
+                children: h5Children
             },
             {
                 path: 'fundManager', // 基金操作专区
+                name: 'FundManager',
                 component: () => import(/* webpackChunkName: "returnMoney" */ '../views/fundManager/index.vue'),
                 meta: {
                     title: 'route.fundManager',
                     roles: ['User']
-                }
+                },
+                children: h5Children
             }
         ]
     },
