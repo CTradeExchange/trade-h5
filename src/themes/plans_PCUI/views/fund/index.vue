@@ -18,6 +18,10 @@
                 <fundDeal v-if='fund?.fundId' :fund='fund' />
             </div>
         </div>
+        <!-- 申购记录、赎回记录、资产 -->
+        <div class='record-content'>
+            <userRecord />
+        </div>
         <!-- 资产 -->
         <van-sticky class='assetsSticky' :offset-bottom='0' position='bottom'>
             <assetsModule />
@@ -31,7 +35,8 @@ import { useStore } from 'vuex'
 import fundList from './components/fundList.vue'
 import fundContent from './components/fundContent.vue'
 import fundDeal from './components/fundDeal.vue'
-import assetsModule from './components/assets.vue'
+import userRecord from './components/userRecord.vue'
+import assetsModule from './components/assetsModule.vue'
 
 const store = useStore()
 // 当前基金产品
@@ -56,22 +61,25 @@ store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 5 })
     display: flex;
     min-width: 1200px;
     height: 785px;
+    .module {
+        border-radius: 10px;
+        background: var(--contentColor);
+        overflow-y: auto;
+    }
+    .left-module {
+        width: 360px;
+        margin-right: 8px;
+    }
+    .middle-module {
+        flex: 1;
+        margin-right: 8px;
+    }
+    .right-module {
+        width: 360px;
+    }
 }
-.module {
-    border-radius: 10px;
-    background: var(--contentColor);
-    overflow-y: auto;
-}
-.left-module {
-    width: 360px;
-    margin-right: 8px;
-}
-.middle-module {
-    flex: 1;
-    margin-right: 8px;
-}
-.right-module {
-    width: 360px;
+.record-content {
+    margin-top: 8px;
 }
 .assetsSticky {
     :deep(.van-sticky--fixed) {

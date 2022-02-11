@@ -59,7 +59,7 @@ watch(() => tradeType.value, async () => {
         align-items: center;
         width: 100%;
         padding: 0 16px;
-         .tabs{
+        .tabs{
             height: 40px;
             :deep{
                 .el-tabs__item{
