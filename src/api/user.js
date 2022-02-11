@@ -900,3 +900,16 @@ export function updateAssertsPwd (data) {
         data
     })
 }
+
+/* 忘记资金密码 */
+export function forgetAssertsPwd (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.forgetAssertsPwd',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

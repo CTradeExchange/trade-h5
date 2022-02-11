@@ -40,7 +40,7 @@
                 value=''
             >
                 <template #right-icon>
-                    <span class='right-val' :class="customInfo.loginPassStatus === 2 ? 'yet' : 'none'">
+                    <span class='right-val' :class="Number(customInfo.loginPassStatus) === 2 ? 'yet' : 'none'">
                         {{ Number(customInfo.loginPassStatus) === 1 ? $t('common.noSet') : $t('common.modify') }}
                     </span>
                     <van-icon name='arrow' />
@@ -49,7 +49,7 @@
             <van-cell
                 class='cellItem'
                 is-link
-                title='资金密码'
+                :title='$t("common.fundPwd")'
                 to='/setFundPwd'
                 value=''
             >
