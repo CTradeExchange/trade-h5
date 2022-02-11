@@ -112,7 +112,7 @@ export default {
             if (state.oldPwd === state.newPwd) {
                 return Toast(t('forgot.pwdSame'))
             }
-            if (state.oldPwd.length !== 6 || state.newPwd.length !== 6 || state.confirmPwd.length !== 6) {
+            if (state.newPwd.length < 6) {
                 return Toast(t('common.fundPwdTip'))
             }
 

@@ -20,6 +20,7 @@
                 <div v-if='!isFirstSet' class='form-item'>
                     <van-field
                         v-model='oldPwd'
+                        :formatter='formatter'
                         label=''
                         maxlength='6'
                         :placeholder='$t("login.originPwd")'
@@ -30,6 +31,7 @@
                 <div class='form-item'>
                     <van-field
                         v-model='newPwd'
+                        :formatter='formatter'
                         label=''
                         maxlength='6'
                         :placeholder='$t("forgot.inputNewPwd")'
@@ -40,6 +42,7 @@
                 <div class='form-item'>
                     <van-field
                         v-model='confirmPwd'
+                        :formatter='formatter'
                         label=''
                         maxlength='6'
                         :placeholder='$t("forgot.newPwdAgain")'
@@ -70,8 +73,6 @@ export default {
     components: {
         Top,
         centerViewDialog,
-        Toast,
-        Dialog
     },
     setup (props) {
         const store = useStore()

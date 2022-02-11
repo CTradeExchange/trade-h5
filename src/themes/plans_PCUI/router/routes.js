@@ -271,6 +271,17 @@ const routes = [
         }
     },
     {
+        path: '/resetFundPwd',
+        name: 'ResetFundPwd',
+        component: () => import(/* webpackChunkName: "Forgot" */ '../views/forgot/resetFundPwd.vue'),
+        meta: {
+            title: 'route.resetFundPwd',
+            // keepAlive: true,
+            roles: [],
+        }
+    },
+
+    {
         path: '/resetSuccess',
         name: 'ResetSuccess',
         component: () => import(/* webpackChunkName: "resetSuccess" */ '../views/forgot/resetSuccess.vue'),
