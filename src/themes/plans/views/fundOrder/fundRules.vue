@@ -10,7 +10,7 @@
         <div v-if='active===0'>
             <section class='block'>
                 <h2 class='title'>
-                    $t("fundInfo.applyRules")
+                    {{ $t("fundInfo.applyRules") }}
                 </h2>
                 <ol class='olList'>
                     <li>
