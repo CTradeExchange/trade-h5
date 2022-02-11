@@ -13,6 +13,9 @@
                 <li v-if='customInfo' class='item' @click='handRoutTo("/setLoginPwd")'>
                     {{ Number(customInfo.loginPassStatus) === 1 ? $t("forgot.setPwd") : $t('login.modifyLoginPwd') }}
                 </li>
+                <li v-if='customInfo' class='item' @click='handRoutTo("/setFundPwd")'>
+                    {{ Number(customInfo.assertPassStatus) === 1 ? $t("forgot.setFundPwd") : $t('forgot.resetFundPwd') }}
+                </li>
                 <li v-if='customInfo' class='item' @click='handRoutTo("/bindMobile")'>
                     {{ customInfo.phone ? $t("setting.replacePhone") : $t('setting.bindPhone') }}
                 </li>

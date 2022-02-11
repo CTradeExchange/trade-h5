@@ -28,6 +28,14 @@ const h5Children = [
         }
     },
     {
+        path: 'setFundPwd', // 设置资金密码
+        component: () => import(/* webpackChunkName: "setLoginPwd" */ '../views/setting/setFundPwd.vue'),
+        meta: {
+            title: 'cRoute.setFundPwd',
+            roles: ['User']
+        }
+    },
+    {
         path: 'bankList',
         component: () => import(/* webpackChunkName: "bankList" */ '../views/user/bankList.vue'),
         meta: {

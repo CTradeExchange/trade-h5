@@ -42,8 +42,8 @@
         "withdrawAccount": "Select Currency",
         "transfer": "Transfer",
         "securitySetting": "Security Settings",
-        "commonSetting": "Common Settings"
-        
+        "commonSetting": "Common Settings",
+        "setFundPwd": "资金密码"
     },
     "login": {
         "loginBtn": "Log In",
@@ -225,6 +225,7 @@
         "setPwdFailed": "New password setting failed",
         "tryLater": "Please try again later or contact Online Customer Service",
         "setPwd": "Set Password",
+        "resetFundPwd": "Change Fund Password",
         "setFundPwd": "Set Fund Password",
         "pwdRule": "Password must be 6-16 characters with alphanumeric",
         "inputNewPwd": "Input new password",

@@ -294,7 +294,7 @@ const routes = [
         name: 'setFundPwd',
         component: () => import(/* webpackChunkName: "setLoginPwd" */ '../user/setFundPwd.vue'),
         meta: {
-            title: 'cRoute.setLoginPwd',
+            title: 'cRoute.setFundPwd',
             footerMenu: false,
             roles: ['User']
         }
