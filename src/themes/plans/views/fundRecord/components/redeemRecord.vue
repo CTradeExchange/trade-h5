@@ -1,8 +1,8 @@
 <template>
     <div class='applyRecord'>
         <van-tabs v-model:active='redeemActive' class='redeemTab' type='card'>
-            <van-tab title='当前赎回' />
-            <van-tab title='历史赎回' />
+            <van-tab :title='$t("fundInfo.curRedeem")' />
+            <van-tab :title='$t("fundInfo.historyRedeem")' />
         </van-tabs>
         <filterBox />
         <div class='listContainer'>
@@ -14,7 +14,8 @@
             >
                 <template #default='{ list }'>
                     <div v-for='item in list' :key='item.id' class='li'>
-                        <fundRedeemRecordItem />
+                        <fundRedeemRecordItem v-if='redeemActive===0' />
+                        <fundRedeemRecordHistoryItem v-else-if='redeemActive===1' />
                     </div>
                 </template>
             </listVue>

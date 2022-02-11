@@ -1,32 +1,32 @@
 <template>
     <div class='fundApplyRecordItem'>
         <p class='title'>
-            申购  ARX 20 Fund
+            {{ $t('fundInfo.buy') }}  {{ data.fundName }}
         </p>
         <ul class='infos'>
             <li class='item'>
                 <span class='label'>
-                    申购金额(USDT)
+                    申购金额({{ data.currencyPay }})
                 </span>
-                <span>200</span>
+                <span>{{ data.amountPay }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    净值(USDT)
+                    净值({{ data.currencyNet }})
                 </span>
-                <span>1.4</span>
+                <span>{{ data.sharesNet }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    申购手续费(USDT)
+                    申购手续费({{ data.currencyPay }})
                 </span>
-                <span>1.4</span>
+                <span>{{ data.fees }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    申购份额(ARX20)
+                    申购份额({{ data.currencyShares }})
                 </span>
-                <span>2</span>
+                <span>{{ data.shares }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
@@ -38,16 +38,16 @@
                 <span class='label'>
                     份额确认状态
                 </span>
-                <span>已确认</span>
+                <span>{{ data.sharesStatus===1?'已确认':'待确认' }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    2022-01-08 21:09:09
+                    {{ formatTime(data.createTime) }}
                 </span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    P355454654
+                    {{ data.proposalNo }}
                 </span>
             </li>
         </ul>
@@ -55,7 +55,11 @@
 </template>
 
 <script setup>
+import { defineProps } from 'vue'
 
+defineProps({
+    data: Object
+})
 </script>
 
 <style lang="scss" scoped>

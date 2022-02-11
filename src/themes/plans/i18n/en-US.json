@@ -688,6 +688,8 @@
 		"redeemNumPlaceholder": "Please enter redemption shares",
 		"available": "Avbl",
 		"indexSample": "指数样本",
+		"curRedeem": "当前赎回",
+		"historyRedeem": "历史赎回",
 		"buy": "Purchase",
 		"sell": "Redemption"
 	}

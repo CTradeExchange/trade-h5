@@ -2,7 +2,7 @@
     <div class='recordList'>
         <tabBar v-model:active='tabActive' />
         <div v-if='tabActive===0' class='listWrap'>
-            <fundApplyRecordItem v-for='item in 2' :key='item' />
+            <fundApplyRecordItem v-for='item in applyRecordData' :key='item' :data='item' />
         </div>
         <div v-else-if='tabActive===1' class='listWrap'>
             <van-tabs v-model:active='redeemActive' class='redeemTab' type='card'>
@@ -29,14 +29,46 @@ import fundApplyRecordItem from '@plans/modules/fundApplyRecord/fundApplyRecordI
 import fundRedeemRecordItem from '@plans/modules/fundApplyRecord/fundRedeemRecordItem.vue'
 import fundRedeemRecordHistoryItem from '@plans/modules/fundApplyRecord/fundRedeemRecordHistoryItem.vue'
 import assetsItem from '@plans/modules/assets/assetsItem.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, unref, onMounted, watch } from 'vue'
 import { useStore } from 'vuex'
+import { fundApplyRecord, fundRedeemRecord } from '@/api/fund'
 const store = useStore()
 
 // 现货账户列表
 const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === 5))
-const tabActive = ref(1)
+const tabActive = ref(0)
 const redeemActive = ref(0)
+const applyRecordData = ref([])
+
+// 获取基金申购记录
+const getFundApplyRecord = function () {
+    fundApplyRecord({ size: 10, current: 1 }).then(res => {
+        if (res.check()) {
+            applyRecordData.value = res.data
+        }
+    })
+}
+
+// 获取基金赎回记录
+const getFundRedeemRecord = function () {
+    fundRedeemRecord({ size: 10, current: 1, sharesStatus: unref(redeemActive) }).then(res => {
+        if (res.check()) {
+            applyRecordData.value = res.data
+        }
+    })
+}
+
+watch(
+    [redeemActive, tabActive],
+    () => {
+        tabActive.value === 0 ? getFundApplyRecord() : getFundRedeemRecord()
+    }
+)
+
+onMounted(() => {
+    getFundApplyRecord()
+})
+
 </script>
 
 <style lang="scss" scoped>
