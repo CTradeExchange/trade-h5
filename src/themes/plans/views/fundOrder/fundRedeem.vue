@@ -1,6 +1,12 @@
 <template>
     <div v-if='fund' class='pageWrapp'>
-        <LayoutTop :back='true' :menu='false' />
+        <LayoutTop :back='true' :menu='false'>
+            <template #right>
+                <router-link class='text' href='javascript:;' to='/fundRules?direction=sell'>
+                    {{ $t('fundInfo.redeemRules') }}
+                </router-link>
+            </template>
+        </LayoutTop>
         <div class='currencyBar'>
             <CurrencyIcon :currency='fund.shareTokenCode' size='28px' />
             <span class='fundCurrency'>
@@ -56,7 +62,7 @@
         </div>
 
         <!-- 申购赎回记录 -->
-        <recordList />
+        <recordList ref='recordListRef' />
 
         <loadingVue :show='loading' />
 
@@ -75,11 +81,12 @@ import { toFixed } from '@/utils/calculation'
 import { useRoute, useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
+
 const { t } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const router = useRouter()
 const { fundId } = route.query
-
+const recordListRef = ref(null)
 const {
     pageTitle,
     fund,
@@ -132,6 +139,7 @@ const submitHandler = () => {
     }).then(res => {
         if (res?.check && res.check()) {
             amountPay.value = ''
+            unref(recordListRef) && unref(recordListRef).refresh()
             Dialog.alert({
                 title: t('fundInfo.redeemSubmiteed'),
                 message: t('fundInfo.redeemSubmiteedDesc'),
@@ -150,6 +158,9 @@ const submitHandler = () => {
     margin-top: rem(110px);
     height: 100%;
     overflow-y: auto;
+    .text {
+        color: var(--color);
+    }
     .currencyBar{
         background: var(--contentColor);
         margin: rem(30px) 0;

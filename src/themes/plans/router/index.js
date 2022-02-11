@@ -259,6 +259,15 @@ const routes = [
             roles: ['User'],
         }
     },
+    {
+        path: '/fundRules',
+        name: 'FundRules',
+        component: () => import(/* webpackChunkName: "fundProduct" */ '../views/fundOrder/fundRules.vue'),
+        meta: {
+            title: 'route.fundRules',
+            roles: ['User'],
+        }
+    },
     { path: '/:pathMatch(.*)*', redirect: { name: 'Mine' } },
 ]
 

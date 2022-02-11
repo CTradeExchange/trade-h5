@@ -1,53 +1,53 @@
 <template>
     <div class='fundApplyRecordItem'>
         <p class='title'>
-            赎回  ARX 20 Fund
+            赎回  {{ data.fundName }}
         </p>
         <ul class='infos'>
             <li class='item'>
                 <span class='label'>
-                    赎回份额(ARX20)
+                    赎回份额({{ data.currencyShares }})
                 </span>
-                <span>200</span>
+                <span>{{ data.amountRedeem }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    净值(USDT)
+                    净值({{ data.currencyNet }})
                 </span>
-                <span>1.3</span>
+                <span>{{ data.sharesNet }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    赎回手续费(USDT)
+                    赎回手续费({{ data.currencyNet }})
                 </span>
-                <span>3</span>
+                <span>{{ data.fees }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    赎回金额(USDT)
+                    赎回金额({{ data.currencyNet }})
                 </span>
-                <span>3</span>
+                <span>{{ data.amountRedeem }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
                     份额代币
                 </span>
-                <span>ARX20</span>
+                <span>{{ data.currencyShares }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
                     份额确认状态
                 </span>
-                <span>已确认</span>
+                <span>{{ data.sharesStatus===1?'已确认':'待确认' }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    2022-01-08 21:09:09
+                    {{ formatTime(data.createTime) }}
                 </span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    P355454654
+                    {{ data.proposalNo }}
                 </span>
             </li>
         </ul>
@@ -55,7 +55,11 @@
 </template>
 
 <script setup>
+import { defineProps } from 'vue'
 
+defineProps({
+    data: Object
+})
 </script>
 
 <style lang="scss" scoped>

@@ -32,7 +32,7 @@
                 <span class='label'>
                     份额代币
                 </span>
-                <span>ARX20</span>
+                <span>{{ data.currencyShares }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
