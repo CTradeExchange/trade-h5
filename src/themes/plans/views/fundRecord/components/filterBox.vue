@@ -25,21 +25,27 @@
 
 <script setup>
 import dateRange from '@plans/components/dateRange'
-import { computed, ref } from 'vue'
+import { computed, ref, defineProps, defineEmits } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
+const props = defineProps({
+    assetsList: Array
+})
+
+const emit = defineEmits(['assetChange', 'dateChange'])
 
 const store = useStore()
 const { t } = useI18n({ useScope: 'global' })
 const primaryColor = computed(() => store.state._base.wpCompanyInfo?.themeColor)
 const shareTokenCode = ref(0)
-const option1 = [
-    { text: '份额代币', value: 0 },
-    { text: '代币A', value: 1 },
-    { text: '代币B', value: 2 },
-]
-const shareTokenChange = () => {
-    console.log(1111)
+const option1 = computed(() => {
+    const placeholdItem = [
+        { text: t('fundInfo.shareCurrency'), value: 0 }
+    ]
+    return placeholdItem.concat(props.assetsList)
+})
+const shareTokenChange = (val) => {
+    emit('assetChange', val)
 }
 
 const timeVal = ref(0)
@@ -51,11 +57,26 @@ const timeList = ref([
     { text: t('common.curMonth'), value: 3 },
     { text: t('common.curThreeMonth'), value: 4 }
 ])
-const timeChange = () => {
-    console.log(222)
+
+const getTime = (type) => {
+    return window.dayjs().startOf(type).valueOf()
 }
-const onRangeChange = () => {
-    console.log(333)
+const period = {
+    1: getTime('day'),
+    2: getTime('week'),
+    3: getTime('month'),
+    4: window.dayjs().startOf('month').subtract(3, 'month').valueOf()
+}
+// 监听下拉菜单变化
+const timeChange = (value) => {
+    console.log(value)
+    const startTime = period[value]
+    const endTime = window.dayjs().endOf('day').valueOf()
+    emit('dateChange', startTime ? [startTime, endTime] : null)
+}
+const onRangeChange = value => {
+    // dateModel.value = 5
+    emit('dateChange', value)
 }
 </script>
 

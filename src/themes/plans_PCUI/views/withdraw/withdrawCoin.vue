@@ -123,7 +123,29 @@
                     <span>{{ $t('withdrawCoin.walletAdd') }}</span>
                 </div>
             </div>
+            <div class='fund'>
+                <p class='bw-t'>
+                    {{ $t('common.fundPwd') }}
+                </p>
+                <div class='fund-input'>
+                    <InputComp
+                        v-model='pwd'
+                        class='input-comp'
+                        clear
+                        :label="$t('common.inputFundPwd')"
+                        :max-length='6'
+                        pwd
+                    />
+                    <router-link v-if='Number(customInfo.assertPassStatus) === 1' class='href' to='/setFundPwd'>
+                        {{ $t('login.goSet') }}
+                    </router-link>
+                    <router-link v-else class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">
+                        {{ $t('login.forgot') }}
+                    </router-link>
+                </div>
+            </div>
         </div>
+
         <van-button class='footer-btn' @click='onConfirm'>
             <span>{{ $t('withdraw.confirm') }}</span>
         </van-button>
@@ -218,12 +240,14 @@ import {
 } from '@api/user'
 // 工具方法
 import { isEmpty, debounce } from '@/utils/util'
-// 插件
+import md5 from 'js-md5'
+import InputComp from '@/components/form/input'
 
 export default {
     components: {
         Top,
-        centerViewDialog
+        centerViewDialog,
+        InputComp
     },
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
@@ -282,7 +306,8 @@ export default {
             // 当前选择的钱包
             currentWallet: null,
             // 当前选择钱包地址id
-            walletId: 0
+            walletId: 0,
+            pwd: ''
         })
 
         // 数据初始化
@@ -744,6 +769,9 @@ export default {
             if (!state.currentWallet) {
                 return Toast({ message: t('withdrawCoin.walletSelect') })
             }
+            if (!state.pwd) {
+                return Toast(t('common.inputFundPwd'))
+            }
 
             // 发起提现
             launchHandleWithdraw()
@@ -763,7 +791,8 @@ export default {
                 bankCardNo: state.currentWallet.address,
                 withdrawType: 2,
                 withdrawCurrency: state.coinKind,
-                blockchainName: state.chainName
+                blockchainName: state.chainName,
+                fundPwd: md5(state.pwd)
             }
             handleWithdraw(item).then(res => {
                 state.loading = false
@@ -832,6 +861,9 @@ export default {
         border-bottom: 1px solid var(--lineColor);
         :deep(.el-select){
             width:100%;
+            .el-input__inner{
+                background: #fff;
+            }
         }
         :deep(.el-input__inner){
             border: none;
@@ -927,6 +959,23 @@ export default {
             }
         }
     }
+    .fund{
+        .bw-t{
+                color: var(--color);
+            font-size: rem(28px);
+            line-height: rem(72px);
+        }
+        .fund-input{
+            display: flex;
+            align-items: center;
+            .input-comp{
+                flex: 1;
+            }
+            .href{
+                vertical-align: middle;
+            }
+        }
+    }
 }
 .module-wallet {
     padding: rem(30px);
@@ -997,6 +1046,25 @@ export default {
         :deep(.van-icon-arrow-down) {
             margin-right: rem(-2px);
             font-weight: bold;
+        }
+    }
+}
+.fund{
+    padding: 0 rem(30px) rem(30px) rem(30px);
+    background-color: var(--contentColor);
+    .bw-t{
+            color: var(--color);
+        font-size: rem(28px);
+        line-height: rem(72px);
+    }
+    .fund-input{
+        display: flex;
+        align-items: center;
+        .input-comp{
+            flex: 1;
+        }
+        .href{
+            vertical-align: middle;
         }
     }
 }

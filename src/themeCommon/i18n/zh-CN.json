@@ -43,7 +43,8 @@
         "withdrawAccount": "选择提现币种",
         "transfer": "划转",
         "securitySetting": "安全设置",
-        "commonSetting": "通用设置"
+        "commonSetting": "通用设置",
+        "setFundPwd": "资金密码"
     },
     "login": {
         "loginBtn": "登录",
@@ -222,12 +223,15 @@
         "personValid": "身份验证"
     },
     "forgot": {
-        "forgot": "找回密码",
+        "forgot": "找回登录密码",
+        "forgotFund": "找回资金密码",
         "retrievedByPhone": "手机找回",
         "retrievedByEmail": "邮箱找回",
         "setPwdFailed": "糟糕！您的新密码设置失败",
         "tryLater": "请稍后再试或联系在线客服",
         "setPwd": "设置登录密码",
+        "setFundPwd": "设置资金密码",
+        "resetFundPwd": "修改资金密码",
         "pwdRule": "密码为6-16位数字和字母的组合",
         "inputNewPwd": "请输入新密码",
         "newPwdAgain": "请再次输入新密码",

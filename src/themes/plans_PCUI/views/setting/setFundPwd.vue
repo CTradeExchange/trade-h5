@@ -1,59 +1,66 @@
 <template>
-    <div class='pageWrap'>
-        <Top back left-icon='arrow-left' :menu='false' :right-action='false'>
-            <template #right>
-            </template>
-        </Top>
-        <header class='header'>
-            <h1 class='pageTitle'>
-                {{ $t(isFirstSet ? "common.settings" : 'common.modify') + $t("common.fundPwd") }}
-            </h1>
-            <h6>{{ $t('common.fundPwdTip') }}</h6>
-        </header>
-        <van-cell-group>
-            <div v-if='!isFirstSet' class='form-item'>
-                <van-field
-                    v-model='oldPwd'
-                    :formatter='formatter'
-                    label=''
-                    maxlength='6'
-                    :placeholder='$t("login.originPwd")'
-                    :type='oldPwdVis ? "text" : "password"'
-                />
-                <span class='icon' :class="oldPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("oldPwdVis")'></span>
-            </div>
-            <div class='form-item'>
-                <van-field
-                    v-model='newPwd'
-                    :formatter='formatter'
-                    label=''
-                    maxlength='6'
-                    :placeholder='$t("forgot.inputNewPwd")'
-                    :type='newPwdVis ? "text" : "password"'
-                />
-                <span class='icon' :class="newPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("newPwdVis")'></span>
-            </div>
-            <div class='form-item'>
-                <van-field
-                    v-model='confirmPwd'
-                    :formatter='formatter'
-                    label=''
-                    maxlength='6'
-                    :placeholder='$t("forgot.newPwdAgain")'
-                    :type='confirmVis ? "text" : "password"'
-                />
-                <span class='icon' :class="confirmVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("confirmVis")'></span>
-            </div>
-        </van-cell-group>
-
-        <van-button class='confirmBtn' @click='handleConfirm'>
-            <span>{{ $t('common.sure') }}</span>
-        </van-button>
-    </div>
+    <centerViewDialog>
+        <div class='pageWrap'>
+            <Top back left-icon='arrow-left' :right-action='false' show-center>
+                <template #left>
+                    <a class='topBack' href='javascript:;' @click='$router.back()'>
+                        <span class='icon_icon_close_big'></span>
+                    </a>
+                </template>
+                <template #right>
+                </template>
+            </Top>
+            <header class='header'>
+                <h1 class='pageTitle'>
+                    {{ $t(isFirstSet ? "common.settings" : 'common.modify') + $t("common.fundPwd") }}
+                </h1>
+                <h6>{{ $t('common.fundPwdTip') }}</h6>
+            </header>
+            <van-cell-group>
+                <div v-if='!isFirstSet' class='form-item'>
+                    <van-field
+                        v-model='oldPwd'
+                        :formatter='formatter'
+                        label=''
+                        maxlength='6'
+                        :placeholder='$t("login.originPwd")'
+                        :type='oldPwdVis ? "text" : "password"'
+                    />
+                    <span class='icon' :class="oldPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("oldPwdVis")'></span>
+                </div>
+                <div class='form-item'>
+                    <van-field
+                        v-model='newPwd'
+                        :formatter='formatter'
+                        label=''
+                        maxlength='6'
+                        :placeholder='$t("forgot.inputNewPwd")'
+                        :type='newPwdVis ? "text" : "password"'
+                    />
+                    <span class='icon' :class="newPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("newPwdVis")'></span>
+                </div>
+                <div class='form-item'>
+                    <van-field
+                        v-model='confirmPwd'
+                        :formatter='formatter'
+                        label=''
+                        maxlength='6'
+                        :placeholder='$t("forgot.newPwdAgain")'
+                        :type='confirmVis ? "text" : "password"'
+                    />
+                    <span class='icon' :class="confirmVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("confirmVis")'></span>
+                </div>
+            </van-cell-group>
+            <van-button class='confirmBtn' @click='handleConfirm'>
+                <span>{{ $t('common.sure') }}</span>
+            </van-button>
+        </div>
+    </centerViewDialog>
 </template>
 
 <script>
 import Top from '@/components/top'
+import centerViewDialog from '@planspc/layout/centerViewDialog'
 import { reactive, toRefs, computed } from 'vue'
 import { Toast, Dialog } from 'vant'
 import { useStore } from 'vuex'
@@ -65,6 +72,7 @@ import { useI18n } from 'vue-i18n'
 export default {
     components: {
         Top,
+        centerViewDialog,
     },
     setup (props) {
         const store = useStore()
@@ -89,7 +97,6 @@ export default {
         function changeState (type) {
             state[type] = !state[type]
         }
-
         function formatter (value) {
             // 过滤输入的非数字
             return value.replace(/[^\d]/g, '')
@@ -105,15 +112,15 @@ export default {
             if (!state.confirmPwd) {
                 return Toast(t('forgot.inputSurePwd'))
             }
+            if (state.oldPwd.length !== 6 || state.newPwd.length !== 6 || state.confirmPwd.length !== 6) {
+                return Toast(t('common.fundPwdTip'))
+            }
 
             if (state.newPwd !== state.confirmPwd) {
                 return Toast(t('forgot.pwdDiff'))
             }
             if (state.oldPwd === state.newPwd) {
                 return Toast(t('forgot.pwdSame'))
-            }
-            if (state.newPwd.length < 6) {
-                return Toast(t('common.fundPwdTip'))
             }
 
             const toast = Toast.loading({
@@ -137,23 +144,13 @@ export default {
                     oldPwd: md5(state.oldPwd),
                     newPwd: md5(state.confirmPwd)
                 }).then((res) => {
-                    if (isFirstSet.value) {
-                        if (res.check()) {
-                            router.push('/resetSuccess')
-                        } else {
-                            router.push('/resetFail')
-                        }
+                    toast.clear()
+                    if (res.check()) {
+                        Toast(t('common.setSuccess'))
+                        store.dispatch('_user/findCustomerInfo')
+                        router.back()
                     } else {
-                        if (res.check()) {
-                            Dialog.alert({
-                                title: t('common.tip'),
-                                message: t('login.pwdSuccess')
-                            }).then(() => {
-                                router.back()
-                            })
-                        } else {
-                            Toast(res.msg)
-                        }
+                        Toast(res.msg)
                     }
                 })
             }
@@ -164,8 +161,8 @@ export default {
             changeState,
             customInfo,
             isFirstSet,
-            formatter,
-            handleConfirm
+            handleConfirm,
+            formatter
         }
     }
 }
@@ -187,6 +184,7 @@ export default {
         margin-bottom: rem(10px);
         font-weight: normal;
         font-size: rem(50px);
+        color: var(--color);
     }
     .confirmBtn {
         position: absolute;

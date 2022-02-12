@@ -120,7 +120,8 @@
 		"fundProductInfo": "Fund Details",
 		"fundPurchase": "Fun Purchase",
 		"fundRedemption": "Fund Redemption",
-		"transfer": "Transfer"
+		"transfer": "Transfer",
+		"fundRules": "交易规则"
 	},
 	"search": {
 		"keywords": "Name/Symbol/Phonics",
@@ -690,7 +691,23 @@
 		"indexSample": "指数样本",
 		"curRedeem": "当前赎回",
 		"historyRedeem": "历史赎回",
+		"applyRules": "申购规则",
+		"redeemRules": "赎回规则",
+        "applyRecords": "申购记录",
+        "redeemRecords": "赎回记录",
 		"buy": "Purchase",
-		"sell": "Redemption"
+		"sell": "Redemption",
+        "applyRule_tip1": "申购以金额申请，即申购基金时，只要填写申购多少金额即可",
+        "applyRule_tip2": "申购价格均按照实时净值价格执行",
+        "applyRule_tip3": "申购流程结束后，您所申购的基金代币将会直接汇入您的现货钱包，申购支付费用将以扣款方式直接从您的现货钱包扣除",
+        "jz_formula": "净值计算公式",
+        "jz_formulaContent": "净值=总净资产/基金最新份额",
+        "tDate": "T日",
+        "redeemSubmit": "赎回提交",
+        "fundArrive": "资金到账",
+        "redeem_tip1": "赎回以份额申请，即赎回基金时，只要填写赎回多少份额即可",
+        "redeem_tip2": "赎回价格采用“未知价”原则，预计按T+2日当天确认份额结束后的净值价格执行",
+        "redeem_tip3": "赎回流程结束，那你所赎回的基金代币将以选择的接收资产汇入您的现货钱包",
+        "shareCurrency": "份额代币"
 	}
 }

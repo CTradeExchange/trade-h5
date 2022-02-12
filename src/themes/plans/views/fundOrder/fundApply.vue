@@ -1,6 +1,12 @@
 <template>
     <div v-if='fund' class='pageWrapp'>
-        <LayoutTop :back='true' :menu='false' />
+        <LayoutTop :back='true' :menu='false'>
+            <template #right>
+                <router-link class='text' href='javascript:;' to='/fundRules?direction=buy'>
+                    {{ $t('fundInfo.applyRules') }}
+                </router-link>
+            </template>
+        </LayoutTop>
         <div class='currencyBar'>
             <CurrencyIcon :currency='fund.shareTokenCode' size='28px' />
             <span class='fundCurrency'>
@@ -64,7 +70,7 @@
         </div>
 
         <!-- 申购赎回记录 -->
-        <recordList />
+        <recordList ref='recordListRef' />
 
         <loadingVue :show='loading' />
 
@@ -78,7 +84,7 @@ import TradeAssetBar from './components/tradeAssetBar.vue'
 import recordList from './components/recordList/recordList.vue'
 import loadingVue from '@/components/loading.vue'
 import { orderHook } from './orderHook'
-import { computed, unref, ref } from 'vue'
+import { computed, unref, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
@@ -102,6 +108,8 @@ const {
     calcShares,
     calcSharesNet,
 } = orderHook()
+
+const recordListRef = ref(null)
 
 // 切换到赎回基金
 const toRedeem = () => {
@@ -140,6 +148,7 @@ const submitHandler = () => {
         if (res.check()) {
             amountPay.value = ''
             calcApplyShares()
+            unref(recordListRef) && unref(recordListRef).refresh()
             Dialog.alert({
                 title: t('fundInfo.applySuccessed'),
                 message: '',
@@ -149,6 +158,10 @@ const submitHandler = () => {
         }
     })
 }
+
+onMounted(() => {
+    console.log(recordListRef)
+})
 </script>
 
 <style lang="scss" scoped>
@@ -157,6 +170,9 @@ const submitHandler = () => {
     margin-top: rem(110px);
     height: 100%;
     overflow-y: auto;
+    .text {
+        color: var(--color);
+    }
     .currencyBar{
         background: var(--contentColor);
         margin: rem(30px) 0;

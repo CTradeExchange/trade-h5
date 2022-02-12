@@ -267,7 +267,7 @@
             :symbol-id='product?.symbolId'
             :trade-type='tradeType'
         />
-        <div v-else-if='product.tradeEnable===2' class='composeBox'>
+        <div v-else-if='product.labelList && product.labelList.includes("index")' class='composeBox'>
             <realtime-invest-compose :title='$t("fundInfo.indexSample")' />
         </div>
 

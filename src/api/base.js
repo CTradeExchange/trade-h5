@@ -79,3 +79,13 @@ export function getThirdLoginConfig (data) {
         data
     })
 }
+
+/* 获取公司资产列表 */
+export function getAssetsList (data) {
+    return request({
+        url: '/global/config.app.AppAssetsDubboService.getAssetsList',
+        method: 'post',
+        toastErr: false,
+        data
+    })
+}

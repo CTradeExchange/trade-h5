@@ -49,9 +49,17 @@ const routes = [
         }
     },
     {
-        path: '/resetPwd',
-        name: 'ResetPwd',
-        component: () => import(/* webpackChunkName: "resetPwd" */ '../user/forgot/resetPwd.vue'),
+        path: '/resetLoginPwd',
+        name: 'ResetLoginPwd',
+        component: () => import(/* webpackChunkName: "resetPwd" */ '../user/forgot/resetLoginPwd.vue'),
+        meta: {
+            title: 'cRoute.resetPwd'
+        }
+    },
+    {
+        path: '/resetFundPwd',
+        name: 'ResetFundPwd',
+        component: () => import(/* webpackChunkName: "resetPwd" */ '../user/forgot/resetFundPwd.vue'),
         meta: {
             title: 'cRoute.resetPwd'
         }
@@ -286,7 +294,7 @@ const routes = [
         name: 'setFundPwd',
         component: () => import(/* webpackChunkName: "setLoginPwd" */ '../user/setFundPwd.vue'),
         meta: {
-            title: 'cRoute.setLoginPwd',
+            title: 'cRoute.setFundPwd',
             footerMenu: false,
             roles: ['User']
         }

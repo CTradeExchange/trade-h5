@@ -27,7 +27,7 @@
                     {{ $t('login.register') }}
                 </a>
                 <Vline />
-                <a class='btn' href='javascript:;' @click="$router.push({ name:'Forgot' })">
+                <a class='btn' href='javascript:;' @click="$router.push({ name:'Forgot',query: { type: 'login' } })">
                     {{ $t('login.forgot') }}
                 </a>
             </div>

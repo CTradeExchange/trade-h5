@@ -48,6 +48,28 @@
                         {{ $t('withdrawMoney.predictName') }} {{ computePre }} {{ currency }}
                     </p>
                 </div>
+
+                <div class='fund'>
+                    <p class='bw-t'>
+                        {{ $t('common.fundPwd') }}
+                    </p>
+                    <div class='fund-input'>
+                        <InputComp
+                            v-model='pwd'
+                            class='input-comp'
+                            clear
+                            :label="$t('common.inputFundPwd')"
+                            :max-length='6'
+                            pwd
+                        />
+                        <router-link v-if='Number(customInfo.assertPassStatus) === 1' class='href' to='/setFundPwd'>
+                            {{ $t('login.goSet') }}
+                        </router-link>
+                        <router-link v-else class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">
+                            {{ $t('login.forgot') }}
+                        </router-link>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -169,11 +191,14 @@ import {
     getWithdrawMethodList
 } from '@/api/user'
 import { useI18n } from 'vue-i18n'
+import InputComp from '@/components/form/input'
+import md5 from 'js-md5'
 
 export default {
     components: {
         Top,
-        centerViewDialog
+        centerViewDialog,
+        InputComp
     },
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
@@ -247,7 +272,8 @@ export default {
             withdrawTimeConfigMap: {}, // 处理后的时区
             appendVis: false, // 是否显示补充资料弹窗
             extend: {}, // 需要补充资料的数据
-            paramsExtens: {} // 补充完整的资料数据
+            paramsExtens: {}, // 补充完整的资料数据
+            pwd: ''
         })
 
         // 初始化数据
@@ -578,11 +604,13 @@ export default {
                 tradeType,
                 accountId
             }).then(res => {
-                res.data.map(elem => {
-                    if (elem.withdrawMethod === currentTab) {
-                        state.extend = elem.extend
-                    }
-                })
+                if (res.check()) {
+                    res.data.map(elem => {
+                        if (elem.withdrawMethod === currentTab) {
+                            state.extend = elem.extend
+                        }
+                    })
+                }
             })
         }
 
@@ -649,6 +677,10 @@ export default {
             if (amount > withdrawAmount) {
                 return Toast(t('withdrawMoney.hint_5'))
             }
+            if (!state.pwd) {
+                return Toast(t('common.inputFundPwd'))
+            }
+
             // 取款方式为otc365_cny判断是否需要填写补充资料
             if (currentTab === 'otc365_cny' && !isEmpty(state.extend) && !checkAllComplete()) {
                 state.appendVis = true
@@ -674,7 +706,8 @@ export default {
                 bankCardNo: state.checkedBank.bankCardNumber,
                 withdrawType: 1,
                 withdrawMethod: currentTab,
-                tradeType
+                tradeType,
+                fundPwd: md5(state.pwd)
             }
             if (!isEmpty(state.paramsExtens)) {
                 params.extend = JSON.stringify(state.paramsExtens)
@@ -801,6 +834,24 @@ export default {
                 line-height: rem(60px);
             }
         }
+        .fund{
+            .bw-t{
+                 color: var(--color);
+                font-size: rem(28px);
+                line-height: rem(72px);
+            }
+            .fund-input{
+                display: flex;
+                align-items: center;
+                .input-comp{
+                    flex: 1;
+                }
+                .href{
+                    vertical-align: middle;
+                }
+            }
+        }
+
     }
 }
 .confirm-btn {

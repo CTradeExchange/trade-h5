@@ -6,7 +6,7 @@
                 <Loading :show='loading' />
                 <header class='header'>
                     <h1 class='pageTitle'>
-                        {{ $t('forgot.forgot') }}
+                        {{ type === 'login' ? $t('forgot.forgot') : $t('forgot.forgotFund') }}
                     </h1>
                 </header>
                 <div class='tabs-wrap'>
@@ -60,7 +60,7 @@ import { reactive, toRefs, computed } from 'vue'
 // import areaInput from '@/components/form/areaInput'
 import checkCode from '@/components/form/checkCode'
 import { Toast } from 'vant'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 // import uInput from '@/components/input.vue'
 import Schema from 'async-validator'
 import RuleFn from './rule'
@@ -82,6 +82,8 @@ export default {
         const style = computed(() => store.state.style)
         const store = useStore()
         const router = useRouter()
+        const route = useRoute()
+        const { type } = route.query
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             mobile: '',
@@ -183,7 +185,7 @@ export default {
                     state.loading = false
                     if (res.ok) {
                         router.push({
-                            path: '/resetPwd',
+                            path: type === 'login' ? '/resetPwd' : '/resetFundPwd',
                             query: {
                                 verifyCodeToken: res.data.token,
                                 sendToken: state.sendToken,
@@ -216,7 +218,8 @@ export default {
             handleVerifyCodeSend,
             style,
             zoneSelect,
-            back
+            back,
+            type
         }
     }
 }

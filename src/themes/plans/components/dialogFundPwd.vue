@@ -17,8 +17,11 @@
         </div>
         <div class='dialog-body'>
             <InputComp v-model='pwd' clear :label="$t('common.inputFundPwd')" :max-length='6' pwd />
-            <router-link class='href' to='/setFundPwd'>
-                {{ Number(customInfo.assertPassStatus) === 1 ? $t('login.goSet') : $t('login.forgot') }}
+            <router-link v-if='Number(customInfo.assertPassStatus) === 1' class='href' to='/setFundPwd'>
+                {{ $t('login.goSet') }}
+            </router-link>
+            <router-link v-else class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">
+                {{ $t('login.forgot') }}
             </router-link>
         </div>
         <div class='dialog-footer'>

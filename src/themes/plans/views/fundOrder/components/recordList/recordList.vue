@@ -6,14 +6,17 @@
         </div>
         <div v-else-if='tabActive===1' class='listWrap'>
             <van-tabs v-model:active='redeemActive' class='redeemTab' type='card'>
-                <van-tab title='当前赎回' />
-                <van-tab title='历史赎回' />
+                <van-tab :title='$t("fundInfo.curRedeem")' />
+                <van-tab :title='$t("fundInfo.historyRedeem")' />
             </van-tabs>
+            <template v-if='redeemRecordData.length===0'>
+                <van-empty :description='$t("common.noData")' image='/images/empty.png' />
+            </template>
             <template v-if='redeemActive===0'>
-                <fundRedeemRecordItem v-for='item in 1' :key='item' />
+                <fundRedeemRecordItem v-for='item in redeemRecordData' :key='item' :data='item' />
             </template>
             <template v-else>
-                <fundRedeemRecordHistoryItem v-for='item in 1' :key='item' />
+                <fundRedeemRecordHistoryItem v-for='item in redeemRecordData' :key='item' :data='item' />
             </template>
         </div>
         <!-- 资产 -->
@@ -23,7 +26,7 @@
     </div>
 </template>
 
-<script setup>
+<script>
 import tabBar from './tabBar.vue'
 import fundApplyRecordItem from '@plans/modules/fundApplyRecord/fundApplyRecordItem.vue'
 import fundRedeemRecordItem from '@plans/modules/fundApplyRecord/fundRedeemRecordItem.vue'
@@ -32,42 +35,71 @@ import assetsItem from '@plans/modules/assets/assetsItem.vue'
 import { ref, computed, unref, onMounted, watch } from 'vue'
 import { useStore } from 'vuex'
 import { fundApplyRecord, fundRedeemRecord } from '@/api/fund'
-const store = useStore()
 
-// 现货账户列表
-const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === 5))
-const tabActive = ref(0)
-const redeemActive = ref(0)
-const applyRecordData = ref([])
+export default {
+    components: {
+        tabBar,
+        fundApplyRecordItem,
+        fundRedeemRecordItem,
+        fundRedeemRecordHistoryItem,
+        assetsItem,
+    },
+    setup () {
+        const store = useStore()
 
-// 获取基金申购记录
-const getFundApplyRecord = function () {
-    fundApplyRecord({ size: 10, current: 1 }).then(res => {
-        if (res.check()) {
-            applyRecordData.value = res.data
+        // 现货账户列表
+        const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === 5))
+        const tabActive = ref(0)
+        const redeemActive = ref(0)
+        const applyRecordData = ref([])
+        const redeemRecordData = ref([])
+
+        // 获取基金申购记录
+        const getFundApplyRecord = function () {
+            fundApplyRecord({ size: 10, current: 1 }).then(res => {
+                if (res.check()) {
+                    applyRecordData.value = res.data.records
+                }
+            })
         }
-    })
-}
 
-// 获取基金赎回记录
-const getFundRedeemRecord = function () {
-    fundRedeemRecord({ size: 10, current: 1, sharesStatus: unref(redeemActive) }).then(res => {
-        if (res.check()) {
-            applyRecordData.value = res.data
+        // 获取基金赎回记录
+        const getFundRedeemRecord = function () {
+            fundRedeemRecord({ size: 10, current: 1, sharesStatus: unref(redeemActive) }).then(res => {
+                if (res.check()) {
+                    redeemRecordData.value = res.data.records
+                }
+            })
         }
-    })
-}
 
-watch(
-    [redeemActive, tabActive],
-    () => {
-        tabActive.value === 0 ? getFundApplyRecord() : getFundRedeemRecord()
+        // 刷新
+        const refresh = () => {
+            tabActive.value === 0 ? getFundApplyRecord() : getFundRedeemRecord()
+        }
+
+        watch(
+            [redeemActive, tabActive],
+            () => {
+                applyRecordData.value = []
+                redeemRecordData.value = []
+                refresh()
+            }
+        )
+
+        onMounted(() => {
+            getFundApplyRecord()
+        })
+
+        return {
+            tabActive,
+            redeemActive,
+            applyRecordData,
+            redeemRecordData,
+            accountList,
+            refresh,
+        }
     }
-)
-
-onMounted(() => {
-    getFundApplyRecord()
-})
+}
 
 </script>
 

@@ -34,6 +34,7 @@ export default {
 
         // 获取基金产品最新净值
         store.dispatch('_quote/fundNetValue', { fundId })
+        store.dispatch('_quote/queryFundInfo', fundId)
 
         return {
             fundId,

@@ -28,6 +28,14 @@ const h5Children = [
         }
     },
     {
+        path: 'setFundPwd', // 设置资金密码
+        component: () => import(/* webpackChunkName: "setLoginPwd" */ '../views/setting/setFundPwd.vue'),
+        meta: {
+            title: 'cRoute.setFundPwd',
+            roles: ['User']
+        }
+    },
+    {
         path: 'bankList',
         component: () => import(/* webpackChunkName: "bankList" */ '../views/user/bankList.vue'),
         meta: {
@@ -262,6 +270,17 @@ const routes = [
             roles: [],
         }
     },
+    {
+        path: '/resetFundPwd',
+        name: 'ResetFundPwd',
+        component: () => import(/* webpackChunkName: "Forgot" */ '../views/forgot/resetFundPwd.vue'),
+        meta: {
+            title: 'route.resetFundPwd',
+            // keepAlive: true,
+            roles: [],
+        }
+    },
+
     {
         path: '/resetSuccess',
         name: 'ResetSuccess',

@@ -53,7 +53,7 @@
                 <router-link to='/register'>
                     {{ $t('signIn.register') }}
                 </router-link>
-                <router-link to='/forgot'>
+                <router-link :to='{ path: "/forgot",query:{ type: "login" } }'>
                     {{ $t('signIn.forgot') }}
                 </router-link>
             </div>

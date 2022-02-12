@@ -19,7 +19,7 @@
         </div>
 
         <!-- etf banner -->
-        <a v-if='categoryType===2 && tradeType==="5"' class='etfBanner' href='javascript:;' @click='toETF'>
+        <a v-if='String(categoryType)===fundBannerPosition[1] && tradeType===fundBannerPosition[0]' class='etfBanner' href='javascript:;' @click='toETF'>
             <img alt='' :src='locale==="en-US" ?"/images/ETF_banner2.png":"/images/ETF_banner.png"' />
         </a>
 
@@ -124,6 +124,7 @@ export default {
         }
         return {
             locale,
+            fundBannerPosition: window['fundBannerPosition'].split('-'),
             openSearch,
             categoryType,
             productListEl,

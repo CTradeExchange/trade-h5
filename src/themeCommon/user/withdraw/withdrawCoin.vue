@@ -176,6 +176,8 @@
             <van-icon :color='$style.color' name='arrow' />
         </div>
     </van-action-sheet>
+
+    <DialogFundPwd v-model:show='fundPwdVis' @confirmWithdraw='confirmWithdraw' />
 </template>
 
 <script>
@@ -204,10 +206,12 @@ import {
 } from '@api/user'
 // 工具方法
 import { isEmpty, debounce } from '@/utils/util'
+import DialogFundPwd from '@plans/components/dialogFundPwd'
+import md5 from 'js-md5'
 
 export default {
     components: {
-        Top
+        Top, DialogFundPwd
     },
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
@@ -270,7 +274,9 @@ export default {
             // 当前选择的钱包
             currentWallet: null,
             // 当前选择钱包地址id
-            walletId: 0
+            walletId: 0,
+            fundPwdVis: false,
+            fundPwd: ''
         })
 
         // 数据初始化
@@ -454,6 +460,13 @@ export default {
                     }
                 }
             }
+        }
+
+        // 获取资金密码
+        const confirmWithdraw = (val) => {
+            state.fundPwd = val
+            // 发起提现
+            launchHandleWithdraw()
         }
 
         // 请求参数
@@ -745,8 +758,8 @@ export default {
                 return Toast({ message: t('withdrawCoin.walletSelect') })
             }
 
-            // 发起提现
-            launchHandleWithdraw()
+            // 判断资金密码
+            state.fundPwdVis = true
         }
 
         // 发起提现
@@ -763,7 +776,8 @@ export default {
                 bankCardNo: state.currentWallet.address,
                 withdrawType: 2,
                 withdrawCurrency: state.coinKind,
-                blockchainName: state.chainName
+                blockchainName: state.chainName,
+                fundPwd: md5(state.fundPwd)
             }
             handleWithdraw(item).then(res => {
                 state.loading = false
@@ -806,13 +820,14 @@ export default {
             openWalletSelect,
             selectWallet,
             onConfirm,
-            accountCurrency
+            accountCurrency,
+            confirmWithdraw
         }
     }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '@/sass/mixin.scss';
 .container {
     flex: 1;
