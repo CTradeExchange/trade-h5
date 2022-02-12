@@ -115,7 +115,7 @@ export default {
 
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
         // 当前币种
-        const columns = computed(() => accountList.value.filter(item => item.tradeType === Number(tradeType)).map(el => {
+        const columns = computed(() => accountList.value.filter(item => item.tradeType === Number(tradeType)).filter(el => state.withdrawAccountCurrencyList.includes(el.currency)).map(el => {
             return {
                 currency: el.currency,
                 accountId: el.accountId
@@ -245,7 +245,9 @@ export default {
 
         // 获取客户支持的取款账户币种列表
         getWithdrawAccountCurrencyList({ tradeType: 5 }).then(res => {
-            console.log(res)
+            if (res.check()) {
+                state.withdrawAccountCurrencyList = res.data
+            }
         })
 
         return {
