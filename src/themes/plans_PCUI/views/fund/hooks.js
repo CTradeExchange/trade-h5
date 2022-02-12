@@ -78,7 +78,7 @@ export const orderHook = (params) => {
         loading.value = true
         return fundRedeem(params).then(res => {
             loading.value = false
-            updateAccountAssetsInfo(fund.value.shareTokenCode)
+            updateAccountAssetsInfo(fund.shareTokenCode)
             return res
         })
     }
