@@ -334,8 +334,10 @@ export default {
 
                 return querySymbolInfo(params).then((res) => {
                     if (res.check() && res.data) {
-                        res.data.tradeType = params.tradeType
-                        commit('Update_product', res.data)
+                        const data = res.data
+                        data.tradeType = params.tradeType
+                        data.isIndex = data.labels?.split('-').includes('index')
+                        commit('Update_product', data)
                         if (res.data.etf) dispatch('queryEquityPremiumRate', { symbolId, tradeType })
                         if (rootState._quote.productActivedID === symbolKey) {
                             sessionSet('productActived', JSON.stringify(productMap[symbolKey]))

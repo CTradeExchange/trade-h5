@@ -126,7 +126,7 @@ const config = {
         }
     },
     css: {
-        loaderOptions: {
+        loaderOptions: { // 自动注入全局变量样式
             sass: {
                 // 注意: 在 sass-loader v8 中，这个选项是 prependData
                 prependData: '@import "~@/sass/mixin.scss";',

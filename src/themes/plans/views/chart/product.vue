@@ -267,7 +267,7 @@
             :symbol-id='product?.symbolId'
             :trade-type='tradeType'
         />
-        <div v-else-if='productLabels && productLabels.includes("index")' class='composeBox'>
+        <div v-else-if='product && product.isIndex ' class='composeBox'>
             <realtime-invest-compose :title='$t("fundInfo.indexSample")' />
         </div>
 
@@ -520,7 +520,6 @@ export default {
             return curIndex + 1
         })
         const product = computed(() => store.getters.productActived)
-        const productLabels = computed(() => product.value.labels?.split(','))
         const positionList = computed(() => store.state._trade.positionList[getTradeType()] || [])
         const selfSymbolList = computed(() => store.state._user.selfSymbolList)
         const plansLen = computed(() => {
@@ -1071,7 +1070,6 @@ export default {
             onBeforeChange,
             onClickStudy,
             showTips,
-            productLabels,
             updateShow,
             onClickMoreTime,
             setChartType,
