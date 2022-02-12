@@ -45,6 +45,7 @@
                         <!-- 资产列表 -->
                         <assetsList
                             v-if='pickerShow'
+                            :account-list='accountList'
                             :currency='accountInfo?.currency'
                             :show='pickerShow'
                             :trade-type='tradeType'
@@ -108,7 +109,7 @@ import { computed, reactive, toRefs, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { checkKycApply, queryPayType } from '@/api/user'
+import { checkKycApply, queryPayType, getDepositCoinList } from '@/api/user'
 import { localSet } from '@/utils/util'
 import { Toast, Dialog } from 'vant'
 export default {
@@ -141,6 +142,7 @@ export default {
             exchangeDisable: true,
             // 当前直充支付通道
             paymentInfo: '',
+            accountList: '', // 存款币种列表
             pickerShow: false,
             selectedCurrency: ''
         })
@@ -287,9 +289,19 @@ export default {
         }
         const bgColor = style.value.primary + '0D'
 
+        // 获取客户支持的存款币种列表
+        const queryDepositCoinList = () => {
+            getDepositCoinList({ clientType: 'mobile' }).then(res => {
+                const accountList = store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(route.query.tradeType))
+                const data = res.data
+                state.accountList = accountList.filter(el => data.includes(el.currency))
+            })
+        }
+
         onMounted(() => {
             // 检查是否需要KYC认证
             checkKyc()
+            queryDepositCoinList()
         })
 
         return {

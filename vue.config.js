@@ -125,6 +125,14 @@ const config = {
             alias
         }
     },
+    css: {
+        loaderOptions: {
+            sass: {
+                // 注意: 在 sass-loader v8 中，这个选项是 prependData
+                prependData: '@import "~@/sass/mixin.scss";',
+            },
+        },
+    },
     devServer: {
         port: isAdminMode ? 8080 : 8090,
         open: false,

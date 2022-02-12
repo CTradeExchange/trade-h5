@@ -29,12 +29,12 @@ export default {
     components: {
         CurrencyIcon
     },
-    props: ['show', 'currency', 'tradeType'],
+    props: ['show', 'currency', 'tradeType', 'accountList'],
     setup (props, context) {
         const store = useStore()
-        const accountList = computed(() => {
-            return store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(props.tradeType))
-        })
+        // const accountList = computed(() => {
+        //     return store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(props.tradeType))
+        // })
         const style = computed(() => store.state.style)
         const state = reactive({
             popupShow: props.show,
@@ -62,7 +62,7 @@ export default {
         return {
             close,
             bgColor,
-            accountList,
+            // accountList,
             checkCurrency,
             ...toRefs(state)
         }
