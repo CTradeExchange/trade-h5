@@ -53,7 +53,7 @@ export const orderHook = (params) => {
 
     // 获取申购手续费
     const calcApplyShares = (val) => {
-        console.log('开始获取申购手续费', val)
+        // console.log('开始获取申购手续费', val)
         getCalcApplyFee(val, activeCurrency.value)
     }
 
@@ -78,7 +78,7 @@ export const orderHook = (params) => {
         loading.value = true
         return fundRedeem(params).then(res => {
             loading.value = false
-            updateAccountAssetsInfo(fund.value.shareTokenCode)
+            updateAccountAssetsInfo(fund.shareTokenCode)
             return res
         })
     }

@@ -15,12 +15,12 @@
             <!-- 右侧模块 -->
             <div class='right-module module'>
                 <!-- 基金交易 -->
-                <fundDeal v-if='fund?.fundId' :fund='fund' />
+                <fundDeal v-if='fund?.fundId' :key='fundDealKey' :fund='fund' />
             </div>
         </div>
         <!-- 申购记录、赎回记录、资产 -->
         <div class='record-content'>
-            <userRecord />
+            <userRecord ref='userRecordRef' />
         </div>
         <!-- 资产 -->
         <van-sticky class='assetsSticky' :offset-bottom='0' position='bottom'>
@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, provide, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import fundList from './components/fundList.vue'
 import fundContent from './components/fundContent.vue'
@@ -39,15 +39,36 @@ import userRecord from './components/userRecord.vue'
 import assetsModule from './components/assetsModule.vue'
 
 const store = useStore()
+// 组件ref
+const userRecordRef = ref(null)
 // 当前基金产品
 const fund = ref({})
+// 基金交易组件key值
+const fundDealKey = ref('')
+
 // 设置当前基金产品
 const setFundProduct = (data) => {
     fund.value = data
+    fundDealKey.value = Date.now()
 }
+// 申购或赎回后更新列表数据
+provide('updateRecord', (value) => {
+    switch (value) {
+        // 更新申购记录
+        case 'apply':
+            userRecordRef.value.getApplyRecord()
+            break
+        // 更新赎回记录
+        case 'redeem':
+            userRecordRef.value.getRedeemRecord()
+            break
+    }
+})
 
-// 获取账户资产
-store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 5 })
+onMounted(() => {
+    // 获取账户资产
+    store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 5 })
+})
 </script>
 
 <style lang="scss" scoped>

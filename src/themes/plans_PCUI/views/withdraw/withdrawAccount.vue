@@ -60,7 +60,7 @@ import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getCookie } from '@/utils/util'
-import { withdrawCurrencyList } from '@/api/user'
+import { withdrawCurrencyList, getWithdrawAccountCurrencyList } from '@/api/user'
 import { Toast } from 'vant'
 
 export default {
@@ -81,6 +81,7 @@ export default {
             outCurrency: '',
             inCurrency: '',
             inCurrencyList: [],
+            withdrawAccountCurrencyList: [],
             currentTab: '',
             accountId: route.query.accountId,
             withdrawMethod: '',
@@ -95,7 +96,7 @@ export default {
 
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
         // 当前币种
-        const columns = computed(() => accountList.value.filter(item => item.tradeType === Number(tradeType)).map(el => {
+        const columns = computed(() => accountList.value.filter(item => item.tradeType === Number(tradeType)).filter(el => state.withdrawAccountCurrencyList.includes(el.currency)).map(el => {
             return {
                 currency: el.currency,
                 accountId: el.accountId
@@ -105,8 +106,6 @@ export default {
 
         const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(tradeType)))
 
-        state.outCurrency = columns.value[0].currency
-        state.accountId = columns.value[0].accountId
         // 自定义picker字段
         const customFieldName = {
             text: 'currency',
@@ -246,6 +245,17 @@ export default {
         }).catch(err => {
             state.loadingMore = false
             state.loading = false
+        })
+
+        // 获取客户支持的取款账户币种列表
+        getWithdrawAccountCurrencyList({ tradeType: 5 }).then(res => {
+            if (res.check()) {
+                state.withdrawAccountCurrencyList = res.data
+                if (res.data.length > 0) {
+                    state.outCurrency = columns.value[0].currency
+                    state.accountId = columns.value[0].accountId
+                }
+            }
         })
 
         return {

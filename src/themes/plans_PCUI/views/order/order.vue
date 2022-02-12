@@ -22,20 +22,25 @@
                     <el-tab-pane :label="$t('trade.offer')" name='offer' />
                     <el-tab-pane :label="$t('trade.material')" name='material' />
                 </el-tabs>
-                <!-- 报价 -->
-                <div v-if="activeName === 'offer'" class='case'>
-                    <!-- 盘口报价 -->
-                    <div class='handicap-content'>
-                        <handicap />
+                <!-- 指数产品 -->
+                <realtimeInvestCompose v-if='isIndexProduct' />
+                <!-- 非指数产品 -->
+                <div v-else class='case'>
+                    <!-- 报价 -->
+                    <div v-if="activeName === 'offer'">
+                        <!-- 盘口报价 -->
+                        <div class='handicap-content'>
+                            <handicap />
+                        </div>
+                        <!-- 实时成交记录 -->
+                        <div class='deal-content'>
+                            <dealList :symbol-id='product?.symbolId' />
+                        </div>
                     </div>
-                    <!-- 实时成交记录 -->
-                    <div class='deal-content'>
-                        <dealList :symbol-id='product?.symbolId' />
+                    <!-- 资料 -->
+                    <div v-if="activeName === 'material'">
+                        <fundInformation :fund-id='product.fundId' />
                     </div>
-                </div>
-                <!-- 资料 -->
-                <div v-if="activeName === 'material'" class='case'>
-                    <fundInformation :fund-id='product.fundId' />
                 </div>
             </div>
         </div>
@@ -51,7 +56,7 @@
 </template>
 
 <script>
-import { reactive, toRefs, watch, computed, onBeforeUnmount, defineAsyncComponent } from 'vue'
+import { reactive, toRefs, watch, computed, onBeforeUnmount, defineAsyncComponent, provide } from 'vue'
 import chart from './pages/chart.vue'
 import { useRouter, useRoute } from 'vue-router'
 import handicap from './pages/handicap.vue'
@@ -64,6 +69,7 @@ import { isEmpty } from '@/utils/util'
 import { useStore } from 'vuex'
 import { toolHooks } from '@planspc/hooks/handicap'
 import userRecord from './pages/userRecord'
+import realtimeInvestCompose from '@planspc/components/fundInformation/realtimeInvestCompose.vue'
 import { MsgSocket, QuoteSocket } from '@/plugins/socket/socket'
 
 export default {
@@ -91,11 +97,21 @@ export default {
         store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
         const customerInfo = computed(() => store.state._user.customerInfo)
         const product = computed(() => store.getters.productActived)
+        const state = reactive({
+            // 当前选中选项卡 offer:报价 material:资料
+            activeName: 'offer',
+            // 是否为指数产品 true:是 false:不是
+            isIndexProduct: false
+        })
         if (isEmpty(product.value)) {
             router.push('/')
         }
         // 获取产品详情
-        store.dispatch('_quote/querySymbolInfo', { 'symbolId': product.value.symbolId, 'tradeType': product.value.tradeType })
+        store.dispatch('_quote/querySymbolInfo', { 'symbolId': product.value.symbolId, 'tradeType': product.value.tradeType }).then(() => {
+            // 设置是否为指数产品
+            setIndexProduct()
+        })
+        provide('fundId', product.value?.fundId)
 
         const tradeContentHeight = computed(() => {
             if (Number(product.value?.tradeType) === 5) {
@@ -117,10 +133,11 @@ export default {
             }
         })
 
-        const state = reactive({
-            // 当前选中选项卡 offer:报价 material:资料
-            activeName: 'offer'
-        })
+        // 设置是否为指数产品
+        const setIndexProduct = () => {
+            const arr = product.value.labels ? product.value.labels.split(',') : []
+            state.isIndexProduct = arr.includes('index')
+        }
 
         watch(
             () => product.value?.tradeType,
@@ -140,7 +157,10 @@ export default {
 
         // 监听产品symbolId
         watch(() => product.value?.symbolId, () => {
+            // 设置默认选项卡
             state.activeName = 'offer'
+            // 设置是否为指数产品
+            setIndexProduct()
         })
 
         onBeforeUnmount(() => {
@@ -158,7 +178,7 @@ export default {
             dealModeShowMap,
             ...toRefs(state)
         }
-    },
+    }
 }
 </script>
 
@@ -216,7 +236,6 @@ export default {
         .right-wrap {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             width: 360px;
             &:deep {
                 .el-tabs {

@@ -360,7 +360,16 @@ const routes = [
                 name: 'Fund',
                 component: () => import(/* webpackChunkName: "returnMoney" */ '../views/fund/index.vue'),
                 meta: {
-                    title: 'route.fund',
+                    title: '',
+                },
+                children: h5Children
+            },
+            {
+                path: 'fundRecord',
+                name: 'FundRecord',
+                component: () => import(/* webpackChunkName: "returnMoney" */ '../views/fund/record.vue'),
+                meta: {
+                    title: '',
                 },
                 children: h5Children
             },

@@ -2,33 +2,87 @@
     <div class='record-module'>
         <div class='header'>
             <el-tabs v-model='activeName'>
-                <el-tab-pane label='申购记录' name='apply' />
-                <el-tab-pane label='赎回记录' name='redeem' />
-                <el-tab-pane label='资产' name='assets' />
+                <el-tab-pane :label="$t('fundInfo.applyRecords')" name='apply' />
+                <el-tab-pane :label="$t('fundInfo.redeemRecords')" name='redeem' />
+                <el-tab-pane :label="$t('fundInfo.assets')" name='assets' />
             </el-tabs>
-            <span v-if="activeName !== 'assets'" class='link'>
-                所有记录
+            <span
+                v-if="activeName !== 'assets'"
+                class='link'
+                @click='goAllRecord'
+            >
+                {{ $t('fundInfo.allRecords') }}
             </span>
         </div>
         <div class='case'>
             <!-- 申购记录 -->
-            <applyRecord v-if="activeName === 'apply'" />
+            <applyRecord v-if="activeName === 'apply'" ref='applyRecordRef' max-height='500px' />
             <!-- 赎回记录 -->
-            <redeemRecord v-if="activeName === 'redeem'" />
+            <redeemRecord v-if="activeName === 'redeem'" ref='redeemRecordRef' max-height='500px' />
             <!-- 资产 -->
-            <assetsList v-if="activeName === 'assets'" />
+            <assetsList v-if="activeName === 'assets'" max-height='500px' />
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, nextTick, defineExpose } from 'vue'
+import { useRouter } from 'vue-router'
 import applyRecord from './applyRecord.vue'
 import redeemRecord from './redeemRecord.vue'
 import assetsList from './assetsList'
 
+const router = useRouter()
+// 组件ref
+const applyRecordRef = ref(null)
+const redeemRecordRef = ref(null)
 // 当前选项卡 apply:申购记录  redeem:赎回记录 assets:资产
 const activeName = ref('apply')
+
+// 监听activeName
+watch(activeName, (newVal) => {
+    nextTick(() => {
+        switch (newVal) {
+            // 获取申购记录
+            case 'apply':
+                getApplyRecord({ size: 20, current: 1 })
+                break
+            // 获取赎回记录
+            case 'redeem':
+                getRedeemRecord({ size: 1000, current: 1 })
+                break
+        }
+    })
+}, { immediate: true })
+
+// 获取申购记录
+const getApplyRecord = (params) => {
+    if (applyRecordRef.value) {
+        applyRecordRef.value.getData(params)
+    }
+}
+// 获取赎回记录
+const getRedeemRecord = (params) => {
+    if (redeemRecordRef.value) {
+        redeemRecordRef.value.getData(params)
+    }
+}
+
+// 跳转到所有记录页面
+const goAllRecord = () => {
+    router.push({
+        path: '/fundRecord',
+        query: {
+            activeName: activeName.value
+        }
+    })
+}
+
+// 暴露子组件属性或方法
+defineExpose({
+    getApplyRecord,
+    getRedeemRecord
+})
 </script>
 
 <style lang="scss" scoped>

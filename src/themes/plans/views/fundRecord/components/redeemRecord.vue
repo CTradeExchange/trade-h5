@@ -35,8 +35,10 @@ import { hooks } from './hooks'
 const { assetsList } = hooks()
 
 const redeemActive = ref(0)
+const currencyShares = ref('')
 const params = computed(() => {
     return {
+        currencyShares: unref(currencyShares),
         sharesStatus: unref(redeemActive)
     }
 })
@@ -50,8 +52,11 @@ const onClickTab = (val) => {
 }
 // 筛选代币
 const assetChange = val => {
-    params.currencyShares = val || ''
-    refresh()
+    console.log(val)
+    currencyShares.value = val || ''
+    setTimeout(() => {
+        refresh()
+    }, 10)
 }
 // 筛选日期
 const dateChange = val => {
