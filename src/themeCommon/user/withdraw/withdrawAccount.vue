@@ -82,7 +82,7 @@ import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getCookie } from '@/utils/util'
-import { withdrawCurrencyList } from '@/api/user'
+import { withdrawCurrencyList, getWithdrawAccountCurrencyList } from '@/api/user'
 import { Toast } from 'vant'
 
 export default {
@@ -100,6 +100,7 @@ export default {
             outCurrency: route.query.currency,
             inCurrency: '',
             inCurrencyList: [],
+            withdrawAccountCurrencyList: [],
             currentTab: '',
             accountId: route.query.accountId,
             withdrawMethod: '',
@@ -240,6 +241,11 @@ export default {
         }).catch(err => {
             state.loadingMore = false
             state.loading = false
+        })
+
+        // 获取客户支持的取款账户币种列表
+        getWithdrawAccountCurrencyList({ tradeType: 5 }).then(res => {
+            console.log(res)
         })
 
         return {

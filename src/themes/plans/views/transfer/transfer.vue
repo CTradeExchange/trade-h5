@@ -87,6 +87,7 @@
         <!-- 资产列表 -->
         <assetsList
             v-if='pickerShow'
+            :account-list='accountList'
             :currency='curCurrency?.currency'
             :show='pickerShow'
             :trade-type='fromAccount.id'

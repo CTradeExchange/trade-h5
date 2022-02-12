@@ -913,3 +913,29 @@ export function forgetAssertsPwd (data) {
         data
     })
 }
+
+/* 获取客户支持的存款币种列表 */
+export function getDepositCoinList (data) {
+    return request({
+        url: '/global/fund.app.DepositAppDubboService.getDepositCoinList',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 获取客户支持的取款账户币种列表 */
+export function getWithdrawAccountCurrencyList (data) {
+    return request({
+        url: '/global/fund.app.WithdrawAppDubboService.getWithdrawAccountCurrencyList',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
