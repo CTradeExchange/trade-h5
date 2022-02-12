@@ -32,6 +32,7 @@
                 <el-table-column :label="$t('trade.free')" min-width='150' prop='available' />
                 <el-table-column :label="$t('trade.frozen')" min-width='150' prop='frozen' />
                 <el-table-column :label="$t('trade.carry')" min-width='150' prop='withdrawAmount' />
+                <el-table-column v-if='customerInfo.isFund === 1' :label="$t('fundInfo.weight')" min-width='150' prop='weight' />
                 <template #empty>
                     <span class='emptyText'>
                         {{ $t('c.noData') }}
@@ -115,7 +116,8 @@ export default {
             goDesposit,
             goWithdraw,
             goTransfer,
-            goRecord
+            goRecord,
+            customerInfo
         }
     }
 }

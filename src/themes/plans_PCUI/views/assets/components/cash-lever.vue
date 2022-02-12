@@ -184,7 +184,8 @@ export default {
             goRepayment,
             goTransfer,
             riskLevelMap,
-            goRecord
+            goRecord,
+            customerInfo
         }
     }
 }
