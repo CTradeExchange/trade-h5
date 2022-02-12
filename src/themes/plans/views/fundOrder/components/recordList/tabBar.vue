@@ -1,8 +1,8 @@
 <template>
     <div class='recordTab'>
         <van-tabs v-model:active='tabActive' class='recordTabBar'>
-            <van-tab title='申购记录' />
-            <van-tab title='赎回记录' />
+            <van-tab :title='$t("fundInfo.applyRecords")' />
+            <van-tab :title='$t("fundInfo.redeemRecords")' />
             <van-tab :title='$t("fundInfo.assets")' />
         </van-tabs>
         <a v-if='tabActive<2' class='recordAll' href='javascript:;' @click='recordAll'>

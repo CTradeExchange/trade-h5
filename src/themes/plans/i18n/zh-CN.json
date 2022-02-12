@@ -693,6 +693,8 @@
     "historyRedeem": "历史赎回",
     "applyRules": "申购规则",
     "redeemRules": "赎回规则",
+    "applyRecords": "申购记录",
+    "redeemRecords": "赎回记录",
     "buy": "申购",
     "sell": "赎回",
     "applyRule_tip1": "申购以金额申请，即申购基金时，只要填写申购多少金额即可",
