@@ -81,7 +81,7 @@
 
 <script setup>
 import CurrencyIcon from '@/components/currencyIcon.vue'
-import { computed, unref, ref, defineProps } from 'vue'
+import { computed, unref, ref, defineProps, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
@@ -96,6 +96,8 @@ const props = defineProps({
         default: () => {}
     }
 })
+// 赎回成功后更新列表数据
+const updateRecord = inject('updateRecord')
 
 const {
     accountList,
@@ -138,6 +140,7 @@ const submitHandler = () => {
     }).then(res => {
         if (res?.check && res.check()) {
             amountPay.value = ''
+            updateRecord('redeem')
             Dialog.alert({
                 title: t('fundInfo.redeemSubmiteed'),
                 message: t('fundInfo.redeemSubmiteedDesc'),

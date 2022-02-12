@@ -4,11 +4,11 @@
         <div class='header'>
             <div class='left'>
                 <span class='title'>
-                    申购赎回记录
+                    {{ $t('fundInfo.buyRedeemRecords') }}
                 </span>
                 <el-tabs v-model='activeName'>
-                    <el-tab-pane label='申购记录' name='apply' />
-                    <el-tab-pane label='赎回记录' name='redeem' />
+                    <el-tab-pane :label="$t('fundInfo.applyRecords')" name='apply' />
+                    <el-tab-pane :label="$t('fundInfo.redeemRecords')" name='redeem' />
                 </el-tabs>
             </div>
             <!-- 申购记录过滤组件 -->

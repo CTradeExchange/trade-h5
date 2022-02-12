@@ -2,24 +2,28 @@
     <div>
         <div class='tabs'>
             <span :class="{ 'active': params.sharesStatus === 0 }" @click='switchActive(0)'>
-                当前赎回
+                {{ $t('fundInfo.currentRedeem') }}
             </span>
             <span :class="{ 'active': params.sharesStatus === 1 }" @click='switchActive(1)'>
-                历史赎回
+                {{ $t('fundInfo.historyRedeem') }}
             </span>
         </div>
         <el-table v-loading='loading' :cell-style="{ background:'none' }" :data='list' :max-height='maxHeight'>
-            <el-table-column label='订单号' :min-width='160' prop='proposalNo' />
-            <el-table-column label='基金名称' :min-width='140' prop='fundName' />
-            <el-table-column label='份额代币' :min-width='minWidth' prop='currencyShares' />
-            <el-table-column label='赎回份额' :min-width='minWidth' prop='shares' />
+            <el-table-column :label="$t('fundInfo.orderNo')" :min-width='160' prop='proposalNo' />
+            <el-table-column :label="$t('fundInfo.fundName')" :min-width='140' prop='fundName' />
+            <el-table-column :label="$t('fundInfo.shareCurrency')" :min-width='minWidth' prop='currencyShares' />
+            <el-table-column :label="$t('fundInfo.redeemShare')" :min-width='minWidth' prop='shares' />
             <template v-if='params.sharesStatus === 1'>
-                <el-table-column label='净值' :min-width='minWidth' prop='sharesNet' />
-                <el-table-column label='赎回手续费' :min-width='minWidth' prop='fees' />
-                <el-table-column label='赎回金额' :min-width='minWidth' prop='amountRedeem' />
+                <el-table-column :label="$t('fundInfo.realtimeJZ')" :min-width='minWidth' prop='sharesNet' />
+                <el-table-column :label="$t('fundInfo.redeemFee')" :min-width='minWidth' prop='fees' />
+                <el-table-column :label="$t('fundInfo.redeemMoney')" :min-width='minWidth' prop='amountRedeem' />
             </template>
-            <el-table-column label='份额确认状态' :min-width='120' prop='sharesStatus' />
-            <el-table-column label='申请时间' :min-width='160'>
+            <el-table-column :label="$t('fundInfo.shareConfirmStatus')" :min-width='120'>
+                <template #default='scope'>
+                    <span>{{ $t(`fundInfo.sharesStatus.${scope.row.sharesStatus}`) }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundInfo.applyTime')" :min-width='160'>
                 <template #default='scope'>
                     <span>{{ formatTime(scope.row.createTime) }}</span>
                 </template>

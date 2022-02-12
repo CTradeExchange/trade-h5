@@ -1,15 +1,19 @@
 <template>
     <div>
         <el-table v-loading='loading' :cell-style="{ background:'none' }" :data='list' :max-height='maxHeight'>
-            <el-table-column label='订单号' :min-width='160' prop='proposalNo' />
-            <el-table-column label='基金名称' :min-width='140' prop='fundName' />
-            <el-table-column label='份额代币' :min-width='minWidth' prop='currencyShares' />
-            <el-table-column label='申购金额' :min-width='minWidth' prop='amountPay' />
-            <el-table-column label='净值' :min-width='minWidth' prop='sharesNet' />
-            <el-table-column label='申购手续费' :min-width='minWidth' prop='fees' />
-            <el-table-column label='申购份额' :min-width='minWidth' prop='shares' />
-            <el-table-column label='份额确认状态' :min-width='120' prop='sharesStatus' />
-            <el-table-column label='申请时间' :min-width='160'>
+            <el-table-column :label="$t('fundInfo.orderNo')" :min-width='160' prop='proposalNo' />
+            <el-table-column :label="$t('fundInfo.fundName')" :min-width='140' prop='fundName' />
+            <el-table-column :label="$t('fundInfo.shareCurrency')" :min-width='minWidth' prop='currencyShares' />
+            <el-table-column :label="$t('fundInfo.buyMoney')" :min-width='minWidth' prop='amountPay' />
+            <el-table-column :label="$t('fundInfo.realtimeJZ')" :min-width='minWidth' prop='sharesNet' />
+            <el-table-column :label="$t('fundInfo.buyFee')" :min-width='minWidth' prop='fees' />
+            <el-table-column :label="$t('fundInfo.buyShare')" :min-width='minWidth' prop='shares' />
+            <el-table-column :label="$t('fundInfo.shareConfirmStatus')" :min-width='120'>
+                <template #default='scope'>
+                    <span>{{ $t(`fundInfo.sharesStatus.${scope.row.sharesStatus}`) }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundInfo.applyTime')" :min-width='160'>
                 <template #default='scope'>
                     <span>{{ formatTime(scope.row.createTime) }}</span>
                 </template>

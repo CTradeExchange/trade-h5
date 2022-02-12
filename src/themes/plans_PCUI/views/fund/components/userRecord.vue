@@ -2,16 +2,16 @@
     <div class='record-module'>
         <div class='header'>
             <el-tabs v-model='activeName'>
-                <el-tab-pane label='申购记录' name='apply' />
-                <el-tab-pane label='赎回记录' name='redeem' />
-                <el-tab-pane label='资产' name='assets' />
+                <el-tab-pane :label="$t('fundInfo.applyRecords')" name='apply' />
+                <el-tab-pane :label="$t('fundInfo.redeemRecords')" name='redeem' />
+                <el-tab-pane :label="$t('fundInfo.assets')" name='assets' />
             </el-tabs>
             <span
                 v-if="activeName !== 'assets'"
                 class='link'
                 @click='goAllRecord'
             >
-                所有记录
+                {{ $t('fundInfo.allRecords') }}
             </span>
         </div>
         <div class='case'>
@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch, nextTick, defineExpose } from 'vue'
 import { useRouter } from 'vue-router'
 import applyRecord from './applyRecord.vue'
 import redeemRecord from './redeemRecord.vue'
@@ -57,11 +57,15 @@ watch(activeName, (newVal) => {
 
 // 获取申购记录
 const getApplyRecord = (params) => {
-    applyRecordRef.value.getData(params)
+    if (applyRecordRef.value) {
+        applyRecordRef.value.getData(params)
+    }
 }
 // 获取赎回记录
 const getRedeemRecord = (params) => {
-    redeemRecordRef.value.getData(params)
+    if (redeemRecordRef.value) {
+        redeemRecordRef.value.getData(params)
+    }
 }
 
 // 跳转到所有记录页面
@@ -73,6 +77,12 @@ const goAllRecord = () => {
         }
     })
 }
+
+// 暴露子组件属性或方法
+defineExpose({
+    getApplyRecord,
+    getRedeemRecord
+})
 </script>
 
 <style lang="scss" scoped>

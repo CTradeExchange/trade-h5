@@ -5,7 +5,7 @@
                 v-model='currencyShares'
                 clearable
                 filterable
-                placeholder='基金份额代币'
+                :placeholder="$t('fundInfo.chooseApplyAsset')"
             >
                 <el-option
                     v-for='item in fundProductList'
@@ -18,14 +18,14 @@
         <div class='item-date'>
             <el-date-picker
                 v-model='time'
-                placeholder='申请时间'
+                :placeholder="$t('fundInfo.applyTime')"
                 type='datetime'
                 value-format='YYYY-MM-DD HH:mm:ss'
                 @change='selectTime'
             />
         </div>
         <button class='btn' @click='onSearch'>
-            搜索
+            {{ $t('compLang.search') }}
         </button>
     </div>
 </template>
