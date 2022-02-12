@@ -15,6 +15,7 @@
                 <el-input
                     v-model='amountPay'
                     clearable
+                    :disabled='fund.canRedemption !== 1'
                     :placeholder='payPlaceholder'
                     type='number'
                     @input='onInput'
@@ -86,7 +87,7 @@ import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { orderHook } from '../hooks.js'
-import { getDecimalNum, retainDecimal, toFixed } from '@/utils/calculation'
+import { limitNumber, limitDecimal, toFixed } from '@/utils/calculation'
 
 const router = useRouter()
 const { t } = useI18n({ useScope: 'global' })
@@ -123,10 +124,10 @@ const amountPay = ref('')
 
 // 输入事件控制
 const onInput = (value) => {
+    const newval = limitNumber(value)
+    amountPay.value = newval
     const digits = fundAccount.value?.digits || 0
-    if (Number(getDecimalNum(value)) > digits) {
-        amountPay.value = retainDecimal(value, digits)
-    }
+    amountPay.value = limitDecimal(newval, digits)
 }
 
 // 提交申购或者赎回
@@ -202,6 +203,9 @@ const submitHandler = () => {
             }
             .el-input__inner {
                 height: 50px;
+            }
+            .is-disabled .el-input__inner {
+                background: none !important;
             }
         }
     }

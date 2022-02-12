@@ -105,3 +105,21 @@ export function retainDecimal (num, decimal) {
     }
     return parseFloat(num).toFixed(decimal)
 }
+
+/* 只能输入数字 */
+export function limitNumber (num) {
+    let result = num
+    if (/[^0-9\.]/.test(num)) {
+        result = result.replace(/[^0-9\.]/g, '')
+    }
+    return result
+}
+
+/* 限制数字小数点后面的位数 */
+export function limitDecimal (num, digits) {
+    let result = num
+    if (Number(getDecimalNum(num)) > digits) {
+        result = retainDecimal(num, digits)
+    }
+    return result
+}

@@ -238,7 +238,7 @@
         "inputSurePwd": "请输入确认密码",
         "pwdDiff": "新密码和确认密码不同，请检查后重新输入",
         "pwdSame": "原密码和新密码相同，请检查后重新输入",
-        "newPwdSuccess": "恭喜！新密码重设成功",
+        "newPwdSuccess": "恭喜！您的新密码重设成功",
         "newPwdLogin": "请使用新密码进行登录",
         "tip1": "出于账户安全考虑，最近24小时将不能取款",
         "goLogin": "去登录"

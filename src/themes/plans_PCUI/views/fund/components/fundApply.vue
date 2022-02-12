@@ -21,6 +21,7 @@
                 <el-input
                     v-model='amountPay'
                     clearable
+                    :disabled='fund.canPurchase !== 1'
                     :placeholder='payPlaceholder'
                     type='number'
                     @input='onInput'
@@ -86,7 +87,7 @@ import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { orderHook } from '../hooks.js'
-import { getDecimalNum, retainDecimal } from '@/utils/calculation'
+import { limitNumber, limitDecimal } from '@/utils/calculation'
 import { debounce } from '@/utils/util'
 
 const router = useRouter()
@@ -128,10 +129,10 @@ const sharesPlaceholder = computed(() => {
 
 // 输入事件控制
 const onInput = (value) => {
+    const newval = limitNumber(value)
+    amountPay.value = newval
     const digits = curAccount.value?.digits || 0
-    if (Number(getDecimalNum(value)) > digits) {
-        amountPay.value = retainDecimal(value, digits)
-    }
+    amountPay.value = limitDecimal(newval, digits)
     inputHandler()
 }
 
@@ -214,6 +215,9 @@ const submitHandler = () => {
             }
             .el-input__inner {
                 height: 50px;
+            }
+            .is-disabled .el-input__inner {
+                background: none !important;
             }
         }
     }

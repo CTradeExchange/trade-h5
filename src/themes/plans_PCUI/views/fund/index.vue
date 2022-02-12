@@ -15,7 +15,7 @@
             <!-- 右侧模块 -->
             <div class='right-module module'>
                 <!-- 基金交易 -->
-                <fundDeal v-if='fund?.fundId' :fund='fund' />
+                <fundDeal v-if='fund?.fundId' :key='fundDealKey' :fund='fund' />
             </div>
         </div>
         <!-- 申购记录、赎回记录、资产 -->
@@ -43,9 +43,13 @@ const store = useStore()
 const userRecordRef = ref(null)
 // 当前基金产品
 const fund = ref({})
+// 基金交易组件key值
+const fundDealKey = ref('')
+
 // 设置当前基金产品
 const setFundProduct = (data) => {
     fund.value = data
+    fundDealKey.value = Date.now()
 }
 // 申购或赎回后更新列表数据
 provide('updateRecord', (value) => {
