@@ -28,6 +28,14 @@
                     {{ fundInfo.newShare }}
                 </span>
             </li>
+            <li v-if='fundInfo.shareTokenCode' class='item'>
+                <span class='hd'>
+                    {{ $t('fundInfo.shareCurrency') }}
+                </span>
+                <span class='ft'>
+                    {{ fundInfo.shareTokenCode }}
+                </span>
+            </li>
             <li v-if='fundInfo.managerName' class='item'>
                 <span class='hd'>
                     {{ $t('fundInfo.fundManager') }}

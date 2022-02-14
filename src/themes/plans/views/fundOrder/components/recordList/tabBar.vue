@@ -5,6 +5,7 @@
             <van-tab :title='$t("fundInfo.redeemRecords")' />
             <van-tab :title='$t("fundInfo.assets")' />
         </van-tabs>
+
         <a v-if='tabActive<2' class='recordAll' href='javascript:;' @click='recordAll'>
             <i class='link icon_mingxi1'></i>
             {{ $t('trade.allPosition') }}
@@ -30,7 +31,7 @@ const recordAll = () => {
     router.push({
         name: 'FundRecord',
         query: {
-            direction: tabActive === 0 ? 'buy' : 'sell',
+            direction: tabActive.value === 0 ? 'buy' : 'sell',
         }
     })
 }

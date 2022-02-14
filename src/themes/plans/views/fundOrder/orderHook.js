@@ -98,22 +98,16 @@ export const orderHook = () => {
         })
     }
 
-    const calcApplyFee = ref('') // 获取申购手续费
-    const calcShares = ref('') // 获取申购份额
-    const calcSharesNet = ref('') // 获取申购手净值
+    const calcApplyNet = ref('') // 申购手续费,申购份额, 申购净值,手续费的币种,净值币种
     const getCalcApplyFee = (amountPay, currencyPay) => {
         if (!amountPay) {
-            calcApplyFee.value = ''
-            calcShares.value = ''
-            calcSharesNet.value = ''
+            calcApplyNet.value = ''
             return false
         }
         fundCalcApplyShares({ amountPay, currencyPay, fundId: parseInt(fundId) }).then(res => {
             if (res.check()) {
                 const { data } = res
-                calcApplyFee.value = data.fees
-                calcShares.value = data.shares
-                calcSharesNet.value = data.sharesNet
+                calcApplyNet.value = data
             }
         })
     }
@@ -131,9 +125,7 @@ export const orderHook = () => {
         activeCurrency,
         curAccount,
         updateAccountAssetsInfo,
-        calcApplyFee,
-        calcShares,
-        calcSharesNet,
+        calcApplyNet,
         onSelect
     }
 }

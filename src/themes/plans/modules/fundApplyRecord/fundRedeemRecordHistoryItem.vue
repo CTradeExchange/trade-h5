@@ -1,44 +1,44 @@
 <template>
     <div class='fundApplyRecordItem'>
         <p class='title'>
-            赎回  {{ data.fundName }}
+            {{ $t('fundInfo.sell') }}  {{ data.fundName }}
         </p>
         <ul class='infos'>
             <li class='item'>
                 <span class='label'>
-                    赎回份额({{ data.currencyShares }})
+                    {{ $t('fundInfo.redeemShares') }}({{ data.currencyShares }})
                 </span>
-                <span>{{ data.amountRedeem }}</span>
+                <span>{{ data.shares }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    净值({{ data.currencyNet }})
+                    {{ $t('fundInfo.realtimeJZ') }}({{ data.currencyNet }})
                 </span>
                 <span>{{ data.sharesNet }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    赎回手续费({{ data.currencyNet }})
+                    {{ $t('fundInfo.redeemFees') }}({{ data.currencyRedeem }})
                 </span>
                 <span>{{ data.fees }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    赎回金额({{ data.currencyNet }})
+                    {{ $t('fundInfo.redeemAmount') }}({{ data.currencyRedeem }})
                 </span>
                 <span>{{ data.amountRedeem }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    份额代币
+                    {{ $t('fundInfo.shareCurrency') }}
                 </span>
                 <span>{{ data.currencyShares }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    份额确认状态
+                    {{ $t('fundInfo.sureSharesStatus') }}
                 </span>
-                <span>{{ data.sharesStatus===1?'已确认':'待确认' }}</span>
+                <span>{{ data.sharesStatus===1 ? $t("fundInfo.confirmed") : $t("fundInfo.willConfirmed") }}</span>
             </li>
             <li class='item'>
                 <span class='label'>

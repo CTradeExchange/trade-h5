@@ -661,6 +661,7 @@
     "fundType": "基金类型",
     "fundChart1": "市场价格 vs 基金净值",
     "fundChart2": "市场表现",
+    "fundChartTitle": "基金涨幅vs 指数涨幅",
     "realtimeInvestCompose": "投资组合",
     "assets": "资产",
     "ranking": "排名",
@@ -708,6 +709,15 @@
     "redeem_tip1": "赎回以份额申请，即赎回基金时，只要填写赎回多少份额即可",
     "redeem_tip2": "赎回价格采用“未知价”原则，预计按T+2日当天确认份额结束后的净值价格执行",
     "redeem_tip3": "赎回流程结束，那你所赎回的基金代币将以选择的接收资产汇入您的现货钱包",
+    "applyAmount": "申购金额",
+    "redeemAmount": "赎回金额",
+    "applyFees": "申购手续费",
+    "redeemFees": "赎回手续费",
+    "applyShares": "申购份额",
+    "redeemShares": "赎回份额",
+    "sureSharesStatus": "份额确认状态",
+    "confirmed": "已确认",
+    "willConfirmed": "待确认",
     "shareCurrency": "份额代币"
   }
 }

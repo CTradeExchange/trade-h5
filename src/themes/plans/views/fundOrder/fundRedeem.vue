@@ -117,7 +117,7 @@ const redeemFeeRate = computed(() => {
 
 // 赎回份额输入框的placeholder
 const payPlaceholder = computed(() => {
-    const text = t('fundInfo.canRedeemMax') + (fundAccount.value?.withdrawAmount || 0)
+    const text = t('fundInfo.canRedeemMax') + (fundAccount.value?.available || 0)
     return text
 })
 const amountPay = ref('')
