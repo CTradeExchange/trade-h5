@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { reactive, toRefs, watch, computed, onBeforeUnmount, defineAsyncComponent, provide } from 'vue'
+import { ref, reactive, toRefs, watch, computed, onBeforeUnmount, defineAsyncComponent, provide } from 'vue'
 import chart from './pages/chart.vue'
 import { useRouter, useRoute } from 'vue-router'
 import handicap from './pages/handicap.vue'
@@ -105,15 +105,14 @@ export default {
         const state = reactive({
             // 当前选中选项卡 offer:报价 material:资料
             activeName: 'offer',
-            // 是否为指数产品 true:是 false:不是
-            isIndexProduct: false
         })
         if (isEmpty(product.value)) {
             router.push('/')
         }
         // 获取产品详情
         store.dispatch('_quote/querySymbolInfo', { 'symbolId': product.value.symbolId, 'tradeType': product.value.tradeType })
-        provide('symbolId', product.value?.symbolId)
+        // 当前产品symbolId
+        provide('symbolId', symbolId)
 
         const tradeContentHeight = computed(() => {
             if (Number(product.value?.tradeType) === 5) {

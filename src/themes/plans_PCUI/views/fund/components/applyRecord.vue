@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-table v-loading='loading' :cell-style="{ background:'none' }" :data='list' :max-height='maxHeight'>
-            <el-table-column :label="$t('fundInfo.orderNo')" :min-width='160' prop='proposalNo' />
+            <el-table-column :label="$t('fundInfo.orderNo')" :min-width='140' prop='proposalNo' />
             <el-table-column :label="$t('fundInfo.fundName')" :min-width='140' prop='fundName' />
             <el-table-column :label="$t('fundInfo.shareCurrency')" :min-width='minWidth' prop='currencyShares' />
             <el-table-column :label="$t('fundInfo.buyMoney')" :min-width='minWidth' prop='amountPay' />
