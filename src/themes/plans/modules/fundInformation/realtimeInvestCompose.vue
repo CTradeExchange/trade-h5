@@ -43,7 +43,7 @@
                         )
                     </p>
                     <p class='ft'>
-                        <van-popover v-model:show='item.popover' placement='bottom-end' theme='dark'>
+                        <van-popover v-if='item.weightRealValue' v-model:show='item.popover' placement='bottom-end' theme='dark'>
                             <p style='padding: 5px 10px; white-space: nowrap;'>
                                 {{ item.weightRealValue }}({{ item.previousPeriodWeightCompare }})
                             </p>
@@ -57,6 +57,9 @@
                                 </span>
                             </template>
                         </van-popover>
+                        <span v-else>
+                            {{ item.weight }}({{ item.previousPeriodWeightCompare }})
+                        </span>
                     </p>
                 </li>
             </ul>
@@ -82,9 +85,13 @@ import { computed, nextTick, onMounted, ref } from 'vue'
 import { useInvestCompose } from './hooks/realtimeInvestCompose'
 import currencyIcon from '@/components/currencyIcon'
 import BottomTip from './bottomTip.vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const { query } = route
 
-defineProps({
-    title: String
+const props = defineProps({
+    title: String,
+    symbolId: [String, Number],
 })
 
 // 显示数据列表还是显示环形图
@@ -122,7 +129,7 @@ onMounted(async () => {
     await delayAwaitTime(200)
 
     // 实时投资组合排名
-    getInvestCombination().then(async data => {
+    getInvestCombination(query.symbolId).then(async data => {
         rangList.value = data.map(el => {
             el.popover = false
             el.arrow = parseFloat(el.previousPeriodWeightCompare) < 0 ? 'downArrow' : 'upArrow'
@@ -133,7 +140,7 @@ onMounted(async () => {
     })
 
     // 单资产表现柱状图
-    getAssetPerformance().then(data => {
+    getAssetPerformance(query.symbolId).then(data => {
         const chartXData = []
         const chartYData = []
         data.forEach(el => {
