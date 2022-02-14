@@ -51,15 +51,15 @@
                     <span class='muted'>
                         {{ $t('fundInfo.realtimeJZ') }}：
                     </span>
-                    {{ calcSharesNet || '--' }}
-                    {{ activeCurrency }}
+                    {{ calcApplyNet.sharesNet || '--' }}
+                    {{ calcApplyNet.currencyNet }}
                 </p>
                 <p>
                     <span class='muted'>
                         {{ $t('fundInfo.fundApplyFeeCalc') }}：
                     </span>
-                    {{ calcApplyFee || '--' }}
-                    {{ activeCurrency }}
+                    {{ calcApplyNet.fees || '--' }}
+                    {{ calcApplyNet.currencyPay }}
                 </p>
             </div>
             <div class='footerBtn'>
@@ -104,9 +104,7 @@ const {
     onSelect,
     activeCurrency,
     curAccount,
-    calcApplyFee,
-    calcShares,
-    calcSharesNet,
+    calcApplyNet,
 } = orderHook()
 
 const recordListRef = ref(null)
@@ -131,8 +129,8 @@ const amountPay = ref('')
 
 // 份额输入框的placeholder
 const sharesPlaceholder = computed(() => {
-    const text = '≈ ' + calcShares.value
-    return unref(calcShares) ? text : '--'
+    const text = '≈ ' + calcApplyNet.value.shares
+    return unref(calcApplyNet).shares ? text : '--'
 })
 const touchCurrency = () => {
     selectShow.value = true

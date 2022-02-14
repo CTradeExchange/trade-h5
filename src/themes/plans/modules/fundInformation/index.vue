@@ -15,14 +15,18 @@
 </template>
 
 <script setup>
-import { provide, ref, defineProps } from 'vue'
+import { localGet, localSet } from '@/utils/util'
+import { provide, ref, defineProps, watchEffect } from 'vue'
 import baseVue from './base.vue'
 import performanceVue from './performance.vue'
 import realtimeInvestCompose from './realtimeInvestCompose.vue'
 const props = defineProps({
     fundId: [String, Number]
 })
-const active = ref(0)
+const active = ref(parseFloat(localGet('fundInfoTabIndex') || 1))
+watchEffect(() => {
+    localSet('fundInfoTabIndex', active.value)
+})
 provide('fundId', props.fundId)
 </script>
 
@@ -33,6 +37,7 @@ provide('fundId', props.fundId)
     min-height: 320px;
     :deep(.van-tabs__wrap){
         border: 0 !important;
+        margin-bottom: rem(30px);
     }
     :deep(.van-tabs__nav){
         border: 0;

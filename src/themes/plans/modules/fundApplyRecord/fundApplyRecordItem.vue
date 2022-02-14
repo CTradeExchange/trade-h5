@@ -6,39 +6,39 @@
         <ul class='infos'>
             <li class='item'>
                 <span class='label'>
-                    申购金额({{ data.currencyPay }})
+                    {{ $t('fundInfo.applyAmount') }}({{ data.currencyPay }})
                 </span>
                 <span>{{ data.amountPay }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    净值({{ data.currencyNet }})
+                    {{ $t('fundInfo.realtimeJZ') }}({{ data.currencyNet }})
                 </span>
                 <span>{{ data.sharesNet }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    申购手续费({{ data.currencyPay }})
+                    {{ $t('fundInfo.applyFees') }}({{ data.currencyPay }})
                 </span>
                 <span>{{ data.fees }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    申购份额({{ data.currencyShares }})
+                    {{ $t('fundInfo.applyShares') }}({{ data.currencyShares }})
                 </span>
                 <span>{{ data.shares }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    份额代币
+                    {{ $t('fundInfo.shareCurrency') }}
                 </span>
                 <span>{{ data.currencyShares }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
-                    份额确认状态
+                    {{ $t('fundInfo.sureSharesStatus') }}
                 </span>
-                <span>{{ data.sharesStatus===1?'已确认':'待确认' }}</span>
+                <span>{{ data.sharesStatus===1?$t("fundInfo.confirmed"):$t("fundInfo.willConfirmed") }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
