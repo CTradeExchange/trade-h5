@@ -3,7 +3,7 @@ import { TooltipComponent, LegendComponent, GridComponent } from 'echarts/compon
 import { PieChart, BarChart } from 'echarts/charts'
 import { LabelLayout } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
-import { assetPerformance, investCombination, queryIndexSample } from '@/api/trade'
+import { assetPerformance, investCombination, queryIndexSample, indexSimplePerformance } from '@/api/trade'
 import { localGet } from '@/utils/util'
 import { computed, inject } from 'vue'
 
@@ -32,16 +32,29 @@ export const useInvestCompose = (params) => {
             })
         } else {
             // 指数产品指数样本
-            return queryIndexSample({ indeId: symbolId }).then(res => {
-                console.log('指数样本数据', res)
+            return queryIndexSample({ indexId: symbolId }).then(res => {
+                if (res.check()) {
+                    const list = res.data
+                    return list
+                }
+                return []
             })
         }
     }
 
     // 获取单资产表现柱状图数据
     const getAssetPerformance = () => {
+        // 获取基金产品柱状图数据
         if (fundId) {
             return assetPerformance({ fundId }).then(res => {
+                if (res.check()) {
+                    return res.data
+                }
+                return []
+            })
+        } else {
+            // 获取指数产品柱状图数据
+            return indexSimplePerformance({ indexId: symbolId }).then(res => {
                 if (res.check()) {
                     return res.data
                 }

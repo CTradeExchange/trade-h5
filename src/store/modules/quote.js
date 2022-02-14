@@ -1,5 +1,5 @@
 import { findSymbolBaseInfoList, querySymbolInfo, getEquityPremiumRate } from '@/api/trade'
-import { findFundPage, fundNetValueChangeQuote, getFundInfo } from '@/api/fund'
+import { findFundPage, findFundPageRealTime, fundNetValueChangeQuote, getFundInfo } from '@/api/fund'
 import { toFixed } from '@/utils/calculation'
 import { vue_set, assign } from '@/utils/vueUtil.js'
 import { sessionSet, sessionGet } from '@/utils/util.js'
@@ -374,16 +374,28 @@ export default {
             })
         },
         // 分页获取基金产品列表
-        findFundPage ({ dispatch, commit, state, rootState, rootGetters }, { current = 1, size = 100 } = {}) {
+        findFundPage ({ dispatch, commit, state, rootState, rootGetters }, data = {}) {
+            console.log('data', data)
             const params = {
-                customerGroupId: rootGetters.customerGroupId,
+                customerGroupId: rootGetters.customerGroupId
             }
-            return findFundPage(params).then((res) => {
-                if (res.check() && res.data) {
-                    commit('Update_fundProductList', res.data.records)
-                }
-                return res.data
-            })
+            // 带实时信息
+            if (data.isRealTime) {
+                params.name = data.name
+                return findFundPageRealTime(params).then(res => {
+                    if (res.check() && res.data) {
+                        commit('Update_fundProductList', res.data.records)
+                    }
+                    return res.data
+                })
+            } else {
+                return findFundPage(params).then((res) => {
+                    if (res.check() && res.data) {
+                        commit('Update_fundProductList', res.data.records)
+                    }
+                    return res.data
+                })
+            }
         },
         // 获取某个基金产品净值、市场价格等数据
         fundNetValue ({ dispatch, commit, state, rootState, rootGetters }, params) {

@@ -293,5 +293,16 @@ export function queryIndexSample (data) {
         data
     })
 }
+/* 指数产品单资产表现柱状图 */
+export function indexSimplePerformance (data) {
+    return request({
+        url: '/global/report.app.ReportDatadDubboService.indexSimplePerformance',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
 
 /* 现货撮合取消委托单 */

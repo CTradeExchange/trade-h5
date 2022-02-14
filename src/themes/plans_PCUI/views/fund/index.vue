@@ -51,6 +51,10 @@ const setFundProduct = (data) => {
     fund.value = data
     fundDealKey.value = Date.now()
 }
+// 更新当前基金产品数据
+provide('updateFund', (data) => {
+    fund.value.netValue = data.sharesNet
+})
 // 申购或赎回后更新列表数据
 provide('updateRecord', (value) => {
     switch (value) {

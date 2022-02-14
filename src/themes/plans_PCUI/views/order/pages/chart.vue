@@ -33,6 +33,11 @@
             <p>{{ $t('trade.low') }} {{ product?.low_price || '--' }}</p>
         </div>
 
+        <div v-if='product.etf' class='item ohlc'>
+            <p>{{ $t('fundInfo.realtimeJZ') }}({{ product.fundCurrency }}) {{ product.currentNav || '--' }}</p>
+            <p>{{ $t('fundInfo.premiumRate') }}({{ product.fundCurrency }}) {{ product.premiumRate || '--' }}</p>
+        </div>
+
         <div class='item collect'>
             <i
                 v-preventReClick

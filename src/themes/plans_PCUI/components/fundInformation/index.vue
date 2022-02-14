@@ -23,7 +23,7 @@ const props = defineProps({
     fundId: [String, Number],
     jump: String
 })
-const active = ref(0)
+const active = ref(1)
 provide('fundId', props.fundId)
 provide('jump', props.jump)
 </script>

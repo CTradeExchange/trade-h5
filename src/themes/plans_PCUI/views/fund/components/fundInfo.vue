@@ -8,7 +8,7 @@
             <span class='type'>
                 {{ fund.operationMode === 1 ? $t('fundInfo.operationModeValue1') : $t('fundInfo.operationModeValue2') }}
             </span>
-            <span class='title'>
+            <span v-if='fund.fundType' class='title'>
                 {{ fund.fundType }}
             </span>
         </div>

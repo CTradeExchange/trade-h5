@@ -48,7 +48,7 @@
         <div class='total'>
             <p>
                 <span>{{ $t('fundInfo.canRedeemMax') }}：</span>
-                <strong>{{ fundAccount?.withdrawAmount || 0 }} {{ fund.shareTokenCode }}</strong>
+                <strong>{{ fundAccount?.available || 0 }} {{ fund.shareTokenCode }}</strong>
             </p>
             <p>
                 <span>{{ $t('fundInfo.redeemFeeRate') }}：</span>
@@ -117,7 +117,7 @@ const redeemFeeRate = computed(() => {
 
 // 赎回份额输入框的placeholder
 const payPlaceholder = computed(() => {
-    const text = t('fundInfo.canRedeemMax') + (fundAccount.value?.withdrawAmount || 0)
+    const text = t('fundInfo.canRedeemMax') + (fundAccount.value?.available || 0)
     return text
 })
 const amountPay = ref('')

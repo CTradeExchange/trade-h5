@@ -71,7 +71,7 @@
                             {{ product.yesterday_close_price }}
                         </span>
                     </p>
-                    <p v-if='product.etf ' class='priceTop'>
+                    <p v-if='product.etf' class='priceTop'>
                         <span>
                             {{ $t('fundInfo.realtimeJZ') }}({{ product.fundCurrency }})
                         </span>

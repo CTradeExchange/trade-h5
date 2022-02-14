@@ -145,6 +145,15 @@ export function findFundPage (data) {
     })
 }
 
+/* 分页获取基金产品列表（带实时信息） */
+export function findFundPageRealTime (data) {
+    return request({
+        url: '/global/config.app.AppSymbolDubboService.findFundPageWithRealTimeInfo',
+        method: 'post',
+        data
+    })
+}
+
 /* 基金净值涨跌比 */
 export function fundNetValueChangeQuote (data) {
     return request({

@@ -1,4 +1,4 @@
-import { computed, ref, unref } from 'vue'
+import { computed, ref, unref, inject } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import { debounce } from '@/utils/util'
@@ -9,8 +9,8 @@ export const useFund = () => {
     const store = useStore()
 
     // 获取基金产品列表
-    const getFundList = () => {
-        return store.dispatch('_quote/findFundPage')
+    const getFundList = (params = {}) => {
+        return store.dispatch('_quote/findFundPage', params)
     }
     const fundProductList = computed(() => store.state._quote.fundProductList)
 
@@ -29,6 +29,8 @@ export const useFund = () => {
 export const orderHook = (params) => {
     const { t } = useI18n({ useScope: 'global' })
     const store = useStore()
+    // 更新基金产品数据
+    const updateFund = inject('updateFund')
 
     const loading = ref(false)
     const activeCurrency = ref(null) // 申购的时候表示支付资产，赎回的时候表示接受资产
@@ -126,6 +128,8 @@ export const orderHook = (params) => {
                 calcApplyFee.value = data.fees
                 calcShares.value = data.shares
                 calcSharesNet.value = data.sharesNet
+                // 更新基金产品数据
+                updateFund(data)
             }
         })
     }

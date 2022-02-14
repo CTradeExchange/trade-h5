@@ -1,7 +1,13 @@
 <template>
     <div class='fund-content'>
         <div class='fund-search'>
-            <el-input v-model='searchValue' class='search-input' clearable :placeholder='$t("transRecords.searchPlaceholder")'>
+            <el-input
+                v-model='searchValue'
+                class='search-input'
+                clearable
+                :placeholder='$t("transRecords.searchPlaceholder")'
+                @input='inputHandler'
+            >
                 <template #prefix>
                     <el-icon class='el-input__icon'>
                         <Search />
@@ -41,16 +47,16 @@
                         </span>
                     </div>
                     <div class='col-2'>
-                        <p :class="['jz', parseFloat(item.netValueChangeQuote) < 0 ? 'down' : 'up']">
-                            {{ item.netValueChangeQuote }}
+                        <p :class="['jz', parseFloat(item.netValue) < 0 ? 'down' : 'up']">
+                            {{ item.netValue }}
                         </p>
                         <p class='currency'>
-                            {{ item.currency }}
+                            {{ item.currencyCode }}
                         </p>
                     </div>
                     <div class='col-3'>
-                        <p :class="['change', parseFloat(item.marketPriceChangeQuote) < 0 ? 'down' : 'up']">
-                            {{ item.marketPriceChangeQuote }}
+                        <p :class="['change', parseFloat(item.netValueChangeQuote) < 0 ? 'down' : 'up']">
+                            {{ item.netValueChangeQuote }}
                         </p>
                     </div>
                 </div>
@@ -66,6 +72,7 @@ import { ref, onMounted, defineEmits } from 'vue'
 import { Search } from '@element-plus/icons'
 import CurrencyIcon from '@/components/currencyIcon.vue'
 import { useFund } from '../hooks.js'
+import { debounce } from '@/utils/util'
 
 const emit = defineEmits(['setFundProduct'])
 // 搜索内容
@@ -98,11 +105,24 @@ const updateFundValue = () => {
         setFundProduct()
     })
 }
-onMounted(() => {
-    getFundList().then(() => {
-        fund.value = fundProductList.value[0]
-        updateFundValue()
+
+// 输入事件，防抖
+const inputHandler = debounce(() => {
+    getProductList()
+}, 500)
+
+// 获取基金产品列表数据
+const getProductList = () => {
+    getFundList({ name: searchValue.value, isRealTime: true }).then(() => {
+        if (fundProductList.value.length > 0) {
+            fund.value = fundProductList.value[0]
+            updateFundValue()
+        }
     })
+}
+
+onMounted(() => {
+    getProductList()
 })
 </script>
 
@@ -126,6 +146,7 @@ onMounted(() => {
         .col-2 {
             width: 70px;
             text-align: right;
+            margin-right: 10px;
         }
         .col-3 {
             width: 70px;
@@ -168,6 +189,7 @@ onMounted(() => {
             .col-2 {
                 width: 70px;
                 text-align: right;
+                margin-right: 10px;
                 .currency {
                     color: var(--normalColor);
                 }
