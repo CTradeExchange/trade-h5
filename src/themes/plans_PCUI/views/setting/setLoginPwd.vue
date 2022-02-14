@@ -19,15 +19,15 @@
             <van-cell-group>
                 <div v-if='!isFirstSet' class='form-item'>
                     <van-field v-model='oldPwd' label='' :placeholder='$t("login.originPwd")' :type='oldPwdVis ? "text" : "password"' />
-                    <span class='icon' :class="oldPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("oldPwdVis")'></span>
+                    <span class='icon' :class="oldPwdVis ? 'icon_icon_pressed': 'icon_icon_default'" @click='changeState("oldPwdVis")'></span>
                 </div>
                 <div class='form-item'>
                     <van-field v-model='newPwd' label='' :placeholder='$t("forgot.inputNewPwd")' :type='newPwdVis ? "text" : "password"' />
-                    <span class='icon' :class="newPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("newPwdVis")'></span>
+                    <span class='icon' :class="newPwdVis ? 'icon_icon_pressed': 'icon_icon_default'" @click='changeState("newPwdVis")'></span>
                 </div>
                 <div class='form-item'>
                     <van-field v-model='confirmPwd' label='' :placeholder='$t("forgot.newPwdAgain")' :type='confirmVis ? "text" : "password"' />
-                    <span class='icon' :class="confirmVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("confirmVis")'></span>
+                    <span class='icon' :class="confirmVis ? 'icon_icon_pressed': 'icon_icon_default'" @click='changeState("confirmVis")'></span>
                 </div>
             </van-cell-group>
             <van-button class='confirmBtn' @click='handleConfirm'>

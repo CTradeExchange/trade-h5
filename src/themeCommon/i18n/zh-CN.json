@@ -224,7 +224,7 @@
     },
     "forgot": {
         "forgot": "找回登录密码",
-        "forgotFund": "找回资金密码",
+        "forgotFund": "重设资金密码",
         "retrievedByPhone": "手机找回",
         "retrievedByEmail": "邮箱找回",
         "setPwdFailed": "糟糕！您的新密码设置失败",

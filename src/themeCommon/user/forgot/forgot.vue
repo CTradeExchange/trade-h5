@@ -4,7 +4,6 @@
             :menu='false'
             :right-action='false'
             :show-center='false'
-            @back='back'
         />
         <Loading :show='loading' />
         <header class='header'>
@@ -114,6 +113,7 @@ export default {
             }, (errors, fields) => {
                 console.log('errors:', errors, fields)
                 if (errors) {
+                    callback && callback(false)
                     return Toast(errors[0].message)
                 }
 

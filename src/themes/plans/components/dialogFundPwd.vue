@@ -17,12 +17,14 @@
         </div>
         <div class='dialog-body'>
             <InputComp v-model='pwd' clear :label="$t('common.inputFundPwd')" :max-length='6' pwd />
-            <router-link v-if='Number(customInfo.assertPassStatus) === 1' class='href' to='/setFundPwd'>
-                {{ $t('login.goSet') }}
-            </router-link>
-            <router-link v-else class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">
-                {{ $t('login.forgot') }}
-            </router-link>
+            <div class='pwd-oper'>
+                <router-link v-if='Number(customInfo.assertPassStatus) === 1' class='href' to='/setFundPwd'>
+                    {{ $t('login.goSet') }}
+                </router-link>
+                <router-link v-else class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">
+                    {{ $t('login.forgot') }}
+                </router-link>
+            </div>
         </div>
         <div class='dialog-footer'>
             <van-button
@@ -66,6 +68,7 @@ export default {
         })
 
         const closed = () => { // 关闭弹出层且动画结束后触发
+            state.pwd = ''
             context.emit('update:show', false)
         }
         const formatter = value => {
@@ -103,14 +106,16 @@ export default {
 
 }
 .dialog-body{
-    .href{
-        text-align: right;
-        color: var(--primary);
-        display: inline-block;
-        width: 100%;
-        font-size: rem(24px);
+    .pwd-oper{
         padding: rem(30px) 0;
+        text-align: right;
+        .href{
+            color: var(--primary);
+            width: 100%;
+            font-size: rem(24px);
+        }
     }
+
 }
 
 .dialog-footer {

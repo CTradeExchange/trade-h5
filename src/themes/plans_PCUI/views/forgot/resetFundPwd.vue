@@ -22,7 +22,7 @@
                             :placeholder='$t("forgot.inputNewPwd")'
                             :type='newPwdVis ? "text" : "password"'
                         />
-                        <span class='icon' :class="newPwdVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("newPwdVis")'></span>
+                        <span class='icon' :class="newPwdVis ? 'icon_icon_pressed': 'icon_icon_default'" @click='changeState("newPwdVis")'></span>
                     </div>
                     <div class='form-item'>
                         <Field
@@ -33,7 +33,7 @@
                             :placeholder='$t("forgot.newPwdAgain")'
                             :type='confirmVis ? "text" : "password"'
                         />
-                        <span class='icon' :class="confirmVis ? 'icon_eye': 'icon_eye-off'" @click='changeState("confirmVis")'></span>
+                        <span class='icon' :class="confirmVis ? 'icon_icon_pressed': 'icon_icon_default'" @click='changeState("confirmVis")'></span>
                     </div>
                 </van-cell-group>
                 <van-button class='confirmBtn' @click='handleConfirm'>
