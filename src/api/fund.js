@@ -225,3 +225,27 @@ export function fundRedeemRecord (data) {
         data
     })
 }
+
+/* 获取指数样本 基金净值涨跌比 */
+export function getIndexSample (data) {
+    return request({
+        url: '/global/report.app.ReportDatadDubboService.indexSample',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
+/* 获取指数单资产表现柱状图 */
+export function getIndexSimplePerformance (data) {
+    return request({
+        url: '/global/report.app.ReportDatadDubboService.indexSimplePerformance',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}

@@ -799,7 +799,6 @@ export default {
                 if (res.check()) {
                     state.withdrawSuccess = true
                 } else {
-                    state.coinCount = ''
                     state.serviceCount = ''
                     state.arriveCount = ''
                     state.minusCount = ''

@@ -111,22 +111,24 @@ export default function ({ showPending = false } = {}) {
 
 export const toolHooks = function () {
     // 成交模式: 1:MM(不展示盘口和成交记录)，2:蝴蝶（不显示挂单tab），3:撮合
+    const store = useStore()
     const dealModeShowMap = computed(() => {
+        const product = store.getters.productActived
         return {
             '1': {
                 handicap: false,
                 pendingTab: true
             },
             '2': {
-                handicap: true,
-                pendingTab: false
+                handicap: true && !product.isIndex, // 非指数产品才显示盘口
+                pendingTab: true
             },
             '3': {
-                handicap: true,
+                handicap: true && !product.isIndex,
                 pendingTab: true
             },
             '4': {
-                handicap: true,
+                handicap: true && !product.isIndex,
                 pendingTab: false
             }
         }

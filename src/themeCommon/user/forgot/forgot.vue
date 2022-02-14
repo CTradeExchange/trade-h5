@@ -14,7 +14,7 @@
         <div class='tabs-wrap'>
             <van-tabs
                 v-model:active='active'
-                :color='style.color'
+                :color='style.primary'
                 line-height='2px'
                 line-width='20px'
                 :title-active-color='style.color'

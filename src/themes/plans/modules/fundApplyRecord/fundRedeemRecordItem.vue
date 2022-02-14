@@ -23,8 +23,10 @@
                 <span>{{ data.sharesStatus===1 ? $t("fundInfo.confirmed") : $t("fundInfo.willConfirmed") }}</span>
             </li>
             <li class='item'>
-                <span class='label'></span>
-                <span></span>
+                <span class='label'>
+                    {{ $t('fundInfo.customerAsset') }}
+                </span>
+                <span>{{ data.currencyRedeem }}</span>
             </li>
             <li class='item'>
                 <span class='label'>

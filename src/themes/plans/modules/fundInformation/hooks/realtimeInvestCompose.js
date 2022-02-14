@@ -4,6 +4,7 @@ import { PieChart, BarChart } from 'echarts/charts'
 import { LabelLayout } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
 import { assetPerformance, investCombination } from '@/api/trade'
+import { getIndexSample, getIndexSimplePerformance } from '@/api/fund'
 import { localGet } from '@/utils/util'
 import { computed, inject } from 'vue'
 
@@ -19,8 +20,14 @@ echarts.use([
 
 export const useInvestCompose = (params) => {
     const fundId = inject('fundId')
-    const getInvestCombination = () => {
-        return investCombination({ fundId, statisticType: 1 }).then(res => {
+    const getInvestCombination = (symbolId) => {
+        return Promise.resolve().then(() => {
+            if (symbolId) {
+                return getIndexSample({ indexId: parseFloat(symbolId) })
+            } else {
+                return investCombination({ fundId, statisticType: 1 })
+            }
+        }).then(res => {
             if (res.check()) {
                 const list = res.data
                 return list
@@ -30,8 +37,14 @@ export const useInvestCompose = (params) => {
     }
 
     // 获取单资产表现柱状图数据
-    const getAssetPerformance = () => {
-        return assetPerformance({ fundId }).then(res => {
+    const getAssetPerformance = (symbolId) => {
+        return Promise.resolve().then(() => {
+            if (symbolId) {
+                return getIndexSimplePerformance({ indexId: parseFloat(symbolId) })
+            } else {
+                return assetPerformance({ fundId })
+            }
+        }).then(res => {
             if (res.check()) {
                 return res.data
             }
