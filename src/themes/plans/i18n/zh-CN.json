@@ -718,6 +718,7 @@
     "sureSharesStatus": "份额确认状态",
     "confirmed": "已确认",
     "willConfirmed": "待确认",
-    "shareCurrency": "份额代币"
+    "shareCurrency": "份额代币",
+    "customerAsset": "客户接受资产"
   }
 }
