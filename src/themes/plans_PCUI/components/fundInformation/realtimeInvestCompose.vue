@@ -106,6 +106,7 @@ const chartData = computed(() => {
         }
     })
 })
+
 // 饼图高度
 const chartPieDOMHeight = computed(() => {
     // return 200 + 'px'

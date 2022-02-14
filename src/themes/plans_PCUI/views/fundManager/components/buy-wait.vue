@@ -55,11 +55,30 @@
             <el-table-column :label="$t('fundManager.buy.orderNo')" :min-width='140' prop='proposalNo' />
             <el-table-column :label="$t('fundManager.buy.woName')" :min-width='minWidth' prop='companyName' />
             <el-table-column :label="$t('fundManager.buy.customerNo')" :min-width='minWidth' prop='customerNo' />
-            <el-table-column :label="$t('fundManager.buy.money')" :min-width='minWidth' prop='amountPay' />
+            <el-table-column :label="$t('fundManager.buy.money')" :min-width='150'>
+                <template #default='scope'>
+                    <span>{{ scope.row.amountPay }}{{ scope.row.currencyPay }}</span>
+                </template>
+            </el-table-column>
             <el-table-column :label="$t('fundManager.buy.payCurrency')" :min-width='minWidth' prop='currencyPay' />
-            <el-table-column :label="$t('fundManager.buy.netWorth')" :min-width='minWidth'>
+            <el-table-column :label="$t('fundManager.buy.netWorth')" :min-width='150'>
                 <template #default='scope'>
                     <span>{{ scope.row.sharesNet }}{{ scope.row.currencyNet }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundManager.buy.fees')" :min-width='150'>
+                <template #default='scope'>
+                    <span>{{ scope.row.fees }}{{ scope.row.currencyPay }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundManager.buy.finalMoney')" :min-width='150'>
+                <template #default='scope'>
+                    <span>{{ scope.row.finalAmount }}{{ scope.row.currencyPay }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundManager.buy.lot')" :min-width='minWidth'>
+                <template #default='scope'>
+                    <span>{{ scope.row.shares }}{{ scope.row.currencyShares }}</span>
                 </template>
             </el-table-column>
             <el-table-column :label="$t('fundManager.buy.status')" :min-width='160'>
@@ -147,7 +166,7 @@ const searchParams = reactive({
 const tableData = ref([])
 
 // 列表最小宽度
-const minWidth = ref(130)
+const minWidth = ref(120)
 // 列表总数据量
 const total = ref(100)
 // 选择的列表数据

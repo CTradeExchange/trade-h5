@@ -1,6 +1,5 @@
 <template>
     <router-view />
-
     <div class='fund-container'>
         <div class='fund-content'>
             <div class='side'>

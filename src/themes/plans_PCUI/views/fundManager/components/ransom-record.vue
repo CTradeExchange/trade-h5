@@ -53,15 +53,20 @@
                     <span>{{ scope.row.shares }}{{ scope.row.currencyShares }}</span>
                 </template>
             </el-table-column>
-            <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='140' prop='currencyRedeem' />
-            <el-table-column :label="$t('fundManager.ransom.networth')" :min-width='minWidth'>
+            <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='minWidth' prop='currencyRedeem' />
+            <el-table-column :label="$t('fundManager.ransom.networth')" :min-width='150'>
                 <template #default='scope'>
                     <span>{{ scope.row.sharesNet }}{{ scope.row.currencyNet }}</span>
                 </template>
             </el-table-column>
-            <el-table-column :label="$t('fundManager.ransom.moneyTotal')" :min-width='160'>
+            <el-table-column :label="$t('fundManager.ransom.fees')" :min-width='150'>
                 <template #default='scope'>
-                    <span>{{ scope.row.amountRedeem }}{{ scope.row.currencyNet }}</span>
+                    <span>{{ scope.row.fees }}{{ scope.row.currencyRedeem }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundManager.ransom.moneyTotal')" :min-width='150'>
+                <template #default='scope'>
+                    <span>{{ scope.row.amountRedeem }}{{ scope.row.currencyRedeem }}</span>
                 </template>
             </el-table-column>
             <el-table-column :label="$t('fundManager.ransom.status')" :min-width='160'>
@@ -142,7 +147,7 @@ const searchParams = reactive({
 const tableData = ref([])
 
 // 列表最小宽度
-const minWidth = ref(130)
+const minWidth = ref(120)
 // 列表总数据量
 const total = ref(100)
 

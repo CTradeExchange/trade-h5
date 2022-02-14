@@ -282,5 +282,16 @@ export function assetPerformance (data) {
         data
     })
 }
+/* 指数产品指数样本 */
+export function queryIndexSample (data) {
+    return request({
+        url: '/global/report.app.ReportDatadDubboService.indexSample',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
 
 /* 现货撮合取消委托单 */

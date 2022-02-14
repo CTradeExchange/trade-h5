@@ -16,6 +16,7 @@
     align-items: center;
     width: 36px;
     height: 16px;
+    line-height: 1;
     font-size: 10px;
     color: #fff;
     background: var(--primary);

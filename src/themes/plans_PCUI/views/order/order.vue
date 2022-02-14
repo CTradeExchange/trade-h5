@@ -23,7 +23,11 @@
                     <el-tab-pane :label="$t('trade.material')" name='material' />
                 </el-tabs>
                 <!-- 指数产品 -->
-                <realtimeInvestCompose v-if='isIndexProduct' />
+                <div v-if='product.isIndex' class='case'>
+                    <div class='index-module'>
+                        <realtimeInvestCompose :title="$t('fundInfo.indexSample')" />
+                    </div>
+                </div>
                 <!-- 非指数产品 -->
                 <div v-else class='case'>
                     <!-- 报价 -->
@@ -81,12 +85,13 @@ export default {
         productSearch,
         assetsModule,
         userRecord,
+        realtimeInvestCompose,
         fundInformation: defineAsyncComponent({
             loader: () => import('@planspc/components/fundInformation'),
             loadingComponent: LoadingComponent,
             delay: 0, // 在显示 loadingComponent 之前的延迟 | 默认值：200（单位 ms）
             suspensible: false
-        })
+        }),
     },
     setup () {
         const store = useStore()
@@ -107,11 +112,8 @@ export default {
             router.push('/')
         }
         // 获取产品详情
-        store.dispatch('_quote/querySymbolInfo', { 'symbolId': product.value.symbolId, 'tradeType': product.value.tradeType }).then(() => {
-            // 设置是否为指数产品
-            setIndexProduct()
-        })
-        provide('fundId', product.value?.fundId)
+        store.dispatch('_quote/querySymbolInfo', { 'symbolId': product.value.symbolId, 'tradeType': product.value.tradeType })
+        provide('symbolId', product.value?.symbolId)
 
         const tradeContentHeight = computed(() => {
             if (Number(product.value?.tradeType) === 5) {
@@ -133,12 +135,6 @@ export default {
             }
         })
 
-        // 设置是否为指数产品
-        const setIndexProduct = () => {
-            const arr = product.value.labels ? product.value.labels.split(',') : []
-            state.isIndexProduct = arr.includes('index')
-        }
-
         watch(
             () => product.value?.tradeType,
             (newval, oldval) => {
@@ -159,8 +155,6 @@ export default {
         watch(() => product.value?.symbolId, () => {
             // 设置默认选项卡
             state.activeName = 'offer'
-            // 设置是否为指数产品
-            setIndexProduct()
         })
 
         onBeforeUnmount(() => {
@@ -274,6 +268,9 @@ export default {
             .case {
                 flex: 1;
                 overflow-y: auto;
+                .index-module {
+                    margin: rem(30px) rem(20px);
+                }
             }
             .handicap-content{
                 border-radius: 10px;

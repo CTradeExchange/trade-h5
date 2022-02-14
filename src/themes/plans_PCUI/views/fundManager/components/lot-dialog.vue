@@ -8,8 +8,16 @@
             width='520px'
         >
             <el-table v-loading='isLoading' border :cell-style="{ background:'none' }" :data='tableData'>
-                <el-table-column align='center' :label="$t('fundManager.ransom.totalLot')" prop='sharesTotal' />
-                <el-table-column align='center' :label="$t('fundManager.ransom.totalMoney')" prop='amountTotal' />
+                <el-table-column align='center' :label="$t('fundManager.ransom.totalLot')">
+                    <template #default='scope'>
+                        <span>{{ scope.row.sharesTotal }}{{ scope.row.currencyShares }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column align='center' :label="$t('fundManager.ransom.totalMoney')">
+                    <template #default='scope'>
+                        <span>{{ scope.row.amountTotal }}{{ scope.row.currencyRedeem }}</span>
+                    </template>
+                </el-table-column>
             </el-table>
             <template #footer v-if='!isLoading'>
                 <button v-loading='isSubmit' class='confirm-btn' @click='onConfirm'>
@@ -55,10 +63,7 @@ const queryFundRedeemMoney = () => {
             isSubmit.value = false
             show.value = true
             const { data } = res
-            tableData.value = [{
-                sharesTotal: data.sharesTotal,
-                amountTotal: data.amountTotal
-            }]
+            tableData.value = [data]
         }
     })
 }

@@ -816,14 +816,17 @@
 			"customerNo": "客户编号",
 			"payCurrency": "申购支付资产",
 			"netWorth": "申购净值",
-			"money": "申购金额",
+			"money": "申购申请金额",
 			"status": "份额确认状态",
             "executeStatus": "申购执行状态",
 			"applyTime": "申请时间",
 			"executeOrder": "申购执行下单",
 			"executeNo": "申购执行单号",
 			"lastTime": "最后更新时间",
-			"standard": "下单执行标准"
+			"standard": "下单执行标准",
+			"fees": "申购手续费",
+			"finalMoney": "最终申购金额",
+			"lot": "申购份额"
 		},
 		"ransom": {
 			"waitConfirm": "待确认",
@@ -843,6 +846,7 @@
 			"applyTime": "申请时间",
 			"confirmLot": "确认份额",
 			"lastTime": "最后更新时间",
+			"fees": "赎回手续费",
 			"tip1": "资产可用余额不足"
 		},
 		"standard": {
@@ -900,6 +904,7 @@
 		"subScriptePlaceholder": "请输入申购金额",
 		"redeemNumPlaceholder": "请输入赎回份额",
 		"available": "可用",
+		"indexSample": "指数样本",
 		"buy": "申购",
 		"sell": "赎回",
 		"fundIcon": "基金代币",

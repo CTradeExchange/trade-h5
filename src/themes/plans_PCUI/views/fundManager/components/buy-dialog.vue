@@ -9,7 +9,11 @@
         >
             <el-table v-loading='isLoading' border :cell-style="{ background:'none' }" :data='tableData'>
                 <el-table-column align='center' :label="$t('fundManager.buy.title4')" prop='symbolName' />
-                <el-table-column align='center' :label="$t('fundManager.buy.title5')" prop='amount' />
+                <el-table-column align='center' :label="$t('fundManager.buy.title5')">
+                    <template #default='scope'>
+                        <span>{{ scope.row.amount }}{{ scope.row.profitCurrency }}</span>
+                    </template>
+                </el-table-column>
             </el-table>
             <template #footer v-if='!isLoading'>
                 <button v-loading='isSubmit' class='confirm-btn' @click='onConfirm'>

@@ -3,7 +3,7 @@ import { TooltipComponent, LegendComponent, GridComponent } from 'echarts/compon
 import { PieChart, BarChart } from 'echarts/charts'
 import { LabelLayout } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
-import { assetPerformance, investCombination } from '@/api/trade'
+import { assetPerformance, investCombination, queryIndexSample } from '@/api/trade'
 import { localGet } from '@/utils/util'
 import { computed, inject } from 'vue'
 
@@ -19,24 +19,35 @@ echarts.use([
 
 export const useInvestCompose = (params) => {
     const fundId = inject('fundId')
+    const symbolId = inject('symbolId')
     const getInvestCombination = () => {
-        return investCombination({ fundId, statisticType: 1 }).then(res => {
-            if (res.check()) {
-                const list = res.data
-                return list
-            }
-            return []
-        })
+        // 实时投资组合排名
+        if (fundId) {
+            return investCombination({ fundId, statisticType: 1 }).then(res => {
+                if (res.check()) {
+                    const list = res.data
+                    return list
+                }
+                return []
+            })
+        } else {
+            // 指数产品指数样本
+            return queryIndexSample({ indeId: symbolId }).then(res => {
+                console.log('指数样本数据', res)
+            })
+        }
     }
 
     // 获取单资产表现柱状图数据
     const getAssetPerformance = () => {
-        return assetPerformance({ fundId }).then(res => {
-            if (res.check()) {
-                return res.data
-            }
-            return []
-        })
+        if (fundId) {
+            return assetPerformance({ fundId }).then(res => {
+                if (res.check()) {
+                    return res.data
+                }
+                return []
+            })
+        }
     }
 
     // 绘制环形图
