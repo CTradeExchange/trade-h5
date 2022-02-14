@@ -26,13 +26,13 @@ export default function hooks (state) {
     // CFD全仓和CFD逐仓 手数区分10-限价预埋单；11-停损预埋单，按额下单固定bizType 14
     const bizTypeByPendingCFD =  ()=>{
         const requestPrice = state.pendingPrice
-        let bizType=''
-        if (state.direction === 'buy') {
-            bizType = lt(requestPrice, product.value.buy_price) ? 10 : 11
-        } else {
-            bizType = gt(requestPrice, product.value.sell_price) ? 10 : 11
-        }
-        return bizType;
+        // let bizType=''
+        // if (state.direction === 'buy') {
+        //     bizType = lt(requestPrice, product.value.buy_price) ? 10 : 11
+        // } else {
+        //     bizType = gt(requestPrice, product.value.sell_price) ? 10 : 11
+        // }
+        return 12;      // 限价单固定bizType 12
     }
     const bizType = computed(() => {
         let bizType = state.orderType   // 1市价单  10挂单
