@@ -5,7 +5,7 @@
                 {{ parseInt(entryType) === 1 ? $t('trade.volumes') : $t('trade.margin') }}
             </div>
             <div class='right' @click='entryTypeUpdate'>
-                <van-icon name="arrow"/> 
+                <van-icon name='arrow' />
                 {{ parseInt(entryType) === 1 ? $t('trade.margin') : $t('trade.volumes') }}
             </div>
         </div>
@@ -83,7 +83,8 @@ export default {
                 newval = newval.replace(/[^0-9\.]/g, '')
                 e.target.value = newval
             }
-            const digits = parseInt(props.entryType) === 1 ? props?.product?.numberDigits : props?.account?.digits
+            const minVolumeDigits = Math.min(getDecimalNum(props.product?.minVolume), props.product?.numberDigits)
+            const digits = parseInt(props.entryType) === 1 ? minVolumeDigits : props?.account?.digits
             const reg = new RegExp('^\\d*(\\.?\\d{0,' + digits + '})', 'g')
             if (getDecimalNum(newval) > digits) {
                 newval = (newval.match(reg) && newval.match(reg)[0]) || ''
@@ -98,7 +99,8 @@ export default {
             placeText.value = placeholder.value
             let value = e.target.value
             if (value === props.modelValue) return false
-            const digits = props.product.numberDigits
+            const minVolumeDigits = Math.min(getDecimalNum(props.product?.minVolume), props.product?.numberDigits)
+            const digits = parseInt(props.entryType) === 1 ? minVolumeDigits : props?.account?.digits
             value = value ? toFixed(value, digits) : value
             emit('change', value)
         }
