@@ -51,6 +51,11 @@
                     <span class='icon' :class="confirmVis ? 'icon_icon_pressed': 'icon_icon_default'" @click='changeState("confirmVis")'></span>
                 </div>
             </van-cell-group>
+            <div v-if='!isFirstSet' class='forgot'>
+                <router-link class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">
+                    {{ $t('login.forgot') }}
+                </router-link>
+            </div>
             <van-button class='confirmBtn' @click='handleConfirm'>
                 <span>{{ $t('common.sure') }}</span>
             </van-button>
@@ -209,6 +214,11 @@ export default {
                 font-size: rem(30px);
             }
         }
+    }
+    .forgot{
+        text-align: right;
+        padding-top: rem(30px);
+        padding-right: rem(30px);
     }
 }
 </style>
