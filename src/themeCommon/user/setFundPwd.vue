@@ -46,7 +46,7 @@
                 <span class='icon' :class="confirmVis ? 'icon_icon_pressed': 'icon_icon_default'" @click='changeState("confirmVis")'></span>
             </div>
         </van-cell-group>
-        <div class='forgot'>
+        <div v-if='!isFirstSet' class='forgot'>
             <router-link class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">
                 {{ $t('login.forgot') }}
             </router-link>
