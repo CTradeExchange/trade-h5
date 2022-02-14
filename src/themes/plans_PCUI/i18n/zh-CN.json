@@ -909,7 +909,7 @@
 		"sell": "赎回",
 		"fundIcon": "基金代币",
 		"shareCurrency": "份额代币",
-		"dayUpDown": "24H涨跌",
+		"dayUpDown": "24H涨跌幅",
 		"applyRecords": "申购记录",
 		"redeemRecords": "赎回记录",
 		"allRecords": "所有记录",
