@@ -1,4 +1,5 @@
 <template>
+    <router-view />
     <div class='forgot'>
         <topNav class='header' />
         <div class='container'>
