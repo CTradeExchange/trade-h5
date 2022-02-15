@@ -839,7 +839,7 @@
 			"receiveCurrency": "客户接受资产",
 			"lot": "赎回份额",
 			"networth": "赎回净值",
-			"moneyTotal": "赎回总金额",
+			"moneyTotal": "实际赎回金额",
 			"totalLot": "总赎回份额",
 			"totalMoney": "预计总赎回金额",
 			"status": "份额确认状态",
@@ -919,6 +919,7 @@
 		"buyShare": "申购份额",
 		"shareConfirmStatus": "份额确认状态",
 		"applyTime": "申请时间",
+		"lastTime": "最后更新时间",
 		"sharesStatus": {
 			"0": "待确认",
 			"1": "已确认"

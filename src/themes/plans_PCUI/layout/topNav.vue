@@ -33,7 +33,7 @@
                         </template>
                     </el-dropdown>
                 </div>
-                <div :class="['item', { 'active': $route.path === '/fund' }]">
+                <div v-if='fundShow' :class="['item', { 'active': $route.path === '/fund' }]">
                     <router-link to='/fund'>
                         <span class='link'>
                             {{ $t('header.fund') }}
@@ -201,7 +201,9 @@ export default {
             formatTime,
             changePlans,
             plansName,
-            ...toRefs(state)
+            ...toRefs(state),
+            // 是否显示基金功能
+            fundShow: window['fundShow']
         }
     }
 }

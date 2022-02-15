@@ -78,9 +78,14 @@ import { useInvestCompose } from './hooks/realtimeInvestCompose'
 import currencyIcon from '@/components/currencyIcon'
 import BottomTip from './bottomTip.vue'
 
-defineProps({
+const props = defineProps({
     // 标题
     title: {
+        type: String,
+        default: ''
+    },
+    // symbolId
+    symbolId: {
         type: String,
         default: ''
     }
@@ -122,7 +127,7 @@ onMounted(async () => {
     await delayAwaitTime(200)
 
     // 实时投资组合排名
-    getInvestCombination().then(async data => {
+    getInvestCombination(props.symbolId).then(async data => {
         rangList.value = data.map(el => {
             el.popover = false
             el.arrow = parseFloat(el.previousPeriodWeightCompare) < 0 ? 'downArrow' : 'upArrow'
@@ -133,7 +138,7 @@ onMounted(async () => {
     })
 
     // 单资产表现柱状图
-    getAssetPerformance().then(data => {
+    getAssetPerformance(props.symbolId).then(data => {
         const chartXData = []
         const chartYData = []
         data.forEach(el => {

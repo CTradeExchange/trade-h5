@@ -1,13 +1,29 @@
 <template>
     <div>
         <el-table v-loading='loading' :cell-style="{ background:'none' }" :data='list' :max-height='maxHeight'>
-            <el-table-column :label="$t('fundInfo.orderNo')" :min-width='140' prop='proposalNo' />
-            <el-table-column :label="$t('fundInfo.fundName')" :min-width='140' prop='fundName' />
-            <el-table-column :label="$t('fundInfo.shareCurrency')" :min-width='minWidth' prop='currencyShares' />
-            <el-table-column :label="$t('fundInfo.buyMoney')" :min-width='minWidth' prop='amountPay' />
-            <el-table-column :label="$t('fundInfo.realtimeJZ')" :min-width='minWidth' prop='sharesNet' />
-            <el-table-column :label="$t('fundInfo.buyFee')" :min-width='minWidth' prop='fees' />
-            <el-table-column :label="$t('fundInfo.buyShare')" :min-width='minWidth' prop='shares' />
+            <el-table-column :label="$t('fundInfo.orderNo')" :min-width='minWidth' prop='proposalNo' />
+            <el-table-column :label="$t('fundInfo.fundName')" :min-width='minWidth' prop='fundName' />
+            <el-table-column :label="$t('fundInfo.shareCurrency')" :min-width='100' prop='currencyShares' />
+            <el-table-column :label="$t('fundInfo.buyMoney')" :min-width='minWidth'>
+                <template #default='scope'>
+                    <span>{{ scope.row.amountPay }}{{ scope.row.currencyPay }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundInfo.realtimeJZ')" :min-width='minWidth'>
+                <template #default='scope'>
+                    <span>{{ scope.row.sharesNet }}{{ scope.row.currencyNet }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundInfo.buyFee')" :min-width='minWidth'>
+                <template #default='scope'>
+                    <span>{{ scope.row.fees }}{{ scope.row.currencyPay }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundInfo.buyShare')" :min-width='minWidth'>
+                <template #default='scope'>
+                    <span>{{ scope.row.shares }}{{ scope.row.currencyShares }}</span>
+                </template>
+            </el-table-column>
             <el-table-column :label="$t('fundInfo.shareConfirmStatus')" :min-width='120'>
                 <template #default='scope'>
                     <span>{{ $t(`fundInfo.sharesStatus.${scope.row.sharesStatus}`) }}</span>
@@ -60,7 +76,7 @@ const list = ref([])
 // 加载状态
 const loading = ref(false)
 // 列表最小宽度
-const minWidth = ref(100)
+const minWidth = ref(140)
 // 列表总数据量
 const total = ref(0)
 // 请求参数

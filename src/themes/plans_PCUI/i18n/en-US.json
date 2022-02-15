@@ -812,14 +812,17 @@
 			"customerNo": "Client No.",
 			"payCurrency": "Payment asset",
 			"netWorth": "NAV",
-			"money": "Purchase amount",
+			"money": "Purchase application amount",
 			"status": "Share confirmation status",
             "executeStatus": "Purchase execution status",
 			"applyTime": "Application time",
 			"executeOrder": "Execute an order",
 			"executeNo": "Execution Id",
 			"lastTime": "Update time",
-			"standard": "Order execution standard"
+			"standard": "Order execution standard",
+			"fees": "Purchase fees",
+			"finalMoney": "Final purchase amount",
+			"lot": "Purchase shares"
 		},
 		"ransom": {
 			"waitConfirm": "Unconfirmed",
@@ -839,6 +842,7 @@
 			"applyTime": "Application time",
 			"confirmLot": "Confirm share",
 			"lastTime": "Update time",
+			"fees": "Redemption fees",
 			"tip1": "Insufficient balance of assets available"
 		},
 		"standard": {
@@ -898,6 +902,29 @@
 		"available": "Avbl",
 		"indexSample": "指数样本",
 		"buy": "Purchase",
-		"sell": "Redemption"
+		"sell": "Redemption",
+		"fundIcon": "Fund token",
+		"shareCurrency": "Share token",
+		"dayUpDown": "24h chg%",
+		"applyRecords": "Purchase Records",
+		"redeemRecords": "Redemption Records",
+		"allRecords": "All Records",
+		"orderNo": "Trade no.",
+		"buyMoney": "Purchase amount",
+		"buyFee": "Purchase fees",
+		"buyShare": "Purchase shares",
+		"shareConfirmStatus": "share confirm status",
+		"applyTime": "Application time",
+		"lastTime": "Update time",
+		"sharesStatus": {
+			"0": "Unconfirmed",
+			"1": "Confirmed"
+		},
+		"currentRedeem": "Open Redemption",
+		"historyRedeem": "History Redemption",
+		"redeemShare": "Redemption shares",
+		"redeemFee": "Redemption fees",
+		"redeemMoney": "Redemption amount",
+		"buyRedeemRecords": "All Records "
 	}
 }

@@ -56,7 +56,7 @@
             </el-table-column>
             <el-table-column :label="$t('fundManager.buy.woName')" :min-width='minWidth' prop='companyName' />
             <el-table-column :label="$t('fundManager.buy.customerNo')" :min-width='minWidth' prop='customerNo' />
-            <el-table-column :label="$t('fundManager.buy.money')" :min-width='150'>
+            <el-table-column :label="$t('fundManager.buy.money')" :min-width='180'>
                 <template #default='scope'>
                     <span>{{ scope.row.amountPay }}{{ scope.row.currencyPay }}</span>
                 </template>

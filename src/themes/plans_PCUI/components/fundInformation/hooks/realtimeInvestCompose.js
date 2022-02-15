@@ -19,8 +19,7 @@ echarts.use([
 
 export const useInvestCompose = (params) => {
     const fundId = inject('fundId')
-    const symbolId = inject('symbolId')
-    const getInvestCombination = () => {
+    const getInvestCombination = (symbolId) => {
         // 实时投资组合排名
         if (fundId) {
             return investCombination({ fundId, statisticType: 1 }).then(res => {
@@ -43,7 +42,7 @@ export const useInvestCompose = (params) => {
     }
 
     // 获取单资产表现柱状图数据
-    const getAssetPerformance = () => {
+    const getAssetPerformance = (symbolId) => {
         // 获取基金产品柱状图数据
         if (fundId) {
             return assetPerformance({ fundId }).then(res => {

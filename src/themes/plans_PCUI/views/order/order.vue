@@ -25,7 +25,7 @@
                 <!-- 指数产品 -->
                 <div v-if='product.isIndex' class='case'>
                     <div class='index-module'>
-                        <realtimeInvestCompose :title="$t('fundInfo.indexSample')" />
+                        <realtimeInvestCompose :symbol-id='symbolId' :title="$t('fundInfo.indexSample')" />
                     </div>
                 </div>
                 <!-- 非指数产品 -->
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { ref, reactive, toRefs, watch, computed, onBeforeUnmount, defineAsyncComponent, provide } from 'vue'
+import { reactive, toRefs, watch, computed, onBeforeUnmount, defineAsyncComponent, provide } from 'vue'
 import chart from './pages/chart.vue'
 import { useRouter, useRoute } from 'vue-router'
 import handicap from './pages/handicap.vue'
@@ -105,14 +105,13 @@ export default {
         const state = reactive({
             // 当前选中选项卡 offer:报价 material:资料
             activeName: 'offer',
+            symbolId
         })
         if (isEmpty(product.value)) {
             router.push('/')
         }
         // 获取产品详情
         store.dispatch('_quote/querySymbolInfo', { 'symbolId': product.value.symbolId, 'tradeType': product.value.tradeType })
-        // 当前产品symbolId
-        provide('symbolId', symbolId)
 
         const tradeContentHeight = computed(() => {
             if (Number(product.value?.tradeType) === 5) {
@@ -154,6 +153,8 @@ export default {
         watch(() => product.value?.symbolId, () => {
             // 设置默认选项卡
             state.activeName = 'offer'
+            // 设置symbolId
+            state.symbolId = product.value?.symbolId
         })
 
         onBeforeUnmount(() => {
@@ -165,7 +166,6 @@ export default {
         return {
             product,
             tradeType,
-            symbolId,
             tradeContentHeight,
             contentHeight,
             dealModeShowMap,
