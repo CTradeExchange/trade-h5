@@ -380,7 +380,8 @@ export default {
             if (state.orderType === 10) {
                 requestPrice = state[state.submitType].pendingPrice
             }
-            const p = Math.pow(10, product.value.price_digits)
+            const price_digits = product.value.hasOwnProperty('price_digits') ? product.value.price_digits : product.value.symbolDigits
+            const p = Math.pow(10, price_digits)
             const params = {
                 bizType: bizType.value, // 业务类型。1-市价开；2-限价开
                 direction, // 订单买卖方向。1-买；2-卖；
