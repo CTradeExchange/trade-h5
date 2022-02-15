@@ -7,7 +7,7 @@
                 <Loading :show='loading' />
                 <header class='header'>
                     <h1 class='pageTitle'>
-                        {{ $t('forgot.setFundPwd') }}
+                        {{ $t('forgot.forgotFund') }}
                     </h1>
                     <h6>{{ $t('common.fundPwdTip') }}</h6>
                 </header>
