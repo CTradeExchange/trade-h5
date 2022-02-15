@@ -42,8 +42,8 @@ const params = computed(() => {
     return {
         currencyShares: unref(currencyShares),
         sharesStatus: unref(redeemActive),
-        startTime: unref(startTime),
-        endTime: unref(endTime),
+        updateStartTime: unref(startTime),
+        updateEndTime: unref(endTime),
     }
 })
 const listRef = ref(null)
