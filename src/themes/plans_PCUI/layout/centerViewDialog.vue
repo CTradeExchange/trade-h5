@@ -83,5 +83,12 @@ export default {
         font-size: 14px;
         background: var(--contentColor);
     }
+    &.withdraw-coin-wrap {
+        background: #3894FF;
+        .el-dialog__body{
+            height: 637px;
+        }
+
+    }
 }
 </style>

@@ -43,7 +43,7 @@
         "transfer": "Transfer",
         "securitySetting": "Security Settings",
         "commonSetting": "Common Settings",
-        "setFundPwd": "资金密码"
+        "setFundPwd": "Fund Password"
     },
     "login": {
         "loginBtn": "Log In",
@@ -236,7 +236,10 @@
         "newPwdSuccess": "Reset New password Success",
         "newPwdLogin": "Please login with New password",
         "tip1": "For security reason, withdrawal is not permitted in recent 24 hours",
-        "goLogin": "Log In"
+        "goLogin": "Log In",
+        "fundPwdSuccess":"Fund Password reset success",
+        "fundPwdModifySuccess": "Fund Password reset success",
+        "fundPwdSetSuccess": "Fund Password Is Set Successfully"
     },
     "register": {
         "accountCurrency": "Account Currency",
