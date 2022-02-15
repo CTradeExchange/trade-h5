@@ -42,7 +42,7 @@
             </li>
             <li class='item'>
                 <span class='label'>
-                    {{ formatTime(data.createTime) }}
+                    {{ formatTime(data.updateTime) }}
                 </span>
             </li>
             <li class='item'>

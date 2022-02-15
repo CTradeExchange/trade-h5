@@ -258,7 +258,8 @@ const routes = [
         meta: {
             title: 'route.forgot',
             roles: [],
-        }
+        },
+        children: h5Children
     },
     {
         path: '/resetPwd',

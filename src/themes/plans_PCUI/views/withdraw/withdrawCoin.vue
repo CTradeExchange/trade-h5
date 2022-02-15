@@ -1,5 +1,5 @@
 <template>
-    <centerViewDialog>
+    <centerViewDialog class='withdraw-coin-wrap'>
         <div class='container'>
             <!-- 加载中组件 -->
             <Loading :show='loading' />
@@ -136,7 +136,7 @@
                         :max-length='6'
                         pwd
                     />
-                    <router-link v-if='Number(customInfo.assertPassStatus) === 1' class='href' to='/setFundPwd'>
+                    <router-link v-if='Number(customInfo.assertPassStatus) === 1' class='href' to='/assets/setFundPwd'>
                         {{ $t('login.goSet') }}
                     </router-link>
                     <router-link v-else class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">
@@ -1162,4 +1162,5 @@ export default {
         }
     }
 }
+
 </style>

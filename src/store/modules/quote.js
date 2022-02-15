@@ -337,7 +337,7 @@ export default {
                     if (res.check() && res.data) {
                         const data = res.data
                         data.tradeType = params.tradeType
-                        data.isIndex = data.labels?.split('-').includes('index')
+                        data.isIndex = data.labels?.split(',').includes('index')
                         commit('Update_product', data)
                         if (res.data.etf) dispatch('queryEquityPremiumRate', { symbolId, tradeType })
                         if (rootState._quote.productActivedID === symbolKey) {

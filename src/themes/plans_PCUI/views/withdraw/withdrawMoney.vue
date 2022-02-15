@@ -62,7 +62,7 @@
                             :max-length='6'
                             pwd
                         />
-                        <router-link v-if='Number(customInfo.assertPassStatus) === 1' class='href' to='/setFundPwd'>
+                        <router-link v-if='Number(customInfo.assertPassStatus) === 1' class='href' to='/assets/setFundPwd'>
                             {{ $t('login.goSet') }}
                         </router-link>
                         <router-link v-else class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">

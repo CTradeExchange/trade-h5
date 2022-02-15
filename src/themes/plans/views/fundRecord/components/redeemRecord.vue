@@ -36,10 +36,14 @@ const { assetsList } = hooks()
 
 const redeemActive = ref(0)
 const currencyShares = ref('')
+const startTime = ref()
+const endTime = ref()
 const params = computed(() => {
     return {
         currencyShares: unref(currencyShares),
-        sharesStatus: unref(redeemActive)
+        sharesStatus: unref(redeemActive),
+        updateStartTime: unref(startTime),
+        updateEndTime: unref(endTime),
     }
 })
 const listRef = ref(null)
@@ -60,10 +64,11 @@ const assetChange = val => {
 }
 // 筛选日期
 const dateChange = val => {
-    const [startTime, endTime] = val || []
-    params.startTime = startTime
-    params.endTime = endTime
-    refresh()
+    console.log(val);
+    [startTime.value, endTime.value] = val || []
+    setTimeout(() => {
+        refresh()
+    }, 10)
 }
 </script>
 

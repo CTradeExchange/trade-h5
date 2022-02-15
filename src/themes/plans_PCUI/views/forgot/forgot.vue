@@ -1,4 +1,5 @@
 <template>
+    <router-view />
     <div class='forgot'>
         <topNav class='header' />
         <div class='container'>
@@ -117,6 +118,7 @@ export default {
             }, (errors, fields) => {
                 console.log('errors:', errors, fields)
                 if (errors) {
+                    callback && callback(false)
                     return Toast(errors[0].message)
                 }
 

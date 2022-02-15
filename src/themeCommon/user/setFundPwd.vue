@@ -133,7 +133,7 @@ export default {
                 }).then(res => {
                     toast.clear()
                     if (res.check()) {
-                        Toast(t('common.setSuccess'))
+                        Toast(t('forgot.fundPwdSetSuccess'))
                         store.dispatch('_user/findCustomerInfo')
                         router.back()
                     }
@@ -153,7 +153,7 @@ export default {
                         if (res.check()) {
                             Dialog.alert({
                                 title: t('common.tip'),
-                                message: t('login.pwdSuccess')
+                                message: t('forgot.fundPwdModifySuccess')
                             }).then(() => {
                                 router.back()
                             })
