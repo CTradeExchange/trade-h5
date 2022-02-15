@@ -376,7 +376,6 @@ export default {
         },
         // 分页获取基金产品列表
         findFundPage ({ dispatch, commit, state, rootState, rootGetters }, data = {}) {
-            console.log('data', data)
             const params = {
                 customerGroupId: rootGetters.customerGroupId
             }

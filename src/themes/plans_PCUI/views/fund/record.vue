@@ -14,13 +14,14 @@
             <!-- 申购记录过滤组件 -->
             <applyFilter
                 v-if="activeName === 'apply'"
-                :fund-product-list='fundProductList'
+                :assets-list='assetsList'
                 @filter='getApplyRecord'
             />
             <!-- 赎回记录过滤组件 -->
             <redeemFilter
                 v-if="activeName === 'redeem'"
-                :fund-product-list='fundProductList'
+                :assets-list='assetsList'
+                :shares-status='sharesStatus'
                 @filter='getRedeemRecord'
             />
         </div>
@@ -28,7 +29,7 @@
             <!-- 申购记录 -->
             <applyRecord v-if="activeName === 'apply'" ref='applyRecordRef' show-page />
             <!-- 赎回记录 -->
-            <redeemRecord v-if="activeName === 'redeem'" ref='redeemRecordRef' show-page />
+            <redeemRecord v-if="activeName === 'redeem'" ref='redeemRecordRef' show-page @setSharesStatus='setSharesStatus' />
         </div>
     </div>
 </template>
@@ -36,20 +37,22 @@
 <script setup>
 import { ref, watch, nextTick, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useFund } from './hooks.js'
 import applyRecord from './components/applyRecord.vue'
 import redeemRecord from './components/redeemRecord.vue'
 import applyFilter from './components/apply-filter.vue'
 import redeemFilter from './components/redeem-filter.vue'
+import { getAssetsList } from '@/api/base'
 
 const route = useRoute()
 // 组件ref
 const applyRecordRef = ref(null)
 const redeemRecordRef = ref(null)
+// 资产列表数据
+const assetsList = ref([])
 // 当前选项卡 apply:申购记录  redeem:赎回记录
 const activeName = ref(route.query.activeName || 'apply')
-// 获取基金产品列表
-const { getFundList, fundProductList } = useFund()
+// 赎回记录状态 0:当前赎回 1:历史赎回
+const sharesStatus = ref('')
 
 // 监听activeName
 watch(activeName, (newVal) => {
@@ -67,6 +70,22 @@ watch(activeName, (newVal) => {
     })
 }, { immediate: true })
 
+// 获取资产列表数据
+const queryAssetsList = () => {
+    const arr = []
+    getAssetsList({ type: 2 }).then(res => {
+        if (res.check()) {
+            res.data.map(el => {
+                arr.push({
+                    text: el.name,
+                    value: el.code
+                })
+            })
+        }
+    })
+    assetsList.value = arr
+}
+
 // 获取申购记录
 const getApplyRecord = (params) => {
     applyRecordRef.value.getData(params)
@@ -75,9 +94,14 @@ const getApplyRecord = (params) => {
 const getRedeemRecord = (params) => {
     redeemRecordRef.value.getData(params)
 }
+// 设置赎回记录状态
+const setSharesStatus = (value) => {
+    sharesStatus.value = value
+}
 
 onMounted(() => {
-    getFundList()
+    // 获取资产列表数据
+    queryAssetsList()
 })
 </script>
 

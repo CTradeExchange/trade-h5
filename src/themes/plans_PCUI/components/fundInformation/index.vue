@@ -15,17 +15,22 @@
 </template>
 
 <script setup>
-import { provide, ref, defineProps } from 'vue'
+import { provide, ref, defineProps, watchEffect } from 'vue'
 import baseVue from './base.vue'
 import performanceVue from './performance.vue'
 import realtimeInvestCompose from './realtimeInvestCompose.vue'
+import { localGet, localSet } from '@/utils/util'
 const props = defineProps({
     fundId: [String, Number],
     jump: String
 })
-const active = ref(1)
+const active = ref(parseFloat(localGet('fundInfoTabIndex') || 1))
 provide('fundId', props.fundId)
 provide('jump', props.jump)
+
+watchEffect(() => {
+    localSet('fundInfoTabIndex', active.value)
+})
 </script>
 
 <style lang="scss" scoped>

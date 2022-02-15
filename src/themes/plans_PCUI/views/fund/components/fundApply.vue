@@ -56,19 +56,23 @@
             </p>
         </div>
         <!-- 已登录 -->
-        <div
-            v-if='isLogin'
-            v-loading='loading'
-            :class="{ 'handle-button': true, 'disable': fund.canPurchase !== 1 }"
-            @click='submitHandler'
-        >
-            <span>{{ fund.canPurchase === 1 ? $t('fundInfo.buy'): $t('fundInfo.disabledBuy') }}</span>
-            <span v-if='fund.canPurchase === 1'>
-                {{ fund.shareTokenCode }}
-            </span>
+        <div v-if='isLogin'>
+            <div
+                v-loading='loading'
+                :class="{ 'handle-button': true, 'disable': fund.canPurchase !== 1 }"
+                @click='submitHandler'
+            >
+                <span>{{ fund.canPurchase === 1 ? $t('fundInfo.buy'): $t('fundInfo.disabledBuy') }}</span>
+                <span v-if='fund.canPurchase === 1'>
+                    {{ fund.shareTokenCode }}
+                </span>
+            </div>
+            <p class='rules-link'>
+                <span>{{ $t('fundInfo.applyRules') }}</span>
+            </p>
         </div>
         <!-- 未登录 -->
-        <div v-else class='login-button'>
+        <div v-if='!isLogin' class='login-button'>
             <span @click="router.push('/login')">
                 {{ $t('c.login') }}
             </span>
@@ -78,10 +82,14 @@
             </span>
         </div>
     </div>
+
+    <!-- 申购规则弹窗 -->
+    <applyRulesDailog />
 </template>
 
 <script setup>
 import CurrencyIcon from '@/components/currencyIcon.vue'
+import applyRulesDailog from './applyRulesDialog.vue'
 import { computed, unref, ref, defineProps, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
@@ -271,6 +279,17 @@ const submitHandler = () => {
             margin: 0 3px;
             font-style: normal;
             color: var(--normalColor);
+        }
+    }
+    .rules-link {
+        text-align: center;
+        margin-top: 10px;
+        span {
+            color: var(--primary);
+            cursor: pointer;
+            &:hover {
+                text-decoration: underline;
+            }
         }
     }
 }

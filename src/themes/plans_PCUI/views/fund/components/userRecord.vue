@@ -49,7 +49,7 @@ watch(activeName, (newVal) => {
                 break
             // 获取赎回记录
             case 'redeem':
-                getRedeemRecord({ size: 1000, current: 1 })
+                getRedeemRecord({ size: 20, current: 1 })
                 break
         }
     })

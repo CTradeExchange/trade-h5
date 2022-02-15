@@ -17,10 +17,23 @@
                     <span>{{ scope.row.shares }}{{ scope.row.currencyShares }}</span>
                 </template>
             </el-table-column>
+            <el-table-column v-if='params.sharesStatus === 0' :label="$t('fundInfo.receiveCurrency')" :min-width='minWidth' prop='currencyRedeem' />
             <template v-if='params.sharesStatus === 1'>
-                <el-table-column :label="$t('fundInfo.realtimeJZ')" :min-width='minWidth' prop='sharesNet' />
-                <el-table-column :label="$t('fundInfo.redeemFee')" :min-width='minWidth' prop='fees' />
-                <el-table-column :label="$t('fundInfo.redeemMoney')" :min-width='minWidth' prop='amountRedeem' />
+                <el-table-column :label="$t('fundInfo.realtimeJZ')" :min-width='minWidth' prop='sharesNet'>
+                    <template #default='scope'>
+                        <span>{{ scope.row.sharesNet }}{{ scope.row.currencyNet }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column :label="$t('fundInfo.redeemFee')" :min-width='minWidth' prop='fees'>
+                    <template #default='scope'>
+                        <span>{{ scope.row.fees }}{{ scope.row.currencyRedeem }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column :label="$t('fundInfo.redeemMoney')" :min-width='minWidth' prop='amountRedeem'>
+                    <template #default='scope'>
+                        <span>{{ scope.row.amountRedeem }}{{ scope.row.currencyRedeem }}</span>
+                    </template>
+                </el-table-column>
             </template>
             <el-table-column :label="$t('fundInfo.shareConfirmStatus')" :min-width='120'>
                 <template #default='scope'>
@@ -58,7 +71,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineExpose } from 'vue'
+import { ref, defineProps, defineExpose, defineEmits } from 'vue'
 import { fundRedeemRecord } from '@/api/fund.js'
 
 defineProps({
@@ -73,6 +86,8 @@ defineProps({
         default: false
     }
 })
+
+const emits = defineEmits(['setSharesStatus'])
 
 // 列表数据
 const list = ref([])
@@ -89,7 +104,8 @@ const params = ref({
     currencyShares: '',
     currencyRedeem: '',
     sharesStatus: 0,
-    startTime: ''
+    startTime: '',
+    updateStartTime: ''
 })
 
 // 切换赎回状态
@@ -112,12 +128,14 @@ const changeSize = (value) => {
 }
 // 获取数据
 const getData = (data = {}) => {
+    emits('setSharesStatus', params.value.sharesStatus)
     params.value = Object.assign({}, params.value, data)
     const result = Object.assign({}, params.value)
     result.currencyShares = result.currencyShares || null
     result.currencyRedeem = result.currencyRedeem || null
     result.sharesStatus = result.sharesStatus === '' ? null : result.sharesStatus
     result.startTime = result.startTime || null
+    result.updateStartTime = result.updateStartTime || null
     loading.value = true
     fundRedeemRecord(result).then(res => {
         loading.value = false

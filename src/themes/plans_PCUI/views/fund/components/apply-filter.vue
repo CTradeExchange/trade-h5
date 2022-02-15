@@ -8,10 +8,10 @@
                 :placeholder="$t('fundInfo.chooseApplyAsset')"
             >
                 <el-option
-                    v-for='item in fundProductList'
-                    :key='item.shareTokenCode'
-                    :label='item.shareTokenCode'
-                    :value='item.shareTokenCode'
+                    v-for='item in assetsList'
+                    :key='item.value'
+                    :label='item.name'
+                    :value='item.value'
                 />
             </el-select>
         </div>
@@ -35,7 +35,7 @@ import { ref, defineProps, defineEmits } from 'vue'
 
 defineProps({
     // 基金产品列表
-    fundProductList: {
+    assetsList: {
         type: Array,
         default: () => []
     }

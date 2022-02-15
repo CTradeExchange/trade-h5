@@ -873,6 +873,7 @@
 		"fundType": "Fund Type",
 		"fundChart1": "Market Price vs Fund Nav",
 		"fundChart2": "Market Performance",
+		"fundChartTitle": "基金涨幅 vs 指数涨幅",
 		"realtimeInvestCompose": "Fund Composition",
 		"assets": "Asset",
 		"ranking": "Rank",
@@ -900,7 +901,7 @@
 		"subScriptePlaceholder": "Please enter the purchase amount",
 		"redeemNumPlaceholder": "Please enter redemption shares",
 		"available": "Avbl",
-		"indexSample": "指数样本",
+		"indexSample": "Constituent Stocks",
 		"buy": "Purchase",
 		"sell": "Redemption",
 		"fundIcon": "Fund token",
@@ -925,6 +926,7 @@
 		"redeemShare": "Redemption shares",
 		"redeemFee": "Redemption fees",
 		"redeemMoney": "Redemption amount",
-		"buyRedeemRecords": "All Records "
+		"buyRedeemRecords": "All Records",
+		"receiveCurrency": "Client accepts assets"
 	}
 }

@@ -8,20 +8,29 @@
                 :placeholder="$t('fundInfo.chooseApplyAsset')"
             >
                 <el-option
-                    v-for='item in fundProductList'
-                    :key='item.shareTokenCode'
-                    :label='item.shareTokenCode'
-                    :value='item.shareTokenCode'
+                    v-for='item in assetsList'
+                    :key='item.value'
+                    :label='item.name'
+                    :value='item.value'
                 />
             </el-select>
         </div>
-        <div class='item-date'>
+        <!-- 当前赎回时间筛选 -->
+        <div v-if='sharesStatus === 0' class='item-date'>
             <el-date-picker
-                v-model='time'
+                v-model='applyTime'
                 :placeholder="$t('fundInfo.applyTime')"
                 type='datetime'
                 value-format='YYYY-MM-DD HH:mm:ss'
-                @change='selectTime'
+            />
+        </div>
+        <!-- 历史赎回时间筛选 -->
+        <div v-if='sharesStatus === 1' class='item-date'>
+            <el-date-picker
+                v-model='updateTime'
+                :placeholder="$t('fundInfo.lastTime')"
+                type='datetime'
+                value-format='YYYY-MM-DD HH:mm:ss'
             />
         </div>
         <button class='btn' @click='onSearch'>
@@ -33,33 +42,43 @@
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue'
 
-defineProps({
+const props = defineProps({
     // 基金产品列表
-    fundProductList: {
+    assetsList: {
         type: Array,
         default: () => []
+    },
+    // 赎回记录状态
+    sharesStatus: {
+        type: [String, Number],
+        default: ''
     }
 })
 const emit = defineEmits(['filter'])
 
 // 选择的基金份额代币
 const currencyShares = ref('')
-// 选择的时间
-const time = ref('')
-// 申请时间
-const startTime = ref('')
+// 选择的申请时间
+const applyTime = ref('')
+// 更新时间
+const updateTime = ref('')
 
-// 选择时间
-const selectTime = () => {
-    if (time.value) {
-        startTime.value = window.dayjs(time.value).valueOf()
-    } else {
-        startTime.value = ''
-    }
-}
 // 点击搜索
 const onSearch = () => {
-    emit('filter', { current: 1, size: 10, currencyShares: currencyShares.value, startTime: startTime.value })
+    const params = {
+        current: 1,
+        size: 10,
+        currencyShares: currencyShares.value
+    }
+    switch (props.sharesStatus) {
+        case 0:
+            params.startTime = applyTime.value ? window.dayjs(applyTime.value).valueOf() : ''
+            break
+        case 1:
+            params.updateStartTime = updateTime.value ? window.dayjs(updateTime.value).valueOf() : ''
+            break
+    }
+    emit('filter', params)
 }
 </script>
 
