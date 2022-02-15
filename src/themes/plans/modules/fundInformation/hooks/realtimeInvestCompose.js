@@ -22,7 +22,7 @@ export const useInvestCompose = (params) => {
     const fundId = inject('fundId')
     const getInvestCombination = (symbolId) => {
         return Promise.resolve().then(() => {
-            if (symbolId) {
+            if (symbolId && !fundId) {
                 return getIndexSample({ indexId: parseFloat(symbolId) })
             } else {
                 return investCombination({ fundId, statisticType: 1 })
@@ -39,7 +39,7 @@ export const useInvestCompose = (params) => {
     // 获取单资产表现柱状图数据
     const getAssetPerformance = (symbolId) => {
         return Promise.resolve().then(() => {
-            if (symbolId) {
+            if (symbolId && !fundId) {
                 return getIndexSimplePerformance({ indexId: parseFloat(symbolId) })
             } else {
                 return assetPerformance({ fundId })
