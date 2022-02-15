@@ -227,6 +227,7 @@ export default {
             if (Number(data.type === 1)) {
                 state.handicapList = data.list
             } else {
+                state.handicapList.push({ ask_deep: [], bid_deep: [] })
                 state.handicapList[0].ask_deep = data.tickList?.ask_deep
                 state.handicapList[0].bid_deep = data.tickList?.bid_deep
             }
