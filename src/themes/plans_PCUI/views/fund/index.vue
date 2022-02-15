@@ -5,7 +5,7 @@
             <!-- 左侧模块 -->
             <div class='left-module module'>
                 <!-- 基金产品列表 -->
-                <fundList @setFundProduct='setFundProduct' />
+                <fundList ref='fundListRef' @setFundProduct='setFundProduct' />
             </div>
             <!-- 中间模块 -->
             <div class='middle-module module'>
@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref, provide, onMounted } from 'vue'
+import { ref, provide, onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import fundList from './components/fundList.vue'
 import fundContent from './components/fundContent.vue'
@@ -39,7 +39,10 @@ import userRecord from './components/userRecord.vue'
 import assetsModule from './components/assetsModule.vue'
 
 const store = useStore()
+// 用户信息
+const customerInfo = computed(() => store.state._user.customerInfo)
 // 组件ref
+const fundListRef = ref(null)
 const userRecordRef = ref(null)
 // 当前基金产品
 const fund = ref({})
@@ -51,10 +54,7 @@ const setFundProduct = (data) => {
     fund.value = data
     fundDealKey.value = Date.now()
 }
-// 更新当前基金产品数据
-provide('updateFund', (data) => {
-    fund.value.netValue = data.sharesNet
-})
+
 // 申购或赎回后更新列表数据
 provide('updateRecord', (value) => {
     switch (value) {
@@ -68,10 +68,16 @@ provide('updateRecord', (value) => {
             break
     }
 })
+// 更新基金产品净值数据
+provide('updateFundValue', () => {
+    fundListRef.value.updateFundValue()
+})
 
 onMounted(() => {
     // 获取账户资产
-    store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 5 })
+    if (customerInfo.value) {
+        store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 5 })
+    }
 })
 </script>
 

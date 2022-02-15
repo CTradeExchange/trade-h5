@@ -35,8 +35,9 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick, onMounted } from 'vue'
+import { ref, watch, nextTick, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 import applyRecord from './components/applyRecord.vue'
 import redeemRecord from './components/redeemRecord.vue'
 import applyFilter from './components/apply-filter.vue'
@@ -44,6 +45,9 @@ import redeemFilter from './components/redeem-filter.vue'
 import { getAssetsList } from '@/api/base'
 
 const route = useRoute()
+const store = useStore()
+// 用户信息
+const customerInfo = computed(() => store.state._user.customerInfo)
 // 组件ref
 const applyRecordRef = ref(null)
 const redeemRecordRef = ref(null)
@@ -101,7 +105,9 @@ const setSharesStatus = (value) => {
 
 onMounted(() => {
     // 获取资产列表数据
-    queryAssetsList()
+    if (customerInfo.value) {
+        queryAssetsList()
+    }
 })
 </script>
 

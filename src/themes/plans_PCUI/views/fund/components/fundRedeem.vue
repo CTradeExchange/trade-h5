@@ -56,19 +56,23 @@
             </p>
         </div>
         <!-- 已登录 -->
-        <div
-            v-if='isLogin'
-            v-loading='loading'
-            :class="{ 'handle-button': true, 'disable': fund.canRedemption !== 1 }"
-            @click='submitHandler'
-        >
-            <span>{{ fund.canRedemption === 1 ? $t('fundInfo.sell') : $t('fundInfo.disabledSell') }}</span>
-            <span v-if='fund.canRedemption === 1'>
-                {{ fund.shareTokenCode }}
-            </span>
+        <div v-if='isLogin'>
+            <div
+                v-loading='loading'
+                :class="{ 'handle-button': true, 'disable': fund.canRedemption !== 1 }"
+                @click='submitHandler'
+            >
+                <span>{{ fund.canRedemption === 1 ? $t('fundInfo.sell') : $t('fundInfo.disabledSell') }}</span>
+                <span v-if='fund.canRedemption === 1'>
+                    {{ fund.shareTokenCode }}
+                </span>
+            </div>
+            <p class='rules-link' @click='openRules'>
+                <span>{{ $t('fundInfo.redeemRules') }}</span>
+            </p>
         </div>
         <!-- 未登录 -->
-        <div v-else class='login-button'>
+        <div v-if='!isLogin' class='login-button'>
             <span @click="router.push('/login')">
                 {{ $t('c.login') }}
             </span>
@@ -78,10 +82,14 @@
             </span>
         </div>
     </div>
+
+    <!-- 赎回规则弹窗 -->
+    <redeemRulesDialog ref='redeemRulesDialogRef' />
 </template>
 
 <script setup>
 import CurrencyIcon from '@/components/currencyIcon.vue'
+import redeemRulesDialog from './redeemRulesDialog.vue'
 import { computed, unref, ref, defineProps, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
@@ -99,6 +107,8 @@ const props = defineProps({
 })
 // 赎回成功后更新列表数据
 const updateRecord = inject('updateRecord')
+// 组件ref
+const redeemRulesDialogRef = ref(null)
 
 const {
     accountList,
@@ -148,6 +158,11 @@ const submitHandler = () => {
             }).then(() => {})
         }
     })
+}
+
+// 打开规则弹窗
+const openRules = () => {
+    redeemRulesDialogRef.value.open()
 }
 </script>
 
@@ -259,6 +274,17 @@ const submitHandler = () => {
             margin: 0 3px;
             font-style: normal;
             color: var(--normalColor);
+        }
+    }
+    .rules-link {
+        text-align: center;
+        margin-top: 10px;
+        span {
+            color: var(--primary);
+            cursor: pointer;
+            &:hover {
+                text-decoration: underline;
+            }
         }
     }
 }

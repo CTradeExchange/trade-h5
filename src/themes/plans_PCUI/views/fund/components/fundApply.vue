@@ -67,7 +67,7 @@
                     {{ fund.shareTokenCode }}
                 </span>
             </div>
-            <p class='rules-link'>
+            <p class='rules-link' @click='openRules'>
                 <span>{{ $t('fundInfo.applyRules') }}</span>
             </p>
         </div>
@@ -84,12 +84,12 @@
     </div>
 
     <!-- 申购规则弹窗 -->
-    <applyRulesDailog />
+    <applyRulesDialog ref='applyRulesDialogRef' />
 </template>
 
 <script setup>
 import CurrencyIcon from '@/components/currencyIcon.vue'
-import applyRulesDailog from './applyRulesDialog.vue'
+import applyRulesDialog from './applyRulesDialog.vue'
 import { computed, unref, ref, defineProps, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
@@ -108,6 +108,8 @@ const props = defineProps({
 })
 // 申购成功后更新列表数据
 const updateRecord = inject('updateRecord')
+// 组件ref
+const applyRulesDialogRef = ref(null)
 
 const {
     loading,
@@ -168,6 +170,11 @@ const submitHandler = () => {
             }).then(() => {})
         }
     })
+}
+
+// 打开规则弹窗
+const openRules = () => {
+    applyRulesDialogRef.value.open()
 }
 </script>
 

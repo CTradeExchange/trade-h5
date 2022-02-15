@@ -25,7 +25,7 @@
                 <!-- 指数产品 -->
                 <div v-if='product.isIndex' class='case'>
                     <div class='index-module'>
-                        <realtimeInvestCompose :symbol-id='symbolId' :title="$t('fundInfo.indexSample')" />
+                        <realtimeInvestCompose :key='product?.symbolId' :symbol-id='symbolId' :title="$t('fundInfo.indexSample')" />
                     </div>
                 </div>
                 <!-- 非指数产品 -->
