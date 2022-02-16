@@ -941,6 +941,8 @@
 		"fundArrive": "Fund arrive",
 		"redeem_tip1": "Redeem in amount, mean when redeem fund, fill the redemption amount only",
 		"redeem_tip2": "Redemption price base on unknown price principle, estimate to be executed according to the net asset value price after share confirmation on T+2",
-		"redeem_tip3": "After the redemption process finished, the fund tokens you redeemed will be deposited to your Spot wallet with the selected receiving assets"
+		"redeem_tip3": "After the redemption process finished, the fund tokens you redeemed will be deposited to your Spot wallet with the selected receiving assets",
+		"assetIndexQquestionTip": "The picture shows the market performance of the assets contained in the index constituent stocks in the recent 24 hours(Quotation unit:USDT)",
+		"assetQquestionTip": "The chart refers to the most recent 24H market performance of the assets included in the fund's portfolio"
 	}
 }

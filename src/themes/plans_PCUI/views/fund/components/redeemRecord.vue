@@ -116,6 +116,8 @@ const switchActive = (value) => {
     if (params.value.sharesStatus === value) return
     params.value.sharesStatus = value
     params.value.current = 1
+    params.value.startTime = ''
+    params.value.updateStartTime = ''
     getData()
 }
 // 改变当前页数
@@ -133,7 +135,7 @@ const changeSize = (value) => {
 const getData = (data = {}) => {
     if (!customerInfo.value) return
     emits('setSharesStatus', params.value.sharesStatus)
-    params.value = Object.assign({}, params.value, data)
+    params.value = Object.assign(params.value, data)
     const result = Object.assign({}, params.value)
     result.currencyShares = result.currencyShares || null
     result.currencyRedeem = result.currencyRedeem || null

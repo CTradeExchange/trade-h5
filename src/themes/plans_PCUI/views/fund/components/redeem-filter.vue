@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue'
+import { ref, defineProps, defineEmits, watch } from 'vue'
 
 const props = defineProps({
     // 基金产品列表
@@ -63,6 +63,12 @@ const applyTime = ref('')
 // 更新时间
 const updateTime = ref('')
 
+// 监听sharesStatus
+watch(() => props.sharesStatus, () => {
+    applyTime.value = ''
+    updateTime.value = ''
+})
+
 // 点击搜索
 const onSearch = () => {
     const params = {
@@ -70,14 +76,8 @@ const onSearch = () => {
         size: 10,
         currencyShares: currencyShares.value
     }
-    switch (props.sharesStatus) {
-        case 0:
-            params.startTime = applyTime.value ? window.dayjs(applyTime.value).valueOf() : ''
-            break
-        case 1:
-            params.updateStartTime = updateTime.value ? window.dayjs(updateTime.value).valueOf() : ''
-            break
-    }
+    params.startTime = applyTime.value ? window.dayjs(applyTime.value).valueOf() : ''
+    params.updateStartTime = updateTime.value ? window.dayjs(updateTime.value).valueOf() : ''
     emit('filter', params)
 }
 </script>

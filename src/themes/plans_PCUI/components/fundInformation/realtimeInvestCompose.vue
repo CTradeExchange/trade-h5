@@ -62,7 +62,15 @@
 
         <div class='block'>
             <h4 class='singleAssetTitle'>
-                {{ $t('fundInfo.singleAsset') }}
+                <span>{{ $t('fundInfo.singleAsset') }}</span>
+                <el-tooltip
+                    :content="symbolId ? $t('fundInfo.assetIndexQquestionTip') : $t('fundInfo.assetQquestionTip')"
+                    effect='light'
+                    placement='bottom'
+                    trigger='hover'
+                >
+                    <van-icon class='question' name='question-o' />
+                </el-tooltip>
             </h4>
             <div ref='chartBarDOM' class='chartBarDOM'></div>
         </div>
@@ -198,6 +206,12 @@ onMounted(async () => {
 }
 .block{
     border-top: 6px solid var(--bgColor);
+    .question {
+        margin-left: 5px;
+        font-size: 18px;
+        color: var(--minorColor);
+        cursor: pointer;
+    }
 }
 .chartPieDOM{
     height: rem(400px);
