@@ -13,7 +13,18 @@
                         <span>{{ scope.row.sharesTotal }}{{ scope.row.currencyShares }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column align='center' :label="$t('fundManager.ransom.totalMoney')">
+                <el-table-column align='center'>
+                    <template #header>
+                        <span>{{ $t('fundManager.ransom.totalMoney') }}</span>
+                        <el-tooltip
+                            :content="$t('fundManager.ransom.tip2')"
+                            effect='light'
+                            placement='bottom'
+                            trigger='hover'
+                        >
+                            <van-icon class='question' name='question-o' />
+                        </el-tooltip>
+                    </template>
                     <template #default='scope'>
                         <span>{{ scope.row.amountTotal }}{{ scope.row.currencyRedeem }}</span>
                     </template>
@@ -102,6 +113,13 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
+.question {
+    margin-left: 2px;
+    font-size: 16px;
+    position: relative;
+    top: 2px;
+    cursor: pointer;
+}
 .dialog-layer {
     .confirm-btn {
         display: flex;

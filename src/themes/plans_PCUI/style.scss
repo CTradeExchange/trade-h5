@@ -751,6 +751,20 @@ body {
 			border-color: var(--primary);
 		}
 	}
+	.el-table {
+		th {
+			border-color: var(--lineColor) !important;
+		}
+		tbody tr td {
+			border-color: var(--lineColor) !important;
+		}
+	}
+	.el-table--border {
+		border-color: var(--lineColor);
+		&::after {
+			background: var(--lineColor);
+		}
+	}
 }
 
 /* 滚动条 */
