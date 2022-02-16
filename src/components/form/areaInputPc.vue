@@ -133,6 +133,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .mobileBar {
+    position: relative;
     display: flex;
     align-items: center;
     width: 100%;
