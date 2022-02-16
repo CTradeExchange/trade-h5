@@ -666,7 +666,7 @@
 		"assets": "Asset",
 		"ranking": "Rank",
 		"weight": "Weights",
-		"comparePrev": "Movement",
+		"comparePrev": "24h chg",
 		"singleAsset": "Asset Performance",
 		"totalManager": "{0} people in total",
 		"fundChartTip": "The data is for reference only, past performance does not represent future performance!",
@@ -719,6 +719,8 @@
         "confirmed": "已确认",
         "willConfirmed": "待确认",
         "shareCurrency": "份额代币",
-        "customerAsset": "客户接受资产"
+        "customerAsset": "客户接受资产",
+        "assetIndexQquestionTip":"The picture shows the market performance of the assets contained in the index constituent stocks in the recent 24 hours(Quotation unit:USDT)",
+        "assetQquestionTip":"The chart refers to the most recent 24H market performance of the assets included in the fund's portfolio"
 	}
 }

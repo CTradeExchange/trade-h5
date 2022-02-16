@@ -666,7 +666,7 @@
     "assets": "资产",
     "ranking": "排名",
     "weight": "权重",
-    "comparePrev": "较上期变化",
+    "comparePrev": "24H涨跌",
     "singleAsset": "单资产表现",
     "totalManager": "等共{0}人",
     "fundChartTip": "数据仅做参考，过往业绩不代表未来表现！",
@@ -719,6 +719,8 @@
     "confirmed": "已确认",
     "willConfirmed": "待确认",
     "shareCurrency": "份额代币",
-    "customerAsset": "客户接受资产"
+    "customerAsset": "客户接受资产",
+    "assetIndexQquestionTip":"图表为指数样本所含资产在近24小时内的市场表现(报价单位:USDT)",
+    "assetQquestionTip":"图表为基金投资组合所含资产在近24小时内的市场表现"
   }
 }
