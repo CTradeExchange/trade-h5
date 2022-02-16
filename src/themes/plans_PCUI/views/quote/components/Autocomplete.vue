@@ -14,9 +14,12 @@
             </template>
             <template #default='{ item }'>
                 <div class='item'>
-                    <span class='label'>
-                        {{ item.name }}
-                    </span>
+                    <div class='row'>
+                        <span class='label'>
+                            {{ item.name }}
+                        </span>
+                        <etfIcon v-if="productMap[item.id + '_' + tradeType].etf" class='etf-icon' />
+                    </div>
                     <span class='star' @click.stop='addOptional(item)'>
                         <i v-if='isCollect(props.tradeType,item.id)' class='icon icon_hangqingliebiaoyijiazixuan'></i>
                         <i v-else class='icon icon_hangqingliebiaoweijiazixuan'></i>
@@ -28,8 +31,9 @@
 </template>
 
 <script setup>
-import { ref, computed, unref } from 'vue'
+import { ref, computed, unref, defineProps } from 'vue'
 import { ElAutocomplete, ElIcon, ElMessage } from 'element-plus'
+import etfIcon from '@planspc/components/etfIcon.vue'
 import { Search } from '@element-plus/icons'
 import { useStore } from 'vuex'
 import { addCustomerOptional, removeCustomerOptional, getSymbolList } from '@/api/trade'
@@ -125,17 +129,23 @@ const addOptional = ({ id: symbolId, tradeType = props.tradeType }) => {
 </style>
 
 <style lang="scss">
-.quote-autocomplete{
-    .el-autocomplete-suggestion{
+.quote-autocomplete {
+    .el-autocomplete-suggestion {
         --el-text-color-regular: var(--color);
-        li:hover{
+        li {
+            line-height: 1;
+        }
+        li:hover {
             background-color: var(--bgColor)
         }
-        .item{
+        .item {
             display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
             justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            .etf-icon {
+                margin-top: 2px;
+            }
         }
     }
 }

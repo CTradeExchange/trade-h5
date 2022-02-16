@@ -91,7 +91,7 @@ export default {
             loadingComponent: LoadingComponent,
             delay: 0, // 在显示 loadingComponent 之前的延迟 | 默认值：200（单位 ms）
             suspensible: false
-        }),
+        })
     },
     setup () {
         const store = useStore()
