@@ -1,9 +1,9 @@
 <template>
-    <div class='fundApplyRecordItem'>
+    <div class='fundApplyRecordItem' @click='full=true'>
         <p class='title'>
             {{ $t('fundInfo.buy') }}  {{ data.fundName }}
         </p>
-        <ul class='infos'>
+        <ul class='infos' :class='{ "full": full || index===0 }'>
             <li class='item'>
                 <span class='label'>
                     {{ $t('fundInfo.applyAmount') }}({{ data.currencyPay }})
@@ -55,27 +55,52 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, ref } from 'vue'
 
 defineProps({
-    data: Object
+    data: Object,
+    index: Number,
 })
+const full = ref(false)
+
 </script>
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .fundApplyRecordItem{
-    padding: rem(10px) 0;
+    padding: rem(10px) rem(30px);
+    margin-bottom: rem(20px);
+    background: var(--contentColor);
     .title{
         font-size: rem(28px);
         line-height: 2;
     }
     .infos{
+        position: relative;
         line-height: rem(42px);
         display: grid;
         grid-column-gap: rem(20px);
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         font-size: rem(24px);
+        height: 7em;
+        overflow: hidden;
+        &::before{
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 47%;
+            width: 0;
+            height: 0;
+            border: 5px solid var(--placeholdColor);
+            border-color: var(--placeholdColor) transparent transparent transparent;
+            border-bottom: 0;
+        }
+        &.full{
+            height: auto;
+            &::before{
+                display: none;
+            }
+        }
         .item{
             display: flex;
             justify-content: space-between;

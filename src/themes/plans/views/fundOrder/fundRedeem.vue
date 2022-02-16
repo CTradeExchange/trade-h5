@@ -3,7 +3,7 @@
         <LayoutTop :back='true' :menu='false'>
             <template #right>
                 <router-link class='text' href='javascript:;' to='/fundRules?direction=sell'>
-                    {{ $t('fundInfo.redeemRules') }}
+                    {{ $t('fundInfo.redeemRules1') }}
                 </router-link>
             </template>
         </LayoutTop>

@@ -692,6 +692,8 @@
 		"indexSample": "Index sample",
 		"curRedeem": "Current Redeem",
 		"historyRedeem": "Redeem History",
+		"applyRules1": "Rules",
+		"redeemRules1": "Rules",
 		"applyRules": "Subscription rule",
 		"redeemRules": "Redemption rule",
 		"applyRecords": "Subscription record",

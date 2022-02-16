@@ -2,7 +2,7 @@
     <div class='recordList'>
         <tabBar v-model:active='tabActive' />
         <div v-if='tabActive===0' class='listWrap'>
-            <fundApplyRecordItem v-for='item in applyRecordData' :key='item' :data='item' />
+            <fundApplyRecordItem v-for='(item,i) in applyRecordData' :key='item' :data='item' :index='i' />
         </div>
         <div v-else-if='tabActive===1' class='listWrap'>
             <van-tabs v-model:active='redeemActive' class='redeemTab' type='card'>
@@ -13,10 +13,10 @@
                 <van-empty :description='$t("common.noData")' image='/images/empty.png' />
             </template>
             <template v-if='redeemActive===0'>
-                <fundRedeemRecordItem v-for='item in redeemRecordData' :key='item' :data='item' />
+                <fundRedeemRecordItem v-for='(item,i) in redeemRecordData' :key='item' :data='item' :index='i' />
             </template>
             <template v-else>
-                <fundRedeemRecordHistoryItem v-for='item in redeemRecordData' :key='item' :data='item' />
+                <fundRedeemRecordHistoryItem v-for='(item,i) in redeemRecordData' :key='item' :data='item' :index='i' />
             </template>
         </div>
         <!-- 资产 -->
@@ -110,12 +110,9 @@ export default {
     // background: var(--contentColor);
     .listWrap{
         margin-top: rem(30px);
-        background: var(--contentColor);
-        padding: rem(10px) rem(30px);
-
     }
     .redeemTab{
-        margin: rem(20px) 10%;
+        margin: rem(20px) 6%;
 
         --van-tabs-default-color: var(--primary);
         :deep(.van-tab--active .van-tab__text){
