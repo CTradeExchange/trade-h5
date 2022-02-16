@@ -139,7 +139,7 @@ export default {
                 }).then(res => {
                     toast.clear()
                     if (res.check()) {
-                        Toast(t('common.setSuccess'))
+                        Toast(t('forgot.fundPwdSetSuccess'))
                         store.dispatch('_user/findCustomerInfo')
                         router.back()
                     }
@@ -151,7 +151,7 @@ export default {
                 }).then((res) => {
                     toast.clear()
                     if (res.check()) {
-                        Toast(t('common.setSuccess'))
+                        Toast(t('forgot.fundPwdModifySuccess'))
                         store.dispatch('_user/findCustomerInfo')
                         router.back()
                     } else {
