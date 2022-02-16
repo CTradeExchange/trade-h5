@@ -71,6 +71,8 @@
         <div class='block'>
             <h4 class='singleAssetTitle'>
                 {{ $t('fundInfo.singleAsset') }}
+
+                <van-icon name='question-o' @click='assetQquestionTip' />
             </h4>
             <div ref='chartBarDOM' class='chartBarDOM'></div>
         </div>
@@ -81,11 +83,16 @@
 
 <script setup>
 import { delayAwaitTime } from '@/utils/util'
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, inject, nextTick, onMounted, ref } from 'vue'
 import { useInvestCompose } from './hooks/realtimeInvestCompose'
 import currencyIcon from '@/components/currencyIcon'
 import BottomTip from './bottomTip.vue'
 import { useRoute } from 'vue-router'
+import { Toast } from 'vant'
+import { useI18n } from 'vue-i18n'
+const fundId = inject('fundId')
+const { t } = useI18n({ useScope: 'global' })
+
 const route = useRoute()
 const { query } = route
 
@@ -122,6 +129,10 @@ const chartPieDOMHeight = computed(() => {
 const assetPerformanceList = ref([]) // 实时投资组合排名
 const chartPieDOM = ref('')
 const chartBarDOM = ref('')
+
+const assetQquestionTip = () => {
+    Toast(fundId ? t('fundInfo.assetQquestionTip') : t('fundInfo.assetIndexQquestionTip'))
+}
 
 const { newBarChart, newPieDoughnutChart, getInvestCombination, getAssetPerformance } = useInvestCompose()
 onMounted(async () => {

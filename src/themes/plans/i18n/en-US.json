@@ -118,7 +118,7 @@
 		"loan": "Borrow",
 		"fundProductList": "Purchase and redemption",
 		"fundProductInfo": "Fund Details",
-		"fundPurchase": "Fund Purchase",
+		"fundPurchase": "Fun Purchase",
 		"fundRedemption": "Fund Redemption",
 		"transfer": "Transfer",
 		"fundRules": "Trading Rule"
@@ -666,7 +666,7 @@
 		"assets": "Asset",
 		"ranking": "Rank",
 		"weight": "Weights",
-		"comparePrev": "Movement",
+		"comparePrev": "24h chg",
 		"singleAsset": "Asset Performance",
 		"totalManager": "{0} people in total",
 		"fundChartTip": "The data is for reference only, past performance does not represent future performance!",
@@ -694,8 +694,8 @@
 		"historyRedeem": "Redeem History",
 		"applyRules": "Subscription rule",
 		"redeemRules": "Redemption rule",
-        "applyRecords": "Subscription record",
-        "redeemRecords": "Redemption record",
+		"applyRecords": "Subscription record",
+		"redeemRecords": "Redemption record",
 		"buy": "Purchase",
 		"sell": "Redemption",
         "applyRule_tip1": "Subscribe in amount, mean when subscribe fund, fill the subscription amount only",
@@ -719,6 +719,8 @@
         "confirmed": "Confirmed",
         "willConfirmed": "To be confirm",
         "shareCurrency": "Shares token",
-        "customerAsset": "Client Asset"
+        "customerAsset": "Client Asset",
+        "assetIndexQquestionTip": "The picture shows the market performance of the assets contained in the index constituent stocks in the recent 24 hours(Quotation unit:USDT)",
+        "assetQquestionTip": "The chart refers to the most recent 24H market performance of the assets included in the fund's portfolio"
 	}
 }

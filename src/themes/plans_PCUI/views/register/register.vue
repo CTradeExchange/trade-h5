@@ -412,8 +412,8 @@ export default {
     }
     :deep{
      .inputWrapper{
-         background-color: var(--bgColor);
-    border-radius: 4px;
+        background-color: var(--bgColor);
+        border-radius: 4px;
          .input{
             width: 100%;
                 height: 48px;
