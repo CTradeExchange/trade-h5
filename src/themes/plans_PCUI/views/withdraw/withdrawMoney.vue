@@ -66,7 +66,7 @@
                             {{ $t('login.goSet') }}
                         </router-link>
                         <router-link v-else class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">
-                            {{ $t('login.forgot') }}
+                            {{ $t('login.forgotFundPwd') }}
                         </router-link>
                     </div>
                 </div>
