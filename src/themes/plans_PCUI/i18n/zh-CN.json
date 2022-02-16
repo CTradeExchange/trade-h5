@@ -884,6 +884,7 @@
 		"ranking": "排名",
 		"weight": "权重",
 		"comparePrev": "较上期变化",
+		"comparePrev24": "24H变化",
 		"singleAsset": "单资产表现",
 		"totalManager": "等共{0}人",
 		"fundChartTip": "数据仅做参考，过往业绩不代表未来表现！",

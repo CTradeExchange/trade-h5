@@ -13,14 +13,14 @@
                     {{ $t('fundInfo.ranking') }}
                     <br />
                     <span class='small'>
-                        ({{ $t('fundInfo.comparePrev') }})
+                        ({{ symbolId ? $t('fundInfo.comparePrev') : $t('fundInfo.comparePrev24') }})
                     </span>
                 </p>
                 <p class='ft'>
                     {{ $t('fundInfo.weight') }}
                     <br />
                     <span class='small'>
-                        ({{ $t('fundInfo.comparePrev') }})
+                        ({{ symbolId ? $t('fundInfo.comparePrev') : $t('fundInfo.comparePrev24') }})
                     </span>
                 </p>
             </div>
