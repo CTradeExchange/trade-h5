@@ -55,7 +55,8 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineExpose } from 'vue'
+import { ref, defineProps, defineExpose, computed } from 'vue'
+import { useStore } from 'vuex'
 import { fundApplyRecord } from '@/api/fund.js'
 
 defineProps({
@@ -71,6 +72,9 @@ defineProps({
     }
 })
 
+const store = useStore()
+// 用户信息
+const customerInfo = computed(() => store.state._user.customerInfo)
 // 列表数据
 const list = ref([])
 // 加载状态
@@ -100,6 +104,7 @@ const changeSize = (value) => {
 }
 // 获取数据
 const getData = (data = {}) => {
+    if (!customerInfo.value) return
     params.value = Object.assign({}, params.value, data)
     const result = Object.assign({}, params.value)
     result.currencyShares = result.currencyShares || null

@@ -71,7 +71,8 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineExpose, defineEmits } from 'vue'
+import { ref, defineProps, defineExpose, defineEmits, computed } from 'vue'
+import { useStore } from 'vuex'
 import { fundRedeemRecord } from '@/api/fund.js'
 
 defineProps({
@@ -88,7 +89,9 @@ defineProps({
 })
 
 const emits = defineEmits(['setSharesStatus'])
-
+const store = useStore()
+// 用户信息
+const customerInfo = computed(() => store.state._user.customerInfo)
 // 列表数据
 const list = ref([])
 // 加载状态
@@ -128,6 +131,7 @@ const changeSize = (value) => {
 }
 // 获取数据
 const getData = (data = {}) => {
+    if (!customerInfo.value) return
     emits('setSharesStatus', params.value.sharesStatus)
     params.value = Object.assign({}, params.value, data)
     const result = Object.assign({}, params.value)

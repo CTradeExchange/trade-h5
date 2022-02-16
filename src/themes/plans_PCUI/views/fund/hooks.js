@@ -29,8 +29,7 @@ export const useFund = () => {
 export const orderHook = (params) => {
     const { t } = useI18n({ useScope: 'global' })
     const store = useStore()
-    // 更新基金产品数据
-    const updateFund = inject('updateFund')
+    const updateFundValue = inject('updateFundValue')
 
     const loading = ref(false)
     const activeCurrency = ref(null) // 申购的时候表示支付资产，赎回的时候表示接受资产
@@ -128,8 +127,8 @@ export const orderHook = (params) => {
                 calcApplyFee.value = data.fees
                 calcShares.value = data.shares
                 calcSharesNet.value = data.sharesNet
-                // 更新基金产品数据
-                updateFund(data)
+                // 更新基金净值等数据
+                updateFundValue()
             }
         })
     }
