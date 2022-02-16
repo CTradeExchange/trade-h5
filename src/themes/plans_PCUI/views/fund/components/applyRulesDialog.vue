@@ -35,7 +35,9 @@
                     </p>
                 </div>
                 <div class='block'>
-                    <p>{{ $t('fundInfo.jz_formula') }}</p>
+                    <p class='title'>
+                        {{ $t('fundInfo.jz_formula') }}
+                    </p>
                     <p>{{ $t('fundInfo.jz_formulaContent') }}</p>
                 </div>
             </div>
@@ -77,8 +79,12 @@ defineExpose({
             background: var(--primary);
             border-radius: 50%;
         }
-        .value {
-
+    }
+    .block {
+        margin-top: 20px;
+        .title {
+            color: var(--color);
+            font-size: 20px;
         }
     }
 }
