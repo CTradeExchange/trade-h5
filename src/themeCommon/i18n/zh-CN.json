@@ -49,7 +49,8 @@
     "login": {
         "loginBtn": "登录",
         "register": "注册新账户",
-        "forgot": "忘记密码",
+        "forgot": "忘记登录密码",
+        "forgotFundPwd": "忘记资金密码",
         "loginByPwd": "账号密码登录",
         "loginByCode": "验证码登录",
         "loginNamePlaceholder": "请输入手机号/邮箱",

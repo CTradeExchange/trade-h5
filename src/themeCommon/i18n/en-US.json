@@ -48,7 +48,8 @@
     "login": {
         "loginBtn": "Log In",
         "register": "Register",
-        "forgot": "Forgot Password",
+        "forgot": "Forgot Login Password",
+        "forgotFundPwd": "Forgot Fund Password",
         "loginByPwd": "Log in with password",
         "loginByCode": "Log in with verification code",
         "loginNamePlaceholder": "Mobile/Email",
@@ -233,13 +234,13 @@
         "inputSurePwd": "Input confirmation password",
         "pwdDiff": "New password is inconsistent with confirmation password, please check and input again",
         "pwdSame": "The original password and the new password are the same, please check and re-enter",
-        "newPwdSuccess": "Reset New password Success",
+        "newPwdSuccess": "Reset New password Successfully",
         "newPwdLogin": "Please login with New password",
         "tip1": "For security reason, withdrawal is not permitted in recent 24 hours",
         "goLogin": "Log In",
         "fundPwdSuccess":"Fund Password reset success",
-        "fundPwdModifySuccess": "Fund Password reset success",
-        "fundPwdSetSuccess": "Fund Password Is Set Successfully"
+        "fundPwdModifySuccess": "Fund Password Changed Successfully",
+        "fundPwdSetSuccess": "Fund Password Set Successfully"
     },
     "register": {
         "accountCurrency": "Account Currency",

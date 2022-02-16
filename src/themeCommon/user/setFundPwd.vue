@@ -48,7 +48,7 @@
         </van-cell-group>
         <div v-if='!isFirstSet' class='forgot'>
             <router-link class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">
-                {{ $t('login.forgot') }}
+                {{ $t('login.forgotFundPwd') }}
             </router-link>
         </div>
 
