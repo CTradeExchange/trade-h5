@@ -5,7 +5,7 @@ export default function hooks () {
     const route = useRoute()
     const { t } = useI18n({ useScope: 'global' })
     const { direction } = route.query
-    const pageTitle = direction === 'buy' ? t('fundInfo.applyRecords') : t('fundInfo.fund')
+    const pageTitle = direction === 'buy' ? t('fundInfo.applyRecords') : t('fundInfo.redeemRecords')
     return {
         pageTitle,
     }

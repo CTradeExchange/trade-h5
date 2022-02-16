@@ -31,7 +31,9 @@
                 </ol>
             </section>
             <section class='block'>
-                <p>{{ $t('fundInfo.jz_formula') }}</p>
+                <h2 class='jz_formula'>
+                    {{ $t('fundInfo.jz_formula') }}
+                </h2>
                 <p>{{ $t('fundInfo.jz_formulaContent') }}</p>
             </section>
         </div>
@@ -74,7 +76,9 @@
                 </ol>
             </section>
             <section class='block'>
-                <p>{{ $t('fundInfo.jz_formula') }}</p>
+                <h2 class='title'>
+                    {{ $t('fundInfo.jz_formula') }}
+                </h2>
                 <p>{{ $t('fundInfo.jz_formulaContent') }}</p>
             </section>
         </div>

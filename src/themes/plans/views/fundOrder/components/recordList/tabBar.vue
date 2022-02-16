@@ -3,12 +3,12 @@
         <van-tabs v-model:active='tabActive' class='recordTabBar'>
             <van-tab :title='$t("fundInfo.applyRecords")' />
             <van-tab :title='$t("fundInfo.redeemRecords")' />
-            <van-tab :title='$t("fundInfo.assets")' />
+            <van-tab :title='$t("fundInfo.assets")' title-class='last' />
         </van-tabs>
 
         <a v-if='tabActive<2' class='recordAll' href='javascript:;' @click='recordAll'>
             <i class='link icon_mingxi1'></i>
-            {{ $t('trade.allPosition') }}
+            <!-- {{ $t('trade.allPosition') }} -->
         </a>
     </div>
 </template>
@@ -47,7 +47,10 @@ const recordAll = () => {
 
     --van-tabs-bottom-bar-color: var(--primary);
     .recordTabBar{
-        width: 65%;
+        width: 80%;
+        :deep(.last){
+            flex: none;
+        }
     }
     .recordAll{
         margin-right: rem(30px);
