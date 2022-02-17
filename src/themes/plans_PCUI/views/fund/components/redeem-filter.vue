@@ -28,7 +28,7 @@
         <div v-if='sharesStatus === 1' class='item-date'>
             <el-date-picker
                 v-model='updateTime'
-                :placeholder="$t('fundInfo.lastTime')"
+                :placeholder="$t('fundInfo.confirmTime')"
                 type='datetime'
                 value-format='YYYY-MM-DD HH:mm:ss'
             />

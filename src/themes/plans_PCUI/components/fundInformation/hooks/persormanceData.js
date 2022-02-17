@@ -28,7 +28,9 @@ echarts.use([
 
 // 基金表现
 export const usePerformance = () => {
+    const store = useStore()
     const fundId = inject('fundId')
+    const style = computed(() => store.state.style)
 
     // 市场价格 vs 基金净值的图表数据
     function mockData () {
@@ -91,12 +93,9 @@ export const usePerformance = () => {
     const newChart = (chartDom, [xData, yData], opts) => {
         // console.log(chartDom, xData, yData, opts)
         if (!chartDom || !xData?.length) return false
-
-        const invertColor = localGet('invertColor')
         const myChart = echarts.init(chartDom)
-
         const option = {
-            backgroundColor: invertColor === 'light' ? '#fff' : '#000',
+            backgroundColor: style.contentColor,
             tooltip: {
                 trigger: 'axis',
                 extraCssText: 'z-index:99',

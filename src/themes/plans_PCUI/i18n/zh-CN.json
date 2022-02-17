@@ -922,7 +922,8 @@
 		"buyShare": "申购份额",
 		"shareConfirmStatus": "份额确认状态",
 		"applyTime": "申请时间",
-		"lastTime": "最后更新时间",
+		"purchaseTime": "申购时间",
+		"confirmTime": "确认时间",
 		"sharesStatus": {
 			"0": "待确认",
 			"1": "已确认"

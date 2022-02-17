@@ -6,6 +6,7 @@ import { CanvasRenderer } from 'echarts/renderers'
 import { assetPerformance, investCombination, queryIndexSample, indexSimplePerformance } from '@/api/trade'
 import { localGet } from '@/utils/util'
 import { computed, inject } from 'vue'
+import { useStore } from 'vuex'
 
 echarts.use([
     TooltipComponent,
@@ -18,7 +19,10 @@ echarts.use([
 ])
 
 export const useInvestCompose = (params) => {
+    const store = useStore()
     const fundId = inject('fundId')
+    const style = computed(() => store.state.style)
+
     const getInvestCombination = (symbolId) => {
         // 实时投资组合排名
         if (fundId) {
@@ -65,9 +69,8 @@ export const useInvestCompose = (params) => {
     // 绘制环形图
     const newPieDoughnutChart = (chartDom, chartData) => {
         const myChart = echarts.init(chartDom)
-        const invertColor = localGet('invertColor')
         const option = {
-            backgroundColor: invertColor === 'light' ? '#fff' : '#000',
+            backgroundColor: style.contentColor,
             color: ['#B72122', '#E9393A', '#FF762C', '#FF9E2C', '#FFC62C', '#F1DE3F', '#D2C02A', '#B6A622', '#9E9123', '#648319', '#198351', '#2AA46B', '#41CE8D', '#6BF1B3', '#56F5DD', '#82ECFF', '#82D7FF', '#7BBCF6', '#589EDC', '#2B70AE'],
             legend: {
                 top: 10,
@@ -113,9 +116,8 @@ export const useInvestCompose = (params) => {
     // 绘制柱状图
     const newBarChart = (chartDom, [xData, yData]) => {
         const myChart = echarts.init(chartDom)
-        const invertColor = localGet('invertColor')
         const option = {
-            backgroundColor: invertColor === 'light' ? '#fff' : '#000',
+            backgroundColor: style.contentColor,
             tooltip: {
                 trigger: 'axis',
                 extraCssText: 'z-index:99',

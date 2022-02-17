@@ -94,6 +94,9 @@ export default {
         .el-tabs__header{
             margin: 0;
         }
+        .el-tabs__nav-prev, .el-tabs__nav-next {
+            line-height: 32px;
+        }
         .el-tabs__item{
             height: 32px;
             line-height: 32px;

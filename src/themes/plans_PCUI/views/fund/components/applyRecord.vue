@@ -29,7 +29,7 @@
                     <span>{{ $t(`fundInfo.sharesStatus.${scope.row.sharesStatus}`) }}</span>
                 </template>
             </el-table-column>
-            <el-table-column :label="$t('fundInfo.applyTime')" :min-width='160'>
+            <el-table-column :label="$t('fundInfo.purchaseTime')" :min-width='160'>
                 <template #default='scope'>
                     <span>{{ formatTime(scope.row.createTime) }}</span>
                 </template>
@@ -42,7 +42,7 @@
         </el-table>
         <div v-if='list.length > 0 && showPage' class='handle-action'>
             <el-pagination
-                v-model:currentPage='params.page'
+                v-model:currentPage='params.current'
                 layout='prev, pager, next, sizes'
                 :page-size='params.size'
                 :page-sizes='[10, 20, 50, 100, 200]'
@@ -110,6 +110,7 @@ const getData = (data = {}) => {
     result.currencyShares = result.currencyShares || null
     result.startTime = result.startTime || null
     loading.value = true
+    console.log('params.value', params.value)
     fundApplyRecord(result).then(res => {
         loading.value = false
         if (res.check()) {

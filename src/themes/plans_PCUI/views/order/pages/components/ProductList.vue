@@ -1,6 +1,5 @@
 <template>
-    <!-- 有数据 -->
-    <div v-if='list.length > 0' class='listWrap'>
+    <div class='listWrap'>
         <div class='listHead'>
             <span class='name'>
                 {{ $t('trade.name') }}
@@ -30,9 +29,10 @@
                 </span>
             </div>
         </div>
+        <div v-if='list.length === 0' class='none-data'>
+            <van-empty :description='$t("common.noData")' image='/images/empty.png' />
+        </div>
     </div>
-    <!-- 无数据 -->
-    <van-empty v-else :description='$t("common.noData")' image='/images/empty.png' />
 </template>
 
 <script setup>
@@ -130,8 +130,6 @@ const addOptional = ({ symbolId, tradeType }) => {
     display: flex;
     flex: 1;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
     box-sizing: border-box;
     width: 100%;
     color: var(--color);
@@ -140,6 +138,7 @@ const addOptional = ({ symbolId, tradeType }) => {
     overflow: hidden;
     font-weight: 500;
     margin-top: 9px;
+    position: relative;
     .item{
         display: flex;
         align-items: center;
@@ -197,6 +196,13 @@ const addOptional = ({ symbolId, tradeType }) => {
             }
         }
     }
-
+    .none-data {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
 }
 </style>

@@ -23,11 +23,10 @@ export default function (productList) {
         const itemHeight = el.firstElementChild.offsetHeight
         const productsScreen = Math.ceil(elHeight / itemHeight) // 一屏显示的产品数
         let start = Math.floor(scrollTop / itemHeight) // 显示的第一个产品
-        start -= productsScreen / 2
+        start -= Math.floor(productsScreen / 2)
         start = Math.max(start, 0)
         const end = Math.round(start + productsScreen * 2)
         const subscribeArr = unref(productList).slice(start, end).map(({ symbolKey }) => symbolKey)
-        // console.log('订阅产品', subscribeArr)
         return subscribeArr
     }
     const calcProductsDebounce = debounce(() => {

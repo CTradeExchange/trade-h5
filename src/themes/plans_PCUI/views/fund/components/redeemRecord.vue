@@ -45,7 +45,7 @@
                     <span>{{ formatTime(scope.row.createTime) }}</span>
                 </template>
             </el-table-column>
-            <el-table-column v-if='params.sharesStatus === 1' :label="$t('fundInfo.lastTime')" :min-width='160'>
+            <el-table-column v-if='params.sharesStatus === 1' :label="$t('fundInfo.confirmTime')" :min-width='160'>
                 <template #default='scope'>
                     <span>{{ formatTime(scope.row.updateTime) }}</span>
                 </template>
@@ -58,7 +58,7 @@
         </el-table>
         <div v-if='list.length > 0 && showPage' class='handle-action'>
             <el-pagination
-                v-model:currentPage='params.page'
+                v-model:currentPage='params.current'
                 layout='prev, pager, next, sizes'
                 :page-size='params.size'
                 :page-sizes='[10, 20, 50, 100, 200]'

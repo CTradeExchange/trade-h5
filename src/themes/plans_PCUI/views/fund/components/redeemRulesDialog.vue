@@ -93,6 +93,9 @@ defineExpose({
             background: var(--primary);
             border-radius: 50%;
         }
+        .value {
+            line-height: 18px;
+        }
     }
     .block {
         margin-top: 20px;

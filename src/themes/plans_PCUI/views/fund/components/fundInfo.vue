@@ -94,11 +94,8 @@ defineProps({
             font-size: 28px;
         }
         .type, .title {
-            padding: 2px 5px;
-            font-size: 12px;
-            color: #fff;
-            background: var(--primary);
-            border-radius: 4px;
+            font-size: 14px;
+            color: var(--normalColor);
         }
         .type {
             margin-right: 6px;

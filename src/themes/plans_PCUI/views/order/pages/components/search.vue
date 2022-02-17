@@ -76,6 +76,7 @@ export default {
     align-items: center;
     justify-content: flex-start;
     align-items: center;
+    flex: 1;
     width: 100%;
     overflow: hidden;
     .search-input {

@@ -35,16 +35,16 @@
                     :class="{ 'item': true, 'active': item.fundId === fund.fundId }"
                     @click='selectFund(item)'
                 >
+                    <CurrencyIcon :currency='item.shareTokenCode' size='36' />
                     <div class='col-1'>
-                        <p class='row'>
-                            <CurrencyIcon :currency='item.shareTokenCode' size='25' />
+                        <div class='row'>
                             <span class='name'>
                                 {{ item.fundName }}
                             </span>
-                        </p>
-                        <span class='type'>
-                            {{ item.operationMode === 1 ? $t('fundInfo.operationModeValue1') : $t('fundInfo.operationModeValue2') }}
-                        </span>
+                            <span class='type'>
+                                {{ item.operationMode === 1 ? $t('fundInfo.operationModeValue1') : $t('fundInfo.operationModeValue2') }}
+                            </span>
+                        </div>
                     </div>
                     <div class='col-2'>
                         <p :class="['jz', parseFloat(item.netValue) < 0 ? 'down' : 'up']">
@@ -153,12 +153,12 @@ defineExpose({
             flex: 1;
         }
         .col-2 {
-            width: 70px;
+            width: 80px;
             text-align: right;
             margin-right: 10px;
         }
         .col-3 {
-            width: 70px;
+            width: 80px;
             text-align: right;
         }
     }
@@ -167,7 +167,7 @@ defineExpose({
             display: flex;
             align-items: center;
             cursor: pointer;
-            padding: 5px 16px;
+            padding: 8px 16px;
             &:hover {
                 background: var(--primaryAssistColor);
             }
@@ -176,27 +176,22 @@ defineExpose({
             }
             .col-1 {
                 flex: 1;
+                margin-left: 8px;
                 .row {
-                    display: flex;
-                    align-items: center;
-                    .name {
-                        margin-left: 5px;
-                        font-size: 14px;
-                    }
-                }
-                .type {
                     display: inline-flex;
-                    line-height: 1;
-                    margin-top: 4px;
-                    padding: 2px 5px;
-                    font-size: 12px;
-                    color: #fff;
-                    background: var(--primary);
-                    border-radius: 4px;
+                    flex-direction: column;
+                    .name {
+                        font-size: 15px;
+                    }
+                    .type {
+                        line-height: 1;
+                        font-size: 12px;
+                        color: var(--normalColor);
+                    }
                 }
             }
             .col-2 {
-                width: 70px;
+                width: 80px;
                 text-align: right;
                 margin-right: 10px;
                 .currency {
@@ -204,7 +199,8 @@ defineExpose({
                 }
             }
             .col-3 {
-                width: 70px;
+                align-self: flex-start;
+                width: 80px;
                 text-align: right;
             }
             .up {
