@@ -724,6 +724,9 @@
         "shareCurrency": "Shares token",
         "customerAsset": "Client Asset",
         "assetIndexQquestionTip": "The picture shows the market performance of the assets contained in the index constituent stocks in the recent 24 hours(Quotation unit:USDT)",
-        "assetQquestionTip": "The chart refers to the most recent 24H market performance of the assets included in the fund's portfolio(Quotation unit:USDT)"
+        "assetQquestionTip": "The chart refers to the most recent 24H market performance of the assets included in the fund's portfolio(Quotation unit:USDT)",
+        "purchaseTime": "Purchase time",
+        "applicationTime": "申请时间",
+        "confirmTime": "确认时间"
 	}
 }

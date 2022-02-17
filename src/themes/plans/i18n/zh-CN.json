@@ -723,7 +723,10 @@
     "willConfirmed": "待确认",
     "shareCurrency": "份额代币",
     "customerAsset": "客户接受资产",
-    "assetIndexQquestionTip":"图表为指数样本所含资产在近24小时内的市场表现(报价单位:USDT)",
-    "assetQquestionTip":"图表为基金投资组合所含资产在近24小时内的市场表现(报价单位:USDT)"
+    "assetIndexQquestionTip": "图表为指数样本所含资产在近24小时内的市场表现(报价单位:USDT)",
+    "assetQquestionTip": "图表为基金投资组合所含资产在近24小时内的市场表现(报价单位:USDT)",
+    "purchaseTime": "申购时间",
+    "applicationTime": "申请时间",
+    "confirmTime": "确认时间"
   }
 }
