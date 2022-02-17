@@ -34,7 +34,6 @@ export default {
         })
         let noticeCloseTimer
         const gotMsg = res => {
-            console.log(res)
             state.show = true
             state.noticeContent = res.detail.content
             if (noticeCloseTimer) clearTimeout(noticeCloseTimer)
@@ -90,7 +89,6 @@ export default {
         padding: rem(30px);
         .top {
             display: flex;
-            justify-content: space-between;
             margin-bottom: rem(10px);
             .title {
                 font-weight: bold;

@@ -110,7 +110,6 @@ const getData = (data = {}) => {
     result.currencyShares = result.currencyShares || null
     result.startTime = result.startTime || null
     loading.value = true
-    console.log('params.value', params.value)
     fundApplyRecord(result).then(res => {
         loading.value = false
         if (res.check()) {

@@ -13,6 +13,7 @@ export const useFund = () => {
         return store.dispatch('_quote/findFundPage', params)
     }
     const fundProductList = computed(() => store.state._quote.fundProductList)
+    const fundInfo = computed(() => store.state._quote.fundInfo)
 
     // 获取基金净值等数据
     const getFundValue = (fund) => {
@@ -22,6 +23,7 @@ export const useFund = () => {
     return {
         getFundList,
         fundProductList,
+        fundInfo,
         getFundValue
     }
 }
@@ -67,6 +69,7 @@ export const orderHook = (params) => {
         return fundApply(params).then(res => {
             loading.value = false
             updateAccountAssetsInfo(activeCurrency.value)
+            store.dispatch('_quote/queryFundInfo', fund.fundId)
             return res
         })
     }
@@ -80,6 +83,7 @@ export const orderHook = (params) => {
         return fundRedeem(params).then(res => {
             loading.value = false
             updateAccountAssetsInfo(fund.shareTokenCode)
+            store.dispatch('_quote/queryFundInfo', fund.fundId)
             return res
         })
     }

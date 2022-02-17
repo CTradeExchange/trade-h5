@@ -170,7 +170,7 @@ export default {
             ElNotification({
                 title: state.noticeContent.title || $t('c.biaoTi'),
                 dangerouslyUseHTMLString: true,
-                message: `<div class='content'>${computeHtmlTime(state.noticeContent.text)}</div>`,
+                message: `<div class='content'>${computeHtmlTime(state.noticeContent.text)}</div>`
             })
             // 刷新消息列表
             onRefresh()
@@ -235,6 +235,7 @@ export default {
     background-color: var(--contentColor) !important;
     .el-notification__title,.el-notification__content{
         color: var(--color) !important;
+        text-align: left !important;
     }
 }
 .infoPop-msg {
@@ -329,5 +330,4 @@ export default {
         }
     }
 }
-
 </style>

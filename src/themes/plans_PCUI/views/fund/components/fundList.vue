@@ -93,7 +93,7 @@ const selectFund = (item) => {
 }
 // 设置组件基金产品
 const setFundProduct = () => {
-    emit('setFundProduct', fund.value)
+    emit('setFundProduct')
 }
 // 更新基金净值等数据
 const updateFundValue = () => {

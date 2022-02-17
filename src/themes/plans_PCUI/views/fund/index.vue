@@ -41,17 +41,16 @@ import assetsModule from './components/assetsModule.vue'
 const store = useStore()
 // 用户信息
 const customerInfo = computed(() => store.state._user.customerInfo)
+// 当产基金产品
+const fund = computed(() => store.state._quote.fundInfo)
 // 组件ref
 const fundListRef = ref(null)
 const userRecordRef = ref(null)
-// 当前基金产品
-const fund = ref({})
 // 基金交易组件key值
 const fundDealKey = ref('')
 
 // 设置当前基金产品
 const setFundProduct = (data) => {
-    fund.value = data
     fundDealKey.value = Date.now()
 }
 

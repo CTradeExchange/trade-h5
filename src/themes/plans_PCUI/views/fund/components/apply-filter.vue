@@ -18,7 +18,7 @@
         <div class='item-date'>
             <el-date-picker
                 v-model='time'
-                :placeholder="$t('fundInfo.applyTime')"
+                :placeholder="$t('fundInfo.purchaseTime')"
                 type='datetime'
                 value-format='YYYY-MM-DD HH:mm:ss'
                 @change='selectTime'
