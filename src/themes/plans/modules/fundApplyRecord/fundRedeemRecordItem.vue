@@ -30,11 +30,17 @@
             </li>
             <li class='item'>
                 <span class='label'>
+                    {{ $t('fundInfo.applicationTime') }}
+                </span>
+                <span>
                     {{ formatTime(data.createTime) }}
                 </span>
             </li>
             <li class='item'>
                 <span class='label'>
+                    {{ $t('trade.pendingNo') }}
+                </span>
+                <span>
                     {{ data.proposalNo }}
                 </span>
             </li>

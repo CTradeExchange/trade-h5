@@ -23,60 +23,81 @@
     </div>
 </template>
 
-<script setup>
+<script>
 import dateRange from '@plans/components/dateRange'
-import { computed, ref, defineProps, defineEmits } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
-const props = defineProps({
-    assetsList: Array
-})
 
-const emit = defineEmits(['assetChange', 'dateChange'])
+export default {
+    components: {
+        dateRange,
+    },
+    props: {
+        assetsList: {
+            type: Array,
+            default: () => []
+        },
+    },
+    emits: ['assetChange', 'dateChange'],
+    setup (props, { emit }) {
+        const store = useStore()
+        const { t } = useI18n({ useScope: 'global' })
+        const primaryColor = computed(() => store.state._base.wpCompanyInfo?.themeColor)
+        const shareTokenCode = ref(0)
+        const option1 = computed(() => {
+            const placeholdItem = [
+                { text: t('fundInfo.shareCurrency'), value: 0 }
+            ]
+            return placeholdItem.concat(props.assetsList)
+        })
+        const shareTokenChange = (val) => {
+            emit('assetChange', val)
+        }
 
-const store = useStore()
-const { t } = useI18n({ useScope: 'global' })
-const primaryColor = computed(() => store.state._base.wpCompanyInfo?.themeColor)
-const shareTokenCode = ref(0)
-const option1 = computed(() => {
-    const placeholdItem = [
-        { text: t('fundInfo.shareCurrency'), value: 0 }
-    ]
-    return placeholdItem.concat(props.assetsList)
-})
-const shareTokenChange = (val) => {
-    emit('assetChange', val)
-}
+        const timeVal = ref(0)
+        const customDate = ref(0)
+        const timeList = ref([
+            { text: t('common.allDate'), value: 0 },
+            { text: t('common.curToday'), value: 1 },
+            { text: t('common.curWeek'), value: 2 },
+            { text: t('common.curMonth'), value: 3 },
+            { text: t('common.curThreeMonth'), value: 4 }
+        ])
 
-const timeVal = ref(0)
-const customDate = ref(0)
-const timeList = ref([
-    { text: t('common.allDate'), value: 0 },
-    { text: t('common.curToday'), value: 1 },
-    { text: t('common.curWeek'), value: 2 },
-    { text: t('common.curMonth'), value: 3 },
-    { text: t('common.curThreeMonth'), value: 4 }
-])
+        const getTime = (type) => {
+            return window.dayjs().startOf(type).valueOf()
+        }
+        const period = {
+            1: getTime('day'),
+            2: getTime('week'),
+            3: getTime('month'),
+            4: window.dayjs().startOf('month').subtract(3, 'month').valueOf()
+        }
+        // 监听下拉菜单变化
+        const timeChange = (value) => {
+            console.log(value)
+            const startTime = period[value]
+            const endTime = window.dayjs().endOf('day').valueOf()
+            emit('dateChange', startTime ? [startTime, endTime] : null)
+        }
+        const onRangeChange = value => {
+            // dateModel.value = 5
+            emit('dateChange', value)
+        }
 
-const getTime = (type) => {
-    return window.dayjs().startOf(type).valueOf()
-}
-const period = {
-    1: getTime('day'),
-    2: getTime('week'),
-    3: getTime('month'),
-    4: window.dayjs().startOf('month').subtract(3, 'month').valueOf()
-}
-// 监听下拉菜单变化
-const timeChange = (value) => {
-    console.log(value)
-    const startTime = period[value]
-    const endTime = window.dayjs().endOf('day').valueOf()
-    emit('dateChange', startTime ? [startTime, endTime] : null)
-}
-const onRangeChange = value => {
-    // dateModel.value = 5
-    emit('dateChange', value)
+        return {
+            primaryColor,
+            shareTokenCode,
+            option1,
+            shareTokenChange,
+            timeVal,
+            customDate,
+            timeList,
+            timeChange,
+            onRangeChange,
+        }
+    },
 }
 </script>
 
