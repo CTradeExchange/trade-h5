@@ -82,7 +82,9 @@ export default {
             emit('dateChange', startTime ? [startTime, endTime] : null)
         }
         const onRangeChange = value => {
-            // dateModel.value = 5
+            timeVal.value = 5
+            value[0] = window.dayjs(value[0]).startOf('date').valueOf()
+            customDate.value = window.dayjs(value[0]).format('YYYY/MM/DD') + ' - ' + window.dayjs(value[1]).format('YYYY/MM/DD')
             emit('dateChange', value)
         }
 

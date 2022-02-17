@@ -7,7 +7,7 @@ export const hooks = () => {
         if (res.check()) {
             assetsList.value = res.data.map(el => {
                 return {
-                    text: el.name,
+                    text: el.code,
                     value: el.code,
                 }
             })
