@@ -68,45 +68,30 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineEmits, defineExpose } from 'vue'
-import { useStore } from 'vuex'
+import { ref, onMounted } from 'vue'
 import { Search } from '@element-plus/icons'
 import CurrencyIcon from '@/components/currencyIcon.vue'
 import { useFund } from '../hooks.js'
 import { debounce } from '@/utils/util'
 
-const emit = defineEmits(['setFundProduct'])
-const store = useStore()
 // 搜索内容
 const searchValue = ref('')
 // 获取基金产品列表
-const { getFundList, fundProductList, getFundValue } = useFund()
+const { getFundList, fundProductList, getFundValue, getFundInfo } = useFund()
 // 当前选中基金
 const fund = ref({})
+
+// 更新基金信息
+const updateFundInfo = () => {
+    const fundId = fund.value.fundId
+    getFundValue(fundId)
+    getFundInfo(fundId)
+}
 
 // 选择基金产品
 const selectFund = (item) => {
     fund.value = item
-    updateFundValue().then(() => {
-        setFundProduct()
-    })
-}
-// 设置组件基金产品
-const setFundProduct = () => {
-    emit('setFundProduct')
-}
-// 更新基金净值等数据
-const updateFundValue = () => {
-    return new Promise((resolve) => {
-        getFundValue(fund.value).then(res => {
-            if (res.check()) {
-                const { data } = res
-                fund.value = Object.assign(fund.value, data)
-                store.commit('_quote/Update_fundProduct', data)
-                resolve()
-            }
-        })
-    })
+    updateFundInfo()
 }
 
 // 输入事件，防抖
@@ -119,19 +104,13 @@ const getProductList = () => {
     getFundList({ name: searchValue.value, isRealTime: true }).then(() => {
         if (fundProductList.value.length > 0) {
             fund.value = fundProductList.value[0]
-            updateFundValue().then(() => {
-                setFundProduct()
-            })
+            updateFundInfo()
         }
     })
 }
 
 onMounted(() => {
     getProductList()
-})
-
-defineExpose({
-    updateFundValue
 })
 </script>
 

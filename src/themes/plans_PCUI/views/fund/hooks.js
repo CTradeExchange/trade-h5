@@ -1,4 +1,4 @@
-import { computed, ref, unref, inject } from 'vue'
+import { computed, ref, unref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import { debounce } from '@/utils/util'
@@ -16,22 +16,26 @@ export const useFund = () => {
     const fundInfo = computed(() => store.state._quote.fundInfo)
 
     // 获取基金净值等数据
-    const getFundValue = (fund) => {
-        return store.dispatch('_quote/fundNetValue', { fundId: fund.fundId })
+    const getFundValue = (fundId) => {
+        return store.dispatch('_quote/fundNetValue', { fundId })
+    }
+    // 获取基金详情
+    const getFundInfo = (fundId) => {
+        return store.dispatch('_quote/queryFundInfo', fundId)
     }
 
     return {
         getFundList,
         fundProductList,
         fundInfo,
-        getFundValue
+        getFundValue,
+        getFundInfo
     }
 }
 
 export const orderHook = (params) => {
     const { t } = useI18n({ useScope: 'global' })
     const store = useStore()
-    const updateFundValue = inject('updateFundValue')
 
     const loading = ref(false)
     const activeCurrency = ref(null) // 申购的时候表示支付资产，赎回的时候表示接受资产
@@ -54,9 +58,18 @@ export const orderHook = (params) => {
         }
     })
 
+    // 获取基金净值等数据
+    const getFundValue = () => {
+        return store.dispatch('_quote/fundNetValue', { fundId: fund.fundId })
+    }
+
+    // 获取基金详情
+    const getFundInfo = () => {
+        return store.dispatch('_quote/queryFundInfo', fund.fundId)
+    }
+
     // 获取申购手续费
     const calcApplyShares = (val) => {
-        // console.log('开始获取申购手续费', val)
         getCalcApplyFee(val, activeCurrency.value)
     }
 
@@ -69,7 +82,8 @@ export const orderHook = (params) => {
         return fundApply(params).then(res => {
             loading.value = false
             updateAccountAssetsInfo(activeCurrency.value)
-            store.dispatch('_quote/queryFundInfo', fund.fundId)
+            getFundValue()
+            getFundInfo()
             return res
         })
     }
@@ -83,7 +97,8 @@ export const orderHook = (params) => {
         return fundRedeem(params).then(res => {
             loading.value = false
             updateAccountAssetsInfo(fund.shareTokenCode)
-            store.dispatch('_quote/queryFundInfo', fund.fundId)
+            getFundValue()
+            getFundInfo()
             return res
         })
     }
@@ -131,8 +146,7 @@ export const orderHook = (params) => {
                 calcApplyFee.value = data.fees
                 calcShares.value = data.shares
                 calcSharesNet.value = data.sharesNet
-                // 更新基金净值等数据
-                updateFundValue()
+                getFundValue()
             }
         })
     }
@@ -152,6 +166,8 @@ export const orderHook = (params) => {
         calcApplyFee,
         calcShares,
         calcSharesNet,
+        getFundValue,
+        getFundInfo,
         isLogin
     }
 }

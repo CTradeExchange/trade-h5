@@ -412,7 +412,7 @@ export default {
         // 获取基金产品详情
         queryFundInfo ({ dispatch, commit, state, rootState, rootGetters }, fundId) {
             commit('Update_fundProduct', null)
-            fundId = parseInt(fundId)
+            fundId = Number(fundId)
             return getFundInfo({ fundId }).then(res => {
                 if (res.check() && res.data) {
                     commit('Update_fundProduct', res.data)

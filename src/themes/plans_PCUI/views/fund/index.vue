@@ -5,7 +5,7 @@
             <!-- 左侧模块 -->
             <div class='left-module module'>
                 <!-- 基金产品列表 -->
-                <fundList ref='fundListRef' @setFundProduct='setFundProduct' />
+                <fundList ref='fundListRef' />
             </div>
             <!-- 中间模块 -->
             <div class='middle-module module'>
@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref, provide, onMounted, computed } from 'vue'
+import { ref, provide, onMounted, computed, watch } from 'vue'
 import { useStore } from 'vuex'
 import fundList from './components/fundList.vue'
 import fundContent from './components/fundContent.vue'
@@ -41,18 +41,20 @@ import assetsModule from './components/assetsModule.vue'
 const store = useStore()
 // 用户信息
 const customerInfo = computed(() => store.state._user.customerInfo)
-// 当产基金产品
-const fund = computed(() => store.state._quote.fundInfo)
+// 基金详情信息
+const fundInfo = computed(() => store.state._quote.fundInfo)
 // 组件ref
 const fundListRef = ref(null)
 const userRecordRef = ref(null)
+// 当前基金产品
+const fund = ref({})
 // 基金交易组件key值
 const fundDealKey = ref('')
 
-// 设置当前基金产品
-const setFundProduct = (data) => {
-    fundDealKey.value = Date.now()
-}
+// 监听fundInfo
+watch(() => fundInfo.value, () => {
+    fund.value = Object.assign({}, fund.value, fundInfo.value)
+}, { deep: true })
 
 // 申购或赎回后更新列表数据
 provide('updateRecord', (value) => {
@@ -66,10 +68,6 @@ provide('updateRecord', (value) => {
             userRecordRef.value.getRedeemRecord()
             break
     }
-})
-// 更新基金产品净值数据
-provide('updateFundValue', () => {
-    fundListRef.value.updateFundValue()
 })
 
 onMounted(() => {
