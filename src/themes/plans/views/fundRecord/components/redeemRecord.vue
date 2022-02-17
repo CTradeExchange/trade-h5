@@ -4,7 +4,7 @@
             <van-tab :title='$t("fundInfo.curRedeem")' />
             <van-tab :title='$t("fundInfo.historyRedeem")' />
         </van-tabs>
-        <filterBox :assets-list='assetsList' @assetChange='assetChange' @dateChange='dateChange' />
+        <filterBox ref='filterBoxRef' :assets-list='assetsList' @assetChange='assetChange' @dateChange='dateChange' />
         <div class='listContainer'>
             <listVue
                 ref='listRef'
@@ -35,16 +35,23 @@ import { hooks } from './hooks'
 const { assetsList } = hooks()
 
 const redeemActive = ref(0)
+const filterBoxRef = ref(null)
 const currencyShares = ref('')
 const startTime = ref()
 const endTime = ref()
 const params = computed(() => {
-    return {
+    const p = {
         currencyShares: unref(currencyShares),
         sharesStatus: unref(redeemActive),
-        updateStartTime: unref(startTime),
-        updateEndTime: unref(endTime),
     }
+    if (unref(redeemActive) === 0) {
+        p.startTime = unref(startTime)
+        p.endTime = unref(endTime)
+    } else {
+        p.updateStartTime = unref(startTime)
+        p.updateEndTime = unref(endTime)
+    }
+    return p
 })
 const listRef = ref(null)
 const refresh = () => {
@@ -52,11 +59,15 @@ const refresh = () => {
 }
 // 切换当前赎回、历史赎回
 const onClickTab = (val) => {
+    unref(filterBoxRef).shareTokenCode = 0
+    unref(filterBoxRef).timeVal = 0
+    startTime.value = undefined
+    endTime.value = undefined
+    currencyShares.value = ''
     refresh()
 }
 // 筛选代币
 const assetChange = val => {
-    console.log(val)
     currencyShares.value = val || ''
     setTimeout(() => {
         refresh()
@@ -64,7 +75,6 @@ const assetChange = val => {
 }
 // 筛选日期
 const dateChange = val => {
-    console.log(val);
     [startTime.value, endTime.value] = val || []
     setTimeout(() => {
         refresh()

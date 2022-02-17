@@ -68,7 +68,7 @@ const onInput = (e) => {
         e.target.value = newval
     }
 
-    inputHandler(e)
+    inputUpdate(e)
 }
 // 离开输入框焦点再次验证
 const onBlur = (e) => {
@@ -76,13 +76,17 @@ const onBlur = (e) => {
     if (value === props.modelValue) return false
     const digits = props.digits
     value = value ? toFixed(value, digits) : value
-    inputHandler(e)
+    inputUpdate(e)
 }
 
 // 输入事件，防抖
-const inputHandler = debounce((e) => {
+const inputUpdate = (e) => {
     if (props.readonly) return false
     emit('update:modelValue', e.target.value)
+    inputHandler(e)
+}
+const inputHandler = debounce((e) => {
+    if (props.readonly) return false
     emit('input', e.target.value, e)
 }, 800)
 
