@@ -55,6 +55,10 @@ const fundDealKey = ref('')
 watch(() => fundInfo.value, () => {
     fund.value = Object.assign({}, fund.value, fundInfo.value)
 }, { deep: true })
+// 监听fundId
+watch(() => fundInfo.value?.fundId, () => {
+    fundDealKey.value = Date.now()
+})
 
 // 申购或赎回后更新列表数据
 provide('updateRecord', (value) => {

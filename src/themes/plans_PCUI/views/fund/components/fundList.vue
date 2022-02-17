@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class='col-2'>
-                        <p :class="['jz', parseFloat(item.netValue) < 0 ? 'down' : 'up']">
+                        <p :class='jz'>
                             {{ item.netValue }}
                         </p>
                         <p class='currency'>
@@ -55,7 +55,7 @@
                         </p>
                     </div>
                     <div class='col-3'>
-                        <p :class="['change', parseFloat(item.netValueChangeQuote) < 0 ? 'down' : 'up']">
+                        <p :class='change'>
                             {{ item.netValueChangeQuote }}
                         </p>
                     </div>
