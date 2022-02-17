@@ -88,7 +88,7 @@ import { useInvestCompose } from './hooks/realtimeInvestCompose'
 import currencyIcon from '@/components/currencyIcon'
 import BottomTip from './bottomTip.vue'
 import { useRoute } from 'vue-router'
-import { Toast } from 'vant'
+import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 const fundId = inject('fundId')
 const { t } = useI18n({ useScope: 'global' })
@@ -131,7 +131,10 @@ const chartPieDOM = ref('')
 const chartBarDOM = ref('')
 
 const assetQquestionTip = () => {
-    Toast(fundId ? t('fundInfo.assetQquestionTip') : t('fundInfo.assetIndexQquestionTip'))
+    Dialog.alert({
+        title: t('common.tip'),
+        message: fundId ? t('fundInfo.assetQquestionTip') : t('fundInfo.assetIndexQquestionTip')
+    })
 }
 
 const { newBarChart, newPieDoughnutChart, getInvestCombination, getAssetPerformance } = useInvestCompose()
