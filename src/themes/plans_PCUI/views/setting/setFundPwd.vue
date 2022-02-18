@@ -219,6 +219,9 @@ export default {
         text-align: right;
         padding-top: rem(30px);
         padding-right: rem(30px);
+        .href{
+            color: var(--primary);
+        }
     }
 }
 </style>

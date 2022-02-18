@@ -1,4 +1,5 @@
 <template>
+    <router-view />
     <div class='pageWrap'>
         <topNav class='header' />
         <div class='container'>
@@ -172,20 +173,20 @@ font-weight: bold;
         // bottom: 0;
         width: 100%;
         background: var(--primary);
-        color: var(--contentColor);
-                    font-size: 20px;
-                    border-radius: 4px;
-                    padding: 0;
-                    margin-top:18px;
+        color: #fff;
+        font-size: 20px;
+        border-radius: 4px;
+        padding: 0;
+        margin-top:18px;
         span {
-           color: var(--contentColor);
+           color: #fff;
         }
     }
     .form-item {
         position: relative;
         margin-bottom: 24px;
-            border-radius: 4px;
-    overflow: hidden;
+        border-radius: 4px;
+        overflow: hidden;
         .icon {
             position: absolute;
             top: rem(25px);

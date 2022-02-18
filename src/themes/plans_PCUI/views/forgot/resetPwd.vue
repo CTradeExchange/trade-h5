@@ -140,9 +140,9 @@ export default {
         }
     }
     .pageTitle {
-font-weight: bold;
-    font-size: 32px;
-    color: var(--color);
+        font-weight: bold;
+        font-size: 32px;
+        color: var(--color);
     }
     .confirmBtn {
         // position: absolute;
@@ -150,19 +150,19 @@ font-weight: bold;
         width: 100%;
         background: var(--primary);
         color: var(--contentColor);
-                    font-size: 20px;
-                    border-radius: 4px;
-                    padding: 0;
-                    margin-top:18px;
+        font-size: 20px;
+        border-radius: 4px;
+        padding: 0;
+        margin-top:18px;
         span {
-           color: var(--contentColor);
+           color: #fff;
         }
     }
     .form-item {
         position: relative;
         margin-bottom: 24px;
-            border-radius: 4px;
-    overflow: hidden;
+        border-radius: 4px;
+        overflow: hidden;
         .icon {
             position: absolute;
             top: rem(25px);

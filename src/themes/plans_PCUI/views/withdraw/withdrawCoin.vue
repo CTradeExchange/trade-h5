@@ -972,6 +972,7 @@ export default {
             }
             .href{
                 vertical-align: middle;
+                color: var(--primary);
             }
         }
     }
@@ -1064,6 +1065,7 @@ export default {
         }
         .href{
             vertical-align: middle;
+            color: var(--primary);
         }
     }
 }
