@@ -279,7 +279,8 @@ const routes = [
             title: 'route.resetFundPwd',
             // keepAlive: true,
             roles: [],
-        }
+        },
+        children: h5Children
     },
 
     {
