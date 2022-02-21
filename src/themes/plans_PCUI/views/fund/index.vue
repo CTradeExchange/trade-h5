@@ -92,22 +92,25 @@ onMounted(() => {
 .page-content {
     display: flex;
     min-width: 1200px;
-    height: 785px;
+    height: 960px;
     .module {
-        border-radius: 10px;
-        background: var(--contentColor);
         overflow-y: auto;
     }
     .left-module {
         width: 360px;
         margin-right: 8px;
+        background: var(--contentColor);
+        border-radius: 10px;
     }
     .middle-module {
         flex: 1;
         margin-right: 8px;
+        border-radius: 10px;
     }
     .right-module {
         width: 360px;
+        background: var(--contentColor);
+        border-radius: 10px;
     }
 }
 .record-content {

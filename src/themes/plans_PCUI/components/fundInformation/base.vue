@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class='base'>
         <h4 class='cellTitle'>
             {{ $t("fundInfo.fundSurvey") }}
         </h4>
@@ -72,7 +72,7 @@
                 </span>
             </li>
         </ul>
-        <BottomTip />
+        <BottomTip v-if='showTabs' />
     </div>
 </template>
 

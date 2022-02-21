@@ -2,7 +2,13 @@
     <div class='fund-content'>
         <fundInfo :fund='fund' />
         <div class='fundInformation'>
-            <fundInformation :key='key' :fund-id='fund.fundId' jump='push' />
+            <fundInformation
+                :key='key'
+                all-show
+                :fund-id='fund.fundId'
+                jump='push'
+                :show-tabs='false'
+            />
         </div>
     </div>
 </template>
@@ -35,7 +41,77 @@ const fundInformation = defineAsyncComponent({
 </script>
 
 <style lang="scss" scoped>
+@import '~@/sass/mixin.scss';
+.fund-content {
+    max-width: 1200px;
+    min-width: 800px;
+    margin: 0 auto;
+}
 .fundInformation {
-    padding: 0 25px;
+    :deep {
+        .base {
+            padding: 0 25px 20px;
+            background: var(--contentColor);
+            border-radius: 0 0 10px 10px;
+            .fundBaseList {
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                .item {
+                    width: calc(50% - 20px);
+                }
+            }
+        }
+        .fundPerformance {
+            padding: 20px 25px;
+            margin-top: 10px;
+            background: var(--contentColor);
+            border-radius: 10px;
+        }
+        .realtimeInvestCompose {
+            padding: 20px 25px;
+            margin-top: 10px;
+            background: var(--contentColor);
+            border-radius: 10px;
+            .assetsTitle {
+                font-size: 16px;
+                .small {
+                    font-size: 14px;
+                }
+            }
+            .assetsList {
+                .cellflex {
+                    font-size: 15px;
+                }
+                .currencyIcon {
+                    width: 30px;
+                }
+            }
+            .merge-case {
+                display: flex;
+                .case-list {
+                    flex: 1;
+                    margin-right: 30px;
+                    min-width: 300px;
+                }
+                .case-chart {
+                    flex: 1;
+                }
+            }
+        }
+        .cellTitle, .title, .singleAssetTitle {
+            font-size: 20px !important;
+        }
+        .chartLine {
+            height: 400px;
+        }
+        .chartBarDOM {
+            height: 400px;
+        }
+        .minorTip {
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+    }
 }
 </style>

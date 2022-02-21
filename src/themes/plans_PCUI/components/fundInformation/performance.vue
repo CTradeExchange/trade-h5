@@ -18,7 +18,7 @@
         <!-- <div class='chartModule'>
             <div id='marketAppearance_DOM1' ref='marketAppearance_DOM1' class='chartLine'></div>
         </div> -->
-        <BottomTip />
+        <BottomTip v-if='showTabs' />
     </div>
 </template>
 
@@ -190,7 +190,6 @@ onMounted(async () => {
         margin-top: rem(30px);
     }
     .spaceLine{
-        border-top: 6px solid var(--bgColor);
         margin-top: rem(40px);
         padding-top: rem(40px);
     }
