@@ -320,7 +320,7 @@ import KIcon from './icons/kIcon.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import { useStore } from 'vuex'
 import { Dialog, Toast } from 'vant'
-import { isEmpty, localSet, localGet, getCookie } from '@/utils/util'
+import { isEmpty, localSet, localGet, getCookie, setCookie } from '@/utils/util'
 import tv from '@/components/tradingview/tv'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import StallsAndDeal from './components/StallsAndDeal'
@@ -331,6 +331,8 @@ import sidebarProduct from '@plans/components/sidebarProduct.vue'
 import Base from '@/store/modules/base'
 import realtimeInvestCompose from '@plans/modules/fundInformation/realtimeInvestCompose.vue'
 import { toolHooks } from '@plans/hooks/handicap'
+import i18n, { loadLocaleMessages } from '@plans/i18n/i18n.js'
+import Colors, { setRootVariable } from '@plans/colorVariables'
 
 export default {
     components: { KIcon, StudyList, tv, StallsAndDeal, Loading, sidebarProduct, ETF, realtimeInvestCompose },
@@ -343,7 +345,10 @@ export default {
         const getTradeType = () => unref(tradeType)
         const { dealModeShowMap } = toolHooks()
 
-        const { t } = useI18n({ useScope: 'global' })
+        // uniapp传参
+        const { lang, customerGroupId, theme, isUniapp } = route.query
+
+        const { t, locale } = useI18n({ useScope: 'global' })
         const klineTypeDropdown = ref(null)
         const collect = ref(null)
         const store = useStore()
@@ -821,8 +826,21 @@ export default {
         // 设置图表设置缓存
         const locChartConfig = JSON.parse(localGet('chartConfig'))
         const initChartData = () => {
-            const invertColor = localGet('invertColor')
-            const locale = getCookie('lang') === 'zh-CN' ? 'zh' : 'en'
+            let chartLocale, invertColor
+
+            if (isUniapp) {
+                chartLocale = lang === 'zh-CN' ? 'zh' : 'en'
+                loadLocaleMessages(i18n, lang).then(() => {
+                    locale.value = lang // change!
+                    setCookie('lang', lang, 'y10')
+                    store.commit('del_cacheViews', 'Product')
+                })
+                invertColor = theme === 'light' ? 'Light' : 'Dark'
+                setRootVariable(theme)
+            } else {
+                invertColor = localGet('invertColor') === 'light' ? 'Light' : 'Dark'
+                chartLocale = getCookie('lang') === 'zh-CN' ? 'zh' : 'en'
+            }
 
             // 红 #ef5350  绿 #26a69a  chartColorType 1 绿涨红跌 2 红涨绿跌
             let upColor, downColor
@@ -876,10 +894,10 @@ export default {
 
                     ],
                     extension: {
-                        theme: invertColor === 'light' ? 'Light' : 'Dark', // 主题 "Light" | "Dark"
+                        theme: invertColor, // 主题 "Light" | "Dark"
                         fullScreen: false, // 全屏功能（右上角缩放按钮、横屏监听等）
                         orientation: 'portrait',
-                        locale
+                        chartLocale
                     }
                 })
             } else {
@@ -918,10 +936,10 @@ export default {
 
                     ],
                     extension: {
-                        theme: invertColor === 'light' ? 'Light' : 'Dark', // 主题 "Light" | "Dark"
+                        theme: invertColor, // 主题 "Light" | "Dark"
                         fullScreen: false, // 全屏功能（右上角缩放按钮、横屏监听等）
                         orientation: 'portrait',
-                        locale
+                        chartLocale
                     }
                 })
             }
