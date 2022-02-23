@@ -354,6 +354,8 @@ export default {
             }
             .left-label {
                 color: var(--minorColor);
+                flex: none;
+                padding-right: rem(30px);
             }
         }
     }

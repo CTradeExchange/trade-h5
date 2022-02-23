@@ -706,6 +706,13 @@
         "applyRule_tip3": "After purchase flow finished, the fund token will deposit to your Spot wallet, purchase fee will direct debit from your Spot wallet",
         "jz_formula": "NAV calculation formula",
         "jz_formulaContent": "Net asset value=Total asset value/Fund latest shares",
+        "calcFormula": "计算公式",
+        "fundFormula1": "净申购金额=申购申请金额-申购手续费",
+        "fundFormula2": "申购手续费=申购申请金额*手续费率",
+        "fundFormula3": "申购份额=净申购金额/实时基金份额净值",
+        "fundRedeemFormula1": "赎回总额=赎回数量*T+2日确认份额净值",
+        "fundRedeemFormula2": "赎回手续费=赎回总额*手续费率",
+        "fundRedeemFormula3": "净赎回金额=赎回总额-赎回手续费",
         "tDate": "T Date",
         "redeemSubmit": "Redemption submit",
         "fundArrive": "Fund arrive",
@@ -727,6 +734,11 @@
         "assetQquestionTip": "The chart refers to the most recent 24H market performance of the assets included in the fund's portfolio(Quotation unit:USDT)",
         "purchaseTime": "Purchase time",
         "applicationTime": "Application time",
-        "confirmTime": "Confirm time"
+        "confirmTime": "Confirm time",
+        "expenseCategory": "费用类别",
+        "redeemCost": "赎回费",
+        "redeemTipRemark": "赎回费指赎回基金的时候产生的手续费，一次性收取。",
+        "applyRule_tipRemark1": "基金管理费指基金管理人管理基金资产所收取的报酬。",
+        "applyRule_tipRemark2": "基金管理费从基金资产中每日00:00结算，结算后的基金净值已经扣除相应费用，无需投资者在每笔交易中另行支付。"
 	}
 }
