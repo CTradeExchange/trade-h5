@@ -50,9 +50,9 @@
                 在线客服
             </a>
         </footer> -->
-        <div class='support'>
+        <!-- <div class='support'>
             <img alt='' src='/images/support.png' />
-        </div>
+        </div> -->
     </div>
 
     <!-- 设置登录密码 -->

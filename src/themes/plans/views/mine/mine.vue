@@ -1,9 +1,9 @@
 <template>
     <div class='page-wrap' :class='{ hasNav: $hasNav }'>
         <PageComp class='minePageComp' :data='pageModules' />
-        <div class='support'>
+        <!-- <div class='support'>
             <img alt='' src='/images/support.png' />
-        </div>
+        </div> -->
     </div>
 </template>
 
