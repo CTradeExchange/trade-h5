@@ -31,10 +31,23 @@
                 </ol>
             </section>
             <section class='block'>
-                <h2 class='jz_formula'>
-                    {{ $t('fundInfo.jz_formula') }}
+                <h2 class='title'>
+                    {{ $t('fundInfo.calcFormula') }}
                 </h2>
-                <p>{{ $t('fundInfo.jz_formulaContent') }}</p>
+                <p>{{ $t('fundInfo.fundFormula1') }}</p>
+                <p>{{ $t('fundInfo.fundFormula2') }}</p>
+                <p>{{ $t('fundInfo.fundFormula3') }}</p>
+            </section>
+            <section class='block'>
+                <h2 class='title'>
+                    {{ $t('fundInfo.expenseCategory') }}
+                </h2>
+                <div class='expenseCategory'>
+                    <van-cell title='申购费' value='1.0%' />
+                    <van-cell title='管理费' value='1.5%（每年）' />
+                </div>
+                <p>{{ $t('fundInfo.applyRule_tipRemark1') }}</p>
+                <p>{{ $t('fundInfo.applyRule_tipRemark2') }}</p>
             </section>
         </div>
 
@@ -77,9 +90,20 @@
             </section>
             <section class='block'>
                 <h2 class='title'>
-                    {{ $t('fundInfo.jz_formula') }}
+                    {{ $t('fundInfo.calcFormula') }}
                 </h2>
-                <p>{{ $t('fundInfo.jz_formulaContent') }}</p>
+                <p>{{ $t('fundInfo.fundRedeemFormula1') }}</p>
+                <p>{{ $t('fundInfo.fundRedeemFormula2') }}</p>
+                <p>{{ $t('fundInfo.fundRedeemFormula3') }}</p>
+            </section>
+            <section class='block'>
+                <h2 class='title'>
+                    {{ $t('fundInfo.expenseCategory') }}
+                </h2>
+                <div class='expenseCategory'>
+                    <van-cell :title='$t("fundInfo.redeemCost")' value='1.0%' />
+                </div>
+                <p>{{ $t('fundInfo.redeemTipRemark') }}</p>
             </section>
         </div>
     </div>
@@ -105,9 +129,10 @@ const active = ref(route.query.direction === 'buy' ? 0 : 1)
         margin-top:10px;
         background: var(--contentColor);
         padding: rem(10px) rem(30px);
-        line-height: 1.6;
+        line-height: 1.8;
         .title{
             padding: 10px 0;
+            line-height: 1.5;
         }
         .olList{
             line-height: 2;
@@ -163,6 +188,14 @@ const active = ref(route.query.direction === 'buy' ? 0 : 1)
                 left: initial;
                 right: 10px;
             }
+        }
+    }
+    .expenseCategory{
+        border-bottom: 1px solid var(--van-cell-border-color);
+        margin-bottom: rem(30px);
+        .van-cell{
+            padding-left: 0;
+            padding-right: 0;
         }
     }
 }

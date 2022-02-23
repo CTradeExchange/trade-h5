@@ -1,6 +1,6 @@
 <template>
     <div class='footer'>
-        © 2021 Trade Switcher. All rights reserved
+        <!-- © 2021 Trade Switcher. All rights reserved -->
     </div>
 </template>
 
