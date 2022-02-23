@@ -144,6 +144,8 @@ export default {
                     getOrderPage()
                     break
                 case 'deal':
+                    state.dealList = []
+                    state.bizTypeText = {}
                     getDealRecord()
                     break
                 case 'position':
