@@ -193,7 +193,8 @@
         "pleaseComplete": "请完成",
         "fundPwd": "资金密码",
         "fundPwdTip":"密码为6位数字",
-        "inputFundPwd":"请输入资金密码"
+        "inputFundPwd":"请输入资金密码",
+        "version": "版本号"
     },
     "faceAuth": {
         "faceDetectTip": "请正对手机，保持光线充足",
@@ -247,6 +248,7 @@
         "fundPwdSetSuccess": "资金密码设置成功"
     },
     "register": {
+        "registerBtn": "注册",
         "accountCurrency": "账户币种",
         "accountType": "账户类型",
         "phoneNo": "手机号",

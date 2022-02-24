@@ -186,9 +186,8 @@
         "warning": "Warning",
         "fundPwd": "Fund Password",
         "fundPwdTip":"Password is 6 digits",
-        "inputFundPwd":"Input Fund Password"
-
-        
+        "inputFundPwd":"Input Fund Password",
+        "version": "Version"
     },
     "faceAuth": {
         "faceDetectTip": "Please face your phone and keep it well lit",
@@ -243,6 +242,7 @@
         "fundPwdSetSuccess": "Fund Password Set Successfully"
     },
     "register": {
+        "registerBtn": "Register",
         "accountCurrency": "Account Currency",
         "accountType": "Account Type",
         "phoneNo": "Mobile",
