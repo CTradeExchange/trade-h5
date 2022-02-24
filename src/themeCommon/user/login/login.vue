@@ -250,6 +250,7 @@ export default {
             })
         }
 
+        // 设置登录密码弹窗
         const noticeSetPwd = (loginPassStatus) => {
             if (parseInt(loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
                 state.loginPwdPop = true
