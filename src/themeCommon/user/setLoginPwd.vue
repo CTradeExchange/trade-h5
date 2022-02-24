@@ -195,7 +195,7 @@ export default {
     .form-item {
         display: flex;
         align-items: center;
-        padding: 0 rem(20px);
+        padding: 0 rem(30px);
         .icon {
             // position: absolute;
             // top: rem(25px);

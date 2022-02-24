@@ -31,6 +31,9 @@
                 <div class='box'>
                     <input v-model='name' :placeholder="$t('walletAdd.namePlaceholder')" type='text' />
                 </div>
+                <div class='tip'>
+                    验证码将发送至您的 {{ customInfo?.phone || customInfo?.email }}
+                </div>
                 <div class='box'>
                     <input v-model='code' :placeholder="$t('walletAdd.codePlaceholder')" />
                     <span v-if='countDown === 0' class='get' @click='getCode'>
@@ -39,6 +42,9 @@
                     <span v-else class='time'>
                         {{ countDown }}{{ $t('walletAdd.codeHint') }}
                     </span>
+                </div>
+                <div class='box'>
+                    <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
                 </div>
             </div>
         </div>
@@ -70,10 +76,12 @@ import { useI18n } from 'vue-i18n'
 // api
 import { getAllWithdrawCurrencyList, addWalletAddress } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 
 export default {
     components: {
-        Top
+        Top,
+        googleVerifyCode
     },
     setup () {
         const { t } = useI18n({ useScope: 'global' })
@@ -108,7 +116,8 @@ export default {
             verifyInfo: {
                 code: '',
                 token: ''
-            }
+            },
+            googleCode: ''
         })
         // 账户信息
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
@@ -140,6 +149,9 @@ export default {
         const selectChainName = (item) => {
             state.chainName = item.name
             state.chainNameVisible = false
+        }
+        const getGooleVerifyCode = val => {
+            state.gooogleCode = val
         }
         // 获取客户提币币种和链名称
         const queryWithdrawCurrencyList = () => {
@@ -219,6 +231,9 @@ export default {
             if (!state.code) {
                 return Toast({ message: t('walletAdd.codePlaceholder') })
             }
+            if (!state.gooogleCode) {
+                return Toast('请输入谷歌验证码')
+            }
 
             // 发起api请示
             addWalletAddress({
@@ -229,7 +244,8 @@ export default {
                 phone: customInfo.phone,
                 verifyCode: state.code,
                 phoneArea: customInfo.phoneArea,
-                sendToken: verifyInfo.token
+                sendToken: verifyInfo.token,
+                googleCode: state.googleCode
             }).then(res => {
                 if (res.check()) {
                     Toast.success(t('withdraw.successHint'))
@@ -253,7 +269,9 @@ export default {
             selectCoinKind,
             selectChainName,
             getCode,
-            onConfirm
+            onConfirm,
+            customInfo,
+            getGooleVerifyCode
         }
     }
 }
@@ -307,13 +325,19 @@ export default {
     padding: 0 rem(28px);
     .box {
         display: flex;
-        align-items: center;
         justify-content: space-between;
         height: rem(100px);
         color: var(--color);
         font-size: rem(28px);
         background-color: var(--contentColor);
         border-bottom: 1px solid var(--lineColor);
+        :deep(.van-cell){
+            padding-left: 0;
+            padding-right: 0;
+            &::after{
+                border: none;
+            }
+        }
         input {
             flex: 1;
             height: 100%;
@@ -322,6 +346,13 @@ export default {
         .time {
             color: var(--minorColor);
         }
+        .get{
+            line-height: rem(104px);
+        }
+    }
+    .tip{
+        padding-top: rem(20px) ;
+        color: var(--normalColor);
     }
 }
 .footer-btn {

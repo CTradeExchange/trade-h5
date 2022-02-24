@@ -17,7 +17,7 @@
 
 <script setup>
 import { ref, watch, unref, computed, defineEmits } from 'vue'
-const emit = defineEmits(['onGetGooleVerifyCode'])
+const emit = defineEmits(['getGooleVerifyCode'])
 const googleCode = ref('')
 const handlePaste = async (e) => {
     try {
@@ -42,10 +42,11 @@ function formatter (value) {
 @import '@/sass/mixin.scss';
 .form-item {
     position: relative;
+    flex: 1;
     //padding: 0 rem(30px);
     margin-bottom: rem(20px);
     background: var(--contentColor);
-    .van-cell{
+    :deep(.van-cell){
         padding-left: 0;
         padding-right: 0;
         input{

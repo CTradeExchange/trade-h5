@@ -226,7 +226,7 @@ export default {
     }
     .form-item {
         position: relative;
-        padding: 0 rem(20px);
+        padding: 0 rem(30px);
         .icon {
             position: absolute;
             top: rem(25px);
