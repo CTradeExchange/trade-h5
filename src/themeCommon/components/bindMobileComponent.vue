@@ -20,7 +20,15 @@
                 </p>
                 <CheckCode v-model='checkCodeOld' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSendOld' />
             </div>
-            <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
+            <div v-else class='field'>
+                <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+            </div>
+            <div class='field'>
+                <p class='title'>
+                    请输入谷歌验证码
+                </p>
+                <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
+            </div>
             <van-button block class='confirm-btn' type='primary' @click='handleConfirm'>
                 <span>{{ $t('common.sure') }}</span>
             </van-button>
@@ -178,6 +186,9 @@ export default {
 
             if (isEmpty(state.sendToken) || isEmpty(state.sendTokenOld)) {
                 return Toast(t('common.getVerifyCode'))
+            }
+            if (!state.gooogleCode) {
+                return Toast('请输入谷歌验证码')
             }
 
             state.loading = true

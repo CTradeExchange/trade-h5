@@ -4,7 +4,7 @@
         <Loading :show='loading' />
         <form class='form'>
             <div class='field'>
-                <areaInput
+                <!-- <areaInput
                     v-model='email'
                     v-model:zone='zoneText'
                     clear
@@ -12,14 +12,42 @@
                     :input-type='"text"'
                     :placeholder='type === "bind" ? $t("common.inputEmail"): $t("common.inputNewEmail")'
                     type='email'
+                /> -->
+                <p class='title'>
+                    {{ $t("common.inputEmail") }}
+                </p>
+                <van-field
+                    v-model='email'
+                    label=''
+                    :placeholder='type === "bind" ? $t("common.inputEmail"): $t("common.inputNewEmail")'
+                    type='text'
                 />
             </div>
-            <div class='field'>
+            <div v-if='type === "change"' class='field'>
+                <p class='title'>
+                    将发送验证码到您的新邮箱
+                </p>
+                <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+            </div>
+            <div v-if='type === "change"' class='field'>
+                <p class='title'>
+                    将发送验证码到您的 {{ customInfo.email }}
+                </p>
+                <CheckCode v-model='checkCodeOld' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSendOld' />
+            </div>
+            <div v-else class='field'>
                 <!-- <label class='label'>
                     验证码
                 </label> -->
                 <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
             </div>
+            <div class='field'>
+                <p class='title'>
+                    请输入谷歌验证码
+                </p>
+                <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
+            </div>
+
             <van-button block class='confirm-btn' type='primary' @click='handleConfirm'>
                 <span>{{ $t('common.sure') }}</span>
             </van-button>
@@ -28,6 +56,7 @@
 </template>
 
 <script>
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 import Top from '@/components/top'
 import CheckCode from '@/components/form/checkCode'
 import areaInput from '@/components/form/areaInput.vue'
@@ -43,7 +72,8 @@ export default {
     components: {
         Top,
         areaInput,
-        CheckCode
+        CheckCode,
+        googleVerifyCode
     },
     props: {
         type: {
@@ -57,9 +87,12 @@ export default {
         const state = reactive({
             email: '',
             sendToken: '',
+            sendTokenOld: '',
             checkCode: '',
+            checkCodeOld: '',
             loading: false,
             zone: '+86',
+            gooogleCode: ''
         })
         store.dispatch('getCountryListByParentCode')
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
@@ -80,14 +113,20 @@ export default {
             if (!emailReg.test(state.email)) {
                 return Toast(t('common.inputRealEmail'))
             }
-            if (isEmpty(state.checkCode)) {
+            if (isEmpty(state.checkCode) || isEmpty(state.checkCodeOld)) {
                 return Toast(t('common.inputVerifyCode'))
+            }
+            if (isEmpty(state.sendToken) || isEmpty(state.sendTokenOld)) {
+                return Toast(t('common.getVerifyCode'))
             }
             const params = {
                 email: state.email,
                 verifyCode: state.checkCode,
                 sendToken: state.sendToken || '11',
-                emailArea: state.zone
+                emailArea: state.zone,
+                verifyCodeOld: state.checkCodeOld,
+                sendTokenOld: state.sendTokenOld,
+                gooogleCode: state.gooogleCode
             }
             state.loading = true
 
@@ -118,6 +157,9 @@ export default {
                     state.loading = false
                 })
             }
+        }
+        const getGooleVerifyCode = val => {
+            state.gooogleCode = val
         }
 
         // 发送验证码
@@ -181,11 +223,29 @@ export default {
             })
         }
 
+        const handleVerifyCodeSendOld = (callback) => {
+            const params = {
+                bizType: 'EMAIL_LOGINED_VERIFICATION_CODE'
+            }
+            verifyCodeSend(params).then(res => {
+                if (res.check()) {
+                    if (Number(res.code) === 0) {
+                        state.sendTokenOld = res.data.token
+                        Toast(t('common.verifySended'))
+                        callback && callback()
+                    }
+                }
+            })
+        }
+
         return {
+            getGooleVerifyCode,
             handleConfirm,
             onlineServices,
             handleVerifyCodeSend,
             zoneText,
+            customInfo,
+            handleVerifyCodeSendOld,
             ...toRefs(state)
         }
     }
@@ -199,10 +259,22 @@ export default {
     .form {
         padding-top: rem(20px);
         .field {
+            margin-bottom: rem(20px);
             padding: 0 rem(30px);
             background: var(--contentColor);
             .label {
                 color: var(--minorColor);
+            }
+            .title{
+                color: var(--normalColor);
+                padding: rem(20px) 0;
+            }
+            :deep(.van-cell){
+                padding-left: 0;
+                padding-right: 0;
+                input{
+                    padding: 0 5px;
+                }
             }
         }
         .confirm-btn {

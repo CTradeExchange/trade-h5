@@ -112,6 +112,7 @@ export default {
         position: relative;
         flex: 1;
         font-size: rem(26px);
+
     }
     .getCodeBtn {
         margin-left: rem(20px);

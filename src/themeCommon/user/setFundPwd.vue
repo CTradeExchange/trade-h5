@@ -45,7 +45,7 @@
                 />
                 <span class='icon' :class="confirmVis ? 'icon_icon_pressed': 'icon_icon_default'" @click='changeState("confirmVis")'></span>
             </div>
-            <googleVerifyCode @handlePaste='handlePaste' />
+            <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
         </van-cell-group>
         <div v-if='!isFirstSet' class='forgot'>
             <router-link class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">
@@ -100,6 +100,10 @@ export default {
             state[type] = !state[type]
         }
 
+        const getGooleVerifyCode = val => {
+            state.gooogleCode = val
+        }
+
         function formatter (value) {
             // 过滤输入的非数字
             return value.replace(/[^\d]/g, '')
@@ -125,6 +129,9 @@ export default {
             if (state.newPwd.length < 6) {
                 return Toast(t('common.fundPwdTip'))
             }
+            if (!state.gooogleCode) {
+                return Toast('请输入谷歌验证码')
+            }
 
             const toast = Toast.loading({
                 message: t('common.loading'),
@@ -133,7 +140,8 @@ export default {
 
             if (isFirstSet.value) {
                 bindAssertsPwd({
-                    pwd: md5(state.confirmPwd)
+                    pwd: md5(state.confirmPwd),
+                    googleCode: state.gooogleCode
                 }).then(res => {
                     toast.clear()
                     if (res.check()) {
@@ -145,7 +153,8 @@ export default {
             } else {
                 updateAssertsPwd({
                     oldPwd: md5(state.oldPwd),
-                    newPwd: md5(state.confirmPwd)
+                    newPwd: md5(state.confirmPwd),
+                    googleCode: state.gooogleCode
                 }).then((res) => {
                     if (isFirstSet.value) {
                         if (res.check()) {
@@ -180,7 +189,8 @@ export default {
             isFirstSet,
             formatter,
             handlePaste,
-            handleConfirm
+            handleConfirm,
+            getGooleVerifyCode
         }
     }
 }
@@ -216,6 +226,7 @@ export default {
     }
     .form-item {
         position: relative;
+        padding: 0 rem(30px);
         .icon {
             position: absolute;
             top: rem(25px);
