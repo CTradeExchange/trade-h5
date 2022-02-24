@@ -1,8 +1,5 @@
 <template>
     <div class='form-item'>
-        <p class='title'>
-            请输入谷歌验证码
-        </p>
         <van-field
             v-model='googleCode'
             :formatter='formatter'
@@ -20,7 +17,7 @@
 
 <script setup>
 import { ref, watch, unref, computed, defineEmits } from 'vue'
-const emit = defineEmits(['handlePaste'])
+const emit = defineEmits(['onGetGooleVerifyCode'])
 const googleCode = ref('')
 const handlePaste = async (e) => {
     try {
@@ -48,14 +45,21 @@ function formatter (value) {
     //padding: 0 rem(30px);
     margin-bottom: rem(20px);
     background: var(--contentColor);
+    .van-cell{
+        padding-left: 0;
+        padding-right: 0;
+        input{
+            padding: 0 5px;
+        }
+    }
     .title{
         color: var(--normalColor);
         padding: rem(20px) rem(30px);
     }
     .paste{
-         position: absolute;
-        top: rem(97px);
-        right: rem(50px);
+        position: absolute;
+        top: rem(25px);
+        right: rem(20px);
         z-index: 99;
         cursor: pointer;
         &::before {

@@ -23,6 +23,7 @@
                 <van-field v-model='confirmPwd' label='' :placeholder='$t("forgot.newPwdAgain")' :type='confirmVis ? "text" : "password"' />
                 <span class='icon' :class="confirmVis ? 'icon_icon_pressed': 'icon_icon_default'" @click='changeState("confirmVis")'></span>
             </div>
+            <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
         </van-cell-group>
         <van-button class='confirmBtn' @click='handleConfirm'>
             <span>{{ $t('common.sure') }}</span>
@@ -39,10 +40,12 @@ import { useRouter, useRoute } from 'vue-router'
 import { setLoginPwd, modifyLoginPwd } from '@/api/user'
 import md5 from 'js-md5'
 import { useI18n } from 'vue-i18n'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 
 export default {
     components: {
-        Top
+        Top,
+        googleVerifyCode
     },
     setup (props) {
         const store = useStore()
@@ -61,11 +64,16 @@ export default {
             oldPwd: '',
             newPwdVis: false,
             confirmVis: false,
-            oldPwdVis: false
+            oldPwdVis: false,
+            gooogleCode: ''
         })
 
         function changeState (type) {
             state[type] = !state[type]
+        }
+
+        const getGooleVerifyCode = val => {
+            state.gooogleCode = val
         }
 
         function handleConfirm () {
@@ -89,6 +97,9 @@ export default {
             if (state.oldPwd === state.newPwd) {
                 return Toast(t('forgot.pwdSame'))
             }
+            if (!state.gooogleCode) {
+                return Toast('请输入谷歌验证码')
+            }
 
             const toast = Toast.loading({
                 message: t('common.loading'),
@@ -97,7 +108,8 @@ export default {
 
             if (isFirstSet.value) {
                 setLoginPwd({
-                    pwd: md5(state.confirmPwd)
+                    pwd: md5(state.confirmPwd),
+                    googleCode: state.gooogleCode
                 }).then(res => {
                     toast.clear()
                     if (res.check()) {
@@ -109,7 +121,8 @@ export default {
             } else {
                 modifyLoginPwd({
                     oldPwd: md5(state.oldPwd),
-                    newPwd: md5(state.confirmPwd)
+                    newPwd: md5(state.confirmPwd),
+                    googleCode: state.gooogleCode
                 }).then((res) => {
                     if (isFirstSet.value) {
                         if (res.check()) {
@@ -144,7 +157,8 @@ export default {
             changeState,
             customInfo,
             isFirstSet,
-            handleConfirm
+            handleConfirm,
+            getGooleVerifyCode
         }
     }
 }
@@ -179,11 +193,13 @@ export default {
         }
     }
     .form-item {
-        position: relative;
+        display: flex;
+        align-items: center;
+        padding: 0 rem(20px);
         .icon {
-            position: absolute;
-            top: rem(25px);
-            right: rem(50px);
+            // position: absolute;
+            // top: rem(25px);
+            // right: rem(50px);
             z-index: 99;
             cursor: pointer;
             &::before {
