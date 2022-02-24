@@ -6,12 +6,21 @@
             <div class='field'>
                 <areaInput v-model='mobile' v-model:zone='zoneText' clear :disabled='true' :placeholder='type === "bind" ? $t("common.inputPhone"): $t("common.inputNewPhone")' />
             </div>
-            <div class='field'>
-                <!-- <label class='label'>
-                    验证码
-                </label> -->
+
+            <div v-if='type === "change"' class='field'>
+                <p class='title'>
+                    将发送验证码到您的新手机号码
+                </p>
                 <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
             </div>
+
+            <div v-if='type === "change"' class='field'>
+                <p class='title'>
+                    将发送验证码到您的 {{ customInfo.phone }}
+                </p>
+                <CheckCode v-model='checkCodeOld' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSendOld' />
+            </div>
+            <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
             <van-button block class='confirm-btn' type='primary' @click='handleConfirm'>
                 <span>{{ $t('common.sure') }}</span>
             </van-button>
@@ -20,6 +29,7 @@
 </template>
 
 <script>
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 import Top from '@/components/top'
 import areaInput from '@/components/form/areaInput'
 import CheckCode from '@/components/form/checkCode'
@@ -35,7 +45,8 @@ export default {
     components: {
         Top,
         areaInput,
-        CheckCode
+        CheckCode,
+        googleVerifyCode
     },
     props: {
         type: {
@@ -50,9 +61,12 @@ export default {
         const state = reactive({
             zone: '',
             sendToken: '',
+            sendTokenOld: '',
             mobile: '',
             checkCode: '',
-            loading: false
+            checkCodeOld: '',
+            loading: false,
+            gooogleCode: ''
         })
 
         store.dispatch('getCountryListByParentCode')
@@ -132,6 +146,25 @@ export default {
             })
         }
 
+        const getGooleVerifyCode = val => {
+            state.gooogleCode = val
+        }
+
+        const handleVerifyCodeSendOld = (callback) => {
+            const params = {
+                bizType: 'SMS_LOGINED_VERIFICATION_CODE'
+            }
+            verifyCodeSend(params).then(res => {
+                if (res.check()) {
+                    if (Number(res.code) === 0) {
+                        state.sendTokenOld = res.data.token
+                        Toast(t('common.verifySended'))
+                        callback && callback()
+                    }
+                }
+            })
+        }
+
         const handleConfirm = () => {
             if (isEmpty(state.mobile)) {
                 return Toast(t('common.inputPhone'))
@@ -139,15 +172,23 @@ export default {
             if (!RegExp(mobileReg.value).test(state.mobile)) {
                 return Toast(t('common.inputRealPhone'))
             }
-            if (isEmpty(state.checkCode)) {
+            if (isEmpty(state.checkCode) || isEmpty(state.checkCodeOld)) {
                 return Toast(t('common.inputVerifyCode'))
             }
+
+            if (isEmpty(state.sendToken) || isEmpty(state.sendTokenOld)) {
+                return Toast(t('common.getVerifyCode'))
+            }
+
             state.loading = true
             const params = {
                 phone: state.mobile,
                 verifyCode: state.checkCode,
                 sendToken: state.sendToken || '11',
-                phoneArea: state.zone
+                phoneArea: state.zone,
+                verifyCodeOld: state.checkCodeOld,
+                sendTokenOld: state.sendTokenOld,
+                gooogleCode: state.gooogleCode
             }
 
             if (props.type === 'bind') {
@@ -181,9 +222,12 @@ export default {
 
         return {
             handleVerifyCodeSend,
+            handleVerifyCodeSendOld,
             handleConfirm,
+            getGooleVerifyCode,
             onlineServices,
             zoneText,
+            customInfo,
             ...toRefs(state)
         }
     }
@@ -198,10 +242,16 @@ export default {
         padding-top: rem(20px);
         .field {
             padding: 0 rem(30px);
+            margin-bottom: rem(20px);
             background: var(--contentColor);
             .label {
                 color: var(--minorColor);
             }
+            .title{
+                color: var(--normalColor);
+                padding: rem(20px) 0;
+            }
+
         }
         .confirm-btn {
             height: rem(90px);

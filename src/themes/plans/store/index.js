@@ -5,7 +5,7 @@ import Quote from '@/store/modules/quote'
 import Trade from '@/store/modules/trade'
 import { getListByParentCode, getCountryListByParentCode } from '@/api/base'
 import Colors from '@plans/colorVariables'
-import { localGet, localSet } from '@/utils/util'
+import { localGet, localSet, getQueryVariable } from '@/utils/util'
 
 const style = {
     ...Colors
@@ -38,7 +38,8 @@ export default createStore({
             return state._quote.productMap[state._quote.productActivedID]
         },
         customerGroupId (state) { // 用户组ID
-            return state._user.customerInfo?.customerGroupId ?? state._base.wpCompanyInfo?.customerGroupId
+            const customerGroupId = getQueryVariable('customerGroupId')
+            return customerGroupId ?? state._user.customerInfo?.customerGroupId ?? state._base.wpCompanyInfo?.customerGroupId
         },
         // 用户自选列表
         userSelfSymbolList (state, getters,) {

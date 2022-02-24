@@ -45,6 +45,7 @@
                 />
                 <span class='icon' :class="confirmVis ? 'icon_icon_pressed': 'icon_icon_default'" @click='changeState("confirmVis")'></span>
             </div>
+            <googleVerifyCode @handlePaste='handlePaste' />
         </van-cell-group>
         <div v-if='!isFirstSet' class='forgot'>
             <router-link class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">
@@ -67,10 +68,12 @@ import { useRouter, useRoute } from 'vue-router'
 import { bindAssertsPwd, updateAssertsPwd } from '@/api/user'
 import md5 from 'js-md5'
 import { useI18n } from 'vue-i18n'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 
 export default {
     components: {
         Top,
+        googleVerifyCode
     },
     setup (props) {
         const store = useStore()
@@ -89,7 +92,8 @@ export default {
             oldPwd: '',
             newPwdVis: false,
             confirmVis: false,
-            oldPwdVis: false
+            oldPwdVis: false,
+            googleCode: ''
         })
 
         function changeState (type) {
@@ -165,12 +169,17 @@ export default {
             }
         }
 
+        function handlePaste (val) {
+            state.googleCode = val
+        }
+
         return {
             ...toRefs(state),
             changeState,
             customInfo,
             isFirstSet,
             formatter,
+            handlePaste,
             handleConfirm
         }
     }
@@ -216,6 +225,9 @@ export default {
             &::before {
                 font-size: rem(30px);
             }
+        }
+        .paste{
+            color: var(--primary);
         }
     }
     .forgot{
