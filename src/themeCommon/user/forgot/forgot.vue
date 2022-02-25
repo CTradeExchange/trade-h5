@@ -28,20 +28,49 @@
         </div>
         <div class='tabs-content'>
             <form v-show='curTab === 0' class='loginForm'>
-                <div class='field'>
+                <div v-if="type==='login'" class='field'>
                     <InputComp v-model.trim='mobile' clear :label='$t("common.inputPhone")' />
                 </div>
+                <div v-else class='field'>
+                    <p class='title'>
+                        {{ $t('common.sendToYou') }} {{ customerInfo?.phone }}
+                    </p>
+                </div>
+
                 <div class='field'>
-                    <checkCode v-model.trim='checkCode' :label='$t("common.inputVerifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+                    <checkCode
+                        v-if="type === 'login'"
+                        v-model.trim='checkCode'
+                        :label='$t("common.inputVerifyCode")'
+                        :type='type'
+                        @verifyCodeSend='handleVerifyCodeSend'
+                    />
+                    <checkCode
+                        v-else
+                        v-model.trim='checkCode'
+                        :label='$t("common.inputVerifyCode")'
+                        :type='type'
+                        @verifyCodeSend='handleVerifyCodeSendFund'
+                    />
                 </div>
             </form>
 
             <form v-show='curTab === 1' class='loginForm'>
-                <div class='field'>
+                <div v-if="type==='login'" class='field'>
                     <InputComp v-model.trim='email' clear :label='$t("common.inputEmail")' />
                 </div>
+                <div v-else class='field'>
+                    <p class='title'>
+                        {{ $t('common.sendToYou') }} {{ customerInfo?.email }}
+                    </p>
+                </div>
                 <div class='field'>
-                    <checkCode v-model.trim='emailCode' :label='$t("common.inputVerifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+                    <checkCode
+                        v-model.trim='emailCode'
+                        :label='$t("common.inputVerifyCode")'
+                        :type='type'
+                        @verifyCodeSend='type === "login" ? handleVerifyCodeSend : handleVerifyCodeSendFund'
+                    />
                 </div>
             </form>
         </div>
@@ -98,18 +127,37 @@ export default {
             loading: false
         })
 
+        const bizTypeMap = {
+            login: {
+                0: 'SMS_LOGINED_VERIFICATION_CODE',
+                1: 'EMAIL_PASSWORD_VERIFICATION_CODE'
+            },
+            fund: {
+                0: 'SMS_LOGINED_VERIFICATION_CODE',
+                1: 'EMAIL_LOGINED_VERIFICATION_CODE'
+            }
+        }
+
+        const customerInfo = computed(() => store.state._user.customerInfo)
+        if (type === 'fund') {
+            state.mobile = customerInfo.value?.phone
+            state.email = customerInfo.value?.email
+        }
+
         const handleTabChange = (name, title) => {
             state.curTab = name
         }
 
-        // 发送验证码
+        // 找回登录密码发送验证码
         const handleVerifyCodeSend = (callback) => {
+            debugger
             const validator = new Schema(RuleFn(t))
             validator.validate({
                 type: state.curTab,
                 mobile: state.mobile,
                 email: state.email,
-                zone: state.zone
+                zone: state.zone,
+                resetType: type
             }, (errors, fields) => {
                 console.log('errors:', errors, fields)
                 if (errors) {
@@ -136,7 +184,7 @@ export default {
                         } else {
                             state.countryZone = res.data.phoneArea
                             verifyCodeSend({
-                                bizType: state.curTab === 0 ? 'SMS_PASSWORD_VERIFICATION_CODE' : 'EMAIL_PASSWORD_VERIFICATION_CODE',
+                                bizType: bizTypeMap['login'][state.curTab],
                                 toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
                             }).then(res => {
                                 if (res.check()) {
@@ -156,7 +204,29 @@ export default {
             })
         }
 
-        const next = () => {
+        // 找回资金密码发送验证码
+        const handleVerifyCodeSendFund = (callback) => {
+            if (state.curTab === 0 && !customerInfo.value.phone) {
+                return Toast(t('common.noBindPhone'))
+            }
+            if (state.curTab === 0 && !customerInfo.value.email) {
+                return Toast(t('common.noBindEmail'))
+            }
+
+            verifyCodeSend({
+                bizType: bizTypeMap['fund'][state.curTab],
+            }).then(res => {
+                if (res.check()) {
+                    state.sendToken = res.data.token
+                    Toast(t('common.verifySended'))
+                    callback && callback()
+                } else {
+                    callback && callback(false)
+                }
+            })
+        }
+
+        const resetLoginPwd = () => {
             const params = {
                 mobile: state.mobile,
                 email: state.email,
@@ -173,9 +243,32 @@ export default {
                     return Toast(errors[0].message)
                 }
                 state.loading = true
+                handleVerifyCode()
+            })
+        }
+
+        const resetFundPwd = () => {
+            if ((isEmpty(state.checkCode) && state.curTab === 0) || (isEmpty(state.emailCode) && state.curTab === 1)) {
+                return Toast(t('common.inputVerifyCode'))
+            }
+            if (isEmpty(state.sendToken)) {
+                return Toast(t('common.getVerifyCode'))
+            }
+            handleVerifyCode()
+        }
+
+        const handleVerifyCode = () => {
+            debugger
+            let loginName
+            if (type === 'login') {
+                loginName = state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email
+            } else if (type === 'fund') {
+                loginName = ''
+            }
+            if (state.curTab === 0) {
                 verifyCodeCheck({
-                    bizType: state.curTab === 0 ? 'SMS_PASSWORD_VERIFICATION_CODE' : 'EMAIL_PASSWORD_VERIFICATION_CODE',
-                    toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
+                    bizType: bizTypeMap['login'][state.curTab],
+                    toUser: loginName,
                     sendToken: state.sendToken || '11',
                     code: state.curTab === 0 ? state.checkCode : state.emailCode
                 }).then(res => {
@@ -187,7 +280,7 @@ export default {
                                 verifyCodeToken: res.data.token,
                                 sendToken: state.sendToken,
                                 type: state.curTab === 0 ? 2 : 1,
-                                loginName: state.curTab === 0 ? state.mobile : state.email,
+                                loginName,
                                 verifyCode: state.curTab === 0 ? state.checkCode : state.emailCode,
                             }
                         })
@@ -197,7 +290,15 @@ export default {
                 }).catch((err) => {
                     state.loading = false
                 })
-            })
+            }
+        }
+
+        const next = () => {
+            if (type === 'login') {
+                resetLoginPwd()
+            } else if (type === 'fund') {
+                resetFundPwd()
+            }
         }
 
         const zoneSelect = (data) => {
@@ -216,7 +317,9 @@ export default {
             style,
             zoneSelect,
             back,
-            type
+            customerInfo,
+            type,
+            handleVerifyCodeSendFund
         }
     }
 }
@@ -260,11 +363,16 @@ export default {
         position: relative;
         display: flex;
         align-items: center;
+
         &:not(:first-of-type) {
             margin-top: rem(30px);
         }
         &.toolWrap {
             justify-content: space-between;
+        }
+        .title{
+            padding-left: rem(10px);
+            color: var(--normalColor);
         }
         label {
             position: absolute;

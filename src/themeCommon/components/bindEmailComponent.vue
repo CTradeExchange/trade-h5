@@ -25,13 +25,13 @@
             </div>
             <div v-if='type === "change"' class='field'>
                 <p class='title'>
-                    将发送验证码到您的新邮箱
+                    {{ $t('common.sendToYourEmail') }}
                 </p>
                 <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
             </div>
             <div v-if='type === "change"' class='field'>
                 <p class='title'>
-                    将发送验证码到您的 {{ customInfo.email }}
+                    {{ $t('common.sendToYou') }} {{ customInfo.email }}
                 </p>
                 <CheckCode v-model='checkCodeOld' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSendOld' />
             </div>
@@ -41,9 +41,9 @@
                 </label> -->
                 <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
             </div>
-            <div class='field'>
+            <div v-if='googleCodeVis' class='field'>
                 <p class='title'>
-                    请输入谷歌验证码
+                    {{ $t('common.inputGoogleCode') }}
                 </p>
                 <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
             </div>
@@ -98,6 +98,7 @@ export default {
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
         const countryList = computed(() => store.state.countryList)
         const customInfo = computed(() => store.state._user.customerInfo)
+        const googleCodeVis = computed(() => customInfo.value.googleId > 0)
         const zoneText = computed(() => {
             const countryObj = getArrayObj(countryList.value, 'code', customInfo.value.country)
             state.zone = countryObj.countryCode
@@ -119,6 +120,10 @@ export default {
             if (isEmpty(state.sendToken) || isEmpty(state.sendTokenOld)) {
                 return Toast(t('common.getVerifyCode'))
             }
+            if (googleCodeVis.value && !state.gooogleCode) {
+                return Toast(t('common.inputGoogleCode'))
+            }
+
             const params = {
                 email: state.email,
                 verifyCode: state.checkCode,
@@ -245,6 +250,7 @@ export default {
             handleVerifyCodeSend,
             zoneText,
             customInfo,
+            googleCodeVis,
             handleVerifyCodeSendOld,
             ...toRefs(state)
         }

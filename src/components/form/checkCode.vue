@@ -52,6 +52,10 @@ export default {
             type: Boolean,
             default: false
         },
+        // 类型：login / fund
+        type: {
+            type: String
+        }
     },
     data () {
         return {

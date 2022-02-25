@@ -9,23 +9,23 @@
 
             <div v-if='type === "change"' class='field'>
                 <p class='title'>
-                    将发送验证码到您的新手机号码
+                    {{ $t('common.sendToYourPhone') }}
                 </p>
                 <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
             </div>
 
             <div v-if='type === "change"' class='field'>
                 <p class='title'>
-                    将发送验证码到您的 {{ customInfo.phone }}
+                    {{ $t('common.sendToYou') }} {{ customInfo.phone }}
                 </p>
                 <CheckCode v-model='checkCodeOld' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSendOld' />
             </div>
             <div v-else class='field'>
                 <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
             </div>
-            <div class='field'>
+            <div v-if='googleCodeVis' class='field'>
                 <p class='title'>
-                    请输入谷歌验证码
+                    {{ $t('common.inputGoogleCode') }}
                 </p>
                 <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
             </div>
@@ -82,6 +82,7 @@ export default {
 
         const countryList = computed(() => store.state.countryList)
         const customInfo = computed(() => store.state._user.customerInfo)
+        const googleCodeVis = computed(() => customInfo.value.googleId > 0)
         const zoneText = computed(() => {
             const countryObj = getArrayObj(countryList.value, 'code', customInfo.value.country)
             if (countryObj) state.zone = countryObj.countryCode
@@ -187,8 +188,8 @@ export default {
             if (isEmpty(state.sendToken) || isEmpty(state.sendTokenOld)) {
                 return Toast(t('common.getVerifyCode'))
             }
-            if (!state.gooogleCode) {
-                return Toast('请输入谷歌验证码')
+            if (googleCodeVis.value && !state.gooogleCode) {
+                return Toast(t('common.inputGoogleCode'))
             }
 
             state.loading = true
@@ -239,6 +240,7 @@ export default {
             onlineServices,
             zoneText,
             customInfo,
+            googleCodeVis,
             ...toRefs(state)
         }
     }

@@ -45,7 +45,12 @@
                 />
                 <span class='icon' :class="confirmVis ? 'icon_icon_pressed': 'icon_icon_default'" @click='changeState("confirmVis")'></span>
             </div>
-            <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
+            <div class='form-item form-item-google'>
+                <googleVerifyCode
+                    v-if='googleCodeVis'
+                    @getGooleVerifyCode='getGooleVerifyCode'
+                />
+            </div>
         </van-cell-group>
         <div v-if='!isFirstSet' class='forgot'>
             <router-link class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">
@@ -83,6 +88,8 @@ export default {
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+
+        const googleCodeVis = computed(() => customInfo.value.googleId > 0)
 
         const isFirstSet = computed(() => Number(customInfo.value.assertPassStatus) === 1)
 
@@ -129,8 +136,8 @@ export default {
             if (state.newPwd.length < 6) {
                 return Toast(t('common.fundPwdTip'))
             }
-            if (!state.gooogleCode) {
-                return Toast('请输入谷歌验证码')
+            if (googleCodeVis.value && !state.gooogleCode) {
+                return Toast(t('common.inputGoogleCode'))
             }
 
             const toast = Toast.loading({
@@ -190,7 +197,8 @@ export default {
             formatter,
             handlePaste,
             handleConfirm,
-            getGooleVerifyCode
+            getGooleVerifyCode,
+            googleCodeVis
         }
     }
 }
@@ -226,11 +234,13 @@ export default {
     }
     .form-item {
         position: relative;
-        padding: 0 rem(30px);
+        display: flex;
+        align-items: center;
+        //padding: 0 rem(30px);
         .icon {
             position: absolute;
             top: rem(25px);
-            right: rem(50px);
+            right: rem(30px);
             z-index: 99;
             cursor: pointer;
             &::before {
@@ -239,6 +249,9 @@ export default {
         }
         .paste{
             color: var(--primary);
+        }
+        &.form-item-google{
+            margin-left: rem(30px);
         }
     }
     .forgot{

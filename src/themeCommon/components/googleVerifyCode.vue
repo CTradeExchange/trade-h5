@@ -5,7 +5,7 @@
             :formatter='formatter'
             label=''
             maxlength='6'
-            placeholder='请输入谷歌验证码'
+            :placeholder='$t("common.inputGoogleCode")'
             type='text'
             @input='handleInput'
         />
@@ -38,7 +38,7 @@ function formatter (value) {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .form-item {
     position: relative;
@@ -50,7 +50,7 @@ function formatter (value) {
         padding-left: 0;
         padding-right: 0;
         input{
-            padding: 0 5px;
+            //padding: 0 5px;
         }
     }
     .title{

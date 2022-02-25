@@ -189,7 +189,14 @@
         "fundPwd": "Fund Password",
         "fundPwdTip":"Password is 6 digits",
         "inputFundPwd":"Input Fund Password",
-        "version": "Version"
+        "version": "Version",
+        "sendToYou": "Verification code will send to your",
+        "sendToYourEmail": "Verification code will send to your new email",
+        "sendToYourPhone": "Verification code will send to your new phone",
+        "noBindPhone": "Mobile phone not binded",
+        "noBindEmail": "Email not binded",
+        "inputGoogleCode": "Please enter Google authentication code",
+        "paste": "Paste"
     },
     "faceAuth": {
         "faceDetectTip": "Please face your phone and keep it well lit",

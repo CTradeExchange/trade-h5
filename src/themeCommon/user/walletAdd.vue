@@ -43,7 +43,7 @@
                         {{ countDown }}{{ $t('walletAdd.codeHint') }}
                     </span>
                 </div>
-                <div class='box'>
+                <div v-if='googleCodeVis' class='box'>
                     <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
                 </div>
             </div>
@@ -121,6 +121,7 @@ export default {
         })
         // 账户信息
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
+        const googleCodeVis = computed(() => customInfo.googleId > 0)
 
         // 初始化数据
         let timer = null
@@ -231,8 +232,8 @@ export default {
             if (!state.code) {
                 return Toast({ message: t('walletAdd.codePlaceholder') })
             }
-            if (!state.gooogleCode) {
-                return Toast('请输入谷歌验证码')
+            if (googleCodeVis.value && !state.gooogleCode) {
+                return Toast(t('common.inputGoogleCode'))
             }
 
             // 发起api请示
@@ -271,6 +272,7 @@ export default {
             getCode,
             onConfirm,
             customInfo,
+            googleCodeVis,
             getGooleVerifyCode
         }
     }

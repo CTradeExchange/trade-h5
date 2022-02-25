@@ -23,7 +23,12 @@
                 <van-field v-model='confirmPwd' label='' :placeholder='$t("forgot.newPwdAgain")' :type='confirmVis ? "text" : "password"' />
                 <span class='icon' :class="confirmVis ? 'icon_icon_pressed': 'icon_icon_default'" @click='changeState("confirmVis")'></span>
             </div>
-            <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
+            <div class='form-item form-item-google'>
+                <googleVerifyCode
+                    v-if='googleCodeVis'
+                    @getGooleVerifyCode='getGooleVerifyCode'
+                />
+            </div>
         </van-cell-group>
         <van-button class='confirmBtn' @click='handleConfirm'>
             <span>{{ $t('common.sure') }}</span>
@@ -55,6 +60,7 @@ export default {
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+        const googleCodeVis = computed(() => customInfo.value.googleId > 0)
 
         const isFirstSet = computed(() => Number(customInfo.value.loginPassStatus) === 1)
 
@@ -97,8 +103,8 @@ export default {
             if (state.oldPwd === state.newPwd) {
                 return Toast(t('forgot.pwdSame'))
             }
-            if (!state.gooogleCode) {
-                return Toast('请输入谷歌验证码')
+            if (googleCodeVis.value && !state.gooogleCode) {
+                return Toast(t('common.inputGoogleCode'))
             }
 
             const toast = Toast.loading({
@@ -158,6 +164,7 @@ export default {
             customInfo,
             isFirstSet,
             handleConfirm,
+            googleCodeVis,
             getGooleVerifyCode
         }
     }
@@ -193,18 +200,22 @@ export default {
         }
     }
     .form-item {
+        position: relative;
         display: flex;
         align-items: center;
-        padding: 0 rem(30px);
+        //padding: 0 rem(30px);
         .icon {
-            // position: absolute;
+            position: absolute;
             // top: rem(25px);
-            // right: rem(50px);
+            right: rem(30px);
             z-index: 99;
             cursor: pointer;
             &::before {
                 font-size: rem(30px);
             }
+        }
+        &.form-item-google{
+            margin-left: rem(30px);
         }
     }
 }

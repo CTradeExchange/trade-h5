@@ -194,7 +194,15 @@
         "fundPwd": "资金密码",
         "fundPwdTip":"密码为6位数字",
         "inputFundPwd":"请输入资金密码",
-        "version": "版本号"
+        "version": "版本号",
+        "sendToYou": "将发送验证码到您的",
+        "sendToYourEmail": "将发送验证码到您的新邮箱",
+        "sendToYourPhone": "将发送验证码到您的新手机",
+        "noBindPhone": "未绑定手机号",
+        "noBindEmail": "未绑定邮箱",
+        "inputGoogleCode": "请输入谷歌验证码",
+        "paste": "粘贴"
+        
     },
     "faceAuth": {
         "faceDetectTip": "请正对手机，保持光线充足",

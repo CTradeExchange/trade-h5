@@ -939,3 +939,16 @@ export function getWithdrawAccountCurrencyList (data) {
         data
     })
 }
+
+/* 检测客户是否开启GoogleMFA */
+export function checkGoogleMFAStatus (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.checkGoogleMFAStatus',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
