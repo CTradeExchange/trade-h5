@@ -150,7 +150,6 @@ export default {
 
         // 找回登录密码发送验证码
         const handleVerifyCodeSend = (callback) => {
-            debugger
             const validator = new Schema(RuleFn(t))
             validator.validate({
                 type: state.curTab,
@@ -258,17 +257,16 @@ export default {
         }
 
         const handleVerifyCode = () => {
-            debugger
-            let loginName
-            if (type === 'login') {
-                loginName = state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email
-            } else if (type === 'fund') {
-                loginName = ''
-            }
+            // let loginName
+            // if (type === 'login') {
+            //     loginName = state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email
+            // } else if (type === 'fund') {
+            //     loginName = ''
+            // }
             if (state.curTab === 0) {
                 verifyCodeCheck({
                     bizType: bizTypeMap['login'][state.curTab],
-                    toUser: loginName,
+                    toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
                     sendToken: state.sendToken || '11',
                     code: state.curTab === 0 ? state.checkCode : state.emailCode
                 }).then(res => {
