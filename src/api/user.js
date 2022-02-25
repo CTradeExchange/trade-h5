@@ -952,3 +952,26 @@ export function checkGoogleMFAStatus (data) {
         data
     })
 }
+/* 生成谷歌验证账号 */
+export function generateGoogleAccount (data) {
+    return request({
+        url: '/global/customer.app.GoogleVerifyApiService.generateGoogleAccount',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 谷歌验证码绑定与解除 */
+export function enableOrForbidMFA (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.enableOrForbidMFA',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

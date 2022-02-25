@@ -44,7 +44,10 @@
         "transfer": "划转",
         "securitySetting": "安全设置",
         "commonSetting": "通用设置",
-        "setFundPwd": "资金密码"
+        "setFundPwd": "资金密码",
+        "MFA_status": "谷歌验证器",
+        "MFA_bind": "绑定谷歌验证器",
+        "MFA_close": "关闭谷歌验证器"
     },
     "login": {
         "loginBtn": "登录",
@@ -795,5 +798,12 @@
         "addBank": "新增银行卡",
         "bankList": "银行卡管理",
         "bankCurrency": "银行卡币种"
+    },
+    "mfa": {
+        "routeTitile": "谷歌身份验证",
+        "enableTitle": "启用谷歌验证码",
+        "enableDesc": "Google Authenticator将保护您的账户及资金安全",
+        "status0": "未开启",
+        "status1": "已开启"
     }
 }
