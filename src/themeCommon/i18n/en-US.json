@@ -43,7 +43,9 @@
         "transfer": "Transfer",
         "securitySetting": "Security Settings",
         "commonSetting": "Common Settings",
-        "setFundPwd": "Fund Password"
+        "setFundPwd": "Fund Password",
+        "MFA_status": "谷歌验证器",
+        "MFA_bind": "绑定谷歌验证器"
     },
     "login": {
         "loginBtn": "Log In",
