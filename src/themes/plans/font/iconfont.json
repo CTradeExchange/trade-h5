@@ -6,6 +6,62 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "23448270",
+      "name": "手机下载",
+      "font_class": "shoujixiazai",
+      "unicode": "e67f",
+      "unicode_decimal": 59007
+    },
+    {
+      "icon_id": "10392612",
+      "name": "盾牌",
+      "font_class": "dunpai",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "26870341",
+      "name": "置顶",
+      "font_class": "zhiding1",
+      "unicode": "e6b2",
+      "unicode_decimal": 59058
+    },
+    {
+      "icon_id": "26818202",
+      "name": "银行卡",
+      "font_class": "yinhangka",
+      "unicode": "e6b0",
+      "unicode_decimal": 59056
+    },
+    {
+      "icon_id": "26818203",
+      "name": "数字钱包",
+      "font_class": "shuziqianbao",
+      "unicode": "e6b1",
+      "unicode_decimal": 59057
+    },
+    {
+      "icon_id": "26777549",
+      "name": "银联",
+      "font_class": "yinlian",
+      "unicode": "e6af",
+      "unicode_decimal": 59055
+    },
+    {
+      "icon_id": "26777547",
+      "name": "支付宝",
+      "font_class": "zhifubao",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
+    },
+    {
+      "icon_id": "26777548",
+      "name": "微信支付",
+      "font_class": "weixinzhifu",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
       "icon_id": "26640272",
       "name": "转换",
       "font_class": "zhuanhuan",
