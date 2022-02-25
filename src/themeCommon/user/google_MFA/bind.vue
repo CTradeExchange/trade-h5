@@ -140,8 +140,15 @@ export default {
                 enableOrForbidMFA(pramas).then(res => {
                     console.log(res)
                     if (res.check()) {
-                        Toast(customerInfo.value.googleId > 0 ? '关闭成功' : '绑定成功',)
-                        store.commit('_user/findCustomerInfo', false)
+                        Dialog.alert({
+                            title: customerInfo.value.googleId > 0 ? '关闭成功' : '绑定成功',
+                        })
+                        store.dispatch('_user/findCustomerInfo', false)
+                        state.googleCode = ''
+                        state.verifyCodeSMS = ''
+                        state.sendTokenSMS = ''
+                        state.verifyCodeEmail = ''
+                        state.sendTokenEmail = ''
                     }
                 })
             })
