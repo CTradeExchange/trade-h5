@@ -16,15 +16,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 const router = useRouter()
+const store = useStore()
 
-const statusChecked = ref(false)
+const statusChecked = computed(() => store.state._user.customerInfo?.googleId > 0)
 const onUpdateStatus = (newValue) => {
     console.log(newValue)
-    router.push({ name: 'MFA_install' })
+    router.push({ name: newValue ? 'MFA_install' : 'MFA_bind' })
 }
 </script>
 

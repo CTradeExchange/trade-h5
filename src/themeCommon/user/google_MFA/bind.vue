@@ -126,10 +126,11 @@ export default {
 
         // 绑定谷歌验证码
         const bindHanlder = () => {
+            const googleId = customerInfo.value.googleId > 0 ? customerInfo.value.googleId : parseInt(id)
             const pramas = {
                 type: customerInfo.value.googleId > 0 ? 2 : 1, // 1开启，2关闭
                 googleCode: state.googleCode, // String 必填 谷歌验证码
-                googleId: parseInt(id), // Long 必填 谷歌Id
+                googleId: googleId, // Long 必填 谷歌Id
                 verifyCodeSMS: state.verifyCodeSMS, // String 非必填 手机验证码
                 sendTokenSMS: state.sendTokenSMS, // String 非必填 手机验证码发送票据
                 verifyCodeEmail: state.verifyCodeEmail, // String 非必填 邮箱验证码
@@ -141,7 +142,7 @@ export default {
                     console.log(res)
                     if (res.check()) {
                         Dialog.alert({
-                            title: customerInfo.value.googleId > 0 ? '关闭成功' : '绑定成功',
+                            message: customerInfo.value.googleId > 0 ? '关闭成功' : '绑定成功',
                         })
                         store.dispatch('_user/findCustomerInfo', false)
                         state.googleCode = ''
