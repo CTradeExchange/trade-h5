@@ -129,7 +129,7 @@ export default {
 
         const bizTypeMap = {
             login: {
-                0: 'SMS_LOGINED_VERIFICATION_CODE',
+                0: 'SMS_PASSWORD_VERIFICATION_CODE',
                 1: 'EMAIL_PASSWORD_VERIFICATION_CODE'
             },
             fund: {
@@ -250,9 +250,9 @@ export default {
             if ((isEmpty(state.checkCode) && state.curTab === 0) || (isEmpty(state.emailCode) && state.curTab === 1)) {
                 return Toast(t('common.inputVerifyCode'))
             }
-            if (isEmpty(state.sendToken)) {
-                return Toast(t('common.getVerifyCode'))
-            }
+            // if (isEmpty(state.sendToken)) {
+            //     return Toast(t('common.getVerifyCode'))
+            // }
             handleVerifyCode()
         }
 
@@ -264,30 +264,41 @@ export default {
             //     loginName = ''
             // }
             if (state.curTab === 0) {
-                verifyCodeCheck({
-                    bizType: bizTypeMap['login'][state.curTab],
-                    toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
-                    sendToken: state.sendToken || '11',
-                    code: state.curTab === 0 ? state.checkCode : state.emailCode
-                }).then(res => {
-                    state.loading = false
-                    if (res.ok) {
-                        router.push({
-                            path: type === 'login' ? '/resetLoginPwd' : '/resetFundPwd',
-                            query: {
-                                verifyCodeToken: res.data.token,
-                                sendToken: state.sendToken,
-                                type: state.curTab === 0 ? 2 : 1,
-                                loginName,
-                                verifyCode: state.curTab === 0 ? state.checkCode : state.emailCode,
-                            }
-                        })
-                    } else {
-                        Toast(res.msg)
+                router.push({
+                    path: type === 'login' ? '/resetLoginPwd' : '/resetFundPwd',
+                    query: {
+                        // verifyCodeToken: res.data.token,
+                        sendToken: state.sendToken,
+                        type: state.curTab === 0 ? 2 : 1,
+                        loginName: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
+                        verifyCode: state.curTab === 0 ? state.checkCode : state.emailCode,
                     }
-                }).catch((err) => {
-                    state.loading = false
                 })
+
+                // verifyCodeCheck({
+                //     bizType: bizTypeMap['login'][state.curTab],
+                //     toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
+                //     sendToken: state.sendToken || '11',
+                //     code: state.curTab === 0 ? state.checkCode : state.emailCode
+                // }).then(res => {
+                //     state.loading = false
+                //     if (res.ok) {
+                //         router.push({
+                //             path: type === 'login' ? '/resetLoginPwd' : '/resetFundPwd',
+                //             query: {
+                //                 verifyCodeToken: res.data.token,
+                //                 sendToken: state.sendToken,
+                //                 type: state.curTab === 0 ? 2 : 1,
+                //                 loginName: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
+                //                 verifyCode: state.curTab === 0 ? state.checkCode : state.emailCode,
+                //             }
+                //         })
+                //     } else {
+                //         Toast(res.msg)
+                //     }
+                // }).catch((err) => {
+                //     state.loading = false
+                // })
             }
         }
 

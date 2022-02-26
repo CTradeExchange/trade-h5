@@ -71,7 +71,7 @@ export default {
             newPwdVis: false,
             confirmVis: false,
             oldPwdVis: false,
-            gooogleCode: ''
+            googleCode: ''
         })
 
         function changeState (type) {
@@ -79,7 +79,7 @@ export default {
         }
 
         const getGooleVerifyCode = val => {
-            state.gooogleCode = val
+            state.googleCode = val
         }
 
         function handleConfirm () {
@@ -103,7 +103,7 @@ export default {
             if (state.oldPwd === state.newPwd) {
                 return Toast(t('forgot.pwdSame'))
             }
-            if (googleCodeVis.value && !state.gooogleCode) {
+            if (googleCodeVis.value && !state.googleCode) {
                 return Toast(t('common.inputGoogleCode'))
             }
 
@@ -115,7 +115,7 @@ export default {
             if (isFirstSet.value) {
                 setLoginPwd({
                     pwd: md5(state.confirmPwd),
-                    googleCode: state.gooogleCode
+                    googleCode: state.googleCode
                 }).then(res => {
                     toast.clear()
                     if (res.check()) {
@@ -128,7 +128,7 @@ export default {
                 modifyLoginPwd({
                     oldPwd: md5(state.oldPwd),
                     newPwd: md5(state.confirmPwd),
-                    googleCode: state.gooogleCode
+                    googleCode: state.googleCode
                 }).then((res) => {
                     if (isFirstSet.value) {
                         if (res.check()) {

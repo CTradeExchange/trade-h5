@@ -74,7 +74,7 @@ export default {
             checkCode: '',
             checkCodeOld: '',
             loading: false,
-            gooogleCode: ''
+            googleCode: ''
         })
 
         store.dispatch('getCountryListByParentCode')
@@ -156,7 +156,7 @@ export default {
         }
 
         const getGooleVerifyCode = val => {
-            state.gooogleCode = val
+            state.googleCode = val
         }
 
         const handleVerifyCodeSendOld = (callback) => {
@@ -181,15 +181,23 @@ export default {
             if (!RegExp(mobileReg.value).test(state.mobile)) {
                 return Toast(t('common.inputRealPhone'))
             }
-            if (isEmpty(state.checkCode) || isEmpty(state.checkCodeOld)) {
+            if (isEmpty(state.checkCode)) {
                 return Toast(t('common.inputVerifyCode'))
             }
 
-            if (isEmpty(state.sendToken) || isEmpty(state.sendTokenOld)) {
+            if (isEmpty(state.sendToken)) {
                 return Toast(t('common.getVerifyCode'))
             }
-            if (googleCodeVis.value && !state.gooogleCode) {
+            if (googleCodeVis.value && !state.googleCode) {
                 return Toast(t('common.inputGoogleCode'))
+            }
+            if (props.type === 'change') {
+                if (isEmpty(state.checkCodeOld)) {
+                    return Toast(t('common.inputVerifyCode'))
+                }
+                if (isEmpty(state.sendTokenOld)) {
+                    return Toast(t('common.getVerifyCode'))
+                }
             }
 
             state.loading = true
@@ -200,7 +208,7 @@ export default {
                 phoneArea: state.zone,
                 verifyCodeOld: state.checkCodeOld,
                 sendTokenOld: state.sendTokenOld,
-                gooogleCode: state.gooogleCode
+                googleCode: state.googleCode
             }
 
             if (props.type === 'bind') {

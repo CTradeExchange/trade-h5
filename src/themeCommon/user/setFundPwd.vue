@@ -108,7 +108,7 @@ export default {
         }
 
         const getGooleVerifyCode = val => {
-            state.gooogleCode = val
+            state.googleCode = val
         }
 
         function formatter (value) {
@@ -136,7 +136,7 @@ export default {
             if (state.newPwd.length < 6) {
                 return Toast(t('common.fundPwdTip'))
             }
-            if (googleCodeVis.value && !state.gooogleCode) {
+            if (googleCodeVis.value && !state.googleCode) {
                 return Toast(t('common.inputGoogleCode'))
             }
 
@@ -148,7 +148,7 @@ export default {
             if (isFirstSet.value) {
                 bindAssertsPwd({
                     pwd: md5(state.confirmPwd),
-                    googleCode: state.gooogleCode
+                    googleCode: state.googleCode
                 }).then(res => {
                     toast.clear()
                     if (res.check()) {
@@ -161,7 +161,7 @@ export default {
                 updateAssertsPwd({
                     oldPwd: md5(state.oldPwd),
                     newPwd: md5(state.confirmPwd),
-                    googleCode: state.gooogleCode
+                    googleCode: state.googleCode
                 }).then((res) => {
                     if (isFirstSet.value) {
                         if (res.check()) {
