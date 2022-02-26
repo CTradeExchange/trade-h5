@@ -25,6 +25,10 @@
                     {{ $t('login.forgotFundPwd') }}
                 </router-link>
             </div>
+            <googleVerifyCode
+                v-if='googleCodeVis'
+                @getGooleVerifyCode='getGooleVerifyCode'
+            />
         </div>
         <div class='dialog-footer'>
             <van-button
@@ -42,6 +46,7 @@
 
 <script>
 import { reactive, toRefs, computed, watchEffect, onMounted } from 'vue'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 import { useStore } from 'vuex'
 import BigNumber from 'bignumber.js'
 import { useI18n } from 'vue-i18n'
@@ -50,7 +55,8 @@ import { Toast } from 'vant'
 import InputComp from '@/components/form/input'
 export default {
     components: {
-        InputComp
+        InputComp,
+        googleVerifyCode
     },
     props: ['show'],
     emits: ['update:show'],
@@ -60,11 +66,13 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
 
         const customInfo = computed(() => store.state._user.customerInfo)
+        const googleCodeVis = computed(() => customInfo.value.googleId > 0)
 
         const state = reactive({
             showFundPwd: false,
             loading: false,
-            pwd: ''
+            pwd: '',
+            gooogleCode: ''
         })
 
         const closed = () => { // 关闭弹出层且动画结束后触发
@@ -76,10 +84,18 @@ export default {
             return value.replace(/[^\d]/g, '')
         }
 
+        const getGooleVerifyCode = val => {
+            state.gooogleCode = val
+        }
+
         const submit = () => {
             if (!state.pwd) {
                 return Toast(t('common.inputFundPwd'))
             }
+            if (googleCodeVis.value && !state.gooogleCode) {
+                return Toast(t('common.inputGoogleCode'))
+            }
+
             context.emit('confirmWithdraw', state.pwd)
         }
 
@@ -92,6 +108,8 @@ export default {
             submit,
             customInfo,
             formatter,
+            googleCodeVis,
+            getGooleVerifyCode,
             ...toRefs(state)
 
         }
