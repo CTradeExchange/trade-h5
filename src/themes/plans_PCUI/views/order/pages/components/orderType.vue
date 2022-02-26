@@ -28,7 +28,8 @@ export default {
 
             if (dealModeShowMap.value[props.tradeMode]?.pendingTab) {
                 list.push({
-                    title: [3, 5, 9].includes(props.tradeType) ? t('trade.pending2') : t('trade.pending'),
+                    // title: [3, 5, 9].includes(props.tradeType) ? t('trade.pending2') : t('trade.pending'),
+                    title: t('trade.pending2'),
                     val: 10
                 })
             }
@@ -66,9 +67,9 @@ export default {
         padding: 0;
         text-align: center;
     }
-     :deep(.van-tabs__line){
-        width: 35px;
+    :deep(.van-tabs__line) {
         bottom: 17px;
+        width: 35px;
     }
 }
 </style>
