@@ -47,7 +47,7 @@ import { Toast, Dialog } from 'vant'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { verifyCodeSend } from '@/api/base'
-import { bindPhone, changePhone, checkUserStatus } from '@/api/user'
+import { bindPhone, changePhoneV1v1v2, checkUserStatus } from '@/api/user'
 import { useI18n } from 'vue-i18n'
 export default {
     components: {
@@ -225,7 +225,7 @@ export default {
                     state.loading = false
                 })
             } else if (props.type === 'change') {
-                changePhone(params).then(res => {
+                changePhoneV1v1v2(params).then(res => {
                     state.loading = false
                     if (res.check()) {
                         Toast(t('common.replacePhoneSuccess'))

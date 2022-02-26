@@ -512,10 +512,34 @@ export function changePhone (data) {
     })
 }
 
+/* 更换手机 MFA */
+export function changePhoneV1v1v2 (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.changePhoneV1v1v2',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
 /* 更换邮箱 */
 export function changeEmail (data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.changeEmail',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 更换邮箱(MFA) */
+export function changeEmailV1v1v2 (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.changeEmailV1v1v2',
         method: 'post',
         headers: {
             version: '0.0.1'
@@ -588,6 +612,18 @@ export function getWalletAddressList (data) {
 export function addWalletAddress (data) {
     return request({
         url: '/global/customer.app.CustomerWalletWebApiService.add',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 新增钱包(MFA) */
+export function addWalletAddressV1v1v2 (data) {
+    return request({
+        url: '/global/customer.app.CustomerWalletWebApiService.addV1v1v2',
         method: 'post',
         headers: {
             version: '0.0.1'
@@ -905,6 +941,19 @@ export function updateAssertsPwd (data) {
 export function forgetAssertsPwd (data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.forgetAssertsPwd',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 忘记资金密码 MFA */
+export function forgetAssertsPwdV1v1v2 (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.forgetAssertsPwdV1v1v2',
         method: 'post',
         toastErr: false,
         headers: {

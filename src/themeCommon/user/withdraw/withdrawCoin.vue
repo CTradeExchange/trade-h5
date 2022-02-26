@@ -276,7 +276,8 @@ export default {
             // 当前选择钱包地址id
             walletId: 0,
             fundPwdVis: false,
-            fundPwd: ''
+            fundPwd: '',
+            googleCode: ''
         })
 
         // 数据初始化
@@ -465,6 +466,7 @@ export default {
         // 获取资金密码
         const confirmWithdraw = (val) => {
             state.fundPwd = val
+            state.googleCode = val[1] ? val[1] : ''
             // 发起提现
             launchHandleWithdraw()
         }
@@ -777,7 +779,8 @@ export default {
                 withdrawType: 2,
                 withdrawCurrency: state.coinKind,
                 blockchainName: state.chainName,
-                fundPwd: md5(state.fundPwd)
+                fundPwd: md5(state.fundPwd),
+                googleCode: state.googleCode
             }
             handleWithdraw(item).then(res => {
                 state.loading = false

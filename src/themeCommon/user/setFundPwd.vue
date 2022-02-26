@@ -155,6 +155,8 @@ export default {
                         Toast(t('forgot.fundPwdSetSuccess'))
                         store.dispatch('_user/findCustomerInfo')
                         router.back()
+                    } else {
+                        Toast(res.msg)
                     }
                 })
             } else {
@@ -258,6 +260,10 @@ export default {
         text-align: right;
         padding-top: rem(30px);
         padding-right: rem(30px);
+        .href{
+           color: var(--primary);
+        }
+
     }
 }
 </style>

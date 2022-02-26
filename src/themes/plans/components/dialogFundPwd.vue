@@ -25,10 +25,12 @@
                     {{ $t('login.forgotFundPwd') }}
                 </router-link>
             </div>
-            <googleVerifyCode
-                v-if='googleCodeVis'
-                @getGooleVerifyCode='getGooleVerifyCode'
-            />
+            <div class='pwd-oper'>
+                <googleVerifyCode
+                    v-if='googleCodeVis'
+                    @getGooleVerifyCode='getGooleVerifyCode'
+                />
+            </div>
         </div>
         <div class='dialog-footer'>
             <van-button
@@ -96,7 +98,7 @@ export default {
                 return Toast(t('common.inputGoogleCode'))
             }
 
-            context.emit('confirmWithdraw', state.pwd)
+            context.emit('confirmWithdraw', [state.pwd, state.googleCode])
         }
 
         watchEffect(() => {
@@ -125,12 +127,18 @@ export default {
 }
 .dialog-body{
     .pwd-oper{
-        padding: rem(30px) 0;
+        padding: rem(30px) 0 0 0;
         text-align: right;
         .href{
             color: var(--primary);
             width: 100%;
             font-size: rem(24px);
+        }
+        .form-item{
+            :deep(.van-cell){
+                background-color: var(--bgColor);
+            }
+
         }
     }
 

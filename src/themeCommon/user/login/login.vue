@@ -285,16 +285,18 @@ export default {
 
         // 检测客户是否开启GoogleMFA
         const checkUserMfa = (val) => {
-            checkGoogleMFAStatus({
-                loginName: val,
-                type: val.includes('@') ? 1 : 2
-            }).then(res => {
-                if (res.check()) {
-                    state.googleCodeVis = res.data > 0
-                }
-            }).catch(err => {
-                console.log('err', err)
-            })
+            if (val) {
+                checkGoogleMFAStatus({
+                    loginName: val,
+                    type: val.includes('@') ? 1 : 2
+                }).then(res => {
+                    if (res.check()) {
+                        state.googleCodeVis = res.data > 0
+                    }
+                }).catch(err => {
+                    console.log('err', err)
+                })
+            }
         }
 
         // 发送验证码

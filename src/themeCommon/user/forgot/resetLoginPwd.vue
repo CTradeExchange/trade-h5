@@ -83,7 +83,8 @@ export default {
                 verifyCode: route.query['verifyCode'],
                 newPwd: md5(state.confirmPwd),
                 sendToken: route.query['sendToken'],
-                verifyCodeToken: route.query['verifyCodeToken']
+                verifyCodeToken: route.query['verifyCodeToken'],
+                googleCode: route.query['googleCode']
             }
             state.loading = true
             findPwd(params).then((res) => {

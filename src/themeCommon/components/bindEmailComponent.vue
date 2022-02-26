@@ -64,7 +64,7 @@ import { Toast, Dialog } from 'vant'
 import { reactive, toRefs, computed } from 'vue'
 import { isEmpty, emailReg, getArrayObj } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
-import { bindEmail, changeEmail, checkCustomerExist } from '@/api/user'
+import { bindEmail, changeEmailV1v1v2, checkCustomerExist } from '@/api/user'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
@@ -158,7 +158,7 @@ export default {
                     state.loading = false
                 })
             } else if (props.type === 'change') {
-                changeEmail(params).then(res => {
+                changeEmailV1v1v2(params).then(res => {
                     state.loading = false
                     if (res.check()) {
                         Toast(t('common.replaceEmailSuccess'))

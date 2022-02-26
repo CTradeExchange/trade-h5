@@ -74,7 +74,7 @@ import { Toast, Dialog } from 'vant'
 // i18n
 import { useI18n } from 'vue-i18n'
 // api
-import { getAllWithdrawCurrencyList, addWalletAddress } from '@/api/user'
+import { getAllWithdrawCurrencyList, addWalletAddressV1v1v2 } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
 import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 
@@ -190,22 +190,9 @@ export default {
         }
         // 点击获取验证码
         const getCode = () => {
-            // 验证是否绑定手机号
-            if (!customInfo.phone) {
-                return Dialog.confirm({
-                    title: t('withdraw.hint'),
-                    message: t('withdraw.bindPhoneHint'),
-                    confirmButtonText: t('withdraw.bindBtn'),
-                    cancelButtonText: t('withdraw.close')
-                }).then(() => {
-                    router.push('/bindMobile')
-                }).catch(() => {})
-            }
-
             // 发送验证码
             verifyCodeSend({
-                bizType: 'SMS_COMMON_VERIFICATION_CODE',
-                toUser: customInfo.phoneArea + ' ' + customInfo.phone
+                bizType: customInfo?.phone ? 'SMS_LOGINED_VERIFICATION_CODE' : 'EMAIL_LOGINED_VERIFICATION_CODE'
             }).then(res => {
                 state.verifyInfo = res.data
                 state.countDown = 59
@@ -237,23 +224,24 @@ export default {
             }
 
             // 发起api请示
-            addWalletAddress({
+            addWalletAddressV1v1v2({
                 currency: state.coinKind,
                 chainName: state.chainName,
                 address: state.address,
                 remark: state.name,
-                phone: customInfo.phone,
+                type: customInfo?.phone ? 2 : 1,
                 verifyCode: state.code,
-                phoneArea: customInfo.phoneArea,
+                phoneArea: customInfo?.phoneArea,
                 sendToken: verifyInfo.token,
-                googleCode: state.googleCode
+                googleCode: state.googleCode,
+
             }).then(res => {
                 if (res.check()) {
-                    Toast.success(t('withdraw.successHint'))
-                    init()
-                    setTimeout(() => {
+                    Dialog.alert({
+                        message: t('withdraw.successHint'),
+                    }).then(() => {
                         router.go(-1)
-                    }, 1500)
+                    })
                 } else {
                     Toast(res.msg)
                 }
@@ -347,6 +335,7 @@ export default {
         }
         .time {
             color: var(--minorColor);
+             line-height: rem(104px);
         }
         .get{
             line-height: rem(104px);
