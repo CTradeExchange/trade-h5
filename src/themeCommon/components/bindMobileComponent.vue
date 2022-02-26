@@ -181,15 +181,23 @@ export default {
             if (!RegExp(mobileReg.value).test(state.mobile)) {
                 return Toast(t('common.inputRealPhone'))
             }
-            if (isEmpty(state.checkCode) || isEmpty(state.checkCodeOld)) {
+            if (isEmpty(state.checkCode)) {
                 return Toast(t('common.inputVerifyCode'))
             }
 
-            if (isEmpty(state.sendToken) || isEmpty(state.sendTokenOld)) {
+            if (isEmpty(state.sendToken)) {
                 return Toast(t('common.getVerifyCode'))
             }
             if (googleCodeVis.value && !state.googleCode) {
                 return Toast(t('common.inputGoogleCode'))
+            }
+            if (props.type === 'change') {
+                if (isEmpty(state.checkCodeOld)) {
+                    return Toast(t('common.inputVerifyCode'))
+                }
+                if (isEmpty(state.sendTokenOld)) {
+                    return Toast(t('common.getVerifyCode'))
+                }
             }
 
             state.loading = true
