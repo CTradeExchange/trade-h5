@@ -1,5 +1,5 @@
 <template>
-    <van-button class='btn' :disabled='disabled' size='small' type='primary' @click='verifyCodeSendHanlder'>
+    <van-button class='btn' :disabled='disabled || loading' size='small' type='primary' @click='verifyCodeSendHanlder'>
         <van-loading v-if='loading' size='20px' />
         <span v-else>
             {{ text }}
@@ -18,15 +18,20 @@ export default {
         const disabled = ref(false)
         const loading = ref(false)
         let interval
-        const text = ref('发送验证码')
+        const text = ref(t('common.sendCode'))
         const verifyCodeSendHanlder = () => {
             disabled.value = true
+            loading.value = true
             emit('send', getCodeBtnCountDown)
         }
 
         // 获取验证码倒计时
         const getCodeBtnCountDown = (flag) => {
-            if (flag === false) return (disabled.value = false)
+            loading.value = false
+            if (flag === false) {
+                disabled.value = false
+                return false
+            }
             let len = 60
             interval = setInterval(() => {
                 if (len === 0) {
@@ -50,9 +55,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.btn{
+.btn {
     width: rem(220px);
-    &:disabled{
+    &:disabled {
         background: var(--minorColor);
     }
 }

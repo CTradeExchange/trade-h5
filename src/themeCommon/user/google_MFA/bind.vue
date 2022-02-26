@@ -6,7 +6,7 @@
         <div class='formBox'>
             <div v-if='customerInfo.phone' class='cell'>
                 <p class='label'>
-                    将发送验证码到您的{{ customerInfo.phone }}
+                    {{ $t('common.sendToYou') }}{{ customerInfo.phone }}
                 </p>
                 <van-field
                     v-model='verifyCodeSMS'
@@ -14,14 +14,14 @@
                     clearable
                 >
                     <template #button>
-                        <VerifyCodeBtn @send='verifyCodeSendHanlder' />
+                        <VerifyCodeBtn @send='smsCodeSendHanlder' />
                     </template>
                 </van-field>
             </div>
 
             <div v-if='customerInfo.email' class='cell'>
                 <p class='label'>
-                    将发送验证码到您的{{ customerInfo.email }}
+                    {{ $t('common.sendToYou') }}{{ customerInfo.email }}
                 </p>
                 <van-field
                     v-model='verifyCodeEmail'
@@ -36,7 +36,7 @@
 
             <div class='cell'>
                 <p class='label'>
-                    请输入谷歌验证码
+                    {{ $t('common.inputGoogleCode') }}
                 </p>
                 <van-field
                     ref='googleVerifyCodeRef'
@@ -46,7 +46,7 @@
                 >
                     <template #button>
                         <a class='copyBtn' href='javascript:;' @click='pasteHanlder'>
-                            粘贴
+                            {{ $t('common.paste') }}
                         </a>
                     </template>
                 </van-field>
@@ -54,7 +54,7 @@
         </div>
 
         <div class='footerBox'>
-            <van-button block type='primary' @click='bindHanlder'>
+            <van-button block :disabled='loading' :loading='loading' type='primary' @click='bindHanlder'>
                 {{ customerInfo.googleId>0 ? $t('cRoute.MFA_close'):$t('cRoute.MFA_bind') }}
             </van-button>
         </div>
@@ -84,6 +84,7 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const { id } = route.query
         const state = reactive({
+            loading: false,
             googleCode: '', // 谷歌验证码
             verifyCodeSMS: '', // 手机验证码
             sendTokenSMS: '', // 手机验证码发送票据
@@ -93,7 +94,7 @@ export default {
 
         const googleVerifyCodeRef = ref(null)
         const customerInfo = computed(() => store.state._user.customerInfo)
-        const descriptorRules = BindDataRules(t, customerInfo)
+        const descriptorRules = BindDataRules(t, customerInfo.value)
         const validator = new Schema(descriptorRules)
         console.log(customerInfo.value)
 
@@ -119,7 +120,7 @@ export default {
             verifyCodeSend(pramas).then(res => {
                 if (res.check()) {
                     fn && fn(true)
-                    state.sendTokenSMS = res.data.token
+                    state.sendTokenEmail = res.data.token
                 } else {
                     fn && fn(false)
                 }
@@ -154,11 +155,13 @@ export default {
             }
             validatPramas(pramas).then(res => {
                 if (!res) return false
+                state.loading = true
                 enableOrForbidMFA(pramas).then(res => {
                     console.log(res)
+                    state.loading = false
                     if (res.check()) {
                         Dialog.alert({
-                            message: customerInfo.value.googleId > 0 ? '关闭成功' : '绑定成功',
+                            message: customerInfo.value.googleId > 0 ? t('mfa.closeSuccess') : t('mfa.bindSuccess'),
                         })
                         store.dispatch('_user/findCustomerInfo', false)
                         state.googleCode = ''
@@ -167,6 +170,8 @@ export default {
                         state.verifyCodeEmail = ''
                         state.sendTokenEmail = ''
                     }
+                }).catch(err => {
+                    state.loading = false
                 })
             })
             console.log('bindHanlder')
@@ -174,7 +179,7 @@ export default {
 
         // 自动粘贴谷歌验证码
         const pasteHanlder = async () => {
-            if (!navigator.clipboard) Toast('您的浏览器不支持使用该功能')
+            if (!navigator.clipboard) Toast(t('common.unSupported'))
             googleVerifyCodeRef.value.focus()
             const text = await navigator.clipboard.readText()
             console.log(text)
@@ -202,31 +207,30 @@ export default {
     margin-top: rem(110px);
     overflow: auto;
     // background: var(--contentColor);
-
-    .formBox{
+    .formBox {
         margin: rem(30px);
-        .cell{
+        .cell {
             margin-bottom: rem(30px);
         }
-        .van-cell{
+        .van-cell {
             padding: 0 0 0 rem(20px);
         }
-        .label{
+        .label {
             padding-bottom: rem(20px);
         }
-        .copyBtn{
+        .copyBtn {
             display: block;
-            height: rem(66px);
-            line-height: rem(66px);
             width: rem(150px);
+            height: rem(66px);
             color: var(--primary);
+            line-height: rem(66px);
             text-align: center;
         }
     }
-    .footerBox{
+    .footerBox {
         position: absolute;
-        left: 0;
         bottom: 0;
+        left: 0;
         width: 100%;
     }
 }

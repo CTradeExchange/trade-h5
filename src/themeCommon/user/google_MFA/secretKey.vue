@@ -2,7 +2,7 @@
     <div class='page-wrap'>
         <LayoutTop :back='true' />
         <p class='desc'>
-            请将此备份密钥保存在安全位置。如果您丢失手机，此密钥将允许您恢复您的身份验证器。否则，重置您的身份验证器需联系客服处理。
+            {{ $t('mfa.secretKeyDesc') }}
         </p>
         <div class='infoBox'>
             <div class='qrcodeWrapper'>
@@ -11,14 +11,14 @@
             <van-cell v-if='secret' :title='secret'>
                 <template #right-icon>
                     <a class='copyBtn' :data-clipboard-text='secret' href='javascript:;' @click='copySecret'>
-                        复制
+                        {{ $t('common.copy') }}
                     </a>
                 </template>
             </van-cell>
         </div>
         <div class='footerBox'>
             <van-button block :disabled='!qrcodeId' type='primary' @click="$router.push({ name:'MFA_bind', query:{ id:qrcodeId } })">
-                绑定
+                {{ $t('mfa.bind') }}
             </van-button>
         </div>
     </div>
@@ -96,27 +96,27 @@ export default {
     margin-bottom: rem(110px);
     overflow: auto;
     // background: var(--contentColor);
-    .desc{
-        padding-top: rem(30px);
+    .desc {
         margin: 0 rem(30px);
+        padding-top: rem(30px);
         // color: var(--minorColor);
         line-height: 1.7;
     }
-    .infoBox{
+    .infoBox {
         margin: rem(40px) rem(30px) 0;
-        .qrcodeWrapper{
+        .qrcodeWrapper {
             width: 128px;
             height: 128px;
             margin: rem(30px) auto rem(80px);
         }
     }
-    .copyBtn{
+    .copyBtn {
         color: var(--primary);
     }
-    .footerBox{
+    .footerBox {
         position: absolute;
-        left: 0;
         bottom: 0;
+        left: 0;
         width: 100%;
     }
 }
