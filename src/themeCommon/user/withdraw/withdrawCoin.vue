@@ -214,6 +214,7 @@ export default {
         Top, DialogFundPwd
     },
     setup (props) {
+        console.log('===============', md5('222222'))
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const router = useRouter()
@@ -465,7 +466,7 @@ export default {
 
         // 获取资金密码
         const confirmWithdraw = (val) => {
-            state.fundPwd = val
+            state.fundPwd = val[0]
             state.googleCode = val[1] ? val[1] : ''
             // 发起提现
             launchHandleWithdraw()

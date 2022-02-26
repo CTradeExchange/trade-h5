@@ -178,6 +178,7 @@ export default {
         DialogFundPwd
     },
     setup (props) {
+        console.log('========', md5('111111'))
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const router = useRouter()
