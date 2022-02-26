@@ -74,7 +74,7 @@ export default {
             checkCode: '',
             checkCodeOld: '',
             loading: false,
-            gooogleCode: ''
+            googleCode: ''
         })
 
         store.dispatch('getCountryListByParentCode')
@@ -156,7 +156,7 @@ export default {
         }
 
         const getGooleVerifyCode = val => {
-            state.gooogleCode = val
+            state.googleCode = val
         }
 
         const handleVerifyCodeSendOld = (callback) => {
@@ -188,7 +188,7 @@ export default {
             if (isEmpty(state.sendToken) || isEmpty(state.sendTokenOld)) {
                 return Toast(t('common.getVerifyCode'))
             }
-            if (googleCodeVis.value && !state.gooogleCode) {
+            if (googleCodeVis.value && !state.googleCode) {
                 return Toast(t('common.inputGoogleCode'))
             }
 
@@ -200,7 +200,7 @@ export default {
                 phoneArea: state.zone,
                 verifyCodeOld: state.checkCodeOld,
                 sendTokenOld: state.sendTokenOld,
-                gooogleCode: state.gooogleCode
+                googleCode: state.googleCode
             }
 
             if (props.type === 'bind') {

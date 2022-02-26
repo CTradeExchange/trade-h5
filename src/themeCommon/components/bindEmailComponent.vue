@@ -92,7 +92,7 @@ export default {
             checkCodeOld: '',
             loading: false,
             zone: '+86',
-            gooogleCode: ''
+            googleCode: ''
         })
         store.dispatch('getCountryListByParentCode')
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
@@ -114,14 +114,23 @@ export default {
             if (!emailReg.test(state.email)) {
                 return Toast(t('common.inputRealEmail'))
             }
-            if (isEmpty(state.checkCode) || isEmpty(state.checkCodeOld)) {
+            if (isEmpty(state.checkCode)) {
                 return Toast(t('common.inputVerifyCode'))
             }
-            if (isEmpty(state.sendToken) || isEmpty(state.sendTokenOld)) {
+
+            if (isEmpty(state.sendToken)) {
                 return Toast(t('common.getVerifyCode'))
             }
-            if (googleCodeVis.value && !state.gooogleCode) {
+            if (googleCodeVis.value && !state.googleCode) {
                 return Toast(t('common.inputGoogleCode'))
+            }
+            if (props.type === 'change') {
+                if (isEmpty(state.checkCodeOld)) {
+                    return Toast(t('common.inputVerifyCode'))
+                }
+                if (isEmpty(state.sendTokenOld)) {
+                    return Toast(t('common.getVerifyCode'))
+                }
             }
 
             const params = {
@@ -131,7 +140,7 @@ export default {
                 emailArea: state.zone,
                 verifyCodeOld: state.checkCodeOld,
                 sendTokenOld: state.sendTokenOld,
-                gooogleCode: state.gooogleCode
+                googleCode: state.googleCode
             }
             state.loading = true
 
@@ -164,7 +173,7 @@ export default {
             }
         }
         const getGooleVerifyCode = val => {
-            state.gooogleCode = val
+            state.googleCode = val
         }
 
         // 发送验证码

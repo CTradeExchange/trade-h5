@@ -72,7 +72,7 @@ export default {
             showFundPwd: false,
             loading: false,
             pwd: '',
-            gooogleCode: ''
+            googleCode: ''
         })
 
         const closed = () => { // 关闭弹出层且动画结束后触发
@@ -85,14 +85,14 @@ export default {
         }
 
         const getGooleVerifyCode = val => {
-            state.gooogleCode = val
+            state.googleCode = val
         }
 
         const submit = () => {
             if (!state.pwd) {
                 return Toast(t('common.inputFundPwd'))
             }
-            if (googleCodeVis.value && !state.gooogleCode) {
+            if (googleCodeVis.value && !state.googleCode) {
                 return Toast(t('common.inputGoogleCode'))
             }
 

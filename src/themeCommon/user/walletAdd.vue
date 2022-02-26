@@ -152,7 +152,7 @@ export default {
             state.chainNameVisible = false
         }
         const getGooleVerifyCode = val => {
-            state.gooogleCode = val
+            state.googleCode = val
         }
         // 获取客户提币币种和链名称
         const queryWithdrawCurrencyList = () => {
@@ -232,7 +232,7 @@ export default {
             if (!state.code) {
                 return Toast({ message: t('walletAdd.codePlaceholder') })
             }
-            if (googleCodeVis.value && !state.gooogleCode) {
+            if (googleCodeVis.value && !state.googleCode) {
                 return Toast(t('common.inputGoogleCode'))
             }
 
