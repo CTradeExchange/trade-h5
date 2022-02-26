@@ -14,9 +14,7 @@
                     clearable
                 >
                     <template #button>
-                        <van-button size='small' type='primary' @click='verifyCodeSendHanlder'>
-                            发送验证码
-                        </van-button>
+                        <VerifyCodeBtn @send='verifyCodeSendHanlder' />
                     </template>
                 </van-field>
             </div>
@@ -31,9 +29,7 @@
                     clearable
                 >
                     <template #button>
-                        <van-button size='small' type='primary'>
-                            发送验证码
-                        </van-button>
+                        <VerifyCodeBtn @send='emailCodeSendHanlder' />
                     </template>
                 </van-field>
             </div>
@@ -75,8 +71,12 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { verifyCodeSend } from '@/api/base'
 import { enableOrForbidMFA } from '@/api/user'
+import VerifyCodeBtn from './components/verifyCodeBtn.vue'
 
 export default {
+    components: {
+        VerifyCodeBtn,
+    },
     setup () {
         const route = useRoute()
         const router = useRouter()
@@ -98,14 +98,30 @@ export default {
         console.log(customerInfo.value)
 
         // 发送短信验证码
-        const verifyCodeSendHanlder = () => {
+        const smsCodeSendHanlder = fn => {
             const pramas = {
                 bizType: 'SMS_LOGINED_VERIFICATION_CODE'
             }
             verifyCodeSend(pramas).then(res => {
-                console.log(res)
                 if (res.check()) {
+                    fn && fn(true)
                     state.sendTokenSMS = res.data.token
+                } else {
+                    fn && fn(false)
+                }
+            })
+        }
+        // 发送邮箱验证码
+        const emailCodeSendHanlder = fn => {
+            const pramas = {
+                bizType: 'EMAIL_LOGINED_VERIFICATION_CODE'
+            }
+            verifyCodeSend(pramas).then(res => {
+                if (res.check()) {
+                    fn && fn(true)
+                    state.sendTokenSMS = res.data.token
+                } else {
+                    fn && fn(false)
                 }
             })
         }
@@ -167,7 +183,8 @@ export default {
 
         return {
             ...toRefs(state),
-            verifyCodeSendHanlder,
+            smsCodeSendHanlder,
+            emailCodeSendHanlder,
             customerInfo,
             googleVerifyCodeRef,
             pasteHanlder,
