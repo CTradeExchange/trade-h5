@@ -34,7 +34,7 @@
                 </li>
             </ul>
             <div class='assets-handle'>
-                <button class='btn' @click='goTransfer'>
+                <button v-if='$store.state._base.plans.length>1' class='btn' @click='goTransfer'>
                     {{ $t('trade.transfer') }}
                 </button>
                 <div class='record-link' @click='goRecord'>
