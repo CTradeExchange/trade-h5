@@ -950,5 +950,23 @@
 		"redeem_tip3": "赎回流程结束，那你所赎回的基金代币将以选择的接收资产汇入您的现货钱包",
 		"assetIndexQquestionTip":"图表为指数样本所含资产在近24小时内的市场表现(报价单位:USDT)",
 		"assetQquestionTip":"图表为基金投资组合所含资产在近24小时内的市场表现(报价单位:USDT)"
-	}
+	},
+    "newHomeFooter":{ 
+        "logoText": "幫助所有人輕鬆參與加密貨幣市場",
+        "product": "產品",
+        "trading": "現貨交易",
+        "fund": "指數基金",
+        "service": "服务",
+        "download": "App下载",
+        "software": "桌面軟件",
+        "vip": "機構及VIP",
+        "help": "幫助",
+        "faqs": "FAQs",
+        "cookies": "cookies",
+        "terms": "條款条例",
+        "policy": "隱私政策",
+        "community": "社媒",
+        "cookieTips": "使用本網站即表示您同意我們使用cookies，我們使用cookies 為您提供出色的體驗。",
+        "accpte": "同意"
+    }
 }

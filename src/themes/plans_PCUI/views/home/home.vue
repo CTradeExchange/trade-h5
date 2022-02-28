@@ -20,6 +20,55 @@
                 <!-- <why /> -->
             </div>
         </div>
+
+        <!-- WL--start -->
+        <div class='new-index-footer'>
+            <ul class='footer-nav f-b-t'>
+                <li>
+                    <p>
+                        <img alt='logo' class='footer-logo' src='../../images/home/logo.png' />
+                    </p>
+                    <p>{{ $t('newHomeFooter.logoText') }}</p>
+                </li>
+                <li>
+                    <p class='nav-dt'>
+                        {{ $t('newHomeFooter.product') }}
+                    </p>
+                    <p>{{ $t('newHomeFooter.trading') }}</p>
+                    <p>{{ $t('newHomeFooter.fund') }}</p>
+                </li>
+                <li>
+                    <p class='nav-dt'>
+                        {{ $t('newHomeFooter.service') }}
+                    </p>
+                    <p>{{ $t('newHomeFooter.download') }}</p>
+                    <p>{{ $t('newHomeFooter.software') }}</p>
+                    <p>{{ $t('newHomeFooter.vip') }}</p>
+                </li>
+                <li>
+                    <p class='nav-dt'>
+                        {{ $t('newHomeFooter.help') }}
+                    </p>
+                    <p>{{ $t('newHomeFooter.faqs') }}</p>
+                    <p>{{ $t('newHomeFooter.cookies') }}</p>
+                    <p>{{ $t('newHomeFooter.terms') }}</p>
+                    <p>{{ $t('newHomeFooter.policy') }}</p>
+                </li>
+                <li>
+                    <p class='nav-dt'>
+                        {{ $t('newHomeFooter.community') }}
+                    </p>
+                </li>
+            </ul>
+            <div class='cookie-label f-b-t'>
+                <p>{{ $t('newHomeFooter.cookieTips') }}</p>
+                <button class='agree-btn'>
+                    {{ $t('newHomeFooter.accpte') }}
+                </button>
+            </div>
+            <p>Vitatoken  2022</p>
+        </div>
+        <!-- WL--end -->
     </div>
 </template>
 
@@ -120,6 +169,45 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
+
+// WL--start
+.f-b-t{
+    display: flex;
+    justify-content: space-between;
+}
+.new-index-footer {
+    min-width: 1200px;
+    box-sizing: border-box;
+    padding: 30px 60px;
+    background: #15191E !important;
+    text-align: center;
+    color:#eee;
+    line-height: 32px;
+    font-size: 16px;
+    .footer-nav {
+        width: 1200px;
+        margin: 0 auto
+    }
+    .footer-logo {
+        display: block;
+        margin: 20px auto;
+    }
+    .nav-dt {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .cookie-label {
+        text-align: center;
+        max-width: 700px;
+        margin: 30px auto;
+        .agree-btn {
+            background: #15191E;
+            border:1px solid #eee;
+            padding: 0 10px;
+        }
+    }
+}
+// WL--end
 
 .homePage{
     position: relative;
