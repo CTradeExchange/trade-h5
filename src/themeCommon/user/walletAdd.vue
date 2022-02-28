@@ -35,7 +35,7 @@
                     {{ $t('common.sendToYou') }} {{ customInfo?.phone || customInfo?.email }}
                 </div>
                 <div class='box'>
-                    <input v-model='code' :placeholder="$t('walletAdd.codePlaceholder')" />
+                    <input v-model='code' :placeholder="$t('common.inputVerifyCode')" />
                     <span v-if='countDown === 0' class='get' @click='getCode'>
                         {{ $t('walletAdd.codeBtn') }}
                     </span>

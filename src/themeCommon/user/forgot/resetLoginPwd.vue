@@ -8,7 +8,7 @@
         <Loading :show='loading' />
         <header class='header'>
             <h1 class='pageTitle'>
-                {{ $t('forgot.setPwd') }}
+                {{ $t('forgot.resetPwd') }}
             </h1>
             <h6>{{ $t('forgot.pwdRule') }}</h6>
         </header>

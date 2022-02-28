@@ -358,6 +358,9 @@ export default {
         }
 
         const next = () => {
+            if (state.googleCodeVis && isEmpty(state.googleCode)) {
+                return Toast(t('common.inputGoogleCode'))
+            }
             if (type === 'login') {
                 resetLoginPwd()
             } else if (type === 'fund') {
