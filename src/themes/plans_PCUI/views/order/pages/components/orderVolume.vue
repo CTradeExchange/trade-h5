@@ -89,7 +89,7 @@ export default {
                 newval = newval.replace(/[^0-9\.]/g, '')
                 e.target.value = newval
             }
-            const minVolumeDigits = Math.min(getDecimalNum(props.product?.minVolume), props.product?.numberDigits)
+            const minVolumeDigits = props.product?.numberDigits
             const digits = parseInt(props.entryType) === 1 ? minVolumeDigits : props?.account?.digits
             const reg = new RegExp('^\\d*(\\.?\\d{0,' + digits + '})', 'g')
             if (getDecimalNum(newval) > digits) {
@@ -105,7 +105,7 @@ export default {
             let value = e.target.value
             if (value === props.modelValue) return false
             // const digits = props.product.numberDigits
-            const minVolumeDigits = Math.min(getDecimalNum(props.product?.minVolume), props.product?.numberDigits)
+            const minVolumeDigits = props.product?.numberDigits
             const digits = parseInt(props.entryType) === 1 ? minVolumeDigits : props?.account?.digits
             value = value ? toFixed(value, digits) : value
             emit('change', value)
