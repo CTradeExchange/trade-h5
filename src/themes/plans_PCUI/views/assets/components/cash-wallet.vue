@@ -16,7 +16,7 @@
                 <button class='btn' @click='goWithdraw'>
                     {{ $t('trade.withdraw') }}
                 </button>
-                <button class='btn' @click='goTransfer'>
+                <button v-if='$store.state._base.plans.length>1' class='btn' @click='goTransfer'>
                     {{ $t('trade.transfer') }}
                 </button>
                 <div class='record-link' @click='goRecord'>
