@@ -17,10 +17,14 @@
 
 <script setup>
 import { ref, watch, unref, computed, defineEmits } from 'vue'
+import { Dialog, Toast } from 'vant'
+import { useI18n } from 'vue-i18n'
 const emit = defineEmits(['getGooleVerifyCode'])
 const googleCode = ref('')
+const { t } = useI18n({ useScope: 'global' })
 const handlePaste = async (e) => {
     try {
+        if (!navigator.clipboard) Toast(t('common.unSupported'))
         const text = await navigator.clipboard.readText()
         googleCode.value = text.substr(0, 6)
         emit('getGooleVerifyCode', googleCode.value)
