@@ -1079,7 +1079,7 @@ export default {
     background: var(--contentColor);
     .main-study,
     .side-study {
-        width: 800px;
+        width: 100%;
         .content {
             display: flex;
             flex: 1;

@@ -1,6 +1,8 @@
 <template>
     <div class='fund-content'>
-        <fundInfo :fund='fund' />
+        <div class='fund-info-wrap'>
+            <fundInfo :fund='fund' />
+        </div>
         <div class='fundInformation'>
             <fundInformation
                 :key='key'
@@ -43,9 +45,16 @@ const fundInformation = defineAsyncComponent({
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
 .fund-content {
-    max-width: 1200px;
-    min-width: 800px;
-    margin: 0 auto;
+    :deep .width-limit {
+        max-width: 1200px;
+        min-width: 600px;
+        margin: 0 auto;
+    }
+}
+.fund-info-wrap {
+    padding: 20px 25px;
+    background: var(--contentColor);
+    border-radius: 10px 10px 0 0;
 }
 .fundInformation {
     :deep {

@@ -1,24 +1,26 @@
 <template>
     <div class='fundPerformance'>
-        <h4 class='title'>
-            {{ $t('fundInfo.fundChart1') }}
-        </h4>
-        <div class='chartModule'>
-            <div id='marketPriceJZ_DOM' ref='marketPriceJZ_DOM' class='chartLine'></div>
+        <div class='width-limit'>
+            <h4 class='title'>
+                {{ $t('fundInfo.fundChart1') }}
+            </h4>
+            <div class='chartModule'>
+                <div id='marketPriceJZ_DOM' ref='marketPriceJZ_DOM' class='chartLine'></div>
+            </div>
+            <!-- <div class='chartModule'>
+                <div id='marketPriceJZ_DOM1' ref='marketPriceJZ_DOM1' class='chartLine'></div>
+            </div> -->
+            <h4 class='title spaceLine'>
+                {{ $t('fundInfo.fundChartTitle') }}
+            </h4>
+            <div class='chartModule'>
+                <div id='marketAppearance_DOM' ref='marketAppearance_DOM' class='chartLine'></div>
+            </div>
+            <!-- <div class='chartModule'>
+                <div id='marketAppearance_DOM1' ref='marketAppearance_DOM1' class='chartLine'></div>
+            </div> -->
+            <BottomTip v-if='showTabs' />
         </div>
-        <!-- <div class='chartModule'>
-            <div id='marketPriceJZ_DOM1' ref='marketPriceJZ_DOM1' class='chartLine'></div>
-        </div> -->
-        <h4 class='title spaceLine'>
-            {{ $t('fundInfo.fundChartTitle') }}
-        </h4>
-        <div class='chartModule'>
-            <div id='marketAppearance_DOM' ref='marketAppearance_DOM' class='chartLine'></div>
-        </div>
-        <!-- <div class='chartModule'>
-            <div id='marketAppearance_DOM1' ref='marketAppearance_DOM1' class='chartLine'></div>
-        </div> -->
-        <BottomTip v-if='showTabs' />
     </div>
 </template>
 

@@ -202,6 +202,7 @@ export default {
             // height: 709px;
             display: flex;
             flex-direction: row;
+            flex-shrink: 0;
         }
 
         .middle-wrap {
@@ -216,9 +217,6 @@ export default {
             }
             .chart-content{
                 margin-bottom: 8px;
-                height: 436px;
-                overflow: hidden;
-
             }
             .trade-content{
                 position: relative;
@@ -229,6 +227,7 @@ export default {
         .right-wrap {
             display: flex;
             flex-direction: column;
+            flex-shrink: 0;
             width: 360px;
             &:deep {
                 .el-tabs {

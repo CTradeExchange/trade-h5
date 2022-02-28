@@ -1,5 +1,5 @@
 <template>
-    <div class='fund-info'>
+    <div class='fund-info width-limit'>
         <div class='header'>
             <CurrencyIcon :currency='fund.shareTokenCode' size='100' />
             <span class='name'>
@@ -83,9 +83,6 @@ defineProps({
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .fund-info {
-    padding: 20px 25px;
-    background: var(--contentColor);
-    border-radius: 10px 10px 0 0;
     .header {
         display: flex;
         align-items: center;

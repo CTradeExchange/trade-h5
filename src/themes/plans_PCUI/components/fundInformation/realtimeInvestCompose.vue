@@ -1,85 +1,87 @@
 <template>
     <div class='realtimeInvestCompose'>
-        <h4 class='title'>
-            <span v-if='!allShow' class='rightSwitch icon_chouti1' @click='switchAction'></span>
-            {{ title || $t('fundInfo.realtimeInvestCompose') }}
-        </h4>
-        <div class='merge-case'>
-            <div v-if="showBlock==='list' || allShow" class='case-list'>
-                <div class='assetsTitle cellflex'>
-                    <p class='hd'>
-                        {{ $t('fundInfo.assets') }}
-                    </p>
-                    <p class='bd'>
-                        {{ $t('fundInfo.ranking') }}
-                        <br />
-                        <span class='small'>
-                            ({{ symbolId ? $t('fundInfo.comparePrev') : $t('fundInfo.comparePrev24') }})
-                        </span>
-                    </p>
-                    <p class='ft'>
-                        {{ $t('fundInfo.weight') }}
-                        <br />
-                        <span class='small'>
-                            ({{ symbolId ? $t('fundInfo.comparePrev') : $t('fundInfo.comparePrev24') }})
-                        </span>
-                    </p>
-                </div>
-                <ul class='assetsList'>
-                    <li v-for='item in rangList' :key='item.asset' class='cellflex'>
+        <div class='width-limit'>
+            <h4 class='title'>
+                <span v-if='!allShow' class='rightSwitch icon_chouti1' @click='switchAction'></span>
+                {{ title || $t('fundInfo.realtimeInvestCompose') }}
+            </h4>
+            <div class='merge-case'>
+                <div v-if="showBlock==='list' || allShow" class='case-list'>
+                    <div class='assetsTitle cellflex'>
                         <p class='hd'>
-                            <!-- <i class='currencyIcon'></i> -->
-                            <currency-icon :currency='item.asset' :size='20' />
-                            <span class='name'>
-                                {{ item.asset }}
-                            </span>
+                            {{ $t('fundInfo.assets') }}
                         </p>
                         <p class='bd'>
-                            {{ item.range }}
-                            ( <i v-if="item.previousPeriodRangeCompare!=='-'" :class='{ "downArrow":item.previousPeriodRangeCompare<0, "upArrow":item.previousPeriodRangeCompare>0 }'></i>
-                            {{ item.previousPeriodRangeCompare==='-' ? '-' : Math.abs(item.previousPeriodRangeCompare) }}
-                            )
+                            {{ $t('fundInfo.ranking') }}
+                            <br />
+                            <span class='small'>
+                                ({{ symbolId ? $t('fundInfo.comparePrev') : $t('fundInfo.comparePrev24') }})
+                            </span>
                         </p>
                         <p class='ft'>
-                            <van-popover v-model:show='item.popover' placement='bottom-end' theme='dark'>
-                                <p style='padding: 5px 10px; white-space: nowrap;'>
-                                    {{ item.weightRealValue }}({{ item.previousPeriodWeightCompare }})
-                                </p>
-                                <template #reference>
-                                    <span>
-                                        {{ item.weight }}
-                                        (
-                                        <i v-if="item.previousPeriodWeightCompare!=='-'" :class='[item.arrow]'></i>
-                                        {{ item.previousPeriodWeightCompare==='-' ? '-' : item.previousPeriodWeightCompare.replace(/[\+-]/,'') }}
-                                        )
-                                    </span>
-                                </template>
-                            </van-popover>
+                            {{ $t('fundInfo.weight') }}
+                            <br />
+                            <span class='small'>
+                                ({{ symbolId ? $t('fundInfo.comparePrev') : $t('fundInfo.comparePrev24') }})
+                            </span>
                         </p>
-                    </li>
-                </ul>
+                    </div>
+                    <ul class='assetsList'>
+                        <li v-for='item in rangList' :key='item.asset' class='cellflex'>
+                            <p class='hd'>
+                                <!-- <i class='currencyIcon'></i> -->
+                                <currency-icon :currency='item.asset' :size='20' />
+                                <span class='name'>
+                                    {{ item.asset }}
+                                </span>
+                            </p>
+                            <p class='bd'>
+                                {{ item.range }}
+                                ( <i v-if="item.previousPeriodRangeCompare!=='-'" :class='{ "downArrow":item.previousPeriodRangeCompare<0, "upArrow":item.previousPeriodRangeCompare>0 }'></i>
+                                {{ item.previousPeriodRangeCompare==='-' ? '-' : Math.abs(item.previousPeriodRangeCompare) }}
+                                )
+                            </p>
+                            <p class='ft'>
+                                <van-popover v-model:show='item.popover' placement='bottom-end' theme='dark'>
+                                    <p style='padding: 5px 10px; white-space: nowrap;'>
+                                        {{ item.weightRealValue }}({{ item.previousPeriodWeightCompare }})
+                                    </p>
+                                    <template #reference>
+                                        <span>
+                                            {{ item.weight }}
+                                            (
+                                            <i v-if="item.previousPeriodWeightCompare!=='-'" :class='[item.arrow]'></i>
+                                            {{ item.previousPeriodWeightCompare==='-' ? '-' : item.previousPeriodWeightCompare.replace(/[\+-]/,'') }}
+                                            )
+                                        </span>
+                                    </template>
+                                </van-popover>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+                <div v-if="showBlock==='chart' || allShow" class='case-chart'>
+                    <div ref='chartPieDOM' class='chartPieDOM' :style='{ height:chartPieDOMHeight }'></div>
+                </div>
             </div>
-            <div v-if="showBlock==='chart' || allShow" class='case-chart'>
-                <div ref='chartPieDOM' class='chartPieDOM' :style='{ height:chartPieDOMHeight }'></div>
+
+            <div class='block'>
+                <h4 class='singleAssetTitle'>
+                    <span>{{ $t('fundInfo.singleAsset') }}</span>
+                    <el-tooltip
+                        :content="symbolId ? $t('fundInfo.assetIndexQquestionTip') : $t('fundInfo.assetQquestionTip')"
+                        effect='light'
+                        placement='bottom'
+                        trigger='hover'
+                    >
+                        <van-icon class='question' name='question-o' />
+                    </el-tooltip>
+                </h4>
+                <div ref='chartBarDOM' class='chartBarDOM'></div>
             </div>
-        </div>
 
-        <div class='block'>
-            <h4 class='singleAssetTitle'>
-                <span>{{ $t('fundInfo.singleAsset') }}</span>
-                <el-tooltip
-                    :content="symbolId ? $t('fundInfo.assetIndexQquestionTip') : $t('fundInfo.assetQquestionTip')"
-                    effect='light'
-                    placement='bottom'
-                    trigger='hover'
-                >
-                    <van-icon class='question' name='question-o' />
-                </el-tooltip>
-            </h4>
-            <div ref='chartBarDOM' class='chartBarDOM'></div>
+            <BottomTip />
         </div>
-
-        <BottomTip />
     </div>
 </template>
 
