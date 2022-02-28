@@ -10,7 +10,7 @@
             @input='handleInput'
         />
         <span class='paste' @click='handlePaste'>
-            粘贴
+            {{ $t('common.paste') }}
         </span>
     </div>
 </template>

@@ -32,7 +32,7 @@
                     <input v-model='name' :placeholder="$t('walletAdd.namePlaceholder')" type='text' />
                 </div>
                 <div class='tip'>
-                    验证码将发送至您的 {{ customInfo?.phone || customInfo?.email }}
+                    {{ $t('common.sendToYou') }} {{ customInfo?.phone || customInfo?.email }}
                 </div>
                 <div class='box'>
                     <input v-model='code' :placeholder="$t('walletAdd.codePlaceholder')" />
