@@ -6,7 +6,7 @@
         </p>
         <div class='infoBox'>
             <div class='qrcodeWrapper'>
-                <span id='qrcodeImg' class='qrcodeImg'></span>
+                <span id='qrcodeImg' ref='qrcodeImgRef' class='qrcodeImg'></span>
             </div>
             <van-cell v-if='secret' :title='secret'>
                 <template #right-icon>
@@ -37,6 +37,7 @@ export default {
         const qrcodeId = ref(null)
         const qrcode = ref(null)
         const qrcodImg = ref(null)
+        const qrcodeImgRef = ref(null)
         const secret = ref(null)
         const { t } = useI18n({ useScope: 'global' })
 
@@ -48,6 +49,7 @@ export default {
                     qrcodeId.value = data.id
                     qrcode.value = data.qrcode
                     secret.value = data.secret
+                    qrcodeImgRef.value.innerHTML = ''
                     qrcodImg.value = new Qrcodejs('qrcodeImg', {
                         text: data.qrcode,
                         width: 128,
@@ -80,6 +82,7 @@ export default {
             qrcodeId,
             qrcode,
             qrcodImg,
+            qrcodeImgRef,
             secret,
             copySecret,
         }
