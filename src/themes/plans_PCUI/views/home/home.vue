@@ -176,6 +176,8 @@ export default {
     justify-content: space-between;
 }
 .new-index-footer {
+    position: relative;
+    z-index: 101;
     min-width: 1200px;
     box-sizing: border-box;
     padding: 30px 60px;
