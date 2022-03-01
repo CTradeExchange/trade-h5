@@ -162,6 +162,8 @@ export default {
                     if (res.check()) {
                         Dialog.alert({
                             message: customerInfo.value.googleId > 0 ? t('mfa.closeSuccess') : t('mfa.bindSuccess'),
+                        }).then(() => {
+                            router.go(customerInfo.value.googleId > 0 ? -4 : -2)
                         })
                         store.dispatch('_user/findCustomerInfo', false)
                         state.googleCode = ''
