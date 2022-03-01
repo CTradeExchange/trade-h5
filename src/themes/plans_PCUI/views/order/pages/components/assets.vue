@@ -19,7 +19,7 @@
             <van-col v-else class='balance'>
                 {{ account[direction]?.available }}
                 {{ direction === 'buy' ? product.profitCurrency : product.baseCurrency }}
-                <router-link :to='$route.path + "/transfer?tradeType="+ product.tradeType'>
+                <router-link v-if='$store.state._base.plans.length>1' :to='$route.path + "/transfer?tradeType="+ product.tradeType'>
                     {{ $t('trade.transfer') }}
                 </router-link>
             </van-col>
@@ -136,9 +136,9 @@ export default {
     margin-bottom: 16px;
     color: var(--minorColor);
     line-height: 1.5;
-    .balance{
+    .balance {
         color: var(--color);
-        >a{
+        >a {
             color: var(--primary);
         }
     }
@@ -153,8 +153,8 @@ export default {
         line-height: 0.9;
     }
     .questionIcon {
-        cursor: pointer;
         font-size: 15px;
+        cursor: pointer;
     }
 
     --van-radio-label-color: var(--minorColor);
