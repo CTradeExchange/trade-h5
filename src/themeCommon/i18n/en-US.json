@@ -45,7 +45,8 @@
         "commonSetting": "Common Settings",
         "setFundPwd": "Fund Password",
         "MFA_status": "Google Authenticator",
-        "MFA_bind": "Bind Google Authenticator"
+        "MFA_bind": "Bind Google Authenticator",
+        "MFA_close": "Close Google Authenticator"
     },
     "login": {
         "loginBtn": "Log In",
@@ -796,7 +797,7 @@
     },
     "mfa": {
         "routeTitile": "Google Identity authentication",
-        "enableTitle": "Enable Google authentication code",
+        "enableTitle": "Enable Google authentication",
         "enableDesc": "Google Authenticator protect your account and money",
         "closeSuccess": "Close Success",
         "bindSuccess": "Bind Success",

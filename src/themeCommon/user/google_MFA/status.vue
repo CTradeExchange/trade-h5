@@ -37,17 +37,20 @@ const onUpdateStatus = (newValue) => {
     margin-top: rem(110px);
     overflow: auto;
     // background: var(--contentColor);
-    .bigIcon{
-        padding-top: rem(60px);
-        text-align: center;
-        font-size: rem(180px);
-        color: var(--primary);
+    :deep(.topNav .main) {
+        max-width: 100%;
     }
-    .desc{
-        font-size: rem(28px);
-        color: var(--minorColor);
+    .bigIcon {
+        padding-top: rem(60px);
+        color: var(--primary);
+        font-size: rem(180px);
+        text-align: center;
+    }
+    .desc {
         padding-top: rem(10px);
         padding-bottom: rem(100px);
+        color: var(--minorColor);
+        font-size: rem(28px);
         text-align: center;
     }
 }

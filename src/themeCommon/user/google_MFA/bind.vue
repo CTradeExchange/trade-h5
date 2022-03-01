@@ -1,8 +1,6 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop :back='true'>
-            <p>{{ customerInfo.googleId>0 ? $t('cRoute.MFA_close'):$t('cRoute.MFA_bind') }}</p>
-        </LayoutTop>
+        <LayoutTop :back='true' :title="customerInfo.googleId>0 ? $t('cRoute.MFA_close'):$t('cRoute.MFA_bind')" />
         <div class='formBox'>
             <div v-if='customerInfo.phone' class='cell'>
                 <p class='label'>
