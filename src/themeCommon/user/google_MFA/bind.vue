@@ -163,9 +163,9 @@ export default {
                         Dialog.alert({
                             message: customerInfo.value.googleId > 0 ? t('mfa.closeSuccess') : t('mfa.bindSuccess'),
                         }).then(() => {
-                            router.go(customerInfo.value.googleId > 0 ? -4 : -2)
+                            router.go(customerInfo.value.googleId > 0 ? -2 : -4)
+                            store.dispatch('_user/findCustomerInfo', false)
                         })
-                        store.dispatch('_user/findCustomerInfo', false)
                         state.googleCode = ''
                         state.verifyCodeSMS = ''
                         state.sendTokenSMS = ''
