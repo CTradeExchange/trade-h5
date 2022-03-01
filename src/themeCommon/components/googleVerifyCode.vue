@@ -47,6 +47,8 @@ function formatter (value) {
 .form-item {
     position: relative;
     flex: 1;
+    display: flex;
+    align-items: center;
     //padding: 0 rem(30px);
     margin-bottom: rem(20px);
     background: var(--contentColor);
@@ -62,11 +64,9 @@ function formatter (value) {
         padding: rem(20px) rem(30px);
     }
     .paste{
-        position: absolute;
-        top: rem(25px);
-        right: rem(20px);
-        z-index: 99;
+        width: rem(100px);
         cursor: pointer;
+        text-align: center;
         &::before {
             font-size: rem(30px);
         }
