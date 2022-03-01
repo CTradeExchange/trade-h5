@@ -3,7 +3,7 @@
         <div class='nav-left'>
             <router-link to='/home'>
                 <h1 class='logo'>
-                    <img alt='' src='@planspc/images/logo.png' />
+                    <img alt='' src='@planspc/images/logo_top.jpg' />
                 </h1>
             </router-link>
             <div class='menus'>
