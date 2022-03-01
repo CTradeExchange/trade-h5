@@ -258,9 +258,11 @@ export default {
         // 找回资金密码发送验证码
         const handleVerifyCodeSendFund = (callback) => {
             if (state.curTab === 0 && !customerInfo.value.phone) {
+                callback && callback(false)
                 return Toast(t('common.noBindPhone'))
             }
             if (state.curTab === 1 && !customerInfo.value.email) {
+                callback && callback(false)
                 return Toast(t('common.noBindEmail'))
             }
 
