@@ -207,6 +207,9 @@ export default {
     margin-top: rem(110px);
     overflow: auto;
     // background: var(--contentColor);
+    :deep(.topNav .main) {
+        max-width: 100%;
+    }
     .formBox {
         margin: rem(30px);
         .cell {

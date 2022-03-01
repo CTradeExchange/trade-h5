@@ -46,6 +46,9 @@ const downloadURL = isIOS() ? iosUrl : androidUrl
     margin-top: rem(110px);
     margin-bottom: rem(110px);
     overflow: auto;
+    :deep(.topNav .main) {
+        max-width: 100%;
+    }
     .bigIcon {
         padding-top: rem(60px);
         color: var(--primary);

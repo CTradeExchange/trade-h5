@@ -99,6 +99,9 @@ export default {
     margin-bottom: rem(110px);
     overflow: auto;
     // background: var(--contentColor);
+    :deep(.topNav .main) {
+        max-width: 100%;
+    }
     .desc {
         margin: 0 rem(30px);
         padding-top: rem(30px);
