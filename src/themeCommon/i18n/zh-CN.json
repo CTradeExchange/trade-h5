@@ -804,7 +804,7 @@
   },
   "mfa": {
     "routeTitile": "谷歌身份验证",
-    "enableTitle": "启用谷歌验证码",
+    "enableTitle": "启用谷歌验证",
     "enableDesc": "Google Authenticator将保护您的账户及资金安全",
     "closeSuccess": "关闭成功",
     "bindSuccess": "绑定成功",
