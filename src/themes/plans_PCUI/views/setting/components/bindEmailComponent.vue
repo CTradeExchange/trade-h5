@@ -1,12 +1,10 @@
 <template>
     <div class='pageWrap'>
-        <Top back left-icon='arrow-left' :right-action='false' show-center>
+        <Top back left-icon='arrow-left' :right-action='false' show-center :title='title'>
             <template #left>
                 <a class='topBack' href='javascript:;' @click='$router.back()'>
                     <span class='icon_icon_close_big'></span>
                 </a>
-            </template>
-            <template #right>
             </template>
         </Top>
         <Loading :show='loading' />
@@ -78,6 +76,7 @@ export default {
             state.zone = countryObj.countryCode
             return countryObj.name + ' (' + countryObj.countryCode + ')'
         })
+        const title = computed(() => props.type === 'bind' ? t('setting.bindEmail') : t('setting.replaceEmail'))
 
         store.dispatch('getListByParentCode')
 
@@ -187,6 +186,7 @@ export default {
             onlineServices,
             handleVerifyCodeSend,
             zoneText,
+            title,
             ...toRefs(state)
         }
     }
@@ -207,9 +207,9 @@ export default {
             }
         }
         .confirm-btn {
-            height: rem(90px);
             position: absolute;
             bottom: 0;
+            height: rem(90px);
             background: var(--contentColor);
             border-color: var(--lineColor);
             span {

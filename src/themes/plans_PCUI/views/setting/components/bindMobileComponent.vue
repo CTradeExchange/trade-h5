@@ -1,7 +1,7 @@
 <template>
     <div class='pageWrap'>
         <!-- <Top back show-center /> -->
-        <Top back left-icon='arrow-left' :right-action='false' show-center>
+        <Top back left-icon='arrow-left' :right-action='false' show-center :title='title'>
             <template #left>
                 <a class='topBack' href='javascript:;' @click='$router.back()'>
                     <span class='icon_icon_close_big'></span>
@@ -56,6 +56,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
+        const title = computed(() => props.type === 'bind' ? t('setting.bindPhone') : t('setting.replacePhone'))
         const state = reactive({
             zone: '',
             sendToken: '',
@@ -186,6 +187,7 @@ export default {
             handleConfirm,
             onlineServices,
             zoneText,
+            title,
             ...toRefs(state)
         }
     }
@@ -206,9 +208,9 @@ export default {
             }
         }
         .confirm-btn {
-            height: rem(90px);
             position: absolute;
             bottom: 0;
+            height: rem(90px);
             background: var(--contentColor);
             border-color: var(--lineColor);
             span {

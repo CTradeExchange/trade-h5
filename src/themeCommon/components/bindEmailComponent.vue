@@ -280,22 +280,22 @@ export default {
             .label {
                 color: var(--minorColor);
             }
-            .title{
-                color: var(--normalColor);
+            .title {
                 padding: rem(20px) 0;
+                color: var(--normalColor);
             }
-            :deep(.van-cell){
-                padding-left: 0;
+            :deep(.van-cell) {
                 padding-right: 0;
-                input{
+                padding-left: 0;
+                input {
                     padding: 0 5px;
                 }
             }
         }
         .confirm-btn {
-            height: rem(90px);
             position: fixed;
             bottom: 0;
+            height: rem(90px);
             background: var(--contentColor);
             border-color: var(--lineColor);
             span {
