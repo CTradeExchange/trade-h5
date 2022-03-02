@@ -44,8 +44,9 @@
         "securitySetting": "Security Settings",
         "commonSetting": "Common Settings",
         "setFundPwd": "Fund Password",
-        "MFA_status": "谷歌验证器",
-        "MFA_bind": "绑定谷歌验证器"
+        "MFA_status": "Google Authenticator",
+        "MFA_bind": "Bind Google Authenticator",
+        "MFA_close": "Close Google Authenticator"
     },
     "login": {
         "loginBtn": "Log In",
@@ -798,20 +799,20 @@
         "bankCurrency": "Bank card currency"
     },
     "mfa": {
-      "routeTitile": "谷歌身份验证",
-      "enableTitle": "启用谷歌验证码",
-      "enableDesc": "Google Authenticator将保护您的账户及资金安全",
-      "closeSuccess": "关闭成功",
-      "bindSuccess": "绑定成功",
-      "status0": "未开启",
-      "status1": "已开启",
-      "installStepLabel": "安装步骤",
-      "step1": "1、请下载并安装Google Authenticator，然后点击“绑定”，以绑定您的账户",
-      "downBtnText": "下载Google验证器",
-      "step2": "2、安装完成后打开GoogleAuthentication，选择\"手动输入密钥\"，页面中填入您的账户名和密钥",
-      "step3": "3、添加成功后，您将得到一个有一定时效的6位数验证码，输入到指定输入框",
-      "hasInstalled": "我已下载并安装",
-      "bind": "绑定",
-      "secretKeyDesc": "请将此备份密钥保存在安全位置。如果您丢失手机，此密钥将允许您恢复您的身份验证器。否则，重置您的身份验证器需联系客服处理。"
+        "routeTitile": "Google Identity authentication",
+        "enableTitle": "Enable Google authentication",
+        "enableDesc": "Google Authenticator protect your account and money",
+        "closeSuccess": "Close Success",
+        "bindSuccess": "Bind Success",
+        "status0": "Not enable",
+        "status1": "Enabled",
+        "installStepLabel": "Installation step",
+        "step1": "1、Please download and install Google Authenticator, click \"Bind\", to bind with your account",
+        "downBtnText": "Download Google Authenticator",
+        "step2": "2、After installation and open GoogleAuthentication, select \"Manual input key\", input your account name and private key",
+        "step3": "3、After add success, you will receive a 6-digit with a certain time valid, input to specify field",
+        "hasInstalled": "I downloaded and installed",
+        "bind": "Bind",
+        "secretKeyDesc": "Please keep this private kay in a safety place, if private key is updated but not binded yet, please save and bind with the latest private key. If you lost mobile phone, this private key allow you to recover your identity authenticator, otherwise, you have to contact Customer Service to reset"
     }
 }

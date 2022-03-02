@@ -1,8 +1,6 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop :back='true'>
-            <p>{{ customerInfo.googleId>0 ? $t('cRoute.MFA_close'):$t('cRoute.MFA_bind') }}</p>
-        </LayoutTop>
+        <LayoutTop :back='true' :title="customerInfo.googleId>0 ? $t('cRoute.MFA_close'):$t('cRoute.MFA_bind')" />
         <div class='formBox'>
             <div v-if='customerInfo.phone' class='cell'>
                 <p class='label'>
@@ -163,9 +161,9 @@ export default {
                         Dialog.alert({
                             message: customerInfo.value.googleId > 0 ? t('mfa.closeSuccess') : t('mfa.bindSuccess'),
                         }).then(() => {
-                            router.go(customerInfo.value.googleId > 0 ? -4 : -2)
+                            router.go(customerInfo.value.googleId > 0 ? -2 : -4)
+                            store.dispatch('_user/findCustomerInfo', false)
                         })
-                        store.dispatch('_user/findCustomerInfo', false)
                         state.googleCode = ''
                         state.verifyCodeSMS = ''
                         state.sendTokenSMS = ''
@@ -209,6 +207,9 @@ export default {
     margin-top: rem(110px);
     overflow: auto;
     // background: var(--contentColor);
+    :deep(.topNav .main) {
+        max-width: 100%;
+    }
     .formBox {
         margin: rem(30px);
         .cell {

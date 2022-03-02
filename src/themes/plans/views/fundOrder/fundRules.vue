@@ -31,23 +31,10 @@
                 </ol>
             </section>
             <section class='block'>
-                <h2 class='title'>
-                    {{ $t('fundInfo.calcFormula') }}
+                <h2 class='jz_formula'>
+                    {{ $t('fundInfo.jz_formula') }}
                 </h2>
-                <p>{{ $t('fundInfo.fundFormula1') }}</p>
-                <p>{{ $t('fundInfo.fundFormula2') }}</p>
-                <p>{{ $t('fundInfo.fundFormula3') }}</p>
-            </section>
-            <section class='block'>
-                <h2 class='title'>
-                    {{ $t('fundInfo.expenseCategory') }}
-                </h2>
-                <div class='expenseCategory'>
-                    <van-cell title='申购费' value='1.0%' />
-                    <van-cell title='管理费' value='1.5%（每年）' />
-                </div>
-                <p>{{ $t('fundInfo.applyRule_tipRemark1') }}</p>
-                <p>{{ $t('fundInfo.applyRule_tipRemark2') }}</p>
+                <p>{{ $t('fundInfo.jz_formulaContent') }}</p>
             </section>
         </div>
 
@@ -90,20 +77,9 @@
             </section>
             <section class='block'>
                 <h2 class='title'>
-                    {{ $t('fundInfo.calcFormula') }}
+                    {{ $t('fundInfo.jz_formula') }}
                 </h2>
-                <p>{{ $t('fundInfo.fundRedeemFormula1') }}</p>
-                <p>{{ $t('fundInfo.fundRedeemFormula2') }}</p>
-                <p>{{ $t('fundInfo.fundRedeemFormula3') }}</p>
-            </section>
-            <section class='block'>
-                <h2 class='title'>
-                    {{ $t('fundInfo.expenseCategory') }}
-                </h2>
-                <div class='expenseCategory'>
-                    <van-cell :title='$t("fundInfo.redeemCost")' value='1.0%' />
-                </div>
-                <p>{{ $t('fundInfo.redeemTipRemark') }}</p>
+                <p>{{ $t('fundInfo.jz_formulaContent') }}</p>
             </section>
         </div>
     </div>
@@ -118,84 +94,75 @@ const active = ref(route.query.direction === 'buy' ? 0 : 1)
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.fundRules{
-    margin-top: rem(110px);
+.fundRules {
     height: 100%;
+    margin-top: rem(110px);
     overflow-y: auto;
 
     --van-tabs-bottom-bar-color: var(--primary);
-
-    .block{
-        margin-top:10px;
-        background: var(--contentColor);
+    .block {
+        margin-top: 10px;
         padding: rem(10px) rem(30px);
-        line-height: 1.8;
-        .title{
+        line-height: 1.6;
+        background: var(--contentColor);
+        .title {
             padding: 10px 0;
-            line-height: 1.5;
         }
-        .olList{
+        .olList {
             line-height: 2;
         }
     }
-    .n{
+    .n {
         display: inline-block;
-        height: 18px;
         width: 18px;
-        border-radius: 100%;
+        height: 18px;
+        margin-right: 0.4em;
+        color: var(--primary);
         font-size: rem(28px);
         line-height: rem(28px);
-        color: var(--primary);
         text-align: center;
         border: 2px solid var(--primary);
-        margin-right: .4em;
+        border-radius: 100%;
     }
-
-    .tDate{
+    .tDate {
+        position: relative;
         display: flex;
         justify-content: space-between;
-        position: relative;
         padding-top: 15px;
         padding-bottom: rem(30px);
-        &::before{
-            content: "";
+        &::before {
             position: absolute;
-            height: 1px;
-            left: 15px;
-            right: 15px;
             top: 5px;
+            right: 15px;
+            left: 15px;
+            height: 1px;
             background: var(--primary);
+            content: '';
         }
-        .end{
+        .end {
             text-align: right;
         }
-        .start,.center,.end{
+        .start,
+        .center,
+        .end {
             position: relative;
-            &::before{
-                content: "";
+            &::before {
                 position: absolute;
-                height: 5px;
-                width: 5px;
-                left: 10px;
                 top: -14px;
-                border-radius: 100%;
+                left: 10px;
+                width: 5px;
+                height: 5px;
                 background: var(--contentColor);
                 border: 2px solid var(--primary);
+                border-radius: 100%;
+                content: '';
             }
         }
-        .end{
-            &::before{
-                left: initial;
+        .end {
+            &::before {
                 right: 10px;
+                left: initial;
             }
-        }
-    }
-    .expenseCategory{
-        border-bottom: 1px solid var(--van-cell-border-color);
-        margin-bottom: rem(30px);
-        .van-cell{
-            padding-left: 0;
-            padding-right: 0;
         }
     }
 }
