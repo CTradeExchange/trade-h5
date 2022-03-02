@@ -276,7 +276,7 @@ export default {
         }
         .confirm-btn {
             height: rem(90px);
-            position: absolute;
+            position: fixed;
             bottom: 0;
             background: var(--contentColor);
             border-color: var(--lineColor);
