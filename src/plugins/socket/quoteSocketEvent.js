@@ -237,15 +237,20 @@ class SocketEvent {
         const priceStr = p.split(';')[0].match(/\((.+)\)/)
         const price = priceStr[1] ?? ''
         const priceArr = price.split(',')
-        const dealData = {
-            symbolId: priceArr[0],
-            dealTime: priceArr[4],
-            trade_direction: priceArr[7], // Math.floor(Math.random() * 2) + 1,
-            price: priceArr[5], // priceArr[4],
-            volume: priceArr[6] // priceArr[5]
+        const [{ symbol_id, trade_type }] = this.subscribeDeal // 订阅的产品数据
+        // console.log(symbol_id, trade_type)
+        // 如果推送的是当前订阅的产品，则使用改数据
+        if (symbol_id === parseInt(priceArr[0]) && trade_type === parseInt(priceArr[1])) {
+            const dealData = {
+                symbolId: priceArr[0],
+                dealTime: priceArr[4],
+                trade_direction: priceArr[7], // Math.floor(Math.random() * 2) + 1,
+                price: priceArr[5], // priceArr[4],
+                volume: priceArr[6] // priceArr[5]
 
+            }
+            this.$store.commit('_quote/Update_dealList', dealData)
         }
-        this.$store.commit('_quote/Update_dealList', dealData)
     }
 
     // 实时盘口深度报价
