@@ -1070,7 +1070,7 @@ export default {
                     await nextTick()
                     const product = store.getters.productActived
                     subscribeToProduct()
-                    // initChartData()
+                    initChartData()
                     renderChart(product, state.initConfig.property)
                     chartRef.value.reset()
                 }
