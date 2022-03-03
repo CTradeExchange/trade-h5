@@ -240,7 +240,7 @@ class SocketEvent {
         const [{ symbol_id, trade_type }] = this.subscribeDeal // 订阅的产品数据
         // console.log(symbol_id, trade_type)
         // 如果推送的是当前订阅的产品，则使用改数据
-        if (symbol_id === parseInt(priceArr[0]) && trade_type === parseInt(priceArr[1])) {
+        if (parseInt(symbol_id) === parseInt(priceArr[0]) && parseInt(trade_type) === parseInt(priceArr[1])) {
             const dealData = {
                 symbolId: priceArr[0],
                 dealTime: priceArr[4],
