@@ -119,7 +119,7 @@ export const toolHooks = function () {
             },
             '2': {
                 handicap: true,
-                pendingTab: true
+                pendingTab: false
             },
             '3': {
                 handicap: true,
