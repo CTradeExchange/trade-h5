@@ -129,10 +129,9 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-
-.trade-type{
+.trade-type {
     cursor: pointer;
-    .icon{
+    .icon {
         font-size: 12px;
     }
 }

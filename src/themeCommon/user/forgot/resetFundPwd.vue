@@ -47,7 +47,7 @@ import Top from '@/components/top'
 import { reactive, toRefs } from 'vue'
 import { Field, Toast, Dialog } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
-import { forgetAssertsPwd } from '@/api/user'
+import { forgetAssertsPwdV1v1v2 } from '@/api/user'
 import md5 from 'js-md5'
 import { useI18n } from 'vue-i18n'
 
@@ -97,10 +97,11 @@ export default {
                 verifyCode: route.query['verifyCode'],
                 newPwd: md5(state.confirmPwd),
                 sendToken: route.query['sendToken'],
-                verifyCodeToken: route.query['verifyCodeToken']
+                verifyCodeToken: route.query['verifyCodeToken'],
+                googleCode: route.query['googleCode']
             }
             state.loading = true
-            forgetAssertsPwd(params).then((res) => {
+            forgetAssertsPwdV1v1v2(params).then((res) => {
                 state.loading = false
                 if (res.check()) {
                     Dialog.alert({

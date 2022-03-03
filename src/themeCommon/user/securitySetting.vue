@@ -75,6 +75,19 @@
                 value=''
             />
             <van-cell
+                class='cellItem'
+                is-link
+                :title='$t("mfa.routeTitile")'
+                to='/googleMFA/status'
+            >
+                <template #right-icon>
+                    <span class='right-val' :class="customInfo.googleId>0 ? 'yet' : 'none'">
+                        {{ customInfo.googleId>0 ? $t("mfa.status1"):$t("mfa.status0") }}
+                    </span>
+                    <van-icon name='arrow' />
+                </template>
+            </van-cell>
+            <van-cell
                 v-if='customInfo'
                 class='cellItem'
                 is-link

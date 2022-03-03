@@ -20,9 +20,9 @@ export default function hooks (state) {
             account = {
                 buy: accountTemp,
                 sell: accountTemp
-            } 
+            }
         } else {
-            const buyCurrency = product.value?.profitCurrency    
+            const buyCurrency = product.value?.profitCurrency
             const sellCurrency = product.value?.baseCurrency
             account = {
                 buy: (buyCurrency && customerInfo.value)  ? customerInfo?.value?.accountMap[`${tradeType}_${buyCurrency}`] : {},
@@ -34,13 +34,13 @@ export default function hooks (state) {
     // CFD全仓和CFD逐仓 手数区分10-限价预埋单；11-停损预埋单，按额下单固定bizType 14
     const bizTypeByPendingCFD =  ()=>{
         const requestPrice = state[state.submitType].pendingPrice
-        let bizType=''
-        if (state.submitType === 'buy') {
-            bizType = lt(requestPrice, product.value.buy_price) ? 10 : 11
-        } else {
-            bizType = gt(requestPrice, product.value.sell_price) ? 10 : 11
-        }
-        return bizType;
+        // let bizType=''
+        // if (state.submitType === 'buy') {
+        //     bizType = lt(requestPrice, product.value.buy_price) ? 10 : 11
+        // } else {
+        //     bizType = gt(requestPrice, product.value.sell_price) ? 10 : 11
+        // }
+        return 12;
     }
     const bizType = computed(() => {
         let bizType = state.orderType   // 1市价单  10挂单

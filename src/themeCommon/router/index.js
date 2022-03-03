@@ -411,6 +411,42 @@ const routes = [
             footerMenu: false,
         }
     },
+    {
+        path: '/googleMFA/status',
+        name: 'MFA_status',
+        component: () => import(/* webpackChunkName: "google_MFA" */ '../user/google_MFA/status.vue'),
+        meta: {
+            title: 'cRoute.MFA_status',
+            roles: ['User'],
+        }
+    },
+    {
+        path: '/googleMFA/install',
+        name: 'MFA_install',
+        component: () => import(/* webpackChunkName: "google_MFA" */ '../user/google_MFA/install.vue'),
+        meta: {
+            title: 'cRoute.MFA_status',
+            roles: ['User'],
+        }
+    },
+    {
+        path: '/googleMFA/secretKey',
+        name: 'MFA_secretKey',
+        component: () => import(/* webpackChunkName: "google_MFA" */ '../user/google_MFA/secretKey.vue'),
+        meta: {
+            title: 'cRoute.MFA_bind',
+            roles: ['User'],
+        }
+    },
+    {
+        path: '/googleMFA/bind',
+        name: 'MFA_bind',
+        component: () => import(/* webpackChunkName: "google_MFA" */ '../user/google_MFA/bind.vue'),
+        meta: {
+            title: 'cRoute.MFA_bind',
+            roles: ['User'],
+        }
+    },
 
 ]
 

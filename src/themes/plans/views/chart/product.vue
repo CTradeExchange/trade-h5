@@ -897,7 +897,7 @@ export default {
                         theme: invertColor, // 主题 "Light" | "Dark"
                         fullScreen: false, // 全屏功能（右上角缩放按钮、横屏监听等）
                         orientation: 'portrait',
-                        chartLocale
+                        locale: chartLocale
                     }
                 })
             } else {
@@ -939,7 +939,7 @@ export default {
                         theme: invertColor, // 主题 "Light" | "Dark"
                         fullScreen: false, // 全屏功能（右上角缩放按钮、横屏监听等）
                         orientation: 'portrait',
-                        chartLocale
+                        locale: chartLocale
                     }
                 })
             }
@@ -1070,7 +1070,7 @@ export default {
                     await nextTick()
                     const product = store.getters.productActived
                     subscribeToProduct()
-                    // initChartData()
+                    initChartData()
                     renderChart(product, state.initConfig.property)
                     chartRef.value.reset()
                 }
@@ -1136,8 +1136,8 @@ export default {
         flex-wrap: nowrap;
         align-items: center;
         justify-content: center;
-        font-size:rem(48px);
         font-weight: bold;
+        font-size: rem(48px);
         .icon_chouti1 {
             margin-right: rem(20px);
             font-size: rem(26px);
@@ -1157,9 +1157,9 @@ export default {
         flex-direction: row;
         flex-wrap: nowrap;
         align-items: center;
-        font-size: rem(32px);
         justify-content: center;
         height: 100%;
+        font-size: rem(32px);
         .ft {
             margin-left: rem(30px);
             a {
@@ -1168,7 +1168,6 @@ export default {
             .icon_guanyu1 {
                 //font-size: rem(36px);
                 color: var(--normalColor);
-
             }
         }
         .collectIcon {
@@ -1378,8 +1377,8 @@ export default {
             :deep(.van-tabs__wrap) {
                 height: rem(60px);
                 .van-tabs__nav--line {
-                    padding-bottom: 0;
                     padding-right: 0;
+                    padding-bottom: 0;
                 }
                 .van-tabs__line {
                     bottom: 0;
@@ -1400,7 +1399,6 @@ export default {
             font-size: rem(24px);
             line-height: rem(60px);
             background-color: var(--contentColor);
-
             &.opened {
                 &::after {
                     margin-top: -1px;
@@ -1439,9 +1437,9 @@ export default {
                 height: 100%;
                 opacity: 0;
             }
-            .icon_icon_arrow{
-                font-size: rem(20px);
+            .icon_icon_arrow {
                 color: var(--minorColor);
+                font-size: rem(20px);
             }
         }
         .loadingIcon {
@@ -1461,12 +1459,11 @@ export default {
         .study-wrap,
         .kIcon-wrap {
             height: auto;
-
             :deep(.van-dropdown-menu__title) {
+                padding-right: 0;
+                padding-left: rem(28px);
                 color: #646566;
                 font-size: rem(24px);
-                    padding-right: 0;
-                    padding-left: rem(28px);
             }
             :deep(.van-dropdown-menu__bar) {
                 width: 100%;
@@ -1503,10 +1500,10 @@ export default {
         }
         .kIcon {
             display: inline-block;
-            color: var(--normalColor);
-            vertical-align: middle;
             width: rem(60px);
+            color: var(--normalColor);
             text-align: center;
+            vertical-align: middle;
         }
         .klineTypeRightIcon {
             padding-top: rem(10px);
@@ -1674,8 +1671,8 @@ export default {
             flex-direction: row;
             flex-wrap: nowrap;
             padding: rem(20px);
-            white-space: nowrap;
             font-weight: bold;
+            white-space: nowrap;
             .buy {
                 margin-right: rem(20px);
             }
@@ -1695,13 +1692,13 @@ export default {
             &.riseColorBg {
                 background-color: var(--fallColor);
             }
-            .icon{
+            .icon {
+                margin-right: rem(20px);
                 font-size: rem(20px);
                 vertical-align: middle;
-                margin-right: rem(20px);
                 opacity: 0.5;
             }
-            .text{
+            .text {
                 font-size: rem(34px);
                 vertical-align: middle;
             }
@@ -1775,14 +1772,14 @@ export default {
     }
 }
 :deep(.van-checkbox__icon--checked .van-icon) {
-    color: var(--van-white)!important;
-    background-color: var(--primary)!important;
-    border-color: var(--primary)!important;
+    color: var(--van-white) !important;
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
 }
-.composeBox{
+.composeBox {
+    box-sizing: content-box;
     margin-top: rem(30px);
     padding: rem(20px) rem(20px);
-    box-sizing: content-box;
     background: var(--contentColor);
 }
 </style>

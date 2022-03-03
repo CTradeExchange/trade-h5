@@ -1,4 +1,5 @@
 <template>
+    <router-view />
     <div class='pageWrap'>
         <topNav class='header' />
         <div class='container'>
@@ -78,26 +79,26 @@ export default {
     height: 100%;
     background: var(--assistColor);
     .container {
-        flex: 1;
-        overflow: auto;
         display: flex;
+        flex: 1;
         align-items: center;
         justify-content: center;
-        .content{
-            width:520px;
+        overflow: auto;
+        .content {
+            width: 520px;
             padding: 60px;
+            background-color: var(--contentColor);
             border-radius: 10px;
-                background-color: var(--contentColor);
         }
     }
-       .registerSuccess {
+    .registerSuccess {
         display: flex;
-            flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    .container{
         flex-direction: column;
-    }
+        align-items: center;
+        justify-content: center;
+        .container {
+            flex-direction: column;
+        }
         .icon {
             width: rem(200px);
             color: var(--success);

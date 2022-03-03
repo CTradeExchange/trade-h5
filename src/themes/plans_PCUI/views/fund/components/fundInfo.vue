@@ -1,7 +1,7 @@
 <template>
-    <div class='fund-info'>
+    <div class='fund-info width-limit'>
         <div class='header'>
-            <CurrencyIcon :currency='fund.shareTokenCode' size='60' />
+            <CurrencyIcon :currency='fund.shareTokenCode' size='100' />
             <span class='name'>
                 {{ fund.fundName }}
             </span>
@@ -83,45 +83,43 @@ defineProps({
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .fund-info {
-    padding: 16px 25px;
-    border-bottom: 1px solid var(--lineColor);
     .header {
         display: flex;
         align-items: center;
         .name {
-            margin-left: 15px;
-            margin-right: 15px;
-            font-size: 28px;
+            margin-left: 25px;
+            margin-right: 20px;
+            font-size: 45px;
         }
         .type, .title {
-            font-size: 14px;
+            font-size: 18px;
             color: var(--normalColor);
         }
         .type {
-            margin-right: 6px;
+            margin-right: 10px;
         }
     }
     .desc {
         margin-top: 20px;
         line-height: 26px;
-        font-size: 16px;
+        font-size: 18px;
         color: var(--normalColor);
         word-wrap: break-word;
     }
     .valueList{
         display: flex;
-        margin-top: rem(30px);
+        margin-top: 30px;
         .item {
             position: relative;
             border-radius: rem(10px);
-            padding: rem(15px) rem(30px);
             flex: 1;
-            line-height: 1.5;
+            line-height: 1.6;
+            font-size: 16px;
             .hours24 {
                 position: relative;
                 margin-left: 5px;
                 background: var(--placeholdColor);
-                font-size: rem(22px);
+                font-size: 14px;
                 padding:0 rem(26px) 0 rem(6px);
                 border-radius: rem(6px);
                 color: var(--color);
@@ -129,8 +127,8 @@ defineProps({
                 &::after{
                     content: '';
                     position: absolute;
-                    right: rem(2px);
-                    top: rem(8px);
+                    right: 0px;
+                    top: 5px;
                     width: 0;
                     height: 0;
                     border: 8px solid var(--normalColor);

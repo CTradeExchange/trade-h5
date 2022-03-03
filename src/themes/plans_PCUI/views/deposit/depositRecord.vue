@@ -89,7 +89,7 @@
                                             <span class='val'>
                                                 {{ item.txid || '--' }}
                                             </span>
-                                            <span v-if='item.txid' class='copy-btn' :data-clipboard-text='item.txid' @click='copyTXID'>
+                                            <span v-if='item.txid' class='copy-btn' :data-clipboard-text='item.txid' @click='copyTXID($event)'>
                                                 <img alt='' src='@/assets/copy.png' srcset='' />
                                             </span>
                                         </span>
@@ -239,13 +239,18 @@ export default {
         }
 
         // 复制txid
-        const copyTXID = () => {
+        const copyTXID = ($event) => {
             var clipboard = new Clipboard('.copy-btn')
             clipboard.on('success', e => {
                 Toast(t('common.copySuccess'))
                 // 释放内存
                 clipboard.destroy()
             })
+            clipboard.on('error', e => {
+                // 释放内存
+                clipboard.destroy()
+            })
+            clipboard.onClick($event)
         }
 
         onMounted(() => {
@@ -305,8 +310,8 @@ export default {
                 }
                 .copy-btn {
                     display: inline-block;
-                    margin-left: rem(5px);
                     flex: none;
+                    margin-left: rem(5px);
                     img {
                         width: rem(40px);
                         vertical-align: middle;

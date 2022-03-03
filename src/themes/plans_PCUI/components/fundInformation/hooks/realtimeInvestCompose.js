@@ -114,7 +114,7 @@ export const useInvestCompose = (params) => {
     }
 
     // 绘制柱状图
-    const newBarChart = (chartDom, [xData, yData]) => {
+    const newBarChart = (chartDom, [xData, yData], props) => {
         const myChart = echarts.init(chartDom)
         const option = {
             backgroundColor: style.contentColor,
@@ -139,7 +139,7 @@ export const useInvestCompose = (params) => {
             },
             xAxis: {
                 type: 'category',
-                axisLabel: { interval: 0, rotate: 90 },
+                axisLabel: { interval: 0, rotate: props.rotate },
                 data: xData, // ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
             },
             yAxis: {

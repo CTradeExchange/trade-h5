@@ -1,7 +1,7 @@
 <template>
     <div class='pageWrap'>
         <!-- <Top back show-center /> -->
-        <Top back left-icon='arrow-left' :right-action='false' show-center>
+        <Top back left-icon='arrow-left' :right-action='false' show-center :title='title'>
             <template #left>
                 <a class='topBack' href='javascript:;' @click='$router.back()'>
                     <span class='icon_icon_close_big'></span>
@@ -32,7 +32,7 @@
 import Top from '@/components/top'
 import areaInput from '@/components/form/areaInput'
 import CheckCode from '@/components/form/checkCode'
-import { toRefs, reactive, computed } from 'vue'
+import { toRefs, reactive, computed, onUnmounted } from 'vue'
 import { isEmpty, getArrayObj } from '@/utils/util'
 import { Toast, Dialog } from 'vant'
 import { useStore } from 'vuex'
@@ -56,6 +56,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
+        const title = computed(() => props.type === 'bind' ? t('setting.bindPhone') : t('setting.replacePhone'))
         const state = reactive({
             zone: '',
             sendToken: '',
@@ -144,6 +145,10 @@ export default {
             if (isEmpty(state.checkCode)) {
                 return Toast(t('common.inputVerifyCode'))
             }
+            if (isEmpty(state.sendToken)) {
+                return Toast(t('common.getVerifyCode'))
+            }
+
             state.loading = true
             const params = {
                 phone: state.mobile,
@@ -157,7 +162,7 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         Toast(t('common.phoneBindSuccess'))
-                        store.dispatch('_user/findCustomerInfo')
+
                         setTimeout(() => {
                             router.back()
                         }, 1500)
@@ -170,7 +175,6 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         Toast(t('common.replacePhoneSuccess'))
-                        store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
                             router.back()
                         }, 1500)
@@ -181,11 +185,16 @@ export default {
             }
         }
 
+        onUnmounted(() => {
+            store.dispatch('_user/findCustomerInfo')
+        })
+
         return {
             handleVerifyCodeSend,
             handleConfirm,
             onlineServices,
             zoneText,
+            title,
             ...toRefs(state)
         }
     }
@@ -206,9 +215,9 @@ export default {
             }
         }
         .confirm-btn {
-            height: rem(90px);
             position: absolute;
             bottom: 0;
+            height: rem(90px);
             background: var(--contentColor);
             border-color: var(--lineColor);
             span {

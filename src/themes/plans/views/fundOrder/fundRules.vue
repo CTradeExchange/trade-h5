@@ -94,74 +94,74 @@ const active = ref(route.query.direction === 'buy' ? 0 : 1)
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.fundRules{
-    margin-top: rem(110px);
+.fundRules {
     height: 100%;
+    margin-top: rem(110px);
     overflow-y: auto;
 
     --van-tabs-bottom-bar-color: var(--primary);
-
-    .block{
-        margin-top:10px;
-        background: var(--contentColor);
+    .block {
+        margin-top: 10px;
         padding: rem(10px) rem(30px);
         line-height: 1.6;
-        .title{
+        background: var(--contentColor);
+        .title {
             padding: 10px 0;
         }
-        .olList{
+        .olList {
             line-height: 2;
         }
     }
-    .n{
+    .n {
         display: inline-block;
-        height: 18px;
         width: 18px;
-        border-radius: 100%;
+        height: 18px;
+        margin-right: 0.4em;
+        color: var(--primary);
         font-size: rem(28px);
         line-height: rem(28px);
-        color: var(--primary);
         text-align: center;
         border: 2px solid var(--primary);
-        margin-right: .4em;
+        border-radius: 100%;
     }
-
-    .tDate{
+    .tDate {
+        position: relative;
         display: flex;
         justify-content: space-between;
-        position: relative;
         padding-top: 15px;
         padding-bottom: rem(30px);
-        &::before{
-            content: "";
+        &::before {
             position: absolute;
-            height: 1px;
-            left: 15px;
-            right: 15px;
             top: 5px;
+            right: 15px;
+            left: 15px;
+            height: 1px;
             background: var(--primary);
+            content: '';
         }
-        .end{
+        .end {
             text-align: right;
         }
-        .start,.center,.end{
+        .start,
+        .center,
+        .end {
             position: relative;
-            &::before{
-                content: "";
+            &::before {
                 position: absolute;
-                height: 5px;
-                width: 5px;
-                left: 10px;
                 top: -14px;
-                border-radius: 100%;
+                left: 10px;
+                width: 5px;
+                height: 5px;
                 background: var(--contentColor);
                 border: 2px solid var(--primary);
+                border-radius: 100%;
+                content: '';
             }
         }
-        .end{
-            &::before{
-                left: initial;
+        .end {
+            &::before {
                 right: 10px;
+                left: initial;
             }
         }
     }

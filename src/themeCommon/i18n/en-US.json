@@ -43,7 +43,10 @@
         "transfer": "Transfer",
         "securitySetting": "Security Settings",
         "commonSetting": "Common Settings",
-        "setFundPwd": "Fund Password"
+        "setFundPwd": "Fund Password",
+        "MFA_status": "Google Authenticator",
+        "MFA_bind": "Bind Google Authenticator",
+        "MFA_close": "Close Google Authenticator"
     },
     "login": {
         "loginBtn": "Log In",
@@ -118,7 +121,10 @@
         "submitSuccess": "Submit success",
         "RMB": "RMB",
         "dollar": "USD",
+        "submiting": "submit...",
         "loading": "Loading...",
+		"more": "Pull up to load more",
+		"noneText": "No display content",
         "back": "Back",
         "chart": "Chart",
         "fee": "Fee",
@@ -186,9 +192,19 @@
         "warning": "Warning",
         "fundPwd": "Fund Password",
         "fundPwdTip":"Password is 6 digits",
-        "inputFundPwd":"Input Fund Password"
-
-        
+        "inputFundPwd":"Input Fund Password",
+        "version": "Version",
+        "sendToYou": "Verification code will send to your",
+        "sendToYourEmail": "Verification code will send to your new email",
+        "sendToYourPhone": "Verification code will send to your new phone",
+        "noBindPhone": "Mobile phone not binded",
+        "noBindEmail": "Email not binded",
+        "inputGoogleCode": "Please enter Google authentication code",
+        "paste": "Paste",
+        "unSupported": "Your browser does not support this feature",
+        "sendCode": "Send code",
+        "smsCodeInput": "Please enter SMS verification code",
+        "emailCodeInput": "Please enter email verification code"
     },
     "faceAuth": {
         "faceDetectTip": "Please face your phone and keep it well lit",
@@ -225,9 +241,10 @@
         "retrievedByEmail": "Email",
         "setPwdFailed": "New password setting failed",
         "tryLater": "Please try again later or contact Online Customer Service",
-        "setPwd": "Set Password",
+        "setPwd": "Set Login PW",
+        "resetPwd": "Reset Login PW",
         "resetFundPwd": "Change Fund PW",
-        "setFundPwd": "Set Fund Password",
+        "setFundPwd": "Set Fund PW",
         "pwdRule": "Password must be 6-16 characters with alphanumeric",
         "inputNewPwd": "Input new password",
         "newPwdAgain": "Input new password again",
@@ -243,6 +260,7 @@
         "fundPwdSetSuccess": "Fund Password Set Successfully"
     },
     "register": {
+        "registerBtn": "Register",
         "accountCurrency": "Account Currency",
         "accountType": "Account Type",
         "phoneNo": "Mobile",
@@ -779,5 +797,22 @@
         "addBank": "Add bank card",
         "bankList": "Bank list",
         "bankCurrency": "Bank card currency"
+    },
+    "mfa": {
+        "routeTitile": "Google Identity authentication",
+        "enableTitle": "Enable Google authentication",
+        "enableDesc": "Google Authenticator protect your account and money",
+        "closeSuccess": "Close Success",
+        "bindSuccess": "Bind Success",
+        "status0": "Not enable",
+        "status1": "Enabled",
+        "installStepLabel": "Installation step",
+        "step1": "1、Please download and install Google Authenticator, click \"Bind\", to bind with your account",
+        "downBtnText": "Download Google Authenticator",
+        "step2": "2、After installation and open GoogleAuthentication, select \"Manual input key\", input your account name and private key",
+        "step3": "3、After add success, you will receive a 6-digit with a certain time valid, input to specify field",
+        "hasInstalled": "I downloaded and installed",
+        "bind": "Bind",
+        "secretKeyDesc": "Please keep this private kay in a safety place, if private key is updated but not binded yet, please save and bind with the latest private key. If you lost mobile phone, this private key allow you to recover your identity authenticator, otherwise, you have to contact Customer Service to reset"
     }
 }

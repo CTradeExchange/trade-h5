@@ -31,14 +31,20 @@
                 <div class='box'>
                     <input v-model='name' :placeholder="$t('walletAdd.namePlaceholder')" type='text' />
                 </div>
+                <div class='tip'>
+                    {{ $t('common.sendToYou') }} {{ customInfo?.phone || customInfo?.email }}
+                </div>
                 <div class='box'>
-                    <input v-model='code' :placeholder="$t('walletAdd.codePlaceholder')" />
+                    <input v-model='code' :placeholder="$t('common.inputVerifyCode')" />
                     <span v-if='countDown === 0' class='get' @click='getCode'>
                         {{ $t('walletAdd.codeBtn') }}
                     </span>
                     <span v-else class='time'>
                         {{ countDown }}{{ $t('walletAdd.codeHint') }}
                     </span>
+                </div>
+                <div v-if='googleCodeVis' class='box'>
+                    <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
                 </div>
             </div>
         </div>
@@ -68,12 +74,14 @@ import { Toast, Dialog } from 'vant'
 // i18n
 import { useI18n } from 'vue-i18n'
 // api
-import { getAllWithdrawCurrencyList, addWalletAddress } from '@/api/user'
+import { getAllWithdrawCurrencyList, addWalletAddressV1v1v2 } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 
 export default {
     components: {
-        Top
+        Top,
+        googleVerifyCode
     },
     setup () {
         const { t } = useI18n({ useScope: 'global' })
@@ -108,10 +116,12 @@ export default {
             verifyInfo: {
                 code: '',
                 token: ''
-            }
+            },
+            googleCode: ''
         })
         // 账户信息
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
+        const googleCodeVis = computed(() => customInfo.googleId > 0)
 
         // 初始化数据
         let timer = null
@@ -140,6 +150,9 @@ export default {
         const selectChainName = (item) => {
             state.chainName = item.name
             state.chainNameVisible = false
+        }
+        const getGooleVerifyCode = val => {
+            state.googleCode = val
         }
         // 获取客户提币币种和链名称
         const queryWithdrawCurrencyList = () => {
@@ -177,22 +190,9 @@ export default {
         }
         // 点击获取验证码
         const getCode = () => {
-            // 验证是否绑定手机号
-            if (!customInfo.phone) {
-                return Dialog.confirm({
-                    title: t('withdraw.hint'),
-                    message: t('withdraw.bindPhoneHint'),
-                    confirmButtonText: t('withdraw.bindBtn'),
-                    cancelButtonText: t('withdraw.close')
-                }).then(() => {
-                    router.push('/bindMobile')
-                }).catch(() => {})
-            }
-
             // 发送验证码
             verifyCodeSend({
-                bizType: 'SMS_COMMON_VERIFICATION_CODE',
-                toUser: customInfo.phoneArea + ' ' + customInfo.phone
+                bizType: customInfo?.phone ? 'SMS_LOGINED_VERIFICATION_CODE' : 'EMAIL_LOGINED_VERIFICATION_CODE'
             }).then(res => {
                 state.verifyInfo = res.data
                 state.countDown = 59
@@ -219,24 +219,29 @@ export default {
             if (!state.code) {
                 return Toast({ message: t('walletAdd.codePlaceholder') })
             }
+            if (googleCodeVis.value && !state.googleCode) {
+                return Toast(t('common.inputGoogleCode'))
+            }
 
             // 发起api请示
-            addWalletAddress({
+            addWalletAddressV1v1v2({
                 currency: state.coinKind,
                 chainName: state.chainName,
                 address: state.address,
                 remark: state.name,
-                phone: customInfo.phone,
+                type: customInfo?.phone ? 2 : 1,
                 verifyCode: state.code,
-                phoneArea: customInfo.phoneArea,
-                sendToken: verifyInfo.token
+                phoneArea: customInfo?.phoneArea,
+                sendToken: verifyInfo.token,
+                googleCode: state.googleCode,
+
             }).then(res => {
                 if (res.check()) {
-                    Toast.success(t('withdraw.successHint'))
-                    init()
-                    setTimeout(() => {
+                    Dialog.alert({
+                        message: t('withdraw.successHint'),
+                    }).then(() => {
                         router.go(-1)
-                    }, 1500)
+                    })
                 } else {
                     Toast(res.msg)
                 }
@@ -253,7 +258,10 @@ export default {
             selectCoinKind,
             selectChainName,
             getCode,
-            onConfirm
+            onConfirm,
+            customInfo,
+            googleCodeVis,
+            getGooleVerifyCode
         }
     }
 }
@@ -307,13 +315,19 @@ export default {
     padding: 0 rem(28px);
     .box {
         display: flex;
-        align-items: center;
         justify-content: space-between;
         height: rem(100px);
         color: var(--color);
         font-size: rem(28px);
         background-color: var(--contentColor);
         border-bottom: 1px solid var(--lineColor);
+        :deep(.van-cell){
+            padding-left: 0;
+            padding-right: 0;
+            &::after{
+                border: none;
+            }
+        }
         input {
             flex: 1;
             height: 100%;
@@ -321,7 +335,15 @@ export default {
         }
         .time {
             color: var(--minorColor);
+             line-height: rem(104px);
         }
+        .get{
+            line-height: rem(104px);
+        }
+    }
+    .tip{
+        padding-top: rem(20px) ;
+        color: var(--normalColor);
     }
 }
 .footer-btn {

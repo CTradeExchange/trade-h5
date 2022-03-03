@@ -512,10 +512,34 @@ export function changePhone (data) {
     })
 }
 
+/* 更换手机 MFA */
+export function changePhoneV1v1v2 (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.changePhoneV1v1v2',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
 /* 更换邮箱 */
 export function changeEmail (data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.changeEmail',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 更换邮箱(MFA) */
+export function changeEmailV1v1v2 (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.changeEmailV1v1v2',
         method: 'post',
         headers: {
             version: '0.0.1'
@@ -588,6 +612,18 @@ export function getWalletAddressList (data) {
 export function addWalletAddress (data) {
     return request({
         url: '/global/customer.app.CustomerWalletWebApiService.add',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 新增钱包(MFA) */
+export function addWalletAddressV1v1v2 (data) {
+    return request({
+        url: '/global/customer.app.CustomerWalletWebApiService.addV1v1v2',
         method: 'post',
         headers: {
             version: '0.0.1'
@@ -914,6 +950,19 @@ export function forgetAssertsPwd (data) {
     })
 }
 
+/* 忘记资金密码 MFA */
+export function forgetAssertsPwdV1v1v2 (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.forgetAssertsPwdV1v1v2',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
 /* 获取客户支持的存款币种列表 */
 export function getDepositCoinList (data) {
     return request({
@@ -933,6 +982,42 @@ export function getWithdrawAccountCurrencyList (data) {
         url: '/global/fund.app.WithdrawAppDubboService.getWithdrawAccountCurrencyList',
         method: 'post',
         toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 检测客户是否开启GoogleMFA */
+export function checkGoogleMFAStatus (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.checkGoogleMFAStatus',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+/* 生成谷歌验证账号 */
+export function generateGoogleAccount (data) {
+    return request({
+        url: '/global/customer.app.GoogleVerifyApiService.generateGoogleAccount',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 谷歌验证码绑定与解除 */
+export function enableOrForbidMFA (data) {
+    return request({
+        url: '/global/customer.app.CustomerWebApiService.enableOrForbidMFA',
+        method: 'post',
         headers: {
             version: '0.0.1'
         },

@@ -1,81 +1,87 @@
 <template>
     <div class='realtimeInvestCompose'>
-        <h4 class='title'>
-            <span class='rightSwitch icon_chouti1' @click='switchAction'></span>
-            {{ title || $t('fundInfo.realtimeInvestCompose') }}
-        </h4>
-        <div v-if="showBlock==='list'">
-            <div class='assetsTitle cellflex'>
-                <p class='hd'>
-                    {{ $t('fundInfo.assets') }}
-                </p>
-                <p class='bd'>
-                    {{ $t('fundInfo.ranking') }}
-                    <br />
-                    <span class='small'>
-                        ({{ symbolId ? $t('fundInfo.comparePrev') : $t('fundInfo.comparePrev24') }})
-                    </span>
-                </p>
-                <p class='ft'>
-                    {{ $t('fundInfo.weight') }}
-                    <br />
-                    <span class='small'>
-                        ({{ symbolId ? $t('fundInfo.comparePrev') : $t('fundInfo.comparePrev24') }})
-                    </span>
-                </p>
-            </div>
-            <ul class='assetsList'>
-                <li v-for='item in rangList' :key='item.asset' class='cellflex'>
-                    <p class='hd'>
-                        <!-- <i class='currencyIcon'></i> -->
-                        <currency-icon :currency='item.asset' />
-                        {{ item.asset }}
-                    </p>
-                    <p class='bd'>
-                        {{ item.range }}
-                        ( <i v-if="item.previousPeriodRangeCompare!=='-'" :class='{ "downArrow":item.previousPeriodRangeCompare<0, "upArrow":item.previousPeriodRangeCompare>0 }'></i>
-                        {{ item.previousPeriodRangeCompare==='-' ? '-' : Math.abs(item.previousPeriodRangeCompare) }}
-                        )
-                    </p>
-                    <p class='ft'>
-                        <van-popover v-model:show='item.popover' placement='bottom-end' theme='dark'>
-                            <p style='padding: 5px 10px; white-space: nowrap;'>
-                                {{ item.weightRealValue }}({{ item.previousPeriodWeightCompare }})
-                            </p>
-                            <template #reference>
-                                <span>
-                                    {{ item.weight }}
-                                    (
-                                    <i v-if="item.previousPeriodWeightCompare!=='-'" :class='[item.arrow]'></i>
-                                    {{ item.previousPeriodWeightCompare==='-' ? '-' : item.previousPeriodWeightCompare.replace(/[\+-]/,'') }}
-                                    )
-                                </span>
-                            </template>
-                        </van-popover>
-                    </p>
-                </li>
-            </ul>
-        </div>
-        <div v-else-if="showBlock==='chart'">
-            <div ref='chartPieDOM' class='chartPieDOM' :style='{ height:chartPieDOMHeight }'></div>
-        </div>
-
-        <div class='block'>
-            <h4 class='singleAssetTitle'>
-                <span>{{ $t('fundInfo.singleAsset') }}</span>
-                <el-tooltip
-                    :content="symbolId ? $t('fundInfo.assetIndexQquestionTip') : $t('fundInfo.assetQquestionTip')"
-                    effect='light'
-                    placement='bottom'
-                    trigger='hover'
-                >
-                    <van-icon class='question' name='question-o' />
-                </el-tooltip>
+        <div class='width-limit'>
+            <h4 class='title'>
+                <span v-if='!allShow' class='rightSwitch icon_chouti1' @click='switchAction'></span>
+                {{ title || $t('fundInfo.realtimeInvestCompose') }}
             </h4>
-            <div ref='chartBarDOM' class='chartBarDOM'></div>
-        </div>
+            <div class='merge-case'>
+                <div v-if="showBlock==='list' || allShow" class='case-list'>
+                    <div class='assetsTitle cellflex'>
+                        <p class='hd'>
+                            {{ $t('fundInfo.assets') }}
+                        </p>
+                        <p class='bd'>
+                            {{ $t('fundInfo.ranking') }}
+                            <br />
+                            <span class='small'>
+                                ({{ symbolId ? $t('fundInfo.comparePrev') : $t('fundInfo.comparePrev24') }})
+                            </span>
+                        </p>
+                        <p class='ft'>
+                            {{ $t('fundInfo.weight') }}
+                            <br />
+                            <span class='small'>
+                                ({{ symbolId ? $t('fundInfo.comparePrev') : $t('fundInfo.comparePrev24') }})
+                            </span>
+                        </p>
+                    </div>
+                    <ul class='assetsList'>
+                        <li v-for='item in rangList' :key='item.asset' class='cellflex'>
+                            <p class='hd'>
+                                <!-- <i class='currencyIcon'></i> -->
+                                <currency-icon :currency='item.asset' :size='20' />
+                                <span class='name'>
+                                    {{ item.asset }}
+                                </span>
+                            </p>
+                            <p class='bd'>
+                                {{ item.range }}
+                                ( <i v-if="item.previousPeriodRangeCompare!=='-'" :class='{ "downArrow":item.previousPeriodRangeCompare<0, "upArrow":item.previousPeriodRangeCompare>0 }'></i>
+                                {{ item.previousPeriodRangeCompare==='-' ? '-' : Math.abs(item.previousPeriodRangeCompare) }}
+                                )
+                            </p>
+                            <p class='ft'>
+                                <van-popover v-model:show='item.popover' placement='bottom-end' theme='dark'>
+                                    <p style='padding: 5px 10px; white-space: nowrap;'>
+                                        {{ item.weightRealValue }}({{ item.previousPeriodWeightCompare }})
+                                    </p>
+                                    <template #reference>
+                                        <span>
+                                            {{ item.weight }}
+                                            (
+                                            <i v-if="item.previousPeriodWeightCompare!=='-'" :class='[item.arrow]'></i>
+                                            {{ item.previousPeriodWeightCompare==='-' ? '-' : item.previousPeriodWeightCompare.replace(/[\+-]/,'') }}
+                                            )
+                                        </span>
+                                    </template>
+                                </van-popover>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+                <div v-if="showBlock==='chart' || allShow" class='case-chart'>
+                    <div ref='chartPieDOM' class='chartPieDOM' :style='{ height:chartPieDOMHeight }'></div>
+                </div>
+            </div>
 
-        <BottomTip />
+            <div class='block'>
+                <h4 class='singleAssetTitle'>
+                    <span>{{ $t('fundInfo.singleAsset') }}</span>
+                    <el-tooltip
+                        :content="symbolId ? $t('fundInfo.assetIndexQquestionTip') : $t('fundInfo.assetQquestionTip')"
+                        effect='light'
+                        placement='bottom'
+                        trigger='hover'
+                    >
+                        <van-icon class='question' name='question-o' />
+                    </el-tooltip>
+                </h4>
+                <div ref='chartBarDOM' class='chartBarDOM'></div>
+            </div>
+
+            <BottomTip />
+        </div>
     </div>
 </template>
 
@@ -96,6 +102,16 @@ const props = defineProps({
     symbolId: {
         type: String,
         default: ''
+    },
+    // 是否全部显示
+    allShow: {
+        type: Boolean,
+        default: false
+    },
+    // 图表文字旋转
+    rotate: {
+        type: Number,
+        default: 90
     }
 })
 
@@ -159,7 +175,7 @@ onMounted(async () => {
             chartXData.push(el.xAxisName)
         })
         assetPerformanceList.value = data
-        newBarChart(chartBarDOM.value, [chartXData, chartYData])
+        newBarChart(chartBarDOM.value, [chartXData, chartYData], props)
     })
 })
 </script>
@@ -182,17 +198,24 @@ onMounted(async () => {
 }
 .assetsList{
     margin-top: rem(20px);
+    margin-bottom: rem(20px);
     font-size: rem(28px);
     li{
-        line-height: rem(60px);
+        margin-bottom: 5px;
     }
-
 }
 .cellflex{
     display: flex;
+    align-items: center;
     text-align: right;
     .hd{
+        display: inline-flex;
+        align-items: center;
         text-align: left;
+        .name {
+            line-height: 1;
+            margin-left: 10px;
+        }
     }
     .bd{
         flex: 1;
@@ -205,7 +228,6 @@ onMounted(async () => {
     }
 }
 .block{
-    border-top: 6px solid var(--bgColor);
     .question {
         margin-left: 5px;
         font-size: 18px;

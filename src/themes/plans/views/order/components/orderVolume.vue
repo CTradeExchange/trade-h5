@@ -133,18 +133,18 @@ export default {
 .orderVolume {
     position: relative;
     margin-top: rem(20px);
-    .entry-type{
+    .entry-type {
         display: flex;
         justify-content: space-between;
-        font-size: rem(28px);
-        color: var(--primary);
         margin-bottom: rem(15px);
+        color: var(--primary);
+        font-size: rem(28px);
         fint-weight: 500;
-        .active{
+        .active {
             color: var(--color);
         }
-        .right{
-            .van-icon{
+        .right {
+            .van-icon {
                 margin-right: -2px;
             }
         }

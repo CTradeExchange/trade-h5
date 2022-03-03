@@ -49,7 +49,7 @@
                 </p>
             </li>
         </ul>
-        <div v-if='assetsInfo' class='btns'>
+        <div v-if='assetsInfo && $store.state._base.plans.length>1' class='btns'>
             <van-button
                 size='mini'
                 @click='toTransfer'
@@ -129,12 +129,12 @@ export default {
     font-size: rem(28px);
     .label {
         display: flex;
-        height: rem(46px);
-        line-height: rem(46px);
         justify-content: space-between;
+        height: rem(46px);
         margin-top: rem(20px);
         color: var(--minorColor);
         font-size: rem(28px);
+        line-height: rem(46px);
         .tag {
             color: var(--normalColor);
             font-size: rem(38px);
@@ -177,9 +177,9 @@ export default {
         color: var(--primary);
         font-size: rem(28px);
         line-height: rem(65px);
+        background: none;
         border: solid 1px var(--primary);
         border-radius: rem(6px);
-        background: none;
         &:last-child {
             margin-right: 0;
         }

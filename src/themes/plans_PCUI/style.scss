@@ -694,6 +694,7 @@ body {
 		color: var(--color) !important;
 		background: var(--contentColor) !important;
 		border: 1px solid var(--lineColor) !important;
+        font-size: 14px;
 		&.is-light {
 			border: 1px solid var(--lineColor) !important;
 			.el-popper__arrow::before {

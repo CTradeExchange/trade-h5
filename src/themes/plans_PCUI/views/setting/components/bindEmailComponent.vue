@@ -1,12 +1,10 @@
 <template>
     <div class='pageWrap'>
-        <Top back left-icon='arrow-left' :right-action='false' show-center>
+        <Top back left-icon='arrow-left' :right-action='false' show-center :title='title'>
             <template #left>
                 <a class='topBack' href='javascript:;' @click='$router.back()'>
                     <span class='icon_icon_close_big'></span>
                 </a>
-            </template>
-            <template #right>
             </template>
         </Top>
         <Loading :show='loading' />
@@ -40,7 +38,7 @@ import Top from '@/components/top'
 import CheckCode from '@/components/form/checkCode'
 import areaInput from '@/components/form/areaInput.vue'
 import { Toast, Dialog } from 'vant'
-import { reactive, toRefs, computed } from 'vue'
+import { reactive, toRefs, computed, onUnmounted } from 'vue'
 import { isEmpty, emailReg, getArrayObj } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
 import { bindEmail, changeEmail, checkCustomerExist } from '@/api/user'
@@ -78,6 +76,7 @@ export default {
             state.zone = countryObj.countryCode
             return countryObj.name + ' (' + countryObj.countryCode + ')'
         })
+        const title = computed(() => props.type === 'bind' ? t('setting.bindEmail') : t('setting.replaceEmail'))
 
         store.dispatch('getListByParentCode')
 
@@ -91,6 +90,10 @@ export default {
             if (isEmpty(state.checkCode)) {
                 return Toast(t('common.inputVerifyCode'))
             }
+            if (isEmpty(state.sendToken)) {
+                return Toast(t('common.getVerifyCode'))
+            }
+
             const params = {
                 email: state.email,
                 verifyCode: state.checkCode,
@@ -104,7 +107,6 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         Toast(t('common.emailBindSuccess'))
-                        store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
                             router.back()
                         }, 1500)
@@ -117,7 +119,6 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         Toast(t('common.replaceEmailSuccess'))
-                        store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
                             router.back()
                         }, 1500)
@@ -182,11 +183,16 @@ export default {
             })
         }
 
+        onUnmounted(() => {
+            store.dispatch('_user/findCustomerInfo')
+        })
+
         return {
             handleConfirm,
             onlineServices,
             handleVerifyCodeSend,
             zoneText,
+            title,
             ...toRefs(state)
         }
     }
@@ -207,9 +213,9 @@ export default {
             }
         }
         .confirm-btn {
-            height: rem(90px);
             position: absolute;
             bottom: 0;
+            height: rem(90px);
             background: var(--contentColor);
             border-color: var(--lineColor);
             span {

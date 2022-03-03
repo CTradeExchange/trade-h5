@@ -17,7 +17,7 @@
             <van-button class='btn' type='primary' @click='goWithdraw'>
                 {{ $t('trade.withdraw') }}
             </van-button>
-            <van-button class='btn' type='primary' @click="$router.push($route.path+'/transfer?tradeType=5')">
+            <van-button v-if='$store.state._base.plans.length>1' class='btn' type='primary' @click="$router.push($route.path+'/transfer?tradeType=5')">
                 {{ $t('trade.transfer') }}
             </van-button>
         </div>
@@ -129,79 +129,79 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.assetsModule{
-    margin-top: 8px;
-    height: 60px;
-    background: var(--contentColor);
-    color: var(--color);
+.assetsModule {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    margin-top: 8px;
     padding: 0 15px;
-    .tradeTypeName{
-        line-height: 60px;
+    color: var(--color);
+    background: var(--contentColor);
+    .tradeTypeName {
         font-size: 16px;
+        line-height: 60px;
     }
-    .rightActions{
+    .rightActions {
         display: flex;
     }
-    .assetItem{
+    .assetItem {
         padding-right: 60px;
-        line-height: 1.2;
         color: var(--minorColor);
         font-size: 12px;
-        .amount{
+        line-height: 1.2;
+        .amount {
             color: var(--color);
             font-size: 14px;
         }
     }
-    .riskRate{
-        .amount{
+    .riskRate {
+        .amount {
             color: var(--success);
         }
     }
-    .btn{
+    .btn {
+        min-width: 80px;
         height: 32px;
+        margin-left: 10px;
+        color: var(--primary);
         line-height: 32px;
         background: var(--primaryAssistColor);
-        color: var(--primary);
         border: transparent;
-        margin-left: 10px;
-        min-width: 80px;
     }
 }
-.riskLevel{
+.riskLevel {
     position: relative;
-    padding-left: rem(25px);
     margin-left: rem(10px);
+    padding-left: rem(25px);
     font-size: rem(28px);
-    &::before{
-        content: '';
-        display: block;
+    &::before {
         position: absolute;
         top: 50%;
         left: 0%;
-        transform: translate(0, -50%);
+        display: block;
         width: rem(16px);
         height: rem(16px);
         border-radius: 16px;
+        transform: translate(0, -50%);
+        content: '';
     }
 }
-.riskLevel1{
+.riskLevel1 {
     color: var(--success);
-    &::before{
+    &::before {
         background: var(--success);
     }
 }
-.riskLevel2{
+.riskLevel2 {
     color: var(--focusColor);
-    &::before{
+    &::before {
         background: var(--focusColor);
     }
 }
-.riskLevel3{
+.riskLevel3 {
     color: var(--warn);
-    &::before{
+    &::before {
         background: var(--warn);
     }
 }

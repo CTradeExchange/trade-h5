@@ -10,6 +10,7 @@
             :placeholder='label'
             required
             :type='pwdVisible ? "text" : "password"'
+            @blur='onBlur'
             @input='onInput'
         />
         <input
@@ -22,6 +23,7 @@
             :placeholder='label'
             required
             type='text'
+            @blur='onBlur'
             @input='onInput'
         />
         <!-- <label v-if='label' class='label' :for='id'>{{ label }}</label> -->
@@ -54,7 +56,7 @@ export default {
             type: Number
         }
     },
-    emits: ['update:modelValue', 'input'],
+    emits: ['update:modelValue', 'input', 'onBlur'],
     data () {
         return {
             val: this.modelValue,
@@ -77,6 +79,9 @@ export default {
             this.$emit('update:modelValue', $event.target.value)
             this.$emit('input', $event.target.value)
         },
+        onBlur ($event) {
+            this.$emit('onBlur', $event.target.value)
+        }
     }
 }
 </script>

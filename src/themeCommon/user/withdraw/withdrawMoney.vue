@@ -178,6 +178,7 @@ export default {
         DialogFundPwd
     },
     setup (props) {
+        console.log('========', md5('111111'))
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const router = useRouter()
@@ -251,7 +252,8 @@ export default {
             extend: {}, // 需要补充资料的数据
             paramsExtens: {}, // 补充完整的资料数据
             fundPwdVis: false,
-            fundPwd: ''
+            fundPwd: '',
+            googleCode: ''
         })
 
         // 初始化数据
@@ -612,7 +614,8 @@ export default {
 
         // 获取资金密码
         const confirmWithdraw = (val) => {
-            state.fundPwd = val
+            state.fundPwd = val[0]
+            state.googleCode = val[1] ? val[1] : ''
             // 发起提现
             launchHandleWithdraw()
         }
@@ -691,7 +694,8 @@ export default {
                 withdrawType: 1,
                 withdrawMethod: currentTab,
                 tradeType,
-                fundPwd: md5(state.fundPwd)
+                fundPwd: md5(state.fundPwd),
+                googleCode: state.googleCode
             }
             if (!isEmpty(state.paramsExtens)) {
                 params.extend = JSON.stringify(state.paramsExtens)

@@ -249,7 +249,8 @@ const routes = [
         meta: {
             title: 'route.registerSuccess',
             roles: [],
-        }
+        },
+        children: h5Children
     },
     {
         path: '/forgot',

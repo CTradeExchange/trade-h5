@@ -52,6 +52,10 @@ export default {
             type: Boolean,
             default: false
         },
+        // 类型：login / fund
+        type: {
+            type: String
+        }
     },
     data () {
         return {
@@ -112,6 +116,7 @@ export default {
         position: relative;
         flex: 1;
         font-size: rem(26px);
+
     }
     .getCodeBtn {
         margin-left: rem(20px);

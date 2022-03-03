@@ -214,7 +214,7 @@ export default {
                 tradeType: state.fromAccount.id
             }).then(res => {
                 if (res.check()) {
-                    state.maxTransfer = res.data.withdrawAmount
+                    state.maxTransfer = res.data.available
                 }
             }).catch(err => {
                 state.loading = false
@@ -389,13 +389,13 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.currency-bg{
+.currency-bg {
     position: fixed;
-    right: -60px;
     top: -55px;
+    right: -60px;
     overflow: hidden;
     opacity: 0.05;
-    img{
+    img {
         width: 320px;
     }
 }
@@ -403,22 +403,19 @@ export default {
     .page-content {
         position: relative;
         z-index: 1;
-        overflow: hidden;
         padding: 0 rem(30px);
-        .header{
-            font-size: rem(48px);
+        overflow: hidden;
+        .header {
             // font-weight: bold;
             padding-bottom: rem(10px);
-
+            font-size: rem(48px);
         }
-
         .transfer {
-            margin-top: rem(30px);
             display: flex;
             align-items: center;
+            margin-top: rem(30px);
             .label {
                 height: rem(200px);
-                background: var(--contentColor);
                 padding: rem(45px) rem(44px) 0 rem(20px);
                 color: var(--color);
                 // font-weight: bold;
@@ -426,6 +423,7 @@ export default {
                 line-height: rem(27px);
                 text-align: center;
                 word-wrap: break-word;
+                background: var(--contentColor);
                 .dots {
                     margin: rem(20px) 0;
                     text-align: center;
@@ -441,10 +439,10 @@ export default {
                 }
             }
             .center {
+                flex: 1;
                 background: var(--contentColor);
                 border-top-left-radius: rem(6px);
                 border-bottom-left-radius: rem(6px);
-                flex: 1;
                 .account {
                     display: flex;
                     align-items: center;
@@ -463,17 +461,17 @@ export default {
                 }
             }
             .right {
-                //flex: 1;
-                background: var(--contentColor);
-                height: rem(200px);
                 display: flex;
                 align-items: center;
+                height: rem(200px);
+                //flex: 1;
+                background: var(--contentColor);
                 border-top-right-radius: rem(6px);
                 border-bottom-right-radius: rem(6px);
-                .icon-wrap{
+                .icon-wrap {
                     display: flex;
-                    justify-content: center;
                     align-items: center;
+                    justify-content: center;
                     text-align: center;
                     .icon_zhuanhuan {
                         margin: 0 rem(32px);
@@ -481,7 +479,6 @@ export default {
                         font-size: rem(40px);
                     }
                 }
-
             }
         }
         .action-bar {
@@ -502,17 +499,17 @@ export default {
             .unit {
                 margin-right: rem(30px);
                 padding-right: rem(30px);
-                border-right: solid 1px var(--lineColor);
                 color: var(--placeholdColor);
+                border-right: solid 1px var(--lineColor);
             }
             .all {
                 color: var(--primary);
             }
-            .currency-icon{
+            .currency-icon {
                 width: rem(48px);
                 margin-right: rem(20px);
             }
-            .label{
+            .label {
                 flex: 1;
             }
         }
@@ -520,14 +517,14 @@ export default {
             margin-left: rem(23px);
             color: var(--minorColor);
             text-align: right;
-            .val{
+            .val {
                 color: var(--color);
             }
         }
-        .mt60{
+        .mt60 {
             margin-top: rem(60px);
         }
-        .mb60{
+        .mb60 {
             margin-bottom: rem(60px);
         }
     }
@@ -542,8 +539,8 @@ export default {
         .returnBtn {
             margin: rem(20px);
             color: #FFF;
-            font-size: rem(30px);
             font-weight: bold;
+            font-size: rem(30px);
             background: var(--primary);
             border: none;
             border-radius: rem(6px);

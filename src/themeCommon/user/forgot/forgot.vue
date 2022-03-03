@@ -28,20 +28,75 @@
         </div>
         <div class='tabs-content'>
             <form v-show='curTab === 0' class='loginForm'>
-                <div class='field'>
-                    <InputComp v-model.trim='mobile' clear :label='$t("common.inputPhone")' />
+                <div v-if="type==='login'" class='field'>
+                    <InputComp
+                        v-model.trim='mobile'
+                        clear
+                        :label='$t("common.inputPhone")'
+                        @onBlur='checkUserMfa'
+                    />
                 </div>
+                <div v-else class='field'>
+                    <p class='title'>
+                        {{ $t('common.sendToYou') }} {{ customerInfo?.phone }}
+                    </p>
+                </div>
+
                 <div class='field'>
-                    <checkCode v-model.trim='checkCode' :label='$t("common.inputVerifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+                    <checkCode
+                        v-if="type === 'login'"
+                        v-model.trim='checkCode'
+                        :label='$t("common.inputVerifyCode")'
+                        :type='type'
+                        @verifyCodeSend='handleVerifyCodeSend'
+                    />
+                    <checkCode
+                        v-else
+                        v-model.trim='checkCode'
+                        :label='$t("common.inputVerifyCode")'
+                        :type='type'
+                        @verifyCodeSend='handleVerifyCodeSendFund'
+                    />
+                </div>
+
+                <div v-if='googleCodeVis' class='field field-google'>
+                    <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
                 </div>
             </form>
 
             <form v-show='curTab === 1' class='loginForm'>
-                <div class='field'>
-                    <InputComp v-model.trim='email' clear :label='$t("common.inputEmail")' />
+                <div v-if="type==='login'" class='field'>
+                    <InputComp
+                        v-model.trim='email'
+                        clear
+                        :label='$t("common.inputEmail")'
+                        @onBlur='checkUserMfa'
+                    />
+                </div>
+                <div v-else class='field'>
+                    <p class='title'>
+                        {{ $t('common.sendToYou') }} {{ customerInfo?.email }}
+                    </p>
                 </div>
                 <div class='field'>
-                    <checkCode v-model.trim='emailCode' :label='$t("common.inputVerifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+                    <checkCode
+                        v-if='type === "login"'
+                        v-model.trim='emailCode'
+                        :label='$t("common.inputVerifyCode")'
+                        :type='type'
+                        @verifyCodeSend='handleVerifyCodeSend'
+                    />
+                    <checkCode
+                        v-else
+                        v-model.trim='emailCode'
+                        :label='$t("common.inputVerifyCode")'
+                        :type='type'
+                        @verifyCodeSend='handleVerifyCodeSendFund'
+                    />
+                </div>
+
+                <div v-if='googleCodeVis' class='field field-google'>
+                    <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
                 </div>
             </form>
         </div>
@@ -64,15 +119,18 @@ import Schema from 'async-validator'
 import RuleFn from './rule'
 import { useStore } from 'vuex'
 import { verifyCodeSend, verifyCodeCheck } from '@/api/base'
-import { checkUserStatus } from '@/api/user'
+import { checkUserStatus, checkGoogleMFAStatus } from '@/api/user'
 import { isEmpty, getArrayObj } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
+
 export default {
     components: {
         Top,
         InputComp,
         checkCode,
-        uInput
+        uInput,
+        googleVerifyCode
     },
     setup (props) {
         const style = computed(() => store.state.style)
@@ -95,21 +153,62 @@ export default {
             },
             sendToken: '',
             active: 0,
-            loading: false
+            loading: false,
+            googleCodeVis: false,
+            googleCode: ''
         })
+
+        const bizTypeMap = {
+            login: {
+                0: 'SMS_PASSWORD_VERIFICATION_CODE',
+                1: 'EMAIL_PASSWORD_VERIFICATION_CODE'
+            },
+            fund: {
+                0: 'SMS_LOGINED_VERIFICATION_CODE',
+                1: 'EMAIL_LOGINED_VERIFICATION_CODE'
+            }
+        }
+
+        const customerInfo = computed(() => store.state._user.customerInfo)
+        if (type === 'fund') {
+            state.mobile = customerInfo.value?.phone
+            state.email = customerInfo.value?.email
+            state.googleCodeVis = customerInfo.value.googleId > 0
+        }
 
         const handleTabChange = (name, title) => {
             state.curTab = name
         }
 
-        // 发送验证码
+        const getGooleVerifyCode = val => {
+            state.googleCode = val
+        }
+
+        // 检测客户是否开启GoogleMFA
+        const checkUserMfa = (val) => {
+            if (val) {
+                checkGoogleMFAStatus({
+                    loginName: val,
+                    type: val.includes('@') ? 1 : 2
+                }).then(res => {
+                    if (res.check()) {
+                        state.googleCodeVis = res.data > 0
+                    }
+                }).catch(err => {
+                    console.log('err', err)
+                })
+            }
+        }
+
+        // 找回登录密码发送验证码
         const handleVerifyCodeSend = (callback) => {
             const validator = new Schema(RuleFn(t))
             validator.validate({
                 type: state.curTab,
                 mobile: state.mobile,
                 email: state.email,
-                zone: state.zone
+                zone: state.zone,
+                resetType: type
             }, (errors, fields) => {
                 console.log('errors:', errors, fields)
                 if (errors) {
@@ -136,7 +235,7 @@ export default {
                         } else {
                             state.countryZone = res.data.phoneArea
                             verifyCodeSend({
-                                bizType: state.curTab === 0 ? 'SMS_PASSWORD_VERIFICATION_CODE' : 'EMAIL_PASSWORD_VERIFICATION_CODE',
+                                bizType: bizTypeMap['login'][state.curTab],
                                 toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
                             }).then(res => {
                                 if (res.check()) {
@@ -156,7 +255,31 @@ export default {
             })
         }
 
-        const next = () => {
+        // 找回资金密码发送验证码
+        const handleVerifyCodeSendFund = (callback) => {
+            if (state.curTab === 0 && !customerInfo.value.phone) {
+                callback && callback(false)
+                return Toast(t('common.noBindPhone'))
+            }
+            if (state.curTab === 1 && !customerInfo.value.email) {
+                callback && callback(false)
+                return Toast(t('common.noBindEmail'))
+            }
+
+            verifyCodeSend({
+                bizType: bizTypeMap['fund'][state.curTab],
+            }).then(res => {
+                if (res.check()) {
+                    state.sendToken = res.data.token
+                    Toast(t('common.verifySended'))
+                    callback && callback()
+                } else {
+                    callback && callback(false)
+                }
+            })
+        }
+
+        const resetLoginPwd = () => {
             const params = {
                 mobile: state.mobile,
                 email: state.email,
@@ -173,8 +296,31 @@ export default {
                     return Toast(errors[0].message)
                 }
                 state.loading = true
+                handleVerifyCode()
+            })
+        }
+
+        const resetFundPwd = () => {
+            if ((isEmpty(state.checkCode) && state.curTab === 0) || (isEmpty(state.emailCode) && state.curTab === 1)) {
+                return Toast(t('common.inputVerifyCode'))
+            }
+            // if (isEmpty(state.sendToken)) {
+            //     return Toast(t('common.getVerifyCode'))
+            // }
+            handleVerifyCode()
+        }
+
+        const handleVerifyCode = () => {
+            // let loginName
+            // if (type === 'login') {
+            //     loginName = state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email
+            // } else if (type === 'fund') {
+            //     loginName = ''
+            // }
+
+            if (type === 'login') {
                 verifyCodeCheck({
-                    bizType: state.curTab === 0 ? 'SMS_PASSWORD_VERIFICATION_CODE' : 'EMAIL_PASSWORD_VERIFICATION_CODE',
+                    bizType: bizTypeMap['login'][state.curTab],
                     toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
                     sendToken: state.sendToken || '11',
                     code: state.curTab === 0 ? state.checkCode : state.emailCode
@@ -182,12 +328,13 @@ export default {
                     state.loading = false
                     if (res.ok) {
                         router.push({
-                            path: type === 'login' ? '/resetLoginPwd' : '/resetFundPwd',
+                            path: '/resetLoginPwd',
                             query: {
                                 verifyCodeToken: res.data.token,
                                 sendToken: state.sendToken,
                                 type: state.curTab === 0 ? 2 : 1,
                                 loginName: state.curTab === 0 ? state.mobile : state.email,
+                                googleCode: state.googleCode,
                                 verifyCode: state.curTab === 0 ? state.checkCode : state.emailCode,
                             }
                         })
@@ -197,7 +344,30 @@ export default {
                 }).catch((err) => {
                     state.loading = false
                 })
-            })
+            } else {
+                router.push({
+                    path: '/resetFundPwd',
+                    query: {
+                        // verifyCodeToken: res.data.token,
+                        sendToken: state.sendToken,
+                        type: state.curTab === 0 ? 2 : 1,
+                        loginName: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
+                        verifyCode: state.curTab === 0 ? state.checkCode : state.emailCode,
+                        googleCode: state.googleCode
+                    }
+                })
+            }
+        }
+
+        const next = () => {
+            if (state.googleCodeVis && isEmpty(state.googleCode)) {
+                return Toast(t('common.inputGoogleCode'))
+            }
+            if (type === 'login') {
+                resetLoginPwd()
+            } else if (type === 'fund') {
+                resetFundPwd()
+            }
         }
 
         const zoneSelect = (data) => {
@@ -216,7 +386,11 @@ export default {
             style,
             zoneSelect,
             back,
-            type
+            customerInfo,
+            type,
+            handleVerifyCodeSendFund,
+            getGooleVerifyCode,
+            checkUserMfa
         }
     }
 }
@@ -259,12 +433,20 @@ export default {
     .field {
         position: relative;
         display: flex;
+        flex: 1;
         align-items: center;
         &:not(:first-of-type) {
             margin-top: rem(30px);
         }
         &.toolWrap {
             justify-content: space-between;
+        }
+        &.field-google{
+            padding: 0 rem(10px)
+        }
+        .title{
+            padding-left: rem(10px);
+            color: var(--normalColor);
         }
         label {
             position: absolute;

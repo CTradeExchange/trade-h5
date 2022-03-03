@@ -167,7 +167,7 @@ export default {
                 tradeType: state.fromAccount.id
             }).then(res => {
                 if (res.check()) {
-                    state.maxTransfer = res.data.withdrawAmount
+                    state.maxTransfer = res.data.available
                 }
             }).catch(err => {
                 state.loading = false
@@ -337,7 +337,7 @@ export default {
                     &.from {
                         border-bottom: solid 1px var(--lineColor);
                     }
-                    .van-icon-arrow{
+                    .van-icon-arrow {
                         position: absolute;
                         right: 20px;
                         pointer-events: none;
@@ -347,15 +347,15 @@ export default {
             .right {
                 //flex: 1;
                 .icon_zhuanhuan1 {
-                    cursor: pointer;
                     margin: 0 rem(32px);
                     color: var(--primary);
                     font-size: rem(44px);
+                    cursor: pointer;
                 }
             }
         }
         .action-bar {
-            cursor: pointer;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -366,7 +366,7 @@ export default {
             font-size: rem(28px);
             background: var(--contentColor);
             border-radius: rem(6px);
-            position: relative;
+            cursor: pointer;
             input {
                 flex: 1;
             }
@@ -379,7 +379,7 @@ export default {
                 color: var(--primary);
                 cursor: pointer;
             }
-            .van-icon-arrow{
+            .van-icon-arrow {
                 position: absolute;
                 right: 20px;
                 pointer-events: none;
@@ -391,22 +391,23 @@ export default {
             color: var(--minorColor);
         }
     }
-    .accountSelect{
+    .accountSelect {
         width: 100%;
-        :deep(.el-input__suffix){
+        :deep(.el-input__suffix) {
             display: none;
         }
-        :deep(.el-input__inner){
-            border: 0;
+        :deep(.el-input__inner) {
             width: 100%;
             color: var(--color);
+            border: 0;
         }
+
         --el-disabled-border-base: transparent;
         --el-disabled-fill-base: transparent;
         --el-input-border: transparent;
         --el-disabled-color-base: var(--color);
     }
-    .accountTradeTypeName{
+    .accountTradeTypeName {
         padding-left: 15px;
         color: var(--color);
     }

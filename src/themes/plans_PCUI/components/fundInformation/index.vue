@@ -1,16 +1,19 @@
 <template>
-    <div class='case'>
-        <van-tabs v-model:active='active' class='fundInfoTab' type='card'>
-            <van-tab :title='$t("fundInfo.baseInfo")'>
-                <baseVue v-if='active === 0' />
-            </van-tab>
-            <van-tab :title='$t("fundInfo.fundPerformance")'>
-                <performanceVue v-if='active === 1' />
-            </van-tab>
-            <van-tab :title='$t("fundInfo.investCompose")'>
-                <realtime-invest-compose v-if='active === 2' />
-            </van-tab>
-        </van-tabs>
+    <van-tabs v-if='showTabs' v-model:active='active' class='fundInfoTab' type='card'>
+        <van-tab :title='$t("fundInfo.baseInfo")'>
+            <baseVue v-if='active === 0' />
+        </van-tab>
+        <van-tab :title='$t("fundInfo.fundPerformance")'>
+            <performanceVue v-if='active === 1' />
+        </van-tab>
+        <van-tab :title='$t("fundInfo.investCompose")'>
+            <realtime-invest-compose v-if='active === 2' :all-show='allShow' :rotate='90' />
+        </van-tab>
+    </van-tabs>
+    <div v-else>
+        <baseVue />
+        <performanceVue />
+        <realtime-invest-compose :all-show='allShow' :rotate='0' />
     </div>
 </template>
 
@@ -22,7 +25,17 @@ import realtimeInvestCompose from './realtimeInvestCompose.vue'
 import { localGet, localSet } from '@/utils/util'
 const props = defineProps({
     fundId: [String, Number],
-    jump: String
+    jump: String,
+    // 是否显示选项卡
+    showTabs: {
+        type: Boolean,
+        default: true
+    },
+    // 是否全部显示
+    allShow: {
+        type: Boolean,
+        default: false
+    }
 })
 const active = ref(parseFloat(localGet('fundInfoTabIndex') || 1))
 provide('fundId', props.fundId)
@@ -57,9 +70,5 @@ watchEffect(() => {
     :deep(.van-tabs__content) {
         margin-top: 10px;
     }
-}
-.case {
-    max-width: 600px;
-    margin: 0 auto;
 }
 </style>

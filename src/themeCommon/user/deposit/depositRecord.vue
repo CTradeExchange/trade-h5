@@ -17,6 +17,7 @@
                     <van-empty :description='$t("common.noData")' image='/images/empty.png' />
                 </div>
                 <van-list
+                    v-else
                     v-model:loading='loading'
                     :finished='finished'
                     :finished-text='finishedText'
@@ -226,7 +227,6 @@ export default {
                         if (resdata.current * resdata.size >= resdata.total) {
                             state.finished = true
                         }
-
                         if (isEmpty(res.data.records)) {
                             state.finishedText = ''
                         }

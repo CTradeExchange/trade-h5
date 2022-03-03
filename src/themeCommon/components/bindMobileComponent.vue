@@ -6,11 +6,28 @@
             <div class='field'>
                 <areaInput v-model='mobile' v-model:zone='zoneText' clear :disabled='true' :placeholder='type === "bind" ? $t("common.inputPhone"): $t("common.inputNewPhone")' />
             </div>
-            <div class='field'>
-                <!-- <label class='label'>
-                    验证码
-                </label> -->
+
+            <div v-if='type === "change"' class='field'>
+                <p class='title'>
+                    {{ $t('common.sendToYourPhone') }}
+                </p>
                 <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+            </div>
+
+            <div v-if='type === "change"' class='field'>
+                <p class='title'>
+                    {{ $t('common.sendToYou') }} {{ customInfo.phone }}
+                </p>
+                <CheckCode v-model='checkCodeOld' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSendOld' />
+            </div>
+            <div v-else class='field'>
+                <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+            </div>
+            <div v-if='googleCodeVis' class='field'>
+                <p class='title'>
+                    {{ $t('common.inputGoogleCode') }}
+                </p>
+                <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
             </div>
             <van-button block class='confirm-btn' type='primary' @click='handleConfirm'>
                 <span>{{ $t('common.sure') }}</span>
@@ -20,6 +37,7 @@
 </template>
 
 <script>
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 import Top from '@/components/top'
 import areaInput from '@/components/form/areaInput'
 import CheckCode from '@/components/form/checkCode'
@@ -29,13 +47,14 @@ import { Toast, Dialog } from 'vant'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { verifyCodeSend } from '@/api/base'
-import { bindPhone, changePhone, checkUserStatus } from '@/api/user'
+import { bindPhone, changePhoneV1v1v2, checkUserStatus } from '@/api/user'
 import { useI18n } from 'vue-i18n'
 export default {
     components: {
         Top,
         areaInput,
-        CheckCode
+        CheckCode,
+        googleVerifyCode
     },
     props: {
         type: {
@@ -50,9 +69,12 @@ export default {
         const state = reactive({
             zone: '',
             sendToken: '',
+            sendTokenOld: '',
             mobile: '',
             checkCode: '',
-            loading: false
+            checkCodeOld: '',
+            loading: false,
+            googleCode: ''
         })
 
         store.dispatch('getCountryListByParentCode')
@@ -60,6 +82,7 @@ export default {
 
         const countryList = computed(() => store.state.countryList)
         const customInfo = computed(() => store.state._user.customerInfo)
+        const googleCodeVis = computed(() => customInfo.value.googleId > 0)
         const zoneText = computed(() => {
             const countryObj = getArrayObj(countryList.value, 'code', customInfo.value.country)
             if (countryObj) state.zone = countryObj.countryCode
@@ -132,6 +155,25 @@ export default {
             })
         }
 
+        const getGooleVerifyCode = val => {
+            state.googleCode = val
+        }
+
+        const handleVerifyCodeSendOld = (callback) => {
+            const params = {
+                bizType: 'SMS_LOGINED_VERIFICATION_CODE'
+            }
+            verifyCodeSend(params).then(res => {
+                if (res.check()) {
+                    if (Number(res.code) === 0) {
+                        state.sendTokenOld = res.data.token
+                        Toast(t('common.verifySended'))
+                        callback && callback()
+                    }
+                }
+            })
+        }
+
         const handleConfirm = () => {
             if (isEmpty(state.mobile)) {
                 return Toast(t('common.inputPhone'))
@@ -142,12 +184,31 @@ export default {
             if (isEmpty(state.checkCode)) {
                 return Toast(t('common.inputVerifyCode'))
             }
+
+            if (isEmpty(state.sendToken)) {
+                return Toast(t('common.getVerifyCode'))
+            }
+            if (googleCodeVis.value && !state.googleCode) {
+                return Toast(t('common.inputGoogleCode'))
+            }
+            if (props.type === 'change') {
+                if (isEmpty(state.checkCodeOld)) {
+                    return Toast(t('common.inputVerifyCode'))
+                }
+                if (isEmpty(state.sendTokenOld)) {
+                    return Toast(t('common.getVerifyCode'))
+                }
+            }
+
             state.loading = true
             const params = {
                 phone: state.mobile,
                 verifyCode: state.checkCode,
                 sendToken: state.sendToken || '11',
-                phoneArea: state.zone
+                phoneArea: state.zone,
+                verifyCodeOld: state.checkCodeOld,
+                sendTokenOld: state.sendTokenOld,
+                googleCode: state.googleCode
             }
 
             if (props.type === 'bind') {
@@ -164,7 +225,7 @@ export default {
                     state.loading = false
                 })
             } else if (props.type === 'change') {
-                changePhone(params).then(res => {
+                changePhoneV1v1v2(params).then(res => {
                     state.loading = false
                     if (res.check()) {
                         Toast(t('common.replacePhoneSuccess'))
@@ -181,9 +242,13 @@ export default {
 
         return {
             handleVerifyCodeSend,
+            handleVerifyCodeSendOld,
             handleConfirm,
+            getGooleVerifyCode,
             onlineServices,
             zoneText,
+            customInfo,
+            googleCodeVis,
             ...toRefs(state)
         }
     }
@@ -198,14 +263,20 @@ export default {
         padding-top: rem(20px);
         .field {
             padding: 0 rem(30px);
+            margin-bottom: rem(20px);
             background: var(--contentColor);
             .label {
                 color: var(--minorColor);
             }
+            .title{
+                color: var(--normalColor);
+                padding: rem(20px) 0;
+            }
+
         }
         .confirm-btn {
             height: rem(90px);
-            position: absolute;
+            position: fixed;
             bottom: 0;
             background: var(--contentColor);
             border-color: var(--lineColor);

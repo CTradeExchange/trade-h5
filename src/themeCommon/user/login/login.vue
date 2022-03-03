@@ -8,7 +8,12 @@
         </header>
         <form class='loginForm'>
             <div v-if="loginAccount==='mobile'" class='field'>
-                <InputComp v-model.trim='loginName' clear :label="$t('login.loginNamePlaceholder')" />
+                <InputComp
+                    v-model.trim='loginName'
+                    clear
+                    :label="$t('login.loginNamePlaceholder')"
+                    @onBlur='checkUserMfa'
+                />
             </div>
             <div v-else class='field'>
                 <InputComp v-model.trim='email' clear :label="$t('login.email')" />
@@ -18,6 +23,9 @@
             </div>
             <div v-else class='field'>
                 <CheckCode v-model.trim='checkCode' clear :label="$t('login.verifyCode')" @verifyCodeSend='verifyCodeSendHandler' />
+            </div>
+            <div v-if='googleCodeVis' class='field field-google'>
+                <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
             </div>
             <van-button block class='loginBtn' :disabled='loading' type='primary' @click='loginHandle'>
                 {{ $t('login.loginBtn') }}
@@ -50,9 +58,9 @@
                 在线客服
             </a>
         </footer> -->
-        <div class='support'>
+        <!-- <div class='support'>
             <img alt='' src='/images/support.png' />
-        </div>
+        </div> -->
     </div>
 
     <!-- 设置登录密码 -->
@@ -101,9 +109,10 @@ import { Toast, Dialog } from 'vant'
 import RuleFn from './rule'
 import md5 from 'js-md5'
 import { timeline, timelineItem } from '@/components/timeline'
-import { checkUserStatus } from '@/api/user'
+import { checkUserStatus, checkGoogleMFAStatus } from '@/api/user'
 import { setQuoteService } from '@/plugins/socket/socket'
 import { useI18n } from 'vue-i18n'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 //  import hooks from './hooks'
 
 export default {
@@ -115,6 +124,7 @@ export default {
         LoginByTwitter,
         CheckCode,
         Top,
+        googleVerifyCode
     },
     setup () {
         // const { getPlansByCountry, getCustomerGroupIdByCountry } = hooks()
@@ -133,7 +143,9 @@ export default {
             loginType: 'password', // checkCode
             loginAccount: 'mobile',
             bindAddShow: false,
-            userId: ''
+            userId: '',
+            googleCodeVis: false,
+            googleCode: ''
         })
         let token = ''
         const rightAction = computed(() => {
@@ -153,7 +165,14 @@ export default {
             const loginType = state.loginType
             state.loginType = loginType === 'password' ? 'checkCode' : 'password'
         }
+        const getGooleVerifyCode = val => {
+            state.googleCode = val
+        }
+
         const loginHandle = () => {
+            if (state.googleCodeVis && isEmpty(state.googleCode)) {
+                return Toast(t('common.inputGoogleCode'))
+            }
             const loginParams = {
                 type: state.loginName.includes('@') ? 1 : 2,
                 loginName: state.loginName,
@@ -163,7 +182,8 @@ export default {
                 sendToken: state.loginType === 'checkCode' ? token : undefined,
                 thirdSource: route.query.thirdSource || '',
                 bindThirdUserId: route.query.bindThirdUserId || '',
-                isThird: false // true为三方登录 false 系统登录
+                isThird: false, // true为三方登录 false 系统登录
+                googleCode: state.googleCode
             }
 
             const validator = new Schema(RuleFn(t))
@@ -250,6 +270,7 @@ export default {
             })
         }
 
+        // 设置登录密码弹窗
         const noticeSetPwd = (loginPassStatus) => {
             if (parseInt(loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
                 state.loginPwdPop = true
@@ -260,6 +281,22 @@ export default {
 
         const topRightClick = () => {
             console.log('rightClick')
+        }
+
+        // 检测客户是否开启GoogleMFA
+        const checkUserMfa = (val) => {
+            if (val) {
+                checkGoogleMFAStatus({
+                    loginName: val,
+                    type: val.includes('@') ? 1 : 2
+                }).then(res => {
+                    if (res.check()) {
+                        state.googleCodeVis = res.data > 0
+                    }
+                }).catch(err => {
+                    console.log('err', err)
+                })
+            }
         }
 
         // 发送验证码
@@ -347,6 +384,8 @@ export default {
             loginPwdSet,
             noTip,
             loginSubmit,
+            checkUserMfa,
+            getGooleVerifyCode,
             thirdLoginArr
         }
     }
@@ -438,6 +477,14 @@ export default {
             margin-left: rem(10px);
             color: var(--lineColor);
             font-size: rem(36px);
+        }
+        &.field-google{
+            :deep(.van-cell){
+                padding-left: 0;
+                input{
+                    padding: 0 rem(10px);
+                }
+            }
         }
     }
     .loginBtn {
