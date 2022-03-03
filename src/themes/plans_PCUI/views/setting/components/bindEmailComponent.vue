@@ -38,7 +38,7 @@ import Top from '@/components/top'
 import CheckCode from '@/components/form/checkCode'
 import areaInput from '@/components/form/areaInput.vue'
 import { Toast, Dialog } from 'vant'
-import { reactive, toRefs, computed } from 'vue'
+import { reactive, toRefs, computed, onUnmounted } from 'vue'
 import { isEmpty, emailReg, getArrayObj } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
 import { bindEmail, changeEmail, checkCustomerExist } from '@/api/user'
@@ -90,6 +90,10 @@ export default {
             if (isEmpty(state.checkCode)) {
                 return Toast(t('common.inputVerifyCode'))
             }
+            if (isEmpty(state.sendToken)) {
+                return Toast(t('common.getVerifyCode'))
+            }
+
             const params = {
                 email: state.email,
                 verifyCode: state.checkCode,
@@ -103,7 +107,6 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         Toast(t('common.emailBindSuccess'))
-                        store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
                             router.back()
                         }, 1500)
@@ -116,7 +119,6 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         Toast(t('common.replaceEmailSuccess'))
-                        store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
                             router.back()
                         }, 1500)
@@ -180,6 +182,10 @@ export default {
                 console.log(err)
             })
         }
+
+        onUnmounted(() => {
+            store.dispatch('_user/findCustomerInfo')
+        })
 
         return {
             handleConfirm,

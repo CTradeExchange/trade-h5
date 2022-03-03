@@ -32,7 +32,7 @@
 import Top from '@/components/top'
 import areaInput from '@/components/form/areaInput'
 import CheckCode from '@/components/form/checkCode'
-import { toRefs, reactive, computed } from 'vue'
+import { toRefs, reactive, computed, onUnmounted } from 'vue'
 import { isEmpty, getArrayObj } from '@/utils/util'
 import { Toast, Dialog } from 'vant'
 import { useStore } from 'vuex'
@@ -145,6 +145,10 @@ export default {
             if (isEmpty(state.checkCode)) {
                 return Toast(t('common.inputVerifyCode'))
             }
+            if (isEmpty(state.sendToken)) {
+                return Toast(t('common.getVerifyCode'))
+            }
+
             state.loading = true
             const params = {
                 phone: state.mobile,
@@ -158,7 +162,7 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         Toast(t('common.phoneBindSuccess'))
-                        store.dispatch('_user/findCustomerInfo')
+
                         setTimeout(() => {
                             router.back()
                         }, 1500)
@@ -171,7 +175,6 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         Toast(t('common.replacePhoneSuccess'))
-                        store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
                             router.back()
                         }, 1500)
@@ -181,6 +184,10 @@ export default {
                 })
             }
         }
+
+        onUnmounted(() => {
+            store.dispatch('_user/findCustomerInfo')
+        })
 
         return {
             handleVerifyCodeSend,
