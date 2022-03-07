@@ -4,13 +4,13 @@
             <!-- 加载中组件 -->
             <Loading :show='loading' />
             <!-- 头部导航 -->
-            <Top
-                back
-                left-icon='arrow-left'
-                :right-action='rightAction'
-                :show-center='true'
-                @rightClick='rightClick'
-            />
+            <LayoutTop>
+                <template #right>
+                    <span @click='rightClick'>
+                        {{ rightAction.title }}
+                    </span>
+                </template>
+            </LayoutTop>
             <div class='empty'></div>
             <div class='module-form'>
                 <div class='select'>
@@ -139,9 +139,9 @@
                     <router-link v-if='Number(customInfo.assertPassStatus) === 1' class='href' to='/assets/setFundPwd'>
                         {{ $t('login.goSet') }}
                     </router-link>
-                    <router-link v-else class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">
+                    <span v-else class='href' @click='goFundForgot'>
                         {{ $t('login.forgotFundPwd') }}
-                    </router-link>
+                    </span>
                 </div>
             </div>
         </div>
@@ -215,7 +215,6 @@
 
 <script>
 // components
-import Top from '@/components/top'
 import centerViewDialog from '@planspc/layout/centerViewDialog'
 // vue
 import { reactive, toRefs, computed, onMounted, watch } from 'vue'
@@ -245,7 +244,6 @@ import InputComp from '@/components/form/input'
 
 export default {
     components: {
-        Top,
         centerViewDialog,
         InputComp
     },
@@ -323,6 +321,16 @@ export default {
         // 导航栏右侧标题点击跳转
         const rightClick = () => {
             router.push(state.rightAction.path)
+        }
+
+        // 跳转到忘记资金密码页面
+        const goFundForgot = () => {
+            router.push({
+                name: 'Forgot',
+                query: {
+                    type: 'fund'
+                }
+            })
         }
 
         // 账户信息
@@ -822,6 +830,7 @@ export default {
         return {
             ...toRefs(state),
             rightClick,
+            goFundForgot,
             customInfo,
             selectCoinKind,
             selectChainName,
@@ -843,6 +852,7 @@ export default {
 .container {
     flex: 1;
     overflow-y: auto;
+    padding-top: rem(90px);
     .empty {
         height: rem(20px);
         background-color: var(--bgColor);
@@ -973,6 +983,7 @@ export default {
             .href{
                 vertical-align: middle;
                 color: var(--primary);
+                cursor: pointer;
             }
         }
     }

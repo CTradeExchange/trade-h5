@@ -3,13 +3,13 @@
         <div class='pageWrap'>
             <Loading :show='loading' />
             <!-- 头部导航 -->
-            <Top
-                back
-                left-icon='arrow-left'
-                :right-action='rightAction'
-                :show-center='true'
-                @rightClick='rightClick'
-            />
+            <LayoutTop>
+                <template #right>
+                    <span @click='rightClick'>
+                        {{ rightAction.title }}
+                    </span>
+                </template>
+            </LayoutTop>
             <div class='wrap'>
                 <p class='header-text'>
                     {{ $t('withdrawMoney.moneyName') }}
@@ -65,9 +65,9 @@
                         <router-link v-if='Number(customInfo.assertPassStatus) === 1' class='href' to='/assets/setFundPwd'>
                             {{ $t('login.goSet') }}
                         </router-link>
-                        <router-link v-else class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">
+                        <span v-else class='href' @click='goFundForgot'>
                             {{ $t('login.forgotFundPwd') }}
-                        </router-link>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -168,7 +168,6 @@
 </template>
 
 <script>
-import Top from '@/components/top'
 import centerViewDialog from '@planspc/layout/centerViewDialog'
 import {
     reactive,
@@ -196,7 +195,6 @@ import md5 from 'js-md5'
 
 export default {
     components: {
-        Top,
         centerViewDialog,
         InputComp
     },
@@ -286,6 +284,16 @@ export default {
         // 导航栏右侧标题点击跳转
         const rightClick = () => {
             router.push(state.rightAction.path)
+        }
+
+        // 跳转到忘记资金密码页面
+        const goFundForgot = () => {
+            router.push({
+                name: 'Forgot',
+                query: {
+                    type: 'fund'
+                }
+            })
         }
 
         // 获取取款手续费
@@ -744,6 +752,7 @@ export default {
             chooseBank,
             getAll,
             toAddBank,
+            goFundForgot,
             changeAmount,
             confirm,
             currency,
@@ -765,6 +774,7 @@ export default {
 @import '@/sass/mixin.scss';
 .pageWrap {
     background: var(--contentColor);
+    padding-top: rem(90px);
     .empty {
         height: rem(20px);
         background-color: var(--bgColor);
@@ -849,6 +859,7 @@ export default {
                 .href{
                     vertical-align: middle;
                     color: var(--primary);
+                    cursor: pointer;
                 }
             }
         }
