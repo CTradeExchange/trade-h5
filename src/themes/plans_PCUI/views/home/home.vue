@@ -25,48 +25,82 @@
         <div class='new-index-footer'>
             <ul class='footer-nav f-b-t'>
                 <li>
-                    <p>
-                        <img alt='logo' class='footer-logo' src='../../images/home/logo.png' />
-                    </p>
-                    <p>{{ $t('newHomeFooter.logoText') }}</p>
-                </li>
-                <li>
                     <p class='nav-dt'>
                         {{ $t('newHomeFooter.product') }}
                     </p>
-                    <p>{{ $t('newHomeFooter.trading') }}</p>
-                    <p>{{ $t('newHomeFooter.fund') }}</p>
+                    <p class='link' @click='jumpUrl("trading")'>
+                        {{ $t('newHomeFooter.trading') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("fund")'>
+                        {{ $t('newHomeFooter.fund') }}
+                    </p>
                 </li>
                 <li>
                     <p class='nav-dt'>
                         {{ $t('newHomeFooter.service') }}
                     </p>
-                    <p>{{ $t('newHomeFooter.download') }}</p>
-                    <p>{{ $t('newHomeFooter.software') }}</p>
-                    <p>{{ $t('newHomeFooter.vip') }}</p>
+                    <p class='link' @click='jumpUrl("program")'>
+                        {{ $t('newHomeFooter.program') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("vip")'>
+                        {{ $t('newHomeFooter.vip') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("customer")'>
+                        {{ $t('newHomeFooter.customer') }}
+                    </p>
                 </li>
                 <li>
                     <p class='nav-dt'>
                         {{ $t('newHomeFooter.help') }}
                     </p>
-                    <p>{{ $t('newHomeFooter.faqs') }}</p>
-                    <p>{{ $t('newHomeFooter.cookies') }}</p>
-                    <p>{{ $t('newHomeFooter.terms') }}</p>
-                    <p>{{ $t('newHomeFooter.policy') }}</p>
+                    <p class='link' @click='jumpUrl("faqs")'>
+                        {{ $t('newHomeFooter.faqs') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("terms")'>
+                        {{ $t('newHomeFooter.terms') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("policy")'>
+                        {{ $t('newHomeFooter.policy') }}
+                    </p>
                 </li>
                 <li>
                     <p class='nav-dt'>
                         {{ $t('newHomeFooter.community') }}
                     </p>
+                    <ul class='community-box f-b-t'>
+                        <li class='box-item' @click='jumpUrl("fb")'>
+                            <img alt='facebook' class='item-icon' src='../../images/home/facebook.png' />
+                            <p class='icon-label'>
+                                Facebook
+                            </p>
+                        </li>
+                        <li class='box-item' @click='jumpUrl("ig")'>
+                            <img alt='instagram' class='item-icon' src='../../images/home/instagram.png' />
+                            <p class='icon-label'>
+                                Instagram
+                            </p>
+                        </li>
+                        <li class='box-item' @click='jumpUrl("twitter")'>
+                            <img alt='twitter' class='item-icon' src='../../images/home/twitter.png' />
+                            <p class='icon-label'>
+                                Twitter
+                            </p>
+                        </li>
+                        <li class='box-item' @click='jumpUrl("telegram")'>
+                            <img alt='telegram' class='item-icon' src='../../images/home/telegram.png' />
+                            <p class='icon-label'>
+                                Telegram
+                            </p>
+                        </li>
+                        <li class='box-item' @click='jumpUrl("yt")'>
+                            <img alt='youtube' class='item-icon' src='../../images/home/youtube.png' />
+                            <p class='icon-label'>
+                                Youtube
+                            </p>
+                        </li>
+                    </ul>
                 </li>
             </ul>
-            <div class='cookie-label f-b-t'>
-                <p>{{ $t('newHomeFooter.cookieTips') }}</p>
-                <button class='agree-btn'>
-                    {{ $t('newHomeFooter.accpte') }}
-                </button>
-            </div>
-            <p>Vitatoken  2022</p>
         </div>
         <!-- WL--end -->
     </div>
@@ -87,6 +121,7 @@ import HomeNotice from '../../modules/homeNotice/homeNotice'
 import { reactive, toRefs, onMounted, onUnmounted, computed, watch } from 'vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useStore } from 'vuex'
+import { getCookie } from '@/utils/util'
 export default {
     name: 'Home',
     components: {
@@ -141,6 +176,45 @@ export default {
             state.pageModules = res
         })
 
+        // WL--start 底部nav跳转
+        const jumpUrl = (index) => {
+            console.log('=======', index, getCookie('lang'))
+            const lang = getCookie('lang') || 'zh-CN'
+            let linkList = {}
+            if (lang === 'zh-CN') {
+                linkList = {
+                    trading: 'https://www.vitatoken.com/zh-CN/order?symbolId=364&tradeType=5',
+                    fund: 'https://www.vitatoken.com/zh-CN/fund',
+                    program: 'https://www.vitatoken.com/zh-CN/new1',
+                    vip: 'https://www.vitatoken.com/zh-CN/vip',
+                    customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
+                    faqs: 'https://www.vitatoken.com/zh-CN/faqs',
+                    terms: 'https://www.vitatoken.com/zh-CN/terms',
+                    policy: 'https://www.vitatoken.com/zh-CN/privacy'
+                }
+            } else {
+                linkList = {
+                    trading: 'https://www.vitatoken.com/en-US/order?symbolId=364&tradeType=5',
+                    fund: 'https://www.vitatoken.com/en-US/fund',
+                    program: 'https://www.vitatoken.com/en-US/new1',
+                    vip: 'https://www.vitatoken.com/en-US/vip',
+                    customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
+                    faqs: 'https://www.vitatoken.com/en-US/faqs',
+                    terms: 'https://www.vitatoken.com/en-US/terms',
+                    policy: 'https://www.vitatoken.com/en-US/privacy'
+                }
+            }
+            const community = {
+                fb: 'https://www.facebook.com/Vitatoken-100578379186941',
+                ig: 'https://www.instagram.com/vitatoken_official/',
+                twitter: 'https://twitter.com/Vitatoken_',
+                telegram: 'https://t.me/vitatoke',
+                yt: 'https://www.youtube.com/channel/UCWrIoUETskxOU9zIVpba6Hg'
+            }
+            const newLinkList = { ...linkList, ...community }
+            window.open(newLinkList[index])
+        }
+
         // 发送行情订阅
         onMounted(() => {
             // 头部固定
@@ -157,6 +231,7 @@ export default {
 
         return {
             ...toRefs(state),
+            jumpUrl,
             pageModulesList,
             fullBannerData,
             homeNoticeData,
@@ -168,53 +243,58 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/sass/mixin.scss';
 
 // WL--start
-.f-b-t{
+.f-b-t {
     display: flex;
     justify-content: space-between;
 }
 .new-index-footer {
     position: relative;
     z-index: 101;
-    min-width: 1200px;
     box-sizing: border-box;
+    min-width: 1200px;
     padding: 30px 60px;
-    background: #15191E !important;
-    text-align: center;
-    color:#eee;
+    color: #333;
+    font-size: 14px;
     line-height: 32px;
-    font-size: 16px;
+    text-align: center;
+    background: #FFF !important;
     .footer-nav {
         width: 1200px;
-        margin: 0 auto
-    }
-    .footer-logo {
-        display: block;
-        margin: 20px auto;
+        margin: 0 auto 15px;
+        .link {
+            color: #333;
+            cursor: pointer;
+        }
     }
     .nav-dt {
-        font-weight: bold;
-        margin-bottom: 10px;
+        margin-bottom: 14px;
+        font-size: 16px;
     }
-    .cookie-label {
-        text-align: center;
-        max-width: 700px;
-        margin: 30px auto;
-        .agree-btn {
-            background: #15191E;
-            border:1px solid #eee;
-            padding: 0 10px;
+    .community-box {
+        .box-item {
+            margin: 5px 18px;
+            text-align: center;
+            cursor: pointer;
+            .item-icon {
+                display: block;
+                width: 36px;
+                height: 36px;
+                margin: 5px auto;
+            }
+            .icon-label {
+                color: #999;
+                font-size: 14px;
+            }
         }
     }
 }
 // WL--end
-
-.homePage{
+.homePage {
     position: relative;
     padding-top: 490px;
-    .relativeFloor{
+    .relativeFloor {
         position: relative;
         z-index: 101;
     }
@@ -241,9 +321,9 @@ export default {
     .title {
         @include font();
         margin-bottom: 38px;
-        font-size: 32px;
-        font-weight: bold;
         color: var(--color);
+        font-weight: bold;
+        font-size: 32px;
     }
     .case {
         height: 600px;
@@ -252,11 +332,11 @@ export default {
         @include font();
         margin-bottom: 38px;
         span {
-            padding-bottom: 6px;
             margin-right: 45px;
-            font-size: 32px;
-            font-weight: bold;
+            padding-bottom: 6px;
             color: var(--minorColor);
+            font-weight: bold;
+            font-size: 32px;
             cursor: pointer;
             &:last-of-type {
                 margin-right: 0;
@@ -271,4 +351,6 @@ export default {
         }
     }
 }
+
+@import '@/sass/mixin.scss';
 </style>

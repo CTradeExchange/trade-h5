@@ -948,21 +948,17 @@
 		"assetQquestionTip": "The chart refers to the most recent 24H market performance of the assets included in the fund's portfolio(Quotation unit:USDT)"
 	},
     "newHomeFooter":{ 
-        "logoText": "We Make Your Cryptocurrency Journey Easier",
         "product": "Products",
         "trading": "Spot Trading",
         "fund": "Index Fund",
         "service": "Services",
-        "download": "Downloads",
-        "software": "Desktop Application ",
+        "program": "Program for New Clients",
         "vip": "Institutional & VIP",
+        "customer": "Customer Service",
         "help": "Support",
         "faqs": "FAQs",
-        "cookies": "cookies",
         "terms": "Terms&Conditions ",
         "policy": "Privacy Policy ",
-        "community": "Community",
-        "cookieTips": "We use cookies to enhance your experience. By visiting our website you agree to our use of cookies.",
-        "accpte": "Accpte"
+        "community": "Community"
     }
 }
