@@ -37,6 +37,7 @@
                 </template>
             </van-cell>
             <van-cell
+                v-if='inviteVis'
                 class='cellItem'
                 is-link
                 :title='$t("common.invite")'
@@ -162,6 +163,11 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         const supportLanguages = computed(() => store.state.supportLanguages)
+        const companyId = computed(() => customInfo.value.companyId)
+
+        const inviteVis = computed(() => {
+            return (location.href.includes('uat') && companyId.value === 1) || (location.href.includes('pre') && companyId.value === 360) || (companyId.value === 1)
+        })
 
         // 选择语言
         const langSelect = (action) => {
@@ -259,6 +265,7 @@ export default {
             colorSelect,
             upDownColorSelect,
             back,
+            inviteVis,
             ...toRefs(state)
         }
     },
