@@ -10,12 +10,13 @@
                 </span>
             </div>
             <!-- 新闻 -->
+
             <div v-show='currentFlow === 1'>
-                <newsList />
+                <newsList :data='data' />
             </div>
             <!-- 7x24 -->
             <div v-if='currentFlow === 2'>
-                <seven />
+                <seven :data='data' />
             </div>
         </div>
         <div class='flow-right'>
@@ -77,7 +78,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/sass/mixin.scss';
 
 // 信息流模块
 .flow-module {
@@ -92,9 +92,9 @@ export default {
     }
     .title {
         margin-bottom: 38px;
-        font-size: 32px;
-        font-weight: bold;
         color: var(--color);
+        font-weight: bold;
+        font-size: 32px;
     }
     .case {
         height: 600px;
@@ -103,9 +103,9 @@ export default {
         margin-bottom: 38px;
         span {
             margin-right: 45px;
-            font-size: 32px;
-            font-weight: bold;
             color: var(--minorColor);
+            font-weight: bold;
+            font-size: 32px;
             cursor: pointer;
             &:last-of-type {
                 margin-right: 0;
@@ -120,4 +120,6 @@ export default {
         }
     }
 }
+
+@import '~@/sass/mixin.scss';
 </style>

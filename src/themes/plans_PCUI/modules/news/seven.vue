@@ -33,7 +33,19 @@ import { getCookie } from '@/utils/util'
 import { newsListByTypeByPage } from '@/api/information'
 
 export default {
-    setup () {
+    props: {
+        data: {
+            type: Object,
+            default: function () {
+                return {
+                    href: '',
+                    src: '',
+                    target: '',
+                }
+            }
+        },
+    },
+    setup (props) {
         const store = useStore()
         const wpCompanyInfo = computed(() => store.state._base.wpCompanyInfo)
         const today = window.dayjs().format('YYYY-MM-DD')
@@ -56,9 +68,9 @@ export default {
                 type: state.type,
                 page: state.page,
                 pageSize: state.size,
-                orgid: wpCompanyInfo.value.orgid || 1
+                orgid: props.data.orgid || 1
             }
-            newsListByTypeByPage(params, state.lang, wpCompanyInfo.value.newsArea).then(res => {
+            newsListByTypeByPage(params, state.lang, props.data.newsArea).then(res => {
                 state.list = res.data
                 state.total = res.total
                 state.loading = 'more'
@@ -94,43 +106,43 @@ export default {
     overflow-y: auto;
     .today {
         margin-bottom: 30px;
-        font-size: 14px;
         color: var(--minorColor);
+        font-size: 14px;
     }
 }
 :deep(.el-timeline) {
     .el-timeline-item {
         .el-timeline-item__node {
+            left: 1px;
             width: 8px;
             height: 8px;
-            left: 1px;
             background: var(--placeholdColor);
         }
         .el-timeline-item__tail {
             border-left: 1px solid var(--lineColor);
         }
         .el-timeline-item__content {
-            font-size: 14px;
             color: var(--minorColor);
+            font-size: 14px;
         }
         .el-timeline-item__timestamp {
-            line-height: 22px;
-            font-size: 16px;
             color: var(--color);
+            font-size: 16px;
+            line-height: 22px;
         }
     }
 }
 .pagination-case {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     margin-top: 50px;
     font-size: 14px;
 }
 .load-more {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     height: 80px;
     cursor: pointer;
     a {
