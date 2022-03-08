@@ -46,7 +46,9 @@
         "setFundPwd": "Fund Password",
         "MFA_status": "Google Authenticator",
         "MFA_bind": "Bind Google Authenticator",
-        "MFA_close": "Close Google Authenticator"
+        "MFA_close": "Close Google Authenticator",
+        "invite": "invite",
+        "rule": "rule"
     },
     "login": {
         "loginBtn": "Log In",
@@ -204,7 +206,8 @@
         "unSupported": "Your browser does not support this feature",
         "sendCode": "Send code",
         "smsCodeInput": "Please enter SMS verification code",
-        "emailCodeInput": "Please enter email verification code"
+        "emailCodeInput": "Please enter email verification code",
+        "invite": "invite"
     },
     "faceAuth": {
         "faceDetectTip": "Please face your phone and keep it well lit",

@@ -36,6 +36,12 @@
                     <van-switch v-model='themeVal' :active-color='$style.primary' size='24px' @change='colorSelect' />
                 </template>
             </van-cell>
+            <van-cell
+                class='cellItem'
+                is-link
+                :title='$t("common.invite")'
+                to='/invite'
+            />
         </van-cell-group>
     </div>
     <van-popup
@@ -261,127 +267,122 @@ export default {
 
 <style lang="scss">
 @import '@/sass/mixin.scss';
-.custom-popup{
+.custom-popup {
     --van-cell-group-inset-padding: 0;
     --van-cell-group-background-color: var(--bgColor);
     --van-cell-group-inset-border-radius: 0;
-    .popup-item{
-        padding: 0 rem(30px);
+    .popup-item {
         display: flex;
         align-items: center;
-        margin-bottom: rem(20px);
-        line-height:rem(130px);
         justify-content: space-between;
+        margin-bottom: rem(20px);
+        padding: 0 rem(30px);
+        line-height: rem(130px);
         background: var(--contentColor);
         border-radius: rem(10px);
-        &:last-child{
+        &:last-child {
             margin-bottom: 0;
         }
-        .left{
-            .label{
+        .left {
+            .label {
                 font-size: rem(32px);
                 vertical-align: middle;
             }
-            .color-icon{
-                width: rem(40px)
+            .color-icon {
+                width: rem(40px);
             }
-            .icon{
+            .icon {
+                margin-left: -3px;
                 font-size: rem(50px);
-                margin-left:-3px;
                 vertical-align: middle;
             }
-            .color-red{
+            .color-red {
                 color: #B72122;
             }
-            .color-green{
+            .color-green {
                 color: #2B70AE;
             }
-
         }
-        .van-radio{
-            .van-radio__icon--checked{
-                .van-icon{
+        .van-radio {
+            .van-radio__icon--checked {
+                .van-icon {
                     line-height: normal;
                 }
             }
         }
-        &::after{
+        &::after {
             border-bottom: none;
         }
-
     }
 }
-.lang-popup{
-    .popup-wrap{
-        padding: 0 0 0 rem(25px);
+.lang-popup {
+    .popup-wrap {
         display: flex;
         flex-wrap: wrap;
-        .lang-item{
+        padding: 0 0 0 rem(25px);
+        .lang-item {
             box-sizing: content-box;
-            padding: rem(8px) rem(8px) rem(2px) rem(8px);
             margin-right: rem(20px);
             margin-bottom: rem(42px);
+            padding: rem(8px) rem(8px) rem(2px) rem(8px);
             border: rem(4px) solid transparent;
-            .lang-icon{
+            .lang-icon {
                 width: rem(120px);
-                height: rem(120px)
+                height: rem(120px);
             }
-            &.active{
+            &.active {
                 border: rem(4px) solid var(--primary);
                 border-radius: 50%;
-
             }
         }
     }
-
 }
 
 </style>
 
 <style lang='scss' scoped>
 @import '@/sass/mixin.scss';
-.custom-popup{
-    :deep(.van-radio-group){
+.custom-popup {
+    :deep(.van-radio-group) {
         background: chocolate;
     }
 }
-
-.page-wrap{
+.page-wrap {
     padding-top: rem(110px);
-    .header{
-        background: var(--contentColor);
-        font-size: rem(48px);
-        padding-left: rem(30px);
+    .header {
         padding-bottom: rem(30px);
+        padding-left: rem(30px);
+        font-size: rem(48px);
+        background: var(--contentColor);
     }
-    .cellGroup{
+    .cellGroup {
         .cellItem {
-            font-size: rem(32px);
-            line-height: rem(120px);
-            height: rem(120px);
-            background: var(--contentColor);
-            border-top: solid rem(10px) var(--bgColor);
             //background: none;
             display: flex;
             align-items: center;
+            height: rem(120px);
+            font-size: rem(32px);
+            line-height: rem(120px);
+            background: var(--contentColor);
+            border-top: solid rem(10px) var(--bgColor);
             //margin-top: rem(10px);
-            &::after{
+            &::after {
                 border: none;
             }
-            :deep(.van-cell__title){
+            :deep(.van-cell__title) {
                 color: var(--color);
             }
-            .lang-icon{
+            .lang-icon {
                 width: rem(56px);
                 margin-right: rem(20px);
             }
-            .right-arrow{
+            .right-arrow {
                 margin-top: -2px;
                 color: var(--minorColor);
             }
-            .updown-icon{
-               width: rem(40px);
-               margin-right: rem(20px);
+            .updown-icon {
+                width: rem(40px);
+                margin-right: rem(20px);
             }
         }
     }
