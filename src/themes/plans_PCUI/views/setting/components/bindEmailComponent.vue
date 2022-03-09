@@ -10,7 +10,7 @@
         <Loading :show='loading' />
         <form class='form'>
             <div class='field'>
-                <areaInput
+                <!-- <areaInput
                     v-model='email'
                     v-model:zone='zoneText'
                     clear
@@ -18,7 +18,34 @@
                     :input-type='"text"'
                     :placeholder='type === "bind" ? $t("common.inputEmail"): $t("common.inputNewEmail")'
                     type='email'
+                /> -->
+                <p class='title'>
+                    {{ $t("common.inputEmail") }}
+                </p>
+                <van-field
+                    v-model='email'
+                    label=''
+                    :placeholder='type === "bind" ? $t("common.inputEmail"): $t("common.inputNewEmail")'
+                    type='text'
                 />
+            </div>
+            <div v-if='type === "change"' class='field'>
+                <p class='title'>
+                    {{ $t('common.sendToYourEmail') }}
+                </p>
+                <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+            </div>
+            <div v-if='type === "change"' class='field'>
+                <p class='title'>
+                    {{ $t('common.sendToYou') }} {{ customInfo.email }}
+                </p>
+                <CheckCode v-model='checkCodeOld' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSendOld' />
+            </div>
+            <div v-if='googleCodeVis' class='field'>
+                <p class='title'>
+                    {{ $t('common.inputGoogleCode') }}
+                </p>
+                <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
             </div>
             <div class='field'>
                 <!-- <label class='label'>
@@ -37,11 +64,12 @@
 import Top from '@/components/top'
 import CheckCode from '@/components/form/checkCode'
 import areaInput from '@/components/form/areaInput.vue'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 import { Toast, Dialog } from 'vant'
 import { reactive, toRefs, computed, onUnmounted } from 'vue'
 import { isEmpty, emailReg, getArrayObj } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
-import { bindEmail, changeEmail, checkCustomerExist } from '@/api/user'
+import { bindEmail, changeEmailV1v1v2, checkCustomerExist } from '@/api/user'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
@@ -49,6 +77,7 @@ export default {
     components: {
         Top,
         areaInput,
+        googleVerifyCode,
         CheckCode
     },
     props: {
@@ -66,11 +95,13 @@ export default {
             checkCode: '',
             loading: false,
             zone: '+86',
+            googleCode: ''
         })
         store.dispatch('getCountryListByParentCode')
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
         const countryList = computed(() => store.state.countryList)
         const customInfo = computed(() => store.state._user.customerInfo)
+        const googleCodeVis = computed(() => customInfo.value.googleId > 0)
         const zoneText = computed(() => {
             const countryObj = getArrayObj(countryList.value, 'code', customInfo.value.country)
             state.zone = countryObj.countryCode
@@ -93,12 +124,26 @@ export default {
             if (isEmpty(state.sendToken)) {
                 return Toast(t('common.getVerifyCode'))
             }
+            if (googleCodeVis.value && !state.googleCode) {
+                return Toast(t('common.inputGoogleCode'))
+            }
+            if (props.type === 'change') {
+                if (isEmpty(state.checkCodeOld)) {
+                    return Toast(t('common.inputVerifyCode'))
+                }
+                if (isEmpty(state.sendTokenOld)) {
+                    return Toast(t('common.getVerifyCode'))
+                }
+            }
 
             const params = {
                 email: state.email,
                 verifyCode: state.checkCode,
                 sendToken: state.sendToken || '11',
-                emailArea: state.zone
+                emailArea: state.zone,
+                verifyCodeOld: state.checkCodeOld,
+                sendTokenOld: state.sendTokenOld,
+                googleCode: state.googleCode
             }
             state.loading = true
 
@@ -115,7 +160,7 @@ export default {
                     state.loading = false
                 })
             } else if (props.type === 'change') {
-                changeEmail(params).then(res => {
+                changeEmailV1v1v2(params).then(res => {
                     state.loading = false
                     if (res.check()) {
                         Toast(t('common.replaceEmailSuccess'))
@@ -127,6 +172,9 @@ export default {
                     state.loading = false
                 })
             }
+        }
+        const getGooleVerifyCode = val => {
+            state.googleCode = val
         }
 
         // 发送验证码
@@ -183,6 +231,21 @@ export default {
             })
         }
 
+        const handleVerifyCodeSendOld = (callback) => {
+            const params = {
+                bizType: 'EMAIL_LOGINED_VERIFICATION_CODE'
+            }
+            verifyCodeSend(params).then(res => {
+                if (res.check()) {
+                    if (Number(res.code) === 0) {
+                        state.sendTokenOld = res.data.token
+                        Toast(t('common.verifySended'))
+                        callback && callback()
+                    }
+                }
+            })
+        }
+
         onUnmounted(() => {
             store.dispatch('_user/findCustomerInfo')
         })
@@ -192,6 +255,10 @@ export default {
             onlineServices,
             handleVerifyCodeSend,
             zoneText,
+            customInfo,
+            googleCodeVis,
+            getGooleVerifyCode,
+            handleVerifyCodeSendOld,
             title,
             ...toRefs(state)
         }
@@ -206,6 +273,7 @@ export default {
     .form {
         padding-top: rem(20px);
         .field {
+            margin-top: 10px;
             padding: 0 rem(30px);
             background: var(--contentColor);
             .label {

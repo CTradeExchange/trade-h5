@@ -204,6 +204,7 @@
     "noBindPhone": "未绑定手机号",
     "noBindEmail": "未绑定邮箱",
     "inputGoogleCode": "请输入谷歌验证码",
+    "googleCode": "谷歌验证码",
     "paste": "粘贴",
     "unSupported": "您的浏览器不支持使用该功能",
     "sendCode": "发送验证码",

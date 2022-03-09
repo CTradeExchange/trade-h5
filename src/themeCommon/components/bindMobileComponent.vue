@@ -262,22 +262,21 @@ export default {
     .form {
         padding-top: rem(20px);
         .field {
-            padding: 0 rem(30px);
             margin-bottom: rem(20px);
+            padding: 0 rem(30px);
             background: var(--contentColor);
             .label {
                 color: var(--minorColor);
             }
-            .title{
-                color: var(--normalColor);
+            .title {
                 padding: rem(20px) 0;
+                color: var(--normalColor);
             }
-
         }
         .confirm-btn {
-            height: rem(90px);
             position: fixed;
             bottom: 0;
+            height: rem(90px);
             background: var(--contentColor);
             border-color: var(--lineColor);
             span {

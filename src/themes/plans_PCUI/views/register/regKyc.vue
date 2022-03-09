@@ -57,7 +57,7 @@ export default {
     margin-bottom: rem(20px);
     padding-left: rem(30px);
 }
-.registerAuthCondition{
+.registerAuthCondition {
     height: 100%;
     overflow: auto;
 }

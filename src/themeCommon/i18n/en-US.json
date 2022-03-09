@@ -200,6 +200,7 @@
         "noBindPhone": "Mobile phone not binded",
         "noBindEmail": "Email not binded",
         "inputGoogleCode": "Please enter Google authentication code",
+        "googleCode": "Google authentication code",
         "paste": "Paste",
         "unSupported": "Your browser does not support this feature",
         "sendCode": "Send code",
