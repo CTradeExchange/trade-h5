@@ -166,7 +166,7 @@ export default {
         const companyId = computed(() => customInfo.value.companyId)
 
         const inviteVis = computed(() => {
-            return (location.href.includes('uat') && companyId.value === 1) || (location.href.includes('pre') && companyId.value === 360) || (companyId.value === 1)
+            return (location.href.includes('uat') && companyId.value === 1) || (location.href.includes('pre') && companyId.value === 360) || (companyId.value === 11)
         })
 
         // 选择语言
