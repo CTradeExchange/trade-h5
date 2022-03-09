@@ -246,7 +246,8 @@ const h5Children = [
         meta: {
             title: 'route.MFA_bind',
         }
-    },
+    }
+
 ]
 
 const routes = [
@@ -326,8 +327,10 @@ const routes = [
         component: () => import(/* webpackChunkName: "resetFail" */ '../views/forgot/resetFail.vue'),
         meta: {
             title: 'cRoute.resetPwdFaid'
-        }
+        },
+
     },
+
     {
         path: '/',
         redirect: '/home',
@@ -413,7 +416,24 @@ const routes = [
                     roles: ['User']
                 },
                 children: h5Children
-            }
+            },
+            {
+                path: '/businessKYC',
+                name: 'BusinessKYC',
+                component: () => import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/index.vue'),
+                meta: {
+                    title: '企业KYC',
+                }
+            },
+            {
+                path: '/businessKYC/content',
+                name: 'BusinessKYCContent',
+                component: () => import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/content.vue'),
+                meta: {
+                    title: '企业KYC',
+                }
+            },
+
         ]
     },
     // {
