@@ -109,7 +109,10 @@
         "loan": "Loan",
         "transfer": "Transfer",
         "records": "Records",
-        "transRecords": "Trade record"
+        "transRecords": "Trade record",
+        "MFA_status": "Google Authenticator",
+        "MFA_bind": "Bind Google Authenticator",
+        "MFA_close": "Close Google Authenticator"
     },
     "historyList": {
         "noMore": "No more"

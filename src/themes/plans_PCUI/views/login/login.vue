@@ -18,7 +18,14 @@
                     {{ loginType==='password' ? $t("signIn.loginByPwd") : $t("signIn.loginByCode") }}
                 </h2>
                 <div class='field'>
-                    <compInput ref='loginNameEl' v-model.trim='loginName' block :placeholder="$t('signIn.loginNamePlaceholder')" @keyup.enter='onLoginNameKeyupEnter' />
+                    <compInput
+                        ref='loginNameEl'
+                        v-model.trim='loginName'
+                        block
+                        :placeholder="$t('signIn.loginNamePlaceholder')"
+                        @keyup.enter='onLoginNameKeyupEnter'
+                        @onBlur='checkUserMfa'
+                    />
                 </div>
                 <div v-if="loginType==='password'" class='field'>
                     <compInput
@@ -44,6 +51,9 @@
                             {{ verifyCodeBtnText }}
                         </van-button>
                     </compInput>
+                </div>
+                <div v-if='googleCodeVis' class='field field-google'>
+                    <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
                 </div>
                 <van-button block class='loginBtn' :disabled='loading' type='primary' @click='loginHandle'>
                     {{ $t('signIn.loginBtn') }}
@@ -90,11 +100,13 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { localGet, isEmpty } from '@/utils/util'
-import { Dialog } from 'vant'
+import { Toast, Dialog } from 'vant'
 import LoginHook from './loginHook'
 import LoginByGoogle from '@/themeCommon/user/login/components/loginByGoogle.vue'
 import LoginByFacebook from '@/themeCommon/user/login/components/loginByFacebook.vue'
 import LoginByTwitter from '@/themeCommon/user/login/components/loginByTwitter.vue'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
+import { checkGoogleMFAStatus } from '@/api/user'
 
 export default {
     name: 'Login',
@@ -103,6 +115,7 @@ export default {
         loginTypeBar,
         topNav,
         compInput,
+        googleVerifyCode,
         LoginByGoogle,
         LoginByFacebook,
         LoginByTwitter,
@@ -122,6 +135,7 @@ export default {
             sendVerifyLoading: false,
             loginName: '',
             pwd: '',
+            googleCodeVis: '',
             checkCode: '',
             token: '', // 验证码token
             loginType: 'password', // password 密码登录   checkCode 验证码登录
@@ -141,6 +155,9 @@ export default {
 
         // 点击登录
         const loginHandle = () => {
+            if (state.googleCodeVis && isEmpty(state.googleCode)) {
+                return Toast(t('common.inputGoogleCode'))
+            }
             state.loading = true
             loginSubmit({
                 loginName: state.loginName,
@@ -148,6 +165,7 @@ export default {
                 checkCode: state.checkCode,
                 pwd: state.pwd,
                 token: state.token,
+                googleCode: state.googleCode
             }).then(res => {
                 console.log('success')
                 // 登录KYC,kycAuditStatus:0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
@@ -235,6 +253,26 @@ export default {
             }
         }
 
+        // 检测客户是否开启GoogleMFA
+        const checkUserMfa = (ev) => {
+            const val = ev.target.value
+            if (val) {
+                checkGoogleMFAStatus({
+                    loginName: val,
+                    type: val.includes('@') ? 1 : 2
+                }).then(res => {
+                    if (res.check()) {
+                        state.googleCodeVis = res.data > 0
+                    }
+                }).catch(err => {
+                    console.log('err', err)
+                })
+            }
+        }
+        const getGooleVerifyCode = val => {
+            state.googleCode = val
+        }
+
         onMounted(() => {
             if (isEmpty(countryList.value) && !isEmpty(thirdLoginArr.value)) {
                 // 获取国家区号
@@ -253,6 +291,8 @@ export default {
             pwdEl,
             checkCodeEl,
             thirdLoginArr,
+            checkUserMfa,
+            getGooleVerifyCode,
             onLoginNameKeyupEnter,
         }
     }
@@ -261,42 +301,42 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.login{
-    height: 100%;
+.login {
     display: flex;
     flex-flow: column;
-    font-size: 14px;
     justify-content: space-between;
+    height: 100%;
+    font-size: 14px;
     background: var(--bgColor);
-    .footer{
-        text-align: center;
-        font-size: 12px;
+    .footer {
         padding-bottom: 16px;
         color: var(--minorColor);
+        font-size: 12px;
+        text-align: center;
     }
-    .main{
-        margin: 0 auto;
+    .main {
         width: 520px;
+        margin: 0 auto;
         padding: 40px 60px 60px;
-        border-radius: 10px;
         background: var(--contentColor);
+        border-radius: 10px;
     }
     .account-type {
         display: flex;
         align-items: center;
         height: 44px;
-        padding: 0 2px;
         margin-bottom: 30px;
+        padding: 0 2px;
         background: var(--assistColor);
         border-radius: 22px;
         .btn {
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex: 1;
+            align-items: center;
+            justify-content: center;
             height: 40px;
-            font-size: 18px;
             color: var(--minorColor);
+            font-size: 18px;
             background: none;
             border-radius: 20px;
             cursor: pointer;
@@ -305,63 +345,75 @@ export default {
             }
         }
         .active {
-            font-weight: bold;
             color: var(--primary);
-            background: #fff;
+            font-weight: bold;
+            background: #FFF;
         }
     }
 }
-.loginForm{
+.loginForm {
     margin-top: 34px;
-    .field{
+    .field {
         margin-top: 24px;
-        :deep(.pcInputBar){
+        :deep(.pcInputBar) {
             border-radius: 4px;
         }
-        :deep(.pcInput){
+        :deep(.pcInput) {
             font-size: 16px;
         }
     }
-    .loginTitle{
-        font-size: 32px;
+    .field-google :deep() {
+        .form-item {
+            background: var(--assistColor);
+        }
+        .van-cell {
+            padding-left: 20px;
+            background: none;
+        }
+        .paste {
+            display: none;
+        }
+    }
+    .loginTitle {
         font-weight: bold;
+        font-size: 32px;
         line-height: 1;
     }
-    .loginBtn{
+    .loginBtn {
         height: 48px;
-        border-radius: 4px;
-        font-size: 20px;
         margin-top: 40px;
+        font-size: 20px;
+        border-radius: 4px;
     }
-    .verifyCodeBtn{
+    .verifyCodeBtn {
         width: 90px;
         margin-right: 8px;
         font-size: 14px;
-        border: 0;
         background: none;
+        border: 0;
     }
 }
-.linkBar{
-    margin-top: 20px;
+.linkBar {
     display: flex;
     justify-content: space-between;
-    a{
-        color: var(--color)
+    margin-top: 20px;
+    a {
+        color: var(--color);
     }
 }
-.three-way-login{
+.three-way-login {
     margin-top: 50px;
-    .title{
-        text-align: center;
-        color: var(--placeholdColor);
+    .title {
         margin-bottom: 10px;
+        color: var(--placeholdColor);
+        text-align: center;
     }
     .otherLogin {
-        text-align: center;
         display: flex;
         justify-content: space-evenly;
         width: 200px;
         margin: 15px auto 0;
+        text-align: center;
     }
 }
 </style>

@@ -86,6 +86,9 @@
                                 <el-dropdown-item @click="handRoutTo('/bankList')">
                                     {{ $t('cRoute.bankList') }}
                                 </el-dropdown-item>
+                                <el-dropdown-item @click="handRoutTo('/googleMFA/status')">
+                                    {{ $t('mfa.routeTitile') }}
+                                </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
@@ -211,20 +214,20 @@ export default {
 
 <style lang="scss" scoped>
 .header-nav {
+    position: relative;
+    z-index: 100;
     display: flex;
     justify-content: space-between;
     min-width: 1200px;
     height: 50px;
     padding: 0 16px;
-    background-color: rgba(21,25,30,1);
-    position: relative;
-    z-index: 100;
-    &.Home{
+    background-color: rgba(21, 25, 30, 1);
+    &.Home {
         position: sticky;
         top: 0;
         left: 0;
         width: 100%;
-        background-color: rgba(0,0,0,.5);
+        background-color: rgba(0, 0, 0, 0.5);
     }
     .nav-left {
         display: flex;
@@ -246,8 +249,8 @@ export default {
                     margin-right: 0;
                 }
                 .link {
+                    color: #FFF;
                     font-size: 14px;
-                    color: #fff;
                     cursor: pointer;
                     &:hover {
                         color: var(--primary);
@@ -272,18 +275,18 @@ export default {
             font-size: 14px;
             .login {
                 margin-right: 15px;
-                color: #fff;
+                color: #FFF;
                 &:hover {
                     color: var(--primary);
                 }
             }
             .register {
                 display: inline-flex;
-                justify-content: center;
                 align-items: center;
+                justify-content: center;
                 width: 64px;
                 height: 28px;
-                color: #fff;
+                color: #FFF;
                 background: #477FD3;
                 border-radius: 4px;
             }
@@ -304,19 +307,19 @@ export default {
                     cursor: pointer;
                     .head {
                         display: inline-flex;
-                        justify-content: center;
                         align-items: center;
+                        justify-content: center;
                         width: 28px;
                         height: 28px;
                         margin-right: 8px;
+                        overflow: hidden;
                         // background: #91B6EE;
                         background: url('../images/user.png') center center no-repeat;
                         border-radius: 50%;
-                        overflow: hidden;
                         i {
                             margin-top: 10px;
+                            color: #FFF;
                             font-size: 24px;
-                            color: #fff;
                         }
 
                         // &::before{
@@ -326,16 +329,15 @@ export default {
                         // }
                     }
                     .no {
-                        line-height: 1;
                         font-size: 16px;
+                        line-height: 1;
                     }
                 }
                 .icon {
-                    font-size: 20px;
                     color: #D6DAE1;
+                    font-size: 20px;
                     cursor: pointer;
                 }
-
             }
             .line {
                 width: 1px;
@@ -354,8 +356,8 @@ export default {
                     margin-right: 0;
                 }
                 .icon {
-                    font-size: 20px;
                     color: #D6DAE1;
+                    font-size: 20px;
                     cursor: pointer;
                 }
                 &:deep(.icon_yuyan) {
@@ -366,44 +368,44 @@ export default {
         }
     }
 }
-.information_box{
-    width:400px;
-    height:600px;
+.information_box {
+    width: 400px;
+    height: 600px;
+    background-color: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-    background-color:rgba(0, 0, 0, 0.2);
-    .information_head{
-        width:100%;
-        height:48px;
-        background-color:#ffffff;
-        text-align:center;
-        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-        .current_type{
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    .information_head {
+        width: 100%;
+        height: 48px;
+        text-align: center;
+        background-color: #FFF;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+        .current_type {
             font-size: 16px;
             line-height: 48px;
-            cursor:pointer;
-            i{
-                margin-left:4px;
-                color:#dcdfe6;
-                cursor:pointer;
+            cursor: pointer;
+            i {
+                margin-left: 4px;
+                color: #DCDFE6;
+                cursor: pointer;
             }
         }
     }
-    .type_list{
-        ul{
-            width:100%;
-            li{
-                width:100%;
-                height:40px;
-                line-height: 44px;
+    .type_list {
+        ul {
+            width: 100%;
+            li {
+                width: 100%;
+                height: 40px;
                 font-size: 14px;
-                text-align:center;
-                background-color:#ffffff;
-                cursor:pointer;
+                line-height: 44px;
+                text-align: center;
+                background-color: #FFF;
+                cursor: pointer;
             }
         }
-        .activeLi{
-            color:#ee0a24;
+        .activeLi {
+            color: #EE0A24;
         }
     }
     .msg-list {
