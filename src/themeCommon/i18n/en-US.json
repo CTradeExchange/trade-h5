@@ -47,7 +47,7 @@
         "MFA_status": "Google Authenticator",
         "MFA_bind": "Bind Google Authenticator",
         "MFA_close": "Close Google Authenticator",
-        "invite": "invite",
+        "invite": "invite friends",
         "rule": "rule"
     },
     "login": {
@@ -817,5 +817,36 @@
         "hasInstalled": "I downloaded and installed",
         "bind": "Bind",
         "secretKeyDesc": "Please keep this private kay in a safety place, if private key is updated but not binded yet, please save and bind with the latest private key. If you lost mobile phone, this private key allow you to recover your identity authenticator, otherwise, you have to contact Customer Service to reset"
+    },
+    "invite": {
+        "rebate": "your rebate",
+        "total": "total reward",
+        "inviteCount": "Invite friends",
+        "method": "Invitation method",
+        "id": "Referral code",
+        "link": "Referral link",
+        "invite": "Invite ",
+        "inviteFriend": "Invite friends",
+        "rule": "View Referral Rules",
+        "ruleContent": "Activity rules: Every time the recommender successfully recommends a new user to vitatoken, he can receive a commission from the transaction fee when the new recommended user trades in any spot or fund. This means that you are free to invite users instantly through the referral link, and both offer commissions. Friends can also enjoy the transaction fee discount you set when registering using your referral link.",
+        "spot": "Spot",
+        "netDeposit":"Inviter's net deposit",
+        "rate": "Inviter's rebate rate",
+        "inviteRate": "The percentage of commission received by the inviter",
+        "rebackRate": "Invitee's cashback percentage",
+        "c1": "If the inviter's net deposit is less than 5000 U, the rebate rate is 20%, and the inviter can set three levels of invitee rebate rate: 0%, 5%, and 10%.",
+        "c2": "If the inviter's net deposit is ≥5000 U, the rebate rate will be increased to 40%. The inviter can set the five-level inviter's cash back rate of 0%, 5%, 10%, 15%, and 20%.",
+        "fund": "FUND：",
+        "c3": "If the inviter's net deposit is less than 5000 U, the rebate rate is 10%, and the inviter can set 0% and 5% for the two-file inviter's cash back rate.",
+        "c4": "If the inviter's net deposit is greater than or equal to 5000 U, the rebate rate will be increased to 20%. The inviter can set 0%, 5%, 10%, and three levels of the invitee's cash back rate.",
+        "send": "Commission delivery:",
+        "c5": "1. The data update time is based on UTC+0 time. The calculation of today's commission is based on the assets of the previous day, and the commission of the day is settled at 24:00:00 every day.",
+        "c6": "2. Your referral commission will be credited to your asset V10 ETF within the next 72 hours. If you have not received your commission within the next 72 hours, please contact our Live Call Center for further assistance.",
+        "c7": "Precautions:",
+        "c8": "1. If customers are found to be trading irregularly during the event, vitoken has the right to stop customer transactions and disqualify the reward",
+        "c9": "2. The cost of ETF redemption, bonus withdrawal process, the difference caused by bank charges or exchange rate shall be borne by the customer",
+        "c10": "3. If you have any questions about the event, you can contact the online customer service at any time",
+        "c11": "4. vitatoken reserves the right to modify, change or cancel this announcement for any reason at its sole discretion at any time without prior notice.",
+        "c12": "5. Risk warning: There are risks in cryptocurrency transactions, please purchase with caution and pay attention to transaction risks. Please note that vitaken is not responsible for any guarantee, compensation, etc. for any of your transactions"
     }
 }

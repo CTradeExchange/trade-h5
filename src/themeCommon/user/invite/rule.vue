@@ -1,22 +1,19 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop :back='true' title='邀请活动规则' />
+        <LayoutTop :back='true' :title='$t("invite.rule")' />
         <div class='content'>
             <p class='t3'>
-                活动规则：推荐人每成功推荐一位新用户给vitatoken，
-                就能在新推荐用户在任何现货或基金交易时从交易费中收到佣金。
-                这表示您可以立即透过推荐链接自由邀请用户，两者皆能提供佣金。
-                朋友使用您的推荐链接注册时亦可享有您设置的交易手续费折扣。
+                {{ $t("invite.ruleContent") }}
             </p>
             <p class='t2'>
-                现货：
+                {{ $t("invite.spot") }}
             </p>
             <table border='1' class='table'>
                 <tr>
-                    <th>邀请人净入金</th>
-                    <th>邀请人返佣比例</th>
-                    <th>邀请人收到的返佣比例</th>
-                    <th>被邀请人的返现比例</th>
+                    <th>{{ $t("invite.netDeposit") }}</th>
+                    <th>{{ $t("invite.rate") }}</th>
+                    <th>{{ $t("invite.inviteRate") }}</th>
+                    <th>{{ $t("invite.rebackRate") }}</th>
                 </tr>
                 <tr>
                     <td rowspan='3'>
@@ -66,21 +63,21 @@
             </table>
 
             <p class='t1'>
-                若邀请人淨入金&lt;5000 U，返佣比例为 20%，邀请人可以设置 0%、5%、10% 三档被邀请人返现比例。
+                {{ $t("invite.c1") }}
             </p>
             <p class='t1'>
-                若邀请人净入金≥5000 U，返佣比例增加为 40%，邀请人可以自行设置 0%、5%、10%、15%、20% 五档被邀请人返现比例。
+                {{ $t("invite.c2") }}
             </p>
             <br />
             <p class='t2'>
-                基金：
+                {{ $t("invite.fund") }}
             </p>
             <table border='1' class='table'>
                 <tr>
-                    <th>邀请人净入金</th>
-                    <th>邀请人返佣比例</th>
-                    <th>邀请人收到的返佣比例</th>
-                    <th>被邀请人的返现比例</th>
+                    <th>{{ $t("invite.netDeposit") }}</th>
+                    <th>{{ $t("invite.rate") }}</th>
+                    <th>{{ $t("invite.inviteRate") }}</th>
+                    <th>{{ $t("invite.rebackRate") }}</th>
                 </tr>
                 <tr>
                     <td rowspan='2'>
@@ -117,45 +114,50 @@
                 </tr>
             </table>
             <p class='t1'>
-                若邀请人淨入金&lt;5000 U，返佣比例為10%，邀请人可以设置 0%、5% 二文件被邀请人返现比例。
+                {{ $t("invite.c3") }}
             </p>
             <p class='t1'>
-                若邀请人净入金≥5000 U，返佣比例增加为 20%，邀请人可以自行设置 0%、5%、10%、三档被邀请人返现比例。
+                {{ $t("invite.c4") }}
             </p>
             <br />
 
             <p class='t2'>
-                佣金放送：
+                {{ $t("invite.send") }}
             </p>
             <p class='t1'>
-                1. 数据更新时间以UTC+0时间为准。 今日佣金的计算以前日资产为基准，每天24：00：00结算当天的佣金。
+                {{ $t("invite.c5") }}
             </p>
             <p class='t1'>
-                2. 您的推荐佣金将于未来 72 小时内入账至您的资产V10 ETF。 如果您于未来 72 小时未收到您的佣金，请联系我们的在线客服中心以获得进一步的协助。
+                {{ $t("invite.c6") }}
             </p>
             <br />
 
             <p class='t2'>
-                注意事项：
+                {{ $t("invite.c7") }}
             </p>
             <p class='t1'>
-                1. 活动期间如发现客户不正规交易，vitatoken有权停止客户交易并取消奖励资格
+                {{ $t("invite.c8") }}
             </p>
             <p class='t1'>
-                2.ETF贖回，赠金取款的过程所发生的费用,银行手续费或汇率引致的差额都由客户所承担
+                {{ $t("invite.c9") }}
             </p>
             <p class='t1'>
-                3.对活动有疑问的地方可以随时联系在线客服
+                {{ $t("invite.c10") }}
             </p>
             <p class='t1'>
-                4. vitatoken保留随时全权酌情因任何理由修改、变更或取消此公告的权利，无需事先通知。
+                {{ $t("invite.c11") }}
             </p>
             <p class='t1'>
-                5.风险提示：加密货币交易存在风险，请您谨慎购买，并注意交易风险。 请注意，vitatoken不对您的任何交易行为承担担保、赔偿等责任
+                {{ $t("invite.c12") }}
             </p>
         </div>
     </div>
 </template>
+
+<script setup>
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n({ useScope: 'global' })
+</script>
 
 <style lang="scss" scoped>
 .page-wrap {

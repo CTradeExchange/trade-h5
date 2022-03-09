@@ -1,17 +1,17 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop :back='true' title='邀请好友' />
+        <LayoutTop :back='true' />
         <div class='header' @click="$router.push('/invite/rule')">
-            <img alt='' src='/images/invite.jpg' srcset='' />
+            <img alt='' :src='"/images/invite-"+ lang +".jpg"' srcset='' />
         </div>
         <div class='block'>
             <p class='title'>
-                您的返佣
+                {{ $t('invite.rebate') }}
             </p>
             <div class='flex-wrap'>
                 <div class='flex-item'>
                     <p class='fit'>
-                        <label> 总奖励(USDT)</label>
+                        <label> {{ $t('invite.total') }}(USDT)</label>
                         <van-icon name='arrow' />
                     </p>
                     <p class='val'>
@@ -20,7 +20,7 @@
                 </div>
                 <div class='flex-item'>
                     <p class='fit'>
-                        <label> 共邀好友</label>
+                        <label> {{ $t('invite.inviteCount') }}</label>
                         <van-icon name='arrow' />
                     </p>
                     <p class='val'>
@@ -32,12 +32,12 @@
 
         <div class='block'>
             <p class='title'>
-                邀请方式
+                {{ $t('invite.method') }}
             </p>
             <div class='flex-column'>
                 <div class='flex-item'>
                     <span class='left-label'>
-                        推荐ID
+                        {{ $t('invite.invite') }}ID
                     </span>
                     <span class='right-val copy-id' data-clipboard-text='1563354' @click='handleCopy("copy-id")'>
                         1563354 <img alt='' src='../../../assets/copy.png' srcset='' />
@@ -45,7 +45,7 @@
                 </div>
                 <div class='flex-item'>
                     <span class='left-label'>
-                        推荐链接
+                        {{ $t('invite.link') }}
                     </span>
                     <span class='right-val copy-link' data-clipboard-text='https://trade......1563354' @click='handleCopy("copy-link")'>
                         https://trade......1563354 <img alt='' src='../../../assets/copy.png' srcset='' />
@@ -53,13 +53,13 @@
                 </div>
             </div>
             <div class='btn'>
-                邀请好友
+                {{ $t('invite.inviteFriend') }}
             </div>
         </div>
 
         <div class='block'>
             <p class='title'>
-                邀请TOP10
+                {{ $t('invite.invite') }}TOP10
             </p>
             <div class='invite-list'>
                 <div v-for='(item,index) in inviteList' :key='item.id' class='intite-item'>
@@ -83,8 +83,11 @@ import { ref, watch, unref, computed, defineEmits } from 'vue'
 import Clipboard from 'clipboard'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
-
+import { useStore } from 'vuex'
+import { setCookie, getCookie, isEmpty, localGet, localSet } from '@/utils/util'
+const store = useStore()
 const { t } = useI18n({ useScope: 'global' })
+const lang = computed(() => getCookie('lang') || store.state._base.wpCompanyInfo.language)
 const inviteList = ref([
     {
         id: 'ID****5425',

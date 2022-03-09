@@ -144,7 +144,7 @@ import { setCookie, getCookie, isEmpty, localGet, localSet } from '@/utils/util'
 import { changeLang } from '@/api/base'
 import { useI18n } from 'vue-i18n'
 import Colors, { setRootVariable } from '@plans/colorVariables'
-import i18n, { loadLocaleMessages } from '@plans/i18n/i18n.js'
+import i18n, { loadLocaleMessages } from '@/themeCommon/i18n/i18n.js'
 import { onBeforeMount, computed, reactive, toRefs, onUnmounted } from 'vue'
 export default {
     components: { Top },
