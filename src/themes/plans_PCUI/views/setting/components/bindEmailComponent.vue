@@ -47,12 +47,9 @@
                 </p>
                 <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
             </div>
-            <div class='field'>
-                <!-- <label class='label'>
-                    验证码
-                </label> -->
+            <!-- <div class='field'>
                 <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
-            </div>
+            </div> -->
             <van-button block class='confirm-btn' type='primary' @click='handleConfirm'>
                 <span>{{ $t('common.sure') }}</span>
             </van-button>
@@ -92,7 +89,9 @@ export default {
         const state = reactive({
             email: '',
             sendToken: '',
+            sendTokenOld: '',
             checkCode: '',
+            checkCodeOld: '',
             loading: false,
             zone: '+86',
             googleCode: ''
@@ -247,7 +246,7 @@ export default {
         }
 
         onUnmounted(() => {
-            store.dispatch('_user/findCustomerInfo')
+            store.dispatch('_user/findCustomerInfo', false)
         })
 
         return {
