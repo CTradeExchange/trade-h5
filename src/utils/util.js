@@ -26,7 +26,9 @@ export function unzip (str) {
     const data = pako.inflate(binData)
     strData = String.fromCharCode.apply(null, new Uint16Array(data))
     strData = decodeURIComponent(strData)
-    console.warn('解压字符', JSON.parse(strData))
+    try {
+        console.warn('解压字符', JSON.parse(strData))
+    } catch (error) {}
     return strData
 }
 window['zip'] = zip
