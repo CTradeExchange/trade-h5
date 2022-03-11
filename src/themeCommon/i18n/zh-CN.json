@@ -206,6 +206,7 @@
     "noBindPhone": "未绑定手机号",
     "noBindEmail": "未绑定邮箱",
     "inputGoogleCode": "请输入谷歌验证码",
+    "googleCode": "谷歌验证码",
     "paste": "粘贴",
     "unSupported": "您的浏览器不支持使用该功能",
     "sendCode": "发送验证码",
@@ -354,7 +355,8 @@
     "directTip": "请注意核对币种，其他币种转入此地址将无法找回",
     "getAddress": "获取地址",
     "limit": "额度",
-    "payType": "支付类型"
+    "payType": "支付类型",
+    "inputPIN": "请输入pin码"
   },
   "fund": {
     "marginLevel": "保证金水平",

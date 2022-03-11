@@ -53,6 +53,9 @@
                             {{ countDown }}{{ $t('walletAdd.codeHint') }}
                         </span>
                     </div>
+                    <div v-if='googleCodeVis' class='box field-google'>
+                        <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
+                    </div>
                 </div>
             </div>
             <!-- 底部按钮 -->
@@ -78,12 +81,14 @@ import { Toast, Dialog } from 'vant'
 // i18n
 import { useI18n } from 'vue-i18n'
 // api
-import { getAllWithdrawCurrencyList, addWalletAddress } from '@/api/user'
+import { getAllWithdrawCurrencyList, addWalletAddressV1v1v2 } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 
 export default {
     components: {
         Top,
+        googleVerifyCode,
         centerViewDialog
     },
     setup () {
@@ -115,10 +120,12 @@ export default {
             verifyInfo: {
                 code: '',
                 token: ''
-            }
+            },
+            googleCode: ''
         })
         // 账户信息
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
+        const googleCodeVis = computed(() => customInfo.googleId > 0)
 
         // 初始化数据
         let timer = null
@@ -133,6 +140,7 @@ export default {
                 code: '',
                 token: ''
             }
+            state.googleCode = ''
             clearInterval(timer)
         }
         // 点击选择提币币种
@@ -141,6 +149,9 @@ export default {
             state.chainName = ''
             // 根据提币币种筛选链名称
             filterChainName()
+        }
+        const getGooleVerifyCode = val => {
+            state.googleCode = val
         }
         // 点击选项链名称
         const selectChainName = (item) => {
@@ -196,8 +207,7 @@ export default {
 
             // 发送验证码
             verifyCodeSend({
-                bizType: 'SMS_COMMON_VERIFICATION_CODE',
-                toUser: customInfo.phoneArea + ' ' + customInfo.phone
+                bizType: customInfo?.phone ? 'SMS_LOGINED_VERIFICATION_CODE' : 'EMAIL_LOGINED_VERIFICATION_CODE',
             }).then(res => {
                 state.verifyInfo = res.data
                 state.countDown = 59
@@ -224,24 +234,29 @@ export default {
             if (!state.code) {
                 return Toast({ message: t('walletAdd.codePlaceholder') })
             }
+            if (googleCodeVis.value && !state.googleCode) {
+                return Toast(t('common.inputGoogleCode'))
+            }
 
             // 发起api请示
-            addWalletAddress({
+            addWalletAddressV1v1v2({
                 currency: state.coinKind,
                 chainName: state.chainName,
                 address: state.address,
                 remark: state.name,
-                phone: customInfo.phone,
+                type: customInfo?.phone ? 2 : 1,
                 verifyCode: state.code,
                 phoneArea: customInfo.phoneArea,
-                sendToken: verifyInfo.token
+                sendToken: verifyInfo.token,
+                googleCode: state.googleCode,
             }).then(res => {
                 if (res.check()) {
-                    Toast.success(t('withdraw.successHint'))
-                    init()
-                    setTimeout(() => {
+                    Dialog.alert({
+                        message: t('withdraw.successHint'),
+                    }).then(() => {
                         router.go(-1)
-                    }, 1500)
+                    })
+                    Toast.success(t('withdraw.successHint'))
                 } else {
                     Toast(res.msg)
                 }
@@ -258,7 +273,10 @@ export default {
             selectCoinKind,
             selectChainName,
             getCode,
-            onConfirm
+            onConfirm,
+            customInfo,
+            googleCodeVis,
+            getGooleVerifyCode
         }
     }
 }
@@ -293,15 +311,15 @@ export default {
         color: var(--color);
         font-size: rem(28px);
         border-bottom: 1px solid var(--lineColor);
-        :deep(.el-select){
-            width:100%;
+        :deep(.el-select) {
+            width: 100%;
         }
-        :deep(.el-input__inner){
+        :deep(.el-input__inner) {
+            text-align: right;
             border: none;
-            text-align:right;
         }
-        .select_lab{
-            width:70px;
+        .select_lab {
+            width: 70px;
         }
         .option {
             display: inline-flex;
@@ -336,6 +354,18 @@ export default {
         }
         .time {
             color: var(--minorColor);
+        }
+    }
+    .field-google :deep() {
+        .van-cell {
+            // padding-left: 20px;
+            background: none;
+        }
+        .form-item {
+            margin-bottom: 0;
+        }
+        .paste {
+            display: none;
         }
     }
 }

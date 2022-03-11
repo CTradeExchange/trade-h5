@@ -206,7 +206,7 @@ import {
 } from '@api/user'
 // 工具方法
 import { isEmpty, debounce } from '@/utils/util'
-import DialogFundPwd from '@plans/components/dialogFundPwd'
+import DialogFundPwd from '@/themeCommon/components/dialogFundPwd'
 import md5 from 'js-md5'
 
 export default {
