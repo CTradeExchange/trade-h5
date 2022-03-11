@@ -84,6 +84,5 @@ function timesSort (dataList = []) {
 export const timeListSort = (dataList = []) => {
     const list = timesSort(dataList)
     const result = list.map(el => (el.timeStr = el.timeStr.join('-'), el))
-    console.log(result)
     return result
 }

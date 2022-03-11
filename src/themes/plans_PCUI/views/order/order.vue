@@ -111,7 +111,7 @@ export default {
             router.push('/')
         }
         // 获取产品详情
-        store.dispatch('_quote/querySymbolInfo', { 'symbolId': product.value.symbolId, 'tradeType': product.value.tradeType })
+        store.dispatch('_quote/querySymbolInfo', { 'symbolId': product.value?.symbolId, 'tradeType': product.value?.tradeType })
 
         const tradeContentHeight = computed(() => {
             if (Number(product.value?.tradeType) === 5) {

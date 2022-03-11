@@ -1,9 +1,10 @@
 <template>
     <centerViewDialog>
-        <Top back left-icon='arrow-left' :menu='false' :right-action='false' :show-center='true'>
+        <!-- <Top back left-icon='arrow-left' :menu='false' :right-action='false' :show-center='true'>
             <template #right>
             </template>
-        </Top>
+        </Top> -->
+        <LayoutTop />
         <Loading :show='loadingPage' />
         <div class='page-wrap'>
             <div class='record-list'>
@@ -161,7 +162,6 @@
 
 <script>
 import { reactive, toRefs, ref, computed, onMounted } from 'vue'
-import Top from '@/components/top'
 import { useStore } from 'vuex'
 import { queryWithdrawPageList } from '@/api/user'
 import { Toast } from 'vant'
@@ -174,7 +174,6 @@ import centerViewDialog from '@planspc/layout/centerViewDialog'
 import { useI18n } from 'vue-i18n'
 export default {
     components: {
-        Top,
         centerViewDialog
     },
     setup (props) {
@@ -315,6 +314,7 @@ export default {
 .page-wrap {
     flex: 1;
     height: 100%;
+    padding-top: rem(90px);
     overflow: auto;
     background-color: var(--bgColor);
     .withdraw-desc {

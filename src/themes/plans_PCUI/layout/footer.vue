@@ -155,6 +155,7 @@ export default {
 
 <style lang="scss" scoped>
 .footer-nav {
+    position: relative;
     min-width: 1200px;
     height: 380px;
     background: #15191E;
@@ -166,8 +167,8 @@ export default {
         padding-top: 87px;
         .year {
             margin-top: 18px;
-            font-size: 12px;
             color: #9293A3;
+            font-size: 12px;
         }
     }
     .nav-right {
@@ -181,14 +182,14 @@ export default {
                 margin-right: 0;
             }
             .title {
-                font-size: 14px;
                 color: #515366;
+                font-size: 14px;
             }
             .name {
                 margin-top: 10px;
                 a {
-                    font-size: 14px;
                     color: #9293A3;
+                    font-size: 14px;
                 }
             }
         }

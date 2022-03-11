@@ -63,6 +63,7 @@ export default {
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
         const dialog = ref(null)
+        console.log(props.data)
         const orgid = computed(() => props.data.orgid || 1)
         const newsArea = computed(() => props.data.newsArea)
         const state = reactive({
@@ -83,7 +84,7 @@ export default {
                 type: state.type,
                 page: state.page,
                 pageSize: state.size,
-                orgid: orgid?.value.orgid || 1
+                orgid: orgid?.value || 1
             }
             newsListByTypeByPage(params, state.lang, newsArea.value).then(res => {
                 res.data.map(elem => {
@@ -145,16 +146,16 @@ export default {
             margin-right: 25px;
             .title {
                 @include ellipsisLn(3);
-                line-height: 22px;
-                font-size: 16px;
                 color: var(--color);
+                font-size: 16px;
+                line-height: 22px;
             }
             .row {
                 display: flex;
-                justify-content: space-between;
                 align-items: center;
-                font-size: 14px;
+                justify-content: space-between;
                 color: var(--minorColor);
+                font-size: 14px;
             }
         }
         .item-right {
@@ -170,15 +171,15 @@ export default {
 }
 .pagination-case {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     margin-top: 50px;
     font-size: 14px;
 }
 .load-more {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     height: 80px;
     cursor: pointer;
     a {

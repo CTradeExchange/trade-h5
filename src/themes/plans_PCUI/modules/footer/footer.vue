@@ -37,10 +37,11 @@ export default {
 
 <style lang="scss" scoped>
 .footer-nav {
+    position: relative;
     min-width: 1200px;
     padding: 40px 0;
-    background: #15191E !important;
     text-align: center;
+    background: #15191E !important;
     // .footer-auto {
     //     display: flex;
     //     justify-content: space-between;
@@ -48,8 +49,8 @@ export default {
     .nav-left {
         .year {
             margin-top: 18px;
-            font-size: 12px;
             color: #9293A3;
+            font-size: 12px;
         }
     }
     .nav-right {
@@ -63,14 +64,14 @@ export default {
                 margin-right: 0;
             }
             .title {
-                font-size: 14px;
                 color: #515366;
+                font-size: 14px;
             }
             .name {
                 margin-top: 10px;
                 a {
-                    font-size: 14px;
                     color: #9293A3;
+                    font-size: 14px;
                 }
             }
         }

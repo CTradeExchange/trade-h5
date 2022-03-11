@@ -447,6 +447,22 @@ const routes = [
             roles: ['User'],
         }
     },
+    {
+        path: '/invite',
+        name: 'Invite',
+        component: () => import(/* webpackChunkName: "google_MFA" */ '../user/invite/invite.vue'),
+        meta: {
+            title: 'cRoute.invite'
+        }
+    },
+    {
+        path: '/invite/rule',
+        name: 'rule',
+        component: () => import(/* webpackChunkName: "google_MFA" */ '../user/invite/rule.vue'),
+        meta: {
+            title: 'cRoute.rule'
+        }
+    },
 
 ]
 

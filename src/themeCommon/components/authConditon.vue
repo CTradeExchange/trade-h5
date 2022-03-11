@@ -455,14 +455,13 @@ export default {
 @import '@/sass/mixin.scss';
 .page-wrap {
     display: flex;
-    flex-direction: column;
     flex: 1;
+    flex-direction: column;
     overflow-y: auto;
     background-color: var(--bgColor);
     .notice {
         padding-left: rem(30px);
         line-height: rem(100px);
-
         .title {
             color: var(--minorColor);
             font-size: rem(28px);
@@ -479,10 +478,11 @@ export default {
     .conditon-wrap {
         flex: 1;
         overflow-y: auto;
-        .condition-item{
-          .c-item {
-                text-align: center;
+        background: var(--contentColor);
+        .condition-item {
+            .c-item {
                 padding-top: rem(20px);
+                text-align: center;
                 background: var(--contentColor);
                 border-bottom: solid 1px var(--lineColor);
                 :deep(.van-cell) {
@@ -500,7 +500,7 @@ export default {
                 .upload-img {
                     width: rem(400px);
                     padding: rem(30px);
-                    border:dashed 1px var(--lineColor);
+                    border: dashed 1px var(--lineColor);
                     border-radius: rem(16px);
                 }
                 .upload-text {
@@ -510,18 +510,16 @@ export default {
                 .van-uploader {
                     margin-top: rem(50px);
                     margin-bottom: rem(50px);
-
                 }
             }
         }
-
     }
     .confirm-btn {
         width: 100%;
         color: var(--color);
         font-size: rem(30px);
-        border-color: var(--lineColor);
         background: var(--contentColor);
+        border-color: var(--lineColor);
     }
 }
 </style>
