@@ -295,8 +295,8 @@ export default {
             })
         },
         // 查询客户KYC认证列表
-        findAllBizKycList ({ state, commit }) {
-            return findAllBizKycList().then(res => {
+        findAllBizKycList ({ state, commit }, params) {
+            return findAllBizKycList(params).then(res => {
                 if (res.check()) {
                     res.data.forEach(item => {
                         if (item.preLevelName) {
@@ -306,6 +306,7 @@ export default {
                     })
 
                     commit('Update_kycList', res.data)
+                    return res
                 }
             })
         },

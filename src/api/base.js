@@ -1,7 +1,7 @@
 
 import request from '@/utils/request'
 
-/* 获取国家区号列表 */
+/* 获取字典列表 */
 export function getListByParentCode (data) {
     return request({
         url: '/global/config.app.AppDictDubboService.getListByParentCode',

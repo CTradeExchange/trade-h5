@@ -385,8 +385,36 @@ const routes = [
                     roles: ['User']
                 },
                 children: h5Children
-            }
-        ]
+            },
+            {
+                path: 'businessKYC/index',
+                name: 'BusinessKYC',
+                component: () => import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/index.vue'),
+                meta: {
+                    title: '企业KYC',
+                },
+                children: h5Children
+            },
+            {
+                path: 'businessKYC',
+                name: 'BusinessKYCList',
+                component: () => import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/kycList.vue'),
+                meta: {
+                    title: '企业KYC',
+                },
+                children: h5Children
+            },
+            {
+                path: '/businessKYC/content',
+                name: 'BusinessKYCContent',
+                component: () => import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/content.vue'),
+                meta: {
+                    title: '企业KYC',
+                },
+                children: h5Children
+            },
+
+        ],
     },
     // {
     //     path: '/:params/setting',

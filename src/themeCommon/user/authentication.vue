@@ -126,14 +126,14 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .page-wrap {
-    padding-top: rem(110px);
     flex: 1;
+    padding-top: rem(110px);
     overflow: auto;
     background: var(--bgColor);
-    .header{
-        font-size: rem(48px);
-        padding-left: rem(30px);
+    .header {
         padding-bottom: rem(30px);
+        padding-left: rem(30px);
+        font-size: rem(48px);
         background: var(--contentColor);
     }
     .empty-data {
@@ -151,9 +151,9 @@ export default {
         background: var(--contentColor);
         .auth-item {
             display: flex;
-            border-top: solid rem(10px) var(--bgColor);
             align-items: center;
             padding: rem(30px) rem(30px);
+            border-top: solid rem(10px) var(--bgColor);
             .auth-img {
                 width: rem(60px);
                 height: rem(100px);
@@ -192,14 +192,14 @@ export default {
                 font-size: rem(24px);
             }
         }
-        .btn{
-            :deep(.van-button){
+        .btn {
+            :deep(.van-button) {
                 background: var(--primaryAssistColor);
             }
-            .unverified{
+            .unverified {
                 color: var(--fallColor);
             }
-            .state{
+            .state {
                 color: var(--minorColor);
                 font-size: rem(26px);
             }
