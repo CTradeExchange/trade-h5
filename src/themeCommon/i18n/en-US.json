@@ -202,6 +202,7 @@
         "noBindPhone": "Mobile phone not binded",
         "noBindEmail": "Email not binded",
         "inputGoogleCode": "Please enter Google authentication code",
+        "googleCode": "Google authentication code",
         "paste": "Paste",
         "unSupported": "Your browser does not support this feature",
         "sendCode": "Send code",
@@ -286,6 +287,7 @@
         "chooseCertificateType": "Please choose certificate type",
         "incorrectlyFormed": "Incorrect format",
         "pleaseEnter": "Please enter ",
+        "businessOpen": "企业开户",
         "reGet": "Get again"
     },
     "chart": {
@@ -350,7 +352,8 @@
         "exchange": "Exchange",
         "exchangeDes": "Deposit currency different with account currency",
         "limit": "Amount",
-        "payType": "Gateway"
+        "payType": "Gateway",
+        "inputPIN": "Please enter pin code"
     },
     "fund": {
         "marginLevel": "margin level",

@@ -83,7 +83,8 @@ export default {
                 verifyCode: route.query['verifyCode'],
                 newPwd: md5(state.confirmPwd),
                 sendToken: route.query['sendToken'],
-                verifyCodeToken: route.query['verifyCodeToken']
+                verifyCodeToken: route.query['verifyCodeToken'],
+                googleCode: route.query['googleCode']
             }
             state.loading = true
             findPwd(params).then((res) => {
@@ -115,17 +116,16 @@ export default {
     height: 100%;
     background: var(--assistColor);
     .container {
-        flex: 1;
-        overflow: auto;
         display: flex;
+        flex: 1;
         align-items: center;
         justify-content: center;
-        .content{
-            width:520px;
+        overflow: auto;
+        .content {
+            width: 520px;
             padding: 60px;
+            background-color: var(--contentColor);
             border-radius: 10px;
-                background-color: var(--contentColor);
-
         }
     }
     .header {
@@ -133,36 +133,35 @@ export default {
         align-items: center;
         justify-content: space-between;
         margin: 0 0 40px;
-        h6{
-            font-size:16px;
+        h6 {
             font-weight: normal;
-
+            font-size: 16px;
         }
     }
     .pageTitle {
+        color: var(--color);
         font-weight: bold;
         font-size: 32px;
-        color: var(--color);
     }
     .confirmBtn {
         // position: absolute;
         // bottom: 0;
         width: 100%;
-        background: var(--primary);
+        margin-top: 18px;
+        padding: 0;
         color: var(--contentColor);
         font-size: 20px;
+        background: var(--primary);
         border-radius: 4px;
-        padding: 0;
-        margin-top:18px;
         span {
-           color: #fff;
+            color: #FFF;
         }
     }
     .form-item {
         position: relative;
         margin-bottom: 24px;
-        border-radius: 4px;
         overflow: hidden;
+        border-radius: 4px;
         .icon {
             position: absolute;
             top: rem(25px);
@@ -173,8 +172,8 @@ export default {
                 font-size: rem(30px);
             }
         }
-        :deep{
-           .van-field {
+        :deep {
+            .van-field {
                 background-color: var(--bgColor);
             }
         }

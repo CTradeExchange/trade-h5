@@ -206,6 +206,7 @@
     "noBindPhone": "未绑定手机号",
     "noBindEmail": "未绑定邮箱",
     "inputGoogleCode": "请输入谷歌验证码",
+    "googleCode": "谷歌验证码",
     "paste": "粘贴",
     "unSupported": "您的浏览器不支持使用该功能",
     "sendCode": "发送验证码",
@@ -272,7 +273,7 @@
     "accountType": "账户类型",
     "phoneNo": "手机号",
     "email": "邮箱",
-    "openAccount": "真实开户",
+    "openAccount": "个人开户",
     "hasAccount": "已有账号",
     "protocol": "继续开户表示您已确认已满18周岁且已细读并同意《客户隐私保护政策、投资风险披露及免责声明》",
     "openSuccess": "恭喜！您的账号已经开立成功",
@@ -290,6 +291,7 @@
     "chooseCertificateType": "请选择证件类型",
     "incorrectlyFormed": "格式不正确",
     "pleaseEnter": "请输入",
+    "businessOpen": "企业开户",
     "reGet": "重新获取"
   },
   "chart": {
@@ -354,7 +356,8 @@
     "directTip": "请注意核对币种，其他币种转入此地址将无法找回",
     "getAddress": "获取地址",
     "limit": "额度",
-    "payType": "支付类型"
+    "payType": "支付类型",
+    "inputPIN": "请输入pin码"
   },
   "fund": {
     "marginLevel": "保证金水平",

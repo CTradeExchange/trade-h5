@@ -6,7 +6,10 @@
         <p class='header'>
             {{ $t('cRoute.regKyc') }}
         </p>
-        <div v-if='kycList.length === 0' class='empty-data'>
+        <div v-if='customInfo.openAccountType===1' class='business'>
+            请在PC进行企业KYC认证
+        </div>
+        <div v-else-if='kycList.length === 0' class='empty-data'>
             <van-empty :description='$t("auth.noRequired")' image='/images/empty.png' />
         </div>
         <div v-else>
@@ -58,6 +61,7 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const style = computed(() => store.state.style)
+        const customInfo = computed(() => store.state._user.customerInfo)
         const state = reactive({
             loading: false,
         })
@@ -116,6 +120,7 @@ export default {
             style,
             kycMap,
             kycList,
+            customInfo,
             kycAuditStatus,
             ...toRefs(state)
         }
@@ -204,6 +209,12 @@ export default {
                 font-size: rem(26px);
             }
         }
+    }
+    .business {
+        padding-top: 40%;
+        color: var(--minorColor);
+        font-size: rem(30px);
+        text-align: center;
     }
 }
 </style>

@@ -194,22 +194,7 @@ export default {
                             })
                             return
                         }
-                        state.elementList.forEach(el => {
-                            // 如果是 inputGroup 单独处理
-                            if (el.showType === 'inputGroup') {
-                                state.elementCodeInputGroup = el.elementCodeInputGroup
-                                state.typeCode = el.elementCodeInputGroup
-                                state.conditionModel[el.elementCodeInputGroup] = el.elementValueInputGroup
-                                if (el.elementCodeInputGroup) {
-                                    state.showImgList = cardTypeMap[el.elementCodeInputGroup]
-                                }
-                            } else if (el.showType === 'date') {
-                                state.conditionModel[el.elementCode] = window.dayjs(Number(el.elementValue)).format('YYYY-MM-DD')
-                                state.datePickerVal = new Date(Number(el.elementValue))
-                            } else {
-                                state.conditionModel[el.elementCode] = el.elementValue
-                            }
-                        })
+                        handleElementList()
                     }
 
                     console.log('state.conditionModel', state.conditionModel)
@@ -217,6 +202,25 @@ export default {
                 }
             }).catch(err => {
                 state.loading = false
+            })
+        }
+
+        const handleElementList = () => {
+            state.elementList.forEach(el => {
+                // 如果是 inputGroup 单独处理
+                if (el.showType === 'inputGroup') {
+                    state.elementCodeInputGroup = el.elementCodeInputGroup
+                    state.typeCode = el.elementCodeInputGroup
+                    state.conditionModel[el.elementCodeInputGroup] = el.elementValueInputGroup
+                    if (el.elementCodeInputGroup) {
+                        state.showImgList = cardTypeMap[el.elementCodeInputGroup]
+                    }
+                } else if (el.showType === 'date') {
+                    state.conditionModel[el.elementCode] = window.dayjs(Number(el.elementValue)).format('YYYY-MM-DD')
+                    state.datePickerVal = new Date(Number(el.elementValue))
+                } else {
+                    state.conditionModel[el.elementCode] = el.elementValue
+                }
             })
         }
 
@@ -402,7 +406,9 @@ export default {
             const kycList = sessionStorage.getItem('kycList')
             if (!isEmpty(kycList)) {
                 state.elementList = JSON.parse(kycList)[0].elementList
+                state.hasFacePhoto = state.elementList.find(el => el.elementCode === 'face_photo')
                 getInputGroupList()
+                handleElementList()
             } else {
                 getConditon()
             }
