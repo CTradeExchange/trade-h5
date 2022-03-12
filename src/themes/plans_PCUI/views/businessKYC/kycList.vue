@@ -1,4 +1,5 @@
 <template>
+    <router-view />
     <div class='page-wrap'>
         <h3>企业认证</h3>
         <div v-if='kycList.length === 0' class='empty-data'>

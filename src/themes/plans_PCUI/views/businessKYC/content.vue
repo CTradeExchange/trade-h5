@@ -1,4 +1,5 @@
 <template>
+    <router-view />
     <div v-loading='loading' class='page-wrap'>
         <el-steps :active='active' align-center finish-status='success'>
             <el-step v-for='item in authList' :key='item' :title='authMap[item]' />
@@ -25,8 +26,8 @@
 </template>
 
 <script>
-import { ElIcon, ElMessage } from 'element-plus'
-import { computed, reactive, ref, toRefs, unref } from 'vue'
+import { ElIcon, ElMessage, ElMessageBox } from 'element-plus'
+import { computed, reactive, ref, toRefs, unref, watchEffect } from 'vue'
 import basicInfo from './components/basicInfo.vue'
 import uploadFiles from './components/uploadFiles.vue'
 import certDirector from './components/certDirector.vue'
@@ -92,42 +93,43 @@ export default {
             return null
         })
 
-        const next = () => {
-            if (state.active === 4 && !state.accountHoldVis) {
-                state.dialogVis = true
-            } else {
-                state.active++
+        const mainAccountVis = computed(() => {
+            // 判断“账户持有人步骤”的主账户持有人是否有值
+            const jsonStr = state.formData?.find(el => el.elementCode === 'company_account_owner')?.elementValue
+            let mainAccount
+            if (jsonStr) {
+                mainAccount = JSON.parse(jsonStr)?.mainAccount
             }
-            if (state.active === 5) {
-                state.nextBtnDisabled = true
-                state.draftVis = false
+            return mainAccount
+        })
+
+        watchEffect(() => {
+            if (mainAccountVis.value) {
+                state.accountHoldVis = true
+            }
+        })
+
+        const save = (commitTag) => {
+            // commitTag true: 提交 false: 保存草稿
+            if (currentComp.value) {
+                currentComp.value.value.formRef.validate((valid, fields) => {
+                    if (valid) {
+                        console.log('submit!')
+                    } else {
+                        console.log('error submit!', fields)
+                    }
+                })
             }
 
-            const query = { ...route.query, index: state.active }
-            router.replace({ query })
-        }
-        const prev = () => {
-            state.active--
-            state.nextBtnDisabled = false
-            state.draftVis = true
-            const query = Object.assign({ index: state.active }, route.query)
-            router.replace({ query })
-        }
-        const save = () => {
-            currentComp.value.value.formRef.validate((valid, fields) => {
-                if (valid) {
-                    console.log('submit!')
-                } else {
-                    console.log('error submit!', fields)
-                }
-            })
-
-            console.log('basicInfoRef', unref([currentComp.value]))
+            console.log('currentComp====', unref([currentComp.value]))
             state.loading = true
-            const elementList = [{
-                elementCode: currentCode.value,
-                elementValue: JSON.stringify(currentComp.value.value.form)
-            }]
+            const elementList = []
+            if (currentComp.value) {
+                elementList.push({
+                    elementCode: currentCode.value,
+                    elementValue: JSON.stringify(currentComp.value.value.form)
+                })
+            }
 
             // 每次保存需要把其它认证步骤的数据取出来
             if (state.formData.length > 0) {
@@ -146,19 +148,60 @@ export default {
                 levelCode,
                 openAccountType: 1,
                 selectCompanyType,
-                commitTag: false,
+                commitTag,
                 elementList
             }).then(res => {
                 state.loading = false
                 if (res.check()) {
-                    ElMessage({
-                        message: '保存草稿成功',
-                        type: 'success',
-                    })
+                    if (commitTag) {
+                        ElMessageBox.alert('您的认证申请已提交成功，请耐心等待审核结果', '提交成功', {
+                            confirmButtonText: 'OK',
+                            callback: (action) => {
+                                router.replace('/')
+                            },
+                        })
+                    } else {
+                        ElMessage({
+                            message: '保存草稿成功',
+                            type: 'success',
+                        })
+                    }
                 }
             }).catch(err => {
                 state.loading = false
             })
+        }
+
+        // 信息确认页面按钮状态
+        const infoButtonState = () => {
+            if (state.active === state.authList.length) {
+                state.nextBtnDisabled = true
+                state.draftVis = false
+            }
+        }
+
+        const next = () => {
+            if (currentCode.value === 'company_account_owner' && !state.accountHoldVis) {
+                state.dialogVis = true
+            } else {
+                // 最后一步，提交全部kyc
+                if (state.active === Number(state.authList.length)) {
+                    return save(true)
+                }
+                state.active++
+            }
+
+            infoButtonState()
+            const query = { ...route.query, index: state.active }
+            router.replace({ query })
+        }
+        const prev = () => {
+            state.active--
+            state.nextBtnDisabled = false
+            state.draftVis = true
+            infoButtonState()
+            const query = { ...route.query, index: state.active }
+            router.replace({ query })
         }
 
         const updateDialogVis = (val) => {
@@ -194,6 +237,7 @@ export default {
             })
         }
 
+        infoButtonState()
         getKycData()
 
         return {

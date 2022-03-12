@@ -1,4 +1,5 @@
 <template>
+    <router-view />
     <div class='page-wrap'>
         <el-form
             ref='formRef'

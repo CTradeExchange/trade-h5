@@ -218,36 +218,7 @@ const h5Children = [
         meta: {
             title: 'route.RegKyc',
         }
-    },
-    {
-        path: 'googleMFA/status',
-        component: () => import(/* webpackChunkName: "google_MFA" */ '../views/google_MFA/status.vue'),
-        meta: {
-            title: 'route.MFA_status',
-        }
-    },
-    {
-        path: 'googleMFA/install',
-        component: () => import(/* webpackChunkName: "google_MFA" */ '../views/google_MFA/install.vue'),
-        meta: {
-            title: 'route.MFA_status',
-        }
-    },
-    {
-        path: 'googleMFA/secretKey',
-        component: () => import(/* webpackChunkName: "google_MFA" */ '../views/google_MFA/secretKey.vue'),
-        meta: {
-            title: 'route.MFA_bind',
-        }
-    },
-    {
-        path: 'googleMFA/bind',
-        component: () => import(/* webpackChunkName: "google_MFA" */ '../views/google_MFA/bind.vue'),
-        meta: {
-            title: 'route.MFA_bind',
-        }
     }
-
 ]
 
 const routes = [
@@ -327,10 +298,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "resetFail" */ '../views/forgot/resetFail.vue'),
         meta: {
             title: 'cRoute.resetPwdFaid'
-        },
-
+        }
     },
-
     {
         path: '/',
         redirect: '/home',
@@ -418,12 +387,22 @@ const routes = [
                 children: h5Children
             },
             {
-                path: '/businessKYC',
+                path: 'businessKYC/index',
                 name: 'BusinessKYC',
                 component: () => import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/index.vue'),
                 meta: {
                     title: '企业KYC',
-                }
+                },
+                children: h5Children
+            },
+            {
+                path: 'businessKYC',
+                name: 'BusinessKYCList',
+                component: () => import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/kycList.vue'),
+                meta: {
+                    title: '企业KYC',
+                },
+                children: h5Children
             },
             {
                 path: '/businessKYC/content',
@@ -431,7 +410,8 @@ const routes = [
                 component: () => import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/content.vue'),
                 meta: {
                     title: '企业KYC',
-                }
+                },
+                children: h5Children
             },
 
         ],
