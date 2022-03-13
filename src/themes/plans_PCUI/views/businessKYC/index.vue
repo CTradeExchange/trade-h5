@@ -7,10 +7,11 @@
             label-position='top'
             label-width='auto'
             :model='form'
+            :rules='rules'
             size='default'
         >
             <h2>企业KYC认证</h2>
-            <el-form-item label='您当前所在国家/地区'>
+            <el-form-item label='您当前所在国家/地区' prop='selectCountry'>
                 <el-select
                     v-model='form.selectCountry'
                     placeholder='请选择您当前所在国家/地区'
@@ -25,6 +26,7 @@
             </el-form-item>
             <el-form-item
                 label='企业类型'
+                prop='selectCompanyType'
             >
                 <el-select
                     v-model='form.selectCompanyType'
@@ -56,10 +58,20 @@ const { levelCode } = route.query
 
 const businessType = ref([])
 const loading = ref(false)
+const formRef = ref(null)
 
 const form = reactive({
     selectCompanyType: '',
     selectCountry: ''
+})
+
+const rules = reactive({
+    selectCountry: [
+        { required: true, message: '请选择您当前所在国家/地区', trigger: 'blur' }
+    ],
+    selectCompanyType: [
+        { required: true, message: '请选择企业类型', trigger: 'blur' }
+    ]
 })
 
 // const getAllLevel = ()=>{
@@ -94,32 +106,39 @@ const form = reactive({
 
 // 根据 levelCode 查询kyc认证元素
 const onSubmit = () => {
-    loading.value = true
+    formRef.value.validate((valid) => {
+        if (valid) {
+            loading.value = true
 
-    findAllLevelKyc({
-        levelCode,
-        selectCountry: form.selectCountry,
-        selectCompanyType: form.selectCompanyType,
-        openAccountType: 1
-    }).then(res => {
-        loading.value = false
-        if (res.check()) {
-            if (res.data.length > 0) {
-                const elementList = res.data[0]?.elementList
-                const elementCode = elementList?.map(el => el.elementCode)
-                router.push({
-                    path: '/businessKYC/content',
-                    query: {
-                        elementCode: elementCode.join(),
-                        levelCode,
-                        selectCountry: form.selectCountry,
-                        selectCompanyType: form.selectCompanyType
+            findAllLevelKyc({
+                levelCode,
+                selectCountry: form.selectCountry,
+                selectCompanyType: form.selectCompanyType,
+                openAccountType: 1
+            }).then(res => {
+                loading.value = false
+                if (res.check()) {
+                    if (res.data.length > 0) {
+                        const elementList = res.data[0]?.elementList
+                        const elementCode = elementList?.map(el => el.elementCode)
+                        router.push({
+                            path: '/businessKYC/content',
+                            query: {
+                                elementCode: elementCode.join(),
+                                levelCode,
+                                selectCountry: form.selectCountry,
+                                selectCompanyType: form.selectCompanyType
+                            }
+                        })
                     }
-                })
-            }
+                }
+            }).catch(err => {
+                loading.value = false
+            })
+        } else {
+            console.log('error submit')
+            return false
         }
-    }).catch(err => {
-        loading.value = false
     })
 }
 

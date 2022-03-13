@@ -35,8 +35,12 @@ import beneficiary from './components/beneficiary.vue'
 import accountHold from './components/accountHold.vue'
 import info from './components/info.vue'
 import { useRouter, useRoute } from 'vue-router'
+import Schema from 'async-validator'
 
 import { findAllLevelKyc, kycLevelApply, kycApply, findAllBizKycList } from '@/api/user'
+var cn = {
+    required: '%s 必填',
+}
 
 export default {
     components: {
@@ -181,19 +185,29 @@ export default {
         }
 
         const next = () => {
-            if (currentCode.value === 'company_account_owner' && !state.accountHoldVis) {
-                state.dialogVis = true
-            } else {
-                // 最后一步，提交全部kyc
-                if (state.active === Number(state.authList.length)) {
-                    return save(true)
-                }
-                state.active++
-            }
+            if (currentComp.value) {
+                const validator = new Schema(currentComp.value.value.rules)
+                const form = currentComp.value.value.formRef
 
-            infoButtonState()
-            const query = { ...route.query, index: state.active }
-            router.replace({ query })
+                validator.validate(form, (errors, fields) => {
+                    if (errors) {
+                        return false
+                    }
+                    if (currentCode.value === 'company_account_owner' && !state.accountHoldVis) {
+                        state.dialogVis = true
+                    } else {
+                        // 最后一步，提交全部kyc
+                        if (state.active === Number(state.authList.length)) {
+                            return save(true)
+                        }
+                        state.active++
+                    }
+
+                    infoButtonState()
+                    const query = { ...route.query, index: state.active }
+                    router.replace({ query })
+                })
+            }
         }
         const prev = () => {
             state.active--
