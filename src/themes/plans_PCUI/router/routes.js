@@ -218,6 +218,34 @@ const h5Children = [
         meta: {
             title: 'route.RegKyc',
         }
+    },
+    {
+        path: 'googleMFA/status',
+        component: () => import(/* webpackChunkName: "google_MFA" */ '../views/google_MFA/status.vue'),
+        meta: {
+            title: 'route.MFA_status',
+        }
+    },
+    {
+        path: 'googleMFA/install',
+        component: () => import(/* webpackChunkName: "google_MFA" */ '../views/google_MFA/install.vue'),
+        meta: {
+            title: 'route.MFA_status',
+        }
+    },
+    {
+        path: 'googleMFA/secretKey',
+        component: () => import(/* webpackChunkName: "google_MFA" */ '../views/google_MFA/secretKey.vue'),
+        meta: {
+            title: 'route.MFA_bind',
+        }
+    },
+    {
+        path: 'googleMFA/bind',
+        component: () => import(/* webpackChunkName: "google_MFA" */ '../views/google_MFA/bind.vue'),
+        meta: {
+            title: 'route.MFA_bind',
+        }
     }
 ]
 
