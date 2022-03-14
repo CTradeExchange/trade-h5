@@ -6,26 +6,50 @@
         :model='form'
         :size='size'
     >
-        <div v-for='(item,index) in form' :key='index' class='director'>
+        <div v-for='(item,index) in form.list' :key='index' class='director'>
             <h3>最终实益拥有人{{ index+1 }}</h3>
             <p class='title'>
                 基础信息
             </p>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='名字'>
+                    <el-form-item
+                        label='名字'
+                        :prop='"list."+index+".lastname"'
+                        :rules="{
+                            required: true,
+                            message: '请输入名字',
+                            trigger: 'blur',
+                        }"
+                    >
                         <el-input v-model='item.lastname' type='text' />
                     </el-form-item>
                 </el-col>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='姓名'>
+                    <el-form-item
+                        label='姓名'
+                        :prop='"list."+index+".firstName"'
+                        :rules="{
+                            required: true,
+                            message: '请输入名字',
+                            trigger: 'blur',
+                        }"
+                    >
                         <el-input v-model='item.firstName' />
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='出生日期'>
+                    <el-form-item
+                        label='出生日期'
+                        :prop='"list."+index+".birthDay"'
+                        :rules="{
+                            required: true,
+                            message: '请选择出生日期',
+                            trigger: 'blur',
+                        }"
+                    >
                         <el-date-picker
                             v-model='item.birthDay'
                             placeholder='请选择出生日期'
@@ -35,7 +59,15 @@
                     </el-form-item>
                 </el-col>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='国家/地区'>
+                    <el-form-item
+                        label='国家/地区'
+                        :prop='"list."+index+".address"'
+                        :rules="{
+                            required: true,
+                            message: '请选择国家/地区',
+                            trigger: 'blur',
+                        }"
+                    >
                         <el-select
                             v-model='item.address'
                             placeholder='请选择国家/地区'
@@ -52,7 +84,20 @@
             </el-row>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='邮箱'>
+                    <el-form-item
+                        label='邮箱'
+                        :prop='"list."+index+".email"'
+                        :rules="[{
+                                     required: true,
+                                     message: '请输入邮箱',
+                                     trigger: 'blur',
+                                 },
+                                 {
+                                     type: 'email',
+                                     message: '请输入正确的邮箱',
+                                     trigger: ['blur', 'change'],
+                                 }]"
+                    >
                         <el-input v-model='item.email' />
                     </el-form-item>
                 </el-col>
@@ -62,7 +107,15 @@
             </p>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='证件类型'>
+                    <el-form-item
+                        label='证件类型'
+                        :prop='"list."+index+".idType"'
+                        :rules="{
+                            required: true,
+                            message: '请选择证件类型',
+                            trigger: 'blur',
+                        }"
+                    >
                         <el-select
                             v-model='item.idType'
                             placeholder='请选择证件类型'
@@ -77,7 +130,15 @@
                     </el-form-item>
                 </el-col>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='证件号'>
+                    <el-form-item
+                        label='证件号'
+                        :prop='"list."+index+".idNo"'
+                        :rules="{
+                            required: true,
+                            message: '请输入证件号',
+                            trigger: 'blur',
+                        }"
+                    >
                         <el-input v-model='item.idNo' />
                     </el-form-item>
                 </el-col>
@@ -85,7 +146,15 @@
 
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='证件签发国家/地区'>
+                    <el-form-item
+                        label='证件签发国家/地区'
+                        :prop='"list."+index+".issued"'
+                        :rules="{
+                            required: true,
+                            message: '请选择证件签发国家/地区',
+                            trigger: 'blur',
+                        }"
+                    >
                         <el-select
                             v-model='item.issued'
                             placeholder='请选择证件签发国家/地区'
@@ -102,7 +171,15 @@
             </el-row>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='证件文件'>
+                    <el-form-item
+                        label='证件文件'
+                        :prop='"list."+index+".documents"'
+                        :rules="{
+                            required: true,
+                            message: '请上传证件文件',
+                            trigger: 'blur',
+                        }"
+                    >
                         <van-uploader :after-read='afterRead' :name="index+',documents'" result-type='file'>
                             <div class='uploader'>
                                 <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -117,7 +194,15 @@
                     </el-form-item>
                 </el-col>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='个人肖像照'>
+                    <el-form-item
+                        label='个人肖像照'
+                        :prop='"list."+index+".photo"'
+                        :rules="{
+                            required: true,
+                            message: '请上传个人肖像照',
+                            trigger: 'blur',
+                        }"
+                    >
                         <van-uploader :after-read='afterRead' :name="index+',photo'" result-type='file'>
                             <div class='uploader'>
                                 <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -137,7 +222,7 @@
             <el-col :offset='0' :span='24'>
                 <div class='add' @click='add'>
                     <i class='el-icon-plus'></i>
-                    添加董事
+                    添加最终实益拥有人
                 </div>
             </el-col>
         </el-row>
@@ -160,18 +245,20 @@ export default {
         const store = useStore()
         const formRef = ref(null)
         const state = reactive({
-            form: [
-                {
-                    lastname: '',
-                    firstName: '',
-                    birthDay: '',
-                    address: '',
-                    email: '',
-                    idType: '',
-                    idNo: '',
-                    issued: ''
-                }
-            ],
+            form: {
+                list: [
+                    {
+                        lastname: '',
+                        firstName: '',
+                        birthDay: '',
+                        address: '',
+                        email: '',
+                        idType: '',
+                        idNo: '',
+                        issued: ''
+                    }
+                ]
+            },
             idCardType: [],
             loading: false
         })
@@ -206,7 +293,7 @@ export default {
         })
 
         const add = () => {
-            state.form.push({
+            state.form.list.push({
                 lastname: '',
                 firstName: '',
                 birthDay: '',
@@ -229,7 +316,7 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     const param = detail.name.split(',')
-                    state.form[param[0]][param[1]] = res.data
+                    state.form.list[param[0]][param[1]] = res.data
                     ElMessage({
                         message: '上传成功',
                         type: 'success',
@@ -271,6 +358,7 @@ export default {
 <style lang="scss" scoped>
 .add {
     width: 100%;
+    margin-top: 30px;
     color: #666;
     font-weight: bold;
     line-height: rem(100px);
