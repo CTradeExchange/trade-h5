@@ -27,7 +27,7 @@
 
 <script>
 import { ElIcon, ElMessage, ElMessageBox } from 'element-plus'
-import { computed, reactive, ref, toRefs, unref, watchEffect } from 'vue'
+import { computed, reactive, ref, toRefs, unref, watchEffect, watch } from 'vue'
 import basicInfo from './components/basicInfo.vue'
 import uploadFiles from './components/uploadFiles.vue'
 import certDirector from './components/certDirector.vue'
@@ -107,25 +107,40 @@ export default {
             return mainAccount
         })
 
+        // 读取已保存的kyc信息
+        const getKycData = () => {
+            findAllLevelKyc({
+                levelCode,
+                selectCountry,
+                selectCompanyType,
+                openAccountType: 1
+            }).then(res => {
+                // loading.value = false
+                if (res.check()) {
+                    if (res.data.length > 0) {
+                        state.formData = res.data[0].elementList
+                        console.log('form-data', state.formData)
+                    }
+                }
+            }).catch(err => {
+                // loading.value = false
+            })
+        }
+
         watchEffect(() => {
             if (mainAccountVis.value) {
                 state.accountHoldVis = true
             }
         })
 
+        watch(() => state.active, val => {
+            getKycData()
+        }, {
+            immediate: true
+        })
+
         // 保存和提交
         const save = (commitTag = false, showToast = true) => {
-            // commitTag true: 提交 false: 保存草稿
-            // if (currentComp.value) {
-            //     currentComp.value.value.formRef.validate((valid, fields) => {
-            //         if (valid) {
-            //             console.log('submit!')
-            //         } else {
-            //             console.log('error submit!', fields)
-            //         }
-            //     })
-            // }
-
             // console.log('currentComp====', unref([currentComp.value]))
             state.loading = true
             const elementList = []
@@ -187,34 +202,30 @@ export default {
             }
         }
 
-        const next = () => {
-            // if (currentComp.value) {
-            // const validator = new Schema(currentComp.value.value.rules)
-            // const form = currentComp.value.value.formRef
-
-            // validator.validate(form, (errors, fields) => {
-            //     if (errors) {
-            //         return false
-            //     }
-
-            if (currentCode.value === 'company_account_owner' && !state.accountHoldVis) {
-                state.dialogVis = true
-            } else {
-                // 最后一步，提交全部kyc
-                if (state.active === Number(state.authList.length)) {
-                    return save(true, true)
+        const next = async () => {
+            if (currentComp.value) {
+                const form = currentComp.value.value.formRef
+                const flag = await form.validate()
+                if (!flag) {
+                    return false
                 }
-                // 每点下一步，都保存一下
-                save(false, false)
-                state.active++
+                if (currentCode.value === 'company_account_owner' && !state.accountHoldVis) {
+                    state.dialogVis = true
+                } else {
+                    // 最后一步，提交全部kyc
+                    if (state.active === Number(state.authList.length)) {
+                        return save(true, true)
+                    }
+                    // 每点下一步，都保存一下
+                    save(false, false)
+                    state.active++
+                }
+
+                infoButtonState()
+
+                const query = { ...route.query, index: state.active }
+                router.replace({ query })
             }
-
-            infoButtonState()
-
-            const query = { ...route.query, index: state.active }
-            router.replace({ query })
-            // })
-            // }
         }
         const prev = () => {
             state.active--
@@ -234,28 +245,7 @@ export default {
             state.nextBtnDisabled = !val
         }
 
-        // 读取已保存的kyc信息
-        const getKycData = () => {
-            findAllLevelKyc({
-                levelCode,
-                selectCountry,
-                selectCompanyType,
-                openAccountType: 1
-            }).then(res => {
-                // loading.value = false
-                if (res.check()) {
-                    if (res.data.length > 0) {
-                        state.formData = res.data[0].elementList
-                        console.log('form-data', state.formData)
-                    }
-                }
-            }).catch(err => {
-                // loading.value = false
-            })
-        }
-
         infoButtonState()
-        getKycData()
 
         return {
             save,
@@ -280,9 +270,10 @@ export default {
 @import '@/sass/mixin.scss';
 .page-wrap {
     width: 1200px;
-    margin: rem(50px) auto;
+    margin: rem(100px) auto;
     padding-top: rem(50px);
     background: var(--contentColor);
+    border-radius: rem(10px);
     .el-steps {
         margin: rem(100px);
     }

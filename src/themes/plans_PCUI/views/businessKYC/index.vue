@@ -151,8 +151,9 @@ store.dispatch('getCountryListByParentCode')
 .page-wrap {
     width: 1200px;
     height: 100%;
-    margin: 0 auto;
+    margin: rem(100px) auto;
     background: var(--contentColor);
+    border-radius: rem(10px);
     .el-form {
         margin: rem(50px);
         padding: rem(100px);

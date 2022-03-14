@@ -13,12 +13,20 @@
             </p>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='名字'>
+                    <el-form-item
+                        label='名字'
+                        :prop='`form.${index}.lastname`'
+                        :rules="{
+                            required: true,
+                            message: '请输入名字',
+                            trigger: 'blur',
+                        }"
+                    >
                         <el-input v-model='item.lastname' type='text' />
                     </el-form-item>
                 </el-col>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='姓名'>
+                    <el-form-item label='姓名' prop='item.firstName'>
                         <el-input v-model='item.firstName' />
                     </el-form-item>
                 </el-col>
@@ -102,7 +110,7 @@
             </el-row>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='证件文件'>
+                    <el-form-item label='证件文件' prop='documents'>
                         <van-uploader :after-read='afterRead' :name="index+',documents'" result-type='file'>
                             <div class='uploader'>
                                 <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -117,7 +125,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='个人肖像照'>
+                    <el-form-item label='个人肖像照' prop='photo'>
                         <van-uploader :after-read='afterRead' :name="index+',photo'" result-type='file'>
                             <div class='uploader'>
                                 <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -169,11 +177,42 @@ export default {
                     email: '',
                     idType: '',
                     idNo: '',
-                    issued: ''
+                    issued: '',
+                    documents: '',
+                    photo: ''
                 }
             ],
             idCardType: [],
-            loading: false
+            loading: false,
+            // rules: {
+            //     form: [{
+            //         lastname: [
+            //             { type: 'string', required: true, message: '请输入名字', trigger: 'blur' },
+            //         ],
+            //         firstName: [
+            //             { type: 'string', required: true, message: '请输入姓名', trigger: 'blur' },
+            //         ],
+            //         birthDay: [
+            //             { type: 'string', required: true, message: '请输入出生日期', trigger: 'blur' },
+            //         ],
+            //         address: [
+            //             { type: 'string', required: true, message: '请选择国家/地区', trigger: 'blur' },
+            //         ],
+            //         email: [
+            //             { type: 'string', required: true, message: '请输入邮箱', trigger: 'blur' },
+            //         ],
+            //         idType: [
+            //             { type: 'string', required: true, message: '请选择证件类型', trigger: 'blur' },
+            //         ],
+            //         idNo: [
+            //             { type: 'string', required: true, message: '请输入证件号', trigger: 'blur' },
+            //         ],
+            //         issued: [
+            //             { type: 'string', required: true, message: '请选择证件签发国家/地区', trigger: 'blur' },
+            //         ]
+            //     }]
+
+            // }
         })
 
         watch(

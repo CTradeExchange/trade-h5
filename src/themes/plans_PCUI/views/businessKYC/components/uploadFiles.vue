@@ -5,11 +5,12 @@
         label-position='top'
         label-width='auto'
         :model='form'
+        :rules='rules'
         :size='size'
     >
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='注册证书'>
+                <el-form-item label='注册证书' prop='regCertificate'>
                     <van-uploader :after-read='afterRead' name='regCertificate' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -38,7 +39,7 @@
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='公司章程'>
+                <el-form-item label='公司章程' prop='policy'>
                     <van-uploader :after-read='afterRead' name='policy' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -55,7 +56,7 @@
         </el-row>
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='董事名册/董事职权证明书（注册代理人证书）/注册信息摘要'>
+                <el-form-item label='董事名册/董事职权证明书（注册代理人证书）/注册信息摘要' prop='directorsList'>
                     <van-uploader :after-read='afterRead' name='directorsList' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -73,7 +74,7 @@
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='董事名册/董事职权证明书（注册代理人证书）/注册信息摘要'>
+                <el-form-item label='董事名册/董事职权证明书（注册代理人证书）/注册信息摘要' prop='directorsList2'>
                     <van-uploader :after-read='afterRead' name='directorsList2' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -112,7 +113,7 @@
 
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='所有权结构图'>
+                <el-form-item label='所有权结构图' prop='structure'>
                     <van-uploader :after-read='afterRead' name='structure' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -130,7 +131,7 @@
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='制裁问卷'>
+                <el-form-item label='制裁问卷' prop='sanctionsQues'>
                     <van-uploader :after-read='afterRead' name='sanctionsQues' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -151,7 +152,7 @@
 
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='授权信'>
+                <el-form-item label='授权信' prop='sanctionsQues'>
                     <el-form-item label='制裁问卷'>
                         <van-uploader :after-read='afterRead' name='authorizationLetter' result-type='file'>
                             <div class='uploader'>
@@ -171,7 +172,7 @@
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='经营状况说明'>
+                <el-form-item label='经营状况说明' prop='businessConditions'>
                     <van-uploader :after-read='afterRead' name='businessConditions' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -204,7 +205,7 @@
 
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='中间股东信息（如有直接/间接持有25%及以上的公司）'>
+                <el-form-item label='中间股东信息（如有直接/间接持有25%及以上的公司）' prop='intermediateShareholders'>
                     <van-uploader :after-read='afterRead' name='intermediateShareholders' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -228,7 +229,7 @@
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='补充资料'>
+                <el-form-item label='补充资料' prop='furtherInfo'>
                     <van-uploader :after-read='afterRead' name='furtherInfo' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -246,7 +247,7 @@
 
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='公司网站（如有，没有填写无'>
+                <el-form-item label='公司网站（如有，没有填写无' prop='websit'>
                     <el-input v-model='form.websit' />
                 </el-form-item>
             </el-col>
@@ -283,6 +284,42 @@ export default {
                 intermediateShareholders: '',
                 furtherInfo: '',
                 websit: ''
+            },
+            rules: {
+                regCertificate: [
+                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                ],
+                policy: [
+                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                ],
+                directorsList: [
+                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                ],
+                directorsList2: [
+                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                ],
+                structure: [
+                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                ],
+                sanctionsQues: [
+                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                ],
+                authorizationLetter: [
+                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                ],
+                businessConditions: [
+                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                ],
+                intermediateShareholders: [
+                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                ],
+                furtherInfo: [
+                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                ],
+                websit: [
+                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                ]
+
             }
 
         })

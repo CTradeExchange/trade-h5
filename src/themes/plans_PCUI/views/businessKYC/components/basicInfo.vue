@@ -12,19 +12,19 @@
         </p>
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='公司名称' prop='companyName'>
+                <el-form-item label='公司名称' prop='accountInfo.companyName'>
                     <el-input v-model='form.accountInfo.companyName' />
                 </el-form-item>
             </el-col>
             <el-col :offset='0' prop='regNo' :span='12'>
-                <el-form-item label='注册号' prop='regNo'>
+                <el-form-item label='注册号' prop='accountInfo.regNo'>
                     <el-input v-model='form.accountInfo.regNo' />
                 </el-form-item>
             </el-col>
         </el-row>
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='成立日期' prop='createTime'>
+                <el-form-item label='成立日期' prop='accountInfo.createTime'>
                     <el-date-picker
                         v-model='form.accountInfo.createTime'
                         placeholder='请选择成立日期'
@@ -36,7 +36,7 @@
             <el-col :offset='0' :span='12'>
                 <el-row :gutter='20'>
                     <el-col :span='10'>
-                        <el-form-item label='区号' prop='area'>
+                        <el-form-item label='区号' prop='accountInfo.area'>
                             <el-select
                                 v-model='form.accountInfo.area'
                                 placeholder='请选择区号'
@@ -51,7 +51,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col prop='phone' :span='14'>
-                        <el-form-item label='联系电话' prop='phone'>
+                        <el-form-item label='联系电话' prop='accountInfo.phone'>
                             <el-input v-model='form.accountInfo.phone' type='number' />
                         </el-form-item>
                     </el-col>
@@ -61,12 +61,12 @@
 
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='资金来源' prop='resource'>
+                <el-form-item label='资金来源' prop='accountInfo.resource'>
                     <el-input v-model='form.accountInfo.resource' />
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='业务性质' prop='nature'>
+                <el-form-item label='业务性质' prop='accountInfo.nature'>
                     <el-select
                         v-model='form.accountInfo.nature'
                         placeholder='请选择业务性质'
@@ -79,7 +79,7 @@
 
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='申请原因' prop='reason'>
+                <el-form-item label='申请原因' prop='accountInfo.reason'>
                     <el-input v-model='form.accountInfo.reason' type='textarea' />
                 </el-form-item>
             </el-col>
@@ -89,7 +89,7 @@
         </p>
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='国家/地区' prop='regCountry'>
+                <el-form-item label='国家/地区' prop='regAddress.regCountry'>
                     <el-select
                         v-model='form.regAddress.regCountry'
                         placeholder='请选择国家/地区'
@@ -104,7 +104,7 @@
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='城市' prop='regCity'>
+                <el-form-item label='城市' prop='regAddress.regCity'>
                     <el-input v-model='form.regAddress.regCity' />
                 </el-form-item>
             </el-col>
@@ -112,7 +112,7 @@
 
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='街道地址' prop='regStreet'>
+                <el-form-item label='街道地址' prop='regAddress.regStreet'>
                     <el-input v-model='form.regAddress.regStreet' />
                 </el-form-item>
             </el-col>
@@ -123,7 +123,7 @@
         </p>
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='国家/地区' prop='opertionCountry'>
+                <el-form-item label='国家/地区' prop='opertion.opertionCountry'>
                     <el-select
                         v-model='form.opertion.opertionCountry'
                         placeholder='请选择国家/地区'
@@ -138,14 +138,14 @@
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='城市' prop='opertionCity'>
+                <el-form-item label='城市' prop='opertion.opertionCity'>
                     <el-input v-model='form.opertion.opertionCity' />
                 </el-form-item>
             </el-col>
         </el-row>
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='街道地址' prop='opertionStreet'>
+                <el-form-item label='街道地址' prop='opertion.opertionStreet'>
                     <el-input v-model='form.opertion.opertionStreet' />
                 </el-form-item>
             </el-col>
@@ -195,68 +195,82 @@ export default {
             },
             rules: {
                 accountInfo: {
-                    type: 'object',
-                    required: true,
-                    fields: {
-                        companyName: [
-                            { type: 'string', required: true, message: '请输入公司名称', trigger: 'blur' },
+                    companyName: [
+                        { type: 'string', required: true, message: '请输入公司名称', trigger: 'blur' },
 
-                        ],
-                        regNo: [
-                            { required: true, message: '请输入注册号', trigger: 'blur' },
+                    ],
+                    regNo: [
+                        { required: true, message: '请输入注册号', trigger: 'blur' },
 
-                        ],
-                        createTime: [
-                            { required: true, message: '请输入成立日期', trigger: 'blur' },
+                    ],
+                    createTime: [
+                        { required: true, message: '请输入成立日期', trigger: 'blur' },
 
-                        ],
-                        area: [
-                            { required: true, message: '请选择区号', trigger: 'blur' },
+                    ],
+                    area: [
+                        { required: true, message: '请选择区号', trigger: 'blur' },
 
-                        ],
-                        phone: [
-                            { required: true, message: '请输入联系电话', trigger: 'blur' },
-                        ],
-                        resource: [
-                            { required: true, message: '请输入资金来源', trigger: 'blur' },
+                    ],
+                    phone: [
+                        { required: true, message: '请输入联系电话', trigger: 'blur' },
+                    ],
+                    resource: [
+                        { required: true, message: '请输入资金来源', trigger: 'blur' },
 
-                        ],
-                        nature: [
-                            { required: true, message: '请选择业务性质', trigger: 'blur' },
+                    ],
+                    nature: [
+                        { required: true, message: '请选择业务性质', trigger: 'blur' },
 
-                        ],
-                        reason: [
-                            { required: true, message: '请输入申请原因', trigger: 'blur' },
+                    ],
+                    reason: [
+                        { required: true, message: '请输入申请原因', trigger: 'blur' },
 
-                        ],
-                        regCountry: [
-                            { required: true, message: '请选择国家/地区', trigger: 'blur' },
+                    ],
+                },
+                regAddress: {
+                    regCountry: [
+                        { required: true, message: '请选择国家/地区', trigger: 'blur' },
 
-                        ],
-                        regCity: [
-                            { required: true, message: '请输入城市', trigger: 'blur' },
+                    ],
+                    regCity: [
+                        { required: true, message: '请输入城市', trigger: 'blur' },
 
-                        ],
-                        regStreet: [
-                            { required: true, message: '请输入街道地址', trigger: 'blur' },
+                    ],
+                    regStreet: [
+                        { required: true, message: '请输入街道地址', trigger: 'blur' },
 
-                        ],
-                        opertionCountry: [
-                            { required: true, message: '请选择国家/地区', trigger: 'blur' },
+                    ],
+                },
+                opertion: {
+                    opertionCountry: [
+                        { required: true, message: '请选择国家/地区', trigger: 'blur' },
 
-                        ],
-                        opertionCity: [
-                            { required: true, message: '请输入城市', trigger: 'blur' },
+                    ],
+                    opertionCity: [
+                        { required: true, message: '请输入城市', trigger: 'blur' },
 
-                        ],
-                        opertionStreet: [
-                            { required: true, message: '请输入街道地址', trigger: 'blur' },
+                    ],
+                    opertionStreet: [
+                        { required: true, message: '请输入街道地址', trigger: 'blur' },
 
-                        ]
-                    }
-
+                    ]
                 }
+
             }
+            // rules: {
+            //     accountInfo: {
+            //         type: 'object',
+            //         required: true,
+            //         fields: {
+            //             companyName: [
+            //                 { type: 'string', required: true, message: '请输入公司名称', trigger: 'blur' },
+
+            //             ],
+            //
+            //         }
+
+            //     }
+            // }
         })
 
         watch(
