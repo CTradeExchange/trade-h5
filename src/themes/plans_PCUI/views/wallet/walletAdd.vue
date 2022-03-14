@@ -44,6 +44,9 @@
                     <div class='box'>
                         <input v-model='name' :placeholder="$t('walletAdd.namePlaceholder')" type='text' />
                     </div>
+                    <div class='tip'>
+                        {{ $t('common.sendToYou') }} {{ customInfo?.phone || customInfo?.email }}
+                    </div>
                     <div class='box'>
                         <input v-model='code' :placeholder="$t('walletAdd.codePlaceholder')" />
                         <span v-if='countDown === 0' class='get' @click='getCode'>
@@ -194,20 +197,20 @@ export default {
         // 点击获取验证码
         const getCode = () => {
             // 验证是否绑定手机号
-            if (!customInfo.phone) {
-                return Dialog.confirm({
-                    title: t('withdraw.hint'),
-                    message: t('withdraw.bindPhoneHint'),
-                    confirmButtonText: t('withdraw.bindBtn'),
-                    cancelButtonText: t('withdraw.close')
-                }).then(() => {
-                    router.push('/bindMobile')
-                }).catch(() => {})
-            }
+            // if (!customInfo.phone) {
+            //     return Dialog.confirm({
+            //         title: t('withdraw.hint'),
+            //         message: t('withdraw.bindPhoneHint'),
+            //         confirmButtonText: t('withdraw.bindBtn'),
+            //         cancelButtonText: t('withdraw.close')
+            //     }).then(() => {
+            //         router.push('/bindMobile')
+            //     }).catch(() => {})
+            // }
 
             // 发送验证码
             verifyCodeSend({
-                bizType: customInfo?.phone ? 'SMS_LOGINED_VERIFICATION_CODE' : 'EMAIL_LOGINED_VERIFICATION_CODE',
+                bizType: customInfo?.phone ? 'SMS_LOGINED_VERIFICATION_CODE' : 'EMAIL_LOGINED_VERIFICATION_CODE'
             }).then(res => {
                 state.verifyInfo = res.data
                 state.countDown = 59
@@ -367,6 +370,10 @@ export default {
         .paste {
             display: none;
         }
+    }
+    .tip{
+        padding-top: rem(20px) ;
+        color: var(--normalColor);
     }
 }
 .footer-btn {

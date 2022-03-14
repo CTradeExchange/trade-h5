@@ -143,7 +143,7 @@
                         {{ $t('login.forgotFundPwd') }}
                     </span>
                 </div>
-                <p class='bw-t'>
+                <p v-if='googleCodeVis' class='bw-t'>
                     {{ $t('common.googleCode') }}
                 </p>
                 <div class='pwd-oper field-google'>

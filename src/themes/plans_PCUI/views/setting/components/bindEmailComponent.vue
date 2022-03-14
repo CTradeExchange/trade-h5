@@ -24,13 +24,14 @@
                 </p>
                 <van-field
                     v-model='email'
+                    class='inputEmail'
                     label=''
                     :placeholder='type === "bind" ? $t("common.inputEmail"): $t("common.inputNewEmail")'
                     type='text'
                 />
             </div>
-            <div v-if='type === "change"' class='field'>
-                <p class='title'>
+            <div class='field'>
+                <p v-if='type === "change"' class='title'>
                     {{ $t('common.sendToYourEmail') }}
                 </p>
                 <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
@@ -41,7 +42,7 @@
                 </p>
                 <CheckCode v-model='checkCodeOld' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSendOld' />
             </div>
-            <div v-if='googleCodeVis' class='field'>
+            <div v-if='googleCodeVis' class='field form-item-google'>
                 <p class='title'>
                     {{ $t('common.inputGoogleCode') }}
                 </p>
@@ -289,6 +290,18 @@ export default {
                 color: var(--color);
                 font-size: rem(32px);
             }
+        }
+    }
+    .inputEmail{
+        padding-left: 0;
+    }
+    .form-item-google :deep() {
+        .van-cell {
+            padding-left: 0;
+            background: none;
+        }
+        .paste {
+            display: none;
         }
     }
 }
