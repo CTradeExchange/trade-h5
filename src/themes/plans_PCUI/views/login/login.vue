@@ -6,9 +6,13 @@
             <!-- 登录账号类型 -->
             <div class='account-type'>
                 <button :class="['btn', { 'active': accountType === 1 }]" @click='accountType = 1'>
-                    {{ $t('signIn.defaultLogin') }}
+                    <!-- {{ $t('signIn.defaultLogin') }} -->
+                    个人登录
                 </button>
                 <button :class="['btn', { 'active': accountType === 2 }]" @click='accountType = 2'>
+                    企业登录
+                </button>
+                <button :class="['btn', { 'active': accountType === 3 }]" @click='accountType = 3'>
                     {{ $t('signIn.fundLogin') }}
                 </button>
             </div>

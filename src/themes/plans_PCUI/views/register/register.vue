@@ -4,7 +4,7 @@
         <div class='container'>
             <div class='content'>
                 <div class='pageTitle'>
-                    <h5>{{ $t('register.openAccount') }}</h5>
+                    <h5>{{ openAccountType===1 ? $t('register.businessOpen') : $t("register.openAccount") }}</h5>
                     <router-link to='/login'>
                         {{ $t('register.hasAccount') }}
                     </router-link>
@@ -17,7 +17,6 @@
                     class='openTypeTab'
                     :color='style.primary'
                     line-height='2px'
-
                     :title-inactive-color='style.mutedColor'
                 >
                     <van-tab name='mobile' :title='$t("register.phoneNo")' />
@@ -28,11 +27,32 @@
                     <!-- <CurrencyAction v-model='currency' class='cellRow' />
                 <TradeTypeAction v-model='tradeType' class='cellRow' /> -->
                     <!-- <van-cell title="账户币种" is-link arrow-direction="down" value="USD" /> -->
+                    <!-- <areaInputPc
+                        v-model.trim='email'
+                        v-model:zone='zone'
+                        clear
+                        input-type='text'
+                        :placeholder='$t("register.email")'
+                        type='business'
+                        @zoneSelect='zoneSelect'
+                    /> -->
+                    <div class='cell'>
+                        <el-select v-model='countryVal' class='select-conuntry' :placeholder='$t("auth.countrySelect")' @change='zoneOnSelect'>
+                            <el-option
+                                v-for='item in countryList'
+                                :key='item.code'
+                                :label='item.name'
+                                :value='item.code'
+                            />
+                        </el-select>
+                    </div>
+
                     <div v-if="openType === 'mobile'" class='cell'>
                         <areaInputPc
                             v-model.trim='mobile'
                             v-model:zone='zone'
                             clear
+                            :disabled='true'
                             :placeholder='$t("register.phoneNo")'
                             type='mobile'
                             @zoneSelect='zoneSelect'
@@ -43,6 +63,7 @@
                             v-model.trim='email'
                             v-model:zone='zone'
                             clear
+                            :disabled='true'
                             input-type='text'
                             :placeholder='$t("register.email")'
                             type='email'
@@ -73,6 +94,11 @@
                         {{ $t('common.submit') }}
                     </van-button>
                 </div>
+                <div v-if='companyCountryVisible' class='businessOpen'>
+                    <a class='businessOpenBtn' href='javascript:;' @click='openAccountType=openAccountType===0 ? 1:0'>
+                        {{ openAccountType===0 ? $t('register.businessOpen') : $t("register.openAccount") }}
+                    </a>
+                </div>
             </div>
         </div>
         <userLayoutFooter />
@@ -94,7 +120,7 @@ import areaInputPc from '@/components/form/areaInputPc'
 // import TradeTypeAction from './components/tradeTypeAction'
 import { getDevice, getQueryVariable, setToken, getArrayObj, sessionGet } from '@/utils/util'
 import { register, checkUserStatus } from '@/api/user'
-import { verifyCodeSend } from '@/api/base'
+import { verifyCodeSend, findCompanyCountry } from '@/api/base'
 import { useStore } from 'vuex'
 import { reactive, toRefs, computed, getCurrentInstance, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -139,7 +165,10 @@ export default {
             email: '',
             pageui: '',
             protocol: true,
-            visited: false // 是否已点击过获取验证码
+            visited: false, // 是否已点击过获取验证码
+            countryVal: '',
+            companyCountryList: [], // 获取白标后台配置的企业开户国家
+            openAccountType: 0, // 开户类型 0:个人 1.企业 默认为个人
         })
         let token = ''
 
@@ -153,25 +182,41 @@ export default {
                 const defaultZone = store.state._base.wpCompanyInfo?.defaultZone
                 const defaultZoneConfig = defaultZone?.code ? countryList.find(el => el.code === defaultZone.code) : countryList[0]
                 if (defaultZoneConfig?.code) {
-                    state.zone = `${defaultZoneConfig.name} (${defaultZoneConfig.countryCode})`
-                    state.countryZone = defaultZoneConfig.countryCode
+                    // state.zone = `(${defaultZoneConfig.countryCode})`
+                    state.countryVal = defaultZoneConfig.code
+                    state.zone = `(${defaultZoneConfig.countryCode})`
                     state.countryCode = defaultZoneConfig.code
                 }
             }
         })
-        const countryList = computed(() => store.state.countryList)
+        const countryList = computed(() => {
+            const countryList = store.state.countryList
+            return state.openAccountType === 0 ? countryList : countryList.filter(el => state.companyCountryList.includes(el.code))
+        })
+
         const style = computed(() => store.state.style)
         // 手机正则表达式
         const mobileReg = computed(() => getArrayObj(countryList.value, 'countryCode', state.countryZone).extend || ''
         )
         // 开户须知内容
-
         const instructions = computed(() => {
             const lang = locale.value
             const wpCompanyInfo = store.state._base.wpCompanyInfo || {}
             const protocol = wpCompanyInfo[lang === 'zh-CN' ? 'instructions_zh' : 'instructions_en']
             return protocol ? decodeURIComponent(unescape(protocol)) : ''
         })
+        // 是否显示企业开户的入口
+        const companyCountryVisible = computed(() => {
+            return state.companyCountryList.includes(state.countryVal)
+        })
+
+        // 选择国家
+        const zoneOnSelect = val => {
+            const countryCode = countryList.value.find(el => el.code === val)?.countryCode
+            state.zone = countryCode
+            state.countryZone = countryCode
+            state.countryCode = countryCode
+        }
 
         const registerSubmit = (params) => {
             state.loading = true
@@ -243,7 +288,8 @@ export default {
                 protocol: state.protocol,
                 tradeTypeCurrencyList: getPlansByCountry(state.countryCode),
                 customerGroupId: getCustomerGroupIdByCountry(state.countryCode),
-                country: state.countryCode
+                country: state.countryCode,
+                openAccountType: state.openAccountType
             }
 
             if (state.openType === 'mobile') {
@@ -328,6 +374,15 @@ export default {
             state.countryCode = data.countryCode
         }
 
+        // 获取白标后台配置的企业开户国家
+        const queryCompanyCountry = () => {
+            findCompanyCountry().then(res => {
+                if (res.check() && res.data) {
+                    state.companyCountryList = res.data.openCompanyCountry
+                }
+            })
+        }
+
         onMounted(() => {
             const { mobile, email } = route.query
             if (mobile) {
@@ -337,6 +392,7 @@ export default {
                 state.email = email
                 state.openType = 'email'
             }
+            queryCompanyCountry()
         })
 
         return {
@@ -346,7 +402,10 @@ export default {
             style,
             instructions,
             countryList,
-            zoneSelect
+            zoneOnSelect,
+            queryCompanyCountry,
+            zoneSelect,
+            companyCountryVisible
         }
     }
 }
@@ -371,6 +430,15 @@ export default {
             padding: 60px;
             background-color: var(--contentColor);
             border-radius: 10px;
+            .businessOpen {
+                text-align: center;
+                .businessOpenBtn {
+                    display: inline-block;
+                    color: var(--primary);
+                    line-height: 1;
+                    border-bottom: 1px solid var(--primary);
+                }
+            }
         }
     }
     .footerBtn {
@@ -406,6 +474,7 @@ export default {
 .cell {
     display: flex;
     justify-content: space-between;
+    width: 100%;
     margin: 20px 0;
     div {
         flex: 1;
@@ -430,6 +499,16 @@ export default {
             &::after {
                 border-bottom: none;
             }
+        }
+    }
+    .select-conuntry {
+        .el-input {
+            font-size: 16px;
+        }
+        :deep(.el-input__inner) {
+            height: 48px;
+            font-size: 16px;
+            line-height: 48px;
         }
     }
 }

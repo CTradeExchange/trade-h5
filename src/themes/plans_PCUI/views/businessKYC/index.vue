@@ -150,6 +150,7 @@ store.dispatch('getCountryListByParentCode')
 <style lang="scss" scoped>
 .page-wrap {
     width: 1200px;
+    height: 100%;
     margin: 0 auto;
     background: var(--contentColor);
     .el-form {

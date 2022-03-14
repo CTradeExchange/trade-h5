@@ -57,6 +57,7 @@ store.dispatch('_user/findAllBizKycList', { openAccountType: 1 }).then(res => {
 <style lang="scss" scoped>
 .page-wrap {
     width: 1200px;
+    height: 100%;
     margin: rem(100px) auto;
     padding: rem(100px);
     background: var(--contentColor);
