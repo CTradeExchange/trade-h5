@@ -80,10 +80,10 @@
                         <i class='icon icon_gerenxinxi' :title="$t('cRoute.personal')"></i>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item @click="$router.push('/businessKYC')">
+                                <el-dropdown-item v-if='Number(customerInfo.companyKycStatus)===1 && Number(customerInfo.openAccountType) === 1' @click="$router.push('/businessKYC')">
                                     企业KYC认证
                                 </el-dropdown-item>
-                                <el-dropdown-item v-if='customerInfo.companyKycStatus===1' @click="handRoutTo('/authentication')">
+                                <el-dropdown-item v-if='Number(customerInfo.companyKycStatus)===1 && Number(customerInfo.openAccountType) === 0' @click="handRoutTo('/authentication')">
                                     {{ $t('cRoute.regKyc') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item @click="handRoutTo('/bankList')">

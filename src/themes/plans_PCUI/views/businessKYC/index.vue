@@ -74,36 +74,6 @@ const rules = reactive({
     ]
 })
 
-// const getAllLevel = ()=>{
-//     findAllBizKycList()
-// }
-
-// const onSubmit = () => {
-// const params = {
-//     businessCode: props.businessCode,
-//     elementList: tempElementList,
-//     openAccountType: 1
-// }
-// state.loading = true
-// kycApply(params).then(res => {
-//     state.loading = false
-//     if (res.check()) {
-//         if (props.platform === 'web') {
-//             const parentPath = route.matched[route.matched.length - 2]
-//             router.push({ path: parentPath.path + '/kycCommitted' })
-//         } else {
-//             router.replace({ name: 'KycCommitted' })
-//         }
-//         sessionStorage.removeItem('kycList')
-//     }
-// }).catch(err => {
-//     state.loading = false
-//     console.log(err)
-// })
-
-// router.push('/businessKYC/content')
-// }
-
 // 根据 levelCode 查询kyc认证元素
 const onSubmit = () => {
     formRef.value.validate((valid) => {

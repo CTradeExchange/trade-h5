@@ -198,11 +198,17 @@ export default {
                     if (res.data.list.length > 0) {
                         // 需要KYC认证
                         sessionStorage.setItem('kycList', JSON.stringify(res.data.list))
-                        router.replace(
-                            {
+                        // 判断是个人KYC还是企业KYC
+                        if (params.openAccountType === 0) {
+                            router.replace({
                                 path: '/register/regKyc',
                                 query: { levelCode: res.data.list[0].levelCode }
                             })
+                        } else {
+                            router.replace({
+                                path: '/businessKYC'
+                            })
+                        }
                     } else {
                         router.replace({ name: 'RegisterSuccess' })
                     }
@@ -355,16 +361,16 @@ export default {
     height: 100%;
     background: var(--bgColor);
     .container {
-        flex: 1;
-        overflow: auto;
         display: flex;
+        flex: 1;
         align-items: center;
         justify-content: center;
-        .content{
-            width:520px;
+        overflow: auto;
+        .content {
+            width: 520px;
             padding: 60px;
+            background-color: var(--contentColor);
             border-radius: 10px;
-                background-color: var(--contentColor);
         }
     }
     .footerBtn {
@@ -372,19 +378,19 @@ export default {
     }
 }
 .pageTitle {
-    margin-bottom: 10px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
     padding: 0;
-    h5{
-    font-size: 32px;
-    color: var(--color);
-    font-family: Microsoft YaHei;
+    h5 {
+        color: var(--color);
+        font-size: 32px;
+        font-family: Microsoft YaHei;
     }
-    a{
-        font-size:14px;
-        color:var(--color);
+    a {
+        color: var(--color);
+        font-size: 14px;
     }
 }
 .banner {
@@ -406,40 +412,36 @@ export default {
     }
     .zone {
         flex: none;
-    width: 152px;
-    margin-right: 10px;
-
+        width: 152px;
+        margin-right: 10px;
     }
-    :deep{
-     .inputWrapper{
-        background-color: var(--bgColor);
-        border-radius: 4px;
-         .input{
-            width: 100%;
+    :deep {
+        .inputWrapper {
+            background-color: var(--bgColor);
+            border-radius: 4px;
+            .input {
+                width: 100%;
                 height: 48px;
-                   padding: 0 16px;
+                padding: 0 16px;
                 font-size: 16px;
-         }
-
-    }
-    .van-hairline--bottom{
-        &::after{
-            border-bottom: none;
+            }
+        }
+        .van-hairline--bottom {
+            &::after {
+                border-bottom: none;
+            }
         }
     }
-    }
-
 }
 .openTypeTab {
     width: 40%;
-
     :deep(.van-tabs__nav--line) {
         background-color: var(--contentColor);
     }
     :deep(.van-tab) {
         .van-tab__text {
-            font-size: 16px;
             color: var(--minorColor);
+            font-size: 16px;
         }
         &.van-tab--active {
             .van-tab__text {
@@ -470,61 +472,61 @@ export default {
     border-radius: rem(10px);
 }
 .registerBtn {
-    color: #fff;
+    height: 48px;
+    color: #FFF;
+    font-size: 20px;
     background: var(--primary);
     border-color: var(--primary);
     border-width: 1px 0 0;
-        height: 48px;
     border-radius: 4px;
-    font-size: 20px;
 }
 .checkbox {
-        align-items: flex-start;
+    align-items: flex-start;
     :deep(.van-badge__wrapper) {
-    width: 16px;
-    height: 16px;
-    overflow: hidden;
-    font-size: 14px;
-    line-height: 16px;
+        width: 16px;
+        height: 16px;
+        overflow: hidden;
+        font-size: 14px;
+        line-height: 16px;
     }
     :deep(.van-checkbox__icon) {
-            margin-top: 4px;
-    flex: none;
-    height: 16px;
-    font-size: 12px;
-    line-height: 16px;
-    cursor: pointer;
+        flex: none;
+        height: 16px;
+        margin-top: 4px;
+        font-size: 12px;
+        line-height: 16px;
         background-color: var(--primary);
-    border-color: var(--primary);
+        border-color: var(--primary);
         border-radius: 4px;
+        cursor: pointer;
     }
     :deep(.van-checkbox__label) {
-      line-height: 20px;
-    font-size: 14px;
         color: var(--placeholdColor);
+        font-size: 14px;
+        line-height: 20px;
     }
 }
-.verifyCodeCell{
-    :deep{
-        .checkCodeBar{
-                background-color: var(--assistColor);
-    border-radius: 4px;
-    border-bottom: none;
-            .checkCodeInput{
+.verifyCodeCell {
+    :deep {
+        .checkCodeBar {
+            background-color: var(--assistColor);
+            border-bottom: none;
+            border-radius: 4px;
+            .checkCodeInput {
                 font-size: 16px;
             }
-            .getCodeBtn{
-font-size: 16px;
-    margin: 0 18px;
-    color: var(--primary);
-    cursor: pointer;
+            .getCodeBtn {
+                margin: 0 18px;
+                color: var(--primary);
+                font-size: 16px;
+                cursor: pointer;
             }
             .input {
-    width: 100%;
-    height: 48px;
-    padding: 0 5px;
-        padding-left: 18px;
-}
+                width: 100%;
+                height: 48px;
+                padding: 0 5px;
+                padding-left: 18px;
+            }
         }
     }
 }
