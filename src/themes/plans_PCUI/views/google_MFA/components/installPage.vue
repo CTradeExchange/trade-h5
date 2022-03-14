@@ -1,6 +1,6 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop :back='true' />
+        <Top absolute back left-icon='arrow-left' :right-action='false' show-center />
         <div class='bigIcon'>
             <i class='icon icon_shoujixiazai'></i>
         </div>
@@ -32,6 +32,7 @@
 </template>
 
 <script setup>
+import Top from '@/components/top'
 import { isIOS } from 'vant/lib/utils'
 import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()

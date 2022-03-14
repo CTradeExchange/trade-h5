@@ -1,6 +1,13 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop :back='true' />
+        <!-- <LayoutTop :back='true' /> -->
+        <Top absolute back left-icon='arrow-left' :right-action='false' show-center>
+            <template #left>
+                <a class='topBack' href='javascript:;' @click='$router.back()'>
+                    <span class='icon_icon_close_big'></span>
+                </a>
+            </template>
+        </Top>
         <div class='bigIcon'>
             <i class='icon icon_dunpai'></i>
         </div>
@@ -16,6 +23,7 @@
 </template>
 
 <script setup>
+import Top from '@/components/top'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'

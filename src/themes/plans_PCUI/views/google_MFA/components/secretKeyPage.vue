@@ -1,6 +1,6 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop :back='true' />
+        <Top absolute back left-icon='arrow-left' :right-action='false' show-center />
         <p class='desc'>
             {{ $t('mfa.secretKeyDesc') }}
         </p>
@@ -10,7 +10,7 @@
             </div>
             <van-cell v-if='secret' :title='secret'>
                 <template #right-icon>
-                    <a class='copyBtn' :data-clipboard-text='secret' href='javascript:;' @click='copySecret'>
+                    <a class='copyBtn' :data-clipboard-text='secret' href='javascript:;' @click='copySecret($event)'>
                         {{ $t('common.copy') }}
                     </a>
                 </template>
@@ -25,6 +25,7 @@
 </template>
 
 <script >
+import Top from '@/components/top'
 import { generateGoogleAccount } from '@/api/user'
 import { onMounted, ref } from 'vue'
 import ClipboardJS from 'clipboard'
@@ -34,6 +35,9 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 
 export default {
+    components: {
+        Top,
+    },
     setup () {
         const router = useRouter()
         const route = useRoute()
@@ -74,7 +78,7 @@ export default {
         }
 
         // 复制
-        const copySecret = () => {
+        const copySecret = ($event) => {
             console.log('copySecret')
             const clipboard = new ClipboardJS('.copyBtn')
 
@@ -82,7 +86,14 @@ export default {
                 Toast(t('common.copySuccess'))
 
                 e.clearSelection()
+                // 释放内存
+                clipboard.destroy()
             })
+            clipboard.on('error', e => {
+                // 释放内存
+                clipboard.destroy()
+            })
+            clipboard.onClick($event)
         }
 
         onMounted(() => {

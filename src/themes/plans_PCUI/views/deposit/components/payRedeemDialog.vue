@@ -4,6 +4,7 @@
         class='m-dialogPIN'
         position='bottom'
         round
+        @open='onOpen'
     >
         <div class='container'>
             <div class='header'>
@@ -51,6 +52,11 @@ export default {
         const loading = ref(false)
         const pin = ref('')
 
+        // 弹窗打开时
+        const onOpen = () => {
+            pin.value = ''
+        }
+
         const submit = () => {
             if (!pin.value) {
                 Toast(t('deposit.inputPIN'))
@@ -70,6 +76,7 @@ export default {
             show,
             pin,
             loading,
+            onOpen,
             submit,
         }
     }

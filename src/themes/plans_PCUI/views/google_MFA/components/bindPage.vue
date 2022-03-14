@@ -1,6 +1,13 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop :back='true' :title="customerInfo.googleId>0 ? $t('cRoute.MFA_close'):$t('cRoute.MFA_bind')" />
+        <Top
+            absolute
+            back
+            left-icon='arrow-left'
+            :right-action='false'
+            show-center
+            :title="customerInfo.googleId>0 ? $t('cRoute.MFA_close'):$t('cRoute.MFA_bind')"
+        />
         <div class='formBox'>
             <div v-if='customerInfo.phone' class='cell'>
                 <p class='label'>
@@ -61,6 +68,7 @@
 </template>
 
 <script >
+import Top from '@/components/top'
 import { computed, reactive, ref, toRefs } from 'vue'
 import { Dialog, Toast } from 'vant'
 import { useStore } from 'vuex'
@@ -74,6 +82,7 @@ import VerifyCodeBtn from './verifyCodeBtn.vue'
 
 export default {
     components: {
+        Top,
         VerifyCodeBtn,
     },
     setup () {

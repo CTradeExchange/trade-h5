@@ -1,5 +1,5 @@
 <template>
-    <div class='top'>
+    <div class='top' :class="{ 'absolute': absolute }">
         <slot name='left'>
             <a class='back' href='javascript:;' @click='back'>
                 <span class='icon_icon_back1'></span>
@@ -35,6 +35,7 @@ export default {
                 return { title: '' }
             }
         },
+        absolute: Boolean,
         backHandler: Function,
         leftIcon: {
             type: String,
@@ -77,6 +78,12 @@ export default {
     height: rem(110px);
     font-size: rem(34px);
     background: var(--contentColor);
+    &.absolute{
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
     .back {
         z-index: 1;
         width: rem(120px);
