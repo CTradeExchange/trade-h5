@@ -161,6 +161,8 @@ export default {
                         Toast(t('forgot.fundPwdSetSuccess'))
                         store.dispatch('_user/findCustomerInfo')
                         router.back()
+                    } else {
+                        Toast(res.msg)
                     }
                 })
             } else {

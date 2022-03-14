@@ -357,7 +357,8 @@
     "getAddress": "获取地址",
     "limit": "额度",
     "payType": "支付类型",
-    "inputPIN": "请输入pin码"
+    "inputPIN": "请输入pin码",
+    "payRedeemSuccess": "充值申请已提交，系统处理中，请留意您的账户资金情况，以实际到账金额为准。如未到账，请联系客服。"
   },
   "fund": {
     "marginLevel": "保证金水平",

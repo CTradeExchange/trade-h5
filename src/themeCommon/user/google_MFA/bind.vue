@@ -41,6 +41,8 @@
                     v-model='googleCode'
                     center
                     clearable
+                    :formatter='formatter'
+                    maxlength='6'
                 >
                     <template #button>
                         <a class='copyBtn' href='javascript:;' @click='pasteHanlder'>
@@ -95,6 +97,11 @@ export default {
         const descriptorRules = BindDataRules(t, customerInfo.value)
         const validator = new Schema(descriptorRules)
         console.log(customerInfo.value)
+
+        const formatter = (value) => {
+            // 过滤输入的非数字
+            return value.replace(/[^\d]/g, '')
+        }
 
         // 发送短信验证码
         const smsCodeSendHanlder = fn => {
@@ -190,6 +197,7 @@ export default {
             ...toRefs(state),
             smsCodeSendHanlder,
             emailCodeSendHanlder,
+            formatter,
             customerInfo,
             googleVerifyCodeRef,
             pasteHanlder,

@@ -353,7 +353,8 @@
         "exchangeDes": "Deposit currency different with account currency",
         "limit": "Amount",
         "payType": "Gateway",
-        "inputPIN": "Please enter pin code"
+        "inputPIN": "Please enter pin code",
+        "payRedeemSuccess": "The deposit application has been submitted and it is processing. Please pay attention to your account funds condition, and the actual amount received shall prevail. If it is not received, please contact Customer Service."
     },
     "fund": {
         "marginLevel": "margin level",
