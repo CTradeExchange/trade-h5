@@ -90,7 +90,7 @@
         </div>
 
         <!-- 侧边栏-切换产品 -->
-        <sidebarProduct v-model='switchProductVisible' :default-trade-type='product.tradeType' :hide-trade-type='plansLen<=1' @select='onSelectProduct' />
+        <sidebarProduct v-if='product' v-model='switchProductVisible' :default-trade-type='product.tradeType' :hide-trade-type='plansLen<=1' @select='onSelectProduct' />
     </div>
 </template>
 
