@@ -15,7 +15,7 @@
             <el-button v-if='active > 0' style='margin-top: 12px;' @click='prev'>
                 上一步
             </el-button>
-            <el-button v-if='draftVis' style='margin-top: 12px;' @click='save'>
+            <el-button v-if='draftVis' style='margin-top: 12px;' @click='save(false,true)'>
                 保存草稿
             </el-button>
             <el-button :disabled='nextBtnDisabled' style='margin-top: 12px;' type='primary' @click='next'>
@@ -113,25 +113,26 @@ export default {
             }
         })
 
-        const save = (commitTag) => {
+        // 保存和提交
+        const save = (commitTag = false, showToast = true) => {
             // commitTag true: 提交 false: 保存草稿
-            if (currentComp.value) {
-                currentComp.value.value.formRef.validate((valid, fields) => {
-                    if (valid) {
-                        console.log('submit!')
-                    } else {
-                        console.log('error submit!', fields)
-                    }
-                })
-            }
+            // if (currentComp.value) {
+            //     currentComp.value.value.formRef.validate((valid, fields) => {
+            //         if (valid) {
+            //             console.log('submit!')
+            //         } else {
+            //             console.log('error submit!', fields)
+            //         }
+            //     })
+            // }
 
-            console.log('currentComp====', unref([currentComp.value]))
+            // console.log('currentComp====', unref([currentComp.value]))
             state.loading = true
             const elementList = []
             if (currentComp.value) {
                 elementList.push({
                     elementCode: currentCode.value,
-                    elementValue: JSON.stringify(currentComp.value.value.form)
+                    elementValue: JSON.stringify(currentComp.value.value?.form)
                 })
             }
 
@@ -165,10 +166,12 @@ export default {
                             },
                         })
                     } else {
-                        ElMessage({
-                            message: '保存草稿成功',
-                            type: 'success',
-                        })
+                        if (showToast) {
+                            ElMessage({
+                                message: '保存草稿成功',
+                                type: 'success',
+                            })
+                        }
                     }
                 }
             }).catch(err => {
@@ -185,29 +188,33 @@ export default {
         }
 
         const next = () => {
-            if (currentComp.value) {
-                const validator = new Schema(currentComp.value.value.rules)
-                const form = currentComp.value.value.formRef
+            // if (currentComp.value) {
+            // const validator = new Schema(currentComp.value.value.rules)
+            // const form = currentComp.value.value.formRef
 
-                validator.validate(form, (errors, fields) => {
-                    if (errors) {
-                        return false
-                    }
-                    if (currentCode.value === 'company_account_owner' && !state.accountHoldVis) {
-                        state.dialogVis = true
-                    } else {
-                        // 最后一步，提交全部kyc
-                        if (state.active === Number(state.authList.length)) {
-                            return save(true)
-                        }
-                        state.active++
-                    }
+            // validator.validate(form, (errors, fields) => {
+            //     if (errors) {
+            //         return false
+            //     }
 
-                    infoButtonState()
-                    const query = { ...route.query, index: state.active }
-                    router.replace({ query })
-                })
+            if (currentCode.value === 'company_account_owner' && !state.accountHoldVis) {
+                state.dialogVis = true
+            } else {
+                // 最后一步，提交全部kyc
+                if (state.active === Number(state.authList.length)) {
+                    return save(true, true)
+                }
+                // 每点下一步，都保存一下
+                save(false, false)
+                state.active++
             }
+
+            infoButtonState()
+
+            const query = { ...route.query, index: state.active }
+            router.replace({ query })
+            // })
+            // }
         }
         const prev = () => {
             state.active--
@@ -238,12 +245,8 @@ export default {
                 // loading.value = false
                 if (res.check()) {
                     if (res.data.length > 0) {
-                        // const elementList = res.data[0].elementList
-                        // const elementValue = elementList.find(el => el.elementCode === currentCode.value)?.elementValue
-                        // if (elementValue) {
                         state.formData = res.data[0].elementList
                         console.log('form-data', state.formData)
-                        // }
                     }
                 }
             }).catch(err => {
