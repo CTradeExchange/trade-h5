@@ -6,7 +6,7 @@
         :model='form'
         :size='size'
     >
-        <div v-for='(item,index) in form' :key='index' v-loading='loading' class='director'>
+        <div v-for='(item,index) in form.list' :key='index' v-loading='loading' class='director'>
             <h3>董事{{ index+1 }}</h3>
             <p class='title'>
                 基础信息
@@ -15,7 +15,7 @@
                 <el-col :offset='0' :span='12'>
                     <el-form-item
                         label='名字'
-                        :prop='`form.${index}.lastname`'
+                        :prop='"list."+index+".lastname"'
                         :rules="{
                             required: true,
                             message: '请输入名字',
@@ -168,20 +168,22 @@ export default {
         const store = useStore()
         const formRef = ref(null)
         const state = reactive({
-            form: [
-                {
-                    lastname: '',
-                    firstName: '',
-                    birthDay: '',
-                    address: '',
-                    email: '',
-                    idType: '',
-                    idNo: '',
-                    issued: '',
-                    documents: '',
-                    photo: ''
-                }
-            ],
+            form: {
+                list: [
+                    {
+                        lastname: '',
+                        firstName: '',
+                        birthDay: '',
+                        address: '',
+                        email: '',
+                        idType: '',
+                        idNo: '',
+                        issued: '',
+                        documents: '',
+                        photo: ''
+                    }
+                ]
+            },
             idCardType: [],
             loading: false,
             // rules: {
@@ -219,7 +221,7 @@ export default {
             () => props.formData, (val) => {
                 if (val) {
                     const elementValue = val.find(el => el.elementCode === 'company_auth_director')?.elementValue
-                    if (elementValue) { state.form = JSON.parse(elementValue) }
+                    if (elementValue) { state.form.list = JSON.parse(elementValue) }
                 }
             }, {
                 immediate: true
@@ -245,7 +247,7 @@ export default {
         })
 
         const add = () => {
-            state.form.push({
+            state.form.list.push({
                 lastname: '',
                 firstName: '',
                 birthDay: '',
