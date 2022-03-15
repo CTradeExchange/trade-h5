@@ -20,19 +20,43 @@
             </p>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='名字'>
+                    <el-form-item
+                        label='名字'
+                        :prop='"list."+index+".lastname"'
+                        :rules="{
+                            required: true,
+                            message: '请输入名字',
+                            trigger: 'blur',
+                        }"
+                    >
                         <el-input v-model='item.lastname' type='text' />
                     </el-form-item>
                 </el-col>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='姓名'>
+                    <el-form-item
+                        label='姓名'
+                        :prop='"list."+index+".firstName"'
+                        :rules="{
+                            required: true,
+                            message: '请输入姓名',
+                            trigger: 'blur',
+                        }"
+                    >
                         <el-input v-model='item.firstName' />
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='出生日期'>
+                    <el-form-item
+                        label='出生日期'
+                        :prop='"list."+index+".firstName"'
+                        :rules="{
+                            required: true,
+                            message: '请输入名字',
+                            trigger: 'blur',
+                        }"
+                    >
                         <el-date-picker
                             v-model='item.birthDay'
                             placeholder='请选择出生日期'
@@ -42,7 +66,15 @@
                     </el-form-item>
                 </el-col>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='国家/地区'>
+                    <el-form-item
+                        label='国家/地区'
+                        :prop='"list."+index+".firstName"'
+                        :rules="{
+                            required: true,
+                            message: '请选择国家/地区',
+                            trigger: 'blur',
+                        }"
+                    >
                         <el-select
                             v-model='item.address'
                             placeholder='请选择国家/地区'
@@ -59,7 +91,20 @@
             </el-row>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='邮箱'>
+                    <el-form-item
+                        label='邮箱'
+                        :prop='"list."+index+".email"'
+                        :rules="[{
+                                     required: true,
+                                     message: '请输入邮箱',
+                                     trigger: 'blur',
+                                 },
+                                 {
+                                     type: 'email',
+                                     message: '请输入正确的邮箱',
+                                     trigger: ['blur', 'change'],
+                                 },]"
+                    >
                         <el-input v-model='item.email' />
                     </el-form-item>
                 </el-col>
@@ -69,7 +114,15 @@
             </p>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='证件类型'>
+                    <el-form-item
+                        label='证件类型'
+                        :prop='"list."+index+".idType"'
+                        :rules="{
+                            required: true,
+                            message: '请选择证件类型',
+                            trigger: 'blur',
+                        }"
+                    >
                         <el-select
                             v-model='item.idType'
                             placeholder='请选择证件类型'
@@ -84,7 +137,15 @@
                     </el-form-item>
                 </el-col>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='证件号'>
+                    <el-form-item
+                        label='证件号'
+                        :prop='"list."+index+".idNo"'
+                        :rules="{
+                            required: true,
+                            message: '请输入证件号',
+                            trigger: 'blur',
+                        }"
+                    >
                         <el-input v-model='item.idNo' />
                     </el-form-item>
                 </el-col>
@@ -92,7 +153,15 @@
 
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='证件签发国家/地区'>
+                    <el-form-item
+                        label='证件签发国家/地区'
+                        :prop='"list."+index+".issued"'
+                        :rules="{
+                            required: true,
+                            message: '请选择证件签发国家/地区',
+                            trigger: 'blur',
+                        }"
+                    >
                         <el-select
                             v-model='item.issued'
                             placeholder='请选择证件签发国家/地区'
@@ -109,7 +178,15 @@
             </el-row>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='证件文件'>
+                    <el-form-item
+                        label='证件文件'
+                        :prop='"list."+index+".documents"'
+                        :rules="{
+                            required: true,
+                            message: '请上传证件文件',
+                            trigger: 'blur',
+                        }"
+                    >
                         <van-uploader :after-read='afterRead' :name="index+',documents'" result-type='file'>
                             <div class='uploader'>
                                 <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -124,7 +201,15 @@
                     </el-form-item>
                 </el-col>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='个人肖像照'>
+                    <el-form-item
+                        label='个人肖像照'
+                        :prop='"list."+index+".photo"'
+                        :rules="{
+                            required: true,
+                            message: '请上传个人肖像照',
+                            trigger: 'blur',
+                        }"
+                    >
                         <van-uploader :after-read='afterRead' :name="index+',photo'" result-type='file'>
                             <div class='uploader'>
                                 <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -140,13 +225,21 @@
                 </el-col>
             </el-row>
         </div>
-        <template v-if='accountHoldVis || mainAccountVis'>
+        <template v-if='accountHoldVis || !mainAccountVis'>
             <p class='title'>
                 账户持有人/交易员身份认证
             </p>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
-                    <el-form-item label='手持证件照'>
+                    <el-form-item
+                        label='手持证件照'
+                        prop='mainAccount'
+                        :rules="{
+                            required: true,
+                            message: '请上传手持证件照',
+                            trigger: 'blur',
+                        }"
+                    >
                         <van-uploader :after-read='afterRead' name='form,mainAccount' result-type='file'>
                             <div class='uploader'>
                                 <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -198,7 +291,7 @@
 
 <script>
 
-import { reactive, ref, computed, unref, toRefs, watch } from 'vue'
+import { reactive, ref, computed, unref, toRefs, watch, onBeforeUnmount, onMounted } from 'vue'
 import { ElIcon, ElMessage } from 'element-plus'
 import { useStore } from 'vuex'
 import { upload, getListByParentCode } from '@/api/base'
@@ -216,7 +309,7 @@ export default {
             require: true
         }
     },
-    emits: ['update:dialogVis'],
+    emits: ['update:dialogVis', 'update:mainAccount'],
     setup (props, context) {
         const store = useStore()
         const formRef = ref(null)
@@ -328,6 +421,7 @@ export default {
                     const param = detail.name.split(',')
                     if (param[0] === 'form') {
                         state.form[param[1]] = res.data
+                        context.emit('update:mainAccount', true)
                     } else {
                         state.form.list[param[0]][param[1]] = res.data
                     }
@@ -347,6 +441,10 @@ export default {
         // 获取国家列表
         store.dispatch('getCountryListByParentCode')
 
+        onMounted(() => {
+            state.accountHoldVis = false
+        })
+
         return {
             add,
             onClose,
@@ -365,6 +463,7 @@ export default {
 <style lang="scss" scoped>
 .add {
     width: 100%;
+    margin-top: 30px;
     color: #666;
     font-weight: bold;
     line-height: rem(100px);

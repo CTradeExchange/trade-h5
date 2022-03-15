@@ -9,7 +9,14 @@
         <uploadFiles v-if='active === 1' ref='uploadFilesRef' :form-data='formData' />
         <certDirector v-if='active === 2' ref='certDirectorRef' :form-data='formData' />
         <beneficiary v-if='active === 3' ref='beneficiaryRef' :form-data='formData' />
-        <accountHold v-if='active === 4' ref='accountHoldRef' :dialog-vis='dialogVis' :form-data='formData' @update:dialogVis='updateDialogVis' />
+        <accountHold
+            v-if='active === 4'
+            ref='accountHoldRef'
+            :dialog-vis='dialogVis'
+            :form-data='formData'
+            @update:dialogVis='updateDialogVis'
+            @update:mainAccount='mainAccountState'
+        />
         <info v-if='active === 5' @update:protocol='updateProtocol' />
         <div class='oper-wrap'>
             <el-button v-if='active > 0' style='margin-top: 12px;' @click='prev'>
@@ -77,6 +84,7 @@ export default {
             authList: elementCode.split(','), // 需要认证的步骤
             loading: false,
             formData: [], // 认证表单数据
+            alreadyUpload: false // 账户持有人是否已上传
         })
 
         // 当前认证code
@@ -130,6 +138,8 @@ export default {
         watchEffect(() => {
             if (mainAccountVis.value) {
                 state.accountHoldVis = true
+            } else {
+                state.accountHoldVis = false
             }
         })
 
@@ -201,6 +211,10 @@ export default {
                 state.draftVis = false
             }
         }
+        // 账户持有人上传回调
+        const mainAccountState = val => {
+            state.alreadyUpload = true
+        }
 
         const next = async () => {
             if (currentComp.value) {
@@ -209,13 +223,10 @@ export default {
                 if (!flag) {
                     return false
                 }
-                if (currentCode.value === 'company_account_owner' && !state.accountHoldVis) {
+
+                if (currentCode.value === 'company_account_owner' && !mainAccountVis.value && !state.alreadyUpload) {
                     state.dialogVis = true
                 } else {
-                    // 最后一步，提交全部kyc
-                    if (state.active === Number(state.authList.length)) {
-                        return save(true, true)
-                    }
                     // 每点下一步，都保存一下
                     save(false, false)
                     state.active++
@@ -225,6 +236,11 @@ export default {
 
                 const query = { ...route.query, index: state.active }
                 router.replace({ query })
+            }
+
+            // 最后一步，提交全部kyc
+            if (state.active === Number(state.authList.length)) {
+                return save(true, true)
             }
         }
         const prev = () => {
@@ -259,6 +275,7 @@ export default {
             authMap,
             updateDialogVis,
             updateProtocol,
+            mainAccountState,
             ...toRefs(state)
         }
     }
