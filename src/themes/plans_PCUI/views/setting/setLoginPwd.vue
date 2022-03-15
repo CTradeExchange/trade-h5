@@ -1,7 +1,7 @@
 <template>
     <centerViewDialog>
         <div class='pageWrap'>
-            <Top back left-icon='arrow-left' :right-action='false' show-center>
+            <Top back left-icon='arrow-left' :right-action='false' show-center :title='$t(isFirstSet ? "common.settings" : "common.modify") + $t("login.loginPwd")'>
                 <template #left>
                     <a class='topBack' href='javascript:;' @click='$router.back()'>
                         <span class='icon_icon_close_big'></span>
@@ -12,7 +12,7 @@
             </Top>
             <header class='header'>
                 <h1 class='pageTitle'>
-                    {{ $t(isFirstSet ? "common.settings" : 'common.modify') + $t("login.loginPwd") }}
+                    {{ $t(isFirstSet ? "common.settings" : "common.modify") + $t("login.loginPwd") }}
                 </h1>
                 <h6>{{ $t('forgot.pwdRule') }}</h6>
             </header>

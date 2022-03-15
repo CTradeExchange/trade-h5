@@ -37,6 +37,7 @@
                         v-model:zone='zone'
                         clear
                         :placeholder='$t("register.phoneNo")'
+                        :show-select='false'
                         @zoneSelect='zoneSelect'
                     />
                 </div>
@@ -370,6 +371,7 @@ export default {
         const countrySelect = item => {
             state.country = item
             state.countryCode = item.code // 国家code
+            state.zone = item.countryCode
         }
 
         onMounted(() => {

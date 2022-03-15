@@ -70,6 +70,12 @@
                         </span>
                     </div>
                 </div>
+                <div v-if='googleCodeVis' class='field-google'>
+                    <p class='bw-t'>
+                        {{ $t('common.googleCode') }}
+                    </p>
+                    <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
+                </div>
             </div>
         </div>
 
@@ -169,6 +175,7 @@
 
 <script>
 import centerViewDialog from '@planspc/layout/centerViewDialog'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 import {
     reactive,
     computed,
@@ -196,7 +203,8 @@ import md5 from 'js-md5'
 export default {
     components: {
         centerViewDialog,
-        InputComp
+        InputComp,
+        googleVerifyCode
     },
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
@@ -218,7 +226,7 @@ export default {
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
-
+        const googleCodeVis = computed(() => customInfo.value.googleId > 0)
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
         // 账户币种
         const { value: accountCurrency } = computed(() => store.state._user.customerInfo.accountList.find(el => el.accountId === Number(accountId)))
@@ -271,7 +279,8 @@ export default {
             appendVis: false, // 是否显示补充资料弹窗
             extend: {}, // 需要补充资料的数据
             paramsExtens: {}, // 补充完整的资料数据
-            pwd: ''
+            pwd: '',
+            googleCode: ''
         })
 
         // 初始化数据
@@ -543,6 +552,10 @@ export default {
             if (!isEmpty(value)) { return `${value.substring(0, 4)} ${'*'.repeat(value.length - 8).replace(/(.{4})/g, '$1 ')}${value.length % 4 ? ' ' : ''}${value.slice(-4)}` }
         }
 
+        const getGooleVerifyCode = val => {
+            state.googleCode = val
+        }
+
         const checkKyc = () => {
             state.loading = true
             checkKycApply({
@@ -688,6 +701,9 @@ export default {
             if (!state.pwd) {
                 return Toast(t('common.inputFundPwd'))
             }
+            if (googleCodeVis.value && isEmpty(state.googleCode)) {
+                return Toast(t('common.inputGoogleCode'))
+            }
 
             // 取款方式为otc365_cny判断是否需要填写补充资料
             if (currentTab === 'otc365_cny' && !isEmpty(state.extend) && !checkAllComplete()) {
@@ -715,7 +731,8 @@ export default {
                 withdrawType: 1,
                 withdrawMethod: currentTab,
                 tradeType,
-                fundPwd: md5(state.pwd)
+                fundPwd: md5(state.pwd),
+                googleCode: state.googleCode
             }
             if (!isEmpty(state.paramsExtens)) {
                 params.extend = JSON.stringify(state.paramsExtens)
@@ -763,7 +780,9 @@ export default {
             onlineServices,
             isEmpty,
             accountCurrency,
-            handleAppendField
+            handleAppendField,
+            googleCodeVis,
+            getGooleVerifyCode
         }
     }
 
@@ -844,11 +863,11 @@ export default {
                 line-height: rem(60px);
             }
         }
-        .fund{
+        .fund, .field-google {
+            margin-top: rem(20px);
             .bw-t{
-                 color: var(--color);
+                color: var(--color);
                 font-size: rem(28px);
-                line-height: rem(72px);
             }
             .fund-input{
                 display: flex;
@@ -863,7 +882,11 @@ export default {
                 }
             }
         }
-
+        .field-google :deep() {
+            .paste {
+                display: none;
+            }
+        }
     }
 }
 .confirm-btn {

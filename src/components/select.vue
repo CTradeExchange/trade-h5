@@ -1,8 +1,8 @@
 <template>
-    <div class='selectWrap' @click='show=true'>
+    <div class='selectWrap' @click='openActionSheet'>
         <span class='selectval'>
             {{ selected && selected[text] }}
-            <van-icon name='arrow-down' />
+            <van-icon v-if='showSelect' name='arrow-down' />
         </span>
     </div>
     <van-action-sheet v-if='actions && actions.length' v-model:show='show' :actions='actions' @select='onSelect' />
@@ -32,6 +32,10 @@ export default {
             type: String,
             default: 'value'
         },
+        showSelect: {
+            type: Boolean,
+            default: true
+        }
     },
     emits: ['update:modelValue', 'select'],
     data () {
@@ -46,6 +50,11 @@ export default {
         }
     },
     methods: {
+        // 打开弹窗
+        openActionSheet () {
+            if (this.showSelect) this.show = true
+        },
+
         onSelect (item, index) {
             this.$emit('select', item, index)
             this.$emit('update:modelValue', item[this.value])

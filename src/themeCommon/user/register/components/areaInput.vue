@@ -1,7 +1,14 @@
 <template>
     <div class='mobileBar van-hairline--bottom'>
         <div v-if='zoneShow' class='zone' :class='{ disabled: disabled }'>
-            <VueSelect v-model='zoneVal' :actions='countryList' text='code' value='code' @select='zoneOnSelect' />
+            <VueSelect
+                v-model='zoneVal'
+                :actions='countryList'
+                :show-select='showSelect'
+                text='code'
+                value='code'
+                @select='zoneOnSelect'
+            />
         </div>
         <div class='inputWrapper'>
             <input
@@ -56,6 +63,10 @@ export default {
         disabled: {
             type: Boolean,
             default: false
+        },
+        showSelect: {
+            type: Boolean,
+            default: true
         }
     },
     data () {
