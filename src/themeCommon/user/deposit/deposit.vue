@@ -127,6 +127,9 @@
             <p class='title'>
                 {{ $t('deposit.appendFiled') }}
             </p>
+            <p class='appendVisDesc'>
+                {{ $t('deposit.appendVisDesc') }}
+            </p>
             <van-cell-group inset>
                 <van-field
                     v-for='(item, key) in checkedType.extend'
@@ -224,7 +227,7 @@ export default {
             // 存款配置数据
             rateConfig: '',
             // 补充资料
-            appendVis: false,
+            appendVis: true,
             appendMap: {},
             paramsExtens: {},
             // 存款提案创建成功返回的数据
@@ -1147,6 +1150,10 @@ export default {
             color: var(--color);
             font-size: rem(32px);
             text-align: center;
+        }
+        .appendVisDesc{
+            padding: 0 rem(50px) rem(40px);
+            text-align: left;
         }
         .btn {
             width: 80%;

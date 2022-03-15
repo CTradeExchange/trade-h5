@@ -7,7 +7,7 @@
             {{ $t('cRoute.regKyc') }}
         </p>
         <div v-if='customInfo.openAccountType===1' class='business'>
-            请在PC进行企业KYC认证
+            {{ $t('auth.authToPC') }}
         </div>
         <div v-else-if='kycList.length === 0' class='empty-data'>
             <van-empty :description='$t("auth.noRequired")' image='/images/empty.png' />

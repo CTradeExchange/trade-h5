@@ -236,7 +236,8 @@
         "tips0": "Information is submitted",
         "tips1": "Thanks for your cooperation, we will verify as soon as possible！",
         "tips2": "Before verification approved, you can login with Mobile / Email + verification code via Registration, to check the approval status",
-        "personValid": "Identity Authentication"
+        "personValid": "Identity Authentication",
+        "authToPC": "Please conduct enterprise KYC certification on PC"
     },
     "forgot": {
         "forgot": "Forget Login Password",
@@ -287,7 +288,7 @@
         "chooseCertificateType": "Please choose certificate type",
         "incorrectlyFormed": "Incorrect format",
         "pleaseEnter": "Please enter ",
-        "businessOpen": "企业开户",
+        "businessOpen": "Entity Verification",
         "reGet": "Get again"
     },
     "chart": {
@@ -354,7 +355,8 @@
         "limit": "Amount",
         "payType": "Gateway",
         "inputPIN": "Please enter pin code",
-        "payRedeemSuccess": "The deposit application has been submitted and it is processing. Please pay attention to your account funds condition, and the actual amount received shall prevail. If it is not received, please contact Customer Service."
+        "payRedeemSuccess": "The deposit application has been submitted and it is processing. Please pay attention to your account funds condition, and the actual amount received shall prevail. If it is not received, please contact Customer Service.",
+        "appendVisDesc": "Please make sure the information is real and valid, otherwise it may cause the recharge failure"
     },
     "fund": {
         "marginLevel": "margin level",
