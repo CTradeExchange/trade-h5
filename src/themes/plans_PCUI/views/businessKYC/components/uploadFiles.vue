@@ -122,9 +122,6 @@
                             </p>
                         </div>
                     </van-uploader>
-                    <div class='el-upload__tip'>
-                        下载模板
-                    </div>
 
                     <div class='el-upload__tip'>
                         <p class='tips'>
@@ -146,9 +143,7 @@
                             </p>
                         </div>
                     </van-uploader>
-                    <div class='el-upload__tip'>
-                        下载模板
-                    </div>
+
                     <a class='link' :href='form.sanctionsQues' target='_blank'>
                         {{ form.sanctionsQues }}
                     </a>
@@ -167,9 +162,7 @@
                             </p>
                         </div>
                     </van-uploader>
-                    <div class='el-upload__tip'>
-                        下载模板
-                    </div>
+
                     <a class='link' :href='form.authorizationLetter' target='_blank'>
                         {{ form.authorizationLetter }}
                     </a>

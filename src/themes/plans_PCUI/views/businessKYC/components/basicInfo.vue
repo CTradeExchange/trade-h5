@@ -307,12 +307,14 @@ export default {
                         res.data.forEach(item => {
                             const lable = item.name + ' (' + item.countryCode + ')'
                             const value = item.countryCode
-                            tempArr.push({
-                                name: lable,
-                                code: value,
-                                countryCode: item.code,
-                                countryName: item.name,
-                            })
+                            if (item.code !== 'other') {
+                                tempArr.push({
+                                    name: lable,
+                                    code: value,
+                                    countryCode: item.code,
+                                    countryName: item.name,
+                                })
+                            }
                         })
                         state.countryList = tempArr
                     }
