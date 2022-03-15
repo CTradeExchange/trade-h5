@@ -7,7 +7,13 @@
         :size='size'
     >
         <div v-for='(item,index) in form.list' :key='index' class='director'>
-            <h3>最终实益拥有人{{ index+1 }}</h3>
+            <div class='head'>
+                <h3>最终实益拥有人{{ index+1 }}</h3>
+                <el-button v-if='index>0' size='small' @click='deleteItem(index)'>
+                    删&nbsp;除
+                </el-button>
+            </div>
+
             <p class='title'>
                 基础信息
             </p>
@@ -31,7 +37,7 @@
                         :prop='"list."+index+".firstName"'
                         :rules="{
                             required: true,
-                            message: '请输入名字',
+                            message: '请输入姓名',
                             trigger: 'blur',
                         }"
                     >
@@ -47,7 +53,7 @@
                         :rules="{
                             required: true,
                             message: '请选择出生日期',
-                            trigger: 'blur',
+                            trigger: 'change',
                         }"
                     >
                         <el-date-picker
@@ -65,7 +71,7 @@
                         :rules="{
                             required: true,
                             message: '请选择国家/地区',
-                            trigger: 'blur',
+                            trigger: 'change',
                         }"
                     >
                         <el-select
@@ -113,7 +119,7 @@
                         :rules="{
                             required: true,
                             message: '请选择证件类型',
-                            trigger: 'blur',
+                            trigger: 'change',
                         }"
                     >
                         <el-select
@@ -152,7 +158,7 @@
                         :rules="{
                             required: true,
                             message: '请选择证件签发国家/地区',
-                            trigger: 'blur',
+                            trigger: 'change',
                         }"
                     >
                         <el-select
@@ -233,7 +239,7 @@
 import { reactive, ref, computed, unref, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import { ElIcon, ElMessage } from 'element-plus'
-import { upload, getListByParentCode } from '@/api/base'
+import { upload, getListByParentCode, getCountryListByParentCode } from '@/api/base'
 export default {
     props: {
         formData: {
@@ -245,6 +251,7 @@ export default {
         const store = useStore()
         const formRef = ref(null)
         const state = reactive({
+            countryList: [],
             form: {
                 list: [
                     {
@@ -274,23 +281,26 @@ export default {
             }
         )
 
-        // 获取国家列表
-        const countryList = computed(() => {
-            const countryList = store.state.countryList || []
-            const tempArr = []
-
-            countryList.forEach(item => {
-                const lable = item.name + ' (' + item.countryCode + ')'
-                const value = item.countryCode
-                tempArr.push({
-                    name: lable,
-                    code: value,
-                    countryCode: item.code,
-                    countryName: item.name,
-                })
+        const getAllCountry = () => {
+            getCountryListByParentCode({ parentCode: '-1' }).then(res => {
+                if (res.check()) {
+                    if (res.data.length > 0) {
+                        const tempArr = []
+                        res.data.forEach(item => {
+                            const lable = item.name + ' (' + item.countryCode + ')'
+                            const value = item.countryCode
+                            tempArr.push({
+                                name: lable,
+                                code: value,
+                                countryCode: item.code,
+                                countryName: item.name,
+                            })
+                        })
+                        state.countryList = tempArr
+                    }
+                }
             })
-            return tempArr
-        })
+        }
 
         const add = () => {
             state.form.list.push({
@@ -303,6 +313,10 @@ export default {
                 idNo: '',
                 issued: ''
             })
+        }
+
+        const deleteItem = (index) => {
+            state.form.list.splice(index, 1)
         }
 
         // 上传图片
@@ -341,13 +355,13 @@ export default {
 
         getIdCardType()
         // 获取国家列表
-        store.dispatch('getCountryListByParentCode')
+        getAllCountry()
 
         return {
             add,
-            countryList,
             afterRead,
             formRef,
+            deleteItem,
             ...toRefs(state)
         }
     }

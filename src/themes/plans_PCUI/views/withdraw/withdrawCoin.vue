@@ -580,10 +580,16 @@ export default {
                         confirmButtonText: Number(res.data) === 1 ? t('withdraw.kycBtn_1') : t('withdraw.kycBtn_2'),
                         message: Number(res.data) === 2 ? t('withdraw.kycMsg_1') : t('withdraw.kycMsg_2'),
                     }).then(() => {
-                        router.replace({
-                            path: '/assets/authentication',
-                            query: { businessCode: 'withdraw' }
-                        })
+                        if (customInfo.openAccountType === 0) {
+                            router.replace({
+                                path: '/assets/authentication',
+                                query: { businessCode: 'withdraw' }
+                            })
+                        } else {
+                            router.replace({
+                                path: '/businessKYC'
+                            })
+                        }
                     })
                 } else {
                     if (!withdrawConfig.accountActiveEnable) {

@@ -7,7 +7,12 @@
         :size='size'
     >
         <div v-for='(item,index) in form.list' :key='index' v-loading='loading' class='director'>
-            <h3>账户持有人/交易员{{ index+1 }}</h3>
+            <div class='head'>
+                <h3>账户持有人/交易员{{ index+1 }}</h3>
+                <el-button v-if='index>0' size='small' @click='deleteItem(index)'>
+                    删&nbsp;除
+                </el-button>
+            </div>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
                     主要验证人&nbsp;&nbsp;<el-switch
@@ -53,8 +58,8 @@
                         :prop='"list."+index+".firstName"'
                         :rules="{
                             required: true,
-                            message: '请输入名字',
-                            trigger: 'blur',
+                            message: '请输入出生日期',
+                            trigger: 'change',
                         }"
                     >
                         <el-date-picker
@@ -72,7 +77,7 @@
                         :rules="{
                             required: true,
                             message: '请选择国家/地区',
-                            trigger: 'blur',
+                            trigger: 'change',
                         }"
                     >
                         <el-select
@@ -120,7 +125,7 @@
                         :rules="{
                             required: true,
                             message: '请选择证件类型',
-                            trigger: 'blur',
+                            trigger: 'change',
                         }"
                     >
                         <el-select
@@ -159,7 +164,7 @@
                         :rules="{
                             required: true,
                             message: '请选择证件签发国家/地区',
-                            trigger: 'blur',
+                            trigger: 'change',
                         }"
                     >
                         <el-select
@@ -294,7 +299,7 @@
 import { reactive, ref, computed, unref, toRefs, watch, onBeforeUnmount, onMounted } from 'vue'
 import { ElIcon, ElMessage, ElMessageBox } from 'element-plus'
 import { useStore } from 'vuex'
-import { upload, getListByParentCode } from '@/api/base'
+import { upload, getListByParentCode, getCountryListByParentCode } from '@/api/base'
 
 export default {
     components: {
@@ -328,6 +333,7 @@ export default {
                 }],
                 mainAccount: ''
             },
+            countryList: [],
             accountHoldVis: false,
             idCardType: [],
             loading: false
@@ -358,6 +364,10 @@ export default {
             })
         }
 
+        const deleteItem = (index) => {
+            state.form.list.splice(index, 1)
+        }
+
         const onClose = () => {
             // 参数： [弹窗状态,点击状态 ]
             context.emit('update:dialogVis', [false, false])
@@ -379,23 +389,26 @@ export default {
             return mainAccount
         })
 
-        // 获取国家列表
-        const countryList = computed(() => {
-            const countryList = store.state.countryList || []
-            const tempArr = []
-
-            countryList.forEach(item => {
-                const lable = item.name + ' (' + item.countryCode + ')'
-                const value = item.countryCode
-                tempArr.push({
-                    name: lable,
-                    code: value,
-                    countryCode: item.code,
-                    countryName: item.name,
-                })
+        const getAllCountry = () => {
+            getCountryListByParentCode({ parentCode: '-1' }).then(res => {
+                if (res.check()) {
+                    if (res.data.length > 0) {
+                        const tempArr = []
+                        res.data.forEach(item => {
+                            const lable = item.name + ' (' + item.countryCode + ')'
+                            const value = item.countryCode
+                            tempArr.push({
+                                name: lable,
+                                code: value,
+                                countryCode: item.code,
+                                countryName: item.name,
+                            })
+                        })
+                        state.countryList = tempArr
+                    }
+                }
             })
-            return tempArr
-        })
+        }
 
         // 获取证件类型
         const getIdCardType = () => {
@@ -439,7 +452,7 @@ export default {
 
         getIdCardType()
         // 获取国家列表
-        store.dispatch('getCountryListByParentCode')
+        getAllCountry()
 
         onMounted(() => {
             state.accountHoldVis = false
@@ -447,8 +460,8 @@ export default {
 
         return {
             add,
+            deleteItem,
             onClose,
-            countryList,
             onConfirm,
             afterRead,
             formRef,

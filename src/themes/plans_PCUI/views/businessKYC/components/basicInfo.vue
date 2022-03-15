@@ -159,7 +159,7 @@
 <script>
 import { reactive, ref, computed, unref, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
-import { upload, getListByParentCode } from '@/api/base'
+import { upload, getListByParentCode, getCountryListByParentCode } from '@/api/base'
 
 export default {
     props: {
@@ -196,6 +196,7 @@ export default {
                     opertionStreet: ''
                 }
             },
+            countryList: [],
             rules: {
                 accountInfo: {
                     companyName: [
@@ -207,11 +208,11 @@ export default {
 
                     ],
                     createTime: [
-                        { required: true, message: '请输入成立日期', trigger: 'blur' },
+                        { required: true, message: '请输入成立日期', trigger: 'change' },
 
                     ],
                     area: [
-                        { required: true, message: '请选择区号', trigger: 'blur' },
+                        { required: true, message: '请选择区号', trigger: 'change' },
 
                     ],
                     phone: [
@@ -222,7 +223,7 @@ export default {
 
                     ],
                     nature: [
-                        { required: true, message: '请选择业务性质', trigger: 'blur' },
+                        { required: true, message: '请选择业务性质', trigger: 'change' },
 
                     ],
                     reason: [
@@ -232,7 +233,7 @@ export default {
                 },
                 regAddress: {
                     regCountry: [
-                        { required: true, message: '请选择国家/地区', trigger: 'blur' },
+                        { required: true, message: '请选择国家/地区', trigger: 'change' },
 
                     ],
                     regCity: [
@@ -246,7 +247,7 @@ export default {
                 },
                 opertion: {
                     opertionCountry: [
-                        { required: true, message: '请选择国家/地区', trigger: 'blur' },
+                        { required: true, message: '请选择国家/地区', trigger: 'change' },
 
                     ],
                     opertionCity: [
@@ -287,24 +288,6 @@ export default {
             }
         )
 
-        // 获取国家列表
-        const countryList = computed(() => {
-            const countryList = store.state.countryList || []
-            const tempArr = []
-
-            countryList.forEach(item => {
-                const lable = item.name + ' (' + item.countryCode + ')'
-                const value = item.countryCode
-                tempArr.push({
-                    name: lable,
-                    code: value,
-                    countryCode: item.code,
-                    countryName: item.name,
-                })
-            })
-            return tempArr
-        })
-
         // 获取业务性质
         const getBusinessNature = () => {
             getListByParentCode({ parentCode: 'Business_Nature' }).then(res => {
@@ -315,14 +298,36 @@ export default {
 
             })
         }
+
+        const getAllCountry = () => {
+            getCountryListByParentCode({ parentCode: '-1' }).then(res => {
+                if (res.check()) {
+                    if (res.data.length > 0) {
+                        const tempArr = []
+                        res.data.forEach(item => {
+                            const lable = item.name + ' (' + item.countryCode + ')'
+                            const value = item.countryCode
+                            tempArr.push({
+                                name: lable,
+                                code: value,
+                                countryCode: item.code,
+                                countryName: item.name,
+                            })
+                        })
+                        state.countryList = tempArr
+                    }
+                }
+            })
+        }
+
         getBusinessNature()
+
         // 获取国家列表
-        store.dispatch('getCountryListByParentCode')
+        getAllCountry()
 
         return {
             ...toRefs(state),
             businessNature,
-            countryList,
             formRef
         }
     }

@@ -800,12 +800,18 @@ export default {
                             confirmButtonText: Number(res.data) === 1 ? t('common.goLook') : t('login.goAuthenticate'),
                             message: Number(res.data) === 2 ? t('deposit.KYCReviewing') : t('deposit.needKYC'),
                         }).then(() => {
-                            router.replace({
-                                path: '/assets/authentication',
-                                query: {
-                                    businessCode: 'cashin'
-                                }
-                            })
+                            if (customInfo.value.openAccountType === 0) {
+                                router.replace({
+                                    path: '/assets/authentication',
+                                    query: {
+                                        businessCode: 'cashin'
+                                    }
+                                })
+                            } else {
+                                router.replace({
+                                    path: '/businessKYC'
+                                })
+                            }
                         })
                     }
                     // 获取支付通道

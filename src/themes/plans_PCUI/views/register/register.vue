@@ -179,7 +179,6 @@ export default {
         // 获取国家区号
         store.dispatch('getCountryListByParentCode').then(res => {
             if (res.check() && res.data.length) {
-                debugger
                 const countryList = store.state.countryList
                 const defaultZone = store.state._base.wpCompanyInfo?.defaultZone
                 const defaultZoneConfig = defaultZone?.code ? countryList.find(el => el.code === defaultZone.code) : countryList[0]

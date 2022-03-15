@@ -7,7 +7,12 @@
         </div>
         <div v-for='(item,index) in kycList' v-else :key='index' class='kyc-list'>
             <p>{{ kycMap[item.levelCode] }}</p>
-            <el-button size='default' type='primary' @click='handleNext(item)'>
+            <el-button
+                :disabled='[1,2].includes(item.status)'
+                size='default'
+                type='primary'
+                @click='handleNext(item)'
+            >
                 {{ kycAuditStatus[item.status] }}
             </el-button>
         </div>

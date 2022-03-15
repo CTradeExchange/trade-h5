@@ -568,12 +568,18 @@ export default {
                         confirmButtonText: Number(res.data) === 1 ? t('withdraw.kycBtn_1') : t('withdraw.kycBtn_2'),
                         message: Number(res.data) === 2 ? t('withdraw.kycMsg_1') : t('withdraw.kycMsg_2'),
                     }).then(() => {
-                        router.replace({
-                            path: '/assets/authentication',
-                            query: {
-                                businessCode: 'withdraw'
-                            }
-                        })
+                        if (customInfo.value.openAccountType === 0) {
+                            router.replace({
+                                path: '/assets/authentication',
+                                query: {
+                                    businessCode: 'withdraw'
+                                }
+                            })
+                        } else {
+                            router.replace({
+                                path: '/businessKYC'
+                            })
+                        }
                     })
                 } else {
                     if (!state.withdrawConfig.accountActiveEnable) {
@@ -792,8 +798,8 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .pageWrap {
-    background: var(--contentColor);
     padding-top: rem(90px);
+    background: var(--contentColor);
     .empty {
         height: rem(20px);
         background-color: var(--bgColor);
@@ -863,21 +869,22 @@ export default {
                 line-height: rem(60px);
             }
         }
-        .fund, .field-google {
+        .fund,
+        .field-google {
             margin-top: rem(20px);
-            .bw-t{
+            .bw-t {
                 color: var(--color);
                 font-size: rem(28px);
             }
-            .fund-input{
+            .fund-input {
                 display: flex;
                 align-items: center;
-                .input-comp{
+                .input-comp {
                     flex: 1;
                 }
-                .href{
-                    vertical-align: middle;
+                .href {
                     color: var(--primary);
+                    vertical-align: middle;
                     cursor: pointer;
                 }
             }
@@ -975,7 +982,7 @@ export default {
 </style>
 
 <style lang="scss">
-@import '@/sass/mixin.scss';
+
 .add-success {
     padding: rem(30px) rem(30px) 0 rem(30px);
     text-align: center;
@@ -1031,4 +1038,6 @@ export default {
         }
     }
 }
+
+@import '@/sass/mixin.scss';
 </style>

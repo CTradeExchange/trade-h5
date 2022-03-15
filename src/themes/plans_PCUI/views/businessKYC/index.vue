@@ -17,7 +17,7 @@
                     placeholder='请选择您当前所在国家/地区'
                 >
                     <el-option
-                        v-for='item in countryList'
+                        v-for='item in allCountry'
                         :key='item.countryCode'
                         :label='item.name'
                         :value='item.countryCode'
@@ -48,7 +48,7 @@
 import { computed, reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { upload, getListByParentCode } from '@/api/base'
+import { upload, getListByParentCode, getCountryListByParentCode, findCompanyCountry } from '@/api/base'
 import { findAllLevelKyc, kycLevelApply, kycApply, findAllBizKycList } from '@/api/user'
 
 const router = useRouter()
@@ -59,18 +59,23 @@ const { levelCode } = route.query
 const businessType = ref([])
 const loading = ref(false)
 const formRef = ref(null)
+const allCountry = ref([])// 所有国家列表
+const companyCountryList = ref([]) // 企业开户的国家
+
+// 获取用户注册的国家
+const userCountry = computed(() => store.state._user.customerInfo.country)
 
 const form = reactive({
     selectCompanyType: '',
-    selectCountry: ''
+    selectCountry: userCountry.value
 })
 
 const rules = reactive({
     selectCountry: [
-        { required: true, message: '请选择您当前所在国家/地区', trigger: 'blur' }
+        { required: true, message: '请选择您当前所在国家/地区', trigger: 'change' }
     ],
     selectCompanyType: [
-        { required: true, message: '请选择企业类型', trigger: 'blur' }
+        { required: true, message: '请选择企业类型', trigger: 'change' }
     ]
 })
 
@@ -112,23 +117,26 @@ const onSubmit = () => {
     })
 }
 
-// 获取国家列表
-const countryList = computed(() => {
-    const countryList = store.state.countryList || []
-    const tempArr = []
-
-    countryList.forEach(item => {
-        const lable = item.name + ' (' + item.countryCode + ')'
-        const value = item.countryCode
-        tempArr.push({
-            name: lable,
-            code: value,
-            countryCode: item.code,
-            countryName: item.name,
-        })
+const getAllCountry = () => {
+    getCountryListByParentCode({ parentCode: '-1' }).then(res => {
+        if (res.check()) {
+            if (res.data.length > 0) {
+                const tempArr = []
+                res.data.forEach(item => {
+                    const lable = item.name + ' (' + item.countryCode + ')'
+                    const value = item.countryCode
+                    tempArr.push({
+                        name: lable,
+                        code: value,
+                        countryCode: item.code,
+                        countryName: item.name,
+                    })
+                })
+                allCountry.value = tempArr
+            }
+        }
     })
-    return tempArr
-})
+}
 
 const getBusinessType = () => {
     getListByParentCode({ parentCode: 'EnterpriseType' }).then(res => {
@@ -143,7 +151,7 @@ const getBusinessType = () => {
 getBusinessType()
 
 // 获取国家列表
-store.dispatch('getCountryListByParentCode')
+getAllCountry()
 
 </script>
 

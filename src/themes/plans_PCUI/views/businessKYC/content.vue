@@ -306,6 +306,15 @@ export default {
         margin: 0 rem(20px) rem(20px) rem(20px);
         padding: 0  rem(100px) 0 rem(100px);
         border-radius: rem(10px);
+        .director {
+            margin-bottom: 50px;
+            padding-bottom: 50px;
+            border-bottom: solid 1px #DDD;
+            .head {
+                display: flex;
+                justify-content: space-between;
+            }
+        }
         h3 {
             margin-bottom: rem(50px);
         }

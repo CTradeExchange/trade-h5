@@ -264,12 +264,18 @@ export default {
                             confirmButtonText: Number(res.data) === 1 ? t('common.goLook') : t('login.goAuthenticate'),
                             message: Number(res.data) === 2 ? t('deposit.KYCReviewing') : t('deposit.needKYC'),
                         }).then(() => {
-                            router.replace({
-                                path: '/assets/authentication',
-                                query: {
-                                    businessCode: 'cashin'
-                                }
-                            })
+                            if (customerInfo.value.openAccountType === 0) {
+                                router.replace({
+                                    path: '/assets/authentication',
+                                    query: {
+                                        businessCode: 'cashin'
+                                    }
+                                })
+                            } else {
+                                router.replace({
+                                    path: '/businessKYC'
+                                })
+                            }
                         })
                     }
                 }
@@ -318,7 +324,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/sass/mixin.scss';
+
 .page-wrap {
     display: flex;
     flex-direction: column;
@@ -327,59 +333,58 @@ export default {
     padding-top: rem(110px);
 }
 .page-content {
-    flex: 1;
-    overflow-y: auto;
     position: relative;
+    flex: 1;
     padding: 0 rem(30px);
+    overflow-y: auto;
 }
 // 资产账户
 .asset-account {
     margin-top: rem(30px);
     .title {
-        line-height: 1;
         margin-bottom: rem(32px);
-        font-size: rem(48px);
-        font-weight: normal;
         color: var(--color);
+        font-weight: normal;
+        font-size: rem(48px);
+        line-height: 1;
     }
     .asset-select {
         position: relative;
         z-index: 100;
     }
     .action-bar {
-        background: var(--contentColor);
-        margin-bottom: rem(80px);
-        border-radius: rem(10px);
-        padding: 0 rem(30px);
-        height: rem(110px);
         display: flex;
         align-items: center;
         justify-content: space-between;
+        height: rem(110px);
+        margin-bottom: rem(80px);
+        padding: 0 rem(30px);
         color: var(--color);
+        background: var(--contentColor);
+        border-radius: rem(10px);
         cursor: pointer;
-        .left{
+        .left {
             display: flex;
             align-items: center;
-            .name{
+            .name {
                 margin-left: rem(15px);
-                .t1{
+                .t1 {
                     font-size: rem(32px);
                     vertical-align: middle;
                 }
-                .t2{
+                .t2 {
                     color: var(--minorColor);
                 }
             }
-
         }
-        .van-icon{
+        .van-icon {
             color: var(--minorColor);
         }
     }
     .list {
         display: flex;
-        justify-content: space-between;
         flex-wrap: wrap;
+        justify-content: space-between;
         .item {
             display: flex;
             align-items: center;
@@ -401,31 +406,31 @@ export default {
                 display: flex;
                 flex-direction: column;
                 .name {
-                    font-size: rem(32px);
                     color: var(--color);
+                    font-size: rem(32px);
                 }
                 .alias {
                     margin-top: rem(4px);
-                    font-size: rem(24px);
                     color: var(--minorColor);
+                    font-size: rem(24px);
                 }
             }
         }
         .active {
-            background: v-bind(bgColor);
-            border: 1px solid var(--primary);
             position: relative;
+            background: v-bind(bgcolor);
+            border: 1px solid var(--primary);
             .check {
+                position: absolute;
+                top: -1px;
+                right: -1px;
                 display: flex;
-                justify-content: center;
                 align-items: center;
+                justify-content: center;
                 width: rem(30px);
                 height: rem(30px);
                 background: var(--primary);
                 border-radius: 0 rem(10px) 0 rem(10px);
-                position: absolute;
-                top: -1px;
-                right: -1px;
                 &:deep(.van-icon) {
                     margin-top: rem(-5px);
                 }
@@ -437,14 +442,15 @@ export default {
 .recharge-handle {
     margin-top: rem(80px);
     .title {
-        line-height: 1;
         margin-bottom: rem(32px);
-        font-size: rem(48px);
-        font-weight: normal;
         color: var(--color);
+        font-weight: normal;
+        font-size: rem(48px);
+        line-height: 1;
     }
     .recharge-way {
         .item {
+            position: relative;
             display: flex;
             align-items: center;
             height: rem(130px);
@@ -453,7 +459,6 @@ export default {
             background: var(--contentColor);
             border: 1px solid transparent;
             border-radius: rem(10px);
-            position: relative;
             cursor: pointer;
             &:last-of-type {
                 margin-bottom: 0;
@@ -463,37 +468,37 @@ export default {
             }
             .icon {
                 margin-right: rem(36px);
-                font-size: rem(40px);
                 color: var(--color);
+                font-size: rem(40px);
             }
             .text {
                 display: flex;
                 flex-direction: column;
                 .name {
-                    font-size: rem(32px);
                     color: var(--color);
+                    font-size: rem(32px);
                 }
                 .des {
                     margin-top: rem(4px);
-                    font-size: rem(24px);
                     color: var(--minorColor);
+                    font-size: rem(24px);
                 }
             }
         }
         .active {
-            background: v-bind(bgColor);
+            background: v-bind(bgcolor);
             border: 1px solid var(--primary);
             .check {
+                position: absolute;
+                top: -1px;
+                right: -1px;
                 display: flex;
-                justify-content: center;
                 align-items: center;
+                justify-content: center;
                 width: rem(30px);
                 height: rem(30px);
                 background: var(--primary);
                 border-radius: 0 rem(10px) 0 rem(10px);
-                position: absolute;
-                top: -1px;
-                right: -1px;
                 &:deep(.van-icon) {
                     margin-top: rem(-5px);
                 }
@@ -501,39 +506,40 @@ export default {
         }
         .disable {
             background: var(--lineColor);
-            opacity: .5;
+            opacity: 0.5;
         }
     }
-
 }
-.btn-wrap{
-    padding: 0 rem(30px);
+.btn-wrap {
     position: absolute;
     bottom: rem(30px);
     width: 100%;
+    padding: 0 rem(30px);
     .recharge-btn {
-        width: 100%;
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
+        width: 100%;
         height: rem(80px);
         background: var(--primary);
         border-radius: rem(6px);
         cursor: pointer;
         span {
             margin-right: rem(10px);
+            color: #FFF;
             font-size: rem(30px);
-            color: #fff;
         }
         .arrow {
             margin-top: rem(-6px);
+            color: #FFF;
             font-size: rem(30px);
-            color: #fff;
         }
         &.disable {
-            opacity: .5;
+            opacity: 0.5;
         }
     }
 }
+
+@import '@/sass/mixin.scss';
 
 </style>
