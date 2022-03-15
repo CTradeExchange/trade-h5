@@ -7,6 +7,9 @@
         :rules='rules'
         :size='size'
     >
+        <h4 class='tip'>
+            请准确填写公司注册证书上的公司名称和公司注册号
+        </h4>
         <p class='title'>
             账户信息
         </p>

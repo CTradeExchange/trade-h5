@@ -125,6 +125,12 @@
                     <div class='el-upload__tip'>
                         下载模板
                     </div>
+
+                    <div class='el-upload__tip'>
+                        <p class='tips'>
+                            请列出所有最终实益拥有人（25%及以上），并由董事签署且附上最新日期
+                        </p>
+                    </div>
                     <a class='link' :href='form.structure' target='_blank'>
                         {{ form.structure }}
                     </a>
@@ -153,22 +159,20 @@
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
                 <el-form-item label='授权信' prop='sanctionsQues'>
-                    <el-form-item label='制裁问卷'>
-                        <van-uploader :after-read='afterRead' name='authorizationLetter' result-type='file'>
-                            <div class='uploader'>
-                                <img class='icon-upload' src='/images/upload.png' srcset='' />
-                                <p class='upload-tip'>
-                                    点击上传
-                                </p>
-                            </div>
-                        </van-uploader>
-                        <div class='el-upload__tip'>
-                            下载模板
+                    <van-uploader :after-read='afterRead' name='authorizationLetter' result-type='file'>
+                        <div class='uploader'>
+                            <img class='icon-upload' src='/images/upload.png' srcset='' />
+                            <p class='upload-tip'>
+                                点击上传
+                            </p>
                         </div>
-                        <a class='link' :href='form.authorizationLetter' target='_blank'>
-                            {{ form.authorizationLetter }}
-                        </a>
-                    </el-form-item>
+                    </van-uploader>
+                    <div class='el-upload__tip'>
+                        下载模板
+                    </div>
+                    <a class='link' :href='form.authorizationLetter' target='_blank'>
+                        {{ form.authorizationLetter }}
+                    </a>
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
@@ -229,7 +233,7 @@
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='补充资料' prop='furtherInfo'>
+                <el-form-item label='补充资料（选填）' prop='furtherInfo'>
                     <van-uploader :after-read='afterRead' name='furtherInfo' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -247,7 +251,7 @@
 
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='公司网站（如有，没有填写无' prop='websit'>
+                <el-form-item label='公司网站（如有，没有填写无）' prop='websit'>
                     <el-input v-model='form.websit' />
                 </el-form-item>
             </el-col>
@@ -311,9 +315,6 @@ export default {
                     { type: 'string', required: true, message: '请上传', trigger: 'blur' },
                 ],
                 intermediateShareholders: [
-                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
-                ],
-                furtherInfo: [
                     { type: 'string', required: true, message: '请上传', trigger: 'blur' },
                 ],
                 websit: [

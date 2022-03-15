@@ -120,7 +120,7 @@ import areaInputPc from '@/components/form/areaInputPc'
 // import TradeTypeAction from './components/tradeTypeAction'
 import { getDevice, getQueryVariable, setToken, getArrayObj, sessionGet } from '@/utils/util'
 import { register, checkUserStatus } from '@/api/user'
-import { verifyCodeSend, findCompanyCountry } from '@/api/base'
+import { verifyCodeSend, findCompanyCountry, getCountryListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
 import { reactive, toRefs, computed, getCurrentInstance, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -169,6 +169,7 @@ export default {
             countryVal: '',
             companyCountryList: [], // 获取白标后台配置的企业开户国家
             openAccountType: 0, // 开户类型 0:个人 1.企业 默认为个人
+            allCountry: [] // 所有国家列表
         })
         let token = ''
 
@@ -178,11 +179,11 @@ export default {
         // 获取国家区号
         store.dispatch('getCountryListByParentCode').then(res => {
             if (res.check() && res.data.length) {
+                debugger
                 const countryList = store.state.countryList
                 const defaultZone = store.state._base.wpCompanyInfo?.defaultZone
                 const defaultZoneConfig = defaultZone?.code ? countryList.find(el => el.code === defaultZone.code) : countryList[0]
                 if (defaultZoneConfig?.code) {
-                    // state.zone = `(${defaultZoneConfig.countryCode})`
                     state.countryVal = defaultZoneConfig.code
                     state.zone = `(${defaultZoneConfig.countryCode})`
                     state.countryCode = defaultZoneConfig.code
@@ -191,8 +192,16 @@ export default {
         })
         const countryList = computed(() => {
             const countryList = store.state.countryList
-            return state.openAccountType === 0 ? countryList : countryList.filter(el => state.companyCountryList.includes(el.code))
+            return state.openAccountType === 0 ? countryList : state.allCountry.filter(el => state.companyCountryList.includes(el.code))
         })
+
+        const getAllCountry = () => {
+            getCountryListByParentCode({ parentCode: '-1' }).then(res => {
+                if (res.check()) {
+                    state.allCountry = res.data
+                }
+            })
+        }
 
         const style = computed(() => store.state.style)
         // 手机正则表达式
@@ -212,10 +221,10 @@ export default {
 
         // 选择国家
         const zoneOnSelect = val => {
-            const countryCode = countryList.value.find(el => el.code === val)?.countryCode
-            state.zone = countryCode
-            state.countryZone = countryCode
-            state.countryCode = countryCode
+            const country = countryList.value.find(el => el.code === val)
+            state.zone = country.countryCode
+            state.countryZone = country.countryCode
+            state.countryCode = country.code
         }
 
         const registerSubmit = (params) => {
@@ -392,6 +401,7 @@ export default {
                 state.email = email
                 state.openType = 'email'
             }
+            getAllCountry()
             queryCompanyCountry()
         })
 

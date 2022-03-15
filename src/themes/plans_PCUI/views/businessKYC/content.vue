@@ -19,7 +19,7 @@
         />
         <info v-if='active === 5' @update:protocol='updateProtocol' />
         <div class='oper-wrap'>
-            <el-button v-if='active > 0' style='margin-top: 12px;' @click='prev'>
+            <el-button style='margin-top: 12px;' @click='prev'>
                 上一步
             </el-button>
             <el-button v-if='draftVis' style='margin-top: 12px;' @click='save(false,true)'>
@@ -187,7 +187,7 @@ export default {
                         ElMessageBox.alert('您的认证申请已提交成功，请耐心等待审核结果', '提交成功', {
                             confirmButtonText: 'OK',
                             callback: (action) => {
-                                router.replace('/')
+                                router.replace('/businessKYC')
                             },
                         })
                     } else {
@@ -244,6 +244,9 @@ export default {
             }
         }
         const prev = () => {
+            if (state.active === 0) {
+                return router.back()
+            }
             state.active--
             state.nextBtnDisabled = false
             state.draftVis = true
@@ -312,6 +315,9 @@ export default {
         .title {
             margin: rem(50px) 0  rem(50px) 0;
             font-weight: bold;
+        }
+        .tip {
+            color: var(--warn);
         }
         .icon-upload {
             margin: rem(60px) 0 0 0;
