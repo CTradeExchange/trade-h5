@@ -600,8 +600,7 @@ export default {
             handleDeposit().then(() => {
                 callback && callback()
                 Dialog.alert({
-                    title: t('common.tip'),
-                    message: t('deposit.depositSuccess'),
+                    message: t('deposit.payRedeemSuccess'),
                 }).then(() => {
                     state.payRedeemDialogVisible = false
                 })
