@@ -255,7 +255,7 @@ export default {
                 forbidClick: true,
                 duration: 0
             })
-            checkKycApply({ businessCode: 'cashin' }).then(res => {
+            checkKycApply({ businessCode: 'cashin', openAccountType: customerInfo.value.openAccountType }).then(res => {
                 Toast.clear()
                 if (res.check()) {
                     if (Number(res.data) !== 2) {

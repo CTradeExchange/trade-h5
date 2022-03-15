@@ -569,7 +569,8 @@ export default {
         // 检测取款是否需要kyc
         const checkKyc = () => {
             checkKycApply({
-                businessCode: 'withdraw'
+                businessCode: 'withdraw',
+                openAccountType: customInfo.openAccountType
             }).then(res => {
                 state.loading = false
                 const withdrawConfig = state.withdrawConfig

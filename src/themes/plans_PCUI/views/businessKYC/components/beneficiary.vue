@@ -183,7 +183,7 @@
                         :rules="{
                             required: true,
                             message: '请上传证件文件',
-                            trigger: 'blur',
+                            trigger: 'change',
                         }"
                     >
                         <van-uploader :after-read='afterRead' :name="index+',documents'" result-type='file'>

@@ -55,7 +55,7 @@
                 <el-col :offset='0' :span='12'>
                     <el-form-item
                         label='出生日期'
-                        :prop='"list."+index+".firstName"'
+                        :prop='"list."+index+".birthDay"'
                         :rules="{
                             required: true,
                             message: '请输入出生日期',

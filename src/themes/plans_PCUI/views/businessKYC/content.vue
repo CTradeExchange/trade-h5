@@ -25,7 +25,11 @@
             <el-button v-if='draftVis' style='margin-top: 12px;' @click='save(false,true)'>
                 保存草稿
             </el-button>
-            <el-button :disabled='nextBtnDisabled' style='margin-top: 12px;' type='primary' @click='next'>
+
+            <el-button v-if='active === 5' style='margin-top: 12px;' type='primary' @click='save(true,true)'>
+                提交
+            </el-button>
+            <el-button v-else :disabled='nextBtnDisabled' style='margin-top: 12px;' type='primary' @click='next'>
                 下一步
             </el-button>
         </div>
@@ -236,11 +240,6 @@ export default {
 
                 const query = { ...route.query, index: state.active }
                 router.replace({ query })
-            }
-
-            // 最后一步，提交全部kyc
-            if (state.active === Number(state.authList.length)) {
-                return save(true, true)
             }
         }
         const prev = () => {

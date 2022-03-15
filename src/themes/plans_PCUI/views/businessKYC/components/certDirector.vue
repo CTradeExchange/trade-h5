@@ -36,7 +36,7 @@
                         :prop='"list."+index+".firstName"'
                         :rules="{
                             required: true,
-                            message: '请输入名字',
+                            message: '请输入姓名',
                             trigger: 'blur',
                         }"
                     >
