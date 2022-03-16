@@ -126,6 +126,7 @@
                         <el-select
                             v-model='item.idType'
                             :placeholder='$t("register.certificateType")'
+                            @change='(val) => changeIdType(val,index)'
                         >
                             <el-option
                                 v-for='ict in idCardType'
@@ -317,6 +318,11 @@ export default {
             state.form.list[index][filed] = state.countryList.find(el => el.countryCode === val)?.countryName
         }
 
+        const changeIdType = (val, index) => {
+            const displayName = state.idCardType.find(el => el.code === val)?.displayName
+            state.form.list[index].idTypeName = displayName
+        }
+
         const add = () => {
             state.form.list.push({
                 lastname: '',
@@ -378,6 +384,7 @@ export default {
             formRef,
             deleteItem,
             selectCountry,
+            changeIdType,
             ...toRefs(state)
         }
     }

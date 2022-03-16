@@ -133,6 +133,7 @@
                         <el-select
                             v-model='item.idType'
                             :placeholder='$t("register.certificateType")'
+                            @change='(val) => changeIdType(val,index)'
                         >
                             <el-option
                                 v-for='ict in idCardType'
@@ -334,6 +335,7 @@ export default {
                     address: '',
                     email: '',
                     idType: '',
+                    idTypeName: '',
                     idNo: '',
                     issued: ''
                 }],
@@ -365,8 +367,14 @@ export default {
                 email: '',
                 idType: '',
                 idNo: '',
-                issued: ''
+                issued: '',
+                idTypeName: '',
             })
+        }
+
+        const changeIdType = (val, index) => {
+            const displayName = state.idCardType.find(el => el.code === val)?.displayName
+            state.form.list[index].idTypeName = displayName
         }
 
         const selectCountry = (val, filed, index) => {
@@ -472,6 +480,7 @@ export default {
             afterRead,
             formRef,
             selectCountry,
+            changeIdType,
             mainAccountVis,
             ...toRefs(state)
         }

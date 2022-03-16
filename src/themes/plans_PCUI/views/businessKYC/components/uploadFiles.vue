@@ -135,7 +135,7 @@
 
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item :label='$t("businessKYC.letterOfAuthorization") ' prop='sanctionsQues'>
+                <el-form-item :label='$t("businessKYC.letterOfAuthorization") ' prop='authorizationLetter'>
                     <van-uploader :after-read='afterRead' name='authorizationLetter' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
