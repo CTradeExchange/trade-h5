@@ -329,10 +329,14 @@ export default {
                 firstName: '',
                 birthDay: '',
                 address: '',
+                addressName: '',
                 email: '',
                 idType: '',
                 idNo: '',
-                issued: ''
+                issued: '',
+                issuedName: '',
+                documents: '',
+                photo: ''
             })
         }
 

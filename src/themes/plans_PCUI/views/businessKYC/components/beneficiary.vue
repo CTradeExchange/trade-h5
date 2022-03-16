@@ -270,7 +270,9 @@ export default {
                         email: '',
                         idType: '',
                         idNo: '',
-                        issued: ''
+                        issued: '',
+                        addressName: '',
+                        issuedName: ''
                     }
                 ]
             },
@@ -329,7 +331,9 @@ export default {
                 email: '',
                 idType: '',
                 idNo: '',
-                issued: ''
+                issued: '',
+                addressName: '',
+                issuedName: ''
             })
         }
 

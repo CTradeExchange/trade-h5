@@ -337,7 +337,9 @@ export default {
                     idType: '',
                     idTypeName: '',
                     idNo: '',
-                    issued: ''
+                    issued: '',
+                    addressName: '',
+                    issuedName: ''
                 }],
                 mainAccount: ''
             },
@@ -369,6 +371,8 @@ export default {
                 idNo: '',
                 issued: '',
                 idTypeName: '',
+                addressName: '',
+                issuedName: ''
             })
         }
 
