@@ -787,7 +787,8 @@ export default {
         const checkKyc = () => {
             state.loading = true
             checkKycApply({
-                businessCode: 'cashin'
+                businessCode: 'cashin',
+                openAccountType: customInfo.value.openAccountType
             }).then(res => {
                 if (res.check()) {
                     state.loading = false
@@ -1151,7 +1152,7 @@ export default {
             font-size: rem(32px);
             text-align: center;
         }
-        .appendVisDesc{
+        .appendVisDesc {
             padding: 0 rem(50px) rem(40px);
             text-align: left;
         }

@@ -296,7 +296,9 @@ export default {
         },
         // 查询客户KYC认证列表
         findAllBizKycList ({ state, commit }, params) {
-            return findAllBizKycList(params).then(res => {
+            return findAllBizKycList({
+                openAccountType: state.customerInfo.openAccountType
+            }).then(res => {
                 if (res.check()) {
                     res.data.forEach(item => {
                         if (item.preLevelName) {

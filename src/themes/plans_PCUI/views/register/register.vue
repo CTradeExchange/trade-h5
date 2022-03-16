@@ -3,11 +3,14 @@
         <topNav class='header' />
         <div class='container'>
             <div class='content'>
-                <div class='pageTitle'>
-                    <h5>{{ openAccountType===1 ? $t('register.businessOpen') : $t("register.openAccount") }}</h5>
+                <div class='login-link'>
                     <router-link to='/login'>
                         {{ $t('register.hasAccount') }}
                     </router-link>
+                </div>
+
+                <div class='pageTitle'>
+                    <h5>{{ openAccountType===1 ? $t('register.businessOpen') : $t("register.openAccount") }}</h5>
                 </div>
                 <div class='banner'>
                     <img alt='' src='https://testcms.ixmiddle.com/docs/registerBanner.png' srcset='' />
@@ -435,10 +438,14 @@ export default {
         justify-content: center;
         overflow: auto;
         .content {
-            width: 520px;
-            padding: 60px;
+            width: 550px;
+            padding: 30px 60px 60px;
             background-color: var(--contentColor);
             border-radius: 10px;
+            .login-link {
+                margin-bottom: 20px;
+                text-align: right;
+            }
             .businessOpen {
                 text-align: center;
                 .businessOpenBtn {

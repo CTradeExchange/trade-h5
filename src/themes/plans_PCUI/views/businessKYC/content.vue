@@ -13,7 +13,7 @@
             v-if='active === 4'
             ref='accountHoldRef'
             :dialog-vis='dialogVis'
-            :form-data='formData'
+            :form-data='formDataMap[currentCode]'
             @update:dialogVis='updateDialogVis'
             @update:mainAccount='mainAccountState'
         />
@@ -116,11 +116,8 @@ export default {
 
         const mainAccountVis = computed(() => {
             // 判断“账户持有人步骤”的主账户持有人是否有值
-            const jsonStr = state.formData?.find(el => el.elementCode === 'company_account_owner')?.elementValue
-            let mainAccount
-            if (jsonStr) {
-                mainAccount = JSON.parse(jsonStr)?.mainAccount
-            }
+
+            const mainAccount = state.formDataMap['company_account_owner']?.mainAccount
             return mainAccount
         })
 
@@ -170,22 +167,23 @@ export default {
             // console.log('currentComp====', unref([currentComp.value]))
 
             const elementList = []
-            if (commitTag) {
-                for (const key in state.formDataMap) {
-                    if (Object.hasOwnProperty.call(state.formDataMap, key)) {
-                        const element = state.formDataMap[key]
-                        elementList.push({
-                            elementCode: key,
-                            elementValue: JSON.stringify(element)
-                        })
-                    }
+            // if (commitTag) {
+            for (const key in state.formDataMap) {
+                if (Object.hasOwnProperty.call(state.formDataMap, key)) {
+                    const element = state.formDataMap[key]
+                    elementList.push({
+                        elementCode: key,
+                        elementValue: JSON.stringify(element)
+                    })
                 }
-            } else {
-                elementList.push({
-                    elementCode: currentCode.value,
-                    elementValue: JSON.stringify(state.formDataMap[currentCode.value])
-                })
             }
+            // } else {
+            //     const form = currentComp.value.value?.form
+            //     elementList.push({
+            //         elementCode: currentCode.value,
+            //         elementValue: JSON.stringify(form)
+            //     })
+            // }
 
             state.loading = true
             // const elementList = []
@@ -219,7 +217,7 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     if (commitTag) {
-                        ElMessageBox.alert('您的认证申请已提交成功，请耐心等待审核结果', '提交成功', {
+                        ElMessageBox.alert(t('businessKYC.commited'), t('common.submitSuccess'), {
                             confirmButtonText: 'OK',
                             callback: (action) => {
                                 router.replace('/businessKYC')
@@ -228,7 +226,7 @@ export default {
                     } else {
                         if (showToast) {
                             ElMessage({
-                                message: '保存草稿成功',
+                                message: t('businessKYC.draftSaved'),
                                 type: 'success',
                             })
                         }
@@ -327,8 +325,17 @@ export default {
     padding-top: rem(50px);
     background: var(--contentColor);
     border-radius: rem(10px);
-    .el-steps {
+    :deep(.el-steps) {
         margin: rem(100px);
+        .el-step__title.is-success {
+            color: var(--primary);
+        }
+        .el-step__head.is-success {
+            color: var(--primary);
+        }
+        .is-success .el-step__icon.is-text {
+            border-color: var(--primary);
+        }
     }
     .title {
         margin: rem(50px) 0 0 0;

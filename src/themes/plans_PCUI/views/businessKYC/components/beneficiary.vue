@@ -8,7 +8,7 @@
     >
         <div v-for='(item,index) in form.list' :key='index' class='director'>
             <div class='head'>
-                <h3>{{ $t('businessKYC.verify') }}{{ index+1 }}</h3>
+                <h3>{{ $t('businessKYC.verify') }} {{ index+1 }}</h3>
                 <el-button v-if='index>0' size='small' @click='deleteItem(index)'>
                     {{ $t('common.remove') }}
                 </el-button>
@@ -61,6 +61,7 @@
                             :placeholder=' $t("businessKYC.birth")'
                             style='width: 100%;'
                             type='date'
+                            value-format='x'
                         />
                     </el-form-item>
                 </el-col>
@@ -129,6 +130,7 @@
                             <el-option
                                 v-for='ict in idCardType'
                                 :key='ict.code'
+                                :label='ict.displayName'
                                 :placeholder='$t("register.certificateType")'
                                 :value='ict.code'
                             />
@@ -240,6 +242,7 @@ import { reactive, ref, computed, unref, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import { ElIcon, ElMessage } from 'element-plus'
 import { isEmpty } from '@/utils/util'
+import { useI18n } from 'vue-i18n'
 import { upload, getListByParentCode, getCountryListByParentCode } from '@/api/base'
 export default {
     props: {
@@ -249,6 +252,7 @@ export default {
         }
     },
     setup (props, context) {
+        const { t, locale } = useI18n({ useScope: 'global' })
         const store = useStore()
         const formRef = ref(null)
         const state = reactive({
@@ -334,7 +338,7 @@ export default {
                     const param = detail.name.split(',')
                     state.form.list[param[0]][param[1]] = res.data
                     ElMessage({
-                        message: '上传成功',
+                        message: t('auth.uploadSuccess'),
                         type: 'success',
                     })
                 }

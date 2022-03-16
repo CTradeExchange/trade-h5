@@ -10,7 +10,7 @@
     >
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item :label=' $t("businessKYC.certificate") ' prop='regCertificate'>
+                <el-form-item :label='$t("businessKYC.certificate") ' prop='regCertificate'>
                     <van-uploader :after-read='afterRead' name='regCertificate' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
@@ -296,7 +296,7 @@ export default {
                     { type: 'string', required: true, message: t('businessKYC.pleaseUpload'), trigger: 'blur' },
                 ],
                 websit: [
-                    { type: 'string', required: true, message: t('businessKYC.pleaseUpload'), trigger: 'blur' },
+                    { type: 'string', required: true, message: t('common.input'), trigger: 'blur' },
                 ]
 
             }
@@ -325,7 +325,7 @@ export default {
                 if (res.check()) {
                     state.form[detail.name] = res.data
                     ElMessage({
-                        message: '上传成功',
+                        message: t('auth.uploadSuccess'),
                         type: 'success',
                     })
                 }

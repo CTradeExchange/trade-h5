@@ -10,7 +10,7 @@
             :rules='rules'
             size='default'
         >
-            <h2>kyc {{ $t("businessKYC.kyc") }}</h2>
+            <h2>{{ $t("businessKYC.kyc") }}</h2>
             <el-form-item :label='$t("businessKYC.currentCountry")' prop='selectCountry'>
                 <el-select
                     v-model='form.selectCountry'
@@ -46,9 +46,10 @@
 import { computed, reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 import { upload, getListByParentCode, getCountryListByParentCode, findCompanyCountry } from '@/api/base'
 import { findAllLevelKyc, kycLevelApply, kycApply, findAllBizKycList } from '@/api/user'
-
+const { t, locale } = useI18n({ useScope: 'global' })
 const router = useRouter()
 const route = useRoute()
 const store = useStore()
@@ -70,10 +71,10 @@ const form = reactive({
 
 const rules = reactive({
     selectCountry: [
-        { required: true, message: '请选择您当前所在国家/地区', trigger: 'change' }
+        { required: true, message: t('common.select') + t('businessKYC.currentCountry'), trigger: 'change' }
     ],
     selectCompanyType: [
-        { required: true, message: '请选择企业类型', trigger: 'change' }
+        { required: true, message: t('common.select') + t('businessKYC.enterpriseType'), trigger: 'change' }
     ]
 })
 
@@ -121,7 +122,7 @@ const getAllCountry = () => {
             if (res.data.length > 0) {
                 const tempArr = []
                 res.data.forEach(item => {
-                    const lable = item.name + ' (' + item.countryCode + ')'
+                    const lable = item.name
                     const value = item.countryCode
                     if (item.code !== 'other') {
                         tempArr.push({
@@ -152,6 +153,13 @@ getBusinessType()
 
 // 获取国家列表
 getAllCountry()
+
+// 获取
+store.dispatch('_user/findAllBizKycList').then(res => {
+    if (res.check() && res.data.length > 0) {
+        form.selectCompanyType = res.data[0]?.companyType
+    }
+})
 
 </script>
 

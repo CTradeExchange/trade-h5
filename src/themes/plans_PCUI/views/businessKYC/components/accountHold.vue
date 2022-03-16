@@ -8,7 +8,7 @@
     >
         <div v-for='(item,index) in form.list' :key='index' v-loading='loading' class='director'>
             <div class='head'>
-                <h3>traders {{ $t('businessKYC.traders') }}{{ index+1 }}</h3>
+                <h3> {{ $t('businessKYC.traders') }} {{ index+1 }}</h3>
                 <el-button v-if='index>0' size='small' @click='deleteItem(index)'>
                     {{ $t('common.remove') }}
                 </el-button>
@@ -67,6 +67,7 @@
                             :placeholder=' $t("businessKYC.birth")'
                             style='width: 100%;'
                             type='date'
+                            value-format='x'
                         />
                     </el-form-item>
                 </el-col>
@@ -230,9 +231,19 @@
                 </el-col>
             </el-row>
         </div>
-        <template v-if='accountHoldVis || !mainAccountVis'>
+
+        <el-row :gutter='20'>
+            <el-col :offset='0' :span='24'>
+                <div class='add' @click='add'>
+                    <i class='el-icon-plus'></i>
+                    {{ $t('common.add') }}{{ $t("businessKYC.traders") }}
+                </div>
+            </el-col>
+        </el-row>
+
+        <div>
             <p class='title'>
-                {{ $t('businessKYC.traders') }} + {{ $t('cRoute.regKyc') }}
+                {{ $t('businessKYC.mainTraders') }} {{ $t('cRoute.regKyc') }}
             </p>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
@@ -259,22 +270,13 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-        </template>
-
-        <el-row :gutter='20'>
-            <el-col :offset='0' :span='24'>
-                <div class='add' @click='add'>
-                    <i class='el-icon-plus'></i>
-                    {{ $t('common.add') }}{{ $t("businessKYC.traders") }}
-                </div>
-            </el-col>
-        </el-row>
+        </div>
     </el-form>
 
     <el-dialog
         v-model='dialogVis'
         :before-close='handleClose'
-        title='$t("businessKYC.tip12")'
+        :title='$t("businessKYC.tip12")'
         width='30%'
     >
         <span>{{ $t("businessKYC.tip13") }}</span>
@@ -299,6 +301,7 @@
 import { reactive, ref, computed, unref, toRefs, watch, onBeforeUnmount, onMounted } from 'vue'
 import { ElIcon, ElMessage, ElMessageBox } from 'element-plus'
 import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 import { upload, getListByParentCode, getCountryListByParentCode } from '@/api/base'
 import { isEmpty } from '@/utils/util'
 export default {
@@ -316,6 +319,7 @@ export default {
     },
     emits: ['update:dialogVis', 'update:mainAccount'],
     setup (props, context) {
+        const { t, locale } = useI18n({ useScope: 'global' })
         const store = useStore()
         const formRef = ref(null)
         const state = reactive({
@@ -380,12 +384,7 @@ export default {
 
         const mainAccountVis = computed(() => {
             // 判断“账户持有人步骤”的主账户持有人是否有值
-            const jsonStr = props.formData?.find(el => el.elementCode === 'company_account_owner')?.elementValue
-            let mainAccount
-            if (jsonStr) {
-                mainAccount = JSON.parse(jsonStr)?.mainAccount
-            }
-            return mainAccount
+            return props.formData?.mainAccount
         })
 
         const getAllCountry = () => {
@@ -441,7 +440,7 @@ export default {
                     }
 
                     ElMessage({
-                        message: '上传成功',
+                        message: t('auth.uploadSuccess'),
                         type: 'success',
                     })
                 }
@@ -478,6 +477,7 @@ export default {
 .add {
     width: 100%;
     margin-top: 30px;
+    margin-bottom: 30px;
     color: #666;
     font-weight: bold;
     line-height: rem(100px);

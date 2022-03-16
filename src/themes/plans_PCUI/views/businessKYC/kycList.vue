@@ -30,13 +30,14 @@ import { findAllLevelKyc, kycLevelApply, kycApply, findAllBizKycList } from '@/a
 const router = useRouter()
 const store = useStore()
 const { t, tm } = useI18n({ useScope: 'global' })
-const kycList = ref([])
 
 const kycMap = {
     level_1: t('common.kycLevel1'),
     level_2: t('common.kycLevel2'),
     level_3: t('common.kycLevel3'),
 }
+
+const kycList = computed(() => store.state._user.kycList)
 const kycAuditStatus = tm('kycAuditStatus')
 
 const handleNext = (item) => {
@@ -51,11 +52,7 @@ const handleNext = (item) => {
 }
 
 // 获取需要认证的kyc列表
-store.dispatch('_user/findAllBizKycList', { openAccountType: 1 }).then(res => {
-    if (res.check()) {
-        kycList.value = res.data
-    }
-})
+store.dispatch('_user/findAllBizKycList')
 
 </script>
 

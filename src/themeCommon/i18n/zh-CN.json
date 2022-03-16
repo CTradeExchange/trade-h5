@@ -891,9 +891,9 @@
       "upload": "上传文件",
       "submitDoc": "文件提交",
       "director": "董事",
-      "certificate ": "注册证书",
+      "certificate": "注册证书",
       "memorandum": "公司章程",
-      "CertificateIssued ": "董事名册/董事职权证明书（注册代理人证书）/注册信息摘要",
+      "CertificateIssued": "董事名册/董事职权证明书（注册代理人证书）/注册信息摘要",
       "tip1": "最近12个月内出具，且包含现任董事信息",
       "tip2": "董事名册/董事职权证明书（注册代理人证书）/注册信息摘要",
       "tip3":  "最近12个月内由政府网站出具的公司信息摘要，包含现任董事及股东信息",
@@ -912,7 +912,7 @@
       "supplementaryDocuments": "补充资料（选填）",
       "website": "公司网站（如有，没有填写无）",
       "directors":  "认证董事",
-      "firstName": "名字",
+      "firstName": "名",
       "lastName": "姓",
       "birth": "出生日期",
       "email": "邮箱",
@@ -921,6 +921,7 @@
       "portraitPhoto": "个人肖像照",
       "verify":"认证最终实益拥有人",
       "traders": "账户持有人/交易员",
+      "mainTraders": "主账户持有人/交易员",
       "tip12": "需要主账户持有人/交易员进行身份验证",
       "tip13": "进行身份验证之前，请确保您是主要的账户持有人/交易员",
       "information": "信息确认",
@@ -938,6 +939,7 @@
       "handId": "手持证件照",
       "think": "我再想想",
       "mainAccount": "我是主要账户持有人/交易员",
-      "declaration": "声明"
+      "declaration": "声明",
+      "commited": "您的认证申请已提交成功，请耐心等待审核结果"
   }
 }
