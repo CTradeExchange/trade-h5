@@ -33,6 +33,7 @@
                         :placeholder="$t('common.select')+$t('businessKYC.registration')"
                         style='width: 100%;'
                         type='date'
+                        value-format='x'
                     />
                 </el-form-item>
             </el-col>

@@ -274,7 +274,7 @@
         "accountType": "Account Type",
         "phoneNo": "Mobile",
         "email": "Email",
-        "openAccount": "Open Account",
+        "openAccount": "Create Personal Account",
         "hasAccount": "Log In",
         "protocol": "Continue to open an account means that you have confirmed you are at least 18 years old and have read and agreed to \"Client Privacy Protection Policy、Investment Risk Disclosure and Disclaimer\"",
         "openSuccess": "Congratulations！You account is opened succesfully",
@@ -885,9 +885,9 @@
         "operatingAddr": "Operating Business Address",
         "submitDoc": "Submit document",
         "director": "Directors",
-        "certificate ": "Certificate of Incorporation   ",
+        "certificate": "Certificate of Incorporation   ",
         "memorandum": "Memorandum & Articles, Articles of Association, By-laws.",
-        "CertificateIssued ": "Register of Directors / Certificate of Incumbency issued ",
+        "CertificateIssued": "Register of Directors / Certificate of Incumbency issued ",
         "tip1": "The last 12 months, including details of Directors",
         "tip2": "Register of Directors / Certificate of Incumbency issued ",
         "tip3":  "A link to the government website that contains your company details, including Directors and Shareholders details within the last 12 months   ",
@@ -932,6 +932,7 @@
         "handId": "Holding ID photo",
         "think": "let me think again",
         "mainAccount": "I am the primary account holder/trader",
-        "declaration": "Declaration"
+        "declaration": "Declaration",
+        "commited": "Your application for certification has been submitted successfully, please be patient and wait for the result of the examination"
     }
 }
