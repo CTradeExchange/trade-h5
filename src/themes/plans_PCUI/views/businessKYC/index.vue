@@ -157,7 +157,9 @@ getAllCountry()
 // 获取
 store.dispatch('_user/findAllBizKycList').then(res => {
     if (res.check() && res.data.length > 0) {
-        form.selectCompanyType = res.data[0]?.companyType
+        if (res.data[0]?.companyType) {
+            form.selectCompanyType = res.data[0]?.companyType
+        }
     }
 })
 

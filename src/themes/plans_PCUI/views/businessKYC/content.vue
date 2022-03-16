@@ -50,6 +50,7 @@ import { useRouter, useRoute } from 'vue-router'
 import Schema from 'async-validator'
 
 import { findAllLevelKyc, kycLevelApply, kycApply, findAllBizKycList } from '@/api/user'
+import { isEmpty } from '@/utils/util'
 
 export default {
     components: {
@@ -168,6 +169,9 @@ export default {
 
             const elementList = []
             // if (commitTag) {
+            if (isEmpty(state.formDataMap[currentCode.value]) && currentCode.value) {
+                state.formDataMap[currentCode.value] = currentComp.value.value?.form
+            }
             for (const key in state.formDataMap) {
                 if (Object.hasOwnProperty.call(state.formDataMap, key)) {
                     const element = state.formDataMap[key]
