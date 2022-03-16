@@ -519,7 +519,8 @@ export default {
         const checkKyc = () => {
             state.loading = true
             checkKycApply({
-                businessCode: 'withdraw'
+                businessCode: 'withdraw',
+                openAccountType: customInfo.value.openAccountType
             }).then(res => {
                 state.loading = false
                 if (Number(res.data) !== 2) {

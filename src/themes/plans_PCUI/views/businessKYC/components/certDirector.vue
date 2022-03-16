@@ -8,7 +8,7 @@
     >
         <div v-for='(item,index) in form.list' :key='index' v-loading='loading' class='director'>
             <div class='head'>
-                <h3>{{ $t('businessKYC.director') }}{{ index+1 }}</h3>
+                <h3>{{ $t('businessKYC.director') }} {{ index+1 }}</h3>
                 <el-button v-if='index>0' size='small' @click='deleteItem(index)'>
                     {{ $t('common.remove') }}
                 </el-button>

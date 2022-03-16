@@ -915,6 +915,7 @@
         "portraitPhoto": "Portrait Photo",
         "verify":"Verify UBOs",
         "traders": "Verify Dealers/Traders",
+        "mainTraders": "Main Verify Dealers/Traders",
         "tip12": "Need Account holder to verify identity",
         "tip13": "Before Identity verification, make sure you are the Account holder",
         "information": "Confirm information",

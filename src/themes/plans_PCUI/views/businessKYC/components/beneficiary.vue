@@ -8,7 +8,7 @@
     >
         <div v-for='(item,index) in form.list' :key='index' class='director'>
             <div class='head'>
-                <h3>{{ $t('businessKYC.verify') }}{{ index+1 }}</h3>
+                <h3>{{ $t('businessKYC.verify') }} {{ index+1 }}</h3>
                 <el-button v-if='index>0' size='small' @click='deleteItem(index)'>
                     {{ $t('common.remove') }}
                 </el-button>
@@ -130,6 +130,7 @@
                             <el-option
                                 v-for='ict in idCardType'
                                 :key='ict.code'
+                                :label='ict.displayName'
                                 :placeholder='$t("register.certificateType")'
                                 :value='ict.code'
                             />

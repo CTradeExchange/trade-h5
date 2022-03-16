@@ -8,7 +8,7 @@
     >
         <div v-for='(item,index) in form.list' :key='index' v-loading='loading' class='director'>
             <div class='head'>
-                <h3> {{ $t('businessKYC.traders') }}{{ index+1 }}</h3>
+                <h3> {{ $t('businessKYC.traders') }} {{ index+1 }}</h3>
                 <el-button v-if='index>0' size='small' @click='deleteItem(index)'>
                     {{ $t('common.remove') }}
                 </el-button>
@@ -231,9 +231,19 @@
                 </el-col>
             </el-row>
         </div>
-        <template v-if='accountHoldVis || mainAccountVis'>
+
+        <el-row :gutter='20'>
+            <el-col :offset='0' :span='24'>
+                <div class='add' @click='add'>
+                    <i class='el-icon-plus'></i>
+                    {{ $t('common.add') }}{{ $t("businessKYC.traders") }}
+                </div>
+            </el-col>
+        </el-row>
+
+        <div>
             <p class='title'>
-                {{ $t('businessKYC.traders') }}  {{ $t('cRoute.regKyc') }}
+                {{ $t('businessKYC.mainTraders') }} {{ $t('cRoute.regKyc') }}
             </p>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
@@ -260,16 +270,7 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-        </template>
-
-        <el-row :gutter='20'>
-            <el-col :offset='0' :span='24'>
-                <div class='add' @click='add'>
-                    <i class='el-icon-plus'></i>
-                    {{ $t('common.add') }}{{ $t("businessKYC.traders") }}
-                </div>
-            </el-col>
-        </el-row>
+        </div>
     </el-form>
 
     <el-dialog
@@ -476,6 +477,7 @@ export default {
 .add {
     width: 100%;
     margin-top: 30px;
+    margin-bottom: 30px;
     color: #666;
     font-weight: bold;
     line-height: rem(100px);
