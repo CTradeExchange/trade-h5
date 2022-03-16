@@ -97,6 +97,7 @@
                     <el-select
                         v-model='form.regAddress.regCountry'
                         :placeholder="$t('common.select') + $t('businessKYC.country')"
+                        @change='selectRegCountry'
                     >
                         <el-option
                             v-for='item in countryList'
@@ -131,6 +132,7 @@
                     <el-select
                         v-model='form.opertion.opertionCountry'
                         :placeholder="$t('common.select') + $t('businessKYC.country')"
+                        @change='selectOperCountry'
                     >
                         <el-option
                             v-for='item in countryList'
@@ -190,11 +192,13 @@ export default {
                 },
                 regAddress: {
                     regCountry: '',
+                    regCountryName: '',
                     regCity: '',
                     regStreet: '',
                 },
                 opertion: {
                     opertionCountry: '',
+                    opertionCountryName: '',
                     opertionCity: '',
                     opertionStreet: ''
                 }
@@ -324,6 +328,15 @@ export default {
             })
         }
 
+        // 注册国家选择
+        const selectRegCountry = val => {
+            state.form.regAddress.regCountryName = state.countryList.find(el => el.countryCode === val)?.countryName
+        }
+
+        const selectOperCountry = val => {
+            state.form.opertion.opertionCountryName = state.countryList.find(el => el.countryCode === val)?.countryName
+        }
+
         getBusinessNature()
 
         // 获取国家列表
@@ -332,7 +345,9 @@ export default {
         return {
             ...toRefs(state),
             businessNature,
-            formRef
+            formRef,
+            selectRegCountry,
+            selectOperCountry
         }
     }
 }

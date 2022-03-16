@@ -78,6 +78,7 @@
                         <el-select
                             v-model='item.address'
                             :placeholder='$t("businessKYC.country")'
+                            @change='(val) => selectCountry(val, "addressName",index)'
                         >
                             <el-option
                                 v-for='country in countryList'
@@ -166,6 +167,7 @@
                         <el-select
                             v-model='item.issued'
                             :placeholder="$t('businessKYC.regionIssue')"
+                            @change='(val) => selectCountry(val, "issuedName",index)'
                         >
                             <el-option
                                 v-for='country in countryList'
@@ -308,6 +310,10 @@ export default {
             })
         }
 
+        const selectCountry = (val, filed, index) => {
+            state.form.list[index][filed] = state.countryList.find(el => el.countryCode === val)?.countryName
+        }
+
         const add = () => {
             state.form.list.push({
                 lastname: '',
@@ -367,6 +373,7 @@ export default {
             add,
             afterRead,
             formRef,
+            selectCountry,
             deleteItem,
             ...toRefs(state)
         }
