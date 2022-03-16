@@ -227,7 +227,7 @@ export default {
             // 存款配置数据
             rateConfig: '',
             // 补充资料
-            appendVis: true,
+            appendVis: false,
             appendMap: {},
             paramsExtens: {},
             // 存款提案创建成功返回的数据
