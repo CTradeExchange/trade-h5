@@ -47,9 +47,9 @@
                             >
                                 <el-option
                                     v-for='item in countryList'
-                                    :key='item.countryCode'
+                                    :key='item.code'
                                     :label='item.name'
-                                    :value='item.countryCode'
+                                    :value='item.code'
                                 />
                             </el-select>
                         </el-form-item>
