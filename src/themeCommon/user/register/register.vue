@@ -97,7 +97,7 @@ import CountrySheet from './components/countrySheet'
 // import TradeTypeAction from './components/tradeTypeAction'
 import { getDevice, getQueryVariable, setToken, getArrayObj, sessionGet } from '@/utils/util'
 import { register, checkUserStatus } from '@/api/user'
-import { verifyCodeSend, findCompanyCountry } from '@/api/base'
+import { verifyCodeSend, findCompanyCountry, getCountryListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
 import { reactive, toRefs, computed, getCurrentInstance, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
@@ -146,6 +146,7 @@ export default {
             openAccountType: 0, // 开户类型 0:个人 1.企业 默认为个人
             countrySheetVisible: false,
             country: {},
+            allCountry: [] // 所有国家列表
         })
         let token = ''
 
@@ -168,8 +169,17 @@ export default {
         })
         const countryList = computed(() => {
             const countryList = store.state.countryList
-            return state.openAccountType === 0 ? countryList : countryList.filter(el => state.companyCountryList.includes(el.code))
+            return state.openAccountType === 0 ? countryList : state.allCountry.filter(el => state.companyCountryList.includes(el.code))
         })
+
+        const getAllCountry = () => {
+            getCountryListByParentCode({ parentCode: '-1' }).then(res => {
+                if (res.check()) {
+                    state.allCountry = res.data
+                }
+            })
+        }
+
         const style = computed(() => store.state.style)
         // 注册类型
         const registerTypes = computed(() => store.state._base.wpCompanyInfo?.registerTypes)
@@ -375,6 +385,7 @@ export default {
         }
 
         onMounted(() => {
+            getAllCountry()
             queryCompanyCountry()
         })
 
